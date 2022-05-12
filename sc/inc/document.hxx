@@ -1325,19 +1325,19 @@ public:
     bool              RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
                                          SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
 
-    SC_DLLPUBLIC void DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                       SCCOL nEndCol, SCROW nEndRow );
-    SC_DLLPUBLIC void DoEmptyBlock( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow );
+    SC_DLLPUBLIC void DoMergeContents( SCCOL nStartCol, SCROW nStartRow,
+                                       SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
+    SC_DLLPUBLIC void DoEmptyBlock( SCCOL nStartCol, SCROW nStartRow,
+                                    SCCOL nEndCol, SCROW nEndRow, SCTAB nTab );
                     //  without checking:
-    SC_DLLPUBLIC void DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                               SCCOL nEndCol, SCROW nEndRow, bool bDeleteCaptions = true );
+    SC_DLLPUBLIC void DoMerge( SCCOL nStartCol, SCROW nStartRow,
+                               SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bDeleteCaptions = true );
     void              RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab );
 
-    bool              IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow, bool bIgnoreNotes = false ) const;
-    bool              IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow,
+    bool              IsBlockEmpty( SCCOL nStartCol, SCROW nStartRow,
+                                    SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bIgnoreNotes = false ) const;
+    bool              IsPrintEmpty( SCCOL nStartCol, SCROW nStartRow,
+                                    SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
                                     bool bLeftIsEmpty = false,
                                     ScRange* pLastRange = nullptr,
                                     tools::Rectangle* pLastMM = nullptr ) const;

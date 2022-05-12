@@ -719,8 +719,8 @@ void ScXMLTableRowCellContext::DoMerge( const ScAddress& rScAddress, const SCCOL
                        mergeToCol <= pDoc->MaxCol() && mergeToRow <= pDoc->MaxRow();
     if( bInBounds )
     {
-        pDoc->DoMerge( rScAddress.Tab(),
-            rScAddress.Col(), rScAddress.Row(), mergeToCol, mergeToRow );
+        pDoc->DoMerge( rScAddress.Col(), rScAddress.Row(),
+                       mergeToCol, mergeToRow, rScAddress.Tab() );
     }
 }
 

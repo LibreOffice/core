@@ -99,9 +99,9 @@ static bool lcl_GetTextToColumnsRange( const ScViewData& rData, ScRange& rRange,
 
     if ( bDoEmptyCheckOnly )
     {
-        if ( bRet && rDoc.IsBlockEmpty( rRange.aStart.Tab(), rRange.aStart.Col(),
-                                         rRange.aStart.Row(), rRange.aEnd.Col(),
-                                         rRange.aEnd.Row() ) )
+        if ( bRet && rDoc.IsBlockEmpty( rRange.aStart.Col(), rRange.aStart.Row(),
+                                        rRange.aEnd.Col(),  rRange.aEnd.Row(),
+                                        rRange.aStart.Tab() ) )
         {
             bRet = false;
         }

@@ -1553,8 +1553,8 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     if (!bApi)
     {
         bool bEmpty = rDoc.IsBlockEmpty(
-            aNewOut.aStart.Tab(), aNewOut.aStart.Col(), aNewOut.aStart.Row(),
-            aNewOut.aEnd.Col(), aNewOut.aEnd.Row());
+            aNewOut.aStart.Col(), aNewOut.aStart.Row(),
+            aNewOut.aEnd.Col(), aNewOut.aEnd.Row(), aNewOut.aStart.Tab() );
 
         if (!bEmpty)
         {

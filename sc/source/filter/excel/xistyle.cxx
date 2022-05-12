@@ -2067,7 +2067,7 @@ void XclImpXFRangeBuffer::Finalize()
             SetBorderLine( rRange, nScTab, SvxBoxItemLine::BOTTOM );
         // do merge
         if( bMultiCol || bMultiRow )
-            rDoc.DoMerge( nScTab, rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );
+            rDoc.DoMerge( rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row(), nScTab );
         // #i93609# merged range in a single row: test if manual row height is needed
         if( !bMultiRow )
         {

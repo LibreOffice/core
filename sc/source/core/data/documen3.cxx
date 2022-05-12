@@ -2032,8 +2032,8 @@ void ScDocument::SetClipOptions(std::unique_ptr<ScClipOptions> pClipOptions)
     mpClipOptions = std::move(pClipOptions);
 }
 
-void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow )
+void ScDocument::DoMergeContents( SCCOL nStartCol, SCROW nStartRow,
+                                    SCCOL nEndCol, SCROW nEndRow, SCTAB nTab )
 {
     OUStringBuffer aTotal;
     OUString aCellStr;
@@ -2056,8 +2056,8 @@ void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     SetString(nStartCol,nStartRow,nTab,aTotal.makeStringAndClear());
 }
 
-void ScDocument::DoEmptyBlock( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                               SCCOL nEndCol, SCROW nEndRow )
+void ScDocument::DoEmptyBlock( SCCOL nStartCol, SCROW nStartRow,
+                               SCCOL nEndCol, SCROW nEndRow, SCTAB nTab )
 {
     SCCOL nCol;
     SCROW nRow;
@@ -2069,8 +2069,8 @@ void ScDocument::DoEmptyBlock( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         }
 }
 
-void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow, bool bDeleteCaptions )
+void ScDocument::DoMerge( SCCOL nStartCol, SCROW nStartRow,
+                          SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bDeleteCaptions )
 {
     ScTable* pTab = FetchTable(nTab);
     if (!pTab)

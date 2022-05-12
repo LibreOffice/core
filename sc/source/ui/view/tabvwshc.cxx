@@ -680,9 +680,8 @@ OUString ScTabViewShell::DoAutoSum(bool& rRangeFinder, bool& rSubTotal, const Op
         for ( size_t i = 0; i < nCount; ++i )
         {
             const ScRange & rRange( aMarkRangeList[i] );
-            if ( rDoc.IsBlockEmpty( rRange.aStart.Tab(),
-                 rRange.aStart.Col(), rRange.aStart.Row(),
-                 rRange.aEnd.Col(), rRange.aEnd.Row() ) )
+            if ( rDoc.IsBlockEmpty( rRange.aStart.Col(), rRange.aStart.Row(),
+                     rRange.aEnd.Col(), rRange.aEnd.Row(),  rRange.aStart.Tab() ) )
             {
                 bEmpty = true;
                 break;

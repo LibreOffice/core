@@ -947,7 +947,7 @@ void ScDPObject::RefreshAfterLoad()
         ++nInitial;
 
     if ( nInitial + 1 < nOutRows &&
-        pDoc->IsBlockEmpty( nTab, nFirstCol, nFirstRow + nInitial, nFirstCol, nFirstRow + nInitial ) &&
+        pDoc->IsBlockEmpty( nFirstCol, nFirstRow + nInitial, nFirstCol, nFirstRow + nInitial, nTab ) &&
         aOutRange.aEnd.Col() > nFirstCol )
     {
         nHeaderRows = nInitial;

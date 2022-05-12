@@ -454,7 +454,7 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
                 if (rD.HasData(nColCnt, nRow, nDestTab))
                 {
                     // new Center after previous Center
-                    rD.DoMerge(nDestTab, nCenterStart, nRow, nCenterEnd, nRow);
+                    rD.DoMerge( nCenterStart, nRow, nCenterEnd, nRow, nDestTab);
                     nCenterStart = nColCnt;
                 }
             }
@@ -471,7 +471,7 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
             if( bCenter )
             {
                 // possibly reset old Center
-                rD.DoMerge(nDestTab, nCenterStart, nRow, nCenterEnd, nRow);
+                rD.DoMerge( nCenterStart, nRow, nCenterEnd, nRow, nDestTab );
                 bCenter = false;
             }
         }
@@ -484,6 +484,6 @@ void ImportLotus::Row_( const sal_uInt16 nRecLen )
 
     if( bCenter )
         // possibly reset old Center
-        rD.DoMerge(nDestTab, nCenterStart, nRow, nCenterEnd, nRow);
+        rD.DoMerge( nCenterStart, nRow, nCenterEnd, nRow, nDestTab );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

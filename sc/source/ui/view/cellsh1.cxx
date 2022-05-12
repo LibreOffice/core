@@ -1500,15 +1500,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                         CellShiftDisabledFlags nDisableShiftY = CellShiftDisabledFlags::NONE;
 
                                         //check if horizontal shift will fit
-                                        if ( !rData.GetDocument().IsBlockEmpty( nStartTab,
+                                        if ( !rData.GetDocument().IsBlockEmpty(
                                                     rDoc.MaxCol() - nRangeSizeX, nStartY,
-                                                    rDoc.MaxCol(), nStartY + nRangeSizeY ) )
+                                                    rDoc.MaxCol(), nStartY + nRangeSizeY,
+                                                    nStartTab ) )
                                             nDisableShiftX = CellShiftDisabledFlags::Right;
 
                                         //check if vertical shift will fit
-                                        if ( !rData.GetDocument().IsBlockEmpty( nStartTab,
+                                        if ( !rData.GetDocument().IsBlockEmpty(
                                                     nStartX, rDoc.MaxRow() - nRangeSizeY,
-                                                    nStartX + nRangeSizeX, rDoc.MaxRow() ) )
+                                                    nStartX + nRangeSizeX, rDoc.MaxRow(),
+                                                    nStartTab ) )
                                             nDisableShiftY = CellShiftDisabledFlags::Down;
 
                                         if ( nDisableShiftX != CellShiftDisabledFlags::NONE || nDisableShiftY != CellShiftDisabledFlags::NONE)

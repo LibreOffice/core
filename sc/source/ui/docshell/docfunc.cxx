@@ -4976,9 +4976,9 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
     for (const SCTAB nTab : rOption.maTabs)
     {
         bool bIsBlockEmpty = ( nStartRow == nEndRow )
-                             ? rDoc.IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow, true )
-                             : rDoc.IsBlockEmpty( nTab, nStartCol,nStartRow+1, nStartCol,nEndRow, true ) &&
-                               rDoc.IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow, true );
+                             ? rDoc.IsBlockEmpty( nStartCol+1,nStartRow, nEndCol,nEndRow, nTab, true )
+                             : rDoc.IsBlockEmpty( nStartCol,nStartRow+1, nStartCol,nEndRow, nTab, true ) &&
+                               rDoc.IsBlockEmpty( nStartCol+1,nStartRow, nEndCol,nEndRow, nTab, true );
         bool bNeedContents = bContents && !bIsBlockEmpty;
         bool bNeedEmpty = bEmptyMergedCells && !bIsBlockEmpty && !bNeedContents; // if DoMergeContents then cells are emptied
 
@@ -4999,10 +4999,10 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
         }
 
         if (bNeedContents)
-            rDoc.DoMergeContents( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
+            rDoc.DoMergeContents( nStartCol,nStartRow, nEndCol,nEndRow,  nTab );
         else if ( bNeedEmpty )
-            rDoc.DoEmptyBlock( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
-        rDoc.DoMerge( nTab, nStartCol,nStartRow, nEndCol,nEndRow );
+            rDoc.DoEmptyBlock( nStartCol,nStartRow, nEndCol,nEndRow, nTab );
+        rDoc.DoMerge( nStartCol,nStartRow, nEndCol,nEndRow, nTab );
 
         if (rOption.mbCenter)
         {

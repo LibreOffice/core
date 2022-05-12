@@ -674,8 +674,8 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
         return false;
     }
 
-    const bool bEndRowEmpty = rDoc.IsBlockEmpty( nTab, nStartCol, nEndRow, nEndCol, nEndRow );
-    const bool bEndColEmpty = rDoc.IsBlockEmpty( nTab, nEndCol, nStartRow, nEndCol, nEndRow );
+    const bool bEndRowEmpty = rDoc.IsBlockEmpty( nStartCol, nEndRow, nEndCol, nEndRow, nTab );
+    const bool bEndColEmpty = rDoc.IsBlockEmpty( nEndCol, nStartRow, nEndCol, nEndRow, nTab );
     bool bRow = ( nStartRow != nEndRow ) && ( bEndRowEmpty || !bEndColEmpty );
     bool bCol = ( nStartCol != nEndCol ) && ( bEndColEmpty || nStartRow == nEndRow );
 
@@ -686,7 +686,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
         if ( nInsRow < rDoc.MaxRow() )
         {
             ++nInsRow;
-            while ( !rDoc.IsBlockEmpty( nTab, nStartCol, nInsRow, nEndCol, nInsRow ) )
+            while ( !rDoc.IsBlockEmpty( nStartCol, nInsRow, nEndCol, nInsRow, nTab ) )
             {
                 if ( nInsRow < rDoc.MaxRow() )
                 {
@@ -712,7 +712,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
         if ( nInsCol < rDoc.MaxCol() )
         {
             ++nInsCol;
-            while ( !rDoc.IsBlockEmpty( nTab, nInsCol, nStartRow, nInsCol, nEndRow ) )
+            while ( !rDoc.IsBlockEmpty( nInsCol, nStartRow, nInsCol, nEndRow, nTab ) )
             {
                 if ( nInsCol < rDoc.MaxCol() )
                 {
@@ -764,7 +764,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
 
         for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
         {
-            if ( !rDoc.IsBlockEmpty( nTab, nCol, nStartRow, nCol, nSumEndRow ) )
+            if ( !rDoc.IsBlockEmpty( nCol, nStartRow, nCol, nSumEndRow, nTab ) )
             {
                 ScRangeList aRangeList;
                 // Include the originally selected start row.
@@ -801,7 +801,7 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
 
         for ( SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow )
         {
-            if ( !rDoc.IsBlockEmpty( nTab, nStartCol, nRow, nSumEndCol, nRow ) )
+            if ( !rDoc.IsBlockEmpty( nStartCol, nRow, nSumEndCol, nRow, nTab ) )
             {
                 ScRangeList aRangeList;
                 // Include the originally selected start column.
@@ -1763,7 +1763,7 @@ void ScViewFunc::FillCrossDblClick()
         return;
 
     // Make sure the selection is not empty
-    if ( rDoc.IsBlockEmpty( nTab, nStartX, nStartY, nEndX, nEndY ) )
+    if ( rDoc.IsBlockEmpty( nStartX, nStartY, nEndX, nEndY, nTab ) )
         return;
 
     // If there is data in all columns immediately below the selection then
@@ -1824,7 +1824,7 @@ void ScViewFunc::FillCrossDblClick()
         bDataFound = (rDoc.HasData( nMovX, nStartY, nTab) && rDoc.HasData( nMovX, nStartY + 1, nTab));
     }
 
-    if (!(bDataFound && rDoc.IsBlockEmpty( nTab, nStartX, nEndY + 1, nEndX, nEndY + 1, true)))
+    if (!(bDataFound && rDoc.IsBlockEmpty( nStartX, nEndY + 1, nEndX, nEndY + 1, nTab, true)))
         return;
 
     // Get end of data left or right.
