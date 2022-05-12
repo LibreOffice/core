@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "211d6beb_8d624c3a",
+        "filename": "sw/uiconfig/swriter/menubar/mscompatibleformsmenu.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-12T06:20:17Z",
+      "side": 1,
+      "message": "This adds the missing entries to the ms compatible menu that you reported.",
+      "revId": "7ac49a112804a1b9f9b53b205e578a01928e4cf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
