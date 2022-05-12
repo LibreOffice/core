@@ -811,6 +811,35 @@ typedef enum
      * }
      */
     LOK_CALLBACK_CONTENT_CONTROL = 55,
+
+    /**
+     * This is Calc specific. The payload contains print ranges of all
+     * sheets in the document.
+     *
+     * Payload example:
+     * {
+     *     "printranges" : [
+     *         {
+     *             "sheet": 0,
+     *             "ranges": [
+     *                 [0, 0, 4, 5],
+     *                 [5, 100, 8, 150]
+     *             ]
+     *         },
+     *         {
+     *             "sheet": 3,
+     *             "ranges": [
+     *                 [1, 0, 6, 10],
+     *                 [3, 200, 6, 230]
+     *             ]
+     *         }
+     *     ]
+     * }
+     *
+     * The format of the inner "ranges" array for each sheet is
+     * [<startColumn>, <startRow>, <endColumn>, <endRow>]
+     */
+    LOK_CALLBACK_PRINT_RANGES = 56,
 }
 LibreOfficeKitCallbackType;
 
@@ -951,6 +980,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_SC_FOLLOW_JUMP";
     case LOK_CALLBACK_CONTENT_CONTROL:
         return "LOK_CALLBACK_CONTENT_CONTROL";
+    case LOK_CALLBACK_PRINT_RANGES:
+        return "LOK_CALLBACK_PRINT_RANGES";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");
