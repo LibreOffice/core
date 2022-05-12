@@ -24,6 +24,8 @@
 #include <vector>
 #include <memory>
 
+namespace tools { class JsonWriter; }
+
 class ScPrintSaverTab
 {
     typedef ::std::vector< ScRange > ScRangeVec;
@@ -60,6 +62,7 @@ public:
     SCTAB                   GetTabCount() const     { return nTabCount; }
     ScPrintSaverTab&        GetTabData(SCTAB nTab);
     const ScPrintSaverTab&  GetTabData(SCTAB nTab) const;
+    void GetPrintRangesInfo(tools::JsonWriter& rPrintRanges) const;
 
     bool    operator==( const ScPrintRangeSaver& rCmp ) const;
 };

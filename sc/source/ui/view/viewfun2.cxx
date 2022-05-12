@@ -86,6 +86,7 @@
 #include <vector>
 #include <memory>
 #include <boost/property_tree/json_parser.hpp>
+#include <tools/json_writer.hxx>
 
 #include <officecfg/Office/Calc.hxx>
 
@@ -1101,6 +1102,16 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
     {
         SCTAB nCurTab = GetViewData().GetTabNo();
         std::unique_ptr<ScPrintRangeSaver> pNewRanges = rDoc.CreatePrintRangeSaver();
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            tools::JsonWriter aJsonWriter;
+            pNewRanges->GetPrintRangesInfo(aJsonWriter);
+
+            SfxViewShell* pViewShell = GetViewData().GetViewShell();
+            const std::string message = aJsonWriter.extractAsStdString();
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_PRINT_RANGES, message.c_str());
+        }
+
         pDocSh->GetUndoManager()->AddUndoAction(
                     std::make_unique<ScUndoPrintRange>( pDocSh, nCurTab, std::move(pOldRanges), std::move(pNewRanges) ) );
     }
