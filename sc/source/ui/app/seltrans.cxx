@@ -273,7 +273,7 @@ void ScSelectionTransferObj::CreateCellData()
             }
             ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
 
-            ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+            ScDocumentRef pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
             // bApi = sal_True -> no error messages
             // #i18364# bStopEdit = sal_False -> don't end edit mode
             // (this may be called from pasting into the edit line)
@@ -288,7 +288,7 @@ void ScSelectionTransferObj::CreateCellData()
                 aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
                 // maSize is set in ScTransferObj ctor
 
-                rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( std::move(pClipDoc), aObjDesc );
+                rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
 
                 // SetDragHandlePos is not used - there is no mouse position
                 //? pTransferObj->SetVisibleTab( nTab );

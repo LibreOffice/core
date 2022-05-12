@@ -107,13 +107,13 @@ public:
     void            EnterDataAtCursor( const OUString& rString );         //! Not used?
 
     SC_DLLPUBLIC void           CutToClip();
-    SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc, bool bCut, bool bApi = false,
+    SC_DLLPUBLIC bool           CopyToClip( ScDocumentRef pClipDoc, bool bCut, bool bApi = false,
                                             bool bIncludeObjects = false, bool bStopEdit = true );
-    SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange, bool bCut,
+    SC_DLLPUBLIC bool           CopyToClip( ScDocumentRef pClipDoc, const ScRangeList& rRange, bool bCut,
                                             bool bApi = false, bool bIncludeObjects = false, bool bStopEdit = true );
-    bool                        CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList& rRanges, bool bCut,
+    bool                        CopyToClipSingleRange( ScDocumentRef pClipDoc, const ScRangeList& rRanges, bool bCut,
                                             bool bIncludeObjects );
-    bool                        CopyToClipMultiRange( const ScDocument* pClipDoc, const ScRangeList& rRanges, bool bCut,
+    bool                        CopyToClipMultiRange( const ScDocumentRef pClipDoc, const ScRangeList& rRanges, bool bCut,
                                             bool bApi, bool bIncludeObjects );
     rtl::Reference<ScTransferObj> CopyToTransferable();
 

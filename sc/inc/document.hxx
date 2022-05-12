@@ -44,6 +44,7 @@
 #include <svl/zforlist.hxx>
 #include <tools/gen.hxx>
 #include <tools/solar.h>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <cassert>
 #include <memory>
@@ -318,7 +319,7 @@ enum ScMutationGuardFlags
 
 typedef std::unique_ptr<ScTable, o3tl::default_delete<ScTable>> ScTableUniquePtr;
 
-class ScDocument
+class ScDocument : public salhelper::SimpleReferenceObject
 {
 friend class ScValueIterator;
 friend class ScHorizontalValueIterator;
@@ -2079,7 +2080,7 @@ public:
     void            ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, SCTAB nTab );
 
     SC_DLLPUBLIC ScPatternAttr*     GetDefPattern() const;
-    SC_DLLPUBLIC ScDocumentPool*    GetPool();
+    SC_DLLPUBLIC ScDocumentPool*    GetPool() const;
     SC_DLLPUBLIC ScStyleSheetPool*  GetStyleSheetPool() const;
     void GetUnprotectedCells( ScRangeList& rRange, SCTAB nTab ) const;
 
@@ -2715,7 +2716,7 @@ private:
     bool BroadcastHintInternal( const ScHint &rHint );
 };
 
-typedef std::unique_ptr<ScDocument, o3tl::default_delete<ScDocument>> ScDocumentUniquePtr;
+typedef rtl::Reference<ScDocument> ScDocumentRef;
 
 /**
  * Instantiate this to ensure that subsequent modification of

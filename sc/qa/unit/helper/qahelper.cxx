@@ -990,10 +990,10 @@ ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pCli
     pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 
     // Taken from ScViewFunc::CutToClip()
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     if (bCreateUndo)
     {
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndoSelected( *pSrcDoc, aMark );
         // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
         ScRange aCopyRange = rRange;
@@ -1009,7 +1009,7 @@ ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pCli
     aMark.MarkToSimple();
 
     if (pUndoDoc)
-        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, std::move(pUndoDoc) );
+        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, pUndoDoc );
 
     return nullptr;
 }
@@ -1029,7 +1029,7 @@ void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* 
     pDestDoc->CopyFromClip(rDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pClipDoc);
 }
 
-ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocumentUniquePtr pUndoDoc)
+ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocumentRef pUndoDoc)
 {
     ScDocument& rDoc = rDocSh.GetDocument();
     ScMarkData aMarkData(rDoc.GetSheetLimits());

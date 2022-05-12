@@ -38,7 +38,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL
 class ScTempDocCache
 {
 private:
-    ScDocumentUniquePtr xDoc;
+    ScDocumentRef xDoc;
     bool            bInUse;
 
 public:

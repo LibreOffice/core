@@ -26,8 +26,9 @@
 
 #include <com/sun/star/uno/Any.hxx>
 
+#include <document.hxx>
+
 class ScDocShell;
-class ScDocument;
 class ScAsciiOptions;
 
 /**
@@ -49,7 +50,7 @@ class SC_DLLPUBLIC ScImportExport
 {
     ScDocShell* pDocSh;
     ScDocument& rDoc;
-    std::unique_ptr<ScDocument, o3tl::default_delete<ScDocument>> pUndoDoc;
+    ScDocumentRef pUndoDoc;
     ScRange     aRange;
     OUString    aStreamPath;
     OUString    aNonConvertibleChars;

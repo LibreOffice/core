@@ -21,7 +21,7 @@ private:
     ScDocument* mpDocument;
     rtl::Reference<SQLFetchThread> mxSQLFetchThread;
 
-    ScDocumentUniquePtr mpDoc;
+    ScDocumentRef mpDoc;
 
 public:
     SQLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource);

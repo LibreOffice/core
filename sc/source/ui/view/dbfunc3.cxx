@@ -483,7 +483,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
     ScDocShellModificator aModificator( *pDocSh );
 
     ScSubTotalParam aNewParam( rParam );        // change end of range
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     std::unique_ptr<ScOutlineTable> pUndoTab;
     std::unique_ptr<ScRangeName> pUndoRange;
     std::unique_ptr<ScDBCollection> pUndoDB;
@@ -492,7 +492,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
     {
         bool bOldFilter = bDo && rParam.bDoSort;
         SCTAB nTabCount = rDoc.GetTableCount();
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
         ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
         if (pTable)
         {
@@ -572,7 +572,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
         pDocSh->GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoSubTotals>( pDocSh, nTab,
                                     rParam, aNewParam.nRow2,
-                                    std::move(pUndoDoc), std::move(pUndoTab), // pUndoDBData,
+                                    pUndoDoc, std::move(pUndoTab), // pUndoDBData,
                                     std::move(pUndoRange), std::move(pUndoDB) ) );
     }
 
@@ -2054,7 +2054,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
 
     SCTAB nNewTab = GetViewData().GetTabNo();
 
-    ScDocumentUniquePtr pInsDoc(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pInsDoc(new ScDocument(SCDOCMODE_CLIP));
     pInsDoc->ResetClip( &rDoc, nNewTab );
     for (SCROW nRow = 0; nRow < nRowSize; ++nRow)
     {
@@ -2159,7 +2159,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
 
         //! undo only needed data ?
 
-        ScDocumentUniquePtr pUndoDoc;
+        ScDocumentRef pUndoDoc;
         std::unique_ptr<ScOutlineTable> pUndoTab;
         std::unique_ptr<ScRangeName> pUndoRange;
         std::unique_ptr<ScDBCollection> pUndoDB;
@@ -2167,7 +2167,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
         if (bRecord)
         {
             SCTAB nTabCount = rDoc.GetTableCount();
-            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+            pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
             ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
             if (pTable)
             {
@@ -2264,7 +2264,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
                                         nStartCol, nStartRow, nEndCol, nEndRow,
                                         nNewEndRow,
                                         nCurX, nCurY,
-                                        std::move(pUndoDoc), std::move(pUndoTab),
+                                        pUndoDoc, std::move(pUndoTab),
                                         std::move(pUndoRange), std::move(pUndoDB),
                                         pOld, pNew ) );
         }

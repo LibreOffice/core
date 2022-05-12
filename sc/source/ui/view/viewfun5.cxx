@@ -145,7 +145,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
                     ScMarkData aSrcMark(rSrcDoc.GetSheetLimits());
                     aSrcMark.SelectOneTable( nSrcTab );         // for CopyToClip
-                    ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+                    ScDocumentRef pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
 
                     SCCOL nFirstCol, nLastCol;
                     SCROW nFirstRow, nLastRow;

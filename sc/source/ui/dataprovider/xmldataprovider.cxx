@@ -103,7 +103,7 @@ void XMLDataProvider::Import()
     if (mpDoc)
         return;
 
-    mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
+    mpDoc.set(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, SCTAB(0));
     mxXMLFetchThread = new XMLFetchThread(*mpDoc, mrDataSource.getURL(),
                                           mrDataSource.getXMLImportParam(), mrDataSource.getID(),

@@ -305,11 +305,11 @@ private:
     void checkReferencedCutRangesCol(const SCTAB nSrcTab, const SCTAB nDestTab);
     void checkReferencedCutTransposedRangesColUndo(const SCTAB nSrcTab, const SCTAB nDestTab);
     void checkReferencedCutTransposedRangesCol(const SCTAB nSrcTab, const SCTAB nDestTab);
-    void prepareUndoBeforePaste(bool bCut, ScDocumentUniquePtr& pPasteUndoDoc,
+    void prepareUndoBeforePaste(bool bCut, ScDocumentRef& pPasteUndoDoc,
                                 std::unique_ptr<ScDocument>& pPasteRefUndoDoc,
                                 const ScMarkData& rDestMark, const ScRange& rDestRange,
                                 std::unique_ptr<ScRefUndoData>& pUndoData);
-    void prepareUndoAfterPaste(ScDocumentUniquePtr& pPasteUndoDoc,
+    void prepareUndoAfterPaste(ScDocumentRef& pPasteUndoDoc,
                                std::unique_ptr<ScDocument>& pPasteRefUndoDoc,
                                const ScMarkData& rDestMark, const ScRange& rDestRange,
                                std::unique_ptr<ScRefUndoData>& pUndoData,
@@ -397,7 +397,7 @@ OUString TestCopyPaste::getNote(SCCOL nCol, SCROW nRow, SCTAB nTab)
 
 // Cannot be moved to qahelper since ScDocument::CopyToDocument() is not SC_DLLPUBLIC
 /** Executes the same steps for undo as ScViewFunc::PasteFromClip(). */
-void TestCopyPaste::prepareUndoBeforePaste(bool bCut, ScDocumentUniquePtr& pPasteUndoDoc,
+void TestCopyPaste::prepareUndoBeforePaste(bool bCut, ScDocumentRef& pPasteUndoDoc,
                                            std::unique_ptr<ScDocument>& pPasteRefUndoDoc,
                                            const ScMarkData& rDestMark, const ScRange& rDestRange,
                                            std::unique_ptr<ScRefUndoData>& pUndoData)
@@ -405,7 +405,7 @@ void TestCopyPaste::prepareUndoBeforePaste(bool bCut, ScDocumentUniquePtr& pPast
     InsertDeleteFlags nUndoFlags = InsertDeleteFlags::CONTENTS;
     SCTAB nTabCount = m_pDoc->GetTableCount();
 
-    pPasteUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+    pPasteUndoDoc.set(new ScDocument(SCDOCMODE_UNDO));
     pPasteUndoDoc->InitUndoSelected(*m_pDoc, rDestMark, false, false);
     // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
     m_pDoc->CopyToDocument(rDestRange.aStart.Col(), rDestRange.aStart.Row(), 0,
@@ -424,7 +424,7 @@ void TestCopyPaste::prepareUndoBeforePaste(bool bCut, ScDocumentUniquePtr& pPast
 
 // Cannot be moved to qahelper since ScDocument::CopyToDocument() is not SC_DLLPUBLIC
 /** Executes the same steps for undo as ScViewFunc::PasteFromClip(). */
-void TestCopyPaste::prepareUndoAfterPaste(ScDocumentUniquePtr& pPasteUndoDoc,
+void TestCopyPaste::prepareUndoAfterPaste(ScDocumentRef& pPasteUndoDoc,
                                           std::unique_ptr<ScDocument>& pPasteRefUndoDoc,
                                           const ScMarkData& rDestMark, const ScRange& rDestRange,
                                           std::unique_ptr<ScRefUndoData>& pUndoData,
@@ -435,13 +435,13 @@ void TestCopyPaste::prepareUndoAfterPaste(ScDocumentUniquePtr& pPasteUndoDoc,
     InsertDeleteFlags nUndoFlags = InsertDeleteFlags::CONTENTS;
     SCTAB nTabCount = m_pDoc->GetTableCount();
 
-    ScDocumentUniquePtr pPasteRedoDoc;
+    ScDocumentRef pPasteRedoDoc;
     // copy redo data after appearance of the first undo
     // don't create Redo-Doc without RefUndoDoc
 
     if (pPasteRefUndoDoc)
     {
-        pPasteRedoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+        pPasteRedoDoc.set(new ScDocument(SCDOCMODE_UNDO));
         pPasteRedoDoc->InitUndo(*m_pDoc, rDestRange.aStart.Tab(), rDestRange.aEnd.Tab(), false,
                                 false);
 
@@ -467,9 +467,8 @@ void TestCopyPaste::prepareUndoAfterPaste(ScDocumentUniquePtr& pPasteUndoDoc,
     aOptions.bAsLink = bAsLink;
     aOptions.eMoveMode = eMoveMode;
 
-    pUndoPaste.reset(new ScUndoPaste(&*m_xDocShell, rDestRange, rDestMark, std::move(pPasteUndoDoc),
-                                     std::move(pPasteRedoDoc), nUndoFlags, std::move(pUndoData),
-                                     false,
+    pUndoPaste.reset(new ScUndoPaste(&*m_xDocShell, rDestRange, rDestMark, pPasteUndoDoc,
+                                     pPasteRedoDoc, nUndoFlags, std::move(pUndoData), false,
                                      &aOptions)); // false = Redo data not yet copied
 }
 
@@ -532,9 +531,9 @@ void TestCopyPaste::testCopyPaste()
     copyToClip(m_pDoc, aRange, &aClipDoc);
 
     aRange = ScRange(0, 1, 1, 2, 1, 1); //target: Sheet2.A2:C2
-    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
+    ScDocumentRef pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(*m_pDoc, 1, 1, true, true);
-    std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(*m_xDocShell, aRange, std::move(pUndoDoc)));
+    std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(*m_xDocShell, aRange, pUndoDoc));
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aRange);
     m_pDoc->CopyFromClip(aRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
@@ -714,14 +713,14 @@ void TestCopyPaste::testCopyPasteTranspose()
     ScDocument aNewClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, aSrcRange, &aNewClipDoc);
 
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aNewClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, false);
 
     ScRange aDestRange(3, 1, 1, 3, 3, 1); //target: Sheet2.D2:D4
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aDestRange);
     m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get());
-    pTransClip.reset();
+    pTransClip.clear();
 
     //check cell content after transposed copy/paste
     OUString aString = m_pDoc->GetString(3, 3, 1);
@@ -790,7 +789,7 @@ void TestCopyPaste::testCopyPasteSpecialMergedCellsTranspose()
     copyToClip(m_pDoc, aSrcRange, &aClipDoc);
 
     // transpose
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, true, false);
 
     ScRange aDestRange(1, 1, destSheet, 4, 2, destSheet); // Paste to B2:E3 on Sheet2.
@@ -798,7 +797,7 @@ void TestCopyPaste::testCopyPasteSpecialMergedCellsTranspose()
     aMark.SetMarkArea(aDestRange);
     m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get(), true,
                          false);
-    pTransClip.reset();
+    pTransClip.clear();
 
     // Check transpose of merged cells
     CPPUNIT_ASSERT_EQUAL(ScAddress(0, 0, destSheet),
@@ -883,7 +882,7 @@ void TestCopyPaste::testCopyPasteSpecialMergedCellsFilteredTranspose()
     copyToClip(m_pDoc, aSrcRange, &aClipDoc);
 
     // transpose
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, true, false);
 
     ScRange aDestRange(1, 1, destSheet, 3, 2, destSheet); // Paste to B2:D3 on Sheet2.
@@ -891,7 +890,7 @@ void TestCopyPaste::testCopyPasteSpecialMergedCellsFilteredTranspose()
     aMark.SetMarkArea(aDestRange);
     m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get(), true,
                          false);
-    pTransClip.reset();
+    pTransClip.clear();
 
     // Check transpose of merged cells
     CPPUNIT_ASSERT_EQUAL(ScAddress(0, 0, destSheet),
@@ -928,7 +927,7 @@ void TestCopyPaste::testCopyPasteSpecialAsLinkTranspose()
     copyToClip(m_pDoc, aSrcRange, &aClipDoc);
 
     // transpose
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::CONTENTS, true, false);
 
     ScRange aDestRange(1, 1, destSheet, 4, 1, destSheet); // Paste to B2:E2 on Sheet2.
@@ -936,7 +935,7 @@ void TestCopyPaste::testCopyPasteSpecialAsLinkTranspose()
     aMark.SetMarkArea(aDestRange);
     m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, pTransClip.get(),
                          true, false);
-    pTransClip.reset();
+    pTransClip.clear();
 
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
@@ -1018,7 +1017,7 @@ void TestCopyPaste::testCopyPasteSpecialAsLinkFilteredTranspose()
     copyToClip(m_pDoc, aSrcRange, &aClipDoc);
 
     // transpose
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::CONTENTS, true, false);
 
     ScRange aDestRange(1, 1, destSheet, 3, 1, destSheet); // Paste to B2:D2 on Sheet2.
@@ -1026,7 +1025,7 @@ void TestCopyPaste::testCopyPasteSpecialAsLinkFilteredTranspose()
     aMark.SetMarkArea(aDestRange);
     m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, pTransClip.get(),
                          true, false, false);
-    pTransClip.reset();
+    pTransClip.clear();
 
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
@@ -1077,7 +1076,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkTranspose()
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aSrcMark, false, false);
 
     // transpose
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::VALUE, true, false);
 
     ScRange aDestRange(1, 1, destSheet, 2, 4, destSheet); // Paste to B2:C5 on Sheet2.
@@ -1086,7 +1085,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkTranspose()
     m_pDoc->CopyMultiRangeFromClip(
         ScAddress(1, 1, destSheet), aMark, InsertDeleteFlags::VALUE | InsertDeleteFlags::FORMULA,
         pTransClip.get(), true, false /* false fixes tdf#141683 */, false, false);
-    pTransClip.reset();
+    pTransClip.clear();
 
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
@@ -1197,7 +1196,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
 
     printRange(m_pDoc, aClipParam.getWholeRange(), "Src range");
     // transpose
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::VALUE, true, false);
 
     printRange(&aClipDoc, ScRange(0, 0, 0, 4, 5, 0), "Base doc (&aClipDoc)");
@@ -1209,7 +1208,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeRowAsLinkFilteredTranspose()
     m_pDoc->CopyMultiRangeFromClip(
         ScAddress(1, 1, destSheet), aMark, InsertDeleteFlags::VALUE | InsertDeleteFlags::FORMULA,
         pTransClip.get(), true, false /* false fixes tdf#141683 */, false, false);
-    pTransClip.reset();
+    pTransClip.clear();
     printRange(m_pDoc, aDestRange, "Transposed dest sheet");
 
     // Check pasted content to make sure they reference the correct cells.
@@ -1302,7 +1301,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkTranspose()
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aSrcMark, false, false);
 
     // transpose
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::VALUE, true, false);
 
     ScRange aDestRange(1, 1, destSheet, 4, 2, destSheet); // Paste to B2:E3 on Sheet2.
@@ -1311,7 +1310,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkTranspose()
     m_pDoc->CopyMultiRangeFromClip(
         ScAddress(1, 1, destSheet), aMark, InsertDeleteFlags::VALUE | InsertDeleteFlags::FORMULA,
         pTransClip.get(), true, false /* false fixes tdf#141683 */, false, false);
-    pTransClip.reset();
+    pTransClip.clear();
 
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
@@ -1409,7 +1408,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose()
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aSrcMark, false, false);
 
     // transpose
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::VALUE, true, false);
 
     ScRange aDestRange(1, 1, destSheet, 4, 2, destSheet); // Paste to B2:E3 on Sheet2.
@@ -1418,7 +1417,7 @@ void TestCopyPaste::testCopyPasteSpecialMultiRangeColAsLinkFilteredTranspose()
     m_pDoc->CopyMultiRangeFromClip(
         ScAddress(1, 1, destSheet), aMark, InsertDeleteFlags::VALUE | InsertDeleteFlags::FORMULA,
         pTransClip.get(), true, false /* false fixes tdf#141683 */, false, false);
-    pTransClip.reset();
+    pTransClip.clear();
 
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
@@ -1471,7 +1470,7 @@ void TestCopyPaste::testCopyPasteSpecialAllAsLinkTranspose()
     copyToClip(m_pDoc, aSrcRange, &aClipDoc);
 
     // transpose
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, true, false);
 
     ScRange aDestRange(1, 1, destSheet, 4, 1, destSheet); // Paste to B2:E2 on Sheet2.
@@ -1479,7 +1478,7 @@ void TestCopyPaste::testCopyPasteSpecialAllAsLinkTranspose()
     aMark.SetMarkArea(aDestRange);
     m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get(), true,
                          false);
-    pTransClip.reset();
+    pTransClip.clear();
 
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
@@ -1563,7 +1562,7 @@ void TestCopyPaste::testCopyPasteSpecialAllAsLinkFilteredTranspose()
     copyToClip(m_pDoc, aSrcRange, &aClipDoc);
 
     // transpose
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, true, false);
 
     ScRange aDestRange(1, 1, destSheet, 3, 1, destSheet); // Paste to B2:D2 on Sheet2.
@@ -1571,7 +1570,7 @@ void TestCopyPaste::testCopyPasteSpecialAllAsLinkFilteredTranspose()
     aMark.SetMarkArea(aDestRange);
     m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get(), true,
                          false, false);
-    pTransClip.reset();
+    pTransClip.clear();
 
     // Check pasted content to make sure they reference the correct cells.
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1, 1, destSheet));
@@ -2029,7 +2028,7 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
     ScMarkData aDestMark(m_pDoc->GetSheetLimits());
     ScRange aDestRange;
 
-    ScDocumentUniquePtr pPasteUndoDoc;
+    ScDocumentRef pPasteUndoDoc;
     std::unique_ptr<ScDocument> pPasteRefUndoDoc;
     std::unique_ptr<ScRefUndoData> pUndoData;
 
@@ -2055,7 +2054,7 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
         if (bTranspose)
         {
             ScDocument* pOrigClipDoc = &aClipDoc;
-            ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+            ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
             aClipDoc.TransposeClip(pTransClip.get(), aFlags, bAsLink, bIncludedFiltered);
             aDestRange = ScRange(3, 1, destSheet, 3 + nSrcRows - 1, 1 + nSrcCols - 1,
                                  destSheet); //target: D2:F6
@@ -2076,7 +2075,7 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
                                         pPasteRefUndoDoc.get());
                 printRange(m_pDoc, aDestRange, "Transposed dest sheet after UpdateTranspose()");
             }
-            pTransClip.reset();
+            pTransClip.clear();
         }
         else
         {
@@ -2122,7 +2121,7 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
         if (bTranspose)
         {
             printRange(m_pDoc, aClipParam.getWholeRange(), "Src range");
-            ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+            ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
             aClipDoc.TransposeClip(pTransClip.get(), aFlags, bAsLink, bIncludedFiltered);
             aDestRange = ScRange(3, 1, destSheet, 3 + nSrcRows - 1, 1 + nSrcCols - 1 - 1,
                                  destSheet); //target col: D2:G6, target row: D2:H6
@@ -2134,7 +2133,7 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
             m_pDoc->CopyMultiRangeFromClip(ScAddress(3, 1, destSheet), aDestMark, aFlags,
                                            pTransClip.get(), true, bAsLink && !bTranspose,
                                            bIncludedFiltered, bSkipEmpty);
-            pTransClip.reset();
+            pTransClip.clear();
             printRange(m_pDoc, aDestRange, "Transposed dest sheet");
         }
         else
@@ -7070,7 +7069,7 @@ void TestCopyPaste::testTdf142201Row()
 
     // Transpose
     ScDocument* pOrigClipDoc = &aClipDoc;
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, true);
     aDestMark.SetMarkArea(aDestRange);
     // Paste
@@ -7082,7 +7081,7 @@ void TestCopyPaste::testTdf142201Row()
     printFormula(m_pDoc, 1, 3, nTab);
     printFormula(m_pDoc, 1, 4, nTab);
     m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
-    pTransClip.reset();
+    pTransClip.clear();
 
     printRange(m_pDoc, aReferencesRange, "References after cut transposed");
     printFormula(m_pDoc, 0, 3, nTab);
@@ -7145,7 +7144,7 @@ void TestCopyPaste::testTdf142201ColRel()
 
     // Transpose
     ScDocument* pOrigClipDoc = &aClipDoc;
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, true);
     aDestMark.SetMarkArea(aDestRange);
     // Paste
@@ -7157,7 +7156,7 @@ void TestCopyPaste::testTdf142201ColRel()
     printFormula(m_pDoc, 1, 3, nTab);
     printFormula(m_pDoc, 1, 4, nTab);
     m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
-    pTransClip.reset();
+    pTransClip.clear();
 
     printRange(m_pDoc, aReferencesRange, "References after paste transposed");
     printFormula(m_pDoc, 0, 3, nTab);
@@ -7220,7 +7219,7 @@ void TestCopyPaste::testTdf142201ColAbs()
 
     // Transpose
     ScDocument* pOrigClipDoc = &aClipDoc;
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, true);
     aDestMark.SetMarkArea(aDestRange);
     // Paste
@@ -7232,7 +7231,7 @@ void TestCopyPaste::testTdf142201ColAbs()
     printFormula(m_pDoc, 1, 3, nTab);
     printFormula(m_pDoc, 1, 4, nTab);
     m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
-    pTransClip.reset();
+    pTransClip.clear();
 
     printRange(m_pDoc, aReferencesRange, "References after paste transposed");
     printFormula(m_pDoc, 0, 3, nTab);
@@ -7615,7 +7614,7 @@ void TestCopyPaste::executeReferencedCutRangesRow(const bool bTransposed, const 
 
     InsertDeleteFlags aFlags(InsertDeleteFlags::ALL);
 
-    ScDocumentUniquePtr pPasteUndoDoc;
+    ScDocumentRef pPasteUndoDoc;
     std::unique_ptr<ScDocument> pPasteRefUndoDoc;
     std::unique_ptr<ScRefUndoData> pUndoData;
 
@@ -7634,7 +7633,7 @@ void TestCopyPaste::executeReferencedCutRangesRow(const bool bTransposed, const 
 
         // Transpose
         ScDocument* pOrigClipDoc = &aClipDoc;
-        ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+        ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
         aClipDoc.TransposeClip(pTransClip.get(), aFlags, false, true);
         // Paste
         m_pDoc->CopyFromClip(aDestRange, aDestMark, aFlags, pPasteRefUndoDoc.get(),
@@ -7645,7 +7644,7 @@ void TestCopyPaste::executeReferencedCutRangesRow(const bool bTransposed, const 
         m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, pPasteRefUndoDoc.get());
         lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
                                           "Relative references after UpdateTranspose");
-        pTransClip.reset();
+        pTransClip.clear();
     }
     else
     {
@@ -8560,7 +8559,7 @@ void TestCopyPaste::executeReferencedCutRangesCol(const bool bTransposed, const 
 
     InsertDeleteFlags aFlags(InsertDeleteFlags::ALL);
 
-    ScDocumentUniquePtr pPasteUndoDoc;
+    ScDocumentRef pPasteUndoDoc;
     std::unique_ptr<ScDocument> pPasteRefUndoDoc;
     std::unique_ptr<ScRefUndoData> pUndoData;
 
@@ -8579,7 +8578,7 @@ void TestCopyPaste::executeReferencedCutRangesCol(const bool bTransposed, const 
 
         // Transpose
         ScDocument* pOrigClipDoc = &aClipDoc;
-        ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+        ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
         aClipDoc.TransposeClip(pTransClip.get(), aFlags, false, true);
         // Paste
         m_pDoc->CopyFromClip(aDestRange, aDestMark, aFlags, pPasteRefUndoDoc.get(),
@@ -8590,7 +8589,7 @@ void TestCopyPaste::executeReferencedCutRangesCol(const bool bTransposed, const 
         m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, pPasteRefUndoDoc.get());
         lcl_printValuesAndFormulasInRange(m_pDoc, ScRange(0, 20, nSrcTab, 2, 21, nSrcTab),
                                           "Relative references after UpdateTranspose");
-        pTransClip.reset();
+        pTransClip.clear();
     }
     else
     {
@@ -9158,14 +9157,14 @@ void TestCopyPaste::testCutTransposedFormulas()
 
     // Transpose
     ScDocument* pOrigClipDoc = &aClipDoc;
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, true);
     aDestMark.SetMarkArea(aDestRange);
     // Paste
     m_pDoc->CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get(),
                          true, false, true, false);
     m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
-    pTransClip.reset();
+    pTransClip.clear();
 
     CPPUNIT_ASSERT_EQUAL(OUString("=A1"), getFormula(2, 2, nTab));
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(2, 2, nTab));
@@ -9228,14 +9227,14 @@ void TestCopyPaste::testCutTransposedFormulasSquare()
 
     // Transpose
     ScDocument* pOrigClipDoc = &aClipDoc;
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, true);
     aDestMark.SetMarkArea(aDestRange);
     // Paste
     m_pDoc->CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get(),
                          true, false, true, false);
     m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
-    pTransClip.reset();
+    pTransClip.clear();
 
     printRange(m_pDoc, aDestRange, "Formulas after cut transposed");
     printFormula(m_pDoc, 2, 6, nTab);
@@ -9286,7 +9285,7 @@ void TestCopyPaste::testTdf142065()
 
     // Transpose
     ScDocument* pOrigClipDoc = &aClipDoc;
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, true);
     printRange(pTransClip.get(), ScRange(0, 0, nTab, 0, 1, nTab),
                "transposed clip doc (pTransClip.get())");
@@ -9301,7 +9300,7 @@ void TestCopyPaste::testTdf142065()
     printRange(pOrigClipDoc, aSrcRange, "orig clip doc (pOrigClipDoc)");
     printFormula(pOrigClipDoc, 1, 0, nTab);
     m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
-    pTransClip.reset();
+    pTransClip.clear();
     printRange(m_pDoc, aDestRange, "dest doc after UpdateTranspose()");
     printFormula(m_pDoc, 0, 3, nTab);
 
@@ -9514,7 +9513,7 @@ void TestCopyPaste::testCopyPasteSkipEmpty()
     }
 
     // Create undo document.
-    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
+    ScDocumentRef pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(*m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, *pUndoDoc, &aMark);
 
@@ -9523,14 +9522,14 @@ void TestCopyPaste::testCopyPasteSkipEmpty()
                          false, false, true /*bSkipEmpty*/);
 
     // Create redo document.
-    ScDocumentUniquePtr pRedoDoc(new ScDocument(SCDOCMODE_UNDO));
+    ScDocumentRef pRedoDoc(new ScDocument(SCDOCMODE_UNDO));
     pRedoDoc->InitUndo(*m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, *pRedoDoc, &aMark);
 
     // Create an undo object for this.
     std::unique_ptr<ScRefUndoData> pRefUndoData(new ScRefUndoData(m_pDoc));
-    ScUndoPaste aUndo(m_xDocShell.get(), aDestRange, aMark, std::move(pUndoDoc),
-                      std::move(pRedoDoc), InsertDeleteFlags::ALL, std::move(pRefUndoData));
+    ScUndoPaste aUndo(m_xDocShell.get(), aDestRange, aMark, pUndoDoc, pRedoDoc,
+                      InsertDeleteFlags::ALL, std::move(pRefUndoData));
 
     // Check the content after the paste.
     {
@@ -9626,7 +9625,7 @@ void TestCopyPaste::testCutPasteRefUndo()
     aClipDoc.SetValue(ScAddress(1, 1, 0), 12.0);
 
     // Set up undo document for reference update.
-    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
+    ScDocumentRef pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(*m_pDoc, 0, 0);
 
     // Do the pasting of 12 into C2.  This should update A2 to reference C2.
@@ -9640,7 +9639,7 @@ void TestCopyPaste::testCutPasteRefUndo()
     ASSERT_FORMULA_EQUAL(*pUndoDoc, ScAddress(0, 1, 0), "B2",
                          "A2 in the undo document should be referencing B2.");
 
-    ScUndoPaste aUndo(m_xDocShell.get(), ScRange(2, 1, 0), aMark, std::move(pUndoDoc), nullptr,
+    ScUndoPaste aUndo(m_xDocShell.get(), ScRange(2, 1, 0), aMark, pUndoDoc, nullptr,
                       InsertDeleteFlags::CONTENTS, nullptr, false, nullptr);
     aUndo.Undo();
 
@@ -9708,7 +9707,7 @@ void TestCopyPaste::testCutPasteGroupRefUndo()
     ScDocument* pPasteUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pPasteUndoDoc->InitUndoSelected(*m_pDoc, aMark);
     std::unique_ptr<ScUndoPaste> pUndoPaste(
-        createUndoPaste(*m_xDocShell, aPasteRange, ScDocumentUniquePtr(pPasteUndoDoc)));
+        createUndoPaste(*m_xDocShell, aPasteRange, ScDocumentRef(pPasteUndoDoc)));
     m_pDoc->CopyFromClip(aPasteRange, aMark, InsertDeleteFlags::ALL, pPasteUndoDoc, &aClipDoc);
 
     // Check data after Paste.
@@ -9820,13 +9819,13 @@ void TestCopyPaste::testUndoCut()
     aMark.MarkToMulti();
 
     // Set up an undo object for cutting A1:A3.
-    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
+    ScDocumentRef pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(*m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL, false, *pUndoDoc);
     ASSERT_DOUBLES_EQUAL(1.0, pUndoDoc->GetValue(ScAddress(0, 0, 0)));
     ASSERT_DOUBLES_EQUAL(10.0, pUndoDoc->GetValue(ScAddress(0, 1, 0)));
     ASSERT_DOUBLES_EQUAL(100.0, pUndoDoc->GetValue(ScAddress(0, 2, 0)));
-    ScUndoCut aUndo(m_xDocShell.get(), aRange, aRange.aEnd, aMark, std::move(pUndoDoc));
+    ScUndoCut aUndo(m_xDocShell.get(), aRange, aRange.aEnd, aMark, pUndoDoc);
 
     // "Cut" the selection.
     m_pDoc->DeleteSelection(InsertDeleteFlags::ALL, aMark);
@@ -10274,14 +10273,14 @@ void TestCopyPaste::testTdf68976()
 
     // Transpose
     ScDocument* pOrigClipDoc = &aClipDoc;
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, true);
     aDestMark.SetMarkArea(aDestRange);
     // Paste
     m_pDoc->CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get(),
                          true, false, true, false);
     m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
-    pTransClip.reset();
+    pTransClip.clear();
 
     // Check results
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 0, nTab)); // A1
@@ -10318,14 +10317,14 @@ void TestCopyPaste::testTdf71058()
 
     // Transpose
     ScDocument* pOrigClipDoc = &aClipDoc;
-    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    ScDocumentRef pTransClip(new ScDocument(SCDOCMODE_CLIP));
     aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, true);
     aDestMark.SetMarkArea(aDestRange);
     // Paste
     m_pDoc->CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get(),
                          true, false, true, false);
     m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
-    pTransClip.reset();
+    pTransClip.clear();
 
     // Check precondition
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(4, 5, nTab));

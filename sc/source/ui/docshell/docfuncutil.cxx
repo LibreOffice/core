@@ -44,11 +44,11 @@ bool DocFuncUtil::hasProtectedTab( const ScDocument& rDoc, const ScMarkData& rMa
     return false;
 }
 
-ScDocumentUniquePtr DocFuncUtil::createDeleteContentsUndoDoc(
+ScDocumentRef DocFuncUtil::createDeleteContentsUndoDoc(
     ScDocument& rDoc, const ScMarkData& rMark, const ScRange& rRange,
     InsertDeleteFlags nFlags, bool bOnlyMarked )
 {
-    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
+    ScDocumentRef pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     SCTAB nTab = rRange.aStart.Tab();
     pUndoDoc->InitUndo(rDoc, nTab, nTab);
     SCTAB nTabCount = rDoc.GetTableCount();
@@ -77,13 +77,13 @@ ScDocumentUniquePtr DocFuncUtil::createDeleteContentsUndoDoc(
 
 void DocFuncUtil::addDeleteContentsUndo(
     SfxUndoManager* pUndoMgr, ScDocShell* pDocSh, const ScMarkData& rMark,
-    const ScRange& rRange, ScDocumentUniquePtr&& pUndoDoc, InsertDeleteFlags nFlags,
+    const ScRange& rRange, ScDocumentRef& pUndoDoc, InsertDeleteFlags nFlags,
     const std::shared_ptr<ScSimpleUndo::DataSpansType>& pSpans,
     bool bMulti, bool bDrawUndo )
 {
     std::unique_ptr<ScUndoDeleteContents> pUndo(
         new ScUndoDeleteContents(
-            pDocSh, rMark, rRange, std::move(pUndoDoc), bMulti, nFlags, bDrawUndo));
+            pDocSh, rMark, rRange, pUndoDoc, bMulti, nFlags, bDrawUndo));
     pUndo->SetDataSpans(pSpans);
 
     pUndoMgr->AddUndoAction(std::move(pUndo));

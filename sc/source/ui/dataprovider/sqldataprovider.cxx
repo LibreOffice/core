@@ -142,7 +142,7 @@ void SQLDataProvider::Import()
     if (mpDoc)
         return;
 
-    mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
+    mpDoc.set(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, SCTAB(0));
     mxSQLFetchThread = new SQLFetchThread(*mpDoc, mrDataSource.getID(),
                                           std::bind(&SQLDataProvider::ImportFinished, this),
@@ -160,7 +160,7 @@ void SQLDataProvider::ImportFinished()
 {
     mrDataSource.getDBManager()->WriteToDoc(*mpDoc);
     mxSQLFetchThread.clear();
-    mpDoc.reset();
+    mpDoc.clear();
 }
 
 const OUString& SQLDataProvider::GetURL() const { return mrDataSource.getURL(); }

@@ -91,7 +91,7 @@ class CSVDataProvider : public DataProvider
 {
     rtl::Reference<CSVFetchThread> mxCSVFetchThread;
     ScDocument* mpDocument;
-    ScDocumentUniquePtr mpDoc;
+    ScDocumentRef mpDoc;
 
     void Refresh();
 

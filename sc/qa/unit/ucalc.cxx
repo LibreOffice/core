@@ -5760,10 +5760,10 @@ void Test::testDeleteContents()
     aMark.SelectOneTable(0);
     aMark.SetMarkArea(aRange);
 
-    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
+    ScDocumentRef pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(*m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc, &aMark);
-    ScUndoDeleteContents aUndo(m_xDocShell.get(), aMark, aRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
+    ScUndoDeleteContents aUndo(m_xDocShell.get(), aMark, aRange, pUndoDoc, false, InsertDeleteFlags::CONTENTS, true);
 
     clearRange(m_pDoc, aRange);
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3,15,0))); // formula

@@ -1169,7 +1169,7 @@ static bool lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDra
                                                    rRange.aEnd.Col(),   rRange.aEnd.Row(),
                                                    aMark ) )
     {
-        ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+        ScDocumentRef pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
         ScClipParam aClipParam(rRange, false);
         rSrcDoc.CopyToClip(aClipParam, pClipDoc.get(), &aMark, false, false);
         // pClipDoc->ExtendMerge( rRange, sal_True );
@@ -1179,7 +1179,7 @@ static bool lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDra
         aObjDesc.maDisplayName = pSrcShell->GetMedium()->GetURLObject().GetURLNoPass();
         // maSize is set in ScTransferObj ctor
 
-        rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( std::move(pClipDoc), aObjDesc );
+        rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
 
         pTransferObj->SetDragSource( pSrcShell, aMark );
         pTransferObj->SetDragSourceFlags( nFlags );

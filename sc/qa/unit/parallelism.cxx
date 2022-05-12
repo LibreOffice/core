@@ -111,10 +111,10 @@ ScUndoCut* ScParallelismTest::cutToClip(ScDocShell& rDocSh, const ScRange& rRang
     pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 
     // Taken from ScViewFunc::CutToClip()
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     if (bCreateUndo)
     {
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndoSelected( *pSrcDoc, aMark );
         // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
         ScRange aCopyRange = rRange;
@@ -130,7 +130,7 @@ ScUndoCut* ScParallelismTest::cutToClip(ScDocShell& rDocSh, const ScRange& rRang
     aMark.MarkToSimple();
 
     if (pUndoDoc)
-        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, std::move(pUndoDoc) );
+        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, pUndoDoc );
 
     return nullptr;
 }

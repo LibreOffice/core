@@ -3292,7 +3292,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
         SCROW nStartRow = rSrcArea.aStart.Row();
         SCCOL nEndCol = rSrcArea.aEnd.Col();
         SCROW nEndRow = rSrcArea.aEnd.Row();
-        ScDocumentUniquePtr pMixDoc;
+        ScDocumentRef pMixDoc;
         bool bDoMix = ( bSkipEmpty || nFunction != ScPasteFunc::NONE ) && ( nFlags & InsertDeleteFlags::CONTENTS );
 
         bool bOldAutoCalc = GetAutoCalc();
@@ -3312,7 +3312,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
                 {
                     if (!pMixDoc)
                     {
-                        pMixDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+                        pMixDoc.set(new ScDocument(SCDOCMODE_UNDO));
                         pMixDoc->InitUndo( *this, i, i );
                     }
                     else
@@ -3354,7 +3354,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
 
     if (ValidTab(nSrcTab) && nSrcTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nSrcTab])
     {
-        ScDocumentUniquePtr pMixDoc;
+        ScDocumentRef pMixDoc;
         bool bDoMix = ( bSkipEmpty || nFunction != ScPasteFunc::NONE ) && ( nFlags & InsertDeleteFlags::CONTENTS );
 
         bool bOldAutoCalc = GetAutoCalc();
@@ -3379,7 +3379,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
                 {
                     if (!pMixDoc)
                     {
-                        pMixDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+                        pMixDoc.set(new ScDocument(SCDOCMODE_UNDO));
                         pMixDoc->InitUndo( *this, i, i );
                     }
                     else
@@ -4773,7 +4773,8 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
             OSL_FAIL( "Attribute Null" );
         }
     }
-    return &mxPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
+    ScDocumentPool* pPool = GetPool();
+    return pPool ? &pPool->GetDefaultItem( nWhich ) : nullptr;
 }
 
 const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
@@ -4788,7 +4789,8 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
             OSL_FAIL( "Attribute Null" );
         }
     }
-    return &mxPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
+    ScDocumentPool* pPool = GetPool();
+    return pPool ? &pPool->GetDefaultItem( nWhich ) : nullptr;
 }
 
 const SfxPoolItem* ScDocument::GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const
@@ -6150,17 +6152,19 @@ void ScDocument::DeleteSelectionTab(
 
 ScPatternAttr* ScDocument::GetDefPattern() const
 {
-    return const_cast<ScPatternAttr*>(&mxPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN));
+    return mxPoolHelper ? const_cast<ScPatternAttr*>(
+               &mxPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN))
+                        : nullptr;
 }
 
-ScDocumentPool* ScDocument::GetPool()
+ScDocumentPool* ScDocument::GetPool() const
 {
-    return mxPoolHelper->GetDocPool();
+    return mxPoolHelper ? mxPoolHelper->GetDocPool() : nullptr;
 }
 
 ScStyleSheetPool* ScDocument::GetStyleSheetPool() const
 {
-    return mxPoolHelper->GetStylePool();
+    return mxPoolHelper ? mxPoolHelper->GetStylePool() : nullptr;
 }
 
 bool ScDocument::IsEmptyData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const
@@ -6223,7 +6227,9 @@ void ScDocument::UpdStlShtPtrsFrmNms()
 
 void ScDocument::StylesToNames()
 {
-    ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
+    ScDocumentPool* pPool = GetPool();
+    if (!pPool)
+        return;
 
     for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_PATTERN))
     {
@@ -6461,7 +6467,8 @@ bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
         const OUString & rNew = maTabs[nTab+1]->GetPageStyle();
         if ( rNew != maTabs[nTab]->GetPageStyle() )
         {
-            SfxStyleSheetBase* pStyle = mxPoolHelper->GetStylePool()->Find( rNew, SfxStyleFamily::Page );
+            ScStyleSheetPool* pPool = GetStyleSheetPool();
+            SfxStyleSheetBase* pStyle = pPool ? pPool->Find( rNew, SfxStyleFamily::Page ) : nullptr;
             if ( pStyle )
             {
                 const SfxItemSet& rSet = pStyle->GetItemSet();

@@ -20,7 +20,7 @@ class XMLDataProvider : public DataProvider
 private:
     ScDocument* mpDocument;
     rtl::Reference<XMLFetchThread> mxXMLFetchThread;
-    ScDocumentUniquePtr mpDoc;
+    ScDocumentRef mpDoc;
 
 public:
     XMLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource);

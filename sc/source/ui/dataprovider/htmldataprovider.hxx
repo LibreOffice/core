@@ -21,7 +21,7 @@ private:
     ScDocument* mpDocument;
     rtl::Reference<HTMLFetchThread> mxHTMLFetchThread;
 
-    ScDocumentUniquePtr mpDoc;
+    ScDocumentRef mpDoc;
 
 public:
     HTMLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource);

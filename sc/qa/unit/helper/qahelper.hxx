@@ -254,7 +254,7 @@ SCQAHELPER_DLLPUBLIC void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange,
 SCQAHELPER_DLLPUBLIC void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
                                     ScDocument* pClipDoc);
 SCQAHELPER_DLLPUBLIC ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange,
-                                    ScDocumentUniquePtr pUndoDoc);
+                                    ScDocumentRef pUndoDoc);
 SCQAHELPER_DLLPUBLIC void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
                                      ScDocument* pClipDoc,
                                      InsertDeleteFlags eFlags = InsertDeleteFlags::ALL);
