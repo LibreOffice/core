@@ -571,7 +571,6 @@ namespace toolkitform
                 }
                 catch(...)
                 {
-                    pCheckBoxWidget->OnValue = "On";
                 }
             }
 
@@ -591,7 +590,6 @@ namespace toolkitform
                 }
                 catch(...)
                 {
-                    pRadioWidget->OnValue = "On";
                 }
             }
 
