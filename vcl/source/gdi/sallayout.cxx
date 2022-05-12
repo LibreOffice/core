@@ -492,10 +492,16 @@ sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoor
     DeviceCoordinate nWidth = 0;
     for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
     {
-        nWidth += aCharWidths[ i - mnMinCharPos ] * nFactor;
-        if( nWidth > nMaxWidth )
-            return i;
-        nWidth += nCharExtra;
+        DeviceCoordinate nDelta =  aCharWidths[ i - mnMinCharPos ] * nFactor;
+
+        if (nDelta != 0)
+        {
+            nWidth += nDelta;
+            if( nWidth > nMaxWidth )
+                return i;
+
+            nWidth += nCharExtra;
+        }
     }
 
     return -1;
