@@ -285,7 +285,7 @@ public:
     bool        IsEmptyAttr() const;
 
                 // data only:
-    bool        IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
+    bool        IsEmptyData(SCROW nStartRow, SCROW nEndRow) const;
     SCSIZE      GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
     bool        HasDataAt( SCROW nRow, ScDataAreaExtras* pDataAreaExtras = nullptr ) const;
     bool        HasDataAt( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,

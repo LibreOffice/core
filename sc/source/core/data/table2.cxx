@@ -2340,7 +2340,7 @@ void ScTable::SetMergedCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
         ApplyFlags(nCol1+1, nRow1+1, nCol2, nRow2, ScMF::Hor | ScMF::Ver);
 }
 
-bool ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes ) const
+bool ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
 {
     if (!(ValidCol(nCol1) && ValidCol(nCol2)))
     {
@@ -2351,12 +2351,12 @@ bool ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, 
     bool bEmpty = true;
     for (SCCOL i=nCol1; i<=nCol2 && bEmpty; i++)
     {
-        bEmpty = aCol[i].IsEmptyBlock( nRow1, nRow2 );
+        bEmpty = aCol[i].IsEmptyData( nRow1, nRow2 );
         if (bEmpty)
         {
             bEmpty = aCol[i].IsSparklinesEmptyBlock(nRow1, nRow2);
         }
-        if (!bIgnoreNotes && bEmpty)
+        if (bEmpty)
         {
             bEmpty = aCol[i].IsNotesEmptyBlock(nRow1, nRow2);
         }

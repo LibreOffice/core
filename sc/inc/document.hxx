@@ -1334,8 +1334,9 @@ public:
                                SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bDeleteCaptions = true );
     void              RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab );
 
+    // This also includes e.g. notes. Use IsEmptyData() for cell data only.
     bool              IsBlockEmpty( SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bIgnoreNotes = false ) const;
+                                    SCCOL nEndCol, SCROW nEndRow, SCTAB nTab ) const;
     bool              IsPrintEmpty( SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
                                     bool bLeftIsEmpty = false,
@@ -1541,8 +1542,8 @@ public:
     void                        ExtendPrintArea( OutputDevice* pDev, SCTAB nTab,
                                                  SCCOL nStartCol, SCROW nStartRow,
                                                  SCCOL& rEndCol, SCROW nEndRow ) const;
-    SC_DLLPUBLIC bool           IsEmptyBlock(SCCOL nStartCol, SCROW nStartRow,
-                                             SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const;
+    SC_DLLPUBLIC bool           IsEmptyData(SCCOL nStartCol, SCROW nStartRow,
+                                            SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const;
     // I think this returns the number of empty cells starting from the given direction.
     SC_DLLPUBLIC SCSIZE         GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                                                       SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab,
