@@ -1026,6 +1026,15 @@ void resetCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry, SwPaM& rPam
 void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     const uno::Sequence< beans::PropertyValue >& rOptions)
 {
+    if (SwTextNode const*const pTextNode = pUnoCursor->GetPoint()->nNode.GetNode().GetTextNode())
+    {
+        if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->nContent.GetIndex(),
+                                     RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT))
+        {
+            throw uno::RuntimeException("cannot insert file inside content controls");
+        }
+    }
+
     std::unique_ptr<SfxMedium> pMed;
     SwDoc& rDoc = pUnoCursor->GetDoc();
     SwDocShell* pDocSh = rDoc.GetDocShell();

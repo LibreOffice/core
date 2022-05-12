@@ -1002,6 +1002,27 @@ bool SwCursorShell::CursorInsideInputField() const
     return false;
 }
 
+bool SwCursorShell::CursorInsideContentControl() const
+{
+    for (SwPaM& rCursor : GetCursor()->GetRingContainer())
+    {
+        const SwPosition* pStart = rCursor.Start();
+        SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+        if (!pTextNode)
+        {
+            continue;
+        }
+
+        sal_Int32 nIndex = pStart->nContent.GetIndex();
+        if (pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool SwCursorShell::PosInsideInputField( const SwPosition& rPos )
 {
     return dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos( &rPos, false )) != nullptr;

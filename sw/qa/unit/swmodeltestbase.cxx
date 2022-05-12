@@ -193,6 +193,27 @@ int SwModelTestBase::getLength() const
     return aBuf.getLength();
 }
 
+OUString SwModelTestBase::getBodyText() const
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    OUStringBuffer aBuf;
+    while (xParaEnum->hasMoreElements())
+    {
+        uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(),
+                                                                       uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
+        while (xRangeEnum->hasMoreElements())
+        {
+            uno::Reference<text::XTextRange> xRange(xRangeEnum->nextElement(), uno::UNO_QUERY);
+            aBuf.append(xRange->getString());
+        }
+    }
+    return aBuf.makeStringAndClear();
+}
+
 uno::Reference<container::XNameAccess> SwModelTestBase::getStyles(const OUString& aFamily)
 {
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
