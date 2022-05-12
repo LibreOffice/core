@@ -24,6 +24,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/compbase.hxx>
 
 namespace filter::config {
 
@@ -316,15 +317,14 @@ public:
 
 };
 
-class TerminateDetection : public cppu::WeakComponentImplHelper<css::frame::XTerminateListener>
+class TerminateDetection : public comphelper::WeakComponentImplHelper<css::frame::XTerminateListener>
 {
 private:
-    osl::Mutex m_aLock;
     TypeDetection* m_pTypeDetection;
 
 public:
 
-    using cppu::WeakComponentImplHelperBase::disposing;
+    using comphelper::WeakComponentImplHelperBase::disposing;
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override
     {
     }
@@ -340,8 +340,7 @@ public:
     }
 
     TerminateDetection(TypeDetection* pTypeDetection)
-        : cppu::WeakComponentImplHelper<css::frame::XTerminateListener>(m_aLock)
-        , m_pTypeDetection(pTypeDetection)
+        : m_pTypeDetection(pTypeDetection)
     {
     }
 };
