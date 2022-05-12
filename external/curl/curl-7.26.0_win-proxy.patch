@@ -31,7 +31,7 @@
 +{
 +  int bufSize;
 +  char *out = NULL;
-+  if(wStr != NULL) {
++  if(wStr) {
 +    bufSize = WideCharToMultiByte(
 +      CP_ACP,  0, wStr, -1, NULL, 0, NULL, NULL);
 +    out = (char *)malloc(bufSize * sizeof(char));
@@ -63,10 +63,10 @@
 +      ieNoProxy = wstrToCstr(ieProxyConfig->lpszProxyBypass);
 +
 +      /* Convert the ieNoProxy into a proper no_proxy value */
-+      if(NULL != ieNoProxy) {
++      if(ieNoProxy) {
 +        no_proxy = strdup(ieNoProxy);
 +        pos = strpbrk(no_proxy, "; ");
-+        while(NULL != pos) {
++        while(pos) {
 +          no_proxy[pos-no_proxy] = ',';
 +          pos = strpbrk(no_proxy, "; ");
 +        }
@@ -77,9 +77,9 @@
 +        char *tok;
 +        char *saveptr;
 +
-+        if(NULL != ieProxy) {
++        if(ieProxy) {
 +          tok = strtok_s(ieProxy, ";", &saveptr);
-+          if(strchr(tok, '=') == NULL) {
++          if(!strchr(tok, '=')) {
 +            proxy = strdup(ieProxy);
 +          }
 +          else {
@@ -90,7 +90,7 @@
 +              }
 +              tok = strtok_s(NULL, ";", &saveptr);
 +            }
-+            while(NULL != tok);
++            while(tok);
 +          }
 +        }
 +      }
