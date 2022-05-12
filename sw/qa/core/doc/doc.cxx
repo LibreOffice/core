@@ -225,6 +225,36 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testImageHyperlinkStyle)
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testContentControlDelete)
+{
+    // Given a document with a content control:
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When deleting the dummy character at the end of the content control:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->DelLeft();
+
+    // Then make sure that we only enter the content control, to be consistent with the start dummy
+    // character:
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetMark()->nNode.GetNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: ^Atest^A
+    // - Actual  : ^Atest
+    // i.e. the end dummy character got deleted, but not the first one, which is inconsistent.
+    CPPUNIT_ASSERT_EQUAL(OUString("\x0001test\x0001"), pTextNode->GetText());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
