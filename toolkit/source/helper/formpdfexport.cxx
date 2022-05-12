@@ -314,10 +314,18 @@ namespace toolkitform
             Any aText;
             static constexpr OUStringLiteral FM_PROP_TEXT = u"Text";
             static constexpr OUStringLiteral FM_PROP_LABEL = u"Label";
+            static constexpr OUStringLiteral FM_PROP_VALUE = u"Value";
             if ( xPSI->hasPropertyByName( FM_PROP_TEXT ) )
                 aText = xModelProps->getPropertyValue( FM_PROP_TEXT );
             else if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
                 aText = xModelProps->getPropertyValue( FM_PROP_LABEL );
+            else if ( xPSI->hasPropertyByName( FM_PROP_VALUE ) )
+            {
+                double aValue;
+                if (xModelProps->getPropertyValue( FM_PROP_VALUE ) >>= aValue)
+                    aText <<= OUString::number(aValue);
+            }
+
             if ( aText.hasValue() ) {
                 if( ! (aText >>= Descriptor->Text) ) {
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to assign aText to Descriptor->Text");
