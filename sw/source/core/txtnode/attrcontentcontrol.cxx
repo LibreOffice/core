@@ -246,6 +246,16 @@ void SwContentControlListItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
+OUString SwContentControlListItem::ToString() const
+{
+    if (!m_aDisplayText.isEmpty())
+    {
+        return m_aDisplayText;
+    }
+
+    return m_aValue;
+}
+
 void SwContentControlListItem::ItemsToAny(const std::vector<SwContentControlListItem>& rItems,
                                           uno::Any& rVal)
 {

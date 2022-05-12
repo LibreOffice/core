@@ -24,7 +24,9 @@ void SwDropDownContentControlButton::InitDropdown()
     std::vector<SwContentControlListItem> aListItems = m_rContentControl.GetListItems();
 
     for (const auto& rListItem : aListItems)
-        m_xTreeView->append_text(rListItem.m_aDisplayText);
+    {
+        m_xTreeView->append_text(rListItem.ToString());
+    }
 
     if (aListItems.empty())
     {

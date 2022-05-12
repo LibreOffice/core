@@ -229,6 +229,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         rReq.Done();
         break;
 
+    case FN_INSERT_DROPDOWN_CONTENT_CONTROL:
+        rSh.InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
+        rReq.Done();
+        break;
+
     case FN_INSERT_COLUMN_BREAK:
         rSh.InsertColumnBreak();
         rReq.Done();
