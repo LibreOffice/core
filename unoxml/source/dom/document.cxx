@@ -105,7 +105,7 @@ namespace DOM
 
     CDocument::~CDocument()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 #ifdef DBG_UTIL
         // node map must be empty now, otherwise CDocument must not die!
         for (const auto& rEntry : m_NodeMap)
@@ -311,14 +311,14 @@ namespace DOM
 
     void SAL_CALL CDocument::addListener(const Reference< XStreamListener >& aListener )
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         m_streamListeners.insert(aListener);
     }
 
     void SAL_CALL CDocument::removeListener(const Reference< XStreamListener >& aListener )
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         m_streamListeners.erase(aListener);
     }
@@ -360,7 +360,7 @@ namespace DOM
     {
         listenerlist_t streamListeners;
         {
-            ::osl::MutexGuard const g(m_Mutex);
+            ::std::unique_lock const g(m_Mutex);
 
             if (! m_rOutputStream.is()) { throw RuntimeException(); }
             streamListeners = m_streamListeners;
@@ -372,7 +372,7 @@ namespace DOM
         }
 
         {
-            ::osl::MutexGuard const g(m_Mutex);
+            ::std::unique_lock const g(m_Mutex);
 
             // check again! could have been reset...
             if (! m_rOutputStream.is()) { throw RuntimeException(); }
@@ -397,14 +397,14 @@ namespace DOM
 
     void SAL_CALL CDocument::setOutputStream( const Reference< XOutputStream >& aStream )
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         m_rOutputStream = aStream;
     }
 
     Reference< XOutputStream > SAL_CALL  CDocument::getOutputStream()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         return m_rOutputStream;
     }
@@ -412,7 +412,7 @@ namespace DOM
     // Creates an Attr of the given name.
     Reference< XAttr > SAL_CALL CDocument::createAttribute(const OUString& name)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar const *pName = reinterpret_cast<xmlChar const *>(o1.getStr());
@@ -429,7 +429,7 @@ namespace DOM
     Reference< XAttr > SAL_CALL CDocument::createAttributeNS(
             const OUString& ns, const OUString& qname)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         // libxml does not allow a NS definition to be attached to an
         // attribute node - which is a good thing, since namespaces are
@@ -463,7 +463,7 @@ namespace DOM
     // Creates a CDATASection node whose value is the specified string.
     Reference< XCDATASection > SAL_CALL CDocument::createCDATASection(const OUString& data)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         OString const oData(
                 OUStringToOString(data, RTL_TEXTENCODING_UTF8));
@@ -480,7 +480,7 @@ namespace DOM
     // Creates a Comment node given the specified string.
     Reference< XComment > SAL_CALL CDocument::createComment(const OUString& data)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         OString o1 = OUStringToOString(data, RTL_TEXTENCODING_UTF8);
         xmlChar const *pData = reinterpret_cast<xmlChar const *>(o1.getStr());
@@ -494,7 +494,7 @@ namespace DOM
     //Creates an empty DocumentFragment object.
     Reference< XDocumentFragment > SAL_CALL CDocument::createDocumentFragment()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         xmlNodePtr pFrag = xmlNewDocFragment(m_aDocPtr);
         Reference< XDocumentFragment > const xRet(
@@ -506,7 +506,7 @@ namespace DOM
     // Creates an element of the type specified.
     Reference< XElement > SAL_CALL CDocument::createElement(const OUString& tagName)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         OString o1 = OUStringToOString(tagName, RTL_TEXTENCODING_UTF8);
         xmlChar const *pName = reinterpret_cast<xmlChar const *>(o1.getStr());
@@ -521,7 +521,7 @@ namespace DOM
     Reference< XElement > SAL_CALL CDocument::createElementNS(
             const OUString& ns, const OUString& qname)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         sal_Int32 i = qname.indexOf(':');
         if (ns.isEmpty()) throw RuntimeException();
@@ -556,7 +556,7 @@ namespace DOM
     //Creates an EntityReference object.
     Reference< XEntityReference > SAL_CALL CDocument::createEntityReference(const OUString& name)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar const *pName = reinterpret_cast<xmlChar const *>(o1.getStr());
@@ -572,7 +572,7 @@ namespace DOM
     Reference< XProcessingInstruction > SAL_CALL CDocument::createProcessingInstruction(
             const OUString& target, const OUString& data)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         OString o1 = OUStringToOString(target, RTL_TEXTENCODING_UTF8);
         xmlChar const *pTarget = reinterpret_cast<xmlChar const *>(o1.getStr());
@@ -589,7 +589,7 @@ namespace DOM
     // Creates a Text node given the specified string.
     Reference< XText > SAL_CALL CDocument::createTextNode(const OUString& data)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         OString o1 = OUStringToOString(data, RTL_TEXTENCODING_UTF8);
         xmlChar const *pData = reinterpret_cast<xmlChar const *>(o1.getStr());
@@ -604,7 +604,7 @@ namespace DOM
     // document.
     Reference< XDocumentType > SAL_CALL CDocument::getDoctype()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         xmlNodePtr const pDocType(lcl_getDocumentType(m_aDocPtr));
         Reference< XDocumentType > const xRet(
@@ -617,7 +617,7 @@ namespace DOM
     // node that is the root element of the document.
     Reference< XElement > SAL_CALL CDocument::getDocumentElement()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         xmlNodePtr const pNode = lcl_getDocumentRootPtr(m_aDocPtr);
         if (!pNode) { return nullptr; }
@@ -657,7 +657,7 @@ namespace DOM
     Reference< XElement > SAL_CALL
     CDocument::getElementById(const OUString& elementId)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         // search the tree for an element with the given ID
         OString o1 = OUStringToOString(elementId, RTL_TEXTENCODING_UTF8);
@@ -675,7 +675,7 @@ namespace DOM
     Reference< XNodeList > SAL_CALL
     CDocument::getElementsByTagName(OUString const& rTagname)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         Reference< XNodeList > const xRet(
             new CElementList(GetDocumentElement(), m_Mutex, rTagname));
@@ -685,7 +685,7 @@ namespace DOM
     Reference< XNodeList > SAL_CALL CDocument::getElementsByTagNameNS(
             OUString const& rNamespaceURI, OUString const& rLocalName)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         Reference< XNodeList > const xRet(
             new CElementList(GetDocumentElement(), m_Mutex,
@@ -920,7 +920,7 @@ namespace DOM
 
     Reference< XNode > SAL_CALL CDocument::cloneNode(sal_Bool bDeep)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         OSL_ASSERT(nullptr != m_aNodePtr);
         if (nullptr == m_aNodePtr) {
@@ -963,7 +963,7 @@ namespace DOM
             const Reference< XDocumentHandler >& i_xHandler,
             const Sequence< beans::StringPair >& i_rNamespaces)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         // add new namespaces to root node
         xmlNodePtr const pRoot = lcl_getDocumentRootPtr(m_aDocPtr);
@@ -989,7 +989,7 @@ namespace DOM
                                             const Sequence< beans::StringPair >& i_rNamespaces,
                                             const Sequence< beans::Pair< OUString, sal_Int32 > >& i_rRegisterNamespaces )
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        ::std::unique_lock const g(m_Mutex);
 
         // add new namespaces to root node
         xmlNodePtr const pRoot = lcl_getDocumentRootPtr(m_aDocPtr);
