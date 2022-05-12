@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e18c7b6c_695f517e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-12T17:39:28Z",
+      "side": 1,
+      "message": "Thought at least one of you may be interested in this one line patch.",
+      "revId": "fd0e2d7b53b230f1a741745554318a61950eae8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
