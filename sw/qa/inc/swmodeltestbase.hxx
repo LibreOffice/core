@@ -235,6 +235,8 @@ protected:
     /// Get the length of the whole document.
     int getLength() const;
 
+    OUString getBodyText() const;
+
     /// Get a family of styles, see com.sun.star.style.StyleFamilies for possible values.
     css::uno::Reference<css::container::XNameAccess> getStyles(const OUString& aFamily);
 

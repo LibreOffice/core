@@ -403,6 +403,14 @@ public:
         const sal_Int32 nIndex,
         const sal_uInt16 nWhich = RES_TXTATR_END ) const;
 
+    /**
+     * Get the text attribute of an end dummy character at nIndex. Return the attribute only in
+     * case its which id is nWhich.
+     *
+     * Note that the position of the end dummy character is one less than the end of the attribute.
+     */
+    SwTextAttr* GetTextAttrForEndCharAt(sal_Int32 nIndex, sal_uInt16 nWhich) const;
+
     SwTextField* GetFieldTextAttrAt(
         const sal_Int32 nIndex,
         const bool bIncludeInputFieldAtStart = false ) const;

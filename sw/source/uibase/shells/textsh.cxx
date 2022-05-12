@@ -197,7 +197,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     case FN_INSERT_BREAK:
         {
-            if( !rSh.CursorInsideInputField() )
+            if (!rSh.CursorInsideInputField() && !rSh.CursorInsideContentControl())
             {
                 rSh.SplitNode();
             }

@@ -555,11 +555,21 @@ namespace sw
                             // at the end, so no need to check in nStartNode
                             if (n == nEndNode && !isOnlyFieldmarks)
                             {
-                                SwTextAttr const*const pAttr(rTextNode.GetTextAttrForCharAt(i));
+                                SwTextAttr const* pAttr(rTextNode.GetTextAttrForCharAt(i));
                                 if (pAttr && pAttr->End() && (nEnd  < *pAttr->End()))
                                 {
                                     assert(pAttr->HasDummyChar());
                                     rBreaks.emplace_back(n, i);
+                                }
+
+                                if (!pAttr)
+                                {
+                                    // See if this is an end dummy character for a content control.
+                                    pAttr = rTextNode.GetTextAttrForEndCharAt(i, RES_TXTATR_CONTENTCONTROL);
+                                    if (pAttr && (nStart > pAttr->GetStart()))
+                                    {
+                                        rBreaks.emplace_back(n, i);
+                                    }
                                 }
                             }
                             break;

@@ -23,6 +23,7 @@
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <wrtsh.hxx>
+#include <ndtxt.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/crsr/data/";
 
@@ -102,6 +103,37 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testSelAllStartsWithTable)
     // - Actual  : 1
     // i.e. the table selection was lost and the table was not deleted.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pDoc->GetTableFrameFormatCount(/*bUsed=*/true));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlLineBreak)
+{
+    // Given a document with a (rich text) content control:
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When pressing "enter" in the middle of that content control:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Go after "t".
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:InsertPara", {});
+
+    // Then make sure that we only insert a line break, not a new paragraph:
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetMark()->nNode.GetNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: t\nest
+    // - Actual  : est
+    // i.e. a new paragraph was inserted, which is not allowed for inline content controls.
+    CPPUNIT_ASSERT_EQUAL(OUString("t\nest"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
