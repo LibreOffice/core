@@ -156,8 +156,6 @@ private:
     sal_Int32 mnEditLock;
     OUString msDefaultCollapsedGraphicURL;
     OUString msDefaultExpandedGraphicURL;
-    Image maDefaultExpandedImage;
-    Image maDefaultCollapsedImage;
     std::unique_ptr<TreeNodeMap> mpTreeNodeMap;
     css::uno::Reference< css::graphic::XGraphicProvider > mxGraphicProvider;
 };

@@ -79,11 +79,7 @@ class ImplContextGraphicItem : public SvLBoxContextBmp
 public:
     ImplContextGraphicItem( Image const & rI1, Image const & rI2, bool bExpanded)
         : SvLBoxContextBmp(rI1, rI2, bExpanded) {}
-
-    OUString msExpandedGraphicURL;
-    OUString msCollapsedGraphicURL;
 };
-
 
 }
 
@@ -242,12 +238,6 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
 
         mpTreeImpl->insert( pEntry, pParent, nPos );
 
-        if( !msDefaultExpandedGraphicURL.isEmpty() )
-            mpTreeImpl->SetExpandedEntryBmp( pEntry, maDefaultExpandedImage );
-
-        if( !msDefaultCollapsedGraphicURL.isEmpty() )
-            mpTreeImpl->SetCollapsedEntryBmp( pEntry, maDefaultCollapsedImage );
-
         updateEntry( pEntry );
     }
     return pEntry;
@@ -287,31 +277,6 @@ void TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
     {
         pEntry->EnableChildrenOnDemand( pEntry->mxNode->hasChildrenOnDemand() );
         bChanged = true;
-    }
-
-    ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( &pEntry->GetItem( 0 ) );
-    if( pContextGraphicItem )
-    {
-        if( pContextGraphicItem->msExpandedGraphicURL != pEntry->mxNode->getExpandedGraphicURL() )
-        {
-            Image aImage;
-            if( loadImage( pEntry->mxNode->getExpandedGraphicURL(), aImage ) )
-            {
-                pContextGraphicItem->msExpandedGraphicURL = pEntry->mxNode->getExpandedGraphicURL();
-                mpTreeImpl->SetExpandedEntryBmp( pEntry, aImage );
-                bChanged = true;
-            }
-        }
-        if( pContextGraphicItem->msCollapsedGraphicURL != pEntry->mxNode->getCollapsedGraphicURL() )
-        {
-            Image aImage;
-            if( loadImage( pEntry->mxNode->getCollapsedGraphicURL(), aImage ) )
-            {
-                pContextGraphicItem->msCollapsedGraphicURL = pEntry->mxNode->getCollapsedGraphicURL();
-                mpTreeImpl->SetCollapsedEntryBmp( pEntry, aImage );
-                bChanged = true;
-            }
-        }
     }
 
     if( bChanged )
@@ -653,45 +618,18 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createReverseSelectionEnumer
     return Reference< XEnumeration >( new TreeSelectionEnumeration( aSelection ) );
 }
 
-
 // css::awt::XTreeControl
-
-
 OUString SAL_CALL TreeControlPeer::getDefaultExpandedGraphicURL()
 {
     SolarMutexGuard aGuard;
     return msDefaultExpandedGraphicURL;
 }
 
-
 void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const OUString& sDefaultExpandedGraphicURL )
 {
     SolarMutexGuard aGuard;
-    if( msDefaultExpandedGraphicURL == sDefaultExpandedGraphicURL )
-        return;
-
-    if( !sDefaultExpandedGraphicURL.isEmpty() )
-        loadImage( sDefaultExpandedGraphicURL, maDefaultExpandedImage );
-    else
-        maDefaultExpandedImage = Image();
-
-    UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
-
-    SvTreeListEntry* pEntry = rTree.First();
-    while( pEntry )
-    {
-        ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( &pEntry->GetItem( 0 ) );
-        if( pContextGraphicItem )
-        {
-            if( pContextGraphicItem->msExpandedGraphicURL.isEmpty() )
-                rTree.SetExpandedEntryBmp( pEntry, maDefaultExpandedImage );
-        }
-        pEntry = rTree.Next( pEntry );
-    }
-
     msDefaultExpandedGraphicURL = sDefaultExpandedGraphicURL;
 }
-
 
 OUString SAL_CALL TreeControlPeer::getDefaultCollapsedGraphicURL()
 {
@@ -699,35 +637,11 @@ OUString SAL_CALL TreeControlPeer::getDefaultCollapsedGraphicURL()
     return msDefaultCollapsedGraphicURL;
 }
 
-
 void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const OUString& sDefaultCollapsedGraphicURL )
 {
     SolarMutexGuard aGuard;
-    if( msDefaultCollapsedGraphicURL == sDefaultCollapsedGraphicURL )
-        return;
-
-    if( !sDefaultCollapsedGraphicURL.isEmpty() )
-        loadImage( sDefaultCollapsedGraphicURL, maDefaultCollapsedImage );
-    else
-        maDefaultCollapsedImage = Image();
-
-    UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
-
-    SvTreeListEntry* pEntry = rTree.First();
-    while( pEntry )
-    {
-        ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( &pEntry->GetItem( 0 ) );
-        if( pContextGraphicItem )
-        {
-            if( pContextGraphicItem->msCollapsedGraphicURL.isEmpty() )
-                rTree.SetCollapsedEntryBmp( pEntry, maDefaultCollapsedImage );
-        }
-        pEntry = rTree.Next( pEntry );
-    }
-
     msDefaultCollapsedGraphicURL = sDefaultCollapsedGraphicURL;
 }
-
 
 sal_Bool SAL_CALL TreeControlPeer::isNodeExpanded( const Reference< XTreeNode >& xNode )
 {
