@@ -312,15 +312,15 @@ ErrCode ImportLotus::Read(SvStream& rIn)
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportWKS(SvStream& rStream)
 {
     ScDLL::Init();
-    ScDocument aDocument;
-    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    ScDocumentRef pDocument(new ScDocument);
+    ScDocOptions aDocOpt = pDocument->GetDocOptions();
     aDocOpt.SetLookUpColRowNames(false);
-    aDocument.SetDocOptions(aDocOpt);
-    aDocument.MakeTable(0);
-    aDocument.EnableExecuteLink(false);
-    aDocument.SetInsertingFromOtherDoc(true);
+    pDocument->SetDocOptions(aDocOpt);
+    pDocument->MakeTable(0);
+    pDocument->EnableExecuteLink(false);
+    pDocument->SetInsertingFromOtherDoc(true);
 
-    LotusContext aContext(aDocument, RTL_TEXTENCODING_ASCII_US);
+    LotusContext aContext(*pDocument, RTL_TEXTENCODING_ASCII_US);
     ImportLotus aLotusImport(aContext, rStream, RTL_TEXTENCODING_ASCII_US);
 
     ErrCode eRet = aLotusImport.parse();

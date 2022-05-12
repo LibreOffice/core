@@ -63,7 +63,7 @@ class ScTempDocSource
 {
 private:
     ScTempDocCache& rCache;
-    ScDocumentUniquePtr pTempDoc;
+    ScDocumentRef pTempDoc;
 
     static ScDocument*  CreateDocument();       // create and initialize doc
 
@@ -87,7 +87,7 @@ ScTempDocSource::ScTempDocSource( ScTempDocCache& rDocCache ) :
     rCache( rDocCache )
 {
     if ( rCache.IsInUse() )
-        pTempDoc.reset(CreateDocument());
+        pTempDoc.set(CreateDocument());
     else
     {
         rCache.SetInUse( true );
@@ -118,13 +118,13 @@ ScTempDocCache::ScTempDocCache()
 void ScTempDocCache::SetDocument( ScDocument* pNew )
 {
     OSL_ENSURE(!xDoc, "ScTempDocCache::SetDocument: already set");
-    xDoc.reset(pNew);
+    xDoc.set(pNew);
 }
 
 void ScTempDocCache::Clear()
 {
     OSL_ENSURE( !bInUse, "ScTempDocCache::Clear: bInUse" );
-    xDoc.reset();
+    xDoc.clear();
 }
 
 //  copy results from one document into another
@@ -142,7 +142,7 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
                 rSrcRange.aEnd.Row() - rSrcRange.aStart.Row() + rDestPos.Row(),
                 nDestTab ) );
 
-    ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+    ScDocumentRef pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
     ScMarkData aSourceMark(pSrcDoc->GetSheetLimits());
     aSourceMark.SelectOneTable( nSrcTab );      // for CopyToClip
     aSourceMark.SetMarkArea( rSrcRange );

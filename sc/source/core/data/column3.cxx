@@ -1123,7 +1123,7 @@ class CopyCellsFromClipHandler
         aRef.InitAddress(aSrcPos);
         aRef.SetFlag3D(true);
 
-        ScTokenArray aArr(*mrCxt.getDestDoc());
+        ScTokenArray aArr(mrCxt.getDestDoc());
         aArr.AddSingleReference(aRef);
 
         mrDestCol.SetFormulaCell(

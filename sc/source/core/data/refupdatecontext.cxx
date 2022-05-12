@@ -64,7 +64,7 @@ bool UpdatedRangeNames::isEmpty(SCTAB nTab) const
     return it == maUpdatedNames.end();
 }
 
-RefUpdateContext::RefUpdateContext(ScDocument& rDoc, ScDocument* pClipdoc)
+RefUpdateContext::RefUpdateContext(ScDocument& rDoc, const ScDocumentRef& pClipdoc)
     : mrDoc(rDoc)
     , meMode(URM_INSDEL)
     , mbTransposed(pClipdoc != nullptr && pClipdoc->GetClipParam().isTransposed())

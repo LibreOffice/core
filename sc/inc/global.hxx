@@ -29,6 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/long.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <atomic>
 // HACK: <atomic> includes <stdbool.h>, which in some Clang versions does '#define bool bool',
@@ -471,7 +472,6 @@ class SvNumberFormatter;
 class ScUnitConverter;
 class CharClass;
 class LocaleDataWrapper;
-class SvtSysLocale;
 class CalendarWrapper;
 class CollatorWrapper;
 class IntlWrapper;

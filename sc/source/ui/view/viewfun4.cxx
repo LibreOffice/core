@@ -112,10 +112,10 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             if (nEndRow > rDoc.MaxRow())
                 nEndRow = rDoc.MaxRow();
 
-            ScDocumentUniquePtr pUndoDoc;
+            ScDocumentRef pUndoDoc;
             if (bRecord)
             {
-                pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+                pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
                 pUndoDoc->InitUndo( rDoc, nTab, nTab );
                 rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, InsertDeleteFlags::ALL, false, *pUndoDoc );
             }
@@ -136,7 +136,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
 
             if (bRecord)
             {
-                ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
+                ScDocumentRef pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
                 pRedoDoc->InitUndo( rDoc, nTab, nTab );
                 rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, InsertDeleteFlags::ALL|InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc );
 
@@ -145,7 +145,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                 aDestMark.SetMarkArea( aMarkRange );
                 pDocSh->GetUndoManager()->AddUndoAction(
                     std::make_unique<ScUndoPaste>( pDocSh, aMarkRange, aDestMark,
-                                     std::move(pUndoDoc), std::move(pRedoDoc), InsertDeleteFlags::ALL, nullptr));
+                                     pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, nullptr));
             }
         }
 
@@ -209,10 +209,10 @@ void ScViewFunc::DoRefConversion()
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     bool bOk = false;
 
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     if (bRecord)
     {
-        pUndoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
+        pUndoDoc.set( new ScDocument( SCDOCMODE_UNDO ) );
         SCTAB nTab = aMarkRange.aStart.Tab();
         pUndoDoc->InitUndo( rDoc, nTab, nTab );
 
@@ -278,7 +278,7 @@ void ScViewFunc::DoRefConversion()
     }
     if (bRecord)
     {
-        ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
+        ScDocumentRef pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
         SCTAB nTab = aMarkRange.aStart.Tab();
         pRedoDoc->InitUndo( rDoc, nTab, nTab );
 
@@ -295,7 +295,7 @@ void ScViewFunc::DoRefConversion()
 
         pDocSh->GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoRefConversion>( pDocSh,
-                                    aMarkRange, rMark, std::move(pUndoDoc), std::move(pRedoDoc), bMulti) );
+                                    aMarkRange, rMark, pUndoDoc, pRedoDoc, bMulti) );
     }
 
     pDocSh->PostPaint( aMarkRange, PaintPartFlags::Grid );
@@ -477,13 +477,13 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
         }
     }
 
-    ScDocumentUniquePtr pUndoDoc;
-    ScDocumentUniquePtr pRedoDoc;
+    ScDocumentRef pUndoDoc;
+    ScDocumentRef pRedoDoc;
     if (bRecord)
     {
-        pUndoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
+        pUndoDoc.set( new ScDocument( SCDOCMODE_UNDO ) );
         pUndoDoc->InitUndo( rDoc, nTab, nTab );
-        pRedoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
+        pRedoDoc.set( new ScDocument( SCDOCMODE_UNDO ) );
         pRedoDoc->InitUndo( rDoc, nTab, nTab );
 
         if ( rMark.GetSelectCount() > 1 )
@@ -548,8 +548,8 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
             rViewData.GetDocShell()->GetUndoManager()->AddUndoAction(
                 std::make_unique<ScUndoConversion>(
                         pDocSh, rMark,
-                        nCol, nRow, nTab, std::move(pUndoDoc),
-                        nNewCol, nNewRow, nTab, std::move(pRedoDoc), rConvParam ) );
+                        nCol, nRow, nTab, pUndoDoc,
+                        nNewCol, nNewRow, nTab, pRedoDoc, rConvParam ) );
         }
 
         sc::SetFormulaDirtyContext aCxt;
@@ -559,8 +559,8 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
     }
     else
     {
-        pUndoDoc.reset();
-        pRedoDoc.reset();
+        pUndoDoc.clear();
+        pRedoDoc.clear();
     }
 
     // *** final cleanup *** --------------------------------------------------

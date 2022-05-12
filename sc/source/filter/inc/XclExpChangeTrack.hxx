@@ -592,7 +592,7 @@ class XclExpChangeTrack : protected XclExpRoot
     std::vector<std::unique_ptr<XclExpChTrTabIdBuffer>>
                                   maBuffers;
 
-    ScDocumentUniquePtr         xTempDoc;           // empty document
+    ScDocumentRef         xTempDoc;           // empty document
 
     ScChangeTrack*              CreateTempChangeTrack();
     void                        PushActionRecord( const ScChangeAction& rAction );

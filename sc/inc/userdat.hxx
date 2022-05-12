@@ -45,12 +45,12 @@ public:
 
     const tools::Rectangle & getShapeRect() const { return maShapeRect; };
     const tools::Rectangle & getLastCellRect() const { return maLastCellRect; };
-    void setShapeRect(const ScDocument* rDoc, tools::Rectangle rNewRect, bool bIsVisible=true)
+    void setShapeRect(const ScDocument& rDoc, tools::Rectangle rNewRect, bool bIsVisible=true)
     {
         // bIsVisible should be false when the object is hidden obviously. we dont want to store the old cell rect in that
         // case because it will have height=0
         if (maStart.IsValid() && mbResizeWithCell && bIsVisible)
-            maLastCellRect = ScDrawLayer::GetCellRect(*rDoc, maStart, true);
+            maLastCellRect = ScDrawLayer::GetCellRect(rDoc, maStart, true);
         maShapeRect = rNewRect;
         mbWasInHiddenRow = !bIsVisible;
     };

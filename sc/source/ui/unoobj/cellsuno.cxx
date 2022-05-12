@@ -1037,9 +1037,9 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
 {
     ScDocument& rDoc = pDocShell->GetDocument();
     bool bUndo(rDoc.IsUndoEnabled());
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     if (bUndo)
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
     size_t nCount = rRanges.size();
     for (size_t i = 0; i < nCount; ++i)
     {
@@ -1066,7 +1066,7 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
     if (bUndo)
     {
         pDocShell->GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoBorder>( pDocShell, rRanges, std::move(pUndoDoc), rOuter, rInner ) );
+                std::make_unique<ScUndoBorder>( pDocShell, rRanges, pUndoDoc, rOuter, rInner ) );
     }
 
     for (size_t i = 0; i < nCount; ++i )
@@ -1107,10 +1107,10 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
         return false;
     }
 
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     if ( bUndo )
     {
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( rDoc, nTab, nTab );
         rDoc.CopyToDocument(rRange, InsertDeleteFlags::CONTENTS|InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc);
     }
@@ -1212,7 +1212,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoPaste>(
                 &rDocShell, ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab),
-                aDestMark, std::move(pUndoDoc), nullptr, InsertDeleteFlags::CONTENTS, nullptr, false));
+                aDestMark, pUndoDoc, nullptr, InsertDeleteFlags::CONTENTS, nullptr, false));
     }
 
     if (!bHeight)
@@ -1252,10 +1252,10 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
         return false;
     }
 
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     if ( bUndo )
     {
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( rDoc, nTab, nTab );
         rDoc.CopyToDocument(rRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc);
     }
@@ -1309,7 +1309,7 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoPaste>( &rDocShell,
                 ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab), aDestMark,
-                std::move(pUndoDoc), nullptr, InsertDeleteFlags::CONTENTS, nullptr, false));
+                pUndoDoc, nullptr, InsertDeleteFlags::CONTENTS, nullptr, false));
     }
 
     if (!bHeight)
@@ -3918,10 +3918,10 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                     SCROW nRow = 0;
 
                     OUString aUndoStr;
-                    ScDocumentUniquePtr pUndoDoc;
+                    ScDocumentRef pUndoDoc;
                     if (bUndo)
                     {
-                        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+                        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
                         pUndoDoc->InitUndo( rDoc, nTab, nTab );
                     }
                     for (const auto& rTab : aMark)
@@ -3948,7 +3948,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
 
                         pDocShell->GetUndoManager()->AddUndoAction(
                             std::make_unique<ScUndoReplace>( pDocShell, *pUndoMark, nCol, nRow, nTab,
-                                                        aUndoStr, std::move(pUndoDoc), pSearchItem ) );
+                                                        aUndoStr, pUndoDoc, pSearchItem ) );
 
                         pDocShell->PostPaintGridAll();
                         pDocShell->SetDocumentModified();
@@ -6829,11 +6829,11 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks()
 
     if (bUndo)
     {
-        ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
+        ScDocumentRef pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
         rDoc.CopyToDocument(0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
         pDocSh->GetUndoManager()->AddUndoAction(
-                                std::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, std::move(pUndoDoc) ) );
+                                std::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, pUndoDoc ) );
     }
 
     rDoc.RemoveManualBreaks(nTab);

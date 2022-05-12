@@ -62,7 +62,7 @@ void ScDataProvidersTest::testCSVImport()
     auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(m_pDoc, true);
+    rDataSources[0].refresh(*m_pDoc, true);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 0, 0));
@@ -90,7 +90,7 @@ void ScDataProvidersTest::testDataLargerThanDB()
     auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(m_pDoc, true);
+    rDataSources[0].refresh(*m_pDoc, true);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0, 0, 0));
@@ -119,7 +119,7 @@ void ScDataProvidersTest::testHTMLImport()
     auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(m_pDoc, true);
+    rDataSources[0].refresh(*m_pDoc, true);
     Scheduler::ProcessEventsToIdle();
 
     std::vector<OUString> aCarManufacturers = { "Audi", "GM", "Nissan", "Ferrari", "Peugeot" };
@@ -169,7 +169,7 @@ void ScDataProvidersTest::testXMLImport()
     auto& rDataSources = m_pDoc->GetExternalDataMapper().getDataSources();
     CPPUNIT_ASSERT(!rDataSources.empty());
 
-    rDataSources[0].refresh(m_pDoc, true);
+    rDataSources[0].refresh(*m_pDoc, true);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("title"), m_pDoc->GetString(0, 0, 0));

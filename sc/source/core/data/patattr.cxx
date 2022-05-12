@@ -1080,16 +1080,16 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
     return pDestStyle;
 }
 
-ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcDoc ) const
+ScPatternAttr* ScPatternAttr::PutInPool( ScDocument& rDestDoc, ScDocument& rSrcDoc ) const
 {
     const SfxItemSet* pSrcSet = &GetItemSet();
 
-    ScPatternAttr aDestPattern( pDestDoc->GetPool() );
+    ScPatternAttr aDestPattern( rDestDoc.GetPool() );
     SfxItemSet* pDestSet = &aDestPattern.GetItemSet();
 
     // Copy cell pattern style to other document:
 
-    if ( pDestDoc != pSrcDoc )
+    if ( &rDestDoc != &rSrcDoc )
     {
         OSL_ENSURE( pStyle, "Missing Pattern-Style! :-/" );
 
@@ -1097,9 +1097,9 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
         // parent style to style or create if necessary and attach DestDoc
 
         SfxStyleSheetBase* pStyleCpy = lcl_CopyStyleToPool( pStyle,
-                                                            pSrcDoc->GetStyleSheetPool(),
-                                                            pDestDoc->GetStyleSheetPool(),
-                                                            pDestDoc->GetFormatExchangeList() );
+                                                            rSrcDoc.GetStyleSheetPool(),
+                                                            rDestDoc.GetStyleSheetPool(),
+                                                            rDestDoc.GetFormatExchangeList() );
 
         aDestPattern.SetStyleSheet( static_cast<ScStyleSheet*>(pStyleCpy) );
     }
@@ -1117,23 +1117,23 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
                 // Copy validity to the new document
 
                 sal_uLong nNewIndex = 0;
-                ScValidationDataList* pSrcList = pSrcDoc->GetValidationList();
+                ScValidationDataList* pSrcList = rSrcDoc.GetValidationList();
                 if ( pSrcList )
                 {
                     sal_uLong nOldIndex = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
                     const ScValidationData* pOldData = pSrcList->GetData( nOldIndex );
                     if ( pOldData )
-                        nNewIndex = pDestDoc->AddValidationEntry( *pOldData );
+                        nNewIndex = rDestDoc.AddValidationEntry( *pOldData );
                 }
                 pNewItem.reset(new SfxUInt32Item( ATTR_VALIDDATA, nNewIndex ));
             }
-            else if ( nAttrId == ATTR_VALUE_FORMAT && pDestDoc->GetFormatExchangeList() )
+            else if ( nAttrId == ATTR_VALUE_FORMAT && rDestDoc.GetFormatExchangeList() )
             {
                 //  Number format to Exchange List
 
                 sal_uLong nOldFormat = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
-                SvNumberFormatterIndexTable::const_iterator it = pDestDoc->GetFormatExchangeList()->find(nOldFormat);
-                if (it != pDestDoc->GetFormatExchangeList()->end())
+                SvNumberFormatterIndexTable::const_iterator it = rDestDoc.GetFormatExchangeList()->find(nOldFormat);
+                if (it != rDestDoc.GetFormatExchangeList()->end())
                 {
                     sal_uInt32 nNewFormat = it->second;
                     pNewItem.reset(new SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ));
@@ -1149,7 +1149,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
         }
     }
 
-    ScPatternAttr* pPatternAttr = const_cast<ScPatternAttr*>( &pDestDoc->GetPool()->Put(aDestPattern) );
+    ScPatternAttr* pPatternAttr = const_cast<ScPatternAttr*>( &rDestDoc.GetPool()->Put(aDestPattern) );
     return pPatternAttr;
 }
 

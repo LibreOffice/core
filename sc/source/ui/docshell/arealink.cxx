@@ -336,10 +336,10 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
         //  initialise Undo
 
-        ScDocumentUniquePtr pUndoDoc;
+        ScDocumentRef pUndoDoc;
         if ( bAddUndo && bUndo )
         {
-            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+            pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
             if ( bDoInsert )
             {
                 if ( nNewEndX != nOldEndX || nNewEndY != nOldEndY )             // range changed?
@@ -414,7 +414,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
         if ( bAddUndo && bUndo)
         {
-            ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
+            ScDocumentRef pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pRedoDoc->InitUndo( rDoc, nDestTab, nDestTab );
             rDoc.CopyToDocument(aNewRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pRedoDoc);
 
@@ -424,7 +424,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                                             aSourceArea, aOldRange, GetRefreshDelaySeconds(),
                                             aNewUrl, rNewFilter, aNewOpt,
                                             rNewArea, aNewRange, nNewRefreshDelaySeconds,
-                                            std::move(pUndoDoc), std::move(pRedoDoc), bDoInsert ) );
+                                            pUndoDoc, pRedoDoc, bDoInsert ) );
         }
 
         //  remember new settings

@@ -54,6 +54,7 @@
 #include <viewfunc.hxx>
 #include <docsh.hxx>
 #include <drawview.hxx>
+#include <drwlayer.hxx>
 #include <impex.hxx>
 #include <dbdata.hxx>
 #include <sc.hrc>
@@ -145,7 +146,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
                     ScMarkData aSrcMark(rSrcDoc.GetSheetLimits());
                     aSrcMark.SelectOneTable( nSrcTab );         // for CopyToClip
-                    ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+                    ScDocumentRef pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
 
                     SCCOL nFirstCol, nLastCol;
                     SCROW nFirstRow, nLastRow;
@@ -611,17 +612,17 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         uno::Reference <io::XInputStream> xStm = aDataHelper.GetInputStream(nFormatId, OUString());
         if (xStm.is())
         {
-            ScDocument aInsDoc( SCDOCMODE_CLIP );
+            ScDocumentRef pInsDoc( new ScDocument( SCDOCMODE_CLIP ) );
             SCTAB nSrcTab = 0;      // Biff5 in clipboard: always sheet 0
-            aInsDoc.ResetClip( &rDoc, nSrcTab );
+            pInsDoc->ResetClip( rDoc, nSrcTab );
 
             SfxMedium aMed;
             aMed.GetItemSet()->Put( SfxUnoAnyItem( SID_INPUTSTREAM, uno::Any( xStm ) ) );
-            ErrCode eErr = ScFormatFilter::Get().ScImportExcel( aMed, &aInsDoc, EIF_AUTO );
+            ErrCode eErr = ScFormatFilter::Get().ScImportExcel( aMed, pInsDoc.get(), EIF_AUTO);
             if ( eErr == ERRCODE_NONE )
             {
                 ScRange aSource;
-                const ScExtDocOptions* pExtOpt = aInsDoc.GetExtDocOptions();
+                const ScExtDocOptions* pExtOpt = pInsDoc->GetExtDocOptions();
                 const ScExtTabSettings* pTabSett = pExtOpt ? pExtOpt->GetTabSettings( nSrcTab ) : nullptr;
                 if( pTabSett && pTabSett->maUsedArea.IsValid() )
                 {
@@ -637,8 +638,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     OSL_FAIL("no dimension");   //! possible?
                     SCCOL nFirstCol, nLastCol;
                     SCROW nFirstRow, nLastRow;
-                    if ( aInsDoc.GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
-                        aInsDoc.GetCellArea( nSrcTab, nLastCol, nLastRow );
+                    if ( pInsDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
+                        pInsDoc->GetCellArea( nSrcTab, nLastCol, nLastRow );
                     else
                     {
                         nFirstCol = nLastCol = 0;
@@ -655,8 +656,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     Unmark();
                 }
 
-                aInsDoc.SetClipArea( aSource );
-                PasteFromClip( InsertDeleteFlags::ALL, &aInsDoc,
+                pInsDoc->SetClipArea( aSource );
+                PasteFromClip( InsertDeleteFlags::ALL, pInsDoc.get(),
                                 ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                                 bAllowDialogs );
                 bRet = true;
