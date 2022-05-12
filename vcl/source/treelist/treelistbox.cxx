@@ -2808,42 +2808,45 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
                                          : *pImg == GetDefaultCollapsedNodeImage();
     aPos.AdjustY((nTempEntryHeight - pImg->GetSizePixel().Height()) / 2 );
 
-    DrawImageFlags nStyle = DrawImageFlags::NONE;
-    if (!IsEnabled())
-        nStyle |= DrawImageFlags::Disable;
-
-    //native
-    bool bNativeOK = false;
-    if (bDefaultImage && rRenderContext.IsNativeControlSupported(ControlType::ListNode, ControlPart::Entire))
+    if (!bDefaultImage)
     {
-        ImplControlValue aControlValue;
-        tools::Rectangle aCtrlRegion(aPos,  pImg->GetSizePixel());
-        ControlState nState = ControlState::NONE;
-
-        if (IsEnabled())
-            nState |= ControlState::ENABLED;
-
-        if (bExpanded)
-            aControlValue.setTristateVal(ButtonValue::On); //expanded node
-        else
+        // If its a custom image then draw what was explicitly set to use
+        DrawImageFlags nStyle = DrawImageFlags::NONE;
+        if (!IsEnabled())
+            nStyle |= DrawImageFlags::Disable;
+        rRenderContext.DrawImage(aPos, *pImg, nStyle);
+    }
+    else
+    {
+        bool bNativeOK = false;
+        // native
+        if (rRenderContext.IsNativeControlSupported(ControlType::ListNode, ControlPart::Entire))
         {
-            if ((!rEntry.HasChildren()) && rEntry.HasChildrenOnDemand() &&
-                (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)))
-            {
-                aControlValue.setTristateVal( ButtonValue::DontKnow ); //don't know
-            }
+            ImplControlValue aControlValue;
+            tools::Rectangle aCtrlRegion(aPos,  pImg->GetSizePixel());
+            ControlState nState = ControlState::NONE;
+
+            if (IsEnabled())
+                nState |= ControlState::ENABLED;
+
+            if (bExpanded)
+                aControlValue.setTristateVal(ButtonValue::On); //expanded node
             else
             {
-                aControlValue.setTristateVal( ButtonValue::Off ); //collapsed node
+                if ((!rEntry.HasChildren()) && rEntry.HasChildrenOnDemand() &&
+                    (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)))
+                {
+                    aControlValue.setTristateVal( ButtonValue::DontKnow ); //don't know
+                }
+                else
+                {
+                    aControlValue.setTristateVal( ButtonValue::Off ); //collapsed node
+                }
             }
+
+            bNativeOK = rRenderContext.DrawNativeControl(ControlType::ListNode, ControlPart::Entire, aCtrlRegion, nState, aControlValue, OUString());
         }
-
-        bNativeOK = rRenderContext.DrawNativeControl(ControlType::ListNode, ControlPart::Entire, aCtrlRegion, nState, aControlValue, OUString());
-    }
-
-    if (!bNativeOK)
-    {
-        if (bDefaultImage)
+        if (!bNativeOK)
         {
             DecorationView aDecoView(&rRenderContext);
             DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
@@ -2856,12 +2859,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
             SymbolType eSymbol = bExpanded ? SymbolType::SPIN_DOWN : SymbolType::SPIN_RIGHT;
             aDecoView.DrawSymbol(tools::Rectangle(aPos, pImg->GetSizePixel()), eSymbol, aCol, nSymbolStyle);
-        }
-        else
-        {
-            // setDefaultExpandedGraphicURL is exposed via uno, see TreeControlPeer::setDefaultExpandedGraphicURL,
-            // while that's supported keep the possibility to render a custom image here
-            rRenderContext.DrawImage(aPos, *pImg ,nStyle);
         }
     }
 }
