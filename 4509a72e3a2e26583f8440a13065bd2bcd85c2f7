@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9c9143d_bca80a40",
+        "filename": "stoc/source/javaloader/javaloader.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-12T07:29:09Z",
+      "side": 1,
+      "message": "One consequence of doing this triggered from cppuhelper::ServiceManager::disposing might be that Java components that have been instantiated at the remote end, and which happen to also be processed by cppuhelper::ServiceManager::disposing\u0027s loops, but happen to come after this JavaComponentLoader in those loops, have meanwhile become unreachable.  Hopefully, this should not be a problem, though, given that everything gets disposed now anyway.  (And is, to some extend, a consequence of the questionable overall design decision of using UNO itself to build parts of the UNO infrastructure like this JavaComponentLoader.)",
+      "revId": "4509a72e3a2e26583f8440a13065bd2bcd85c2f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
