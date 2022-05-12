@@ -129,7 +129,7 @@ void ExternalDataSource::setDBData(const OUString& rDBName)
 {
     if (!mpDBDataManager)
     {
-        mpDBDataManager = std::make_shared<ScDBDataManager>(rDBName, mpDoc);
+        mpDBDataManager = std::make_shared<ScDBDataManager>(rDBName, *mpDoc);
     }
     else
     {
@@ -147,7 +147,7 @@ ScDBDataManager* ExternalDataSource::getDBManager()
     return mpDBDataManager.get();
 }
 
-void ExternalDataSource::refresh(ScDocument* pDoc, bool bDeterministic)
+void ExternalDataSource::refresh(ScDocument& rDoc, bool bDeterministic)
 {
     // no DB data available
     if (!mpDBDataManager)
@@ -155,7 +155,7 @@ void ExternalDataSource::refresh(ScDocument* pDoc, bool bDeterministic)
 
     // if no data provider exists, try to create one
     if (!mpDataProvider)
-        mpDataProvider = DataProviderFactory::getDataProvider(pDoc, *this);
+        mpDataProvider = DataProviderFactory::getDataProvider(rDoc, *this);
 
     // if we still have not been able to create one, we can not refresh the data
     if (!mpDataProvider)
@@ -238,17 +238,17 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
     SCROW nRowSize = std::min<SCROW>(aDestRange.aEnd.Row() - aDestRange.aStart.Row(), nEndRow);
     aDestRange.aEnd.SetRow(aDestRange.aStart.Row() + nRowSize);
 
-    ScMarkData aMark(mpDoc->GetSheetLimits());
+    ScMarkData aMark(mrDoc.GetSheetLimits());
     aMark.SelectTable(0, true);
-    mpDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &rDoc);
-    ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDoc->GetDocumentShell());
+    mrDoc.CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &rDoc);
+    ScDocShell* pDocShell = static_cast<ScDocShell*>(mrDoc.GetDocumentShell());
     if (pDocShell)
         pDocShell->PostPaint(aDestRange, PaintPartFlags::All);
 }
 
-ScDBDataManager::ScDBDataManager(const OUString& rDBName, ScDocument* pDoc):
+ScDBDataManager::ScDBDataManager(const OUString& rDBName, ScDocument& rDoc):
     maDBName(rDBName),
-    mpDoc(pDoc)
+    mrDoc(rDoc)
 {
 }
 
@@ -263,7 +263,7 @@ void ScDBDataManager::SetDatabase(const OUString& rDBName)
 
 ScDBData* ScDBDataManager::getDBData()
 {
-    ScDBData* pDBData = mpDoc->GetDBCollection()->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(maDBName));
+    ScDBData* pDBData = mrDoc.GetDBCollection()->getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(maDBName));
     return pDBData;
 }
 
@@ -272,7 +272,7 @@ bool DataProviderFactory::isInternalDataProvider(std::u16string_view rProvider)
     return o3tl::starts_with(rProvider, u"org.libreoffice.calc");
 }
 
-std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* pDoc,
+std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument& rDoc,
         sc::ExternalDataSource& rDataSource)
 {
     const OUString& rDataProvider = rDataSource.getProvider();
@@ -280,13 +280,13 @@ std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* p
     if (bInternal)
     {
         if (rDataProvider == "org.libreoffice.calc.csv")
-            return std::make_shared<CSVDataProvider>(pDoc, rDataSource);
+            return std::make_shared<CSVDataProvider>(rDoc, rDataSource);
         else if (rDataProvider == "org.libreoffice.calc.html")
-            return std::make_shared<HTMLDataProvider>(pDoc, rDataSource);
+            return std::make_shared<HTMLDataProvider>(rDoc, rDataSource);
         else if (rDataProvider == "org.libreoffice.calc.xml")
-            return std::make_shared<XMLDataProvider>(pDoc, rDataSource);
+            return std::make_shared<XMLDataProvider>(rDoc, rDataSource);
         else if (rDataProvider == "org.libreoffice.calc.sql")
-            return std::make_shared<SQLDataProvider>(pDoc, rDataSource);
+            return std::make_shared<SQLDataProvider>(rDoc, rDataSource);
     }
     else
     {

@@ -250,18 +250,18 @@ ErrCode ScQProReader::import( ScDocument& rDoc)
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportQPW(SvStream &rStream)
 {
     ScDLL::Init();
-    ScDocument aDocument;
-    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    ScDocumentRef pDocument(new ScDocument);
+    ScDocOptions aDocOpt = pDocument->GetDocOptions();
     aDocOpt.SetLookUpColRowNames(false);
-    aDocument.SetDocOptions(aDocOpt);
-    aDocument.MakeTable(0);
-    aDocument.EnableExecuteLink(false);
-    aDocument.SetInsertingFromOtherDoc(true);
-    aDocument.SetImportingXML(true);
-    aDocument.SetHardRecalcState(ScDocument::HardRecalcState::ETERNAL);
+    pDocument->SetDocOptions(aDocOpt);
+    pDocument->MakeTable(0);
+    pDocument->EnableExecuteLink(false);
+    pDocument->SetInsertingFromOtherDoc(true);
+    pDocument->SetImportingXML(true);
+    pDocument->SetHardRecalcState(ScDocument::HardRecalcState::ETERNAL);
 
     ScQProReader aReader(&rStream);
-    ErrCode eRet = aReader.parse(aDocument);
+    ErrCode eRet = aReader.parse(*pDocument);
     return eRet == ERRCODE_NONE;
 }
 

@@ -1428,9 +1428,9 @@ void TestSharedFormula::testSharedFormulasCopyPaste()
 
     // Copy formulas in B6:B9 to the clipboard doc.
     ScRange aSrcRange(1,5,0,1,8,0); // B6:B9
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, aSrcRange, &aClipDoc);
-    pFC = aClipDoc.GetFormulaCell(aPos);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    copyToClip(m_pDoc, aSrcRange, pClipDoc);
+    pFC = pClipDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("B9 in the clip doc should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
@@ -1438,7 +1438,7 @@ void TestSharedFormula::testSharedFormulasCopyPaste()
 
     // Paste them to C2:C10.
     ScRange aDestRange(2,1,0,2,9,0);
-    pasteFromClip(m_pDoc, aDestRange, &aClipDoc);
+    pasteFromClip(m_pDoc, aDestRange, pClipDoc);
     aPos.SetCol(2);
     aPos.SetRow(1);
     pFC = m_pDoc->GetFormulaCell(aPos);
@@ -1448,10 +1448,10 @@ void TestSharedFormula::testSharedFormulasCopyPaste()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The token is expected to be shared.", pFC->GetCode(), pFC->GetSharedCode());
 
     ScRange aRange(1,0,0,1,9,0); // B1:B10
-    ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
+    ScDocumentRef pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(*m_pDoc, 0, 0, true, true);
     m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc);
-    std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(*m_xDocShell, aRange, ScDocumentUniquePtr(pUndoDoc)));
+    std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(*m_xDocShell, aRange, pUndoDoc));
 
     // First, make sure the formula cells are shared in the undo document.
     aPos.SetCol(1);
@@ -2403,10 +2403,10 @@ void TestSharedFormula::testSharedFormulaUpdateOnReplacement()
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     aMark.SetMultiMarkArea(aUndoRange);
-    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
+    ScDocumentRef pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(*m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aUndoRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc, &aMark);
-    ScUndoDeleteContents aUndo(m_xDocShell.get(), aMark, aUndoRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
+    ScUndoDeleteContents aUndo(m_xDocShell.get(), aMark, aUndoRange, pUndoDoc, false, InsertDeleteFlags::CONTENTS, true);
 
     // Delete A4.
     clearRange(m_pDoc, aUndoRange);
@@ -2581,15 +2581,15 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveIntoRef()
         aMark.SelectOneTable(0);
 
         // Set up clip document.
-        ScDocument aClipDoc(SCDOCMODE_CLIP);
-        aClipDoc.ResetClip(m_pDoc, &aMark);
+        ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+        pClipDoc->ResetClip(*m_pDoc, &aMark);
         // Cut C1:C2 to clipboard.
-        cutToClip(*m_xDocShell, ScRange(2,0,0, 2,1,0), &aClipDoc, false);
+        cutToClip(*m_xDocShell, ScRange(2,0,0, 2,1,0), pClipDoc, false);
 
         // Paste to B1:B2
         ScRange aPasteRange(1,0,0, 1,1,0);
         aMark.SetMarkArea(aPasteRange);
-        m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+        m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, pClipDoc);
 
         // Check data in A1:A2 after Paste.
         ScAddress aPos(aOrgPos);
@@ -2628,10 +2628,10 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveIntoRef()
         aMark.SelectOneTable(0);
 
         // Set up clip document.
-        ScDocument aClipDoc(SCDOCMODE_CLIP);
-        aClipDoc.ResetClip(m_pDoc, &aMark);
+        ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+        pClipDoc->ResetClip(*m_pDoc, &aMark);
         // Cut B1:B2 to clipboard.
-        cutToClip(*m_xDocShell, ScRange(1,0,0, 1,1,0), &aClipDoc, false);
+        cutToClip(*m_xDocShell, ScRange(1,0,0, 1,1,0), pClipDoc, false);
 
         // Check results in C1:C4 after Cut.
         const double fVec1[] = { 1.0, 4.0, 48.0, 192.0 };
@@ -2645,7 +2645,7 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveIntoRef()
         // Paste to B3:B4
         ScRange aPasteRange(1,2,0, 1,3,0);
         aMark.SetMarkArea(aPasteRange);
-        m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+        m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, pClipDoc);
 
         // Check results in C1:C4 after Paste.
         const double fVec2[] = { 1.0, 4.0, 18.0, 72.0 };
@@ -2659,7 +2659,7 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveIntoRef()
         // Paste to B1:B2
         aPasteRange = ScRange(1,0,0, 1,1,0);
         aMark.SetMarkArea(aPasteRange);
-        m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+        m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, pClipDoc);
 
         // Check results in C1:C4 after Paste.
         const double fVec3[] = { 3.0, 12.0, 18.0, 72.0 };
@@ -2706,10 +2706,10 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveWithRef()
     }
 
     // Set up clip document.
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    aClipDoc.ResetClip(m_pDoc, &aMark);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    pClipDoc->ResetClip(*m_pDoc, &aMark);
     // Cut A3:B3 to clipboard.
-    cutToClip(*m_xDocShell, ScRange(0,2,0, 1,2,0), &aClipDoc, false);
+    cutToClip(*m_xDocShell, ScRange(0,2,0, 1,2,0), pClipDoc, false);
 
     // Check results in C1:C4 after Cut.
     const double fVec1[] = { 0.0, 0.0, 0.0, 12.0 };
@@ -2723,7 +2723,7 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveWithRef()
     // Paste to A1:B1
     ScRange aPasteRange(0,0,0, 1,0,0);
     aMark.SetMarkArea(aPasteRange);
-    m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+    m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, pClipDoc);
 
     // Check results in C1:C4 after Paste.
     const double fVec2[] = { 3.0, 0.0, 3.0, 12.0 };
@@ -2788,10 +2788,10 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveWithinRun()
     aMark.SelectOneTable(0);
 
     // Set up clip document.
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    aClipDoc.ResetClip(m_pDoc, &aMark);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    pClipDoc->ResetClip(*m_pDoc, &aMark);
     // Cut A8:D8 to clipboard.
-    cutToClip(*m_xDocShell, ScRange(0,7,0, 3,7,0), &aClipDoc, false);
+    cutToClip(*m_xDocShell, ScRange(0,7,0, 3,7,0), pClipDoc, false);
 
     // Check results in E3:E9 after Cut.
     const double fVec1[] = { 2200.0, 2200.0, 300.0, 300.0, 1900.0, 1900.0, 1900.0 };
@@ -2806,7 +2806,7 @@ void TestSharedFormula::testSharedFormulaCutCopyMoveWithinRun()
     // Paste to A4:D4
     ScRange aPasteRange(0,3,0, 3,3,0);
     aMark.SetMarkArea(aPasteRange);
-    m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+    m_pDoc->CopyFromClip( aPasteRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, pClipDoc);
 
     // Check results in E3:E9 after Paste.
     const double fVec2[] = { 2200.0, 1200.0, -700.0, -700.0, 900.0, 900.0, 900.0 };

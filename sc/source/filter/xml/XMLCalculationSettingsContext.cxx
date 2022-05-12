@@ -28,6 +28,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

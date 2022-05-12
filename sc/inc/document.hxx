@@ -19,10 +19,15 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <i18nutil/transliteration.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/errcode.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/vclptr.hxx>
+
+#include "global.hxx"
 #include "patattr.hxx"
 #include "scdllapi.h"
 #include "interpretercontext.hxx"
@@ -39,6 +44,8 @@
 #include "sheetlimits.hxx"
 #include <o3tl/deleter.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <svl/hint.hxx>
 #include <svl/typedwhich.hxx>
 #include <svl/zforlist.hxx>
@@ -55,7 +62,6 @@
 #include <vector>
 
 #include "markdata.hxx"
-#include "drwlayer.hxx"
 
 namespace com::sun::star::chart2 { class XChartDocument; }
 
@@ -316,9 +322,20 @@ enum ScMutationGuardFlags
     CORE = 0x0001, /// Core calc data structures should not be mutated
 };
 
+// for ScDrawLayer::SetPageSize
+enum class ScObjectHandling
+{
+    RecalcPosMode, // used for row height or col width changes
+    MoveRTLMode, // used for switch to RTL during import of right-to-left sheet
+    MirrorRTLMode // used for switch between RTL and LTR by .uno:SheetRightToLeft
+};
+
 typedef std::unique_ptr<ScTable, o3tl::default_delete<ScTable>> ScTableUniquePtr;
 
-class ScDocument
+class ScDocument;
+typedef rtl::Reference<ScDocument> ScDocumentRef;
+
+class ScDocument : public salhelper::SimpleReferenceObject
 {
 friend class ScValueIterator;
 friend class ScHorizontalValueIterator;
@@ -1563,24 +1580,24 @@ public:
 
     bool               InsertRow( SCCOL nStartCol, SCTAB nStartTab,
                                   SCCOL nEndCol,   SCTAB nEndTab,
-                                  SCROW nStartRow, SCSIZE nSize, ScDocument* pRefUndoDoc = nullptr,
+                                  SCROW nStartRow, SCSIZE nSize, const ScDocumentRef& pRefUndoDoc = nullptr,
                                   const ScMarkData* pTabMark = nullptr );
     SC_DLLPUBLIC bool  InsertRow( const ScRange& rRange );
     void               DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                                   SCCOL nEndCol,   SCTAB nEndTab,
                                   SCROW nStartRow, SCSIZE nSize,
-                                  ScDocument* pRefUndoDoc = nullptr, bool* pUndoOutline = nullptr,
+                                  const ScDocumentRef& pRefUndoDoc = nullptr, bool* pUndoOutline = nullptr,
                                   const ScMarkData* pTabMark = nullptr );
     SC_DLLPUBLIC void  DeleteRow( const ScRange& rRange );
     bool               InsertCol( SCROW nStartRow, SCTAB nStartTab,
                                   SCROW nEndRow,   SCTAB nEndTab,
-                                  SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc = nullptr,
+                                  SCCOL nStartCol, SCSIZE nSize, const ScDocumentRef& pRefUndoDoc = nullptr,
                                   const ScMarkData* pTabMark = nullptr );
     SC_DLLPUBLIC bool  InsertCol( const ScRange& rRange );
     void               DeleteCol( SCROW nStartRow, SCTAB nStartTab,
                                   SCROW nEndRow, SCTAB nEndTab,
                                   SCCOL nStartCol, SCSIZE nSize,
-                                  ScDocument* pRefUndoDoc = nullptr, bool* pUndoOutline = nullptr,
+                                  const ScDocumentRef& pRefUndoDoc = nullptr, bool* pUndoOutline = nullptr,
                                   const ScMarkData* pTabMark = nullptr );
     void               DeleteCol( const ScRange& rRange );
 
@@ -1608,8 +1625,8 @@ public:
     SC_DLLPUBLIC void            EnableUserInteraction( bool bVal );
     SC_DLLPUBLIC sal_Int16       GetNamedRangesLockCount() const             { return mnNamedRangesLockCount; }
     void                         SetNamedRangesLockCount( sal_Int16 nCount ) { mnNamedRangesLockCount = nCount; }
-    SC_DLLPUBLIC void            ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks );
-    SC_DLLPUBLIC void            ResetClip( ScDocument* pSourceDoc, SCTAB nTab );
+    SC_DLLPUBLIC void            ResetClip( ScDocument& rSourceDoc, const ScMarkData* pMarks );
+    SC_DLLPUBLIC void            ResetClip( ScDocument& rSourceDoc, SCTAB nTab );
     void                         SetCutMode( bool bCut );
     bool                         IsCutMode();
     void                         SetClipArea( const ScRange& rArea, bool bCut = false );
@@ -1631,7 +1648,7 @@ public:
                                                SCTAB nTab, InsertDeleteFlags nDelFlag);
     void                         DeleteAreaTab(const ScRange& rRange, InsertDeleteFlags nDelFlag);
 
-    SC_DLLPUBLIC void            CopyToClip( const ScClipParam& rClipParam, ScDocument* pClipDoc,
+    SC_DLLPUBLIC void            CopyToClip( const ScClipParam& rClipParam, const ScDocumentRef& pClipDoc,
                                              const ScMarkData* pMarks, bool bKeepScenarioFlags,
                                              bool bIncludeObjects );
 
@@ -1656,7 +1673,7 @@ public:
     void CopyCellToDocument( const ScAddress& rSrcPos, const ScAddress& rDestPos, ScDocument& rDestDoc );
 
     void CopyTabToClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                        SCTAB nTab, ScDocument* pClipDoc);
+                        SCTAB nTab, const ScDocumentRef& pClipDoc);
 
     SC_DLLPUBLIC bool InitColumnBlockPosition( sc::ColumnBlockPosition& rBlockPos, SCTAB nTab, SCCOL nCol );
 
@@ -1696,13 +1713,13 @@ public:
      */
     SC_DLLPUBLIC void CopyFromClip(
         const ScRange& rDestRange, const ScMarkData& rMark, InsertDeleteFlags nInsFlag,
-        ScDocument* pRefUndoDoc, ScDocument* pClipDoc,
+        const ScDocumentRef& pRefUndoDoc, const ScDocumentRef& pClipDoc,
         bool bResetCut = true, bool bAsLink = false,
         bool bIncludeFiltered = true, bool bSkipEmptyCells = false,
         const ScRangeList* pDestRanges = nullptr );
 
     void                CopyMultiRangeFromClip(const ScAddress& rDestPos, const ScMarkData& rMark,
-                                               InsertDeleteFlags nInsFlag, ScDocument* pClipDoc,
+                                               InsertDeleteFlags nInsFlag, const ScDocumentRef& pClipDoc,
                                                bool bResetCut = true, bool bAsLink = false,
                                                bool bIncludeFiltered = true,
                                                bool bSkipAttrForEmpty = false);
@@ -1714,7 +1731,7 @@ public:
 
     bool                IsClipboardSource() const;
 
-    SC_DLLPUBLIC void TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags, bool bAsLink,
+    SC_DLLPUBLIC void TransposeClip(const ScDocumentRef& pTransClip, InsertDeleteFlags nFlags, bool bAsLink,
                                     bool bIncludeFiltered);
 
     ScClipParam&        GetClipParam();
@@ -1769,17 +1786,17 @@ public:
     bool            HasScenarioRange( SCTAB nTab, const ScRange& rRange ) const;
     SC_DLLPUBLIC const ScRangeList* GetScenarioRanges( SCTAB nTab ) const;
 
-    SC_DLLPUBLIC void  CopyUpdated( ScDocument* pPosDoc, ScDocument* pDestDoc );
+    SC_DLLPUBLIC void  CopyUpdated( const ScDocumentRef& pPosDoc, const ScDocumentRef& pDestDoc );
 
-    void               UpdateReference( sc::RefUpdateContext& rCxt,  ScDocument*
+    void               UpdateReference( sc::RefUpdateContext& rCxt, const ScDocumentRef&
                                         pUndoDoc = nullptr, bool bIncludeDraw = true,
                                         bool bUpdateNoteCaptionPos = true );
     /**
      * @param pClipDoc original clipboard doc, i.e. non-transposed
      *                 This clip doc is used to check references pointing to cut cells.
      */
-    SC_DLLPUBLIC void  UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDoc,
-                                        const ScMarkData& rMark, ScDocument* pUndoDoc );
+    SC_DLLPUBLIC void  UpdateTranspose( const ScAddress& rDestPos, const ScDocumentRef& pClipDoc,
+                                        const ScMarkData& rMark, const ScDocumentRef& pUndoDoc );
 
     void               UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
@@ -1937,7 +1954,7 @@ public:
     bool                 SearchAndReplace( const SvxSearchItem& rSearchItem,
                                            SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
                                            const ScMarkData& rMark, ScRangeList& rMatchedRanges,
-                                           OUString& rUndoStr, ScDocument* pUndoDoc = nullptr );
+                                           OUString& rUndoStr, const ScDocumentRef& pUndoDoc = nullptr );
     static bool          IsEmptyCellSearch( const SvxSearchItem& rSearchItem );
 
                     // determine Col/Row of subsequent calls
@@ -2079,7 +2096,7 @@ public:
     void            ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, SCTAB nTab );
 
     SC_DLLPUBLIC ScPatternAttr*     GetDefPattern() const;
-    SC_DLLPUBLIC ScDocumentPool*    GetPool();
+    SC_DLLPUBLIC ScDocumentPool*    GetPool() const;
     SC_DLLPUBLIC ScStyleSheetPool*  GetStyleSheetPool() const;
     void GetUnprotectedCells( ScRangeList& rRange, SCTAB nTab ) const;
 
@@ -2674,7 +2691,7 @@ private:
 
     void    UpdateDrawPrinter();
     void    UpdateDrawLanguages();
-    SC_DLLPUBLIC void   InitClipPtrs( ScDocument* pSourceDoc );
+    SC_DLLPUBLIC void   InitClipPtrs( ScDocument& rSourceDoc );
 
     void    LoadDdeLinks(SvStream& rStream);
     void    SaveDdeLinks(SvStream& rStream) const;
@@ -2683,7 +2700,7 @@ private:
     void    UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                              const ScRange& r, SCCOL nDx, SCROW nDy, SCTAB nDz );
 
-    void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks);
+    void    CopyRangeNamesToClip(const ScDocumentRef& pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks);
 
     bool    HasPartOfMerged( const ScRange& rRange );
 
@@ -2701,7 +2718,7 @@ private:
     SCSIZE GetPatternCount( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
     void   ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve );
 
-    void SharePooledResources( const ScDocument* pSrcDoc );
+    void SharePooledResources( const ScDocument& rSrcDoc );
 
     void EndListeningIntersectedGroup(
         sc::EndListeningContext& rCxt, const ScAddress& rPos, std::vector<ScAddress>* pGroupPos );
@@ -2714,8 +2731,6 @@ private:
 
     bool BroadcastHintInternal( const ScHint &rHint );
 };
-
-typedef std::unique_ptr<ScDocument, o3tl::default_delete<ScDocument>> ScDocumentUniquePtr;
 
 /**
  * Instantiate this to ensure that subsequent modification of

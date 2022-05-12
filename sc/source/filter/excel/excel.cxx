@@ -417,20 +417,20 @@ ErrCode ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocument
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportCalcRTF(SvStream &rStream)
 {
     ScDLL::Init();
-    ScDocument aDocument;
-    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    ScDocumentRef pDocument(new ScDocument);
+    ScDocOptions aDocOpt = pDocument->GetDocOptions();
     aDocOpt.SetLookUpColRowNames(false);
-    aDocument.SetDocOptions(aDocOpt);
-    aDocument.MakeTable(0);
-    aDocument.EnableExecuteLink(false);
-    aDocument.SetInsertingFromOtherDoc(true);
+    pDocument->SetDocOptions(aDocOpt);
+    pDocument->MakeTable(0);
+    pDocument->EnableExecuteLink(false);
+    pDocument->SetInsertingFromOtherDoc(true);
     ScRange aRange;
 
     bool bRet;
 
     try
     {
-        bRet = ScFormatFilter::Get().ScImportRTF(rStream, OUString(), &aDocument, aRange) == ERRCODE_NONE;
+        bRet = ScFormatFilter::Get().ScImportRTF(rStream, OUString(), pDocument.get(), aRange) == ERRCODE_NONE;
     }
     catch (const std::range_error&)
     {
@@ -481,14 +481,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLS(SvStream& rStream)
 extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDIF(SvStream &rStream)
 {
     ScDLL::Init();
-    ScDocument aDocument;
-    ScDocOptions aDocOpt = aDocument.GetDocOptions();
+    ScDocumentRef pDocument(new ScDocument);
+    ScDocOptions aDocOpt = pDocument->GetDocOptions();
     aDocOpt.SetLookUpColRowNames(false);
-    aDocument.SetDocOptions(aDocOpt);
-    aDocument.MakeTable(0);
-    aDocument.EnableExecuteLink(false);
-    aDocument.SetInsertingFromOtherDoc(true);
-    return ScFormatFilter::Get().ScImportDif(rStream, &aDocument, ScAddress(0, 0, 0), RTL_TEXTENCODING_IBM_850) == ERRCODE_NONE;
+    pDocument->SetDocOptions(aDocOpt);
+    pDocument->MakeTable(0);
+    pDocument->EnableExecuteLink(false);
+    pDocument->SetInsertingFromOtherDoc(true);
+    return ScFormatFilter::Get().ScImportDif(rStream, pDocument.get(), ScAddress(0, 0, 0), RTL_TEXTENCODING_IBM_850) == ERRCODE_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

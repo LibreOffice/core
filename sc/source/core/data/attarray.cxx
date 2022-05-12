@@ -2457,14 +2457,14 @@ void ScAttrArray::CopyArea(
                 if (bSamePool)
                     pNewPattern = &pDestDocPool->Put(aTmpPattern);
                 else
-                    pNewPattern = aTmpPattern.PutInPool( &rAttrArray.rDocument, &rDocument );
+                    pNewPattern = aTmpPattern.PutInPool( rAttrArray.rDocument, rDocument );
             }
             else
             {
                 if (bSamePool)
                     pNewPattern = &pDestDocPool->Put(*pOldPattern);
                 else
-                    pNewPattern = pOldPattern->PutInPool( &rAttrArray.rDocument, &rDocument );
+                    pNewPattern = pOldPattern->PutInPool( rAttrArray.rDocument, rDocument );
             }
 
             rAttrArray.SetPatternArea(nDestStart,
@@ -2505,7 +2505,7 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, tools::Long nDy,
         if (bSamePool)
             pNewPattern = &pDestDocPool->Put(*rDocument.GetDefPattern());
         else
-            pNewPattern = rDocument.GetDefPattern()->PutInPool( &rAttrArray.rDocument, &rDocument );
+            pNewPattern = rDocument.GetDefPattern()->PutInPool( rAttrArray.rDocument, rDocument );
 
         rAttrArray.SetPatternAreaSafe(nDestStart, nDestEnd, pNewPattern, false);
         return;
@@ -2522,7 +2522,7 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, tools::Long nDy,
             if (bSamePool)
                 pNewPattern = &pDestDocPool->Put(*pOldPattern);
             else
-                pNewPattern = pOldPattern->PutInPool( &rAttrArray.rDocument, &rDocument );
+                pNewPattern = pOldPattern->PutInPool( rAttrArray.rDocument, rDocument );
 
             rAttrArray.SetPatternAreaSafe(nDestStart,
                             std::min(static_cast<SCROW>(mvData[i].nEndRow + nDy), nDestEnd), pNewPattern, false);

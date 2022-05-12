@@ -2688,7 +2688,7 @@ void ScFiltersTest::testColorScaleNumWithRefXLSX()
 
 void ScFiltersTest::testOrcusODSStyleInterface()
 {
-    ScDocument aDoc;
+    ScDocumentRef pDoc(new ScDocument);
     OUString aFullUrl = m_directories.getURLFromSrc(u"sc/qa/unit/data/xml/styles.xml");
 
     /* This loop below trims file:// from the start because orcus doesn't accept such a URL */
@@ -2698,8 +2698,8 @@ void ScFiltersTest::testOrcusODSStyleInterface()
     ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
     CPPUNIT_ASSERT(pOrcus);
 
-    pOrcus->importODS_Styles(aDoc, aValidPath);
-    ScStyleSheetPool* pStyleSheetPool = aDoc.GetStyleSheetPool();
+    pOrcus->importODS_Styles(*pDoc, aValidPath);
+    ScStyleSheetPool* pStyleSheetPool = pDoc->GetStyleSheetPool();
 
     /* Test cases for Style "Name1"
      * Has Border and Fill.

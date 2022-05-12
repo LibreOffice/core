@@ -12,12 +12,12 @@
 #include "address.hxx"
 #include "cellvalue.hxx"
 #include "celltextattr.hxx"
+#include "document.hxx"
 #include "Sparkline.hxx"
 
 #include <memory>
 #include <vector>
 
-class ScDocument;
 class ScColumn;
 class ScPatternAttr;
 class ScPostIt;
@@ -52,8 +52,8 @@ class SC_DLLPUBLIC CopyFromClipContext final : public ClipContextBase
     SCTAB mnTabStart;
     SCTAB mnTabEnd;
     ScDocument& mrDestDoc;
-    ScDocument* mpRefUndoDoc;
-    ScDocument* mpClipDoc;
+    ScDocumentRef mpRefUndoDoc;
+    ScDocumentRef mpClipDoc;
     InsertDeleteFlags mnInsertFlag;
     InsertDeleteFlags mnDeleteFlag;
 
@@ -80,7 +80,7 @@ public:
 
     CopyFromClipContext() = delete;
     CopyFromClipContext(ScDocument& rDoc,
-        ScDocument* pRefUndoDoc, ScDocument* pClipDoc, InsertDeleteFlags nInsertFlag,
+        const ScDocumentRef& pRefUndoDoc, const ScDocumentRef& pClipDoc, InsertDeleteFlags nInsertFlag,
         bool bAsLink, bool bSkipAttrForEmptyCells);
 
     virtual ~CopyFromClipContext() override;
@@ -93,9 +93,9 @@ public:
     void setDestRange( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     Range getDestRange() const;
 
-    ScDocument* getUndoDoc();
-    ScDocument* getClipDoc();
-    ScDocument* getDestDoc() { return &mrDestDoc; }
+    const ScDocumentRef& getUndoDoc();
+    const ScDocumentRef& getClipDoc();
+    ScDocument& getDestDoc() { return mrDestDoc; }
     InsertDeleteFlags getInsertFlag() const;
 
     void setDeleteFlag( InsertDeleteFlags nFlag );

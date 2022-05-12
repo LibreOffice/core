@@ -258,7 +258,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         if (!rCxt.isSkipEmptyCells() || rSrcCell.meType != CELLTYPE_NONE)
         {
             const ScPatternAttr* pAttr = (bSameDocPool ? rCxt.getSingleCellPattern(nColOffset) :
-                    rCxt.getSingleCellPattern(nColOffset)->PutInPool( &rDocument, rCxt.getClipDoc()));
+                    rCxt.getSingleCellPattern(nColOffset)->PutInPool( rDocument, *rCxt.getClipDoc()));
 
             auto pNewPattern = std::make_unique<ScPatternAttr>(*pAttr);
             sal_uInt16 pItems[2];
@@ -340,7 +340,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
 
     // Duplicate the cell note over the whole pasted range.
 
-    ScDocument* pClipDoc = rCxt.getClipDoc();
+    const ScDocumentRef& pClipDoc = rCxt.getClipDoc();
     const ScAddress aSrcPos = pClipDoc->GetClipParam().getWholeRange().aStart;
     std::vector<ScPostIt*> aNotes;
     aNotes.reserve(nDestSize);

@@ -137,6 +137,8 @@ public:
 
     /// create ScModelObj and set at pDocSh (SetBaseModel)
     static void             CreateAndSet(ScDocShell* pDocSh);
+    /// detach ScModelObj from destroying ScDocShell
+    static void             Detach(ScDocShell* pDocSh);
 
     ScDocument*             GetDocument() const;
     SfxObjectShell*         GetEmbeddedObject() const;

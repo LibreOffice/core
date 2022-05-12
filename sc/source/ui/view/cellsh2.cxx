@@ -801,7 +801,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         break;
         case SID_DATA_PROVIDER:
         {
-            auto xDoc = o3tl::make_shared<ScDocument>();
+            ScDocumentRef xDoc(new ScDocument);
             xDoc->InsertTab(0, "test");
             ScDocument& rDoc = GetViewData().GetDocument();
             ScDataProviderDlg aDialog(pTabViewShell->GetDialogParent(), xDoc, &rDoc);
@@ -817,7 +817,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             auto& rDataMapper = rDoc.GetExternalDataMapper();
             for (auto& rDataSource : rDataMapper.getDataSources())
             {
-                rDataSource.refresh(&rDoc, false);
+                rDataSource.refresh(rDoc, false);
             }
         }
         break;

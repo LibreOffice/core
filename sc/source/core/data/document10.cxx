@@ -81,7 +81,7 @@ void ScDocument::DeleteBeforeCopyFromClip(
 bool ScDocument::CopyOneCellFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
-    ScDocument* pClipDoc = rCxt.getClipDoc();
+    const ScDocumentRef& pClipDoc = rCxt.getClipDoc();
     if (pClipDoc->GetClipParam().mbCutMode)
         // We don't handle cut and paste or moving of cells here.
         return false;
@@ -327,11 +327,11 @@ void ScDocument::CompileHybridFormula()
     }
 }
 
-void ScDocument::SharePooledResources( const ScDocument* pSrcDoc )
+void ScDocument::SharePooledResources( const ScDocument& rSrcDoc )
 {
     ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
-    mxPoolHelper = pSrcDoc->mxPoolHelper;
-    mpCellStringPool = pSrcDoc->mpCellStringPool;
+    mxPoolHelper = rSrcDoc.mxPoolHelper;
+    mpCellStringPool = rSrcDoc.mpCellStringPool;
 }
 
 void ScDocument::UpdateScriptTypes( const ScAddress& rPos, SCCOL nColSize, SCROW nRowSize )
