@@ -1441,6 +1441,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
     case LOK_COMMAND_BLOCKED:
     case LOK_CALLBACK_SC_FOLLOW_JUMP:
+    case LOK_CALLBACK_PRINT_RANGES:
     {
         // TODO: Implement me
         break;
