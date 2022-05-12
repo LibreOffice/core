@@ -44,7 +44,7 @@ namespace DOM
                 css::uno::Reference< css::xml::dom::XAttr > const& xNewAttr, bool const bNS);
 
     protected:
-        CElement(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CElement(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
                 xmlNodePtr const pNode);
 
     public:

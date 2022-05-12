@@ -21,6 +21,8 @@
 
 #include <libxml/tree.h>
 
+#include <mutex>
+
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
@@ -104,10 +106,10 @@ namespace DOM
         xmlNodePtr m_aNodePtr;
 
         ::rtl::Reference< CDocument > const m_xDocument;
-        ::osl::Mutex & m_rMutex;
+        ::std::recursive_mutex & m_rMutex;
 
         // for initialization by classes derived through ImplInheritanceHelper
-        CNode(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CNode(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
                 css::xml::dom::NodeType const& reNodeType, xmlNodePtr const& rpNode);
         void invalidate();
 

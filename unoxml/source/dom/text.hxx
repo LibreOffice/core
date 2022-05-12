@@ -42,9 +42,9 @@ namespace DOM
         friend class CDocument;
 
     protected:
-        CText(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CText(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
                 css::xml::dom::NodeType const& reNodeType, xmlNodePtr const& rpNode);
-        CText(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CText(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
                 xmlNodePtr const pNode);
 
     public:

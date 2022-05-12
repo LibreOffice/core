@@ -123,7 +123,7 @@ namespace DOM
     }
 
 
-    CNode::CNode(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+    CNode::CNode(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
                 NodeType const& reNodeType, xmlNodePtr const& rpNode)
         :   m_bUnlinked(false)
         ,   m_aNodeType(reNodeType)
@@ -132,7 +132,7 @@ namespace DOM
         // (but not if this is a document; that would create a leak!)
         ,   m_xDocument( (m_aNodePtr->type != XML_DOCUMENT_NODE)
                 ? &const_cast<CDocument&>(rDocument) : nullptr )
-        ,   m_rMutex(const_cast< ::osl::Mutex & >(rMutex))
+        ,   m_rMutex(const_cast< ::std::recursive_mutex & >(rMutex))
     {
         OSL_ASSERT(m_aNodePtr);
     }
@@ -156,7 +156,7 @@ namespace DOM
         if (NodeType_DOCUMENT_NODE == m_aNodeType) {
             invalidate();
         } else {
-            ::osl::MutexGuard const g(m_rMutex);
+            ::std::unique_lock const g(m_rMutex);
             invalidate(); // other nodes are still alive so must lock mutex
         }
     }
@@ -274,7 +274,7 @@ namespace DOM
     Reference< XNode > SAL_CALL CNode::appendChild(
             Reference< XNode > const& xNewChild)
     {
-        ::osl::ClearableMutexGuard guard(m_rMutex);
+        ::std::unique_lock guard(m_rMutex);
 
         if (nullptr == m_aNodePtr) { return nullptr; }
 
@@ -360,7 +360,7 @@ namespace DOM
 
         // the following dispatch functions use only UNO interfaces
         // and call event listeners, so release mutex to prevent deadlocks.
-        guard.clear();
+        guard.unlock();
 
         dispatchEvent(event);
         // dispatch subtree modified for this node
@@ -375,7 +375,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CNode::cloneNode(sal_Bool bDeep)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return nullptr;
@@ -402,7 +402,7 @@ namespace DOM
     */
     Reference< XNodeList > SAL_CALL CNode::getChildNodes()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return nullptr;
@@ -416,7 +416,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CNode::getFirstChild()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return nullptr;
@@ -429,7 +429,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CNode::getLastChild()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return nullptr;
@@ -452,7 +452,7 @@ namespace DOM
     */
     OUString SAL_CALL CNode::getNamespaceURI()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         OUString aURI;
         if (m_aNodePtr != nullptr &&
@@ -470,7 +470,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CNode::getNextSibling()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return nullptr;
@@ -509,7 +509,7 @@ namespace DOM
     */
     NodeType SAL_CALL CNode::getNodeType()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         return m_aNodeType;
     }
@@ -527,7 +527,7 @@ namespace DOM
     */
     Reference< XDocument > SAL_CALL CNode::getOwnerDocument()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return nullptr;
@@ -541,7 +541,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CNode::getParentNode()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return nullptr;
@@ -554,7 +554,7 @@ namespace DOM
     */
     OUString SAL_CALL CNode::getPrefix()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         OUString aPrefix;
         if (m_aNodePtr != nullptr &&
@@ -574,7 +574,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CNode::getPreviousSibling()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return nullptr;
@@ -587,7 +587,7 @@ namespace DOM
     */
     sal_Bool SAL_CALL CNode::hasAttributes()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         return (m_aNodePtr != nullptr && m_aNodePtr->properties != nullptr);
     }
@@ -597,7 +597,7 @@ namespace DOM
     */
     sal_Bool SAL_CALL CNode::hasChildNodes()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         return (m_aNodePtr != nullptr && m_aNodePtr->children != nullptr);
     }
@@ -621,7 +621,7 @@ namespace DOM
             throw e;
         }
 
-        ::osl::ClearableMutexGuard guard(m_rMutex);
+        ::std::unique_lock guard(m_rMutex);
 
         CNode *const pNewNode(comphelper::getFromUnoTunnel<CNode>(newChild));
         CNode *const pRefNode(comphelper::getFromUnoTunnel<CNode>(refChild));
@@ -650,7 +650,7 @@ namespace DOM
 
         // attributes are unordered anyway, so just do appendChild
         if (XML_ATTRIBUTE_NODE == pNewChild->type) {
-            guard.clear();
+            guard.unlock();
             return appendChild(newChild);
         }
 
@@ -725,7 +725,7 @@ namespace DOM
             throw e;
         }
 
-        ::osl::ClearableMutexGuard guard(m_rMutex);
+        ::std::unique_lock guard(m_rMutex);
 
         if (!m_aNodePtr) { throw RuntimeException(); }
 
@@ -768,7 +768,7 @@ namespace DOM
 
         // the following dispatch functions use only UNO interfaces
         // and call event listeners, so release mutex to prevent deadlocks.
-        guard.clear();
+        guard.unlock();
 
         dispatchEvent(event);
         // subtree modified for this node
@@ -800,7 +800,7 @@ namespace DOM
             throw e;
         }
 
-        ::osl::ClearableMutexGuard guard(m_rMutex);
+        ::std::unique_lock guard(m_rMutex);
 
         ::rtl::Reference<CNode> const pOldNode(
                 comphelper::getFromUnoTunnel<CNode>(xOldChild));
@@ -875,7 +875,7 @@ namespace DOM
         }
         }
 
-        guard.clear(); // release for calling event handlers
+        guard.unlock(); // release for calling event handlers
         dispatchSubtreeModified();
 
         return xOldChild;
@@ -914,7 +914,7 @@ namespace DOM
     */
     void SAL_CALL CNode::setPrefix(const OUString& prefix)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if ((nullptr == m_aNodePtr) ||
             ((m_aNodePtr->type != XML_ELEMENT_NODE) &&
@@ -939,7 +939,7 @@ namespace DOM
         const Reference< css::xml::dom::events::XEventListener >& listener,
         sal_Bool useCapture)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         CDocument & rDocument(GetOwnerDocument());
         events::CEventDispatcher & rDispatcher(rDocument.GetEventDispatcher());
@@ -950,7 +950,7 @@ namespace DOM
         const Reference< css::xml::dom::events::XEventListener >& listener,
         sal_Bool useCapture)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         CDocument & rDocument(GetOwnerDocument());
         events::CEventDispatcher & rDispatcher(rDocument.GetEventDispatcher());
@@ -963,7 +963,7 @@ namespace DOM
         events::CEventDispatcher * pDispatcher;
         xmlNodePtr pNode;
         {
-            ::osl::MutexGuard const g(m_rMutex);
+            ::std::unique_lock const g(m_rMutex);
 
             pDocument = & GetOwnerDocument();
             pDispatcher = & pDocument->GetEventDispatcher();

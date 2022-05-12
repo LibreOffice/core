@@ -28,7 +28,7 @@ using namespace css::xml::dom;
 
 namespace DOM
 {
-    CNotation::CNotation(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+    CNotation::CNotation(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
             xmlNotationPtr const pNotation)
         : CNotation_Base(rDocument, rMutex,
             NodeType_NOTATION_NODE, reinterpret_cast<xmlNodePtr>(pNotation))
@@ -55,7 +55,7 @@ namespace DOM
 
     OUString SAL_CALL CNotation::getNodeName()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         OUString aName;
         if (m_aNodePtr != nullptr)

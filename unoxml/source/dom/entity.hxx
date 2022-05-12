@@ -41,7 +41,7 @@ namespace DOM
 
         xmlEntityPtr m_aEntityPtr;
 
-        CEntity(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CEntity(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
                 xmlEntityPtr const pEntity);
 
     public:

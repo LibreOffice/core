@@ -39,7 +39,7 @@ namespace DOM
         friend class CDocument;
 
         CEntityReference(
-            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
             xmlNodePtr const pNode);
 
     public:

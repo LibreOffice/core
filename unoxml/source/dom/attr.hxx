@@ -45,7 +45,7 @@ namespace DOM
         xmlAttrPtr m_aAttrPtr;
         ::std::unique_ptr< stringpair_t > m_pNamespace;
 
-        CAttr(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CAttr(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
                 xmlAttrPtr const pAttr);
 
     public:

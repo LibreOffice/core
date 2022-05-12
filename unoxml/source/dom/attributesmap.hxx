@@ -39,11 +39,11 @@ namespace DOM
     {
     private:
         ::rtl::Reference<CElement> const m_pElement;
-        ::osl::Mutex & m_rMutex;
+        ::std::recursive_mutex & m_rMutex;
 
     public:
         CAttributesMap(::rtl::Reference<CElement> const& pElement,
-                ::osl::Mutex & rMutex);
+                ::std::recursive_mutex & rMutex);
 
         /**
         The number of nodes in this map.

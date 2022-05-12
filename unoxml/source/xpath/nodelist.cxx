@@ -19,6 +19,8 @@
 
 #include "nodelist.hxx"
 
+#include <mutex>
+
 #include "../dom/document.hxx"
 
 using namespace css::uno;
@@ -28,7 +30,7 @@ namespace XPath
 {
     CNodeList::CNodeList(
                 ::rtl::Reference<DOM::CDocument> const& pDocument,
-                ::osl::Mutex & rMutex,
+                ::std::recursive_mutex & rMutex,
                 std::shared_ptr<xmlXPathObject> const& rxpathObj)
         : m_pDocument(pDocument)
         , m_rMutex(rMutex)
@@ -46,7 +48,7 @@ namespace XPath
     */
     sal_Int32 SAL_CALL CNodeList::getLength()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         sal_Int32 value = 0;
         if (m_pNodeSet != nullptr)
@@ -59,7 +61,7 @@ namespace XPath
     */
     Reference< XNode > SAL_CALL CNodeList::item(sal_Int32 index)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_pNodeSet) {
             return nullptr;

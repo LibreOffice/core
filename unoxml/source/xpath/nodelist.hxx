@@ -46,7 +46,7 @@ namespace XPath
     private:
         /// #i115995# keep document alive
         ::rtl::Reference< DOM::CDocument > const m_pDocument;
-        ::osl::Mutex & m_rMutex;
+        ::std::recursive_mutex & m_rMutex;
         /// retain the result set in case the CXPathObject is released
         std::shared_ptr<xmlXPathObject> m_pXPathObj;
         xmlNodeSetPtr m_pNodeSet;
@@ -54,7 +54,7 @@ namespace XPath
     public:
         CNodeList(
                 ::rtl::Reference<DOM::CDocument> const& pDocument,
-                ::osl::Mutex & rMutex,
+                ::std::recursive_mutex & rMutex,
                 std::shared_ptr<xmlXPathObject> const& rxpathObj);
         /**
         The number of nodes in the list.

@@ -30,7 +30,7 @@ using namespace css::xml::sax;
 namespace DOM
 {
     CProcessingInstruction::CProcessingInstruction(
-            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
             xmlNodePtr const pNode)
         : CProcessingInstruction_Base(rDocument, rMutex,
             NodeType_PROCESSING_INSTRUCTION_NODE, pNode)
@@ -52,7 +52,7 @@ namespace DOM
     OUString SAL_CALL
     CProcessingInstruction::getData()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return OUString();
@@ -73,7 +73,7 @@ namespace DOM
     OUString SAL_CALL
     CProcessingInstruction::getTarget()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return OUString();
@@ -93,7 +93,7 @@ namespace DOM
     */
     void SAL_CALL CProcessingInstruction::setData(OUString const& rData)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             throw RuntimeException();
@@ -110,7 +110,7 @@ namespace DOM
     OUString SAL_CALL
     CProcessingInstruction::getNodeName()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::unique_lock const g(m_rMutex);
 
         if (nullptr == m_aNodePtr) {
             return OUString();

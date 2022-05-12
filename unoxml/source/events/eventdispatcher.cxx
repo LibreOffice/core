@@ -101,14 +101,14 @@ namespace DOM::events {
     }
 
     void CEventDispatcher::dispatchEvent(
-            DOM::CDocument & rDocument, ::osl::Mutex & rMutex,
+            DOM::CDocument & rDocument, ::std::recursive_mutex & rMutex,
             xmlNodePtr const pNode, Reference<XNode> const& xNode,
             Reference< XEvent > const& i_xEvent) const
     {
         TypeListenerMap captureListeners;
         TypeListenerMap targetListeners;
         {
-            ::osl::MutexGuard g(rMutex);
+            ::std::unique_lock g(rMutex);
 
             captureListeners = m_CaptureListeners;
             targetListeners = m_TargetListeners;
@@ -191,7 +191,7 @@ namespace DOM::events {
             NodeVector_t;
         NodeVector_t captureVector;
         {
-            ::osl::MutexGuard g(rMutex);
+            ::std::unique_lock g(rMutex);
 
             xmlNodePtr cur = pNode;
             while (cur != nullptr)

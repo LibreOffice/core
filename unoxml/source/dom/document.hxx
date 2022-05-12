@@ -70,7 +70,7 @@ namespace DOM
     private:
         /// this Mutex is used for synchronization of all UNO wrapper
         /// objects that belong to this document
-        ::osl::Mutex m_Mutex;
+        ::std::recursive_mutex m_Mutex;
         /// the libxml document: freed in destructor
         /// => all UNO wrapper objects must keep the CDocument alive
         xmlDocPtr const m_aDocPtr;
@@ -97,7 +97,7 @@ namespace DOM
         virtual ~CDocument() override;
 
         // needed by CXPathAPI
-        ::osl::Mutex & GetMutex() { return m_Mutex; }
+        ::std::recursive_mutex & GetMutex() { return m_Mutex; }
 
         events::CEventDispatcher & GetEventDispatcher();
         ::rtl::Reference< CElement > GetDocumentElement();

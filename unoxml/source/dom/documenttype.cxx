@@ -33,7 +33,7 @@ namespace DOM
 {
 
     CDocumentType::CDocumentType(
-            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
             xmlDtdPtr const pDtd)
         : CDocumentType_Base(rDocument, rMutex,
             NodeType_DOCUMENT_TYPE_NODE, reinterpret_cast<xmlNodePtr>(pDtd))
@@ -47,7 +47,7 @@ namespace DOM
     */
     css::uno::Reference< XNamedNodeMap > SAL_CALL CDocumentType::getEntities()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::unique_lock const g(m_rMutex);
 
         css::uno::Reference< XNamedNodeMap > aMap;
         if (m_aDtdPtr != nullptr)
@@ -73,7 +73,7 @@ namespace DOM
     */
     OUString SAL_CALL CDocumentType::getName()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::unique_lock const g(m_rMutex);
 
         OUString aName;
         if (m_aDtdPtr != nullptr)
@@ -88,7 +88,7 @@ namespace DOM
     */
     css::uno::Reference< XNamedNodeMap > SAL_CALL CDocumentType::getNotations()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::unique_lock const g(m_rMutex);
 
         css::uno::Reference< XNamedNodeMap > aMap;
         if (m_aDtdPtr != nullptr)
@@ -103,7 +103,7 @@ namespace DOM
     */
     OUString SAL_CALL CDocumentType::getPublicId()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::unique_lock const g(m_rMutex);
 
         OUString aId;
         if (m_aDtdPtr != nullptr)
@@ -118,7 +118,7 @@ namespace DOM
     */
     OUString SAL_CALL CDocumentType::getSystemId()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        std::unique_lock const g(m_rMutex);
 
         OUString aId;
         if (m_aDtdPtr != nullptr)
