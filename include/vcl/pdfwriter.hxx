@@ -333,6 +333,7 @@ public:
     {
         bool                Checked;
         OUString            OnValue; // the value of the checkbox if it is selected
+        OUString            OffValue; // the value of the checkbox if it is not selected
 
         CheckBoxWidget()
                 : AnyWidget( vcl::PDFWriter::CheckBox ),
@@ -350,6 +351,7 @@ public:
         bool                Selected;
         sal_Int32           RadioGroup;
         OUString       OnValue; // the value of the radio button if it is selected
+        OUString       OffValue; // the value of the radio button if it is not selected
 
         RadioButtonWidget()
                 : AnyWidget( vcl::PDFWriter::RadioButton ),

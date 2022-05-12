@@ -572,6 +572,14 @@ namespace toolkitform
                 catch(...)
                 {
                 }
+
+                try
+                {
+                    xModelProps->getPropertyValue( "SecondaryRefValue" ) >>= pCheckBoxWidget->OffValue;
+                }
+                catch(...)
+                {
+                }
             }
 
 
@@ -587,6 +595,14 @@ namespace toolkitform
                 try
                 {
                     xModelProps->getPropertyValue( "RefValue" ) >>= pRadioWidget->OnValue;
+                }
+                catch(...)
+                {
+                }
+
+                try
+                {
+                    xModelProps->getPropertyValue( "SecondaryRefValue" ) >>= pRadioWidget->OffValue;
                 }
                 catch(...)
                 {
