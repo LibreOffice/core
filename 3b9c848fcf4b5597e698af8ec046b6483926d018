@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c745e1e6_116be53c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-05-12T01:33:43Z",
+      "side": 1,
+      "message": "Unless people here have concerns, I plan to merge this in the next few days. I\u0027ve tested parallel packaging works on Linux and Windows (and the behavior w/o gnu parallel should be exactly as before)",
+      "revId": "3b9c848fcf4b5597e698af8ec046b6483926d018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
