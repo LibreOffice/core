@@ -254,8 +254,7 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
     if (SfxObjectShell* pObjectShell = rDoc.GetDocumentShell())
     {
         // Copy document properties from pObjectShell to pClipDoc (to its clip options, as it has no object shell).
-        uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(pObjectShell->GetModel(), uno::UNO_QUERY);
-        uno::Reference<util::XCloneable> xCloneable(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
+        uno::Reference<util::XCloneable> xCloneable(pObjectShell->getDocProperties(), uno::UNO_QUERY_THROW);
         std::unique_ptr<ScClipOptions> pOptions(new ScClipOptions);
         pOptions->m_xDocumentProperties.set(xCloneable->createClone(), uno::UNO_QUERY);
         pClipDoc->SetClipOptions(std::move(pOptions));
