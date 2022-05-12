@@ -743,13 +743,14 @@ SmColorTokenTableEntry starmathdatabase::Identify_Color_DVIPSNAMES(sal_uInt32 cC
         return SmColorTokenTableEntry("", TRGBA, cColor);
 }
 
-const SmColorTokenTableEntry* starmathdatabase::Identify_ColorName_Parser(const OUString& colorname)
+const SmColorTokenTableEntry*
+starmathdatabase::Identify_ColorName_Parser(std::u16string_view colorname)
 {
-    if (colorname.isEmpty())
+    if (colorname.empty())
         return &aColorTokenTableERROR[0];
     for (auto i = std::begin(aColorTokenTableParse); i < std::end(aColorTokenTableParse); ++i)
     {
-        sal_Int32 matches = colorname.compareToIgnoreAsciiCaseAscii(i->pIdent);
+        sal_Int32 matches = o3tl::compareToIgnoreAsciiCase(colorname, i->aIdent);
         if (matches == 0)
             return i;
         if (matches < 0)
@@ -757,9 +758,9 @@ const SmColorTokenTableEntry* starmathdatabase::Identify_ColorName_Parser(const 
     }
     return &aColorTokenTableERROR[0];
 }
-SmColorTokenTableEntry starmathdatabase::Identify_ColorName_HTML(const OUString& colorname)
+SmColorTokenTableEntry starmathdatabase::Identify_ColorName_HTML(std::u16string_view colorname)
 {
-    if (colorname.isEmpty())
+    if (colorname.empty())
         return SmColorTokenTableEntry("", TERROR, COL_SM_BLACK);
     if (colorname[0] == '#')
     {
@@ -768,7 +769,7 @@ SmColorTokenTableEntry starmathdatabase::Identify_ColorName_HTML(const OUString&
     }
     for (auto i = std::begin(aColorTokenTableHTML); i < std::end(aColorTokenTableHTML); ++i)
     {
-        sal_Int32 matches = colorname.compareToIgnoreAsciiCaseAscii(i->pIdent);
+        sal_Int32 matches = o3tl::compareToIgnoreAsciiCase(colorname, i->aIdent);
         if (matches == 0)
             return i;
         if (matches < 0)
@@ -777,13 +778,13 @@ SmColorTokenTableEntry starmathdatabase::Identify_ColorName_HTML(const OUString&
     return SmColorTokenTableEntry("", TERROR, COL_SM_BLACK);
 }
 const SmColorTokenTableEntry*
-starmathdatabase::Identify_ColorName_DVIPSNAMES(const OUString& colorname)
+starmathdatabase::Identify_ColorName_DVIPSNAMES(std::u16string_view colorname)
 {
-    if (colorname.isEmpty())
+    if (colorname.empty())
         return &aColorTokenTableERROR[0];
     for (auto i = std::begin(aColorTokenTableDVIPS); i < std::end(aColorTokenTableDVIPS); ++i)
     {
-        sal_Int32 matches = colorname.compareToIgnoreAsciiCaseAscii(i->pIdent);
+        sal_Int32 matches = o3tl::compareToIgnoreAsciiCase(colorname, i->aIdent);
         if (matches == 0)
             return i;
         if (matches < 0)

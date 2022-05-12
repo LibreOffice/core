@@ -302,7 +302,7 @@ SmColorTokenTableEntry Identify_Color_DVIPSNAMES(sal_uInt32 cColor);
   * @param cColor
   * @param parser color
   */
-const SmColorTokenTableEntry* Identify_ColorName_Parser(const OUString& colorname);
+const SmColorTokenTableEntry* Identify_ColorName_Parser(std::u16string_view colorname);
 
 /**
   * Identifies color from color name.
@@ -315,7 +315,7 @@ const SmColorTokenTableEntry* Identify_ColorName_Parser(const OUString& colornam
   * @param cColor
   * @param parser color
   */
-SmColorTokenTableEntry Identify_ColorName_HTML(const OUString& colorname);
+SmColorTokenTableEntry Identify_ColorName_HTML(std::u16string_view colorname);
 
 /**
   * Identifies color from color name.
@@ -326,7 +326,7 @@ SmColorTokenTableEntry Identify_ColorName_HTML(const OUString& colorname);
   * @param cColor
   * @param parser color
   */
-const SmColorTokenTableEntry* Identify_ColorName_DVIPSNAMES(const OUString& colorname);
+const SmColorTokenTableEntry* Identify_ColorName_DVIPSNAMES(std::u16string_view colorname);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

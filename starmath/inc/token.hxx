@@ -29,6 +29,7 @@
 #pragma once
 
 #include <tools/color.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 // std imports
@@ -148,7 +149,7 @@ enum SmTokenType
 
 struct SmTokenTableEntry
 {
-    std::u16string_view pIdent;
+    OUString aIdent;
     SmTokenType eType;
     sal_Unicode cMathChar;
     TG nGroup;
@@ -157,48 +158,47 @@ struct SmTokenTableEntry
 
 struct SmColorTokenTableEntry
 {
-    const char* pIdent;
+    OUString aIdent;
     SmTokenType eType;
     Color cColor;
 
     SmColorTokenTableEntry()
-        : pIdent("")
-        , eType(TERROR)
+        : eType(TERROR)
         , cColor()
     {
     }
 
     SmColorTokenTableEntry(const SmColorTokenTableEntry* amColorTokenTableEntry)
-        : pIdent(amColorTokenTableEntry->pIdent)
+        : aIdent(amColorTokenTableEntry->aIdent)
         , eType(amColorTokenTableEntry->eType)
         , cColor(amColorTokenTableEntry->cColor)
     {
     }
 
     SmColorTokenTableEntry(const std::unique_ptr<SmColorTokenTableEntry> amColorTokenTableEntry)
-        : pIdent(amColorTokenTableEntry->pIdent)
+        : aIdent(amColorTokenTableEntry->aIdent)
         , eType(amColorTokenTableEntry->eType)
         , cColor(amColorTokenTableEntry->cColor)
     {
     }
 
-    SmColorTokenTableEntry(const char* name, SmTokenType ctype, Color ncolor)
-        : pIdent(name)
+    SmColorTokenTableEntry(const OUString& name, SmTokenType ctype, Color ncolor)
+        : aIdent(name)
         , eType(ctype)
         , cColor(ncolor)
     {
     }
 
-    SmColorTokenTableEntry(const char* name, SmTokenType ctype, sal_uInt32 ncolor)
-        : pIdent(name)
+    SmColorTokenTableEntry(const OUString& name, SmTokenType ctype, sal_uInt32 ncolor)
+        : aIdent(name)
         , eType(ctype)
         , cColor(ColorTransparency, ncolor)
     {
     }
 
-    bool equals(const OUString& colorname) const
+    bool equals(std::u16string_view colorname) const
     {
-        return colorname.compareToIgnoreAsciiCaseAscii(pIdent) == 0;
+        return o3tl::compareToIgnoreAsciiCase(colorname, aIdent) == 0;
     }
 
     bool equals(sal_uInt32 colorcode) const { return colorcode == static_cast<sal_uInt32>(cColor); }
@@ -224,9 +224,9 @@ struct SmToken
     {
     }
 
-    SmToken(SmTokenType eTokenType, sal_Unicode cMath, const char* pText, TG nTokenGroup = TG::NONE,
-            sal_uInt16 nTokenLevel = 0)
-        : aText(OUString::createFromAscii(pText))
+    SmToken(SmTokenType eTokenType, sal_Unicode cMath, const OUString& rText,
+            TG nTokenGroup = TG::NONE, sal_uInt16 nTokenLevel = 0)
+        : aText(rText)
         , eType(eTokenType)
         , cMathChar(cMath)
         , nGroup(nTokenGroup)
@@ -236,7 +236,7 @@ struct SmToken
 
     void operator=(const SmTokenTableEntry& aTokenTableEntry)
     {
-        aText = aTokenTableEntry.pIdent;
+        aText = aTokenTableEntry.aIdent;
         eType = aTokenTableEntry.eType;
         cMathChar = OUString(&aTokenTableEntry.cMathChar, 1);
         nGroup = aTokenTableEntry.nGroup;
@@ -245,7 +245,7 @@ struct SmToken
 
     void operator=(const SmTokenTableEntry* aTokenTableEntry)
     {
-        aText = aTokenTableEntry->pIdent;
+        aText = aTokenTableEntry->aIdent;
         eType = aTokenTableEntry->eType;
         cMathChar = OUString(&aTokenTableEntry->cMathChar, 1);
         nGroup = aTokenTableEntry->nGroup;
