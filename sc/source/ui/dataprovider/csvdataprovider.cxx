@@ -119,9 +119,9 @@ void CSVFetchThread::execute()
     maImportFinishedHdl();
 }
 
-CSVDataProvider::CSVDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource):
+CSVDataProvider::CSVDataProvider(ScDocument& rDoc, sc::ExternalDataSource& rDataSource):
     DataProvider(rDataSource),
-    mpDocument(pDoc)
+    mrDocument(rDoc)
 {
 }
 
@@ -140,8 +140,8 @@ void CSVDataProvider::Import()
     if (mpDoc)
         return;
 
-    mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
-    mpDoc->ResetClip(mpDocument, SCTAB(0));
+    mpDoc.set(new ScDocument(SCDOCMODE_CLIP));
+    mpDoc->ResetClip(mrDocument, SCTAB(0));
     mxCSVFetchThread = new CSVFetchThread(*mpDoc, mrDataSource.getURL(), std::bind(&CSVDataProvider::ImportFinished, this), std::vector(mrDataSource.getDataTransformation()));
     mxCSVFetchThread->launch();
 
@@ -155,13 +155,13 @@ void CSVDataProvider::Import()
 void CSVDataProvider::ImportFinished()
 {
     mrDataSource.getDBManager()->WriteToDoc(*mpDoc);
-    mpDoc.reset();
+    mpDoc.clear();
     Refresh();
 }
 
 void CSVDataProvider::Refresh()
 {
-    ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDocument->GetDocumentShell());
+    ScDocShell* pDocShell = static_cast<ScDocShell*>(mrDocument.GetDocumentShell());
     if (pDocShell)
         pDocShell->SetDocumentModified();
 }

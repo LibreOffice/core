@@ -218,7 +218,7 @@ bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
             SCCOL nEndCol = static_cast<SCCOL>(nCol2);
             SCROW nEndRow = nRow2;
 
-            ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
+            ScDocumentRef pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
             rDoc.CopyToDocument(nStartCol, 0, nTab, nEndCol, rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
             rDoc.CopyToDocument(0, nStartRow, nTab, rDoc.MaxCol(), nEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
@@ -229,7 +229,7 @@ bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
                 std::make_unique<ScUndoRemoveAllOutlines>( &rDocShell,
                                                 nStartCol, nStartRow, nTab,
                                                 nEndCol, nEndRow, nTab,
-                                                std::move(pUndoDoc), std::move(pUndoTab) ) );
+                                                pUndoDoc, std::move(pUndoTab) ) );
         }
 
         SelectLevel( nTab, true,  pTable->GetColArray().GetDepth(), false, false );
@@ -264,7 +264,7 @@ void ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
         bRecord = false;
     ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
 
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     std::unique_ptr<ScOutlineTable> pUndoTab;
 
     if ( pTable )
@@ -281,7 +281,7 @@ void ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
             SCCOL nOutEndCol = static_cast<SCCOL>(nCol2);
             SCROW nOutEndRow = nRow2;
 
-            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+            pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
             rDoc.CopyToDocument(nOutStartCol, 0, nTab, nOutEndCol, rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
             rDoc.CopyToDocument(0, nOutStartRow, nTab, rDoc.MaxCol(), nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
@@ -301,7 +301,7 @@ void ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
             std::make_unique<ScUndoAutoOutline>( &rDocShell,
                                     nStartCol, nStartRow, nTab,
                                     nEndCol, nEndRow, nTab,
-                                    std::move(pUndoDoc), std::move(pUndoTab) ) );
+                                    pUndoDoc, std::move(pUndoTab) ) );
     }
 
     rDoc.SetStreamValid(nTab, false);
@@ -332,7 +332,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     if (!comphelper::LibreOfficeKit::isActive() && bRecord )
     {
         std::unique_ptr<ScOutlineTable> pUndoTab(new ScOutlineTable( *pTable ));
-        ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
+        ScDocumentRef pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
         if (bColumns)
         {
             pUndoDoc->InitUndo( rDoc, nTab, nTab, true );
@@ -349,7 +349,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoOutlineLevel>( &rDocShell,
                                     nStart, nEnd, nTab,             //! calculate start and end
-                                    std::move(pUndoDoc), std::move(pUndoTab),
+                                    pUndoDoc, std::move(pUndoTab),
                                     bColumns, nLevel ) );
     }
 
@@ -453,7 +453,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         if ( !comphelper::LibreOfficeKit::isActive() && bRecord )
         {
             std::unique_ptr<ScOutlineTable> pUndoTab(new ScOutlineTable( *pTable ));
-            ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
+            ScDocumentRef pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
             rDoc.CopyToDocument(nStartCol, 0, nTab, nEndCol, rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
             rDoc.CopyToDocument(0, nStartRow, nTab, rDoc.MaxCol(), nEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
@@ -461,7 +461,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
             rDocShell.GetUndoManager()->AddUndoAction(
                 std::make_unique<ScUndoOutlineBlock>( &rDocShell,
                                         nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                                        std::move(pUndoDoc), std::move(pUndoTab), true ) );
+                                        pUndoDoc, std::move(pUndoTab), true ) );
         }
 
         //  Columns
@@ -579,7 +579,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
         if ( !comphelper::LibreOfficeKit::isActive() && bRecord )
         {
             std::unique_ptr<ScOutlineTable> pUndoTab(new ScOutlineTable( *pTable ));
-            ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
+            ScDocumentRef pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
             rDoc.CopyToDocument(static_cast<SCCOL>(nEffStartCol), 0, nTab,
                                 static_cast<SCCOL>(nEffEndCol), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE,
@@ -589,7 +589,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
             rDocShell.GetUndoManager()->AddUndoAction(
                 std::make_unique<ScUndoOutlineBlock>( &rDocShell,
                                         nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                                        std::move(pUndoDoc), std::move(pUndoTab), false ) );
+                                        pUndoDoc, std::move(pUndoTab), false ) );
         }
 
         //  Columns
@@ -649,7 +649,7 @@ void ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     // this is a temporarily workaround
     if ( !comphelper::LibreOfficeKit::isActive() && bRecord )
     {
-        ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
+        ScDocumentRef pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
         if (bColumns)
         {
             pUndoDoc->InitUndo( rDoc, nTab, nTab, true );
@@ -665,7 +665,7 @@ void ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoDoOutline>( &rDocShell,
-                                    nStart, nEnd, nTab, std::move(pUndoDoc),  //! calc start and end
+                                    nStart, nEnd, nTab, pUndoDoc,  //! calc start and end
                                     bColumns, nLevel, nEntry, true ) );
     }
 
@@ -741,7 +741,7 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     // this is a temporarily workaround
     if ( !comphelper::LibreOfficeKit::isActive() &&  bRecord )
     {
-        ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
+        ScDocumentRef pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
         if (bColumns)
         {
             pUndoDoc->InitUndo( rDoc, nTab, nTab, true );
@@ -757,7 +757,7 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoDoOutline>( &rDocShell,
-                                    nStart, nEnd, nTab, std::move(pUndoDoc),
+                                    nStart, nEnd, nTab, pUndoDoc,
                                     bColumns, nLevel, nEntry, false ) );
     }
 

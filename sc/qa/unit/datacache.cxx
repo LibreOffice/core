@@ -42,74 +42,74 @@ public:
 
 void ScCacheTest::testCacheSimple()
 {
-    ScDocument aDoc;
-    aDoc.InsertTab(0, "test");
+    ScDocumentRef pDoc(new ScDocument);
+    pDoc->InsertTab(0, "test");
     for (SCROW nRow = 0; nRow < 10; ++nRow)
-        aDoc.SetValue(0, nRow, 0, nRow);
+        pDoc->SetValue(0, nRow, 0, nRow);
 
-    aDoc.SetValue(0, 100000, 0, -10);
+    pDoc->SetValue(0, 100000, 0, -10);
 
     SvMemoryStream aStrm;
-    aDoc.StoreTabToCache(0, aStrm);
+    pDoc->StoreTabToCache(0, aStrm);
 
     aStrm.Seek(0);
 
-    ScDocument aNewDoc;
-    aNewDoc.InsertTab(0, "test");
-    aNewDoc.RestoreTabFromCache(0, aStrm);
+    ScDocumentRef pNewDoc(new ScDocument);
+    pNewDoc->InsertTab(0, "test");
+    pNewDoc->RestoreTabFromCache(0, aStrm);
 
     for (SCROW nRow = 0; nRow < 10; ++nRow)
-        ASSERT_DOUBLES_EQUAL(nRow, aNewDoc.GetValue(0, nRow, 0));
+        ASSERT_DOUBLES_EQUAL(nRow, pNewDoc->GetValue(0, nRow, 0));
 }
 
 void ScCacheTest::testCacheString()
 {
-    ScDocument aDoc;
-    aDoc.InsertTab(0, "test");
+    ScDocumentRef pDoc(new ScDocument);
+    pDoc->InsertTab(0, "test");
 
-    aDoc.SetString(0, 0, 0, "TestString");
-    aDoc.SetString(0, 1, 0, "asjdaonfdssda");
-    aDoc.SetString(0, 2, 0, "da");
+    pDoc->SetString(0, 0, 0, "TestString");
+    pDoc->SetString(0, 1, 0, "asjdaonfdssda");
+    pDoc->SetString(0, 2, 0, "da");
 
     SvMemoryStream aStrm;
-    aDoc.StoreTabToCache(0, aStrm);
+    pDoc->StoreTabToCache(0, aStrm);
 
     aStrm.Seek(0);
 
-    ScDocument aNewDoc;
-    aNewDoc.InsertTab(0, "test");
-    aNewDoc.RestoreTabFromCache(0, aStrm);
+    ScDocumentRef pNewDoc(new ScDocument);
+    pNewDoc->InsertTab(0, "test");
+    pNewDoc->RestoreTabFromCache(0, aStrm);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("TestString"), aNewDoc.GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("asjdaonfdssda"), aNewDoc.GetString(0, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString("da"), aNewDoc.GetString(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("TestString"), pNewDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("asjdaonfdssda"), pNewDoc->GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("da"), pNewDoc->GetString(0, 2, 0));
 }
 
 void ScCacheTest::testCacheFormula()
 {
-    ScDocument aDoc;
-    aDoc.InsertTab(0, "test");
+    ScDocumentRef pDoc(new ScDocument);
+    pDoc->InsertTab(0, "test");
 
-    aDoc.SetString(0, 0, 0, "=B1");
-    aDoc.SetString(0, 1, 0, "=B2");
-    aDoc.SetString(0, 2, 0, "=B3");
-    aDoc.SetString(0, 3, 0, "=B4");
-    aDoc.SetString(0, 4, 0, "=B5");
-    aDoc.SetString(0, 5, 0, "=B1");
+    pDoc->SetString(0, 0, 0, "=B1");
+    pDoc->SetString(0, 1, 0, "=B2");
+    pDoc->SetString(0, 2, 0, "=B3");
+    pDoc->SetString(0, 3, 0, "=B4");
+    pDoc->SetString(0, 4, 0, "=B5");
+    pDoc->SetString(0, 5, 0, "=B1");
 
     SvMemoryStream aStrm;
-    aDoc.StoreTabToCache(0, aStrm);
+    pDoc->StoreTabToCache(0, aStrm);
 
     aStrm.Seek(0);
 
-    ScDocument aNewDoc;
-    aNewDoc.InsertTab(0, "test");
-    aNewDoc.RestoreTabFromCache(0, aStrm);
+    ScDocumentRef pNewDoc(new ScDocument);
+    pNewDoc->InsertTab(0, "test");
+    pNewDoc->RestoreTabFromCache(0, aStrm);
 
     std::vector<OUString> aFormulas = { "=B1", "=B2", "=B3", "=B4", "=B5", "=B1" };
     for (SCROW nRow = 0; nRow <= 5; ++nRow)
     {
-        OUString aFormula = aNewDoc.GetFormula(0, nRow, 0);
+        OUString aFormula = pNewDoc->GetFormula(0, nRow, 0);
         CPPUNIT_ASSERT_EQUAL(aFormulas[nRow], aFormula);
     }
 }

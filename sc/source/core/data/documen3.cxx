@@ -800,7 +800,7 @@ bool ScDocument::HasSubTotalCells( const ScRange& rRange )
  * From this document this method copies the cells of positions at which
  * there are also cells in pPosDoc to pDestDoc
  */
-void ScDocument::CopyUpdated( ScDocument* pPosDoc, ScDocument* pDestDoc )
+void ScDocument::CopyUpdated( const ScDocumentRef& pPosDoc, const ScDocumentRef& pDestDoc )
 {
     SCTAB nCount = static_cast<SCTAB>(maTabs.size());
     for (SCTAB nTab=0; nTab<nCount; nTab++)
@@ -1006,7 +1006,7 @@ void ScDocument::AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges )
 }
 
 void ScDocument::UpdateReference(
-    sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )
+    sc::RefUpdateContext& rCxt, const ScDocumentRef& pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )
 {
     if (!ValidRange(rCxt.maRange) && !(rCxt.meMode == URM_INSDEL &&
                 ((rCxt.mnColDelta < 0 &&    // convention from ScDocument::DeleteCol()
@@ -1066,7 +1066,7 @@ void ScDocument::UpdateReference(
         if (!maTabs[i])
             continue;
 
-        maTabs[i]->UpdateReference(rCxt, pUndoDoc, bIncludeDraw, bUpdateNoteCaptionPos);
+        maTabs[i]->UpdateReference(rCxt, pUndoDoc.get(), bIncludeDraw, bUpdateNoteCaptionPos);
     }
 
     if ( bIsEmbedded )
@@ -1109,8 +1109,8 @@ void ScDocument::UpdateReference(
     }
 }
 
-void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDoc,
-                                        const ScMarkData& rMark, ScDocument* pUndoDoc )
+void ScDocument::UpdateTranspose( const ScAddress& rDestPos, const ScDocumentRef& pClipDoc,
+                                        const ScMarkData& rMark, const ScDocumentRef& pUndoDoc )
 {
     OSL_ENSURE(pClipDoc->bIsClip, "UpdateTranspose: No Clip");
 
@@ -1134,7 +1134,7 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
                 pRangeName->UpdateTranspose( aSource, aDest ); // Before the cells!
             for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
                 if (maTabs[i])
-                    maTabs[i]->UpdateTranspose( aSource, aDest, pUndoDoc );
+                    maTabs[i]->UpdateTranspose( aSource, aDest, pUndoDoc.get() );
 
             nClipTab = (nClipTab+1) % (MAXTAB+1);
         }
@@ -1310,7 +1310,7 @@ bool ScDocument::IsEmptyCellSearch( const SvxSearchItem& rSearchItem )
 bool ScDocument::SearchAndReplace(
     const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
     const ScMarkData& rMark, ScRangeList& rMatchedRanges,
-    OUString& rUndoStr, ScDocument* pUndoDoc)
+    OUString& rUndoStr, const ScDocumentRef& pUndoDoc)
 {
     // FIXME: Manage separated marks per table!
     bool bFound = false;
@@ -1335,7 +1335,7 @@ bool ScDocument::SearchAndReplace(
                     nCol = 0;
                     nRow = 0;
                     bFound |= maTabs[rMarkedTab]->SearchAndReplace(
-                        rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+                        rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc.get());
                 }
             }
 
@@ -1353,7 +1353,7 @@ bool ScDocument::SearchAndReplace(
                         if (rMark.GetTableSelect(nTab))
                         {
                             bFound = maTabs[nTab]->SearchAndReplace(
-                                rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+                                rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc.get());
                             if (bFound)
                             {
                                 rCol = nCol;
@@ -1384,7 +1384,7 @@ bool ScDocument::SearchAndReplace(
                         if (rMark.GetTableSelect(nTab))
                         {
                             bFound = maTabs[nTab]->SearchAndReplace(
-                                rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+                                rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc.get());
                             if (bFound)
                             {
                                 rCol = nCol;
@@ -1954,7 +1954,8 @@ void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
     assert(pDocOptions && "No DocOptions! :-(");
 
     *pDocOptions = rOpt;
-    mxPoolHelper->SetFormTableOpt(rOpt);
+    if (mxPoolHelper)
+        mxPoolHelper->SetFormTableOpt(rOpt);
 }
 
 const ScViewOptions& ScDocument::GetViewOptions() const

@@ -2800,9 +2800,9 @@ void ScFormatShell::ExecFormatPaintbrush( const SfxRequest& rReq )
         if ( rViewData.GetSimpleArea(aDummy) != SC_MARK_SIMPLE )
             pView->Unmark();
 
-        ScDocumentUniquePtr pBrushDoc(new ScDocument( SCDOCMODE_CLIP ));
-        pView->CopyToClip( pBrushDoc.get(), false, true );
-        pView->SetBrushDocument( std::move(pBrushDoc), bLock );
+        ScDocumentRef pBrushDoc(new ScDocument( SCDOCMODE_CLIP ));
+        pView->CopyToClip( pBrushDoc, false, true );
+        pView->SetBrushDocument( pBrushDoc, bLock );
     }
 }
 

@@ -151,7 +151,7 @@ public:
     void operator() ( SCCOL nColumn, const OUString& rFormula,
                       std::function<double(SCROW )> const & lExpected ) const
     {
-        ScDocument aClipDoc(SCDOCMODE_CLIP);
+        ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
         ScMarkData aMark(m_pDoc->GetSheetLimits());
 
         ScAddress aPos(nColumn, m_nStart1, 0);
@@ -161,18 +161,18 @@ public:
         // Copy formula cell to clipboard.
         ScClipParam aClipParam(aPos, false);
         aMark.SetMarkArea(aPos);
-        m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+        m_pDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 
         // Paste it to first range.
         InsertDeleteFlags nFlags = InsertDeleteFlags::CONTENTS;
         ScRange aDestRange(nColumn, m_nStart1, 0, nColumn, m_nEnd1, 0);
         aMark.SetMarkArea(aDestRange);
-        m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, &aClipDoc);
+        m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, pClipDoc);
 
         // Paste it second range.
         aDestRange = ScRange(nColumn, m_nStart2, 0, nColumn, m_nEnd2, 0);
         aMark.SetMarkArea(aDestRange);
-        m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, &aClipDoc);
+        m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, nullptr, pClipDoc);
 
         // Check the formula results for passed column.
         for( SCROW i = 0; i < m_nTotalRows; ++i )
@@ -1276,7 +1276,7 @@ void TestFormula::testFormulaTokenEquality()
 
 void TestFormula::testFormulaRefData()
 {
-    std::unique_ptr<ScDocument> pDoc = std::make_unique<ScDocument>();
+    ScDocumentRef pDoc = new ScDocument;
 
     ScAddress aAddr(4,5,3), aPos(2,2,2);
     ScSingleRefData aRef;
@@ -8849,7 +8849,7 @@ void TestFormula::testTdf97587()
         m_pDoc->SetValue(ScAddress(0, i, 0), 1.0);
     }
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
     ScMarkData aMark(m_pDoc->GetSheetLimits());
 
     ScAddress aPos(1, 0, 0);
@@ -8858,12 +8858,12 @@ void TestFormula::testTdf97587()
     // Copy formula cell to clipboard.
     ScClipParam aClipParam(aPos, false);
     aMark.SetMarkArea(aPos);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+    m_pDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 
     // Paste it to first range.
     ScRange aDestRange(1, 1, 0, 1, TOTAL_ROWS + ROW_RANGE, 0);
     aMark.SetMarkArea(aDestRange);
-    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &aClipDoc);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, pClipDoc);
 
     // Check the formula results in column B.
     for( SCROW i = 0; i < TOTAL_ROWS + 1; ++i )
@@ -9059,9 +9059,9 @@ void TestFormula::testSingleCellCopyColumnLabel()
     double nVal = m_pDoc->GetValue(1, 1, 0);
     ASSERT_DOUBLES_EQUAL(1.0, nVal);
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, ScRange(1, 1, 0), &aClipDoc);
-    pasteOneCellFromClip(m_pDoc, ScRange(1, 2, 0), &aClipDoc);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    copyToClip(m_pDoc, ScRange(1, 1, 0), pClipDoc);
+    pasteOneCellFromClip(m_pDoc, ScRange(1, 2, 0), pClipDoc);
     nVal = m_pDoc->GetValue(1, 2, 0);
     ASSERT_DOUBLES_EQUAL(2.0, nVal);
 

@@ -259,7 +259,7 @@ void ScAnchorTest::testCopyColumnWithImages()
     ScTabViewShell* pViewShell = pDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pViewShell != nullptr);
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
 
     // Copy whole column
     {
@@ -267,13 +267,13 @@ void ScAnchorTest::testCopyColumnWithImages()
         ScRange aSrcRange;
         aSrcRange.Parse("A1:A11", *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
-        pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
+        pViewShell->GetViewData().GetView()->CopyToClip(pClipDoc, false, false, true, false);
 
         // 2. Paste to target range
         ScRange aDstRange;
         aDstRange.Parse("D1:D11", *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
-        pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+        pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, pClipDoc);
 
         // 3. Make sure the images have been copied too
         std::map<SCROW, std::vector<SdrObject*>> aRowObjects
@@ -290,13 +290,13 @@ void ScAnchorTest::testCopyColumnWithImages()
         ScRange aSrcRange;
         aSrcRange.Parse("A3:B3", *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
-        pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, true, false);
+        pViewShell->GetViewData().GetView()->CopyToClip(pClipDoc, false, false, true, false);
 
         // 2. Paste to target cells
         ScRange aDstRange;
         aDstRange.Parse("G3:H3", *pDoc, pDoc->GetAddressConvention());
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
-        pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+        pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, pClipDoc);
 
         // 3. Make sure the image has been copied too
         std::map<SCROW, std::vector<SdrObject*>> aRowObjects

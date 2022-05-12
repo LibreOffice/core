@@ -12,11 +12,10 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "columnset.hxx"
+#include "document.hxx"
 
 #include <unordered_map>
 #include <unordered_set>
-
-class ScDocument;
 
 namespace sc
 {
@@ -83,7 +82,7 @@ struct RefUpdateContext
 
     ColumnBlockPositionSet* mpBlockPos; // not owning
 
-    RefUpdateContext(ScDocument& rDoc, ScDocument* pClipdoc = nullptr);
+    RefUpdateContext(ScDocument& rDoc, const ScDocumentRef& pClipdoc = nullptr);
 
     bool isInserted() const;
     bool isDeleted() const;

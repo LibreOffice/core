@@ -62,8 +62,8 @@ struct MockedHiddenRangeListener : public ScChartHiddenRangeListener
 void ChartListenerCollectionTest::ListenerGetsNotifiedWhenItsRangeIsSetDirty()
 {
     MockedHiddenRangeListener listener;
-    ScDocument aDoc;
-    ScChartListenerCollection sut(aDoc);
+    ScDocumentRef pDoc(new ScDocument);
+    ScChartListenerCollection sut(*pDoc);
 
     sut.StartListeningHiddenRange(RANGE_1, &listener);
     sut.SetRangeDirty(RANGE_INTERSECTING_1_AND_2);
@@ -74,8 +74,8 @@ void ChartListenerCollectionTest::ListenerGetsNotifiedWhenItsRangeIsSetDirty()
 void ChartListenerCollectionTest::ListenerGetsNotifiedTwiceWhenRegisteredTwoTimes()
 {
     MockedHiddenRangeListener listener;
-    ScDocument aDoc;
-    ScChartListenerCollection sut(aDoc);
+    ScDocumentRef pDoc(new ScDocument);
+    ScChartListenerCollection sut(*pDoc);
 
     sut.StartListeningHiddenRange(RANGE_1, &listener);
     sut.StartListeningHiddenRange(RANGE_2, &listener);
@@ -87,8 +87,8 @@ void ChartListenerCollectionTest::ListenerGetsNotifiedTwiceWhenRegisteredTwoTime
 void ChartListenerCollectionTest::ListenerDoesNotGetNotifiedWhenListeningStops()
 {
     MockedHiddenRangeListener listener;
-    ScDocument aDoc;
-    ScChartListenerCollection sut(aDoc);
+    ScDocumentRef pDoc(new ScDocument);
+    ScChartListenerCollection sut(*pDoc);
     sut.StartListeningHiddenRange(RANGE_1, &listener);
 
     sut.EndListeningHiddenRange(&listener);
@@ -100,8 +100,8 @@ void ChartListenerCollectionTest::ListenerDoesNotGetNotifiedWhenListeningStops()
 void ChartListenerCollectionTest::ListenerStopsListeningForAllRanges()
 {
     MockedHiddenRangeListener listener;
-    ScDocument aDoc;
-    ScChartListenerCollection sut(aDoc);
+    ScDocumentRef pDoc(new ScDocument);
+    ScChartListenerCollection sut(*pDoc);
     sut.StartListeningHiddenRange(RANGE_1, &listener);
     sut.StartListeningHiddenRange(RANGE_2, &listener);
 
@@ -115,9 +115,9 @@ void ChartListenerCollectionTest::ListenersStopListeningIndependently()
 {
     MockedHiddenRangeListener listener1;
     MockedHiddenRangeListener listener2;
-    ScDocument aDoc;
+    ScDocumentRef pDoc(new ScDocument);
 
-    ScChartListenerCollection sut(aDoc);
+    ScChartListenerCollection sut(*pDoc);
     sut.StartListeningHiddenRange(RANGE_1, &listener1);
     sut.StartListeningHiddenRange(RANGE_2, &listener2);
 

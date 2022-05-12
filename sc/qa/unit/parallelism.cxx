@@ -75,8 +75,8 @@ private:
     bool getThreadingFlag() const;
     void setThreadingFlag(bool bSet);
 
-    static ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo);
-    static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc);
+    static ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, const ScDocumentRef& pClipDoc, bool bCreateUndo);
+    static void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, const ScDocumentRef& pClipDoc);
 
     ScDocument *m_pDoc;
 
@@ -101,7 +101,7 @@ void ScParallelismTest::setThreadingFlag( bool bSet )
     xBatch->commit();
 }
 
-ScUndoCut* ScParallelismTest::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc, bool bCreateUndo)
+ScUndoCut* ScParallelismTest::cutToClip(ScDocShell& rDocSh, const ScRange& rRange, const ScDocumentRef& pClipDoc, bool bCreateUndo)
 {
     ScDocument* pSrcDoc = &rDocSh.GetDocument();
 
@@ -111,10 +111,10 @@ ScUndoCut* ScParallelismTest::cutToClip(ScDocShell& rDocSh, const ScRange& rRang
     pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 
     // Taken from ScViewFunc::CutToClip()
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     if (bCreateUndo)
     {
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndoSelected( *pSrcDoc, aMark );
         // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
         ScRange aCopyRange = rRange;
@@ -130,12 +130,12 @@ ScUndoCut* ScParallelismTest::cutToClip(ScDocShell& rDocSh, const ScRange& rRang
     aMark.MarkToSimple();
 
     if (pUndoDoc)
-        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, std::move(pUndoDoc) );
+        return new ScUndoCut( &rDocSh, rRange, rRange.aEnd, aMark, pUndoDoc );
 
     return nullptr;
 }
 
-void ScParallelismTest::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc)
+void ScParallelismTest::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, const ScDocumentRef& pClipDoc)
 {
     ScMarkData aMark(pDestDoc->GetSheetLimits());
     aMark.SetMarkArea(rDestRange);
@@ -915,11 +915,11 @@ void ScParallelismTest::testFormulaGroupsInCyclesAndWithSelfReference()
     aMark.SelectOneTable(0);
 
     // Set up clip document.
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    aClipDoc.ResetClip(m_pDoc, &aMark);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    pClipDoc->ResetClip(*m_pDoc, &aMark);
     // Cut B1:B2 to clipboard.
-    cutToClip(*m_xDocShell, aChangeRange, &aClipDoc, false);
-    pasteFromClip(m_pDoc, aChangeRange, &aClipDoc);
+    cutToClip(*m_xDocShell, aChangeRange, pClipDoc, false);
+    pasteFromClip(m_pDoc, aChangeRange, pClipDoc);
 
     double fExpected[3][5] = {
         { 1, 3,  8, 21, 55 },
