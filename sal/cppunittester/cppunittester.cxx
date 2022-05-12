@@ -490,7 +490,6 @@ static bool main2()
 //Prints stack trace based on exception context record
 static void printStack( PCONTEXT ctx )
 {
-    constexpr int MaxNameLen = 256;
     HANDLE process = GetCurrentProcess();
     HANDLE thread = GetCurrentThread();
 
