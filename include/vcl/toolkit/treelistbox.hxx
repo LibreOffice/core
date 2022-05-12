@@ -472,7 +472,6 @@ public:
 
     VCL_DLLPRIVATE void SetCollapsedNodeBmp( const Image& );
     VCL_DLLPRIVATE void SetExpandedNodeBmp( const Image& );
-    VCL_DLLPRIVATE Image const & GetExpandedNodeBmp( ) const;
 
 protected:
 

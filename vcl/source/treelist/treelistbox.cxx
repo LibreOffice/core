@@ -1405,7 +1405,7 @@ void SvTreeListBox::SetTabs()
     bool bHasButtonsAtRoot = (nStyle & (WB_HASLINESATROOT |
                                               WB_HASBUTTONSATROOT))!=0;
     tools::Long nStartPos = TAB_STARTPOS;
-    tools::Long nNodeWidthPixel = GetExpandedNodeBmp().GetSizePixel().Width();
+    tools::Long nNodeWidthPixel = GetDefaultExpandedNodeImage().GetSizePixel().Width();
 
     // pCheckButtonData->Width() knows nothing about the native checkbox width,
     // so we have mnCheckboxItemWidth which becomes valid when something is added.
@@ -2328,11 +2328,6 @@ void SvTreeListBox::SetCurEntry( SvTreeListEntry* pEntry )
     pImpl->SetCurEntry( pEntry );
 }
 
-Image const & SvTreeListBox::GetExpandedNodeBmp( ) const
-{
-    return pImpl->GetExpandedNodeBmp( );
-}
-
 Point SvTreeListBox::GetEntryPosition(const SvTreeListEntry* pEntry) const
 {
     return pImpl->GetEntryPosition( pEntry );
@@ -2799,9 +2794,9 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
     const Image* pImg = nullptr;
 
     if (IsExpanded(&rEntry))
-        pImg = &pImpl->GetExpandedNodeBmp();
+        pImg = &GetDefaultExpandedNodeImage();
     else
-        pImg = &pImpl->GetCollapsedNodeBmp();
+        pImg = &GetDefaultCollapsedNodeImage();
     aPos.AdjustY((nTempEntryHeight - pImg->GetSizePixel().Height()) / 2 );
 
     DrawImageFlags nStyle = DrawImageFlags::NONE;
