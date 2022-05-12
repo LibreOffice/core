@@ -1293,7 +1293,7 @@ bool ScColumn::HasVisibleDataAt(SCROW nRow) const
     return it->type != sc::element_type_empty;
 }
 
-bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
+bool ScColumn::IsEmptyData(SCROW nStartRow, SCROW nEndRow) const
 {
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nStartRow);
     sc::CellStoreType::const_iterator it = aPos.first;
