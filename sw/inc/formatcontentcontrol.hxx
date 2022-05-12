@@ -84,6 +84,8 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
+    OUString ToString() const;
+
     static void ItemsToAny(const std::vector<SwContentControlListItem>& rItems,
                            css::uno::Any& rVal);
 
