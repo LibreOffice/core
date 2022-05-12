@@ -288,7 +288,7 @@ const sal_Int32 coUserDefinedCharContFlags = KParseTokens::ANY_LETTER_OR_NUMBER
 //Checks if keyword is in the list.
 static inline bool findCompare(const SmTokenTableEntry& lhs, const OUString& s)
 {
-    return s.compareToIgnoreAsciiCase(lhs.pIdent) > 0;
+    return s.compareToIgnoreAsciiCase(lhs.aIdent) > 0;
 }
 
 //Returns the SmTokenTableEntry for a keyword
@@ -299,7 +299,7 @@ static const SmTokenTableEntry* GetTokenTableEntry(const OUString& rName)
     //Looks for the first keyword after or equal to rName in alphabetical order.
     auto findIter
         = std::lower_bound(std::begin(aTokenTable), std::end(aTokenTable), rName, findCompare);
-    if (findIter != std::end(aTokenTable) && rName.equalsIgnoreAsciiCase(findIter->pIdent))
+    if (findIter != std::end(aTokenTable) && rName.equalsIgnoreAsciiCase(findIter->aIdent))
         return &*findIter; //check is equal
     return nullptr; //not found
 }
@@ -490,7 +490,7 @@ void SmParser5::NextToken() //Central part of the parser
             m_aCurToken.setChar(pEntry->cMathChar);
             m_aCurToken.nGroup = pEntry->nGroup;
             m_aCurToken.nLevel = pEntry->nLevel;
-            m_aCurToken.aText = pEntry->pIdent;
+            m_aCurToken.aText = pEntry->aIdent;
         }
         else
         {

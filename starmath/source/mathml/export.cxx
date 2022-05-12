@@ -785,11 +785,10 @@ void SmMLExport::exportMlAttributes(const SmMlElement* pMlElement)
                         break;
                     case SmMlAttributeValueMathbackground::MlRgb:
                     {
-                        OUString aTextColor
-                            = OUString::createFromAscii(starmathdatabase::Identify_Color_MATHML(
-                                                            sal_uInt32(aAttributeValue->m_aCol))
-                                                            .pIdent);
-                        addAttribute(XML_MATHBACKGROUND, aTextColor);
+                        const OUString& rTextColor = starmathdatabase::Identify_Color_MATHML(
+                                                         sal_uInt32(aAttributeValue->m_aCol))
+                                                         .aIdent;
+                        addAttribute(XML_MATHBACKGROUND, rTextColor);
                         break;
                     }
                     default:
@@ -807,11 +806,10 @@ void SmMLExport::exportMlAttributes(const SmMlElement* pMlElement)
                         break;
                     case SmMlAttributeValueMathcolor::MlRgb:
                     {
-                        OUString aTextColor
-                            = OUString::createFromAscii(starmathdatabase::Identify_Color_MATHML(
-                                                            sal_uInt32(aAttributeValue->m_aCol))
-                                                            .pIdent);
-                        addAttribute(XML_MATHCOLOR, aTextColor);
+                        const OUString& rTextColor = starmathdatabase::Identify_Color_MATHML(
+                                                         sal_uInt32(aAttributeValue->m_aCol))
+                                                         .aIdent;
+                        addAttribute(XML_MATHCOLOR, rTextColor);
                         break;
                     }
                     default:
