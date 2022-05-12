@@ -1030,7 +1030,6 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
     switch (eType)
     {
         case SwContentControlType::RICH_TEXT:
-        case SwContentControlType::DROP_DOWN_LIST:
         {
             pContentControl->SetShowingPlaceHolder(true);
             if (!HasSelection())
@@ -1047,6 +1046,18 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
             // Ballot Box
             pContentControl->SetUncheckedState(OUString(u"\u2610"));
             aPlaceholder = u"\u2610";
+            break;
+        }
+        case SwContentControlType::DROP_DOWN_LIST:
+        {
+            pContentControl->SetShowingPlaceHolder(true);
+            if (!HasSelection())
+            {
+                aPlaceholder = SwResId(STR_DROPDOWN_CONTENT_CONTROL_PLACEHOLDER);
+            }
+            SwContentControlListItem aListItem;
+            aListItem.m_aValue = aPlaceholder;
+            pContentControl->SetListItems({ aListItem });
             break;
         }
     }

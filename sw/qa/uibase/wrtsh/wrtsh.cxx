@@ -216,6 +216,29 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDropdownContentControl)
     // i.e. the document text was unchanged instead of display text of the first list item.
     CPPUNIT_ASSERT_EQUAL(OUString("red"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertDropdownContentControl)
+{
+    // Given an empty document:
+    SwDoc* pDoc = createSwDoc();
+
+    // When inserting a content control:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
+
+    // Then make sure that the matching text attribute is added to the document model:
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    SwContentControl* pContentControl = rFormatContentControl.GetContentControl();
+    // Without the accompanying fix in place, this test would have failed:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the inserted content control was a default (rich text) one, not a dropdown.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pContentControl->GetListItems().size());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -714,6 +714,7 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertContentControl"/>
           <menu:menuitem menu:id=".uno:InsertCheckboxContentControl"/>
+          <menu:menuitem menu:id=".uno:InsertDropdownContentControl"/>
         </menu:menupopup>
       </menu:menu>
     </menu:menupopup>
