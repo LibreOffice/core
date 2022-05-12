@@ -266,6 +266,14 @@ void ScQueryCellIteratorBase< accessType, queryType >::InitPos()
                 // the position to the first row in the range.
                 op = saveOp; // back to SC_EQUAL
             }
+            else if( maParam.GetEntry(0).GetQueryItem().mbMatchEmpty
+                && rDoc.IsEmptyData(nCol, maParam.nRow1, nCol, maParam.nRow2, nTab))
+            {
+                // BinarySearch() returns false in case it's all empty data,
+                // handle that specially.
+                beforeRow = -1;
+                lastRow = maParam.nRow2;
+            }
         }
         else
         {   // The range is from the start up to and including the last matching.
@@ -1221,8 +1229,6 @@ static bool CanBeUsedForSorterCache(const ScDocument& rDoc, const ScQueryParam& 
         return false;
     if(rParam.bHasHeader)
         return false;
-    if(rParam.GetEntry(0).GetQueryItem().mbMatchEmpty)
-        return false;
     if(rParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString
         && !ScQueryEvaluator::isMatchWholeCell(rDoc, rParam.GetEntry(0)))
         return false; // substring matching cannot be sorted
@@ -1395,6 +1401,13 @@ sal_uInt64 ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache >::GetC
                     size_t lastMatching = sortedCache->indexForRow(nRow) + 1;
                     count += lastMatching;
                 }
+                else if( maParam.GetEntry(0).GetQueryItem().mbMatchEmpty
+                    && rDoc.IsEmptyData(col, maParam.nRow1, col, maParam.nRow2, nTab))
+                {
+                    // BinarySearch() returns false in case it's all empty data,
+                    // handle that specially.
+                    count += maParam.nRow2 - maParam.nRow1 + 1;
+                }
             }
         }
         else
@@ -1404,6 +1417,12 @@ sal_uInt64 ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache >::GetC
             if( BinarySearch( nCol ))
                 count += sortedCache->indexForRow(nRow) + 1;
         }
+    }
+    if( maParam.GetEntry(0).GetQueryItem().mbMatchEmpty
+        && maParam.nCol2 >= rDoc.GetAllocatedColumnsCount( nTab ))
+    {
+        count += (maParam.nCol2 - rDoc.GetAllocatedColumnsCount( nTab ))
+            * ( maParam.nRow2 - maParam.nRow1 + 1 );
     }
     return count;
 }
