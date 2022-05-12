@@ -110,6 +110,7 @@ public:
     void testSofthyphenPos();
     void testTdf107013();
     void testTdf107018();
+    void testTdf148706();
     void testTdf107089();
     void testTdf99680();
     void testTdf99680_2();
@@ -155,6 +156,7 @@ public:
     CPPUNIT_TEST(testSofthyphenPos);
     CPPUNIT_TEST(testTdf107013);
     CPPUNIT_TEST(testTdf107018);
+    CPPUNIT_TEST(testTdf148706);
     CPPUNIT_TEST(testTdf107089);
     CPPUNIT_TEST(testTdf99680);
     CPPUNIT_TEST(testTdf99680_2);
@@ -747,6 +749,41 @@ void PdfExportTest::testTdf107018()
     // This was "XObject", reference in a nested dictionary wasn't updated when
     // copying the page stream of a PDF image.
     CPPUNIT_ASSERT_EQUAL(OString("Pages"), pName->GetValue());
+}
+
+void PdfExportTest::testTdf148706()
+{
+    // Import the bugdoc and export as PDF.
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf148706.odt");
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // The page has one annotation.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnot = pPdfPage->getAnnotation(0);
+
+    CPPUNIT_ASSERT(pAnnot->hasKey("V"));
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFObjectType::String, pAnnot->getValueType("V"));
+    OUString aV = pAnnot->getString("V");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1821.84
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("1821.84"), aV);
+
+    CPPUNIT_ASSERT(pAnnot->hasKey("DV"));
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFObjectType::String, pAnnot->getValueType("DV"));
+    OUString aDV = pAnnot->getString("DV");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1821.84"), aDV);
 }
 
 void PdfExportTest::testTdf107089()
