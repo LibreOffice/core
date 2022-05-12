@@ -699,27 +699,26 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
     uno::Reference< beans::XPropertySetInfo > xPropertySetInfo =
         mxExportInfo->getPropertySetInfo();
-    OUString sPropName(
-            "BaseURI"  );
-    if( xPropertySetInfo->hasPropertyByName(sPropName) )
+    static constexpr OUStringLiteral sBaseURI = u"BaseURI";
+    if( xPropertySetInfo->hasPropertyByName(sBaseURI) )
     {
-        uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
+        uno::Any aAny = mxExportInfo->getPropertyValue(sBaseURI);
         aAny >>= msOrigFileName;
         mpImpl->msPackageURI = msOrigFileName;
         mpImpl->SetSchemeOf( msOrigFileName );
     }
     OUString sRelPath;
-    sPropName = "StreamRelPath";
-    if( xPropertySetInfo->hasPropertyByName(sPropName) )
+    static constexpr OUStringLiteral sStreamRelPath = u"StreamRelPath";
+    if( xPropertySetInfo->hasPropertyByName(sStreamRelPath) )
     {
-        uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
+        uno::Any aAny = mxExportInfo->getPropertyValue(sStreamRelPath);
         aAny >>= sRelPath;
     }
     OUString sName;
-    sPropName = "StreamName";
-    if( xPropertySetInfo->hasPropertyByName(sPropName) )
+    static constexpr OUStringLiteral sStreamName = u"StreamName";
+    if( xPropertySetInfo->hasPropertyByName(sStreamName) )
     {
-        uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
+        uno::Any aAny = mxExportInfo->getPropertyValue(sStreamName);
         aAny >>= sName;
     }
     if( !msOrigFileName.isEmpty() && !sName.isEmpty() )
