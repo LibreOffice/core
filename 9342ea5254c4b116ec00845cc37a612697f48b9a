@@ -16,6 +16,29 @@
       "message": "Adjusted some tooltip formulations -- in response to feedback in tdf#148941 comment 3",
       "revId": "9342ea5254c4b116ec00845cc37a612697f48b9a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5b1eb31_a799cffb",
+        "filename": "sw/uiconfig/swriter/ui/frmaddpage.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-12T10:40:45Z",
+      "side": 1,
+      "message": "@Adolfo -- so you can sleep better at night...(-:",
+      "range": {
+        "startLine": 334,
+        "startChar": 103,
+        "endLine": 334,
+        "endChar": 106
+      },
+      "revId": "9342ea5254c4b116ec00845cc37a612697f48b9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
