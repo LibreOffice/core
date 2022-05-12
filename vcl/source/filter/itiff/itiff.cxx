@@ -1132,6 +1132,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                                 while ( nx < nImageWidth )
                                 {
                                     SetPixel(nY, nx++, ( nByteVal >> nShift ) & 1);
+                                    --nShift;
                                 }
                             }
                         }
