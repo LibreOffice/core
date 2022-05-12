@@ -260,13 +260,13 @@ static bool lcl_GetCaptionPoint( const uno::Reference< drawing::XShape >& xShape
     return bReturn;
 }
 
-static ScRange lcl_GetAnchorCell( const uno::Reference< drawing::XShape >& xShape, const ScDocument* pDoc, SCTAB nTab,
+static ScRange lcl_GetAnchorCell( const uno::Reference< drawing::XShape >& xShape, const ScDocument& rDoc, SCTAB nTab,
                           awt::Point& rUnoPoint, awt::Size& rUnoSize, awt::Point& rCaptionPoint )
 {
     ScRange aReturn;
     rUnoPoint = xShape->getPosition();
     bool bCaptionShape(lcl_GetCaptionPoint(xShape, rCaptionPoint));
-    if (pDoc->IsNegativePage(nTab))
+    if (rDoc.IsNegativePage(nTab))
     {
         rUnoSize = xShape->getSize();
         rUnoPoint.X += rUnoSize.Width; // the right top point is base
@@ -277,7 +277,7 @@ static ScRange lcl_GetAnchorCell( const uno::Reference< drawing::XShape >& xShap
             if (rCaptionPoint.Y < 0)
                 rUnoPoint.Y += rCaptionPoint.Y;
         }
-        aReturn = pDoc->GetRange( nTab, tools::Rectangle( VCLPoint(rUnoPoint), VCLPoint(rUnoPoint) ));
+        aReturn = rDoc.GetRange( nTab, tools::Rectangle( VCLPoint(rUnoPoint), VCLPoint(rUnoPoint) ));
     }
     else
     {
@@ -288,19 +288,19 @@ static ScRange lcl_GetAnchorCell( const uno::Reference< drawing::XShape >& xShap
             if (rCaptionPoint.Y < 0)
                 rUnoPoint.Y += rCaptionPoint.Y;
         }
-        aReturn = pDoc->GetRange( nTab, tools::Rectangle( VCLPoint(rUnoPoint), VCLPoint(rUnoPoint) ));
+        aReturn = rDoc.GetRange( nTab, tools::Rectangle( VCLPoint(rUnoPoint), VCLPoint(rUnoPoint) ));
     }
 
     return aReturn;
 }
 
-static awt::Point lcl_GetRelativePos( const uno::Reference< drawing::XShape >& xShape, const ScDocument* pDoc, SCTAB nTab, ScRange& rRange,
+static awt::Point lcl_GetRelativePos( const uno::Reference< drawing::XShape >& xShape, const ScDocument& rDoc, SCTAB nTab, ScRange& rRange,
                               awt::Size& rUnoSize, awt::Point& rCaptionPoint)
 {
     awt::Point aUnoPoint;
-    rRange = lcl_GetAnchorCell(xShape, pDoc, nTab, aUnoPoint, rUnoSize, rCaptionPoint);
-    tools::Rectangle aRect(pDoc->GetMMRect( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab() ));
-    Point aPoint = pDoc->IsNegativePage(nTab) ? aRect.TopRight() : aRect.TopLeft();
+    rRange = lcl_GetAnchorCell(xShape, rDoc, nTab, aUnoPoint, rUnoSize, rCaptionPoint);
+    tools::Rectangle aRect(rDoc.GetMMRect( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab() ));
+    Point aPoint = rDoc.IsNegativePage(nTab) ? aRect.TopRight() : aRect.TopLeft();
     aUnoPoint.X -= aPoint.X();
     aUnoPoint.Y -= aPoint.Y();
     return aUnoPoint;
@@ -324,7 +324,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
 
             if ( pPage )
             {
-                ScDocument* pDoc(rModel.GetDocument());
+                const ScDocumentRef& pDoc(rModel.GetDocument());
 
                 if ( pDoc )
                 {
@@ -358,7 +358,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                                     awt::Size aUnoSize;
                                     awt::Point aCaptionPoint;
                                     ScRange aRange;
-                                    aRelPoint = lcl_GetRelativePos( xShape, pDoc, nTab, aRange, aUnoSize, aCaptionPoint );
+                                    aRelPoint = lcl_GetRelativePos( xShape, *pDoc, nTab, aRange, aUnoSize, aCaptionPoint );
                                     awt::Point aUnoPoint(aRelPoint);
 
                                     aUnoPoint.X += aPoint.X();
@@ -478,7 +478,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                     SCTAB nTab = 0;
                     if ( lcl_GetPageNum( pPage, rModel, nTab ) )
                     {
-                        ScDocument* pDoc = rModel.GetDocument();
+                        const ScDocumentRef& pDoc = rModel.GetDocument();
                         if ( pDoc )
                         {
                             SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
@@ -521,7 +521,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                                         awt::Size aUnoSize;
                                         awt::Point aCaptionPoint;
                                         ScRange aRange;
-                                        awt::Point aUnoPoint(lcl_GetRelativePos( xShape, pDoc, nTab, aRange, aUnoSize, aCaptionPoint ));
+                                        awt::Point aUnoPoint(lcl_GetRelativePos( xShape, *pDoc, nTab, aRange, aUnoSize, aCaptionPoint ));
                                         tools::Rectangle aRect(pDoc->GetMMRect( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab() ));
                                         if (pDoc->IsNegativePage(nTab))
                                         {
@@ -578,7 +578,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                     SCTAB nTab = 0;
                     if ( lcl_GetPageNum( pPage, rModel, nTab ) )
                     {
-                        ScDocument* pDoc = rModel.GetDocument();
+                        const ScDocumentRef& pDoc = rModel.GetDocument();
                         if ( pDoc )
                         {
                             SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
@@ -607,7 +607,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                                         awt::Size aUnoSize;
                                         awt::Point aCaptionPoint;
                                         ScRange aRange;
-                                        awt::Point aUnoPoint(lcl_GetRelativePos( xShape, pDoc, nTab, aRange, aUnoSize, aCaptionPoint ));
+                                        awt::Point aUnoPoint(lcl_GetRelativePos( xShape, *pDoc, nTab, aRange, aUnoSize, aCaptionPoint ));
                                         tools::Rectangle aRect(pDoc->GetMMRect( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab() ));
                                         Point aPoint(aRect.TopRight());
                                         Point aEndPoint(aRect.BottomLeft());
@@ -673,7 +673,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
 
             if ( pPage )
             {
-                ScDocument* pDoc = rModel.GetDocument();
+                const ScDocumentRef& pDoc = rModel.GetDocument();
                 if ( pDoc )
                 {
                     SCTAB nTab = 0;
@@ -732,7 +732,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
 
             if ( pPage )
             {
-                ScDocument* pDoc = rModel.GetDocument();
+                const ScDocumentRef& pDoc = rModel.GetDocument();
                 if ( pDoc )
                 {
                     SCTAB nTab = 0;
@@ -747,7 +747,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
                                 awt::Size aUnoSize;
                                 awt::Point aCaptionPoint;
                                 ScRange aRange;
-                                awt::Point aUnoPoint(lcl_GetRelativePos( xShape, pDoc, nTab, aRange, aUnoSize, aCaptionPoint ));
+                                awt::Point aUnoPoint(lcl_GetRelativePos( xShape, *pDoc, nTab, aRange, aUnoSize, aCaptionPoint ));
                                 if (pDoc->IsNegativePage(nTab))
                                     aUnoPoint.X *= -1;
                                 aAny <<= aUnoPoint.X;
@@ -793,7 +793,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
 
             if ( pPage )
             {
-                ScDocument* pDoc = rModel.GetDocument();
+                const ScDocumentRef& pDoc = rModel.GetDocument();
                 if ( pDoc )
                 {
                     SCTAB nTab = 0;
@@ -808,7 +808,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
                                 awt::Size aUnoSize;
                                 awt::Point aCaptionPoint;
                                 ScRange aRange;
-                                awt::Point aUnoPoint(lcl_GetRelativePos( xShape, pDoc, nTab, aRange, aUnoSize, aCaptionPoint ));
+                                awt::Point aUnoPoint(lcl_GetRelativePos( xShape, *pDoc, nTab, aRange, aUnoSize, aCaptionPoint ));
 
                                 aAny <<= aUnoPoint.Y;
                             }
@@ -1011,7 +1011,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getAnchor()
     {
         ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
         SdrPage* pPage(pObj->getSdrPageFromSdrObject());
-        ScDocument* pDoc = rModel.GetDocument();
+        const ScDocumentRef& pDoc = rModel.GetDocument();
 
         if ( pPage && pDoc )
         {
@@ -1250,7 +1250,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScShapeObj::getParent()
     {
         ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
         SdrPage* pPage(pObj->getSdrPageFromSdrObject());
-        ScDocument* pDoc = rModel.GetDocument();
+        const ScDocumentRef& pDoc = rModel.GetDocument();
 
         if ( pPage && pDoc )
         {

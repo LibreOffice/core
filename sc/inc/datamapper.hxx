@@ -88,7 +88,7 @@ public:
     void setDBData(const OUString& rDBName);
     ScDBDataManager* getDBManager();
 
-    void refresh(ScDocument* pDoc, bool bDeterministic = false);
+    void refresh(ScDocument& rDoc, bool bDeterministic = false);
 
     void AddDataTransformation(const std::shared_ptr<sc::DataTransformation>& mpDataTransformation);
     const std::vector<std::shared_ptr<sc::DataTransformation>>& getDataTransformation() const;

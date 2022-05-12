@@ -930,8 +930,8 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
 
     ScAddress aPos( nCol, nRow, nTab );
 
-    ScDocumentUniquePtr pInsDoc(new ScDocument( SCDOCMODE_CLIP ));
-    pInsDoc->ResetClip( &rDoc, nTab );
+    ScDocumentRef pInsDoc(new ScDocument( SCDOCMODE_CLIP ));
+    pInsDoc->ResetClip( rDoc, nTab );
 
     if (aNewStr[0] == '=')                      // Formula ?
     {
@@ -1011,11 +1011,11 @@ void ScViewFunc::RemoveManualBreaks()
 
     if (bUndo)
     {
-        ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
+        ScDocumentRef pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
         rDoc.CopyToDocument( 0,0,nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
         pDocSh->GetUndoManager()->AddUndoAction(
-                                std::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, std::move(pUndoDoc) ) );
+                                std::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, pUndoDoc ) );
     }
 
     rDoc.RemoveManualBreaks(nTab);
@@ -1690,11 +1690,11 @@ void ScViewFunc::FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool 
     else
         aMarkRange = ScRange( GetViewData().GetCurX(), GetViewData().GetCurY(), nTab );
 
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
 
     if (bUndo)
     {
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( rDoc, nTab, nTab );
 
         for (const SCTAB& i : rMark)
@@ -1722,7 +1722,7 @@ void ScViewFunc::FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool 
             std::make_unique<ScUndoFillTable>( pDocSh, rMark,
                                 aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), nTab,
                                 aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), nTab,
-                                std::move(pUndoDoc), bMulti, nTab, nFlags, nFunction, bSkipEmpty, bAsLink ) );
+                                pUndoDoc, bMulti, nTab, nFlags, nFunction, bSkipEmpty, bAsLink ) );
     }
 
     pDocSh->PostPaintGridAll();
@@ -1984,7 +1984,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
     //!     account for bAttrib during Undo !!!
 
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     std::unique_ptr<ScMarkData> pUndoMark;
     OUString aUndoStr;
     if (bAddUndo)
@@ -1992,7 +1992,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         pUndoMark.reset(new ScMarkData(rMark));                // Mark is being modified
         if ( nCommand == SvxSearchCmd::REPLACE_ALL )
         {
-            pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+            pUndoDoc.set(new ScDocument(SCDOCMODE_UNDO));
             pUndoDoc->InitUndo( rDoc, nStartTab, nEndTab );
         }
     }
@@ -2026,7 +2026,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 GetViewData().GetDocShell()->GetUndoManager()->AddUndoAction(
                     std::make_unique<ScUndoReplace>( GetViewData().GetDocShell(), *pUndoMark,
                                         nCol, nRow, nTab,
-                                        aUndoStr, std::move(pUndoDoc), pSearchItem ) );
+                                        aUndoStr, pUndoDoc, pSearchItem ) );
             }
 
             if (nCommand == SvxSearchCmd::FIND_ALL || nCommand == SvxSearchCmd::REPLACE_ALL)
@@ -2521,11 +2521,11 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
         --nNewTab;
 
     bool bWasLinked = false;
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     std::unique_ptr<ScRefUndoData> pUndoData;
     if (bRecord)
     {
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
         SCTAB nCount = rDoc.GetTableCount();
 
         OUString aOldName;
@@ -2599,7 +2599,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
     {
         pDocSh->GetUndoManager()->AddUndoAction(
                     std::make_unique<ScUndoDeleteTab>( GetViewData().GetDocShell(), TheTabs,
-                                            std::move(pUndoDoc), std::move(pUndoData) ));
+                                            pUndoDoc, std::move(pUndoData) ));
     }
 
     if (bDelDone)

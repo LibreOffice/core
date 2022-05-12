@@ -107,18 +107,18 @@ public:
     void            EnterDataAtCursor( const OUString& rString );         //! Not used?
 
     SC_DLLPUBLIC void           CutToClip();
-    SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc, bool bCut, bool bApi = false,
+    SC_DLLPUBLIC bool           CopyToClip( const ScDocumentRef& pClipDoc, bool bCut, bool bApi = false,
                                             bool bIncludeObjects = false, bool bStopEdit = true );
-    SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange, bool bCut,
+    SC_DLLPUBLIC bool           CopyToClip( const ScDocumentRef& pClipDoc, const ScRangeList& rRange, bool bCut,
                                             bool bApi = false, bool bIncludeObjects = false, bool bStopEdit = true );
-    bool                        CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList& rRanges, bool bCut,
+    bool                        CopyToClipSingleRange( const ScDocumentRef& pClipDoc, const ScRangeList& rRanges, bool bCut,
                                             bool bIncludeObjects );
-    bool                        CopyToClipMultiRange( const ScDocument* pClipDoc, const ScRangeList& rRanges, bool bCut,
+    bool                        CopyToClipMultiRange( const ScDocumentRef& pClipDoc, const ScRangeList& rRanges, bool bCut,
                                             bool bApi, bool bIncludeObjects );
     rtl::Reference<ScTransferObj> CopyToTransferable();
 
     SC_DLLPUBLIC bool PasteFromClip(
-        InsertDeleteFlags nFlags, ScDocument* pClipDoc,
+        InsertDeleteFlags nFlags, const ScDocumentRef& pClipDoc,
         ScPasteFunc nFunction = ScPasteFunc::NONE, bool bSkipEmptyCells = false,
         bool bTranspose = false, bool bAsLink = false,
         InsCellCmd eMoveMode = INS_NONE,
@@ -355,13 +355,13 @@ private:
                                 const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
 
     bool PasteMultiRangesFromClip(
-        InsertDeleteFlags nFlags, ScDocument* pClipDoc,
+        InsertDeleteFlags nFlags, const ScDocumentRef& pClipDoc,
         ScPasteFunc nFunction, bool bSkipEmptyCells,
         bool bTranspose, bool bAsLink, bool bAllowDialogs,
         InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags );
 
     bool PasteFromClipToMultiRanges(
-        InsertDeleteFlags nFlags, ScDocument* pClipDoc, ScPasteFunc nFunction,
+        InsertDeleteFlags nFlags, const ScDocumentRef& pClipDoc, ScPasteFunc nFunction,
         bool bSkipEmptyCells, bool bTranspose, bool bAsLink, bool bAllowDialogs,
         InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags );
 

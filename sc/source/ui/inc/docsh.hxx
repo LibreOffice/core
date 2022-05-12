@@ -25,6 +25,7 @@
 #include <sfx2/viewsh.hxx>
 #include <o3tl/deleter.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <scdllapi.h>
 #include <document.hxx>
@@ -79,7 +80,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDBF(SvStream &rStream);
 
 class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
 {
-    ScDocument          m_aDocument;
+    rtl::Reference<ScDocument> m_pDocument;
 
     OUString            m_aDdeTextFmt;
 
@@ -168,9 +169,12 @@ private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
 
+    ScDocShell(const rtl::Reference<ScDocument>& rDoc, const SfxModelFlags i_nSfxCreationFlags);
+
 public:
     explicit        ScDocShell( const ScDocShell& rDocShell ) = delete;
     explicit        ScDocShell( const SfxModelFlags i_nSfxCreationFlags = SfxModelFlags::EMBEDDED_OBJECT );
+    explicit        ScDocShell( ScDocument& rDoc, const SfxModelFlags i_nSfxCreationFlags = SfxModelFlags::EMBEDDED_OBJECT );
                     virtual ~ScDocShell() override;
 
     virtual SfxUndoManager*
@@ -217,8 +221,8 @@ public:
 
     void    GetDocStat( ScDocStat& rDocStat );
 
-    const ScDocument& GetDocument() const { return m_aDocument; }
-    ScDocument&     GetDocument()   { return m_aDocument; }
+    const ScDocument& GetDocument() const { return *m_pDocument; }
+    ScDocument&     GetDocument()   { return *m_pDocument; }
     ScDocFunc&      GetDocFunc()    { return *m_pDocFunc; }
 
     css::uno::Reference<css::datatransfer::XTransferable2> const & GetClipData() const { return m_xClipData; }

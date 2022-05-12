@@ -18,13 +18,13 @@ class HTMLFetchThread;
 class HTMLDataProvider : public DataProvider
 {
 private:
-    ScDocument* mpDocument;
+    ScDocument& mrDocument;
     rtl::Reference<HTMLFetchThread> mxHTMLFetchThread;
 
-    ScDocumentUniquePtr mpDoc;
+    ScDocumentRef mpDoc;
 
 public:
-    HTMLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource);
+    HTMLDataProvider(ScDocument& rDoc, sc::ExternalDataSource& rDataSource);
     virtual ~HTMLDataProvider() override;
 
     virtual void Import() override;

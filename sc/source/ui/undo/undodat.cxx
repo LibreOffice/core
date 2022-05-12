@@ -49,13 +49,13 @@
 
 ScUndoDoOutline::ScUndoDoOutline( ScDocShell* pNewDocShell,
                             SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
-                            ScDocumentUniquePtr pNewUndoDoc, bool bNewColumns,
+                            ScDocumentRef pNewUndoDoc, bool bNewColumns,
                             sal_uInt16 nNewLevel, sal_uInt16 nNewEntry, bool bNewShow ) :
     ScSimpleUndo( pNewDocShell ),
     nStart( nNewStart ),
     nEnd( nNewEnd ),
     nTab( nNewTab ),
-    pUndoDoc( std::move(pNewUndoDoc) ),
+    pUndoDoc( pNewUndoDoc ),
     bColumns( bNewColumns ),
     nLevel( nNewLevel ),
     nEntry( nNewEntry ),
@@ -232,13 +232,13 @@ bool ScUndoMakeOutline::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoOutlineLevel::ScUndoOutlineLevel( ScDocShell* pNewDocShell,
                         SCCOLROW nNewStart, SCCOLROW nNewEnd, SCTAB nNewTab,
-                        ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab,
+                        ScDocumentRef pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab,
                         bool bNewColumns, sal_uInt16 nNewLevel )
     : ScSimpleUndo(pNewDocShell)
     , nStart(nNewStart)
     , nEnd(nNewEnd)
     , nTab(nNewTab)
-    , xUndoDoc(std::move(pNewUndoDoc))
+    , xUndoDoc(pNewUndoDoc)
     , xUndoTable(std::move(pNewUndoTab))
     , bColumns(bNewColumns)
     , nLevel(nNewLevel)
@@ -317,11 +317,11 @@ bool ScUndoOutlineLevel::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoOutlineBlock::ScUndoOutlineBlock( ScDocShell* pNewDocShell,
                         SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                         SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                        ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab, bool bNewShow ) :
+                        ScDocumentRef pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab, bool bNewShow ) :
     ScSimpleUndo( pNewDocShell ),
     aBlockStart( nStartX, nStartY, nStartZ ),
     aBlockEnd( nEndX, nEndY, nEndZ ),
-    xUndoDoc(std::move(pNewUndoDoc)),
+    xUndoDoc(pNewUndoDoc),
     xUndoTable(std::move(pNewUndoTab)),
     bShow( bNewShow )
 {
@@ -420,11 +420,11 @@ bool ScUndoOutlineBlock::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoRemoveAllOutlines::ScUndoRemoveAllOutlines(ScDocShell* pNewDocShell,
                                     SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                     SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                                    ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab)
+                                    ScDocumentRef pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab)
     : ScSimpleUndo(pNewDocShell)
     , aBlockStart(nStartX, nStartY, nStartZ)
     , aBlockEnd(nEndX, nEndY, nEndZ)
-    , xUndoDoc(std::move(pNewUndoDoc))
+    , xUndoDoc(pNewUndoDoc)
     , xUndoTable(std::move(pNewUndoTab))
 {
 }
@@ -506,11 +506,11 @@ bool ScUndoRemoveAllOutlines::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoAutoOutline::ScUndoAutoOutline(ScDocShell* pNewDocShell,
                                      SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                      SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                                     ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab)
+                                     ScDocumentRef pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab)
     : ScSimpleUndo(pNewDocShell)
     , aBlockStart(nStartX, nStartY, nStartZ)
     , aBlockEnd(nEndX, nEndY, nEndZ)
-    , xUndoDoc(std::move(pNewUndoDoc))
+    , xUndoDoc(pNewUndoDoc)
     , xUndoTable(std::move(pNewUndoTab))
 {
 }
@@ -602,14 +602,14 @@ bool ScUndoAutoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoSubTotals::ScUndoSubTotals(ScDocShell* pNewDocShell, SCTAB nNewTab,
                                  const ScSubTotalParam& rNewParam, SCROW nNewEndY,
-                                 ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab,
+                                 ScDocumentRef pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab,
                                  std::unique_ptr<ScRangeName> pNewUndoRange, std::unique_ptr<ScDBCollection> pNewUndoDB)
     : ScDBFuncUndo(pNewDocShell, ScRange(rNewParam.nCol1, rNewParam.nRow1, nNewTab,
                                          rNewParam.nCol2, rNewParam.nRow2, nNewTab))
     , nTab(nNewTab)
     , aParam(rNewParam)
     , nNewEndRow(nNewEndY)
-    , xUndoDoc(std::move(pNewUndoDoc))
+    , xUndoDoc(pNewUndoDoc)
     , xUndoTable(std::move(pNewUndoTab))
     , xUndoRange(std::move(pNewUndoRange))
     , xUndoDB(std::move(pNewUndoDB))
@@ -715,13 +715,13 @@ bool ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQueryParam& rParam,
-                            ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScDBCollection> pNewUndoDB,
+                            ScDocumentRef pNewUndoDoc, std::unique_ptr<ScDBCollection> pNewUndoDB,
                             const ScRange* pOld, bool bSize, const ScRange* pAdvSrc ) :
     ScDBFuncUndo( pNewDocShell, ScRange( rParam.nCol1, rParam.nRow1, nNewTab,
                                          rParam.nCol2, rParam.nRow2, nNewTab ) ),
     nTab( nNewTab ),
     aQueryParam( rParam ),
-    xUndoDoc( std::move(pNewUndoDoc) ),
+    xUndoDoc( pNewUndoDoc ),
     xUndoDB( std::move(pNewUndoDB) ),
     bIsAdvanced( false ),
     bDestArea( false ),
@@ -1040,15 +1040,15 @@ bool ScUndoDBData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 ScUndoImportData::ScUndoImportData( ScDocShell* pNewDocShell, SCTAB nNewTab,
                                 const ScImportParam& rParam, SCCOL nNewEndX, SCROW nNewEndY,
                                 SCCOL nNewFormula,
-                                ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
+                                ScDocumentRef pNewUndoDoc, ScDocumentRef pNewRedoDoc,
                                 std::unique_ptr<ScDBData> pNewUndoData, std::unique_ptr<ScDBData> pNewRedoData ) :
     ScSimpleUndo( pNewDocShell ),
     nTab( nNewTab ),
     aImportParam( rParam ),
     nEndCol( nNewEndX ),
     nEndRow( nNewEndY ),
-    xUndoDoc(std::move(pNewUndoDoc)),
-    xRedoDoc(std::move(pNewRedoDoc)),
+    xUndoDoc(pNewUndoDoc),
+    xRedoDoc(pNewRedoDoc),
     xUndoDBData(std::move(pNewUndoData)),
     xRedoDBData(std::move(pNewRedoData)),
     nFormulaCols( nNewFormula ),
@@ -1244,7 +1244,7 @@ bool ScUndoImportData::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoRepeatDB::ScUndoRepeatDB( ScDocShell* pNewDocShell, SCTAB nNewTab,
                                 SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
                                 SCROW nResultEndRow, SCCOL nCurX, SCROW nCurY,
-                                ScDocumentUniquePtr pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab,
+                                ScDocumentRef pNewUndoDoc, std::unique_ptr<ScOutlineTable> pNewUndoTab,
                                 std::unique_ptr<ScRangeName> pNewUndoRange, std::unique_ptr<ScDBCollection> pNewUndoDB,
                                 const ScRange* pOldQ, const ScRange* pNewQ ) :
     ScSimpleUndo( pNewDocShell ),
@@ -1252,7 +1252,7 @@ ScUndoRepeatDB::ScUndoRepeatDB( ScDocShell* pNewDocShell, SCTAB nNewTab,
     aBlockEnd( nEndX,nEndY,nNewTab ),
     nNewEndRow( nResultEndRow ),
     aCursorPos( nCurX,nCurY,nNewTab ),
-    xUndoDoc(std::move(pNewUndoDoc)),
+    xUndoDoc(pNewUndoDoc),
     xUndoTable(std::move(pNewUndoTab)),
     xUndoRange(std::move(pNewUndoRange)),
     xUndoDB(std::move(pNewUndoDB)),
@@ -1404,11 +1404,11 @@ bool ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoDataPilot::ScUndoDataPilot( ScDocShell* pNewDocShell,
-                            ScDocumentUniquePtr pOldDoc, ScDocumentUniquePtr pNewDoc,
+                            ScDocumentRef pOldDoc, ScDocumentRef pNewDoc,
                             const ScDPObject* pOldObj, const ScDPObject* pNewObj, bool bMove )
     : ScSimpleUndo(pNewDocShell)
-    , xOldUndoDoc(std::move(pOldDoc))
-    , xNewUndoDoc(std::move(pNewDoc))
+    , xOldUndoDoc(pOldDoc)
+    , xNewUndoDoc(pNewDoc)
     , bAllowMove( bMove)
 {
     if (pOldObj)
@@ -1546,12 +1546,12 @@ bool ScUndoDataPilot::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoConsolidate::ScUndoConsolidate( ScDocShell* pNewDocShell, const ScArea& rArea,
-                    const ScConsolidateParam& rPar, ScDocumentUniquePtr pNewUndoDoc,
+                    const ScConsolidateParam& rPar, ScDocumentRef pNewUndoDoc,
                     bool bReference, SCROW nInsCount, std::unique_ptr<ScOutlineTable> pTab,
                     std::unique_ptr<ScDBData> pData )
     : ScSimpleUndo(pNewDocShell)
     , aDestArea(rArea)
-    , xUndoDoc(std::move(pNewUndoDoc))
+    , xUndoDoc(pNewUndoDoc)
     , aParam(rPar)
     , bInsRef(bReference)
     , nInsertCount(nInsCount)
@@ -1759,12 +1759,12 @@ ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                 const ScMarkData& rMark,
-                                ScDocumentUniquePtr pNewUndoDoc, ScDocumentUniquePtr pNewRedoDoc,
+                                ScDocumentRef pNewUndoDoc, ScDocumentRef pNewRedoDoc,
                                 std::unique_ptr<ScRefUndoData> pRefData )
     : ScBlockUndo(pNewDocShell, ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ), SC_UNDO_SIMPLE)
     , mxMarkData(new ScMarkData(rMark))
-    , xUndoDoc(std::move(pNewUndoDoc))
-    , xRedoDoc(std::move(pNewRedoDoc))
+    , xUndoDoc(pNewUndoDoc)
+    , xRedoDoc(pNewRedoDoc)
     , xRefUndoData(std::move(pRefData))
     , bRedoFilled(false)
 {
@@ -1837,7 +1837,7 @@ void ScUndoDataForm::DoChange( const bool bUndo )
             bool bColInfo = ( aBlockRange.aStart.Row()==0 && aBlockRange.aEnd.Row()==rDoc.MaxRow() );
             bool bRowInfo = ( aBlockRange.aStart.Col()==0 && aBlockRange.aEnd.Col()==rDoc.MaxCol() );
 
-            xRedoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+            xRedoDoc.set(new ScDocument(SCDOCMODE_UNDO));
             xRedoDoc->InitUndoSelected(rDoc, *mxMarkData, bColInfo, bRowInfo);
         }
         //  read "redo" data from the document in the first undo

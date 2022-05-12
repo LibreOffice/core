@@ -3577,7 +3577,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
             auto& rMapper = rDoc.GetExternalDataMapper();
             for (auto& itr : rMapper.getDataSources())
             {
-                itr.refresh(&rDoc);
+                itr.refresh(rDoc);
             }
             return;
         }

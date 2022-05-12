@@ -117,7 +117,7 @@ ScXMLMappingContext::~ScXMLMappingContext()
     auto& rDataMapper = pDoc->GetExternalDataMapper();
     auto& rDataSources = rDataMapper.getDataSources();
     if(!rDataSources.empty())
-        rDataSources[0].refresh(pDoc, true);
+        rDataSources[0].refresh(*pDoc, true);
 }
 
 uno::Reference<xml::sax::XFastContextHandler>

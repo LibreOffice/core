@@ -1395,7 +1395,7 @@ void ScPrintFunc::DrawBorder( tools::Long nScrX, tools::Long nScrY, tools::Long 
     if (!pBorderData)
         return;
 
-    ScDocumentUniquePtr pBorderDoc(new ScDocument( SCDOCMODE_UNDO ));
+    ScDocumentRef pBorderDoc(new ScDocument( SCDOCMODE_UNDO ));
     pBorderDoc->InitUndo( rDoc, 0,0, true,true );
     pBorderDoc->ApplyAttr( 0,0,0, *pBorderData );
 

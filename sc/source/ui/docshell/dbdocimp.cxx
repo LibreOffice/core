@@ -181,7 +181,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         xResultSet.set((*pDescriptor)[svx::DataAccessDescriptorProperty::Cursor], uno::UNO_QUERY);
 
     // ImportDoc - also used for Redo
-    ScDocumentUniquePtr pImportDoc(new ScDocument( SCDOCMODE_UNDO ));
+    ScDocumentRef pImportDoc(new ScDocument( SCDOCMODE_UNDO ));
     pImportDoc->InitUndo( rDoc, nTab, nTab );
 
     //  get data from database into import document
@@ -462,11 +462,11 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         SCCOL nUndoEndCol = std::max( nEndCol, rParam.nCol2 );       // rParam = old end
         SCROW nUndoEndRow = std::max( nEndRow, rParam.nRow2 );
 
-        ScDocumentUniquePtr pUndoDoc;
+        ScDocumentRef pUndoDoc;
         std::unique_ptr<ScDBData> pUndoDBData;
         if ( bRecord )
         {
-            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+            pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
             pUndoDoc->InitUndo( rDoc, nTab, nTab );
 
             pUndoDBData.reset(new ScDBData( *pDBData ));
@@ -570,7 +570,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
         if (bRecord)
         {
-            ScDocumentUniquePtr pRedoDoc = std::move(pImportDoc);
+            ScDocumentRef pRedoDoc = pImportDoc;
 
             if (nFormulaCols > 0)                   // include filled formulas for redo
                 rDoc.CopyToDocument(rParam.nCol1, rParam.nRow1, nTab,
@@ -583,7 +583,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 std::make_unique<ScUndoImportData>( &rDocShell, nTab,
                                         rParam, nUndoEndCol, nUndoEndRow,
                                         nFormulaCols,
-                                        std::move(pUndoDoc), std::move(pRedoDoc),
+                                        pUndoDoc, pRedoDoc,
                                         std::move(pUndoDBData), std::move(pRedoDBData) ) );
         }
 
@@ -617,7 +617,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         xInfoBox->run();
     }
 
-    pImportDoc.reset();
+    pImportDoc.clear();
 
     if (bSuccess && pChangeTrack)
         pChangeTrack->AppendInsert ( aChangedRange );
