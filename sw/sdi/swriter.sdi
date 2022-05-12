@@ -3066,6 +3066,23 @@ SfxVoidItem InsertCheckboxContentControl FN_INSERT_CHECKBOX_CONTENT_CONTROL
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem InsertDropdownContentControl FN_INSERT_DROPDOWN_CONTENT_CONTROL
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
 SfxVoidItem InsertMultiIndex FN_INSERT_MULTI_TOX
 ()
 [

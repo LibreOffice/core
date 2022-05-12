@@ -3920,7 +3920,7 @@ void XMLTextParagraphExport::ExportContentControl(
         comphelper::SequenceAsHashMap aMap(rListItem);
         auto it = aMap.find("DisplayText");
         OUString aValue;
-        if (it != aMap.end() && (it->second >>= aValue))
+        if (it != aMap.end() && (it->second >>= aValue) && !aValue.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DISPLAY_TEXT, aValue);
         }

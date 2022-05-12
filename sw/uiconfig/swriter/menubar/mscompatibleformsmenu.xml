@@ -15,6 +15,9 @@
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:MSCompatContentControls">
         <menu:menupopup>
+          <menu:menuitem menu:id=".uno:InsertContentControl"/>
+          <menu:menuitem menu:id=".uno:InsertCheckboxContentControl"/>
+          <menu:menuitem menu:id=".uno:InsertDropdownContentControl"/>
           <menu:menuitem menu:id=".uno:DatePickerFormField"/>
         </menu:menupopup>
       </menu:menu>

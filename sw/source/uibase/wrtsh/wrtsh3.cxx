@@ -132,7 +132,7 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
         size_t nSelectedListItem = *pContentControl->GetSelectedListItem();
         LockView(/*bViewLocked=*/true);
         OUString aOldState = GetCursorDescr();
-        OUString aNewState = pContentControl->GetListItems()[nSelectedListItem].m_aDisplayText;
+        OUString aNewState = pContentControl->GetListItems()[nSelectedListItem].ToString();
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, aOldState);
         aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
