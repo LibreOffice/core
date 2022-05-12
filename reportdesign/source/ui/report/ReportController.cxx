@@ -1657,8 +1657,7 @@ void OReportController::impl_initialize( )
             clearUndoManager();
             UndoSuppressor aSuppressUndo( getUndoManager() );
 
-            ::comphelper::NamedValueCollection aArgs(getModel()->getArgs());
-            setMode(aArgs.getOrDefault("Mode", OUString("normal")));
+            setMode(::comphelper::NamedValueCollection::getOrDefault(getModel()->getArgs(), u"Mode", OUString("normal")));
 
             listen(true);
             setEditable( !m_aReportModel->IsReadOnly() );

@@ -544,8 +544,7 @@ SfxInterfaceId SfxFrameLoader_Impl::impl_determineEffectiveViewId_nothrow( const
                 if ( !( xViewData->getByIndex( 0 ) >>= aViewData ) )
                     break;
 
-                ::comphelper::NamedValueCollection aNamedViewData( aViewData );
-                OUString sViewId = aNamedViewData.getOrDefault( "ViewId", OUString() );
+                OUString sViewId = ::comphelper::NamedValueCollection::getOrDefault( aViewData, u"ViewId", OUString() );
                 if ( sViewId.isEmpty() )
                     break;
 

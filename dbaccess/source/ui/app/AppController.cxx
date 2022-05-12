@@ -348,8 +348,7 @@ void SAL_CALL OApplicationController::disposing()
             OUString sUrl = m_xModel->getURL();
             if ( !sUrl.isEmpty() )
             {
-                ::comphelper::NamedValueCollection aArgs( m_xModel->getArgs() );
-                if ( aArgs.getOrDefault( "PickListEntry", true ) )
+                if ( ::comphelper::NamedValueCollection::getOrDefault( m_xModel->getArgs(), u"PickListEntry", true ) )
                 {
                     OUString     aFilter;
                     INetURLObject       aURL( m_xModel->getURL() );
@@ -907,8 +906,7 @@ namespace
         bool bHandled = false;
 
         // try handling the error with an interaction handler
-        ::comphelper::NamedValueCollection aArgs( _rxDocument->getArgs() );
-        Reference< XInteractionHandler > xHandler( aArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
+        Reference< XInteractionHandler > xHandler = ::comphelper::NamedValueCollection::getOrDefault( _rxDocument->getArgs(), u"InteractionHandler", Reference< XInteractionHandler >() );
         if ( xHandler.is() )
         {
             rtl::Reference pRequest( new ::comphelper::OInteractionRequest( _rException ) );
@@ -2514,8 +2512,7 @@ void OApplicationController::OnFirstControllerConnected()
     {
         // If the migration just happened, but was not successful, the document is reloaded.
         // In this case, we should not show the warning, again.
-        ::comphelper::NamedValueCollection aModelArgs( m_xModel->getArgs() );
-        if ( aModelArgs.getOrDefault( "SuppressMigrationWarning", false ) )
+        if ( ::comphelper::NamedValueCollection::getOrDefault( m_xModel->getArgs(), u"SuppressMigrationWarning", false ) )
             return;
 
         // also, if the document is read-only, then no migration is possible, and the

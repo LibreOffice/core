@@ -201,9 +201,54 @@ namespace comphelper
             nullptr, 0 );
     }
 
+    // static
+    bool NamedValueCollection::get_ensureType( const css::uno::Sequence<css::beans::PropertyValue>& rPropSeq,
+            std::u16string_view _rValueName, void* _pValueLocation, const Type& _rExpectedValueType )
+    {
+        for (const css::beans::PropertyValue& rPropVal : rPropSeq)
+        {
+            if (rPropVal.Name == _rValueName)
+            {
+                if ( uno_type_assignData(
+                        _pValueLocation, _rExpectedValueType.getTypeLibType(),
+                        const_cast< void* >( rPropVal.Value.getValue() ), rPropVal.Value.getValueType().getTypeLibType(),
+                        reinterpret_cast< uno_QueryInterfaceFunc >( cpp_queryInterface ),
+                        reinterpret_cast< uno_AcquireFunc >( cpp_acquire ),
+                        reinterpret_cast< uno_ReleaseFunc >( cpp_release )
+                    ) )
+                    // argument exists, and could be extracted
+                    return true;
+
+                // argument exists, but is of wrong type
+                throw IllegalArgumentException(
+                    OUString::Concat("Invalid value type for '") + _rValueName
+                    + "'.\nExpected: " + _rExpectedValueType.getTypeName()
+                    + "\nFound: " + rPropVal.Value.getValueType().getTypeName(),
+                    nullptr, 0 );
+            }
+        }
+        // argument does not exist
+        return false;
+    }
+
+    // static
+    const css::uno::Any& NamedValueCollection::get( const css::uno::Sequence<css::beans::PropertyValue>& rPropSeq,
+            std::u16string_view _rValueName )
+    {
+        static const Any theEmptyDefault;
+        for (const css::beans::PropertyValue& rPropVal : rPropSeq)
+        {
+            if (rPropVal.Name == _rValueName)
+            {
+                return rPropVal.Value;
+            }
+        }
+        return theEmptyDefault;
+    }
+
     const Any& NamedValueCollection::impl_get( const OUString& _rValueName ) const
     {
-        static Any theEmptyDefault;
+        static const Any theEmptyDefault;
         auto pos = maValues.find( _rValueName );
         if ( pos != maValues.end() )
             return pos->second;

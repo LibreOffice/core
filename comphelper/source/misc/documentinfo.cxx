@@ -106,8 +106,7 @@ namespace comphelper {
             }
 
             // 4. try model arguments
-            NamedValueCollection aModelArgs( _rxDocument->getArgs() );
-            sTitle = aModelArgs.getOrDefault( "Title", sTitle );
+            sTitle = NamedValueCollection::getOrDefault( _rxDocument->getArgs(), u"Title", sTitle );
             if ( !sTitle.isEmpty() )
                 return sTitle;
 

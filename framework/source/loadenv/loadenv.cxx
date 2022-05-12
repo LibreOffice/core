@@ -160,9 +160,8 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
         LoadEnv aEnv(xContext);
 
         LoadEnvFeatures loadEnvFeatures = LoadEnvFeatures::WorkWithUI;
-        comphelper::NamedValueCollection aDescriptor( lArgs );
         // tdf#118238 Only disable UI interaction when loading as hidden
-        if (aDescriptor.get("Hidden") == uno::Any(true) || Application::IsHeadlessModeEnabled())
+        if (comphelper::NamedValueCollection::get(lArgs, u"Hidden") == uno::Any(true) || Application::IsHeadlessModeEnabled())
             loadEnvFeatures = LoadEnvFeatures::NONE;
 
         aEnv.startLoading(sURL,

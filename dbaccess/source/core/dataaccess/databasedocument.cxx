@@ -1921,8 +1921,7 @@ void SAL_CALL ODatabaseDocument::loadFromStorage(const Reference<XStorage>& xSto
     DocumentGuard aGuard(*this, DocumentGuard::InitMethod);
 
     uno::Reference<beans::XPropertySet> xInfoSet(comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aEmbeddedImportInfoMap)));
-    comphelper::NamedValueCollection aDescriptor(rMediaDescriptor);
-    xInfoSet->setPropertyValue("StreamRelPath", uno::Any(aDescriptor.getOrDefault("HierarchicalDocumentName", OUString())));
+    xInfoSet->setPropertyValue("StreamRelPath", uno::Any(comphelper::NamedValueCollection::getOrDefault(rMediaDescriptor, u"HierarchicalDocumentName", OUString())));
     xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("content.xml")));
     xInfoSet->setPropertyValue("SourceStorage", uno::Any(xStorage));
 
