@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42b83b97_efff9809",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-12T14:33:17Z",
+      "side": 1,
+      "message": "This fixes the issues I\u0027m currently aware of wrt the start and end dummy char of content controls.",
+      "revId": "2e7bb5a26de2205ff31e495d8475cfbacff894d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
