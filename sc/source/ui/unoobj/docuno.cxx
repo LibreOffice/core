@@ -372,6 +372,15 @@ void ScModelObj::CreateAndSet(ScDocShell* pDocSh)
         pDocSh->SetBaseModel( new ScModelObj(pDocSh) );
 }
 
+// static
+void ScModelObj::Detach(ScDocShell* pDocSh)
+{
+    auto xModel3 = pDocSh->GetBaseModel();
+    if (ScModelObj* pScModelObj = dynamic_cast<ScModelObj*>(xModel3.get()))
+        if (pScModelObj->pDocShell == pDocSh)
+            pScModelObj->pDocShell = nullptr;
+}
+
 SdrModel& ScModelObj::getSdrModelFromUnoModel() const
 {
     ScDocument& rDoc(pDocShell->GetDocument());

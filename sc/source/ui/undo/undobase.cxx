@@ -405,9 +405,9 @@ void ScMultiBlockUndo::ShowBlock()
     }
 }
 
-ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocumentUniquePtr pRefDoc, std::unique_ptr<ScRefUndoData> pRefData ) :
+ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocumentRef pRefDoc, std::unique_ptr<ScRefUndoData> pRefData ) :
     ScSimpleUndo( pDocSh ),
-    pRefUndoDoc( std::move(pRefDoc) ),
+    pRefUndoDoc( pRefDoc ),
     pRefUndoData( std::move(pRefData) )
 {
     ScDocument& rDoc = pDocShell->GetDocument();
@@ -419,7 +419,7 @@ ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocumentUniquePtr pRefDoc, std::un
 ScMoveUndo::~ScMoveUndo()
 {
     pRefUndoData.reset();
-    pRefUndoDoc.reset();
+    pRefUndoDoc.clear();
     pDrawUndo.reset();
 }
 

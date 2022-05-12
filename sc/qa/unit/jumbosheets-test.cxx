@@ -20,6 +20,7 @@
 #include <test/xmltesttools.hxx>
 
 #include <defaultsoptions.hxx>
+#include <drwlayer.hxx>
 #include <scmod.hxx>
 #include <viewdata.hxx>
 #include <tabvwsh.hxx>

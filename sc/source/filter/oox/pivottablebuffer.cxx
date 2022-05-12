@@ -41,6 +41,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
+#include <tools/datetime.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <oox/helper/binaryinputstream.hxx>

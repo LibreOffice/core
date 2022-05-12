@@ -23,7 +23,6 @@
 #include <tools/diagnose_ex.h>
 
 using namespace css;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
@@ -121,9 +120,9 @@ void SQLFetchThread::execute()
     maImportFinishedHdl();
 }
 
-SQLDataProvider::SQLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource)
+SQLDataProvider::SQLDataProvider(ScDocument& rDoc, sc::ExternalDataSource& rDataSource)
     : DataProvider(rDataSource)
-    , mpDocument(pDoc)
+    , mrDocument(rDoc)
 {
 }
 
@@ -142,8 +141,8 @@ void SQLDataProvider::Import()
     if (mpDoc)
         return;
 
-    mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
-    mpDoc->ResetClip(mpDocument, SCTAB(0));
+    mpDoc.set(new ScDocument(SCDOCMODE_CLIP));
+    mpDoc->ResetClip(mrDocument, SCTAB(0));
     mxSQLFetchThread = new SQLFetchThread(*mpDoc, mrDataSource.getID(),
                                           std::bind(&SQLDataProvider::ImportFinished, this),
                                           std::vector(mrDataSource.getDataTransformation()));
@@ -160,7 +159,7 @@ void SQLDataProvider::ImportFinished()
 {
     mrDataSource.getDBManager()->WriteToDoc(*mpDoc);
     mxSQLFetchThread.clear();
-    mpDoc.reset();
+    mpDoc.clear();
 }
 
 const OUString& SQLDataProvider::GetURL() const { return mrDataSource.getURL(); }

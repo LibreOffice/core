@@ -82,9 +82,9 @@ void XMLFetchThread::execute()
     maImportFinishedHdl();
 }
 
-XMLDataProvider::XMLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource)
+XMLDataProvider::XMLDataProvider(ScDocument& rDoc, sc::ExternalDataSource& rDataSource)
     : DataProvider(rDataSource)
-    , mpDocument(pDoc)
+    , mrDocument(rDoc)
 {
 }
 
@@ -103,8 +103,8 @@ void XMLDataProvider::Import()
     if (mpDoc)
         return;
 
-    mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
-    mpDoc->ResetClip(mpDocument, SCTAB(0));
+    mpDoc.set(new ScDocument(SCDOCMODE_CLIP));
+    mpDoc->ResetClip(mrDocument, SCTAB(0));
     mxXMLFetchThread = new XMLFetchThread(*mpDoc, mrDataSource.getURL(),
                                           mrDataSource.getXMLImportParam(), mrDataSource.getID(),
                                           std::bind(&XMLDataProvider::ImportFinished, this),

@@ -21,9 +21,8 @@
 
 #include <svx/fmmodel.hxx>
 #include <svx/svdundo.hxx>
-#include "global.hxx"
+#include "document.hxx"
 
-class ScDocument;
 class SfxObjectShell;
 class ScDrawObjData;
 class ScMacroInfo;
@@ -76,29 +75,21 @@ class ScUndoAnchorData final : public SdrUndoObj
 private:
     bool                    mbWasCellAnchored;
     bool                    mbWasResizeWithCell;
-    ScDocument*             mpDoc;
+    ScDocumentRef           mpDoc;
     SCTAB                   mnTab;
 public:
-                ScUndoAnchorData( SdrObject* pObj, ScDocument* pDoc, SCTAB nTab );
+                ScUndoAnchorData( SdrObject* pObj, const ScDocumentRef& pDoc, SCTAB nTab );
                 virtual ~ScUndoAnchorData() override;
 
     virtual void     Undo() override;
     virtual void     Redo() override;
 };
 
-// for ScDrawLayer::SetPageSize
-enum class ScObjectHandling
-{
-    RecalcPosMode, // used for row height or col width changes
-    MoveRTLMode, // used for switch to RTL during import of right-to-left sheet
-    MirrorRTLMode // used for switch between RTL and LTR by .uno:SheetRightToLeft
-};
-
 class SC_DLLPUBLIC ScDrawLayer final : public FmFormModel
 {
 private:
     OUString        aName;
-    ScDocument*     pDoc;
+    ScDocumentRef   pDoc;
     std::unique_ptr<SdrUndoGroup> pUndoGroup;
     bool            bRecording;
     bool            bAdjustEnabled;
@@ -111,7 +102,7 @@ private:
     void            ResizeLastRectFromAnchor( const SdrObject* pObj, ScDrawObjData& rData, bool bNegativePage, bool bCanResize );
 
 public:
-                    ScDrawLayer( ScDocument* pDocument, const OUString& rName );
+                    ScDrawLayer( const ScDocumentRef& pDocument, const OUString& rName );
     virtual         ~ScDrawLayer() override;
 
     virtual rtl::Reference<SdrPage> AllocPage(bool bMasterPage) override;
@@ -127,7 +118,7 @@ public:
     void            ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos );
     void            ResetTab( SCTAB nStart, SCTAB nEnd );
 
-    ScDocument*     GetDocument() const { return pDoc; }
+    const ScDocumentRef& GetDocument() const { return pDoc; }
 
     void            UseHyphenator();
 
@@ -153,7 +144,7 @@ public:
                                             SCCOL nCol2,SCROW nRow2, bool bAnchored = false );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
 
-    void            CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rectangle& rRange );
+    void            CopyToClip( const ScDocumentRef& pClipDoc, SCTAB nTab, const tools::Rectangle& rRange );
     void            CopyFromClip( ScDrawLayer* pClipModel,
                                     SCTAB nSourceTab, const tools::Rectangle& rSourceRange,
                                     const ScAddress& rDestPos, const tools::Rectangle& rDestRange );

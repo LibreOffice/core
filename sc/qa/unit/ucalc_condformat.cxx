@@ -401,11 +401,11 @@ void TestCondformat::testCondCopyPaste()
     pFormat->AddEntry(pEntry);
     sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, aCondFormatRange, &aClipDoc);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    copyToClip(m_pDoc, aCondFormatRange, pClipDoc);
 
     ScRange aTargetRange(4,4,0,7,7,0);
-    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+    pasteFromClip(m_pDoc, aTargetRange, pClipDoc);
 
     ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(7,7,0);
     CPPUNIT_ASSERT(pPastedFormat);
@@ -440,11 +440,11 @@ void TestCondformat::testCondCopyPasteSingleCell()
     pFormat->AddEntry(pEntry);
     sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), &aClipDoc);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), pClipDoc);
 
     ScRange aTargetRange(4,4,0,4,4,0);
-    pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
+    pasteOneCellFromClip(m_pDoc, aTargetRange, pClipDoc);
 
     ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(4,4,0);
     CPPUNIT_ASSERT(pPastedFormat);
@@ -479,10 +479,10 @@ void TestCondformat::testCondCopyPasteSingleCellToRange()
     pFormat->AddEntry(pEntry);
     sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), &aClipDoc);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), pClipDoc);
     ScRange aTargetRange(4,4,0,5,8,0);
-    pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
+    pasteOneCellFromClip(m_pDoc, aTargetRange, pClipDoc);
 
     // Pasting the same conditional format must modify existing format, making its range
     // combined of previous range and newly pasted range having the conditional format.
@@ -524,11 +524,11 @@ void TestCondformat::testCondCopyPasteSingleCellIntoSameFormatRange()
     pFormat->AddEntry(pEntry);
     sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, ScRange(1, 1, 0, 1, 1, 0), &aClipDoc);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    copyToClip(m_pDoc, ScRange(1, 1, 0, 1, 1, 0), pClipDoc);
 
     ScRange aTargetRange(2, 2, 0, 2, 2, 0);
-    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+    pasteFromClip(m_pDoc, aTargetRange, pClipDoc);
 
     ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(2, 2, 0);
     CPPUNIT_ASSERT(pPastedFormat);
@@ -562,10 +562,10 @@ void TestCondformat::testCondCopyPasteSingleRowToRange()
     auto pFormatTmp = pFormat.get();
     m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, ScRange(0,0,0,m_pDoc->MaxCol(),0,0), &aClipDoc);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    copyToClip(m_pDoc, ScRange(0,0,0,m_pDoc->MaxCol(),0,0), pClipDoc);
     ScRange aTargetRange(0,4,0,m_pDoc->MaxCol(),4,0);
-    pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
+    pasteOneCellFromClip(m_pDoc, aTargetRange, pClipDoc);
 
     ScConditionalFormat* pNewFormat = m_pDoc->GetCondFormat(0, 4, 0);
     CPPUNIT_ASSERT(pNewFormat);
@@ -593,10 +593,10 @@ void TestCondformat::testCondCopyPasteSingleRowToRange2()
     pFormat->AddEntry(pEntry);
     m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, ScRange(0,0,0,3,0,0), &aClipDoc);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    copyToClip(m_pDoc, ScRange(0,0,0,3,0,0), pClipDoc);
     ScRange aTargetRange(0,4,0,m_pDoc->MaxCol(),4,0);
-    pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
+    pasteOneCellFromClip(m_pDoc, aTargetRange, pClipDoc);
 
     for (SCCOL nCol = 0; nCol <= m_pDoc->MaxCol(); ++nCol)
     {
@@ -623,10 +623,10 @@ void TestCondformat::testCondCopyPasteSheetBetweenDoc()
     pFormat->AddEntry(pEntry);
     m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
-    ScDocument aDoc;
-    aDoc.TransferTab(*m_pDoc, 0, 0);
+    ScDocumentRef pDoc(new ScDocument);
+    pDoc->TransferTab(*m_pDoc, 0, 0);
 
-    ScConditionalFormatList* pList = aDoc.GetCondFormList(0);
+    ScConditionalFormatList* pList = pDoc->GetCondFormList(0);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
 
     m_pDoc->DeleteTab(0);
@@ -1193,10 +1193,10 @@ void TestCondformat::testMultipleSingleCellCondFormatCopyPaste()
     sal_uInt32 nFirstCondFormatKey = addSingleCellCondFormat(m_pDoc, ScAddress(0, 0, 0), 1, "=A2");
     sal_uInt32 nSecondCondFormatKey = addSingleCellCondFormat(m_pDoc, ScAddress(1, 0, 0), 2, "=B3");
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, ScRange(0,0,0,2,0,0), &aClipDoc);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    copyToClip(m_pDoc, ScRange(0,0,0,2,0,0), pClipDoc);
     ScRange aTargetRange(2,4,0,7,4,0);
-    pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
+    pasteOneCellFromClip(m_pDoc, aTargetRange, pClipDoc);
 
     for (SCCOL nCol = 2; nCol <= 7; ++nCol)
     {
@@ -1225,10 +1225,10 @@ void TestCondformat::testDeduplicateMultipleCondFormats()
     sal_uInt32 nFirstCondFormatKey = addSingleCellCondFormat(m_pDoc, ScAddress(0, 0, 0), 1, "=B2");
     sal_uInt32 nSecondCondFormatKey = addSingleCellCondFormat(m_pDoc, ScAddress(1, 0, 0), 2, "=B2");
 
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, ScRange(0,0,0,2,0,0), &aClipDoc);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    copyToClip(m_pDoc, ScRange(0,0,0,2,0,0), pClipDoc);
     ScRange aTargetRange(2,4,0,7,4,0);
-    pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
+    pasteOneCellFromClip(m_pDoc, aTargetRange, pClipDoc);
 
     for (SCCOL nCol = 2; nCol <= 7; ++nCol)
     {

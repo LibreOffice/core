@@ -423,7 +423,7 @@ ScDocument::~ScDocument()
     assert( pDelayedStartListeningFormulaCells.empty());
 }
 
-void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
+void ScDocument::InitClipPtrs( ScDocument& rSourceDoc )
 {
     OSL_ENSURE(bIsClip, "InitClipPtrs and not bIsClip");
 
@@ -433,26 +433,26 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
     Clear();
 
-    SharePooledResources(pSourceDoc);
+    SharePooledResources(rSourceDoc);
 
     //  conditional Formats / validations
     // TODO: Copy Templates?
-    const ScValidationDataList* pSourceValid = pSourceDoc->pValidationList.get();
+    const ScValidationDataList* pSourceValid = rSourceDoc.pValidationList.get();
     if ( pSourceValid )
         pValidationList.reset(new ScValidationDataList(*this, *pSourceValid));
 
     // store Links in Stream
     pClipData.reset();
-    if (pSourceDoc->GetDocLinkManager().hasDdeLinks())
+    if (rSourceDoc.GetDocLinkManager().hasDdeLinks())
     {
         pClipData.reset( new SvMemoryStream );
-        pSourceDoc->SaveDdeLinks(*pClipData);
+        rSourceDoc.SaveDdeLinks(*pClipData);
     }
 
     // Options pointers exist (ImplCreateOptions) for any document.
     // Must be copied for correct results in OLE objects (#i42666#).
-    SetDocOptions( pSourceDoc->GetDocOptions() );
-    SetViewOptions( pSourceDoc->GetViewOptions() );
+    SetDocOptions( rSourceDoc.GetDocOptions() );
+    SetViewOptions( rSourceDoc.GetViewOptions() );
 }
 
 SvNumberFormatter* ScDocument::GetFormatTable() const
@@ -502,17 +502,17 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
     return *mpNoteEngine;
 }
 
-void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
+void ScDocument::ResetClip( ScDocument& rSourceDoc, const ScMarkData* pMarks )
 {
     if (bIsClip)
     {
-        InitClipPtrs(pSourceDoc);
+        InitClipPtrs(rSourceDoc);
 
-        for (SCTAB i = 0; i < static_cast<SCTAB>(pSourceDoc->maTabs.size()); i++)
-            if (pSourceDoc->maTabs[i])
+        for (SCTAB i = 0; i < static_cast<SCTAB>(rSourceDoc.maTabs.size()); i++)
+            if (rSourceDoc.maTabs[i])
                 if (!pMarks || pMarks->GetTableSelect(i))
                 {
-                    OUString aString = pSourceDoc->maTabs[i]->GetName();
+                    OUString aString = rSourceDoc.maTabs[i]->GetName();
                     if ( i < static_cast<SCTAB>(maTabs.size()) )
                     {
                         maTabs[i].reset( new ScTable(*this, i, aString) );
@@ -526,7 +526,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
                         }
                         maTabs.emplace_back(new ScTable(*this, i, aString));
                     }
-                    maTabs[i]->SetLayoutRTL( pSourceDoc->maTabs[i]->IsLayoutRTL() );
+                    maTabs[i]->SetLayoutRTL( rSourceDoc.maTabs[i]->IsLayoutRTL() );
                 }
     }
     else
@@ -535,18 +535,18 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
     }
 }
 
-void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
+void ScDocument::ResetClip( ScDocument& rSourceDoc, SCTAB nTab )
 {
     if (bIsClip)
     {
-        InitClipPtrs(pSourceDoc);
+        InitClipPtrs(rSourceDoc);
         if (nTab >= static_cast<SCTAB>(maTabs.size()))
         {
             maTabs.resize(nTab+1);
         }
         maTabs[nTab].reset( new ScTable(*this, nTab, "baeh") );
-        if (nTab < static_cast<SCTAB>(pSourceDoc->maTabs.size()) && pSourceDoc->maTabs[nTab])
-            maTabs[nTab]->SetLayoutRTL( pSourceDoc->maTabs[nTab]->IsLayoutRTL() );
+        if (nTab < static_cast<SCTAB>(rSourceDoc.maTabs.size()) && rSourceDoc.maTabs[nTab])
+            maTabs[nTab]->SetLayoutRTL( rSourceDoc.maTabs[nTab]->IsLayoutRTL() );
     }
     else
     {
