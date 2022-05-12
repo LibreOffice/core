@@ -33,6 +33,24 @@
       "message": "Patch works as advertised - what is still missing:\n* Chart is not updated after modifying the checkbox\n* Property is not stored in ODF\n\nDo we want this incomplete feature in?",
       "revId": "81c7fa8b58c91062b3d8c73314d713b97f040c4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74ed2a80_464e6003",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-05-12T01:31:01Z",
+      "side": 1,
+      "message": "While its an experimental feature, not being able to save/load limits the usefulness quite a lot. I\u0027d think that should be added (or we merge, but with the expectation it gets added before 7.4)?",
+      "parentUuid": "86c8a75c_a96de6c1",
+      "revId": "81c7fa8b58c91062b3d8c73314d713b97f040c4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
