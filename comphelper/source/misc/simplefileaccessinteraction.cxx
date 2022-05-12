@@ -32,38 +32,26 @@ const sal_Int32 HANDLE_AUTHENTICATIONREQUEST = 4;
 SimpleFileAccessInteraction::SimpleFileAccessInteraction(
     const css::uno::Reference<css::task::XInteractionHandler>& xHandler)
 {
-    std::vector<::ucbhelper::InterceptedInteraction::InterceptedRequest> lInterceptions;
-    ::ucbhelper::InterceptedInteraction::InterceptedRequest aInterceptedRequest;
-
-    //intercept standard IO error exception (local file and WebDAV)
-    aInterceptedRequest.Handle = HANDLE_INTERACTIVEIOEXCEPTION;
-    aInterceptedRequest.Request <<= css::ucb::InteractiveIOException();
-    aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
-    lInterceptions.push_back(aInterceptedRequest);
-
-    //intercept internal error
-    aInterceptedRequest.Handle = HANDLE_UNSUPPORTEDDATASINKEXCEPTION;
-    aInterceptedRequest.Request <<= css::ucb::UnsupportedDataSinkException();
-    aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
-    lInterceptions.push_back(aInterceptedRequest);
-
-    //intercept network error exception (WebDAV ucp provider)
-    aInterceptedRequest.Handle = HANDLE_INTERACTIVENETWORKEXCEPTION;
-    aInterceptedRequest.Request <<= css::ucb::InteractiveNetworkException();
-    aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
-    lInterceptions.push_back(aInterceptedRequest);
-
-    //intercept certificate validation request (WebDAV ucp provider)
-    aInterceptedRequest.Handle = HANDLE_CERTIFICATEREQUEST;
-    aInterceptedRequest.Request <<= css::ucb::CertificateValidationRequest();
-    aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
-    lInterceptions.push_back(aInterceptedRequest);
-
-    //intercept authentication request (WebDAV ucp provider)
-    aInterceptedRequest.Handle = HANDLE_AUTHENTICATIONREQUEST;
-    aInterceptedRequest.Request <<= css::ucb::AuthenticationRequest();
-    aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionApprove>::get();
-    lInterceptions.push_back(aInterceptedRequest);
+    std::vector<::ucbhelper::InterceptedInteraction::InterceptedRequest> lInterceptions{
+        { //intercept standard IO error exception (local file and WebDAV)
+          css::uno::Any(css::ucb::InteractiveIOException()),
+          cppu::UnoType<css::task::XInteractionAbort>::get(), HANDLE_INTERACTIVEIOEXCEPTION },
+        { //intercept internal error
+          css::uno::Any(css::ucb::UnsupportedDataSinkException()),
+          cppu::UnoType<css::task::XInteractionAbort>::get(), HANDLE_UNSUPPORTEDDATASINKEXCEPTION },
+        {
+            //intercept network error exception (WebDAV ucp provider)
+            css::uno::Any(css::ucb::InteractiveNetworkException()),
+            cppu::UnoType<css::task::XInteractionAbort>::get(),
+            HANDLE_INTERACTIVENETWORKEXCEPTION,
+        },
+        { //intercept certificate validation request (WebDAV ucp provider)
+          css::uno::Any(css::ucb::CertificateValidationRequest()),
+          cppu::UnoType<css::task::XInteractionAbort>::get(), HANDLE_CERTIFICATEREQUEST },
+        { //intercept authentication request (WebDAV ucp provider)
+          css::uno::Any(css::ucb::AuthenticationRequest()),
+          cppu::UnoType<css::task::XInteractionApprove>::get(), HANDLE_AUTHENTICATIONREQUEST }
+    };
 
     setInterceptedHandler(xHandler);
     setInterceptions(std::move(lInterceptions));

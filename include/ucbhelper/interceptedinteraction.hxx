@@ -87,6 +87,10 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
             {
                 Handle     = INVALID_HANDLE;
             }
+            InterceptedRequest(css::uno::Any Request_, css::uno::Type Continuation_, sal_Int32 Handle_)
+                : Request(std::move(Request_)), Continuation(std::move(Continuation_)), Handle(Handle_)
+            {
+            }
 
         };
 
