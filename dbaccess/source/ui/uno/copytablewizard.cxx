@@ -571,8 +571,7 @@ namespace
         // see whether the document model can provide a handler
         if ( xDocumentModel.is() )
         {
-            ::comphelper::NamedValueCollection aModelArgs( xDocumentModel->getArgs() );
-            xHandler = aModelArgs.getOrDefault( "InteractionHandler", xHandler );
+            xHandler = ::comphelper::NamedValueCollection::getOrDefault( xDocumentModel->getArgs(), u"InteractionHandler", xHandler );
         }
 
         return xHandler;

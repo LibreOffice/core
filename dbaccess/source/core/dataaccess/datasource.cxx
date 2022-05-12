@@ -608,8 +608,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     if ( xModel)
     {
         //See ODbTypeWizDialogSetup::SaveDatabaseDocument
-        ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
-        aArgs.get("IgnoreFirebirdMigration") >>= bIgnoreMigration;
+        ::comphelper::NamedValueCollection::get(xModel->getArgs(), u"IgnoreFirebirdMigration") >>= bIgnoreMigration;
     }
     else
     {

@@ -292,8 +292,7 @@ namespace dlgprov
                     OUString sDocURL = xModel->getURL();
                     if ( sDocURL.isEmpty() )
                     {
-                        ::comphelper::NamedValueCollection aModelArgs( xModel->getArgs() );
-                        sDocURL = aModelArgs.getOrDefault( "Title", sDocURL );
+                        sDocURL = ::comphelper::NamedValueCollection::getOrDefault( xModel->getArgs(), u"Title", sDocURL );
                     }
 
                     if ( sLocation != sDocURL )

@@ -157,6 +157,19 @@ namespace comphelper
             return retVal;
         }
 
+        /** Retrieves a value with a given name, or defaults it to a given value, if it's not present
+            in the collection.
+            For when you only need a single value from a Sequence<PropertyValue>.
+        */
+        template < typename VALUE_TYPE >
+        static VALUE_TYPE  getOrDefault( const css::uno::Sequence<css::beans::PropertyValue> & rPropSeq,
+                    std::u16string_view _rValueName, const VALUE_TYPE& _rDefault )
+        {
+            VALUE_TYPE retVal( _rDefault );
+            get_ensureType( rPropSeq, _rValueName, &retVal, ::cppu::UnoType< VALUE_TYPE >::get() );
+            return retVal;
+        }
+
         /** retrieves a (untyped) value with a given name
 
             If the collection does not contain a value with the given name, an empty
@@ -166,6 +179,13 @@ namespace comphelper
         {
             return impl_get( _rValueName );
         }
+
+        /** retrieves a (untyped) value with a given name. For when you only need a single value from a Sequence<PropertyValue>.
+
+            If the collection does not contain a value with the given name, an empty
+            Any is returned.
+        */
+        static const css::uno::Any& get( const css::uno::Sequence<css::beans::PropertyValue>& rPropSeq, std::u16string_view _rValueName );
 
         /// determines whether a value with a given name is present in the collection
         bool has( const OUString& _rValueName ) const
@@ -259,6 +279,13 @@ namespace comphelper
                     void* _pValueLocation,
                     const css::uno::Type& _rExpectedValueType
                 ) const;
+
+        static bool get_ensureType(
+                    const css::uno::Sequence<css::beans::PropertyValue> & rPropSeq,
+                    std::u16string_view _rValueName,
+                    void* _pValueLocation,
+                    const css::uno::Type& _rExpectedValueType
+                );
 
         const css::uno::Any&
                 impl_get( const OUString& _rValueName ) const;

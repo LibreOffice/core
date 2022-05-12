@@ -1882,8 +1882,7 @@ bool SfxObjectShell::isEditDocLocked() const
         return false;
     if (!officecfg::Office::Common::Misc::AllowEditReadonlyDocs::get())
         return true;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockEditDoc" } ));
-    return aArgs.getOrDefault("LockEditDoc", false);
+    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockEditDoc" } ), u"LockEditDoc", false);
 }
 
 bool SfxObjectShell::isContentExtractionLocked() const
@@ -1891,8 +1890,7 @@ bool SfxObjectShell::isContentExtractionLocked() const
     Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockContentExtraction" } ));
-    return aArgs.getOrDefault("LockContentExtraction", false);
+    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockContentExtraction" } ), u"LockContentExtraction", false);
 }
 
 bool SfxObjectShell::isExportLocked() const
@@ -1900,8 +1898,7 @@ bool SfxObjectShell::isExportLocked() const
     Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockExport" } ));
-    return aArgs.getOrDefault("LockExport", false);
+    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockExport" } ), u"LockExport", false);
 }
 
 bool SfxObjectShell::isPrintLocked() const
@@ -1909,8 +1906,7 @@ bool SfxObjectShell::isPrintLocked() const
     Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockPrint" } ));
-    return aArgs.getOrDefault("LockPrint", false);
+    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockPrint" } ), u"LockPrint", false);
 }
 
 bool SfxObjectShell::isSaveLocked() const
@@ -1918,8 +1914,7 @@ bool SfxObjectShell::isSaveLocked() const
     Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    comphelper::NamedValueCollection aArgs(xModel->getArgs2( { "LockSave" } ));
-    return aArgs.getOrDefault("LockSave", false);
+    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockSave" } ), u"LockSave", false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

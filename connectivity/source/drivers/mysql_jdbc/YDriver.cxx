@@ -49,8 +49,8 @@ namespace
 {
 OUString getJavaDriverClass(css::uno::Sequence<css::beans::PropertyValue> const& info)
 {
-    return comphelper::NamedValueCollection(info).getOrDefault("JavaDriverClass",
-                                                               OUString("com.mysql.jdbc.Driver"));
+    return comphelper::NamedValueCollection::getOrDefault(info, u"JavaDriverClass",
+                                                          OUString("com.mysql.jdbc.Driver"));
 }
 }
 
@@ -232,8 +232,8 @@ Reference<XConnection> SAL_CALL ODriverDelegator::connect(const OUString& url,
             Sequence<PropertyValue> aConvertedProperties = lcl_convertProperties(eType, info, url);
             if (eType == T_DRIVERTYPE::Jdbc)
             {
-                ::comphelper::NamedValueCollection aSettings(info);
-                OUString sIanaName = aSettings.getOrDefault("CharSet", OUString());
+                OUString sIanaName = ::comphelper::NamedValueCollection::getOrDefault(
+                    info, u"CharSet", OUString());
                 if (!sIanaName.isEmpty())
                 {
                     ::dbtools::OCharsetMap aLookupIanaName;

@@ -535,9 +535,7 @@ bool OfficeDocumentsManager::isDocumentPreview(
     if ( !xModel.is() )
         return false;
 
-    ::comphelper::NamedValueCollection aArgs(
-        xModel->getArgs() );
-    bool bIsPreview = aArgs.getOrDefault( "Preview", false );
+    bool bIsPreview = ::comphelper::NamedValueCollection::getOrDefault( xModel->getArgs(), u"Preview", false );
     return bIsPreview;
 }
 
