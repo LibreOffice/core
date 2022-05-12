@@ -1824,7 +1824,7 @@ void ScViewFunc::FillCrossDblClick()
         bDataFound = (rDoc.HasData( nMovX, nStartY, nTab) && rDoc.HasData( nMovX, nStartY + 1, nTab));
     }
 
-    if (!(bDataFound && rDoc.IsBlockEmpty( nTab, nStartX, nEndY + 1, nEndX, nEndY + 1, true)))
+    if (!(bDataFound && rDoc.IsEmptyData( nTab, nStartX, nEndY + 1, nEndX, nEndY + 1 )))
         return;
 
     // Get end of data left or right.

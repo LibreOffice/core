@@ -2413,7 +2413,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
         bool bMarkClipped = aViewData.GetOptions().GetOption( VOPT_CLIPMARKS );
         if (bMarkClipped)
         {
-            // ScColumn::IsEmptyBlock has to be optimized for this
+            // ScColumn::IsEmptyData has to be optimized for this
             //  (switch to Search() )
             //!if ( nCol1 > 0 && !aViewData.GetDocument()->IsBlockEmpty(
             //!                     aViewData.GetTabNo(),
