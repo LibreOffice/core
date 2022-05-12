@@ -4188,6 +4188,25 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                         SAL_INFO("vcl.pdfwriter", "error: CheckBox without \"Yes\" stream" );
                 }
             }
+
+            if ( !rWidget.m_aOffValue.isEmpty() )
+            {
+                auto app_it = rWidget.m_aAppearances.find( "N" );
+                if( app_it != rWidget.m_aAppearances.end() )
+                {
+                    auto stream_it = app_it->second.find( "Off" );
+                    if( stream_it != app_it->second.end() )
+                    {
+                        SvMemoryStream* pStream = stream_it->second;
+                        app_it->second.erase( stream_it );
+                        OStringBuffer aBuf( rWidget.m_aOffValue.getLength()*2 );
+                        appendName( rWidget.m_aOffValue, aBuf );
+                        (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
+                    }
+                    else
+                        SAL_INFO("vcl.pdfwriter", "error: CheckBox without \"Off\" stream" );
+                }
+            }
         }
 
         OStringBuffer aLine( 1024 );
@@ -10736,6 +10755,26 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
                         SAL_INFO("vcl.pdfwriter", "error: RadioButton without \"Yes\" stream" );
                 }
             }
+
+            if ( !rKid.m_aOffValue.isEmpty() )
+            {
+                auto app_it = rKid.m_aAppearances.find( "N" );
+                if( app_it != rKid.m_aAppearances.end() )
+                {
+                    auto stream_it = app_it->second.find( "Off" );
+                    if( stream_it != app_it->second.end() )
+                    {
+                        SvMemoryStream* pStream = stream_it->second;
+                        app_it->second.erase( stream_it );
+                        OStringBuffer aBuf( rKid.m_aOffValue.getLength()*2 );
+                        appendName( rKid.m_aOffValue, aBuf );
+                        (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
+                    }
+                    else
+                        SAL_INFO("vcl.pdfwriter", "error: RadioButton without \"Off\" stream" );
+                }
+            }
+
             // update selected radio button
             if( rKid.m_aValue != "Off" )
             {
@@ -10853,6 +10892,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 
         rNewWidget.m_aValue     = "Off";
         rNewWidget.m_aOnValue   = rBtn.OnValue;
+        rNewWidget.m_aOffValue   = rBtn.OffValue;
         if( rRadioButton.m_aValue.isEmpty() && rBtn.Selected )
         {
             rNewWidget.m_aValue     = rNewWidget.m_aOnValue;
@@ -10875,6 +10915,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_aValue
             = rBox.Checked ? std::u16string_view(u"Yes") : std::u16string_view(u"Off" );
         rNewWidget.m_aOnValue   = rBox.OnValue;
+        rNewWidget.m_aOffValue   = rBox.OffValue;
         // create default appearance before m_aRect gets transformed
         createDefaultCheckBoxAppearance( rNewWidget, rBox );
     }

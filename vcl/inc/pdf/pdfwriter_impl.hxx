@@ -463,7 +463,8 @@ struct PDFWidget : public PDFAnnotation
     sal_Int32                   m_nParent; // if not 0, parent's object number
     std::vector<sal_Int32>      m_aKids; // widget children, contains object numbers
     std::vector<sal_Int32>      m_aKidsIndex; // widget children, contains index to m_aWidgets
-    OUString               m_aOnValue;
+    OUString                    m_aOnValue;
+    OUString                    m_aOffValue;
     sal_Int32                   m_nTabOrder; // lowest number gets first in tab order
     sal_Int32                   m_nRadioGroup;
     sal_Int32                   m_nMaxLen;
