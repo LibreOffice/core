@@ -985,7 +985,7 @@ static rtl::Reference<SwMailMessage> lcl_CreateMailFromDoc(
             return pMessage;
 
         pInStream->SetStreamCharSet( sMailEncoding );
-        OString sLine;
+        OStringBuffer sLine;
         while ( pInStream->ReadLine( sLine ) )
         {
             sBody.append(OStringToOUString( sLine, sMailEncoding ));

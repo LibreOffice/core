@@ -346,11 +346,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             {
                 xStm->Seek( 0 );
 
-                OString aLine;
+                OStringBuffer aLine;
                 while (xStm->ReadLine(aLine))
                 {
-                    sal_Int32 x = aLine.indexOf( "\\trowd" );
-                    if (x != -1)
+                    size_t x = std::string_view(aLine).find( "\\trowd" );
+                    if (x != std::string_view::npos)
                     {
                         bTable = true;
                         nFormat = bIsRTF ? SotClipboardFormatId::RTF : SotClipboardFormatId::RICHTEXT;

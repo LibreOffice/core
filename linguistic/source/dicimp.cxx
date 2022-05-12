@@ -124,7 +124,7 @@ sal_Int16 ReadDicVersion( SvStream& rStream, LanguageType &nLng, bool &bNeg, OUS
         !strcmp(pMagicHeader, pVerOOo7))
     {
         bool bSuccess;
-        OString aLine;
+        OStringBuffer aLine;
 
         nDicVersion = DIC_VERSION_7;
 
@@ -165,7 +165,7 @@ sal_Int16 ReadDicVersion( SvStream& rStream, LanguageType &nLng, bool &bNeg, OUS
                     EXTENSION_FOR_TITLE_TEXT;
             }
 
-            if (aLine.indexOf("---") != -1) // end of header
+            if (std::string_view(aLine).find("---") != std::string_view::npos) // end of header
                 break;
         }
         if (!bSuccess)
@@ -362,7 +362,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
     }
     else if (DIC_VERSION_7 == nDicVersion)
     {
-        OString aLine;
+        OStringBuffer aLine;
 
         // remaining lines - stock strings (a [==] b)
         while (pStream->ReadLine(aLine))

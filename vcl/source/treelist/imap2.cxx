@@ -236,7 +236,7 @@ void ImageMap::ImpReadCERN( SvStream& rIStm )
     // delete old content
     ClearImageMap();
 
-    OString aStr;
+    OStringBuffer aStr;
     while ( rIStm.ReadLine( aStr ) )
         ImpReadCERNLine( aStr );
 }
@@ -369,7 +369,7 @@ void ImageMap::ImpReadNCSA( SvStream& rIStm )
     // delete old content
     ClearImageMap();
 
-    OString aStr;
+    OStringBuffer aStr;
     while ( rIStm.ReadLine( aStr ) )
         ImpReadNCSALine( aStr );
 }

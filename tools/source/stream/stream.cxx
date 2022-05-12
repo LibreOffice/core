@@ -426,13 +426,21 @@ bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
 
 bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
 {
+    OStringBuffer aBuf(4096);
+    bool rv = ReadLine(aBuf, nMaxBytesToRead);
+    rStr = aBuf.makeStringAndClear();
+    return rv;
+}
+
+bool SvStream::ReadLine( OStringBuffer& aBuf, sal_Int32 nMaxBytesToRead )
+{
     char    buf[256+1];
     bool        bEnd        = false;
     sal_uInt64  nOldFilePos = Tell();
     char    c           = 0;
     std::size_t nTotalLen   = 0;
 
-    OStringBuffer aBuf(4096);
+    aBuf.setLength(0);
     while( !bEnd && !GetError() )   // Don't test for EOF as we
                                     // are reading block-wise!
     {
@@ -443,7 +451,7 @@ bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
             {
                 // Exit on first block-read error
                 m_isEof = true;
-                rStr.clear();
+                aBuf.setLength(0);
                 return false;
             }
             else
@@ -494,7 +502,6 @@ bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
 
     if ( bEnd )
         m_isEof = false;
-    rStr = aBuf.makeStringAndClear();
     return bEnd;
 }
 

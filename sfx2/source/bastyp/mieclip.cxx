@@ -35,7 +35,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
     bool bRet = false;
     pStrm.reset();
 
-    OString sLine;
+    OStringBuffer sLine;
     sal_Int32 nStt = -1, nEnd = -1, nFragStart = -1, nFragEnd = -1;
     sal_Int32 nIndex = 0;
 
@@ -49,16 +49,17 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
         {
             nIndex = 0;
             std::string_view sTmp(o3tl::getToken(sLine, 0, ':', nIndex));
+            std::string_view sView(sLine);
             if (sTmp == "StartHTML")
-                nStt = o3tl::toInt32(sLine.subView(nIndex));
+                nStt = o3tl::toInt32(sView.substr(nIndex));
             else if (sTmp == "EndHTML")
-                nEnd = o3tl::toInt32(sLine.subView(nIndex));
+                nEnd = o3tl::toInt32(sView.substr(nIndex));
             else if (sTmp == "StartFragment")
-                nFragStart = o3tl::toInt32(sLine.subView(nIndex));
+                nFragStart = o3tl::toInt32(sView.substr(nIndex));
             else if (sTmp == "EndFragment")
-                nFragEnd = o3tl::toInt32(sLine.subView(nIndex));
+                nFragEnd = o3tl::toInt32(sView.substr(nIndex));
             else if (sTmp == "SourceURL")
-                sBaseURL = OStringToOUString( sLine.subView(nIndex), RTL_TEXTENCODING_UTF8 );
+                sBaseURL = OStringToOUString( sView.substr(nIndex), RTL_TEXTENCODING_UTF8 );
 
             if (nEnd >= 0 && nStt >= 0 &&
                 (!sBaseURL.isEmpty() || rStream.Tell() >= o3tl::make_unsigned(nStt)))

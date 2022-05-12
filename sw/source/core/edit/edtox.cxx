@@ -316,9 +316,9 @@ void SwEditShell::ApplyAutoMark()
                             SearchAlgorithms2::ABSOLUTE,
                             '\\' );
 
+        OStringBuffer aRdLine;
         while (rStrm.good())
         {
-            OString aRdLine;
             rStrm.ReadLine( aRdLine );
 
             // # -> comment

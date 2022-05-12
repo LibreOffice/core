@@ -114,9 +114,9 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
     sal_Int32 nIndex = 0;
     bool foundOne = false;
 
+    OStringBuffer aLine;
     while (aStream.IsOpen() && !aStream.eof() && nIndex < MAX_DEFAULT_PERSONAS)
     {
-        OString aLine;
         OUString aPersonaSetting, aPreviewFile, aName;
         sal_Int32 nParseIndex = 0;
 

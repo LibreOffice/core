@@ -25,6 +25,7 @@
 #include <tools/ref.hxx>
 #include <vcl/errcode.hxx>
 #include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 #include <string_view>
@@ -293,6 +294,7 @@ public:
               @endcode
               causing endless loops ...
     */
+    bool            ReadLine( OStringBuffer& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
     bool            ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
     bool            WriteLine( std::string_view rStr );
 

@@ -39,6 +39,7 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
@@ -588,7 +589,7 @@ void ImplImageTree::loadImageLinks()
 
 void ImplImageTree::parseLinkFile(std::shared_ptr<SvStream> const & xStream)
 {
-    OString aLine;
+    OStringBuffer aLine;
     OUString aLink, aOriginal;
     int nLineNo = 0;
     while (xStream->ReadLine(aLine))

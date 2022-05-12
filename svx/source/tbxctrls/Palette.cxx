@@ -172,7 +172,7 @@ void PaletteASE::LoadPalette()
 
 // PaletteGPL ------------------------------------------------------------------
 
-static OString lcl_getToken(const OString& rStr, sal_Int32& index);
+static OString lcl_getToken(OStringBuffer& rStr, sal_Int32& index);
 
 PaletteGPL::PaletteGPL( const OUString &rFPath, const OUString &rFName ) :
     mbLoadedPalette( false ),
@@ -254,7 +254,7 @@ void PaletteGPL::LoadPalette()
 
     if( !mbValidPalette ) return;
 
-    OString aLine;
+    OStringBuffer aLine;
     do {
         if (aLine[0] != '#' && aLine[0] != '\n')
         {
@@ -274,9 +274,9 @@ void PaletteGPL::LoadPalette()
             if(token.isEmpty()) continue;
             sal_Int32 b = token.toInt32();
 
-            OString name;
+            std::string_view name;
             if(nIndex != -1)
-                name = aLine.copy(nIndex);
+                name = std::string_view(aLine).substr(nIndex);
 
             maColors.emplace_back(
                 Color(r, g, b),
@@ -287,7 +287,7 @@ void PaletteGPL::LoadPalette()
 
 // finds first token in rStr from index, separated by whitespace
 // returns position of next token in index
-static OString lcl_getToken(const OString& rStr, sal_Int32& index)
+static OString lcl_getToken(OStringBuffer& rStr, sal_Int32& index)
 {
     sal_Int32 substart, toklen = 0;
     OUString aWhitespaceChars( " \n\t" );
@@ -317,7 +317,7 @@ static OString lcl_getToken(const OString& rStr, sal_Int32& index)
     if(index == rStr.getLength())
         index = -1;
 
-    return rStr.copy(substart, toklen);
+    return OString(std::string_view(rStr).substr(substart, toklen));
 }
 
 // PaletteSOC ------------------------------------------------------------------
