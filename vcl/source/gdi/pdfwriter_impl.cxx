@@ -4170,20 +4170,23 @@ bool PDFWriterImpl::emitWidgetAnnotations()
 
         if( rWidget.m_eType == PDFWriter::CheckBox )
         {
-            auto app_it = rWidget.m_aAppearances.find( "N" );
-            if( app_it != rWidget.m_aAppearances.end() )
+            if ( !rWidget.m_aOnValue.isEmpty() )
             {
-                auto stream_it = app_it->second.find( "Yes" );
-                if( stream_it != app_it->second.end() )
+                auto app_it = rWidget.m_aAppearances.find( "N" );
+                if( app_it != rWidget.m_aAppearances.end() )
                 {
-                    SvMemoryStream* pStream = stream_it->second;
-                    app_it->second.erase( stream_it );
-                    OStringBuffer aBuf( rWidget.m_aOnValue.getLength()*2 );
-                    appendName( rWidget.m_aOnValue, aBuf );
-                    (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
+                    auto stream_it = app_it->second.find( "Yes" );
+                    if( stream_it != app_it->second.end() )
+                    {
+                        SvMemoryStream* pStream = stream_it->second;
+                        app_it->second.erase( stream_it );
+                        OStringBuffer aBuf( rWidget.m_aOnValue.getLength()*2 );
+                        appendName( rWidget.m_aOnValue, aBuf );
+                        (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
+                    }
+                    else
+                        SAL_INFO("vcl.pdfwriter", "error: CheckBox without \"Yes\" stream" );
                 }
-                else
-                    SAL_INFO("vcl.pdfwriter", "error: CheckBox without \"Yes\" stream" );
             }
         }
 
@@ -10715,20 +10718,23 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
         for (auto const& nKidIndex : rGroupWidget.m_aKidsIndex)
         {
             PDFWidget& rKid = m_aWidgets[nKidIndex];
-            auto app_it = rKid.m_aAppearances.find( "N" );
-            if( app_it != rKid.m_aAppearances.end() )
+            if ( !rKid.m_aOnValue.isEmpty() )
             {
-                auto stream_it = app_it->second.find( "Yes" );
-                if( stream_it != app_it->second.end() )
+                auto app_it = rKid.m_aAppearances.find( "N" );
+                if( app_it != rKid.m_aAppearances.end() )
                 {
-                    SvMemoryStream* pStream = stream_it->second;
-                    app_it->second.erase( stream_it );
-                    OStringBuffer aBuf( rKid.m_aOnValue.getLength()*2 );
-                    appendName( rKid.m_aOnValue, aBuf );
-                    (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
+                    auto stream_it = app_it->second.find( "Yes" );
+                    if( stream_it != app_it->second.end() )
+                    {
+                        SvMemoryStream* pStream = stream_it->second;
+                        app_it->second.erase( stream_it );
+                        OStringBuffer aBuf( rKid.m_aOnValue.getLength()*2 );
+                        appendName( rKid.m_aOnValue, aBuf );
+                        (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
+                    }
+                    else
+                        SAL_INFO("vcl.pdfwriter", "error: RadioButton without \"Yes\" stream" );
                 }
-                else
-                    SAL_INFO("vcl.pdfwriter", "error: RadioButton without \"Yes\" stream" );
             }
             // update selected radio button
             if( rKid.m_aValue != "Off" )
