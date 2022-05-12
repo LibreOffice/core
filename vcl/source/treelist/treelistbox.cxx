@@ -1494,13 +1494,11 @@ void SvTreeListBox::SetTabs()
 
 void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr)
 {
-    if( nTreeFlags & SvTreeFlags::CHKBTN )
-    {
+    if (nTreeFlags & SvTreeFlags::CHKBTN)
         pEntry->AddItem(std::make_unique<SvLBoxButton>(pCheckButtonData));
-    }
 
-    const Image& rDefColBmp = pImpl->GetDefaultEntryColBmp();
-    const Image& rDefExpBmp = pImpl->GetDefaultEntryExpBmp();
+    const Image& rDefColBmp = GetDefaultCollapsedNodeImage();
+    const Image& rDefExpBmp = GetDefaultExpandedNodeImage();
     pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(rDefColBmp, rDefExpBmp, mbContextBmpExpanded));
 
     pEntry->AddItem(std::make_unique<SvLBoxString>(rStr));
