@@ -18,13 +18,17 @@
   </Type>
   <Type Name="_rtl_uString">
     <DisplayString Condition="length == 0">empty</DisplayString>
-    <DisplayString>{buffer,[length]su}</DisplayString>
-    <StringView>buffer,[length]su</StringView>
+    <DisplayString>u"{buffer,[length]sub}"</DisplayString>
+    <StringView>buffer,[length]sub</StringView>
   </Type>
   <Type Name="_rtl_String">
     <DisplayString Condition="length == 0">empty</DisplayString>
     <DisplayString>{buffer,[length]s}</DisplayString>
     <StringView>buffer,[length]s</StringView>
+  </Type>
+  <Type Name="rtl::OUStringLiteral &lt; * &gt;">
+    <DisplayString>{str}</DisplayString>
+    <StringView>str</StringView>
   </Type>
   <Type Name="_uno_Any">
     <!--
