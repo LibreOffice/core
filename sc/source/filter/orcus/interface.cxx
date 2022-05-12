@@ -1310,8 +1310,10 @@ ScOrcusStyles::ScOrcusStyles( ScOrcusFactory& rFactory, bool bSkipDefaultStyles 
     mrFactory(rFactory)
 {
     ScDocument& rDoc = rFactory.getDoc().getDoc();
-    if (!bSkipDefaultStyles && !rDoc.GetStyleSheetPool()->HasStandardStyles())
-        rDoc.GetStyleSheetPool()->CreateStandardStyles();
+    if (!bSkipDefaultStyles)
+        if (ScStyleSheetPool* pPool = rDoc.GetStyleSheetPool())
+            if(!pPool->HasStandardStyles())
+                pPool->CreateStandardStyles();
 }
 
 /*

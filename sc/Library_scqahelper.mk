@@ -47,6 +47,7 @@ $(eval $(call gb_Library_use_libraries,scqahelper,\
 	editeng \
 	for \
 	sal \
+    salhelper \
 	sc \
 	sfx \
 	sot \

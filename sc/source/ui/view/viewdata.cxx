@@ -1266,8 +1266,9 @@ bool ScViewData::IsMultiMarked() const
     return (eType & SC_MARK_SIMPLE) != SC_MARK_SIMPLE;
 }
 
-bool ScViewData::SelectionForbidsPaste( ScDocument* pClipDoc )
+bool ScViewData::SelectionForbidsPaste( const ScDocumentRef& pClipDoc )
 {
+    ScDocumentRef pRealClipDoc(pClipDoc);
     if (!pClipDoc)
     {
         // Same as checkDestRanges() in sc/source/ui/view/cellsh.cxx but
@@ -1283,13 +1284,13 @@ bool ScViewData::SelectionForbidsPaste( ScDocument* pClipDoc )
             // Foreign content does not get repeatedly replicated.
             return false;
 
-        pClipDoc = pOwnClip->GetDocument();
-        if (!pClipDoc)
+        pRealClipDoc = pOwnClip->GetDocument();
+        if (!pRealClipDoc)
             // No clipdoc doesn't mean paste would be forbidden.
             return false;
     }
 
-    const ScRange aSrcRange = pClipDoc->GetClipParam().getWholeRange();
+    const ScRange aSrcRange = pRealClipDoc->GetClipParam().getWholeRange();
     const SCROW nRowSize = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
     const SCCOL nColSize = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
 

@@ -1242,7 +1242,7 @@ private:
 
 bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
                             SCCOL nEndCol,   SCTAB nEndTab,
-                            SCROW nStartRow, SCSIZE nSize, ScDocument* pRefUndoDoc,
+                            SCROW nStartRow, SCSIZE nSize, const ScDocumentRef& pRefUndoDoc,
                             const ScMarkData* pTabMark )
 {
     SCTAB i;
@@ -1365,7 +1365,7 @@ bool ScDocument::InsertRow( const ScRange& rRange )
 void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                             SCCOL nEndCol,   SCTAB nEndTab,
                             SCROW nStartRow, SCSIZE nSize,
-                            ScDocument* pRefUndoDoc, bool* pUndoOutline,
+                            const ScDocumentRef& pRefUndoDoc, bool* pUndoOutline,
                             const ScMarkData* pTabMark )
 {
     SCTAB i;
@@ -1496,7 +1496,7 @@ bool ScDocument::CanInsertCol( const ScRange& rRange ) const
 
 bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
                             SCROW nEndRow,   SCTAB nEndTab,
-                            SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc,
+                            SCCOL nStartCol, SCSIZE nSize, const ScDocumentRef& pRefUndoDoc,
                             const ScMarkData* pTabMark )
 {
     SCTAB i;
@@ -1588,7 +1588,7 @@ bool ScDocument::InsertCol( const ScRange& rRange )
 }
 
 void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTAB nEndTab,
-                                SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc,
+                                SCCOL nStartCol, SCSIZE nSize, const ScDocumentRef& pRefUndoDoc,
                                 bool* pUndoOutline, const ScMarkData* pTabMark )
 {
     SCTAB i;
@@ -1969,7 +1969,7 @@ void ScDocument::InitUndoSelected(const ScDocument& rSrcDoc, const ScMarkData& r
     {
         Clear();
 
-        SharePooledResources(&rSrcDoc);
+        SharePooledResources(rSrcDoc);
 
         for (SCTAB nTab = 0; nTab <= rTabSelection.GetLastSelected(); nTab++)
             if ( rTabSelection.GetTableSelect( nTab ) )
@@ -2006,7 +2006,7 @@ void ScDocument::InitUndo( const ScDocument& rSrcDoc, SCTAB nTab1, SCTAB nTab2,
     Clear();
 
     // Undo document shares its pooled resources with the source document.
-    SharePooledResources(&rSrcDoc);
+    SharePooledResources(rSrcDoc);
 
     if (rSrcDoc.mpShell->GetMedium())
         maFileURL = rSrcDoc.mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
@@ -2162,7 +2162,7 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
 }
 
 void ScDocument::CopyToClip(const ScClipParam& rClipParam,
-                            ScDocument* pClipDoc, const ScMarkData* pMarks,
+                            const ScDocumentRef& pClipDoc, const ScMarkData* pMarks,
                             bool bKeepScenarioFlags, bool bIncludeObjects )
 {
     OSL_ENSURE( pMarks, "CopyToClip: ScMarkData fails" );
@@ -2170,22 +2170,23 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     if (bIsClip)
         return;
 
+    ScDocumentRef pRealClipDoc(pClipDoc);
     if (!pClipDoc)
     {
         SAL_WARN("sc", "CopyToClip: no ClipDoc");
-        pClipDoc = ScModule::GetClipDoc();
+        pRealClipDoc = ScModule::GetClipDoc();
     }
 
     if (mpShell->GetMedium())
     {
-        pClipDoc->maFileURL = mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+        pRealClipDoc->maFileURL = mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
         // for unsaved files use the title name and adjust during save of file
-        if (pClipDoc->maFileURL.isEmpty())
-            pClipDoc->maFileURL = mpShell->GetName();
+        if (pRealClipDoc->maFileURL.isEmpty())
+            pRealClipDoc->maFileURL = mpShell->GetName();
     }
     else
     {
-        pClipDoc->maFileURL = mpShell->GetName();
+        pRealClipDoc->maFileURL = mpShell->GetName();
     }
 
     //init maTabNames
@@ -2194,43 +2195,43 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
         if( rxTab )
         {
             OUString aTabName = rxTab->GetName();
-            pClipDoc->maTabNames.push_back(aTabName);
+            pRealClipDoc->maTabNames.push_back(aTabName);
         }
         else
-            pClipDoc->maTabNames.emplace_back();
+            pRealClipDoc->maTabNames.emplace_back();
     }
 
-    pClipDoc->aDocName = aDocName;
-    pClipDoc->SetClipParam(rClipParam);
+    pRealClipDoc->aDocName = aDocName;
+    pRealClipDoc->SetClipParam(rClipParam);
     ScRange aClipRange = rClipParam.getWholeRange();
     SCTAB nEndTab =  static_cast<SCTAB>(maTabs.size());
 
-    pClipDoc->ResetClip(this, pMarks);
+    pRealClipDoc->ResetClip(*this, pMarks);
 
-    sc::CopyToClipContext aCxt(*pClipDoc, bKeepScenarioFlags);
-    CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks);
+    sc::CopyToClipContext aCxt(*pRealClipDoc, bKeepScenarioFlags);
+    CopyRangeNamesToClip(pRealClipDoc, aClipRange, pMarks);
 
     for (SCTAB i = 0; i < nEndTab; ++i)
     {
-        if (!maTabs[i] || i >= static_cast<SCTAB>(pClipDoc->maTabs.size()) || !pClipDoc->maTabs[i])
+        if (!maTabs[i] || i >= static_cast<SCTAB>(pRealClipDoc->maTabs.size()) || !pRealClipDoc->maTabs[i])
             continue;
 
         if ( pMarks && !pMarks->GetTableSelect(i) )
             continue;
 
-        maTabs[i]->CopyToClip(aCxt, rClipParam.maRanges, pClipDoc->maTabs[i].get());
+        maTabs[i]->CopyToClip(aCxt, rClipParam.maRanges, pRealClipDoc->maTabs[i].get());
 
         if (mpDrawLayer && bIncludeObjects)
         {
             //  also copy drawing objects
             tools::Rectangle aObjRect = GetMMRect(
                 aClipRange.aStart.Col(), aClipRange.aStart.Row(), aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), i);
-            mpDrawLayer->CopyToClip(pClipDoc, i, aObjRect);
+            mpDrawLayer->CopyToClip(pRealClipDoc, i, aObjRect);
         }
     }
 
     // Make sure to mark overlapped cells.
-    pClipDoc->ExtendMerge(aClipRange, true);
+    pRealClipDoc->ExtendMerge(aClipRange, true);
 }
 
 void ScDocument::CopyStaticToDocument(const ScRange& rSrcRange, SCTAB nDestTab, ScDocument& rDestDoc)
@@ -2262,27 +2263,28 @@ void ScDocument::CopyCellToDocument( const ScAddress& rSrcPos, const ScAddress& 
 
 void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
                                 SCCOL nCol2, SCROW nRow2,
-                                SCTAB nTab, ScDocument* pClipDoc)
+                                SCTAB nTab, const ScDocumentRef& pClipDoc)
 {
     if (bIsClip)
         return;
 
+    ScDocumentRef pRealClipDoc(pClipDoc);
     if (!pClipDoc)
     {
         SAL_WARN("sc", "CopyTabToClip: no ClipDoc");
-        pClipDoc = ScModule::GetClipDoc();
+        pRealClipDoc = ScModule::GetClipDoc();
     }
 
     if (mpShell->GetMedium())
     {
-        pClipDoc->maFileURL = mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+        pRealClipDoc->maFileURL = mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
         // for unsaved files use the title name and adjust during save of file
-        if (pClipDoc->maFileURL.isEmpty())
-            pClipDoc->maFileURL = mpShell->GetName();
+        if (pRealClipDoc->maFileURL.isEmpty())
+            pRealClipDoc->maFileURL = mpShell->GetName();
     }
     else
     {
-        pClipDoc->maFileURL = mpShell->GetName();
+        pRealClipDoc->maFileURL = mpShell->GetName();
     }
 
     //init maTabNames
@@ -2291,30 +2293,30 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
         if( rxTab )
         {
             OUString aTabName = rxTab->GetName();
-            pClipDoc->maTabNames.push_back(aTabName);
+            pRealClipDoc->maTabNames.push_back(aTabName);
         }
         else
-            pClipDoc->maTabNames.emplace_back();
+            pRealClipDoc->maTabNames.emplace_back();
     }
 
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
 
-    ScClipParam& rClipParam = pClipDoc->GetClipParam();
-    pClipDoc->aDocName = aDocName;
+    ScClipParam& rClipParam = pRealClipDoc->GetClipParam();
+    pRealClipDoc->aDocName = aDocName;
     rClipParam.maRanges.RemoveAll();
     rClipParam.maRanges.push_back(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
-    pClipDoc->ResetClip( this, nTab );
+    pRealClipDoc->ResetClip( *this, nTab );
 
-    sc::CopyToClipContext aCxt(*pClipDoc, false);
-    if (nTab < static_cast<SCTAB>(maTabs.size()) && nTab < static_cast<SCTAB>(pClipDoc->maTabs.size()))
-        if (maTabs[nTab] && pClipDoc->maTabs[nTab])
-            maTabs[nTab]->CopyToClip(aCxt, nCol1, nRow1, nCol2, nRow2, pClipDoc->maTabs[nTab].get());
+    sc::CopyToClipContext aCxt(*pRealClipDoc, false);
+    if (nTab < static_cast<SCTAB>(maTabs.size()) && nTab < static_cast<SCTAB>(pRealClipDoc->maTabs.size()))
+        if (maTabs[nTab] && pRealClipDoc->maTabs[nTab])
+            maTabs[nTab]->CopyToClip(aCxt, nCol1, nRow1, nCol2, nRow2, pRealClipDoc->maTabs[nTab].get());
 
-    pClipDoc->GetClipParam().mbCutMode = false;
+    pRealClipDoc->GetClipParam().mbCutMode = false;
 }
 
-void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags, bool bAsLink,
+void ScDocument::TransposeClip(const ScDocumentRef& pTransClip, InsertDeleteFlags nFlags, bool bAsLink,
                                bool bIncludeFiltered)
 {
     OSL_ENSURE( bIsClip && pTransClip && pTransClip->bIsClip,
@@ -2323,7 +2325,7 @@ void ScDocument::TransposeClip(ScDocument* pTransClip, InsertDeleteFlags nFlags,
     // initialize
     // -> pTransClip has to be deleted before the original document!
 
-    pTransClip->ResetClip(this, nullptr);     // all
+    pTransClip->ResetClip(*this, nullptr);     // all
 
     // Take over range
 
@@ -2445,7 +2447,7 @@ void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName,
 
 }
 
-void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks)
+void ScDocument::CopyRangeNamesToClip(const ScDocumentRef& pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks)
 {
     if (!pRangeName || pRangeName->empty())
         return;
@@ -2842,25 +2844,26 @@ public:
 
 void ScDocument::CopyFromClip(
     const ScRange& rDestRange, const ScMarkData& rMark, InsertDeleteFlags nInsFlag,
-    ScDocument* pRefUndoDoc, ScDocument* pClipDoc, bool bResetCut,
+    const ScDocumentRef& pRefUndoDoc, const ScDocumentRef& pClipDoc, bool bResetCut,
     bool bAsLink, bool bIncludeFiltered, bool bSkipEmptyCells,
     const ScRangeList * pDestRanges )
 {
     if (bIsClip)
         return;
 
+    ScDocumentRef pRealClipDoc(pClipDoc);
     if (!pClipDoc)
     {
         OSL_FAIL("CopyFromClip: no ClipDoc");
-        pClipDoc = ScModule::GetClipDoc();
+        pRealClipDoc = ScModule::GetClipDoc();
     }
 
-    if (!pClipDoc->bIsClip || !pClipDoc->GetTableCount())
+    if (!pRealClipDoc->bIsClip || !pRealClipDoc->GetTableCount())
         return;
 
     sc::AutoCalcSwitch aACSwitch(*this, false); // temporarily turn off auto calc.
 
-    NumFmtMergeHandler aNumFmtMergeHdl(*this, *pClipDoc);
+    NumFmtMergeHandler aNumFmtMergeHdl(*this, *pRealClipDoc);
 
     SCCOL nAllCol1 = rDestRange.aStart.Col();
     SCROW nAllRow1 = rDestRange.aStart.Row();
@@ -2869,13 +2872,13 @@ void ScDocument::CopyFromClip(
 
     SCCOL nXw = 0;
     SCROW nYw = 0;
-    ScRange aClipRange = pClipDoc->GetClipParam().getWholeRange();
-    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(pClipDoc->maTabs.size()); nTab++)    // find largest merge overlap
-        if (pClipDoc->maTabs[nTab])                   // all sheets of the clipboard content
+    ScRange aClipRange = pRealClipDoc->GetClipParam().getWholeRange();
+    for (SCTAB nTab = 0; nTab < static_cast<SCTAB>(pRealClipDoc->maTabs.size()); nTab++)    // find largest merge overlap
+        if (pRealClipDoc->maTabs[nTab])                   // all sheets of the clipboard content
         {
             SCCOL nThisEndX = aClipRange.aEnd.Col();
             SCROW nThisEndY = aClipRange.aEnd.Row();
-            pClipDoc->ExtendMerge( aClipRange.aStart.Col(),
+            pRealClipDoc->ExtendMerge( aClipRange.aStart.Col(),
                                     aClipRange.aStart.Row(),
                                     nThisEndX, nThisEndY, nTab );
             // only extra value from ExtendMerge
@@ -2889,7 +2892,7 @@ void ScDocument::CopyFromClip(
 
     SCCOL nDestAddX;
     SCROW nDestAddY;
-    pClipDoc->GetClipArea( nDestAddX, nDestAddY, bIncludeFiltered );
+    pRealClipDoc->GetClipArea( nDestAddX, nDestAddY, bIncludeFiltered );
     nXw = sal::static_int_cast<SCCOL>( nXw + nDestAddX );
     nYw = sal::static_int_cast<SCROW>( nYw + nDestAddY );   // ClipArea, plus ExtendMerge value
 
@@ -2909,7 +2912,7 @@ void ScDocument::CopyFromClip(
     if (nInsFlag & InsertDeleteFlags::ATTRIB)
         nDelFlag |= InsertDeleteFlags::ATTRIB;
 
-    sc::CopyFromClipContext aCxt(*this, pRefUndoDoc, pClipDoc, nInsFlag, bAsLink, bSkipEmptyCells);
+    sc::CopyFromClipContext aCxt(*this, pRefUndoDoc, pRealClipDoc, nInsFlag, bAsLink, bSkipEmptyCells);
     std::pair<SCTAB,SCTAB> aTabRanges = getMarkedTableRange(maTabs, rMark);
     aCxt.setTabRange(aTabRanges.first, aTabRanges.second);
     aCxt.setDeleteFlag(nDelFlag);
@@ -3048,11 +3051,11 @@ void ScDocument::CopyFromClip(
     }
 
     if (bResetCut)
-        pClipDoc->GetClipParam().mbCutMode = false;
+        pRealClipDoc->GetClipParam().mbCutMode = false;
 }
 
 void ScDocument::CopyMultiRangeFromClip(const ScAddress& rDestPos, const ScMarkData& rMark,
-                                        InsertDeleteFlags nInsFlag, ScDocument* pClipDoc,
+                                        InsertDeleteFlags nInsFlag, const ScDocumentRef& pClipDoc,
                                         bool bResetCut, bool bAsLink, bool bIncludeFiltered,
                                         bool bSkipAttrForEmpty)
 {
@@ -3292,7 +3295,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
         SCROW nStartRow = rSrcArea.aStart.Row();
         SCCOL nEndCol = rSrcArea.aEnd.Col();
         SCROW nEndRow = rSrcArea.aEnd.Row();
-        ScDocumentUniquePtr pMixDoc;
+        ScDocumentRef pMixDoc;
         bool bDoMix = ( bSkipEmpty || nFunction != ScPasteFunc::NONE ) && ( nFlags & InsertDeleteFlags::CONTENTS );
 
         bool bOldAutoCalc = GetAutoCalc();
@@ -3312,7 +3315,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
                 {
                     if (!pMixDoc)
                     {
-                        pMixDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+                        pMixDoc.set(new ScDocument(SCDOCMODE_UNDO));
                         pMixDoc->InitUndo( *this, i, i );
                     }
                     else
@@ -3354,7 +3357,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
 
     if (ValidTab(nSrcTab) && nSrcTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nSrcTab])
     {
-        ScDocumentUniquePtr pMixDoc;
+        ScDocumentRef pMixDoc;
         bool bDoMix = ( bSkipEmpty || nFunction != ScPasteFunc::NONE ) && ( nFlags & InsertDeleteFlags::CONTENTS );
 
         bool bOldAutoCalc = GetAutoCalc();
@@ -3379,7 +3382,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
                 {
                     if (!pMixDoc)
                     {
-                        pMixDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+                        pMixDoc.set(new ScDocument(SCDOCMODE_UNDO));
                         pMixDoc->InitUndo( *this, i, i );
                     }
                     else
@@ -4773,7 +4776,8 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
             OSL_FAIL( "Attribute Null" );
         }
     }
-    return &mxPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
+    ScDocumentPool* pPool = GetPool();
+    return pPool ? &pPool->GetDefaultItem( nWhich ) : nullptr;
 }
 
 const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
@@ -4788,7 +4792,8 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
             OSL_FAIL( "Attribute Null" );
         }
     }
-    return &mxPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
+    ScDocumentPool* pPool = GetPool();
+    return pPool ? &pPool->GetDefaultItem( nWhich ) : nullptr;
 }
 
 const SfxPoolItem* ScDocument::GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const
@@ -6150,17 +6155,19 @@ void ScDocument::DeleteSelectionTab(
 
 ScPatternAttr* ScDocument::GetDefPattern() const
 {
-    return const_cast<ScPatternAttr*>(&mxPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN));
+    return mxPoolHelper ? const_cast<ScPatternAttr*>(
+               &mxPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN))
+                        : nullptr;
 }
 
-ScDocumentPool* ScDocument::GetPool()
+ScDocumentPool* ScDocument::GetPool() const
 {
-    return mxPoolHelper->GetDocPool();
+    return mxPoolHelper ? mxPoolHelper->GetDocPool() : nullptr;
 }
 
 ScStyleSheetPool* ScDocument::GetStyleSheetPool() const
 {
-    return mxPoolHelper->GetStylePool();
+    return mxPoolHelper ? mxPoolHelper->GetStylePool() : nullptr;
 }
 
 bool ScDocument::IsEmptyData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const
@@ -6223,7 +6230,9 @@ void ScDocument::UpdStlShtPtrsFrmNms()
 
 void ScDocument::StylesToNames()
 {
-    ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
+    ScDocumentPool* pPool = GetPool();
+    if (!pPool)
+        return;
 
     for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_PATTERN))
     {
@@ -6461,7 +6470,8 @@ bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
         const OUString & rNew = maTabs[nTab+1]->GetPageStyle();
         if ( rNew != maTabs[nTab]->GetPageStyle() )
         {
-            SfxStyleSheetBase* pStyle = mxPoolHelper->GetStylePool()->Find( rNew, SfxStyleFamily::Page );
+            ScStyleSheetPool* pPool = GetStyleSheetPool();
+            SfxStyleSheetBase* pStyle = pPool ? pPool->Find( rNew, SfxStyleFamily::Page ) : nullptr;
             if ( pStyle )
             {
                 const SfxItemSet& rSet = pStyle->GetItemSet();

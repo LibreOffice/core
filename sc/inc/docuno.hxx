@@ -53,6 +53,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <svl/itemprop.hxx>
+#include <tools/ref.hxx>
 #include <vcl/ITiledRenderable.hxx>
 
 namespace com::sun::star::chart2::data { class XDataProvider; }
@@ -137,6 +138,8 @@ public:
 
     /// create ScModelObj and set at pDocSh (SetBaseModel)
     static void             CreateAndSet(ScDocShell* pDocSh);
+    /// detach ScModelObj from destroying ScDocShell
+    static void             Detach(ScDocShell* pDocSh);
 
     ScDocument*             GetDocument() const;
     SfxObjectShell*         GetEmbeddedObject() const;
@@ -438,7 +441,7 @@ class ScTableSheetsObj final : public cppu::WeakImplHelper<
                          public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
+    tools::SvRef<ScDocShell> pDocShell;
 
     rtl::Reference<ScTableSheetObj> GetObjectByIndex_Impl(sal_Int32 nIndex) const;
     rtl::Reference<ScTableSheetObj> GetObjectByName_Impl(const OUString& aName) const;

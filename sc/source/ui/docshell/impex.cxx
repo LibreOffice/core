@@ -198,7 +198,7 @@ ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
 
 ScImportExport::~ScImportExport() COVERITY_NOEXCEPT_FALSE
 {
-    pUndoDoc.reset();
+    pUndoDoc.clear();
     pExtOptions.reset();
 }
 
@@ -248,7 +248,7 @@ bool ScImportExport::StartPaste()
     }
     if( bUndo && pDocSh && rDoc.IsUndoEnabled())
     {
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( rDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
         rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc);
     }
@@ -263,15 +263,15 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
 
     if( pUndoDoc && rDoc.IsUndoEnabled() && pDocSh )
     {
-        ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
+        ScDocumentRef pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
         pRedoDoc->InitUndo( rDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
         rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL | InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc);
         ScMarkData aDestMark(pRedoDoc->GetSheetLimits());
         aDestMark.SetMarkArea(aRange);
         pDocSh->GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoPaste>(pDocSh, aRange, aDestMark, std::move(pUndoDoc), std::move(pRedoDoc), InsertDeleteFlags::ALL, nullptr));
+            std::make_unique<ScUndoPaste>(pDocSh, aRange, aDestMark, pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, nullptr));
     }
-    pUndoDoc.reset();
+    pUndoDoc.clear();
     if( pDocSh )
     {
         if (!bHeight)
@@ -2523,7 +2523,7 @@ bool ScImportExport::Doc2Dif( SvStream& rStrm )
 bool ScImportExport::Dif2Doc( SvStream& rStrm )
 {
     SCTAB nTab = aRange.aStart.Tab();
-    ScDocumentUniquePtr pImportDoc( new ScDocument( SCDOCMODE_UNDO ) );
+    ScDocumentRef pImportDoc( new ScDocument( SCDOCMODE_UNDO ) );
     pImportDoc->InitUndo( rDoc, nTab, nTab );
 
     // for DIF in the clipboard, IBM_850 is always used

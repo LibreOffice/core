@@ -1361,12 +1361,12 @@ void ScExportTest2::testValidationCopyPaste()
     ScDocument& rSrcDoc = xDocSh->GetDocument();
 
     // Copy B1 from src doc to clip
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
     ScRange aSrcRange(1, 0, 1);
     ScClipParam aClipParam(aSrcRange, false);
     ScMarkData aMark(rSrcDoc.GetSheetLimits());
     aMark.SetMarkArea(aSrcRange);
-    rSrcDoc.CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+    rSrcDoc.CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 
     // Create second document, paste B1 from clip
     ScDocShell* pShell2
@@ -1377,7 +1377,7 @@ void ScExportTest2::testValidationCopyPaste()
     ScRange aDstRange(1, 0, 0);
     ScMarkData aMark2(rDestDoc.GetSheetLimits());
     aMark2.SetMarkArea(aDstRange);
-    rDestDoc.CopyFromClip(aDstRange, aMark2, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+    rDestDoc.CopyFromClip(aDstRange, aMark2, InsertDeleteFlags::ALL, nullptr, pClipDoc);
 
     // save as XLSX
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*pShell2, FORMAT_XLSX);

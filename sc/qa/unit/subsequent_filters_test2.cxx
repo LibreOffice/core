@@ -913,14 +913,14 @@ void ScFiltersTest2::testCopyMergedNumberFormats()
     OUString aStrC1 = rDoc.GetString(ScAddress(2, 0, 0));
     OUString aStrD1 = rDoc.GetString(ScAddress(3, 0, 0));
 
-    ScDocument aCopyDoc;
-    aCopyDoc.InsertTab(0, "CopyHere");
-    rDoc.CopyStaticToDocument(ScRange(1, 0, 0, 3, 0, 0), 0, aCopyDoc);
+    ScDocumentRef pCopyDoc(new ScDocument);
+    pCopyDoc->InsertTab(0, "CopyHere");
+    rDoc.CopyStaticToDocument(ScRange(1, 0, 0, 3, 0, 0), 0, *pCopyDoc);
 
     // Make sure the date formats are copied to the new document.
-    CPPUNIT_ASSERT_EQUAL(aStrB1, aCopyDoc.GetString(ScAddress(1, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(aStrC1, aCopyDoc.GetString(ScAddress(2, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(aStrD1, aCopyDoc.GetString(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(aStrB1, pCopyDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(aStrC1, pCopyDoc->GetString(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(aStrD1, pCopyDoc->GetString(ScAddress(3, 0, 0)));
 
     xDocSh->DoClose();
 }

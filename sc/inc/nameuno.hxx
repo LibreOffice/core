@@ -53,7 +53,7 @@ class SC_DLLPUBLIC ScNamedRangeObj final : public ::cppu::WeakImplHelper<
 {
 private:
     rtl::Reference< ScNamedRangesObj > mxParent;
-    ScDocShell*             pDocShell;
+    tools::SvRef<ScDocShell> pDocShell;
     OUString                aName;
     css::uno::Reference< css::container::XNamed > mxSheet;
 
@@ -144,7 +144,7 @@ private:
 
 protected:
 
-    ScDocShell*             pDocShell;
+    tools::SvRef<ScDocShell> pDocShell;
     /** called from the XActionLockable interface methods on initial locking */
     void            lock();
 

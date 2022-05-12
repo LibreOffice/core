@@ -142,7 +142,7 @@ void ScUndoObjData::Redo()
     }
 }
 
-ScUndoAnchorData::ScUndoAnchorData( SdrObject* pObjP, ScDocument* pDoc, SCTAB nTab ) :
+ScUndoAnchorData::ScUndoAnchorData( SdrObject* pObjP, const ScDocumentRef& pDoc, SCTAB nTab ) :
     SdrUndoObj( *pObjP ),
     mpDoc( pDoc ),
     mnTab( nTab )
@@ -211,7 +211,7 @@ static void lcl_ReverseTwipsToMM( tools::Rectangle& rRect )
     rRect = o3tl::convert(rRect, o3tl::Length::mm100, o3tl::Length::twip);
 }
 
-static ScRange lcl_getClipRangeFromClipDoc(ScDocument* pClipDoc, SCTAB nClipTab)
+static ScRange lcl_getClipRangeFromClipDoc(const ScDocumentRef& pClipDoc, SCTAB nClipTab)
 {
     if (!pClipDoc)
         return ScRange();
@@ -228,7 +228,7 @@ static ScRange lcl_getClipRangeFromClipDoc(ScDocument* pClipDoc, SCTAB nClipTab)
     return ScRange(nClipStartX, nClipStartY, nClipTab, nClipEndX, nClipEndY, nClipTab);
 }
 
-ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
+ScDrawLayer::ScDrawLayer( const ScDocumentRef& pDocument, const OUString& rName ) :
     FmFormModel(
         nullptr,
         pGlobalDrawPersist ? pGlobalDrawPersist : (pDocument ? pDocument->GetDocumentShell() : nullptr)),
@@ -694,7 +694,7 @@ bool lcl_NeedsMirrorYCorrection(const SdrObject* pObj)
            && static_cast<const SdrObjCustomShape*>(pObj)->IsMirroredY();
 }
 
-void lcl_SetLogicRectFromAnchor(SdrObject* pObj, const ScDrawObjData& rAnchor, const ScDocument* pDoc)
+void lcl_SetLogicRectFromAnchor(SdrObject* pObj, const ScDrawObjData& rAnchor, const ScDocumentRef& pDoc)
 {
     // This is only used during initialization. At that time, shape handling is always LTR. No need
     // to consider negative page.
@@ -898,7 +898,7 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
     if (bNegativePage)
         MirrorRectRTL(aRect);
 
-    rData.setShapeRect(GetDocument(), lcl_makeSafeRectangle(aRect), pObj->IsVisible());
+    rData.setShapeRect(*GetDocument(), lcl_makeSafeRectangle(aRect), pObj->IsVisible());
 }
 
 void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rData)
@@ -993,7 +993,7 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
     // Make sure maShapeRect of rNoRotatedAnchor is not empty. Method ScDrawView::Notify()
     // needs it to detect a change in object geometry. For example a 180deg rotation effects only
     // logic rect.
-    rNoRotatedAnchor.setShapeRect(GetDocument(), pObj->GetLogicRect(), true);
+    rNoRotatedAnchor.setShapeRect(*GetDocument(), pObj->GetLogicRect(), true);
 
     // Start and end addresses and offsets in rData refer to the actual snap rectangle of the
     // shape. We initialize them here based on the "full" sized object. Adaptation to reduced size
@@ -1009,11 +1009,11 @@ void ScDrawLayer::InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rDat
         pObj->SetVisible(false);
 
     // Set visibility. ToDo: Really used?
-    rNoRotatedAnchor.setShapeRect(GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
+    rNoRotatedAnchor.setShapeRect(*GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
 
     // And set maShapeRect in rData. It stores not only the current rectangles, but currently,
     // existence of maShapeRect is the flag for initialization is done.
-    rData.setShapeRect(GetDocument(), pObj->GetSnapRect(), pObj->IsVisible());
+    rData.setShapeRect(*GetDocument(), pObj->GetSnapRect(), pObj->IsVisible());
 
     pObj->getSdrModelFromSdrObject().setLock(bWasLocked);
 }
@@ -1053,7 +1053,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
     if (rData.meType == ScDrawObjData::ValidationCircle)
     {
         // Validation circle for detective.
-        rData.setShapeRect(GetDocument(), pObj->GetLogicRect());
+        rData.setShapeRect(*GetDocument(), pObj->GetLogicRect());
 
         // rData.maStart should contain the address of the be validated cell.
         tools::Rectangle aRect = GetCellRect(*GetDocument(), rData.maStart, true);
@@ -1068,7 +1068,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         {
             if (bRecording)
                 AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *pObj ) );
-            rData.setShapeRect(GetDocument(), lcl_makeSafeRectangle(aRect));
+            rData.setShapeRect(*GetDocument(), lcl_makeSafeRectangle(aRect));
             // maStart has the meaning of "to be validated cell" in a validation circle. For usual
             // drawing objects it has the meaning "left/top of logic/snap rect". Because the rectangle
             // is expanded above, SetLogicRect() will set maStart to one cell left and one cell above
@@ -1080,7 +1080,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
     }
     else if (rData.meType == ScDrawObjData::DetectiveArrow)
     {
-        rData.setShapeRect(GetDocument(), pObj->GetLogicRect());
+        rData.setShapeRect(*GetDocument(), pObj->GetLogicRect());
         basegfx::B2DPolygon aCalcPoly;
         Point aOrigStartPos(pObj->GetPoint(0));
         Point aOrigEndPos(pObj->GetPoint(1));
@@ -1107,7 +1107,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 if (bRecording)
                     AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *pObj ) );
 
-                rData.setShapeRect(GetDocument(), lcl_UpdateCalcPoly(aCalcPoly, 0, aStartPos));
+                rData.setShapeRect(*GetDocument(), lcl_UpdateCalcPoly(aCalcPoly, 0, aStartPos));
                 pObj->SetPoint( aStartPos, 0 );
             }
 
@@ -1123,7 +1123,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                     if (bRecording)
                         AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *pObj ) );
 
-                    rData.setShapeRect(GetDocument(), lcl_UpdateCalcPoly(aCalcPoly, 1, aEndPos));
+                    rData.setShapeRect(*GetDocument(), lcl_UpdateCalcPoly(aCalcPoly, 1, aEndPos));
                     pObj->SetPoint( aEndPos, 1 );
                 }
             }
@@ -1145,7 +1145,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 if (bRecording)
                     AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *pObj ) );
 
-                rData.setShapeRect(GetDocument(), lcl_UpdateCalcPoly(aCalcPoly, 1, aEndPos));
+                rData.setShapeRect(*GetDocument(), lcl_UpdateCalcPoly(aCalcPoly, 1, aEndPos));
                 pObj->SetPoint( aEndPos, 1 );
             }
 
@@ -1163,7 +1163,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                     if (bRecording)
                         AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *pObj ) );
 
-                    rData.setShapeRect(GetDocument(), lcl_UpdateCalcPoly(aCalcPoly, 0, aStartPos));
+                    rData.setShapeRect(*GetDocument(), lcl_UpdateCalcPoly(aCalcPoly, 0, aStartPos));
                     pObj->SetPoint( aStartPos, 0 );
                 }
             }
@@ -1209,7 +1209,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                     pObj->NbcResize(aNew.TopLeft(), Fraction(fXFrac), Fraction(fYFrac));
                 }
 
-                rData.setShapeRect(GetDocument(), lcl_makeSafeRectangle(rData.getShapeRect()), pObj->IsVisible());
+                rData.setShapeRect(*GetDocument(), lcl_makeSafeRectangle(rData.getShapeRect()), pObj->IsVisible());
                 if (pObj->GetObjIdentifier() == SdrObjKind::CustomShape)
                     pObj->AdjustToMaxRect(rData.getShapeRect());
                 else
@@ -1217,7 +1217,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
 
                 // The shape rectangle in the 'unrotated' anchor needs to be updated to the changed
                 // object geometry. It is used in adjustAnchoredPosition() in ScDrawView::Notify().
-                rNoRotatedAnchor.setShapeRect(pDoc, pObj->GetLogicRect(), pObj->IsVisible());
+                rNoRotatedAnchor.setShapeRect(*GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
             }
         }
         else
@@ -1228,7 +1228,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 if (bRecording)
                     AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *pObj ) );
                 pObj->SetRelativePos( aPos );
-                rNoRotatedAnchor.setShapeRect(pDoc, pObj->GetLogicRect(), pObj->IsVisible());
+                rNoRotatedAnchor.setShapeRect(*GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
             }
         }
         /*
@@ -1686,7 +1686,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
     }
 }
 
-void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const tools::Rectangle& rRange )
+void ScDrawLayer::CopyToClip( const ScDocumentRef& pClipDoc, SCTAB nTab, const tools::Rectangle& rRange )
 {
     //  copy everything in the specified range into the same page (sheet) in the clipboard doc
 
@@ -1831,7 +1831,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     SdrObjListIter aIter( pSrcPage, SdrIterMode::Flat );
     SdrObject* pOldObject = aIter.Next();
 
-    ScDocument* pClipDoc = pClipModel->GetDocument();
+    const ScDocumentRef& pClipDoc = pClipModel->GetDocument();
     //  a clipboard document and its source share the same document item pool,
     //  so the pointers can be compared to see if this is copy&paste within
     //  the same document
@@ -2072,9 +2072,9 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
     ScDrawObjData* pData = GetObjData(pObj);
     if (pData)
     {
-        pData->setShapeRect(GetDocument(), pObj->GetSnapRect(), pObj->IsVisible());
+        pData->setShapeRect(*GetDocument(), pObj->GetSnapRect(), pObj->IsVisible());
         ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData(pObj, true /*bCreate*/);
-        pNoRotatedAnchor->setShapeRect(GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
+        pNoRotatedAnchor->setShapeRect(*GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
     }
 }
 
@@ -2090,9 +2090,9 @@ void ScDrawLayer::MoveRTL(SdrObject* pObj)
     ScDrawObjData* pData = GetObjData(pObj);
     if (pData)
     {
-        pData->setShapeRect(GetDocument(), pObj->GetSnapRect(), pObj->IsVisible());
+        pData->setShapeRect(*GetDocument(), pObj->GetSnapRect(), pObj->IsVisible());
         ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData(pObj, true /*bCreate*/);
-        pNoRotatedAnchor->setShapeRect(GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
+        pNoRotatedAnchor->setShapeRect(*GetDocument(), pObj->GetLogicRect(), pObj->IsVisible());
     }
 }
 
@@ -2315,7 +2315,7 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     // absolutely necessary to set flag, ScDrawLayer::RecalcPos expects it.
     if ( ScDrawObjData* pAnchor = GetObjData( &rObj ) )
     {
-        pAnchor->setShapeRect(&rDoc, rObj.GetSnapRect());
+        pAnchor->setShapeRect(rDoc, rObj.GetSnapRect());
     }
 
     // - keep also an anchor in terms of the Logic ( untransformed ) object
@@ -2364,7 +2364,7 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     // And update maShapeRect. It is used in adjustAnchoredPosition() in ScDrawView::Notify().
     if (ScDrawObjData* pAnchor = GetNonRotatedObjData(&rObj))
     {
-        pAnchor->setShapeRect(&rDoc, rObj.GetLogicRect());
+        pAnchor->setShapeRect(rDoc, rObj.GetLogicRect());
     }
 }
 

@@ -336,10 +336,10 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
         //  initialise Undo
 
-        ScDocumentUniquePtr pUndoDoc;
+        ScDocumentRef pUndoDoc;
         if ( bAddUndo && bUndo )
         {
-            pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+            pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
             if ( bDoInsert )
             {
                 if ( nNewEndX != nOldEndX || nNewEndY != nOldEndY )             // range changed?
@@ -371,7 +371,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
         if (nWidth > 0 && nHeight > 0)
         {
-            ScDocument aClipDoc( SCDOCMODE_CLIP );
+            ScDocumentRef pClipDoc( new ScDocument(SCDOCMODE_CLIP) );
             ScRange aNewTokenRange( aNewRange.aStart );
             for (size_t nRange = 0; nRange < aSourceRanges.size(); ++nRange)
             {
@@ -382,9 +382,9 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                 aSourceMark.SetMarkArea( rTokenRange );
 
                 ScClipParam aClipParam(rTokenRange, false);
-                rSrcDoc.CopyToClip(aClipParam, &aClipDoc, &aSourceMark, false, false);
+                rSrcDoc.CopyToClip(aClipParam, pClipDoc, &aSourceMark, false, false);
 
-                if ( aClipDoc.HasAttrib( 0,0,nSrcTab, rDoc.MaxCol(),rDoc.MaxRow(),nSrcTab,
+                if ( pClipDoc->HasAttrib( 0,0,nSrcTab, rDoc.MaxCol(),rDoc.MaxRow(),nSrcTab,
                             HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
                 {
                     //! ResetAttrib at document !!!
@@ -392,7 +392,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                     ScPatternAttr aPattern( rSrcDoc.GetPool() );
                     aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults
                     aPattern.GetItemSet().Put( ScMergeFlagAttr() );
-                    aClipDoc.ApplyPatternAreaTab( 0,0, rDoc.MaxCol(),rDoc.MaxRow(), nSrcTab, aPattern );
+                    pClipDoc->ApplyPatternAreaTab( 0,0, rDoc.MaxCol(),rDoc.MaxRow(), nSrcTab, aPattern );
                 }
 
                 aNewTokenRange.aEnd.SetCol( aNewTokenRange.aStart.Col() + (rTokenRange.aEnd.Col() - rTokenRange.aStart.Col()) );
@@ -400,7 +400,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                 ScMarkData aDestMark(rDoc.GetSheetLimits());
                 aDestMark.SelectOneTable( nDestTab );
                 aDestMark.SetMarkArea( aNewTokenRange );
-                rDoc.CopyFromClip( aNewTokenRange, aDestMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc, false );
+                rDoc.CopyFromClip( aNewTokenRange, aDestMark, InsertDeleteFlags::ALL, nullptr, pClipDoc, false );
                 aNewTokenRange.aStart.SetRow( aNewTokenRange.aEnd.Row() + 2 );
             }
         }
@@ -414,7 +414,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
         if ( bAddUndo && bUndo)
         {
-            ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
+            ScDocumentRef pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
             pRedoDoc->InitUndo( rDoc, nDestTab, nDestTab );
             rDoc.CopyToDocument(aNewRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pRedoDoc);
 
@@ -424,7 +424,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                                             aSourceArea, aOldRange, GetRefreshDelaySeconds(),
                                             aNewUrl, rNewFilter, aNewOpt,
                                             rNewArea, aNewRange, nNewRefreshDelaySeconds,
-                                            std::move(pUndoDoc), std::move(pRedoDoc), bDoInsert ) );
+                                            pUndoDoc, pRedoDoc, bDoInsert ) );
         }
 
         //  remember new settings

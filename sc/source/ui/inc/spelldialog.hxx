@@ -74,8 +74,8 @@ private:
     typedef ::std::unique_ptr< ScSelectionState >         ScSelectionStatePtr;
 
     ScConvEnginePtr     mxEngine;
-    ScDocumentUniquePtr mxUndoDoc;
-    ScDocumentUniquePtr mxRedoDoc;
+    ScDocumentRef mxUndoDoc;
+    ScDocumentRef mxRedoDoc;
     ScSelectionStatePtr mxOldSel;           /// For cursor position in selection
     tools::SvRef< ScRangeList >
                         mxOldRangeList;     /// Original selection range for comparison.

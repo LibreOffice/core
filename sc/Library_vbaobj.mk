@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,vbaobj,\
 	for \
 	msfilter \
 	sal \
+    salhelper \
 	sb \
 	sc \
 	sfx \

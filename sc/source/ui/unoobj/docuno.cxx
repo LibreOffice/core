@@ -372,6 +372,15 @@ void ScModelObj::CreateAndSet(ScDocShell* pDocSh)
         pDocSh->SetBaseModel( new ScModelObj(pDocSh) );
 }
 
+// static
+void ScModelObj::Detach(ScDocShell* pDocSh)
+{
+    auto xModel3 = pDocSh->GetBaseModel();
+    if (ScModelObj* pScModelObj = dynamic_cast<ScModelObj*>(xModel3.get()))
+        if (pScModelObj->pDocShell == pDocSh)
+            pScModelObj->pDocShell = nullptr;
+}
+
 SdrModel& ScModelObj::getSdrModelFromUnoModel() const
 {
     ScDocument& rDoc(pDocShell->GetDocument());
@@ -1307,6 +1316,10 @@ void SAL_CALL ScModelObj::acquire() noexcept
 
 void SAL_CALL ScModelObj::release() noexcept
 {
+    // Not only ScModelObj own dtor needs the guard, but also parent dtors
+    // that may call SfxBroadcaster::RemoveListener
+    SolarMutexGuard g;
+
     SfxBaseModel::release();
 }
 
@@ -3612,7 +3625,10 @@ ScTableSheetsObj::~ScTableSheetsObj()
     SolarMutexGuard g;
 
     if (pDocShell)
+    {
         pDocShell->GetDocument().RemoveUnoObject(*this);
+        pDocShell.clear();
+    }
 }
 
 void ScTableSheetsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -3630,7 +3646,7 @@ void ScTableSheetsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 rtl::Reference<ScTableSheetObj> ScTableSheetsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
 {
     if ( pDocShell && nIndex >= 0 && nIndex < pDocShell->GetDocument().GetTableCount() )
-        return new ScTableSheetObj( pDocShell, static_cast<SCTAB>(nIndex) );
+        return new ScTableSheetObj( pDocShell.get(), static_cast<SCTAB>(nIndex));
 
     return nullptr;
 }
@@ -3641,7 +3657,7 @@ rtl::Reference<ScTableSheetObj> ScTableSheetsObj::GetObjectByName_Impl(const OUS
     {
         SCTAB nIndex;
         if ( pDocShell->GetDocument().GetTable( aName, nIndex ) )
-            return new ScTableSheetObj( pDocShell, nIndex );
+            return new ScTableSheetObj( pDocShell.get(), nIndex );
     }
     return nullptr;
 }
@@ -3727,7 +3743,7 @@ void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const uno::
                 bDone = pDocShell->GetDocFunc().InsertTable( nPosition, aName,
                                                              true, true );
                 if (bDone)
-                    pSheetObj->InitInsertSheet( pDocShell, nPosition );
+                    pSheetObj->InitInsertSheet( pDocShell.get(), nPosition );
                 //  set document and new range in the object
             }
             else
@@ -3774,7 +3790,7 @@ void SAL_CALL ScTableSheetsObj::replaceByName( const OUString& aName, const uno:
                     //  InsertTable can't really go wrong now
                     bDone = pDocShell->GetDocFunc().InsertTable( nPosition, aName, true, true );
                     if (bDone)
-                        pSheetObj->InitInsertSheet( pDocShell, nPosition );
+                        pSheetObj->InitInsertSheet( pDocShell.get(), nPosition );
                 }
 
             }
@@ -3882,7 +3898,7 @@ uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj:
     for( size_t nIndex = 0; nIndex < nCount; nIndex++ )
     {
         const ScRange & rRange = aRangeList[ nIndex ];
-        pRet[nIndex] = new ScCellRangeObj(pDocShell, rRange);
+        pRet[nIndex] = new ScCellRangeObj(pDocShell.get(), rRange);
     }
 
     return xRet;

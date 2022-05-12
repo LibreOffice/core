@@ -1037,9 +1037,9 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
 {
     ScDocument& rDoc = pDocShell->GetDocument();
     bool bUndo(rDoc.IsUndoEnabled());
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     if (bUndo)
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
     size_t nCount = rRanges.size();
     for (size_t i = 0; i < nCount; ++i)
     {
@@ -1066,7 +1066,7 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
     if (bUndo)
     {
         pDocShell->GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoBorder>( pDocShell, rRanges, std::move(pUndoDoc), rOuter, rInner ) );
+                std::make_unique<ScUndoBorder>( pDocShell, rRanges, pUndoDoc, rOuter, rInner ) );
     }
 
     for (size_t i = 0; i < nCount; ++i )
@@ -1107,10 +1107,10 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
         return false;
     }
 
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     if ( bUndo )
     {
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( rDoc, nTab, nTab );
         rDoc.CopyToDocument(rRange, InsertDeleteFlags::CONTENTS|InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc);
     }
@@ -1212,7 +1212,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoPaste>(
                 &rDocShell, ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab),
-                aDestMark, std::move(pUndoDoc), nullptr, InsertDeleteFlags::CONTENTS, nullptr, false));
+                aDestMark, pUndoDoc, nullptr, InsertDeleteFlags::CONTENTS, nullptr, false));
     }
 
     if (!bHeight)
@@ -1252,10 +1252,10 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
         return false;
     }
 
-    ScDocumentUniquePtr pUndoDoc;
+    ScDocumentRef pUndoDoc;
     if ( bUndo )
     {
-        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( rDoc, nTab, nTab );
         rDoc.CopyToDocument(rRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc);
     }
@@ -1309,7 +1309,7 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoPaste>( &rDocShell,
                 ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab), aDestMark,
-                std::move(pUndoDoc), nullptr, InsertDeleteFlags::CONTENTS, nullptr, false));
+                pUndoDoc, nullptr, InsertDeleteFlags::CONTENTS, nullptr, false));
     }
 
     if (!bHeight)
@@ -1427,7 +1427,10 @@ ScCellRangesBase::~ScCellRangesBase()
     //  during ForgetCurrentAttrs
 
     if (pDocShell)
+    {
         pDocShell->GetDocument().RemoveUnoObject(*this);
+        pDocShell.clear();
+    }
 
     ForgetCurrentAttrs();
     ForgetMarkData();
@@ -2236,7 +2239,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
                         SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
                         ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder );
 
-                        ScHelperFunctions::ApplyBorder( pDocShell, aRanges, aOuter, aInner );   //! docfunc
+                        ScHelperFunctions::ApplyBorder( pDocShell.get(), aRanges, aOuter, aInner);   //! docfunc
                     }
                 }
                 break;
@@ -2249,7 +2252,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
                         SvxBoxInfoItem aInner(ATTR_BORDER_INNER);
                         ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder2 );
 
-                        ScHelperFunctions::ApplyBorder( pDocShell, aRanges, aOuter, aInner );   //! docfunc
+                        ScHelperFunctions::ApplyBorder( pDocShell.get(), aRanges, aOuter, aInner );   //! docfunc
                     }
                 }
                 break;
@@ -3334,7 +3337,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryVisibleC
 
         ScRangeList aNewRanges;
         aMarkData.FillRangeListWithMarks( &aNewRanges, false );
-        return new ScCellRangesObj( pDocShell, aNewRanges );
+        return new ScCellRangesObj( pDocShell.get(), aNewRanges );
     }
 
     return nullptr;
@@ -3368,7 +3371,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
         //if (aMarkData.HasAnyMultiMarks()) // #i20044# should be set for all empty range
         aMarkData.FillRangeListWithMarks( &aNewRanges, false );
 
-        return new ScCellRangesObj( pDocShell, aNewRanges );    // aNewRanges can be empty
+        return new ScCellRangesObj( pDocShell.get(), aNewRanges );    // aNewRanges can be empty
     }
 
     return nullptr;
@@ -3457,7 +3460,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
         if (aMarkData.IsMultiMarked())
             aMarkData.FillRangeListWithMarks( &aNewRanges, false );
 
-        return new ScCellRangesObj( pDocShell, aNewRanges );    // aNewRanges can be empty
+        return new ScCellRangesObj( pDocShell.get(), aNewRanges );    // aNewRanges can be empty
     }
 
     return nullptr;
@@ -3511,7 +3514,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryFormulaC
         if (aMarkData.IsMultiMarked())
             aMarkData.FillRangeListWithMarks( &aNewRanges, false );
 
-        return new ScCellRangesObj( pDocShell, aNewRanges );    // aNewRanges can be empty
+        return new ScCellRangesObj( pDocShell.get(), aNewRanges );    // aNewRanges can be empty
     }
 
     return nullptr;
@@ -3596,7 +3599,7 @@ uno::Reference<sheet::XSheetCellRanges> ScCellRangesBase::QueryDifferences_Impl(
         if (aMarkData.IsMultiMarked())
             aMarkData.FillRangeListWithMarks( &aNewRanges, false );
 
-        return new ScCellRangesObj( pDocShell, aNewRanges );    // aNewRanges can be empty
+        return new ScCellRangesObj( pDocShell.get(), aNewRanges );    // aNewRanges can be empty
     }
     return nullptr;
 }
@@ -3635,7 +3638,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryIntersec
                                 std::min( aTemp.aEnd.Tab(), aMask.aEnd.Tab() ) ) );
     }
 
-    return new ScCellRangesObj( pDocShell, aNew );  // can be empty
+    return new ScCellRangesObj( pDocShell.get(), aNew );  // can be empty
 }
 
 // XFormulaQuery
@@ -3682,7 +3685,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPreceden
         }
         while ( bRecursive && bFound );
 
-        return new ScCellRangesObj( pDocShell, aNewRanges );
+        return new ScCellRangesObj( pDocShell.get(), aNewRanges );
     }
 
     return nullptr;
@@ -3743,7 +3746,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
         }
         while ( bRecursive && bFound );
 
-        return new ScCellRangesObj( pDocShell, aNewRanges );
+        return new ScCellRangesObj( pDocShell.get(), aNewRanges );
     }
 
     return nullptr;
@@ -3788,7 +3791,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                 if (bFound)
                 {
                     //  on findAll always CellRanges no matter how much has been found
-                    xRet.set(new ScCellRangesObj( pDocShell, aMatchedRanges ));
+                    xRet.set(new ScCellRangesObj( pDocShell.get(), aMatchedRanges ));
                 }
             }
         }
@@ -3834,7 +3837,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                 if (bFound)
                 {
                     ScAddress aFoundPos( nCol, nRow, nTab );
-                    xRet.set(static_cast<cppu::OWeakObject*>(new ScCellObj( pDocShell, aFoundPos )));
+                    xRet.set(static_cast<cppu::OWeakObject*>(new ScCellObj( pDocShell.get(), aFoundPos )));
                 }
             }
         }
@@ -3857,7 +3860,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScCellRangesBase::findNext(
     if ( xStartAt.is() )
     {
         ScCellRangesBase* pRangesImp = comphelper::getFromUnoTunnel<ScCellRangesBase>( xStartAt );
-        if ( pRangesImp && pRangesImp->GetDocShell() == pDocShell )
+        if ( pRangesImp && pRangesImp->GetDocShell() == pDocShell.get() )
         {
             const ScRangeList& rStartRanges = pRangesImp->GetRangeList();
             if ( rStartRanges.size() == 1 )
@@ -3918,10 +3921,10 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                     SCROW nRow = 0;
 
                     OUString aUndoStr;
-                    ScDocumentUniquePtr pUndoDoc;
+                    ScDocumentRef pUndoDoc;
                     if (bUndo)
                     {
-                        pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
+                        pUndoDoc.set(new ScDocument( SCDOCMODE_UNDO ));
                         pUndoDoc->InitUndo( rDoc, nTab, nTab );
                     }
                     for (const auto& rTab : aMark)
@@ -3940,15 +3943,15 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                     {
                         ScRangeList aMatchedRanges;
                         bFound = rDoc.SearchAndReplace(
-                            *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aUndoStr, pUndoDoc.get() );
+                            *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aUndoStr, pUndoDoc );
                     }
                     if (bFound)
                     {
                         nReplaced = pUndoDoc->GetCellCount();
 
                         pDocShell->GetUndoManager()->AddUndoAction(
-                            std::make_unique<ScUndoReplace>( pDocShell, *pUndoMark, nCol, nRow, nTab,
-                                                        aUndoStr, std::move(pUndoDoc), pSearchItem ) );
+                            std::make_unique<ScUndoReplace>( pDocShell.get(), *pUndoMark, nCol, nRow, nTab,
+                                                        aUndoStr, pUndoDoc, pSearchItem ) );
 
                         pDocShell->PostPaintGridAll();
                         pDocShell->SetDocumentModified();
@@ -6829,11 +6832,11 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks()
 
     if (bUndo)
     {
-        ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
+        ScDocumentRef pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
         pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
         rDoc.CopyToDocument(0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
         pDocSh->GetUndoManager()->AddUndoAction(
-                                std::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, std::move(pUndoDoc) ) );
+                                std::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, pUndoDoc ) );
     }
 
     rDoc.RemoveManualBreaks(nTab);

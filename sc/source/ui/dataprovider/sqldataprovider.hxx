@@ -18,13 +18,13 @@ class SQLFetchThread;
 class SQLDataProvider : public DataProvider
 {
 private:
-    ScDocument* mpDocument;
+    ScDocument& mrDocument;
     rtl::Reference<SQLFetchThread> mxSQLFetchThread;
 
-    ScDocumentUniquePtr mpDoc;
+    ScDocumentRef mpDoc;
 
 public:
-    SQLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource);
+    SQLDataProvider(ScDocument& rDoc, sc::ExternalDataSource& rDataSource);
     virtual ~SQLDataProvider() override;
 
     virtual void Import() override;

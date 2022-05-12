@@ -18,12 +18,12 @@ class XMLFetchThread;
 class XMLDataProvider : public DataProvider
 {
 private:
-    ScDocument* mpDocument;
+    ScDocument& mrDocument;
     rtl::Reference<XMLFetchThread> mxXMLFetchThread;
-    ScDocumentUniquePtr mpDoc;
+    ScDocumentRef mpDoc;
 
 public:
-    XMLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource);
+    XMLDataProvider(ScDocument& rDoc, sc::ExternalDataSource& rDataSource);
     virtual ~XMLDataProvider() override;
 
     virtual void Import() override;

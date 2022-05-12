@@ -122,7 +122,7 @@ public:
 
     void                    FillEditParaItems( SfxItemSet* pSet ) const;
 
-    ScPatternAttr*          PutInPool( ScDocument* pDestDoc, ScDocument* pSrcDoc ) const;
+    ScPatternAttr*          PutInPool( ScDocument& rDestDoc, ScDocument& rSrcDoc ) const;
 
     void                    SetStyleSheet(ScStyleSheet* pNewStyle, bool bClearDirectFormat = true);
     const ScStyleSheet*     GetStyleSheet() const  { return pStyle; }
