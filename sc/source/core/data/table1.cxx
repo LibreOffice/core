@@ -720,7 +720,7 @@ bool ScTable::GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
 
     for (i=0; i<aCol.size(); i++)               // test the data
     {
-        if (!aCol[i].IsEmptyBlock( nStartRow, nEndRow ))        //TODO: bNotes ??????
+        if (!aCol[i].IsEmptyData( nStartRow, nEndRow ))        //TODO: bNotes ??????
         {
             bFound = true;
             if (i > nMaxX)
@@ -906,7 +906,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
             if (nEnd<rDocument.MaxRow()) ++nEnd;
 
             if (rEndCol < (aCol.size()-1))
-                if (!aCol[rEndCol+1].IsEmptyBlock(nStart,nEnd))
+                if (!aCol[rEndCol+1].IsEmptyData(nStart,nEnd))
                 {
                     assert( int( blockPos.size()) == rEndCol + 1 );
                     ++rEndCol;
@@ -917,7 +917,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
                 }
 
             if (rStartCol > 0)
-                if (!aCol[rStartCol-1].IsEmptyBlock(nStart,nEnd))
+                if (!aCol[rStartCol-1].IsEmptyData(nStart,nEnd))
                 {
                     --rStartCol;
                     bChanged = true;
@@ -960,11 +960,11 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     if ( !bIncludeOld && !bOnlyDown )
     {
         if ( !bLeft )
-            while ( rStartCol < rEndCol && rStartCol < (aCol.size()-1) && aCol[rStartCol].IsEmptyBlock(rStartRow,rEndRow) )
+            while ( rStartCol < rEndCol && rStartCol < (aCol.size()-1) && aCol[rStartCol].IsEmptyData(rStartRow,rEndRow) )
                 ++rStartCol;
 
         if ( !bRight )
-            while ( rEndCol > 0 && rStartCol < rEndCol && aCol[rEndCol].IsEmptyBlock(rStartRow,rEndRow) )
+            while ( rEndCol > 0 && rStartCol < rEndCol && aCol[rEndCol].IsEmptyData(rStartRow,rEndRow) )
                 --rEndCol;
 
         if ( !bTop && rStartRow < rDocument.MaxRow() && rStartRow < rEndRow )
@@ -1067,7 +1067,7 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
 
     while (rStartCol < rEndCol)
     {
-        if (aCol[rEndCol].IsEmptyBlock( rStartRow, rEndRow))
+        if (aCol[rEndCol].IsEmptyData( rStartRow, rEndRow))
         {
             if (pDataAreaExtras && pDataAreaExtras->mnEndCol < rEndCol)
             {
@@ -1093,7 +1093,7 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
     {
         while (rStartCol < rEndCol)
         {
-            if (aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow))
+            if (aCol[rStartCol].IsEmptyData( rStartRow, rEndRow))
             {
                 if (pDataAreaExtras && pDataAreaExtras->mnStartCol > rStartCol)
                 {
@@ -1152,7 +1152,7 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
     }
 
     return rStartCol != rEndCol || (bColumnsOnly ?
-            !aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow) :
+            !aCol[rStartCol].IsEmptyData( rStartRow, rEndRow) :
             (rStartRow != rEndRow ||
                 aCol[rStartCol].HasDataAt( rStartRow, pDataAreaExtras)));
 }
@@ -1175,11 +1175,11 @@ SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow, ScDataA
     return nNewLastRow;
 }
 
-bool ScTable::IsEmptyBlock( SCCOL nStartCol, SCROW nStartRow,
+bool ScTable::IsEmptyData( SCCOL nStartCol, SCROW nStartRow,
                             SCCOL nEndCol, SCROW nEndRow ) const
 {
     for( SCCOL col : GetAllocatedColumnsRange( nStartCol, nEndCol ))
-        if( !aCol[col].IsEmptyBlock( nStartRow, nEndRow ))
+        if( !aCol[col].IsEmptyData( nStartRow, nEndRow ))
             return false;
     return true;
 }
@@ -1211,7 +1211,7 @@ SCSIZE ScTable::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
     {
         nCol = nEndCol;
         while ((nCol >= nStartCol) &&
-                 aCol[nCol].IsEmptyBlock(nStartRow, nEndRow))
+                 aCol[nCol].IsEmptyData(nStartRow, nEndRow))
         {
             nCount++;
             nCol--;
@@ -1221,7 +1221,7 @@ SCSIZE ScTable::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
     else
     {
         nCol = nStartCol;
-        while ((nCol <= nEndCol) && aCol[nCol].IsEmptyBlock(nStartRow, nEndRow))
+        while ((nCol <= nEndCol) && aCol[nCol].IsEmptyData(nStartRow, nEndRow))
         {
             nCount++;
             nCol++;
@@ -1254,10 +1254,10 @@ void ScTable::LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol
     rStartCol = std::min<SCCOL>( rStartCol, aCol.size()-1 );
     rEndCol   = std::min<SCCOL>( rEndCol,   aCol.size()-1 );
 
-    while ( rStartCol<rEndCol && aCol[rStartCol].IsEmptyBlock(rStartRow,rEndRow) )
+    while ( rStartCol<rEndCol && aCol[rStartCol].IsEmptyData(rStartRow,rEndRow) )
         ++rStartCol;
 
-    while ( rStartCol<rEndCol && aCol[rEndCol].IsEmptyBlock(rStartRow,rEndRow) )
+    while ( rStartCol<rEndCol && aCol[rEndCol].IsEmptyData(rStartRow,rEndRow) )
         --rEndCol;
 
     while ( rStartRow<rEndRow && IsEmptyLine(rStartRow, rStartCol, rEndCol) )

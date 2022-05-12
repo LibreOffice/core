@@ -5389,11 +5389,11 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
 }
 
 bool ScDocument::IsBlockEmpty(SCCOL nStartCol, SCROW nStartRow,
-                              SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bIgnoreNotes ) const
+                              SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
-            return maTabs[nTab]->IsBlockEmpty( nStartCol, nStartRow, nEndCol, nEndRow, bIgnoreNotes );
+            return maTabs[nTab]->IsBlockEmpty( nStartCol, nStartRow, nEndCol, nEndRow );
 
     OSL_FAIL("wrong table number");
     return false;
@@ -6163,10 +6163,10 @@ ScStyleSheetPool* ScDocument::GetStyleSheetPool() const
     return mxPoolHelper->GetStylePool();
 }
 
-bool ScDocument::IsEmptyBlock(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const
+bool ScDocument::IsEmptyData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        return maTabs[nTab]->IsEmptyBlock(nStartCol, nStartRow, nEndCol, nEndRow);
+        return maTabs[nTab]->IsEmptyData(nStartCol, nStartRow, nEndCol, nEndRow);
     return true;
 }
 

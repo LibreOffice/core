@@ -5008,10 +5008,8 @@ void Test::testNoteDeleteRow()
     CPPUNIT_ASSERT_MESSAGE("there should be a note", m_pDoc->HasNote(1, 1, 0));
 
     // test with IsBlockEmpty
-    bool bIgnoreNotes = true;
-    CPPUNIT_ASSERT_MESSAGE("The Block should be detected as empty (no Notes)", m_pDoc->IsBlockEmpty(0, 0, 100, 100, 0, bIgnoreNotes));
-    bIgnoreNotes = false;
-    CPPUNIT_ASSERT_MESSAGE("The Block should NOT be detected as empty", !m_pDoc->IsBlockEmpty(0, 0, 100, 100, 0, bIgnoreNotes));
+    CPPUNIT_ASSERT_MESSAGE("The Block should be detected as empty (no Notes)", m_pDoc->IsEmptyData(0, 0, 100, 100, 0));
+    CPPUNIT_ASSERT_MESSAGE("The Block should NOT be detected as empty", !m_pDoc->IsBlockEmpty(0, 0, 100, 100, 0));
 
     m_pDoc->DeleteRow(0, 0, m_pDoc->MaxCol(), 0, 1, 1);
 

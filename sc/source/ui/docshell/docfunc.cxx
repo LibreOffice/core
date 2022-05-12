@@ -4976,9 +4976,9 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
     for (const SCTAB nTab : rOption.maTabs)
     {
         bool bIsBlockEmpty = ( nStartRow == nEndRow )
-                             ? rDoc.IsBlockEmpty( nStartCol+1,nStartRow, nEndCol,nEndRow, nTab, true )
-                             : rDoc.IsBlockEmpty( nStartCol,nStartRow+1, nStartCol,nEndRow, nTab, true ) &&
-                               rDoc.IsBlockEmpty( nStartCol+1,nStartRow, nEndCol,nEndRow, nTab, true );
+                             ? rDoc.IsEmptyData( nStartCol+1,nStartRow, nEndCol,nEndRow, nTab )
+                             : rDoc.IsEmptyData( nStartCol,nStartRow+1, nStartCol,nEndRow, nTab ) &&
+                               rDoc.IsEmptyData( nStartCol+1,nStartRow, nEndCol,nEndRow, nTab );
         bool bNeedContents = bContents && !bIsBlockEmpty;
         bool bNeedEmpty = bEmptyMergedCells && !bIsBlockEmpty && !bNeedContents; // if DoMergeContents then cells are emptied
 
