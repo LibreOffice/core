@@ -122,6 +122,8 @@ public:
        This might be replaced by a better interface later. */
     const NameSpaceHash& GetAllEntries() const { return aNameHash; }
 
+    void Clear();
+
     static bool NormalizeOasisURN( OUString& rName );
     static bool NormalizeW3URI( OUString& rName );
     static bool NormalizeURI( OUString& rName );
