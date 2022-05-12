@@ -178,7 +178,7 @@ class SC_DLLPUBLIC ScCellRangesBase :
 
 private:
     const SfxItemPropertySet* pPropSet;
-    ScDocShell*             pDocShell;
+    tools::SvRef<ScDocShell> pDocShell;
     std::unique_ptr<ScLinkListener> pValueListener;
     std::unique_ptr<ScPatternAttr>  pCurrentFlat;
     std::unique_ptr<ScPatternAttr>  pCurrentDeep;
@@ -238,7 +238,7 @@ public:
     virtual void            RefChanged();
 
                             // from derived classes and by getImplementation
-    ScDocShell*             GetDocShell() const     { return pDocShell; }
+    ScDocShell*             GetDocShell() const     { return pDocShell.get(); }
     ScDocument*             GetDocument() const;
     const ScRangeList&      GetRangeList() const    { return aRanges; }
     void                    AddRange(const ScRange& rRange, const bool bMergeRanges);

@@ -22,10 +22,10 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
+
+#include <document.hxx>
 #include <types.hxx>
 #include "hdrcont.hxx"
-
-class ScDocument;
 
 class ScDataTableColView : public ScHeaderControl
 {
@@ -74,7 +74,7 @@ public:
  */
 class ScDataTableView : public Control
 {
-    std::shared_ptr<ScDocument> mpDoc;
+    ScDocumentRef mpDoc;
     std::unique_ptr<SelectionEngine> mpSelectionEngine;
     VclPtr<ScrollBarBox> mpTopLeft;
     VclPtr<ScDataTableColView> mpColView;
@@ -91,7 +91,7 @@ class ScDataTableView : public Control
 
 public:
     ScDataTableView(const css::uno::Reference<css::awt::XWindow>& rParent,
-                    std::shared_ptr<ScDocument> pDoc);
+                    const ScDocumentRef& pDoc);
     ~ScDataTableView() override;
 
     virtual void dispose() override;

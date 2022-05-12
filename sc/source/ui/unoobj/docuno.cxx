@@ -372,6 +372,15 @@ void ScModelObj::CreateAndSet(ScDocShell* pDocSh)
         pDocSh->SetBaseModel( new ScModelObj(pDocSh) );
 }
 
+// static
+void ScModelObj::Detach(ScDocShell* pDocSh)
+{
+    auto xModel3 = pDocSh->GetBaseModel();
+    if (ScModelObj* pScModelObj = dynamic_cast<ScModelObj*>(xModel3.get()))
+        if (pScModelObj->pDocShell == pDocSh)
+            pScModelObj->pDocShell = nullptr;
+}
+
 SdrModel& ScModelObj::getSdrModelFromUnoModel() const
 {
     ScDocument& rDoc(pDocShell->GetDocument());
@@ -1307,6 +1316,10 @@ void SAL_CALL ScModelObj::acquire() noexcept
 
 void SAL_CALL ScModelObj::release() noexcept
 {
+    // Not only ScModelObj own dtor needs the guard, but also parent dtors
+    // that may call SfxBroadcaster::RemoveListener
+    SolarMutexGuard g;
+
     SfxBaseModel::release();
 }
 

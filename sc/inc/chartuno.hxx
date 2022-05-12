@@ -105,7 +105,7 @@ class ScChartObj final : public ::cppu::BaseMutex
                   ,public SfxListener
 {
 private:
-    ScDocShell*             pDocShell;
+    tools::SvRef<ScDocShell> pDocShell;
     SCTAB                   nTab;           // Charts are per sheet
     OUString                aChartName;
 

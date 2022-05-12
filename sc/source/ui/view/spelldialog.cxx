@@ -150,8 +150,8 @@ void ScSpellDialogChildWindow::Reset()
         mpDoc->EnableIdle(mbOldIdleEnabled);
     }
     mxEngine.reset();
-    mxUndoDoc.reset();
-    mxRedoDoc.reset();
+    mxUndoDoc.clear();
+    mxRedoDoc.clear();
     mxOldSel.reset();
     mxOldRangeList.clear();
     mpViewShell = nullptr;
@@ -225,9 +225,9 @@ void ScSpellDialogChildWindow::Init()
 
     // *** create Undo/Redo documents *** -------------------------------------
 
-    mxUndoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
+    mxUndoDoc.set( new ScDocument( SCDOCMODE_UNDO ) );
     mxUndoDoc->InitUndo( *mpDoc, nTab, nTab );
-    mxRedoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
+    mxRedoDoc.set( new ScDocument( SCDOCMODE_UNDO ) );
     mxRedoDoc->InitUndo( *mpDoc, nTab, nTab );
 
     if ( rMarkData.GetSelectCount() > 1 )

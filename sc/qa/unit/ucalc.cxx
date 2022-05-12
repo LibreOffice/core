@@ -542,17 +542,17 @@ void Test::testSharedStringPoolUndoDoc()
     m_pDoc->SetString(ScAddress(0,2,0), "A2");
     m_pDoc->SetString(ScAddress(0,3,0), "A3");
 
-    ScDocument aUndoDoc(SCDOCMODE_UNDO);
-    aUndoDoc.InitUndo(*m_pDoc, 0, 0);
+    ScDocumentRef pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
+    pUndoDoc->InitUndo(*m_pDoc, 0, 0);
 
-    bool bSuccess = aTest.check(*m_pDoc, aUndoDoc);
+    bool bSuccess = aTest.check(*m_pDoc, *pUndoDoc);
     CPPUNIT_ASSERT_MESSAGE("Check failed with undo document.", bSuccess);
 
     // Test the clip document as well.
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    aClipDoc.ResetClip(m_pDoc, static_cast<SCTAB>(0));
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    pClipDoc->ResetClip(*m_pDoc, static_cast<SCTAB>(0));
 
-    bSuccess = aTest.check(*m_pDoc, aClipDoc);
+    bSuccess = aTest.check(*m_pDoc, *pClipDoc);
     CPPUNIT_ASSERT_MESSAGE("Check failed with clip document.", bSuccess);
 
     m_pDoc->DeleteTab(0);
@@ -5128,12 +5128,12 @@ void Test::testNoteLifeCycle()
     // Copy B2 with note to a clipboard.
 
     ScClipParam aClipParam(aPos, false);
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
     ScMarkData aMarkData(m_pDoc->GetSheetLimits());
     aMarkData.SelectOneTable(0);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMarkData, false, true);
+    m_pDoc->CopyToClip(aClipParam, pClipDoc, &aMarkData, false, true);
 
-    ScPostIt* pClipNote = aClipDoc.GetNote(aPos);
+    ScPostIt* pClipNote = pClipDoc->GetNote(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to copy note to the clipboard.", pClipNote);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Note on the clipboard should share the same caption object from the original.",
                            pCaption, pClipNote->GetCaption());
@@ -5217,19 +5217,19 @@ void Test::testNoteLifeCycle()
         const SdrCaptionObj* pOtherCaptionB5 = pOtherNoteB5->GetOrCreateCaption(aPosB5);
         CPPUNIT_ASSERT_MESSAGE("No caption at B5.", pOtherCaptionB5);
 
-        ScDocument aClipDoc2(SCDOCMODE_CLIP);
-        copyToClip( pDoc2, aPosB5, &aClipDoc2);
+        ScDocumentRef pClipDoc2(new ScDocument(SCDOCMODE_CLIP));
+        copyToClip( pDoc2, aPosB5, pClipDoc2);
 
         // There's no ScTransferObject involved in the "fake" clipboard copy
         // and ScDocument dtor asking IsClipboardSource() gets no, so emulate
         // the part that normally is responsible for forgetting the caption
         // objects.
-        aClipDoc2.ClosingClipboardSource();
+        pClipDoc2->ClosingClipboardSource();
 
         pDoc2->DeleteTab(0);
         closeDocShell(xDocSh2);
 
-        pasteFromClip( m_pDoc, aPosB5, &aClipDoc2); // should not crash... tdf#104967
+        pasteFromClip( m_pDoc, aPosB5, pClipDoc2); // should not crash... tdf#104967
         ScPostIt* pNoteB5 = m_pDoc->GetNote(aPosB5);
         CPPUNIT_ASSERT_MESSAGE("Failed to paste cell comment at B5.", pNoteB5);
         const SdrCaptionObj* pCaptionB5 = pNoteB5->GetOrCreateCaption(aPosB5);
@@ -5267,23 +5267,23 @@ void Test::testNoteCopyPaste()
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     ScRange aCopyRange(1,1,0,1,3,0);
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    aClipDoc.ResetClip(m_pDoc, &aMark);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    pClipDoc->ResetClip(*m_pDoc, &aMark);
     ScClipParam aClipParam(aCopyRange, false);
-    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+    m_pDoc->CopyToClip(aClipParam, pClipDoc, &aMark, false, false);
 
     // Make sure the notes are in the clipboard.
-    pNote = aClipDoc.GetNote(ScAddress(1,1,0));
+    pNote = pClipDoc->GetNote(ScAddress(1,1,0));
     CPPUNIT_ASSERT(pNote);
     CPPUNIT_ASSERT_EQUAL(OUString("Note1"), pNote->GetText());
 
-    pNote = aClipDoc.GetNote(ScAddress(1,3,0));
+    pNote = pClipDoc->GetNote(ScAddress(1,3,0));
     CPPUNIT_ASSERT(pNote);
     CPPUNIT_ASSERT_EQUAL(OUString("Note2"), pNote->GetText());
 
     // Paste to B6:B8 but only cell notes.
     ScRange aDestRange(1,5,0,1,7,0);
-    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::NOTE, nullptr, &aClipDoc);
+    m_pDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::NOTE, nullptr, pClipDoc);
 
     // Make sure the notes are there.
     pNote = m_pDoc->GetNote(ScAddress(1,5,0));
@@ -5760,10 +5760,10 @@ void Test::testDeleteContents()
     aMark.SelectOneTable(0);
     aMark.SetMarkArea(aRange);
 
-    ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
+    ScDocumentRef pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoDoc->InitUndo(*m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc, &aMark);
-    ScUndoDeleteContents aUndo(m_xDocShell.get(), aMark, aRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
+    ScUndoDeleteContents aUndo(m_xDocShell.get(), aMark, aRange, pUndoDoc, false, InsertDeleteFlags::CONTENTS, true);
 
     clearRange(m_pDoc, aRange);
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3,15,0))); // formula

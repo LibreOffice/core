@@ -231,9 +231,9 @@ void HTMLFetchThread::execute()
     maImportFinishedHdl();
 }
 
-HTMLDataProvider::HTMLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource):
+HTMLDataProvider::HTMLDataProvider(ScDocument& rDoc, sc::ExternalDataSource& rDataSource):
     DataProvider(rDataSource),
-    mpDocument(pDoc)
+    mrDocument(rDoc)
 {
 }
 
@@ -252,8 +252,8 @@ void HTMLDataProvider::Import()
     if (mpDoc)
         return;
 
-    mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
-    mpDoc->ResetClip(mpDocument, SCTAB(0));
+    mpDoc.set(new ScDocument(SCDOCMODE_CLIP));
+    mpDoc->ResetClip(mrDocument, SCTAB(0));
     mxHTMLFetchThread = new HTMLFetchThread(*mpDoc, mrDataSource.getURL(), mrDataSource.getID(),
             std::bind(&HTMLDataProvider::ImportFinished, this), std::vector(mrDataSource.getDataTransformation()));
     mxHTMLFetchThread->launch();

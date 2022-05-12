@@ -248,15 +248,15 @@ SCQAHELPER_DLLPUBLIC ScTokenArray* getTokens(ScDocument& rDoc, const ScAddress& 
 
 SCQAHELPER_DLLPUBLIC std::string to_std_string(const OUString& rStr);
 
-SCQAHELPER_DLLPUBLIC ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pClipDoc,
+SCQAHELPER_DLLPUBLIC ScUndoCut* cutToClip(ScDocShell& rDocSh, const ScRange& rRange, const ScDocumentRef& pClipDoc,
                                     bool bCreateUndo);
-SCQAHELPER_DLLPUBLIC void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, ScDocument* pClipDoc);
+SCQAHELPER_DLLPUBLIC void copyToClip(ScDocument* pSrcDoc, const ScRange& rRange, const ScDocumentRef& pClipDoc);
 SCQAHELPER_DLLPUBLIC void pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
-                                    ScDocument* pClipDoc);
+                                    const ScDocumentRef& pClipDoc);
 SCQAHELPER_DLLPUBLIC ScUndoPaste* createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange,
-                                    ScDocumentUniquePtr pUndoDoc);
+                                    const ScDocumentRef& pUndoDoc);
 SCQAHELPER_DLLPUBLIC void pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange,
-                                     ScDocument* pClipDoc,
+                                     const ScDocumentRef& pClipDoc,
                                      InsertDeleteFlags eFlags = InsertDeleteFlags::ALL);
 SCQAHELPER_DLLPUBLIC void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown);
 SCQAHELPER_DLLPUBLIC ScDocShell* findLoadedDocShellByName(std::u16string_view rName);

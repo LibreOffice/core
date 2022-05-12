@@ -96,7 +96,10 @@ ScNamedRangeObj::~ScNamedRangeObj()
     SolarMutexGuard g;
 
     if (pDocShell)
+    {
         pDocShell->GetDocument().RemoveUnoObject(*this);
+        pDocShell.clear();
+    }
 }
 
 void ScNamedRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -350,9 +353,9 @@ uno::Reference<table::XCellRange> SAL_CALL ScNamedRangeObj::getReferredCells()
         //! static function to create ScCellObj/ScCellRangeObj at ScCellRangeObj ???
 
         if ( aRange.aStart == aRange.aEnd )
-            return new ScCellObj( pDocShell, aRange.aStart );
+            return new ScCellObj( pDocShell.get(), aRange.aStart);
         else
-            return new ScCellRangeObj( pDocShell, aRange );
+            return new ScCellRangeObj( pDocShell.get(), aRange );
     }
     return nullptr;
 }
@@ -447,7 +450,10 @@ ScNamedRangesObj::~ScNamedRangesObj()
     SolarMutexGuard g;
 
     if (pDocShell)
+    {
         pDocShell->GetDocument().RemoveUnoObject(*this);
+        pDocShell.clear();
+    }
 }
 
 void ScNamedRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -808,7 +814,7 @@ rtl::Reference<ScNamedRangeObj> ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sa
         if (lcl_UserVisibleName(*rName.second))
         {
             if (nPos == nIndex)
-                return new ScNamedRangeObj(this, pDocShell, rName.second->GetName());
+                return new ScNamedRangeObj(this, pDocShell.get(), rName.second->GetName());
         }
         ++nPos;
     }
@@ -818,7 +824,7 @@ rtl::Reference<ScNamedRangeObj> ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sa
 rtl::Reference<ScNamedRangeObj> ScGlobalNamedRangesObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell && hasByName(aName) )
-        return new ScNamedRangeObj(this, pDocShell, aName);
+        return new ScNamedRangeObj(this, pDocShell.get(), aName);
     return nullptr;
 }
 
@@ -847,7 +853,7 @@ ScLocalNamedRangesObj::~ScLocalNamedRangesObj()
 rtl::Reference<ScNamedRangeObj> ScLocalNamedRangesObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell && hasByName( aName ) )
-        return new ScNamedRangeObj( this, pDocShell, aName, mxSheet);
+        return new ScNamedRangeObj( this, pDocShell.get(), aName, mxSheet);
     return nullptr;
 
 }
@@ -873,7 +879,7 @@ rtl::Reference<ScNamedRangeObj> ScLocalNamedRangesObj::GetObjectByIndex_Impl( sa
         if (lcl_UserVisibleName(*rName.second))
         {
             if (nPos == nIndex)
-                return new ScNamedRangeObj(this, pDocShell, rName.second->GetName(), mxSheet);
+                return new ScNamedRangeObj(this, pDocShell.get(), rName.second->GetName(), mxSheet);
         }
         ++nPos;
     }

@@ -19,6 +19,7 @@
 #include <conditio.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
+#include <drwlayer.hxx>
 #include <scitems.hxx>
 #include <sortparam.hxx>
 

@@ -423,7 +423,10 @@ ScChartObj::~ScChartObj()
     SolarMutexGuard g;
 
     if (pDocShell)
+    {
         pDocShell->GetDocument().RemoveUnoObject(*this);
+        pDocShell.clear();
+    }
 }
 
 void ScChartObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -504,7 +507,7 @@ void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, b
         if (bUndo)
         {
             pDocShell->GetUndoManager()->AddUndoAction(
-                std::make_unique<ScUndoChartData>( pDocShell, aChartName, rRanges, bColHeaders, bRowHeaders, false ) );
+                std::make_unique<ScUndoChartData>( pDocShell.get(), aChartName, rRanges, bColHeaders, bRowHeaders, false));
         }
         rDoc.UpdateChartArea( aChartName, rRanges, bColHeaders, bRowHeaders, false );
     }
@@ -703,7 +706,7 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
 uno::Reference<lang::XComponent> SAL_CALL ScChartObj::getEmbeddedObject()
 {
     SolarMutexGuard aGuard;
-    SdrOle2Obj* pObject = sc::tools::findChartsByName(pDocShell, nTab, aChartName,
+    SdrOle2Obj* pObject = sc::tools::findChartsByName(pDocShell.get(), nTab, aChartName,
                                                       sc::tools::ChartSourceType::CELL_RANGE);
     if ( pObject && svt::EmbeddedObjectRef::TryRunningState( pObject->GetObjRef() ) )
     {

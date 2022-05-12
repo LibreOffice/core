@@ -150,7 +150,7 @@ ScTabView::~ScTabView()
         TransferableHelper::ClearPrimarySelection();       // may delete pOld
     }
 
-    pBrushDocument.reset();
+    pBrushDocument.clear();
     pDrawBrushSet.reset();
 
     pPageBreakData.reset();
@@ -631,10 +631,10 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
     ScrollLines( nLinesX, nLinesY );                    // execute
 }
 
-void ScTabView::SetBrushDocument( ScDocumentUniquePtr pNew, bool bLock )
+void ScTabView::SetBrushDocument( ScDocumentRef pNew, bool bLock )
 {
     pDrawBrushSet.reset();
-    pBrushDocument = std::move(pNew);
+    pBrushDocument = pNew;
 
     bLockPaintBrush = bLock;
 
@@ -643,7 +643,7 @@ void ScTabView::SetBrushDocument( ScDocumentUniquePtr pNew, bool bLock )
 
 void ScTabView::SetDrawBrushSet( std::unique_ptr<SfxItemSet> pNew, bool bLock )
 {
-    pBrushDocument.reset();
+    pBrushDocument.clear();
     pDrawBrushSet = std::move(pNew);
 
     bLockPaintBrush = bLock;
