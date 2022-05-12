@@ -1781,7 +1781,9 @@ std::unique_ptr<SmNode> SmParser5::DoTerm(bool bGroupNumberIdent)
                 return DoUnOper();
             if (TokenInGroup(TG::Attribute) || TokenInGroup(TG::FontAttr))
             {
-                std::stack<std::unique_ptr<SmStructureNode>> aStack;
+                std::stack<std::unique_ptr<SmStructureNode>,
+                           std::vector<std::unique_ptr<SmStructureNode>>>
+                    aStack;
                 bool bIsAttr;
                 for (;;)
                 {
