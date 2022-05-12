@@ -1029,7 +1029,7 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
     sal_uInt16 nDistance;
     sal_uLong nMax = m_nVisibleCount + nOffs + 1;
 
-    const Image& rExpandedNodeBitmap = GetExpandedNodeBmp();
+    const Image& rExpandedNodeBitmap = GetDefaultExpandedNodeImage();
 
     for (sal_uLong n=0; n< nMax && pEntry; n++)
     {
@@ -1396,8 +1396,8 @@ tools::Long SvImpLBox::GetEntryLine(const SvTreeListEntry* pEntry) const
 
 void SvImpLBox::SetEntryHeight()
 {
-    SetNodeBmpWidth( GetExpandedNodeBmp() );
-    SetNodeBmpWidth( GetCollapsedNodeBmp() );
+    SetNodeBmpWidth(GetDefaultExpandedNodeImage());
+    SetNodeBmpWidth(GetDefaultCollapsedNodeImage());
     if(!m_pView->HasViewData()) // are we within the Clear?
     {
         Size aSize = m_pView->Control::GetOutputSizePixel();
@@ -1516,7 +1516,7 @@ void SvImpLBox::SetNodeBmpTabDistance()
     if( m_pView->nContextBmpWidthMax )
     {
         // only if the first dynamic tab is centered (we currently assume that)
-        Size aSize = GetExpandedNodeBmp().GetSizePixel();
+        Size aSize = GetDefaultExpandedNodeImage().GetSizePixel();
         m_nNodeBmpTabDistance -= aSize.Width() / 2;
     }
 }

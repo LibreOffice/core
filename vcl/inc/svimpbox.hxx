@@ -277,9 +277,6 @@ public:
     inline void         SetExpandedNodeBmp(  const Image& _rImg );
     inline void         SetCollapsedNodeBmp( const Image& _rImg );
 
-    inline const Image& GetExpandedNodeBmp( );
-    inline const Image& GetCollapsedNodeBmp( );
-
     inline void         SetDefaultEntryExpBmp( const Image& _rImg );
     inline void         SetDefaultEntryColBmp( const Image& _rImg );
     inline const Image& GetDefaultEntryExpBmp( );
@@ -334,16 +331,6 @@ inline void SvImpLBox::SetCollapsedNodeBmp( const Image& rImg )
 {
     implGetImageLocation( ImageType::NodeCollapsed ) = rImg;
     SetNodeBmpWidth( rImg );
-}
-
-inline const Image& SvImpLBox::GetExpandedNodeBmp( )
-{
-    return implGetImageLocation( ImageType::NodeExpanded );
-}
-
-inline const Image& SvImpLBox::GetCollapsedNodeBmp( )
-{
-    return implGetImageLocation( ImageType::NodeCollapsed );
 }
 
 inline void SvImpLBox::SetDefaultEntryExpBmp( const Image& _rImg )
