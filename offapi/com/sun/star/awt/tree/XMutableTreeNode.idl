@@ -90,13 +90,13 @@ interface XMutableTreeNode : XTreeNode
     */
     void setNodeGraphicURL( [in] string URL );
 
-    /** The URL for a graphic that is rendered to visualize expanded non leaf nodes.
-        <p>If <var>URL</var> is empty, XTreeControl::DefaultExpandedGraphicURL is used.
+    /**
+        @deprecated - doesn't do anything
     */
     void setExpandedGraphicURL( [in] string URL );
 
-    /** The URL for a graphic that is rendered to visualize collapsed non leaf nodes.
-        <p>If <var>URL</var> is empty, XTreeControl::DefaultCollapsedGraphicURL is used.
+    /**
+        @deprecated - doesn't do anything
     */
     void setCollapsedGraphicURL( [in] string URL );
 };
