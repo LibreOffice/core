@@ -608,6 +608,41 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107018)
     CPPUNIT_ASSERT_EQUAL(OString("Pages"), pName->GetValue());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148706)
+{
+    // Import the bugdoc and export as PDF.
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf148706.odt");
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // The page has one annotation.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnot = pPdfPage->getAnnotation(0);
+
+    CPPUNIT_ASSERT(pAnnot->hasKey("V"));
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFObjectType::String, pAnnot->getValueType("V"));
+    OUString aV = pAnnot->getString("V");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1821.84
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("1821.84"), aV);
+
+    CPPUNIT_ASSERT(pAnnot->hasKey("DV"));
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFObjectType::String, pAnnot->getValueType("DV"));
+    OUString aDV = pAnnot->getString("DV");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1821.84"), aDV);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107089)
 {
     vcl::filter::PDFDocument aDocument;
