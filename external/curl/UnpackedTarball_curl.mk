@@ -26,7 +26,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-7.26.0_win-proxy.patch \
 	external/curl/zlib.patch.0 \
 	external/curl/configurable-z-option.patch.0 \
-	external/curl/configure-eval-fix.patch.0 \
 ))
 
 ifeq ($(SYSTEM_NSS),)
