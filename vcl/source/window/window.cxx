@@ -260,7 +260,7 @@ void Window::dispose()
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
             OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
         }
 
         if (mpWindowImpl->mpFrameData != nullptr)
@@ -283,7 +283,6 @@ void Window::dispose()
                     ") with live SystemWindows destroyed: " +
                     aErrorStr;
                 OSL_FAIL(aTempStr.getStr());
-                // abort in debug builds, must be fixed!
                 Application::Abort(OStringToOUString(aTempStr, RTL_TEXTENCODING_UTF8));
             }
         }
@@ -306,7 +305,7 @@ void Window::dispose()
                 ") with live SystemWindows destroyed: " +
                 aErrorStr;
             OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr, RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            Application::Abort(OStringToOUString(aTempStr, RTL_TEXTENCODING_UTF8));
         }
 
         if ( mpWindowImpl->mpFirstOverlap )
@@ -321,7 +320,7 @@ void Window::dispose()
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
             OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
         }
 
         vcl::Window* pMyParent = GetParent();
@@ -341,7 +340,7 @@ void Window::dispose()
                 lcl_createWindowInfo(this) +
                 ") still in TaskPanelList!";
             OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr, RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            Application::Abort(OStringToOUString(aTempStr, RTL_TEXTENCODING_UTF8));
         }
     }
 #endif
@@ -400,7 +399,7 @@ void Window::dispose()
         OUString aTempStr = "Window (" + GetText() +
                 ") with focused child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !";
         SAL_WARN( "vcl", aTempStr );
-        Application::Abort(aTempStr);   // abort in debug build version, this must be fixed!
+        Application::Abort(aTempStr);
 #endif
     }
 
