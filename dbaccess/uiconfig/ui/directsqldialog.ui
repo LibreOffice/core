@@ -94,6 +94,11 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="sql-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="directsqldialog|extended_tip|sql">Enter the SQL administration command that you want to run.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -132,6 +137,11 @@
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="directsql-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="directsqldialog|extended_tip|directsql">Execute the SQL command directly without escape processing.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -147,6 +157,11 @@
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="showoutput-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="directsqldialog|extended_tip|showoutput">Show the result of the SQL SELECT command in the Output box.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -178,6 +193,11 @@
                   <object class="GtkComboBoxText" id="sqlhistory">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="sqlhistory-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="directsqldialog|extended_tip|sqlhistory">Lists the previously executed SQL commands. To run a command again, click the command, and then click Execute.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -235,6 +255,11 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="editable">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="status-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="directsqldialog|extended_tip|status">Displays the results, including errors, of the SQL command that you ran.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -274,6 +299,11 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="editable">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="output-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="directsqldialog|extended_tip|output">Displays the results of the SQL command that you ran.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
