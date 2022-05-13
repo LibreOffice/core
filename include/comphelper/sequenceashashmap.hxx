@@ -39,7 +39,29 @@ namespace comphelper{
             such name sequences very easy ...
  */
 
-using SequenceAsHashMapBase = std::unordered_map<OUString, css::uno::Any>;
+/** Cache the hash code since calculating it for every comparison adds up */
+struct OUStringAndHashCode
+{
+    OUString maString;
+    sal_Int32 mnHashCode;
+
+    OUStringAndHashCode(OUString s) : maString(s), mnHashCode(maString.hashCode()) {}
+};
+struct OUStringAndHashCodeEqual
+{
+    bool operator()(const OUStringAndHashCode & lhs, const OUStringAndHashCode & rhs) const
+    {
+        return lhs.mnHashCode == rhs.mnHashCode && lhs.maString == rhs.maString;
+    }
+};
+struct OUStringAndHashCodeHash
+{
+    size_t operator()(const OUStringAndHashCode & i) const
+    {
+        return i.mnHashCode;
+    }
+};
+using SequenceAsHashMapBase = std::unordered_map<OUStringAndHashCode, css::uno::Any, OUStringAndHashCodeHash, OUStringAndHashCodeEqual>;
 
 class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
 {
@@ -320,6 +342,11 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
             return m_aMap[rKey];
         }
 
+        css::uno::Any& operator[](const OUStringAndHashCode& rKey)
+        {
+            return m_aMap[rKey];
+        }
+
         using iterator = SequenceAsHashMapBase::iterator;
         using const_iterator = SequenceAsHashMapBase::const_iterator;
 
@@ -364,6 +391,16 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
         }
 
         const_iterator find(const OUString& rKey) const
+        {
+            return m_aMap.find(rKey);
+        }
+
+        iterator find(const OUStringAndHashCode& rKey)
+        {
+            return m_aMap.find(rKey);
+        }
+
+        const_iterator find(const OUStringAndHashCode& rKey) const
         {
             return m_aMap.find(rKey);
         }
