@@ -74,7 +74,7 @@ const SCCOL       MAXCOLCOUNT_JUMBO = 16384;
 const SCROW       MAXROW_JUMBO   = MAXROWCOUNT_JUMBO - 1;
 const SCCOL       MAXCOL_JUMBO   = MAXCOLCOUNT_JUMBO - 1;
 // Maximum tiled rendering values
-const SCROW       MAXTILEDROW    = 500000;
+const SCROW       MAXTILEDROW    = MAXROW;
 // Limit the initial tab count to prevent users to set the count too high,
 // which could cause the memory usage of blank documents to exceed the
 // available system memory.
