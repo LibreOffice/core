@@ -657,7 +657,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
             {
                 if ( bAllowToRepair50 && !xResult.is() )
                 {
-                    OUString aOrigContName( "Ole-Object" );
+                    OUString aOrigContName( "Ole Object" );
                     if ( xNameContainer->hasByName( aOrigContName ) )
                     {
                         uno::Reference< embed::XClassifiedObject > xClassified( xNameContainer, uno::UNO_QUERY_THROW );
