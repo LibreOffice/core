@@ -726,7 +726,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         // the same as editeng and drawinglayer), and get rid of all the
         // SetMapMode's and other unnecessary fun we have with pixels
         // See also ScGridWindow::GetDrawMapMode() for the rest of this hack
-        aDrawMode.SetOrigin(PixelToLogic(Point(nScrX, nScrY), aDrawMode));
+        aDrawMode.SetOrigin(PixelToLogic(Point(tools::Long(nScrX / aOutputData.aZoomX),
+                                               tools::Long(nScrY / aOutputData.aZoomY)), aDrawMode));
     }
     tools::Rectangle aDrawingRectLogic;
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
@@ -1027,16 +1028,22 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
             if (bIsTiledRendering)
             {
-                Point aOrigin = aOriginalMode.GetOrigin();
-                if (bLayoutRTL)
-                    aOrigin.setX(-aOrigin.getX() / TWIPS_PER_PIXEL + aOutputData.nScrX + aOutputData.GetScrW());
-                else
-                    aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + aOutputData.nScrX);
+                Fraction& rZoomX = aOutputData.aZoomX;
+                Fraction& rZoomY = aOutputData.aZoomY;
 
-                aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + aOutputData.nScrY);
+                Point aOrigin = aOriginalMode.GetOrigin();
+                Fraction fOriginX = aOrigin.getX() / TWIPS_PER_PIXEL / rZoomX;
+                Fraction fOriginY = aOrigin.getY() / TWIPS_PER_PIXEL / rZoomY;
+
+                if (bLayoutRTL)
+                    aOrigin.setX(-tools::Long(fOriginX) + aOutputData.nScrX + aOutputData.GetScrW());
+                else
+                    aOrigin.setX(tools::Long(fOriginX) + aOutputData.nScrX);
+
+                aOrigin.setY(tools::Long(fOriginY) + aOutputData.nScrY);
+
                 const double twipFactor = 15 * 1.76388889; // 26.45833335
-                aOrigin = Point(aOrigin.getX() * twipFactor,
-                                aOrigin.getY() * twipFactor);
+                aOrigin = Point(aOrigin.getX() * twipFactor, aOrigin.getY() * twipFactor);
                 MapMode aNew = rDevice.GetMapMode();
                 aNew.SetOrigin(aOrigin);
                 rDevice.SetMapMode(aNew);
@@ -1558,7 +1565,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                              -nTopLeftTileRowOffset,
                              nTopLeftTileCol, nTopLeftTileRow,
                              nBottomRightTileCol, nBottomRightTileRow,
-                             fPPTX, fPPTY, nullptr, nullptr);
+                             fPPTX, fPPTY, &aFracX, &aFracY);
 
     // setup the SdrPage so that drawinglayer works correctly
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
