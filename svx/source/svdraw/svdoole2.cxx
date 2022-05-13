@@ -763,7 +763,7 @@ SdrOle2Obj::SdrOle2Obj(
     mpImpl->aPersistName = rNewObjName;
 
     if (mpImpl->mxObjRef.is() && (mpImpl->mxObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
-        SetResizeProtect(true);
+        m_bSizProt = true;
 
     // For math objects, set closed state to transparent
     SetClosedObj(!ImplIsMathObj( mpImpl->mxObjRef.GetObject() ));
