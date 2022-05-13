@@ -95,7 +95,7 @@ css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyVa
                         pProp != end()  ;
                       ++pProp           )
     {
-        const OUString& rName  = pProp->first;
+        const OUString& rName  = pProp->first.maString;
         const css::uno::Any&   rValue = pProp->second;
 
         if (!rValue.hasValue())

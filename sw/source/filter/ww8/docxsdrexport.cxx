@@ -802,15 +802,17 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             if (it != aGrabBag.end())
             {
                 comphelper::SequenceAsHashMap aAnchorDistDiff(it->second);
-                for (const std::pair<const OUString, uno::Any>& rDiff : aAnchorDistDiff)
+                for (const std::pair<const comphelper::OUStringAndHashCode, uno::Any>& rDiff :
+                     aAnchorDistDiff)
                 {
-                    if (rDiff.first == "distTDiff" && rDiff.second.has<sal_Int32>())
+                    const OUString& rName = rDiff.first.maString;
+                    if (rName == "distTDiff" && rDiff.second.has<sal_Int32>())
                         nDistT -= round(rDiff.second.get<sal_Int32>());
-                    else if (rDiff.first == "distBDiff" && rDiff.second.has<sal_Int32>())
+                    else if (rName == "distBDiff" && rDiff.second.has<sal_Int32>())
                         nDistB -= round(rDiff.second.get<sal_Int32>());
-                    else if (rDiff.first == "distLDiff" && rDiff.second.has<sal_Int32>())
+                    else if (rName == "distLDiff" && rDiff.second.has<sal_Int32>())
                         nDistL -= rDiff.second.get<sal_Int32>();
-                    else if (rDiff.first == "distRDiff" && rDiff.second.has<sal_Int32>())
+                    else if (rName == "distRDiff" && rDiff.second.has<sal_Int32>())
                         nDistR -= rDiff.second.get<sal_Int32>();
                 }
             }
@@ -1159,15 +1161,17 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             sal_Int64 nTopExtGrabBag(0);
             sal_Int64 nRightExtGrabBag(0);
             sal_Int64 nBottomExtGrabBag(0);
-            for (const std::pair<const OUString, uno::Any>& rDirection : aEffectExtent)
+            for (const std::pair<const comphelper::OUStringAndHashCode, uno::Any>& rDirection :
+                 aEffectExtent)
             {
-                if (rDirection.first == "l" && rDirection.second.has<sal_Int32>())
+                const OUString& rName = rDirection.first.maString;
+                if (rName == "l" && rDirection.second.has<sal_Int32>())
                     nLeftExtGrabBag = rDirection.second.get<sal_Int32>();
-                else if (rDirection.first == "t" && rDirection.second.has<sal_Int32>())
+                else if (rName == "t" && rDirection.second.has<sal_Int32>())
                     nTopExtGrabBag = rDirection.second.get<sal_Int32>();
-                else if (rDirection.first == "r" && rDirection.second.has<sal_Int32>())
+                else if (rName == "r" && rDirection.second.has<sal_Int32>())
                     nRightExtGrabBag = rDirection.second.get<sal_Int32>();
-                else if (rDirection.first == "b" && rDirection.second.has<sal_Int32>())
+                else if (rName == "b" && rDirection.second.has<sal_Int32>())
                     nBottomExtGrabBag = rDirection.second.get<sal_Int32>();
             }
             if (abs(nLeftExtEMU - nLeftExtGrabBag) <= 635 && abs(nTopExtEMU - nTopExtGrabBag) <= 635
