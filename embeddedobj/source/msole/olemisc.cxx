@@ -677,11 +677,9 @@ void OleEmbeddedObject::initialize(const uno::Sequence<uno::Any>& rArguments)
         return;
 
     comphelper::SequenceAsHashMap aValues(rArguments[0]);
-    for (const auto& rValue : aValues)
-    {
-        if (rValue.first == "StreamReadOnly")
-            rValue.second >>= m_bStreamReadOnly;
-    }
+    auto it = aValues.find("StreamReadOnly");
+    if (it != aValues.end())
+        it->second >>= m_bStreamReadOnly;
 }
 
 OUString SAL_CALL OleEmbeddedObject::getImplementationName()

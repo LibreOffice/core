@@ -233,7 +233,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
     {
         // let "NoSuchElementException" out ! We support the same API ...
         // and without a flush() at the end all changed data before will be ignored !
-        xModule->replaceByName(prop.first, prop.second);
+        xModule->replaceByName(prop.first.maString, prop.second);
     }
 
     ::comphelper::ConfigurationHelper::flush(xCfg);

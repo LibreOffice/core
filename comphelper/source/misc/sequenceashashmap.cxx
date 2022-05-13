@@ -232,7 +232,7 @@ void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::PropertyValue
                         pThis != end()  ;
                       ++pThis           )
     {
-        pDestination[i].Name  = pThis->first ;
+        pDestination[i].Name  = pThis->first.maString;
         pDestination[i].Value = pThis->second;
         ++i;
     }
@@ -249,7 +249,7 @@ void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::NamedValue >&
                         pThis != end()  ;
                       ++pThis           )
     {
-        pDestination[i].Name  = pThis->first ;
+        pDestination[i].Name  = pThis->first.maString;
         pDestination[i].Value = pThis->second;
         ++i;
     }
@@ -283,7 +283,7 @@ bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
 {
     for (auto const& elem : rCheck)
     {
-        const OUString& sCheckName  = elem.first;
+        const OUString& sCheckName  = elem.first.maString;
         const css::uno::Any&   aCheckValue = elem.second;
         const_iterator         pFound      = find(sCheckName);
 
@@ -301,12 +301,9 @@ bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
 void SequenceAsHashMap::update(const SequenceAsHashMap& rUpdate)
 {
     m_aMap.reserve(std::max(size(), rUpdate.size()));
-    for (auto const& elem : rUpdate)
+    for (auto const& elem : rUpdate.m_aMap)
     {
-        const OUString& sName  = elem.first;
-        const css::uno::Any&   aValue = elem.second;
-
-        (*this)[sName] = aValue;
+        m_aMap[elem.first] = elem.second;
     }
 }
 
