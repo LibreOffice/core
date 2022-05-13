@@ -136,6 +136,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_core_tox \
     CppunitTest_sw_core_frmedt \
     CppunitTest_sw_core_txtnode \
+    CppunitTest_sw_core_txtnode_justify \
     CppunitTest_sw_core_objectpositioning \
     CppunitTest_sw_core_unocore \
     CppunitTest_sw_core_crsr \
