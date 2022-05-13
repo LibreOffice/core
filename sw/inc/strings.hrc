@@ -564,7 +564,7 @@
 /*undo: STR_PARAGRAPHS, string.text*/
 #define STR_PARAGRAPHS                          NC_("STR_PARAGRAPHS", "Paragraphs")
 #define STR_FRAME                               NC_("STR_FRAME", "frame")
-#define STR_OLE                                 NC_("STR_OLE", "OLE-object")
+#define STR_OLE                                 NC_("STR_OLE", "OLE object")
 #define STR_MATH_FORMULA                        NC_("STR_MATH_FORMULA", "formula")
 #define STR_CHART                               NC_("STR_CHART", "chart")
 #define STR_NOTE                                NC_("STR_NOTE", "comment")
@@ -955,7 +955,7 @@
 #define FLD_STAT_WORD                           NC_("FLD_STAT_WORD", "Words")
 #define FLD_STAT_PARA                           NC_("FLD_STAT_PARA", "Paragraphs")
 #define FLD_STAT_GRF                            NC_("FLD_STAT_GRF", "Image")
-#define FLD_STAT_OBJ                            NC_("FLD_STAT_OBJ", "Objects")
+#define FLD_STAT_OBJ                            NC_("FLD_STAT_OBJ", "OLE objects")
 #define FLD_STAT_PAGE                           NC_("FLD_STAT_PAGE", "Pages")
 //  SubCmd DDETypes
 #define FMT_DDE_HOT                             NC_("FMT_DDE_HOT", "DDE automatic")
