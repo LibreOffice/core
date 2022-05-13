@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "024f880d_18d2fe63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-05-13T12:50:53Z",
+      "side": 1,
+      "message": "I guess this is ok, but I don\u0027t even know these exist :) (and I also use a separate builddir, so I wouldn\u0027t notice anyway).\n",
+      "revId": "d7d35d785bdc1ea2e3d94ddf205c4d140d29d9fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
