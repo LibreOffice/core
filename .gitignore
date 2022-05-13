@@ -94,6 +94,7 @@ eclipsesettingfile.xml
 .yavide_session
 .vscode
 *.code-workspace
+.mold-*
 
 # things below this point are targeted for elimination
 
