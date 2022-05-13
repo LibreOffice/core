@@ -202,6 +202,36 @@ void LOKDocViewSigHandlers::formulaChanged(LOKDocView* pDocView, char* pPayload,
     gtk_entry_set_text(pFormulabar, pPayload);
 }
 
+void LOKDocViewSigHandlers::contentControl(LOKDocView* pDocView, gchar* pJson, gpointer)
+{
+    GtvApplicationWindow* window
+        = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+    GtvMainToolbar* toolbar = gtv_application_window_get_main_toolbar(window);
+    gtv_application_window_set_part_broadcast(window, false);
+    gtk_list_store_clear(
+        GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(toolbar->m_pContentControlSelector))));
+    if (!window->lokdocview)
+    {
+        return;
+    }
+
+    std::stringstream aStream(pJson);
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    boost::optional<boost::property_tree::ptree&> oItems = aTree.get_child_optional("items");
+    if (oItems)
+    {
+        for (const auto& rItem : *oItems)
+        {
+            std::string aValue = rItem.second.get_value<std::string>();
+            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(toolbar->m_pContentControlSelector),
+                                           aValue.c_str());
+        }
+    }
+
+    gtv_application_window_set_part_broadcast(window, true);
+}
+
 void LOKDocViewSigHandlers::passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));

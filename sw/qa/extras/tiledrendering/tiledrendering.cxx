@@ -168,6 +168,7 @@ public:
     void testMoveShapeHandle();
     void testRedlinePortions();
     void testContentControl();
+    void testDropDownContentControl();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -256,6 +257,7 @@ public:
     CPPUNIT_TEST(testMoveShapeHandle);
     CPPUNIT_TEST(testRedlinePortions);
     CPPUNIT_TEST(testContentControl);
+    CPPUNIT_TEST(testDropDownContentControl);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3635,6 +3637,81 @@ void SwTiledRenderingTest::testContentControl()
     boost::property_tree::read_json(aStream, aTree);
     OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
     CPPUNIT_ASSERT_EQUAL(OString("hide"), sAction);
+}
+
+void SwTiledRenderingTest::testDropDownContentControl()
+{
+    // Given a document with a dropdown content control:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "choose an item", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    {
+        uno::Sequence<beans::PropertyValues> aListItems = {
+            {
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("red"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("R"))),
+            },
+            {
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("green"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("G"))),
+            },
+            {
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("blue"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("B"))),
+            },
+        };
+        xContentControlProps->setPropertyValue("ListItems", uno::Any(aListItems));
+    }
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    m_aContentControl.clear();
+
+    // When entering that content control:
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
+
+    // Then make sure that the callback is emitted:
+    CPPUNIT_ASSERT(!m_aContentControl.isEmpty());
+    {
+        std::stringstream aStream(m_aContentControl.getStr());
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
+        OString sRectangles = aTree.get_child("rectangles").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT(!sRectangles.isEmpty());
+        boost::optional<boost::property_tree::ptree&> oItems = aTree.get_child_optional("items");
+        CPPUNIT_ASSERT(oItems);
+        static const std::vector<std::string> vExpected = { "red", "green", "blue" };
+        size_t i = 0;
+        for (const auto& rItem : *oItems)
+        {
+            CPPUNIT_ASSERT_EQUAL(vExpected[i++], rItem.second.get_value<std::string>());
+        }
+    }
+
+    // And when selecting the 2nd item (green):
+    std::map<OUString, OUString> aArguments;
+    aArguments.emplace("type", "drop-down");
+    aArguments.emplace("selected", "1");
+    pXTextDocument->executeContentControlEvent(aArguments);
+
+    // Then make sure that the document is updated accordingly:
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: green
+    // - Actual  : choose an item
+    // i.e. the document text was not updated.
+    CPPUNIT_ASSERT_EQUAL(OUString("green"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);

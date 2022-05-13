@@ -163,6 +163,7 @@
 
 #include <IDocumentOutlineNodes.hxx>
 #include <SearchResultLocator.hxx>
+#include <textcontentcontrol.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -3361,6 +3362,51 @@ SwXTextDocument::getSearchResultRectangles(const char* pPayload)
         return aResult.maRectangles;
     }
     return std::vector<basegfx::B2DRange>();
+}
+
+void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
+{
+    SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
+    const SwPosition* pStart = pWrtShell->GetCursor()->Start();
+    SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+    if (!pTextNode)
+    {
+        return;
+    }
+
+    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pStart->nContent.GetIndex(),
+                                                 RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+    if (!pAttr)
+    {
+        return;
+    }
+
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
+    auto pContentControl = const_cast<SwContentControl*>(rFormatContentControl.GetContentControl());
+    auto it = rArguments.find("type");
+    if (it == rArguments.end())
+    {
+        return;
+    }
+
+    if (it->second == "drop-down")
+    {
+        if (!pContentControl->HasListItems())
+        {
+            return;
+        }
+
+        it = rArguments.find("selected");
+        if (it == rArguments.end())
+        {
+            return;
+        }
+
+        sal_Int32 nSelection = it->second.toInt32();
+        pContentControl->SetSelectedListItem(nSelection);
+        pWrtShell->GotoContentControl(rFormatContentControl);
+    }
 }
 
 int SwXTextDocument::getPart()

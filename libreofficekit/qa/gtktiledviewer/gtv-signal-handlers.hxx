@@ -67,6 +67,8 @@ gboolean signalAddressbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pD
 /// Handles the key-press-event of the formula entry widget.
 gboolean signalFormulabar(GtkWidget* /*pWidget*/, GdkEventKey* /*pEvent*/, gpointer /*pData*/);
 
+void changeContentControl(GtkWidget* pSelector, gpointer /*pItem*/);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

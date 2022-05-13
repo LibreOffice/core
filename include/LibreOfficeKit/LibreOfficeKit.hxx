@@ -807,6 +807,25 @@ public:
         return mpDoc->pClass->renderSearchResult(mpDoc, pSearchResult, pBitmapBuffer, pWidth, pHeight, pByteSize);
     }
 
+    /**
+     * Posts an event for the content control at the cursor position.
+     *
+     * @param pArguments arguments of the event.
+     *
+     * Example argument string:
+     *
+     * {
+     *     "type": "drop-down",
+     *     "selected": "2"
+     * }
+     *
+     * selects the 3rd list item of the drop-down.
+     */
+    void sendContentControlEvent(const char* pArguments)
+    {
+        mpDoc->pClass->sendContentControlEvent(mpDoc, pArguments);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
