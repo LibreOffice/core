@@ -14,10 +14,10 @@
 
 #include <edtwin.hxx>
 
-SwContentControlButton::SwContentControlButton(SwEditWin* pEditWin,
-                                               const SwContentControl& rContentControl)
+SwContentControlButton::SwContentControlButton(
+    SwEditWin* pEditWin, const std::shared_ptr<SwContentControl>& pContentControl)
     : Control(pEditWin, WB_DIALOGCONTROL)
-    , m_rContentControl(rContentControl)
+    , m_pContentControl(pContentControl)
 {
     assert(GetParent());
     assert(dynamic_cast<SwEditWin*>(GetParent()));

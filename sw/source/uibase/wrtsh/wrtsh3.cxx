@@ -94,7 +94,7 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
 
     bool bRet = SwCursorShell::GotoFormatContentControl(rContentControl);
 
-    auto pContentControl = const_cast<SwContentControl*>(rContentControl.GetContentControl());
+    std::shared_ptr<SwContentControl> pContentControl = rContentControl.GetContentControl();
     if (bRet && pContentControl && pContentControl->GetCheckbox())
     {
         // Checkbox: GotoFormatContentControl() selected the old state.

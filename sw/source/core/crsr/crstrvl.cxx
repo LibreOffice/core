@@ -856,7 +856,7 @@ bool SwCursorShell::GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote)
 bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rContentControl)
 {
     bool bRet = false;
-    auto pContentControl = const_cast<SwContentControl*>(rContentControl.GetContentControl());
+    std::shared_ptr<SwContentControl> pContentControl = rContentControl.GetContentControl();
     if (!pContentControl->GetShowingPlaceHolder() && !pContentControl->GetCheckbox()
         && !pContentControl->GetSelectedListItem())
     {

@@ -21,7 +21,7 @@
 
 void SwDropDownContentControlButton::InitDropdown()
 {
-    std::vector<SwContentControlListItem> aListItems = m_rContentControl.GetListItems();
+    std::vector<SwContentControlListItem> aListItems = m_pContentControl->GetListItems();
 
     for (const auto& rListItem : aListItems)
     {
@@ -60,17 +60,16 @@ IMPL_LINK(SwDropDownContentControlButton, ListBoxHandler, weld::TreeView&, rBox,
     {
         SwView& rView = static_cast<SwEditWin*>(GetParent())->GetView();
         SwWrtShell& rWrtShell = rView.GetWrtShell();
-        auto& rContentControl = const_cast<SwContentControl&>(m_rContentControl);
-        rContentControl.SetSelectedListItem(nSelection);
-        rWrtShell.GotoContentControl(*m_rContentControl.GetFormatContentControl());
+        m_pContentControl->SetSelectedListItem(nSelection);
+        rWrtShell.GotoContentControl(*m_pContentControl->GetFormatContentControl());
     }
 
     return true;
 }
 
 SwDropDownContentControlButton::SwDropDownContentControlButton(
-    SwEditWin* pEditWin, const SwContentControl& rContentControl)
-    : SwContentControlButton(pEditWin, rContentControl)
+    SwEditWin* pEditWin, const std::shared_ptr<SwContentControl>& pContentControl)
+    : SwContentControlButton(pEditWin, pContentControl)
 {
 }
 

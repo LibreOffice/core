@@ -20,7 +20,8 @@ class SwContentControl;
 class SwContentControlButton : public Control
 {
 public:
-    SwContentControlButton(SwEditWin* pEditWin, const SwContentControl& rContentControl);
+    SwContentControlButton(SwEditWin* pEditWin,
+                           const std::shared_ptr<SwContentControl>& pContentControl);
     virtual ~SwContentControlButton() override;
     virtual void dispose() override;
 
@@ -35,13 +36,13 @@ public:
     virtual void LaunchPopup();
     virtual void DestroyPopup();
 
-    const SwContentControl& GetContentControl() const { return m_rContentControl; }
+    const std::shared_ptr<SwContentControl>& GetContentControl() const { return m_pContentControl; }
 
 private:
     tools::Rectangle m_aFramePixel;
 
 protected:
-    const SwContentControl& m_rContentControl;
+    std::shared_ptr<SwContentControl> m_pContentControl;
     std::unique_ptr<weld::Builder> m_xPopupBuilder;
     std::unique_ptr<weld::Popover> m_xPopup;
 };
