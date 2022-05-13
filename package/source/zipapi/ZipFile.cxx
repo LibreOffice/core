@@ -918,6 +918,7 @@ sal_Int32 ZipFile::readCEN()
         ZipEntry aEntry;
         sal_Int16 nCommentLen;
 
+        aEntries.reserve(nTotal);
         for (nCount = 0 ; nCount < nTotal; nCount++)
         {
             sal_Int32 nTestSig = aMemGrabber.ReadInt32();
