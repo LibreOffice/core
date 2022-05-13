@@ -94,7 +94,7 @@ bool PackageEncryptionDataLessOrEqual( const ::comphelper::SequenceAsHashMap& aH
         bResult = ( ( aIter->second >>= aKey1 ) && aKey1.hasElements() );
         if ( bResult )
         {
-            const uno::Sequence< sal_Int8 > aKey2 = aHash2.getUnpackedValueOrDefault( aIter->first, uno::Sequence< sal_Int8 >() );
+            const uno::Sequence< sal_Int8 > aKey2 = aHash2.getUnpackedValueOrDefault( aIter->first.maString, uno::Sequence< sal_Int8 >() );
             bResult = aKey1.getLength() == aKey2.getLength()
                 && std::equal(std::cbegin(aKey1), std::cend(aKey1), aKey2.begin(), aKey2.end());
         }
