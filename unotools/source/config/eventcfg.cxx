@@ -111,7 +111,7 @@ public:
     /// @throws css::container::NoSuchElementException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Any getByName( const OUString& aName );
+    css::uno::Sequence < css::beans::PropertyValue > getByName( const OUString& aName );
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< OUString > getElementNames(  );
     /// @throws css::uno::RuntimeException
@@ -238,9 +238,8 @@ void GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aE
     SetModified();
 }
 
-Any GlobalEventConfig_Impl::getByName( const OUString& aName )
+css::uno::Sequence < css::beans::PropertyValue > GlobalEventConfig_Impl::getByName( const OUString& aName )
 {
-    Any aRet;
     Sequence< beans::PropertyValue > props(2);
     auto pProps = props.getArray();
     pProps[0].Name = "EventType";
@@ -261,8 +260,7 @@ Any GlobalEventConfig_Impl::getByName( const OUString& aName )
 
         pProps[1].Value <<= OUString();
     }
-    aRet <<= props;
-    return aRet;
+    return props;
 }
 
 Sequence< OUString > GlobalEventConfig_Impl::getElementNames(  )
@@ -341,6 +339,10 @@ void SAL_CALL GlobalEventConfig::replaceByName( const OUString& aName, const Any
     m_pImpl->replaceByName( aName, aElement );
 }
 Any SAL_CALL GlobalEventConfig::getByName( const OUString& aName )
+{
+    return Any(getByName2(aName));
+}
+css::uno::Sequence < css::beans::PropertyValue > GlobalEventConfig::getByName2( const OUString& aName )
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
     return m_pImpl->getByName( aName );
