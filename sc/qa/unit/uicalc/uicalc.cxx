@@ -970,6 +970,26 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf145085)
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf148863)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertArrayToCell(*pModelObj, "A1", "=TRANSPOSE(IF({0|0|0}=0;RANDBETWEEN.NV(1;1000000)))");
+
+    double nA1 = pDoc->GetValue(ScAddress(0, 0, 0));
+    double nB1 = pDoc->GetValue(ScAddress(1, 0, 0));
+    double nC1 = pDoc->GetValue(ScAddress(2, 0, 0));
+
+    // Without the fix in place, this test woul have failed here
+    CPPUNIT_ASSERT(nA1 != nB1);
+    CPPUNIT_ASSERT(nA1 != nC1);
+    CPPUNIT_ASSERT(nB1 != nC1);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144244)
 {
     ScModelObj* pModelObj = createDoc("tdf144244.ods");
