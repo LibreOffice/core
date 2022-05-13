@@ -4048,16 +4048,54 @@
      <table:table-cell table:style-name="ce58"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.I46:.L46];[.F46])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A46];12)=ROUND([.B46];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A46])" office:value-type="string" office:string-value="=COUNTIF(I46:L46;&quot;&lt;&gt;&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF(I46:L46;&quot;&lt;&gt;&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>numbers entered as string</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>3</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce64"/>
-     <table:table-cell table:style-name="ce34"/>
-     <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce20"/>
-     <table:table-cell table:number-columns-repeated="16"/>
-     <table:table-cell table:style-name="ce56"/>
-     <table:table-cell table:style-name="ce58"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>3</text:p>
+     </table:table-cell>
     </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.I47:.L47];[.F47])" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A47];12)=ROUND([.B47];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A47])" office:value-type="string" office:string-value="=COUNTIF(I47:L47;&quot;&lt;&gt;&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF(I47:L47;&quot;&lt;&gt;&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>numbers entered as string</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>1</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell/>
      <table:table-cell table:style-name="ce23"/>
      <table:table-cell table:style-name="ce64"/>

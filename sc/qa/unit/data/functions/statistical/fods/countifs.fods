@@ -3898,10 +3898,54 @@
      <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A37])" office:value-type="string" office:string-value="=COUNTIFS(AF2:AF7, &quot;&lt;&quot; &amp; AF6,AG2:AG7,&quot;&lt;&quot; &amp; AG4)" calcext:value-type="string">
       <text:p>=COUNTIFS(AF2:AF7, &quot;&lt;&quot; &amp; AF6,AG2:AG7,&quot;&lt;&quot; &amp; AG4)</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="21"/>
-     <table:table-cell table:style-name="ce45"/>
-     <table:table-cell table:style-name="ce46"/>
-     <table:table-cell table:number-columns-repeated="7"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+     <table:table-cell table:formula="of:=COUNTIFS([.$I$38:.$I$39];[.F38])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" table:formula="of:=ROUND([.A38];12)=ROUND([.B38];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A38])" office:value-type="string" office:string-value="=COUNTIFS(AF2:AF7, &quot;&lt;&quot; &amp; AF6,AG2:AG7,&quot;&lt;&quot; &amp; AG4)" calcext:value-type="string">
+      <text:p>=COUNTIFS(I38:I39;F38)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>numbers entered as string</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>3</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro8">
+     <table:table-cell table:formula="of:=COUNTIFS([.$I$38:.$I$39];[.F39])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" table:formula="of:=ROUND([.A39];12)=ROUND([.B39];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce25" table:formula="of:=FORMULA([.A39])" office:value-type="string" office:string-value="=COUNTIFS(AF2:AF7, &quot;&lt;&quot; &amp; AF6,AG2:AG7,&quot;&lt;&quot; &amp; AG4)" calcext:value-type="string">
+      <text:p>=COUNTIFS(I38:I39;F39)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>numbers entered as string</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>1</text:p>
+     </table:table-cell>
     </table:table-row>
     <table:table-row table:style-name="ro6" table:number-rows-repeated="4">
      <table:table-cell table:number-columns-repeated="2"/>
@@ -4335,17 +4379,17 @@
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C9"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C9"/>
      </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C30 Sheet2.C31:Sheet2.C37">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C30 Sheet2.C31:Sheet2.C39">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
      </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C30 Sheet2.C31:Sheet2.C37">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C30 Sheet2.C31:Sheet2.C39">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
      </calcext:conditional-format>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C30 Sheet2.C31:Sheet2.C37">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C30 Sheet2.C31:Sheet2.C39">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
