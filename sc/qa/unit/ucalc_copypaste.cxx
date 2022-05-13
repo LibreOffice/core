@@ -10798,6 +10798,10 @@ void TestCopyPaste::testCopyPasteMatrixFormula()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
 
     m_pDoc->DeleteTab(0);
+
+    OString s1("abcабв");
+    OString s2(u8"abcабв");
+    CPPUNIT_ASSERT_EQUAL(s1, s2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestCopyPaste);
