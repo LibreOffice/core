@@ -160,7 +160,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControl)
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
         = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
-    SwContentControl* pContentControl = rFormatContentControl.GetContentControl();
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
     // Without the accompanying fix in place, this test would have failed, the inserted content
     // control wasn't a checkbox one.
     CPPUNIT_ASSERT(pContentControl->GetCheckbox());
@@ -232,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertDropdownContentControl)
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
         = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
-    SwContentControl* pContentControl = rFormatContentControl.GetContentControl();
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
     // Without the accompanying fix in place, this test would have failed:
     // - Expected: 1
     // - Actual  : 0

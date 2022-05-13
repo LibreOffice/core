@@ -3383,7 +3383,7 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
 
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
-    auto pContentControl = const_cast<SwContentControl*>(rFormatContentControl.GetContentControl());
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
     auto it = rArguments.find("type");
     if (it == rArguments.end())
     {

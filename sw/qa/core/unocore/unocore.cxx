@@ -342,7 +342,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlInsert)
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
         = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
-    SwContentControl* pContentControl = rFormatContentControl.GetContentControl();
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
     CPPUNIT_ASSERT(pContentControl->GetShowingPlaceHolder());
 }
 
@@ -459,7 +459,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlCheckbox)
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
         = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
-    SwContentControl* pContentControl = rFormatContentControl.GetContentControl();
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
     CPPUNIT_ASSERT(pContentControl->GetCheckbox());
     CPPUNIT_ASSERT(pContentControl->GetChecked());
     CPPUNIT_ASSERT_EQUAL(OUString(u"☒"), pContentControl->GetCheckedState());
@@ -510,7 +510,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDropdown)
     auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     auto& rFormatContentControl
         = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
-    SwContentControl* pContentControl = rFormatContentControl.GetContentControl();
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
     std::vector<SwContentControlListItem> aListItems = pContentControl->GetListItems();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aListItems.size());
     CPPUNIT_ASSERT_EQUAL(OUString("red"), aListItems[0].m_aDisplayText);

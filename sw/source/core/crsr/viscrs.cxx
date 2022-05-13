@@ -640,7 +640,7 @@ void SwSelPaintRects::HighlightContentControl()
     std::vector<basegfx::B2DRange> aContentControlRanges;
     std::vector<OString> aLOKRectangles;
     SwRect aLastPortionPaintArea;
-    const SwContentControl* pContentControl = nullptr;
+    std::shared_ptr<SwContentControl> pContentControl;
 
     if (m_bShowContentControlOverlay)
     {
@@ -740,14 +740,14 @@ void SwSelPaintRects::HighlightContentControl()
             {
                 auto& rEditWin = const_cast<SwEditWin&>(pWrtShell->GetView().GetEditWin());
                 if (m_pContentControlButton
-                    && &m_pContentControlButton->GetContentControl() != pContentControl)
+                    && m_pContentControlButton->GetContentControl() != pContentControl)
                 {
                     m_pContentControlButton.disposeAndClear();
                 }
                 if (!m_pContentControlButton)
                 {
                     m_pContentControlButton = VclPtr<SwDropDownContentControlButton>::Create(
-                        &rEditWin, *pContentControl);
+                        &rEditWin, pContentControl);
                 }
                 m_pContentControlButton->CalcPosAndSize(aLastPortionPaintArea);
                 m_pContentControlButton->Show();
