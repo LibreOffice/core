@@ -613,27 +613,14 @@ void PPTShape::addShape(
                     // so check here if it's a bookmark or a document
                     if (meClickAction == ClickAction_BOOKMARK)
                     {
+                        sal_Int32 nSplitPos;
                         if (!sURL.startsWith("#"))
                             meClickAction = ClickAction_DOCUMENT;
-                        else
+                        else if (-1 != (nSplitPos = sURL.indexOf( ' ' )))
                         {
-                            sURL = sURL.copy(1);
-                            sal_Int32 nPageNumber = 0;
-                            static const OUStringLiteral sSlide = u"Slide ";
-                            if (sURL.match(sSlide))
-                                nPageNumber = o3tl::toInt32(sURL.subView(sSlide.getLength()));
-                            Reference<drawing::XDrawPagesSupplier> xDPS(rFilterBase.getModel(),
-                                                                        uno::UNO_QUERY_THROW);
-                            Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(),
-                                                                      uno::UNO_SET_THROW);
-                            sal_Int32 nMaxPages = xDrawPages->getCount();
-                            if (nPageNumber && nPageNumber <= nMaxPages)
-                            {
-                                Reference<XDrawPage> xDrawPage;
-                                xDrawPages->getByIndex(nPageNumber - 1) >>= xDrawPage;
-                                Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY);
-                                sURL = xNamed->getName();
-                            }
+                            setBookmark(true);
+                            // reuse slide number from '#Slide [Num]' or "#Notes [Num]"
+                            sURL = OUString::Concat("#page") + sURL.subView(nSplitPos);
                         }
                         nPropertyCount += 1;
                     }

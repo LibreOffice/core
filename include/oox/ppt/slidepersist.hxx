@@ -127,6 +127,9 @@ public:
 
     void createConnectorShapeConnection();
 
+    void  addURLShapeId(const OUString& rShapeId) { maURLShapeId.push_back(rShapeId); }
+    std::vector<OUString>& getURLShapeId() { return maURLShapeId; }
+
 private:
     OUString                                                                maPath;
     OUString                                                                maLayoutPath;
@@ -160,6 +163,7 @@ private:
     CommentAuthorList                                                       maCommentAuthors;
 
     std::vector<OUString>                                                   maConnectorShapeId;
+    std::vector<OUString>                                                   maURLShapeId;
 };
 
 }

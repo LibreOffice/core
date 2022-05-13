@@ -106,6 +106,51 @@ PresentationFragmentHandler::~PresentationFragmentHandler() noexcept
 {
 }
 
+static void lcl_setBookmark(uno::Reference<drawing::XShape>& rShape,
+                            std::vector<SlidePersistPtr>& rSlidePersist)
+{
+    OUString aBookmark;
+    sal_Int32 nPageNumber;
+    static const OUStringLiteral sSlideName = u"#page";
+    uno::Reference<beans::XPropertySet> xPropSet(rShape, uno::UNO_QUERY);
+    xPropSet->getPropertyValue("Bookmark") >>= aBookmark;
+    nPageNumber = o3tl::toInt32(aBookmark.subView(sSlideName.getLength()));
+    Reference<XDrawPage> xDrawPage(rSlidePersist[nPageNumber - 1]->getPage());
+    Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
+    aBookmark = xNamed->getName();
+    xPropSet->setPropertyValue("Bookmark", Any(aBookmark));
+}
+
+static void ResolveShapeBookmark(std::vector<SlidePersistPtr>& rSlidePersist)
+{
+    sal_Int32 nPageCount = rSlidePersist.size();
+    for (sal_Int32 nPage = 0; nPage < nPageCount; ++nPage)
+    {
+        if (!rSlidePersist[nPage]->getURLShapeId().empty())
+        {
+            auto aShapeMap = rSlidePersist[nPage]->getShapeMap();
+            sal_Int32 nCount = rSlidePersist[nPage]->getURLShapeId().size();
+            for (sal_Int32 i = 0; i < nCount; i++)
+            {
+                OUString sId = rSlidePersist[nPage]->getURLShapeId()[i];
+                uno::Reference<drawing::XShape> xShape(aShapeMap[sId]->getXShape(), uno::UNO_QUERY);
+                Reference<XShapes> xShapes(xShape, UNO_QUERY);
+                if (xShapes.is()) // group shape
+                {
+                    for (sal_Int32 j = 0; j < xShapes->getCount(); j++)
+                    {
+                        uno::Reference<drawing::XShape> xGroupedShape(xShapes->getByIndex(j),
+                                                                      uno::UNO_QUERY);
+                        lcl_setBookmark(xGroupedShape, rSlidePersist);
+                    }
+                }
+                else
+                    lcl_setBookmark(xShape, rSlidePersist);
+            }
+        }
+    }
+}
+
 static void ResolveTextFields( XmlFilterBase const & rFilter )
 {
     const oox::core::TextFieldStack& rTextFields = rFilter.getTextFieldStack();
@@ -551,6 +596,7 @@ void PresentationFragmentHandler::finalizeImport()
                 nPagesImported++;
             }
             ResolveTextFields( rFilter );
+            ResolveShapeBookmark(rFilter.getDrawPages());
             if (!maCustomShowList.empty())
                 importCustomSlideShow(maCustomShowList);
         }

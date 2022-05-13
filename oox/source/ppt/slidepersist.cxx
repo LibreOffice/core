@@ -158,6 +158,8 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
                             maConnectorShapeId.push_back(pPPTShape->getChildren()[i]->getId());
                     }
                 }
+                if (pPPTShape->hasBookmark())
+                    addURLShapeId(pPPTShape->getId());
             }
             else
                 child->addShape( rFilterBase, getTheme().get(), xShapes, aTransformation, maShapesPtr->getFillProperties(), &getShapeMap() );
