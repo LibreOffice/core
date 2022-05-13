@@ -559,45 +559,55 @@ ErrCode SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, std::shared_ptr<cons
 std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilterForProps( const css::uno::Sequence < beans::NamedValue >& aSeq, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    uno::Reference< container::XContainerQuery > xTypeCFG;
-    if( xServiceManager.is() )
-        xTypeCFG.set( xServiceManager->createInstance( "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
-    if ( xTypeCFG.is() )
+    if( !xServiceManager )
+        return nullptr;
+
+    static constexpr OUStringLiteral sTypeDetection = u"com.sun.star.document.TypeDetection";
+    uno::Reference< container::XContainerQuery > xTypeCFG( xServiceManager->createInstance( sTypeDetection ), uno::UNO_QUERY );
+    if ( !xTypeCFG )
+        return nullptr;
+
+    // make query for all types matching the properties
+    uno::Reference < css::container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
+    ::comphelper::SequenceAsHashMap aProps;
+    while ( xEnum->hasMoreElements() )
     {
-        // make query for all types matching the properties
-        uno::Reference < css::container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
-        while ( xEnum->hasMoreElements() )
+        aProps << xEnum->nextElement();
+
+        OUString aValue;
+        static constexpr OUStringLiteral sPreferredFilter = u"PreferredFilter";
+        // try to get the preferred filter (works without loading all filters!)
+        auto it = aProps.find(sPreferredFilter);
+        if ( it != aProps.end() && (it->second >>= aValue) && !aValue.isEmpty() )
         {
-            ::comphelper::SequenceAsHashMap aProps( xEnum->nextElement() );
-            OUString aValue;
+            std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName( aValue );
+            if ( !pFilter || (pFilter->GetFilterFlags() & nMust) != nMust || (pFilter->GetFilterFlags() & nDont ) )
+                // check for filter flags
+                // pFilter == 0: if preferred filter is a Writer filter, but Writer module is not installed
+                continue;
 
-            // try to get the preferred filter (works without loading all filters!)
-            if ( (aProps[OUString("PreferredFilter")] >>= aValue) && !aValue.isEmpty() )
+            if ( !m_rImpl.aName.isEmpty() )
             {
-                std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName( aValue );
-                if ( !pFilter || (pFilter->GetFilterFlags() & nMust) != nMust || (pFilter->GetFilterFlags() & nDont ) )
-                    // check for filter flags
-                    // pFilter == 0: if preferred filter is a Writer filter, but Writer module is not installed
-                    continue;
-
-                if ( !m_rImpl.aName.isEmpty() )
+                // if this is not the global FilterMatcher: check if filter matches the document type
+                if ( pFilter->GetServiceName() != m_rImpl.aName )
                 {
-                    // if this is not the global FilterMatcher: check if filter matches the document type
-                    if ( pFilter->GetServiceName() != m_rImpl.aName )
-                    {
-                        // preferred filter belongs to another document type; now we must search the filter
-                        m_rImpl.InitForIterating();
-                        aProps[OUString("Name")] >>= aValue;
-                        pFilter = GetFilter4EA( aValue, nMust, nDont );
-                        if ( pFilter )
-                            return pFilter;
-                    }
+                    // preferred filter belongs to another document type; now we must search the filter
+                    m_rImpl.InitForIterating();
+                    static constexpr OUStringLiteral sName = u"Name";
+                    it = aProps.find(sName);
+                    if (it != aProps.end())
+                        it->second >>= aValue;
                     else
+                        aValue.clear();
+                    pFilter = GetFilter4EA( aValue, nMust, nDont );
+                    if ( pFilter )
                         return pFilter;
                 }
                 else
                     return pFilter;
             }
+            else
+                return pFilter;
         }
     }
 
@@ -730,8 +740,10 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4FilterName( const O
         uno::Reference< container::XNameAccess >     xTypeCFG                                                  ;
         if( xServiceManager.is() )
         {
-            xFilterCFG.set( xServiceManager->createInstance(  "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
-            xTypeCFG.set( xServiceManager->createInstance(  "com.sun.star.document.TypeDetection" ), uno::UNO_QUERY );
+            static constexpr OUStringLiteral sFilterFactory = u"com.sun.star.document.FilterFactory";
+            static constexpr OUStringLiteral sTypeDetection = u"com.sun.star.document.TypeDetection";
+            xFilterCFG.set( xServiceManager->createInstance(  sFilterFactory ), uno::UNO_QUERY );
+            xTypeCFG.set( xServiceManager->createInstance(  sTypeDetection ), uno::UNO_QUERY );
         }
 
         if( xFilterCFG.is() && xTypeCFG.is() )
