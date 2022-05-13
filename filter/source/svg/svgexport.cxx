@@ -372,6 +372,11 @@ SVGExport::SVGExport(
 
     // add namespaces
     GetNamespaceMap_().Add(
+            GetXMLToken(XML_NP_SVG),
+            GetXMLToken(XML_N_SVG_COMPAT),
+            XML_NAMESPACE_SVG);
+
+    GetNamespaceMap_().Add(
         GetXMLToken(XML_NP_PRESENTATION),
         GetXMLToken(XML_N_PRESENTATION),
         XML_NAMESPACE_PRESENTATION);
@@ -1047,6 +1052,7 @@ void SVGFilter::implExportDocumentHeaderImpressOrDraw(sal_Int32 nDocX, sal_Int32
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:presentation", "http://sun.com/xmlns/staroffice/presentation" );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:smil", "http://www.w3.org/2001/SMIL20/" );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:anim", "urn:oasis:names:tc:opendocument:xmlns:animation:1.0" );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xml:space", "preserve" );
 
     mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", true, true );
