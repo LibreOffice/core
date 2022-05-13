@@ -367,6 +367,13 @@ gfloat                         lok_doc_view_pixel_to_twip          (LOKDocView* 
 gfloat                         lok_doc_view_twip_to_pixel          (LOKDocView* pDocView,
                                                                     float fInput);
 
+/**
+ * lok_doc_view_send_content_control_event:
+ * @pDocView: The #LOKDocView instance
+ * @pArguments: (nullable) (allow-none): see lok::Document::sendContentControlEvent() for the details.
+ */
+void lok_doc_view_send_content_control_event(LOKDocView* pDocView, const gchar* pArguments);
+
 G_END_DECLS
 
 #endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITGTK_H

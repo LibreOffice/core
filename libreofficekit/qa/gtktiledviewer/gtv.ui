@@ -428,6 +428,24 @@
       </packing>
     </child>
     <child>
+      <object class="GtkToolItem" id="contentcontrolselectortoolitem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkComboBoxText" id="combo_contentcontrolselector">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="tooltip_text">Content control list items</property>
+            <signal name="changed" handler="changeContentControl" swapped="no"/>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkToggleToolButton" id="btn_editmode">
         <property name="visible">True</property>
         <property name="label" translatable="yes">Turn on/off edit mode</property>
