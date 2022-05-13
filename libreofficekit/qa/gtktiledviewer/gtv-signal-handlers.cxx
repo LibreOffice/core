@@ -318,6 +318,22 @@ void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
     }
 }
 
+void changeContentControl(GtkWidget* pSelector, gpointer /*pItem*/)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pSelector));
+    if (gtv_application_window_get_part_broadcast(window) && window->lokdocview)
+    {
+        int nItem = gtk_combo_box_get_active(GTK_COMBO_BOX(pSelector));
+        boost::property_tree::ptree aValues;
+        aValues.put("type", "drop-down");
+        aValues.put("selected", std::to_string(nItem));
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aValues);
+        std::string aJson = aStream.str();
+        lok_doc_view_send_content_control_event(LOK_DOC_VIEW(window->lokdocview), aJson.c_str());
+    }
+}
+
 void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 {
     static const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };

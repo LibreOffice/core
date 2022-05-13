@@ -331,6 +331,8 @@ static void setupDocView(GtvApplicationWindow* window)
     g_signal_connect(window->lokdocview, "search-result-count", G_CALLBACK(LOKDocViewSigHandlers::searchResultCount), nullptr);
     g_signal_connect(window->lokdocview, "part-changed", G_CALLBACK(LOKDocViewSigHandlers::partChanged), nullptr);
     g_signal_connect(window->lokdocview, "hyperlink-clicked", G_CALLBACK(LOKDocViewSigHandlers::hyperlinkClicked), nullptr);
+    g_signal_connect(window->lokdocview, "content-control",
+                     G_CALLBACK(LOKDocViewSigHandlers::contentControl), nullptr);
     g_signal_connect(window->lokdocview, "cursor-changed", G_CALLBACK(LOKDocViewSigHandlers::cursorChanged), nullptr);
     g_signal_connect(window->lokdocview, "address-changed", G_CALLBACK(LOKDocViewSigHandlers::addressChanged), nullptr);
     g_signal_connect(window->lokdocview, "formula-changed", G_CALLBACK(LOKDocViewSigHandlers::formulaChanged), nullptr);
