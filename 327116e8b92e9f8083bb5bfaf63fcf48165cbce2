@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0cd81d8_6977162a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-13T10:31:15Z",
+      "side": 1,
+      "message": "Hopefully correcting these two will get you unblocked wrt ODF import. :-)",
+      "revId": "327116e8b92e9f8083bb5bfaf63fcf48165cbce2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe333d5c_10621dce",
+        "filename": "xmloff/source/core/xmltoken.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3478,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-13T10:31:15Z",
+      "side": 1,
+      "message": "Be sure to update xmloff/source/token/tokens.txt accordingly.",
+      "revId": "327116e8b92e9f8083bb5bfaf63fcf48165cbce2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee2ddd64_3eded74b",
+        "filename": "xmloff/source/text/txtflde.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1803,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-13T10:31:15Z",
+      "side": 1,
+      "message": "Use XML_NAMESPACE_LO_EXT for new extensions till they are not in ODF.",
+      "revId": "327116e8b92e9f8083bb5bfaf63fcf48165cbce2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
