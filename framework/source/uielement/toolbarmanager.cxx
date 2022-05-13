@@ -1196,30 +1196,16 @@ void ToolBarManager::CreateControllers()
         {
             if ( bInit )
             {
-                PropertyValue aPropValue;
-                std::vector< Any > aPropertyVector;
-
-                aPropValue.Name = "Frame";
-                aPropValue.Value <<= m_xFrame;
-                aPropertyVector.push_back( Any( aPropValue ));
-                aPropValue.Name = "CommandURL";
-                aPropValue.Value <<= aCommandURL;
-                aPropertyVector.push_back( Any( aPropValue ));
-                aPropValue.Name = "ServiceManager";
                 Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
-                aPropValue.Value <<= xMSF;
-                aPropertyVector.push_back( Any( aPropValue ));
-                aPropValue.Name = "ParentWindow";
-                aPropValue.Value <<= xToolbarWindow;
-                aPropertyVector.push_back( Any( aPropValue ));
-                aPropValue.Name = "ModuleIdentifier";
-                aPropValue.Value <<= m_aModuleIdentifier;
-                aPropertyVector.push_back( Any( aPropValue ));
-                aPropValue.Name     = "Identifier";
-                aPropValue.Value    <<= sal_uInt16(nId);
-                aPropertyVector.push_back( uno::Any( aPropValue ) );
+                Sequence< Any > aArgs {
+                    Any( comphelper::makePropertyValue("Frame", m_xFrame) ),
+                    Any( comphelper::makePropertyValue("CommandURL", aCommandURL) ),
+                    Any( comphelper::makePropertyValue("ServiceManager", xMSF) ),
+                    Any( comphelper::makePropertyValue("ParentWindow", xToolbarWindow) ),
+                    Any( comphelper::makePropertyValue("ModuleIdentifier", m_aModuleIdentifier) ),
+                    Any( comphelper::makePropertyValue("Identifier", sal_uInt16(nId)) ),
+                };
 
-                Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
                 xInit->initialize( aArgs );
 
                 if (pController)
