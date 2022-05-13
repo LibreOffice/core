@@ -1229,6 +1229,8 @@ static bool CanBeUsedForSorterCache(const ScDocument& rDoc, const ScQueryParam& 
         return false;
     if(rParam.bHasHeader)
         return false;
+    if(rParam.mbRangeLookup)
+        return false;
     if(rParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString
         && !ScQueryEvaluator::isMatchWholeCell(rDoc, rParam.GetEntry(0)))
         return false; // substring matching cannot be sorted
