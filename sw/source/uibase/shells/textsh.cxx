@@ -234,6 +234,18 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         rReq.Done();
         break;
 
+    case FN_CONTENT_CONTROL_PROPERTIES:
+    {
+        SwWrtShell& rWrtSh = GetShell();
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwContentControlDlg(GetView().GetFrameWeld(), rWrtSh));
+        VclAbstractDialog::AsyncContext aContext;
+        aContext.maEndDialogFn = [](sal_Int32){};
+        pDlg->StartExecuteAsync(aContext);
+        rReq.Done();
+        break;
+    }
+
     case FN_INSERT_COLUMN_BREAK:
         rSh.InsertColumnBreak();
         rReq.Done();

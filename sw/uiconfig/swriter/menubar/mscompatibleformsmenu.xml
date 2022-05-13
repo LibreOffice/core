@@ -19,6 +19,7 @@
           <menu:menuitem menu:id=".uno:InsertCheckboxContentControl"/>
           <menu:menuitem menu:id=".uno:InsertDropdownContentControl"/>
           <menu:menuitem menu:id=".uno:DatePickerFormField"/>
+          <menu:menuitem menu:id=".uno:ContentControlProperties"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:MSCompatLegacyControls">

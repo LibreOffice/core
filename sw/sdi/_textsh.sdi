@@ -290,6 +290,12 @@ interface BaseText
         StateMethod = NoState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    FN_CONTENT_CONTROL_PROPERTIES  // status(final|play)
+    [
+        ExecMethod = ExecInsert ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     FN_INSERT_COLUMN_BREAK // status(final|play)
     [
         ExecMethod = ExecInsert ;
