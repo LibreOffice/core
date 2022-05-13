@@ -122,151 +122,141 @@ static bool isSubSet(const css::uno::Any& aSubSet,
         return false;
     }
 
-    css::uno::TypeClass aTypeClass = aT1.getTypeClass();
-    switch(aTypeClass)
+    if (aSubSet.hasValue() && aSet.hasValue())
     {
-
-        case css::uno::TypeClass_BOOLEAN :
-        case css::uno::TypeClass_BYTE :
-        case css::uno::TypeClass_SHORT :
-        case css::uno::TypeClass_UNSIGNED_SHORT :
-        case css::uno::TypeClass_LONG :
-        case css::uno::TypeClass_UNSIGNED_LONG :
-        case css::uno::TypeClass_HYPER :
-        case css::uno::TypeClass_UNSIGNED_HYPER :
-        case css::uno::TypeClass_FLOAT :
-        case css::uno::TypeClass_DOUBLE :
+        css::uno::TypeClass aTypeClass = aT1.getTypeClass();
+        switch(aTypeClass)
         {
-            bool bIs = (aSubSet == aSet);
-            return bIs;
-        }
 
-
-        case css::uno::TypeClass_STRING :
-        {
-            OUString v1;
-            OUString v2;
-
-            if (
-                (aSubSet >>= v1) &&
-                (aSet    >>= v2)
-               )
+            case css::uno::TypeClass_BOOLEAN :
+            case css::uno::TypeClass_BYTE :
+            case css::uno::TypeClass_SHORT :
+            case css::uno::TypeClass_UNSIGNED_SHORT :
+            case css::uno::TypeClass_LONG :
+            case css::uno::TypeClass_UNSIGNED_LONG :
+            case css::uno::TypeClass_HYPER :
+            case css::uno::TypeClass_UNSIGNED_HYPER :
+            case css::uno::TypeClass_FLOAT :
+            case css::uno::TypeClass_DOUBLE :
             {
-                bool bIs = v1 == v2;
-                return bIs;
-            }
-        }
-        break;
-
-
-        case css::uno::TypeClass_STRUCT :
-        {
-            css::beans::PropertyValue p1;
-            css::beans::PropertyValue p2;
-
-            if (
-                (aSubSet >>= p1) &&
-                (aSet    >>= p2)
-               )
-            {
-                bool bIs = (p1.Name == p2.Name) && isSubSet(p1.Value, p2.Value);
+                bool bIs = (aSubSet == aSet);
                 return bIs;
             }
 
-            css::beans::NamedValue n1;
-            css::beans::NamedValue n2;
 
-            if (
-                (aSubSet >>= n1) &&
-                (aSet    >>= n2)
-               )
+            case css::uno::TypeClass_STRING :
+                return aSubSet == aSet;
+            break;
+
+
+            case css::uno::TypeClass_STRUCT :
             {
-                bool bIs = (n1.Name == n2.Name) && isSubSet(n1.Value, n2.Value);
-                return bIs;
+                css::beans::PropertyValue p1;
+                css::beans::PropertyValue p2;
+
+                if (
+                    (aSubSet >>= p1) &&
+                    (aSet    >>= p2)
+                   )
+                {
+                    bool bIs = (p1.Name == p2.Name) && isSubSet(p1.Value, p2.Value);
+                    return bIs;
+                }
+
+                css::beans::NamedValue n1;
+                css::beans::NamedValue n2;
+
+                if (
+                    (aSubSet >>= n1) &&
+                    (aSet    >>= n2)
+                   )
+                {
+                    bool bIs = (n1.Name == n2.Name) && isSubSet(n1.Value, n2.Value);
+                    return bIs;
+                }
             }
+            break;
+
+
+            case css::uno::TypeClass_SEQUENCE :
+            {
+                css::uno::Sequence< OUString > uno_s1;
+                css::uno::Sequence< OUString > uno_s2;
+
+                if (
+                    (aSubSet >>= uno_s1) &&
+                    (aSet    >>= uno_s2)
+                   )
+                {
+                    auto s2Begin = uno_s2.getConstArray();
+                    auto s2End = uno_s2.getConstArray() + uno_s2.getLength();
+
+                    for (auto const& elem : uno_s1)
+                    {
+                        if (::std::find(s2Begin, s2End, elem) == s2End)
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+
+                css::uno::Sequence< css::beans::PropertyValue > uno_p1;
+                css::uno::Sequence< css::beans::PropertyValue > uno_p2;
+
+                if (
+                    (aSubSet >>= uno_p1) &&
+                    (aSet    >>= uno_p2)
+                   )
+                {
+                    ::comphelper::SequenceAsHashMap stl_p1(uno_p1);
+                    ::comphelper::SequenceAsHashMap stl_p2(uno_p2);
+
+                    for (auto const& elem : stl_p1)
+                    {
+                        ::comphelper::SequenceAsHashMap::const_iterator it2 = stl_p2.find(elem.first);
+                        if (it2 == stl_p2.end())
+                        {
+                            return false;
+                        }
+                        if (!isSubSet(elem.second, it2->second))
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+
+                css::uno::Sequence< css::beans::NamedValue > uno_n1;
+                css::uno::Sequence< css::beans::NamedValue > uno_n2;
+
+                if (
+                    (aSubSet >>= uno_n1) &&
+                    (aSet    >>= uno_n2)
+                   )
+                {
+                    ::comphelper::SequenceAsHashMap stl_n1(uno_n1);
+                    ::comphelper::SequenceAsHashMap stl_n2(uno_n2);
+
+                    for (auto const& elem : stl_n1)
+                    {
+                        ::comphelper::SequenceAsHashMap::const_iterator it2 = stl_n2.find(elem.first);
+                        if (it2 == stl_n2.end())
+                        {
+                            return false;
+                        }
+                        if (!isSubSet(elem.second, it2->second))
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
+            break;
+            default: break;
         }
-        break;
-
-
-        case css::uno::TypeClass_SEQUENCE :
-        {
-            css::uno::Sequence< OUString > uno_s1;
-            css::uno::Sequence< OUString > uno_s2;
-
-            if (
-                (aSubSet >>= uno_s1) &&
-                (aSet    >>= uno_s2)
-               )
-            {
-                auto s2Begin = uno_s2.getConstArray();
-                auto s2End = uno_s2.getConstArray() + uno_s2.getLength();
-
-                for (auto const& elem : uno_s1)
-                {
-                    if (::std::find(s2Begin, s2End, elem) == s2End)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-
-            css::uno::Sequence< css::beans::PropertyValue > uno_p1;
-            css::uno::Sequence< css::beans::PropertyValue > uno_p2;
-
-            if (
-                (aSubSet >>= uno_p1) &&
-                (aSet    >>= uno_p2)
-               )
-            {
-                ::comphelper::SequenceAsHashMap stl_p1(uno_p1);
-                ::comphelper::SequenceAsHashMap stl_p2(uno_p2);
-
-                for (auto const& elem : stl_p1)
-                {
-                    ::comphelper::SequenceAsHashMap::const_iterator it2 = stl_p2.find(elem.first);
-                    if (it2 == stl_p2.end())
-                    {
-                        return false;
-                    }
-                    if (!isSubSet(elem.second, it2->second))
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-
-            css::uno::Sequence< css::beans::NamedValue > uno_n1;
-            css::uno::Sequence< css::beans::NamedValue > uno_n2;
-
-            if (
-                (aSubSet >>= uno_n1) &&
-                (aSet    >>= uno_n2)
-               )
-            {
-                ::comphelper::SequenceAsHashMap stl_n1(uno_n1);
-                ::comphelper::SequenceAsHashMap stl_n2(uno_n2);
-
-                for (auto const& elem : stl_n1)
-                {
-                    ::comphelper::SequenceAsHashMap::const_iterator it2 = stl_n2.find(elem.first);
-                    if (it2 == stl_n2.end())
-                    {
-                        return false;
-                    }
-                    if (!isSubSet(elem.second, it2->second))
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
-        break;
-        default: break;
     }
-
     OSL_FAIL("isSubSet() ... this point should not be reached!");
     return false;
 }
