@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3dc02dd_2d203612",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-05-13T12:26:56Z",
+      "side": 1,
+      "message": "I think this is ok to back-pick if kept together with the follow-up commit of\nhttps://gerrit.libreoffice.org/c/core/+/134277\n",
+      "revId": "39eae4775a32be791fee2fd8c3cf0a3766cf8e53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
