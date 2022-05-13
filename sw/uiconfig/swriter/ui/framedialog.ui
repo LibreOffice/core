@@ -108,7 +108,7 @@
               <object class="GtkLabel" id="type">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="framedialog|type">Type</property>
+                <property name="label" translatable="yes" context="framedialog|type">Position and Size</property>
               </object>
               <packing>
                 <property name="tab-fill">False</property>

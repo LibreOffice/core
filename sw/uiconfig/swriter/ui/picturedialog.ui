@@ -133,7 +133,7 @@
               <object class="GtkLabel" id="type">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="picturedialog|type">Type</property>
+                <property name="label" translatable="yes" context="picturedialog|type">Position and Size</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -324,7 +324,7 @@
               <object class="GtkLabel" id="picture">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="picturedialog|picture">Image</property>
+                <property name="label" translatable="yes" context="picturedialog|picture">Rotation</property>
               </object>
               <packing>
                 <property name="position">4</property>
