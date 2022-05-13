@@ -53,7 +53,7 @@ SmFormat::SmFormat()
     vDist[DIS_OPERATORSIZE]         = 50;
     vDist[DIS_OPERATORSPACE]        = 20;
     vDist[DIS_LEFTSPACE]            =
-    vDist[DIS_RIGHTSPACE]           = 100;
+    vDist[DIS_RIGHTSPACE]           = 0;
     vDist[DIS_TOPSPACE]             =
     vDist[DIS_BOTTOMSPACE]          =
     vDist[DIS_NORMALBRACKETSIZE]    = 0;
