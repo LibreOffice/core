@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60f13d26_559fc3c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-05-13T19:27:12Z",
+      "side": 1,
+      "message": "Assuming that this function is only called in a safe way (since it was created specifically for this AFAICS) this seems like an easy win.",
+      "revId": "33753b96598523cf8df78cb92f4eca7f42b0fe52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
