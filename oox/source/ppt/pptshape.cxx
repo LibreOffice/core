@@ -634,6 +634,8 @@ void PPTShape::addShape(
                                 Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY);
                                 sURL = xNamed->getName();
                             }
+                            else
+                                sURL = "page" + OUString::number(nPageNumber);
                         }
                         nPropertyCount += 1;
                     }
