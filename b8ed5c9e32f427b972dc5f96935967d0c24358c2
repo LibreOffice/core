@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "554934a1_df7c5c68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-13T11:19:53Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/134259/1 is a follow-up change that was approved by Jenkins.",
+      "revId": "b8ed5c9e32f427b972dc5f96935967d0c24358c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
