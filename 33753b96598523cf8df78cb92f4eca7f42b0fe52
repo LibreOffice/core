@@ -16,6 +16,23 @@
       "message": "Assuming that this function is only called in a safe way (since it was created specifically for this AFAICS) this seems like an easy win.",
       "revId": "33753b96598523cf8df78cb92f4eca7f42b0fe52",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26a65bca_e3f6014d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-05-13T20:59:53Z",
+      "side": 1,
+      "message": "I think it looks right.",
+      "revId": "33753b96598523cf8df78cb92f4eca7f42b0fe52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
