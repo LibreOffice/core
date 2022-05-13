@@ -1662,7 +1662,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         {
             aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::FRAME ) );
-            aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
+            aSet.Put( SvxLRSpaceItem( 0, 0, 0, 0, RES_LR_SPACE ) );
         }
         break;
     case RES_POOLFRM_MARGINAL:
