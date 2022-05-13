@@ -259,9 +259,9 @@ bool SvtUserOptions::Impl::IsTokenReadonly (UserOptToken nToken) const
             beans::PropertyAttribute::READONLY);
 }
 
-static std::mutex& GetInitMutex()
+static std::recursive_mutex& GetInitMutex()
 {
-    static std::mutex gMutex;
+    static std::recursive_mutex gMutex;
     return gMutex;
 }
 
