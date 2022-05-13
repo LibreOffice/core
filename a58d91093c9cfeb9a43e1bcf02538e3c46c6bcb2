@@ -34,6 +34,24 @@
       "parentUuid": "71c55b03_430c9ae8",
       "revId": "a58d91093c9cfeb9a43e1bcf02538e3c46c6bcb2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80713656_5f95f5a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-13T22:45:58Z",
+      "side": 1,
+      "message": "Thank you for the review!\n\n\u003e You need to be careful with this change... Make sure you are not introducing a circular reference somewhere not-so-obvious...\n\nYou are definitely right! I knew that, and I see that the life cycle is very complicated, such as I have to debug and fix the cycles.\n\n\u003e why use rtl::Reference instead of something like std::shared_ptr?  With the latter, you could also use std::weak_ptr in places where it makes sense.\n\nFirst of all, because it allows me to use the existing clang plugin to find places that create the objects on stack, which, mixed with smart pointers, breaks ctack. Likewise, there are places where unique_ptrs were used - all needed unification, and the plugin helped a lot. However, I suppose I should create a utility factory function creating the smart pointer, and hide the ctors. That would allow to make sure all instances are wrapped into refcounted smart objects... If only not the friends.\n\n\u003e Also, you are removing forward declarations in lots n lots of places. I personally think that\u0027s a bad build hygiene though I know many of you don\u0027t care about build times these days...\n\nThis sounded a bit undeserved. I myself replace includes with forward declarations right and left. But here I have to use the smart pointer from the header, and can\u0027t use forward declarations.\n\n\u003e But I feel like this change is way bigger than it needs to be...  Isn\u0027t there a simpler approach to this?\n\nI will split it into two (still big) changes. But detaching ScDocument from shell takes tons of replacements... I would love to know if there is a better way!",
+      "parentUuid": "780a59c4_5e942519",
+      "revId": "a58d91093c9cfeb9a43e1bcf02538e3c46c6bcb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
