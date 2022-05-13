@@ -122,7 +122,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
                     {
                         const OUString aSlideType( sHref.copy( 0, nIndex2 ) );
                         if ( aSlideType.match( "slide" ) )
-                            sURL = "#Slide " + OUString::number( nPageNumber );
+                            sURL = "#page" + OUString::number( nPageNumber );
                         else if ( aSlideType.match( "notesSlide" ) )
                             sURL = "#Notes " + OUString::number( nPageNumber );
 //                      else: todo for other types such as notesMaster or slideMaster as they can't be referenced easily
