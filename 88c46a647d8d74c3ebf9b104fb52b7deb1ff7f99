@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d37c1d5_0044fb13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-05-13T16:28:04Z",
+      "side": 1,
+      "message": "You should write in the description how one should run the tests.",
+      "revId": "88c46a647d8d74c3ebf9b104fb52b7deb1ff7f99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
