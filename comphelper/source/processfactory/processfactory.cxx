@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -41,19 +41,20 @@ class LocalProcessFactory {
 public:
     void set( const Reference< XMultiServiceFactory >& xSMgr )
     {
-        Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
+        std::unique_lock aGuard( maMutex );
 
         xProcessFactory = xSMgr;
     }
 
     Reference< XMultiServiceFactory > get() const
     {
-        Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
+        std::unique_lock aGuard( maMutex );
 
         return xProcessFactory;
     }
 
 private:
+    mutable std::mutex maMutex;
     Reference< XMultiServiceFactory > xProcessFactory;
 };
 
