@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba83d7fe_b35b6b75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2022-05-13T10:15:40Z",
+      "side": 1,
+      "message": "Hi Noël,\n\nPerhaps this patch could interest you",
+      "revId": "6647e601a722a78675e42e881aad3d1083aa6a0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
