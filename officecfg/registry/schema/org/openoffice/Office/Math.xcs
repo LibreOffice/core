@@ -961,7 +961,7 @@
               </info>
             </maxInclusive>
           </constraints>
-          <value>100</value>
+          <value>0</value>
         </prop>
         <prop oor:name="RightSpace" oor:type="xs:short" oor:nillable="false">
           <info>
@@ -979,7 +979,7 @@
               </info>
             </maxInclusive>
           </constraints>
-          <value>100</value>
+          <value>0</value>
         </prop>
         <prop oor:name="TopSpace" oor:type="xs:short" oor:nillable="false">
           <info>
