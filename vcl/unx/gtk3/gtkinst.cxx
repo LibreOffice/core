@@ -14552,8 +14552,14 @@ public:
     virtual void set_cursor(int pos) override
     {
         disable_notify_events();
-        GtkTreePath* path = pos != -1 ? gtk_tree_path_new_from_indices(pos, -1) : nullptr;
-        gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
+        GtkTreePath* path;
+        if (pos != -1)
+        {
+            path = gtk_tree_path_new_from_indices(pos, -1);
+            gtk_tree_view_scroll_to_cell(m_pTreeView, path, nullptr, false, 0, 0);
+        }
+        else
+            path = gtk_tree_path_new();
         gtk_tree_view_set_cursor(m_pTreeView, path, nullptr, false);
         gtk_tree_path_free(path);
         enable_notify_events();
