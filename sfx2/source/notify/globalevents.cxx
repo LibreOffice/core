@@ -35,6 +35,7 @@
 #include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/enumhelper.hxx>
+#include <rtl/ref.hxx>
 #include <sfx2/app.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/eventcfg.hxx>
@@ -60,7 +61,7 @@ class SfxGlobalEvents_Impl : public ::cppu::WeakImplHelper< css::lang::XServiceI
                                                             >
 {
     std::mutex m_aLock;
-    css::uno::Reference< css::container::XNameReplace > m_xEvents;
+    rtl::Reference< GlobalEventConfig > m_xEvents;
     css::uno::Reference< css::document::XEventListener > m_xJobExecutorListener;
     ::comphelper::OInterfaceContainerHelper4<document::XEventListener> m_aLegacyListeners;
     ::comphelper::OInterfaceContainerHelper4<document::XDocumentEventListener> m_aDocumentListeners;
@@ -448,7 +449,7 @@ void SfxGlobalEvents_Impl::implts_notifyJobExecution(const document::EventObject
 
 void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::DocumentEvent& aEvent)
 {
-    css::uno::Reference<css::container::XNameReplace> events;
+    rtl::Reference<GlobalEventConfig> events;
     {
         std::scoped_lock g(m_aLock);
         events = m_xEvents;
@@ -458,10 +459,11 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::D
     }
     try
     {
-        uno::Any aAny;
         if ( events->hasByName( aEvent.EventName ) )
-            aAny = events->getByName(aEvent.EventName);
-        SfxEvents_Impl::Execute(aAny, aEvent, nullptr);
+        {
+            uno::Sequence < beans::PropertyValue > aAny = events->getByName2(aEvent.EventName);
+            SfxEvents_Impl::Execute(aAny, aEvent, nullptr);
+        }
     }
     catch ( uno::RuntimeException const & )
     {

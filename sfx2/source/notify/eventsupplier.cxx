@@ -98,11 +98,11 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::
 
     if ( !aNormalizedDescriptor.empty() )
     {
-        maEventData[nIndex] <<= aNormalizedDescriptor.getPropertyValues();
+        maEventData[nIndex] = aNormalizedDescriptor.getPropertyValues();
     }
     else
     {
-        maEventData[nIndex].clear();
+        maEventData[nIndex] = {};
     }
 }
 
@@ -117,7 +117,7 @@ uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
 
     auto nIndex = comphelper::findValue(maEventNames, aName);
     if (nIndex != -1)
-        return maEventData[nIndex];
+        return uno::Any(maEventData[nIndex]);
 
     throw container::NoSuchElementException();
 }
@@ -180,12 +180,8 @@ bool SfxEvents_Impl::isScriptURLAllowed(const OUString& aScriptURL)
     return false;
 }
 
-void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
+void SfxEvents_Impl::Execute( css::uno::Sequence < css::beans::PropertyValue > const & aProperties, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
 {
-    uno::Sequence < beans::PropertyValue > aProperties;
-    if ( !(aEventData >>= aProperties) )
-        return;
-
     OUString aType;
     OUString aScript;
     OUString aLibrary;
@@ -292,7 +288,7 @@ void SAL_CALL SfxEvents_Impl::documentEventOccured( const document::DocumentEven
     if ( nIndex == -1 )
         return;
 
-    uno::Any aEventData = maEventData[ nIndex ];
+    css::uno::Sequence < css::beans::PropertyValue > aEventData = maEventData[ nIndex ];
     aGuard.unlock();
     Execute( aEventData, aEvent, mpObjShell );
 }
