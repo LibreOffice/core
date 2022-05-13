@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0af0d329_1d286b64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-13T09:28:15Z",
+      "side": 1,
+      "message": "this is OK now that rtl_allocateMemory unconditionally calls malloc since db354dfad541fe2edd64a618a2d7cc83a6be2b9e \"the custom SAL allocator is no longer used\"",
+      "revId": "40616dea61f87e642c68d91d9bf9c330b0cf732a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
