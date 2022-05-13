@@ -159,9 +159,22 @@ void ScEditUtil::RemoveCharAttribs( EditTextObject& rEditText, const ScPatternAt
         sal_uInt16 nCharType;
     } AttrTypeMap[] = {
         { ATTR_FONT,        EE_CHAR_FONTINFO },
+        { ATTR_CJK_FONT, EE_CHAR_FONTINFO_CJK },
+        { ATTR_CTL_FONT, EE_CHAR_FONTINFO_CTL },
         { ATTR_FONT_HEIGHT, EE_CHAR_FONTHEIGHT },
+        { ATTR_CJK_FONT_HEIGHT, EE_CHAR_FONTHEIGHT_CJK },
+        { ATTR_CTL_FONT_HEIGHT, EE_CHAR_FONTHEIGHT_CTL },
         { ATTR_FONT_WEIGHT, EE_CHAR_WEIGHT },
-        { ATTR_FONT_COLOR,  EE_CHAR_COLOR }
+        { ATTR_CJK_FONT_WEIGHT, EE_CHAR_WEIGHT_CJK },
+        { ATTR_CTL_FONT_WEIGHT, EE_CHAR_WEIGHT_CTL },
+        { ATTR_FONT_POSTURE, EE_CHAR_ITALIC },
+        { ATTR_CJK_FONT_POSTURE, EE_CHAR_ITALIC_CJK },
+        { ATTR_CTL_FONT_POSTURE, EE_CHAR_ITALIC_CTL },
+        { ATTR_FONT_COLOR, EE_CHAR_COLOR },
+        { ATTR_FONT_UNDERLINE, EE_CHAR_UNDERLINE },
+        { ATTR_FONT_CROSSEDOUT, EE_CHAR_STRIKEOUT },
+        { ATTR_FONT_CONTOUR, EE_CHAR_OUTLINE },
+        { ATTR_FONT_SHADOWED, EE_CHAR_SHADOW }
     };
 
     const SfxItemSet& rSet = rAttr.GetItemSet();
