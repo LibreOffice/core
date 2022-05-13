@@ -2810,7 +2810,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
     if (!bDefaultImage)
     {
-        // If its a custom image then draw what was explicitly set to use
+        // If it's a custom image then draw what was explicitly set to use
         DrawImageFlags nStyle = DrawImageFlags::NONE;
         if (!IsEnabled())
             nStyle |= DrawImageFlags::Disable;
