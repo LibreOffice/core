@@ -616,25 +616,7 @@ void PPTShape::addShape(
                         if (!sURL.startsWith("#"))
                             meClickAction = ClickAction_DOCUMENT;
                         else
-                        {
-                            sURL = sURL.copy(1);
-                            sal_Int32 nPageNumber = 0;
-                            static const OUStringLiteral sSlide = u"Slide ";
-                            if (sURL.match(sSlide))
-                                nPageNumber = o3tl::toInt32(sURL.subView(sSlide.getLength()));
-                            Reference<drawing::XDrawPagesSupplier> xDPS(rFilterBase.getModel(),
-                                                                        uno::UNO_QUERY_THROW);
-                            Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(),
-                                                                      uno::UNO_SET_THROW);
-                            sal_Int32 nMaxPages = xDrawPages->getCount();
-                            if (nPageNumber && nPageNumber <= nMaxPages)
-                            {
-                                Reference<XDrawPage> xDrawPage;
-                                xDrawPages->getByIndex(nPageNumber - 1) >>= xDrawPage;
-                                Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY);
-                                sURL = xNamed->getName();
-                            }
-                        }
+                            setBookmark(true);
                         nPropertyCount += 1;
                     }
 
