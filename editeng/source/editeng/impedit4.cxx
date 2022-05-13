@@ -1043,6 +1043,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
         // and the Attribute...
         std::size_t nAttr = 0;
         EditCharAttrib* pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
+        rCAttriblist.reserve(rCAttriblist.size() + pNode->GetCharAttribs().GetAttribs().size());
         while ( pAttr )
         {
             // In a blank paragraph keep the attributes!
