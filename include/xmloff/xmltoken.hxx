@@ -3473,6 +3473,8 @@ namespace xmloff::token {
         XML_CHECKED_STATE,
         XML_UNCHECKED_STATE,
 
+        XML_FEDERATED_ID,
+
         XML_TOKEN_END
     };
 

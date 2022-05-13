@@ -3475,6 +3475,8 @@ namespace xmloff::token {
         TOKEN("checked-state", XML_CHECKED_STATE),
         TOKEN("unchecked-state", XML_UNCHECKED_STATE),
 
+        TOKEN("federated-id", XML_FEDERATED_ID),
+
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }

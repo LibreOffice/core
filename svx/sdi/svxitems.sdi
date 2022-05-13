@@ -182,6 +182,7 @@ item String                 SvxPostItAuthorItem;
 item String                 SvxPostItDateItem;
 item String                 SvxPostItTextItem;
 item INT32                  SvxPostItIdItem;
+item String                 SvxPostItFederatedIdItem;
 item FontItalic             SvxPostureItem;  // enum
 item BOOL                   SvxPrintItem;
 item UINT16                 SvxPropSizeItem;        // derived from UInt16Item

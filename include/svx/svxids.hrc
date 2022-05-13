@@ -37,6 +37,7 @@ class SvxPostItAuthorItem;
 class SvxPostItDateItem;
 class SvxPostItTextItem;
 class SvxPostItIdItem;
+class SvxPostItFederatedIdItem;
 class SvxColorListItem;
 class SvxColorItem;
 class SvxGradientListItem;
@@ -1030,9 +1031,10 @@ class SdrAngleItem;
 #define SID_LANGUAGE_STATUS                             ( SID_SVX_START + 1209 )
 #define SID_CHAR_DLG_FOR_PARAGRAPH                      ( SID_SVX_START + 1210 )
 #define SID_SET_DOCUMENT_LANGUAGE                       ( SID_SVX_START + 1211 )
+#define SID_ATTR_POSTIT_FEDERATEDID                     TypedWhichId<SvxPostItFederatedIdItem>( SID_SVX_START + 1212 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1211 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1212 + 1 )
 
 
 // Overflow check for slot IDs

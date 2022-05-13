@@ -3161,6 +3161,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnnotationImportCon
              nElement == XML_ELEMENT(LO_EXT, XML_SENDER_INITIALS) ||
              nElement == XML_ELEMENT(META, XML_CREATOR_INITIALS))
         return new XMLStringBufferImportContext(GetImport(), aInitialsBuffer);
+    else if (nElement == XML_ELEMENT(TEXT, XML_FEDERATED_ID))
+    {
+        return new XMLStringBufferImportContext(GetImport(), aFederatedIdBuffer);
+    }
 
     try
     {
@@ -3302,6 +3306,9 @@ void XMLAnnotationImportContext::PrepareField(
     // import (possibly empty) initials
     OUString sInitials( aInitialsBuffer.makeStringAndClear() );
     xPropertySet->setPropertyValue("Initials", makeAny(sInitials));
+
+    OUString sFederatedId( aFederatedIdBuffer.makeStringAndClear() );
+    xPropertySet->setPropertyValue("FederatedId", makeAny(sFederatedId));
 
     //import resolved flag
     bool bTmp(false);

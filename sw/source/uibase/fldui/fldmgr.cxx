@@ -921,6 +921,7 @@ bool SwFieldMgr::InsertField(
                     rData.m_sPar2, // content
                     aUserOpt.GetID(), // author's initials
                     OUString(), // name
+                    rData.m_sPar3, // FederatedId
                     DateTime(DateTime::SYSTEM) ));
         }
         break;

@@ -281,6 +281,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if(!sTmp.isEmpty())
                         cSeparator = sTmp[0];
                 }
+                // SwInsertField_Data aData(nType, nSubType, aPar1, aPar2, aPar3, nFormat, GetShellPtr(), cSeparator );
                 SwInsertField_Data aData(nType, nSubType, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
                 bRes = aFieldMgr.InsertField( aData );
             }
