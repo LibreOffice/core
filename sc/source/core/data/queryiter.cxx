@@ -1238,6 +1238,13 @@ static bool CanBeUsedForSorterCache(const ScDocument& rDoc, const ScQueryParam& 
         && rParam.GetEntry(0).eOp != SC_GREATER && rParam.GetEntry(0).eOp != SC_GREATER_EQUAL
         && rParam.GetEntry(0).eOp != SC_EQUAL)
         return false;
+    // tdf#149071 - numbers entered as string can be compared both as numbers
+    // and as strings, depending on the cell content, and that makes it hard to pre-sort
+    // the data; such queries are ScQueryEntry::ByValue but have maString set too
+    // (see ScQueryParamBase::FillInExcelSyntax())
+    if(rParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue
+        && rParam.GetEntry(0).GetQueryItem().maString.isValid())
+        return false;
     // For unittests allow inefficient caching, in order for the code to be checked.
     static bool inUnitTest = getenv("LO_TESTNAME") != nullptr;
     if(refData == nullptr || refData->Ref1.IsRowRel() || refData->Ref2.IsRowRel())
