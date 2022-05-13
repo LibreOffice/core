@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_core_txtnode))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_core_txtnode, \
     sw/qa/core/txtnode/txtnode \
+    sw/qa/core/txtnode/justify \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_core_txtnode, \
@@ -44,6 +45,7 @@ $(eval $(call gb_CppunitTest_use_externals,sw_core_txtnode,\
 $(eval $(call gb_CppunitTest_set_include,sw_core_txtnode,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/core/txtnode \
     -I$(SRCDIR)/sw/source/uibase/inc \
     -I$(SRCDIR)/sw/qa/inc \
     $$(INCLUDE) \
