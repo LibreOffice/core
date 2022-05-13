@@ -787,7 +787,7 @@ private:
     rtl::Reference<sax_fastparser::FastAttributeList> m_pSectionSpacingAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSpacingAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pHyperlinkAttrList;
-    const SwContentControl* m_pContentControl = nullptr;
+    std::shared_ptr<SwContentControl> m_pContentControl;
     /// If the current SDT around runs should be ended before the current run.
     bool m_bEndCharSdt;
     /// Attributes of the run color

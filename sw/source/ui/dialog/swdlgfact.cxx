@@ -33,6 +33,7 @@
 #include <changedb.hxx>
 #include <chrdlg.hxx>
 #include <colwd.hxx>
+#include <contentcontroldlg.hxx>
 #include <convert.hxx>
 #include <cption.hxx>
 #include <dbinsdlg.hxx>
@@ -832,6 +833,12 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDl
                                                                                   SwWrtShell &rSh)
 {
     return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwInsertBookmarkDlg>(pParent, rSh));
+}
+
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwContentControlDlg(weld::Window* pParent,
+                                                                                  SwWrtShell &rSh)
+{
+    return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwContentControlDlg>(pParent, rSh));
 }
 
 std::shared_ptr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(weld::Window* pParent, SwWrtShell &rSh)

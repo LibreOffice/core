@@ -28,7 +28,8 @@ private:
     void InitDropdown();
 
 public:
-    SwDropDownContentControlButton(SwEditWin* pEditWin, const SwContentControl& rContentControl);
+    SwDropDownContentControlButton(SwEditWin* pEditWin,
+                                   const std::shared_ptr<SwContentControl>& pContentControl);
     virtual ~SwDropDownContentControlButton() override;
 
     virtual void LaunchPopup() override;

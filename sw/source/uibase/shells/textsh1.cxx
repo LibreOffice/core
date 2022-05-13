@@ -2240,6 +2240,14 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put(SfxBoolItem(nWhich, bProtected));
             }
             break;
+            case FN_CONTENT_CONTROL_PROPERTIES:
+            {
+                if (!GetShell().CursorInsideContentControl())
+                {
+                    rSet.DisableItem(nWhich);
+                }
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }
