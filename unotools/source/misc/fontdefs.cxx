@@ -291,7 +291,7 @@ OUString GetEnglishSearchFontName(std::u16string_view rInName)
     // translate normalized localized name to its normalized English ASCII name
     if( bNeedTranslation )
     {
-        typedef std::unordered_map<OUString, const char*> FontNameDictionary;
+        typedef std::unordered_map<OUString, OUString> FontNameDictionary;
         static FontNameDictionary const aDictionary = {
             {aBatang, "batang"},
             {aBatangChe, "batangche"},
@@ -452,7 +452,7 @@ OUString GetEnglishSearchFontName(std::u16string_view rInName)
 
         FontNameDictionary::const_iterator it = aDictionary.find( rNameStr );
         if( it != aDictionary.end() )
-            rNameStr = OUString::createFromAscii ( it->second );
+            rNameStr = it->second;
     }
 
     return rNameStr;
