@@ -55,6 +55,8 @@
 #include <com/sun/star/drawing/ConnectorType.hpp>
 
 #include <stlpool.hxx>
+#include <unotools/syslocaleoptions.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/lok.hxx>
 #include <svx/svdograf.hxx>
@@ -81,6 +83,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf148965();
     void testTdf89449();
     void testTdf147459();
     void testTdf146223();
@@ -149,6 +152,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf148965);
     CPPUNIT_TEST(testTdf89449);
     CPPUNIT_TEST(testTdf147459);
     CPPUNIT_TEST(testTdf146223);
@@ -293,6 +297,42 @@ void SdImportTest::testDocumentLayout()
                 OUStringConcatenation(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf148965()
+{
+    // Set the system user interface to Hungarian
+    SvtSysLocaleOptions aOptions;
+    OUString sUIConfigString = aOptions.GetLanguageTag().getBcp47();
+    aOptions.SetUILocaleConfigString("hu-HU");
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions, &sUIConfigString] {
+        aOptions.SetUILocaleConfigString(sUIConfigString);
+        aOptions.Commit();
+        });
+
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf148965.pptx"), PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape1(getShapeFromPage(0, 1, xDocShRef));
+    uno::Reference<document::XEventsSupplier> xEventsSupplier1(xShape1, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xEvents1(xEventsSupplier1->getEvents());
+    uno::Sequence<beans::PropertyValue> props1;
+    xEvents1->getByName("OnClick") >>= props1;
+    comphelper::SequenceAsHashMap map1(props1);
+    auto iter1(map1.find("Bookmark"));
+    CPPUNIT_ASSERT_EQUAL(OUString("page1"), iter1->second.get<OUString>());
+
+    uno::Reference<beans::XPropertySet> xShape2(getShapeFromPage(1, 1, xDocShRef));
+    uno::Reference<document::XEventsSupplier> xEventsSupplier2(xShape2, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xEvents2(xEventsSupplier2->getEvents());
+    uno::Sequence<beans::PropertyValue> props2;
+    xEvents2->getByName("OnClick") >>= props2;
+    comphelper::SequenceAsHashMap map2(props2);
+    auto iter2(map2.find("Bookmark"));
+    CPPUNIT_ASSERT_EQUAL(OUString("page3"), iter2->second.get<OUString>());
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf89449()
