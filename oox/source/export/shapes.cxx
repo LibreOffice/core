@@ -1662,12 +1662,12 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
         case ConnectorType_CURVE:
             sGeometry = "curvedConnector";
             break;
+        case ConnectorType_LINES:
         case ConnectorType_STANDARD:
             sGeometry = "bentConnector";
             break;
         default:
         case ConnectorType_LINE:
-        case ConnectorType_LINES:
             sGeometry = "straightConnector1";
             break;
     }
@@ -1692,7 +1692,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     }
     EscherConnectorListEntry aConnectorEntry( xShape, aStartPoint, rXShapeA, aEndPoint, rXShapeB );
 
-    if (eConnectorType == ConnectorType_CURVE || eConnectorType == ConnectorType_STANDARD)
+    if (eConnectorType != ConnectorType_LINE)
     {
         tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon(xShape);
         if (aPolyPolygon.Count() > 0)
