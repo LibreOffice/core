@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bacf6a6b_6a5e6f1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-13T13:15:02Z",
+      "side": 1,
+      "message": "I don\u0027t know why jenkins keeps failing on mac for this patch and the patches depending on this patch pass",
+      "revId": "294bc5b90507d8c30f74d615bb69ca1521b30c6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
