@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <osl/conditn.hxx>
 
 namespace framework{
@@ -81,7 +81,7 @@ class Gate
         void open()
         {
             // We must safe access to our internal member!
-            ::osl::MutexGuard aLock( m_aAccessLock );
+            std::unique_lock aLock( m_aAccessLock );
             // Set condition -> wait don't block any longer -> gate is open
             m_aPassage.set();
             // Check if operation was successful!
@@ -98,7 +98,7 @@ class Gate
         void close()
         {
             // We must safe access to our internal member!
-            ::osl::MutexGuard aLock( m_aAccessLock );
+            std::unique_lock aLock( m_aAccessLock );
             // Reset condition -> wait blocks now -> gate is closed
             m_aPassage.reset();
             // Check if operation was successful!
@@ -118,14 +118,14 @@ class Gate
         void wait()
         {
             // We must safe access to our internal member!
-            ::osl::ClearableMutexGuard aLock( m_aAccessLock );
+            std::unique_lock aLock( m_aAccessLock );
             // If gate not closed - caller can pass it.
             if( m_bClosed )
             {
                 // Then we must release used access lock -
                 // because next call will block...
                 // and if we hold the access lock nobody else can use this object without a deadlock!
-                aLock.clear();
+                aLock.unlock();
                 // Wait for opening gate...
                 m_aPassage.wait();
             }
@@ -135,7 +135,7 @@ class Gate
 
     private:
 
-        ::osl::Mutex        m_aAccessLock;
+        std::mutex          m_aAccessLock;
         ::osl::Condition    m_aPassage;
         bool                m_bClosed;
 
