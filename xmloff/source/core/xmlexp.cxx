@@ -1725,7 +1725,8 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
     xViewDataSupplier->setViewData( xIndexAccess ); // make sure we get a newly created sequence
     {
         // tdf#130559: don't export preview view data if active
-        css::uno::ContextLayer layer(comphelper::NewFlagContext("NoPreviewData"));
+        static constexpr OUStringLiteral sNoPreviewData = u"NoPreviewData";
+        css::uno::ContextLayer layer(comphelper::NewFlagContext(sNoPreviewData));
         xIndexAccess = xViewDataSupplier->getViewData();
     }
     bool bAdd = false;
