@@ -116,6 +116,8 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
 
     toolbar->m_pAddressbar = GTK_WIDGET(gtk_builder_get_object(builder.get(), "addressbar_entry"));
     toolbar->m_pFormulabar = GTK_WIDGET(gtk_builder_get_object(builder.get(), "formulabar_entry"));
+    toolbar->m_pContentControlSelector
+        = GTK_WIDGET(gtk_builder_get_object(builder.get(), "combo_contentcontrolselector"));
 
     // TODO: compile with -rdynamic and get rid of it
     gtk_builder_add_callback_symbol(builder.get(), "btn_clicked", G_CALLBACK(btn_clicked));
@@ -128,6 +130,8 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     gtk_builder_add_callback_symbol(builder.get(), "toggleEditing", G_CALLBACK(toggleEditing));
     gtk_builder_add_callback_symbol(builder.get(), "changePartMode", G_CALLBACK(changePartMode));
     gtk_builder_add_callback_symbol(builder.get(), "changePart", G_CALLBACK(changePart));
+    gtk_builder_add_callback_symbol(builder.get(), "changeContentControl",
+                                    G_CALLBACK(changeContentControl));
     gtk_builder_add_callback_symbol(builder.get(), "changeZoom", G_CALLBACK(changeZoom));
     gtk_builder_add_callback_symbol(builder.get(), "toggleFindbar", G_CALLBACK(toggleFindbar));
     gtk_builder_add_callback_symbol(builder.get(), "documentRedline", G_CALLBACK(documentRedline));

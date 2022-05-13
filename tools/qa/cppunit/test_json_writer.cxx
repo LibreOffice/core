@@ -29,10 +29,12 @@ public:
 
     void test1();
     void test2();
+    void testArray();
 
     CPPUNIT_TEST_SUITE(JsonWriterTest);
     CPPUNIT_TEST(test1);
     CPPUNIT_TEST(test2);
+    CPPUNIT_TEST(testArray);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -79,6 +81,21 @@ void JsonWriterTest::test2()
                                      "\"node\": { \"field3\": \"val3\", \"node\": { \"field4\": "
                                      "\"val4\", \"field5\": \"val5\"}}}}"),
                          std::string(result.get()));
+}
+
+void JsonWriterTest::testArray()
+{
+    tools::JsonWriter aJson;
+    {
+        tools::ScopedJsonWriterArray aArray = aJson.startArray("items");
+        aJson.putSimpleValue("foo");
+        aJson.putSimpleValue("bar");
+    }
+
+    std::unique_ptr<char, o3tl::free_delete> aResult(aJson.extractData());
+
+    CPPUNIT_ASSERT_EQUAL(std::string("{ \"items\": [ \"foo\", \"bar\"]}"),
+                         std::string(aResult.get()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(JsonWriterTest);

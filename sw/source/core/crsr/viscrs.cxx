@@ -697,6 +697,16 @@ void SwSelPaintRects::HighlightContentControl()
             tools::JsonWriter aJson;
             aJson.put("action", "show");
             aJson.put("rectangles", aPayload);
+
+            if (pContentControl && pContentControl->HasListItems())
+            {
+                tools::ScopedJsonWriterArray aItems = aJson.startArray("items");
+                for (const auto& rItem : pContentControl->GetListItems())
+                {
+                    aJson.putSimpleValue(rItem.ToString());
+                }
+            }
+
             std::unique_ptr<char, o3tl::free_delete> pJson(aJson.extractData());
             GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson.get());
         }

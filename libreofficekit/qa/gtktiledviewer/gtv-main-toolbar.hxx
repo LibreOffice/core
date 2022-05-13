@@ -29,6 +29,7 @@ struct GtvMainToolbar
 
     GtkWidget* m_pAddressbar;
     GtkWidget* m_pFormulabar;
+    GtkWidget* m_pContentControlSelector;
 };
 
 struct GtvMainToolbarClass

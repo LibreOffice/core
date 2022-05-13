@@ -469,6 +469,9 @@ struct _LibreOfficeKitDocumentClass
                                 unsigned char** pBitmapBuffer,
                                 int* pWidth, int* pHeight, size_t* pByteSize);
 
+    /// @see lok::Document::sendContentControlEvent().
+    void (*sendContentControlEvent)(LibreOfficeKitDocument* pThis, const char* pArguments);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

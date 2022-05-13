@@ -1143,6 +1143,8 @@ static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
                                  const char* pSearchResult, unsigned char** pBitmapBuffer,
                                  int* pWidth, int* pHeight, size_t* pByteSize);
 
+static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const char* pArguments);
+
 } // extern "C"
 
 namespace {
@@ -1285,6 +1287,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->renderSearchResult = doc_renderSearchResult;
 
         m_pDocumentClass->setBlockedCommandList = doc_setBlockedCommandList;
+
+        m_pDocumentClass->sendContentControlEvent = doc_sendContentControlEvent;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -6068,6 +6072,34 @@ static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
     *pBitmapBuffer = pBuffer;
 
     return true;
+}
+
+static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const char* pArguments)
+{
+    SolarMutexGuard aGuard;
+
+    // Supported in Writer only
+    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT)
+    {
+        return;
+    }
+
+    StringMap aMap(jsdialog::jsonToStringMap(pArguments));
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return;
+    }
+
+    // Sanity check
+    if (aMap.find("type") == aMap.end() || aMap.find("selected") == aMap.end())
+    {
+        SetLastExceptionMsg("Wrong arguments for sendContentControlEvent");
+        return;
+    }
+
+    pDoc->executeContentControlEvent(aMap);
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)

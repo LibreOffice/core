@@ -1410,8 +1410,8 @@ callback (gpointer pData)
         {
             priv->m_aContentControlRectangles.clear();
         }
-        bool bIsTextSelected = !priv->m_aContentControlRectangles.empty();
-        g_signal_emit(pDocView, doc_view_signals[CONTENT_CONTROL], 0, bIsTextSelected);
+        g_signal_emit(pCallback->m_pDocView, doc_view_signals[CONTENT_CONTROL], 0,
+                      pCallback->m_aPayload.c_str());
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
     }
     break;
@@ -3325,7 +3325,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
     /**
      * LOKDocView::content-control:
      * @pDocView: the #LOKDocView on which the signal is emitted
-     * @bIsTextSelected: whether current content control is non-null
+     * @pPayload: the JSON string containing the information about ruler properties
      */
     doc_view_signals[CONTENT_CONTROL] =
         g_signal_new("content-control",
@@ -3333,9 +3333,9 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_SIGNAL_RUN_FIRST,
                      0,
                      nullptr, nullptr,
-                     g_cclosure_marshal_VOID__BOOLEAN,
+                     g_cclosure_marshal_generic,
                      G_TYPE_NONE, 1,
-                     G_TYPE_BOOLEAN);
+                     G_TYPE_STRING);
 
     /**
      * LOKDocView::password-required:
@@ -3724,6 +3724,23 @@ lok_doc_view_set_part (LOKDocView* pDocView, int nPart)
     }
     g_object_unref(task);
     priv->m_nPartId = nPart;
+}
+
+SAL_DLLPUBLIC_EXPORT void lok_doc_view_send_content_control_event(LOKDocView* pDocView,
+                                                                  const gchar* pArguments)
+{
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+    if (!priv->m_pDocument)
+    {
+        return;
+    }
+
+    std::scoped_lock<std::mutex> aGuard(g_aLOKMutex);
+    std::stringstream ss;
+    ss << "lok::Document::sendContentControlEvent('" << pArguments << "')";
+    g_info("%s", ss.str().c_str());
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
+    return priv->m_pDocument->pClass->sendContentControlEvent(priv->m_pDocument, pArguments);
 }
 
 SAL_DLLPUBLIC_EXPORT gchar*

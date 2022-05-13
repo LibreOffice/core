@@ -336,6 +336,12 @@ public:
     {
         return std::vector<basegfx::B2DRange>();
     }
+
+    /**
+     * Execute a content control event in the document.
+     * E.g. select a list item from a drop down content control.
+     */
+    virtual void executeContentControlEvent(const StringMap&) {}
 };
 } // namespace vcl
 
