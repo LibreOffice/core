@@ -182,7 +182,7 @@ namespace fileaccess
             inline const sal_Int16& getAttributes() const;
 
             // The set* functions are declared const, because the key of "this" stays intact
-            inline void setValue( const css::uno::Any& theValue ) const;
+            inline void setValue( css::uno::Any theValue ) const;
             inline void setState( const css::beans::PropertyState& theState ) const;
         };
 
