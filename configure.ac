@@ -7419,6 +7419,34 @@ AC_LANG_POP([C++])
 AC_SUBST([HAVE_LIBSTDCPP])
 AC_SUBST([HAVE_LIBCPP])
 
+HAVE_LIBCPP_DEBUG=
+if test -n "$HAVE_LIBCPP" -a -n "$ENABLE_DBGUTIL"; then
+    # Libc++ supports debug mode only if built for it, Mac libc++ isn't,
+    # and there would be undefined references to debug functions.
+    # Moreover std::to_string() has a bug (https://reviews.llvm.org/D125184).
+    AC_MSG_CHECKING([if libc++ has a usable debug mode])
+    AC_LANG_PUSH([C++])
+    AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#define _LIBCPP_DEBUG 1
+#include <string>
+#include <vector>
+int foo(const std::vector<int>& v) { return *v.begin(); }
+int main()
+{
+    std::vector<int> v{ 1, 2 };
+    std::string s = "xxxxxxxxxxxxxxxxxxxxxxxxx" + std::to_string(10);
+    return (foo(v) + s.size()) != 0 ? 0 : 1;
+}
+]])],
+    [AC_MSG_RESULT(yes)
+     HAVE_LIBCPP_DEBUG=1
+    ],
+    [AC_MSG_RESULT(no)]
+    )
+    AC_LANG_POP([C++])
+fi
+AC_SUBST([HAVE_LIBCPP_DEBUG])
+
 dnl ===================================================================
 dnl Check for gperf
 dnl ===================================================================
