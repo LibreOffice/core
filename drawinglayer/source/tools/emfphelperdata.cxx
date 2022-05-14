@@ -80,6 +80,7 @@ namespace emfplushelper
             case EmfPlusRecordTypeDrawRects: return "EmfPlusRecordTypeDrawRects";
             case EmfPlusRecordTypeFillPolygon: return "EmfPlusRecordTypeFillPolygon";
             case EmfPlusRecordTypeDrawLines: return "EmfPlusRecordTypeDrawLines";
+            case EmfPlusRecordTypeFillClosedCurve: return "EmfPlusRecordTypeFillClosedCurve";
             case EmfPlusRecordTypeFillEllipse: return "EmfPlusRecordTypeFillEllipse";
             case EmfPlusRecordTypeDrawEllipse: return "EmfPlusRecordTypeDrawEllipse";
             case EmfPlusRecordTypeFillPie: return "EmfPlusRecordTypeFillPie";
@@ -89,6 +90,7 @@ namespace emfplushelper
             case EmfPlusRecordTypeFillPath: return "EmfPlusRecordTypeFillPath";
             case EmfPlusRecordTypeDrawPath: return "EmfPlusRecordTypeDrawPath";
             case EmfPlusRecordTypeDrawBeziers: return "EmfPlusRecordTypeDrawBeziers";
+            case EmfPlusRecordTypeDrawClosedCurve: return "EmfPlusRecordTypeDrawClosedCurve";
             case EmfPlusRecordTypeDrawImage: return "EmfPlusRecordTypeDrawImage";
             case EmfPlusRecordTypeDrawImagePoints: return "EmfPlusRecordTypeDrawImagePoints";
             case EmfPlusRecordTypeDrawString: return "EmfPlusRecordTypeDrawString";
@@ -1393,26 +1395,24 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeFillPolygon:
                     {
-                        const sal_uInt8 index = flags & 0xff;
                         sal_uInt32 brushIndexOrColor, points;
 
                         rMS.ReadUInt32(brushIndexOrColor);
                         rMS.ReadUInt32(points);
-                        SAL_INFO("drawinglayer.emf", "EMF+\t FillPolygon in slot: " << index << " points: " << points);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Points: " << points);
                         SAL_INFO("drawinglayer.emf", "EMF+\t " << ((flags & 0x8000) ? "Color" : "Brush index") << " : 0x" << std::hex << brushIndexOrColor << std::dec);
 
                         EMFPPath path(points, true);
                         path.Read(rMS, flags);
 
                         EMFPPlusFillPolygon(path.GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
-
                         break;
                     }
                     case EmfPlusRecordTypeDrawLines:
                     {
                         sal_uInt32 points;
                         rMS.ReadUInt32(points);
-                        SAL_INFO("drawinglayer.emf", "EMF+\t DrawLines in slot: " << (flags & 0xff) << " points: " << points);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Points: " << points);
                         EMFPPath path(points, true);
                         path.Read(rMS, flags);
 
@@ -1480,6 +1480,39 @@ namespace emfplushelper
                             x1 = x4;
                             y1 = y4;
                         }
+                        break;
+                    }
+                    case EmfPlusRecordTypeDrawClosedCurve:
+                    case EmfPlusRecordTypeFillClosedCurve:
+                    {
+                        sal_uInt32 brushIndexOrColor, points;
+                        float aTension;
+                        if (type == EmfPlusRecordTypeFillClosedCurve)
+                        {
+                            rMS.ReadUInt32(brushIndexOrColor);
+                            SAL_INFO("drawinglayer.emf",
+                                "EMF+\t Fill Mode: " << (flags & 0x2000 ? "Winding" : "Alternate"));
+                        }
+                        rMS.ReadFloat(aTension);
+                        rMS.ReadUInt32(points);
+                        SAL_WARN("drawinglayer.emf",
+                                "EMF+\t Tension: " << aTension << " Points: " << points);
+                        SAL_WARN_IF(aTension != 0, "drawinglayer.emf",
+                                    "EMF+\t TODO Add support for tension different than 0");
+                        SAL_INFO("drawinglayer.emf",
+                                "EMF+\t " << (flags & 0x8000 ? "Color" : "Brush index") << " : 0x"
+                                        << std::hex << brushIndexOrColor << std::dec);
+
+                        EMFPPath path(points, true);
+                        path.Read(rMS, flags);
+                        if (type == EmfPlusRecordTypeFillClosedCurve)
+                            EMFPPlusFillPolygon(path.GetPolygon(*this, /* bMapIt */ true,
+                                                                /*bAddLineToCloseShape */ true),
+                                                flags & 0x8000, brushIndexOrColor);
+                        else
+                            EMFPPlusDrawPolygon(path.GetPolygon(*this, /* bMapIt */ true,
+                                                                /*bAddLineToCloseShape */ true),
+                                                flags & 0xff);
                         break;
                     }
                     case EmfPlusRecordTypeDrawImage:
