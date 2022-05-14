@@ -619,10 +619,11 @@ public:
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
         SwTextFormatColl* pCollection = pTextNode->GetTextColl();
-        int nLevel = pCollection->GetAssignedOutlineStyleLevel();
-        if (nLevel < 0)
+        if (!pCollection->IsAssignedToListLevelOfOutlineStyle())
             return;
 
+        int nLevel = pCollection->GetAssignedOutlineStyleLevel();
+        assert(nLevel >= 0);
         if (nLevel > m_nPreviousLevel && std::abs(nLevel - m_nPreviousLevel) > 1)
         {
             lclAddIssue(m_rIssueCollection, SwResId(STR_HEADINGS_NOT_IN_ORDER));
