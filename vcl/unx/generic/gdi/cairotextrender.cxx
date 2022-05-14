@@ -117,6 +117,14 @@ namespace
     }
 }
 
+#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+extern "C"
+{
+    __attribute__((weak)) void __lsan_disable();
+    __attribute__((weak)) void __lsan_enable();
+}
+#endif
+
 void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalGraphics& rGraphics)
 {
     const FreetypeFontInstance& rInstance = static_cast<FreetypeFontInstance&>(rLayout.GetFont());
@@ -177,6 +185,11 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         SAL_WARN("vcl", "no cairo context for text");
         return;
     }
+
+#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+    if (__lsan_disable)
+        __lsan_disable();
+#endif
 
     if (const cairo_font_options_t* pFontOptions = GetSalInstance()->GetCairoFontOptions())
     {
@@ -305,6 +318,11 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     }
 
     releaseCairoContext(cr);
+
+#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+    if (__lsan_enable)
+        __lsan_enable();
+#endif
 }
 
 void FontConfigFontOptions::cairo_font_options_substitute(FcPattern* pPattern)
