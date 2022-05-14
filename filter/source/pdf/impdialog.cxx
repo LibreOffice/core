@@ -329,6 +329,10 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, OkHdl, weld::Button&, void)
                     m_xDialog->response(retValue);
                 });
             }
+            else
+            {
+                m_xDialog->response(RET_OK);
+            }
         }
     }
     else
