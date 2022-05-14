@@ -214,10 +214,6 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     static o3tl::lru_map<BlobCacheKey, BlobReference, BlobCacheKeyHash> gCache(50);
 
     WinFontInstance* pFont = static_cast<WinFontInstance*>(pUserData);
-    HDC hDC = pFont->GetGraphics()->getHDC();
-    HFONT hFont = pFont->GetHFONT();
-    assert(hDC);
-    assert(hFont);
 
     BlobCacheKey cacheKey{ rtl::Reference<vcl::font::PhysicalFontFace>(pFont->GetFontFace()),
                            nTableTag };
@@ -227,6 +223,11 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
         hb_blob_reference(it->second.mpBlob);
         return it->second.mpBlob;
     }
+
+    HDC hDC = pFont->GetGraphics()->getHDC();
+    HFONT hFont = pFont->GetHFONT();
+    assert(hDC);
+    assert(hFont);
 
     sal_uLong nLength = 0;
     unsigned char* pBuffer = nullptr;
