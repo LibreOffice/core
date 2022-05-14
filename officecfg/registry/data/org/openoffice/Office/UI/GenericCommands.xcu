@@ -5465,11 +5465,8 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Open Clip Art and Media Gallery</value>
         </prop>
-        <prop oor:name="TargetURL" oor:type="xs:string">
-          <value>.uno:Sidebar.GalleryDeck</value>
-        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
-          <value>9</value>
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:SearchDialog" oor:op="replace">
