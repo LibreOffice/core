@@ -118,7 +118,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
                     as a list of all properties of this cacheitem,
                     where empty properties was removed.
          */
-        css::uno::Sequence< css::beans::PropertyValue > getAsPackedPropertyValueList();
+        css::uno::Sequence< css::beans::PropertyValue > getAsPackedPropertyValueList(bool bFinalized, bool bMandatory) const;
 };
 
 
