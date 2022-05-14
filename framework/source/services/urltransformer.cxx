@@ -120,7 +120,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL )
     if ( nURLIndex <= 1 )
         return false;
 
-    OUString aProtocol = aURL.Complete.copy( 0, nURLIndex+1 );
+    std::u16string_view aProtocol = aURL.Complete.subView( 0, nURLIndex+1 );
 
     // If INetURLObject knows this protocol let it parse
     if ( INetURLObject::CompareProtocolScheme( aProtocol ) != INetProtocol::NotValid )
