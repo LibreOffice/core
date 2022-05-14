@@ -73,11 +73,6 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
     return 0;
 }
 
-extern "C" const char* __lsan_default_suppressions()
-{
-    return "leak:CairoTextRender::DrawTextLayout\n";
-}
-
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
