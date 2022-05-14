@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59be20be_3e88d9ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-05-14T18:00:47Z",
+      "side": 1,
+      "message": "tdf#114117 is still fixed after applying, the after screenshots look compelling and I don\u0027t know of an counter reason, so looks worth trying to me.\n\nThe docs used to say CAIRO_EXTEND_PAD ... (Since 1.2; not implemented for surface patterns currently) but now say (... implemented for surface patterns since 1.6) but 1.6 is ancient.",
+      "revId": "c7d48ea54696857e197f8402ad26e8918a223c41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
