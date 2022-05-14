@@ -80,6 +80,7 @@ namespace emfplushelper
             case EmfPlusRecordTypeDrawRects: return "EmfPlusRecordTypeDrawRects";
             case EmfPlusRecordTypeFillPolygon: return "EmfPlusRecordTypeFillPolygon";
             case EmfPlusRecordTypeDrawLines: return "EmfPlusRecordTypeDrawLines";
+            case EmfPlusRecordTypeFillClosedCurve: return "EmfPlusRecordTypeFillClosedCurve";
             case EmfPlusRecordTypeFillEllipse: return "EmfPlusRecordTypeFillEllipse";
             case EmfPlusRecordTypeDrawEllipse: return "EmfPlusRecordTypeDrawEllipse";
             case EmfPlusRecordTypeFillPie: return "EmfPlusRecordTypeFillPie";
@@ -89,6 +90,7 @@ namespace emfplushelper
             case EmfPlusRecordTypeFillPath: return "EmfPlusRecordTypeFillPath";
             case EmfPlusRecordTypeDrawPath: return "EmfPlusRecordTypeDrawPath";
             case EmfPlusRecordTypeDrawBeziers: return "EmfPlusRecordTypeDrawBeziers";
+            case EmfPlusRecordTypeDrawClosedCurve: return "EmfPlusRecordTypeDrawClosedCurve";
             case EmfPlusRecordTypeDrawImage: return "EmfPlusRecordTypeDrawImage";
             case EmfPlusRecordTypeDrawImagePoints: return "EmfPlusRecordTypeDrawImagePoints";
             case EmfPlusRecordTypeDrawString: return "EmfPlusRecordTypeDrawString";
@@ -610,8 +612,11 @@ namespace emfplushelper
         if (pen->GetColor().IsTransparent())
         {
             drawinglayer::primitive2d::Primitive2DContainer aContainer;
-            if ((pen->penDataFlags & EmfPlusPenDataStartCap)
-                || (pen->penDataFlags & EmfPlusPenDataEndCap))
+            if (aStart.isDefault() && aEnd.isDefault())
+                aContainer.append(drawinglayer::primitive2d::Primitive2DReference(
+                    new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                        polygon, lineAttribute, pen->GetStrokeAttribute(mdExtractedXScale))));
+            else
             {
                 aContainer.resize(polygon.count());
                 for (sal_uInt32 i = 0; i < polygon.count(); i++)
@@ -620,18 +625,17 @@ namespace emfplushelper
                             polygon.getB2DPolygon(i), lineAttribute,
                             pen->GetStrokeAttribute(mdExtractedXScale), aStart, aEnd));
             }
-            else
-                aContainer.append(drawinglayer::primitive2d::Primitive2DReference(
-                    new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                        polygon, lineAttribute, pen->GetStrokeAttribute(mdExtractedXScale))));
             mrTargetHolders.Current().append(
                 new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                     std::move(aContainer), (255 - pen->GetColor().GetAlpha()) / 255.0));
         }
         else
         {
-            if ((pen->penDataFlags & EmfPlusPenDataStartCap)
-                || (pen->penDataFlags & EmfPlusPenDataEndCap))
+            if (aStart.isDefault() && aEnd.isDefault())
+                mrTargetHolders.Current().append(
+                    new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                        polygon, lineAttribute, pen->GetStrokeAttribute(mdExtractedXScale)));
+            else
                 for (sal_uInt32 i = 0; i < polygon.count(); i++)
                 {
                     mrTargetHolders.Current().append(
@@ -639,10 +643,6 @@ namespace emfplushelper
                             polygon.getB2DPolygon(i), lineAttribute,
                             pen->GetStrokeAttribute(mdExtractedXScale), aStart, aEnd));
                 }
-            else
-                mrTargetHolders.Current().append(
-                    new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                        polygon, lineAttribute, pen->GetStrokeAttribute(mdExtractedXScale)));
         }
 
         if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap) && (pen->customStartCap->polygon.begin()->count() > 1))
@@ -1393,26 +1393,24 @@ namespace emfplushelper
                     }
                     case EmfPlusRecordTypeFillPolygon:
                     {
-                        const sal_uInt8 index = flags & 0xff;
                         sal_uInt32 brushIndexOrColor, points;
 
                         rMS.ReadUInt32(brushIndexOrColor);
                         rMS.ReadUInt32(points);
-                        SAL_INFO("drawinglayer.emf", "EMF+\t FillPolygon in slot: " << index << " points: " << points);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Points: " << points);
                         SAL_INFO("drawinglayer.emf", "EMF+\t " << ((flags & 0x8000) ? "Color" : "Brush index") << " : 0x" << std::hex << brushIndexOrColor << std::dec);
 
                         EMFPPath path(points, true);
                         path.Read(rMS, flags);
 
                         EMFPPlusFillPolygon(path.GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
-
                         break;
                     }
                     case EmfPlusRecordTypeDrawLines:
                     {
                         sal_uInt32 points;
                         rMS.ReadUInt32(points);
-                        SAL_INFO("drawinglayer.emf", "EMF+\t DrawLines in slot: " << (flags & 0xff) << " points: " << points);
+                        SAL_INFO("drawinglayer.emf", "EMF+\t Points: " << points);
                         EMFPPath path(points, true);
                         path.Read(rMS, flags);
 
@@ -1480,6 +1478,40 @@ namespace emfplushelper
                             x1 = x4;
                             y1 = y4;
                         }
+                        break;
+                    }
+                    case EmfPlusRecordTypeDrawClosedCurve:
+                    case EmfPlusRecordTypeFillClosedCurve:
+                    {
+                        // Silent MSVC warning C4701: potentially uninitialized local variable 'brushIndexOrColor' used
+                        sal_uInt32 brushIndexOrColor = 999, points;
+                        float aTension;
+                        if (type == EmfPlusRecordTypeFillClosedCurve)
+                        {
+                            rMS.ReadUInt32(brushIndexOrColor);
+                            SAL_INFO("drawinglayer.emf",
+                                "EMF+\t Fill Mode: " << (flags & 0x2000 ? "Winding" : "Alternate"));
+                        }
+                        rMS.ReadFloat(aTension);
+                        rMS.ReadUInt32(points);
+                        SAL_WARN("drawinglayer.emf",
+                                 "EMF+\t Tension: " << aTension << " Points: " << points);
+                        SAL_WARN_IF(aTension != 0, "drawinglayer.emf",
+                                    "EMF+\t TODO Add support for tension different than 0");
+                        SAL_INFO("drawinglayer.emf",
+                                 "EMF+\t " << (flags & 0x8000 ? "Color" : "Brush index") << " : 0x"
+                                           << std::hex << brushIndexOrColor << std::dec);
+
+                        EMFPPath path(points, true);
+                        path.Read(rMS, flags);
+                        if (type == EmfPlusRecordTypeFillClosedCurve)
+                            EMFPPlusFillPolygon(path.GetPolygon(*this, /* bMapIt */ true,
+                                                                /*bAddLineToCloseShape */ true),
+                                                flags & 0x8000, brushIndexOrColor);
+                        else
+                            EMFPPlusDrawPolygon(path.GetPolygon(*this, /* bMapIt */ true,
+                                                                /*bAddLineToCloseShape */ true),
+                                                flags & 0xff);
                         break;
                     }
                     case EmfPlusRecordTypeDrawImage:
