@@ -488,12 +488,11 @@ void SvpGraphicsBackend::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBi
     double fYScale = static_cast<double>(rTR.mnDestHeight) / rTR.mnSrcHeight;
     cairo_scale(cr, fXScale, fYScale);
     cairo_set_source_surface(cr, aSurface.getSurface(), -rTR.mnSrcX, -rTR.mnSrcY);
-    if ((fXScale != 1.0 && rTR.mnSrcWidth == 1) || (fYScale != 1.0 && rTR.mnSrcHeight == 1))
-    {
-        cairo_pattern_t* sourcepattern = cairo_get_source(cr);
-        cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
-        cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_NEAREST);
-    }
+
+    //tdf#133716 borders of upscaled images should not be blured
+    cairo_pattern_t* sourcepattern = cairo_get_source(cr);
+    cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_PAD);
+
     cairo_paint(cr);
 
     m_rCairoCommon.releaseCairoContext(cr, false, extents);
@@ -674,16 +673,13 @@ bool SvpGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap&
     cairo_scale(cr, fXScale, fYScale);
     cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
 
-    //tdf#114117 when stretching a single pixel width/height source to fit an area
-    //set extend and filter to stretch it with simplest expected interpolation
-    if ((fXScale != 1.0 && rTR.mnSrcWidth == 1) || (fYScale != 1.0 && rTR.mnSrcHeight == 1))
-    {
-        cairo_pattern_t* sourcepattern = cairo_get_source(cr);
-        cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
-        cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_NEAREST);
-        cairo_pattern_set_extend(maskpattern, CAIRO_EXTEND_REPEAT);
-        cairo_pattern_set_filter(maskpattern, CAIRO_FILTER_NEAREST);
-    }
+    cairo_pattern_t* sourcepattern = cairo_get_source(cr);
+
+    //tdf#133716 borders of upscaled images should not be blured
+    //tdf#114117 when stretching a single or multi pixel width/height source to fit an area
+    //the image will be extended into that size.
+    cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_PAD);
+    cairo_pattern_set_extend(maskpattern, CAIRO_EXTEND_PAD);
 
     //this block is just "cairo_mask_surface", but we have to make it explicit
     //because of the cairo_pattern_set_filter etc we may want applied

@@ -876,12 +876,11 @@ basegfx::B2DRange renderWithOperator(cairo_t* cr, const SalTwoRect& rTR, cairo_s
 
     cairo_save(cr);
     cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
-    if ((fXScale != 1.0 && rTR.mnSrcWidth == 1) || (fYScale != 1.0 && rTR.mnSrcHeight == 1))
-    {
-        cairo_pattern_t* sourcepattern = cairo_get_source(cr);
-        cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_REPEAT);
-        cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_NEAREST);
-    }
+
+    //tdf#133716 borders of upscaled images should not be blured
+    cairo_pattern_t* sourcepattern = cairo_get_source(cr);
+    cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_PAD);
+
     cairo_set_operator(cr, eOperator);
     cairo_paint(cr);
     cairo_restore(cr);
