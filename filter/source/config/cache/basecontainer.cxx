@@ -236,12 +236,10 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
     // SAFE ->
     osl::MutexGuard aLock(m_aMutex);
 
-    CacheItem aItem;
     try
     {
         FilterCache* pCache = impl_getWorkingCache();
-        aItem = pCache->getItem(m_eType, sItem);
-        pCache->addStatePropsToItem(m_eType, sItem, aItem); // add implicit props "Finalized"/"Mandatory"
+        aValue = pCache->getItemWithStateProps(m_eType, sItem);
     }
     catch(const css::container::NoSuchElementException&)
     {
@@ -250,10 +248,8 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
     catch(const css::uno::Exception&)
     {
         // TODO invalid cache!? How should it be handled right?
-        aItem.clear();
     }
 
-    aValue <<= aItem.getAsPackedPropertyValueList();
     // <- SAFE
 
     return aValue;

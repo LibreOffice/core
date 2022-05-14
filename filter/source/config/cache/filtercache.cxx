@@ -349,6 +349,15 @@ CacheItem FilterCache::getItem(      EItemType        eType,
     // SAFE ->
     osl::MutexGuard aLock(m_aMutex);
 
+    CacheItem aItem = impl_getItem(eType, sItem);
+    // <- SAFE
+    return aItem;
+}
+
+
+CacheItem& FilterCache::impl_getItem(      EItemType        eType,
+                               const OUString& sItem)
+{
     // search for right list
     // An exception is thrown if "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
@@ -389,7 +398,6 @@ CacheItem FilterCache::getItem(      EItemType        eType,
     }
 
     return pIt->second;
-    // <- SAFE
 }
 
 
@@ -450,12 +458,13 @@ void FilterCache::refreshItem(      EItemType        eType,
 }
 
 
-void FilterCache::addStatePropsToItem(      EItemType        eType,
-                                      const OUString& sItem,
-                                            CacheItem&       rItem)
+css::uno::Any FilterCache::getItemWithStateProps(      EItemType        eType,
+                                      const OUString& sItem)
 {
     // SAFE ->
     osl::MutexGuard aLock(m_aMutex);
+
+    const CacheItem& rItem = impl_getItem(eType, sItem);
 
     // Note: Opening of the configuration layer throws some exceptions
     // if it failed. So we mustn't check any reference here...
@@ -494,9 +503,8 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
                     (sItem == sDefaultFrameLoader   )
                    )
                 {
-                    rItem[PROPNAME_FINALIZED] <<= true;
-                    rItem[PROPNAME_MANDATORY] <<= true;
-                    return;
+                    css::uno::Sequence aProps = rItem.getAsPackedPropertyValueList(true, true);
+                    return css::uno::Any(aProps);
                 }
                 /* <-- HACK */
 
@@ -514,17 +522,16 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
         default: break;
     }
 
+    bool bFinalized, bMandatory;
     try
     {
         css::uno::Reference< css::beans::XProperty > xItem;
         xSet->getByName(sItem) >>= xItem;
         css::beans::Property aDescription = xItem->getAsProperty();
 
-        bool bFinalized = ((aDescription.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
-        bool bMandatory = ((aDescription.Attributes & css::beans::PropertyAttribute::REMOVABLE) != css::beans::PropertyAttribute::REMOVABLE);
+        bFinalized = ((aDescription.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
+        bMandatory = ((aDescription.Attributes & css::beans::PropertyAttribute::REMOVABLE) != css::beans::PropertyAttribute::REMOVABLE);
 
-        rItem[PROPNAME_FINALIZED] <<= bFinalized;
-        rItem[PROPNAME_MANDATORY] <<= bMandatory;
     }
     catch(const css::container::NoSuchElementException&)
     {
@@ -537,10 +544,13 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
 
             => mark item as FINALIZED / MANDATORY, we don't support writing to the old format
         */
-        rItem[PROPNAME_FINALIZED] <<= true;
-        rItem[PROPNAME_MANDATORY] <<= true;
+        bFinalized = true;
+        bMandatory = true;
     }
 
+    css::uno::Sequence<css::beans::PropertyValue> aProps = rItem.getAsPackedPropertyValueList(bFinalized, bMandatory);
+
+    return css::uno::Any(aProps);
     // <- SAFE
 }
 
