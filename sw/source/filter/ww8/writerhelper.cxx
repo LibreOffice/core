@@ -838,7 +838,7 @@ namespace sw
 
         RedlineStack::~RedlineStack()
         {
-            std::sort(maStack.begin(), maStack.end(), CompareRedlines());
+            std::stable_sort(maStack.begin(), maStack.end(), CompareRedlines());
             std::for_each(maStack.begin(), maStack.end(), SetInDocAndDelete(mrDoc));
         }
 

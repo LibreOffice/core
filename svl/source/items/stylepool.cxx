@@ -261,7 +261,7 @@ namespace {
             // Sort the parents using their name, if they have one.
             if (!rParentNames.empty())
             {
-                std::sort(maParents.begin(), maParents.end(),
+                std::stable_sort(maParents.begin(), maParents.end(),
                           [&rParentNames](const SfxItemSet* pA, const SfxItemSet* pB) {
                               OUString aA;
                               OUString aB;

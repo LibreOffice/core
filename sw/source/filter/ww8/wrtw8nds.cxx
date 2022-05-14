@@ -220,7 +220,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
      Get list of any graphics which may be anchored from this paragraph.
     */
     maFlyFrames = GetFramesInNode(rWr.m_aFrames, m_rNode);
-    std::sort(maFlyFrames.begin(), maFlyFrames.end(), sortswflys());
+    std::stable_sort(maFlyFrames.begin(), maFlyFrames.end(), sortswflys());
 
     /*
      #i18480#
