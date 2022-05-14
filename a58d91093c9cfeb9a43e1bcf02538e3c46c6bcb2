@@ -52,6 +52,24 @@
       "parentUuid": "780a59c4_5e942519",
       "revId": "a58d91093c9cfeb9a43e1bcf02538e3c46c6bcb2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e5ff30a_117023b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-05-14T01:31:57Z",
+      "side": 1,
+      "message": "\u003e This sounded a bit undeserved. I myself replace includes with forward declarations right and left. But here I have to use the smart pointer from the header, and can\u0027t use forward declarations.\n\nI mention this because you can still forward declare types even with smart pointers, at least with std::shared_ptr and std::unique_ptr.  Unless there is something special about rtl::Reference, I\u0027d imagine you can do the same with it as well...",
+      "parentUuid": "80713656_5f95f5a0",
+      "revId": "a58d91093c9cfeb9a43e1bcf02538e3c46c6bcb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
