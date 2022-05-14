@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e66ebfb1_c4d874b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-05-14T16:10:45Z",
+      "side": 1,
+      "message": "Do we still need the struct RTUik in refltype.hxx?",
+      "revId": "40eb2503e55889f7c947ad81ca1df444c605f996",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
