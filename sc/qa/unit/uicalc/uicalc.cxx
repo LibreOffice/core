@@ -988,7 +988,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf148863)
     double nB1 = pDoc->GetValue(ScAddress(1, 0, 0));
     double nC1 = pDoc->GetValue(ScAddress(2, 0, 0));
 
-    // Without the fix in place, this test woul have failed here
+    // Without the fix in place, this test would have failed here
     CPPUNIT_ASSERT(nA1 != nB1);
     CPPUNIT_ASSERT(nA1 != nC1);
     CPPUNIT_ASSERT(nB1 != nC1);
