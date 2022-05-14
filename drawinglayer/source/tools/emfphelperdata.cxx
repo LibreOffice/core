@@ -596,7 +596,7 @@ namespace emfplushelper
         const double transformedPenWidth = mdExtractedYScale * pen->penWidth;
         drawinglayer::attribute::LineAttribute lineAttribute(
             pen->GetColor().getBColor(), transformedPenWidth, pen->GetLineJoinType(),
-            css::drawing::LineCap_BUTT, //TODO implement PenDataDashedLineCap supportr here
+            css::drawing::LineCap_BUTT, //TODO implement PenDataDashedLineCap support here
             pen->fMiterMinimumAngle);
 
         drawinglayer::attribute::LineStartEndAttribute aStart;
