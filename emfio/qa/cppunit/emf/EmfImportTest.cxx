@@ -68,6 +68,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestEmfPlusGetDC();
     void TestEmfPlusSave();
     void TestEmfPlusDrawPathWithMiterLimit();
+    void TestEmfPlusFillClosedCurve();
     void TestExtTextOutOpaqueAndClipTransform();
 
     void TestBitBltStretchBltWMF();
@@ -117,6 +118,7 @@ public:
     CPPUNIT_TEST(TestEmfPlusGetDC);
     CPPUNIT_TEST(TestEmfPlusSave);
     CPPUNIT_TEST(TestEmfPlusDrawPathWithMiterLimit);
+    CPPUNIT_TEST(TestEmfPlusFillClosedCurve);
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipTransform);
 
     CPPUNIT_TEST(TestBitBltStretchBltWMF);
@@ -1067,6 +1069,52 @@ void Test::TestEmfPlusDrawPathWithMiterLimit()
     assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "linejoin", "Miter");
     assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "miterangle", "60");
     assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/stroke", 0);
+}
+
+void Test::TestEmfPlusFillClosedCurve()
+{
+    // tdf#143876 EMF+ records: SetWorldTransform, FillClosedCurve, DrawClosedCurve
+    Primitive2DSequence aSequence
+        = parseEmf(u"emfio/qa/cppunit/emf/data/TestEmfPlusFillClosedCurve.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", 2);
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]", "color", "#808080");
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[1]/polypolygon", "path",
+                "m18202.841744243 13758.4401790456 1269.96570308672 "
+                "3175.02465670283-2539.93140617345-2116.68310446856h2539.93140617345l-2539."
+                "93140617345 2116.68310446856z");
+
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke", 2);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "color", "#000000");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "width", "10");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "linejoin", "Miter");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "miterangle", "3");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "linecap", "BUTT");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/polypolygon", "path",
+                "m18202.841744243 13758.4401790456 1269.96570308672 "
+                "3175.02465670283-2539.93140617345-2116.68310446856h2539.93140617345l-2539."
+                "93140617345 2116.68310446856z");
+
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]", "color", "#808080");
+    //TODO Check path with implemented Winding
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]/polypolygon", "path",
+                "m22012.7388535032 13758.4401790456 1269.96570308672 "
+                "3175.02465670283-2539.93140617344-2116.68310446856h2539.93140617344l-2539."
+                "93140617344 2116.68310446856z");
+
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "color", "#000000");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "width", "10");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "linejoin", "Miter");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "miterangle", "3");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "linecap", "BUTT");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/polypolygon", "path",
+                "m22012.7388535032 13758.4401790456 1269.96570308672 "
+                "3175.02465670283-2539.93140617344-2116.68310446856h2539.93140617344l-2539."
+                "93140617344 2116.68310446856z");
 }
 
 void Test::TestExtTextOutOpaqueAndClipTransform()
