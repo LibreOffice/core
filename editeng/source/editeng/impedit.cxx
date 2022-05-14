@@ -2693,18 +2693,18 @@ void ImpEditView::RemoveDragAndDropListeners()
     else if (auto xWindow = GetWindow())
         xDropTarget = xWindow->GetDropTarget();
 
-    if (!xDropTarget.is())
-        return;
-
-    css::uno::Reference<css::datatransfer::dnd::XDragGestureRecognizer> xDragGestureRecognizer(xDropTarget, uno::UNO_QUERY);
-    if (xDragGestureRecognizer.is())
+    if (xDropTarget.is())
     {
-        uno::Reference<datatransfer::dnd::XDragGestureListener> xDGL(mxDnDListener, uno::UNO_QUERY);
-        xDragGestureRecognizer->removeDragGestureListener(xDGL);
-    }
+        css::uno::Reference<css::datatransfer::dnd::XDragGestureRecognizer> xDragGestureRecognizer(xDropTarget, uno::UNO_QUERY);
+        if (xDragGestureRecognizer.is())
+        {
+            uno::Reference<datatransfer::dnd::XDragGestureListener> xDGL(mxDnDListener, uno::UNO_QUERY);
+            xDragGestureRecognizer->removeDragGestureListener(xDGL);
+        }
 
-    uno::Reference<datatransfer::dnd::XDropTargetListener> xDTL(mxDnDListener, uno::UNO_QUERY);
-    xDropTarget->removeDropTargetListener(xDTL);
+        uno::Reference<datatransfer::dnd::XDropTargetListener> xDTL(mxDnDListener, uno::UNO_QUERY);
+        xDropTarget->removeDropTargetListener(xDTL);
+    }
 
     if ( mxDnDListener.is() )
     {
