@@ -102,8 +102,8 @@ bool SdrUndoManager::Redo()
             // The problem here is that Undo/Redo actions historically reference
             // XShapes/SdrShapes by pointer/reference, e.g. deleting means: remove
             // from an SdrObjList and add to an Undo action. I is *not*
-            // adddress/incarnation-invariant in the sense to remember e.g. to
-            // remove the Nth object in tha list (that would work).
+            // address/incarnation-invariant in the sense to remember e.g. to
+            // remove the Nth object in the list (that would work).
 
             // It might be possible to solve/correct this better, but since it's
             // a rare corner case just avoid the possible crash when continuing Redos
