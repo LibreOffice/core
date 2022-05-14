@@ -83,12 +83,12 @@ void CacheItem::validateUINames(const OUString& sActLocale)
 }
 
 
-css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyValueList()
+css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyValueList(bool bFinalized, bool bMandatory) const
 {
     sal_Int32 c = static_cast<sal_Int32>(size());
     sal_Int32 i = 0;
 
-    css::uno::Sequence< css::beans::PropertyValue > lList(c);
+    css::uno::Sequence< css::beans::PropertyValue > lList(c+2);
     css::beans::PropertyValue*                      pList = lList.getArray();
 
     for (const_iterator pProp  = begin();
@@ -100,11 +100,18 @@ css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyVa
 
         if (!rValue.hasValue())
             continue;
+        assert (rName != PROPNAME_FINALIZED && rName != PROPNAME_MANDATORY);
 
         pList[i].Name  = rName ;
         pList[i].Value = rValue;
         ++i;
     }
+    pList[i].Name  = PROPNAME_FINALIZED ;
+    pList[i].Value <<= bFinalized;
+    ++i;
+    pList[i].Name  = PROPNAME_MANDATORY ;
+    pList[i].Value <<= bMandatory;
+    ++i;
     lList.realloc(i);
 
     return lList;
