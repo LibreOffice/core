@@ -100,7 +100,6 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
     Size prefSize;
     BitmapScopedWriteAccess pWriteAccessInstance;
     AlphaScopedWriteAccess pWriteAccessAlphaInstance;
-    std::vector<std::vector<png_byte>> aRows;
     const bool bFuzzing = utl::ConfigManager::IsFuzzing();
     const bool bSupportsBitmap32 = bFuzzing || ImplGetSVData()->mpDefInst->supportsBitmap32();
     const bool bOnlyCreateBitmap
@@ -342,9 +341,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
             if (eFormat == ScanlineFormat::N24BitTcBgr)
                 png_set_bgr(pPng);
 
-            aRows = std::vector<std::vector<png_byte>>(height);
-            for (auto& rRow : aRows)
-                rRow.resize(aRowSizeBytes, 0);
+            std::vector<png_byte> aRow(aRowSizeBytes, 0);
 
             for (int pass = 0; pass < nNumberOfPasses; pass++)
             {
@@ -352,7 +349,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
                 {
                     Scanline pScanline = pWriteAccess->GetScanline(y);
                     Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
-                    png_bytep pRow = aRows[y].data();
+                    png_bytep pRow = aRow.data();
                     png_read_row(pPng, pRow, nullptr);
                     size_t iAlpha = 0;
                     size_t iColor = 0;
