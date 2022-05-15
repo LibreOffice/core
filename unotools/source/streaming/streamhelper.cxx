@@ -22,8 +22,10 @@
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <o3tl/safeint.hxx>
 #include <unotools/streamhelper.hxx>
+#include <unotools/bytereader.hxx>
 
 namespace utl
 {
@@ -116,6 +118,19 @@ void SAL_CALL OInputStreamHelper::closeInput()
 void SAL_CALL OInputStreamHelper::acquire() SAL_NOEXCEPT
 {
     cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>::acquire();
+}
+
+ByteReader::~ByteReader() {}
+
+const css::uno::Sequence< sal_Int8 > & ByteReader::getUnoTunnelId()
+{
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
+}
+
+sal_Int64 ByteReader::getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier )
+{
+    return comphelper::getSomethingImpl(_rIdentifier, this);
 }
 
 } // namespace utl

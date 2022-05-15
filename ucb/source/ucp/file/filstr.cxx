@@ -23,6 +23,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <osl/diagnose.h>
 #include "filstr.hxx"
 #include "filerror.hxx"
@@ -148,6 +149,34 @@ XStream_impl::readBytes(
     return static_cast<sal_Int32>(nrc);
 }
 
+sal_Int32
+XStream_impl::readSomeBytes(
+    sal_Int8* pData,
+    sal_Int32 nBytesToRead )
+{
+    if( ! m_nIsOpen )
+        throw io::IOException( THROW_WHERE );
+
+    sal_uInt64 nrc(0);
+    if(m_aFile.read( pData, sal_uInt64(nBytesToRead), nrc )
+       != osl::FileBase::E_None)
+    {
+        throw io::IOException( THROW_WHERE );
+    }
+    return static_cast<sal_Int32>(nrc);
+}
+
+const css::uno::Sequence<sal_Int8> & XStream_impl::getUnoTunnelId()
+{
+    static const comphelper::UnoIdInit implID;
+    return implID.getSeq();
+}
+
+sal_Int64 SAL_CALL XStream_impl::getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier )
+{
+    return comphelper::getSomethingImpl(_rIdentifier, this,
+                        comphelper::FallbackToGetSomethingOf<utl::ByteReader>{});
+}
 
 sal_Int32 SAL_CALL
 XStream_impl::readSomeBytes(
