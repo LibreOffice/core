@@ -14,7 +14,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes" context="statisticsinfopage|label4">Pages:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label4">_Pages:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nopages</property>
       </object>
@@ -28,7 +28,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes" context="statisticsinfopage|label5">Tables:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label5">_Tables:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">notables</property>
       </object>
@@ -42,7 +42,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes" context="statisticsinfopage|label6">Images:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label6">_Images:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nogrfs</property>
       </object>
@@ -56,7 +56,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes" context="statisticsinfopage|label31">OLE objects:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label31">_OLE objects:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nooles</property>
       </object>
@@ -84,7 +84,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes" context="statisticsinfopage|label33">Words:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label33">_Words:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nowords</property>
       </object>
@@ -98,7 +98,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes" context="statisticsinfopage|label34">Characters:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label34">_Characters:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nochars</property>
       </object>
@@ -112,7 +112,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes" context="statisticsinfopage|label35">Characters excluding spaces:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|label35">Characters _excluding spaces:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nocharsexspaces</property>
       </object>
@@ -126,7 +126,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <property name="label" translatable="yes" context="statisticsinfopage|lineft">Lines:</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|lineft">_Lines:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nolines</property>
       </object>
@@ -237,7 +237,7 @@
     </child>
     <child>
       <object class="GtkButton" id="update">
-        <property name="label" translatable="yes" context="statisticsinfopage|update">Update</property>
+        <property name="label" translatable="yes" context="statisticsinfopage|update">_Update</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
