@@ -28,22 +28,15 @@
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-class ImplB2DPolyPolygon;
-
 namespace basegfx
 {
     class B2DHomMatrix;
-}
+    class ImplB2DPolyPolygon;
 
-namespace basegfx
-{
     class BASEGFX_DLLPUBLIC B2DPolyPolygon
     {
-    public:
-        typedef o3tl::cow_wrapper< ImplB2DPolyPolygon > ImplType;
-
     private:
-        ImplType                                        mpPolyPolygon;
+        o3tl::cow_wrapper<ImplB2DPolyPolygon> mpPolyPolygon;
 
     public:
         B2DPolyPolygon();
