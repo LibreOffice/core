@@ -293,7 +293,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="tooltip_text" translatable="yes" context="explorerfiledialog|add">Add shortcut</property>
+                                    <property name="tooltip_text" translatable="yes" context="explorerfiledialog|add">Add current folder to Places</property>
                                     <property name="image">image1</property>
                                     <property name="always_show_image">True</property>
                                   </object>
@@ -308,7 +308,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="tooltip_text" translatable="yes" context="explorerfiledialog|add">Delete shortcut</property>
+                                    <property name="tooltip_text" translatable="yes" context="explorerfiledialog|add">Remove selected folder from Places</property>
                                     <property name="image">image2</property>
                                     <property name="always_show_image">True</property>
                                   </object>
