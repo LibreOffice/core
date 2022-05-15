@@ -17,13 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_LZWDECOM_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_LZWDECOM_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <array>
 
-#define MAX_TABLE_SIZE 4096
+constexpr sal_Int16 MAX_TABLE_SIZE = 4096;
 
 struct LZWTableEntry
 {
@@ -50,23 +49,21 @@ private:
     void AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData);
     void DecompressSome();
 
-    SvStream* pIStream;
+    SvStream* m_pIStream;
 
-    std::array<LZWTableEntry, MAX_TABLE_SIZE> aTable;
-    sal_uInt16 nTableSize;
+    std::array<LZWTableEntry, MAX_TABLE_SIZE> m_aTable;
+    sal_uInt16 m_nTableCurrentId;
 
-    bool bEOIFound, bInvert, bFirst;
+    bool m_bEOIFound, m_bInvert;
 
-    sal_uInt16 nOldCode;
+    sal_uInt16 m_nOldCode;
 
-    std::array<sal_uInt8, MAX_TABLE_SIZE> pOutBuf;
-    sal_uInt8* pOutBufData;
-    sal_uInt16 nOutBufDataLen;
+    std::array<sal_uInt8, MAX_TABLE_SIZE> m_pOutBuf;
+    sal_uInt8* m_pOutBufData;
+    sal_uInt16 m_nOutBufDataLen;
 
-    sal_uInt8 nInputBitsBuf;
-    sal_uInt16 nInputBitsBufSize;
+    sal_uInt8 m_nInputBitsBuf;
+    sal_uInt16 m_nInputBitsBufSize;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
