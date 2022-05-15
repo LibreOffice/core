@@ -267,7 +267,6 @@ CharShape::CharShape()
     , color{0}
     , shade(0)
     , attr(0)
-    , reserved{0}
 {
 }
 
@@ -283,7 +282,7 @@ void CharShape::Read(HWPFile & hwpf)
     hwpf.ReadBlock(color, 2);
     hwpf.Read1b(shade);
     hwpf.Read1b(attr);
-    hwpf.ReadBlock(reserved, 4);
+    hwpf.SkipBlock(4);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
