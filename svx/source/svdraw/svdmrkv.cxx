@@ -23,6 +23,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/svdomedia.hxx>
 
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -1145,6 +1146,14 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             // other views want to know about it.
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelectionText.getStr());
             SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelectionTextView);
+        }
+
+        if (comphelper::LibreOfficeKit::isActive() && mpMarkedObj
+            && mpMarkedObj->GetObjIdentifier() == OBJ_MEDIA)
+        {
+            SdrMediaObj* mediaObj = dynamic_cast<SdrMediaObj*>(mpMarkedObj);
+            if (mediaObj)
+                mediaObj->notifyPropertiesForLOKit();
         }
     }
 }
