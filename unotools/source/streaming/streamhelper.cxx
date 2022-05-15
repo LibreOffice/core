@@ -24,6 +24,7 @@
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <o3tl/safeint.hxx>
 #include <unotools/streamhelper.hxx>
+#include <unotools/bytereader.hxx>
 
 namespace utl
 {
@@ -117,6 +118,8 @@ void SAL_CALL OInputStreamHelper::acquire() SAL_NOEXCEPT
 {
     cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>::acquire();
 }
+
+ByteReader::~ByteReader() {}
 
 } // namespace utl
 
