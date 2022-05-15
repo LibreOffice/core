@@ -43,22 +43,6 @@ SharedString& SharedString::operator= ( const SharedString& r )
     return *this;
 }
 
-SharedString& SharedString::operator=(SharedString&& r) noexcept
-{
-    if (mpData)
-        rtl_uString_release(mpData);
-    if (mpDataIgnoreCase)
-        rtl_uString_release(mpDataIgnoreCase);
-
-    mpData = r.mpData;
-    mpDataIgnoreCase = r.mpDataIgnoreCase;
-
-    r.mpData = nullptr;
-    r.mpDataIgnoreCase = nullptr;
-
-    return *this;
-}
-
 bool SharedString::operator== ( const SharedString& r ) const
 {
     // Compare only the original (not case-folded) string.
