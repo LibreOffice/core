@@ -27,6 +27,9 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 
+namespace basegfx
+{
+
 class ImplB2DPolyPolygon
 {
     basegfx::B2DPolygonVector                               maPolygons;
@@ -196,9 +199,6 @@ public:
             return maPolygons.data() + maPolygons.size();
     }
 };
-
-namespace basegfx
-{
 
     static o3tl::cow_wrapper<ImplB2DPolyPolygon> DEFAULT;
 
