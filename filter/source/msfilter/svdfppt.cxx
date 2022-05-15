@@ -1507,7 +1507,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
             DffRecordHeader* pSlideListWithTextHd = aDocRecManager.GetRecordHeader( PPT_PST_SlideListWithText );
             PptSlidePersistEntry* pPreviousPersist = nullptr;
             DffRecordHeader* pSlideListHd = aDocRecManager.GetRecordHeader(PPT_PST_List);
-            sal_uLong nPSTList = 0;
+            sal_uInt64 nPSTList = 0;
             if (pSlideListHd) nPSTList = pSlideListHd->GetRecBegFilePos();
             sal_uInt16 nRealPageNum = 0;
             // Normal PPT document has order of Master slides - Presentation slides - Note slides
@@ -3046,7 +3046,7 @@ sal_uInt16 SdrPowerPointImport::GetMasterPageIndex( sal_uInt16 nPageNum, PptPage
     return nIdx;
 }
 
-SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage, sal_uInt32& nBgFileOffset )
+SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage, sal_uInt64& nBgFileOffset )
 {
     SdrObject* pRet = nullptr;
     std::optional<SfxItemSet> pSet;

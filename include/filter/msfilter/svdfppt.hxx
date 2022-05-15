@@ -244,7 +244,7 @@ struct PptSlidePersistAtom
     sal_uInt32          nFlags;
     sal_uInt32          nNumberTexts;
     sal_uInt32          nSlideId;
-    sal_uInt32          nReserved;                  // we will use nReserved temporarily to set the offset to SSSlideInfoAtom ( if possible )
+    sal_uInt64          nReserved;                  // we will use nReserved temporarily to set the offset to SSSlideInfoAtom ( if possible )
 
 public:
                         PptSlidePersistAtom() { Clear(); }
@@ -364,14 +364,14 @@ struct PptSlidePersistEntry
     PptColorSchemeAtom  aColorScheme;           // each slide includes this colorscheme atom
     std::unique_ptr<PPTStyleSheet> xStyleSheet; // stylesheet of this page (only in masterpages), since XP supports more than one masterpage
 
-    sal_uInt32          HeaderFooterOfs[ 4 ];   // containing the ofs to the placeholder (only masterpage)
+    sal_uInt64          HeaderFooterOfs[ 4 ];   // containing the ofs to the placeholder (only masterpage)
     std::unique_ptr<HeaderFooterEntry> xHeaderFooterEntry;
     std::unique_ptr<SvxMSDffSolverContainer> xSolverContainer;
     sal_uInt32          nSlidePersistStartOffset;// is an array to the end of the SlidePersistAtom of this page, TextHeaderAtom is following
     sal_uInt32          nSlidePersistEndOffset;
     sal_uInt32          nBackgroundOffset;      // fileoffset
     sal_uInt32          nDrawingDgId;           // valid, if not -1
-    std::unique_ptr<sal_uInt32[]>
+    std::unique_ptr<sal_uInt64[]>
                         pPresentationObjects;   // if valid, this is a pointer to an array that includes the offsets to the presentation objects
                                                 // on this masterpage for each instance (0 - 8);
     SdrObject*          pBObj;
