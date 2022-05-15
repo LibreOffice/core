@@ -23,6 +23,7 @@ $(eval $(call gb_Library_use_libraries,ucpfile1,\
 	sal \
 	tl \
 	ucbhelper \
+	utl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ucpfile1,\

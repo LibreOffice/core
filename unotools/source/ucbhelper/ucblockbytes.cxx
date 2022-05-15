@@ -57,6 +57,7 @@
 
 #include <comphelper/storagehelper.hxx>
 #include <ucbhelper/content.hxx>
+#include <unotools/bytereader.hxx>
 #include <mutex>
 
 using namespace ::com::sun::star::uno;
@@ -1092,7 +1093,6 @@ ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
         return ERRCODE_IO_CANTSEEK;
     }
 
-    Sequence<sal_Int8> aData;
     sal_Int32          nSize;
 
     if(nCount > 0x7FFFFFFF)
@@ -1108,14 +1108,23 @@ ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
                 return ERRCODE_IO_PENDING;
         }
 
-        nSize = xStream->readBytes( aData, sal_Int32(nCount) );
+        utl::ByteReader* pByteReader = dynamic_cast<utl::ByteReader*>(xStream.get());
+        if (pByteReader)
+        {
+            nSize = pByteReader->readSomeBytes( static_cast<sal_Int8*>(pBuffer), sal_Int32(nCount) );
+        }
+        else
+        {
+            Sequence<sal_Int8> aData;
+            nSize = xStream->readBytes( aData, sal_Int32(nCount) );
+            memcpy (pBuffer, aData.getConstArray(), nSize);
+        }
     }
     catch (const IOException&)
     {
         return ERRCODE_IO_CANTREAD;
     }
 
-    memcpy (pBuffer, aData.getConstArray(), nSize);
     if (pRead)
         *pRead = static_cast<std::size_t>(nSize);
 
