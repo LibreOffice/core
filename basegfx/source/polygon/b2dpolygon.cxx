@@ -28,34 +28,13 @@
 #include <memory>
 #include <vector>
 
-namespace {
-
-struct CoordinateData2D : public basegfx::B2DPoint
+namespace
 {
-public:
-    CoordinateData2D() {}
-
-    explicit CoordinateData2D(const basegfx::B2DPoint& rData)
-    :   B2DPoint(rData)
-    {}
-
-    CoordinateData2D& operator=(const basegfx::B2DPoint& rData)
-    {
-        B2DPoint::operator=(rData);
-        return *this;
-    }
-
-    void transform(const basegfx::B2DHomMatrix& rMatrix)
-    {
-        *this *= rMatrix;
-    }
-};
 
 class CoordinateDataArray2D
 {
-    typedef std::vector< CoordinateData2D > CoordinateData2DVector;
-
-    CoordinateData2DVector                          maVector;
+private:
+    std::vector<basegfx::B2DPoint> maVector;
 
 public:
     explicit CoordinateDataArray2D(sal_uInt32 nCount)
@@ -93,17 +72,17 @@ public:
         maVector.reserve(nCount);
     }
 
-    void append(const CoordinateData2D& rValue)
+    void append(const basegfx::B2DPoint& rValue)
     {
         maVector.push_back(rValue);
     }
 
-    void insert(sal_uInt32 nIndex, const CoordinateData2D& rValue, sal_uInt32 nCount)
+    void insert(sal_uInt32 nIndex, const basegfx::B2DPoint& rValue, sal_uInt32 nCount)
     {
         if(nCount)
         {
             // add nCount copies of rValue
-            CoordinateData2DVector::iterator aIndex(maVector.begin());
+            auto aIndex = maVector.begin();
             aIndex += nIndex;
             maVector.insert(aIndex, nCount, rValue);
         }
@@ -116,10 +95,10 @@ public:
         if(nCount)
         {
             // insert data
-            CoordinateData2DVector::iterator aIndex(maVector.begin());
+            auto aIndex = maVector.begin();
             aIndex += nIndex;
-            CoordinateData2DVector::const_iterator aStart(rSource.maVector.begin());
-            CoordinateData2DVector::const_iterator aEnd(rSource.maVector.end());
+            auto aStart = rSource.maVector.cbegin();
+            auto aEnd = rSource.maVector.cend();
             maVector.insert(aIndex, aStart, aEnd);
         }
     }
@@ -129,9 +108,9 @@ public:
         if(nCount)
         {
             // remove point data
-            CoordinateData2DVector::iterator aStart(maVector.begin());
+            auto aStart = maVector.begin();
             aStart += nIndex;
-            const CoordinateData2DVector::iterator aEnd(aStart + nCount);
+            const auto aEnd = aStart + nCount;
             maVector.erase(aStart, aEnd);
         }
     }
@@ -144,8 +123,8 @@ public:
         // to keep the same point at index 0, just flip all points except the
         // first one when closed
         const sal_uInt32 nHalfSize(bIsClosed ? (maVector.size() - 1) >> 1 : maVector.size() >> 1);
-        CoordinateData2DVector::iterator aStart(bIsClosed ? maVector.begin() + 1 : maVector.begin());
-        CoordinateData2DVector::iterator aEnd(maVector.end() - 1);
+        auto aStart = bIsClosed ? maVector.begin() + 1 : maVector.begin();
+        auto aEnd = maVector.end() - 1;
 
         for(sal_uInt32 a(0); a < nHalfSize; a++)
         {
@@ -188,9 +167,9 @@ public:
 
     void transform(const basegfx::B2DHomMatrix& rMatrix)
     {
-        for (auto & elem : maVector)
+        for (auto& point : maVector)
         {
-            elem.transform(rMatrix);
+            point *= rMatrix;
         }
     }
 };
@@ -713,7 +692,7 @@ public:
     void append(const basegfx::B2DPoint& rPoint)
     {
         mpBufferedData.reset(); // TODO: is this needed?
-        const CoordinateData2D aCoordinate(rPoint);
+        const auto aCoordinate = rPoint;
         maPoints.append(aCoordinate);
 
         if(moControlVector)
@@ -728,7 +707,7 @@ public:
         if(nCount)
         {
             mpBufferedData.reset();
-            CoordinateData2D aCoordinate(rPoint);
+            auto aCoordinate = rPoint;
             maPoints.insert(nIndex, aCoordinate, nCount);
 
             if(moControlVector)
