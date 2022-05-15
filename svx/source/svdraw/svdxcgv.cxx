@@ -27,6 +27,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdopage.hxx>
@@ -626,6 +627,18 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject)
         if(pSdrOle2Obj->GetGraphic())
         {
             aRet = *pSdrOle2Obj->GetGraphic();
+        }
+    }
+    else
+    {
+        // Support extracting a snapshot from video media, if possible.
+        const SdrMediaObj* pSdrMediaObj = dynamic_cast<const SdrMediaObj*>(&rSdrObject);
+        if (pSdrMediaObj)
+        {
+            const css::uno::Reference<css::graphic::XGraphic>& xGraphic
+                = pSdrMediaObj->getSnapshot();
+            if (xGraphic.is())
+                aRet = Graphic(xGraphic);
         }
     }
 

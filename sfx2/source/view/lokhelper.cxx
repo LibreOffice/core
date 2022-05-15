@@ -892,4 +892,13 @@ void SfxLokHelper::dumpState(rtl::OStringBuffer &rState)
     }
 }
 
+void SfxLokHelper::notifyMediaUpdate(boost::property_tree::ptree& json)
+{
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, json, /*pretty=*/ false);
+    const std::string str = aStream.str();
+
+    SfxLokHelper::notifyAllViews(LOK_CALLBACK_MEDIA_SHAPE, str.c_str());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

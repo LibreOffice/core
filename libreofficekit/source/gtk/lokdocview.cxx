@@ -1485,6 +1485,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_SC_FOLLOW_JUMP:
     case LOK_CALLBACK_PRINT_RANGES:
     case LOK_CALLBACK_FONTS_MISSING:
+    case LOK_CALLBACK_MEDIA_SHAPE:
     {
         // TODO: Implement me
         break;

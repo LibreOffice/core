@@ -29,6 +29,10 @@
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -455,6 +459,27 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     {
         SetChanged();
         BroadcastObjectChange();
+    }
+}
+
+void SdrMediaObj::notifyPropertiesForLOKit()
+{
+    if (!m_xImpl->m_MediaProperties.getTempURL().isEmpty())
+    {
+        const auto mediaId = reinterpret_cast<std::size_t>(this);
+
+        boost::property_tree::ptree json;
+        json.put("action", "update");
+        json.put("id", mediaId);
+        json.put("url", m_xImpl->m_MediaProperties.getTempURL());
+
+        const tools::Rectangle aRect = o3tl::convert(maRect, o3tl::Length::mm100, o3tl::Length::twip);
+        json.put("x", aRect.getX());
+        json.put("y", aRect.getY());
+        json.put("w", aRect.getOpenWidth());
+        json.put("h", aRect.getOpenHeight());
+
+        SfxLokHelper::notifyMediaUpdate(json);
     }
 }
 

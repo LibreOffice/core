@@ -1545,6 +1545,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
             type != LOK_CALLBACK_TEXT_SELECTION &&
             type != LOK_CALLBACK_TEXT_SELECTION_START &&
             type != LOK_CALLBACK_TEXT_SELECTION_END &&
+            type != LOK_CALLBACK_MEDIA_SHAPE &&
             type != LOK_CALLBACK_REFERENCE_MARKS)
         {
             SAL_INFO("lok", "Skipping while painting [" << type << "]: [" << aCallbackData.getPayload() << "].");
