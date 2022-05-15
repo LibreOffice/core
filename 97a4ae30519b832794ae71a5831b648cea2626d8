@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d973be8c_67e4ed89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-15T06:24:55Z",
+      "side": 1,
+      "message": "oh dear, this is more complicated than I thought.\n\nSo, if you want to proceed, the solution is to add extra methods, so that the call sites can call different versions that are deliberately not taking the lock. \n\nSomething like:\n\nA::foo()\n{\n  std::unique_lock....\n  b-\u003efoo_Unlocked();\n}\n\nb::foo()\n{\n  std::unique_lock....\n  foo_Unlocked();\n}\n\nb::foo_Unlocked()\n{\n  ......\n}\n\n",
+      "revId": "97a4ae30519b832794ae71a5831b648cea2626d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
