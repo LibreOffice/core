@@ -375,16 +375,20 @@ Reference< XCustomShapeEngine > const & SdrObjCustomShape::GetCustomShapeEngine(
     if (mxCustomShapeEngine.is())
         return mxCustomShapeEngine;
 
-    OUString aEngine(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ).GetValue());
-    if ( aEngine.isEmpty() )
-        aEngine = "com.sun.star.drawing.EnhancedCustomShapeEngine";
+    Reference< XShape > aXShape = GetXShapeForSdrObject(const_cast<SdrObjCustomShape*>(this));
+    if ( !aXShape )
+        return mxCustomShapeEngine;
 
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
-    Reference< XShape > aXShape = GetXShapeForSdrObject(const_cast<SdrObjCustomShape*>(this));
-    if ( aXShape.is() )
+    OUString aEngine(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ).GetValue());
+    static constexpr OUStringLiteral sEnhancedCustomShapeEngine = u"com.sun.star.drawing.EnhancedCustomShapeEngine";
+    if ( aEngine.isEmpty() )
+        aEngine = sEnhancedCustomShapeEngine;
+
     {
-        Sequence< PropertyValue > aPropValues{ comphelper::makePropertyValue("CustomShape",
+        static constexpr OUStringLiteral sCustomShape = u"CustomShape";
+        Sequence< PropertyValue > aPropValues{ comphelper::makePropertyValue(sCustomShape,
                                                                              aXShape) };
         Sequence< Any > aArgument{ Any(aPropValues) };
         try
