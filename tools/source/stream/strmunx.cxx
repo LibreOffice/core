@@ -372,14 +372,20 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
     // FIXME: we really need to switch to a pure URL model ...
     if ( osl::File::getFileURLFromSystemPath( aFilename, aFileURL ) != osl::FileBase::E_None )
         aFileURL = aFilename;
-    bool bStatValid = ( osl::DirectoryItem::get( aFileURL, aItem) == osl::FileBase::E_None &&
+
+    // don't both stat()ing a temporary file, unnecessary
+    bool bStatValid = true;
+    if (!(nOpenMode & StreamMode::TEMPORARY))
+    {
+        bStatValid = ( osl::DirectoryItem::get( aFileURL, aItem) == osl::FileBase::E_None &&
                         aItem.getFileStatus( aStatus ) == osl::FileBase::E_None );
 
-    // SvFileStream can't open a directory
-    if( bStatValid && aStatus.getFileType() == osl::FileStatus::Directory )
-    {
-        SetError( ::GetSvError( EISDIR ) );
-        return;
+        // SvFileStream can't open a directory
+        if( bStatValid && aStatus.getFileType() == osl::FileStatus::Directory )
+        {
+            SetError( ::GetSvError( EISDIR ) );
+            return;
+        }
     }
 
     if ( !( nOpenMode & StreamMode::WRITE ) )
