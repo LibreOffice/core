@@ -25,7 +25,9 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <unotools/bytereader.hxx>
 #include <mutex>
 
 #include "filrec.hxx"
@@ -41,7 +43,9 @@ class XStream_impl :  public cppu::WeakImplHelper<
     css::io::XInputStream,
     css::io::XOutputStream,
     css::io::XTruncate,
-    css::io::XAsyncOutputMonitor >
+    css::io::XAsyncOutputMonitor,
+    css::lang::XUnoTunnel >,
+    public utl::ByteReader
     {
 
     public:
@@ -119,6 +123,17 @@ class XStream_impl :  public cppu::WeakImplHelper<
         closeOutput() override;
 
         virtual void SAL_CALL waitForCompletion() override;
+
+        // XUnoTunnel
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier ) override;
+
+        // utl::ByteReader
+        virtual sal_Int32
+        readSomeBytes(
+            sal_Int8* aData,
+            sal_Int32 nMaxBytesToRead ) override;
+
+        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     private:
 

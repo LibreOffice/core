@@ -21,6 +21,7 @@
 
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <o3tl/safeint.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
@@ -74,6 +75,21 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >
     // If read characters < MaxLength, adjust css::uno::Sequence
     if (nRead < o3tl::make_unsigned(aData.getLength()))
         aData.realloc( nRead );
+
+    return nRead;
+}
+
+sal_Int32 OInputStreamWrapper::readSomeBytes(sal_Int8* pData, sal_Int32 nBytesToRead)
+{
+    checkConnected();
+
+    if (nBytesToRead < 0)
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+
+    std::scoped_lock aGuard( m_aMutex );
+
+    sal_uInt32 nRead = m_pSvStream->ReadBytes(static_cast<void*>(pData), nBytesToRead);
+    checkError();
 
     return nRead;
 }
@@ -140,6 +156,19 @@ void OInputStreamWrapper::checkError() const
         // TODO: really evaluate the error
         throw css::io::NotConnectedException("utl::OInputStreamWrapper error " + e.toHexString(), const_cast<css::uno::XWeak*>(static_cast<const css::uno::XWeak*>(this)));
 }
+
+const css::uno::Sequence< sal_Int8 > & OInputStreamWrapper::getUnoTunnelId()
+{
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
+}
+
+sal_Int64 SAL_CALL OInputStreamWrapper::getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier )
+{
+    return comphelper::getSomethingImpl(_rIdentifier, this,
+        comphelper::FallbackToGetSomethingOf<utl::ByteReader>{});
+}
+
 
 //= OSeekableInputStreamWrapper
 

@@ -28,6 +28,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <unotools/bytereader.hxx>
 #include <memory>
 #include <mutex>
 
@@ -37,10 +38,10 @@ namespace utl
 {
 
 // workaround for incremental linking bugs in MSVC2015
-class SAL_DLLPUBLIC_TEMPLATE OInputStreamWrapper_Base : public cppu::WeakImplHelper< css::io::XInputStream > {};
+class SAL_DLLPUBLIC_TEMPLATE OInputStreamWrapper_Base : public cppu::WeakImplHelper< css::io::XInputStream, css::lang::XUnoTunnel > {};
 
 /// helper class for wrapping an SvStream into a com.sun.star.io::XInputStream
-class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public OInputStreamWrapper_Base
+class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public OInputStreamWrapper_Base, public ByteReader
 {
 protected:
     std::mutex      m_aMutex;
@@ -63,6 +64,14 @@ public:
     virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) override;
     virtual sal_Int32   SAL_CALL    available() override;
     virtual void        SAL_CALL    closeInput() override;
+
+// css::lang::XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier ) override;
+
+// utl::ByteReader
+    virtual sal_Int32 readSomeBytes( sal_Int8* aData, sal_Int32 nMaxBytesToRead ) final override;
+
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
 protected:
     /// throws a NotConnectedException if the object is not connected anymore
