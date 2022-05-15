@@ -225,7 +225,6 @@ struct CharShape
     unsigned char color[2];
     unsigned char shade;
     unsigned char attr;
-    unsigned char reserved[4];
 
     void Read(HWPFile &);
 
