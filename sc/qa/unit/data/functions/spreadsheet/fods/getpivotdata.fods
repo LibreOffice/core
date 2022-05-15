@@ -7906,9 +7906,17 @@
      <table:table-cell table:number-columns-repeated="18"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce14"/>
-     <table:table-cell table:number-columns-repeated="6"/>
+     <table:table-cell table:formula="of:=GETPIVOTDATA(&quot;Value&quot;;[.I30];&quot;name&quot;;&quot;mary&quot;;&quot;type&quot;;&quot;f&quot;)
+" office:value-type="float" office:value="34" calcext:value-type="float">
+      <text:p>34</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="34" calcext:value-type="float">
+      <text:p>34</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" table:formula="of:=[.A41]=[.B41]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce21" table:number-columns-repeated="5"/>
      <table:table-cell table:number-columns-repeated="8"/>
     </table:table-row>
