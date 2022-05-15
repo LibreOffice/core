@@ -148,6 +148,29 @@ XStream_impl::readBytes(
     return static_cast<sal_Int32>(nrc);
 }
 
+sal_Int32
+XStream_impl::readSomeBytes(
+    sal_Int8* pData,
+    sal_Int32 nBytesToRead )
+{
+    if( ! m_nIsOpen )
+        throw io::IOException( THROW_WHERE );
+
+    sal_uInt64 nrc(0);
+    if(m_aFile.read( pData, sal_uInt64(nBytesToRead), nrc )
+       != osl::FileBase::E_None)
+    {
+        throw io::IOException( THROW_WHERE );
+    }
+    return static_cast<sal_Int32>(nrc);
+}
+
+sal_Int64 SAL_CALL XStream_impl::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
+{
+    if (rIdentifier == utl::ByteReader::getUnoTunnelId())
+        return reinterpret_cast<sal_Int64>(static_cast<utl::ByteReader*>(this));
+    return 0;
+}
 
 sal_Int32 SAL_CALL
 XStream_impl::readSomeBytes(
