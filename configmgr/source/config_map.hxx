@@ -9,7 +9,7 @@
 #ifndef CONFIG_MAP_HXX
 #define CONFIG_MAP_HXX
 
-#include <map>
+#include <boost/container/flat_map.hpp>
 #include <rtl/ustring.hxx>
 
 // The realisation here is that while a map is a reasonably compact
@@ -28,7 +28,8 @@ struct LengthContentsCompare
     }
 };
 
-template <class T> struct config_map : public std::map<OUString, T, LengthContentsCompare>
+template <class T>
+struct config_map : public boost::container::flat_map<OUString, T, LengthContentsCompare>
 {
 };
 

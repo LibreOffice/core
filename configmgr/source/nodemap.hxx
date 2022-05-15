@@ -23,6 +23,7 @@
 #include "config_map.hxx"
 #include <rtl/ref.hxx>
 #include "node.hxx"
+#include <optional>
 
 namespace configmgr {
 
@@ -59,8 +60,8 @@ class NodeMap
 
 private:
     // We get a large number of repeated identical lookups.
-    mutable const_iterator maCache;
-    void clearCache() { maCache = maImpl.end(); }
+    mutable std::optional<const_iterator> moCache;
+    void clearCache() { moCache.reset(); }
 };
 
 }
