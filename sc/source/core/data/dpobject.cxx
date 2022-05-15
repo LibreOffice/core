@@ -1341,11 +1341,13 @@ public:
     {
         size_t nRank1 = mrDimOrder.size();
         size_t nRank2 = mrDimOrder.size();
-        ScDPSaveData::DimOrderType::const_iterator it1 = mrDimOrder.find(r1.FieldName);
+        ScDPSaveData::DimOrderType::const_iterator it1 = mrDimOrder.find(
+            ScGlobal::getCharClass().uppercase(r1.FieldName));
         if (it1 != mrDimOrder.end())
             nRank1 = it1->second;
 
-        ScDPSaveData::DimOrderType::const_iterator it2 = mrDimOrder.find(r2.FieldName);
+        ScDPSaveData::DimOrderType::const_iterator it2 = mrDimOrder.find(
+            ScGlobal::getCharClass().uppercase(r2.FieldName));
         if (it2 != mrDimOrder.end())
             nRank2 = it2->second;
 

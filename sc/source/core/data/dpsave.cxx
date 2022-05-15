@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/stl_types.hxx>
+#include <unotools/charclass.hxx>
 
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
@@ -783,7 +784,7 @@ public:
     void operator() (const ScDPSaveDimension* pDim)
     {
         size_t nRank = mrNames.size();
-        mrNames.emplace(pDim->GetName(), nRank);
+        mrNames.emplace(ScGlobal::getCharClass().uppercase(pDim->GetName()), nRank);
     }
 };
 
