@@ -16,6 +16,24 @@
       "message": "You should also change sal_uLong -\u003e sal_uInt64 for GetRecEndFilePos(). Please also look at all the invocations of this function.\nMake sure that you look at all invokations of GetRecBegFilePos() and GetRecEndFilePos(). For example, you have not changed filter/source/msfilter/svdfppt.cxx:1510.",
       "revId": "ed007423eb4b6d1560d81317b20f291d81bced28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6451c82_81525f85",
+        "filename": "include/filter/msfilter/dffrecordheader.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1003536
+      },
+      "writtenOn": "2022-05-15T17:29:18Z",
+      "side": 0,
+      "message": "I accidentally created a new commit patch (https://gerrit.libreoffice.org/c/core/+/134374) for this comment fix. I tried to abandon the new commit but was not able to update the commit on this patch set. Could you please help me update the patch the right way.",
+      "parentUuid": "255fe0e4_38bbda30",
+      "revId": "ed007423eb4b6d1560d81317b20f291d81bced28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
