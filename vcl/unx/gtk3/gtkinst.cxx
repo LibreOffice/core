@@ -1960,8 +1960,53 @@ private:
         glViewport(0, 0, width, height);
     }
 
+    // Use a throw away toplevel to determine the OpenGL version because once
+    // an GdkGLContext is created for a window then it seems that
+    // glGenVertexArrays will always be called when the window gets rendered.
+    static int GetOpenGLVersion()
+    {
+        int nMajorGLVersion(0);
+
+        GtkWidget* pWindow;
+#if !GTK_CHECK_VERSION(4,0,0)
+        pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+#else
+        pWindow = gtk_window_new();
+#endif
+
+        gtk_widget_realize(pWindow);
+
+        if (GdkSurface* pSurface = widget_get_surface(pWindow))
+        {
+            if (GdkGLContext* pContext = surface_create_gl_context(pSurface))
+            {
+                if (gdk_gl_context_realize(pContext, nullptr))
+                {
+                    gdk_gl_context_make_current(pContext);
+                    gdk_gl_context_get_version(pContext, &nMajorGLVersion, nullptr);
+                    gdk_gl_context_clear_current();
+                }
+                g_object_unref(pContext);
+            }
+        }
+
+#if !GTK_CHECK_VERSION(4,0,0)
+        gtk_widget_destroy(pWindow);
+#else
+        gtk_window_destroy(GTK_WINDOW(pWindow));
+#endif
+        return nMajorGLVersion;
+    }
+
     virtual bool ImplInit() override
     {
+        static int nOpenGLVersion = GetOpenGLVersion();
+        if (nOpenGLVersion < 3)
+        {
+            SAL_WARN("vcl.gtk", "gtk GL requires glGenVertexArrays which is OpenGL 3, while system provides: " << nOpenGLVersion);
+            return false;
+        }
+
         const SystemEnvData* pEnvData = m_pChildWindow->GetSystemData();
         GtkWidget *pParent = static_cast<GtkWidget*>(pEnvData->pWidget);
         m_pGLArea = gtk_gl_area_new();
