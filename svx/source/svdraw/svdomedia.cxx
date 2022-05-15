@@ -77,6 +77,10 @@ SdrMediaObj::SdrMediaObj(
 :   SdrRectObj(rSdrModel, rRect)
     ,m_xImpl( new Impl )
 {
+    const bool bUndo(rSdrModel.IsUndoEnabled());
+    rSdrModel.EnableUndo(false);
+    MakeNameUnique();
+    rSdrModel.EnableUndo(bUndo);
 }
 
 SdrMediaObj::~SdrMediaObj()
