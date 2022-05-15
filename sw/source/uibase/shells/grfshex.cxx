@@ -96,6 +96,8 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
 
                 return bRet;
             }
+
+            return true;
         }
 
         rWindow.EnterWait();
