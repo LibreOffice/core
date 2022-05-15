@@ -88,6 +88,24 @@ inline SharedString::~SharedString()
         rtl_uString_release(mpDataIgnoreCase);
 }
 
+inline SharedString& SharedString::operator=(SharedString&& r) noexcept
+{
+    // Having this inline helps Calc's mdds::multi_type_vector to do some operations
+    // much faster.
+    if (mpData)
+        rtl_uString_release(mpData);
+    if (mpDataIgnoreCase)
+        rtl_uString_release(mpDataIgnoreCase);
+
+    mpData = r.mpData;
+    mpDataIgnoreCase = r.mpDataIgnoreCase;
+
+    r.mpData = nullptr;
+    r.mpDataIgnoreCase = nullptr;
+
+    return *this;
+}
+
 inline bool SharedString::operator!= ( const SharedString& r ) const
 {
     return !operator== (r);
