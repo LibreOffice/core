@@ -714,6 +714,7 @@ Try:
 		SetFormula(sFormulaRange, FilterFormula)
 		&apos;	Get the columns to compact: 0 = False, 1 = True
 		vCompact = GetValue(sFormulaRange)
+		If Not IsArray(vCompact) Then vCompact = Array(vCompact)
 		ClearAll(sFormulaRange)
 
 		&apos;	Iterates from the last to the first column of the range and remove the columns that match the filter
@@ -823,6 +824,7 @@ Try:
 		SetFormula(sFormulaRange, FilterFormula)
 		&apos;	Get the rows to compact: 0 = False, 1 = True
 		vCompact = GetValue(sFormulaRange)
+		If Not IsArray(vCompact) Then vCompact = Array(vCompact)
 		ClearAll(sFormulaRange)
 
 		&apos;	Iterates from the last to the first row of the range and remove the rows that match the filter
