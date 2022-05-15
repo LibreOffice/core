@@ -414,10 +414,11 @@ const char* s_stdMeta[] = {
     nullptr
 };
 
-const char* s_stdMetaList[] = {
-    "meta:keyword",             // string*
-    "meta:user-defined",        // ...*
-    nullptr
+constexpr OUStringLiteral sMetaKeyword = u"meta:keyword";
+constexpr OUStringLiteral sMetaUserDefined = u"meta:user-defined";
+constexpr rtl::OUStringConstExpr s_stdMetaList[] {
+    sMetaKeyword,             // string*
+    sMetaUserDefined,        // ...*
 };
 
 constexpr OUStringLiteral s_nsXLink = u"http://www.w3.org/1999/xlink";
@@ -1152,17 +1153,20 @@ void SfxDocumentMetaData::init(
                 }
             }
             if (!xRElem.is()) {
+                static constexpr OUStringLiteral sOfficeDocumentMeta = u"office:document-meta";
                 xRElem = i_xDoc->createElementNS(
-                    s_nsODF, "office:document-meta");
+                    s_nsODF, sOfficeDocumentMeta);
                 css::uno::Reference<css::xml::dom::XNode> xRNode(xRElem,
                     css::uno::UNO_QUERY_THROW);
                 i_xDoc->appendChild(xRNode);
             }
-            xRElem->setAttributeNS(s_nsODF, "office:version", "1.0");
+            static constexpr OUStringLiteral sOfficeVersion = u"office:version";
+            xRElem->setAttributeNS(s_nsODF, sOfficeVersion, "1.0");
             // does not exist, otherwise m_xParent would not be null
+            static constexpr OUStringLiteral sOfficeMeta = u"office:meta";
             css::uno::Reference<css::xml::dom::XNode> xParent (
-                i_xDoc->createElementNS(s_nsODF, "office:meta"),
-            css::uno::UNO_QUERY_THROW);
+                i_xDoc->createElementNS(s_nsODF, sOfficeMeta),
+                css::uno::UNO_QUERY_THROW);
             xRElem->appendChild(xParent);
             m_xParent = xParent;
         } catch (const css::xml::dom::DOMException &) {
@@ -1191,23 +1195,25 @@ void SfxDocumentMetaData::init(
     }
 
     // select nodes for elements of which we handle all occurrences
-    for (const char **pName = s_stdMetaList; *pName != nullptr; ++pName) {
-        OUString name = OUString::createFromAscii(*pName);
+    for (const auto & name : s_stdMetaList) {
         std::vector<css::uno::Reference<css::xml::dom::XNode> > nodes =
-            getChildNodeListByName(m_xParent, name);
+            getChildNodeListByName(m_xParent, OUString(name));
         m_metaList[name] = nodes;
     }
 
     // initialize members corresponding to attributes from DOM nodes
-    m_TemplateName  = getMetaAttr("meta:template", "xlink:title");
-    m_TemplateURL   = getMetaAttr("meta:template", "xlink:href");
+    static constexpr OUStringLiteral sMetaTemplate = u"meta:template";
+    static constexpr OUStringLiteral sMetaAutoReload = u"meta:auto-reload";
+    static constexpr OUStringLiteral sMetaHyperlinkBehaviour = u"meta:hyperlink-behaviour";
+    m_TemplateName  = getMetaAttr(sMetaTemplate, "xlink:title");
+    m_TemplateURL   = getMetaAttr(sMetaTemplate, "xlink:href");
     m_TemplateDate  =
-        textToDateTimeDefault(getMetaAttr("meta:template", "meta:date"));
-    m_AutoloadURL   = getMetaAttr("meta:auto-reload", "xlink:href");
+        textToDateTimeDefault(getMetaAttr(sMetaTemplate, "meta:date"));
+    m_AutoloadURL   = getMetaAttr(sMetaAutoReload, "xlink:href");
     m_AutoloadSecs  =
-        textToDuration(getMetaAttr("meta:auto-reload", "meta:delay"));
+        textToDuration(getMetaAttr(sMetaAutoReload, "meta:delay"));
     m_DefaultTarget =
-        getMetaAttr("meta:hyperlink-behaviour", "office:target-frame-name");
+        getMetaAttr(sMetaHyperlinkBehaviour, "office:target-frame-name");
 
 
     std::vector<css::uno::Reference<css::xml::dom::XNode> > & vec =
