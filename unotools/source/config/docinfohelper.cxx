@@ -31,74 +31,78 @@ namespace utl
 
 OUString DocInfoHelper::GetGeneratorString()
 {
-    OUString aResultOverride = officecfg::Office::Common::Save::Document::GeneratorOverride::get();
-    if( !aResultOverride.isEmpty())
-        return aResultOverride;
+    static const OUString sGenerator = []()
+            {
+            OUString aResultOverride = officecfg::Office::Common::Save::Document::GeneratorOverride::get();
+            if( !aResultOverride.isEmpty())
+                return aResultOverride;
 
-    OUStringBuffer aResult(128);
+            OUStringBuffer aResult(128);
 
-    // First product: branded name + version
-    // version is <product_versions>_<product_extension>$<platform>
+            // First product: branded name + version
+            // version is <product_versions>_<product_extension>$<platform>
 
-    // plain product name
-    OUString aValue( utl::ConfigManager::getProductName() );
-    if ( !aValue.isEmpty() )
-    {
-        aResult.append( aValue.replace( ' ', '_' ) );
-        aResult.append( '/' );
-
-        aValue = utl::ConfigManager::getProductVersion();
-        if ( !aValue.isEmpty() )
-        {
-            aResult.append( aValue.replace( ' ', '_' ) );
-
-            aValue = utl::ConfigManager::getProductExtension();
+            // plain product name
+            OUString aValue( utl::ConfigManager::getProductName() );
             if ( !aValue.isEmpty() )
             {
                 aResult.append( aValue.replace( ' ', '_' ) );
-            }
-        }
+                aResult.append( '/' );
 
-        OUString os( "$_OS" );
-        OUString arch( "$_ARCH" );
-        ::rtl::Bootstrap::expandMacros(os);
-        ::rtl::Bootstrap::expandMacros(arch);
-        aResult.append( '$' );
-        aResult.append( os );
-        aResult.append( '_' );
-        aResult.append( arch );
-        aResult.append( ' ' );
-    }
+                aValue = utl::ConfigManager::getProductVersion();
+                if ( !aValue.isEmpty() )
+                {
+                    aResult.append( aValue.replace( ' ', '_' ) );
 
-    // second product: LibreOffice_project/<build_information>
-    // build_information has '(' and '[' encoded as '$', ')' and ']' ignored
-    // and ':' replaced by '-'
-    {
-        aResult.append( "LibreOffice_project/" );
-        OUString aBuildId( Bootstrap::getBuildIdData( OUString() ) );
-        for( sal_Int32 i=0; i < aBuildId.getLength(); i++ )
-        {
-            sal_Unicode c = aBuildId[i];
-            switch( c )
-            {
-            case '(':
-            case '[':
+                    aValue = utl::ConfigManager::getProductExtension();
+                    if ( !aValue.isEmpty() )
+                    {
+                        aResult.append( aValue.replace( ' ', '_' ) );
+                    }
+                }
+
+                OUString os( "$_OS" );
+                OUString arch( "$_ARCH" );
+                ::rtl::Bootstrap::expandMacros(os);
+                ::rtl::Bootstrap::expandMacros(arch);
                 aResult.append( '$' );
-                break;
-            case ')':
-            case ']':
-                break;
-            case ':':
-                aResult.append( '-' );
-                break;
-            default:
-                aResult.append( c );
-                break;
+                aResult.append( os );
+                aResult.append( '_' );
+                aResult.append( arch );
+                aResult.append( ' ' );
             }
-        }
-    }
 
-    return aResult.makeStringAndClear();
+            // second product: LibreOffice_project/<build_information>
+            // build_information has '(' and '[' encoded as '$', ')' and ']' ignored
+            // and ':' replaced by '-'
+            {
+                aResult.append( "LibreOffice_project/" );
+                OUString aBuildId( Bootstrap::getBuildIdData( OUString() ) );
+                for( sal_Int32 i=0; i < aBuildId.getLength(); i++ )
+                {
+                    sal_Unicode c = aBuildId[i];
+                    switch( c )
+                    {
+                    case '(':
+                    case '[':
+                        aResult.append( '$' );
+                        break;
+                    case ')':
+                    case ']':
+                        break;
+                    case ':':
+                        aResult.append( '-' );
+                        break;
+                    default:
+                        aResult.append( c );
+                        break;
+                    }
+                }
+            }
+
+            return aResult.makeStringAndClear();
+    }();
+    return sGenerator;
 }
 
 } // end of namespace utl
