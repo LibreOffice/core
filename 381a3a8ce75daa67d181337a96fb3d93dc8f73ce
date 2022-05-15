@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e158f352_278729f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-15T23:24:11Z",
+      "side": 1,
+      "message": "Have I guessed correctly that the keyboard accelerators in the File \u003e Properties - Statistics tab are not working because the _ was missing?\n\nBut why would any accelerator be shown without the underscore? Does the use_underline default to using the first letter, as well as notice \"conflicts\" (Characters vs. Characters excluding spaces)?",
+      "revId": "381a3a8ce75daa67d181337a96fb3d93dc8f73ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
