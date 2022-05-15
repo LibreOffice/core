@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "669237c6_1e4416ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-05-15T05:27:57Z",
+      "side": 1,
+      "message": "Hi Caolán, when making a patch to give media objects names when created I notice media objects are inserted twice in Writer. Is the return I have added here a correct fix for this?  ",
+      "revId": "7d339c5935cb94a4bfb80efeacb6368776ce6dc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
