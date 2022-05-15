@@ -240,11 +240,13 @@ void GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aE
 
 css::uno::Sequence < css::beans::PropertyValue > GlobalEventConfig_Impl::getByName( const OUString& aName )
 {
+    static constexpr OUStringLiteral sEventType = u"EventType";
+    static constexpr OUStringLiteral sScript = u"Script";
     Sequence< beans::PropertyValue > props(2);
     auto pProps = props.getArray();
-    pProps[0].Name = "EventType";
-    pProps[0].Value <<= OUString("Script");
-    pProps[1].Name = "Script";
+    pProps[0].Name = sEventType;
+    pProps[0].Value <<= OUString(sScript);
+    pProps[1].Name = sScript;
     EventBindingHash::const_iterator it = m_eventBindingHash.find( aName );
     if( it != m_eventBindingHash.end() )
     {
