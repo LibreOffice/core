@@ -783,7 +783,7 @@ public:
     void operator() (const ScDPSaveDimension* pDim)
     {
         size_t nRank = mrNames.size();
-        mrNames.emplace(pDim->GetName(), nRank);
+        mrNames.emplace(ScGlobal::getCharClass().uppercase(pDim->GetName()), nRank);
     }
 };
 
