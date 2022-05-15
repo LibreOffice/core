@@ -140,6 +140,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
+        <property name="selectable">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -151,6 +152,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
+        <property name="selectable">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -162,6 +164,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
+        <property name="selectable">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -173,6 +176,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
+        <property name="selectable">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -184,6 +188,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
+        <property name="selectable">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -195,6 +200,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
+        <property name="selectable">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -206,6 +212,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
+        <property name="selectable">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -217,6 +224,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
+        <property name="selectable">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -229,6 +237,7 @@
         <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="label">...</property>
+        <property name="selectable">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
