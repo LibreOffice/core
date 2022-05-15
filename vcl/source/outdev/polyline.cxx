@@ -116,17 +116,28 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rL
         return;
     }
 
-    // #i101491#
-    // Try direct Fallback to B2D-Version of DrawPolyLine
-    if (LineStyle::Solid == rLineInfo.GetStyle() && IsDeviceOutputNecessary())
+    if (IsDeviceOutputNecessary())
     {
-        DrawPolyLine(
-            rPoly.getB2DPolygon(),
-            rLineInfo.GetWidth(),
-            rLineInfo.GetLineJoin(),
-            rLineInfo.GetLineCap(),
-            basegfx::deg2rad(15.0) /* default fMiterMinimumAngle, value not available in LineInfo */);
-        return;
+        auto eLineStyle = rLineInfo.GetStyle();
+        switch (eLineStyle)
+        {
+            case LineStyle::NONE:
+            case LineStyle::Dash:
+                // use drawPolyLine for these
+                break;
+            case LineStyle::Solid:
+                // #i101491# Try direct Fallback to B2D-Version of DrawPolyLine
+                DrawPolyLine(
+                    rPoly.getB2DPolygon(),
+                    rLineInfo.GetWidth(),
+                    rLineInfo.GetLineJoin(),
+                    rLineInfo.GetLineCap(),
+                    basegfx::deg2rad(15.0) /* default fMiterMinimumAngle, value not available in LineInfo */);
+                return;
+            default:
+                SAL_WARN("vcl.gdi", "Unknown LineStyle: " << static_cast<int>(eLineStyle));
+                return;
+        }
     }
 
     if ( mpMetaFile )
