@@ -34,6 +34,24 @@
       "parentUuid": "255fe0e4_38bbda30",
       "revId": "ed007423eb4b6d1560d81317b20f291d81bced28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da33f61a_25ef454f",
+        "filename": "include/filter/msfilter/dffrecordheader.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-05-15T17:59:59Z",
+      "side": 0,
+      "message": "Go to the view of your previous patchset, eight: https://gerrit.libreoffice.org/c/core/+/132014/8\nand follow this: https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Cherry_picking_yourself_out_of_trouble\n\nIt\u0027s the surest way without us having to know anything about the state of your commits and branches.",
+      "parentUuid": "f6451c82_81525f85",
+      "revId": "ed007423eb4b6d1560d81317b20f291d81bced28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
