@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_CCIDECOM_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ITIFF_CCIDECOM_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <array>
@@ -95,35 +94,32 @@ private:
     bool Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTargetBits);
     bool Read2DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTargetBits);
 
-    bool bTableBad;
+    bool m_bTableBad;
 
-    bool bStatus;
+    bool m_bStatus;
 
-    std::unique_ptr<sal_uInt8[]> pByteSwap;
+    std::unique_ptr<sal_uInt8[]> m_pByteSwap;
 
-    SvStream * pIStream;
+    SvStream * m_pIStream;
 
-    sal_uInt32 nEOLCount;
+    sal_uInt32 m_nEOLCount;
 
-    sal_uInt32 nWidth;
+    sal_uInt32 m_nWidth;
 
-    sal_uInt32 nOptions;
+    sal_uInt32 m_nOptions;
 
-    bool bFirstEOL;
+    bool m_bFirstEOL;
 
-    std::array<CCILookUpTableEntry, 1<<13> pWhiteLookUp;
-    std::array<CCILookUpTableEntry, 1<<13> pBlackLookUp;
-    std::array<CCILookUpTableEntry, 1<<10> p2DModeLookUp;
-    std::array<CCILookUpTableEntry, 1<<11> pUncompLookUp;
+    std::array<CCILookUpTableEntry, 1<<13> m_pWhiteLookUp;
+    std::array<CCILookUpTableEntry, 1<<13> m_pBlackLookUp;
+    std::array<CCILookUpTableEntry, 1<<10> m_p2DModeLookUp;
+    std::array<CCILookUpTableEntry, 1<<11> m_pUncompLookUp;
 
-    sal_uInt32 nInputBitsBuf;
-    sal_uInt16 nInputBitsBufSize;
+    sal_uInt32 m_nInputBitsBuf;
+    sal_uInt16 m_nInputBitsBufSize;
 
-    std::unique_ptr<sal_uInt8[]> pLastLine;
-    sal_uInt64 nLastLineSize;
+    std::unique_ptr<sal_uInt8[]> m_pLastLine;
+    sal_uInt64 m_nLastLineSize;
 };
-
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
