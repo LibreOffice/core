@@ -78,6 +78,21 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >
     return nRead;
 }
 
+sal_Int32 OInputStreamWrapper::readSomeBytes(sal_Int8* pData, sal_Int32 nBytesToRead)
+{
+    checkConnected();
+
+    if (nBytesToRead < 0)
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+
+    std::scoped_lock aGuard( m_aMutex );
+
+    sal_uInt32 nRead = m_pSvStream->ReadBytes(static_cast<void*>(pData), nBytesToRead);
+    checkError();
+
+    return nRead;
+}
+
 sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
 {
     checkError();
@@ -140,6 +155,14 @@ void OInputStreamWrapper::checkError() const
         // TODO: really evaluate the error
         throw css::io::NotConnectedException("utl::OInputStreamWrapper error " + e.toHexString(), const_cast<css::uno::XWeak*>(static_cast<const css::uno::XWeak*>(this)));
 }
+
+sal_Int64 SAL_CALL OInputStreamWrapper::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
+{
+    if (rIdentifier == utl::ByteReader::getUnoTunnelId())
+        return reinterpret_cast<sal_Int64>(static_cast<utl::ByteReader*>(this));
+    return 0;
+}
+
 
 //= OSeekableInputStreamWrapper
 
