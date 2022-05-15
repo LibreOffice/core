@@ -2771,8 +2771,8 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     }
 
     m_pImpl->GetStreamProperties();
-    OUString aCompressedString( "Compressed" );
-    OUString aMediaTypeString( "MediaType" );
+    static constexpr OUStringLiteral aCompressedString( u"Compressed" );
+    static constexpr OUStringLiteral aMediaTypeString( u"MediaType" );
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName == aMediaTypeString )
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
