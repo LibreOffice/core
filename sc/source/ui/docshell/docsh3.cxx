@@ -94,7 +94,7 @@ void ScDocShell::PostDataChanged()
 {
     Broadcast( SfxHint( SfxHintId::ScDataChanged ) );
     SfxGetpApp()->Broadcast(SfxHint( SfxHintId::ScAnyDataChanged ));      // Navigator
-    m_aDocument.PrepareFormulaCalc();
+    m_pDocument->PrepareFormulaCalc();
     //! notify navigator directly!
 }
 
@@ -116,10 +116,10 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
         SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
         SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = rRange.aEnd.Tab();
 
-        if (!m_aDocument.ValidCol(nCol1)) nCol1 = m_aDocument.MaxCol();
-        if (!m_aDocument.ValidRow(nRow1)) nRow1 = m_aDocument.MaxRow();
-        if (!m_aDocument.ValidCol(nCol2)) nCol2 = m_aDocument.MaxCol();
-        if (!m_aDocument.ValidRow(nRow2)) nRow2 = m_aDocument.MaxRow();
+        if (!m_pDocument->ValidCol(nCol1)) nCol1 = m_pDocument->MaxCol();
+        if (!m_pDocument->ValidRow(nRow1)) nRow1 = m_pDocument->MaxRow();
+        if (!m_pDocument->ValidCol(nCol2)) nCol2 = m_pDocument->MaxCol();
+        if (!m_pDocument->ValidRow(nRow2)) nRow2 = m_pDocument->MaxRow();
 
         if ( m_pPaintLockData )
         {
@@ -142,16 +142,16 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
         {
                                                 //! check for hidden columns/rows!
             if (nCol1>0) --nCol1;
-            if (nCol2<m_aDocument.MaxCol()) ++nCol2;
+            if (nCol2<m_pDocument->MaxCol()) ++nCol2;
             if (nRow1>0) --nRow1;
-            if (nRow2<m_aDocument.MaxRow()) ++nRow2;
+            if (nRow2<m_pDocument->MaxRow()) ++nRow2;
         }
 
                                                 // expand for the merged ones
         if (nExtFlags & SC_PF_TESTMERGE)
-            m_aDocument.ExtendMerge( nCol1, nRow1, nCol2, nRow2, nTab1 );
+            m_pDocument->ExtendMerge( nCol1, nRow1, nCol2, nRow2, nTab1 );
 
-        if ( nCol1 != 0 || nCol2 != m_aDocument.MaxCol() )
+        if ( nCol1 != 0 || nCol2 != m_pDocument->MaxCol() )
         {
             //  Extend to whole rows if SC_PF_WHOLEROWS is set, or rotated or non-left
             //  aligned cells are contained (see UpdatePaintExt).
@@ -159,11 +159,11 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
             //  support of right-aligned text.
 
             if ( ( nExtFlags & SC_PF_WHOLEROWS ) ||
-                 m_aDocument.HasAttrib( nCol1,nRow1,nTab1,
-                                      m_aDocument.MaxCol(),nRow2,nTab2, HasAttrFlags::Rotate | HasAttrFlags::RightOrCenter ) )
+                 m_pDocument->HasAttrib( nCol1,nRow1,nTab1,
+                                      m_pDocument->MaxCol(),nRow2,nTab2, HasAttrFlags::Rotate | HasAttrFlags::RightOrCenter ) )
             {
                 nCol1 = 0;
-                nCol2 = m_aDocument.MaxCol();
+                nCol2 = m_pDocument->MaxCol();
             }
         }
         aPaintRanges.push_back(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
@@ -182,7 +182,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
 
 void ScDocShell::PostPaintGridAll()
 {
-    PostPaint( 0,0,0, m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB, PaintPartFlags::Grid );
+    PostPaint( 0,0,0, m_pDocument->MaxCol(),m_pDocument->MaxRow(),MAXTAB, PaintPartFlags::Grid );
 }
 
 void ScDocShell::PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
@@ -197,13 +197,13 @@ void ScDocShell::PostPaintCell( const ScAddress& rPos )
 
 void ScDocShell::PostPaintExtras()
 {
-    PostPaint( 0,0,0, m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB, PaintPartFlags::Extras );
+    PostPaint( 0,0,0, m_pDocument->MaxCol(),m_pDocument->MaxRow(),MAXTAB, PaintPartFlags::Extras );
 }
 
 void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange )
 {
     if ( ( rExtFlags & SC_PF_LINES ) == 0 &&
-         m_aDocument.HasAttrib( rRange, HasAttrFlags::Lines | HasAttrFlags::Shadow | HasAttrFlags::Conditional ) )
+         m_pDocument->HasAttrib( rRange, HasAttrFlags::Lines | HasAttrFlags::Shadow | HasAttrFlags::Conditional ) )
     {
         //  If the range contains lines, shadow or conditional formats,
         //  set SC_PF_LINES to include one extra cell in all directions.
@@ -212,8 +212,8 @@ void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange )
     }
 
     if ( ( rExtFlags & SC_PF_WHOLEROWS ) == 0 &&
-         ( rRange.aStart.Col() != 0 || rRange.aEnd.Col() != m_aDocument.MaxCol() ) &&
-         m_aDocument.HasAttrib( rRange, HasAttrFlags::Rotate | HasAttrFlags::RightOrCenter ) )
+         ( rRange.aStart.Col() != 0 || rRange.aEnd.Col() != m_pDocument->MaxCol() ) &&
+         m_pDocument->HasAttrib( rRange, HasAttrFlags::Rotate | HasAttrFlags::RightOrCenter ) )
     {
         //  If the range contains (logically) right- or center-aligned cells,
         //  or rotated cells, set SC_PF_WHOLEROWS to paint the whole rows.
@@ -279,7 +279,7 @@ void ScDocShell::LockDocument_Impl(sal_uInt16 nNew)
 {
     if (!m_nDocumentLock)
     {
-        ScDrawLayer* pDrawLayer = m_aDocument.GetDrawLayer();
+        ScDrawLayer* pDrawLayer = m_pDocument->GetDrawLayer();
         if (pDrawLayer)
             pDrawLayer->setLock(true);
     }
@@ -291,7 +291,7 @@ void ScDocShell::UnlockDocument_Impl(sal_uInt16 nNew)
     m_nDocumentLock = nNew;
     if (!m_nDocumentLock)
     {
-        ScDrawLayer* pDrawLayer = m_aDocument.GetDrawLayer();
+        ScDrawLayer* pDrawLayer = m_pDocument->GetDrawLayer();
         if (pDrawLayer)
             pDrawLayer->setLock(false);
     }
@@ -370,7 +370,7 @@ void ScDocShell::CalcOutputFactor()
     OUString aTestString(
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789");
     tools::Long nPrinterWidth = 0;
-    const ScPatternAttr* pPattern = &m_aDocument.GetPool()->GetDefaultItem(ATTR_PATTERN);
+    const ScPatternAttr* pPattern = &m_pDocument->GetPool()->GetDefaultItem(ATTR_PATTERN);
 
     vcl::Font aDefFont;
     OutputDevice* pRefDev = GetRefDevice();
@@ -434,23 +434,23 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
         aDocOpt.SetDate( 30, 12, 1899);
     }
 
-    m_aDocument.SetDocOptions( aDocOpt );
-    m_aDocument.SetViewOptions( aViewOpt );
+    m_pDocument->SetDocOptions( aDocOpt );
+    m_pDocument->SetViewOptions( aViewOpt );
     SetFormulaOptions( aFormulaOpt, bForLoading );
 
     //  print options are now set directly before the printing
 
-    m_aDocument.SetLanguage( nDefLang, nCjkLang, nCtlLang );
+    m_pDocument->SetLanguage( nDefLang, nCjkLang, nCtlLang );
 }
 
 Printer* ScDocShell::GetDocumentPrinter()       // for OLE
 {
-    return m_aDocument.GetPrinter();
+    return m_pDocument->GetPrinter();
 }
 
 SfxPrinter* ScDocShell::GetPrinter(bool bCreateIfNotExist)
 {
-    return m_aDocument.GetPrinter(bCreateIfNotExist);
+    return m_pDocument->GetPrinter(bCreateIfNotExist);
 }
 
 void ScDocShell::UpdateFontList()
@@ -465,21 +465,21 @@ void ScDocShell::UpdateFontList()
 
 OutputDevice* ScDocShell::GetRefDevice()
 {
-    return m_aDocument.GetRefDevice();
+    return m_pDocument->GetRefDevice();
 }
 
 sal_uInt16 ScDocShell::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPrinterChangeFlags nDiffFlags )
 {
-    SfxPrinter *pOld = m_aDocument.GetPrinter( false );
+    SfxPrinter *pOld = m_pDocument->GetPrinter( false );
     if ( pOld && pOld->IsPrinting() )
         return SFX_PRINTERROR_BUSY;
 
     if (nDiffFlags & SfxPrinterChangeFlags::PRINTER)
     {
-        if ( m_aDocument.GetPrinter() != pNewPrinter )
+        if ( m_pDocument->GetPrinter() != pNewPrinter )
         {
-            m_aDocument.SetPrinter( pNewPrinter );
-            m_aDocument.SetPrintOptions();
+            m_pDocument->SetPrinter( pNewPrinter );
+            m_pDocument->SetPrintOptions();
 
             // MT: Use UpdateFontList: Will use Printer fonts only if needed!
             /*
@@ -510,7 +510,7 @@ sal_uInt16 ScDocShell::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPr
     }
     else if (nDiffFlags & SfxPrinterChangeFlags::JOBSETUP)
     {
-        SfxPrinter* pOldPrinter = m_aDocument.GetPrinter();
+        SfxPrinter* pOldPrinter = m_pDocument->GetPrinter();
         if (pOldPrinter)
         {
             pOldPrinter->SetJobSetup( pNewPrinter->GetJobSetup() );
@@ -518,20 +518,20 @@ sal_uInt16 ScDocShell::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPr
             //  #i6706# Call SetPrinter with the old printer again, so the drawing layer
             //  RefDevice is set (calling ReformatAllTextObjects and rebuilding charts),
             //  because the JobSetup (printer device settings) may affect text layout.
-            m_aDocument.SetPrinter( pOldPrinter );
+            m_pDocument->SetPrinter( pOldPrinter );
             CalcOutputFactor();                         // also with the new settings
         }
     }
 
     if (nDiffFlags & SfxPrinterChangeFlags::OPTIONS)
     {
-        m_aDocument.SetPrintOptions();        //! from new printer ???
+        m_pDocument->SetPrintOptions();        //! from new printer ???
     }
 
     if (nDiffFlags & (SfxPrinterChangeFlags::CHG_ORIENTATION | SfxPrinterChangeFlags::CHG_SIZE))
     {
-        OUString aStyle = m_aDocument.GetPageStyle( GetCurTab() );
-        ScStyleSheetPool* pStPl = m_aDocument.GetStyleSheetPool();
+        OUString aStyle = m_pDocument->GetPageStyle( GetCurTab() );
+        ScStyleSheetPool* pStPl = m_pDocument->GetStyleSheetPool();
         SfxStyleSheet* pStyleSheet = static_cast<SfxStyleSheet*>(pStPl->Find(aStyle, SfxStyleFamily::Page));
         if (pStyleSheet)
         {
@@ -564,7 +564,7 @@ sal_uInt16 ScDocShell::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPr
         }
     }
 
-    PostPaint(0,0,0,m_aDocument.MaxCol(),m_aDocument.MaxRow(),MAXTAB,PaintPartFlags::All);
+    PostPaint(0,0,0,m_pDocument->MaxCol(),m_pDocument->MaxRow(),MAXTAB,PaintPartFlags::All);
 
     return 0;
 }
@@ -659,17 +659,17 @@ void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, weld::Wind
 
 void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
 {
-    ScChangeTrack* pTrack = m_aDocument.GetChangeTrack();
+    ScChangeTrack* pTrack = m_pDocument->GetChangeTrack();
     if ( pTrack && pTrack->GetFirst() )
     {
         //! there are changes -> inquiry if needs to be deleted
     }
 
-    m_aDocument.EndChangeTracking();
-    m_aDocument.StartChangeTracking();
+    m_pDocument->EndChangeTracking();
+    m_pDocument->StartChangeTracking();
 
     OUString aOldUser;
-    pTrack = m_aDocument.GetChangeTrack();
+    pTrack = m_pDocument->GetChangeTrack();
     if ( pTrack )
     {
         aOldUser = pTrack->GetUser();
@@ -708,9 +708,9 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
         }
     }
 
-    m_aDocument.CompareDocument( rOtherDoc );
+    m_pDocument->CompareDocument( rOtherDoc );
 
-    pTrack = m_aDocument.GetChangeTrack();
+    pTrack = m_pDocument->GetChangeTrack();
     if ( pTrack )
         pTrack->SetUser( aOldUser );
 
@@ -774,18 +774,18 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
     if (!pSourceTrack)
         return;             //! nothing to do - error notification?
 
-    ScChangeTrack* pThisTrack = m_aDocument.GetChangeTrack();
+    ScChangeTrack* pThisTrack = m_pDocument->GetChangeTrack();
     if ( !pThisTrack )
     {   // turn on
-        m_aDocument.StartChangeTracking();
-        pThisTrack = m_aDocument.GetChangeTrack();
+        m_pDocument->StartChangeTracking();
+        pThisTrack = m_pDocument->GetChangeTrack();
         OSL_ENSURE(pThisTrack,"ChangeTracking not enabled?");
         if ( !bShared )
         {
             // turn on visual RedLining
             ScChangeViewSettings aChangeViewSet;
             aChangeViewSet.SetShowChanges(true);
-            m_aDocument.SetChangeViewSettings(aChangeViewSet);
+            m_pDocument->SetChangeViewSettings(aChangeViewSet);
         }
     }
 
@@ -892,7 +892,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         bool bMergeAction = false;
         if ( bShared )
         {
-            if ( !bCheckDuplicates || !lcl_FindAction( rOtherDoc, pSourceAction, m_aDocument, pFirstSearchAction, pLastSearchAction, bIgnore100Sec ) )
+            if ( !bCheckDuplicates || !lcl_FindAction( rOtherDoc, pSourceAction, *m_pDocument, pFirstSearchAction, pLastSearchAction, bIgnore100Sec ) )
             {
                 bMergeAction = true;
             }
@@ -920,7 +920,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 #if OSL_DEBUG_LEVEL > 0
                 OUString aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
-                    aValue = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( &m_aDocument );
+                    aValue = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( m_pDocument.get() );
                 SAL_WARN( "sc", aValue << " omitted");
 #endif
             }
@@ -981,7 +981,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
                             OSL_ENSURE( aSourceRange.aStart == aSourceRange.aEnd, "huch?" );
                             ScAddress aPos = aSourceRange.aStart;
-                            OUString aValue = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( &m_aDocument );
+                            OUString aValue = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( m_pDocument.get() );
                             ScMatrixMode eMatrix = ScMatrixMode::NONE;
                             const ScCellValue& rCell = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewCell();
                             if (rCell.meType == CELLTYPE_FORMULA)
@@ -1012,7 +1012,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         case SC_CAT_INSERT_TABS :
                         {
                             OUString aName;
-                            m_aDocument.CreateValidTabName( aName );
+                            m_pDocument->CreateValidTabName( aName );
                             (void)GetDocFunc().InsertTable( aSourceRange.aStart.Tab(), aName, true, false );
                         }
                         break;
@@ -1140,7 +1140,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         return false;
     }
 
-    ScChangeTrack* pThisTrack = m_aDocument.GetChangeTrack();
+    ScChangeTrack* pThisTrack = m_pDocument->GetChangeTrack();
     if ( !pThisTrack )
     {
         return false;
@@ -1156,7 +1156,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
     // reset show changes
     ScChangeViewSettings aChangeViewSet;
     aChangeViewSet.SetShowChanges( false );
-    m_aDocument.SetChangeViewSettings( aChangeViewSet );
+    m_pDocument->SetChangeViewSettings( aChangeViewSet );
 
     // find first merge action in this document
     bool bIgnore100Sec = !pThisTrack->IsTimeNanoSeconds() || !pSharedTrack->IsTimeNanoSeconds();
@@ -1176,13 +1176,13 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             sal_uLong nActStartShared = pSharedAction->GetActionNumber();
             sal_uLong nActEndShared = pSharedTrack->GetActionMax();
             std::optional<ScDocument> pTmpDoc(std::in_place);
-            for ( sal_Int32 nIndex = 0; nIndex < m_aDocument.GetTableCount(); ++nIndex )
+            for ( sal_Int32 nIndex = 0; nIndex < m_pDocument->GetTableCount(); ++nIndex )
             {
                 OUString sTabName;
                 pTmpDoc->CreateValidTabName( sTabName );
                 pTmpDoc->InsertTab( SC_TAB_APPEND, sTabName );
             }
-            m_aDocument.GetChangeTrack()->Clone( &*pTmpDoc );
+            m_pDocument->GetChangeTrack()->Clone( &*pTmpDoc );
             ScChangeActionMergeMap aOwnInverseMergeMap;
             pSharedDocShell->MergeDocument( *pTmpDoc, true, true, 0, &aOwnInverseMergeMap, true );
             pTmpDoc.reset();
@@ -1224,7 +1224,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
 
             // clone change track for merging into own document
             pTmpDoc.emplace();
-            for ( sal_Int32 nIndex = 0; nIndex < m_aDocument.GetTableCount(); ++nIndex )
+            for ( sal_Int32 nIndex = 0; nIndex < m_pDocument->GetTableCount(); ++nIndex )
             {
                 OUString sTabName;
                 pTmpDoc->CreateValidTabName( sTabName );
@@ -1269,7 +1269,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             aChangeViewSet.SetShowAccepted( true );
             aChangeViewSet.SetHasActionRange();
             aChangeViewSet.SetTheActionRange( nStartShared, nEndShared );
-            m_aDocument.SetChangeViewSettings( aChangeViewSet );
+            m_pDocument->SetChangeViewSettings( aChangeViewSet );
 
             // merge own changes back into own document
             sal_uLong nStartOwn = nEndShared + 1;
@@ -1312,7 +1312,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             aChangeViewSet.SetShowAccepted( true );
             aChangeViewSet.SetHasActionRange();
             aChangeViewSet.SetTheActionRange( nStartShared, nEndShared );
-            m_aDocument.SetChangeViewSettings( aChangeViewSet );
+            m_pDocument->SetChangeViewSettings( aChangeViewSet );
         }
 
         // update view

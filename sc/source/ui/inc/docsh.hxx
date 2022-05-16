@@ -79,7 +79,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDBF(SvStream &rStream);
 
 class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
 {
-    ScDocument          m_aDocument;
+    std::shared_ptr<ScDocument> m_pDocument;
 
     OUString            m_aDdeTextFmt;
 
@@ -217,8 +217,8 @@ public:
 
     void    GetDocStat( ScDocStat& rDocStat );
 
-    const ScDocument& GetDocument() const { return m_aDocument; }
-    ScDocument&     GetDocument()   { return m_aDocument; }
+    const ScDocument& GetDocument() const { return *m_pDocument; }
+    ScDocument&     GetDocument()   { return *m_pDocument; }
     ScDocFunc&      GetDocFunc()    { return *m_pDocFunc; }
 
     css::uno::Reference<css::datatransfer::XTransferable2> const & GetClipData() const { return m_xClipData; }
