@@ -236,6 +236,7 @@ void SvxFillToolBoxControl::StateChangedAtToolBoxControl(
             }
             break;
         }
+        // TODO: equivalent for SID_ATTR_FILL_USE_BACKGROUND
         case SID_ATTR_FILL_BITMAP:
         {
             if(SfxItemState::DEFAULT == eState)

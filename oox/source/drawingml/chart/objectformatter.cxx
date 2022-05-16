@@ -443,14 +443,35 @@ const AutoTextEntry* lclGetAutoTextEntry( const AutoTextEntry* pEntries, sal_Int
 
 // These PropIds arrays will be indexed into using a ShapeProperty enum
 
-const ShapePropertyIds spnCommonPropIds =
-{
-    PROP_LineStyle, PROP_LineWidth, PROP_LineColor, PROP_LineTransparence, PROP_LineDashName,
-    PROP_LineCap, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
-    PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_FillTransparenceGradientName, PROP_FillGradientName,
-    PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,
-    PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint,
-    PROP_FillHatchName, PROP_FillBackground
+const ShapePropertyIds spnCommonPropIds = {
+    PROP_LineStyle,
+    PROP_LineWidth,
+    PROP_LineColor,
+    PROP_LineTransparence,
+    PROP_LineDashName,
+    PROP_LineCap,
+    PROP_INVALID,
+    PROP_INVALID,
+    PROP_INVALID,
+    PROP_INVALID,
+    PROP_INVALID,
+    PROP_INVALID,
+    PROP_INVALID,
+    PROP_FillStyle,
+//    PROP_FillUseBackground,
+    PROP_FillColor,
+    PROP_FillTransparence,
+    PROP_FillTransparenceGradientName,
+    PROP_FillGradientName,
+    PROP_FillBitmapName,
+    PROP_FillBitmapMode,
+    PROP_FillBitmapSizeX,
+    PROP_FillBitmapSizeY,
+    PROP_FillBitmapPositionOffsetX,
+    PROP_FillBitmapPositionOffsetY,
+    PROP_FillBitmapRectanglePoint,
+    PROP_FillHatchName,
+    PROP_FillBackground,
 };
 
 const ShapePropertyIds spnLinearPropIds =
@@ -479,6 +500,7 @@ const ShapePropertyIds spnFilledPropIds =
     PROP_INVALID,
     PROP_INVALID,
     PROP_FillStyle,
+//    PROP_FillUseBackground,
     PROP_Color,
     PROP_Transparency,
     PROP_FillTransparenceGradientName,

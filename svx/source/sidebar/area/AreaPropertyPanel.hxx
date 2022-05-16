@@ -59,6 +59,7 @@ public:
     virtual ~AreaPropertyPanel() override;
 
     virtual void setFillTransparence(const XFillTransparenceItem& rItem) override;
+    virtual void setFillUseBackground(bool bUseBackground) override;
     virtual void setFillFloatTransparence(const XFillFloatTransparenceItem& rItem) override;
     virtual void setFillStyle(const XFillStyleItem& rItem) override;
     virtual void setFillStyleAndColor(const XFillStyleItem* pStyleItem, const XFillColorItem& aColorItem) override;

@@ -850,6 +850,11 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         }
         break;
 
+        case XML_useBgFill:
+            eFillStyle = FillStyle_NONE;
+            rPropMap.setProperty( ShapeProperty::FillUseBackground, true );
+        break;
+
         case XML_grpFill:
             // todo
             eFillStyle = FillStyle_NONE;
