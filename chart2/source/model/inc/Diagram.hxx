@@ -30,6 +30,9 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
+#include <rtl/ref.hxx>
+#include "ModifyListenerHelper.hxx"
+#include "charttoolsdllapi.hxx"
 
 #include <vector>
 
@@ -39,6 +42,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
+class DataTable;
 
 namespace impl
 {
@@ -108,6 +112,9 @@ private:
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
+    virtual css::uno::Reference<css::chart2::XDataTable> SAL_CALL getDataTable() override;
+    virtual void SAL_CALL setDataTable(const css::uno::Reference<css::chart2::XDataTable>& xDataTable) override;
+
     // ____ XCoordinateSystemContainer ____
     virtual void SAL_CALL addCoordinateSystem(
         const css::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys ) override;
@@ -137,6 +144,13 @@ private:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
+    void setDataTable(const rtl::Reference<::chart::DataTable>& xNewDataTable);
+
+    rtl::Reference<::chart::DataTable> const& getDataTableRef() const
+    {
+        return m_xDataTable;
+    };
+
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
         const css::lang::EventObject& aEvent ) override;
@@ -163,6 +177,7 @@ private:
     css::uno::Reference<css::beans::XPropertySet> m_xFloor;
     css::uno::Reference<css::chart2::XTitle> m_xTitle;
     css::uno::Reference<css::chart2::XLegend> m_xLegend;
+    rtl::Reference<::chart::DataTable> m_xDataTable;
     css::uno::Reference<css::chart2::XColorScheme> m_xColorScheme;
     css::uno::Reference<css::util::XModifyListener> m_xModifyEventForwarder;
 };
