@@ -16,6 +16,23 @@
       "message": "Laurent, any idea what\u0027s going wrong?",
       "revId": "bc1131ebdf4de62016296fd83c754dce3f3cc112",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed7cb9b5_2b74e84c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-05-16T19:42:02Z",
+      "side": 1,
+      "message": "Hi Heiko,\nI found some time to dive into your change. Actually it works when sorting columns, but not rows. I found the mistake I think.",
+      "revId": "bc1131ebdf4de62016296fd83c754dce3f3cc112",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

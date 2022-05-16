@@ -16,6 +16,29 @@
       "message": "This works internally meaning when you switch from one tab to the other but does always sort the first column. Row sorting works as expected. I\u0027m starring at the code but don\u0027t find the issue. Do you?",
       "revId": "e1761ba1a31e99cede1e080a84cdcba1424b720a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fc43586_1cadb0cd",
+        "filename": "sc/source/ui/dbgui/tpsort.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-05-16T19:42:02Z",
+      "side": 1,
+      "message": "Previous test check whether bByRow changed state. This tests is different.\nIt needs to preserve previous value of bByRow and test here if it has changed\nComments should then be kept also.",
+      "range": {
+        "startLine": 272,
+        "startChar": 8,
+        "endLine": 272,
+        "endChar": 34
+      },
+      "revId": "e1761ba1a31e99cede1e080a84cdcba1424b720a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
