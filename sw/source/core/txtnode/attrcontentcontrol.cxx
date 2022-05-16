@@ -256,6 +256,11 @@ OUString SwContentControlListItem::ToString() const
     return m_aValue;
 }
 
+bool SwContentControlListItem::operator==(const SwContentControlListItem& rOther) const
+{
+    return m_aDisplayText == rOther.m_aDisplayText && m_aValue == rOther.m_aValue;
+}
+
 void SwContentControlListItem::ItemsToAny(const std::vector<SwContentControlListItem>& rItems,
                                           uno::Any& rVal)
 {

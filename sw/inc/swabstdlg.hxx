@@ -61,6 +61,7 @@ enum class SwBorderModes;
 enum class SwCharDlgMode;
 enum class SfxStyleFamily;
 enum class SwLineBreakClear;
+class SwContentControlListItem;
 
 namespace com::sun::star{
     namespace frame{
@@ -339,6 +340,18 @@ public:
              css::uno::Reference< css::container::XNameAccess > & xThird ) = 0;
 };
 
+/**
+ * Interface for e.g. the form -> content control -> properties -> add dialog. It's implemented by
+ * AbstractSwContentControlListItemDlg_Impl, but SwContentControlDlg only knows about this interface
+ * and the SwAbstractDialogFactory::CreateSwContentControlListItemDlg() factory.
+ */
+class AbstractSwContentControlListItemDlg  : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractSwContentControlListItemDlg() override = default;
+public:
+};
+
 class AbstractSwModalRedlineAcceptDlg : public VclAbstractDialog
 {
 protected:
@@ -390,6 +403,9 @@ public:
                                                                 SvStream* pStream) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwInsertBookmarkDlg(weld::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwContentControlDlg(weld::Window *pParent, SwWrtShell &rSh) = 0;
+
+    virtual VclPtr<AbstractSwContentControlListItemDlg>
+    CreateSwContentControlListItemDlg(weld::Window* pParent, SwContentControlListItem& rItem) = 0;
 
     virtual std::shared_ptr<AbstractSwBreakDlg> CreateSwBreakDlg(weld::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwChangeDBDlg(SwView& rVw) = 0;
