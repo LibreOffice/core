@@ -725,6 +725,30 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144668, "tdf144668.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("[001]"), getProperty<OUString>(xPara2, "ListLabelString"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf148455_1, "tdf148455_1.docx")
+{
+    uno::Reference<beans::XPropertySet> xPara2(getParagraph(3, u"1.1.1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1.1.1."), getProperty<OUString>(xPara2, "ListLabelString"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf148455_2, "tdf148455_2.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return; // initial import, no further checks
+
+    // Find list id for restarted list
+    sal_Int32 nListId = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:numPr/w:numId", "val").toInt32();
+
+    xmlDocUniquePtr pNumberingDoc = parseExport("word/numbering.xml");
+
+    // Ensure we have empty lvlOverride for levels 0 - 1
+    getXPath(pNumberingDoc, "/w:numbering/w:num[@w:numId='" + OString::number(nListId) +"']/w:lvlOverride[@w:ilvl='0']", "");
+    getXPath(pNumberingDoc, "/w:numbering/w:num[@w:numId='" + OString::number(nListId) +"']/w:lvlOverride[@w:ilvl='1']", "");
+    // And normal overrride for level 2
+    getXPath(pNumberingDoc, "/w:numbering/w:num[@w:numId='" + OString::number(nListId) +"']/w:lvlOverride[@w:ilvl='2']/w:startOverride", "val");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
 {
     load(DATA_DIRECTORY, "tdf147978_enhancedPath_commandABVW.odt");
