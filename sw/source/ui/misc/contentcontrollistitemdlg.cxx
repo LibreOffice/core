@@ -33,6 +33,8 @@ SwContentControlListItemDlg::SwContentControlListItemDlg(weld::Widget* pParent,
     , m_xOk(m_xBuilder->weld_button("ok"))
 {
     m_xOk->connect_clicked(LINK(this, SwContentControlListItemDlg, OkHdl));
+    m_xDisplayNameED->set_text(rItem.m_aDisplayText);
+    m_xValueED->set_text(rItem.m_aValue);
 }
 
 IMPL_LINK_NOARG(SwContentControlListItemDlg, OkHdl, weld::Button&, void)
