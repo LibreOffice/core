@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa6ed06e_055a7244",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-16T10:29:47Z",
+      "side": 1,
+      "message": "jenkins failed for unrelated reason on WNT and multiple builds for other patches based on this were successful",
+      "revId": "c0e6de66e3bb63ee76a44872d5757e2ee639bce5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
