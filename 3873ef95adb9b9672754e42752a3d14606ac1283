@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d2cff9c_ec7d266f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-05-16T05:04:10Z",
+      "side": 1,
+      "message": "Hi Stephan, I have been trying to document LibreOffice via my Inside LibreOffice book. I was hoping these unit tests might be useful. They certainly helped me understand how this module works.",
+      "revId": "3873ef95adb9b9672754e42752a3d14606ac1283",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
