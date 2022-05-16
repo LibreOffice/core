@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edcce97f_6eccd6e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-05-16T11:19:15Z",
+      "side": 1,
+      "message": "The old code returns in all cases a valid XCustomShapeEngine with \"com.sun.star.drawing.EnhancedCustomShapeEngine\" as default. After your change it returns a non existing mxCustomShapeEngine in case aXShape does not exist.  ??",
+      "revId": "7351fe40debc038f2000290222e9f46fe61f7619",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
