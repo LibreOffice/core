@@ -856,7 +856,7 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
 
         // peel mnemonics because on mac there are no such things for menu items
         // Delete CJK-style mnemonics for the dropdown menu of the 'New button' and lower menu of 'File > New'
-        NSString* pString = CreateNSString(MnemonicGenerator::EraseAllMnemonicChars((pItemData->aText)));
+        NSString* pString = CreateNSString(MnemonicGenerator::EraseAllMnemonicChars(pItemData->aText));
         if (pString)
         {
             [mpMenuItem setTitle: pString];
