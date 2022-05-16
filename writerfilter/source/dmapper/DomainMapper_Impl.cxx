@@ -2278,20 +2278,26 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                     }
                                 }
                             }
-                            if (pList->GetCurrentLevel())
+
+                            sal_Int16 nCurrentLevel = GetListLevel(pEntry, pPropertyMap);
+                            if (nCurrentLevel != -1)
                             {
-                                sal_Int16 nOverrideLevel = pList->GetCurrentLevel()->GetStartOverride();
-                                if (nOverrideLevel != -1 && m_aListOverrideApplied.find(nListId) == m_aListOverrideApplied.end())
+                                const ListLevel::Pointer pListLevel = pList->GetLevel(nCurrentLevel);
+                                if (pListLevel)
                                 {
-                                    // Apply override: we have override instruction for this level
-                                    // And this was not done for this list before: we can do this only once on first occurrence
-                                    // of list with override
-                                    // TODO: Not tested variant with different levels override in different lists.
-                                    // Probably m_aListOverrideApplied as a set of overridden listids is not sufficient
-                                    // and we need to register level overrides separately.
-                                    m_xPreviousParagraph->setPropertyValue("ParaIsNumberingRestart", uno::Any(true));
-                                    m_xPreviousParagraph->setPropertyValue("NumberingStartValue", uno::Any(nOverrideLevel));
-                                    m_aListOverrideApplied.insert(nListId);
+                                    sal_Int16 nOverrideLevel = pListLevel->GetStartOverride();
+                                    if (nOverrideLevel != -1 && m_aListOverrideApplied.find(nListId) == m_aListOverrideApplied.end())
+                                    {
+                                        // Apply override: we have override instruction for this level
+                                        // And this was not done for this list before: we can do this only once on first occurrence
+                                        // of list with override
+                                        // TODO: Not tested variant with different levels override in different lists.
+                                        // Probably m_aListOverrideApplied as a set of overridden listids is not sufficient
+                                        // and we need to register level overrides separately.
+                                        m_xPreviousParagraph->setPropertyValue("ParaIsNumberingRestart", uno::Any(true));
+                                        m_xPreviousParagraph->setPropertyValue("NumberingStartValue", uno::Any(nOverrideLevel));
+                                        m_aListOverrideApplied.insert(nListId);
+                                    }
                                 }
                             }
                         }
