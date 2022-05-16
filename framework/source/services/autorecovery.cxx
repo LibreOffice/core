@@ -55,6 +55,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -84,6 +85,7 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/content.hxx>
+#include <svtools/sfxecode.hxx>
 
 #include <vcl/weld.hxx>
 #include <osl/file.hxx>
@@ -3051,9 +3053,22 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
             nRetry = 0;
 #endif // TRIGGER_FULL_DISC_CHECK
         }
-        catch(const css::uno::Exception&)
+        catch(const css::uno::Exception& rException)
         {
             bError = true;
+
+            // skip saving XLSX with protected sheets, if their passwords haven't supported yet
+            if ( rException.Message.startsWith("SfxBaseModel::impl_store") )
+            {
+                const css::task::ErrorCodeIOException& pErrorCodeIOException =
+                    static_cast<const css::task::ErrorCodeIOException&>(rException);
+                if ( static_cast<ErrCode>(pErrorCodeIOException.ErrCode) == ERRCODE_SFX_WRONGPASSWORD )
+                {
+                    // stop and remove the bad temporary file, instead of filling the disk with them
+                    bError = false;
+                    break;
+                }
+            }
 
             // a) FULL DISC seems to be the problem behind                              => show error and retry it forever (e.g. retry=300)
             // b) unknown problem (may be locking problem)                              => reset RETRY value to more useful value(!) (e.g. retry=3)
