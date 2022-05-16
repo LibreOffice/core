@@ -134,10 +134,10 @@ bool urlExists(OUString const & sUrl)
     return osl::FileBase::E_None == eRC;
 }
 
-std::u16string_view getNameNoExtension(std::u16string_view sName)
+OUString getNameNoExtension(std::u16string_view sName)
 {
     size_t nDotPosition = sName.rfind('.');
-    return sName.substr(0, nDotPosition);
+    return OUString(sName.substr(0, nDotPosition));
 }
 
 std::shared_ptr<SvMemoryStream> wrapStream(uno::Reference<io::XInputStream> const & rInputStream)
@@ -222,15 +222,15 @@ std::vector<OUString> ImplImageTree::getPaths(OUString const & name, LanguageTag
     {
         for (const OUString& rFallback : rLanguageTag.getFallbackStrings(true))
         {
-            std::u16string_view aFallbackName = getNameNoExtension(getRealImageName(createPath(name, pos, rFallback)));
-            sPaths.emplace_back(OUString::Concat(aFallbackName) + ".png");
-            sPaths.emplace_back(OUString::Concat(aFallbackName) + ".svg");
+            OUString aFallbackName = getNameNoExtension(getRealImageName(createPath(name, pos, rFallback)));
+            sPaths.emplace_back(aFallbackName + ".png");
+            sPaths.emplace_back(aFallbackName + ".svg");
         }
     }
 
-    std::u16string_view aRealName = getNameNoExtension(getRealImageName(name));
-    sPaths.emplace_back(OUString::Concat(aRealName) + ".png");
-    sPaths.emplace_back(OUString::Concat(aRealName) + ".svg");
+    OUString aRealName = getNameNoExtension(getRealImageName(name));
+    sPaths.emplace_back(aRealName + ".png");
+    sPaths.emplace_back(aRealName + ".svg");
 
     return sPaths;
 }
@@ -624,15 +624,15 @@ OUString const & ImplImageTree::getRealImageName(OUString const & rIconName)
 {
     IconLinkHash & rLinkHash = maIconSets[maCurrentStyle].maLinkHash;
 
-    std::u16string_view sNameWithNoExtension = getNameNoExtension(rIconName);
+    OUString sNameWithNoExtension = getNameNoExtension(rIconName);
 
     // PNG is priority
-    auto it = rLinkHash.find(OUString::Concat(sNameWithNoExtension) + ".png");
+    auto it = rLinkHash.find(sNameWithNoExtension + ".png");
     if (it != rLinkHash.end())
         return it->second;
 
     // also check SVG name
-    it = rLinkHash.find(OUString::Concat(sNameWithNoExtension) + ".svg");
+    it = rLinkHash.find(sNameWithNoExtension + ".svg");
     if (it != rLinkHash.end())
         return it->second;
 
