@@ -16,6 +16,23 @@
       "message": "Hi Noël,\n\nPerhaps this patch could interest you",
       "revId": "6647e601a722a78675e42e881aad3d1083aa6a0a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2f0beb8_46fafac6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-16T07:24:56Z",
+      "side": 1,
+      "message": "What\u0027s the motivation for this change?\n\nMy thoughts have always been that our ultimate goal is to get rid of recursive mutexes, so we wouldn\u0027t bother to replace recursive uses of osl::Mutex with std::recursive_mutex.  (While on the other hand, replacing known--non-recursive uses of osl::Mutex with std::mutex nicely reduces the use of that ugly recursive osl::Mutex.)  But that\u0027s mostly my personal perspective on that, and I wouldn\u0027t care too much if SolarMutex (which we won\u0027t get rid of for good easily, anyway) is changed this way.",
+      "revId": "6647e601a722a78675e42e881aad3d1083aa6a0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
