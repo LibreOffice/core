@@ -242,6 +242,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="halign">start</property>
+        <property name="use-underline">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
