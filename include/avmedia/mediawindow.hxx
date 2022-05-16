@@ -134,7 +134,9 @@ namespace avmedia
 
         static css::uno::Reference< css::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = nullptr );
 
-        static css::uno::Reference<css::graphic::XGraphic> grabFrame(const css::uno::Reference<css::media::XPlayer>& rPlayer);
+        static css::uno::Reference<css::graphic::XGraphic>
+        grabFrame(const css::uno::Reference<css::media::XPlayer>& rPlayer,
+                  const css::uno::Reference<css::graphic::XGraphic>& rGraphic = nullptr);
 
         static css::uno::Reference< css::graphic::XGraphic > grabFrame(const OUString& rURL, const OUString& rReferer,
             const OUString& sMimeType, rtl::Reference<PlayerListener> xPreferredPixelSizeListener);
