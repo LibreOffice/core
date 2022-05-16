@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
+#include <mutex>
 
 #include "gate.hxx"
 
@@ -111,7 +111,7 @@ class TransactionManager
 
     private:
 
-        mutable ::osl::Mutex    m_aAccessLock;   /// regulate access on internal member of this instance
+        mutable std::mutex      m_aAccessLock;   /// regulate access on internal member of this instance
         Gate                    m_aBarrier;   /// used to block transactions requests during change or work mode
         EWorkingMode            m_eWorkingMode;   /// current working mode of object which use this manager (used to reject calls at wrong time)
         sal_Int32               m_nTransactionCount;   /// every transaction request is registered by this counter

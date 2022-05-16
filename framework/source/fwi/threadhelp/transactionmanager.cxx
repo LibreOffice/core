@@ -71,7 +71,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
     // Safe member access.
     bool bWaitFor = false;
     {
-        osl::MutexGuard aAccessGuard(m_aAccessLock);
+        std::unique_lock aAccessGuard(m_aAccessLock);
         // Change working mode first!
         if (
             (m_eWorkingMode == E_INIT && eMode == E_WORK) ||
@@ -137,7 +137,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
 EWorkingMode TransactionManager::getWorkingMode() const
 {
     // Synchronize access to internal member!
-    ::osl::MutexGuard aAccessLock( m_aAccessLock );
+    std::unique_lock aAccessLock( m_aAccessLock );
     return m_eWorkingMode;
 }
 
@@ -154,7 +154,7 @@ EWorkingMode TransactionManager::getWorkingMode() const
 *//*-*****************************************************************************************************/
 void  TransactionManager::registerTransaction( EExceptionMode eMode )
 {
-    ::osl::MutexGuard aAccessGuard( m_aAccessLock );
+    std::unique_lock aAccessGuard( m_aAccessLock );
     switch( m_eWorkingMode )
     {
     case E_INIT:
@@ -201,7 +201,7 @@ void  TransactionManager::unregisterTransaction()
 {
     // This call could not rejected!
     // Safe access to internal member.
-    ::osl::MutexGuard aAccessGuard( m_aAccessLock );
+    std::unique_lock aAccessGuard( m_aAccessLock );
 
     // Deregister this transaction.
     // If it was the last one ... open gate to enable changing of working mode!
