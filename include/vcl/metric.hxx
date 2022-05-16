@@ -68,7 +68,16 @@ public:
     bool                operator==( const FontMetric& rMetric ) const;
     bool                operator!=( const FontMetric& rMetric ) const
                             { return !operator==( rMetric ); }
+
+    bool                EqualIgnoreColor( const FontMetric& ) const;
+
+    // Compute value usable as hash.
+    size_t              GetHashValue() const;
+    size_t              GetHashValueIgnoreColor() const;
+
 private:
+    bool                EqualNoBase( const FontMetric& ) const;
+    size_t              GetHashValueNoBase() const;
     tools::Long                mnAscent;                      // Ascent
     tools::Long                mnDescent;                     // Descent
     tools::Long                mnIntLeading;                  // Internal Leading
