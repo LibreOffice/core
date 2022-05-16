@@ -110,7 +110,7 @@ frog, dogg, catt"""
                     # Without the fix in place, this test would have crashed here
                     xChangeBtn.executeAction("CLICK", ())
 
-            output_text = writer_doc.Text.getString().replace('\n', '')
+            output_text = writer_doc.Text.getString().replace('\n', '').replace('\r', '')
             self.assertTrue(output_text.startswith("xx xx xx xxxxxxxxxxix xxxxxxxxxxxxxxviii"))
 
     def test_tdf66043(self):
