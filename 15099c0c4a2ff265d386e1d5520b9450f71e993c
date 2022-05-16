@@ -16,6 +16,23 @@
       "message": "this requires new translation strings, Samuel already knows where they are",
       "revId": "15099c0c4a2ff265d386e1d5520b9450f71e993c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aab3b9b9_b4fa2fd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-16T10:53:43Z",
+      "side": 1,
+      "message": "jenkins was successful",
+      "revId": "15099c0c4a2ff265d386e1d5520b9450f71e993c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
