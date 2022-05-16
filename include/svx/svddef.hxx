@@ -329,7 +329,8 @@ constexpr TypedWhichId<SdrGrafTransparenceItem> SDRATTR_GRAFTRANSPARENCE (SDRATT
 constexpr TypedWhichId<SdrGrafInvertItem>       SDRATTR_GRAFINVERT       (SDRATTR_GRAF_FIRST+7);      /*  1236 V4+++*/
 constexpr TypedWhichId<SdrGrafModeItem>         SDRATTR_GRAFMODE         (SDRATTR_GRAF_FIRST+8);      /*  1237 V4+++*/
 constexpr TypedWhichId<SdrGrafCropItem>         SDRATTR_GRAFCROP         (SDRATTR_GRAF_FIRST+9);      /*  1238 V4+++*/
-constexpr sal_uInt16                            SDRATTR_GRAF_LAST        (SDRATTR_GRAFCROP);          /*  1242 V4+++*/
+constexpr TypedWhichId<SfxBoolItem>             SDRATTR_USE_BG_FILL      (SDRATTR_GRAF_FIRST+10);     /*  1239 V4+++*/
+constexpr sal_uInt16                            SDRATTR_GRAF_LAST        (SDRATTR_USE_BG_FILL);       /*  1242 V4+++*/
 
 constexpr sal_uInt16 SDRATTR_3D_FIRST (SDRATTR_GRAF_LAST + 1);     /* 1244 V4+++*/
 

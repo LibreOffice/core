@@ -84,6 +84,7 @@ public:
     virtual void setFillStyleAndGradient(const XFillStyleItem* pStyleItem, const XFillGradientItem& aGradientItem) = 0;
     virtual void setFillStyleAndHatch(const XFillStyleItem* pStyleItem, const XFillHatchItem& aHatchItem) = 0;
     virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& aHatchItem) = 0;
+    virtual void setFillUseBackground(bool bUseBackground) = 0;
 
     void updateFillTransparence(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
     void updateFillFloatTransparence(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
@@ -92,6 +93,7 @@ public:
     void updateFillHatch(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
     void updateFillColor(bool bDefaultOrSet, const SfxPoolItem* pState);
     void updateFillBitmap(bool BDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
+    void updateFillUseBackground(bool BDisabled, bool bDefaultOrSet, const SfxPoolItem* pState);
 
 private:
     void Initialize();

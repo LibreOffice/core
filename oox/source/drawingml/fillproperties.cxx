@@ -382,7 +382,11 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
     switch( moFillType.get() )
     {
         case XML_noFill:
+        {
             eFillStyle = FillStyle_NONE;
+            if (mbUseBgFill)
+                rPropMap.setProperty(ShapeProperty::FillUseBackground, mbUseBgFill);
+        }
         break;
 
         case XML_solidFill:
@@ -848,6 +852,11 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 }
             }
         }
+        break;
+
+        case XML_useBgFill:
+            eFillStyle = FillStyle_NONE;
+            rPropMap.setProperty( ShapeProperty::FillUseBackground, true );
         break;
 
         case XML_grpFill:

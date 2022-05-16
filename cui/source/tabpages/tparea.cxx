@@ -167,6 +167,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         case drawing::FillStyle_NONE:
         {
             SelectFillType(*m_xBtnNone);
+            // TODO
             break;
         }
         case drawing::FillStyle_SOLID:

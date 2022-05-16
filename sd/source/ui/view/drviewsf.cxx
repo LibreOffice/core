@@ -404,6 +404,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_FILL_GRADIENT:
             case SID_ATTR_FILL_HATCH:
             case SID_ATTR_FILL_BITMAP:
+            case SID_ATTR_FILL_USE_BACKGROUND:
             case SID_ATTR_FILL_SHADOW:
             case SID_ATTR_SHADOW_COLOR:
             case SID_ATTR_SHADOW_TRANSPARENCE:

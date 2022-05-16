@@ -227,6 +227,13 @@ published service FillProperties
      */
     [optional, property] com::sun::star::text::GraphicCrop GraphicCrop;
 
+    /** Whether the shape should use the slide/page background to fill the area.
+        Setting this property will override the com::sun::star::drawing::FillProperties::FillStyle enum.
+
+        @since LibreOffice 7.4
+     */
+    [optional, property] boolean FillUseBackground;
+
 };
 
 

@@ -251,6 +251,7 @@ SdrItemPool::SdrItemPool(
     rPoolDefaults[ SDRATTR_GRAFINVERT            - SDRATTR_START] = new SdrGrafInvertItem;
     rPoolDefaults[ SDRATTR_GRAFMODE          - SDRATTR_START] = new SdrGrafModeItem;
     rPoolDefaults[ SDRATTR_GRAFCROP          - SDRATTR_START] = new SdrGrafCropItem;
+    rPoolDefaults[ SDRATTR_USE_BG_FILL       - SDRATTR_START] = new SfxBoolItem(SDRATTR_USE_BG_FILL, false);
     rPoolDefaults[ SDRATTR_3DOBJ_PERCENT_DIAGONAL - SDRATTR_START ] = new SfxUInt16Item(SDRATTR_3DOBJ_PERCENT_DIAGONAL, 10);
     rPoolDefaults[ SDRATTR_3DOBJ_BACKSCALE - SDRATTR_START ] = new SfxUInt16Item(SDRATTR_3DOBJ_BACKSCALE, 100);
     rPoolDefaults[ SDRATTR_3DOBJ_DEPTH - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, 1000);
@@ -344,6 +345,7 @@ SdrItemPool::SdrItemPool(
     mpLocalItemInfos[SDRATTR_SHADOWYDIST-SDRATTR_START]._nSID=SID_ATTR_SHADOW_YDISTANCE;
     mpLocalItemInfos[SDRATTR_TEXT_FITTOSIZE-SDRATTR_START]._nSID=SID_ATTR_TEXT_FITTOSIZE;
     mpLocalItemInfos[SDRATTR_GRAFCROP-SDRATTR_START]._nSID=SID_ATTR_GRAF_CROP;
+    mpLocalItemInfos[SDRATTR_USE_BG_FILL-SDRATTR_START]._nSID=SDRATTR_USE_BG_FILL;
 
     mpLocalItemInfos[SDRATTR_TABLE_BORDER - SDRATTR_START ]._nSID = SID_ATTR_BORDER_OUTER;
     mpLocalItemInfos[SDRATTR_TABLE_BORDER_INNER - SDRATTR_START ]._nSID = SID_ATTR_BORDER_INNER;
@@ -594,6 +596,7 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
         case SDRATTR_GRAFINVERT         : pResId = SIP_SA_GRAFINVERT;break;
         case SDRATTR_GRAFMODE           : pResId = SIP_SA_GRAFMODE;break;
         case SDRATTR_GRAFCROP           : pResId = SIP_SA_GRAFCROP;break;
+        case SDRATTR_USE_BG_FILL        : pResId = SIP_SA_USE_BG_FILL;break;
 
         case EE_PARA_HYPHENATE  : pResId = SIP_EE_PARA_HYPHENATE;break;
         case EE_PARA_BULLETSTATE: pResId = SIP_EE_PARA_BULLETSTATE;break;
@@ -628,6 +631,8 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
 
         case SDRATTR_TEXTCOLUMNS_NUMBER: pResId = SIP_SA_TEXTCOLUMNS_NUMBER; break;
         case SDRATTR_TEXTCOLUMNS_SPACING: pResId = SIP_SA_TEXTCOLUMNS_SPACING; break;
+        default:
+            SAL_WARN("svx", "Unknown prop: " << nWhich);
     } // switch
 
     return SvxResId(pResId);

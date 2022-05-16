@@ -49,7 +49,8 @@ enum eFillStyle
     GRADIENT,
     HATCH,
     BITMAP,
-    PATTERN
+    PATTERN,
+    USE_BACKGROUND
 };
 
 }
@@ -156,8 +157,7 @@ void AreaPropertyPanelBase::Initialize()
     mxLbFillGradTo->SetSelectHdl( aLink3 );
     mxMTRAngle->connect_value_changed(LINK(this,AreaPropertyPanelBase, ChangeGradientAngle));
 
-    // https://gerrit.libreoffice.org/c/core/+/87313 set a small width to force widgets to
-    // take their final width from other widgets in the grid
+    // set a small width to force widgets to take their final width from other widgets in the grid
     mxLbFillGradFrom->get_widget().set_size_request(42, -1);
     mxLbFillGradTo->get_widget().set_size_request(42, -1);
 
@@ -420,6 +420,21 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, weld::ComboBox&, void)
             const XFillBitmapItem aXFillBitmapItem( aName, aBitmap );
             const XFillStyleItem aXFillStyleItem(drawing::FillStyle_BITMAP);
             setFillStyleAndBitmap(&aXFillStyleItem, aXFillBitmapItem);
+            break;
+        }
+        case USE_BACKGROUND:
+        {
+            mxLbFillAttr->show();
+            mxLbFillGradFrom->hide();
+            mxLbFillGradTo->hide();
+            mxGradientStyle->hide();
+            mxMTRAngle->hide();
+            mxToolBoxColor->hide();
+            mxBmpImport->hide();
+            mxLbFillAttr->set_sensitive(false);
+
+            // #i122676# need to call a single SID_ATTR_FILL_STYLE change
+            setFillUseBackground(true);
             break;
         }
     }
@@ -973,6 +988,11 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet,
         m_pPanel->TriggerDeckLayouting();
 }
 
+void AreaPropertyPanelBase::updateFillUseBackground(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
+{
+    // TODO: Implement
+}
+
 void AreaPropertyPanelBase::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
@@ -1004,6 +1024,9 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
         break;
         case SID_ATTR_FILL_BITMAP:
             updateFillBitmap(bDisabled, bDefaultOrSet, pState);
+        break;
+        case SID_ATTR_FILL_USE_BACKGROUND:
+            updateFillUseBackground(bDisabled, bDefaultOrSet, pState);
         break;
         case SID_GRADIENT_LIST:
         {

@@ -57,6 +57,7 @@ enum class ShapeProperty
     LineEndWidth,
     LineEndCenter,
     FillStyle,
+    FillUseBackground,
     FillColor,
     FillTransparency,
     GradientTransparency,

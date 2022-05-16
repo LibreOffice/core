@@ -50,7 +50,8 @@ const ShapePropertyIds spnDefaultShapeIds =
     PROP_FillBitmapName,
     PROP_ShadowXDistance,
     PROP_ShadowSizeX,
-    PROP_ShadowSizeY
+    PROP_ShadowSizeY,
+    PROP_FillUseBackground,
 };
 
 } // namespace

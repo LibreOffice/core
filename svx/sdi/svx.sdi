@@ -2761,6 +2761,23 @@ XFillBitmapItem FillBitmap SID_ATTR_FILL_BITMAP
     GroupId = SfxGroupId::Special;
 ]
 
+SfxBoolItem FillUseBackground SID_ATTR_FILL_USE_BACKGROUND
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Format;
+]
+
 XFillBitmapItem FillPageBitmap SID_ATTR_PAGE_BITMAP
 
 [

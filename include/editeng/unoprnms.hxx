@@ -68,7 +68,7 @@ inline constexpr OUStringLiteral UNO_NAME_FILL_TRANSPARENCE = u"FillTransparence
 inline constexpr OUStringLiteral UNO_NAME_FILLTRANSPARENCEGRADIENT = u"FillTransparenceGradient";
 inline constexpr OUStringLiteral UNO_NAME_FILLTRANSPARENCEGRADIENTNAME = u"FillTransparenceGradientName";
 inline constexpr OUStringLiteral UNO_NAME_FILLBMP_MODE = u"FillBitmapMode";
-
+inline constexpr OUStringLiteral UNO_NAME_FILL_USE_BACKGROUND = u"FillUseBackground";
 
 inline constexpr OUStringLiteral UNO_NAME_LINESTYLE = u"LineStyle";
 inline constexpr OUStringLiteral UNO_NAME_LINEDASH = u"LineDash";

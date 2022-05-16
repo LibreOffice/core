@@ -69,6 +69,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
                 SID_ATTR_FILL_GRADIENT,
                 SID_ATTR_FILL_HATCH,
                 SID_ATTR_FILL_BITMAP,
+                SID_ATTR_FILL_USE_BACKGROUND,
                 SID_ATTR_FILL_TRANSPARENCE,
                 SID_ATTR_FILL_FLOATTRANSPARENCE,
                 0 };

@@ -86,6 +86,13 @@ void AreaPropertyPanel::setFillTransparence(const XFillTransparenceItem& rItem)
             SfxCallMode::RECORD, { &rItem });
 }
 
+void AreaPropertyPanel::setFillUseBackground(bool bUseBackground)
+{
+    SfxBoolItem aItem( SID_ATTR_FILL_USE_BACKGROUND, bUseBackground );
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_USE_BACKGROUND,
+            SfxCallMode::RECORD, { &aItem });
+}
+
 void AreaPropertyPanel::setFillFloatTransparence(const XFillFloatTransparenceItem& rItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_FLOATTRANSPARENCE,

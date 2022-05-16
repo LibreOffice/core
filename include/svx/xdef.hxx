@@ -30,6 +30,7 @@
 |*
 \************************************************************************/
 
+class SfxBoolItem;
 class SfxMetricItem;
 class XFillAttrSetItem;
 class XFillBackgroundItem;
@@ -124,6 +125,8 @@ constexpr TypedWhichId<XFillBmpStretchItem>        XATTR_FILLBMP_STRETCH       (
 constexpr TypedWhichId<XFillBmpPosOffsetXItem>     XATTR_FILLBMP_POSOFFSETX    (XATTR_FILL_FIRST + 17); /* V3: 1041 */
 constexpr TypedWhichId<XFillBmpPosOffsetYItem>     XATTR_FILLBMP_POSOFFSETY    (XATTR_FILL_FIRST + 18); /* V3: 1042 */
 constexpr TypedWhichId<XFillBackgroundItem>        XATTR_FILLBACKGROUND        (XATTR_FILL_FIRST + 19); /* V3: 1043 */
+//constexpr TypedWhichId<SfxBoolItem>                XATTR_FILL_USE_BACKGROUND   (XATTR_FILL_FIRST + 20); /* V3: 1044 */
+//constexpr sal_uInt16                               XATTR_FILL_LAST             (XATTR_FILL_USE_BACKGROUND);
 constexpr sal_uInt16                               XATTR_FILL_LAST             (XATTR_FILLBACKGROUND);
 constexpr TypedWhichId<XFillAttrSetItem>           XATTRSET_FILL               (XATTR_FILL_LAST + 1);   /* V3: 1047  V2: 1030 */
 
