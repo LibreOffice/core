@@ -7,13 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
-from uitest.uihelper.common import select_pos
-from uitest.uihelper.calc import enter_text_to_cell
+from uitest.uihelper.common import get_url_for_data_file, select_pos
+
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-#Bug 95192 - SORTING Natural sorting not working with non-letter,non-number content
 
+
+# Bug 95192 - SORTING Natural sorting not working with non-letter,non-number content
 class tdf95192(UITestCase):
     def test_td99627_natural_sort(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf95192.ods")) as calc_doc:
