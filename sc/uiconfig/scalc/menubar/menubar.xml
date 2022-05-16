@@ -591,6 +591,7 @@
       <menu:menuitem menu:id=".uno:DuplicateSheet"/>
       <menu:menu menu:id=".uno:NavigateMenu">
         <menu:menupopup>
+          <menu:menuitem menu:id=".uno:JumpToTable"/>
           <menu:menuitem menu:id=".uno:JumpToPrevTable"/>
           <menu:menuitem menu:id=".uno:JumpToNextTable"/>
         </menu:menupopup>
