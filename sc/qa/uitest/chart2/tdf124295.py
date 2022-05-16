@@ -10,8 +10,6 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 
-import time
-import unittest
 
 class tdf124295(UITestCase):
 

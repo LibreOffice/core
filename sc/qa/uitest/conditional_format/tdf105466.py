@@ -8,8 +8,8 @@
 #
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import select_pos
+
 
 class tdf105466(UITestCase):
 
