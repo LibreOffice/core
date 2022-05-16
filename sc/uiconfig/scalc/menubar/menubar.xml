@@ -593,6 +593,7 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:JumpToPrevTable"/>
           <menu:menuitem menu:id=".uno:JumpToNextTable"/>
+          <menu:menuitem menu:id=".uno:JumpToTable"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
