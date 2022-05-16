@@ -24,6 +24,8 @@
 #include <AxisIndexDefines.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
+#include <Diagram.hxx>
+#include <DataTable.hxx>
 #include <ChartModel.hxx>
 
 namespace chart
@@ -90,7 +92,9 @@ void VPolarCoordinateSystem::createVAxisList(
             rtl::Reference< Axis > xAxis = getAxisByDimension(nDimensionIndex,nAxisIndex);
             if(!xAxis.is() || !AxisHelper::shouldAxisBeDisplayed( xAxis, m_xCooSysModel ))
                 continue;
-            AxisProperties aAxisProperties(xAxis,getExplicitCategoriesProvider());
+
+            rtl::Reference<Diagram> xDiagram(xChartDoc->getFirstChartDiagram());
+            AxisProperties aAxisProperties(xAxis,getExplicitCategoriesProvider(), xDiagram->getDataTableRef());
             aAxisProperties.init();
             if(aAxisProperties.m_bDisplayLabels)
                 aAxisProperties.m_nNumberFormatKey = getNumberFormatKeyForAxis(xAxis, xChartDoc);

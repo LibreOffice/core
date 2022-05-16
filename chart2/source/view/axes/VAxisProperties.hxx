@@ -21,6 +21,7 @@
 #include "TickmarkProperties.hxx"
 #include <Axis.hxx>
 #include <LabelAlignment.hxx>
+#include <DataTable.hxx>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
@@ -139,10 +140,13 @@ struct AxisProperties final
 
     bool                                m_bLimitSpaceForLabels;
 
+    rtl::Reference<::chart::DataTable> m_xDataTableModel;
+
     //methods:
 
-    AxisProperties( rtl::Reference< ::chart::Axis > xAxisModel
-                  , ExplicitCategoriesProvider* pExplicitCategoriesProvider );
+    AxisProperties(rtl::Reference<::chart::Axis> xAxisModel,
+                   ExplicitCategoriesProvider* pExplicitCategoriesProvider,
+                   rtl::Reference<::chart::DataTable> const& xDataTableModel);
 
     void init(bool bCartesian=false);//init from model data (m_xAxisModel)
 
