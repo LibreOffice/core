@@ -158,6 +158,7 @@
               <object class="GtkEntry" id="search">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="truncate-multiline">True</property>
                 <property name="placeholder-text" translatable="yes" context="extensionmanager|search">Search ...</property>
               </object>
               <packing>
