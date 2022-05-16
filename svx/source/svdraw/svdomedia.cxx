@@ -161,7 +161,9 @@ uno::Reference< graphic::XGraphic > const & SdrMediaObj::getSnapshot() const
         m_xImpl->m_xPlayerListener.set(new avmedia::PlayerListener(
             [this, xCachedSnapshot, aRealURL, sReferer, sMimeType](const css::uno::Reference<css::media::XPlayer>& rPlayer){
                 SolarMutexGuard g;
-                m_xImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame(rPlayer);
+                uno::Reference<graphic::XGraphic> xGraphic
+                    = m_xImpl->m_MediaProperties.getGraphic().GetXGraphic();
+                m_xImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame(rPlayer, xGraphic);
                 ActionChanged();
             }));
 
