@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "771c6aa3_75571292",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2164,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-16T09:16:37Z",
+      "side": 1,
+      "message": "i have no idea about calc, should this maybe do this DelayedSetNumberFormat thing?",
+      "revId": "14001c1482f4a966dc3af5dea655e72a0bef0668",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
