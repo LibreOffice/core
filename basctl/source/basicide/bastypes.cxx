@@ -418,6 +418,11 @@ ExtendedEdit::ExtendedEdit(vcl::Window* pParent, WinBits nStyle)
     Control::SetLoseFocusHdl( LINK( this, ExtendedEdit, ImplLoseFocusHdl ) );
 }
 
+ExtendedEdit::~ExtendedEdit()
+{
+    Application::RemoveAccel( &aAcc );
+}
+
 IMPL_LINK_NOARG(ExtendedEdit, ImplGetFocusHdl, Control&, void)
 {
     Application::InsertAccel( &aAcc );

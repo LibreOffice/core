@@ -36,6 +36,7 @@ class ExtendedEdit final : public Edit
 
 public:
     ExtendedEdit(vcl::Window* pParent, WinBits nStyle);
+    ~ExtendedEdit();
 
     void            SetAccHdl( const Link<Accelerator&,void>& rLink )         { aAccHdl = rLink; }
     Accelerator&    GetAccelerator()                                          { return aAcc; }
