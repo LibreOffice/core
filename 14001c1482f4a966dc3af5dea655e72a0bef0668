@@ -16,6 +16,24 @@
       "message": "i have no idea about calc, should this maybe do this DelayedSetNumberFormat thing?",
       "revId": "14001c1482f4a966dc3af5dea655e72a0bef0668",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35a3657b_b5d70e55",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2164,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-05-16T10:04:50Z",
+      "side": 1,
+      "message": "While I know that\u0027s used for the threaded import stuff, I have no notion how the \"delayed\" format could be applied in this circumstance",
+      "parentUuid": "771c6aa3_75571292",
+      "revId": "14001c1482f4a966dc3af5dea655e72a0bef0668",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
