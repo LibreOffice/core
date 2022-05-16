@@ -34,6 +34,7 @@
 #include <chrdlg.hxx>
 #include <colwd.hxx>
 #include <contentcontroldlg.hxx>
+#include <contentcontrollistitemdlg.hxx>
 #include <convert.hxx>
 #include <cption.hxx>
 #include <dbinsdlg.hxx>
@@ -205,6 +206,11 @@ short AbstractSwFieldDlg_Impl::Execute()
 }
 
 short AbstractSwRenameXNamedDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+short AbstractSwContentControlListItemDlg_Impl::Execute()
 {
     return m_xDlg->run();
 }
@@ -840,6 +846,14 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwContentControlDl
                                                                                   SwWrtShell &rSh)
 {
     return VclPtr<AbstractGenericDialog_Impl>::Create(std::make_shared<SwContentControlDlg>(pParent, rSh));
+}
+
+VclPtr<AbstractSwContentControlListItemDlg>
+SwAbstractDialogFactory_Impl::CreateSwContentControlListItemDlg(weld::Window* pParent,
+                                                                SwContentControlListItem& rItem)
+{
+    return VclPtr<AbstractSwContentControlListItemDlg_Impl>::Create(
+        std::make_unique<SwContentControlListItemDlg>(pParent, rItem));
 }
 
 std::shared_ptr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(weld::Window* pParent, SwWrtShell &rSh)

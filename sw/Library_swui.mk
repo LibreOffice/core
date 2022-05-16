@@ -138,6 +138,7 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/index/swuiidxmrk \
     sw/source/ui/misc/bookmark \
     sw/source/ui/misc/contentcontroldlg \
+    sw/source/ui/misc/contentcontrollistitemdlg \
     sw/source/ui/misc/docfnote \
     sw/source/ui/misc/glosbib \
     sw/source/ui/misc/glossary \
