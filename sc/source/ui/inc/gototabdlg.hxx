@@ -1,0 +1,52 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#include <vcl/weld.hxx>
+
+class ScGoToTabDlg : public weld::GenericDialogController
+{
+private:
+    std::vector<OUString> maCacheSheetsNames;
+
+    std::unique_ptr<weld::Frame> m_xFrameMask;
+    std::unique_ptr<weld::Entry> m_xEnNameMask;
+    std::unique_ptr<weld::Frame> m_xFrameSheets;
+    std::unique_ptr<weld::TreeView> m_xLb;
+
+    DECL_LINK(DblClkHdl, weld::TreeView&, bool);
+    DECL_LINK(FindNameHdl, weld::Entry&, void);
+
+public:
+    ScGoToTabDlg(weld::Window* pParent);
+    virtual ~ScGoToTabDlg() override;
+
+    /** Sets dialog title, label texts and help IDs. */
+    void SetDescription(const OUString& rTitle, const OUString& rEntryLabel,
+                        const OUString& rListLabel, const OString& rDlgHelpId,
+                        const OString& rEnHelpId, const OString& rLbHelpId);
+
+    /** Inserts a string into the weld::TreeView. */
+    void Insert(const OUString& rString, bool bSelected);
+
+    OUString GetSelectedEntry() const;
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
