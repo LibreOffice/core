@@ -338,6 +338,11 @@ QVariant QtMimeData::retrieveData(const QString& mimeType, QMetaType) const
             OString aLocaleString(OUStringToOString(aString, osl_getThreadTextEncoding()));
             aByteArray = QByteArray(aLocaleString.getStr(), aLocaleString.getLength());
         }
+        else if (bWantUTF16)
+        {
+            aByteArray = QByteArray(reinterpret_cast<const char*>(aString.getStr()),
+                                    aString.getLength() * 2);
+        }
         else
             return QVariant(toQString(aString));
     }
