@@ -55,6 +55,9 @@ void DataTableConverter::convertFromModel(uno::Reference<chart2::XDiagram> const
             aPropSet.setProperty(PROP_Outline, mrModel.mbShowOutline);
         if (mrModel.mbShowKeys)
             aPropSet.setProperty(PROP_Keys, mrModel.mbShowKeys);
+
+        getFormatter().convertFormatting(aPropSet, mrModel.mxShapeProp, mrModel.mxTextProp,
+                                         OBJECTTYPE_DATATABLE);
     }
     catch (uno::Exception&)
     {
