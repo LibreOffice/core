@@ -26,8 +26,8 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart/X3DDefaultSetter.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include "ModifyListenerHelper.hxx"
 #include "charttoolsdllapi.hxx"
 
@@ -41,6 +41,7 @@ namespace chart
 {
 class BaseCoordinateSystem;
 class Legend;
+class DataTable;
 class Wall;
 
 namespace impl
@@ -110,6 +111,9 @@ public:
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
+    virtual css::uno::Reference<css::chart2::XDataTable> SAL_CALL getDataTable() override;
+    virtual void SAL_CALL setDataTable(const css::uno::Reference<css::chart2::XDataTable>& xDataTable) override;
+
     // ____ XCoordinateSystemContainer ____
     virtual void SAL_CALL addCoordinateSystem(
         const css::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys ) override;
@@ -150,8 +154,14 @@ public:
     const rtl::Reference< ::chart::Legend > & getLegend2() const { return m_xLegend; }
     void setLegend(const rtl::Reference< ::chart::Legend > &);
 
-private:
+    void setDataTable(const rtl::Reference<::chart::DataTable>& xNewDataTable);
 
+    rtl::Reference<::chart::DataTable> const& getDataTableRef() const
+    {
+        return m_xDataTable;
+    };
+
+private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
         const css::lang::EventObject& aEvent ) override;
@@ -175,6 +185,7 @@ private:
     css::uno::Reference<css::chart2::XTitle> m_xTitle;
 
     rtl::Reference<::chart::Legend> m_xLegend;
+    rtl::Reference<::chart::DataTable> m_xDataTable;
     css::uno::Reference<css::chart2::XColorScheme> m_xColorScheme;
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 

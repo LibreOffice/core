@@ -1,0 +1,48 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/** Describes a data table for a Diagram.
+    @since LibreOffice 7.5
+ */
+service DataTable
+{
+    service com::sun::star::beans::PropertySet;
+    service com::sun::star::drawing::FillProperties;
+    service com::sun::star::drawing::LineProperties;
+
+    /** The interface for registering and removing data table entries.
+     */
+    interface ::com::sun::star::chart2::XDataTable;
+
+    /** Show the horizontal border of the data table */
+    [optional, property] boolean HBorder;
+
+    /** Show the vertical border of the data table */
+    [optional, property] boolean VBorder;
+
+    /** Show the outline of the data table */
+    [optional, property] boolean Outline;
+
+    /** Show the legend keys in the data table */
+    [optional, property] boolean Keys;
+
+};
+
+}; }; }; }; // com::sun::star::chart2
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
