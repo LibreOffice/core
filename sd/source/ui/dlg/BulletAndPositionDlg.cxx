@@ -138,7 +138,7 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     m_xWidthMF->connect_value_changed(LINK(this, SvxBulletAndPositionDlg, SizeHdl_Impl));
     m_xHeightMF->connect_value_changed(LINK(this, SvxBulletAndPositionDlg, SizeHdl_Impl));
     m_xRatioCB->connect_toggled(LINK(this, SvxBulletAndPositionDlg, RatioHdl_Impl));
-    m_xStartED->connect_changed(LINK(this, SvxBulletAndPositionDlg, EditModifyHdl_Impl));
+    m_xStartED->connect_value_changed(LINK(this, SvxBulletAndPositionDlg, SpinModifyHdl_Impl));
     m_xPrefixED->connect_changed(LINK(this, SvxBulletAndPositionDlg, EditModifyHdl_Impl));
     m_xSuffixED->connect_changed(LINK(this, SvxBulletAndPositionDlg, EditModifyHdl_Impl));
     m_xBulRelSizeMF->connect_value_changed(LINK(this, SvxBulletAndPositionDlg, BulRelSizeHdl_Impl));
@@ -659,7 +659,7 @@ void SvxBulletAndPositionDlg::CheckForStartValue_Impl(sal_uInt16 nNumberingType)
                           || SVX_NUM_CHARS_LOWER_LETTER_N == nNumberingType;
     m_xStartED->set_min(bNoZeroAllowed ? 1 : 0);
     if (bIsNull && bNoZeroAllowed)
-        EditModifyHdl_Impl(*m_xStartED);
+        SpinModifyHdl_Impl(*m_xStartED);
 }
 
 IMPL_LINK(SvxBulletAndPositionDlg, LevelHdl_Impl, weld::TreeView&, rBox, void)
@@ -1123,6 +1123,11 @@ IMPL_LINK_NOARG(SvxBulletAndPositionDlg, ResetHdl_Impl, weld::Button&, void)
 IMPL_LINK(SvxBulletAndPositionDlg, EditModifyHdl_Impl, weld::Entry&, rEdit, void)
 {
     EditModifyHdl_Impl(&rEdit);
+}
+
+IMPL_LINK(SvxBulletAndPositionDlg, SpinModifyHdl_Impl, weld::SpinButton&, rSpinButton, void)
+{
+    EditModifyHdl_Impl(&rSpinButton);
 }
 
 IMPL_LINK(SvxBulletAndPositionDlg, DistanceHdl_Impl, weld::MetricSpinButton&, rFld, void)
