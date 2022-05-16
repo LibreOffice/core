@@ -18,7 +18,8 @@
  */
 
 #include <drawingml/chart/datatablecontext.hxx>
-
+#include <drawingml/shapepropertiescontext.hxx>
+#include <drawingml/textbodycontext.hxx>
 #include <drawingml/chart/plotareamodel.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
@@ -57,6 +58,10 @@ ContextHandlerRef DataTableContext::onCreateContext(sal_Int32 nElement,
                 case C_TOKEN(showKeys):
                     mrModel.mbShowKeys = rAttribs.getBool(XML_val, false);
                     break;
+                case C_TOKEN(spPr):
+                    return new ShapePropertiesContext(*this, mrModel.mxShapeProp.create());
+                case C_TOKEN(txPr):
+                    return new TextBodyContext(*this, mrModel.mxTextProp.create());
             }
             break;
     }
