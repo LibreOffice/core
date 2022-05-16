@@ -823,10 +823,7 @@ bool PDFPage::emit(sal_Int32 nParentObject )
         }
         aLine.append( ">>\n" );
     }
-    if( m_pWriter->getVersion() > PDFWriter::PDFVersion::PDF_1_3 && ! m_pWriter->m_bIsPDF_A1 )
-    {
-        aLine.append( "/Group<</S/Transparency/CS/DeviceRGB/I true>>" );
-    }
+
     aLine.append( "/Contents" );
     unsigned int nStreamObjects = m_aStreamObjects.size();
     if( nStreamObjects > 1 )
