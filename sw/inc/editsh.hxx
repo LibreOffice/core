@@ -710,6 +710,11 @@ public:
     /// For Inserting SoftHyphen. Position is offset within the syllabificated word.
     static void InsertSoftHyph( const sal_Int32 nHyphPos );
 
+    /**
+     * Inserts an nRows x nCols table to the document at the current position. Unlike the UI, this
+     * function does not move the user's cursor to the first cell of the just inserted table, use
+     * `MoveTable(GotoPrevTable, fnTableStart)` to do that.
+     */
     const SwTable& InsertTable( const SwInsertTableOptions& rInsTableOpts,  ///< All
                                 sal_uInt16 nRows, sal_uInt16 nCols,
                                 const SwTableAutoFormat* pTAFormat = nullptr );
