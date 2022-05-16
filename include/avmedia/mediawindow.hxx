@@ -103,7 +103,7 @@ namespace avmedia
         static css::uno::Reference< css::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = nullptr );
 
         static css::uno::Reference< css::graphic::XGraphic > grabFrame( const OUString& rURL, const OUString& rReferer,
-            const OUString& sMimeType );
+            const OUString& sMimeType, const css::uno::Reference<css::graphic::XGraphic>& rGraphic = nullptr);
 
     private:
         MediaWindow(const MediaWindow&) = delete;
