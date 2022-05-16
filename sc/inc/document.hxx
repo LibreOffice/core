@@ -323,7 +323,6 @@ class ScDocument
 friend class ScValueIterator;
 friend class ScHorizontalValueIterator;
 friend class ScDBQueryDataIterator;
-friend class ScFormulaGroupIterator;
 friend class ScCellIterator;
 template< ScQueryCellIteratorAccess accessType, ScQueryCellIteratorType queryType >
 friend class ScQueryCellIteratorBase;
@@ -332,22 +331,15 @@ friend class ScQueryCellIteratorAccessSpecific;
 friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 friend class ScDocAttrIterator;
-friend class ScAccessibleTableBase;
 friend class ScAttrRectIterator;
 friend class ScDocShell;
 friend class ScDocRowHeightUpdater;
 friend class ScColumnTextWidthIterator;
-friend class ScFormulaCell;
 friend class ScTable;
 friend class ScColumn;
 friend struct ScRefCellValue;
 friend class ScDocumentImport;
-friend class sc::DocumentStreamAccess;
-friend class sc::ColumnSpanSet;
-friend class sc::RangeColumnSpanSet;
 friend class sc::EditTextIterator;
-friend class sc::FormulaGroupAreaListener;
-friend class sc::TableColumnBlockPositionSet;
 friend struct ScMutationGuard;
 friend struct ScMutationDisable;
 
