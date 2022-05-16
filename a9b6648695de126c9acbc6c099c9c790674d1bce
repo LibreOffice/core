@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fea1085_919d1cc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-05-16T13:59:17Z",
+      "side": 1,
+      "message": "Aron, could you please check if 1) you can reproduce the problem with not being able to type into the child tunnelled dialog with online:master against core:co-22.05, and if yes, 2) whether this helps.\n\nI am not able to check myself as I run into different problems with crashes at various stages before I even get to try to click the Format menu button...",
+      "revId": "a9b6648695de126c9acbc6c099c9c790674d1bce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
