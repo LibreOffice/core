@@ -6,13 +6,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
+from uitest.framework import UITestCase
 
+from libreoffice.calc.document import get_column
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
-from uitest.framework import UITestCase
-from libreoffice.calc.document import get_column
-
-import time
 
 def get_column_hidden(doc, index):
     column = get_column(doc, index)
