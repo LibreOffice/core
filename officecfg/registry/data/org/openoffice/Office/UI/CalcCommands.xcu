@@ -557,6 +557,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:JumpToTable" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">GoTo Sheet...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:StarChartDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Ch~art...</value>
