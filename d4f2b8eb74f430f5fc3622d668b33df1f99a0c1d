@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27497722_3c9f0627",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-16T09:04:53Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/c/core/+/134390\u003e \"Revert \u0027use more string_view in getNameNoExtension\u0027\"",
+      "revId": "d4f2b8eb74f430f5fc3622d668b33df1f99a0c1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
