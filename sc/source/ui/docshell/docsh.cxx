@@ -139,6 +139,8 @@
 #include <vector>
 
 #include <comphelper/lok.hxx>
+#include <svtools/sfxecode.hxx>
+#include <unotools/pathoptions.hxx>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -1808,6 +1810,17 @@ bool ScDocShell::SaveAs( SfxMedium& rMedium )
     if (bNeedsRehash)
     {   // SHA256 explicitly supported in ODF 1.2, implicitly in ODF 1.1
         bNeedsRehash = ScPassHashHelper::needsPassHashRegen(m_aDocument, PASSHASH_SHA256);
+    }
+
+    // skip saving recovery file instead of showing re-type password dialog window
+    if ( bNeedsRehash && rMedium.GetFilter()->GetFilterName() == "calc8" &&
+            // it seems, utl::MediaDescriptor::PROP_AUTOSAVEEVENT is true at Save As, too,
+            // so check the backup path
+            rMedium.GetName().startsWith( SvtPathOptions().GetBackupPath() ) )
+    {
+        SAL_WARN("sc.filter", "Should re-type password for own format, won't export recovery file");
+        rMedium.SetError(ERRCODE_SFX_WRONGPASSWORD);
+        return false;
     }
 
     if (pViewShell && bNeedsRehash)
