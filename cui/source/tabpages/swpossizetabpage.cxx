@@ -261,8 +261,8 @@ FrmMap const aHParaHtmlAbsMap[] =
 };
 
 
-constexpr auto VERT_PARA_REL = LB::VertFrame|LB::VertPrintArea|
-                                      LB::RelPageFrame|LB::RelPagePrintArea| LB::RelPagePrintAreaTop |LB::RelPagePrintAreaBottom;
+constexpr auto VERT_PARA_REL = LB::VertPrintArea|LB::RelPageFrame|LB::RelPagePrintArea|
+                                      LB::RelPagePrintAreaTop |LB::RelPagePrintAreaBottom;
 
 FrmMap const aVParaMap[] =
 {
@@ -310,8 +310,8 @@ static FrmMap aHCharHtmlAbsMap[] =
 
 // #i18732# - allow vertical alignment at page areas
 // #i22341# - handle <LB::RelChar> on its own
-constexpr auto VERT_CHAR_REL = LB::VertFrame|LB::VertPrintArea|
-                                      LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPagePrintAreaBottom;
+constexpr auto VERT_CHAR_REL = LB::VertPrintArea|LB::RelPageFrame|
+                                      LB::RelPagePrintArea|LB::RelPagePrintAreaBottom;
 
 static FrmMap aVCharMap[] =
 {
