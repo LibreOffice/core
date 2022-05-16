@@ -17,7 +17,8 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkButton" id="btnFormatFonts">
-            <property name="label">Fonts</property> <!-- No need to translate - set in code -->
+            <!-- No need to translate - set in code -->
+            <property name="label" translatable="no">Fonts</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="valign">start</property>
@@ -31,7 +32,8 @@
         </child>
         <child>
           <object class="GtkButton" id="btnFormatFontSize">
-            <property name="label">Font Size</property> <!-- No need to translate - set in code -->
+            <!-- No need to translate - set in code -->
+            <property name="label" translatable="no">Font Size</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="valign">start</property>
@@ -45,7 +47,8 @@
         </child>
         <child>
           <object class="GtkButton" id="btnFormatSpacing">
-            <property name="label">Spacing</property> <!-- No need to translate - set in code -->
+            <!-- No need to translate - set in code -->
+            <property name="label" translatable="no">Spacing</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="valign">start</property>
@@ -59,7 +62,8 @@
         </child>
         <child>
           <object class="GtkButton" id="btnFormatAlignment">
-            <property name="label">Alignment</property> <!-- No need to translate - set in code -->
+            <!-- No need to translate - set in code -->
+            <property name="label" translatable="no">Alignment</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="valign">start</property>
