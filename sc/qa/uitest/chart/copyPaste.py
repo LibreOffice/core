@@ -6,13 +6,14 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-
 import unittest
 import platform
+
 from uitest.framework import UITestCase
-from libreoffice.calc.document import get_cell_by_position
-from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_url_for_data_file
+
+from libreoffice.uno.propertyvalue import mkPropertyValues
+
 
 class CopyPaste(UITestCase):
 

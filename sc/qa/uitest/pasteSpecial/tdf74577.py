@@ -8,8 +8,9 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
-from libreoffice.uno.propertyvalue import mkPropertyValues
+
 from libreoffice.calc.document import get_cell_by_position
+
 
 class tdf74577(UITestCase):
 
