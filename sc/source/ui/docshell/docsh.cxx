@@ -2857,9 +2857,9 @@ std::unique_ptr<ScDocFunc> ScDocShell::CreateDocFunc()
     return std::make_unique<ScDocFuncDirect>( *this );
 }
 
-ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags ) :
+ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags, const std::shared_ptr<ScDocument>& pDoc ) :
     SfxObjectShell( i_nSfxCreationFlags ),
-    m_pDocument       (std::make_shared<ScDocument>( SCDOCMODE_DOCUMENT, this )),
+    m_pDocument       ( pDoc ? pDoc : std::make_shared<ScDocument>( SCDOCMODE_DOCUMENT, this )),
     m_aDdeTextFmt(OUString("TEXT")),
     m_nPrtToScreenFactor( 1.0 ),
     m_pImpl           ( new DocShell_Impl ),
