@@ -362,6 +362,9 @@ void ScDocument::UpdateChart( const OUString& rChartName )
 
 void ScDocument::RestoreChartListener( const OUString& rName )
 {
+    if (!pChartListenerCollection)
+        return;
+
     // Read the data ranges from the chart object, and start listening to those ranges again
     // (called when a chart is saved, because then it might be swapped out and stop listening itself).
 

@@ -109,8 +109,8 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument& rDoc, double nPr
     ScPrintFunc::DrawToDev( rDoc, pDev, nPrintFactor, aBound, &aViewData, false/*bMetaFile*/ );
 }
 
-ScTransferObj::ScTransferObj( ScDocumentUniquePtr pClipDoc, const TransferableObjectDescriptor& rDesc ) :
-    m_pDoc( std::move(pClipDoc ) ),
+ScTransferObj::ScTransferObj( const std::shared_ptr<ScDocument>& pClipDoc, const TransferableObjectDescriptor& rDesc ) :
+    m_pDoc( pClipDoc ),
     m_nNonFiltered(0),
     m_aObjDesc( rDesc ),
     m_nDragHandleX( 0 ),
@@ -813,14 +813,14 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         rDestDoc.UpdateChartListenerCollection();
 }
 
-SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle )
+SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle, const std::shared_ptr<ScDocument>& pDoc )
 {
     // update ScGlobal::xDrawClipDocShellRef
 
     ScGlobal::xDrawClipDocShellRef.clear();
     if (bAnyOle)
     {
-        ScGlobal::xDrawClipDocShellRef = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS); // there must be a ref
+        ScGlobal::xDrawClipDocShellRef = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS, pDoc); // there must be a ref
         ScGlobal::xDrawClipDocShellRef->DoInitNew();
     }
 
