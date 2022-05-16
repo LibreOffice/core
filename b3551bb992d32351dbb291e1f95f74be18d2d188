@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd98d522_0dc154b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-16T02:16:47Z",
+      "side": 1,
+      "message": "Maybe you have noticed that the Vertical option \"Entire Frame\" continues to appear for \"To Paragraph\" and \"To Anchor\" -- (though now the Vertical options for \"To Frame\" anchoring appears to be correct). \n\nI have made a test file to convince myself that \"Entire Frame\" and \"Paragraph Text Area\" are identical -- but I do not understand why Entire Frame continues to appear.\n\nAnyway -- here is a first proposal for a patch that removes \"Margin\" (now \"Entire Frame\") from the options.  \n\nI will mention this issue in the BZ ticket, but first I want to be sure that I am on the right track here.  Thanks.",
+      "revId": "b3551bb992d32351dbb291e1f95f74be18d2d188",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
