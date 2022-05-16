@@ -91,7 +91,6 @@
 #include <osl/file.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/lok.hxx>
-#include <i18nlangtag/languagetag.hxx>
 
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
@@ -3169,11 +3168,6 @@ bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
         return false;
 }
 
-namespace
-{
-static LanguageTag g_defaultLanguageTag("en-US", true);
-}
-
 bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
 {
     uno::Reference< embed::XStorage > xStorage = rMedium.GetStorage();
@@ -3196,31 +3190,6 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
             pImpl->aBasicManager.storeLibrariesToStorage( xStorage );
         }
 #endif
-
-        // Because XMLTextFieldExport::ExportFieldDeclarations (called from SwXMLExport)
-        // calls SwXTextFieldMasters::getByName, which in turn maps property names by
-        // calling SwStyleNameMapper::GetTextUINameArray, which uses
-        // SvtSysLocale().GetUILanguageTag() to do the mapping, saving indirectly depends
-        // on the UI language. This is an unfortunate depenency.
-        // Here we restore to English
-        const auto viewLanguage = comphelper::LibreOfficeKit::getLanguageTag();
-
-        // Use the default language for saving and restore later if necessary.
-        bool restoreLanguage = false;
-        if (comphelper::LibreOfficeKit::isActive() && viewLanguage != g_defaultLanguageTag)
-        {
-            restoreLanguage = true;
-            comphelper::LibreOfficeKit::setLanguageTag(g_defaultLanguageTag);
-        }
-
-        // Restore the view's original language automatically and as necessary.
-        const ::comphelper::ScopeGuard aGuard(
-            [&viewLanguage, restoreLanguage]()
-            {
-                if (restoreLanguage && viewLanguage != comphelper::LibreOfficeKit::getLanguageTag())
-                    comphelper::LibreOfficeKit::setLanguageTag(viewLanguage);
-            });
-
         return SaveAs( rMedium );
     }
     else return false;
