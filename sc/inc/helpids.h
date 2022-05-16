@@ -63,6 +63,7 @@ inline constexpr OStringLiteral HID_PASSWD_DOC_CONFIRM = "SC_HID_PASSWD_DOC_CONF
 
 // Other help IDs (max.70) ---------------------------------------------------
 inline constexpr OStringLiteral HID_SELECTTABLES = "SC_HID_SELECTTABLES";
+inline constexpr OStringLiteral HID_GOTOTABLE  = "SC_HID_GOTOTABLE";
 
 
 // Analysis Addin Functions (max.120) ----------------------------------------
