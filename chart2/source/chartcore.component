@@ -220,6 +220,13 @@
     <service name="com.sun.star.layout.LayoutElement"/>
     <service name="com.sun.star.style.CharacterProperties"/>
   </implementation>
+    <implementation name="com.sun.star.comp.chart2.DataTable"
+    constructor="com_sun_star_comp_chart2_DataTable_get_implementation">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.DataTable"/>
+    <service name="com.sun.star.drawing.FillProperties"/>
+    <service name="com.sun.star.drawing.LineProperties"/>
+  </implementation>
   <implementation name="com.sun.star.comp.chart2.PageBackground"
     constructor="com_sun_star_comp_chart2_PageBackground_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>

@@ -28,6 +28,7 @@
 #include <CloneHelper.hxx>
 #include <SceneProperties.hxx>
 #include <unonames.hxx>
+#include <DataTable.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -157,21 +158,6 @@ void lcl_AddPropertiesToVector(
                   PROP_DIAGRAM_3DRELATIVEHEIGHT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::MAYBEVOID );
-    rOutProperties.emplace_back( "DataTableHBorder",
-               PROP_DIAGRAM_DATATABLEHBORDER,
-                 cppu::UnoType<bool>::get(),
-                 beans::PropertyAttribute::BOUND
-                 | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "DataTableVBorder",
-               PROP_DIAGRAM_DATATABLEVBORDER,
-                 cppu::UnoType<bool>::get(),
-                 beans::PropertyAttribute::BOUND
-                 | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "DataTableOutline",
-               PROP_DIAGRAM_DATATABLEOUTLINE,
-                 cppu::UnoType<bool>::get(),
-                 beans::PropertyAttribute::BOUND
-                 | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( "ExternalData",
                   PROP_DIAGRAM_EXTERNALDATA,
                   cppu::UnoType<OUString>::get(),
@@ -189,9 +175,6 @@ const ::chart::tPropertyValueMap& StaticDiagramDefaults()
         ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );
         ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS, true );
         ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_DATATABLEHBORDER, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_DATATABLEVBORDER, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( aMap, PROP_DIAGRAM_DATATABLEOUTLINE, false );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aMap, PROP_DIAGRAM_3DRELATIVEHEIGHT, 100 );
         ::chart::SceneProperties::AddDefaultsToMap( aMap );
@@ -640,6 +623,42 @@ void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) co
     }
     else
         ::property::OPropertySet::getFastPropertyValue( rValue,nHandle );
+}
+
+uno::Reference<chart2::XDataTable> SAL_CALL Diagram::getDataTable()
+{
+    MutexGuard aGuard(m_aMutex);
+    return m_xDataTable;
+}
+
+void SAL_CALL Diagram::setDataTable(const uno::Reference<chart2::XDataTable>& xDataTable)
+{
+    auto* pDataTable = dynamic_cast<DataTable*>(xDataTable.get());
+    assert(!xDataTable || pDataTable);
+    setDataTable(rtl::Reference<DataTable>(pDataTable));
+}
+
+void Diagram::setDataTable(const rtl::Reference<DataTable>& xNewDataTable)
+{
+    rtl::Reference<DataTable> xOldDataTable;
+    {
+        MutexGuard aGuard(m_aMutex);
+        if (m_xDataTable == xNewDataTable)
+            return;
+        xOldDataTable = m_xDataTable;
+        m_xDataTable = xNewDataTable;
+    }
+    if (xOldDataTable.is())
+    {
+        uno::Reference<chart2::XDataTable> xDataTable(xOldDataTable);
+        ModifyListenerHelper::removeListener(xDataTable, m_xModifyEventForwarder);
+    }
+    if (xNewDataTable.is())
+    {
+        uno::Reference<chart2::XDataTable> xDataTable(xNewDataTable);
+        ModifyListenerHelper::addListener(xDataTable, m_xModifyEventForwarder);
+    }
+    fireModifyEvent();
 }
 
 using impl::Diagram_Base;

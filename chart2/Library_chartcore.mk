@@ -136,6 +136,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/model/main/DataPointProperties \
     chart2/source/model/main/DataSeries \
     chart2/source/model/main/DataSeriesProperties \
+    chart2/source/model/main/DataTable \
     chart2/source/model/main/Diagram \
     chart2/source/model/main/FormattedString \
     chart2/source/model/main/GridProperties \

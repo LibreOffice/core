@@ -91,6 +91,15 @@ interface XDiagram : ::com::sun::star::uno::XInterface
      */
     void setDiagramData( [in] com::sun::star::chart2::data::XDataSource xDataSource,
         [in] sequence< com::sun::star::beans::PropertyValue > aArguments );
+
+
+    /** returns the data table
+     */
+    XDataTable getDataTable();
+
+    /** sets a new data table.
+     */
+    void setDataTable([in] XDataTable xDataTable);
 };
 
 } ; // chart2
