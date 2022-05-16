@@ -2169,9 +2169,15 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                     }
                                 }
                             }
-                            if (pList->GetCurrentLevel())
+
+                            sal_Int16 nCurrentLevel = GetListLevel(pEntry, pPropertyMap);
+                            if (nCurrentLevel == -1)
+                                nCurrentLevel = 0;
+
+                            const ListLevel::Pointer pListLevel = pList->GetLevel(nCurrentLevel);
+                            if (pListLevel)
                             {
-                                sal_Int16 nOverrideLevel = pList->GetCurrentLevel()->GetStartOverride();
+                                sal_Int16 nOverrideLevel = pListLevel->GetStartOverride();
                                 if (nOverrideLevel != -1 && m_aListOverrideApplied.find(nListId) == m_aListOverrideApplied.end())
                                 {
                                     // Apply override: we have override instruction for this level

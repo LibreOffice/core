@@ -7715,6 +7715,7 @@ void DocxAttributeOutput::OverrideNumberingDefinition(
     SwNumRule const& rAbstractRule = *(*m_rExport.m_pUsedNumTable)[nAbstractNum - 1];
     sal_uInt8 const nLevels = static_cast<sal_uInt8>(rRule.IsContinusNum()
         ? WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel);
+    sal_uInt8 nPreviousOverrideLevel = 0;
     for (sal_uInt8 nLevel = 0; nLevel < nLevels; ++nLevel)
     {
         const auto levelOverride = rLevelOverrides.find(nLevel);
@@ -7724,6 +7725,14 @@ void DocxAttributeOutput::OverrideNumberingDefinition(
         // or we have a level numbering override
         if (bListsAreDifferent || levelOverride != rLevelOverrides.end())
         {
+            // If there are "gaps" in w:lvlOverride numbers, MS Word can have issues with numbering.
+            // So we need to emit empty override tokens up to current one.
+            while (nPreviousOverrideLevel < nLevel)
+            {
+                m_pSerializer->singleElementNS(XML_w, XML_lvlOverride, FSNS(XML_w, XML_ilvl), OString::number(nPreviousOverrideLevel));
+                nPreviousOverrideLevel++;
+            }
+
             m_pSerializer->startElementNS(XML_w, XML_lvlOverride, FSNS(XML_w, XML_ilvl), OString::number(nLevel));
 
             if (bListsAreDifferent)
