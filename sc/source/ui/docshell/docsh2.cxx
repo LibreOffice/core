@@ -42,7 +42,7 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
     bool bRet = SfxObjectShell::InitNew( xStor );
 
-    m_aDocument.MakeTable(0);
+    m_pDocument->MakeTable(0);
 
     //  Additional tables are created by the first View, if bIsEmpty is still sal_True
     if( bRet )
@@ -58,8 +58,8 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     // InitOptions sets the document languages, must be called before CreateStandardStyles
     InitOptions(false);
 
-    m_aDocument.GetStyleSheetPool()->CreateStandardStyles();
-    m_aDocument.UpdStlShtPtrsFrmNms();
+    m_pDocument->GetStyleSheetPool()->CreateStandardStyles();
+    m_pDocument->UpdStlShtPtrsFrmNms();
 
     if (!m_bUcalcTest)
     {
@@ -74,8 +74,8 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
         if (pOrcus)
         {
-            pOrcus->importODS_Styles(m_aDocument, aPath);
-            m_aDocument.GetStyleSheetPool()->setAllParaStandard();
+            pOrcus->importODS_Styles(*m_pDocument, aPath);
+            m_pDocument->GetStyleSheetPool()->setAllParaStandard();
         }
     }
 
@@ -97,7 +97,7 @@ void ScDocShell::InitItems()
     // Printer Options are set in GetPrinter when printing
     UpdateFontList();
 
-    ScDrawLayer* pDrawLayer = m_aDocument.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = m_pDocument->GetDrawLayer();
     if (pDrawLayer)
     {
         PutItem( SvxColorListItem  ( pDrawLayer->GetColorList(), SID_COLOR_TABLE ) );
@@ -118,13 +118,13 @@ void ScDocShell::InitItems()
     }
 
     if (utl::ConfigManager::IsFuzzing() ||
-        (m_aDocument.GetForbiddenCharacters() && m_aDocument.IsValidAsianCompression() && m_aDocument.IsValidAsianKerning()))
+        (m_pDocument->GetForbiddenCharacters() && m_pDocument->IsValidAsianCompression() && m_pDocument->IsValidAsianKerning()))
         return;
 
     //  get settings from SvxAsianConfig
     SvxAsianConfig aAsian;
 
-    if (!m_aDocument.GetForbiddenCharacters())
+    if (!m_pDocument->GetForbiddenCharacters())
     {
         // set forbidden characters if necessary
         const uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
@@ -142,37 +142,37 @@ void ScDocShell::InitItems()
                 xForbiddenTable->SetForbiddenCharacters( eLang, aForbidden );
             }
 
-            m_aDocument.SetForbiddenCharacters( xForbiddenTable );
+            m_pDocument->SetForbiddenCharacters( xForbiddenTable );
         }
     }
 
-    if ( !m_aDocument.IsValidAsianCompression() )
+    if ( !m_pDocument->IsValidAsianCompression() )
     {
         // set compression mode from configuration if not already set (e.g. XML import)
-        m_aDocument.SetAsianCompression( aAsian.GetCharDistanceCompression() );
+        m_pDocument->SetAsianCompression( aAsian.GetCharDistanceCompression() );
     }
 
-    if ( !m_aDocument.IsValidAsianKerning() )
+    if ( !m_pDocument->IsValidAsianKerning() )
     {
         // set asian punctuation kerning from configuration if not already set (e.g. XML import)
-        m_aDocument.SetAsianKerning( !aAsian.IsKerningWesternTextOnly() );    // reversed
+        m_pDocument->SetAsianKerning( !aAsian.IsKerningWesternTextOnly() );    // reversed
     }
 }
 
 void ScDocShell::ResetDrawObjectShell()
 {
-    ScDrawLayer* pDrawLayer = m_aDocument.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = m_pDocument->GetDrawLayer();
     if (pDrawLayer)
         pDrawLayer->SetObjectShell( nullptr );
 }
 
 ScDrawLayer* ScDocShell::MakeDrawLayer()
 {
-    ScDrawLayer* pDrawLayer = m_aDocument.GetDrawLayer();
+    ScDrawLayer* pDrawLayer = m_pDocument->GetDrawLayer();
     if (!pDrawLayer)
     {
-        m_aDocument.InitDrawLayer(this);
-        pDrawLayer = m_aDocument.GetDrawLayer();
+        m_pDocument->InitDrawLayer(this);
+        pDrawLayer = m_pDocument->GetDrawLayer();
         InitItems(); // including Undo and Basic
         Broadcast( SfxHint( SfxHintId::ScDrawLayerNew ) );
         if (m_nDocumentLock)
