@@ -190,6 +190,7 @@ public:
     void testXlsxRowsOrder();
     void testTdf91286();
     void testTdf148820();
+    void testEmbeddedTextInDecimal();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -312,6 +313,7 @@ public:
     CPPUNIT_TEST(testXlsxRowsOrder);
     CPPUNIT_TEST(testTdf91286);
     CPPUNIT_TEST(testTdf148820);
+    CPPUNIT_TEST(testEmbeddedTextInDecimal);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3090,6 +3092,32 @@ void ScExportTest2::testTdf148820()
         = OString("/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nDxfIdCondFormatLast)
                   + "]/x:fill/x:patternFill/x:bgColor");
     assertXPath(pStyles, sDxfCondFormatXPath, "rgb", "FFA30000");
+
+    xDocSh->DoClose();
+}
+
+namespace
+{
+void lcl_TestEmbeddedTextInDecimal(ScDocShellRef xDocSh)
+{
+    CPPUNIT_ASSERT(xDocSh);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    sal_uInt32 nNumberFormat = rDoc.GetNumberFormat(0, 0, 0);
+    const SvNumberformat* pNumberFormat = rDoc.GetFormatTable()->GetEntry(nNumberFormat);
+    const OUString& rFormatStr = pNumberFormat->GetFormatstring();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("#,##0.000\" \"###\" \"###"), rFormatStr);
+}
+}
+
+void ScExportTest2::testEmbeddedTextInDecimal()
+{
+    ScDocShellRef xDocSh = loadDoc(u"embedded-text-in-decimal.", FORMAT_XLSX);
+    lcl_TestEmbeddedTextInDecimal(xDocSh);
+
+    // save to ODS and reload
+    xDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
+    lcl_TestEmbeddedTextInDecimal(xDocSh);
 
     xDocSh->DoClose();
 }
