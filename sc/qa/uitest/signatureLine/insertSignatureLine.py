@@ -8,12 +8,11 @@
 #
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
+
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
-#Bug 117903 - Allow signature lines in Calc
 
+# Bug 117903 - Allow signature lines in Calc
 class insertSignatureLineCalc(UITestCase):
 
    def test_insert_signature_line_calc(self):
