@@ -153,8 +153,9 @@ TickmarkProperties AxisProperties::getBiggestTickmarkProperties()
     return aTickmarkProperties;
 }
 
-AxisProperties::AxisProperties( rtl::Reference< Axis > xAxisModel
-                              , ExplicitCategoriesProvider* pExplicitCategoriesProvider )
+AxisProperties::AxisProperties(rtl::Reference<::chart::Axis> xAxisModel,
+                               ExplicitCategoriesProvider* pExplicitCategoriesProvider,
+                               rtl::Reference<::chart::DataTable> const& xDataTableModel)
     : m_xAxisModel(std::move(xAxisModel))
     , m_nDimensionIndex(0)
     , m_bIsMainAxis(true)
@@ -174,6 +175,7 @@ AxisProperties::AxisProperties( rtl::Reference< Axis > xAxisModel
     , m_bComplexCategories(false)
     , m_pExplicitCategoriesProvider(pExplicitCategoriesProvider)
     , m_bLimitSpaceForLabels(false)
+    , m_xDataTableModel(xDataTableModel)
 {
 }
 
@@ -256,7 +258,9 @@ void AxisProperties::init( bool bCartesian )
     if( bCartesian )
     {
         if (m_nDimensionIndex == 0)
-            m_bDisplayDataTable = false;
+        {
+            m_bDisplayDataTable = m_xDataTableModel.is();
+        }
 
         if( m_nDimensionIndex == 0 && m_nAxisType == AxisType::CATEGORY
                 && m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )

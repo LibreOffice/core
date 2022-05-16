@@ -23,6 +23,8 @@
 #include <BaseCoordinateSystem.hxx>
 #include <AxisIndexDefines.hxx>
 #include <Axis.hxx>
+#include <DataTable.hxx>
+#include <Diagram.hxx>
 #include <AxisHelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ChartModel.hxx>
@@ -130,7 +132,8 @@ void VCartesianCoordinateSystem::createVAxisList(
             if(!xAxis.is() || !AxisHelper::shouldAxisBeDisplayed( xAxis, m_xCooSysModel ))
                 continue;
 
-            AxisProperties aAxisProperties(xAxis,getExplicitCategoriesProvider());
+            rtl::Reference<Diagram> xDiagram(xChartDoc->getFirstChartDiagram());
+            AxisProperties aAxisProperties(xAxis, getExplicitCategoriesProvider(), xDiagram->getDataTableRef());
             aAxisProperties.m_nDimensionIndex = nDimensionIndex;
             aAxisProperties.m_bSwapXAndY = bSwapXAndY;
             aAxisProperties.m_bIsMainAxis = (nAxisIndex==0);
