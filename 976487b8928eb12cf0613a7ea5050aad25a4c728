@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adc5ab16_9df92b8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-16T08:59:15Z",
+      "side": 1,
+      "message": "well i\u0027d say 1) is sweeping the problem under the rug - currently the MarkManager has the invariant that m_vAllMarks is always sorted by position, so clearly there\u0027s a bug somewhere that causes it to become unsorted.",
+      "parentUuid": "bfcf0325_5f53318e",
+      "revId": "976487b8928eb12cf0613a7ea5050aad25a4c728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b46353ba_a737ee8a",
