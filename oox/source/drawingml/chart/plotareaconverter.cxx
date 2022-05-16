@@ -433,8 +433,11 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
         nAxesSetIdx = 1 - nAxesSetIdx;
     }
 
-    DataTableConverter dataTableConverter (*this, mrModel.mxDataTable.getOrCreate());
-    dataTableConverter.convertFromModel(xDiagram);
+    if (mrModel.mxDataTable)
+    {
+        DataTableConverter dataTableConverter(*this, *mrModel.mxDataTable);
+        dataTableConverter.convertFromModel(xDiagram);
+    }
 
     // plot area formatting
     if( xDiagram.is() && !mb3dChart )
