@@ -34,6 +34,24 @@
       "parentUuid": "771c6aa3_75571292",
       "revId": "14001c1482f4a966dc3af5dea655e72a0bef0668",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83b2910b_9c52fec4",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2164,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-05-16T14:02:55Z",
+      "side": 1,
+      "message": "Right. This is only hit for a threaded group recalc so would miss the \"usual\" non-threaded case. It\u0027s odd enough that an export to PDF triggers a recalc *with* setting the format, probably because the cell was never calculated before and the General format was still set as imported from .xlsx",
+      "parentUuid": "35a3657b_b5d70e55",
+      "revId": "14001c1482f4a966dc3af5dea655e72a0bef0668",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
