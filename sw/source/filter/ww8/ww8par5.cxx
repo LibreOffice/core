@@ -1316,13 +1316,13 @@ tools::Long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     }
     else
     {
-        nNo = m_xReffingStck->aFieldVarNames.size()+1;
+        nNo = m_xReffingStck->m_aFieldVarNames.size()+1;
         sName = "WWSetBkmk" + OUString::number(nNo);
         nNo += m_xPlcxMan->GetBook()->GetIMax();
     }
     m_xReffedStck->NewAttr(*m_pPaM->GetPoint(),
         SwFltBookmark( BookmarkToWriter(sName), rData, nNo ));
-    m_xReffingStck->aFieldVarNames[rOrigName] = sName;
+    m_xReffingStck->m_aFieldVarNames[rOrigName] = sName;
     return nNo;
 }
 
@@ -1345,9 +1345,9 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pField,
         //Get the name of the ref field, and see if actually a variable
         const OUString sName = pField->GetPar1();
         std::map<OUString, OUString, SwWW8::ltstr>::const_iterator
-            aResult = aFieldVarNames.find(sName);
+            aResult = m_aFieldVarNames.find(sName);
 
-        if (aResult != aFieldVarNames.end())
+        if (aResult != m_aFieldVarNames.end())
         {
             SwGetExpField aField( static_cast<SwGetExpFieldType*>(
                 m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetExp)), sName, nsSwGetSetExpType::GSE_STRING, 0);
@@ -1368,9 +1368,9 @@ OUString SwWW8ImplReader::GetMappedBookmark(std::u16string_view rOrigName)
     //See if there has been a variable set with this name, if so get
     //the pseudo bookmark name that was set with it.
     std::map<OUString, OUString, SwWW8::ltstr>::const_iterator aResult =
-            m_xReffingStck->aFieldVarNames.find(sName);
+            m_xReffingStck->m_aFieldVarNames.find(sName);
 
-    return (aResult == m_xReffingStck->aFieldVarNames.end())
+    return (aResult == m_xReffingStck->m_aFieldVarNames.end())
         ? sName : (*aResult).second;
 }
 
@@ -2138,7 +2138,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
     {
         sBkmName = EnsureTOCBookmarkName(sBkmName);
         // track <sBookmarkName> as referenced TOC bookmark.
-        m_xReffedStck->aReferencedTOCBookmarks.insert( sBkmName );
+        m_xReffedStck->m_aReferencedTOCBookmarks.insert( sBkmName );
     }
 
     SwGetRefField aField(
@@ -2246,7 +2246,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
             {
                 sBookmarkName = EnsureTOCBookmarkName(sName);
                 // track <sBookmarkName> as referenced TOC bookmark.
-                m_xReffedStck->aReferencedTOCBookmarks.insert( sBookmarkName );
+                m_xReffedStck->m_aReferencedTOCBookmarks.insert( sBookmarkName );
             }
             else
             {
@@ -2271,7 +2271,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
     {
         sPageRefBookmarkName = EnsureTOCBookmarkName(sName);
         // track <sPageRefBookmarkName> as referenced TOC bookmark.
-        m_xReffedStck->aReferencedTOCBookmarks.insert( sPageRefBookmarkName );
+        m_xReffedStck->m_aReferencedTOCBookmarks.insert( sPageRefBookmarkName );
     }
     else
     {
@@ -3566,7 +3566,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
                     {
                         sMark = EnsureTOCBookmarkName(sMark);
                         // track <sMark> as referenced TOC bookmark.
-                        m_xReffedStck->aReferencedTOCBookmarks.insert( sMark );
+                        m_xReffedStck->m_aReferencedTOCBookmarks.insert( sMark );
                     }
 
                     if (m_bLoadingTOXCache)

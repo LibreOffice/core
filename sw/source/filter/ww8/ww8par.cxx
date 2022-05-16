@@ -478,7 +478,7 @@ Sttb::getStringAtIndex( sal_uInt32 index )
 SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr, bool bSkipImages )
     : SvxMSDffManager(*rRdr.m_pTableStream, rRdr.GetBaseURL(), rRdr.m_xWwFib->m_fcDggInfo,
         rRdr.m_pDataStream, nullptr, 0, COL_WHITE, rRdr.m_pStrm, bSkipImages),
-    rReader(rRdr), pFallbackStream(nullptr)
+    m_rReader(rRdr), m_pFallbackStream(nullptr)
 {
     SetSvxMSDffSettings( GetSvxMSDffSettings() );
     nSvxMSDffOLEConvFlags = SwMSDffManager::GetFilterFlags();
@@ -526,10 +526,10 @@ SdrObject* SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
     {
         tools::SvRef<SotStorage> xSrc = xSrcStg->OpenSotStorage( sStorageName );
-        OSL_ENSURE(rReader.m_xFormImpl, "No Form Implementation!");
+        OSL_ENSURE(m_rReader.m_xFormImpl, "No Form Implementation!");
         css::uno::Reference< css::drawing::XShape > xShape;
-        if ( (!(rReader.m_bIsHeader || rReader.m_bIsFooter)) &&
-            rReader.m_xFormImpl->ReadOCXStream(xSrc,&xShape,true))
+        if ( (!(m_rReader.m_bIsHeader || m_rReader.m_bIsFooter)) &&
+            m_rReader.m_xFormImpl->ReadOCXStream(xSrc,&xShape,true))
         {
             pRet = SdrObject::getSdrObjectFromXShape(xShape);
         }
@@ -548,7 +548,7 @@ SdrObject* SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
                 nError,
                 nSvxMSDffOLEConvFlags,
                 css::embed::Aspects::MSOLE_CONTENT,
-                rReader.GetBaseURL());
+                m_rReader.GetBaseURL());
         }
     }
     return pRet;
@@ -556,20 +556,20 @@ SdrObject* SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
 
 void SwMSDffManager::DisableFallbackStream()
 {
-    OSL_ENSURE(!pFallbackStream,
+    OSL_ENSURE(!m_pFallbackStream,
         "if you're recursive, you're broken");
-    pFallbackStream = pStData2;
-    aOldEscherBlipCache = aEscherBlipCache;
+    m_pFallbackStream = pStData2;
+    m_aOldEscherBlipCache = aEscherBlipCache;
     aEscherBlipCache.clear();
     pStData2 = nullptr;
 }
 
 void SwMSDffManager::EnableFallbackStream()
 {
-    pStData2 = pFallbackStream;
-    aEscherBlipCache = aOldEscherBlipCache;
-    aOldEscherBlipCache.clear();
-    pFallbackStream = nullptr;
+    pStData2 = m_pFallbackStream;
+    aEscherBlipCache = m_aOldEscherBlipCache;
+    m_aOldEscherBlipCache.clear();
+    m_pFallbackStream = nullptr;
 }
 
 sal_uInt16 SwWW8ImplReader::GetToggleAttrFlags() const
@@ -1110,10 +1110,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             sal_uInt16 nRawRecId,nRawRecSize;
             if( bRet )
                 aMemStream.ReadUInt16( nRawRecId ).ReadUInt16( nRawRecSize );
-            SwDocShell* pDocShell = rReader.m_pDocShell;
+            SwDocShell* pDocShell = m_rReader.m_pDocShell;
             if (pDocShell)
             {
-                rReader.ReadEmbeddedData(aMemStream, pDocShell, hlStr);
+                m_rReader.ReadEmbeddedData(aMemStream, pDocShell, hlStr);
             }
         }
 
@@ -1189,7 +1189,7 @@ SwFltStackEntry* SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt1
     // Doing a textbox, and using the control stack only as a temporary
     // collection point for properties which will are not to be set into
     // the real document
-    if (rReader.m_xPlcxMan && rReader.m_xPlcxMan->GetDoingDrawTextBox())
+    if (m_rReader.m_xPlcxMan && m_rReader.m_xPlcxMan->GetDoingDrawTextBox())
     {
         size_t nCnt = size();
         for (size_t i=0; i < nCnt; ++i)
@@ -1313,8 +1313,8 @@ void SwWW8ReferencedFltEndStack::SetAttrInDoc( const SwPosition& rTmpPos,
             if ( pFltBookmark != nullptr && pFltBookmark->IsTOCBookmark() )
             {
                 const OUString& rName = pFltBookmark->GetName();
-                std::set< OUString, SwWW8::ltstr >::const_iterator aResult = aReferencedTOCBookmarks.find(rName);
-                if ( aResult == aReferencedTOCBookmarks.end() )
+                std::set< OUString, SwWW8::ltstr >::const_iterator aResult = m_aReferencedTOCBookmarks.find(rName);
+                if ( aResult == m_aReferencedTOCBookmarks.end() )
                 {
                     bInsertBookmarkIntoDoc = false;
                 }
@@ -1374,12 +1374,12 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         {
                             // #i103711#
                             const bool bFirstLineIndentSet =
-                                ( rReader.m_aTextNodesHavingFirstLineOfstSet.end() !=
-                                    rReader.m_aTextNodesHavingFirstLineOfstSet.find( pNode ) );
+                                ( m_rReader.m_aTextNodesHavingFirstLineOfstSet.end() !=
+                                    m_rReader.m_aTextNodesHavingFirstLineOfstSet.find( pNode ) );
                             // #i105414#
                             const bool bLeftIndentSet =
-                                (  rReader.m_aTextNodesHavingLeftIndentSet.end() !=
-                                    rReader.m_aTextNodesHavingLeftIndentSet.find( pNode ) );
+                                (  m_rReader.m_aTextNodesHavingLeftIndentSet.end() !=
+                                    m_rReader.m_aTextNodesHavingLeftIndentSet.find( pNode ) );
                             SyncIndentWithList( aNewLR, *pNum,
                                                 bFirstLineIndentSet,
                                                 bLeftIndentSet );
@@ -1464,8 +1464,8 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
                 SfxItemState eState = SfxItemState::DEFAULT;
                 if (const SfxItemSet *pSet = pNd->GetpSwAttrSet())
                     eState = pSet->GetItemState(RES_LR_SPACE, false);
-                if (eState != SfxItemState::SET && rReader.m_nCurrentColl < rReader.m_vColl.size())
-                    pItem = rReader.m_vColl[rReader.m_nCurrentColl].maWordLR.get();
+                if (eState != SfxItemState::SET && m_rReader.m_nCurrentColl < m_rReader.m_vColl.size())
+                    pItem = m_rReader.m_vColl[m_rReader.m_nCurrentColl].maWordLR.get();
             }
 
             /*
@@ -6598,13 +6598,13 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
     bool bRet = false;
 
     sal_Int32 nPictureId = 0;
-    if (rReader.m_pStg)
+    if (m_rReader.m_pStg)
     {
         // Via the TextBox-PLCF we get the right char Start-End positions
         // We should then find the EmbeddedField and the corresponding Sprms
         // in that Area.
         // We only need the Sprm for the Picture Id.
-        sal_uInt64 nOldPos = rReader.m_pStrm->Tell();
+        sal_uInt64 nOldPos = m_rReader.m_pStrm->Tell();
         {
             // #i32596# - consider return value of method
             // <rReader.GetTxbxTextSttEndCp(..)>. If it returns false, method
@@ -6612,17 +6612,17 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
             // Note: Ask MM for initialization of <nStartCp> and <nEndCp>.
             // Note: Ask MM about assertions in method <rReader.GetTxbxTextSttEndCp(..)>.
             WW8_CP nStartCp, nEndCp;
-            if ( rReader.m_bDrawCpOValid && rReader.GetTxbxTextSttEndCp(nStartCp, nEndCp,
+            if ( m_rReader.m_bDrawCpOValid && m_rReader.GetTxbxTextSttEndCp(nStartCp, nEndCp,
                             o3tl::narrowing<sal_uInt16>((nOLEId >> 16) & 0xFFFF),
                             o3tl::narrowing<sal_uInt16>(nOLEId & 0xFFFF)) )
             {
                 WW8PLCFxSaveAll aSave;
-                rReader.m_xPlcxMan->SaveAllPLCFx( aSave );
+                m_rReader.m_xPlcxMan->SaveAllPLCFx( aSave );
 
-                nStartCp += rReader.m_nDrawCpO;
-                nEndCp   += rReader.m_nDrawCpO;
-                WW8PLCFx_Cp_FKP* pChp = rReader.m_xPlcxMan->GetChpPLCF();
-                wwSprmParser aSprmParser(*rReader.m_xWwFib);
+                nStartCp += m_rReader.m_nDrawCpO;
+                nEndCp   += m_rReader.m_nDrawCpO;
+                WW8PLCFx_Cp_FKP* pChp = m_rReader.m_xPlcxMan->GetChpPLCF();
+                wwSprmParser aSprmParser(*m_rReader.m_xWwFib);
                 while (nStartCp <= nEndCp && !nPictureId)
                 {
                     if (!pChp->SeekPos( nStartCp))
@@ -6656,21 +6656,21 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
                     nStartCp = aDesc.nEndPos;
                 }
 
-                rReader.m_xPlcxMan->RestoreAllPLCFx( aSave );
+                m_rReader.m_xPlcxMan->RestoreAllPLCFx( aSave );
             }
         }
-        rReader.m_pStrm->Seek( nOldPos );
+        m_rReader.m_pStrm->Seek( nOldPos );
     }
 
     if( bRet )
     {
         rStorageName = "_";
         rStorageName += OUString::number(nPictureId);
-        rSrcStorage = rReader.m_pStg->OpenSotStorage(SL::aObjectPool);
-        if (!rReader.m_pDocShell)
+        rSrcStorage = m_rReader.m_pStg->OpenSotStorage(SL::aObjectPool);
+        if (!m_rReader.m_pDocShell)
             bRet=false;
         else
-            rDestStorage = rReader.m_pDocShell->GetStorage();
+            rDestStorage = m_rReader.m_pDocShell->GetStorage();
     }
     return bRet;
 }
