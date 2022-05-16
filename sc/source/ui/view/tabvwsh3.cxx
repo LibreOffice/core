@@ -516,12 +516,47 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         case SID_CURRENTTAB:
-            if ( pReqArgs )
             {
-                // sheet for basic is one-based
-                SCTAB nTab = static_cast<const SfxUInt16Item&>(pReqArgs->Get(nSlot)).GetValue() - 1;
-                ScDocument& rDoc = GetViewData().GetDocument();
-                if ( nTab < rDoc.GetTableCount() )
+                SCTAB nTab;
+                ScViewData& rViewData = GetViewData();
+                ScDocument& rDoc = rViewData.GetDocument();
+                SCTAB nTabCount = rDoc.GetTableCount();
+                if ( pReqArgs ) // command from Navigator with nTab
+                {
+                    // sheet for basic is one-based
+                    nTab = static_cast<const SfxUInt16Item&>(pReqArgs->Get(nSlot)).GetValue() - 1;
+                }
+                else            // command from Menu: ask for nTab
+                {
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+
+                    ScopedVclPtr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetFrameWeld()));
+                    pDlg->SetDescription(
+                        ScResId( STR_DLG_SELECTTABLE_TITLE ),
+                        ScResId( STR_DLG_SELECTTABLE_LBNAME ),
+                        GetStaticInterface()->GetSlot(SID_CURRENTTAB)->GetCommand(), HID_GOTOTABLE );
+
+                    // fill all table names and select current tab
+                    OUString aTabName;
+                    for( nTab = 0; nTab < nTabCount; ++nTab )
+                    {
+                        rDoc.GetName( nTab, aTabName );
+                        pDlg->Insert( aTabName, rViewData.GetTabNo() == nTab );
+                    }
+
+                    if( pDlg->Execute() == RET_OK )
+                    {
+                        ::std::vector < sal_Int32 > aIndexList = pDlg->GetSelectedRows();
+                        if( !aIndexList.empty() )
+                            nTab = aIndexList[ 0 ];
+                        pDlg.disposeAndClear();
+                    }
+                    else
+                    {
+                        rReq.Ignore();
+                    }
+                }
+                if ( nTab < nTabCount )
                 {
                     SetTabNo( nTab );
                     rBindings.Update( nSlot );
