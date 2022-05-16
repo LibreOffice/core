@@ -7,16 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict
-from uitest.uihelper.common import select_pos
-from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
+from uitest.uihelper.common import select_by_text
+
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
 
-#Bug 39917 - EDITING Find/Replace modifies formula in R1C1 syntax to invalid lowercase
 
+# Bug 39917 - EDITING Find/Replace modifies formula in R1C1 syntax to invalid lowercase
 class tdf39917(UITestCase):
    def test_tdf39917_find_replace_R1C1(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:

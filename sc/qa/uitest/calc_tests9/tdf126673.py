@@ -7,15 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
-from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import change_measurement_unit
-from uitest.uihelper.calc import enter_text_to_cell
-from libreoffice.calc.document import get_cell_by_position
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
+
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
-#Bug 126673 - Calc: Auto-fit column and auto-fit row don't work with line break
 
+# Bug 126673 - Calc: Auto-fit column and auto-fit row don't work with line break
 class tdf126673(UITestCase):
     def test_tdf126673_auto_fit_row_height(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf126673.ods")) as calc_doc:
