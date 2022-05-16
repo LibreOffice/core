@@ -20,6 +20,7 @@
 
 #include "TickmarkProperties.hxx"
 #include <LabelAlignment.hxx>
+#include <DataTable.hxx>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
@@ -137,10 +138,12 @@ struct AxisProperties final
 
     bool                                m_bLimitSpaceForLabels;
 
-    //methods:
+    rtl::Reference<::chart::DataTable> m_xDataTableModel;
 
+    //methods:
     AxisProperties( const css::uno::Reference< css::chart2::XAxis >& xAxisModel
-                  , ExplicitCategoriesProvider* pExplicitCategoriesProvider );
+                  , ExplicitCategoriesProvider* pExplicitCategoriesProvider
+                  , rtl::Reference<::chart::DataTable> const& xDataTableModel);
 
     void init(bool bCartesian=false);//init from model data (m_xAxisModel)
 

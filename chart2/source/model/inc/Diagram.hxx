@@ -144,6 +144,7 @@ private:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
+public:
     void setDataTable(const rtl::Reference<::chart::DataTable>& xNewDataTable);
 
     rtl::Reference<::chart::DataTable> const& getDataTableRef() const
@@ -151,6 +152,7 @@ private:
         return m_xDataTable;
     };
 
+private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
         const css::lang::EventObject& aEvent ) override;
