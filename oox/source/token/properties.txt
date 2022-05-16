@@ -127,9 +127,6 @@ D3DSceneLightOn2
 D3DScenePerspective
 D3DSceneShadeMode
 DDELinks
-DataTableHBorder
-DataTableOutline
-DataTableVBorder
 DatabaseRanges
 Decoration
 DefaultScrollValue
@@ -247,6 +244,7 @@ HasVerticalScrollBar
 HasXAxisTitle
 HasYAxisTitle
 HasZAxisTitle
+HBorder
 HeaderBodyDistance
 HeaderHeight
 HeaderIsDynamicHeight
@@ -294,6 +292,7 @@ IsVisible
 IterationCount
 IterationEpsilon
 Japanese
+Keys
 Label
 LabelBorderColor
 LabelBorderStyle
@@ -365,6 +364,7 @@ OpCodeMap
 Opaque
 Orientation
 OutputPosition
+Outline
 OverlapSequence
 Overlay
 PageScale
@@ -586,6 +586,7 @@ UseSelectedPage
 VScroll
 Validation
 Value
+VBorder
 VaryColorsByPoint
 VertJustify
 VertJustifyMethod

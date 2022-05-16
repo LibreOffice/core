@@ -20,6 +20,7 @@
 #include <drawingml/chart/datatableconverter.hxx>
 
 #include <com/sun/star/chart2/XDiagram.hpp>
+#include <com/sun/star/chart2/XDataTable.hpp>
 #include <drawingml/chart/plotareamodel.hxx>
 #include <oox/token/properties.hxx>
 
@@ -36,13 +37,28 @@ DataTableConverter::~DataTableConverter() = default;
 
 void DataTableConverter::convertFromModel(uno::Reference<chart2::XDiagram> const& rxDiagram)
 {
-    PropertySet aPropSet(rxDiagram);
-    if (mrModel.mbShowHBorder)
-        aPropSet.setProperty(PROP_DataTableHBorder, mrModel.mbShowHBorder);
-    if (mrModel.mbShowVBorder)
-        aPropSet.setProperty(PROP_DataTableVBorder, mrModel.mbShowVBorder);
-    if (mrModel.mbShowOutline)
-        aPropSet.setProperty(PROP_DataTableOutline, mrModel.mbShowOutline);
+    if (!rxDiagram.is())
+        return;
+
+    try
+    {
+        uno::Reference<chart2::XDataTable> xDataTable(
+            createInstance("com.sun.star.chart2.DataTable"), uno::UNO_QUERY_THROW);
+        rxDiagram->setDataTable(xDataTable);
+
+        PropertySet aPropSet(xDataTable);
+        if (mrModel.mbShowHBorder)
+            aPropSet.setProperty(PROP_HBorder, mrModel.mbShowHBorder);
+        if (mrModel.mbShowVBorder)
+            aPropSet.setProperty(PROP_VBorder, mrModel.mbShowVBorder);
+        if (mrModel.mbShowOutline)
+            aPropSet.setProperty(PROP_Outline, mrModel.mbShowOutline);
+        if (mrModel.mbShowKeys)
+            aPropSet.setProperty(PROP_Keys, mrModel.mbShowKeys);
+    }
+    catch (uno::Exception&)
+    {
+    }
 }
 
 } // namespace oox
