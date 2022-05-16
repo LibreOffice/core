@@ -39,11 +39,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/strict_ansi.patch \
 	external/icu/icu4c-windows-cygwin-cross.patch.1 \
 	external/icu/icu4c-emscripten-cross.patch.1 \
-	external/icu/icu4c-khmerbreakengine.patch.1 \
 	external/icu/icu4c-use-pkgdata-single-ccode-file-mode.patch.1 \
+	external/icu/do-not-reset-useful-cache-to-empty-in-populateNear.patch.2 \
+	external/icu/icu4c-khmerbreakengine.patch.1 \
 	external/icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch.1 \
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.patch.1) \
-	external/icu/do-not-reset-useful-cache-to-empty-in-populateNear.patch.2 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
