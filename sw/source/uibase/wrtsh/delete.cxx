@@ -302,7 +302,7 @@ bool SwWrtShell::DelRight()
     if(nSelection & SelectionType::Text)
         nSelection = SelectionType::Text;
 
-    switch( nSelection & ~SelectionType::Ornament )
+    switch( nSelection & ~SelectionType::Ornament & ~SelectionType::Media )
     {
     case SelectionType::PostIt:
     case SelectionType::Text:
