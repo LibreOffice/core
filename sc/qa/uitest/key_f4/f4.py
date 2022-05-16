@@ -7,12 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-import os
-from uitest.uihelper.common import get_state_as_dict
+from uitest.uihelper.calc import enter_text_to_cell
 from uitest.uihelper.common import select_by_text
+
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
-from uitest.uihelper.calc import enter_text_to_cell
+
 
 class keyF4(UITestCase):
     def test_f4(self):

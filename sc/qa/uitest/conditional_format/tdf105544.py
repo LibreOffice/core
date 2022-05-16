@@ -9,11 +9,11 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
-from libreoffice.calc.document import get_sheet_from_doc
-from libreoffice.calc.conditional_format import get_conditional_format_from_sheet
+
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
-#Bug 105544 - Manage Conditional Formatting is not able to edit a condition
+
+# Bug 105544 - Manage Conditional Formatting is not able to edit a condition
 class tdf105544(UITestCase):
     def test_tdf105544_Manage_Conditional_Formatting_edit_condition(self):
 
