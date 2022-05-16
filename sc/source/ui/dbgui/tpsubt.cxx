@@ -257,6 +257,7 @@ void ScTpSubTotalGroup::FillListBoxes()
     mxLbColumns->clear();
     mxLbGroup->insert_text(0, aStrNone );
 
+    mxLbColumns->freeze();
     sal_uInt16 i=0;
     for ( col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS(pDoc->GetSheetLimits()); col++ )
     {
@@ -273,6 +274,8 @@ void ScTpSubTotalGroup::FillListBoxes()
         mxLbColumns->set_id(i, "0");
         i++;
     }
+    mxLbColumns->thaw();
+
     // subsequent initialization of the constant:
     nFieldCount = i;
 }
