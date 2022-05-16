@@ -87,8 +87,10 @@
 #define STR_CAPTION_DEFAULT_TEXT                    NC_("STR_CAPTION_DEFAULT_TEXT", "Text")
 // Select tables dialog title
 #define STR_DLG_SELECTTABLES_TITLE                  NC_("STR_DLG_SELECTTABLES_TITLE", "Select Sheets")
+#define STR_DLG_SELECTTABLE_TITLE                   NC_("STR_DLG_SELECTTABLE_TITLE", "Select Sheet")
 // Select tables dialog listbox
 #define STR_DLG_SELECTTABLES_LBNAME                 NC_("STR_DLG_SELECTTABLES_LBNAME", "~Selected sheets")
+#define STR_DLG_SELECTTABLE_LBNAME                  NC_("STR_DLG_SELECTTABLE_LBNAME", "~Sheets list")
 #define STR_ACC_CSVRULER_NAME                       NC_("STR_ACC_CSVRULER_NAME", "Ruler")
 #define STR_ACC_CSVRULER_DESCR                      NC_("STR_ACC_CSVRULER_DESCR", "This ruler manages objects at fixed positions.")
 #define STR_ACC_CSVGRID_NAME                        NC_("STR_ACC_CSVGRID_NAME", "Preview")
