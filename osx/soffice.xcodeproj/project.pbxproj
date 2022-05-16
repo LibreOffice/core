@@ -124,6 +124,7 @@
 		BE017BF925AF568900244ED8 /* mtrindlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mtrindlg.cxx; path = ../sc/source/ui/miscdlgs/mtrindlg.cxx; sourceTree = "<group>"; };
 		BE017BFA25AF568900244ED8 /* linkarea.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = linkarea.cxx; path = ../sc/source/ui/miscdlgs/linkarea.cxx; sourceTree = "<group>"; };
 		BE017BFB25AF568900244ED8 /* shtabdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = shtabdlg.cxx; path = ../sc/source/ui/miscdlgs/shtabdlg.cxx; sourceTree = "<group>"; };
+		BE017BFB25AF568900244ED8 /* gototabdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gototabdlg.cxx; path = ../sc/source/ui/miscdlgs/gototabdlg.cxx; sourceTree = "<group>"; };
 		BE017BFC25AF568900244ED8 /* inscodlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = inscodlg.cxx; path = ../sc/source/ui/miscdlgs/inscodlg.cxx; sourceTree = "<group>"; };
 		BE017BFD25AF568A00244ED8 /* crdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = crdlg.cxx; path = ../sc/source/ui/miscdlgs/crdlg.cxx; sourceTree = "<group>"; };
 		BE017BFE25AF568A00244ED8 /* datafdlg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = datafdlg.cxx; path = ../sc/source/ui/miscdlgs/datafdlg.cxx; sourceTree = "<group>"; };

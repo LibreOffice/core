@@ -275,6 +275,16 @@ bool AbstractScShowTabDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContex
     return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
+short AbstractScGoToTabDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool AbstractScGoToTabDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractScSortWarningDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -839,6 +849,28 @@ OUString AbstractScShowTabDlg_Impl::GetEntry(sal_Int32 nPos) const
     return m_xDlg->GetEntry(nPos);
 }
 
+void AbstractScGoToTabDlg_Impl::Insert( const OUString& rString, bool bSelected )
+{
+    m_xDlg->Insert(rString, bSelected);
+}
+
+void    AbstractScGoToTabDlg_Impl::SetDescription(
+                const OUString& rTitle, const OUString& rFixedText,
+                const OString& sDlgHelpId, const OString& sLbHelpId )
+{
+    m_xDlg->SetDescription( rTitle, rFixedText, sDlgHelpId, sLbHelpId );
+}
+
+sal_Int32 AbstractScGoToTabDlg_Impl::GetSelectedRow() const
+{
+    return m_xDlg->GetSelectedRow();
+}
+
+OUString AbstractScGoToTabDlg_Impl::GetEntry(sal_Int32 nPos) const
+{
+    return m_xDlg->GetEntry(nPos);
+}
+
 short AbstractScStringInputDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -1181,6 +1213,11 @@ VclPtr<AbstractScNewScenarioDlg> ScAbstractDialogFactory_Impl::CreateScNewScenar
 VclPtr<AbstractScShowTabDlg> ScAbstractDialogFactory_Impl::CreateScShowTabDlg(weld::Window* pParent)
 {
     return VclPtr<AbstractScShowTabDlg_Impl>::Create(std::make_shared<ScShowTabDlg>(pParent));
+}
+
+VclPtr<AbstractScGoToTabDlg> ScAbstractDialogFactory_Impl::CreateScGoToTabDlg(weld::Window* pParent)
+{
+    return VclPtr<AbstractScGoToTabDlg_Impl>::Create(std::make_shared<ScGoToTabDlg>(pParent));
 }
 
 VclPtr<AbstractScStringInputDlg> ScAbstractDialogFactory_Impl::CreateScStringInputDlg(weld::Window* pParent,

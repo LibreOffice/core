@@ -396,6 +396,17 @@ public:
     virtual bool IsKeepAskingSet() const = 0;
 };
 
+class AbstractScGoToTabDlg : public VclAbstractDialog
+{
+protected:
+    virtual             ~AbstractScGoToTabDlg() override = default;
+public:
+    virtual void Insert( const OUString& rString, bool bSelected ) = 0;
+    virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& nDlgHelpId, const OString& nLbHelpId ) = 0;
+    virtual sal_Int32 GetSelectedRow() const = 0;
+    virtual OUString GetEntry(sal_Int32 nPos) const = 0;
+};
+
 class ScAbstractDialogFactory
 {
 public:
@@ -525,6 +536,8 @@ public:
                                                                         const OUString*         pStrTitle,
                                                                         bool                    bOnlyDbtoolsEncodings,
                                                                         bool                    bImport = true ) = 0;
+
+    virtual VclPtr<AbstractScGoToTabDlg> CreateScGoToTabDlg(weld::Window* pParent) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateScAttrDlg(weld::Window* pParent,
                                                     const SfxItemSet* pCellAttrs) = 0;

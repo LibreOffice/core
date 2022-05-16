@@ -141,6 +141,7 @@
 #include <formulaopt.hxx>
 #include <global.hxx>
 #include <globalnames.hxx>
+#include <gototabdlg.hxx>
 #include <groupdlg.hxx>
 #include <helpids.h>
 #include <hfedtdlg.hxx>
