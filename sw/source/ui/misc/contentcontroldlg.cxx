@@ -38,14 +38,24 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
     , m_xListItems(m_xBuilder->weld_tree_view("listitems"))
     , m_xListItemButtons(m_xBuilder->weld_box("listitembuttons"))
     , m_xInsertBtn(m_xBuilder->weld_button("add"))
+    , m_xRenameBtn(m_xBuilder->weld_button("modify"))
+    , m_xDeleteBtn(m_xBuilder->weld_button("remove"))
+    , m_xMoveUpBtn(m_xBuilder->weld_button("moveup"))
+    , m_xMoveDownBtn(m_xBuilder->weld_button("movedown"))
     , m_xOk(m_xBuilder->weld_button("ok"))
 {
     m_xOk->connect_clicked(LINK(this, SwContentControlDlg, OkHdl));
 
     // Only 2 items would be visible by default.
     m_xListItems->set_size_request(-1, m_xListItems->get_height_rows(8));
+    // Only the first column would have a non-zero size by default in the SvHeaderTabListBox case.
+    m_xListItems->set_column_fixed_widths({ 100, 100 });
 
     m_xInsertBtn->connect_clicked(LINK(this, SwContentControlDlg, InsertHdl));
+    m_xRenameBtn->connect_clicked(LINK(this, SwContentControlDlg, RenameHdl));
+    m_xDeleteBtn->connect_clicked(LINK(this, SwContentControlDlg, DeleteHdl));
+    m_xMoveUpBtn->connect_clicked(LINK(this, SwContentControlDlg, MoveUpHdl));
+    m_xMoveDownBtn->connect_clicked(LINK(this, SwContentControlDlg, MoveDownHdl));
 
     const SwPosition* pStart = rWrtShell.GetCursor()->Start();
     SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
@@ -151,6 +161,88 @@ IMPL_LINK_NOARG(SwContentControlDlg, InsertHdl, weld::Button&, void)
     int nRow = m_xListItems->n_children();
     m_xListItems->append_text(aItem.m_aDisplayText);
     m_xListItems->set_text(nRow, aItem.m_aValue, 1);
+}
+
+IMPL_LINK_NOARG(SwContentControlDlg, RenameHdl, weld::Button&, void)
+{
+    int nRow = m_xListItems->get_selected_index();
+    if (nRow < 0)
+    {
+        return;
+    }
+
+    SwContentControlListItem aItem;
+    aItem.m_aDisplayText = m_xListItems->get_text(nRow, 0);
+    aItem.m_aValue = m_xListItems->get_text(nRow, 1);
+    SwAbstractDialogFactory& rFact = swui::GetFactory();
+    ScopedVclPtr<VclAbstractDialog> pDlg(
+        rFact.CreateSwContentControlListItemDlg(m_xDialog.get(), aItem));
+    if (!pDlg->Execute())
+    {
+        return;
+    }
+
+    if (aItem.m_aDisplayText.isEmpty() && aItem.m_aValue.isEmpty())
+    {
+        // Maintain the invariant that value can't be empty.
+        return;
+    }
+
+    if (aItem.m_aValue.isEmpty())
+    {
+        aItem.m_aValue = aItem.m_aDisplayText;
+    }
+
+    m_xListItems->set_text(nRow, aItem.m_aDisplayText, 0);
+    m_xListItems->set_text(nRow, aItem.m_aValue, 1);
+}
+
+IMPL_LINK_NOARG(SwContentControlDlg, DeleteHdl, weld::Button&, void)
+{
+    int nRow = m_xListItems->get_selected_index();
+    if (nRow < 0)
+    {
+        return;
+    }
+
+    m_xListItems->remove(nRow);
+}
+
+IMPL_LINK_NOARG(SwContentControlDlg, MoveUpHdl, weld::Button&, void)
+{
+    int nRow = m_xListItems->get_selected_index();
+    if (nRow <= 0)
+    {
+        return;
+    }
+
+    SwContentControlListItem aItem;
+    aItem.m_aDisplayText = m_xListItems->get_text(nRow, 0);
+    aItem.m_aValue = m_xListItems->get_text(nRow, 1);
+    m_xListItems->remove(nRow);
+    --nRow;
+    m_xListItems->insert_text(nRow, aItem.m_aDisplayText);
+    m_xListItems->set_text(nRow, aItem.m_aValue, 1);
+    m_xListItems->select(nRow);
+}
+
+IMPL_LINK_NOARG(SwContentControlDlg, MoveDownHdl, weld::Button&, void)
+{
+    int nRow = m_xListItems->get_selected_index();
+    int nEndPos = m_xListItems->n_children() - 1;
+    if (nRow < 0 || nRow >= nEndPos)
+    {
+        return;
+    }
+
+    SwContentControlListItem aItem;
+    aItem.m_aDisplayText = m_xListItems->get_text(nRow, 0);
+    aItem.m_aValue = m_xListItems->get_text(nRow, 1);
+    m_xListItems->remove(nRow);
+    ++nRow;
+    m_xListItems->insert_text(nRow, aItem.m_aDisplayText);
+    m_xListItems->set_text(nRow, aItem.m_aValue, 1);
+    m_xListItems->select(nRow);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
