@@ -22,7 +22,10 @@
 #include "VPolarAxis.hxx"
 #include <AxisIndexDefines.hxx>
 #include <AxisHelper.hxx>
+#include <Diagram.hxx>
+#include <DataTable.hxx>
 #include <ChartModel.hxx>
+#include <Diagram.hxx>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 
 namespace chart
@@ -89,7 +92,11 @@ void VPolarCoordinateSystem::createVAxisList(
             Reference< XAxis > xAxis( getAxisByDimension(nDimensionIndex,nAxisIndex) );
             if(!xAxis.is() || !AxisHelper::shouldAxisBeDisplayed( xAxis, m_xCooSysModel ))
                 continue;
-            AxisProperties aAxisProperties(xAxis,getExplicitCategoriesProvider());
+
+            uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram());
+            auto pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
+            assert(pDiagram);
+            AxisProperties aAxisProperties(xAxis,getExplicitCategoriesProvider(), pDiagram->getDataTableRef());
             aAxisProperties.init();
             if(aAxisProperties.m_bDisplayLabels)
                 aAxisProperties.m_nNumberFormatKey = getNumberFormatKeyForAxis(xAxis, xChartDoc);

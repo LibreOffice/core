@@ -21,9 +21,11 @@
 #include "VCartesianGrid.hxx"
 #include "VCartesianAxis.hxx"
 #include <AxisIndexDefines.hxx>
+#include <DataTable.hxx>
 #include <AxisHelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ChartModel.hxx>
+#include <Diagram.hxx>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -129,7 +131,10 @@ void VCartesianCoordinateSystem::createVAxisList(
             if(!xAxis.is() || !AxisHelper::shouldAxisBeDisplayed( xAxis, m_xCooSysModel ))
                 continue;
 
-            AxisProperties aAxisProperties(xAxis,getExplicitCategoriesProvider());
+            uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram());
+            auto pDiagram = dynamic_cast<Diagram*>(xDiagram.get());
+            assert(pDiagram);
+            AxisProperties aAxisProperties(xAxis, getExplicitCategoriesProvider(), pDiagram->getDataTableRef());
             aAxisProperties.m_nDimensionIndex = nDimensionIndex;
             aAxisProperties.m_bSwapXAndY = bSwapXAndY;
             aAxisProperties.m_bIsMainAxis = (nAxisIndex==0);
