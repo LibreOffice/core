@@ -226,10 +226,12 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
         return false;
 
     bool bSysClip = false;
+    std::shared_ptr<ScDocument> pSysClipDoc;
     if ( !pClipDoc )                                    // no clip doc specified
     {
         // Create one (deleted by ScTransferObj).
-        pClipDoc = new ScDocument( SCDOCMODE_CLIP );
+        pSysClipDoc = std::make_shared<ScDocument>( SCDOCMODE_CLIP );
+        pClipDoc = pSysClipDoc.get();
         bSysClip = true;                                // and copy into system
     }
     if ( !bCut )
@@ -243,7 +245,7 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
     {
         bool bAnyOle = rDoc.HasOLEObjectsInArea( aRange );
         // Update ScGlobal::xDrawClipDocShellRef.
-        ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
+        ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle, pSysClipDoc ) );
     }
 
     // is this necessary?, will setting the doc id upset the
@@ -291,7 +293,7 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
         aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
         // maSize is set in ScTransferObj ctor
 
-        rtl::Reference<ScTransferObj> pTransferObj(new ScTransferObj( ScDocumentUniquePtr(pClipDoc), aObjDesc ));
+        rtl::Reference<ScTransferObj> pTransferObj(new ScTransferObj( pSysClipDoc, aObjDesc ));
         if ( ScGlobal::xDrawClipDocShellRef.is() )
         {
             SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef.get() );

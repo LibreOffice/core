@@ -38,7 +38,7 @@ namespace com::sun::star {
 class SAL_DLLPUBLIC_RTTI ScTransferObj : public TransferDataContainer
 {
 private:
-    ScDocumentUniquePtr             m_pDoc;
+    std::shared_ptr<ScDocument>     m_pDoc;
     ScRange                         m_aBlock;
     SCROW                           m_nNonFiltered;       // non-filtered rows
     TransferableObjectDescriptor    m_aObjDesc;
@@ -67,7 +67,7 @@ private:
     static void GetAreaSize( const ScDocument& rDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol );
 
 public:
-            ScTransferObj( ScDocumentUniquePtr pClipDoc, const TransferableObjectDescriptor& rDesc );
+            ScTransferObj( const std::shared_ptr<ScDocument>& pClipDoc, const TransferableObjectDescriptor& rDesc );
     virtual ~ScTransferObj() override;
 
     virtual void        AddSupportedFormats() override;
@@ -104,7 +104,7 @@ public:
 
     static  SC_DLLPUBLIC ScTransferObj* GetOwnClipboard(const css::uno::Reference<css::datatransfer::XTransferable2>&);
 
-    static SfxObjectShell*  SetDrawClipDoc( bool bAnyOle );     // update ScGlobal::xDrawClipDocShellRef
+    static SfxObjectShell* SetDrawClipDoc(bool bAnyOle, const std::shared_ptr<ScDocument>& = {} );     // update ScGlobal::xDrawClipDocShellRef
     virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) override;
     static const com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 };

@@ -6155,12 +6155,12 @@ ScPatternAttr* ScDocument::GetDefPattern() const
 
 ScDocumentPool* ScDocument::GetPool()
 {
-    return mxPoolHelper->GetDocPool();
+    return mxPoolHelper ? mxPoolHelper->GetDocPool() : nullptr;
 }
 
 ScStyleSheetPool* ScDocument::GetStyleSheetPool() const
 {
-    return mxPoolHelper->GetStylePool();
+    return mxPoolHelper ? mxPoolHelper->GetStylePool() : nullptr;
 }
 
 bool ScDocument::IsEmptyData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const
