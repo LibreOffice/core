@@ -3487,7 +3487,7 @@ SfxVoidItem JumpToTable SID_CURRENTTAB
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    AccelConfig = FALSE,
+    AccelConfig = TRUE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Navigator;
