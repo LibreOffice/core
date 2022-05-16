@@ -1,7 +1,7 @@
 diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
---- icu.org/source/common/dictbe.cpp	2021-10-28 18:04:57.000000000 +0200
-+++ icu/source/common/dictbe.cpp	2021-11-15 20:39:03.710870385 +0100
-@@ -32,7 +32,19 @@
+--- icu.org/source/common/dictbe.cpp	2022-04-08 00:41:55.000000000 +0200
++++ icu/source/common/dictbe.cpp	2022-05-16 13:56:43.426870900 +0200
+@@ -35,7 +35,19 @@
   ******************************************************************
   */
  
@@ -13,16 +13,16 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 +DictionaryBreakEngine::DictionaryBreakEngine(uint32_t breakTypes)
 +    : fTypes(breakTypes), clusterLimit(3) {
 +    UErrorCode status = U_ZERO_ERROR;
-+    fViramaSet.applyPattern(UNICODE_STRING_SIMPLE("[[:ccc=VR:]]"), status);
++    fViramaSet.applyPattern(UnicodeString(u"[[:ccc=VR:]]"), status);
 +
 +    // note Skip Sets contain fIgnoreSet characters too.
-+    fSkipStartSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=OP:][:lb=QU:]\\u200C\\u200D\\u2060]"), status);
-+    fSkipEndSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=CP:][:lb=QU:][:lb=EX:][:lb=CL:]\\u200C\\u200D\\u2060]"), status);
-+    fNBeforeSet.applyPattern(UNICODE_STRING_SIMPLE("[[:lb=CR:][:lb=LF:][:lb=NL:][:lb=SP:][:lb=ZW:][:lb=IS:][:lb=BA:][:lb=NS:]]"), status);
++    fSkipStartSet.applyPattern(UnicodeString(u"[[:lb=OP:][:lb=QU:]\\u200C\\u200D\\u2060]"), status);
++    fSkipEndSet.applyPattern(UnicodeString(u"[[:lb=CP:][:lb=QU:][:lb=EX:][:lb=CL:]\\u200C\\u200D\\u2060]"), status);
++    fNBeforeSet.applyPattern(UnicodeString(u"[[:lb=CR:][:lb=LF:][:lb=NL:][:lb=SP:][:lb=ZW:][:lb=IS:][:lb=BA:][:lb=NS:]]"), status);
  }
  
  DictionaryBreakEngine::~DictionaryBreakEngine() {
-@@ -81,6 +93,169 @@
+@@ -85,6 +97,169 @@
      fSet.compact();
  }
  
@@ -192,7 +192,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  /*
   ******************************************************************
   * PossibleWord
-@@ -110,7 +285,7 @@
+@@ -114,7 +289,7 @@
      ~PossibleWord() {}
    
      // Fill the list of candidates if needed, select the longest, and return the number found
@@ -201,7 +201,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
    
      // Select the currently marked candidate, point after it in the text, and invalidate self
      int32_t   acceptMarked( UText *text );
-@@ -131,12 +306,12 @@
+@@ -135,12 +310,12 @@
  };
  
  
@@ -216,7 +216,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
          // Dictionary leaves text after longest prefix, not longest word. Back up.
          if (count <= 0) {
              utext_setNativeIndex(text, start);
-@@ -808,53 +983,30 @@
+@@ -814,53 +989,30 @@
   * KhmerBreakEngine
   */
  
@@ -243,17 +243,17 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  {
      UTRACE_ENTRY(UTRACE_UBRK_CREATE_BREAK_ENGINE);
      UTRACE_DATA1(UTRACE_INFO, "dictbe=%s", "Khmr");
--    fKhmerWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]]"), status);
+-    UnicodeSet khmerWordSet(UnicodeString(u"[[:Khmr:]&[:LineBreak=SA:]]"), status);
 +
 +    clusterLimit = 3;
 +
-+    fKhmerWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]\\u2060\\u200C\\u200D]"), status);
++    UnicodeSet khmerWordSet(UnicodeString(u"[[:Khmr:]\\u2060\\u200C\\u200D]"), status);
      if (U_SUCCESS(status)) {
-         setCharacters(fKhmerWordSet);
+         setCharacters(khmerWordSet);
      }
-     fMarkSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]&[:M:]]"), status);
+     fMarkSet.applyPattern(UnicodeString(u"[[:Khmr:]&[:LineBreak=SA:]&[:M:]]"), status);
 -    fMarkSet.add(0x0020);
--    fEndWordSet = fKhmerWordSet;
+-    fEndWordSet = khmerWordSet;
 -    fBeginWordSet.add(0x1780, 0x17B3);
 -    //fBeginWordSet.add(0x17A3, 0x17A4);      // deprecated vowels
 -    //fEndWordSet.remove(0x17A5, 0x17A9);     // Khmer independent vowels that can't end a word
@@ -268,8 +268,8 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -//    fSuffixSet.add(THAI_MAIYAMOK);
 +    fIgnoreSet.add(0x2060);         // WJ
 +    fIgnoreSet.add(0x200C, 0x200D); // ZWJ, ZWNJ
-+    fBaseSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:lb=SA:]&[:^M:]]"), status);
-+    fPuncSet.applyPattern(UNICODE_STRING_SIMPLE("[\\u17D4\\u17D5\\u17D6\\u17D7\\u17D9:]"), status);
++    fBaseSet.applyPattern(UnicodeString(u"[[:Khmr:]&[:lb=SA:]&[:^M:]]"), status);
++    fPuncSet.applyPattern(UnicodeString(u"[\\u17D4\\u17D5\\u17D6\\u17D7\\u17D9:]"), status);
  
      // Compact for caching.
      fMarkSet.compact();
@@ -282,8 +282,8 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
      UTRACE_EXIT_STATUS(status);
  }
  
-@@ -869,175 +1021,204 @@
-                                                 UVector32 &foundBreaks,
+@@ -876,175 +1028,205 @@
+                                                 UBool /* isPhraseBreaking */,
                                                  UErrorCode& status ) const {
      if (U_FAILURE(status)) return 0;
 -    if ((rangeEnd - rangeStart) < KHMER_MIN_WORD_SPAN) {
@@ -304,7 +304,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 +        --scanStart;
 +        startZwsp = scanBeforeStart(text, scanStart, breakStart);
      }
--
+ 
 -    uint32_t wordsFound = 0;
 -    int32_t cpWordLength = 0;
 -    int32_t cuWordLength = 0;
@@ -633,9 +633,9 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  
  #if !UCONFIG_NO_NORMALIZATION
 diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
---- icu.org/source/common/dictbe.h	2021-10-28 18:04:57.000000000 +0200
-+++ icu/source/common/dictbe.h	2021-11-15 20:41:53.052317579 +0100
-@@ -34,7 +34,8 @@
+--- icu.org/source/common/dictbe.h	2022-04-08 00:41:55.000000000 +0200
++++ icu/source/common/dictbe.h	2022-05-16 13:49:33.820459894 +0200
+@@ -35,7 +35,8 @@
   * threads without synchronization.</p>
   */
  class DictionaryBreakEngine : public LanguageBreakEngine {
@@ -645,7 +645,7 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
      /**
       * The set of characters handled by this engine
       * @internal
-@@ -42,14 +43,84 @@
+@@ -43,14 +44,84 @@
  
    UnicodeSet    fSet;
  
@@ -731,10 +731,10 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
     * <p>Virtual destructor.</p>
     */
    virtual ~DictionaryBreakEngine();
-@@ -303,10 +374,12 @@
+@@ -305,10 +376,12 @@
+      * @internal
       */
  
-   UnicodeSet                fKhmerWordSet;
 -  UnicodeSet                fEndWordSet;
    UnicodeSet                fBeginWordSet;
 -  UnicodeSet                fMarkSet;
@@ -748,8 +748,8 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
   public:
  
 diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionarydata.cpp
---- icu.org/source/common/dictionarydata.cpp	2021-10-28 18:04:57.000000000 +0200
-+++ icu/source/common/dictionarydata.cpp	2021-11-15 19:25:00.583694898 +0100
+--- icu.org/source/common/dictionarydata.cpp	2022-04-08 00:41:55.000000000 +0200
++++ icu/source/common/dictionarydata.cpp	2022-05-16 13:49:33.821459892 +0200
 @@ -44,7 +44,7 @@
  
  int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t limit,
@@ -797,8 +797,8 @@ diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionaryda
                  if (values != NULL) {
                      values[wordCount] = bt.getValue();
 diff -ur icu.org/source/common/dictionarydata.h icu/source/common/dictionarydata.h
---- icu.org/source/common/dictionarydata.h	2021-10-28 18:04:57.000000000 +0200
-+++ icu/source/common/dictionarydata.h	2021-11-15 20:44:34.484790590 +0100
+--- icu.org/source/common/dictionarydata.h	2022-04-08 00:41:55.000000000 +0200
++++ icu/source/common/dictionarydata.h	2022-05-16 13:49:33.822459891 +0200
 @@ -21,6 +21,7 @@
  #include "unicode/utext.h"
  #include "unicode/udata.h"
