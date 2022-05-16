@@ -25,6 +25,7 @@
 #include <ascfldlg.hxx>
 #include <cnttab.hxx>
 #include <colwd.hxx>
+#include <contentcontrollistitemdlg.hxx>
 #include <convert.hxx>
 #include <DateFormFieldDialog.hxx>
 #include <dbinsdlg.hxx>
@@ -409,6 +410,24 @@ public:
              css::uno::Reference< css::container::XNameAccess > & xThird ) override;
 };
 
+/**
+ * Implementation of AbstractSwContentControlListItemDlg, that is only visible to
+ * SwAbstractDialogFactory_Impl::CreateSwContentControlListItemDlg().
+ */
+class AbstractSwContentControlListItemDlg_Impl : public AbstractSwContentControlListItemDlg
+{
+    std::unique_ptr<SwContentControlListItemDlg> m_xDlg;
+
+public:
+    explicit AbstractSwContentControlListItemDlg_Impl(
+        std::unique_ptr<SwContentControlListItemDlg> xDlg)
+        : m_xDlg(std::move(xDlg))
+    {
+    }
+
+    short Execute() override;
+};
+
 class AbstractSwModalRedlineAcceptDlg_Impl : public AbstractSwModalRedlineAcceptDlg
 {
     std::unique_ptr<SwModalRedlineAcceptDlg> m_xDlg;
@@ -659,6 +678,11 @@ public:
                                                                 SvStream* pStream) override;
     virtual VclPtr<VclAbstractDialog> CreateSwInsertBookmarkDlg(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwContentControlDlg(weld::Window *pParent, SwWrtShell &rSh) override;
+
+    VclPtr<AbstractSwContentControlListItemDlg>
+    CreateSwContentControlListItemDlg(weld::Window* pParent,
+                                      SwContentControlListItem& rItem) override;
+
     virtual std::shared_ptr<AbstractSwBreakDlg> CreateSwBreakDlg(weld::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwChangeDBDlg(SwView& rVw) override;
     virtual VclPtr<SfxAbstractTabDialog>  CreateSwCharDlg(weld::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,

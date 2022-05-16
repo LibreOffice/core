@@ -27,6 +27,7 @@
 #include <svl/poolitem.hxx>
 
 #include "calbck.hxx"
+#include "swdllapi.h"
 
 class SwContentControl;
 class SwTextContentControl;
@@ -41,7 +42,7 @@ enum class SwContentControlType
 };
 
 /// SfxPoolItem subclass that wraps an SwContentControl.
-class SAL_DLLPUBLIC_RTTI SwFormatContentControl final : public SfxPoolItem
+class SW_DLLPUBLIC SwFormatContentControl final : public SfxPoolItem
 {
     std::shared_ptr<SwContentControl> m_pContentControl;
     SwTextContentControl* m_pTextAttr;
@@ -76,15 +77,19 @@ public:
 };
 
 /// Represents one list item in a content control dropdown list.
-class SwContentControlListItem
+class SW_DLLPUBLIC SwContentControlListItem
 {
 public:
+    /// This may be empty, ToString() falls back to m_aValue.
     OUString m_aDisplayText;
+    /// This must not be empty.
     OUString m_aValue;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     OUString ToString() const;
+
+    bool operator==(const SwContentControlListItem& rOther) const;
 
     static void ItemsToAny(const std::vector<SwContentControlListItem>& rItems,
                            css::uno::Any& rVal);
@@ -93,7 +98,7 @@ public:
 };
 
 /// Stores the properties of a content control.
-class SAL_DLLPUBLIC_RTTI SwContentControl : public sw::BroadcastingModify
+class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
 {
     css::uno::WeakReference<css::text::XTextContent> m_wXContentControl;
 
