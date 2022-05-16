@@ -26,6 +26,7 @@
 #include <o3tl/lru_map.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <vcl/glyphitem.hxx>
+#include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/gen.hxx>
@@ -69,7 +70,7 @@ private:
         sal_Int32 index;
         sal_Int32 len;
         tools::Long logicWidth;
-        vcl::Font font;
+        FontMetric fontMetric;
         double fontScaleX;
         double fontScaleY;
         MapMode mapMode;

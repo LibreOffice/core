@@ -450,7 +450,7 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
     , logicWidth(w)
     // we also need to save things used in OutputDevice::ImplPrepareLayoutArgs(), in case they
     // change in the output device, plus mapMode affects the sizes.
-    , font(outputDevice->GetFont())
+    , fontMetric(outputDevice->GetFontMetric())
     // TODO It would be possible to get a better hit ratio if mapMode wasn't part of the key
     // and results that differ only in mapmode would have coordinates adjusted based on that.
     // That would occasionally lead to rounding errors (at least differences that would
@@ -471,7 +471,7 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
     o3tl::hash_combine(hashValue, outputDevice.get());
     // Need to use IgnoreColor, because sometimes the color changes, but it's irrelevant
     // for text layout (and also obsolete in vcl::Font).
-    o3tl::hash_combine(hashValue, font.GetHashValueIgnoreColor());
+    o3tl::hash_combine(hashValue, fontMetric.GetHashValueIgnoreColor());
     // For some reason font scale may differ even if vcl::Font is the same,
     // so explicitly check it too.
     o3tl::hash_combine(hashValue, fontScaleX);
@@ -488,7 +488,7 @@ inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphs
            && logicWidth == other.logicWidth && mapMode == other.mapMode && rtl == other.rtl
            && layoutMode == other.layoutMode && digitLanguage == other.digitLanguage
            && fontScaleX == other.fontScaleX && fontScaleY == other.fontScaleY
-           && font.EqualIgnoreColor(other.font)
+           && fontMetric.EqualIgnoreColor(other.fontMetric)
            && vcl::text::FastStringCompareEqual()(text, other.text);
     // Slower things last in the comparison.
 }

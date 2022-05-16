@@ -78,10 +78,8 @@ FontMetric& FontMetric::operator=(const FontMetric& rFontMetric) = default;
 
 FontMetric& FontMetric::operator=(FontMetric&& rFontMetric) = default;
 
-bool FontMetric::operator==( const FontMetric& r ) const
+bool FontMetric::EqualNoBase( const FontMetric& r ) const
 {
-    if( Font::operator!=(r) )
-        return false;
     if (mbFullstopCentered != r.mbFullstopCentered)
         return false;
     if( mnAscent     != r.mnAscent )
@@ -96,6 +94,46 @@ bool FontMetric::operator==( const FontMetric& r ) const
         return false;
 
     return true;
+}
+
+bool FontMetric::operator==( const FontMetric& r ) const
+{
+    if( Font::operator!=(r) )
+        return false;
+    return EqualNoBase(r);
+}
+
+bool FontMetric::EqualIgnoreColor( const FontMetric& r ) const
+{
+    if( !Font::EqualIgnoreColor(r) )
+        return false;
+    return EqualNoBase(r);
+}
+
+size_t FontMetric::GetHashValueNoBase() const
+{
+    size_t hash = 0;
+    o3tl::hash_combine( hash, mbFullstopCentered );
+    o3tl::hash_combine( hash, mnAscent );
+    o3tl::hash_combine( hash, mnDescent );
+    o3tl::hash_combine( hash, mnIntLeading );
+    o3tl::hash_combine( hash, mnExtLeading );
+    o3tl::hash_combine( hash, mnSlant );
+    return hash;
+}
+
+size_t FontMetric::GetHashValue() const
+{
+    size_t hash = GetHashValueNoBase();
+    o3tl::hash_combine( hash, Font::GetHashValue());
+    return hash;
+}
+
+size_t FontMetric::GetHashValueIgnoreColor() const
+{
+    size_t hash = GetHashValueNoBase();
+    o3tl::hash_combine( hash, Font::GetHashValueIgnoreColor());
+    return hash;
 }
 
 ImplFontMetricData::ImplFontMetricData( const vcl::font::FontSelectPattern& rFontSelData )
