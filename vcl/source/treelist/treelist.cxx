@@ -24,10 +24,10 @@
 #include <osl/diagnose.h>
 
 #include <memory>
-#include <map>
+#include <unordered_map>
 
 
-typedef std::map<SvTreeListEntry*, std::unique_ptr<SvViewDataEntry>> SvDataTable;
+typedef std::unordered_map<SvTreeListEntry*, std::unique_ptr<SvViewDataEntry>> SvDataTable;
 
 struct SvListView::Impl
 {
