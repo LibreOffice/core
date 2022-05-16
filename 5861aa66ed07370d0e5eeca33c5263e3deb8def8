@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c961455d_bfa76658",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-16T07:52:26Z",
+      "side": 1,
+      "message": "Two nitpicks:  I\u0027m a bit torn by the use of \"Should\" in the names of the test functions, and by each of the test functions testing a prefix of the next function (which is kind of the right thing conceptually, but nevertheless looks a bit excessive).  But I don\u0027t mind too much either way.",
+      "revId": "5861aa66ed07370d0e5eeca33c5263e3deb8def8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e10e4258_68639dcf",
+        "filename": "store/CppunitTest_store.mk",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-16T07:52:26Z",
+      "side": 1,
+      "message": "please use the header/footer from TEMPLATE.SOURCECODE.HEADER",
+      "revId": "5861aa66ed07370d0e5eeca33c5263e3deb8def8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
