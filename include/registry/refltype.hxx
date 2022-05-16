@@ -23,17 +23,6 @@
 #include <registry/types.hxx>
 #include <sal/types.h>
 
-/** specifies the type source of a binary type blob.
-
-    Currently only RT_UNO_IDL type is used.
- */
-enum RTTypeSource
-{
-    RT_UNO_IDL,
-    RT_CORBA_IDL,
-    RT_JAVA
-};
-
 /** specifies a helper class for const values.
 
     This class is used for easy handling of constants or enum values
