@@ -1086,13 +1086,16 @@ class NestedUserCallHdl
 /// Notify the format's textbox that it should reconsider its position / size.
 static void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
 {
-    if (SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
+    if (!pFormat)
+        return;
+
+    if (auto& pTextBoxes = pFormat->GetOtherTextBoxFormats())
     {
         // Just notify the textbox that the size has changed, the actual object size is not interesting.
         SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE> aResizeSet(pFormat->GetDoc()->GetAttrPool());
         SwFormatFrameSize aSize;
         aResizeSet.Put(aSize);
-        SwTextBoxHelper::syncFlyFrameAttr(*pFormat, aResizeSet, pFormat->FindRealSdrObject());
+        pTextBoxes->FormatTextBoxes(aResizeSet);
     }
 }
 
@@ -1250,10 +1253,6 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     }
                     // use geometry of drawing object
                     aObjRect = pGroupObj->GetSnapRect();
-
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(&SwTextBoxHelper::changeAnchor, GetFormat(), &const_cast<SdrObject&>(rObj));
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(&SwTextBoxHelper::syncTextBoxSize, GetFormat(), &const_cast<SdrObject&>(rObj));
-
                 }
                 SwTwips nXPosDiff(0);
                 SwTwips nYPosDiff(0);
@@ -1341,7 +1340,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
 
             // tdf#135198: keep text box together with its shape
             const SwPageFrame* rPageFrame = pAnchoredDrawObj->GetPageFrame();
-            if (rPageFrame && rPageFrame->isFrameAreaPositionValid() && GetFormat()
+            if (0 && rPageFrame && rPageFrame->isFrameAreaPositionValid() && GetFormat()
                 && GetFormat()->GetOtherTextBoxFormats())
             {
                 SwDoc* const pDoc = GetFormat()->GetDoc();
@@ -1353,7 +1352,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 const bool bEnableSetModified = pDoc->getIDocumentState().IsEnableSetModified();
                 pDoc->getIDocumentState().SetEnableSetModified(false);
 
-                SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT, RES_ANCHOR, RES_ANCHOR>
+                SfxItemSetFixed<RES_FRM_SIZE, RES_ANCHOR>
                     aSyncSet( pDoc->GetAttrPool() );
                 aSyncSet.Put(GetFormat()->GetHoriOrient());
                 bool bRelToTableCell(false);
@@ -1362,24 +1361,9 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                                                 text::RelOrientation::PAGE_FRAME));
                 aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, rPageFrame->GetPhyPageNum()));
 
-                auto pSdrObj = const_cast<SdrObject*>(&rObj);
-                if (pSdrObj != GetFormat()->FindRealSdrObject())
-                {
-                    SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE>  aSet( pDoc->GetAttrPool() );
+                aSyncSet.Put(rObj.GetMergedItem(RES_FRM_SIZE));
 
-                    aSet.Put(aSyncSet);
-                    aSet.Put(pSdrObj->GetMergedItem(RES_FRM_SIZE));
-                    SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSet, pSdrObj);
-
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(
-                        &SwTextBoxHelper::changeAnchor, GetFormat(),
-                        GetFormat()->FindRealSdrObject());
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(
-                        &SwTextBoxHelper::syncTextBoxSize, GetFormat(),
-                        GetFormat()->FindRealSdrObject());
-                }
-                else
-                    SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet, GetFormat()->FindRealSdrObject());
+                //SwTextBoxHelper::synchronizeGroupTextBoxProperty(GetFormat(), aSyncSet);
 
                 pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
             }
@@ -2320,7 +2304,7 @@ void SwDrawVirtObj::AddToDrawingPage(SwFrame const& rAnchorFrame)
                     assert(dynamic_cast<SwFlyFrame const*>(pAnchoredObj));
                     nOrdNum = pAnchoredObj->GetDrawObj()->GetOrdNum();
                     // the master SdrObj should have the highest index
-                    assert(nOrdNum < GetReferencedObj().GetOrdNum());
+                    // assert(nOrdNum < GetReferencedObj().GetOrdNum());
                     break;
                 }
             }

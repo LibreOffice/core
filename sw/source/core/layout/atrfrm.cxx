@@ -2600,8 +2600,12 @@ void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         case RES_ATTRSET_CHG:
         {
             pNewAttrSetChg = static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+
             pH = pNewAttrSetChg->GetChgSet()->GetItem(RES_HEADER, false);
             pF = pNewAttrSetChg->GetChgSet()->GetItem(RES_FOOTER, false);
+
+            if (m_pOtherTextBoxFormats && pNewAttrSetChg->GetChgSet())
+                m_pOtherTextBoxFormats->FormatTextBoxes(*pNewAttrSetChg->GetChgSet());
 
             // reset fill information
             if(maFillAttributes && supportsFullDrawingLayerFillAttributeSet())

@@ -24,6 +24,7 @@
 class SdrPage;
 class SdrObject;
 class SfxItemSet;
+class SfxPoolItem;
 class SwFrameFormat;
 class SwFrameFormats;
 class SwFormatContent;
@@ -93,18 +94,18 @@ public:
 
     /// Sets the anchor of the associated textframe of the given shape, and
     /// returns true on success.
-    static bool changeAnchor(SwFrameFormat* pShape, SdrObject* pObj);
+    static void changeAnchor(SwFrameFormat* pShape, const SdrObject* pObj);
 
     /// Does the positioning for the associated textframe of the shape, and
     /// returns true on success.
-    static bool doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pObj);
+    static void doTextBoxPositioning(SwFrameFormat* pShape, const SdrObject* pObj);
 
     /// Sets the correct size of textframe depending on the given SdrObject.
-    static bool syncTextBoxSize(SwFrameFormat* pShape, SdrObject* pObj);
+    static void syncTextBoxSize(SwFrameFormat* pShape, const SdrObject* pObj);
 
     // Returns true on success. Synchronize z-order of the text frame of the given textbox
     // by setting it one level higher than the z-order of the shape of the textbox.
-    static bool DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const SdrObject* pObj);
+    static void DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const SdrObject* pObj);
 
     /**
      * If we have an associated TextFrame, then return that.
@@ -170,9 +171,8 @@ public:
     static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew,
                              SavedLink& rSavedLinks);
 
-    /// Calls the method given by pFunc with every textboxes of the group given by pFormat.
-    static void synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*, SdrObject*),
-                                                SwFrameFormat* pFormat, SdrObject* pObj);
+    /// Calls the needed methods given by rSet with every textboxes of the group given by pDrawFormat.
+    static void synchronizeGroupTextBoxProperty(SwFrameFormat* pDrawFormat, const SfxItemSet& rSet);
 
     /// Collect all textboxes of the group given by the pGroupObj Parameter. Returns with a
     /// vector filled with the textboxes.
@@ -202,6 +202,9 @@ class SwTextBoxNode
     // This is the pointer to the shape format, which has this node
     // (and the textboxes)
     SwFrameFormat* m_pOwnerShapeFormat;
+
+    // Field what limits the execution of sync, to use less resource.
+    bool m_bLocked;
 
 public:
     // Not needed.
@@ -250,6 +253,23 @@ public:
     size_t GetTextBoxCount() const { return m_pTextBoxes.size(); };
     // Returns with a const collection of textboxes owned by this node.
     std::map<SdrObject*, SwFrameFormat*> GetAllTextBoxes() const;
+
+    // Syncs the properties given by rSet for ALL textboxes of this shape.
+    void FormatTextBoxes(const SfxItemSet& rSet);
+    // Syncs the property given by pItem for ALL textboxes of this shape.
+    void FormatTextBoxes(const SfxPoolItem* const pItem);
+    // Syncs the properties given by rSet for the textbox of pObj.
+    void FormatTextBox(const SdrObject* pObj, const SfxItemSet& rSet);
+    // Syncs the property given by pItem for the textbox of pObj.
+    void FormatTextBox(const SdrObject* pObj, const SfxPoolItem* const pItem);
+
+private:
+    void HandleTextBoxSizeChange(const SdrObject* pObj);
+    void HandleTextBoxPositionChange(const SdrObject* pObj);
+    void HandleTextBoxZOrderChange(const SdrObject* pObj);
+    void HandleTextBoxSurroundChange(const SdrObject* pObj);
+
+    void HandleTextBoxPropertyChange(const SdrObject* pObj, const SfxPoolItem* const pItem);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX

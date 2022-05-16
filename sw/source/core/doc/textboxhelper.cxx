@@ -95,17 +95,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
         pShape->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
     uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
                                                                 uno::UNO_QUERY);
-    try
-    {
-        uno::Reference<text::XTextContent> XSourceShape(pObject->getUnoShape(),
-                                                        uno::UNO_QUERY_THROW);
-        xTextContentAppend->insertTextContentWithProperties(
-            xTextFrame, uno::Sequence<beans::PropertyValue>(), XSourceShape->getAnchor());
-    }
-    catch (uno::Exception&)
-    {
-        xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
-    }
+    xTextContentAppend->appendTextContent(xTextFrame, uno::Sequence<beans::PropertyValue>());
+
     // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
     uno::Reference<text::XTextFrame> xRealTextFrame(xTextFrame, uno::UNO_QUERY);
     auto pTextFrame = dynamic_cast<SwXTextFrame*>(xRealTextFrame.get());
@@ -157,8 +148,6 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
         pShape->SetFormatAttr(aSet);
     }
 
-    DoTextBoxZOrderCorrection(pShape, pObject);
-
     // Also initialize the properties, which are not constant, but inherited from the shape's ones.
     uno::Reference<drawing::XShape> xShape(pObject->getUnoShape(), uno::UNO_QUERY);
     syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::Any(xShape->getSize()), pObject);
@@ -190,6 +179,15 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
 
     if (bIsGroupObj)
         doTextBoxPositioning(pShape, pObject);
+
+    // Do sync for the new textframe.
+    SfxItemSet aSyncSet(pShape->GetDoc()->GetAttrPool());
+    aSyncSet.Put(SwFormatAnchor());
+    aSyncSet.Put(SwFormatFrameSize());
+    aSyncSet.Put(SwFormatHoriOrient());
+
+    synchronizeGroupTextBoxProperty(pShape, aSyncSet);
+    DoTextBoxZOrderCorrection(pShape, pObject);
 
     // Check if the shape had text before and move it to the new textframe
     if (!bCopyText || sCopyableText.isEmpty())
@@ -326,9 +324,11 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
         pFormat->SetFormatAttr(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, 1));
     }
     // Do sync for the new textframe.
-    synchronizeGroupTextBoxProperty(&changeAnchor, pShapeFormat, pObj);
-    synchronizeGroupTextBoxProperty(&syncTextBoxSize, pShapeFormat, pObj);
-
+    SfxItemSet aSyncSet(pShapeFormat->GetDoc()->GetAttrPool());
+    aSyncSet.Put(SwFormatAnchor());
+    aSyncSet.Put(SwFormatFrameSize());
+    synchronizeGroupTextBoxProperty(pShapeFormat, aSyncSet);
+    DoTextBoxZOrderCorrection(pShapeFormat, pObj);
     updateTextBoxMargin(pObj);
 }
 
@@ -1063,6 +1063,9 @@ text::TextContentAnchorType SwTextBoxHelper::mapAnchorType(const RndStdIds& rAnc
 void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet,
                                        SdrObject* pObj)
 {
+    synchronizeGroupTextBoxProperty(&rShape, rSet);
+    return;
+
     SwFrameFormat* pFormat = getOtherTextBoxFormat(&rShape, RES_DRAWFRMFMT, pObj);
     if (!pFormat)
         return;
@@ -1199,6 +1202,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
 
 void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
 {
+    return;
     if (!pObj)
         return;
     uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
@@ -1241,7 +1245,7 @@ void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
     DoTextBoxZOrderCorrection(pParentFormat, pObj);
 }
 
-bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape, SdrObject* pObj)
+void SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape, const SdrObject* pObj)
 {
     if (auto pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj))
     {
@@ -1316,14 +1320,10 @@ bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape, SdrObject* pObj)
         {
             SAL_WARN("sw.core", "SwTextBoxHelper::changeAnchor(): " << e.Message);
         }
-
-        return doTextBoxPositioning(pShape, pObj) && DoTextBoxZOrderCorrection(pShape, pObj);
     }
-
-    return false;
 }
 
-bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pObj)
+void SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, const SdrObject* pObj)
 {
     // Set the position of the textboxes according to the position of its shape-pair
     const bool bIsGroupObj = (pObj != pShape->FindRealSdrObject()) && pObj;
@@ -1332,13 +1332,13 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
         // Do not create undo entry for the positioning
         ::sw::UndoGuard const UndoGuard(pShape->GetDoc()->GetIDocumentUndoRedo());
 
+        // Text area of the shape
+        tools::Rectangle aRect = getRelativeTextRectangle(pObj ? const_cast<SdrObject*>(pObj)
+                                                               : pShape->FindRealSdrObject());
+
         // Special treatment for AS_CHAR textboxes:
         if (pShape->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
         {
-            // Get the text area of the shape
-            tools::Rectangle aRect
-                = getRelativeTextRectangle(pObj ? pObj : pShape->FindRealSdrObject());
-
             // Get the left spacing of the text area of the shape
             auto nLeftSpace = pShape->GetLRSpace().GetLeft();
 
@@ -1415,10 +1415,6 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
         // Other cases when the shape has different anchor from AS_CHAR
         else
         {
-            // Text area of the shape
-            tools::Rectangle aRect
-                = getRelativeTextRectangle(pObj ? pObj : pShape->FindRealSdrObject());
-
             // X Offset of the shape spacing
             auto nLeftSpace = pShape->GetLRSpace().GetLeft();
 
@@ -1496,32 +1492,12 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
             pFormat->SetFormatAttr(aNewHOri);
             pFormat->SetFormatAttr(aNewVOri);
         }
-        return true;
     }
-
-    return false;
 }
 
-bool SwTextBoxHelper::syncTextBoxSize(SwFrameFormat* pShape, SdrObject* pObj)
-{
-    if (!pShape || !pObj)
-        return false;
+void SwTextBoxHelper::syncTextBoxSize(SwFrameFormat* pShape, const SdrObject* pObj) {}
 
-    if (auto pTextBox = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj))
-    {
-        const auto& rSize = getRelativeTextRectangle(pObj).GetSize();
-        if (!rSize.IsEmpty())
-        {
-            SwFormatFrameSize aSize(pTextBox->GetFrameSize());
-            aSize.SetSize(rSize);
-            return pTextBox->SetFormatAttr(aSize);
-        }
-    }
-
-    return false;
-}
-
-bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const SdrObject* pObj)
+void SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const SdrObject* pObj)
 {
     // TODO: do this with group shape textboxes.
     SdrObject* pShpObj = nullptr;
@@ -1569,7 +1545,7 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const Sdr
                             break; // Do not run to infinity
                     }
                 pPage->RecalcObjOrdNums();
-                return true; // Success
+                return; // Success
             }
             SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
                                 "No Valid Draw model for SdrObject for the shape!");
@@ -1580,21 +1556,20 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const Sdr
     SAL_WARN("sw.core", "SwTextBoxHelper::DoTextBoxZOrderCorrection(): "
                         "No Valid SdrObject for the shape!");
 
-    return false;
+    return;
 }
 
-void SwTextBoxHelper::synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*, SdrObject*),
-                                                      SwFrameFormat* pFormat, SdrObject* pObj)
+void SwTextBoxHelper::synchronizeGroupTextBoxProperty(SwFrameFormat* pDrawFormat,
+                                                      const SfxItemSet& rSet)
 {
-    if (auto pChildren = pObj->getChildrenOfSdrObject())
-    {
-        for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
-            synchronizeGroupTextBoxProperty(pFunc, pFormat, pChildren->GetObj(i));
-    }
-    else
-    {
-        (*pFunc)(pFormat, pObj);
-    }
+    if (!pDrawFormat && pDrawFormat->Which() != RES_DRAWFRMFMT)
+        return;
+
+    auto& pTextBoxes = pDrawFormat->GetOtherTextBoxFormats();
+    if (!pTextBoxes)
+        return;
+
+    pTextBoxes->FormatTextBoxes(rSet);
 }
 
 std::vector<SwFrameFormat*> SwTextBoxHelper::CollectTextBoxes(const SdrObject* pGroupObject,
@@ -1624,6 +1599,7 @@ SwTextBoxNode::SwTextBoxNode(SwFrameFormat* pOwnerShape)
     assert(pOwnerShape->Which() == RES_DRAWFRMFMT);
 
     m_pOwnerShapeFormat = pOwnerShape;
+    m_bLocked = false;
     if (!m_pTextBoxes.empty())
         m_pTextBoxes.clear();
 }
@@ -1779,6 +1755,193 @@ std::map<SdrObject*, SwFrameFormat*> SwTextBoxNode::GetAllTextBoxes() const
         aRet.emplace(rElem.m_pDrawObject, rElem.m_pTextBoxFormat);
     }
     return aRet;
+}
+
+void SwTextBoxNode::FormatTextBoxes(const SfxItemSet& rSet)
+{
+    if (m_bLocked || !rSet.Count())
+        return;
+
+    for (auto& rElem : m_pTextBoxes)
+        FormatTextBox(rElem.m_pDrawObject, rSet);
+}
+
+void SwTextBoxNode::FormatTextBoxes(SfxPoolItem const* const pItem)
+{
+    if (m_bLocked || !pItem)
+        return;
+
+    for (auto& rElem : m_pTextBoxes)
+        FormatTextBox(rElem.m_pDrawObject, pItem);
+}
+
+void SwTextBoxNode::FormatTextBox(const SdrObject* pObj, const SfxItemSet& rSet)
+{
+    if (m_bLocked || !rSet.Count())
+        return;
+
+    SfxItemIter aIter(rSet);
+    auto pItem = aIter.GetCurItem();
+    while (pItem)
+    {
+        FormatTextBox(pObj, pItem);
+        pItem = aIter.NextItem();
+    }
+}
+
+void SwTextBoxNode::FormatTextBox(const SdrObject* pObj, SfxPoolItem const* const pItem)
+{
+    if (!pItem || m_bLocked)
+        return;
+
+    m_bLocked = true;
+    switch (pItem->Which())
+    {
+        case RES_ANCHOR:
+        case RES_HORI_ORIENT:
+        case RES_VERT_ORIENT:
+        {
+            HandleTextBoxPositionChange(pObj);
+            break;
+        }
+        case RES_FRM_SIZE:
+        {
+            HandleTextBoxSizeChange(pObj);
+            break;
+        }
+        case RES_SURROUND:
+        {
+            HandleTextBoxSurroundChange(pObj);
+            break;
+        }
+
+        default:
+        {
+            HandleTextBoxPropertyChange(pObj, pItem);
+            break;
+        }
+    }
+    m_bLocked = false;
+}
+
+void SwTextBoxNode::HandleTextBoxSizeChange(const SdrObject* pObj)
+{
+    auto pTextBox = GetTextBox(pObj);
+    if (!pTextBox)
+        return;
+
+    const auto& rTextArea = SwTextBoxHelper::getRelativeTextRectangle(const_cast<SdrObject*>(pObj));
+    const auto& rRefSize
+        = /*pObj->GetMergedItem(RES_FRM_SIZE);*/ m_pOwnerShapeFormat->GetFrameSize();
+    const bool& bWordWrap = (rRefSize.GetWidthSizeType() == SwFrameSize::Fixed);
+    const bool& bIsShapeHasAutoHeight = (rRefSize.GetHeightSizeType() != SwFrameSize::Fixed);
+
+    SwFormatFrameSize aNewShapeSize(m_pOwnerShapeFormat->GetFrameSize());
+    SwFormatFrameSize aNewFrameSize(pTextBox->GetFrameSize());
+
+    const Size aOldTextBoxSize = pTextBox->GetFrameSize().GetSize();
+    //if (!bIsShapeHasAutoHeight)
+    aNewFrameSize.SetHeight(rTextArea.getHeight());
+    //if (bWordWrap)
+    aNewFrameSize.SetWidth(rTextArea.getWidth());
+    aNewFrameSize.SetHeightSizeType(
+        /*bIsShapeHasAutoHeight ? SwFrameSize::Minimum : */ SwFrameSize::Fixed);
+    aNewFrameSize.SetWidthSizeType(/*bWordWrap ? */ SwFrameSize::Fixed /*: SwFrameSize::Minimum*/);
+
+    //const bool bFrameFormatLocked = pTextBox->IsModifyLocked();
+    //if (!bFrameFormatLocked)
+    //    pTextBox->LockModify();
+    pTextBox->SetFormatAttr(aNewFrameSize);
+    //if (!bFrameFormatLocked)
+    //    pTextBox->UnlockModify();
+
+    //if (!bWordWrap)
+    //{
+    //    aNewShapeSize.SetWidth(aNewShapeSize.GetWidth() + (aNewFrameSize.GetWidth() - aOldTextBoxSize.getWidth()));
+    //}
+
+    //const bool bShapeFormatLocked = m_pOwnerShapeFormat->IsModifyLocked();
+    //if (!bShapeFormatLocked)
+    //    m_pOwnerShapeFormat->LockModify();
+    //m_pOwnerShapeFormat->SetFormatAttr(aNewShapeSize);
+    //if (!bShapeFormatLocked)
+    //    m_pOwnerShapeFormat->UnlockModify();
+    //
+}
+
+void SwTextBoxNode::HandleTextBoxPositionChange(const SdrObject* pObj)
+{
+    if (!m_pOwnerShapeFormat->FindRealSdrObject())
+        return;
+    // TODO
+    SwTextBoxHelper::doTextBoxPositioning(m_pOwnerShapeFormat, pObj);
+    SwTextBoxHelper::changeAnchor(m_pOwnerShapeFormat, pObj);
+
+    SwTextBoxHelper::doTextBoxPositioning(m_pOwnerShapeFormat, pObj);
+}
+
+void SwTextBoxNode::HandleTextBoxZOrderChange(const SdrObject* pObj)
+{
+    auto pTextBox = GetTextBox(pObj);
+    if (!pObj || !pTextBox)
+        return;
+
+    auto pDrawModel = m_pOwnerShapeFormat->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+    if (!pDrawModel)
+        return;
+
+    auto pRefObj = m_pOwnerShapeFormat->FindRealSdrObject();
+    if (!pRefObj)
+        return;
+
+    auto pTextObj = pTextBox->FindRealSdrObject();
+    if (!pTextBox)
+        return;
+
+    auto pPage = pDrawModel->GetPage(0);
+    if (!pPage)
+        return;
+
+    pPage->RecalcObjOrdNums();
+    //while (pTextObj->GetOrdNum() != pRefObj->GetOrdNum() + 1)
+    //{
+    //    if (pTextObj->GetOrdNum() < pRefObj->GetOrdNum() + 1)
+    //    {
+    //        pTextObj->SetOrdNum()
+    //    }
+    //    else
+    //    {
+    //    }
+    //
+    //}
+
+    // TODO
+    SwTextBoxHelper::DoTextBoxZOrderCorrection(m_pOwnerShapeFormat, pObj);
+}
+
+void SwTextBoxNode::HandleTextBoxSurroundChange(const SdrObject* pObj)
+{
+    auto pTextBox = GetTextBox(pObj);
+    if (pTextBox)
+    {
+        pTextBox->SetFormatAttr(SwFormatSurround(text::WrapTextMode::WrapTextMode_THROUGH));
+    }
+}
+
+void SwTextBoxNode::HandleTextBoxPropertyChange(const SdrObject* pObj,
+                                                const SfxPoolItem* const pItem)
+{
+    if (pItem->Which() == RES_CNTNT)
+        return;
+    auto pTextBox = GetTextBox(pObj);
+    if (pTextBox)
+    {
+        auto& rShapeSet = m_pOwnerShapeFormat->GetAttrSet();
+        const SfxItemPool* rTextBoxPool = pTextBox->GetAttrSet().GetPool();
+        if (rShapeSet.HasItem(pItem->Which()) && rTextBoxPool->CheckItemInPool(pItem)
+            && rShapeSet.GetItemState(pItem->Which()) == SfxItemState::SET)
+            pTextBox->SetFormatAttr(*rShapeSet.GetItem(pItem->Which()));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

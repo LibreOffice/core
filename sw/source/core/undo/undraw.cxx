@@ -601,10 +601,9 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         pContact->MoveObjToVisibleLayer( pObj );
 
         SwDrawFrameFormat* pDrawFrameFormat = rSave.pFormat;
-        if (pDrawFrameFormat->GetOtherTextBoxFormats())
+        if (auto pTextBoxes = pDrawFrameFormat->GetOtherTextBoxFormats())
         {
-            SwTextBoxHelper::synchronizeGroupTextBoxProperty(
-                SwTextBoxHelper::changeAnchor, pDrawFrameFormat, pObj);
+            pTextBoxes->FormatTextBoxes(&pDrawFrameFormat->GetAnchor());
         }
 
         // #i45952# - notify that position attributes are already set

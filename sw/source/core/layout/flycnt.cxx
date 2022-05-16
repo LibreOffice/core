@@ -527,30 +527,30 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
             }
         }
     }
-    // tdf#137803: Fix the position of the shape during autoSize
-    SwFrameFormat* pShapeFormat
-        = SwTextBoxHelper::getOtherTextBoxFormat(GetFormat(), RES_FLYFRMFMT);
-    // FIXME: According to tdf37153, ignore FollowTextFlow objs, because
-    // wrong position will applied in that case. FollowTextFlow needs fix.
-    if (pShapeFormat && !pShapeFormat->GetFollowTextFlow().GetValue() &&
-        SwTextBoxHelper::getProperty(pShapeFormat,
-            UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT).hasValue() &&
-        SwTextBoxHelper::getProperty(pShapeFormat,
-            UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT).get<bool>() )
-    {
-        // get the text area of the shape
-        const tools::Rectangle aTextRectangle
-            = SwTextBoxHelper::getRelativeTextRectangle(pShapeFormat->FindRealSdrObject());
-        // get the original textframe position
-        SwFormatHoriOrient aHOri = pShapeFormat->GetHoriOrient();
-        SwFormatVertOrient aVOri = pShapeFormat->GetVertOrient();
-        // calc the right position of the shape depending on text area
-        aHOri.SetPos(aHOri.GetPos() + aTextRectangle.Left());
-        aVOri.SetPos(aVOri.GetPos() + aTextRectangle.Top());
-        // save the new position for the shape
-        GetFormat()->SetFormatAttr(aHOri);
-        GetFormat()->SetFormatAttr(aVOri);
-    }
+    //// tdf#137803: Fix the position of the shape during autoSize
+    //SwFrameFormat* pShapeFormat
+    //    = SwTextBoxHelper::getOtherTextBoxFormat(GetFormat(), RES_FLYFRMFMT);
+    //// FIXME: According to tdf37153, ignore FollowTextFlow objs, because
+    //// wrong position will applied in that case. FollowTextFlow needs fix.
+    //if (pShapeFormat && !pShapeFormat->GetFollowTextFlow().GetValue() &&
+    //    SwTextBoxHelper::getProperty(pShapeFormat,
+    //        UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT).hasValue() &&
+    //    SwTextBoxHelper::getProperty(pShapeFormat,
+    //        UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT).get<bool>() )
+    //{
+    //    // get the text area of the shape
+    //    const tools::Rectangle aTextRectangle
+    //        = SwTextBoxHelper::getRelativeTextRectangle(pShapeFormat->FindRealSdrObject());
+    //    // get the original textframe position
+    //    SwFormatHoriOrient aHOri = pShapeFormat->GetHoriOrient();
+    //    SwFormatVertOrient aVOri = pShapeFormat->GetVertOrient();
+    //    // calc the right position of the shape depending on text area
+    //    aHOri.SetPos(aHOri.GetPos() + aTextRectangle.Left());
+    //    aVOri.SetPos(aVOri.GetPos() + aTextRectangle.Top());
+    //    // save the new position for the shape
+    //    GetFormat()->SetFormatAttr(aHOri);
+    //    GetFormat()->SetFormatAttr(aVOri);
+    //}
     if ( bOsz || bConsiderWrapInfluenceDueToOverlapPrevCol ||
          // #i40444#
          bConsiderWrapInfluenceDueToMovedFwdAnchor )
