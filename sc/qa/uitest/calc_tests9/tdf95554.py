@@ -11,6 +11,8 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.calc import enter_text_to_cell
 
+import platform
+
 class Tdf95554(UITestCase):
 
    def test_tdf95554(self):
@@ -39,7 +41,11 @@ class Tdf95554(UITestCase):
             # Without the fix, the test breaks here with:
             #AssertionError: 'A\n\nC\n\nE\nF' != 'A'
 
-            self.assertEqual('A\n\nC\n\nE\nF',
-                    writer_document.Text.String)
+            if platform.system() == "Windows":
+                self.assertEqual('A\r\n\r\nC\r\n\r\nE\r\nF',
+                        writer_document.Text.String)
+            else:
+                self.assertEqual('A\n\nC\n\nE\nF',
+                        writer_document.Text.String)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
