@@ -331,14 +331,12 @@ QVariant QtMimeData::retrieveData(const QString& mimeType, QMetaType) const
         if (bWantUTF8)
         {
             OString aUTF8String(OUStringToOString(aString, RTL_TEXTENCODING_UTF8));
-            aByteArray = QByteArray(reinterpret_cast<const char*>(aUTF8String.getStr()),
-                                    aUTF8String.getLength());
+            aByteArray = QByteArray(aUTF8String.getStr(), aUTF8String.getLength());
         }
         else if (bWantNoCharset)
         {
             OString aLocaleString(OUStringToOString(aString, osl_getThreadTextEncoding()));
-            aByteArray = QByteArray(reinterpret_cast<const char*>(aLocaleString.getStr()),
-                                    aLocaleString.getLength());
+            aByteArray = QByteArray(aLocaleString.getStr(), aLocaleString.getLength());
         }
         else
             return QVariant(toQString(aString));
