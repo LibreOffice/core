@@ -34,6 +34,24 @@
       "parentUuid": "e158f352_278729f5",
       "revId": "381a3a8ce75daa67d181337a96fb3d93dc8f73ce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "958bdf56_43acc59c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-16T13:37:41Z",
+      "side": 1,
+      "message": "Thanks for explanations and help.  Sometimes there are (too) many roads to Rome!",
+      "parentUuid": "8253bd9c_4ed206d8",
+      "revId": "381a3a8ce75daa67d181337a96fb3d93dc8f73ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
