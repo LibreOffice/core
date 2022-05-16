@@ -352,10 +352,10 @@ uno::Reference< media::XPlayer > MediaWindow::createPlayer( const OUString& rURL
     return priv::MediaWindowImpl::createPlayer( rURL, rReferer, pMimeType );
 }
 
-
 uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL,
                                                             const OUString& rReferer,
-                                                            const OUString& sMimeType )
+                                                            const OUString& sMimeType,
+                                                            const uno::Reference<graphic::XGraphic>& rGraphic)
 {
     uno::Reference< media::XPlayer >    xPlayer( createPlayer( rURL, rReferer, &sMimeType ) );
     uno::Reference< graphic::XGraphic > xRet;
@@ -394,7 +394,11 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
     }
 
     if (xGraphic)
+    {
+        if (rGraphic)
+            xGraphic.reset(new Graphic(rGraphic));
         xRet = xGraphic->GetXGraphic();
+    }
 
     return xRet;
 }
