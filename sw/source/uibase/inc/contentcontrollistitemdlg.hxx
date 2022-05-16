@@ -18,36 +18,23 @@
  */
 #pragma once
 
-#include <sfx2/basedlgs.hxx>
 #include <vcl/weld.hxx>
 
-class SwWrtShell;
-class SwContentControl;
 class SwContentControlListItem;
 
-/**
- * The content control dialog allows editing the properties of the content control under the
- * cursor.
- */
-class SwContentControlDlg final : public SfxDialogController
+/// Edits the properties of a sing list item in a (drop-down) content control.
+class SwContentControlListItemDlg final : public weld::GenericDialogController
 {
-    SwWrtShell& m_rWrtShell;
-    std::shared_ptr<SwContentControl> m_pContentControl;
-    std::vector<SwContentControlListItem> m_aSavedListItems;
+    SwContentControlListItem& m_rItem;
 
-    std::unique_ptr<weld::CheckButton> m_xShowingPlaceHolderCB;
-    std::unique_ptr<weld::Frame> m_xListItemsFrame;
-    std::unique_ptr<weld::TreeView> m_xListItems;
-    std::unique_ptr<weld::Box> m_xListItemButtons;
-    std::unique_ptr<weld::Button> m_xInsertBtn;
+    std::unique_ptr<weld::Entry> m_xDisplayNameED;
+    std::unique_ptr<weld::Entry> m_xValueED;
     std::unique_ptr<weld::Button> m_xOk;
 
-    DECL_LINK(InsertHdl, weld::Button&, void);
     DECL_LINK(OkHdl, weld::Button&, void);
 
 public:
-    SwContentControlDlg(weld::Window* pParent, SwWrtShell& rSh);
-    virtual ~SwContentControlDlg() override;
+    SwContentControlListItemDlg(weld::Widget* pParent, SwContentControlListItem& rItem);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
