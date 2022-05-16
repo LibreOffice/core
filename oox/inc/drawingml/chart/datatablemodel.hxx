@@ -28,6 +28,9 @@ struct DataTableModel
     bool mbShowOutline : 1; /// Show outline
     bool mbShowKeys : 1;
 
+    ModelRef<Shape> mxShapeProp; /// frame formatting.
+    ModelRef<TextBody> mxTextProp; /// text formatting.
+
     DataTableModel()
         : mbShowHBorder(false)
         , mbShowVBorder(false)
