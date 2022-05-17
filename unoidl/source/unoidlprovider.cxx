@@ -777,6 +777,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 5;
             std::vector< EnumTypeEntity::Member > mems;
+            mems.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString memName(file->readIdxName(&offset));
                 checkEntityName(file, memName);
@@ -817,6 +818,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 4;
             std::vector< PlainStructTypeEntity::Member > mems;
+            mems.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString memName(file->readIdxName(&offset));
                 checkEntityName(file, memName);
@@ -841,6 +843,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 5;
             std::vector< OUString > params;
+            params.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString param(file->readIdxName(&offset));
                 checkEntityName(file, param);
@@ -855,6 +858,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 4;
             std::vector< PolymorphicStructTypeTemplateEntity::Member > mems;
+            mems.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 v = file->read8(offset);
                 ++offset;
@@ -900,6 +904,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 4;
             std::vector< ExceptionTypeEntity::Member > mems;
+            mems.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString memName(file->readIdxName(&offset));
                 checkEntityName(file, memName);
@@ -924,6 +929,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 5;
             std::vector< AnnotatedReference > mandBases;
+            mandBases.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString base(file->readIdxName(&offset));
                 checkTypeName(file, base);
@@ -939,6 +945,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 4;
             std::vector< AnnotatedReference > optBases;
+            optBases.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString base(file->readIdxName(&offset));
                 checkTypeName(file, base);
@@ -954,6 +961,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 4;
             std::vector< InterfaceTypeEntity::Attribute > attrs;
+            attrs.reserve(nAttrs);
             for (sal_uInt32 i = 0; i != nAttrs; ++i) {
                 v = file->read8(offset);
                 ++offset;
@@ -976,6 +984,7 @@ rtl::Reference< Entity > readEntity(
                          " attribute " + attrName + " of interface type"));
                 }
                 offset += 4;
+                getExcs.reserve(m);
                 for (sal_uInt32 j = 0; j != m; ++j) {
                     OUString exc(file->readIdxName(&offset));
                     checkTypeName(file, exc);
@@ -992,6 +1001,7 @@ rtl::Reference< Entity > readEntity(
                              + " of interface type"));
                     }
                     offset += 4;
+                    setExcs.reserve(m);
                     for (sal_uInt32 j = 0; j != m; ++j) {
                         OUString exc(file->readIdxName(&offset));
                         checkTypeName(file, exc);
@@ -1027,6 +1037,7 @@ rtl::Reference< Entity > readEntity(
                 }
                 offset += 4;
                 std::vector< InterfaceTypeEntity::Method::Parameter > params;
+                params.reserve(m);
                 for (sal_uInt32 j = 0; j != m; ++j) {
                     v = file->read8(offset);
                     ++offset;
@@ -1067,6 +1078,7 @@ rtl::Reference< Entity > readEntity(
                          + methName + " of interface type"));
                 }
                 offset += 4;
+                excs.reserve(m);
                 for (sal_uInt32 j = 0; j != m; ++j) {
                     OUString exc(file->readIdxName(&offset));
                     checkTypeName(file, exc);
@@ -1107,6 +1119,7 @@ rtl::Reference< Entity > readEntity(
             MapEntry const * p = reinterpret_cast< MapEntry const * >(
                 static_cast< char const * >(file->address) + offset + 5);
             std::vector< ConstantGroupEntity::Member > mems;
+            mems.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 sal_uInt32 off = p[i].data.getUnsigned32();
                 bool ann;
@@ -1138,6 +1151,7 @@ rtl::Reference< Entity > readEntity(
                          " single-interface--based service"));
                 }
                 offset += 4;
+                ctors.reserve(n);
                 for (sal_uInt32 i = 0; i != n; ++i) {
                     OUString ctorName(file->readIdxName(&offset));
                     checkEntityName(file, ctorName);
@@ -1153,6 +1167,7 @@ rtl::Reference< Entity > readEntity(
                     std::vector<
                         SingleInterfaceBasedServiceEntity::Constructor::
                         Parameter > params;
+                    params.reserve(m);
                     for (sal_uInt32 j = 0; j != m; ++j) {
                         v = file->read8(offset);
                         ++offset;
@@ -1188,6 +1203,7 @@ rtl::Reference< Entity > readEntity(
                              + " of single-interface--based service"));
                     }
                     offset += 4;
+                    excs.reserve(m);
                     for (sal_uInt32 j = 0; j != m; ++j) {
                         OUString exc(file->readIdxName(&offset));
                         checkTypeName(file, exc);
@@ -1214,6 +1230,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 5;
             std::vector< AnnotatedReference > mandServs;
+            mandServs.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString base(file->readIdxName(&offset));
                 checkTypeName(file, base);
@@ -1229,6 +1246,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 4;
             std::vector< AnnotatedReference > optServs;
+            optServs.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString base(file->readIdxName(&offset));
                 checkTypeName(file, base);
@@ -1244,6 +1262,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 4;
             std::vector< AnnotatedReference > mandIfcs;
+            mandIfcs.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString base(file->readIdxName(&offset));
                 checkTypeName(file, base);
@@ -1259,6 +1278,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 4;
             std::vector< AnnotatedReference > optIfcs;
+            optIfcs.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString base(file->readIdxName(&offset));
                 checkTypeName(file, base);
@@ -1274,6 +1294,7 @@ rtl::Reference< Entity > readEntity(
             }
             offset += 4;
             std::vector< AccumulationBasedServiceEntity::Property > props;
+            props.reserve(n);
             for (sal_uInt32 i = 0; i != n; ++i) {
                 sal_uInt16 attrs = file->read16(offset);
                 offset += 2;
