@@ -38,6 +38,7 @@ enum class SwContentControlType
     RICH_TEXT,
     CHECKBOX,
     DROP_DOWN_LIST,
+    PICTURE,
 };
 
 /// SfxPoolItem subclass that wraps an SwContentControl.
@@ -123,6 +124,8 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
 
     std::vector<SwContentControlListItem> m_aListItems;
 
+    bool m_bPicture = false;
+
     /// Stores a list item index, in case the doc model is not yet updated.
     std::optional<size_t> m_oSelectedListItem;
 
@@ -184,6 +187,10 @@ public:
     {
         m_aListItems = rListItems;
     }
+
+    void SetPicture(bool bPicture) { m_bPicture = bPicture; }
+
+    bool GetPicture() const { return m_bPicture; }
 
     void SetSelectedListItem(std::optional<size_t> oSelectedListItem)
     {

@@ -36,6 +36,7 @@
 
 using namespace com::sun::star;
 
+/// The inner part SwXLineBreak, which is deleted with a locked SolarMutex.
 class SwXLineBreak::Impl : public SvtListener
 {
 public:
