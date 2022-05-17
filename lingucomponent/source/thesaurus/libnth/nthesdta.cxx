@@ -21,6 +21,7 @@
 
 #include "nthesdta.hxx"
 #include <linguistic/misc.hxx>
+#include <utility>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -32,12 +33,9 @@ using namespace com::sun::star::linguistic2;
 namespace linguistic
 {
 
-Meaning::Meaning(
-            const OUString &rTerm) :
-
+Meaning::Meaning(OUString _aTerm) :
     aSyn        ( Sequence< OUString >(1) ),
-    aTerm       (rTerm)
-
+    aTerm       (std::move(_aTerm))
 {
 #if 0
     // this is for future use by a german thesaurus when one exists

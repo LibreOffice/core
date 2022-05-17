@@ -29,6 +29,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <utility>
 
 
 using com::sun::star::beans::XIntrospectionAccess;
@@ -51,8 +52,8 @@ using com::sun::star::reflection::ParamInfo;
 namespace pyuno
 {
 
-Adapter::Adapter( const PyRef & ref, const Sequence< Type > &types )
-    : mWrappedObject( ref ),
+Adapter::Adapter( PyRef ref, const Sequence< Type > &types )
+    : mWrappedObject(std::move( ref )),
       mInterpreter( (PyThreadState_Get()->interp) ),
       mTypes( types )
 {}
