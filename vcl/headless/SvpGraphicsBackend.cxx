@@ -489,7 +489,7 @@ void SvpGraphicsBackend::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBi
     cairo_scale(cr, fXScale, fYScale);
     cairo_set_source_surface(cr, aSurface.getSurface(), -rTR.mnSrcX, -rTR.mnSrcY);
 
-    //tdf#133716 borders of upscaled images should not be blured
+    //tdf#133716 borders of upscaled images should not be blurred
     cairo_pattern_t* sourcepattern = cairo_get_source(cr);
     cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_PAD);
 
@@ -675,7 +675,7 @@ bool SvpGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap&
 
     cairo_pattern_t* sourcepattern = cairo_get_source(cr);
 
-    //tdf#133716 borders of upscaled images should not be blured
+    //tdf#133716 borders of upscaled images should not be blurred
     //tdf#114117 when stretching a single or multi pixel width/height source to fit an area
     //the image will be extended into that size.
     cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_PAD);
