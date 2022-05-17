@@ -34,6 +34,24 @@
       "parentUuid": "cd0dcbca_9b2c2fa3",
       "revId": "6201446cc1dc8691f94a5d95fc012253557b513c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6693067e_2452c980",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-17T14:35:17Z",
+      "side": 1,
+      "message": "\u003e Maybe that\u0027s doing a dynamic_cast on a fake UNO proxy C++ object.\n\nAh, that would be the case, thanks for spotting that.\n\nAny other ideas for doing UNO bypass? I can\u0027t use XTunnel because I don\u0027t want to cast to a specific concrete class.\n\nI guess I could create something XTunnel-like, so something like\n\ninterface XTunnelRead\n{\nint readSomething(sal_Int64 pointer, sal_Int32 length)\n}",
+      "parentUuid": "04522c8b_fb065d7c",
+      "revId": "6201446cc1dc8691f94a5d95fc012253557b513c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
