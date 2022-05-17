@@ -16,6 +16,24 @@
       "message": "But even with latest Xcode (some day ago), the SDK included for macOS is for 12.3. Is the macOS part really needed? Configures fine for me on macOS without this.",
       "revId": "5642744176c5f18a348f4b2fe35f91acd382e4a6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2e46ff3_a740721a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-05-17T09:47:30Z",
+      "side": 1,
+      "message": "MacOS upgraded to the 12.4 today, SDK 12.4 didn\u0027t come indeed, maybe it come later, so reset the macOS SDK part.",
+      "parentUuid": "77e5515e_a7f29156",
+      "revId": "5642744176c5f18a348f4b2fe35f91acd382e4a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
