@@ -34,6 +34,24 @@
       "parentUuid": "9a4fc769_54991e7c",
       "revId": "f87bed79931326bc38953ba820fa0d7ccaaf7d1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ab501c7_a206899f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-05-17T13:43:25Z",
+      "side": 1,
+      "message": "Can confirm, the hyphenation is just a Germanism",
+      "parentUuid": "da32b552_1c107da8",
+      "revId": "f87bed79931326bc38953ba820fa0d7ccaaf7d1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
