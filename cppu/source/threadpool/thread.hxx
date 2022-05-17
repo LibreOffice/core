@@ -35,9 +35,9 @@ namespace cppu_threadpool {
         public salhelper::SimpleReferenceObject, public osl::Thread
     {
     public:
-        ORequestThread( ThreadPoolHolder const &aThreadPool,
+        ORequestThread( ThreadPoolHolder aThreadPool,
                         JobQueue * ,
-                        const ::rtl::ByteSequence &aThreadId,
+                        ::rtl::ByteSequence aThreadId,
                         bool bAsynchron );
         virtual ~ORequestThread() override;
 

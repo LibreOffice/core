@@ -69,7 +69,7 @@ namespace cppu_threadpool {
         rtl::Reference< ORequestThread > thread;
 
         explicit WaitingThread(
-            rtl::Reference<ORequestThread> const & theThread);
+            rtl::Reference<ORequestThread> theThread);
     };
 
     typedef std::deque< struct ::cppu_threadpool::WaitingThread * > WaitingThreadDeque;
