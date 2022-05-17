@@ -246,6 +246,10 @@ private:
         if (!pSource)
             return DND_ACTION_NONE;
 
+        // tdf#145722 only return a DND_ACTION_MOVE possibility if that
+        // is requested as an option
+        const bool bCheckForMove = rEvt.mnAction & DND_ACTION_MOVE;
+
         sal_Int8 nMode = DND_ACTION_NONE;
 
         std::unique_ptr<weld::TreeIter> xEntry(pSource->make_iterator());
@@ -255,28 +259,31 @@ private:
             if (nDepth >= 2)
             {
                 nMode = DND_ACTION_COPY;
-                EntryDescriptor aDesc = m_rTreeView.GetEntryDescriptor(xEntry.get());
-                const ScriptDocument& aDocument( aDesc.GetDocument() );
-                const OUString& aLibName( aDesc.GetLibName() );
-                // allow MOVE mode only for libraries, which are not readonly
-                Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-                Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
-                if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
-                        ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) ) )
+                if (bCheckForMove)
                 {
-                    // Only allow copy for localized libraries
-                    bool bAllowMove = true;
-                    if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) )
+                    EntryDescriptor aDesc = m_rTreeView.GetEntryDescriptor(xEntry.get());
+                    const ScriptDocument& aDocument( aDesc.GetDocument() );
+                    const OUString& aLibName( aDesc.GetLibName() );
+                    // allow MOVE mode only for libraries, which are not readonly
+                    Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+                    Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+                    if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
+                            ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) ) )
                     {
-                        // Get StringResourceManager
-                        Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, aLibName, true ) );
-                        Reference< XStringResourceManager > xSourceMgr =
-                            LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
-                        if( xSourceMgr.is() )
-                            bAllowMove = ( xSourceMgr->getLocales().getLength() == 0 );
+                        // Only allow copy for localized libraries
+                        bool bAllowMove = true;
+                        if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) )
+                        {
+                            // Get StringResourceManager
+                            Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, aLibName, true ) );
+                            Reference< XStringResourceManager > xSourceMgr =
+                                LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
+                            if( xSourceMgr.is() )
+                                bAllowMove = ( xSourceMgr->getLocales().getLength() == 0 );
+                        }
+                        if( bAllowMove )
+                            nMode |= DND_ACTION_MOVE;
                     }
-                    if( bAllowMove )
-                        nMode |= DND_ACTION_MOVE;
                 }
             }
         }
@@ -569,6 +576,9 @@ ObjectPage::ObjectPage(weld::Container* pParent, const OString &rName, BrowseMod
     }
 
     m_xDropTarget.reset(new SbTreeListBoxDropTarget(*m_xBasicBox));
+    // tdf#145722 explicitly claim COPY and MOVE are options
+    rtl::Reference<TransferDataContainer> xHelper(new TransferDataContainer);
+    m_xBasicBox->get_widget().enable_drag_source(xHelper, DND_ACTION_COPYMOVE);
 
     m_xBasicBox->connect_editing(LINK(this, ObjectPage, EditingEntryHdl),
                                  LINK(this, ObjectPage, EditedEntryHdl));
