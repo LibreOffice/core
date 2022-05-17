@@ -379,7 +379,7 @@ public:
     bool       TestCopyScenarioTo( const ScColumn& rDestCol ) const;
     void        MarkScenarioIn( ScMarkData& rDestMark ) const;
 
-    void        CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const;
+    void        CopyUpdated( const ScColumn* pPosCol, ScColumn& rDestCol ) const;
 
     void        SwapCol(ScColumn& rCol);
     void        MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol);

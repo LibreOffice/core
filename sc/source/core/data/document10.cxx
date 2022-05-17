@@ -991,7 +991,7 @@ std::optional<sc::ColumnIterator> ScDocument::GetColumnIterator( SCTAB nTab, SCC
 
 void ScDocument::CreateColumnIfNotExists( SCTAB nTab, SCCOL nCol )
 {
-    const ScTable* pTab = FetchTable(nTab);
+    ScTable* pTab = FetchTable(nTab);
     if (!pTab)
         return;
 

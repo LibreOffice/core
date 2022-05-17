@@ -140,7 +140,7 @@ bool ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SC
         bTest = pOutlineTable->TestInsertRow(nSize);
 
     for (SCCOL i=nStartCol; (i<=nEndCol) && bTest; i++)
-        bTest = CreateColumnIfNotExists(i).TestInsertRow(nStartRow, nSize);
+        bTest = const_cast<ScTable*>(this)->CreateColumnIfNotExists(i).TestInsertRow(nStartRow, nSize);
 
     return bTest;
 }
@@ -1531,10 +1531,9 @@ void ScTable::UndoToTable(
 
 void ScTable::CopyUpdated( const ScTable* pPosTab, ScTable* pDestTab ) const
 {
-    pPosTab->CreateColumnIfNotExists(aCol.size()-1);
     pDestTab->CreateColumnIfNotExists(aCol.size()-1);
     for (SCCOL i=0; i < aCol.size(); i++)
-        aCol[i].CopyUpdated( pPosTab->aCol[i], pDestTab->aCol[i] );
+        aCol[i].CopyUpdated( pPosTab->FetchColumn(i), pDestTab->aCol[i] );
 }
 
 void ScTable::InvalidateTableArea()
@@ -1548,7 +1547,7 @@ void ScTable::InvalidatePageBreaks()
     mbPageBreaksValid = false;
 }
 
-void ScTable::CopyScenarioTo( const ScTable* pDestTab ) const
+void ScTable::CopyScenarioTo( ScTable* pDestTab ) const
 {
     OSL_ENSURE( bScenario, "bScenario == FALSE" );
 
@@ -2808,9 +2807,10 @@ void ScTable::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkDa
 
     for (const sc::ColRowSpan & rSpan : aSpans)
     {
-        for (SCCOLROW i = rSpan.mnStart; i <= rSpan.mnEnd; ++i)
+        SCCOL maxCol = ClampToAllocatedColumns(rSpan.mnEnd);
+        for (SCCOL i = rSpan.mnStart; i <= maxCol; ++i)
         {
-            CreateColumnIfNotExists(i).MergeSelectionPattern( rState, rMark, bDeep );
+            aCol[i].MergeSelectionPattern( rState, rMark, bDeep );
         }
     }
 }
