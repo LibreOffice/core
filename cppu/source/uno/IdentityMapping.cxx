@@ -22,6 +22,7 @@
 #include <typelib/typedescription.h>
 #include <uno/mapping.h>
 #include <uno/environment.hxx>
+#include <utility>
 
 #include <osl/interlck.h>
 
@@ -35,7 +36,7 @@ struct IdentityMapping : public uno_Mapping
     sal_Int32        m_nRef;
     uno::Environment m_env;
 
-    explicit IdentityMapping(uno::Environment const & rEnv);
+    explicit IdentityMapping(uno::Environment aEnv);
 };
 
 }
@@ -86,9 +87,9 @@ static void s_mapInterface(uno_Mapping                       * pMapping,
 }
 
 
-IdentityMapping::IdentityMapping(uno::Environment const & rEnv)
+IdentityMapping::IdentityMapping(uno::Environment aEnv)
     : m_nRef(0),
-      m_env(rEnv)
+      m_env(std::move(aEnv))
 {
     uno_Mapping::acquire        = s_acquire;
     uno_Mapping::release        = s_release;

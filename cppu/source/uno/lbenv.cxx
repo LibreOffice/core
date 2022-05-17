@@ -42,6 +42,7 @@
 
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include <stdio.h>
 
@@ -78,7 +79,7 @@ struct ObjectEntry
     sal_Int32 nRef;
     bool mixedObject;
 
-    explicit ObjectEntry( const OUString & rOId_ );
+    explicit ObjectEntry( OUString aOId_ );
 
     void append(
         uno_DefaultEnvironment * pEnv,
@@ -147,8 +148,8 @@ struct uno_DefaultEnvironment : public uno_ExtEnvironment
 };
 
 
-ObjectEntry::ObjectEntry( OUString const & rOId_ )
-    : oid( rOId_ ),
+ObjectEntry::ObjectEntry( OUString aOId_ )
+    : oid(std::move( aOId_ )),
       nRef( 0 ),
       mixedObject( false )
 {
