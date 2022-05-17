@@ -161,6 +161,7 @@ public:
     OUString m_aCheckedState;
     OUString m_aUncheckedState;
     std::vector<SwContentControlListItem> m_aListItems;
+    bool m_bPicture;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
          const uno::Reference<text::XText>& xParentText,
@@ -174,6 +175,7 @@ public:
         , m_bShowingPlaceHolder(false)
         , m_bCheckbox(false)
         , m_bChecked(false)
+        , m_bPicture(false)
     {
         if (m_pContentControl)
         {
@@ -519,6 +521,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetCheckedState(m_pImpl->m_aCheckedState);
     pContentControl->SetUncheckedState(m_pImpl->m_aUncheckedState);
     pContentControl->SetListItems(m_pImpl->m_aListItems);
+    pContentControl->SetPicture(m_pImpl->m_bPicture);
 
     SwFormatContentControl aContentControl(pContentControl, nWhich);
     bool bSuccess
@@ -758,6 +761,21 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             m_pImpl->m_pContentControl->SetListItems(aItems);
         }
     }
+    else if (rPropertyName == UNO_NAME_PICTURE)
+    {
+        bool bValue;
+        if (rValue >>= bValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_bPicture = bValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetPicture(bValue);
+            }
+        }
+    }
     else
     {
         throw beans::UnknownPropertyException();
@@ -836,6 +854,17 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
             aItems = m_pImpl->m_pContentControl->GetListItems();
         }
         SwContentControlListItem::ItemsToAny(aItems, aRet);
+    }
+    else if (rPropertyName == UNO_NAME_PICTURE)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_bPicture;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetPicture();
+        }
     }
     else
     {
