@@ -52,6 +52,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49783fc7_76f192fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-17T11:37:42Z",
+      "side": 1,
+      "message": "Yes, the values are stored in Math\u0027 settings.xml (including the unchanged default values).",
+      "parentUuid": "a4dbe087_24131bd5",
+      "revId": "17b6d84fc5a27979770ff7c665b4c9b726e62789",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c352f847_228fffe4",
