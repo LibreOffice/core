@@ -69,6 +69,24 @@
       "message": "Thanks Mike and Adolfo.  Will continue more calmly now with \"OLE-Object\" -\u003e \"OLE Object\" \n\nBut a final query: in PS3, I had also removed one [1], but then had second thoughts because the \"msole\" in the directory name suggested that perhaps importing MS OLE objects also use the -\n\n[1] https://opengrok.libreoffice.org/xref/core/embeddedobj/source/msole/olepersist.cxx?r\u003d5c1c4402#660",
       "revId": "f87bed79931326bc38953ba820fa0d7ccaaf7d1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9664cd45_19506250",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-17T15:26:51Z",
+      "side": 1,
+      "message": "The place that you show in olepersist looks indeed sensitive - yes, I think you did correct that you reverted that change. The character case is also special there.",
+      "parentUuid": "977ddc9a_a17926cf",
+      "revId": "f87bed79931326bc38953ba820fa0d7ccaaf7d1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
