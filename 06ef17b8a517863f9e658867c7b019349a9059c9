@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c1219dc_e2c95c6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-17T10:23:26Z",
+      "side": 1,
+      "message": "Caolan: could you please check if I don\u0027t oversimplify? Thank you!",
+      "revId": "06ef17b8a517863f9e658867c7b019349a9059c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
