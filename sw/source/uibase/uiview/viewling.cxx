@@ -694,9 +694,15 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 if (pNode)
                 {
                     pCursorShell->Push();
-                    pCursorShell->MovePara(GoCurrPara, fnParaStart);
+                    if (!pCursorShell->IsSttPara())
+                    {
+                        pCursorShell->MovePara(GoCurrPara, fnParaStart);
+                    }
                     pCursorShell->SetMark();
-                    pCursorShell->MovePara(GoCurrPara, fnParaEnd);
+                    if (!pCursorShell->IsEndPara())
+                    {
+                        pCursorShell->MovePara(GoCurrPara, fnParaEnd);
+                    }
                     aParaText = pCursorShell->GetSelText();
                     pCursorShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
                 }
