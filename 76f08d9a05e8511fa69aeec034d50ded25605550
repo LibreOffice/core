@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52522406_fbc42684",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-17T19:05:25Z",
+      "side": 1,
+      "message": "No need to test the revert, I had just pushed the patch.\nSorry for the noise.",
+      "revId": "76f08d9a05e8511fa69aeec034d50ded25605550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
