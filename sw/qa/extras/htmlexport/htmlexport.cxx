@@ -2157,6 +2157,40 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTableBackground)
     assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:table[2]/reqif-xhtml:tr[1]", "bgcolor");
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testImageKeepRatio)
+{
+    // Given a document with an image: width is relative, height is "keep ratio":
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextGraphic(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue("AnchorType",
+                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    xTextGraphic->setPropertyValue("RelativeWidth", uno::Any(static_cast<sal_Int16>(42)));
+    xTextGraphic->setPropertyValue("IsSyncHeightToWidth", uno::Any(true));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBodyText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
+    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+    xBodyText->insertTextContent(xCursor, xTextContent, false);
+
+    // When exporting to HTML:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure that the width is not a fixed size, that would break on resizing the browser
+    // window:
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: auto
+    // - Actual  : 2
+    // i.e. a static (CSS pixel) height was written.
+    assertXPath(pDoc, "/html/body/p/img", "height", "auto");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
