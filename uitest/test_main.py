@@ -11,6 +11,7 @@ import os
 import unittest
 import importlib
 import importlib.machinery
+import types
 
 import uitest.config
 
@@ -75,7 +76,12 @@ def add_tests_for_file(test_file, test_suite):
     module_name = os.path.splitext(os.path.split(test_file)[1])[0]
 
     loader = importlib.machinery.SourceFileLoader(module_name, test_file)
-    mod = loader.load_module()
+    # exec_module was only introduced in 3.4
+    if sys.version_info[1] < 4:
+        mod = loader.load_module()
+    else:
+        mod = types.ModuleType(loader.name)
+        loader.exec_module(mod)
     classes = get_test_case_classes_of_module(mod)
     global test_name_limit_found
     for c in classes:
