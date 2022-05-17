@@ -165,8 +165,24 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         {
             if (utl::ConfigManager::IsFuzzing())
             {
-                tools::Long nVertSteps = aInc.Height() ? ((aEndPt1.Y() - aPt1.Y()) / aInc.Height()) : -1;
-                tools::Long nHorzSteps = aInc.Width() ? ((aEndPt1.X() - aPt1.X()) / aInc.Width()) : -1;
+                tools::Long nVertSteps = -1;
+                if (aInc.Height())
+                {
+                    bool bFail = o3tl::checked_sub(aEndPt1.Y(), aPt1.Y(), nVertSteps);
+                    if (bFail)
+                        nVertSteps = std::numeric_limits<tools::Long>::max();
+                    else
+                        nVertSteps = nVertSteps / aInc.Height();
+                }
+                tools::Long nHorzSteps = -1;
+                if (aInc.Width())
+                {
+                    bool bFail = o3tl::checked_sub(aEndPt1.X(), aPt1.X(), nHorzSteps);
+                    if (bFail)
+                        nHorzSteps = std::numeric_limits<tools::Long>::max();
+                    else
+                        nHorzSteps = nHorzSteps / aInc.Width();
+                }
                 auto nSteps = std::max(nVertSteps, nHorzSteps);
                 if (nSteps > 1024)
                 {
