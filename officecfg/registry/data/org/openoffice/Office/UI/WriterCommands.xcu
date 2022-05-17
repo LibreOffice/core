@@ -922,7 +922,10 @@
       </node>
       <node oor:name=".uno:InsertObjCtrl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Object Menu</value>
+          <value xml:lang="en-US">OLE Object Insert Menu</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert OLE Object</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
