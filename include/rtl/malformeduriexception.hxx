@@ -24,6 +24,8 @@
 #ifndef INCLUDED_RTL_MALFORMEDURIEXCEPTION_HXX
 #define INCLUDED_RTL_MALFORMEDURIEXCEPTION_HXX
 
+#include <utility>
+
 #include "rtl/ustring.hxx"
 
 namespace rtl {
@@ -41,7 +43,7 @@ public:
         A message containing any details about the exception.
      */
     SAL_EXCEPTION_DLLPRIVATE MalformedUriException(
-        rtl::OUString const & rMessage): m_aMessage(rMessage) {}
+        rtl::OUString aMessage): m_aMessage(std::move(aMessage)) {}
 
     SAL_EXCEPTION_DLLPRIVATE MalformedUriException(
         MalformedUriException const & other): m_aMessage(other.m_aMessage) {}
