@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b967a4d2_d1a17e33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-17T08:55:38Z",
+      "side": 1,
+      "message": "This is a run of clang-tidy modernize-pass-by-value over our codebase.\n\nObjections?\n\n(If there are no objections, I will break this up into per-folder pieces before pushing)",
+      "revId": "e0faa60aa076a927d0f2f61d69f51895aa7bef2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
