@@ -16,6 +16,24 @@
       "message": "Mike, maybe all the OLE-Object in officecfg/registry/data/org/openoffice/Office/UI/*.xcu need to keep the \"-\" as in OLE-Object? (e.g., for MS compatability?)\n\nJust trying to use \"OLE Object\" consistently -- but get the impression that \"OLE-Object\" may be significant in some places -- hence this query.  Thanks.",
       "revId": "f87bed79931326bc38953ba820fa0d7ccaaf7d1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da32b552_1c107da8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-17T13:33:57Z",
+      "side": 1,
+      "message": "I don\u0027t know of any requirement to have the dash in the name. I\u0027d suggest to proceed with the rename.",
+      "parentUuid": "9a4fc769_54991e7c",
+      "revId": "f87bed79931326bc38953ba820fa0d7ccaaf7d1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
