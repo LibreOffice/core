@@ -68,6 +68,24 @@
       "message": "* This ties a function\u0027s interface to its implementation details, which may change over time, so it might be a modest maintenance burden (e.g., new code added to a function that uses a param without noticing that it has already been moved from).  That\u0027s why I myself am not too excited about such a change at scale, but wouldn\u0027t insist on not doing it, either.\n\n* But I wonder if it should exclude changes to published URE interfaces (though I can\u0027t come up with a vital reason why).\n\n* But it should of course not add calls to std::move to !LIBO_INTERNAL_ONLY code (e.g., in URE include files).\n\n* Is that plugin robust enough to not change functions whose implementation contains #if blocks (which might forbid std::move\u0027ing params, as they get also used there), or have multiple, platform-specific implemenations (though it could hardly detect that, and I\u0027m not sure we run into that issue; just something to keep in mind when using automatic tidy plugins at scale).\n\n* It sometimes adds \u003cutility\u003e in odd places, either (which is a nitpick) to some other include block than an already present standard headers include block, or (which is more problematic) at the top of the file, ahead of the license header and internal include guard.\n\n* Nitpick: it introduces whitespace glitches, e.g. when replacing \"Type const \u0026 param\" with \"Type  param\" separated by two spaces.",
       "revId": "e0faa60aa076a927d0f2f61d69f51895aa7bef2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ae7af6f_7455460a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-17T12:58:51Z",
+      "side": 1,
+      "message": "\u003e \n\u003e * But I wonder if it should exclude changes to published URE interfaces (though I can\u0027t come up with a vital reason why).\n\u003e \n\u003e * But it should of course not add calls to std::move to !LIBO_INTERNAL_ONLY code (e.g., in URE include files).\n\u003e \n\nReverted all changes to URE include files.\n\n\u003e * Is that plugin robust enough to not change functions whose implementation contains #if blocks (which might forbid std::move\u0027ing params, as they get also used there), or have multiple, platform-\n\nNo it does not exclude such functions.\n\n\u003e \n\u003e * It sometimes adds \u003cutility\u003e in odd places, either (which is a nitpick) to some other include block than an already present standard headers include block, or (which is more problematic) at the top of the file, ahead of the license header and internal include guard.\n\u003e \n\u003e * Nitpick: it introduces whitespace glitches, e.g. when replacing \"Type const \u0026 param\" with \"Type  param\" separated by two spaces.\n\nI\u0027ll clean up those issues before pushing such patches.",
+      "parentUuid": "679472ed_5b16d6d5",
+      "revId": "e0faa60aa076a927d0f2f61d69f51895aa7bef2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
