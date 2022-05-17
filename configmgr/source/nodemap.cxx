@@ -42,9 +42,10 @@ void NodeMap::cloneInto(NodeMap* target) const
 
 rtl::Reference<Node> NodeMap::findNode(int layer, OUString const& name) const
 {
-    if (!moCache || (*moCache)->first != name)
-        moCache = const_cast<NodeMap*>(this)->maImpl.find(name);
-    const_iterator i = *moCache;
+    const_iterator i;
+    if (maCache == end() || maCache->first != name)
+        maCache = const_cast<NodeMap*>(this)->maImpl.find(name);
+    i = maCache;
     return i == end() || i->second->getLayer() > layer ? rtl::Reference<Node>() : i->second;
 }
 }
