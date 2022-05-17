@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f03013d2_ad970e48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-05-17T08:37:11Z",
+      "side": 1,
+      "message": "This seems to fix bug 148049 as well",
+      "revId": "b6a432e04409d2824ab288cb4af814d8e0a33d02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
