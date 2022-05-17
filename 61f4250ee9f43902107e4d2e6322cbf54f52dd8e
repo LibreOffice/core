@@ -110,6 +110,30 @@
       },
       "revId": "61f4250ee9f43902107e4d2e6322cbf54f52dd8e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db55a4a9_b6f4bc3d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 3446,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-05-17T16:02:50Z",
+      "side": 1,
+      "message": "My knowledge of ODF standard and Unicode code points is insufficient to be of any help. The number of revised patches and comments on them illustrate this.",
+      "parentUuid": "7e1caa91_02f8e2c9",
+      "range": {
+        "startLine": 3446,
+        "startChar": 16,
+        "endLine": 3446,
+        "endChar": 27
+      },
+      "revId": "61f4250ee9f43902107e4d2e6322cbf54f52dd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
