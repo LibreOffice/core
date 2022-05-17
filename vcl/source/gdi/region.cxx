@@ -989,7 +989,7 @@ void vcl::Region::Intersect( const vcl::Region& rRegion )
             return;
         }
 
-        static size_t gPointLimit = !utl::ConfigManager::IsFuzzing() ? SAL_MAX_SIZE : SAL_MAX_INT16;
+        static size_t gPointLimit = !utl::ConfigManager::IsFuzzing() ? SAL_MAX_SIZE : 8192;
         size_t nPointLimit(gPointLimit);
         const basegfx::B2DPolyPolygon aClip(
             basegfx::utils::clipPolyPolygonOnPolyPolygon(
