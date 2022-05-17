@@ -40,6 +40,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <mutex>
+#include <utility>
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
@@ -65,7 +66,7 @@ class InvocationToAllListenerMapper : public WeakImplHelper< XInvocation >
 {
 public:
     InvocationToAllListenerMapper( const Reference< XIdlClass >& ListenerType,
-        const Reference< XAllListener >& AllListener, const Any& Helper );
+        const Reference< XAllListener >& AllListener, Any Helper );
 
     // XInvocation
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() override;
@@ -107,10 +108,10 @@ static Reference< XInterface > createAllListenerAdapter
 
 // InvocationToAllListenerMapper
 InvocationToAllListenerMapper::InvocationToAllListenerMapper
-    ( const Reference< XIdlClass >& ListenerType, const Reference< XAllListener >& AllListener, const Any& Helper )
+    ( const Reference< XIdlClass >& ListenerType, const Reference< XAllListener >& AllListener, Any Helper )
         : m_xAllListener( AllListener )
         , m_xListenerType( ListenerType )
-        , m_Helper( Helper )
+        , m_Helper(std::move( Helper ))
 {
 }
 
@@ -394,7 +395,7 @@ namespace {
 class FilterAllListenerImpl : public WeakImplHelper< XAllListener  >
 {
 public:
-    FilterAllListenerImpl( EventAttacherImpl * pEA_, const OUString& EventMethod_,
+    FilterAllListenerImpl( EventAttacherImpl * pEA_, OUString  EventMethod_,
                            const Reference< XAllListener >& AllListener_ );
 
     // XAllListener
@@ -417,10 +418,10 @@ private:
 
 }
 
-FilterAllListenerImpl::FilterAllListenerImpl( EventAttacherImpl * pEA_, const OUString& EventMethod_,
+FilterAllListenerImpl::FilterAllListenerImpl( EventAttacherImpl * pEA_, OUString EventMethod_,
                                               const Reference< XAllListener >& AllListener_ )
         : m_pEA( pEA_ )
-        , m_EventMethod( EventMethod_ )
+        , m_EventMethod(std::move( EventMethod_ ))
         , m_AllListener( AllListener_ )
 {
 }

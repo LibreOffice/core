@@ -31,7 +31,7 @@ class ORegKey
 {
 public:
 
-    ORegKey(const OUString& keyName, ORegistry* pReg);
+    ORegKey(OUString keyName, ORegistry* pReg);
     ~ORegKey();
 
     void        acquire()
