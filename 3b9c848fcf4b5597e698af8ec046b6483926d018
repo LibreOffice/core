@@ -16,6 +16,23 @@
       "message": "Unless people here have concerns, I plan to merge this in the next few days. I\u0027ve tested parallel packaging works on Linux and Windows (and the behavior w/o gnu parallel should be exactly as before)",
       "revId": "3b9c848fcf4b5597e698af8ec046b6483926d018",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2926a4c8_4e06b4f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-05-17T11:43:35Z",
+      "side": 1,
+      "message": "fails at least on mac - tries to create helppacks, but there are no helppacks on mac, help is included in the langpacks, didn\u0027t check for windows, there we only have helpacks, all languages are included in the main installer.\n\nAlso no reservations/objections against this approach, apart from probably trying to use make targets for parallelism some time. (and probably not using gnu parallel myself on build boxes)",
+      "revId": "3b9c848fcf4b5597e698af8ec046b6483926d018",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
