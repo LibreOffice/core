@@ -44,6 +44,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/numeric.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/temporary.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
@@ -4382,11 +4383,45 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 }
             }
         }
-        if( rWidget.m_eType == PDFWriter::Edit && rWidget.m_nMaxLen > 0 )
+        if( rWidget.m_eType == PDFWriter::Edit )
         {
-            aLine.append( "/MaxLen " );
-            aLine.append( rWidget.m_nMaxLen );
-            aLine.append( "\n" );
+            if ( rWidget.m_nMaxLen > 0 )
+            {
+                aLine.append( "/MaxLen " );
+                aLine.append( rWidget.m_nMaxLen );
+                aLine.append( "\n" );
+            }
+
+            if ( rWidget.m_nFormat == PDFWriter::Number )
+            {
+                OString aHexText;
+
+                if ( !rWidget.m_aCurrencySymbol.isEmpty() )
+                {
+                    // Get the hexadecimal code
+                    sal_UCS4 cChar = rWidget.m_aCurrencySymbol.iterateCodePoints(&o3tl::temporary(sal_Int32(1)), -1);
+                    aHexText = "\\\\u" + OString::number(cChar, 16);
+                }
+
+                aLine.append("/AA<<\n");
+                aLine.append("/F<</JS(AFNumber_Format\\(");
+                aLine.append(OString::number(rWidget.m_nDecimalAccuracy));
+                aLine.append(", 0, 0, 0, \"");
+                aLine.append( aHexText );
+                aLine.append("\",");
+                aLine.append(OString::boolean(rWidget.m_bPrependCurrencySymbol));
+                aLine.append("\\);)");
+                aLine.append("/S/JavaScript>>\n");
+                aLine.append("/K<</JS(AFNumber_Keystroke\\(");
+                aLine.append(OString::number(rWidget.m_nDecimalAccuracy));
+                aLine.append(", 0, 0, 0, \"");
+                aLine.append( aHexText );
+                aLine.append("\",");
+                aLine.append(OString::boolean(rWidget.m_bPrependCurrencySymbol));
+                aLine.append("\\);)");
+                aLine.append("/S/JavaScript>>\n");
+                aLine.append(">>\n");
+            }
         }
         if( rWidget.m_eType == PDFWriter::PushButton )
         {
@@ -10976,6 +11011,10 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         if( rEdit.FileSelect && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
             rNewWidget.m_nFlags |= 0x00100000;
         rNewWidget.m_nMaxLen = rEdit.MaxLen;
+        rNewWidget.m_nFormat = rEdit.Format;
+        rNewWidget.m_aCurrencySymbol = rEdit.CurrencySymbol;
+        rNewWidget.m_nDecimalAccuracy = rEdit.DecimalAccuracy;
+        rNewWidget.m_bPrependCurrencySymbol = rEdit.PrependCurrencySymbol;
         rNewWidget.m_aValue = rEdit.Text;
 
         createDefaultEditAppearance( rNewWidget, rEdit );
