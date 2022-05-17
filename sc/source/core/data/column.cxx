@@ -1679,14 +1679,15 @@ void ScColumn::UndoToColumn(
         CopyToColumn(rCxt, nRow2+1, GetDoc().MaxRow(), InsertDeleteFlags::FORMULA, false, rColumn);
 }
 
-void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
+void ScColumn::CopyUpdated( const ScColumn* pPosCol, ScColumn& rDestCol ) const
 {
     // Copy cells from this column to the destination column only for those
-    // rows that are present in the position column (rPosCol).
+    // rows that are present in the position column (pPosCol).
 
     // First, mark all the non-empty cell ranges from the position column.
     sc::SingleColumnSpanSet aRangeSet(GetDoc().GetSheetLimits());
-    aRangeSet.scan(rPosCol);
+    if(pPosCol)
+        aRangeSet.scan(*pPosCol);
 
     // Now, copy cells from this column to the destination column for those
     // marked row ranges.

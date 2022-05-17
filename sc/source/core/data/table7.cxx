@@ -427,7 +427,7 @@ std::optional<sc::ColumnIterator> ScTable::GetColumnIterator( SCCOL nCol, SCROW 
     if (!ValidCol(nCol))
         return {};
 
-    return CreateColumnIfNotExists(nCol).GetColumnIterator(nRow1, nRow2);
+    return const_cast<ScTable*>(this)->CreateColumnIfNotExists(nCol).GetColumnIterator(nRow1, nRow2);
 }
 
 bool ScTable::EnsureFormulaCellResults( const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2, bool bSkipRunning )
