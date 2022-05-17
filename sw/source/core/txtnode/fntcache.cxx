@@ -112,6 +112,8 @@ SwFntObj::SwFntObj(const SwSubFont &rFont, std::uintptr_t nFontCacheId, SwViewSh
     , m_nScrHeight(0)
     , m_nPrtHeight(USHRT_MAX)
     , m_nPropWidth(rFont.GetPropWidth())
+    , m_nScrHangingBaseline(0)
+    , m_nPrtHangingBaseline(0)
 {
     m_nZoom = pSh ? pSh->GetViewOptions()->GetZoom() : USHRT_MAX;
     m_bSymbol = RTL_TEXTENCODING_SYMBOL == m_aFont.GetCharSet();
