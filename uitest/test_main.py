@@ -78,7 +78,7 @@ def add_tests_for_file(test_file, test_suite):
 
     loader = importlib.machinery.SourceFileLoader(module_name, test_file)
     # exec_module was only introduced in 3.4
-    if sys.version_info[1] < 4:
+    if sys.version_info < (3,4):
         mod = loader.load_module()
     else:
         mod = types.ModuleType(loader.name)
