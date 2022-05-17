@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <utility>
 
 #include "file_path_helper.hxx"
 #include "uunxapi.hxx"
@@ -170,8 +171,8 @@ public:
        returns the first path in list, no need
        to call reset first
      */
-    path_list_iterator(const OUString& path_list, sal_Unicode list_separator = FPH_CHAR_COLON) :
-        m_path_list(path_list),
+    path_list_iterator(OUString path_list, sal_Unicode list_separator = FPH_CHAR_COLON) :
+        m_path_list(std::move(path_list)),
         m_end(m_path_list.getStr() + m_path_list.getLength() + 1),
         m_separator(list_separator)
     {

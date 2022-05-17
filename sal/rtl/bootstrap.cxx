@@ -39,6 +39,7 @@
 #include <o3tl/lru_map.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <utility>
 #include <vector>
 #include <algorithm>
 #include <cstddef>
@@ -121,9 +122,9 @@ struct rtl_bootstrap_NameValue
 
     rtl_bootstrap_NameValue()
         {}
-    rtl_bootstrap_NameValue(OUString const & name, OUString const & value )
-        : sName( name ),
-          sValue( value )
+    rtl_bootstrap_NameValue(OUString name, OUString value )
+        : sName(std::move( name )),
+          sValue(std::move( value ))
         {}
 };
 
