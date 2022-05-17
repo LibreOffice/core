@@ -877,6 +877,7 @@
 #define UNO_NAME_CHECKED_STATE "CheckedState"
 #define UNO_NAME_UNCHECKED_STATE "UncheckedState"
 #define UNO_NAME_LIST_ITEMS "ListItems"
+#define UNO_NAME_PICTURE "Picture"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
