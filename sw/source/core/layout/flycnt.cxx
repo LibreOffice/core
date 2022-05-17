@@ -548,8 +548,14 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
         aHOri.SetPos(aHOri.GetPos() + aTextRectangle.Left());
         aVOri.SetPos(aVOri.GetPos() + aTextRectangle.Top());
         // save the new position for the shape
-        GetFormat()->SetFormatAttr(aHOri);
-        GetFormat()->SetFormatAttr(aVOri);
+        auto pFormat = GetFormat();
+        const bool bLocked = pFormat->IsModifyLocked();
+        if (!bLocked)
+            pFormat->LockModify();
+        pFormat->SetFormatAttr(aHOri);
+        pFormat->SetFormatAttr(aVOri);
+        if (!bLocked)
+            pFormat->UnlockModify();
     }
     if ( bOsz || bConsiderWrapInfluenceDueToOverlapPrevCol ||
          // #i40444#
