@@ -16,6 +16,24 @@
       "message": "possibly sberg is interested in what looks like a compiler/libc++ bug in the dynamic_cast machinery?",
       "revId": "6201446cc1dc8691f94a5d95fc012253557b513c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04522c8b_fb065d7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-17T11:46:50Z",
+      "side": 1,
+      "message": "You mean SIGSEGV at\n\n  #0  0x00002aca330f581f in __cxxabiv1::__dynamic_cast(void const*, __cxxabiv1::__class_type_info const*, __cxxabiv1::__class_type_info const*, ptrdiff_t) (src_ptr\u003d0x2c3ef88, src_type\u003d0x2aca34942050 \u003ctypeinfo for com::sun::star::io::XInputStream\u003e, dst_type\u003d0x2aca3a405930 \u003ctypeinfo for utl::ByteReader\u003e, src2dst\u003d-2) at ../../../../gcc-7.3.0/libstdc++-v3/libsupc++/dyncast.cc:72\n          vtable \u003d 0x2aca32330010\n          whole_type \u003d 0x0\n          result \u003d {dst_ptr \u003d 0x0, whole2dst \u003d __cxxabiv1::__class_type_info::__unknown, whole2src \u003d __cxxabiv1::__class_type_info::__unknown, dst2src \u003d __cxxabiv1::__class_type_info::__unknown, whole_details \u003d 16}\n          whole_vtable \u003d 0x2aca32330010\n  #1  0x00002aca3a28a837 in utl::UcbLockBytes::ReadAt(unsigned long, void*, unsigned long, unsigned long*) const (this\u003d0x2cd21b0, nPos\u003d0, pBuffer\u003d0x2ce0590, nCount\u003d4096, pRead\u003d0x2aca53500838) at unotools/source/ucbhelper/ucblockbytes.cxx:1111\n  \nin soffice.bin during JunitTest_sfx2_complex (patch set 2 \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/113889/consoleFull#15526987172b3c3940-aa94-44b1-926f-2d1e7de0f995\u003e)?  Maybe that\u0027s doing a dynamic_cast on a fake UNO proxy C++ object.  That\u0027s not supported in general (and looks like it renders this Gerrit change not suitable, at least without further changes to UNO); the RTTI slot of such proxy objects is only set up for some architectures in specific build scenarios, e.g., \u003chttps://git.libreoffice.org/core/+/9c9f0ea2c38929d133b0fe2faf616ecab17e07c9%5E!/\u003e \"Include RTTI in generated vtables for ubsan\u0027s vptr-based checks\".",
+      "parentUuid": "cd0dcbca_9b2c2fa3",
+      "revId": "6201446cc1dc8691f94a5d95fc012253557b513c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
