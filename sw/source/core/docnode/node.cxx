@@ -1449,6 +1449,12 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                                 pMerged->pParaPropsNode = pNode->GetTextNode();
                                 break;
                             }
+                            else if (pMerged->pFirstNode->GetIndex() == i)
+                            {   // this can only happen when called from CheckParaRedlineMerge()
+                                // and the pMerged will be deleted anyway
+                                pMerged->pParaPropsNode = pMerged->pFirstNode;
+                                break;
+                            }
                         }
                         assert(pMerged->listener.IsListeningTo(pMerged->pParaPropsNode));
                     }
