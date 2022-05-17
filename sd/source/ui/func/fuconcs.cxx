@@ -124,7 +124,27 @@ bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
         {
             bReturn = true;
         }
+        else //if(bClickToCreateObj)
+        {
+            //if pObj doesn't exist, or EndCreateObj() returned false meaning not enough drag to create
+            //then we create manually at cursor using CreateDefaultObject()
+
+            sal_uInt32 nDefaultObjectSize(1000); //should size be dynamic? or user setting? or static
+
+            Point aClickPos(mpWindow->PixelToLogic(rMEvt.GetPosPixel()));
+            aClickPos.AdjustX( -sal_Int32(nDefaultObjectSize / 2) );
+            aClickPos.AdjustY( -sal_Int32(nDefaultObjectSize / 2) );
+
+            ::tools::Rectangle aNewObjectRectangle(aClickPos, Size(nDefaultObjectSize, nDefaultObjectSize));
+
+            SdrObjectUniquePtr pObjDefault = CreateDefaultObject(0, aNewObjectRectangle);
+            SdrPageView *pPV = mpView->GetSdrPageView();
+            mpView->InsertObjectAtView(pObjDefault.release(), *pPV);
+
+            bReturn = true;
+        }
     }
+
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
 
     if (!bPermanent)
