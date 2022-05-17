@@ -59,6 +59,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
+#include <txtfrm.hxx>
 
 namespace
 {
@@ -372,6 +373,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf67238)
     CPPUNIT_ASSERT(!((rTable.GetTableBox("C1"))->GetFrameFormat()->GetProtect()).IsContentProtected());
     CPPUNIT_ASSERT(!((rTable.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
     CPPUNIT_ASSERT(!((rTable.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf147220)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Insert(u"él");
+
+    // hide and enable
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT(pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT(
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    pWrtShell->GoStartSentence();
+    pWrtShell->SetMark();
+    pWrtShell->GoEndSentence();
+
+    // this did not remove the original text from the layout
+    pWrtShell->Replace(u"Él", false);
+
+    // currently the deleted text is before the replacement text, not sure if
+    // that is really required
+    CPPUNIT_ASSERT_EQUAL(OUString(u"élÉl"),
+        pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Él"),
+        static_cast<SwTextFrame const*>(pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->getLayoutFrame(nullptr))->GetText());
+
+    SwRedlineTable const& rRedlines(pDoc->getIDocumentRedlineAccess().GetRedlineTable());
+    CPPUNIT_ASSERT_EQUAL(SwRedlineTable::size_type(2), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlines[0]->GetType());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"él"), rRedlines[0]->GetText());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[1]->GetType());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Él"), rRedlines[1]->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf135978)
