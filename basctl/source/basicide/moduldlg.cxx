@@ -496,6 +496,13 @@ private:
 
         OUString sText(m_rTreeView.get_text(*xSelected));
         OUString sId(m_rTreeView.get_id(*xSelected));
+        /// if copying then clone the userdata
+        if (Entry* pEntry = bMove ? nullptr : reinterpret_cast<Entry*>(sId.toUInt64()))
+        {
+            assert(pEntry->GetType() != OBJ_TYPE_DOCUMENT);
+            std::unique_ptr<Entry> xNewUserData(std::make_unique<Entry>(*pEntry));
+            sId = OUString::number(reinterpret_cast<sal_uInt64>(xNewUserData.release()));
+        }
         std::unique_ptr<weld::TreeIter> xRet(m_rTreeView.make_iterator());
         m_rTreeView.get_widget().insert(xNewParent.get(), nNewChildPos, &sText, &sId, nullptr, nullptr, false, xRet.get());
         if (eType == OBJ_TYPE_MODULE)
