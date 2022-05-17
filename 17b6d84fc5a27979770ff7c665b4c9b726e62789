@@ -16,6 +16,46 @@
       "message": "Regina and Heiko, could you please take a look at this patch?",
       "revId": "17b6d84fc5a27979770ff7c665b4c9b726e62789",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56b3a2a5_b8cb9462",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-17T09:59:50Z",
+      "side": 1,
+      "message": "New documents have zero spacing for the style Formula, if the document has content it keeps the previous 0.2cm (same when using a template or in case of styled autotext such as my formatted dummy text).\n\nSo LGTM but adding Miklos for expert review.",
+      "revId": "17b6d84fc5a27979770ff7c665b4c9b726e62789",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c352f847_228fffe4",
+        "filename": "starmath/source/format.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-17T09:59:50Z",
+      "side": 1,
+      "message": "Looking at left spacing above this value might be omitted. But effectively the same, I guess.",
+      "range": {
+        "startLine": 56,
+        "startChar": 38,
+        "endLine": 56,
+        "endChar": 40
+      },
+      "revId": "17b6d84fc5a27979770ff7c665b4c9b726e62789",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
