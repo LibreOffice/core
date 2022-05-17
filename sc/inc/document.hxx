@@ -1484,7 +1484,7 @@ public:
      * non-empty row position in the upward direction if the start row
      * position is empty.</p>
      */
-    SCROW GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const;
+    SC_DLLPUBLIC SCROW GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const;
 
     /**
      * Return the smallest area containing at least all contiguous cells
