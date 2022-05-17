@@ -47,7 +47,7 @@ class Proxy : public uno_Interface
     void                              * m_pProbeContext;
 
 public:
-    explicit Proxy(css::uno::Mapping                    const & to_from,
+    explicit Proxy(css::uno::Mapping                        to_from,
                    uno_Environment                        * pTo,
                    uno_Environment                        * pFrom,
                    uno_Interface                          * pUnoI,

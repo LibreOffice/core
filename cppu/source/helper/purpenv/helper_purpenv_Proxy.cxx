@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <uno/dispatcher.h>
 #include <typelib/typedescription.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -188,7 +189,7 @@ static void s_acquireAndRegister_v(va_list * pParam)
 }
 }
 
-Proxy::Proxy(uno::Mapping                  const & to_from,
+Proxy::Proxy(uno::Mapping                          to_from,
              uno_Environment                     * pTo,
              uno_Environment                     * pFrom,
              uno_Interface                       * pUnoI,
@@ -201,7 +202,7 @@ Proxy::Proxy(uno::Mapping                  const & to_from,
           m_from         (pFrom),
           m_to           (pTo),
           m_from_to      (pFrom, pTo),
-          m_to_from      (to_from),
+          m_to_from      (std::move(to_from)),
           m_pUnoI        (pUnoI),
           m_pTypeDescr   (pTypeDescr),
           m_aOId         (rOId),

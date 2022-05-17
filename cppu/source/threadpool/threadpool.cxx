@@ -22,6 +22,7 @@
 #include <cassert>
 #include <chrono>
 #include <algorithm>
+#include <utility>
 #include <unordered_map>
 
 #include <osl/diagnose.h>
@@ -39,7 +40,7 @@ using namespace ::rtl;
 namespace cppu_threadpool
 {
     WaitingThread::WaitingThread(
-        rtl::Reference<ORequestThread> const & theThread): thread(theThread)
+        rtl::Reference<ORequestThread> theThread): thread(std::move(theThread))
     {}
 
     DisposedCallerAdminHolder const & DisposedCallerAdmin::getInstance()
