@@ -31,6 +31,7 @@
 #include "storbase.hxx"
 
 #include <memory>
+#include <utility>
 #include <string.h>
 
 using namespace store;

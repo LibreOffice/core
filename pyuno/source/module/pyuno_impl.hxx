@@ -259,7 +259,7 @@ private:
 
 public:
 public:
-    Adapter( const PyRef &obj,
+    Adapter( PyRef obj,
              const css::uno::Sequence< css::uno::Type > & types );
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();

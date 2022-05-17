@@ -21,6 +21,7 @@
 
 #include "nthesdta.hxx"
 #include <linguistic/misc.hxx>
+#include <utility>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -33,10 +34,10 @@ namespace linguistic
 {
 
 Meaning::Meaning(
-            const OUString &rTerm) :
+            OUString rTerm) :
 
     aSyn        ( Sequence< OUString >(1) ),
-    aTerm       (rTerm)
+    aTerm       (std::move(rTerm))
 
 {
 #if 0

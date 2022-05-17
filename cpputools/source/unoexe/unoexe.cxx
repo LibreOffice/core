@@ -46,6 +46,7 @@
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridge.hpp>
+#include <utility>
 
 using namespace osl;
 using namespace cppu;
@@ -246,16 +247,16 @@ class OInstanceProvider
 
 public:
     OInstanceProvider( const Reference< XComponentContext > & xContext,
-                       const OUString & rImplName, const OUString & rLocation,
-                       const OUString & rServiceName, const Sequence< Any > & rInitParams,
-                       bool bSingleInstance, const OUString & rInstanceName )
+                       OUString  rImplName, OUString  rLocation,
+                       OUString  rServiceName, const Sequence< Any > & rInitParams,
+                       bool bSingleInstance, OUString  rInstanceName )
         : _xContext( xContext )
         , _bSingleInstance( bSingleInstance )
-        , _aImplName( rImplName )
-        , _aLocation( rLocation )
-        , _aServiceName( rServiceName )
+        , _aImplName(std::move( rImplName ))
+        , _aLocation(std::move( rLocation ))
+        , _aServiceName(std::move( rServiceName ))
         , _aInitParams( rInitParams )
-        , _aInstanceName( rInstanceName )
+        , _aInstanceName(std::move( rInstanceName ))
         {}
 
     // XInstanceProvider
