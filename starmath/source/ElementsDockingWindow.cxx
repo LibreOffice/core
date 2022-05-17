@@ -1042,15 +1042,15 @@ void SmElementsControl::build()
     {
         case 5:
         {
-            for (sal_uInt16 n = 0; n < m_a5CategoriesSize; ++n)
+            for (const auto& [rSetId, rElementsArray, rElementsArraySize] : m_a5Categories)
             {
-                if (msCurrentSetId == std::get<0>(m_a5Categories[n]))
+                if (msCurrentSetId == rSetId)
                 {
-                    addElements(std::get<1>(m_a5Categories[n]), std::get<2>(m_a5Categories[n]));
+                    addElements(rElementsArray, rElementsArraySize);
                     break;
                 }
                 else
-                    m_nCurrentOffset += std::get<2>(m_a5Categories[n]);
+                    m_nCurrentOffset += rElementsArraySize;
             }
             break;
         }
