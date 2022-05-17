@@ -69,7 +69,6 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     i18nutil \
     $(if $(ENABLE_JAVA),jvmaccess) \
     $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
-    package2 \
     sal \
     salhelper \
     sot \
