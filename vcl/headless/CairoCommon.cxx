@@ -877,7 +877,7 @@ basegfx::B2DRange renderWithOperator(cairo_t* cr, const SalTwoRect& rTR, cairo_s
     cairo_save(cr);
     cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
 
-    //tdf#133716 borders of upscaled images should not be blured
+    //tdf#133716 borders of upscaled images should not be blurred
     cairo_pattern_t* sourcepattern = cairo_get_source(cr);
     cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_PAD);
 
