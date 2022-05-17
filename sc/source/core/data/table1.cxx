@@ -2594,8 +2594,9 @@ void ScTable::DeleteEmptyBroadcasters()
 void ScTable::FillMatrix( ScMatrix& rMat, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, svl::SharedStringPool* pPool ) const
 {
     size_t nMatCol = 0;
+    nCol2 = ClampToAllocatedColumns(nCol2);
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol, ++nMatCol)
-        CreateColumnIfNotExists(nCol).FillMatrix(rMat, nMatCol, nRow1, nRow2, pPool);
+        aCol[nCol].FillMatrix(rMat, nMatCol, nRow1, nRow2, pPool);
 }
 
 void ScTable::InterpretDirtyCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
@@ -2718,7 +2719,7 @@ ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
 }
 
 // out-of-line the cold part of the CreateColumnIfNotExists function
-void ScTable::CreateColumnIfNotExistsImpl( const SCCOL nScCol ) const
+void ScTable::CreateColumnIfNotExistsImpl( const SCCOL nScCol )
 {
     // When doing multi-threaded load of, e.g. XLS files, we can hit this, which calls
     // into SfxItemPool::Put, in parallel with other code that calls into SfxItemPool::Put,

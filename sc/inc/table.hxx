@@ -157,7 +157,7 @@ class ScTable
 private:
     typedef ::std::vector< ScRange > ScRangeVec;
 
-    mutable ScColContainer aCol;
+    ScColContainer aCol;
 
     OUString aName;
     OUString aCodeName;
@@ -286,14 +286,14 @@ public:
 
     ScOutlineTable* GetOutlineTable()               { return pOutlineTable.get(); }
 
-    ScColumn& CreateColumnIfNotExists( const SCCOL nScCol ) const
+    ScColumn& CreateColumnIfNotExists( const SCCOL nScCol )
     {
         if ( nScCol >= aCol.size() )
             CreateColumnIfNotExistsImpl(nScCol);
         return aCol[nScCol];
     }
     // out-of-line the cold part of the function
-    void CreateColumnIfNotExistsImpl( const SCCOL nScCol ) const;
+    void CreateColumnIfNotExistsImpl( const SCCOL nScCol );
     sal_uInt64      GetCellCount() const;
     sal_uInt64      GetWeightedCount() const;
     sal_uInt64      GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const;
@@ -584,7 +584,7 @@ public:
                             SCCOL nDestCol, SCROW nDestRow, SCTAB nDestTab );
 
     void        CopyScenarioFrom( const ScTable* pSrcTab );
-    void        CopyScenarioTo( const ScTable* pDestTab ) const;
+    void        CopyScenarioTo( ScTable* pDestTab ) const;
     bool        TestCopyScenarioTo( const ScTable* pDestTab ) const;
     void        MarkScenarioIn(ScMarkData& rMark, ScScenarioFlags nNeededBits) const;
     bool        HasScenarioRange( const ScRange& rRange ) const;

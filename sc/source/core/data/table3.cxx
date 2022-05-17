@@ -1738,20 +1738,26 @@ short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const
         do
         {
             SCCOL nCol = static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField);
-            CreateColumnIfNotExists(nCol);
-            ScRefCellValue aCell1 = aCol[nCol].GetCellValue(nIndex1);
-            ScRefCellValue aCell2 = aCol[nCol].GetCellValue(nIndex2);
-            nRes = CompareCell(nSort, aCell1, nCol, nIndex1, aCell2, nCol, nIndex2);
+            nRes = 0;
+            if(nCol < GetAllocatedColumnsCount())
+            {
+                ScRefCellValue aCell1 = aCol[nCol].GetCellValue(nIndex1);
+                ScRefCellValue aCell2 = aCol[nCol].GetCellValue(nIndex2);
+                nRes = CompareCell(nSort, aCell1, nCol, nIndex1, aCell2, nCol, nIndex2);
+            }
         } while ( nRes == 0 && ++nSort < nMaxSorts && aSortParam.maKeyState[nSort].bDoSort );
     }
     else
     {
-        CreateColumnIfNotExists(std::max(nIndex1, nIndex2));
         do
         {
             SCROW nRow = aSortParam.maKeyState[nSort].nField;
-            ScRefCellValue aCell1 = aCol[nIndex1].GetCellValue(nRow);
-            ScRefCellValue aCell2 = aCol[nIndex2].GetCellValue(nRow);
+            ScRefCellValue aCell1;
+            ScRefCellValue aCell2;
+            if(nIndex1 < GetAllocatedColumnsCount())
+                aCell1 = aCol[nIndex1].GetCellValue(nRow);
+            if(nIndex2 < GetAllocatedColumnsCount())
+                aCell2 = aCol[nIndex2].GetCellValue(nRow);
             nRes = CompareCell( nSort, aCell1, static_cast<SCCOL>(nIndex1),
                     nRow, aCell2, static_cast<SCCOL>(nIndex2), nRow );
         } while ( nRes == 0 && ++nSort < nMaxSorts && aSortParam.maKeyState[nSort].bDoSort );
