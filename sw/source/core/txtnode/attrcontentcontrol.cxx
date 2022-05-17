@@ -222,6 +222,8 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
                                             BAD_CAST(m_aCheckedState.toUtf8().getStr()));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("unchecked-state"), "%s",
                                             BAD_CAST(m_aUncheckedState.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("picture"),
+                                      BAD_CAST(OString::boolean(m_bPicture).getStr()));
 
     if (!m_aListItems.empty())
     {
