@@ -4422,7 +4422,12 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
                     std::make_unique<SwUndoRedlineDelete>( aDelPam, SwUndoId::REPLACE ));
             }
+            // add redline similar to DeleteAndJoinWithRedlineImpl()
+            std::shared_ptr<SwUnoCursor> const pCursor(m_rDoc.CreateUnoCursor(*aDelPam.GetMark()));
+            pCursor->SetMark();
+            *pCursor->GetPoint() = *aDelPam.GetPoint();
             m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Delete, aDelPam ), true);
+            sw::UpdateFramesForAddDeleteRedline(m_rDoc, *pCursor);
 
             *rPam.GetMark() = *aDelPam.GetMark();
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
