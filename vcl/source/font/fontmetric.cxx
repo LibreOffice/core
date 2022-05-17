@@ -109,6 +109,7 @@ ImplFontMetricData::ImplFontMetricData( const vcl::font::FontSelectPattern& rFon
     , mnExtLeading( 0 )
     , mnSlant( 0 )
     , mnMinKashida( 0 )
+    , mnHangingBaseline( 0 )
     , mbFullstopCentered( false )
     , mnBulletOffset( 0 )
     , mnUnderlineSize( 0 )
