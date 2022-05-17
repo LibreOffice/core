@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd0dcbca_9b2c2fa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-17T06:10:23Z",
+      "side": 1,
+      "message": "possibly sberg is interested in what looks like a compiler/libc++ bug in the dynamic_cast machinery?",
+      "revId": "6201446cc1dc8691f94a5d95fc012253557b513c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
