@@ -29,14 +29,15 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <memory>
+#include <utility>
 
 using namespace store;
 
 namespace { char const VALUE_PREFIX[] = "$VL_"; }
 
-ORegKey::ORegKey(const OUString& keyName, ORegistry* pReg)
+ORegKey::ORegKey(OUString keyName, ORegistry* pReg)
     : m_refCount(1)
-    , m_name(keyName)
+    , m_name(std::move(keyName))
     , m_bDeleted(false)
     , m_bModified(false)
     , m_pRegistry(pReg)

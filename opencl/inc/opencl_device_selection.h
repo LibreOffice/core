@@ -26,6 +26,7 @@
 
 #include <opencl/OpenCLZone.hxx>
 
+#include <utility>
 #include <vector>
 
 enum ds_status
@@ -88,8 +89,8 @@ struct ds_profile
     std::vector<ds_device> devices;
     OString version;
 
-    ds_profile(OString const & inVersion)
-        : version(inVersion)
+    ds_profile(OString inVersion)
+        : version(std::move(inVersion))
     {}
 };
 

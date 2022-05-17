@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <utility>
 #include <vector>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -42,8 +43,8 @@ class XMLElement
     : public cppu::WeakImplHelper< css::xml::sax::XAttributeList >
 {
 public:
-    XMLElement( OUString const & name )
-        : _name( name )
+    XMLElement( OUString name )
+        : _name(std::move( name ))
         {}
 
     /** Adds a sub element of element.

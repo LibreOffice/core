@@ -15,6 +15,7 @@
 
 #include <opencl/opencldllapi.h>
 #include <rtl/ustring.hxx>
+#include <utility>
 
 struct OpenCLDeviceInfo;
 struct OpenCLPlatformInfo;
@@ -33,16 +34,16 @@ struct OPENCL_DLLPUBLIC OpenCLConfig
         {
         }
 
-        ImplMatcher(const OUString& rOS,
-                    const OUString& rOSVersion,
-                    const OUString& rPlatformVendor,
-                    const OUString& rDevice,
-                    const OUString& rDriverVersion)
-            : maOS(rOS),
-              maOSVersion(rOSVersion),
-              maPlatformVendor(rPlatformVendor),
-              maDevice(rDevice),
-              maDriverVersion(rDriverVersion)
+        ImplMatcher(OUString aOS,
+                    OUString aOSVersion,
+                    OUString aPlatformVendor,
+                    OUString aDevice,
+                    OUString aDriverVersion)
+            : maOS(std::move(aOS)),
+              maOSVersion(std::move(aOSVersion)),
+              maPlatformVendor(std::move(aPlatformVendor)),
+              maDevice(std::move(aDevice)),
+              maDriverVersion(std::move(aDriverVersion))
         {
         }
 

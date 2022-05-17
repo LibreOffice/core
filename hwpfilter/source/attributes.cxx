@@ -19,6 +19,7 @@
 
 
 #include <assert.h>
+#include <utility>
 #include <vector>
 #include "attributes.hxx"
 
@@ -26,8 +27,8 @@ namespace {
 
 struct TagAttribute
 {
-    TagAttribute( const OUString &rName, const OUString &rType , const OUString &rValue )
-       : sName(rName), sType(rType), sValue(rValue)
+    TagAttribute( OUString aName, OUString aType, OUString aValue )
+       : sName(std::move(aName)), sType(std::move(aType)), sValue(std::move(aValue))
     {
     }
 

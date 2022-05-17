@@ -51,6 +51,7 @@
 #include <unotest/gettestargument.hxx>
 #include <unotest/officeconnection.hxx>
 #include <unotest/toabsolutefileurl.hxx>
+#include <utility>
 
 namespace {
 
@@ -93,12 +94,11 @@ class Callback: public cppu::WeakImplHelper< css::awt::XCallback > {
 public:
     Callback(
         css::uno::Reference< css::frame::XNotifyingDispatch > const & dispatch,
-        css::util::URL const & url,
+        css::util::URL url,
         css::uno::Sequence< css::beans::PropertyValue > const & arguments,
-        css::uno::Reference< css::frame::XDispatchResultListener > const &
-            listener):
-        dispatch_(dispatch), url_(url), arguments_(arguments),
-        listener_(listener)
+        css::uno::Reference< css::frame::XDispatchResultListener > listener):
+        dispatch_(dispatch), url_(std::move(url)), arguments_(arguments),
+        listener_(std::move(listener))
     { OSL_ASSERT(dispatch.is()); }
 
 private:
