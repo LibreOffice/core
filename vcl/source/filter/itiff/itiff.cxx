@@ -20,6 +20,10 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <comphelper/sequence.hxx>
+#include <optional>
+#include <package/Inflater.hxx>
+
 #include <unotools/configmgr.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graph.hxx>
@@ -697,6 +701,60 @@ bool TIFFReader::ReadMap()
                 if (np >= SAL_N_ELEMENTS(aMap))
                     return false;
                 if ( ( aLZWDecom.Decompress(getMapData(np), nBytesPerRow) != nBytesPerRow ) || pTIFF->GetError() )
+                    return false;
+            }
+
+            nTotalDataRead += nBytesPerRow;
+            if (nMaxAllowedDecompression && nTotalDataRead > nMaxAllowedDecompression)
+                return false;
+
+            if ( !ConvertScanline( ny ) )
+                return false;
+        }
+    }
+    else if ( nCompression == 32946 ) // deflate compression (legacy code)
+    {
+        sal_uInt32 nStrip(0);
+        if (nStrip >= aStripOffsets.size())
+            return false;
+        pTIFF->Seek(aStripOffsets[nStrip]);
+
+
+        sal_Int32 nRowSize = (static_cast<sal_uInt64>(nImageWidth) * nSamplesPerPixel / nPlanes * nBitsPerSample + 7) >> 3;
+
+        for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
+        {
+            for (sal_uInt32 np = 0; np < nPlanes; ++np)
+            {
+                if ( ny / GetRowsPerStrip() + np * nStripsPerPlane > nStrip )
+                {
+                    nStrip = ny / GetRowsPerStrip() + np * nStripsPerPlane;
+                    if (nStrip >= aStripOffsets.size())
+                        return false;
+                    pTIFF->Seek(aStripOffsets[nStrip]);
+                }
+                if (np >= SAL_N_ELEMENTS(aMap))
+                    return false;
+
+                // Inflater uses in and out sequences
+                // 1) read in nBytesPerRow from the stream, put it on the sequence and initialize decompresser with it
+                css::uno::Sequence<sal_Int8> aInput(nBytesPerRow);
+                sal_uInt8* aInputArray = reinterpret_cast< sal_uInt8* >( aInput.getArray( ) );
+                for (size_t i = 0; i < nBytesPerRow ; ++i)
+                {
+                    pTIFF->ReadUChar(aInputArray[i]);
+                }
+                std::optional< ::ZipUtils::Inflater> decompresser(std::in_place, false);
+                decompresser->setInput(aInput);
+                css::uno::Sequence<sal_Int8> aOutput(nRowSize);
+                decompresser->doInflateSegment(aOutput, 0, nRowSize);
+                decompresser->end();
+                decompresser.reset();
+                auto pDest = getMapData(np);
+                for (sal_Int32 i = 0; i < nRowSize; ++i)
+                    *pDest++ = aInput[i];
+
+                if ( pTIFF->GetError() )
                     return false;
             }
 
@@ -1584,7 +1642,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                             bStatus = false;
                     }
                 }
-                else if (nCompression == 5)
+                else if (nCompression == 5 || nCompression == 32946)
                 {
                     sal_uInt32 np = nPlanes - 1;
                     if (np >= SAL_N_ELEMENTS(aMap))
