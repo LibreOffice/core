@@ -975,22 +975,60 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
             ((nPercentWidth && nPercentWidth!=255) || aPixelSz.Width()) )
         {
             OString sWidth;
-            if (nPercentWidth && nPercentWidth != 255)
-                sWidth = OString::number(static_cast<sal_Int32>(nPercentWidth)) + "%";
+            if (nPercentWidth)
+            {
+                if (nPercentWidth == 255)
+                {
+                    if (nPercentHeight)
+                    {
+                        sWidth = "auto";
+                    }
+                    else
+                    {
+                        sWidth = OString::number(static_cast<sal_Int32>(aPixelSz.Width()));
+                    }
+                }
+                else
+                {
+                    sWidth = OString::number(static_cast<sal_Int32>(nPercentWidth)) + "%";
+                }
+            }
             else
                 sWidth = OString::number(static_cast<sal_Int32>(aPixelSz.Width()));
-            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_width, sWidth);
+            if (!mbXHTML || sWidth != "auto")
+            {
+                aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_width, sWidth);
+            }
         }
 
         if( (nFrameOptions & HtmlFrmOpts::Height) &&
             ((nPercentHeight && nPercentHeight!=255) || aPixelSz.Height()) )
         {
             OString sHeight;
-            if (nPercentHeight && nPercentHeight != 255)
-                sHeight = OString::number(static_cast<sal_Int32>(nPercentHeight)) + "%";
+            if (nPercentHeight)
+            {
+                if (nPercentHeight == 255)
+                {
+                    if (nPercentWidth)
+                    {
+                        sHeight = "auto";
+                    }
+                    else
+                    {
+                        sHeight = OString::number(static_cast<sal_Int32>(aPixelSz.Height()));
+                    }
+                }
+                else
+                {
+                    sHeight = OString::number(static_cast<sal_Int32>(nPercentHeight)) + "%";
+                }
+            }
             else
                 sHeight = OString::number(static_cast<sal_Int32>(aPixelSz.Height()));
-            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_height, sHeight);
+            if (!mbXHTML || sHeight != "auto")
+            {
+                aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_height, sHeight);
+            }
         }
     }
 
