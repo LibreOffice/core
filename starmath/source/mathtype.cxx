@@ -28,6 +28,7 @@
 void MathType::Init()
 {
     //These are the default MathType sizes
+    aSizeTable.reserve(7);
     aSizeTable.push_back(12);
     aSizeTable.push_back(8);
     aSizeTable.push_back(6);
