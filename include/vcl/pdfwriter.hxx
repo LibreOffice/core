@@ -193,6 +193,11 @@ public:
         Signature
     };
 
+    enum FormatType
+    {
+        Text, Number
+    };
+
     enum ErrorCode
     {
         // transparent object occurred and was draw opaque because
@@ -379,13 +384,18 @@ public:
         bool                Password;   // visible echo off
         bool                FileSelect; // field is a file selector
         sal_Int32           MaxLen;     // maximum field length in characters, 0 means unlimited
+        FormatType          Format;
+        OUString            CurrencySymbol;
+        sal_Int32           DecimalAccuracy;
+        bool                PrependCurrencySymbol;
 
         EditWidget()
                 : AnyWidget( vcl::PDFWriter::Edit ),
                   MultiLine( false ),
                   Password( false ),
                   FileSelect( false ),
-                  MaxLen( 0 )
+                  MaxLen( 0 ),
+                  Format( FormatType::Text )
         {}
 
         virtual std::shared_ptr<AnyWidget> Clone() const override
