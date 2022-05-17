@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77e5515e_a7f29156",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-05-17T08:05:09Z",
+      "side": 1,
+      "message": "But even with latest Xcode (some day ago), the SDK included for macOS is for 12.3. Is the macOS part really needed? Configures fine for me on macOS without this.",
+      "revId": "5642744176c5f18a348f4b2fe35f91acd382e4a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
