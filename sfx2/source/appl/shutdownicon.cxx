@@ -55,6 +55,7 @@
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <rtl/ref.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <sfx2/sfxresid.hxx>
@@ -138,11 +139,11 @@ void ShutdownIcon::deInitSystray()
 }
 
 
-ShutdownIcon::ShutdownIcon( const css::uno::Reference< XComponentContext > & rxContext ) :
+ShutdownIcon::ShutdownIcon( css::uno::Reference< XComponentContext >  rxContext ) :
     m_bVeto ( false ),
     m_bListenForTermination ( false ),
     m_bSystemDialogs( false ),
-    m_xContext( rxContext ),
+    m_xContext(std::move( rxContext )),
     m_bInitialized( false )
 {
     m_bSystemDialogs = officecfg::Office::Common::Misc::UseSystemFileDialog::get();

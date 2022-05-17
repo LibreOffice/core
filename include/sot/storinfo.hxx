@@ -21,6 +21,7 @@
 #define INCLUDED_SOT_STORINFO_HXX
 
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <vector>
 #include <sot/sotdllapi.h>
 #include <sot/formats.hxx>
@@ -38,8 +39,8 @@ class SvStorageInfo
 
 public:
     SvStorageInfo(const StgDirEntry&);
-    SvStorageInfo(const OUString& rName, sal_uInt64 nSz, bool bIsStorage)
-        : aName(rName)
+    SvStorageInfo(OUString rName, sal_uInt64 nSz, bool bIsStorage)
+        : aName(std::move(rName))
         , nSize(nSz)
         , bStream(!bIsStorage)
         , bStorage(bIsStorage)

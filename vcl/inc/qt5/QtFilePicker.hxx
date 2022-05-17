@@ -87,7 +87,7 @@ protected:
 public:
     // use non-native file dialog by default; there's no easy way to add custom widgets
     // in a generic way in the native one
-    explicit QtFilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
+    explicit QtFilePicker(css::uno::Reference<css::uno::XComponentContext> context,
                           QFileDialog::FileMode, bool bUseNative = false);
     virtual ~QtFilePicker() override;
 

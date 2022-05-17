@@ -25,6 +25,7 @@
 #include <cppuhelper/basemutex.hxx>
 
 #include <unordered_map>
+#include <utility>
 
 namespace com :: sun :: star :: frame { class XDispatch; }
 namespace com :: sun :: star :: frame { class XFrame; }
@@ -70,8 +71,8 @@ class FrameStatusListener : public css::frame::XStatusListener,
     protected:
         struct Listener
         {
-            Listener( const css::util::URL& rURL, const css::uno::Reference< css::frame::XDispatch >& rDispatch ) :
-                aURL( rURL ), xDispatch( rDispatch ) {}
+            Listener( css::util::URL  rURL, css::uno::Reference< css::frame::XDispatch >  rDispatch ) :
+                aURL(std::move( rURL )), xDispatch(std::move( rDispatch )) {}
 
             css::util::URL aURL;
             css::uno::Reference< css::frame::XDispatch > xDispatch;

@@ -64,6 +64,7 @@
 #include <memory>
 #include <set>
 #include <string_view>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -801,8 +802,8 @@ ParaPortionList::DbgCheck(ParaPortionList const& rParas, EditDoc const& rDoc)
 }
 #endif
 
-ContentAttribsInfo::ContentAttribsInfo( const SfxItemSet& rParaAttribs ) :
-        aPrevParaAttribs( rParaAttribs)
+ContentAttribsInfo::ContentAttribsInfo( SfxItemSet  rParaAttribs ) :
+        aPrevParaAttribs(std::move( rParaAttribs))
 {
 }
 
@@ -1190,8 +1191,8 @@ ContentNode::ContentNode( SfxItemPool& rPool ) : aContentAttribs( rPool )
 {
 }
 
-ContentNode::ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs ) :
-    maString(rStr), aContentAttribs(rContentAttribs)
+ContentNode::ContentNode( OUString  rStr, ContentAttribs  rContentAttribs ) :
+    maString(std::move(rStr)), aContentAttribs(std::move(rContentAttribs))
 {
 }
 

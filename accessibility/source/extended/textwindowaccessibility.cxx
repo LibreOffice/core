@@ -33,6 +33,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/window.hxx>
@@ -79,10 +80,10 @@ void WindowListenerGuard::endListening()
     }
 }
 
-Paragraph::Paragraph(::rtl::Reference< Document > const & rDocument,
+Paragraph::Paragraph(::rtl::Reference< Document >  rDocument,
                              Paragraphs::size_type nNumber):
     ParagraphBase(m_aMutex),
-    m_xDocument(rDocument),
+    m_xDocument(std::move(rDocument)),
     m_nNumber(nNumber),
     m_nClientId(0)
 {

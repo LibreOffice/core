@@ -23,6 +23,7 @@
 
 #include <sdpage.hxx>
 #include <comphelper/profilezone.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 namespace sd::slidesorter::cache {
@@ -31,16 +32,16 @@ namespace sd::slidesorter::cache {
 
 QueueProcessor::QueueProcessor (
     RequestQueue& rQueue,
-    const std::shared_ptr<BitmapCache>& rpCache,
+    std::shared_ptr<BitmapCache>  rpCache,
     const Size& rPreviewSize,
     const bool bDoSuperSampling,
-    const SharedCacheContext& rpCacheContext)
+    SharedCacheContext  rpCacheContext)
     : maTimer("sd::QueueProcessor maTimer"),
       maPreviewSize(rPreviewSize),
       mbDoSuperSampling(bDoSuperSampling),
-      mpCacheContext(rpCacheContext),
+      mpCacheContext(std::move(rpCacheContext)),
       mrQueue(rQueue),
-      mpCache(rpCache),
+      mpCache(std::move(rpCache)),
       mbIsPaused(false)
 {
     maTimer.SetInvokeHandler (LINK(this,QueueProcessor,ProcessRequestHdl));

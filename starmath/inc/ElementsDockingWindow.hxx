@@ -40,7 +40,7 @@ public:
     Point mBoxLocation;
     Size  mBoxSize;
 
-    SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, const OUString& aHelpText);
+    SmElement(std::unique_ptr<SmNode>&& pNode, OUString  aText, OUString  aHelpText);
     virtual ~SmElement();
 
     const std::unique_ptr<SmNode>& getNode() const;

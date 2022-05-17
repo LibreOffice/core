@@ -102,7 +102,7 @@ private:
     bool                mbOnlyCursor;
 
 public:
-                        CommandExtTextInputData( const OUString& rText,
+                        CommandExtTextInputData( OUString  rText,
                                                  const ExtTextInputAttr* pTextAttr,
                                                  sal_Int32 nCursorPos,
                                                  sal_uInt16 nCursorFlags,

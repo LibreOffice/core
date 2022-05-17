@@ -36,17 +36,18 @@
 #include <rangeseq.hxx>
 #include <sc.hrc>
 #include <hints.hxx>
+#include <utility>
 
 
 bool ScDdeLink::bIsInUpdate = false;
 
-ScDdeLink::ScDdeLink( ScDocument& rD, const OUString& rA, const OUString& rT, const OUString& rI,
+ScDdeLink::ScDdeLink( ScDocument& rD, OUString  rA, OUString  rT, OUString  rI,
                         sal_uInt8 nM ) :
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ALWAYS,SotClipboardFormatId::STRING),
     rDoc( rD ),
-    aAppl( rA ),
-    aTopic( rT ),
-    aItem( rI ),
+    aAppl(std::move( rA )),
+    aTopic(std::move( rT )),
+    aItem(std::move( rI )),
     nMode( nM ),
     bNeedUpdate( false ),
     pResult( nullptr )

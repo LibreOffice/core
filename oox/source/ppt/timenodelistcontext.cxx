@@ -39,6 +39,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <o3tl/string_view.hxx>
+#include <utility>
 
 #include "animvariantcontext.hxx"
 #include "commonbehaviorcontext.hxx"
@@ -960,10 +961,10 @@ namespace oox::ppt {
     }
 
     TimeNodeContext::TimeNodeContext( FragmentHandler2 const & rParent, sal_Int32 aElement,
-            const TimeNodePtr & pNode ) noexcept
+            TimeNodePtr  pNode ) noexcept
         : FragmentHandler2( rParent )
         , mnElement( aElement )
-        , mpNode( pNode )
+        , mpNode(std::move( pNode ))
     {
     }
 

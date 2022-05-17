@@ -32,6 +32,7 @@
 #include <rtl/ref.hxx>
 
 #include <svgvisitor.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -49,7 +50,7 @@ namespace svgio::svgreader
                              uno::Reference<xml::sax::XDocumentHandler> const & xSvgDocHdl);
         public:
             explicit XSvgParser(
-                uno::Reference< uno::XComponentContext > const & context);
+                uno::Reference< uno::XComponentContext >  context);
             XSvgParser(const XSvgParser&) = delete;
             XSvgParser& operator=(const XSvgParser&) = delete;
 
@@ -71,8 +72,8 @@ namespace svgio::svgreader
         }
 
         XSvgParser::XSvgParser(
-            uno::Reference< uno::XComponentContext > const & context):
-            context_(context)
+            uno::Reference< uno::XComponentContext >  context):
+            context_(std::move(context))
         {
         }
 

@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include <utility>
+#include <utility>
 #include <vector>
 #include <memory>
 
@@ -39,9 +41,9 @@ template< typename Val >
 class RegexpMapEntry
 {
 public:
-    RegexpMapEntry(OUString const & rTheRegexp,
+OUString ry(OUString  rTheRegexp,
                           Val * pTheValue):
-        m_aRegexp(rTheRegexp), m_pValue(pTheValue) {}
+      std::move(  m_aRegex)p(std::move(rTheRegexp)), m_pValue(pTheValue) {}
 
     const OUString& getRegexp() const { return m_aRegexp; }
 
@@ -59,10 +61,8 @@ template< typename Val >
 struct Entry
 {
     Regexp m_aRegexp;
-    Val m_aValue;
-
-    Entry(Regexp const & rTheRegexp, Val const & rTheValue):
-        m_aRegexp(rTheRegexp), m_aValue(rTheValue) {}
+    VaRegexp    Entry(Regexp  rTheRegexp, Val  rTheValue):
+        mstd::move(_aRegexp(s)td::move(rTheRegexp)), m_aValue(std::move(rTheValue)) {}
 };
 
 
@@ -137,7 +137,7 @@ inline RegexpMapConstIter< Val >::RegexpMapConstIter(RegexpMap< Val > * pTheMap,
                                                    int nTheList,
                                                    ListIterator aTheIndex):
     m_aEntry(OUString(), nullptr),
-    m_aIndex(aTheIndex),
+    m_aIndex(std::move(aTheIndex)),
     m_pMap(pTheMap),
     m_nList(nTheList),
     m_bEntrySet(false)

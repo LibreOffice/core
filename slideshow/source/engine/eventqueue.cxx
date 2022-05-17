@@ -27,6 +27,7 @@
 
 #include <limits>
 #include <memory>
+#include <utility>
 
 
 using namespace ::com::sun::star;
@@ -42,12 +43,12 @@ namespace slideshow::internal
 
 
         EventQueue::EventQueue(
-            std::shared_ptr<canvas::tools::ElapsedTime> const & pPresTimer )
+            std::shared_ptr<canvas::tools::ElapsedTime>  pPresTimer )
             : maMutex(),
               maEvents(),
               maNextEvents(),
               maNextNextEvents(),
-              mpTimer( pPresTimer )
+              mpTimer(std::move( pPresTimer ))
         {
         }
 

@@ -20,6 +20,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/vectorgraphicdata.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -310,10 +311,10 @@ std::pair<VectorGraphicData::State, size_t> VectorGraphicData::getSizeBytes() co
 }
 
 VectorGraphicData::VectorGraphicData(
-    const BinaryDataContainer& rDataContainer,
+    BinaryDataContainer  rDataContainer,
     VectorGraphicDataType eVectorDataType,
     sal_Int32 nPageIndex)
-:   maDataContainer(rDataContainer),
+:   maDataContainer(std::move(rDataContainer)),
     mbSequenceCreated(false),
     mNestedBitmapSize(0),
     meType(eVectorDataType),

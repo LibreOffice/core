@@ -25,17 +25,18 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <base/cachedprimitivebase.hxx>
+#include <utility>
 
 
 using namespace ::com::sun::star;
 
 namespace canvas
 {
-    CachedPrimitiveBase::CachedPrimitiveBase( const rendering::ViewState&                   rUsedViewState,
-                                              const uno::Reference< rendering::XCanvas >&   rTarget ) :
+    CachedPrimitiveBase::CachedPrimitiveBase( rendering::ViewState                    rUsedViewState,
+                                              uno::Reference< rendering::XCanvas >    rTarget ) :
         CachedPrimitiveBase_Base( m_aMutex ),
-        maUsedViewState( rUsedViewState ),
-        mxTarget( rTarget )
+        maUsedViewState(std::move( rUsedViewState )),
+        mxTarget(std::move( rTarget ))
     {
     }
 

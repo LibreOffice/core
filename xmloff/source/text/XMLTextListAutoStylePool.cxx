@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vector>
 
 #include <tools/solar.h>
@@ -72,8 +73,8 @@ public:
     }
 
     explicit XMLTextListAutoStylePoolEntry_Impl(
-            const OUString& rInternalName ) :
-        sInternalName( rInternalName ),
+            OUString  rInternalName ) :
+        sInternalName(std::move( rInternalName )),
         nPos( 0 ),
         bIsNamed( true )
     {

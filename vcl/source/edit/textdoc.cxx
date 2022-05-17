@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 
 // compare function called by QuickSort
 static bool CompareStart( const std::unique_ptr<TextCharAttrib>& pFirst, const std::unique_ptr<TextCharAttrib>& pSecond )
@@ -132,8 +133,8 @@ void TextCharAttribList::DeleteEmptyAttribs()
     mbHasEmptyAttribs = false;
 }
 
-TextNode::TextNode( const OUString& rText ) :
-    maText( rText )
+TextNode::TextNode( OUString  rText ) :
+    maText(std::move( rText ))
 {
 }
 

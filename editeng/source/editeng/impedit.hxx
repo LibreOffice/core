@@ -143,7 +143,7 @@ struct ImplIMEInfos
     sal_Int32   nLen;
     bool        bWasCursorOverwrite;
 
-            ImplIMEInfos( const EditPaM& rPos, const OUString& rOldTextAfterStartPos );
+            ImplIMEInfos( const EditPaM& rPos, OUString  rOldTextAfterStartPos );
             ~ImplIMEInfos();
 
     void    CopyAttribs( const ExtTextInputAttr* pA, sal_uInt16 nL );

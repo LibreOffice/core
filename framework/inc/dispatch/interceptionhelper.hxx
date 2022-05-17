@@ -151,7 +151,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
                     an outside creates dispatch provider, which has to be used here as lowest slave "interceptor".
          */
         InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
-                           const css::uno::Reference< css::frame::XDispatchProvider >& xSlave);
+                           css::uno::Reference< css::frame::XDispatchProvider >  xSlave);
 
     private:
 

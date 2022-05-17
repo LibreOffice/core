@@ -19,18 +19,19 @@
 
 
 #include <sdr/attribute/sdreffectstextattribute.hxx>
+#include <utility>
 
 
 namespace drawinglayer::attribute
 {
         SdrEffectsTextAttribute::SdrEffectsTextAttribute(
-            const SdrShadowAttribute& rShadow,
-            const SdrTextAttribute& rTextAttribute,
-            const SdrGlowAttribute& rGlow,
+            SdrShadowAttribute  rShadow,
+            SdrTextAttribute  rTextAttribute,
+            SdrGlowAttribute  rGlow,
             sal_Int32 nSoftEdgeRadius)
-        :   maShadow(rShadow),
-            maTextAttribute(rTextAttribute),
-            maGlow(rGlow),
+        :   maShadow(std::move(rShadow)),
+            maTextAttribute(std::move(rTextAttribute)),
+            maGlow(std::move(rGlow)),
             mnSoftEdgeRadius(nSoftEdgeRadius)
         {
         }

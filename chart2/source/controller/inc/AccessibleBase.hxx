@@ -99,7 +99,7 @@ public:
         LOST_SELECTION
     };
 
-    AccessibleBase( const AccessibleElementInfo & rAccInfo,
+    AccessibleBase( AccessibleElementInfo  rAccInfo,
                     bool bMayHaveChildren,
                     bool bAlwaysTransparent );
     virtual ~AccessibleBase() override;

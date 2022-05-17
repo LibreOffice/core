@@ -80,7 +80,7 @@ class ShutdownIcon : public ShutdownIconServiceBase
         friend class SfxNotificationListener_Impl;
 
     public:
-        explicit ShutdownIcon( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+        explicit ShutdownIcon( css::uno::Reference< css::uno::XComponentContext >  rxContext );
 
         virtual ~ShutdownIcon() override;
 

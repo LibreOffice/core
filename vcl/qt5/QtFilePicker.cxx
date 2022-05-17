@@ -65,6 +65,7 @@
 
 #include <unx/geninst.h>
 #include <fpicker/strings.hrc>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
@@ -84,10 +85,10 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 }
 }
 
-QtFilePicker::QtFilePicker(css::uno::Reference<css::uno::XComponentContext> const& context,
+QtFilePicker::QtFilePicker(css::uno::Reference<css::uno::XComponentContext> context,
                            QFileDialog::FileMode eMode, bool bUseNative)
     : QtFilePicker_Base(m_aHelperMutex)
-    , m_context(context)
+    , m_context(std::move(context))
     , m_bIsFolderPicker(eMode == QFileDialog::Directory)
     , m_pParentWidget(nullptr)
     , m_pFileDialog(new QFileDialog(nullptr, {}, QDir::homePath()))

@@ -36,6 +36,7 @@
 #include <oox/drawingml/theme.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
 #include <memory>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -43,9 +44,9 @@ namespace oox::shape {
 using namespace core;
 using namespace drawingml;
 
-ShapeContextHandler::ShapeContextHandler(const rtl::Reference<ShapeFilterBase>& xFilterBase) :
+ShapeContextHandler::ShapeContextHandler(rtl::Reference<ShapeFilterBase>  xFilterBase) :
   m_bFullWPGSUpport(false),
-  mxShapeFilterBase(xFilterBase)
+  mxShapeFilterBase(std::move(xFilterBase))
 
 {
 }

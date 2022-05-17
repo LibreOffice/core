@@ -35,7 +35,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaHeaderFooter( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps, bool isHeader, sal_Int32 index );
+    SwVbaHeaderFooter( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::frame::XModel >  xModel, css::uno::Reference< css::beans::XPropertySet >  xProps, bool isHeader, sal_Int32 index );
 
     // Attributes
     virtual sal_Bool SAL_CALL getIsHeader() override;

@@ -51,9 +51,9 @@ namespace dbaui
 
     public:
         explicit OTableWindowData(  const css::uno::Reference< css::beans::XPropertySet>& _xTable
-                                   ,const OUString& _rComposedName
-                                   ,const OUString& strTableName
-                                   ,const OUString& rWinName );
+                                   ,OUString  _rComposedName
+                                   ,OUString  strTableName
+                                   ,OUString  rWinName );
         virtual ~OTableWindowData() override;
 
         /** late constructor

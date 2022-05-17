@@ -25,6 +25,7 @@
 #include <comphelper/sequence.hxx>
 
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "targetpropertiescreator.hxx"
@@ -102,11 +103,11 @@ namespace slideshow::internal
             }
 
             NodeFunctor( XShapeToNamedValuesMap&                    rShapeHash,
-                         const uno::Reference< drawing::XShape >&   rTargetShape,
+                         uno::Reference< drawing::XShape >    rTargetShape,
                          sal_Int16                                  nParagraphIndex,
                          bool                                       bInitial) :
                 mrShapeHash( rShapeHash ),
-                mxTargetShape( rTargetShape ),
+                mxTargetShape(std::move( rTargetShape )),
                 mnParagraphIndex( nParagraphIndex ),
                 mbInitial( bInitial )
             {

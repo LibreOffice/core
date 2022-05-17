@@ -38,6 +38,7 @@
 #include <i18nutil/unicode.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <utility>
 #include <vcl/GraphicObject.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/bigint.hxx>
@@ -2850,14 +2851,14 @@ SvxBrushItem::SvxBrushItem(const GraphicObject& rGraphicObj, SvxGraphicPosition 
     DBG_ASSERT( GPOS_NONE != ePos, "SvxBrushItem-Ctor with GPOS_NONE == ePos" );
 }
 
-SvxBrushItem::SvxBrushItem(const OUString& rLink, const OUString& rFilter,
+SvxBrushItem::SvxBrushItem(OUString  rLink, OUString  rFilter,
                            SvxGraphicPosition ePos, sal_uInt16 _nWhich)
     : SfxPoolItem(_nWhich)
     , aColor(COL_TRANSPARENT)
     , nShadingValue(ShadingPattern::CLEAR)
     , nGraphicTransparency(0)
-    , maStrLink(rLink)
-    , maStrFilter(rFilter)
+    , maStrLink(std::move(rLink))
+    , maStrFilter(std::move(rFilter))
     , eGraphicPos((GPOS_NONE != ePos) ? ePos : GPOS_MM)
     , bLoadAgain(true)
 {

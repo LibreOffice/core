@@ -20,6 +20,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
+#include <utility>
 
 struct TestMacroInfo
 {
@@ -55,8 +56,8 @@ public:
         std::function<void()> m_Func;
 
     public:
-        Resetter(std::function<void()> const& rFunc)
-            : m_Func(rFunc)
+        Resetter(std::function<void()> rFunc)
+            : m_Func(std::move(rFunc))
         {
         }
         ~Resetter()

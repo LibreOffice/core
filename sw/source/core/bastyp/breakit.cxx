@@ -27,6 +27,7 @@
 #include <unicode/uchar.h>
 #include <unotools/localedatawrapper.hxx>
 #include <algorithm>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -49,8 +50,8 @@ SwBreakIt * SwBreakIt::Get()
     return g_pBreakIt;
 }
 
-SwBreakIt::SwBreakIt( const uno::Reference<uno::XComponentContext> & rxContext )
-    : m_xContext(rxContext)
+SwBreakIt::SwBreakIt( uno::Reference<uno::XComponentContext>  rxContext )
+    : m_xContext(std::move(rxContext))
     , m_xBreak(i18n::BreakIterator::create(m_xContext))
     , m_aForbiddenLang(LANGUAGE_DONTKNOW)
 {

@@ -18,6 +18,7 @@
  */
 
 #include <svx/numinf.hxx>
+#include <utility>
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( const TypedWhichId<SvxNumberInfoItem> nId ) :
@@ -42,11 +43,11 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
-                                      const OUString& rVal, const TypedWhichId<SvxNumberInfoItem> nId ) :
+                                      OUString  rVal, const TypedWhichId<SvxNumberInfoItem> nId ) :
     SfxPoolItem     ( nId ),
     pFormatter      ( pNumFormatter ),
     eValueType      ( SvxNumberValueType::String ),
-    aStringVal      ( rVal ),
+    aStringVal      (std::move( rVal )),
     nDoubleVal      ( 0 )
 {
 }
@@ -64,12 +65,12 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
-                                      const double& rVal, const OUString& rValueStr,
+                                      const double& rVal, OUString  rValueStr,
                                       const TypedWhichId<SvxNumberInfoItem> nId ) :
     SfxPoolItem     ( nId ),
     pFormatter      ( pNumFormatter ),
     eValueType      ( SvxNumberValueType::Number ),
-    aStringVal      ( rValueStr ),
+    aStringVal      (std::move( rValueStr )),
     nDoubleVal      ( rVal )
 {
 }

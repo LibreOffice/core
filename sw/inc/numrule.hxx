@@ -142,7 +142,7 @@ private:
 
 public:
     /// add parameter <eDefaultNumberFormatPositionAndSpaceMode>
-    SwNumRule( const OUString& rNm,
+    SwNumRule( OUString  rNm,
                const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                SwNumRuleType = NUM_RULE );
 

@@ -25,6 +25,8 @@
 #include <mutex>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <utility>
+#include <utility>
 
 namespace http_dav_ucp
 {
@@ -191,9 +193,9 @@ namespace http_dav_ucp
         css::uno::Any const       value;
 
         ProppatchValue( const ProppatchOperation o,
-                        const OUString & n,
-                        const css::uno::Any & v )
-            : operation( o ), name( n ), value( v ) {}
+     OUString    OUString  n,
+            css::uno::Any :Any  v )
+            : operation( o ), std::move(nam)e(std::mostd::move(ve() n )), value(std::move( v )) {}
     };
 } // namespace http_dav_ucp
 

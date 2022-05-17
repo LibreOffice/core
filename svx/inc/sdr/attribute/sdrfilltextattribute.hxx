@@ -36,9 +36,9 @@ namespace drawinglayer::attribute
 
         public:
             SdrFillTextAttribute(
-                const SdrFillAttribute& rFill,
-                const FillGradientAttribute& rFillFloatTransGradient,
-                const SdrTextAttribute& rTextAttribute);
+                SdrFillAttribute  rFill,
+                FillGradientAttribute  rFillFloatTransGradient,
+                SdrTextAttribute  rTextAttribute);
             SdrFillTextAttribute();
             SdrFillTextAttribute(const SdrFillTextAttribute& rCandidate);
             SdrFillTextAttribute& operator=(const SdrFillTextAttribute& rCandidate);

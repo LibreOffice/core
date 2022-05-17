@@ -33,6 +33,7 @@
 #include <map>
 #include <memory>
 #include <string_view>
+#include <utility>
 
 class CharClass;
 class SfxPoolItem;
@@ -143,8 +144,8 @@ class EDITENG_DLLPUBLIC SvxAutocorrWord
     OUString sShort, sLong;
     bool bIsTxtOnly;                // Is pure ASCII - Text
 public:
-    SvxAutocorrWord( const OUString& rS, const OUString& rL, bool bFlag = true )
-        : sShort( rS ), sLong( rL ), bIsTxtOnly( bFlag )
+    SvxAutocorrWord( OUString  rS, OUString  rL, bool bFlag = true )
+        : sShort(std::move( rS )), sLong(std::move( rL )), bIsTxtOnly( bFlag )
     {}
 
     const OUString& GetShort() const                  { return sShort; }
@@ -210,8 +211,8 @@ class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
 
 public:
     SvxAutoCorrectLanguageLists( SvxAutoCorrect& rParent,
-            const OUString& rShareAutoCorrectFile,
-            const OUString& rUserAutoCorrectFile);
+            OUString  rShareAutoCorrectFile,
+            OUString  rUserAutoCorrectFile);
     ~SvxAutoCorrectLanguageLists();
 
     // Load, Set, Get - the replacement list
@@ -285,8 +286,8 @@ public:
 
     virtual void refreshBlockList( const css::uno::Reference < css::embed::XStorage >& rStg);
 
-    SvxAutoCorrect( const OUString& rShareAutocorrFile,
-                    const OUString& rUserAutocorrFile );
+    SvxAutoCorrect( OUString  rShareAutocorrFile,
+                    OUString  rUserAutocorrFile );
     SvxAutoCorrect( const SvxAutoCorrect& );
     virtual ~SvxAutoCorrect();
 

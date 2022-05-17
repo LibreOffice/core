@@ -33,6 +33,7 @@
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <utility>
 #include <xmloff/table/XMLTableImport.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/txtimp.hxx>
@@ -70,7 +71,7 @@ struct ColumnInfo
 class XMLProxyContext : public SvXMLImportContext
 {
 public:
-    XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContextRef& xParent );
+    XMLProxyContext( SvXMLImport& rImport, SvXMLImportContextRef  xParent );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
@@ -177,9 +178,9 @@ private:
 }
 
 
-XMLProxyContext::XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContextRef& xParent )
+XMLProxyContext::XMLProxyContext( SvXMLImport& rImport, SvXMLImportContextRef  xParent )
 : SvXMLImportContext( rImport )
-, mxParent( xParent )
+, mxParent(std::move( xParent ))
 {
 }
 

@@ -68,6 +68,7 @@
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/macros.hxx>
+#include <utility>
 #include "pkgcontent.hxx"
 #include "pkgprovider.hxx"
 #include "pkgresultset.hxx"
@@ -237,14 +238,14 @@ Content::Content(
         const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider* pProvider,
         const uno::Reference< ucb::XContentIdentifier >& Identifier,
-        const uno::Reference< container::XHierarchicalNameAccess > & Package,
-        const PackageUri& rUri,
-        const ContentProperties& rProps )
+        uno::Reference< container::XHierarchicalNameAccess >  Package,
+        PackageUri  rUri,
+        ContentProperties  rProps )
 : ContentImplHelper( rxContext, pProvider, Identifier ),
-  m_aUri( rUri ),
-  m_aProps( rProps ),
+  m_aUri(std::move( rUri )),
+  m_aProps(std::move( rProps )),
   m_eState( PERSISTENT ),
-  m_xPackage( Package ),
+  m_xPackage(std::move( Package )),
   m_pProvider( pProvider ),
   m_nModifiedProps( NONE_MODIFIED )
 {
@@ -255,14 +256,14 @@ Content::Content(
         const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider* pProvider,
         const uno::Reference< ucb::XContentIdentifier >& Identifier,
-        const uno::Reference< container::XHierarchicalNameAccess > & Package,
-        const PackageUri& rUri,
+        uno::Reference< container::XHierarchicalNameAccess >  Package,
+        PackageUri  rUri,
         const ucb::ContentInfo& Info )
   : ContentImplHelper( rxContext, pProvider, Identifier ),
-  m_aUri( rUri ),
+  m_aUri(std::move( rUri )),
   m_aProps( Info.Type ),
   m_eState( TRANSIENT ),
-  m_xPackage( Package ),
+  m_xPackage(std::move( Package )),
   m_pProvider( pProvider ),
   m_nModifiedProps( NONE_MODIFIED )
 {

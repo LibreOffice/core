@@ -31,6 +31,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <cmath>
+#include <utility>
 #include <vcl/skia/SkiaHelper.hxx>
 
 using namespace com::sun::star;
@@ -342,14 +343,14 @@ namespace drawinglayer::primitive2d
         }
 
         SvgGradientHelper::SvgGradientHelper(
-            const basegfx::B2DHomMatrix& rGradientTransform,
-            const basegfx::B2DPolyPolygon& rPolyPolygon,
+            basegfx::B2DHomMatrix  rGradientTransform,
+            basegfx::B2DPolyPolygon  rPolyPolygon,
             SvgGradientEntryVector&& rGradientEntries,
             const basegfx::B2DPoint& rStart,
             bool bUseUnitCoordinates,
             SpreadMethod aSpreadMethod)
-        :   maGradientTransform(rGradientTransform),
-            maPolyPolygon(rPolyPolygon),
+        :   maGradientTransform(std::move(rGradientTransform)),
+            maPolyPolygon(std::move(rPolyPolygon)),
             maGradientEntries(std::move(rGradientEntries)),
             maStart(rStart),
             maSpreadMethod(aSpreadMethod),

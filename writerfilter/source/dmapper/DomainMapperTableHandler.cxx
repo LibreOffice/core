@@ -54,6 +54,7 @@
 #ifdef DBG_UTIL
 #include "PropertyMapHelper.hxx"
 #include <rtl/ustring.hxx>
+#include <utility>
 #endif
 
 namespace writerfilter::dmapper {
@@ -80,9 +81,9 @@ using namespace ::std;
 #define MAXTABLECELLS 63
 
 DomainMapperTableHandler::DomainMapperTableHandler(
-            css::uno::Reference<css::text::XTextAppendAndConvert> const& xText,
+            css::uno::Reference<css::text::XTextAppendAndConvert>  xText,
             DomainMapper_Impl& rDMapper_Impl)
-    : m_xText(xText),
+    : m_xText(std::move(xText)),
         m_rDMapper_Impl( rDMapper_Impl ),
         m_bHadFootOrEndnote(false)
 {

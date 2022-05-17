@@ -51,7 +51,7 @@ public:
 
     OUString msDetectedFormat;
 
-    GraphicFormatDetector(SvStream& rStream, OUString const& rFormatExtension);
+    GraphicFormatDetector(SvStream& rStream, OUString rFormatExtension);
 
     bool detect();
 

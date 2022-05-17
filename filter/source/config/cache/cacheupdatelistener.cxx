@@ -26,15 +26,16 @@
 #include <unotools/configpaths.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/processfactory.hxx>
+#include <utility>
 
 
 namespace filter::config{
 
 CacheUpdateListener::CacheUpdateListener(FilterCache &rFilterCache,
-                                         const css::uno::Reference< css::uno::XInterface >& xConfigAccess,
+                                         css::uno::Reference< css::uno::XInterface >  xConfigAccess,
                                          FilterCache::EItemType eConfigType)
     : m_rCache(rFilterCache)
-    , m_xConfig(xConfigAccess)
+    , m_xConfig(std::move(xConfigAccess))
     , m_eConfigType(eConfigType)
 {
 }

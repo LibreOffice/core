@@ -116,13 +116,13 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow[13] = new ORowSetValueDecorator(OUString("B"));
         aRows.push_back(aRow);
 
-        aRow[11] = new ORowSetValueDecorator(true);
+        aRow[11] = new ORowSetValueDecorator(ORowSetValue(true));
         aRow[13] = new ORowSetValueDecorator(OUString("Y"));
         aRows.push_back(aRow);
 
         aRow[1] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
         aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
-        aRow[11] = new ORowSetValueDecorator(false);
+        aRow[11] = new ORowSetValueDecorator(ORowSetValue(false));
         aRow[13] = new ORowSetValueDecorator(OUString("T"));
         aRows.push_back(aRow);
 
@@ -291,7 +291,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
 
         if(unique && !getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             continue;
-        aRow[4] = new ORowSetValueDecorator(getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))));
+        aRow[4] = new ORowSetValueDecorator(ORowSetValue(getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE)))));
         aRow[6] = new ORowSetValueDecorator(*pBegin);
 
         auto pIndex = comphelper::getFromUnoTunnel<ODbaseIndex>(xIndex);

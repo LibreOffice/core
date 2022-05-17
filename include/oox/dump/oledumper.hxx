@@ -22,6 +22,7 @@
 
 #include <map>
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -353,8 +354,8 @@ private:
         OUString     maItemName;
         sal_uInt32          mnDataSize;
         OUString*    mpItemValue;
-        explicit     LargeProperty( LargePropertyType ePropType, const String& rItemName, sal_uInt32 nDataSize, OUString* pItemValue = nullptr ) :
-                                mePropType( ePropType ), maItemName( rItemName ), mnDataSize( nDataSize ), mpItemValue( pItemValue ) {}
+        explicit     LargeProperty( LargePropertyType ePropType, String  rItemName, sal_uInt32 nDataSize, OUString* pItemValue = nullptr ) :
+                                mePropType( ePropType ), maItemName(std::move( rItemName )), mnDataSize( nDataSize ), mpItemValue( pItemValue ) {}
     };
     typedef ::std::vector< LargeProperty > LargePropertyVector;
 
@@ -362,8 +363,8 @@ private:
     {
         OUString     maItemName;
         sal_uInt16          mnData;
-        explicit     StreamProperty( const String& rItemName, sal_uInt16 nData ) :
-                                maItemName( rItemName ), mnData( nData ) {}
+        explicit     StreamProperty( String  rItemName, sal_uInt16 nData ) :
+                                maItemName(std::move( rItemName )), mnData( nData ) {}
     };
 
     LargePropertyVector maLargeProps;

@@ -24,6 +24,7 @@
 #include <memory>
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+#include <utility>
 
 #include "diagram.hxx"
 
@@ -354,7 +355,7 @@ class ShapeAtom
     : public LayoutAtom
 {
 public:
-    ShapeAtom(LayoutNode& rLayoutNode, const ShapePtr& pShape) : LayoutAtom(rLayoutNode), mpShapeTemplate(pShape) {}
+    ShapeAtom(LayoutNode& rLayoutNode, ShapePtr  pShape) : LayoutAtom(rLayoutNode), mpShapeTemplate(std::move(pShape)) {}
     virtual void accept( LayoutAtomVisitor& ) override;
     const ShapePtr& getShapeTemplate() const
         { return mpShapeTemplate; }

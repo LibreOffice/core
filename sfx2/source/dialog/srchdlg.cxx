@@ -24,6 +24,7 @@
 #include <tools/debug.hxx>
 #include <unotools/viewoptions.hxx>
 #include <o3tl/string_view.hxx>
+#include <utility>
 
 using namespace ::com::sun::star::uno;
 
@@ -36,9 +37,9 @@ namespace sfx2 {
 // SearchDialog
 
 
-SearchDialog::SearchDialog(weld::Window* pWindow, const OUString& rConfigName)
+SearchDialog::SearchDialog(weld::Window* pWindow, OUString  rConfigName)
     : GenericDialogController(pWindow, "sfx/ui/searchdialog.ui", "SearchDialog")
-    , m_sConfigName(rConfigName)
+    , m_sConfigName(std::move(rConfigName))
     , m_xSearchEdit(m_xBuilder->weld_combo_box("searchterm"))
     , m_xWholeWordsBox(m_xBuilder->weld_check_button("wholewords"))
     , m_xMatchCaseBox(m_xBuilder->weld_check_button("matchcase"))

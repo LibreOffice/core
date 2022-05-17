@@ -9,15 +9,16 @@
 
 #include <contentcontrolbutton.hxx>
 
+#include <utility>
 #include <vcl/weldutils.hxx>
 #include <vcl/event.hxx>
 
 #include <edtwin.hxx>
 
-SwContentControlButton::SwContentControlButton(
-    SwEditWin* pEditWin, const std::shared_ptr<SwContentControl>& pContentControl)
+SwContentControlButton::SwContentControlButton(SwEditWin* pEditWin,
+                                               std::shared_ptr<SwContentControl> pContentControl)
     : Control(pEditWin, WB_DIALOGCONTROL)
-    , m_pContentControl(pContentControl)
+    , m_pContentControl(std::move(pContentControl))
 {
     assert(GetParent());
     assert(dynamic_cast<SwEditWin*>(GetParent()));

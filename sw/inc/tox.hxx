@@ -171,7 +171,7 @@ public:
 class SwTOXType final: public sw::BroadcastingModify
 {
 public:
-    SwTOXType(SwDoc& rDoc, TOXTypes eTyp, const OUString& rName);
+    SwTOXType(SwDoc& rDoc, TOXTypes eTyp, OUString  rName);
 
     // @@@ public copy ctor, but no copy assignment?
     SwTOXType(const SwTOXType& rCopy);
@@ -457,7 +457,7 @@ protected:
 
 public:
     SwTOXBase( const SwTOXType* pTyp, const SwForm& rForm,
-               SwTOXElement nCreaType, const OUString& rTitle );
+               SwTOXElement nCreaType, OUString  rTitle );
     SwTOXBase( const SwTOXBase& rCopy, SwDoc* pDoc = nullptr );
     virtual ~SwTOXBase() override;
 

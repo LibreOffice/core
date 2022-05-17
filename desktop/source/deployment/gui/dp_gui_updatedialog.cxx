@@ -117,13 +117,13 @@ struct UpdateDialog::IgnoredUpdate {
     OUString sExtensionID;
     OUString sVersion;
 
-    IgnoredUpdate( const OUString &rExtensionID, const OUString &rVersion );
+    IgnoredUpdate( OUString rExtensionID, OUString rVersion );
 };
 
 
-UpdateDialog::IgnoredUpdate::IgnoredUpdate( const OUString &rExtensionID, const OUString &rVersion ):
-    sExtensionID( rExtensionID ),
-    sVersion( rVersion )
+UpdateDialog::IgnoredUpdate::IgnoredUpdate( OUString rExtensionID, OUString rVersion ):
+    sExtensionID(std::move( rExtensionID )),
+    sVersion(std::move( rVersion ))
 {}
 
 
@@ -134,11 +134,11 @@ struct UpdateDialog::Index
     sal_uInt16    m_nIndex;
     OUString      m_aName;
 
-    Index( Kind theKind, sal_uInt16 nIndex, const OUString &rName ) :
+    Index( Kind theKind, sal_uInt16 nIndex, OUString rName ) :
         m_eKind( theKind ),
         m_bIgnored( false ),
         m_nIndex( nIndex ),
-        m_aName( rName ) {}
+        m_aName(std::move( rName )) {}
 };
 
 

@@ -18,21 +18,22 @@
  */
 
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
+#include <utility>
 
 
 namespace drawinglayer::attribute
 {
         SdrLineFillShadowAttribute3D::SdrLineFillShadowAttribute3D(
-            const SdrLineAttribute& rLine,
-            const SdrFillAttribute& rFill,
-            const SdrLineStartEndAttribute& rLineStartEnd,
-            const SdrShadowAttribute& rShadow,
-            const FillGradientAttribute& rFillFloatTransGradient)
-        :   maLine(rLine),
-            maFill(rFill),
-            maLineStartEnd(rLineStartEnd),
-            maShadow(rShadow),
-            maFillFloatTransGradient(rFillFloatTransGradient)
+            SdrLineAttribute  rLine,
+            SdrFillAttribute  rFill,
+            SdrLineStartEndAttribute  rLineStartEnd,
+            SdrShadowAttribute  rShadow,
+            FillGradientAttribute  rFillFloatTransGradient)
+        :   maLine(std::move(rLine)),
+            maFill(std::move(rFill)),
+            maLineStartEnd(std::move(rLineStartEnd)),
+            maShadow(std::move(rShadow)),
+            maFillFloatTransGradient(std::move(rFillFloatTransGradient))
         {
         }
 

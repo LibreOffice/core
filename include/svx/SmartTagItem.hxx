@@ -54,11 +54,11 @@ public:
                      const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                      const css::uno::Sequence < css::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,
                      const css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
-                     const css::uno::Reference<css::text::XTextRange>& rRange,
-                     const css::uno::Reference<css::frame::XController>& rController,
-                     const css::lang::Locale& rLocale,
-                     const OUString& rApplicationName,
-                     const OUString& rRangeText );
+                     css::uno::Reference<css::text::XTextRange>  rRange,
+                     css::uno::Reference<css::frame::XController>  rController,
+                     css::lang::Locale  rLocale,
+                     OUString  rApplicationName,
+                     OUString  rRangeText );
 
     // "purely virtual methods" from the SfxPoolItem
     virtual bool             operator==( const SfxPoolItem& ) const override;

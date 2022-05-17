@@ -29,7 +29,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS WrappedDefaultProperty : public WrappedProperty
 public:
     explicit WrappedDefaultProperty(
         const OUString& rOuterName, const OUString& rInnerName,
-        const css::uno::Any& rNewOuterDefault );
+        css::uno::Any  rNewOuterDefault );
     virtual ~WrappedDefaultProperty() override;
 
     virtual void setPropertyToDefault(

@@ -23,6 +23,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <toolkit/helper/convert.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <osl/mutex.hxx>
@@ -322,10 +323,10 @@ void SvxPixelCtlAccessibleChild::SelectChild( bool bSelect)
 }
 
 SvxPixelCtlAccessibleChild::SvxPixelCtlAccessibleChild( SvxPixelCtl& rWindow, bool bPixelColorOrBG,
-    const tools::Rectangle& rBoundingBox, const rtl::Reference<SvxPixelCtlAccessible>& rxParent,
+    const tools::Rectangle& rBoundingBox, rtl::Reference<SvxPixelCtlAccessible>  rxParent,
     tools::Long nIndexInParent)
     : mrParentWindow( rWindow )
-    , mxParent(rxParent)
+    , mxParent(std::move(rxParent))
     , m_bPixelColorOrBG(bPixelColorOrBG)
     , maBoundingBox( rBoundingBox )
     , mnIndexInParent( nIndexInParent )

@@ -78,7 +78,7 @@ private:
     void SetCloseButtonImage();
 
 public:
-    SfxInfoBarWindow(vcl::Window* parent, const OUString& sId, const OUString& sPrimaryMessage,
+    SfxInfoBarWindow(vcl::Window* parent, OUString sId, const OUString& sPrimaryMessage,
                      const OUString& sSecondaryMessage, InfobarType InfobarType,
                      bool bShowCloseButton);
     Size DoLayout();

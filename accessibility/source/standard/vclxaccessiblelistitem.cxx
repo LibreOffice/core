@@ -29,6 +29,7 @@
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/unohelp2.hxx>
@@ -59,13 +60,13 @@ using namespace ::com::sun::star;
 
 // Ctor() and Dtor()
 
-VCLXAccessibleListItem::VCLXAccessibleListItem(sal_Int32 _nIndexInParent, const rtl::Reference< VCLXAccessibleList >& _xParent)
+VCLXAccessibleListItem::VCLXAccessibleListItem(sal_Int32 _nIndexInParent, rtl::Reference< VCLXAccessibleList >  _xParent)
     : VCLXAccessibleListItem_BASE(m_aMutex)
     , m_nIndexInParent(_nIndexInParent)
     , m_bSelected(false)
     , m_bVisible(false)
     , m_nClientId(0)
-    , m_xParent(_xParent)
+    , m_xParent(std::move(_xParent))
 {
     assert(m_xParent.is());
     ::accessibility::IComboListBoxHelper* pListBoxHelper = m_xParent->getListBoxHelper();

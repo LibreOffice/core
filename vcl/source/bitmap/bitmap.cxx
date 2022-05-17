@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <tools/helpers.hxx>
 
+#include <utility>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/outdev.hxx>
@@ -67,8 +68,8 @@ Bitmap::Bitmap(const Bitmap& rBitmap)
 {
 }
 
-Bitmap::Bitmap(std::shared_ptr<SalBitmap> const & pSalBitmap)
-    : mxSalBmp(pSalBitmap)
+Bitmap::Bitmap(std::shared_ptr<SalBitmap>  pSalBitmap)
+    : mxSalBmp(std::move(pSalBitmap))
     , maPrefMapMode(MapMode(MapUnit::MapPixel))
     , maPrefSize(mxSalBmp->GetSize())
 {

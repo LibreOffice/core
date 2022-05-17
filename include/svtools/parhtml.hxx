@@ -92,7 +92,7 @@ class SVT_DLLPUBLIC HTMLOption
 
 public:
 
-    HTMLOption( HtmlOptionId nTyp, const OUString& rToken, const OUString& rValue );
+    HTMLOption( HtmlOptionId nTyp, OUString  rToken, OUString  rValue );
 
     // name of the option...
     HtmlOptionId GetToken() const { return nToken; }  // ... as enum

@@ -34,7 +34,7 @@ class ChartTypeTabPage;
 class ChartTypeDialog final : public weld::GenericDialogController
 {
 public:
-    ChartTypeDialog(weld::Window* pWindow, const rtl::Reference<::chart::ChartModel>& xChartModel);
+    ChartTypeDialog(weld::Window* pWindow, rtl::Reference<::chart::ChartModel> xChartModel);
     virtual ~ChartTypeDialog() override;
 
 private:

@@ -73,7 +73,7 @@ private:
 public:
     GfxLink();
     explicit GfxLink(std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nBufSize, GfxLinkType nType);
-    explicit GfxLink(BinaryDataContainer const & rDataConainer, GfxLinkType nType);
+    explicit GfxLink(BinaryDataContainer  rDataConainer, GfxLinkType nType);
 
     bool                operator==( const GfxLink& ) const;
 

@@ -24,6 +24,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <o3tl/string_view.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <svl/itemprop.hxx>
@@ -311,9 +312,9 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) noexcept
     }
 }
 
-SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAnchor, const OUString& rPresentation, const SvxFieldData* pData ) noexcept
+SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange >  xAnchor, const OUString& rPresentation, const SvxFieldData* pData ) noexcept
 :   OComponentHelper( m_aMutex )
-,   mxAnchor( xAnchor )
+,   mxAnchor(std::move( xAnchor ))
 ,   mpPropSet(nullptr)
 ,   mnServiceId(text::textfield::Type::UNSPECIFIED)
 ,   mpImpl( new SvxUnoFieldData_Impl )

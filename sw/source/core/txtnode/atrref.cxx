@@ -22,16 +22,17 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <txtrfmrk.hxx>
+#include <utility>
 
 SwFormatRefMark::~SwFormatRefMark( )
 {
 }
 
-SwFormatRefMark::SwFormatRefMark( const OUString& rName )
+SwFormatRefMark::SwFormatRefMark( OUString  rName )
     : SfxPoolItem(RES_TXTATR_REFMARK)
     , sw::BroadcastingModify()
     , m_pTextAttr(nullptr)
-    , m_aRefName(rName)
+    , m_aRefName(std::move(rName))
 {
 }
 

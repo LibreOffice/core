@@ -53,6 +53,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 
 #include <memory>
+#include <utility>
 #include <vector>
 #include <algorithm>
 
@@ -415,8 +416,8 @@ public:
         @param rLayerBounds
         Initial layer bounds, in view coordinate system
      */
-    SlideViewLayer( const cppcanvas::SpriteCanvasSharedPtr& pCanvas,
-                    const basegfx::B2DHomMatrix&            rTransform,
+    SlideViewLayer( cppcanvas::SpriteCanvasSharedPtr  pCanvas,
+                    basegfx::B2DHomMatrix             rTransform,
                     const basegfx::B2DRange&                rLayerBounds,
                     const basegfx::B2DSize&                 rUserSize,
                     View const* const                       pParentView) :
@@ -425,8 +426,8 @@ public:
         maLayerBoundsPixel(),
         maClip(),
         maUserSize(rUserSize),
-        maTransformation(rTransform),
-        mpSpriteCanvas(pCanvas),
+        maTransformation(std::move(rTransform)),
+        mpSpriteCanvas(std::move(pCanvas)),
         mpSprite(),
         mpOutputCanvas(),
         mpParentView(pParentView)
@@ -1026,10 +1027,10 @@ struct WeakRefWrapper
     uno::WeakReference<uno::XInterface> const m_wObj;
     std::function<void (SlideView&)> const m_func;
 
-    WeakRefWrapper(SlideView & rObj, std::function<void (SlideView&)> const& func)
+    WeakRefWrapper(SlideView & rObj, std::function<void (SlideView&)>  func)
         : m_rObj(rObj)
         , m_wObj(static_cast<::cppu::OWeakObject*>(&rObj))
-        , m_func(func)
+        , m_func(std::move(func))
     {
     }
 

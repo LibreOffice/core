@@ -19,12 +19,13 @@
 #include "vbatableofcontents.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/word/WdTabLeader.hpp>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaTableOfContents::SwVbaTableOfContents( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& xDoc, const uno::Reference< text::XDocumentIndex >& xDocumentIndex ) :
-    SwVbaTableOfContents_BASE( rParent, rContext ), mxTextDocument( xDoc ), mxDocumentIndex( xDocumentIndex )
+SwVbaTableOfContents::SwVbaTableOfContents( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument >  xDoc, uno::Reference< text::XDocumentIndex >  xDocumentIndex ) :
+    SwVbaTableOfContents_BASE( rParent, rContext ), mxTextDocument(std::move( xDoc )), mxDocumentIndex(std::move( xDocumentIndex ))
 {
     mxTocProps.set( mxDocumentIndex, uno::UNO_QUERY_THROW );
 }

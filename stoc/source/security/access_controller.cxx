@@ -18,6 +18,7 @@
  */
 
 
+#include <utility>
 #include <vector>
 
 #include <osl/diagnose.h>
@@ -174,8 +175,8 @@ class acc_Policy
 
 public:
     explicit acc_Policy(
-        PermissionCollection const & permissions )
-        : m_permissions( permissions )
+        PermissionCollection  permissions )
+        : m_permissions(std::move( permissions ))
     {}
 
     // XAccessControlContext impl

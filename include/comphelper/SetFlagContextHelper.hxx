@@ -13,6 +13,7 @@
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <uno/current_context.hxx>
+#include <utility>
 
 namespace comphelper
 {
@@ -20,10 +21,9 @@ namespace comphelper
 class SetFlagContext final : public cppu::WeakImplHelper<css::uno::XCurrentContext>
 {
 public:
-    explicit SetFlagContext(const OUString& sName,
-                            css::uno::Reference<css::uno::XCurrentContext> const& xContext)
-        : m_sName(sName)
-        , mxNextContext(xContext)
+    explicit SetFlagContext(OUString sName, css::uno::Reference<css::uno::XCurrentContext> xContext)
+        : m_sName(std::move(sName))
+        , mxNextContext(std::move(xContext))
     {
     }
     SetFlagContext(const SetFlagContext&) = delete;

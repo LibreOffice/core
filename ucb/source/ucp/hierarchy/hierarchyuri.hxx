@@ -20,6 +20,8 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <utility>
+#include <utility>
 
 namespace hierarchy_ucp {
 
@@ -36,8 +38,8 @@ private:
     void init() const;
 
 public:
-    explicit HierarchyUri( const OUString & rUri )
-    : m_aUri( rUri ), m_bValid( false ) {}
+    explOUString i( OUString  rUri )
+ std::move(   : m)_aUri(std::move( rUri )), m_bValid( false ) {}
 
     bool isValid() const
     { init(); return m_bValid; }

@@ -25,6 +25,7 @@
 #include <ooo/vba/word/WdConstants.hpp>
 #include <ooo/vba/word/WdRulerStyle.hpp>
 #include <basic/sberrors.hxx>
+#include <utility>
 #include "vbacolumns.hxx"
 #include "vbatablehelper.hxx"
 
@@ -42,7 +43,7 @@ class RowsEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 nIndex;
 
 public:
-    RowsEnumWrapper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< text::XTextTable >& xTextTable ) : mxParent( xParent ), mxContext( xContext ), mxTextTable( xTextTable ), nIndex( 0 )
+    RowsEnumWrapper( const uno::Reference< XHelperInterface >& xParent, uno::Reference< uno::XComponentContext >  xContext, uno::Reference< text::XTextTable >  xTextTable ) : mxParent( xParent ), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), nIndex( 0 )
     {
         mxIndexAccess = mxTextTable->getRows();
     }
@@ -63,13 +64,13 @@ public:
 
 }
 
-SwVbaRows::SwVbaRows( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextTable >& xTextTable, const uno::Reference< table::XTableRows >& xTableRows ) : SwVbaRows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xTableRows, uno::UNO_QUERY_THROW ) ), mxTextTable( xTextTable ), mxTableRows( xTableRows )
+SwVbaRows::SwVbaRows( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, uno::Reference< text::XTextTable >  xTextTable, const uno::Reference< table::XTableRows >& xTableRows ) : SwVbaRows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xTableRows, uno::UNO_QUERY_THROW ) ), mxTextTable(std::move( xTextTable )), mxTableRows( xTableRows )
 {
     mnStartRowIndex = 0;
     mnEndRowIndex = m_xIndexAccess->getCount() - 1;
 }
 
-SwVbaRows::SwVbaRows( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextTable >& xTextTable, const uno::Reference< table::XTableRows >& xTableRows, sal_Int32 nStarIndex, sal_Int32 nEndIndex ) : SwVbaRows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xTableRows, uno::UNO_QUERY_THROW ) ), mxTextTable( xTextTable ), mxTableRows( xTableRows ), mnStartRowIndex( nStarIndex ), mnEndRowIndex( nEndIndex )
+SwVbaRows::SwVbaRows( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, uno::Reference< text::XTextTable >  xTextTable, const uno::Reference< table::XTableRows >& xTableRows, sal_Int32 nStarIndex, sal_Int32 nEndIndex ) : SwVbaRows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( xTableRows, uno::UNO_QUERY_THROW ) ), mxTextTable(std::move( xTextTable )), mxTableRows( xTableRows ), mnStartRowIndex( nStarIndex ), mnEndRowIndex( nEndIndex )
 {
     if( mnEndRowIndex < mnStartRowIndex )
         throw uno::RuntimeException();

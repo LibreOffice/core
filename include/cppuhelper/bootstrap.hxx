@@ -98,7 +98,7 @@ public:
      * @param rMessage
      * A message containing any details about the exception.
      */
-    BootstrapException( const ::rtl::OUString & rMessage );
+    BootstrapException( ::rtl::OUString  rMessage );
 
     /**
      * Copy constructs a BootstrapException.

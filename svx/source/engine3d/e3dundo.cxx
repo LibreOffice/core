@@ -19,6 +19,7 @@
 
 #include <svx/e3dundo.hxx>
 #include <svx/e3dsceneupdater.hxx>
+#include <utility>
 
 
 E3dUndoAction::~E3dUndoAction ()
@@ -54,12 +55,12 @@ void E3dRotateUndoAction::Redo()
 
 E3dAttributesUndoAction::E3dAttributesUndoAction(
     E3dObject& rInObject,
-    const SfxItemSet& rNewSet,
-    const SfxItemSet& rOldSet)
+    SfxItemSet  rNewSet,
+    SfxItemSet  rOldSet)
 :   SdrUndoAction(rInObject.getSdrModelFromSdrObject())
     ,mrObject(rInObject)
-    ,maNewSet(rNewSet)
-    ,maOldSet(rOldSet)
+    ,maNewSet(std::move(rNewSet))
+    ,maOldSet(std::move(rOldSet))
 {
 }
 

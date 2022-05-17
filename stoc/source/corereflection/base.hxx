@@ -153,7 +153,7 @@ public:
 
     // Ctor
     IdlClassImpl( IdlReflectionServiceImpl * pReflection,
-                  const OUString & rName, typelib_TypeClass eTypeClass,
+                  OUString  rName, typelib_TypeClass eTypeClass,
                   typelib_TypeDescription * pTypeDescr );
     virtual ~IdlClassImpl() override;
 
@@ -338,7 +338,7 @@ public:
         { return _pDeclTypeDescr; }
 
     // ctor/ dtor
-    IdlMemberImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
+    IdlMemberImpl( IdlReflectionServiceImpl * pReflection, OUString  rName,
                    typelib_TypeDescription * pTypeDescr, typelib_TypeDescription * pDeclTypeDescr );
     virtual ~IdlMemberImpl() override;
 

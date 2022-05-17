@@ -82,6 +82,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <oox/export/drawingml.hxx>
+#include <utility>
 
 using namespace css;
 
@@ -450,8 +451,8 @@ public:
     }
 };
 
-GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> const& xComponentContext,
-                             uno::Reference<lang::XMultiServiceFactory> const& xTextFactory,
+GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext>  xComponentContext,
+                             uno::Reference<lang::XMultiServiceFactory>  xTextFactory,
                              DomainMapper& rDMapper,
                              GraphicImportType eImportType,
                              std::pair<OUString, OUString>& rPositionOffsets,
@@ -461,8 +462,8 @@ GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> const& xComp
 , LoggedTable("GraphicImport")
 , LoggedStream("GraphicImport")
 , m_pImpl(new GraphicImport_Impl(eImportType, rDMapper, rPositionOffsets, rAligns, rPositivePercentages))
-, m_xComponentContext(xComponentContext)
-, m_xTextFactory(xTextFactory)
+, m_xComponentContext(std::move(xComponentContext))
+, m_xTextFactory(std::move(xTextFactory))
 {
 }
 

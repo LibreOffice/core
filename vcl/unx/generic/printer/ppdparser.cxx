@@ -26,6 +26,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <ppdparser.hxx>
 #include <strhelper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -592,8 +593,8 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
     return pNewParser;
 }
 
-PPDParser::PPDParser(const OUString& rFile, const std::vector<PPDKey*>& keys)
-    : m_aFile(rFile)
+PPDParser::PPDParser(OUString  rFile, const std::vector<PPDKey*>& keys)
+    : m_aFile(std::move(rFile))
     , m_bColorDevice(false)
     , m_bType42Capable(false)
     , m_nLanguageLevel(0)
@@ -698,8 +699,8 @@ PPDParser::PPDParser(const OUString& rFile, const std::vector<PPDKey*>& keys)
         m_bColorDevice = pKey->countValues() > 1;
 }
 
-PPDParser::PPDParser( const OUString& rFile ) :
-        m_aFile( rFile ),
+PPDParser::PPDParser( OUString  rFile ) :
+        m_aFile(std::move( rFile )),
         m_bColorDevice( false ),
         m_bType42Capable( false ),
         m_nLanguageLevel( 0 ),
@@ -1568,8 +1569,8 @@ OUString PPDParser::translateOption( const OUString& i_rKey,
  *  PPDKey
  */
 
-PPDKey::PPDKey( const OUString& rKey ) :
-        m_aKey( rKey ),
+PPDKey::PPDKey( OUString  rKey ) :
+        m_aKey(std::move( rKey )),
         m_pDefaultValue( nullptr ),
         m_bQueryValue( false ),
         m_bUIOption( false ),

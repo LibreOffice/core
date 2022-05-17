@@ -31,9 +31,8 @@ class AcceleratorExecute;
 class FindTextFieldControl final : public InterimItemWindow
 {
 public:
-    FindTextFieldControl(vcl::Window* pParent,
-                         css::uno::Reference<css::frame::XFrame> const& xFrame,
-                         const css::uno::Reference<css::uno::XComponentContext>& xContext);
+    FindTextFieldControl(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> xFrame,
+                         css::uno::Reference<css::uno::XComponentContext> xContext);
 
     virtual void dispose() override;
 

@@ -36,6 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/sequence.hxx>
+#include <utility>
 
 #define DEBUG_TYPE_DETECTION 0
 
@@ -346,7 +347,7 @@ class FindByType
 {
     OUString maType;
 public:
-    explicit FindByType(const OUString& rType) : maType(rType) {}
+    explicit FindByType(OUString  rType) : maType(std::move(rType)) {}
     bool operator() (const FlatDetectionInfo& rInfo) const
     {
         return rInfo.sType == maType;

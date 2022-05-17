@@ -44,6 +44,7 @@
 #include <tools/globname.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <utility>
 
 namespace oox::ole {
 
@@ -203,8 +204,8 @@ StdFontInfo::StdFontInfo() :
 {
 }
 
-StdFontInfo::StdFontInfo( const OUString& rName, sal_uInt32 nHeight ) :
-    maName( rName ),
+StdFontInfo::StdFontInfo( OUString  rName, sal_uInt32 nHeight ) :
+    maName(std::move( rName )),
     mnHeight( nHeight ),
     mnWeight( OLE_STDFONT_NORMAL ),
     mnCharSet( WINDOWS_CHARSET_ANSI ),

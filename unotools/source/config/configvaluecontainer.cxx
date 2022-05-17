@@ -24,6 +24,7 @@
 #include <unotools/confignode.hxx>
 #include <uno/data.h>
 #include <algorithm>
+#include <utility>
 #include <vector>
 
 namespace utl
@@ -53,7 +54,7 @@ namespace utl
         Type                aDataType;          // the type object pointed to by pLocation
 
     public:
-        explicit NodeValueAccessor( const OUString& _rNodePath );
+        explicit NodeValueAccessor( OUString  _rNodePath );
 
         void bind( void* _pLocation, const Type& _rType );
 
@@ -66,8 +67,8 @@ namespace utl
         bool operator == ( const NodeValueAccessor& rhs ) const;
     };
 
-    NodeValueAccessor::NodeValueAccessor( const OUString& _rNodePath )
-        :sRelativePath( _rNodePath )
+    NodeValueAccessor::NodeValueAccessor( OUString  _rNodePath )
+        :sRelativePath(std::move( _rNodePath ))
         ,eLocationType( LocationType::Unbound )
         ,pLocation( nullptr )
     {

@@ -18,11 +18,12 @@
  */
 
 #include <svgdocument.hxx>
+#include <utility>
 
 namespace svgio::svgreader
 {
-        SvgDocument::SvgDocument(const OUString& rAbsolutePath)
-        : maAbsolutePath(rAbsolutePath)
+        SvgDocument::SvgDocument(OUString  rAbsolutePath)
+        : maAbsolutePath(std::move(rAbsolutePath))
         {
         }
 

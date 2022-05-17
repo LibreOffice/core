@@ -44,6 +44,7 @@
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::oox::core;
@@ -57,14 +58,14 @@ namespace oox::ppt {
 
 SlidePersist::SlidePersist( XmlFilterBase& rFilter, bool bMaster, bool bNotes,
     const css::uno::Reference< css::drawing::XDrawPage >& rxPage,
-        oox::drawingml::ShapePtr const & pShapesPtr, const drawingml::TextListStylePtr & pDefaultTextStyle )
+        oox::drawingml::ShapePtr  pShapesPtr, drawingml::TextListStylePtr  pDefaultTextStyle )
 : mpDrawingPtr( std::make_shared<oox::vml::Drawing>( rFilter, rxPage, oox::vml::VMLDRAWING_POWERPOINT ) )
 , mxPage( rxPage )
-, maShapesPtr( pShapesPtr )
+, maShapesPtr(std::move( pShapesPtr ))
 , mnLayoutValueToken( 0 )
 , mbMaster( bMaster )
 , mbNotes ( bNotes )
-, maDefaultTextStylePtr( pDefaultTextStyle )
+, maDefaultTextStylePtr(std::move( pDefaultTextStyle ))
 , maTitleTextStylePtr( std::make_shared<oox::drawingml::TextListStyle>() )
 , maBodyTextStylePtr( std::make_shared<oox::drawingml::TextListStyle>() )
 , maNotesTextStylePtr( std::make_shared<oox::drawingml::TextListStyle>() )

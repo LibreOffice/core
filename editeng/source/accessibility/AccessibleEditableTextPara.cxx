@@ -22,6 +22,7 @@
 
 
 #include <algorithm>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -102,13 +103,13 @@ namespace accessibility
 
     // #i27138# - add parameter <_pParaManager>
     AccessibleEditableTextPara::AccessibleEditableTextPara(
-                                const uno::Reference< XAccessible >& rParent,
+                                uno::Reference< XAccessible >  rParent,
                                 const AccessibleParaManager* _pParaManager )
         : mnParagraphIndex( 0 ),
           mnIndexInParent( 0 ),
           mpEditSource( nullptr ),
           maEEOffset( 0, 0 ),
-          mxParent( rParent ),
+          mxParent(std::move( rParent )),
           // well, that's strictly (UNO) exception safe, though not
           // really robust. We rely on the fact that this member is
           // constructed last, and that the constructor body catches

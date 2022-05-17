@@ -27,6 +27,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 
+#include <utility>
 #include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
@@ -302,9 +303,9 @@ struct PrintJobAsync
     std::shared_ptr<PrinterController>  mxController;
     JobSetup                            maInitSetup;
 
-    PrintJobAsync(const std::shared_ptr<PrinterController>& i_xController,
+    PrintJobAsync(std::shared_ptr<PrinterController>  i_xController,
                   const JobSetup& i_rInitSetup)
-    : mxController( i_xController ), maInitSetup( i_rInitSetup )
+    : mxController(std::move( i_xController )), maInitSetup( i_rInitSetup )
     {}
 
     DECL_LINK( ExecJob, void*, void );

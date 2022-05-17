@@ -15,14 +15,15 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
+#include <utility>
 
 namespace apitest
 {
 class OOO_DLLPUBLIC_TEST CellAreaLink
 {
 public:
-    CellAreaLink(const OUString& rFileURL)
-        : m_aFileURL(rFileURL)
+    CellAreaLink(OUString rFileURL)
+        : m_aFileURL(std::move(rFileURL))
     {
     }
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;

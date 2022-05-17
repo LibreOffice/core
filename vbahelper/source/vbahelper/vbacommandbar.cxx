@@ -23,16 +23,17 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <ooo/vba/office/MsoBarType.hpp>
 #include <sal/log.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
 
 ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface >& xParent,
                                   const uno::Reference< uno::XComponentContext >& xContext,
-                                  VbaCommandBarHelperRef const & pHelper,
-                                  const uno::Reference< container::XIndexAccess >& xBarSettings,
-                                  const OUString& sResourceUrl, bool bIsMenu )
-   : CommandBar_BASE( xParent, xContext ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl ), m_bIsMenu( bIsMenu )
+                                  VbaCommandBarHelperRef  pHelper,
+                                  uno::Reference< container::XIndexAccess >  xBarSettings,
+                                  OUString  sResourceUrl, bool bIsMenu )
+   : CommandBar_BASE( xParent, xContext ), pCBarHelper(std::move( pHelper )), m_xBarSettings(std::move( xBarSettings )), m_sResourceUrl(std::move( sResourceUrl )), m_bIsMenu( bIsMenu )
 {
 }
 
@@ -193,9 +194,9 @@ ScVbaCommandBar::getServiceNames()
 VbaDummyCommandBar::VbaDummyCommandBar(
         const uno::Reference< ov::XHelperInterface >& xParent,
         const uno::Reference< uno::XComponentContext >& xContext,
-        const OUString& rName ) :
+        OUString  rName ) :
     CommandBar_BASE( xParent, xContext ),
-    maName( rName )
+    maName(std::move( rName ))
 {
 }
 

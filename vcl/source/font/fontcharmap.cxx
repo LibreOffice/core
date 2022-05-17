@@ -15,6 +15,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <utility>
 #include <vcl/fontcharmap.hxx>
 #include <impfontcharmap.hxx>
 #include <rtl/textcvt.h>
@@ -431,8 +432,8 @@ FontCharMap::FontCharMap()
 {
 }
 
-FontCharMap::FontCharMap( ImplFontCharMapRef const & pIFCMap )
-    : mpImplFontCharMap( pIFCMap )
+FontCharMap::FontCharMap( ImplFontCharMapRef  pIFCMap )
+    : mpImplFontCharMap(std::move( pIFCMap ))
 {
 }
 

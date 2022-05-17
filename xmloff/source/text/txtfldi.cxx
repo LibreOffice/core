@@ -30,6 +30,7 @@
 
 #include <txtfldi.hxx>
 #include <txtvfldi.hxx>
+#include <utility>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -123,9 +124,9 @@ constexpr OUStringLiteral sAPI_true = u"TRUE";
 
 XMLTextFieldImportContext::XMLTextFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    const OUString& pService)
+    OUString  pService)
 :   SvXMLImportContext( rImport )
-,   sServiceName(pService)
+,   sServiceName(std::move(pService))
 ,   rTextImportHelper(rHlp)
 ,   sServicePrefix(sAPI_textfield_prefix)
 ,   bValid(false)

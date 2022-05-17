@@ -293,9 +293,9 @@ public:
       * @param Identifier is the content identifier for the content.
       */
     ContentImplHelper(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const rtl::Reference< ContentProviderImplHelper >& rxProvider,
-            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier );
+            css::uno::Reference< css::uno::XComponentContext >  rxContext,
+            rtl::Reference< ContentProviderImplHelper >  rxProvider,
+            css::uno::Reference< css::ucb::XContentIdentifier >  Identifier );
 
     /**
       * Destructor.

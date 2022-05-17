@@ -30,6 +30,7 @@
 
 #include <sax/tools/converter.hxx>
 
+#include <utility>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/xmltkmap.hxx>
@@ -57,8 +58,8 @@ struct SvXMLNumFmtEntry
     sal_uInt32  nKey;
     bool        bRemoveAfterUse;
 
-    SvXMLNumFmtEntry( const OUString& rN, sal_uInt32 nK, bool bR ) :
-        aName(rN), nKey(nK), bRemoveAfterUse(bR) {}
+    SvXMLNumFmtEntry( OUString  rN, sal_uInt32 nK, bool bR ) :
+        aName(std::move(rN)), nKey(nK), bRemoveAfterUse(bR) {}
 };
 
 }

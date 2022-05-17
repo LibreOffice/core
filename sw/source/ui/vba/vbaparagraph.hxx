@@ -36,7 +36,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaParagraph( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& xDocument, const css::uno::Reference< css::text::XTextRange >& xTextRange );
+    SwVbaParagraph( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextDocument >  xDocument, css::uno::Reference< css::text::XTextRange >  xTextRange );
     virtual ~SwVbaParagraph() override;
 
     // XParagraph

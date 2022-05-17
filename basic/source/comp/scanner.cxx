@@ -28,9 +28,10 @@
 #include <svl/zforlist.hxx>
 #include <rtl/character.hxx>
 #include <o3tl/string_view.hxx>
+#include <utility>
 
-SbiScanner::SbiScanner(const OUString& rBuf, StarBASIC* p)
-    : aBuf(rBuf)
+SbiScanner::SbiScanner(OUString  rBuf, StarBASIC* p)
+    : aBuf(std::move(rBuf))
     , nLineIdx(-1)
     , nSaveLineIdx(-1)
     , pBasic(p)

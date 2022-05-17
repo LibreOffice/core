@@ -45,7 +45,7 @@ public:
 
 private:
     friend class FreetypeManager;
-    explicit                FreetypeFontFile( const OString& rNativeFileName );
+    explicit                FreetypeFontFile( OString  rNativeFileName );
 
     const OString    maNativeFileName;
     unsigned char*   mpFileMap;
@@ -79,7 +79,7 @@ public:
 
 private:
     friend class FreetypeManager;
-    explicit FreetypeFontInfo(const FontAttributes&, FreetypeFontFile* const pFontFile,
+    explicit FreetypeFontInfo(FontAttributes , FreetypeFontFile* const pFontFile,
                               int nFaceNum, int nFaceVariation, sal_IntPtr nFontId);
 
     FT_FaceRec_*    maFaceFT;

@@ -60,7 +60,7 @@ class ScAccessibleContextBase
 public:
     //=====  internal  ========================================================
     ScAccessibleContextBase(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        css::uno::Reference<css::accessibility::XAccessible>  rxParent,
         const sal_Int16 aRole);
 
     virtual void Init();

@@ -41,7 +41,7 @@ private:
 
 public:
     SvXMLMetaDocumentContext(SvXMLImport& rImport,
-        const css::uno::Reference< css::document::XDocumentProperties>& xDocProps);
+        css::uno::Reference< css::document::XDocumentProperties>  xDocProps);
 
     virtual ~SvXMLMetaDocumentContext() override;
 

@@ -57,6 +57,7 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <svx/AccessibleControlShape.hxx>
@@ -102,7 +103,7 @@ struct ScAccessibleShapeData
 }
 
 ScAccessibleShapeData::ScAccessibleShapeData(css::uno::Reference< css::drawing::XShape > xShape_)
-    : xShape(xShape_),
+    : xShape(std::move(xShape_)),
     bSelected(false), bSelectable(true)
 {
     static constexpr OUStringLiteral gsLayerId = u"LayerID";

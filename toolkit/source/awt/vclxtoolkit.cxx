@@ -69,6 +69,7 @@
 #include <postmac.h>
 #endif
 
+#include <utility>
 #include <vcl/sysdata.hxx>
 #include <vcl/textrectinfo.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
@@ -227,11 +228,11 @@ void MessBox::ImplInitButtons()
 }
 
 MessBox::MessBox(vcl::Window* pParent, MessBoxStyle nMessBoxStyle, WinBits nWinBits,
-                 const OUString& rTitle, const OUString& rMessage) :
+                 const OUString& rTitle, OUString  rMessage) :
     ButtonDialog( WindowType::MESSBOX ),
     mbHelpBtn( false ),
     mnMessBoxStyle( nMessBoxStyle ),
-    maMessText( rMessage )
+    maMessText(std::move( rMessage ))
 {
     ImplLOKNotifier(pParent);
     ImplInitDialog(pParent, nWinBits | WB_MOVEABLE | WB_HORZ | WB_CENTER);

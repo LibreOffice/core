@@ -24,6 +24,7 @@
 #include <common.hxx>
 #include <export.hxx>
 #include <po.hxx>
+#include <utility>
 #include <xrmlex.hxx>
 #include <xrmmerge.hxx>
 #include <tokens.h>
@@ -275,8 +276,8 @@ void XRMResParser::Error( const OString &rError )
 
 
 XRMResExport::XRMResExport(
-    const OString &rOutputFile, const OString &rFilePath )
-                : sPath( rFilePath )
+    const OString &rOutputFile, OString rFilePath )
+                : sPath(std::move( rFilePath ))
 {
     pOutputStream.open( rOutputFile, PoOfstream::APP );
     if (!pOutputStream.isOpen())
@@ -346,8 +347,8 @@ void XRMResExport::EndOfText(
 
 XRMResMerge::XRMResMerge(
     const OString &rMergeSource, const OString &rOutputFile,
-    const OString &rFilename )
-                : sFilename( rFilename )
+    OString rFilename )
+                : sFilename(std::move( rFilename ))
 {
     if (!rMergeSource.isEmpty() && sLanguage.equalsIgnoreAsciiCase("ALL"))
     {

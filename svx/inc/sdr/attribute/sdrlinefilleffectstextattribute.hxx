@@ -35,10 +35,10 @@ namespace drawinglayer::attribute
         public:
             SdrLineFillEffectsTextAttribute(
                 const SdrLineAttribute& rLine,
-                const SdrFillAttribute& rFill,
+                SdrFillAttribute  rFill,
                 const SdrLineStartEndAttribute& rLineStartEnd,
                 const SdrShadowAttribute& rShadow,
-                const FillGradientAttribute& rFillFloatTransGradient,
+                FillGradientAttribute  rFillFloatTransGradient,
                 const SdrTextAttribute& rTextAttribute,
                 const SdrGlowAttribute& rGlow,
                 sal_Int32 nSoftEdgeRadius);

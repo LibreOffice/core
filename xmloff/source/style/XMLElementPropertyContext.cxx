@@ -18,16 +18,17 @@
  */
 
 #include <XMLElementPropertyContext.hxx>
+#include <utility>
 
 
 XMLElementPropertyContext::XMLElementPropertyContext (
                                 SvXMLImport& rImport, sal_Int32 /*nElement*/,
-                                const XMLPropertyState& rProp,
+                                XMLPropertyState  rProp,
                                  ::std::vector< XMLPropertyState > &rProps ) :
     SvXMLImportContext( rImport ),
     bInsert( false ),
     rProperties( rProps ),
-    aProp( rProp )
+    aProp(std::move( rProp ))
 {
 }
 

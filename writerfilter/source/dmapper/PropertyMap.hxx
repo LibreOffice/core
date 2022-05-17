@@ -31,6 +31,7 @@
 #include <memory>
 #include <optional>
 #include <map>
+#include <utility>
 #include <vector>
 #include <set>
 
@@ -98,15 +99,15 @@ private:
     bool          m_bIsDocDefault;
 
 public:
-    PropValue( const css::uno::Any& rValue, GrabBagType i_GrabBagType, bool bDocDefault )
-        : m_aValue( rValue )
+    PropValue( css::uno::Any  rValue, GrabBagType i_GrabBagType, bool bDocDefault )
+        : m_aValue(std::move( rValue ))
         , m_GrabBagType( i_GrabBagType )
         , m_bIsDocDefault( bDocDefault )
     {
     }
 
-    PropValue( const css::uno::Any& rValue, GrabBagType i_GrabBagType )
-        : m_aValue( rValue )
+    PropValue( css::uno::Any  rValue, GrabBagType i_GrabBagType )
+        : m_aValue(std::move( rValue ))
         , m_GrabBagType( i_GrabBagType )
         , m_bIsDocDefault( false )
     {

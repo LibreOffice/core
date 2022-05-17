@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace drawinglayer::primitive2d;
@@ -183,9 +184,9 @@ namespace svgio::svgreader
         SvgCharacterNode::SvgCharacterNode(
             SvgDocument& rDocument,
             SvgNode* pParent,
-            const OUString& rText)
+            OUString  rText)
         :   SvgNode(SVGToken::Character, rDocument, pParent),
-            maText(rText)
+            maText(std::move(rText))
         {
         }
 

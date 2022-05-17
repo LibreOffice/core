@@ -58,8 +58,8 @@ public:
     TabBar (
         vcl::Window* pParentWindow,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        const ::std::function<void (const OUString& rsDeckId)>& rDeckActivationFunctor,
-        const PopupMenuProvider& rPopupMenuProvider,
+        ::std::function<void (const OUString& rsDeckId)>  rDeckActivationFunctor,
+        PopupMenuProvider  rPopupMenuProvider,
         SidebarController* rParentSidebarController);
 
     weld::Container* GetContainer() { return m_xContainer.get(); }

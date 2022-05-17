@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 
 #include <ucbhelper/contenthelper.hxx>
+#include <utility>
 #include "contentinfo.hxx"
 
 using namespace com::sun::star;
@@ -39,9 +40,9 @@ using namespace com::sun::star;
 namespace ucbhelper {
 
 PropertySetInfo::PropertySetInfo(
-    const uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
+    uno::Reference< css::ucb::XCommandEnvironment >  rxEnv,
     ContentImplHelper* pContent )
-: m_xEnv( rxEnv ),
+: m_xEnv(std::move( rxEnv )),
   m_pContent( pContent )
 {
 }
@@ -170,9 +171,9 @@ bool PropertySetInfo::queryProperty(
 
 
 CommandProcessorInfo::CommandProcessorInfo(
-    const uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
+    uno::Reference< css::ucb::XCommandEnvironment >  rxEnv,
     ContentImplHelper* pContent )
-: m_xEnv( rxEnv ),
+: m_xEnv(std::move( rxEnv )),
   m_pContent( pContent )
 {
 }

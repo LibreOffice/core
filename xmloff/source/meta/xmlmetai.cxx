@@ -32,6 +32,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -52,7 +53,7 @@ private:
 public:
     XMLDocumentBuilderContext(SvXMLImport& rImport, sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        const css::uno::Reference<css::xml::dom::XSAXDocumentBuilder2>& rDocBuilder,
+        css::uno::Reference<css::xml::dom::XSAXDocumentBuilder2>  rDocBuilder,
         SvXMLMetaDocumentContext * pTopLevel);
 
     virtual void SAL_CALL characters( const OUString& aChars ) override;
@@ -76,10 +77,10 @@ public:
 
 XMLDocumentBuilderContext::XMLDocumentBuilderContext(SvXMLImport& rImport,
         sal_Int32 /*nElement*/, const uno::Reference<xml::sax::XFastAttributeList>&,
-        const uno::Reference<xml::dom::XSAXDocumentBuilder2>& rDocBuilder,
+        uno::Reference<xml::dom::XSAXDocumentBuilder2>  rDocBuilder,
         SvXMLMetaDocumentContext *const pTopLevel)
     : SvXMLImportContext(rImport)
-    , mxDocBuilder(rDocBuilder)
+    , mxDocBuilder(std::move(rDocBuilder))
     , m_pTopLevel(pTopLevel)
 {
 }
@@ -180,9 +181,9 @@ lcl_initGenerator(SvXMLImport & rImport,
 }
 
 SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
-            const uno::Reference<document::XDocumentProperties>& xDocProps) :
+            uno::Reference<document::XDocumentProperties>  xDocProps) :
     SvXMLImportContext( rImport ),
-    mxDocProps(xDocProps),
+    mxDocProps(std::move(xDocProps)),
     mxDocBuilder(
         xml::dom::SAXDocumentBuilder::create(
             comphelper::getProcessComponentContext()))

@@ -33,14 +33,15 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 
 
 using namespace ::com::sun::star;
 using namespace comphelper;
 
 
-MimeConfigurationHelper::MimeConfigurationHelper( const uno::Reference< uno::XComponentContext >& rxContext )
-: m_xContext( rxContext )
+MimeConfigurationHelper::MimeConfigurationHelper( uno::Reference< uno::XComponentContext >  rxContext )
+: m_xContext(std::move( rxContext ))
 {
     if ( !m_xContext.is() )
         throw uno::RuntimeException();

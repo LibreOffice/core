@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/GraphicObject.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -79,7 +80,7 @@ class ShapeOfGroup : public Shape
 {
 public:
     ShapeOfGroup( ShapeSharedPtr const&                      pGroupShape,
-                  uno::Reference<drawing::XShape> const&     xShape,
+                  uno::Reference<drawing::XShape>      xShape,
                   uno::Reference<beans::XPropertySet> const& xPropSet,
                   double                                     nPrio );
 
@@ -109,11 +110,11 @@ private:
 };
 
 ShapeOfGroup::ShapeOfGroup( ShapeSharedPtr const&                      pGroupShape,
-                            uno::Reference<drawing::XShape> const&     xShape,
+                            uno::Reference<drawing::XShape>      xShape,
                             uno::Reference<beans::XPropertySet> const& xPropSet,
                             double                                     nPrio ) :
     mpGroupShape(pGroupShape),
-    mxShape(xShape),
+    mxShape(std::move(xShape)),
     mnPrio(nPrio)
 {
     // read bound rect
@@ -514,13 +515,13 @@ const PolyPolygonVector& ShapeImporter::getPolygons() const
 }
 
 ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&          xPage,
-                              uno::Reference<drawing::XDrawPage> const&          xActualPage,
-                              uno::Reference<drawing::XDrawPagesSupplier> const& xPagesSupplier,
+                              uno::Reference<drawing::XDrawPage>           xActualPage,
+                              uno::Reference<drawing::XDrawPagesSupplier>  xPagesSupplier,
                               const SlideShowContext&                            rContext,
                               sal_Int32                                          nOrdNumStart,
                               bool                                               bConvertingMasterPage ) :
-    mxPage( xActualPage ),
-    mxPagesSupplier( xPagesSupplier ),
+    mxPage(std::move( xActualPage )),
+    mxPagesSupplier(std::move( xPagesSupplier )),
     mrContext( rContext ),
     maPolygons(),
     maShapesStack(),

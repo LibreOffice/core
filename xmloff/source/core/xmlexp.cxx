@@ -436,11 +436,11 @@ void SvXMLExport::DetermineModelType_()
 
 SvXMLExport::SvXMLExport(
     const uno::Reference< uno::XComponentContext >& xContext,
-    OUString const & implementationName,
+    OUString  implementationName,
     sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
     const enum XMLTokenEnum eClass, SvXMLExportFlags nExportFlags )
 :   mpImpl( new SvXMLExport_Impl ),
-    m_xContext(xContext), m_implementationName(implementationName),
+    m_xContext(xContext), m_implementationName(std::move(implementationName)),
     mxAttrList( new SvXMLAttributeList ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     mpAuthorIDs( new SvtSecurityMapPersonalInfo ),
@@ -458,16 +458,16 @@ SvXMLExport::SvXMLExport(
 
 SvXMLExport::SvXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-    OUString const & implementationName,
-    const OUString &rFileName,
+    OUString  implementationName,
+    OUString rFileName,
     sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler)
 :   mpImpl( new SvXMLExport_Impl ),
-    m_xContext(xContext), m_implementationName(implementationName),
+    m_xContext(xContext), m_implementationName(std::move(implementationName)),
     mxHandler( rHandler ),
     mxExtHandler( rHandler, uno::UNO_QUERY ),
     mxAttrList( new SvXMLAttributeList ),
-    msOrigFileName( rFileName ),
+    msOrigFileName(std::move( rFileName )),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     mpAuthorIDs( new SvtSecurityMapPersonalInfo ),
     maUnitConv(xContext, util::MeasureUnit::MM_100TH, eDefaultMeasureUnit, getSaneDefaultVersion()),
@@ -488,20 +488,20 @@ SvXMLExport::SvXMLExport(
 
 SvXMLExport::SvXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-    OUString const & implementationName,
-    const OUString &rFileName,
+    OUString  implementationName,
+    OUString rFileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     const Reference< XModel >& rModel,
     FieldUnit const eDefaultFieldUnit,
     SvXMLExportFlags nExportFlag)
 :   mpImpl( new SvXMLExport_Impl ),
-    m_xContext(xContext), m_implementationName(implementationName),
+    m_xContext(xContext), m_implementationName(std::move(implementationName)),
     mxModel( rModel ),
     mxHandler( rHandler ),
     mxExtHandler( rHandler, uno::UNO_QUERY ),
     mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     mxAttrList( new SvXMLAttributeList ),
-    msOrigFileName( rFileName ),
+    msOrigFileName(std::move( rFileName )),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     mpAuthorIDs( new SvtSecurityMapPersonalInfo ),
     maUnitConv( xContext,

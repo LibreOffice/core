@@ -20,6 +20,7 @@
 #include <comphelper/interaction.hxx>
 
 #include <comphelper/sequence.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 
@@ -30,14 +31,14 @@ namespace comphelper
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::task;
 
-    OInteractionRequest::OInteractionRequest(const Any& _rRequestDescription)
-        :m_aRequest(_rRequestDescription)
+    OInteractionRequest::OInteractionRequest(Any  _rRequestDescription)
+        :m_aRequest(std::move(_rRequestDescription))
     {
     }
 
-    OInteractionRequest::OInteractionRequest(const Any& rRequestDescription,
+    OInteractionRequest::OInteractionRequest(Any  rRequestDescription,
             std::vector<Reference<XInteractionContinuation>>&& rContinuations)
-        : m_aRequest(rRequestDescription)
+        : m_aRequest(std::move(rRequestDescription))
         , m_aContinuations(std::move(rContinuations))
     {
     }

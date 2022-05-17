@@ -85,7 +85,7 @@ public:
             is our parent accessible object
     */
     VCLXAccessibleListItem(sal_Int32 _nIndexInParent,
-                           const rtl::Reference< VCLXAccessibleList >& _xParent);
+                           rtl::Reference< VCLXAccessibleList >  _xParent);
 
     void                    NotifyAccessibleEvent(  sal_Int16 _nEventId, const css::uno::Any& _aOldValue, const css::uno::Any& _aNewValue );
 

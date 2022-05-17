@@ -24,6 +24,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <utility>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/decoview.hxx>
@@ -526,9 +527,9 @@ Size const & PrintDialog::getJobPageSize()
     return maFirstPageSize;
 }
 
-PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterController>& i_rController)
+PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterController>  i_rController)
     : GenericDialogController(i_pWindow, "vcl/ui/printdialog.ui", "PrintDialog")
-    , maPController( i_rController )
+    , maPController(std::move( i_rController ))
     , mxTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
     , mxScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow"))
     , mxPageLayoutFrame(m_xBuilder->weld_frame("layoutframe"))

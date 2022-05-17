@@ -11,6 +11,7 @@
 
 #include <comphelper/string.hxx>
 #include <osl/mutex.hxx>
+#include <utility>
 #include <vcl/weld.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <vcl/sysdata.hxx>
@@ -80,7 +81,7 @@ public:
     JSDialogMessageInfo(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
                         std::unique_ptr<jsdialog::ActionDataMap> pData)
         : m_eType(eType)
-        , m_pWindow(pWindow)
+        , m_pWindow(std::move(pWindow))
         , m_pData(std::move(pData))
     {
     }

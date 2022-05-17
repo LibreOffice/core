@@ -32,6 +32,7 @@
 
 #include <iostream>
 #include <map>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -71,8 +72,8 @@ class FolderStream : public librevenge::RVNGInputStream
 {
 public:
     //! constructor
-    explicit FolderStream(const css::uno::Reference<css::ucb::XContent>& xContent)
-        : m_xContent(xContent)
+    explicit FolderStream(css::uno::Reference<css::ucb::XContent> xContent)
+        : m_xContent(std::move(xContent))
     {
     }
 

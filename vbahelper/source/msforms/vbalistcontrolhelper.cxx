@@ -18,6 +18,7 @@
  */
 
 #include "vbalistcontrolhelper.hxx"
+#include <utility>
 #include <vector>
 #include <vbahelper/vbapropvalue.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -36,7 +37,7 @@ private:
     uno::Any m_pvarColumn;
 
 public:
-    ListPropListener( const uno::Reference< beans::XPropertySet >& xProps, const uno::Any& pvargIndex, const uno::Any& pvarColumn );
+    ListPropListener( uno::Reference< beans::XPropertySet >  xProps, uno::Any  pvargIndex, uno::Any  pvarColumn );
     virtual ~ListPropListener() { };
     virtual void setValueEvent( const css::uno::Any& value ) override;
     virtual css::uno::Any getValueEvent() override;
@@ -44,7 +45,7 @@ public:
 
 }
 
-ListPropListener::ListPropListener( const uno::Reference< beans::XPropertySet >& xProps, const uno::Any& pvargIndex, const uno::Any& pvarColumn ) : m_xProps( xProps ), m_pvargIndex( pvargIndex ), m_pvarColumn( pvarColumn )
+ListPropListener::ListPropListener( uno::Reference< beans::XPropertySet >  xProps, uno::Any  pvargIndex, uno::Any  pvarColumn ) : m_xProps(std::move( xProps )), m_pvargIndex(std::move( pvargIndex )), m_pvarColumn(std::move( pvarColumn ))
 {
 }
 

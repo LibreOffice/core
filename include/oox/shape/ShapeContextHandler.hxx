@@ -49,7 +49,7 @@ class OOX_DLLPUBLIC ShapeContextHandler final :
     public ::cppu::WeakImplHelper< css::xml::sax::XFastContextHandler >
 {
 public:
-    explicit ShapeContextHandler(const rtl::Reference<ShapeFilterBase>& xFilterBase);
+    explicit ShapeContextHandler(rtl::Reference<ShapeFilterBase>  xFilterBase);
 
     virtual ~ShapeContextHandler() override;
 

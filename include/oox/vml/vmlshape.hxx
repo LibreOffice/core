@@ -309,7 +309,7 @@ protected:
 class SimpleShape : public ShapeBase
 {
 public:
-    explicit            SimpleShape( Drawing& rDrawing, const OUString& rService );
+    explicit            SimpleShape( Drawing& rDrawing, OUString  rService );
 
     void setService( const OUString& aService ) { maService = aService; }
 

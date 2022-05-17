@@ -18,6 +18,7 @@
  */
 
 #include <impglyphitem.hxx>
+#include <utility>
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/vcllayout.hxx>
 #include <vcl/lazydelete.hxx>
@@ -442,9 +443,9 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
 }
 
 SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
-    const VclPtr<const OutputDevice>& outputDevice, const OUString& t, sal_Int32 i, sal_Int32 l,
+    const VclPtr<const OutputDevice>& outputDevice, OUString t, sal_Int32 i, sal_Int32 l,
     tools::Long w)
-    : text(t)
+    : text(std::move(t))
     , index(i)
     , len(l)
     , logicWidth(w)

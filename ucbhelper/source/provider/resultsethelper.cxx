@@ -34,6 +34,7 @@
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/resultsethelper.hxx>
+#include <utility>
 
 #include <osl/diagnose.h>
 
@@ -47,12 +48,12 @@ namespace ucbhelper {
 
 
 ResultSetImplHelper::ResultSetImplHelper(
-    const uno::Reference< uno::XComponentContext >& rxContext,
-    const css::ucb::OpenCommandArgument2& rCommand )
+    uno::Reference< uno::XComponentContext >  rxContext,
+    css::ucb::OpenCommandArgument2  rCommand )
 : m_bStatic( false ),
   m_bInitDone( false ),
-  m_aCommand( rCommand ),
-  m_xContext( rxContext )
+  m_aCommand(std::move( rCommand )),
+  m_xContext(std::move( rxContext ))
 {
 }
 

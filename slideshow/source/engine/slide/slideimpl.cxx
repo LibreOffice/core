@@ -48,6 +48,7 @@
 #include "targetpropertiescreator.hxx"
 #include <tools.hxx>
 #include <box2dtools.hxx>
+#include <utility>
 #include <vcl/graphicfilter.hxx>
 #include <svx/svdograf.hxx>
 
@@ -66,8 +67,8 @@ class SlideImpl : public Slide,
 {
 public:
     SlideImpl( const uno::Reference<drawing::XDrawPage>&         xDrawPage,
-               const uno::Reference<drawing::XDrawPagesSupplier>&    xDrawPages,
-               const uno::Reference<animations::XAnimationNode>& xRootNode,
+               uno::Reference<drawing::XDrawPagesSupplier>     xDrawPages,
+               uno::Reference<animations::XAnimationNode>  xRootNode,
                EventQueue&                                       rEventQueue,
                EventMultiplexer&                                 rEventMultiplexer,
                ScreenUpdater&                                    rScreenUpdater,
@@ -287,8 +288,8 @@ void slideRenderer( SlideImpl const * pSlide, const UnoViewSharedPtr& rView )
 
 
 SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDrawPage,
-                      const uno::Reference<drawing::XDrawPagesSupplier>&    xDrawPages,
-                      const uno::Reference< animations::XAnimationNode >&   xRootNode,
+                      uno::Reference<drawing::XDrawPagesSupplier>     xDrawPages,
+                      uno::Reference< animations::XAnimationNode >    xRootNode,
                       EventQueue&                                           rEventQueue,
                       EventMultiplexer&                                     rEventMultiplexer,
                       ScreenUpdater&                                        rScreenUpdater,
@@ -307,8 +308,8 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                       bool                                                  bIntrinsicAnimationsAllowed,
                       bool                                                  bDisableAnimationZOrder ) :
     mxDrawPage( xDrawPage ),
-    mxDrawPagesSupplier( xDrawPages ),
-    mxRootNode( xRootNode ),
+    mxDrawPagesSupplier(std::move( xDrawPages )),
+    mxRootNode(std::move( xRootNode )),
     mpLayerManager( std::make_shared<LayerManager>(
                         rViewContainer,
                         bDisableAnimationZOrder) ),

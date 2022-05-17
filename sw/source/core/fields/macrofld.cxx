@@ -23,6 +23,7 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -39,8 +40,8 @@ std::unique_ptr<SwFieldType> SwMacroFieldType::Copy() const
 }
 
 SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
-                           const OUString& rLibAndName, const OUString& rText) :
-    SwField(pInitType), m_aMacro(rLibAndName), m_aText(rText), m_bIsScriptURL(false)
+                           OUString  rLibAndName, OUString  rText) :
+    SwField(pInitType), m_aMacro(std::move(rLibAndName)), m_aText(std::move(rText)), m_bIsScriptURL(false)
 {
     m_bIsScriptURL = isScriptURL(m_aMacro);
 }

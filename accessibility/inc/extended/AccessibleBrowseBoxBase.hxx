@@ -80,9 +80,9 @@ public:
         @param _xFocusWindow    The window that gets all the focus events.
         @param eObjType         Object type */
     AccessibleBrowseBoxBase(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        css::uno::Reference< css::accessibility::XAccessible >  rxParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
-        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
+        css::uno::Reference< css::awt::XWindow >  _xFocusWindow,
         AccessibleBrowseBoxObjType eObjType );
 
     /** Constructor sets specified name and description.
@@ -93,12 +93,12 @@ public:
         @param rName            The name of this object.
         @param rDescription     The description text of this object. */
     AccessibleBrowseBoxBase(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        css::uno::Reference< css::accessibility::XAccessible >  rxParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
-        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
+        css::uno::Reference< css::awt::XWindow >  _xFocusWindow,
         AccessibleBrowseBoxObjType eObjType,
-        const OUString& rName,
-        const OUString& rDescription );
+        OUString  rName,
+        OUString  rDescription );
 
 protected:
     virtual ~AccessibleBrowseBoxBase() override;

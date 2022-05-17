@@ -92,7 +92,7 @@ private:
     getRootReadAccess();
 
 public:
-    HierarchyEntry( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    HierarchyEntry( css::uno::Reference< css::uno::XComponentContext >  rxContext,
                     HierarchyContentProvider* pProvider,
                     const OUString& rURL );
 

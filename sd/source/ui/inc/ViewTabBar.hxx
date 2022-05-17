@@ -45,7 +45,7 @@ namespace sd {
 class TabBarControl final : public InterimItemWindow
 {
 public:
-    TabBarControl(vcl::Window* pParentWindow, const ::rtl::Reference<ViewTabBar>& rpViewTabBar);
+    TabBarControl(vcl::Window* pParentWindow, ::rtl::Reference<ViewTabBar>  rpViewTabBar);
     virtual void dispose() override;
     virtual ~TabBarControl() override;
     weld::Notebook& GetNotebook() { return *mxTabControl; }

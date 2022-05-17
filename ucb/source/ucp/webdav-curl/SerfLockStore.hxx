@@ -25,6 +25,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/ucb/Lock.hpp>
+#include <utility>
 
 #include "CurlSession.hxx"
 
@@ -43,13 +44,13 @@ struct LockInfo
     LockInfo()
         : m_nLastChanceToSendRefreshRequest( -1 ) {}
 
-    LockInfo( const OUString& sToken,
-              css::ucb::Lock const& rLock,
-              rtl::Reference<CurlSession> const & xSession,
+    LockInfo( OUString  sToken,
+              css::ucb::Lock  rLock,
+              rtl::Reference<CurlSession>  xSession,
               sal_Int32 nLastChanceToSendRefreshRequest )
-        : m_sToken(sToken)
-        , m_Lock(rLock)
-        , m_xSession(xSession)
+        : m_sToken(std::move(sToken))
+        , m_Lock(std::move(rLock))
+        , m_xSession(std::move(xSession))
         , m_nLastChanceToSendRefreshRequest(nLastChanceToSendRefreshRequest)
     {}
 };

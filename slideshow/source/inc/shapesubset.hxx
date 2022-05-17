@@ -57,9 +57,9 @@ namespace slideshow::internal
                 Manager object, where subsets are
                 registered/unregistered
              */
-            ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
+            ShapeSubset( AttributableShapeSharedPtr        rOriginalShape,
                          const DocTreeNode&                      rTreeNode,
-                         const SubsettableShapeManagerSharedPtr& rSubsetManager );
+                         SubsettableShapeManagerSharedPtr  rSubsetManager );
 
             /** Create a subset from another subset.
 
@@ -83,8 +83,8 @@ namespace slideshow::internal
                 Original shape, which will be represented as a whole
                 by this object
              */
-            ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
-                         const SubsettableShapeManagerSharedPtr& rShapeManager );
+            ShapeSubset( AttributableShapeSharedPtr        rOriginalShape,
+                         SubsettableShapeManagerSharedPtr  rShapeManager );
 
             ~ShapeSubset();
 

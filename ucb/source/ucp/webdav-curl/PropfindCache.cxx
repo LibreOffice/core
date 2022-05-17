@@ -8,6 +8,8 @@
  */
 
 #include <osl/time.h>
+
+#include <utility>
 #include "PropfindCache.hxx"
 
 namespace http_dav_ucp
@@ -22,9 +24,9 @@ namespace http_dav_ucp
     {
     }
 
-    PropertyNames::PropertyNames( const OUString& rURL ) :
+    PropertyNames::PropertyNames( OUString  rURL ) :
         m_nStaleTime( 0 ),
-        m_sURL( rURL ),
+        m_sURL(std::move( rURL )),
         m_aPropertiesNames()
     {
     }

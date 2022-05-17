@@ -12,12 +12,13 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
+#include <utility>
 
 using namespace css;
 using namespace css::uno;
 
-UnoApiTest::UnoApiTest(const OUString& path)
-    : m_aBaseString(path)
+UnoApiTest::UnoApiTest(OUString path)
+    : m_aBaseString(std::move(path))
 {
 }
 

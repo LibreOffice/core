@@ -27,6 +27,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
+#include <utility>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
@@ -91,8 +92,8 @@ UcbContentProviderProxyFactory::createContentProvider(
 
 UcbContentProviderProxy::UcbContentProviderProxy(
                         const Reference< XComponentContext >& rxContext,
-                        const OUString& Service )
-: m_aService( Service ),
+                        OUString  Service )
+: m_aService(std::move( Service )),
   m_bReplace( false ),
   m_bRegister( false ),
   m_xContext( rxContext )

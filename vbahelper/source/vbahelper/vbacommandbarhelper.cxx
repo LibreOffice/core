@@ -23,6 +23,7 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 #include <comphelper/random.hxx>
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -84,7 +85,7 @@ public:
 MSO2OOCommandbarHelper* MSO2OOCommandbarHelper::pMSO2OOCommandbarHelper = nullptr;
 
 
-VbaCommandBarHelper::VbaCommandBarHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel ) : mxContext( xContext ), mxModel( xModel )
+VbaCommandBarHelper::VbaCommandBarHelper( css::uno::Reference< css::uno::XComponentContext >  xContext, css::uno::Reference< css::frame::XModel >  xModel ) : mxContext(std::move( xContext )), mxModel(std::move( xModel ))
 {
     Init();
 }

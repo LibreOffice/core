@@ -52,6 +52,7 @@
 #include <acorrect.hxx>
 
 #include <strings.hrc>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -495,7 +496,7 @@ class SwUndoReplace::Impl
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 
 public:
-    Impl(SwPaM const& rPam, OUString const& rIns, bool const bRegExp);
+    Impl(SwPaM const& rPam, OUString  rIns, bool const bRegExp);
 
     void UndoImpl( ::sw::UndoRedoContext & );
     void RedoImpl( ::sw::UndoRedoContext & );
@@ -581,8 +582,8 @@ void SwUndoReplace::SetEnd(SwPaM const& rPam)
 }
 
 SwUndoReplace::Impl::Impl(
-        SwPaM const& rPam, OUString const& rIns, bool const bRegExp)
-    : m_sIns( rIns )
+        SwPaM const& rPam, OUString  rIns, bool const bRegExp)
+    : m_sIns(std::move( rIns ))
     , m_nOffset( 0 )
     , m_bRegExp(bRegExp)
 {
@@ -843,19 +844,19 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
 }
 
 SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
-                                      const OUString &rText,
-                                      const OUString& rSeparator,
-                                      const OUString& rNumberSeparator,
+                                      OUString rText,
+                                      OUString  rSeparator,
+                                      OUString  rNumberSeparator,
                                       const bool bBef,
                                       const sal_uInt16 nInitId,
-                                      const OUString& rCharacterStyle,
+                                      OUString  rCharacterStyle,
                                       const bool bCpyBorder,
                                       const SwDoc* pDoc )
     : SwUndo( SwUndoId::INSERTLABEL, pDoc ),
-      m_sText( rText ),
-      m_sSeparator( rSeparator ),
-      m_sNumberSeparator( rNumberSeparator ),//#i61007# order of captions
-      m_sCharacterStyle( rCharacterStyle ),
+      m_sText(std::move( rText )),
+      m_sSeparator(std::move( rSeparator )),
+      m_sNumberSeparator(std::move( rNumberSeparator )),//#i61007# order of captions
+      m_sCharacterStyle(std::move( rCharacterStyle )),
       m_nFieldId( nInitId ),
       m_eType( eTyp ),
       m_nLayerId( 0 ),

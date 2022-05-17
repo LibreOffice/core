@@ -45,7 +45,7 @@ class PPTShapeGroupContext final : public ::oox::drawingml::ShapeGroupContext
 public:
     PPTShapeGroupContext(
         ::oox::core::FragmentHandler2 const & rParent,
-        const oox::ppt::SlidePersistPtr& rSlidePersistPtr,
+        oox::ppt::SlidePersistPtr  rSlidePersistPtr,
         const oox::ppt::ShapeLocation eShapeLocation,
         const oox::drawingml::ShapePtr& pMasterShapePtr,
         const oox::drawingml::ShapePtr& pGroupShapePtr );

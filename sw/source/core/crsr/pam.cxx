@@ -45,6 +45,7 @@
 #include <hints.hxx>
 #include <txatbase.hxx>
 #include <osl/diagnose.h>
+#include <utility>
 #include <xmloff/odffields.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -340,10 +341,10 @@ SwPaM::SwPaM( const SwPosition& rPos, SwPaM* pRing )
 {
 }
 
-SwPaM::SwPaM( const SwPosition& rMark, const SwPosition& rPoint, SwPaM* pRing )
+SwPaM::SwPaM( SwPosition  rMark, SwPosition  rPoint, SwPaM* pRing )
     : Ring( pRing )
-    , m_Bound1( rMark )
-    , m_Bound2( rPoint )
+    , m_Bound1(std::move( rMark ))
+    , m_Bound2(std::move( rPoint ))
     , m_pPoint( &m_Bound2 )
     , m_pMark( &m_Bound1 )
     , m_bIsInFrontOfLabel( false )

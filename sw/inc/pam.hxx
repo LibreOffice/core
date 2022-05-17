@@ -146,7 +146,7 @@ class SAL_WARN_UNUSED SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>
 
 public:
     explicit SwPaM( const SwPosition& rPos, SwPaM* pRing = nullptr );
-    SwPaM( const SwPosition& rMk, const SwPosition& rPt, SwPaM* pRing = nullptr );
+    SwPaM( SwPosition  rMk, SwPosition  rPt, SwPaM* pRing = nullptr );
     SwPaM( const SwNodeIndex& rMk, const SwNodeIndex& rPt,
            SwNodeOffset nMkOffset = SwNodeOffset(0), SwNodeOffset nPtOffset = SwNodeOffset(0), SwPaM* pRing = nullptr );
     SwPaM( const SwNode& rMk, const SwNode& rPt,

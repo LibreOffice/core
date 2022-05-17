@@ -87,6 +87,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/temporary.hxx>
 #include <oox/mathml/import.hxx>
+#include <utility>
 #include <xmloff/odffields.hxx>
 #include <rtl/uri.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -312,7 +313,7 @@ uno::Any FloatingTableInfo::getPropertyValue(std::u16string_view propertyName)
 
 DomainMapper_Impl::DomainMapper_Impl(
             DomainMapper& rDMapper,
-            uno::Reference<uno::XComponentContext> const& xContext,
+            uno::Reference<uno::XComponentContext>  xContext,
             uno::Reference<lang::XComponent> const& xModel,
             SourceDocumentType eDocumentType,
             utl::MediaDescriptor const & rMediaDesc) :
@@ -321,7 +322,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_pOOXMLDocument(nullptr),
         m_xTextDocument( xModel, uno::UNO_QUERY ),
         m_xTextFactory( xModel, uno::UNO_QUERY ),
-        m_xComponentContext( xContext ),
+        m_xComponentContext(std::move( xContext )),
         m_bForceGenericFields(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get()),
         m_bSetUserFieldContent( false ),
         m_bSetCitation( false ),
@@ -4975,9 +4976,9 @@ bool HeaderFooterContext::getTextInserted() const
 
 sal_Int32 HeaderFooterContext::getTableDepth() const { return m_nTableDepth; }
 
-FieldContext::FieldContext(uno::Reference< text::XTextRange > const& xStart)
+FieldContext::FieldContext(uno::Reference< text::XTextRange >  xStart)
     : m_bFieldCommandCompleted(false)
-    , m_xStartRange( xStart )
+    , m_xStartRange(std::move( xStart ))
     , m_bFieldLocked( false )
 {
     m_pProperties = new PropertyMap();

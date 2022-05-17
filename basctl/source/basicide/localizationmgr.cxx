@@ -37,6 +37,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 namespace basctl
@@ -59,14 +60,14 @@ constexpr OUStringLiteral aSemi(u";");
 
 LocalizationMgr::LocalizationMgr(
     Shell* pShell,
-    ScriptDocument const& rDocument,
-    OUString const& aLibName,
+    ScriptDocument  rDocument,
+    OUString  aLibName,
     Reference<XStringResourceManager> const& xStringResourceManager
 ) :
     m_xStringResourceManager(xStringResourceManager),
     m_pShell(pShell),
-    m_aDocument(rDocument),
-    m_aLibName(aLibName)
+    m_aDocument(std::move(rDocument)),
+    m_aLibName(std::move(aLibName))
 { }
 
 bool LocalizationMgr::isLibraryLocalized ()

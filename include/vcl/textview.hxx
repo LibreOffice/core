@@ -57,7 +57,7 @@ private:
     SvMemoryStream  maHTMLStream;
 
 public:
-    explicit TETextDataObject( const OUString& rText );
+    explicit TETextDataObject( OUString  rText );
 
     SvMemoryStream& GetHTMLStream() { return maHTMLStream; }
 

@@ -22,6 +22,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <rtl/ref.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -52,7 +53,7 @@ public:
 
 }
 
-ScVbaCommandBarControls::ScVbaCommandBarControls( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess>& xIndexAccess, VbaCommandBarHelperRef const & pHelper, const uno::Reference< container::XIndexAccess>& xBarSettings, const OUString& sResourceUrl ) : CommandBarControls_BASE( xParent, xContext, xIndexAccess ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl )
+ScVbaCommandBarControls::ScVbaCommandBarControls( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess>& xIndexAccess, VbaCommandBarHelperRef  pHelper, uno::Reference< container::XIndexAccess>  xBarSettings, const OUString& sResourceUrl ) : CommandBarControls_BASE( xParent, xContext, xIndexAccess ), pCBarHelper(std::move( pHelper )), m_xBarSettings(std::move( xBarSettings )), m_sResourceUrl( sResourceUrl )
 {
     m_bIsMenu = sResourceUrl == ITEM_MENUBAR_URL;
 }

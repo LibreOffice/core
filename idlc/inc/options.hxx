@@ -20,6 +20,10 @@
 #ifndef INCLUDED_IDLC_INC_OPTIONS_HXX
 #define INCLUDED_IDLC_INC_OPTIONS_HXX
 
+#include <utility>
+
+#include <utility>
+
 #include "idlctypes.hxx"
 
 typedef std::unordered_map< OString, OString > OptionMap;
@@ -27,8 +31,8 @@ typedef std::unordered_map< OString, OString > OptionMap;
 class IllegalArgument
 {
 public:
-    IllegalArgument(const OString& msg)
-        : m_message(msg) {}
+OString ument(OString  msg)
+      std::move(  :) m_message(std::move(msg)) {}
 
     OString  m_message;
 };

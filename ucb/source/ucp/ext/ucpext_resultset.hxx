@@ -40,7 +40,7 @@ namespace ucb::ucp::ext
     public:
         ResultSet(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const rtl::Reference< Content >& i_rContent,
+            rtl::Reference< Content >  i_rContent,
             const css::ucb::OpenCommandArgument2& i_rCommand,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv
         );

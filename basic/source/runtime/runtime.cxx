@@ -38,6 +38,7 @@
 #include <tools/wldcrd.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -143,8 +144,8 @@ struct SbiArgv {                   // Argv stack:
     SbxArrayRef    refArgv;             // Argv
     short nArgc;                        // Argc
 
-    SbiArgv(SbxArrayRef const & refArgv_, short nArgc_) :
-        refArgv(refArgv_),
+    SbiArgv(SbxArrayRef  refArgv_, short nArgc_) :
+        refArgv(std::move(refArgv_)),
         nArgc(nArgc_) {}
 };
 
@@ -1774,10 +1775,10 @@ struct DimAsNewRecoverItem
         , m_pClassModule( nullptr )
     {}
 
-    DimAsNewRecoverItem( const OUString& rObjClass, const OUString& rObjName,
+    DimAsNewRecoverItem( OUString  rObjClass, OUString  rObjName,
                          SbxObject* pObjParent, SbModule* pClassModule )
-            : m_aObjClass( rObjClass )
-            , m_aObjName( rObjName )
+            : m_aObjClass(std::move( rObjClass ))
+            , m_aObjName(std::move( rObjName ))
             , m_pObjParent( pObjParent )
             , m_pClassModule( pClassModule )
     {}

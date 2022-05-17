@@ -38,6 +38,7 @@
 
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 
 constexpr OUStringLiteral IMPL_NAME = u"com.sun.star.security.comp.stoc.FilePolicy";
 
@@ -152,7 +153,7 @@ class PolicyReader
         { return (';' == c || ',' == c || '{' == c || '}' == c); }
 
 public:
-    PolicyReader( OUString const & file, AccessControl & ac );
+    PolicyReader( OUString  file, AccessControl & ac );
     ~PolicyReader();
 
     void error( std::u16string_view msg );
@@ -328,8 +329,8 @@ void PolicyReader::error( std::u16string_view msg )
         "] " + msg);
 }
 
-PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
-    : m_fileName( fileName )
+PolicyReader::PolicyReader( OUString  fileName, AccessControl & ac )
+    : m_fileName(std::move( fileName ))
     , m_linepos( 0 )
     , m_pos( 1 ) // force readline
     , m_back( '\0' )

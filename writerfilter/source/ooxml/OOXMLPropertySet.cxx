@@ -24,15 +24,16 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <sax/tools/converter.hxx>
 #include <tools/color.hxx>
+#include <utility>
 
 namespace writerfilter::ooxml
 {
 using namespace ::std;
 using namespace com::sun::star;
 
-OOXMLProperty::OOXMLProperty(Id id, const OOXMLValue::Pointer_t& pValue,
+OOXMLProperty::OOXMLProperty(Id id, OOXMLValue::Pointer_t  pValue,
                              OOXMLProperty::Type_t eType)
-    : mId(id), mpValue(pValue), meType(eType)
+    : mId(id), mpValue(std::move(pValue)), meType(eType)
 {
 }
 
@@ -171,9 +172,8 @@ OOXMLValue * OOXMLValue::clone() const
   class OOXMLBinaryValue
  */
 
-OOXMLBinaryValue::OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t const &
-                                   pBinaryObj)
-: mpBinaryObj(pBinaryObj)
+OOXMLBinaryValue::OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t pBinaryObj)
+: mpBinaryObj(std::move(pBinaryObj))
 {
 }
 
@@ -259,8 +259,8 @@ OOXMLValue * OOXMLBooleanValue::clone() const
   class OOXMLStringValue
 */
 
-OOXMLStringValue::OOXMLStringValue(const OUString & rStr)
-: mStr(rStr)
+OOXMLStringValue::OOXMLStringValue(OUString  rStr)
+: mStr(std::move(rStr))
 {
 }
 
@@ -293,8 +293,8 @@ OOXMLValue * OOXMLStringValue::clone() const
 /*
   class OOXMLInputStreamValue
  */
-OOXMLInputStreamValue::OOXMLInputStreamValue(uno::Reference<io::XInputStream> const & xInputStream)
-: mxInputStream(xInputStream)
+OOXMLInputStreamValue::OOXMLInputStreamValue(uno::Reference<io::XInputStream>  xInputStream)
+: mxInputStream(std::move(xInputStream))
 {
 }
 
@@ -430,8 +430,8 @@ string OOXMLPropertySet::toString()
   class OOXMLPropertySetValue
 */
 
-OOXMLPropertySetValue::OOXMLPropertySetValue(const OOXMLPropertySet::Pointer_t& pPropertySet)
-    : mpPropertySet(pPropertySet)
+OOXMLPropertySetValue::OOXMLPropertySetValue(OOXMLPropertySet::Pointer_t  pPropertySet)
+    : mpPropertySet(std::move(pPropertySet))
 {
 }
 
@@ -689,8 +689,8 @@ string OOXMLMeasurementOrPercentValue::toString() const
  */
 
 
-OOXMLShapeValue::OOXMLShapeValue(uno::Reference<drawing::XShape> const & rShape)
-: mrShape(rShape)
+OOXMLShapeValue::OOXMLShapeValue(uno::Reference<drawing::XShape>  rShape)
+: mrShape(std::move(rShape))
 {
 }
 
@@ -720,8 +720,8 @@ OOXMLValue * OOXMLShapeValue::clone() const
  */
 
 
-OOXMLStarMathValue::OOXMLStarMathValue( uno::Reference< embed::XEmbeddedObject > const & c )
-: component(c)
+OOXMLStarMathValue::OOXMLStarMathValue( uno::Reference< embed::XEmbeddedObject >  c )
+: component(std::move(c))
 {
 }
 

@@ -51,6 +51,7 @@
 #include <svtools/urlfilter.hxx>
 
 #include <mutex>
+#include <utility>
 #include <vector>
 #include <algorithm>
 
@@ -105,7 +106,7 @@ class SvtMatchContext_Impl: public salhelper::Thread
     static void                     FillPicklist(std::vector<OUString>& rPickList);
 
 public:
-                                    SvtMatchContext_Impl( SvtURLBox* pBoxP, const OUString& rText );
+                                    SvtMatchContext_Impl( SvtURLBox* pBoxP, OUString  rText );
     void                            Stop();
 };
 
@@ -119,10 +120,10 @@ namespace
     }
 }
 
-SvtMatchContext_Impl::SvtMatchContext_Impl(SvtURLBox* pBoxP, const OUString& rText)
+SvtMatchContext_Impl::SvtMatchContext_Impl(SvtURLBox* pBoxP, OUString  rText)
     : Thread( "MatchContext_Impl" )
     , aLink( LINK( this, SvtMatchContext_Impl, Select_Impl ) )
-    , aText( rText )
+    , aText(std::move( rText ))
     , pBox( pBoxP )
     , bOnlyDirectories( pBoxP->bOnlyDirectories )
     , bNoSelection( pBoxP->bNoSelection )

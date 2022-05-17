@@ -33,6 +33,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <comphelper/fileurl.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 #include "filglob.hxx"
 #include "filid.hxx"
 #include "filrow.hxx"
@@ -108,10 +109,10 @@ public:
 // Private Constructor for just inserted Contents
 
 BaseContent::BaseContent( TaskManager* pMyShell,
-                          const OUString& parentName,
+                          OUString  parentName,
                           bool bFolder )
     : m_pMyShell( pMyShell ),
-      m_aUncPath( parentName ),
+      m_aUncPath(std::move( parentName )),
       m_bFolder( bFolder ),
       m_nState( JustInserted )
 {
@@ -124,10 +125,10 @@ BaseContent::BaseContent( TaskManager* pMyShell,
 
 BaseContent::BaseContent( TaskManager* pMyShell,
                           const Reference< XContentIdentifier >& xContentIdentifier,
-                          const OUString& aUncPath )
+                          OUString  aUncPath )
     : m_pMyShell( pMyShell ),
       m_xContentIdentifier( xContentIdentifier ),
-      m_aUncPath( aUncPath ),
+      m_aUncPath(std::move( aUncPath )),
       m_bFolder( false ),
       m_nState( FullFeatured )
 {

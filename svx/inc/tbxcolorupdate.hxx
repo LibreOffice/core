@@ -51,9 +51,9 @@ namespace svx
     class ToolboxButtonColorUpdaterBase
     {
     public:
-        ToolboxButtonColorUpdaterBase(bool bWideButton, const OUString& rCommandLabel,
-                                      const OUString& rCommandURL,
-                                      const css::uno::Reference<css::frame::XFrame>& rFrame);
+        ToolboxButtonColorUpdaterBase(bool bWideButton, OUString  rCommandLabel,
+                                      OUString  rCommandURL,
+                                      css::uno::Reference<css::frame::XFrame>  rFrame);
 
         virtual ~ToolboxButtonColorUpdaterBase();
 

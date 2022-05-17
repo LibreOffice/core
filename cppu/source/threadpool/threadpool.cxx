@@ -26,6 +26,7 @@
 
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <utility>
 
 #include <uno/threadpool.h>
 
@@ -39,7 +40,7 @@ using namespace ::rtl;
 namespace cppu_threadpool
 {
     WaitingThread::WaitingThread(
-        rtl::Reference<ORequestThread> const & theThread): thread(theThread)
+        rtl::Reference<ORequestThread>  theThread): thread(std::move(theThread))
     {}
 
     DisposedCallerAdminHolder const & DisposedCallerAdmin::getInstance()

@@ -12,6 +12,7 @@
 
 #include <sfx2/devtools/ObjectInspectorTreeHandler.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include "DevToolsStrings.hrc"
 
@@ -389,8 +390,8 @@ protected:
     OUString msName;
 
 public:
-    SimpleStringNode(OUString const& rName)
-        : msName(rName)
+    SimpleStringNode(OUString rName)
+        : msName(std::move(rName))
     {
     }
 
@@ -409,8 +410,8 @@ private:
     uno::Reference<reflection::XIdlMethod> mxMethod;
 
 public:
-    MethodNode(uno::Reference<reflection::XIdlMethod> const& xMethod)
-        : mxMethod(xMethod)
+    MethodNode(uno::Reference<reflection::XIdlMethod> xMethod)
+        : mxMethod(std::move(xMethod))
     {
     }
 
@@ -500,8 +501,8 @@ private:
     }
 
 public:
-    ClassNode(uno::Reference<reflection::XIdlClass> const& xClass)
-        : mxClass(xClass)
+    ClassNode(uno::Reference<reflection::XIdlClass> xClass)
+        : mxClass(std::move(xClass))
     {
     }
 
@@ -539,12 +540,12 @@ protected:
     createNodeObjectForAny(OUString const& rName, const uno::Any& rAny, OUString const& mrInfo);
 
 public:
-    BasicValueNode(OUString const& rName, uno::Any const& rAny, OUString const& rInfo,
-                   uno::Reference<uno::XComponentContext> const& xContext)
+    BasicValueNode(OUString const& rName, uno::Any rAny, OUString rInfo,
+                   uno::Reference<uno::XComponentContext> xContext)
         : SimpleStringNode(rName)
-        , maAny(rAny)
-        , mrInfo(rInfo)
-        , mxContext(xContext)
+        , maAny(std::move(rAny))
+        , mrInfo(std::move(rInfo))
+        , mxContext(std::move(xContext))
     {
     }
 

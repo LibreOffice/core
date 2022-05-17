@@ -36,6 +36,7 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <unordered_map>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -60,9 +61,9 @@ struct ContentProviderImplHelper_Impl
 namespace ucbhelper {
 
 ContentProviderImplHelper::ContentProviderImplHelper(
-    const uno::Reference< uno::XComponentContext >& rxContext )
+    uno::Reference< uno::XComponentContext >  rxContext )
 : m_pImpl( new ucbhelper_impl::ContentProviderImplHelper_Impl ),
-  m_xContext( rxContext )
+  m_xContext(std::move( rxContext ))
 {
 }
 

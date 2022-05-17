@@ -32,9 +32,9 @@ namespace cppcanvas::internal
         public:
             ImplSprite( const css::uno::Reference<
                                   css::rendering::XSpriteCanvas >&                    rParentCanvas,
-                        const css::uno::Reference<
-                                  css::rendering::XSprite >&                          rSprite,
-                        const ImplSpriteCanvas::TransformationArbiterSharedPtr&       rTransformArbiter );
+                        css::uno::Reference<
+                                  css::rendering::XSprite >                           rSprite,
+                        ImplSpriteCanvas::TransformationArbiterSharedPtr        rTransformArbiter );
             virtual ~ImplSprite() override;
 
             virtual void setAlpha( const double& rAlpha ) override;

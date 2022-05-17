@@ -108,7 +108,7 @@ public:
     SfxDialogLibrary
     (
         ModifiableHelper& _rModifiable,
-        const OUString& aName,
+        OUString  aName,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         SfxDialogLibraryContainer* pParent
     );
@@ -116,7 +116,7 @@ public:
     SfxDialogLibrary
     (
         ModifiableHelper& _rModifiable,
-        const OUString& aName,
+        OUString  aName,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         const OUString& aLibInfoFileURL, const OUString& aStorageURL, bool ReadOnly,
         SfxDialogLibraryContainer* pParent

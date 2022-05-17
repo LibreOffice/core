@@ -38,6 +38,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbashape.hxx>
 #include <vbahelper/vbashapes.hxx>
@@ -55,7 +56,7 @@ class VbShapeEnumHelper : public EnumerationHelper_BASE
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
         sal_Int32 nIndex;
 public:
-    VbShapeEnumHelper( const uno::Reference< msforms::XShapes >& xParent,  const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xParent( xParent ), m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
+    VbShapeEnumHelper( uno::Reference< msforms::XShapes >  xParent,  uno::Reference< container::XIndexAccess >  xIndexAccess ) : m_xParent(std::move( xParent )), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
         virtual sal_Bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
@@ -87,7 +88,7 @@ void ScVbaShapes::initBaseCollection()
     m_xNameAccess.set( xShapes, uno::UNO_QUERY );
 }
 
-ScVbaShapes::ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, const uno::Reference< frame::XModel>& xModel ): ScVbaShapes_BASE( xParent, xContext, xShapes, true ), m_nNewShapeCount(0), m_xModel( xModel )
+ScVbaShapes::ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, uno::Reference< frame::XModel>  xModel ): ScVbaShapes_BASE( xParent, xContext, xShapes, true ), m_nNewShapeCount(0), m_xModel(std::move( xModel ))
 {
     m_xShapes.set( xShapes, uno::UNO_QUERY_THROW );
     m_xDrawPage.set( xShapes, uno::UNO_QUERY_THROW );

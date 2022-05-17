@@ -23,6 +23,7 @@
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -104,7 +105,7 @@ class RevisionsEnumeration : public EnumerationHelperImpl
     uno::Reference< frame::XModel > m_xModel;
 public:
     /// @throws uno::RuntimeException
-    RevisionsEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel  ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_xModel( xModel ) {}
+    RevisionsEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  uno::Reference< frame::XModel >  xModel  ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_xModel(std::move( xModel )) {}
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
@@ -120,7 +121,7 @@ SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParen
 {
 }
 
-SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< container::XIndexAccess >& xIndexAccess ): SwVbaRevisions_BASE( xParent, xContext, xIndexAccess ),  mxModel( xModel )
+SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, uno::Reference< frame::XModel >  xModel, const uno::Reference< container::XIndexAccess >& xIndexAccess ): SwVbaRevisions_BASE( xParent, xContext, xIndexAccess ),  mxModel(std::move( xModel ))
 {
 }
 

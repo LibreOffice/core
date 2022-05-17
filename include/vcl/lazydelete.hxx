@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <optional>
+#include <utility>
 
 namespace vcl
 {
@@ -114,7 +115,7 @@ namespace vcl
         css::uno::Reference<I> m_xI;
         virtual void doCleanup() override { set(nullptr); }
     public:
-        DeleteUnoReferenceOnDeinit(const css::uno::Reference<I>& r_xI ) : m_xI( r_xI ) {
+        DeleteUnoReferenceOnDeinit(css::uno::Reference<I>  r_xI ) : m_xI(std::move( r_xI )) {
             addDeinitContainer( this ); }
 
         css::uno::Reference<I> get() { return m_xI; }

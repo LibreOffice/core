@@ -92,11 +92,11 @@ namespace
         BkmType                     nBkmType;
         const SwPosition            aPosition;
 
-        SwXBookmarkPortion_Impl(uno::Reference<text::XTextContent> const& xMark,
-                const BkmType nType, SwPosition const& rPosition)
-        : xBookmark ( xMark )
+        SwXBookmarkPortion_Impl(uno::Reference<text::XTextContent>  xMark,
+                const BkmType nType, SwPosition  rPosition)
+        : xBookmark (std::move( xMark ))
         , nBkmType  ( nType )
-        , aPosition ( rPosition )
+        , aPosition (std::move( rPosition ))
         {
         }
         sal_Int32 getIndex () const
@@ -207,10 +207,10 @@ namespace
         const SwPosition maPosition;
 
         SwAnnotationStartPortion_Impl(
-            uno::Reference< text::XTextField > const& xAnnotationField,
-            SwPosition const& rPosition)
-        : mxAnnotationField ( xAnnotationField )
-        , maPosition ( rPosition )
+            uno::Reference< text::XTextField >  xAnnotationField,
+            SwPosition  rPosition)
+        : mxAnnotationField (std::move( xAnnotationField ))
+        , maPosition (std::move( rPosition ))
         {
         }
 

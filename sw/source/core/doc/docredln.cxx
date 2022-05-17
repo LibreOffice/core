@@ -47,6 +47,7 @@
 #include <hints.hxx>
 #include <pamtyp.hxx>
 #include <poolfmt.hxx>
+#include <utility>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <usrpref.hxx>
@@ -878,11 +879,11 @@ bool SwRedlineExtraData::operator == ( const SwRedlineExtraData& ) const
     return false;
 }
 
-SwRedlineExtraData_FormatColl::SwRedlineExtraData_FormatColl( const OUString& rColl,
+SwRedlineExtraData_FormatColl::SwRedlineExtraData_FormatColl( OUString  rColl,
                                                 sal_uInt16 nPoolFormatId,
                                                 const SfxItemSet* pItemSet,
                                                 bool bFormatAll )
-    : m_sFormatNm(rColl), m_nPoolId(nPoolFormatId), m_bFormatAll(bFormatAll)
+    : m_sFormatNm(std::move(rColl)), m_nPoolId(nPoolFormatId), m_bFormatAll(bFormatAll)
 {
     if( pItemSet && pItemSet->Count() )
         m_pSet.reset( new SfxItemSet( *pItemSet ) );
@@ -1039,8 +1040,8 @@ SwRedlineData::SwRedlineData(
 
 // For sw3io: We now own pNext!
 SwRedlineData::SwRedlineData(RedlineType eT, std::size_t nAut, const DateTime& rDT,
-    const OUString& rCmnt, SwRedlineData *pNxt)
-    : m_pNext(pNxt), m_pExtraData(nullptr), m_sComment(rCmnt), m_aStamp(rDT),
+    OUString  rCmnt, SwRedlineData *pNxt)
+    : m_pNext(pNxt), m_pExtraData(nullptr), m_sComment(std::move(rCmnt)), m_aStamp(rDT),
     m_nAuthor(nAut), m_eType(eT), m_nSeqNo(0), m_bAutoFormat(false), m_bMoved(false)
 {
 }

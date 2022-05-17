@@ -46,6 +46,7 @@
 #include <tools/urlobj.hxx>
 #include <implimagetree.hxx>
 
+#include <utility>
 #include <vcl/bitmapex.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
@@ -647,8 +648,8 @@ class FolderFileAccess : public ::cppu::WeakImplHelper<css::container::XNameAcce
 public:
     uno::Reference< uno::XComponentContext > mxContext;
     OUString maURL;
-    FolderFileAccess(uno::Reference< uno::XComponentContext > const & context, OUString const & url)
-        : mxContext(context), maURL(url) {}
+    FolderFileAccess(uno::Reference< uno::XComponentContext >  context, OUString  url)
+        : mxContext(std::move(context)), maURL(std::move(url)) {}
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override { return cppu::UnoType<io::XInputStream>::get(); }
     virtual sal_Bool SAL_CALL hasElements() override { return true; }

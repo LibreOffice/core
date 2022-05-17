@@ -30,6 +30,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
+#include <utility>
 
 #include "tdoc_uri.hxx"
 
@@ -43,9 +44,9 @@ using namespace tdoc_ucp;
 
 
 ParentStorageHolder::ParentStorageHolder(
-            const uno::Reference< embed::XStorage > & xParentStorage,
+            uno::Reference< embed::XStorage >  xParentStorage,
             const OUString & rUri )
-: m_xParentStorage( xParentStorage ),
+: m_xParentStorage(std::move( xParentStorage )),
   m_bParentIsRootStorage( false )
 {
     Uri aUri( rUri );
@@ -58,12 +59,12 @@ ParentStorageHolder::ParentStorageHolder(
 
 
 Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
-                  const rtl::Reference< StorageElementFactory > & xFactory,
+                  rtl::Reference< StorageElementFactory >  xFactory,
                   const OUString & rUri,
                   const uno::Reference< embed::XStorage > & xParentStorage,
                   const uno::Reference< embed::XStorage > & xStorageToWrap )
 : ParentStorageHolder( xParentStorage, Uri( rUri ).getParentUri() ),
-  m_xFactory( xFactory ),
+  m_xFactory(std::move( xFactory )),
   m_xWrappedStorage( xStorageToWrap ),
   m_xWrappedTransObj( xStorageToWrap, uno::UNO_QUERY ), // optional interface
   m_xWrappedComponent( xStorageToWrap ),

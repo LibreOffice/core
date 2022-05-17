@@ -10,6 +10,7 @@
 #include <jsdialog/jsdialogbuilder.hxx>
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
+#include <utility>
 #include <vcl/tabpage.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/dialog.hxx>
@@ -47,9 +48,9 @@ void response_help(vcl::Window* pWindow)
 JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
                                        VclPtr<vcl::Window> aContentWindow, std::string sTypeOfJSON)
     : Idle("JSDialog notify")
-    , m_aNotifierWindow(aNotifierWindow)
-    , m_aContentWindow(aContentWindow)
-    , m_sTypeOfJSON(sTypeOfJSON)
+    , m_aNotifierWindow(std::move(aNotifierWindow))
+    , m_aContentWindow(std::move(aContentWindow))
+    , m_sTypeOfJSON(std::move(sTypeOfJSON))
     , m_bForce(false)
 {
     SetPriority(TaskPriority::POST_PAINT);

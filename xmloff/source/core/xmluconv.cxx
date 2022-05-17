@@ -21,6 +21,7 @@
 
 #include <string_view>
 
+#include <utility>
 #include <xmloff/xmluconv.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>
@@ -72,7 +73,7 @@ struct SvXMLUnitConverter::Impl
     mutable uno::Reference< i18n::XCharacterClassification > m_xCharClass;
     uno::Reference< uno::XComponentContext > m_xContext;
 
-    Impl(uno::Reference<uno::XComponentContext> const& xContext,
+    Impl(uno::Reference<uno::XComponentContext>  xContext,
             sal_Int16 const eCoreMeasureUnit,
             sal_Int16 const eXMLMeasureUnit,
             SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion)
@@ -80,7 +81,7 @@ struct SvXMLUnitConverter::Impl
         , m_eXMLMeasureUnit(eXMLMeasureUnit)
         , m_eODFVersion(nODFVersion)
         , m_aNullDate(30, 12, 1899)
-        , m_xContext(xContext)
+        , m_xContext(std::move(xContext))
     {
         OSL_ENSURE( m_xContext.is(), "got no service manager" );
     }

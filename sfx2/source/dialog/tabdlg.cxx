@@ -28,6 +28,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <unotools/viewoptions.hxx>
+#include <utility>
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -61,10 +62,10 @@ struct Data_Impl
     bool bRefresh;                // Flag: Page must be re-initialized
 
     // Constructor
-    Data_Impl( const OString& rId, CreateTabPage fnPage,
+    Data_Impl( OString  rId, CreateTabPage fnPage,
                GetTabPageRanges fnRanges ) :
 
-        sId         ( rId ),
+        sId         (std::move( rId )),
         fnCreatePage( fnPage ),
         fnGetRanges ( fnRanges ),
         bRefresh    ( false )

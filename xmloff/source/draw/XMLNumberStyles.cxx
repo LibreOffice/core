@@ -19,6 +19,7 @@
 
 #include "XMLNumberStylesExport.hxx"
 #include <XMLNumberStylesImport.hxx>
+#include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -501,7 +502,7 @@ public:
         sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         SdXMLNumberFormatImportContext* pParent,
-        const SvXMLImportContextRef& rSlaveContext );
+        SvXMLImportContextRef  rSlaveContext );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
@@ -520,11 +521,11 @@ SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext(
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     SdXMLNumberFormatImportContext* pParent,
-    const SvXMLImportContextRef& rSlaveContext )
+    SvXMLImportContextRef  rSlaveContext )
 :   SvXMLImportContext(rImport),
     mpParent( pParent ),
     maNumberStyle( SvXMLImport::getNameFromToken(nElement) ),
-    mxSlaveContext( rSlaveContext )
+    mxSlaveContext(std::move( rSlaveContext ))
 {
     mbLong = false;
     mbTextual = false;

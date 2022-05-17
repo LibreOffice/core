@@ -8,6 +8,7 @@
  *
  */
 
+#include <utility>
 #include <widgetdraw/WidgetDefinitionReader.hxx>
 
 #include <sal/config.h>
@@ -185,10 +186,9 @@ bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
 
 } // end anonymous namespace
 
-WidgetDefinitionReader::WidgetDefinitionReader(OUString const& rDefinitionFile,
-                                               OUString const& rResourcePath)
-    : m_rDefinitionFile(rDefinitionFile)
-    , m_rResourcePath(rResourcePath)
+WidgetDefinitionReader::WidgetDefinitionReader(OUString rDefinitionFile, OUString rResourcePath)
+    : m_rDefinitionFile(std::move(rDefinitionFile))
+    , m_rResourcePath(std::move(rResourcePath))
 {
 }
 

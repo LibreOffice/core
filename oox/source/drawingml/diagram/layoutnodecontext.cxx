@@ -27,6 +27,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -98,9 +99,9 @@ class ChooseContext
     : public ContextHandler2
 {
 public:
-    ChooseContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, const LayoutAtomPtr & pNode )
+    ChooseContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, LayoutAtomPtr  pNode )
         : ContextHandler2( rParent )
-        , mpNode( pNode )
+        , mpNode(std::move( pNode ))
         {
             msName = rAttribs.getString( XML_name ).get();
         }

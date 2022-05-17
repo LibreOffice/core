@@ -20,6 +20,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 #include <vcl/ImageTree.hxx>
 #include <vcl/svapp.hxx>
 #include <ucbhelper/content.hxx>
@@ -40,8 +41,8 @@ class Provider final:
 {
 public:
     explicit Provider(
-        css::uno::Reference<css::uno::XComponentContext> const & context):
-        context_(context)
+        css::uno::Reference<css::uno::XComponentContext>  context):
+        context_(std::move(context))
     {}
 
 private:

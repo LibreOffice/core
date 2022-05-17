@@ -42,6 +42,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <mutex>
+#include <utility>
 #include <vector>
 #include <algorithm>
 
@@ -128,7 +129,7 @@ namespace svt
         virtual ~TemplateContent() override;
 
     public:
-        explicit TemplateContent( const INetURLObject& _rURL );
+        explicit TemplateContent( INetURLObject  _rURL );
 
         // attribute access
         OUString                 getURL( ) const                             { return m_aURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ); }
@@ -148,8 +149,8 @@ namespace svt
 
     }
 
-    TemplateContent::TemplateContent( const INetURLObject& _rURL )
-        :m_aURL( _rURL )
+    TemplateContent::TemplateContent( INetURLObject  _rURL )
+        :m_aURL(std::move( _rURL ))
     {
         DBG_ASSERT( INetProtocol::NotValid != m_aURL.GetProtocol(), "TemplateContent::TemplateContent: invalid URL!" );
         implResetDate();
@@ -259,10 +260,9 @@ namespace svt
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
         StoreContentURL( SvStream& _rStorage,
-                         const uno::Reference<
-                            util::XOfficeInstallationDirectories > &
-                                xOfficeInstDirs )
-        : StorageHelper( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
+                         uno::Reference<
+                            util::XOfficeInstallationDirectories > xOfficeInstDirs )
+        : StorageHelper( _rStorage ), m_xOfficeInstDirs(std::move( xOfficeInstDirs )) { }
 
         void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
@@ -283,10 +283,9 @@ namespace svt
 
     public:
         StoreFolderContent( SvStream& _rStorage,
-                         const uno::Reference<
-                            util::XOfficeInstallationDirectories > &
-                                xOfficeInstDirs )
-        : StorageHelper( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
+                         uno::Reference<
+                            util::XOfficeInstallationDirectories > xOfficeInstDirs )
+        : StorageHelper( _rStorage ), m_xOfficeInstDirs(std::move( xOfficeInstDirs )) { }
 
 
         void operator() ( const TemplateContent& _rContent ) const
@@ -328,10 +327,9 @@ namespace svt
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
         ReadFolderContent( SvStream& _rStorage,
-                         const uno::Reference<
-                            util::XOfficeInstallationDirectories > &
-                                xOfficeInstDirs )
-        : StorageHelper( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
+                         uno::Reference<
+                            util::XOfficeInstallationDirectories > xOfficeInstDirs )
+        : StorageHelper( _rStorage ), m_xOfficeInstDirs(std::move( xOfficeInstDirs )) { }
 
 
         void operator() ( TemplateContent& _rContent ) const

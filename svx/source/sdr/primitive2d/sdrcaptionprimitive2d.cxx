@@ -23,6 +23,7 @@
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -119,14 +120,14 @@ namespace drawinglayer::primitive2d
         }
 
         SdrCaptionPrimitive2D::SdrCaptionPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform,
+            basegfx::B2DHomMatrix  rTransform,
             const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
-            const basegfx::B2DPolygon& rTail,
+            basegfx::B2DPolygon  rTail,
             double fCornerRadiusX,
             double fCornerRadiusY)
-        :   maTransform(rTransform),
+        :   maTransform(std::move(rTransform)),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
-            maTail(rTail),
+            maTail(std::move(rTail)),
             mfCornerRadiusX(fCornerRadiusX),
             mfCornerRadiusY(fCornerRadiusY)
         {

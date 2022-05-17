@@ -32,7 +32,7 @@ namespace svx
         SvxFontListItem m_aFontList;
 
     public:
-        TextControlCharAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet, const SvxFontListItem& rFontList);
+        TextControlCharAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet, SvxFontListItem  rFontList);
 
     private:
         virtual void PageCreated(const OString& rId, SfxTabPage& _rPage) override;

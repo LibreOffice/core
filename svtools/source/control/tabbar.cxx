@@ -21,6 +21,7 @@
 #include <svtools/tabbar.hxx>
 #include <tools/time.hxx>
 #include <tools/poly.hxx>
+#include <utility>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
@@ -213,10 +214,10 @@ struct ImplTabBarItem
     Color maTabBgColor;
     Color maTabTextColor;
 
-    ImplTabBarItem(sal_uInt16 nItemId, const OUString& rText, TabBarPageBits nPageBits)
+    ImplTabBarItem(sal_uInt16 nItemId, OUString  rText, TabBarPageBits nPageBits)
         : mnId(nItemId)
         , mnBits(nPageBits)
-        , maText(rText)
+        , maText(std::move(rText))
         , mnWidth(0)
         , mbShort(false)
         , mbSelect(false)

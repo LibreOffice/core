@@ -26,6 +26,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
+#include <utility>
 
 namespace oox::vml {
 
@@ -34,12 +35,12 @@ using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
 
 TextPortionContext::TextPortionContext( ContextHandler2Helper const & rParent,
-        TextBox& rTextBox, TextParagraphModel const & rParagraph, const TextFontModel& rParentFont,
+        TextBox& rTextBox, TextParagraphModel  rParagraph, TextFontModel  rParentFont,
         sal_Int32 nElement, const AttributeList& rAttribs ) :
     ContextHandler2( rParent ),
     mrTextBox( rTextBox ),
-    maParagraph( rParagraph ),
-    maFont( rParentFont ),
+    maParagraph(std::move( rParagraph )),
+    maFont(std::move( rParentFont )),
     mnInitialPortions( rTextBox.getPortionCount() )
 {
     switch( nElement )

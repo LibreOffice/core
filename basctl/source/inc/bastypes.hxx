@@ -172,7 +172,7 @@ protected:
     virtual void    DoScroll( ScrollBar* pCurScrollBar );
 
 public:
-    BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName );
+    BaseWindow( vcl::Window* pParent, ScriptDocument  rDocument, OUString  aLibName, OUString  aName );
     virtual         ~BaseWindow() override;
     virtual void    dispose() override;
 
@@ -260,7 +260,7 @@ private:
         OUString        m_aLibName;
 
     public:
-        Key (ScriptDocument const&, OUString const& rLibName);
+        Key (ScriptDocument , OUString  rLibName);
     public:
         bool operator == (Key const&) const;
         struct Hash
@@ -278,7 +278,7 @@ public:
         ItemType        m_eCurrentType;
 
     public:
-        Item (OUString const& rCurrentName, ItemType eCurrentType);
+        Item (OUString  rCurrentName, ItemType eCurrentType);
         const OUString& GetCurrentName()        const { return m_aCurrentName; }
         ItemType        GetCurrentType()        const { return m_eCurrentType; }
     };

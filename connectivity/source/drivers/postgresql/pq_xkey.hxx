@@ -61,8 +61,8 @@ public:
     Key( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
          const css::uno::Reference< css::sdbc::XConnection > & connection,
          ConnectionSettings *pSettings,
-         const OUString &schemaName,
-         const OUString &tableName);
+         OUString schemaName,
+         OUString tableName);
 
 public: // XInterface
     virtual void SAL_CALL acquire() noexcept override { ReflectionBase::acquire(); }

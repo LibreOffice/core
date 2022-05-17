@@ -19,6 +19,7 @@
 #include <thread>
 #include <chrono>
 #include <comphelper/debuggerinfo.hxx>
+#include <utility>
 
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/memcheck.h>
@@ -304,8 +305,8 @@ bool ThreadPool::isTaskTagDone(const std::shared_ptr<ThreadTaskTag>& pTag)
     return pTag->isDone();
 }
 
-ThreadTask::ThreadTask(const std::shared_ptr<ThreadTaskTag>& pTag)
-    : mpTag(pTag)
+ThreadTask::ThreadTask(std::shared_ptr<ThreadTaskTag>  pTag)
+    : mpTag(std::move(pTag))
 {
 }
 

@@ -71,7 +71,7 @@ class HostDetailsContainer : public DetailsContainer
         OUString m_sHost;
 
     public:
-        HostDetailsContainer(PlaceEditDialog* pDialog, sal_uInt16 nPort, const OUString& sScheme);
+        HostDetailsContainer(PlaceEditDialog* pDialog, sal_uInt16 nPort, OUString  sScheme);
 
         virtual void set_visible( bool bShow ) override;
         virtual INetURLObject getUrl( ) override;
@@ -125,7 +125,7 @@ class CmisDetailsContainer final : public DetailsContainer
         css::uno::Reference< css::awt::XWindow > m_xParentDialog;
 
     public:
-        CmisDetailsContainer(PlaceEditDialog* pDialog, OUString const & sBinding);
+        CmisDetailsContainer(PlaceEditDialog* pDialog, OUString  sBinding);
 
         virtual void set_visible( bool bShow ) override;
         virtual INetURLObject getUrl( ) override;

@@ -33,7 +33,7 @@ class OOXMLBinaryObjectReference : public writerfilter::Reference<BinaryObj>
     void read();
 
 public:
-    explicit OOXMLBinaryObjectReference(OOXMLStream::Pointer_t const& pStream);
+    explicit OOXMLBinaryObjectReference(OOXMLStream::Pointer_t pStream);
     virtual ~OOXMLBinaryObjectReference() override;
 
     virtual void resolve(BinaryObj& rHandler) override;

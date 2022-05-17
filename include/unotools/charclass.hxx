@@ -69,11 +69,11 @@ public:
     /// Preferred ctor with service manager specified
     CharClass(
         const css::uno::Reference< css::uno::XComponentContext > & rxContext,
-        const LanguageTag& rLanguageTag );
+        LanguageTag  rLanguageTag );
 
     /// Deprecated ctor, tries to get a process service manager or to load the
     /// library directly.
-    CharClass( const LanguageTag& rLanguageTag );
+    CharClass( LanguageTag  rLanguageTag );
 
     ~CharClass();
 

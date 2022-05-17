@@ -39,6 +39,7 @@
 #include <ucbhelper/content.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
@@ -464,9 +465,9 @@ class ImplUCBPrintWatcher : public ::osl::Thread
 
     public:
         /* initialize this watcher but don't start it */
-        ImplUCBPrintWatcher( SfxPrinter* pPrinter, ::utl::TempFile* pTempFile, const OUString& sTargetURL )
+        ImplUCBPrintWatcher( SfxPrinter* pPrinter, ::utl::TempFile* pTempFile, OUString  sTargetURL )
                 : m_pPrinter  ( pPrinter   )
-                , m_sTargetURL( sTargetURL )
+                , m_sTargetURL(std::move( sTargetURL ))
                 , m_pTempFile ( pTempFile  )
         {}
 

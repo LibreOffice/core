@@ -135,8 +135,8 @@ bool isPrimaryAxes(sal_Int32 nIndex)
 class lcl_MatchesRole
 {
 public:
-    explicit lcl_MatchesRole( const OUString & aRole ) :
-            m_aRole( aRole )
+    explicit lcl_MatchesRole( OUString  aRole ) :
+            m_aRole(std::move( aRole ))
     {}
 
     bool operator () ( const Reference< chart2::data::XLabeledDataSequence > & xSeq ) const

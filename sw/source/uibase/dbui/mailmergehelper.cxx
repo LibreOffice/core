@@ -33,6 +33,7 @@
 #include <com/sun/star/mail/XSmtpService.hpp>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
+#include <utility>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/weldutils.hxx>
@@ -590,11 +591,11 @@ OUString SwAuthenticator::getPassword(  )
 }
 
 SwConnectionContext::SwConnectionContext(
-        const OUString& rMailServer, sal_Int16 nPort,
-        const OUString& rConnectionType) :
-    m_sMailServer(rMailServer),
+        OUString  rMailServer, sal_Int16 nPort,
+        OUString  rConnectionType) :
+    m_sMailServer(std::move(rMailServer)),
     m_nPort(nPort),
-    m_sConnectionType(rConnectionType)
+    m_sConnectionType(std::move(rConnectionType))
 {
 }
 
@@ -630,20 +631,20 @@ void SwConnectionListener::disposing(const lang::EventObject& /*aEvent*/)
 {
 }
 
-SwMailTransferable::SwMailTransferable(const OUString& rBody, const OUString& rMimeType) :
+SwMailTransferable::SwMailTransferable(OUString  rBody, OUString  rMimeType) :
     cppu::WeakComponentImplHelper< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
-    m_aMimeType( rMimeType ),
-    m_sBody( rBody ),
+    m_aMimeType(std::move( rMimeType )),
+    m_sBody(std::move( rBody )),
     m_bIsBody( true )
 {
 }
 
-SwMailTransferable::SwMailTransferable(const OUString& rURL,
-                const OUString& rName, const OUString& rMimeType) :
+SwMailTransferable::SwMailTransferable(OUString  rURL,
+                OUString  rName, OUString  rMimeType) :
     cppu::WeakComponentImplHelper< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
-    m_aMimeType( rMimeType ),
-    m_aURL(rURL),
-    m_aName( rName ),
+    m_aMimeType(std::move( rMimeType )),
+    m_aURL(std::move(rURL)),
+    m_aName(std::move( rName )),
     m_bIsBody( false )
 {
 }

@@ -27,6 +27,7 @@
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <utility>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/drawing/GluePoint2.hpp>
@@ -143,12 +144,12 @@ static bool ImpIsEmptyURL( std::u16string_view rURL )
 
 SdXMLShapeContext::SdXMLShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes > const & rShapes,
+    css::uno::Reference< css::xml::sax::XFastAttributeList>  xAttrList,
+    uno::Reference< drawing::XShapes >  rShapes,
     bool bTemporaryShape)
     : SvXMLShapeContext( rImport, bTemporaryShape )
-    , mxShapes( rShapes )
-    , mxAttrList(xAttrList)
+    , mxShapes(std::move( rShapes ))
+    , mxAttrList(std::move(xAttrList))
     , mbListContextPushed( false )
     , mnStyleFamily(XmlStyleFamily::SD_GRAPHICS_ID)
     , mbIsPlaceholder(false)

@@ -21,6 +21,7 @@
 #define INCLUDED_FILTER_MSFILTER_ESCHEREX_HXX
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/awt/Point.hpp>
@@ -461,16 +462,16 @@ struct MSFILTER_DLLPUBLIC EscherConnectorListEntry
 
     sal_uInt32      GetConnectorRule( bool bFirst );
 
-                    EscherConnectorListEntry( const css::uno::Reference< css::drawing::XShape > & rC,
+                    EscherConnectorListEntry( css::uno::Reference< css::drawing::XShape >  rC,
                                         const css::awt::Point& rPA,
-                                        css::uno::Reference< css::drawing::XShape > const & rSA ,
+                                        css::uno::Reference< css::drawing::XShape >  rSA ,
                                         const css::awt::Point& rPB,
-                                        css::uno::Reference< css::drawing::XShape > const & rSB ) :
-                                            mXConnector ( rC ),
+                                        css::uno::Reference< css::drawing::XShape >  rSB ) :
+                                            mXConnector (std::move( rC )),
                                             maPointA    ( rPA ),
-                                            mXConnectToA( rSA ),
+                                            mXConnectToA(std::move( rSA )),
                                             maPointB    ( rPB ),
-                                            mXConnectToB( rSB ) {}
+                                            mXConnectToB(std::move( rSB )) {}
 
                     static sal_uInt32 GetClosestPoint( const tools::Polygon& rPoly, const css::awt::Point& rP );
 };
@@ -1069,7 +1070,7 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
         bool DoSeek( sal_uInt32 nKey );
 
 public:
-    explicit            EscherEx( const std::shared_ptr<EscherExGlobal>& rxGlobal, SvStream* pOutStrm, bool bOOXML = false );
+    explicit            EscherEx( std::shared_ptr<EscherExGlobal>  rxGlobal, SvStream* pOutStrm, bool bOOXML = false );
     virtual             ~EscherEx() override;
 
     /** Creates and returns a new shape identifier, updates the internal shape

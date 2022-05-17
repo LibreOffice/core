@@ -21,6 +21,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <utility>
 
 #include "RowSetRow.hxx"
 
@@ -43,8 +44,8 @@ namespace dbaccess
         ORowSetCache*               m_pCache;
         ORowSetBase*                m_pRowSet;
 
-        ORowSetCacheIterator(const ORowSetCacheMap::iterator& _rIter,ORowSetCache* _pCache,ORowSetBase* _pRowSet)
-            : m_aIter(_rIter)
+        ORowSetCacheIterator(ORowSetCacheMap::iterator  _rIter,ORowSetCache* _pCache,ORowSetBase* _pRowSet)
+            : m_aIter(std::move(_rIter))
             ,m_pCache(_pCache)
             ,m_pRowSet(_pRowSet)
         {

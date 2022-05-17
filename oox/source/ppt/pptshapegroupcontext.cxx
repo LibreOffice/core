@@ -35,6 +35,7 @@
 #include "extdrawingfragmenthandler.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <utility>
 
 using namespace oox::core;
 using namespace ::com::sun::star;
@@ -47,12 +48,12 @@ namespace oox::ppt {
 
 PPTShapeGroupContext::PPTShapeGroupContext(
         FragmentHandler2 const & rParent,
-        const oox::ppt::SlidePersistPtr& rSlidePersistPtr,
+        oox::ppt::SlidePersistPtr  rSlidePersistPtr,
         const ShapeLocation eShapeLocation,
         const oox::drawingml::ShapePtr& pMasterShapePtr,
         const oox::drawingml::ShapePtr& pGroupShapePtr )
 : ShapeGroupContext( rParent, pMasterShapePtr, pGroupShapePtr )
-, mpSlidePersistPtr( rSlidePersistPtr )
+, mpSlidePersistPtr(std::move( rSlidePersistPtr ))
 , meShapeLocation( eShapeLocation )
 {
 }

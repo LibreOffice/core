@@ -20,6 +20,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <ooo/vba/office/MsoBarType.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 #include "vbacommandbars.hxx"
 #include "vbacommandbar.hxx"
@@ -38,7 +39,7 @@ class CommandBarEnumeration : public ::cppu::WeakImplHelper< container::XEnumera
     sal_Int32 m_nCurrentPosition;
 public:
     /// @throws uno::RuntimeException
-    CommandBarEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const VbaCommandBarHelperRef& pHelper) : m_xParent( xParent ), m_xContext( xContext ), m_pCBarHelper( pHelper ) , m_nCurrentPosition( 0 )
+    CommandBarEnumeration( uno::Reference< XHelperInterface >  xParent, uno::Reference< uno::XComponentContext >  xContext, VbaCommandBarHelperRef  pHelper) : m_xParent(std::move( xParent )), m_xContext(std::move( xContext )), m_pCBarHelper(std::move( pHelper )) , m_nCurrentPosition( 0 )
     {
         uno::Reference< container::XNameAccess > xNameAccess = m_pCBarHelper->getPersistentWindowState();
         m_sNames = xNameAccess->getElementNames();

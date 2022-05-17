@@ -26,6 +26,7 @@
 #include <osl/diagnose.h>
 #include <map>
 #include <numeric>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -212,7 +213,7 @@ class PresenterTheme::Theme
 public:
     Theme (
         const Reference<container::XHierarchicalNameAccess>& rThemeRoot,
-        const OUString& rsNodeName);
+        OUString  rsNodeName);
 
     void Read (
         PresenterConfigurationAccess& rConfiguration,
@@ -241,10 +242,10 @@ private:
 //===== PresenterTheme ========================================================
 
 PresenterTheme::PresenterTheme (
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
-    : mxContext(rxContext),
-      mxCanvas(rxCanvas)
+    css::uno::Reference<css::uno::XComponentContext>  rxContext,
+    css::uno::Reference<css::rendering::XCanvas>  rxCanvas)
+    : mxContext(std::move(rxContext)),
+      mxCanvas(std::move(rxCanvas))
 {
     mpTheme = ReadTheme();
 }
@@ -553,8 +554,8 @@ double PresenterTheme::FontDescriptor::GetCellSizeForDesignSize (
 
 PresenterTheme::Theme::Theme (
     const Reference<container::XHierarchicalNameAccess>& rxThemeRoot,
-    const OUString& rsNodeName)
-    : msConfigurationNodeName(rsNodeName),
+    OUString  rsNodeName)
+    : msConfigurationNodeName(std::move(rsNodeName)),
       maPaneStyles(),
       maViewStyles(),
       maStyleAssociations(),

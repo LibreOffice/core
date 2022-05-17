@@ -33,11 +33,12 @@
 
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
-ScDPSaveGroupItem::ScDPSaveGroupItem( const OUString& rName ) :
-    aGroupName(rName) {}
+ScDPSaveGroupItem::ScDPSaveGroupItem( OUString  rName ) :
+    aGroupName(std::move(rName)) {}
 
 ScDPSaveGroupItem::~ScDPSaveGroupItem() {}
 
@@ -123,16 +124,16 @@ void ScDPSaveGroupItem::AddToData(ScDPGroupDimension& rDataDim) const
     rDataDim.AddItem(aGroup);
 }
 
-ScDPSaveGroupDimension::ScDPSaveGroupDimension( const OUString& rSource, const OUString& rName ) :
-    aSourceDim( rSource ),
-    aGroupDimName( rName ),
+ScDPSaveGroupDimension::ScDPSaveGroupDimension( OUString  rSource, OUString  rName ) :
+    aSourceDim(std::move( rSource )),
+    aGroupDimName(std::move( rName )),
     nDatePart( 0 )
 {
 }
 
-ScDPSaveGroupDimension::ScDPSaveGroupDimension( const OUString& rSource, const OUString& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart ) :
-    aSourceDim( rSource ),
-    aGroupDimName( rName ),
+ScDPSaveGroupDimension::ScDPSaveGroupDimension( OUString  rSource, OUString  rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart ) :
+    aSourceDim(std::move( rSource )),
+    aGroupDimName(std::move( rName )),
     aDateInfo( rDateInfo ),
     nDatePart( nPart )
 {
@@ -390,15 +391,15 @@ void ScDPSaveGroupDimension::AddToCache(ScDPCache& rCache) const
     }
 }
 
-ScDPSaveNumGroupDimension::ScDPSaveNumGroupDimension( const OUString& rName, const ScDPNumGroupInfo& rInfo ) :
-    aDimensionName( rName ),
+ScDPSaveNumGroupDimension::ScDPSaveNumGroupDimension( OUString  rName, const ScDPNumGroupInfo& rInfo ) :
+    aDimensionName(std::move( rName )),
     aGroupInfo( rInfo ),
     nDatePart( 0 )
 {
 }
 
-ScDPSaveNumGroupDimension::ScDPSaveNumGroupDimension( const OUString& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart ) :
-    aDimensionName( rName ),
+ScDPSaveNumGroupDimension::ScDPSaveNumGroupDimension( OUString  rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart ) :
+    aDimensionName(std::move( rName )),
     aDateInfo( rDateInfo ),
     nDatePart( nPart )
 {
@@ -537,14 +538,14 @@ namespace {
 struct ScDPSaveGroupDimNameFunc
 {
     OUString       maDimName;
-    explicit     ScDPSaveGroupDimNameFunc( const OUString& rDimName ) : maDimName( rDimName ) {}
+    explicit     ScDPSaveGroupDimNameFunc( OUString  rDimName ) : maDimName(std::move( rDimName )) {}
     bool         operator()( const ScDPSaveGroupDimension& rGroupDim ) const { return rGroupDim.GetGroupDimName() == maDimName; }
 };
 
 struct ScDPSaveGroupSourceNameFunc
 {
     OUString       maSrcDimName;
-    explicit     ScDPSaveGroupSourceNameFunc( const OUString& rSrcDimName ) : maSrcDimName( rSrcDimName ) {}
+    explicit     ScDPSaveGroupSourceNameFunc( OUString  rSrcDimName ) : maSrcDimName(std::move( rSrcDimName )) {}
     bool         operator()( const ScDPSaveGroupDimension& rGroupDim ) const { return rGroupDim.GetSourceDimName() == maSrcDimName; }
 };
 

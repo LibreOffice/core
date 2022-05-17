@@ -54,7 +54,7 @@ namespace drawinglayer::primitive2d
             /// constructor
             ModifiedColorPrimitive2D(
                 Primitive2DContainer&& aChildren,
-                const basegfx::BColorModifierSharedPtr& rColorModifier);
+                basegfx::BColorModifierSharedPtr  rColorModifier);
 
             /// data read access
             const basegfx::BColorModifierSharedPtr& getColorModifier() const { return maColorModifier; }

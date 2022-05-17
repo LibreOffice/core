@@ -175,7 +175,7 @@ class SdNavigatorControllerItem : public SfxControllerItem
 {
 public:
     SdNavigatorControllerItem( sal_uInt16, SdNavigatorWin*, SfxBindings*,
-        const SdNavigatorWin::UpdateRequestFunctor& rUpdateRequest);
+        SdNavigatorWin::UpdateRequestFunctor  rUpdateRequest);
 
 protected:
     virtual void StateChangedAtToolBoxControl( sal_uInt16 nSId, SfxItemState eState,

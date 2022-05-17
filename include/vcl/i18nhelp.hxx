@@ -57,7 +57,7 @@ class VCL_DLLPUBLIC I18nHelper
 
 public:
 
-                I18nHelper( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const LanguageTag& rLanguageTag );
+                I18nHelper( const css::uno::Reference< css::uno::XComponentContext >& rxContext, LanguageTag  rLanguageTag );
                 ~I18nHelper();
 
     sal_Int32   CompareString( const OUString& rStr1, const OUString& rStr2 ) const;

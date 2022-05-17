@@ -22,6 +22,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <svtools/PlaceEditDialog.hxx>
+#include <utility>
 #include <config_oauth2.h>
 
 #include "ServerDetailsControls.hxx"
@@ -79,10 +80,10 @@ IMPL_LINK_NOARG( DetailsContainer, ValueChangeHdl, weld::Entry&, void )
     notifyChange( );
 }
 
-HostDetailsContainer::HostDetailsContainer(PlaceEditDialog* pDialog, sal_uInt16 nPort, const OUString& sScheme) :
+HostDetailsContainer::HostDetailsContainer(PlaceEditDialog* pDialog, sal_uInt16 nPort, OUString  sScheme) :
     DetailsContainer( pDialog ),
     m_nDefaultPort( nPort ),
-    m_sScheme( sScheme )
+    m_sScheme(std::move( sScheme ))
 {
     set_visible( false );
 }
@@ -271,13 +272,13 @@ void SmbDetailsContainer::set_visible( bool bShow )
         m_pDialog->m_xEDHost->set_text( m_sHost );
 }
 
-CmisDetailsContainer::CmisDetailsContainer(PlaceEditDialog* pParentDialog, OUString const & sBinding) :
+CmisDetailsContainer::CmisDetailsContainer(PlaceEditDialog* pParentDialog, OUString  sBinding) :
     DetailsContainer( pParentDialog ),
     m_sUsername( ),
     m_xCmdEnv( ),
     m_aRepoIds( ),
     m_sRepoId( ),
-    m_sBinding( sBinding ),
+    m_sBinding(std::move( sBinding )),
     m_xParentDialog(pParentDialog->getDialog()->GetXWindow())
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();

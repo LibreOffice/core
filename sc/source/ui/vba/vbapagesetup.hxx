@@ -35,7 +35,7 @@ public:
     /// @throws css::uno::RuntimeException
     ScVbaPageSetup(const css::uno::Reference<ov::XHelperInterface>& xParent,
                    const css::uno::Reference<css::uno::XComponentContext>& xContext,
-                   const css::uno::Reference<css::sheet::XSpreadsheet>& xSheet,
+                   css::uno::Reference<css::sheet::XSpreadsheet> xSheet,
                    const css::uno::Reference<css::frame::XModel>& xModel);
 
     // Attribute

@@ -36,6 +36,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
+#include <utility>
 
 #include "pq_statics.hxx"
 #include "pq_tools.hxx"
@@ -56,18 +57,18 @@ namespace pq_sdbc_driver
 {
 
 ReflectionBase::ReflectionBase(
-    const OUString &implName,
+    OUString implName,
     const css::uno::Sequence< OUString > &supportedServices,
     const ::rtl::Reference< comphelper::RefCountedMutex >& refMutex,
-    const css::uno::Reference< css::sdbc::XConnection > &conn,
+    css::uno::Reference< css::sdbc::XConnection > conn,
     ConnectionSettings *pSettings,
     cppu::IPropertyArrayHelper & props /* must survive this object !*/ )
     : ReflectionBase_BASE( refMutex->GetMutex() ),
       OPropertySetHelper( ReflectionBase_BASE::rBHelper ),
-      m_implName( implName ),
+      m_implName(std::move( implName )),
       m_supportedServices( supportedServices ),
       m_xMutex( refMutex ),
-      m_conn( conn ),
+      m_conn(std::move( conn )),
       m_pSettings( pSettings ),
       m_propsDesc( props ),
       m_values( props.getProperties().getLength() )

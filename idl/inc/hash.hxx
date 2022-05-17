@@ -24,14 +24,15 @@
 #include <tools/solar.h>
 #include <unordered_map>
 #include <memory>
+#include <utility>
 
 class SvStringHashEntry
 {
     OString     aName;
     sal_uLong   nValue;
 public:
-    SvStringHashEntry( const OString& rName )
-        : aName(rName)
+    SvStringHashEntry( OString  rName )
+        : aName(std::move(rName))
         , nValue(0)
     {
     }

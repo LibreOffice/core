@@ -18,9 +18,10 @@
  */
 
 #include <svx/XPropertyEntry.hxx>
+#include <utility>
 
-XPropertyEntry::XPropertyEntry(const OUString& rPropEntryName)
-    : maPropEntryName(rPropEntryName)
+XPropertyEntry::XPropertyEntry(OUString rPropEntryName)
+    : maPropEntryName(std::move(rPropEntryName))
 {
 }
 

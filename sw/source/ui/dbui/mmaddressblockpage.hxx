@@ -271,7 +271,7 @@ class SwAssignFieldsDialog : public SfxDialogController
 public:
     SwAssignFieldsDialog(weld::Window* pParent,
                 SwMailMergeConfigItem& rConfigItem,
-                const OUString& rPreview,
+                OUString  rPreview,
                 bool bIsAddressBlock);
 
     void ConnectSizeGroups(int nLabelWidth, int nComboBoxWidth, int nPreviewWidth);

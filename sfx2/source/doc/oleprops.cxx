@@ -25,6 +25,7 @@
 #include <tools/datetime.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
+#include <utility>
 
 
 #define STREAM_BUFFER_SIZE 2048
@@ -102,7 +103,7 @@ public:
                             const SfxOleTextEncoding& rTextEnc );
     explicit            SfxOleStringPropertyBase(
                             sal_Int32 nPropId, sal_Int32 nPropType,
-                            const SfxOleTextEncoding& rTextEnc, const OUString& rValue );
+                            const SfxOleTextEncoding& rTextEnc, OUString  rValue );
     explicit            SfxOleStringPropertyBase(
                             sal_Int32 nPropId, sal_Int32 nPropType,
                             rtl_TextEncoding eTextEnc );
@@ -442,10 +443,10 @@ SfxOleStringPropertyBase::SfxOleStringPropertyBase(
 }
 
 SfxOleStringPropertyBase::SfxOleStringPropertyBase(
-        sal_Int32 nPropId, sal_Int32 nPropType, const SfxOleTextEncoding& rTextEnc, const OUString& rValue ) :
+        sal_Int32 nPropId, sal_Int32 nPropType, const SfxOleTextEncoding& rTextEnc, OUString  rValue ) :
     SfxOlePropertyBase( nPropId, nPropType ),
     SfxOleStringHelper( rTextEnc ),
-    maValue( rValue )
+    maValue(std::move( rValue ))
 {
 }
 

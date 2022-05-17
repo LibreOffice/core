@@ -20,6 +20,7 @@
 
 #include "connector.hxx"
 #include <com/sun/star/io/IOException.hpp>
+#include <utility>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -80,9 +81,9 @@ namespace stoc_connector {
     }
 
 
-    SocketConnection::SocketConnection( const OUString &sConnectionDescription ) :
+    SocketConnection::SocketConnection( OUString sConnectionDescription ) :
         m_nStatus( 0 ),
-        m_sDescription( sConnectionDescription ),
+        m_sDescription(std::move( sConnectionDescription )),
         _started(false),
         _closed(false),
         _error(false)

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vbahelper/vbadocumentsbase.hxx>
 
 #include <unotools/mediadescriptor.hxx>
@@ -60,12 +61,12 @@ class DocumentsEnumImpl : public ::cppu::WeakImplHelper< container::XEnumeration
 
 public:
     /// @throws uno::RuntimeException
-    DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext, Documents&& docs ) :  m_xContext( xContext ), m_documents( std::move(docs) )
+    DocumentsEnumImpl( uno::Reference< uno::XComponentContext >  xContext, Documents&& docs ) :  m_xContext(std::move( xContext )), m_documents( std::move(docs) )
     {
         m_it = m_documents.begin();
     }
     /// @throws uno::RuntimeException
-    explicit DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) :  m_xContext( xContext )
+    explicit DocumentsEnumImpl( uno::Reference< uno::XComponentContext >  xContext ) :  m_xContext(std::move( xContext ))
     {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
         uno::Reference< container::XEnumeration > xComponents = xDesktop->getComponents()->createEnumeration();
@@ -115,7 +116,7 @@ class DocumentsAccessImpl : public DocumentsAccessImpl_BASE
     NameIndexHash namesToIndices;
 public:
     /// @throws uno::RuntimeException
-    DocumentsAccessImpl( const uno::Reference< uno::XComponentContext >& xContext, VbaDocumentsBase::DOCUMENT_TYPE eDocType ) :m_xContext( xContext )
+    DocumentsAccessImpl( uno::Reference< uno::XComponentContext >  xContext, VbaDocumentsBase::DOCUMENT_TYPE eDocType ) :m_xContext(std::move( xContext ))
     {
         uno::Reference< container::XEnumeration > xEnum = new DocumentsEnumImpl( m_xContext );
         sal_Int32 nIndex=0;

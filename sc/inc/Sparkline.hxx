@@ -13,6 +13,7 @@
 #include "scdllapi.h"
 #include "rangelst.hxx"
 #include <memory>
+#include <utility>
 
 namespace sc
 {
@@ -33,10 +34,10 @@ class SC_DLLPUBLIC Sparkline
     std::shared_ptr<SparklineGroup> m_pSparklineGroup;
 
 public:
-    Sparkline(SCCOL nColumn, SCROW nRow, std::shared_ptr<SparklineGroup> const& pSparklineGroup)
+    Sparkline(SCCOL nColumn, SCROW nRow, std::shared_ptr<SparklineGroup> pSparklineGroup)
         : m_nColumn(nColumn)
         , m_nRow(nRow)
-        , m_pSparklineGroup(pSparklineGroup)
+        , m_pSparklineGroup(std::move(pSparklineGroup))
     {
     }
 

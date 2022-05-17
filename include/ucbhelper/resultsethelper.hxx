@@ -118,9 +118,9 @@ public:
       *        this resultset.
       */
     ResultSetImplHelper(
-            const css::uno::Reference<
-                css::uno::XComponentContext >& rxContext,
-            const css::ucb::OpenCommandArgument2& rCommand );
+            css::uno::Reference<
+                css::uno::XComponentContext >  rxContext,
+            css::ucb::OpenCommandArgument2  rCommand );
 
     /**
       * Destructor.

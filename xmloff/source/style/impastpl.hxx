@@ -24,6 +24,7 @@
 #include <rtl/ref.hxx>
 #include <set>
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include <comphelper/stl_types.hxx>
@@ -70,8 +71,8 @@ private:
 
 public:
 
-    explicit XMLAutoStylePoolParent( const OUString & rParent ) :
-        msParent( rParent )
+    explicit XMLAutoStylePoolParent( OUString  rParent ) :
+        msParent(std::move( rParent ))
     {
     }
 
@@ -112,9 +113,9 @@ struct XMLAutoStyleFamily
     OUString maStrPrefix;
     bool mbAsFamily;
 
-    XMLAutoStyleFamily( XmlStyleFamily nFamily, const OUString& rStrName,
-            const rtl::Reference<SvXMLExportPropertyMapper>& rMapper,
-            const OUString& rStrPrefix, bool bAsFamily );
+    XMLAutoStyleFamily( XmlStyleFamily nFamily, OUString  rStrName,
+            rtl::Reference<SvXMLExportPropertyMapper>  rMapper,
+            OUString  rStrPrefix, bool bAsFamily );
 
     explicit XMLAutoStyleFamily( XmlStyleFamily nFamily );
 

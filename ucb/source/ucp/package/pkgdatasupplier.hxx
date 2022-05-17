@@ -22,6 +22,8 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>
+#include <utility>
+#include <utility>
 #include <vector>
 
 namespace package_ucp {
@@ -31,7 +33,7 @@ class Content;
 class DataSupplier : public ::ucbhelper::ResultSetDataSupplier
 {
 public:
-    DataSupplier( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    DataSupplier( css::uno::Reference< css::uno::XComponentContext >  rxContext,
                   const rtl::Reference< Content >& rContent );
     virtual ~DataSupplier() override;
 
@@ -65,7 +67,7 @@ private:
         css::uno::Reference< css::ucb::XContent >           xContent;
         css::uno::Reference< css::sdbc::XRow >              xRow;
 
-        explicit ResultListEntry( const OUString& rURL ) : aURL( rURL ) {}
+        explicit ResuOUString String  rURL ) std::move(: aURL)(std::move( rURL )) {}
     };
     osl::Mutex                                   m_aMutex;
     std::vector< ResultListEntry >               m_aResults;

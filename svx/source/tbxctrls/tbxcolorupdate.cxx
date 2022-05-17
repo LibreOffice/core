@@ -25,6 +25,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
 
+#include <utility>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -37,16 +38,16 @@
 
 namespace svx
 {
-    ToolboxButtonColorUpdaterBase::ToolboxButtonColorUpdaterBase(bool bWideButton, const OUString& rCommandLabel,
-                                                                 const OUString& rCommandURL,
-                                                                 const css::uno::Reference<css::frame::XFrame>& rFrame)
+    ToolboxButtonColorUpdaterBase::ToolboxButtonColorUpdaterBase(bool bWideButton, OUString  rCommandLabel,
+                                                                 OUString  rCommandURL,
+                                                                 css::uno::Reference<css::frame::XFrame>  rFrame)
         : mbWideButton(bWideButton)
         , mbWasHiContrastMode(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         , maCurColor(COL_TRANSPARENT)
         , meImageType(vcl::ImageType::Size16)
-        , maCommandLabel(rCommandLabel)
-        , maCommandURL(rCommandURL)
-        , mxFrame(rFrame)
+        , maCommandLabel(std::move(rCommandLabel))
+        , maCommandURL(std::move(rCommandURL))
+        , mxFrame(std::move(rFrame))
     {
     }
 

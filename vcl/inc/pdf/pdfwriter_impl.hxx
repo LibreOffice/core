@@ -1054,7 +1054,7 @@ i12626
     void appendStrokingColor( const Color& rColor, OStringBuffer& rBuffer );
     void appendNonStrokingColor( const Color& rColor, OStringBuffer& rBuffer );
 public:
-    PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >&, PDFWriter& );
+    PDFWriterImpl( PDFWriter::PDFWriterContext  rContext, const css::uno::Reference< css::beans::XMaterialHolder >&, PDFWriter& );
     ~PDFWriterImpl() override;
     void dispose() override;
 

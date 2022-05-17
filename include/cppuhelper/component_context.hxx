@@ -1,3 +1,5 @@
+#include <utility>
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -68,12 +70,12 @@ struct SAL_WARN_UNUSED ContextEntry_Init
                (value is object factory or service string)
     */
     ContextEntry_Init(
-        ::rtl::OUString const & name_,
-        css::uno::Any const & value_,
+        ::rtl::OUString  name_,
+        css::uno::Any  value_,
         bool bLateInitService_ = false )
             : bLateInitService( bLateInitService_ ),
-              name( name_ ),
-              value( value_ )
+              name(std::move( name_ )),
+              value(std::move( value_ ))
         {}
 };
 

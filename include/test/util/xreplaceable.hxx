@@ -12,14 +12,15 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
+#include <utility>
 
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XReplaceable
 {
 public:
-        XReplaceable( const OUString& rSearchString, const OUString& rReplaceString):
-            maSearchString(rSearchString), maReplaceString(rReplaceString) {}
+        XReplaceable( OUString  rSearchString, OUString  rReplaceString):
+            maSearchString(std::move(rSearchString)), maReplaceString(std::move(rReplaceString)) {}
         virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
     void testCreateReplaceDescriptor();

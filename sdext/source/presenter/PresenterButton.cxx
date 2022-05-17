@@ -28,6 +28,7 @@
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -82,20 +83,20 @@ const double gnVerticalBorder (5);
 
 PresenterButton::PresenterButton (
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
-    const ::rtl::Reference<PresenterController>& rpPresenterController,
-    const std::shared_ptr<PresenterTheme>& rpTheme,
+    ::rtl::Reference<PresenterController>  rpPresenterController,
+    std::shared_ptr<PresenterTheme>  rpTheme,
     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-    const PresenterTheme::SharedFontDescriptor& rpFont,
-    const PresenterTheme::SharedFontDescriptor& rpMouseOverFont,
-    const OUString& rsText,
-    const OUString& rsAction)
+    PresenterTheme::SharedFontDescriptor  rpFont,
+    PresenterTheme::SharedFontDescriptor  rpMouseOverFont,
+    OUString  rsText,
+    OUString  rsAction)
     : PresenterButtonInterfaceBase(m_aMutex),
-      mpPresenterController(rpPresenterController),
-      mpTheme(rpTheme),
-      msText(rsText),
-      mpFont(rpFont),
-      mpMouseOverFont(rpMouseOverFont),
-      msAction(rsAction),
+      mpPresenterController(std::move(rpPresenterController)),
+      mpTheme(std::move(rpTheme)),
+      msText(std::move(rsText)),
+      mpFont(std::move(rpFont)),
+      mpMouseOverFont(std::move(rpMouseOverFont)),
+      msAction(std::move(rsAction)),
       maButtonSize(-1,-1),
       meState(PresenterBitmapDescriptor::Normal)
 {

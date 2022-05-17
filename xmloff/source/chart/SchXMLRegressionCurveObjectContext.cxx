@@ -24,6 +24,7 @@
 #include <sax/tools/converter.hxx>
 #include <sal/log.hxx>
 
+#include <utility>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -44,12 +45,12 @@ SchXMLRegressionCurveObjectContext::SchXMLRegressionCurveObjectContext(
                                         SchXMLImportHelper& rImpHelper,
                                         SvXMLImport& rImport,
                                         std::vector< RegressionStyle >& rRegressionStyleVector,
-                                        const css::uno::Reference<
-                                                    css::chart2::XDataSeries >& xSeries,
+                                        css::uno::Reference<
+                                                    css::chart2::XDataSeries >  xSeries,
                                         const awt::Size & rChartSize) :
     SvXMLImportContext( rImport ),
     mrImportHelper( rImpHelper ),
-    mxSeries( xSeries ),
+    mxSeries(std::move( xSeries )),
     maChartSize( rChartSize ),
     mrRegressionStyleVector( rRegressionStyleVector )
 {

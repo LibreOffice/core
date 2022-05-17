@@ -11,6 +11,7 @@
 #include <datamapper.hxx>
 #include <datatransformation.hxx>
 #include <salhelper/thread.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 
@@ -37,20 +38,20 @@ class HTMLFetchThread : public salhelper::Thread
     void handleCell(xmlNodePtr pCell, SCROW nRow, SCCOL nCol);
 
 public:
-    HTMLFetchThread(ScDocument& rDoc, const OUString&, const OUString& rID, std::function<void()> aImportFinishedHdl,
+    HTMLFetchThread(ScDocument& rDoc, OUString , OUString  rID, std::function<void()> aImportFinishedHdl,
             std::vector<std::shared_ptr<sc::DataTransformation>>&& rTransformations);
 
     virtual void execute() override;
 };
 
 HTMLFetchThread::HTMLFetchThread(
-    ScDocument& rDoc, const OUString& rURL, const OUString& rID,
+    ScDocument& rDoc, OUString  rURL, OUString  rID,
     std::function<void()> aImportFinishedHdl,
     std::vector<std::shared_ptr<sc::DataTransformation>>&& rTransformations)
     : salhelper::Thread("HTML Fetch Thread")
     , mrDocument(rDoc)
-    , maURL(rURL)
-    , maID(rID)
+    , maURL(std::move(rURL))
+    , maID(std::move(rID))
     , maDataTransformations(std::move(rTransformations))
     , maImportFinishedHdl(std::move(aImportFinishedHdl))
 {

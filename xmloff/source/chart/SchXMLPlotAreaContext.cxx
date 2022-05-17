@@ -27,6 +27,7 @@
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -130,7 +131,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     bool & rRowHasLabels,
     chart::ChartDataRowSource & rDataRowSource,
     SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
-    const OUString& aChartTypeServiceName,
+    OUString  aChartTypeServiceName,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
     const awt::Size & rChartSize ) :
         SvXMLImportContext( rImport ),
@@ -152,7 +153,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
         mrColHasLabels( rColHasLabels ),
         mrRowHasLabels( rRowHasLabels ),
         mrDataRowSource( rDataRowSource ),
-        maChartTypeServiceName( aChartTypeServiceName ),
+        maChartTypeServiceName(std::move( aChartTypeServiceName )),
         mrLSequencesPerIndex( rLSequencesPerIndex ),
         mbGlobalChartTypeUsedBySeries( false ),
         maChartSize( rChartSize )
@@ -1049,18 +1050,18 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
 SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
-    const OUString &rSeriesStyleName,
+    OUString rSeriesStyleName,
     ::std::vector< DataRowPointStyle >& rStyleVector,
-    const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+    css::uno::Reference< css::chart2::XDataSeries >  xSeries,
     ContextType eContextType,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex) :
 
         SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mrStyleVector( rStyleVector ),
-        m_xSeries( xSeries ),
+        m_xSeries(std::move( xSeries )),
         meContextType( eContextType ),
-        maSeriesStyleName( rSeriesStyleName),
+        maSeriesStyleName(std::move( rSeriesStyleName)),
         mrLSequencesPerIndex(rLSequencesPerIndex)
 {}
 

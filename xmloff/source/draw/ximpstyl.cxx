@@ -18,6 +18,7 @@
  */
 
 #include "ximpstyl.hxx"
+#include <utility>
 #include <xmloff/maptype.hxx>
 #include <xmloff/XMLDrawingPageStyleContext.hxx>
 #include <xmloff/XMLShapeStyleContext.hxx>
@@ -91,7 +92,7 @@ class XMLThemeContext : public SvXMLImportContext
 public:
     XMLThemeContext(SvXMLImport& rImport,
                     const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-                    const uno::Reference<beans::XPropertySet>& xMasterPage);
+                    uno::Reference<beans::XPropertySet>  xMasterPage);
     ~XMLThemeContext();
 
     uno::Reference<xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
@@ -1488,9 +1489,9 @@ void SdXMLHeaderFooterDeclContext::characters( const OUString& rChars )
 
 XMLThemeContext::XMLThemeContext(SvXMLImport& rImport,
                                  const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-                                 const uno::Reference<beans::XPropertySet>& xMasterPage)
+                                 uno::Reference<beans::XPropertySet>  xMasterPage)
     : SvXMLImportContext(rImport)
-    , m_xMasterPage(xMasterPage)
+    , m_xMasterPage(std::move(xMasterPage))
 {
     for (const auto& rAttribute : sax_fastparser::castToFastAttributeList(xAttrList))
     {

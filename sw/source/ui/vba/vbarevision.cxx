@@ -25,11 +25,12 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaRevision::SwVbaRevision( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xRedlineProps ) : SwVbaRevision_BASE( rParent, rContext ), mxModel( xModel ), mxRedlineProps( xRedlineProps )
+SwVbaRevision::SwVbaRevision( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< frame::XModel >  xModel, uno::Reference< beans::XPropertySet >  xRedlineProps ) : SwVbaRevision_BASE( rParent, rContext ), mxModel(std::move( xModel )), mxRedlineProps(std::move( xRedlineProps ))
 {
 }
 

@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <utility>
 #include "DAVResource.hxx"
 #include "DAVSessionFactory.hxx"
 #include "DAVTypes.hxx"
@@ -178,8 +179,8 @@ public:
 protected:
     rtl::Reference< DAVSessionFactory > m_xFactory;
 
-    explicit DAVSession( rtl::Reference< DAVSessionFactory > const & rFactory )
-        : m_xFactory( rFactory ), m_nRefCount( 0 ) {}
+    explicit DAVSession( rtl::Reference< DAVSessionFactory >  rFactory )
+        : m_xFactory(std::move( rFactory )), m_nRefCount( 0 ) {}
 
     virtual ~DAVSession() {}
 

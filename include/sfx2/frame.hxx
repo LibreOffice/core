@@ -188,7 +188,7 @@ class SFX2_DLLPUBLIC SfxUnoFrameItem final : public SfxPoolItem
 public:
                                 static SfxPoolItem* CreateDefault();
                                 SfxUnoFrameItem();
-                                SfxUnoFrameItem( sal_uInt16 nWhich, const css::uno::Reference< css::frame::XFrame >& i_rFrame );
+                                SfxUnoFrameItem( sal_uInt16 nWhich, css::uno::Reference< css::frame::XFrame >  i_rFrame );
     const css::uno::Reference< css::frame::XFrame >&
                                 GetFrame() const
                                 { return m_xFrame; }

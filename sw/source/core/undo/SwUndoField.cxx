@@ -28,6 +28,7 @@
 #include <fmtfld.hxx>
 #include <docsh.hxx>
 #include <pam.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star::uno;
@@ -111,9 +112,9 @@ void SwUndoFieldFromDoc::RepeatImpl(::sw::RepeatContext &)
 }
 
 SwUndoFieldFromAPI::SwUndoFieldFromAPI(const SwPosition & rPos,
-                                       const Any & rOldVal, const Any & rNewVal,
+                                       Any  rOldVal, Any  rNewVal,
                                        sal_uInt16 _nWhich)
-    : SwUndoField(rPos), m_aOldVal(rOldVal), m_aNewVal(rNewVal), m_nWhich(_nWhich)
+    : SwUndoField(rPos), m_aOldVal(std::move(rOldVal)), m_aNewVal(std::move(rNewVal)), m_nWhich(_nWhich)
 {
 }
 

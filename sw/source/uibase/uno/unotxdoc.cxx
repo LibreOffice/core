@@ -22,6 +22,7 @@
 #include <comphelper/string.hxx>
 #include <AnnotationWin.hxx>
 #include <o3tl/any.hxx>
+#include <utility>
 #include <vcl/virdev.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
@@ -1297,7 +1298,7 @@ class SwDrawPagesObj : public cppu::WeakImplHelper<
 private:
     css::uno::Reference< css::drawing::XDrawPageSupplier > m_xDoc;
 public:
-    SwDrawPagesObj(const css::uno::Reference< css::drawing::XDrawPageSupplier >& rxDoc) : m_xDoc(rxDoc) {}
+    SwDrawPagesObj(css::uno::Reference< css::drawing::XDrawPageSupplier >  rxDoc) : m_xDoc(std::move(rxDoc)) {}
 
     // XDrawPages
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL
@@ -4022,20 +4023,20 @@ Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames()
 }
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
-            Reference< XNameAccess > const & xAccess, const OUString& rLinkDisplayName, const OUString& sSuffix ) :
+            Reference< XNameAccess > const & xAccess, OUString  rLinkDisplayName, OUString  sSuffix ) :
     m_xRealAccess(xAccess),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
-    m_sLinkSuffix(sSuffix),
-    m_sLinkDisplayName(rLinkDisplayName),
+    m_sLinkSuffix(std::move(sSuffix)),
+    m_sLinkDisplayName(std::move(rLinkDisplayName)),
     m_pxDoc(nullptr)
 {
 }
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
-            const OUString& rLinkDisplayName, const OUString& sSuffix) :
+            OUString  rLinkDisplayName, OUString  sSuffix) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
-    m_sLinkSuffix(sSuffix),
-    m_sLinkDisplayName(rLinkDisplayName),
+    m_sLinkSuffix(std::move(sSuffix)),
+    m_sLinkDisplayName(std::move(rLinkDisplayName)),
     m_pxDoc(&rxDoc)
 {
 }
@@ -4335,11 +4336,11 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames()
     return aRet;
 }
 
-SwXOutlineTarget::SwXOutlineTarget(const OUString& rOutlineText, const OUString& rActualText,
+SwXOutlineTarget::SwXOutlineTarget(OUString  rOutlineText, OUString  rActualText,
                                    const sal_Int32 nOutlineLevel) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
-    m_sOutlineText(rOutlineText),
-    m_sActualText(rActualText),
+    m_sOutlineText(std::move(rOutlineText)),
+    m_sActualText(std::move(rActualText)),
     m_nOutlineLevel(nOutlineLevel)
 {
 }
@@ -4412,9 +4413,9 @@ Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames()
     return aRet;
 }
 
-SwXDrawingObjectTarget::SwXDrawingObjectTarget(const OUString& rDrawingObjectText) :
+SwXDrawingObjectTarget::SwXDrawingObjectTarget(OUString  rDrawingObjectText) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
-    m_sDrawingObjectText(rDrawingObjectText)
+    m_sDrawingObjectText(std::move(rDrawingObjectText))
 {
 }
 

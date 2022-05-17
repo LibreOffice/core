@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 // Includes for string resources.
@@ -35,8 +36,8 @@ using namespace ::com::sun::star;
 
 namespace accessibility
 {
-DescriptionGenerator::DescriptionGenerator(const uno::Reference<drawing::XShape>& xShape)
-    : mxShape(xShape)
+DescriptionGenerator::DescriptionGenerator(uno::Reference<drawing::XShape> xShape)
+    : mxShape(std::move(xShape))
     , mxSet(mxShape, uno::UNO_QUERY)
     , mbIsFirstProperty(true)
 {

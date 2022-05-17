@@ -37,6 +37,7 @@
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <utility>
 #include "hierarchyprovider.hxx"
 #include "hierarchyuri.hxx"
 
@@ -93,10 +94,10 @@ constexpr OUStringLiteral CFGPROPERTY_NODEPATH = u"nodepath";
 
 
 HierarchyEntry::HierarchyEntry(
-                const uno::Reference< uno::XComponentContext >& rxContext,
+                uno::Reference< uno::XComponentContext >  rxContext,
                 HierarchyContentProvider* pProvider,
                 const OUString& rURL )
-: m_xContext( rxContext ),
+: m_xContext(std::move( rxContext )),
   m_xOfficeInstDirs( pProvider->getOfficeInstallationDirectories() ),
   m_bTriedToGetRootReadAccess( false )
 {

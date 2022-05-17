@@ -57,7 +57,7 @@ public:
     explicit            VbaModule(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::frame::XModel >& rxDocModel,
-                            const OUString& rName,
+                            OUString  rName,
                             rtl_TextEncoding eTextEnc,
                             bool bExecutable );
 

@@ -44,7 +44,7 @@ class XMLOFF_DLLPUBLIC ProgressBarHelper
             bool                                                  bFailure;
 #endif
 public:
-            ProgressBarHelper(const css::uno::Reference < css::task::XStatusIndicator>& xStatusIndicator,
+            ProgressBarHelper(css::uno::Reference < css::task::XStatusIndicator>  xStatusIndicator,
                                 const bool bStrict);
             ~ProgressBarHelper();
 

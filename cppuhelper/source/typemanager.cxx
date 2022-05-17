@@ -82,8 +82,8 @@ class SimpleTypeDescription:
 {
 public:
     SimpleTypeDescription(
-        css::uno::TypeClass typeClass, OUString const & name):
-        typeClass_(typeClass), name_(name)
+        css::uno::TypeClass typeClass, OUString  name):
+        typeClass_(typeClass), name_(std::move(name))
     {}
 
 private:
@@ -105,8 +105,8 @@ class SequenceTypeDescription:
 public:
     SequenceTypeDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name, OUString const & componentType):
-        manager_(manager), name_(name), componentType_(componentType)
+        OUString  name, OUString  componentType):
+        manager_(manager), name_(std::move(name)), componentType_(std::move(componentType))
     { assert(manager.is()); }
 
 private:
@@ -148,9 +148,9 @@ class ModuleDescription:
 public:
     ModuleDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::ModuleEntity > const & entity):
-        manager_(manager), name_(name), entity_(entity)
+        manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
 private:
@@ -199,9 +199,9 @@ EnumTypeDescription_Base;
 class EnumTypeDescription: public EnumTypeDescription_Base {
 public:
     EnumTypeDescription(
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::EnumTypeEntity > const & entity):
-        EnumTypeDescription_Base(entity->isPublished()), name_(name),
+        EnumTypeDescription_Base(entity->isPublished()), name_(std::move(name)),
         entity_(entity)
     { assert(entity.is()); }
 
@@ -257,10 +257,10 @@ class PlainStructTypeDescription: public PlainStructTypeDescription_Base {
 public:
     PlainStructTypeDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::PlainStructTypeEntity > const & entity):
         PlainStructTypeDescription_Base(entity->isPublished()),
-        manager_(manager), name_(name), entity_(entity)
+        manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
 private:
@@ -333,8 +333,8 @@ class ParameterizedMemberTypeDescription:
 {
 public:
     explicit ParameterizedMemberTypeDescription(
-        OUString const & typeParameterName):
-        typeParameterName_(typeParameterName)
+        OUString  typeParameterName):
+        typeParameterName_(std::move(typeParameterName))
     {}
 
 private:
@@ -359,11 +359,11 @@ class PolymorphicStructTypeTemplateDescription:
 public:
     PolymorphicStructTypeTemplateDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > const &
             entity):
         PolymorphicStructTypeTemplateDescription_Base(entity->isPublished()),
-        manager_(manager), name_(name), entity_(entity)
+        manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
 private:
@@ -450,11 +450,11 @@ class InstantiatedPolymorphicStructTypeDescription:
 public:
     InstantiatedPolymorphicStructTypeDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > const &
             entity,
         std::vector< OUString >&& arguments):
-        manager_(manager), name_(name), entity_(entity), arguments_(std::move(arguments))
+        manager_(manager), name_(std::move(name)), entity_(entity), arguments_(std::move(arguments))
     {
         assert(manager.is());
         assert(entity.is());
@@ -553,10 +553,10 @@ class ExceptionTypeDescription: public ExceptionTypeDescription_Base {
 public:
     ExceptionTypeDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::ExceptionTypeEntity > const & entity):
         ExceptionTypeDescription_Base(entity->isPublished()), manager_(manager),
-        name_(name), entity_(entity)
+        name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
 private:
@@ -619,10 +619,10 @@ class AttributeDescription:
 public:
     AttributeDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
-        unoidl::InterfaceTypeEntity::Attribute const & attribute,
+        OUString  name,
+        unoidl::InterfaceTypeEntity::Attribute  attribute,
         sal_Int32 position):
-        manager_(manager), name_(name), attribute_(attribute),
+        manager_(manager), name_(std::move(name)), attribute_(std::move(attribute)),
         position_(position)
     { assert(manager.is()); }
 
@@ -705,9 +705,9 @@ class MethodParameter:
 public:
     MethodParameter(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        unoidl::InterfaceTypeEntity::Method::Parameter const & parameter,
+        unoidl::InterfaceTypeEntity::Method::Parameter  parameter,
         sal_Int32 position):
-        manager_(manager), parameter_(parameter), position_(position)
+        manager_(manager), parameter_(std::move(parameter)), position_(position)
     { assert(manager.is()); }
 
 private:
@@ -753,9 +753,9 @@ class MethodDescription:
 public:
     MethodDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
-        unoidl::InterfaceTypeEntity::Method const & method, sal_Int32 position):
-        manager_(manager), name_(name), method_(method), position_(position)
+        OUString  name,
+        unoidl::InterfaceTypeEntity::Method  method, sal_Int32 position):
+        manager_(manager), name_(std::move(name)), method_(std::move(method)), position_(position)
     { assert(manager.is()); }
 
 private:
@@ -887,10 +887,10 @@ class InterfaceTypeDescription: public InterfaceTypeDescription_Base {
 public:
     InterfaceTypeDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::InterfaceTypeEntity > const & entity):
         InterfaceTypeDescription_Base(entity->isPublished()), manager_(manager),
-        name_(name), entity_(entity)
+        name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
 private:
@@ -1062,9 +1062,9 @@ ConstantGroupDescription_Base;
 class ConstantGroupDescription: public ConstantGroupDescription_Base {
 public:
     ConstantGroupDescription(
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::ConstantGroupEntity > const & entity):
-        ConstantGroupDescription_Base(entity->isPublished()), name_(name),
+        ConstantGroupDescription_Base(entity->isPublished()), name_(std::move(name)),
         entity_(entity)
     { assert(entity.is()); }
 
@@ -1108,10 +1108,10 @@ class TypedefDescription: public TypedefDescription_Base {
 public:
     TypedefDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::TypedefEntity > const & entity):
         TypedefDescription_Base(entity->isPublished()), manager_(manager),
-        name_(name), entity_(entity)
+        name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
 private:
@@ -1138,10 +1138,9 @@ class ConstructorParameter:
 public:
     ConstructorParameter(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter
-            const & parameter,
+        unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter  parameter,
         sal_Int32 position):
-        manager_(manager), parameter_(parameter), position_(position)
+        manager_(manager), parameter_(std::move(parameter)), position_(position)
     { assert(manager.is()); }
 
 private:
@@ -1179,9 +1178,8 @@ class ConstructorDescription:
 public:
     ConstructorDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        unoidl::SingleInterfaceBasedServiceEntity::Constructor const &
-            constructor):
-        manager_(manager), constructor_(constructor)
+        unoidl::SingleInterfaceBasedServiceEntity::Constructor constructor):
+        manager_(manager), constructor_(std::move(constructor))
     { assert(manager.is()); }
 
 private:
@@ -1247,11 +1245,11 @@ class SingleInterfaceBasedServiceDescription:
 public:
     SingleInterfaceBasedServiceDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > const &
             entity):
         SingleInterfaceBasedServiceDescription_Base(entity->isPublished()),
-        manager_(manager), name_(name), entity_(entity)
+        manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
 private:
@@ -1351,8 +1349,8 @@ class PropertyDescription:
 public:
     PropertyDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        unoidl::AccumulationBasedServiceEntity::Property const & property):
-        manager_(manager), property_(property)
+        unoidl::AccumulationBasedServiceEntity::Property  property):
+        manager_(manager), property_(std::move(property))
     { assert(manager.is()); }
 
 private:
@@ -1385,11 +1383,11 @@ class AccumulationBasedServiceDescription:
 public:
     AccumulationBasedServiceDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::AccumulationBasedServiceEntity > const &
             entity):
         AccumulationBasedServiceDescription_Base(entity->isPublished()),
-        manager_(manager), name_(name), entity_(entity)
+        manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
 private:
@@ -1554,10 +1552,10 @@ class InterfaceBasedSingletonDescription:
 public:
     InterfaceBasedSingletonDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::InterfaceBasedSingletonEntity > const & entity):
         InterfaceBasedSingletonDescription_Base(entity->isPublished()),
-        manager_(manager), name_(name), entity_(entity)
+        manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
 private:
@@ -1598,10 +1596,10 @@ class ServiceBasedSingletonDescription:
 public:
     ServiceBasedSingletonDescription(
         rtl::Reference< cppuhelper::TypeManager > const & manager,
-        OUString const & name,
+        OUString  name,
         rtl::Reference< unoidl::ServiceBasedSingletonEntity > const & entity):
         ServiceBasedSingletonDescription_Base(entity->isPublished()),
-        manager_(manager), name_(name), entity_(entity)
+        manager_(manager), name_(std::move(name)), entity_(entity)
     { assert(manager.is()); assert(entity.is()); }
 
 private:
@@ -1666,16 +1664,16 @@ private:
 
     struct Position {
         Position(
-            OUString const & thePrefix,
+            OUString  thePrefix,
             rtl::Reference< unoidl::MapCursor > const & theCursor):
-            prefix(thePrefix), cursor(theCursor)
+            prefix(std::move(thePrefix)), cursor(theCursor)
         { assert(theCursor.is()); }
 
         Position(
-            OUString const & thePrefix,
+            OUString  thePrefix,
             rtl::Reference< unoidl::ConstantGroupEntity > const &
                 theConstantGroup):
-            prefix(thePrefix), constantGroup(theConstantGroup),
+            prefix(std::move(thePrefix)), constantGroup(theConstantGroup),
             constantGroupIndex(constantGroup->getMembers().begin())
         { assert(theConstantGroup.is()); }
 

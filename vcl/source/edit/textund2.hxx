@@ -78,7 +78,7 @@ private:
     OUString        maText;
 
 public:
-                    TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr );
+                    TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, OUString  rStr );
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -95,7 +95,7 @@ private:
     OUString        maText;
 
 public:
-                    TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr );
+                    TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, OUString  rStr );
 
     virtual void    Undo() override;
     virtual void    Redo() override;

@@ -3121,9 +3121,9 @@ void CheckTable( const SwTable& rTable )
 }
 #endif
 
-SwUndoTableStyleMake::SwUndoTableStyleMake(const OUString& rName, const SwDoc& rDoc)
+SwUndoTableStyleMake::SwUndoTableStyleMake(OUString  rName, const SwDoc& rDoc)
     : SwUndo(SwUndoId::TBLSTYLE_CREATE, &rDoc),
-    m_sName(rName)
+    m_sName(std::move(rName))
 { }
 
 SwUndoTableStyleMake::~SwUndoTableStyleMake()

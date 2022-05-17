@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <utility>
 #include <vcl/weld.hxx>
 #include <deque>
 
@@ -34,7 +35,7 @@ private:
 
 public:
     OTableIndex() { }
-    explicit OTableIndex( const OUString& rFileName ) : aIndexFileName( rFileName ) { }
+    explicit OTableIndex( OUString  rFileName ) : aIndexFileName(std::move( rFileName )) { }
 
     const OUString& GetIndexFileName() const { return aIndexFileName; }
 };
@@ -53,7 +54,7 @@ private:
     TableIndexList aIndexList;
 
 public:
-    explicit OTableInfo( const OUString& rName ) : aTableName(rName) { }
+    explicit OTableInfo( OUString  rName ) : aTableName(std::move(rName)) { }
 
     void WriteInfFile( const OUString& rDSN ) const;
 };
@@ -101,7 +102,7 @@ protected:
     void checkButtons();
 
 public:
-    ODbaseIndexDialog(weld::Window * pParent, const OUString& rDataSrcName);
+    ODbaseIndexDialog(weld::Window * pParent, OUString  rDataSrcName);
     virtual ~ODbaseIndexDialog() override;
 };
 

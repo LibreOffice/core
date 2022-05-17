@@ -20,6 +20,7 @@
 #include "elementexport.hxx"
 
 #include "strings.hxx"
+#include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include "eventexport.hxx"
 #include "formenums.hxx"
@@ -226,11 +227,11 @@ namespace xmloff
 
     //= OControlExport
     OControlExport::OControlExport(IFormsExportContext& _rContext,  const Reference< XPropertySet >& _rxControl,
-        const OUString& _rControlId, const OUString& _rReferringControls,
+        OUString  _rControlId, OUString  _rReferringControls,
         const Sequence< ScriptEventDescriptor >& _rEvents)
         :OElementExport(_rContext, _rxControl, _rEvents)
-        ,m_sControlId(_rControlId)
-        ,m_sReferringControls(_rReferringControls)
+        ,m_sControlId(std::move(_rControlId))
+        ,m_sReferringControls(std::move(_rReferringControls))
         ,m_nClassId(FormComponentType::CONTROL)
         ,m_eType( UNKNOWN )
         ,m_nIncludeCommon(CCAFlags::NONE)

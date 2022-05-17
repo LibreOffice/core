@@ -24,6 +24,7 @@
 #include <sfx2/Metadatable.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -892,11 +893,11 @@ namespace {
 struct RMapEntry
 {
     RMapEntry() {}
-    RMapEntry(OUString const& i_rStream,
-            OUString const& i_rXmlId,
-            std::shared_ptr<MetadatableClipboard> const& i_pLink
+    RMapEntry(OUString  i_rStream,
+            OUString  i_rXmlId,
+            std::shared_ptr<MetadatableClipboard>  i_pLink
                 = std::shared_ptr<MetadatableClipboard>())
-        :   m_Stream(i_rStream), m_XmlId(i_rXmlId), m_xLink(i_pLink)
+        :   m_Stream(std::move(i_rStream)), m_XmlId(std::move(i_rXmlId)), m_xLink(std::move(i_pLink))
         {}
     OUString m_Stream;
     OUString m_XmlId;

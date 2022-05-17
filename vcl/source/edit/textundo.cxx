@@ -22,6 +22,7 @@
 #include <strings.hrc>
 
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/textdata.hxx>
@@ -248,9 +249,9 @@ OUString TextUndoSplitPara::GetComment () const
     return VclResId(STR_TEXTUNDO_SPLITPARA);
 }
 
-TextUndoInsertChars::TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr )
+TextUndoInsertChars::TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, OUString  rStr )
                     : TextUndo( pTextEngine ),
-                        maTextPaM( rTextPaM ), maText( rStr )
+                        maTextPaM( rTextPaM ), maText(std::move( rStr ))
 {
 }
 
@@ -296,9 +297,9 @@ OUString TextUndoInsertChars::GetComment () const
     return VclResId(STR_TEXTUNDO_INSERTCHARS).replaceAll("$1", sText);
 }
 
-TextUndoRemoveChars::TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr )
+TextUndoRemoveChars::TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, OUString  rStr )
                     : TextUndo( pTextEngine ),
-                        maTextPaM( rTextPaM ), maText( rStr )
+                        maTextPaM( rTextPaM ), maText(std::move( rStr ))
 {
 }
 

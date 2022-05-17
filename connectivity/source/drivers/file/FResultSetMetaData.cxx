@@ -22,6 +22,7 @@
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
+#include <utility>
 
 
 using namespace ::comphelper;
@@ -36,9 +37,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-OResultSetMetaData::OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,const OUString& _aTableName,OFileTable* _pTable)
-    :m_aTableName(_aTableName)
-    ,m_xColumns(_rxColumns)
+OResultSetMetaData::OResultSetMetaData(::rtl::Reference<connectivity::OSQLColumns>  _rxColumns,OUString  _aTableName,OFileTable* _pTable)
+    :m_aTableName(std::move(_aTableName))
+    ,m_xColumns(std::move(_rxColumns))
     ,m_pTable(_pTable)
 {
 }

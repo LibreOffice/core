@@ -24,6 +24,7 @@
 
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontCollection.hxx>
+#include <utility>
 
 namespace vcl::font
 {
@@ -92,8 +93,8 @@ static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
     return ImplFontAttrs::None;
 }
 
-PhysicalFontFamily::PhysicalFontFamily( const OUString& rSearchName )
-:   maSearchName( rSearchName ),
+PhysicalFontFamily::PhysicalFontFamily( OUString  rSearchName )
+:   maSearchName(std::move( rSearchName )),
     mnTypeFaces( FontTypeFaces::NONE ),
     meFamily( FAMILY_DONTKNOW ),
     mePitch( PITCH_DONTKNOW ),

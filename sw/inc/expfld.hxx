@@ -23,6 +23,7 @@
 #include "fldbas.hxx"
 #include "cellfml.hxx"
 #include <memory>
+#include <utility>
 #include <vector>
 #include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>
@@ -51,8 +52,8 @@ struct SeqFieldLstElem
     OUString sDlgEntry;
     sal_uInt16 nSeqNo;
 
-    SeqFieldLstElem( const OUString& rStr, sal_uInt16 nNo )
-        : sDlgEntry( rStr ), nSeqNo( nNo )
+    SeqFieldLstElem( OUString  rStr, sal_uInt16 nNo )
+        : sDlgEntry(std::move( rStr )), nSeqNo( nNo )
     {}
 };
 
@@ -155,7 +156,7 @@ class SW_DLLPUBLIC SwSetExpFieldType final : public SwValueFieldType
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
-    SwSetExpFieldType( SwDoc* pDoc, const OUString& rName,
+    SwSetExpFieldType( SwDoc* pDoc, OUString  rName,
                         sal_uInt16 nType = nsSwGetSetExpType::GSE_EXPR );
     virtual std::unique_ptr<SwFieldType> Copy() const override;
     virtual OUString        GetName() const override;
@@ -304,8 +305,8 @@ public:
     /// Direct input via dialog; delete old value.
     SwInputField(
         SwInputFieldType* pFieldType,
-        const OUString& rContent,
-        const OUString& rPrompt,
+        OUString  rContent,
+        OUString  rPrompt,
         sal_uInt16 nSubType,
         sal_uLong nFormat = 0,
         bool bIsFormField = true );

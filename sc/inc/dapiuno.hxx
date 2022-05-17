@@ -44,6 +44,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace com::sun::star::sheet { struct DataPilotFieldAutoShowInfo; }
@@ -237,7 +238,7 @@ private:
     void                    Refreshed_Impl();
 
 public:
-                            ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN);
+                            ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, OUString  rN);
     virtual                 ~ScDataPilotTableObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
@@ -293,8 +294,8 @@ struct ScFieldIdentifier
     explicit     ScFieldIdentifier() :
                             mnFieldIdx( 0 ), mbDataLayout( false ) {}
 
-    explicit     ScFieldIdentifier( const OUString& rFieldName, bool bDataLayout ) :
-                            maFieldName( rFieldName ), mnFieldIdx( 0 ), mbDataLayout( bDataLayout ) {}
+    explicit     ScFieldIdentifier( OUString  rFieldName, bool bDataLayout ) :
+                            maFieldName(std::move( rFieldName )), mnFieldIdx( 0 ), mbDataLayout( bDataLayout ) {}
 };
 
 /** Base class of all implementation objects based on a DataPilot descriptor
@@ -303,7 +304,7 @@ class ScDataPilotChildObjBase
 {
 protected:
     explicit            ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rParent );
-    explicit            ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId );
+    explicit            ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rParent, ScFieldIdentifier  rFieldId );
     virtual             ~ScDataPilotChildObjBase();
 
     /** Returns the wrapped DataPilot object (calls GetDPObject() at parent). */
@@ -401,7 +402,7 @@ public:
                         ScDataPilotFieldObj(
                             ScDataPilotDescriptorBase& rParent,
                             const ScFieldIdentifier& rIdent,
-                            const css::uno::Any& rOrient );
+                            css::uno::Any  rOrient );
 
     virtual             ~ScDataPilotFieldObj() override;
 
@@ -560,7 +561,7 @@ ScDataPilotFieldGroupObjImpl;
 class ScDataPilotFieldGroupObj final : public ScDataPilotFieldGroupObjImpl
 {
 public:
-    explicit            ScDataPilotFieldGroupObj( ScDataPilotFieldGroupsObj& rParent, const OUString& rGroupName );
+    explicit            ScDataPilotFieldGroupObj( ScDataPilotFieldGroupsObj& rParent, OUString  rGroupName );
     virtual             ~ScDataPilotFieldGroupObj() override;
 
                             // XNameAccess
@@ -613,7 +614,7 @@ ScDataPilotFieldGroupItemObjImpl;
 class ScDataPilotFieldGroupItemObj final : public ScDataPilotFieldGroupItemObjImpl
 {
 public:
-    explicit            ScDataPilotFieldGroupItemObj( ScDataPilotFieldGroupObj& rParent, const OUString& rName );
+    explicit            ScDataPilotFieldGroupItemObj( ScDataPilotFieldGroupObj& rParent, OUString  rName );
     virtual             ~ScDataPilotFieldGroupItemObj() override;
 
                             // XNamed

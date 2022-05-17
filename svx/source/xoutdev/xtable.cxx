@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <utility>
 #include <xmlxtexp.hxx>
 #include <xmlxtimp.hxx>
 #include <o3tl/safeint.hxx>
@@ -35,9 +36,9 @@ XColorEntry::XColorEntry(const Color& rColor, const OUString& rName)
 {
 }
 
-XLineEndEntry::XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const OUString& rName)
+XLineEndEntry::XLineEndEntry(basegfx::B2DPolyPolygon  rB2DPolyPolygon, const OUString& rName)
 :   XPropertyEntry(rName),
-    aB2DPolyPolygon(rB2DPolyPolygon)
+    aB2DPolyPolygon(std::move(rB2DPolyPolygon))
 {
 }
 
@@ -97,11 +98,11 @@ XBitmapEntry::XBitmapEntry(const XBitmapEntry& rOther)
 
 XPropertyList::XPropertyList(
     XPropertyListType type,
-    const OUString& rPath, const OUString& rReferer
+    OUString  rPath, OUString  rReferer
 ) : meType           ( type ),
     maName           ( "standard" ),
-    maPath           ( rPath ),
-    maReferer        ( rReferer ),
+    maPath           (std::move( rPath )),
+    maReferer        (std::move( rReferer )),
     mbListDirty      ( true ),
     mbEmbedInDocument( false )
 {

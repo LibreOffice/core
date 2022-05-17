@@ -107,14 +107,14 @@ private:
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
-             const css::uno::Reference< css::container::XHierarchicalNameAccess >& Package,
-             const PackageUri& rUri,
-             const ContentProperties& rProps );
+             css::uno::Reference< css::container::XHierarchicalNameAccess >  Package,
+             PackageUri  rUri,
+             ContentProperties  rProps );
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
-             const css::uno::Reference< css::container::XHierarchicalNameAccess >& Package,
-             const PackageUri& rUri,
+             css::uno::Reference< css::container::XHierarchicalNameAccess >  Package,
+             PackageUri  rUri,
              const css::ucb::ContentInfo& Info );
 
     virtual css::uno::Sequence< css::beans::Property >

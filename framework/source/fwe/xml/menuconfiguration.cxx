@@ -20,6 +20,7 @@
 #include <menuconfiguration.hxx>
 
 #include <addonmenu.hxx>
+#include <utility>
 #include <xml/menudocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
 
@@ -42,8 +43,8 @@ namespace framework
 {
 
 MenuConfiguration::MenuConfiguration(
-    const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-:   m_xContext( rxContext )
+    css::uno::Reference< css::uno::XComponentContext >  rxContext )
+:   m_xContext(std::move( rxContext ))
 {
 }
 

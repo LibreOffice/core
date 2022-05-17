@@ -41,10 +41,10 @@ class QueueProcessor final
 public:
     QueueProcessor (
         RequestQueue& rQueue,
-        const std::shared_ptr<BitmapCache>& rpCache,
+        std::shared_ptr<BitmapCache>  rpCache,
         const Size& rPreviewSize,
         const bool bDoSuperSampling,
-        const SharedCacheContext& rpCacheContext);
+        SharedCacheContext  rpCacheContext);
     ~QueueProcessor();
 
     /** Start the processor.  This implementation is timer based and waits

@@ -297,7 +297,7 @@ protected:
     virtual void    DoScroll( ScrollBar* pCurScrollBar ) override;
 
 public:
-    ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, OUString const & aModule );
+    ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, OUString  aModule );
 
                     virtual ~ModulWindow() override;
     virtual void    dispose() override;

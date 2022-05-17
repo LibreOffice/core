@@ -41,6 +41,7 @@
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <utility>
 #include <vcl/window.hxx>
 #include <tools/debug.hxx>
 
@@ -65,7 +66,7 @@ class IFrameObject : public ::cppu::WeakImplHelper <
 public:
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    IFrameObject(const css::uno::Reference < css::uno::XComponentContext>& rxContext, const css::uno::Sequence< css::uno::Any >& aArguments);
+    IFrameObject(css::uno::Reference < css::uno::XComponentContext>  rxContext, const css::uno::Sequence< css::uno::Any >& aArguments);
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -144,8 +145,8 @@ const SfxItemPropertyMapEntry* lcl_GetIFramePropertyMap_Impl()
     return aIFramePropertyMap_Impl;
 }
 
-IFrameObject::IFrameObject(const uno::Reference < uno::XComponentContext >& rxContext, const css::uno::Sequence< css::uno::Any >& aArguments)
-    : mxContext( rxContext )
+IFrameObject::IFrameObject(uno::Reference < uno::XComponentContext >  rxContext, const css::uno::Sequence< css::uno::Any >& aArguments)
+    : mxContext(std::move( rxContext ))
     , maPropMap( lcl_GetIFramePropertyMap_Impl() )
 {
     if ( aArguments.hasElements() )

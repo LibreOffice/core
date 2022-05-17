@@ -35,6 +35,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <algorithm>
 #include <string_view>
+#include <utility>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
@@ -56,9 +57,9 @@ struct ImplPropertyInfo
     sal_Int16                nAttribs;
     bool                     bDependsOnOthers;   // eg. VALUE depends on MIN/MAX and must be set after MIN/MAX.
 
-    ImplPropertyInfo( OUString const & theName, sal_uInt16 nId, const css::uno::Type& rType,
+    ImplPropertyInfo( OUString  theName, sal_uInt16 nId, const css::uno::Type& rType,
                         sal_Int16 nAttrs, bool bDepends = false )
-         : aName(theName)
+         : aName(std::move(theName))
          , nPropId(nId)
          , aType(rType)
          , nAttribs(nAttrs)

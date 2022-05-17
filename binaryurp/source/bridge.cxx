@@ -24,6 +24,7 @@
 #include <cstddef>
 #include <limits>
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/bridge/InvalidProtocolChangeException.hpp>
@@ -129,7 +130,7 @@ AttachThread::~AttachThread() {
 class PopOutgoingRequest {
 public:
     PopOutgoingRequest(
-        OutgoingRequests & requests, rtl::ByteSequence const & tid,
+        OutgoingRequests & requests, rtl::ByteSequence  tid,
         OutgoingRequest const & request);
 
     ~PopOutgoingRequest();
@@ -146,9 +147,9 @@ private:
 };
 
 PopOutgoingRequest::PopOutgoingRequest(
-    OutgoingRequests & requests, rtl::ByteSequence const & tid,
+    OutgoingRequests & requests, rtl::ByteSequence  tid,
     OutgoingRequest const & request):
-    requests_(requests), tid_(tid), cleared_(false)
+    requests_(requests), tid_(std::move(tid)), cleared_(false)
 {
     requests_.push(tid_, request);
 }
@@ -172,11 +173,11 @@ struct Bridge::SubStub {
 };
 
 Bridge::Bridge(
-    rtl::Reference< BridgeFactory > const & factory, OUString const & name,
+    rtl::Reference< BridgeFactory > const & factory, OUString  name,
     css::uno::Reference< css::connection::XConnection > const & connection,
-    css::uno::Reference< css::bridge::XInstanceProvider > const & provider):
-    factory_(factory), name_(name), connection_(connection),
-    provider_(provider),
+    css::uno::Reference< css::bridge::XInstanceProvider >  provider):
+    factory_(factory), name_(std::move(name)), connection_(connection),
+    provider_(std::move(provider)),
     binaryUno_(UNO_LB_UNO),
     cppToBinaryMapping_(CPPU_CURRENT_LANGUAGE_BINDING_NAME, UNO_LB_UNO),
     binaryToCppMapping_(UNO_LB_UNO, CPPU_CURRENT_LANGUAGE_BINDING_NAME),

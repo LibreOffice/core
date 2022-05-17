@@ -38,7 +38,7 @@ class ScVbaAxis : public ScVbaAxis_BASE
     std::unique_ptr<ov::ShapeHelper> oShapeHelper;
 
 public:
-    ScVbaAxis( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup );
+    ScVbaAxis( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::beans::XPropertySet >  _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup );
     // Methods
     virtual void SAL_CALL Delete(  ) override;
     virtual css::uno::Reference< ::ooo::vba::excel::XAxisTitle > SAL_CALL getAxisTitle(  ) override;

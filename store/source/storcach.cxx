@@ -31,6 +31,7 @@
 #include "storbase.hxx"
 
 #include <memory>
+#include <utility>
 #include <string.h>
 
 using namespace store;
@@ -50,8 +51,8 @@ struct Entry
     static void   operator delete (void *, void *) {}
 
     // Construction
-    explicit Entry (std::shared_ptr<PageData> const & rxPage, sal_uInt32 nOffset)
-        : m_xPage(rxPage), m_nOffset(nOffset), m_pNext(nullptr)
+    explicit Entry (std::shared_ptr<PageData>  rxPage, sal_uInt32 nOffset)
+        : m_xPage(std::move(rxPage)), m_nOffset(nOffset), m_pNext(nullptr)
     {}
 };
 };

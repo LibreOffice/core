@@ -20,6 +20,7 @@
 #include "FontTable.hxx"
 #include <o3tl/deleter.hxx>
 #include <ooxml/resourceids.hxx>
+#include <utility>
 #include <vector>
 #include <sal/log.hxx>
 #include <rtl/tencinfo.h>
@@ -233,10 +234,10 @@ void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>
     m_pImpl->xEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key);
 }
 
-EmbeddedFontHandler::EmbeddedFontHandler(FontTable& rFontTable, const OUString& _fontName, const char* _style )
+EmbeddedFontHandler::EmbeddedFontHandler(FontTable& rFontTable, OUString  _fontName, const char* _style )
 : LoggedProperties("EmbeddedFontHandler")
 , fontTable( rFontTable )
-, fontName( _fontName )
+, fontName(std::move( _fontName ))
 , style( _style )
 {
 }

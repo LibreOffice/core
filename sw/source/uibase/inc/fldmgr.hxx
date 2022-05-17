@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace com::sun::star{
@@ -82,12 +83,12 @@ struct SwInsertField_Data
     /// Marks the PostIt field's annotation start/end if it differs from the cursor selection.
     std::unique_ptr<SwPaM> m_pAnnotationRange;
 
-    SwInsertField_Data(SwFieldTypesEnum nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
+    SwInsertField_Data(SwFieldTypesEnum nType, sal_uInt16 nSub, OUString  rPar1, OUString  rPar2,
                     sal_uInt32 nFormatId, SwWrtShell* pShell = nullptr, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :
         m_nTypeId(nType),
         m_nSubType(nSub),
-        m_sPar1(rPar1),
-        m_sPar2(rPar2),
+        m_sPar1(std::move(rPar1)),
+        m_sPar2(std::move(rPar2)),
         m_nFormatId(nFormatId),
         m_pSh(pShell),
         m_cSeparator(cSep),

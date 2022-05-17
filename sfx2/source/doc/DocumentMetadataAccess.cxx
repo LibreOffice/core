@@ -55,6 +55,7 @@
 
 #include <libxml/tree.h>
 
+#include <utility>
 #include <vector>
 #include <set>
 #include <string_view>
@@ -221,9 +222,9 @@ struct DocumentMetadataAccess_Impl
     uno::Reference<rdf::XRepository> m_xRepository;
     uno::Reference<rdf::XNamedGraph> m_xManifest;
     DocumentMetadataAccess_Impl(
-            uno::Reference<uno::XComponentContext> const& i_xContext,
+            uno::Reference<uno::XComponentContext>  i_xContext,
             SfxObjectShell const & i_rRegistrySupplier)
-      : m_xContext(i_xContext)
+      : m_xContext(std::move(i_xContext))
       , m_rXmlIdRegistrySupplier(i_rRegistrySupplier)
     {
         OSL_ENSURE(m_xContext.is(), "context null");

@@ -36,6 +36,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
+#include <utility>
 
 namespace {
 
@@ -60,7 +61,7 @@ private:
 
 public:
 
-    explicit ModuleManager(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit ModuleManager(css::uno::Reference< css::uno::XComponentContext >  xContext);
 
     ModuleManager(const ModuleManager&) = delete;
     ModuleManager& operator=(const ModuleManager&) = delete;
@@ -123,8 +124,8 @@ private:
     OUString implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent);
 };
 
-ModuleManager::ModuleManager(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : m_xContext(xContext)
+ModuleManager::ModuleManager(css::uno::Reference< css::uno::XComponentContext >  xContext)
+    : m_xContext(std::move(xContext))
 {
     m_xCFG.set( comphelper::ConfigurationHelper::openConfig(
                 m_xContext, "/org.openoffice.Setup/Office/Factories",

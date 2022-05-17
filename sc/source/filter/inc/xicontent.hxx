@@ -182,7 +182,7 @@ private:
         ScRangeList         maRanges;
         ScValidationData    maValidData;
 
-        explicit DVItem ( const ScRangeList& rRanges, const ScValidationData& rValidData );
+        explicit DVItem ( ScRangeList  rRanges, const ScValidationData& rValidData );
     };
 
     std::vector< std::unique_ptr<DVItem> > maDVItems;

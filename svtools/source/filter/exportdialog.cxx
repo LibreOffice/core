@@ -25,6 +25,7 @@
 #include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
+#include <utility>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <svtools/strings.hrc>
@@ -557,13 +558,13 @@ bool ExportDialog::IsTempExportAvailable() const
 }
 
 ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
-    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+    css::uno::Reference< css::uno::XComponentContext >  rxContext,
     const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
     bool bExportSelection, bool bIsPixelFormat, bool bGraphicsSource,
     const css::uno::Reference< css::graphic::XGraphic >& rxGraphic)
     : GenericDialogController(rPara.pWindow, "svt/ui/graphicexport.ui", "GraphicExportDialog")
     , mrFltCallPara(rPara)
-    , mxContext(rxContext)
+    , mxContext(std::move(rxContext))
     , mxSourceDocument(rxSourceDocument)
     , mxGraphic(rxGraphic)
     , msEstimatedSizePix1(SvtResId(STR_SVT_ESTIMATED_SIZE_PIX_1))

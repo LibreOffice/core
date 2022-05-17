@@ -167,10 +167,9 @@ public:
     OString msButtonValue;
     OString msExtra;
 
-    WidgetDefinitionState(OString const& sEnabled, OString const& sFocused, OString const& sPressed,
-                          OString const& sRollover, OString const& sDefault,
-                          OString const& sSelected, OString const& sButtonValue,
-                          OString const& sExtra);
+    WidgetDefinitionState(OString sEnabled, OString sFocused, OString sPressed, OString sRollover,
+                          OString sDefault, OString sSelected, OString sButtonValue,
+                          OString sExtra);
 
     std::vector<std::shared_ptr<WidgetDrawAction>> mpWidgetDrawActions;
 

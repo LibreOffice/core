@@ -64,7 +64,7 @@ class SlidePersist : public std::enable_shared_from_this< SlidePersist >
 public:
     SlidePersist( oox::core::XmlFilterBase& rFilter, bool bMaster, bool bNotes,
                     const css::uno::Reference< css::drawing::XDrawPage >&,
-                    oox::drawingml::ShapePtr const & pShapesPtr, const ::oox::drawingml::TextListStylePtr & );
+                    oox::drawingml::ShapePtr  pShapesPtr, ::oox::drawingml::TextListStylePtr  );
     ~SlidePersist();
 
 

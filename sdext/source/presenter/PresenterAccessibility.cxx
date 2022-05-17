@@ -44,6 +44,7 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -70,9 +71,9 @@ class PresenterAccessible::AccessibleObject
 {
 public:
     AccessibleObject (
-        const css::lang::Locale& rLocale,
+        css::lang::Locale  rLocale,
         const sal_Int16 nRole,
-        const OUString& rsName);
+        OUString  rsName);
     void LateInitialization();
 
     virtual void SetWindow (
@@ -270,7 +271,7 @@ public:
     AccessibleParagraph (
         const css::lang::Locale& rLocale,
         const OUString& rsName,
-        const SharedPresenterTextParagraph& rpParagraph,
+        SharedPresenterTextParagraph  rpParagraph,
         const sal_Int32 nParagraphIndex);
 
     //----- XAccessibleContext ------------------------------------------------
@@ -466,12 +467,12 @@ private:
 //===== PresenterAccessible ===================================================
 
 PresenterAccessible::PresenterAccessible (
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-    const ::rtl::Reference<PresenterController>& rpPresenterController,
+    css::uno::Reference<css::uno::XComponentContext>  rxContext,
+    ::rtl::Reference<PresenterController>  rpPresenterController,
     const Reference<drawing::framework::XPane>& rxMainPane)
     : PresenterAccessibleInterfaceBase(m_aMutex),
-      mxComponentContext(rxContext),
-      mpPresenterController(rpPresenterController),
+      mxComponentContext(std::move(rxContext)),
+      mpPresenterController(std::move(rpPresenterController)),
       mxMainPane(rxMainPane, UNO_QUERY)
 {
     if (mxMainPane.is())
@@ -712,12 +713,12 @@ void SAL_CALL PresenterAccessible::initialize (const css::uno::Sequence<css::uno
 //===== PresenterAccessible::AccessibleObject =========================================
 
 PresenterAccessible::AccessibleObject::AccessibleObject (
-    const lang::Locale& rLocale,
+    lang::Locale  rLocale,
     const sal_Int16 nRole,
-    const OUString& rsName)
+    OUString  rsName)
     : PresenterAccessibleObjectInterfaceBase(m_aMutex),
-      msName(rsName),
-      maLocale(rLocale),
+      msName(std::move(rsName)),
+      maLocale(std::move(rLocale)),
       mnRole(nRole),
       mnStateSet(0),
       mbIsFocused(false)
@@ -1316,10 +1317,10 @@ AccessibleRelation SAL_CALL AccessibleRelationSet::getRelationByType (sal_Int16 
 PresenterAccessible::AccessibleParagraph::AccessibleParagraph (
     const lang::Locale& rLocale,
     const OUString& rsName,
-    const SharedPresenterTextParagraph& rpParagraph,
+    SharedPresenterTextParagraph  rpParagraph,
     const sal_Int32 nParagraphIndex)
     : PresenterAccessibleParagraphInterfaceBase(rLocale, AccessibleRole::PARAGRAPH, rsName),
-      mpParagraph(rpParagraph),
+      mpParagraph(std::move(rpParagraph)),
       mnParagraphIndex(nParagraphIndex)
 {
 }

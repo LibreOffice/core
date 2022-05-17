@@ -21,6 +21,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <utility>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/svapp.hxx>
 
@@ -103,13 +104,13 @@ void InterimToolbarPopup::EndPopupMode()
     GetDockingManager()->EndPopupMode(this);
 }
 
-WeldToolbarPopup::WeldToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
+WeldToolbarPopup::WeldToolbarPopup(css::uno::Reference<css::frame::XFrame>  rFrame,
                                    weld::Widget* pParent, const OUString& rUIFile,
                                    const OString& rId)
     : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
     , m_xTopLevel(m_xBuilder->weld_popover(rId))
     , m_xContainer(m_xBuilder->weld_container("container"))
-    , m_xFrame(rFrame)
+    , m_xFrame(std::move(rFrame))
 {
     m_xTopLevel->connect_focus_in(LINK(this, WeldToolbarPopup, FocusHdl));
 }

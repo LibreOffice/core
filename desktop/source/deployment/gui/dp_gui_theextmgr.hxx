@@ -59,7 +59,7 @@ private:
 public:
     static ::rtl::Reference<TheExtensionManager> s_ExtMgr;
 
-         TheExtensionManager( const css::uno::Reference< css::awt::XWindow > &xParent,
+         TheExtensionManager( css::uno::Reference< css::awt::XWindow > xParent,
                               const css::uno::Reference< css::uno::XComponentContext > &xContext );
         virtual ~TheExtensionManager() override;
 

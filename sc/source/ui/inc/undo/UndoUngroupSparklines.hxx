@@ -12,16 +12,17 @@
 
 #include <undobase.hxx>
 #include <memory>
+#include <utility>
 
 namespace sc
 {
 struct SparklineUndoData
 {
-    SparklineUndoData(ScAddress const& rAddress, ScRangeList const& rDataRangeList,
-                      std::shared_ptr<sc::SparklineGroup> const& rpGroup)
+    SparklineUndoData(ScAddress const& rAddress, ScRangeList rDataRangeList,
+                      std::shared_ptr<sc::SparklineGroup> rpGroup)
         : m_aAddress(rAddress)
-        , m_aDataRangeList(rDataRangeList)
-        , m_pSparklineGroup(rpGroup)
+        , m_aDataRangeList(std::move(rDataRangeList))
+        , m_pSparklineGroup(std::move(rpGroup))
     {
     }
 

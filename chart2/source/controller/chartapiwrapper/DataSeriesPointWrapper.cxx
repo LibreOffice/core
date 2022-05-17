@@ -55,6 +55,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/propshlp.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::chart::wrapper;
@@ -276,7 +277,7 @@ struct StaticPointWrapperPropertyArray : public rtl::StaticAggregate< Sequence< 
 class WrappedAttachedAxisProperty : public ::chart::WrappedProperty
 {
 public:
-    explicit WrappedAttachedAxisProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
+    explicit WrappedAttachedAxisProperty(std::shared_ptr<Chart2ModelContact>  spChart2ModelContact);
 
     virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
@@ -289,9 +290,9 @@ protected:
 };
 
 WrappedAttachedAxisProperty::WrappedAttachedAxisProperty(
-                const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact )
+                std::shared_ptr<Chart2ModelContact>  spChart2ModelContact )
                 : WrappedProperty("Axis",OUString())
-            , m_spChart2ModelContact( spChart2ModelContact )
+            , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
 }
 
@@ -457,8 +458,8 @@ void WrappedLineStyleProperty::setPropertyToDefault( const Reference< beans::XPr
 namespace chart::wrapper
 {
 
-DataSeriesPointWrapper::DataSeriesPointWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
-    : m_spChart2ModelContact( spChart2ModelContact )
+DataSeriesPointWrapper::DataSeriesPointWrapper(std::shared_ptr<Chart2ModelContact>  spChart2ModelContact)
+    : m_spChart2ModelContact(std::move( spChart2ModelContact ))
     , m_aEventListenerContainer( m_aMutex )
     , m_eType( DATA_SERIES )
     , m_nSeriesIndexInNewAPI( -1 )
@@ -500,8 +501,8 @@ void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any 
 DataSeriesPointWrapper::DataSeriesPointWrapper(eType _eType,
                                                sal_Int32 nSeriesIndexInNewAPI ,
                                                sal_Int32 nPointIndex, //ignored for series
-                                               const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
-    : m_spChart2ModelContact( spChart2ModelContact )
+                                               std::shared_ptr<Chart2ModelContact>  spChart2ModelContact)
+    : m_spChart2ModelContact(std::move( spChart2ModelContact ))
     , m_aEventListenerContainer( m_aMutex )
     , m_eType( _eType )
     , m_nSeriesIndexInNewAPI( nSeriesIndexInNewAPI )

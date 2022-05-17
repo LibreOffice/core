@@ -40,6 +40,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/srchdefs.hxx>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -53,14 +54,14 @@ namespace basctl
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-BaseWindow::BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName )
+BaseWindow::BaseWindow( vcl::Window* pParent, ScriptDocument  rDocument, OUString  aLibName, OUString  aName )
     :Window( pParent, WinBits( WB_3DLOOK ) )
     ,pShellHScrollBar( nullptr)
     ,pShellVScrollBar( nullptr)
     ,nStatus( 0)
-    ,m_aDocument( rDocument )
-    ,m_aLibName( aLibName )
-    ,m_aName( aName )
+    ,m_aDocument(std::move( rDocument ))
+    ,m_aLibName(std::move( aLibName ))
+    ,m_aName(std::move( aName ))
 {
 }
 
@@ -667,8 +668,8 @@ LibInfo::Item const* LibInfo::GetInfo (
     return it != m_aMap.end() ? &it->second : nullptr;
 }
 
-LibInfo::Key::Key (ScriptDocument const& rDocument, OUString const& rLibName) :
-    m_aDocument(rDocument), m_aLibName(rLibName)
+LibInfo::Key::Key (ScriptDocument  rDocument, OUString  rLibName) :
+    m_aDocument(std::move(rDocument)), m_aLibName(std::move(rLibName))
 { }
 
 bool LibInfo::Key::operator == (Key const& rKey) const
@@ -685,10 +686,10 @@ size_t LibInfo::Key::Hash::operator () (Key const& rKey) const
 }
 
 LibInfo::Item::Item (
-    OUString const& rCurrentName,
+    OUString  rCurrentName,
     ItemType eCurrentType
 ) :
-    m_aCurrentName(rCurrentName),
+    m_aCurrentName(std::move(rCurrentName)),
     m_eCurrentType(eCurrentType)
 { }
 

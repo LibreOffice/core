@@ -46,6 +46,7 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
+#include <utility>
 #include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
@@ -1586,8 +1587,8 @@ struct WatchItem
 
     WatchItem*      mpArrayParentItem;
 
-    explicit WatchItem (OUString const& rName):
-        maName(rName),
+    explicit WatchItem (OUString  rName):
+        maName(std::move(rName)),
         nDimLevel(0),
         nDimCount(0),
         mpArrayParentItem(nullptr)

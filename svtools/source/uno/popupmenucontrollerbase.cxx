@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -47,8 +48,8 @@ struct PopupMenuControllerBaseDispatchInfo
     const URL maURL;
     const Sequence< PropertyValue > maArgs;
 
-    PopupMenuControllerBaseDispatchInfo( const Reference< XDispatch >& xDispatch, const URL& rURL, const Sequence< PropertyValue >& rArgs )
-        : mxDispatch( xDispatch ), maURL( rURL ), maArgs( rArgs ) {}
+    PopupMenuControllerBaseDispatchInfo( const Reference< XDispatch >& xDispatch, URL  rURL, const Sequence< PropertyValue >& rArgs )
+        : mxDispatch( xDispatch ), maURL(std::move( rURL )), maArgs( rArgs ) {}
 };
 
 }

@@ -135,9 +135,9 @@ class PrioritizedHandlerEntry
     double            mnPrio;
 
 public:
-    PrioritizedHandlerEntry( HandlerSharedPtrT const& pHandler,
+    PrioritizedHandlerEntry( HandlerSharedPtrT  pHandler,
                              double                   nPrio ) :
-        mpHandler(pHandler),
+        mpHandler(std::move(pHandler)),
         mnPrio(nPrio)
     {}
 

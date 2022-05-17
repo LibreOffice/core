@@ -49,7 +49,7 @@ class CreationWizard final : public vcl::RoadmapWizardMachine, public TabPageNot
 {
 public:
     CreationWizard(weld::Window* pParent, const rtl::Reference<::chart::ChartModel>& xChartModel,
-                   const css::uno::Reference<css::uno::XComponentContext>& xContext);
+                   css::uno::Reference<css::uno::XComponentContext> xContext);
 
     CreationWizard() = delete;
     virtual ~CreationWizard() override;

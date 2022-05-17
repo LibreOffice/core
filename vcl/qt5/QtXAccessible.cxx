@@ -17,12 +17,13 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 #include <sal/log.hxx>
+#include <utility>
 
 using namespace css::accessibility;
 using namespace css::uno;
 
 QtXAccessible::QtXAccessible(Reference<XAccessible> xAccessible)
-    : m_xAccessible(xAccessible)
+    : m_xAccessible(std::move(xAccessible))
 {
 }
 

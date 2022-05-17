@@ -23,6 +23,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
@@ -583,9 +584,9 @@ private:
 public:
     bool HasParent() const { return !aParent.isEmpty(); }
 
-    StyleTree_Impl(const OUString& rName, const OUString& rParent)
-        : aName(rName)
-        , aParent(rParent)
+    StyleTree_Impl(OUString rName, OUString rParent)
+        : aName(std::move(rName))
+        , aParent(std::move(rParent))
         , pChildren(0)
     {
     }

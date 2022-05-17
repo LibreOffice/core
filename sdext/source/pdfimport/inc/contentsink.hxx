@@ -24,6 +24,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/rendering/ARGBColor.hpp>
 #include <memory>
+#include <utility>
+#include <utility>
+#include <utility>
+#include <utility>
 
 namespace com::sun::star {
     namespace rendering
@@ -45,17 +49,13 @@ namespace com::sun::star {
 }
 
 namespace pdfi
-{
-    struct FontAttributes
-    {
-        FontAttributes( const OUString&      familyName_,
-                        const OUString&      sFontWeight,
+{OUString tAttOUString     OUString es( OUString     OUString String String String       sFontWeight,
                         bool                 isItalic_,
                         bool                 isUnderline_,
                         double               size_,
                         double               ascent_) :
-            familyName(familyName_),
-            fontWeight(sFontWeight),
+  std::move(       std:):move(   famistd:):move(lystd::move(Name(std:):)move(fastd::move(milyName_))),
+     std::move(       font)Weight(std::move(sFontWeight)),
             isItalic(isItalic_),
             isUnderline(isUnderline_),
             isOutline(false),

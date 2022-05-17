@@ -1,3 +1,5 @@
+#include <utility>
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -46,7 +48,7 @@ output( myValue.getOutValue() );
      */
     template<typename In, typename Out, typename Func> class LazyUpdate {
     public:
-        LazyUpdate(Func const & func): func_(func), input_(), dirty_(true) {}
+        LazyUpdate(Func  func): func_(std::move(func)), input_(), dirty_(true) {}
 
         In const & getInValue() const { return input_; }
 

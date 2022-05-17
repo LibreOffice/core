@@ -19,6 +19,7 @@
 
 #include <extended/AccessibleBrowseBoxBase.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <utility>
 #include <vcl/accessibletableprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -49,14 +50,14 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 // Ctor/Dtor/disposing
 
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        css::uno::Reference< css::accessibility::XAccessible >  rxParent,
         ::vcl::IAccessibleTableProvider&                      rBrowseBox,
-        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
+        css::uno::Reference< css::awt::XWindow >  _xFocusWindow,
         AccessibleBrowseBoxObjType      eObjType ) :
     AccessibleBrowseBoxImplHelper( m_aMutex ),
-    mxParent( rxParent ),
+    mxParent(std::move( rxParent )),
     mpBrowseBox( &rBrowseBox ),
-    m_xFocusWindow(_xFocusWindow),
+    m_xFocusWindow(std::move(_xFocusWindow)),
     maName( rBrowseBox.GetAccessibleObjectName( eObjType ) ),
     maDescription( rBrowseBox.GetAccessibleObjectDescription( eObjType ) ),
     meObjType( eObjType ),
@@ -67,18 +68,18 @@ AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
 }
 
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        css::uno::Reference< css::accessibility::XAccessible >  rxParent,
         ::vcl::IAccessibleTableProvider&                      rBrowseBox,
-        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
+        css::uno::Reference< css::awt::XWindow >  _xFocusWindow,
         AccessibleBrowseBoxObjType      eObjType,
-        const OUString&          rName,
-        const OUString&          rDescription ) :
+        OUString           rName,
+        OUString           rDescription ) :
     AccessibleBrowseBoxImplHelper( m_aMutex ),
-    mxParent( rxParent ),
+    mxParent(std::move( rxParent )),
     mpBrowseBox( &rBrowseBox ),
-    m_xFocusWindow(_xFocusWindow),
-    maName( rName ),
-    maDescription( rDescription ),
+    m_xFocusWindow(std::move(_xFocusWindow)),
+    maName(std::move( rName )),
+    maDescription(std::move( rDescription )),
     meObjType( eObjType ),
     m_aClientId(0)
 {

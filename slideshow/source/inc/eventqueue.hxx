@@ -26,6 +26,7 @@
 
 #include <mutex>
 #include <queue>
+#include <utility>
 #include <vector>
 
 
@@ -40,8 +41,7 @@ namespace slideshow::internal
         {
         public:
             EventQueue(
-                std::shared_ptr< ::canvas::tools::ElapsedTime >
-                const & pPresTimer );
+                std::shared_ptr< ::canvas::tools::ElapsedTime >  pPresTimer );
 
             ~EventQueue();
 
@@ -125,8 +125,8 @@ namespace slideshow::internal
 
                 bool operator<( const EventEntry& ) const; // to leverage priority_queue's default compare
 
-                EventEntry( EventSharedPtr const& p, double t )
-                    : pEvent(p), nTime(t) {}
+                EventEntry( EventSharedPtr  p, double t )
+                    : pEvent(std::move(p)), nTime(t) {}
             };
 
             typedef ::std::priority_queue< EventEntry > ImplQueueType;

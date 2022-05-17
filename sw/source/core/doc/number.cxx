@@ -20,6 +20,7 @@
 #include <memory>
 #include <hintids.hxx>
 
+#include <utility>
 #include <vcl/font.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/numitem.hxx>
@@ -360,11 +361,11 @@ const SwFormatVertOrient*      SwNumFormat::GetGraphicOrientation() const
     }
 }
 
-SwNumRule::SwNumRule( const OUString& rNm,
+SwNumRule::SwNumRule( OUString  rNm,
                       const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                       SwNumRuleType eType )
   : mpNumRuleMap(nullptr),
-    msName( rNm ),
+    msName(std::move( rNm )),
     meRuleType( eType ),
     mnPoolFormatId( USHRT_MAX ),
     mnPoolHelpId( USHRT_MAX ),

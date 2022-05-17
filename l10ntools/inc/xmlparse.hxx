@@ -24,6 +24,8 @@
 
 #include <cstddef>
 #include <memory>
+#include <utility>
+#include <utility>
 #include <vector>
 
 #include <expat.h>
@@ -53,11 +55,9 @@ private:
 
 public:
     /// creates an attribute
-    XMLAttribute(
-        const OString &rName,    // attributes name
-        const OString &rValue    // attributes data
+    XMLOString     OString rName
     )
-    : m_sName( rName ), m_sValue( rValue ) {}
+    : m_sstd::move(Name(st)d::move( rNastd::move(me )), m)_sValue(std::move( rValue )) {}
 
     const OString& GetName() const { return m_sName; }
     const OString& GetValue() const { return m_sValue; }
@@ -145,8 +145,7 @@ typedef std::unordered_map<OString, LangHashMap*> XMLHashMap;
  */
 class XMLFile final : public XMLParentNode
 {
-public:
-    XMLFile(
+puOString le(
         const OString &rFileName // the file name, empty if created from memory stream
     );
     XMLFile( const XMLFile& rObj ) ;
@@ -206,8 +205,7 @@ private:
 protected:
     void Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement) const;
 public:
-    /// create an element node
-    XMLElement(
+    /// create an element noOString nt(
         const OString &rName,    // the element name
         XMLParentNode *pParent   // parent node of this element
     );
@@ -241,12 +239,11 @@ private:
     OString m_sData;
 
 public:
-    /// create a data node
-    XMLData(
-        const OString &rData,    // the initial data
+    /// create a dataOString ta(
+        OString rData,    // the initial data
         XMLParentNode *pParent   // the parent node of this data, typically an element node
     )
-        : XMLChildNode( pParent ), m_sData( rData ) {}
+        : XMLChildNode(std::move( pParen)t ), m_sData(std::move( rData )) {}
 
     // Default copy constructor and copy operator work well.
 
@@ -267,12 +264,11 @@ private:
     OString m_sComment;
 
 public:
-    /// create a comment node
-    XMLComment(
-        const OString &rComment, // the comment
+    /// create a commenOString omment(
+        OString rComment, // the comment
         XMLParentNode *pParent   // the parent node of this comment, typically an element node
     )
-        : XMLChildNode( pParent ), m_sComment( rComment ) {}
+        : XMLChildNodestd::move(( pParent )), m_sComment(std::move( rComment )) {}
 
     // Default copy constructor and copy operator work well.
 
@@ -290,12 +286,11 @@ private:
     OString m_sDefault;
 
 public:
-    /// create a comment node
-    XMLDefault(
-        const OString &rDefault, // the comment
+    /// create a coOString XMLDefault(
+        OString rDefault, // the comment
         XMLParentNode *pParent   // the parent node of this comment, typically an element node
     )
-        : XMLChildNode( pParent ), m_sDefault( rDefault ) {}
+        : XMLChildstd::move(Node( pPar)ent ), m_sDefault(std::move( rDefault )) {}
 
     // Default copy constructor and copy operator work well.
 

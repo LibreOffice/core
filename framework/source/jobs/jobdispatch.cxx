@@ -36,6 +36,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 using namespace framework;
@@ -73,7 +74,7 @@ private:
 
 public:
 
-    explicit JobDispatch(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit JobDispatch(css::uno::Reference< css::uno::XComponentContext >  xContext);
     virtual ~JobDispatch() override;
 
     void impl_dispatchEvent  ( const OUString&                                            sEvent    ,
@@ -132,8 +133,8 @@ public:
     @param      xContext
                     reference to the uno service manager
 */
-JobDispatch::JobDispatch( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : m_xContext    (xContext                        )
+JobDispatch::JobDispatch( /*IN*/ css::uno::Reference< css::uno::XComponentContext >  xContext )
+    : m_xContext    (std::move(xContext                        ))
 {
 }
 

@@ -61,7 +61,7 @@ public:
         registers its event handlers.
     */
     ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
-                      LayerManagerSharedPtr const& rLayerManager,
+                      LayerManagerSharedPtr  rLayerManager,
                       CursorManager&               rCursorManager,
                       const ShapeEventListenerMap& rGlobalListenersMap,
                       const ShapeCursorMap&        rGlobalCursorMap,

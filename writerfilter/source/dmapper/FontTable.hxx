@@ -88,7 +88,7 @@ typedef tools::SvRef< FontTable >          FontTablePtr;
 class EmbeddedFontHandler : public LoggedProperties
 {
 public:
-    EmbeddedFontHandler(FontTable& rFontTable, const OUString& fontName, const char* style);
+    EmbeddedFontHandler(FontTable& rFontTable, OUString  fontName, const char* style);
     virtual ~EmbeddedFontHandler() override;
 private:
     virtual void lcl_attribute( Id name, Value& val ) override;

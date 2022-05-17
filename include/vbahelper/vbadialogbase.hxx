@@ -27,6 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <vbahelper/vbadllapi.h>
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 
@@ -48,7 +49,7 @@ protected:
     sal_Int32 mnIndex;
         css::uno::Reference< css::frame::XModel > m_xModel;
 public:
-    VbaDialogBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nIndex ):VbaDialogBase_BASE( xParent, xContext ), mnIndex( nIndex ), m_xModel( xModel ) {}
+    VbaDialogBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel >  xModel, sal_Int32 nIndex ):VbaDialogBase_BASE( xParent, xContext ), mnIndex( nIndex ), m_xModel(std::move( xModel )) {}
 
     // Methods
     virtual void SAL_CALL Show() override;

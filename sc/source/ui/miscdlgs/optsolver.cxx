@@ -20,6 +20,7 @@
 #include <rangelst.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/numformat.hxx>
+#include <utility>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
@@ -131,19 +132,19 @@ IMPL_LINK(ScCursorRefEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     return formula::RefEdit::KeyInput(rKEvt);
 }
 
-ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bMin, bool bValue,
-                             const OUString& rTarget, const OUString& rVariable,
+ScOptSolverSave::ScOptSolverSave( OUString  rObjective, bool bMax, bool bMin, bool bValue,
+                             OUString  rTarget, OUString  rVariable,
                              std::vector<ScOptConditionRow>&& rConditions,
-                             const OUString& rEngine,
+                             OUString  rEngine,
                              const uno::Sequence<beans::PropertyValue>& rProperties ) :
-    maObjective( rObjective ),
+    maObjective(std::move( rObjective )),
     mbMax( bMax ),
     mbMin( bMin ),
     mbValue( bValue ),
-    maTarget( rTarget ),
-    maVariable( rVariable ),
+    maTarget(std::move( rTarget )),
+    maVariable(std::move( rVariable )),
     maConditions( std::move(rConditions) ),
-    maEngine( rEngine ),
+    maEngine(std::move( rEngine )),
     maProperties( rProperties )
 {
 }

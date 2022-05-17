@@ -120,7 +120,7 @@ class SdtHelper final : public virtual SvRefBase
 
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl,
-                       css::uno::Reference<css::uno::XComponentContext> const& xContext);
+                       css::uno::Reference<css::uno::XComponentContext> xContext);
     ~SdtHelper() override;
 
     std::vector<OUString>& getDropDownItems() { return m_aDropDownItems; }

@@ -61,7 +61,7 @@ public:
         PGresult *result,
         const OUString &schema,
         const OUString &table,
-        const OUString &aReason );
+        OUString aReason );
 
 public: // XInterface
     virtual void SAL_CALL acquire() noexcept override { ResultSet::acquire(); }

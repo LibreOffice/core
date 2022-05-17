@@ -66,6 +66,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
@@ -958,8 +959,8 @@ void ConcreteXShapeGeometryAttributes::setWidth( double nWidth)
 }
 
 
-ShapeHelper::ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape)
-    : xShape( _xShape )
+ShapeHelper::ShapeHelper( css::uno::Reference< css::drawing::XShape >  _xShape)
+    : xShape(std::move( _xShape ))
 {
     if( !xShape.is() )
         throw css::uno::RuntimeException( "No valid shape for helper" );

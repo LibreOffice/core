@@ -8,6 +8,7 @@
  *
  */
 
+#include <utility>
 #include <vcl/VectorGraphicSearch.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
@@ -191,9 +192,9 @@ public:
     ~Implementation() { mpSearchContext.reset(); }
 };
 
-VectorGraphicSearch::VectorGraphicSearch(Graphic const& rGraphic)
+VectorGraphicSearch::VectorGraphicSearch(Graphic rGraphic)
     : mpImplementation(std::make_unique<VectorGraphicSearch::Implementation>())
-    , maGraphic(rGraphic)
+    , maGraphic(std::move(rGraphic))
 {
 }
 

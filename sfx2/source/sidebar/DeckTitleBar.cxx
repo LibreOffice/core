@@ -20,6 +20,7 @@
 #include <sidebar/DeckTitleBar.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
+#include <utility>
 #include <vcl/bitmapex.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/outdev.hxx>
@@ -60,12 +61,12 @@ public:
 
 DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
                             weld::Builder& rBuilder,
-                            const std::function<void()>& rCloserAction)
+                            std::function<void()>  rCloserAction)
     : TitleBar(rBuilder, Theme::Color_DeckTitleBarBackground)
     , mxGripWidget(new GripWidget)
     , mxGripWeld(new weld::CustomWeld(rBuilder, "grip", *mxGripWidget))
     , mxLabel(rBuilder.weld_label("label"))
-    , maCloserAction(rCloserAction)
+    , maCloserAction(std::move(rCloserAction))
     , mbIsCloserVisible(false)
 {
     mxLabel->set_label(rsTitle);

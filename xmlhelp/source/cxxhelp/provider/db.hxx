@@ -24,6 +24,8 @@
 #include <rtl/string.hxx>
 #include <memory>
 #include <unordered_map>
+#include <utility>
+#include <utility>
 
 namespace helpdatafileproxy {
 
@@ -68,10 +70,9 @@ namespace helpdatafileproxy {
         //HDFHelp must get a fileURL which can then directly be used by simple file access.
         //SimpleFileAccess requires file URLs as arguments. Passing file path may work but fails
         //for example when using long file paths on Windows, which start with "\\?\"
-        Hdf( const OUString& rFileURL,
-            css::uno::Reference< css::ucb::XSimpleFileAccess3 > const & xSFA )
+        Hdf( const OUString& rFicss::uno::Reference< css::ucb::XSimpleFileAccess3 > leAccess3 >  xSFA )
                 : m_aFileURL( rFileURL )
-                , m_xSFA( xSFA )
+             std::move(    m)_xSFA(std::move( xSFA ))
                 , m_nItRead( -1 )
                 , m_iItPos( -1 )
         {

@@ -32,6 +32,7 @@
 #include <oox/helper/textinputstream.hxx>
 #include <oox/ole/vbahelper.hxx>
 #include <oox/ole/vbainputstream.hxx>
+#include <utility>
 
 namespace oox::ole {
 
@@ -44,10 +45,10 @@ using ::com::sun::star::awt::KeyEvent;
 
 VbaModule::VbaModule( const Reference< XComponentContext >& rxContext,
                       const Reference< frame::XModel >& rxDocModel,
-                      const OUString& rName, rtl_TextEncoding eTextEnc, bool bExecutable ) :
+                      OUString  rName, rtl_TextEncoding eTextEnc, bool bExecutable ) :
     mxContext( rxContext ),
     mxDocModel( rxDocModel ),
-    maName( rName ),
+    maName(std::move( rName )),
     meTextEnc( eTextEnc ),
     mnType( script::ModuleType::UNKNOWN ),
     mnOffset( SAL_MAX_UINT32 ),

@@ -22,13 +22,14 @@
 #include <ooo/vba/word/WdReplace.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <utility>
 #include "wordvbahelper.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaFind::SwVbaFind( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange ) :
-    SwVbaFind_BASE( rParent, rContext ), mxModel( xModel ), mxTextRange( xTextRange ), mbReplace( false ), mnReplaceType( word::WdReplace::wdReplaceOne ), mnWrap( word::WdFindWrap::wdFindStop )
+SwVbaFind::SwVbaFind( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< frame::XModel >  xModel, uno::Reference< text::XTextRange >  xTextRange ) :
+    SwVbaFind_BASE( rParent, rContext ), mxModel(std::move( xModel )), mxTextRange(std::move( xTextRange )), mbReplace( false ), mnReplaceType( word::WdReplace::wdReplaceOne ), mnWrap( word::WdFindWrap::wdFindStop )
 {
     mxReplaceable.set( mxModel, uno::UNO_QUERY_THROW );
     mxPropertyReplace.set( mxReplaceable->createReplaceDescriptor(), uno::UNO_QUERY_THROW );

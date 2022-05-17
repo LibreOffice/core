@@ -62,7 +62,7 @@ public:
 class OverflowingText
 {
 public:
-    OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent);
+    OverflowingText(css::uno::Reference< css::datatransfer::XTransferable >  xOverflowingContent);
 
     std::optional<OutlinerParaObject> JuxtaposeParaObject(Outliner *, OutlinerParaObject const *);
     std::optional<OutlinerParaObject> DeeplyMergeParaObject(Outliner *, OutlinerParaObject const *);

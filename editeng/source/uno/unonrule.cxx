@@ -28,6 +28,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <utility>
 #include <vcl/font.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
@@ -90,8 +91,8 @@ static unsigned short ConvertUnoAdjust( SvxAdjust eAdjust )
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoNumberingRules );
 
-SvxUnoNumberingRules::SvxUnoNumberingRules(const SvxNumRule& rRule)
-: maRule( rRule )
+SvxUnoNumberingRules::SvxUnoNumberingRules(SvxNumRule  rRule)
+: maRule(std::move( rRule ))
 {
 }
 

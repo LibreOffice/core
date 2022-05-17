@@ -36,6 +36,7 @@
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
+#include <utility>
 #include <vcl/weldutils.hxx>
 
 using namespace css;
@@ -47,7 +48,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
              weld::Widget* pParentWindow,
              const bool bIsInitiallyExpanded,
              Deck* pDeck,
-             const std::function<Context()>& rContextAccess,
+             std::function<Context()>  rContextAccess,
              const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : mxBuilder(Application::CreateBuilder(pParentWindow, "sfx/ui/panel.ui", false, reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
     , msPanelId(rPanelDescriptor.msId)
@@ -56,7 +57,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , mbWantsAWT(rPanelDescriptor.mbWantsAWT)
     , mbIsExpanded(bIsInitiallyExpanded)
     , mbLurking(false)
-    , maContextAccess(rContextAccess)
+    , maContextAccess(std::move(rContextAccess))
     , mxFrame(rxFrame)
     , mpParentWindow(pParentWindow)
     , mxDeck(pDeck)

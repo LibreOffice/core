@@ -24,6 +24,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <toolkit/helper/convert.hxx>
+#include <utility>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
 
@@ -307,8 +308,8 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
 
 
 AccessibleGridControlAccess::AccessibleGridControlAccess(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::vcl::table::IAccessibleTable& rTable )
-    : m_xParent( rxParent )
+        css::uno::Reference< css::accessibility::XAccessible >  rxParent, ::vcl::table::IAccessibleTable& rTable )
+    : m_xParent(std::move( rxParent ))
     , m_pTable( & rTable )
 {
 }

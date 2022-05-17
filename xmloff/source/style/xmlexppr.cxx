@@ -35,6 +35,7 @@
 #include <map>
 #include <o3tl/sorted_vector.hxx>
 
+#include <utility>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/attrlist.hxx>
@@ -132,7 +133,7 @@ class FilterPropertyInfo_Impl
 
 public:
 
-    FilterPropertyInfo_Impl( const OUString& rApiName,
+    FilterPropertyInfo_Impl( OUString  rApiName,
                              const sal_uInt32 nIndex);
 
     const OUString& GetApiName() const { return msApiName; }
@@ -146,9 +147,9 @@ public:
 };
 
 FilterPropertyInfo_Impl::FilterPropertyInfo_Impl(
-        const OUString& rApiName,
+        OUString  rApiName,
         const sal_uInt32 nIndex ) :
-    msApiName( rApiName )
+    msApiName(std::move( rApiName ))
 {
     maIndexes.push_back(nIndex);
 }

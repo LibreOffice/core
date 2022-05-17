@@ -45,7 +45,7 @@ public:
     ImplLayoutRuns maFallbackRuns;
 
     ImplLayoutArgs(OUString const& rStr, int nMinCharPos, int nEndCharPos, SalLayoutFlags nFlags,
-                   LanguageTag const& rLanguageTag, vcl::text::TextLayoutCache const* pLayoutCache);
+                   LanguageTag rLanguageTag, vcl::text::TextLayoutCache const* pLayoutCache);
 
     void SetLayoutWidth(DeviceCoordinate nWidth);
     void SetDXArray(const DeviceCoordinate* pDXArray);

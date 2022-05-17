@@ -23,6 +23,7 @@
 
 #include <sax/tools/converter.hxx>
 
+#include <utility>
 #include <xmloff/xmlprmap.hxx>
 
 #include <SchXMLExport.hxx>
@@ -372,8 +373,8 @@ css::chart2::RelativePosition lcl_getCustomLabelPosition(
 class lcl_MatchesRole
 {
 public:
-    explicit lcl_MatchesRole( const OUString & aRole ) :
-            m_aRole( aRole )
+    explicit lcl_MatchesRole( OUString  aRole ) :
+            m_aRole(std::move( aRole ))
     {}
 
     bool operator () ( const Reference< chart2::data::XLabeledDataSequence > & xSeq ) const
@@ -2620,10 +2621,10 @@ void lcl_createDataLabelProperties(
         OUString sAPIName;
         sal_uInt16 nNameSpace; // from include/xmloff/xmlnamespace.hxx
         OUString sLocalName;
-        API2ODFMapItem(const OUString& sAPI, const sal_uInt16 nNS, const OUString& sLocal)
-            : sAPIName(sAPI)
+        API2ODFMapItem(OUString  sAPI, const sal_uInt16 nNS, OUString  sLocal)
+            : sAPIName(std::move(sAPI))
             , nNameSpace(nNS)
-            , sLocalName(sLocal)
+            , sLocalName(std::move(sLocal))
         {
         }
     };

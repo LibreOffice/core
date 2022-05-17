@@ -77,7 +77,7 @@ class FindTypedStrData
     ScTypedStrData maVal;
     bool mbCaseSens;
 public:
-    FindTypedStrData(const ScTypedStrData& rVal, bool bCaseSens);
+    FindTypedStrData(ScTypedStrData  rVal, bool bCaseSens);
     bool operator() (const ScTypedStrData& r) const;
 };
 

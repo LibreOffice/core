@@ -62,8 +62,8 @@ using uno::Any;
 constexpr sal_uInt16 nUnknownWhich = RES_UNKNOWNATR_CONTAINER;
 
 SvXMLImportItemMapper::SvXMLImportItemMapper(
-                                SvXMLItemMapEntriesRef const & rMapEntries ) :
-    mrMapEntries( rMapEntries )
+                                SvXMLItemMapEntriesRef  rMapEntries ) :
+    mrMapEntries(std::move( rMapEntries ))
 {
 }
 

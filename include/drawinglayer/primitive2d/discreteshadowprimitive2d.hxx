@@ -91,8 +91,8 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             DiscreteShadowPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform,
-                const DiscreteShadow& rDiscreteShadow);
+                basegfx::B2DHomMatrix  rTransform,
+                DiscreteShadow  rDiscreteShadow);
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }

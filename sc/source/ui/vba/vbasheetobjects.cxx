@@ -18,6 +18,7 @@
  */
 
 #include "vbasheetobjects.hxx"
+#include <utility>
 #include <vector>
 #include <rtl/math.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -77,8 +78,8 @@ class ScVbaObjectContainer : public ::cppu::WeakImplHelper< container::XIndexAcc
 public:
     /// @throws uno::RuntimeException
     explicit ScVbaObjectContainer(
-        const uno::Reference< XHelperInterface >& rxParent,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        uno::Reference< XHelperInterface >  rxParent,
+        uno::Reference< uno::XComponentContext >  rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         const uno::Type& rVbaType );
@@ -166,13 +167,13 @@ private:
 };
 
 ScVbaObjectContainer::ScVbaObjectContainer(
-        const uno::Reference< XHelperInterface >& rxParent,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        uno::Reference< XHelperInterface >  rxParent,
+        uno::Reference< uno::XComponentContext >  rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         const uno::Type& rVbaType ) :
-    mxParent( rxParent ),
-    mxContext( rxContext ),
+    mxParent(std::move( rxParent )),
+    mxContext(std::move( rxContext )),
     mxModel( rxModel, uno::UNO_SET_THROW ),
     mxFactory( rxModel, uno::UNO_QUERY_THROW ),
     maVbaType( rVbaType )
@@ -379,7 +380,7 @@ public:
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         const uno::Type& rVbaType,
-        const OUString& rModelServiceName,
+        OUString  rModelServiceName,
         sal_Int16 /* css::form::FormComponentType */ eType );
 
 protected:
@@ -406,10 +407,10 @@ ScVbaControlContainer::ScVbaControlContainer(
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         const uno::Type& rVbaType,
-        const OUString& rModelServiceName,
+        OUString  rModelServiceName,
         sal_Int16 /* css::form::FormComponentType */ eType ) :
     ScVbaObjectContainer( rxParent, rxContext, rxModel, rxSheet, rVbaType ),
-    maModelServiceName( rModelServiceName ),
+    maModelServiceName(std::move( rModelServiceName )),
     meType( eType )
 {
 }

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbarow.hxx"
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -29,8 +30,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaRow::SwVbaRow( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nIndex ) :
-    SwVbaRow_BASE( rParent, rContext ), mxTextTable( xTextTable ), mnIndex( nIndex )
+SwVbaRow::SwVbaRow( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,uno::Reference< text::XTextTable >  xTextTable, sal_Int32 nIndex ) :
+    SwVbaRow_BASE( rParent, rContext ), mxTextTable(std::move( xTextTable )), mnIndex( nIndex )
 {
     mxTableRows = mxTextTable->getRows();
     mxRowProps.set( mxTableRows->getByIndex( mnIndex ), uno::UNO_QUERY_THROW );

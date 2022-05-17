@@ -54,7 +54,7 @@ private:
 public:
     SystemDependentData_BitmapHelper(
         basegfx::SystemDependentDataManager& rSystemDependentDataManager,
-        const std::shared_ptr<BitmapHelper>& rBitmapHelper);
+        std::shared_ptr<BitmapHelper> rBitmapHelper);
 
     const std::shared_ptr<BitmapHelper>& getBitmapHelper() const { return maBitmapHelper; };
     virtual sal_Int64 estimateUsageInBytes() const override;
@@ -67,7 +67,7 @@ private:
 
 public:
     SystemDependentData_MaskHelper(basegfx::SystemDependentDataManager& rSystemDependentDataManager,
-                                   const std::shared_ptr<MaskHelper>& rMaskHelper);
+                                   std::shared_ptr<MaskHelper> rMaskHelper);
 
     const std::shared_ptr<MaskHelper>& getMaskHelper() const { return maMaskHelper; };
     virtual sal_Int64 estimateUsageInBytes() const override;

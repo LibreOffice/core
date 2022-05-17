@@ -36,6 +36,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 #include <box2dtools.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -205,7 +206,7 @@ namespace slideshow::internal
                                const ShapeManagerSharedPtr& rShapeManager,
                                const ::basegfx::B2DVector&  rSlideSize,
                                int                          nFlags,
-                               const box2d::utils::Box2DWorldSharedPtr& pBox2DWorld ) :
+                               box2d::utils::Box2DWorldSharedPtr  pBox2DWorld ) :
                     maPathPoly(),
                     mpShape(),
                     mpAttrLayer(),
@@ -216,7 +217,7 @@ namespace slideshow::internal
                     mbAnimationStarted( false ),
                     mbAnimationFirstUpdate( true ),
                     mnAdditive( nAdditive ),
-                    mpBox2DWorld( pBox2DWorld )
+                    mpBox2DWorld(std::move( pBox2DWorld ))
                 {
                     ENSURE_OR_THROW( rShapeManager,
                                       "PathAnimation::PathAnimation(): Invalid ShapeManager" );
@@ -367,7 +368,7 @@ namespace slideshow::internal
             class PhysicsAnimation : public NumberAnimation
             {
             public:
-                PhysicsAnimation( const ::box2d::utils::Box2DWorldSharedPtr& pBox2DWorld,
+                PhysicsAnimation( ::box2d::utils::Box2DWorldSharedPtr  pBox2DWorld,
                                     const double                 fDuration,
                                     const ShapeManagerSharedPtr& rShapeManager,
                                     const ::basegfx::B2DVector&  rSlideSize,
@@ -382,7 +383,7 @@ namespace slideshow::internal
                     mnFlags( nFlags ),
                     mbAnimationStarted( false ),
                     mpBox2DBody(),
-                    mpBox2DWorld( pBox2DWorld ),
+                    mpBox2DWorld(std::move( pBox2DWorld )),
                     mfDuration(fDuration),
                     maStartVelocity(rStartVelocity),
                     mfDensity(fDensity),
@@ -578,13 +579,13 @@ namespace slideshow::internal
                 GenericAnimation( const ShapeManagerSharedPtr&          rShapeManager,
                                   int                                   nFlags,
                                   bool           (ShapeAttributeLayer::*pIsValid)() const,
-                                  const ValueT&                         rDefaultValue,
+                                  ValueT                          rDefaultValue,
                                   ValueT         (ShapeAttributeLayer::*pGetValue)() const,
                                   void           (ShapeAttributeLayer::*pSetValue)( const ValueT& ),
                                   const ModifierFunctor&                rGetterModifier,
                                   const ModifierFunctor&                rSetterModifier,
                                   const AttributeType                   eAttrType,
-                                  const box2d::utils::Box2DWorldSharedPtr& pBox2DWorld ) :
+                                  box2d::utils::Box2DWorldSharedPtr  pBox2DWorld ) :
                     mpShape(),
                     mpAttrLayer(),
                     mpShapeManager( rShapeManager ),
@@ -594,11 +595,11 @@ namespace slideshow::internal
                     maGetterModifier( rGetterModifier ),
                     maSetterModifier( rSetterModifier ),
                     mnFlags( nFlags ),
-                    maDefaultValue(rDefaultValue),
+                    maDefaultValue(std::move(rDefaultValue)),
                     mbAnimationStarted( false ),
                     mbAnimationFirstUpdate( true ),
                     meAttrType( eAttrType ),
-                    mpBox2DWorld ( pBox2DWorld )
+                    mpBox2DWorld (std::move( pBox2DWorld ))
                 {
                     ENSURE_OR_THROW( rShapeManager,
                                       "GenericAnimation::GenericAnimation(): Invalid ShapeManager" );

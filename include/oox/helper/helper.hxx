@@ -31,6 +31,7 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <tools/color.hxx>
+#include <utility>
 
 namespace oox {
 
@@ -175,7 +176,7 @@ class OptValue
 {
 public:
                  OptValue() : maValue(), mbHasValue( false ) {}
-    explicit     OptValue( const Type& rValue ) : maValue( rValue ), mbHasValue( true ) {}
+    explicit     OptValue( Type  rValue ) : maValue(std::move( rValue )), mbHasValue( true ) {}
     explicit     OptValue( bool bHasValue, const Type& rValue ) : maValue( rValue ), mbHasValue( bHasValue ) {}
 
     bool         has() const { return mbHasValue; }

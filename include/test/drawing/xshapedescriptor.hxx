@@ -14,14 +14,15 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
+#include <utility>
 
 namespace apitest
 {
 class OOO_DLLPUBLIC_TEST XShapeDescriptor
 {
 public:
-    XShapeDescriptor(const OUString& rShapeType)
-        : m_aShapeType(rShapeType)
+    XShapeDescriptor(OUString rShapeType)
+        : m_aShapeType(std::move(rShapeType))
     {
     }
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;

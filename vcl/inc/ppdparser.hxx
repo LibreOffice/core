@@ -83,7 +83,7 @@ private:
 
     void eraseValue( const OUString& rOption );
 public:
-    PPDKey( const OUString& rKey );
+    PPDKey( OUString  rKey );
     ~PPDKey();
 
     PPDValue*           insertValue(const OUString& rOption, PPDValueType eType, bool bCustomOption = false);
@@ -163,8 +163,8 @@ private:
     // translations
     std::unique_ptr<PPDTranslator>              m_pTranslator;
 
-    PPDParser( const OUString& rFile );
-    PPDParser(const OUString& rFile, const std::vector<PPDKey*>& keys);
+    PPDParser( OUString  rFile );
+    PPDParser(OUString  rFile, const std::vector<PPDKey*>& keys);
 
     void parseOrderDependency(const OString& rLine);
     void parseOpenUI(const OString& rLine, std::string_view rPPDGroup);

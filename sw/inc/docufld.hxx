@@ -313,15 +313,15 @@ class SW_DLLPUBLIC SwHiddenTextField final : public SwField
 public:
     SwHiddenTextField( SwHiddenTextFieldType*,
                      bool   bConditional,
-                     const OUString& rCond,
+                     OUString  rCond,
                      const OUString& rText,
                      bool   bHidden,
                      SwFieldTypesEnum nSubType = SwFieldTypesEnum::HiddenText);
 
     SwHiddenTextField( SwHiddenTextFieldType*,
-                      const OUString& rCond,
-                      const OUString& rTrue,
-                      const OUString& rFalse,
+                      OUString  rCond,
+                      OUString  rTrue,
+                      OUString  rFalse,
                       SwFieldTypesEnum nSubType = SwFieldTypesEnum::HiddenText);
 
     virtual OUString    GetFieldName() const override;
@@ -367,7 +367,7 @@ class SwHiddenParaField final : public SwField
     bool m_bIsHidden;
 public:
     /// Direct input, delete old value.
-    SwHiddenParaField(SwHiddenParaFieldType*, const OUString& rCond);
+    SwHiddenParaField(SwHiddenParaFieldType*, OUString  rCond);
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
@@ -403,8 +403,8 @@ class SW_DLLPUBLIC SwMacroField final : public SwField
 
 public:
     /// Direct input, delete old value.
-    SwMacroField( SwMacroFieldType*, const OUString& rLibAndName,
-                  const OUString& rText);
+    SwMacroField( SwMacroFieldType*, OUString  rLibAndName,
+                  OUString  rText);
 
     const OUString&  GetMacro() const { return m_aMacro; }
     OUString         GetLibName() const;
@@ -461,10 +461,10 @@ public:
     static sal_uInt32 s_nLastPostItId;
 
     SwPostItField( SwPostItFieldType*,
-                   const OUString& rAuthor,
-                   const OUString& rText,
-                   const OUString& rInitials,
-                   const OUString& rName,
+                   OUString  rAuthor,
+                   OUString  rText,
+                   OUString  rInitials,
+                   OUString  rName,
                    const DateTime& rDate,
                    const bool bResolved = false,
                    const sal_uInt32 nPostItId = 0);
@@ -666,7 +666,7 @@ class SwJumpEditField final : public SwField
     OUString m_sHelp;
 public:
     SwJumpEditField( SwJumpEditFieldType*, sal_uInt32 nFormat,
-                     const OUString& sText, const OUString& sHelp );
+                     OUString  sText, OUString  sHelp );
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
@@ -703,8 +703,8 @@ class SW_DLLPUBLIC SwScriptField final : public SwField
     bool    m_bCodeURL; ///< Code contains URL of a script.
 
 public:
-    SwScriptField( SwScriptFieldType*, const OUString& rType,
-                   const OUString& rCode, bool bURL );
+    SwScriptField( SwScriptFieldType*, OUString  rType,
+                   OUString  rCode, bool bURL );
 
     virtual OUString        GetDescription() const override;
 

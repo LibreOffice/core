@@ -30,6 +30,7 @@
 #include <PageMasterPropMapper.hxx>
 #include <sal/log.hxx>
 #include <svl/style.hxx>
+#include <utility>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -159,8 +160,8 @@ class SvXMLStyleIndex_Impl
 
 public:
 
-    SvXMLStyleIndex_Impl( XmlStyleFamily nFam, const OUString& rName ) :
-        sName( rName ),
+    SvXMLStyleIndex_Impl( XmlStyleFamily nFam, OUString  rName ) :
+        sName(std::move( rName )),
         nFamily( nFam ),
         mpStyle(nullptr)
     {

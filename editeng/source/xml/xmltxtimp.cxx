@@ -21,6 +21,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svl/itemprop.hxx>
+#include <utility>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -50,7 +51,7 @@ namespace {
 class SvxXMLTextImportContext : public SvXMLImportContext
 {
 public:
-    SvxXMLTextImportContext( SvXMLImport& rImport, const uno::Reference< XText >& xText );
+    SvxXMLTextImportContext( SvXMLImport& rImport, uno::Reference< XText >  xText );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
             sal_Int32 nElement,
@@ -62,8 +63,8 @@ private:
 
 }
 
-SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, const uno::Reference< XText >& xText )
-: SvXMLImportContext( rImport ), mxText( xText )
+SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, uno::Reference< XText >  xText )
+: SvXMLImportContext( rImport ), mxText(std::move( xText ))
 {
 }
 
@@ -93,7 +94,7 @@ class SvxXMLXTextImportComponent : public SvXMLImport
 public:
     SvxXMLXTextImportComponent(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        const uno::Reference< XText > & rText );
+        uno::Reference< XText >  rText );
 
     virtual SvXMLImportContext* CreateFastContext(sal_Int32 nElement,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
@@ -120,9 +121,9 @@ SvXMLImportContext *SvxXMLXTextImportComponent::CreateFastContext(
 
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-    const uno::Reference< XText > & xText )
+    uno::Reference< XText >  xText )
 :   SvXMLImport(xContext, ""),
-    mxText( xText )
+    mxText(std::move( xText ))
 {
     GetTextImport()->SetCursor( mxText->createTextCursor() );
     SvXMLImport::setTargetDocument(new SvxSimpleUnoModel);

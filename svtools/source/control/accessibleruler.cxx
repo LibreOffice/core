@@ -23,6 +23,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/gen.hxx>
@@ -40,11 +41,11 @@ using namespace ::com::sun::star::accessibility;
 //=====  internal  ============================================================
 
 SvtRulerAccessible::SvtRulerAccessible(
-    const uno::Reference< XAccessible >& rxParent, Ruler& rRepr, const OUString& rName ) :
+    uno::Reference< XAccessible >  rxParent, Ruler& rRepr, OUString  rName ) :
 
     SvtRulerAccessible_Base( m_aMutex ),
-    msName( rName ),
-    mxParent( rxParent ),
+    msName(std::move( rName )),
+    mxParent(std::move( rxParent )),
     mpRepr( &rRepr ),
     mnClientId( 0 )
 {

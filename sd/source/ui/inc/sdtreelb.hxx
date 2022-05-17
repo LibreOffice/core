@@ -354,7 +354,7 @@ public:
     {
     public:
         SdPageObjsTransferable(
-            const INetBookmark& rBookmark,
+            INetBookmark  rBookmark,
             ::sd::DrawDocShell& rDocShell,
             NavigatorDragType eDragType );
         ::sd::DrawDocShell&     GetDocShell() const { return mrDocShell;}

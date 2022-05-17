@@ -12,14 +12,15 @@
 #include <osl/file.hxx>
 
 #include <svtools/filechangedchecker.hxx>
+#include <utility>
 #include <vcl/timer.hxx>
 
-FileChangedChecker::FileChangedChecker(const OUString& rFilename,
-        const ::std::function<void ()>& rCallback)
+FileChangedChecker::FileChangedChecker(OUString  rFilename,
+        ::std::function<void ()>  rCallback)
     : mTimer("SVTools FileChangedChecker Timer")
-    , mFileName(rFilename)
+    , mFileName(std::move(rFilename))
     , mLastModTime()
-    , mpCallback(rCallback)
+    , mpCallback(std::move(rCallback))
 {
     // Get the current last file modified Status
     getCurrentModTime(mLastModTime);
@@ -34,9 +35,9 @@ FileChangedChecker::FileChangedChecker(const OUString& rFilename,
     resetTimer();
 }
 
-FileChangedChecker::FileChangedChecker(const OUString& rFilename)
+FileChangedChecker::FileChangedChecker(OUString  rFilename)
     : mTimer("")
-    , mFileName(rFilename)
+    , mFileName(std::move(rFilename))
     , mLastModTime()
     , mpCallback(nullptr)
 {

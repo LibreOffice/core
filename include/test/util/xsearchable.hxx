@@ -13,13 +13,14 @@
 #include <test/testdllapi.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <utility>
 
 namespace apitest {
 
 class OOO_DLLPUBLIC_TEST XSearchable
 {
 public:
-    XSearchable(const OUString& rString, sal_Int32 nCount) : maSearchString(rString), mnCount(nCount) {}
+    XSearchable(OUString  rString, sal_Int32 nCount) : maSearchString(std::move(rString)), mnCount(nCount) {}
     XSearchable() : maSearchString("SearchString"), mnCount(1) {}
     virtual ~XSearchable();
 

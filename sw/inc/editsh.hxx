@@ -30,6 +30,7 @@
 #include "tox.hxx"
 
 #include <memory>
+#include <utility>
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
 
@@ -119,8 +120,8 @@ struct SwGetINetAttr
     OUString sText;
     const SwTextINetFormat& rINetAttr;
 
-    SwGetINetAttr( const OUString& rText, const SwTextINetFormat& rAttr )
-        : sText( rText ), rINetAttr( rAttr )
+    SwGetINetAttr( OUString  rText, const SwTextINetFormat& rAttr )
+        : sText(std::move( rText )), rINetAttr( rAttr )
     {}
 };
 typedef std::vector<SwGetINetAttr> SwGetINetAttrs;

@@ -18,6 +18,7 @@
  */
 
 #include <pivot.hxx>
+#include <utility>
 
 #if DEBUG_PIVOT_TABLE
 using std::cout;
@@ -31,8 +32,8 @@ using std::endl;
 ScDPName::ScDPName() : mnDupCount(0)
 {}
 
-ScDPName::ScDPName(const OUString& rName, const OUString& rLayoutName, sal_uInt8 nDupCount) :
-    maName(rName), maLayoutName(rLayoutName), mnDupCount(nDupCount)
+ScDPName::ScDPName(OUString  rName, OUString  rLayoutName, sal_uInt8 nDupCount) :
+    maName(std::move(rName)), maLayoutName(std::move(rLayoutName)), mnDupCount(nDupCount)
 {}
 
 // ScDPLabelData

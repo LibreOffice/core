@@ -30,6 +30,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <utility>
 
 namespace oox::vml {
 
@@ -39,10 +40,10 @@ TextFontModel::TextFontModel()
 {
 }
 
-TextPortionModel::TextPortionModel( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText ) :
-    maParagraph( rParagraph ),
-    maFont( rFont ),
-    maText( rText )
+TextPortionModel::TextPortionModel( TextParagraphModel  rParagraph, TextFontModel  rFont, OUString  rText ) :
+    maParagraph(std::move( rParagraph )),
+    maFont(std::move( rFont )),
+    maText(std::move( rText ))
 {
 }
 

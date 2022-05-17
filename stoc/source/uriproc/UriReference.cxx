@@ -25,16 +25,17 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <sal/types.h>
 
 using stoc::uriproc::UriReference;
 
 UriReference::UriReference(
-    OUString const & scheme, bool bHasAuthority,
-    OUString const & authority, OUString const & path,
+    OUString  scheme, bool bHasAuthority,
+    OUString const & authority, OUString  path,
     bool bHasQuery, OUString const & query):
-    m_path(path),
-    m_scheme(scheme),
+    m_path(std::move(path)),
+    m_scheme(std::move(scheme)),
     m_authority(authority),
     m_query(query),
     m_hasAuthority(bHasAuthority),

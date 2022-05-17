@@ -47,7 +47,7 @@ namespace slideshow::internal
                 @param rContext
                 Slide show context, passing on common parameters
              */
-            SlideAnimations( const SlideShowContext&     rContext,
+            SlideAnimations( SlideShowContext      rContext,
                              const ::basegfx::B2DVector& rSlideSize );
             ~SlideAnimations() COVERITY_NOEXCEPT_FALSE;
 

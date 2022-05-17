@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbacolumn.hxx"
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -26,8 +27,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaColumn::SwVbaColumn( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nIndex ) :
-    SwVbaColumn_BASE( rParent, rContext ), mxTextTable( xTextTable ), mnIndex( nIndex )
+SwVbaColumn::SwVbaColumn( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextTable >  xTextTable, sal_Int32 nIndex ) :
+    SwVbaColumn_BASE( rParent, rContext ), mxTextTable(std::move( xTextTable )), mnIndex( nIndex )
 {
 }
 

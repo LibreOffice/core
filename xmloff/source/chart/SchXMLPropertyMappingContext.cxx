@@ -9,6 +9,7 @@
 
 #include "SchXMLPropertyMappingContext.hxx"
 #include "SchXMLTools.hxx"
+#include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -66,9 +67,9 @@ SchXMLPropertyMappingContext::SchXMLPropertyMappingContext(
         SvXMLImport& rImport,
         tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
         uno::Reference<
-        chart2::XDataSeries > const & xSeries ):
+        chart2::XDataSeries >  xSeries ):
     SvXMLImportContext( rImport ),
-    mxDataSeries(xSeries),
+    mxDataSeries(std::move(xSeries)),
     mrLSequencesPerIndex(rLSequencesPerIndex)
 {
 

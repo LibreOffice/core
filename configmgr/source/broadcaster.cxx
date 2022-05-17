@@ -35,6 +35,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <utility>
 
 #include "broadcaster.hxx"
 
@@ -183,8 +184,8 @@ void Broadcaster::send() {
 
 Broadcaster::DisposeNotification::DisposeNotification(
     css::uno::Reference< css::lang::XEventListener > const & theListener,
-    css::lang::EventObject const & theEvent):
-    listener(theListener), event(theEvent)
+    css::lang::EventObject  theEvent):
+    listener(theListener), event(std::move(theEvent))
 {
     assert(theListener.is());
 }
@@ -192,8 +193,8 @@ Broadcaster::DisposeNotification::DisposeNotification(
 Broadcaster::ContainerNotification::ContainerNotification(
     css::uno::Reference< css::container::XContainerListener > const &
         theListener,
-    css::container::ContainerEvent const & theEvent):
-    listener(theListener), event(theEvent)
+    css::container::ContainerEvent  theEvent):
+    listener(theListener), event(std::move(theEvent))
 {
     assert(theListener.is());
 }
@@ -201,8 +202,8 @@ Broadcaster::ContainerNotification::ContainerNotification(
 Broadcaster::PropertyChangeNotification::PropertyChangeNotification(
     css::uno::Reference< css::beans::XPropertyChangeListener > const &
         theListener,
-    css::beans::PropertyChangeEvent const & theEvent):
-    listener(theListener), event(theEvent)
+    css::beans::PropertyChangeEvent  theEvent):
+    listener(theListener), event(std::move(theEvent))
 {
     assert(theListener.is());
 }
@@ -218,8 +219,8 @@ Broadcaster::PropertiesChangeNotification::PropertiesChangeNotification(
 
 Broadcaster::ChangesNotification::ChangesNotification(
     css::uno::Reference< css::util::XChangesListener > const & theListener,
-    css::util::ChangesEvent const & theEvent):
-    listener(theListener), event(theEvent)
+    css::util::ChangesEvent  theEvent):
+    listener(theListener), event(std::move(theEvent))
 {
     assert(theListener.is());
 }

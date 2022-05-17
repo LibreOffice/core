@@ -25,6 +25,7 @@
 #include <rtl/ref.hxx>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace com::sun::star::chart2 { class XChartDocument; }
@@ -116,13 +117,13 @@ public:
         {}
         // "full" CTOR
         tDataHeader(
-            rtl::Reference< ::chart::DataSeries > const & xDataSeries,
-            rtl::Reference< ::chart::ChartType > const &xChartType,
+            rtl::Reference< ::chart::DataSeries >  xDataSeries,
+            rtl::Reference< ::chart::ChartType > xChartType,
             bool                                        bSwapXAndYAxis,
             sal_Int32                                   nStartColumn,
             sal_Int32                                   nEndColumn ) :
-                m_xDataSeries( xDataSeries ),
-                m_xChartType( xChartType ),
+                m_xDataSeries(std::move( xDataSeries )),
+                m_xChartType(std::move( xChartType )),
                 m_bSwapXAndYAxis( bSwapXAndYAxis ),
                 m_nStartColumn( nStartColumn ),
                 m_nEndColumn( nEndColumn )

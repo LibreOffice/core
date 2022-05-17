@@ -44,6 +44,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include "impframe.hxx"
+#include <utility>
 #include <workwin.hxx>
 #include <sfx2/ipclient.hxx>
 #include <vector>
@@ -472,9 +473,9 @@ SfxUnoFrameItem::SfxUnoFrameItem()
 {
 }
 
-SfxUnoFrameItem::SfxUnoFrameItem( sal_uInt16 nWhichId, const css::uno::Reference< css::frame::XFrame >& i_rFrame )
+SfxUnoFrameItem::SfxUnoFrameItem( sal_uInt16 nWhichId, css::uno::Reference< css::frame::XFrame >  i_rFrame )
     : SfxPoolItem( nWhichId )
-    , m_xFrame( i_rFrame )
+    , m_xFrame(std::move( i_rFrame ))
 {
 }
 

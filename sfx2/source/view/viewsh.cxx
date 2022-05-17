@@ -23,6 +23,7 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
@@ -104,7 +105,7 @@ class SfxClipboardChangeListener : public ::cppu::WeakImplHelper<
     datatransfer::clipboard::XClipboardListener >
 {
 public:
-    SfxClipboardChangeListener( SfxViewShell* pView, const uno::Reference< datatransfer::clipboard::XClipboardNotifier >& xClpbrdNtfr );
+    SfxClipboardChangeListener( SfxViewShell* pView, uno::Reference< datatransfer::clipboard::XClipboardNotifier >  xClpbrdNtfr );
 
     // XEventListener
     virtual void SAL_CALL disposing( const lang::EventObject& rEventObject ) override;
@@ -138,8 +139,8 @@ private:
     DECL_STATIC_LINK( SfxClipboardChangeListener, AsyncExecuteHdl_Impl, void*, void );
 };
 
-SfxClipboardChangeListener::SfxClipboardChangeListener( SfxViewShell* pView, const uno::Reference< datatransfer::clipboard::XClipboardNotifier >& xClpbrdNtfr )
-  : m_pViewShell( nullptr ), m_xClpbrdNtfr( xClpbrdNtfr ), m_xCtrl(pView->GetController())
+SfxClipboardChangeListener::SfxClipboardChangeListener( SfxViewShell* pView, uno::Reference< datatransfer::clipboard::XClipboardNotifier >  xClpbrdNtfr )
+  : m_pViewShell( nullptr ), m_xClpbrdNtfr(std::move( xClpbrdNtfr )), m_xCtrl(pView->GetController())
 {
     if ( m_xCtrl.is() )
     {

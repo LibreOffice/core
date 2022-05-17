@@ -24,11 +24,12 @@
 
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
+#include <utility>
 
 namespace sfx2 {
 
-PreventDuplicateInteraction::PreventDuplicateInteraction(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
-    : m_xContext(rxContext)
+PreventDuplicateInteraction::PreventDuplicateInteraction(css::uno::Reference< css::uno::XComponentContext >  rxContext)
+    : m_xContext(std::move(rxContext))
 {
 }
 

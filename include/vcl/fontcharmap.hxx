@@ -147,7 +147,7 @@ private:
 
     int                 findRangeIndex( sal_UCS4 ) const;
 
-                        FontCharMap( ImplFontCharMapRef const & pIFCMap );
+                        FontCharMap( ImplFontCharMapRef  pIFCMap );
 
     // prevent assignment and copy construction
                         FontCharMap( const FontCharMap& ) = delete;

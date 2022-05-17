@@ -42,6 +42,7 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <utility>
 
 using namespace css;
 using namespace com::sun::star::uno;
@@ -101,7 +102,7 @@ private:
     void QuitSessionQuietly();
 
 public:
-    explicit SessionListener(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit SessionListener(css::uno::Reference< css::uno::XComponentContext >  xContext);
 
     virtual ~SessionListener() override;
 
@@ -138,8 +139,8 @@ public:
     virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& event) override;
 };
 
-SessionListener::SessionListener(const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-        : m_xContext( rxContext )
+SessionListener::SessionListener(css::uno::Reference< css::uno::XComponentContext >  rxContext )
+        : m_xContext(std::move( rxContext ))
         , m_bRestored( false )
         , m_bSessionStoreRequested( false )
         , m_bAllowUserInteractionOnQuit( false )

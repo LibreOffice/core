@@ -25,6 +25,7 @@
 #include <deque>
 #include <map>
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include <optional>
@@ -223,7 +224,7 @@ namespace dbaui
             css::util::URL                                        aURL;
             css::uno::Reference< css::frame::XStatusListener >    xListener;
 
-            DispatchTarget(const css::util::URL& rURL, const css::uno::Reference< css::frame::XStatusListener >& rRef) : aURL(rURL), xListener(rRef) { }
+            DispatchTarget(css::util::URL  rURL, css::uno::Reference< css::frame::XStatusListener >  rRef) : aURL(std::move(rURL)), xListener(std::move(rRef)) { }
         };
 
         typedef std::map<sal_uInt16, FeatureState> StateCache;

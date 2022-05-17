@@ -18,6 +18,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <dbdocutl.hxx>
 #include <datamapper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
@@ -37,20 +38,20 @@ class SQLFetchThread : public salhelper::Thread
     std::function<void()> maImportFinishedHdl;
 
 public:
-    SQLFetchThread(ScDocument& rDoc, const OUString& rID, std::function<void()> aImportFinishedHdl,
+    SQLFetchThread(ScDocument& rDoc, OUString rID, std::function<void()> aImportFinishedHdl,
                    std::vector<std::shared_ptr<sc::DataTransformation>>&& rTransformations);
 
     virtual void execute() override;
 };
 
 SQLFetchThread::SQLFetchThread(
-    ScDocument& rDoc, const OUString& rID, std::function<void()> aImportFinishedHdl,
+    ScDocument& rDoc, OUString rID, std::function<void()> aImportFinishedHdl,
     std::vector<std::shared_ptr<sc::DataTransformation>>&& rTransformations)
     : salhelper::Thread("SQL Fetch Thread")
     , mrDocument(rDoc)
-    , maID(rID)
+    , maID(std::move(rID))
     , maDataTransformations(std::move(rTransformations))
-    , maImportFinishedHdl(aImportFinishedHdl)
+    , maImportFinishedHdl(std::move(aImportFinishedHdl))
 {
 }
 

@@ -21,6 +21,7 @@
 
 #include "swatrset.hxx"
 #include "swtypes.hxx"
+#include <utility>
 #include <vcl/vclptr.hxx>
 
 class SwFormat;
@@ -345,8 +346,8 @@ public:
 
     const OUString& GetString() const { return m_sStr; }
 
-    SwStringMsgPoolItem( sal_uInt16 nId, const OUString& rStr )
-        : SwMsgPoolItem( nId ), m_sStr( rStr )
+    SwStringMsgPoolItem( sal_uInt16 nId, OUString  rStr )
+        : SwMsgPoolItem( nId ), m_sStr(std::move( rStr ))
     {}
 };
 #endif

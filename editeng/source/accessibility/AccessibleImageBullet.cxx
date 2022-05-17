@@ -19,6 +19,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/ustring.hxx>
@@ -49,12 +50,12 @@ using namespace ::com::sun::star::accessibility;
 namespace accessibility
 {
 
-    AccessibleImageBullet::AccessibleImageBullet ( const uno::Reference< XAccessible >& rParent ) :
+    AccessibleImageBullet::AccessibleImageBullet ( uno::Reference< XAccessible >  rParent ) :
         mnParagraphIndex( 0 ),
         mnIndexInParent( 0 ),
         mpEditSource( nullptr ),
         maEEOffset( 0, 0 ),
-        mxParent( rParent ),
+        mxParent(std::move( rParent )),
         // well, that's strictly (UNO) exception safe, though not
         // really robust. We rely on the fact that this member is
         // constructed last, and that the constructor body catches

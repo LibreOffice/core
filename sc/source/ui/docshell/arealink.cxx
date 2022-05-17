@@ -19,6 +19,7 @@
 
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/charclass.hxx>
@@ -46,17 +47,17 @@
 #include <clipparam.hxx>
 
 
-ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
-                        const OUString& rFilter, const OUString& rOpt,
-                        const OUString& rArea, const ScRange& rDest,
+ScAreaLink::ScAreaLink( SfxObjectShell* pShell, OUString  rFile,
+                        OUString  rFilter, OUString  rOpt,
+                        OUString  rArea, const ScRange& rDest,
                         sal_Int32 nRefreshDelaySeconds ) :
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
     ScRefreshTimer  ( nRefreshDelaySeconds ),
     m_pDocSh(static_cast<ScDocShell*>(pShell)),
-    aFileName       (rFile),
-    aFilterName     (rFilter),
-    aOptions        (rOpt),
-    aSourceArea     (rArea),
+    aFileName       (std::move(rFile)),
+    aFilterName     (std::move(rFilter)),
+    aOptions        (std::move(rOpt)),
+    aSourceArea     (std::move(rArea)),
     aDestArea       (rDest),
     bAddUndo        (true),
     bInCreate       (false),

@@ -26,6 +26,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/prnsetup.hxx>
@@ -79,8 +80,8 @@ class SfxPrinterController : public vcl::PrinterController, public SfxListener
 
 public:
     SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
-                          const Any& i_rComplete,
-                          const Any& i_rSelection,
+                          Any  i_rComplete,
+                          Any  i_rSelection,
                           const Any& i_rViewProp,
                           const Reference< view::XRenderable >& i_xRender,
                           bool i_bApi, bool i_bDirect,
@@ -98,8 +99,8 @@ public:
 };
 
 SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
-                                            const Any& i_rComplete,
-                                            const Any& i_rSelection,
+                                            Any  i_rComplete,
+                                            Any  i_rSelection,
                                             const Any& i_rViewProp,
                                             const Reference< view::XRenderable >& i_xRender,
                                             bool i_bApi, bool i_bDirect,
@@ -107,8 +108,8 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
                                             const uno::Sequence< beans::PropertyValue >& rProps
                                           )
     : PrinterController(i_rPrinter, pView ? pView->GetFrameWeld() : nullptr)
-    , maCompleteSelection( i_rComplete )
-    , maSelection( i_rSelection )
+    , maCompleteSelection(std::move( i_rComplete ))
+    , maSelection(std::move( i_rSelection ))
     , mxRenderable( i_xRender )
     , mpLastPrinter( nullptr )
     , mpViewShell( pView )

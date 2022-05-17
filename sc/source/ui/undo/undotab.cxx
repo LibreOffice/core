@@ -38,6 +38,7 @@
 #include <printfun.hxx>
 #include <chgtrack.hxx>
 #include <tabprotection.hxx>
+#include <utility>
 #include <viewdata.hxx>
 #include <progress.hxx>
 #include <markdata.hxx>
@@ -62,9 +63,9 @@ using ::std::vector;
 ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
                                   SCTAB nTabNum,
                                   bool bApp,
-                                  const OUString& rNewName) :
+                                  OUString  rNewName) :
     ScSimpleUndo( pNewDocShell ),
-    sNewName( rNewName ),
+    sNewName(std::move( rNewName )),
     nTab( nTabNum ),
     bAppend( bApp )
 {
@@ -771,15 +772,15 @@ bool ScUndoTabColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
                         SCTAB nSrc, SCTAB nDest,
-                        const OUString& rN, const OUString& rC,
+                        OUString  rN, OUString  rC,
                         const Color& rCol, ScScenarioFlags nF,
                         const ScMarkData& rMark ) :
     ScSimpleUndo( pNewDocShell ),
     mpMarkData(new ScMarkData(rMark)),
     nSrcTab( nSrc ),
     nDestTab( nDest ),
-    aName( rN ),
-    aComment( rC ),
+    aName(std::move( rN )),
+    aComment(std::move( rC )),
     aColor( rCol ),
     nFlags( nF )
 {
@@ -1008,9 +1009,9 @@ bool ScUndoImportTab::CanRepeat(SfxRepeatTarget& rTarget) const
     return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
-ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const OUString& rDocName ) :
+ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, OUString  rDocName ) :
     ScSimpleUndo( pShell ),
-    aDocName( rDocName ),
+    aDocName(std::move( rDocName )),
     nRefreshDelay( 0 ),
     nCount( 0 )
 {
@@ -1350,14 +1351,14 @@ OUString ScUndoPrintRange::GetComment() const
 }
 
 ScUndoScenarioFlags::ScUndoScenarioFlags(ScDocShell* pNewDocShell, SCTAB nT,
-                    const OUString& rON, const OUString& rNN, const OUString& rOC, const OUString& rNC,
+                    OUString  rON, OUString  rNN, OUString  rOC, OUString  rNC,
                     const Color& rOCol, const Color& rNCol, ScScenarioFlags nOF, ScScenarioFlags nNF) :
     ScSimpleUndo( pNewDocShell ),
     nTab        ( nT ),
-    aOldName    ( rON ),
-    aNewName    ( rNN ),
-    aOldComment ( rOC ),
-    aNewComment ( rNC ),
+    aOldName    (std::move( rON )),
+    aNewName    (std::move( rNN )),
+    aOldComment (std::move( rOC )),
+    aNewComment (std::move( rNC )),
     aOldColor   ( rOCol ),
     aNewColor   ( rNCol ),
     nOldFlags   (nOF),
@@ -1419,12 +1420,12 @@ bool ScUndoScenarioFlags::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 //      (move to different file?)
-ScUndoRenameObject::ScUndoRenameObject( ScDocShell* pNewDocShell, const OUString& rPN,
-                                        const OUString& rON, const OUString& rNN ) :
+ScUndoRenameObject::ScUndoRenameObject( ScDocShell* pNewDocShell, OUString  rPN,
+                                        OUString  rON, OUString  rNN ) :
     ScSimpleUndo( pNewDocShell ),
-    aPersistName( rPN ),
-    aOldName    ( rON ),
-    aNewName    ( rNN )
+    aPersistName(std::move( rPN )),
+    aOldName    (std::move( rON )),
+    aNewName    (std::move( rNN ))
 {
 }
 

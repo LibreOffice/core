@@ -21,7 +21,7 @@ private:
 public:
 
     ElementUIObject(SmElementsControl* pElementSelector,
-            const OUString& rID);
+            OUString  rID);
 
     virtual StringMap get_state() override;
 

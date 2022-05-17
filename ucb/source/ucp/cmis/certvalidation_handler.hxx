@@ -22,6 +22,7 @@
 #endif
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <utility>
 
 namespace cmis
 {
@@ -35,8 +36,8 @@ namespace cmis
             CertValidationHandler (
                            const css::uno::Reference< css::ucb::XCommandEnvironment>& xEnv,
                            const css::uno::Reference< css::uno::XComponentContext>& xContext,
-                           const OUString& sHostname ):
-                m_xEnv( xEnv ), m_xContext( xContext ), m_sHostname( sHostname ) { }
+                           OUString  sHostname ):
+                m_xEnv( xEnv ), m_xContext( xContext ), m_sHostname(std::move( sHostname )) { }
 
             bool validateCertificate( std::vector< std::string > certificates ) override;
     };

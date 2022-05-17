@@ -25,6 +25,7 @@
 #include <sfx2/event.hxx>
 #include <svl/poolitem.hxx>
 #include <memory>
+#include <utility>
 #include <vector>
 
 class SfxObjectShell;
@@ -37,11 +38,11 @@ struct SFX2_DLLPUBLIC SfxEventName
     OUString      maUIName;
 
             SfxEventName( SvMacroItemId nId,
-                             const OUString& rEventName,
-                             const OUString& rUIName )
+                             OUString  rEventName,
+                             OUString  rUIName )
                 : mnId( nId )
-                , maEventName( rEventName )
-                , maUIName( rUIName ) {}
+                , maEventName(std::move( rEventName ))
+                , maUIName(std::move( rUIName )) {}
 };
 
 class SFX2_DLLPUBLIC SfxEventNamesList

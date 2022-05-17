@@ -23,6 +23,7 @@
 #include <bitmaps.hlst>
 #include <strings.hrc>
 #include <tools/urlobj.hxx>
+#include <utility>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -453,9 +454,9 @@ void MediaWindow::dispatchInsertAVMedia(const css::uno::Reference<css::frame::XD
     xDispatch->dispatch(aDispatchURL, aArgs);
 }
 
-PlayerListener::PlayerListener(const std::function<void(const css::uno::Reference<css::media::XPlayer>&)> &rFn)
+PlayerListener::PlayerListener(std::function<void(const css::uno::Reference<css::media::XPlayer>&)> rFn)
     : PlayerListener_BASE(m_aMutex)
-    , m_aFn(rFn)
+    , m_aFn(std::move(rFn))
 {
 }
 

@@ -18,6 +18,7 @@
  */
 
 #include "elementimport.hxx"
+#include <utility>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
 #include "strings.hxx"
@@ -1680,9 +1681,9 @@ namespace xmloff
 
     //= OListOptionImport
     OListOptionImport::OListOptionImport(SvXMLImport& _rImport,
-            const OListAndComboImportRef& _rListBox)
+            OListAndComboImportRef  _rListBox)
         :SvXMLImportContext(_rImport)
-        ,m_xListBoxImport(_rListBox)
+        ,m_xListBoxImport(std::move(_rListBox))
     {
     }
 
@@ -1731,9 +1732,9 @@ namespace xmloff
 
     //= OComboItemImport
     OComboItemImport::OComboItemImport(SvXMLImport& _rImport,
-            const OListAndComboImportRef& _rListBox)
+            OListAndComboImportRef  _rListBox)
         :SvXMLImportContext(_rImport)
-        ,m_xListBoxImport(_rListBox)
+        ,m_xListBoxImport(std::move(_rListBox))
     {
     }
 

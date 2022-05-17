@@ -27,6 +27,7 @@
 #include <unx/gtk/gtksalmenu.hxx>
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
+#include <utility>
 #include <vcl/builder.hxx>
 #include <vcl/inputtypes.hxx>
 #include <vcl/specialchars.hxx>
@@ -17564,10 +17565,10 @@ private:
 
     DECL_LINK(SettingsChangedHdl, VclWindowEvent&, void);
 public:
-    GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, GtkInstanceBuilder* pBuilder, const a11yref& rA11y, bool bTakeOwnership)
+    GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, GtkInstanceBuilder* pBuilder, a11yref  rA11y, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pDrawingArea), pBuilder, bTakeOwnership)
         , m_pDrawingArea(pDrawingArea)
-        , m_xAccessible(rA11y)
+        , m_xAccessible(std::move(rA11y))
 #if !GTK_CHECK_VERSION(4, 0, 0)
         , m_pAccessible(nullptr)
 #endif

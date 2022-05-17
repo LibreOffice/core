@@ -35,6 +35,7 @@
 #include "ftpintreq.hxx"
 
 #include <memory>
+#include <utility>
 #include <vector>
 #include <string.h>
 #include "curl.hxx"
@@ -99,13 +100,13 @@ FTPContent::FTPContent( const Reference< XComponentContext >& rxContext,
 FTPContent::FTPContent( const Reference< XComponentContext >& rxContext,
                         FTPContentProvider* pProvider,
                         const Reference< XContentIdentifier >& Identifier,
-                        const ContentInfo& Info)
+                        ContentInfo  Info)
     : ContentImplHelper(rxContext,pProvider,Identifier)
     , m_pFCP(pProvider)
     , m_aFTPURL(Identifier->getContentIdentifier(), pProvider)
     , m_bInserted(true)
     , m_bTitleSet(false)
-    , m_aInfo(Info)
+    , m_aInfo(std::move(Info))
 {
 }
 

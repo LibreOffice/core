@@ -34,7 +34,7 @@ private:
                                const std::shared_ptr<WidgetDefinitionState>& rStates);
 
 public:
-    WidgetDefinitionReader(OUString const& rDefinitionFile, OUString const& rResourcePath);
+    WidgetDefinitionReader(OUString rDefinitionFile, OUString rResourcePath);
     bool read(WidgetDefinition& rWidgetDefinition);
 };
 

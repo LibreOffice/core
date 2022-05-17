@@ -36,7 +36,7 @@ protected:
     /// once pushed ThreadTasks are destroyed by the pool
     virtual   ~ThreadTask() {}
 public:
-    ThreadTask(const std::shared_ptr<ThreadTaskTag>& pTag);
+    ThreadTask(std::shared_ptr<ThreadTaskTag>  pTag);
 };
 
 /// A very basic thread-safe thread pool implementation

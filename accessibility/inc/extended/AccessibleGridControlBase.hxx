@@ -66,7 +66,7 @@ public:
         @param rTable    The Table control.
         @param eObjType  Type of accessible table control. */
     AccessibleGridControlBase(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        css::uno::Reference< css::accessibility::XAccessible >  rxParent,
         ::vcl::table::IAccessibleTable& rTable,
         ::vcl::table::AccessibleTableControlObjType  eObjType );
 

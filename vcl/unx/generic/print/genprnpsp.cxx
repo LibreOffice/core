@@ -44,6 +44,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
+#include <utility>
 #include <vcl/gdimtf.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/printer/Options.hxx>
@@ -948,8 +949,8 @@ struct PDFPrintFile
     OUString       maTmpURL;
     PDFNewJobParameters maParameters;
 
-    PDFPrintFile( const OUString& i_rURL, const PDFNewJobParameters& i_rNewParameters )
-    : maTmpURL( i_rURL )
+    PDFPrintFile( OUString  i_rURL, const PDFNewJobParameters& i_rNewParameters )
+    : maTmpURL(std::move( i_rURL ))
     , maParameters( i_rNewParameters ) {}
 };
 

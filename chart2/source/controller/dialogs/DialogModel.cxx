@@ -125,9 +125,9 @@ struct lcl_RolesWithRangeAppend
     typedef ::chart::DialogModel::tRolesWithRanges tContainerType;
 
     explicit lcl_RolesWithRangeAppend( tContainerType * rCnt,
-                                       const OUString & aLabelRole )
+                                       OUString  aLabelRole )
             : m_rDestCnt( rCnt ),
-              m_aRoleForLabelSeq( aLabelRole )
+              m_aRoleForLabelSeq(std::move( aLabelRole ))
     {}
 
     lcl_RolesWithRangeAppend & operator= ( const value_type & xVal )
@@ -343,8 +343,8 @@ DialogModelTimeBasedInfo::DialogModelTimeBasedInfo():
 }
 
 DialogModel::DialogModel(
-    const rtl::Reference<::chart::ChartModel> & xChartDocument ) :
-        m_xChartDocument( xChartDocument ),
+    rtl::Reference<::chart::ChartModel>  xChartDocument ) :
+        m_xChartDocument(std::move( xChartDocument )),
         m_aTimerTriggeredControllerLock( m_xChartDocument )
 {
 }

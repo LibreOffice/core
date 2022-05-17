@@ -31,6 +31,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <svtools/langtab.hxx>
 #include <svx/langbox.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
@@ -52,9 +53,9 @@ bool localesAreEqual( const Locale& rLocaleLeft, const Locale& rLocaleRight )
     return bRet;
 }
 
-ManageLanguageDialog::ManageLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> const & xLMgr)
+ManageLanguageDialog::ManageLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr>  xLMgr)
     : GenericDialogController(pParent, "modules/BasicIDE/ui/managelanguages.ui", "ManageLanguagesDialog")
-    , m_xLocalizationMgr(xLMgr)
+    , m_xLocalizationMgr(std::move(xLMgr))
     , m_sDefLangStr(IDEResId(RID_STR_DEF_LANG))
     , m_sCreateLangStr(IDEResId(RID_STR_CREATE_LANG))
     , m_xLanguageLB(m_xBuilder->weld_tree_view("treeview"))
@@ -213,9 +214,9 @@ IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl, weld::TreeView&, void)
 
 // class SetDefaultLanguageDialog -----------------------------------------------
 
-SetDefaultLanguageDialog::SetDefaultLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> const & xLMgr)
+SetDefaultLanguageDialog::SetDefaultLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr>  xLMgr)
     : GenericDialogController(pParent, "modules/BasicIDE/ui/defaultlanguage.ui", "DefaultLanguageDialog")
-    , m_xLocalizationMgr(xLMgr)
+    , m_xLocalizationMgr(std::move(xLMgr))
     , m_xLanguageFT(m_xBuilder->weld_label("defaultlabel"))
     , m_xLanguageLB(m_xBuilder->weld_tree_view("entries"))
     , m_xCheckLangFT(m_xBuilder->weld_label("checkedlabel"))

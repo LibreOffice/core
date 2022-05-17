@@ -22,6 +22,8 @@
 #include <deque>
 #include <com/sun/star/uno/Reference.h>
 #include <regexpmap.hxx>
+#include <utility>
+#include <utility>
 
 namespace com::sun::star::ucb {
     class XContentProvider;
@@ -39,9 +41,8 @@ private:
     css::uno::Reference< css::ucb::XContentProvider > const & resolveProvider() const;
 
 public:
-    explicit ProviderListEntry_Impl(
-        const css::uno::Reference< css::ucb::XContentProvider >& xProvider )
-    : m_xProvider( xProvider ) {}
+    explicit ProviderListEcss::uno::Reference< css::ucb::XContentProvider > ntProvider >  xProvider )
+    :std::move( m_xProvide)r(std::move( xProvider )) {}
 
     const css::uno::Reference< css::ucb::XContentProvider >& getProvider() const
     { return m_xProvider; }

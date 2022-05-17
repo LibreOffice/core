@@ -73,9 +73,9 @@ private:
     ScChartListener& operator=( const ScChartListener& ) = delete;
 
 public:
-    ScChartListener( const OUString& rName, ScDocument& rDoc,
+    ScChartListener( OUString  rName, ScDocument& rDoc,
                      const ScRangeListRef& rRangeListRef );
-    ScChartListener( const OUString& rName, ScDocument& rDoc,
+    ScChartListener( OUString  rName, ScDocument& rDoc,
                      std::unique_ptr<::std::vector<ScTokenRef>> pTokens );
     ScChartListener( const ScChartListener& ) = delete;
     virtual ~ScChartListener() override;

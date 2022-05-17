@@ -81,7 +81,7 @@ class UcbContentProviderProxy :
 public:
     UcbContentProviderProxy(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const OUString& Service );
+            OUString  Service );
     virtual ~UcbContentProviderProxy() override;
 
     // XInterface

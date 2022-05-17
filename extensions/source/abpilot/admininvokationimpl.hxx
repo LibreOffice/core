@@ -40,7 +40,7 @@ namespace abp
     public:
         OAdminDialogInvokation(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-            const css::uno::Reference< css::beans::XPropertySet >& _rDataSource,
+            css::uno::Reference< css::beans::XPropertySet >  _rDataSource,
             weld::Window* _pMessageParent
         );
 

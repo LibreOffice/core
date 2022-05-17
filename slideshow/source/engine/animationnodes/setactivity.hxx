@@ -25,6 +25,7 @@
 #include <animatableshape.hxx>
 #include <shapeattributelayer.hxx>
 #include <activitiesfactory.hxx>
+#include <utility>
 
 namespace slideshow::internal {
 
@@ -44,14 +45,14 @@ public:
     typedef typename AnimationT::ValueType      ValueT;
 
     SetActivity( const ActivitiesFactory::CommonParameters& rParms,
-                 const AnimationSharedPtrT&                 rAnimation,
-                 const ValueT&                              rToValue )
-        : mpAnimation( rAnimation ),
+                 AnimationSharedPtrT                  rAnimation,
+                 ValueT                               rToValue )
+        : mpAnimation(std::move( rAnimation )),
           mpShape(),
           mpAttributeLayer(),
           mpEndEvent( rParms.mpEndEvent ),
           mrEventQueue( rParms.mrEventQueue ),
-          maToValue( rToValue ),
+          maToValue(std::move( rToValue )),
           mbIsActive(true)
     {
         ENSURE_OR_THROW( mpAnimation, "Invalid animation" );

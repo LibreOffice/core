@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <utility>
 #include <vector>
 #include <rtl/ref.hxx>
 #include "DAVAuthListener.hxx"
@@ -34,10 +35,10 @@ struct DAVRequestEnvironment
     rtl::Reference< DAVAuthListener >     m_xAuthListener;
     DAVRequestHeaders                     m_aRequestHeaders;
 
-    DAVRequestEnvironment( const rtl::Reference< DAVAuthListener > & xListener,
-                       const DAVRequestHeaders & rRequestHeaders)
-    : m_xAuthListener( xListener ),
-      m_aRequestHeaders( rRequestHeaders ) {}
+    DAVRequestEnvironment( rtl::Reference< DAVAuthListener >  xListener,
+                       DAVRequestHeaders  rRequestHeaders)
+    : m_xAuthListener(std::move( xListener )),
+      m_aRequestHeaders(std::move( rRequestHeaders )) {}
 };
 
 } // namespace http_dav_ucp

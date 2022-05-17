@@ -45,6 +45,7 @@
 #include <Window.hxx>
 
 #include <DrawViewShell.hxx>
+#include <utility>
 
 /**
  * SdNavigatorWin - FloatingWindow
@@ -621,10 +622,10 @@ SdNavigatorControllerItem::SdNavigatorControllerItem(
     sal_uInt16 _nId,
     SdNavigatorWin* pNavWin,
     SfxBindings*    _pBindings,
-    const SdNavigatorWin::UpdateRequestFunctor& rUpdateRequest)
+    SdNavigatorWin::UpdateRequestFunctor  rUpdateRequest)
     : SfxControllerItem( _nId, *_pBindings ),
       pNavigatorWin( pNavWin ),
-      maUpdateRequest(rUpdateRequest)
+      maUpdateRequest(std::move(rUpdateRequest))
 {
 }
 

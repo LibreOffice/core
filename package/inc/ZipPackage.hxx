@@ -117,7 +117,7 @@ class ZipPackage final : public cppu::WeakImplHelper
             const css::uno::Reference< css::io::XInputStream >& xTempStream );
 
 public:
-    ZipPackage( const css::uno::Reference < css::uno::XComponentContext > &xContext );
+    ZipPackage( css::uno::Reference < css::uno::XComponentContext > xContext );
     virtual ~ZipPackage() override;
     ZipFile& getZipFile() { return *m_pZipFile;}
     sal_Int32 getFormat() const { return m_nFormat; }

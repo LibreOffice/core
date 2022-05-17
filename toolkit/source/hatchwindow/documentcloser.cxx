@@ -28,6 +28,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <vcl/window.hxx>
@@ -68,8 +69,8 @@ class MainThreadFrameCloserRequest
     uno::Reference< frame::XFrame > m_xFrame;
 
     public:
-        explicit MainThreadFrameCloserRequest( const uno::Reference< frame::XFrame >& xFrame )
-        : m_xFrame( xFrame )
+        explicit MainThreadFrameCloserRequest( uno::Reference< frame::XFrame >  xFrame )
+        : m_xFrame(std::move( xFrame ))
         {}
 
         DECL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, void );

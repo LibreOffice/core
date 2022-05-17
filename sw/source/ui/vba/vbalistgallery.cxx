@@ -16,13 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <utility>
+
 #include "vbalistgallery.hxx"
 #include "vbalisttemplates.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaListGallery::SwVbaListGallery( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& xTextDoc, sal_Int32 nType ) : SwVbaListGallery_BASE( rParent, rContext ), mxTextDocument( xTextDoc ), mnType( nType )
+SwVbaListGallery::SwVbaListGallery( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument >  xTextDoc, sal_Int32 nType ) : SwVbaListGallery_BASE( rParent, rContext ), mxTextDocument(std::move( xTextDoc )), mnType( nType )
 {
 }
 

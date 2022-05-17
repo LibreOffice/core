@@ -24,6 +24,7 @@
 #include <smmod.hxx>
 #include <cfgitem.hxx>
 #include <parse.hxx>
+#include <utility>
 #include <view.hxx>
 #include <visitors.hxx>
 #include <document.hxx>
@@ -38,10 +39,10 @@
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/uitest/logger.hxx>
 
-SmElement::SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, const OUString& aHelpText) :
+SmElement::SmElement(std::unique_ptr<SmNode>&& pNode, OUString  aText, OUString  aHelpText) :
     mpNode(std::move(pNode)),
-    maText(aText),
-    maHelpText(aHelpText)
+    maText(std::move(aText)),
+    maHelpText(std::move(aHelpText))
 {}
 
 SmElement::~SmElement()

@@ -21,6 +21,7 @@
 #include "SchemaRestrictionContext.hxx"
 #include "xformsapi.hxx"
 
+#include <utility>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -56,10 +57,10 @@ using namespace xmloff::token;
 SchemaRestrictionContext::SchemaRestrictionContext(
     SvXMLImport& rImport,
     Reference<css::xforms::XDataTypeRepository> const & rRepository,
-    const OUString& sTypeName ) :
+    OUString  sTypeName ) :
         TokenContext( rImport ),
         mxRepository( rRepository ),
-        msTypeName( sTypeName )
+        msTypeName(std::move( sTypeName ))
 {
     SAL_WARN_IF( !mxRepository.is(), "xmloff", "need repository" );
 }

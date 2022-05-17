@@ -65,6 +65,7 @@
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/macros.hxx>
+#include <utility>
 #include "hierarchycontent.hxx"
 #include "hierarchyprovider.hxx"
 #include "dynamicresultset.hxx"
@@ -115,9 +116,9 @@ HierarchyContent::HierarchyContent(
             const uno::Reference< uno::XComponentContext >& rxContext,
             HierarchyContentProvider* pProvider,
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
-            const HierarchyContentProperties& rProps )
+            HierarchyContentProperties  rProps )
 : ContentImplHelper( rxContext, pProvider, Identifier ),
-  m_aProps( rProps ),
+  m_aProps(std::move( rProps )),
   m_eState( PERSISTENT ),
   m_pProvider( pProvider ),
   m_bCheckedReadOnly( false ),

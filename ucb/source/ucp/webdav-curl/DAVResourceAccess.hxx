@@ -56,9 +56,9 @@ class DAVResourceAccess
 
 public:
     DAVResourceAccess() = default;
-    DAVResourceAccess( const css::uno::Reference< css::uno::XComponentContext > & rContext,
-                       rtl::Reference< DAVSessionFactory > const & rSessionFactory,
-                       const OUString & rURL );
+    DAVResourceAccess( css::uno::Reference< css::uno::XComponentContext >  rContext,
+                       rtl::Reference< DAVSessionFactory >  rSessionFactory,
+                       OUString  rURL );
     DAVResourceAccess( const DAVResourceAccess & rOther );
 
     DAVResourceAccess & operator=( const DAVResourceAccess & rOther );

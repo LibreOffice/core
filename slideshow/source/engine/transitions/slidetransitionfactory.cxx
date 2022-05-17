@@ -35,6 +35,7 @@
 #include "combtransition.hxx"
 #include <tools.hxx>
 #include <memory>
+#include <utility>
 
 
 /***************************************************
@@ -84,8 +85,8 @@ class PluginSlideChange: public SlideChangeBase
     uno::Reference<presentation::XTransition> mxTransition;
     UnoViewSharedPtr mpView;
 
-    TransitionViewPair( uno::Reference<presentation::XTransition> const & xTransition, const UnoViewSharedPtr& rView )
-         : mxTransition(xTransition), mpView(rView)
+    TransitionViewPair( uno::Reference<presentation::XTransition>  xTransition, UnoViewSharedPtr  rView )
+         : mxTransition(std::move(xTransition)), mpView(std::move(rView))
     {
     }
 
@@ -113,8 +114,8 @@ public:
                        const SlideSharedPtr&                    pEnteringSlide,
                        const UnoViewContainer&                  rViewContainer,
                        ScreenUpdater&                           rScreenUpdater,
-                       const uno::Reference<
-                             presentation::XTransitionFactory>& xFactory,
+                       uno::Reference<
+                             presentation::XTransitionFactory>  xFactory,
                        const SoundPlayerSharedPtr&              pSoundPlayer,
                        EventMultiplexer&                        rEventMultiplexer) :
         SlideChangeBase( leavingSlide_,
@@ -128,7 +129,7 @@ public:
         mnTransitionType( nTransitionType ),
         mnTransitionSubType( nTransitionSubType ),
         mnTransitionFadeColor( rTransitionFadeColor ),
-        mxFactory( xFactory )
+        mxFactory(std::move( xFactory ))
     {
         // create one transition per view
         for( const auto& rView : rViewContainer )

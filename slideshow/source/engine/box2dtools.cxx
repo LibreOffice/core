@@ -22,6 +22,7 @@
 #include <svx/svdpage.hxx>
 
 #include <svx/unoapi.hxx>
+#include <utility>
 
 #define BOX2D_SLIDE_SIZE_IN_METERS 100.00f
 constexpr double fDefaultStaticBodyBounciness(0.1);
@@ -772,7 +773,7 @@ Box2DBodySharedPtr box2DWorld::createStaticBody(const slideshow::internal::Shape
 }
 
 box2DBody::box2DBody(std::shared_ptr<b2Body> pBox2DBody, double fScaleFactor)
-    : mpBox2DBody(pBox2DBody)
+    : mpBox2DBody(std::move(pBox2DBody))
     , mfScaleFactor(fScaleFactor)
 {
 }

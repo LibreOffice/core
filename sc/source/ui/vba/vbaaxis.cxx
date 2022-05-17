@@ -21,6 +21,7 @@
 #include <ooo/vba/excel/XlAxisCrosses.hpp>
 #include <ooo/vba/excel/XlAxisType.hpp>
 #include <ooo/vba/excel/XlScaleType.hpp>
+#include <utility>
 #include "vbaaxistitle.hxx"
 #include "vbachart.hxx"
 using namespace ::com::sun::star;
@@ -52,7 +53,7 @@ ScVbaAxis::isValueAxis()
     return true;
 }
 
-ScVbaAxis::ScVbaAxis( const uno::Reference< XHelperInterface >& xParent,const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< beans::XPropertySet >& _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup  ) : ScVbaAxis_BASE( xParent, xContext ), mxPropertySet( _xPropertySet ), mnType( _nType ), mnGroup( _nGroup ), bCrossesAreCustomized( false )
+ScVbaAxis::ScVbaAxis( const uno::Reference< XHelperInterface >& xParent,const uno::Reference< uno::XComponentContext > & xContext, uno::Reference< beans::XPropertySet >  _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup  ) : ScVbaAxis_BASE( xParent, xContext ), mxPropertySet(std::move( _xPropertySet )), mnType( _nType ), mnGroup( _nGroup ), bCrossesAreCustomized( false )
 {
     oShapeHelper.reset( new ShapeHelper( uno::Reference< drawing::XShape >( mxPropertySet, uno::UNO_QUERY ) ) );
     moChartParent.set( xParent, uno::UNO_QUERY_THROW  );

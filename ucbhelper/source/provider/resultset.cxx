@@ -33,6 +33,7 @@
 #include <ucbhelper/resultset.hxx>
 #include <ucbhelper/resultsetmetadata.hxx>
 #include <ucbhelper/macros.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace com::sun::star;
@@ -154,21 +155,21 @@ struct ResultSet_Impl
     bool                            m_bAfterLast;
 
     inline ResultSet_Impl(
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        uno::Reference< uno::XComponentContext >  rxContext,
         const uno::Sequence< beans::Property >& rProperties,
-        const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
-        const uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
+        rtl::Reference< ResultSetDataSupplier >  rDataSupplier,
+        uno::Reference< css::ucb::XCommandEnvironment >  rxEnv );
 };
 
 inline ResultSet_Impl::ResultSet_Impl(
-    const uno::Reference< uno::XComponentContext >& rxContext,
+    uno::Reference< uno::XComponentContext >  rxContext,
     const uno::Sequence< beans::Property >& rProperties,
-    const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
-    const uno::Reference< css::ucb::XCommandEnvironment >& rxEnv )
-: m_xContext( rxContext ),
-  m_xEnv( rxEnv ),
+    rtl::Reference< ResultSetDataSupplier >  rDataSupplier,
+    uno::Reference< css::ucb::XCommandEnvironment >  rxEnv )
+: m_xContext(std::move( rxContext )),
+  m_xEnv(std::move( rxEnv )),
   m_aProperties( rProperties ),
-  m_xDataSupplier( rDataSupplier ),
+  m_xDataSupplier(std::move( rDataSupplier )),
   m_nPos( 0 ), // Position is one-based. Zero means: before first element.
   m_bWasNull( false ),
   m_bAfterLast( false )

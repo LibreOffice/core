@@ -30,6 +30,7 @@
 #include <sfx2/viewsh.hxx>
 #include <UndoBookmark.hxx>
 #include <unobookmark.hxx>
+#include <utility>
 #include <xmloff/odffields.hxx>
 #include <libxml/xmlwriter.h>
 #include <comphelper/random.hxx>
@@ -267,9 +268,9 @@ namespace
 namespace sw::mark
 {
     MarkBase::MarkBase(const SwPaM& aPaM,
-        const OUString& rName)
+        OUString  rName)
         : m_pPos1(new SwPosition(*(aPaM.GetPoint())))
-        , m_aName(rName)
+        , m_aName(std::move(rName))
     {
         m_pPos1->nContent.SetMark(this);
         lcl_FixPosition(*m_pPos1);

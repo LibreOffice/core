@@ -72,7 +72,7 @@ class TextNode
     void                CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDelChars );
 
 public:
-                        TextNode( const OUString& rText );
+                        TextNode( OUString  rText );
 
     TextNode( const TextNode& ) = delete;
     void operator=( const TextNode& ) = delete;

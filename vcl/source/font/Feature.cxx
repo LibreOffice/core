@@ -94,11 +94,11 @@ FeatureDefinition::FeatureDefinition()
 {
 }
 
-FeatureDefinition::FeatureDefinition(uint32_t nCode, OUString const& rDescription,
+FeatureDefinition::FeatureDefinition(uint32_t nCode, OUString rDescription,
                                      FeatureParameterType eType,
                                      std::vector<FeatureParameter>&& rEnumParameters,
                                      uint32_t nDefault)
-    : m_sDescription(rDescription)
+    : m_sDescription(std::move(rDescription))
     , m_nCode(nCode)
     , m_nDefault(nDefault)
     , m_eType(eType)
@@ -107,9 +107,9 @@ FeatureDefinition::FeatureDefinition(uint32_t nCode, OUString const& rDescriptio
 }
 
 FeatureDefinition::FeatureDefinition(uint32_t nCode, TranslateId pDescriptionID,
-                                     OUString const& rNumericPart)
+                                     OUString rNumericPart)
     : m_pDescriptionID(pDescriptionID)
-    , m_sNumericPart(rNumericPart)
+    , m_sNumericPart(std::move(rNumericPart))
     , m_nCode(nCode)
     , m_nDefault(0)
     , m_eType(FeatureParameterType::BOOL)

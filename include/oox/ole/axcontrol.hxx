@@ -897,7 +897,7 @@ public:
 class OOX_DLLPUBLIC EmbeddedControl
 {
 public:
-    explicit            EmbeddedControl( const OUString& rName );
+    explicit            EmbeddedControl( OUString  rName );
 
     /** Creates and returns the internal control model of the specified type. */
     template< typename ModelType >

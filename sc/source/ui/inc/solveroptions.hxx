@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <utility>
 #include <vcl/weld.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -34,11 +35,11 @@ class ScSolverOptionsString
     OUString    msStr;
 
 public:
-    explicit ScSolverOptionsString(const OUString& rStr)
+    explicit ScSolverOptionsString(OUString  rStr)
         : mbIsDouble(false)
         , mfDoubleValue(0.0)
         , mnIntValue(0)
-        , msStr(rStr)
+        , msStr(std::move(rStr))
     {
     }
 
@@ -82,7 +83,7 @@ public:
     ScSolverOptionsDialog( weld::Window* pParent,
                            const css::uno::Sequence<OUString>& rImplNames,
                            const css::uno::Sequence<OUString>& rDescriptions,
-                           const OUString& rEngine,
+                           OUString  rEngine,
                            const css::uno::Sequence<css::beans::PropertyValue>& rProperties );
     virtual ~ScSolverOptionsDialog() override;
 

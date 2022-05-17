@@ -39,7 +39,7 @@ struct PivotTableSources
         ScDPObject* mpDP;
         ScSheetSourceDesc maDesc;
 
-        SheetSource(ScDPObject* pObj, const ScSheetSourceDesc& rDesc);
+        SheetSource(ScDPObject* pObj, ScSheetSourceDesc rDesc);
     };
 
     struct DBSource
@@ -47,7 +47,7 @@ struct PivotTableSources
         ScDPObject* mpDP;
         ScImportSourceDesc maDesc;
 
-        DBSource(ScDPObject* pObj, const ScImportSourceDesc& rDesc);
+        DBSource(ScDPObject* pObj, ScImportSourceDesc rDesc);
     };
 
     struct ServiceSource
@@ -55,7 +55,7 @@ struct PivotTableSources
         ScDPObject* mpDP;
         ScDPServiceDesc maDesc;
 
-        ServiceSource(ScDPObject* pObj, const ScDPServiceDesc& rDesc);
+        ServiceSource(ScDPObject* pObj, ScDPServiceDesc rDesc);
     };
 
     std::vector<SelectedPages> maSelectedPagesList;

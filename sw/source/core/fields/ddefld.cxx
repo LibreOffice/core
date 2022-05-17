@@ -36,6 +36,7 @@
 #include <swbaslnk.hxx>
 #include <unofldmid.h>
 #include <hints.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -144,10 +145,10 @@ bool SwIntrnlRefLink::IsInRange( SwNodeOffset nSttNd, SwNodeOffset nEndNd ) cons
     return bInRange;
 }
 
-SwDDEFieldType::SwDDEFieldType(const OUString& rName,
+SwDDEFieldType::SwDDEFieldType(OUString  rName,
                                const OUString& rCmd, SfxLinkUpdateMode nUpdateType )
     : SwFieldType( SwFieldIds::Dde ),
-    m_aName( rName ), m_pDoc( nullptr ), m_nRefCount( 0 )
+    m_aName(std::move( rName )), m_pDoc( nullptr ), m_nRefCount( 0 )
 {
     m_bCRLFFlag = m_bDeleted = false;
     m_RefLink = new SwIntrnlRefLink( *this, nUpdateType );

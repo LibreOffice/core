@@ -55,6 +55,7 @@
 #include <string_view>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace css::uno;
@@ -205,8 +206,8 @@ sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
 class ImplementationEnumeration_Impl : public WeakImplHelper< XEnumeration >
 {
 public:
-    explicit ImplementationEnumeration_Impl( const HashSet_Ref & rImplementationMap )
-        : aImplementationMap( rImplementationMap )
+    explicit ImplementationEnumeration_Impl( HashSet_Ref  rImplementationMap )
+        : aImplementationMap(std::move( rImplementationMap ))
         , aIt( aImplementationMap.begin() )
         {}
 

@@ -40,7 +40,7 @@ struct FormulaResultValue
 
     FormulaResultValue();
     FormulaResultValue( double fValue );
-    FormulaResultValue( const svl::SharedString& rStr );
+    FormulaResultValue( svl::SharedString  rStr );
     FormulaResultValue( FormulaError nErr );
 };
 

@@ -27,8 +27,8 @@ class DateTickFactory
 {
 public:
     DateTickFactory(
-         const ExplicitScaleData& rScale
-        , const ExplicitIncrementData& rIncrement );
+         ExplicitScaleData  rScale
+        , ExplicitIncrementData  rIncrement );
     ~DateTickFactory();
 
     void getAllTicks( TickInfoArraysType& rAllTickInfos ) const;

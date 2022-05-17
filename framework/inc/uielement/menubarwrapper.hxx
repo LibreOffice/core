@@ -34,7 +34,7 @@ class MenuBarWrapper final : public UIConfigElementWrapperBase,
 {
     public:
         MenuBarWrapper(
-            const css::uno::Reference< css::uno::XComponentContext >& xContext );
+            css::uno::Reference< css::uno::XComponentContext >  xContext );
         virtual ~MenuBarWrapper() override;
 
         //  XInterface, XTypeProvider

@@ -28,6 +28,7 @@
 #include <sal/log.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/seqstream.hxx>
+#include <utility>
 #include <vcl/wmfexternal.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
@@ -57,9 +58,9 @@ sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm )
 
 } // namespace
 
-GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, const Reference< XFrame >& /*rxTargetFrame*/, const StorageRef& rxStorage ) :
+GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, const Reference< XFrame >& /*rxTargetFrame*/, StorageRef  rxStorage ) :
     mxContext( rxContext ),
-    mxStorage( rxStorage )
+    mxStorage(std::move( rxStorage ))
 {
     OSL_ENSURE( mxContext.is(), "GraphicHelper::GraphicHelper - missing component context" );
     if( mxContext.is() )

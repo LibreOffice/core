@@ -21,6 +21,7 @@
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
@@ -86,8 +87,8 @@ struct CustomProperty
     OUString         m_sName;
     css::uno::Any    m_aValue;
 
-    CustomProperty( const OUString& sName, const css::uno::Any& rValue ) :
-        m_sName( sName ), m_aValue( rValue ) {}
+    CustomProperty( OUString  sName, css::uno::Any  rValue ) :
+        m_sName(std::move( sName )), m_aValue(std::move( rValue )) {}
 
     bool operator==(const CustomProperty& rProp) const
     {

@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <utility>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -52,7 +53,7 @@ namespace svt
 ToolboxController::ToolboxController(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame,
-    const OUString& aCommandURL ) :
+    OUString  aCommandURL ) :
     OPropertyContainer( GetBroadcastHelper() )
     ,   m_bSupportVisible( false )
     ,   m_bInitialized( false )
@@ -61,7 +62,7 @@ ToolboxController::ToolboxController(
     ,   m_nToolBoxId( SAL_MAX_UINT16 )
     ,   m_xFrame( xFrame )
     ,   m_xContext( rxContext )
-    ,   m_aCommandURL( aCommandURL )
+    ,   m_aCommandURL(std::move( aCommandURL ))
     ,   m_aListenerContainer( m_aMutex )
     ,   m_pToolbar(nullptr)
     ,   m_pBuilder(nullptr)

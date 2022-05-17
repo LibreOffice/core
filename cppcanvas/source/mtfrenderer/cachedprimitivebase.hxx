@@ -57,7 +57,7 @@ namespace cppcanvas::internal
                 same. Otherwise, repaints are always performed via the
                 cached primitive.
              */
-            CachedPrimitiveBase( const CanvasSharedPtr& rCanvas,
+            CachedPrimitiveBase( CanvasSharedPtr  rCanvas,
                                  bool                   bOnlyRedrawWithSameTransform );
 
             CachedPrimitiveBase(const CachedPrimitiveBase&) = delete;

@@ -19,15 +19,16 @@
 #include <sfx2/sidebar/Deck.hxx>
 #include <sidebar/DeckDescriptor.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 
 using namespace css;
 using namespace ::sfx2::sidebar;
 
-SfxUnoPanel::SfxUnoPanel(const uno::Reference<frame::XFrame>& rFrame, const OUString& panelId, const OUString& deckId):
-xFrame(rFrame),
-mPanelId(panelId),
-mDeckId(deckId)
+SfxUnoPanel::SfxUnoPanel(uno::Reference<frame::XFrame>  rFrame, OUString  panelId, OUString  deckId):
+xFrame(std::move(rFrame)),
+mPanelId(std::move(panelId)),
+mDeckId(std::move(deckId))
 {
     SidebarController* pSidebarController = getSidebarController();
 

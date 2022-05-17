@@ -15,6 +15,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <utility>
 
 namespace apitest
 {
@@ -25,8 +26,8 @@ public:
         : m_aRangeName("A1:A1")
     {
     }
-    XCellRange(const OUString& aRangeName)
-        : m_aRangeName(aRangeName)
+    XCellRange(OUString aRangeName)
+        : m_aRangeName(std::move(aRangeName))
     {
     }
 

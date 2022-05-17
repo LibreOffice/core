@@ -19,6 +19,7 @@
 
 #include <sfx2/minfitem.hxx>
 #include <sal/log.hxx>
+#include <utility>
 #include <config_features.h>
 
 #if HAVE_FEATURE_SCRIPTING
@@ -29,16 +30,16 @@ SfxPoolItem* SfxMacroInfoItem::CreateDefault() { SAL_WARN( "sfx", "No SfxMacroIn
 SfxMacroInfoItem::SfxMacroInfoItem(
     sal_uInt16 nWhichId,        // Slot-ID
     const BasicManager* pMgr,
-    const OUString &rLibName,
-    const OUString &rModuleName,
-    const OUString &rMethodName,
-    const OUString &rComment) :
+    OUString rLibName,
+    OUString rModuleName,
+    OUString rMethodName,
+    OUString rComment) :
     SfxPoolItem(nWhichId),
     pBasicManager(pMgr),
-    aLibName(rLibName),
-    aModuleName(rModuleName),
-    aMethodName(rMethodName),
-    aCommentText(rComment)
+    aLibName(std::move(rLibName)),
+    aModuleName(std::move(rModuleName)),
+    aMethodName(std::move(rMethodName)),
+    aCommentText(std::move(rComment))
 {
 }
 

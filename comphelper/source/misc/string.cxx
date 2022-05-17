@@ -21,6 +21,7 @@
 
 #include <cstddef>
 #include <string_view>
+#include <utility>
 #include <vector>
 #include <algorithm>
 
@@ -478,7 +479,7 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
 
 NaturalStringSorter::NaturalStringSorter(
     const uno::Reference< uno::XComponentContext > &rContext,
-    const lang::Locale &rLocale) : m_aLocale(rLocale)
+    lang::Locale rLocale) : m_aLocale(std::move(rLocale))
 {
     m_xCollator = i18n::Collator::create( rContext );
     m_xCollator->loadDefaultCollator(m_aLocale, 0);

@@ -72,7 +72,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             GridPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform,
+                basegfx::B2DHomMatrix  rTransform,
                 double fWidth,
                 double fHeight,
                 double fSmallestViewDistance,

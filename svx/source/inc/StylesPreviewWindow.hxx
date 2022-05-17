@@ -61,7 +61,7 @@ class StyleItemController
     std::pair<OUString, OUString> m_aStyleName;
 
 public:
-    StyleItemController(const std::pair<OUString, OUString>& aStyleName);
+    StyleItemController(std::pair<OUString, OUString> aStyleName);
 
     void Paint(vcl::RenderContext& rRenderContext);
 

@@ -26,6 +26,7 @@
 #include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <tools/urlobj.hxx>
+#include <utility>
 #include <vcl/embeddedfontshelper.hxx>
 #include <vcl/graph.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -312,8 +313,8 @@ public:
 
     std::unique_ptr< DocumentInfo > mpDocumentInfo;
 
-    SvXMLImport_Impl( const uno::Reference< uno::XComponentContext >& rxContext,
-                      OUString const & theImplementationName,
+    SvXMLImport_Impl( uno::Reference< uno::XComponentContext >  rxContext,
+                      OUString  theImplementationName,
                       const css::uno::Sequence< OUString > & sSupportedServiceNames = {})
         : hBatsFontConv( nullptr )
         , hMathFontConv( nullptr )
@@ -323,8 +324,8 @@ public:
         // Convert drawing object positions from OOo file format to OASIS (#i28749#)
         , mbShapePositionInHoriL2R( false )
         , mbTextDocInOOoFileFormat( false )
-        , mxComponentContext( rxContext )
-        , implementationName(theImplementationName)
+        , mxComponentContext(std::move( rxContext ))
+        , implementationName(std::move(theImplementationName))
         , maSupportedServiceNames(sSupportedServiceNames)
     {
         SAL_WARN_IF(!mxComponentContext.is(), "xmloff.core", "SvXMLImport: no ComponentContext");
@@ -491,9 +492,9 @@ namespace
     private:
         css::uno::Reference<css::xml::sax::XFastParser> mxParser;
     public:
-        setFastDocumentHandlerGuard(const css::uno::Reference<css::xml::sax::XFastParser>& Parser,
+        setFastDocumentHandlerGuard(css::uno::Reference<css::xml::sax::XFastParser>  Parser,
                                     const css::uno::Reference<css::xml::sax::XFastDocumentHandler>& Handler)
-            : mxParser(Parser)
+            : mxParser(std::move(Parser))
         {
             mxParser->setFastDocumentHandler(Handler);
         }
@@ -2155,8 +2156,8 @@ OUString SvXMLImportFastNamespaceHandler::getNamespaceURI( const OUString&/* rNa
     return OUString();
 }
 
-SvXMLLegacyToFastDocHandler::SvXMLLegacyToFastDocHandler( const rtl::Reference< SvXMLImport > & rImport )
-:   mrImport( rImport ),
+SvXMLLegacyToFastDocHandler::SvXMLLegacyToFastDocHandler( rtl::Reference< SvXMLImport >  rImport )
+:   mrImport(std::move( rImport )),
     mxFastAttributes( new sax_fastparser::FastAttributeList( SvXMLImport::xTokenHandler.get() ) )
 {
 }

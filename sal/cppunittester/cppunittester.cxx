@@ -69,6 +69,7 @@
 
 #include <algorithm>
 #include <string_view>
+#include <utility>
 
 namespace {
 
@@ -188,8 +189,8 @@ private:
 
 struct test_name_compare
 {
-    explicit test_name_compare(const std::string& rName):
-        maName(rName)
+    explicit test_name_compare(std::string  rName):
+        maName(std::move(rName))
     {
     }
 

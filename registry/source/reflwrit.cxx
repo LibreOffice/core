@@ -28,6 +28,7 @@
 
 #include "reflwrit.hxx"
 #include <registry/refltype.hxx>
+#include <utility>
 #include <registry/version.h>
 #include <registry/writer.h>
 
@@ -637,11 +638,11 @@ public:
     sal_uInt32          m_blopSize;
 
     TypeWriter(typereg_Version version,
-               OString const & documentation,
-               OString const & fileName,
+               OString  documentation,
+               OString  fileName,
                RTTypeClass      RTTypeClass,
                bool             published,
-               const OString&   typeName,
+               OString    typeName,
                sal_uInt16       superTypeCount,
                sal_uInt16       FieldCount,
                sal_uInt16       methodCount,
@@ -655,11 +656,11 @@ public:
 };
 
 TypeWriter::TypeWriter(typereg_Version version,
-                       OString const & documentation,
-                       OString const & fileName,
+                       OString  documentation,
+                       OString  fileName,
                        RTTypeClass      RTTypeClass,
                        bool             published,
-                       const OString&   typeName,
+                       OString    typeName,
                        sal_uInt16       superTypeCount,
                        sal_uInt16       fieldCount,
                        sal_uInt16       methodCount,
@@ -669,10 +670,10 @@ TypeWriter::TypeWriter(typereg_Version version,
     , m_typeClass(
         static_cast< enum RTTypeClass >(
             RTTypeClass | (published ? RT_TYPE_PUBLISHED : 0)))
-     , m_typeName(typeName)
+     , m_typeName(std::move(typeName))
     , m_nSuperTypes(superTypeCount)
-    , m_doku(documentation)
-    , m_fileName(fileName)
+    , m_doku(std::move(documentation))
+    , m_fileName(std::move(fileName))
     , m_fieldCount(fieldCount)
     , m_fields(nullptr)
     , m_methodCount(methodCount)

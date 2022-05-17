@@ -65,7 +65,7 @@ class SW_DLLPUBLIC SwNumRulesWithName final
     SwNumRulesWithName() = default;
 
 public:
-    SwNumRulesWithName(const SwNumRule &, const OUString &);
+    SwNumRulesWithName(const SwNumRule &, OUString );
     SwNumRulesWithName( const SwNumRulesWithName & );
     ~SwNumRulesWithName();
 

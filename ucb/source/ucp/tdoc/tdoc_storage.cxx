@@ -25,6 +25,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/packages/NoEncryptionException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 #include "tdoc_uri.hxx"
@@ -41,10 +42,10 @@ using namespace tdoc_ucp;
 
 
 StorageElementFactory::StorageElementFactory(
-    const uno::Reference< uno::XComponentContext > & rxContext,
-    const rtl::Reference< OfficeDocumentsManager > & xDocsMgr )
-: m_xDocsMgr( xDocsMgr ),
-  m_xContext( rxContext )
+    uno::Reference< uno::XComponentContext >  rxContext,
+    rtl::Reference< OfficeDocumentsManager >  xDocsMgr )
+: m_xDocsMgr(std::move( xDocsMgr )),
+  m_xContext(std::move( rxContext ))
 {
 }
 

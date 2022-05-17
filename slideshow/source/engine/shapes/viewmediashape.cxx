@@ -22,6 +22,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/canvastools.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
@@ -55,15 +56,15 @@ using namespace ::com::sun::star;
 namespace slideshow::internal
 {
         ViewMediaShape::ViewMediaShape( const ViewLayerSharedPtr&                       rViewLayer,
-                                        const uno::Reference< drawing::XShape >&        rxShape,
-                                        const uno::Reference< uno::XComponentContext >& rxContext ) :
+                                        uno::Reference< drawing::XShape >         rxShape,
+                                        uno::Reference< uno::XComponentContext >  rxContext ) :
             mpViewLayer( rViewLayer ),
             maWindowOffset( 0, 0 ),
             maBounds(),
-            mxShape( rxShape ),
+            mxShape(std::move( rxShape )),
             mxPlayer(),
             mxPlayerWindow(),
-            mxComponentContext( rxContext ),
+            mxComponentContext(std::move( rxContext )),
             mbIsSoundEnabled(true)
         {
             ENSURE_OR_THROW( mxShape.is(), "ViewMediaShape::ViewMediaShape(): Invalid Shape" );

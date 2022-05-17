@@ -22,11 +22,12 @@
 #include <numrule.hxx>
 #include <ndarr.hxx>
 #include <node.hxx>
+#include <utility>
 
-SwList::SwList( const OUString& sListId,
+SwList::SwList( OUString  sListId,
                         SwNumRule& rDefaultListStyle,
                         const SwNodes& rNodes )
-    : msListId( sListId ),
+    : msListId(std::move( sListId )),
       msDefaultListStyleName( rDefaultListStyle.GetName() ),
       mnMarkedListLevel( MAXLEVEL )
 {

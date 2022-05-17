@@ -25,6 +25,7 @@
 #include <cppuhelper/compbase.hxx>
 
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <factory.hxx>
@@ -59,8 +60,8 @@ class VCLSession:
         bool                                        m_bInteractionDone;
         bool                                        m_bSaveDone;
 
-        explicit Listener( const css::uno::Reference< XSessionManagerListener >& xListener )
-                : m_xListener( xListener ),
+        explicit Listener( css::uno::Reference< XSessionManagerListener >  xListener )
+                : m_xListener(std::move( xListener )),
                   m_bInteractionRequested( false ),
                   m_bInteractionDone( false ),
                   m_bSaveDone( false )

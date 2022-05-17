@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
+#include <utility>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/quickselectionengine.hxx>
@@ -60,9 +61,9 @@ struct ImplEntryType
 
     tools::Long getHeightWithMargin() const;
 
-    ImplEntryType( const OUString& rStr, const Image& rImage ) :
-        maStr( rStr ),
-        maImage( rImage ),
+    ImplEntryType( OUString  rStr, Image  rImage ) :
+        maStr(std::move( rStr )),
+        maImage(std::move( rImage )),
         mnFlags( ListBoxEntryFlags::NONE ),
         mnHeight( 0 )
     {
@@ -70,8 +71,8 @@ struct ImplEntryType
         mpUserData = nullptr;
     }
 
-    ImplEntryType( const OUString& rStr ) :
-        maStr( rStr ),
+    ImplEntryType( OUString  rStr ) :
+        maStr(std::move( rStr )),
         mnFlags( ListBoxEntryFlags::NONE ),
         mnHeight( 0 )
     {

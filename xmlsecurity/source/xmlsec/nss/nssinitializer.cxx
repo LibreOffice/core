@@ -42,6 +42,7 @@
 #include "ciphercontext.hxx"
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include <nss.h>
@@ -306,8 +307,8 @@ sal_Bool SAL_CALL ONSSInitializer::getIsNSSinitialized()
     return m_bIsNSSinitialized;
 }
 
-ONSSInitializer::ONSSInitializer(const css::uno::Reference< css::uno::XComponentContext > &rxContext)
-    : m_xContext(rxContext)
+ONSSInitializer::ONSSInitializer(css::uno::Reference< css::uno::XComponentContext > rxContext)
+    : m_xContext(std::move(rxContext))
 {
 }
 

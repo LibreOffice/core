@@ -42,6 +42,7 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <comphelper/processfactory.hxx>
 #include <uno/current_context.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <boost/property_tree/json_parser.hpp>
@@ -338,8 +339,8 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
     SfxBindings*                       pBind,
     SfxDispatcher*                     pDispat,
     const SfxSlot*                     pSlot,
-    const css::util::URL&              rURL )
-    : aDispatchURL( rURL )
+    css::util::URL               rURL )
+    : aDispatchURL(std::move( rURL ))
     , pDispatcher( pDispat )
     , pBindings( pBind )
     , pLastState( nullptr )

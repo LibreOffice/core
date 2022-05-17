@@ -26,6 +26,7 @@
 
 #include <map>
 #include <memory>
+#include <utility>
 
 namespace com::sun::star::io { class XInputStream; }
 
@@ -58,7 +59,7 @@ class SwRetrievedInputStreamDataManager
             {};
 
             tData( std::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > pThreadConsumer )
-                : mpThreadConsumer( pThreadConsumer ),
+                : mpThreadConsumer(std::move( pThreadConsumer )),
                   mbIsStreamReadOnly( false )
             {};
         };

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <xmloff/xmlerror.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -44,11 +45,11 @@ public:
 
     ErrorRecord( sal_Int32 nId,
                  const Sequence<OUString>& rParams,
-                 const OUString& rExceptionMessage,
+                 OUString  rExceptionMessage,
                  sal_Int32 nRow,
                  sal_Int32 nColumn,
-                 const OUString& rPublicId,
-                 const OUString& rSystemId);
+                 OUString  rPublicId,
+                 OUString  rSystemId);
 
     sal_Int32 nId;  /// error ID
 
@@ -66,14 +67,14 @@ public:
 
 
 ErrorRecord::ErrorRecord( sal_Int32 nID, const Sequence<OUString>& rParams,
-    const OUString& rExceptionMessage, sal_Int32 nRowNumber, sal_Int32 nCol,
-    const OUString& rPublicId, const OUString& rSystemId) :
+    OUString  rExceptionMessage, sal_Int32 nRowNumber, sal_Int32 nCol,
+    OUString  rPublicId, OUString  rSystemId) :
         nId(nID),
-        sExceptionMessage(rExceptionMessage),
+        sExceptionMessage(std::move(rExceptionMessage)),
         nRow(nRowNumber),
         nColumn(nCol),
-        sPublicId(rPublicId),
-        sSystemId(rSystemId),
+        sPublicId(std::move(rPublicId)),
+        sSystemId(std::move(rSystemId)),
         aParams(rParams)
 {
 }

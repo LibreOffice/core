@@ -58,6 +58,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
 #include <svl/cryptosign.hxx>
+#include <utility>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -1190,7 +1191,7 @@ double PDFPage::getHeight() const
     return fRet;
 }
 
-PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
+PDFWriterImpl::PDFWriterImpl( PDFWriter::PDFWriterContext  rContext,
                                const css::uno::Reference< css::beans::XMaterialHolder >& xEnc,
                                PDFWriter& i_rOuterFace)
         : VirtualDevice(Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::NONE, OUTDEV_PDF),
@@ -1207,7 +1208,7 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         m_nSignatureLastByteRangeNoOffset( 0 ),
         m_nResourceDict( -1 ),
         m_nFontDictObject( -1 ),
-        m_aContext(rContext),
+        m_aContext(std::move(rContext)),
         m_aFile(m_aContext.URL),
         m_bOpen(false),
         m_DocDigest(::comphelper::HashType::MD5),

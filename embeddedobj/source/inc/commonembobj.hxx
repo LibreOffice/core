@@ -255,12 +255,12 @@ private:
 
 public:
     OCommonEmbeddedObject(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        css::uno::Reference< css::uno::XComponentContext >  rxContext,
         const css::uno::Sequence< css::beans::NamedValue >& aObjectProps );
 
     // no persistence for linked objects, so the descriptors are provided in constructor
     OCommonEmbeddedObject(
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        css::uno::Reference< css::uno::XComponentContext >  rxContext,
         const css::uno::Sequence< css::beans::NamedValue >& aObjectProps,
         const css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr,
         const css::uno::Sequence< css::beans::PropertyValue >& aObjectDescr );

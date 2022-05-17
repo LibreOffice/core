@@ -74,6 +74,7 @@
 #include <tools/urlobj.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/i18nhelp.hxx>
@@ -194,8 +195,8 @@ struct IndexEntry_Impl
     bool            m_bSubEntry;
     OUString        m_aURL;
 
-    IndexEntry_Impl( const OUString& rURL, bool bSubEntry ) :
-        m_bSubEntry( bSubEntry ), m_aURL( rURL ) {}
+    IndexEntry_Impl( OUString  rURL, bool bSubEntry ) :
+        m_bSubEntry( bSubEntry ), m_aURL(std::move( rURL )) {}
 };
 
 // struct ContentEntry_Impl ----------------------------------------------
@@ -205,8 +206,8 @@ struct ContentEntry_Impl
     OUString    aURL;
     bool        bIsFolder;
 
-    ContentEntry_Impl( const OUString& rURL, bool bFolder ) :
-        aURL( rURL ), bIsFolder( bFolder ) {}
+    ContentEntry_Impl( OUString  rURL, bool bFolder ) :
+        aURL(std::move( rURL )), bIsFolder( bFolder ) {}
 };
 
 }

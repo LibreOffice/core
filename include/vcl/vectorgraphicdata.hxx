@@ -91,7 +91,7 @@ private:
 public:
     VectorGraphicData(const OUString& rPath, VectorGraphicDataType eVectorDataType);
     VectorGraphicData(
-        const BinaryDataContainer& rDataContainer,
+        BinaryDataContainer  rDataContainer,
         VectorGraphicDataType eVectorDataType,
         sal_Int32 nPageIndex = -1);
     ~VectorGraphicData();

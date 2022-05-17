@@ -23,6 +23,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <ooo/vba/office/MsoShapeType.hpp>
 
+#include <utility>
 #include <vbahelper/vbashaperange.hxx>
 #include <vbahelper/vbashape.hxx>
 using namespace ::ooo::vba;
@@ -36,7 +37,7 @@ class VbShapeRangeEnumHelper : public EnumerationHelper_BASE
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
         sal_Int32 nIndex;
 public:
-    VbShapeRangeEnumHelper( const uno::Reference< XCollection >& xParent,  const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xParent( xParent ), m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
+    VbShapeRangeEnumHelper( uno::Reference< XCollection >  xParent,  uno::Reference< container::XIndexAccess >  xIndexAccess ) : m_xParent(std::move( xParent )), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
         virtual sal_Bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
@@ -53,7 +54,7 @@ public:
 
 }
 
-ScVbaShapeRange::ScVbaShapeRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xShapes, const uno::Reference< drawing::XDrawPage >& xDrawPage, const uno::Reference< frame::XModel >& xModel  ) : ScVbaShapeRange_BASE( xParent, xContext, xShapes ), m_xDrawPage( xDrawPage ), m_xModel( xModel )
+ScVbaShapeRange::ScVbaShapeRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xShapes, uno::Reference< drawing::XDrawPage >  xDrawPage, uno::Reference< frame::XModel >  xModel  ) : ScVbaShapeRange_BASE( xParent, xContext, xShapes ), m_xDrawPage(std::move( xDrawPage )), m_xModel(std::move( xModel ))
 {
 }
 

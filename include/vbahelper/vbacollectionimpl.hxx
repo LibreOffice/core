@@ -21,6 +21,7 @@
 #define INCLUDED_VBAHELPER_VBACOLLECTIONIMPL_HXX
 
 #include <exception>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -71,8 +72,8 @@ class VBAHELPER_DLLPUBLIC SimpleIndexAccessToEnumeration final : public Enumerat
 public:
     /// @throws css::uno::RuntimeException
     explicit SimpleIndexAccessToEnumeration(
-            const css::uno::Reference< css::container::XIndexAccess >& rxIndexAccess ) :
-        mxIndexAccess( rxIndexAccess ), mnIndex( 0 ) {}
+            css::uno::Reference< css::container::XIndexAccess >  rxIndexAccess ) :
+        mxIndexAccess(std::move( rxIndexAccess )), mnIndex( 0 ) {}
 
     virtual sal_Bool SAL_CALL hasMoreElements() override
     {
@@ -135,7 +136,7 @@ protected:
     css::uno::Reference< css::container::XEnumeration > m_xEnumeration;
 public:
     /// @throws css::uno::RuntimeException
-    EnumerationHelperImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XEnumeration >& xEnumeration ) : m_xParent( xParent ), m_xContext( xContext ),  m_xEnumeration( xEnumeration ) { }
+    EnumerationHelperImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, css::uno::Reference< css::uno::XComponentContext >  xContext, css::uno::Reference< css::container::XEnumeration >  xEnumeration ) : m_xParent( xParent ), m_xContext(std::move( xContext )),  m_xEnumeration(std::move( xEnumeration )) { }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override { return m_xEnumeration->hasMoreElements(); }
 };
 
@@ -157,7 +158,7 @@ private:
         XNamedVec mXNamedVec;
         typename XNamedVec::iterator mIt;
     public:
-            XNamedEnumerationHelper( const XNamedVec& sMap ) : mXNamedVec( sMap ), mIt( mXNamedVec.begin() ) {}
+            XNamedEnumerationHelper( XNamedVec  sMap ) : mXNamedVec(std::move( sMap )), mIt( mXNamedVec.begin() ) {}
 
             virtual sal_Bool SAL_CALL hasMoreElements(  ) override
             {
@@ -175,7 +176,7 @@ private:
     XNamedVec mXNamedVec;
     typename XNamedVec::iterator cachePos;
 public:
-    XNamedObjectCollectionHelper( const XNamedVec& sMap ) : mXNamedVec( sMap ), cachePos(mXNamedVec.begin()) {}
+    XNamedObjectCollectionHelper( XNamedVec  sMap ) : mXNamedVec(std::move( sMap )), cachePos(mXNamedVec.begin()) {}
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override { return cppu::UnoType< OneIfc >::get(); }
     virtual sal_Bool SAL_CALL hasElements(  ) override { return ( mXNamedVec.size() > 0 ); }
@@ -283,7 +284,7 @@ protected:
     }
 
 public:
-    ScVbaCollectionBase( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, bool bIgnoreCase = false ) : BaseColBase( xParent, xContext ), m_xIndexAccess( xIndexAccess ), mbIgnoreCase( bIgnoreCase ) { m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
+    ScVbaCollectionBase( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::container::XIndexAccess >  xIndexAccess, bool bIgnoreCase = false ) : BaseColBase( xParent, xContext ), m_xIndexAccess(std::move( xIndexAccess )), mbIgnoreCase( bIgnoreCase ) { m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
 
     //XCollection
     virtual ::sal_Int32 SAL_CALL getCount() override

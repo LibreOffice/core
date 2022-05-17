@@ -46,11 +46,11 @@ namespace drawinglayer::attribute
         public:
             /// constructors/assignmentoperator/destructor
             SdrLineFillShadowAttribute3D(
-                const SdrLineAttribute& rLine,
-                const SdrFillAttribute& rFill,
-                const SdrLineStartEndAttribute& rLineStartEnd,
-                const SdrShadowAttribute& rShadow,
-                const FillGradientAttribute& rFillFloatTransGradient);
+                SdrLineAttribute  rLine,
+                SdrFillAttribute  rFill,
+                SdrLineStartEndAttribute  rLineStartEnd,
+                SdrShadowAttribute  rShadow,
+                FillGradientAttribute  rFillFloatTransGradient);
             SdrLineFillShadowAttribute3D();
 
             // compare operator

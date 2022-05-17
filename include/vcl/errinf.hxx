@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_ERRINF_HXX
 
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <vcl/errcode.hxx>
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -178,7 +179,7 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC StringErrorInfo final : public DynamicErrorI
 {
 public:
                             StringErrorInfo(ErrCode nUserId,
-                                            const OUString& aStringP,
+                                            OUString  aStringP,
                                             DialogMask nMask = DialogMask::NONE);
 
     const OUString&         GetErrorString() const { return aString; }
@@ -191,9 +192,9 @@ private:
 class SAL_WARN_UNUSED VCL_DLLPUBLIC TwoStringErrorInfo final : public DynamicErrorInfo
 {
 public:
-    TwoStringErrorInfo(ErrCode nUserID, const OUString & rTheArg1,
-                       const OUString & rTheArg2, DialogMask nMask):
-        DynamicErrorInfo(nUserID, nMask), aArg1(rTheArg1), aArg2(rTheArg2) {}
+    TwoStringErrorInfo(ErrCode nUserID, OUString  rTheArg1,
+                       OUString  rTheArg2, DialogMask nMask):
+        DynamicErrorInfo(nUserID, nMask), aArg1(std::move(rTheArg1)), aArg2(std::move(rTheArg2)) {}
 
     const OUString& GetArg1() const { return aArg1; }
     const OUString& GetArg2() const { return aArg2; }

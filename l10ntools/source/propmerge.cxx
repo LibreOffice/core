@@ -20,6 +20,7 @@
 #include <export.hxx>
 #include <common.hxx>
 #include <propmerge.hxx>
+#include <utility>
 
 namespace
 {
@@ -88,10 +89,10 @@ namespace
 
 //Open source file and store its lines
 PropParser::PropParser(
-    const OString& rInputFile, const OString& rLang,
+    OString  rInputFile, OString  rLang,
     const bool bMergeMode )
-    : m_sSource( rInputFile )
-    , m_sLang( rLang )
+    : m_sSource(std::move( rInputFile ))
+    , m_sLang(std::move( rLang ))
     , m_bIsInitialized( false )
 {
     std::ifstream aIfstream( m_sSource.getStr() );

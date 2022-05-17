@@ -23,6 +23,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/i18n/CharacterClassification.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -30,15 +31,15 @@ using namespace ::com::sun::star::uno;
 
 CharClass::CharClass(
             const Reference< uno::XComponentContext > & rxContext,
-            const LanguageTag& rLanguageTag
+            LanguageTag  rLanguageTag
             )
-    : maLanguageTag( rLanguageTag)
+    : maLanguageTag(std::move( rLanguageTag))
 {
     xCC = CharacterClassification::create( rxContext );
 }
 
-CharClass::CharClass( const LanguageTag& rLanguageTag )
-    : maLanguageTag( rLanguageTag)
+CharClass::CharClass( LanguageTag  rLanguageTag )
+    : maLanguageTag(std::move( rLanguageTag))
 {
     xCC = CharacterClassification::create( comphelper::getProcessComponentContext() );
 }

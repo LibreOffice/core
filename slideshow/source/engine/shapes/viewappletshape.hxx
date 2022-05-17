@@ -72,12 +72,12 @@ namespace slideshow
                 @param nNumPropEntries
                 Number of property table entries (in pPropCopyTable)
              */
-            ViewAppletShape( const ViewLayerSharedPtr&                         rViewLayer,
+            ViewAppletShape( ViewLayerSharedPtr                          rViewLayer,
                              const css::uno::Reference< css::drawing::XShape >&        rxShape,
                              const OUString&                                   rServiceName,
                              const char**                                      pPropCopyTable,
                              std::size_t                                       nNumPropEntries,
-                             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                             css::uno::Reference< css::uno::XComponentContext >  rxContext );
 
             /** destroy the object
              */

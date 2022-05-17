@@ -105,9 +105,9 @@ namespace accessibility
 
     public:
         EditBrowseBoxTableCellAccess(
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxControlAccessible,
-            const css::uno::Reference< css::awt::XWindow >& _rxFocusWindow,
+            css::uno::Reference< css::accessibility::XAccessible >  _rxParent,
+            css::uno::Reference< css::accessibility::XAccessible >  _rxControlAccessible,
+            css::uno::Reference< css::awt::XWindow >  _rxFocusWindow,
             ::vcl::IAccessibleTableProvider& _rBrowseBox,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos

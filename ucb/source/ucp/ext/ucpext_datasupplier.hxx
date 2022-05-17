@@ -41,7 +41,7 @@ namespace ucb::ucp::ext
     public:
         DataSupplier(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const rtl::Reference< Content >& rContent
+            rtl::Reference< Content >  rContent
         );
 
         void    fetchData();

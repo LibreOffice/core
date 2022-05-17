@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <osl/module.hxx>
@@ -83,22 +84,22 @@ public:
     ModuleData(const ModuleData&) = delete;
     const ModuleData& operator=(const ModuleData&) = delete;
 
-    ModuleData(const OUString& rStr, std::unique_ptr<osl::Module> pInst) : aName(rStr), pInstance(std::move(pInst)) {}
+    ModuleData(OUString  rStr, std::unique_ptr<osl::Module> pInst) : aName(std::move(rStr)), pInstance(std::move(pInst)) {}
 
     const OUString& GetName() const { return aName; }
     osl::Module*    GetInstance() const { return pInstance.get(); }
 };
 
 LegacyFuncData::LegacyFuncData(const ModuleData*pModule,
-                   const OUString& rIName,
-                   const OUString& rFName,
+                   OUString  rIName,
+                   OUString  rFName,
                          sal_uInt16 nNo,
                     sal_uInt16  nCount,
                    const ParamType* peType,
                     ParamType  eType) :
     pModuleData     (pModule),
-    aInternalName   (rIName),
-    aFuncName       (rFName),
+    aInternalName   (std::move(rIName)),
+    aFuncName       (std::move(rFName)),
     nNumber         (nNo),
     nParamCount     (nCount),
     eAsyncType      (eType)

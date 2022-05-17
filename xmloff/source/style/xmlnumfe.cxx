@@ -38,6 +38,7 @@
 
 #include <com/sun/star/i18n/NativeNumberXmlAttributes2.hpp>
 
+#include <utility>
 #include <xmloff/xmlnumfe.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlnumfi.hxx>
@@ -66,8 +67,8 @@ struct SvXMLEmbeddedTextEntry
     sal_Int32       nFormatPos;     // resulting position in embedded-text element
     OUString   aText;
 
-    SvXMLEmbeddedTextEntry( sal_uInt16 nSP, sal_Int32 nFP, const OUString& rT ) :
-        nSourcePos(nSP), nFormatPos(nFP), aText(rT) {}
+    SvXMLEmbeddedTextEntry( sal_uInt16 nSP, sal_Int32 nFP, OUString  rT ) :
+        nSourcePos(nSP), nFormatPos(nFP), aText(std::move(rT)) {}
 };
 
 }
@@ -238,9 +239,9 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 SvXMLNumFmtExport::SvXMLNumFmtExport(
                        SvXMLExport& rExp,
                        const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp,
-                       const OUString& rPrefix ) :
+                       OUString  rPrefix ) :
     rExport( rExp ),
-    sPrefix( rPrefix ),
+    sPrefix(std::move( rPrefix )),
     pFormatter( nullptr ),
     bHasText( false )
 {

@@ -50,8 +50,8 @@ public:
         weld::Widget* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
-        const std::shared_ptr<MasterPageContainer>& rpContainer,
-        const css::uno::Reference<css::ui::XSidebar>& rxSidebar,
+        std::shared_ptr<MasterPageContainer>  rpContainer,
+        css::uno::Reference<css::ui::XSidebar>  rxSidebar,
         const OUString& rUIFileName,
         const OString& rValueSetName);
     virtual ~MasterPagesSelector() override;

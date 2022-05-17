@@ -36,6 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 
@@ -45,11 +46,11 @@ using namespace css::frame;
 
 namespace framework{
 
-TitleHelper::TitleHelper(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+TitleHelper::TitleHelper(css::uno::Reference< css::uno::XComponentContext >  rxContext,
                         const css::uno::Reference< css::uno::XInterface >& xOwner,
                         const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers)
     : ::cppu::BaseMutex ()
-    , m_xContext        (rxContext)
+    , m_xContext        (std::move(rxContext))
     , m_bExternalTitle  (false)
     , m_nLeasedNumber   (css::frame::UntitledNumbersConst::INVALID_NUMBER)
     , m_aListener       (m_aMutex)

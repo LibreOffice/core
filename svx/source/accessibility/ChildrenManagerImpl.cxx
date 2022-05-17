@@ -26,6 +26,7 @@
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -65,12 +66,12 @@ void adjustIndexInParentOfShapes(ChildDescriptorListType& _rList)
 
 // AccessibleChildrenManager
 ChildrenManagerImpl::ChildrenManagerImpl (
-    const uno::Reference<XAccessible>& rxParent,
-    const uno::Reference<drawing::XShapes>& rxShapeList,
+    uno::Reference<XAccessible>  rxParent,
+    uno::Reference<drawing::XShapes>  rxShapeList,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     AccessibleContextBase& rContext)
-    : mxShapeList (rxShapeList),
-      mxParent (rxParent),
+    : mxShapeList (std::move(rxShapeList)),
+      mxParent (std::move(rxParent)),
       maShapeTreeInfo (rShapeTreeInfo),
       mrContext (rContext),
       mpFocusedShape(nullptr)

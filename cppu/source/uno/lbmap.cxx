@@ -44,6 +44,7 @@
 #include <typelib/typedescription.h>
 
 #include <cppu/EnvDcp.hxx>
+#include <utility>
 #include "cascade_mapping.hxx"
 #include "loadmodule.hxx"
 
@@ -125,11 +126,11 @@ struct MappingEntry
 
     MappingEntry(
         uno_Mapping * pMapping_, uno_freeMappingFunc freeMapping_,
-        const OUString & rMappingName_ )
+        OUString  rMappingName_ )
         : nRef( 1 )
         , pMapping( pMapping_ )
         , freeMapping( freeMapping_ )
-        , aMappingName( rMappingName_ )
+        , aMappingName(std::move( rMappingName_ ))
         {}
 };
 
@@ -192,9 +193,9 @@ struct uno_Mediate_Mapping : public uno_Mapping
     OUString    aAddPurpose;
 
     uno_Mediate_Mapping(
-        const Environment & rFrom_, const Environment & rTo_,
-        const Mapping & rFrom2Uno_, const Mapping & rUno2To_,
-        const OUString & rAddPurpose );
+        Environment  rFrom_, Environment  rTo_,
+        Mapping  rFrom2Uno_, Mapping  rUno2To_,
+        OUString  rAddPurpose );
 };
 
 }
@@ -265,15 +266,15 @@ static void mediate_mapInterface(
 }
 
 uno_Mediate_Mapping::uno_Mediate_Mapping(
-    const Environment & rFrom_, const Environment & rTo_,
-    const Mapping & rFrom2Uno_, const Mapping & rUno2To_,
-    const OUString & rAddPurpose_ )
+    Environment  rFrom_, Environment  rTo_,
+    Mapping  rFrom2Uno_, Mapping  rUno2To_,
+    OUString  rAddPurpose_ )
     : nRef( 1 )
-    , aFrom( rFrom_ )
-    , aTo( rTo_ )
-    , aFrom2Uno( rFrom2Uno_ )
-    , aUno2To( rUno2To_ )
-    , aAddPurpose( rAddPurpose_ )
+    , aFrom(std::move( rFrom_ ))
+    , aTo(std::move( rTo_ ))
+    , aFrom2Uno(std::move( rFrom2Uno_ ))
+    , aUno2To(std::move( rUno2To_ ))
+    , aAddPurpose(std::move( rAddPurpose_ ))
 {
     uno_Mapping::acquire        = mediate_acquire;
     uno_Mapping::release        = mediate_release;

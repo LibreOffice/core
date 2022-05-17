@@ -33,7 +33,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaListLevel( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, SwVbaListHelperRef const & pHelper, sal_Int32 nLevel );
+    SwVbaListLevel( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, SwVbaListHelperRef  pHelper, sal_Int32 nLevel );
     virtual ~SwVbaListLevel() override;
 
     // Attributes

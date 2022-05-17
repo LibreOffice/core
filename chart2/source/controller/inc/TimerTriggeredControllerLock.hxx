@@ -40,7 +40,7 @@ class ChartModel;
 class TimerTriggeredControllerLock final
 {
 public:
-    TimerTriggeredControllerLock(const rtl::Reference<::chart::ChartModel>& xModel);
+    TimerTriggeredControllerLock(rtl::Reference<::chart::ChartModel> xModel);
     ~TimerTriggeredControllerLock();
 
     void startTimer();

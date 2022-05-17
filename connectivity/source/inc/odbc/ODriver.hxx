@@ -49,7 +49,7 @@ namespace connectivity::odbc
 
         public:
 
-            ODBCDriver(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+            ODBCDriver(css::uno::Reference< css::uno::XComponentContext >  rxContext);
 
             // only possibility to get the odbc functions
             virtual oslGenericFunction getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const = 0;

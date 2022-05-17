@@ -24,6 +24,7 @@
 #include "BorderHandler.hxx"
 #include "LatentStyleHandler.hxx"
 #include <ooxml/resourceids.hxx>
+#include <utility>
 #include <vector>
 #include <iterator>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -255,8 +256,8 @@ struct ListCharStylePropertyMap_t
     OUString         sCharStyleName;
     PropertyValueVector_t   aPropertyValues;
 
-    ListCharStylePropertyMap_t(const OUString& rCharStyleName, PropertyValueVector_t&& rPropertyValues):
-        sCharStyleName( rCharStyleName ),
+    ListCharStylePropertyMap_t(OUString  rCharStyleName, PropertyValueVector_t&& rPropertyValues):
+        sCharStyleName(std::move( rCharStyleName )),
         aPropertyValues( std::move(rPropertyValues) )
         {}
 };
@@ -277,7 +278,7 @@ struct StyleSheetTable_Impl
     bool                                    m_bHasImportedDefaultParaProps;
     bool                                    m_bIsNewDoc;
 
-    StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> const& xTextDocument, bool bIsNewDoc);
+    StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument>  xTextDocument, bool bIsNewDoc);
 
     OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
 
@@ -289,10 +290,10 @@ struct StyleSheetTable_Impl
 
 
 StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper,
-        uno::Reference< text::XTextDocument> const& xTextDocument,
+        uno::Reference< text::XTextDocument>  xTextDocument,
         bool const bIsNewDoc)
     :       m_rDMapper( rDMapper ),
-            m_xTextDocument( xTextDocument ),
+            m_xTextDocument(std::move( xTextDocument )),
             m_pDefaultParaProps(new PropertyMap),
             m_pDefaultCharProps(new PropertyMap),
             m_sDefaultParaStyleName("Normal"),

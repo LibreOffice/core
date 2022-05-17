@@ -29,6 +29,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/io/IOException.hpp>
+#include <utility>
 
 using namespace http_dav_ucp;
 using namespace com::sun::star;
@@ -122,12 +123,12 @@ int DAVAuthListener_Impl::authenticate(
 
 
 DAVResourceAccess::DAVResourceAccess(
-    const uno::Reference< uno::XComponentContext > & rContext,
-    rtl::Reference< DAVSessionFactory > const & rSessionFactory,
-    const OUString & rURL )
-: m_aURL( rURL ),
-  m_xSessionFactory( rSessionFactory ),
-  m_xContext( rContext )
+    uno::Reference< uno::XComponentContext >  rContext,
+    rtl::Reference< DAVSessionFactory >  rSessionFactory,
+    OUString  rURL )
+: m_aURL(std::move( rURL )),
+  m_xSessionFactory(std::move( rSessionFactory )),
+  m_xContext(std::move( rContext ))
 , m_nRedirectLimit( 5 )
 {
 }

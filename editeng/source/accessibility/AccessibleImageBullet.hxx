@@ -50,7 +50,7 @@ namespace accessibility
 
     public:
         /// Create accessible object for given parent
-        AccessibleImageBullet ( const css::uno::Reference< css::accessibility::XAccessible >& rParent );
+        AccessibleImageBullet ( css::uno::Reference< css::accessibility::XAccessible >  rParent );
 
         virtual ~AccessibleImageBullet  () override;
 

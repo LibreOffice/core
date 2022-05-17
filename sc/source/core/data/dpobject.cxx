@@ -72,6 +72,7 @@
 #include <svl/numformat.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/zforlist.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -119,7 +120,7 @@ class DBConnector : public ScDPCache::DBConnector
     Date maNullDate;
 
 public:
-    DBConnector(ScDPCache& rCache, const uno::Reference<sdbc::XRowSet>& xRowSet, const Date& rNullDate);
+    DBConnector(ScDPCache& rCache, uno::Reference<sdbc::XRowSet>  xRowSet, const Date& rNullDate);
 
     bool isValid() const;
 
@@ -131,8 +132,8 @@ public:
     virtual void finish() override;
 };
 
-DBConnector::DBConnector(ScDPCache& rCache, const uno::Reference<sdbc::XRowSet>& xRowSet, const Date& rNullDate) :
-    mrCache(rCache), mxRowSet(xRowSet), maNullDate(rNullDate)
+DBConnector::DBConnector(ScDPCache& rCache, uno::Reference<sdbc::XRowSet>  xRowSet, const Date& rNullDate) :
+    mrCache(rCache), mxRowSet(std::move(xRowSet)), maNullDate(rNullDate)
 {
     Reference<sdbc::XResultSetMetaDataSupplier> xMetaSupp(mxRowSet, UNO_QUERY);
     if (xMetaSupp.is())
@@ -289,13 +290,13 @@ static sheet::DataPilotFieldOrientation lcl_GetDataGetOrientation( const uno::Re
 }
 
 ScDPServiceDesc::ScDPServiceDesc(
-    const OUString& rServ, const OUString& rSrc, const OUString& rNam,
-    const OUString& rUser, const OUString& rPass ) :
-    aServiceName( rServ ),
-    aParSource( rSrc ),
-    aParName( rNam ),
-    aParUser( rUser ),
-    aParPass( rPass ) {}
+    OUString  rServ, OUString  rSrc, OUString  rNam,
+    OUString  rUser, OUString  rPass ) :
+    aServiceName(std::move( rServ )),
+    aParSource(std::move( rSrc )),
+    aParName(std::move( rNam )),
+    aParUser(std::move( rUser )),
+    aParPass(std::move( rPass )) {}
 
 bool ScDPServiceDesc::operator== ( const ScDPServiceDesc& rOther ) const
 {
@@ -1311,7 +1312,7 @@ class FindByName
 {
     OUString maName; // must be all uppercase.
 public:
-    explicit FindByName(const OUString& rName) : maName(rName) {}
+    explicit FindByName(OUString  rName) : maName(std::move(rName)) {}
     bool operator() (const ScDPSaveDimension* pDim) const
     {
         // Layout name takes precedence.
@@ -3160,8 +3161,8 @@ bool ScDPCollection::NameCaches::remove(const ScDPCache* p)
     return false;
 }
 
-ScDPCollection::DBType::DBType(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) :
-    mnSdbType(nSdbType), maDBName(rDBName), maCommand(rCommand) {}
+ScDPCollection::DBType::DBType(sal_Int32 nSdbType, OUString  rDBName, OUString  rCommand) :
+    mnSdbType(nSdbType), maDBName(std::move(rDBName)), maCommand(std::move(rCommand)) {}
 
 bool ScDPCollection::DBType::less::operator() (const DBType& left, const DBType& right) const
 {

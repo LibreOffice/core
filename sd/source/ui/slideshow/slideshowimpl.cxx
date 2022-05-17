@@ -68,6 +68,7 @@
 #include <bitmaps.hlst>
 #include <strings.hrc>
 #include <sdresid.hxx>
+#include <utility>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/weldutils.hxx>
@@ -3121,10 +3122,10 @@ void PresentationSettingsEx::SetPropertyValue( std::u16string_view rProperty, co
 
 // XAnimationListener
 
-SlideShowListenerProxy::SlideShowListenerProxy( const rtl::Reference< SlideshowImpl >& xController, const css::uno::Reference< css::presentation::XSlideShow >& xSlideShow )
+SlideShowListenerProxy::SlideShowListenerProxy( rtl::Reference< SlideshowImpl >  xController, css::uno::Reference< css::presentation::XSlideShow >  xSlideShow )
 : maListeners( m_aMutex )
-, mxController( xController )
-, mxSlideShow( xSlideShow )
+, mxController(std::move( xController ))
+, mxSlideShow(std::move( xSlideShow ))
 {
 }
 

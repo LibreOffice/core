@@ -244,7 +244,7 @@ private:
 
 public:
                     ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
-                                      const OUString& rName, bool bSet );
+                                      OUString  rName, bool bSet );
     virtual         ~ScUndoAutoFilter() override;
 
     virtual void    Undo() override;
@@ -388,10 +388,10 @@ class ScUndoChartData: public ScSimpleUndo
 {
 public:
                         ScUndoChartData( ScDocShell* pNewDocShell,
-                                const OUString& rName, const ScRange& rNew,
+                                OUString  rName, const ScRange& rNew,
                                 bool bColHdr, bool bRowHdr, bool bAdd );
                         ScUndoChartData( ScDocShell* pNewDocShell,
-                                const OUString& rName, const ScRangeListRef& rNew,
+                                OUString  rName, ScRangeListRef  rNew,
                                 bool bColHdr, bool bRowHdr, bool bAdd );
     virtual             ~ScUndoChartData() override;
 

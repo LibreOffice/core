@@ -47,6 +47,7 @@
 
 #include <helper/imagealign.hxx>
 #include <helper/unopropertyarrayhelper.hxx>
+#include <utility>
 
 using namespace css;
 using namespace css::awt;
@@ -1931,8 +1932,8 @@ struct ListItem
     {
     }
 
-    explicit ListItem( const OUString& i_rItemText )
-        :ItemText( i_rItemText )
+    explicit ListItem( OUString  i_rItemText )
+        :ItemText(std::move( i_rItemText ))
     {
     }
 };

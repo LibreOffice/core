@@ -80,11 +80,11 @@ private:
 
 public:
     UUIInteractionHelper(
-        css::uno::Reference< css::uno::XComponentContext > const & rxContext,
-        css::uno::Reference< css::awt::XWindow > const & rxWindow,
-        const OUString & rContextParam);
+        css::uno::Reference< css::uno::XComponentContext >  rxContext,
+        css::uno::Reference< css::awt::XWindow >  rxWindow,
+        OUString  rContextParam);
     explicit UUIInteractionHelper(
-        css::uno::Reference< css::uno::XComponentContext > const & rxContext);
+        css::uno::Reference< css::uno::XComponentContext >  rxContext);
 
     const css::uno::Reference<css::awt::XWindow> & GetParentWindow() const { return m_xWindowParam; }
     void SetParentWindow(const css::uno::Reference<css::awt::XWindow>& rWindow) { m_xWindowParam = rWindow; }

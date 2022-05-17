@@ -62,7 +62,7 @@ public:
         Compare,
         Merge
     };
-    DocumentInserter(weld::Window* pParent, const OUString& rFactory, const Mode mode = Mode::Insert);
+    DocumentInserter(weld::Window* pParent, OUString  rFactory, const Mode mode = Mode::Insert);
     ~DocumentInserter();
 
     void                    StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink );

@@ -28,6 +28,7 @@
 #include <comphelper/extract.hxx>
 
 #include <memory>
+#include <utility>
 
 
 namespace comphelper
@@ -103,8 +104,8 @@ namespace comphelper
     class StringCollationPredicateLess final : public IKeyPredicateLess
     {
     public:
-        StringCollationPredicateLess( css::uno::Reference< css::i18n::XCollator > const & i_collator )
-            :m_collator( i_collator )
+        StringCollationPredicateLess( css::uno::Reference< css::i18n::XCollator >  i_collator )
+            :m_collator(std::move( i_collator ))
         {
         }
 

@@ -23,6 +23,7 @@
 
 #include <map>
 #include <set>
+#include <utility>
 
 class CharClass;
 class CollatorWrapper;
@@ -135,9 +136,9 @@ struct DoubleString
     OUString  sShort;
     OUString  sLong;
     void*   pUserData; ///< CheckBox -> form. Text Bool -> selection text
-    DoubleString(const OUString& rShort, const OUString& rLong)
-        : sShort(rShort)
-        , sLong(rLong)
+    DoubleString(OUString  rShort, OUString  rLong)
+        : sShort(std::move(rShort))
+        , sLong(std::move(rLong))
         , pUserData(nullptr)
     {
     }

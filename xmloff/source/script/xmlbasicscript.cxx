@@ -22,6 +22,7 @@
 #include "xmlbasicscript.hxx"
 #include <sal/log.hxx>
 #include <xmlscript/xmlns.h>
+#include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -187,10 +188,10 @@ BasicLibrariesElement::createFastChildContext(sal_Int32 nElement,
 
 BasicEmbeddedLibraryElement::BasicEmbeddedLibraryElement(
     SvXMLImport& rImport, const Reference<script::XLibraryContainer2>& rxLibContainer,
-    const OUString& rLibName, bool bReadOnly)
+    OUString rLibName, bool bReadOnly)
     : BasicElementBase(rImport)
     , m_xLibContainer(rxLibContainer)
-    , m_aLibName(rLibName)
+    , m_aLibName(std::move(rLibName))
     , m_bReadOnly(bReadOnly)
 {
     try
@@ -236,10 +237,10 @@ void BasicEmbeddedLibraryElement::endFastElement(sal_Int32)
 
 BasicModuleElement::BasicModuleElement(SvXMLImport& rImport,
                                        const Reference<container::XNameContainer>& rxLib,
-                                       const OUString& rName)
+                                       OUString rName)
     : BasicElementBase(rImport)
     , m_xLib(rxLib)
-    , m_aName(rName)
+    , m_aName(std::move(rName))
 {
 }
 
@@ -276,10 +277,10 @@ BasicModuleElement::createFastChildContext(sal_Int32 nElement,
 
 BasicSourceCodeElement::BasicSourceCodeElement(SvXMLImport& rImport,
                                                const Reference<container::XNameContainer>& rxLib,
-                                               const OUString& rName)
+                                               OUString rName)
     : BasicElementBase(rImport)
     , m_xLib(rxLib)
-    , m_aName(rName)
+    , m_aName(std::move(rName))
 {
 }
 

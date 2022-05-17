@@ -28,6 +28,7 @@
 
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <utility>
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <WordWrapPropertyHdl.hxx>
@@ -973,13 +974,13 @@ public:
 
 }
 
-XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > const & xModel, SvXMLImport& rImport )
-: mxModel( xModel ), mpExport(nullptr), mpImport( &rImport )
+XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel >  xModel, SvXMLImport& rImport )
+: mxModel(std::move( xModel )), mpExport(nullptr), mpImport( &rImport )
 {
 }
 
-XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > const & xModel, SvXMLExport& rExport )
-: mxModel( xModel ), mpExport( &rExport ), mpImport(nullptr)
+XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel >  xModel, SvXMLExport& rExport )
+: mxModel(std::move( xModel )), mpExport( &rExport ), mpImport(nullptr)
 {
 }
 

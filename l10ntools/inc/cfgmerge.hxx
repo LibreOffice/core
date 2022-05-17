@@ -25,6 +25,7 @@
 #include <fstream>
 #include <unordered_map>
 #include <memory>
+#include <utility>
 #include <vector>
 #include "po.hxx"
 #include "export.hxx"
@@ -50,8 +51,8 @@ private:
 
     OStringHashMap sText;
 public:
-    CfgStackData(const OString &rTag, const OString &rId)
-        : sTagType( rTag ), sIdentifier( rId )
+    CfgStackData(OString rTag, OString rId)
+        : sTagType(std::move( rTag )), sIdentifier(std::move( rId ))
     {}
 
     const OString &GetTagType() const { return sTagType; }
@@ -145,7 +146,7 @@ protected:
 public:
     CfgExport(
         const OString &rOutputFile,
-        const OString &rFilePath
+        OString rFilePath
     );
     virtual ~CfgExport() override;
 };
@@ -172,7 +173,7 @@ protected:
 public:
     CfgMerge(
         const OString &rMergeSource, const OString &rOutputFile,
-        const OString &rFilename, const OString &rLanguage );
+        OString rFilename, const OString &rLanguage );
     virtual ~CfgMerge() override;
 };
 

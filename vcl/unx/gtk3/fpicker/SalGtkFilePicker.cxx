@@ -43,6 +43,7 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <o3tl/string_view.hxx>
@@ -367,9 +368,9 @@ protected:
     css::uno::Sequence< css::beans::StringPair >       m_aSubFilters;
 
 public:
-    FilterEntry( const OUString& _rTitle, const OUString& _rFilter )
-        :m_sTitle( _rTitle )
-        ,m_sFilter( _rFilter )
+    FilterEntry( OUString  _rTitle, OUString  _rFilter )
+        :m_sTitle(std::move( _rTitle ))
+        ,m_sFilter(std::move( _rFilter ))
     {
     }
 

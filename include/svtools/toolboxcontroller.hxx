@@ -33,6 +33,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <tools/link.hxx>
+#include <utility>
 #include <vcl/toolboxid.hxx>
 
 #include <unordered_map>
@@ -71,7 +72,7 @@ class SVT_DLLPUBLIC ToolboxController :
     public:
         ToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                            const css::uno::Reference< css::frame::XFrame >& xFrame,
-                           const OUString& aCommandURL );
+                           OUString  aCommandURL );
         ToolboxController();
         virtual ~ToolboxController() override;
 
@@ -135,8 +136,8 @@ class SVT_DLLPUBLIC ToolboxController :
         bool getToolboxId( ToolBoxItemId& rItemId, ToolBox** ppToolBox );
         struct Listener
         {
-            Listener( const css::util::URL& rURL, const css::uno::Reference< css::frame::XDispatch >& rDispatch ) :
-                aURL( rURL ), xDispatch( rDispatch ) {}
+            Listener( css::util::URL  rURL, css::uno::Reference< css::frame::XDispatch >  rDispatch ) :
+                aURL(std::move( rURL )), xDispatch(std::move( rDispatch )) {}
 
             css::util::URL aURL;
             css::uno::Reference< css::frame::XDispatch > xDispatch;
@@ -148,11 +149,11 @@ class SVT_DLLPUBLIC ToolboxController :
             const css::util::URL maURL;
             const css::uno::Sequence< css::beans::PropertyValue > maArgs;
 
-            DispatchInfo( const css::uno::Reference< css::frame::XDispatch >& xDispatch,
-                          const css::util::URL& rURL,
+            DispatchInfo( css::uno::Reference< css::frame::XDispatch >  xDispatch,
+                          css::util::URL  rURL,
                           const css::uno::Sequence< css::beans::PropertyValue >& rArgs )
-                : mxDispatch( xDispatch )
-                , maURL( rURL )
+                : mxDispatch(std::move( xDispatch ))
+                , maURL(std::move( rURL ))
                 , maArgs( rArgs )
                 {}
         };

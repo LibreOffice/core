@@ -71,6 +71,7 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/macros.hxx>
+#include <utility>
 
 #include "tdoc_content.hxx"
 #include "tdoc_resultset.hxx"
@@ -144,9 +145,9 @@ Content::Content(
             const uno::Reference< uno::XComponentContext > & rxContext,
             ContentProvider * pProvider,
             const uno::Reference< ucb::XContentIdentifier > & Identifier,
-            const ContentProperties & rProps )
+            ContentProperties  rProps )
 : ContentImplHelper( rxContext, pProvider, Identifier ),
-  m_aProps( rProps ),
+  m_aProps(std::move( rProps )),
   m_eState( PERSISTENT ),
   m_pProvider( pProvider )
 {

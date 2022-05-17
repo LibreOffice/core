@@ -59,8 +59,8 @@ public:
         resources.
     */
     ConfigurationControllerResourceManager (
-        const std::shared_ptr<ResourceFactoryManager>& rpResourceFactoryContainer,
-        const std::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster);
+        std::shared_ptr<ResourceFactoryManager>  rpResourceFactoryContainer,
+        std::shared_ptr<ConfigurationControllerBroadcaster>  rpBroadcaster);
 
     ~ConfigurationControllerResourceManager();
 

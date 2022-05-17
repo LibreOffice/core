@@ -52,8 +52,8 @@ private:
 
 public:
     /// constructor
-    BitmapPrimitive2D(const css::uno::Reference<css::awt::XBitmap>& rXBitmap,
-                      const basegfx::B2DHomMatrix& rTransform);
+    BitmapPrimitive2D(css::uno::Reference<css::awt::XBitmap> rXBitmap,
+                      basegfx::B2DHomMatrix rTransform);
 
     /// data read access
     const css::uno::Reference<css::awt::XBitmap>& getXBitmap() const { return maXBitmap; }

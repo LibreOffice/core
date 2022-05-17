@@ -41,7 +41,7 @@ class ParentStorageHolder
 {
 public:
     ParentStorageHolder(
-        const css::uno::Reference< css::embed::XStorage > & xParentStorage,
+        css::uno::Reference< css::embed::XStorage >  xParentStorage,
         const OUString & rUri );
 
     bool isParentARootStorage() const
@@ -72,7 +72,7 @@ class Storage : public StorageUNOBase, public ParentStorageHolder
 public:
     Storage(
         const css::uno::Reference< css::uno::XComponentContext > & rxContext,
-        const rtl::Reference< StorageElementFactory >  & xFactory,
+        rtl::Reference< StorageElementFactory >  xFactory,
         const OUString & rUri,
         const css::uno::Reference< css::embed::XStorage > & xParentStorage,
         const css::uno::Reference< css::embed::XStorage > & xStorageToWrap );

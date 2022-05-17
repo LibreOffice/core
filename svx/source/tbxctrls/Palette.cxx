@@ -21,6 +21,7 @@
 #include <tools/stream.hxx>
 
 #include <palettes.hxx>
+#include <utility>
 
 Palette::~Palette()
 {
@@ -30,10 +31,10 @@ PaletteASE::~PaletteASE()
 {
 }
 
-PaletteASE::PaletteASE( const OUString &rFPath, const OUString &rFName ) :
+PaletteASE::PaletteASE( OUString rFPath, OUString rFName ) :
     mbValidPalette( false ),
-    maFPath ( rFPath ),
-    maASEPaletteName  ( rFName )
+    maFPath (std::move( rFPath )),
+    maASEPaletteName  (std::move( rFName ))
 {
     LoadPalette();
 }
@@ -174,11 +175,11 @@ void PaletteASE::LoadPalette()
 
 static OString lcl_getToken(OStringBuffer& rStr, sal_Int32& index);
 
-PaletteGPL::PaletteGPL( const OUString &rFPath, const OUString &rFName ) :
+PaletteGPL::PaletteGPL( OUString rFPath, OUString rFName ) :
     mbLoadedPalette( false ),
     mbValidPalette( false ),
-    maFName( rFName ),
-    maFPath( rFPath )
+    maFName(std::move( rFName )),
+    maFPath(std::move( rFPath ))
 {
     LoadPaletteHeader();
 }
@@ -322,10 +323,10 @@ static OString lcl_getToken(OStringBuffer& rStr, sal_Int32& index)
 
 // PaletteSOC ------------------------------------------------------------------
 
-PaletteSOC::PaletteSOC( const OUString &rFPath, const OUString &rFName ) :
+PaletteSOC::PaletteSOC( OUString rFPath, OUString rFName ) :
     mbLoadedPalette( false ),
-    maFPath( rFPath ),
-    maSOCPaletteName( rFName )
+    maFPath(std::move( rFPath )),
+    maSOCPaletteName(std::move( rFName ))
 {
 }
 

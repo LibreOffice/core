@@ -25,6 +25,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <utility>
 #include "vbaborders.hxx"
 #include "vbapalette.hxx"
 #include "vbarows.hxx"
@@ -33,7 +34,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaTable::SwVbaTable(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& rDocument, const  uno::Reference< text::XTextTable >& xTextTable) : SwVbaTable_BASE( rParent, rContext ), mxTextDocument( rDocument )
+SwVbaTable::SwVbaTable(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument >  rDocument, const  uno::Reference< text::XTextTable >& xTextTable) : SwVbaTable_BASE( rParent, rContext ), mxTextDocument(std::move( rDocument ))
 {
     mxTextTable.set( xTextTable, uno::UNO_SET_THROW );
 }

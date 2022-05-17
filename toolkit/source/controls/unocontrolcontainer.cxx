@@ -34,6 +34,7 @@
 #include <map>
 #include <memory>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -47,9 +48,9 @@ struct UnoControlHolder
     OUString                        msName;
 
 public:
-    UnoControlHolder( const OUString& rName, const uno::Reference< awt::XControl > & rControl )
-    :   mxControl( rControl ),
-        msName( rName )
+    UnoControlHolder( OUString  rName, uno::Reference< awt::XControl >  rControl )
+    :   mxControl(std::move( rControl )),
+        msName(std::move( rName ))
     {
     }
 
@@ -334,8 +335,8 @@ private:
     uno::Reference< awt::XControlContainer > mxControlContainer;
 
 public:
-    explicit DialogStepChangedListener( uno::Reference< awt::XControlContainer > const & xControlContainer )
-        : mxControlContainer( xControlContainer ) {}
+    explicit DialogStepChangedListener( uno::Reference< awt::XControlContainer >  xControlContainer )
+        : mxControlContainer(std::move( xControlContainer )) {}
 
     // XEventListener
     virtual void SAL_CALL disposing( const  lang::EventObject& Source ) override;

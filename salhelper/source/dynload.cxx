@@ -18,6 +18,7 @@
  */
 
 #include <salhelper/dynload.hxx>
+#include <utility>
 
 namespace salhelper
 {
@@ -25,15 +26,15 @@ namespace salhelper
 typedef void* (*ApiInitFunction) ();
 
 ORealDynamicLoader::ORealDynamicLoader(ORealDynamicLoader ** ppSetToZeroInDestructor_,
-                       const OUString& moduleName,
-                       const OUString& initFunction,
+                       OUString  moduleName,
+                       OUString  initFunction,
                        void* pApi,
                        oslModule pModule)
     : m_pApi(pApi)
     , m_refCount(1)
     , m_pModule(pModule)
-    , m_strModuleName(moduleName)
-    , m_strInitFunction(initFunction)
+    , m_strModuleName(std::move(moduleName))
+    , m_strInitFunction(std::move(initFunction))
     , ppSetToZeroInDestructor( ppSetToZeroInDestructor_ )
 {
 }

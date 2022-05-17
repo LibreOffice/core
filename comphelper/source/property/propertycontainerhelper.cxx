@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 
 #include <algorithm>
+#include <utility>
 
 
 namespace comphelper
@@ -51,7 +52,7 @@ namespace
     struct PropertyDescriptionNameMatch
     {
         OUString const m_rCompare;
-        explicit PropertyDescriptionNameMatch( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }
+        explicit PropertyDescriptionNameMatch( OUString  _rCompare ) : m_rCompare(std::move( _rCompare )) { }
 
         bool operator() (const PropertyDescription& x ) const
         {

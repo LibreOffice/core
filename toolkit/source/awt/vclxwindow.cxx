@@ -40,6 +40,7 @@
 #include <toolkit/helper/property.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -404,10 +405,10 @@ namespace
 {
     struct CallWindow2Listener
     {
-        CallWindow2Listener( ::comphelper::OInterfaceContainerHelper3<css::awt::XWindowListener2>& i_rWindow2Listeners, const bool i_bEnabled, const EventObject& i_rEvent )
+        CallWindow2Listener( ::comphelper::OInterfaceContainerHelper3<css::awt::XWindowListener2>& i_rWindow2Listeners, const bool i_bEnabled, EventObject  i_rEvent )
             :m_rWindow2Listeners( i_rWindow2Listeners )
             ,m_bEnabled( i_bEnabled )
-            ,m_aEvent( i_rEvent )
+            ,m_aEvent(std::move( i_rEvent ))
         {
         }
 

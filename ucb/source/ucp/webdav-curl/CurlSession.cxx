@@ -39,6 +39,7 @@
 #include <map>
 #include <optional>
 #include <tuple>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -82,9 +83,9 @@ struct DownloadTarget
 {
     uno::Reference<io::XOutputStream> xOutStream;
     ResponseHeaders const& rHeaders;
-    DownloadTarget(uno::Reference<io::XOutputStream> const& i_xOutStream,
+    DownloadTarget(uno::Reference<io::XOutputStream> i_xOutStream,
                    ResponseHeaders const& i_rHeaders)
-        : xOutStream(i_xOutStream)
+        : xOutStream(std::move(i_xOutStream))
         , rHeaders(i_rHeaders)
     {
     }
@@ -183,10 +184,10 @@ private:
     CURL* const m_pCurl;
 
 public:
-    explicit Guard(::std::mutex& rMutex, ::std::vector<CurlOption> const& rOptions,
+    explicit Guard(::std::mutex& rMutex, ::std::vector<CurlOption> rOptions,
                    ::http_dav_ucp::CurlUri const& rURI, CURL* const pCurl)
         : m_Lock(rMutex, ::std::defer_lock)
-        , m_Options(rOptions)
+        , m_Options(std::move(rOptions))
         , m_rURI(rURI)
         , m_pCurl(pCurl)
     {
@@ -584,12 +585,12 @@ static auto ExtractRealm(ResponseHeaders const& rHeaders, char const* const pAut
     return buf.makeStringAndClear();
 }
 
-CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
+CurlSession::CurlSession(uno::Reference<uno::XComponentContext> xContext,
                          ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
                          uno::Sequence<beans::NamedValue> const& rFlags,
                          ::ucbhelper::InternetProxyDecider const& rProxyDecider)
     : DAVSession(rpFactory)
-    , m_xContext(xContext)
+    , m_xContext(std::move(xContext))
     , m_Flags(rFlags)
     , m_URI(rURI)
     , m_Proxy(rProxyDecider.getProxy(m_URI.GetScheme(), m_URI.GetHost(), m_URI.GetPort()))
@@ -1185,10 +1186,9 @@ auto CurlProcessor::ProcessRequest(
         OUString UserName;
         OUString PassWord;
         decltype(CURLAUTH_ANY) AuthMask; ///< allowed auth methods
-        Auth(OUString const& rUserName, OUString const& rPassword,
-             decltype(CURLAUTH_ANY) const & rAuthMask)
-            : UserName(rUserName)
-            , PassWord(rPassword)
+        Auth(OUString rUserName, OUString rPassword, decltype(CURLAUTH_ANY) const & rAuthMask)
+            : UserName(std::move(rUserName))
+            , PassWord(std::move(rPassword))
             , AuthMask(rAuthMask)
         {
         }

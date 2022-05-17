@@ -35,6 +35,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/sdmetitm.hxx>
+#include <utility>
 #include <vcl/cvtgrf.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/util.hxx>
@@ -59,9 +60,9 @@ using namespace com::sun::star;
 const sal_Int32 Tag_Container = 44444;
 const sal_Int32 Tag_Commit = 44445;
 
-VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLTextExport* pTextExport )
+VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr  pSerializer, VMLTextExport* pTextExport )
     : EscherEx( std::make_shared<EscherExGlobal>(), nullptr, /*bOOXML=*/true )
-    , m_pSerializer( pSerializer )
+    , m_pSerializer(std::move( pSerializer ))
     , m_pTextExport( pTextExport )
     , m_eHOri( 0 )
     , m_eVOri( 0 )

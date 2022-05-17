@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_DIALOG_IMAPWND_HXX
 #define INCLUDED_SVX_SOURCE_DIALOG_IMAPWND_HXX
 
+#include <utility>
 #include <vcl/imapobj.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/imap.hxx>
@@ -50,9 +51,9 @@ class IMapUserData : public SdrObjUserData
 
 public:
 
-                   explicit IMapUserData( const IMapObjectPtr& rIMapObj ) :
+                   explicit IMapUserData( IMapObjectPtr  rIMapObj ) :
                                 SdrObjUserData  ( SdrInventor::IMap, SVD_IMAP_USERDATA ),
-                                mpObj           ( rIMapObj ) {}
+                                mpObj           (std::move( rIMapObj )) {}
 
                             IMapUserData( const IMapUserData& rIMapUserData ) :
                                 SdrObjUserData  ( SdrInventor::IMap, SVD_IMAP_USERDATA ),

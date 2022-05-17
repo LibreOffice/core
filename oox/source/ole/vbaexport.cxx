@@ -31,6 +31,7 @@
 #include <sot/storage.hxx>
 
 #include <comphelper/xmltools.hxx>
+#include <utility>
 #include <rtl/tencinfo.h>
 #include <osl/thread.h>
 
@@ -473,8 +474,8 @@ void VBAEncryption::write()
 
 #endif
 
-VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> const & xModel):
-    mxModel(xModel)
+VbaExport::VbaExport(css::uno::Reference<css::frame::XModel>  xModel):
+    mxModel(std::move(xModel))
 {
 }
 

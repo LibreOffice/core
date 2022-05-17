@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include "FormControlHelper.hxx"
+#include <utility>
 #include <xmloff/odffields.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
@@ -129,8 +130,8 @@ uno::Reference<container::XIndexContainer> FormControlHelper::FormControlHelper_
 
 FormControlHelper::FormControlHelper(FieldId eFieldId,
                                      uno::Reference<text::XTextDocument> const& xTextDocument,
-                                     FFDataHandler::Pointer_t const & pFFData)
-    : m_pFFData(pFFData), m_pImpl(new FormControlHelper_Impl)
+                                     FFDataHandler::Pointer_t  pFFData)
+    : m_pFFData(std::move(pFFData)), m_pImpl(new FormControlHelper_Impl)
 {
     m_pImpl->m_eFieldId = eFieldId;
     m_pImpl->rTextDocument = xTextDocument;

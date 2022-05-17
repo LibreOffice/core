@@ -63,8 +63,8 @@ public:
 
 protected:
     ZipOutputEntryBase(
-        const css::uno::Reference< css::io::XOutputStream >& rxOutStream,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        css::uno::Reference< css::io::XOutputStream >  rxOutStream,
+        css::uno::Reference< css::uno::XComponentContext >  rxContext,
         ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt, bool checkStream);
 
     // Inherited classes call this with deflated data buffer.

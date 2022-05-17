@@ -284,8 +284,8 @@ class Factory:
 {
 public:
     explicit Factory(
-        css::uno::Reference< css::uno::XComponentContext > const & context):
-        m_context(context) {}
+        css::uno::Reference< css::uno::XComponentContext >  context):
+        m_context(std::move(context)) {}
 
     Factory(const Factory&) = delete;
     Factory& operator=(const Factory&) = delete;

@@ -43,6 +43,7 @@
 #include <rtl/ref.hxx>
 
 #include <unordered_map>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -124,14 +125,14 @@ using namespace ucbhelper_impl;
 namespace ucbhelper {
 
 ContentImplHelper::ContentImplHelper(
-            const uno::Reference< uno::XComponentContext >& rxContext,
-            const rtl::Reference< ContentProviderImplHelper >& rxProvider,
-            const uno::Reference<
-            css::ucb::XContentIdentifier >& Identifier )
+            uno::Reference< uno::XComponentContext >  rxContext,
+            rtl::Reference< ContentProviderImplHelper >  rxProvider,
+            uno::Reference<
+            css::ucb::XContentIdentifier >  Identifier )
 : m_pImpl( new ContentImplHelper_Impl ),
-  m_xContext( rxContext ),
-  m_xIdentifier( Identifier ),
-  m_xProvider( rxProvider ),
+  m_xContext(std::move( rxContext )),
+  m_xIdentifier(std::move( Identifier )),
+  m_xProvider(std::move( rxProvider )),
   m_nCommandId( 0 )
 {
 }

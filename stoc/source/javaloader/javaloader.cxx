@@ -67,6 +67,7 @@
 
 // this one is header-only
 #include <comphelper/sequence.hxx>
+#include <utility>
 
 namespace com::sun::star::registry { class XRegistryKey; }
 
@@ -258,7 +259,7 @@ class JavaComponentLoader
 
 public:
     /// @throws RuntimeException
-    explicit JavaComponentLoader(const css::uno::Reference<XComponentContext> & xCtx);
+    explicit JavaComponentLoader(css::uno::Reference<XComponentContext>  xCtx);
 
 public:
     // XServiceInfo
@@ -495,9 +496,9 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
     return m_javaLoader;
 }
 
-JavaComponentLoader::JavaComponentLoader(const css::uno::Reference<XComponentContext> & xCtx)
+JavaComponentLoader::JavaComponentLoader(css::uno::Reference<XComponentContext>  xCtx)
     : WeakComponentImplHelper(m_aMutex)
-    , m_xComponentContext(xCtx)
+    , m_xComponentContext(std::move(xCtx))
 {
 
 }

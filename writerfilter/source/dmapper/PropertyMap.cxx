@@ -64,6 +64,7 @@
 #include "PropertyMapHelper.hxx"
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -1998,8 +1999,8 @@ private:
     OUString m_aName;
 
 public:
-    explicit NamedPropertyValue( const OUString& i_aStr )
-        : m_aName( i_aStr )
+    explicit NamedPropertyValue( OUString  i_aStr )
+        : m_aName(std::move( i_aStr ))
     {
     }
 

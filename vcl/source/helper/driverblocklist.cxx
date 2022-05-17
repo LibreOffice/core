@@ -13,6 +13,7 @@
 #include <string_view>
 
 #include <sal/log.hxx>
+#include <utility>
 
 #ifdef _WIN32
 #if !defined WIN32_LEAN_AND_MEAN
@@ -179,10 +180,10 @@ std::string_view GetVendorNameFromId(uint32_t id)
     }
 }
 
-Parser::Parser(const OUString& rURL, std::vector<DriverInfo>& rDriverList, VersionType versionType)
+Parser::Parser(OUString rURL, std::vector<DriverInfo>& rDriverList, VersionType versionType)
     : meBlockType(BlockType::UNKNOWN)
     , mrDriverList(rDriverList)
-    , maURL(rURL)
+    , maURL(std::move(rURL))
     , mVersionType(versionType)
 {
 }
@@ -558,8 +559,8 @@ namespace
 {
 struct compareIgnoreAsciiCase
 {
-    explicit compareIgnoreAsciiCase(const OUString& rString)
-        : maString(rString)
+    explicit compareIgnoreAsciiCase(OUString rString)
+        : maString(std::move(rString))
     {
     }
 
@@ -585,11 +586,11 @@ DriverInfo::DriverInfo()
 {
 }
 
-DriverInfo::DriverInfo(OperatingSystem os, const OUString& vendor, VersionComparisonOp op,
+DriverInfo::DriverInfo(OperatingSystem os, OUString vendor, VersionComparisonOp op,
                        uint64_t driverVersion, bool bAllowlisted,
                        const char* suggestedVersion /* = nullptr */)
     : meOperatingSystem(os)
-    , maAdapterVendor(vendor)
+    , maAdapterVendor(std::move(vendor))
     , mbAllowlisted(bAllowlisted)
     , meComparisonOp(op)
     , mnDriverVersion(driverVersion)

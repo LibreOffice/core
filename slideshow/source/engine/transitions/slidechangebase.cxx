@@ -27,23 +27,24 @@
 #include <tools.hxx>
 
 #include <algorithm>
+#include <utility>
 
 using namespace com::sun::star;
 
 namespace slideshow::internal {
 
-SlideChangeBase::SlideChangeBase( std::optional<SlideSharedPtr> const & leavingSlide,
+SlideChangeBase::SlideChangeBase( std::optional<SlideSharedPtr>  leavingSlide,
                                   const SlideSharedPtr&                   pEnteringSlide,
-                                  const SoundPlayerSharedPtr&             pSoundPlayer,
+                                  SoundPlayerSharedPtr              pSoundPlayer,
                                   const UnoViewContainer&                 rViewContainer,
                                   ScreenUpdater&                          rScreenUpdater,
                                   EventMultiplexer&                       rEventMultiplexer,
                                   bool                                    bCreateLeavingSprites,
                                   bool                                    bCreateEnteringSprites ) :
-      mpSoundPlayer( pSoundPlayer ),
+      mpSoundPlayer(std::move( pSoundPlayer )),
       mrEventMultiplexer(rEventMultiplexer),
       mrScreenUpdater(rScreenUpdater),
-      maLeavingSlide( leavingSlide ),
+      maLeavingSlide(std::move( leavingSlide )),
       mpEnteringSlide( pEnteringSlide ),
       maViewData(),
       mrViewContainer(rViewContainer),

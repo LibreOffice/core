@@ -23,6 +23,7 @@
 #include <o3tl/string_view.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <hintids.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <svl/hint.hxx>
 #include <svtools/ctrltool.hxx>
@@ -145,16 +146,16 @@ class SwStyleProperties_Impl;
         GetCountOrName_t m_fGetCountOrName;
         CreateStyle_t m_fCreateStyle;
         TranslateIndex_t m_fTranslateIndex;
-        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString const& sName, TranslateId pResId, GetCountOrName_t const & fGetCountOrName, CreateStyle_t const & fCreateStyle, TranslateIndex_t const & fTranslateIndex)
+        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString  sName, TranslateId pResId, GetCountOrName_t  fGetCountOrName, CreateStyle_t  fCreateStyle, TranslateIndex_t  fTranslateIndex)
                 : m_eFamily(eFamily)
                 , m_nPropMapType(nPropMapType)
                 , m_xPSInfo(aSwMapProvider.GetPropertySet(nPropMapType)->getPropertySetInfo())
                 , m_aPoolId(aPoolId)
-                , m_sName(sName)
+                , m_sName(std::move(sName))
                 , m_pResId(pResId)
-                , m_fGetCountOrName(fGetCountOrName)
-                , m_fCreateStyle(fCreateStyle)
-                , m_fTranslateIndex(fTranslateIndex)
+                , m_fGetCountOrName(std::move(fGetCountOrName))
+                , m_fCreateStyle(std::move(fCreateStyle))
+                , m_fTranslateIndex(std::move(fTranslateIndex))
             { }
     };
     const std::vector<StyleFamilyEntry>* our_pStyleFamilyEntries;
@@ -1486,11 +1487,11 @@ private:
     OUString m_rStyleName;
     const SwAttrSet* m_pParentStyle;
 public:
-    SwStyleBase_Impl(SwDoc& rSwDoc, const OUString& rName, const SwAttrSet* pParentStyle)
+    SwStyleBase_Impl(SwDoc& rSwDoc, OUString  rName, const SwAttrSet* pParentStyle)
         : m_rDoc(rSwDoc)
         , m_pOldPageDesc(nullptr)
         , m_pItemSet(nullptr)
-        , m_rStyleName(rName)
+        , m_rStyleName(std::move(rName))
         , m_pParentStyle(pParentStyle)
     { }
 
@@ -3882,9 +3883,9 @@ uno::Any SwXAutoStylesEnumerator::nextElement(  )
 
 SwXAutoStyle::SwXAutoStyle(
     SwDoc* pDoc,
-    std::shared_ptr<SfxItemSet> const & pInitSet,
+    std::shared_ptr<SfxItemSet>  pInitSet,
     IStyleAccess::SwAutoStyleFamily eFam)
-:   mpSet(pInitSet),
+:   mpSet(std::move(pInitSet)),
     meFamily(eFam),
     mrDoc(*pDoc)
 {
@@ -4674,17 +4675,17 @@ css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getSupportedServiceName
 }
 
 // SwXTextCellStyle
-SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, const OUString& sParentStyle) :
+SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, OUString  sParentStyle) :
     m_pDocShell(pDocShell),
     m_pBoxAutoFormat(pBoxAutoFormat),
-    m_sParentStyle(sParentStyle),
+    m_sParentStyle(std::move(sParentStyle)),
     m_bPhysical(true)
 { }
 
-SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, const OUString& sName) :
+SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, OUString  sName) :
     m_pDocShell(pDocShell),
     m_pBoxAutoFormat_Impl(std::make_shared<SwBoxAutoFormat>()),
-    m_sName(sName),
+    m_sName(std::move(sName)),
     m_bPhysical(false)
 {
     m_pBoxAutoFormat = m_pBoxAutoFormat_Impl.get();

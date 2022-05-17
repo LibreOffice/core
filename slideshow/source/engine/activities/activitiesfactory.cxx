@@ -38,6 +38,7 @@
 #include <optional>
 
 #include <memory>
+#include <utility>
 #include <vector>
 #include <algorithm>
 
@@ -140,15 +141,15 @@ public:
         value, or start fresh each time.
     */
     FromToByActivity(
-        const OptionalValueType&                      rFrom,
+        OptionalValueType                       rFrom,
         const OptionalValueType&                      rTo,
         const OptionalValueType&                      rBy,
         const ActivityParameters&                     rParms,
-        const ::std::shared_ptr< AnimationType >&   rAnim,
+        ::std::shared_ptr< AnimationType >    rAnim,
         const Interpolator< ValueType >&              rInterpolator,
         bool                                          bCumulative )
         : BaseType( rParms ),
-          maFrom( rFrom ),
+          maFrom(std::move( rFrom )),
           maTo( rTo ),
           maBy( rBy ),
           mpFormula( rParms.mpFormula ),
@@ -157,7 +158,7 @@ public:
           maPreviousValue(),
           maStartInterpolationValue(),
           mnIteration( 0 ),
-          mpAnim( rAnim ),
+          mpAnim(std::move( rAnim )),
           maInterpolator( rInterpolator ),
           mbDynamicStartValue( false ),
           mbCumulative( bCumulative )
@@ -508,13 +509,13 @@ public:
     ValuesActivity(
         const ValueVectorType&                      rValues,
         const ActivityParameters&                   rParms,
-        const std::shared_ptr<AnimationType>&     rAnim,
+        std::shared_ptr<AnimationType>      rAnim,
         const Interpolator< ValueType >&            rInterpolator,
         bool                                        bCumulative )
         : BaseType( rParms ),
           maValues( rValues ),
           mpFormula( rParms.mpFormula ),
-          mpAnim( rAnim ),
+          mpAnim(std::move( rAnim )),
           maInterpolator( rInterpolator ),
           mbCumulative( bCumulative )
     {
@@ -864,9 +865,9 @@ public:
         Standard Activity parameter struct
     */
     SimpleActivity( const ActivityParameters&       rParms,
-                    const NumberAnimationSharedPtr& rAnim ) :
+                    NumberAnimationSharedPtr  rAnim ) :
         ContinuousActivityBase( rParms ),
-        mpAnim( rAnim )
+        mpAnim(std::move( rAnim ))
     {
         ENSURE_OR_THROW( mpAnim, "Invalid animation object" );
     }

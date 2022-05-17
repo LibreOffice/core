@@ -49,7 +49,7 @@ public:
         SvXMLImport& rImport,
         sal_Int32 nElement,
         ::std::vector<XMLPropertyState> & rProperties,
-        const rtl::Reference<XMLPropertySetMapper> & rMapperRef,
+        rtl::Reference<XMLPropertySetMapper>  rMapperRef,
         sal_Int32 nIndex);
 
     virtual ~XMLFootnoteSeparatorImport() override;

@@ -28,6 +28,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sheet;
 
 #include <memory>
+#include <utility>
 
 namespace oox::xls {
 
@@ -346,13 +347,13 @@ void processSheetFormulaCells(
 
 FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
     const ScAddress& rAddr,
-    const OUString& rTokenStr, sal_Int32 nSharedId ) :
-    maAddress(rAddr), maTokenStr(rTokenStr), mnSharedId(nSharedId) {}
+    OUString  rTokenStr, sal_Int32 nSharedId ) :
+    maAddress(rAddr), maTokenStr(std::move(rTokenStr)), mnSharedId(nSharedId) {}
 
 FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
     const ScAddress& rAddr, sal_Int32 nSharedId,
-    const OUString& rCellValue, sal_Int32 nValueType ) :
-    maAddress(rAddr), maCellValue(rCellValue), mnSharedId(nSharedId), mnValueType(nValueType) {}
+    OUString  rCellValue, sal_Int32 nValueType ) :
+    maAddress(rAddr), maCellValue(std::move(rCellValue)), mnSharedId(nSharedId), mnValueType(nValueType) {}
 
 FormulaBuffer::SheetItem::SheetItem() :
     mpCellFormulas(nullptr),

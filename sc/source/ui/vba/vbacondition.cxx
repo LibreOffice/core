@@ -23,6 +23,7 @@
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <basic/sberrors.hxx>
+#include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -30,12 +31,11 @@ using namespace ::com::sun::star;
 const sal_Int32 ISFORMULA = 98765432;
 
 template <typename... Ifc>
-ScVbaCondition<Ifc...>::ScVbaCondition(
-    const uno::Reference<XHelperInterface>& xParent,
-    const uno::Reference<uno::XComponentContext>& xContext,
-    const uno::Reference<sheet::XSheetCondition>& _xSheetCondition)
+ScVbaCondition<Ifc...>::ScVbaCondition(const uno::Reference<XHelperInterface>& xParent,
+                                       const uno::Reference<uno::XComponentContext>& xContext,
+                                       uno::Reference<sheet::XSheetCondition> _xSheetCondition)
     : ScVbaCondition_BASE(xParent, xContext)
-    , mxSheetCondition(_xSheetCondition)
+    , mxSheetCondition(std::move(_xSheetCondition))
 {
     mxAddressable.set(xParent, uno::UNO_QUERY_THROW);
 }

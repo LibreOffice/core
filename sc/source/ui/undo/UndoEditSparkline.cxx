@@ -14,17 +14,18 @@
 
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
+#include <utility>
 
 namespace sc
 {
 UndoEditSparkline::UndoEditSparkline(ScDocShell& rDocShell,
-                                     std::shared_ptr<sc::Sparkline> const& rpSparkline, SCTAB nTab,
-                                     ScRangeList const& rDataRange)
+                                     std::shared_ptr<sc::Sparkline> rpSparkline, SCTAB nTab,
+                                     ScRangeList rDataRange)
     : ScSimpleUndo(&rDocShell)
-    , mpSparkline(rpSparkline)
+    , mpSparkline(std::move(rpSparkline))
     , mnTab(nTab)
     , maOldDataRange(mpSparkline->getInputRange())
-    , maNewDataRange(rDataRange)
+    , maNewDataRange(std::move(rDataRange))
 {
 }
 

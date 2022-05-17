@@ -723,7 +723,7 @@ public:
                  NameListWrapper() {}
     /*implicit*/ NameListWrapper( const OUString& rListName ) : maName( rListName ) {}
     /*implicit*/ NameListWrapper( const char* pcListName ) : maName( pcListName ) {}
-    /*implicit*/ NameListWrapper( const NameListRef& rxList ) : mxList( rxList ) {}
+    /*implicit*/ NameListWrapper( NameListRef  rxList ) : mxList(std::move( rxList )) {}
 
     bool         isEmpty() const { return !mxList && !maName.has(); }
     const NameListRef &  getNameList( const Config& rCfg ) const;
@@ -761,8 +761,8 @@ public:
     explicit            SharedConfigData(
                             const OUString& rFileName,
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                            const StorageRef& rxRootStrg,
-                            const OUString& rSysFileName );
+                            StorageRef  rxRootStrg,
+                            OUString  rSysFileName );
 
     virtual             ~SharedConfigData() override;
 
@@ -1072,7 +1072,7 @@ private:
 class StorageIterator : public Base
 {
 public:
-    explicit            StorageIterator( const StorageRef& rxStrg );
+    explicit            StorageIterator( StorageRef  rxStrg );
     virtual             ~StorageIterator() override;
 
     StorageIterator&    operator++();
@@ -1185,8 +1185,8 @@ private:
         OUString     maName;
         bool                mbStorage;
 
-        explicit     PreferredItem( const OUString& rName, bool bStorage ) :
-                                maName( rName ), mbStorage( bStorage ) {}
+        explicit     PreferredItem( OUString  rName, bool bStorage ) :
+                                maName(std::move( rName )), mbStorage( bStorage ) {}
     };
     typedef ::std::vector< PreferredItem > PreferredItemVector;
 

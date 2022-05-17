@@ -24,6 +24,7 @@
 
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
+#include <utility>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -62,7 +63,7 @@ class XMLMyList
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:
-    explicit XMLMyList(const uno::Reference<uno::XComponentContext>& rxContext);
+    explicit XMLMyList(uno::Reference<uno::XComponentContext>  rxContext);
 
     void push_back(beans::PropertyValue const & aProp) { aProps.push_back(aProp); nCount++; }
     uno::Sequence<beans::PropertyValue> GetSequence();
@@ -72,9 +73,9 @@ public:
 
 }
 
-XMLMyList::XMLMyList(const uno::Reference<uno::XComponentContext>& rxContext)
+XMLMyList::XMLMyList(uno::Reference<uno::XComponentContext>  rxContext)
 :   nCount(0),
-    m_xContext(rxContext)
+    m_xContext(std::move(rxContext))
 {
     assert(m_xContext.is());
 }
@@ -149,7 +150,7 @@ public:
     XMLConfigItemContext(SvXMLImport& rImport,
                                     const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                                     css::uno::Any& rAny,
-                                    const OUString& rItemName,
+                                    OUString  rItemName,
                                     XMLConfigBaseContext* pBaseContext);
 
     virtual void SAL_CALL characters( const OUString& rChars ) override;
@@ -193,7 +194,7 @@ private:
 public:
     XMLConfigItemMapIndexedContext(SvXMLImport& rImport,
                                     css::uno::Any& rAny,
-                                    const OUString& rConfigItemName,
+                                    OUString  rConfigItemName,
                                     XMLConfigBaseContext* pBaseContext);
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -383,11 +384,11 @@ void XMLConfigItemSetContext::endFastElement(sal_Int32 )
 XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport,
                                     const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                                     css::uno::Any& rTempAny,
-                                    const OUString& rTempItemName,
+                                    OUString  rTempItemName,
                                     XMLConfigBaseContext* pTempBaseContext)
     : SvXMLImportContext(rImport),
     mrAny(rTempAny),
-    mrItemName(rTempItemName),
+    mrItemName(std::move(rTempItemName)),
     mpBaseContext(pTempBaseContext)
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
@@ -552,10 +553,10 @@ void XMLConfigItemMapNamedContext::endFastElement(sal_Int32 )
 
 XMLConfigItemMapIndexedContext::XMLConfigItemMapIndexedContext(SvXMLImport& rImport,
                                     css::uno::Any& rAny,
-                                    const OUString& rConfigItemName,
+                                    OUString  rConfigItemName,
                                     XMLConfigBaseContext* pBaseContext)
     : XMLConfigBaseContext(rImport, rAny, pBaseContext),
-      maConfigItemName( rConfigItemName )
+      maConfigItemName(std::move( rConfigItemName ))
 {
 }
 

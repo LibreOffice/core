@@ -28,9 +28,9 @@ private:
     OUString m_sDefaultValue;
 
 public:
-    ColumnDefinition(const OUString& sName, sal_Int32 eType, std::vector<sal_Int32>&& aParams,
+    ColumnDefinition(OUString sName, sal_Int32 eType, std::vector<sal_Int32>&& aParams,
                      bool bPrimary = false, sal_Int32 nAutoIncr = -1, bool bNullable = true,
-                     bool bCaseInsensitive = false, const OUString& sDefault = OUString{});
+                     bool bCaseInsensitive = false, OUString sDefault = OUString{});
 
     OUString const& getName() const { return m_sName; }
     sal_Int32 getDataType() const { return m_eType; }

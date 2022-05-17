@@ -32,6 +32,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 using namespace oox::core;
 using namespace ::com::sun::star;
@@ -44,10 +45,10 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox::drawingml {
 
 // CT_Shape
-ShapeContext::ShapeContext( ContextHandler2Helper const & rParent, ShapePtr const & pMasterShapePtr, ShapePtr const & pShapePtr )
+ShapeContext::ShapeContext( ContextHandler2Helper const & rParent, ShapePtr  pMasterShapePtr, ShapePtr  pShapePtr )
 : ContextHandler2( rParent )
-, mpMasterShapePtr( pMasterShapePtr )
-, mpShapePtr( pShapePtr )
+, mpMasterShapePtr(std::move( pMasterShapePtr ))
+, mpShapePtr(std::move( pShapePtr ))
 {
     if( mpMasterShapePtr && mpShapePtr )
         mpMasterShapePtr->addChild( mpShapePtr );

@@ -25,13 +25,14 @@
 
 #include <rtl/ustrbuf.hxx>
 
+#include <utility>
 #include <vcl/i18nhelp.hxx>
 
 using namespace ::com::sun::star;
 
-vcl::I18nHelper::I18nHelper(  const css::uno::Reference< css::uno::XComponentContext >& rxContext, const LanguageTag& rLanguageTag )
+vcl::I18nHelper::I18nHelper(  const css::uno::Reference< css::uno::XComponentContext >& rxContext, LanguageTag  rLanguageTag )
     :
-        maLanguageTag( rLanguageTag)
+        maLanguageTag(std::move( rLanguageTag))
 {
     m_xContext = rxContext;
     mpLocaleDataWrapper = nullptr;

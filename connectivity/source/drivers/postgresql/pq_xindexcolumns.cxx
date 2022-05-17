@@ -37,6 +37,7 @@
 #include <sal/log.hxx>
 
 #include <string_view>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -72,14 +73,14 @@ IndexColumns::IndexColumns(
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const OUString &schemaName,
-        const OUString &tableName,
-        const OUString &indexName,
+        OUString schemaName,
+        OUString tableName,
+        OUString indexName,
         const css::uno::Sequence< OUString > &columns )
     : Container( refMutex, origin, pSettings,  "INDEX_COLUMN" ),
-      m_schemaName( schemaName ),
-      m_tableName( tableName ),
-      m_indexName( indexName ),
+      m_schemaName(std::move( schemaName )),
+      m_tableName(std::move( tableName )),
+      m_indexName(std::move( indexName )),
       m_columns( columns )
 {}
 

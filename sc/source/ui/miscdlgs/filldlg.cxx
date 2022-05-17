@@ -20,6 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <svl/numformat.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -35,14 +36,14 @@ ScFillSeriesDlg::ScFillSeriesDlg( weld::Window*       pParent,
                                   FillDir       eFillDir,
                                   FillCmd       eFillCmd,
                                   FillDateCmd   eFillDateCmd,
-                                  const OUString& aStartStr,
+                                  OUString  aStartStr,
                                   double        fStep,
                                   double        fMax,
                                   const SCSIZE  nSelectHeight,
                                   const SCSIZE  nSelectWidth,
                                   sal_uInt16        nPossDir )
     : GenericDialogController(pParent, "modules/scalc/ui/filldlg.ui", "FillSeriesDialog")
-    , aStartStrVal(aStartStr)
+    , aStartStrVal(std::move(aStartStr))
     , aErrMsgInvalidVal(ScResId(SCSTR_VALERR))
     , rDoc(rDocument)
     , theFillDir(eFillDir)

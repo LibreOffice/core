@@ -32,6 +32,7 @@
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 
 #include <unordered_map>
+#include <utility>
 
 namespace dlgprov
 {
@@ -89,7 +90,7 @@ namespace dlgprov
 
     public:
         DialogAllListenerImpl( const css::uno::Reference< css::script::XScriptListener >& rxListener,
-            const OUString& rScriptType, const OUString& rScriptCode );
+            OUString  rScriptType, OUString  rScriptCode );
         virtual ~DialogAllListenerImpl() override;
 
         // XEventListener
@@ -113,7 +114,7 @@ namespace dlgprov
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
         virtual void firing_impl( const css::script::ScriptEvent& aScriptEvent, css::uno::Any* pRet ) = 0;
     public:
-        explicit DialogScriptListenerImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) : m_xContext( rxContext ) {}
+        explicit DialogScriptListenerImpl( css::uno::Reference< css::uno::XComponentContext >  rxContext ) : m_xContext(std::move( rxContext )) {}
         virtual ~DialogScriptListenerImpl() override;
 
         // XEventListener

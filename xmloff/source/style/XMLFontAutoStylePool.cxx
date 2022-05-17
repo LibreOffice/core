@@ -19,6 +19,7 @@
 
 #include <o3tl/sorted_vector.hxx>
 #include <tools/fontenum.hxx>
+#include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -62,16 +63,16 @@ class XMLFontAutoStylePoolEntry_Impl
 public:
 
     inline XMLFontAutoStylePoolEntry_Impl(
-            const OUString& rName,
-            const OUString& rFamilyName,
-            const OUString& rStyleName,
+            OUString  rName,
+            OUString  rFamilyName,
+            OUString  rStyleName,
             FontFamily nFamily,
             FontPitch nPitch,
             rtl_TextEncoding eEnc );
 
     inline XMLFontAutoStylePoolEntry_Impl(
-            const OUString& rFamilyName,
-            const OUString& rStyleName,
+            OUString  rFamilyName,
+            OUString  rStyleName,
             FontFamily nFamily,
             FontPitch nPitch,
             rtl_TextEncoding eEnc );
@@ -87,15 +88,15 @@ public:
 }
 
 inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
-        const OUString& rName,
-        const OUString& rFamilyName,
-        const OUString& rStyleName,
+        OUString  rName,
+        OUString  rFamilyName,
+        OUString  rStyleName,
         FontFamily nFam,
         FontPitch nP,
         rtl_TextEncoding eE ) :
-    sName( rName ),
-    sFamilyName( rFamilyName ),
-    sStyleName( rStyleName ),
+    sName(std::move( rName )),
+    sFamilyName(std::move( rFamilyName )),
+    sStyleName(std::move( rStyleName )),
     nFamily( nFam ),
     nPitch( nP ),
     eEnc( eE )
@@ -103,13 +104,13 @@ inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
 }
 
 inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
-        const OUString& rFamilyName,
-        const OUString& rStyleName,
+        OUString  rFamilyName,
+        OUString  rStyleName,
         FontFamily nFam,
         FontPitch nP,
         rtl_TextEncoding eE ) :
-    sFamilyName( rFamilyName ),
-    sStyleName( rStyleName ),
+    sFamilyName(std::move( rFamilyName )),
+    sStyleName(std::move( rStyleName )),
     nFamily( nFam ),
     nPitch( nP ),
     eEnc( eE )

@@ -48,8 +48,8 @@ private:
     const bool m_bRemove;
 
 public:
-    SwUndoParagraphSigning(SwDoc& rDoc, const css::uno::Reference<css::text::XTextField>& xField,
-                           const css::uno::Reference<css::text::XTextContent>& xParent,
+    SwUndoParagraphSigning(SwDoc& rDoc, css::uno::Reference<css::text::XTextField> xField,
+                           css::uno::Reference<css::text::XTextContent> xParent,
                            const bool bRemove);
 
     virtual void UndoImpl(::sw::UndoRedoContext&) override;

@@ -33,6 +33,7 @@
 #include <oox/helper/textinputstream.hxx>
 #include <tools/time.hxx>
 #include <o3tl/string_view.hxx>
+#include <utility>
 
 #ifdef DBG_UTIL
 
@@ -1262,11 +1263,11 @@ const NameListRef & NameListWrapper::getNameList( const Config& rCfg ) const
 }
 
 SharedConfigData::SharedConfigData( const OUString& rFileName,
-        const Reference< XComponentContext >& rxContext, const StorageRef& rxRootStrg,
-        const OUString& rSysFileName ) :
+        const Reference< XComponentContext >& rxContext, StorageRef  rxRootStrg,
+        OUString  rSysFileName ) :
     mxContext( rxContext ),
-    mxRootStrg( rxRootStrg ),
-    maSysFileName( rSysFileName ),
+    mxRootStrg(std::move( rxRootStrg )),
+    maSysFileName(std::move( rSysFileName )),
     mbLoaded( false )
 {
     OUString aFileUrl = InputOutputHelper::convertFileNameToUrl( rFileName );
@@ -1692,8 +1693,8 @@ void Output::writeItemName( const String& rItemName )
         writeString( rItemName );
 }
 
-StorageIterator::StorageIterator( const StorageRef& rxStrg ) :
-    mxStrg( rxStrg )
+StorageIterator::StorageIterator( StorageRef  rxStrg ) :
+    mxStrg(std::move( rxStrg ))
 {
     if( mxStrg )
         mxStrg->getElementNames( maNames );

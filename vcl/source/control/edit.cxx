@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/builder.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
@@ -120,14 +121,14 @@ struct Impl_IMEInfos
     bool          bCursor;
     bool          bWasCursorOverwrite;
 
-    Impl_IMEInfos(sal_Int32 nPos, const OUString& rOldTextAfterStartPos);
+    Impl_IMEInfos(sal_Int32 nPos, OUString  rOldTextAfterStartPos);
 
     void        CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL);
     void        DestroyAttribs();
 };
 
-Impl_IMEInfos::Impl_IMEInfos(sal_Int32 nP, const OUString& rOldTextAfterStartPos)
-    : aOldTextAfterStartPos(rOldTextAfterStartPos),
+Impl_IMEInfos::Impl_IMEInfos(sal_Int32 nP, OUString  rOldTextAfterStartPos)
+    : aOldTextAfterStartPos(std::move(rOldTextAfterStartPos)),
     nPos(nP),
     nLen(0),
     bCursor(true),
@@ -2275,8 +2276,8 @@ void Edit::ImplHideDDCursor()
     }
 }
 
-TextFilter::TextFilter(const OUString &rForbiddenChars)
-    : sForbiddenChars(rForbiddenChars)
+TextFilter::TextFilter(OUString rForbiddenChars)
+    : sForbiddenChars(std::move(rForbiddenChars))
 {
 }
 

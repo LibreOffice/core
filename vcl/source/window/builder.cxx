@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
+#include <utility>
 #include <vcl/builder.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <vcl/menu.hxx>
@@ -442,19 +443,19 @@ namespace weld
 }
 
 VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUString& sUIFile,
-                       const OString& sID, const css::uno::Reference<css::frame::XFrame>& rFrame,
+                       OString  sID, css::uno::Reference<css::frame::XFrame>  rFrame,
                        bool bLegacy, const NotebookBarAddonsItem* pNotebookBarAddonsItem)
     : m_pNotebookBarAddonsItem(pNotebookBarAddonsItem
                                    ? new NotebookBarAddonsItem(*pNotebookBarAddonsItem)
                                    : new NotebookBarAddonsItem{})
-    , m_sID(sID)
+    , m_sID(std::move(sID))
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
     , m_pStringReplace(Translate::GetReadStringHook())
     , m_pParent(pParent)
     , m_bToplevelParentFound(false)
     , m_bLegacy(bLegacy)
     , m_pParserState(new ParserState)
-    , m_xFrame(rFrame)
+    , m_xFrame(std::move(rFrame))
 {
     m_bToplevelHasDeferredInit = pParent &&
         ((pParent->IsSystemWindow() && static_cast<SystemWindow*>(pParent)->isDeferredInit()) ||
@@ -4381,8 +4382,8 @@ VclBuilder::ParserState::ParserState()
     , m_nLastMenuItemId(0)
 {}
 
-VclBuilder::MenuAndId::MenuAndId(const OString &rId, Menu *pMenu)
-    : m_sID(rId)
+VclBuilder::MenuAndId::MenuAndId(OString rId, Menu *pMenu)
+    : m_sID(std::move(rId))
     , m_pMenu(pMenu)
 {}
 

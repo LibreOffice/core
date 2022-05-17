@@ -46,7 +46,7 @@ class ScVbaChartObject : public ChartObjectImpl_BASE
     /// @throws css::script::BasicErrorException
     css::uno::Reference< css::drawing::XShape > setShape();
 public:
-    ScVbaChartObject( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableChart >& _xTableChart, const css::uno::Reference< css::drawing::XDrawPageSupplier >& _xDrawPageSupplier );
+    ScVbaChartObject( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, css::uno::Reference< css::table::XTableChart >  _xTableChart, css::uno::Reference< css::drawing::XDrawPageSupplier >  _xDrawPageSupplier );
     virtual OUString SAL_CALL getName() override;
     virtual void SAL_CALL setName( const OUString& sName ) override;
     virtual css::uno::Reference< ov::excel::XChart > SAL_CALL getChart() override;

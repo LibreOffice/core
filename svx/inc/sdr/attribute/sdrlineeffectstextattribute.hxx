@@ -35,8 +35,8 @@ namespace drawinglayer::attribute
 
         public:
             SdrLineEffectsTextAttribute(
-                const SdrLineAttribute& rLine,
-                const SdrLineStartEndAttribute& rLineStartEnd,
+                SdrLineAttribute  rLine,
+                SdrLineStartEndAttribute  rLineStartEnd,
                 const SdrShadowAttribute& rShadow,
                 const SdrTextAttribute& rTextAttribute,
                 const SdrGlowAttribute& rGlow,

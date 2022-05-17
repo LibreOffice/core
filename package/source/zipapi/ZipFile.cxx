@@ -40,6 +40,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <utility>
 #include <vector>
 
 #include "blowfishcontext.hxx"
@@ -73,15 +74,15 @@ using ZipUtils::Inflater;
 
 /** This class is used to read entries from a zip file
  */
-ZipFile::ZipFile( const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
+ZipFile::ZipFile( rtl::Reference<comphelper::RefCountedMutex>  aMutexHolder,
                   uno::Reference < XInputStream > const &xInput,
-                  const uno::Reference < XComponentContext > & rxContext,
+                  uno::Reference < XComponentContext >  rxContext,
                   bool bInitialise )
-: m_aMutexHolder( aMutexHolder )
+: m_aMutexHolder(std::move( aMutexHolder ))
 , aGrabber( xInput )
 , aInflater( true )
 , xStream(xInput)
-, m_xContext ( rxContext )
+, m_xContext (std::move( rxContext ))
 , bRecoveryMode( false )
 {
     if (bInitialise && readCEN() == -1 )
@@ -91,15 +92,15 @@ ZipFile::ZipFile( const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolde
     }
 }
 
-ZipFile::ZipFile( const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
+ZipFile::ZipFile( rtl::Reference< comphelper::RefCountedMutex >  aMutexHolder,
                   uno::Reference < XInputStream > const &xInput,
-                  const uno::Reference < XComponentContext > & rxContext,
+                  uno::Reference < XComponentContext >  rxContext,
                   bool bInitialise, bool bForceRecovery)
-: m_aMutexHolder( aMutexHolder )
+: m_aMutexHolder(std::move( aMutexHolder ))
 , aGrabber( xInput )
 , aInflater( true )
 , xStream(xInput)
-, m_xContext ( rxContext )
+, m_xContext (std::move( rxContext ))
 , bRecoveryMode( bForceRecovery )
 {
     if (bInitialise)

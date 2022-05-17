@@ -12,20 +12,21 @@
 #include <dpsave.hxx>
 
 #include <algorithm>
+#include <utility>
 
 namespace sc {
 
 PivotTableSources::SelectedPages::SelectedPages( ScDPObject* pObj, SelectedPagesType&& rSelected ) :
     mpDP(pObj), maSelectedPages(std::move(rSelected)) {}
 
-PivotTableSources::SheetSource::SheetSource( ScDPObject* pObj, const ScSheetSourceDesc& rDesc ) :
-    mpDP(pObj), maDesc(rDesc) {}
+PivotTableSources::SheetSource::SheetSource( ScDPObject* pObj, ScSheetSourceDesc  rDesc ) :
+    mpDP(pObj), maDesc(std::move(rDesc)) {}
 
-PivotTableSources::DBSource::DBSource( ScDPObject* pObj, const ScImportSourceDesc& rDesc ) :
-    mpDP(pObj), maDesc(rDesc) {}
+PivotTableSources::DBSource::DBSource( ScDPObject* pObj, ScImportSourceDesc  rDesc ) :
+    mpDP(pObj), maDesc(std::move(rDesc)) {}
 
-PivotTableSources::ServiceSource::ServiceSource( ScDPObject* pObj, const ScDPServiceDesc& rDesc ) :
-    mpDP(pObj), maDesc(rDesc) {}
+PivotTableSources::ServiceSource::ServiceSource( ScDPObject* pObj, ScDPServiceDesc  rDesc ) :
+    mpDP(pObj), maDesc(std::move(rDesc)) {}
 
 PivotTableSources::PivotTableSources() {}
 

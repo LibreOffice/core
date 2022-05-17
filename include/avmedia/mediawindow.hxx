@@ -66,7 +66,7 @@ namespace avmedia
 
         using WeakComponentImplHelperBase::disposing;
     public:
-        PlayerListener(const std::function<void(const css::uno::Reference<css::media::XPlayer>&)> &rFn);
+        PlayerListener(std::function<void(const css::uno::Reference<css::media::XPlayer>&)> rFn);
         virtual void SAL_CALL dispose() override;
         virtual ~PlayerListener() override;
 

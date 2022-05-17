@@ -48,6 +48,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <svl/numformat.hxx>
+#include <utility>
 
 namespace
 {
@@ -320,8 +321,8 @@ bool SwTableCalcPara::CalcWithStackOverflow()
     return !m_rCalc.IsCalcError();
 }
 
-SwTableFormula::SwTableFormula( const OUString& rFormula )
-: m_sFormula( rFormula )
+SwTableFormula::SwTableFormula( OUString  rFormula )
+: m_sFormula(std::move( rFormula ))
 , m_eNmType( EXTRNL_NAME )
 , m_bValidValue( false )
 {

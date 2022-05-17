@@ -59,11 +59,10 @@ public:
     /** Create a new ConfigurationUpdater object that notifies configuration
         changes and the start and end of updates via the given broadcaster.
     */
-    ConfigurationUpdater(
-        const std::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster,
-        const std::shared_ptr<ConfigurationControllerResourceManager>& rpResourceManager,
-        const css::uno::Reference<css::drawing::framework::XControllerManager>&
-            rxControllerManager);
+    ConfigurationUpdater(std::shared_ptr<ConfigurationControllerBroadcaster> rpBroadcaster,
+                         std::shared_ptr<ConfigurationControllerResourceManager> rpResourceManager,
+                         const css::uno::Reference<css::drawing::framework::XControllerManager>&
+                             rxControllerManager);
     ~ConfigurationUpdater();
 
     /** Request an update of the current configuration so that it looks like

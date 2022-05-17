@@ -80,8 +80,7 @@ private:
     const BufferNode* getNextChild(const BufferNode* pChild) const;
 
 public:
-    explicit BufferNode(
-        const css::uno::Reference<css::xml::wrapper::XXMLElementWrapper>& xXMLElement);
+    explicit BufferNode(css::uno::Reference<css::xml::wrapper::XXMLElementWrapper> xXMLElement);
 
     bool isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const;
     void setReceivedAll();

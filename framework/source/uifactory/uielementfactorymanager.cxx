@@ -44,6 +44,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -63,12 +64,12 @@ static OUString getHashKeyFromStrings( std::u16string_view aType, std::u16string
     return OUString::Concat(aType) + "^" + aName + "^" + aModuleName;
 }
 
-ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Reference< XComponentContext >& rxContext, const OUString& _sRoot ) :
+ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Reference< XComponentContext >& rxContext, OUString  _sRoot ) :
     m_aPropType( "Type" ),
     m_aPropName( "Name" ),
     m_aPropModule( "Module" ),
     m_aPropFactory( "FactoryImplementation" ),
-    m_sRoot(_sRoot),
+    m_sRoot(std::move(_sRoot)),
     m_bConfigAccessInitialized( false )
 {
     m_xConfigProvider = theDefaultProvider::get( rxContext );

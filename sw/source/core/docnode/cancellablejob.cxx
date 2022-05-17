@@ -18,9 +18,10 @@
  */
 #include "cancellablejob.hxx"
 #include <observablethread.hxx>
+#include <utility>
 
-CancellableJob::CancellableJob( const rtl::Reference< ObservableThread >& rThread ) :
-    mrThread( rThread )
+CancellableJob::CancellableJob( rtl::Reference< ObservableThread >  rThread ) :
+    mrThread(std::move( rThread ))
 {
 }
 

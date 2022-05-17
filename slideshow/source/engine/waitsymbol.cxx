@@ -33,6 +33,7 @@
 #include <eventmultiplexer.hxx>
 
 #include <algorithm>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -57,10 +58,10 @@ WaitSymbolSharedPtr WaitSymbol::create( const uno::Reference<rendering::XBitmap>
     return pRet;
 }
 
-WaitSymbol::WaitSymbol( uno::Reference<rendering::XBitmap> const &   xBitmap,
+WaitSymbol::WaitSymbol( uno::Reference<rendering::XBitmap>    xBitmap,
                         ScreenUpdater&                               rScreenUpdater,
                         const UnoViewContainer&                      rViewContainer ) :
-    mxBitmap(xBitmap),
+    mxBitmap(std::move(xBitmap)),
     maViews(),
     mrScreenUpdater( rScreenUpdater ),
     mbVisible(false)

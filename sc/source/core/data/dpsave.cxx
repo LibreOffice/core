@@ -47,6 +47,7 @@
 
 #include <unordered_map>
 #include <algorithm>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace com::sun::star::sheet;
@@ -62,8 +63,8 @@ static void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xPro
     xProp->setPropertyValue( rName, uno::Any( bValue ) );
 }
 
-ScDPSaveMember::ScDPSaveMember(const OUString& rName) :
-    aName( rName ),
+ScDPSaveMember::ScDPSaveMember(OUString  rName) :
+    aName(std::move( rName )),
     nVisibleMode( SC_DPSAVEMODE_DONTKNOW ),
     nShowDetailsMode( SC_DPSAVEMODE_DONTKNOW )
 {
@@ -179,8 +180,8 @@ void ScDPSaveMember::Dump(int nIndent) const
 
 #endif
 
-ScDPSaveDimension::ScDPSaveDimension(const OUString& rName, bool bDataLayout) :
-    aName( rName ),
+ScDPSaveDimension::ScDPSaveDimension(OUString  rName, bool bDataLayout) :
+    aName(std::move( rName )),
     bIsDataLayout( bDataLayout ),
     bDupFlag( false ),
     nOrientation( sheet::DataPilotFieldOrientation_HIDDEN ),

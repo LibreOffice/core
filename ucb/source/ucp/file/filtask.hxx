@@ -47,6 +47,10 @@
 #include "filnot.hxx"
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
+#include <utility>
+#include <utility>
+#include <utility>
 #include <vector>
 
 namespace fileaccess
@@ -82,14 +86,11 @@ namespace fileaccess
             css::uno::Reference< css::ucb::XCommandEnvironment >  m_xCommandEnvironment;
 
 
-        public:
-
-            explicit TaskHandling(
-                const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv )
+        pubcss::uno::Reference< css::ucb::XCommandEnvironment > nvironment > nvironment > nvironment >   xCommandEnv )
                 : m_bHandled( false ),
                   m_nErrorCode( TASKHANDLER_NO_ERROR ),
                   m_nMinorCode( TASKHANDLER_NO_ERROR ),
-                  m_xCommandEnvironment( xCommandEnv )
+ std::move(             )std::move(    m_xComman)std::move(dEnvironment()std::move( xCommandEnv ))
             {
             }
 

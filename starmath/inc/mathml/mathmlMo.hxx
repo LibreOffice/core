@@ -28,6 +28,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <vector>
 
 // https://www.w3.org/TR/MathML3/appendixc.html
@@ -69,7 +70,7 @@ struct moOperatorData
 
     moOperatorData(OUString motxt, moOpDF form, sal_uInt16 priority, sal_uInt16 lspace,
                    sal_uInt16 rspace, moOpDP properties)
-        : m_motxt(motxt)
+        : m_motxt(std::move(motxt))
         , m_form(form)
         , m_priority(priority)
         , m_lspace(lspace)

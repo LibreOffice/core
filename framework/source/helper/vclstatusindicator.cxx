@@ -20,12 +20,13 @@
 #include <helper/vclstatusindicator.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 namespace framework {
 
-VCLStatusIndicator::VCLStatusIndicator(const css::uno::Reference< css::awt::XWindow >&               xParentWindow)
-    : m_xParentWindow    (xParentWindow                )
+VCLStatusIndicator::VCLStatusIndicator(css::uno::Reference< css::awt::XWindow >                xParentWindow)
+    : m_xParentWindow    (std::move(xParentWindow                ))
     , m_pStatusBar       (nullptr                            )
     , m_nRange           (0                            )
     , m_nValue           (0                            )

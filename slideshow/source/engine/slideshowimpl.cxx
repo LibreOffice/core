@@ -82,6 +82,7 @@
 #include "pointersymbol.hxx"
 
 #include <map>
+#include <utility>
 #include <vector>
 #include <algorithm>
 
@@ -200,7 +201,7 @@ class SlideShowImpl : private cppu::BaseMutex,
 {
 public:
     explicit SlideShowImpl(
-        uno::Reference<uno::XComponentContext> const& xContext );
+        uno::Reference<uno::XComponentContext>  xContext );
 
     /** Notify that the transition phase of the current slide
         has ended.
@@ -539,7 +540,7 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
 };
 
 SlideShowImpl::SlideShowImpl(
-    uno::Reference<uno::XComponentContext> const& xContext )
+    uno::Reference<uno::XComponentContext>  xContext )
     : SlideShowImplBase(m_aMutex),
       maViewContainer(),
       maListenerContainer( m_aMutex ),
@@ -563,7 +564,7 @@ SlideShowImpl::SlideShowImpl(
       mpWaitSymbol(),
       mpPointerSymbol(),
       mpCurrentSlideTransitionSound(),
-      mxComponentContext( xContext ),
+      mxComponentContext(std::move( xContext )),
       mxOptionalTransitionFactory(),
       mpCurrentSlide(),
       mpPrefetchSlide(),

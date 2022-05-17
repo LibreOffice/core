@@ -16,6 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <utility>
+
 #include "vbalisttemplates.hxx"
 #include "vbalisttemplate.hxx"
 
@@ -45,7 +47,7 @@ public:
 
 }
 
-SwVbaListTemplates::SwVbaListTemplates( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xTextDoc, sal_Int32 nType ) : SwVbaListTemplates_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >() ),  mxTextDocument( xTextDoc ), mnGalleryType( nType )
+SwVbaListTemplates::SwVbaListTemplates( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, uno::Reference< text::XTextDocument >  xTextDoc, sal_Int32 nType ) : SwVbaListTemplates_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >() ),  mxTextDocument(std::move( xTextDoc )), mnGalleryType( nType )
 {
 }
 

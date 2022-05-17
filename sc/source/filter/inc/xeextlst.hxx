@@ -136,7 +136,7 @@ private:
 class XclExpExtCfRule : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& rFormat, const ScAddress& rPos, const OString& rId, sal_Int32 nPriority );
+    XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& rFormat, const ScAddress& rPos, OString  rId, sal_Int32 nPriority );
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
@@ -152,7 +152,7 @@ typedef rtl::Reference<XclExpExt> XclExpExtRef;
 class XclExpExtConditionalFormatting : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    explicit XclExpExtConditionalFormatting( const XclExpRoot& rRoot, std::vector<XclExpExtCondFormatData>& rData, const ScRangeList& rRange);
+    explicit XclExpExtConditionalFormatting( const XclExpRoot& rRoot, std::vector<XclExpExtCondFormatData>& rData, ScRangeList  rRange);
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:

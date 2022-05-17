@@ -29,6 +29,7 @@
 #include <svl/undo.hxx>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <utility>
 #include <vcl/outdev.hxx>
 #include <vcl/errcode.hxx>
 #include <tools/link.hxx>
@@ -421,7 +422,7 @@ public:
 
     DrawPortionInfo(
         const Point& rPos,
-        const OUString& rTxt,
+        OUString  rTxt,
         sal_Int32 nTxtStart,
         sal_Int32 nTxtLen,
         const SvxFont& rFnt,
@@ -439,7 +440,7 @@ public:
         bool bEndOfParagraph,
         bool bEndOfBullet)
     :   mrStartPos(rPos),
-        maText(rTxt),
+        maText(std::move(rTxt)),
         mnTextStart(nTxtStart),
         mnTextLen(nTxtLen),
         mnPara(nPar),

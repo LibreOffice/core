@@ -45,22 +45,23 @@
 
 #include "viewappletshape.hxx"
 #include <tools.hxx>
+#include <utility>
 
 
 using namespace ::com::sun::star;
 
 namespace slideshow::internal
 {
-        ViewAppletShape::ViewAppletShape( const ViewLayerSharedPtr&                       rViewLayer,
+        ViewAppletShape::ViewAppletShape( ViewLayerSharedPtr                        rViewLayer,
                                           const uno::Reference< drawing::XShape >&        rxShape,
                                           const OUString&                          rServiceName,
                                           const char**                                    pPropCopyTable,
                                           std::size_t                                     nNumPropEntries,
-                                          const uno::Reference< uno::XComponentContext >& rxContext ) :
-            mpViewLayer( rViewLayer ),
+                                          uno::Reference< uno::XComponentContext >  rxContext ) :
+            mpViewLayer(std::move( rViewLayer )),
             mxViewer(),
             mxFrame(),
-            mxComponentContext( rxContext )
+            mxComponentContext(std::move( rxContext ))
         {
             ENSURE_OR_THROW( rxShape.is(), "ViewAppletShape::ViewAppletShape(): Invalid Shape" );
             ENSURE_OR_THROW( mpViewLayer, "ViewAppletShape::ViewAppletShape(): Invalid View" );

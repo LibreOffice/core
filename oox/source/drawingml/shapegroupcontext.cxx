@@ -29,6 +29,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 using namespace oox::core;
 using namespace ::com::sun::star;
@@ -39,9 +40,9 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox::drawingml {
 
-ShapeGroupContext::ShapeGroupContext( FragmentHandler2 const & rParent, ShapePtr const & pMasterShapePtr, ShapePtr const & pGroupShapePtr )
+ShapeGroupContext::ShapeGroupContext( FragmentHandler2 const & rParent, ShapePtr const & pMasterShapePtr, ShapePtr  pGroupShapePtr )
 : FragmentHandler2( rParent )
-, mpGroupShapePtr( pGroupShapePtr )
+, mpGroupShapePtr(std::move( pGroupShapePtr ))
 {
     if( pMasterShapePtr )
         mpGroupShapePtr->setWps(pMasterShapePtr->getWps());

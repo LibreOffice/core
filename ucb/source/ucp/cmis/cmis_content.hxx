@@ -139,7 +139,7 @@ public:
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
-        libcmis::ObjectPtr const & pObject = libcmis::ObjectPtr( ) );
+        libcmis::ObjectPtr  pObject = libcmis::ObjectPtr( ) );
 
     /// @throws css::ucb::ContentCreationException
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,

@@ -62,6 +62,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/conditn.hxx>
 #include <unotools/resmgr.hxx>
+#include <utility>
 #include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -108,8 +109,8 @@ class HandleData : public osl::Condition
 {
 public:
     explicit HandleData(
-        uno::Reference< task::XInteractionRequest > const & rRequest)
-        : m_rRequest(rRequest),
+        uno::Reference< task::XInteractionRequest >  rRequest)
+        : m_rRequest(std::move(rRequest)),
           bHandled( false )
     {
     }
@@ -121,18 +122,18 @@ public:
 } /* namespace */
 
 UUIInteractionHelper::UUIInteractionHelper(
-    uno::Reference< uno::XComponentContext > const & rxContext,
-    uno::Reference< awt::XWindow > const & rxWindowParam,
-    const OUString & rContextParam)
-    :   m_xContext(rxContext),
-        m_xWindowParam(rxWindowParam),
-        m_aContextParam(rContextParam)
+    uno::Reference< uno::XComponentContext >  rxContext,
+    uno::Reference< awt::XWindow >  rxWindowParam,
+    OUString  rContextParam)
+    :   m_xContext(std::move(rxContext)),
+        m_xWindowParam(std::move(rxWindowParam)),
+        m_aContextParam(std::move(rContextParam))
 {
 }
 
 UUIInteractionHelper::UUIInteractionHelper(
-    uno::Reference< uno::XComponentContext > const & rxContext)
-    :  m_xContext(rxContext)
+    uno::Reference< uno::XComponentContext >  rxContext)
+    :  m_xContext(std::move(rxContext))
 {
 }
 

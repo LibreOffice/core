@@ -18,6 +18,7 @@
  */
 
 #include <hints.hxx>
+#include <utility>
 
 // ScPaintHint - info what has to be repainted
 
@@ -81,11 +82,11 @@ void ScLinkRefreshedHint::SetAreaLink( const ScAddress& rPos )
 
 //      ScAutoStyleHint - STYLE() function has been called
 
-ScAutoStyleHint::ScAutoStyleHint( const ScRange& rR, const OUString& rSt1,
-                                        sal_uLong nT, const OUString& rSt2 ) :
+ScAutoStyleHint::ScAutoStyleHint( const ScRange& rR, OUString  rSt1,
+                                        sal_uLong nT, OUString  rSt2 ) :
     aRange( rR ),
-    aStyle1( rSt1 ),
-    aStyle2( rSt2 ),
+    aStyle1(std::move( rSt1 )),
+    aStyle2(std::move( rSt2 )),
     nTimeout( nT )
 {
 }
@@ -102,8 +103,8 @@ ScDBRangeRefreshedHint::~ScDBRangeRefreshedHint()
 {
 }
 
-ScDataPilotModifiedHint::ScDataPilotModifiedHint( const OUString& rName )
-    : maName(rName)
+ScDataPilotModifiedHint::ScDataPilotModifiedHint( OUString  rName )
+    : maName(std::move(rName))
 {
 }
 ScDataPilotModifiedHint::~ScDataPilotModifiedHint()

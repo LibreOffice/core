@@ -47,7 +47,7 @@ class OOX_DLLPUBLIC ObjectContainer
 public:
     explicit            ObjectContainer(
                             const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory,
-                            const OUString& rServiceName );
+                            OUString  rServiceName );
                         ~ObjectContainer();
 
     /** Returns true, if the object with the passed name exists in the container. */

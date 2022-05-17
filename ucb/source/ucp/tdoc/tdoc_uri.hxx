@@ -20,6 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <utility>
 
 namespace tdoc_ucp {
 
@@ -44,8 +45,8 @@ private:
     void init() const;
 
 public:
-    explicit Uri( const OUString & rUri )
-    : m_aUri( rUri ), m_eState( UNKNOWN ) {}
+    explicit Uri( OUString  rUri )
+    : m_aUri(std::move( rUri )), m_eState( UNKNOWN ) {}
 
     bool operator== ( const Uri & rOther ) const
     { init(); return m_aUri == rOther.m_aUri; }

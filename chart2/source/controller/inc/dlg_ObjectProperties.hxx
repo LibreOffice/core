@@ -30,7 +30,7 @@ namespace chart
 class ObjectPropertiesDialogParameter final
 {
 public:
-    ObjectPropertiesDialogParameter( const OUString& rObjectCID );
+    ObjectPropertiesDialogParameter( OUString  rObjectCID );
     ~ObjectPropertiesDialogParameter();
 
     void            init( const rtl::Reference<::chart::ChartModel>& xModel );

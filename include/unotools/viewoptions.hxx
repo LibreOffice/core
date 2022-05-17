@@ -114,7 +114,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final
         *//*-*****************************************************************************************************/
 
          SvtViewOptions(       EViewType        eType     ,
-                         const OUString& sViewName );
+                         OUString  sViewName );
 
         //  interface
 

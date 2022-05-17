@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/container/XStringKeyMap.hpp>
+#include <utility>
 
 
 using namespace ::com::sun::star;
@@ -33,20 +34,20 @@ SvxSmartTagItem::SvxSmartTagItem( const TypedWhichId<SvxSmartTagItem> nId,
                                   const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                                   const css::uno::Sequence < css::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,
                                   const css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
-                                  const css::uno::Reference<css::text::XTextRange>& rRange,
-                                  const css::uno::Reference<css::frame::XController>& rController,
-                                  const css::lang::Locale& rLocale,
-                                  const OUString& rApplicationName,
-                                  const OUString& rRangeText ) :
+                                  css::uno::Reference<css::text::XTextRange>  rRange,
+                                  css::uno::Reference<css::frame::XController>  rController,
+                                  css::lang::Locale  rLocale,
+                                  OUString  rApplicationName,
+                                  OUString  rRangeText ) :
     SfxPoolItem( nId ),
     maActionComponentsSequence( rActionComponentsSequence ),
     maActionIndicesSequence( rActionIndicesSequence ),
     maStringKeyMaps( rStringKeyMaps ),
-    mxRange( rRange ),
-    mxController( rController ),
-    maLocale( rLocale ),
-    maApplicationName( rApplicationName ),
-    maRangeText( rRangeText )
+    mxRange(std::move( rRange )),
+    mxController(std::move( rController )),
+    maLocale(std::move( rLocale )),
+    maApplicationName(std::move( rApplicationName )),
+    maRangeText(std::move( rRangeText ))
 {
 }
 

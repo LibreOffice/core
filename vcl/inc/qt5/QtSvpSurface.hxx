@@ -26,7 +26,7 @@ class QtSvpSurface final : public Surface
 
 public:
     /// takes over ownership of passed cairo_surface
-    explicit QtSvpSurface(const CairoSurfaceSharedPtr& pSurface);
+    explicit QtSvpSurface(CairoSurfaceSharedPtr pSurface);
     /// create surface on subarea of given drawable
     explicit QtSvpSurface(const QtSvpGraphics* pGraphics, int x, int y, int width, int height);
     ~QtSvpSurface() override;

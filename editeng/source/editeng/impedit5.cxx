@@ -22,6 +22,7 @@
 #include <editeng/editeng.hxx>
 #include <svl/hint.hxx>
 #include <sfx2/app.hxx>
+#include <utility>
 
 void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
 {
@@ -816,8 +817,8 @@ void IdleFormattter::ForceTimeout()
     }
 }
 
-ImplIMEInfos::ImplIMEInfos( const EditPaM& rPos, const OUString& rOldTextAfterStartPos )
- : aOldTextAfterStartPos( rOldTextAfterStartPos ),
+ImplIMEInfos::ImplIMEInfos( const EditPaM& rPos, OUString  rOldTextAfterStartPos )
+ : aOldTextAfterStartPos(std::move( rOldTextAfterStartPos )),
  aPos(rPos),
  nLen(0),
  bWasCursorOverwrite(false)

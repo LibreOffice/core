@@ -112,7 +112,7 @@ protected:
     OUString maText;
 
 public:
-    SvLBoxString(const OUString& rText);
+    SvLBoxString(OUString  rText);
     SvLBoxString();
     virtual ~SvLBoxString() override;
 

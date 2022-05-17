@@ -63,6 +63,7 @@
 #include <swerror.h>
 #include <pausethreadstarting.hxx>
 #include <frameformats.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -401,9 +402,9 @@ ErrCode SwReader::Read( const Reader& rOptions )
 }
 
 
-SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwDoc *pDocument)
+SwReader::SwReader(SfxMedium& rMedium, OUString  rFileName, SwDoc *pDocument)
     : SwDocFac(pDocument), mpStrm(nullptr), mpMedium(&rMedium), mpCursor(nullptr),
-    maFileName(rFileName), mbSkipImages(false)
+    maFileName(std::move(rFileName)), mbSkipImages(false)
 {
     SetBaseURL( rMedium.GetBaseURL() );
     SetSkipImages( rMedium.IsSkipImages() );
@@ -411,22 +412,22 @@ SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwDoc *pDocume
 
 
 // Read into an existing document
-SwReader::SwReader(SvStream& rStrm, const OUString& rFileName, const OUString& rBaseURL, SwPaM& rPam)
+SwReader::SwReader(SvStream& rStrm, OUString  rFileName, const OUString& rBaseURL, SwPaM& rPam)
     : SwDocFac(&rPam.GetDoc()), mpStrm(&rStrm), mpMedium(nullptr), mpCursor(&rPam),
-    maFileName(rFileName), mbSkipImages(false)
+    maFileName(std::move(rFileName)), mbSkipImages(false)
 {
     SetBaseURL( rBaseURL );
 }
 
-SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwPaM& rPam)
+SwReader::SwReader(SfxMedium& rMedium, OUString  rFileName, SwPaM& rPam)
     : SwDocFac(&rPam.GetDoc()), mpStrm(nullptr), mpMedium(&rMedium),
-    mpCursor(&rPam), maFileName(rFileName), mbSkipImages(false)
+    mpCursor(&rPam), maFileName(std::move(rFileName)), mbSkipImages(false)
 {
     SetBaseURL( rMedium.GetBaseURL() );
 }
 
-SwReader::SwReader( const uno::Reference < embed::XStorage > &rStg, const OUString& rFilename, SwPaM &rPam )
-    : SwDocFac(&rPam.GetDoc()), mpStrm(nullptr), mxStg( rStg ), mpMedium(nullptr), mpCursor(&rPam), maFileName(rFilename), mbSkipImages(false)
+SwReader::SwReader( uno::Reference < embed::XStorage > rStg, OUString  rFilename, SwPaM &rPam )
+    : SwDocFac(&rPam.GetDoc()), mpStrm(nullptr), mxStg(std::move( rStg )), mpMedium(nullptr), mpCursor(&rPam), maFileName(std::move(rFilename)), mbSkipImages(false)
 {
 }
 
@@ -711,8 +712,8 @@ SwWriter::SwWriter(SvStream& rStrm, SwPaM& rPam, bool bInWriteAll)
 {
 }
 
-SwWriter::SwWriter( const uno::Reference < embed::XStorage >& rStg, SwDoc &rDocument)
-    : m_pStrm(nullptr), m_xStg( rStg ), m_pMedium(nullptr), m_pOutPam(nullptr), m_pShell(nullptr), m_rDoc(rDocument), m_bWriteAll(true)
+SwWriter::SwWriter( uno::Reference < embed::XStorage >  rStg, SwDoc &rDocument)
+    : m_pStrm(nullptr), m_xStg(std::move( rStg )), m_pMedium(nullptr), m_pOutPam(nullptr), m_pShell(nullptr), m_rDoc(rDocument), m_bWriteAll(true)
 {
 }
 

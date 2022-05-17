@@ -63,8 +63,8 @@ public:
     SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich = SID_HYPERLINK_GETLINK ):
                 SfxPoolItem(_nWhich) { eType = HLINK_DEFAULT; nMacroEvents=HyperDialogEvent::NONE; };
     SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem );
-    SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> nWhich, const OUString& rName, const OUString& rURL,
-                                    const OUString& rTarget, const OUString& rIntName,
+    SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> nWhich, OUString  rName, OUString  rURL,
+                                    OUString  rTarget, OUString  rIntName,
                                     SvxLinkInsertMode eTyp,
                                     HyperDialogEvent nEvents,
                                     SvxMacroTableDtor const *pMacroTbl );

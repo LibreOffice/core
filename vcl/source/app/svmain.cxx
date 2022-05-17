@@ -32,6 +32,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <utility>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclmain.hxx>
@@ -246,8 +247,8 @@ namespace {
 class DesktopEnvironmentContext: public cppu::WeakImplHelper< css::uno::XCurrentContext >
 {
 public:
-    explicit DesktopEnvironmentContext( const css::uno::Reference< css::uno::XCurrentContext > & ctx)
-        : m_xNextContext( ctx ) {}
+    explicit DesktopEnvironmentContext( css::uno::Reference< css::uno::XCurrentContext >  ctx)
+        : m_xNextContext(std::move( ctx )) {}
 
     // XCurrentContext
     virtual css::uno::Any SAL_CALL getValueByName( const OUString& Name ) override;

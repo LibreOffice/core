@@ -31,8 +31,8 @@ class SdLayerModifyUndoAction final : public SdUndoAction
 
 public:
     SdLayerModifyUndoAction( SdDrawDocument* _pDoc, SdrLayer* pLayer,
-    const OUString& rOldLayerName, const OUString& rOldLayerTitle, const OUString& rOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
-    const OUString& rNewLayerName, const OUString& rNewLayerTitle, const OUString& rNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable );
+    OUString  rOldLayerName, OUString  rOldLayerTitle, OUString  rOldLayerDesc, bool bOldIsVisible, bool bOldIsLocked, bool bOldIsPrintable,
+    OUString  rNewLayerName, OUString  rNewLayerTitle, OUString  rNewLayerDesc, bool bNewIsVisible, bool bNewIsLocked, bool bNewIsPrintable );
 
     virtual void Undo() override;
     virtual void Redo() override;

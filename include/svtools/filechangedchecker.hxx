@@ -38,8 +38,8 @@ public:
     // bUpdate = true  when file has changed, get the return and the object get the new time
     //         = false when file has changed, only get the return, not change the object
     bool hasFileChanged(bool bUpdate = true);
-    FileChangedChecker(const OUString& rFilename,
-            const ::std::function<void ()>& rCallback);
+    FileChangedChecker(OUString  rFilename,
+            ::std::function<void ()>  rCallback);
     // without Timer function
-    FileChangedChecker(const OUString& rFilename);
+    FileChangedChecker(OUString  rFilename);
 };

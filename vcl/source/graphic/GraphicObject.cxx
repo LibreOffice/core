@@ -25,6 +25,7 @@
 #include <osl/diagnose.h>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/GraphicObject.hxx>
@@ -292,16 +293,16 @@ struct GrfSimpleCacheObj
     Graphic     maGraphic;
     GraphicAttr maAttr;
 
-                GrfSimpleCacheObj( const Graphic& rGraphic, const GraphicAttr& rAttr ) :
-                    maGraphic( rGraphic ), maAttr( rAttr ) {}
+                GrfSimpleCacheObj( Graphic  rGraphic, const GraphicAttr& rAttr ) :
+                    maGraphic(std::move( rGraphic )), maAttr( rAttr ) {}
 };
 
 GraphicObject::GraphicObject()
 {
 }
 
-GraphicObject::GraphicObject(const Graphic& rGraphic)
-    : maGraphic(rGraphic)
+GraphicObject::GraphicObject(Graphic  rGraphic)
+    : maGraphic(std::move(rGraphic))
 {
 }
 

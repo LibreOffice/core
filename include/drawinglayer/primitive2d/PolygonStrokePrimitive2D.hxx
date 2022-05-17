@@ -54,12 +54,12 @@ protected:
 
 public:
     /// constructor
-    PolygonStrokePrimitive2D(const basegfx::B2DPolygon& rPolygon,
+    PolygonStrokePrimitive2D(basegfx::B2DPolygon rPolygon,
                              const attribute::LineAttribute& rLineAttribute,
-                             const attribute::StrokeAttribute& rStrokeAttribute);
+                             attribute::StrokeAttribute rStrokeAttribute);
 
     /// constructor without stroking
-    PolygonStrokePrimitive2D(const basegfx::B2DPolygon& rPolygon,
+    PolygonStrokePrimitive2D(basegfx::B2DPolygon rPolygon,
                              const attribute::LineAttribute& rLineAttribute);
 
     /// data read access

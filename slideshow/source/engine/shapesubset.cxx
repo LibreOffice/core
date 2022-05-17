@@ -21,19 +21,20 @@
 #include <tools/diagnose_ex.h>
 
 #include <shapesubset.hxx>
+#include <utility>
 
 
 using namespace ::com::sun::star;
 
 namespace slideshow::internal
 {
-        ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
+        ShapeSubset::ShapeSubset( AttributableShapeSharedPtr        rOriginalShape,
                                   const DocTreeNode&                      rTreeNode,
-                                  const SubsettableShapeManagerSharedPtr& rShapeManager ) :
-            mpOriginalShape( rOriginalShape ),
+                                  SubsettableShapeManagerSharedPtr  rShapeManager ) :
+            mpOriginalShape(std::move( rOriginalShape )),
             mpSubsetShape(),
             maTreeNode( rTreeNode ),
-            mpShapeManager( rShapeManager )
+            mpShapeManager(std::move( rShapeManager ))
         {
             ENSURE_OR_THROW( mpShapeManager,
                               "ShapeSubset::ShapeSubset(): Invalid shape manager" );
@@ -56,12 +57,12 @@ namespace slideshow::internal
                               "ShapeSubset::ShapeSubset(): Subset is bigger than parent" );
         }
 
-        ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
-                                  const SubsettableShapeManagerSharedPtr& rShapeManager ) :
-            mpOriginalShape( rOriginalShape ),
+        ShapeSubset::ShapeSubset( AttributableShapeSharedPtr        rOriginalShape,
+                                  SubsettableShapeManagerSharedPtr  rShapeManager ) :
+            mpOriginalShape(std::move( rOriginalShape )),
             mpSubsetShape(),
             maTreeNode(),
-            mpShapeManager( rShapeManager )
+            mpShapeManager(std::move( rShapeManager ))
         {
             ENSURE_OR_THROW( mpShapeManager,
                               "ShapeSubset::ShapeSubset(): Invalid shape manager" );

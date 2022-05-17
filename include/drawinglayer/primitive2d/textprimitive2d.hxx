@@ -136,11 +136,10 @@ protected:
 
 public:
     /// constructor
-    TextSimplePortionPrimitive2D(const basegfx::B2DHomMatrix& rNewTransform, const OUString& rText,
+    TextSimplePortionPrimitive2D(basegfx::B2DHomMatrix rNewTransform, OUString rText,
                                  sal_Int32 nTextPosition, sal_Int32 nTextLength,
                                  std::vector<double>&& rDXArray,
-                                 const attribute::FontAttribute& rFontAttribute,
-                                 const css::lang::Locale& rLocale,
+                                 attribute::FontAttribute rFontAttribute, css::lang::Locale rLocale,
                                  const basegfx::BColor& rFontColor, bool bFilled = false,
                                  tools::Long nWidthToFill = 0,
                                  const Color& rTextFillColor = COL_TRANSPARENT);

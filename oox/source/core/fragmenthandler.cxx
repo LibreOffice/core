@@ -20,6 +20,7 @@
 #include <oox/core/fragmenthandler.hxx>
 
 #include <oox/core/xmlfilterbase.hxx>
+#include <utility>
 
 namespace oox::core {
 
@@ -27,10 +28,10 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-FragmentBaseData::FragmentBaseData( XmlFilterBase& rFilter, const OUString& rFragmentPath, RelationsRef const & xRelations ) :
+FragmentBaseData::FragmentBaseData( XmlFilterBase& rFilter, OUString  rFragmentPath, RelationsRef  xRelations ) :
     mrFilter( rFilter ),
-    maFragmentPath( rFragmentPath ),
-    mxRelations( xRelations )
+    maFragmentPath(std::move( rFragmentPath )),
+    mxRelations(std::move( xRelations ))
 {
 }
 

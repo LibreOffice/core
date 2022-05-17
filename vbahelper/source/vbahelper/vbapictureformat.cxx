@@ -16,6 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <utility>
+
 #include "vbapictureformat.hxx"
 
 using namespace ooo::vba;
@@ -23,8 +25,8 @@ using namespace com::sun::star;
 
 ScVbaPictureFormat::ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent,
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-    uno::Reference< drawing::XShape > const & xShape )
-    : ScVbaPictureFormat_BASE( xParent, xContext ), m_xShape( xShape )
+    uno::Reference< drawing::XShape >  xShape )
+    : ScVbaPictureFormat_BASE( xParent, xContext ), m_xShape(std::move( xShape ))
 {
     m_xPropertySet.set( m_xShape, uno::UNO_QUERY_THROW );
 }

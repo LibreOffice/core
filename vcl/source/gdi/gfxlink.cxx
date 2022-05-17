@@ -20,6 +20,7 @@
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
+#include <utility>
 #include <vcl/graph.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -45,10 +46,10 @@ GfxLink::GfxLink(std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nSize, GfxLinkTyp
 {
 }
 
-GfxLink::GfxLink(BinaryDataContainer const & rDataConainer, GfxLinkType nType)
+GfxLink::GfxLink(BinaryDataContainer  rDataConainer, GfxLinkType nType)
     : meType(nType)
     , mnUserId(0)
-    , maDataContainer(rDataConainer)
+    , maDataContainer(std::move(rDataConainer))
     , maHash(0)
     , mbPrefMapModeValid(false)
     , mbPrefSizeValid(false)

@@ -129,7 +129,7 @@ public:
                                                     SfxBindings*                       pBind,
                                                     SfxDispatcher*                     pDispat,
                                                     const SfxSlot*                     pSlot,
-                                                    const css::util::URL& rURL );
+                                                    css::util::URL  rURL );
                         virtual ~SfxDispatchController_Impl() override;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;

@@ -68,14 +68,14 @@ namespace fileaccess {
 
         // A special creator for inserted contents; Creates an ugly object
         BaseContent( TaskManager* pMyShell,
-                     const OUString& parentName,
+                     OUString  parentName,
                      bool bFolder );
 
     public:
         BaseContent(
             TaskManager* pMyShell,
             const css::uno::Reference< css::ucb::XContentIdentifier >& xContentIdentifier,
-            const OUString& aUnqPath );
+            OUString  aUnqPath );
 
         virtual ~BaseContent() override;
 

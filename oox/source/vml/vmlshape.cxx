@@ -23,6 +23,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <oox/vml/vmlshape.hxx>
+#include <utility>
 #include <vcl/wmfexternal.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -570,9 +571,9 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
     PropertySet( rxShape ).setProperties( aPropMap );
 }
 
-SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
+SimpleShape::SimpleShape( Drawing& rDrawing, OUString  rService ) :
     ShapeBase( rDrawing ),
-    maService( rService )
+    maService(std::move( rService ))
 {
 }
 

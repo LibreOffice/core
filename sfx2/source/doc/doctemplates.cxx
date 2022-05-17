@@ -22,6 +22,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <unotools/pathoptions.hxx>
@@ -164,8 +165,8 @@ class TplTaskEnvironment : public ::cppu::WeakImplHelper< ucb::XCommandEnvironme
     uno::Reference< task::XInteractionHandler >               m_xInteractionHandler;
 
 public:
-    explicit TplTaskEnvironment( const uno::Reference< task::XInteractionHandler>& rxInteractionHandler )
-                                : m_xInteractionHandler( rxInteractionHandler )
+    explicit TplTaskEnvironment( uno::Reference< task::XInteractionHandler>  rxInteractionHandler )
+                                : m_xInteractionHandler(std::move( rxInteractionHandler ))
                             {}
 
     virtual uno::Reference<task::XInteractionHandler> SAL_CALL getInteractionHandler() override
@@ -322,7 +323,7 @@ class DocTemplates_EntryData_Impl
     bool            mbUpdateLink    : 1;
 
 public:
-   explicit             DocTemplates_EntryData_Impl( const OUString& rTitle );
+   explicit             DocTemplates_EntryData_Impl( OUString  rTitle );
 
     void                setInUse() { mbInUse = true; }
     void                setHierarchy( bool bInHierarchy ) { mbInHierarchy = bInHierarchy; }
@@ -355,7 +356,7 @@ class GroupData_Impl
     bool            mbInHierarchy   : 1;
 
 public:
-    explicit            GroupData_Impl( const OUString& rTitle );
+    explicit            GroupData_Impl( OUString  rTitle );
 
     void                setInUse() { mbInUse = true; }
     void                setHierarchy( bool bInHierarchy ) { mbInHierarchy = bInHierarchy; }
@@ -2564,8 +2565,8 @@ void SfxDocTplService_Impl::removeFromHierarchy( GroupData_Impl const *pGroup )
 }
 
 
-GroupData_Impl::GroupData_Impl( const OUString& rTitle )
-     : maTitle(rTitle), mbInUse(false), mbInHierarchy(false)
+GroupData_Impl::GroupData_Impl( OUString  rTitle )
+     : maTitle(std::move(rTitle)), mbInUse(false), mbInHierarchy(false)
 {
 }
 
@@ -2622,8 +2623,8 @@ DocTemplates_EntryData_Impl* GroupData_Impl::addEntry( const OUString& rTitle,
 }
 
 
-DocTemplates_EntryData_Impl::DocTemplates_EntryData_Impl( const OUString& rTitle )
-     : maTitle(rTitle), mbInHierarchy(false), mbInUse(false), mbUpdateType(false), mbUpdateLink(false)
+DocTemplates_EntryData_Impl::DocTemplates_EntryData_Impl( OUString  rTitle )
+     : maTitle(std::move(rTitle)), mbInHierarchy(false), mbInUse(false), mbUpdateType(false), mbUpdateLink(false)
 {
 }
 
@@ -2641,8 +2642,8 @@ bool SfxURLRelocator_Impl::propertyCanContainOfficeDir(
 }
 
 
-SfxURLRelocator_Impl::SfxURLRelocator_Impl( const uno::Reference< XComponentContext > & xContext )
-: mxContext( xContext )
+SfxURLRelocator_Impl::SfxURLRelocator_Impl( uno::Reference< XComponentContext >  xContext )
+: mxContext(std::move( xContext ))
 {
 }
 

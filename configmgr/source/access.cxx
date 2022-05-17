@@ -21,6 +21,7 @@
 
 #include <cassert>
 #include <cstdlib>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/beans/Property.hpp>
@@ -1924,8 +1925,8 @@ Access::ModifiedChild::ModifiedChild():
 {}
 
 Access::ModifiedChild::ModifiedChild(
-    rtl::Reference< ChildAccess > const & theChild, bool theDirectlyModified):
-    child(theChild), directlyModified(theDirectlyModified)
+    rtl::Reference< ChildAccess >  theChild, bool theDirectlyModified):
+    child(std::move(theChild)), directlyModified(theDirectlyModified)
 {}
 
 rtl::Reference< ChildAccess > Access::getModifiedChild(

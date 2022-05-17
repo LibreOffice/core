@@ -47,6 +47,7 @@
 #include <IMark.hxx>
 #include <crossrefbookmark.hxx>
 #include <ftnidx.hxx>
+#include <utility>
 #include <viewsh.hxx>
 #include <unofldmid.h>
 #include <SwStyleNameMapper.hxx>
@@ -347,11 +348,11 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
 
 /// get references
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFieldType,
-                              const OUString& rSetRef, const OUString& rSetReferenceLanguage, sal_uInt16 nSubTyp,
+                              OUString  rSetRef, OUString  rSetReferenceLanguage, sal_uInt16 nSubTyp,
                               sal_uInt16 nSequenceNo, sal_uLong nFormat )
     : SwField( pFieldType, nFormat ),
-      m_sSetRefName( rSetRef ),
-      m_sSetReferenceLanguage( rSetReferenceLanguage ),
+      m_sSetRefName(std::move( rSetRef )),
+      m_sSetReferenceLanguage(std::move( rSetReferenceLanguage )),
       m_nSubType( nSubTyp ),
       m_nSeqNo( nSequenceNo )
 {
@@ -1309,7 +1310,7 @@ private:
     static sal_uInt16 GetFirstUnusedId( std::set<sal_uInt16> &rIds );
 
 public:
-    explicit RefIdsMap( const OUString& rName ) : aName( rName ), bInit( false ) {}
+    explicit RefIdsMap( OUString  rName ) : aName(std::move( rName )), bInit( false ) {}
 
     void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField, bool bField );
 

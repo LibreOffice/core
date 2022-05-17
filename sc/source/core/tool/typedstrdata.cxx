@@ -11,6 +11,7 @@
 #include <global.hxx>
 
 #include <unotools/collatorwrapper.hxx>
+#include <utility>
 
 bool ScTypedStrData::LessCaseSensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
 {
@@ -86,8 +87,8 @@ ScTypedStrData::ScTypedStrData(
     meStrType(nType),
     mbIsDate( bDate ) {}
 
-FindTypedStrData::FindTypedStrData(const ScTypedStrData& rVal, bool bCaseSens) :
-    maVal(rVal), mbCaseSens(bCaseSens) {}
+FindTypedStrData::FindTypedStrData(ScTypedStrData  rVal, bool bCaseSens) :
+    maVal(std::move(rVal)), mbCaseSens(bCaseSens) {}
 
 bool FindTypedStrData::operator() (const ScTypedStrData& r) const
 {

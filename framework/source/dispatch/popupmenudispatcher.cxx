@@ -28,6 +28,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 namespace framework{
@@ -44,8 +45,8 @@ using namespace ::cppu;
 using namespace ::osl;
 
 PopupMenuDispatcher::PopupMenuDispatcher(
-    const uno::Reference< XComponentContext >& xContext )
-        :   m_xContext              ( xContext                       )
+    uno::Reference< XComponentContext >  xContext )
+        :   m_xContext              (std::move( xContext                       ))
         ,   m_bAlreadyDisposed      ( false                      )
         ,   m_bActivateListener     ( false                      )
 {

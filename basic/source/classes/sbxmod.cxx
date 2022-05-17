@@ -18,6 +18,7 @@
  */
 
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 #include <tools/diagnose_ex.h>
@@ -2212,8 +2213,8 @@ class FormObjEventListenerImpl:
 public:
     FormObjEventListenerImpl(const FormObjEventListenerImpl&) = delete;
     const FormObjEventListenerImpl& operator=(const FormObjEventListenerImpl&) = delete;
-    FormObjEventListenerImpl( SbUserFormModule* pUserForm, const uno::Reference< lang::XComponent >& xComponent, const uno::Reference< frame::XModel >& xModel ) :
-        mpUserForm( pUserForm ), mxComponent( xComponent), mxModel( xModel ),
+    FormObjEventListenerImpl( SbUserFormModule* pUserForm, uno::Reference< lang::XComponent >  xComponent, uno::Reference< frame::XModel >  xModel ) :
+        mpUserForm( pUserForm ), mxComponent(std::move( xComponent)), mxModel(std::move( xModel )),
         mbDisposed( false ), mbOpened( false ), mbActivated( false ), mbShowing( false )
     {
         if ( mxComponent.is() )

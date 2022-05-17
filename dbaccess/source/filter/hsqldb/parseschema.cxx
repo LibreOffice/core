@@ -33,6 +33,7 @@
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <connectivity/dbexception.hxx>
+#include <utility>
 
 namespace
 {
@@ -46,8 +47,8 @@ private:
     OUString m_sql;
 
 public:
-    IndexStmtParser(const OUString& sSql)
-        : m_sql(sSql)
+    IndexStmtParser(OUString sSql)
+        : m_sql(std::move(sSql))
     {
     }
 

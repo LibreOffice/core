@@ -25,10 +25,11 @@
 #include <docsh.hxx>
 #include <markdata.hxx>
 #include <prevloc.hxx>
+#include <utility>
 
 ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
-                                    const ScPrintSelectionStatus& rStatus ) :
-    aSelection( rStatus ),
+                                    ScPrintSelectionStatus  rStatus ) :
+    aSelection(std::move( rStatus )),
     pDocSh( pD ),
     nTotalPages( 0 ),
     bLocInitialized( false )

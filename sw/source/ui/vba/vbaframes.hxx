@@ -32,7 +32,7 @@ private:
     css::uno::Reference< css::text::XTextFramesSupplier > mxFramesSupplier;
 
 public:
-    SwVbaFrames( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xFrames, const css::uno::Reference< css::frame::XModel >& xModel );
+    SwVbaFrames( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xFrames, css::uno::Reference< css::frame::XModel >  xModel );
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

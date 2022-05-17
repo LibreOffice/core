@@ -98,8 +98,8 @@ protected:
 public:
 
     SdXMLShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        css::uno::Reference< css::xml::sax::XFastAttributeList>  xAttrList,
+        css::uno::Reference< css::drawing::XShapes >  rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLShapeContext() override;
 

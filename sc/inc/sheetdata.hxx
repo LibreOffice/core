@@ -22,6 +22,7 @@
 #include <editeng/editdata.hxx>
 #include <map>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
 #include "address.hxx"
@@ -52,8 +53,8 @@ struct ScCellStyleEntry
     OUString   maName;
     ScAddress       maCellPos;
 
-                ScCellStyleEntry( const OUString& rName, const ScAddress& rPos ) :
-                    maName(rName),
+                ScCellStyleEntry( OUString  rName, const ScAddress& rPos ) :
+                    maName(std::move(rName)),
                     maCellPos(rPos)
                 {
                 }
@@ -65,9 +66,9 @@ struct ScNoteStyleEntry
     OUString   maTextStyle;
     ScAddress       maCellPos;
 
-                ScNoteStyleEntry( const OUString& rStyle, const OUString& rText, const ScAddress& rPos ) :
-                    maStyleName(rStyle),
-                    maTextStyle(rText),
+                ScNoteStyleEntry( OUString  rStyle, OUString  rText, const ScAddress& rPos ) :
+                    maStyleName(std::move(rStyle)),
+                    maTextStyle(std::move(rText)),
                     maCellPos(rPos)
                 {
                 }
@@ -79,8 +80,8 @@ struct ScTextStyleEntry
     ScAddress       maCellPos;
     ESelection      maSelection;
 
-                ScTextStyleEntry( const OUString& rName, const ScAddress& rPos, const ESelection& rSel ) :
-                    maName(rName),
+                ScTextStyleEntry( OUString  rName, const ScAddress& rPos, const ESelection& rSel ) :
+                    maName(std::move(rName)),
                     maCellPos(rPos),
                     maSelection(rSel)
                 {
@@ -93,9 +94,9 @@ struct ScLoadedNamespaceEntry
     OUString   maName;
     sal_uInt16      mnKey;
 
-                ScLoadedNamespaceEntry( const OUString& rPrefix, const OUString& rName, sal_uInt16 nKey ) :
-                    maPrefix(rPrefix),
-                    maName(rName),
+                ScLoadedNamespaceEntry( OUString  rPrefix, OUString  rName, sal_uInt16 nKey ) :
+                    maPrefix(std::move(rPrefix)),
+                    maName(std::move(rName)),
                     mnKey(nKey)
                 {
                 }

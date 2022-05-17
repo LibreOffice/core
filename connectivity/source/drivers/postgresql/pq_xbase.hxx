@@ -65,10 +65,10 @@ protected:
     std::vector< css::uno::Any > m_values;
 public:
     ReflectionBase(
-        const OUString &implName,
+        OUString implName,
         const css::uno::Sequence< OUString > &supportedServices,
         const ::rtl::Reference< comphelper::RefCountedMutex >& refMutex,
-        const css::uno::Reference< css::sdbc::XConnection > &conn,
+        css::uno::Reference< css::sdbc::XConnection > conn,
         ConnectionSettings *pSettings,
         cppu::IPropertyArrayHelper & props /* must survive this object !*/ );
 

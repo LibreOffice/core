@@ -20,15 +20,16 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <utility>
 
 using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-BitmapPrimitive2D::BitmapPrimitive2D(const css::uno::Reference<css::awt::XBitmap>& rXBitmap,
-                                     const basegfx::B2DHomMatrix& rTransform)
-    : maXBitmap(rXBitmap)
-    , maTransform(rTransform)
+BitmapPrimitive2D::BitmapPrimitive2D(css::uno::Reference<css::awt::XBitmap> rXBitmap,
+                                     basegfx::B2DHomMatrix rTransform)
+    : maXBitmap(std::move(rXBitmap))
+    , maTransform(std::move(rTransform))
 {
 }
 

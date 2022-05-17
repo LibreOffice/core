@@ -46,6 +46,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
+#include <utility>
 #include "ucbstore.hxx"
 
 using namespace com::sun::star::beans;
@@ -1014,8 +1015,8 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
 
 PersistentPropertySet::PersistentPropertySet(
                         PropertySetRegistry& rCreator,
-                        const OUString& rKey )
-: m_pCreator( &rCreator ), m_aKey( rKey )
+                        OUString  rKey )
+: m_pCreator( &rCreator ), m_aKey(std::move( rKey ))
 {
     // register at creator.
     rCreator.add( this );

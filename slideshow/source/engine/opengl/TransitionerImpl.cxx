@@ -58,6 +58,7 @@
 
 #include <tools/diagnose_ex.h>
 
+#include <utility>
 #include <vcl/canvastools.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
@@ -87,8 +88,8 @@ typedef cppu::WeakComponentImplHelper<presentation::XTransition> OGLTransitioner
 class TimerContext
 {
 public:
-    explicit TimerContext(OUString const& rWhat)
-        : m_aWhat(rWhat)
+    explicit TimerContext(OUString  rWhat)
+        : m_aWhat(std::move(rWhat))
         , m_StartTime(std::chrono::steady_clock::now())
     {
     }

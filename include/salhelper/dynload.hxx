@@ -68,8 +68,8 @@ protected:
         @param pModule points to the loaded library handle.
      */
     ORealDynamicLoader( ORealDynamicLoader ** ppSetToZeroInDestructor,
-                        const ::rtl::OUString& strModuleName,
-                        const ::rtl::OUString& strInitFunction,
+                        ::rtl::OUString  strModuleName,
+                        ::rtl::OUString  strInitFunction,
                         void* pApi,
                         oslModule pModule );
 

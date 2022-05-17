@@ -41,6 +41,7 @@
 #include <comphelper/property.hxx>
 
 #include <algorithm>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -125,9 +126,9 @@ namespace chart
 
 ChartTypeTemplate::ChartTypeTemplate(
     Reference< uno::XComponentContext > const & xContext,
-    const OUString & rServiceName ) :
+    OUString  rServiceName ) :
         m_xContext( xContext ),
-        m_aServiceName( rServiceName )
+        m_aServiceName(std::move( rServiceName ))
 {
 }
 

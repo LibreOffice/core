@@ -28,6 +28,7 @@
 #include <rtl/ref.hxx>
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 #include <mutex>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -81,7 +82,7 @@ class MutableTreeNode: public ::cppu::WeakAggImplHelper2< XMutableTreeNode, XSer
     friend class MutableTreeDataModel;
 
 public:
-    MutableTreeNode( const rtl::Reference< MutableTreeDataModel >& xModel, const Any& rValue, bool bChildrenOnDemand );
+    MutableTreeNode( rtl::Reference< MutableTreeDataModel >  xModel, Any  rValue, bool bChildrenOnDemand );
     virtual ~MutableTreeNode() override;
 
     void setParent( MutableTreeNode* pParent );
@@ -247,11 +248,11 @@ Sequence< OUString > SAL_CALL MutableTreeDataModel::getSupportedServiceNames(  )
     return aSeq;
 }
 
-MutableTreeNode::MutableTreeNode( const rtl::Reference< MutableTreeDataModel >& xModel, const Any& rValue, bool bChildrenOnDemand )
-: maDisplayValue( rValue )
+MutableTreeNode::MutableTreeNode( rtl::Reference< MutableTreeDataModel >  xModel, Any  rValue, bool bChildrenOnDemand )
+: maDisplayValue(std::move( rValue ))
 , mbHasChildrenOnDemand( bChildrenOnDemand )
 , mpParent( nullptr )
-, mxModel( xModel )
+, mxModel(std::move( xModel ))
 , mbIsInserted( false )
 {
 }

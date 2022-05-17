@@ -21,6 +21,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <utility>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -186,12 +187,12 @@ IMPL_LINK_NOARG(ExtraButton, CommandHdl, weld::Button&, void)
     comphelper::dispatchCommand(m_aCommand, css::uno::Sequence<css::beans::PropertyValue>());
 }
 
-SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
+SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, OUString sId,
                                    const OUString& sPrimaryMessage,
                                    const OUString& sSecondaryMessage, InfobarType ibType,
                                    bool bShowCloseButton)
     : InterimItemWindow(pParent, "sfx/ui/infobar.ui", "InfoBar")
-    , m_sId(sId)
+    , m_sId(std::move(sId))
     , m_eType(ibType)
     , m_bLayingOut(false)
     , m_xImage(m_xBuilder->weld_image("image"))

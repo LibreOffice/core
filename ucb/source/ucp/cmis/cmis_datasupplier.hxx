@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <utility>
+#include <utility>
 #include <vector>
 
 #include <ucbhelper/resultset.hxx>
@@ -25,7 +27,7 @@ namespace cmis
         css::uno::Reference< css::ucb::XContent > xContent;
         css::uno::Reference< css::sdbc::XRow > xRow;
 
-        explicit ResultListEntry( css::uno::Reference< css::ucb::XContent > const & xCnt ) : xContent( xCnt )
+        explicicss::uno::Reference< css::ucb::XContent > :XContent >  xCnt )std::move( : xCo)ntent(std::move( xCnt ))
         {
         }
     };

@@ -43,6 +43,7 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <algorithm>
+#include <utility>
 
 
 using namespace utl;
@@ -213,12 +214,12 @@ sal_Int16 ReadDicVersion( SvStream& rStream, LanguageType &nLng, bool &bNeg, OUS
     return nDicVersion;
 }
 
-DictionaryNeo::DictionaryNeo(const OUString &rName,
+DictionaryNeo::DictionaryNeo(OUString rName,
                              LanguageType nLang, DictionaryType eType,
                              const OUString &rMainURL,
                              bool bWriteable) :
     aDicEvtListeners( GetLinguMutex() ),
-    aDicName        (rName),
+    aDicName        (std::move(rName)),
     aMainURL        (rMainURL),
     eDicType        (eType),
     nLanguage       (nLang)
@@ -1038,10 +1039,10 @@ DicEntry::DicEntry(const OUString &rDicFileWord,
     bIsNegativ = bIsNegativWord;
 }
 
-DicEntry::DicEntry(const OUString &rDicWord, bool bNegativ,
-                   const OUString &rRplcText) :
-    aDicWord                (rDicWord),
-    aReplacement            (rRplcText),
+DicEntry::DicEntry(OUString rDicWord, bool bNegativ,
+                   OUString rRplcText) :
+    aDicWord                (std::move(rDicWord)),
+    aReplacement            (std::move(rRplcText)),
     bIsNegativ              (bNegativ)
 {
 }

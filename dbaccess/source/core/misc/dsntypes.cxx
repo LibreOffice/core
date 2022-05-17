@@ -26,6 +26,7 @@
 #include <osl/file.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/string.hxx>
+#include <utility>
 
 namespace dbaccess
 {
@@ -349,8 +350,8 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(std::u16string_view _rDsn) con
         const DATASOURCE_TYPE   eType;
         const bool              bMatchComplete;
 
-        KnownPrefix( const OUString &_s, const DATASOURCE_TYPE _t, const bool _m )
-            :sPrefix( _s )
+        KnownPrefix( OUString _s, const DATASOURCE_TYPE _t, const bool _m )
+            :sPrefix(std::move( _s ))
             ,eType ( _t )
             ,bMatchComplete( _m )
         {

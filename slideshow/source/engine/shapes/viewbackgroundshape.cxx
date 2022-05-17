@@ -36,6 +36,7 @@
 #include <cppcanvas/basegfxfactory.hxx>
 #include <cppcanvas/renderer.hxx>
 #include <cppcanvas/bitmap.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -122,9 +123,9 @@ namespace slideshow::internal
             return mxBitmap.is();
         }
 
-        ViewBackgroundShape::ViewBackgroundShape( const ViewLayerSharedPtr&         rViewLayer,
+        ViewBackgroundShape::ViewBackgroundShape( ViewLayerSharedPtr          rViewLayer,
                                                   const ::basegfx::B2DRectangle&    rShapeBounds ) :
-            mpViewLayer( rViewLayer ),
+            mpViewLayer(std::move( rViewLayer )),
             mxBitmap(),
             mpLastMtf(),
             maLastTransformation(),

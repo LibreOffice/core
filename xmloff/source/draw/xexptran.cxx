@@ -21,6 +21,7 @@
 
 #include <string_view>
 
+#include <utility>
 #include <xexptran.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -217,8 +218,8 @@ struct ImpSdXMLExpTransObj2DSkewY : public ImpSdXMLExpTransObj2DBase
 struct ImpSdXMLExpTransObj2DMatrix : public ImpSdXMLExpTransObj2DBase
 {
     ::basegfx::B2DHomMatrix     maMatrix;
-    explicit ImpSdXMLExpTransObj2DMatrix(const ::basegfx::B2DHomMatrix& rNew)
-    :   ImpSdXMLExpTransObj2DBase(IMP_SDXMLEXP_TRANSOBJ2D_MATRIX), maMatrix(rNew) {}
+    explicit ImpSdXMLExpTransObj2DMatrix(::basegfx::B2DHomMatrix  rNew)
+    :   ImpSdXMLExpTransObj2DBase(IMP_SDXMLEXP_TRANSOBJ2D_MATRIX), maMatrix(std::move(rNew)) {}
 };
 
 }
@@ -597,8 +598,8 @@ struct ImpSdXMLExpTransObj3DTranslate : public ImpSdXMLExpTransObj3DBase
 struct ImpSdXMLExpTransObj3DMatrix : public ImpSdXMLExpTransObj3DBase
 {
     ::basegfx::B3DHomMatrix     maMatrix;
-    explicit ImpSdXMLExpTransObj3DMatrix(const ::basegfx::B3DHomMatrix& rNew)
-    :   ImpSdXMLExpTransObj3DBase(IMP_SDXMLEXP_TRANSOBJ3D_MATRIX), maMatrix(rNew) {}
+    explicit ImpSdXMLExpTransObj3DMatrix(::basegfx::B3DHomMatrix  rNew)
+    :   ImpSdXMLExpTransObj3DBase(IMP_SDXMLEXP_TRANSOBJ3D_MATRIX), maMatrix(std::move(rNew)) {}
 };
 
 }
@@ -993,8 +994,8 @@ SdXMLImExViewBox::SdXMLImExViewBox(double fX, double fY, double fW, double fH)
 }
 
 // #100617# Asked vincent hardy: svg:viewBox values may be double precision.
-SdXMLImExViewBox::SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverter& rConv)
-:   msString(rNew),
+SdXMLImExViewBox::SdXMLImExViewBox(OUString  rNew, const SvXMLUnitConverter& rConv)
+:   msString(std::move(rNew)),
     mfX( 0.0 ),
     mfY( 0.0 ),
     mfW( 1000.0 ),

@@ -27,6 +27,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
+#include <utility>
 #include <vector>
 
 using namespace ::cppu;
@@ -46,7 +47,7 @@ private:
         OUString    m_aPrefix;
         OUString    m_aNamespaceURI;
 
-        NamespaceDefine( const OUString& rPrefix, const OUString& rNamespaceURI ) : m_aPrefix( rPrefix ), m_aNamespaceURI( rNamespaceURI ) {}
+        NamespaceDefine( OUString  rPrefix, OUString  rNamespaceURI ) : m_aPrefix(std::move( rPrefix )), m_aNamespaceURI(std::move( rNamespaceURI )) {}
     };
     std::vector< std::unique_ptr< NamespaceDefine > > m_aNamespaceDefines;
 

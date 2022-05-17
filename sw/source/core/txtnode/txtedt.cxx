@@ -20,6 +20,7 @@
 #include <config_wasm_strip.h>
 
 #include <hintids.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/languageoptions.hxx>
@@ -714,14 +715,14 @@ SwScanner::SwScanner( const SwTextNode& rNd, const OUString& rText,
 {
 }
 
-SwScanner::SwScanner(std::function<LanguageType(sal_Int32, sal_Int32, bool)> const& pGetLangOfChar,
-                     const OUString& rText, const LanguageType* pLang,
-                     const ModelToViewHelper& rConvMap, sal_uInt16 nType, sal_Int32 nStart,
+SwScanner::SwScanner(std::function<LanguageType(sal_Int32, sal_Int32, bool)>  pGetLangOfChar,
+                     OUString  rText, const LanguageType* pLang,
+                     ModelToViewHelper  rConvMap, sal_uInt16 nType, sal_Int32 nStart,
                      sal_Int32 nEnd, bool bClp)
-    : m_pGetLangOfChar(pGetLangOfChar)
-    , m_aPreDashReplacementText(rText)
+    : m_pGetLangOfChar(std::move(pGetLangOfChar))
+    , m_aPreDashReplacementText(std::move(rText))
     , m_pLanguage(pLang)
-    , m_ModelToView(rConvMap)
+    , m_ModelToView(std::move(rConvMap))
     , m_nLength(0)
     , m_nOverriddenDashCount(0)
     , m_nWordType(nType)

@@ -27,6 +27,7 @@
 #include <unotools/fontdefs.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
+#include <utility>
 #include <vcl/outdev.hxx>
 #include <vcl/unohelp.hxx>
 #include <svtools/unitconv.hxx>
@@ -181,14 +182,14 @@ SvxFontItem::SvxFontItem( const sal_uInt16 nId ) :
 }
 
 
-SvxFontItem::SvxFontItem( const FontFamily eFam, const OUString& aName,
-                  const OUString& aStName, const FontPitch eFontPitch,
+SvxFontItem::SvxFontItem( const FontFamily eFam, OUString  aName,
+                  OUString  aStName, const FontPitch eFontPitch,
                   const rtl_TextEncoding eFontTextEncoding, const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
 
-    aFamilyName(aName),
-    aStyleName(aStName)
+    aFamilyName(std::move(aName)),
+    aStyleName(std::move(aStName))
 {
     eFamily = eFam;
     ePitch = eFontPitch;

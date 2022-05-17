@@ -30,7 +30,7 @@ private:
     OUString msFullUrl;
 public:
     SwVbaTemplate( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        const OUString& );
+        OUString  );
     virtual ~SwVbaTemplate() override;
 
    // XTemplate

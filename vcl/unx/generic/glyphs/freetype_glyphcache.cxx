@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
+#include <utility>
 #include <vcl/fontcharmap.hxx>
 
 #include <unx/freetype_glyphcache.hxx>
@@ -72,8 +73,8 @@ static FT_Library aLibFT = nullptr;
 static int nDefaultPrioEmbedded    = 2;
 static int nDefaultPrioAntiAlias   = 1;
 
-FreetypeFontFile::FreetypeFontFile( const OString& rNativeFileName )
-:   maNativeFileName( rNativeFileName ),
+FreetypeFontFile::FreetypeFontFile( OString  rNativeFileName )
+:   maNativeFileName(std::move( rNativeFileName )),
     mpFileMap( nullptr ),
     mnFileSize( 0 ),
     mnRefCount( 0 ),
@@ -144,7 +145,7 @@ void FreetypeFontFile::Unmap()
     }
 }
 
-FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
+FreetypeFontInfo::FreetypeFontInfo( FontAttributes  rDevFontAttributes,
     FreetypeFontFile* const pFontFile, int nFaceNum, int nFaceVariation, sal_IntPtr nFontId)
 :
     maFaceFT( nullptr ),
@@ -153,7 +154,7 @@ FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
     mnFaceVariation( nFaceVariation ),
     mnRefCount( 0 ),
     mnFontId( nFontId ),
-    maDevFontAttributes( rDevFontAttributes )
+    maDevFontAttributes(std::move( rDevFontAttributes ))
 {
     // prefer font with low ID
     maDevFontAttributes.IncreaseQualityBy( 10000 - nFontId );
@@ -410,12 +411,12 @@ rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const v
 
 // FreetypeFont
 
-FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, const std::shared_ptr<FreetypeFontInfo>& rFI)
+FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, std::shared_ptr<FreetypeFontInfo>  rFI)
 :   mrFontInstance(rFontInstance),
     mnCos( 0x10000),
     mnSin( 0 ),
     mnPrioAntiAlias(nDefaultPrioAntiAlias),
-    mxFontInfo(rFI),
+    mxFontInfo(std::move(rFI)),
     mnLoadFlags( 0 ),
     maFaceFT( nullptr ),
     maSizeFT( nullptr ),

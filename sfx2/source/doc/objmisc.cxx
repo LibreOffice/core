@@ -61,6 +61,7 @@
 
 #include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
+#include <utility>
 #include <vcl/weld.hxx>
 #include <basic/sbx.hxx>
 #include <svtools/sfxecode.hxx>
@@ -1272,8 +1273,8 @@ void SfxObjectShell::CancelTransfers()
 
 
 AutoReloadTimer_Impl::AutoReloadTimer_Impl(
-    const OUString& rURL, sal_uInt32 nTime, SfxObjectShell* pSh )
-    : Timer("sfx2 AutoReloadTimer_Impl"), aUrl( rURL ), pObjSh( pSh )
+    OUString  rURL, sal_uInt32 nTime, SfxObjectShell* pSh )
+    : Timer("sfx2 AutoReloadTimer_Impl"), aUrl(std::move( rURL )), pObjSh( pSh )
 {
     SetTimeout( nTime );
 }

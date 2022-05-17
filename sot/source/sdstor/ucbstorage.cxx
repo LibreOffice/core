@@ -64,6 +64,7 @@
 #include <comphelper/classids.hxx>
 
 #include <mutex>
+#include <utility>
 #include <vector>
 
 namespace com::sun::star::ucb { class XCommandEnvironment; }
@@ -93,7 +94,7 @@ protected:
     std::unique_ptr<SvStream> m_pSvStream;
 
 public:
-    explicit FileStreamWrapper_Impl(const OUString& rName);
+    explicit FileStreamWrapper_Impl(OUString  rName);
     virtual ~FileStreamWrapper_Impl() override;
 
     virtual void SAL_CALL seek( sal_Int64 _nLocation ) override;
@@ -112,8 +113,8 @@ protected:
 
 }
 
-FileStreamWrapper_Impl::FileStreamWrapper_Impl( const OUString& rName )
-    : m_aURL( rName )
+FileStreamWrapper_Impl::FileStreamWrapper_Impl( OUString  rName )
+    : m_aURL(std::move( rName ))
 {
     // if no URL is provided the stream is empty
 }

@@ -249,7 +249,7 @@ namespace slideshow::internal
                 events.
              */
             DrawShape( const css::uno::Reference< css::drawing::XShape >&    xShape,
-                       const css::uno::Reference< css::drawing::XDrawPage >& xContainingPage,
+                       css::uno::Reference< css::drawing::XDrawPage >  xContainingPage,
                        double                                       nPrio,
                        const Graphic&                               rGraphic,
                        const SlideShowContext&                      rContext ); // throw ShapeLoadFailedException;

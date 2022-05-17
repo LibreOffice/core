@@ -107,7 +107,7 @@ public:
                             Bitmap();
                             Bitmap( const Bitmap& rBitmap );
                             Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const BitmapPalette* pPal = nullptr );
-    explicit                Bitmap( std::shared_ptr<SalBitmap> const & xSalBitmap );
+    explicit                Bitmap( std::shared_ptr<SalBitmap>  xSalBitmap );
     virtual                 ~Bitmap();
 
     Bitmap&                 operator=( const Bitmap& rBitmap );

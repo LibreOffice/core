@@ -33,6 +33,7 @@
 #include <eventmultiplexer.hxx>
 
 #include <algorithm>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -54,10 +55,10 @@ PointerSymbolSharedPtr PointerSymbol::create( const uno::Reference<rendering::XB
     return pRet;
 }
 
-PointerSymbol::PointerSymbol( uno::Reference<rendering::XBitmap> const &   xBitmap,
+PointerSymbol::PointerSymbol( uno::Reference<rendering::XBitmap>    xBitmap,
                               ScreenUpdater&                               rScreenUpdater,
                               const UnoViewContainer&                      rViewContainer ) :
-    mxBitmap(xBitmap),
+    mxBitmap(std::move(xBitmap)),
     maViews(),
     mrScreenUpdater( rScreenUpdater ),
     maPos(),

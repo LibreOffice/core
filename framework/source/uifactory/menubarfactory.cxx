@@ -29,6 +29,7 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star::uno;
@@ -41,8 +42,8 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-MenuBarFactory::MenuBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : m_xContext( xContext )
+MenuBarFactory::MenuBarFactory( css::uno::Reference< css::uno::XComponentContext >  xContext )
+    : m_xContext(std::move( xContext ))
 {
 }
 

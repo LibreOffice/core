@@ -21,6 +21,7 @@
 
 #include <svtools/brwbox.hxx>
 #include <tools/long.hxx>
+#include <utility>
 #include <vcl/scrbar.hxx>
 
 #include <limits>
@@ -36,12 +37,12 @@ class ButtonFrame
 
 public:
                ButtonFrame( const Point& rPt, const Size& rSz,
-                            const OUString &rText,
+                            OUString rText,
                             bool _bDrawDisabled)
                 :aRect( rPt, rSz )
                 ,aInnerRect( Point( aRect.Left()+1, aRect.Top()+1 ),
                             Size( aRect.GetWidth()-2, aRect.GetHeight()-2 ) )
-                ,aText(rText)
+                ,aText(std::move(rText))
                 ,m_bDrawDisabled(_bDrawDisabled)
             {
             }
@@ -60,7 +61,7 @@ class BrowserColumn final
 
 public:
                         BrowserColumn( sal_uInt16 nItemId,
-                                        const OUString& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom );
+                                        OUString  rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom );
                         ~BrowserColumn();
 
     sal_uInt16          GetId() const { return _nId; }

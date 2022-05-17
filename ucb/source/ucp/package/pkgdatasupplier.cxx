@@ -30,6 +30,7 @@
 #include <com/sun/star/ucb/ResultSetException.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
+#include <utility>
 #include "pkgdatasupplier.hxx"
 #include "pkgcontent.hxx"
 #include "pkgprovider.hxx"
@@ -43,9 +44,9 @@ using namespace package_ucp;
 
 
 DataSupplier::DataSupplier(
-                const uno::Reference< uno::XComponentContext >& rxContext,
+                uno::Reference< uno::XComponentContext >  rxContext,
                 const rtl::Reference< Content >& rContent )
-: m_xContent( rContent ), m_xContext( rxContext ),
+: m_xContent( rContent ), m_xContext(std::move( rxContext )),
   m_xFolderEnum( rContent->getIterator() ),
   m_bCountFinal( !m_xFolderEnum.is() ), m_bThrowException( m_bCountFinal )
 {

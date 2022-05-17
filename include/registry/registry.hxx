@@ -22,6 +22,7 @@
 #include <registry/regdllapi.h>
 #include <registry/regtype.h>
 #include <rtl/ustring.hxx>
+#include <utility>
 
 extern "C" {
 
@@ -556,7 +557,7 @@ public:
 
         This constructor is internal only.
     */
-    inline RegistryKey(Registry const & registry,
+    inline RegistryKey(Registry  registry,
                        RegKeyHandle hKey);
 
 private:
@@ -647,8 +648,8 @@ inline RegistryKey::RegistryKey()
     { }
 
 /// @cond INTERNAL
-inline RegistryKey::RegistryKey(Registry const & registry, RegKeyHandle hKey)
-    : m_registry(registry)
+inline RegistryKey::RegistryKey(Registry  registry, RegKeyHandle hKey)
+    : m_registry(std::move(registry))
     , m_hImpl(hKey)
     {
         if (m_hImpl)

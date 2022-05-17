@@ -42,6 +42,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <memory>
 #include <mutex>
+#include <utility>
 
 namespace com::sun::star::datatransfer::dnd { class XDragGestureRecognizer; }
 namespace com::sun::star::io { class XInputStream; }
@@ -103,9 +104,9 @@ struct AcceptDropEvent
 
     AcceptDropEvent( sal_Int8 nAction,
                      const Point& rPosPixel,
-                     const css::datatransfer::dnd::DropTargetDragEvent& rDragEvent ) :
+                     css::datatransfer::dnd::DropTargetDragEvent  rDragEvent ) :
         maPosPixel( rPosPixel ),
-        maDragEvent( rDragEvent ),
+        maDragEvent(std::move( rDragEvent )),
         mnAction( nAction ),
         mbLeaving( false ),
         mbDefault( false ) {}
@@ -120,9 +121,9 @@ struct ExecuteDropEvent
 
     ExecuteDropEvent( sal_Int8 nAction,
                       const Point& rPosPixel,
-                      const css::datatransfer::dnd::DropTargetDropEvent& rDropEvent ) :
+                      css::datatransfer::dnd::DropTargetDropEvent  rDropEvent ) :
         maPosPixel( rPosPixel ),
-        maDropEvent( rDropEvent ),
+        maDropEvent(std::move( rDropEvent )),
         mnAction( nAction ),
         mbDefault( false ) {}
 };

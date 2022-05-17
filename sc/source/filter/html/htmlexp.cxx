@@ -24,6 +24,7 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -193,12 +194,12 @@ static OString lcl_makeHTMLColorTriplet(const Color& rColor)
     return OString(buf);
 }
 
-ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocument* pDocP,
+ScHTMLExport::ScHTMLExport( SvStream& rStrmP, OUString  rBaseURL, ScDocument* pDocP,
                             const ScRange& rRangeP, bool bAllP,
-                            const OUString& rStreamPathP, std::u16string_view rFilterOptions ) :
+                            OUString  rStreamPathP, std::u16string_view rFilterOptions ) :
     ScExportBase( rStrmP, pDocP, rRangeP ),
-    aBaseURL( rBaseURL ),
-    aStreamPath( rStreamPathP ),
+    aBaseURL(std::move( rBaseURL )),
+    aStreamPath(std::move( rStreamPathP )),
     pAppWin( Application::GetDefaultDevice() ),
     nUsedTables( 0 ),
     nIndent( 0 ),

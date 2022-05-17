@@ -51,6 +51,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <rtl/tencinfo.h>
 #include <osl/diagnose.h>
+#include <utility>
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
@@ -2654,8 +2655,8 @@ HtmlTextBoxModel::importBinaryModel( BinaryInputStream& rInStrm )
     return true;
 }
 
-EmbeddedControl::EmbeddedControl( const OUString& rName ) :
-    maName( rName )
+EmbeddedControl::EmbeddedControl( OUString  rName ) :
+    maName(std::move( rName ))
 {
 }
 

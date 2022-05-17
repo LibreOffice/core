@@ -36,6 +36,7 @@
 
 #include <sal/log.hxx>
 
+#include <utility>
 #include <vector>
 #include <algorithm>
 
@@ -313,12 +314,12 @@ private:
 };
 
 BaseNode::BaseNode( const uno::Reference< animations::XAnimationNode >& xNode,
-                    const BaseContainerNodeSharedPtr&                   rParent,
+                    BaseContainerNodeSharedPtr                    rParent,
                     const NodeContext&                                  rContext ) :
     maContext( rContext.maContext ),
     maDeactivatingListeners(),
     mxAnimationNode( xNode ),
-    mpParent( rParent ),
+    mpParent(std::move( rParent )),
     mpSelf(),
     mpStateTransitionTable( nullptr ),
     mnStartDelay( rContext.mnStartDelay ),

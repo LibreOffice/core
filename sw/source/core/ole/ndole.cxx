@@ -31,6 +31,7 @@
 #include <tools/globname.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <unotools/configitem.hxx>
+#include <utility>
 #include <vcl/outdev.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
@@ -695,8 +696,8 @@ private:
     std::shared_ptr<comphelper::ThreadTaskTag>          mpTag;
 
 public:
-    explicit DeflateData(const uno::Reference< frame::XModel >& rXModel)
-    :   maXModel(rXModel),
+    explicit DeflateData(uno::Reference< frame::XModel >  rXModel)
+    :   maXModel(std::move(rXModel)),
         mbKilled(false),
         mpTag( comphelper::ThreadPool::createThreadTaskTag() )
     {
@@ -782,9 +783,9 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     }
 }
 
-SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
+SwOLEObj::SwOLEObj( OUString rString, sal_Int64 nAspect ) :
     m_pOLENode( nullptr ),
-    m_aName( rString )
+    m_aName(std::move( rString ))
 {
     m_xOLERef.Lock();
     m_xOLERef.SetViewAspect( nAspect );

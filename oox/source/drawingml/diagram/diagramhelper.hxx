@@ -57,8 +57,8 @@ class AdvancedDiagramHelper final : public IDiagramHelper
 
 public:
     AdvancedDiagramHelper(
-        const std::shared_ptr< Diagram >& rDiagramPtr,
-        const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
+        std::shared_ptr< Diagram >  rDiagramPtr,
+        std::shared_ptr<::oox::drawingml::Theme>  rTheme,
         css::awt::Size aImportSize);
     virtual ~AdvancedDiagramHelper();
 

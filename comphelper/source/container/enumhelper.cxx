@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <utility>
 
 namespace comphelper
 {
@@ -35,10 +36,10 @@ OEnumerationByName::OEnumerationByName(const css::uno::Reference<css::container:
 }
 
 
-OEnumerationByName::OEnumerationByName(const css::uno::Reference<css::container::XNameAccess>& _rxAccess,
+OEnumerationByName::OEnumerationByName(css::uno::Reference<css::container::XNameAccess>  _rxAccess,
                                        const css::uno::Sequence< OUString >&           _aNames  )
     :m_aNames(_aNames)
-    ,m_xAccess(_rxAccess)
+    ,m_xAccess(std::move(_rxAccess))
     ,m_nPos(0)
     ,m_bListening(false)
 {
@@ -132,8 +133,8 @@ void OEnumerationByName::impl_stopDisposeListening()
     osl_atomic_decrement(&m_refCount);
 }
 
-OEnumerationByIndex::OEnumerationByIndex(const css::uno::Reference< css::container::XIndexAccess >& _rxAccess)
-    :m_xAccess(_rxAccess)
+OEnumerationByIndex::OEnumerationByIndex(css::uno::Reference< css::container::XIndexAccess >  _rxAccess)
+    :m_xAccess(std::move(_rxAccess))
     ,m_nPos(0)
     ,m_bListening(false)
 {

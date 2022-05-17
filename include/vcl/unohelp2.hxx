@@ -40,7 +40,7 @@ namespace vcl::unohelper {
         OUString        maText;
 
     public:
-                        TextDataObject( const OUString& rText );
+                        TextDataObject( OUString  rText );
                         virtual ~TextDataObject() override;
 
         // css::uno::XInterface

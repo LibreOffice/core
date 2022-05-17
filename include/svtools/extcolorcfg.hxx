@@ -24,6 +24,7 @@
 #include <svl/lstner.hxx>
 #include <tools/color.hxx>
 #include <memory>
+#include <utility>
 
 
 namespace svtools {
@@ -38,12 +39,12 @@ class ExtendedColorConfigValue
     Color       m_nDefaultColor;
 public:
     ExtendedColorConfigValue() : m_nColor(0),m_nDefaultColor(0){}
-    ExtendedColorConfigValue(const OUString& _sName
-                            ,const OUString& _sDisplayName
+    ExtendedColorConfigValue(OUString  _sName
+                            ,OUString  _sDisplayName
                             ,Color      _nColor
                             ,Color      _nDefaultColor)
-    : m_sName(_sName)
-    ,m_sDisplayName(_sDisplayName)
+    : m_sName(std::move(_sName))
+    ,m_sDisplayName(std::move(_sDisplayName))
     ,m_nColor(_nColor)
     ,m_nDefaultColor(_nDefaultColor)
     {}

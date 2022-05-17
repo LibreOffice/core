@@ -20,6 +20,7 @@
 #include "datwin.hxx"
 #include <o3tl/numeric.hxx>
 #include <svtools/brwhead.hxx>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
@@ -86,10 +87,10 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 }
 
 BrowserColumn::BrowserColumn( sal_uInt16 nItemId,
-                              const OUString& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom )
+                              OUString  rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom )
 :   _nId( nItemId ),
     _nWidth( nWidthPixel ),
-    _aTitle( rTitle ),
+    _aTitle(std::move( rTitle )),
     _bFrozen( false )
 {
     double n = static_cast<double>(_nWidth);

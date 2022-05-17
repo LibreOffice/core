@@ -29,6 +29,7 @@
 #include "shapemanagerimpl.hxx"
 
 #include <functional>
+#include <utility>
 
 using namespace css;
 using namespace css::uno;
@@ -38,13 +39,13 @@ using namespace css::system;
 namespace slideshow::internal {
 
 ShapeManagerImpl::ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
-                                    LayerManagerSharedPtr const& rLayerManager,
+                                    LayerManagerSharedPtr  rLayerManager,
                                     CursorManager&               rCursorManager,
                                     const ShapeEventListenerMap& rGlobalListenersMap,
                                     const ShapeCursorMap&        rGlobalCursorMap,
                                     const Reference<XDrawPage>& xDrawPage ):
     mrMultiplexer(rMultiplexer),
-    mpLayerManager(rLayerManager),
+    mpLayerManager(std::move(rLayerManager)),
     mrCursorManager(rCursorManager),
     mrGlobalListenersMap(rGlobalListenersMap),
     mrGlobalCursorMap(rGlobalCursorMap),

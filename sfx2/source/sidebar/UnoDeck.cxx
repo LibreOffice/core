@@ -18,14 +18,15 @@
 #include <sfx2/sidebar/Deck.hxx>
 #include <sidebar/DeckDescriptor.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 
 using namespace css;
 using namespace ::sfx2::sidebar;
 
-SfxUnoDeck::SfxUnoDeck(const uno::Reference<frame::XFrame>& rFrame, const OUString& deckId):
-xFrame(rFrame),
-mDeckId(deckId)
+SfxUnoDeck::SfxUnoDeck(uno::Reference<frame::XFrame>  rFrame, OUString  deckId):
+xFrame(std::move(rFrame)),
+mDeckId(std::move(deckId))
 {
 
 }

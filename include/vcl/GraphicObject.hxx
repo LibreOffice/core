@@ -158,7 +158,7 @@ private:
 
 public:
                             GraphicObject();
-                            GraphicObject( const Graphic& rGraphic );
+                            GraphicObject( Graphic  rGraphic );
                             GraphicObject( const GraphicObject& rCacheObj );
                             ~GraphicObject();
 

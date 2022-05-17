@@ -78,6 +78,7 @@ using namespace ::ucbhelper;
 #include <svtools/templatefoldercache.hxx>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 
@@ -144,7 +145,7 @@ private:
 
 public:
                         RegionData_Impl( const SfxDocTemplate_Impl* pParent,
-                                         const OUString& rTitle );
+                                         OUString  rTitle );
 
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
 
@@ -1294,8 +1295,8 @@ const OUString& DocTempl_EntryData_Impl::GetTargetURL()
 
 
 RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
-                                  const OUString& rTitle )
-                                  : mpParent(pParent), maTitle(rTitle)
+                                  OUString  rTitle )
+                                  : mpParent(pParent), maTitle(std::move(rTitle))
 {
 }
 

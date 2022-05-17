@@ -62,7 +62,7 @@ private:
     bool hasToolbar( const OUString& sResourceUrl, std::u16string_view sName );
 public:
     /// @throws css::uno::RuntimeException
-    VbaCommandBarHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel );
+    VbaCommandBarHelper( css::uno::Reference< css::uno::XComponentContext >  xContext, css::uno::Reference< css::frame::XModel >  xModel );
 
     const css::uno::Reference< css::frame::XModel >& getModel() const { return mxModel; }
 

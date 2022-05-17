@@ -43,7 +43,7 @@ class SAL_DLLPUBLIC_RTTI SwFormatRefMark final
     css::uno::WeakReference<css::text::XTextContent> m_wXReferenceMark;
 
 public:
-    SwFormatRefMark( const OUString& rText );
+    SwFormatRefMark( OUString  rText );
     SwFormatRefMark( const SwFormatRefMark& rRefMark );
     virtual ~SwFormatRefMark( ) override;
 

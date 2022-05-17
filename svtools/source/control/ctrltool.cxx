@@ -26,6 +26,7 @@
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <utility>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -114,8 +115,8 @@ private:
     ImplFontListFontMetric* mpFirst;
     FontListFontNameType    mnType;
 
-    explicit ImplFontListNameInfo(const OUString& rSearchName)
-        : maSearchName(rSearchName)
+    explicit ImplFontListNameInfo(OUString  rSearchName)
+        : maSearchName(std::move(rSearchName))
         , mpFirst(nullptr)
         , mnType(FontListFontNameType::NONE)
     {

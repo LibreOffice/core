@@ -13,6 +13,7 @@
 #include <filter.hxx>
 #include <document.hxx>
 #include <datamapper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <orcusfilters.hxx>
 #include <utility>
@@ -32,21 +33,21 @@ class XMLFetchThread : public salhelper::Thread
     std::function<void()> maImportFinishedHdl;
 
 public:
-    XMLFetchThread(ScDocument& rDoc, const OUString&, const ScOrcusImportXMLParam& rParam,
-                   const OUString& rID, std::function<void()> aImportFinishedHdl,
+    XMLFetchThread(ScDocument& rDoc, OUString, ScOrcusImportXMLParam rParam, OUString rID,
+                   std::function<void()> aImportFinishedHdl,
                    std::vector<std::shared_ptr<sc::DataTransformation>>&& rTransformations);
     virtual void execute() override;
 };
 
 XMLFetchThread::XMLFetchThread(
-    ScDocument& rDoc, const OUString& rURL, const ScOrcusImportXMLParam& rParam,
-    const OUString& rID, std::function<void()> aImportFinishedHdl,
+    ScDocument& rDoc, OUString rURL, ScOrcusImportXMLParam rParam, OUString rID,
+    std::function<void()> aImportFinishedHdl,
     std::vector<std::shared_ptr<sc::DataTransformation>>&& rTransformations)
     : salhelper::Thread("XML Fetch Thread")
     , mrDocument(rDoc)
-    , maURL(rURL)
-    , maID(rID)
-    , maParam(rParam)
+    , maURL(std::move(rURL))
+    , maID(std::move(rID))
+    , maParam(std::move(rParam))
     , maDataTransformations(std::move(rTransformations))
     , maImportFinishedHdl(std::move(aImportFinishedHdl))
 {

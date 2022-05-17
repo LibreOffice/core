@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <utility>
 
 namespace connectivity
 {
@@ -64,14 +65,14 @@ namespace connectivity
             , m_DefinitelyWritable(false)
             {}
 
-        OColumn(const OUString &_aTableName,
+        OColumn(OUString _aTableName,
                 const OUString &_aColumnName,
                 sal_Int32       _aNullable,
                 sal_Int32       _aColumnDisplaySize,
                 sal_Int32       _aPrecision,
                 sal_Int32       _aScale,
                 sal_Int32       _aColumnType)
-        :   m_TableName(_aTableName),
+        :   m_TableName(std::move(_aTableName)),
             m_ColumnName(_aColumnName),
             m_ColumnLabel(),
 

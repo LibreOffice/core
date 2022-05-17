@@ -58,6 +58,7 @@
 #include <authfld.hxx>
 #include <txtinet.hxx>
 #include <fmtcntnt.hxx>
+#include <utility>
 
 using namespace ::com::sun::star::uno;
 
@@ -364,9 +365,9 @@ sal_Int32 SetGetExpField::GetCntPosFromContent() const
     return nRet;
 }
 
-HashStr::HashStr( const OUString& rName, const OUString& rText,
+HashStr::HashStr( const OUString& rName, OUString  rText,
                     HashStr* pNxt )
-    : SwHash( rName ), aSetStr( rText )
+    : SwHash( rName ), aSetStr(std::move( rText ))
 {
     pNext.reset( pNxt );
 }

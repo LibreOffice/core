@@ -40,7 +40,7 @@ private:
 
 public:
     ImplImage(const BitmapEx& rBitmapEx);
-    ImplImage(const OUString &aStockName);
+    ImplImage(OUString aStockName);
 
     bool isStock() const
     {

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/virdev.hxx>
 #include <svx/svdundo.hxx>
 
@@ -341,9 +342,9 @@ void ScBlockUndo::ShowBlock()
 }
 
 ScMultiBlockUndo::ScMultiBlockUndo(
-    ScDocShell* pDocSh, const ScRangeList& rRanges) :
+    ScDocShell* pDocSh, ScRangeList  rRanges) :
     ScSimpleUndo(pDocSh),
-    maBlockRanges(rRanges)
+    maBlockRanges(std::move(rRanges))
 {
     mpDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }

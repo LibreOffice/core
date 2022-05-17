@@ -29,6 +29,7 @@
 #include <string.h>
 
 #include <cstddef>
+#include <utility>
 
 #include "sal/log.hxx"
 #include "osl/time.h"
@@ -911,7 +912,7 @@ public:
         The full qualified URL of the file. Relative paths are not allowed.
     */
 
-    File( const ::rtl::OUString& ustrFileURL ): _pData( NULL ), _aPath( ustrFileURL ) {}
+    File( ::rtl::OUString  ustrFileURL ): _pData( NULL ), _aPath(std::move( ustrFileURL )) {}
 
     /** Destructor
     */
@@ -1658,7 +1659,7 @@ public:
         Relative URLs are not allowed.
      */
 
-    Directory( const ::rtl::OUString& strPath ): _pData( NULL ), _aPath( strPath )
+    Directory( ::rtl::OUString  strPath ): _pData( NULL ), _aPath(std::move( strPath ))
     {
     }
 

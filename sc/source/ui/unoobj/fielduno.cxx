@@ -28,6 +28,7 @@
 #include <editutil.hxx>
 
 #include <svl/hint.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <editeng/eeitem.hxx>
@@ -270,9 +271,9 @@ SvxFieldData* ScUnoEditEngine::FindByPos(sal_Int32 nPar, sal_Int32 nPos, sal_Int
 }
 
 ScCellFieldsObj::ScCellFieldsObj(
-    const uno::Reference<text::XTextRange>& xContent,
+    uno::Reference<text::XTextRange>  xContent,
     ScDocShell* pDocSh, const ScAddress& rPos) :
-    mxContent(xContent),
+    mxContent(std::move(xContent)),
     pDocShell( pDocSh ),
     aCellPos( rPos )
 {
@@ -1039,12 +1040,12 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
 }
 
 ScEditFieldObj::ScEditFieldObj(
-    const uno::Reference<text::XTextRange>& rContent,
+    uno::Reference<text::XTextRange>  rContent,
     std::unique_ptr<ScEditSource> pEditSrc, sal_Int32 eType, const ESelection& rSel) :
     pPropSet(nullptr),
     mpEditSource(std::move(pEditSrc)),
     aSelection(rSel),
-    meType(eType), mpContent(rContent), mnNumFormat(0), mbIsDate(false), mbIsFixed(false)
+    meType(eType), mpContent(std::move(rContent)), mnNumFormat(0), mbIsDate(false), mbIsFixed(false)
 {
     switch (meType)
     {

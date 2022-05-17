@@ -50,6 +50,7 @@
 #include "types.hxx"
 #include <svtools/embedhlp.hxx>
 #include <numrule.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -153,9 +154,9 @@ namespace
 namespace ww8
 {
     //For i120928,size conversion before exporting graphic of bullet
-    Frame::Frame(const Graphic &rGrf, const SwPosition &rPos)
+    Frame::Frame(const Graphic &rGrf, SwPosition rPos)
         : mpFlyFrame(nullptr)
-        , maPos(rPos)
+        , maPos(std::move(rPos))
         , meWriterType(eBulletGrf)
         , mpStartFrameContent(nullptr)
         , mbIsInline(true)
@@ -176,9 +177,9 @@ namespace ww8
         maLayoutSize = maSize;
     }
 
-    Frame::Frame(const SwFrameFormat &rFormat, const SwPosition &rPos)
+    Frame::Frame(const SwFrameFormat &rFormat, SwPosition rPos)
         : mpFlyFrame(&rFormat)
-        , maPos(rPos)
+        , maPos(std::move(rPos))
         , meWriterType(eTextBox)
         , mpStartFrameContent(nullptr)
         // #i43447# - move to initialization list

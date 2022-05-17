@@ -48,6 +48,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/useroptions.hxx>
 #include <usrfld.hxx>
+#include <utility>
 #include <viewsh.hxx>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
@@ -1435,8 +1436,8 @@ bool SwCalc::IsValidVarName( const OUString& rStr, OUString* pValidName )
     return bRet;
 }
 
-SwHash::SwHash(const OUString& rStr)
-    : aStr(rStr)
+SwHash::SwHash(OUString  rStr)
+    : aStr(std::move(rStr))
 {
 }
 
@@ -1444,10 +1445,10 @@ SwHash::~SwHash()
 {
 }
 
-SwCalcExp::SwCalcExp(const OUString& rStr, const SwSbxValue& rVal,
+SwCalcExp::SwCalcExp(const OUString& rStr, SwSbxValue  rVal,
                       const SwFieldType* pType)
     : SwHash(rStr)
-    , nValue(rVal)
+    , nValue(std::move(rVal))
     , pFieldType(pType)
 {
 }

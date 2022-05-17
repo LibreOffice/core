@@ -93,7 +93,7 @@ public:
                            bool & rRowHasLabels,
                            css::chart::ChartDataRowSource & rDataRowSource,
                            SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
-                           const OUString& aChartTypeServiceName,
+                           OUString  aChartTypeServiceName,
                            tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
                            const css::awt::Size & rChartSize );
     virtual ~SchXMLPlotAreaContext() override;
@@ -281,9 +281,9 @@ public:
     SchXMLStatisticsObjectContext(
         SchXMLImportHelper& rImportHelper,
         SvXMLImport& rImport,
-        const OUString &rSeriesStyleName,
+        OUString rSeriesStyleName,
         ::std::vector< DataRowPointStyle >& rStyleVector,
-        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+        css::uno::Reference< css::chart2::XDataSeries >  xSeries,
         ContextType eContextType,
         tSchXMLLSequencesPerIndex & rLSequencesPerIndex );
 

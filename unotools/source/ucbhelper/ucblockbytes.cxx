@@ -58,6 +58,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <mutex>
+#include <utility>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -154,8 +155,8 @@ class UcbPropertiesChangeListener_Impl : public ::cppu::WeakImplHelper< XPropert
 public:
     UcbLockBytesRef         m_xLockBytes;
 
-    explicit UcbPropertiesChangeListener_Impl( UcbLockBytesRef const & rRef )
-        : m_xLockBytes( rRef )
+    explicit UcbPropertiesChangeListener_Impl( UcbLockBytesRef  rRef )
+        : m_xLockBytes(std::move( rRef ))
     {}
 
     virtual void SAL_CALL   disposing ( const EventObject &/*rEvent*/) override {}
@@ -191,7 +192,7 @@ public:
     Moderator(
         Reference < XContent > const & xContent,
         Reference < XInteractionHandler > const & xInteract,
-        const Command& rArg
+        Command  rArg
     );
 
     enum class ResultType {
@@ -417,14 +418,14 @@ ModeratorsInteractionHandler::handle(
 Moderator::Moderator(
     Reference < XContent > const & xContent,
     Reference < XInteractionHandler > const & xInteract,
-    const Command& rArg
+    Command  rArg
 )
     : m_aRes(m_aMutex,*this),
       m_aResultType(ResultType::NORESULT),
       m_nIOErrorCode(IOErrorCode_ABORT),
       m_aRep(m_aMutex,*this),
       m_aReplyType(NOREPLY),
-      m_aArg(rArg),
+      m_aArg(std::move(rArg)),
       m_aContent(
           xContent,
           new UcbTaskEnvironment(

@@ -25,6 +25,7 @@
 
 #include <functional>
 #include <algorithm>
+#include <utility>
 
 #include "layermanager.hxx"
 
@@ -541,8 +542,8 @@ namespace slideshow::internal
             class DummyLayer : public ViewLayer
             {
             public:
-                explicit DummyLayer( const ::cppcanvas::CanvasSharedPtr& rCanvas ) :
-                    mpCanvas( rCanvas )
+                explicit DummyLayer( ::cppcanvas::CanvasSharedPtr  rCanvas ) :
+                    mpCanvas(std::move( rCanvas ))
                 {
                 }
 

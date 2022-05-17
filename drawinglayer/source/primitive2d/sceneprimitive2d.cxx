@@ -31,6 +31,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <processor3d/geometry2dextractor.hxx>
 #include <basegfx/raster/bzpixelraster.hxx>
+#include <utility>
 #include <vcl/BitmapTools.hxx>
 #include <comphelper/threadpool.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -561,16 +562,16 @@ namespace drawinglayer::primitive2d
         }
 
         ScenePrimitive2D::ScenePrimitive2D(
-            const primitive3d::Primitive3DContainer& rxChildren3D,
-            const attribute::SdrSceneAttribute& rSdrSceneAttribute,
-            const attribute::SdrLightingAttribute& rSdrLightingAttribute,
-            const basegfx::B2DHomMatrix& rObjectTransformation,
-            const geometry::ViewInformation3D& rViewInformation3D)
-        :   mxChildren3D(rxChildren3D),
-            maSdrSceneAttribute(rSdrSceneAttribute),
-            maSdrLightingAttribute(rSdrLightingAttribute),
-            maObjectTransformation(rObjectTransformation),
-            maViewInformation3D(rViewInformation3D),
+            primitive3d::Primitive3DContainer  rxChildren3D,
+            attribute::SdrSceneAttribute  rSdrSceneAttribute,
+            attribute::SdrLightingAttribute  rSdrLightingAttribute,
+            basegfx::B2DHomMatrix  rObjectTransformation,
+            geometry::ViewInformation3D  rViewInformation3D)
+        :   mxChildren3D(std::move(rxChildren3D)),
+            maSdrSceneAttribute(std::move(rSdrSceneAttribute)),
+            maSdrLightingAttribute(std::move(rSdrLightingAttribute)),
+            maObjectTransformation(std::move(rObjectTransformation)),
+            maViewInformation3D(std::move(rViewInformation3D)),
             mbShadow3DChecked(false),
             mfOldDiscreteSizeX(0.0),
             mfOldDiscreteSizeY(0.0)

@@ -23,6 +23,7 @@
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <svl/style.hxx>
+#include <utility>
 #include <vcl/weld.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
@@ -183,7 +184,7 @@ class SwAutoMarkDlg_Impl : public weld::GenericDialogController
 
     DECL_LINK(OkHdl, weld::Button&, void);
 public:
-    SwAutoMarkDlg_Impl(weld::Window* pParent, const OUString& rAutoMarkURL,
+    SwAutoMarkDlg_Impl(weld::Window* pParent, OUString  rAutoMarkURL,
                        bool bCreate);
     virtual ~SwAutoMarkDlg_Impl() override;
 };
@@ -3906,10 +3907,10 @@ bool SwEntryBrowseBox::IsModified()const
     return pController->IsValueChangedFromSaved();
 }
 
-SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(weld::Window* pParent, const OUString& rAutoMarkURL,
+SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(weld::Window* pParent, OUString  rAutoMarkURL,
         bool bCreate)
     : GenericDialogController(pParent, "modules/swriter/ui/createautomarkdialog.ui", "CreateAutomarkDialog")
-    , sAutoMarkURL(rAutoMarkURL)
+    , sAutoMarkURL(std::move(rAutoMarkURL))
     , bCreateMode(bCreate)
     , m_xOKPB(m_xBuilder->weld_button("ok"))
     , m_xTable(m_xBuilder->weld_container("area"))

@@ -135,7 +135,7 @@ namespace svgio::svgreader
             SvgCharacterNode(
                 SvgDocument& rDocument,
                 SvgNode* pParent,
-                const OUString& rText);
+                OUString  rText);
             virtual ~SvgCharacterNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;

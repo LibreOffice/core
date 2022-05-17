@@ -58,6 +58,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <unofldmid.h>
 #include <numrule.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -508,9 +509,9 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const OUString& rName, sal_uInt16 nTyp )
+SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, OUString  rName, sal_uInt16 nTyp )
     : SwValueFieldType( pDc, SwFieldIds::SetExp ),
-    m_sName( rName ),
+    m_sName(std::move( rName )),
     m_sDelim( "." ),
     m_nType(nTyp), m_nLevel( UCHAR_MAX ),
     m_bDeleted( false )
@@ -1218,14 +1219,14 @@ std::unique_ptr<SwFieldType> SwInputFieldType::Copy() const
 }
 
 SwInputField::SwInputField( SwInputFieldType* pFieldType,
-                            const OUString& rContent,
-                            const OUString& rPrompt,
+                            OUString  rContent,
+                            OUString  rPrompt,
                             sal_uInt16 nSub,
                             sal_uLong nFormat,
                             bool bIsFormField )
     : SwField( pFieldType, nFormat, LANGUAGE_SYSTEM, false )
-    , maContent(rContent)
-    , maPText(rPrompt)
+    , maContent(std::move(rContent))
+    , maPText(std::move(rPrompt))
     , mnSubType(nSub)
     , mbIsFormField( bIsFormField )
     , mpFormatField( nullptr )

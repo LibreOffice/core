@@ -63,6 +63,7 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <connectivity/DriversConfig.hxx>
+#include <utility>
 
 namespace dbaui
 {
@@ -859,7 +860,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             OAsynchronousLink                    m_aAsyncCaller;
 
         public:
-            AsyncLoader( const Reference< XComponentContext >& _rxORB, const OUString& _rURL );
+            AsyncLoader( const Reference< XComponentContext >& _rxORB, OUString  _rURL );
 
             void doLoadAsync();
 
@@ -873,8 +874,8 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             DECL_LINK( OnOpenDocument, void*, void );
         };
 
-        AsyncLoader::AsyncLoader( const Reference< XComponentContext >& _rxORB, const OUString& _rURL )
-            :m_sURL( _rURL )
+        AsyncLoader::AsyncLoader( const Reference< XComponentContext >& _rxORB, OUString  _rURL )
+            :m_sURL(std::move( _rURL ))
             ,m_aAsyncCaller( LINK( this, AsyncLoader, OnOpenDocument ) )
         {
             try

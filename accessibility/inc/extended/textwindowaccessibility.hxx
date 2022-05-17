@@ -132,7 +132,7 @@ class Paragraph final:
     private cppu::BaseMutex, public ParagraphBase, private ::comphelper::OCommonAccessibleText
 {
 public:
-    Paragraph(::rtl::Reference< Document > const & rDocument,
+    Paragraph(::rtl::Reference< Document >  rDocument,
                   Paragraphs::size_type nNumber);
 
     // Not thread-safe.

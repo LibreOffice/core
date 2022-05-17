@@ -39,6 +39,7 @@
 
 #include "viewshape.hxx"
 #include <tools.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -705,8 +706,8 @@ namespace slideshow::internal
         }
 
 
-        ViewShape::ViewShape( const ViewLayerSharedPtr& rViewLayer ) :
-            mpViewLayer( rViewLayer ),
+        ViewShape::ViewShape( ViewLayerSharedPtr  rViewLayer ) :
+            mpViewLayer(std::move( rViewLayer )),
             maRenderers(),
             mpSprite(),
             mbAnimationMode( false ),

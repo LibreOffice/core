@@ -25,10 +25,11 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <comphelper/lok.hxx>
+#include <utility>
 
-ScMoveTableDlg::ScMoveTableDlg(weld::Window* pParent, const OUString& rDefault)
+ScMoveTableDlg::ScMoveTableDlg(weld::Window* pParent, OUString rDefault)
     : GenericDialogController(pParent, "modules/scalc/ui/movecopysheet.ui", "MoveCopySheetDialog")
-    , maDefaultName(rDefault)
+    , maDefaultName(std::move(rDefault))
     , mnCurrentDocPos(0)
     , nDocument(0)
     , nTable(0)

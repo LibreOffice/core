@@ -25,6 +25,7 @@
 #include <comphelper/base64.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <utility>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -1770,12 +1771,12 @@ OUString OOo2OasisTransformer::GetEventName( const OUString& rName, bool )
     return aNewName;
 }
 
-OOo2OasisTransformer::OOo2OasisTransformer( OUString const & rImplName,
-                                            OUString const & rSubServiceName )
+OOo2OasisTransformer::OOo2OasisTransformer( OUString  rImplName,
+                                            OUString  rSubServiceName )
         noexcept :
     XMLTransformerBase( aActionTable, aTokenMap ),
-    m_aImplName(rImplName),
-    m_aSubServiceName(rSubServiceName),
+    m_aImplName(std::move(rImplName)),
+    m_aSubServiceName(std::move(rSubServiceName)),
     m_pEventMap( nullptr )
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE_OOO), XML_NAMESPACE_OFFICE );

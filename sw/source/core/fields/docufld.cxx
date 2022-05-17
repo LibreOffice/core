@@ -69,6 +69,7 @@
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
+#include <utility>
 #include <viewsh.hxx>
 #include <dbmgr.hxx>
 #include <shellres.hxx>
@@ -1263,11 +1264,11 @@ void SwHiddenTextFieldType::SetHiddenFlag( bool bSetHidden )
 
 SwHiddenTextField::SwHiddenTextField( SwHiddenTextFieldType* pFieldType,
                                     bool    bConditional,
-                                    const OUString& rCond,
+                                    OUString  rCond,
                                     const OUString& rStr,
                                     bool    bHidden,
                                     SwFieldTypesEnum  nSub) :
-    SwField( pFieldType ), m_aCond(rCond), m_nSubType(nSub),
+    SwField( pFieldType ), m_aCond(std::move(rCond)), m_nSubType(nSub),
     m_bCanToggle(bConditional), m_bIsHidden(bHidden), m_bValid(false)
 {
     if(m_nSubType == SwFieldTypesEnum::ConditionalText)
@@ -1290,11 +1291,11 @@ SwHiddenTextField::SwHiddenTextField( SwHiddenTextFieldType* pFieldType,
 }
 
 SwHiddenTextField::SwHiddenTextField( SwHiddenTextFieldType* pFieldType,
-                                    const OUString& rCond,
-                                    const OUString& rTrue,
-                                    const OUString& rFalse,
+                                    OUString  rCond,
+                                    OUString  rTrue,
+                                    OUString  rFalse,
                                     SwFieldTypesEnum nSub)
-    : SwField( pFieldType ), m_aTRUEText(rTrue), m_aFALSEText(rFalse), m_aCond(rCond), m_nSubType(nSub),
+    : SwField( pFieldType ), m_aTRUEText(std::move(rTrue)), m_aFALSEText(std::move(rFalse)), m_aCond(std::move(rCond)), m_nSubType(nSub),
       m_bIsHidden(true), m_bValid(false)
 {
     m_bCanToggle = !m_aCond.isEmpty();
@@ -1643,8 +1644,8 @@ std::unique_ptr<SwFieldType> SwHiddenParaFieldType::Copy() const
 
 // field for line height 0
 
-SwHiddenParaField::SwHiddenParaField(SwHiddenParaFieldType* pTyp, const OUString& rStr)
-    : SwField(pTyp), m_aCond(rStr)
+SwHiddenParaField::SwHiddenParaField(SwHiddenParaFieldType* pTyp, OUString  rStr)
+    : SwField(pTyp), m_aCond(std::move(rStr))
 {
     m_bIsHidden = false;
 }
@@ -1723,19 +1724,19 @@ std::unique_ptr<SwFieldType> SwPostItFieldType::Copy() const
 sal_uInt32 SwPostItField::s_nLastPostItId = 1;
 
 SwPostItField::SwPostItField( SwPostItFieldType* pT,
-        const OUString& rAuthor,
-        const OUString& rText,
-        const OUString& rInitials,
-        const OUString& rName,
+        OUString  rAuthor,
+        OUString  rText,
+        OUString  rInitials,
+        OUString  rName,
         const DateTime& rDateTime,
         const bool bResolved,
         const sal_uInt32 nPostItId
 )
     : SwField( pT )
-    , m_sText( rText )
-    , m_sAuthor( rAuthor )
-    , m_sInitials( rInitials )
-    , m_sName( rName )
+    , m_sText(std::move( rText ))
+    , m_sAuthor(std::move( rAuthor ))
+    , m_sInitials(std::move( rInitials ))
+    , m_sName(std::move( rName ))
     , m_aDateTime( rDateTime )
     , m_bResolved( bResolved )
 {
@@ -2468,8 +2469,8 @@ SwCharFormat* SwJumpEditFieldType::GetCharFormat()
 }
 
 SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, sal_uInt32 nForm,
-                                const OUString& rText, const OUString& rHelp )
-    : SwField( pTyp, nForm ), m_sText( rText ), m_sHelp( rHelp )
+                                OUString  rText, OUString  rHelp )
+    : SwField( pTyp, nForm ), m_sText(std::move( rText )), m_sHelp(std::move( rHelp ))
 {
 }
 

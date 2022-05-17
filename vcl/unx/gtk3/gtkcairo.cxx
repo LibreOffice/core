@@ -9,6 +9,7 @@
 
 #include "gtkcairo.hxx"
 
+#include <utility>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 
@@ -38,10 +39,10 @@ namespace cairo
      *
      * Set the mpSurface as pSurface
      **/
-    Gtk3Surface::Gtk3Surface(const CairoSurfaceSharedPtr& pSurface)
+    Gtk3Surface::Gtk3Surface(CairoSurfaceSharedPtr  pSurface)
         : mpGraphics(nullptr)
         , cr(nullptr)
-        , mpSurface(pSurface)
+        , mpSurface(std::move(pSurface))
     {}
 
     /**

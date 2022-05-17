@@ -59,7 +59,7 @@ namespace slideshow::internal
                 Priority of the sprite. Must remain static over the
                 lifetime of this object
              */
-            AnimatedSprite( const ViewLayerSharedPtr&   rViewLayer,
+            AnimatedSprite( ViewLayerSharedPtr    rViewLayer,
                             const ::basegfx::B2DSize&   rSpriteSizePixel,
                             double                      nSpritePrio );
             AnimatedSprite(const AnimatedSprite&) = delete;

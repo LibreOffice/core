@@ -20,6 +20,7 @@
 #include <memory>
 #include <i18nutil/searchopt.hxx>
 #include <o3tl/deleter.hxx>
+#include <utility>
 #include <vcl/textview.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/settings.hxx>
@@ -62,7 +63,7 @@
 #include <algorithm>
 #include <cstddef>
 
-TETextDataObject::TETextDataObject( const OUString& rText ) : maText( rText )
+TETextDataObject::TETextDataObject( OUString  rText ) : maText(std::move( rText ))
 {
 }
 

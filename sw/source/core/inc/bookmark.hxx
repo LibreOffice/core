@@ -108,7 +108,7 @@ namespace sw::mark {
             // SwClient
             virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
-            MarkBase(const SwPaM& rPaM, const OUString& rName);
+            MarkBase(const SwPaM& rPaM, OUString  rName);
             std::unique_ptr<SwPosition> m_pPos1;
             std::unique_ptr<SwPosition> m_pPos2;
             OUString m_aName;

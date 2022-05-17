@@ -25,6 +25,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <svtools/restartdialog.hxx>
+#include <utility>
 
 class SfxModule;
 class SfxShell;
@@ -36,8 +37,8 @@ struct OrderedEntry
     sal_Int32       m_nIndex;
     OUString   m_sId;
 
-    OrderedEntry( sal_Int32 nIndex, const OUString& rId ) :
-        m_nIndex( nIndex ), m_sId( rId ) {}
+    OrderedEntry( sal_Int32 nIndex, OUString  rId ) :
+        m_nIndex( nIndex ), m_sId(std::move( rId )) {}
 };
 
 
@@ -61,15 +62,15 @@ struct OptionsLeaf
     OUString   m_sGroupId;
     sal_Int32       m_nGroupIndex;
 
-    OptionsLeaf(    const OUString& rLabel,
-                    const OUString& rPageURL,
-                    const OUString& rEventHdl,
-                    const OUString& rGroupId,
+    OptionsLeaf(    OUString  rLabel,
+                    OUString  rPageURL,
+                    OUString  rEventHdl,
+                    OUString  rGroupId,
                     sal_Int32 nGroupIndex ) :
-        m_sLabel( rLabel ),
-        m_sPageURL( rPageURL ),
-        m_sEventHdl( rEventHdl ),
-        m_sGroupId( rGroupId ),
+        m_sLabel(std::move( rLabel )),
+        m_sPageURL(std::move( rPageURL )),
+        m_sEventHdl(std::move( rEventHdl )),
+        m_sGroupId(std::move( rGroupId )),
         m_nGroupIndex( nGroupIndex ) {}
 };
 
@@ -84,11 +85,11 @@ struct OptionsNode
     std::vector< std::vector< std::unique_ptr<OptionsLeaf> > >
                             m_aGroupedLeaves;
 
-    OptionsNode(    const OUString& rId,
-                    const OUString& rLabel,
+    OptionsNode(    OUString  rId,
+                    OUString  rLabel,
                     bool bAllModules ) :
-        m_sId( rId ),
-        m_sLabel( rLabel ),
+        m_sId(std::move( rId )),
+        m_sLabel(std::move( rLabel )),
         m_bAllModules( bAllModules ) {}
 };
 
@@ -219,7 +220,7 @@ private:
 public:
     ExtensionsTabPage(
         weld::Container* pParent,
-        const OUString& rPageURL, const OUString& rEvtHdl,
+        OUString  rPageURL, OUString  rEvtHdl,
         const css::uno::Reference<
             css::awt::XContainerWindowProvider >& rProvider );
 

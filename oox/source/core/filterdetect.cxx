@@ -35,6 +35,7 @@
 
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -51,9 +52,9 @@ using utl::MediaDescriptor;
 using comphelper::IDocPasswordVerifier;
 using comphelper::DocPasswordVerifierResult;
 
-FilterDetectDocHandler::FilterDetectDocHandler( const  Reference< XComponentContext >& rxContext, OUString& rFilterName, const OUString& rFileName ) :
+FilterDetectDocHandler::FilterDetectDocHandler( const  Reference< XComponentContext >& rxContext, OUString& rFilterName, OUString  rFileName ) :
     mrFilterName( rFilterName ),
-    maFileName(rFileName),
+    maFileName(std::move(rFileName)),
     maOOXMLVariant( OOXMLVariant::ECMA_Transitional ),
     mxContext( rxContext )
 {

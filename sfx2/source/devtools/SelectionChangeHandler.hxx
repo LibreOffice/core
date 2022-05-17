@@ -16,6 +16,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/compbase.hxx>
+#include <utility>
 
 typedef comphelper::WeakComponentImplHelper<css::view::XSelectionChangeListener>
     SelectionChangeHandlerInterfaceBase;
@@ -32,9 +33,9 @@ private:
     VclPtr<DevelopmentToolDockingWindow> mpDockingWindow;
 
 public:
-    SelectionChangeHandler(const css::uno::Reference<css::frame::XController>& rxController,
+    SelectionChangeHandler(css::uno::Reference<css::frame::XController> rxController,
                            DevelopmentToolDockingWindow* pDockingWindow)
-        : mxController(rxController)
+        : mxController(std::move(rxController))
         , mpDockingWindow(pDockingWindow)
     {
         css::uno::Reference<css::view::XSelectionSupplier> xSupplier(mxController,

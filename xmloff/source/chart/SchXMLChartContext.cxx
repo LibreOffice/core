@@ -29,6 +29,7 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/mediadescriptor.hxx>
+#include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -447,8 +448,8 @@ struct NewDonutSeries
     ::std::vector< OUString > m_aSeriesStyles;
     ::std::vector< OUString > m_aPointStyles;
 
-    NewDonutSeries( const css::uno::Reference< css::chart2::XDataSeries >& xSeries, sal_Int32 nPointCount )
-                    : m_xSeries( xSeries )
+    NewDonutSeries( css::uno::Reference< css::chart2::XDataSeries >  xSeries, sal_Int32 nPointCount )
+                    : m_xSeries(std::move( xSeries ))
                     , mnAttachedAxis( 1 )
     {
         m_aPointStyles.resize(nPointCount);
@@ -1158,11 +1159,11 @@ void SchXMLChartContext::InitChart(
 
 SchXMLTitleContext::SchXMLTitleContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
                                         OUString& rTitle,
-                                        uno::Reference< drawing::XShape > const & xTitleShape ) :
+                                        uno::Reference< drawing::XShape >  xTitleShape ) :
         SvXMLImportContext( rImport ),
         mrImportHelper( rImpHelper ),
         mrTitle( rTitle ),
-        mxTitleShape( xTitleShape )
+        mxTitleShape(std::move( xTitleShape ))
 {
 }
 

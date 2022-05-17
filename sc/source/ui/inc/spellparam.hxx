@@ -47,7 +47,7 @@ public:
                             ScConversionType eConvType,
                             LanguageType eSourceLang,
                             LanguageType eTargetLang,
-                            const vcl::Font& rTargetFont,
+                            vcl::Font  rTargetFont,
                             sal_Int32 nOptions,
                             bool bIsInteractive );
 

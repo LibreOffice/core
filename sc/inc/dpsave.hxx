@@ -57,7 +57,7 @@ private:
     sal_uInt16 nShowDetailsMode;
 
 public:
-    ScDPSaveMember(const OUString& rName);
+    ScDPSaveMember(OUString  rName);
     ScDPSaveMember(const ScDPSaveMember& r);
     ~ScDPSaveMember();
 
@@ -119,7 +119,7 @@ private:
     MemberList maMemberList;
 
 public:
-    ScDPSaveDimension(const OUString& rName, bool bDataLayout);
+    ScDPSaveDimension(OUString  rName, bool bDataLayout);
     ScDPSaveDimension(const ScDPSaveDimension& r);
     ~ScDPSaveDimension();
 

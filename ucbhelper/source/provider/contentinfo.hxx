@@ -58,7 +58,7 @@ private:
     const css::uno::Sequence< css::beans::Property > & getPropertiesImpl();
 
 public:
-    PropertySetInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
+    PropertySetInfo( css::uno::Reference< css::ucb::XCommandEnvironment >  rxEnv,
                      ContentImplHelper* pContent );
     virtual ~PropertySetInfo() override;
 
@@ -97,7 +97,7 @@ private:
     const css::uno::Sequence< css::ucb::CommandInfo > & getCommandsImpl();
 
 public:
-    CommandProcessorInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
+    CommandProcessorInfo( css::uno::Reference< css::ucb::XCommandEnvironment >  rxEnv,
                          ContentImplHelper* pContent );
     virtual ~CommandProcessorInfo() override;
 

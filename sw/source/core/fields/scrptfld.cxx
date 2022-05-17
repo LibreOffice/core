@@ -22,6 +22,7 @@
 #include <strings.hrc>
 #include <o3tl/any.hxx>
 #include <swtypes.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -35,9 +36,9 @@ std::unique_ptr<SwFieldType> SwScriptFieldType::Copy() const
 }
 
 SwScriptField::SwScriptField( SwScriptFieldType* pInitType,
-                                const OUString& rType, const OUString& rCode,
+                                OUString  rType, OUString  rCode,
                                 bool bURL )
-    : SwField( pInitType ), m_sType( rType ), m_sCode( rCode ), m_bCodeURL( bURL )
+    : SwField( pInitType ), m_sType(std::move( rType )), m_sCode(std::move( rCode )), m_bCodeURL( bURL )
 {
 }
 

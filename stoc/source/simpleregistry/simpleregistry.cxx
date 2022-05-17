@@ -21,6 +21,7 @@
 
 #include <cstdlib>
 #include <mutex>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -101,9 +102,9 @@ private:
 class Key: public cppu::WeakImplHelper< css::registry::XRegistryKey > {
 public:
     Key(
-        rtl::Reference< SimpleRegistry > const & registry,
+        rtl::Reference< SimpleRegistry >  registry,
         RegistryKey const & key):
-        registry_(registry), key_(key) {}
+        registry_(std::move(registry)), key_(key) {}
 
 private:
     virtual OUString SAL_CALL getKeyName() override;

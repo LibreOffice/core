@@ -21,6 +21,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
+#include <utility>
 #include <vcl/EnumContext.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
@@ -49,13 +50,13 @@ Reference<ui::XUIElement> SidebarPanelBase::Create (
 }
 
 SidebarPanelBase::SidebarPanelBase (
-    const OUString& rsResourceURL,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    OUString  rsResourceURL,
+    css::uno::Reference<css::frame::XFrame>  rxFrame,
     std::unique_ptr<PanelLayout> xControl,
     const css::ui::LayoutSize& rLayoutSize)
-    : mxFrame(rxFrame),
+    : mxFrame(std::move(rxFrame)),
       mxControl(std::move(xControl)),
-      msResourceURL(rsResourceURL),
+      msResourceURL(std::move(rsResourceURL)),
       maLayoutSize(rLayoutSize)
 {
     if (mxFrame.is())

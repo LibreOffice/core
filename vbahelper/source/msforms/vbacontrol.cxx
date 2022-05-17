@@ -60,6 +60,7 @@
 #include <svx/svdobj.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -125,8 +126,8 @@ ScVbaControlListener::disposing( const lang::EventObject& )
 
 //ScVbaControl
 
-ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< ::uno::XInterface >& xControl,  const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
-    : ControlImpl_BASE( xParent, xContext ), m_xControl( xControl ), m_xModel( xModel )
+ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< ::uno::XInterface >  xControl,  css::uno::Reference< css::frame::XModel >  xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
+    : ControlImpl_BASE( xParent, xContext ), m_xControl(std::move( xControl )), m_xModel(std::move( xModel ))
 {
     //add listener
     m_xEventListener.set( new ScVbaControlListener( this ) );
@@ -755,7 +756,7 @@ class ControlProviderImpl : public cppu::WeakImplHelper< XControlProvider, css::
 {
     uno::Reference< uno::XComponentContext > m_xCtx;
 public:
-    explicit ControlProviderImpl( const uno::Reference< uno::XComponentContext >& xCtx ) : m_xCtx( xCtx ) {}
+    explicit ControlProviderImpl( uno::Reference< uno::XComponentContext >  xCtx ) : m_xCtx(std::move( xCtx )) {}
     virtual uno::Reference< msforms::XControl > SAL_CALL createControl( const uno::Reference< drawing::XControlShape >& xControl, const uno::Reference< frame::XModel >& xDocOwner ) override;
 
     //  XServiceInfo

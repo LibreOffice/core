@@ -61,6 +61,7 @@
 #include <calbck.hxx>
 #include <fmtclds.hxx>
 #include <algorithm>
+#include <utility>
 #include "ndsect.hxx"
 
 using namespace ::com::sun::star;
@@ -91,9 +92,9 @@ namespace {
     };
 }
 
-SwSectionData::SwSectionData(SectionType const eType, OUString const& rName)
+SwSectionData::SwSectionData(SectionType const eType, OUString  rName)
     : m_eType(eType)
-    , m_sSectionName(rName)
+    , m_sSectionName(std::move(rName))
     , m_bHiddenFlag(false)
     , m_bProtectFlag(false)
     , m_bEditInReadonlyFlag(false) // edit in readonly sections

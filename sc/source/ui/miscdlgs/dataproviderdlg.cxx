@@ -19,6 +19,7 @@
 #include <sal/log.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/charclass.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <utility>
@@ -524,7 +525,7 @@ ScReplaceNullTransformation::ScReplaceNullTransformation(const ScDocument *pDoc,
     , mxColumnNums(mxBuilder->weld_entry("ed_columns"))
     , mxReplaceString(mxBuilder->weld_entry("ed_str"))
     , mxDelete(mxBuilder->weld_button("ed_delete"))
-    , maDeleteTransformation(aDeleteTransformation)
+    , maDeleteTransformation(std::move(aDeleteTransformation))
     , mpDoc(pDoc)
 {
     mxDelete->connect_clicked(LINK(this,ScReplaceNullTransformation, DeleteHdl));
@@ -575,7 +576,7 @@ ScDateTimeTransformation::ScDateTimeTransformation(const ScDocument* pDoc, weld:
     , mxColumnNums(mxBuilder->weld_entry("ed_columns"))
     , mxType(mxBuilder->weld_combo_box("ed_lst"))
     , mxDelete(mxBuilder->weld_button("ed_delete"))
-    , maDeleteTransformation(aDeleteTransformation)
+    , maDeleteTransformation(std::move(aDeleteTransformation))
     , mpDoc(pDoc)
 {
     mxDelete->connect_clicked(LINK(this,ScDateTimeTransformation, DeleteHdl));

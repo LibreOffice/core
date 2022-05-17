@@ -26,6 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <utility>
 
 /** @descr  MultiPropertySetHandler handles the two slightly different
         interfaces XPropertySet and XMultiPropertySet for accessing
@@ -48,8 +49,8 @@ public:
     /** @descr  Create a class instance and store the given name.
         @param  rName   The name of the property.
     */
-    explicit PropertyWrapperBase (const OUString & rName)
-        :   msName (rName)
+    explicit PropertyWrapperBase (OUString  rName)
+        :   msName (std::move(rName))
     {}
     virtual ~PropertyWrapperBase()
     {}
@@ -125,7 +126,7 @@ public:
             is casted later to one of the two of them.
     */
     explicit MultiPropertySetHandler (css::uno::Reference<
-        css::uno::XInterface> const & xObject);
+        css::uno::XInterface>  xObject);
     /** @descr  Add a property to handle.  The type given implicitly by the
             reference to a variable is used to create an instance of
             the PropertyWrapper template class.
@@ -177,8 +178,8 @@ private:
 };
 
 MultiPropertySetHandler::MultiPropertySetHandler (css::uno::Reference<
-    css::uno::XInterface> const & xObject)
-        :   mxObject (xObject)
+    css::uno::XInterface>  xObject)
+        :   mxObject (std::move(xObject))
 {
 }
 

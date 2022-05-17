@@ -31,6 +31,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <avmedia/mediaitem.hxx>
+#include <utility>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -100,9 +101,9 @@ namespace oox::ppt {
 
     }
 
-    TimeTargetElementContext::TimeTargetElementContext( FragmentHandler2 const & rParent, const AnimTargetElementPtr & pValue )
+    TimeTargetElementContext::TimeTargetElementContext( FragmentHandler2 const & rParent, AnimTargetElementPtr  pValue )
         : FragmentHandler2( rParent ),
-            mpTarget( pValue )
+            mpTarget(std::move( pValue ))
     {
         OSL_ENSURE( mpTarget, "no valid target passed" );
     }

@@ -40,7 +40,7 @@ namespace http_dav_ucp
 
     public:
         PropertyNames();
-        explicit PropertyNames( const OUString& rURL );
+        explicit PropertyNames( OUString  rURL );
 
         sal_uInt32 getStaleTime() const { return m_nStaleTime; };
         void setStaleTime( const sal_uInt32 nStaleTime ) { m_nStaleTime = nStaleTime; };

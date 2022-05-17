@@ -45,6 +45,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <regex>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -638,11 +639,11 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
 
 ListsManager::ListsManager(DomainMapper& rDMapper,
-    const uno::Reference<lang::XMultiServiceFactory> & xFactory)
+    uno::Reference<lang::XMultiServiceFactory>  xFactory)
     : LoggedProperties("ListsManager")
     , LoggedTable("ListsManager")
     , m_rDMapper(rDMapper)
-    , m_xFactory(xFactory)
+    , m_xFactory(std::move(xFactory))
 {
 }
 

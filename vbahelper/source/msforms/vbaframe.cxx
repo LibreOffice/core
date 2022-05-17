@@ -22,6 +22,7 @@
 #include "vbacontrols.hxx"
 #include <ooo/vba/msforms/fmBorderStyle.hpp>
 #include <ooo/vba/msforms/fmSpecialEffect.hpp>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -32,9 +33,9 @@ ScVbaFrame::ScVbaFrame(
         const uno::Reference< uno::XInterface >& xControl,
         const uno::Reference< frame::XModel >& xModel,
         std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper,
-        const css::uno::Reference< css::awt::XControl >& xDialog ) :
+        css::uno::Reference< css::awt::XControl >  xDialog ) :
     FrameImpl_BASE( xParent, xContext, xControl, xModel, std::move(pGeomHelper) ),
-    mxDialog( xDialog )
+    mxDialog(std::move( xDialog ))
 {
 }
 

@@ -10,6 +10,7 @@
 #pragma once
 
 #include <tools/urlobj.hxx>
+#include <utility>
 
 class Place
 {
@@ -21,8 +22,8 @@ private:
 
 public:
 
-    Place( const OUString& sName, std::u16string_view sUrl, bool bEditable = false ) :
-        msName( sName ),
+    Place( OUString  sName, std::u16string_view sUrl, bool bEditable = false ) :
+        msName(std::move( sName )),
         maUrl( sUrl ),
         mbEditable( bEditable ) {};
 

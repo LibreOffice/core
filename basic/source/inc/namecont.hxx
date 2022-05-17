@@ -543,8 +543,8 @@ public:
         ModifiableHelper& _rModifiable,
         const css::uno::Type& aType,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
-        const OUString& aLibInfoFileURL,
-        const OUString& aStorageURL,
+        OUString  aLibInfoFileURL,
+        OUString  aStorageURL,
         bool ReadOnly
     );
 

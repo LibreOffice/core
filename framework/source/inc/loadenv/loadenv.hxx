@@ -200,7 +200,7 @@ public:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    LoadEnv(css::uno::Reference< css::uno::XComponentContext >  xContext);
 
     /** @short  deinitialize an instance of this class in the right way.
      */

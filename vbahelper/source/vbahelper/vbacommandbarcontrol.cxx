@@ -18,6 +18,7 @@
  */
 #include "vbacommandbarcontrol.hxx"
 #include "vbacommandbarcontrols.hxx"
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <sal/log.hxx>
@@ -25,7 +26,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaCommandBarControl::ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl ) : CommandBarControl_BASE( xParent, xContext ), pCBarHelper( pHelper ), m_sResourceUrl( sResourceUrl ), m_xCurrentSettings( xSettings ), m_xBarSettings( xBarSettings ), m_nPosition( 0 )
+ScVbaCommandBarControl::ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::container::XIndexAccess >  xSettings, VbaCommandBarHelperRef  pHelper, css::uno::Reference< css::container::XIndexAccess >  xBarSettings, OUString  sResourceUrl ) : CommandBarControl_BASE( xParent, xContext ), pCBarHelper(std::move( pHelper )), m_sResourceUrl(std::move( sResourceUrl )), m_xCurrentSettings(std::move( xSettings )), m_xBarSettings(std::move( xBarSettings )), m_nPosition( 0 )
 {
 }
 

@@ -56,6 +56,7 @@
 #include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
 #include <tools/debug.hxx>
+#include <utility>
 #include <vcl/locktoplevels.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
@@ -193,12 +194,12 @@ void lcl_ConvertTabsToSpaces( OUString& rLine )
 } // namespace
 
 ModulWindow::ModulWindow (ModulWindowLayout* pParent, ScriptDocument const& rDocument,
-                          const OUString& aLibName, const OUString& aName, OUString const & aModule)
+                          const OUString& aLibName, const OUString& aName, OUString  aModule)
     : BaseWindow(pParent, rDocument, aLibName, aName)
     , m_rLayout(*pParent)
     , m_nValid(ValidWindow)
     , m_aXEditorWindow(VclPtr<ComplexEditorWindow>::Create(this))
-    , m_aModule(aModule)
+    , m_aModule(std::move(aModule))
 {
     m_aXEditorWindow->Show();
     SetBackground();

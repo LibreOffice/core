@@ -43,7 +43,7 @@ class SVX_DLLPUBLIC OfaXColorListItem final : public SfxPoolItem
  private:
     rtl::Reference<XColorList> mxRef;
 public:
-    OfaXColorListItem( sal_uInt16 _nWhich, const rtl::Reference<XColorList> &xRef );
+    OfaXColorListItem( sal_uInt16 _nWhich, rtl::Reference<XColorList> xRef );
 
     virtual bool operator==( const SfxPoolItem& rItem ) const override;
 

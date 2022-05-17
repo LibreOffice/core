@@ -252,7 +252,7 @@ class PreventDuplicateInteraction final :
 
             @threadsafe not necessary
         */
-        PreventDuplicateInteraction(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+        PreventDuplicateInteraction(css::uno::Reference< css::uno::XComponentContext >  rxContext);
 
 
         /**

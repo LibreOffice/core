@@ -64,6 +64,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unordered_map>
+#include <utility>
 
 using namespace css::uno;
 using namespace css::lang;
@@ -687,7 +688,7 @@ class ImplIntrospectionAccess : public IntrospectionAccessHelper
     void cacheXIndexContainer();
 
 public:
-    ImplIntrospectionAccess( const Any& obj, rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ );
+    ImplIntrospectionAccess( Any  obj, rtl::Reference< IntrospectionAccessStatic_Impl >  pStaticImpl_ );
 
     // Methods from XIntrospectionAccess
     virtual sal_Int32 SAL_CALL getSuppliedMethodConcepts() override;
@@ -772,8 +773,8 @@ public:
 };
 
 ImplIntrospectionAccess::ImplIntrospectionAccess
-    ( const Any& obj, rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ )
-        : maInspectedObject( obj ), mpStaticImpl( pStaticImpl_ ) ,
+    ( Any  obj, rtl::Reference< IntrospectionAccessStatic_Impl >  pStaticImpl_ )
+        : maInspectedObject(std::move( obj )), mpStaticImpl(std::move( pStaticImpl_ )) ,
           mnLastPropertyConcept(-1), mnLastMethodConcept(-1) //, maAdapter()
 {
     // Save object as an interface if possible
@@ -1430,9 +1431,9 @@ OUString ImplIntrospectionAccess::getExactName( const OUString& rApproximateName
 
 struct TypeKey {
     TypeKey(
-        css::uno::Reference<css::beans::XPropertySetInfo> const & theProperties,
+        css::uno::Reference<css::beans::XPropertySetInfo>  theProperties,
         std::vector<css::uno::Type> const & theTypes):
-        properties(theProperties)
+        properties(std::move(theProperties))
     {
         //TODO: Could even sort the types lexicographically first, to increase
         // the chance of matches between different implementations' getTypes(),
@@ -1500,8 +1501,8 @@ public:
 private:
     struct Data {
         explicit Data(
-            rtl::Reference<IntrospectionAccessStatic_Impl> const & theAccess):
-            access(theAccess), hits(1)
+            rtl::Reference<IntrospectionAccessStatic_Impl>  theAccess):
+            access(std::move(theAccess)), hits(1)
         {}
 
         rtl::Reference<IntrospectionAccessStatic_Impl> access;

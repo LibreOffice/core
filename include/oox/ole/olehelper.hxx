@@ -75,7 +75,7 @@ struct StdFontInfo
 
     explicit            StdFontInfo();
     explicit            StdFontInfo(
-                            const OUString& rName,
+                            OUString  rName,
                             sal_uInt32 nHeight );
 };
 

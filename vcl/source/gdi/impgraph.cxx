@@ -31,6 +31,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
+#include <utility>
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/outdev.hxx>
@@ -64,9 +65,9 @@ private:
     OUString maOriginURL;
 
 public:
-    ImpSwapFile(INetURLObject const & rSwapURL, OUString const & rOriginURL)
+    ImpSwapFile(INetURLObject const & rSwapURL, OUString  rOriginURL)
         : SwapFile(rSwapURL)
-        , maOriginURL(rOriginURL)
+        , maOriginURL(std::move(rOriginURL))
     {
     }
 
@@ -134,8 +135,8 @@ ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic) noexcept
     rImpGraphic.mbDummyContext = false;
 }
 
-ImpGraphic::ImpGraphic(std::shared_ptr<GfxLink> const & rGfxLink, sal_Int32 nPageIndex)
-    : mpGfxLink(rGfxLink)
+ImpGraphic::ImpGraphic(std::shared_ptr<GfxLink>  rGfxLink, sal_Int32 nPageIndex)
+    : mpGfxLink(std::move(rGfxLink))
     , meType(GraphicType::Bitmap)
     , mnSizeBytes(0)
     , mbSwapOut(true)
@@ -151,12 +152,12 @@ ImpGraphic::ImpGraphic(std::shared_ptr<GfxLink> const & rGfxLink, sal_Int32 nPag
     maSwapInfo.mnPageIndex = nPageIndex;
 }
 
-ImpGraphic::ImpGraphic(GraphicExternalLink const & rGraphicExternalLink) :
+ImpGraphic::ImpGraphic(GraphicExternalLink  rGraphicExternalLink) :
         meType          ( GraphicType::Default ),
         mnSizeBytes     ( 0 ),
         mbSwapOut       ( false ),
         mbDummyContext  ( false ),
-        maGraphicExternalLink(rGraphicExternalLink),
+        maGraphicExternalLink(std::move(rGraphicExternalLink)),
         maLastUsed (std::chrono::high_resolution_clock::now()),
         mbPrepared (false)
 {

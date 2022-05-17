@@ -32,7 +32,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaReplacement( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::util::XPropertyReplace >& xPropertyReplace );
+    SwVbaReplacement( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::util::XPropertyReplace >  xPropertyReplace );
     virtual ~SwVbaReplacement() override;
 
     // Attributes

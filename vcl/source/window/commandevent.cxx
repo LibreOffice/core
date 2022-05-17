@@ -19,12 +19,13 @@
 
 #include <string.h>
 
+#include <utility>
 #include <vcl/commandevent.hxx>
 
-CommandExtTextInputData::CommandExtTextInputData( const OUString& rText,
+CommandExtTextInputData::CommandExtTextInputData( OUString  rText,
     const ExtTextInputAttr* pTextAttr, sal_Int32 nCursorPos, sal_uInt16 nCursorFlags,
     bool bOnlyCursor)
-    : maText(rText)
+    : maText(std::move(rText))
 {
     if ( pTextAttr && !maText.isEmpty() )
     {

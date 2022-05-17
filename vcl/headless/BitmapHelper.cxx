@@ -19,6 +19,7 @@
 
 #include <headless/BitmapHelper.hxx>
 #include <svdata.hxx>
+#include <utility>
 
 BitmapHelper::BitmapHelper(const SalBitmap& rSourceBitmap, const bool bForceARGB32)
 #ifdef HAVE_CAIRO_FORMAT_RGB24_888
@@ -161,9 +162,9 @@ sal_Int64 estimateUsageInBytesForSurfaceHelper(const SurfaceHelper* pHelper)
 
 SystemDependentData_BitmapHelper::SystemDependentData_BitmapHelper(
     basegfx::SystemDependentDataManager& rSystemDependentDataManager,
-    const std::shared_ptr<BitmapHelper>& rBitmapHelper)
+    std::shared_ptr<BitmapHelper> rBitmapHelper)
     : basegfx::SystemDependentData(rSystemDependentDataManager)
-    , maBitmapHelper(rBitmapHelper)
+    , maBitmapHelper(std::move(rBitmapHelper))
 {
 }
 
@@ -174,9 +175,9 @@ sal_Int64 SystemDependentData_BitmapHelper::estimateUsageInBytes() const
 
 SystemDependentData_MaskHelper::SystemDependentData_MaskHelper(
     basegfx::SystemDependentDataManager& rSystemDependentDataManager,
-    const std::shared_ptr<MaskHelper>& rMaskHelper)
+    std::shared_ptr<MaskHelper> rMaskHelper)
     : basegfx::SystemDependentData(rSystemDependentDataManager)
-    , maMaskHelper(rMaskHelper)
+    , maMaskHelper(std::move(rMaskHelper))
 {
 }
 

@@ -40,6 +40,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ref.hxx>
+#include <utility>
 
 #include "pq_xcolumns.hxx"
 #include "pq_xkeycolumns.hxx"
@@ -68,13 +69,13 @@ KeyColumns::KeyColumns(
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const OUString &schemaName,
-        const OUString &tableName,
+        OUString schemaName,
+        OUString tableName,
         const Sequence< OUString > &columnNames,
         const Sequence< OUString > &foreignColumnNames )
     : Container( refMutex, origin, pSettings,  "KEY_COLUMN" ),
-      m_schemaName( schemaName ),
-      m_tableName( tableName ),
+      m_schemaName(std::move( schemaName )),
+      m_tableName(std::move( tableName )),
       m_columnNames( columnNames ),
       m_foreignColumnNames( foreignColumnNames )
 {}

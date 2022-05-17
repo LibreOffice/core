@@ -30,6 +30,7 @@
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 
@@ -73,16 +74,16 @@ namespace vclcanvas
         }
     }
 
-    TextLayout::TextLayout( const rendering::StringContext&                  aText,
+    TextLayout::TextLayout( rendering::StringContext                   aText,
                             sal_Int8                                         nDirection,
-                            const CanvasFont::Reference&                     rFont,
-                            const uno::Reference<rendering::XGraphicDevice>& xDevice,
-                            const OutDevProviderSharedPtr&                   rOutDev ) :
+                            CanvasFont::Reference                      rFont,
+                            uno::Reference<rendering::XGraphicDevice>  xDevice,
+                            OutDevProviderSharedPtr                    rOutDev ) :
         TextLayout_Base( m_aMutex ),
-        maText( aText ),
-        mpFont( rFont ),
-        mxDevice( xDevice ),
-        mpOutDevProvider( rOutDev ),
+        maText(std::move( aText )),
+        mpFont(std::move( rFont )),
+        mxDevice(std::move( xDevice )),
+        mpOutDevProvider(std::move( rOutDev )),
         mnTextDirection( nDirection )
     {}
 
@@ -360,8 +361,8 @@ namespace vclcanvas
         class OffsetTransformer
         {
         public:
-            explicit OffsetTransformer( const ::basegfx::B2DHomMatrix& rMat ) :
-                maMatrix( rMat )
+            explicit OffsetTransformer( ::basegfx::B2DHomMatrix  rMat ) :
+                maMatrix(std::move( rMat ))
             {
             }
 

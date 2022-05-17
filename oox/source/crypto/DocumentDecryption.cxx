@@ -22,6 +22,7 @@
 #include <oox/helper/binaryinputstream.hxx>
 
 #include <sal/log.hxx>
+#include <utility>
 
 namespace
 {
@@ -51,10 +52,9 @@ namespace oox::crypto
 {
 using namespace css;
 
-DocumentDecryption::DocumentDecryption(
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-    oox::ole::OleStorage& rOleStorage)
-    : mxContext(rxContext)
+DocumentDecryption::DocumentDecryption(css::uno::Reference<css::uno::XComponentContext> rxContext,
+                                       oox::ole::OleStorage& rOleStorage)
+    : mxContext(std::move(rxContext))
     , mrOleStorage(rOleStorage)
 {
     // Get OLE streams into sequences for later use in CryptoEngine

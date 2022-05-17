@@ -61,6 +61,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/lok.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -266,7 +267,7 @@ class ModelData_Impl
 
 public:
     ModelData_Impl( SfxStoringHelper& aOwner,
-                    const uno::Reference< frame::XModel >& xModel,
+                    uno::Reference< frame::XModel >  xModel,
                     const uno::Sequence< beans::PropertyValue >& aMediaDescr );
 
     ~ModelData_Impl();
@@ -326,10 +327,10 @@ public:
 
 
 ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
-                                const uno::Reference< frame::XModel >& xModel,
+                                uno::Reference< frame::XModel >  xModel,
                                 const uno::Sequence< beans::PropertyValue >& aMediaDescr )
 : m_pOwner( &aOwner )
-, m_xModel( xModel )
+, m_xModel(std::move( xModel ))
 , m_aMediaDescrHM( aMediaDescr )
 , m_bRecommendReadOnly( false )
 {

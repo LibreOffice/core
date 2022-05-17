@@ -308,7 +308,7 @@ public:
         ScInputHdlState( const ScAddress& rCurPos,
                          const ScAddress& rStartPos,
                          const ScAddress& rEndPos,
-                         const OUString& rString,
+                         OUString  rString,
                          const EditTextObject* pData );
         ScInputHdlState( const ScInputHdlState& rCpy );
         ~ScInputHdlState();

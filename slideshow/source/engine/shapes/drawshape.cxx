@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <utility>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
@@ -393,12 +394,12 @@ namespace slideshow::internal
         }
 
         DrawShape::DrawShape( const uno::Reference< drawing::XShape >&      xShape,
-                              const uno::Reference< drawing::XDrawPage >&   xContainingPage,
+                              uno::Reference< drawing::XDrawPage >    xContainingPage,
                               double                                        nPrio,
                               const Graphic&                                rGraphic,
                               const SlideShowContext&                       rContext ) :
             mxShape( xShape ),
-            mxPage( xContainingPage ),
+            mxPage(std::move( xContainingPage )),
             maAnimationFrames(),
             mnCurrFrame(0),
             mpCurrMtf(),

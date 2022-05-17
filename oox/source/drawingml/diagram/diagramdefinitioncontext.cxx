@@ -23,6 +23,7 @@
 #include "layoutnodecontext.hxx"
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
+#include <utility>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -33,9 +34,9 @@ namespace oox::drawingml {
 // CT_DiagramDefinition
 DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper const & rParent,
                                                     const AttributeList& rAttributes,
-                                                    const DiagramLayoutPtr &pLayout )
+                                                    DiagramLayoutPtr pLayout )
     : ContextHandler2( rParent )
-    , mpLayout( pLayout )
+    , mpLayout(std::move( pLayout ))
 {
     mpLayout->setDefStyle( rAttributes.getString( XML_defStyle ).get() );
     OUString sValue = rAttributes.getString( XML_minVer ).get();

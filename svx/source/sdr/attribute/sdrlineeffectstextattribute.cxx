@@ -19,20 +19,21 @@
 
 
 #include <sdr/attribute/sdrlineeffectstextattribute.hxx>
+#include <utility>
 
 
 namespace drawinglayer::attribute
 {
         SdrLineEffectsTextAttribute::SdrLineEffectsTextAttribute(
-            const SdrLineAttribute& rLine,
-            const SdrLineStartEndAttribute& rLineStartEnd,
+            SdrLineAttribute  rLine,
+            SdrLineStartEndAttribute  rLineStartEnd,
             const SdrShadowAttribute& rShadow,
             const SdrTextAttribute& rTextAttribute,
             const SdrGlowAttribute& rGlow,
             sal_Int32 nSoftEdgeRadius)
         :   SdrEffectsTextAttribute(rShadow, rTextAttribute, rGlow, nSoftEdgeRadius),
-            maLine(rLine),
-            maLineStartEnd(rLineStartEnd)
+            maLine(std::move(rLine)),
+            maLineStartEnd(std::move(rLineStartEnd))
         {
         }
 

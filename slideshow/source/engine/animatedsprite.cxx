@@ -30,16 +30,17 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <utility>
 
 
 using namespace ::com::sun::star;
 
 namespace slideshow::internal
 {
-        AnimatedSprite::AnimatedSprite( const ViewLayerSharedPtr&   rViewLayer,
+        AnimatedSprite::AnimatedSprite( ViewLayerSharedPtr    rViewLayer,
                                         const ::basegfx::B2DSize&   rSpriteSizePixel,
                                         double                      nSpritePrio ) :
-            mpViewLayer( rViewLayer ),
+            mpViewLayer(std::move( rViewLayer )),
             mpSprite(),
             maEffectiveSpriteSizePixel( rSpriteSizePixel ),
             maContentPixelOffset(),

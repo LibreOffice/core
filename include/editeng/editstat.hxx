@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <utility>
 
 enum class EEControlBits
 {
@@ -126,8 +127,8 @@ struct SpellCallbackInfo
     SpellCallbackCommand nCommand;
     OUString        aWord;
 
-    SpellCallbackInfo( SpellCallbackCommand nCMD, const OUString& rWord )
-        : aWord( rWord )
+    SpellCallbackInfo( SpellCallbackCommand nCMD, OUString  rWord )
+        : aWord(std::move( rWord ))
     {
         nCommand = nCMD;
     }

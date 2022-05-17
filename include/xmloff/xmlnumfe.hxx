@@ -102,7 +102,7 @@ public:
                        const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp );
     SvXMLNumFmtExport( SvXMLExport& rExport,
                        const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp,
-                       const OUString& rPrefix );
+                       OUString  rPrefix );
 
     ~SvXMLNumFmtExport();
 

@@ -32,6 +32,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <cppuhelper/implbase.hxx>
 
+#include <utility>
 #include <vcl/evntpost.hxx>
 #include <sal/log.hxx>
 #include <vcl/lok.hxx>
@@ -74,9 +75,9 @@ class AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEventListener>
         /** @short  allow creation of instances of this class
                     by using our factory only!
          */
-        AsyncAccelExec(const css::uno::Reference<css::lang::XComponent>& xFrame,
-                                      const css::uno::Reference< css::frame::XDispatch >& xDispatch,
-                                      const css::util::URL& rURL);
+        AsyncAccelExec(css::uno::Reference<css::lang::XComponent>  xFrame,
+                                      css::uno::Reference< css::frame::XDispatch >  xDispatch,
+                                      css::util::URL  rURL);
 
         DECL_LINK(impl_ts_asyncCallback, LinkParamNone*, void);
 };
@@ -442,12 +443,12 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
     return xParser;
 }
 
-AsyncAccelExec::AsyncAccelExec(const css::uno::Reference<css::lang::XComponent>& xFrame,
-                               const css::uno::Reference<css::frame::XDispatch>& xDispatch,
-                               const css::util::URL& rURL)
-    : m_xFrame(xFrame)
-    , m_xDispatch(xDispatch)
-    , m_aURL(rURL)
+AsyncAccelExec::AsyncAccelExec(css::uno::Reference<css::lang::XComponent>  xFrame,
+                               css::uno::Reference<css::frame::XDispatch>  xDispatch,
+                               css::util::URL  rURL)
+    : m_xFrame(std::move(xFrame))
+    , m_xDispatch(std::move(xDispatch))
+    , m_aURL(std::move(rURL))
     , m_aAsyncCallback(LINK(this, AsyncAccelExec, impl_ts_asyncCallback))
 {
     acquire();

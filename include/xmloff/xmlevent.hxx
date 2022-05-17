@@ -21,6 +21,7 @@
 #define INCLUDED_XMLOFF_XMLEVENT_HXX
 
 #include <rtl/ustring.hxx>
+#include <utility>
 
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
@@ -54,9 +55,9 @@ struct XMLEventName
         m_aName( OUString::createFromAscii(p) )
        {}
 
-    XMLEventName( sal_uInt16 n, const OUString& r ) :
+    XMLEventName( sal_uInt16 n, OUString  r ) :
         m_nPrefix( n ),
-        m_aName( r )
+        m_aName(std::move( r ))
        {}
 
     bool operator<( const XMLEventName& r ) const

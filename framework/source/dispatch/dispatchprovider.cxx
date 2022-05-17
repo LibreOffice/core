@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
@@ -53,9 +54,9 @@ namespace framework{
     @param      xFrame
                     reference to our owner frame.
 */
-DispatchProvider::DispatchProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext  ,
+DispatchProvider::DispatchProvider( css::uno::Reference< css::uno::XComponentContext >  rxContext  ,
                                     const css::uno::Reference< css::frame::XFrame >&              xFrame    )
-        : m_xContext    ( rxContext                     )
+        : m_xContext    (std::move( rxContext                     ))
         , m_xFrame      ( xFrame                        )
 {
 }

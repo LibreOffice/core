@@ -59,7 +59,7 @@ public:
         @throws css::uno::RuntimeException
         on errors during construction of an instance of this class.
     */
-    MailDispatcher(css::uno::Reference<css::mail::XSmtpService> const& xMailService);
+    MailDispatcher(css::uno::Reference<css::mail::XSmtpService> xMailService);
 
     /**
         Shutdown the mail dispatcher. Every mail messages

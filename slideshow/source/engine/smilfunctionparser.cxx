@@ -42,6 +42,7 @@
 #include <functional>
 #include <algorithm>
 #include <stack>
+#include <utility>
 
 
 /* Implementation of SmilFunctionParser class */
@@ -78,9 +79,9 @@ namespace slideshow::internal
             {
             public:
                 ShapeBoundsFunctor( Generator                       aGenerator,
-                                    const ParserContextSharedPtr&   rContext ) :
+                                    ParserContextSharedPtr    rContext ) :
                     maGenerator( aGenerator ),
-                    mpContext( rContext )
+                    mpContext(std::move( rContext ))
                 {
                     ENSURE_OR_THROW( mpContext,
                                       "ShapeBoundsFunctor::ShapeBoundsFunctor(): Invalid context" );
@@ -111,9 +112,9 @@ namespace slideshow::internal
             {
             public:
                 ConstantFunctor( double                         rValue,
-                                 const ParserContextSharedPtr&  rContext ) :
+                                 ParserContextSharedPtr   rContext ) :
                     mnValue( rValue ),
-                    mpContext( rContext )
+                    mpContext(std::move( rContext ))
                 {
                     ENSURE_OR_THROW( mpContext,
                                       "ConstantFunctor::ConstantFunctor(): Invalid context" );
@@ -135,8 +136,8 @@ namespace slideshow::internal
             class DoubleConstantFunctor
             {
             public:
-                explicit DoubleConstantFunctor( const ParserContextSharedPtr& rContext ) :
-                    mpContext( rContext )
+                explicit DoubleConstantFunctor( ParserContextSharedPtr  rContext ) :
+                    mpContext(std::move( rContext ))
                 {
                     ENSURE_OR_THROW( mpContext,
                                       "DoubleConstantFunctor::DoubleConstantFunctor(): Invalid context" );
@@ -158,8 +159,8 @@ namespace slideshow::internal
             class ValueTFunctor
             {
             public:
-                explicit ValueTFunctor( const ParserContextSharedPtr& rContext ) :
-                    mpContext( rContext )
+                explicit ValueTFunctor( ParserContextSharedPtr  rContext ) :
+                    mpContext(std::move( rContext ))
                 {
                     ENSURE_OR_THROW( mpContext,
                                       "ValueTFunctor::ValueTFunctor(): Invalid context" );
@@ -192,9 +193,9 @@ namespace slideshow::internal
                 {
                 public:
                     UnaryFunctionExpression( const Functor&                 rFunctor,
-                                             const std::shared_ptr<ExpressionNode>& rArg ) :
+                                             std::shared_ptr<ExpressionNode>  rArg ) :
                         maFunctor( rFunctor ),
-                        mpArg( rArg )
+                        mpArg(std::move( rArg ))
                     {
                     }
 
@@ -215,9 +216,9 @@ namespace slideshow::internal
 
             public:
                 UnaryFunctionFunctor( const Functor&                rFunctor,
-                                      const ParserContextSharedPtr& rContext ) :
+                                      ParserContextSharedPtr  rContext ) :
                     maFunctor( rFunctor ),
-                    mpContext( rContext )
+                    mpContext(std::move( rContext ))
                 {
                     ENSURE_OR_THROW( mpContext,
                                       "UnaryFunctionFunctor::UnaryFunctionFunctor(): Invalid context" );
@@ -289,9 +290,9 @@ namespace slideshow::internal
             {
             public:
                 BinaryFunctionFunctor( const Generator&                 rGenerator,
-                                       const ParserContextSharedPtr&    rContext ) :
+                                       ParserContextSharedPtr     rContext ) :
                     maGenerator( rGenerator ),
-                    mpContext( rContext )
+                    mpContext(std::move( rContext ))
                 {
                     ENSURE_OR_THROW( mpContext,
                                       "BinaryFunctionFunctor::BinaryFunctionFunctor(): Invalid context" );
@@ -403,8 +404,8 @@ namespace slideshow::internal
                     @param rParserContext
                     Contains context info for the parser
                  */
-                explicit ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
-                    mpParserContext( rParserContext )
+                explicit ExpressionGrammar( ParserContextSharedPtr  rParserContext ) :
+                    mpParserContext(std::move( rParserContext ))
                 {
                 }
 

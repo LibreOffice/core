@@ -63,8 +63,8 @@ private:
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const OUString &schemaName,
-        const OUString &tableName,
+        OUString schemaName,
+        OUString tableName,
         const css::uno::Sequence< OUString > &keyColumns,
         const css::uno::Sequence< OUString > &foreignColumnNames);
 

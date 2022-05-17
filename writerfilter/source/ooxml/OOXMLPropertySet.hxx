@@ -65,7 +65,7 @@ private:
     Type_t meType;
 
 public:
-    OOXMLProperty(Id id, const OOXMLValue::Pointer_t& pValue, Type_t eType);
+    OOXMLProperty(Id id, OOXMLValue::Pointer_t pValue, Type_t eType);
     OOXMLProperty(const OOXMLProperty& rSprm) = delete;
     virtual ~OOXMLProperty() override;
 
@@ -84,7 +84,7 @@ class OOXMLBinaryValue : public OOXMLValue
     mutable OOXMLBinaryObjectReference::Pointer_t mpBinaryObj;
 
 public:
-    explicit OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t const& pBinaryObj);
+    explicit OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t pBinaryObj);
     virtual ~OOXMLBinaryValue() override;
 
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() override;
@@ -123,7 +123,7 @@ class OOXMLStringValue : public OOXMLValue
     OUString mStr;
 
 public:
-    explicit OOXMLStringValue(const OUString& rStr);
+    explicit OOXMLStringValue(OUString rStr);
     virtual ~OOXMLStringValue() override;
 
     OOXMLStringValue(OOXMLStringValue const&) = default;
@@ -144,7 +144,7 @@ class OOXMLInputStreamValue : public OOXMLValue
     css::uno::Reference<css::io::XInputStream> mxInputStream;
 
 public:
-    explicit OOXMLInputStreamValue(css::uno::Reference<css::io::XInputStream> const& xInputStream);
+    explicit OOXMLInputStreamValue(css::uno::Reference<css::io::XInputStream> xInputStream);
     virtual ~OOXMLInputStreamValue() override;
 
     virtual css::uno::Any getAny() const override;
@@ -216,7 +216,7 @@ class OOXMLPropertySetValue : public OOXMLValue
     OOXMLPropertySet::Pointer_t mpPropertySet;
 
 public:
-    explicit OOXMLPropertySetValue(const OOXMLPropertySet::Pointer_t& pPropertySet);
+    explicit OOXMLPropertySetValue(OOXMLPropertySet::Pointer_t pPropertySet);
     virtual ~OOXMLPropertySetValue() override;
 
     OOXMLPropertySetValue(OOXMLPropertySetValue const&) = default;
@@ -339,7 +339,7 @@ class OOXMLShapeValue : public OOXMLValue
     css::uno::Reference<css::drawing::XShape> mrShape;
 
 public:
-    explicit OOXMLShapeValue(css::uno::Reference<css::drawing::XShape> const& rShape);
+    explicit OOXMLShapeValue(css::uno::Reference<css::drawing::XShape> rShape);
     virtual ~OOXMLShapeValue() override;
 
     virtual css::uno::Any getAny() const override;
@@ -354,7 +354,7 @@ class OOXMLStarMathValue : public OOXMLValue
     css::uno::Reference<css::embed::XEmbeddedObject> component;
 
 public:
-    explicit OOXMLStarMathValue(css::uno::Reference<css::embed::XEmbeddedObject> const& component);
+    explicit OOXMLStarMathValue(css::uno::Reference<css::embed::XEmbeddedObject> component);
     virtual ~OOXMLStarMathValue() override;
 
     virtual css::uno::Any getAny() const override;

@@ -195,7 +195,7 @@ class SwXAutoTextEntry final
     virtual ~SwXAutoTextEntry() override;    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
-    SwXAutoTextEntry(SwGlossaries* , const OUString& rGroupName, const OUString& rEntryName);
+    SwXAutoTextEntry(SwGlossaries* , OUString  rGroupName, OUString  rEntryName);
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 

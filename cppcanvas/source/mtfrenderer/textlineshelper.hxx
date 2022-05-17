@@ -53,7 +53,7 @@ class TextLinesHelper
     bool mbUnderlineWavelineBold;
 
 public:
-    TextLinesHelper(const CanvasSharedPtr& rCanvas, const OutDevState& rState);
+    TextLinesHelper(CanvasSharedPtr rCanvas, const OutDevState& rState);
 
     ::basegfx::B2DSize const& getOverallSize() const { return maOverallSize; }
 

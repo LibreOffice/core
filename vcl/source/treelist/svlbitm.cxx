@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
@@ -167,11 +168,11 @@ bool SvLBoxButtonData::IsRadio() const {
 // ***************************************************************
 
 
-SvLBoxString::SvLBoxString(const OUString& rStr)
+SvLBoxString::SvLBoxString(OUString  rStr)
     : mbEmphasized(false)
     , mbCustom(false)
     , mfAlign(0.0)
-    , maText(rStr)
+    , maText(std::move(rStr))
 {
 }
 

@@ -24,6 +24,7 @@
 
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
+#include <utility>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -56,8 +57,8 @@ namespace
 class lcl_MatchesChartType
 {
 public:
-    explicit lcl_MatchesChartType( const OUString & aChartTypeName ) :
-            m_aChartTypeName( aChartTypeName )
+    explicit lcl_MatchesChartType( OUString  aChartTypeName ) :
+            m_aChartTypeName(std::move( aChartTypeName ))
     {}
 
     bool operator () ( const Reference< chart2::XChartType > & xChartType ) const

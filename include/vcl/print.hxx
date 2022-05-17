@@ -29,6 +29,7 @@
 #include <i18nutil/paper.hxx>
 
 #include <vcl/dllapi.h>
+#include <utility>
 #include <vcl/PrinterSupport.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/outdev.hxx>
@@ -541,9 +542,9 @@ public:
         bool             mbInternalOnly;
         bool             mbEnabled;
 
-                         UIControlOptions( const OUString& i_rDependsOnName = OUString(),
+                         UIControlOptions( OUString  i_rDependsOnName = OUString(),
                              sal_Int32 i_nDependsOnEntry = -1, bool i_bAttachToDependency = false)
-                             : maDependsOnName( i_rDependsOnName )
+                             : maDependsOnName(std::move( i_rDependsOnName ))
                              , mnDependsOnEntry( i_nDependsOnEntry )
                              , mbAttachToDependency( i_bAttachToDependency )
                              , mbInternalOnly( false )

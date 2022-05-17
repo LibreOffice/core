@@ -36,6 +36,7 @@
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <utility>
 
 using namespace css;
 
@@ -63,10 +64,9 @@ protected:
     css::uno::Reference<css::uno::XInterface> mxObject;
 
 public:
-    DocumentModelTreeEntry(OUString const& rString,
-                           css::uno::Reference<css::uno::XInterface> const& xObject)
-        : maString(rString)
-        , mxObject(xObject)
+    DocumentModelTreeEntry(OUString rString, css::uno::Reference<css::uno::XInterface> xObject)
+        : maString(std::move(rString))
+        , mxObject(std::move(xObject))
     {
     }
 
@@ -701,9 +701,9 @@ public:
 
 DocumentModelTreeHandler::DocumentModelTreeHandler(
     std::unique_ptr<weld::TreeView>& pDocumentModelTree,
-    css::uno::Reference<css::uno::XInterface> const& xDocument)
+    css::uno::Reference<css::uno::XInterface> xDocument)
     : mpDocumentModelTree(pDocumentModelTree)
-    , mxDocument(xDocument)
+    , mxDocument(std::move(xDocument))
 {
     mpDocumentModelTree->connect_expanding(LINK(this, DocumentModelTreeHandler, ExpandingHandler));
 }

@@ -115,11 +115,11 @@ class ToolBarManager final : public ToolbarManager_Base
     public:
         ToolBarManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                         const css::uno::Reference< css::frame::XFrame >& rFrame,
-                        const OUString& rResourceName,
+                        OUString  rResourceName,
                         ToolBox* pToolBar );
         ToolBarManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                         const css::uno::Reference< css::frame::XFrame >& rFrame,
-                        const OUString& rResourceName,
+                        OUString  rResourceName,
                         weld::Toolbar* pToolBar,
                         weld::Builder* pBuilder );
         virtual ~ToolBarManager() override;

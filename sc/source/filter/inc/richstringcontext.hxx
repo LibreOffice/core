@@ -23,6 +23,8 @@
 #include "richstring.hxx"
 #include <osl/diagnose.h>
 
+#include <utility>
+
 namespace oox::xls {
 
 class RichStringContext : public WorkbookContextBase
@@ -44,7 +46,7 @@ private:
 template< typename ParentType >
 RichStringContext::RichStringContext( ParentType& rParent, RichStringRef xString ) :
     WorkbookContextBase( rParent ),
-    mxString( xString )
+    mxString(std::move( xString ))
 {
     mbEnableTrimSpace = false;
     OSL_ENSURE( mxString, "RichStringContext::RichStringContext - missing string object" );

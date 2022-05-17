@@ -21,6 +21,7 @@
 #include <rtl/ustring.hxx>
 #include "XMLTextFrameContext.hxx"
 #include "XMLTextFrameHyperlinkContext.hxx"
+#include <utility>
 #include <xmloff/XMLEventsImportContext.hxx>
 
 enum class XMLHintType
@@ -45,10 +46,10 @@ class XMLHint_Impl
 public:
 
     XMLHint_Impl( XMLHintType nTyp,
-                  const css::uno::Reference < css::text::XTextRange > & rS,
-                  const css::uno::Reference < css::text::XTextRange > & rE ) :
-        xStart( rS ),
-        xEnd( rE ),
+                  css::uno::Reference < css::text::XTextRange >  rS,
+                  css::uno::Reference < css::text::XTextRange >  rE ) :
+        xStart(std::move( rS )),
+        xEnd(std::move( rE )),
         nType( nTyp )
     {
     }
@@ -71,10 +72,10 @@ class XMLStyleHint_Impl : public XMLHint_Impl
 
 public:
 
-    XMLStyleHint_Impl( const OUString& rStyleName,
+    XMLStyleHint_Impl( OUString  rStyleName,
                          const css::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XMLHintType::XML_HINT_STYLE, rPos, rPos ),
-        sStyleName( rStyleName )
+        sStyleName(std::move( rStyleName ))
     {
     }
 
@@ -87,10 +88,10 @@ class XMLReferenceHint_Impl : public XMLHint_Impl
 
 public:
 
-    XMLReferenceHint_Impl( const OUString& rRefName,
+    XMLReferenceHint_Impl( OUString  rRefName,
                              const css::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XMLHintType::XML_HINT_REFERENCE, rPos, rPos ),
-        sRefName( rRefName )
+        sRefName(std::move( rRefName ))
     {
     }
 
@@ -141,20 +142,20 @@ class XMLIndexMarkHint_Impl : public XMLHint_Impl
 
 public:
 
-    XMLIndexMarkHint_Impl( const css::uno::Reference < css::beans::XPropertySet > & rPropSet,
+    XMLIndexMarkHint_Impl( css::uno::Reference < css::beans::XPropertySet >  rPropSet,
                            const css::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XMLHintType::XML_HINT_INDEX_MARK, rPos, rPos ),
-        xIndexMarkPropSet( rPropSet ),
+        xIndexMarkPropSet(std::move( rPropSet )),
         sID()
     {
     }
 
-    XMLIndexMarkHint_Impl( const css::uno::Reference < css::beans::XPropertySet > & rPropSet,
+    XMLIndexMarkHint_Impl( css::uno::Reference < css::beans::XPropertySet >  rPropSet,
                            const css::uno::Reference < css::text::XTextRange > & rPos,
-                           const OUString& sIDString) :
+                           OUString  sIDString) :
         XMLHint_Impl( XMLHintType::XML_HINT_INDEX_MARK, rPos, rPos ),
-        xIndexMarkPropSet( rPropSet ),
-        sID(sIDString)
+        xIndexMarkPropSet(std::move( rPropSet )),
+        sID(std::move(sIDString))
     {
     }
 

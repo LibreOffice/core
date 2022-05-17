@@ -55,6 +55,7 @@
 
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <utility>
 #include <vcl/cvtgrf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -76,8 +77,8 @@ namespace
 {
 struct lcl_PropNameEquals
 {
-    explicit lcl_PropNameEquals( const OUString & rStrToCompareWith ) :
-            m_aStr( rStrToCompareWith )
+    explicit lcl_PropNameEquals( OUString  rStrToCompareWith ) :
+            m_aStr(std::move( rStrToCompareWith ))
     {}
     bool operator() ( const beans::PropertyValue & rProp )
     {

@@ -35,6 +35,7 @@
 #include <QtGui/QFontDatabase>
 #include <QtGui/QFontInfo>
 #include <QtGui/QRawFont>
+#include <utility>
 
 using namespace vcl;
 
@@ -149,10 +150,9 @@ QtFontFace* QtFontFace::fromQFontDatabase(const QString& aFamily, const QString&
                           FontIdType::FontDB);
 }
 
-QtFontFace::QtFontFace(const FontAttributes& rFA, const QString& rFontID,
-                       const FontIdType eFontIdType)
+QtFontFace::QtFontFace(const FontAttributes& rFA, QString rFontID, const FontIdType eFontIdType)
     : PhysicalFontFace(rFA)
-    , m_aFontId(rFontID)
+    , m_aFontId(std::move(rFontID))
     , m_eFontIdType(eFontIdType)
     , m_bFontCapabilitiesRead(false)
 {

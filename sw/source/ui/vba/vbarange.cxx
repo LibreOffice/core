@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbarange.hxx"
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include <basic/sberrors.hxx>
 #include "vbarangehelper.hxx"
@@ -41,18 +42,18 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& rTextDocument, const uno::Reference< text::XTextRange >& rStart ) : SwVbaRange_BASE( rParent, rContext ), mxTextDocument( rTextDocument )
+SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument >  rTextDocument, const uno::Reference< text::XTextRange >& rStart ) : SwVbaRange_BASE( rParent, rContext ), mxTextDocument(std::move( rTextDocument ))
 {
     uno::Reference< text::XTextRange > xEnd;
     initialize( rStart, xEnd );
 }
 
-SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& rTextDocument, const uno::Reference< text::XTextRange >& rStart, const uno::Reference< text::XTextRange >& rEnd ) : SwVbaRange_BASE( rParent, rContext ), mxTextDocument( rTextDocument )
+SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument >  rTextDocument, const uno::Reference< text::XTextRange >& rStart, const uno::Reference< text::XTextRange >& rEnd ) : SwVbaRange_BASE( rParent, rContext ), mxTextDocument(std::move( rTextDocument ))
 {
     initialize( rStart, rEnd );
 }
 
-SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& rTextDocument, const uno::Reference< text::XTextRange >& rStart, const uno::Reference< text::XTextRange >& rEnd, const uno::Reference< text::XText >& rText ) : SwVbaRange_BASE( rParent, rContext ),mxTextDocument( rTextDocument ), mxText( rText )
+SwVbaRange::SwVbaRange( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument >  rTextDocument, const uno::Reference< text::XTextRange >& rStart, const uno::Reference< text::XTextRange >& rEnd, uno::Reference< text::XText >  rText ) : SwVbaRange_BASE( rParent, rContext ),mxTextDocument(std::move( rTextDocument )), mxText(std::move( rText ))
 {
     initialize( rStart, rEnd );
 }

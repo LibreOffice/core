@@ -33,6 +33,7 @@
 
 #include <map>
 #include <mutex>
+#include <utility>
 
 namespace tdoc_ucp {
 
@@ -47,10 +48,10 @@ namespace tdoc_ucp {
         StorageInfo() {}; // needed for STL map only.
 
         StorageInfo(
-            const OUString & rTitle,
-            const css::uno::Reference< css::embed::XStorage > & rxStorage,
-            const css::uno::Reference< css::frame::XModel > & rxModel )
-        : aTitle( rTitle ), xStorage( rxStorage ), xModel( rxModel ) {}
+            OUString  rTitle,
+            css::uno::Reference< css::embed::XStorage >  rxStorage,
+            css::uno::Reference< css::frame::XModel >  rxModel )
+        : aTitle(std::move( rTitle )), xStorage(std::move( rxStorage )), xModel(std::move( rxModel )) {}
     };
 
 

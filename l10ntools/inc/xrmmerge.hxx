@@ -99,7 +99,7 @@ private:
 public:
     XRMResExport(
         const OString &rOutputFile,
-        const OString &rFilePath
+        OString rFilePath
     );
     virtual ~XRMResExport() override;
 };
@@ -132,7 +132,7 @@ public:
     XRMResMerge(
         const OString &rMergeSource,
         const OString &rOutputFile,
-        const OString &rFilename
+        OString rFilename
     );
     virtual ~XRMResMerge() override;
 };

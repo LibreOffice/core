@@ -21,6 +21,8 @@
 
 #include <string.h>
 
+#include <utility>
+
 #include "../dom/document.hxx"
 #include "nodelist.hxx"
 
@@ -60,10 +62,10 @@ namespace XPath
     }
 
     CXPathObject::CXPathObject(
-            ::rtl::Reference<DOM::CDocument> const& pDocument,
+            ::rtl::Reference<DOM::CDocument>  pDocument,
             ::osl::Mutex & rMutex,
             std::shared_ptr<xmlXPathObject> const& pXPathObj)
-        : m_pDocument(pDocument)
+        : m_pDocument(std::move(pDocument))
         , m_rMutex(rMutex)
         , m_pXPathObj(pXPathObj)
         , m_XPathObjectType(lcl_GetType(pXPathObj.get()))

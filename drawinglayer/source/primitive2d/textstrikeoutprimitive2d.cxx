@@ -28,15 +28,16 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 
 
 namespace drawinglayer::primitive2d
 {
         BaseTextStrikeoutPrimitive2D::BaseTextStrikeoutPrimitive2D(
-            const basegfx::B2DHomMatrix& rObjectTransformation,
+            basegfx::B2DHomMatrix  rObjectTransformation,
             double fWidth,
             const basegfx::BColor& rFontColor)
-        :   maObjectTransformation(rObjectTransformation),
+        :   maObjectTransformation(std::move(rObjectTransformation)),
             mfWidth(fWidth),
             maFontColor(rFontColor)
         {
@@ -106,12 +107,12 @@ namespace drawinglayer::primitive2d
             double fWidth,
             const basegfx::BColor& rFontColor,
             sal_Unicode aStrikeoutChar,
-            const attribute::FontAttribute& rFontAttribute,
-            const css::lang::Locale& rLocale)
+            attribute::FontAttribute  rFontAttribute,
+            css::lang::Locale  rLocale)
         :   BaseTextStrikeoutPrimitive2D(rObjectTransformation, fWidth, rFontColor),
             maStrikeoutChar(aStrikeoutChar),
-            maFontAttribute(rFontAttribute),
-            maLocale(rLocale)
+            maFontAttribute(std::move(rFontAttribute)),
+            maLocale(std::move(rLocale))
         {
         }
 

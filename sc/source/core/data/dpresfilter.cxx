@@ -18,11 +18,12 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <limits>
+#include <utility>
 
 using namespace com::sun::star;
 
-ScDPResultFilter::ScDPResultFilter(const OUString& rDimName, bool bDataLayout) :
-    maDimName(rDimName), mbHasValue(false), mbDataLayout(bDataLayout) {}
+ScDPResultFilter::ScDPResultFilter(OUString  rDimName, bool bDataLayout) :
+    maDimName(std::move(rDimName)), mbHasValue(false), mbDataLayout(bDataLayout) {}
 
 ScDPResultFilterContext::ScDPResultFilterContext() :
     mnCol(0), mnRow(0) {}

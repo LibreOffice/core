@@ -93,7 +93,7 @@ namespace vcl
             }
         };
 
-        PrintDialog(weld::Window*, const std::shared_ptr<PrinterController>&);
+        PrintDialog(weld::Window*, std::shared_ptr<PrinterController> );
         virtual ~PrintDialog() override;
 
         bool isPrintToFile() const;

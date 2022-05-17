@@ -65,6 +65,7 @@
 #include <comphelper/xmltools.hxx>
 
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
+#include <utility>
 
 /**
     Implementation of the service com.sun.star.rdf.Repository.
@@ -183,15 +184,15 @@ public:
     struct URI : public Resource
     {
         OString const value;
-        explicit URI(OString const& i_rValue)
-            : value(i_rValue)
+        explicit URI(OString  i_rValue)
+            : value(std::move(i_rValue))
         { }
     };
     struct BlankNode : public Resource
     {
         OString const value;
-        explicit BlankNode(OString const& i_rValue)
-            : value(i_rValue)
+        explicit BlankNode(OString  i_rValue)
+            : value(std::move(i_rValue))
         { }
     };
     struct Literal : public Node
@@ -199,11 +200,11 @@ public:
         OString const value;
         OString const language;
         ::std::optional<OString> const type;
-        Literal(OString const& i_rValue, OString const& i_rLanguage,
-                ::std::optional<OString> const& i_rType)
-            : value(i_rValue)
-            , language(i_rLanguage)
-            , type(i_rType)
+        Literal(OString  i_rValue, OString  i_rLanguage,
+                ::std::optional<OString>  i_rType)
+            : value(std::move(i_rValue))
+            , language(std::move(i_rLanguage))
+            , type(std::move(i_rType))
         { }
     };
     struct Statement
@@ -211,19 +212,19 @@ public:
         std::shared_ptr<Resource> const pSubject;
         std::shared_ptr<URI> const pPredicate;
         std::shared_ptr<Node> const pObject;
-        Statement(std::shared_ptr<Resource> const& i_pSubject,
-                  std::shared_ptr<URI> const& i_pPredicate,
-                  std::shared_ptr<Node> const& i_pObject)
-            : pSubject(i_pSubject)
-            , pPredicate(i_pPredicate)
-            , pObject(i_pObject)
+        Statement(std::shared_ptr<Resource>  i_pSubject,
+                  std::shared_ptr<URI>  i_pPredicate,
+                  std::shared_ptr<Node>  i_pObject)
+            : pSubject(std::move(i_pSubject))
+            , pPredicate(std::move(i_pPredicate))
+            , pObject(std::move(i_pObject))
         { }
     };
 
     librdf_TypeConverter(
-            uno::Reference< uno::XComponentContext > const & i_xContext,
+            uno::Reference< uno::XComponentContext >  i_xContext,
             librdf_Repository &i_rRep)
-        : m_xContext(i_xContext)
+        : m_xContext(std::move(i_xContext))
         , m_rRep(i_rRep)
     { };
 
@@ -429,15 +430,15 @@ public:
 
     librdf_GraphResult(librdf_Repository *i_pRepository,
             std::mutex & i_rMutex,
-            std::shared_ptr<librdf_stream> const& i_pStream,
-            std::shared_ptr<librdf_node> const& i_pContext,
-            std::shared_ptr<librdf_query>  const& i_pQuery =
+            std::shared_ptr<librdf_stream>  i_pStream,
+            std::shared_ptr<librdf_node>  i_pContext,
+            std::shared_ptr<librdf_query>  i_pQuery =
                 std::shared_ptr<librdf_query>() )
         : m_xRep(i_pRepository)
         , m_rMutex(i_rMutex)
-        , m_pQuery(i_pQuery)
-        , m_pContext(i_pContext)
-        , m_pStream(i_pStream)
+        , m_pQuery(std::move(i_pQuery))
+        , m_pContext(std::move(i_pContext))
+        , m_pStream(std::move(i_pStream))
     { };
 
     virtual ~librdf_GraphResult() override
@@ -581,13 +582,13 @@ public:
 
     librdf_QuerySelectResult(librdf_Repository *i_pRepository,
             std::mutex & i_rMutex,
-            std::shared_ptr<librdf_query>  const& i_pQuery,
-            std::shared_ptr<librdf_query_results> const& i_pQueryResult,
+            std::shared_ptr<librdf_query>  i_pQuery,
+            std::shared_ptr<librdf_query_results>  i_pQueryResult,
             uno::Sequence< OUString > const& i_rBindingNames )
         : m_xRep(i_pRepository)
         , m_rMutex(i_rMutex)
-        , m_pQuery(i_pQuery)
-        , m_pQueryResult(i_pQueryResult)
+        , m_pQuery(std::move(i_pQuery))
+        , m_pQueryResult(std::move(i_pQueryResult))
         , m_BindingNames(i_rBindingNames)
     { };
 
@@ -695,10 +696,10 @@ class librdf_NamedGraph:
 {
 public:
     librdf_NamedGraph(librdf_Repository * i_pRep,
-            uno::Reference<rdf::XURI> const & i_xName)
+            uno::Reference<rdf::XURI>  i_xName)
         : m_wRep(i_pRep)
         , m_pRep(i_pRep)
-        , m_xName(i_xName)
+        , m_xName(std::move(i_xName))
     { };
 
     // css::rdf::XNode:

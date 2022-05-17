@@ -27,10 +27,10 @@ namespace oglcanvas
                        public TextLayoutBaseT
     {
     public:
-        TextLayout( const css::rendering::StringContext&              aText,
+        TextLayout( css::rendering::StringContext               aText,
                     sal_Int8                                          nDirection,
                     sal_Int64                                         nRandomSeed,
-                    const CanvasFont::ImplRef&                        rFont );
+                    CanvasFont::ImplRef                         rFont );
 
         /// make noncopyable
         TextLayout(const TextLayout&) = delete;

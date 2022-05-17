@@ -26,6 +26,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/ui/XStatusbarItem.hpp>
 #include <cppuhelper/queryinterface.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/status.hxx>
@@ -46,7 +47,7 @@ namespace svt
 StatusbarController::StatusbarController(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame,
-    const OUString& aCommandURL,
+    OUString  aCommandURL,
     unsigned short nID ) :
     OWeakObject()
     ,   m_bInitialized( false )
@@ -54,7 +55,7 @@ StatusbarController::StatusbarController(
     ,   m_nID( nID )
     ,   m_xFrame( xFrame )
     ,   m_xContext( rxContext )
-    ,   m_aCommandURL( aCommandURL )
+    ,   m_aCommandURL(std::move( aCommandURL ))
     ,   m_aListenerContainer( m_aMutex )
 {
 }

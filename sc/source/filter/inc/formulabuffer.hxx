@@ -11,6 +11,7 @@
 
 #include "workbookhelper.hxx"
 #include <mutex>
+#include <utility>
 #include <vector>
 
 namespace oox::xls {
@@ -29,7 +30,7 @@ public:
 
         SharedFormulaEntry(
             const ScAddress& rAddress,
-            const OUString& rTokenStr, sal_Int32 nSharedId );
+            OUString  rTokenStr, sal_Int32 nSharedId );
     };
 
     /**
@@ -44,21 +45,21 @@ public:
 
         SharedFormulaDesc(
             const ScAddress& rAddr, sal_Int32 nSharedId,
-            const OUString& rCellValue, sal_Int32 nValueType );
+            OUString  rCellValue, sal_Int32 nValueType );
     };
 
     struct TokenAddressItem
     {
         OUString maTokenStr;
         ScAddress maAddress;
-        TokenAddressItem( const OUString& rTokenStr, const ScAddress& rAddress ) : maTokenStr( rTokenStr ), maAddress( rAddress ) {}
+        TokenAddressItem( OUString  rTokenStr, const ScAddress& rAddress ) : maTokenStr(std::move( rTokenStr )), maAddress( rAddress ) {}
     };
 
     struct TokenRangeAddressItem
     {
         TokenAddressItem maTokenAndAddress;
         ScRange maRange;
-        TokenRangeAddressItem( const TokenAddressItem& rTokenAndAddress, const ScRange& rRange ) : maTokenAndAddress( rTokenAndAddress ), maRange( rRange ) {}
+        TokenRangeAddressItem( TokenAddressItem  rTokenAndAddress, const ScRange& rRange ) : maTokenAndAddress(std::move( rTokenAndAddress )), maRange( rRange ) {}
     };
 
     struct FormulaValue

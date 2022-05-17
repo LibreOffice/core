@@ -40,7 +40,7 @@ namespace drawinglayer::primitive2d
         public:
             SdrOle2Primitive2D(
                 Primitive2DContainer&& rOLEContent,
-                const basegfx::B2DHomMatrix& rTransform,
+                basegfx::B2DHomMatrix  rTransform,
                 const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute);
 
             // data access

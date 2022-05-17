@@ -11,6 +11,7 @@
 
 
 #include <functional>
+#include <utility>
 #include <vector>
 #include "kahan.hxx"
 
@@ -23,7 +24,7 @@ struct Op_
     const double mInitVal;
     const T maOp;
     Op_(double InitVal, T aOp):
-        mInitVal(InitVal), maOp(aOp)
+        mInitVal(InitVal), maOp(std::move(aOp))
     {
     }
     void operator()(tRes& rAccum, double fVal) const

@@ -18,6 +18,7 @@
  */
 
 #include "backingwindow.hxx"
+#include <utility>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -696,10 +697,10 @@ struct ImplDelayedDispatch
     Sequence< PropertyValue >   aArgs;
 
     ImplDelayedDispatch( const Reference< XDispatch >& i_xDispatch,
-                         const css::util::URL& i_rURL,
+                         css::util::URL  i_rURL,
                          const Sequence< PropertyValue >& i_rArgs )
     : xDispatch( i_xDispatch ),
-      aDispatchURL( i_rURL ),
+      aDispatchURL(std::move( i_rURL )),
       aArgs( i_rArgs )
     {
     }

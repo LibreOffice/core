@@ -67,6 +67,7 @@
 #include <string.h>
 #include <time.h>
 #include <memory>
+#include <utility>
 #include <vector>
 
 // Properties of the javavm can be put
@@ -470,9 +471,9 @@ private:
 }
 
 JavaVirtualMachine::JavaVirtualMachine(
-    css::uno::Reference< css::uno::XComponentContext > const & rContext):
+    css::uno::Reference< css::uno::XComponentContext >  rContext):
     WeakComponentImplHelper(m_aMutex),
-    m_xContext(rContext),
+    m_xContext(std::move(rContext)),
     m_bDisposed(false),
     m_pJavaVm(nullptr),
     m_aAttachGuards(destroyAttachGuards) // TODO check for validity

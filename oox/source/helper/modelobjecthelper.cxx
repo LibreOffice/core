@@ -28,6 +28,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <oox/helper/containerhelper.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 namespace oox {
@@ -37,9 +38,9 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxModelFactory, const OUString& rServiceName ) :
+ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxModelFactory, OUString  rServiceName ) :
     mxModelFactory( rxModelFactory ),
-    maServiceName( rServiceName ),
+    maServiceName(std::move( rServiceName )),
     mnIndex( 0 )
 {
     OSL_ENSURE( mxModelFactory.is(), "ObjectContainer::ObjectContainer - missing service factory" );

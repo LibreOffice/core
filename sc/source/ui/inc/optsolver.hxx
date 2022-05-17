@@ -69,10 +69,10 @@ class ScOptSolverSave
     css::uno::Sequence<css::beans::PropertyValue> maProperties;
 
 public:
-            ScOptSolverSave( const OUString& rObjective, bool bMax, bool bMin, bool bValue,
-                             const OUString& rTarget, const OUString& rVariable,
+            ScOptSolverSave( OUString  rObjective, bool bMax, bool bMin, bool bValue,
+                             OUString  rTarget, OUString  rVariable,
                              std::vector<ScOptConditionRow>&& rConditions,
-                             const OUString& rEngine,
+                             OUString  rEngine,
                              const css::uno::Sequence<css::beans::PropertyValue>& rProperties );
 
     const OUString&   GetObjective() const    { return maObjective; }

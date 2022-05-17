@@ -21,6 +21,7 @@
 #include <extended/AccessibleBrowseBoxTable.hxx>
 #include <extended/AccessibleBrowseBoxHeaderBar.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <utility>
 #include <vcl/accessibletableprovider.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -267,8 +268,8 @@ void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
 
 // = AccessibleBrowseBoxAccess
 
-AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::vcl::IAccessibleTableProvider& _rBrowseBox )
-        :m_xParent( _rxParent )
+AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( css::uno::Reference< css::accessibility::XAccessible >  _rxParent, ::vcl::IAccessibleTableProvider& _rBrowseBox )
+        :m_xParent(std::move( _rxParent ))
         ,m_rBrowseBox( _rBrowseBox )
 {
 }

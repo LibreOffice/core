@@ -41,7 +41,7 @@ public:
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
                             bool bApp,
-                            const OUString& rNewName);
+                            OUString  rNewName);
     virtual         ~ScUndoInsertTab() override;
 
     virtual void    Undo() override;
@@ -225,7 +225,7 @@ public:
                     ScUndoMakeScenario(
                             ScDocShell* pNewDocShell,
                             SCTAB nSrc, SCTAB nDest,
-                            const OUString& rN, const OUString& rC,
+                            OUString  rN, OUString  rC,
                             const Color& rCol, ScScenarioFlags nF,
                             const ScMarkData& rMark );
     virtual         ~ScUndoMakeScenario() override;
@@ -277,7 +277,7 @@ class ScUndoRemoveLink : public ScSimpleUndo
 public:
                     ScUndoRemoveLink(               // Call before delete!
                             ScDocShell* pShell,
-                            const OUString& rDoc );
+                            OUString  rDoc );
     virtual         ~ScUndoRemoveLink() override;
 
     virtual void    Undo() override;
@@ -398,8 +398,8 @@ class ScUndoScenarioFlags: public ScSimpleUndo
 public:
                     ScUndoScenarioFlags(
                             ScDocShell* pNewDocShell, SCTAB nT,
-                            const OUString& rON, const OUString& rNN,
-                            const OUString& rOC, const OUString& rNC,
+                            OUString  rON, OUString  rNN,
+                            OUString  rOC, OUString  rNC,
                             const Color& rOCol, const Color& rNCol,
                             ScScenarioFlags nOF, ScScenarioFlags nNF);
 
@@ -428,8 +428,8 @@ class ScUndoRenameObject: public ScSimpleUndo
 {
 public:
                     ScUndoRenameObject(
-                            ScDocShell* pNewDocShell, const OUString& rPN,
-                            const OUString& rON, const OUString& rNN );
+                            ScDocShell* pNewDocShell, OUString  rPN,
+                            OUString  rON, OUString  rNN );
 
     virtual         ~ScUndoRenameObject() override;
 

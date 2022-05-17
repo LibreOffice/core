@@ -28,7 +28,7 @@ class WrappedSeriesAreaOrLineProperty : public WrappedProperty
 {
 public:
     WrappedSeriesAreaOrLineProperty( const OUString& rOuterName
-        , const OUString& rInnerAreaTypeName, const OUString& rInnerLineTypeName
+        , OUString  rInnerAreaTypeName, OUString  rInnerLineTypeName
         , DataSeriesPointWrapper* pDataSeriesPointWrapper );
     virtual ~WrappedSeriesAreaOrLineProperty() override;
 

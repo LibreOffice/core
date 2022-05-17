@@ -20,6 +20,7 @@
 #pragma once
 
 #include <forms/property_handler.hxx>
+#include <utility>
 #include <xmloff/xmltoken.hxx>
 
 #include <vector>
@@ -78,13 +79,13 @@ namespace xmloff
         }
 
         PropertyDescription(
-            const OUString&              i_propertyName,
+            OUString               i_propertyName,
             const sal_uInt16                    i_namespacePrefix,
             const ::xmloff::token::XMLTokenEnum i_attributeToken,
             const PropertyHandlerFactory        i_factory,
             const PropertyId                    i_propertyId
         )
-            :propertyName( i_propertyName )
+            :propertyName(std::move( i_propertyName ))
             ,factory( i_factory )
             ,propertyId( i_propertyId )
             ,attribute( i_namespacePrefix, i_attributeToken )

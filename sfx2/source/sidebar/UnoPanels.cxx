@@ -17,6 +17,7 @@
 #include <com/sun/star/ui/XPanel.hpp>
 #include <sidebar/UnoPanel.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <algorithm>
@@ -24,8 +25,8 @@
 using namespace css;
 using namespace ::sfx2::sidebar;
 
-SfxUnoPanels::SfxUnoPanels(const uno::Reference<frame::XFrame>& rFrame, const OUString& deckId):
-xFrame(rFrame),
+SfxUnoPanels::SfxUnoPanels(uno::Reference<frame::XFrame>  rFrame, const OUString& deckId):
+xFrame(std::move(rFrame)),
 mDeckId(deckId)
 {
 }

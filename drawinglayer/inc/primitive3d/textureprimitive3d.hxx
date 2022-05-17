@@ -121,7 +121,7 @@ namespace drawinglayer::primitive3d
         public:
             /// constructor
             GradientTexturePrimitive3D(
-                const attribute::FillGradientAttribute& rGradient,
+                attribute::FillGradientAttribute  rGradient,
                 const Primitive3DContainer& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,

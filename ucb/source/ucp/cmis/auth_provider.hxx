@@ -20,6 +20,8 @@
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <cppuhelper/weakref.hxx>
+#include <utility>
+#include <utility>
 
 namespace cmis
 {
@@ -32,9 +34,9 @@ namespace cmis
 
         public:
             AuthProvider ( const css::uno::Reference< css::ucb::XCommandEnvironment>& xEnv,
-                           const OUString& sUrl,
-                           const OUString& sBindingUrl ):
-                m_xEnv( xEnv ), m_sUrl( sUrl ), m_sBindingUrl( sBindingUrl ) { }
+        OUString     OUString  sUrl,
+              OUString String  sBindingUrl ):
+                m_xEnv( xEnv ), std::move(m_sUrl)(std::move( sUrl std::move()), m_sBindin)gUrl(std::move( sBindingUrl )) { }
 
             bool authenticationQuery( std::string& username, std::string& password ) override;
 

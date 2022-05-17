@@ -32,6 +32,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <sot/exchange.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
@@ -90,8 +91,8 @@ class SfxFilterContainer_Impl
 public:
     OUString            aName;
 
-    explicit SfxFilterContainer_Impl( const OUString& rName )
-        : aName( rName )
+    explicit SfxFilterContainer_Impl( OUString  rName )
+        : aName(std::move( rName ))
     {
     }
 };
@@ -199,8 +200,8 @@ public:
 
     void InitForIterating() const;
     void Update() const;
-    explicit SfxFilterMatcher_Impl(const OUString &rName)
-        : aName(rName)
+    explicit SfxFilterMatcher_Impl(OUString rName)
+        : aName(std::move(rName))
         , pList(nullptr)
     {
     }

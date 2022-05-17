@@ -24,13 +24,14 @@
 
 #include <algorithm>
 #include <memory>
+#include <utility>
 
 namespace vcl::text
 {
 ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCharPos,
-                               SalLayoutFlags nFlags, const LanguageTag& rLanguageTag,
+                               SalLayoutFlags nFlags, LanguageTag rLanguageTag,
                                vcl::text::TextLayoutCache const* const pLayoutCache)
-    : maLanguageTag(rLanguageTag)
+    : maLanguageTag(std::move(rLanguageTag))
     , mnFlags(nFlags)
     , mrStr(rStr)
     , mnMinCharPos(nMinCharPos)

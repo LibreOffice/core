@@ -39,6 +39,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <memory>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -74,9 +75,9 @@ FileDialogFlags lcl_map_mode_to_flags(const sfx2::DocumentInserter::Mode mode)
 
 namespace sfx2 {
 
-DocumentInserter::DocumentInserter(weld::Window* pParent, const OUString& rFactory, const Mode mode)
+DocumentInserter::DocumentInserter(weld::Window* pParent, OUString  rFactory, const Mode mode)
     : m_pParent                 ( pParent )
-    , m_sDocFactory             ( rFactory )
+    , m_sDocFactory             (std::move( rFactory ))
     , m_nDlgFlags               ( lcl_map_mode_to_flags(mode) )
     , m_nError                  ( ERRCODE_NONE )
 {

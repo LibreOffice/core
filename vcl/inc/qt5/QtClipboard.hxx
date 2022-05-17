@@ -53,7 +53,7 @@ class QtClipboard final
     static bool isOwner(const QClipboard::Mode aMode);
     static bool isSupported(const QClipboard::Mode aMode);
 
-    explicit QtClipboard(const OUString& aModeString, const QClipboard::Mode aMode);
+    explicit QtClipboard(OUString aModeString, const QClipboard::Mode aMode);
 
 private Q_SLOTS:
     void handleChanged(QClipboard::Mode mode);

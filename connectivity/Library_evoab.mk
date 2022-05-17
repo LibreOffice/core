@@ -30,6 +30,7 @@ $(eval $(call gb_Library_use_libraries,evoab,\
 	comphelper \
 	cppu \
 	cppuhelper \
+	i18nlangtag \
 	svl \
 	tl \
 	utl \

@@ -30,14 +30,15 @@
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 
 #include <com/sun/star/ucb/CertificateValidationRequest.hpp>
+#include <utility>
 
 namespace comphelper{
 
 StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
-                                                     const css::uno::Reference< css::task::XInteractionHandler >& xAuxiliaryHandler)
+                                                     css::uno::Reference< css::task::XInteractionHandler >  xAuxiliaryHandler)
              : m_bUsed                    (false)
              , m_bHandledByMySelf         (false)
-             , m_xAuxiliaryHandler(xAuxiliaryHandler)
+             , m_xAuxiliaryHandler(std::move(xAuxiliaryHandler))
 {
     std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest > lInterceptions;
     lInterceptions.reserve(4);

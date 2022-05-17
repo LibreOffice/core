@@ -76,9 +76,9 @@ public:
 
         See accessor method descriptions for argument description
      */
-    SvtGraphicStroke( const tools::Polygon& rPath,
-                      const tools::PolyPolygon& rStartArrow,
-                      const tools::PolyPolygon& rEndArrow,
+    SvtGraphicStroke( tools::Polygon  rPath,
+                      tools::PolyPolygon  rStartArrow,
+                      tools::PolyPolygon  rEndArrow,
                       double                fTransparency,
                       double                fStrokeWidth,
                       CapType               aCap,
@@ -275,7 +275,7 @@ public:
 
         See accessor method descriptions for argument description
      */
-    SvtGraphicFill( const tools::PolyPolygon&  rPath,
+    SvtGraphicFill( tools::PolyPolygon   rPath,
                     Color               aFillColor,
                     double              fTransparency,
                     FillRule            aFillRule,
@@ -288,7 +288,7 @@ public:
                     Color               aGradient1stColor,      // TODO: vector of colors and offsets
                     Color               aGradient2ndColor,
                     sal_Int32           aGradientStepCount,     // numbers of steps to render the gradient. gradientStepsInfinite means infinitely many.
-                    const Graphic&      aFillGraphic );
+                    Graphic       aFillGraphic );
 
     // accessors
     /// Query path to fill

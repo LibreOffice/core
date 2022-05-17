@@ -42,6 +42,7 @@
 #include <o3tl/string_view.hxx>
 #include <ucbhelper/macros.hxx>
 #include <mutex>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace hierarchy_ucp;
@@ -88,8 +89,8 @@ class HierarchyDataAccess : public cppu::OWeakObject,
     bool m_bReadOnly;
 
 public:
-    HierarchyDataAccess( const uno::Reference<
-                                        uno::XInterface > & xConfigAccess,
+    HierarchyDataAccess( uno::Reference<
+                                        uno::XInterface >  xConfigAccess,
                          bool bReadOnly );
 
     // XInterface
@@ -184,8 +185,8 @@ using namespace hcp_impl;
 
 
 HierarchyDataSource::HierarchyDataSource(
-        const uno::Reference< uno::XComponentContext > & rxContext )
-: m_xContext( rxContext )
+        uno::Reference< uno::XComponentContext >  rxContext )
+: m_xContext(std::move( rxContext ))
 {
 }
 
@@ -483,10 +484,10 @@ css::uno::Reference<T> HierarchyDataAccess::ensureOrigInterface(css::uno::Refere
 }
 
 
-HierarchyDataAccess::HierarchyDataAccess( const uno::Reference<
-                                            uno::XInterface > & xConfigAccess,
+HierarchyDataAccess::HierarchyDataAccess( uno::Reference<
+                                            uno::XInterface >  xConfigAccess,
                                           bool bReadOnly )
-: m_xConfigAccess( xConfigAccess ),
+: m_xConfigAccess(std::move( xConfigAccess )),
   m_bReadOnly( bReadOnly )
 {
 }

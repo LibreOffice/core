@@ -25,6 +25,7 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
+#include <utility>
 
 namespace basctl
 {
@@ -32,7 +33,7 @@ namespace basctl
 using namespace ::com::sun::star;
 
 
-DlgEdFactory::DlgEdFactory( const css::uno::Reference< css::frame::XModel >& xModel ) : mxModel( xModel )
+DlgEdFactory::DlgEdFactory( css::uno::Reference< css::frame::XModel >  xModel ) : mxModel(std::move( xModel ))
 {
     SdrObjFactory::InsertMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }

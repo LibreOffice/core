@@ -27,6 +27,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/configitem.hxx>
+#include <utility>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -132,8 +133,8 @@ namespace svt
 
     public:
         AssignmentTransientData(
-            const OUString& _rDataSourceName,
-            const OUString& _rTableName,
+            OUString  _rDataSourceName,
+            OUString  _rTableName,
             const Sequence< AliasProgrammaticPair >& _rFields
         );
 
@@ -152,10 +153,10 @@ namespace svt
     }
 
     AssignmentTransientData::AssignmentTransientData(
-            const OUString& _rDataSourceName, const OUString& _rTableName,
+            OUString  _rDataSourceName, OUString  _rTableName,
             const Sequence< AliasProgrammaticPair >& _rFields )
-        :m_sDSName( _rDataSourceName )
-        ,m_sTableName( _rTableName )
+        :m_sDSName(std::move( _rDataSourceName ))
+        ,m_sTableName(std::move( _rTableName ))
     {
         // fill our aliases structure
         // first collect all known programmatic names

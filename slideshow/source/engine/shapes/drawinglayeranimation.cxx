@@ -24,6 +24,7 @@
 #include <canvas/elapsedtime.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
+#include <utility>
 #include <vcl/canvastools.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
@@ -122,7 +123,7 @@ class ActivityImpl : public Activity
 public:
     ActivityImpl(
         SlideShowContext const& rContext,
-        std::shared_ptr<WakeupEvent> const& pWakeupEvent,
+        std::shared_ptr<WakeupEvent>  pWakeupEvent,
         std::shared_ptr<DrawShape> const& pDrawShape );
 
     ActivityImpl(const ActivityImpl&) = delete;
@@ -708,10 +709,10 @@ bool ActivityImpl::perform()
 
 ActivityImpl::ActivityImpl(
     SlideShowContext const& rContext,
-    std::shared_ptr<WakeupEvent> const& pWakeupEvent,
+    std::shared_ptr<WakeupEvent>  pWakeupEvent,
     std::shared_ptr<DrawShape> const& pParentDrawShape )
     : maContext(rContext),
-      mpWakeupEvent(pWakeupEvent),
+      mpWakeupEvent(std::move(pWakeupEvent)),
       mpParentDrawShape(pParentDrawShape),
       mpListener( std::make_shared<IntrinsicAnimationListener>(*this) ),
       maTimer(rContext.mrEventQueue.getTimer()),

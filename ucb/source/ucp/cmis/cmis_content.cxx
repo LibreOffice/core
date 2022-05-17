@@ -56,6 +56,7 @@
 #include <ucbhelper/proxydecider.hxx>
 #include <ucbhelper/macros.hxx>
 #include <sax/tools/converter.hxx>
+#include <utility>
 
 #include "auth_provider.hxx"
 #include "certvalidation_handler.hxx"
@@ -261,11 +262,11 @@ namespace cmis
 {
     Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier,
-        libcmis::ObjectPtr const & pObject )
+        libcmis::ObjectPtr  pObject )
         : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),
         m_pSession( nullptr ),
-        m_pObject( pObject ),
+        m_pObject(std::move( pObject )),
         m_sURL( Identifier->getContentIdentifier( ) ),
         m_aURL( Identifier->getContentIdentifier( ) ),
         m_bTransient( false ),

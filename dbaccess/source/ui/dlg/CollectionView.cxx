@@ -26,6 +26,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <UITools.hxx>
@@ -57,10 +58,10 @@ using namespace comphelper;
 OCollectionView::OCollectionView(weld::Window* pParent,
                                  const Reference< XContent>& _xContent,
                                  const OUString& _sDefaultName,
-                                 const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
+                                 css::uno::Reference< css::uno::XComponentContext >  _rxContext)
     : GenericDialogController(pParent, "dbaccess/ui/collectionviewdialog.ui", "CollectionView")
     , m_xContent(_xContent)
-    , m_xContext(_rxContext)
+    , m_xContext(std::move(_rxContext))
     , m_bCreateForm(true)
     , m_xFTCurrentPath(m_xBuilder->weld_label("currentPathLabel"))
     , m_xNewFolder(m_xBuilder->weld_button("newFolderButton"))

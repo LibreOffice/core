@@ -23,6 +23,7 @@
 #include <math.h>
 #include <limits>
 #include <limits.h>
+#include <utility>
 #include <vector>
 
 #include <o3tl/any.hxx>
@@ -5720,7 +5721,7 @@ void SvxMSDffManager::RemoveFromShapeOrder( SdrObject const * pObject ) const
 //  exported class: Public Methods
 
 SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
-                                 const OUString& rBaseURL,
+                                 OUString  rBaseURL,
                                  sal_uInt32 nOffsDgg_,
                                  SvStream* pStData_,
                                  SdrModel* pSdrModel_,// see SetModel() below
@@ -5735,7 +5736,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we first check if the
      nGroupShapeFlags(ShapeFlag::NONE),     // ensure initialization here, as some corrupted
                                             // files may yield to this being uninitialized
-     maBaseURL( rBaseURL ),
+     maBaseURL(std::move( rBaseURL )),
      mnIdClusters(0),
      rStCtrl(  rStCtrl_  ),
      pStData(  pStData_  ),
@@ -5770,14 +5771,14 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
         pStData->Seek( nOldPosData );
 }
 
-SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
+SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, OUString  rBaseURL )
     :DffPropertyReader( *this ),
      m_pBLIPInfos( new SvxMSDffBLIPInfos ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      nOffsDgg( 0 ),
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we first have to check
      nGroupShapeFlags(ShapeFlag::NONE),
-     maBaseURL( rBaseURL ),
+     maBaseURL(std::move( rBaseURL )),
      mnIdClusters(0),
      rStCtrl(  rStCtrl_  ),
      pStData( nullptr ),

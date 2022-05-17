@@ -31,6 +31,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <utility>
 
 using namespace oox::core;
 using namespace ::com::sun::star;
@@ -40,9 +41,9 @@ using namespace ::com::sun::star::text;
 namespace oox::ppt {
 
 // CT_Shape
-PPTShapeContext::PPTShapeContext( ContextHandler2Helper const & rParent, const SlidePersistPtr& rSlidePersistPtr, const oox::drawingml::ShapePtr& pMasterShapePtr, const oox::drawingml::ShapePtr& pShapePtr )
+PPTShapeContext::PPTShapeContext( ContextHandler2Helper const & rParent, SlidePersistPtr  rSlidePersistPtr, const oox::drawingml::ShapePtr& pMasterShapePtr, const oox::drawingml::ShapePtr& pShapePtr )
 : oox::drawingml::ShapeContext( rParent, pMasterShapePtr, pShapePtr )
-, mpSlidePersistPtr( rSlidePersistPtr )
+, mpSlidePersistPtr(std::move( rSlidePersistPtr ))
 {
 }
 

@@ -24,6 +24,7 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <algorithm>
+#include <utility>
 #include <vector>
 
 #include <linguistic/misc.hxx>
@@ -167,10 +168,10 @@ SpellAlternatives::SpellAlternatives()
 
 
 SpellAlternatives::SpellAlternatives(
-        const OUString &rWord, LanguageType nLang,
+        OUString rWord, LanguageType nLang,
         const Sequence< OUString > &rAlternatives ) :
     aAlt        (rAlternatives),
-    aWord       (rWord),
+    aWord       (std::move(rWord)),
     nType       (SpellFailure::IS_NEGATIVE_WORD),
     nLanguage   (nLang)
 {

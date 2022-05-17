@@ -37,6 +37,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
@@ -57,7 +58,7 @@ struct FindWeakRef
 {
     const uno::Reference<deployment::XPackage> m_extension;
 
-    explicit FindWeakRef( uno::Reference<deployment::XPackage> const & ext): m_extension(ext) {}
+    explicit FindWeakRef( uno::Reference<deployment::XPackage>  ext): m_extension(std::move(ext)) {}
     bool operator () (uno::WeakReference< deployment::XPackage >  const & ref);
 };
 

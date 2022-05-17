@@ -23,6 +23,7 @@
 #include <string_view>
 
 #include <oox/core/relations.hxx>
+#include <utility>
 
 namespace oox::core {
 
@@ -55,8 +56,8 @@ OUString createOfficeDocRelationTypeStrict(std::u16string_view rType)
 
 }
 
-Relations::Relations( const OUString& rFragmentPath )
-    : maFragmentPath( rFragmentPath )
+Relations::Relations( OUString  rFragmentPath )
+    : maFragmentPath(std::move( rFragmentPath ))
 {
 }
 

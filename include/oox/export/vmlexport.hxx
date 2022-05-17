@@ -126,7 +126,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     sal_uInt64 m_nShapeIDCounter;
 
 public:
-                        VMLExport( ::sax_fastparser::FSHelperPtr const & pSerializer, VMLTextExport* pTextExport = nullptr);
+                        VMLExport( ::sax_fastparser::FSHelperPtr  pSerializer, VMLTextExport* pTextExport = nullptr);
     virtual             ~VMLExport() override;
 
     const ::sax_fastparser::FSHelperPtr&

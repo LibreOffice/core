@@ -21,6 +21,7 @@
 #include <framework/interaction.hxx>
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
 #include <com/sun/star/document/NoSuchFilterRequest.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -191,9 +192,9 @@ class InteractionRequest_Impl : public ::cppu::WeakImplHelper< css::task::XInter
     uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_lContinuations;
 
 public:
-    InteractionRequest_Impl( const css::uno::Any& aRequest,
+    InteractionRequest_Impl( css::uno::Any  aRequest,
         const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations )
-        : m_aRequest(aRequest), m_lContinuations(lContinuations)
+        : m_aRequest(std::move(aRequest)), m_lContinuations(lContinuations)
     {
     }
 

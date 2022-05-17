@@ -83,7 +83,7 @@ public:
     void SetParentPanel(sfx2::sidebar::Panel* pPanel);
 
 private:
-    SidebarPanelBase(const OUString& rsResourceURL, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    SidebarPanelBase(OUString  rsResourceURL, css::uno::Reference<css::frame::XFrame>  rxFrame,
                      std::unique_ptr<PanelLayout> xControl, const css::ui::LayoutSize& rLayoutSize);
     virtual ~SidebarPanelBase() override;
     SidebarPanelBase(const SidebarPanelBase&) = delete;

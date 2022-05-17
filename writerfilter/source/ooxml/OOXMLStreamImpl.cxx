@@ -23,6 +23,7 @@
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <comphelper/storagehelper.hxx>
+#include <utility>
 
 namespace writerfilter::ooxml
 {
@@ -31,9 +32,9 @@ using namespace com::sun::star;
 
 OOXMLStreamImpl::OOXMLStreamImpl
 (uno::Reference<uno::XComponentContext> const & xContext,
- uno::Reference<io::XInputStream> const & xStorageStream,
+ uno::Reference<io::XInputStream>  xStorageStream,
  StreamType_t nType, bool bRepairStorage)
-: mxContext(xContext), mxStorageStream(xStorageStream), mnStreamType(nType)
+: mxContext(xContext), mxStorageStream(std::move(xStorageStream)), mnStreamType(nType)
 {
     mxStorage.set
         (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream
@@ -57,12 +58,12 @@ OOXMLStreamImpl::OOXMLStreamImpl
 }
 
 OOXMLStreamImpl::OOXMLStreamImpl
-(OOXMLStreamImpl const & rOOXMLStream, const OUString & rId)
+(OOXMLStreamImpl const & rOOXMLStream, OUString  rId)
 : mxContext(rOOXMLStream.mxContext),
   mxStorageStream(rOOXMLStream.mxStorageStream),
   mxStorage(rOOXMLStream.mxStorage),
   mnStreamType(UNKNOWN),
-  msId(rId),
+  msId(std::move(rId)),
   msPath(rOOXMLStream.msPath)
 {
     mxRelationshipAccess.set(rOOXMLStream.mxDocumentStream, uno::UNO_QUERY_THROW);

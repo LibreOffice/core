@@ -30,6 +30,7 @@
 #include <com/sun/star/ucb/ResultSetException.hpp>
 #include <osl/diagnose.h>
 #include <ucbhelper/contentidentifier.hxx>
+#include <utility>
 
 #include "tdoc_datasupplier.hxx"
 #include "tdoc_content.hxx"
@@ -55,9 +56,9 @@ namespace {
 
 // DataSupplier Implementation.
 ResultSetDataSupplier::ResultSetDataSupplier(
-                const uno::Reference< uno::XComponentContext >& rxContext,
-                const rtl::Reference< Content >& rContent )
-: m_xContent( rContent ), m_xContext( rxContext ),
+                uno::Reference< uno::XComponentContext >  rxContext,
+                rtl::Reference< Content >  rContent )
+: m_xContent(std::move( rContent )), m_xContext(std::move( rxContext )),
   m_bCountFinal( false ), m_bThrowException( false )
 {
 }

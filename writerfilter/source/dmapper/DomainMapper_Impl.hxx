@@ -31,6 +31,7 @@
 #include <string_view>
 #include <o3tl/sorted_vector.hxx>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include <optional>
 
@@ -198,7 +199,7 @@ class FieldContext : public virtual SvRefBase
     std::vector<FieldParagraph> m_aParagraphsToFinish;
 
 public:
-    explicit FieldContext(css::uno::Reference<css::text::XTextRange> const& xStart);
+    explicit FieldContext(css::uno::Reference<css::text::XTextRange>  xStart);
     ~FieldContext() override;
 
     const css::uno::Reference<css::text::XTextRange>& GetStartRange() const { return m_xStartRange; }
@@ -264,7 +265,7 @@ struct TextAppendContext
      */
     std::vector<AnchoredObjectInfo> m_aAnchoredObjects;
 
-    inline TextAppendContext(const css::uno::Reference<css::text::XTextAppend>& xAppend, const css::uno::Reference<css::text::XTextCursor>& xCur);
+    inline TextAppendContext(css::uno::Reference<css::text::XTextAppend>  xAppend, const css::uno::Reference<css::text::XTextCursor>& xCur);
 };
 
 struct AnchoredContext
@@ -272,8 +273,8 @@ struct AnchoredContext
     css::uno::Reference<css::text::XTextContent> xTextContent;
     bool bToRemove;
 
-    explicit AnchoredContext(const css::uno::Reference<css::text::XTextContent>& xContent)
-        : xTextContent(xContent), bToRemove(false)
+    explicit AnchoredContext(css::uno::Reference<css::text::XTextContent>  xContent)
+        : xTextContent(std::move(xContent)), bToRemove(false)
     {
     }
 };
@@ -305,10 +306,10 @@ struct BookmarkInsertPosition
     bool                                                             m_bIsStartOfText;
     OUString                                                         m_sBookmarkName;
     css::uno::Reference<css::text::XTextRange> m_xTextRange;
-    BookmarkInsertPosition(bool bIsStartOfText, const OUString& rName, css::uno::Reference<css::text::XTextRange> const& xTextRange):
+    BookmarkInsertPosition(bool bIsStartOfText, OUString  rName, css::uno::Reference<css::text::XTextRange>  xTextRange):
         m_bIsStartOfText( bIsStartOfText ),
-        m_sBookmarkName( rName ),
-        m_xTextRange( xTextRange )
+        m_sBookmarkName(std::move( rName )),
+        m_xTextRange(std::move( xTextRange ))
      {}
 };
 
@@ -321,12 +322,12 @@ struct PermInsertPosition
 
     css::uno::Reference<css::text::XTextRange> m_xTextRange;
 
-    PermInsertPosition(bool bIsStartOfText, sal_Int32 id, const OUString& ed, const OUString& edGrp, css::uno::Reference<css::text::XTextRange> const& xTextRange)
+    PermInsertPosition(bool bIsStartOfText, sal_Int32 id, OUString  ed, OUString  edGrp, css::uno::Reference<css::text::XTextRange>  xTextRange)
         : m_bIsStartOfText(bIsStartOfText)
         , m_Id(id)
-        , m_Ed(ed)
-        , m_EdGrp(edGrp)
-        , m_xTextRange(xTextRange)
+        , m_Ed(std::move(ed))
+        , m_EdGrp(std::move(edGrp))
+        , m_xTextRange(std::move(xTextRange))
     {}
 
     OUString createBookmarkName() const
@@ -406,12 +407,12 @@ struct FloatingTableInfo
     /// Tables in footnotes and endnotes are always floating
     bool m_bConvertToFloatingInFootnote = false;
 
-    FloatingTableInfo(css::uno::Reference<css::text::XTextRange> const& xStart,
-            css::uno::Reference<css::text::XTextRange> const& xEnd,
+    FloatingTableInfo(css::uno::Reference<css::text::XTextRange>  xStart,
+            css::uno::Reference<css::text::XTextRange>  xEnd,
             const css::uno::Sequence<css::beans::PropertyValue>& aFrameProperties,
             sal_Int32 nTableWidth, sal_Int32 nTableWidthType, bool bConvertToFloatingInFootnote)
-        : m_xStart(xStart),
-        m_xEnd(xEnd),
+        : m_xStart(std::move(xStart)),
+        m_xEnd(std::move(xEnd)),
         m_aFrameProperties(aFrameProperties),
         m_nTableWidth(nTableWidth),
         m_nTableWidthType(nTableWidthType),
@@ -642,7 +643,7 @@ private:
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
-            css::uno::Reference < css::uno::XComponentContext > const& xContext,
+            css::uno::Reference < css::uno::XComponentContext >  xContext,
             css::uno::Reference< css::lang::XComponent > const& xModel,
             SourceDocumentType eDocumentType,
             utl::MediaDescriptor const & rMediaDesc);
@@ -1214,8 +1215,8 @@ private:
     std::unordered_map<OUString, CommentProperties> m_aCommentProps;
 };
 
-TextAppendContext::TextAppendContext(const css::uno::Reference<css::text::XTextAppend>& xAppend, const css::uno::Reference<css::text::XTextCursor>& xCur)
-    : xTextAppend(xAppend)
+TextAppendContext::TextAppendContext(css::uno::Reference<css::text::XTextAppend>  xAppend, const css::uno::Reference<css::text::XTextCursor>& xCur)
+    : xTextAppend(std::move(xAppend))
 {
     xCursor.set(xCur, css::uno::UNO_QUERY);
     xInsertPosition = xCursor;

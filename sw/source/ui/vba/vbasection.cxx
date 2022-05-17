@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbasection.hxx"
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include "vbapagesetup.hxx"
 #include "vbaheadersfooters.hxx"
@@ -24,8 +25,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaSection::SwVbaSection( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xProps ) :
-    SwVbaSection_BASE( rParent, rContext ), mxModel( xModel ), mxPageProps( xProps )
+SwVbaSection::SwVbaSection( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< frame::XModel >  xModel, uno::Reference< beans::XPropertySet >  xProps ) :
+    SwVbaSection_BASE( rParent, rContext ), mxModel(std::move( xModel )), mxPageProps(std::move( xProps ))
 {
 }
 

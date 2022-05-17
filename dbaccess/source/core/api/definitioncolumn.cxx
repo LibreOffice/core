@@ -30,6 +30,7 @@
 #include <comphelper/property.hxx>
 #include <connectivity/dbtools.hxx>
 #include <sal/log.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::sdbc;
@@ -156,9 +157,9 @@ OUString OTableColumn::getImplementationName(  )
 
 // OQueryColumn
 
-OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection, const OUString &i_sLabel )
+OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection, OUString i_sLabel )
     :OTableColumnDescriptor( false /* do not act as descriptor */ )
-    ,m_sLabel(i_sLabel)
+    ,m_sLabel(std::move(i_sLabel))
 {
     const sal_Int32 nPropAttr = PropertyAttribute::READONLY;
     registerProperty( PROPERTY_CATALOGNAME, PROPERTY_ID_CATALOGNAME, nPropAttr, &m_sCatalogName, cppu::UnoType<decltype(m_sCatalogName)>::get() );

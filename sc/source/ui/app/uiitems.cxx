@@ -25,18 +25,19 @@
 
 #include <osl/diagnose.h>
 #include <editeng/editobj.hxx>
+#include <utility>
 
 /**
  * Status update for entry field
  */
 ScInputStatusItem::ScInputStatusItem(
     sal_uInt16 nWhichP, const ScAddress& rCurPos, const ScAddress& rStartPos,
-    const ScAddress& rEndPos, const OUString& rString, const EditTextObject* pData ) :
+    const ScAddress& rEndPos, OUString  rString, const EditTextObject* pData ) :
     SfxPoolItem ( nWhichP ),
     aCursorPos  ( rCurPos ),
     aStartPos   ( rStartPos ),
     aEndPos     ( rEndPos ),
-    aString     ( rString ),
+    aString     (std::move( rString )),
     pEditData   ( pData ? pData->Clone() : nullptr ),
     mpMisspellRanges(nullptr)
 {

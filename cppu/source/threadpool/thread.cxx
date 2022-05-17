@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <uno/threadpool.h>
 #include <sal/log.hxx>
+#include <utility>
 
 #include "thread.hxx"
 #include "jobqueue.hxx"
@@ -90,13 +91,13 @@ namespace cppu_threadpool {
     }
 
 
-    ORequestThread::ORequestThread( ThreadPoolHolder const &aThreadPool,
+    ORequestThread::ORequestThread( ThreadPoolHolder aThreadPool,
                                     JobQueue *pQueue,
-                                    const ByteSequence &aThreadId,
+                                    ByteSequence aThreadId,
                                     bool bAsynchron )
-        : m_aThreadPool( aThreadPool )
+        : m_aThreadPool(std::move( aThreadPool ))
         , m_pQueue( pQueue )
-        , m_aThreadId( aThreadId )
+        , m_aThreadId(std::move( aThreadId ))
         , m_bAsynchron( bAsynchron )
     {}
 

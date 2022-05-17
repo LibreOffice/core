@@ -79,6 +79,7 @@
 #include <comphelper/multiinterfacecontainer3.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
+#include <utility>
 #include <vcl/evntpost.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -448,7 +449,7 @@ private:
 
 public:
 
-    explicit AutoRecovery(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit AutoRecovery(css::uno::Reference< css::uno::XComponentContext >  xContext);
     virtual ~AutoRecovery(                                                                   ) override;
 
     virtual OUString SAL_CALL getImplementationName() override
@@ -1207,10 +1208,10 @@ void DispatchParams::forget()
     m_xHoldRefForAsyncOpAlive.clear();
 };
 
-AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+AutoRecovery::AutoRecovery(css::uno::Reference< css::uno::XComponentContext >  xContext)
     : AutoRecovery_BASE         (m_aMutex)
     , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
-    , m_xContext                (xContext                                           )
+    , m_xContext                (std::move(xContext                                           ))
     , m_bListenForDocEvents     (false                                          )
     , m_bListenForConfigChanges (false                                          )
     , m_nAutoSaveTimeIntervall  (0                                                  )

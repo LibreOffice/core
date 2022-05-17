@@ -37,6 +37,7 @@
 
 #include <com/sun/star/bridge/UnoUrlResolver.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
+#include <utility>
 
 #include "macro_expander.hxx"
 
@@ -55,8 +56,8 @@ BootstrapException::BootstrapException()
 {
 }
 
-BootstrapException::BootstrapException( const OUString & rMessage )
-    :m_aMessage( rMessage )
+BootstrapException::BootstrapException( OUString  rMessage )
+    :m_aMessage(std::move( rMessage ))
 {
 }
 

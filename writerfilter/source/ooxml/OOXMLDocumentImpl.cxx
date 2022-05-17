@@ -42,6 +42,7 @@
 
 #include <iostream>
 #include <sfx2/objsh.hxx>
+#include <utility>
 
 // this extern variable is declared in OOXMLStreamImpl.hxx
 OUString customTarget;
@@ -50,9 +51,9 @@ using namespace ::com::sun::star;
 namespace writerfilter::ooxml
 {
 
-OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
-    : mpStream(pStream)
-    , mxStatusIndicator(xStatusIndicator)
+OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t  pStream, uno::Reference<task::XStatusIndicator>  xStatusIndicator, bool bSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
+    : mpStream(std::move(pStream))
+    , mxStatusIndicator(std::move(xStatusIndicator))
     , mnXNoteId(0)
     , mbIsSubstream(false)
     , mbSkipImages(bSkipImages)
@@ -416,8 +417,8 @@ namespace {
 // Ensures that the indicator is reset after exiting OOXMLDocumentImpl::resolve
 class StatusIndicatorGuard{
 public:
-    explicit StatusIndicatorGuard(css::uno::Reference<css::task::XStatusIndicator> const & xStatusIndicator)
-        :mxStatusIndicator(xStatusIndicator)
+    explicit StatusIndicatorGuard(css::uno::Reference<css::task::XStatusIndicator>  xStatusIndicator)
+        :mxStatusIndicator(std::move(xStatusIndicator))
     {
     }
 

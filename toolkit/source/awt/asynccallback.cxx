@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -51,8 +52,8 @@ private:
 
     struct CallbackData
     {
-        CallbackData( const css::uno::Reference< css::awt::XCallback >& rCallback, const css::uno::Any& rAny ) :
-            xCallback( rCallback ), aData( rAny ) {}
+        CallbackData( css::uno::Reference< css::awt::XCallback >  rCallback, css::uno::Any  rAny ) :
+            xCallback(std::move( rCallback )), aData(std::move( rAny )) {}
 
         css::uno::Reference< css::awt::XCallback > xCallback;
         css::uno::Any                              aData;

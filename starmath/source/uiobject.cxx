@@ -10,11 +10,12 @@
 #include <memory>
 #include "uiobject.hxx"
 #include <ElementsDockingWindow.hxx>
+#include <utility>
 
 ElementUIObject::ElementUIObject(SmElementsControl* pElementSelector,
-        const OUString& rID):
+        OUString  rID):
     mpElementsSelector(pElementSelector),
-    maID(rID)
+    maID(std::move(rID))
 {
 }
 
