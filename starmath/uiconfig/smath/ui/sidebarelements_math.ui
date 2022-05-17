@@ -6,6 +6,8 @@
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkPaned" id="MathElementsPanel">
@@ -41,7 +43,7 @@
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext1"/>
                   <attributes>
-                    <attribute name="text">1</attribute>
+                    <attribute name="text">0</attribute>
                   </attributes>
                 </child>
               </object>
