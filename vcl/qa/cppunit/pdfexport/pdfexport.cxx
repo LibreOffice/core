@@ -855,6 +855,45 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
+{
+    vcl::filter::PDFDocument aDocument;
+    load(u"tdf105972.fodt", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnnots->GetElements().size());
+
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("FT"));
+        if (pType && pType->GetValue() == "Tx")
+        {
+            auto pT = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pObject->Lookup("T"));
+            CPPUNIT_ASSERT(pT);
+            CPPUNIT_ASSERT_EQUAL(OString("CurrencyField"), pT->GetValue());
+
+            auto pAA = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("AA"));
+            CPPUNIT_ASSERT(pAA);
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pAA->GetItems().size());
+
+            auto pF = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAA->LookupElement("F"));
+            CPPUNIT_ASSERT(pF);
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pF->GetItems().size());
+            auto pJS = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pF->LookupElement("JS"));
+            CPPUNIT_ASSERT_EQUAL(OString("AFNumber_Format\\(4, 0, 0, 0, \"\\\\u20ac\",true\\);"),
+                                 pJS->GetValue());
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
 {
     vcl::filter::PDFDocument aDocument;

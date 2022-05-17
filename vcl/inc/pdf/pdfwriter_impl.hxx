@@ -468,6 +468,9 @@ struct PDFWidget : public PDFAnnotation
     sal_Int32                   m_nTabOrder; // lowest number gets first in tab order
     sal_Int32                   m_nRadioGroup;
     sal_Int32                   m_nMaxLen;
+    PDFWriter::FormatType       m_nFormat;
+    OUString                    m_aCurrencySymbol;
+    sal_Int32                   m_nDecimalAccuracy;
     bool                        m_bSubmit;
     bool                        m_bSubmitGet;
     sal_Int32                   m_nDest;

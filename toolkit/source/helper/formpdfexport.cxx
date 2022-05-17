@@ -491,6 +491,33 @@ namespace toolkitform
                         nMaxTextLength = 0;
                     pEditWidget->MaxLen = nMaxTextLength;
                 }
+
+                switch ( nControlType )
+                {
+                    case FormComponentType::CURRENCYFIELD:
+                    case FormComponentType::NUMERICFIELD:
+
+                        pEditWidget->Format = vcl::PDFWriter::Number;
+
+                        static constexpr OUStringLiteral FM_PROP_CURRENCYSYMBOL = u"CurrencySymbol";
+                        if ( xPSI->hasPropertyByName( FM_PROP_CURRENCYSYMBOL ) )
+                        {
+                            OUString sCurrencySymbol;
+                            if( ! (xModelProps->getPropertyValue( FM_PROP_CURRENCYSYMBOL ) >>= sCurrencySymbol) )
+                                SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_CURRENCYSYMBOL);
+                            pEditWidget->CurrencySymbol = sCurrencySymbol;
+                        }
+
+                        static constexpr OUStringLiteral FM_PROP_DECIMALACCURACY = u"DecimalAccuracy";
+                        if ( xPSI->hasPropertyByName( FM_PROP_DECIMALACCURACY ) )
+                        {
+                            sal_Int32 nDecimalAccuracy = 0;
+                            if( ! (xModelProps->getPropertyValue( FM_PROP_DECIMALACCURACY ) >>= nDecimalAccuracy) )
+                                SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_DECIMALACCURACY);
+                            pEditWidget->DecimalAccuracy = nDecimalAccuracy;
+                        }
+                        break;
+                }
             }
 
 
