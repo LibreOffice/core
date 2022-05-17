@@ -87,6 +87,29 @@
       "parentUuid": "c53b3f2a_43c0e695",
       "revId": "61f4250ee9f43902107e4d2e6322cbf54f52dd8e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e1caa91_02f8e2c9",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 3446,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-17T12:12:04Z",
+      "side": 1,
+      "message": "See the commit message of \u003chttps://gerrit.libreoffice.org/c/core/+/134474\u003e \"At least make CppunitTest_sc_text_functions_test more resilient to ICU version\":  \"61f4250ee9f43902107e4d2e6322cbf54f52dd8e \u0027Make CLEAN fully compliant woth ODFF v1.3\u0027 has changed lcl_ScInterpreter_IsPrintable (sc/source/core/tool/interpr1.cxx) to use ICU\u0027s u_isdefined to check for Unicode code points of category Cn (i.e., noncharacter or reserved).  This is at least questionable, as assignment of code points to that category varies with Unicode versions.  And while \u003chttps://docs.oasis-open.org/office/OpenDocument/v1.3/os/part4-formula/OpenDocument-v1.3-os-part4-formula.html#__RefHeading__1017856_715980110\u003e \u0027Open Document Format for Office Applications (OpenDocument) Version 1.3. Part 4: Recalculated Formula (OpenFormula) Format: 1.4 Normative References\u0027 references \u0027The Unicode Standard, Version 5.2.0\u0027 (so one might expect CLEAN to use the category classification from that old Unicode version), versions of ICU keep being updated with current Unicode versions\u0027 category classifications.  For example, the currently bundled external/icu\u0027s icu4c-70_1-src.tgz uses Unicode 14 (according to \u003chttps://icu.unicode.org/download/70#h.x1orhyniml8k\u003e) for its implementation of u_isdefined.  And for --with-system-icu, all that configure.ac apparently requires is that \u0027icu-i18n \u003e\u003d 4.6\u0027 (i.e., it will potentially allow the behavior of u_isdefined to vary over a wide range of Unicode versions).\"\n\nCan somebody knowledgeable about the ODF standard clarify what the behavior of CLEAN should be?  Should it follow some specific version of the Unicode standard (5.2 maybe), or shall its behavior vary depending on which Unicode version happens to be used by some ODF-conforming software?",
+      "range": {
+        "startLine": 3446,
+        "startChar": 16,
+        "endLine": 3446,
+        "endChar": 27
+      },
+      "revId": "61f4250ee9f43902107e4d2e6322cbf54f52dd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
