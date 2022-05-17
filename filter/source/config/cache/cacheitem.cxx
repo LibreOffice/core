@@ -40,13 +40,7 @@ CacheItem::CacheItem()
 void CacheItem::update(const CacheItem& rUpdateItem)
 {
     for (auto const& elem : rUpdateItem)
-    {
-        iterator pItThis = find(elem.first);
-        if (pItThis == end())
-            (*this)[elem.first] = elem.second; // add new prop
-        else
-            pItThis->second = elem.second; // change value of existing prop
-    }
+       (*this)[elem.first] = elem.second;
 }
 
 
