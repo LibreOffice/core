@@ -27,11 +27,12 @@
 
 #include <sstream>
 #include <string_view>
+#include <utility>
 
 namespace {
 
 struct CheckFailed {
-    explicit CheckFailed(OUString const & theMessage): message(theMessage)
+    explicit CheckFailed(OUString theMessage): message(std::move(theMessage))
     {}
 
     OUString message;

@@ -24,6 +24,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <utility>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wmfexternal.hxx>
@@ -50,7 +51,7 @@ namespace emfio::emfreader
 
         public:
             explicit XEmfParser(
-                uno::Reference< uno::XComponentContext > const & context);
+                uno::Reference< uno::XComponentContext > context);
             XEmfParser(const XEmfParser&) = delete;
             XEmfParser& operator=(const XEmfParser&) = delete;
 
@@ -70,8 +71,8 @@ namespace emfio::emfreader
         }
 
         XEmfParser::XEmfParser(
-            uno::Reference< uno::XComponentContext > const & context):
-            context_(context)
+            uno::Reference< uno::XComponentContext > context):
+            context_(std::move(context))
         {
         }
 

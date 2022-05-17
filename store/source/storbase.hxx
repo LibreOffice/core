@@ -319,8 +319,8 @@ struct PageData
 
     class Deallocate {
     public:
-        explicit Deallocate(rtl::Reference<Allocator> const & allocator):
-            allocator_(allocator) {};
+        explicit Deallocate(rtl::Reference<Allocator> allocator):
+            allocator_(std::move(allocator)) {};
 
         void operator ()(void * page) const { allocator_->deallocate(page); }
 
@@ -425,8 +425,8 @@ public:
         return bool(m_xPage);
     }
 
-    explicit PageHolderObject (std::shared_ptr<PageData> const & rxPage = std::shared_ptr<PageData>())
-        : m_xPage (rxPage)
+    explicit PageHolderObject (std::shared_ptr<PageData> xPage = std::shared_ptr<PageData>())
+        : m_xPage (std::move(xPage))
     {}
 
     void swap (PageHolderObject<T> & rhs)
@@ -547,8 +547,8 @@ protected:
 
     /** Construction.
      */
-    explicit OStorePageObject (std::shared_ptr<PageData> const & rxPage)
-        : m_xPage (rxPage), m_bDirty (false)
+    explicit OStorePageObject (std::shared_ptr<PageData>  rxPage)
+        : m_xPage (std::move(rxPage)), m_bDirty (false)
     {}
 
     /** Destruction.
