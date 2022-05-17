@@ -7420,7 +7420,7 @@ AC_SUBST([HAVE_LIBSTDCPP])
 AC_SUBST([HAVE_LIBCPP])
 
 HAVE_LIBCPP_DEBUG=
-if test -n "$HAVE_LIBCPP" -a -n "$ENABLE_DBGUTIL"; then
+if test -z "$CROSS_COMPILING" -a -n "$HAVE_LIBCPP" -a -n "$ENABLE_DBGUTIL"; then
     # Libc++ supports debug mode only if built for it, Mac libc++ isn't,
     # and there would be undefined references to debug functions.
     # Moreover std::to_string() has a bug (https://reviews.llvm.org/D125184).
