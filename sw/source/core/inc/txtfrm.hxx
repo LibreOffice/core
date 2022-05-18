@@ -30,6 +30,7 @@ namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
 namespace sw::mark { class IMark; }
 class SwCharRange;
+class SwInsText;
 class SwTextNode;
 class SwTextAttrEnd;
 class SwTextFormatter;
@@ -145,6 +146,8 @@ bool IsMarkHintHidden(SwRootFrame const& rLayout,
         SwTextNode const& rNode, SwTextAttrEnd const& rHint);
 
 void RecreateStartTextFrames(SwTextNode & rNode);
+
+auto MakeSwInsText(SwTextNode & rNode, sal_Int32 nPos, sal_Int32 nLen) -> SwInsText;
 
 /**
  * Decides if rTextNode has a numbering which has layout-level values (e.g. Arabic, but not

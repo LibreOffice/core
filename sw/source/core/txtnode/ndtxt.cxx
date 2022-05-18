@@ -2330,7 +2330,7 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
 
     if ( HasWriterListeners() )
     {   // send this before messing with hints, which will send RES_UPDATE_ATTR
-        SwInsText aHint( aPos, nLen );
+        SwInsText const aHint(sw::MakeSwInsText(*this, aPos, nLen));
         CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
     }
 
@@ -2538,7 +2538,8 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
 
     // notify frames - before moving hints, because footnotes
     // want to find their anchor text frame in the follow chain
-    SwInsText aInsHint(nDestStart, nLen);
+    // (also ignore fieldmarks, the caller will recreate frames)
+    SwInsText const aInsHint(nDestStart, nLen, false, false);
     pDest->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, &aInsHint));
     const sw::MoveText aMoveHint(pDest, nDestStart, nTextStartIdx, nLen);
     CallSwClientNotify(aMoveHint);
@@ -3781,7 +3782,7 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
 
     if (sInserted.getLength())
     {
-        SwInsText aHint( nStartPos, sInserted.getLength() );
+        SwInsText const aHint(sw::MakeSwInsText(*this, nStartPos, sInserted.getLength()));
         CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
     }
 }

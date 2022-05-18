@@ -2020,7 +2020,7 @@ void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
     SwDelText aDelHint( nPos, nTLen );
     CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aDelHint));
 
-    SwInsText aHint( nPos, nTLen );
+    SwInsText const aHint(sw::MakeSwInsText(*this, nPos, nTLen));
     CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
 }
 

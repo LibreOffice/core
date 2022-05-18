@@ -2148,28 +2148,44 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             sal_Int32 const nNPos = static_cast<const SwInsText*>(pNew)->nPos;
             sal_Int32 const nNLen = static_cast<const SwInsText*>(pNew)->nLen;
             nPos = MapModelToView(&rNode, nNPos);
-            nLen = TextFrameIndex(nNLen);
-            if (m_pMergedPara)
+            // unlike redlines, inserting into fieldmark must be explicitly handled
+            bool isHidden(false);
+            switch (getRootFrame()->GetFieldmarkMode())
             {
-                UpdateMergedParaForInsert(*m_pMergedPara, true, rNode, nNPos, nNLen);
+                case sw::FieldmarkMode::ShowCommand:
+                    isHidden = static_cast<const SwInsText*>(pNew)->isInsideFieldmarkResult;
+                break;
+                case sw::FieldmarkMode::ShowResult:
+                    isHidden = static_cast<const SwInsText*>(pNew)->isInsideFieldmarkCommand;
+                break;
+                case sw::FieldmarkMode::ShowBoth: // just to avoid the warning
+                break;
             }
-            if( IsIdxInside( nPos, nLen ) )
+            if (!isHidden)
             {
-                if( !nLen )
+                nLen = TextFrameIndex(nNLen);
+                if (m_pMergedPara)
                 {
-                    // Refresh NumPortions even when line is empty!
-                    if( nPos )
-                        InvalidateSize();
-                    else
-                        Prepare();
+                    UpdateMergedParaForInsert(*m_pMergedPara, true, rNode, nNPos, nNLen);
                 }
-                else
-                    InvalidateRange_( SwCharRange( nPos, nLen ), nNLen );
+                if( IsIdxInside( nPos, nLen ) )
+                {
+                    if( !nLen )
+                    {
+                        // Refresh NumPortions even when line is empty!
+                        if( nPos )
+                            InvalidateSize();
+                        else
+                            Prepare();
+                    }
+                    else
+                        InvalidateRange_( SwCharRange( nPos, nLen ), nNLen );
+                }
+                lcl_SetScriptInval( *this, nPos );
+                bSetFieldsDirty = true;
+                lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator+<sal_Int32, Tag_TextFrameIndex>);
             }
             lcl_SetWrong( *this, rNode, nNPos, nNLen, true );
-            lcl_SetScriptInval( *this, nPos );
-            bSetFieldsDirty = true;
-            lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator+<sal_Int32, Tag_TextFrameIndex>);
         }
         break;
         case RES_DEL_CHR:
