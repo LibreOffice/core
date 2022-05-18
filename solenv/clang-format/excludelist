@@ -10319,7 +10319,6 @@ setup_native/source/win32/customactions/shellextensions/migrateinstallpath.cxx
 setup_native/source/win32/customactions/shellextensions/shlxtmsi.hxx
 setup_native/source/win32/customactions/shellextensions/startmenuicon.cxx
 setup_native/source/win32/customactions/shellextensions/upgrade.cxx
-setup_native/source/win32/customactions/shellextensions/vistaspecial.cxx
 setup_native/source/win32/customactions/tools/checkversion.cxx
 setup_native/source/win32/customactions/tools/seterror.cxx
 setup_native/source/win32/customactions/tools/seterror.hxx
