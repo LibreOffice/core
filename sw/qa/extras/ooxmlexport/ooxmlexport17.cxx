@@ -745,7 +745,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148455_2, "tdf148455_2.docx")
     // Ensure we have empty lvlOverride for levels 0 - 1
     getXPath(pNumberingDoc, "/w:numbering/w:num[@w:numId='" + OString::number(nListId) +"']/w:lvlOverride[@w:ilvl='0']", "");
     getXPath(pNumberingDoc, "/w:numbering/w:num[@w:numId='" + OString::number(nListId) +"']/w:lvlOverride[@w:ilvl='1']", "");
-    // And normal overrride for level 2
+    // And normal override for level 2
     getXPath(pNumberingDoc, "/w:numbering/w:num[@w:numId='" + OString::number(nListId) +"']/w:lvlOverride[@w:ilvl='2']/w:startOverride", "val");
 }
 
