@@ -53,8 +53,8 @@ SvXMLNamespaceMap::SvXMLNamespaceMap()
 : sXMLNS( GetXMLToken ( XML_XMLNS ) )
 {
     // approx worst-case size
-    aNameHash.reserve(20);
-    aNameMap.reserve(20);
+    aNameHash.reserve(30);
+    aNameMap.reserve(30);
 }
 
 SvXMLNamespaceMap::SvXMLNamespaceMap( const SvXMLNamespaceMap& rMap )
