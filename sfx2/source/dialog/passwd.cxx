@@ -111,6 +111,8 @@ SfxPasswordDialog::SfxPasswordDialog(weld::Widget* pParent, const OUString* pGro
     Link<OUString&,bool> aLink2 = LINK(this, SfxPasswordDialog, InsertTextHdl);
     m_xPassword1ED->connect_insert_text(aLink2);
     m_xPassword2ED->connect_insert_text(aLink2);
+    m_xConfirm1ED->connect_insert_text(aLink2);
+    m_xConfirm2ED->connect_insert_text(aLink2);
     m_xOKBtn->connect_clicked(LINK(this, SfxPasswordDialog, OKHdl));
 
     if (pGroupText)
