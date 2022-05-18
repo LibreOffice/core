@@ -314,8 +314,7 @@ public:
     ErrCode             ImportGraphic( Graphic& rGraphic, std::u16string_view rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                   sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
-                                   WmfExternal const *pExtHeader = nullptr );
+                                   sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE );
 
     /// Imports multiple graphics.
     ///
@@ -353,10 +352,9 @@ public:
     static ErrCode readXBM(SvStream & rStream, Graphic & rGraphic);
     static ErrCode readXPM(SvStream & rStream, Graphic & rGraphic);
 
-    static ErrCode readWMF_EMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
-                        WmfExternal const* pExtHeader, VectorGraphicDataType eType);
-    static ErrCode readWMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, WmfExternal const* pExtHeader);
-    static ErrCode readEMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, WmfExternal const* pExtHeader);
+    static ErrCode readWMF_EMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, VectorGraphicDataType eType);
+    static ErrCode readWMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
+    static ErrCode readEMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
 
     static ErrCode readPDF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
     static ErrCode readTIFF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
