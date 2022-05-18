@@ -866,8 +866,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 
     auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
     CPPUNIT_ASSERT(pAnnots);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnnots->GetElements().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pAnnots->GetElements().size());
 
+    sal_uInt32 nTextFieldCount = 0;
     for (const auto& aElement : aDocument.GetElements())
     {
         auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
@@ -876,20 +877,36 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("FT"));
         if (pType && pType->GetValue() == "Tx")
         {
+            ++nTextFieldCount;
+
             auto pT = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pObject->Lookup("T"));
             CPPUNIT_ASSERT(pT);
-            CPPUNIT_ASSERT_EQUAL(OString("CurrencyField"), pT->GetValue());
-
             auto pAA = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("AA"));
             CPPUNIT_ASSERT(pAA);
             CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pAA->GetItems().size());
-
             auto pF = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAA->LookupElement("F"));
             CPPUNIT_ASSERT(pF);
             CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pF->GetItems().size());
-            auto pJS = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pF->LookupElement("JS"));
-            CPPUNIT_ASSERT_EQUAL(OString("AFNumber_Format\\(4, 0, 0, 0, \"\\\\u20ac\",true\\);"),
-                                 pJS->GetValue());
+
+            if (nTextFieldCount == 1)
+            {
+                CPPUNIT_ASSERT_EQUAL(OString("CurrencyField"), pT->GetValue());
+
+                auto pJS
+                    = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pF->LookupElement("JS"));
+                CPPUNIT_ASSERT_EQUAL(
+                    OString("AFNumber_Format\\(4, 0, 0, 0, \"\\\\u20ac\",true\\);"),
+                    pJS->GetValue());
+            }
+            else
+            {
+                CPPUNIT_ASSERT_EQUAL(OString("TimeField"), pT->GetValue());
+
+                auto pJS
+                    = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pF->LookupElement("JS"));
+                CPPUNIT_ASSERT_EQUAL(OString("AFTime_FormatEx\\(\"h:MM:sstt\"\\);"),
+                                     pJS->GetValue());
+            }
         }
     }
 }
