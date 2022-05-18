@@ -214,6 +214,7 @@
               <object class="GtkButton" id="modify">
                 <property name="label" translatable="yes" context="contentcontordlg|modify">Modify</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
               </object>
@@ -228,6 +229,7 @@
               <object class="GtkButton" id="remove">
                 <property name="label" translatable="yes" context="contentcontordlg|remove">Remove</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
               </object>
@@ -242,6 +244,7 @@
               <object class="GtkButton" id="moveup">
                 <property name="label" translatable="yes" context="contentcontordlg|moveup">Move Up</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
               </object>
@@ -256,6 +259,7 @@
               <object class="GtkButton" id="movedown">
                 <property name="label" translatable="yes" context="contentcontordlg|movedown">Move Down</property>
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
               </object>
