@@ -52,6 +52,24 @@
       "parentUuid": "04522c8b_fb065d7c",
       "revId": "6201446cc1dc8691f94a5d95fc012253557b513c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "455a8c57_ddfb9dc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-18T07:27:28Z",
+      "side": 1,
+      "message": "\u003e \u003e Maybe that\u0027s doing a dynamic_cast on a fake UNO proxy C++ object.\n\u003e \n\u003e Ah, that would be the case, thanks for spotting that.\n\u003e \n\u003e Any other ideas for doing UNO bypass?\n\nIn principle, we could make dynamic_cast on proxy objects work.  We\u0027d \"just\" need to extend all bridges/source/cpp_uno/* to support generating RTTI for multiple-inheritance classes (which generating RTTI for exceptions didn\u0027t need for now)...\n\n\u003e I can\u0027t use XTunnel because I don\u0027t want to cast to a specific concrete class.\n\nBut css.lang.XUnoTunnel::getSomething\u0027s return value could encode the callee\u0027s static_cast\u003cutl::ByteReader\u003e(this)?\n\n\u003e I guess I could create something XTunnel-like, so something like\n\u003e \n\u003e interface XTunnelRead\n\u003e {\n\u003e int readSomething(sal_Int64 pointer, sal_Int32 length)\n\u003e }\n\n...plus a third `[in] sequence\u003c byte \u003e aIdentifier` parameter a la XUnoTunnel, to make sure pointer doesn\u0027t get mis-interpreted in a different address space.  I\u0027d prefer to stick with the existing XUnoTunnel wart (see above).",
+      "parentUuid": "6693067e_2452c980",
+      "revId": "6201446cc1dc8691f94a5d95fc012253557b513c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
