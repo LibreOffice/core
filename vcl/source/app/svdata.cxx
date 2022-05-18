@@ -53,7 +53,7 @@
 
 #include <config_features.h>
 #include <basegfx/utils/systemdependentdata.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <mutex>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -103,9 +103,10 @@ namespace
 {
     typedef ::std::map< basegfx::SystemDependentData_SharedPtr, sal_uInt32 > EntryMap;
 
-    class SystemDependentDataBuffer final : public basegfx::SystemDependentDataManager, protected cppu::BaseMutex
+    class SystemDependentDataBuffer final : public basegfx::SystemDependentDataManager
     {
     private:
+        std::mutex m_aMutex;
         std::unique_ptr<AutoTimer> maTimer;
         EntryMap maEntries;
 
@@ -126,7 +127,7 @@ namespace
 
         void startUsage(basegfx::SystemDependentData_SharedPtr& rData) override
         {
-            ::osl::MutexGuard aGuard(m_aMutex);
+            std::unique_lock aGuard(m_aMutex);
             EntryMap::iterator aFound(maEntries.find(rData));
 
             if(aFound == maEntries.end())
@@ -142,7 +143,7 @@ namespace
 
         void endUsage(basegfx::SystemDependentData_SharedPtr& rData) override
         {
-            ::osl::MutexGuard aGuard(m_aMutex);
+            std::unique_lock aGuard(m_aMutex);
             EntryMap::iterator aFound(maEntries.find(rData));
 
             if(aFound != maEntries.end())
@@ -153,7 +154,7 @@ namespace
 
         void touchUsage(basegfx::SystemDependentData_SharedPtr& rData) override
         {
-            ::osl::MutexGuard aGuard(m_aMutex);
+            std::unique_lock aGuard(m_aMutex);
             EntryMap::iterator aFound(maEntries.find(rData));
 
             if(aFound != maEntries.end())
@@ -164,7 +165,7 @@ namespace
 
         void flushAll() override
         {
-            ::osl::MutexGuard aGuard(m_aMutex);
+            std::unique_lock aGuard(m_aMutex);
 
             if(maTimer)
             {
@@ -178,7 +179,7 @@ namespace
 
     IMPL_LINK_NOARG(SystemDependentDataBuffer, implTimeoutHdl, Timer *, void)
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
+        std::unique_lock aGuard(m_aMutex);
         EntryMap::iterator aIter(maEntries.begin());
 
         while(aIter != maEntries.end())
