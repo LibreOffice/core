@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecd992b0_07d0d326",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2022-05-18T14:07:51Z",
+      "side": 1,
+      "message": "This passed on retry:\nhttps://cpci.cbg.collabora.co.uk:8080/job/gerrit_linux_cp-6.4_debug/3177/",
+      "revId": "24b2876c33d8e7b97a9e92992871f6d250c8931a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
