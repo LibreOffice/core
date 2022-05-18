@@ -60,6 +60,7 @@ private:
     std::unique_ptr<weld::Entry> m_xConfirm2ED;
 
     std::unique_ptr<weld::Label> m_xMinLengthFT;
+    std::unique_ptr<weld::Label> m_xOnlyAsciiFT;
 
     std::unique_ptr<weld::Button> m_xOKBtn;
 
@@ -117,11 +118,8 @@ public:
     {
         mnExtras = nExtras;
     }
-    void AllowAsciiOnly()
-    {
-        mbAsciiOnly = true;
-    }
 
+    void AllowAsciiOnly();
     void ShowMinLengthText(bool bShow);
 
     virtual short run() override;
