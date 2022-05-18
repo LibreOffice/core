@@ -44,6 +44,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 
+#include <vcl/settings.hxx>
+#include <i18nlangtag/languagetag.hxx>
+
 using namespace css;
 
 namespace
@@ -928,6 +931,7 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     std::unique_ptr<ObjectInspectorWidgets>& pObjectInspectorWidgets)
     : mpObjectInspectorWidgets(pObjectInspectorWidgets)
     , mxContext(comphelper::getProcessComponentContext())
+    , mxSorter(mxContext, Application::GetSettings().GetLanguageTag().getLocale())
 {
     mpObjectInspectorWidgets->mpInterfacesTreeView->connect_expanding(
         LINK(this, ObjectInspectorTreeHandler, ExpandingHandlerInterfaces));
@@ -954,6 +958,11 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     mpObjectInspectorWidgets->mpServicesTreeView->make_sorted();
     mpObjectInspectorWidgets->mpPropertiesTreeView->make_sorted();
     mpObjectInspectorWidgets->mpMethodsTreeView->make_sorted();
+
+    setSortFunction(mpObjectInspectorWidgets->mpInterfacesTreeView);
+    setSortFunction(mpObjectInspectorWidgets->mpServicesTreeView);
+    setSortFunction(mpObjectInspectorWidgets->mpPropertiesTreeView);
+    setSortFunction(mpObjectInspectorWidgets->mpMethodsTreeView);
 
     mpObjectInspectorWidgets->mpInterfacesTreeView->connect_column_clicked(
         LINK(this, ObjectInspectorTreeHandler, HeaderBarClick));
@@ -987,7 +996,27 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
                                      static_cast<int>(nMethodsDigitWidth * 50) };
     mpObjectInspectorWidgets->mpMethodsTreeView->set_column_fixed_widths(aMethodsWidths);
 
-    pObjectInspectorWidgets->mpPaned->set_position(160);
+    mpObjectInspectorWidgets->mpPaned->set_position(160);
+}
+
+void ObjectInspectorTreeHandler::setSortFunction(std::unique_ptr<weld::TreeView>& pTreeView)
+{
+    pTreeView->set_sort_func(
+        [this, &pTreeView](const weld::TreeIter& rLeft, const weld::TreeIter& rRight) {
+            return compare(pTreeView, rLeft, rRight);
+        });
+}
+
+sal_Int32 ObjectInspectorTreeHandler::compare(std::unique_ptr<weld::TreeView>& pTreeView,
+                                              const weld::TreeIter& rLeft,
+                                              const weld::TreeIter& rRight)
+{
+    int nSortColumn = pTreeView->get_sort_column();
+
+    OUString sLeft = pTreeView->get_text(rLeft, nSortColumn);
+    OUString sRight = pTreeView->get_text(rRight, nSortColumn);
+    sal_Int32 nCompare = mxSorter.compare(sLeft, sRight);
+    return nCompare;
 }
 
 void ObjectInspectorTreeHandler::handleExpanding(std::unique_ptr<weld::TreeView>& pTreeView,
