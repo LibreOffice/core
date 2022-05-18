@@ -856,6 +856,7 @@ ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >
     , rDoc( rDocument )
     , mrContext( rContext )
 {
+    // coverity[uninit_member] - this just contains data, subclass will initialize some of it
 }
 
 void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >::InitPos()
@@ -1067,6 +1068,7 @@ ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
     , rDoc( rDocument )
     , mrContext( rContext )
 {
+    // coverity[uninit_member] - this just contains data, subclass will initialize some of it
 }
 
 void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::SetSortedRangeCache(
@@ -1174,6 +1176,7 @@ public:
     {
         if(mSortedRows.empty())
             return;
+        // coverity[uninit_member] - these are initialized only if valid
         mLowIndex = 0;
         mHighIndex = mSortedRows.size() - 1;
         mValid = true;
