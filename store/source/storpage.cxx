@@ -71,7 +71,7 @@ storeError OStorePageManager::initialize (
     sal_uInt16 &    rnPageSize)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
+    std::unique_lock aGuard(getMutex());
 
     // Check arguments.
     if (!pLockBytes)
@@ -248,7 +248,7 @@ storeError OStorePageManager::iget (
     storeAccessMode             eMode)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
+    std::unique_lock aGuard(getMutex());
 
     // Check precond.
     if (!self::isValid())
@@ -333,7 +333,7 @@ storeError OStorePageManager::iterate (
     sal_uInt32 &     rAttrib)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
+    std::unique_lock aGuard(getMutex());
 
     // Check precond.
     if (!self::isValid())
@@ -439,7 +439,7 @@ storeError OStorePageManager::save_dirpage_Impl (
 storeError OStorePageManager::remove (const OStorePageKey &rKey)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard(*this);
+    std::unique_lock aGuard(getMutex());
 
     // Check precond.
     if (!self::isValid())

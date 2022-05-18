@@ -137,7 +137,7 @@ storeError OStoreLockBytes::readAt (
         return store_E_None;
 
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (*m_xManager);
+    std::unique_lock aGuard(m_xManager->getMutex());
 
     // Determine data length.
     OStoreDirectoryPageObject aPage (m_xNode.get());
@@ -239,7 +239,7 @@ storeError OStoreLockBytes::writeAt (
         return store_E_None;
 
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (*m_xManager);
+    std::unique_lock aGuard(m_xManager->getMutex());
 
     // Write data.
     OStoreDirectoryPageObject aPage (m_xNode.get());
@@ -355,7 +355,7 @@ storeError OStoreLockBytes::setSize (sal_uInt32 nSize)
         return store_E_AccessViolation;
 
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (*m_xManager);
+    std::unique_lock aGuard(m_xManager->getMutex());
 
     // Determine current length.
     OStoreDirectoryPageObject aPage (m_xNode.get());

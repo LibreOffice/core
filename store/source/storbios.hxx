@@ -21,11 +21,12 @@
 
 #include <sal/types.h>
 #include <rtl/ref.hxx>
-#include <osl/mutex.hxx>
 
 #include <store/types.h>
 #include "object.hxx"
 #include "storbase.hxx"
+
+#include <mutex>
 
 namespace store
 {
@@ -40,10 +41,6 @@ public:
     /** Construction.
      */
     OStorePageBIOS();
-
-    /** Conversion into Mutex&
-     */
-    inline operator osl::Mutex& (void) const;
 
     /** Initialization.
      *  @param  pLockBytes [in]
@@ -108,6 +105,8 @@ public:
      */
     storeError flush();
 
+    std::mutex& getMutex() { return m_aMutex; }
+
 protected:
     /** Destruction (OReference).
      */
@@ -117,7 +116,7 @@ private:
     /** Representation.
      */
     rtl::Reference<ILockBytes>    m_xLockBytes;
-    osl::Mutex                    m_aMutex;
+    std::mutex                    m_aMutex;
 
     std::unique_ptr<SuperBlockPage> m_pSuper;
 
@@ -170,10 +169,6 @@ private:
     OStorePageBIOS& operator= (const OStorePageBIOS&) = delete;
 };
 
-inline OStorePageBIOS::operator osl::Mutex& (void) const
-{
-    return const_cast<osl::Mutex&>(m_aMutex);
-}
 inline bool OStorePageBIOS::isWriteable() const
 {
     return m_bWriteable;
