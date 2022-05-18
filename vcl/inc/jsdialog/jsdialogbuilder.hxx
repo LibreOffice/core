@@ -40,6 +40,7 @@ class SvTabListBox;
 class IconView;
 
 typedef std::map<OString, weld::Widget*> WidgetMap;
+typedef std::map<OString, vcl::Window*> PopupMap;
 typedef std::unordered_map<std::string, OUString> ActionDataMap;
 
 namespace jsdialog
@@ -295,6 +296,11 @@ public:
     static void AddChildWidget(const std::string& nWindowId, const OString& id,
                                weld::Widget* pWidget);
     static void RemoveWindowWidget(const std::string& nWindowId);
+
+    // we need to remember original popup window to close it properly (its handled by vcl)
+    static void RememberPopup(const std::string& nWindowId, const OString& id,
+                              VclPtr<vcl::Window> pWidget);
+    static vcl::Window* FindPopup(const std::string& nWindowId, const OString& id);
 
 private:
     const std::string& GetTypeOfJSON();
@@ -690,12 +696,16 @@ public:
 
 class JSPopover : public JSWidget<SalInstancePopover, DockingWindow>
 {
+    vcl::LOKWindowId mnWindowId;
+
 public:
     JSPopover(JSDialogSender* pSender, DockingWindow* pPopover, SalInstanceBuilder* pBuilder,
               bool bTakeOwnership);
 
     virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) override;
     virtual void popdown() override;
+
+    void set_window_id(vcl::LOKWindowId nWindowId) { mnWindowId = nWindowId; }
 };
 
 class JSBox : public JSWidget<SalInstanceBox, VclBox>
