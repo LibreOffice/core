@@ -25,6 +25,7 @@
 
 #include <tools/debug.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <utility>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -110,11 +111,11 @@ sal_Bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
 }
 
 
-PossibleHyphens::PossibleHyphens(const OUString &rWord, LanguageType nLang,
-            const OUString &rHyphWord,
+PossibleHyphens::PossibleHyphens(OUString aWord, LanguageType nLang,
+            OUString aHyphWord,
             const Sequence< sal_Int16 > &rPositions) :
-    aWord           (rWord),
-    aWordWithHyphens(rHyphWord),
+    aWord           (std::move(aWord)),
+    aWordWithHyphens(std::move(aHyphWord)),
     aOrigHyphenPos  (rPositions),
     nLanguage       (nLang)
 {

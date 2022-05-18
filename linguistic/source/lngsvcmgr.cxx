@@ -33,6 +33,7 @@
 
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
@@ -131,9 +132,9 @@ struct SvcInfo
     const OUString                  aSvcImplName;
     const std::vector< LanguageType >    aSuppLanguages;
 
-    SvcInfo( const OUString &rSvcImplName,
+    SvcInfo( OUString aSvcImplName_,
              std::vector< LanguageType >&& rSuppLanguages ) :
-        aSvcImplName    (rSvcImplName),
+        aSvcImplName    (std::move(aSvcImplName_)),
         aSuppLanguages  (std::move(rSuppLanguages))
     {
     }
@@ -173,7 +174,7 @@ class LngSvcMgrListenerHelper :
 
 public:
     LngSvcMgrListenerHelper( LngSvcMgr &rLngSvcMgr,
-        const uno::Reference< linguistic2::XSearchableDictionaryList > &rxDicList );
+        uno::Reference< linguistic2::XSearchableDictionaryList > xDicList );
 
     LngSvcMgrListenerHelper(const LngSvcMgrListenerHelper&) = delete;
     LngSvcMgrListenerHelper& operator=(const LngSvcMgrListenerHelper&) = delete;
@@ -207,11 +208,11 @@ public:
 
 LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
         LngSvcMgr &rLngSvcMgr,
-        const uno::Reference< linguistic2::XSearchableDictionaryList > &rxDicList  ) :
+        uno::Reference< linguistic2::XSearchableDictionaryList > xDicList_ ) :
     rMyManager              ( rLngSvcMgr ),
     aLngSvcMgrListeners     ( GetLinguMutex() ),
     aLngSvcEvtBroadcasters  ( GetLinguMutex() ),
-    xDicList                ( rxDicList )
+    xDicList                (std::move( xDicList_ ))
 {
     if (xDicList.is())
     {

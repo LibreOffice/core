@@ -82,7 +82,7 @@ protected:
     void    Save();
 
 public:
-    ConvDic( const OUString &rName,
+    ConvDic( OUString aName,
              LanguageType nLanguage,
              sal_Int16 nConversionType,
              bool bBiDirectional,

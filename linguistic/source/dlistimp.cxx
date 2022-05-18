@@ -39,6 +39,7 @@
 #include <unotools/resmgr.hxx>
 #include <unotools/charclass.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 #include "dlistimp.hxx"
 #include "dicimp.hxx"
@@ -72,7 +73,7 @@ class DicEvtListenerHelper :
     sal_Int16                               nNumCollectEvtListeners;
 
 public:
-    explicit DicEvtListenerHelper( const uno::Reference< XDictionaryList > &rxDicList );
+    explicit DicEvtListenerHelper( uno::Reference< XDictionaryList > xDicList );
     virtual ~DicEvtListenerHelper() override;
 
     // XEventListener
@@ -98,9 +99,9 @@ public:
 
 
 DicEvtListenerHelper::DicEvtListenerHelper(
-        const uno::Reference< XDictionaryList > &rxDicList ) :
+        uno::Reference< XDictionaryList > xDicList ) :
     aDicListEvtListeners    ( GetLinguMutex() ),
-    xMyDicList              ( rxDicList ),
+    xMyDicList              (std::move( xDicList )),
     nCondensedEvt(0), nNumCollectEvtListeners(0)
 {
 }

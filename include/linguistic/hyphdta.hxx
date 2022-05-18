@@ -83,8 +83,8 @@ class PossibleHyphens final :
     PossibleHyphens & operator = (const PossibleHyphens &) = delete;
 
 public:
-    PossibleHyphens(const OUString &rWord, LanguageType nLang,
-            const OUString &rHyphWord,
+    PossibleHyphens(OUString aWord, LanguageType nLang,
+            OUString aHyphWord,
             const css::uno::Sequence< sal_Int16 > &rPositions);
     virtual ~PossibleHyphens() override;
 
