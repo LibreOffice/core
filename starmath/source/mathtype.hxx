@@ -153,7 +153,6 @@ private:
     int nPendingAttributes;
     sal_uInt64 nInsertion;
 
-    std::vector<sal_Int16> aSizeTable;
     sal_Int16 nLSize;
     sal_Int16 nDSize;
     sal_Int16 nCurSize;

@@ -24,19 +24,21 @@
 #include <osl/diagnose.h>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
+#include <array>
+
+//These are the default MathType sizes
+constexpr std::array<sal_Int16, 7> aSizeTable {
+    12,
+    8,
+    6,
+    24,
+    10,
+    12,
+    12,
+};
 
 void MathType::Init()
 {
-    //These are the default MathType sizes
-    aSizeTable.reserve(7);
-    aSizeTable.push_back(12);
-    aSizeTable.push_back(8);
-    aSizeTable.push_back(6);
-    aSizeTable.push_back(24);
-    aSizeTable.push_back(10);
-    aSizeTable.push_back(12);
-    aSizeTable.push_back(12);
-
     /*
     These are the default MathType italic/bold settings If mathtype is changed
     from its defaults, there is nothing we can do, as this information is not
