@@ -21,7 +21,7 @@ namespace Justify
 /// @param nSpaceAdd amount of space to insert for each CH_BLANK.
 /// @param nKern amount of space to insert between letters.
 /// @param bNoHalfSpace whether to split the space into two halves.
-///        Splitted spaces are inserted before and after CH_BLANK.
+///        Split spaces are inserted before and after CH_BLANK.
 ///        Set to true in word line mode and for Arabic text to avoid splitting.
 SW_DLLPUBLIC void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OUString& rText,
                                     sal_Int32 nStt, sal_Int32 nLen, tools::Long nSpaceAdd,
