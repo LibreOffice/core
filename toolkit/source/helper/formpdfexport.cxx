@@ -526,9 +526,37 @@ namespace toolkitform
                             pEditWidget->PrependCurrencySymbol = bPrependCurrencySymbol;
                         }
                         break;
+
+                    case FormComponentType::TIMEFIELD:
+
+                        pEditWidget->Format = vcl::PDFWriter::Time;
+
+                        static constexpr OUStringLiteral FM_PROP_TIMEFORMAT = u"TimeFormat";
+                        if ( xPSI->hasPropertyByName( FM_PROP_TIMEFORMAT ) )
+                        {
+                            sal_Int32 nTimeFormat = 0;
+                            if( ! (xModelProps->getPropertyValue( FM_PROP_TIMEFORMAT ) >>= nTimeFormat) )
+                                SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_TIMEFORMAT);
+
+                            switch ( nTimeFormat )
+                            {
+                                case 0:
+                                    pEditWidget->TimeFormat = "HH:MM"; //13:45
+                                    break;
+                                case 1:
+                                    pEditWidget->TimeFormat = "HH:MM:ss"; //13:45:00
+                                    break;
+                                case 2:
+                                    pEditWidget->TimeFormat = "h:MMtt"; //01:45 PM
+                                    break;
+                                case 3:
+                                    pEditWidget->TimeFormat = "h:MM:sstt"; //01:45:00 PM
+                                    break;
+                            }
+                        }
+                        break;
                 }
             }
-
 
             // buttons
             if ( Descriptor->getType() == vcl::PDFWriter::PushButton )
