@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8ae5e87_92e00acb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-05-18T17:16:57Z",
+      "side": 1,
+      "message": "Hi Tomaz, hopefully an easy one - is this reasonable?",
+      "revId": "b8d657bfccd62342e1ace614ca8a56a5c37d9c0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
