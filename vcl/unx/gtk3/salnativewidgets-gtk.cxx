@@ -2637,6 +2637,54 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     g_object_get(pSettings, "gtk-icon-theme-name", &pIconThemeName,
                             "gtk-application-prefer-dark-theme", &bDarkIconTheme,
                             nullptr );
+
+    if (GDBusConnection* session_connection = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr))
+    {
+        if (GDBusProxy* proxy = g_dbus_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION,
+                                                              G_DBUS_PROXY_FLAGS_NONE,
+                                                              nullptr,
+                                                              "org.freedesktop.portal.Desktop",
+                                                              "/org/freedesktop/portal/desktop",
+                                                              "org.freedesktop.portal.Settings",
+                                                              nullptr,
+                                                              nullptr))
+        {
+            if (GVariant* ret = g_dbus_proxy_call_sync(proxy, "Read",
+                                                       g_variant_new("(ss)", "org.freedesktop.appearance", "color-scheme"),
+                                                       G_DBUS_CALL_FLAGS_NONE,
+                                                       G_MAXINT,
+                                                       nullptr,
+                                                       nullptr))
+            {
+                GVariant* child = nullptr;
+                GVariant* value = nullptr;
+
+                g_variant_get(ret, "(v)", &child);
+                g_variant_get(child, "v", &value);
+
+                enum ColorScheme
+                {
+                    DEFAULT,
+                    PREFER_DARK,
+                    PREFER_LIGHT
+                };
+
+                guint32 color_scheme = g_variant_get_uint32(value);
+                if (color_scheme > PREFER_LIGHT)
+                    color_scheme = DEFAULT;
+                bDarkIconTheme = color_scheme == PREFER_DARK;
+
+                g_variant_unref(value);
+                g_variant_unref(child);
+                g_variant_unref(ret);
+            }
+
+            g_object_unref(G_OBJECT(proxy));
+        }
+
+        g_object_unref(G_OBJECT(session_connection));
+    }
+
     OUString sIconThemeName(OUString::createFromAscii(pIconThemeName));
     aStyleSet.SetPreferredIconTheme(sIconThemeName, bDarkIconTheme);
     g_free( pIconThemeName );
