@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25a50658_e96aa794",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-18T09:28:57Z",
+      "side": 1,
+      "message": "Many thanks, Laurent. Your comment brought me to the solution. Although I don\u0027t understand what the code before was meant for. This works for me now (Linux, tested with gtk3, kf5, gen)",
+      "revId": "cbcb9d71a23a702acfb388170447c7de27b4f947",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
