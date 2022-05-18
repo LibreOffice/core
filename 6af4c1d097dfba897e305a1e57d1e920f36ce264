@@ -33,6 +33,24 @@
       "message": "Did you consider dropping the startsWith() check and changing this to a dynamic cast?\n\nA string prefix check followed by a static cast sounds fragile.",
       "revId": "6af4c1d097dfba897e305a1e57d1e920f36ce264",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed524eb9_5e194ade",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 3066,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-18T15:23:01Z",
+      "side": 1,
+      "message": "Hi, Miklós. Yes, I\u0027ve tried, but it didn\u0027t work:\n\n/home/laci/libreoffice/framework/source/services/autorecovery.cxx:3063:81: error: cannot dynamic_cast ‘rException’ (of type ‘const class com::sun::star::uno::Exception’) to type ‘const class com::sun::star::task::ErrorCodeIOException\u0026’ (source type is not polymorphic)\n             if ( dynamic_cast\u003cconst css::task::ErrorCodeIOException\u0026\u003e(rException) )\n                                                                                 ^\nSo I choose static_cast instead of extending(?) the Exception class.\n\nIn fact, the error code is there in the message:\n\nsfx2/source/doc/sfxbasemodel.cxx:        throw task::ErrorCodeIOException(\nsfx2/source/doc/sfxbasemodel.cxx-            \"SfxBaseModel::impl_store \u003c\" + sURL + \"\u003e failed: \" + OUString::fromUtf8(aErrCode.str().c_str()),\nsfx2/source/doc/sfxbasemodel.cxx-            Reference\u003c XInterface \u003e(), sal_uInt32(nErrCode));\n\nSo we could use a simple string check, but that is likely more fragile.\n\nMy colleagues are working on fixing tdf#145757, porting RecoveryTest.java or its subset, and it will be possible to add an unit test for this fix, so checking only the Message won\u0027t be fragile any more, so we will be able to use that.\n\nWhat is your opinion?",
+      "parentUuid": "5177ad51_505c1254",
+      "revId": "6af4c1d097dfba897e305a1e57d1e920f36ce264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
