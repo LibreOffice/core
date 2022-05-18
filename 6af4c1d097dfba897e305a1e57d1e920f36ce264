@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "318f0504_4a5f8ea6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-18T15:31:25Z",
+      "side": 1,
+      "message": "That is an unit test for the Re-type password dialog window. The test would have caught the buggy first version of this patch (which uses the MediaDescriptor variable bAutoSaveSession, because I though, that bit signs AutoSave session, but it doesn\u0027t, resulting broken Save, see my comment in the patch).\n\nBut you are right, we need an unit test for the fix, too. See my previous reply to Miklós.",
+      "parentUuid": "cfa49069_dbacfdaf",
+      "revId": "6af4c1d097dfba897e305a1e57d1e920f36ce264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5177ad51_505c1254",
