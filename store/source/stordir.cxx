@@ -150,7 +150,7 @@ storeError OStoreDirectory_Impl::iterate (storeFindData &rFindData)
         return eErrCode;
 
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (*m_xManager);
+    std::unique_lock aGuard(m_xManager->getMutex());
 
     // Check TextConverter.
     if (m_hTextCvt == nullptr)

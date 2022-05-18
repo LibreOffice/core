@@ -553,7 +553,7 @@ storeError OStorePageBIOS::initialize (
     sal_uInt16 &    rnPageSize)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // Initialize.
     storeError eErrCode = initialize_Impl (pLockBytes, eAccessMode, rnPageSize);
@@ -717,7 +717,7 @@ storeError OStorePageBIOS::acquirePage (
     const OStorePageDescriptor& rDescr, storeAccessMode eMode)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // Check precond.
     if (!m_xLockBytes.is())
@@ -758,7 +758,7 @@ storeError OStorePageBIOS::acquirePage (
 storeError OStorePageBIOS::releasePage (const OStorePageDescriptor& rDescr)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // Check precond.
     if (!m_xLockBytes.is())
@@ -788,7 +788,7 @@ storeError OStorePageBIOS::allocate (
     OStorePageObject& rPage)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // Check precond.
     if (!m_xLockBytes.is())
@@ -833,7 +833,7 @@ storeError OStorePageBIOS::allocate (
 storeError OStorePageBIOS::free (sal_uInt32 nAddr)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // Check precond.
     if (!m_xLockBytes.is())
@@ -855,7 +855,7 @@ storeError OStorePageBIOS::free (sal_uInt32 nAddr)
 storeError OStorePageBIOS::loadObjectAt (OStorePageObject & rPage, sal_uInt32 nAddr)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // Check precond.
     if (!m_xLockBytes.is())
@@ -898,7 +898,7 @@ storeError OStorePageBIOS::loadObjectAt_Impl (OStorePageObject & rPage, sal_uInt
 storeError OStorePageBIOS::saveObjectAt (OStorePageObject & rPage, sal_uInt32 nAddr)
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // Check precond.
     if (!m_xLockBytes.is())
@@ -940,7 +940,7 @@ storeError OStorePageBIOS::saveObjectAt_Impl (OStorePageObject & rPage, sal_uInt
 storeError OStorePageBIOS::close()
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // Cleanup.
     cleanup_Impl();
@@ -956,7 +956,7 @@ storeError OStorePageBIOS::close()
 storeError OStorePageBIOS::flush()
 {
     // Acquire exclusive access.
-    osl::MutexGuard aGuard (m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     // Check precond.
     if (!m_xLockBytes.is())
