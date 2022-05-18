@@ -401,10 +401,8 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             aExtHeader.xExt = nExtWidth;
             aExtHeader.yExt = nExtHeight;
             aExtHeader.mapMode = nExtMapMode;
-            WmfExternal *pExtHeader = nullptr;
             if ( nExtMapMode > 0 )
             {
-                pExtHeader = &aExtHeader;
                 bLazyRead = false;
             }
 
@@ -416,8 +414,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
                     aVCLGraphic = aGraphic;
             }
             if (aVCLGraphic.IsNone())
-                error = rFilter.ImportGraphic(aVCLGraphic, aPath, *pIStm, GRFILTER_FORMAT_DONTKNOW,
-                                              nullptr, GraphicFilterImportFlags::NONE, pExtHeader);
+                error = rFilter.ImportGraphic(aVCLGraphic, aPath, *pIStm, GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE);
 
             if( (error == ERRCODE_NONE ) &&
                 ( aVCLGraphic.GetType() != GraphicType::NONE ) )
