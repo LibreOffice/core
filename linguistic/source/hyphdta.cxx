@@ -69,43 +69,36 @@ HyphenatedWord::~HyphenatedWord()
 
 OUString SAL_CALL HyphenatedWord::getWord()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return aWord;
 }
 
 
 Locale SAL_CALL HyphenatedWord::getLocale()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     return LanguageTag::convertToLocale( nLanguage );
 }
 
 
 sal_Int16 SAL_CALL HyphenatedWord::getHyphenationPos()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return nHyphenationPos;
 }
 
 
 OUString SAL_CALL HyphenatedWord::getHyphenatedWord()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return aHyphenatedWord;
 }
 
 
 sal_Int16 SAL_CALL HyphenatedWord::getHyphenPos()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return nHyphPos;
 }
 
 
 sal_Bool SAL_CALL HyphenatedWord::isAlternativeSpelling()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return bIsAltSpelling;
 }
 
@@ -128,28 +121,24 @@ PossibleHyphens::~PossibleHyphens()
 
 OUString SAL_CALL PossibleHyphens::getWord()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return aWord;
 }
 
 
 Locale SAL_CALL PossibleHyphens::getLocale()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return LanguageTag::convertToLocale( nLanguage );
 }
 
 
 OUString SAL_CALL PossibleHyphens::getPossibleHyphens()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return aWordWithHyphens;
 }
 
 
 Sequence< sal_Int16 > SAL_CALL PossibleHyphens::getHyphenationPositions()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return aOrigHyphenPos;
 }
 
