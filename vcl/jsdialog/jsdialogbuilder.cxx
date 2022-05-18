@@ -27,6 +27,14 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
 
+static std::map<std::string, vcl::Window*>& GetLOKPopupsMap()
+{
+    // Map to remember the LOKWindowId <-> vcl popup binding.
+    static std::map<std::string, vcl::Window*> s_aLOKPopupsMap;
+
+    return s_aLOKPopupsMap;
+}
+
 namespace
 {
 void response_help(vcl::Window* pWindow)
@@ -673,6 +681,8 @@ JSInstanceBuilder::~JSInstanceBuilder()
                           [it](std::string& sId) { it->second.erase(sId.c_str()); });
         }
     }
+
+    GetLOKPopupsMap().erase(std::to_string(m_nWindowId));
 }
 
 std::map<std::string, WidgetMap>& JSInstanceBuilder::GetLOKWeldWidgetsMap()
@@ -762,6 +772,28 @@ void JSInstanceBuilder::RemoveWindowWidget(const std::string& nWindowId)
     {
         JSInstanceBuilder::GetLOKWeldWidgetsMap().erase(it);
     }
+}
+
+void JSInstanceBuilder::RememberPopup(const std::string& nWindowId, VclPtr<vcl::Window> pWidget)
+{
+    GetLOKPopupsMap()[nWindowId] = pWidget;
+}
+
+void JSInstanceBuilder::ForgetPopup(const std::string& nWindowId)
+{
+    auto it = GetLOKPopupsMap().find(nWindowId);
+    if (it != GetLOKPopupsMap().end())
+        GetLOKPopupsMap().erase(it);
+}
+
+vcl::Window* JSInstanceBuilder::FindPopup(const std::string& nWindowId)
+{
+    const auto it = GetLOKPopupsMap().find(nWindowId);
+
+    if (it != GetLOKPopupsMap().end())
+        return it->second;
+
+    return nullptr;
 }
 
 const std::string& JSInstanceBuilder::GetTypeOfJSON() const { return m_sTypeOfJSON; }
@@ -1050,8 +1082,9 @@ std::unique_ptr<weld::MenuButton> JSInstanceBuilder::weld_menu_button(const OStr
 std::unique_ptr<weld::Popover> JSInstanceBuilder::weld_popover(const OString& id)
 {
     DockingWindow* pDockingWindow = m_xBuilder->get<DockingWindow>(id);
-    std::unique_ptr<weld::Popover> pWeldWidget(
-        pDockingWindow ? new JSPopover(this, pDockingWindow, this, false) : nullptr);
+    JSPopover* pPopover
+        = pDockingWindow ? new JSPopover(this, pDockingWindow, this, false) : nullptr;
+    std::unique_ptr<weld::Popover> pWeldWidget(pPopover);
     if (pDockingWindow)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
@@ -1065,6 +1098,10 @@ std::unique_ptr<weld::Popover> JSInstanceBuilder::weld_popover(const OString& id
             m_aParentDialog = pPopupRoot;
             m_aWindowToRelease = pPopupRoot;
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
+
+            pPopover->set_window_id(m_nWindowId);
+            JSInstanceBuilder::RememberPopup(std::to_string(m_nWindowId), pDockingWindow);
+
             InsertWindowToMap(getMapIdFromWindowId());
             initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
         }
@@ -1466,10 +1503,16 @@ void JSToolbar::set_menu_item_active(const OString& rIdent, bool bActive)
     if (pPopupRoot)
     {
         if (bActive)
+        {
+            JSInstanceBuilder::RememberPopup(std::to_string(pPopupRoot->GetLOKWindowId()), pFloat);
             sendPopup(pPopupRoot, m_xToolBox->get_id(),
                       OStringToOUString(rIdent, RTL_TEXTENCODING_ASCII_US));
+        }
         else if (bWasActive)
+        {
+            JSInstanceBuilder::ForgetPopup(std::to_string(pPopupRoot->GetLOKWindowId()));
             sendClosePopup(pPopupRoot->GetLOKWindowId());
+        }
     }
 }
 
@@ -1757,8 +1800,17 @@ void JSPopover::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRe
 
 void JSPopover::popdown()
 {
+    vcl::Window* pPopup = JSInstanceBuilder::FindPopup(std::to_string(mnWindowId));
+
+    if (pPopup)
+    {
+        sendClosePopup(mnWindowId);
+        vcl::Window::GetDockingManager()->EndPopupMode(pPopup);
+    }
+
     if (getWidget() && getWidget()->GetChild(0))
         sendClosePopup(getWidget()->GetChild(0)->GetLOKWindowId());
+
     SalInstancePopover::popdown();
 }
 
