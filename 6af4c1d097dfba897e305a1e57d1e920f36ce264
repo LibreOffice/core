@@ -87,6 +87,24 @@
       "parentUuid": "ed524eb9_5e194ade",
       "revId": "6af4c1d097dfba897e305a1e57d1e920f36ce264",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51b2bfef_c5e0aaef",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 3066,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-18T15:53:02Z",
+      "side": 1,
+      "message": "Yes, I did, and it is. :) In fact, I considered a lot of other things, but I forgot to write about it. E.g. It seemed like a good idea to use \"emergency XLSX\" recovery format here. I was able to create it, but I wasn\u0027t able to check its usage, also exporting XLSX is lossy, and slower, especially for a big file..., \n\nFinally, my last and best idea was to add a RedlineProtectionKey like config setting (e.g. RecoverySheetProtectionKey) to store the foreign password only in the recovery ODS. Or as a general solution, we need a RecoveryGrabBag config setting for the recovery files, containing a JSON data sequence with the content of the GrabBag... Because now recovering is a quite lossy operation for the opened OOXML files, if I am right. (I\u0027ll copy this to the bug, too.)",
+      "parentUuid": "e013f5da_77b8bbba",
+      "revId": "6af4c1d097dfba897e305a1e57d1e920f36ce264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
