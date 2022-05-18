@@ -24,6 +24,7 @@
 #include <com/sun/star/util/SearchAlgorithms.hpp>
 #include <com/sun/star/util/SearchOptions2.hpp>
 #include <i18nutil/transliteration.hxx>
+#include <utility>
 
 namespace i18nutil
 {
@@ -68,15 +69,15 @@ struct SAL_WARN_UNUSED SearchOptions {
     }
 
     SearchOptions(const css::util::SearchAlgorithms& algorithmType_, const sal_Int32 searchFlag_,
-                   const OUString& searchString_, const OUString& replaceString_,
-                   const css::lang::Locale& Locale_,
+                   OUString searchString_, OUString replaceString_,
+                   css::lang::Locale Locale_,
                    const sal_Int32 changedChars_, const sal_Int32 deletedChars_, const sal_Int32 insertedChars_,
                    const TransliterationFlags& transliterateFlags_)
         : algorithmType(algorithmType_)
         , searchFlag(searchFlag_)
-        , searchString(searchString_)
-        , replaceString(replaceString_)
-        , Locale(Locale_)
+        , searchString(std::move(searchString_))
+        , replaceString(std::move(replaceString_))
+        , Locale(std::move(Locale_))
         , changedChars(changedChars_)
         , deletedChars(deletedChars_)
         , insertedChars(insertedChars_)
