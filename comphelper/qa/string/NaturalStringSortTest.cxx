@@ -38,8 +38,6 @@ namespace
 class TestStringNaturalCompare : public test::BootstrapFixtureBase
 {
 public:
-    void setUp() override { BootstrapFixtureBase::setUp(); }
-
     void testNatural()
     {
         lang::Locale aLocale;
