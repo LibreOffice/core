@@ -54,6 +54,41 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11a76675_4069cfa8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-18T16:07:52Z",
+      "side": 1,
+      "message": "Hi Xisco, Yes, it\u0027s a good idea. Also I just recognized, that Gábor has made a smaller and more simple unit test document, likely it\u0027s worth to replace it with the recent one later.",
+      "parentUuid": "04f69efb_2397c875",
+      "revId": "6af4c1d097dfba897e305a1e57d1e920f36ce264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e08d26c8_52ee3d40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-18T16:07:52Z",
+      "side": 1,
+      "message": "@Miklós, Xisco: thanks for the review!",
+      "revId": "6af4c1d097dfba897e305a1e57d1e920f36ce264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5177ad51_505c1254",
