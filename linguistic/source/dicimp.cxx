@@ -503,8 +503,6 @@ int DictionaryNeo::cmpDicEntry(std::u16string_view rWord1,
                                std::u16string_view rWord2,
                                bool bSimilarOnly)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     // returns 0 if rWord1 is equal to rWord2
     //   "     a value < 0 if rWord1 is less than rWord2
     //   "     a value > 0 if rWord1 is greater than rWord2
@@ -1054,8 +1052,6 @@ void DicEntry::splitDicFileWord(const OUString &rDicFileWord,
                                 OUString &rDicWord,
                                 OUString &rReplacement)
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     sal_Int32 nDelimPos = rDicFileWord.indexOf( "==" );
     if (-1 != nDelimPos)
     {
@@ -1075,19 +1071,16 @@ void DicEntry::splitDicFileWord(const OUString &rDicFileWord,
 
 OUString SAL_CALL DicEntry::getDictionaryWord(  )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return aDicWord;
 }
 
 sal_Bool SAL_CALL DicEntry::isNegative(  )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return bIsNegativ;
 }
 
 OUString SAL_CALL DicEntry::getReplacementText(  )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
     return aReplacement;
 }
 
