@@ -477,7 +477,6 @@ uno::Any SAL_CALL ScSheetLinksObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScSheetLinksObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
@@ -979,7 +978,6 @@ uno::Any SAL_CALL ScAreaLinksObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScAreaLinksObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XAreaLink>::get();
 }
 
@@ -1268,7 +1266,6 @@ uno::Any SAL_CALL ScDDELinksObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScDDELinksObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XDDELink>::get();
 }
 
@@ -1581,7 +1578,6 @@ uno::Reference< container::XEnumeration > SAL_CALL ScExternalDocLinkObj::createE
 
 uno::Type SAL_CALL ScExternalDocLinkObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XExternalDocLink>::get();
 }
 
@@ -1683,7 +1679,6 @@ uno::Reference< container::XEnumeration > SAL_CALL ScExternalDocLinksObj::create
 
 uno::Type SAL_CALL ScExternalDocLinksObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XExternalDocLinks>::get();
 }
 

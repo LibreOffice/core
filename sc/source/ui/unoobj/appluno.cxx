@@ -570,7 +570,6 @@ uno::Reference<container::XEnumeration> SAL_CALL ScFunctionListObj::createEnumer
 
 uno::Type SAL_CALL ScFunctionListObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 

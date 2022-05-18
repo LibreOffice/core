@@ -285,7 +285,6 @@ uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScAutoFormatsObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<container::XNamed>::get();    // must match getByIndex
 }
 
@@ -403,7 +402,6 @@ uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScAutoFormatObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<beans::XPropertySet>::get();  // must match getByIndex
 }
 
