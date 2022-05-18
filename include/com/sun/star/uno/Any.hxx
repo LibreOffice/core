@@ -131,31 +131,30 @@ inline Any & Any::operator = ( const Any & rAny )
 
 #if defined LIBO_INTERNAL_ONLY
 
-namespace detail {
-
-inline void moveAnyInternals(Any & from, Any & to) noexcept {
-    uno_any_construct(&to, nullptr, nullptr, &cpp_acquire);
-    std::swap(from.pType, to.pType);
-    std::swap(from.pData, to.pData);
-    std::swap(from.pReserved, to.pReserved);
-    if (to.pData == &from.pReserved) {
-        to.pData = &to.pReserved;
+Any::Any(Any && other) noexcept {
+    uno_any_construct(this, nullptr, nullptr, &cpp_acquire);
+    std::swap(other.pType, pType);
+    std::swap(other.pData, pData);
+    std::swap(other.pReserved, pReserved);
+    if (pData == &other.pReserved) {
+        pData = &pReserved;
     }
-    // This leaves from.pData (where "from" is now VOID) dangling to somewhere (cf.
+    // This leaves other.pData (where "other" is now VOID) dangling to somewhere (cf.
     // CONSTRUCT_EMPTY_ANY, cppu/source/uno/prim.hxx), but what's relevant is
     // only that it isn't a nullptr (as e.g. >>= -> uno_type_assignData ->
     // _assignData takes a null pSource to mean "construct a default value").
 }
 
-}
-
-Any::Any(Any && other) noexcept {
-    detail::moveAnyInternals(other, *this);
-}
-
 Any & Any::operator =(Any && other) noexcept {
-    uno_any_destruct(this, &cpp_release);
-    detail::moveAnyInternals(other, *this);
+    std::swap(other.pType, pType);
+    std::swap(other.pData, pData);
+    std::swap(other.pReserved, pReserved);
+    if (pData == &other.pReserved) {
+        pData = &pReserved;
+    }
+    if (other.pData == &pReserved) {
+        other.pData = &other.pReserved;
+    }
     return *this;
 }
 
