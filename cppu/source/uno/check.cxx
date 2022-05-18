@@ -260,11 +260,13 @@ static_assert(sizeof(second) == sizeof(int), "sizeof(second) != sizeof(int)");
 
 struct Char4
 {
-    Char3 chars;
+    [[maybe_unused]] Char3 chars;
     char c;
 };
 
-#define OFFSET_OF( s, m ) reinterpret_cast< size_t >(reinterpret_cast<char *>(&reinterpret_cast<s *>(16)->m) -16)
+template<typename T1, typename T2> std::size_t OFFSET_OF(T2 T1::* p) {
+    return reinterpret_cast< size_t >(reinterpret_cast<char *>(&(reinterpret_cast<T1 *>(16)->*p)) -16);
+}
 
 class BinaryCompatible_Impl
 {
@@ -273,48 +275,48 @@ public:
 };
 BinaryCompatible_Impl::BinaryCompatible_Impl()
 {
-    assert(OFFSET_OF(N, p) == 8);
+    assert(OFFSET_OF(&N::p) == 8);
 
-    assert(OFFSET_OF(C2, n2) == 4);
+    assert(OFFSET_OF(&C2::n2) == 4);
 
 #if SAL_TYPES_ALIGNMENT8 == 2
-    assert(OFFSET_OF(C3, d3) == 6);
-    assert(OFFSET_OF(C3, n3) == 14);
-    assert(OFFSET_OF(C4, n4) == 18);
-    assert(OFFSET_OF(C4, d4) == 22);
-    assert(OFFSET_OF(C5, n5) == 30);
-    assert(OFFSET_OF(C5, b5) == 38);
-    assert(OFFSET_OF(C6, c6) == 2);
-    assert(OFFSET_OF(C6, b6) == 42);
+    assert(OFFSET_OF(&C3::d3) == 6);
+    assert(OFFSET_OF(&C3::n3) == 14);
+    assert(OFFSET_OF(&C4::n4) == 18);
+    assert(OFFSET_OF(&C4::d4) == 22);
+    assert(OFFSET_OF(&C5::n5) == 30);
+    assert(OFFSET_OF(&C5::b5) == 38);
+    assert(OFFSET_OF(&C6::c6) == 2);
+    assert(OFFSET_OF(&C6::b6) == 42);
 
-    assert(OFFSET_OF(O2, p2) == 16);
+    assert(OFFSET_OF(&O2::p2) == 16);
 #elif SAL_TYPES_ALIGNMENT8 == 4
-    assert(OFFSET_OF(C3, d3) == 8);
-    assert(OFFSET_OF(C3, n3) == 16);
-    assert(OFFSET_OF(C4, n4) == 20);
-    assert(OFFSET_OF(C4, d4) == 24);
-    assert(OFFSET_OF(C5, n5) == 32);
-    assert(OFFSET_OF(C5, b5) == 40);
-    assert(OFFSET_OF(C6, c6) == 4);
-    assert(OFFSET_OF(C6, b6) == 48);
+    assert(OFFSET_OF(&C3::d3) == 8);
+    assert(OFFSET_OF(&C3::n3) == 16);
+    assert(OFFSET_OF(&C4::n4) == 20);
+    assert(OFFSET_OF(&C4::d4) == 24);
+    assert(OFFSET_OF(&C5::n5) == 32);
+    assert(OFFSET_OF(&C5::b5) == 40);
+    assert(OFFSET_OF(&C6::c6) == 4);
+    assert(OFFSET_OF(&C6::b6) == 48);
 
-    assert(OFFSET_OF(O2, p2) == 20);
+    assert(OFFSET_OF(&O2::p2) == 20);
 #elif SAL_TYPES_ALIGNMENT8 == 8
-    assert(OFFSET_OF(C3, d3) == 8);
-    assert(OFFSET_OF(C3, n3) == 16);
-    assert(OFFSET_OF(C4, n4) == 24);
-    assert(OFFSET_OF(C4, d4) == 32);
-    assert(OFFSET_OF(C5, n5) == 40);
-    assert(OFFSET_OF(C5, b5) == 48);
-    assert(OFFSET_OF(C6, c6) == 8);
-    assert(OFFSET_OF(C6, b6) == 64);
+    assert(OFFSET_OF(&C3::d3) == 8);
+    assert(OFFSET_OF(&C3::n3) == 16);
+    assert(OFFSET_OF(&C4::n4) == 24);
+    assert(OFFSET_OF(&C4::d4) == 32);
+    assert(OFFSET_OF(&C5::n5) == 40);
+    assert(OFFSET_OF(&C5::b5) == 48);
+    assert(OFFSET_OF(&C6::c6) == 8);
+    assert(OFFSET_OF(&C6::b6) == 64);
 
-    assert(OFFSET_OF(O2, p2) == 24);
+    assert(OFFSET_OF(&O2::p2) == 24);
 #else
 # error unexpected alignment of 8 byte types
 #endif
 
-    assert(OFFSET_OF(Char4, c) == 3);
+    assert(OFFSET_OF(&Char4::c) == 3);
 }
 
 BinaryCompatible_Impl aTest;

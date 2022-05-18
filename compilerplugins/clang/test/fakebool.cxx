@@ -33,4 +33,18 @@ struct S3 {
     void f() { S2 s(b_); }
 };
 
+namespace {
+
+struct S4 {
+    sal_Bool b;
+};
+
+}
+
+void f() {
+    sal_Bool b;
+    (void) &b;
+    (void) &S4::b;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
