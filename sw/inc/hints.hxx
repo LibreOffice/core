@@ -80,8 +80,10 @@ class SwInsText final : public SwMsgPoolItem
 public:
     sal_Int32 nPos;
     sal_Int32 nLen;
+    bool isInsideFieldmarkCommand;
+    bool isInsideFieldmarkResult;
 
-    SwInsText( sal_Int32 nP, sal_Int32 nL );
+    SwInsText(sal_Int32 nP, sal_Int32 nL, bool isInFMCommand, bool isInFMResult);
 };
 
 class SwDelChr final : public SwMsgPoolItem
