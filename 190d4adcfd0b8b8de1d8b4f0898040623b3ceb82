@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fa5909a_9a47b0f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-05-18T14:35:40Z",
+      "side": 1,
+      "message": "Looks OK to me\nYou may add some description in your commit message about uitests updates",
+      "revId": "190d4adcfd0b8b8de1d8b4f0898040623b3ceb82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
