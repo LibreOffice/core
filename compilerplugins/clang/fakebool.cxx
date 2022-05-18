@@ -451,9 +451,10 @@ bool FakeBool::VisitUnaryOperator(UnaryOperator * op) {
     Expr const * e1 = op->getSubExpr()->IgnoreParenCasts();
     if (isFakeBool(e1->getType()) != FBK_No) {
         if (DeclRefExpr const * e2 = dyn_cast<DeclRefExpr>(e1)) {
-            VarDecl const * d = dyn_cast<VarDecl>(e2->getDecl());
-            if (d != nullptr) {
+            if (auto const d = dyn_cast<VarDecl>(e2->getDecl())) {
                 varDecls_.erase(d);
+            } else if (auto const d = dyn_cast<FieldDecl>(e2->getDecl())) {
+                fieldDecls_.erase(d);
             }
         } else if (auto const e3 = dyn_cast<MemberExpr>(e1)) {
             if (auto const d = dyn_cast<FieldDecl>(e3->getMemberDecl())) {
