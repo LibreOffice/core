@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00a3f335_61715e47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-18T14:18:47Z",
+      "side": 1,
+      "message": "Can understand that \"Arrow Styles\" has become \"deprecated\" - but a tooltip for the Arrow Styles icon is still worthwhile (both for the Customize dialog and for the Drawing Object Properties toolbar), so have used \"arrowheads\" in tooltip, as explained in the commit message.",
+      "revId": "3feed2fec64e34f911a2fbdad713ae2cf33db4ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
