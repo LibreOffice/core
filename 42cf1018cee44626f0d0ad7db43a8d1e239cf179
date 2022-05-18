@@ -85,6 +85,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4e62d41a_a47c3328",
+        "filename": "ucb/source/ucp/file/filstr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-18T12:31:49Z",
+      "side": 1,
+      "message": "\u003e But it would be weird that getSomething can only ever return something that is useful to a single call site,\n\n...but that\u0027s the whole raison d\u0027être of XUnoTunnel, to open an auxiliary channel where caller and callee must agree how to interpret the hyper sent back in response to an agreed-upon identifier (and for this particular tunnel implementation and ByteReader::getImplemnetationId() identifier, they would agree that the hyper encodes a ByteReader* value)\n\n\u003e so it makes sense to me that getSomething looks at the requested identifier, and then casts to the desired \"thing\", so in this case, it checks the identifier, and then either casts to itself, or to ByteReader*.\n\n...and in UcbLockBytes::ReadAt (unotools/source/ucbhelper/ucblockbytes.cxx), it would happily reinterpret_cast the obtained XStream_impl pointer to ByteReader*, and boom?!?",
+      "parentUuid": "0988edd9_9c822977",
+      "range": {
+        "startLine": 177,
+        "startChar": 11,
+        "endLine": 177,
+        "endChar": 39
+      },
+      "revId": "42cf1018cee44626f0d0ad7db43a8d1e239cf179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6915dc3e_c9070540",
         "filename": "ucb/source/ucp/file/filstr.hxx",
         "patchSetId": 3
