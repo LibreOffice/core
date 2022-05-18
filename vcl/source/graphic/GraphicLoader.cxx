@@ -32,8 +32,7 @@ Graphic loadFromURL(OUString const& rURL, weld::Window* pParentWin)
 
         ErrCode nError
             = rFilter.ImportGraphic(aGraphic, rURL, *pInputStream, GRFILTER_FORMAT_DONTKNOW,
-                                    nullptr, GraphicFilterImportFlags::NONE,
-                                    /*pExtHeader*/ static_cast<WmfExternal const*>(nullptr));
+                                    nullptr, GraphicFilterImportFlags::NONE);
         if (nError != ERRCODE_NONE || aGraphic.GetType() == GraphicType::NONE)
             return Graphic();
     }

@@ -1149,8 +1149,7 @@ ErrCode GraphicFilter::readXPM(SvStream & rStream, Graphic & rGraphic)
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
-ErrCode GraphicFilter::readWMF_EMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
-                                   WmfExternal const *pExtHeader, VectorGraphicDataType eType)
+ErrCode GraphicFilter::readWMF_EMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, VectorGraphicDataType eType)
 {
     // use new UNO API service, do not directly import but create a
     // Graphic that contains the original data and decomposes to
@@ -1181,11 +1180,6 @@ ErrCode GraphicFilter::readWMF_EMF(SvStream & rStream, Graphic & rGraphic, GfxLi
 
         auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(aDataContainer, aDataType);
 
-        if (pExtHeader)
-        {
-            aVectorGraphicDataPtr->setWmfExternalHeader(*pExtHeader);
-        }
-
         rGraphic = Graphic(aVectorGraphicDataPtr);
         rLinkType = GfxLinkType::NativeWmf;
         aReturnCode = ERRCODE_NONE;
@@ -1194,14 +1188,14 @@ ErrCode GraphicFilter::readWMF_EMF(SvStream & rStream, Graphic & rGraphic, GfxLi
     return aReturnCode;
 }
 
-ErrCode GraphicFilter::readWMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, WmfExternal const* pExtHeader)
+ErrCode GraphicFilter::readWMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType)
 {
-    return readWMF_EMF(rStream, rGraphic, rLinkType, pExtHeader, VectorGraphicDataType::Wmf);
+    return readWMF_EMF(rStream, rGraphic, rLinkType,VectorGraphicDataType::Wmf);
 }
 
-ErrCode GraphicFilter::readEMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, WmfExternal const* pExtHeader)
+ErrCode GraphicFilter::readEMF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType)
 {
-    return readWMF_EMF(rStream, rGraphic, rLinkType, pExtHeader, VectorGraphicDataType::Emf);
+    return readWMF_EMF(rStream, rGraphic, rLinkType, VectorGraphicDataType::Emf);
 }
 
 ErrCode GraphicFilter::readPDF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType)
@@ -1363,9 +1357,8 @@ ErrCode GraphicFilter::readWEBP(SvStream & rStream, Graphic & rGraphic, GfxLinkT
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
-ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, std::u16string_view rPath, SvStream& rIStream,
-                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
-                                     WmfExternal const *pExtHeader )
+ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPath, SvStream& rIStream,
+                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags)
 {
     OUString aFilterName;
     sal_uInt64 nStreamBegin;
@@ -1458,11 +1451,11 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, std::u16string_view rPa
         }
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_WMF))
         {
-            nStatus = readWMF(rIStream, rGraphic, eLinkType, pExtHeader);
+            nStatus = readWMF(rIStream, rGraphic, eLinkType);
         }
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_EMF))
         {
-            nStatus = readEMF(rIStream, rGraphic, eLinkType, pExtHeader);
+            nStatus = readEMF(rIStream, rGraphic, eLinkType);
         }
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_PDF))
         {
