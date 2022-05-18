@@ -577,6 +577,16 @@ bool RedundantCast::VisitCXXReinterpretCastExpr(
     if (ignoreLocation(expr)) {
         return true;
     }
+    if (expr->getTypeAsWritten() == expr->getSubExprAsWritten()->getType())
+        //TODO: instead of exact QualType match, allow some variation?
+    {
+        report(
+            DiagnosticsEngine::Warning, "redundant reinterpret_cast from %0 to %1",
+                expr->getExprLoc())
+                << expr->getSubExprAsWritten()->getType() << expr->getTypeAsWritten()
+                << expr->getSourceRange();
+        return true;
+    }
     if (auto const sub = dyn_cast<ImplicitCastExpr>(expr->getSubExpr())) {
         if (sub->getCastKind() == CK_ArrayToPointerDecay && sub->getType() == expr->getType())
             //TODO: instead of exact QualType match, allow some variation?

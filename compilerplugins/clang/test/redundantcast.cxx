@@ -329,6 +329,11 @@ void testArithmeticTypedefs() {
     (void) static_cast<T1>(c); // expected-error {{redundant}}
 }
 
+void testReinterpretCast() {
+    int * p;
+    (void) reinterpret_cast<int *>(p); // expected-error {{redundant reinterpret_cast from 'int *' to 'int *' [loplugin:redundantcast]}}
+}
+
 void testReinterpretConstCast() {
     int n = 0;
     (void) reinterpret_cast<std::size_t>((const_cast<int const *>(&n))); // expected-error-re {{redundant const_cast from 'int *' to 'const int *' within reinterpret_cast to fundamental type 'std::size_t' (aka 'unsigned {{.+}}') [loplugin:redundantcast]}}
@@ -442,6 +447,7 @@ int main() {
     testFunctionalCast();
     testCStyleCast();
     testCStyleCastOfTemplateMethodResult(nullptr);
+    testReinterpretCast();
     testReinterpretConstCast();
     testDynamicCast();
     testIntermediaryStaticCast();

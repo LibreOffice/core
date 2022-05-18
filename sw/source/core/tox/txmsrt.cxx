@@ -753,7 +753,7 @@ TextAndReading SwTOXTable::GetText_Impl(SwRootFrame const*const) const
     if( pNd )
     {
         const SwTableNode* pTableNd =
-            reinterpret_cast<const SwTableNode*>(pNd->FindTableNode());
+            pNd->FindTableNode();
         if (pTableNd)
         {
             return TextAndReading(pTableNd->GetTable().GetFrameFormat()->GetName(), OUString());

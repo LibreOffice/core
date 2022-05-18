@@ -22338,7 +22338,7 @@ private:
         if (!pMouseEnteredAnotherPopup)
             return false;
 
-        return gtk_widget_event(pEventWidget, reinterpret_cast<GdkEvent*>(pEvent));
+        return gtk_widget_event(pEventWidget, pEvent);
     }
 
     static gboolean signalButtonCrossing(GtkWidget*, GdkEvent* pEvent, gpointer widget)

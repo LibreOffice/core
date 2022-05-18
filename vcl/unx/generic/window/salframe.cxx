@@ -3204,7 +3204,7 @@ bool X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         // convert to single byte text stream
         nSize = rtl_convertTextToUnicode(
                                 aConverter, aContext,
-                                reinterpret_cast<char*>(pPrintable), nLen,
+                                pPrintable, nLen,
                                 pBuffer, nBufferSize,
                                 RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE |
                                 RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE,

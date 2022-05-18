@@ -101,7 +101,7 @@ namespace DOM
     {
         sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
         OString prefix(pPrefix,
-                       strlen(reinterpret_cast<const char*>(pPrefix)));
+                       strlen(pPrefix));
 
         SAL_INFO("unoxml", "getTokenWithPrefix(): prefix " << pPrefix << ", name " << pName);
 
