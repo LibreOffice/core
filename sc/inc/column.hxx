@@ -171,6 +171,7 @@ public:
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark, SCCOL nCol );
 
     bool        TestInsertRow( SCSIZE nSize ) const;
+    void        InsertRow( SCROW nStartRow, SCSIZE nSize );
 };
 
 // Use protected inheritance to prevent publishing some internal ScColumnData
@@ -1036,6 +1037,11 @@ inline void ScColumnData::SetAttrEntries(std::vector<ScAttrEntry> && vNewData)
 inline bool ScColumnData::TestInsertRow( SCSIZE nSize ) const
 {
     return pAttrArray->TestInsertRow( nSize );
+}
+
+inline void ScColumnData::InsertRow( SCROW nStartRow, SCSIZE nSize )
+{
+    pAttrArray->InsertRow( nStartRow, nSize );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
