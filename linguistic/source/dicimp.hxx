@@ -74,7 +74,7 @@ class DictionaryNeo :
                                           bool bIsLoadEntries = false);
 
 public:
-    DictionaryNeo(const OUString &rName, LanguageType nLang,
+    DictionaryNeo(OUString aName, LanguageType nLang,
                     css::linguistic2::DictionaryType eType,
                     const OUString &rMainURL,
                     bool bWriteable );
@@ -155,8 +155,8 @@ class DicEntry :
 
 public:
     DicEntry(const OUString &rDicFileWord, bool bIsNegativ);
-    DicEntry(const OUString &rDicWord, bool bIsNegativ,
-             const OUString &rRplcText);
+    DicEntry(OUString aDicWord, bool bIsNegativ,
+             OUString aRplcText);
     virtual ~DicEntry() override;
 
     // XDictionaryEntry
