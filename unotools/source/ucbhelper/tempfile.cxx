@@ -142,19 +142,18 @@ static OUString ConstructTempDir_Impl( const OUString* pParent, bool bCreatePare
 
     if ( aName.isEmpty() )
     {
-        OUString &rTempNameBase_Impl = gTempNameBase_Impl;
-        if (rTempNameBase_Impl.isEmpty())
+        if (gTempNameBase_Impl.isEmpty())
         {
             OUString ustrTempDirURL;
             ::osl::FileBase::RC rc = ::osl::File::getTempDirURL(
                 ustrTempDirURL );
             if (rc == ::osl::FileBase::E_None)
-                rTempNameBase_Impl = ustrTempDirURL;
+                gTempNameBase_Impl = ustrTempDirURL;
+            ensuredir( aName );
         }
         // if no parent or invalid parent : use default directory
-        DBG_ASSERT( !rTempNameBase_Impl.isEmpty(), "No TempDir!" );
-        aName = rTempNameBase_Impl;
-        ensuredir( aName );
+        DBG_ASSERT( !gTempNameBase_Impl.isEmpty(), "No TempDir!" );
+        aName = gTempNameBase_Impl;
     }
 
     // Make sure that directory ends with a separator
