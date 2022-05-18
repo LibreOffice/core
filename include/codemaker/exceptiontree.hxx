@@ -24,6 +24,7 @@
 #include <rtl/string.hxx>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 class TypeManager;
@@ -37,8 +38,8 @@ struct ExceptionTreeNode {
     typedef std::vector< std::unique_ptr<ExceptionTreeNode> > Children;
 
     // Internally used by ExceptionTree:
-    ExceptionTreeNode(rtl::OString const & theName):
-        name(theName), present(false) {}
+    ExceptionTreeNode(rtl::OString theName):
+        name(std::move(theName)), present(false) {}
 
     // Internally used by ExceptionTree:
     ~ExceptionTreeNode() { clearChildren(); }

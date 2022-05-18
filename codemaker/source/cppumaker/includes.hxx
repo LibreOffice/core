@@ -33,7 +33,7 @@ namespace codemaker::cppumaker {
 class Includes {
 public:
     Includes(
-        rtl::Reference< TypeManager > const & manager,
+        rtl::Reference< TypeManager > manager,
         Dependencies const & dependencies, bool hpp);
 
     ~Includes();
