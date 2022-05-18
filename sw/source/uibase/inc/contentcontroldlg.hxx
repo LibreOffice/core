@@ -52,6 +52,7 @@ class SwContentControlDlg final : public SfxDialogController
     DECL_LINK(DeleteHdl, weld::Button&, void);
     DECL_LINK(MoveUpHdl, weld::Button&, void);
     DECL_LINK(MoveDownHdl, weld::Button&, void);
+    DECL_LINK(SelectionChangedHdl, weld::TreeView&, void);
     DECL_LINK(OkHdl, weld::Button&, void);
 
 public:
