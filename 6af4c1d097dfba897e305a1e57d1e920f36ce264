@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5177ad51_505c1254",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 3066,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-18T07:15:00Z",
+      "side": 1,
+      "message": "Did you consider dropping the startsWith() check and changing this to a dynamic cast?\n\nA string prefix check followed by a static cast sounds fragile.",
+      "revId": "6af4c1d097dfba897e305a1e57d1e920f36ce264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
