@@ -193,8 +193,6 @@ class SwTextBoxNode
         SwFrameFormat* m_pTextBoxFormat;
         // The Draw object where the textbox belongs to
         SdrObject* m_pDrawObject;
-        // This is for indicating if the textbox is in special case: for example during undo.
-        bool m_bIsActive;
     };
 
     // This vector stores the textboxes what belongs to this node
@@ -202,6 +200,10 @@ class SwTextBoxNode
     // This is the pointer to the shape format, which has this node
     // (and the textboxes)
     SwFrameFormat* m_pOwnerShapeFormat;
+
+    // If this true all sync calls will be blocked, in order to prevent
+    // unneeded sync loops.
+    bool m_bIsSycLocked;
 
 public:
     // Not needed.
@@ -235,13 +237,6 @@ public:
     // to the given shape (pDrawObject)
     SwFrameFormat* GetTextBox(const SdrObject* pDrawObject) const;
 
-    // Is this textbox has special state, undo for example?
-    bool IsTextBoxActive(const SdrObject* pDrawObject) const;
-
-    // Setters for the state flag.
-    void SetTextBoxInactive(const SdrObject* pDrawObject);
-    void SetTextBoxActive(const SdrObject* pDrawObject);
-
     // If this is a group shape, that returns true.
     bool IsGroupTextBox() const;
     // This returns with the shape what this class belongs to.
@@ -250,6 +245,13 @@ public:
     size_t GetTextBoxCount() const { return m_pTextBoxes.size(); };
     // Returns with a const collection of textboxes owned by this node.
     std::map<SdrObject*, SwFrameFormat*> GetAllTextBoxes() const;
+
+    // If this returns true syncing will be aborted.
+    bool IsSyncLocked() const { return m_bIsSycLocked; }
+    // Locks the sync methods.
+    void Lock() { m_bIsSycLocked = true; }
+    // Unlocks the sync methods.
+    void Unlock() { m_bIsSycLocked = false; }
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX
