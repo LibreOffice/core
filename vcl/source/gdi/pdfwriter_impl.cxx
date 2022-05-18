@@ -4438,6 +4438,19 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 aLine.append("/S/JavaScript>>\n");
                 aLine.append(">>\n");
             }
+            else if ( rWidget.m_nFormat == PDFWriter::Date )
+            {
+                aLine.append("/AA<<\n");
+                aLine.append("/F<</JS(AFDate_FormatEx\\(\"");
+                aLine.append(OUStringToOString(rWidget.m_aDateFormat, RTL_TEXTENCODING_ASCII_US));
+                aLine.append("\"\\);)");
+                aLine.append("/S/JavaScript>>\n");
+                aLine.append("/K<</JS(AFDate_KeystrokeEx\\(\"");
+                aLine.append(OUStringToOString(rWidget.m_aDateFormat, RTL_TEXTENCODING_ASCII_US));
+                aLine.append("\"\\);)");
+                aLine.append("/S/JavaScript>>\n");
+                aLine.append(">>\n");
+            }
         }
         if( rWidget.m_eType == PDFWriter::PushButton )
         {
@@ -11032,6 +11045,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_nDecimalAccuracy = rEdit.DecimalAccuracy;
         rNewWidget.m_bPrependCurrencySymbol = rEdit.PrependCurrencySymbol;
         rNewWidget.m_aTimeFormat = rEdit.TimeFormat;
+        rNewWidget.m_aDateFormat = rEdit.DateFormat;
         rNewWidget.m_aValue = rEdit.Text;
 
         createDefaultEditAppearance( rNewWidget, rEdit );

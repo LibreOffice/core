@@ -866,7 +866,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 
     auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
     CPPUNIT_ASSERT(pAnnots);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pAnnots->GetElements().size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pAnnots->GetElements().size());
 
     sal_uInt32 nTextFieldCount = 0;
     for (const auto& aElement : aDocument.GetElements())
@@ -898,13 +898,22 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
                     OString("AFNumber_Format\\(4, 0, 0, 0, \"\\\\u20ac\",true\\);"),
                     pJS->GetValue());
             }
-            else
+            else if (nTextFieldCount == 2)
             {
                 CPPUNIT_ASSERT_EQUAL(OString("TimeField"), pT->GetValue());
 
                 auto pJS
                     = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pF->LookupElement("JS"));
                 CPPUNIT_ASSERT_EQUAL(OString("AFTime_FormatEx\\(\"h:MM:sstt\"\\);"),
+                                     pJS->GetValue());
+            }
+            else
+            {
+                CPPUNIT_ASSERT_EQUAL(OString("DateField"), pT->GetValue());
+
+                auto pJS
+                    = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pF->LookupElement("JS"));
+                CPPUNIT_ASSERT_EQUAL(OString("AFDate_FormatEx\\(\"yy-mm-dd\"\\);"),
                                      pJS->GetValue());
             }
         }

@@ -473,6 +473,7 @@ struct PDFWidget : public PDFAnnotation
     sal_Int32                   m_nDecimalAccuracy;
     bool                        m_bPrependCurrencySymbol;
     OUString                    m_aTimeFormat;
+    OUString                    m_aDateFormat;
     bool                        m_bSubmit;
     bool                        m_bSubmitGet;
     sal_Int32                   m_nDest;
