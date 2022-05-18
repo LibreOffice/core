@@ -20,6 +20,7 @@
 #ifndef INCLUDED_O3TL_VECTOR_POOL_HXX
 #define INCLUDED_O3TL_VECTOR_POOL_HXX
 
+#include <utility>
 #include <vector>
 
 namespace o3tl
@@ -84,8 +85,8 @@ namespace o3tl
                     value(),
                     nextFree(-1)
                 {}
-                explicit type( const ValueType& val ) :
-                    value(val),
+                explicit type( ValueType val ) :
+                    value(std::move(val)),
                     nextFree(-1)
                 {}
 
