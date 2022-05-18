@@ -133,6 +133,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dee60449_cf388e4a",
+        "filename": "ucb/source/ucp/file/filstr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-18T13:19:02Z",
+      "side": 1,
+      "message": "\u003e \u003e ...and in UcbLockBytes::ReadAt (unotools/source/ucbhelper/ucblockbytes.cxx), it would happily reinterpret_cast the obtained XStream_impl pointer to ByteReader*, and boom?!?\n\u003e \n\u003e No, because in \n\u003e   UcbLockBytes::ReadAt , \n\u003e we pass in the GUID we get from \n\u003e     ByteReader::getUnoTunnelId()\n\u003e and then the \n\u003e     XStream_Impl::getSomething \n\u003e will use the\n\u003e     comphelper::getSomethingImpl\n\u003e infrastructure to select what to cast to, and will return a ByteReader*.\n\u003e \n\u003e Or at least that is how I understand the code, could be barking in entirely the wrong forest.\n\nSure, because you are using a convoluted implementation based on that cppuhelper machinery, which appears completely unnecessary here :)  (And that\u0027s why I wrote \"would\", not \"does\".)",
+      "parentUuid": "a588c504_6cf49389",
+      "range": {
+        "startLine": 177,
+        "startChar": 11,
+        "endLine": 177,
+        "endChar": 39
+      },
+      "revId": "42cf1018cee44626f0d0ad7db43a8d1e239cf179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6915dc3e_c9070540",
         "filename": "ucb/source/ucp/file/filstr.hxx",
         "patchSetId": 3
