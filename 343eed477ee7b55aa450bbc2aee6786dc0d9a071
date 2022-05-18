@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fde3760_afede214",
+        "filename": "include/o3tl/lazy_update.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-18T12:53:18Z",
+      "side": 1,
+      "message": "Could you please move this down below the license header? Thanks.",
+      "revId": "343eed477ee7b55aa450bbc2aee6786dc0d9a071",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
