@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0988edd9_9c822977",
+        "filename": "ucb/source/ucp/file/filstr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-18T12:15:22Z",
+      "side": 1,
+      "message": "I confess that the whole XUnoTunnel is a little opaque to me, so I largely cut\u0027n\u0027pasted from other code that is using.\n\nBut it would be weird that getSomething can only ever return something that is useful to a single call site, so it makes sense to me that getSomething looks at the requested identifier, and then casts to the desired \"thing\", so in this case, it checks the identifier, and then either casts to itself, or to ByteReader*.",
+      "parentUuid": "1ffdd176_667871f6",
+      "range": {
+        "startLine": 177,
+        "startChar": 11,
+        "endLine": 177,
+        "endChar": 39
+      },
+      "revId": "42cf1018cee44626f0d0ad7db43a8d1e239cf179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6915dc3e_c9070540",
@@ -54,6 +78,24 @@
       "writtenOn": "2022-05-18T11:46:55Z",
       "side": 1,
       "message": "here and elsewhere: why do you need this function?",
+      "revId": "42cf1018cee44626f0d0ad7db43a8d1e239cf179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7cbc9f8_8ca7a595",
+        "filename": "ucb/source/ucp/file/filstr.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-18T12:15:22Z",
+      "side": 1,
+      "message": "Because the comphelpergetSomethingImpl infrastructure requires it.",
+      "parentUuid": "6915dc3e_c9070540",
       "revId": "42cf1018cee44626f0d0ad7db43a8d1e239cf179",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
