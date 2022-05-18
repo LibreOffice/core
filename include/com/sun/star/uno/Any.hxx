@@ -154,8 +154,15 @@ Any::Any(Any && other) noexcept {
 }
 
 Any & Any::operator =(Any && other) noexcept {
-    uno_any_destruct(this, &cpp_release);
-    detail::moveAnyInternals(other, *this);
+    std::swap(other.pType, pType);
+    std::swap(other.pData, pData);
+    std::swap(other.pReserved, pReserved);
+    if (pData == &other.pReserved) {
+        pData = &pReserved;
+    }
+    if (other.pData == &pReserved) {
+        other.pData = &other.pReserved;
+    }
     return *this;
 }
 
