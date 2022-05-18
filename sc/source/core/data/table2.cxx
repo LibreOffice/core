@@ -308,8 +308,11 @@ void ScTable::InsertCol(
         }
     }
 
+    // Make sure there are enough columns at the end.
+    CreateColumnIfNotExists(std::min<SCCOL>(rDocument.MaxCol(), std::max(nStartCol, aCol.size()) + nSize - 1 ));
     if ((nStartRow == 0) && (nEndRow == rDocument.MaxRow()))
     {
+        // Move existing columns back, this will swap last empty columns in the inserted place.
         for (SCCOL nCol = aCol.size() - 1 - nSize; nCol >= nStartCol; --nCol)
             aCol[nCol].SwapCol(aCol[nCol+nSize]);
     }
