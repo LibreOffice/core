@@ -44,6 +44,7 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
     , m_xMoveDownBtn(m_xBuilder->weld_button("movedown"))
     , m_xOk(m_xBuilder->weld_button("ok"))
 {
+    m_xListItems->connect_changed(LINK(this, SwContentControlDlg, SelectionChangedHdl));
     m_xOk->connect_clicked(LINK(this, SwContentControlDlg, OkHdl));
 
     // Only 2 items would be visible by default.
@@ -243,6 +244,45 @@ IMPL_LINK_NOARG(SwContentControlDlg, MoveDownHdl, weld::Button&, void)
     m_xListItems->insert_text(nRow, aItem.m_aDisplayText);
     m_xListItems->set_text(nRow, aItem.m_aValue, 1);
     m_xListItems->select(nRow);
+}
+
+IMPL_LINK_NOARG(SwContentControlDlg, SelectionChangedHdl, weld::TreeView&, void)
+{
+    if (!m_xListItems->has_focus())
+    {
+        return;
+    }
+
+    int nRow = m_xListItems->get_selected_index();
+    if (nRow < 0)
+    {
+        m_xRenameBtn->set_sensitive(false);
+        m_xDeleteBtn->set_sensitive(false);
+    }
+    else
+    {
+        m_xRenameBtn->set_sensitive(true);
+        m_xDeleteBtn->set_sensitive(true);
+    }
+
+    if (nRow <= 0)
+    {
+        m_xMoveUpBtn->set_sensitive(false);
+    }
+    else
+    {
+        m_xMoveUpBtn->set_sensitive(true);
+    }
+
+    int nEndPos = m_xListItems->n_children() - 1;
+    if (nRow < 0 || nRow >= nEndPos)
+    {
+        m_xMoveDownBtn->set_sensitive(false);
+    }
+    else
+    {
+        m_xMoveDownBtn->set_sensitive(true);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
