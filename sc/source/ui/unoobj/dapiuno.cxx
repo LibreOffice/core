@@ -499,7 +499,6 @@ Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScDataPilotTablesObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<XDataPilotTable2>::get();
 }
 
@@ -1580,7 +1579,6 @@ Any SAL_CALL ScDataPilotFieldsObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScDataPilotFieldsObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<XPropertySet>::get();
 }
 
@@ -2851,7 +2849,6 @@ Reference<XEnumeration> SAL_CALL ScDataPilotFieldGroupsObj::createEnumeration()
 
 uno::Type SAL_CALL ScDataPilotFieldGroupsObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<XNameAccess>::get();
 }
 
@@ -3024,7 +3021,6 @@ Reference< XEnumeration > SAL_CALL ScDataPilotFieldGroupObj::createEnumeration()
 
 uno::Type SAL_CALL ScDataPilotFieldGroupObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<XNamed>::get();
 }
 
@@ -3176,7 +3172,6 @@ Any SAL_CALL ScDataPilotItemsObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScDataPilotItemsObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<XPropertySet>::get();
 }
 

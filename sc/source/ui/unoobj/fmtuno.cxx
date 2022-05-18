@@ -382,7 +382,6 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScTableConditionalFormat::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XSheetConditionalEntry>::get();
 }
 

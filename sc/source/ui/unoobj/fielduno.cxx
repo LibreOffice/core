@@ -360,7 +360,6 @@ uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScCellFieldsObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<text::XTextField>::get();
 }
 
@@ -511,7 +510,6 @@ uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScHeaderFieldsObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<text::XTextField>::get();
 }
 

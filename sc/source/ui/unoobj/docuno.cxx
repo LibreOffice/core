@@ -3591,7 +3591,6 @@ uno::Any SAL_CALL ScDrawPagesObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScDrawPagesObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<drawing::XDrawPage>::get();
 }
 
@@ -3920,7 +3919,6 @@ uno::Any SAL_CALL ScTableSheetsObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScTableSheetsObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XSpreadsheet>::get();
 }
 
@@ -4091,7 +4089,6 @@ uno::Any SAL_CALL ScTableColumnsObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScTableColumnsObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<table::XCellRange>::get();
 }
 
@@ -4334,7 +4331,6 @@ uno::Any SAL_CALL ScTableRowsObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScTableRowsObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<table::XCellRange>::get();
 }
 
@@ -4645,7 +4641,6 @@ uno::Any SAL_CALL ScAnnotationsObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScAnnotationsObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XSheetAnnotation>::get();
 }
 
@@ -4800,7 +4795,6 @@ uno::Any SAL_CALL ScScenariosObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScScenariosObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XScenario>::get();
 }
 

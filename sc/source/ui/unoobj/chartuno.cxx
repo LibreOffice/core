@@ -331,7 +331,6 @@ uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScChartsObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<table::XTableChart>::get();
 }
 

@@ -179,7 +179,6 @@ void SAL_CALL OBookmarkContainer::removeContainerListener( const Reference< XCon
 // XElementAccess
 Type SAL_CALL OBookmarkContainer::getElementType( )
 {
-    MutexGuard aGuard(m_rMutex);
     return ::cppu::UnoType<OUString>::get();
 }
 
