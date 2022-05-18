@@ -11,6 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,comphelper_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_test, \
     comphelper/qa/string/test_string \
+    comphelper/qa/string/NaturalStringSortTest \
     comphelper/qa/container/testifcontainer \
     comphelper/qa/container/testifcontainer3 \
     comphelper/qa/unit/test_hash \
@@ -21,6 +22,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_test, \
     comphelper/qa/unit/test_traceevent \
 ))
 
+$(eval $(call gb_CppunitTest_use_ure,comphelper_test))
 $(eval $(call gb_CppunitTest_use_sdk_api,comphelper_test))
 
 $(eval $(call gb_CppunitTest_use_libraries,comphelper_test, \
@@ -28,6 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,comphelper_test, \
     cppuhelper \
     cppu \
     sal \
+    unotest \
 ))
 
 ifeq ($(TLS),NSS)
@@ -36,5 +39,9 @@ $(eval $(call gb_CppunitTest_use_externals,comphelper_test,\
        nss3 \
 ))
 endif
+
+$(eval $(call gb_CppunitTest_use_components,comphelper_test,\
+	i18npool/util/i18npool \
+))
 
 # vim: set noet sw=4 ts=4:
