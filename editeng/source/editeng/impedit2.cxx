@@ -3486,7 +3486,7 @@ tools::Long ImpEditEngine::Calc1ColumnTextHeight(tools::Long* pHeightNTP)
     comphelper::ValueRestorationGuard aGuard(nCurTextHeight,
                                              std::numeric_limits<tools::Long>::max());
 
-    auto FindLastLineBottom = [&](const LineAreaInfo& rInfo) {
+    IterateLinesAreasFunc FindLastLineBottom = [&](const LineAreaInfo& rInfo) {
         if (rInfo.pLine)
         {
             // bottom coordinate does not belong to area, so no need to do +1
