@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 #include <string_view>
+#include <utility>
 #include <vector>
 
 struct IsoLanguageCountryEntry;
@@ -221,7 +222,7 @@ public:
         OUString        maBcp47;
         LanguageType    mnLang;
 
-        LanguagetagMapping( const OUString & rBcp47, LanguageType nLang ) : maBcp47(rBcp47), mnLang(nLang) {}
+        LanguagetagMapping( OUString aBcp47, LanguageType nLang ) : maBcp47(std::move(aBcp47)), mnLang(nLang) {}
     };
 
     /** @internal - Obtain a list of known locales (i.e. those that have a
