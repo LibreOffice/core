@@ -380,7 +380,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     bool bShowError = !pName;
     if( pName
 #if HAVE_FEATURE_DESKTOP
-        || ERRCODE_NONE == pFileDlg->Execute()
+        || (!Application::IsHeadlessModeEnabled() && ERRCODE_NONE == pFileDlg->Execute())
 #endif
         )
     {
