@@ -4664,6 +4664,32 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
                             CaptureMouse();
                         }
+
+                        if (pFlyFormat)
+                        {
+                            // See if the fly frame's anchor is in a content control. If so,
+                            // interact with it.
+                            const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
+                            const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
+                            if (pAnchorPos)
+                            {
+                                SwTextNode* pTextNode = pAnchorPos->nNode.GetNode().GetTextNode();
+                                if (pTextNode)
+                                {
+                                    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
+                                        pAnchorPos->nContent.GetIndex(), RES_TXTATR_CONTENTCONTROL,
+                                        SwTextNode::PARENT);
+                                    if (pAttr)
+                                    {
+                                        SwTextContentControl* pTextContentControl
+                                            = static_txtattr_cast<SwTextContentControl*>(pAttr);
+                                        const SwFormatContentControl& rFormatContentControl
+                                            = pTextContentControl->GetContentControl();
+                                        rSh.GotoContentControl(rFormatContentControl);
+                                    }
+                                }
+                            }
+                        }
                     }
                     rSh.EndDrag( &aDocPt, false );
                 }
