@@ -25,6 +25,7 @@
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
+#include <fmtanchr.hxx>
 
 namespace
 {
@@ -238,6 +239,51 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertDropdownContentControl)
     // - Actual  : 0
     // i.e. the inserted content control was a default (rich text) one, not a dropdown.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pContentControl->GetListItems().size());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testReplacePictureContentControl)
+{
+    // Given a document with a picture content control:
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<beans::XPropertySet> xTextGraphic(
+        xMSF->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue("AnchorType",
+                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xTextContent, false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("ShowingPlaceHolder", uno::Any(true));
+    xContentControlProps->setPropertyValue("Picture", uno::Any(true));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When clicking on that content control:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->GotoObj(/*bNext=*/true, GotoObjFlags::Any);
+    pWrtShell->EnterSelFrameMode();
+    const SwFrameFormat* pFlyFormat = pWrtShell->GetFlyFrameFormat();
+    const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
+    const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
+    SwTextNode* pTextNode = pAnchorPos->nNode.GetNode().GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    pWrtShell->GotoContentControl(rFormatContentControl);
+
+    // Then make sure that the picture is replaced:
+    CPPUNIT_ASSERT(!rFormatContentControl.GetContentControl()->GetShowingPlaceHolder());
+    // Without the accompanying fix in place, this test would have failed, there was no special
+    // handling for picture content control (how to interact with them), and the default handler
+    // killed the image selection.
+    CPPUNIT_ASSERT(pWrtShell->IsFrameSelected());
 }
 }
 
