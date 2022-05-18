@@ -390,7 +390,7 @@ xmlDocUniquePtr SdTiledRenderingTest::parseXmlDump()
     (void)xmlTextWriterEndDocument(pXmlWriter);
     xmlFreeTextWriter(pXmlWriter);
 
-    auto pCharBuffer = reinterpret_cast<const xmlChar*>(xmlBufferContent(m_pXmlBuffer));
+    auto pCharBuffer = xmlBufferContent(m_pXmlBuffer);
     SAL_INFO("test", "SdTiledRenderingTest::parseXmlDump: pCharBuffer is '" << pCharBuffer << "'");
     return xmlDocUniquePtr(xmlParseDoc(pCharBuffer));
 }

@@ -260,7 +260,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
                 sal_Size nConverted;
                 sal_Size nSize = rtl_convertTextToUnicode(
                     aConverter, aContext,
-                    reinterpret_cast< char const * >(rTest.m_pText + nInput),
+                    rTest.m_pText + nInput,
                     nSrcBytes, aUnicode + nOutput, TEST_STRING_SIZE - nOutput,
                     nFlags, &nInfo, &nConverted);
                 nOutput += nSize;

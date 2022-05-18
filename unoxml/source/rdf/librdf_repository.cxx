@@ -2426,7 +2426,7 @@ librdf_TypeConverter::convertToXNode(librdf_node* i_pNode) const
         RTL_TEXTENCODING_UTF8) );
     if (lang) {
         const OUString langU( OStringToOUString(
-            std::string_view(reinterpret_cast<const char*>(lang)),
+            std::string_view(lang),
             RTL_TEXTENCODING_UTF8) );
         return rdf::Literal::createWithLanguage(m_xContext, valueU, langU);
     } else if (pType) {
