@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb905953_0ec7c55e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-18T15:13:02Z",
+      "side": 1,
+      "message": "Eike, would appreciate if you can take a look too as this changes a lot. Laurent gave his +2.",
+      "revId": "27219aba78a21d89b6e8aad4d5ea4240eaf6f4de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
