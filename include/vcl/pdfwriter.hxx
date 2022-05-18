@@ -395,7 +395,8 @@ public:
                   Password( false ),
                   FileSelect( false ),
                   MaxLen( 0 ),
-                  Format( FormatType::Text )
+                  Format( FormatType::Text ),
+                  PrependCurrencySymbol( false )
         {}
 
         virtual std::shared_ptr<AnyWidget> Clone() const override
