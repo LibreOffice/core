@@ -134,15 +134,20 @@ void ScTable::SetCalcNotification( bool bSet )
 
 bool ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize ) const
 {
-    bool bTest = true;
-
     if ( nStartCol==0 && nEndCol==rDocument.MaxCol() && pOutlineTable )
-        bTest = pOutlineTable->TestInsertRow(nSize);
+        if (!pOutlineTable->TestInsertRow(nSize))
+            return false;
 
-    for (SCCOL i=nStartCol; (i<=nEndCol) && bTest; i++)
-        bTest = const_cast<ScTable*>(this)->CreateColumnIfNotExists(i).TestInsertRow(nStartRow, nSize);
+    SCCOL maxCol = ClampToAllocatedColumns(nEndCol);
+    for (SCCOL i=nStartCol; i<=maxCol; i++)
+        if (!aCol[i].TestInsertRow(nStartRow, nSize))
+            return false;
 
-    return bTest;
+    if( maxCol != nEndCol )
+        if (!aDefaultColData.TestInsertRow(nSize))
+            return false;
+
+    return true;
 }
 
 void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize )

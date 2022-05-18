@@ -169,6 +169,8 @@ public:
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark, SCCOL nCol );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark, SCCOL nCol );
+
+    bool        TestInsertRow( SCSIZE nSize ) const;
 };
 
 // Use protected inheritance to prevent publishing some internal ScColumnData
@@ -1028,6 +1030,11 @@ inline void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
 inline void ScColumnData::SetAttrEntries(std::vector<ScAttrEntry> && vNewData)
 {
     pAttrArray->SetAttrEntries( std::move( vNewData ));
+}
+
+inline bool ScColumnData::TestInsertRow( SCSIZE nSize ) const
+{
+    return pAttrArray->TestInsertRow( nSize );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
