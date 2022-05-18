@@ -12,6 +12,7 @@
 
 #include <vcl/weld.hxx>
 #include <vcl/commandevent.hxx>
+#include <comphelper/string.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -40,6 +41,13 @@ private:
     // just the current context
     css::uno::Reference<css::uno::XComponentContext> mxContext;
 
+    // treeview sort and compare
+    comphelper::string::NaturalStringSorter mxSorter;
+    void setSortFunction(std::unique_ptr<weld::TreeView>& pTreeView);
+    sal_Int32 compare(std::unique_ptr<weld::TreeView>& pTreeView, const weld::TreeIter& rLeft,
+                      const weld::TreeIter& rRight);
+
+    // treeview manipulation
     static void clearObjectInspectorChildren(std::unique_ptr<weld::TreeView>& pTreeView,
                                              weld::TreeIter const& rParent);
     static void handleExpanding(std::unique_ptr<weld::TreeView>& pTreeView,
