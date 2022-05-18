@@ -23,6 +23,7 @@
 #include "idlc.hxx"
 
 #include <rtl/ustring.hxx>
+#include <utility>
 
 class AstInterface;
 class AstType;
@@ -31,9 +32,9 @@ class InheritedInterface {
 public:
     InheritedInterface(
         AstType const * theInterface, bool theOptional,
-        OUString const & theDocumentation):
+        OUString theDocumentation):
         interface(theInterface), optional(theOptional),
-        documentation(theDocumentation) {}
+        documentation(std::move(theDocumentation)) {}
 
     AstType const * getInterface() const { return interface; }
 
