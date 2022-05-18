@@ -14,6 +14,7 @@
 #include <cassert>
 #include <map>
 #include <set>
+#include <utility>
 #include <vector>
 
 #include <rtl/ref.hxx>
@@ -107,10 +108,10 @@ class SourceProviderInterfaceTypeEntityPad: public SourceProviderEntityPad {
 public:
     struct DirectBase {
         DirectBase(
-            OUString const & theName,
+            OUString theName,
             rtl::Reference<unoidl::InterfaceTypeEntity> const & theEntity,
             std::vector<OUString>&& theAnnotations):
-            name(theName), entity(theEntity), annotations(std::move(theAnnotations))
+            name(std::move(theName)), entity(theEntity), annotations(std::move(theAnnotations))
         { assert(theEntity.is()); }
 
         OUString name;
@@ -127,7 +128,7 @@ public:
         OUString mandatory;
         std::set<OUString> optional;
 
-        explicit Member(const OUString & theMandatory): mandatory(theMandatory) {}
+        explicit Member(OUString theMandatory): mandatory(std::move(theMandatory)) {}
     };
 
     SourceProviderInterfaceTypeEntityPad(bool published, bool theSingleBase):
@@ -196,9 +197,9 @@ public:
     struct Constructor {
         struct Parameter {
             Parameter(
-                OUString const & theName,
-                SourceProviderType const & theType, bool theRest):
-                name(theName), type(theType), rest(theRest)
+                OUString theName,
+                SourceProviderType theType, bool theRest):
+                name(std::move(theName)), type(std::move(theType)), rest(theRest)
             {}
 
             OUString name;
@@ -209,9 +210,9 @@ public:
         };
 
         Constructor(
-            OUString const & theName,
+            OUString theName,
             std::vector< OUString >&& theAnnotations):
-            name(theName), annotations(std::move(theAnnotations))
+            name(std::move(theName)), annotations(std::move(theAnnotations))
         {}
 
         OUString name;
@@ -224,8 +225,8 @@ public:
     };
 
     explicit SourceProviderSingleInterfaceBasedServiceEntityPad(
-        bool published, OUString const & theBase):
-        SourceProviderEntityPad(published), base(theBase)
+        bool published, OUString theBase):
+        SourceProviderEntityPad(published), base(std::move(theBase))
     {}
 
     OUString const base;
@@ -284,8 +285,8 @@ struct SourceProviderEntity {
 
 struct SourceProviderScannerData {
     explicit SourceProviderScannerData(
-        rtl::Reference<unoidl::Manager> const & theManager):
-        manager(theManager),
+        rtl::Reference<unoidl::Manager> theManager):
+        manager(std::move(theManager)),
         sourcePosition(), sourceEnd(),
             // avoid false warnings about uninitialized members
         errorLine(0), publishedContext(false)

@@ -11,6 +11,7 @@
 
 #include <sal/config.h>
 
+#include <utility>
 #include <vector>
 
 #include <rtl/ustring.hxx>
@@ -97,25 +98,25 @@ struct SourceProviderType {
     { assert(componentType != nullptr); subtypes.push_back(*componentType); }
 
     SourceProviderType(
-        Type theType, OUString const & theName,
+        Type theType, OUString theName,
         SourceProviderEntity const * theEntity):
-        type(theType), name(theName), entity(theEntity)
+        type(theType), name(std::move(theName)), entity(theEntity)
     {
         assert(theType >= TYPE_ENUM && theType <= TYPE_INTERFACE);
         assert(theEntity != nullptr);
     }
 
     SourceProviderType(
-        OUString const & polymorphicStructTypeTemplateName,
+        OUString polymorphicStructTypeTemplateName,
         SourceProviderEntity const * theEntity,
         std::vector<SourceProviderType>&& typeArguments):
         type(TYPE_INSTANTIATED_POLYMORPHIC_STRUCT),
-        name(polymorphicStructTypeTemplateName), entity(theEntity),
+        name(std::move(polymorphicStructTypeTemplateName)), entity(theEntity),
         subtypes(std::move(typeArguments))
     { assert(theEntity != nullptr); }
 
-    explicit SourceProviderType(OUString const & identifier):
-        type(TYPE_PARAMETER), name(identifier),
+    explicit SourceProviderType(OUString identifier):
+        type(TYPE_PARAMETER), name(std::move(identifier)),
         entity() // avoid false warnings about uninitialized member
     {}
 

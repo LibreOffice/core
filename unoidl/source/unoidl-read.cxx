@@ -143,8 +143,8 @@ struct Entity {
     enum class Written { NO, DECLARATION, DEFINITION };
 
     explicit Entity(
-        rtl::Reference<unoidl::Entity> const & theEntity, bool theRelevant, Entity * theParent):
-        entity(theEntity), relevant(theRelevant), sorted(Sorted::NO),
+        rtl::Reference<unoidl::Entity> theEntity, bool theRelevant, Entity * theParent):
+        entity(std::move(theEntity)), relevant(theRelevant), sorted(Sorted::NO),
         written(Written::NO), parent(theParent)
     {}
 

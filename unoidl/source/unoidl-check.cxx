@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 #include <osl/file.hxx>
@@ -150,7 +151,7 @@ OUString showDirection(
 }
 
 struct EqualsAnnotation {
-    explicit EqualsAnnotation(OUString const & name): name_(name) {}
+    explicit EqualsAnnotation(OUString name): name_(std::move(name)) {}
 
     bool operator ()(unoidl::AnnotatedReference const & ref)
     { return ref.name == name_; }

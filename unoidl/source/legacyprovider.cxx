@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <utility>
 #include <vector>
 
 #include <registry/reader.hxx>
@@ -75,7 +76,7 @@ rtl::Reference< Entity > readEntity(
 class Cursor: public MapCursor {
 public:
     Cursor(
-        rtl::Reference< Manager > const & manager, RegistryKey const & ucr,
+        rtl::Reference< Manager > manager, RegistryKey const & ucr,
         RegistryKey const & key);
 
 private:
@@ -92,9 +93,9 @@ private:
 };
 
 Cursor::Cursor(
-    rtl::Reference< Manager > const & manager, RegistryKey const & ucr,
+    rtl::Reference< Manager > manager, RegistryKey const & ucr,
     RegistryKey const & key):
-    manager_(manager), ucr_(ucr), key_(key), index_(0)
+    manager_(std::move(manager)), ucr_(ucr), key_(key), index_(0)
 {
     if (!ucr_.isValid())
         return;
@@ -129,9 +130,9 @@ rtl::Reference< Entity > Cursor::getNext(OUString * name) {
 class Module: public ModuleEntity {
 public:
     Module(
-        rtl::Reference< Manager > const & manager, RegistryKey const & ucr,
+        rtl::Reference< Manager > manager, RegistryKey const & ucr,
         RegistryKey const & key):
-        manager_(manager), ucr_(ucr), key_(key)
+        manager_(std::move(manager)), ucr_(ucr), key_(key)
     {}
 
 private:
