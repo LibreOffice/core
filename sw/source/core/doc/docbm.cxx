@@ -1975,4 +1975,32 @@ void DelBookmarks(
     }
 }
 
+namespace sw {
+
+SwInsText MakeSwInsText(SwTextNode & rNode, sal_Int32 const nPos, sal_Int32 const nLen)
+{
+    SwCursor cursor(SwPosition(rNode, nPos), nullptr);
+    bool isInsideFieldmarkCommand(false);
+    bool isInsideFieldmarkResult(false);
+    while (auto const*const pMark = rNode.GetDoc().getIDocumentMarkAccess()->getFieldmarkFor(*cursor.GetPoint()))
+    {
+        if (sw::mark::FindFieldSep(*pMark) < *cursor.GetPoint())
+        {
+            isInsideFieldmarkResult = true;
+        }
+        else
+        {
+            isInsideFieldmarkCommand = true;
+        }
+        *cursor.GetPoint() = pMark->GetMarkStart();
+        if (!cursor.Left(1))
+        {
+            break;
+        }
+    }
+    return SwInsText(nPos, nLen, isInsideFieldmarkCommand, isInsideFieldmarkResult);
+}
+
+} // namespace sw
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

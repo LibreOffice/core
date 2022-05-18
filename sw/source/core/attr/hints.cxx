@@ -31,8 +31,11 @@ SwFormatChg::SwFormatChg( SwFormat* pFormat )
 {
 }
 
-SwInsText::SwInsText( sal_Int32 nP, sal_Int32 nL )
-    : SwMsgPoolItem( RES_INS_TXT ), nPos( nP ), nLen( nL )
+SwInsText::SwInsText(sal_Int32 const nP, sal_Int32 const nL, bool const isInFMCommand, bool const isInFMResult)
+    : SwMsgPoolItem( RES_INS_TXT )
+    , nPos( nP ), nLen( nL )
+    , isInsideFieldmarkCommand(isInFMCommand)
+    , isInsideFieldmarkResult(isInFMResult)
 {
 }
 
