@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9aacec83_922409c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-05-18T17:16:12Z",
+      "side": 1,
+      "message": "Noel, please feel free to reject if I am not on the right track. But it seems that store would be a good candidate to use std::unique_lock. Is this a reasonable patch?",
+      "revId": "335889667c44ae2a81541c868bed16a9b87fea47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
