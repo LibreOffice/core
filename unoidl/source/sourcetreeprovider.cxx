@@ -11,6 +11,7 @@
 #include <sal/log.hxx>
 
 #include <map>
+#include <utility>
 #include <vector>
 
 #include <osl/file.h>
@@ -111,7 +112,7 @@ private:
 
 class SourceModuleEntity: public ModuleEntity {
 public:
-    SourceModuleEntity(Manager& manager, OUString const & uri): manager_(manager), uri_(uri) {}
+    SourceModuleEntity(Manager& manager, OUString uri): manager_(manager), uri_(std::move(uri)) {}
 
 private:
     virtual ~SourceModuleEntity() noexcept override {}

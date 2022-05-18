@@ -14,6 +14,7 @@
 #include <cstring>
 #include <set>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 #include <o3tl/string_view.hxx>
@@ -35,7 +36,7 @@ namespace unoidl::detail {
 
 class MappedFile: public salhelper::SimpleReferenceObject {
 public:
-    explicit MappedFile(OUString const & fileUrl);
+    explicit MappedFile(OUString fileUrl);
 
     sal_uInt8 read8(sal_uInt32 offset) const;
 
@@ -258,7 +259,7 @@ void checkEntityName(
 
 }
 
-MappedFile::MappedFile(OUString const & fileUrl): uri(fileUrl), handle(nullptr) {
+MappedFile::MappedFile(OUString fileUrl): uri(std::move(fileUrl)), handle(nullptr) {
     oslFileError e = osl_openFile(uri.pData, &handle, osl_File_OpenFlag_Read);
     switch (e) {
     case osl_File_E_None:
@@ -657,11 +658,11 @@ class UnoidlModuleEntity;
 class UnoidlCursor: public MapCursor {
 public:
     UnoidlCursor(
-        rtl::Reference< MappedFile > const & file,
-        rtl::Reference<UnoidlProvider> const & reference1,
-        rtl::Reference<UnoidlModuleEntity> const & reference2,
+        rtl::Reference< MappedFile > file,
+        rtl::Reference<UnoidlProvider> reference1,
+        rtl::Reference<UnoidlModuleEntity> reference2,
         NestedMap const & map):
-        file_(file), reference1_(reference1), reference2_(reference2),
+        file_(std::move(file)), reference1_(std::move(reference1)), reference2_(std::move(reference2)),
         map_(map), index_(0)
     {}
 

@@ -11,6 +11,7 @@
 #include <sal/log.hxx>
 
 #include <set>
+#include <utility>
 #include <vector>
 
 #include <osl/file.h>
@@ -33,8 +34,8 @@ class AggregatingModule: public ModuleEntity {
 public:
     AggregatingModule(
         std::vector< rtl::Reference< Provider > >&& providers,
-        OUString const & name):
-        providers_(std::move(providers)), name_(name)
+        OUString name):
+        providers_(std::move(providers)), name_(std::move(name))
     {}
 
 private:
@@ -65,8 +66,8 @@ class AggregatingCursor: public MapCursor {
 public:
     AggregatingCursor(
         std::vector< rtl::Reference< Provider > >&& providers,
-        OUString const & name):
-        providers_(std::move(providers)), name_(name), iterator_(providers_.begin())
+        OUString name):
+        providers_(std::move(providers)), name_(std::move(name)), iterator_(providers_.begin())
     { findCursor(); }
 
 private:

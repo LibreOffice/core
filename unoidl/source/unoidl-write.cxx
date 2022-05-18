@@ -298,8 +298,8 @@ void writeKind(
 }
 
 struct Item {
-    explicit Item(rtl::Reference< unoidl::Entity > const & theEntity):
-        entity(theEntity), nameOffset(0), dataOffset(0)
+    explicit Item(rtl::Reference< unoidl::Entity > theEntity):
+        entity(std::move(theEntity)), nameOffset(0), dataOffset(0)
     {}
 
     rtl::Reference< unoidl::Entity > entity;
