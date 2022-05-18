@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4030bb9e_2293fca4",
+        "filename": "include/unotools/bytereader.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-18T12:21:10Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "728b4298_7aaa34b2",
+      "revId": "42cf1018cee44626f0d0ad7db43a8d1e239cf179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ffdd176_667871f6",
