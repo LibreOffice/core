@@ -1819,19 +1819,6 @@ void ScTable::UpdateReference(
     sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )
 {
     bool bUpdated = false;
-    SCCOL i;
-    SCCOL iMax;
-    if (rCxt.meMode == URM_COPY )
-    {
-        i = rCxt.maRange.aStart.Col();
-        iMax = rCxt.maRange.aEnd.Col();
-    }
-    else
-    {
-        i = 0;
-        iMax = rDocument.MaxCol();
-    }
-
     UpdateRefMode eUpdateRefMode = rCxt.meMode;
     SCCOL nDx = rCxt.mnColDelta;
     SCROW nDy = rCxt.mnRowDelta;
@@ -1844,8 +1831,16 @@ void ScTable::UpdateReference(
     if (mpRangeName)
         mpRangeName->UpdateReference(rCxt, nTab);
 
-    for ( ; i<=iMax; i++)
-        bUpdated |= CreateColumnIfNotExists(i).UpdateReference(rCxt, pUndoDoc);
+    if (rCxt.meMode == URM_COPY )
+    {
+        for( SCCOL col : GetAllocatedColumnsRange( rCxt.maRange.aStart.Col(), rCxt.maRange.aEnd.Col()))
+            bUpdated |= aCol[col].UpdateReference(rCxt, pUndoDoc);
+    }
+    else
+    {
+        for( SCCOL col : GetAllocatedColumnsRange( 0, rDocument.MaxCol()))
+            bUpdated |= aCol[col].UpdateReference(rCxt, pUndoDoc);
+    }
 
     if ( bIncludeDraw )
         UpdateDrawRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, bUpdateNoteCaptionPos );

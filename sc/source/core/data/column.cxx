@@ -2391,12 +2391,12 @@ bool ScColumn::UpdateReferenceOnCopy( sc::RefUpdateContext& rCxt, ScDocument* pU
 
 bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc )
 {
-    if (rCxt.meMode == URM_COPY)
-        return UpdateReferenceOnCopy(rCxt, pUndoDoc);
-
     if (IsEmptyData() || GetDoc().IsClipOrUndo())
         // Cells in this column are all empty, or clip or undo doc. No update needed.
         return false;
+
+    if (rCxt.meMode == URM_COPY)
+        return UpdateReferenceOnCopy(rCxt, pUndoDoc);
 
     std::vector<SCROW> aBounds;
 
