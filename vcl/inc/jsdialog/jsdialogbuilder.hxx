@@ -305,6 +305,11 @@ public:
                                weld::Widget* pWidget);
     static void RemoveWindowWidget(const std::string& nWindowId);
 
+    // we need to remember original popup window to close it properly (its handled by vcl)
+    static void RememberPopup(const std::string& nWindowId, VclPtr<vcl::Window> pWidget);
+    static void ForgetPopup(const std::string& nWindowId);
+    static vcl::Window* FindPopup(const std::string& nWindowId);
+
 private:
     const std::string& GetTypeOfJSON() const;
     VclPtr<vcl::Window>& GetContentWindow();
@@ -701,6 +706,8 @@ public:
 
 class JSPopover : public JSWidget<SalInstancePopover, DockingWindow>
 {
+    vcl::LOKWindowId mnWindowId;
+
 public:
     JSPopover(JSDialogSender* pSender, DockingWindow* pPopover, SalInstanceBuilder* pBuilder,
               bool bTakeOwnership);
@@ -708,6 +715,8 @@ public:
     virtual void popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
                                weld::Placement ePlace = weld::Placement::Under) override;
     virtual void popdown() override;
+
+    void set_window_id(vcl::LOKWindowId nWindowId) { mnWindowId = nWindowId; }
 };
 
 class JSBox : public JSWidget<SalInstanceBox, VclBox>
