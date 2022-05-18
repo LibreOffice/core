@@ -462,8 +462,8 @@ SwFootnoteBossFrame* SwFrame::FindFootnoteBossFrame( bool bFootnotes )
     SwFrame *pRet = this;
     // Footnote bosses can't exist inside a table; also sections with columns
     // don't contain footnote texts there
-    if( pRet->IsInTab() )
-        pRet = pRet->FindTabFrame();
+    if (SwFrame *pTabFrame = pRet->IsInTab() ? pRet->FindTabFrame() : nullptr)
+        pRet = pTabFrame;
 
     // tdf139336: put the footnotes into the page frame (instead of a column frame)
     // to avoid maximizing the section to the full page.... if:
