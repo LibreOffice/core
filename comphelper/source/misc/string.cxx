@@ -425,33 +425,50 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
     sal_Int32 nLHSFirstDigitPos = 0;
     sal_Int32 nRHSFirstDigitPos = 0;
 
+    // Check if the string starts with a digit
+    sal_Int32 nStartsDigitLHS = rBI->endOfCharBlock(rLHS, nLHSFirstDigitPos, rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
+    sal_Int32 nStartsDigitRHS = rBI->endOfCharBlock(rRHS, nRHSFirstDigitPos, rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
+
+    if (nStartsDigitLHS > 0 && nStartsDigitRHS > 0)
+    {
+        sal_uInt32 nLHS = comphelper::string::decimalStringToNumber(rLHS, 0, nStartsDigitLHS);
+        sal_uInt32 nRHS = comphelper::string::decimalStringToNumber(rRHS, 0, nStartsDigitRHS);
+
+        if (nLHS != nRHS)
+            return nLHS < nRHS ? -1 : 1;
+        nLHSLastNonDigitPos = nStartsDigitLHS;
+        nRHSLastNonDigitPos = nStartsDigitRHS;
+    }
+    else if (nStartsDigitLHS > 0)
+        return -1;
+    else if (nStartsDigitRHS > 0)
+        return 1;
+
     while (nLHSFirstDigitPos < rLHS.getLength() || nRHSFirstDigitPos < rRHS.getLength())
     {
         sal_Int32 nLHSChunkLen;
         sal_Int32 nRHSChunkLen;
 
         //Compare non digit block as normal strings
-        nLHSFirstDigitPos = rBI->nextCharBlock(rLHS, nLHSLastNonDigitPos,
-            rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
-        nRHSFirstDigitPos = rBI->nextCharBlock(rRHS, nRHSLastNonDigitPos,
-            rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
+        nLHSFirstDigitPos = rBI->nextCharBlock(rLHS, nLHSLastNonDigitPos, rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
+        nRHSFirstDigitPos = rBI->nextCharBlock(rRHS, nRHSLastNonDigitPos, rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
+
         if (nLHSFirstDigitPos == -1)
             nLHSFirstDigitPos = rLHS.getLength();
+
         if (nRHSFirstDigitPos == -1)
             nRHSFirstDigitPos = rRHS.getLength();
+
         nLHSChunkLen = nLHSFirstDigitPos - nLHSLastNonDigitPos;
         nRHSChunkLen = nRHSFirstDigitPos - nRHSLastNonDigitPos;
 
-        nRet = rCollator->compareSubstring(rLHS, nLHSLastNonDigitPos,
-            nLHSChunkLen, rRHS, nRHSLastNonDigitPos, nRHSChunkLen);
+        nRet = rCollator->compareSubstring(rLHS, nLHSLastNonDigitPos, nLHSChunkLen, rRHS, nRHSLastNonDigitPos, nRHSChunkLen);
         if (nRet != 0)
             break;
 
         //Compare digit block as one number vs another
-        nLHSLastNonDigitPos = rBI->endOfCharBlock(rLHS, nLHSFirstDigitPos,
-            rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
-        nRHSLastNonDigitPos = rBI->endOfCharBlock(rRHS, nRHSFirstDigitPos,
-            rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
+        nLHSLastNonDigitPos = rBI->endOfCharBlock(rLHS, nLHSFirstDigitPos, rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
+        nRHSLastNonDigitPos = rBI->endOfCharBlock(rRHS, nRHSFirstDigitPos, rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
         if (nLHSLastNonDigitPos == -1)
             nLHSLastNonDigitPos = rLHS.getLength();
         if (nRHSLastNonDigitPos == -1)

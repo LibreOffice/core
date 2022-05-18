@@ -35,7 +35,6 @@ namespace {
 class TestString: public CppUnit::TestFixture
 {
 public:
-    void testNatural();
     void testStripStart();
     void testStripEnd();
     void testStrip();
@@ -48,7 +47,6 @@ public:
     void testRemoveAny();
 
     CPPUNIT_TEST_SUITE(TestString);
-    CPPUNIT_TEST(testNatural);
     CPPUNIT_TEST(testStripStart);
     CPPUNIT_TEST(testStripEnd);
     CPPUNIT_TEST(testStrip);
@@ -80,192 +78,6 @@ void TestString::testIsdigitAsciiString()
     CPPUNIT_ASSERT_EQUAL(false, comphelper::string::isdigitAsciiString("1A34"));
 
     CPPUNIT_ASSERT_EQUAL(true, comphelper::string::isdigitAsciiString(""));
-}
-
-using namespace ::com::sun::star;
-
-class testCollator : public cppu::WeakImplHelper< i18n::XCollator >
-{
-public:
-    virtual sal_Int32 SAL_CALL compareSubstring(
-        const OUString& str1, sal_Int32 off1, sal_Int32 len1,
-        const OUString& str2, sal_Int32 off2, sal_Int32 len2) override
-    {
-        return str1.copy(off1, len1).compareTo(str2.subView(off2, len2));
-    }
-    virtual sal_Int32 SAL_CALL compareString(
-        const OUString& str1,
-        const OUString& str2) override
-    {
-        return str1.compareTo(str2);
-    }
-    virtual sal_Int32 SAL_CALL loadDefaultCollator(const lang::Locale&, sal_Int32) override {return 0;}
-    virtual sal_Int32 SAL_CALL loadCollatorAlgorithm(const OUString&,
-        const lang::Locale&, sal_Int32) override {return 0;}
-    virtual void SAL_CALL loadCollatorAlgorithmWithEndUserOption(const OUString&,
-        const lang::Locale&, const uno::Sequence< sal_Int32 >&) override {}
-    virtual uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms(const lang::Locale&) override
-    {
-        return uno::Sequence< OUString >();
-    }
-    virtual uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions(const OUString&) override
-    {
-        return uno::Sequence< sal_Int32 >();
-    }
-};
-
-#define IS_DIGIT(CHAR) (((CHAR) >= 48) && ((CHAR <= 57)))
-
-class testBreakIterator : public cppu::WeakImplHelper< i18n::XBreakIterator >
-{
-public:
-    virtual sal_Int32 SAL_CALL nextCharacters( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16, sal_Int32, sal_Int32& ) override {return -1;}
-    virtual sal_Int32 SAL_CALL previousCharacters( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16, sal_Int32, sal_Int32& ) override {return -1;}
-
-    virtual i18n::Boundary SAL_CALL previousWord( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16) override
-        { return i18n::Boundary(); }
-    virtual i18n::Boundary SAL_CALL nextWord( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16) override
-        { return i18n::Boundary(); }
-    virtual i18n::Boundary SAL_CALL getWordBoundary( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16, sal_Bool ) override
-        { return i18n::Boundary(); }
-
-    virtual sal_Bool SAL_CALL isBeginWord( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16 ) override
-        { return false; }
-    virtual sal_Bool SAL_CALL isEndWord( const OUString&, sal_Int32,
-        const lang::Locale& , sal_Int16 ) override
-        { return false; }
-    virtual sal_Int16 SAL_CALL getWordType( const OUString&, sal_Int32,
-        const lang::Locale& ) override
-        { return 0; }
-
-    virtual sal_Int32 SAL_CALL beginOfSentence( const OUString&, sal_Int32,
-        const lang::Locale& ) override
-        { return 0; }
-    virtual sal_Int32 SAL_CALL endOfSentence( const OUString& rText, sal_Int32,
-        const lang::Locale& ) override
-        { return rText.getLength(); }
-
-    virtual i18n::LineBreakResults SAL_CALL getLineBreak( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int32,
-        const i18n::LineBreakHyphenationOptions&,
-        const i18n::LineBreakUserOptions&) override
-    {
-        return i18n::LineBreakResults();
-    }
-
-    virtual sal_Int16 SAL_CALL getScriptType( const OUString&, sal_Int32 ) override { return -1; }
-    virtual sal_Int32 SAL_CALL beginOfScript( const OUString&, sal_Int32,
-        sal_Int16 ) override { return -1; }
-    virtual sal_Int32 SAL_CALL endOfScript( const OUString&, sal_Int32,
-        sal_Int16 ) override { return -1; }
-    virtual sal_Int32 SAL_CALL previousScript( const OUString&, sal_Int32,
-        sal_Int16 ) override { return -1; }
-    virtual sal_Int32 SAL_CALL nextScript( const OUString&, sal_Int32,
-        sal_Int16 ) override { return -1; }
-
-    virtual sal_Int32 SAL_CALL beginOfCharBlock( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16 ) override { return -1; }
-    virtual sal_Int32 SAL_CALL endOfCharBlock( const OUString& rText, sal_Int32 nStartPos,
-        const lang::Locale&, sal_Int16 CharType ) override
-    {
-        const sal_Unicode *pStr = rText.getStr()+nStartPos;
-        for (sal_Int32 nI = nStartPos; nI < rText.getLength(); ++nI)
-        {
-            if (CharType == i18n::CharType::DECIMAL_DIGIT_NUMBER && !IS_DIGIT(*pStr))
-                return nI;
-            else if (CharType != i18n::CharType::DECIMAL_DIGIT_NUMBER && IS_DIGIT(*pStr))
-                return nI;
-            ++pStr;
-        }
-        return -1;
-    }
-    virtual sal_Int32 SAL_CALL previousCharBlock( const OUString&, sal_Int32,
-        const lang::Locale&, sal_Int16 ) override { return -1; }
-    virtual sal_Int32 SAL_CALL nextCharBlock( const OUString& rText, sal_Int32 nStartPos,
-        const lang::Locale&, sal_Int16 CharType ) override
-    {
-        const sal_Unicode *pStr = rText.getStr()+nStartPos;
-        for (sal_Int32 nI = nStartPos; nI < rText.getLength(); ++nI)
-        {
-            if (CharType == i18n::CharType::DECIMAL_DIGIT_NUMBER && IS_DIGIT(*pStr))
-                return nI;
-            else if (CharType != i18n::CharType::DECIMAL_DIGIT_NUMBER && !IS_DIGIT(*pStr))
-                return nI;
-            ++pStr;
-        }
-        return -1;
-    }
-};
-
-void TestString::testNatural()
-{
-    using namespace comphelper::string;
-
-    uno::Reference< i18n::XCollator > xCollator(new testCollator);
-    uno::Reference< i18n::XBreakIterator > xBI(new testBreakIterator);
-
-// --- Some generic tests to ensure we do not alter original behavior
-// outside what we want
-    CPPUNIT_ASSERT_EQUAL(
-        static_cast<sal_Int32>(0), compareNatural("ABC", "ABC", xCollator, xBI, lang::Locale())
-    );
-    // Case sensitivity
-    CPPUNIT_ASSERT(
-        compareNatural("ABC", "abc", xCollator, xBI, lang::Locale()) < 0
-    );
-    // Reverse
-    CPPUNIT_ASSERT(
-        compareNatural("abc", "ABC", xCollator, xBI, lang::Locale()) > 0
-    );
-    // First shorter
-    CPPUNIT_ASSERT(
-        compareNatural("alongstring", "alongerstring", xCollator, xBI, lang::Locale()) > 0
-    );
-    // Second shorter
-    CPPUNIT_ASSERT(
-        compareNatural("alongerstring", "alongstring", xCollator, xBI, lang::Locale()) < 0
-    );
-// -- Here we go on natural order, each one is followed by classic compare and the reverse comparison
-    // That's why we originally made the patch
-    CPPUNIT_ASSERT(
-        compareNatural("Heading 9", "Heading 10", xCollator, xBI, lang::Locale()) < 0
-    );
-    // Original behavior
-    CPPUNIT_ASSERT(
-        OUString("Heading 9").compareTo(u"Heading 10") > 0
-    );
-    CPPUNIT_ASSERT(
-        compareNatural("Heading 10", "Heading 9", xCollator, xBI, lang::Locale()) > 0
-    );
-    // Harder
-    CPPUNIT_ASSERT(
-        compareNatural("July, the 4th", "July, the 10th", xCollator, xBI, lang::Locale()) < 0
-    );
-    CPPUNIT_ASSERT(
-        OUString("July, the 4th").compareTo(u"July, the 10th") > 0
-    );
-    CPPUNIT_ASSERT(
-        compareNatural("July, the 10th", "July, the 4th", xCollator, xBI, lang::Locale()) > 0
-    );
-    // Hardest
-    CPPUNIT_ASSERT(
-        compareNatural("abc08", "abc010", xCollator, xBI, lang::Locale()) < 0
-    );
-    CPPUNIT_ASSERT(
-        OUString("abc08").compareTo(u"abc010") > 0
-    );
-    CPPUNIT_ASSERT(
-        compareNatural("abc010", "abc08", xCollator, xBI, lang::Locale()) > 0
-    );
-    CPPUNIT_ASSERT_EQUAL(
-        static_cast<sal_Int32>(0), compareNatural("apple10apple", "apple10apple", xCollator, xBI, lang::Locale())
-    );
 }
 
 void TestString::testStripStart()
