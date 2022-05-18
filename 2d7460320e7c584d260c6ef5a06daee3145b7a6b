@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5df965b9_5b406114",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-18T07:31:33Z",
+      "side": 1,
+      "message": "Also, the function isn\u0027t in an idl file or have prefix containing PUBLIC so I don\u0027t think it can break some API.\nDoes it seem ok to you?",
+      "revId": "2d7460320e7c584d260c6ef5a06daee3145b7a6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
