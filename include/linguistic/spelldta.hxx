@@ -63,7 +63,7 @@ class SpellAlternatives final
 
 public:
     UNLESS_MERGELIBS(LNG_DLLPUBLIC) SpellAlternatives();
-    SpellAlternatives(const OUString &rWord, LanguageType nLang,
+    SpellAlternatives(OUString aWord, LanguageType nLang,
                       const css::uno::Sequence< OUString > &rAlternatives );
     virtual ~SpellAlternatives() override;
     SpellAlternatives(const SpellAlternatives&) = delete;
