@@ -1181,7 +1181,7 @@ const SwFootnoteFrame *SwFootnoteBossFrame::FindFirstFootnote( SwContentFrame co
             if ( pRet )
             {
                 const SwFootnoteBossFrame* pBoss = pRet->GetRef()->FindFootnoteBossFrame();
-                if( pBoss->GetPhyPageNum() != nPageNum ||
+                if( !pBoss || pBoss->GetPhyPageNum() != nPageNum ||
                     nColNum != lcl_ColumnNum( pBoss ) )
                     pRet = nullptr;
             }
