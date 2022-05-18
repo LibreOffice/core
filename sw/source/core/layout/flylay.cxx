@@ -810,10 +810,32 @@ void SwPageFrame::AppendFlyToPage( SwFlyFrame *pNew )
     {
         //#i119945# set pFly's OrdNum to _rNewObj's. So when pFly is removed by Undo, the original OrdNum will not be changed.
         sal_uInt32 nNewNum = pObj->GetOrdNumDirect();
-        if ( pObj->getSdrPageFromSdrObject() )
-            pObj->getSdrPageFromSdrObject()->SetObjectOrdNum( pFly->GetVirtDrawObj()->GetOrdNumDirect(), nNewNum );
+
+        // If the fly has attached drawing update the that too.
+        SdrObject* pDrawingObj = nullptr;
+        if (auto pFlyFormat = pFly->GetFormat())
+        {
+            if (auto pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(pFlyFormat, RES_FLYFRMFMT))
+            {
+                pDrawingObj = pTextBox->FindRealSdrObject();
+            }
+        }
+
+        if (pDrawingObj)
+        {
+            if (pDrawingObj->getSdrPageFromSdrObject())
+                pDrawingObj->getSdrPageFromSdrObject()->SetObjectOrdNum(pDrawingObj->GetOrdNumDirect(), nNewNum);
+            else
+                pDrawingObj->SetOrdNum(nNewNum);
+
+        }
+
+        if (pObj->getSdrPageFromSdrObject())
+            pObj->getSdrPageFromSdrObject()->SetObjectOrdNum(pFly->GetVirtDrawObj()->GetOrdNumDirect(), pDrawingObj ? nNewNum + 1 : nNewNum);
         else
-            pFly->GetVirtDrawObj()->SetOrdNum( nNewNum );
+            pFly->GetVirtDrawObj()->SetOrdNum(pDrawingObj ? nNewNum + 1 : nNewNum);
+
+
     }
 
     // Don't look further at Flys that sit inside the Content.
