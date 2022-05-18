@@ -1174,8 +1174,8 @@ CPPUNIT_TEST_FIXTURE(Test, NoFillAttrInImagedata)
     //problem was that type and color2 which are v:fill attributes were written in 'v:imagedata'
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata", "type");
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect/v:imagedata", "color2");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Fallback/w:pict/v:rect/v:imagedata", "type");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Fallback/w:pict/v:rect/v:imagedata", "color2");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBnc837302, "bnc837302.docx")
