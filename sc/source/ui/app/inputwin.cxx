@@ -1331,10 +1331,10 @@ void ScTextWnd::SetNumLines(tools::Long nLines)
 {
     ScViewData& rViewData = mpViewShell->GetViewData();
     rViewData.SetFormulaBarLines(nLines);
-
     if ( nLines > 1 )
     {
-        mnLastExpandedLines = nLines;
+        // SetFormulaBarLines sanitizes the height, so get the sanitized value
+        mnLastExpandedLines = rViewData.GetFormulaBarLines();
         Resize();
     }
 }
