@@ -18,24 +18,6 @@
 
 #include "macros.inc"
 
-WindowsCustomAction gid_Customaction_RenamePrgFolder
-	Name = "RenamePrgFolder";
-	Typ = "1";
-	Source = "shlxtmsi.dll";
-	Target = "RenamePrgFolder";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "OLDPRODUCTS And Not REMOVE=\"ALL\" And Not PATCH", "ValidateProductID");
-End
-
-WindowsCustomAction gid_Customaction_RemovePrgFolder
-	Name = "RemovePrgFolder";
-	Typ = "1";
-	Source = "shlxtmsi.dll";
-	Target = "RemovePrgFolder";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "OLDPRODUCTS And Not REMOVE=\"ALL\" And Not PATCH", "end");
-End
-
 WindowsCustomAction gid_Customaction_Regallmsdocdll
 	Name = "Regallmsdocdll";
 	Typ = "65";

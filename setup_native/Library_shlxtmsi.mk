@@ -30,7 +30,6 @@ $(eval $(call gb_Library_add_exception_objects,shlxtmsi,\
     setup_native/source/win32/customactions/shellextensions/migrateinstallpath \
     setup_native/source/win32/customactions/shellextensions/completeinstallpath \
     setup_native/source/win32/customactions/shellextensions/checkdirectory \
-    setup_native/source/win32/customactions/shellextensions/vistaspecial \
     setup_native/source/win32/customactions/shellextensions/checkpatches \
 ))
 
