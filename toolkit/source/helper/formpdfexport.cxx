@@ -555,6 +555,54 @@ namespace toolkitform
                             }
                         }
                     } break;
+                    case FormComponentType::DATEFIELD:
+                    {
+                        pEditWidget->Format = vcl::PDFWriter::Date;
+
+                        static constexpr OUStringLiteral FM_PROP_DATEFORMAT = u"DateFormat";
+                        if ( xPSI->hasPropertyByName( FM_PROP_DATEFORMAT ) )
+                        {
+                            sal_Int32 nDateFormat = 0;
+                            if( ! (xModelProps->getPropertyValue( FM_PROP_DATEFORMAT ) >>= nDateFormat) )
+                                SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_DATEFORMAT);
+
+                            switch ( nDateFormat )
+                            {
+                                case 0:
+                                case 1:
+                                    pEditWidget->DateFormat = "mm/dd/yy"; // Standard (short)
+                                    break;
+                                case 2:
+                                case 3:
+                                    pEditWidget->DateFormat = "mm/dd/yyyy"; // Standard (long)
+                                    break;
+                                case 4:
+                                    pEditWidget->DateFormat = "dd/mm/yy"; // DD/MM/YY
+                                    break;
+                                case 5:
+                                    pEditWidget->DateFormat = "mm/dd/yy"; // MM/DD/YY
+                                    break;
+                                case 6:
+                                    pEditWidget->DateFormat = "yy/mm/dd"; // YY/MM/DD
+                                    break;
+                                case 7:
+                                    pEditWidget->DateFormat = "dd/mm/yyyy"; // DD/MM/YYYY
+                                    break;
+                                case 8:
+                                    pEditWidget->DateFormat = "mm/dd/yyyy"; // MM/DD/YYYY
+                                    break;
+                                case 9:
+                                    pEditWidget->DateFormat = "yyyy/mm/dd"; // YYYY/MM/DD
+                                    break;
+                                case 10:
+                                    pEditWidget->DateFormat = "yy-mm-dd"; // YY-MM-DD
+                                    break;
+                                case 11:
+                                    pEditWidget->DateFormat = "yyyy-mm-dd"; // YYYY-MM-DD
+                                    break;
+                            }
+                        }
+                    } break;
                 }
             }
 

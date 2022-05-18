@@ -195,7 +195,7 @@ public:
 
     enum FormatType
     {
-        Text, Number, Time
+        Text, Number, Time, Date
     };
 
     enum ErrorCode
@@ -389,6 +389,7 @@ public:
         sal_Int32           DecimalAccuracy;
         bool                PrependCurrencySymbol;
         OUString            TimeFormat;
+        OUString            DateFormat;
 
         EditWidget()
                 : AnyWidget( vcl::PDFWriter::Edit ),
