@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04f69efb_2397c875",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-18T15:57:38Z",
+      "side": 1,
+      "message": "Hi László,\nThanks for the clarification. In that case, I think the test should be renamed and not use tdf123877 in the test name nor the filename, otherwise it looks like a UItest for the fix",
+      "parentUuid": "318f0504_4a5f8ea6",
+      "revId": "6af4c1d097dfba897e305a1e57d1e920f36ce264",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5177ad51_505c1254",
