@@ -536,18 +536,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rP
     return nRetValue;
 }
 
-ErrCode GraphicFilter::ImportGraphic(
-    Graphic& rGraphic,
-    std::u16string_view rPath,
-    SvStream& rIStream,
-    sal_uInt16 nFormat,
-    sal_uInt16* pDeterminedFormat,
-    GraphicFilterImportFlags nImportFlags,
-    WmfExternal const *pExtHeader)
-{
-    return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, nullptr, pExtHeader );
-}
-
 namespace {
 
 /// Contains a stream and other associated data to import pixels into a
@@ -1377,7 +1365,6 @@ ErrCode GraphicFilter::readWEBP(SvStream & rStream, Graphic & rGraphic, GfxLinkT
 
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, std::u16string_view rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
-                                     const css::uno::Sequence< css::beans::PropertyValue >* /*pFilterData*/,
                                      WmfExternal const *pExtHeader )
 {
     OUString aFilterName;

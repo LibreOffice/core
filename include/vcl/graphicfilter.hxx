@@ -328,13 +328,6 @@ public:
     */
     void MakeGraphicsAvailableThreaded(std::vector< Graphic* >& rGraphics);
 
-    ErrCode             ImportGraphic( Graphic& rGraphic, std::u16string_view rPath,
-                                   SvStream& rStream,
-                                   sal_uInt16 nFormat,
-                                   sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
-                                   const css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
-                                   WmfExternal const *pExtHeader = nullptr );
-
     // Setting sizeLimit limits how much will be read from the stream.
     Graphic ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit = 0, const Size* pSizeHint = nullptr);
 
