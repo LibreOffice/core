@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "059ec742_8ab4b7c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-05-18T17:13:39Z",
+      "side": 1,
+      "message": "I know it is only a simple documentation fix, are you OK with this?",
+      "revId": "a986acc1ed7b65468b1d8be0afbba37b8c6e6292",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
