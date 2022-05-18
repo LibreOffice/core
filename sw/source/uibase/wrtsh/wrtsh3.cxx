@@ -28,6 +28,8 @@
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
+#include <sfx2/dispatch.hxx>
+
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -90,11 +92,25 @@ bool SwWrtShell::GotoField( const SwFormatField& rField )
 
 bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentControl)
 {
+    std::shared_ptr<SwContentControl> pContentControl = rContentControl.GetContentControl();
+    if (IsFrameSelected() && pContentControl && pContentControl->GetPicture())
+    {
+        // A frame is already selected, and its anchor is inside a picture content control.
+        if (pContentControl->GetShowingPlaceHolder())
+        {
+            // Replace the placeholder image with a real one.
+            GetView().StopShellTimer();
+            GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHANGE_PICTURE,
+                                                               SfxCallMode::SYNCHRON);
+            pContentControl->SetShowingPlaceHolder(false);
+        }
+        return true;
+    }
+
     (this->*m_fnKillSel)(nullptr, false);
 
     bool bRet = SwCursorShell::GotoFormatContentControl(rContentControl);
 
-    std::shared_ptr<SwContentControl> pContentControl = rContentControl.GetContentControl();
     if (bRet && pContentControl && pContentControl->GetCheckbox())
     {
         // Checkbox: GotoFormatContentControl() selected the old state.
