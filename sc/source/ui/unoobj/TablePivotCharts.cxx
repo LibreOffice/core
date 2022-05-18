@@ -223,7 +223,6 @@ uno::Any SAL_CALL TablePivotCharts::getByIndex(sal_Int32 nIndex)
 
 uno::Type SAL_CALL TablePivotCharts::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<table::XTablePivotChart>::get();
 }
 

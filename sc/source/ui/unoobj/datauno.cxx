@@ -643,7 +643,6 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScSubTotalDescriptorBase::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XSubTotalField>::get();
 }
 
@@ -2250,7 +2249,6 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScDatabaseRangesObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XDatabaseRange>::get();
 }
 

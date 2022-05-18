@@ -1321,7 +1321,6 @@ public:
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override
     {
-        SolarMutexGuard aGuard;
         return cppu::UnoType<drawing::XDrawPage>::get();
     }
 

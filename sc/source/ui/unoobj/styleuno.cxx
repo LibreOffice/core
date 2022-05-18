@@ -490,7 +490,6 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScStyleFamiliesObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<container::XNameContainer>::get();    // has to fit to getByIndex
 }
 
@@ -806,7 +805,6 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScStyleFamilyObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<style::XStyle>::get();    // has to fit to getByIndex
 }
 

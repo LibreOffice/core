@@ -613,7 +613,6 @@ uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScNamedRangesObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XNamedRange>::get();   // must be suitable for getByIndex
 }
 
@@ -1148,9 +1147,7 @@ uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScLabelRangesObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XLabelRange>::get();   // must be suitable for getByIndex
-
 }
 
 sal_Bool SAL_CALL ScLabelRangesObj::hasElements()

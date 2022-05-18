@@ -162,7 +162,6 @@ sal_Bool SAL_CALL ScSheetEventsObj::hasByName( const OUString& aName )
 
 uno::Type SAL_CALL ScSheetEventsObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
 }
 

@@ -969,7 +969,6 @@ uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
 
 uno::Type SAL_CALL ScTabViewObj::getElementType()
 {
-    SolarMutexGuard aGuard;
     return cppu::UnoType<sheet::XViewPane>::get();
 }
 
