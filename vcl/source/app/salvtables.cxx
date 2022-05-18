@@ -5381,7 +5381,7 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
     if (pIcon)
     {
         const Point aNull(0, 0);
-        const Size aSize = pIcon->GetOutputSizePixel();
+        const Size aSize = pIcon->GetOutputSize();
         Image aImage(pIcon->GetBitmapEx(aNull, aSize));
         pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
     }
