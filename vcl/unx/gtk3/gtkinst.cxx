@@ -21927,6 +21927,7 @@ private:
     gulong m_nSignalId;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nButtonPressEventSignalId;
+    gulong m_nMappedSignalId;
 #endif
 
     static void signalExpanded(GtkExpander* pExpander, GParamSpec*, gpointer widget)
@@ -21974,6 +21975,31 @@ private:
         // doesn't work
         return true;
     }
+
+    /* tdf#141186 if the expander is initially collapsed then when mapped all its
+       children are mapped too. If they are mapped then the mnemonics of the
+       children are taken into account on shortcuts and non-visible children in a
+       collapsed expander can be triggered which is confusing.
+
+       If the expander is expanded and collapsed the child is unmapped and the
+       problem doesn't occur.
+
+       So to avoid the problem of an initially collapsed expander, listen to
+       the map event and if the expander is mapped but collapsed then unmap the
+       child of the expander.
+
+       This problem was seen in gtk3-3.24.33 and not with gtk4-4.6.4 so a gtk3
+       fix only needed.
+    */
+    static void signalMap(GtkWidget*, gpointer widget)
+    {
+        GtkInstanceExpander* pThis = static_cast<GtkInstanceExpander*>(widget);
+        if (!gtk_expander_get_expanded(pThis->m_pExpander))
+        {
+            if (GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(pThis->m_pExpander)))
+                gtk_widget_unmap(pChild);
+        }
+    }
 #endif
 
 public:
@@ -21983,6 +22009,7 @@ public:
         , m_nSignalId(g_signal_connect(m_pExpander, "notify::expanded", G_CALLBACK(signalExpanded), this))
 #if !GTK_CHECK_VERSION(4, 0, 0)
         , m_nButtonPressEventSignalId(g_signal_connect_after(m_pExpander, "button-press-event", G_CALLBACK(signalButton), this))
+        , m_nMappedSignalId(g_signal_connect_after(m_pExpander, "map", G_CALLBACK(signalMap), this))
 #endif
     {
     }
@@ -22010,6 +22037,7 @@ public:
     virtual ~GtkInstanceExpander() override
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
+        g_signal_handler_disconnect(m_pExpander, m_nMappedSignalId);
         g_signal_handler_disconnect(m_pExpander, m_nButtonPressEventSignalId);
 #endif
         g_signal_handler_disconnect(m_pExpander, m_nSignalId);
