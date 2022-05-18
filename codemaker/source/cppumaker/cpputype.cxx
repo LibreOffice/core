@@ -27,6 +27,7 @@
 #include <set>
 #include <string_view>
 #include <memory>
+#include <utility>
 #include <vector>
 #include <iostream>
 
@@ -152,8 +153,7 @@ bool isBootstrapType(OUString const & name)
 class CppuType
 {
 public:
-    CppuType(
-        OUString const & name, rtl::Reference< TypeManager > const & typeMgr);
+    CppuType(OUString name, rtl::Reference< TypeManager > const & typeMgr);
 
     virtual ~CppuType() {}
 
@@ -273,12 +273,12 @@ private:
 };
 
 CppuType::CppuType(
-    OUString const & name, rtl::Reference< TypeManager > const & typeMgr):
+    OUString name, rtl::Reference< TypeManager > const & typeMgr):
     m_inheritedMemberCount(0)
     , m_cppuTypeLeak(false)
     , m_cppuTypeDynamic(true)
     , m_indentLength(0)
-    , name_(name)
+    , name_(std::move(name))
     , id_(name_.copy(name_.lastIndexOf('.') + 1))
     , m_typeMgr(typeMgr)
     , m_dependencies(typeMgr, name_)
@@ -1051,9 +1051,9 @@ class BaseOffset
 {
 public:
     BaseOffset(
-        rtl::Reference< TypeManager > const & manager,
+        rtl::Reference< TypeManager > manager,
         rtl::Reference< unoidl::InterfaceTypeEntity > const & entity):
-        manager_(manager), offset_(0) {
+        manager_(std::move(manager)), offset_(0) {
         calculateBases(entity);
     }
     BaseOffset(const BaseOffset&) = delete;

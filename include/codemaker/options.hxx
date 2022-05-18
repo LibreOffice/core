@@ -22,6 +22,7 @@
 
 #include <codemaker/global.hxx>
 #include <unordered_map>
+#include <utility>
 
 typedef std::unordered_map
 <
@@ -33,8 +34,8 @@ typedef std::unordered_map
 class IllegalArgument
 {
 public:
-    IllegalArgument(const ::rtl::OString& msg)
-        : m_message(msg) {}
+    IllegalArgument(::rtl::OString msg)
+        : m_message(std::move(msg)) {}
 
     ::rtl::OString  m_message;
 };

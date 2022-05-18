@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CODEMAKER_GLOBAL_HXX
 #define INCLUDED_CODEMAKER_GLOBAL_HXX
 
+#include <utility>
 #include <vector>
 #include <string_view>
 
@@ -80,7 +81,7 @@ bool removeTypeFile(const ::rtl::OString& fileName);
 
 class CannotDumpException final {
 public:
-    CannotDumpException(OUString const & message): message_(message) {}
+    CannotDumpException(OUString message): message_(std::move(message)) {}
 
     ~CannotDumpException() noexcept;
 

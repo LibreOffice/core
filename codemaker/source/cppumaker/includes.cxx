@@ -33,14 +33,15 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
+#include <utility>
 #include <vector>
 
 using codemaker::cppumaker::Includes;
 
 Includes::Includes(
-    rtl::Reference< TypeManager > const & manager,
+    rtl::Reference< TypeManager > manager,
     codemaker::cppumaker::Dependencies const & dependencies, bool hpp):
-    m_manager(manager), m_map(dependencies.getMap()), m_hpp(hpp),
+    m_manager(std::move(manager)), m_map(dependencies.getMap()), m_hpp(hpp),
     m_includeCassert(false),
     m_includeAny(dependencies.hasAnyDependency()), m_includeReference(false),
     m_includeSequence(dependencies.hasSequenceDependency()),
