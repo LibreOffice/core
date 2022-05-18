@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5c9fcdd_c6f85ca9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-18T13:49:33Z",
+      "side": 1,
+      "message": "but you still need some coordinating ByteReader::getUnoTunnelId(), so that the implementations of getSomething don\u0027t return an address from an alien address space",
+      "revId": "1acb76ea1424edb830483eb5ea0834020d2400b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
