@@ -133,10 +133,12 @@ OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLoca
                         return OUString('0');
                     else
                     {
+                        static constexpr OUStringLiteral sNumberingType = u"NumberingType";
+                        static constexpr OUStringLiteral sValue = u"Value";
                         Sequence< PropertyValue > aProperties
                         {
-                            comphelper::makePropertyValue("NumberingType", static_cast<sal_uInt16>(nNumType)),
-                            comphelper::makePropertyValue("Value", nNo)
+                            comphelper::makePropertyValue(sNumberingType, static_cast<sal_uInt16>(nNumType)),
+                            comphelper::makePropertyValue(sValue, nNo)
                         };
 
                         try
