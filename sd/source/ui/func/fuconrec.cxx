@@ -314,6 +314,24 @@ bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 
             bReturn = true;
         }
+        else
+        {
+            //Drag was too small to create object, so insert default object at click pos
+            Point aClickPos(mpWindow->PixelToLogic(rMEvt.GetPosPixel()));
+            sal_uInt32 nDefaultObjectSize(1500);
+            sal_Int32 nCenterOffset(-sal_Int32(nDefaultObjectSize / 2));
+            aClickPos.AdjustX(nCenterOffset);
+            aClickPos.AdjustY(nCenterOffset);
+
+            SdrPageView *pPV = mpView->GetSdrPageView();
+            if(mpView->IsSnapEnabled())
+                aClickPos = mpView->GetSnapPos(aClickPos, pPV);
+
+            ::tools::Rectangle aNewObjectRectangle(aClickPos, Size(nDefaultObjectSize, nDefaultObjectSize));
+            SdrObjectUniquePtr pObjDefault = CreateDefaultObject(nSlotId, aNewObjectRectangle);
+
+            bReturn = mpView->InsertObjectAtView(pObjDefault.release(), *pPV);
+        }
     }
 
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
