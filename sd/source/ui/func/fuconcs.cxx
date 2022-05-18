@@ -144,7 +144,6 @@ bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
             bReturn = mpView->InsertObjectAtView(pObjDefault.release(), *pPV);
         }
     }
-
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
 
     if (!bPermanent)
