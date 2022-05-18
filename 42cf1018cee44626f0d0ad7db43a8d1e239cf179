@@ -109,6 +109,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a588c504_6cf49389",
+        "filename": "ucb/source/ucp/file/filstr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-18T13:13:24Z",
+      "side": 1,
+      "message": "\u003e ...and in UcbLockBytes::ReadAt (unotools/source/ucbhelper/ucblockbytes.cxx), it would happily reinterpret_cast the obtained XStream_impl pointer to ByteReader*, and boom?!?\n\nNo, because in \n  UcbLockBytes::ReadAt , \nwe pass in the GUID we get from \n    ByteReader::getUnoTunnelId()\nand then the \n    XStream_Impl::getSomething \nwill use the\n    comphelper::getSomethingImpl\ninfrastructure to select what to cast to, and will return a ByteReader*.\n\nOr at least that is how I understand the code, could be barking in entirely the wrong forest.",
+      "parentUuid": "4e62d41a_a47c3328",
+      "range": {
+        "startLine": 177,
+        "startChar": 11,
+        "endLine": 177,
+        "endChar": 39
+      },
+      "revId": "42cf1018cee44626f0d0ad7db43a8d1e239cf179",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6915dc3e_c9070540",
         "filename": "ucb/source/ucp/file/filstr.hxx",
         "patchSetId": 3
