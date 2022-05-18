@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71262edc_7ae83d90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-18T09:03:00Z",
+      "side": 1,
+      "message": "the unique string pointer, super effective c++ item 126",
+      "revId": "5aa64be5b8dc3c7d78a3e5ef87613906a57bab79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
