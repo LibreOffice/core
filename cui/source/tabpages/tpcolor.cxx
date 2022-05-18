@@ -242,6 +242,14 @@ bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
     {
         aColorItem.GetThemeColor().SetThemeIndex(aCurrentColor.m_nThemeIndex);
     }
+    if (aCurrentColor.m_nLumMod != 10000)
+    {
+        aColorItem.GetThemeColor().SetLumMod(aCurrentColor.m_nLumMod);
+    }
+    if (aCurrentColor.m_nLumOff != 0)
+    {
+        aColorItem.GetThemeColor().SetLumOff(aCurrentColor.m_nLumOff);
+    }
     rSet->Put( aColorItem );
     rSet->Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     return true;
