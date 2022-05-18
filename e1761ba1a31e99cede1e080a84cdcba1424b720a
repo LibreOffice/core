@@ -39,6 +39,30 @@
       },
       "revId": "e1761ba1a31e99cede1e080a84cdcba1424b720a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "697dfaa7_aa5aa51c",
+        "filename": "sc/source/ui/dbgui/tpsort.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-18T06:12:32Z",
+      "side": 1,
+      "message": "I read the previous code as \"if the dialog is available and bSortByRows taken from aSortData.bByRow, which is set at the second tab, is different to GetByRows(), which is set per SetByRow() from bSortByRows - meaning always the same?!...\n\nThe new code correctly runs the first loop for TopToBottom and the second for LeftToRight.",
+      "parentUuid": "4fc43586_1cadb0cd",
+      "range": {
+        "startLine": 272,
+        "startChar": 8,
+        "endLine": 272,
+        "endChar": 34
+      },
+      "revId": "e1761ba1a31e99cede1e080a84cdcba1424b720a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
