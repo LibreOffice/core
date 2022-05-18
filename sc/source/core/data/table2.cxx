@@ -186,8 +186,9 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         }
     }
 
-    for (SCCOL j=nStartCol; j<=nEndCol; j++)
+    for (SCCOL j : GetAllocatedColumnsRange(nStartCol, nEndCol))
         aCol[j].InsertRow( nStartRow, nSize );
+    aDefaultColData.InsertRow( nStartRow, nSize );
 
     mpCondFormatList->InsertRow(nTab, nStartCol, nEndCol, nStartRow, nSize);
 
