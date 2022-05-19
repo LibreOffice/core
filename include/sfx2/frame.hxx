@@ -116,7 +116,7 @@ public:
     SAL_DLLPRIVATE bool PrepareClose_Impl( bool bUI );
     SAL_DLLPRIVATE bool DocIsModified_Impl();
     SAL_DLLPRIVATE void SetCurrentViewFrame_Impl( SfxViewFrame* );
-    SAL_DLLPRIVATE bool IsClosing_Impl() const;
+    bool IsClosing_Impl() const;
     SAL_DLLPRIVATE void SetIsClosing_Impl();
 
     // Methods for accessing the current set

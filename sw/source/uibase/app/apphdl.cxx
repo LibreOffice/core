@@ -879,7 +879,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     {
                         // assume that not calling via SwEditShell::SetFixFields
                         // is allowed, because the shell hasn't been created yet
-                        assert(!pWrtSh);
+                        assert(!pWrtSh || pWrtSh->GetView().GetViewFrame()->GetFrame().IsClosing_Impl());
                         pDocSh->GetDoc()->getIDocumentFieldsAccess().SetFixFields(nullptr);
                     }
                 }
