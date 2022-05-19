@@ -3473,6 +3473,7 @@ namespace xmloff::token {
         XML_CHECKED_STATE,
         XML_UNCHECKED_STATE,
         XML_DISPLAY_TEXT,
+        XML_PICTURE,
 
         XML_TOKEN_END
     };
