@@ -3219,4 +3219,5 @@ showing-place-holder
 checked-state
 unchecked-state
 display-text
+picture
 TOKEN_END_DUMMY
