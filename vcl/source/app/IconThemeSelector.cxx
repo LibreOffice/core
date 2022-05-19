@@ -124,13 +124,20 @@ IconThemeSelector::SetUseHighContrastTheme(bool v)
     mUseHighContrastTheme = v;
 }
 
-void
+bool
 IconThemeSelector::SetPreferredIconTheme(const OUString& theme, bool bDarkIconTheme)
 {
     // lower case theme name, and (tdf#120175) replace - with _
     // see icon-themes/README
-    mPreferredIconTheme = theme.toAsciiLowerCase().replace('-','_');
-    mPreferDarkIconTheme = bDarkIconTheme;
+    OUString sIconTheme = theme.toAsciiLowerCase().replace('-','_');
+
+    const bool bChanged = mPreferredIconTheme != sIconTheme || mPreferDarkIconTheme != bDarkIconTheme;
+    if (bChanged)
+    {
+        mPreferredIconTheme = sIconTheme;
+        mPreferDarkIconTheme = bDarkIconTheme;
+    }
+    return bChanged;
 }
 
 bool
