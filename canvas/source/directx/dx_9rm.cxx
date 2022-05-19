@@ -569,7 +569,7 @@ namespace dxcanvas
             const HWND hwnd(reinterpret_cast<HWND>(pData->hWnd));
             mhWnd = hwnd;
 
-            ENSURE_OR_THROW( IsWindow( reinterpret_cast<HWND>(mhWnd) ),
+            ENSURE_OR_THROW( IsWindow( mhWnd ),
                             "DXRenderModule::create() No valid HWND given." );
 
             // retrieve position and size of the parent window
