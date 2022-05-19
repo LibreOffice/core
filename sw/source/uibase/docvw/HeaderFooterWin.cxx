@@ -399,6 +399,11 @@ bool SwHeaderFooterWin::IsEmptyHeaderFooter( ) const
 {
     bool bResult = true;
 
+    if (!GetPageFrame())
+    {
+        return bResult;
+    }
+
     // Actually check it
     const SwPageDesc* pDesc = GetPageFrame()->GetPageDesc();
 
