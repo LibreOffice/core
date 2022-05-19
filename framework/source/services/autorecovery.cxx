@@ -94,6 +94,7 @@
 #include <unotools/configmgr.hxx>
 #include <svl/documentlockfile.hxx>
 #include <tools/urlobj.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>
 #include <officecfg/Setup.hxx>
 
@@ -1749,7 +1750,7 @@ void AutoRecovery::implts_readAutoSaveConfig()
     implts_openConfig();
 
     // AutoSave [bool]
-    bool bEnabled(officecfg::Office::Recovery::AutoSave::Enabled::get());
+    bool bEnabled(officecfg::Office::Common::Save::Document::AutoSave::get());
 
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -1777,7 +1778,8 @@ void AutoRecovery::implts_readAutoSaveConfig()
     } /* SAFE */
 
     // AutoSaveTimeIntervall [int] in min
-    sal_Int32 nTimeIntervall(officecfg::Office::Recovery::AutoSave::TimeIntervall::get());
+    sal_Int32 nTimeIntervall(
+        officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::get());
 
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
