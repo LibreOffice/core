@@ -787,6 +787,30 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119162)
                          pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124820)
+{
+    ScModelObj* pModelObj = createDoc("tdf124820.xlsx");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("B2");
+
+    dispatchCommand(mxComponent, ".uno:Strikeout", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pModelObj = saveAndReload(mxComponent, "Calc Office Open XML");
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    vcl::Font aFont;
+    const ScPatternAttr* pPattern = pDoc->GetPattern(1, 1, 0);
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+
+    // Without the fix in place, this test would have failed here
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be striked out", STRIKEOUT_SINGLE,
+                                 aFont.GetStrikeout());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119155)
 {
     ScModelObj* pModelObj = createDoc("tdf119155.xlsx");
