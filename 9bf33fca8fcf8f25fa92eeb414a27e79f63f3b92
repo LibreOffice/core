@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ec750f6_ab07bf66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-19T09:18:15Z",
+      "side": 1,
+      "message": "@Attila: very nice fix!\n\nNote: I\u0027ve fixed the typo in the unit test (Coma instead of Comma), removing also the commented code lines.",
+      "revId": "9bf33fca8fcf8f25fa92eeb414a27e79f63f3b92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
