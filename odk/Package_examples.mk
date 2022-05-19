@@ -19,6 +19,8 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     CLI/CSharp/Spreadsheet/ViewSample.cs \
     CLI/VB.NET/WriterDemo/Makefile \
     CLI/VB.NET/WriterDemo/WriterDemo.vb \
+    DevelopersGuide/FirstSteps/cxx/FirstUnoContact.cxx \
+    DevelopersGuide/FirstSteps/cxx/Makefile \
     DevelopersGuide/BasicAndDialogs/CreatingDialogs/CreatingDialogs.odt \
     DevelopersGuide/BasicAndDialogs/CreatingDialogs/Makefile \
     DevelopersGuide/BasicAndDialogs/CreatingDialogs/SampleDialog.java \
