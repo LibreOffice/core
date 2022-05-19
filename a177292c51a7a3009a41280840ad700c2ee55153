@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "300dfac5_893ce2c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-19T12:41:06Z",
+      "side": 1,
+      "message": "Thanks for taking the time to write tests! :-)\n\nWhat do you think about just including your new .cxx file in the existing CppunitTest_sw_core_txtnode.mk suite (and drop CPPUNIT_PLUGIN_IMPLEMENT() from your .cxx file)?\n\nHaving a sw/CppunitTest_foo.mk file for every .cxx file under sw/source is perhaps an overkill.\n\nEverything else looks promising!",
+      "revId": "a177292c51a7a3009a41280840ad700c2ee55153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
