@@ -16,6 +16,24 @@
       "message": "Just for information, there\u0027s also TIFFStreamOpen to open a stream but when trying to build I got:\nvcl/source/filter/tiff/reader.cxx:61: error: undefined reference to \u0027TIFFStreamOpen(char const*, std::istream*)\u0027\nclang: error: linker command failed with exit code 1 (use -v to see invocation)\n\nwhereas I added \"#include \u003ctiffio.hxx\u003e\" + I used --enable-cxx in external/libtiff/ExternalProject_libtiff.mk from a local branch",
       "revId": "d29acbc851196c5e2bfee88560068bdfa16ee526",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4e93ed1_bf06f1b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-05-19T20:05:56Z",
+      "side": 1,
+      "message": "Maybe you have to link against libtiffxx to use that. Either way I don\u0027t think we need --enable-cxx and that C++ api anyway to make use of libtiff for what we need.",
+      "parentUuid": "3a09a573_33329e77",
+      "revId": "d29acbc851196c5e2bfee88560068bdfa16ee526",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
