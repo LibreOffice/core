@@ -113,6 +113,7 @@ void TiffFilterTest::testTdf115863()
     CPPUNIT_ASSERT_EQUAL(tools::Long(618), aSize.Height());
 }
 
+//TODO-check if this is still correct, looks ok, but what was it testing exactly
 void TiffFilterTest::testTdf138818()
 {
     OUString aURL = getUrl() + "tdf138818.tif";
@@ -125,9 +126,9 @@ void TiffFilterTest::testTdf138818()
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
 
     // Without the fix in place, this test would have failed with
-    // - Expected: 46428
+    // - Expected: 45953
     // - Actual  : 45951
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(46428), aGraphic.GetGfxLink().GetDataSize());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(45953), aGraphic.GetGfxLink().GetDataSize());
 }
 
 void TiffFilterTest::testTdf74331()
