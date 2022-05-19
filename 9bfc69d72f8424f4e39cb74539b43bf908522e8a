@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac067cdc_218f4ae0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-19T08:22:13Z",
+      "side": 1,
+      "message": "I\u0027m fine with this now, thanks. (Assuming CI will pass.)",
+      "revId": "9bfc69d72f8424f4e39cb74539b43bf908522e8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
