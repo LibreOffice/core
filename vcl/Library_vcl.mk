@@ -90,6 +90,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
     libeot \
     libjpeg \
     libpng \
+    libtiff \
     libwebp \
     mdds_headers \
     $(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
