@@ -2601,6 +2601,11 @@ bool MSWordExportBase::GetNumberFormat(const SwField& rField, OUString& rStr)
     if( pNumFormat )
     {
         LanguageType nLng = rField.GetLanguage();
+        SAL_WARN_IF(nLng == LANGUAGE_DONTKNOW, "sw.ww8", "unexpected LANGUAGE_DONTKNOW");
+        if (nLng == LANGUAGE_NONE || nLng == LANGUAGE_DONTKNOW)
+        {
+            nLng = pNumFormat->GetLanguage();
+        }
         LocaleDataWrapper aLocDat(pNFormatr->GetComponentContext(),
                                   LanguageTag(nLng));
 

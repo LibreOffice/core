@@ -93,7 +93,7 @@ public:
     CPPUNIT_TEST(testExcelExportFormats);
     CPPUNIT_TEST_SUITE_END();
 
-private:
+protected:
     uno::Reference< uno::XComponentContext > m_xContext;
     void checkPreviewString(SvNumberFormatter& aFormatter,
                             const OUString& sCode,
@@ -1918,6 +1918,19 @@ void Test::testExcelExportFormats()
     aCode = aFormatter.GetFormatStringForExcel( nKey2, aKeywords, aTempFormatter);
     // Test that LCID is not prepended. Note that literal characters are escaped.
     CPPUNIT_ASSERT_EQUAL( OUString("[$R-1C09]\\ #,##0.0;[$R-1C09]\\-#,##0.0"), aCode);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLanguageNone)
+{
+    SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
+    NfKeywordTable keywords;
+    aFormatter.FillKeywordTableForExcel(keywords);
+    OUString code("TT.MM.JJJJ");
+    sal_uInt32 nKey = aFormatter.GetEntryKey(code, LANGUAGE_GERMAN);
+    CPPUNIT_ASSERT(nKey != NUMBERFORMAT_ENTRY_NOT_FOUND);
+    SvNumberformat const*const pFormat = aFormatter.GetEntry(nKey);
+    LocaleDataWrapper ldw(m_xContext, LanguageTag(pFormat->GetLanguage()));
+    CPPUNIT_ASSERT_EQUAL(OUString("dd.mm.yyyy"), pFormat->GetMappedFormatstring(keywords, ldw));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
