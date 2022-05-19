@@ -35,9 +35,14 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
 		&& MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
-			--enable-shared \
 			--enable-static \
-			--enable-cxx \
+			--with-pic \
+			--disable-shared \
+			--disable-jbig \
+			--disable-jpeg \
+			--disable-lzma \
+			--disable-win32-io \
+			--disable-zstd \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,libtiff)" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
