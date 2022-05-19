@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/acceleratorexecute.hxx>
@@ -121,6 +122,14 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
             OSL_ASSERT(xDescriptor!=nullptr);
             continue;
         }
+
+        // If the shortcut is changed the change wont be updated until the sidebar is closed and
+        // then reopened. This is consistant with toolbar item shortcut change behavior.
+        const OUString sCommand = ".uno:SidebarDeck." + xDescriptor->msId;
+        OUString sShortcut = vcl::CommandInfoProvider::GetCommandShortcut(sCommand, mxFrame);
+        if (!sShortcut.isEmpty())
+            sShortcut = u" (" + sShortcut + u")";
+        xDescriptor->msHelpText += sShortcut;
 
         maItems.emplace_back(std::make_unique<Item>(*this));
         auto& xItem(maItems.back());
