@@ -33,9 +33,9 @@ struct UNOTOOLS_DLLPUBLIC TranslateId
     const char* mpContext;
     const char* mpId;
 
-    inline TranslateId()
+    inline constexpr TranslateId()
         : mpContext(nullptr), mpId(nullptr) {}
-    inline TranslateId(const char* pContext, const char* pId)
+    inline constexpr TranslateId(const char* pContext, const char* pId)
         : mpContext(pContext), mpId(pId) {}
 
     inline operator bool() const { return mpId != nullptr; }

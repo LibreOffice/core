@@ -46,8 +46,8 @@ SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBind
     , mxElementsControlWin(
           std::make_unique<weld::CustomWeld>(*m_xBuilder, "element_selector", *mxElementsControl))
 {
-    for (size_t i = 0; i < SmElementsControl::categoriesSize(); ++i)
-        mxCategoryList->append_text(SmResId(std::get<0>(SmElementsControl::categories()[i])));
+    for (const auto& rCategoryId : SmElementsControl::categories())
+        mxCategoryList->append_text(SmResId(rCategoryId));
 
     mxCategoryList->set_size_request(-1, mxCategoryList->get_height_rows(6));
 
@@ -69,9 +69,8 @@ SmElementsPanel::~SmElementsPanel()
 IMPL_LINK(SmElementsPanel, CategorySelectedHandle, weld::TreeView&, rList, void)
 {
     const OUString sSelected = rList.get_selected_text();
-    for (size_t i = 0; i < SmElementsControl::categoriesSize(); ++i)
+    for (const auto& rCategoryId : SmElementsControl::categories())
     {
-        const TranslateId& rCategoryId = std::get<0>(SmElementsControl::categories()[i]);
         OUString aCurrentCategoryString = SmResId(rCategoryId);
         if (aCurrentCategoryString == sSelected)
         {
