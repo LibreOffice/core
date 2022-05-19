@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "878b7cc5_f2830a07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-19T07:15:40Z",
+      "side": 1,
+      "message": "Thank you for the review!\nPatch updated to remove spaces.",
+      "revId": "c12bcd21a7cdb1b3d6f2eb9e6724a3a1abe5a593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
