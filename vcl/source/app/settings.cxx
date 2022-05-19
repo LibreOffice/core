@@ -185,7 +185,7 @@ struct ImplStyleData
     std::shared_ptr<vcl::IconThemeSelector>
                                     mIconThemeSelector;
 
-    OUString                   mIconTheme;
+    OUString                        mIconTheme;
     bool                            mbSkipDisabledInMenus;
     bool                            mbHideDisabledMenuItems;
     bool                            mbPreferredContextMenuShortcuts;
@@ -3151,7 +3151,12 @@ StyleSettings::GetHighContrastMode() const
 void
 StyleSettings::SetPreferredIconTheme(const OUString& theme, bool bDarkIconTheme)
 {
-    mxData->mIconThemeSelector->SetPreferredIconTheme(theme, bDarkIconTheme);
+    const bool bChanged = mxData->mIconThemeSelector->SetPreferredIconTheme(theme, bDarkIconTheme);
+    if (bChanged)
+    {
+        // clear this so it is recalculated if it was selected as the automatic theme
+        mxData->mIconTheme.clear();
+    }
 }
 
 void
