@@ -13556,6 +13556,12 @@ LIBPNG_LIBS_internal="-L${WORKDIR}/LinkTarget/StaticLibrary -llibpng"
 libo_CHECK_SYSTEM_MODULE([libpng],[LIBPNG],[libpng])
 
 dnl ===================================================================
+dnl Test whether to build libtiff or rely on the system version
+dnl ===================================================================
+
+libo_CHECK_SYSTEM_MODULE([libtiff],[LIBTIFF],[libtiff])
+
+dnl ===================================================================
 dnl Test whether to build libwebp or rely on the system version
 dnl ===================================================================
 
