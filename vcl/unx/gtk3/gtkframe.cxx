@@ -76,6 +76,12 @@ int GtkSalFrame::m_nFloats = 0;
 
 static GDBusConnection* pSessionBus = nullptr;
 
+static void EnsureSessionBus()
+{
+    if (!pSessionBus)
+        pSessionBus = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr);
+}
+
 sal_uInt16 GtkSalFrame::GetKeyModCode( guint state )
 {
     sal_uInt16 nCode = 0;
@@ -541,8 +547,7 @@ static void attach_menu_model(GtkSalFrame* pSalFrame)
 
 #if !GTK_CHECK_VERSION(4,0,0)
     // Get a DBus session connection.
-    if (!pSessionBus)
-        pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, nullptr, nullptr);
+    EnsureSessionBus();
     if (!pSessionBus)
         return;
 
@@ -629,13 +634,9 @@ void GtkSalFrame::EnsureAppMenuWatch()
         return;
 
     // Get a DBus session connection.
-    if ( pSessionBus == nullptr )
-    {
-        pSessionBus = g_bus_get_sync( G_BUS_TYPE_SESSION, nullptr, nullptr );
-
-        if ( pSessionBus == nullptr )
-            return;
-    }
+    EnsureSessionBus();
+    if (!pSessionBus)
+        return;
 
     // Publish the menu only if AppMenu registrar is available.
     m_nWatcherId = g_bus_watch_name_on_connection( pSessionBus,
@@ -698,8 +699,14 @@ GtkSalFrame::~GtkSalFrame()
     {
         SolarMutexGuard aGuard;
 
-        if(m_nWatcherId)
+        if (m_nWatcherId)
             g_bus_unwatch_name(m_nWatcherId);
+
+        if (m_nPortalSettingChangedSignalId)
+            g_signal_handler_disconnect(m_pSettingsPortal, m_nPortalSettingChangedSignalId);
+
+        if (m_pSettingsPortal)
+            g_object_unref(m_pSettingsPortal);
     }
 
     GtkWidget *pEventWidget = getMouseEventWidget();
@@ -900,6 +907,8 @@ void GtkSalFrame::InitCommon()
     m_pSurface = nullptr;
     m_nGrabLevel = 0;
     m_bSalObjectSetPosSize = false;
+    m_nPortalSettingChangedSignalId = 0;
+    m_pSettingsPortal = nullptr;
 
     m_aDamageHandler.handle = this;
     m_aDamageHandler.damaged = ::damaged;
@@ -1243,6 +1252,91 @@ void GtkSalFrame::AllowCycleFocusOut()
 #endif
 }
 
+namespace
+{
+    enum ColorScheme
+    {
+        DEFAULT,
+        PREFER_DARK,
+        PREFER_LIGHT
+    };
+
+    bool ReadColorScheme(GDBusProxy* proxy, GVariant** out)
+    {
+        g_autoptr (GVariant) ret =
+            g_dbus_proxy_call_sync(proxy, "Read",
+                                   g_variant_new ("(ss)", "org.freedesktop.appearance", "color-scheme"),
+                                   G_DBUS_CALL_FLAGS_NONE, G_MAXINT, nullptr, nullptr);
+        if (!ret)
+            return false;
+
+        g_autoptr (GVariant) child = nullptr;
+        g_variant_get(ret, "(v)", &child);
+        g_variant_get(child, "v", out);
+
+        return true;
+    }
+}
+
+void GtkSalFrame::SetColorScheme(GVariant* variant)
+{
+    if (!m_pWindow)
+        return;
+
+    guint32 color_scheme = g_variant_get_uint32(variant);
+    if (color_scheme > PREFER_LIGHT)
+        color_scheme = DEFAULT;
+
+    bool bDarkIconTheme(color_scheme == PREFER_DARK);
+    GtkSettings* pSettings = gtk_widget_get_settings(m_pWindow);
+    g_object_set(pSettings, "gtk-application-prefer-dark-theme", bDarkIconTheme, nullptr);
+}
+
+static void settings_portal_changed_cb(GDBusProxy*, const char*, const char* signal_name,
+                                       GVariant* parameters, gpointer frame)
+{
+    if (g_strcmp0(signal_name, "SettingChanged"))
+        return;
+
+    g_autoptr (GVariant) value = nullptr;
+    const char *name_space;
+    const char *name;
+    g_variant_get(parameters, "(&s&sv)", &name_space, &name, &value);
+
+    if (g_strcmp0(name_space, "org.freedesktop.appearance") ||
+        g_strcmp0(name, "color-scheme"))
+      return;
+
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->SetColorScheme(value);
+}
+
+void GtkSalFrame::ListenPortalSettings()
+{
+    EnsureSessionBus();
+
+    if (!pSessionBus)
+        return;
+
+    m_pSettingsPortal = g_dbus_proxy_new_sync(pSessionBus,
+                                              G_DBUS_PROXY_FLAGS_NONE,
+                                              nullptr,
+                                              "org.freedesktop.portal.Desktop",
+                                              "/org/freedesktop/portal/desktop",
+                                              "org.freedesktop.portal.Settings",
+                                              nullptr,
+                                              nullptr);
+    if (!m_pSettingsPortal)
+        return;
+
+    g_autoptr (GVariant) value = nullptr;
+
+    if (!ReadColorScheme(m_pSettingsPortal, &value))
+        return;
+
+    SetColorScheme(value);
+    m_nPortalSettingChangedSignalId = g_signal_connect(m_pSettingsPortal, "g-signal", G_CALLBACK(settings_portal_changed_cb), this);
+}
 
 void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
@@ -1403,6 +1497,9 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     {
         // Enable GMenuModel native menu
         attach_menu_model(this);
+
+        // Listen to portal settings for e.g. prefer dark theme
+        ListenPortalSettings();
     }
 }
 

@@ -185,6 +185,8 @@ class GtkSalFrame final : public SalFrame
     GtkEventControllerKey*          m_pKeyController;
     gulong                          m_nSettingChangedSignalId;
 #endif
+    gulong                          m_nPortalSettingChangedSignalId;
+    GDBusProxy*                     m_pSettingsPortal;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
@@ -412,6 +414,8 @@ class GtkSalFrame final : public SalFrame
 
     bool HandleMenubarMnemonic(guint eState, guint nKeyval);
 
+    void ListenPortalSettings();
+
 public:
     cairo_surface_t*                m_pSurface;
     basegfx::B2IVector              m_aFrameSize;
@@ -632,6 +636,8 @@ public:
     static Selection            CalcDeleteSurroundingSelection(const OUString& rSurroundingText, sal_Int32 nCursorIndex, int nOffset, int nChars);
 
     const cairo_font_options_t* get_font_options();
+
+    void SetColorScheme(GVariant* variant);
 
     void DisallowCycleFocusOut();
     bool IsCycleFocusOutDisallowed() const;
