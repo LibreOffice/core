@@ -16,6 +16,23 @@
       "message": "@Xisco: many thanks for extending the test and for the clean-up!",
       "revId": "a58910763d49ec168da476b5a74f378635d51ace",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33ada69b_bae2566b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-19T12:46:48Z",
+      "side": 1,
+      "message": "The failure is on windows, not related to this patch since UItests are only executed on Linux. pushing",
+      "revId": "a58910763d49ec168da476b5a74f378635d51ace",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
