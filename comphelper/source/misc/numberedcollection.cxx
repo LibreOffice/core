@@ -178,32 +178,25 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
  */
 ::sal_Int32 NumberedCollection::impl_searchFreeNumber ()
 {
-    // create ordered list of all possible numbers.
-    std::vector< ::sal_Int32 > lPossibleNumbers;
-    lPossibleNumbers.reserve(m_lComponents.size() + 1);
-    ::sal_Int32                  c = static_cast<::sal_Int32>(m_lComponents.size ());
-    ::sal_Int32                  i = 1;
-
-    // c can't be less than 0 ... otherwise hash.size() has an error :-)
-    // But we need at least n+1 numbers here.
-    c += 1;
-
-    for (i=1; i<=c; ++i)
-        lPossibleNumbers.push_back (i);
+    // create bitset, where each position represents one possible number.
+    std::vector<bool> aUsedNumbers((m_lComponents.size() * 2) + 1, false);
 
     for (const auto& rPair : m_lComponents)
     {
-        std::vector< ::sal_Int32 >::iterator pPossible = std::find(lPossibleNumbers.begin (), lPossibleNumbers.end (), rPair.second.nNumber);
-        if (pPossible != lPossibleNumbers.end ())
-            lPossibleNumbers.erase (pPossible);
+        // numbers start at 1
+        sal_Int32 pos = rPair.second.nNumber - 1;
+        if (pos >= static_cast<sal_Int32>(aUsedNumbers.size()))
+            aUsedNumbers.resize(pos * 2, false); //  should be rare
+        aUsedNumbers[pos] = true;
     }
 
     // a) non free numbers ... return INVALID_NUMBER
-    if (lPossibleNumbers.empty())
+    auto it = std::find(aUsedNumbers.begin(), aUsedNumbers.end(), false);
+    if (it == aUsedNumbers.end())
         return css::frame::UntitledNumbersConst::INVALID_NUMBER;
 
     // b) return first free number
-    return *(lPossibleNumbers.begin ());
+    return it - aUsedNumbers.begin() + 1;
 }
 
 void NumberedCollection::impl_cleanUpDeadItems (      TNumberedItemHash& lItems    ,
