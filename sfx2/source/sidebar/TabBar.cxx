@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/acceleratorexecute.hxx>
@@ -226,7 +227,11 @@ void TabBar::CreateTabItem(weld::Toolbar& rItem, const DeckDescriptor& rDeckDesc
     rItem.set_accessible_name(rDeckDescriptor.msTitle);
     rItem.set_accessible_description(rDeckDescriptor.msHelpText);
     rItem.set_tooltip_text(rDeckDescriptor.msHelpText);
-    rItem.set_item_tooltip_text("toggle", rDeckDescriptor.msHelpText);
+    const OUString sCommand = ".uno:SidebarDeck." + rDeckDescriptor.msId;
+    OUString sShortcut = vcl::CommandInfoProvider::GetCommandShortcut(sCommand, mxFrame);
+    if (!sShortcut.isEmpty())
+        sShortcut = u" (" + sShortcut + u")";
+    rItem.set_item_tooltip_text("toggle", rDeckDescriptor.msHelpText + sShortcut);
 }
 
 css::uno::Reference<css::graphic::XGraphic> TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
