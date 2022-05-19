@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "537a52d0_84936b3c",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-19T07:10:12Z",
+      "side": 1,
+      "message": "It would be great to remove the spaces near the bracket, to keep the same formatting similar to other functions.",
+      "range": {
+        "startLine": 1361,
+        "startChar": 126,
+        "endLine": 1361,
+        "endChar": 127
+      },
+      "revId": "fed07643e9a3411c94e5a9fb8b6e0a8789a351c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
