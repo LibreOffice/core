@@ -3933,6 +3933,16 @@ void XMLTextParagraphExport::ExportContentControl(
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_UNCHECKED_STATE, aUncheckedState);
         }
+
+        bool bPicture = false;
+        xPropertySet->getPropertyValue("Picture") >>= bPicture;
+        if (bPicture)
+        {
+            OUStringBuffer aBuffer;
+            sax::Converter::convertBool(aBuffer, bPicture);
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_PICTURE,
+                                     aBuffer.makeStringAndClear());
+        }
     }
 
     SvXMLElementExport aElem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_CONTENT_CONTROL, false,
