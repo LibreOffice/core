@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c68bd336_204a46f6",
+        "filename": "sw/source/core/txtnode/justify.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-05-19T02:23:07Z",
+      "side": 1,
+      "message": "This is not needed and can cause a problem when declared in headers.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 33
+      },
+      "revId": "f8560e09006cec5cc6ef26ccbf4f21aa28c22ac3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
