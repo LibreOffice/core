@@ -1,5 +1,3 @@
-#include <utility>
-
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -21,6 +19,8 @@
 
 #ifndef INCLUDED_O3TL_LAZY_UPDATE_HXX
 #define INCLUDED_O3TL_LAZY_UPDATE_HXX
+
+#include <utility>
 
 namespace o3tl
 {
