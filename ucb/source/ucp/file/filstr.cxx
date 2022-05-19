@@ -167,8 +167,8 @@ XStream_impl::readSomeBytes(
 
 sal_Int64 SAL_CALL XStream_impl::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
-    if (rIdentifier == utl::ByteReader::getUnoTunnelId())
-        return reinterpret_cast<sal_Int64>(static_cast<utl::ByteReader*>(this));
+    if (rIdentifier == comphelper::ByteReader::getUnoTunnelId())
+        return reinterpret_cast<sal_Int64>(static_cast<comphelper::ByteReader*>(this));
     return 0;
 }
 

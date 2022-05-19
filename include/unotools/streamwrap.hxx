@@ -27,9 +27,9 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <comphelper/bytereader.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <unotools/bytereader.hxx>
 #include <memory>
 #include <mutex>
 
@@ -42,7 +42,7 @@ namespace utl
 class SAL_DLLPUBLIC_TEMPLATE OInputStreamWrapper_Base : public cppu::WeakImplHelper< css::io::XInputStream, css::lang::XUnoTunnel > {};
 
 /// helper class for wrapping an SvStream into a com.sun.star.io::XInputStream
-class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public OInputStreamWrapper_Base, public ByteReader
+class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public OInputStreamWrapper_Base, public comphelper::ByteReader
 {
 protected:
     std::mutex      m_aMutex;

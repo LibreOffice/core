@@ -28,6 +28,7 @@
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
@@ -39,6 +40,7 @@
 
 #include <cppuhelper/weak.hxx>
 
+#include <comphelper/bytereader.hxx>
 #include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -229,7 +231,9 @@ class OWriteStream : public css::lang::XTypeProvider
             , public css::embed::XTransactedObject
             , public css::embed::XTransactionBroadcaster
             , public css::beans::XPropertySet
+            , public css::lang::XUnoTunnel
             , public ::cppu::OWeakObject
+            , public comphelper::ByteWriter
 {
     friend struct OWriteStream_Impl;
 
@@ -341,6 +345,12 @@ public:
             const css::uno::Reference< css::embed::XTransactionListener >& aListener ) override;
     virtual void SAL_CALL removeTransactionListener(
             const css::uno::Reference< css::embed::XTransactionListener >& aListener ) override;
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+
+    // comphelper::ByteWriter
+    virtual sal_Int32 writeSomeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) override;
 
 };
 
