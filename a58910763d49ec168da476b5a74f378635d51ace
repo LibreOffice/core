@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a689c77d_fb209abf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-19T10:08:46Z",
+      "side": 1,
+      "message": "@Xisco: many thanks for extending the test and for the clean-up!",
+      "revId": "a58910763d49ec168da476b5a74f378635d51ace",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
