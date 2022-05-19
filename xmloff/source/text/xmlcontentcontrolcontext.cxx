@@ -86,6 +86,14 @@ void XMLContentControlContext::startFastElement(
                 m_aUncheckedState = rIter.toString();
                 break;
             }
+            case XML_ELEMENT(LO_EXT, XML_PICTURE):
+            {
+                if (sax::Converter::convertBool(bTmp, rIter.toView()))
+                {
+                    m_bPicture = bTmp;
+                }
+                break;
+            }
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", rIter);
         }
@@ -148,6 +156,11 @@ void XMLContentControlContext::endFastElement(sal_Int32)
     {
         xPropertySet->setPropertyValue("ListItems",
                                        uno::Any(comphelper::containerToSequence(m_aListItems)));
+    }
+
+    if (m_bPicture)
+    {
+        xPropertySet->setPropertyValue("Picture", uno::Any(m_bPicture));
     }
 }
 

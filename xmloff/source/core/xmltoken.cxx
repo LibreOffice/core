@@ -3497,6 +3497,7 @@ namespace xmloff::token {
         TOKEN("checked-state", XML_CHECKED_STATE),
         TOKEN("unchecked-state", XML_UNCHECKED_STATE),
         TOKEN("display-text", XML_DISPLAY_TEXT),
+        TOKEN("picture", XML_PICTURE),
 
 
 #if OSL_DEBUG_LEVEL > 0

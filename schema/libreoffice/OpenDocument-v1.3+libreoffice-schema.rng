@@ -2844,6 +2844,12 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:ref name="string"/>
         </rng:attribute>
       </rng:optional>
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:picture">
+        <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
       <rng:zeroOrMore>
         <rng:element name="loext:list-item">
           <rng:attribute name="loext:display-text">

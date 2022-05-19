@@ -43,6 +43,7 @@ class XMLContentControlContext : public SvXMLImportContext
     OUString m_aCheckedState;
     OUString m_aUncheckedState;
     std::vector<css::beans::PropertyValues> m_aListItems;
+    bool m_bPicture = false;
 
 public:
     XMLContentControlContext(SvXMLImport& rImport, sal_Int32 nElement, XMLHints_Impl& rHints,

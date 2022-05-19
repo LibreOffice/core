@@ -17,6 +17,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/BibliographyDataType.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
@@ -642,6 +643,76 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlImport)
     uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("choose a color"), xContent->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlExport)
+{
+    // Given a document with a picture content control around an as-char image:
+    getComponent() = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<beans::XPropertySet> xTextGraphic(
+        xMSF->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue("AnchorType",
+                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xTextContent, false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("Picture", uno::Any(true));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When exporting to ODT:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer8")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    validate(aTempFile.GetFileName(), test::ODF);
+
+    // Then make sure the expected markup is used:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//loext:content-control' no attribute 'picture' exist
+    assertXPath(pXmlDoc, "//loext:content-control", "picture", "true");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlImport)
+{
+    // Given an ODF document with a picture content control:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control-picture.fodt";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the content control is not lost on import:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    bool bPicture{};
+    xContentControlProps->getPropertyValue("Picture") >>= bPicture;
+    // Without the accompanying fix in place, this failed, as the picture attribute was ignored on
+    // import.
+    CPPUNIT_ASSERT(bPicture);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
