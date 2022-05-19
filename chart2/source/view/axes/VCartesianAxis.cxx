@@ -2011,7 +2011,7 @@ void VCartesianAxis::createDataTableView(std::vector<std::unique_ptr<VSeriesPlot
 {
     if (m_aAxisProperties.m_bDisplayDataTable)
     {
-        m_pDataTableView.reset(new DataTableView);
+        m_pDataTableView.reset(new DataTableView(m_aAxisProperties.m_xDataTableModel));
         m_pDataTableView->initializeValues(rSeriesPlotterList);
         m_xNumberFormatsSupplier = xNumberFormatsSupplier;
     }

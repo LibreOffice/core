@@ -12,6 +12,7 @@
 #include <svx/unodraw/SvxTableShape.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <DataTable.hxx>
 
 namespace chart
 {
@@ -21,17 +22,18 @@ class DataTableView final
 {
     css::uno::Reference<css::drawing::XShapes> m_xTarget;
     rtl::Reference<SvxTableShape> m_xTableShape;
+    rtl::Reference<DataTable> m_xDataTableModel;
 
     std::vector<OUString> m_aDataSeriesNames;
     std::vector<OUString> m_aXValues;
     std::vector<std::vector<OUString>> m_pDataSeriesValues;
 
 public:
-    DataTableView();
+    DataTableView(rtl::Reference<DataTable> const& rDataTableModel);
     void initializeShapes(const css::uno::Reference<css::drawing::XShapes>& xTarget);
     void initializeValues(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList);
     void createShapes(basegfx::B2DVector const& rStart, basegfx::B2DVector const& rEnd,
-                      sal_Int32 nDistance);
+                      sal_Int32 nColumnWidth);
 };
 
 } //namespace chart

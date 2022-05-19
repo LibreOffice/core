@@ -30,11 +30,15 @@ using namespace css;
 
 namespace chart
 {
-DataTableView::DataTableView() = default;
+DataTableView::DataTableView(rtl::Reference<DataTable> const& rDataTableModel)
+    : m_xDataTableModel(rDataTableModel)
+{
+}
 
 namespace
 {
-void setCellDefaults(uno::Reference<beans::XPropertySet>& xPropertySet)
+void setCellDefaults(uno::Reference<beans::XPropertySet>& xPropertySet, bool bLeft, bool bTop,
+                     bool bRight, bool bBottom)
 {
     xPropertySet->setPropertyValue("FillColor", uno::makeAny(Color(0xFFFFFF)));
     xPropertySet->setPropertyValue("TextVerticalAdjust",
@@ -45,10 +49,14 @@ void setCellDefaults(uno::Reference<beans::XPropertySet>& xPropertySet)
     aBorderLine.LineWidth = o3tl::convert(0.5, o3tl::Length::pt, o3tl::Length::mm100);
     aBorderLine.Color = 0x000000;
 
-    xPropertySet->setPropertyValue("TopBorder", uno::makeAny(aBorderLine));
-    xPropertySet->setPropertyValue("BottomBorder", uno::makeAny(aBorderLine));
-    xPropertySet->setPropertyValue("LeftBorder", uno::makeAny(aBorderLine));
-    xPropertySet->setPropertyValue("RightBorder", uno::makeAny(aBorderLine));
+    if (bLeft)
+        xPropertySet->setPropertyValue("LeftBorder", uno::makeAny(aBorderLine));
+    if (bTop)
+        xPropertySet->setPropertyValue("TopBorder", uno::makeAny(aBorderLine));
+    if (bRight)
+        xPropertySet->setPropertyValue("RightBorder", uno::makeAny(aBorderLine));
+    if (bBottom)
+        xPropertySet->setPropertyValue("BottomBorder", uno::makeAny(aBorderLine));
 }
 
 void setTopCell(uno::Reference<beans::XPropertySet>& xPropertySet)
@@ -67,7 +75,7 @@ void setTopCell(uno::Reference<beans::XPropertySet>& xPropertySet)
 }
 }
 void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DVector const& rEnd,
-                                 sal_Int32 nColumnSize)
+                                 sal_Int32 nColumnWidth)
 {
     if (!m_xTarget.is())
         return;
@@ -76,7 +84,6 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     m_xTableShape = ShapeFactory::createTable(m_xTarget);
 
     uno::Reference<table::XTable> xTable;
-    uno::Reference<util::XBroadcaster> xBroadcaster;
     try
     {
         auto rDelta = rEnd - rStart;
@@ -88,18 +95,31 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         return;
     }
 
-    if (xTable.is())
-        xBroadcaster.set(xTable, uno::UNO_QUERY);
+    if (!xTable.is())
+        return;
+
+    uno::Reference<util::XBroadcaster> xBroadcaster(xTable, uno::UNO_QUERY);
 
     if (!xBroadcaster.is())
         return;
 
     xBroadcaster->lockBroadcasts();
-    uno::Reference<table::XTableColumns> xTableColumns = xTable->getColumns();
-    xTableColumns->insertByIndex(0, m_aXValues.size());
 
+    bool bHBorder = false;
+    bool bVBorder = false;
+    bool bOutline = false;
+
+    m_xDataTableModel->getPropertyValue("HBorder") >>= bHBorder;
+    m_xDataTableModel->getPropertyValue("VBorder") >>= bVBorder;
+    m_xDataTableModel->getPropertyValue("Outline") >>= bOutline;
+
+    sal_Int32 nColumnCount = m_aXValues.size();
+    uno::Reference<table::XTableColumns> xTableColumns = xTable->getColumns();
+    xTableColumns->insertByIndex(0, nColumnCount);
+
+    sal_Int32 nRowCount = m_aDataSeriesNames.size();
     uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
-    xTableRows->insertByIndex(0, m_aDataSeriesNames.size());
+    xTableRows->insertByIndex(0, nRowCount);
 
     {
         uno::Reference<table::XCell> xCell = xTable->getCellByPosition(0, 0);
@@ -122,7 +142,8 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         if (xCellTextRange.is())
         {
             xCellTextRange->setString(rString);
-            setCellDefaults(xPropertySet);
+            bool bLeft = bOutline || (bVBorder && nColumn > 1);
+            setCellDefaults(xPropertySet, bLeft, bOutline, bOutline, bOutline);
         }
         nColumn++;
     }
@@ -135,8 +156,9 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         uno::Reference<text::XTextRange> xCellTextRange(xCell, uno::UNO_QUERY);
         if (xCellTextRange.is())
         {
+            bool bTop = bOutline || (bHBorder && nRow > 1);
             xCellTextRange->setString(rSeriesName);
-            setCellDefaults(xPropertySet);
+            setCellDefaults(xPropertySet, bOutline, bTop, bOutline, bOutline);
         }
         nRow++;
     }
@@ -153,7 +175,25 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
             if (xCellTextRange.is())
             {
                 xCellTextRange->setString(rValue);
-                setCellDefaults(xPropertySet);
+
+                bool bLeft = false;
+                bool bTop = false;
+                bool bRight = false;
+                bool bBottom = false;
+
+                if (nColumn > 1 && bVBorder)
+                    bLeft = true;
+
+                if (nRow > 1 && bHBorder)
+                    bTop = true;
+
+                if (nRow == nRowCount && bOutline)
+                    bBottom = true;
+
+                if (nColumn == nColumnCount && bOutline)
+                    bRight = true;
+
+                setCellDefaults(xPropertySet, bLeft, bTop, bRight, bBottom);
             }
             nColumn++;
         }
@@ -163,7 +203,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     xBroadcaster->unlockBroadcasts();
 
     auto* pTableObject = static_cast<sdr::table::SdrTableObj*>(m_xTableShape->GetSdrObject());
-    pTableObject->DistributeColumns(0, pTableObject->getColumnCount() - 1, true, true);
+    pTableObject->DistributeColumns(0, nColumnCount - 1, true, true);
 
     uno::Reference<beans::XPropertySet> xPropertySet(xTableColumns->getByIndex(0), uno::UNO_QUERY);
     sal_Int32 nWidth = 0;
@@ -175,7 +215,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     for (sal_Int32 i = 1; i < xTableColumns->getCount(); ++i)
     {
         xPropertySet.set(xTableColumns->getByIndex(i), uno::UNO_QUERY);
-        xPropertySet->setPropertyValue("Width", uno::Any(nColumnSize));
+        xPropertySet->setPropertyValue("Width", uno::Any(nColumnWidth));
     }
 }
 
