@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "857518d1_70746a99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-19T09:57:58Z",
+      "side": 1,
+      "message": "Aha, what happened here is that the new test fires the file picker and that\u0027s auto-cancelled on Linux, but not on Windows and we hang. I added explicit code to not open the file picker in the headless case, that helps with my local Windows build.",
+      "revId": "9e2d11bc4274bdea470044410ee0dec034eeaee0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
