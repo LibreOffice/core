@@ -123,6 +123,7 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $WORKDIR/UnpackedTarball/liborcus/src/*/.libs/*.a \
      $WORKDIR/UnpackedTarball/librevenge/src/*/.libs/*.a \
      $WORKDIR/UnpackedTarball/libvisio/src/lib/.libs/*.a \
+     $WORKDIR/UnpackedTarball/libtiff/libtiff/.libs/*.a \
      $WORKDIR/UnpackedTarball/libwebp/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/libwp?/src/lib/.libs/*.a \
      $WORKDIR/UnpackedTarball/raptor/src/.libs/*.a \
