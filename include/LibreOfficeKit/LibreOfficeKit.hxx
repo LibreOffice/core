@@ -10,6 +10,7 @@
 #pragma once
 
 #include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 
 /*
@@ -363,11 +364,37 @@ public:
     /**
      * Gets the type of the selected content.
      *
+     * In most cases it is more efficient to use getSelectionTypeAndText().
+     *
      * @return an element of the LibreOfficeKitSelectionType enum.
      */
     int getSelectionType()
     {
         return mpDoc->pClass->getSelectionType(mpDoc);
+    }
+
+    /**
+     * Gets the type of the selected content and possibly its text.
+     *
+     * This function is a more efficient combination of getSelectionType() and getTextSelection().
+     * It returns the same as getSelectionType(), and additionally if the return value is
+     * LOK_SELTYPE_TEXT then it also returns the same as getTextSelection(), otherwise
+     * pText and pUsedMimeType are unchanged.
+     *
+     * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
+     * @param pText the currently selected text
+     * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
+     * @return an element of the LibreOfficeKitSelectionType enum.
+     * @since LibreOffice 7.4
+     */
+    int getSelectionTypeAndText(const char* pMimeType, char** pText, char** pUsedMimeType = NULL)
+    {
+        if (LIBREOFFICEKIT_DOCUMENT_HAS(mpDoc, getSelectionTypeAndText))
+            return mpDoc->pClass->getSelectionTypeAndText(mpDoc, pMimeType, pText, pUsedMimeType);
+        int type = mpDoc->pClass->getSelectionType(mpDoc);
+        if(type == LOK_SELTYPE_TEXT && pText)
+            *pText = mpDoc->pClass->getTextSelection(mpDoc, pMimeType, pUsedMimeType);
+        return type;
     }
 
     /**
