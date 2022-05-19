@@ -39,6 +39,30 @@
       },
       "revId": "9ea0c8e044fb534fcdf072607e4fb9602e1b9dcf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "297e28b0_38e3352a",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1002525
+      },
+      "writtenOn": "2022-05-19T12:34:25Z",
+      "side": 1,
+      "message": "@László: I have tested your suggestion, and when I removed the condition the test of I733ddcdcdf92b32c4e6272d3cf48da872a63cd47 commit failed.",
+      "parentUuid": "c777dd72_009db65b",
+      "range": {
+        "startLine": 630,
+        "startChar": 0,
+        "endLine": 637,
+        "endChar": 32
+      },
+      "revId": "9ea0c8e044fb534fcdf072607e4fb9602e1b9dcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
