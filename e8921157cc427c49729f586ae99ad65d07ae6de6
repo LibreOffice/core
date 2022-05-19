@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7459f756_c06bab71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-19T07:26:41Z",
+      "side": 1,
+      "message": "See inline comment for a nitpick, but otherwise if the old bugdoc is fine without 2123ede032ca64f696ef54af4ad3238974ca2b5d these days, then sure, I don\u0027t object to revert it.",
+      "revId": "e8921157cc427c49729f586ae99ad65d07ae6de6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b581d5c_d49bef8e",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport17.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-19T07:26:41Z",
+      "side": 1,
+      "message": "Care to document what was the old, bad value?",
+      "revId": "e8921157cc427c49729f586ae99ad65d07ae6de6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
