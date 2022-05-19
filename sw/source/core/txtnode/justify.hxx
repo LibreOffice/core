@@ -10,7 +10,6 @@
 #pragma once
 #include <sal/types.h>
 
-using namespace ::com::sun::star;
 namespace Justify
 {
 /// Distribute space between words and letters.
