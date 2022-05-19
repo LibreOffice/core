@@ -58,32 +58,11 @@ public:
     bool isSeparator() const override { return true; }
 };
 
-typedef std::pair<const char*, TranslateId> SmElementDescr;
-
 class SmElementsControl : public weld::CustomWidgetController
 {
     friend class ElementSelectorUIObject;
     friend class ElementUIObject;
 
-    // SmParser 5 elements
-    static const SmElementDescr m_a5UnaryBinaryOperatorsList[];
-    static const SmElementDescr m_a5RelationsList[];
-    static const SmElementDescr m_a5SetOperationsList[];
-    static const SmElementDescr m_a5FunctionsList[];
-    static const SmElementDescr m_a5OperatorsList[];
-    static const SmElementDescr m_a5AttributesList[];
-    static const SmElementDescr m_a5BracketsList[];
-    static const SmElementDescr m_a5FormatsList[];
-    static const SmElementDescr m_a5OthersList[];
-    static const SmElementDescr m_a5ExamplesList[];
-    static const std::tuple<TranslateId, const SmElementDescr*, size_t> m_a5Categories[];
-    static const size_t m_a5CategoriesSize;
-
-    // SmParser 6 elements
-    static const std::tuple<const char*, const SmElementDescr*, size_t> m_a6Categories[0];
-    static const size_t m_a6CategoriesSize = 0;
-
-    // Parser for them
     std::unique_ptr<AbstractSmParser> maParser;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
@@ -113,7 +92,6 @@ class SmElementsControl : public weld::CustomWidgetController
     rtl::Reference<AccessibleSmElementsControl> m_xAccessible;
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
-    void addElements(const SmElementDescr aElementsArray[], sal_uInt16 size);
     SmElement* current() const;
     void setCurrentElement(sal_uInt16);
     bool hasRollover() const { return m_nCurrentRolloverElement != SAL_MAX_UINT16; }
@@ -133,8 +111,7 @@ public:
     explicit SmElementsControl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
     virtual ~SmElementsControl() override;
 
-    static const auto& categories() { return m_a5Categories; }
-    static size_t categoriesSize() { return m_a5CategoriesSize; }
+    static const std::vector<TranslateId>& categories();
     const TranslateId& elementSetId() const { return msCurrentSetId; }
     void setElementSetId(TranslateId pSetId);
 
