@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f0116ec_d60f16c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-19T08:00:14Z",
+      "side": 1,
+      "message": "@Tibi: thanks for the fix! It seems, the unit test doesn\u0027t fail without the fix (with an en_US-only build). Could we use always your code path in the code, removing the old (bad?) condition? It seems for me, that would be the complete solution. What is your opinion?",
+      "revId": "9ea0c8e044fb534fcdf072607e4fb9602e1b9dcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c777dd72_009db65b",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-19T08:00:14Z",
+      "side": 1,
+      "message": "What about to remove this?",
+      "range": {
+        "startLine": 630,
+        "startChar": 0,
+        "endLine": 637,
+        "endChar": 32
+      },
+      "revId": "9ea0c8e044fb534fcdf072607e4fb9602e1b9dcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
