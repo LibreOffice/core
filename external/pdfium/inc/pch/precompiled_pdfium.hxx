@@ -45,6 +45,7 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <new>
 #include <numeric>
 #include <ostream>
 #include <set>
@@ -72,6 +73,7 @@
 #include <constants/annotation_flags.h>
 #include <constants/appearance.h>
 #include <constants/ascii.h>
+#include <constants/font_encodings.h>
 #include <constants/form_fields.h>
 #include <constants/form_flags.h>
 #include <constants/page_object.h>
@@ -93,7 +95,6 @@
 #include <core/fpdfapi/font/cpdf_cid2unicodemap.h>
 #include <core/fpdfapi/font/cpdf_cidfont.h>
 #include <core/fpdfapi/font/cpdf_cmap.h>
-#include <core/fpdfapi/font/cpdf_cmapmanager.h>
 #include <core/fpdfapi/font/cpdf_cmapparser.h>
 #include <core/fpdfapi/font/cpdf_font.h>
 #include <core/fpdfapi/font/cpdf_fontencoding.h>
@@ -126,6 +127,7 @@
 #include <core/fpdfapi/page/cpdf_iccprofile.h>
 #include <core/fpdfapi/page/cpdf_image.h>
 #include <core/fpdfapi/page/cpdf_imageobject.h>
+#include <core/fpdfapi/page/cpdf_indexedcs.h>
 #include <core/fpdfapi/page/cpdf_meshstream.h>
 #include <core/fpdfapi/page/cpdf_occontext.h>
 #include <core/fpdfapi/page/cpdf_page.h>
@@ -318,6 +320,7 @@
 #include <core/fxcrt/fx_safe_types.h>
 #include <core/fxcrt/fx_stream.h>
 #include <core/fxcrt/fx_string.h>
+#include <core/fxcrt/fx_string_wrappers.h>
 #include <core/fxcrt/fx_system.h>
 #include <core/fxcrt/fx_unicode.h>
 #include <core/fxcrt/maybe_owned.h>
@@ -339,6 +342,7 @@
 #include <core/fxcrt/xml/cfx_xmlparser.h>
 #include <core/fxcrt/xml/cfx_xmltext.h>
 #include <core/fxge/agg/fx_agg_driver.h>
+#include <core/fxge/calculate_pitch.h>
 #include <core/fxge/cfx_cliprgn.h>
 #include <core/fxge/cfx_color.h>
 #include <core/fxge/cfx_defaultrenderdevice.h>
@@ -374,21 +378,18 @@
 #include <core/fxge/dib/fx_dib.h>
 #include <core/fxge/dib/scanlinecomposer_iface.h>
 #include <core/fxge/fontdata/chromefontdata/chromefontdata.h>
+#include <core/fxge/freetype/fx_freetype.h>
 #include <core/fxge/fx_font.h>
-#include <core/fxge/fx_freetype.h>
 #include <core/fxge/renderdevicedriver_iface.h>
 #include <core/fxge/scoped_font_transform.h>
 #include <core/fxge/systemfontinfo_iface.h>
 #include <core/fxge/text_char_pos.h>
 #include <core/fxge/text_glyph_pos.h>
-#include <fpdfsdk/cpdfsdk_actionhandler.h>
 #include <fpdfsdk/cpdfsdk_annot.h>
-#include <fpdfsdk/cpdfsdk_annothandlermgr.h>
 #include <fpdfsdk/cpdfsdk_annotiteration.h>
 #include <fpdfsdk/cpdfsdk_annotiterator.h>
 #include <fpdfsdk/cpdfsdk_appstream.h>
 #include <fpdfsdk/cpdfsdk_baannot.h>
-#include <fpdfsdk/cpdfsdk_baannothandler.h>
 #include <fpdfsdk/cpdfsdk_customaccess.h>
 #include <fpdfsdk/cpdfsdk_filewriteadapter.h>
 #include <fpdfsdk/cpdfsdk_formfillenvironment.h>
@@ -398,7 +399,6 @@
 #include <fpdfsdk/cpdfsdk_pauseadapter.h>
 #include <fpdfsdk/cpdfsdk_renderpage.h>
 #include <fpdfsdk/cpdfsdk_widget.h>
-#include <fpdfsdk/cpdfsdk_widgethandler.h>
 #include <fpdfsdk/formfiller/cffl_button.h>
 #include <fpdfsdk/formfiller/cffl_checkbox.h>
 #include <fpdfsdk/formfiller/cffl_combobox.h>
@@ -411,7 +411,6 @@
 #include <fpdfsdk/formfiller/cffl_radiobutton.h>
 #include <fpdfsdk/formfiller/cffl_textfield.h>
 #include <fpdfsdk/formfiller/cffl_textobject.h>
-#include <fpdfsdk/ipdfsdk_annothandler.h>
 #include <fpdfsdk/pwl/cpwl_button.h>
 #include <fpdfsdk/pwl/cpwl_caret.h>
 #include <fpdfsdk/pwl/cpwl_cbbutton.h>
@@ -426,7 +425,6 @@
 #include <fpdfsdk/pwl/cpwl_special_button.h>
 #include <fpdfsdk/pwl/cpwl_wnd.h>
 #include <fpdfsdk/pwl/ipwl_fillernotify.h>
-#include <fpdfsdk/pwl/ipwl_systemhandler.h>
 #include <fxjs/cjs_event_context_stub.h>
 #include <fxjs/cjs_runtimestub.h>
 #include <fxjs/ijs_event_context.h>

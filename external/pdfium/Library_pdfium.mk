@@ -47,14 +47,11 @@ $(eval $(call gb_Library_set_generated_cxx_suffix,pdfium,cpp))
 # pdfium
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_annot \
-    UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_annothandlermgr \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_annotiteration \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_baannot \
-    UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_baannothandler \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_formfillenvironment \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_pageview \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_widget \
-    UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_widgethandler \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_dataavail \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_ext \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_flatten \
@@ -63,7 +60,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/fpdf_structtree \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_sysfontinfo \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_transformpage \
-    UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_actionhandler \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_annotiterator \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_customaccess \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_filewriteadapter \
@@ -80,7 +76,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/fpdf_save \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_text \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_view \
-    UnpackedTarball/pdfium/fpdfsdk/ipdfsdk_annothandler \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_pauseadapter \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_interactiveform \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_renderpage \
@@ -91,6 +86,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 	UnpackedTarball/pdfium/constants/page_object \
 	UnpackedTarball/pdfium/constants/stream_dict_common \
 	UnpackedTarball/pdfium/constants/transparency \
+	UnpackedTarball/pdfium/constants/font_encodings \
 ))
 
 # fdrm
@@ -269,7 +265,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/font/cfx_stockfontarray \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_cid2unicodemap \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_cmap \
-    UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_cmapmanager \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_cmapparser \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_fontglobals \
     UnpackedTarball/pdfium/core/fpdfapi/font/cpdf_tounicodemap \

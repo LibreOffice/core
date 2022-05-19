@@ -81,3 +81,67 @@ index 8b3a72700..ea1db23f4 100644
  }
  
  FX_RECT FXRectFromFTPos(FT_Pos left, FT_Pos top, FT_Pos right, FT_Pos bottom) {
+diff --git a/third_party/base/numerics/safe_conversions_impl.h b/third_party/base/numerics/safe_conversions_impl.h
+index 4d8a7b7d9..d14c6dc06 100644
+--- a/third_party/base/numerics/safe_conversions_impl.h
++++ b/third_party/base/numerics/safe_conversions_impl.h
+@@ -88,7 +88,7 @@ constexpr typename std::make_unsigned<T>::type SafeUnsignedAbs(T value) {
+ 
+ // TODO(jschuh): Switch to std::is_constant_evaluated() once C++20 is supported.
+ // Alternately, the usage could be restructured for "consteval if" in C++23.
+-#define IsConstantEvaluated() (__builtin_is_constant_evaluated())
++#define IsConstantEvaluated() (false)
+ 
+ // TODO(jschuh): Debug builds don't reliably propagate constants, so we restrict
+ // some accelerated runtime paths to release builds until this can be forced
+--- pdfium/core/fpdfapi/font/cpdf_cidfont.cpp.orig	2022-05-20 09:25:52.066728467 +0000
++++ pdfium/core/fpdfapi/font/cpdf_cidfont.cpp	2022-05-20 09:25:56.146736531 +0000
+@@ -738,7 +738,7 @@
+         uint32_t maccode = CharCodeFromUnicodeForFreetypeEncoding(
+             FT_ENCODING_APPLE_ROMAN, name_unicode);
+         index = maccode ? FT_Get_Char_Index(face, maccode)
+-                        : FT_Get_Name_Index(face, name);
++                        : FT_Get_Name_Index(face, const_cast<char*>(name));
+       }
+       if (index == 0 || index == 0xffff)
+         return charcode ? static_cast<int>(charcode) : -1;
+--- pdfium/core/fpdfapi/font/cpdf_type1font.cpp.orig	2022-05-20 09:26:59.090862058 +0000
++++ pdfium/core/fpdfapi/font/cpdf_type1font.cpp	2022-05-20 09:27:33.810932435 +0000
+@@ -260,7 +260,7 @@
+                                           static_cast<uint32_t>(charcode));
+       if (name) {
+         m_Encoding.SetUnicode(charcode, UnicodeFromAdobeName(name));
+-        m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), name);
++        m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), const_cast<char*>(name));
+       } else {
+         m_GlyphIndex[charcode] = FT_Get_Char_Index(
+             m_Font.GetFaceRec(), static_cast<uint32_t>(charcode));
+@@ -291,7 +291,7 @@
+       continue;
+ 
+     m_Encoding.SetUnicode(charcode, UnicodeFromAdobeName(name));
+-    m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), name);
++    m_GlyphIndex[charcode] = FT_Get_Name_Index(m_Font.GetFaceRec(), const_cast<char*>(name));
+     if (m_GlyphIndex[charcode] != 0)
+       continue;
+ 
+--- pdfium/core/fpdfapi/font/cpdf_truetypefont.cpp.orig	2022-05-20 09:26:12.066767996 +0000
++++ pdfium/core/fpdfapi/font/cpdf_truetypefont.cpp	2022-05-20 09:26:46.690836923 +0000
+@@ -90,7 +90,7 @@
+               FT_ENCODING_APPLE_ROMAN,
+               m_Encoding.UnicodeFromCharCode(charcode));
+           if (!maccode) {
+-            m_GlyphIndex[charcode] = FT_Get_Name_Index(face, name);
++            m_GlyphIndex[charcode] = FT_Get_Name_Index(face, const_cast<char*>(name));
+           } else {
+             m_GlyphIndex[charcode] = FT_Get_Char_Index(face, maccode);
+           }
+@@ -104,7 +104,7 @@
+         m_GlyphIndex[charcode] = FT_Get_Char_Index(face, 32);
+         continue;
+       }
+-      m_GlyphIndex[charcode] = FT_Get_Name_Index(face, name);
++      m_GlyphIndex[charcode] = FT_Get_Name_Index(face, const_cast<char*>(name));
+       if (m_GlyphIndex[charcode] != 0 || !bToUnicode)
+         continue;
+ 
