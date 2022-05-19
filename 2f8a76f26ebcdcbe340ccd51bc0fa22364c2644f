@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23495e61_51c623f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-19T07:34:29Z",
+      "side": 1,
+      "message": "in order for this to work, significant refactoring would be necessary (because std::mutex is non-recursive, while osl::Mutex is recursive).\n\nAs can be seen from jenkins, it is deadlocking",
+      "revId": "2f8a76f26ebcdcbe340ccd51bc0fa22364c2644f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
