@@ -1061,6 +1061,10 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis,
                                   const char* pMimeType,
                                   char** pUsedMimeType);
 static int doc_getSelectionType(LibreOfficeKitDocument* pThis);
+static int doc_getSelectionTypeAndText(LibreOfficeKitDocument* pThis,
+                                       const char* pMimeType,
+                                       char** pText,
+                                       char** pUsedMimeType);
 static int doc_getClipboard (LibreOfficeKitDocument* pThis,
                              const char **pMimeTypes,
                              size_t      *pOutCount,
@@ -1255,6 +1259,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->setWindowTextSelection = doc_setWindowTextSelection;
         m_pDocumentClass->getTextSelection = doc_getTextSelection;
         m_pDocumentClass->getSelectionType = doc_getSelectionType;
+        m_pDocumentClass->getSelectionTypeAndText = doc_getSelectionTypeAndText;
         m_pDocumentClass->getClipboard = doc_getClipboard;
         m_pDocumentClass->setClipboard = doc_setClipboard;
         m_pDocumentClass->paste = doc_paste;
@@ -4695,7 +4700,62 @@ static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
     if (aRet.getLength() > 10000)
         return LOK_SELTYPE_COMPLEX;
 
-    return aRet.getLength() ? LOK_SELTYPE_TEXT : LOK_SELTYPE_NONE;
+    return !aRet.isEmpty() ? LOK_SELTYPE_TEXT : LOK_SELTYPE_NONE;
+}
+
+static int doc_getSelectionTypeAndText(LibreOfficeKitDocument* pThis, const char* pMimeType, char** pText, char** pUsedMimeType)
+{
+    // The purpose of this function is to avoid double call to pDoc->getSelection(),
+    // which may be expensive.
+    comphelper::ProfileZone aZone("doc_getSelectionTypeAndText");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return LOK_SELTYPE_NONE;
+    }
+
+    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(pDoc->getSelection(), css::uno::UNO_QUERY);
+    if (!xTransferable)
+    {
+        SetLastExceptionMsg("No selection available");
+        return LOK_SELTYPE_NONE;
+    }
+
+    if (xTransferable->isComplex())
+        return LOK_SELTYPE_COMPLEX;
+
+    const char *pType = pMimeType;
+    if (!pType || pType[0] == '\0')
+        pType = "text/plain;charset=utf-8";
+
+    OString aRet;
+    bool bSuccess = getFromTransferrable(xTransferable, OString(pType), aRet);
+    if (!bSuccess)
+        return LOK_SELTYPE_NONE;
+
+    if (aRet.getLength() > 10000)
+        return LOK_SELTYPE_COMPLEX;
+
+    if (aRet.isEmpty())
+        return LOK_SELTYPE_NONE;
+
+    if (pText)
+        *pText = convertOString(aRet);
+
+    if (pUsedMimeType) // legacy
+    {
+        if (pMimeType)
+            *pUsedMimeType = strdup(pMimeType);
+        else
+            *pUsedMimeType = nullptr;
+    }
+
+    return LOK_SELTYPE_TEXT;
 }
 
 static int doc_getClipboard(LibreOfficeKitDocument* pThis,
