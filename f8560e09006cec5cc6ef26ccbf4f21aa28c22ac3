@@ -22,6 +22,30 @@
       },
       "revId": "f8560e09006cec5cc6ef26ccbf4f21aa28c22ac3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e716f5a_e739cea5",
+        "filename": "sw/source/core/txtnode/justify.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2022-05-19T12:18:15Z",
+      "side": 1,
+      "message": "@Tomaž Thanks for noticing this! I proposed another patch to fix this:\nhttps://gerrit.libreoffice.org/c/core/+/134639",
+      "parentUuid": "c68bd336_204a46f6",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 33
+      },
+      "revId": "f8560e09006cec5cc6ef26ccbf4f21aa28c22ac3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
