@@ -361,7 +361,6 @@ uno::Reference<table::XCellRange> SAL_CALL ScNamedRangeObj::getReferredCells()
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScNamedRangeObj::getPropertySetInfo()
 {
-    SolarMutexGuard aGuard;
     static uno::Reference< beans::XPropertySetInfo >  aRef(new SfxItemPropertySetInfo( lcl_GetNamedRangeMap() ));
     return aRef;
 }
@@ -369,7 +368,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScNamedRangeObj::getPropertySet
 void SAL_CALL ScNamedRangeObj::setPropertyValue(
                         const OUString& rPropertyName, const uno::Any& /*aValue*/ )
 {
-    SolarMutexGuard aGuard;
     if ( rPropertyName == SC_UNONAME_ISSHAREDFMLA )
     {
         // Ignore this.

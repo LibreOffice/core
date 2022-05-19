@@ -220,11 +220,8 @@ void SAL_CALL
 }
 
 /// Create a name for this view.
-OUString
-    AccessibleOutlineView::CreateAccessibleName()
+OUString AccessibleOutlineView::CreateAccessibleName()
 {
-    SolarMutexGuard aGuard;
-
     return SdResId(SID_SD_A11Y_I_OUTLINEVIEW_N);
 }
 

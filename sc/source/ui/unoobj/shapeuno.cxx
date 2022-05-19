@@ -995,8 +995,6 @@ uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const OUString& aPropertyName 
 
 void SAL_CALL ScShapeObj::attach( const uno::Reference<text::XTextRange>& /* xTextRange */ )
 {
-    SolarMutexGuard aGuard;
-
     throw lang::IllegalArgumentException();     // anchor cannot be changed
 }
 

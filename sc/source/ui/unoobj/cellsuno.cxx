@@ -3753,7 +3753,6 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
 
 uno::Reference<util::XSearchDescriptor> SAL_CALL ScCellRangesBase::createSearchDescriptor()
 {
-    SolarMutexGuard aGuard;
     return new ScCellSearchObj;
 }
 
@@ -3874,7 +3873,6 @@ uno::Reference<uno::XInterface> SAL_CALL ScCellRangesBase::findNext(
 
 uno::Reference<util::XReplaceDescriptor> SAL_CALL ScCellRangesBase::createReplaceDescriptor()
 {
-    SolarMutexGuard aGuard;
     return new ScCellSearchObj;
 }
 
@@ -8323,7 +8321,6 @@ OUString SAL_CALL ScTableColumnObj::getName()
 
 void SAL_CALL ScTableColumnObj::setName( const OUString& /* aNewName */ )
 {
-    SolarMutexGuard aGuard;
     throw uno::RuntimeException();      // read-only
 }
 
