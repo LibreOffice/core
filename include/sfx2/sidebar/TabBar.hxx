@@ -119,7 +119,7 @@ private:
     const ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
     PopupMenuProvider maPopupMenuProvider;
 
-    static void CreateTabItem(weld::Toolbar& rButton, const DeckDescriptor& rDeckDescriptor);
+    void CreateTabItem(weld::Toolbar& rButton, const DeckDescriptor& rDeckDescriptor);
     css::uno::Reference<css::graphic::XGraphic> GetItemImage(const DeckDescriptor& rDeskDescriptor) const;
     void UpdateButtonIcons();
 
