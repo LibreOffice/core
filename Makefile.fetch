@@ -159,6 +159,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,LIBLANGTAG,LIBLANGTAG_TARBALL) \
 		$(call fetch_Optional,LIBNUMBERTEXT,LIBNUMBERTEXT_TARBALL) \
 		$(call fetch_Optional,LIBPNG,LIBPNG_TARBALL) \
+		$(call fetch_Optional,LIBTIFF,LIBTIFF_TARBALL) \
 		$(call fetch_Optional,LIBTOMMATH,LIBTOMMATH_TARBALL) \
 		$(call fetch_Optional,LIBWEBP,LIBWEBP_TARBALL) \
 		$(call fetch_Optional,LIBXML2,LIBXML_TARBALL) \
