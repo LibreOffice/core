@@ -132,14 +132,14 @@ namespace
 {
 bool isCharacterVariantCode(sal_uInt32 nFeatureCode)
 {
-    return char((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 'c'
-           && char((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 'v';
+    return ((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 'c'
+           && ((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 'v';
 }
 
 bool isStylisticSetCode(sal_uInt32 nFeatureCode)
 {
-    return char((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 's'
-           && char((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 's';
+    return ((sal_uInt32(nFeatureCode) >> 24) & 0xFF) == 's'
+           && ((sal_uInt32(nFeatureCode) >> 16) & 0xFF) == 's';
 }
 
 OUString getNumericLowerPart(sal_uInt32 nFeatureCode)
