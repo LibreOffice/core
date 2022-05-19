@@ -312,7 +312,16 @@ OUString SwAuthorFieldType::Expand(sal_uLong nFormat)
 {
     SvtUserOptions&  rOpt = SW_MOD()->GetUserOptions();
     if((nFormat & 0xff) == AF_NAME)
-        return rOpt.GetFullName();
+    {
+        // Prefer the view's redline author name.
+        // (set in SwXTextDocument::initializeForTiledRendering)
+        std::size_t nAuthor = SW_MOD()->GetRedlineAuthor();
+        OUString sAuthor = SW_MOD()->GetRedlineAuthor(nAuthor);
+        if (sAuthor.isEmpty())
+            return rOpt.GetFullName();
+
+        return sAuthor;
+    }
 
     return rOpt.GetID();
 }
