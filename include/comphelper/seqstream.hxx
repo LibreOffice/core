@@ -24,8 +24,10 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/bytereader.hxx>
 #include <mutex>
 
 namespace comphelper
@@ -37,7 +39,8 @@ namespace comphelper
 
 
 class COMPHELPER_DLLPUBLIC SequenceInputStream final
-    : public ::cppu::WeakImplHelper< css::io::XInputStream, css::io::XSeekable >
+    : public ::cppu::WeakImplHelper< css::io::XInputStream, css::io::XSeekable, css::lang::XUnoTunnel >,
+      public comphelper::ByteReader
 {
     std::mutex    m_aMutex;
     css::uno::Sequence<sal_Int8> const m_aData;
@@ -60,6 +63,12 @@ public:
     virtual void SAL_CALL seek( sal_Int64 location ) override;
     virtual sal_Int64 SAL_CALL getPosition(  ) override;
     virtual sal_Int64 SAL_CALL getLength(  ) override;
+
+// css::lang::XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+
+// comphelper::ByteReader
+    virtual sal_Int32 readSomeBytes( sal_Int8* pData, sal_Int32 nBytesToRead ) override;
 
 private:
     sal_Int32 avail();

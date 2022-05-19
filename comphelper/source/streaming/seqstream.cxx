@@ -74,6 +74,30 @@ sal_Int32 SAL_CALL SequenceInputStream::readBytes( Sequence<sal_Int8>& aData, sa
     return nBytesToRead;
 }
 
+sal_Int32 SequenceInputStream::readSomeBytes( sal_Int8* pData, sal_Int32 nBytesToRead )
+{
+    if (nBytesToRead < 0)
+        throw BufferSizeExceededException(OUString(),*this);
+
+    std::scoped_lock aGuard( m_aMutex );
+
+    sal_Int32 nAvail = avail();
+
+    if (nAvail < nBytesToRead)
+        nBytesToRead = nAvail;
+
+    memcpy(pData, m_aData.getConstArray() + m_nPos, nBytesToRead);
+    m_nPos += nBytesToRead;
+
+    return nBytesToRead;
+}
+
+sal_Int64 SAL_CALL SequenceInputStream::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
+{
+    if (rIdentifier == comphelper::ByteReader::getUnoTunnelId())
+        return reinterpret_cast<sal_Int64>(static_cast<comphelper::ByteReader*>(this));
+    return 0;
+}
 
 sal_Int32 SAL_CALL SequenceInputStream::readSomeBytes( Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead )
 {

@@ -26,8 +26,8 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <comphelper/bytereader.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <unotools/bytereader.hxx>
 #include <mutex>
 
 #include "filrec.hxx"
@@ -45,7 +45,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
     css::io::XTruncate,
     css::io::XAsyncOutputMonitor,
     css::lang::XUnoTunnel >,
-    public utl::ByteReader
+    public comphelper::ByteReader
     {
 
     public:

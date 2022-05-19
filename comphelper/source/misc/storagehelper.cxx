@@ -27,6 +27,7 @@
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -48,6 +49,7 @@
 
 #include <ucbhelper/content.hxx>
 
+#include <comphelper/bytereader.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/hash.hxx>
 #include <comphelper/processfactory.hxx>
@@ -173,21 +175,47 @@ void OStorageHelper::CopyInputToOutput(
 {
     static const sal_Int32 nConstBufferSize = 32000;
 
-    sal_Int32 nRead;
-    uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
-
-    do
+    uno::Reference< css::lang::XUnoTunnel > xInputTunnel( xInput, uno::UNO_QUERY );
+    comphelper::ByteReader* pByteReader = nullptr;
+    comphelper::ByteWriter* pByteWriter = nullptr;
+    if (xInputTunnel)
+        pByteReader = reinterpret_cast< comphelper::ByteReader* >( xInputTunnel->getSomething( comphelper::ByteReader::getUnoTunnelId() ) );
+    if (pByteReader)
     {
-        nRead = xInput->readBytes ( aSequence, nConstBufferSize );
-        if ( nRead < nConstBufferSize )
-        {
-            uno::Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
-            xOutput->writeBytes ( aTempBuf );
-        }
-        else
-            xOutput->writeBytes ( aSequence );
+        uno::Reference< css::lang::XUnoTunnel > xOutputTunnel( xOutput, uno::UNO_QUERY );
+        if (xOutputTunnel)
+            pByteWriter = reinterpret_cast< comphelper::ByteWriter* >( xOutputTunnel->getSomething( comphelper::ByteWriter::getUnoTunnelId() ) );
     }
-    while ( nRead == nConstBufferSize );
+
+    if (pByteWriter)
+    {
+        sal_Int32 nRead;
+        sal_Int8 aTempBuf[ nConstBufferSize ];
+        do
+        {
+            nRead = pByteReader->readSomeBytes ( aTempBuf, nConstBufferSize );
+            pByteWriter->writeSomeBytes ( aTempBuf, nRead );
+        }
+        while ( nRead == nConstBufferSize );
+    }
+    else
+    {
+        sal_Int32 nRead;
+        uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
+
+        do
+        {
+            nRead = xInput->readBytes ( aSequence, nConstBufferSize );
+            if ( nRead < nConstBufferSize )
+            {
+                uno::Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
+                xOutput->writeBytes ( aTempBuf );
+            }
+            else
+                xOutput->writeBytes ( aSequence );
+        }
+        while ( nRead == nConstBufferSize );
+    }
 }
 
 

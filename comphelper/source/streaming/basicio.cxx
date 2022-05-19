@@ -18,6 +18,8 @@
  */
 
 #include <comphelper/basicio.hxx>
+#include <comphelper/bytereader.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
 namespace comphelper
@@ -155,6 +157,22 @@ const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css:
 {
     _rxOutStream->writeLong(_nValue);
     return _rxOutStream;
+}
+
+ByteReader::~ByteReader() {}
+
+const css::uno::Sequence< sal_Int8 > & ByteReader::getUnoTunnelId()
+{
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
+}
+
+ByteWriter::~ByteWriter() {}
+
+const css::uno::Sequence< sal_Int8 > & ByteWriter::getUnoTunnelId()
+{
+    static const comphelper::UnoIdInit implId;
+    return implId.getSeq();
 }
 
 

@@ -2137,6 +2137,88 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
     ModifyParentUnlockMutex_Impl( aGuard );
 }
 
+sal_Int32 OWriteStream::writeSomeBytes( const sal_Int8* pData, sal_Int32 nBytesToWrite )
+{
+    osl::ClearableMutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
+
+    // the write method makes initialization itself, since it depends from the aData length
+    // NO CheckInitOnDemand()!
+
+    if ( !m_pImpl )
+    {
+        SAL_INFO("package.xstor", "Disposed!");
+        throw lang::DisposedException();
+    }
+
+    if ( !m_bInitOnDemand )
+    {
+        if ( !m_xOutStream.is() || !m_xSeekable.is())
+            throw io::NotConnectedException();
+
+        if ( m_pImpl->m_xCacheStream.is() )
+        {
+            // check whether the cache should be turned off
+            sal_Int64 nPos = m_xSeekable->getPosition();
+            if ( nPos + nBytesToWrite > MAX_STORCACHE_SIZE )
+            {
+                // disconnect the cache and copy the data to the temporary file
+                m_xSeekable->seek( 0 );
+
+                // it is enough to copy the cached stream, the cache should already contain everything
+                if ( !m_pImpl->GetFilledTempFileIfNo( m_xInStream ).isEmpty() )
+                {
+                    DeInit();
+                    // the last position is known and it is differs from the current stream position
+                    m_nInitPosition = nPos;
+                }
+            }
+        }
+    }
+
+    if ( m_bInitOnDemand )
+    {
+        SAL_INFO( "package.xstor", "package (mv76033) OWriteStream::CheckInitOnDemand, initializing" );
+        uno::Reference< io::XStream > xStream = m_pImpl->GetTempFileAsStream();
+        if ( xStream.is() )
+        {
+            m_xInStream.set( xStream->getInputStream(), uno::UNO_SET_THROW );
+            m_xOutStream.set( xStream->getOutputStream(), uno::UNO_SET_THROW );
+            m_xSeekable.set( xStream, uno::UNO_QUERY_THROW );
+            m_xSeekable->seek( m_nInitPosition );
+
+            m_nInitPosition = 0;
+            m_bInitOnDemand = false;
+        }
+    }
+
+    if ( !m_xOutStream.is() )
+        throw io::NotConnectedException();
+
+    uno::Reference< css::lang::XUnoTunnel > xOutputTunnel( m_xOutStream, uno::UNO_QUERY );
+    comphelper::ByteWriter* pByteWriter = nullptr;
+    if (xOutputTunnel)
+        pByteWriter = reinterpret_cast< comphelper::ByteWriter* >( xOutputTunnel->getSomething( comphelper::ByteWriter::getUnoTunnelId() ) );
+    if (pByteWriter)
+        nBytesToWrite = pByteWriter->writeSomeBytes(pData, nBytesToWrite);
+    else
+    {
+        uno::Sequence<sal_Int8> aData(pData, nBytesToWrite);
+        m_xOutStream->writeBytes( aData );
+    }
+    m_pImpl->m_bHasDataToFlush = true;
+
+    ModifyParentUnlockMutex_Impl( aGuard );
+
+    return nBytesToWrite;
+}
+
+sal_Int64 SAL_CALL OWriteStream::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
+{
+    if (rIdentifier == comphelper::ByteWriter::getUnoTunnelId())
+        return reinterpret_cast<sal_Int64>(static_cast<comphelper::ByteWriter*>(this));
+    return 0;
+}
+
 void SAL_CALL OWriteStream::flush()
 {
     // In case stream is flushed its current version becomes visible

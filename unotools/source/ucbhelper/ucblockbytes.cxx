@@ -56,9 +56,9 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+#include <comphelper/bytereader.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <ucbhelper/content.hxx>
-#include <unotools/bytereader.hxx>
 #include <mutex>
 
 using namespace ::com::sun::star::uno;
@@ -1110,9 +1110,9 @@ ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
         }
 
         Reference< css::lang::XUnoTunnel > xTunnel( xStream, UNO_QUERY );
-        utl::ByteReader* pByteReader = nullptr;
+        comphelper::ByteReader* pByteReader = nullptr;
         if (xTunnel)
-            pByteReader = reinterpret_cast< utl::ByteReader* >( xTunnel->getSomething( utl::ByteReader::getUnoTunnelId() ) );
+            pByteReader = reinterpret_cast< comphelper::ByteReader* >( xTunnel->getSomething( comphelper::ByteReader::getUnoTunnelId() ) );
 
         if (pByteReader)
         {
