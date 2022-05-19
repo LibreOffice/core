@@ -257,6 +257,7 @@ std::vector<OUString> FilterCache::getMatchingItemsByProps(      EItemType  eTyp
     const CacheItemList& rList = impl_getItemList(eType);
 
     std::vector<OUString> lKeys;
+    lKeys.reserve(rList.size());
 
     // search items, which provides all needed properties of set "lIProps"
     // but not of set "lEProps"!
