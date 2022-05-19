@@ -5291,7 +5291,14 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                             aStr.append( "-" );
                         break;
                     case NF_SYMBOLTYPE_DATESEP :
-                        aStr.append( rLocWrp.getDateSep() );
+                        if (nOriginalLang == LANGUAGE_DONTKNOW)
+                        {   // prefer whatever the existing separator is
+                            aStr.append(rStrArray[j]);
+                        }
+                        else
+                        {
+                            aStr.append( rLocWrp.getDateSep() );
+                        }
                         break;
                     case NF_SYMBOLTYPE_TIMESEP :
                         aStr.append( rLocWrp.getTimeSep() );
