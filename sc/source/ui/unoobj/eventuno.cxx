@@ -143,7 +143,6 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
 
 uno::Sequence<OUString> SAL_CALL ScSheetEventsObj::getElementNames()
 {
-    SolarMutexGuard aGuard;
     auto aNames = uno::Sequence<OUString>(int(ScSheetEventId::COUNT));
     auto pNames = aNames.getArray();
     for (sal_Int32 nEvent=0; nEvent<int(ScSheetEventId::COUNT); ++nEvent)
@@ -153,7 +152,6 @@ uno::Sequence<OUString> SAL_CALL ScSheetEventsObj::getElementNames()
 
 sal_Bool SAL_CALL ScSheetEventsObj::hasByName( const OUString& aName )
 {
-    SolarMutexGuard aGuard;
     ScSheetEventId nEvent = lcl_GetEventFromName(aName);
     return (nEvent != ScSheetEventId::NOTFOUND);
 }

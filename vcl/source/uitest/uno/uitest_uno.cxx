@@ -66,33 +66,28 @@ UITestUnoObj::UITestUnoObj():
 
 sal_Bool SAL_CALL UITestUnoObj::executeCommand(const OUString& rCommand)
 {
-    SolarMutexGuard aGuard;
     return UITest::executeCommand(rCommand);
 }
 
 sal_Bool SAL_CALL UITestUnoObj::executeCommandWithParameters(const OUString& rCommand,
     const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
-    SolarMutexGuard aGuard;
     return UITest::executeCommandWithParameters(rCommand,rArgs);
 }
 
 sal_Bool SAL_CALL UITestUnoObj::executeDialog(const OUString& rCommand)
 {
-    SolarMutexGuard aGuard;
     return UITest::executeDialog(rCommand);
 }
 
 css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getTopFocusWindow()
 {
-    SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = UITest::getFocusTopWindow();
     return new UIObjectUnoObj(std::move(pObj));
 }
 
 css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getFloatWindow()
 {
-    SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = UITest::getFloatWindow();
     return new UIObjectUnoObj(std::move(pObj));
 }

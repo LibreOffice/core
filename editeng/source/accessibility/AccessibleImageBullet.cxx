@@ -130,18 +130,12 @@ namespace accessibility
 
     OUString SAL_CALL  AccessibleImageBullet::getAccessibleDescription()
     {
-
-        SolarMutexGuard aGuard;
-
         // Get the string from the resource for the specified id.
         return EditResId(RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION);
     }
 
     OUString SAL_CALL  AccessibleImageBullet::getAccessibleName()
     {
-
-        SolarMutexGuard aGuard;
-
         // Get the string from the resource for the specified id.
         return EditResId(RID_SVXSTR_A11Y_IMAGEBULLET_NAME);
     }

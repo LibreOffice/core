@@ -178,7 +178,6 @@ OUString SAL_CALL ScFormulaParserObj::printFormula(
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFormulaParserObj::getPropertySetInfo()
 {
-    SolarMutexGuard aGuard;
     static uno::Reference< beans::XPropertySetInfo > aRef(new SfxItemPropertySetInfo( lcl_GetFormulaParserMap() ));
     return aRef;
 }

@@ -1203,7 +1203,6 @@ SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
 void SAL_CALL
 SwXParagraph::attach(const uno::Reference< text::XTextRange > & /*xTextRange*/)
 {
-    SolarMutexGuard aGuard;
     // SwXParagraph will only created in order to be inserted by
     // 'insertTextContentBefore' or 'insertTextContentAfter' therefore
     // they cannot be attached

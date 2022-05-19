@@ -438,8 +438,6 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
 uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::queryGraphics(const uno::Sequence< uno::Sequence<beans::PropertyValue> >& rMediaPropertiesSeq)
 {
-    SolarMutexGuard aGuard;
-
     // Turn properties into streams.
     std::vector< std::unique_ptr<SvStream> > aStreams;
     for (const auto& rMediaProperties : rMediaPropertiesSeq)
@@ -701,8 +699,6 @@ void ImplApplyFilterData( ::Graphic& rGraphic, const uno::Sequence< beans::Prope
 
 void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XGraphic >& rxGraphic, const uno::Sequence< beans::PropertyValue >& rMediaProperties )
 {
-    SolarMutexGuard g;
-
     std::unique_ptr<SvStream> pOStm;
     OUString    aPath;
 

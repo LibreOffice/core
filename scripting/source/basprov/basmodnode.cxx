@@ -124,8 +124,6 @@ namespace basprov
 
     sal_Int16 BasicModuleNodeImpl::getType(  )
     {
-        SolarMutexGuard aGuard;
-
         return browse::BrowseNodeTypes::CONTAINER;
     }
 

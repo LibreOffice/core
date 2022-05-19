@@ -321,9 +321,7 @@ OUString SAL_CALL SmGraphicAccessible::getAccessibleName()
 
 Reference< XAccessibleRelationSet > SAL_CALL SmGraphicAccessible::getAccessibleRelationSet()
 {
-    SolarMutexGuard aGuard;
-    Reference< XAccessibleRelationSet > xRelSet = new utl::AccessibleRelationSetHelper();
-    return xRelSet;   // empty relation set
+    return new utl::AccessibleRelationSetHelper(); // empty relation set
 }
 
 Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStateSet()

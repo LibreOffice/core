@@ -2260,7 +2260,6 @@ sal_Int16 VCLXMessageBox::execute()
 
 css::awt::Size SAL_CALL VCLXMessageBox::getMinimumSize()
 {
-    SolarMutexGuard aGuard;
     return css::awt::Size( 250, 100 );
 }
 

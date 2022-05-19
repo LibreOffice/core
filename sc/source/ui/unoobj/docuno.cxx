@@ -4135,7 +4135,6 @@ sal_Bool SAL_CALL ScTableColumnsObj::hasByName( const OUString& aName )
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableColumnsObj::getPropertySetInfo()
 {
-    SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
         new SfxItemPropertySetInfo( lcl_GetColumnsPropertyMap() ));
     return aRef;
@@ -4344,7 +4343,6 @@ sal_Bool SAL_CALL ScTableRowsObj::hasElements()
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableRowsObj::getPropertySetInfo()
 {
-    SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
         new SfxItemPropertySetInfo( lcl_GetRowsPropertyMap() ));
     return aRef;
