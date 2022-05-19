@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e99652b7_5e6a7355",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-19T07:56:46Z",
+      "side": 1,
+      "message": "...in which case I\u0027d fold moveAnyInternals into its only remaining call site in the Any move ctor (and fix the comment in binaryurp/source/binaryany.cxx referencing it), to make the Any move ctor and assignment op look similar again.\n\n(Also, this change can cause the original contents of *this to live on past the assignment, whether or not that may be unexpected or problematic for certain call sites.  But maybe that\u0027s unlikely an issue.)",
+      "revId": "c694610a4d1f1726c4bc66be127eefb4fcdeb159",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
