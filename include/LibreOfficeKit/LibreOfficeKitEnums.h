@@ -53,7 +53,7 @@ typedef enum
 {
     LOK_SELTYPE_NONE,
     LOK_SELTYPE_TEXT,
-    LOK_SELTYPE_LARGE_TEXT,
+    LOK_SELTYPE_LARGE_TEXT, // unused (same as LOK_SELTYPE_COMPLEX)
     LOK_SELTYPE_COMPLEX
 }
 LibreOfficeKitSelectionType;
