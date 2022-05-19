@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2df21d0_32f9e4bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-05-19T15:17:47Z",
+      "side": 1,
+      "message": "Shortcuts are showing twice in Calc!",
+      "revId": "4f31dc08a6dbbf017f3521f68f3f276955bd2e84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
