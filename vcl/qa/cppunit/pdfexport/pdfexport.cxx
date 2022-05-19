@@ -855,6 +855,44 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testAlternativeText)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
+
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    saveAsPDF(u"alternativeText.fodp");
+
+    // Parse the export result.
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"));
+        if (pType && pType->GetValue() == "StructElem")
+        {
+            auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"));
+            if (pS && pS->GetValue() == "Figure")
+            {
+                CPPUNIT_ASSERT_EQUAL(
+                    OUString(u"This is the text alternative"),
+                    ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                        *dynamic_cast<vcl::filter::PDFHexStringElement*>(pObject->Lookup("Alt"))));
+            }
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105972)
 {
     vcl::filter::PDFDocument aDocument;
