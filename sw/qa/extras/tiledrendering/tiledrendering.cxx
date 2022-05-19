@@ -18,6 +18,8 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/AuthorDisplayFormat.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 
 #include <test/helper/transferable.hxx>
@@ -165,6 +167,7 @@ public:
     void testCondCollCopy();
     void testMoveShapeHandle();
     void testRedlinePortions();
+    void testAuthorField();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -251,6 +254,7 @@ public:
     CPPUNIT_TEST(testCondCollCopy);
     CPPUNIT_TEST(testMoveShapeHandle);
     CPPUNIT_TEST(testRedlinePortions);
+    CPPUNIT_TEST(testAuthorField);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3568,6 +3572,72 @@ void SwTiledRenderingTest::testRedlinePortions()
     // i.e. the portion list was outdated, even " after" was marked as deleted.
     assertXPath(pXmlDoc, "//Text[3]", "Portion", "bar");
     assertXPath(pXmlDoc, "//Text[4]", "Portion", " after");
+}
+
+void SwTiledRenderingTest::testAuthorField()
+{
+    SwXTextDocument* pXTextDocument = createDoc();
+
+    int nView1 = SfxLokHelper::getView();
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
+    {
+        {".uno:Author", uno::makeAny(OUString("first"))},
+    }));
+    pXTextDocument->initializeForTiledRendering(aPropertyValues1);
+
+    Scheduler::ProcessEventsToIdle();
+
+    // Second view
+    int nView2 = SfxLokHelper::createView();
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues2(comphelper::InitPropertySequence(
+    {
+        {".uno:Author", uno::makeAny(OUString("second"))},
+    }));
+    pXTextDocument->initializeForTiledRendering(aPropertyValues2);
+
+    auto insertAuthorField = [this]()
+    {
+        uno::Reference<lang::XMultiServiceFactory> const xMSF(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextDocument> const xTD(mxComponent, uno::UNO_QUERY_THROW);
+
+        auto const xText = xTD->getText();
+        auto const xTextCursor = xText->createTextCursor();
+        CPPUNIT_ASSERT(xTextCursor.is());
+
+        xTextCursor->gotoEnd(false);
+
+        uno::Reference<text::XTextField> const xTextField(
+            xMSF->createInstance("com.sun.star.text.textfield.Author"), uno::UNO_QUERY_THROW);
+
+        uno::Reference<beans::XPropertySet> xTextFieldProps(xTextField, uno::UNO_QUERY_THROW);
+        xTextFieldProps->setPropertyValue("FullName", uno::Any(true));
+
+        xText->insertTextContent(xTextCursor, xTextField, false);
+    };
+
+    SfxLokHelper::setView(nView1);
+    Scheduler::ProcessEventsToIdle();
+    insertAuthorField();
+    Scheduler::ProcessEventsToIdle();
+
+    SfxLokHelper::setView(nView2);
+    Scheduler::ProcessEventsToIdle();
+    insertAuthorField();
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    /*
+    FILE* fp = fopen("/tmp/mylayout.xml", "w");
+    xmlBufferDump(fp, mpXmlBuffer);
+    fclose(fp);
+    */
+
+    // FIXME: now both fields (inserted by two views) evaluate to "second" !!!
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[1]", "rText", "first");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[2]", "rText", "second");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
