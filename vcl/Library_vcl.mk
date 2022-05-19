@@ -586,6 +586,9 @@ $(eval $(call gb_Library_add_libs,vcl,\
 ))
 endif # USING_X11
 
+$(eval $(call gb_Library_add_libs,vcl,\
+    -ltiff \
+))
 
 ifeq ($(DISABLE_GUI),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
