@@ -91,10 +91,7 @@ const ModelToViewHelper& SwXTextMarkup::GetConversionMap() const
 
 uno::Reference< container::XStringKeyMap > SAL_CALL SwXTextMarkup::getMarkupInfoContainer()
 {
-    SolarMutexGuard aGuard;
-
-    uno::Reference< container::XStringKeyMap > xProp = new SwXStringKeyMap;
-    return xProp;
+    return new SwXStringKeyMap;
 }
 
 void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUString & aIdentifier, const uno::Reference< text::XTextRange> & xRange,

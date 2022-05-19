@@ -599,7 +599,6 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
 
 uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions()
 {
-    SolarMutexGuard aGuard;
     const uno::Any aVal(true);
     return comphelper::InitPropertySequence({
         { UNO_NAME_LOAD_TEXT_STYLES, aVal },
@@ -4588,13 +4587,11 @@ uno::Any SAL_CALL SwXTextTableStyle::getByName(const OUString& rName)
 
 css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getElementNames()
 {
-    SolarMutexGuard aGuard;
     return comphelper::mapKeysToSequence(GetCellStyleNameMap());
 }
 
 sal_Bool SAL_CALL SwXTextTableStyle::hasByName(const OUString& rName)
 {
-    SolarMutexGuard aGuard;
     const CellStyleNameMap& rMap = GetCellStyleNameMap();
     CellStyleNameMap::const_iterator iter = rMap.find(rName);
     return iter != rMap.end();
@@ -4840,7 +4837,6 @@ OUString SAL_CALL SwXTextCellStyle::getParentStyle()
 
 void SAL_CALL SwXTextCellStyle::setParentStyle(const OUString& /*sParentStyle*/)
 {
-    SolarMutexGuard aGuard;
     // Changing parent to one which is unaware of it will lead to a something unexpected. getName() rely on a parent.
     SAL_INFO("sw.uno", "Changing SwXTextCellStyle parent");
 }

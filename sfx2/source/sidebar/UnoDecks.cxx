@@ -129,8 +129,6 @@ uno::Any SAL_CALL SfxUnoDecks::getByIndex( sal_Int32 Index )
 // XElementAccess
 uno::Type SAL_CALL SfxUnoDecks::getElementType()
 {
-    SolarMutexGuard aGuard;
-
     return uno::Type();
 }
 

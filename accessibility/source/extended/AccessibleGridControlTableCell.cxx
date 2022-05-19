@@ -262,20 +262,14 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleGridControlTableCell::getSelectedText(  )
     {
-        SolarMutexGuard aSolarGuard;
-
         return OUString();
     }
     sal_Int32 SAL_CALL AccessibleGridControlTableCell::getSelectionStart(  )
     {
-        SolarMutexGuard aSolarGuard;
-
         return 0;
     }
     sal_Int32 SAL_CALL AccessibleGridControlTableCell::getSelectionEnd(  )
     {
-        SolarMutexGuard aSolarGuard;
-
         return 0;
     }
     sal_Bool SAL_CALL AccessibleGridControlTableCell::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )

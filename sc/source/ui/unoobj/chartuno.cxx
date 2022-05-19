@@ -723,7 +723,6 @@ OUString SAL_CALL ScChartObj::getName()
 
 void SAL_CALL ScChartObj::setName( const OUString& /* aName */ )
 {
-    SolarMutexGuard aGuard;
     throw uno::RuntimeException();      // name cannot be changed
 }
 

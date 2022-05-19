@@ -306,8 +306,6 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     void XMLBasicExporterBase::cancel()
     {
-        std::scoped_lock aGuard( m_aMutex );
-
         // cancel export
     }
 

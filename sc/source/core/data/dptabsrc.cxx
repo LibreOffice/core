@@ -1063,7 +1063,6 @@ const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( const Sc
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo()
 {
-    SolarMutexGuard aGuard;
     using beans::PropertyAttribute::READONLY;
 
     static const SfxItemPropertyMapEntry aDPSourceMap_Impl[] =
@@ -1391,8 +1390,6 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetInfo()
 {
-    SolarMutexGuard aGuard;
-
     static const SfxItemPropertyMapEntry aDPDimensionMap_Impl[] =
     {
         { SC_UNO_DP_FILTER,   0,  cppu::UnoType<uno::Sequence<sheet::TableFilterField>>::get(), 0, 0 },
@@ -2061,8 +2058,6 @@ uno::Sequence<sal_Int16> ScDPLevel::getSubTotals() const
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
 {
-    SolarMutexGuard aGuard;
-
     static const SfxItemPropertyMapEntry aDPLevelMap_Impl[] =
     {
         //TODO: change type of AutoShow/Layout/Sorting to API struct when available
@@ -2535,8 +2530,6 @@ void SAL_CALL ScDPMember::setName( const OUString& /* rNewName */ )
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo()
 {
-    SolarMutexGuard aGuard;
-
     static const SfxItemPropertyMapEntry aDPMemberMap_Impl[] =
     {
         { SC_UNO_DP_ISVISIBLE, 0,  cppu::UnoType<bool>::get(),              0, 0 },

@@ -654,9 +654,7 @@ Reference< XPropertySet >  SwXTextDocument::getEndnoteSettings()
 
 Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor()
 {
-    SolarMutexGuard aGuard;
-    Reference< util::XReplaceDescriptor >  xRet = new SwXTextSearch;
-    return xRet;
+    return new SwXTextSearch;
 }
 
 SwUnoCursor* SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCursor)
@@ -738,10 +736,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
 
 Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor()
 {
-    SolarMutexGuard aGuard;
-    Reference< util::XSearchDescriptor >  xRet = new SwXTextSearch;
-    return xRet;
-
+    return new SwXTextSearch;
 }
 
 // Used for findAll/First/Next
@@ -3421,14 +3416,11 @@ int SwXTextDocument::getPart()
 
 OUString SwXTextDocument::getPartName(int nPart)
 {
-    SolarMutexGuard aGuard;
-
     return SwResId(STR_PAGE) + OUString::number(nPart + 1);
 }
 
 OUString SwXTextDocument::getPartHash(int nPart)
 {
-    SolarMutexGuard aGuard;
     OUString sPart(SwResId(STR_PAGE) + OUString::number(nPart + 1));
 
     return OUString::number(sPart.hashCode());
