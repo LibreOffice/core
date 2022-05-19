@@ -81,3 +81,16 @@ index 8b3a72700..ea1db23f4 100644
  }
  
  FX_RECT FXRectFromFTPos(FT_Pos left, FT_Pos top, FT_Pos right, FT_Pos bottom) {
+diff --git a/third_party/base/numerics/safe_conversions_impl.h b/third_party/base/numerics/safe_conversions_impl.h
+index 4d8a7b7d9..d14c6dc06 100644
+--- a/third_party/base/numerics/safe_conversions_impl.h
++++ b/third_party/base/numerics/safe_conversions_impl.h
+@@ -88,7 +88,7 @@ constexpr typename std::make_unsigned<T>::type SafeUnsignedAbs(T value) {
+ 
+ // TODO(jschuh): Switch to std::is_constant_evaluated() once C++20 is supported.
+ // Alternately, the usage could be restructured for "consteval if" in C++23.
+-#define IsConstantEvaluated() (__builtin_is_constant_evaluated())
++#define IsConstantEvaluated() (false)
+ 
+ // TODO(jschuh): Debug builds don't reliably propagate constants, so we restrict
+ // some accelerated runtime paths to release builds until this can be forced
