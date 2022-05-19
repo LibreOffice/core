@@ -2758,7 +2758,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,libtiff)/src \
+	-I$(call gb_UnpackedTarball_get_dir,libtiff)/libtiff \
 	$$(INCLUDE) \
 )
 ifeq ($(OS),WNT)
