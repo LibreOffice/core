@@ -76,6 +76,12 @@ int GtkSalFrame::m_nFloats = 0;
 
 static GDBusConnection* pSessionBus = nullptr;
 
+static void EnsureSessionBus()
+{
+    if (!pSessionBus)
+        pSessionBus = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr);
+}
+
 sal_uInt16 GtkSalFrame::GetKeyModCode( guint state )
 {
     sal_uInt16 nCode = 0;
@@ -541,8 +547,7 @@ static void attach_menu_model(GtkSalFrame* pSalFrame)
 
 #if !GTK_CHECK_VERSION(4,0,0)
     // Get a DBus session connection.
-    if (!pSessionBus)
-        pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, nullptr, nullptr);
+    EnsureSessionBus();
     if (!pSessionBus)
         return;
 
@@ -629,13 +634,9 @@ void GtkSalFrame::EnsureAppMenuWatch()
         return;
 
     // Get a DBus session connection.
-    if ( pSessionBus == nullptr )
-    {
-        pSessionBus = g_bus_get_sync( G_BUS_TYPE_SESSION, nullptr, nullptr );
-
-        if ( pSessionBus == nullptr )
-            return;
-    }
+    EnsureSessionBus();
+    if (!pSessionBus)
+        return;
 
     // Publish the menu only if AppMenu registrar is available.
     m_nWatcherId = g_bus_watch_name_on_connection( pSessionBus,
