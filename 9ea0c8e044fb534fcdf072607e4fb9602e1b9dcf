@@ -63,6 +63,30 @@
       },
       "revId": "9ea0c8e044fb534fcdf072607e4fb9602e1b9dcf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1235b842_57503b47",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-19T15:47:04Z",
+      "side": 1,
+      "message": "@Tibi: thanks for checking! \n\nWhat is the incoming value of sURL in the Hungarian build? The localized STR_SLIDE_NAME \"Dia\" or something similar?\n\nI believe, that failing test is a symptom that we need to replace sSlide with a localized string, that would be the real solution for this problem (bad slide numbers can occur with the localized LibreOffice, too).\n\nI\u0027ve checked sd/qa/unit/data/pptx/tdf144918.pptx in a localized 7.3, but the second link (jump to the Third page) is still broken. Could you check that, too?\n\nIf that is still broken with your fix, I suggest e.g. to extend oox/inc/ooxresid.hxx with STR_SLIDE_NAME, and replace sString with OoxResId(STR_SLIDE_NAME) instead of this workaround  (or if we could use STR_SLIDE_NAME from sd e.g by moving that to svx and because it seems, svx strings are accessible in oox: \n\noox/source/ppt/pptimport.cxx:        aWarning +\u003d \":\\n\" + SvxResId(RID_SVXSTR_WARN_MISSING_SMARTART);\n).",
+      "parentUuid": "297e28b0_38e3352a",
+      "range": {
+        "startLine": 630,
+        "startChar": 0,
+        "endLine": 637,
+        "endChar": 32
+      },
+      "revId": "9ea0c8e044fb534fcdf072607e4fb9602e1b9dcf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
