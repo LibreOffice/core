@@ -62,7 +62,8 @@ public:
     void
     SetUseHighContrastTheme(bool);
 
-    void
+    /** Returns true if the PreferredIconTheme was changed */
+    bool
     SetPreferredIconTheme(const OUString&, bool bDarkIconTheme);
 
     bool
