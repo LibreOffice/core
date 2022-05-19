@@ -472,6 +472,13 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::sendContentControlEvent().
     void (*sendContentControlEvent)(LibreOfficeKitDocument* pThis, const char* pArguments);
 
+    /// @see lok::Document::getSelectionTypeAndText
+    /// @since LibreOffice 7.4
+    int (*getSelectionTypeAndText) (LibreOfficeKitDocument* pThis,
+                                    const char* pMimeType,
+                                    char** pText,
+                                    char** pUsedMimeType);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

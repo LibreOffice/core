@@ -3040,12 +3040,16 @@ void DesktopLOKTest::testComplexSelection()
 
     // Certainly not complex.
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_NONE), pDocument->pClass->getSelectionType(pDocument));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_NONE), pDocument->pClass->getSelectionTypeAndText(pDocument,
+                                                                 "", nullptr, nullptr));
 
     // Paste text.
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
 
     // No selection.
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_NONE), pDocument->pClass->getSelectionType(pDocument));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_NONE), pDocument->pClass->getSelectionTypeAndText(pDocument,
+                                                                 "", nullptr, nullptr));
 
     // Paste an image.
     OUString aFileURL;
@@ -3080,6 +3084,8 @@ void DesktopLOKTest::testComplexSelection()
 
     // We expect this to be complex.
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_COMPLEX), pDocument->pClass->getSelectionType(pDocument));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(LOK_SELTYPE_COMPLEX), pDocument->pClass->getSelectionTypeAndText(pDocument,
+                                                                 "", nullptr, nullptr));
 }
 
 void DesktopLOKTest::testCalcSaveAs()
@@ -3633,10 +3639,11 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(63), offsetof(struct _LibreOfficeKitDocumentClass, renderSearchResult));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(64),
                          offsetof(struct _LibreOfficeKitDocumentClass, sendContentControlEvent));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(65), offsetof(struct _LibreOfficeKitDocumentClass, getSelectionTypeAndText));
 
     // Extending is fine, update this, and add new assert for the offsetof the
     // new method
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(65), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(66), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
