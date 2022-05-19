@@ -206,6 +206,7 @@ bool StgCache::Commit()
     if ( Good() ) // otherwise Write does nothing
     {
         std::vector< StgPage * > aToWrite;
+        aToWrite.reserve(maDirtyPages.size());
         for (const auto& rEntry : maDirtyPages)
             aToWrite.push_back( rEntry.second.get() );
 
