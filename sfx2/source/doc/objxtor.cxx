@@ -1032,8 +1032,10 @@ SfxObjectShell* SfxObjectShell::GetShellFromComponent(const Reference<uno::XInte
 {
     try
     {
-        Reference<lang::XUnoTunnel> xTunnel(xComp, UNO_QUERY_THROW);
-        Sequence <sal_Int8> aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
+        Reference<lang::XUnoTunnel> xTunnel(xComp, UNO_QUERY);
+        if (!xTunnel)
+            return nullptr;
+        static const Sequence <sal_Int8> aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
         return comphelper::getSomething_cast<SfxObjectShell>(xTunnel->getSomething(aSeq));
     }
     catch (const Exception&)
