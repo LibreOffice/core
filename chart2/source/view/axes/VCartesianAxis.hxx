@@ -100,7 +100,8 @@ public:
     };
 
     void createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
-                             css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier) override;
+                             css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
+                             rtl::Reference<::chart::ChartModel> const& xChartDoc) override;
 private: //methods
     /**
      * Go through all tick label positions and decide which labels to display

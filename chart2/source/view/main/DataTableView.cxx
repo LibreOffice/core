@@ -12,6 +12,7 @@
 #include <VSeriesPlotter.hxx>
 #include <ShapeFactory.hxx>
 #include <ExplicitCategoriesProvider.hxx>
+#include <ChartModel.hxx>
 
 #include <svx/svdotable.hxx>
 
@@ -19,10 +20,14 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/util/XBroadcaster.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 
 #include <o3tl/unit_conversion.hxx>
 
@@ -30,34 +35,17 @@ using namespace css;
 
 namespace chart
 {
-DataTableView::DataTableView(rtl::Reference<DataTable> const& rDataTableModel)
-    : m_xDataTableModel(rDataTableModel)
+DataTableView::DataTableView(rtl::Reference<::chart::ChartModel> const& xChartModel,
+                             rtl::Reference<DataTable> const& rDataTableModel)
+    : m_xChartModel(xChartModel)
+    , m_xDataTableModel(rDataTableModel)
 {
+    uno::Reference<beans::XPropertySet> xProp = m_xDataTableModel.get();
+    m_aLineProperties.initFromPropertySet(xProp);
 }
 
 namespace
 {
-void setCellDefaults(uno::Reference<beans::XPropertySet>& xPropertySet, bool bLeft, bool bTop,
-                     bool bRight, bool bBottom)
-{
-    xPropertySet->setPropertyValue("FillColor", uno::Any(Color(0xFFFFFF)));
-    xPropertySet->setPropertyValue("TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_TOP));
-    xPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_CENTER));
-
-    table::BorderLine2 aBorderLine;
-    aBorderLine.LineWidth = o3tl::convert(0.5, o3tl::Length::pt, o3tl::Length::mm100);
-    aBorderLine.Color = 0x000000;
-
-    if (bLeft)
-        xPropertySet->setPropertyValue("LeftBorder", uno::Any(aBorderLine));
-    if (bTop)
-        xPropertySet->setPropertyValue("TopBorder", uno::Any(aBorderLine));
-    if (bRight)
-        xPropertySet->setPropertyValue("RightBorder", uno::Any(aBorderLine));
-    if (bBottom)
-        xPropertySet->setPropertyValue("BottomBorder", uno::Any(aBorderLine));
-}
-
 void setTopCell(uno::Reference<beans::XPropertySet>& xPropertySet)
 {
     xPropertySet->setPropertyValue("FillColor", uno::Any(Color(0xFFFFFF)));
@@ -72,6 +60,72 @@ void setTopCell(uno::Reference<beans::XPropertySet>& xPropertySet)
     xPropertySet->setPropertyValue("LeftBorder", uno::Any(aBorderLine));
 }
 }
+
+void DataTableView::setCellDefaults(uno::Reference<beans::XPropertySet>& xPropertySet, bool bLeft,
+                                    bool bTop, bool bRight, bool bBottom)
+{
+    xPropertySet->setPropertyValue("FillColor", uno::Any(Color(0xFFFFFF)));
+    xPropertySet->setPropertyValue("TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_TOP));
+    xPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_CENTER));
+
+    drawing::LineStyle eStyle = drawing::LineStyle_NONE;
+    m_aLineProperties.LineStyle >>= eStyle;
+
+    if (eStyle != drawing::LineStyle_NONE)
+    {
+        table::BorderLine2 aBorderLine;
+
+        sal_Int32 nWidth = 0;
+        m_aLineProperties.Width >>= nWidth;
+        aBorderLine.LineWidth = o3tl::convert(nWidth, o3tl::Length::mm100, o3tl::Length::twip);
+
+        sal_Int32 nColor = 0;
+        m_aLineProperties.Color >>= nColor;
+        aBorderLine.Color = nColor;
+
+        aBorderLine.LineStyle = table::BorderLineStyle::SOLID;
+
+        if (eStyle == drawing::LineStyle_DASH)
+        {
+            OUString aDashName;
+            m_aLineProperties.DashName >>= aDashName;
+            if (!aDashName.isEmpty() && m_xChartModel.is())
+            {
+                uno::Reference<container::XNameContainer> xDashTable(
+                    m_xChartModel->createInstance("com.sun.star.drawing.DashTable"),
+                    uno::UNO_QUERY);
+                if (xDashTable.is() && xDashTable->hasByName(aDashName))
+                {
+                    drawing::LineDash aLineDash;
+                    xDashTable->getByName(aDashName) >>= aLineDash;
+
+                    if (aLineDash.Dots == 0 && aLineDash.Dashes == 0)
+                        aBorderLine.LineStyle = table::BorderLineStyle::SOLID;
+                    else if (aLineDash.Dots == 1 && aLineDash.Dashes == 0)
+                        aBorderLine.LineStyle = table::BorderLineStyle::DOTTED;
+                    else if (aLineDash.Dots == 0 && aLineDash.Dashes == 1)
+                        aBorderLine.LineStyle = table::BorderLineStyle::DASHED;
+                    else if (aLineDash.Dots == 1 && aLineDash.Dashes == 1)
+                        aBorderLine.LineStyle = table::BorderLineStyle::DASH_DOT;
+                    else if (aLineDash.Dots == 2 && aLineDash.Dashes == 1)
+                        aBorderLine.LineStyle = table::BorderLineStyle::DASH_DOT_DOT;
+                    else
+                        aBorderLine.LineStyle = table::BorderLineStyle::DASHED;
+                }
+            }
+        }
+
+        if (bLeft)
+            xPropertySet->setPropertyValue("LeftBorder", uno::Any(aBorderLine));
+        if (bTop)
+            xPropertySet->setPropertyValue("TopBorder", uno::Any(aBorderLine));
+        if (bRight)
+            xPropertySet->setPropertyValue("RightBorder", uno::Any(aBorderLine));
+        if (bBottom)
+            xPropertySet->setPropertyValue("BottomBorder", uno::Any(aBorderLine));
+    }
+}
+
 void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DVector const& rEnd,
                                  sal_Int32 nColumnWidth)
 {
