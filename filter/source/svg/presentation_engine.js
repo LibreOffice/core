@@ -11574,6 +11574,59 @@ PropertyAnimationNode.prototype.createActivity = function()
 
 
 
+function isValidTransformation( sType )
+{
+    return ( sType === 'translate' || sType === 'scale' || sType === 'rotate'
+          || sType === 'skewX' || sType === 'skewY' );
+}
+
+function AnimationTransformNode(  aAnimElem, aParentNode, aNodeContext )
+{
+    AnimationTransformNode.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
+
+    this.sClassName = 'AnimationTransformNode';
+}
+extend( AnimationTransformNode, AnimationBaseNode3 );
+
+
+AnimationTransformNode.prototype.parseElement = function()
+{
+    var bRet = AnimationTransformNode.superclass.parseElement.call(this);
+
+    var aAnimElem = this.aElement;
+
+    // transformation type
+    var sTransformType = aAnimElem.getAttribute( 'svg:type' );
+    if( !isValidTransformation( sTransformType ) )
+    {
+        this.eCurrentState = INVALID_NODE;
+        log( 'AnimationTransformNode.parseElement: transformation type not found: ' + sTransformType );
+    }
+    else
+    {
+        this.sAttributeName = sTransformType;
+    }
+
+    return bRet;
+}
+
+AnimationTransformNode.prototype.createActivity = function()
+{
+    var aActivityParamSet = this.fillActivityParams();
+    var aAnimation;
+
+    aAnimation = createPropertyAnimation( this.getAttributeName(),
+                                          this.getAnimatedElement(),
+                                          this.aNodeContext.aSlideWidth,
+                                          this.aNodeContext.aSlideHeight );
+
+    var aInterpolator = null;  // createActivity will compute it;
+    return createActivity( aActivityParamSet, this, aAnimation, aInterpolator );
+};
+
+
+
+
 function AnimationSetNode(  aAnimElem, aParentNode, aNodeContext )
 {
     AnimationSetNode.superclass.constructor.call( this, aAnimElem, aParentNode, aNodeContext );
@@ -11872,10 +11925,8 @@ function createAnimationNode( aElement, aParentNode, aNodeContext )
             aCreatedNode = new AnimationColorNode( aElement, aParentNode, aNodeContext );
             break;
         case ANIMATION_NODE_ANIMATETRANSFORM:
-            //aCreatedNode = new AnimationTransformNode( aElement, aParentNode, aNodeContext );
-            //break;
-            log( 'createAnimationNode: ANIMATETRANSFORM not implemented' );
-            return null;
+            aCreatedNode = new AnimationTransformNode( aElement, aParentNode, aNodeContext );
+            break;
         case ANIMATION_NODE_TRANSITIONFILTER:
             aCreatedNode = new AnimationTransitionFilterNode( aElement, aParentNode, aNodeContext );
             break;
@@ -17934,9 +17985,12 @@ function evalValuesAttribute( aValueList, aValueSet, aBBox, nSlideWidth, nSlideH
     for( var i = 0; i < aValueSet.length; ++i )
     {
         var sValue = aValueSet[i];
-        sValue = sValue.replace(reMath, 'Math.$&');
-        sValue = sValue.replace(/pi(?!\w)/g, 'Math.PI');
-        sValue = sValue.replace(/e(?!\w)/g, 'Math.E');
+        if(sValue)
+        {
+            sValue = sValue.replace(reMath, 'Math.$&');
+            sValue = sValue.replace(/pi(?!\w)/g, 'Math.PI');
+            sValue = sValue.replace(/e(?!\w)/g, 'Math.E');
+        }
         var aValue =  eval( sValue );
         aValueList.push( aValue );
     }
