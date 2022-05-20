@@ -1829,6 +1829,11 @@ sal_Int32 SwPostItField::GetNumberOfParagraphs() const
     return mpText ? mpText->Count() : 1;
 }
 
+void SwPostItField::SetPostItId(const sal_uInt32 nPostItId)
+{
+    m_nPostItId = nPostItId == 0 ? s_nLastPostItId++ : nPostItId;
+}
+
 bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
