@@ -149,7 +149,7 @@ private:
 
 namespace sc
 {
-
+/** Wrapper for the sparkline properties dialog */
 class SparklineDialogWrapper :
     public ChildControllerWrapper<SID_SPARKLINE_DIALOG>
 {
@@ -157,6 +157,7 @@ private:
     SparklineDialogWrapper() = delete;
 };
 
+/** Wrapper for the sparkline data range dialog */
 class SparklineDataRangeDialogWrapper :
     public ChildControllerWrapper<SID_SPARKLINE_DATA_RANGE_DIALOG>
 {

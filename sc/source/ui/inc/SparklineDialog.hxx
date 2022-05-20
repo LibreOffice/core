@@ -20,6 +20,7 @@ class ColorListBox;
 
 namespace sc
 {
+/** Dialog to create or edit sparkline group attributes */
 class SparklineDialog : public ScAnyRefDlgController
 {
 private:
