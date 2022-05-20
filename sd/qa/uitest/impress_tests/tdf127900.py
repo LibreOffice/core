@@ -31,7 +31,7 @@ class tdf127900(UITestCase):
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDlg:
 
-                select_pos(xDlg.getChild("westlanglb-cjk"), "10")
+                select_pos(xDlg.getChild("cbWestLanguage"), "10")
 
             xMasterLang = doc.MasterPages.getByIndex(0).getByIndex(1).CharLocale.Language
             xSlideLang = doc.DrawPages.getByIndex(1).getByIndex(1).CharLocale.Language

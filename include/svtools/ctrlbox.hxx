@@ -410,6 +410,8 @@ public:
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xComboBox->connect_changed(rLink); }
     OUString get_active_text() const { return m_xComboBox->get_active_text(); }
     void set_active_text(const OUString& rText) { m_xComboBox->set_active_text(rText); }
+    void set_size_request(int nWidth, int nHeight) {  m_xComboBox->set_size_request(nWidth, nHeight); }
+
     void append_text(const OUString& rStr) { m_xComboBox->append_text(rStr); }
     void set_sensitive(bool bSensitive) { m_xComboBox->set_sensitive(bSensitive); }
     void save_value() { m_xComboBox->save_value(); }
@@ -479,6 +481,8 @@ public:
     OUString get_active_text() const { return m_xComboBox->get_active_text(); }
     void set_active_or_entry_text(const OUString& rText);
     void set_sensitive(bool bSensitive) { m_xComboBox->set_sensitive(bSensitive); }
+    void set_size_request(int nWidth, int nHeight) { m_xComboBox->set_size_request(nWidth, nHeight); }
+
     int get_active() const { return m_xComboBox->get_active(); }
     int get_value() const;
     void set_value(int nValue);
