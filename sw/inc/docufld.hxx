@@ -481,6 +481,7 @@ public:
     Date       GetDate() const                 { return Date(m_aDateTime.GetDate()); }
     tools::Time GetTime() const                 { return tools::Time(m_aDateTime.GetTime()); }
     sal_uInt32 GetPostItId() const             { return m_nPostItId; }
+    void SetPostItId(const sal_uInt32 nPostItId = 0);
 
     /// Author
     virtual OUString        GetPar1() const override;
