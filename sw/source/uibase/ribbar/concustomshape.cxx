@@ -171,6 +171,22 @@ void ConstCustomShape::CreateDefaultObject()
     }
 }
 
+void ConstCustomShape::CreateDefaultObjectAtPosWithSize(Point aPos, Size aSize)
+{
+    SwDrawBase::CreateDefaultObjectAtPosWithSize(aPos, aSize);
+    SdrView *pSdrView = m_pSh->GetDrawView();
+    if ( pSdrView )
+    {
+        const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+        if ( rMarkList.GetMarkCount() == 1 )
+        {
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            if ( dynamic_cast< const SdrObjCustomShape *>( pObj ) )
+                SetAttributes( pObj );
+        }
+    }
+}
+
 // #i33136#
 bool ConstCustomShape::doConstructOrthogonal() const
 {

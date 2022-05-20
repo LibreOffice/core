@@ -254,7 +254,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                            SdrObjKind::PathFill == nDrawMode ||
                            SdrObjKind::FreehandLine == nDrawMode ||
                            SdrObjKind::FreehandFill == nDrawMode;
-        if(rMEvt.IsRight() || (aPnt == m_aStartPos && !bMultiPoint))
+        if(rMEvt.IsRight())
         {
             m_pSh->BreakCreate();
             m_pView->LeaveDrawCreate();
@@ -269,7 +269,12 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 m_pSh->StartUndo(SwUndoId::INSERT, &aRewriter);
             }
 
-            m_pSh->EndCreate(SdrCreateCmd::ForceEnd);
+            bool didCreate = m_pSh->EndCreate(SdrCreateCmd::ForceEnd);
+            if(!didCreate && !bMultiPoint)
+            {
+                CreateDefaultObjectAtPosWithSize(aPnt, Size(1000, 1000));
+            }
+
             if (SdrObjKind::NONE == nDrawMode)   // Text border inserted
             {
                 uno::Reference< frame::XDispatchRecorder > xRecorder =
@@ -521,6 +526,21 @@ void SwDrawBase::CreateDefaultObject()
     aEndPos.AdjustY(constTwips_3cm);
     tools::Rectangle aRect(aStartPos, aEndPos);
     m_pSh->CreateDefaultShape(m_pWin->GetSdrDrawMode(), aRect, m_nSlotId);
+}
+
+void SwDrawBase::CreateDefaultObjectAtPosWithSize(Point aPos, Size aSize)
+{
+    aPos.AdjustX(-sal_Int32(aSize.getWidth() / 2));
+    aPos.AdjustY(-sal_Int32(aSize.getHeight() / 2));
+
+    SdrView* sdrView =  m_pView->GetDrawView();
+    SdrPageView *pPV = sdrView->GetSdrPageView();
+
+    if(sdrView->IsSnapEnabled())
+        aPos = sdrView->GetSnapPos(aPos, pPV);
+
+    ::tools::Rectangle aNewObjectRectangle(aPos, aSize);
+    m_pSh->CreateDefaultShape(m_pWin->GetSdrDrawMode(), aNewObjectRectangle, m_nSlotId);
 }
 
 Point  SwDrawBase::GetDefaultCenterPos() const
