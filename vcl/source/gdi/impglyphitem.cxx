@@ -318,7 +318,6 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         // So in that case this is a cached failure.
         return nullptr;
     }
-    const SalLayoutFlags glyphItemsOnlyLayout = SalLayoutFlags::GlyphItemsOnly;
     bool resetLastSubstringKey = true;
     const sal_Unicode nbSpace = 0xa0; // non-breaking space
     if (nIndex != 0 || nLen != text.getLength())
@@ -392,7 +391,7 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
                 // to make sure corner cases are handled well (see SalLayoutGlyphsImpl::cloneCharRange()).
                 std::unique_ptr<SalLayout> layout
                     = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
-                                               glyphItemsOnlyLayout, layoutCache);
+                                               SalLayoutFlags::GlyphItemsOnly, layoutCache);
                 assert(layout);
                 checkGlyphsEqual(mLastTemporaryGlyphs, layout->GetGlyphs());
 #endif
@@ -415,8 +414,9 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         tmpLayoutCache = vcl::text::TextLayoutCache::Create(text);
         layoutCache = tmpLayoutCache.get();
     }
-    std::unique_ptr<SalLayout> layout = outputDevice->ImplLayout(
-        text, nIndex, nLen, Point(0, 0), nLogicWidth, {}, glyphItemsOnlyLayout, layoutCache);
+    std::unique_ptr<SalLayout> layout
+        = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
+                                   SalLayoutFlags::GlyphItemsOnly, layoutCache);
     if (layout)
     {
         SalLayoutGlyphs glyphs = layout->GetGlyphs();
