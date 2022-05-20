@@ -1732,6 +1732,7 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
     }
     //Axis Data
     exportAxes( );
+
     // Data Table
     exportDataTable();
 
@@ -2033,35 +2034,41 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
 
 void ChartExport::exportDataTable( )
 {
+    auto xDataTable = mxNewDiagram->getDataTable();
+    if (!xDataTable.is())
+        return;
+
     FSHelperPtr pFS = GetFS();
-    Reference< beans::XPropertySet > aPropSet( mxDiagram, uno::UNO_QUERY );
+    uno::Reference<beans::XPropertySet> aPropSet(xDataTable, uno::UNO_QUERY);
 
     bool bShowVBorder = false;
     bool bShowHBorder = false;
     bool bShowOutline = false;
+    bool bShowKeys = false;
 
-    if (GetProperty( aPropSet, "DataTableHBorder"))
+    if (GetProperty(aPropSet, "HBorder"))
         mAny >>= bShowHBorder;
-    if (GetProperty( aPropSet, "DataTableVBorder"))
+    if (GetProperty(aPropSet, "VBorder"))
         mAny >>= bShowVBorder;
-    if (GetProperty( aPropSet, "DataTableOutline"))
+    if (GetProperty(aPropSet, "Outline"))
+        mAny >>= bShowOutline;
+    if (GetProperty(aPropSet, "Keys"))
         mAny >>= bShowOutline;
 
-    if (!(bShowVBorder || bShowHBorder || bShowOutline))
-        return;
-
     pFS->startElement(FSNS(XML_c, XML_dTable));
+
     if (bShowHBorder)
-        pFS->singleElement( FSNS( XML_c, XML_showHorzBorder ),
-                        XML_val, "1" );
+        pFS->singleElement(FSNS(XML_c, XML_showHorzBorder), XML_val, "1" );
     if (bShowVBorder)
         pFS->singleElement(FSNS(XML_c, XML_showVertBorder), XML_val, "1");
     if (bShowOutline)
         pFS->singleElement(FSNS(XML_c, XML_showOutline), XML_val, "1");
+    if (bShowKeys)
+        pFS->singleElement(FSNS(XML_c, XML_showKeys), XML_val, "1");
 
-    pFS->endElement(  FSNS( XML_c, XML_dTable));
-
+    pFS->endElement(FSNS(XML_c, XML_dTable));
 }
+
 void ChartExport::exportAreaChart( const Reference< chart2::XChartType >& xChartType )
 {
     FSHelperPtr pFS = GetFS();
