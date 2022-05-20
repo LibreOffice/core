@@ -16,7 +16,7 @@
 
 namespace sc
 {
-/** Hodler of a sparkline, that is connected to a cell specific */
+/** Holder of a sparkline, that is connected to a cell specific */
 class SC_DLLPUBLIC SparklineCell
 {
 private:
