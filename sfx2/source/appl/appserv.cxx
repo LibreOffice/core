@@ -813,6 +813,14 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             pViewFrame = SfxViewFrame::GetFirst();
             while( pViewFrame )
             {
+                // in LOK case we want to apply changes only to the current view
+                if (comphelper::LibreOfficeKit::isActive() &&
+                    pViewFrame != SfxViewShell::Current()->GetViewFrame())
+                {
+                    pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
+                    continue;
+                }
+
                 Reference<XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
 
                 // We want to change mode only for a current app module, ignore other apps
