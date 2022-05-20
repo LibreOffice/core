@@ -162,14 +162,35 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
     {
         uint32_t w, h;
 
-        TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
-        TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
+        if (TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w) != 1)
+        {
+            SAL_WARN("filter.tiff", "missing width");
+            break;
+        }
+
+        if (TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h) != 1)
+        {
+            SAL_WARN("filter.tiff", "missing height");
+            break;
+        }
+
+        if (w > SAL_MAX_INT32 / 8 || h > SAL_MAX_INT32 / 8)
+        {
+            SAL_WARN("filter.tiff", "image too large");
+            break;
+        }
 
         Bitmap bitmap(Size(w, h), vcl::PixelFormat::N24_BPP);
         AlphaMask bitmapAlpha(Size(w, h));
 
         BitmapScopedWriteAccess access(bitmap);
         AlphaScopedWriteAccess accessAlpha(bitmapAlpha);
+
+        if (!access || !accessAlpha)
+        {
+            SAL_WARN("filter.tiff", "could not create bitmaps");
+            break;
+        }
 
         aContext.pWriteAccess = access.get();
         aContext.pAlphaAccess = accessAlpha.get();
