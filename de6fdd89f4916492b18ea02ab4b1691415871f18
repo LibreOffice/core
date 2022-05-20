@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e687902_ec270b38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-20T12:27:35Z",
+      "side": 1,
+      "message": "Follow-up change at https://gerrit.libreoffice.org/c/core/+/134665/1 passed CI.",
+      "revId": "de6fdd89f4916492b18ea02ab4b1691415871f18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
