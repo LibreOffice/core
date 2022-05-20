@@ -34,6 +34,7 @@
 #include <svl/style.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <svtools/colorcfg.hxx>
 
 #include <osl/diagnose.h>
 #include <sfx2/dispatch.hxx>
@@ -350,6 +351,9 @@ void StyleList::Initialize()
     int nTreeHeight = m_xFmtLb->get_height_rows(8);
     m_xFmtLb->set_size_request(-1, nTreeHeight);
     m_xTreeBox->set_size_request(-1, nTreeHeight);
+
+    m_xTreeBox->set_background(
+        svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
 
     m_xFmtLb->connect_custom_get_size(LINK(this, StyleList, CustomGetSizeHdl));
     m_xFmtLb->connect_custom_render(LINK(this, StyleList, CustomRenderHdl));
@@ -1548,8 +1552,22 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
     if (bSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
     else
-        rRenderContext.SetTextColor(rStyleSettings.GetDialogTextColor());
+    {
+        Color aBgColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+        m_xTreeBox->set_background(aBgColor);
 
+        // see also ImpEditEngine::GetAutoColor()
+        Color aColor = svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+        if ( aBgColor != COL_AUTO )
+        {
+            if ( aBgColor.IsDark() && aColor.IsDark() )
+                aColor = COL_WHITE;
+            else if ( aBgColor.IsBright() && aColor.IsBright() )
+                aColor = COL_BLACK;
+        }
+        rRenderContext.SetTextColor(aColor);
+
+    }
     bool bSuccess = false;
 
     SfxObjectShell* pShell = SfxObjectShell::Current();
