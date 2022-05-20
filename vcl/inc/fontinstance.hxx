@@ -81,7 +81,9 @@ public: // TODO: make data members private
     void            AddFallbackForUnicode(sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName,
                                           bool bEmbolden, const ItalicMatrix& rMatrix);
     bool            GetFallbackForUnicode(sal_UCS4 cInChar, FontWeight eInWeight,
-                                          OUString* pOutFontName, bool* pOutEmbolden, ItalicMatrix* pOutItalicMatrix) const;
+                                          OUString* pOutFontName = nullptr,
+                                          bool* pOutEmbolden = nullptr,
+                                          ItalicMatrix* pOutItalicMatrix = nullptr) const;
     void            IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, std::u16string_view rFontName );
 
     inline hb_font_t* GetHbFont();
