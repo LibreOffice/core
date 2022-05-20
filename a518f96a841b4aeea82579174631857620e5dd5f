@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67880fc6_3c91e3f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-20T19:28:02Z",
+      "side": 1,
+      "message": "\u003e while the split alpha persists as a thing\n\nMaybe someone...hint...hint... should take a bash at it ? :-) ",
+      "revId": "a518f96a841b4aeea82579174631857620e5dd5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
