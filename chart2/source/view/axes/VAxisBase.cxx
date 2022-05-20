@@ -243,7 +243,8 @@ void VAxisBase::updateUnscaledValuesAtTicks( TickIter& rIter )
 }
 
 void VAxisBase::createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& /*rSeriesPlotterList*/,
-                                    uno::Reference<util::XNumberFormatsSupplier> const& /*xNumberFormatsSupplier*/)
+                                    uno::Reference<util::XNumberFormatsSupplier> const& /*xNumberFormatsSupplier*/,
+                                    rtl::Reference<::chart::ChartModel> const& /*xChartDoc*/)
 {
 }
 
