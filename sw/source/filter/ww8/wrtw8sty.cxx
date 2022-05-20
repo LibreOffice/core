@@ -2080,6 +2080,10 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFormat& rFormat, bool bHea
         m_bHasHdr = true;
         const SwFormatHeader& rHd = rFormat.GetHeader();
         OSL_ENSURE( rHd.GetHeaderFormat(), "Header text is not here" );
+
+        if ( !rHd.GetHeaderFormat() )
+            return;
+
         pContent = &rHd.GetHeaderFormat()->GetContent();
     }
     else
@@ -2087,6 +2091,10 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFormat& rFormat, bool bHea
         m_bHasFtr = true;
         const SwFormatFooter& rFt = rFormat.GetFooter();
         OSL_ENSURE( rFt.GetFooterFormat(), "Footer text is not here" );
+
+        if ( !rFt.GetFooterFormat() )
+            return;
+
         pContent = &rFt.GetFooterFormat()->GetContent();
     }
 

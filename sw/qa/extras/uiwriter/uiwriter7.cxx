@@ -24,6 +24,7 @@
 #include <AnnotationWin.hxx>
 #include <com/sun/star/awt/FontUnderline.hpp>
 
+#include <svx/hdft.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svxids.hrc>
@@ -2749,6 +2750,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf117225)
     nActual = CountFilesInDirectory(aTargetDirectory);
     // nActual was nExpected + 1, i.e. we leaked a tempfile.
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149184)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "simplefooter.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Removing the footer for all styles
+    pWrtShell->ChangeHeaderOrFooter(u"", false, false, false);
+
+    // export to simplefooter.doc
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("MS Word 97")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    // Without the fix in place, the test fails with:
+    // [CUT] sw_uiwriter7
+    // Segmentation fault (core dumped)
+    // [_RUN_____] testTdf149184::TestBody
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
