@@ -871,7 +871,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
         comphelper::SequenceAsHashMap levelProps(xLevels->getByIndex(1));
         OUString aCharStyleName = levelProps["CharStyleName"].get<OUString>();
         // Ensure that numbering in this paragraph is 24pt bold italic
-        // Previously it got overriden by paragraph properties and became 6pt, no bold, no italic
+        // Previously it get overridden by paragraph properties and became 6pt, no bold, no italic
         uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName(aCharStyleName), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(24.f, getProperty<float>(xStyle, "CharHeight"));
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xStyle, "CharWeight"));
