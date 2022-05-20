@@ -37,6 +37,7 @@
 #include <svx/unoshtxt.hxx>
 #include <VSeriesPlotter.hxx>
 #include <DataTableView.hxx>
+#include <ChartModel.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -2007,11 +2008,12 @@ void VCartesianAxis::createShapes()
 }
 
 void VCartesianAxis::createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
-                                         Reference<util::XNumberFormatsSupplier> const& xNumberFormatsSupplier)
+                                         uno::Reference<util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
+                                         uno::Reference<chart2::XChartDocument> const& xChartDoc)
 {
     if (m_aAxisProperties.m_bDisplayDataTable)
     {
-        m_pDataTableView.reset(new DataTableView(m_aAxisProperties.m_xDataTableModel));
+        m_pDataTableView.reset(new DataTableView(xChartDoc, m_aAxisProperties.m_xDataTableModel));
         m_pDataTableView->initializeValues(rSeriesPlotterList);
         m_xNumberFormatsSupplier = xNumberFormatsSupplier;
     }

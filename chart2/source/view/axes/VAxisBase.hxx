@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include "VAxisOrGridBase.hxx"
 #include "VAxisProperties.hxx"
 #include "Tickmarks.hxx"
@@ -29,6 +30,7 @@ namespace chart
 
 class VSeriesPlotter;
 class DataTableView;
+class ChartModel;
 
 class VAxisBase : public VAxisOrGridBase
 {
@@ -63,7 +65,8 @@ public:
     void setExtraLinePositionAtOtherAxis( double fCrossingAt );
 
     virtual void createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
-                                     css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier);
+                                     css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
+                                     css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc);
 
     std::shared_ptr<DataTableView> getDataTableView() { return m_pDataTableView; }
 
