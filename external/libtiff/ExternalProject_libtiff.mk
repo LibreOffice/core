@@ -13,7 +13,20 @@ $(eval $(call gb_ExternalProject_register_targets,libtiff,\
 	build \
 ))
 
+$(eval $(call gb_ExternalProject_use_externals,libtiff,\
+    libjpeg \
+    zlib \
+))
+
 $(eval $(call gb_ExternalProject_use_autoconf,libtiff,build))
+
+# using ac_cv_lib_z_inflateEnd=yes to skip test for our
+# static windows lib where the name is zlib not z
+# using ac_cv_lib_jpeg_jpeg_read_scanlines to skip test
+# for our static windows lib where the name is libjpeg-turbo.lib
+# not libjpeg.lib
+# we're building this statically anyway so the lib isn't
+# used during the link done here
 
 $(call gb_ExternalProject_get_state_target,libtiff,build) :
 	$(call gb_Trace_StartRange,libtiff,EXTERNAL)
@@ -24,8 +37,9 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			--with-pic \
 			--disable-shared \
 			--disable-cxx \
+			--enable-jpeg \
+			--enable-zlib \
 			--disable-jbig \
-			--disable-jpeg \
 			--disable-lzma \
 			--disable-mdi \
 			--disable-webp \
@@ -34,8 +48,14 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			--without-x \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,libtiff)" \
+			$(if $(SYSTEM_ZLIB),,--with-zlib-include-dir="$(call gb_UnpackedTarball_get_dir,zlib)") \
+			$(if $(SYSTEM_ZLIB),,--with-zlib-lib-dir="$(gb_StaticLibrary_WORKDIR)") \
+			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-include-dir="$(call gb_UnpackedTarball_get_dir,libjpeg-turbo)") \
+			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-lib-dir="$(gb_StaticLibrary_WORKDIR)") \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libtiff)" \
+			ac_cv_lib_z_inflateEnd=yes \
+			ac_cv_lib_jpeg_jpeg_read_scanlines=yes \
 			$(gb_CONFIGURE_PLATFORMS) \
 		&& $(MAKE) \
 	)
