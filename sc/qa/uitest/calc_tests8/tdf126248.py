@@ -59,8 +59,8 @@ class tdf126248(UITestCase):
                 select_pos(xTabs, "1")
 
                 # Get current font names from the Format Cell dialog
-                westFontName = get_state_as_dict(xDialog.getChild("westfontnamelb-cjk"))['Text']
-                eastFontName = get_state_as_dict(xDialog.getChild("eastfontnamelb"))['Text']
+                westFontName = get_state_as_dict(xDialog.getChild("edWestFontName"))['Text']
+                eastFontName = get_state_as_dict(xDialog.getChild("edCJKFontName"))['Text']
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")

@@ -25,7 +25,7 @@ class tdf119462(UITestCase):
                     #3. Choose Bold
                     xTabs = dialog.getChild("tabcontrol")
                     select_pos(xTabs, "0")
-                    xweststylelbcjk = dialog.getChild("weststylelb-cjk")
+                    xweststylelbcjk = dialog.getChild("cbWestStyle")
                     xweststylelbcjk.executeAction("TYPE", mkPropertyValues({"TEXT":"Bold"}))
 
                 #verify label searchdesc

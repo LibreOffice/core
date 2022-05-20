@@ -75,25 +75,27 @@ class formatCell(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")  #tab Font
-                xSizeFont = xDialog.getChild("westsizelb-cjk")
-                xSizeFontEast = xDialog.getChild("eastsizelb")
-                xSizeFontCTL = xDialog.getChild("ctlsizelb")
-                xLangFont = xDialog.getChild("westlanglb-cjk")
-                xLangFontEast = xDialog.getChild("eastlanglb")
-                xLangFontCTL = xDialog.getChild("ctllanglb")
 
+                # xNoteBook = xDialog.getChild("nbWestern") //western notbook is always active
+                xSizeFont = xDialog.getChild("cbWestSize")
                 xSizeFont.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 xSizeFont.executeAction("TYPE", mkPropertyValues({"TEXT":"18"}))    #set font size 18
+                xLangFont = xDialog.getChild("cbWestLanguage")
+                select_pos(xLangFont, "0")
+
+                xNoteBook = xDialog.getChild("nbCJKCTL")
+                select_pos(xNoteBook, "0")
+                xSizeFontEast = xDialog.getChild("cbCJKSize")
                 xSizeFontEast.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 xSizeFontEast.executeAction("TYPE", mkPropertyValues({"TEXT":"18"}))    #set font size 18
+                xLangFontEast = xDialog.getChild("cbCJKLanguage")
+                select_pos(xLangFontEast, "0")
+
+                select_pos(xNoteBook, "1")
+                xSizeFontCTL = xDialog.getChild("cbCTLSize")
                 xSizeFontCTL.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 xSizeFontCTL.executeAction("TYPE", mkPropertyValues({"TEXT":"18"}))    #set font size 18
-                xNoteBook = xDialog.getChild("notebook")
-                select_pos(xNoteBook, "0")
-                select_pos(xLangFont, "0")
-                select_pos(xNoteBook, "1")
-                select_pos(xLangFontEast, "0")
-                select_pos(xNoteBook, "2")
+                xLangFontCTL = xDialog.getChild("cbCTLLanguage")
                 select_pos(xLangFontCTL, "0")
 
             #Verify - select cell A1
@@ -102,19 +104,23 @@ class formatCell(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog", close_button="cancel") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")  #tab Font
-                xSizeFont = xDialog.getChild("westsizelb-cjk")
-                xSizeFontEast = xDialog.getChild("eastsizelb")
-                xSizeFontCTL = xDialog.getChild("ctlsizelb")
-                xLangFont = xDialog.getChild("westlanglb-cjk")
-                xLangFontEast = xDialog.getChild("eastlanglb")
-                xLangFontCTL = xDialog.getChild("ctllanglb")
-
+                xSizeFont = xDialog.getChild("cbWestSize")
                 self.assertEqual(get_state_as_dict(xSizeFont)["Text"], "18 pt")
-                self.assertEqual(get_state_as_dict(xSizeFontEast)["Text"], "18 pt")
-                self.assertEqual(get_state_as_dict(xSizeFontCTL)["Text"], "18 pt") #check font size
+                xLangFont = xDialog.getChild("cbWestLanguage")
                 self.assertEqual(get_state_as_dict(xLangFont)["Text"], "[None]")
-                self.assertEqual(get_state_as_dict(xLangFontEast)["SelectEntryText"], "[None]")
-                self.assertEqual(get_state_as_dict(xLangFontCTL)["SelectEntryText"], "[None]")
+
+                xNoteBook = xDialog.getChild("nbCJKCTL")
+                select_pos(xNoteBook, "0")
+                xSizeFontEast = xDialog.getChild("cbCJKSize")
+                self.assertEqual(get_state_as_dict(xSizeFontEast)["Text"], "18 pt")
+                xLangFontEast = xDialog.getChild("cbCJKLanguage")
+                self.assertEqual(get_state_as_dict(xLangFontEast)["Text"], "[None]")
+
+                select_pos(xNoteBook, "1")
+                xSizeFontCTL = xDialog.getChild("cbCTLSize")
+                self.assertEqual(get_state_as_dict(xSizeFontCTL)["Text"], "18 pt") #check font size
+                xLangFontCTL = xDialog.getChild("cbCTLLanguage")
+                self.assertEqual(get_state_as_dict(xLangFontCTL)["Text"], "[None]")
 
 
 

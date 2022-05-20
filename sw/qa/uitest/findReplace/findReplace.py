@@ -71,7 +71,7 @@ class findReplace(UITestCase):
                 with self.ui_test.execute_blocking_action(format.executeAction, args=('CLICK', ())) as dialog:
                     xTabs = dialog.getChild("tabcontrol")
                     select_pos(xTabs, "0")
-                    xSizeFont = dialog.getChild("westsizelb-cjk")
+                    xSizeFont = dialog.getChild("cbWestSize")
                     xSizeFont.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                     xSizeFont.executeAction("TYPE", mkPropertyValues({"TEXT":"16"}))    #set font size 16
 
