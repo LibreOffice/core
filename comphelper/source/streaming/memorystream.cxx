@@ -82,7 +82,18 @@ public:
     virtual void SAL_CALL truncate() override;
 
 private:
-    std::vector< sal_Int8 > maData;
+    // prevents std::vector from wasting time doing memset on data we are going to overwrite anyway
+    struct NoInitInt8
+    {
+        sal_Int8 value;
+        NoInitInt8() noexcept {
+            // do nothing
+            static_assert(sizeof *this == sizeof value, "invalid size");
+            static_assert(alignof *this == alignof value, "invalid alignment");
+        }
+    };
+
+    std::vector< NoInitInt8 > maData;
     sal_Int32 mnCursor;
 };
 
@@ -132,8 +143,8 @@ sal_Int32 SAL_CALL UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_
 
     if( nBytesToRead )
     {
-        sal_Int8* pData = &(*maData.begin());
-        sal_Int8* pCursor = &(pData[mnCursor]);
+        NoInitInt8* pData = &(*maData.begin());
+        NoInitInt8* pCursor = &(pData[mnCursor]);
         memcpy( static_cast<void*>(aData.getArray()), static_cast<void*>(pCursor), nBytesToRead );
 
         mnCursor += nBytesToRead;
@@ -205,8 +216,8 @@ void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData )
     if( static_cast< sal_Int32 >( nNewSize ) > static_cast< sal_Int32 >( maData.size() ) )
         maData.resize( nNewSize );
 
-    sal_Int8* pData = &(*maData.begin());
-    sal_Int8* pCursor = &(pData[mnCursor]);
+    NoInitInt8* pData = &(*maData.begin());
+    NoInitInt8* pCursor = &(pData[mnCursor]);
     memcpy( pCursor, aData.getConstArray(), nBytesToWrite );
 
     mnCursor += nBytesToWrite;
