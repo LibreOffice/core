@@ -1,13 +1,48 @@
+diff --git a/include/core/SkImage.h b/include/core/SkImage.h
+index 9ca9317408..fee18fe58c 100644
+--- a/include/core/SkImage.h
++++ b/include/core/SkImage.h
+@@ -17,7 +17,7 @@
+ #if SK_SUPPORT_GPU
+ #include "include/gpu/GrTypes.h"
+ #endif
+-#if SK_GRAPHITE_ENABLED
++#ifdef SK_GRAPHITE_ENABLED
+ #include "include/gpu/graphite/GraphiteTypes.h"
+ #endif
+ #include <functional>  // std::function
+@@ -49,7 +49,7 @@ class SkYUVAPixmaps;
+ 
+ enum class SkEncodedImageFormat;
+ 
+-#if SK_GRAPHITE_ENABLED
++#ifdef SK_GRAPHITE_ENABLED
+ namespace skgpu::graphite {
+ class Recorder;
+ };
+diff --git a/include/core/SkTypes.h b/include/core/SkTypes.h
+index 5301361a2b..8adaf3ac09 100644
+--- a/include/core/SkTypes.h
++++ b/include/core/SkTypes.h
+@@ -236,7 +236,7 @@
+ #  define SK_SUPPORT_GPU 1
+ #endif
+ 
+-#if SK_SUPPORT_GPU || SK_GRAPHITE_ENABLED
++#if SK_SUPPORT_GPU || defined(SK_GRAPHITE_ENABLED)
+ #  if !defined(SK_ENABLE_SKSL)
+ #    define SK_ENABLE_SKSL
+ #  endif
 diff --git a/tools/sk_app/WindowContext.h b/tools/sk_app/WindowContext.h
-index 79f6d72f35..f9d8081b85 100644
+index 65ab8b9aa4..c1bc7fb03a 100644
 --- a/tools/sk_app/WindowContext.h
 +++ b/tools/sk_app/WindowContext.h
-@@ -55,7 +55,7 @@ protected:
+@@ -58,7 +58,7 @@ protected:
      virtual bool isGpuContext() { return true;  }
  
      sk_sp<GrDirectContext> fContext;
 -#if SK_GRAPHITE_ENABLED
 +#ifdef SK_GRAPHITE_ENABLED
-     sk_sp<skgpu::Context> fGraphiteContext;
+     std::unique_ptr<skgpu::graphite::Context> fGraphiteContext;
+     std::unique_ptr<skgpu::graphite::Recorder> fGraphiteRecorder;
  #endif
- 

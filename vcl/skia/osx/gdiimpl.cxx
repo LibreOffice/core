@@ -27,6 +27,7 @@
 
 #include <quartz/ctfonts.hxx>
 
+#include <SkBitmap.h>
 #include <SkCanvas.h>
 #include <SkFont.h>
 #include <SkFontMgr_mac_ct.h>

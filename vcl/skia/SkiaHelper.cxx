@@ -38,7 +38,9 @@ bool isVCLSkiaEnabled() { return false; }
 #include <list>
 #include <o3tl/lru_map.hxx>
 
+#include <SkBitmap.h>
 #include <SkCanvas.h>
+#include <SkEncodedImageFormat.h>
 #include <SkPaint.h>
 #include <SkSurface.h>
 #include <SkGraphics.h>
