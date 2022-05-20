@@ -1,5 +1,5 @@
 diff --git a/tools/sk_app/MetalWindowContext.h b/tools/sk_app/MetalWindowContext.h
-index a9eacdd66f..23604db25b 100644
+index 106d366415..08dc19b5c8 100644
 --- a/tools/sk_app/MetalWindowContext.h
 +++ b/tools/sk_app/MetalWindowContext.h
 @@ -14,13 +14,18 @@
@@ -59,7 +59,7 @@ index a9eacdd66f..23604db25b 100644
  }   // namespace sk_app
  
 diff --git a/tools/sk_app/MetalWindowContext.mm b/tools/sk_app/MetalWindowContext.mm
-index c464c3904a..799aafa78b 100644
+index d972e321a6..9f576944b7 100644
 --- a/tools/sk_app/MetalWindowContext.mm
 +++ b/tools/sk_app/MetalWindowContext.mm
 @@ -37,24 +37,30 @@ NSURL* MetalWindowContext::CacheURL() {
@@ -241,23 +241,26 @@ index c464c3904a..799aafa78b 100644
 +
  }   //namespace sk_app
 diff --git a/tools/sk_app/VulkanWindowContext.cpp b/tools/sk_app/VulkanWindowContext.cpp
-index d07d5a4274..2b36d60076 100644
+index c9db528ca4..634034da5a 100644
 --- a/tools/sk_app/VulkanWindowContext.cpp
 +++ b/tools/sk_app/VulkanWindowContext.cpp
-@@ -24,8 +24,10 @@
- #undef CreateSemaphore
+@@ -25,9 +25,13 @@
  #endif
  
--#define GET_PROC(F) f ## F = (PFN_vk ## F) fGetInstanceProcAddr(fInstance, "vk" #F)
--#define GET_DEV_PROC(F) f ## F = (PFN_vk ## F) fGetDeviceProcAddr(fDevice, "vk" #F)
-+#define GET_PROC(F) f ## F = (PFN_vk ## F) fGetInstanceProcAddr(fShared->fInstance, "vk" #F)
-+#define GET_DEV_PROC(F) f ## F = (PFN_vk ## F) fGetDeviceProcAddr(fShared->fDevice, "vk" #F)
-+#define GET_PROC_GLOBAL(F) fGlobalShared->f ## F = (PFN_vk ## F) fGetInstanceProcAddr(fGlobalShared->fInstance, "vk" #F)
-+#define GET_DEV_PROC_GLOBAL(F) fGlobalShared->f ## F = (PFN_vk ## F) fGetDeviceProcAddr(fGlobalShared->fDevice, "vk" #F)
+ #define GET_PROC(F) f ## F = \
+-    (PFN_vk ## F) backendContext.fGetProc("vk" #F, fInstance, VK_NULL_HANDLE)
++    (PFN_vk ## F) fGlobalShared->backendContext.fGetProc("vk" #F, fShared->fInstance, VK_NULL_HANDLE)
+ #define GET_DEV_PROC(F) f ## F = \
+-    (PFN_vk ## F) backendContext.fGetProc("vk" #F, VK_NULL_HANDLE, fDevice)
++    (PFN_vk ## F) fGlobalShared->backendContext.fGetProc("vk" #F, VK_NULL_HANDLE, fShared->fDevice)
++#define GET_PROC_GLOBAL(F) fGlobalShared->f ## F = \
++    (PFN_vk ## F) fGlobalShared->backendContext.fGetProc("vk" #F, fGlobalShared->fInstance, VK_NULL_HANDLE)
++#define GET_DEV_PROC_GLOBAL(F) fGlobalShared->f ## F = \
++    (PFN_vk ## F) fGlobalShared->backendContext.fGetProc("vk" #F, VK_NULL_HANDLE, fGlobalShared->fDevice)
  
  namespace sk_app {
  
-@@ -49,6 +51,14 @@ VulkanWindowContext::VulkanWindowContext(const DisplayParams& params,
+@@ -49,31 +53,39 @@ VulkanWindowContext::VulkanWindowContext(const DisplayParams& params,
  }
  
  void VulkanWindowContext::initializeContext() {
@@ -272,15 +275,16 @@ index d07d5a4274..2b36d60076 100644
      SkASSERT(!fContext);
      // any config code here (particularly for msaa)?
  
-@@ -63,24 +73,25 @@ void VulkanWindowContext::initializeContext() {
-     };
-     GrVkBackendContext backendContext;
+     PFN_vkGetInstanceProcAddr getInstanceProc = fGetInstanceProcAddr;
+-    GrVkBackendContext backendContext;
++    GrVkBackendContext& backendContext = fGlobalShared->backendContext;
      GrVkExtensions extensions;
 -    VkPhysicalDeviceFeatures2 features;
--    if (!sk_gpu_test::CreateVkBackendContext(getProc, &backendContext, &extensions, &features,
--                                             &fDebugCallback, &fPresentQueueIndex, fCanPresentFn)) {
+-    if (!sk_gpu_test::CreateVkBackendContext(getInstanceProc, &backendContext, &extensions,
+-                                             &features, &fDebugCallback, &fPresentQueueIndex,
+-                                             fCanPresentFn)) {
 -        sk_gpu_test::FreeVulkanFeaturesStructs(&features);
-+    if (!sk_gpu_test::CreateVkBackendContext(getProc, &backendContext, &extensions, &d->features,
++    if (!sk_gpu_test::CreateVkBackendContext(getInstanceProc, &backendContext, &extensions, &d->features,
 +                                             &d->fDebugCallback, &d->fPresentQueueIndex, fCanPresentFn)) {
 +        sk_gpu_test::FreeVulkanFeaturesStructs(&d->features);
 +        fGlobalShared.reset();
@@ -308,7 +312,7 @@ index d07d5a4274..2b36d60076 100644
  
      PFN_vkGetPhysicalDeviceProperties localGetPhysicalDeviceProperties =
              reinterpret_cast<PFN_vkGetPhysicalDeviceProperties>(
-@@ -88,21 +99,30 @@ void VulkanWindowContext::initializeContext() {
+@@ -81,21 +93,30 @@ void VulkanWindowContext::initializeContext() {
                                              backendContext.fInstance,
                                              VK_NULL_HANDLE));
      if (!localGetPhysicalDeviceProperties) {
@@ -347,7 +351,7 @@ index d07d5a4274..2b36d60076 100644
      GET_PROC(DestroySurfaceKHR);
      GET_PROC(GetPhysicalDeviceSurfaceSupportKHR);
      GET_PROC(GetPhysicalDeviceSurfaceCapabilitiesKHR);
-@@ -110,7 +130,6 @@ void VulkanWindowContext::initializeContext() {
+@@ -103,7 +124,6 @@ void VulkanWindowContext::initializeContext() {
      GET_PROC(GetPhysicalDeviceSurfacePresentModesKHR);
      GET_DEV_PROC(DeviceWaitIdle);
      GET_DEV_PROC(QueueWaitIdle);
@@ -355,7 +359,7 @@ index d07d5a4274..2b36d60076 100644
      GET_DEV_PROC(CreateSwapchainKHR);
      GET_DEV_PROC(DestroySwapchainKHR);
      GET_DEV_PROC(GetSwapchainImagesKHR);
-@@ -118,46 +137,44 @@ void VulkanWindowContext::initializeContext() {
+@@ -111,46 +131,44 @@ void VulkanWindowContext::initializeContext() {
      GET_DEV_PROC(QueuePresentKHR);
      GET_DEV_PROC(GetDeviceQueue);
  
@@ -412,7 +416,7 @@ index d07d5a4274..2b36d60076 100644
                                                nullptr);
      if (VK_SUCCESS != res) {
          return false;
-@@ -165,14 +182,14 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
+@@ -158,14 +176,14 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
  
      SkAutoMalloc surfaceFormatAlloc(surfaceFormatCount * sizeof(VkSurfaceFormatKHR));
      VkSurfaceFormatKHR* surfaceFormats = (VkSurfaceFormatKHR*)surfaceFormatAlloc.get();
@@ -429,7 +433,7 @@ index d07d5a4274..2b36d60076 100644
                                                     nullptr);
      if (VK_SUCCESS != res) {
          return false;
-@@ -180,7 +197,7 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
+@@ -173,7 +191,7 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
  
      SkAutoMalloc presentModeAlloc(presentModeCount * sizeof(VkPresentModeKHR));
      VkPresentModeKHR* presentModes = (VkPresentModeKHR*)presentModeAlloc.get();
@@ -438,7 +442,7 @@ index d07d5a4274..2b36d60076 100644
                                                     presentModes);
      if (VK_SUCCESS != res) {
          return false;
-@@ -293,8 +310,8 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
+@@ -286,8 +304,8 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
      swapchainCreateInfo.imageArrayLayers = 1;
      swapchainCreateInfo.imageUsage = usageFlags;
  
@@ -449,7 +453,7 @@ index d07d5a4274..2b36d60076 100644
          swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
          swapchainCreateInfo.queueFamilyIndexCount = 2;
          swapchainCreateInfo.pQueueFamilyIndices = queueFamilies;
-@@ -310,27 +327,27 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
+@@ -303,27 +321,27 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
      swapchainCreateInfo.clipped = true;
      swapchainCreateInfo.oldSwapchain = fSwapchain;
  
@@ -482,7 +486,7 @@ index d07d5a4274..2b36d60076 100644
      }
  
      return true;
-@@ -339,10 +356,10 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
+@@ -332,10 +350,10 @@ bool VulkanWindowContext::createSwapchain(int width, int height,
  bool VulkanWindowContext::createBuffers(VkFormat format, VkImageUsageFlags usageFlags,
                                          SkColorType colorType,
                                          VkSharingMode sharingMode) {
@@ -495,7 +499,7 @@ index d07d5a4274..2b36d60076 100644
  
      // set up initial image layouts and create surfaces
      fImageLayouts = new VkImageLayout[fImageCount];
-@@ -358,7 +375,7 @@ bool VulkanWindowContext::createBuffers(VkFormat format, VkImageUsageFlags usage
+@@ -351,7 +369,7 @@ bool VulkanWindowContext::createBuffers(VkFormat format, VkImageUsageFlags usage
          info.fFormat = format;
          info.fImageUsageFlags = usageFlags;
          info.fLevelCount = 1;
@@ -504,7 +508,7 @@ index d07d5a4274..2b36d60076 100644
          info.fSharingMode = sharingMode;
  
          if (usageFlags & VK_IMAGE_USAGE_SAMPLED_BIT) {
-@@ -394,8 +411,8 @@ bool VulkanWindowContext::createBuffers(VkFormat format, VkImageUsageFlags usage
+@@ -387,8 +405,8 @@ bool VulkanWindowContext::createBuffers(VkFormat format, VkImageUsageFlags usage
      fBackbuffers = new BackbufferInfo[fImageCount + 1];
      for (uint32_t i = 0; i < fImageCount + 1; ++i) {
          fBackbuffers[i].fImageIndex = -1;
@@ -515,7 +519,7 @@ index d07d5a4274..2b36d60076 100644
                                  &fBackbuffers[i].fRenderSemaphore));
          SkASSERT(result == VK_SUCCESS);
      }
-@@ -408,8 +425,8 @@ void VulkanWindowContext::destroyBuffers() {
+@@ -401,8 +419,8 @@ void VulkanWindowContext::destroyBuffers() {
      if (fBackbuffers) {
          for (uint32_t i = 0; i < fImageCount + 1; ++i) {
              fBackbuffers[i].fImageIndex = -1;
@@ -526,7 +530,7 @@ index d07d5a4274..2b36d60076 100644
                                          fBackbuffers[i].fRenderSemaphore,
                                          nullptr));
          }
-@@ -434,42 +451,59 @@ VulkanWindowContext::~VulkanWindowContext() {
+@@ -427,42 +445,59 @@ VulkanWindowContext::~VulkanWindowContext() {
  void VulkanWindowContext::destroyContext() {
      if (this->isValid()) {
          fQueueWaitIdle(fPresentQueue);
@@ -600,7 +604,7 @@ index d07d5a4274..2b36d60076 100644
  }
  
  VulkanWindowContext::BackbufferInfo* VulkanWindowContext::getAvailableBackbuffer() {
-@@ -495,35 +529,35 @@ sk_sp<SkSurface> VulkanWindowContext::getBackbufferSurface() {
+@@ -488,35 +523,35 @@ sk_sp<SkSurface> VulkanWindowContext::getBackbufferSurface() {
      semaphoreInfo.pNext = nullptr;
      semaphoreInfo.flags = 0;
      VkSemaphore semaphore;
@@ -642,7 +646,7 @@ index d07d5a4274..2b36d60076 100644
              return nullptr;
          }
      }
-@@ -549,7 +583,7 @@ void VulkanWindowContext::swapBuffers() {
+@@ -542,7 +577,7 @@ void VulkanWindowContext::swapBuffers() {
      GrFlushInfo info;
      info.fNumSemaphores = 1;
      info.fSignalSemaphores = &beSemaphore;
@@ -651,7 +655,7 @@ index d07d5a4274..2b36d60076 100644
      surface->flush(info, &presentState);
      surface->recordingContext()->asDirectContext()->submit();
  
-@@ -569,4 +603,6 @@ void VulkanWindowContext::swapBuffers() {
+@@ -562,4 +597,6 @@ void VulkanWindowContext::swapBuffers() {
      fQueuePresentKHR(fPresentQueue, &presentInfo);
  }
  
@@ -659,7 +663,7 @@ index d07d5a4274..2b36d60076 100644
 +
  }   //namespace sk_app
 diff --git a/tools/sk_app/VulkanWindowContext.h b/tools/sk_app/VulkanWindowContext.h
-index 580dba2733..92bfba6dff 100644
+index 7e1fdd9af5..946bca7522 100644
 --- a/tools/sk_app/VulkanWindowContext.h
 +++ b/tools/sk_app/VulkanWindowContext.h
 @@ -19,18 +19,22 @@
@@ -689,7 +693,7 @@ index 580dba2733..92bfba6dff 100644
          this->createSwapchain(w, h, fDisplayParams);
 @@ -50,9 +54,15 @@ public:
      VulkanWindowContext(const DisplayParams&, CreateVkSurfaceFn, CanPresentFn,
-                         PFN_vkGetInstanceProcAddr, PFN_vkGetDeviceProcAddr);
+                         PFN_vkGetInstanceProcAddr);
  
 +    static const VkPhysicalDeviceProperties& getPhysDeviceProperties() {
 +        assert( fGlobalShared != nullptr );
@@ -715,7 +719,7 @@ index 580dba2733..92bfba6dff 100644
      // Create functions
      CreateVkSurfaceFn fCreateVkSurfaceFn;
      CanPresentFn      fCanPresentFn;
-@@ -90,20 +95,44 @@ private:
+@@ -88,20 +93,46 @@ private:
      PFN_vkAcquireNextImageKHR fAcquireNextImageKHR = nullptr;
      PFN_vkQueuePresentKHR fQueuePresentKHR = nullptr;
  
@@ -749,6 +753,8 @@ index 580dba2733..92bfba6dff 100644
 +    // Store this to make it accessible.
 +    VkPhysicalDeviceProperties physDeviceProperties;
 +
++    GrVkBackendContext backendContext;
++
      uint32_t          fGraphicsQueueIndex;
      VkQueue           fGraphicsQueue;
      uint32_t          fPresentQueueIndex;
@@ -766,7 +772,7 @@ index 580dba2733..92bfba6dff 100644
  
      uint32_t               fImageCount;
 diff --git a/tools/sk_app/WindowContext.h b/tools/sk_app/WindowContext.h
-index 79f6d72f35..01d0e18f46 100644
+index 65ab8b9aa4..2d222385a3 100644
 --- a/tools/sk_app/WindowContext.h
 +++ b/tools/sk_app/WindowContext.h
 @@ -10,9 +10,9 @@
@@ -779,7 +785,7 @@ index 79f6d72f35..01d0e18f46 100644
 -class GrDirectContext;
  class SkSurface;
  #ifdef SK_GRAPHITE_ENABLED
- namespace skgpu {
+ namespace skgpu::graphite {
 diff --git a/tools/sk_app/mac/MetalWindowContext_mac.mm b/tools/sk_app/mac/MetalWindowContext_mac.mm
 index 5bea8578fa..f7df061af0 100644
 --- a/tools/sk_app/mac/MetalWindowContext_mac.mm
@@ -801,7 +807,7 @@ index 5bea8578fa..f7df061af0 100644
  
      // resize ignores the passed values and uses the fMainView directly.
 diff --git a/tools/sk_app/unix/VulkanWindowContext_unix.cpp b/tools/sk_app/unix/VulkanWindowContext_unix.cpp
-index 34f6640c76..5478b75dac 100644
+index 2b31fedc19..0c05fbfc92 100644
 --- a/tools/sk_app/unix/VulkanWindowContext_unix.cpp
 +++ b/tools/sk_app/unix/VulkanWindowContext_unix.cpp
 @@ -30,7 +30,7 @@ std::unique_ptr<WindowContext> MakeVulkanForXlib(const XlibWindowInfo& info,
@@ -826,17 +832,17 @@ index 34f6640c76..5478b75dac 100644
 @@ -76,7 +79,7 @@ std::unique_ptr<WindowContext> MakeVulkanForXlib(const XlibWindowInfo& info,
      };
      std::unique_ptr<WindowContext> ctx(
-             new VulkanWindowContext(displayParams, createVkSurface, canPresent, instProc, devProc));
+             new VulkanWindowContext(displayParams, createVkSurface, canPresent, instProc));
 -    if (!ctx->isValid()) {
 +    if (!ctx->isValid() && createVkSurface != nullptr) {
          return nullptr;
      }
      return ctx;
 diff --git a/tools/sk_app/win/VulkanWindowContext_win.cpp b/tools/sk_app/win/VulkanWindowContext_win.cpp
-index 909c96127b..35e063ae28 100644
+index 976c42556e..c8f6b162bf 100644
 --- a/tools/sk_app/win/VulkanWindowContext_win.cpp
 +++ b/tools/sk_app/win/VulkanWindowContext_win.cpp
-@@ -30,7 +30,7 @@ std::unique_ptr<WindowContext> MakeVulkanForWin(HWND hwnd, const DisplayParams&
+@@ -29,7 +29,7 @@ std::unique_ptr<WindowContext> MakeVulkanForWin(HWND hwnd, const DisplayParams&
          return nullptr;
      }
  
@@ -845,7 +851,7 @@ index 909c96127b..35e063ae28 100644
          static PFN_vkCreateWin32SurfaceKHR createWin32SurfaceKHR = nullptr;
          if (!createWin32SurfaceKHR) {
              createWin32SurfaceKHR = (PFN_vkCreateWin32SurfaceKHR)
-@@ -54,6 +54,9 @@ std::unique_ptr<WindowContext> MakeVulkanForWin(HWND hwnd, const DisplayParams&
+@@ -53,6 +53,9 @@ std::unique_ptr<WindowContext> MakeVulkanForWin(HWND hwnd, const DisplayParams&
  
          return surface;
      };
@@ -855,10 +861,10 @@ index 909c96127b..35e063ae28 100644
  
      auto canPresent = [instProc] (VkInstance instance, VkPhysicalDevice physDev,
                                    uint32_t queueFamilyIndex) {
-@@ -71,7 +74,7 @@ std::unique_ptr<WindowContext> MakeVulkanForWin(HWND hwnd, const DisplayParams&
+@@ -70,7 +73,7 @@ std::unique_ptr<WindowContext> MakeVulkanForWin(HWND hwnd, const DisplayParams&
  
      std::unique_ptr<WindowContext> ctx(
-             new VulkanWindowContext(params, createVkSurface, canPresent, instProc, devProc));
+             new VulkanWindowContext(params, createVkSurface, canPresent, instProc));
 -    if (!ctx->isValid()) {
 +    if (!ctx->isValid() && createVkSurface != nullptr) {
          return nullptr;

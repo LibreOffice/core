@@ -1,6 +1,8 @@
---- include/private/GrContext_Base.h
-+++ include/private/GrContext_Base.h
-@@ -20,7 +20,7 @@
+diff --git a/include/private/gpu/ganesh/GrContext_Base.h b/include/private/gpu/ganesh/GrContext_Base.h
+index 847e76f232..e27d9454f8 100644
+--- a/include/private/gpu/ganesh/GrContext_Base.h
++++ b/include/private/gpu/ganesh/GrContext_Base.h
+@@ -20,7 +20,7 @@ class GrDirectContext;
  class GrImageContext;
  class GrRecordingContext;
  
@@ -9,7 +11,7 @@
  public:
      ~GrContext_Base() override;
  
-@@ -32,7 +32,7 @@
+@@ -32,7 +32,7 @@ public:
      /*
       * The 3D API backing this context
       */
@@ -18,7 +20,7 @@
  
      /*
       * Retrieve the default GrBackendFormat for a given SkColorType and renderability.
-@@ -41,9 +41,9 @@
+@@ -41,16 +41,16 @@ public:
       *
       * The caller should check that the returned format is valid.
       */
@@ -27,6 +29,14 @@
  
 -    SK_API GrBackendFormat compressedBackendFormat(SkImage::CompressionType) const;
 +    GrBackendFormat compressedBackendFormat(SkImage::CompressionType) const;
+ 
+     /**
+      * Gets the maximum supported sample count for a color type. 1 is returned if only non-MSAA
+      * rendering is supported for the color type. 0 is returned if rendering to this color type
+      * is not supported at all.
+      */
+-    SK_API int maxSurfaceSampleCountForColorType(SkColorType colorType) const;
++    int maxSurfaceSampleCountForColorType(SkColorType colorType) const;
  
      // TODO: When the public version is gone, rename to refThreadSafeProxy and add raw ptr ver.
      sk_sp<GrContextThreadSafeProxy> threadSafeProxy();
