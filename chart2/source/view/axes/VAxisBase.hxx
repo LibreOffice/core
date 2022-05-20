@@ -29,6 +29,7 @@ namespace chart
 
 class VSeriesPlotter;
 class DataTableView;
+class ChartModel;
 
 class VAxisBase : public VAxisOrGridBase
 {
@@ -63,7 +64,8 @@ public:
     void setExtraLinePositionAtOtherAxis( double fCrossingAt );
 
     virtual void createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
-                                     css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier);
+                                     css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
+                                     rtl::Reference<::chart::ChartModel> const& xChartDoc);
 
     std::shared_ptr<DataTableView> getDataTableView() { return m_pDataTableView; }
 
