@@ -1225,7 +1225,9 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
         // find a font family suited for glyph fallback
         // GetGlyphFallbackFont() needs a valid FontInstance
         // if the system-specific glyph fallback is active
+#ifndef NDEBUG
         OUString oldMissingCodes = aMissingCodes;
+#endif
         if( !pFallbackFont )
             pFallbackFont = mxFontCache->GetGlyphFallbackFont( mxFontCollection.get(),
                 aFontSelData, mpFontInstance.get(), nFallbackLevel, aMissingCodes );
@@ -1235,20 +1237,13 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
         if( nFallbackLevel < MAX_FALLBACK-1)
         {
             // ignore fallback font if it is the same as the original font
-            // TODO: This seems broken. Either the font does not provide any of the missing
-            // codes, in which case the fallback should not select it. Or it does provide
-            // some of the missing codes, and then why weren't they used the first time?
-            // This will just loop repeatedly finding the same font (it used to remove
-            // the found font from mxFontCache, but doesn't do that anymore and I don't
-            // see how doing that would remove the font from consideration for fallback).
             if( mpFontInstance->GetFontFace() == pFallbackFont->GetFontFace())
             {
-                if(aMissingCodes != oldMissingCodes)
-                {
-                    SAL_WARN("vcl.gdi", "Font fallback to the same font, but has missing codes");
-                    // Restore the missing codes if we're not going to use this font.
-                    aMissingCodes = oldMissingCodes;
-                }
+                // If its the same font, then surely no glyphs could have been
+                // found, so aMissingCodes should be unchanged, if it did
+                // change then why were those those glyphs considered missing
+                // initially
+                assert(aMissingCodes == oldMissingCodes && "Font fallback to the same font, but has somehow replaced missing glyphs");
                 continue;
             }
         }
