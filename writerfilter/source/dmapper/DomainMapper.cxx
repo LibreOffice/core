@@ -378,6 +378,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "asciiTheme", ThemeTable::getStringForTheme(nIntValue));
             if (m_pImpl->GetTopContext())
             {
+                // note: overwrite Fonts_ascii with Fonts_asciiTheme *even if*
+                // theme font is empty - this is apparently what Word 2013 does
                 uno::Any aPropValue = uno::makeAny( m_pImpl->GetThemeTable()->getFontNameForTheme( nIntValue ) );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, aPropValue );
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_FONT_NAME_ASCII, aPropValue, true, CHAR_GRAB_BAG );
