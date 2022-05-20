@@ -33,6 +33,24 @@
       "message": "Doesn\u0027t libwebp that we use allow to enable this?",
       "revId": "bca920e4000e1265c560b12417225cbb5b106add",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7214824a_10a4665e",
+        "filename": "external/libtiff/ExternalProject_libtiff.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-05-20T19:20:49Z",
+      "side": 1,
+      "message": "yeah, I expect so. something to look at eventually",
+      "parentUuid": "43d851e3_525d9a67",
+      "revId": "bca920e4000e1265c560b12417225cbb5b106add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
