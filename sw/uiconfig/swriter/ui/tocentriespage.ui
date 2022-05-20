@@ -513,7 +513,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="box2">
+                      <object class="GtkBox" id="fieldbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_bottom">6</property>
