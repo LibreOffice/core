@@ -190,27 +190,40 @@ struct SvxCharNamePage_Impl
 SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInSet)
     : SvxCharBasePage(pPage, pController, "cui/ui/charnamepage.ui", "CharNamePage", rInSet)
     , m_pImpl(new SvxCharNamePage_Impl)
-    , m_xLangNotebook(m_xBuilder->weld_notebook("notebook"))
-    , m_xEastFontNameFT(m_xBuilder->weld_label("eastfontnameft"))
-    , m_xEastFontNameLB(m_xBuilder->weld_combo_box("eastfontnamelb"))
-    , m_xEastFontStyleFT(m_xBuilder->weld_label("eaststyleft"))
-    , m_xEastFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("eaststylelb")))
-    , m_xEastFontSizeFT(m_xBuilder->weld_label("eastsizeft"))
-    , m_xEastFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box("eastsizelb")))
-    , m_xEastFontLanguageFT(m_xBuilder->weld_label("eastlangft"))
-    , m_xEastFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("eastlanglb")))
-    , m_xEastFontTypeFT(m_xBuilder->weld_label("eastfontinfo"))
-    , m_xEastFontFeaturesButton(m_xBuilder->weld_button("east_features_button"))
-    , m_xCTLFontNameFT(m_xBuilder->weld_label("ctlfontnameft"))
-    , m_xCTLFontNameLB(m_xBuilder->weld_combo_box("ctlfontnamelb"))
-    , m_xCTLFontStyleFT(m_xBuilder->weld_label("ctlstyleft"))
-    , m_xCTLFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("ctlstylelb")))
-    , m_xCTLFontSizeFT(m_xBuilder->weld_label("ctlsizeft"))
-    , m_xCTLFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box("ctlsizelb")))
-    , m_xCTLFontLanguageFT(m_xBuilder->weld_label("ctllangft"))
-    , m_xCTLFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("ctllanglb")))
-    , m_xCTLFontTypeFT(m_xBuilder->weld_label("ctlfontinfo"))
-    , m_xCTLFontFeaturesButton(m_xBuilder->weld_button("ctl_features_button"))
+    // Western
+    , m_xWestern(m_xBuilder->weld_notebook("nbWestern"))
+    , m_xWestFontNameFT(m_xBuilder->weld_label("lbWestFontname"))
+    , m_xWestFontStyleFT(m_xBuilder->weld_label("lbWestStyle"))
+    , m_xWestFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("cbWestStyle")))
+    , m_xWestFontSizeFT(m_xBuilder->weld_label("lbWestSize"))
+    , m_xWestFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box("cbWestSize")))
+    , m_xWestFontLanguageFT(m_xBuilder->weld_label("lbWestLanguage"))
+    , m_xWestFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("cbWestLanguage")))
+    , m_xWestFontFeaturesButton(m_xBuilder->weld_button("btnWestFeatures"))
+    , m_xWestFontTypeFT(m_xBuilder->weld_label("lbWestFontinfo"))
+    , m_xCJK_CTL(m_xBuilder->weld_notebook("nbCJKCTL"))
+    // CJK
+    , m_xEastFontNameFT(m_xBuilder->weld_label("lbCJKFontname"))
+    , m_xEastFontStyleFT(m_xBuilder->weld_label("lbCJKStyle"))
+    , m_xEastFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("cbCJKStyle")))
+    , m_xEastFontSizeFT(m_xBuilder->weld_label("lbCJKSize"))
+    , m_xEastFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box("cbCJKSize")))
+    , m_xEastFontLanguageFT(m_xBuilder->weld_label("lbCJKLanguage"))
+    , m_xEastFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("cbCJKLanguage")))
+    , m_xEastFontFeaturesButton(m_xBuilder->weld_button("btnCJKFeatures"))
+    , m_xEastFontTypeFT(m_xBuilder->weld_label("lbCJKFontinfo"))
+    // CTL
+    , m_xCTLFontNameFT(m_xBuilder->weld_label("lbCTLFontname"))
+    // tree
+    , m_xCTLFontStyleFT(m_xBuilder->weld_label("lbCTLStyle"))
+    , m_xCTLFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("cbCTLStyle")))
+    , m_xCTLFontSizeFT(m_xBuilder->weld_label("lbCTLSize"))
+    , m_xCTLFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box("cbCTLSize")))
+    , m_xCTLFontLanguageFT(m_xBuilder->weld_label("lbCTLLanguage"))
+    , m_xCTLFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("cbCTLLanguage")))
+    , m_xCTLFontFeaturesButton(m_xBuilder->weld_button("btnCTLFeatures"))
+    , m_xCTLFontTypeFT(m_xBuilder->weld_label("lbCTLFontinfo"))
+
     , m_xVDev(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT)
 {
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));
@@ -219,54 +232,40 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
 #endif
     m_pImpl->m_aNoStyleText = CuiResId( RID_CUISTR_CHARNAME_NOSTYLE );
 
+    std::unique_ptr<weld::EntryTreeView> xWestFontName = m_xBuilder->weld_entry_tree_view("gdWestern", "edWestFontName", "trWestFontName");
+    std::unique_ptr<weld::EntryTreeView> xCJKFontName = m_xBuilder->weld_entry_tree_view("gdCJK", "edCJKFontName", "trCJKFontName");
+    std::unique_ptr<weld::EntryTreeView> xCTLFontName = m_xBuilder->weld_entry_tree_view("gdCTL", "edCTLFontName", "trCTLFontName");
+
+    // 7 lines in the treeview
+    xWestFontName->set_height_request_by_rows(7);
+    xCJKFontName->set_height_request_by_rows(7);
+    xCTLFontName->set_height_request_by_rows(7);
+
+    m_xWestFontNameLB = std::move(xWestFontName);
+    m_xEastFontNameLB = std::move(xCJKFontName);
+    m_xCTLFontNameLB = std::move(xCTLFontName);
+
     SvtCTLOptions aCTLLanguageOptions;
     bool bShowCJK = SvtCJKOptions::IsCJKFontEnabled();
     bool bShowCTL = aCTLLanguageOptions.IsCTLFontEnabled();
     bool bShowNonWestern = bShowCJK || bShowCTL;
-
-    if (bShowNonWestern)
+    if (!bShowNonWestern)
     {
-        m_xWestFrame = m_xBuilder->weld_widget("western");
-        m_xWestFontNameFT = m_xBuilder->weld_label("westfontnameft-cjk");
-        m_xWestFontNameLB = m_xBuilder->weld_combo_box("westfontnamelb-cjk");
-        m_xWestFontStyleFT = m_xBuilder->weld_label("weststyleft-cjk");
-        m_xWestFontSizeFT = m_xBuilder->weld_label("westsizeft-cjk");
-
-        m_xWestFontStyleLB.reset(new FontStyleBox(m_xBuilder->weld_combo_box("weststylelb-cjk")));
-        m_xWestFontSizeLB.reset(new FontSizeBox(m_xBuilder->weld_combo_box("westsizelb-cjk")));
-
-        m_xWestFontLanguageFT = m_xBuilder->weld_label("westlangft-cjk");
-        m_xWestFontLanguageLB.reset(new SvxLanguageBox(m_xBuilder->weld_combo_box("westlanglb-cjk")));
-        m_xWestFontTypeFT = m_xBuilder->weld_label("westfontinfo-cjk");
-
-        m_xWestFontFeaturesButton = m_xBuilder->weld_button("west_features_button-cjk");
+        m_xCJK_CTL->hide();
+        m_xWestern->set_show_tabs(false); //hide single tab in case of Western only
     }
-    else
-    {
-        m_xWestFrame = m_xBuilder->weld_widget("simple");
-        m_xWestFontNameFT = m_xBuilder->weld_label("westfontnameft-nocjk");
-        m_xWestFontStyleFT = m_xBuilder->weld_label("weststyleft-nocjk");
-        m_xWestFontSizeFT = m_xBuilder->weld_label("westsizeft-nocjk");
+    else if (!bShowCJK) m_xCJK_CTL->remove_page("nbCJK");
+    else if (!bShowCTL) m_xCJK_CTL->remove_page("nbCTL");
 
-        m_xWestFontLanguageFT = m_xBuilder->weld_label("westlangft-nocjk");
-        m_xWestFontLanguageLB.reset(new SvxLanguageBox(m_xBuilder->weld_combo_box("westlanglb-nocjk")));
-        m_xWestFontTypeFT = m_xBuilder->weld_label("westfontinfo-nocjk");
 
-        m_xWestFontFeaturesButton = m_xBuilder->weld_button("west_features_button-nocjk");
-
-        std::unique_ptr<weld::EntryTreeView> xWestFontNameLB = m_xBuilder->weld_entry_tree_view("namegrid", "westfontname-nocjk", "westfontnamelb-nocjk");
-        std::unique_ptr<weld::EntryTreeView> xWestFontStyleLB = m_xBuilder->weld_entry_tree_view("stylegrid", "weststyle-nocjk", "weststylelb-nocjk");
-        std::unique_ptr<weld::EntryTreeView> xWestFontSizeLB = m_xBuilder->weld_entry_tree_view("sizegrid", "westsize-nocjk", "westsizelb-nocjk");
-
-        // 7 lines in the treeview
-        xWestFontNameLB->set_height_request_by_rows(7);
-        xWestFontStyleLB->set_height_request_by_rows(7);
-        xWestFontSizeLB->set_height_request_by_rows(7);
-
-        m_xWestFontNameLB = std::move(xWestFontNameLB);
-        m_xWestFontStyleLB.reset(new FontStyleBox(std::move(xWestFontStyleLB)));
-        m_xWestFontSizeLB.reset(new FontSizeBox(std::move(xWestFontSizeLB)));
-    }
+    // info at 80% font size
+    vcl::Font aFont(m_xWestFontTypeFT->get_font());
+    Size aSize(aFont.GetFontSize());
+    aSize.setHeight(aSize.Height() * 0.8);
+    aFont.SetFontSize(aSize);
+    m_xWestFontTypeFT->set_font(aFont);
+    m_xEastFontTypeFT->set_font(aFont);
+    m_xCTLFontTypeFT->set_font(aFont);
 
     //In MacOSX the standard dialogs name font-name, font-style as
     //Family, Typeface
@@ -280,8 +279,8 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     OUString sFontFamilyString(CuiResId(RID_CUISTR_CHARNAME_FAMILY));
 #endif
     m_xWestFontNameFT->set_label(sFontFamilyString);
-    m_xEastFontNameFT->set_label(sFontFamilyString);
     m_xCTLFontNameFT->set_label(sFontFamilyString);
+    m_xEastFontNameFT->set_label(sFontFamilyString);
 
 #ifdef MACOSX
     OUString sFontStyleString(CuiResId(RID_CUISTR_CHARNAME_TYPEFACE));
@@ -292,18 +291,17 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     m_xEastFontStyleFT->set_label(sFontStyleString);
     m_xCTLFontStyleFT->set_label(sFontStyleString);
 
-    m_xWestFrame->show();
-    if (!bShowCJK)
-        m_xLangNotebook->remove_page("lbAsian");
-    if (!bShowCTL)
-        m_xLangNotebook->remove_page("lbComplex");
-
     m_xWestFontLanguageLB->SetLanguageList(SvxLanguageListFlags::WESTERN, true, false, true, true,
-                                           LANGUAGE_SYSTEM, css::i18n::ScriptType::LATIN);
+                                             LANGUAGE_SYSTEM, css::i18n::ScriptType::LATIN);
     m_xEastFontLanguageLB->SetLanguageList(SvxLanguageListFlags::CJK, true, false, true, true,
-                                           LANGUAGE_SYSTEM, css::i18n::ScriptType::ASIAN);
+                                            LANGUAGE_SYSTEM, css::i18n::ScriptType::ASIAN);
     m_xCTLFontLanguageLB->SetLanguageList(SvxLanguageListFlags::CTL, true, false, true, true,
-                                          LANGUAGE_SYSTEM, css::i18n::ScriptType::COMPLEX);
+                                            LANGUAGE_SYSTEM, css::i18n::ScriptType::COMPLEX);
+    int nVisibleChars = 15;
+    // read-only combobox / HasEntry asserts on set_width_char()
+    m_xWestFontLanguageLB->set_width_chars(nVisibleChars);
+    m_xEastFontLanguageLB->set_width_chars(nVisibleChars);
+    m_xCTLFontLanguageLB->set_width_chars(nVisibleChars);
 
     Initialize();
 }
