@@ -116,9 +116,12 @@ bool LogicalFontInstance::GetFallbackForUnicode(sal_UCS4 cChar, FontWeight eWeig
         return false;
 
     const MapEntry& rEntry = (*it).second;
-    *pFontName = rEntry.sFontName;
-    *pEmbolden = rEntry.bEmbolden;
-    *pMatrix = rEntry.aItalicMatrix;
+    if (pFontName)
+        *pFontName = rEntry.sFontName;
+    if (pEmbolden)
+        *pEmbolden = rEntry.bEmbolden;
+    if (pMatrix)
+        *pMatrix = rEntry.aItalicMatrix;
     return true;
 }
 
