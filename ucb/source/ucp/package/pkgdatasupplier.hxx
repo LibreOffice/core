@@ -22,6 +22,7 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>
+#include <mutex>
 #include <vector>
 
 namespace package_ucp {
@@ -58,6 +59,10 @@ public:
     OUString assembleChildURL( const OUString& aName );
 
 private:
+    bool getResultImpl( std::unique_lock<std::mutex>&, sal_uInt32 nIndex );
+    OUString queryContentIdentifierStringImpl( std::unique_lock<std::mutex>&, sal_uInt32 nIndex );
+    css::uno::Reference< css::ucb::XContentIdentifier > queryContentIdentifierImpl( std::unique_lock<std::mutex>&, sal_uInt32 nIndex );
+
     struct ResultListEntry
     {
         OUString                                  aURL;
@@ -67,7 +72,7 @@ private:
 
         explicit ResultListEntry( const OUString& rURL ) : aURL( rURL ) {}
     };
-    osl::Mutex                                   m_aMutex;
+    std::mutex                                   m_aMutex;
     std::vector< ResultListEntry >               m_aResults;
     rtl::Reference< Content >                    m_xContent;
     css::uno::Reference< css::uno::XComponentContext >     m_xContext;
