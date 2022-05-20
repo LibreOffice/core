@@ -298,6 +298,24 @@ static void checkGlyphsEqual(const SalLayoutGlyphs& g1, const SalLayoutGlyphs& g
         assert(l1->isEqual(l2));
     }
 }
+
+static void verifyGlyphs(const SalLayoutGlyphs& glyphs, VclPtr<const OutputDevice> outputDevice,
+                         const OUString& text, sal_Int32 nIndex, sal_Int32 nLen,
+                         tools::Long nLogicWidth, const vcl::text::TextLayoutCache* layoutCache)
+{
+    // Check if the cached result really matches what we would get normally.
+    std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
+    if (layoutCache == nullptr)
+    {
+        tmpLayoutCache = vcl::text::TextLayoutCache::Create(text);
+        layoutCache = tmpLayoutCache.get();
+    }
+    std::unique_ptr<SalLayout> layout
+        = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
+                                   SalLayoutFlags::GlyphItemsOnly, layoutCache);
+    assert(layout);
+    checkGlyphsEqual(glyphs, layout->GetGlyphs());
+}
 #endif
 
 const SalLayoutGlyphs*
@@ -312,7 +330,12 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
     if (it != mCachedGlyphs.end())
     {
         if (it->second.IsValid())
+        {
+#ifdef DBG_UTIL
+            verifyGlyphs(it->second, outputDevice, text, nIndex, nLen, nLogicWidth, layoutCache);
+#endif
             return &it->second;
+        }
         // Do not try to create the layout here. If a cache item exists, it's already
         // been attempted and the layout was invalid (this happens with MultiSalLayout).
         // So in that case this is a cached failure.
@@ -381,19 +404,8 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
             {
                 mLastTemporaryKey = std::move(key);
 #ifdef DBG_UTIL
-                std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
-                if (layoutCache == nullptr)
-                {
-                    tmpLayoutCache = vcl::text::TextLayoutCache::Create(text);
-                    layoutCache = tmpLayoutCache.get();
-                }
-                // Check if the subset result really matches what we would get normally,
-                // to make sure corner cases are handled well (see SalLayoutGlyphsImpl::cloneCharRange()).
-                std::unique_ptr<SalLayout> layout
-                    = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
-                                               SalLayoutFlags::GlyphItemsOnly, layoutCache);
-                assert(layout);
-                checkGlyphsEqual(mLastTemporaryGlyphs, layout->GetGlyphs());
+                verifyGlyphs(mLastTemporaryGlyphs, outputDevice, text, nIndex, nLen, nLogicWidth,
+                             layoutCache);
 #endif
                 return &mLastTemporaryGlyphs;
             }
