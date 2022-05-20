@@ -44,6 +44,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basegfx,\
     basegfx/test/basegfxtools \
     basegfx/test/clipstate \
     basegfx/test/genericclipper \
+    basegfx/test/VectorTest \
 ))
 
 # vim: set noet sw=4 ts=4:
