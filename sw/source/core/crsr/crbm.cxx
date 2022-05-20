@@ -130,9 +130,14 @@ bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark)
     {
         return false;
     }
-    SwTextNode const& rNode(*rMark.GetMarkPos().nNode.GetNode().GetTextNode());
+    SwNode const& rNode(rMark.GetMarkPos().nNode.GetNode());
+    SwTextNode const*const pTextNode(rNode.GetTextNode());
+    if (pTextNode == nullptr)
+    {   // UNO_BOOKMARK may point to table node
+        return rNode.GetRedlineMergeFlag() == SwNode::Merge::Hidden;
+    }
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(
-        rNode.getLayoutFrame(&rLayout)));
+        pTextNode->getLayoutFrame(&rLayout)));
     if (!pFrame)
     {
         return true;
@@ -147,14 +152,14 @@ bool IsMarkHidden(SwRootFrame const& rLayout, ::sw::mark::IMark const& rMark)
     }
     else
     {
-        if (rMark.GetMarkPos().nContent.GetIndex() == rNode.Len())
+        if (rMark.GetMarkPos().nContent.GetIndex() == pTextNode->Len())
         {   // at end of node: never deleted (except if node deleted)
-            return rNode.GetRedlineMergeFlag() == SwNode::Merge::Hidden;
+            return pTextNode->GetRedlineMergeFlag() == SwNode::Merge::Hidden;
         }
         else
         {   // check character following mark pos
             return pFrame->MapModelToViewPos(rMark.GetMarkPos())
-                == pFrame->MapModelToView(&rNode, rMark.GetMarkPos().nContent.GetIndex() + 1);
+                == pFrame->MapModelToView(pTextNode, rMark.GetMarkPos().nContent.GetIndex() + 1);
         }
     }
 }
