@@ -885,7 +885,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testAlternativeText)
             if (pS && pS->GetValue() == "Figure")
             {
                 CPPUNIT_ASSERT_EQUAL(
-                    OUString(u"This is the text alternative"),
+                    OUString(u"This is the text alternative - This is the description"),
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                         *dynamic_cast<vcl::filter::PDFHexStringElement*>(pObject->Lookup("Alt"))));
             }
