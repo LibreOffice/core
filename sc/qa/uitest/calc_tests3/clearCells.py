@@ -216,7 +216,7 @@ class clearCells(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")  #tab Font
 
-                xstylelb = xDialog.getChild("weststylelb-cjk")
+                xstylelb = xDialog.getChild("cbWestStyle")
                 self.assertEqual(get_state_as_dict(xstylelb)["Text"], "Regular")
 
     def test_clear_cells_all(self):
