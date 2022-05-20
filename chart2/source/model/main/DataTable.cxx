@@ -34,20 +34,19 @@ enum
     DataTableProperty_Keys,
 };
 
-void lcl_AddPropertiesToVector(std::vector<beans::Property>& rOutProperties)
+void lcl_AddPropertiesToVector(std::vector<beans::Property>& rProps)
 {
-    rOutProperties.emplace_back(
-        "HBorder", DataTableProperty_HorizontalBorder, cppu::UnoType<bool>::get(),
-        beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
-    rOutProperties.emplace_back(
-        "VBorder", DataTableProperty_VerticalBorder, cppu::UnoType<bool>::get(),
-        beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
-    rOutProperties.emplace_back("Outline", DataTableProperty_Outilne, cppu::UnoType<bool>::get(),
-                                beans::PropertyAttribute::BOUND
-                                    | beans::PropertyAttribute::MAYBEDEFAULT);
-    rOutProperties.emplace_back("Keys", DataTableProperty_Keys, cppu::UnoType<bool>::get(),
-                                beans::PropertyAttribute::BOUND
-                                    | beans::PropertyAttribute::MAYBEDEFAULT);
+    auto const nBound = beans::PropertyAttribute::BOUND;
+    auto const nMaybeDefault = beans::PropertyAttribute::MAYBEDEFAULT;
+
+    rProps.emplace_back("HBorder", DataTableProperty_HorizontalBorder, cppu::UnoType<bool>::get(),
+                        nBound | nMaybeDefault);
+    rProps.emplace_back("VBorder", DataTableProperty_VerticalBorder, cppu::UnoType<bool>::get(),
+                        nBound | nMaybeDefault);
+    rProps.emplace_back("Outline", DataTableProperty_Outilne, cppu::UnoType<bool>::get(),
+                        nBound | nMaybeDefault);
+    rProps.emplace_back("Keys", DataTableProperty_Keys, cppu::UnoType<bool>::get(),
+                        nBound | nMaybeDefault);
 }
 
 struct StaticDataTableDefaults_Initializer
