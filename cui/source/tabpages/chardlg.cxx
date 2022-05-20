@@ -191,7 +191,8 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     : SvxCharBasePage(pPage, pController, "cui/ui/charnamepage.ui", "CharNamePage", rInSet)
     , m_pImpl(new SvxCharNamePage_Impl)
     , m_xLangNotebook(m_xBuilder->weld_notebook("notebook"))
-    , m_xEastFontNameFT(m_xBuilder->weld_label("eastfontnameft"))
+//    , m_xEastFrame(m_xBuilder->weld_widget("asian"))
+//    , m_xEastFontNameFT(m_xBuilder->weld_label("eastfontnameft"))
     , m_xEastFontNameLB(m_xBuilder->weld_combo_box("eastfontnamelb"))
     , m_xEastFontStyleFT(m_xBuilder->weld_label("eaststyleft"))
     , m_xEastFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("eaststylelb")))
@@ -199,9 +200,10 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xEastFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box("eastsizelb")))
     , m_xEastFontLanguageFT(m_xBuilder->weld_label("eastlangft"))
     , m_xEastFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("eastlanglb")))
-    , m_xEastFontTypeFT(m_xBuilder->weld_label("eastfontinfo"))
+//    , m_xEastFontTypeFT(m_xBuilder->weld_label("eastfontinfo"))
     , m_xEastFontFeaturesButton(m_xBuilder->weld_button("east_features_button"))
-    , m_xCTLFontNameFT(m_xBuilder->weld_label("ctlfontnameft"))
+//    , m_xCTLFrame(m_xBuilder->weld_widget("ctl"))
+///    , m_xCTLFontNameFT(m_xBuilder->weld_label("ctlfontnameft"))
     , m_xCTLFontNameLB(m_xBuilder->weld_combo_box("ctlfontnamelb"))
     , m_xCTLFontStyleFT(m_xBuilder->weld_label("ctlstyleft"))
     , m_xCTLFontStyleLB(new FontStyleBox(m_xBuilder->weld_combo_box("ctlstylelb")))
@@ -209,7 +211,7 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     , m_xCTLFontSizeLB(new FontSizeBox(m_xBuilder->weld_combo_box("ctlsizelb")))
     , m_xCTLFontLanguageFT(m_xBuilder->weld_label("ctllangft"))
     , m_xCTLFontLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("ctllanglb")))
-    , m_xCTLFontTypeFT(m_xBuilder->weld_label("ctlfontinfo"))
+//    , m_xCTLFontTypeFT(m_xBuilder->weld_label("ctlfontinfo"))
     , m_xCTLFontFeaturesButton(m_xBuilder->weld_button("ctl_features_button"))
     , m_xVDev(*Application::GetDefaultDevice(), DeviceFormat::DEFAULT, DeviceFormat::DEFAULT)
 {
@@ -280,8 +282,8 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     OUString sFontFamilyString(CuiResId(RID_CUISTR_CHARNAME_FAMILY));
 #endif
     m_xWestFontNameFT->set_label(sFontFamilyString);
-    m_xEastFontNameFT->set_label(sFontFamilyString);
-    m_xCTLFontNameFT->set_label(sFontFamilyString);
+//    m_xEastFontNameFT->set_label(sFontFamilyString);
+//    m_xCTLFontNameFT->set_label(sFontFamilyString);
 
 #ifdef MACOSX
     OUString sFontStyleString(CuiResId(RID_CUISTR_CHARNAME_TYPEFACE));
@@ -293,10 +295,8 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     m_xCTLFontStyleFT->set_label(sFontStyleString);
 
     m_xWestFrame->show();
-    if (!bShowCJK)
-        m_xLangNotebook->remove_page("lbAsian");
-    if (!bShowCTL)
-        m_xLangNotebook->remove_page("lbComplex");
+//    m_xEastFrame->set_visible(bShowCJK);
+//    m_xCTLFrame->set_visible(bShowCTL);
 
     m_xWestFontLanguageLB->SetLanguageList(SvxLanguageListFlags::WESTERN, true, false, true, true,
                                            LANGUAGE_SYSTEM, css::i18n::ScriptType::LATIN);
@@ -304,6 +304,10 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
                                            LANGUAGE_SYSTEM, css::i18n::ScriptType::ASIAN);
     m_xCTLFontLanguageLB->SetLanguageList(SvxLanguageListFlags::CTL, true, false, true, true,
                                           LANGUAGE_SYSTEM, css::i18n::ScriptType::COMPLEX);
+    int nVisibleChars = 10;
+    m_xWestFontLanguageLB->set_width_chars(nVisibleChars);
+//    m_xEastFontLanguageLB->set_width_chars(nVisibleChars);
+//    m_xCTLFontLanguageLB->set_width_chars(nVisibleChars);
 
     Initialize();
 }
@@ -472,14 +476,14 @@ void SvxCharNamePage::UpdatePreview_Impl()
         pFontList, GetWhich(SID_ATTR_CHAR_CJK_FONT),
         GetWhich(SID_ATTR_CHAR_CJK_FONTHEIGHT));
 
-    m_xEastFontTypeFT->set_label(pFontList->GetFontMapText(aEastFontMetric));
+//    m_xEastFontTypeFT->set_label(pFontList->GetFontMapText(aEastFontMetric));
 
     FontMetric aCTLFontMetric = calcFontMetrics(rCTLFont,
         this, m_xCTLFontNameLB.get(), m_xCTLFontStyleLB.get(), m_xCTLFontSizeLB.get(),
         m_xCTLFontLanguageLB.get(), pFontList, GetWhich(SID_ATTR_CHAR_CTL_FONT),
         GetWhich(SID_ATTR_CHAR_CTL_FONTHEIGHT));
 
-    m_xCTLFontTypeFT->set_label(pFontList->GetFontMapText(aCTLFontMetric));
+//    m_xCTLFontTypeFT->set_label(pFontList->GetFontMapText(aCTLFontMetric));
 
     m_aPreviewWin.Invalidate();
 }
@@ -818,10 +822,10 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
             m_xWestFontTypeFT->set_label(sMapText);
             break;
         case Asian:
-            m_xEastFontTypeFT->set_label(sMapText);
+//            m_xEastFontTypeFT->set_label(sMapText);
             break;
         case Ctl:
-            m_xCTLFontTypeFT->set_label(sMapText);
+//            m_xCTLFontTypeFT->set_label(sMapText);
             break;
     }
 

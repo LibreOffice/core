@@ -175,7 +175,7 @@
               <object class="GtkLabel" id="westfontnameft-nocjk">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="no" context="charnamepage|westfontnameft-nocjk">Family:</property>
+                <property name="label" context="charnamepage|westfontnameft-nocjk">Family:</property>
               </object>
             </child>
           </object>
@@ -265,7 +265,7 @@
               <object class="GtkLabel" id="weststyleft-nocjk">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="no" context="charnamepage|weststyleft-nocjk">Style:</property>
+                <property name="label" context="charnamepage|weststyleft-nocjk">Style:</property>
               </object>
             </child>
           </object>
@@ -464,382 +464,241 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="western">
+      <!-- n-columns=2 n-rows=2 -->
+      <object class="GtkGrid" id="advanced">
+        <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="no-show-all">True</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
-        <property name="label-xalign">0</property>
-        <property name="shadow-type">none</property>
+        <property name="column-spacing">12</property>
+        <child>
+          <object class="GtkFrame" id="western">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
+            <child>
+              <!-- n-columns=3 n-rows=4 -->
+              <object class="GtkGrid" id="grid1">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="westfontnameft-cjk">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" context="charnamepage|westfontnameft-cjk">Family:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">westfontnamelb-cjk</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="westlangft-cjk">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="charnamepage|westlangft-cjk">Language:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">westlanglb-cjk</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="westlanglb-cjk">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="model">liststore5</property>
+                    <property name="has-entry">True</property>
+                    <property name="entry-text-column">0</property>
+                    <property name="id-column">1</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext5"/>
+                      <attributes>
+                        <attribute name="pixbuf">2</attribute>
+                      </attributes>
+                    </child>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="can-focus">False</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="westlanglb-cjk-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|westlanglb-cjk">Sets the language that the spellchecker uses for the selected text or the text that you type. Available language modules have a check mark in front of them.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="westfontnamelb-cjk">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="has-entry">True</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="can-focus">False</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="weststyleft-cjk">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" context="charnamepage|weststyleft-cjk">Style:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">weststylelb-cjk</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="weststylelb-cjk">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="has-entry">True</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="can-focus">False</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="weststylelb-cjk-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|weststylelb-cjk">Select the formatting that you want to apply.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="westsizeft-cjk">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="charnamepage|westsizeft-cjk">Size:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">westsizelb-cjk</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="westsizelb-cjk">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="has-entry">True</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="can-focus">False</property>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="westsizelb-cjk-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|westsizelb-cjk">Enter or select the font size that you want to apply. For scalable fonts, you can also enter decimal values.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="west_features_button-cjk">
+                    <property name="label" translatable="yes" context="charnamepage|west_features_button-cjk">Features...</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="halign">end</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="lbWestern">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="charnamepage|westfontframe">Western</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="westfontinfo-cjk">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="wrap">True</property>
+            <property name="ellipsize">end</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkNotebook" id="notebook">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="margin-start">6</property>
-            <property name="margin-end">6</property>
-            <property name="margin-top">6</property>
-            <property name="margin-bottom">6</property>
+            <property name="show-border">False</property>
             <child>
-              <!-- n-columns=1 n-rows=2 -->
-              <object class="GtkGrid" id="grid1">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="valign">start</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="row-spacing">6</property>
-                <child>
-                  <!-- n-columns=3 n-rows=4 -->
-                  <object class="GtkGrid">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="row-spacing">6</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="westfontnameft-cjk">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="no" context="charnamepage|westfontnameft-cjk">Family:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">westfontnamelb-cjk</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="westlangft-cjk">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="charnamepage|westlangft-cjk">Language:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">westlanglb-cjk</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBox" id="westlanglb-cjk">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="model">liststore5</property>
-                        <property name="has-entry">True</property>
-                        <property name="entry-text-column">0</property>
-                        <property name="id-column">1</property>
-                        <child>
-                          <object class="GtkCellRendererPixbuf" id="cellrenderertext5"/>
-                          <attributes>
-                            <attribute name="pixbuf">2</attribute>
-                          </attributes>
-                        </child>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="westlanglb-cjk-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|westlanglb-cjk">Sets the language that the spellchecker uses for the selected text or the text that you type. Available language modules have a check mark in front of them.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="westfontnamelb-cjk">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="has-entry">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="weststyleft-cjk">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="no" context="charnamepage|weststyleft-cjk">Style:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">weststylelb-cjk</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="weststylelb-cjk">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-entry">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="weststylelb-cjk-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|weststylelb-cjk">Select the formatting that you want to apply.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="westsizeft-cjk">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="charnamepage|westsizeft-cjk">Size:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">westsizelb-cjk</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="westsizelb-cjk">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-entry">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="westsizelb-cjk-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|westsizelb-cjk">Enter or select the font size that you want to apply. For scalable fonts, you can also enter decimal values.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <!-- n-columns=2 n-rows=1 -->
-                  <object class="GtkGrid">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="column-spacing">12</property>
-                    <child>
-                      <object class="GtkButton" id="west_features_button-cjk">
-                        <property name="label" translatable="yes" context="charnamepage|west_features_button-cjk">Features...</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="halign">end</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="westfontinfo-cjk">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="wrap">True</property>
-                        <property name="width-chars">30</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="lbWestern">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="charnamepage|tab_western">Western</property>
-              </object>
-              <packing>
-                <property name="tab-fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <!-- n-columns=1 n-rows=2 -->
+              <!-- n-columns=3 n-rows=4 -->
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
+                <property name="valign">start</property>
+                <property name="hexpand">True</property>
                 <property name="row-spacing">6</property>
+                <property name="column-spacing">6</property>
                 <child>
-                  <!-- n-columns=3 n-rows=4 -->
-                  <object class="GtkGrid">
+                  <object class="GtkLabel" id="eastfontnameft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="hexpand">True</property>
-                    <property name="row-spacing">6</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="eastfontnameft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="no" context="charnamepage|eastfontnameft">Family:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">eastfontnamelb</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="eastsizeft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="charnamepage|eastsizeft">Size:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">eastsizelb</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="eastlangft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="charnamepage|eastlangft">Language:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">eastlanglb</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="eastfontnamelb">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="has-entry">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="eaststylelb">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-entry">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="eaststylelb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|eaststylelb">Select the formatting that you want to apply.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="eastsizelb">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-entry">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="eastsizelb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|eastsizelb">Enter or select the font size that you want to apply. For scalable fonts, you can also enter decimal values.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBox" id="eastlanglb">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="model">liststore6</property>
-                        <property name="entry-text-column">0</property>
-                        <property name="id-column">1</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext9"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                        <child>
-                          <object class="GtkCellRendererPixbuf" id="cellrenderertext6"/>
-                          <attributes>
-                            <attribute name="pixbuf">2</attribute>
-                          </attributes>
-                        </child>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="eastlanglb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|eastlanglb">Sets the language that the spellchecker uses for the selected text or the text that you type. Available language modules have a check mark in front of them.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="eaststyleft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="no" context="charnamepage|eaststyleft">Style:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">eaststylelb</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
+                    <property name="label" context="charnamepage|eastfontnameft">Family:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">eastfontnamelb</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -847,214 +706,167 @@
                   </packing>
                 </child>
                 <child>
-                  <!-- n-columns=2 n-rows=1 -->
-                  <object class="GtkGrid">
+                  <object class="GtkLabel" id="eastsizeft">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="charnamepage|eastsizeft">Size:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">eastsizelb</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="eastlangft">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="charnamepage|eastlangft">Language:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">eastlanglb</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="eastfontnamelb">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="column-spacing">12</property>
-                    <child>
-                      <object class="GtkButton" id="east_features_button">
-                        <property name="label" translatable="yes" context="charnamepage|east_features_button">Features...</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="halign">end</property>
+                    <property name="has-entry">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="eaststylelb">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="has-entry">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eaststylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|eaststylelb">Select the formatting that you want to apply.</property>
                       </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="eastsizelb">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="has-entry">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eastsizelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|eastsizelb">Enter or select the font size that you want to apply. For scalable fonts, you can also enter decimal values.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="eastlanglb">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="model">liststore6</property>
+                    <property name="entry-text-column">0</property>
+                    <property name="id-column">1</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext9"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="eastfontinfo">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="wrap">True</property>
-                        <property name="width-chars">30</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext6"/>
+                      <attributes>
+                        <attribute name="pixbuf">2</attribute>
+                      </attributes>
                     </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="eastlanglb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|eastlanglb">Sets the language that the spellchecker uses for the selected text or the text that you type. Available language modules have a check mark in front of them.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="eaststyleft">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" context="charnamepage|eaststyleft">Style:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">eaststylelb</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkButton" id="east_features_button">
+                    <property name="label" translatable="yes" context="charnamepage|east_features_button">Features...</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="halign">end</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="lbAsian">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="charnamepage|tab_asian">Asian</property>
+                <property name="label" translatable="yes" context="charnamepage|lbAsian">Asian</property>
               </object>
               <packing>
-                <property name="position">1</property>
                 <property name="tab-fill">False</property>
               </packing>
             </child>
             <child>
-              <!-- n-columns=1 n-rows=2 -->
-              <object class="GtkGrid">
+              <!-- n-columns=3 n-rows=4 -->
+              <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
+                <property name="valign">start</property>
+                <property name="hexpand">True</property>
                 <property name="row-spacing">6</property>
+                <property name="column-spacing">6</property>
                 <child>
-                  <!-- n-columns=3 n-rows=4 -->
-                  <object class="GtkGrid" id="grid3">
+                  <object class="GtkLabel" id="ctlfontnameft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="hexpand">True</property>
-                    <property name="row-spacing">6</property>
-                    <property name="column-spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="ctlfontnameft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="no" context="charnamepage|ctlfontnameft">Family:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">ctlfontnamelb</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="ctlstyleft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="no" context="charnamepage|ctlstyleft">Style:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">ctlstylelb</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="ctlsizeft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="charnamepage|ctlsizeft">Size:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">ctlsizelb</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="ctlfontnamelb">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="has-entry">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="ctlstylelb">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-entry">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="ctlstylelb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|ctlstylelb">Select the formatting that you want to apply.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="ctlsizelb">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="has-entry">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="ctlsizelb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|ctlsizelb">Enter or select the font size that you want to apply. For scalable fonts, you can also enter decimal values.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBox" id="ctllanglb">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="model">liststore7</property>
-                        <property name="entry-text-column">0</property>
-                        <property name="id-column">1</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext7"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                        <child>
-                          <object class="GtkCellRendererPixbuf" id="cellrenderertext11"/>
-                          <attributes>
-                            <attribute name="pixbuf">2</attribute>
-                          </attributes>
-                        </child>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="ctllanglb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|ctllanglb">Sets the language that the spellchecker uses for the selected text or the text that you type. Available language modules have a check mark in front of them.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
-                        <property name="width">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="ctllangft">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="charnamepage|ctllangft">Language:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">ctllanglb</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
+                    <property name="label" context="charnamepage|ctlfontnameft">Family:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">ctlfontnamelb</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -1062,77 +874,170 @@
                   </packing>
                 </child>
                 <child>
-                  <!-- n-columns=2 n-rows=1 -->
-                  <object class="GtkGrid">
+                  <object class="GtkLabel" id="ctlstyleft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="column-spacing">12</property>
-                    <child>
-                      <object class="GtkButton" id="ctl_features_button">
-                        <property name="label" translatable="yes" context="charnamepage|ctl_features_button">Features...</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="halign">end</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="ctlfontinfo">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="wrap">True</property>
-                        <property name="width-chars">30</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
+                    <property name="label" context="charnamepage|ctlstyleft">Style:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">ctlstylelb</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkLabel" id="ctlsizeft">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="charnamepage|ctlsizeft">Size:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">ctlsizelb</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="ctlfontnamelb">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="has-entry">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="ctlstylelb">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="has-entry">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ctlstylelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|ctlstylelb">Select the formatting that you want to apply.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="ctlsizelb">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="has-entry">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ctlsizelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|ctlsizelb">Enter or select the font size that you want to apply. For scalable fonts, you can also enter decimal values.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="ctllanglb">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="model">liststore7</property>
+                    <property name="entry-text-column">0</property>
+                    <property name="id-column">1</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext7"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext11"/>
+                      <attributes>
+                        <attribute name="pixbuf">2</attribute>
+                      </attributes>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="ctllanglb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|ctllanglb">Sets the language that the spellchecker uses for the selected text or the text that you type. Available language modules have a check mark in front of them.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="ctllangft">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="charnamepage|ctllangft">Language:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">ctllanglb</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="ctl_features_button">
+                    <property name="label" translatable="yes" context="charnamepage|ctl_features_button">Features...</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="halign">end</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="lbComplex">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="charnamepage|tab_complex">Complex</property>
+                <property name="label" translatable="yes" context="charnamepage|lbComplex">Complex</property>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">1</property>
                 <property name="tab-fill">False</property>
               </packing>
             </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <placeholder/>
+            </child>
           </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label4">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="charnamepage|label4">Text Font</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
         </child>
       </object>
       <packing>
         <property name="expand">False</property>
-        <property name="fill">True</property>
+        <property name="fill">False</property>
         <property name="position">1</property>
       </packing>
     </child>
@@ -1177,37 +1082,5 @@
         <property name="AtkObject::accessible-description" translatable="yes" context="charnamepage|extended_tip|CharNamePage">Specify the formatting and the font that you want to apply.</property>
       </object>
     </child>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <property name="ignore-hidden">True</property>
-    <widgets>
-      <widget name="weststyleft-cjk"/>
-      <widget name="eaststyleft"/>
-      <widget name="ctlstyleft"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup2">
-    <property name="ignore-hidden">True</property>
-    <widgets>
-      <widget name="westfontnameft-cjk"/>
-      <widget name="eastfontnameft"/>
-      <widget name="ctlfontnameft"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup3">
-    <property name="ignore-hidden">True</property>
-    <widgets>
-      <widget name="westsizeft-cjk"/>
-      <widget name="eastsizeft"/>
-      <widget name="ctlsizeft"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup4">
-    <property name="ignore-hidden">True</property>
-    <widgets>
-      <widget name="westlangft-cjk"/>
-      <widget name="eastlangft"/>
-      <widget name="ctllangft"/>
-    </widgets>
   </object>
 </interface>
