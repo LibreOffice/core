@@ -12,6 +12,7 @@
 
 namespace sc
 {
+/** Holder of sparkline attributes */
 class SparklineAttributes::Implementation
 {
 public:
