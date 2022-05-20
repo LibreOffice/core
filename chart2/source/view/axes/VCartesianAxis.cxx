@@ -37,6 +37,7 @@
 #include <svx/unoshtxt.hxx>
 #include <VSeriesPlotter.hxx>
 #include <DataTableView.hxx>
+#include <ChartModel.hxx>
 
 #include <comphelper/scopeguard.hxx>
 
@@ -1993,11 +1994,12 @@ void VCartesianAxis::createShapes()
 }
 
 void VCartesianAxis::createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
-                                         Reference<util::XNumberFormatsSupplier> const& xNumberFormatsSupplier)
+                                         Reference<util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
+                                         rtl::Reference<::chart::ChartModel> const& xChartDoc)
 {
     if (m_aAxisProperties.m_bDisplayDataTable)
     {
-        m_pDataTableView.reset(new DataTableView(m_aAxisProperties.m_xDataTableModel));
+        m_pDataTableView.reset(new DataTableView(xChartDoc, m_aAxisProperties.m_xDataTableModel));
         m_pDataTableView->initializeValues(rSeriesPlotterList);
         m_xNumberFormatsSupplier = xNumberFormatsSupplier;
     }
