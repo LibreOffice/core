@@ -181,6 +181,39 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunDropdown)
     uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("choose a color"), xContent->getString());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSdtRunPicture)
+{
+    // Given a document with a dropdown inline/run SDT:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-run-picture.docx";
+
+    // When loading the document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the doc model has a clickable picture content control:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    // Without the accompanying fix in place, this failed with:
+    // - Expected: ContentControl
+    // - Actual  : Frame
+    // i.e. the SDT was imported as a plain image, not as a clickable placeholder in a content
+    // control.
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    bool bPicture{};
+    xContentControlProps->getPropertyValue("Picture") >>= bPicture;
+    CPPUNIT_ASSERT(bPicture);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
