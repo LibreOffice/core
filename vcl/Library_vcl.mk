@@ -455,9 +455,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/ipdf/pdfdocument \
     vcl/source/filter/iras/iras \
     vcl/source/filter/itga/itga \
-    vcl/source/filter/itiff/ccidecom \
     vcl/source/filter/itiff/itiff \
-    vcl/source/filter/itiff/lzwdecom \
     vcl/source/filter/ixbm/xbmread \
     vcl/source/filter/ixpm/xpmread \
     vcl/source/filter/jpeg/Exif \
