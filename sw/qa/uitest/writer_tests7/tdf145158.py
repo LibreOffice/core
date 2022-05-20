@@ -29,7 +29,7 @@ class tdf145158(UITestCase):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "Test"}))
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
-                xSizeFont = xDialog.getChild("westsizelb-cjk")
+                xSizeFont = xDialog.getChild("cbWestSize")
 
                 # Without the fix in place, this test would have failed with
                 # AssertionError: '10.5 pt' != '11 pt'

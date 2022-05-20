@@ -65,7 +65,7 @@ private:
 
     std::unique_ptr<SvxCharNamePage_Impl>   m_pImpl;
 
-    std::unique_ptr<weld::Widget> m_xWestFrame;
+    std::unique_ptr<weld::Notebook> m_xWestern;
     std::unique_ptr<weld::Label> m_xWestFontNameFT;
     std::unique_ptr<weld::ComboBox> m_xWestFontNameLB;
     std::unique_ptr<weld::Label> m_xWestFontStyleFT;
@@ -74,10 +74,10 @@ private:
     std::unique_ptr<FontSizeBox> m_xWestFontSizeLB;
     std::unique_ptr<weld::Label> m_xWestFontLanguageFT;
     std::unique_ptr<SvxLanguageBox> m_xWestFontLanguageLB;
-    std::unique_ptr<weld::Label> m_xWestFontTypeFT;
     std::unique_ptr<weld::Button> m_xWestFontFeaturesButton;
-    std::unique_ptr<weld::Notebook> m_xLangNotebook;
+    std::unique_ptr<weld::Label> m_xWestFontTypeFT;
 
+    std::unique_ptr<weld::Notebook> m_xCJK_CTL;
     std::unique_ptr<weld::Label> m_xEastFontNameFT;
     std::unique_ptr<weld::ComboBox> m_xEastFontNameLB;
     std::unique_ptr<weld::Label> m_xEastFontStyleFT;
@@ -86,8 +86,8 @@ private:
     std::unique_ptr<FontSizeBox> m_xEastFontSizeLB;
     std::unique_ptr<weld::Label> m_xEastFontLanguageFT;
     std::unique_ptr<SvxLanguageBox> m_xEastFontLanguageLB;
-    std::unique_ptr<weld::Label> m_xEastFontTypeFT;
     std::unique_ptr<weld::Button> m_xEastFontFeaturesButton;
+    std::unique_ptr<weld::Label> m_xEastFontTypeFT;
 
     std::unique_ptr<weld::Label> m_xCTLFontNameFT;
     std::unique_ptr<weld::ComboBox> m_xCTLFontNameLB;
@@ -97,8 +97,8 @@ private:
     std::unique_ptr<FontSizeBox> m_xCTLFontSizeLB;
     std::unique_ptr<weld::Label> m_xCTLFontLanguageFT;
     std::unique_ptr<SvxLanguageBox> m_xCTLFontLanguageLB;
-    std::unique_ptr<weld::Label> m_xCTLFontTypeFT;
     std::unique_ptr<weld::Button> m_xCTLFontFeaturesButton;
+    std::unique_ptr<weld::Label> m_xCTLFontTypeFT;
 
     //for getting FontFeatures
     ScopedVclPtrInstance<VirtualDevice> m_xVDev;
