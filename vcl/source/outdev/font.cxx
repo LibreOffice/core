@@ -1234,13 +1234,8 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
         if( nFallbackLevel < MAX_FALLBACK-1)
         {
             // ignore fallback font if it is the same as the original font
-            // unless we are looking for a substitution for 0x202F, in which
-            // case we'll just use a normal space
-            if( mpFontInstance->GetFontFace() == pFallbackFont->GetFontFace() &&
-                aMissingCodes.indexOf(0x202F) == -1 )
-            {
+            if( mpFontInstance->GetFontFace() == pFallbackFont->GetFontFace())
                 continue;
-            }
         }
 
         // create and add glyph fallback layout to multilayout
