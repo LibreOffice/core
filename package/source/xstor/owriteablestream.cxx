@@ -1774,7 +1774,8 @@ uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
                     ,   static_cast<io::XSeekable*> ( this )
                     ,   static_cast<io::XTruncate*> ( this )
                     ,   static_cast<lang::XComponent*> ( this )
-                    ,   static_cast<beans::XPropertySet*> ( this ) );
+                    ,   static_cast<beans::XPropertySet*> ( this )
+                    ,   static_cast<lang::XUnoTunnel*> ( this ) );
 
     if ( aReturn.hasValue() )
         return aReturn ;
