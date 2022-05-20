@@ -23,6 +23,7 @@ class AttributeList;
 
 namespace oox::xls
 {
+/** Transitional sparkline data */
 class Sparkline
 {
 public:
@@ -31,6 +32,7 @@ public:
     Sparkline() {}
 };
 
+/** Transitional sparkline group data */
 class SparklineGroup
 {
 private:
@@ -49,6 +51,7 @@ public:
     std::vector<Sparkline>& getSparklines() { return m_aSparklines; }
 };
 
+/** Handle import of the sparkline, sparkline group and attributes */
 class SparklineGroupsContext : public WorksheetContextBase
 {
 private:

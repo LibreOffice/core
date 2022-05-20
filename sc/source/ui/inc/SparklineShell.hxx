@@ -19,6 +19,7 @@ class SfxModule;
 
 namespace sc
 {
+/** Shell to handle the sparkline context */
 class SparklineShell final : public SfxShell
 {
 public:

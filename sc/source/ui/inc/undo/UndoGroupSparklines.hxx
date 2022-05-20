@@ -15,6 +15,7 @@
 
 namespace sc
 {
+/** Previous sparkline group data, which is restored at Undo grupping */
 struct UndoGroupSparklinesData
 {
     UndoGroupSparklinesData(ScAddress const& rAddress, ScRangeList const& rDataRangeList,
@@ -30,7 +31,7 @@ struct UndoGroupSparklinesData
     std::shared_ptr<sc::SparklineGroup> m_pSparklineGroup;
 };
 
-/** Undo action for ungrouping sparklines */
+/** Undo action for grouping sparklines */
 class UndoGroupSparklines : public ScSimpleUndo
 {
 private:

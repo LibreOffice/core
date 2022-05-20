@@ -15,6 +15,7 @@
 
 namespace sc
 {
+/** Data defining a sparkline - input data and output position */
 struct SC_DLLPUBLIC SparklineData
 {
     ScAddress maPosition;
@@ -34,6 +35,7 @@ enum class RangeOrientation
     Col
 };
 
+/** Determine the sparkline group orientation for the input data the output size */
 SC_DLLPUBLIC RangeOrientation calculateOrientation(sal_Int32 nOutputSize,
                                                    ScRange const& rInputRange);
 

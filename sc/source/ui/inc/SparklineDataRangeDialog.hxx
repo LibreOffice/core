@@ -20,6 +20,7 @@ class ColorListBox;
 
 namespace sc
 {
+/** Dialog to change input data range for a sparkline  */
 class SparklineDataRangeDialog : public ScAnyRefDlgController
 {
 private:
