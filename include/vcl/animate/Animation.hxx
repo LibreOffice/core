@@ -66,8 +66,8 @@ public:
     void SetNotifyHdl(const Link<Animation*, void>& rLink) { maNotifyLink = rLink; }
     const Link<Animation*, void>& GetNotifyHdl() const { return maNotifyLink; }
 
-    std::vector<std::unique_ptr<AnimationBitmap>>& GetAnimationFrames() { return maList; }
-    size_t Count() const { return maList.size(); }
+    std::vector<std::unique_ptr<AnimationBitmap>>& GetAnimationFrames() { return maFrames; }
+    size_t Count() const { return maFrames.size(); }
     bool Insert(const AnimationBitmap& rAnimationBitmap);
     const AnimationBitmap& Get(sal_uInt16 nAnimation) const;
     void Replace(const AnimationBitmap& rNewAnimationBmp, sal_uInt16 nAnimation);
@@ -96,7 +96,7 @@ public:
 private:
     SAL_DLLPRIVATE static sal_uLong mnAnimCount;
 
-    std::vector<std::unique_ptr<AnimationBitmap>> maList;
+    std::vector<std::unique_ptr<AnimationBitmap>> maFrames;
     std::vector<std::unique_ptr<ImplAnimView>> maViewList;
 
     Link<Animation*, void> maNotifyLink;
