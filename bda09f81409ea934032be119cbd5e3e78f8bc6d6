@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "952bb63c_53c59770",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-20T06:53:11Z",
+      "side": 1,
+      "message": "How do I test this manually? Interestingly when I use the \"insert first author\" menu item on the desktop, then an SwDocStatField is inserted, not an SwAuthorField.\n\nBut I assume you found a way to insert an SwAuthorField. :-) Thanks.",
+      "revId": "bda09f81409ea934032be119cbd5e3e78f8bc6d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
