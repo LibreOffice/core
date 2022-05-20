@@ -285,6 +285,28 @@ CPPUNIT_TEST_FIXTURE(Test, testReplacePictureContentControl)
     // killed the image selection.
     CPPUNIT_ASSERT(pWrtShell->IsFrameSelected());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertPictureContentControl)
+{
+    // Given an empty document:
+    SwDoc* pDoc = createSwDoc();
+
+    // When inserting a content control:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::PICTURE);
+
+    // Then make sure that the matching text attribute is added to the document model:
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
+    // Without the accompanying fix in place, this test would have failed, there was no special
+    // handling for picture content control, no placeholder fly content was inserted.
+    CPPUNIT_ASSERT(pContentControl->GetPicture());
+    CPPUNIT_ASSERT(pTextNode->GetTextAttrForCharAt(1, RES_TXTATR_FLYCNT));
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
