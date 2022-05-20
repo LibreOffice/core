@@ -12,7 +12,9 @@
 #include <svx/unodraw/SvxTableShape.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <DataTable.hxx>
+#include "VLineProperties.hxx"
 
 namespace chart
 {
@@ -20,16 +22,23 @@ class VSeriesPlotter;
 
 class DataTableView final
 {
+private:
+    css::uno::Reference<css::chart2::XChartDocument> m_xChartModel;
     css::uno::Reference<css::drawing::XShapes> m_xTarget;
     rtl::Reference<SvxTableShape> m_xTableShape;
     rtl::Reference<DataTable> m_xDataTableModel;
+    VLineProperties m_aLineProperties;
 
     std::vector<OUString> m_aDataSeriesNames;
     std::vector<OUString> m_aXValues;
     std::vector<std::vector<OUString>> m_pDataSeriesValues;
 
+    void setCellDefaults(css::uno::Reference<css::beans::XPropertySet>& xPropertySet, bool bLeft,
+                         bool bTop, bool bRight, bool bBottom);
+
 public:
-    DataTableView(rtl::Reference<DataTable> const& rDataTableModel);
+    DataTableView(css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
+                  rtl::Reference<DataTable> const& rDataTableModel);
     void initializeShapes(const css::uno::Reference<css::drawing::XShapes>& xTarget);
     void initializeValues(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList);
     void createShapes(basegfx::B2DVector const& rStart, basegfx::B2DVector const& rEnd,
