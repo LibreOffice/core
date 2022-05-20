@@ -63,6 +63,7 @@ public:
     virtual void Deactivate();                      // deactivate function
 
     virtual void CreateDefaultObject();
+    virtual void CreateDefaultObjectAtPosWithSize(Point aPos, Size aSize);
 
     // #i33136#
     virtual bool doConstructOrthogonal() const;
