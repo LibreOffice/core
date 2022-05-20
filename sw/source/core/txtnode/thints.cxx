@@ -1091,7 +1091,9 @@ SwTextAttr* MakeTextAttr(
                 // the relation to its annotation mark (relation established via annotation field's name).
                 // If the annotation mark is also copied, the relation and thus the annotated text range will be reestablished,
                 // when the annotation mark is created and inserted into the document.
-                const_cast<SwPostItField&>(dynamic_cast<const SwPostItField&>(*(pNew->GetFormatField().GetField()))).SetName(OUString());
+                auto& pField = const_cast<SwPostItField&>(dynamic_cast<const SwPostItField&>(*(pNew->GetFormatField().GetField())));
+                pField.SetName(OUString());
+                pField.SetPostItId();
             }
         }
         break;
