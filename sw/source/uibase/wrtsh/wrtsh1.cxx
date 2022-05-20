@@ -103,6 +103,7 @@
 #include <svx/postattr.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <memory>
 
 #include <frmtool.hxx>
@@ -267,9 +268,9 @@ void SwWrtShell::Insert( const OUString &rStr )
 // Maximum height limit not possible, because the maximum height
 // of the current frame can not be obtained.
 
-void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
-                         const Graphic &rGrf, SwFlyFrameAttrMgr *pFrameMgr,
-                         RndStdIds nAnchorType )
+void SwWrtShell::InsertGraphic( const OUString &rPath, const OUString &rFilter,
+                                const Graphic &rGrf, SwFlyFrameAttrMgr *pFrameMgr,
+                                RndStdIds nAnchorType )
 {
     ResetCursorStack();
     if ( !CanInsert() )
@@ -1030,7 +1031,6 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
     switch (eType)
     {
         case SwContentControlType::RICH_TEXT:
-        case SwContentControlType::PICTURE:
         {
             pContentControl->SetShowingPlaceHolder(true);
             if (!HasSelection())
@@ -1059,6 +1059,50 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
             SwContentControlListItem aListItem;
             aListItem.m_aValue = aPlaceholder;
             pContentControl->SetListItems({ aListItem });
+            break;
+        }
+        case SwContentControlType::PICTURE:
+        {
+            // Set up the picture content control.
+            pContentControl->SetShowingPlaceHolder(true);
+            pContentControl->SetPicture(true);
+
+            // Create the placeholder bitmap.
+            BitmapEx aBitmap(Size(1, 1), vcl::PixelFormat::N24_BPP);
+            Color aColor = SvtOptionsDrawinglayer::getHilightColor();
+            aColor.IncreaseLuminance(255 * 0.75);
+            aBitmap.Erase(aColor);
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UndoArg1, SwResId(STR_GRAPHIC_DEFNAME));
+            StartUndo(SwUndoId::INSERT, &aRewriter);
+            LockPaint();
+            StartAction();
+            InsertGraphic(OUString(), OUString(), aBitmap, nullptr, RndStdIds::FLY_AS_CHAR);
+
+            // Set properties on the bitmap.
+            SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE> aSet(GetDoc()->GetAttrPool());
+            GetFlyFrameAttr(aSet);
+            SwFormatFrameSize aSize(SwFrameSize::Fixed, 3000, 3000);
+            aSet.Put(aSize);
+            SetFlyFrameAttr(aSet);
+            SwFrameFormat* pFrameFormat = GetFlyFrameFormat();
+            EndAction();
+            UnlockPaint();
+            EndUndo();
+
+            // Go after the anchor position.
+            UnSelectFrame();
+            LeaveSelFrameMode();
+            {
+                SwCursor* pCursor = getShellCursor(true);
+                pCursor->DeleteMark();
+                const SwPosition* pAnchor = pFrameFormat->GetAnchor().GetContentAnchor();
+                pCursor->GetPoint()->nContent = pAnchor->nContent;
+                ++pCursor->GetPoint()->nContent;
+            }
+
+            // Select before the anchor position.
+            Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
             break;
         }
     }

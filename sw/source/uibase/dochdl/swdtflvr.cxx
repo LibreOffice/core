@@ -2499,7 +2499,7 @@ bool SwTransferable::PasteTargetURL( const TransferableDataHelper& rData,
                 {
                 case SwPasteSdr::Insert:
                     SwTransferable::SetSelInShell( rSh, false, pPt );
-                    rSh.Insert(sURL, OUString(), aGraphic);
+                    rSh.InsertGraphic(sURL, OUString(), aGraphic);
                     break;
 
                 case SwPasteSdr::Replace:
@@ -2521,7 +2521,7 @@ bool SwTransferable::PasteTargetURL( const TransferableDataHelper& rData,
                     else
                     {
                         SwTransferable::SetSelInShell( rSh, false, pPt );
-                        rSh.Insert(sURL, OUString(), aGraphic);
+                        rSh.InsertGraphic(sURL, OUString(), aGraphic);
                     }
                     break;
                 default:
@@ -2627,7 +2627,7 @@ bool SwTransferable::PasteDDE( const TransferableDataHelper& rData,
             if ( bReReadGrf )
                 rWrtShell.ReRead( aCmd, sLnkTyp, &aGrf );
             else
-                rWrtShell.Insert( aCmd, sLnkTyp, aGrf );
+                rWrtShell.InsertGraphic( aCmd, sLnkTyp, aGrf );
         }
         return bRet;
     }
@@ -2922,7 +2922,7 @@ bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& 
             case SwPasteSdr::Insert:
             {
                 SwTransferable::SetSelInShell( rSh, false, pPt );
-                rSh.Insert(sURL, OUString(), aGraphic, nullptr, nAnchorType);
+                rSh.InsertGraphic(sURL, OUString(), aGraphic, nullptr, nAnchorType);
                 break;
             }
 
@@ -2976,7 +2976,7 @@ bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& 
                 else
                 {
                     SwTransferable::SetSelInShell( rSh, false, pPt );
-                    rSh.Insert(aBkmk.GetURL(), OUString(), aGraphic);
+                    rSh.InsertGraphic(aBkmk.GetURL(), OUString(), aGraphic);
                 }
                 break;
             }

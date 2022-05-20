@@ -919,7 +919,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 if ( nSelType & SelectionType::Graphic )
                     rSh.ReRead( aGrfName, aFltName, &aGrf );
                 else
-                    rSh.Insert( aGrfName, aFltName, aGrf );
+                    rSh.InsertGraphic( aGrfName, aFltName, aGrf );
 
                 GetView().GetEditWin().GrabFocus();
             }

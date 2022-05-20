@@ -309,7 +309,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool    InsertField2(SwField const &, SwPaM* pAnnotationRange = nullptr);
     void    Insert(const OUString &);
     // graphic
-    void    Insert( const OUString &rPath, const OUString &rFilter,
+    void    InsertGraphic( const OUString &rPath, const OUString &rFilter,
                     const Graphic &, SwFlyFrameAttrMgr * = nullptr,
                     RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA);
 
