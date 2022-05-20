@@ -132,9 +132,6 @@ enum
     PROP_DIAGRAM_HAS_SECOND_Y_AXIS_TITLE,
 
     PROP_DIAGRAM_AUTOMATIC_SIZE,
-    PROP_DIAGRAM_DATATABLEHBORDER,
-    PROP_DIAGRAM_DATATABLEVBORDER,
-    PROP_DIAGRAM_DATATABLEOUTLINE,
     PROP_DIAGRAM_EXTERNALDATA
 };
 
@@ -376,21 +373,7 @@ void lcl_AddPropertiesToVector(
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "DataTableHBorder",
-                PROP_DIAGRAM_DATATABLEHBORDER,
-                  cppu::UnoType<bool>::get(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "DataTableVBorder",
-                PROP_DIAGRAM_DATATABLEVBORDER,
-                  cppu::UnoType<bool>::get(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "DataTableOutline",
-                PROP_DIAGRAM_DATATABLEOUTLINE,
-                  cppu::UnoType<bool>::get(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
+
     rOutProperties.emplace_back( "ExternalData",
                   PROP_DIAGRAM_EXTERNALDATA,
                   cppu::UnoType<OUString>::get(),
