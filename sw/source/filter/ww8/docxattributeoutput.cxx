@@ -2335,6 +2335,11 @@ void DocxAttributeOutput::WriteContentControlStart()
         m_pSerializer->singleElementNS(XML_w, XML_showingPlcHdr);
     }
 
+    if (m_pContentControl->GetPicture())
+    {
+        m_pSerializer->singleElementNS(XML_w, XML_picture);
+    }
+
     if (m_pContentControl->GetCheckbox())
     {
         m_pSerializer->startElementNS(XML_w14, XML_checkbox);

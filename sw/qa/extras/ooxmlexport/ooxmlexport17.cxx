@@ -285,7 +285,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
 {
-    // Given a document with a checkbox content control around a text portion:
+    // Given a document with a dropdown content control around a text portion:
     mxComponent = loadFromDesktop("private:factory/swriter");
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -333,6 +333,41 @@ CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]", "value", "G");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[3]", "displayText", "blue");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[3]", "value", "B");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPictureContentControlExport)
+{
+    // Given a document with a picture content control around a text portion:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<beans::XPropertySet> xTextGraphic(
+        xMSF->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue("AnchorType",
+                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xTextContent, false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("Picture", uno::Any(true));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When exporting to DOCX:
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+
+    // Then make sure the expected markup is used:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. <w:picture> was lost on export.
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:picture", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148494)

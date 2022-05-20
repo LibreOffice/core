@@ -1091,6 +1091,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     case SdtControlType::richText:
                     case SdtControlType::checkBox:
                     case SdtControlType::dropDown:
+                    case SdtControlType::picture:
                         m_pImpl->PopSdt();
                         break;
                     default:
@@ -2766,6 +2767,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             if (nSprmId == NS_ooxml::LN_CT_SdtPr_checkbox)
             {
                 m_pImpl->m_pSdtHelper->setControlType(SdtControlType::checkBox);
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if (pProperties)
+                {
+                    pProperties->resolve(*this);
+                }
+                break;
+            }
+            else if (nSprmId == NS_ooxml::LN_CT_SdtPr_picture)
+            {
+                m_pImpl->m_pSdtHelper->setControlType(SdtControlType::picture);
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if (pProperties)
                 {
