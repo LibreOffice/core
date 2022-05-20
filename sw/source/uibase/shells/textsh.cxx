@@ -234,6 +234,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         rReq.Done();
         break;
 
+    case FN_INSERT_PICTURE_CONTENT_CONTROL:
+        rSh.InsertContentControl(SwContentControlType::PICTURE);
+        rReq.Done();
+        break;
+
     case FN_CONTENT_CONTROL_PROPERTIES:
     {
         SwWrtShell& rWrtSh = GetShell();
