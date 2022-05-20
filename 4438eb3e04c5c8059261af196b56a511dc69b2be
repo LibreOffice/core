@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14564977_a3d36254",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-20T06:20:55Z",
+      "side": 1,
+      "message": "@Stephan: Is there any GCC version that is known not to need this workaround any more so this should better be limited to versions smaller than that?",
+      "revId": "4438eb3e04c5c8059261af196b56a511dc69b2be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
