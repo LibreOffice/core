@@ -16,6 +16,24 @@
       "message": "Hi Caolán,\n\nEffort here is to show the keyboard shortcut in the tab bar tab button tooltip. I have changed the CreateTabItem function to non static in order to access the mxframe member. Is there a need to keep the function static? If so I will move the added code to after the CreateTabItem function call in the SetDecks function.",
       "revId": "e4da42368ea98844e21a2a3965e7de3515408984",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e45e563_d2b39fa1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-05-20T07:54:24Z",
+      "side": 1,
+      "message": "no need to keep it static, you\u0027re fine to make a sensible change like that",
+      "parentUuid": "ae1d5df1_b5fd6ee6",
+      "revId": "e4da42368ea98844e21a2a3965e7de3515408984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
