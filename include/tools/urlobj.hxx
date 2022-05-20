@@ -822,10 +822,33 @@ public:
         @return  The text, encoded according to the given mechanism and
         charset ('forbidden' characters replaced by escape sequences).
      */
-    static inline OUString encode(std::u16string_view rText, Part ePart,
-                                   EncodeMechanism eMechanism,
-                                   rtl_TextEncoding eCharset
-                                       = RTL_TEXTENCODING_UTF8);
+    static void encode( OUStringBuffer& rOutputBuffer,
+                           std::u16string_view rText, Part ePart,
+                           EncodeMechanism eMechanism,
+                           rtl_TextEncoding eCharset
+                               = RTL_TEXTENCODING_UTF8);
+
+    /** Encode some text as part of a URI.
+
+        @param rText  Some text (for its interpretation, see the general
+        discussion for set-methods).
+
+        @param ePart  The part says which characters are 'forbidden' and must
+        be encoded (replaced by escape sequences).  Characters outside the US-
+        ASCII range are always 'forbidden.'
+
+        @param eMechanism  See the general discussion for set-methods.
+
+        @param eCharset  See the general discussion for set-methods.
+
+        @return  The text, encoded according to the given mechanism and
+        charset ('forbidden' characters replaced by escape sequences).
+     */
+    static OUString encode( std::u16string_view rText, Part ePart,
+                           EncodeMechanism eMechanism,
+                           rtl_TextEncoding eCharset
+                               = RTL_TEXTENCODING_UTF8);
+
 
     /** Decode some text.
 
@@ -1093,12 +1116,14 @@ private:
     TOOLS_DLLPRIVATE static inline void appendEscape(
         OUStringBuffer & rTheText, sal_uInt32 nOctet);
 
-    static OUString encodeText(
+    static void encodeText(
+        OUStringBuffer& rOutputBuffer,
         sal_Unicode const * pBegin, sal_Unicode const * pEnd,
         Part ePart, EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
         bool bKeepVisibleEscapes);
 
-    static inline OUString encodeText(
+    static inline void encodeText(
+        OUStringBuffer& rOutputBuffer,
         std::u16string_view rTheText, Part ePart,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset,
         bool bKeepVisibleEscapes);
@@ -1118,15 +1143,17 @@ private:
 };
 
 // static
-inline OUString INetURLObject::encodeText(std::u16string_view rTheText,
+inline void INetURLObject::encodeText( OUStringBuffer& rOutputBuffer,
+                                           std::u16string_view rTheText,
                                            Part ePart,
                                            EncodeMechanism eMechanism,
                                            rtl_TextEncoding eCharset,
                                            bool bKeepVisibleEscapes)
 {
-    return encodeText(rTheText.data(),
-                      rTheText.data() + rTheText.size(), ePart,
-                      eMechanism, eCharset, bKeepVisibleEscapes);
+    encodeText(rOutputBuffer,
+                rTheText.data(),
+                rTheText.data() + rTheText.size(), ePart,
+                eMechanism, eCharset, bKeepVisibleEscapes);
 }
 
 inline OUString INetURLObject::decode(SubString const & rSubString,
@@ -1284,11 +1311,22 @@ inline bool INetURLObject::SetMark(std::u16string_view rTheFragment,
 }
 
 // static
-inline OUString INetURLObject::encode(std::u16string_view rText, Part ePart,
-                                       EncodeMechanism eMechanism,
-                                       rtl_TextEncoding eCharset)
+inline void INetURLObject::encode(OUStringBuffer& rOutputBuffer,
+                                   std::u16string_view rText, Part ePart,
+                                   EncodeMechanism eMechanism,
+                                   rtl_TextEncoding eCharset)
 {
-    return encodeText(rText, ePart, eMechanism, eCharset, false);
+    encodeText(rOutputBuffer, rText, ePart, eMechanism, eCharset, false);
+}
+
+// static
+inline OUString INetURLObject::encode(std::u16string_view rText, Part ePart,
+                                   EncodeMechanism eMechanism,
+                                   rtl_TextEncoding eCharset)
+{
+    OUStringBuffer aBuf;
+    encodeText(aBuf, rText, ePart, eMechanism, eCharset, false);
+    return aBuf.makeStringAndClear();
 }
 
 // static
