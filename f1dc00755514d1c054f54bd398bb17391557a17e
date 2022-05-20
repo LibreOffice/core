@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c86d2919_50c7fcd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-05-20T20:27:06Z",
+      "side": 1,
+      "message": "Looks good, I\u0027ve been getting some cross-view interference I think from other people showing / hiding the sidebar.",
+      "revId": "f1dc00755514d1c054f54bd398bb17391557a17e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
