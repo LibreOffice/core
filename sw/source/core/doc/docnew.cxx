@@ -29,6 +29,7 @@
 
 #include <doc.hxx>
 #include <proofreadingiterator.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -908,6 +909,14 @@ SfxObjectShell* SwDoc::CreateCopy( bool bCallInitNew, bool bEmpty ) const
     xRet->ReplaceCompatibilityOptions(*this);
 
     xRet->ReplaceStyles(*this);
+
+    uno::Reference<beans::XPropertySet> const xThisSet(
+        GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> const xRetSet(
+        pRetShell->GetBaseModel(), uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aInteropGrabBag;
+    xThisSet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
+    xRetSet->setPropertyValue("InteropGrabBag", uno::Any(aInteropGrabBag));
 
     if( !bEmpty )
     {
