@@ -24,6 +24,7 @@
 
 namespace xcl::exp
 {
+/** Export for sparkline type of <ext> element - top sparkline element. */
 class SparklineExt : public XclExpExt
 {
 public:
@@ -42,6 +43,7 @@ public:
     XclExpExtType GetType() override { return XclExpExtSparklineType; }
 };
 
+/** Determines if sparklines needs to be exported and initiates the export. */
 class SparklineBuffer : public XclExpRecordBase, protected XclExpRoot
 {
 public:

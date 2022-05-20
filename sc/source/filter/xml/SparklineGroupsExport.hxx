@@ -22,6 +22,7 @@ class ScXMLExport;
 
 namespace sc
 {
+/** Handle the export of sparkline groups and sparklines */
 class SparklineGroupsExport
 {
     ScXMLExport& m_rExport;

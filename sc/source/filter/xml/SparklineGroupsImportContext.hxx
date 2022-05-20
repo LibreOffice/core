@@ -24,12 +24,14 @@ namespace sc
 {
 class SparklineGroup;
 
+/** Transitional import data of a sparkline */
 struct SparklineImportData
 {
     ScAddress m_aAddress;
     ScRangeList m_aDataRangeList;
 };
 
+/** Handle the import of sparkline groups and sparklines */
 class SparklineGroupsImportContext : public ScXMLImportContext
 {
 private:
