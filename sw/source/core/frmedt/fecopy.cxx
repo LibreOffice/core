@@ -1133,7 +1133,7 @@ void SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         return;
     }
     MovePage( GetThisFrame, GetFirstSub );
-    SwPaM aCpyPam( *GetCursor()->GetPoint() );
+    ::std::optional<SwPaM> oSourcePam( *GetCursor()->GetPoint() );
     OUString sStartingPageDesc = GetPageDesc( GetCurPageDesc()).GetName();
     SwPageDesc* pDesc = rToFill.FindPageDescByName( sStartingPageDesc, true );
     if( pDesc )
@@ -1145,7 +1145,7 @@ void SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         return;
     }
     //if the page starts with a table a paragraph has to be inserted before
-    SwNode* pTableNode = aCpyPam.GetNode().FindTableNode();
+    SwNode *const pTableNode = oSourcePam->GetNode().FindTableNode();
     if(pTableNode)
     {
         //insert a paragraph
@@ -1155,22 +1155,23 @@ void SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         if(GetDoc()->getIDocumentContentOperations().AppendTextNode( aBefore ))
         {
             SwPaM aTmp(aBefore);
-            aCpyPam = aTmp;
+            *oSourcePam = aTmp;
         }
         EndUndo(SwUndoId::INSERT);
     }
 
     MovePage( GetThisFrame, GetLastSub );
-    aCpyPam.SetMark();
-    *aCpyPam.GetMark() = *GetCursor()->GetPoint();
+    oSourcePam->SetMark();
+    *oSourcePam->GetMark() = *GetCursor()->GetPoint();
 
     CurrShell aCurr( this );
 
     StartAllAction();
     GetDoc()->getIDocumentFieldsAccess().LockExpFields();
-    SetSelection(aCpyPam);
+    SetSelection(*oSourcePam);
     // copy the text of the selection
     SwEditShell::Copy(rToFill);
+    oSourcePam.reset(); // delete it because Undo will remove its node!
 
     if(pTableNode)
     {
