@@ -59,7 +59,7 @@
 #include <DocumentSettingManager.hxx>
 #include <docary.hxx>
 #include <o3tl/make_unique.hxx>
-#include <optional>
+#include <boost/optional.hpp>
 
 using namespace ::com::sun::star;
 
@@ -2052,7 +2052,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             }
             SwFootnoteBossFrame *pOldBoss = bFootnotesInDoc ? FindFootnoteBossFrame( true ) : nullptr;
             bool bReformat;
-            std::optional<SfxDeleteListener> oDeleteListener;
+            boost::optional<SfxDeleteListener> oDeleteListener;
             if (pOldBoss)
                 oDeleteListener.emplace(*pOldBoss);
             SwFrameDeleteGuard g(this);
