@@ -44,6 +44,7 @@ enum class SdtControlType
     plainText,
     richText,
     checkBox,
+    picture,
     unsupported, // Sdt block is defined, but we still do not support such type of field
     unknown
 };
