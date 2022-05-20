@@ -260,12 +260,12 @@ static_assert(sizeof(second) == sizeof(int), "sizeof(second) != sizeof(int)");
 
 struct Char4
 {
-#if defined __GNUC__ && __GNUC__ == 7 && !defined __clang__
+#if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"
 #endif
     [[maybe_unused]] Char3 chars;
-#if defined __GNUC__ && __GNUC__ == 7 && !defined __clang__
+#if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic pop
 #endif
     char c;
