@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f6ac73c_503fc8b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-05-20T12:51:38Z",
+      "side": 1,
+      "message": "the \"Cache the result even if there was no match\" stuff all the way back from https://bz.apache.org/ooo/show_bug.cgi?id\u003d83491\n\ncommit e4faf23ffe759865f4c966252850677c99355744\nDate:   Wed Dec 12 12:20:52 2007 +0000\n\n...\n    2007/11/12 10:32:11 hdu 1.230.42.7: #i83491# improve performance of glyph fallback hook by caching results\n\nseems to be involved, so its apparently not fontconfig doing something weird as far as I can see, but weirdness within LibreOffice",
+      "revId": "47e8763114f12fe14e2a8dd94b5a339f614d23bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
