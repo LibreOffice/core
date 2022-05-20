@@ -231,6 +231,13 @@ inline OUStringBuffer& padToLength(
     return detail::padToLength(rBuffer, nLength, cFill);
 }
 
+/** Similar to OUString::replaceAt, but for an OUStringBuffer.
+
+    Replace n = count characters
+    from position index in this string with newStr.
+ */
+COMPHELPER_DLLPUBLIC void replaceAt(OUStringBuffer& rIn, sal_Int32 index, sal_Int32 count, std::u16string_view newStr );
+
 /** Replace a token in a string
     @param rIn       OUString in which the token is to be replaced
     @param nToken    which nToken to replace
