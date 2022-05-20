@@ -76,6 +76,7 @@ public:
     void testTdf99213();
     void testPotxExport();
     void testTdf44223();
+    void testTdf135843();
     void testSmartArtPreserve();
     void testTdf125346();
     void testTdf125346_2();
@@ -157,6 +158,7 @@ public:
     CPPUNIT_TEST(testTdf99213);
     CPPUNIT_TEST(testPotxExport);
     CPPUNIT_TEST(testTdf44223);
+    CPPUNIT_TEST(testTdf135843);
     CPPUNIT_TEST(testSmartArtPreserve);
     CPPUNIT_TEST(testTdf125346);
     CPPUNIT_TEST(testTdf125346_2);
@@ -1167,6 +1169,31 @@ void SdOOXMLExportTest3::testTdf44223()
     assertXPath(pRels1, "//rels:Relationship[@Id='rId1']", "Target", "../media/audio1.wav");
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest3::testTdf135843()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf135843_export.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPathStart("/p:sld/p:cSld/p:spTree/p:graphicFrame/a:graphic/a:graphicData/a:tbl");
+    assertXPath(pXmlDoc, sPathStart + "/a:tr[1]/a:tc[1]/a:tcPr/a:lnL/a:noFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:tr[1]/a:tc[1]/a:tcPr/a:lnR/a:noFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:tr[1]/a:tc[1]/a:tcPr/a:lnT/a:noFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:tr[1]/a:tc[1]/a:tcPr/a:lnB/a:noFill");
+
+    assertXPath(pXmlDoc, sPathStart + "/a:tr[2]/a:tc[1]/a:tcPr/a:lnL/a:noFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:tr[2]/a:tc[1]/a:tcPr/a:lnR/a:noFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:tr[2]/a:tc[1]/a:tcPr/a:lnT/a:noFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:tr[2]/a:tc[1]/a:tcPr/a:lnB/a:noFill");
+
+    assertXPath(pXmlDoc, sPathStart + "/a:tr[3]/a:tc[1]/a:tcPr/a:lnL/a:noFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:tr[3]/a:tc[1]/a:tcPr/a:lnR/a:noFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:tr[3]/a:tc[1]/a:tcPr/a:lnT/a:noFill");
+    assertXPath(pXmlDoc, sPathStart + "/a:tr[3]/a:tc[1]/a:tcPr/a:lnB/a:noFill");
 }
 
 void SdOOXMLExportTest3::testSmartArtPreserve()
