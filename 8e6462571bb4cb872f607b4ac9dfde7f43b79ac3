@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb0d4e9a_67d140cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-20T13:16:28Z",
+      "side": 1,
+      "message": "I asked someone on IRC to file that as a bug, but just FTR:\n\nhttps://forums.zotero.org/discussion/97282/libreoffice-plugin-problem\n\nThe person reported that \u0027java -version\u0027 reports\n\n  java version \"18.0.1.1\" 2022-04-22\n  Java(TM) SE Runtime Environment (build 18.0.1.1+2-6)\n  Java HotSpot(TM) 64-Bit Server VM (build 18.0.1.1+2-6, mixed mode, sharing)",
+      "revId": "8e6462571bb4cb872f607b4ac9dfde7f43b79ac3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
