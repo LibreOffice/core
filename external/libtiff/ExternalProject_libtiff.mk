@@ -13,6 +13,11 @@ $(eval $(call gb_ExternalProject_register_targets,libtiff,\
 	build \
 ))
 
+$(eval $(call gb_ExternalProject_use_externals,libtiff,\
+    libjpeg \
+    zlib \
+))
+
 ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalProject_use_nmake,libtiff,build))
 
@@ -38,13 +43,22 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			--enable-static \
 			--with-pic \
 			--disable-shared \
+			--disable-cxx \
+			--enable-jpeg \
+			--enable-zlib \
 			--disable-jbig \
-			--disable-jpeg \
 			--disable-lzma \
+			--disable-mdi \
+			--disable-webp \
 			--disable-win32-io \
 			--disable-zstd \
+			--without-x \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,libtiff)" \
+			$(if $(SYSTEM_ZLIB),,--with-zlib-include-dir="$(call gb_UnpackedTarball_get_dir,zlib)") \
+			$(if $(SYSTEM_ZLIB),,--with-zlib-lib-dir="$(gb_StaticLibrary_WORKDIR)") \
+			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-include-dir="$(call gb_UnpackedTarball_get_dir,libjpeg-turbo)") \
+			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-lib-dir="$(gb_StaticLibrary_WORKDIR)") \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libtiff)" \
 			$(gb_CONFIGURE_PLATFORMS) \
