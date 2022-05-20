@@ -332,8 +332,9 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
         maContextChangeUpdate.RequestCall(); // async call, not a prob
                                              // calling with held
                                              // solarmutex
-        // TODO: this call is redundant but mandatory for unit test to update context on document loading
-        if (!comphelper::LibreOfficeKit::isActive())
+        if (comphelper::LibreOfficeKit::isActive())
+            maContextChangeUpdate.Sync();
+        else // TODO: this call is redundant but mandatory for unit test to update context on document loading
             UpdateConfigurations();
     }
 }
@@ -373,6 +374,8 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
         mnRequestedForceFlags |= SwitchFlag_ForceSwitch;
         maContextChangeUpdate.RequestCall(); // async call, ok to call
                                              // with held solarmutex
+        if (comphelper::LibreOfficeKit::isActive())
+            maContextChangeUpdate.Sync();
     }
 }
 
@@ -1028,6 +1031,8 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
                 mpParentWindow->Invalidate();
                 mnRequestedForceFlags |= SwitchFlag_ForceNewDeck | SwitchFlag_ForceNewPanels;
                 maContextChangeUpdate.RequestCall();
+                if (comphelper::LibreOfficeKit::isActive())
+                    maContextChangeUpdate.Sync();
                 break;
 
             case VclEventId::ObjectDying:
