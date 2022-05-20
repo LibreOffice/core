@@ -36,10 +36,37 @@ namespace
     {
         SvStream& rStream;
         tsize_t nSize;
+
+        tileContigRoutine pOrigContig;
+        tileSeparateRoutine pOrigSeparate;
+        BitmapWriteAccess* pWriteAccess;
+        BitmapWriteAccess* pAlphaAccess;
+        std::vector<uint32_t> aBuffer;
+
         Context(SvStream& rInStream, tsize_t nInSize)
             : rStream(rInStream)
             , nSize(nInSize)
+            , pOrigContig(nullptr)
+            , pOrigSeparate(nullptr)
+            , pWriteAccess(nullptr)
+            , pAlphaAccess(nullptr)
         {
+        }
+
+        void SetPixels(uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+        {
+            const uint32_t* pSrc = aBuffer.data();
+
+            for (uint32_t nRow = 0; nRow < h; ++nRow)
+            {
+                for (uint32_t nCol = 0; nCol < w; ++nCol)
+                {
+                    pWriteAccess->SetPixel(y + nRow, x + nCol,
+                        Color(TIFFGetR(*pSrc), TIFFGetG(*pSrc), TIFFGetB(*pSrc)));
+                    pAlphaAccess->SetPixelIndex(y, x, 255 - TIFFGetA(*pSrc));
+                    ++pSrc;
+                }
+            }
         }
     };
 }
@@ -90,6 +117,34 @@ static toff_t tiff_size(thandle_t handle)
     return pContext->nSize;
 }
 
+static void putContigPixel(TIFFRGBAImage* img, uint32_t* /*raster*/,
+                           uint32_t x, uint32_t y, uint32_t w, uint32_t h,
+                           int32_t fromskew, int32_t toskew,
+                           unsigned char* cp)
+{
+    Context* pContext = static_cast<Context*>(TIFFClientdata(img->tif));
+
+    pContext->aBuffer.resize(w * h);
+    (pContext->pOrigContig)(img, pContext->aBuffer.data(), 0, 0, w, h,
+                            fromskew, toskew, cp);
+
+    pContext->SetPixels(x, y, w, h);
+}
+
+static void putSeparatePixel(TIFFRGBAImage* img, uint32_t* /*raster*/,
+                             uint32_t x, uint32_t y, uint32_t w, uint32_t h,
+                             int32_t fromskew, int32_t toskew,
+                             unsigned char* r, unsigned char* g, unsigned char* b, unsigned char* a)
+{
+    Context* pContext = static_cast<Context*>(TIFFClientdata(img->tif));
+
+    pContext->aBuffer.resize(w * h);
+    (pContext->pOrigSeparate)(img, pContext->aBuffer.data(), 0, 0, w, h,
+                              fromskew, toskew, r, g, b, a);
+
+    pContext->SetPixels(x, y, w, h);
+}
+
 bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
 {
     Context aContext(rTIFF, rTIFF.remainingSize());
@@ -110,43 +165,51 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
         TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
         TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
 
-        size_t npixels = w * h;
-        uint32_t* raster = static_cast<uint32_t*>(_TIFFmalloc(npixels * sizeof (uint32_t)));
-        if (raster)
+        Bitmap bitmap(Size(w, h), vcl::PixelFormat::N24_BPP);
+        AlphaMask bitmapAlpha(Size(w, h));
+
+        BitmapScopedWriteAccess access(bitmap);
+        AlphaScopedWriteAccess accessAlpha(bitmapAlpha);
+
+        aContext.pWriteAccess = access.get();
+        aContext.pAlphaAccess = accessAlpha.get();
+
+        char emsg[1024] = "";
+        TIFFRGBAImage img;
+        bool bOk = false;
+        // Expanded out TIFFReadRGBAImageOriented to create this block then
+        // inserted custom "put" methods to write (via a limited size buffer)
+        // into the final Bitmap incrementally
+        if (TIFFRGBAImageOK(tif, emsg) && TIFFRGBAImageBegin(&img, tif, 1, emsg))
         {
-            if (TIFFReadRGBAImageOriented(tif, w, h, raster, ORIENTATION_TOPLEFT, 1))
+            img.req_orientation = ORIENTATION_TOPLEFT;
+            assert(!TIFFIsTiled(img.tif));
+            if (!TIFFIsTiled(img.tif))
             {
-                Bitmap bitmap(Size(w, h), vcl::PixelFormat::N24_BPP);
-                AlphaMask bitmapAlpha(Size(w, h));
-
-                BitmapScopedWriteAccess access(bitmap);
-                AlphaScopedWriteAccess accessAlpha(bitmapAlpha);
-
-                for (tools::Long y = 0; y < access->Height(); ++y)
-                {
-                    const uint32_t* src = raster + w * y;
-                    for (tools::Long x = 0; x < access->Width(); ++x)
-                    {
-                        sal_uInt8 r = TIFFGetR(*src);
-                        sal_uInt8 g = TIFFGetG(*src);
-                        sal_uInt8 b = TIFFGetB(*src);
-                        sal_uInt8 a = TIFFGetA(*src);
-                        access->SetPixel(y, x, Color(r, g, b));
-                        accessAlpha->SetPixelIndex(y, x, 255 - a);
-                        ++src;
-                    }
-                }
-
-                access.reset();
-                accessAlpha.reset();
-
-                BitmapEx aBitmapEx(bitmap, bitmapAlpha);
-                AnimationBitmap aAnimationBitmap(aBitmapEx, Point(0, 0), aBitmapEx.GetSizePixel(),
-                                                 ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back);
-                aAnimation.Insert(aAnimationBitmap);
+                aContext.pOrigContig = img.put.contig;
+                img.put.contig = putContigPixel;
             }
-            _TIFFfree(raster);
+            else
+            {
+                aContext.pOrigSeparate = img.put.separate;
+                img.put.separate = putSeparatePixel;
+            }
+
+            bOk = TIFFRGBAImageGet(&img, nullptr, w, img.height);
+            TIFFRGBAImageEnd(&img);
         }
+
+        access.reset();
+        accessAlpha.reset();
+
+        if (bOk)
+        {
+            BitmapEx aBitmapEx(bitmap, bitmapAlpha);
+            AnimationBitmap aAnimationBitmap(aBitmapEx, Point(0, 0), aBitmapEx.GetSizePixel(),
+                                             ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back);
+            aAnimation.Insert(aAnimationBitmap);
+        }
+
     } while (TIFFReadDirectory(tif));
 
     TIFFClose(tif);
