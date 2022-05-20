@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04e54c37_003cabe1",
+        "filename": "vcl/source/uitest/uno/uitest_uno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-05-20T07:20:32Z",
+      "side": 0,
+      "message": "Just from a glance at it this seems wrong. Are you sure that e.g. getFocusTopWindow() does not require running with SolarMutex held? Just because this does not touch the UITestUnoObj object does not mean the lock is not required to protect e.g. VCL internals touched by getTopFocusWindow().",
+      "revId": "66d8951df3c11ead0b9415eb292c3ae88689edf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
