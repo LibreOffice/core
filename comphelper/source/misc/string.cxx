@@ -624,6 +624,36 @@ OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,
     return rIn;
 }
 
+/** Similar to OUString::replaceAt, but for an OUStringBuffer.
+
+    Replace n = count characters
+    from position index in this string with newStr.
+ */
+void replaceAt(OUStringBuffer& rIn, sal_Int32 nIndex, sal_Int32 nCount, std::u16string_view newStr )
+{
+    assert(nIndex >= 0 && nIndex <= rIn.getLength());
+    assert(nCount >= 0);
+    assert(nCount <= rIn.getLength() - nIndex);
+
+    /* Append? */
+    const sal_Int32 nOldLength = rIn.getLength();
+    if ( nIndex == nOldLength )
+    {
+        rIn.append(newStr);
+        return;
+    }
+
+    sal_Int32 nNewLength = nOldLength + newStr.size() - nCount;
+    if (static_cast<sal_Int32>(newStr.size()) > nCount)
+        rIn.ensureCapacity(nOldLength + newStr.size() - nCount);
+
+    sal_Unicode* pStr = const_cast<sal_Unicode*>(rIn.getStr());
+    memmove(pStr + nIndex + newStr.size(), pStr + nIndex + nCount, nOldLength - nIndex + nCount);
+    memcpy(pStr + nIndex, newStr.data(), newStr.size());
+
+    rIn.setLength(nNewLength);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
