@@ -16,7 +16,9 @@
 
 #include <com/sun/star/text/MailMergeType.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/task/XJob.hpp>
@@ -76,7 +78,7 @@ public:
      * calling executeMailMerge() after modifying the job arguments.
      */
     void executeMailMergeTest( const char* filename, const char* datasource, const char* tablename,
-                               bool file, int selection, const char* column )
+                               char const*const filter, int selection, const char* column )
     {
         maMMtestFilename = filename;
         header();
@@ -88,7 +90,7 @@ public:
         const OUString aURI( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
         const OUString aPrefix = column ? OUString::createFromAscii( column ) : "LOMM_";
         const OUString aDBName = registerDBsource( aURI, aWorkDir );
-        initMailMergeJobAndArgs( filename, tablename, aDBName, aPrefix, aWorkDir, file, selection, column != nullptr );
+        initMailMergeJobAndArgs( filename, tablename, aDBName, aPrefix, aWorkDir, filter, selection, column != nullptr );
 
         verify();
         finish();
@@ -137,7 +139,8 @@ public:
     }
 
     void initMailMergeJobAndArgs( const char* filename, const char* tablename, const OUString &aDBName,
-                                  const OUString &aPrefix, const OUString &aWorkDir, bool file, int nDataSets,
+                                  const OUString &aPrefix, const OUString &aWorkDir,
+                                  char const*const filter, int nDataSets,
                                   const bool bPrefixIsColumn )
     {
         uno::Reference< task::XJob > xJob( getMultiServiceFactory()->createInstance( "com.sun.star.text.MailMerge" ), uno::UNO_QUERY_THROW );
@@ -145,13 +148,16 @@ public:
 
         mMMargs.reserve( 15 );
 
-        mMMargs.emplace_back( UNO_NAME_OUTPUT_TYPE, uno::Any( file ? text::MailMergeType::FILE : text::MailMergeType::SHELL ) );
+        mMMargs.emplace_back( UNO_NAME_OUTPUT_TYPE, uno::Any( filter ? text::MailMergeType::FILE : text::MailMergeType::SHELL ) );
         mMMargs.emplace_back( UNO_NAME_DOCUMENT_URL, uno::Any(
                                          ( OUString( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename)) ) ) );
         mMMargs.emplace_back( UNO_NAME_DATA_SOURCE_NAME, uno::Any( aDBName ) );
         mMMargs.emplace_back( UNO_NAME_OUTPUT_URL, uno::Any( aWorkDir ) );
-        if (file)
+        if (filter)
+        {
             mMMargs.emplace_back( UNO_NAME_FILE_NAME_PREFIX, uno::Any( aPrefix ) );
+            mMMargs.emplace_back(UNO_NAME_SAVE_FILTER, uno::Any(OUString::createFromAscii(filter)));
+        }
 
         if (bPrefixIsColumn)
             mMMargs.emplace_back( UNO_NAME_FILE_NAME_FROM_COLUMN, uno::Any( true ) );
@@ -255,7 +261,7 @@ public:
     /**
      Loads number-th document from mail merge. Requires file output from mail merge.
     */
-    void loadMailMergeDocument( int number )
+    void loadMailMergeDocument(int number, char const*const ext = ".odt")
     {
         OUString name;
         if (!msMailMergeOutputPrefix.isEmpty())
@@ -267,7 +273,7 @@ public:
             aURLObj.SetSmartURL( msMailMergeDocumentURL );
             name = aURLObj.GetBase();
         }
-        name += OUString::number( number ) + ".odt";
+        name += OUString::number(number) + OStringToOUString(std::string_view(ext, strlen(ext)), RTL_TEXTENCODING_ASCII_US);
         loadMailMergeDocument( name );
     }
 
@@ -297,7 +303,7 @@ protected:
     const char* maMMtestFilename;
 };
 
-#define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, file, BaseClass, selection, column) \
+#define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, filter, BaseClass, selection, column) \
     class TestName : public BaseClass { \
     protected: \
         virtual OUString getTestName() override { return #TestName; } \
@@ -307,7 +313,7 @@ protected:
         CPPUNIT_TEST_SUITE_END(); \
     \
         void MailMerge() { \
-            executeMailMergeTest(filename, datasource, tablename, file, selection, column); \
+            executeMailMergeTest(filename, datasource, tablename, filter, selection, column); \
         } \
         void verify() override; \
     }; \
@@ -316,17 +322,17 @@ protected:
 
 // Will generate the resulting document in mxMMDocument.
 #define DECLARE_SHELL_MAILMERGE_TEST(TestName, filename, datasource, tablename) \
-    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, false, MMTest, 0, nullptr)
+    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, nullptr, MMTest, 0, nullptr)
 
 // Will generate documents as files, use loadMailMergeDocument().
 #define DECLARE_FILE_MAILMERGE_TEST(TestName, filename, datasource, tablename) \
-    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, true, MMTest, 0, nullptr)
+    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, "writer8", MMTest, 0, nullptr)
 
 #define DECLARE_SHELL_MAILMERGE_TEST_SELECTION(TestName, filename, datasource, tablename, selection) \
-    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, false, MMTest, selection, nullptr)
+    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, nullptr, MMTest, selection, nullptr)
 
 #define DECLARE_FILE_MAILMERGE_TEST_COLUMN(TestName, filename, datasource, tablename, column) \
-    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, true, MMTest, 0, column)
+    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, "writer8", MMTest, 0, column)
 
 int MMTest::documentStartPageNumber( int document ) const
 {   // See documentStartPageNumber() .
@@ -1289,6 +1295,66 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf128148, "tdf128148.odt", "4_v01.ods", "Tabel
 
         pPageFrm = static_cast<const SwPageFrame*>(pPageFrm->GetNext());
     }
+}
+
+namespace com::sun::star::table {
+
+static std::ostream& operator<<(std::ostream& rStream, table::BorderLine const& rLine)
+{
+    rStream << "BorderLine(" << rLine.Color << "," << rLine.InnerLineWidth << "," << rLine.OuterLineWidth << "," << rLine.LineDistance << ")";
+    return rStream;
+}
+
+static std::ostream& operator<<(std::ostream& rStream, table::TableBorder const& rBorder)
+{
+    rStream << "TableBorder(\n  "
+        << rBorder.TopLine << "," << static_cast<bool>(rBorder.IsTopLineValid) << ",\n  "
+        << rBorder.BottomLine << "," << static_cast<bool>(rBorder.IsBottomLineValid) << ",\n  "
+        << rBorder.LeftLine << "," << static_cast<bool>(rBorder.IsLeftLineValid) << ",\n  "
+        << rBorder.RightLine << "," << static_cast<bool>(rBorder.IsRightLineValid) << ",\n  "
+        << rBorder.HorizontalLine << "," << static_cast<bool>(rBorder.IsHorizontalLineValid) << ",\n  "
+        << rBorder.VerticalLine << "," << static_cast<bool>(rBorder.IsVerticalLineValid) << ",\n  "
+        << rBorder.Distance << "," << static_cast<bool>(rBorder.IsDistanceValid) << ")";
+    return rStream;
+}
+
+}
+
+DECLARE_MAILMERGE_TEST(testGrabBag, "grabbagtest.docx", "onecell.xlsx", "Sheet1", "MS Word 2007 XML", MMTest, 0, nullptr)
+{
+    executeMailMerge(true);
+
+    loadMailMergeDocument(0, ".docx");
+
+    SwXTextDocument *const pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum());
+
+    // check grabbag
+    uno::Reference<beans::XPropertySet> const xModel(
+        mxComponent, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aInteropGrabBag;
+    pTextDoc->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(13), aInteropGrabBag.getLength());
+
+    // check table border - comes from table style "Tabellenraster"
+    uno::Reference<text::XTextTable> const xTable(getParagraphOrTable(1, pTextDoc->getText()), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> const xTableProps(xTable, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(table::TableBorder(
+                table::BorderLine(util::Color(0), 0, 18, 0), true,
+                table::BorderLine(util::Color(0), 0, 18, 0), true,
+                table::BorderLine(util::Color(0), 0, 18, 0), true,
+                table::BorderLine(util::Color(0), 0, 18, 0), true,
+                table::BorderLine(util::Color(0), 0, 18, 0), true,
+                table::BorderLine(util::Color(0), 0, 0, 0), true,
+                sal_Int16(191), true),
+            getProperty<table::TableBorder>(xTableProps, "TableBorder"));
+
+    // check font is Arial - comes from theme (wrong result was "" - nothing)
+    uno::Reference<text::XText> const xCell(xTable->getCellByName("A1"), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> const xParaA1(getParagraphOrTable(1, xCell->getText()), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xParaA1, "CharFontName"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
