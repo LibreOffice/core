@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa91786f_335732a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-05-20T06:55:51Z",
+      "side": 1,
+      "message": "Not that I understand what the actual problem here is, but this is why those SalLayoutGlyphsCache checks fail on the crashtesting server.\n",
+      "revId": "cc0d8f0624d1664a037f0edd15f8ef09ef6539fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
