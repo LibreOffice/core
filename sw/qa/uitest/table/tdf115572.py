@@ -38,7 +38,7 @@ class tdf115572(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
-                xweststylelbcjk = xDialog.getChild("weststylelb-cjk")
+                xweststylelbcjk = xDialog.getChild("cbWestStyle")
                 self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
 
 
@@ -60,7 +60,7 @@ class tdf115572(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
-                xweststylelbcjk = xDialog.getChild("weststylelb-cjk")
+                xweststylelbcjk = xDialog.getChild("cbWestStyle")
                 self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
