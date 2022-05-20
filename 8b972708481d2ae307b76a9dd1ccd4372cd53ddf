@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e34f50bc_82b043e6",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport17.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-20T09:31:41Z",
+      "side": 1,
+      "message": "surely it\u0027s \"got overridden\" because previously indicates it happened in the past?",
+      "range": {
+        "startLine": 874,
+        "startChar": 25,
+        "endLine": 874,
+        "endChar": 39
+      },
+      "revId": "8b972708481d2ae307b76a9dd1ccd4372cd53ddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
