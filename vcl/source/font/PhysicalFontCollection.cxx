@@ -247,10 +247,7 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont(FontSelectPatte
             // font + applying a matrix to fake the missing italic.
             for(;;)
             {
-                 if (!pFontInstance->GetFallbackForUnicode(cChar, rFontSelData.GetWeight(),
-                                                           &rFontSelData.maSearchName,
-                                                           &rFontSelData.mbEmbolden,
-                                                           &rFontSelData.maItalicMatrix))
+                 if (!pFontInstance->GetFallbackForUnicode(cChar, rFontSelData.GetWeight()))
                  {
                      pFontInstance->AddFallbackForUnicode(cChar, rFontSelData.GetWeight(),
                                                           rFontSelData.maSearchName,
