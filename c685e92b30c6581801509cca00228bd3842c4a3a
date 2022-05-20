@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "beb301da_ad3d9eb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-05-20T20:26:12Z",
+      "side": 1,
+      "message": "Looks sensible to me - thanks Szymon \u003d)",
+      "revId": "c685e92b30c6581801509cca00228bd3842c4a3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
