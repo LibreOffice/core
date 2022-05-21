@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0c82fe2_2eff2289",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-21T08:37:42Z",
+      "side": 1,
+      "message": "Reviewer can see the ImpDetectEMF function before the regression here:\nhttps://gerrit.libreoffice.org/c/core/+/132456/14/vcl/source/filter/graphicfilter2.cxx",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "188ebe05_0948b6a0",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-21T08:37:42Z",
+      "side": 1,
+      "message": "This was a ReadInt32 normally but the int it reads to is unused so I thought to change it to this instead.",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
