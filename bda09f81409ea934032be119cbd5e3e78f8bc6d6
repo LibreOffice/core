@@ -16,6 +16,24 @@
       "message": "How do I test this manually? Interestingly when I use the \"insert first author\" menu item on the desktop, then an SwDocStatField is inserted, not an SwAuthorField.\n\nBut I assume you found a way to insert an SwAuthorField. :-) Thanks.",
       "revId": "bda09f81409ea934032be119cbd5e3e78f8bc6d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e107dcba_ec66824e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2022-05-21T05:18:42Z",
+      "side": 1,
+      "message": "In then tabbed user interface, select the References tab click Field.\nIn the dialog select Document \u003e Author \u003e Name, then click Insert button, then the Close button. The field should now be placed at the cursor. The fixed code area is hit with this procedure and it works as expected in the lok and the desktop case.",
+      "parentUuid": "952bb63c_53c59770",
+      "revId": "bda09f81409ea934032be119cbd5e3e78f8bc6d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
