@@ -14833,10 +14833,7 @@ vcl/source/filter/ixbm/xbmread.cxx
 vcl/source/filter/ixpm/rgbtable.hxx
 vcl/source/filter/ixpm/xpmread.cxx
 vcl/source/filter/itga/itga.cxx
-vcl/source/filter/itiff/ccidecom.cxx
-vcl/source/filter/itiff/ccidecom.hxx
 vcl/source/filter/itiff/itiff.cxx
-vcl/source/filter/itiff/lzwdecom.cxx
 vcl/source/filter/jpeg/Exif.cxx
 vcl/source/filter/jpeg/Exif.hxx
 vcl/source/filter/jpeg/JpegReader.cxx
