@@ -23,6 +23,7 @@
 #include <osl/file.h>
 #include <stddef.h>
 #include <sys/types.h>
+#include <rtl/string.hxx>
 
 struct DirectoryItem_Impl
 {
@@ -48,7 +49,7 @@ oslFileError openFile(
     mode_t mode);
 
 oslFileError openFilePath(
-    const char *cpFilePath,
+    const OString& filePath,
     oslFileHandle* pHandle,
     sal_uInt32 uFlags, mode_t mode );
 
