@@ -604,27 +604,6 @@ void SwFntObj::SetDevFont( const SwViewShell *pSh, OutputDevice& rOut )
  *      on printer, !Kerning   => DrawText
  *      on printer + Kerning   => DrawStretchText
  */
-static sal_uInt8 lcl_WhichPunctuation( sal_Unicode cChar )
-{
-    if ( ( cChar < 0x3001 || cChar > 0x3002 ) &&
-            ( cChar < 0x3008 || cChar > 0x3011 ) &&
-            ( cChar < 0x3014 || cChar > 0x301F ) &&
-              0xFF62 != cChar && 0xFF63 != cChar )
-        // no punctuation
-        return SwScriptInfo::NONE;
-    else if ( 0x3001 == cChar || 0x3002 == cChar ||
-              0x3009 == cChar || 0x300B == cChar ||
-              0x300D == cChar || 0x300F == cChar ||
-              0x3011 == cChar || 0x3015 == cChar ||
-              0x3017 == cChar || 0x3019 == cChar ||
-              0x301B == cChar || 0x301E == cChar ||
-              0x301F == cChar || 0xFF63 == cChar )
-        // right punctuation
-        return SwScriptInfo::SPECIAL_RIGHT;
-
-    return SwScriptInfo::SPECIAL_LEFT;
-}
-
 static bool lcl_IsMonoSpaceFont( const vcl::RenderContext& rOut )
 {
     const tools::Long nWidth1 = rOut.GetTextWidth( OUString( u'\x3008' ) );
@@ -970,81 +949,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             else
                 GetTextArray(rInf.GetOut(), rInf, aKernArray);
 
-            // Change the average width per character to an appropriate grid width
-            // basically get the ratio of the avg width to the grid unit width, then
-            // multiple this ratio to give the new avg width - which in this case
-            // gives a new grid width unit size
+            // Todo: simplify rInf.GetWidth() if it is the same as aKernArray[rInf.GetLen() - 1]
+            tools::Long nDelta
+                = Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+                                      sal_Int32(rInf.GetLen()), nGridWidth, rInf.GetWidth());
 
-            tools::Long nAvgWidthPerChar = aKernArray[sal_Int32(rInf.GetLen()) - 1] / sal_Int32(rInf.GetLen());
-
-            const sal_uLong nRatioAvgWidthCharToGridWidth = nAvgWidthPerChar ?
-                                ( nAvgWidthPerChar - 1 ) / nGridWidth + 1:
-                                1;
-
-            nAvgWidthPerChar = nRatioAvgWidthCharToGridWidth * nGridWidth;
-
-            // the absolute end position of the first character is also its width
-            tools::Long nCharWidth = aKernArray[ 0 ];
-            sal_uLong nHalfWidth = nAvgWidthPerChar / 2;
-
-            tools::Long nNextFix=0;
-
-            // we work out the start position (origin) of the first character,
-            // and we set the next "fix" offset to half the width of the char.
-            // The exceptions are for punctuation characters that are not centered
-            // so in these cases we just add half a regular "average" character width
-            // to the first characters actual width to allow the next character to
-            // be centered automatically
-            // If the character is "special right", then the offset is correct already
-            // so the fix offset is as normal - half the average character width
-
-            sal_Unicode cChar = rInf.GetText()[ sal_Int32(rInf.GetIdx()) ];
-            sal_uInt8 nType = lcl_WhichPunctuation( cChar );
-            switch ( nType )
-            {
-            // centre character
-            case SwScriptInfo::NONE :
-                aTextOriginPos.AdjustX(( nAvgWidthPerChar - nCharWidth ) / 2 );
-                nNextFix = nCharWidth / 2;
-                break;
-            case SwScriptInfo::SPECIAL_RIGHT :
-                nNextFix = nHalfWidth;
-                break;
-            // punctuation
-            default:
-                aTextOriginPos.AdjustX(nAvgWidthPerChar - nCharWidth );
-                nNextFix = nCharWidth - nHalfWidth;
-            }
-
-            // calculate offsets
-            for (sal_Int32 j = 1; j < sal_Int32(rInf.GetLen()); ++j)
-            {
-                tools::Long nCurrentCharWidth = aKernArray[ j ] - aKernArray[ j - 1 ];
-                nNextFix += nAvgWidthPerChar;
-
-                // almost the same as getting the offset for the first character:
-                // punctuation characters are not centered, so just add half an
-                // average character width minus the characters actual char width
-                // to get the offset into the centre of the next character
-
-                cChar = rInf.GetText()[ sal_Int32(rInf.GetIdx()) + j ];
-                nType = lcl_WhichPunctuation( cChar );
-                switch ( nType )
-                {
-                case SwScriptInfo::NONE :
-                    aKernArray[ j - 1 ] = nNextFix - ( nCurrentCharWidth / 2 );
-                    break;
-                case SwScriptInfo::SPECIAL_RIGHT :
-                    aKernArray[ j - 1 ] = nNextFix - nHalfWidth;
-                    break;
-                default:
-                    aKernArray[ j - 1 ] = nNextFix + nHalfWidth - nCurrentCharWidth;
-                }
-            }
-
-            // the layout engine requires the total width of the output
-            aKernArray[sal_Int32(rInf.GetLen()) - 1] = rInf.GetWidth() -
-                                              aTextOriginPos.X() + rInf.GetPos().X() ;
+            if (nDelta)
+                aTextOriginPos.AdjustX(nDelta);
 
             if ( bSwitchH2V )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
