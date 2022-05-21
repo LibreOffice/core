@@ -1574,10 +1574,11 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             OUString sCharFormatName;
             SwStyleNameMapper::FillUIName( uTmp, sCharFormatName, SwGetPoolIdFromName::ChrFmt );
             SwDoc *const pLocalDoc = pDocShell ? pDocShell->GetDoc() : pDoc;
-            if (sCharFormatName == UNO_NAME_CHARACTER_FORMAT_NONE)
+            if (sCharFormatName.isEmpty() || sCharFormatName == UNO_NAME_CHARACTER_FORMAT_NONE)
             {
                 rCharStyleName = aInvalidStyle;
                 aFormat.SetCharFormat(nullptr);
+                aFormat.SetCharFormatName("");
             }
             else if (pLocalDoc)
             {
