@@ -15,6 +15,7 @@ $(eval $(call gb_ExternalProject_register_targets,libtiff,\
 
 $(eval $(call gb_ExternalProject_use_externals,libtiff,\
     libjpeg \
+    libwebp \
     zlib \
 ))
 
@@ -36,6 +37,7 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			--enable-static \
 			--enable-jpeg \
 			--enable-zlib \
+			--enable-webp \
 			--disable-shared \
 			--disable-cxx \
 			--disable-libdeflate \
@@ -43,7 +45,6 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			--disable-lerc \
 			--disable-lzma \
 			--disable-mdi \
-			--disable-webp \
 			--disable-win32-io \
 			--disable-zstd \
 			--with-pic \
@@ -54,10 +55,15 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			$(if $(SYSTEM_ZLIB),,--with-zlib-lib-dir="$(gb_StaticLibrary_WORKDIR)") \
 			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-include-dir="$(call gb_UnpackedTarball_get_dir,libjpeg-turbo)") \
 			$(if $(SYSTEM_LIBJPEG),,--with-jpeg-lib-dir="$(gb_StaticLibrary_WORKDIR)") \
+			$(if $(SYSTEM_LIBWEBP),,--with-webp-include-dir="$(call gb_UnpackedTarball_get_dir,libwebp/src)") \
+			$(if $(SYSTEM_LIBWEBP),,$(if $(filter WNT,$(OS_FOR_BUILD)),\
+				--with-webp-lib-dir="$(call gb_UnpackedTarball_get_dir,libwebp)/output/lib/libwebp$(if $(MSVC_USE_DEBUG_RUNTIME),_debug)$(gb_StaticLibrary_PLAINEXT)", \
+				--with-webp-lib-dir="$(call gb_UnpackedTarball_get_dir,libwebp)/src/.libs")) \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libtiff)" \
 			ac_cv_lib_z_inflateEnd=yes \
 			ac_cv_lib_jpeg_jpeg_read_scanlines=yes \
+			ac_cv_lib_webp_WebPDecode=yes \
 			$(gb_CONFIGURE_PLATFORMS) \
 		&& cd libtiff && $(MAKE) libtiff.la \
 	)
