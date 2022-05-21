@@ -1134,7 +1134,6 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         {
             SwNumFormat aFormat(aNumRule.Get( i ));
             if (!m_sNewCharStyleNames[i].isEmpty() &&
-                m_sNewCharStyleNames[i] != UNO_NAME_CHARACTER_FORMAT_NONE &&
                 (!aFormat.GetCharFormat() || aFormat.GetCharFormat()->GetName()!= m_sNewCharStyleNames[i]))
             {
                 SwCharFormat* pCharFormat = nullptr;
@@ -1574,7 +1573,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             OUString sCharFormatName;
             SwStyleNameMapper::FillUIName( uTmp, sCharFormatName, SwGetPoolIdFromName::ChrFmt );
             SwDoc *const pLocalDoc = pDocShell ? pDocShell->GetDoc() : pDoc;
-            if (sCharFormatName.isEmpty() || sCharFormatName == UNO_NAME_CHARACTER_FORMAT_NONE)
+            if (sCharFormatName.isEmpty())
             {
                 rCharStyleName = aInvalidStyle;
                 aFormat.SetCharFormat(nullptr);
