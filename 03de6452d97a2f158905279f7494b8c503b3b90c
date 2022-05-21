@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8eb22043_c19c9b63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-05-21T15:57:23Z",
+      "side": 1,
+      "message": "on the other hand, libwebp also can depend on libtiff but we also --disable-jpeg for libwebp, don\u0027t know if there\u0027s an advantage to --enable-tiff for webp, but a circular dependency looks a super pain to handle if we did try to --enable-tiff",
+      "revId": "03de6452d97a2f158905279f7494b8c503b3b90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
