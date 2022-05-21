@@ -33,6 +33,23 @@
       "message": "google \"what is hodl\" :P ",
       "revId": "e930396337cbbf8a8b9c2da63e5c47cfacac0341",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6885ed1_da9bc448",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-21T07:19:11Z",
+      "side": 1,
+      "message": "I didn\u0027t know this. Now for readability sake, I would change it into \"holder\".\nSlang and buzz word may change quite quickly, at least everybody should understand \"holder\" in an hundred years :-)\nI let you choose.",
+      "revId": "e930396337cbbf8a8b9c2da63e5c47cfacac0341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
