@@ -29,6 +29,8 @@ public:
     {
     }
     template <typename Function> void InvokeWithKernArray(Function f);
+    void ConvertToKernArray();
+    void ConvertToCharWidths();
 };
 
 inline bool operator==(const CharWidthArray& lhs, const CharWidthArray& rhs)
@@ -50,16 +52,24 @@ std::ostream& operator<<(std::ostream& rStrm, const CharWidthArray& rCharWidthAr
     return rStrm;
 }
 
-/// Convert maArray to kern array values, then invoke the function, and convert it back.
-template <typename Function> void CharWidthArray::InvokeWithKernArray(Function f)
+void CharWidthArray::ConvertToKernArray()
 {
     for (sal_Int32 i = 1; i < sal_Int32(maArray.size()); ++i)
         maArray[i] += maArray[i - 1];
+}
 
-    f();
-
+void CharWidthArray::ConvertToCharWidths()
+{
     for (sal_Int32 i = maArray.size() - 1; i > 0; --i)
         maArray[i] -= maArray[i - 1];
+}
+
+/// Convert maArray to kern array values, then invoke the function, and convert it back.
+template <typename Function> void CharWidthArray::InvokeWithKernArray(Function f)
+{
+    ConvertToKernArray();
+    f();
+    ConvertToCharWidths();
 }
 }
 
@@ -99,4 +109,19 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSpaceDistributionUnicodeIVS)
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGrid)
+{
+    tools::Long nDelta = 0;
+    // "曰〈道高一尺化太平〉云云"
+    static const OUStringLiteral aText
+        = u"\u66f0\u3008\u9053\u9ad8\u4e00\u5c3a\u5316\u592a\u5e73\u3009\u4e91\u4e91";
+    CharWidthArray aActual{ 880, 880, 880, 880, 880, 880, 880, 880, 880, 880, 880, 880 };
+    CharWidthArray aExpected{
+        1360, 1040, 1200, 1200, 1200, 1200, 1200, 1200, 1040, 1360, 1200, 1040
+    };
+    aActual.InvokeWithKernArray(
+        [&] { nDelta = Justify::SnapToGrid(aActual.maArray, aText, 0, 12, 400, 14400); });
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(160), nDelta);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
