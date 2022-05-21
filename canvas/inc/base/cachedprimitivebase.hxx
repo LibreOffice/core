@@ -53,8 +53,8 @@ namespace canvas
             @param rTarget
             The target canvas the repaint should happen on.
          */
-        CachedPrimitiveBase( const css::rendering::ViewState&  rUsedViewState,
-                             const css::uno::Reference< css::rendering::XCanvas >& rTarget );
+        CachedPrimitiveBase( css::rendering::ViewState rUsedViewState,
+                             css::uno::Reference< css::rendering::XCanvas > xTarget );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing() override;

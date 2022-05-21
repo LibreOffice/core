@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <utility>
 
 #include <tools/diagnose_ex.h>
 
@@ -18,13 +19,13 @@ using namespace ::com::sun::star;
 
 namespace oglcanvas
 {
-    TextLayout::TextLayout( const rendering::StringContext&     aText,
-                            sal_Int8                            nDirection,
-                            sal_Int64                           /*nRandomSeed*/,
-                            const CanvasFont::ImplRef&          rFont ) :
+    TextLayout::TextLayout( rendering::StringContext      aText,
+                            sal_Int8                      nDirection,
+                            sal_Int64                     /*nRandomSeed*/,
+                            CanvasFont::ImplRef           rFont ) :
         TextLayoutBaseT( m_aMutex ),
-        maText( aText ),
-        mpFont( rFont ),
+        maText(std::move( aText )),
+        mpFont(std::move( rFont )),
         mnTextDirection( nDirection )
     {
     }

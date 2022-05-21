@@ -69,7 +69,7 @@ namespace cairocanvas
             Reference device, with which bitmap should be compatible
         */
         CanvasBitmap( const ::basegfx::B2ISize& rSize,
-                      const SurfaceProviderRef& rDevice,
+                      SurfaceProviderRef  rDevice,
                       css::rendering::XGraphicDevice* pDevice,
                       bool                      bHasAlpha );
 

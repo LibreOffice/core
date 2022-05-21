@@ -26,6 +26,7 @@
 
 #include <canvas/canvastoolsdllapi.h>
 #include <rtl/ref.hxx>
+#include <utility>
 
 namespace com::sun::star::rendering { class XGraphicDevice; }
 
@@ -54,12 +55,12 @@ namespace canvas
          */
         struct Values
         {
-            Values( const ::basegfx::B2DPolygon&                        rGradientPoly,
+            Values( ::basegfx::B2DPolygon                               aGradientPoly,
                     const css::uno::Sequence< css::uno::Sequence< double > >& rColors,
                     const css::uno::Sequence< double >&                 rStops,
                     double                                              nAspectRatio,
                     GradientType                                        eType ) :
-                maGradientPoly( rGradientPoly ),
+                maGradientPoly(std::move( aGradientPoly )),
                 mnAspectRatio( nAspectRatio ),
                 maColors( rColors ),
                 maStops( rStops ),
@@ -127,15 +128,15 @@ namespace canvas
                                                                  double fAspect );
 
         /// Private, because objects can only be created from the static factories
-        ParametricPolyPolygon( const css::uno::Reference<
-                                   css::rendering::XGraphicDevice >&            rDevice,
+        ParametricPolyPolygon( css::uno::Reference<
+                                   css::rendering::XGraphicDevice >             xDevice,
                                const ::basegfx::B2DPolygon&                     rGradientPoly,
                                GradientType                                     eType,
                                const css::uno::Sequence< css::uno::Sequence< double > >&  colors,
                                const css::uno::Sequence< double >&              stops,
                                double                                           nAspectRatio );
-        ParametricPolyPolygon( const css::uno::Reference<
-                                   css::rendering::XGraphicDevice >&            rDevice,
+        ParametricPolyPolygon( css::uno::Reference<
+                                   css::rendering::XGraphicDevice >             xDevice,
                                GradientType                                     eType,
                                const css::uno::Sequence< css::uno::Sequence< double > >&  colors,
                                const css::uno::Sequence< double >&              stops );

@@ -22,6 +22,7 @@
 #include <canvas/elapsedtime.hxx>
 
 #include <tools/time.hxx>
+#include <utility>
 
 namespace canvas::tools {
 
@@ -41,8 +42,8 @@ ElapsedTime::ElapsedTime()
 }
 
 ElapsedTime::ElapsedTime(
-    std::shared_ptr<ElapsedTime> const & pTimeBase )
-    : m_pTimeBase( pTimeBase ),
+    std::shared_ptr<ElapsedTime> pTimeBase )
+    : m_pTimeBase(std::move( pTimeBase )),
       m_fLastQueriedTime( 0.0 ),
       m_fStartTime( getCurrentTime() ),
       m_fFrozenTime( 0.0 ),

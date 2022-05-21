@@ -36,9 +36,9 @@ namespace oglcanvas
         CanvasFont(const CanvasFont&) = delete;
         const CanvasFont& operator=(const CanvasFont&) = delete;
 
-        CanvasFont( const css::rendering::FontRequest&                                     fontRequest,
+        CanvasFont( css::rendering::FontRequest                               fontRequest,
                     const css::uno::Sequence< css::beans::PropertyValue >&    extraFontProperties,
-                    const css::geometry::Matrix2D&                                         fontMatrix );
+                    const css::geometry::Matrix2D&                            fontMatrix );
 
         // XCanvasFont
         virtual css::uno::Reference< css::rendering::XTextLayout > SAL_CALL createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) override;

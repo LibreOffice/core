@@ -22,6 +22,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
 
@@ -35,10 +36,10 @@ using namespace ::com::sun::star;
 namespace cairocanvas
 {
     CanvasBitmap::CanvasBitmap( const ::basegfx::B2ISize&  rSize,
-                                const SurfaceProviderRef&  rSurfaceProvider,
+                                SurfaceProviderRef         rSurfaceProvider,
                                 rendering::XGraphicDevice* pDevice,
                                 bool                       bHasAlpha ) :
-        mpSurfaceProvider( rSurfaceProvider ),
+        mpSurfaceProvider(std::move( rSurfaceProvider )),
         maSize(rSize),
         mbHasAlpha(bHasAlpha)
     {

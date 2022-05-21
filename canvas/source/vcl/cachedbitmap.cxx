@@ -21,6 +21,7 @@
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/RepaintResult.hpp>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 #include "cachedbitmap.hxx"
@@ -31,16 +32,16 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    CachedBitmap::CachedBitmap( const GraphicObjectSharedPtr&               rGraphicObject,
+    CachedBitmap::CachedBitmap( GraphicObjectSharedPtr                      xGraphicObject,
                                 const ::Point&                              rPoint,
                                 const ::Size&                               rSize,
                                 const GraphicAttr&                          rAttr,
                                 const rendering::ViewState&                 rUsedViewState,
-                                const rendering::RenderState&               rUsedRenderState,
+                                rendering::RenderState                      aUsedRenderState,
                                 const uno::Reference< rendering::XCanvas >& rTarget ) :
         CachedPrimitiveBase( rUsedViewState, rTarget ),
-        mpGraphicObject( rGraphicObject ),
-        maRenderState(rUsedRenderState),
+        mpGraphicObject(std::move( xGraphicObject )),
+        maRenderState(std::move(aUsedRenderState)),
         maPoint( rPoint ),
         maSize( rSize ),
         maAttributes( rAttr )

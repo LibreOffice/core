@@ -27,6 +27,7 @@
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 
 #include <parametricpolypolygon.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -197,13 +198,13 @@ namespace canvas
     {
     }
 
-    ParametricPolyPolygon::ParametricPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&    rDevice,
+    ParametricPolyPolygon::ParametricPolyPolygon( uno::Reference< rendering::XGraphicDevice >           xDevice,
                                                   const ::basegfx::B2DPolygon&                          rGradientPoly,
                                                   GradientType                                          eType,
                                                   const uno::Sequence< uno::Sequence< double > >&       rColors,
                                                   const uno::Sequence< double >&                        rStops,
                                                   double                                                nAspectRatio ) :
-        mxDevice( rDevice ),
+        mxDevice(std::move( xDevice )),
         maValues( rGradientPoly,
                   rColors,
                   rStops,
@@ -212,11 +213,11 @@ namespace canvas
     {
     }
 
-    ParametricPolyPolygon::ParametricPolyPolygon( const uno::Reference< rendering::XGraphicDevice >&    rDevice,
+    ParametricPolyPolygon::ParametricPolyPolygon( uno::Reference< rendering::XGraphicDevice >           xDevice,
                                                   GradientType                                          eType,
                                                   const uno::Sequence< uno::Sequence< double > >&       rColors,
                                                   const uno::Sequence< double >&                        rStops ) :
-        mxDevice( rDevice ),
+        mxDevice(std::move( xDevice )),
         maValues( ::basegfx::B2DPolygon(),
                   rColors,
                   rStops,

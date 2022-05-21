@@ -11,6 +11,7 @@
 
 #include <com/sun/star/rendering/FontMetrics.hpp>
 #include <canvas/canvastools.hxx>
+#include <utility>
 
 #include "ogl_canvasfont.hxx"
 #include "ogl_textlayout.hxx"
@@ -19,11 +20,11 @@ using namespace ::com::sun::star;
 
 namespace oglcanvas
 {
-    CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
+    CanvasFont::CanvasFont( rendering::FontRequest                          aFontRequest,
                             const uno::Sequence< beans::PropertyValue >&    extraFontProperties,
                             const geometry::Matrix2D&                       fontMatrix ) :
         CanvasFontBaseT( m_aMutex ),
-        maFontRequest( rFontRequest ),
+        maFontRequest(std::move( aFontRequest )),
         mnEmphasisMark(0),
         maFontMatrix( fontMatrix )
     {

@@ -28,6 +28,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 
@@ -69,15 +70,15 @@ namespace cairocanvas
         }
     }
 
-    TextLayout::TextLayout( const rendering::StringContext&     aText,
-                            sal_Int8                            nDirection,
-                            sal_Int64                           /*nRandomSeed*/,
-                            const CanvasFont::Reference&        rFont,
-                            const SurfaceProviderRef&           rRefDevice ) :
+    TextLayout::TextLayout( rendering::StringContext      aText,
+                            sal_Int8                      nDirection,
+                            sal_Int64                     /*nRandomSeed*/,
+                            CanvasFont::Reference         rFont,
+                            SurfaceProviderRef            rRefDevice ) :
         TextLayout_Base( m_aMutex ),
-        maText( aText ),
-        mpFont( rFont ),
-        mpRefDevice( rRefDevice ),
+        maText(std::move( aText )),
+        mpFont(std::move( rFont )),
+        mpRefDevice(std::move( rRefDevice )),
         mnTextDirection( nDirection )
     {
     }
@@ -286,8 +287,8 @@ namespace cairocanvas
         class OffsetTransformer
         {
         public:
-            explicit OffsetTransformer( const ::basegfx::B2DHomMatrix& rMat ) :
-                maMatrix( rMat )
+            explicit OffsetTransformer( ::basegfx::B2DHomMatrix aMat ) :
+                maMatrix(std::move( aMat ))
             {
             }
 

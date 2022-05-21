@@ -22,17 +22,18 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <utility>
 
 #include "surface.hxx"
 
 namespace canvas
 {
-    Surface::Surface( const PageManagerSharedPtr&  rPageManager,
-                      const std::shared_ptr<IColorBuffer>& rColorBuffer,
+    Surface::Surface( PageManagerSharedPtr         rPageManager,
+                      std::shared_ptr<IColorBuffer> xColorBuffer,
                       const ::basegfx::B2IPoint&   rPos,
                       const ::basegfx::B2ISize&    rSize ) :
-        mpColorBuffer(rColorBuffer),
-        mpPageManager(rPageManager),
+        mpColorBuffer(std::move(xColorBuffer)),
+        mpPageManager(std::move(rPageManager)),
         maSourceOffset(rPos),
         maSize(rSize),
         mbIsDirty(true)

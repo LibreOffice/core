@@ -53,7 +53,7 @@ namespace canvas::tools
                 are not taken from the system's time base, but from
                 the provided timer.
              */
-            ElapsedTime( std::shared_ptr<ElapsedTime> const & pTimeBase );
+            ElapsedTime( std::shared_ptr<ElapsedTime> xTimeBase );
 
             /** Reset the time
 

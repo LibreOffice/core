@@ -23,15 +23,16 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <utility>
 
 #include "surfaceproxy.hxx"
 
 namespace canvas
 {
-    SurfaceProxy::SurfaceProxy( const std::shared_ptr<canvas::IColorBuffer>& pBuffer,
-                                const PageManagerSharedPtr&          pPageManager ) :
-        mpPageManager( pPageManager ),
-        mpBuffer( pBuffer )
+    SurfaceProxy::SurfaceProxy( std::shared_ptr<canvas::IColorBuffer> xBuffer,
+                                PageManagerSharedPtr           xPageManager ) :
+        mpPageManager(std::move( xPageManager )),
+        mpBuffer(std::move( xBuffer ))
     {
         const ::basegfx::B2ISize aImageSize(mpBuffer->getWidth(),mpBuffer->getHeight());
         const ::basegfx::B2ISize aPageSize(mpPageManager->getPageSize());
