@@ -109,4 +109,19 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSpaceDistributionUnicodeIVS)
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGrid)
+{
+    tools::Long nDelta = 0;
+    // "曰〈道高一尺化太平〉云云"
+    static const OUStringLiteral aText
+        = u"\u66f0\u3008\u9053\u9ad8\u4e00\u5c3a\u5316\u592a\u5e73\u3009\u4e91\u4e91";
+    CharWidthArray aActual{ 880, 880, 880, 880, 880, 880, 880, 880, 880, 880, 880, 880 };
+    CharWidthArray aExpected{
+        1360, 1040, 1200, 1200, 1200, 1200, 1200, 1200, 1040, 1360, 1200, 1040
+    };
+    aActual.InvokeWithKernArray(
+        [&] { nDelta = Justify::SnapToGrid(aActual.maArray, aText, 0, 12, 400, 14400); });
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(160), nDelta);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
