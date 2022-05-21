@@ -2649,9 +2649,7 @@ $(call gb_LinkTarget_use_external_project,$(1),libtiff)
 endef
 
 define gb_ExternalProject__use_libtiff
-$(call gb_ExternalProject_use_external_project,$(1),\
-	libtiff \
-)
+$(call gb_ExternalProject_use_external_project,$(1),libtiff)
 
 endef
 
@@ -2699,9 +2697,7 @@ $(call gb_LinkTarget_use_external_project,$(1),libwebp)
 endef
 
 define gb_ExternalProject__use_libwebp
-$(call gb_ExternalProject_use_external_project,$(1),\
-	libwebp \
-)
+$(call gb_ExternalProject_use_external_project,$(1),libwebp)
 
 endef
 
