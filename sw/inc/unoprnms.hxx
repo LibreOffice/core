@@ -340,7 +340,6 @@
 #define UNO_NAME_WIDTH "Width"
 #define UNO_NAME_CHAR_WORD_MODE "CharWordMode"
 #define UNO_NAME_GRAPHIC_CROP "GraphicCrop"
-#define UNO_NAME_CHARACTER_FORMAT_NONE "CharacterFormatNone"
 #define UNO_NAME_DOCUMENT_INDEX_MARK "DocumentIndexMark"
 #define UNO_NAME_DOCUMENT_INDEX "DocumentIndex"
 #define UNO_NAME_IS_GLOBAL_DOCUMENT_SECTION "IsGlobalDocumentSection"
