@@ -51,9 +51,9 @@ namespace cairocanvas
         const CanvasFont& operator=(const CanvasFont&) = delete;
 
         CanvasFont( const css::rendering::FontRequest&                                  fontRequest,
-                    const css::uno::Sequence< css::beans::PropertyValue >& extraFontProperties,
+                    const css::uno::Sequence< css::beans::PropertyValue >&              extraFontProperties,
                     const css::geometry::Matrix2D&                                      rFontMatrix,
-                    const SurfaceProviderRef&                                                        rDevice );
+                    SurfaceProviderRef                                                  rDevice );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing() override;

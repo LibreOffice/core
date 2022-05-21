@@ -34,10 +34,10 @@ namespace cairocanvas
 
         /** Create an XCachedPrimitive for given GraphicObject
          */
-        CachedBitmap( const ::cairo::SurfaceSharedPtr&                pSurface,
-                      const css::rendering::ViewState&   rUsedViewState,
-                      const css::rendering::RenderState& rUsedRenderState,
-                      const css::uno::Reference< css::rendering::XCanvas >&      rTarget   );
+        CachedBitmap( ::cairo::SurfaceSharedPtr                              pSurface,
+                      const css::rendering::ViewState&                       rUsedViewState,
+                      css::rendering::RenderState                            aUsedRenderState,
+                      const css::uno::Reference< css::rendering::XCanvas >&  rTarget   );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing() override;

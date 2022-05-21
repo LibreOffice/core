@@ -37,12 +37,12 @@ namespace vclcanvas
 
         /** Create an XCachedPrimitive for given GraphicObject
          */
-        CachedBitmap( const GraphicObjectSharedPtr&                   rGraphicObject,
+        CachedBitmap( GraphicObjectSharedPtr                          xGraphicObject,
                       const ::Point&                                  rPoint,
                       const ::Size&                                   rSize,
                       const GraphicAttr&                              rAttr,
                       const css::rendering::ViewState&                rUsedViewState,
-                      const css::rendering::RenderState&              rUsedRenderState,
+                      css::rendering::RenderState                     aUsedRenderState,
                       const css::uno::Reference< css::rendering::XCanvas >&   rTarget );
 
         /// Dispose all internal references

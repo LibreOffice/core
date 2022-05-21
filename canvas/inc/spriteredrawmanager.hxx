@@ -25,6 +25,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 
+#include <utility>
 #include <vector>
 #include <algorithm>
 
@@ -76,10 +77,10 @@ namespace canvas
 
                 @internal
              */
-            SpriteInfo( const Sprite::Reference&    rRef,
+            SpriteInfo( Sprite::Reference           aRef,
                         const ::basegfx::B2DRange&  rTrueUpdateArea,
                         bool                        bNeedsUpdate ) :
-                mpSprite( rRef ),
+                mpSprite(std::move( aRef )),
                 maTrueUpdateArea( rTrueUpdateArea ),
                 mbNeedsUpdate( bNeedsUpdate ),
                 mbIsPureMove( false )
@@ -105,11 +106,11 @@ namespace canvas
 
                 @internal
              */
-            SpriteInfo( const Sprite::Reference&    rRef,
+            SpriteInfo( Sprite::Reference           aRef,
                         const ::basegfx::B2DRange&  rTrueUpdateArea,
                         bool                        bNeedsUpdate,
                         bool                        bIsPureMove ) :
-                mpSprite( rRef ),
+                mpSprite(std::move( aRef )),
                 maTrueUpdateArea( rTrueUpdateArea ),
                 mbNeedsUpdate( bNeedsUpdate ),
                 mbIsPureMove( bIsPureMove )
@@ -140,12 +141,12 @@ namespace canvas
         {
             enum class ChangeType { move, update };
 
-            SpriteChangeRecord( const Sprite::Reference&    rSprite,
+            SpriteChangeRecord( Sprite::Reference     rSprite,
                                 const ::basegfx::B2DPoint&  rOldPos,
                                 const ::basegfx::B2DPoint&  rNewPos,
                                 const ::basegfx::B2DVector& rSpriteSize ) :
                 meChangeType( ChangeType::move ),
-                mpAffectedSprite( rSprite ),
+                mpAffectedSprite(std::move( rSprite )),
                 maOldPos( rOldPos ),
                 maUpdateArea( rNewPos.getX(),
                               rNewPos.getY(),
@@ -154,11 +155,11 @@ namespace canvas
             {
             }
 
-            SpriteChangeRecord( const Sprite::Reference&    rSprite,
+            SpriteChangeRecord( Sprite::Reference     rSprite,
                                 const ::basegfx::B2DPoint&  rPos,
                                 const ::basegfx::B2DRange&  rUpdateArea ) :
                 meChangeType( ChangeType::update ),
-                mpAffectedSprite( rSprite ),
+                mpAffectedSprite(std::move( rSprite )),
                 maOldPos( rPos ),
                 maUpdateArea( rUpdateArea )
             {

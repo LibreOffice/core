@@ -38,8 +38,8 @@ namespace canvas
     {
     public:
 
-        SurfaceProxy( const std::shared_ptr<canvas::IColorBuffer>& pBuffer,
-                      const PageManagerSharedPtr &pPageManager );
+        SurfaceProxy( std::shared_ptr<canvas::IColorBuffer> xBuffer,
+                      PageManagerSharedPtr xPageManager );
 
         // ISurfaceProxy interface
         virtual void setColorBufferDirty() override;

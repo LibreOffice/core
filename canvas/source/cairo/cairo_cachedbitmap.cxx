@@ -21,6 +21,7 @@
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/RepaintResult.hpp>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 #include "cairo_cachedbitmap.hxx"
@@ -32,13 +33,13 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
-    CachedBitmap::CachedBitmap( const SurfaceSharedPtr&                     pSurface,
+    CachedBitmap::CachedBitmap( SurfaceSharedPtr                            pSurface,
                                 const rendering::ViewState&                 rUsedViewState,
-                                const rendering::RenderState&               rUsedRenderState,
+                                rendering::RenderState                      aUsedRenderState,
                                 const uno::Reference< rendering::XCanvas >& rTarget ) :
         CachedPrimitiveBase( rUsedViewState, rTarget ),
-        mpSurface( pSurface ),
-        maRenderState( rUsedRenderState )
+        mpSurface(std::move( pSurface )),
+        maRenderState(std::move( aUsedRenderState ))
     {}
 
     void SAL_CALL CachedBitmap::disposing()

@@ -24,6 +24,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/math.hxx>
+#include <utility>
 #include <vcl/metric.hxx>
 
 #include "cairo_canvasfont.hxx"
@@ -37,13 +38,13 @@ namespace cairocanvas
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
                             const uno::Sequence< beans::PropertyValue >&    /*rExtraFontProperties*/,
                             const geometry::Matrix2D&                       rFontMatrix,
-                            const SurfaceProviderRef&                       rDevice ) :
+                            SurfaceProviderRef                              rDevice ) :
         CanvasFont_Base( m_aMutex ),
         maFont( vcl::Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,
                       Size( 0, ::basegfx::fround(rFontRequest.CellSize) ) ) ),
         maFontRequest( rFontRequest ),
-        mpRefDevice( rDevice )
+        mpRefDevice(std::move( rDevice ))
     {
         maFont->SetAlignment( ALIGN_BASELINE );
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==css::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );

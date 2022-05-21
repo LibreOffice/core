@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <utility>
 
 namespace basegfx
 {
@@ -112,8 +113,8 @@ namespace canvas
     class RenderModuleGuard
     {
     public:
-        explicit RenderModuleGuard( const std::shared_ptr<IRenderModule>& rRenderModule ) :
-            mpRenderModule( rRenderModule )
+        explicit RenderModuleGuard( std::shared_ptr<IRenderModule> xRenderModule ) :
+            mpRenderModule(std::move( xRenderModule ))
         {
             mpRenderModule->lock();
         }

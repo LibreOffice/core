@@ -46,9 +46,9 @@ namespace oglcanvas
             @param rDevice
             Reference device, with which bitmap should be compatible
          */
-        CanvasBitmap( const css::geometry::IntegerSize2D&              rSize,
-                      const SpriteCanvasRef&                           rDevice,
-                      SpriteDeviceHelper&                              rDeviceHelper );
+        CanvasBitmap( const css::geometry::IntegerSize2D&        rSize,
+                      SpriteCanvasRef                            rDevice,
+                      SpriteDeviceHelper&                        rDeviceHelper );
 
         /** Create verbatim copy (including all recorded actions)
          */

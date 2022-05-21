@@ -21,6 +21,7 @@
 
 #include <basegfx/vector/b2isize.hxx>
 #include <rendering/irendermodule.hxx>
+#include <utility>
 
 #include "page.hxx"
 
@@ -30,8 +31,8 @@ namespace canvas
     class PageManager
     {
     public:
-        explicit PageManager(const std::shared_ptr<canvas::IRenderModule>& rRenderModule)
-            : mpRenderModule(rRenderModule)
+        explicit PageManager(std::shared_ptr<canvas::IRenderModule> xRenderModule)
+            : mpRenderModule(std::move(xRenderModule))
         {
         }
 

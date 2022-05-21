@@ -28,6 +28,7 @@
 
 #include <spriteredrawmanager.hxx>
 #include <boost/range/adaptor/reversed.hpp>
+#include <utility>
 
 namespace canvas
 {
@@ -43,8 +44,8 @@ namespace canvas
         class SpriteTracer
         {
         public:
-            explicit SpriteTracer( const Sprite::Reference& rAffectedSprite ) :
-                mpAffectedSprite(rAffectedSprite),
+            explicit SpriteTracer( Sprite::Reference rAffectedSprite ) :
+                mpAffectedSprite(std::move(rAffectedSprite)),
                 mbIsMove( false ),
                 mbIsGenericUpdate( false )
             {
