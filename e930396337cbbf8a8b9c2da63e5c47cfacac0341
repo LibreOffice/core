@@ -50,6 +50,24 @@
       "message": "I didn\u0027t know this. Now for readability sake, I would change it into \"holder\".\nSlang and buzz word may change quite quickly, at least everybody should understand \"holder\" in an hundred years :-)\nI let you choose.",
       "revId": "e930396337cbbf8a8b9c2da63e5c47cfacac0341",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bb17d4b_7a642332",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-05-21T11:07:43Z",
+      "side": 1,
+      "message": "I didn\u0027t write it on purpose - it\u0027s a genuine spelling mistake, but just wanted to hint at Andrea what it means as it is such a common mistake that it became a slang word :)",
+      "parentUuid": "a6885ed1_da9bc448",
+      "revId": "e930396337cbbf8a8b9c2da63e5c47cfacac0341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
