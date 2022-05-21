@@ -81,7 +81,7 @@ namespace {
 struct FileHandle_Impl
 {
     pthread_mutex_t m_mutex;
-    rtl_String *    m_strFilePath; /*< holds native file path */
+    OString         m_strFilePath; /*< holds native file path */
     int             m_fd;
 
     enum Kind
@@ -108,7 +108,7 @@ struct FileHandle_Impl
     rtl_String*  m_memstreambuf; /*< used for in-memory streams */
 #endif
 
-    explicit FileHandle_Impl(int fd, Kind kind = KIND_FD, char const * path = "<anon>");
+    explicit FileHandle_Impl(int fd, Kind kind = KIND_FD, OString path = "<anon>");
     ~FileHandle_Impl();
 
     static void* operator new (size_t n);
@@ -184,8 +184,8 @@ FileHandle_Impl::Guard::~Guard()
     (void) pthread_mutex_unlock(m_mutex);
 }
 
-FileHandle_Impl::FileHandle_Impl(int fd, enum Kind kind, char const * path)
-    : m_strFilePath(nullptr),
+FileHandle_Impl::FileHandle_Impl(int fd, enum Kind kind, OString path)
+    : m_strFilePath(std::move(path)),
       m_fd      (fd),
       m_kind    (kind),
       m_state   (State::Seekable | State::Readable),
@@ -198,7 +198,6 @@ FileHandle_Impl::FileHandle_Impl(int fd, enum Kind kind, char const * path)
       m_buffer  (nullptr)
 {
     (void) pthread_mutex_init(&m_mutex, nullptr);
-    rtl_string_newFromStr(&m_strFilePath, path);
     if (m_kind == KIND_FD)
     {
         size_t const pagesize = getpagesize();
@@ -220,8 +219,6 @@ FileHandle_Impl::~FileHandle_Impl()
         m_buffer = nullptr;
     }
 
-    rtl_string_release(m_strFilePath);
-    m_strFilePath = nullptr;
     (void) pthread_mutex_destroy(&m_mutex); // ignoring EBUSY ...
 }
 
@@ -752,7 +749,7 @@ oslFileHandle osl::detail::createFileHandleFromFD(int fd)
     return static_cast<oslFileHandle>(pImpl);
 }
 
-static int osl_file_adjustLockFlags(const char *path, int flags)
+static int osl_file_adjustLockFlags(const OString& path, int flags)
 {
 #ifdef MACOSX
     /*
@@ -763,7 +760,7 @@ static int osl_file_adjustLockFlags(const char *path, int flags)
      * for the filesystem name.
      */
     struct statfs s;
-    if(statfs(path, &s) >= 0)
+    if(statfs(path.getStr(), &s) >= 0)
     {
         if(strncmp("afpfs", s.f_fstypename, 5) == 0)
         {
@@ -814,7 +811,7 @@ namespace {
 
 static oslFileError openMemoryAsFile(const OString &rData,
                                      oslFileHandle *pHandle,
-                                     const char *path)
+                                     const OString& path)
 {
     const char *address = rData.getStr();
     size_t size = rData.getLength();
@@ -889,7 +886,7 @@ private:
 
 #endif
 
-oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle,
+oslFileError openFilePath(const OString& filePath, oslFileHandle* pHandle,
                           sal_uInt32 uFlags, mode_t mode)
 {
     oslFileError eRet;
@@ -898,16 +895,16 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle,
     /* Opening a file from /assets read-only means
      * we should mmap it from the .apk file
      */
-    if (strncmp(cpFilePath, "/assets/", sizeof ("/assets/") - 1) == 0)
+    if (o3tl::starts_with(filePath, "/assets/"))
     {
         OString aData;
         bool bCache = true;
 
-        const char *cpAssetsPath = cpFilePath + sizeof("/assets/") - 1;
+        const char *cpAssetsPath = filePath.getStr() + sizeof("/assets/") - 1;
         // some requests are /assets//foo...
         if (cpAssetsPath[0] == '/')
         {
-            __android_log_print(ANDROID_LOG_DEBUG,"libo:sal/osl/unx/file", "double-slash in path: %s", cpFilePath);
+            __android_log_print(ANDROID_LOG_DEBUG,"libo:sal/osl/unx/file", "double-slash in path: %s", filePath.getStr());
             cpAssetsPath++;
         }
 
@@ -957,9 +954,9 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle,
             // loading a document from /assets fails with that idiotic
             // "General Error" dialog...
         }
-        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ") => '" << cpAssetsPath << "'"
+        SAL_INFO("sal.file", "osl_openFile(" << filePath << ") => '" << cpAssetsPath << "'"
                  << aData.getLength() << " bytes from file " << (bCache ? "cache" : "system"));
-        return openMemoryAsFile(aData, pHandle, cpFilePath);
+        return openMemoryAsFile(aData, pHandle, filePath);
     }
 #endif
 
@@ -997,7 +994,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle,
     }
     else
     {
-        flags = osl_file_adjustLockFlags (cpFilePath, flags);
+        flags = osl_file_adjustLockFlags (filePath, flags);
     }
 
     // O_EXCL can be set only when O_CREAT is set
@@ -1005,7 +1002,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle,
         flags &= ~O_EXCL;
 
     /* open the file */
-    int fd = open_c( cpFilePath, flags, mode );
+    int fd = open_c( filePath, flags, mode );
     if (fd == -1)
     {
         return oslTranslateFileError(errno);
@@ -1059,7 +1056,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle,
     if (!S_ISREG(aFileStat.st_mode))
     {
         /* we only open regular files here */
-        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << "): not a regular file");
+        SAL_INFO("sal.file", "osl_openFile(" << filePath << "): not a regular file");
         (void) close(fd);
         SAL_INFO("sal.file", "close(" << fd << ")");
         return osl_File_E_INVAL;
@@ -1107,7 +1104,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle,
     }
 
     /* allocate memory for impl structure */
-    FileHandle_Impl *pImpl = new FileHandle_Impl(fd, FileHandle_Impl::KIND_FD, cpFilePath);
+    FileHandle_Impl *pImpl = new FileHandle_Impl(fd, FileHandle_Impl::KIND_FD, filePath);
     if (flags & O_RDWR)
         pImpl->m_state |= State::Writeable;
 
