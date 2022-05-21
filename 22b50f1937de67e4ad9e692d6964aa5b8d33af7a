@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9e5d875_7e3b0be1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-21T11:19:26Z",
+      "side": 1,
+      "message": "When building, I got this:\n[CXX] vcl/qt5/QtData.cxx\ntif_zip.c:558 : erreur : référence à « libdeflate_free_compressor » non définie\ntif_zip.c:198 : erreur : référence à « libdeflate_alloc_decompressor » non définie\ntif_zip.c:207 : erreur : référence à « libdeflate_zlib_decompress » non définie\ntif_zip.c:382 : erreur : référence à « libdeflate_alloc_compressor » non définie\ntif_zip.c:398 : erreur : référence à « libdeflate_zlib_compress_bound » non définie\ntif_zip.c:405 : erreur : référence à « libdeflate_zlib_compress » non définie\ntif_zip.c:515 : erreur : référence à « libdeflate_free_decompressor » non définie\ntif_zip.c:517 : erreur : référence à « libdeflate_free_compressor » non définie\n[CXX] vcl/qt5/QtDragAndDrop.cxx\nclang: error: linker command failed with exit code 1 (use -v to see invocation)\nmake[1]: *** [/home/julien/lo/libreoffice/vcl/Library_vcl.mk:20 : /home/julien/lo/libreoffice/instdir/program/libvcllo.so] Erreur 1\nmake[1]: *** Attente des tâches non terminées....\nmake: *** [Makefile:288 : build] Erreur 2\n\neven after \"make vcl.clean \u0026\u0026 make vcl.build\"\nany idea how to fix this?",
+      "revId": "22b50f1937de67e4ad9e692d6964aa5b8d33af7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
