@@ -76,7 +76,7 @@ private:
     UnoInterfaceProxy(
         Bridge * pBridge_, com::sun::star::uno::XInterface * pCppI_,
         typelib_InterfaceTypeDescription * pTypeDescr_,
-        OUString const & rOId_);
+        OUString aOId_);
 
     ~UnoInterfaceProxy();
 

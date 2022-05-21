@@ -29,6 +29,7 @@
 #include <jni.h>
 
 #include <new>
+#include <utility>
 
 /* The native implementation part of
  * jurt/com/sun/star/lib/uno/environments/remote/NativeThreadPool.java.
@@ -37,9 +38,9 @@
 namespace {
 
 struct Pool {
-    Pool(rtl::Reference< jvmaccess::VirtualMachine > const & theVirtualMachine,
+    Pool(rtl::Reference< jvmaccess::VirtualMachine > theVirtualMachine,
          jmethodID theExecute, uno_ThreadPool thePool):
-        virtualMachine(theVirtualMachine), execute(theExecute), pool(thePool) {}
+        virtualMachine(std::move(theVirtualMachine)), execute(theExecute), pool(thePool) {}
 
     rtl::Reference< jvmaccess::VirtualMachine > virtualMachine;
     jmethodID execute;

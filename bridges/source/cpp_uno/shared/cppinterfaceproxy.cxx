@@ -20,6 +20,7 @@
 #include <cppinterfaceproxy.hxx>
 
 #include <bridge.hxx>
+#include <utility>
 #include <vtablefactory.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
@@ -102,12 +103,12 @@ void CppInterfaceProxy::releaseProxy()
 
 CppInterfaceProxy::CppInterfaceProxy(
     bridges::cpp_uno::shared::Bridge * pBridge_, uno_Interface * pUnoI_,
-    typelib_InterfaceTypeDescription * pTypeDescr_, OUString const & rOId_)
+    typelib_InterfaceTypeDescription * pTypeDescr_, OUString aOId_)
     : nRef( 1 )
     , pBridge( pBridge_ )
     , pUnoI( pUnoI_ )
     , pTypeDescr( pTypeDescr_ )
-    , oid( rOId_ )
+    , oid(std::move( aOId_ ))
 {
     pBridge->acquire();
     ::typelib_typedescription_acquire( &pTypeDescr->aBase );

@@ -31,6 +31,7 @@
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 #include <uno/environment.h>
 #include <typelib/typedescription.h>
@@ -45,8 +46,8 @@ struct BridgeRuntimeError
 {
     OUString m_message;
 
-    explicit BridgeRuntimeError( OUString const & message )
-        : m_message( message )
+    explicit BridgeRuntimeError( OUString message )
+        : m_message(std::move( message ))
         {}
 };
 
