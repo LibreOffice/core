@@ -5,7 +5,6 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
  */
 
 #include <DataTableView.hxx>
@@ -59,11 +58,70 @@ void setTopCell(uno::Reference<beans::XPropertySet>& xPropertySet)
     xPropertySet->setPropertyValue("TopBorder", uno::Any(aBorderLine));
     xPropertySet->setPropertyValue("LeftBorder", uno::Any(aBorderLine));
 }
+
+void copyProperty(uno::Reference<beans::XPropertySet>& xOut,
+                  uno::Reference<beans::XPropertySet>& xIn, OUString const& sPropertyName)
+{
+    xOut->setPropertyValue(sPropertyName, xIn->getPropertyValue(sPropertyName));
+}
 }
 
 void DataTableView::setCellDefaults(uno::Reference<beans::XPropertySet>& xPropertySet, bool bLeft,
                                     bool bTop, bool bRight, bool bBottom)
 {
+    uno::Reference<beans::XPropertySet> xDataTableProperties = m_xDataTableModel.get();
+
+    copyProperty(xPropertySet, xDataTableProperties, "CharColor");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontFamily");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontFamilyAsian");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontFamilyComplex");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontCharSet");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontCharSetAsian");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontCharSetComplex");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontName");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontNameAsian");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontNameComplex");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontPitch");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontPitchAsian");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontPitchComplex");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontStyleName");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontStyleNameAsian");
+    copyProperty(xPropertySet, xDataTableProperties, "CharFontStyleNameComplex");
+
+    copyProperty(xPropertySet, xDataTableProperties, "CharHeight");
+    copyProperty(xPropertySet, xDataTableProperties, "CharHeightAsian");
+    copyProperty(xPropertySet, xDataTableProperties, "CharHeightComplex");
+    copyProperty(xPropertySet, xDataTableProperties, "CharKerning");
+    copyProperty(xPropertySet, xDataTableProperties, "CharLocale");
+    copyProperty(xPropertySet, xDataTableProperties, "CharLocaleAsian");
+    copyProperty(xPropertySet, xDataTableProperties, "CharLocaleComplex");
+    copyProperty(xPropertySet, xDataTableProperties, "CharPosture");
+    copyProperty(xPropertySet, xDataTableProperties, "CharPostureAsian");
+    copyProperty(xPropertySet, xDataTableProperties, "CharPostureComplex");
+    copyProperty(xPropertySet, xDataTableProperties, "CharRelief");
+    copyProperty(xPropertySet, xDataTableProperties, "CharShadowed");
+    copyProperty(xPropertySet, xDataTableProperties, "CharStrikeout");
+    copyProperty(xPropertySet, xDataTableProperties, "CharUnderline");
+    copyProperty(xPropertySet, xDataTableProperties, "CharUnderlineColor");
+    copyProperty(xPropertySet, xDataTableProperties, "CharUnderlineHasColor");
+    copyProperty(xPropertySet, xDataTableProperties, "CharOverline");
+    copyProperty(xPropertySet, xDataTableProperties, "CharOverlineColor");
+    copyProperty(xPropertySet, xDataTableProperties, "CharOverlineHasColor");
+    copyProperty(xPropertySet, xDataTableProperties, "CharWeight");
+    copyProperty(xPropertySet, xDataTableProperties, "CharWeightAsian");
+    copyProperty(xPropertySet, xDataTableProperties, "CharWeightComplex");
+    copyProperty(xPropertySet, xDataTableProperties, "CharWordMode");
+
+    float fFontHeight = 0.0;
+    xDataTableProperties->getPropertyValue("CharHeight") >>= fFontHeight;
+    fFontHeight = o3tl::convert(fFontHeight, o3tl::Length::pt, o3tl::Length::mm100);
+    uno::Any aXDistanceAny(sal_Int32(std::round(fFontHeight * 0.18f)));
+    uno::Any aYDistanceAny(sal_Int32(std::round(fFontHeight * 0.30f)));
+    xPropertySet->setPropertyValue("TextLeftDistance", aXDistanceAny);
+    xPropertySet->setPropertyValue("TextRightDistance", aXDistanceAny);
+    xPropertySet->setPropertyValue("TextUpperDistance", aYDistanceAny);
+    xPropertySet->setPropertyValue("TextLowerDistance", aYDistanceAny);
+
     xPropertySet->setPropertyValue("FillColor", uno::Any(Color(0xFFFFFF)));
     xPropertySet->setPropertyValue("TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_TOP));
     xPropertySet->setPropertyValue("ParaAdjust", uno::Any(style::ParagraphAdjust_CENTER));
