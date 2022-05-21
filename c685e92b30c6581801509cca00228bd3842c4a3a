@@ -16,6 +16,24 @@
       "message": "Looks sensible to me - thanks Szymon \u003d)",
       "revId": "c685e92b30c6581801509cca00228bd3842c4a3a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fac0422_a53f3f45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-05-21T04:16:54Z",
+      "side": 1,
+      "message": "@Michael Now I have concerns - we probably did async call because context may be switched few times in a row - so we want only the last one to be applied.. It can slow down switching. We have to double check this patch (maybe it is even not needed as I have the other fix)",
+      "parentUuid": "beb301da_ad3d9eb6",
+      "revId": "c685e92b30c6581801509cca00228bd3842c4a3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
