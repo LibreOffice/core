@@ -93,6 +93,7 @@ private:
         lcl_AddPropertiesToVector(aProperties);
         ::chart::LinePropertiesHelper::AddPropertiesToVector(aProperties);
         ::chart::FillProperties::AddPropertiesToVector(aProperties);
+        ::chart::CharacterProperties::AddPropertiesToVector(aProperties);
         std::sort(aProperties.begin(), aProperties.end(), ::chart::PropertyNameLess());
 
         return comphelper::containerToSequence(aProperties);
@@ -211,7 +212,8 @@ sal_Bool SAL_CALL DataTable::supportsService(const OUString& rServiceName)
 uno::Sequence<OUString> SAL_CALL DataTable::getSupportedServiceNames()
 {
     return { "com.sun.star.chart2.DataTable", "com.sun.star.beans.PropertySet",
-             "com.sun.star.drawing.FillProperties", "com.sun.star.drawing.LineProperties" };
+             "com.sun.star.drawing.FillProperties", "com.sun.star.drawing.LineProperties",
+             "com.sun.star.style.CharacterProperties" };
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2(DataTable, DataTable_Base, ::property::OPropertySet)
