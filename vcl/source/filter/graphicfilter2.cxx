@@ -21,6 +21,7 @@
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/zcodec.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -29,6 +30,9 @@
 #include "graphicfilter_internal.hxx"
 
 #define DATA_SIZE           640
+constexpr sal_uInt32 EMF_CHECK_SIZE    = 44;
+constexpr sal_uInt32 EMR_HEADER        = 0x00000001;
+constexpr sal_uInt32 ENHMETA_SIGNATURE = 0x464d4520;
 
 GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
     pFileStm( ::utl::UcbStreamHelper::CreateStream( rPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ).release() ),
@@ -1086,12 +1090,64 @@ bool GraphicDescriptor::ImpDetectWMF( SvStream&, bool )
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectEMF( SvStream&, bool )
+bool GraphicDescriptor::ImpDetectEMF(SvStream& rStm, bool bExtendedInfo)
 {
-    bool bRet = aPathExt.startsWith( "emf" ) || aPathExt.startsWith( "emz" );
-    if (bRet)
-        nFormat = GraphicFileFormat::EMF;
+    SvStream* aNewStream = &rStm;
+    SvMemoryStream aMemStream;
+    sal_uInt8 aUncompressedBuffer[EMF_CHECK_SIZE];
+    if (ZCodec::IsZCompressed(rStm))
+    {
+        ZCodec aCodec;
+        aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/ true);
+        auto nDecompressLength = aCodec.Read(rStm, aUncompressedBuffer, EMF_CHECK_SIZE);
+        aCodec.EndCompression();
+        if (nDecompressLength != EMF_CHECK_SIZE)
+            return false;
+        aMemStream.SetBuffer(aUncompressedBuffer, EMF_CHECK_SIZE, EMF_CHECK_SIZE);
+        aNewStream = &aMemStream;
+    }
 
+    sal_uInt32 nRecordType = 0;
+    bool bRet = false;
+    sal_Int32 nStmPos = aNewStream->Tell();
+    aNewStream->SetEndian(SvStreamEndian::LITTLE);
+    aNewStream->ReadUInt32(nRecordType);
+    if (nRecordType == EMR_HEADER)
+    {
+        sal_Int32 nBoundLeft = 0, nBoundTop = 0, nBoundRight = 0, nBoundBottom = 0;
+        sal_Int32 nFrameLeft = 0, nFrameTop = 0, nFrameRight = 0, nFrameBottom = 0;
+        sal_uInt32 nSignature = 0;
+
+        aNewStream->SeekRel(4);
+        aNewStream->ReadInt32(nBoundLeft);
+        aNewStream->ReadInt32(nBoundTop);
+        aNewStream->ReadInt32(nBoundRight);
+        aNewStream->ReadInt32(nBoundBottom);
+        aNewStream->ReadInt32(nFrameLeft);
+        aNewStream->ReadInt32(nFrameTop);
+        aNewStream->ReadInt32(nFrameRight);
+        aNewStream->ReadInt32(nFrameBottom);
+        aNewStream->ReadUInt32(nSignature);
+
+        if (nSignature == ENHMETA_SIGNATURE)
+        {
+            nFormat = GraphicFileFormat::EMF;
+            bRet = true;
+
+            if (bExtendedInfo)
+            {
+                // size in pixels
+                aPixSize.setWidth(nBoundRight - nBoundLeft + 1);
+                aPixSize.setHeight(nBoundBottom - nBoundTop + 1);
+
+                // size in 0.01mm units
+                aLogSize.setWidth(nFrameRight - nFrameLeft + 1);
+                aLogSize.setHeight(nFrameBottom - nFrameTop + 1);
+            }
+        }
+    }
+
+    rStm.Seek(nStmPos);
     return bRet;
 }
 
