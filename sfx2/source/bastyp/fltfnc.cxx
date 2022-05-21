@@ -569,16 +569,24 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilterForProps( const css:
 
     // make query for all types matching the properties
     uno::Reference < css::container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
-    ::comphelper::SequenceAsHashMap aProps;
+    uno::Sequence<beans::PropertyValue> aProps;
     while ( xEnum->hasMoreElements() )
     {
-        aProps << xEnum->nextElement();
-
-        OUString aValue;
         static constexpr OUStringLiteral sPreferredFilter = u"PreferredFilter";
+        static constexpr OUStringLiteral sName = u"Name";
+
+        xEnum->nextElement() >>= aProps;
+        OUString aValue, aName;
+        for( const auto & rPropVal : aProps)
+        {
+            if (rPropVal.Name == sPreferredFilter)
+                rPropVal.Value >>= aValue;
+            else if (rPropVal.Name == sName)
+                rPropVal.Value >>= aName;
+        }
+
         // try to get the preferred filter (works without loading all filters!)
-        auto it = aProps.find(sPreferredFilter);
-        if ( it != aProps.end() && (it->second >>= aValue) && !aValue.isEmpty() )
+        if ( !aValue.isEmpty() )
         {
             std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetFilterByName( aValue );
             if ( !pFilter || (pFilter->GetFilterFlags() & nMust) != nMust || (pFilter->GetFilterFlags() & nDont ) )
@@ -593,13 +601,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilterForProps( const css:
                 {
                     // preferred filter belongs to another document type; now we must search the filter
                     m_rImpl.InitForIterating();
-                    static constexpr OUStringLiteral sName = u"Name";
-                    it = aProps.find(sName);
-                    if (it != aProps.end())
-                        it->second >>= aValue;
-                    else
-                        aValue.clear();
-                    pFilter = GetFilter4EA( aValue, nMust, nDont );
+                    pFilter = GetFilter4EA( aName, nMust, nDont );
                     if ( pFilter )
                         return pFilter;
                 }
