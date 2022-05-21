@@ -219,6 +219,10 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             bOk = TIFFRGBAImageGet(&img, nullptr, w, img.height);
             TIFFRGBAImageEnd(&img);
         }
+        else
+        {
+            SAL_WARN("filter.tiff", "cannot import tiff, error is: " << emsg);
+        }
 
         access.reset();
         accessAlpha.reset();
