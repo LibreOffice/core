@@ -104,18 +104,17 @@ private:
 
         // Request:
         Item(
-            rtl::ByteSequence const & theTid, OUString const & theOid,
-            com::sun::star::uno::TypeDescription const & theType,
-            com::sun::star::uno::TypeDescription const & theMember,
+            rtl::ByteSequence theTid, OUString theOid,
+            com::sun::star::uno::TypeDescription theType,
+            com::sun::star::uno::TypeDescription theMember,
             std::vector< BinaryAny >&& inArguments,
-            com::sun::star::uno::UnoInterfaceReference const &
-                theCurrentContext);
+            com::sun::star::uno::UnoInterfaceReference theCurrentContext);
 
         // Reply:
         Item(
-            rtl::ByteSequence const & theTid,
-            com::sun::star::uno::TypeDescription const & theMember,
-            bool theSetter, bool theException, BinaryAny const & theReturnValue,
+            rtl::ByteSequence theTid,
+            com::sun::star::uno::TypeDescription theMember,
+            bool theSetter, bool theException, BinaryAny theReturnValue,
             std::vector< BinaryAny >&& outArguments,
             bool theSetCurrentContextMode);
 

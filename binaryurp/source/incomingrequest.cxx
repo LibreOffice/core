@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
@@ -43,14 +44,14 @@
 namespace binaryurp {
 
 IncomingRequest::IncomingRequest(
-    rtl::Reference< Bridge > const & bridge, rtl::ByteSequence const & tid,
-    OUString const & oid, css::uno::UnoInterfaceReference const & object,
-    css::uno::TypeDescription const & type, sal_uInt16 functionId,
+    rtl::Reference< Bridge > const & bridge, rtl::ByteSequence tid,
+    OUString oid, css::uno::UnoInterfaceReference object,
+    css::uno::TypeDescription type, sal_uInt16 functionId,
     bool synchronous, css::uno::TypeDescription const & member, bool setter,
     std::vector< BinaryAny >&& inArguments, bool currentContextMode,
-    css::uno::UnoInterfaceReference const & currentContext):
-    bridge_(bridge), tid_(tid), oid_(oid), object_(object), type_(type),
-    member_(member), currentContext_(currentContext),
+    css::uno::UnoInterfaceReference currentContext):
+    bridge_(bridge), tid_(std::move(tid)), oid_(std::move(oid)), object_(std::move(object)), type_(std::move(type)),
+    member_(member), currentContext_(std::move(currentContext)),
     inArguments_(std::move(inArguments)), functionId_(functionId),
     synchronous_(synchronous), setter_(setter), currentContextMode_(currentContextMode)
 {

@@ -21,6 +21,7 @@
 
 #include <cassert>
 #include <exception>
+#include <utility>
 #include <vector>
 
 #include <cppuhelper/exc_hlp.hxx>
@@ -64,9 +65,9 @@ extern "C" void proxy_dispatchInterface(
 }
 
 Proxy::Proxy(
-    rtl::Reference< Bridge > const & bridge, OUString const & oid,
-    css::uno::TypeDescription const & type):
-    bridge_(bridge), oid_(oid), type_(type), references_(1)
+    rtl::Reference< Bridge > const & bridge, OUString oid,
+    css::uno::TypeDescription type):
+    bridge_(bridge), oid_(std::move(oid)), type_(std::move(type)), references_(1)
 {
     assert(bridge.is());
     acquire = &proxy_acquireInterface;

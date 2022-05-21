@@ -43,14 +43,14 @@ private:
     IncomingRequest& operator=(const IncomingRequest&) = delete;
 public:
     IncomingRequest(
-        rtl::Reference< Bridge > const & bridge, rtl::ByteSequence const & tid,
-        OUString const & oid,
-        com::sun::star::uno::UnoInterfaceReference const & object,
-        com::sun::star::uno::TypeDescription const & type,
+        rtl::Reference< Bridge > const & bridge, rtl::ByteSequence tid,
+        OUString oid,
+        com::sun::star::uno::UnoInterfaceReference object,
+        com::sun::star::uno::TypeDescription type,
         sal_uInt16 functionId, bool synchronous,
         com::sun::star::uno::TypeDescription const & member, bool setter,
         std::vector< BinaryAny >&& inArguments, bool currentContextMode,
-        com::sun::star::uno::UnoInterfaceReference const & currentContext);
+        com::sun::star::uno::UnoInterfaceReference currentContext);
 
     ~IncomingRequest();
 

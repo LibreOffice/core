@@ -39,8 +39,8 @@ namespace binaryurp {
 class Proxy: public uno_Interface {
 public:
     Proxy(
-        rtl::Reference< Bridge > const & bridge, OUString const & oid,
-        com::sun::star::uno::TypeDescription const & type);
+        rtl::Reference< Bridge > const & bridge, OUString oid,
+        com::sun::star::uno::TypeDescription type);
 
     const OUString& getOid() const { return oid_;}
 
