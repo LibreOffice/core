@@ -411,7 +411,7 @@ static bool lcl_CanApplyAsianKerning(sal_Unicode cp)
 void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
 {
     const int nLength = rStr.getLength();
-    tools::Long nOffset = 0;
+    double nOffset = 0;
 
     for (std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.begin(),
                                           pGlyphIterEnd = m_GlyphItems.end();
@@ -437,7 +437,7 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
                 continue;
 
             // apply punctuation compression to logical glyph widths
-            int nDelta = (nKernCurrent < nKernNext) ? nKernCurrent : nKernNext;
+            DeviceCoordinate nDelta = (nKernCurrent < nKernNext) ? nKernCurrent : nKernNext;
             if (nDelta < 0)
             {
                 nDelta = (nDelta * pGlyphIter->origWidth() + 2) / 4;

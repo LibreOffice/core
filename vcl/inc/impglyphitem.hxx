@@ -52,18 +52,18 @@ template <> struct typed_flags<GlyphItemFlags> : is_typed_flags<GlyphItemFlags, 
 class VCL_DLLPUBLIC GlyphItem
 {
     DevicePoint m_aLinearPos; // absolute position of non rotated string
-    sal_Int32 m_nOrigWidth; // original glyph width
+    DeviceCoordinate m_nOrigWidth; // original glyph width
     sal_Int32 m_nCharPos; // index in string
     sal_Int32 m_nXOffset;
     sal_Int32 m_nYOffset;
-    sal_Int32 m_nNewWidth; // width after adjustments
+    DeviceCoordinate m_nNewWidth; // width after adjustments
     sal_GlyphId m_aGlyphId;
     GlyphItemFlags m_nFlags;
     sal_Int8 m_nCharCount; // number of characters making up this glyph
 
 public:
     GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const DevicePoint& rLinearPos,
-              GlyphItemFlags nFlags, int nOrigWidth, int nXOffset, int nYOffset)
+              GlyphItemFlags nFlags, DeviceCoordinate nOrigWidth, int nXOffset, int nYOffset)
         : m_aLinearPos(rLinearPos)
         , m_nOrigWidth(nOrigWidth)
         , m_nCharPos(nCharPos)
@@ -92,15 +92,15 @@ public:
 
     sal_GlyphId glyphId() const { return m_aGlyphId; }
     int charCount() const { return m_nCharCount; }
-    int origWidth() const { return m_nOrigWidth; }
+    DeviceCoordinate origWidth() const { return m_nOrigWidth; }
     int charPos() const { return m_nCharPos; }
     int xOffset() const { return m_nXOffset; }
     int yOffset() const { return m_nYOffset; }
-    sal_Int32 newWidth() const { return m_nNewWidth; }
+    DeviceCoordinate newWidth() const { return m_nNewWidth; }
     const DevicePoint& linearPos() const { return m_aLinearPos; }
 
-    void setNewWidth(sal_Int32 width) { m_nNewWidth = width; }
-    void addNewWidth(sal_Int32 width) { m_nNewWidth += width; }
+    void setNewWidth(DeviceCoordinate width) { m_nNewWidth = width; }
+    void addNewWidth(DeviceCoordinate width) { m_nNewWidth += width; }
     void setLinearPos(const DevicePoint& point) { m_aLinearPos = point; }
     void setLinearPosX(double x) { m_aLinearPos.setX(x); }
     void adjustLinearPosX(double diff) { m_aLinearPos.adjustX(diff); }
