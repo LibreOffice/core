@@ -30,6 +30,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 
 #include "jni_bridge.h"
 #include "jniunoenvironmentdata.hxx"
@@ -401,7 +402,7 @@ struct UNO_proxy : public uno_Interface
     // ctor
     inline UNO_proxy(
         JNI_context const & jni, Bridge const * bridge,
-        jobject javaI, jstring jo_oid, OUString const & oid,
+        jobject javaI, jstring jo_oid, OUString oid,
         JNI_interface_type_info const * info );
 };
 
@@ -409,10 +410,10 @@ struct UNO_proxy : public uno_Interface
 
 inline UNO_proxy::UNO_proxy(
     JNI_context const & jni, Bridge const * bridge,
-    jobject javaI, jstring jo_oid, OUString const & oid,
+    jobject javaI, jstring jo_oid, OUString oid,
     JNI_interface_type_info const * info )
     : m_ref( 1 ),
-      m_oid( oid ),
+      m_oid(std::move( oid )),
       m_type_info( info )
 {
     JNI_info const * jni_info = bridge->getJniInfo();

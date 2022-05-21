@@ -72,7 +72,7 @@ private:
     CppInterfaceProxy(
         Bridge * pBridge_, uno_Interface * pUnoI_,
         typelib_InterfaceTypeDescription * pTypeDescr_,
-        OUString const & rOId_);
+        OUString aOId_);
 
     ~CppInterfaceProxy();
 

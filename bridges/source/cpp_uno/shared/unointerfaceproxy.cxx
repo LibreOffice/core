@@ -22,6 +22,7 @@
 #include <bridge.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
+#include <utility>
 #include <typelib/typedescription.h>
 #include <uno/dispatcher.h>
 
@@ -93,12 +94,12 @@ UnoInterfaceProxy * UnoInterfaceProxy::create(
 UnoInterfaceProxy::UnoInterfaceProxy(
     bridges::cpp_uno::shared::Bridge * pBridge_,
     com::sun::star::uno::XInterface * pCppI_,
-    typelib_InterfaceTypeDescription * pTypeDescr_, OUString const & rOId_)
+    typelib_InterfaceTypeDescription * pTypeDescr_, OUString aOId_)
     : nRef( 1 )
     , pBridge( pBridge_ )
     , pCppI( pCppI_ )
     , pTypeDescr( pTypeDescr_ )
-    , oid( rOId_ )
+    , oid(std::move( aOId_ ))
 {
     pBridge->acquire();
     ::typelib_typedescription_acquire(&pTypeDescr->aBase);
