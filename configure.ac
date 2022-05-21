@@ -13559,7 +13559,7 @@ dnl ===================================================================
 dnl Test whether to build libtiff or rely on the system version
 dnl ===================================================================
 
-libo_CHECK_SYSTEM_MODULE([libtiff],[LIBTIFF],[libtiff])
+libo_CHECK_SYSTEM_MODULE([libtiff],[LIBTIFF],[libtiff-4])
 
 dnl ===================================================================
 dnl Test whether to build libwebp or rely on the system version
