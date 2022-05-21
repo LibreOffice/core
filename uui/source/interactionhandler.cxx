@@ -34,6 +34,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <optional>
 
 using namespace com::sun::star;
 
@@ -46,7 +47,7 @@ class UUIInteractionHandler:
                                 css::beans::XPropertySet>
 {
 private:
-    std::unique_ptr<UUIInteractionHelper> m_pImpl;
+    std::optional<UUIInteractionHelper> m_pImpl;
 
 public:
     explicit UUIInteractionHandler(css::uno::Reference< css::uno::XComponentContext > const & rxContext);
@@ -131,7 +132,7 @@ public:
 
 UUIInteractionHandler::UUIInteractionHandler(
     uno::Reference< uno::XComponentContext > const & rxContext)
-        : m_pImpl(new UUIInteractionHelper(rxContext))
+        : m_pImpl(rxContext)
 {
 }
 
@@ -184,7 +185,7 @@ UUIInteractionHandler::initialize(
         }
     }
 
-    m_pImpl.reset( new UUIInteractionHelper(xContext, xWindow, aContext) );
+    m_pImpl.emplace( xContext, xWindow, aContext );
 }
 
 void SAL_CALL

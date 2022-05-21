@@ -28,7 +28,7 @@ using namespace css;
 UUIInteractionRequestStringResolver::UUIInteractionRequestStringResolver(
     uno::Reference< uno::XComponentContext > const &
         rxContext)
-        : m_pImpl(new UUIInteractionHelper(rxContext))
+        : m_pImpl(rxContext)
 {
 }
 

@@ -23,9 +23,8 @@
 #include <com/sun/star/task/XInteractionRequestStringResolver.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <memory>
-
-class UUIInteractionHelper;
+#include "iahndl.hxx"
+#include <optional>
 
 class UUIInteractionRequestStringResolver:
     public cppu::WeakImplHelper<
@@ -37,7 +36,7 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & rxContext);
 
 private:
-    std::unique_ptr<UUIInteractionHelper> m_pImpl;
+    std::optional<UUIInteractionHelper> m_pImpl;
 
     UUIInteractionRequestStringResolver(UUIInteractionRequestStringResolver const &) = delete;
     void operator =(UUIInteractionRequestStringResolver const &) = delete;
