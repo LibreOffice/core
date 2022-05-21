@@ -544,8 +544,10 @@ void SmXMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
                            aRet.Name = prop.Name;
                            OUString aActualName(prop.Name);
                            // handle 'save used symbols only'
+                           static constexpr OUStringLiteral sUserDefinedSymbolsInUse
+                               = u"UserDefinedSymbolsInUse";
                            if (bUsedSymbolsOnly && prop.Name == "Symbols")
-                               aActualName = "UserDefinedSymbolsInUse";
+                               aActualName = UserDefinedSymbolsInUse;
                            aRet.Value = xProps->getPropertyValue(aActualName);
                        }
                        return aRet;
