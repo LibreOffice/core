@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <utility>
 #include <vector>
 
 #include "binaryany.hxx"
@@ -33,9 +34,9 @@ private:
     IncomingReply& operator=(const IncomingReply&) = delete;
 public:
     IncomingReply(
-        bool theException, BinaryAny const & theReturnValue,
+        bool theException, BinaryAny theReturnValue,
         std::vector< BinaryAny >&& theOutArguments):
-        exception(theException), returnValue(theReturnValue),
+        exception(theException), returnValue(std::move(theReturnValue)),
         outArguments(std::move(theOutArguments))
     {}
 

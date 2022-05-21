@@ -22,6 +22,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <new>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/io/IOException.hpp>
@@ -90,9 +91,9 @@ std::vector< BinaryAny >::iterator copyMemberValues(
 }
 
 Unmarshal::Unmarshal(
-    rtl::Reference< Bridge > const & bridge, ReaderState & state,
+    rtl::Reference< Bridge > bridge, ReaderState & state,
     css::uno::Sequence< sal_Int8 > const & buffer):
-    bridge_(bridge), state_(state), buffer_(buffer)
+    bridge_(std::move(bridge)), state_(state), buffer_(buffer)
 {
     data_ = reinterpret_cast< sal_uInt8 const * >(buffer_.getConstArray());
     end_ = data_ + buffer_.getLength();

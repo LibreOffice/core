@@ -40,7 +40,7 @@ namespace binaryurp {
 class Unmarshal {
 public:
     Unmarshal(
-        rtl::Reference< Bridge > const & bridge, ReaderState & state,
+        rtl::Reference< Bridge > bridge, ReaderState & state,
         com::sun::star::uno::Sequence< sal_Int8 > const & buffer);
 
     ~Unmarshal();

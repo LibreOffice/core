@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <typelib/typedescription.hxx>
+#include <utility>
 
 namespace binaryurp {
 
@@ -29,9 +30,9 @@ struct OutgoingRequest {
     enum Kind { KIND_NORMAL, KIND_REQUEST_CHANGE, KIND_COMMIT_CHANGE };
 
     OutgoingRequest(
-        Kind theKind, com::sun::star::uno::TypeDescription const & theMember,
+        Kind theKind, com::sun::star::uno::TypeDescription theMember,
         bool theSetter):
-        member(theMember), kind(theKind), setter(theSetter)
+        member(std::move(theMember)), kind(theKind), setter(theSetter)
     {}
 
     com::sun::star::uno::TypeDescription member;

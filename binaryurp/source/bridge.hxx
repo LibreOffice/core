@@ -71,11 +71,11 @@ class Bridge:
 public:
     Bridge(
         rtl::Reference< BridgeFactory > const & factory,
-        OUString const & name,
+        OUString name,
         com::sun::star::uno::Reference<
             com::sun::star::connection::XConnection > const & connection,
         com::sun::star::uno::Reference<
-            com::sun::star::bridge::XInstanceProvider > const & provider);
+            com::sun::star::bridge::XInstanceProvider > provider);
 
     void start();
 

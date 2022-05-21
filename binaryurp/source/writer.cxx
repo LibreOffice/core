@@ -24,6 +24,7 @@
 #include <cstring>
 #include <exception>
 #include <limits>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/connection/XConnection.hpp>
@@ -50,24 +51,24 @@ Writer::Item::Item()
 {}
 
 Writer::Item::Item(
-    rtl::ByteSequence const & theTid, OUString const & theOid,
-    css::uno::TypeDescription const & theType,
-    css::uno::TypeDescription const & theMember,
+    rtl::ByteSequence theTid, OUString theOid,
+    css::uno::TypeDescription theType,
+    css::uno::TypeDescription theMember,
     std::vector< BinaryAny >&& inArguments,
-    css::uno::UnoInterfaceReference const & theCurrentContext):
-    tid(theTid), oid(theOid), type(theType), member(theMember),
-    currentContext(theCurrentContext), arguments(std::move(inArguments)),
+    css::uno::UnoInterfaceReference theCurrentContext):
+    tid(std::move(theTid)), oid(std::move(theOid)), type(std::move(theType)), member(std::move(theMember)),
+    currentContext(std::move(theCurrentContext)), arguments(std::move(inArguments)),
     request(true), setter(false), exception(false), setCurrentContextMode(false)
 {}
 
 Writer::Item::Item(
-    rtl::ByteSequence const & theTid,
-    css::uno::TypeDescription const & theMember, bool theSetter,
-    bool theException, BinaryAny const & theReturnValue,
+    rtl::ByteSequence theTid,
+    css::uno::TypeDescription theMember, bool theSetter,
+    bool theException, BinaryAny theReturnValue,
     std::vector< BinaryAny >&& outArguments,
     bool theSetCurrentContextMode):
-    tid(theTid), member(theMember),
-    returnValue(theReturnValue), arguments(std::move(outArguments)),
+    tid(std::move(theTid)), member(std::move(theMember)),
+    returnValue(std::move(theReturnValue)), arguments(std::move(outArguments)),
     request(false), setter(theSetter),
     exception(theException), setCurrentContextMode(theSetCurrentContextMode)
 {}
