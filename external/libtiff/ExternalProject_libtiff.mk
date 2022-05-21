@@ -24,8 +24,10 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			--with-pic \
 			--disable-shared \
 			--disable-cxx \
+			--disable-libdeflate \
 			--disable-jbig \
 			--disable-jpeg \
+			--disable-lerc \
 			--disable-lzma \
 			--disable-mdi \
 			--disable-webp \
