@@ -16,6 +16,23 @@
       "message": "Just wonder if we shouldn\u0027t be put an assert for these.\nI mean, I also noticed\nwarn:vcl.layout:710042:710042:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero for VclBox: svt/ui/linewindow/box1\nI haven\u0027t taken a look yet but it\u0027s possible some other UI bugs are lurking around.",
       "revId": "434b23f96a7fff9a31f6070f1301bcb7c5eca5cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2edbc84_64b747bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-21T20:15:24Z",
+      "side": 1,
+      "message": "is the patch ok or should it be fixed on another way?",
+      "revId": "434b23f96a7fff9a31f6070f1301bcb7c5eca5cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
