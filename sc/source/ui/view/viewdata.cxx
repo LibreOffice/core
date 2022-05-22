@@ -782,7 +782,7 @@ ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pVi
         nPPTY(0.0),
         maMarkData  (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : pDoc->GetSheetLimits()),
         pDocShell   ( pDocSh ),
-        mrDoc       (pDoc ? *pDoc : pDocSh->GetDocument()),
+        mrDoc       (pDocSh ? pDocSh->GetDocument() : *pDoc),
         pView       ( pViewSh ),
         maOptions   (pDocSh ? pDocSh->GetDocument().GetViewOptions() : DefaultOptions()),
         pSpellingView ( nullptr ),
