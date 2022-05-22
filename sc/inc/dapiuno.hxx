@@ -90,7 +90,7 @@ private:
     rtl::Reference<ScDataPilotTableObj> GetObjectByName_Impl(const OUString& aName);
 
 public:
-                            ScDataPilotTablesObj(ScDocShell* pDocSh, SCTAB nT);
+                            ScDataPilotTablesObj(ScDocShell& rDocSh, SCTAB nT);
     virtual                 ~ScDataPilotTablesObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -141,7 +141,7 @@ private:
     ScDocShell*         pDocShell;
 
 public:
-                            ScDataPilotDescriptorBase(ScDocShell* pDocSh);
+                            ScDataPilotDescriptorBase(ScDocShell& rDocSh);
     virtual                 ~ScDataPilotDescriptorBase() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -207,7 +207,7 @@ private:
     std::unique_ptr<ScDPObject>  mpDPObject;
 
 public:
-                            ScDataPilotDescriptor(ScDocShell* pDocSh);
+                            ScDataPilotDescriptor(ScDocShell& rDocSh);
     virtual                 ~ScDataPilotDescriptor() override;
 
     virtual ScDPObject* GetDPObject() const override;
@@ -237,7 +237,7 @@ private:
     void                    Refreshed_Impl();
 
 public:
-                            ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN);
+                            ScDataPilotTableObj(ScDocShell& rDocSh, SCTAB nT, const OUString& rN);
     virtual                 ~ScDataPilotTableObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;

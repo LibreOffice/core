@@ -6652,7 +6652,7 @@ uno::Reference<sheet::XDataPilotTables> SAL_CALL ScTableSheetObj::getDataPilotTa
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
-        return new ScDataPilotTablesObj( pDocSh, GetTab_Impl() );
+        return new ScDataPilotTablesObj(*pDocSh, GetTab_Impl());
 
     OSL_FAIL("no document");
     return nullptr;

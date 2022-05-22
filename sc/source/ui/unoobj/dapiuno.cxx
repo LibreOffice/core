@@ -295,8 +295,8 @@ static sal_Int32 lcl_GetObjectIndex( ScDPObject* pDPObj, const ScFieldIdentifier
     return -1;  // none
 }
 
-ScDataPilotTablesObj::ScDataPilotTablesObj(ScDocShell* pDocSh, SCTAB nT) :
-    pDocShell( pDocSh ),
+ScDataPilotTablesObj::ScDataPilotTablesObj(ScDocShell& rDocSh, SCTAB nT) :
+    pDocShell( &rDocSh ),
     nTab( nT )
 {
     pDocShell->GetDocument().AddUnoObject(*this);
@@ -340,7 +340,7 @@ rtl::Reference<ScDataPilotTableObj> ScDataPilotTablesObj::GetObjectByIndex_Impl(
                 {
                     if ( nFound == nIndex )
                     {
-                        return new ScDataPilotTableObj( pDocShell, nTab, rDPObj.GetName() );
+                        return new ScDataPilotTableObj(*pDocShell, nTab, rDPObj.GetName());
                     }
                     ++nFound;
                 }
@@ -353,7 +353,7 @@ rtl::Reference<ScDataPilotTableObj> ScDataPilotTablesObj::GetObjectByIndex_Impl(
 rtl::Reference<ScDataPilotTableObj> ScDataPilotTablesObj::GetObjectByName_Impl(const OUString& rName)
 {
     if (hasByName(rName))
-        return new ScDataPilotTableObj( pDocShell, nTab, rName );
+        return new ScDataPilotTableObj(*pDocShell, nTab, rName);
     return nullptr;
 }
 
@@ -361,7 +361,7 @@ Reference<XDataPilotDescriptor> SAL_CALL ScDataPilotTablesObj::createDataPilotDe
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
-        return new ScDataPilotDescriptor(pDocShell);
+        return new ScDataPilotDescriptor(*pDocShell);
     return nullptr;
 }
 
@@ -578,9 +578,9 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
     return false;
 }
 
-ScDataPilotDescriptorBase::ScDataPilotDescriptorBase(ScDocShell* pDocSh) :
+ScDataPilotDescriptorBase::ScDataPilotDescriptorBase(ScDocShell& rDocSh) :
     maPropSet( lcl_GetDataPilotDescriptorBaseMap() ),
-    pDocShell( pDocSh )
+    pDocShell( &rDocSh )
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 }
@@ -988,8 +988,8 @@ const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()
     return theScDataPilotDescriptorBaseUnoTunnelId.getSeq();
 }
 
-ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN) :
-    ScDataPilotDescriptorBase( pDocSh ),
+ScDataPilotTableObj::ScDataPilotTableObj(ScDocShell& rDocSh, SCTAB nT, const OUString& rN) :
+    ScDataPilotDescriptorBase( rDocSh ),
     nTab( nT ),
     aName( rN ),
     aModifyListeners( 0 )
@@ -1258,9 +1258,9 @@ void ScDataPilotTableObj::Refreshed_Impl()
         rDoc.AddUnoListenerCall( xModifyListener, aEvent );
 }
 
-ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
-    ScDataPilotDescriptorBase( pDocSh ),
-    mpDPObject(new ScDPObject(&pDocSh->GetDocument()))
+ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell& rDocSh) :
+    ScDataPilotDescriptorBase( rDocSh ),
+    mpDPObject(new ScDPObject(&rDocSh.GetDocument()))
 {
     ScDPSaveData aSaveData;
     // set defaults like in ScPivotParam constructor
@@ -1269,7 +1269,7 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     aSaveData.SetIgnoreEmptyRows( false );
     aSaveData.SetRepeatIfEmpty( false );
     mpDPObject->SetSaveData(aSaveData);
-    ScSheetSourceDesc aSheetDesc(&pDocSh->GetDocument());
+    ScSheetSourceDesc aSheetDesc(&rDocSh.GetDocument());
     mpDPObject->SetSheetDesc(aSheetDesc);
 }
 
