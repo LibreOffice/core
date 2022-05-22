@@ -218,7 +218,8 @@ void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData )
 
     NoInitInt8* pData = &(*maData.begin());
     NoInitInt8* pCursor = &(pData[mnCursor]);
-    memcpy( pCursor, aData.getConstArray(), nBytesToWrite );
+    // cast to avoid -Werror=class-memaccess
+    memcpy(static_cast<void*>(pCursor), aData.getConstArray(), nBytesToWrite);
 
     mnCursor += nBytesToWrite;
 }
