@@ -34,7 +34,16 @@ class SW_DLLPUBLIC SwNodeIndex final : public sw::Ring<SwNodeIndex>
     void RegisterIndex( SwNodes& rNodes )
     {
         if(!rNodes.m_vIndices)
+        {
+#if defined(__GNUC__) && __GNUC__ == 12
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-pointer"
+#endif
             rNodes.m_vIndices = this;
+#if defined(__GNUC__) && __GNUC__ == 12
+#pragma GCC diagnostic pop
+#endif
+        }
         MoveTo(rNodes.m_vIndices);
     }
     void DeRegisterIndex( SwNodes& rNodes )
