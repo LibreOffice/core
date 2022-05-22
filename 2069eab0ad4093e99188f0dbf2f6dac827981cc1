@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b18a2261_707683c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-05-22T13:56:48Z",
+      "side": 1,
+      "message": "packaging on mac is solved. (only tested without gnu parallel)",
+      "revId": "2069eab0ad4093e99188f0dbf2f6dac827981cc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
