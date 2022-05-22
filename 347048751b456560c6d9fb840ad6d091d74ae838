@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ac56f172_9d9e4a97",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-22T09:58:24Z",
+      "side": 1,
+      "message": "Please avoid repeating all reasons of the bug report in the commit message. The discussion happened there; the commit message must not preach, but it must describe the change.\n\nA reasonable message could start like \"tdf#141026 put user and computer name into collapsed section\", and proceed with something only briefly mentioning the privacy (e.g., \"this allows to improve privacy, as discussed in the bug report\"). The part about technical details is OK in the commit message, e.g. where you describe replacing \"standard dialog\" with custom one, or the .ui file pieces.",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 67
+      },
+      "revId": "347048751b456560c6d9fb840ad6d091d74ae838",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "40417819_7b4f8e3a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
