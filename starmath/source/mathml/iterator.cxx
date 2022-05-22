@@ -54,7 +54,11 @@ void SmMlIteratorFree(SmMlElement* pMlElementTree)
 {
     if (pMlElementTree == nullptr)
         return;
-    SmMlIteratorBottomToTop(pMlElementTree, deleteElement, nullptr);
+    for (size_t i = 0; i < pMlElementTree->getSubElementsCount(); ++i)
+    {
+        SmMlIteratorFree(pMlElementTree->getSubElement(i));
+    }
+    deleteElement(pMlElementTree, nullptr);
 }
 
 SmMlElement* SmMlIteratorCopy(SmMlElement* pMlElementTree)
