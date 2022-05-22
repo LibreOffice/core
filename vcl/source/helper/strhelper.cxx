@@ -360,9 +360,15 @@ OString WhitespaceToSpace(const OString& rLine)
 
     // there might be a space at beginning or end
     pLeap--;
+#if defined(__GNUC__) && __GNUC__ == 12
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
     if( *pLeap == ' ' )
         *pLeap = 0;
-
+#if defined(__GNUC__) && __GNUC__ == 12
+#pragma GCC diagnostic pop
+#endif
     return *pBuffer == ' ' ? pBuffer+1 : pBuffer;
 }
 
