@@ -129,7 +129,7 @@ void ScRedComDialog::Execute()
 
 void ScRedComDialog::SelectCell()
 {
-    if(pChangeAction==nullptr)
+    if (!pChangeAction || !pDocShell)
         return;
 
     const ScChangeAction* pAction=pChangeAction;
