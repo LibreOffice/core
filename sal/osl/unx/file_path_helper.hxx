@@ -36,7 +36,7 @@
    @returns nothing
 
 */
-void osl_systemPathRemoveSeparator(rtl_String* pstrPath);
+void osl_systemPathRemoveSeparator(char* pstrPath);
 
 /**
    Returns true if the given path is a relative path and so starts not with '/'

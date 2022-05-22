@@ -150,18 +150,18 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 {
     oslFileError eRet;
 
-    OString path;
+    char path[PATH_MAX];
 
     if ((ustrDirectoryURL == nullptr) || (ustrDirectoryURL->length == 0) || (pDirectory == nullptr))
         return osl_File_E_INVAL;
 
     /* convert file URL to system path */
-    eRet = osl::detail::convertUrlToPathname(OUString::unacquired(&ustrDirectoryURL), &path);
+    eRet = osl::detail::convertUrlToPathname(OUString::unacquired(&ustrDirectoryURL), path, PATH_MAX);
 
     if( eRet != osl_File_E_None )
         return eRet;
 
-    osl_systemPathRemoveSeparator(path.pData);
+    osl_systemPathRemoveSeparator(path);
 
 #ifdef MACOSX
     {
@@ -204,7 +204,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 #endif
     {
         /* open directory */
-        DIR *pdir = opendir( path.getStr() );
+        DIR *pdir = opendir( path );
 
         if( pdir )
         {
@@ -354,17 +354,17 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
 
 oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString* ustrFileURL, oslDirectoryItem* pItem)
 {
-    OString strSystemPath;
+    char strSystemPath[PATH_MAX];
     oslFileError osl_error = osl_File_E_INVAL;
 
     if ((!ustrFileURL) || (ustrFileURL->length == 0) || (!pItem))
         return osl_File_E_INVAL;
 
-    osl_error = osl::detail::convertUrlToPathname(OUString::unacquired(&ustrFileURL), &strSystemPath);
+    osl_error = osl::detail::convertUrlToPathname(OUString::unacquired(&ustrFileURL), strSystemPath);
     if (osl_error != osl_File_E_None)
         return osl_error;
 
-    osl_systemPathRemoveSeparator(strSystemPath.pData);
+    osl_systemPathRemoveSeparator(strSystemPath);
 
     if (osl::access(strSystemPath, F_OK) == -1)
     {
@@ -564,9 +564,9 @@ oslFileError SAL_CALL osl_createDirectoryPath(
     if (aDirectoryUrl == nullptr)
         return osl_File_E_INVAL;
 
-    OString sys_path;
+    char sys_path[PATH_MAX];
     oslFileError osl_error = osl::detail::convertUrlToPathname(
-        OUString::unacquired(&aDirectoryUrl), &sys_path);
+        OUString::unacquired(&aDirectoryUrl), sys_path);
 
     if (osl_error != osl_File_E_None)
         return osl_error;
@@ -575,7 +575,7 @@ oslFileError SAL_CALL osl_createDirectoryPath(
 
     // const_cast because sys_path is a local copy which we want to modify inplace instead of
     // copy it into another buffer on the heap again
-    return create_dir_recursively_(sys_path.pData->buffer, aDirectoryCreationCallbackFunc, pData);
+    return create_dir_recursively_(sys_path, aDirectoryCreationCallbackFunc, pData);
 }
 
 static oslFileError osl_unlinkFile(const char* pszPath);

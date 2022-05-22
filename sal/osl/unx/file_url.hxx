@@ -37,7 +37,7 @@ int TextToUnicode(const char* text, size_t text_buffer_size, sal_Unicode* unic_t
 
 namespace osl::detail {
 
-oslFileError convertUrlToPathname(rtl::OUString const & url, rtl::OString * pathname);
+oslFileError convertUrlToPathname(rtl::OUString const & url, char * pathname, sal_Int32 pathnameMaxSize);
 
 oslFileError convertPathnameToUrl(rtl::OString const & pathname, rtl::OUString * url);
 

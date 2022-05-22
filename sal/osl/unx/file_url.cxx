@@ -277,6 +277,10 @@ template<typename T> oslFileError getSystemPathFromFileUrl(
         if (!decodeFromUtf8(url.subView(i), path)) {
             return osl_File_E_INVAL;
         }
+    else if constexpr (std::is_same_v<T, char*>) {
+        if (!decodeFromUtf8(url.subView(i), path)) {
+            return osl_File_E_INVAL;
+        }
     } else if constexpr (std::is_same_v<T, rtl::OUString>) {
         *path = rtl::Uri::decode(
             url.copy(i), rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
@@ -810,19 +814,17 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
 
 oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileURL)
 {
-    OString strSystemPath;
-    oslFileError osl_error      = osl::detail::convertUrlToPathname(
-        OUString::unacquired(&ustrFileURL), &strSystemPath);
+    oslFileError osl_error = osl::detail::convertUrlToPathname(
+        OUString::unacquired(&ustrFileURL), buffer, bufLen);
 
     if(osl_error != osl_File_E_None)
         return osl_error;
 
-    osl_systemPathRemoveSeparator(strSystemPath.pData);
+    osl_systemPathRemoveSeparator(buffer);
 
-    if (o3tl::make_unsigned(strSystemPath.getLength()) >= bufLen) {
+    if (strlen(buffer) >= bufLen) {
         return osl_File_E_OVERFLOW;
     }
-    std::strcpy(buffer, strSystemPath.getStr());
 
     return osl_error;
 }
@@ -904,7 +906,7 @@ int TextToUnicode(
     return nDestBytes;
 }
 
-oslFileError osl::detail::convertUrlToPathname(OUString const & url, OString * pathname) {
+oslFileError osl::detail::convertUrlToPathname(OUString const & url, char * pathname, sal_Int32 pathnameMaxSize) {
     assert(pathname != nullptr);
     oslFileError e;
     try {
@@ -912,7 +914,7 @@ oslFileError osl::detail::convertUrlToPathname(OUString const & url, OString * p
     } catch (std::length_error &) {
         e = osl_File_E_RANGE;
     }
-    if (e == osl_File_E_None && !pathname->startsWith("/")) {
+    if (e == osl_File_E_None && !o3tl::starts_with(pathname, "/")) {
         e = osl_File_E_INVAL;
     }
     return e;
