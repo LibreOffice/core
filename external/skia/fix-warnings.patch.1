@@ -26,3 +26,14 @@ index f143dab013..be3cde0f4f 100644
  
      const DisplayParams& getDisplayParams() { return fDisplayParams; }
      virtual void setDisplayParams(const DisplayParams& params) = 0;
+--- skia/include/core/SkSamplingOptions.h.orig	2022-05-22 12:25:06.112544528 +0200
++++ skia/include/core/SkSamplingOptions.h	2022-05-22 12:25:09.207636134 +0200
+@@ -97,7 +97,7 @@
+     bool isAniso() const { return maxAniso != 0; }
+ 
+ private:
+-    SkSamplingOptions(int maxAniso) : maxAniso(maxAniso) {}
++    SkSamplingOptions(int maxAniso_) : maxAniso(maxAniso_) {}
+ };
+ 
+ #endif
