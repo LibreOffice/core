@@ -1742,7 +1742,6 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
     //! DocFunc-??
     //! Undo ??
 
-    ScDocument& rDoc = pDocShell->GetDocument();
     if ( eFamily == SfxStyleFamily::Para )
     {
         // If we are loading, we can delay line height calculation, because we are going to re-calc all of those
@@ -1755,6 +1754,7 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
             double nPPTX = aLogic.X() / 1000.0;
             double nPPTY = aLogic.Y() / 1000.0;
             Fraction aZoom(1,1);
+            ScDocument& rDoc = pDocShell->GetDocument();
             rDoc.StyleSheetChanged( pStyle, false, pVDev, nPPTX, nPPTY, aZoom, aZoom );
 
             if (!rDoc.IsImportingXML())
