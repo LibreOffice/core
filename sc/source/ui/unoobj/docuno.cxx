@@ -4124,8 +4124,8 @@ sal_Bool SAL_CALL ScTableColumnsObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     SCCOL nCol = 0;
-    if ( ::AlphaToCol( pDocShell->GetDocument(), nCol, aName) )
-        if ( pDocShell && nCol >= nStartCol && nCol <= nEndCol )
+    if (pDocShell && ::AlphaToCol(pDocShell->GetDocument(), nCol, aName))
+        if (nCol >= nStartCol && nCol <= nEndCol)
             return true;
 
     return false;       // not found
