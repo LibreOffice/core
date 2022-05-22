@@ -1260,7 +1260,7 @@ void ScDataPilotTableObj::Refreshed_Impl()
 
 ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     ScDataPilotDescriptorBase( pDocSh ),
-    mpDPObject(new ScDPObject(pDocSh ? &pDocSh->GetDocument() : nullptr) )
+    mpDPObject(new ScDPObject(&pDocSh->GetDocument()))
 {
     ScDPSaveData aSaveData;
     // set defaults like in ScPivotParam constructor
@@ -1269,7 +1269,7 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     aSaveData.SetIgnoreEmptyRows( false );
     aSaveData.SetRepeatIfEmpty( false );
     mpDPObject->SetSaveData(aSaveData);
-    ScSheetSourceDesc aSheetDesc(pDocSh ? &pDocSh->GetDocument() : nullptr);
+    ScSheetSourceDesc aSheetDesc(&pDocSh->GetDocument());
     mpDPObject->SetSheetDesc(aSheetDesc);
 }
 
