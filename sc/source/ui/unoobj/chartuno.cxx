@@ -83,9 +83,10 @@ void ScChartsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 rtl::Reference<ScChartObj> ScChartsObj::GetObjectByIndex_Impl(tools::Long nIndex) const
 {
-    OUString aName;
     if ( pDocShell )
     {
+        OUString aName;
+
         ScDocument& rDoc = pDocShell->GetDocument();
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
         if (pDrawLayer)
@@ -114,10 +115,11 @@ rtl::Reference<ScChartObj> ScChartsObj::GetObjectByIndex_Impl(tools::Long nIndex
                 }
             }
         }
+
+        if (!aName.isEmpty())
+            return new ScChartObj( pDocShell, nTab, aName );
     }
 
-    if (!aName.isEmpty())
-        return new ScChartObj( pDocShell, nTab, aName );
     return nullptr;
 }
 
