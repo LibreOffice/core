@@ -16,6 +16,24 @@
       "message": "@Stephan: Is there any GCC version that is known not to need this workaround any more so this should better be limited to versions smaller than that?",
       "revId": "4438eb3e04c5c8059261af196b56a511dc69b2be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afb892b3_695fac95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-22T20:36:26Z",
+      "side": 1,
+      "message": "At least GCC 13 trunk doesn\u0027t need it.  Which version(s) do you know need it?",
+      "parentUuid": "14564977_a3d36254",
+      "revId": "4438eb3e04c5c8059261af196b56a511dc69b2be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
