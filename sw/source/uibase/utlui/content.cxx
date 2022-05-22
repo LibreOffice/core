@@ -3709,10 +3709,13 @@ void SwContentTree::UpdateTracking()
                 && (m_nRootType != ContentTypeId::FOOTNOTE
                     && m_nRootType != ContentTypeId::ENDNOTE)))
         {
-            if (mTrackContentType[ContentTypeId::FOOTNOTE])
-                lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::FOOTNOTE,
-                                                  aContentAtPos.pFndTextAttr);
-            if (mTrackContentType[ContentTypeId::ENDNOTE])
+            if (!aContentAtPos.pFndTextAttr->GetFootnote().IsEndNote())
+            {
+                if (mTrackContentType[ContentTypeId::FOOTNOTE])
+                    lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::FOOTNOTE,
+                                                      aContentAtPos.pFndTextAttr);
+            }
+            else if (mTrackContentType[ContentTypeId::ENDNOTE])
                 lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::ENDNOTE,
                                                   aContentAtPos.pFndTextAttr);
             return;
