@@ -1067,6 +1067,7 @@ chart2/source/inc/Scaling.hxx
 chart2/source/inc/SceneProperties.hxx
 chart2/source/inc/StatisticsHelper.hxx
 chart2/source/inc/ThreeDHelper.hxx
+chart2/source/inc/Title.hxx
 chart2/source/inc/TitleHelper.hxx
 chart2/source/inc/UncachedDataSequence.hxx
 chart2/source/inc/UserDefinedProperties.hxx
@@ -1107,7 +1108,6 @@ chart2/source/model/main/PageBackground.hxx
 chart2/source/model/main/PolarCoordinateSystem.cxx
 chart2/source/model/main/StockBar.cxx
 chart2/source/model/main/Title.cxx
-chart2/source/model/main/Title.hxx
 chart2/source/model/main/UndoManager.cxx
 chart2/source/model/main/UndoManager.hxx
 chart2/source/model/main/Wall.cxx

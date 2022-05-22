@@ -18,6 +18,7 @@
  */
 
 #include <TitleHelper.hxx>
+#include <Title.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <Axis.hxx>
@@ -197,7 +198,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
     , const uno::Reference< uno::XComponentContext > & xContext
     , ReferenceSizeProvider * pRefSizeProvider )
 {
-    uno::Reference< XTitle > xTitle;
+    rtl::Reference< ::chart::Title > xTitle;
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( eTitleType, xModel ) );
 
     if( !xTitled.is() )
@@ -226,70 +227,61 @@ uno::Reference< XTitle > TitleHelper::createTitle(
     {
         rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
 
-        xTitle.set( xContext->getServiceManager()->createInstanceWithContext(
-                        "com.sun.star.chart2.Title",
-                        xContext ), uno::UNO_QUERY );
+        xTitle = new ::chart::Title();
 
-        if(xTitle.is())
+        // default char height (main: 13.0 == default)
+        float fDefaultCharHeightSub = 11.0;
+        float fDefaultCharHeightAxis = 9.0;
+        switch( eTitleType )
         {
-            // default char height (main: 13.0 == default)
-            float fDefaultCharHeightSub = 11.0;
-            float fDefaultCharHeightAxis = 9.0;
-            switch( eTitleType )
+            case TitleHelper::SUB_TITLE:
+                TitleHelper::setCompleteString(
+                    rTitleText, xTitle, xContext, & fDefaultCharHeightSub );
+                break;
+            case TitleHelper::X_AXIS_TITLE:
+            case TitleHelper::Y_AXIS_TITLE:
+            case TitleHelper::Z_AXIS_TITLE:
+            case TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION:
+            case TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION:
+            case TitleHelper::SECONDARY_X_AXIS_TITLE:
+            case TitleHelper::SECONDARY_Y_AXIS_TITLE:
+                TitleHelper::setCompleteString(
+                    rTitleText, xTitle, xContext, & fDefaultCharHeightAxis );
+                break;
+            default:
+                TitleHelper::setCompleteString( rTitleText, xTitle, xContext );
+                break;
+        }
+
+        // set/clear autoscale
+        if( pRefSizeProvider )
+            pRefSizeProvider->setValuesAtTitle( xTitle );
+
+        xTitled->setTitleObject( xTitle );
+
+        //default rotation 90 degree for y axis title in normal coordinatesystems or for x axis title for swapped coordinatesystems
+        if( eTitleType == TitleHelper::X_AXIS_TITLE ||
+            eTitleType == TitleHelper::Y_AXIS_TITLE ||
+            eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE ||
+            eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE )
+
+        {
+            try
             {
-                case TitleHelper::SUB_TITLE:
-                    TitleHelper::setCompleteString(
-                        rTitleText, xTitle, xContext, & fDefaultCharHeightSub );
-                    break;
-                case TitleHelper::X_AXIS_TITLE:
-                case TitleHelper::Y_AXIS_TITLE:
-                case TitleHelper::Z_AXIS_TITLE:
-                case TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION:
-                case TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION:
-                case TitleHelper::SECONDARY_X_AXIS_TITLE:
-                case TitleHelper::SECONDARY_Y_AXIS_TITLE:
-                    TitleHelper::setCompleteString(
-                        rTitleText, xTitle, xContext, & fDefaultCharHeightAxis );
-                    break;
-                default:
-                    TitleHelper::setCompleteString( rTitleText, xTitle, xContext );
-                    break;
+                bool bDummy = false;
+                bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
+
+                if( (!bIsVertical && eTitleType == TitleHelper::Y_AXIS_TITLE)
+                    || (bIsVertical && eTitleType == TitleHelper::X_AXIS_TITLE)
+                    || (!bIsVertical && eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE)
+                    || (bIsVertical && eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE) )
+                {
+                    xTitle->setPropertyValue( "TextRotation", uno::Any( 90.0 ));
+                }
             }
-
-            // set/clear autoscale
-            if( pRefSizeProvider )
-                pRefSizeProvider->setValuesAtTitle( xTitle );
-
-            xTitled->setTitleObject( xTitle );
-
-            //default rotation 90 degree for y axis title in normal coordinatesystems or for x axis title for swapped coordinatesystems
-            if( eTitleType == TitleHelper::X_AXIS_TITLE ||
-                eTitleType == TitleHelper::Y_AXIS_TITLE ||
-                eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE ||
-                eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE )
-
+            catch( const uno::Exception & )
             {
-                try
-                {
-                    bool bDummy = false;
-                    bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
-
-                    Reference< beans::XPropertySet > xTitleProps( xTitle, uno::UNO_QUERY );
-                    if( xTitleProps.is() )
-                    {
-                        if( (!bIsVertical && eTitleType == TitleHelper::Y_AXIS_TITLE)
-                            || (bIsVertical && eTitleType == TitleHelper::X_AXIS_TITLE)
-                            || (!bIsVertical && eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE)
-                            || (bIsVertical && eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE) )
-                        {
-                            xTitleProps->setPropertyValue( "TextRotation", uno::Any( 90.0 ));
-                        }
-                    }
-                }
-                catch( const uno::Exception & )
-                {
-                    DBG_UNHANDLED_EXCEPTION("chart2");
-                }
+                DBG_UNHANDLED_EXCEPTION("chart2");
             }
         }
     }
