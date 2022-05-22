@@ -54,6 +54,8 @@
 
 #include <memory>
 
+#include <o3tl/deleter.hxx>
+
 #include <rtl/tencinfo.h>
 
 #include <svl/numformat.hxx>
@@ -128,7 +130,7 @@ protected:
     }
     ~CellInterpreterBase()
     {
-        flushPending();
+        suppress_fun_call_w_exception(flushPending());
     }
 private:
     void flushPending()
