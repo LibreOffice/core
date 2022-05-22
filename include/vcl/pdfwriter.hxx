@@ -398,6 +398,7 @@ public:
                   FileSelect( false ),
                   MaxLen( 0 ),
                   Format( FormatType::Text ),
+                  DecimalAccuracy ( 0 ),
                   PrependCurrencySymbol( false )
         {}
 
