@@ -31,6 +31,7 @@
 #include <DiagramHelper.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <Legend.hxx>
+#include <XMLFilter.hxx>
 
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -200,10 +201,7 @@ Reference< document::XFilter > ChartModel::impl_createFilter(
     if( ! xFilter.is())
     {
         SAL_WARN("chart2", "No FilterName passed in MediaDescriptor" );
-        xFilter.set(
-            m_xContext->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.comp.chart2.XMLFilter", m_xContext ),
-            uno::UNO_QUERY_THROW );
+        xFilter = new XMLFilter(m_xContext);
     }
 
     return xFilter;
