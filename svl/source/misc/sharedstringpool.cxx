@@ -90,7 +90,7 @@ SharedString SharedStringPool::intern(const OUString& rStr)
 {
     auto& rMap = mpImpl->maStrMap;
 
-    rtl_uString *pResultLower, *pResultUpper;
+    rtl_uString *pResultLower = {}, *pResultUpper = {}; // bogus GCC 12 -Werror=maybe-uninitialized
     if (rMap.find_fn(rStr.pData, [&](const Mapped& rMapped) {
             pResultLower = rMapped.first.pData;
             pResultUpper = rMapped.second.pData;
