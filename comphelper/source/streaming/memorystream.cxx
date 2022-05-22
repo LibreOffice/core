@@ -87,9 +87,9 @@ private:
     {
         sal_Int8 value;
         NoInitInt8() noexcept {
-            // do nothing
             static_assert(sizeof(NoInitInt8) == sizeof(sal_Int8), "invalid size");
             static_assert(alignof(NoInitInt8) == alignof(sal_Int8), "invalid alignment");
+            /* coverity[uninit_member] - deliberately do nothing to leave uninitialized */
         }
     };
 
