@@ -488,7 +488,9 @@ struct PDFWidget : public PDFAnnotation
               m_nParent( 0 ),
               m_nTabOrder( 0 ),
               m_nRadioGroup( -1 ),
-              m_nMaxLen( 0 ),
+              m_nFormat( PDFWriter::FormatType::Text ),
+              m_nDecimalAccuracy ( 0 ),
+              m_bPrependCurrencySymbol( false ),
               m_bSubmit( false ),
               m_bSubmitGet( false ),
               m_nDest( -1 )
