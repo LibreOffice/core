@@ -1175,8 +1175,10 @@ public:
         , mValid( false )
     {
         if(mSortedRows.empty())
+        {
+            // coverity[uninit_member] - these are initialized only if valid
             return;
-        // coverity[uninit_member] - these are initialized only if valid
+        }
         mLowIndex = 0;
         mHighIndex = mSortedRows.size() - 1;
         mValid = true;
