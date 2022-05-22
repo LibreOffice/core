@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fab94d88_31171867",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-05-22T15:53:01Z",
+      "side": 1,
+      "message": "Thank you for your suggestions. I will keep this in mind for all future patches, and I will make changes to this commit message in my next patch set.",
+      "parentUuid": "ac56f172_9d9e4a97",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 67
+      },
+      "revId": "347048751b456560c6d9fb840ad6d091d74ae838",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "40417819_7b4f8e3a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
