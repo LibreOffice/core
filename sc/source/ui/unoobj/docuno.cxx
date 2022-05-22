@@ -1683,7 +1683,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
 
     // restrict to selected sheets if a view is available
     uno::Reference<sheet::XSelectedSheetsSupplier> xSelectedSheets(xView, uno::UNO_QUERY);
-    if (bSelectedSheetsOnly && xSelectedSheets.is())
+    if (bSelectedSheetsOnly && pDocShell && xSelectedSheets.is())
     {
         const uno::Sequence<sal_Int32> aSelected = xSelectedSheets->getSelectedSheets();
         ScMarkData::MarkedTabsType aSelectedTabs;
