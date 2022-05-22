@@ -78,12 +78,6 @@ const TranslateId RID_RSC_ENUM_BUTTONTYPE[] =
     NC_("RID_RSC_ENUM_BUTTONTYPE", "Refresh form")
 };
 
-const TranslateId RID_RSC_ENUM_SUBMIT_METHOD[] =
-{
-    NC_("RID_RSC_ENUM_SUBMIT_METHOD", "Get"),
-    NC_("RID_RSC_ENUM_SUBMIT_METHOD", "Post" )
-};
-
 const TranslateId RID_RSC_ENUM_SUBMIT_ENCODING[] =
 {
     NC_("RID_RSC_ENUM_SUBMIT_ENCODING", "URL"),
