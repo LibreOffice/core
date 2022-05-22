@@ -18,14 +18,14 @@
  */
 #pragma once
 
-#include <OPropertySet.hxx>
+#include "OPropertySet.hxx"
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <ModifyListenerHelper.hxx>
+#include "ModifyListenerHelper.hxx"
 
 namespace chart
 {
