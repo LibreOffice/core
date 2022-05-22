@@ -19,7 +19,6 @@ $(eval $(call gb_Executable_use_api,tiffuzzer,\
 
 $(eval $(call gb_Executable_use_externals,tiffuzzer,\
 	$(fuzzer_externals) \
-	libtiff \
 ))
 
 $(eval $(call gb_Executable_set_include,tiffuzzer,\
