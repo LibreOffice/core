@@ -881,7 +881,7 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
 #endif
 
         unlink( it->second.getStr() );
-        m_aSpoolFiles.erase( pFile );
+        m_aSpoolFiles.erase(it);
         if( pOptions )
             cupsFreeOptions( nNumOptions, pOptions );
     }
