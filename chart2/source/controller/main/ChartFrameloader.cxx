@@ -20,6 +20,8 @@
 #include "ChartFrameloader.hxx"
 #include <servicenames.hxx>
 #include <MediaDescriptorHelper.hxx>
+#include <ChartController.hxx>
+#include <ChartModel.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/frame/XLoadable.hpp>
@@ -93,35 +95,24 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
     if( ! xModel.is())
     {
         //@todo?? load mechanism to cancel during loading of document
-        xModel.set(
-                m_xCC->getServiceManager()->createInstanceWithContext(
-                CHART_MODEL_SERVICE_IMPLEMENTATION_NAME, m_xCC )
-                , uno::UNO_QUERY );
+        xModel = new ChartModel(m_xCC);
 
         if( impl_checkCancel() )
             return false;
     }
 
     //create the controller(+XWindow)
-    uno::Reference< frame::XController >    xController;
-    uno::Reference< awt::XWindow >          xComponentWindow;
-    {
-        xController.set(
-            m_xCC->getServiceManager()->createInstanceWithContext(
-            CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME,m_xCC )
-            , uno::UNO_QUERY );
+    rtl::Reference< ChartController > xController = new ChartController(m_xCC);
 
-        //!!!it is a special characteristic of the example application
-        //that the controller simultaneously provides the XWindow controller functionality
-        xComponentWindow =
-                      uno::Reference< awt::XWindow >( xController, uno::UNO_QUERY );
+    //!!!it is a special characteristic of the example application
+    //that the controller simultaneously provides the XWindow controller functionality
+    uno::Reference< awt::XWindow > xComponentWindow = xController;
 
-        if( impl_checkCancel() )
-            return false;
-    }
+    if( impl_checkCancel() )
+        return false;
 
     //connect frame, controller and model one to each other:
-    if(xController.is()&&xModel.is())
+    if(xModel.is())
     {
         xModel->connectController(xController);
         xModel->setCurrentController(xController);
@@ -167,7 +158,7 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
                 xLoadable->load( aCompleteMediaDescriptor );
 
                 //resize standalone files to get correct size:
-                if( xComponentWindow.is() && aMDHelper.ISSET_FilterName && aMDHelper.FilterName == "StarChart 5.0" )
+                if( aMDHelper.ISSET_FilterName && aMDHelper.FilterName == "StarChart 5.0" )
                 {
                     awt::Rectangle aRect( xComponentWindow->getPosSize() );
                     xComponentWindow->setPosSize( aRect.X, aRect.Y, aRect.Width, aRect.Height, 0 );
