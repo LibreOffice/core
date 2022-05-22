@@ -722,7 +722,7 @@ bool CPDManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
         }
         g_variant_unref(ret);
         unlink( it->second.getStr() );
-        m_aSpoolFiles.erase( pFile );
+        m_aSpoolFiles.erase(it);
     }
 #else
     (void)rPrintername;
