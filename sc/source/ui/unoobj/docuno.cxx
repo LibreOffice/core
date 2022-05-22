@@ -4015,8 +4015,8 @@ rtl::Reference<ScTableColumnObj> ScTableColumnsObj::GetObjectByIndex_Impl(sal_In
 rtl::Reference<ScTableColumnObj> ScTableColumnsObj::GetObjectByName_Impl(const OUString& aName) const
 {
     SCCOL nCol = 0;
-    if ( ::AlphaToCol( pDocShell->GetDocument(), nCol, aName) )
-        if ( pDocShell && nCol >= nStartCol && nCol <= nEndCol )
+    if (pDocShell && ::AlphaToCol(pDocShell->GetDocument(), nCol, aName))
+        if (nCol >= nStartCol && nCol <= nEndCol)
             return new ScTableColumnObj( pDocShell, nCol, nTab );
 
     return nullptr;
