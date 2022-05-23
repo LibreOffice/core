@@ -70,6 +70,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97f73870_58e5d49e",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-23T09:58:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92de5ebf_76515ba8",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "791ebc1f_c964b042",
@@ -83,6 +101,24 @@
       "writtenOn": "2022-05-23T08:45:01Z",
       "side": 1,
       "message": "It would be great to check if the uncompression was successfull, and return if failed.\n\nFor example:\n\n    if (!aCodec.EndCompression())\n        return false;",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eaf4631_1b25f050",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-23T09:58:32Z",
+      "side": 1,
+      "message": "I think the check nDecompressLength \u003d\u003d EMF_CHECK_SIZE is enough for checking if the uncompression is successful, as it checks that 44 bytes have been uncompressed, enough to detect EMF files. Let me know if I\u0027m missing something.",
+      "parentUuid": "791ebc1f_c964b042",
       "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -124,6 +160,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b9173f36_d50e8b1b",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-23T09:58:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2330231a_647172d6",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "188ebe05_0948b6a0",
         "filename": "vcl/source/filter/graphicfilter2.cxx",
         "patchSetId": 1
@@ -152,6 +206,24 @@
       "writtenOn": "2022-05-23T06:26:15Z",
       "side": 1,
       "message": "More information about this magic number is here:\nhttps://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-emf/b55cbd24-612d-47fe-81c9-1da6a682246f\nPlease replace is with constexpr or enum.",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b68de971_49a53113",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-23T09:58:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cca6fcaf_e6b54736",
       "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
