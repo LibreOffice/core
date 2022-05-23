@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4544f48_ff7f8e0a",
+        "filename": "sysui/desktop/menus/calc.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-23T06:27:21Z",
+      "side": 0,
+      "message": "Missing the period.",
+      "range": {
+        "startLine": 28,
+        "startChar": 96,
+        "endLine": 28,
+        "endChar": 97
+      },
+      "revId": "47e8763114f12fe14e2a8dd94b5a339f614d23bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6005109_bb84c649",
+        "filename": "sysui/desktop/menus/draw.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-23T06:27:21Z",
+      "side": 0,
+      "message": "Here as well.",
+      "range": {
+        "startLine": 28,
+        "startChar": 69,
+        "endLine": 28,
+        "endChar": 70
+      },
+      "revId": "47e8763114f12fe14e2a8dd94b5a339f614d23bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a32a878_e6b578b8",
+        "filename": "sysui/desktop/menus/impress.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-23T06:27:21Z",
+      "side": 0,
+      "message": "Here as well.",
+      "range": {
+        "startLine": 28,
+        "startChar": 92,
+        "endLine": 28,
+        "endChar": 93
+      },
+      "revId": "47e8763114f12fe14e2a8dd94b5a339f614d23bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c72dd6e8_3c289a25",
+        "filename": "sysui/desktop/menus/math.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-23T06:27:21Z",
+      "side": 0,
+      "message": "Here as well.",
+      "range": {
+        "startLine": 29,
+        "startChar": 71,
+        "endLine": 29,
+        "endChar": 72
+      },
+      "revId": "47e8763114f12fe14e2a8dd94b5a339f614d23bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f79139a8_85f043bb",
+        "filename": "sysui/desktop/menus/writer.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-23T06:27:21Z",
+      "side": 0,
+      "message": "Missing period",
+      "range": {
+        "startLine": 28,
+        "startChar": 102,
+        "endLine": 28,
+        "endChar": 103
+      },
+      "revId": "47e8763114f12fe14e2a8dd94b5a339f614d23bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
