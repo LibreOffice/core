@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be1e872e_c93bc4ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-23T12:03:19Z",
+      "side": 1,
+      "message": "Also wanted to note that these two ui files are just some WIP; I see that using several separate IconViews is not nice, so I am in process of extending the control to allow separators, so finally there should be a single IconView.",
+      "revId": "0b753d2b1699ce681074aad379a9b77d41839ef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
