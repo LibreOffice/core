@@ -216,7 +216,14 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                 img.put.separate = putSeparatePixel;
             }
 
-            bOk = TIFFRGBAImageGet(&img, nullptr, w, img.height);
+            bOk = TIFFRGBAImageGet(
+                &img, reinterpret_cast<uint32_t *>(sizeof (uint32_t)), w, img.height);
+                // we don't access TIFFRGBAImageGet's raster argument in our custom putContigPixel/
+                // putSeparatePixel functions, but TIFFRGBAImageGet nevertheless internally
+                // advances that pointer, so passing nullptr would cause UBSan nullptr-with-offset
+                // errors; while technically still UB, this HACK of passing a non-null pointer keeps
+                // UBSan happy for now (and better use an artificial pointer value which would
+                // hopefully cause SIGSEGV if it should erroneously be dereferenced after all)
             TIFFRGBAImageEnd(&img);
         }
         else
