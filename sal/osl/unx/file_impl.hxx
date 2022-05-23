@@ -49,7 +49,7 @@ oslFileError openFile(
     mode_t mode);
 
 oslFileError openFilePath(
-    const char* cpFilePath,
+    const OString& filePath,
     oslFileHandle* pHandle,
     sal_uInt32 uFlags, mode_t mode );
 
