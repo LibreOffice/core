@@ -13906,12 +13906,13 @@ private:
             return false;
 #endif
         OUString aTooltip = pThis->signal_query_tooltip(GtkInstanceTreeIter(iter));
-        if (aTooltip.isEmpty())
-            return false;
-        gtk_tooltip_set_text(tooltip, OUStringToOString(aTooltip, RTL_TEXTENCODING_UTF8).getStr());
-        gtk_tree_view_set_tooltip_row(pTreeView, tooltip, pPath);
+        if (!aTooltip.isEmpty())
+        {
+            gtk_tooltip_set_text(tooltip, OUStringToOString(aTooltip, RTL_TEXTENCODING_UTF8).getStr());
+            gtk_tree_view_set_tooltip_row(pTreeView, tooltip, pPath);
+        }
         gtk_tree_path_free(pPath);
-        return true;
+        return !aTooltip.isEmpty();
     }
 
     void last_child(GtkTreeModel* pModel, GtkTreeIter* result, GtkTreeIter* pParent, int nChildren) const
