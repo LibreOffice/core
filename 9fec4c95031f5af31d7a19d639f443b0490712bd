@@ -69,6 +69,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2330231a_647172d6",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T06:26:15Z",
+      "side": 1,
+      "message": "More information about different record types:\nhttps://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-emf/1eec80ba-799b-4784-a9ac-91597d590ae1",
+      "parentUuid": "fe4fa921_8dbdee79",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "188ebe05_0948b6a0",
@@ -82,6 +100,23 @@
       "writtenOn": "2022-05-21T08:37:42Z",
       "side": 1,
       "message": "This was a ReadInt32 normally but the int it reads to is unused so I thought to change it to this instead.",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cca6fcaf_e6b54736",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T06:26:15Z",
+      "side": 1,
+      "message": "More information about this magic number is here:\nhttps://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-emf/b55cbd24-612d-47fe-81c9-1da6a682246f\nPlease replace is with constexpr or enum.",
       "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
