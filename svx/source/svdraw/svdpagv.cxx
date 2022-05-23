@@ -730,8 +730,7 @@ bool SdrPageView::EnterGroup(SdrObject* pObj)
         return false;
 
     // Don't allow enter Diagrams
-    auto* pGroup(dynamic_cast<SdrObjGroup*>(pObj));
-    if(nullptr != pGroup && pGroup->isDiagram())
+    if(nullptr != pObj && pObj->isDiagram())
         return false;
 
     const bool bGlueInvalidate(GetView().ImpIsGlueVisible());

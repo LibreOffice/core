@@ -199,6 +199,11 @@ struct SdrObject::Impl
         meRelativeHeightRelation(text::RelOrientation::PAGE_FRAME) {}
 };
 
+const std::shared_ptr< svx::diagram::IDiagramHelper >& SdrObject::getDiagramHelper() const
+{
+    static std::shared_ptr< svx::diagram::IDiagramHelper > aEmpty;
+    return aEmpty;
+}
 
 // BaseProperties section
 
