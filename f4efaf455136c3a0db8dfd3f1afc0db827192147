@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "578bf8d7_0f1a77a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-23T09:21:56Z",
+      "side": 1,
+      "message": "Just for curiosity, what about this case in filter/source/msfilter/escherex.cxx:\n   2282                             case drawing::ConnectorType_LINE :\n   2283                             case drawing::ConnectorType_LINES :   // Connector 2-\u003e5\n   2284                             {\n   2285                                 rShapeType \u003d ESCHER_ShpInst_StraightConnector1;\n   2286                                 AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleStraight );\n   2287                             }\n\nhttps://opengrok.libreoffice.org/xref/core/filter/source/msfilter/escherex.cxx?r\u003d9f1701d0#2283\n\nshould we apply the same fix?",
+      "revId": "f4efaf455136c3a0db8dfd3f1afc0db827192147",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
