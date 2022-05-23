@@ -6093,9 +6093,9 @@ static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const cha
     }
 
     // Sanity check
-    if (aMap.find("type") == aMap.end() || aMap.find("selected") == aMap.end())
+    if (aMap.find("type") == aMap.end())
     {
-        SetLastExceptionMsg("Wrong arguments for sendContentControlEvent");
+        SetLastExceptionMsg("Missing 'type' argument for sendContentControlEvent");
         return;
     }
 

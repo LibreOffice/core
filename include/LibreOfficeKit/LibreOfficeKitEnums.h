@@ -799,15 +799,28 @@ typedef enum
     /**
      * Sends all information for displaying metadata for a text based content control.
      *
-     * The payload example:
+     * Examples:
+     * Entered a rich text content control:
      * {
-     *      "action": "show",
-     *      "rectangles": "1418, 1694, 720, 551; 10291, 1418, 1099, 275"
+     *     "action": "show",
+     *     "rectangles": "1418, 1694, 720, 551; 10291, 1418, 1099, 275"
      * }
      *
-     * or
+     * Left a rich text content control:
      * {
-     *      "action": "hide"
+     *     "action": "hide"
+     * }
+     *
+     * Entered a dropdown content control:
+     * {
+     *     "action": "show",
+     *     "rectangles": "...",
+     *     "items": ["red", "green", "blue"]
+     * }
+     *
+     * Clicked on a picture content control's placeholder:
+     * {
+     *     "action": "change-picture"
      * }
      */
     LOK_CALLBACK_CONTENT_CONTROL = 55,
