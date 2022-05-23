@@ -397,25 +397,25 @@ namespace sw
         {
             if (const SvxBoxItem *pBox = rPage.GetItem<SvxBoxItem>(RES_BOX))
             {
-                dyaHdrTop = pBox->CalcLineSpace( SvxBoxItemLine::TOP, /*bEvenIfNoLine*/true );
-                dyaHdrBottom = pBox->CalcLineSpace( SvxBoxItemLine::BOTTOM, /*bEvenIfNoLine*/true );
+                m_DyaHdrTop = pBox->CalcLineSpace( SvxBoxItemLine::TOP, /*bEvenIfNoLine*/true );
+                m_DyaHdrBottom = pBox->CalcLineSpace( SvxBoxItemLine::BOTTOM, /*bEvenIfNoLine*/true );
             }
             else
             {
-                dyaHdrTop = dyaHdrBottom = 0;
+                m_DyaHdrTop = m_DyaHdrBottom = 0;
             }
             const SvxULSpaceItem &rUL = rPage.Get(RES_UL_SPACE);
-            dyaHdrTop += rUL.GetUpper();
-            dyaHdrBottom += rUL.GetLower();
+            m_DyaHdrTop += rUL.GetUpper();
+            m_DyaHdrBottom += rUL.GetLower();
 
-            dyaTop = dyaHdrTop;
-            dyaBottom = dyaHdrBottom;
+            m_DyaTop = m_DyaHdrTop;
+            m_DyaBottom = m_DyaHdrBottom;
 
             const SwFormatHeader *pHd = rPage.GetItem<SwFormatHeader>(RES_HEADER);
             if (pHd && pHd->IsActive() && pHd->GetHeaderFormat())
             {
                 mbHasHeader = true;
-                dyaTop = dyaTop + static_cast< sal_uInt16 >( (myImplHelpers::CalcHdDist(*(pHd->GetHeaderFormat()))) );
+                m_DyaTop = m_DyaTop + static_cast< sal_uInt16 >( (myImplHelpers::CalcHdDist(*(pHd->GetHeaderFormat()))) );
             }
             else
                 mbHasHeader = false;
@@ -424,7 +424,7 @@ namespace sw
             if (pFt && pFt->IsActive() && pFt->GetFooterFormat())
             {
                 mbHasFooter = true;
-                dyaBottom = dyaBottom + static_cast< sal_uInt16 >( (myImplHelpers::CalcFtDist(*(pFt->GetFooterFormat()))) );
+                m_DyaBottom = m_DyaBottom + static_cast< sal_uInt16 >( (myImplHelpers::CalcFtDist(*(pFt->GetFooterFormat()))) );
             }
             else
                 mbHasFooter = false;
@@ -437,7 +437,7 @@ namespace sw
             // both object don't have a header
             if (HasHeader() == rOther.HasHeader())
             {
-                if (dyaTop != rOther.dyaTop)
+                if (m_DyaTop != rOther.m_DyaTop)
                     return false;
             }
 
@@ -445,7 +445,7 @@ namespace sw
             // both object don't have a footer
             if (HasFooter() == rOther.HasFooter())
             {
-                if (dyaBottom != rOther.dyaBottom)
+                if (m_DyaBottom != rOther.m_DyaBottom)
                     return false;
             }
 

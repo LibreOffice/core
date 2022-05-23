@@ -166,13 +166,13 @@ public:
 
 private:
     wwSprmParser maSprmParser;
-    SwWW8ImplReader& rReader;
-    SwDoc&           rDoc;
-    const WW8Fib&    rFib;
-    SvStream&        rSt;
+    SwWW8ImplReader& m_rReader;
+    SwDoc&           m_rDoc;
+    const WW8Fib&    m_rFib;
+    SvStream&        m_rSt;
     std::vector<std::unique_ptr<WW8LSTInfo>> maLSTInfos;
     std::vector<std::unique_ptr<WW8LFOInfo>> m_LFOInfos;// D. from PLF LFO, sorted exactly like in the WW8 Stream
-    sal_uInt16       nUniqueList; // current number for creating unique list names
+    sal_uInt16       m_nUniqueList; // current number for creating unique list names
     SprmResult GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms, sal_uInt8 nLen);
     WW8LSTInfo* GetLSTByListId(    sal_uInt32  nIdLst     ) const;
     //the rParaSprms returns back the original word paragraph indent
@@ -193,7 +193,7 @@ private:
 
     WW8ListManager(const WW8ListManager&) = delete;
     WW8ListManager& operator=(const WW8ListManager&) = delete;
-    sal_uInt16 nLastLFOPosition;
+    sal_uInt16 m_nLastLFOPosition;
 };
 
 struct WW8FlyPara
@@ -620,7 +620,7 @@ enum class eF_ResT { OK, TEXT, TAGIGN, READ_FSPA };
 class SwWW8Shade
 {
 public:
-    Color aColor;
+    Color m_aColor;
     SwWW8Shade(bool bVer67, const WW8_SHD& rSHD);
     SwWW8Shade(Color nFore, Color nBack, sal_uInt16 nIndex)
     {

@@ -3229,26 +3229,26 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
                                                       ? *m_rExport.GetFirstPageItemSet()
                                                       : *m_rExport.GetCurItemSet());
 
-            if (aDistances.dyaTop)
+            if (aDistances.m_DyaTop)
             {
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGTSXN);
-                m_aSectionBreaks.append(static_cast<sal_Int32>(aDistances.dyaTop));
+                m_aSectionBreaks.append(static_cast<sal_Int32>(aDistances.m_DyaTop));
             }
             if (aDistances.HasHeader())
             {
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_HEADERY);
-                m_aSectionBreaks.append(static_cast<sal_Int32>(aDistances.dyaHdrTop));
+                m_aSectionBreaks.append(static_cast<sal_Int32>(aDistances.m_DyaHdrTop));
             }
 
-            if (aDistances.dyaBottom)
+            if (aDistances.m_DyaBottom)
             {
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGBSXN);
-                m_aSectionBreaks.append(static_cast<sal_Int32>(aDistances.dyaBottom));
+                m_aSectionBreaks.append(static_cast<sal_Int32>(aDistances.m_DyaBottom));
             }
             if (aDistances.HasFooter())
             {
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_FOOTERY);
-                m_aSectionBreaks.append(static_cast<sal_Int32>(aDistances.dyaHdrBottom));
+                m_aSectionBreaks.append(static_cast<sal_Int32>(aDistances.m_DyaHdrBottom));
             }
             if (!m_bBufferSectionBreaks)
                 m_rExport.Strm().WriteOString(m_aSectionBreaks.makeStringAndClear());

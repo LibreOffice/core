@@ -117,10 +117,10 @@ namespace sw
             bool mbHasHeader;
             bool mbHasFooter;
         public:
-            sal_uInt16 dyaHdrTop;
-            sal_uInt16 dyaHdrBottom;
-            sal_uInt16 dyaTop;
-            sal_uInt16 dyaBottom;
+            sal_uInt16 m_DyaHdrTop;
+            sal_uInt16 m_DyaHdrBottom;
+            sal_uInt16 m_DyaTop;
+            sal_uInt16 m_DyaBottom;
             explicit HdFtDistanceGlue(const SfxItemSet &rPage);
             bool HasHeader() const { return mbHasHeader; }
             bool HasFooter() const { return mbHasFooter; }

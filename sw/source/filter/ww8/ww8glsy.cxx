@@ -35,23 +35,23 @@
 #include "ww8par.hxx"
 
 WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVersion, SotStorage *pStg)
-    : rStrm(refStrm)
-    , xStg(pStg)
-    , nStrings(0)
+    : m_rStrm(refStrm)
+    , m_xStg(pStg)
+    , m_nStrings(0)
 {
     refStrm->SetEndian(SvStreamEndian::LITTLE);
     WW8Fib aWwFib(*refStrm, nVersion);
 
     if (aWwFib.m_nFibBack >= 0x6A)   //Word97
     {
-        xTableStream = pStg->OpenSotStream(
+        m_xTableStream = pStg->OpenSotStream(
             aWwFib.m_fWhichTableStm ? OUString(SL::a1Table) : OUString(SL::a0Table),
             StreamMode::STD_READ);
 
-        if (xTableStream.is() && ERRCODE_NONE == xTableStream->GetError())
+        if (m_xTableStream.is() && ERRCODE_NONE == m_xTableStream->GetError())
         {
-            xTableStream->SetEndian(SvStreamEndian::LITTLE);
-            xGlossary = std::make_shared<WW8GlossaryFib>(*refStrm, nVersion, aWwFib);
+            m_xTableStream->SetEndian(SvStreamEndian::LITTLE);
+            m_xGlossary = std::make_shared<WW8GlossaryFib>(*refStrm, nVersion, aWwFib);
         }
     }
 }
@@ -191,22 +191,22 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
 bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 {
     bool bRet=false;
-    if (xGlossary && xGlossary->IsGlossaryFib() && rBlocks.StartPutMuchBlockEntries())
+    if (m_xGlossary && m_xGlossary->IsGlossaryFib() && rBlocks.StartPutMuchBlockEntries())
     {
         //read the names of the autotext entries
         std::vector<OUString> aStrings;
         std::vector<ww::bytes> aData;
 
         rtl_TextEncoding eStructCharSet =
-            WW8Fib::GetFIBCharset(xGlossary->m_chseTables, xGlossary->m_lid);
+            WW8Fib::GetFIBCharset(m_xGlossary->m_chseTables, m_xGlossary->m_lid);
 
-        WW8ReadSTTBF(true, *xTableStream, xGlossary->m_fcSttbfglsy,
-            xGlossary->m_lcbSttbfglsy, 0, eStructCharSet, aStrings, &aData );
+        WW8ReadSTTBF(true, *m_xTableStream, m_xGlossary->m_fcSttbfglsy,
+            m_xGlossary->m_lcbSttbfglsy, 0, eStructCharSet, aStrings, &aData );
 
-        rStrm->Seek(0);
+        m_rStrm->Seek(0);
 
-        nStrings = static_cast< sal_uInt16 >(aStrings.size());
-        if ( 0 != nStrings )
+        m_nStrings = static_cast< sal_uInt16 >(aStrings.size());
+        if ( 0 != m_nStrings )
         {
             SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
             if (xDocSh->DoInitNew())
@@ -224,7 +224,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
                 aPamo.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(),
                     0);
                 std::unique_ptr<SwWW8ImplReader> xRdr(new SwWW8ImplReader(
-                    xGlossary->m_nVersion, xStg.get(), rStrm.get(), *pD, rBlocks.GetBaseURL(),
+                    m_xGlossary->m_nVersion, m_xStg.get(), m_rStrm.get(), *pD, rBlocks.GetBaseURL(),
                     true, false, *aPamo.GetPoint()));
                 xRdr->LoadDoc(this);
                 bRet = MakeEntries(pD, rBlocks, bSaveRelFile, aStrings, aData);
