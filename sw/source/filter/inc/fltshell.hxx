@@ -181,6 +181,7 @@ public:
           SwFrameFormat* GetFrameFormat() { return m_pFrameFormat; }
 };
 
+/// Used by SwFltAnchor, to listen to an SwFrameFormat (to be aware when it is replaced or deleted).
 class SwFltAnchorListener final : public SvtListener
 {
     SwFltAnchor* m_pFltAnchor;
