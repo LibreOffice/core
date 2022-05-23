@@ -441,6 +441,9 @@ bool SwHTMLParser::InsertEmbed()
         u"image/svg+xml",
         u"image/tiff",
         u"image/x-emf",
+        u"image/bmp",
+        u"image/tif",
+        u"image/wmf",
     };
 
     if (vAllowlist.find(aType) != vAllowlist.end() && m_aEmbeds.empty())
