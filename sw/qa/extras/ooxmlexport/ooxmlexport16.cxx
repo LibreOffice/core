@@ -679,6 +679,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf149198, "tdf149198.docx")
+{
+    // Without the fix in place, this test would have crashed at export time
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(OUString("Documentation"), getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFooterMarginLost)
 {
     loadAndSave("footer-margin-lost.docx");
