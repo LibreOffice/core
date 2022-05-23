@@ -16,6 +16,24 @@
       "message": "Hope you don\u0027t mind that I modified the UI file. Placed the controls in a GtkGrid, adjusted the distances so Notify is clearly related to Read Only and reduced the large spacing to the usual size. I added also some a11y information.\n\nLGTM now, and works like a charm. Last code check for Hossein.",
       "revId": "abc5c52525377d781b0a3afbd15875c6c9411abe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9859b80_45e475c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-05-23T12:28:36Z",
+      "side": 1,
+      "message": "Thank you for modifying the UI. I have been waiting to hear from an LO designer about the icon (which you suggested in the comments in the last patch). Or is it okay to just keep things as they are now?\n\nShould I also change the commit message as per the suggestions by Mike, and submit patch 5?",
+      "parentUuid": "bd2e52ea_3a8244ea",
+      "revId": "abc5c52525377d781b0a3afbd15875c6c9411abe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
