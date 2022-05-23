@@ -202,6 +202,7 @@ Bridge::Bridge(
         throw css::uno::RuntimeException("URP: no C++ UNO mapping");
     }
     passive_.set();
+    // coverity[uninit_member] - random_ is set in due course by the reader_ thread's state machine
 }
 
 void Bridge::start() {
