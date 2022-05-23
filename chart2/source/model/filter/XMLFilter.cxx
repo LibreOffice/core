@@ -308,7 +308,7 @@ ErrCode XMLFilter::impl_Import(
 
         // create XPropertySet with extra information for the filter
         /** property map for import info set */
-        comphelper::PropertyMapEntry const aImportInfoMap[] =
+        static comphelper::PropertyMapEntry const aImportInfoMap[] =
         {
             // necessary properties for XML progress bar at load time
             { OUString("ProgressRange"),   0, cppu::UnoType<sal_Int32>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -319,7 +319,6 @@ ErrCode XMLFilter::impl_Import(
             { OUString("StreamRelPath"),   0, cppu::UnoType<OUString>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("StreamName"),      0, cppu::UnoType<OUString>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("BuildId"),         0, cppu::UnoType<OUString>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString(), 0, css::uno::Type(), 0, 0 }
         };
         uno::Reference< beans::XPropertySet > xImportInfo(
                     comphelper::GenericPropertySet_CreateInstance(
@@ -569,14 +568,13 @@ ErrCode XMLFilter::impl_Export(
         xGraphicStorageHandler.set(document::GraphicStorageHandler::createWithStorage(m_xContext, xStorage));
 
         // property map for export info set
-        comphelper::PropertyMapEntry const aExportInfoMap[] =
+        static comphelper::PropertyMapEntry const aExportInfoMap[] =
         {
             { OUString("UsePrettyPrinting"), 0, cppu::UnoType<bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
             { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("ExportTableNumberList"), 0, cppu::UnoType<bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString(), 0, css::uno::Type(), 0, 0 }
         };
 
         uno::Reference< beans::XPropertySet > xInfoSet =

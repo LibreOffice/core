@@ -98,7 +98,6 @@ void Test::testMetaGenerator()
 {
     comphelper::PropertyMapEntry const aInfoMap[] = {
         { OUString("BuildId"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference<beans::XPropertySet> const xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(

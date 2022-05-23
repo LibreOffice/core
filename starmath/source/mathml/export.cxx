@@ -127,16 +127,16 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
     }
 
     // create XPropertySet with three properties for status indicator
-    comphelper::PropertyMapEntry aInfoMap[]
-        = { { OUString("UsePrettyPrinting"), 0, cppu::UnoType<bool>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString(), 0, css::uno::Type(), 0, 0 } };
+    static const comphelper::PropertyMapEntry aInfoMap[]{
+        { OUString("UsePrettyPrinting"), 0, cppu::UnoType<bool>::get(),
+          beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(),
+          beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(),
+          beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(),
+          beans::PropertyAttribute::MAYBEVOID, 0 }
+    };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
 
@@ -262,16 +262,16 @@ OUString SmMLExportWrapper::Export(SmMlElement* pElementTree)
     }
 
     // create XPropertySet with three properties for status indicator
-    comphelper::PropertyMapEntry aInfoMap[]
-        = { { OUString("UsePrettyPrinting"), 0, cppu::UnoType<bool>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString(), 0, css::uno::Type(), 0, 0 } };
+    static const comphelper::PropertyMapEntry aInfoMap[]{
+        { OUString("UsePrettyPrinting"), 0, cppu::UnoType<bool>::get(),
+          beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(),
+          beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(),
+          beans::PropertyAttribute::MAYBEVOID, 0 },
+        { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(),
+          beans::PropertyAttribute::MAYBEVOID, 0 }
+    };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
 

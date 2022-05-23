@@ -178,7 +178,6 @@ rtl::Reference<::comphelper::PropertySetInfo> GraphicRendererVCL::createProperty
         { OUString("Device"), UNOGRAPHIC_DEVICE, cppu::UnoType<uno::Any>::get(), 0, 0 },
         { OUString("DestinationRect"), UNOGRAPHIC_DESTINATIONRECT, cppu::UnoType<awt::Rectangle>::get(), 0, 0 },
         { OUString("RenderData"), UNOGRAPHIC_RENDERDATA, cppu::UnoType<uno::Any>::get(), 0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
     return rtl::Reference<::comphelper::PropertySetInfo>( new ::comphelper::PropertySetInfo(aEntries) );

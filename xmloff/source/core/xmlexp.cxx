@@ -1254,7 +1254,6 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 { OUString("Class"), 0,
                     ::cppu::UnoType<OUString>::get(),
                       PropertyAttribute::MAYBEVOID, 0},
-                { OUString(), 0, css::uno::Type(), 0, 0 }
             };
             Reference< XPropertySet > xConvPropSet(
                 ::comphelper::GenericPropertySet_CreateInstance(

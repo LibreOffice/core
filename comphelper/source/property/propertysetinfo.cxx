@@ -28,63 +28,65 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-void PropertySetInfo::addImpl(PropertyMapEntry const * pMap) noexcept
-{
-    while (!pMap->maName.isEmpty())
-    {
-        // check for duplicates
-        assert(maPropertyMap.find(pMap->maName) == maPropertyMap.end());
-
-        maPropertyMap[pMap->maName] = pMap;
-
-        maProperties.realloc(0);
-
-        ++pMap;
-    }
-}
-
 PropertySetInfo::PropertySetInfo() noexcept
 {
 }
 
-PropertySetInfo::PropertySetInfo( PropertyMapEntry const * pMap ) noexcept
+PropertySetInfo::PropertySetInfo( o3tl::span<const PropertyMapEntry> pMap ) noexcept
 {
-    while (!pMap->maName.isEmpty())
+    maPropertyMap.reserve(pMap.size());
+    for (const auto & rEntry : pMap)
     {
         // check for duplicates
-        assert(maPropertyMap.find(pMap->maName) == maPropertyMap.end());
+        assert(maPropertyMap.find(rEntry.maName) == maPropertyMap.end());
+        // Make sure there are no accidental empty entries left at the end of the array from
+        // when this method used to take a empty-terminated array.
+        assert(!rEntry.maName.isEmpty());
 
-        maPropertyMap[pMap->maName] = pMap;
-
-        ++pMap;
+        maPropertyMap.emplace(rEntry.maName, &rEntry);
     }
 }
 
 PropertySetInfo::PropertySetInfo(uno::Sequence<beans::Property> const& rProps) noexcept
 {
-    PropertyMapEntry * pEntries(new PropertyMapEntry[rProps.getLength() + 1]);
+    PropertyMapEntry * pEntries(new PropertyMapEntry[rProps.getLength()]);
     PropertyMapEntry * pEntry(&pEntries[0]);
     for (auto const& it : rProps)
     {
+        // check for duplicates
+        assert(maPropertyMap.find(it.Name) == maPropertyMap.end());
+
         pEntry->maName = it.Name;
         pEntry->mnHandle = it.Handle;
         pEntry->maType = it.Type;
         pEntry->mnAttributes = it.Attributes;
         pEntry->mnMemberId = 0;
+
+        maPropertyMap.emplace(it.Name, pEntry);
         ++pEntry;
     }
-    pEntry->maName = OUString();
-
-    addImpl(pEntries);
 }
 
 PropertySetInfo::~PropertySetInfo() noexcept
 {
 }
 
-void PropertySetInfo::add( PropertyMapEntry const * pMap ) noexcept
+void PropertySetInfo::add( o3tl::span<PropertyMapEntry const> pMap ) noexcept
 {
-    addImpl( pMap );
+    maPropertyMap.reserve(maPropertyMap.size() + pMap.size());
+    for (const auto & rEntry : pMap)
+    {
+        // check for duplicates
+        assert(maPropertyMap.find(rEntry.maName) == maPropertyMap.end());
+        // Make sure there are no accidental empty entries left at the end of the array from
+        // when this method used to take a empty-terminated array.
+        assert(!rEntry.maName.isEmpty());
+
+        maPropertyMap.emplace(rEntry.maName, &rEntry);
+    }
+
+    // clear cache
+    maProperties.realloc(0);
 }
 
 void PropertySetInfo::remove( const OUString& aName ) noexcept
