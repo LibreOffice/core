@@ -32,7 +32,7 @@ namespace binaryurp {
 
 namespace {
 
-// Cf. com::sun::star::uno::detail::moveAnyInternals in
+// Cf. com::sun::star::uno::Any move ctor in
 // include/com/sun/star/uno/Any.hxx:
 void moveInternals(uno_Any & from, uno_Any & to) {
     uno_any_construct(&to, nullptr, nullptr, nullptr);
