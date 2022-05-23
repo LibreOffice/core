@@ -54,6 +54,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "791ebc1f_c964b042",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T08:45:01Z",
+      "side": 1,
+      "message": "It would be great to check if the uncompression was successfull, and return if failed.\n\nFor example:\n\n    if (!aCodec.EndCompression())\n        return false;",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fe4fa921_8dbdee79",
         "filename": "vcl/source/filter/graphicfilter2.cxx",
         "patchSetId": 1
