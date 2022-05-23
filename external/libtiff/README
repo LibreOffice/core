@@ -1,0 +1,3 @@
+libtiff is a library to encode and decode images in TIFF format, from [http://download.osgeo.org/libtiff/]
+
+For the moment we use it only for decoding part.
