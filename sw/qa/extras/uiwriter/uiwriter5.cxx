@@ -2952,6 +2952,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
         "Only cell B1 was selected. A1 should still have bullets turned on.",
         !getProperty<OUString>(getParagraphOfText(1, xCellA1->getText()), "NumberingStyleName")
              .isEmpty());
+
+    // Toggle it back on
+    dispatchCommand(mxComponent, ".uno:DefaultBullet", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT(
+        !getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "NumberingStyleName")
+             .isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf126735)
