@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85651ec2_73eba3f5",
+        "filename": "sal/osl/unx/file.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-23T14:24:29Z",
+      "side": 1,
+      "message": "so \u003chttps://git.libreoffice.org/core/+/fa9ef668fb8b0abfdf85d641048580fa7c2fee3e%5E!/\u003e \"More work on a sandboxed LibreOffice on OS X\" and its comment in ftruncate_with_name (sal/osl/unx/uunxapi.cxx) is no longer relevant?  (in which case the now unused ftruncate_with_name should be removed)",
+      "revId": "1d58828f2285064635ed776e0641e83ee26d34da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
