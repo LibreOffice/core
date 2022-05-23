@@ -957,7 +957,7 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                                PART_AUTHORITY, eCharset, false);
                 }
                 m_aHost.set(m_aAbsURIRef,
-                            aSynAuthority.makeStringAndClear(),
+                            aSynAuthority,
                             m_aAbsURIRef.getLength());
                     // misusing m_aHost to store the authority
                 break;
@@ -993,7 +993,7 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                         return false;
                     }
                     m_aHost.set(m_aAbsURIRef,
-                                aSynAuthority.makeStringAndClear(),
+                                aSynAuthority,
                                 m_aAbsURIRef.getLength());
                         // misusing m_aHost to store the authority
                 }
@@ -1034,7 +1034,7 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                 else
                 {
                     m_aUser.set(m_aAbsURIRef,
-                            aSynUser.makeStringAndClear(),
+                            aSynUser,
                             m_aAbsURIRef.getLength());
                     m_aAbsURIRef.append("@");
                     ++pPos;
@@ -1057,7 +1057,7 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                     return false;
                 }
                 m_aHost.set(m_aAbsURIRef,
-                            aSynAuthority.makeStringAndClear(),
+                            aSynAuthority,
                             m_aAbsURIRef.getLength());
                     // misusing m_aHost to store the authority
                 break;
@@ -1341,8 +1341,7 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                 appendUCS4(aSynUser, nUTF32, eEscapeType, ePart,
                            eCharset, false);
             }
-            m_aUser.set(m_aAbsURIRef, aSynUser.makeStringAndClear(),
-                m_aAbsURIRef.getLength());
+            m_aUser.set(m_aAbsURIRef, aSynUser, m_aAbsURIRef.getLength());
             if (bHasAuth)
             {
                 if (bSupportsPassword)
@@ -1358,8 +1357,7 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                         appendUCS4(aSynAuth, nUTF32, eEscapeType,
                                    ePart, eCharset, false);
                     }
-                    m_aAuth.set(m_aAbsURIRef, aSynAuth.makeStringAndClear(),
-                        m_aAbsURIRef.getLength());
+                    m_aAuth.set(m_aAbsURIRef, aSynAuth, m_aAbsURIRef.getLength());
                 }
                 else
                 {
@@ -1379,8 +1377,7 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                         appendUCS4(aSynAuth, nUTF32, eEscapeType,
                                    ePart, eCharset, false);
                     }
-                    m_aAuth.set(m_aAbsURIRef, aSynAuth.makeStringAndClear(),
-                        m_aAbsURIRef.getLength());
+                    m_aAuth.set(m_aAbsURIRef, aSynAuth, m_aAbsURIRef.getLength());
                 }
             }
             if (pHostPortBegin)
@@ -1471,8 +1468,7 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
             appendUCS4(aSynQuery, nUTF32, eEscapeType,
                        PART_URIC, eCharset, true);
         }
-        m_aQuery.set(m_aAbsURIRef, aSynQuery.makeStringAndClear(),
-            m_aAbsURIRef.getLength());
+        m_aQuery.set(m_aAbsURIRef, aSynQuery, m_aAbsURIRef.getLength());
     }
 
     // Parse #<fragment>
@@ -1488,8 +1484,7 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
             appendUCS4(aSynFragment, nUTF32, eEscapeType, PART_URIC,
                        eCharset, true);
         }
-        m_aFragment.set(m_aAbsURIRef, aSynFragment.makeStringAndClear(),
-            m_aAbsURIRef.getLength());
+        m_aFragment.set(m_aAbsURIRef, aSynFragment, m_aAbsURIRef.getLength());
     }
 
     if (pPos != pEnd)
@@ -2938,7 +2933,7 @@ bool INetURLObject::setHost(std::u16string_view rTheHost,
             aSynHost.getStr(), aSynHost.getStr() + aSynHost.getLength(),
             EncodeMechanism::WasEncoded, eCharset, bNetBiosName, &aSynHost))
         return false;
-    sal_Int32 nDelta = m_aHost.set(m_aAbsURIRef, aSynHost.makeStringAndClear());
+    sal_Int32 nDelta = m_aHost.set(m_aAbsURIRef, aSynHost);
     m_aPort += nDelta;
     m_aPath += nDelta;
     m_aQuery += nDelta;
@@ -3214,7 +3209,7 @@ bool INetURLObject::setPath(std::u16string_view rThePath,
                    '/', 0x80000000, 0x80000000, 0x80000000, aSynPath)
         || p != pEnd)
         return false;
-    sal_Int32 nDelta = m_aPath.set(m_aAbsURIRef, aSynPath.makeStringAndClear());
+    sal_Int32 nDelta = m_aPath.set(m_aAbsURIRef, aSynPath);
     m_aQuery += nDelta;
     m_aFragment += nDelta;
     return true;
@@ -3864,8 +3859,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                 setInvalid();
                 return false;
             }
-            m_aHost.set(m_aAbsURIRef, aSynHost.makeStringAndClear(),
-                m_aAbsURIRef.getLength());
+            m_aHost.set(m_aAbsURIRef, aSynHost, m_aAbsURIRef.getLength());
             if (nThePort != 0)
             {
                 if (getSchemeInfo().m_bPort)
@@ -3898,8 +3892,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
         setInvalid();
         return false;
     }
-    m_aPath.set(m_aAbsURIRef, aSynPath.makeStringAndClear(),
-        m_aAbsURIRef.getLength());
+    m_aPath.set(m_aAbsURIRef, aSynPath, m_aAbsURIRef.getLength());
     return true;
 }
 
