@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad38bcd1_f8d588e9",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T22:26:23Z",
+      "side": 1,
+      "message": "This is working quite nice, bug we shouldn\u0027t use PolyPolygonHatchPrimitive2D, and instead for example: HatchTexturePrimitive3D.",
+      "revId": "a6f5576d5539dfa3d87fc6b809a6f746bf466927",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
