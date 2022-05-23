@@ -5404,6 +5404,32 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
     enable_notify_events();
 }
 
+IMPL_LINK(SalInstanceIconView, TooltipHdl, const HelpEvent&, rHEvt, bool)
+{
+    if (notify_events_disabled())
+        return false;
+    Point aPos(m_xIconView->ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
+    SvTreeListEntry* pEntry = m_xIconView->GetEntry(aPos);
+    if (pEntry)
+    {
+        SalInstanceTreeIter aIter(pEntry);
+        OUString aTooltip = signal_query_tooltip(aIter);
+        if (aTooltip.isEmpty())
+            return false;
+        Size aSize(m_xIconView->GetOutputSizePixel().Width(), m_xIconView->GetEntryHeight());
+        tools::Rectangle aScreenRect(
+            m_xIconView->OutputToScreenPixel(m_xIconView->GetEntryPosition(pEntry)), aSize);
+        Help::ShowQuickHelp(m_xIconView, aScreenRect, aTooltip);
+    }
+    return true;
+}
+
+void SalInstanceIconView::connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink)
+{
+    weld::IconView::connect_query_tooltip(rLink);
+    m_xIconView->SetTooltipHdl(LINK(this, SalInstanceIconView, TooltipHdl));
+}
+
 OUString SalInstanceIconView::get_selected_id() const
 {
     assert(m_xIconView->IsUpdateMode() && "don't request selection when frozen");

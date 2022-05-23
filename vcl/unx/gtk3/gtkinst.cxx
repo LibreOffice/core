@@ -16097,6 +16097,7 @@ private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nPopupMenu;
 #endif
+    gulong m_nQueryTooltipSignalId = 0;
     ImplSVEvent* m_pSelectionChangeEvent;
 
     DECL_LINK(async_signal_selection_changed, void*, void);
@@ -16141,6 +16142,32 @@ private:
         GtkInstanceIconView* pThis = static_cast<GtkInstanceIconView*>(widget);
         SolarMutexGuard aGuard;
         pThis->handle_item_activated();
+    }
+
+    static gboolean signalQueryTooltip(GtkWidget* /*pGtkWidget*/, gint x, gint y,
+        gboolean keyboard_tip, GtkTooltip* tooltip,
+        gpointer widget)
+    {
+        GtkInstanceIconView* pThis = static_cast<GtkInstanceIconView*>(widget);
+        GtkTreeIter iter;
+        GtkIconView* pIconView = pThis->m_pIconView;
+        GtkTreeModel* pModel = gtk_icon_view_get_model(pIconView);
+        GtkTreePath* pPath = nullptr;
+#if GTK_CHECK_VERSION(4, 0, 0)
+        if (!gtk_icon_view_get_tooltip_context(pIconView, x, y, keyboard_tip, &pModel, &pPath, &iter))
+            return false;
+#else
+        if (!gtk_icon_view_get_tooltip_context(pIconView, &x, &y, keyboard_tip, &pModel, &pPath, &iter))
+            return false;
+#endif
+        OUString aTooltip = pThis->signal_query_tooltip(GtkInstanceTreeIter(iter));
+        if (!aTooltip.isEmpty())
+        {
+            gtk_tooltip_set_text(tooltip, OUStringToOString(aTooltip, RTL_TEXTENCODING_UTF8).getStr());
+            gtk_icon_view_set_tooltip_item(pIconView, tooltip, pPath);
+        }
+        gtk_tree_path_free(pPath);
+        return !aTooltip.isEmpty();
     }
 
     void insert_item(GtkTreeIter& iter, int pos, const OUString* pId, const OUString* pText, const OUString* pIconName)
@@ -16247,6 +16274,12 @@ public:
             pGtkRetIter->iter = iter;
         }
         enable_notify_events();
+    }
+
+    virtual void connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink) override
+    {
+        weld::IconView::connect_query_tooltip(rLink);
+        m_nQueryTooltipSignalId = g_signal_connect(m_pIconView, "query-tooltip", G_CALLBACK(signalQueryTooltip), this);
     }
 
     virtual OUString get_selected_id() const override
@@ -16492,6 +16525,9 @@ public:
     {
         if (m_pSelectionChangeEvent)
             Application::RemoveUserEvent(m_pSelectionChangeEvent);
+
+        if (m_nQueryTooltipSignalId)
+            g_signal_handler_disconnect(m_pIconView, m_nQueryTooltipSignalId);
 
         g_signal_handler_disconnect(m_pIconView, m_nItemActivatedSignalId);
         g_signal_handler_disconnect(m_pIconView, m_nSelectionChangedSignalId);
