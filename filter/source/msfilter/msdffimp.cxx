@@ -4056,7 +4056,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 pRet->SetName( aFileName );
         }
     }
-    pRet->SetLogicRect( rObjData.aBoundRect );
+    pRet->NbcSetLogicRect( rObjData.aBoundRect );
 
     if (SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>(pRet))
     {
