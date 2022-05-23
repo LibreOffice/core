@@ -775,7 +775,7 @@ static SfxItemPropertyMapEntry const * ImplGetSvxTableShapePropertyMap()
     return aTableShapePropertyMap_Impl;
 }
 
-static comphelper::PropertyMapEntry const * ImplGetSvxDrawingDefaultsPropertyMap()
+static o3tl::span<comphelper::PropertyMapEntry const> ImplGetSvxDrawingDefaultsPropertyMap()
 {
     static comphelper::PropertyMapEntry const aSvxDrawingDefaultsPropertyMap_Impl[] =
     {
@@ -791,18 +791,16 @@ static comphelper::PropertyMapEntry const * ImplGetSvxDrawingDefaultsPropertyMap
         SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS
         MISC_3D_OBJ_PROPERTIES
         SPECIAL_3DBACKSCALE_PROPERTIES
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
     return aSvxDrawingDefaultsPropertyMap_Impl;
 }
 
-static comphelper::PropertyMapEntry const * ImplGetAdditionalWriterDrawingDefaultsPropertyMap()
+static o3tl::span<comphelper::PropertyMapEntry const> ImplGetAdditionalWriterDrawingDefaultsPropertyMap()
 {
     static comphelper::PropertyMapEntry const aSvxAdditionalDefaultsPropertyMap_Impl[] =
     {
         { "IsFollowingTextFlow", SID_SW_FOLLOW_TEXT_FLOW, cppu::UnoType<bool>::get(), 0, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
     return aSvxAdditionalDefaultsPropertyMap_Impl;

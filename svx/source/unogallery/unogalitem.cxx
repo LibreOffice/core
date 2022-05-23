@@ -193,8 +193,6 @@ rtl::Reference<::comphelper::PropertySetInfo> GalleryItem::createPropertySetInfo
 
         { OUString("Drawing"), UNOGALLERY_DRAWING, cppu::UnoType<lang::XComponent>::get(),
           beans::PropertyAttribute::READONLY, 0 },
-
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
     return rtl::Reference<::comphelper::PropertySetInfo>( new ::comphelper::PropertySetInfo( aEntries ) );

@@ -129,7 +129,7 @@ ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
     // the user.
 
     // create XPropertySet with three properties for status indicator
-    comphelper::PropertyMapEntry const aInfoMap[] =
+    static comphelper::PropertyMapEntry const aInfoMap[] =
     {
         { OUString("ProgressRange"), 0,
               ::cppu::UnoType<sal_Int32>::get(),
@@ -180,7 +180,6 @@ ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
         { OUString("NoEmbDataSet"), 0,
               cppu::UnoType<bool>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
                 comphelper::GenericPropertySet_CreateInstance(

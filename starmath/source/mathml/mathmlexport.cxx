@@ -134,16 +134,14 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
     static constexpr OUStringLiteral sStreamName(u"StreamName");
 
     // create XPropertySet with three properties for status indicator
-    comphelper::PropertyMapEntry aInfoMap[]
-        = { { sUsePrettyPrinting, 0, cppu::UnoType<bool>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { sBaseURI, 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID,
-              0 },
-            { sStreamRelPath, 0, ::cppu::UnoType<OUString>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { sStreamName, 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID,
-              0 },
-            { OUString(), 0, css::uno::Type(), 0, 0 } };
+    static const comphelper::PropertyMapEntry aInfoMap[] = {
+        { sUsePrettyPrinting, 0, cppu::UnoType<bool>::get(), beans::PropertyAttribute::MAYBEVOID,
+          0 },
+        { sBaseURI, 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { sStreamRelPath, 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID,
+          0 },
+        { sStreamName, 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 }
+    };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
 
