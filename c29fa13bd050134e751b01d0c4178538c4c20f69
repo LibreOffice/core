@@ -16,6 +16,24 @@
       "message": "This likely leaks pPath, or do I misunderstand? (not an expert in this API, and asking because I have to implement the same for IconView)",
       "revId": "c29fa13bd050134e751b01d0c4178538c4c20f69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29571263_a1ed465e",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8538,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-05-23T11:25:26Z",
+      "side": 1,
+      "message": "yeah, looks like a leak there: https://gerrit.libreoffice.org/c/core/+/134815 to fix",
+      "parentUuid": "c9c0a0d4_d5399af8",
+      "revId": "c29fa13bd050134e751b01d0c4178538c4c20f69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
