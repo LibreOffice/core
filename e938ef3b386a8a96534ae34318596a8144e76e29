@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d14e993_f02611bf",
+        "filename": "starmath/UIConfig_smath.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-23T11:59:59Z",
+      "side": 1,
+      "message": "Oh I\u0027m sorry - will add them now! BTW, I\u0027m working on it on Windows, so no idea what it would look like on other platforms yet - will test later, when main problems get solved.",
+      "parentUuid": "0ec4a5e1_d9389b63",
+      "revId": "e938ef3b386a8a96534ae34318596a8144e76e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d16c6c8b_3cad72f0",
         "filename": "starmath/source/ElementsDockingWindow.cxx",
         "patchSetId": 1
