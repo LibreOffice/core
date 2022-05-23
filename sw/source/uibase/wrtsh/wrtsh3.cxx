@@ -29,6 +29,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
 #include <sfx2/dispatch.hxx>
+#include <comphelper/lok.hxx>
+#include <tools/json_writer.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
@@ -100,8 +103,19 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
         {
             // Replace the placeholder image with a real one.
             GetView().StopShellTimer();
-            GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHANGE_PICTURE,
-                                                               SfxCallMode::SYNCHRON);
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                tools::JsonWriter aJson;
+                aJson.put("action", "change-picture");
+                std::unique_ptr<char, o3tl::free_delete> pJson(aJson.extractData());
+                GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL,
+                                                              pJson.get());
+            }
+            else
+            {
+                GetView().GetViewFrame()->GetDispatcher()->Execute(SID_CHANGE_PICTURE,
+                                                                   SfxCallMode::SYNCHRON);
+            }
             pContentControl->SetShowingPlaceHolder(false);
         }
         return true;

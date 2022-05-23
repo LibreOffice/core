@@ -812,14 +812,18 @@ public:
      *
      * @param pArguments arguments of the event.
      *
-     * Example argument string:
-     *
+     * Examples:
+     * To select the 3rd list item of the drop-down:
      * {
      *     "type": "drop-down",
      *     "selected": "2"
      * }
      *
-     * selects the 3rd list item of the drop-down.
+     * To change a picture place-holder:
+     * {
+     *     "type": "picture",
+     *     "changed": "file:///path/to/test.png"
+     * }
      */
     void sendContentControlEvent(const char* pArguments)
     {
