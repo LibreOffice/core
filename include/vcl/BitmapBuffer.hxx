@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_BITMAPBUFFER_HXX
 #define INCLUDED_VCL_BITMAPBUFFER_HXX
 
+#include <memory>
+
 #include <vcl/dllapi.h>
 #include <vcl/BitmapPalette.hxx>
 #include <vcl/ColorMask.hxx>
