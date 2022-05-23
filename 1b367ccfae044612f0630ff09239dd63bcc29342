@@ -16,6 +16,23 @@
       "message": "Great work!\nYou could resolve two nitpicks.",
       "revId": "1b367ccfae044612f0630ff09239dd63bcc29342",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f2b4811_df8e9db5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-23T22:58:50Z",
+      "side": 1,
+      "message": "Nevermind, TIL about relation chains.",
+      "revId": "1b367ccfae044612f0630ff09239dd63bcc29342",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
