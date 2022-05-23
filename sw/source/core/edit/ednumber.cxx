@@ -146,45 +146,40 @@ void SwEditShell::NoNum()
     EndAllAction();
 }
 
+// The entire selection is numbered (ignoring unnumbered empty lines)
 bool SwEditShell::SelectionHasNumber() const
 {
-    bool bResult = HasNumber();
-    const SwTextNode * pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
-    if (!bResult && pTextNd && pTextNd->Len()==0 && !pTextNd->GetNumRule()) {
-        SwPamRanges aRangeArr( *GetCursor() );
-        SwPaM aPam( *GetCursor()->GetPoint() );
-        for( size_t n = 0; n < aRangeArr.Count(); ++n )
-        {
-            aRangeArr.SetPam( n, aPam );
-            {
-                SwNodeOffset nStt = aPam.Start()->nNode.GetIndex(),
-                             nEnd = aPam.End()->nNode.GetIndex();
-                for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
-                {
-                    pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
-                    if (pTextNd)
-                    {
-                        pTextNd = sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pTextNd));
-                    }
-                    if (pTextNd && pTextNd->Len()!=0)
-                    {
-                        bResult = pTextNd->HasNumber();
+    bool bResult = false;
+    for (SwPaM& rPaM : GetCursor()->GetRingContainer())
+    {
+        // If in table cells select mode, ignore the cells that aren't actually selected
+        if (IsTableMode() && !rPaM.HasMark())
+            continue;
 
-                        // #b6340308# special case: outline numbered, not counted paragraph
-                        if ( bResult &&
-                            pTextNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
-                            !pTextNd->IsCountedInList() )
-                        {
-                            bResult = false;
-                        }
-                        if (!bResult) {
-                            break;
-                        }
-                    }
+        SwNodeOffset nStt = rPaM.Start()->nNode.GetIndex();
+        SwNodeOffset nEnd = rPaM.End()->nNode.GetIndex();
+        for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
+        {
+            SwTextNode* pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
+            if (pTextNd)
+            {
+                pTextNd = sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pTextNd));
+            }
+            if (pTextNd && (!bResult || pTextNd->Len()!=0))
+            {
+                bResult = pTextNd->HasNumber();
+
+                // #b6340308# special case: outline numbered, not counted paragraph
+                if (bResult &&
+                    pTextNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
+                    !pTextNd->IsCountedInList())
+                {
+                    bResult = false;
                 }
+                if (!bResult && pTextNd->Len())
+                    break;
             }
         }
-
     }
 
     return bResult;
@@ -193,33 +188,27 @@ bool SwEditShell::SelectionHasNumber() const
 // add a new function to determine number on/off status
 bool SwEditShell::SelectionHasBullet() const
 {
-    bool bResult = HasBullet();
-    const SwTextNode * pTextNd = sw::GetParaPropsNode(*GetLayout(), GetCursor()->GetPoint()->nNode);
-    if (!bResult && pTextNd && pTextNd->Len()==0 && !pTextNd->GetNumRule()) {
-        SwPamRanges aRangeArr( *GetCursor() );
-        SwPaM aPam( *GetCursor()->GetPoint() );
-        for( size_t n = 0; n < aRangeArr.Count(); ++n )
-        {
-            aRangeArr.SetPam( n, aPam );
-            {
-                SwNodeOffset nStt = aPam.Start()->nNode.GetIndex(),
-                             nEnd = aPam.End()->nNode.GetIndex();
-                for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
-                {
-                    pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
-                    if (pTextNd)
-                    {
-                        pTextNd = sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pTextNd));
-                    }
-                    if (pTextNd && pTextNd->Len()!=0)
-                    {
-                        bResult = pTextNd->HasBullet();
+    bool bResult = false;
+    for (SwPaM& rPaM : GetCursor()->GetRingContainer())
+    {
+        if (IsTableMode() && !rPaM.HasMark())
+            continue;
 
-                        if (!bResult) {
-                            break;
-                        }
-                    }
-                }
+        SwNodeOffset nStt = rPaM.Start()->nNode.GetIndex();
+        SwNodeOffset nEnd = rPaM.End()->nNode.GetIndex();
+        for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
+        {
+            SwTextNode* pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
+            if (pTextNd)
+            {
+                pTextNd = sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pTextNd));
+            }
+            if (pTextNd && (!bResult || pTextNd->Len()!=0))
+            {
+                bResult = pTextNd->HasBullet();
+
+                if (!bResult && pTextNd->Len())
+                    break;
             }
         }
     }
