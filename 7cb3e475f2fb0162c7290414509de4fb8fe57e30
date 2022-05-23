@@ -16,6 +16,24 @@
       "message": "Could you please test if this fails for you when you do `make UITest_chart`?",
       "revId": "7cb3e475f2fb0162c7290414509de4fb8fe57e30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44ce6df7_df673e04",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-23T10:53:57Z",
+      "side": 1,
+      "message": "Ähmmm - this patch is from 2018. It\u0027s Windows-only. Was there some change that made  UI tests work correctly on Windows? Or maybe my info is just outdated?",
+      "parentUuid": "e2e11028_025043ea",
+      "revId": "7cb3e475f2fb0162c7290414509de4fb8fe57e30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
