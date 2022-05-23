@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f9d471a_ac4b41e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-05-23T20:36:22Z",
+      "side": 1,
+      "message": "Hi,\nThis change is now complete and resolve tdf#129674\nNext steps: add Help page; add UITest",
+      "revId": "984f68b3a439093a3342f40d76acfcf42d2b1e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
