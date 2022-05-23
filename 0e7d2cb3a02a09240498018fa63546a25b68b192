@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b3b5cff_ea028dcc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-23T08:59:05Z",
+      "side": 1,
+      "message": "@Tibor: very nice and useful fix! I\u0027ve added the details to the commit description, according to the bug report.",
+      "revId": "0e7d2cb3a02a09240498018fa63546a25b68b192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
