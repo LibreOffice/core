@@ -34,6 +34,24 @@
       "parentUuid": "bd2e52ea_3a8244ea",
       "revId": "abc5c52525377d781b0a3afbd15875c6c9411abe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6722aca_b3bed35a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-23T12:34:27Z",
+      "side": 1,
+      "message": "I suggest you use a dummy image and let the icon designer replace it in a follow-up patch (I\u0027ll ping the people). And for the commit message: yes, please.\n\nFeature freeze for 7.4 is close and it would be nice to include this patch.",
+      "parentUuid": "b9859b80_45e475c9",
+      "revId": "abc5c52525377d781b0a3afbd15875c6c9411abe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
