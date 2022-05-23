@@ -121,14 +121,13 @@ css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
                   Of course we can't check for corrupted service names here. We can check
                   for empty strings only...
     */
-    CacheItem lIProps;
-    CacheItem lEProps;
-    lEProps[PROPNAME_FILTERSERVICE] <<= OUString();
+    css::beans::NamedValue lEProps[] {
+        { PROPNAME_FILTERSERVICE, css::uno::Any(OUString()) } };
 
     std::vector<OUString> lUNOFilters;
     try
     {
-        lUNOFilters = GetTheFilterCache().getMatchingItemsByProps(FilterCache::E_FILTER, lIProps, lEProps);
+        lUNOFilters = GetTheFilterCache().getMatchingItemsByProps(FilterCache::E_FILTER, {}, lEProps);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -420,8 +419,7 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterListForModule(const OUS
     std::vector<OUString> lSortedFilters = impl_readSortedFilterListFromConfig(sModule);
 
     // get all filters for the requested module
-    CacheItem lIProps;
-    lIProps[PROPNAME_DOCUMENTSERVICE] <<= sModule;
+    css::beans::NamedValue lIProps[] { { PROPNAME_DOCUMENTSERVICE, css::uno::Any(sModule) } };
 
     // SAFE -> ----------------------
     osl::ClearableMutexGuard aLock(m_aMutex);
