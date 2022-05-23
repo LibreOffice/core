@@ -773,7 +773,8 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
 
 IMPL_LINK_NOARG(SwGlobalTree, Timeout, Timer *, void)
 {
-    if (m_pActiveShell && m_pActiveShell->GetView().GetEditWin().HasFocus())
+    SwView* pView = GetParentWindow()->GetCreateView();
+    if (pView && pView->GetEditWin().HasFocus())
     {
         if (Update(false))
             Display();
@@ -877,14 +878,13 @@ bool SwGlobalTree::Update(bool bHard)
     bool bRet = false;
     if (pActView && pActView->GetWrtShellPtr())
     {
-        SwWrtShell* pOldShell = m_pActiveShell;
+        const SwWrtShell* pOldShell = m_pActiveShell;
         m_pActiveShell = pActView->GetWrtShellPtr();
         if(m_pActiveShell != pOldShell)
         {
-            if (pOldShell)
-                EndListening(*pOldShell->GetView().GetDocShell());
-            StartListening(*m_pActiveShell->GetView().GetDocShell());
             m_pSwGlblDocContents.reset();
+            if (!IsListening(*m_pActiveShell->GetView().GetDocShell()))
+                StartListening(*m_pActiveShell->GetView().GetDocShell());
         }
         if(!m_pSwGlblDocContents)
         {
