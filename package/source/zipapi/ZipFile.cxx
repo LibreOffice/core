@@ -20,6 +20,7 @@
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/packages/NoEncryptionException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
@@ -31,6 +32,7 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/NSSInitializer.hpp>
 
+#include <comphelper/bytereader.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/digest.h>
@@ -544,34 +546,54 @@ class XBufferedStream : public cppu::WeakImplHelper<css::io::XInputStream, css::
 public:
     XBufferedStream( const uno::Reference<XInputStream>& xSrcStream ) : mnPos(0)
     {
-        const sal_Int32 nBufSize = 8192;
-
         sal_Int32 nRemaining = xSrcStream->available();
-        sal_Int32 nRead = 0;
-        maBytes.reserve(nRemaining);
-        uno::Sequence<sal_Int8> aBuf(nBufSize);
+        uno::Reference< css::lang::XUnoTunnel > xInputTunnel( xSrcStream, uno::UNO_QUERY );
+        comphelper::ByteReader* pByteReader = nullptr;
+        if (xInputTunnel)
+            pByteReader = reinterpret_cast< comphelper::ByteReader* >( xInputTunnel->getSomething( comphelper::ByteReader::getUnoTunnelId() ) );
 
-        auto readAndCopy = [&]( sal_Int32 nReadSize ) -> sal_Int32
+        if (pByteReader)
         {
-            sal_Int32 nBytes = xSrcStream->readBytes(aBuf, nReadSize);
-            const sal_Int8* p = aBuf.getConstArray();
-            const sal_Int8* pEnd = p + nBytes;
-            maBytes.insert( maBytes.end(), p, pEnd );
-            return nBytes;
-        };
+            maBytes.resize(nRemaining);
 
-        while (nRemaining > nBufSize)
-        {
-            const auto nBytes = readAndCopy(nBufSize);
-            if (!nBytes)
-                break;
-            nRead += nBytes;
-            nRemaining -= nBytes;
+            sal_Int8* pData = maBytes.data();
+            while (nRemaining > 0)
+            {
+                sal_Int32 nRead = pByteReader->readSomeBytes(pData, nRemaining);
+                nRemaining -= nRead;
+                pData += nRead;
+            }
         }
+        else
+        {
+            const sal_Int32 nBufSize = 8192;
 
-        if (nRemaining)
-            nRead += readAndCopy(nRemaining);
-        maBytes.resize(nRead);
+            sal_Int32 nRead = 0;
+            maBytes.reserve(nRemaining);
+            uno::Sequence<sal_Int8> aBuf(nBufSize);
+
+            auto readAndCopy = [&]( sal_Int32 nReadSize ) -> sal_Int32
+            {
+                sal_Int32 nBytes = xSrcStream->readBytes(aBuf, nReadSize);
+                const sal_Int8* p = aBuf.getConstArray();
+                const sal_Int8* pEnd = p + nBytes;
+                maBytes.insert( maBytes.end(), p, pEnd );
+                return nBytes;
+            };
+
+            while (nRemaining > nBufSize)
+            {
+                const auto nBytes = readAndCopy(nBufSize);
+                if (!nBytes)
+                    break;
+                nRead += nBytes;
+                nRemaining -= nBytes;
+            }
+
+            if (nRemaining)
+                nRead += readAndCopy(nRemaining);
+            maBytes.resize(nRead);
+        }
     }
 
     virtual sal_Int32 SAL_CALL readBytes( uno::Sequence<sal_Int8>& rData, sal_Int32 nBytesToRead ) override
