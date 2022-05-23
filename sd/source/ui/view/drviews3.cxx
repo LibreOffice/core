@@ -49,6 +49,7 @@
 #include <svx/float3d.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -491,14 +492,12 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
                 // Support advanced DiagramHelper
-                SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(pObj);
-
-                if(pAnchorObj && pAnchorObj->isDiagram())
+                if(nullptr != pObj && pObj->isDiagram())
                 {
                     if(SID_REGENERATE_DIAGRAM == nSlot)
                     {
                         mpDrawView->UnmarkAll();
-                        pAnchorObj->getDiagramHelper()->reLayout(*pAnchorObj);
+                        pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
                         mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
                     }
                     else // SID_EDIT_DIAGRAM
@@ -506,7 +505,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                         VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                         ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
                             GetFrameWeld(),
-                            *pAnchorObj);
+                            *static_cast<SdrObjGroup*>(pObj));
                         pDlg->Execute();
                     }
                 }

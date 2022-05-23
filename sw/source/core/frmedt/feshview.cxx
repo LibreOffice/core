@@ -2456,8 +2456,7 @@ bool SwFEShell::IsGroupSelected(bool bAllowDiagams)
                 if(!bAllowDiagams)
                 {
                     // Don't allow enter Diagrams
-                    auto* pGroup(dynamic_cast<SdrObjGroup*>(pObj));
-                    if(nullptr != pGroup && pGroup->isDiagram())
+                    if(pObj->isDiagram())
                     {
                         return false;
                     }

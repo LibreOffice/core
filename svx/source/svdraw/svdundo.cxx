@@ -46,6 +46,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <svx/diagram/datamodel.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 
 
 // iterates over all views and unmarks this SdrObject if it is marked
@@ -634,12 +635,8 @@ SdrUndoDiagramModelData::SdrUndoDiagramModelData(SdrObject& rNewObj, svx::diagra
 , m_aStartState(rStartState)
 , m_aEndState()
 {
-    SdrObjGroup* pDiagram(dynamic_cast<SdrObjGroup*>(&rNewObj));
-
-    if(pDiagram && pDiagram->isDiagram())
-    {
-        m_aEndState = pDiagram->getDiagramHelper()->extractDiagramDataState();
-    }
+    if(rNewObj.isDiagram())
+        m_aEndState = rNewObj.getDiagramHelper()->extractDiagramDataState();
 }
 
 SdrUndoDiagramModelData::~SdrUndoDiagramModelData()
@@ -651,14 +648,12 @@ void SdrUndoDiagramModelData::implUndoRedo(bool bUndo)
     if(nullptr == pObj)
         return;
 
-    SdrObjGroup* pDiagram(dynamic_cast<SdrObjGroup*>(pObj));
-
-    if(nullptr == pDiagram || !pDiagram->isDiagram())
+    if(!pObj->isDiagram())
         return;
 
-    pDiagram->getDiagramHelper()->applyDiagramDataState(
+    pObj->getDiagramHelper()->applyDiagramDataState(
         bUndo ? m_aStartState : m_aEndState);
-    pDiagram->getDiagramHelper()->reLayout(*pDiagram);
+    pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
 }
 
 void SdrUndoDiagramModelData::Undo()

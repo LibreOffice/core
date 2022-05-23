@@ -680,8 +680,9 @@ void SdrEditView::CheckPossibilities()
     // Don't allow enter Diagrams
     if (1 == nMarkCount && m_bGrpEnterPossible)
     {
-        auto* pGroup(dynamic_cast<SdrObjGroup*>(GetMarkedObjectByIndex(0)));
-        if(nullptr != pGroup && pGroup->isDiagram())
+        SdrObject* pCandidate(GetMarkedObjectByIndex(0));
+
+        if(nullptr != pCandidate && pCandidate->isDiagram())
             m_bGrpEnterPossible = false;
     }
 }

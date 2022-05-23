@@ -88,6 +88,7 @@ namespace sdr::contact { class ViewContact; }
 
 namespace svx { class PropertyChangeNotifier; }
 namespace com::sun::star::drawing { class XShape; }
+namespace svx::diagram { class IDiagramHelper; }
 
 
 struct SVXCORE_DLLPUBLIC SdrObjectFreeOp;
@@ -258,6 +259,11 @@ public:
 /// Abstract DrawObject
 class SVXCORE_DLLPUBLIC SdrObject : public SfxListener, public tools::WeakBase
 {
+public:
+    // Basic DiagramHelper support
+    virtual const std::shared_ptr< svx::diagram::IDiagramHelper >& getDiagramHelper() const;
+    bool isDiagram() const { return bool(getDiagramHelper()); }
+
 private:
     friend class                SdrObjListIter;
     friend class                SdrObjList;

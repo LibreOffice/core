@@ -59,6 +59,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <textboxhelper.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::beans;
@@ -446,14 +447,12 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
                     // Support advanced DiagramHelper
-                    SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(pObj);
-
-                    if(pAnchorObj && pAnchorObj->isDiagram())
+                    if(nullptr != pObj && pObj->isDiagram())
                     {
                         if(SID_REGENERATE_DIAGRAM == nSlotId)
                         {
                             pSdrView->UnmarkAll();
-                            pAnchorObj->getDiagramHelper()->reLayout(*pAnchorObj);
+                            pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
                             pSdrView->MarkObj(pObj, pSdrView->GetSdrPageView());
                         }
                         else // SID_EDIT_DIAGRAM
@@ -461,7 +460,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                             ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
                                 GetView().GetFrameWeld(),
-                                *pAnchorObj);
+                                *static_cast<SdrObjGroup*>(pObj));
                             pDlg->Execute();
                         }
                     }
@@ -940,8 +939,9 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 if (nullptr != rMarkList.GetMark(0))
                 {
-                    SdrObjGroup* pSdrObjGroup = dynamic_cast<SdrObjGroup*>(rMarkList.GetMark(0)->GetMarkedSdrObj());
-                    if(nullptr != pSdrObjGroup && pSdrObjGroup->isDiagram())
+                    SdrObject* pObj(rMarkList.GetMark(0)->GetMarkedSdrObj());
+
+                    if(nullptr != pObj && pObj->isDiagram())
                     {
                         bDisable = false;
                     }

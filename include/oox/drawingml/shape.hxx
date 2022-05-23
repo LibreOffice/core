@@ -58,7 +58,9 @@ namespace oox::vml {
     struct OleObjectInfo;
 }
 
-class IDiagramHelper;
+namespace svx::diagram {
+    class IDiagramHelper;
+}
 
 namespace oox::drawingml {
 
@@ -410,7 +412,7 @@ private:
 
     // temporary space for DiagramHelper in preparation for collecting data
     // Note: I tried to use a unique_ptr here, but existing constructor func does not allow that
-    IDiagramHelper* mpDiagramHelper;
+    svx::diagram::IDiagramHelper* mpDiagramHelper;
 
     // association-ID to identify the Diagram ModelData
     OUString msDiagramDataModelID;

@@ -1332,6 +1332,12 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 }
             }
 
+            // Diagram selection visualization support
+            if(mpMarkedObj->isDiagram())
+            {
+                mpMarkedObj->AddToHdlList(maHdlList);
+            }
+
             const size_t nSiz1(maHdlList.GetHdlCount());
 
             // moved setting the missing parameters at SdrHdl here from the

@@ -24,84 +24,13 @@
 #include <svx/svxdllapi.h>
 #include <svx/svdpage.hxx>
 
-// Forward declarations
-class SfxItemSet;
-class SdrObjGroup;
-namespace svx
-{
-namespace diagram
-{
-class DiagramDataState;
-}
-}
-
-// Helper class to allow administer advanced Diagram related
-// data and functionality
-class SVXCORE_DLLPUBLIC IDiagramHelper
-{
-private:
-    // These values define behaviour to where take data from at re-creation time.
-    // Different definitions will have different consequences for re-creation
-    // of Diagram visualization (if needed/triggered).
-    // The style attributes per shape e.g. can be re-stored frm either an
-    // existing Theme, or the preserved key/value list of properties per XShape.
-    // With the current default settings the re-creation uses the preserved
-    // key/value pairs, but re-creation from Theme may also be desirable. It
-    // is also good to preserve both data packages at initial import to allow
-    // alternatively one of these two methods for re-construction
-
-    // If true, the oox::Theme data from ::DiagramData get/set/ThemeDocument()
-    // aka mxThemeDocument - if it exists - will be used to create the style
-    // attributes for the to-be-created XShapes (theoretically allows re-creation
-    // with other Theme)
-    bool mbUseDiagramThemeData; // false
-
-    // If true, the UNO API form of attributes per Point as Key/value list
-    // that was secured after initial XShape creation is used to create the
-    // style attributes for the to-be-created XShapes
-    bool mbUseDiagramModelData; // true
-
-    // If true and mxThemeDocument exists it will be re-imported to
-    // a newly created oox::drawingml::Theme object
-    bool mbForceThemePtrRecreation; // false
-
-protected:
-    void anchorToSdrObjGroup(SdrObjGroup& rTarget);
-
-public:
-    IDiagramHelper();
-    virtual ~IDiagramHelper();
-
-    // re-create XShapes
-    virtual void reLayout(SdrObjGroup& rTarget) = 0;
-
-    // get text representation of data tree
-    virtual OUString getString() const = 0;
-
-    // get children of provided data node
-    // use empty string for top-level nodes
-    // returns vector of (id, text)
-    virtual std::vector<std::pair<OUString, OUString>>
-    getChildren(const OUString& rParentId) const = 0;
-
-    // add/remove new top-level node to data model, returns its id
-    virtual OUString addNode(const OUString& rText) = 0;
-    virtual bool removeNode(const OUString& rNodeId) = 0;
-
-    // Undo/Redo helpers for extracting/restoring Diagram-defining data
-    virtual std::shared_ptr<svx::diagram::DiagramDataState> extractDiagramDataState() const = 0;
-    virtual void
-    applyDiagramDataState(const std::shared_ptr<svx::diagram::DiagramDataState>& rState)
-        = 0;
-
-    bool UseDiagramThemeData() const { return mbUseDiagramThemeData; }
-    bool UseDiagramModelData() const { return mbUseDiagramModelData; }
-    bool ForceThemePtrRecreation() const { return mbForceThemePtrRecreation; };
-};
-
 //   SdrObjGroup
 class SVXCORE_DLLPUBLIC SdrObjGroup final : public SdrObject, public SdrObjList
 {
+public:
+    // Basic DiagramHelper support
+    virtual const std::shared_ptr< svx::diagram::IDiagramHelper >& getDiagramHelper() const override;
+
 private:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual std::unique_ptr<sdr::properties::BaseProperties>
@@ -111,14 +40,9 @@ private:
 
     // Allow *only* DiagramHelper itself to set this internal reference to
     // tightly control usage
-    friend class IDiagramHelper;
-    std::shared_ptr<IDiagramHelper> mp_DiagramHelper;
+    friend class svx::diagram::IDiagramHelper;
+    std::shared_ptr< svx::diagram::IDiagramHelper > mp_DiagramHelper;
 
-public:
-    bool isDiagram() const { return bool(mp_DiagramHelper); }
-    const std::shared_ptr<IDiagramHelper>& getDiagramHelper() { return mp_DiagramHelper; }
-
-private:
     // protected destructor - due to final, make private
     virtual ~SdrObjGroup() override;
 
@@ -192,6 +116,7 @@ public:
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

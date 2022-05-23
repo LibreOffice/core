@@ -33,6 +33,7 @@
 #include <svx/svdogrp.hxx>
 #include <sfx2/docfile.hxx>
 #include <osl/diagnose.h>
+#include <svx/diagram/IDiagramHelper.hxx>
 
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -282,14 +283,12 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
                     // Support advanced DiagramHelper
-                    SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(pObj);
-
-                    if(pAnchorObj && pAnchorObj->isDiagram())
+                    if(nullptr != pObj && pObj->isDiagram())
                     {
                         if(SID_REGENERATE_DIAGRAM == nSlotId)
                         {
                             pView->UnmarkAll();
-                            pAnchorObj->getDiagramHelper()->reLayout(*pAnchorObj);
+                            pObj->getDiagramHelper()->reLayout(*static_cast<SdrObjGroup*>(pObj));
                             pView->MarkObj(pObj, pView->GetSdrPageView());
                         }
                         else // SID_EDIT_DIAGRAM
@@ -298,7 +297,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             vcl::Window* pWin = rViewData.GetActiveWin();
                             ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
                                 pWin ? pWin->GetFrameWeld() : nullptr,
-                                *pAnchorObj);
+                                *static_cast<SdrObjGroup*>(pObj));
                             pDlg->Execute();
                         }
                     }

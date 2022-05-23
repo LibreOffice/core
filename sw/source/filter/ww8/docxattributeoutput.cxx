@@ -6454,8 +6454,7 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                 const SdrObject* pSdrObj = rFrame.GetFrameFormat().FindRealSdrObject();
                 if ( pSdrObj )
                 {
-                    const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(pSdrObj));
-                    const bool bIsDiagram(nullptr != pDiagramCandidate && pDiagramCandidate->isDiagram());
+                    const bool bIsDiagram(nullptr != pSdrObj && pSdrObj->isDiagram());
 
                     if (bIsDiagram)
                     {
