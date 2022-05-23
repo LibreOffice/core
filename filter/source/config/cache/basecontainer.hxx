@@ -31,10 +31,11 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
+#include <unotools/weakref.hxx>
 
 
 namespace filter::config {
-
+class ConfigFlush;
 
 /** @short      implements the interface css::container::XNameContainer
                 on top of a FilterCache reference.
@@ -61,7 +62,7 @@ class BaseContainer : public cppu::BaseMutex
     protected:
 
         // TODO
-        css::uno::WeakReference< css::util::XRefreshable > m_xRefreshBroadcaster;
+        unotools::WeakReference< ConfigFlush > m_xRefreshBroadcaster;
 
         /** @short  the implementation name of our derived class, which we provide
                     at the interface XServiceInfo of our class... */

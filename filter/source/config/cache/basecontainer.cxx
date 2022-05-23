@@ -27,6 +27,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
+#include "configflush.hxx"
 
 #define LOAD_IMPLICIT
 
@@ -56,7 +57,7 @@ void BaseContainer::init(const css::uno::Reference< css::uno::XComponentContext 
     m_sImplementationName = sImplementationName;
     m_lServiceNames       = lServiceNames      ;
     m_eType               = eType              ;
-    m_xRefreshBroadcaster = css::document::FilterConfigRefresh::create(rxContext);
+    m_xRefreshBroadcaster = new ConfigFlush();
     // <- SAFE
 }
 
@@ -427,7 +428,7 @@ void SAL_CALL BaseContainer::flush()
 
     m_pFlushCache.reset();
 
-    css::uno::Reference< css::util::XRefreshable > xRefreshBroadcaster = m_xRefreshBroadcaster;
+    rtl::Reference< ConfigFlush > xRefreshBroadcaster = m_xRefreshBroadcaster;
 
     aLock.clear();
     // <- SAFE
