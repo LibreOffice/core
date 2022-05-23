@@ -3136,7 +3136,7 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
     {
         const char* pVal = nullptr;
         m_pColorAttrList->getAsChar(FSNS(XML_w, XML_val), pVal);
-        if (std::string_view("auto") != pVal)
+        if (pVal != nullptr && std::string_view("auto") != pVal)
         {
             m_pSerializer->startElementNS(XML_w14, XML_textFill);
             m_pSerializer->startElementNS(XML_w14, XML_solidFill);
