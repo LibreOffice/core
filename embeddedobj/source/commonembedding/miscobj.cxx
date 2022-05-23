@@ -139,42 +139,6 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
     if ( m_aClassID.getLength() != 16 /*|| !m_aDocServiceName.getLength()*/ )
         throw uno::RuntimeException(); // something goes really wrong
 
-    // accepted states
-    m_aAcceptedStates = { /* [0] */ embed::EmbedStates::LOADED,
-                          /* [1] */ embed::EmbedStates::RUNNING,
-                          /* [2] */ embed::EmbedStates::INPLACE_ACTIVE,
-                          /* [3] */ embed::EmbedStates::UI_ACTIVE,
-                          /* [4] */ embed::EmbedStates::ACTIVE };
-    assert(m_aAcceptedStates.getLength() == NUM_SUPPORTED_STATES);
-
-
-    // intermediate states
-    // In the following table the first index points to starting state,
-    // the second one to the target state, and the sequence referenced by
-    // first two indexes contains intermediate states, that should be
-    // passed by object to reach the target state.
-    // If the sequence is empty that means that indirect switch from start
-    // state to the target state is forbidden, only if direct switch is possible
-    // the state can be reached.
-
-    m_pIntermediateStatesSeqs[0][2] = { embed::EmbedStates::RUNNING };
-
-    m_pIntermediateStatesSeqs[0][3] = { embed::EmbedStates::RUNNING,
-                                        embed::EmbedStates::INPLACE_ACTIVE };
-
-    m_pIntermediateStatesSeqs[0][4] = {embed::EmbedStates::RUNNING};
-
-    m_pIntermediateStatesSeqs[1][3] = { embed::EmbedStates::INPLACE_ACTIVE };
-
-    m_pIntermediateStatesSeqs[2][0] = { embed::EmbedStates::RUNNING };
-
-    m_pIntermediateStatesSeqs[3][0] = { embed::EmbedStates::INPLACE_ACTIVE,
-                                        embed::EmbedStates::RUNNING };
-
-    m_pIntermediateStatesSeqs[3][1] = { embed::EmbedStates::INPLACE_ACTIVE };
-
-    m_pIntermediateStatesSeqs[4][0] = { embed::EmbedStates::RUNNING };
-
     // verbs table
     for ( auto const & verb : std::as_const(m_aObjectVerbs) )
     {
