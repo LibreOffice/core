@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37ce86e4_cfd8c333",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-23T11:10:12Z",
+      "side": 1,
+      "message": "Caolán: do you confirm you downloaded from https://download.osgeo.org/libtiff/ ?\nSince their initial website had been hijacked (see https://en.wikipedia.org/wiki/Libtiff), we must be sure.\nIf yes, I can provide a quick patch.",
+      "revId": "a2ffd71f20e14f797f30223fe29b3ac1e92eafdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d43b0d3_fe9c38c1",
