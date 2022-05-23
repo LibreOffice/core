@@ -23,6 +23,7 @@
 
 #include <jvmaccess/virtualmachine.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 using jvmaccess::VirtualMachine;
 
@@ -41,8 +42,8 @@ VirtualMachine::AttachGuard::CreationException::operator =(
 }
 
 VirtualMachine::AttachGuard::AttachGuard(
-    rtl::Reference< VirtualMachine > const & rMachine):
-    m_xMachine(rMachine)
+    rtl::Reference< VirtualMachine > xMachine):
+    m_xMachine(std::move(xMachine))
 {
     assert(m_xMachine.is());
     m_pEnvironment = m_xMachine->attachThread(&m_bDetach);

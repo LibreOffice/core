@@ -64,8 +64,7 @@ public:
         @exception CreationException
         Thrown in case creation fails (due to a JNI problem).
      */
-    UnoVirtualMachine(rtl::Reference<jvmaccess::VirtualMachine> const& virtualMachine,
-                      void* classLoader);
+    UnoVirtualMachine(rtl::Reference<jvmaccess::VirtualMachine> virtualMachine, void* classLoader);
 
     /** Get the Java virtual machine wrapper.
 
