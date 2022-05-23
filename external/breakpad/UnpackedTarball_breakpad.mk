@@ -25,6 +25,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/0001-Handle-race-between-ExceptionHandler-SignalHandler-a.patch.1 \
 	external/breakpad/0001-Fix-double-declaration-of-tgkill-when-using-Android-.patch.1 \
 	external/breakpad/c++20-allocator.patch \
+	external/breakpad/include.patch \
 ))
 
 ifeq ($(COM_IS_CLANG),TRUE)
