@@ -80,6 +80,30 @@
       },
       "revId": "1c18815d5222a946b96e1dc2ee3e09a1da40bdaf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "697b8326_b8b6ae08",
+        "filename": "sysui/desktop/menus/startcenter.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-23T07:12:25Z",
+      "side": 1,
+      "message": "Oh!  I can see now that Name is in fact %PRODUCTNAME -- so maybe change that to %PRODUCTNAME Start Center ?",
+      "parentUuid": "24e995a4_9d07e1ff",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 31
+      },
+      "revId": "1c18815d5222a946b96e1dc2ee3e09a1da40bdaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
