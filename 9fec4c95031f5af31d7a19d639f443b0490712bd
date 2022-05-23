@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad7515b9_4c001df1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-23T08:58:12Z",
+      "side": 1,
+      "message": "Thanks for the review.\n\nThe test is something I was looking into, there\u0027s two options the way I see it.\n\n1. Place it inside a new testDetectEMF method in GraphicTest.cxx\n\n2. Create a new file that tests GraphicDescriptor. Because nothing else in GraphicTest tests the GraphicDescriptor and a GraphicDescriptor test file doesn\u0027t exist\n\nLet me know if there\u0027s a better way.",
+      "parentUuid": "7a232246_239d0392",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92de5ebf_76515ba8",
