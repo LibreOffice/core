@@ -1,0 +1,10 @@
+--- core/src/textcodec/JPTextEncoder.cpp
++++ core/src/textcodec/JPTextEncoder.cpp
+@@ -36,6 +36,7 @@
+ // and the grateful thanks of the Qt team.
+ 
+ #include "JPTextEncoder.h"
++#include <stdint.h>
+ 
+ /*
+ * This data is derived from Unicode 1.1,
