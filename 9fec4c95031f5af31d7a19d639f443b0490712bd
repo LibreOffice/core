@@ -143,6 +143,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "847e0adf_72eb9dc6",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T10:24:54Z",
+      "side": 1,
+      "message": "In my opinion if decompression was failed (eg. size is different than EMF_CHECK_SIZE), we should stop analysing file and return false.",
+      "parentUuid": "0e9727da_d04a6fda",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fe4fa921_8dbdee79",
         "filename": "vcl/source/filter/graphicfilter2.cxx",
         "patchSetId": 1
