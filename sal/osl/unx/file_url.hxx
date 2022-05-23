@@ -27,7 +27,7 @@ namespace rtl {
     class OUString;
 }
 
-oslFileError osl_getSystemPathFromFileURL_Ex(rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath);
+oslFileError getSystemPathFromFileURL_Ex(rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath);
 
 oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileURL);
 

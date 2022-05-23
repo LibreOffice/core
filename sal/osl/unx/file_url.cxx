@@ -444,7 +444,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
 /*
  * relative URLs are not accepted
  */
-oslFileError osl_getSystemPathFromFileURL_Ex(
+oslFileError getSystemPathFromFileURL_Ex(
     rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath)
 {
     rtl_uString* temp = nullptr;
@@ -711,7 +711,7 @@ oslFileError osl_getAbsoluteFileURL(
     if (systemPathIsRelativePath(unresolved_path))
     {
         OUString base_path;
-        oslFileError rc = osl_getSystemPathFromFileURL_Ex(ustrBaseDirURL, &base_path.pData);
+        oslFileError rc = getSystemPathFromFileURL_Ex(ustrBaseDirURL, &base_path.pData);
         if (rc != osl_File_E_None)
             return rc;
 
