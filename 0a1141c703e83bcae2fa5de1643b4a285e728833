@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4f0149c_cb615ee6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2022-05-23T11:43:38Z",
+      "side": 1,
+      "message": "Hi Colomban,\n\nI\u0027m not sure that using iostream like std::cout is a good idea in tests.\n\nFeel free to call me in case you have questions",
+      "revId": "0a1141c703e83bcae2fa5de1643b4a285e728833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
