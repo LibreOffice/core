@@ -116,6 +116,7 @@ public:
                       std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
     void testPptCrop();
+    void testTdf149206();
     void testTdf120028();
     void testDescriptionImport();
     void testTdf83247();
@@ -178,6 +179,7 @@ public:
     CPPUNIT_TEST(testTdf77747);
     CPPUNIT_TEST(testTdf116266);
     CPPUNIT_TEST(testPptCrop);
+    CPPUNIT_TEST(testTdf149206);
     CPPUNIT_TEST(testTdf120028);
     CPPUNIT_TEST(testDescriptionImport);
     CPPUNIT_TEST(testTdf83247);
@@ -1529,6 +1531,29 @@ void SdImportTest2::testPptCrop()
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), aCrop.Right);
 
     xDocShRef->DoClose();
+}
+
+void SdImportTest2::testTdf149206()
+{
+    // Check that the image is cropped
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf149206.pptx"), PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getShapeFromPage(/*nShape=*/0, /*nPage=*/0, xDocShRef));
+    text::GraphicCrop aCrop;
+    xPropertySet->getPropertyValue("GraphicCrop") >>= aCrop;
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Top);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 5937
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5937), aCrop.Bottom);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Left);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Right);
 }
 
 void SdImportTest2::testTdf120028()
