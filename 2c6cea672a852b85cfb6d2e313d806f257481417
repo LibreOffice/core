@@ -16,6 +16,24 @@
       "message": "I ran into this with Ubuntu 20.04/gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0\n\ncppu/source/uno/check.cxx:267:28: error: ‘maybe_unused’ attribute ignored [-Werror\u003dattributes]\n  267 |     [[maybe_unused]] Char3 chars;\n\nChanging it to \"\u003d 9 \" let me continue compiling.",
       "revId": "2c6cea672a852b85cfb6d2e313d806f257481417",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1050eeb7_2d419ced",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-23T08:51:47Z",
+      "side": 1,
+      "message": "see \u003chttps://git.libreoffice.org/core/+/123bb44f4a23acad6acb0bdaf43705680d8739c9%5E%21\u003e \"Extend \u0027-Werror\u003dattributes\u0027 workaround to GCC versions \u003c 12.1\"",
+      "parentUuid": "ac480887_0ef4da3f",
+      "revId": "2c6cea672a852b85cfb6d2e313d806f257481417",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
