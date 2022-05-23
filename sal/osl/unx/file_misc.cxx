@@ -668,13 +668,13 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
 
 oslFileError SAL_CALL osl_removeFile(rtl_uString* ustrFileURL)
 {
-    char path[PATH_MAX];
+    StackString path;
     oslFileError eRet;
 
     SAL_WARN_IF(!ustrFileURL || ustrFileURL->length == 0, "sal.file", "Invalid file URL");
 
     /* convert file url to system path */
-    eRet = FileURLToPath(path, PATH_MAX, ustrFileURL);
+    eRet = FileURLToPath(path, ustrFileURL);
     if (eRet != osl_File_E_None)
         return eRet;
 
@@ -683,7 +683,7 @@ oslFileError SAL_CALL osl_removeFile(rtl_uString* ustrFileURL)
       return oslTranslateFileError(errno);
 #endif/* MACOSX */
 
-    return osl_unlinkFile(path);
+    return osl_unlinkFile(path.getStr());
 }
 
 static oslFileError oslDoMoveFile(const char* pszPath, const char* pszDestPath)
