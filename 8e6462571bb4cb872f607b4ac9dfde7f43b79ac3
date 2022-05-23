@@ -16,6 +16,24 @@
       "message": "I asked someone on IRC to file that as a bug, but just FTR:\n\nhttps://forums.zotero.org/discussion/97282/libreoffice-plugin-problem\n\nThe person reported that \u0027java -version\u0027 reports\n\n  java version \"18.0.1.1\" 2022-04-22\n  Java(TM) SE Runtime Environment (build 18.0.1.1+2-6)\n  Java HotSpot(TM) 64-Bit Server VM (build 18.0.1.1+2-6, mixed mode, sharing)",
       "revId": "8e6462571bb4cb872f607b4ac9dfde7f43b79ac3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37308771_8a417d61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-23T08:41:12Z",
+      "side": 1,
+      "message": "\u003e I asked someone on IRC to file that as a bug, but just FTR:\n\n...which presumably is \u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d149202\u003e \"MalformedVersionException with Zotero plugin - plus sign in Java version apparently breaks\"",
+      "parentUuid": "eb0d4e9a_67d140cf",
+      "revId": "8e6462571bb4cb872f607b4ac9dfde7f43b79ac3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
