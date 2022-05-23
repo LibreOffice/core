@@ -34,9 +34,9 @@
 +	for( ; h > 0; --h) {
 +		for (x = w; x > 0; --x) {
 +			TIFFCIELabToXYZ(img->cielab,
-+					wp[0] / 256,
-+					wp[1] / 256,
-+					wp[2] / 256,
++					(uint16_t)wp[0] / 257,
++					(int16_t)wp[1] / 256,
++					(int16_t)wp[2] / 256,
 +					&X, &Y, &Z);
 +			TIFFXYZToRGB(img->cielab, X, Y, Z, &r, &g, &b);
 +			*cp++ = PACK(r, g, b);
