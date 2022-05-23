@@ -33,6 +33,24 @@
       "message": "We could write 300 instead of \"0x12C\" here",
       "revId": "be941091dd21772a6ea82df22a6366d5fcd8d4a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3d127c0_3ccb47a0",
+        "filename": "vcl/qa/cppunit/GraphicDescriptorTest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-23T22:44:10Z",
+      "side": 1,
+      "message": "The comments were mostly to explain why such a test is needed. Also I think you meant to merge the other patch before rebasing.",
+      "parentUuid": "8888f231_72a49b68",
+      "revId": "be941091dd21772a6ea82df22a6366d5fcd8d4a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
