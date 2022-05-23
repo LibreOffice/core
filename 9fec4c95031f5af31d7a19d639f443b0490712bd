@@ -145,6 +145,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fcf1009b_4aada495",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-23T21:08:49Z",
+      "side": 1,
+      "message": "Added a test case in GraphicDescriptorTest for testing GraphicDescriptors EMF detection. I am reusing TypeDetectionExample.emf, let me know what you think.\n\nPatch: https://gerrit.libreoffice.org/c/core/+/134845",
+      "parentUuid": "109bd03f_2fe456a0",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92de5ebf_76515ba8",
         "filename": "vcl/source/filter/graphicfilter2.cxx",
         "patchSetId": 1
