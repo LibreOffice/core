@@ -25,6 +25,8 @@ pdfium_patches += bsd-time.patch.1
 # --with-latest-c++:
 pdfium_patches += gcc-c++20-comparison.patch
 
+pdfium_patches += include.patch
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pdfium,$(PDFIUM_TARBALL)))
