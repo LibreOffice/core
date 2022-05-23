@@ -48,8 +48,7 @@ private:
     const SfxBindings& mrBindings;
 
     std::unique_ptr<weld::TreeView> mxCategoryList;
-    std::unique_ptr<SmElementsControl> mxElementsControl;
-    std::unique_ptr<weld::CustomWeld> mxElementsControlWin;
+    std::unique_ptr<weld::Container> mpElementsGrid;
 };
 
 } // end of namespace sm::sidebar

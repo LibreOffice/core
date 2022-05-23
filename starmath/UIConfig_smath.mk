@@ -33,6 +33,8 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/smath,\
 	starmath/uiconfig/smath/ui/catalogdialog \
 	starmath/uiconfig/smath/ui/dockingelements \
 	starmath/uiconfig/smath/ui/editwindow \
+	starmath/uiconfig/smath/ui/elements_fragment_h \
+	starmath/uiconfig/smath/ui/elements_fragment_v \
 	starmath/uiconfig/smath/ui/fontdialog \
 	starmath/uiconfig/smath/ui/fontsizedialog \
 	starmath/uiconfig/smath/ui/fonttypedialog \

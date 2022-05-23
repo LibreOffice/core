@@ -60,6 +60,21 @@ protected:
 
     void SyncVerThumb() override;
     void AdjustScrollBars(Size& rSize) override;
+
+private:
+    enum class CallbackResult
+    {
+        Continue,
+        Stop, // Stop iteration
+    };
+    struct EntryAreaInfo
+    {
+        tools::Long nId;
+        tools::Rectangle aArea; // The area for the entry
+    };
+    using IterateLinesAreasFunc = std::function<CallbackResult(const EntryAreaInfo&)>;
+
+    void IterateEntryAreas(const IterateLinesAreasFunc& f);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

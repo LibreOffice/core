@@ -37,7 +37,9 @@
 #include <vcl/settings.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/uitest/logger.hxx>
+#include <vcl/virdev.hxx>
 
+#include <unordered_map>
 #include <utility>
 
 SmElement::SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, const OUString& aHelpText) :
@@ -440,25 +442,29 @@ const std::vector<TranslateId> s_a5Categories{
 };
 
 template <size_t N>
-constexpr std::tuple<TranslateId, const SmElementDescr*, size_t>
-asTuple(TranslateId id, const SmElementDescr (&category)[N])
+constexpr std::pair<const SmElementDescr*, size_t> asPair(const SmElementDescr (&category)[N])
 {
-    return { id, category, N };
+    return { category, N };
 }
 
-const std::tuple<TranslateId, const SmElementDescr*, size_t> s_a5CategoryDescriptions[]{
-    asTuple(RID_CATEGORY_UNARY_BINARY_OPERATORS, s_a5UnaryBinaryOperatorsList),
-    asTuple(RID_CATEGORY_RELATIONS, s_a5RelationsList),
-    asTuple(RID_CATEGORY_SET_OPERATIONS, s_a5SetOperationsList),
-    asTuple(RID_CATEGORY_FUNCTIONS, s_a5FunctionsList),
-    asTuple(RID_CATEGORY_OPERATORS, s_a5OperatorsList),
-    asTuple(RID_CATEGORY_ATTRIBUTES, s_a5AttributesList),
-    asTuple(RID_CATEGORY_BRACKETS, s_a5BracketsList),
-    asTuple(RID_CATEGORY_FORMATS, s_a5FormatsList),
-    asTuple(RID_CATEGORY_OTHERS, s_a5OthersList),
-    asTuple(RID_CATEGORY_EXAMPLES, s_a5ExamplesList),
+struct TranslateId_hash
+{
+    size_t operator()(const TranslateId& val) const { return std::hash<std::string_view>()(val.mpId); }
 };
-}
+
+const std::unordered_map<TranslateId, std::pair<const SmElementDescr*, size_t>, TranslateId_hash> s_a5CategoryDescriptions{
+    { RID_CATEGORY_UNARY_BINARY_OPERATORS, asPair(s_a5UnaryBinaryOperatorsList) },
+    { RID_CATEGORY_RELATIONS, asPair(s_a5RelationsList) },
+    { RID_CATEGORY_SET_OPERATIONS, asPair(s_a5SetOperationsList) },
+    { RID_CATEGORY_FUNCTIONS, asPair(s_a5FunctionsList) },
+    { RID_CATEGORY_OPERATORS, asPair(s_a5OperatorsList) },
+    { RID_CATEGORY_ATTRIBUTES, asPair(s_a5AttributesList) },
+    { RID_CATEGORY_BRACKETS, asPair(s_a5BracketsList) },
+    { RID_CATEGORY_FORMATS, asPair(s_a5FormatsList) },
+    { RID_CATEGORY_OTHERS, asPair(s_a5OthersList) },
+    { RID_CATEGORY_EXAMPLES, asPair(s_a5ExamplesList) },
+};
+} // namespace
 
 // static
 const std::vector<TranslateId>& SmElementsControl::categories()
@@ -466,18 +472,13 @@ const std::vector<TranslateId>& SmElementsControl::categories()
     return s_a5Categories;
 }
 
-SmElementsControl::SmElementsControl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
+SmElementsControl::SmElementsControl(std::unique_ptr<weld::Container> xContainer)
     : mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
-    , m_nCurrentElement(SAL_MAX_UINT16)
-    , m_nCurrentRolloverElement(SAL_MAX_UINT16)
-    , m_nCurrentOffset(0)
     , m_nSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
     , mbVerticalMode(true)
-    , mxScroll(std::move(xScrolledWindow))
+    , mpParentContainer(std::move(xContainer))
     , m_bFirstPaintAfterLayout(false)
 {
-    mxScroll->connect_hadjustment_changed( LINK(this, SmElementsControl, ScrollHdl) );
-    mxScroll->connect_vadjustment_changed( LINK(this, SmElementsControl, ScrollHdl) );
     maParser.reset(starmathdatabase::GetVersionSmParser(m_nSmSyntaxVersion));
     maParser->SetImportSymbolNames(true);
 }
@@ -492,33 +493,7 @@ void SmElementsControl::setVerticalMode(bool bVerticalMode)
     if (mbVerticalMode == bVerticalMode)
         return;
     mbVerticalMode = bVerticalMode;
-    // turn off scrollbars, LayoutOrPaintContents will enable whichever one
-    // might be needed
-    mxScroll->set_vpolicy(VclPolicyType::NEVER);
-    mxScroll->set_hpolicy(VclPolicyType::NEVER);
-    LayoutOrPaintContents(GetDrawingArea()->get_ref_device(), false);
-    Invalidate();
-}
-
-SmElement* SmElementsControl::current() const
-{
-    sal_uInt16 nCur = (m_nCurrentRolloverElement != SAL_MAX_UINT16)
-            ? m_nCurrentRolloverElement
-            : (HasFocus() ? m_nCurrentElement : SAL_MAX_UINT16);
-    return (nCur < maElementList.size()) ? maElementList[nCur].get() : nullptr;
-}
-
-void SmElementsControl::setCurrentElement(sal_uInt16 nPos)
-{
-    if (m_nCurrentElement == nPos)
-        return;
-    if (nPos != SAL_MAX_UINT16 && nPos >= maElementList.size())
-        return;
-    if (m_xAccessible.is() && m_nCurrentElement != SAL_MAX_UINT16)
-        m_xAccessible->ReleaseFocus(m_nCurrentElement);
-    m_nCurrentElement = nPos;
-    if (m_xAccessible.is() && m_nCurrentElement != SAL_MAX_UINT16)
-        m_xAccessible->AcquireFocus();
+    build();
 }
 
 Color SmElementsControl::GetTextColor()
@@ -533,533 +508,64 @@ Color SmElementsControl::GetControlBackground()
     return rStyleSettings.GetFieldColor();
 }
 
-/**
- * !bDraw => layout only
- *
- * Layouting is always done without a scrollbar and will show or hide it.
- * The first paint (m_bFirstPaintAfterLayout) therefore needs to update a
- * visible scrollbar, because the layouting was wrong.
- **/
-void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext& rContext, bool bDraw)
+struct ElementData
 {
-    rContext.Push();
-
-    rContext.SetMapMode( MapMode(MapUnit::Map100thMM) );
-    rContext.SetDrawMode( DrawModeFlags::Default );
-    rContext.SetLayoutMode( vcl::text::ComplexTextLayoutFlags::Default );
-    rContext.SetDigitLanguage( LANGUAGE_ENGLISH );
-    if (bDraw)
+    OUString maElementSource;
+    OUString maHelpText;
+    ElementData(const OUString& aElementSource, const OUString& aHelpText)
+        : maElementSource(aElementSource)
+        , maHelpText(aHelpText)
     {
-        rContext.SetBackground(GetControlBackground());
-        rContext.SetTextColor(GetTextColor());
-        rContext.Erase();
     }
-
-    const sal_Int32 nControlHeight = GetOutputSizePixel().Height();
-    const sal_Int32 nControlWidth = GetOutputSizePixel().Width();
-
-    sal_Int32 boxX = maMaxElementDimensions.Width()  + 10;
-    sal_Int32 boxY = maMaxElementDimensions.Height() + 10;
-
-    sal_Int32 x = mbVerticalMode ? -mxScroll->hadjustment_get_value() : 0;
-    sal_Int32 y = !mbVerticalMode ? -mxScroll->vadjustment_get_value() : 0;
-
-    sal_Int32 perLine = 0;
-
-    if (mbVerticalMode)
-        perLine = nControlHeight / boxY;
-    else
-        perLine = nControlWidth / boxX;
-    if (perLine <= 0)
-        perLine = 1;
-
-    if (mbVerticalMode)
-        boxY = nControlHeight / perLine;
-    else
-        boxX = nControlWidth / perLine;
-
-    const SmElement* pCurrentElement = current();
-    for (const std::unique_ptr<SmElement> & i : maElementList)
-    {
-        SmElement* element = i.get();
-        if (element->isSeparator())
-        {
-            if (mbVerticalMode)
-            {
-                x += boxX;
-                y = 0;
-
-                element->mBoxLocation = Point(x, y);
-                element->mBoxSize = Size(10, nControlHeight);
-
-                tools::Rectangle aSelectionRectangle(x + 5 - 1, y + 5,
-                                              x + 5 + 1, nControlHeight - 5);
-
-                if (bDraw)
-                    rContext.DrawRect(rContext.PixelToLogic(aSelectionRectangle));
-                x += 10;
-            }
-            else
-            {
-                x = 0;
-                y += boxY;
-
-                element->mBoxLocation = Point(x, y);
-                element->mBoxSize = Size(nControlWidth, 10);
-
-                tools::Rectangle aSelectionRectangle(x + 5, y + 5 - 1,
-                                              nControlWidth - 5, y + 5 + 1);
-
-                if (bDraw)
-                    rContext.DrawRect(rContext.PixelToLogic(aSelectionRectangle));
-                y += 10;
-            }
-        }
-        else
-        {
-            if (mbVerticalMode)
-            {
-                if (y + boxY > nControlHeight)
-                {
-                    x += boxX;
-                    y = 0;
-                }
-            }
-            else
-            {
-                if ( x + boxX > nControlWidth)
-                {
-                    x = 0;
-                    y += boxY;
-                }
-            }
-
-            element->mBoxLocation = Point(x,y);
-            element->mBoxSize = Size(boxX, boxY);
-
-            if (bDraw)
-            {
-                if (pCurrentElement == element)
-                {
-                    rContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
-                    const StyleSettings& rStyleSettings = rContext.GetSettings().GetStyleSettings();
-                    rContext.SetLineColor(rStyleSettings.GetHighlightColor());
-                    rContext.SetFillColor(COL_TRANSPARENT);
-                    rContext.DrawRect(rContext.PixelToLogic(tools::Rectangle(x + 1, y + 1, x + boxX - 1, y + boxY - 1)));
-                    rContext.DrawRect(rContext.PixelToLogic(tools::Rectangle(x + 2, y + 2, x + boxX - 2, y + boxY - 2)));
-                    rContext.Pop();
-                }
-
-                Size aSizePixel = rContext.LogicToPixel(Size(element->getNode()->GetWidth(),
-                                                    element->getNode()->GetHeight()));
-                Point location(x + ((boxX - aSizePixel.Width()) / 2),
-                               y + ((boxY - aSizePixel.Height()) / 2));
-                SmDrawingVisitor(rContext, rContext.PixelToLogic(location), element->getNode().get());
-            }
-
-            if (mbVerticalMode)
-                y += boxY;
-            else
-                x += boxX;
-        }
-    }
-
-    if (bDraw)
-    {
-        if (!m_bFirstPaintAfterLayout)
-        {
-            rContext.Pop();
-            return;
-        }
-        m_bFirstPaintAfterLayout = false;
-    }
-    else
-        m_bFirstPaintAfterLayout = true;
-
-    if (mbVerticalMode)
-    {
-        sal_Int32 nTotalControlWidth = x + boxX + mxScroll->hadjustment_get_value();
-        if (nTotalControlWidth > GetOutputSizePixel().Width())
-        {
-            mxScroll->hadjustment_set_upper(nTotalControlWidth);
-            mxScroll->hadjustment_set_page_size(nControlWidth);
-            mxScroll->hadjustment_set_page_increment(nControlWidth);
-            mxScroll->hadjustment_set_step_increment(boxX);
-            mxScroll->set_hpolicy(VclPolicyType::ALWAYS);
-        }
-        else
-        {
-            mxScroll->hadjustment_set_value(0);
-            mxScroll->set_hpolicy(VclPolicyType::NEVER);
-        }
-    }
-    else
-    {
-        sal_Int32 nTotalControlHeight = y + boxY + mxScroll->vadjustment_get_value();
-        if (nTotalControlHeight > GetOutputSizePixel().Height())
-        {
-            mxScroll->vadjustment_set_upper(nTotalControlHeight);
-            mxScroll->vadjustment_set_page_size(nControlHeight);
-            mxScroll->vadjustment_set_page_increment(nControlHeight);
-            mxScroll->vadjustment_set_step_increment(boxY);
-            mxScroll->set_vpolicy(VclPolicyType::ALWAYS);
-        }
-        else
-        {
-            mxScroll->vadjustment_set_value(0);
-            mxScroll->set_vpolicy(VclPolicyType::NEVER);
-        }
-    }
-    rContext.Pop();
-}
-
-void SmElementsControl::Resize()
-{
-    CustomWidgetController::Resize();
-    LayoutOrPaintContents(GetDrawingArea()->get_ref_device(), false);
-}
-
-void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
-{
-    LayoutOrPaintContents(rRenderContext, true);
-}
-
-OUString SmElementsControl::RequestHelp(tools::Rectangle& rRect)
-{
-    if (!hasRollover())
-        return OUString();
-
-    const SmElement* pHelpElement = current();
-    if (!pHelpElement)
-        return OUString();
-
-    rRect = tools::Rectangle(pHelpElement->mBoxLocation, pHelpElement->mBoxSize);
-
-    // get text and display it
-    return pHelpElement->getHelpText();
-}
-
-bool SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
-{
-    if (rMouseEvent.IsLeaveWindow())
-    {
-        m_nCurrentRolloverElement = SAL_MAX_UINT16;
-        Invalidate();
-        return false;
-    }
-
-    if (tools::Rectangle(Point(0, 0), GetOutputSizePixel()).Contains(rMouseEvent.GetPosPixel()))
-    {
-        const SmElement* pPrevElement = current();
-        if (pPrevElement)
-        {
-            const tools::Rectangle rect(pPrevElement->mBoxLocation, pPrevElement->mBoxSize);
-            if (rect.Contains(rMouseEvent.GetPosPixel()))
-                return true;
-        }
-
-        const sal_uInt16 nElementCount = maElementList.size();
-        for (sal_uInt16 n = 0; n < nElementCount; n++)
-        {
-            const SmElement* element = maElementList[n].get();
-            if (pPrevElement == element)
-                continue;
-
-            const tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
-            if (rect.Contains(rMouseEvent.GetPosPixel()))
-            {
-                m_nCurrentRolloverElement = n;
-                Invalidate();
-                return true;
-            }
-        }
-        if (pPrevElement && hasRollover())
-            Invalidate();
-        m_nCurrentRolloverElement = SAL_MAX_UINT16;
-        return true;
-    }
-
-    return false;
-}
-
-namespace {
-
-void collectUIInformation(const OUString& aID)
-{
-    EventDescription aDescription;
-    aDescription.aID = aID;
-    aDescription.aParent = "element_selector";
-    aDescription.aAction = "SELECT";
-    aDescription.aKeyWord = "ElementUIObject";
-    UITestLogger::getInstance().logEvent(aDescription);
-}
-
-}
-
-bool SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
-{
-    GrabFocus();
-
-    if (rMouseEvent.IsLeft() && tools::Rectangle(Point(0, 0), GetOutputSizePixel()).Contains(rMouseEvent.GetPosPixel()) && maSelectHdlLink.IsSet())
-    {
-        const SmElement* pPrevElement = hasRollover() ? current() : nullptr;
-        if (pPrevElement)
-        {
-            tools::Rectangle rect(pPrevElement->mBoxLocation, pPrevElement->mBoxSize);
-            if (rect.Contains(rMouseEvent.GetPosPixel()))
-            {
-                setCurrentElement(m_nCurrentRolloverElement);
-                maSelectHdlLink.Call(*const_cast<SmElement*>(pPrevElement));
-                collectUIInformation(OUString::number(m_nCurrentRolloverElement));
-                return true;
-            }
-        }
-
-        const sal_uInt16 nElementCount = maElementList.size();
-        for (sal_uInt16 n = 0; n < nElementCount; n++)
-        {
-            SmElement* element = maElementList[n].get();
-            tools::Rectangle rect(element->mBoxLocation, element->mBoxSize);
-            if (rect.Contains(rMouseEvent.GetPosPixel()))
-            {
-                setCurrentElement(n);
-                maSelectHdlLink.Call(*element);
-                collectUIInformation(OUString::number(n));
-                return true;
-            }
-        }
-
-        return true;
-    }
-    return false;
-}
-
-void SmElementsControl::GetFocus()
-{
-    CustomWidgetController::GetFocus();
-    Invalidate();
-    if (m_xAccessible.is() && m_nCurrentElement != SAL_MAX_UINT16)
-        m_xAccessible->AcquireFocus();
-}
-
-void SmElementsControl::LoseFocus()
-{
-    if (m_xAccessible.is() && m_nCurrentElement != SAL_MAX_UINT16)
-        m_xAccessible->ReleaseFocus(m_nCurrentElement);
-    CustomWidgetController::LoseFocus();
-    Invalidate();
-}
-
-sal_uInt16 SmElementsControl::nextElement(const bool bBackward, const sal_uInt16 nStartPos, const sal_uInt16 nLastElement)
-{
-    sal_uInt16 nPos = nStartPos;
-
-    while (true)
-    {
-        if (bBackward)
-        {
-            if (nPos == 0)
-                break;
-            nPos--;
-        }
-        else
-        {
-            if (nPos == nLastElement)
-                break;
-            nPos++;
-        }
-
-        if (nStartPos == nPos)
-            break;
-        if (!maElementList[nPos]->isSeparator())
-            break;
-    }
-
-    return nPos;
-}
-
-void SmElementsControl::scrollToElement(const bool bBackward, const SmElement *pCur)
-{
-    if (mbVerticalMode)
-    {
-        auto nScrollPos = mxScroll->hadjustment_get_value();
-        nScrollPos += pCur->mBoxLocation.X();
-        if (!bBackward)
-            nScrollPos += pCur->mBoxSize.Width() - GetOutputSizePixel().Width();
-        mxScroll->hadjustment_set_value(nScrollPos);
-    }
-    else
-    {
-        auto nScrollPos = mxScroll->vadjustment_get_value();
-        nScrollPos += pCur->mBoxLocation.Y();
-        if (!bBackward)
-            nScrollPos += pCur->mBoxSize.Height() - GetOutputSizePixel().Height();
-        mxScroll->vadjustment_set_value(nScrollPos);
-    }
-}
-
-void SmElementsControl::stepFocus(const bool bBackward)
-{
-    const sal_uInt16 nStartPos = m_nCurrentElement;
-    const sal_uInt16 nLastElement = (maElementList.size() ? maElementList.size() - 1 : 0);
-    assert(nStartPos <= nLastElement);
-
-    sal_uInt16 nPos = nextElement(bBackward, nStartPos, nLastElement);
-    if (nStartPos != nPos)
-    {
-        m_nCurrentRolloverElement = SAL_MAX_UINT16;
-        setCurrentElement(nPos);
-
-        const tools::Rectangle outputRect(Point(0,0), GetOutputSizePixel());
-        const SmElement *pCur = maElementList[nPos].get();
-        tools::Rectangle elementRect(pCur->mBoxLocation, pCur->mBoxSize);
-        if (!outputRect.Contains(elementRect))
-            scrollToElement(bBackward, pCur);
-        Invalidate();
-    }
-}
-
-void SmElementsControl::pageFocus(const bool bBackward)
-{
-    const sal_uInt16 nStartPos = m_nCurrentElement;
-    const sal_uInt16 nLastElement = (maElementList.size() ? maElementList.size() - 1 : 0);
-    assert(nStartPos <= nLastElement);
-    tools::Rectangle outputRect(Point(0,0), GetOutputSizePixel());
-    sal_uInt16 nPrevPos = nStartPos;
-    sal_uInt16 nPos = nPrevPos;
-
-    bool bMoved = false;
-    while (true)
-    {
-        nPrevPos = nPos;
-        nPos = nextElement(bBackward, nPrevPos, nLastElement);
-        if (nPrevPos == nPos)
-            break;
-
-        m_nCurrentRolloverElement = SAL_MAX_UINT16;
-
-        SmElement *pCur = maElementList[nPos].get();
-        tools::Rectangle elementRect(pCur->mBoxLocation, pCur->mBoxSize);
-        if (!outputRect.Contains(elementRect))
-        {
-            if (nPrevPos != nStartPos)
-            {
-                nPos = nPrevPos;
-                break;
-            }
-            if (bMoved)
-                break;
-            pCur = maElementList[nPrevPos].get();
-
-            elementRect = tools::Rectangle(pCur->mBoxLocation, pCur->mBoxSize);
-            if (mbVerticalMode)
-                outputRect.Move(bBackward ? -outputRect.GetWidth() + elementRect.Right() : elementRect.Left(), 0);
-            else
-                outputRect.Move(0, bBackward ? -outputRect.GetHeight() + elementRect.Bottom() : elementRect.Top());
-            bMoved = true;
-        }
-    }
-
-    if (nStartPos != nPos)
-    {
-        setCurrentElement(nPos);
-        if (bMoved)
-            scrollToElement(bBackward, maElementList[nPos].get());
-        Invalidate();
-    }
-}
-
-bool SmElementsControl::KeyInput(const KeyEvent& rKEvt)
-{
-    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
-
-    if (aKeyCode.GetModifier())
-    {
-        return false;
-    }
-
-    switch(aKeyCode.GetCode())
-    {
-        case KEY_RETURN:
-            [[fallthrough]];
-        case KEY_SPACE:
-            assert(m_nCurrentElement < maElementList.size());
-            assert(maSelectHdlLink.IsSet());
-            maSelectHdlLink.Call(*maElementList[m_nCurrentElement]);
-            collectUIInformation(OUString::number(m_nCurrentElement));
-            break;
-
-        case KEY_DOWN:
-            [[fallthrough]];
-        case KEY_RIGHT:
-            stepFocus(false);
-            break;
-
-        case KEY_LEFT:
-            [[fallthrough]];
-        case KEY_UP:
-            stepFocus(true);
-            break;
-
-        case KEY_HOME:
-            if (!maElementList.empty())
-            {
-                setCurrentElement(0);
-                mxScroll->vadjustment_set_value(0);
-            }
-            break;
-        case KEY_END:
-            if (!maElementList.empty())
-            {
-                setCurrentElement(maElementList.size() - 1);
-                mxScroll->vadjustment_set_value(mxScroll->vadjustment_get_upper());
-            }
-            break;
-
-        case KEY_PAGEUP:
-            pageFocus(true);
-            break;
-        case KEY_PAGEDOWN:
-            pageFocus(false);
-            break;
-
-        default:
-            return false;
-    }
-    return true;
-}
-
-IMPL_LINK_NOARG( SmElementsControl, ScrollHdl, weld::ScrolledWindow&, void )
-{
-    Invalidate();
-}
+};
 
 void SmElementsControl::addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
 {
-    // SAL_MAX_UINT16 is invalid, zero is the scrollbar
-    assert(maElementList.size() < SAL_MAX_UINT16 - 2);
-    auto pNode = maParser->ParseExpression(aElementVisual);
-
-    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
-    rDevice.Push(vcl::PushFlags::MAPMODE);
-    rDevice.SetMapMode( MapMode(MapUnit::Map100thMM) );
+    std::unique_ptr<SmNode> pNode = maParser->ParseExpression(aElementVisual);
+    weld::IconView* pIconView(maElementIconViews.back().get());
+    // pIconView->create_virtual_device() creates a transparent device.
+    // OTOH, non-transparent device looks odd when selected...
+    // VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice())
+    auto pDevice(pIconView->create_virtual_device());
+//    auto pDevice(VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice()));
+    pDevice->SetMapMode(MapMode(MapUnit::Map100thMM));
 
     pNode->Prepare(maFormat, *mpDocShell, 0);
     pNode->SetSize(Fraction(10,8));
-    pNode->Arrange(rDevice, maFormat);
+    pNode->Arrange(*pDevice, maFormat);
 
-    Size aSizePixel = rDevice.LogicToPixel(Size(pNode->GetWidth(), pNode->GetHeight()), MapMode(MapUnit::Map100thMM));
-    if (aSizePixel.Width() > maMaxElementDimensions.Width()) {
-        maMaxElementDimensions.setWidth( aSizePixel.Width() );
+    Size aSize = pDevice->LogicToPixel(Size(pNode->GetWidth(), pNode->GetHeight()));
+    aSize.extendBy(20, 20); // 10 pixel padding from each side
+    pDevice->SetOutputSizePixel(aSize);
+    SmDrawingVisitor(*pDevice, pDevice->PixelToLogic(Point(10, 10)), pNode.get());
+
+    // Our brilliant "separate alpha bitmap" thing breaks all operations with antialiasing:
+    // drawing on primary bitmap blends alpha to partially covered pixels, and then alpha
+    // bitmap marks the softened pixels with the partial alpha values, effectively doubling
+    // the anti-aliasing effect. Undo blending of the alpha with the primary bitmap here,
+    // when we still know it's only AA alpha here. What a mess!
+    for (tools::Long i = 0; i < aSize.getWidth(); ++i)
+    {
+        for (tools::Long j = 0; j < aSize.getHeight(); ++j)
+        {
+            const Point p = pDevice->PixelToLogic(Point(i, j));
+            Color c = pDevice->GetPixel(p);
+            if (const int alpha = c.GetAlpha(); alpha != 0 && alpha != 255)
+            {
+                const double q = 255.0 / alpha;
+                c.SetRed(std::clamp(std::round((c.GetRed() + alpha - 255) * q), 0.0, 255.0));
+                c.SetGreen(std::clamp(std::round((c.GetGreen() + alpha - 255) * q), 0.0, 255.0));
+                c.SetBlue(std::clamp(std::round((c.GetBlue() + alpha - 255) * q), 0.0, 255.0));
+                pDevice->DrawPixel(p, c);
+            }
+        }
     }
 
-    if (aSizePixel.Height() > maMaxElementDimensions.Height()) {
-        maMaxElementDimensions.setHeight( aSizePixel.Height() );
-    }
-
-    maElementList.push_back(std::make_unique<SmElement>(std::move(pNode), aElementSource, aHelpText));
-
-    rDevice.Pop();
+    maItemDatas.push_back(std::make_unique<ElementData>(aElementSource, aHelpText));
+    const OUString aId(weld::toId(maItemDatas.back().get()));
+    pIconView->insert(-1, nullptr, &aId, pDevice, nullptr);
+    if (pIconView->get_item_width() < aSize.Width() + 4)
+        pIconView->set_item_width(aSize.Width() + 4);
 }
 
 void SmElementsControl::setElementSetId(TranslateId pSetId)
@@ -1067,167 +573,75 @@ void SmElementsControl::setElementSetId(TranslateId pSetId)
     if (msCurrentSetId == pSetId)
         return;
     msCurrentSetId = pSetId;
-    maMaxElementDimensions = Size();
     build();
+}
+
+void SmElementsControl::addElements(const TranslateId& rCategory)
+{
+    static constexpr OUStringLiteral sFragmentH(u"modules/smath/ui/elements_fragment_h.ui");
+    static constexpr OUStringLiteral sFragmentV(u"modules/smath/ui/elements_fragment_v.ui");
+
+    auto AddIconView = [this](int i)
+    {
+        maBuilders.push_back(Application::CreateBuilder(
+            mpParentContainer.get(), mbVerticalMode ? sFragmentV : sFragmentH, false,
+            reinterpret_cast<sal_uInt64>(SfxViewShell::Current())));
+        maElementBoxes.push_back(maBuilders.back()->weld_box("elements_fragment"));
+        if (mbVerticalMode)
+            maElementBoxes.back()->set_grid_left_attach(i);
+        else
+            maElementBoxes.back()->set_grid_top_attach(i);
+        maElementIconViews.push_back(maBuilders.back()->weld_icon_view("elements"));
+        maElementIconViews.back()->freeze();
+        maElementIconViews.back()->connect_query_tooltip(LINK(this, SmElementsControl, QueryTooltipHandler));
+        maElementIconViews.back()->connect_item_activated(maSelectHdlLink);
+    };
+
+    const auto& [aElementsArray, aElementsArraySize] = s_a5CategoryDescriptions.at(rCategory);
+
+    int iconViewPos = 0;
+    AddIconView(iconViewPos++);
+    for (size_t i = 0; i < aElementsArraySize ; i++)
+    {
+        const auto& [element, elementHelp, elementVisual, visualTranslatable] = aElementsArray[i];
+        if (element.empty()) {
+            AddIconView(iconViewPos++); // Separator + next group
+        } else {
+            OUString aElement(OUString::createFromAscii(element));
+            OUString aVisual(elementVisual.empty() ? aElement : OUString(elementVisual));
+            if (visualTranslatable)
+                aVisual = aVisual.replaceFirst("$1", SmResId(visualTranslatable));
+            OUString aHelp(elementHelp ? SmResId(elementHelp) : OUString());
+            addElement(aVisual, aElement, aHelp);
+        }
+    }
+
+    for (const auto& r : maElementIconViews)
+    {
+        r->set_item_height(r->get_item_height() + 4);
+        r->thaw();
+        r->set_size_request(-1, -1);
+    }
 }
 
 void SmElementsControl::build()
 {
-    // The order is important!
-    // 1. Ensure there are no items left
-    // 2. Release all the current accessible items.
-    //    This will check for new items after releasing them!
-    // 3. Set the cursor element
-    maElementList.clear();
-    mxScroll->hadjustment_set_value(0);
-    mxScroll->vadjustment_set_value(0);
-    mxScroll->set_hpolicy(VclPolicyType::NEVER);
-    mxScroll->set_vpolicy(VclPolicyType::NEVER);
-
-    if (m_xAccessible.is())
-        m_xAccessible->ReleaseAllItems();
-
-    setCurrentElement(SAL_MAX_UINT16);
-
-    m_nCurrentOffset = 0;
+    maElementIconViews.clear();
+    for (const auto& pElementBox : maElementBoxes)
+        mpParentContainer->move(pElementBox.get(), nullptr);
+    maElementBoxes.clear();
+    maBuilders.clear();
+    maItemDatas.clear();
 
     switch(m_nSmSyntaxVersion)
     {
         case 5:
-        {
-            for (const auto& [rSetId, rElementsArray, rElementsArraySize] : s_a5CategoryDescriptions)
-            {
-                if (msCurrentSetId == rSetId)
-                {
-                    for (size_t i = 0; i < rElementsArraySize; i++)
-                    {
-                        const auto& [element, elementHelp, elementVisual, visualTranslatable]
-                            = rElementsArray[i];
-                        if (element.empty())
-                        {
-                            maElementList.push_back(std::make_unique<SmElementSeparator>());
-                        }
-                        else
-                        {
-                            OUString aElement(OUString::createFromAscii(element));
-                            OUString aVisual(elementVisual.empty() ? aElement
-                                                                   : OUString(elementVisual));
-                            if (visualTranslatable)
-                                aVisual = aVisual.replaceFirst("$1", SmResId(visualTranslatable));
-                            OUString aHelp(elementHelp ? SmResId(elementHelp) : OUString());
-                            addElement(aVisual, aElement, aHelp);
-                        }
-                    }
-
-                    break;
-                }
-                else
-                    m_nCurrentOffset += rElementsArraySize;
-            }
+            addElements(msCurrentSetId);
             break;
-        }
         case 6:
         default:
             throw std::range_error("parser version limit");
     }
-
-    m_nCurrentRolloverElement = SAL_MAX_UINT16;
-    LayoutOrPaintContents(GetDrawingArea()->get_ref_device(), false);
-
-    if (m_xAccessible.is())
-        m_xAccessible->AddAllItems();
-
-    setCurrentElement(0);
-    Invalidate();
-}
-
-void SmElementsControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
-{
-    CustomWidgetController::SetDrawingArea(pDrawingArea);
-    OutputDevice& rDevice = pDrawingArea->get_ref_device();
-    maFormat.SetBaseSize(rDevice.PixelToLogic(Size(0, SmPtsTo100th_mm(12))));
-    Size aSize(rDevice.LogicToPixel(Size(10, 100), MapMode(MapUnit::MapAppFont)));
-    // give it an arbitrary small width request so it can shrink in the sidebar
-    pDrawingArea->set_size_request(42, aSize.Height());
-    SetOutputSizePixel(aSize);
-}
-
-FactoryFunction SmElementsControl::GetUITestFactory() const
-{
-    return ElementSelectorUIObject::create;
-}
-
-bool SmElementsControl::itemIsSeparator(sal_uInt16 nPos) const
-{
-    if (nPos < m_nCurrentOffset)
-        return true;
-    nPos -= m_nCurrentOffset;
-    if (nPos >= maElementList.size())
-        return true;
-    return maElementList[nPos]->isSeparator();
-}
-
-css::uno::Reference<css::accessibility::XAccessible> SmElementsControl::CreateAccessible()
-{
-    if (!m_xAccessible.is())
-    {
-        m_xAccessible = new AccessibleSmElementsControl(*this);
-        m_xAccessible->AddAllItems();
-    }
-    return m_xAccessible;
-}
-
-bool SmElementsControl::itemTrigger(sal_uInt16 nPos)
-{
-    if (nPos < m_nCurrentOffset)
-        return false;
-    nPos -= m_nCurrentOffset;
-    if (nPos >= maElementList.size())
-        return false;
-
-    maSelectHdlLink.Call(*maElementList[nPos]);
-    collectUIInformation(OUString::number(nPos));
-    return true;
-}
-
-tools::Rectangle SmElementsControl::itemPosRect(sal_uInt16 nPos) const
-{
-    if (nPos < m_nCurrentOffset)
-        return tools::Rectangle();
-    nPos -= m_nCurrentOffset;
-    if (nPos >= maElementList.size())
-        return tools::Rectangle();
-
-    SmElement* pItem = maElementList[nPos].get();
-    return tools::Rectangle(pItem->mBoxLocation, pItem->mBoxSize);
-}
-
-bool SmElementsControl::itemIsVisible(sal_uInt16 nPos) const
-{
-    tools::Rectangle elementRect = itemPosRect(nPos);
-    if (elementRect.IsEmpty())
-        return false;
-
-    tools::Rectangle outputRect(Point(0, 0), GetOutputSizePixel());
-    return outputRect.Contains(elementRect);
-}
-
-sal_uInt16 SmElementsControl::itemCount() const { return maElementList.size(); }
-
-sal_uInt16 SmElementsControl::itemHighlighted() const { return m_nCurrentElement; }
-
-void SmElementsControl::setItemHighlighted(sal_uInt16 nPos)
-{
-    if (m_nCurrentRolloverElement == nPos)
-        return;
-    if (nPos != SAL_MAX_UINT16 && nPos >= maElementList.size())
-        return;
-
-    if (maElementList[nPos]->isSeparator())
-        m_nCurrentRolloverElement = SAL_MAX_UINT16;
-    else
-        m_nCurrentRolloverElement = nPos;
-    Invalidate();
 }
 
 void SmElementsControl::setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
@@ -1242,35 +656,17 @@ void SmElementsControl::setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
     }
 }
 
-OUString SmElementsControl::itemName(sal_uInt16 nPos) const
+IMPL_LINK(SmElementsControl, QueryTooltipHandler, const weld::TreeIter&, iter, OUString)
 {
-    if (nPos < m_nCurrentOffset)
-        return OUString();
-    nPos -= m_nCurrentOffset;
-    if (nPos >= maElementList.size())
-        return OUString();
-
-    return maElementList[nPos]->getHelpText();
-}
-
-sal_uInt16 SmElementsControl::itemAtPos(const Point& rPoint) const
-{
-    sal_uInt16 nElementCount = maElementList.size();
-    for (sal_uInt16 n = 0; n < nElementCount; n++)
-    {
-        const SmElement* pItem = maElementList[n].get();
-        tools::Rectangle elementRect(pItem->mBoxLocation, pItem->mBoxSize);
-        if (elementRect.Contains(rPoint))
-            return n;
-    }
-    return SAL_MAX_UINT16;
+    if (const OUString id = maElementIconViews.back()->get_id(iter); !id.isEmpty())
+        return weld::fromId<ElementData*>(id)->maHelpText;
+    return {};
 }
 
 SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, SfxChildWindow* pChildWindow, vcl::Window* pParent)
     : SfxDockingWindow(pInputBindings, pChildWindow, pParent, "DockingElements",
         "modules/smath/ui/dockingelements.ui")
-    , mxElementsControl(new SmElementsControl(m_xBuilder->weld_scrolled_window("scrolledwindow", true)))
-    , mxElementsControlWin(new weld::CustomWeld(*m_xBuilder, "element_selector", *mxElementsControl))
+    , mxElementsControl(new SmElementsControl(m_xBuilder->weld_container("elements_grid")))
     , mxElementListBox(m_xBuilder->weld_combo_box("listbox"))
 {
     // give it an arbitrary small width request so it can shrink in the sidebar
@@ -1300,7 +696,6 @@ SmElementsDockingWindow::~SmElementsDockingWindow ()
 
 void SmElementsDockingWindow::dispose()
 {
-    mxElementsControlWin.reset();
     mxElementsControl.reset();
     mxElementListBox.reset();
     SfxDockingWindow::dispose();
@@ -1328,17 +723,23 @@ void SmElementsDockingWindow::EndDocking( const tools::Rectangle& rReactangle, b
     mxElementsControl->setVerticalMode(bVertical);
 }
 
-IMPL_LINK(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElement, void)
+IMPL_LINK(SmElementsDockingWindow, SelectClickHandler, weld::IconView&, rIconView, bool)
 {
     SmViewShell* pViewSh = GetView();
 
     if (pViewSh)
     {
-        std::unique_ptr<SfxStringItem> pInsertCommand = std::make_unique<SfxStringItem>(SID_INSERTCOMMANDTEXT, rElement.getText());
-        pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
-            SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD,
-            { pInsertCommand.get() });
+        const OUString sItemId = rIconView.get_selected_id();
+        if (!sItemId.isEmpty())
+        {
+            const ElementData* pElementData = weld::fromId<ElementData*>(sItemId);
+            SfxStringItem aInsertCommand(SID_INSERTCOMMANDTEXT, pElementData->maElementSource);
+            pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
+                SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD, { &aInsertCommand });
+        }
     }
+    rIconView.unselect_all();
+    return true;
 }
 
 IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, weld::ComboBox&, rList, void)

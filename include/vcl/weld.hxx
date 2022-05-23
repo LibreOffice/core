@@ -1343,11 +1343,20 @@ protected:
     Link<IconView&, void> m_aSelectionChangeHdl;
     Link<IconView&, bool> m_aItemActivatedHdl;
     Link<const CommandEvent&, bool> m_aCommandHdl;
+    Link<const TreeIter&, OUString> m_aQueryTooltipHdl;
 
     void signal_selection_changed() { m_aSelectionChangeHdl.Call(*this); }
     bool signal_item_activated() { return m_aItemActivatedHdl.Call(*this); }
+    OUString signal_query_tooltip(const TreeIter& rIter) { return m_aQueryTooltipHdl.Call(rIter); }
 
 public:
+    virtual int get_item_width() const = 0;
+    virtual void set_item_width(int width) = 0;
+    virtual int get_item_height() const = 0;
+    virtual void set_item_height(int height) = 0;
+
+    virtual void set_selection_mode(SelectionMode eMode) = 0;
+
     virtual void insert(int pos, const OUString* pStr, const OUString* pId,
                         const OUString* pIconName, TreeIter* pRet)
         = 0;
@@ -1355,6 +1364,8 @@ public:
     virtual void insert(int pos, const OUString* pStr, const OUString* pId,
                         const VirtualDevice* pIcon, TreeIter* pRet)
         = 0;
+
+    virtual void insert_separator(int pos, const OUString* pId) = 0;
 
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
@@ -1365,6 +1376,8 @@ public:
     {
         insert(-1, &rStr, &rId, pImage, nullptr);
     }
+
+    void append_separator(const OUString& rId) { insert_separator(-1, &rId); }
 
     void connect_selection_changed(const Link<IconView&, void>& rLink)
     {
@@ -1380,6 +1393,11 @@ public:
     void connect_item_activated(const Link<IconView&, bool>& rLink) { m_aItemActivatedHdl = rLink; }
 
     void connect_command(const Link<const CommandEvent&, bool>& rLink) { m_aCommandHdl = rLink; }
+
+    virtual void connect_query_tooltip(const Link<const TreeIter&, OUString>& rLink)
+    {
+        m_aQueryTooltipHdl = rLink;
+    }
 
     virtual OUString get_selected_id() const = 0;
 

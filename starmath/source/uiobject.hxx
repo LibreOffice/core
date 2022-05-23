@@ -27,9 +27,6 @@ public:
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
-
-private:
-    SmElement* get_element();
 };
 
 class ElementSelectorUIObject : public DrawingAreaUIObject

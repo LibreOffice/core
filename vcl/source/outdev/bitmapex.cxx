@@ -156,7 +156,7 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
 
         // ensure 8 bit alpha
         if (aAlphaBitmap.getPixelFormat() > vcl::PixelFormat::N8_BPP)
-            aAlphaBitmap.Convert( BmpConversion::N8BitNoConversion );
+            aAlphaBitmap.Convert( BmpConversion::N8BitGreys);
 
         return BitmapEx(GetBitmap( rSrcPt, rSize ), AlphaMask( aAlphaBitmap ) );
     }
