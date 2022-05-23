@@ -13027,7 +13027,7 @@ then
     if test -n "$QT6DIR"; then
         AC_PATH_PROG(QMAKE6, [qmake], no, [$QT6DIR/bin])
     else
-        AC_PATH_PROGS(QMAKE6, [qmake-qt6 qmake], no)
+        AC_PATH_PROGS(QMAKE6, [qmake-qt6 qmake6 qmake], no)
     fi
     if test "$QMAKE6" = "no"; then
         AC_MSG_ERROR([Qmake not found.  Please specify the root of your Qt6 installation by exporting QT6DIR before running "configure".])
