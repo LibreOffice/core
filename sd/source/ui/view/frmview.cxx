@@ -377,6 +377,7 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rValues )
 {
     std::vector< std::pair< OUString, Any > > aUserData;
+    aUserData.reserve(41); // worst case
 
     aUserData.emplace_back( sUNO_View_GridIsVisible, Any( IsGridVisible() ) );
     aUserData.emplace_back( sUNO_View_GridIsFront, Any( IsGridFront() ) );
