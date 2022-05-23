@@ -69,6 +69,42 @@
       "message": "This commit from a quick `git log --grep\u003dmaybe_unused` looks like the relevant one:\n\ncommit c0f769fa3114ea852a26d93f0ee3f9595463de0b\nAuthor: Jason Merrill \u003cjason@redhat.com\u003e\nDate:   Fri Jun 11 16:10:50 2021 -0400\n\n    c-family: don\u0027t warn for [[maybe_unused]] on data member\n    \n    The C++17 standard (and C2x) says that [[maybe_unused]] may be applied to a\n    non-static data member, so we shouldn\u0027t warn about it.  And I don\u0027t see a\n    reason not to handle a FIELD_DECL the same as any other decl, by setting\n    TREE_USED on it.  It doesn\u0027t look like anything yet cares about that flag on\n    a FIELD_DECL, but setting it shouldn\u0027t hurt.\n    \n    gcc/c-family/ChangeLog:\n    \n            * c-attribs.c (handle_unused_attribute): Handle FIELD_DECL.\n    \n    gcc/testsuite/ChangeLog:\n    \n            * g++.dg/ext/attrib62.C: No longer warn.\n            * g++.dg/diagnostic/maybe_unused1.C: New test.\n    \n    gcc/ChangeLog:\n    \n            * doc/extend.texi (unused variable attribute): Applies to\n            structure fields as well.\n\n\nIIUC, that means that it should work from GCC 12.1.0 on:\n\n$ git tag --contains c0f769fa3114ea852a26d93f0ee3f9595463de0b\nbasepoints/gcc-13\nreleases/gcc-12.1.0",
       "revId": "4438eb3e04c5c8059261af196b56a511dc69b2be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2802cbaa_e4a24a97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-23T05:54:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e504af7_d13dc1eb",
+      "revId": "4438eb3e04c5c8059261af196b56a511dc69b2be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42ba5f81_186b9cf4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-23T05:54:33Z",
+      "side": 1,
+      "message": "Indeed, a GCC 12.1.0 build on Debian testing worked fine. I have uploaded a new patch set that checks for that version.",
+      "parentUuid": "a4d8fa79_38575829",
+      "revId": "4438eb3e04c5c8059261af196b56a511dc69b2be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
