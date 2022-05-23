@@ -15,6 +15,7 @@
 #include <svx/svdundo.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svx/diagram/datamodel.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 
 DiagramDialog::DiagramDialog(weld::Window* pWindow, SdrObjGroup& rDiagram)
     : GenericDialogController(pWindow, "cui/ui/diagramdialog.ui", "DiagramDialog")
@@ -61,7 +62,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
         return;
 
     OUString sText = mpTextAdd->get_text();
-    const std::shared_ptr<IDiagramHelper>& pDiagramHelper(m_rDiagram.getDiagramHelper());
+    const std::shared_ptr< svx::diagram::IDiagramHelper >& pDiagramHelper(m_rDiagram.getDiagramHelper());
 
     if (pDiagramHelper && !sText.isEmpty())
     {
@@ -99,7 +100,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnRemoveClick, weld::Button&, void)
         return;
 
     std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
-    const std::shared_ptr<IDiagramHelper>& pDiagramHelper(m_rDiagram.getDiagramHelper());
+    const std::shared_ptr< svx::diagram::IDiagramHelper >& pDiagramHelper(m_rDiagram.getDiagramHelper());
 
     if (pDiagramHelper && mpTreeDiagram->get_selected(pEntry.get()))
     {
@@ -135,7 +136,7 @@ void DiagramDialog::populateTree(const weld::TreeIter* pParent, const OUString& 
     if (!m_rDiagram.isDiagram())
         return;
 
-    const std::shared_ptr<IDiagramHelper>& pDiagramHelper(m_rDiagram.getDiagramHelper());
+    const std::shared_ptr< svx::diagram::IDiagramHelper >& pDiagramHelper(m_rDiagram.getDiagramHelper());
 
     if (!pDiagramHelper)
         return;

@@ -308,9 +308,10 @@ void SdrMarkView::UndirtyMrkPnt() const
             }
             else
             {
-                OSL_FAIL("SdrMarkView::UndirtyMrkPnt(): Selected points on an object that is not a PolyObj!");
                 if (!rPts.empty())
                 {
+                    // only fail *if* there are marked points
+                    OSL_FAIL("SdrMarkView::UndirtyMrkPnt(): Selected points on an object that is not a PolyObj!");
                     rPts.clear();
                     bChg = true;
                 }
