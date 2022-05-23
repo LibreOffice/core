@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cc76ef5_22841f42",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-23T10:21:41Z",
+      "side": 1,
+      "message": "This is likely a functional change (no idea how correct though) compared to the older \"construct empty string from nullptr\"? :-)",
+      "revId": "c8d4ae2ad0cfdac770d897e7aca72fbb4a87765f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
