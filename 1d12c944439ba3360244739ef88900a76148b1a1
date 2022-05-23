@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80a61462_fd2e44e0",
+        "filename": "sal/osl/unx/file_misc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-23T11:25:32Z",
+      "side": 1,
+      "message": "Is it recommended now that we pass O(U)Strings by value instead of by const reference? Or is this only for places where we can std::move to the final destination?",
+      "revId": "1d12c944439ba3360244739ef88900a76148b1a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
