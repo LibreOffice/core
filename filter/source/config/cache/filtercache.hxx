@@ -361,9 +361,9 @@ class FilterCache : public cppu::BaseMutex
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
-        std::vector<OUString> getMatchingItemsByProps(      EItemType  eType                ,
-                                                     const CacheItem& lIProps              ,
-                                                     const CacheItem& lEProps = CacheItem()) const;
+        std::vector<OUString> getMatchingItemsByProps( EItemType  eType,
+                                                     o3tl::span< const css::beans::NamedValue > lIProps,
+                                                     o3tl::span< const css::beans::NamedValue > lEProps = {}) const;
 
 
         /** @short      indicates if the requested sub container

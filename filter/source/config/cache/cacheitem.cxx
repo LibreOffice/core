@@ -263,19 +263,19 @@ static bool isSubSet(const css::uno::Any& aSubSet,
 }
 
 
-bool CacheItem::haveProps(const CacheItem& lProps) const
+bool CacheItem::haveProps(o3tl::span< const css::beans::NamedValue > lProps) const
 {
     for (auto const& prop : lProps)
     {
         // i) one required property does not exist at this item => return false
-        const_iterator pItThis = find(prop.first);
+        const_iterator pItThis = find(prop.Name);
         if (pItThis == end())
         {
             return false;
         }
 
         // ii) one item does not have the right value => return false
-        if (!isSubSet(prop.second, pItThis->second))
+        if (!isSubSet(prop.Value, pItThis->second))
         {
             return false;
         }
@@ -288,7 +288,7 @@ bool CacheItem::haveProps(const CacheItem& lProps) const
 }
 
 
-bool CacheItem::dontHaveProps(const CacheItem& lProps) const
+bool CacheItem::dontHaveProps(o3tl::span< const css::beans::NamedValue > lProps) const
 {
     for (auto const& prop : lProps)
     {
@@ -296,7 +296,7 @@ bool CacheItem::dontHaveProps(const CacheItem& lProps) const
         //    => continue with next one, because
         //    "excluding" means... "don't have it".
         //    And "not exists" matches to "don't have it".
-        const_iterator pItThis = find(prop.first);
+        const_iterator pItThis = find(prop.Name);
         if (pItThis == end())
         {
             continue;
@@ -305,7 +305,7 @@ bool CacheItem::dontHaveProps(const CacheItem& lProps) const
         // ii) one item have the right value => return false
         //     because this item has the requested property...
         //     But we checked for "don't have it" here.
-        if (isSubSet(prop.second, pItThis->second))
+        if (isSubSet(prop.Value, pItThis->second))
         {
             return false;
         }

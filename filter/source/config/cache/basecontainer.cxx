@@ -362,14 +362,10 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 
     try
     {
-        // convert the given properties first to our internal representation
-        CacheItem lProps;
-        lProps << lProperties;
-
         // search the key names of all items, where its properties match
         // the given ones in its minimum
         FilterCache* pCache = impl_getWorkingCache();
-        lKeys = pCache->getMatchingItemsByProps(m_eType, lProps);
+        lKeys = pCache->getMatchingItemsByProps(m_eType, o3tl::span<const css::beans::NamedValue>( lProperties.getConstArray(), lProperties.getLength() ));
     }
     catch(const css::uno::Exception&)
     {
