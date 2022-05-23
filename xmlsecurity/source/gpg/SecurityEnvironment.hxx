@@ -11,6 +11,9 @@
 #define INCLUDED_XMLSECURITY_SOURCE_GPG_SECURITYENVIRONMENT_HXX
 
 #include <sal/config.h>
+
+#include <memory>
+
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 
