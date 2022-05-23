@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "df3bad82_72c02dd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-23T10:54:45Z",
+      "side": 1,
+      "message": "please add an external/libtiff/README stating where tiff-4.3.0.tar.gz comes from",
+      "revId": "a2ffd71f20e14f797f30223fe29b3ac1e92eafdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7d43b0d3_fe9c38c1",
         "filename": "configure.ac",
         "patchSetId": 11
