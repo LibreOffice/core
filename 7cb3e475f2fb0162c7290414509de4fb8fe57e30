@@ -34,6 +34,24 @@
       "parentUuid": "e2e11028_025043ea",
       "revId": "7cb3e475f2fb0162c7290414509de4fb8fe57e30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee262c19_502fbbf3",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-23T11:11:00Z",
+      "side": 1,
+      "message": "I test UITests on Windows from time to time. And in this case, the problem seems to be not UITest-specific (UITests run in full GUI on Windows by default, with normal win plugin).\n\nI moved the asserts past caching code in https://gerrit.libreoffice.org/c/core/+/134192 - exactly to make the intermitted assert failure less frequent. If you decide to \u0027make UITest_chart\u0027 on Windows, you might want to revert that my change.\n\nMy hope was that you would see why the assertion is failing, maybe there\u0027s something waiting for a fix :-)",
+      "parentUuid": "44ce6df7_df673e04",
+      "revId": "7cb3e475f2fb0162c7290414509de4fb8fe57e30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
