@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c688c008_9117adb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-23T07:09:13Z",
+      "side": 1,
+      "message": "Not a problem to remove the period.... see: https://wiki.documentfoundation.org/Design/Guidelines/UIWriting#Punctuation\n\n If your UI copy consists only of a sentence fragment (e.g., a short tooltip), then don’t add a period. \n",
+      "revId": "1c18815d5222a946b96e1dc2ee3e09a1da40bdaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d597f0b_250aa57c",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-05-23T06:27:21Z",
       "side": 1,
       "message": "Would use at least one \"LibreOffice\" in the text like \"Start center for LibreOffice Writer, Calc...\". But comparing to the modules description this comment is bland. How about \"Start center providing access to the modules and showing the recently used documents/files.\"",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 31
+      },
+      "revId": "1c18815d5222a946b96e1dc2ee3e09a1da40bdaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24e995a4_9d07e1ff",
+        "filename": "sysui/desktop/menus/startcenter.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-23T07:09:13Z",
+      "side": 1,
+      "message": "As I can read in the BZ -- because I cannot see the actual interface (I think this is Linux only) -- it seems there is a \"Name\" -- where %PRODUCTNAME% can be mentioned -- if it is not already there.  And then a \"comment\", which is this string.  \n\nMy suggestion:\n\nLaunch applications to create text documents, spreadsheets, presentations, drawings, formula, and databases, or open recently-used documents.\n\n\n(need a period here, because not a short text (-: )",
+      "parentUuid": "1d597f0b_250aa57c",
       "range": {
         "startLine": 29,
         "startChar": 25,
