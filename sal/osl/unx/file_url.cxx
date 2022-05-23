@@ -33,6 +33,7 @@
 #include <unistd.h>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/socket.h>
@@ -74,6 +75,47 @@
 */
 
 using namespace osl;
+
+//    sal_Int32 getLength() const { return mpCurrent - mpBase; }
+//    char* back() const { return mpCurrent; }
+void StackString::setLength(sal_Int32 len)
+{
+    if (len > PATH_MAX)
+        throw std::length_error("xx");
+    mpCurrent = maData + len;
+}
+void StackString::append(char c)
+{
+    if (getLength() == PATH_MAX)
+        throw std::length_error("xx");
+    *mpCurrent = c; ++mpCurrent;
+}
+sal_Int32 StackString::indexOf(char c, sal_Int32 startIndex) const
+{
+    const char* p = maData + startIndex;
+    for (;;)
+    {
+        if (p >= mpCurrent)
+            return -1;
+        if (*p == c)
+            return p - maData;
+        ++p;
+    }
+}
+bool StackString::startsWith(std::string_view s) const
+{
+    return o3tl::starts_with(std::string_view(maData, getLength()), s);
+}
+char StackString::operator[](sal_Int32 nIndex) const
+{
+    assert(nIndex > 0 && nIndex < getLength());
+    return maData[nIndex];
+}
+char* StackString::getStr()
+{
+    *mpCurrent = 0; // make it null-terminated
+    return maData;
+}
 
 namespace {
 
@@ -154,6 +196,36 @@ bool convert(OUStringBuffer const & in, OStringBuffer * append) {
     return true;
 }
 
+bool convert(OUStringBuffer const & in, StackString& append) {
+    for (sal_Size nConvert = in.getLength();;) {
+        auto const oldLen = append.getLength();
+        auto n = std::min(
+            std::max(nConvert, sal_Size(PATH_MAX)),
+            sal_Size(std::numeric_limits<sal_Int32>::max() - oldLen));
+            // approximation of required converted size
+        auto s = append.back();
+        sal_uInt32 info;
+        sal_Size converted;
+        //TODO: context, for reliable treatment of DESTBUFFERTOSMALL:
+        n = UnicodeToTextConverter_Impl::getInstance().convert(
+            in.getStr() + in.getLength() - nConvert, nConvert, s, n,
+            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
+             | RTL_UNICODETOTEXT_FLAGS_FLUSH),
+            &info, &converted);
+        if ((info & RTL_UNICODETOTEXT_INFO_ERROR) != 0) {
+            return false;
+        }
+        append.setLength(oldLen + n);
+        assert(converted <= nConvert);
+        nConvert -= converted;
+        assert((nConvert == 0) == ((info & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0));
+        if ((info & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0) {
+            break;
+        }
+    }
+    return true;
+}
+
 bool decodeFromUtf8(std::u16string_view text, OString * result) {
     assert(result != nullptr);
     auto p = text.data();
@@ -189,6 +261,41 @@ bool decodeFromUtf8(std::u16string_view text, OString * result) {
         return false;
     }
     *result = bbuf.makeStringAndClear();
+    return true;
+}
+
+bool decodeFromUtf8(std::u16string_view text, StackString& result) {
+    auto p = text.data();
+    auto const end = p + text.size();
+    OUStringBuffer ubuf(static_cast<int>(text.size()));
+    while (p < end) {
+        rtl::uri::detail::EscapeType t;
+        sal_uInt32 c = rtl::uri::detail::readUcs4(&p, end, true, RTL_TEXTENCODING_UTF8, &t);
+        switch (t) {
+        case rtl::uri::detail::EscapeNo:
+            if (c == '%') {
+                return false;
+            }
+            [[fallthrough]];
+        case rtl::uri::detail::EscapeChar:
+            if (rtl::isSurrogate(c)) {
+                return false;
+            }
+            ubuf.appendUtf32(c);
+            break;
+        case rtl::uri::detail::EscapeOctet:
+            if (!convert(ubuf, result)) {
+                return false;
+            }
+            ubuf.setLength(0);
+            assert(c <= 0xFF);
+            result.append(char(c));
+            break;
+        }
+    }
+    if (!convert(ubuf, result)) {
+        return false;
+    }
     return true;
 }
 
@@ -323,6 +430,137 @@ template<typename T> oslFileError getSystemPathFromFileUrl(
                 return osl_File_E_INVAL;
             }
             return getSystemPathFromFileUrl(home, path, false);
+        }
+        // FIXME: replace ~user with user's home directory
+        return osl_File_E_INVAL;
+    }
+    return osl_File_E_None;
+}
+
+oslFileError getSystemPathFromFileUrl2(
+    OUString const & url, StackString& path, bool resolveHome)
+{
+    assert(path != nullptr);
+    // For compatibility with assumptions in other parts of the code base,
+    // assume that anything starting with a slash is a system path instead of a
+    // (relative) file URL (except if it starts with two slashes, in which case
+    // it is a relative URL with an authority component):
+    if (url.isEmpty()
+        || (url[0] == '/' && (url.getLength() == 1 || url[1] != '/')))
+    {
+        return osl_File_E_INVAL;
+    }
+    // Check for non file scheme:
+    sal_Int32 i = 0;
+    if (rtl::isAsciiAlpha(url[0])) {
+        for (sal_Int32 j = 1; j != url.getLength(); ++j) {
+            auto c = url[j];
+            if (c == ':') {
+                if (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                        url.pData->buffer, j,
+                        RTL_CONSTASCII_STRINGPARAM("file"))
+                    != 0)
+                {
+                    return osl_File_E_INVAL;
+                }
+                i = j + 1;
+                break;
+            }
+            if (!rtl::isAsciiAlphanumeric(c) && c != '+' && c != '-'
+                       && c != '.')
+            {
+                break;
+            }
+        }
+    }
+    // Handle query or fragment:
+    if (url.indexOf('?', i) != -1 || url.indexOf('#', i) != -1)
+        return osl_File_E_INVAL;
+    // Handle authority, supporting a host of "localhost", "127.0.0.1", or the exact value (e.g.,
+    // not supporting an additional final dot, for simplicity) reported by osl_getLocalHostnameFQDN
+    // (and, in each case, ignoring case of ASCII letters):
+    if (url.getLength() - i >= 2 && url[i] == '/' && url[i + 1] == '/')
+    {
+        i += 2;
+        sal_Int32 j = url.indexOf('/', i);
+        if (j == -1)
+            j = url.getLength();
+        if (j != i
+            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                    url.pData->buffer + i, j - i,
+                    RTL_CONSTASCII_STRINGPARAM("localhost"))
+                != 0)
+            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                    url.pData->buffer + i, j - i,
+                    RTL_CONSTASCII_STRINGPARAM("127.0.0.1"))
+                != 0))
+        {
+            OUString hostname;
+            // The 'file' URI Scheme does imply that we want a FQDN in this case
+            // See https://tools.ietf.org/html/rfc8089#section-3
+            if (osl_getLocalHostnameFQDN(&hostname.pData) != osl_Socket_Ok
+                || (rtl_ustr_compareIgnoreAsciiCase_WithLength(
+                        url.pData->buffer + i, j - i, hostname.getStr(), hostname.getLength())
+                    != 0))
+            {
+                return osl_File_E_INVAL;
+            }
+        }
+        i = j;
+    }
+    // Handle empty path:
+    if (i == url.getLength())
+    {
+        path.append('/');
+        return osl_File_E_None;
+    }
+    // Path must not contain %2F:
+    if (url.indexOf("%2F", i) != -1 || url.indexOf("%2f", i) != -1)
+        return osl_File_E_INVAL;
+
+    if (!decodeFromUtf8(url.subView(i), path)) {
+        return osl_File_E_INVAL;
+    }
+    // Path must not contain %2F:
+    if (path.indexOf('\0') != -1)
+        return osl_File_E_INVAL;
+
+    // Handle ~ notation:
+    if (resolveHome && path.getLength() >= 2 && path[1] == '~')
+    {
+        sal_Int32 j = path.indexOf('/', 2);
+        if (j == -1)
+            j = path.getLength();
+
+        if (j == 2)
+        {
+            OUString home;
+            if (!osl::Security().getHomeDir(home))
+            {
+                SAL_WARN("sal.file", "osl::Security::getHomeDir failed");
+                return osl_File_E_INVAL;
+            }
+
+            i = url.indexOf('/', i + 1);
+
+            if (i == -1)
+                i = url.getLength();
+            else
+                ++i;
+
+            //TODO: cheesy way of ensuring home's path ends in slash:
+            if (!home.isEmpty() && home[home.getLength() - 1] != '/')
+                home += "/";
+            try
+            {
+                home = rtl::Uri::convertRelToAbs(home, url.copy(i));
+            }
+            catch (rtl::MalformedUriException & e)
+            {
+                SAL_WARN("sal.file", "rtl::MalformedUriException " << e.getMessage());
+                return osl_File_E_INVAL;
+            }
+            return getSystemPathFromFileUrl2(home, path, false);
         }
         // FIXME: replace ~user with user's home directory
         return osl_File_E_INVAL;
@@ -823,6 +1061,25 @@ oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileUR
         return osl_File_E_OVERFLOW;
     }
     std::strcpy(buffer, strSystemPath.getStr());
+
+    return osl_error;
+}
+
+oslFileError FileURLToPath(StackString& buffer, rtl_uString* ustrFileURL)
+{
+    oslFileError osl_error;
+    try {
+        osl_error = getSystemPathFromFileUrl2(OUString::unacquired(&ustrFileURL), buffer, true);
+    } catch (std::length_error &) {
+        return osl_File_E_RANGE;
+    }
+    if(osl_error != osl_File_E_None)
+        return osl_error;
+    if (!buffer.startsWith("/")) {
+        return osl_File_E_INVAL;
+    }
+
+    osl_systemPathRemoveSeparator2(buffer.getStr());
 
     return osl_error;
 }

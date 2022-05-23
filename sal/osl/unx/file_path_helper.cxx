@@ -53,6 +53,27 @@ void osl_systemPathRemoveSeparator(rtl_String* pstrPath)
                  "osl_systemPathRemoveSeparator: Post condition failed");
 }
 
+void osl_systemPathRemoveSeparator2(char* pstrPath)
+{
+    OSL_PRECOND(nullptr != pstrPath, "osl_systemPathRemoveSeparator: Invalid parameter");
+    if (pstrPath == nullptr)
+        return;
+
+    // maybe there are more than one separator at end
+    // so we run in a loop
+    sal_Int32 len = strlen(pstrPath);
+    while ((len > 1) && (pstrPath[len - 1] == FPH_CHAR_PATH_SEPARATOR))
+    {
+        --len;
+        pstrPath[len] = '\0';
+    }
+
+    SAL_WARN_IF( !((len) || (1 == len) ||
+                 (len > 1 && pstrPath[len- 1] != FPH_CHAR_PATH_SEPARATOR)),
+                 "sal.osl",
+                 "osl_systemPathRemoveSeparator: Post condition failed");
+}
+
 namespace {
 
 template<typename T> void systemPathEnsureSeparator(T* ppstrPath)

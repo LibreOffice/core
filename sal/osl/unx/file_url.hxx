@@ -21,15 +21,37 @@
 #define INCLUDED_SAL_OSL_UNX_FILE_URL_HXX
 
 #include <osl/file.h>
+#include <string_view>
+#include <limits.h>
 
 namespace rtl {
     class OString;
     class OUString;
 }
 
+class StackString
+{
+    char maData[PATH_MAX];
+    char* mpCurrent;
+public:
+    StackString() : mpCurrent(maData) {}
+
+    sal_Int32 getLength() const { return mpCurrent - maData; }
+    char* back() const { return mpCurrent; }
+    void setLength(sal_Int32 len);
+    void append(char c);
+    sal_Int32 indexOf(char c, sal_Int32 startIndex = 0) const;
+    bool startsWith(std::string_view) const;
+    char operator[](sal_Int32 nIndex) const;
+    char* getStr();
+};
+
+
 oslFileError getSystemPathFromFileURL_Ex(rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath);
 
 oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileURL);
+
+oslFileError FileURLToPath(StackString& buffer, rtl_uString* ustrFileURL);
 
 int UnicodeToText(char * buffer, size_t bufLen, const sal_Unicode * uniText, sal_Int32 uniTextLen);
 

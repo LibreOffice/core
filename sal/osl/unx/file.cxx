@@ -1116,8 +1116,8 @@ oslFileError openFile(rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uInt
         return osl_File_E_INVAL;
 
     /* convert file URL to system path */
-    char buffer[PATH_MAX];
-    eRet = FileURLToPath(buffer, sizeof(buffer), ustrFileURL);
+    StackString buffer;
+    eRet = FileURLToPath(buffer, ustrFileURL);
     if (eRet != osl_File_E_None)
         return eRet;
 
@@ -1126,7 +1126,7 @@ oslFileError openFile(rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal_uInt
         return oslTranslateFileError(errno);
 #endif /* MACOSX */
 
-    return openFilePath(buffer, pHandle, uFlags, mode);
+    return openFilePath(buffer.getStr(), pHandle, uFlags, mode);
 }
 
 oslFileError SAL_CALL osl_closeFile(oslFileHandle Handle)
