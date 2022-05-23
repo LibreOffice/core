@@ -36,6 +36,17 @@ namespace
     {
         SvStream& rStream;
         tsize_t nSize;
+        /*
+            ORIENTATION_TOPLEFT = 1
+            ORIENTATION_TOPRIGHT = 2
+            ORIENTATION_BOTRIGHT = 3
+            ORIENTATION_BOTLEFT = 4
+            ORIENTATION_LEFTTOP = 5
+            ORIENTATION_RIGHTTOP = 6
+            ORIENTATION_RIGHTBOT = 7
+            ORIENTATION_LEFTBOT = 8
+         */
+        uint16_t nOrientation;
 
         tileContigRoutine pOrigContig;
         tileSeparateRoutine pOrigSeparate;
@@ -46,6 +57,7 @@ namespace
         Context(SvStream& rInStream, tsize_t nInSize)
             : rStream(rInStream)
             , nSize(nInSize)
+            , nOrientation(0)
             , pOrigContig(nullptr)
             , pOrigSeparate(nullptr)
             , pWriteAccess(nullptr)
@@ -60,9 +72,20 @@ namespace
             {
                 for (uint32_t nCol = 0; nCol < w; ++nCol)
                 {
-                    pWriteAccess->SetPixel(nDestRow, x + nCol,
+                    uint32_t nDestCol;
+                    switch (nOrientation)
+                    {
+                        case ORIENTATION_LEFTBOT:
+                            nDestCol = x + w - 1 - nCol;
+                            break;
+                        default:
+                            nDestCol = x + nCol;
+                            break;
+                    }
+
+                    pWriteAccess->SetPixel(nDestRow, nDestCol,
                         Color(TIFFGetR(*pSrc), TIFFGetG(*pSrc), TIFFGetB(*pSrc)));
-                    pAlphaAccess->SetPixelIndex(nDestRow, x + nCol, 255 - TIFFGetA(*pSrc));
+                    pAlphaAccess->SetPixelIndex(nDestRow, nDestCol, 255 - TIFFGetA(*pSrc));
                     ++pSrc;
                 }
                 pSrc += skew;
@@ -199,6 +222,9 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             break;
         }
 
+        aContext.nOrientation = 0;
+        TIFFGetField(tif, TIFFTAG_ORIENTATION, &aContext.nOrientation);
+
         Bitmap bitmap(Size(w, h), vcl::PixelFormat::N24_BPP);
         AlphaMask bitmapAlpha(Size(w, h));
 
@@ -249,6 +275,16 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
         if (bOk)
         {
             BitmapEx aBitmapEx(bitmap, bitmapAlpha);
+
+            switch (aContext.nOrientation)
+            {
+                case ORIENTATION_LEFTBOT:
+                    aBitmapEx.Rotate(2700_deg10, COL_BLACK);
+                    break;
+                default:
+                    break;
+            }
+
             AnimationBitmap aAnimationBitmap(aBitmapEx, Point(0, 0), aBitmapEx.GetSizePixel(),
                                              ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back);
             aAnimation.Insert(aAnimationBitmap);
