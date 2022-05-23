@@ -482,7 +482,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
            nMaxNodes_2 = nMaxNodes / 2;
 
     // Determine if page is right or left neighbour
-    bool    bRight    = ((*xPage)[0].GetKey() > (*this)[0].GetKey()); // sal_True, whenn xPage the right side is
+    bool    bRight    = ((*xPage)[0].GetKey() > (*this)[0].GetKey()); // true when xPage is at the right side
     sal_uInt16  nNewCount = (*xPage).Count() + Count();
 
     if (IsLeaf())
