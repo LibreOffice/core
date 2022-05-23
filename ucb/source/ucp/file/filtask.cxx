@@ -539,7 +539,7 @@ TaskManager::associate( const OUString& aUnqPath,
                             beans::PropertyState_DEFAULT_VALUE,
                             Attributes );
 
-    TaskManager::PropertySet::iterator it1 = m_aDefaultProperties.find( newProperty );
+    auto it1 = m_aDefaultProperties.find( newProperty );
     if( it1 != m_aDefaultProperties.end() )
         throw beans::PropertyExistException( THROW_WHERE );
 
@@ -570,7 +570,7 @@ TaskManager::deassociate( const OUString& aUnqPath,
 {
     MyProperty oldProperty( PropertyName );
 
-    TaskManager::PropertySet::iterator it1 = m_aDefaultProperties.find( oldProperty );
+    auto it1 = m_aDefaultProperties.find( oldProperty );
     if( it1 != m_aDefaultProperties.end() )
         throw beans::NotRemoveableException( THROW_WHERE );
 
@@ -845,7 +845,7 @@ TaskManager::setv( const OUString& aUnqPath,
 
     TaskManager::ContentMap::iterator it = m_aContent.find( aUnqPath );
     PropertySet& properties = it->second.properties;
-    TaskManager::PropertySet::iterator it1;
+    TaskManager::PropertySet::const_iterator it1;
     uno::Any aAny;
 
     for( sal_Int32 i = 0; i < values.getLength(); ++i )
@@ -1934,6 +1934,7 @@ void TaskManager::insertDefaultProperties( const OUString& aUnqPath )
     PropertySet& properties = it->second.properties;
     bool ContentNotDefau = properties.find( ContentTProperty ) != properties.end();
 
+    properties.reserve(properties.size() + m_aDefaultProperties.size());
     for (auto const& defaultprop : m_aDefaultProperties)
     {
         if( !ContentNotDefau || defaultprop.getPropertyName() != ContentType )
@@ -2243,7 +2244,7 @@ void
 TaskManager::commit( const TaskManager::ContentMap::iterator& it,
                const osl::FileStatus& aFileStatus )
 {
-    TaskManager::PropertySet::iterator it1;
+    TaskManager::PropertySet::const_iterator it1;
 
     if( it->second.properties.empty() )
     {

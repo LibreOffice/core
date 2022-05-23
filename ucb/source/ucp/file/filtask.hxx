@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <o3tl/sorted_vector.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 
@@ -186,23 +187,15 @@ namespace fileaccess
             inline void setState( const css::beans::PropertyState& theState ) const;
         };
 
-        struct eMyProperty
+        struct MyPropertyLess
         {
             bool operator()( const MyProperty& rKey1, const MyProperty& rKey2 ) const
             {
-                return rKey1.getPropertyName() == rKey2.getPropertyName();
+                return rKey1.getPropertyName() < rKey2.getPropertyName();
             }
         };
 
-        struct hMyProperty
-        {
-            size_t operator()( const MyProperty& rName ) const
-            {
-                return rName.getPropertyName().hashCode();
-            }
-        };
-
-        typedef std::unordered_set< MyProperty,hMyProperty,eMyProperty > PropertySet;
+        typedef o3tl::sorted_vector< MyProperty, MyPropertyLess > PropertySet;
 
         class UnqPathData
         {
