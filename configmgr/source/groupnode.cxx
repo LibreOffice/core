@@ -21,6 +21,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <utility>
 
 #include "data.hxx"
 #include "groupnode.hxx"
@@ -30,8 +31,8 @@
 namespace configmgr {
 
 GroupNode::GroupNode(
-    int layer, bool extensible, OUString const & templateName):
-    Node(layer), extensible_(extensible), templateName_(templateName),
+    int layer, bool extensible, OUString templateName):
+    Node(layer), extensible_(extensible), templateName_(std::move(templateName)),
     mandatory_(Data::NO_LAYER)
 {}
 

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -54,10 +55,10 @@
 namespace configmgr {
 
 RootAccess::RootAccess(
-    Components & components, OUString const & pathRepresentation,
-    OUString const & locale, bool update):
-    Access(components), pathRepresentation_(pathRepresentation),
-    locale_(locale),
+    Components & components, OUString pathRepresentation,
+    OUString locale, bool update):
+    Access(components), pathRepresentation_(std::move(pathRepresentation)),
+    locale_(std::move(locale)),
     lock_( lock() ),
     update_(update), finalized_(false), alive_(true)
 {

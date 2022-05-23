@@ -56,7 +56,7 @@ public:
 
     ChildAccess(
         Components & components, rtl::Reference< RootAccess > const & root,
-        rtl::Reference< Access > const & parent, OUString const & name,
+        rtl::Reference< Access > const & parent, OUString name,
         rtl::Reference< Node > const & node);
 
     ChildAccess(

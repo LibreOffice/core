@@ -53,8 +53,8 @@ class RootAccess:
 {
 public:
     RootAccess(
-        Components & components, OUString const & pathRepresentation,
-        OUString const & locale, bool update);
+        Components & components, OUString pathRepresentation,
+        OUString locale, bool update);
 
     virtual std::vector<OUString> getAbsolutePath() override;
 

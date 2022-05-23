@@ -26,6 +26,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 #include "components.hxx"
 #include "node.hxx"
@@ -35,10 +36,10 @@
 namespace configmgr {
 
 PropertyNode::PropertyNode(
-    int layer, Type staticType, bool nillable, css::uno::Any const & value,
+    int layer, Type staticType, bool nillable, css::uno::Any value,
     bool extension):
     Node(layer), staticType_(staticType), nillable_(nillable),
-    extension_(extension), value_(value)
+    extension_(extension), value_(std::move(value))
 {}
 
 rtl::Reference< Node > PropertyNode::clone(bool) const {

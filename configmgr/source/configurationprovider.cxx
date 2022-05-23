@@ -49,6 +49,7 @@
 #include <rtl/ustring.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
+#include <utility>
 
 #include "components.hxx"
 #include "configurationprovider.hxx"
@@ -93,8 +94,8 @@ public:
 
     Service(
         const css::uno::Reference< css::uno::XComponentContext >& context,
-        OUString const & locale):
-        ServiceBase(m_aMutex), context_(context), locale_(locale),
+        OUString locale):
+        ServiceBase(m_aMutex), context_(context), locale_(std::move(locale)),
         default_(false),
         lock_( lock() )
     {

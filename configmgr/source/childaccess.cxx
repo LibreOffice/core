@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/container/XChild.hpp>
@@ -63,9 +64,9 @@ css::uno::Sequence< sal_Int8 > const & ChildAccess::getUnoTunnelId()
 
 ChildAccess::ChildAccess(
     Components & components, rtl::Reference< RootAccess > const & root,
-    rtl::Reference< Access > const & parent, OUString const & name,
+    rtl::Reference< Access > const & parent, OUString name,
     rtl::Reference< Node > const & node):
-    Access(components), root_(root), parent_(parent), name_(name), node_(node),
+    Access(components), root_(root), parent_(parent), name_(std::move(name)), node_(node),
     inTransaction_(false),
     lock_( lock() )
 {
