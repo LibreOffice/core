@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd2e52ea_3a8244ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-23T10:11:31Z",
+      "side": 1,
+      "message": "Hope you don\u0027t mind that I modified the UI file. Placed the controls in a GtkGrid, adjusted the distances so Notify is clearly related to Read Only and reduced the large spacing to the usual size. I added also some a11y information.\n\nLGTM now, and works like a charm. Last code check for Hossein.",
+      "revId": "abc5c52525377d781b0a3afbd15875c6c9411abe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
