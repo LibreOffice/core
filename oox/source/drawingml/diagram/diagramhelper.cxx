@@ -42,7 +42,7 @@ AdvancedDiagramHelper::AdvancedDiagramHelper(
     const std::shared_ptr< Diagram >& rDiagramPtr,
     const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
     css::awt::Size aImportSize)
-: IDiagramHelper()
+: svx::diagram::IDiagramHelper()
 , mpDiagramPtr(rDiagramPtr)
 , mpThemePtr(rTheme)
 , maImportSize(aImportSize)
