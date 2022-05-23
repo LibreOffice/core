@@ -111,9 +111,6 @@ struct FileHandle_Impl
     explicit FileHandle_Impl(int fd, Kind kind = KIND_FD);
     ~FileHandle_Impl();
 
-    static void* operator new (size_t n);
-    static void  operator delete (void * p);
-
     static size_t getpagesize();
 
     sal_uInt64   getPos() const;
@@ -219,16 +216,6 @@ FileHandle_Impl::~FileHandle_Impl()
     }
 
     (void) pthread_mutex_destroy(&m_mutex); // ignoring EBUSY ...
-}
-
-void* FileHandle_Impl::operator new (size_t n)
-{
-    return malloc(n);
-}
-
-void FileHandle_Impl::operator delete (void * p)
-{
-    free(p);
 }
 
 size_t FileHandle_Impl::getpagesize()

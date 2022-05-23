@@ -94,15 +94,6 @@ DirectoryItem_Impl::~DirectoryItem_Impl()
 {
 }
 
-void * DirectoryItem_Impl::operator new(size_t n)
-{
-    return malloc(n);
-}
-void DirectoryItem_Impl::operator delete(void * p)
-{
-    free(p);
-}
-
 void DirectoryItem_Impl::acquire()
 {
     ++m_RefCount;

@@ -83,8 +83,6 @@ struct FileHandle_Impl
     explicit      FileHandle_Impl (HANDLE hFile);
                   ~FileHandle_Impl();
 
-    static void*  operator new(size_t n);
-    static void   operator delete(void * p, size_t);
     static SIZE_T getpagesize();
 
     sal_uInt64    getPos() const;
@@ -176,16 +174,6 @@ FileHandle_Impl::~FileHandle_Impl()
     free(m_buffer);
     m_buffer = nullptr;
     ::DeleteCriticalSection (&m_mutex);
-}
-
-void * FileHandle_Impl::operator new(size_t n)
-{
-    return malloc(n);
-}
-
-void FileHandle_Impl::operator delete(void * p, size_t)
-{
-    free(p);
 }
 
 SIZE_T FileHandle_Impl::getpagesize()
