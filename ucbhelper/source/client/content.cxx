@@ -416,8 +416,9 @@ Reference< XCommandInfo > Content::getCommands()
 
 Reference< XPropertySetInfo > Content::getProperties()
 {
+    static constexpr OUStringLiteral sgetPropertySetInfo = u"getPropertySetInfo";
     Command aCommand;
-    aCommand.Name     = "getPropertySetInfo";
+    aCommand.Name     = sgetPropertySetInfo;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument = Any();
 

@@ -389,10 +389,9 @@ sal_Bool SmModel::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SmModel::getSupportedServiceNames()
 {
-    return uno::Sequence<OUString>{
-        "com.sun.star.document.OfficeDocument",
-        "com.sun.star.formula.FormulaProperties"
-    };
+    static constexpr OUStringLiteral service1 = u"com.sun.star.document.OfficeDocument";
+    static constexpr OUStringLiteral service2 = u"com.sun.star.formula.FormulaProperties";
+    return uno::Sequence<OUString>{ service1, service2 };
 }
 
 void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* pValues)
