@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0cb4404a_badae30b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T11:55:10Z",
+      "side": 1,
+      "message": "I could reduce the WMF image to small size. \nCould you please provide the WMF image for shrinking?",
+      "parentUuid": "61bc8349_9cf521dc",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92de5ebf_76515ba8",
         "filename": "vcl/source/filter/graphicfilter2.cxx",
         "patchSetId": 1
