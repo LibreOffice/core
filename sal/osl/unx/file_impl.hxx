@@ -35,9 +35,6 @@ struct DirectoryItem_Impl
         rtl_String * strFilePath, unsigned char DType = 0);
     ~DirectoryItem_Impl();
 
-    static void * operator new(size_t n);
-    static void operator delete (void * p);
-
     void acquire(); /* @see osl_acquireDirectoryItem() */
     void release(); /* @see osl_releaseDirectoryItem() */
 
