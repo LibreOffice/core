@@ -208,7 +208,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             // so it's either a simple property or a complex property in one single UNO struct
             if( pItem->PutValue( rProp.Value, bConvertTwips ? CONVERT_TWIPS : 0 ) )
                 // only use successfully converted items
-                rSet.Put( *pItem );
+                rSet.Put( std::move(pItem) );
             else
             {
                 SAL_WARN( "sfx", "Property not convertible: " << pSlot->pUnoName );
@@ -304,7 +304,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #endif
                 if( pItem->PutValue( pProp->Value, 0 ) )
                     // only use successfully converted items
-                    rSet.Put( *pItem );
+                    rSet.Put( std::move(pItem) );
                 else
                 {
                     SAL_WARN( "sfx", "Property not convertible: " << rArg.pName );
@@ -326,7 +326,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #endif
                     if( pItem->PutValue( rProp.Value, 0 ) )
                         // only use successfully converted items
-                        rSet.Put( *pItem );
+                        rSet.Put( std::move(pItem) );
                     else
                     {
                         SAL_WARN( "sfx", "Property not convertible: " << rArg.pName );
