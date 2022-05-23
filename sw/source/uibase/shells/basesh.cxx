@@ -1903,7 +1903,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         break;
                         case FN_FRAME_WRAP_CONTOUR:
                             bDisable |= bHtmlMode;
-                            //no contour available whenn no wrap or wrap through is set
+                            //no contour available when no wrap or wrap through is set
                             bDisable |= (nSurround == css::text::WrapTextMode_NONE || nSurround == css::text::WrapTextMode_THROUGH);
                             if( !bDisable )
                             {
