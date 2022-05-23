@@ -1305,7 +1305,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
             }
         }
     }
-    OUString aMainStr("Main");
+    static constexpr OUStringLiteral aMainStr(u"Main");
     if( !pRes && pNamed && ( t == SbxClassType::Method || t == SbxClassType::DontCare ) &&
         !pNamed->GetName().equalsIgnoreAsciiCase( aMainStr ) )
     {

@@ -25,7 +25,7 @@ struct HandleAdjRel
     // Shape name without leading "ooxml-", underscore, zero based handle index
     // e.g. The third handle in shape of type "ooxml-circularArrow" will be
     // identified by key "circularArrow_2"
-    const OUString sShape_Handle;
+    const char* sShape_Handle;
 
     // 4 tokens with separator "|"
     // first: RefX or RefR, na if not exists
@@ -35,13 +35,13 @@ struct HandleAdjRel
     // e.g. The third handle in shape <circularArrow> has in the preset
     // the tag <ahPolar gdRefR="adj5" minR="0" maxR="25000"> .
     // The resulting value in the map here is "RefR|adj5|na|na"
-    const OUString sAdjReferences;
+    const char* sAdjReferences;
 };
 
 // The array initializer has been extracted from
 // oox/source/drawingml/customshapes/presetShapeDefinitions.xml
 // by using an XSLT file. That file is attached to tdf#126512.
-const HandleAdjRel aHandleAdjRelArray[]
+constexpr HandleAdjRel aHandleAdjRelArray[]
     = { { "accentBorderCallout1_0", "RefX|adj2|RefY|adj1" },
         { "accentBorderCallout1_1", "RefX|adj4|RefY|adj3" },
         { "accentBorderCallout2_0", "RefX|adj2|RefY|adj1" },
@@ -308,8 +308,10 @@ void PresetOOXHandleAdj::GetOOXHandleAdjRelation(
 {
     static const HandleAdjRelHashMap s_HashMap = []() {
         HandleAdjRelHashMap aH;
+        aH.reserve(std::size(aHandleAdjRelArray));
         for (const auto& item : aHandleAdjRelArray)
-            aH[item.sShape_Handle] = item.sAdjReferences;
+            aH.emplace(OUString::createFromAscii(item.sShape_Handle),
+                       OUString::createFromAscii(item.sAdjReferences));
         return aH;
     }();
 
