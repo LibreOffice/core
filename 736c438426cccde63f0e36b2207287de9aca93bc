@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "578e930c_cb49d64d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-23T13:09:31Z",
+      "side": 1,
+      "message": "Works like a charm",
+      "revId": "736c438426cccde63f0e36b2207287de9aca93bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6468b2a2_f997d1bf",
+        "filename": "sw/source/uibase/ribbar/drawbase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-23T13:09:31Z",
+      "side": 1,
+      "message": "1.76cm / 0.69\" is a crooked number but no problem",
+      "range": {
+        "startLine": 275,
+        "startChar": 60,
+        "endLine": 275,
+        "endChar": 64
+      },
+      "revId": "736c438426cccde63f0e36b2207287de9aca93bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
