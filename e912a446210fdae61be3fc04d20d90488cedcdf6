@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2a616f7_7eec4520",
+        "filename": "vcl/source/filter/itiff/itiff.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-23T11:04:38Z",
+      "side": 1,
+      "message": "Are you sure that this argument may be null?  workdir/UnpackedTarball/libtiff/man/TIFFRGBAImage.3tiff doesn\u0027t mention it, and \u003chttps://ci.libreoffice.org/job/lo_ubsan/2406/\u003e now started to fail CppunitTest_vcl_filters_test with\n\n  [_RUN_____] TiffFilterTest::testCVEs\n  Testing load file:///home/tdf/lode/jenkins/workspace/lo_ubsan//vcl/qa/cppunit/graphicfilter/data/tiff/pass/CVE-2005-1544-1.tiff:\n  TIFFFetchNormalTag: Warning, ASCII value for tag \"ImageDescription\" contains null byte in value; value incorrectly truncated during reading due to implementation limitations.\n  tif_getimage.c:998:21: runtime error: applying zero offset to null pointer\n      #0 0x7f487da9d408 in gtStripContig /workdir/UnpackedTarball/libtiff/libtiff/tif_getimage.c:998:21\n      #1 0x7f487da97c27 in TIFFRGBAImageGet /workdir/UnpackedTarball/libtiff/libtiff/tif_getimage.c:512:12\n      #2 0x7f487bd1a56c in ImportTiffGraphicImport(SvStream\u0026, Graphic\u0026) /vcl/source/filter/itiff/itiff.cxx:219:19\n      #3 0x7f485d820126 in TiffFilterTest::load(rtl::OUString const\u0026, rtl::OUString const\u0026, rtl::OUString const\u0026, SfxFilterFlags, SotClipboardFormatId, unsigned int) /vcl/qa/cppunit/graphicfilter/filters-tiff-test.cxx:70:12\n      #4 0x7f485a49ffa0 in test::FiltersTest::recursiveScan(test::filterStatus, rtl::OUString const\u0026, rtl::OUString const\u0026, rtl::OUString const\u0026, SfxFilterFlags, SotClipboardFormatId, unsigned int, bool) /unotest/source/cpp/filters-test.cxx:132:20\n      #5 0x7f485a4a3a52 in test::FiltersTest::testDir(rtl::OUString const\u0026, std::basic_string_view\u003cchar16_t, std::char_traits\u003cchar16_t\u003e \u003e, rtl::OUString const\u0026, SfxFilterFlags, SotClipboardFormatId, unsigned int, bool) /unotest/source/cpp/filters-test.cxx:157:5\n      #6 0x7f485d8206f9 in TiffFilterTest::testCVEs() /vcl/qa/cppunit/graphicfilter/filters-tiff-test.cxx:76:5",
+      "range": {
+        "startLine": 198,
+        "startChar": 41,
+        "endLine": 198,
+        "endChar": 48
+      },
+      "revId": "e912a446210fdae61be3fc04d20d90488cedcdf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
