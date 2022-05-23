@@ -23,6 +23,7 @@
 
 #include <jvmaccess/virtualmachine.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 #include <jni.h>
 
@@ -40,9 +41,9 @@ UnoVirtualMachine::CreationException::operator =(CreationException const &) {
 }
 
 UnoVirtualMachine::UnoVirtualMachine(
-    rtl::Reference< jvmaccess::VirtualMachine > const & virtualMachine,
+    rtl::Reference< jvmaccess::VirtualMachine > virtualMachine,
     void * classLoader):
-    m_virtualMachine(virtualMachine),
+    m_virtualMachine(std::move(virtualMachine)),
     m_classLoader(nullptr)
 {
     try {

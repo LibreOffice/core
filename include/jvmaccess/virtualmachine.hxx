@@ -73,7 +73,7 @@ public:
             @exception CreationException
             Thrown in case attaching fails (due to a JNI problem).
          */
-        explicit AttachGuard(rtl::Reference<VirtualMachine> const& rMachine);
+        explicit AttachGuard(rtl::Reference<VirtualMachine> xMachine);
 
         /** Detach the current thread from the virtual machine again.
          */
