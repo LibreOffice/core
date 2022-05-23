@@ -191,7 +191,7 @@ namespace
         if ((pImpl == nullptr) || (pStat == nullptr))
             return osl_File_E_INVAL;
 
-        file_path = OString(pImpl->m_strFilePath);
+        file_path = pImpl->m_strFilePath;
         OSL_ASSERT(!file_path.isEmpty());
         if (file_path.isEmpty())
             return osl_File_E_INVAL;
@@ -443,8 +443,8 @@ SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
 
     struct stat a_stat, b_stat;
 
-    if (osl::lstat(OString(pA->m_strFilePath), a_stat) != 0 ||
-        osl::lstat(OString(pB->m_strFilePath), b_stat) != 0)
+    if (osl::lstat(pA->m_strFilePath, a_stat) != 0 ||
+        osl::lstat(pB->m_strFilePath, b_stat) != 0)
         return false;
 
     return (a_stat.st_ino == b_stat.st_ino);
