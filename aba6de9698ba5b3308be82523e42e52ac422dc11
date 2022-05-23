@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b7a2950_05bd43fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-23T12:59:43Z",
+      "side": 1,
+      "message": "Rizal, what is the status here? Feature freeze is close and we should try to include this patch.",
+      "revId": "aba6de9698ba5b3308be82523e42e52ac422dc11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75e2864d_b7ff0924",
