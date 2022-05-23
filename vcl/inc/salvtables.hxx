@@ -1749,6 +1749,7 @@ private:
     DECL_LINK(DeSelectHdl, SvTreeListBox*, void);
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
+    DECL_LINK(TooltipHdl, const HelpEvent&, bool);
 
 public:
     SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
@@ -1762,6 +1763,8 @@ public:
 
     virtual void insert(int pos, const OUString* pStr, const OUString* pId,
                         const VirtualDevice* pIcon, weld::TreeIter* pRet) override;
+
+    virtual void connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink) override;
 
     virtual OUString get_selected_id() const override;
 
