@@ -4213,25 +4213,25 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
         {
             //sprmSDyaHdrTop
             m_rWW8Export.InsUInt16( NS_sprm::SDyaHdrTop::val );
-            m_rWW8Export.InsUInt16( aDistances.dyaHdrTop );
+            m_rWW8Export.InsUInt16( aDistances.m_DyaHdrTop );
         }
 
         // sprmSDyaTop
         m_rWW8Export.InsUInt16( NS_sprm::SDyaTop::val );
-        m_rWW8Export.InsUInt16( aDistances.dyaTop );
-        m_pageMargins.nTop = aDistances.dyaTop;
+        m_rWW8Export.InsUInt16( aDistances.m_DyaTop );
+        m_pageMargins.nTop = aDistances.m_DyaTop;
 
         if ( aDistances.HasFooter() )
         {
             //sprmSDyaHdrBottom
             m_rWW8Export.InsUInt16( NS_sprm::SDyaHdrBottom::val );
-            m_rWW8Export.InsUInt16( aDistances.dyaHdrBottom );
+            m_rWW8Export.InsUInt16( aDistances.m_DyaHdrBottom );
         }
 
         //sprmSDyaBottom
         m_rWW8Export.InsUInt16( NS_sprm::SDyaBottom::val );
-        m_rWW8Export.InsUInt16( aDistances.dyaBottom );
-        m_pageMargins.nBottom = aDistances.dyaBottom;
+        m_rWW8Export.InsUInt16( aDistances.m_DyaBottom );
+        m_pageMargins.nBottom = aDistances.m_DyaBottom;
     }
     else
     {

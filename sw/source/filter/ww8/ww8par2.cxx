@@ -3103,7 +3103,7 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
             return;
 
         SwWW8Shade aSh( m_pIo->m_bVer67, rSHD );
-        pBox->GetFrameFormat()->SetFormatAttr(SvxBrushItem(aSh.aColor, RES_BACKGROUND));
+        pBox->GetFrameFormat()->SetFormatAttr(SvxBrushItem(aSh.m_aColor, RES_BACKGROUND));
     }
 }
 

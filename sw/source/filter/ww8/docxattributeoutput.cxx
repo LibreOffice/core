@@ -7298,10 +7298,10 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrameFormat* pFormat, cons
     editeng::WordPageMargins aMargins = m_pageMargins;
     HdFtDistanceGlue aGlue(pFormat->GetAttrSet());
     if (aGlue.HasHeader())
-        aMargins.nTop = aGlue.dyaHdrTop;
+        aMargins.nTop = aGlue.m_DyaHdrTop;
     // Ditto for bottom margin.
     if (aGlue.HasFooter())
-        aMargins.nBottom = aGlue.dyaHdrBottom;
+        aMargins.nBottom = aGlue.m_DyaHdrBottom;
 
     if (pFormat->GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GUTTER_AT_TOP))
     {
@@ -9416,7 +9416,7 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 
         sal_Int32 nHeader = 0;
         if ( aDistances.HasHeader() )
-            nHeader = sal_Int32( aDistances.dyaHdrTop );
+            nHeader = sal_Int32( aDistances.m_DyaHdrTop );
         else if (m_rExport.m_pFirstPageFormat)
         {
             HdFtDistanceGlue aFirstPageDistances(m_rExport.m_pFirstPageFormat->GetAttrSet());
@@ -9425,16 +9425,16 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
                 // The follow page style has no header, but the first page style has. In Word terms,
                 // this means that the header margin of "the" section is coming from the first page
                 // style.
-                nHeader = sal_Int32(aFirstPageDistances.dyaHdrTop);
+                nHeader = sal_Int32(aFirstPageDistances.m_DyaHdrTop);
             }
         }
 
         // Page top
-        m_pageMargins.nTop = aDistances.dyaTop;
+        m_pageMargins.nTop = aDistances.m_DyaTop;
 
         sal_Int32 nFooter = 0;
         if ( aDistances.HasFooter() )
-            nFooter = sal_Int32( aDistances.dyaHdrBottom );
+            nFooter = sal_Int32( aDistances.m_DyaHdrBottom );
         else if (m_rExport.m_pFirstPageFormat)
         {
             HdFtDistanceGlue aFirstPageDistances(m_rExport.m_pFirstPageFormat->GetAttrSet());
@@ -9443,12 +9443,12 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
                 // The follow page style has no footer, but the first page style has. In Word terms,
                 // this means that the footer margin of "the" section is coming from the first page
                 // style.
-                nFooter = sal_Int32(aFirstPageDistances.dyaHdrBottom);
+                nFooter = sal_Int32(aFirstPageDistances.m_DyaHdrBottom);
             }
         }
 
         // Page Bottom
-        m_pageMargins.nBottom = aDistances.dyaBottom;
+        m_pageMargins.nBottom = aDistances.m_DyaBottom;
 
         AddToAttrList( m_pSectionSpacingAttrList, 4,
                 FSNS( XML_w, XML_header ), OString::number( nHeader ).getStr(),

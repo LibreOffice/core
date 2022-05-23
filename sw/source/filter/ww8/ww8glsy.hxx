@@ -64,19 +64,19 @@ public:
     bool Load( SwTextBlocks &rBlocks, bool bSaveRelFile );
     std::shared_ptr<WW8GlossaryFib>& GetFib()
     {
-        return xGlossary;
+        return m_xGlossary;
     }
     sal_uInt16 GetNoStrings() const
     {
-        return nStrings;
+        return m_nStrings;
     }
 
 private:
-    std::shared_ptr<WW8GlossaryFib> xGlossary;
-    tools::SvRef<SotStorageStream> xTableStream;
-    tools::SvRef<SotStorageStream> &rStrm;
-    tools::SvRef<SotStorage> xStg;
-    sal_uInt16 nStrings;
+    std::shared_ptr<WW8GlossaryFib> m_xGlossary;
+    tools::SvRef<SotStorageStream> m_xTableStream;
+    tools::SvRef<SotStorageStream> &m_rStrm;
+    tools::SvRef<SotStorage> m_xStg;
+    sal_uInt16 m_nStrings;
 
     static bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,
                             const std::vector<OUString>& rStrings,

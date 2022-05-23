@@ -4125,7 +4125,7 @@ void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, shor
         aSHD.SetWWValue( *reinterpret_cast<SVBT16 const *>(pData) );
         SwWW8Shade aSh( m_bVer67, aSHD );
 
-        NewAttr( SvxBrushItem( aSh.aColor, RES_CHRATR_BACKGROUND ));
+        NewAttr( SvxBrushItem( aSh.m_aColor, RES_CHRATR_BACKGROUND ));
 
         // Add a marker to the grabbag indicating that character background was imported from MSO shading
         SfxGrabBagItem aGrabBag = *static_cast<const SfxGrabBagItem*>(GetFormatAttr(RES_CHRATR_GRABBAG));
@@ -4958,7 +4958,7 @@ void SwWW8Shade::SetShade(Color nFore, Color nBack, sal_uInt16 nIndex)
     switch (nWW8BrushStyle)
     {
         case 0: // Null-Brush
-            aColor = nBack;
+            m_aColor = nBack;
             break;
         default:
             {
@@ -4972,7 +4972,7 @@ void SwWW8Shade::SetShade(Color nFore, Color nBack, sal_uInt16 nIndex)
                 nGreen += aBackColor.GetGreen()* (1000 - nWW8BrushStyle);
                 nBlue += aBackColor.GetBlue() * (1000 - nWW8BrushStyle);
 
-                aColor = Color( nRed/1000, nGreen/1000, nBlue/1000 );
+                m_aColor = Color( nRed/1000, nGreen/1000, nBlue/1000 );
             }
             break;
     }
@@ -4996,7 +4996,7 @@ void SwWW8ImplReader::Read_Shade( sal_uInt16, const sal_uInt8* pData, short nLen
         SwWW8Shade aSh( m_bVer67, aSHD );
 
         NewAttr( XFillStyleItem(drawing::FillStyle_SOLID) );
-        NewAttr( XFillColorItem(OUString(), aSh.aColor) );
+        NewAttr( XFillColorItem(OUString(), aSh.m_aColor) );
     }
 }
 
@@ -5039,7 +5039,7 @@ Color SwWW8ImplReader::ExtractColour(const sal_uInt8* &rpData, bool bVer67)
     OSL_ENSURE(nBack == COL_AUTO || !nBack.IsTransparent(),
         "ww8: don't know what to do with such a transparent bg colour, report");
     SwWW8Shade aShade(nFore, nBack, nIndex);
-    return aShade.aColor;
+    return aShade.m_aColor;
 }
 
 void SwWW8ImplReader::Read_TextVerticalAdjustment( sal_uInt16, const sal_uInt8* pData, short nLen )

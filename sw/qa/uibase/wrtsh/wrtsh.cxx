@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <swmodeltestbase.hxx>
+#include <wrtsh.hxx>
 
 #include <optional>
 
@@ -19,10 +19,10 @@
 #include <sal/types.h>
 #include <comphelper/propertyvalue.hxx>
 
+#include <swmodeltestbase.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <formatlinebreak.hxx>
-#include <wrtsh.hxx>
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
 #include <fmtanchr.hxx>
