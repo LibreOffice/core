@@ -22,6 +22,30 @@
       },
       "revId": "e912a446210fdae61be3fc04d20d90488cedcdf6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a58b53bb_9adaf7e7",
+        "filename": "vcl/source/filter/itiff/itiff.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-05-23T11:37:32Z",
+      "side": 1,
+      "message": "What I have here is inspired by the \"ALTERNATE RASTER FORMATS\" section, we don\u0027t write to the \"raster\" arg so it isn\u0027t derefed (as far as I understand). Is there a solution that can satisfy ubsan, like reinterpret_cast\u003cuint32_t*\u003e(1) or something?",
+      "parentUuid": "a2a616f7_7eec4520",
+      "range": {
+        "startLine": 198,
+        "startChar": 41,
+        "endLine": 198,
+        "endChar": 48
+      },
+      "revId": "e912a446210fdae61be3fc04d20d90488cedcdf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
