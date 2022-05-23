@@ -59,28 +59,19 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCh
         // prepare substring for BiDi analysis
         // TODO: reuse allocated pParaBidi
         UErrorCode rcI18n = U_ZERO_ERROR;
-        const int nLength = mrStr.getLength();
+        const int nLength = mnEndCharPos - mnMinCharPos;
         UBiDi* pParaBidi = ubidi_openSized(nLength, 0, &rcI18n);
         if (!pParaBidi)
             return;
-        ubidi_setPara(pParaBidi, reinterpret_cast<const UChar*>(mrStr.getStr()), nLength, nLevel,
-                      nullptr, &rcI18n);
-
-        UBiDi* pLineBidi = pParaBidi;
-        int nSubLength = mnEndCharPos - mnMinCharPos;
-        if (nSubLength != nLength)
-        {
-            pLineBidi = ubidi_openSized(nSubLength, 0, &rcI18n);
-            ubidi_setLine(pParaBidi, mnMinCharPos, mnEndCharPos, pLineBidi, &rcI18n);
-        }
+        ubidi_setPara(pParaBidi, reinterpret_cast<const UChar*>(mrStr.getStr()) + mnMinCharPos,
+                      nLength, nLevel, nullptr, &rcI18n);
 
         // run BiDi algorithm
-        const int nRunCount = ubidi_countRuns(pLineBidi, &rcI18n);
-        //maRuns.resize( 2 * nRunCount );
+        const int nRunCount = ubidi_countRuns(pParaBidi, &rcI18n);
         for (int i = 0; i < nRunCount; ++i)
         {
             int32_t nMinPos, nRunLength;
-            const UBiDiDirection nDir = ubidi_getVisualRun(pLineBidi, i, &nMinPos, &nRunLength);
+            const UBiDiDirection nDir = ubidi_getVisualRun(pParaBidi, i, &nMinPos, &nRunLength);
             const int nPos0 = nMinPos + mnMinCharPos;
             const int nPos1 = nPos0 + nRunLength;
 
@@ -89,8 +80,6 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr, int nMinCharPos, int nEndCh
         }
 
         // cleanup BiDi engine
-        if (pLineBidi != pParaBidi)
-            ubidi_close(pLineBidi);
         ubidi_close(pParaBidi);
     }
 
