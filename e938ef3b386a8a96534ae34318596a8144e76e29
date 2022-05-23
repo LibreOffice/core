@@ -50,6 +50,24 @@
       "message": "and then draws on that - and this drawing operation gives sub-pixel positioning artifacts, with red and blue pixels on different sides of lines.\n\nHow can I disable sub-pixel thing, and make it normal greyscale antialiasing?",
       "revId": "e938ef3b386a8a96534ae34318596a8144e76e29",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85c9d12d_2d70764d",
+        "filename": "starmath/source/ElementsDockingWindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-23T09:34:12Z",
+      "side": 1,
+      "message": "And this is what the new code does:\nhttps://imgur.com/KJLR7FJ",
+      "parentUuid": "5b652399_b0c17e18",
+      "revId": "e938ef3b386a8a96534ae34318596a8144e76e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

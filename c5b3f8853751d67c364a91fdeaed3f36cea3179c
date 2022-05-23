@@ -39,6 +39,24 @@
       "message": "Old drawing code used rContext, and that doesn\u0027t use sub-pixel positioning in master.",
       "revId": "c5b3f8853751d67c364a91fdeaed3f36cea3179c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21342ce9_2198c85b",
+        "filename": "starmath/source/ElementsDockingWindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-23T09:34:12Z",
+      "side": 0,
+      "message": "This is what the old code paints:\nhttps://imgur.com/QcG5ORO",
+      "parentUuid": "7bdc4a1d_5f913d9f",
+      "revId": "c5b3f8853751d67c364a91fdeaed3f36cea3179c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
