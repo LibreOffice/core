@@ -541,13 +541,15 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
 void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rGeometryItem )
 {
     // AdjustmentValues
-    const Any* pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( "AdjustmentValues" );
+    static constexpr OUStringLiteral sAdjustmentValues( u"AdjustmentValues" );
+    const Any* pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sAdjustmentValues );
     if ( pAny )
         *pAny >>= seqAdjustmentValues;
 
 
     // Coordsize
-    const Any* pViewBox = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( "ViewBox" );
+    static constexpr OUStringLiteral sViewBox( u"ViewBox" );
+    const Any* pViewBox = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sViewBox );
     css::awt::Rectangle aViewBox;
     if ( pViewBox && (*pViewBox >>= aViewBox ) )
     {
@@ -745,7 +747,8 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
 
     OUString sShapeType;
     const SdrCustomShapeGeometryItem& rGeometryItem(mrSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-    const Any* pAny = rGeometryItem.GetPropertyValueByName( "Type" );
+    static constexpr OUStringLiteral sType = u"Type";
+    const Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
     if ( pAny ) {
         *pAny >>= sShapeType;
         bOOXMLShape = sShapeType.startsWith("ooxml-");
@@ -753,10 +756,12 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
     }
     eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
 
-    pAny = rGeometryItem.GetPropertyValueByName( "MirroredX" );
+    static constexpr OUStringLiteral sMirroredX = u"MirroredX";
+    static constexpr OUStringLiteral sMirroredY = u"MirroredY";
+    pAny = rGeometryItem.GetPropertyValueByName( sMirroredX );
     if ( pAny )
         *pAny >>= bFlipH;
-    pAny = rGeometryItem.GetPropertyValueByName( "MirroredY" );
+    pAny = rGeometryItem.GetPropertyValueByName( sMirroredY );
     if ( pAny )
         *pAny >>= bFlipV;
 
