@@ -38,6 +38,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/forcepoint-87.patch.1 \
 	external/liborcus/forcepoint-88.patch.1 \
 	external/liborcus/forcepoint-95.patch.1 \
+	external/liborcus/include.patch.0 \
 ))
 
 ifeq ($(OS),WNT)
