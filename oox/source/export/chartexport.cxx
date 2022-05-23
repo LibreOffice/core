@@ -2067,6 +2067,9 @@ void ChartExport::exportDataTable( )
     if (bShowKeys)
         pFS->singleElement(FSNS(XML_c, XML_showKeys), XML_val, "1");
 
+    exportShapeProps(aPropSet);
+    exportTextProps(aPropSet);
+
     pFS->endElement(FSNS(XML_c, XML_dTable));
 }
 
