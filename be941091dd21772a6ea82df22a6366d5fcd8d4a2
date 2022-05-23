@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "708f30c1_3613abe4",
+        "filename": "vcl/qa/cppunit/GraphicDescriptorTest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T22:19:54Z",
+      "side": 1,
+      "message": "I think we could write number \"142\", instead of \"0x8E\". Then the comment would be not needed.",
+      "revId": "be941091dd21772a6ea82df22a6366d5fcd8d4a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8888f231_72a49b68",
+        "filename": "vcl/qa/cppunit/GraphicDescriptorTest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T22:19:54Z",
+      "side": 1,
+      "message": "We could write 300 instead of \"0x12C\" here",
+      "revId": "be941091dd21772a6ea82df22a6366d5fcd8d4a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

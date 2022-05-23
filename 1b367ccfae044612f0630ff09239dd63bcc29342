@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed71335f_54e27cdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T22:19:54Z",
+      "side": 1,
+      "message": "Great work!\nYou could resolve two nitpicks.",
+      "revId": "1b367ccfae044612f0630ff09239dd63bcc29342",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
