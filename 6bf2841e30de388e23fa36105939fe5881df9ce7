@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "254ccc8c_ac5bbec2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-23T17:29:41Z",
+      "side": 1,
+      "message": "Put back Verified+1, I just fixed the typo of the comment of the patch.",
+      "revId": "6bf2841e30de388e23fa36105939fe5881df9ce7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
