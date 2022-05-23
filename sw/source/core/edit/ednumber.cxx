@@ -274,11 +274,12 @@ void SwEditShell::DelNumRules()
     if( pCursor->IsMultiSelection() )
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
-        SwPamRanges aRangeArr( *pCursor );
-        SwPaM aPam( *pCursor->GetPoint() );
-        for( size_t n = 0; n < aRangeArr.Count(); ++n )
+        for (SwPaM& rPaM : pCursor->GetRingContainer())
         {
-            GetDoc()->DelNumRules(aRangeArr.SetPam( n, aPam ), GetLayout());
+            if (IsTableMode() && !rPaM.HasMark())
+                continue;
+
+            GetDoc()->DelNumRules(rPaM, GetLayout());
         }
         GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
     }
@@ -769,13 +770,13 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     SwPaM* pCursor = GetCursor();
     if( IsMultiSelection() )
     {
-        SwPamRanges aRangeArr( *pCursor );
-        SwPaM aPam( *pCursor->GetPoint() );
         OUString sContinuedListId(rContinuedListId);
-        for( size_t n = 0; n < aRangeArr.Count(); ++n )
+        for (SwPaM& rPaM : pCursor->GetRingContainer())
         {
-            aRangeArr.SetPam( n, aPam );
-            OUString sListId = GetDoc()->SetNumRule( aPam, rRule,
+            if (IsTableMode() && !rPaM.HasMark())
+                continue;
+
+            OUString sListId = GetDoc()->SetNumRule(rPaM, rRule,
                                   bCreateNewList, GetLayout(), sContinuedListId,
                                   true, bResetIndentAttrs );
 
@@ -787,7 +788,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
                 bCreateNewList = false;
             }
 
-            GetDoc()->SetCounted(aPam, true, GetLayout());
+            GetDoc()->SetCounted(rPaM, true, GetLayout());
         }
     }
     else

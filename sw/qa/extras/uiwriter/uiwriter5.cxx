@@ -2870,6 +2870,90 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
         getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "ParaStyleName"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    pWrtSh->Insert("Col1");
+
+    // Move the cursor to B1
+    pWrtSh->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    pWrtSh->Insert("Col2");
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getColumns()->getCount());
+
+    uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Col1"), xCellA1->getString());
+
+    uno::Reference<text::XTextRange> xCellB1(xTextTable->getCellByName("B1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Col2"), xCellB1->getString());
+
+    // Select backwards B1 and A1 (select "2loC<cell>" which ends up selecting both cells)
+    pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+
+    // Just select the whole B1
+    pWrtSh->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // B1 should now have a numbering style, but A1 should not be affected.
+    OUString sNumStyleB1
+        = getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "NumberingStyleName");
+    CPPUNIT_ASSERT(!sNumStyleB1.isEmpty());
+    CPPUNIT_ASSERT_MESSAGE(
+        "Only cell B1 was selected. A1 should not have any numbering.",
+        getProperty<OUString>(getParagraphOfText(1, xCellA1->getText()), "NumberingStyleName")
+            .isEmpty());
+
+    // Now test removing numbering/bullets
+    // Add A1 to the current B1 selection
+    pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    // Toggle on bullet numbering
+    dispatchCommand(mxComponent, ".uno:DefaultBullet", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // sanity check - both cells have bullets turned on.
+    OUString sNumStyleA1
+        = getProperty<OUString>(getParagraphOfText(1, xCellA1->getText()), "NumberingStyleName");
+    CPPUNIT_ASSERT(!sNumStyleA1.isEmpty());
+    CPPUNIT_ASSERT_EQUAL(
+        sNumStyleA1,
+        getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "NumberingStyleName"));
+    CPPUNIT_ASSERT(sNumStyleA1 != sNumStyleB1); // therefore B1 changed from numbering to bullets
+
+    // Just select cell B1
+    pWrtSh->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    // Toggle off bullet numbering
+    dispatchCommand(mxComponent, ".uno:DefaultBullet", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // B1 should now have removed all numbering, while A1 should still have the bullet.
+    CPPUNIT_ASSERT(
+        getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "NumberingStyleName")
+            .isEmpty());
+    CPPUNIT_ASSERT_MESSAGE(
+        "Only cell B1 was selected. A1 should still have bullets turned on.",
+        !getProperty<OUString>(getParagraphOfText(1, xCellA1->getText()), "NumberingStyleName")
+             .isEmpty());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf126735)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf39721.fodt");
