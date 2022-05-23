@@ -53,20 +53,42 @@ namespace
         {
         }
 
-        void SetPixels(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t skew)
+        uint32_t* GetBuffer(uint32_t w, uint32_t h, int32_t toskew)
         {
-            const uint32_t* pSrc = aBuffer.data();
+            uint32_t nExtraPerRow;
+            if (toskew >= 0)
+                nExtraPerRow = toskew;
+            else
+            {
+                int32_t nExtraNeg = w + toskew + w;
+                nExtraPerRow = std::abs(nExtraNeg);
+            }
+            uint32_t nScanLine = w + nExtraPerRow;
+            aBuffer.resize(nScanLine * h);
+            uint32_t* pBuffer = aBuffer.data();
+            if (toskew < 0)
+                pBuffer += h * nScanLine - nScanLine;
 
+            return pBuffer;
+        }
+
+        void SetPixels(uint32_t x, uint32_t y, uint32_t w, uint32_t h, const uint32_t* pSrc, int32_t skew)
+        {
+            uint32_t nDestRow = y;
             for (uint32_t nRow = 0; nRow < h; ++nRow)
             {
                 for (uint32_t nCol = 0; nCol < w; ++nCol)
                 {
-                    pWriteAccess->SetPixel(y + nRow, x + nCol,
+                    pWriteAccess->SetPixel(nDestRow, x + nCol,
                         Color(TIFFGetR(*pSrc), TIFFGetG(*pSrc), TIFFGetB(*pSrc)));
-                    pAlphaAccess->SetPixelIndex(y + nRow, x + nCol, 255 - TIFFGetA(*pSrc));
+                    pAlphaAccess->SetPixelIndex(nDestRow, x + nCol, 255 - TIFFGetA(*pSrc));
                     ++pSrc;
                 }
                 pSrc += skew;
+                if (skew >= 0)
+                    ++nDestRow;
+                else
+                    --nDestRow;
             }
         }
     };
@@ -125,11 +147,12 @@ static void putContigPixel(TIFFRGBAImage* img, uint32_t* /*raster*/,
 {
     Context* pContext = static_cast<Context*>(TIFFClientdata(img->tif));
 
-    pContext->aBuffer.resize((w + toskew) * h);
-    (pContext->pOrigContig)(img, pContext->aBuffer.data(), 0, 0, w, h,
+    uint32_t* pBuffer = pContext->GetBuffer(w, h, toskew);
+
+    (pContext->pOrigContig)(img, pBuffer, 0, 0, w, h,
                             fromskew, toskew, cp);
 
-    pContext->SetPixels(x, y, w, h, toskew);
+    pContext->SetPixels(x, y, w, h, pBuffer, toskew);
 }
 
 static void putSeparatePixel(TIFFRGBAImage* img, uint32_t* /*raster*/,
@@ -139,11 +162,12 @@ static void putSeparatePixel(TIFFRGBAImage* img, uint32_t* /*raster*/,
 {
     Context* pContext = static_cast<Context*>(TIFFClientdata(img->tif));
 
-    pContext->aBuffer.resize((w + toskew) * h);
-    (pContext->pOrigSeparate)(img, pContext->aBuffer.data(), 0, 0, w, h,
+    uint32_t* pBuffer = pContext->GetBuffer(w, h, toskew);
+
+    (pContext->pOrigSeparate)(img, pBuffer, 0, 0, w, h,
                               fromskew, toskew, r, g, b, a);
 
-    pContext->SetPixels(x, y, w, h, toskew);
+    pContext->SetPixels(x, y, w, h, pBuffer, toskew);
 }
 
 bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
