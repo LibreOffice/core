@@ -20,6 +20,57 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7a232246_239d0392",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T06:20:35Z",
+      "side": 1,
+      "message": "Thank you Paris. Great work.\n\nIt would be great if the issue could be covered with test.\n@Xisco Do you know how it could be made?\n",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92de5ebf_76515ba8",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T06:20:35Z",
+      "side": 1,
+      "message": "It would be great if the whole method would have the same code formatting (eg. spaces inside brackets).\n\nYou could run `clang-format vcl/source/filter/graphicfilter2.cxx` on that file, and copy paste the method.",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe4fa921_8dbdee79",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T06:20:35Z",
+      "side": 1,
+      "message": "It would be great to avoid using magic numbers.\nThis record is called EMR_HEADER. Can you define constexp for that.\n(The usage the same field from emfio/source/reader/emfreader.cxx would be too much work for this PR).",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "188ebe05_0948b6a0",
         "filename": "vcl/source/filter/graphicfilter2.cxx",
         "patchSetId": 1
