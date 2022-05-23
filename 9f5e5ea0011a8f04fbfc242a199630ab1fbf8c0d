@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4276b8a6_4440afdb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-05-23T04:28:30Z",
+      "side": 1,
+      "message": "got a compile error\n/persistent/git/libreoffice2/workdir/UnpackedTarball/skia/include/core/SkSamplingOptions.h:100:37: error: declaration of ‘maxAniso’ shadows a member of ‘SkSamplingOptions’ [-Werror\u003dshadow]\n  100 |     SkSamplingOptions(int maxAniso) : maxAniso(maxAniso) {}\n\nLooks like mstahl has a fix at \nhttps://gerrit.libreoffice.org/c/core/+/134737",
+      "revId": "9f5e5ea0011a8f04fbfc242a199630ab1fbf8c0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
