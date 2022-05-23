@@ -1324,9 +1324,11 @@ protected:
     Link<IconView&, void> m_aSelectionChangeHdl;
     Link<IconView&, bool> m_aItemActivatedHdl;
     Link<const CommandEvent&, bool> m_aCommandHdl;
+    Link<const TreeIter&, OUString> m_aQueryTooltipHdl;
 
     void signal_selection_changed() { m_aSelectionChangeHdl.Call(*this); }
     bool signal_item_activated() { return m_aItemActivatedHdl.Call(*this); }
+    OUString signal_query_tooltip(const TreeIter& rIter) { return m_aQueryTooltipHdl.Call(rIter); }
 
 public:
     virtual void insert(int pos, const OUString* pStr, const OUString* pId,
@@ -1361,6 +1363,11 @@ public:
     void connect_item_activated(const Link<IconView&, bool>& rLink) { m_aItemActivatedHdl = rLink; }
 
     void connect_command(const Link<const CommandEvent&, bool>& rLink) { m_aCommandHdl = rLink; }
+
+    virtual void connect_query_tooltip(const Link<const TreeIter&, OUString>& rLink)
+    {
+        m_aQueryTooltipHdl = rLink;
+    }
 
     virtual OUString get_selected_id() const = 0;
 
