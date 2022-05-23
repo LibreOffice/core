@@ -38,15 +38,35 @@ const sal_uInt16 XML_NAMESPACE_NONE          = USHRT_MAX-1;
 const sal_uInt16 XML_NAMESPACE_UNKNOWN       = USHRT_MAX;
 const sal_uInt16 XML_NAMESPACE_UNKNOWN_FLAG  = 0x8000;
 
-class NameSpaceEntry final : public salhelper::SimpleReferenceObject
+struct NameSpaceEntry final
 {
-public:
     // sName refers to the full namespace name
     OUString     sName;
     // sPrefix is the prefix used to declare a given item to be from a given namespace
     OUString     sPrefix;
     // nKey is the unique identifier of a namespace
     sal_uInt16   nKey;
+};
+
+struct PrefixToNamespaceMapEntry final
+{
+    // sName refers to the full namespace name
+    OUString     sName;
+    // nKey is the unique identifier of a namespace
+    sal_uInt16   nKey;
+
+    bool operator==(PrefixToNamespaceMapEntry const & rOther) const
+    {
+        return sName == rOther.sName && nKey == rOther.nKey;
+    }
+};
+
+struct KeyToNamespaceMapEntry final
+{
+    // sName refers to the full namespace name
+    OUString     sName;
+    // sPrefix is the prefix used to declare a given item to be from a given namespace
+    OUString     sPrefix;
 };
 
 typedef ::std::pair < sal_uInt16, OUString > QNamePair;
@@ -63,16 +83,17 @@ struct QNamePairHash
 };
 
 typedef std::unordered_map < QNamePair, OUString, QNamePairHash > QNameCache;
-typedef std::unordered_map < OUString, ::rtl::Reference <NameSpaceEntry > > NameSpaceHash;
-typedef std::unordered_map < sal_uInt16, ::rtl::Reference < NameSpaceEntry > > NameSpaceMap;
+typedef std::unordered_map < OUString, NameSpaceEntry > NameSpaceHash;
+typedef std::unordered_map < OUString, PrefixToNamespaceMapEntry > PrefixToNamespaceMap;
+typedef std::unordered_map < sal_uInt16, KeyToNamespaceMapEntry > KeyToNamespaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
 {
     OUString                    sXMLNS;
 
-    NameSpaceHash               aNameHash;
+    PrefixToNamespaceMap        maPrefixToNamespaceMap;
     mutable NameSpaceHash       aNameCache;
-    NameSpaceMap                aNameMap;
+    KeyToNamespaceMap           maKeyToNamespaceMap;
     mutable QNameCache          aQNameCache;
     SAL_DLLPRIVATE sal_uInt16 Add_( const OUString& rPrefix, const OUString &rName, sal_uInt16 nKey );
 
@@ -120,7 +141,7 @@ public:
     /* Give access to all namespace definitions, including multiple entries
        for the same key (needed for saving sheets separately in Calc).
        This might be replaced by a better interface later. */
-    const NameSpaceHash& GetAllEntries() const { return aNameHash; }
+    const PrefixToNamespaceMap& GetAllEntries() const { return maPrefixToNamespaceMap; }
 
     void Clear();
 
