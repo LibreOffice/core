@@ -36,8 +36,6 @@
 
 #include "impldockingwrapper.hxx"
 
-#include <comphelper/lok.hxx>
-
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE)
 
 class DockingWindow::ImplData
