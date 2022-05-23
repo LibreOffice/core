@@ -117,6 +117,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <sfx2/dispatch.hxx>
 #include <swruler.hxx>
 #include <docufld.hxx>
 
@@ -3360,24 +3361,6 @@ SwXTextDocument::getSearchResultRectangles(const char* pPayload)
 
 void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
 {
-    SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
-    const SwPosition* pStart = pWrtShell->GetCursor()->Start();
-    SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
-    if (!pTextNode)
-    {
-        return;
-    }
-
-    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pStart->nContent.GetIndex(),
-                                                 RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
-    if (!pAttr)
-    {
-        return;
-    }
-
-    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
-    const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
-    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
     auto it = rArguments.find("type");
     if (it == rArguments.end())
     {
@@ -3386,6 +3369,24 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
 
     if (it->second == "drop-down")
     {
+        SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
+        const SwPosition* pStart = pWrtShell->GetCursor()->Start();
+        SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+        if (!pTextNode)
+        {
+            return;
+        }
+
+        SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pStart->nContent.GetIndex(),
+                                                     RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+        if (!pAttr)
+        {
+            return;
+        }
+
+        auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+        const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
+        std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
         if (!pContentControl->HasListItems())
         {
             return;
@@ -3400,6 +3401,25 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
         sal_Int32 nSelection = it->second.toInt32();
         pContentControl->SetSelectedListItem(nSelection);
         pWrtShell->GotoContentControl(rFormatContentControl);
+    }
+    else if (it->second == "picture")
+    {
+        it = rArguments.find("changed");
+        if (it == rArguments.end())
+        {
+            return;
+        }
+
+        SwView* pView = m_pDocShell->GetView();
+        if (!pView)
+        {
+            return;
+        }
+
+        // The current placeholder is selected, so this will replace, not insert.
+        SfxStringItem aItem(SID_INSERT_GRAPHIC, it->second);
+        pView->GetViewFrame()->GetDispatcher()->ExecuteList(SID_INSERT_GRAPHIC,
+                                                            SfxCallMode::SYNCHRON, { &aItem });
     }
 }
 
