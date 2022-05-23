@@ -52,6 +52,7 @@
 #include <cppuhelper/weak.hxx>
 #include <mutex>
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <sal/types.h>
 
 namespace com::sun::star::util {
@@ -131,8 +132,8 @@ class RegistryKey:
     public cppu::WeakImplHelper< css::registry::XRegistryKey >
 {
 public:
-    RegistryKey(Service & service, css::uno::Any const & value):
-        service_(service), value_(value) {}
+    RegistryKey(Service & service, css::uno::Any value):
+        service_(service), value_(std::move(value)) {}
 
 private:
     RegistryKey(const RegistryKey&) = delete;

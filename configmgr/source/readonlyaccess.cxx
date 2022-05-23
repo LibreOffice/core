@@ -25,6 +25,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <sal/types.h>
 
 #include "components.hxx"
@@ -42,8 +43,8 @@ class Service:
 {
 public:
     explicit Service(
-        css::uno::Reference< css::uno::XComponentContext > const & context):
-        context_(context) {}
+        css::uno::Reference< css::uno::XComponentContext > context):
+        context_(std::move(context)) {}
 
 private:
     Service(const Service&) = delete;

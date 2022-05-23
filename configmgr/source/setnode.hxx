@@ -34,8 +34,8 @@ namespace configmgr {
 class SetNode: public Node {
 public:
     SetNode(
-        int layer, OUString const & defaultTemplateName,
-        OUString const & templateName);
+        int layer, OUString defaultTemplateName,
+        OUString templateName);
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const override;
 

@@ -86,7 +86,7 @@ private:
 
         DisposeNotification(
             css::uno::Reference< css::lang::XEventListener > const & theListener,
-            css::lang::EventObject const & theEvent);
+            css::lang::EventObject theEvent);
     };
 
     struct ContainerNotification {
@@ -95,7 +95,7 @@ private:
 
         ContainerNotification(
             css::uno::Reference< css::container::XContainerListener > const & theListener,
-            css::container::ContainerEvent const & theEvent);
+            css::container::ContainerEvent theEvent);
     };
 
     struct PropertyChangeNotification {
@@ -104,7 +104,7 @@ private:
 
         PropertyChangeNotification(
             css::uno::Reference< css::beans::XPropertyChangeListener > const & theListener,
-            css::beans::PropertyChangeEvent const & theEvent);
+            css::beans::PropertyChangeEvent theEvent);
     };
 
     struct PropertiesChangeNotification {
@@ -122,7 +122,7 @@ private:
 
         ChangesNotification(
             css::uno::Reference< css::util::XChangesListener > const & theListener,
-            css::util::ChangesEvent const & theEvent);
+            css::util::ChangesEvent theEvent);
     };
 
     std::vector< DisposeNotification > disposeNotifications_;

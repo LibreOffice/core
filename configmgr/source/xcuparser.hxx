@@ -27,6 +27,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <xmlreader/xmlreader.hxx>
 
 #include "additions.hxx"
@@ -124,13 +125,13 @@ private:
     private:
         explicit State(bool thePop): ignore(true), insert(false), pop(thePop) {}
 
-        explicit State(rtl::Reference< Node > const & theNode):
-            node(theNode), ignore(false), insert(false), pop(true)
+        explicit State(rtl::Reference< Node > theNode):
+            node(std::move(theNode)), ignore(false), insert(false), pop(true)
         {}
 
         State(
-            rtl::Reference< Node > const & theNode, OUString const & theName):
-            node(theNode), name(theName), ignore(false), insert(true), pop(true)
+            rtl::Reference< Node > theNode, OUString theName):
+            node(std::move(theNode)), name(std::move(theName)), ignore(false), insert(true), pop(true)
         {}
     };
 

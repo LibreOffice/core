@@ -23,6 +23,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <utility>
 
 #include "data.hxx"
 #include "node.hxx"
@@ -32,10 +33,10 @@
 namespace configmgr {
 
 SetNode::SetNode(
-    int layer, OUString const & defaultTemplateName,
-    OUString const & templateName):
-    Node(layer), defaultTemplateName_(defaultTemplateName),
-    templateName_(templateName), mandatory_(Data::NO_LAYER)
+    int layer, OUString defaultTemplateName,
+    OUString templateName):
+    Node(layer), defaultTemplateName_(std::move(defaultTemplateName)),
+    templateName_(std::move(templateName)), mandatory_(Data::NO_LAYER)
 {}
 
 rtl::Reference< Node > SetNode::clone(bool keepTemplateName) const {

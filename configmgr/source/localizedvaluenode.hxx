@@ -32,7 +32,7 @@ class LocalizedValueNode : public Node
 {
 public:
     explicit LocalizedValueNode(int layer);
-    LocalizedValueNode(int layer, css::uno::Any const& value);
+    LocalizedValueNode(int layer, css::uno::Any value);
 
     virtual rtl::Reference<Node> clone(bool keepTemplateName) const override;
 

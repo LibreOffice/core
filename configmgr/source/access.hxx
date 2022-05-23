@@ -354,7 +354,7 @@ private:
         ModifiedChild();
 
         ModifiedChild(
-            rtl::Reference< ChildAccess > const & theChild,
+            rtl::Reference< ChildAccess > theChild,
             bool theDirectlyModified);
     };
 

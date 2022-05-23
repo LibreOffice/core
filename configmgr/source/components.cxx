@@ -21,6 +21,7 @@
 
 #include <cassert>
 #include <chrono>
+#include <utility>
 #include <vector>
 #include <set>
 
@@ -85,9 +86,9 @@ struct UnresolvedVectorItem {
     rtl::Reference< ParseManager > manager;
 
     UnresolvedVectorItem(
-        OUString const & theName,
-        rtl::Reference< ParseManager > const & theManager):
-        name(theName), manager(theManager) {}
+        OUString  theName,
+        rtl::Reference< ParseManager > theManager):
+        name(std::move(theName)), manager(std::move(theManager)) {}
 };
 
 typedef std::vector< UnresolvedVectorItem > UnresolvedVector;
@@ -151,7 +152,7 @@ class Components::WriteThread: public salhelper::Thread {
 public:
     WriteThread(
         rtl::Reference< WriteThread > * reference, Components & components,
-        OUString const & url, Data const & data);
+        OUString url, Data const & data);
 
     void flush() { delay_.set(); }
 
@@ -170,9 +171,9 @@ private:
 
 Components::WriteThread::WriteThread(
     rtl::Reference< WriteThread > * reference, Components & components,
-    OUString const & url, Data const & data):
+    OUString url, Data const & data):
     Thread("configmgrWriter"), reference_(reference), components_(components),
-    url_(url), data_(data),
+    url_(std::move(url)), data_(data),
     lock_( lock() )
 {
     assert(reference != nullptr);

@@ -22,14 +22,15 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <utility>
 
 #include "localizedvaluenode.hxx"
 #include "node.hxx"
 
 namespace configmgr {
 
-LocalizedValueNode::LocalizedValueNode(int layer, css::uno::Any const & value):
-    Node(layer), value_(value)
+LocalizedValueNode::LocalizedValueNode(int layer, css::uno::Any value):
+    Node(layer), value_(std::move(value))
 {}
 
 LocalizedValueNode::LocalizedValueNode(int layer):

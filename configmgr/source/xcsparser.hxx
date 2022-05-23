@@ -26,6 +26,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <xmlreader/xmlreader.hxx>
 
 #include "node.hxx"
@@ -80,9 +81,9 @@ private:
         OUString name;
 
         Element(
-            rtl::Reference< Node > const & theNode,
-            OUString const & theName):
-            node(theNode), name(theName) {}
+            rtl::Reference< Node > theNode,
+            OUString theName):
+            node(std::move(theNode)), name(std::move(theName)) {}
     };
 
     typedef std::stack< Element > ElementStack;

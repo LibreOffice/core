@@ -36,7 +36,7 @@ class PropertyNode: public Node {
 public:
     PropertyNode(
         int layer, Type staticType, bool nillable,
-        css::uno::Any const & value, bool extension);
+        css::uno::Any value, bool extension);
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const override;
 
