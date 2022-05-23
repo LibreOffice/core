@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61bc8349_9cf521dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-23T11:47:01Z",
+      "side": 1,
+      "message": "Hi,\nSince the WMF image inside the file is 2.7 mbs ( too large for a unittest ) I created a minimal pptx reproducer and test it as a sd_import_tests. See https://gerrit.libreoffice.org/c/core/+/134818\nIf there are other ways to test it or make the WMF smaller, I don\u0027t know them",
+      "parentUuid": "ad7515b9_4c001df1",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92de5ebf_76515ba8",
