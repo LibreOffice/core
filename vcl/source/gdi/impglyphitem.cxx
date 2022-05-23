@@ -98,11 +98,17 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
     copy->SetFlags(GetFlags());
     if (empty())
         return copy.release();
+    bool rtl = front().IsRTLGlyph();
+    // Avoid mixing LTR/RTL or layouts that do not have it set explicitly (BiDiStrong). Otherwise
+    // the subset may not quite match what would a real layout call give (e.g. some characters with neutral
+    // direction such as space might have different LTR/RTL flag). It seems bailing out here mostly
+    // avoid relatively rare corner cases and doesn't matter for performance.
+    if (!(GetFlags() & SalLayoutFlags::BiDiStrong) || rtl != (GetFlags() & SalLayoutFlags::BiDiRtl))
+        return nullptr;
     copy->reserve(std::min<size_t>(size(), length));
     sal_Int32 beginPos = index;
     sal_Int32 endPos = index + length;
     const_iterator pos;
-    bool rtl = front().IsRTLGlyph();
     if (rtl)
     {
         // Glyphs are in reverse order for RTL.
@@ -163,22 +169,6 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
             return nullptr;
         if (!isSafeToBreak(pos, rtl))
             return nullptr;
-    }
-    // HACK: If mode is set to be RTL, but the last glyph is a non-RTL space,
-    // then making a subset would give a different result than the actual layout,
-    // because the weak BiDi mode code in ImplLayoutArgs ctor would interpret
-    // the string subset ending with space as the space being RTL, but it would
-    // treat it as non-RTL for the whole string if there would be more non-RTL
-    // characters after the space. So bail out.
-    if (GetFlags() & SalLayoutFlags::BiDiRtl && !rtl && !copy->empty() && copy->back().IsSpacing())
-    {
-        return nullptr;
-    }
-    // Similarly, if mode is not RTL but the last glyph is an RTL space.
-    if (!(GetFlags() & SalLayoutFlags::BiDiRtl) && rtl && !copy->empty()
-        && copy->back().IsSpacing())
-    {
-        return nullptr;
     }
     return copy.release();
 }
