@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1553ce5e_5dd34218",
+        "filename": "vcl/qa/cppunit/GraphicDescriptorTest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-23T23:16:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "708f30c1_3613abe4",
+      "revId": "be941091dd21772a6ea82df22a6366d5fcd8d4a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8888f231_72a49b68",
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "The comments were mostly to explain why such a test is needed. Also I think you meant to merge the other patch before rebasing.",
       "parentUuid": "8888f231_72a49b68",
+      "revId": "be941091dd21772a6ea82df22a6366d5fcd8d4a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89f4cee3_90a4d933",
+        "filename": "vcl/qa/cppunit/GraphicDescriptorTest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-23T23:16:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3d127c0_3ccb47a0",
       "revId": "be941091dd21772a6ea82df22a6366d5fcd8d4a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
