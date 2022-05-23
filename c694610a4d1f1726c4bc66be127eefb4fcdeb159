@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68a3e956_220d9e92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-23T06:53:46Z",
+      "side": 1,
+      "message": "\u003e (and fix the comment in binaryurp/source/binaryany.cxx referencing it)\n\n\u003chttps://gerrit.libreoffice.org/c/core/+/134751\u003e \"Adapt comment\"",
+      "parentUuid": "e99652b7_5e6a7355",
+      "revId": "c694610a4d1f1726c4bc66be127eefb4fcdeb159",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b381d3ea_61a560b4",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-05-19T14:45:56Z",
       "side": 1,
       "message": "I think that comment is still relevant?",
+      "revId": "c694610a4d1f1726c4bc66be127eefb4fcdeb159",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ff83268_c8d97ebc",
+        "filename": "include/com/sun/star/uno/Any.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-23T06:53:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b381d3ea_61a560b4",
       "revId": "c694610a4d1f1726c4bc66be127eefb4fcdeb159",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
