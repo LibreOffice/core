@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9582eae7_b4cc4f42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-05-23T11:14:07Z",
+      "side": 1,
+      "message": "Bah, false negative. This change affects macOS (and perhaps iOS) only.",
+      "revId": "3f8da4f59914538fd3dc2e2dbc9bfda59392a233",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
