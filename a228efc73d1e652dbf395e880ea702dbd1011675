@@ -16,6 +16,24 @@
       "message": "Works like a charm. But I cannot judge on the code, adding Hossein. And the help page is missing, adding Olivier.",
       "revId": "a228efc73d1e652dbf395e880ea702dbd1011675",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ae8782f_c357d301",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-05-23T18:20:54Z",
+      "side": 1,
+      "message": "Help page is ready in a different commit. But I will propose help change after finishing UI.",
+      "parentUuid": "baa30d16_95ad2f30",
+      "revId": "a228efc73d1e652dbf395e880ea702dbd1011675",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
