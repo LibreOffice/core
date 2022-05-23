@@ -919,7 +919,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // tdf#143455: A diagram is imported as group, but has no valid object list
                         // and contour wrap is different to Word. As workaround diagrams are excluded
                         // here in various places.
-                        const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(m_xShape)));
+                        const SdrObject* pDiagramCandidate(SdrObject::getSdrObjectFromXShape(m_xShape));
                         const bool bIsDiagram(nullptr != pDiagramCandidate && pDiagramCandidate->isDiagram());
                         // tdf#143476: A lockedCanvas (Word2007) is imported as group, but has not
                         // got size and position. Values from m_Impl has to be used.

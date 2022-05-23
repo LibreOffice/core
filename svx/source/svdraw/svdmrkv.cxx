@@ -1332,6 +1332,13 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 }
             }
 
+            // Diagram selection visualization support
+            // Caution: CppunitTest_sd_tiledrendering shows that mpMarkedObj *can* actually be nullptr (!)
+            if(nullptr != mpMarkedObj && mpMarkedObj->isDiagram())
+            {
+                mpMarkedObj->AddToHdlList(maHdlList);
+            }
+
             const size_t nSiz1(maHdlList.GetHdlCount());
 
             // moved setting the missing parameters at SdrHdl here from the

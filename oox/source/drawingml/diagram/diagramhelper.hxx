@@ -24,6 +24,7 @@
 #include <oox/drawingml/theme.hxx>
 #include <oox/shape/ShapeFilterBase.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 
 namespace svx { namespace diagram {
     class DiagramDataState;
@@ -46,7 +47,7 @@ class Diagram;
 // - deliver representative data from the Diagram-Model
 // - modify it eventually
 // - im/export Diagram model to other representations
-class AdvancedDiagramHelper final : public IDiagramHelper
+class AdvancedDiagramHelper final : public svx::diagram::IDiagramHelper
 {
     const std::shared_ptr< Diagram >            mpDiagramPtr;
     std::shared_ptr<::oox::drawingml::Theme>    mpThemePtr;
