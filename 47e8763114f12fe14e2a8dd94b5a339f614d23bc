@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07e196ac_f614b28d",
+        "filename": "sysui/desktop/menus/calc.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-05-23T06:50:14Z",
+      "side": 0,
+      "message": "Periods were requested to be removed.",
+      "parentUuid": "d4544f48_ff7f8e0a",
+      "range": {
+        "startLine": 28,
+        "startChar": 96,
+        "endLine": 28,
+        "endChar": 97
+      },
+      "revId": "47e8763114f12fe14e2a8dd94b5a339f614d23bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6005109_bb84c649",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-23T06:27:21Z",
       "side": 0,
       "message": "Here as well.",
+      "range": {
+        "startLine": 28,
+        "startChar": 69,
+        "endLine": 28,
+        "endChar": 70
+      },
+      "revId": "47e8763114f12fe14e2a8dd94b5a339f614d23bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45675651_4a9f4cd8",
+        "filename": "sysui/desktop/menus/draw.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-05-23T06:50:14Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "f6005109_bb84c649",
       "range": {
         "startLine": 28,
         "startChar": 69,
@@ -70,6 +118,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcf5051d_886bbccb",
+        "filename": "sysui/desktop/menus/impress.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-05-23T06:50:14Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "3a32a878_e6b578b8",
+      "range": {
+        "startLine": 28,
+        "startChar": 92,
+        "endLine": 28,
+        "endChar": 93
+      },
+      "revId": "47e8763114f12fe14e2a8dd94b5a339f614d23bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c72dd6e8_3c289a25",
@@ -93,6 +165,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8e3b7a4_e56cf8e6",
+        "filename": "sysui/desktop/menus/math.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-05-23T06:50:14Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "c72dd6e8_3c289a25",
+      "range": {
+        "startLine": 29,
+        "startChar": 71,
+        "endLine": 29,
+        "endChar": 72
+      },
+      "revId": "47e8763114f12fe14e2a8dd94b5a339f614d23bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f79139a8_85f043bb",
@@ -106,6 +202,30 @@
       "writtenOn": "2022-05-23T06:27:21Z",
       "side": 0,
       "message": "Missing period",
+      "range": {
+        "startLine": 28,
+        "startChar": 102,
+        "endLine": 28,
+        "endChar": 103
+      },
+      "revId": "47e8763114f12fe14e2a8dd94b5a339f614d23bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c88044b_94e86c08",
+        "filename": "sysui/desktop/menus/writer.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-05-23T06:50:14Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "f79139a8_85f043bb",
       "range": {
         "startLine": 28,
         "startChar": 102,
