@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac480887_0ef4da3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-05-23T04:35:26Z",
+      "side": 1,
+      "message": "I ran into this with Ubuntu 20.04/gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0\n\ncppu/source/uno/check.cxx:267:28: error: ‘maybe_unused’ attribute ignored [-Werror\u003dattributes]\n  267 |     [[maybe_unused]] Char3 chars;\n\nChanging it to \"\u003d 9 \" let me continue compiling.",
+      "revId": "2c6cea672a852b85cfb6d2e313d806f257481417",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
