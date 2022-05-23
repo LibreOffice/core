@@ -119,8 +119,6 @@ protected:
 
     css::uno::Sequence< css::embed::VerbDescriptor > m_aObjectVerbs;
 
-    css::uno::Sequence< sal_Int32 > m_aAcceptedStates;
-    css::uno::Sequence< sal_Int32 > m_pIntermediateStatesSeqs[NUM_SUPPORTED_STATES][NUM_SUPPORTED_STATES];
     std::map< sal_Int32, sal_Int32 > m_aVerbTable;
 
     css::uno::Reference< css::embed::XEmbeddedClient > m_xClientSite;
