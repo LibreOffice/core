@@ -35,6 +35,7 @@ class GraphicDescriptorTest : public test::BootstrapFixtureBase
     void testDetectTIF();
     void testDetectBMP();
     void testDetectWEBP();
+    void testDetectEMF();
 
     CPPUNIT_TEST_SUITE(GraphicDescriptorTest);
     CPPUNIT_TEST(testDetectPNG);
@@ -43,6 +44,7 @@ class GraphicDescriptorTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testDetectTIF);
     CPPUNIT_TEST(testDetectBMP);
     CPPUNIT_TEST(testDetectWEBP);
+    CPPUNIT_TEST(testDetectEMF);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -152,6 +154,24 @@ void GraphicDescriptorTest::testDetectWEBP()
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aDescriptor.GetSizePixel().Height());
+}
+
+void GraphicDescriptorTest::testDetectEMF()
+{
+    SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.emf"), StreamMode::READ);
+    GraphicDescriptor aDescriptor(aFileStream, nullptr);
+    aDescriptor.Detect(true);
+    CPPUNIT_ASSERT_EQUAL(GraphicFileFormat::EMF, aDescriptor.GetFileFormat());
+    // Without setting the metadata in ImpDetectEMF, these asserts would have failed with:
+    // - Expected: 142
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(tools::Long(0x8E), aDescriptor.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(0x8E), aDescriptor.GetSizePixel().Height());
+    // Without setting the metadata in ImpDetectEMF, these asserts would have failed with:
+    // - Expected: 300
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(tools::Long(0x12C), aDescriptor.GetSize_100TH_MM().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(0x12C), aDescriptor.GetSize_100TH_MM().Height());
 }
 
 } // namespace
