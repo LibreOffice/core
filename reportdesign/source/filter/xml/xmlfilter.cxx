@@ -423,7 +423,6 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             { OUString("PrivateData"),0,    cppu::UnoType<XInterface>::get(),  beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("BaseURI"),    0,    cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("StreamRelPath"), 0, cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString(), 0, css::uno::Type(), 0, 0 }
         };
         utl::MediaDescriptor aDescriptor(rDescriptor);
         uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));

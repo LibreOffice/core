@@ -80,13 +80,12 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
     }
 
     // create an XProperty set to configure the exporter for pretty printing
-    PropertyMapEntry aImportInfoMap[] =
+    static const PropertyMapEntry aImportInfoMap[] =
     {
         { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
         { OUString("BuildId"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0 },
         { OUString("DefaultDocumentSettings"), 0,
           ::cppu::UnoType<Sequence<PropertyValue>>::get(), PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
     Reference< XPropertySet > xInfoSet(
@@ -280,12 +279,11 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
         }
 
         // create an XProperty set to configure the exporter for pretty printing
-        PropertyMapEntry aImportInfoMap[] =
+        static const PropertyMapEntry aImportInfoMap[] =
          {
              { OUString("UsePrettyPrinting"), 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
              { OUString("ExportTextNumberElement"), 0, cppu::UnoType<sal_Bool>::get(), PropertyAttribute::MAYBEVOID, 0},
              { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0},
-             { OUString(), 0, css::uno::Type(), 0, 0 }
          };
 
         Reference< XPropertySet > xInfoSet(

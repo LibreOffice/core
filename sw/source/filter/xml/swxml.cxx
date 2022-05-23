@@ -518,7 +518,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     // the user.
 
     // create XPropertySet with three properties for status indicator
-    comphelper::PropertyMapEntry const aInfoMap[] =
+    static comphelper::PropertyMapEntry const aInfoMap[] =
     {
         { OUString("ProgressRange"), 0,
               ::cppu::UnoType<sal_Int32>::get(),
@@ -592,7 +592,6 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(),
           css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
                 comphelper::GenericPropertySet_CreateInstance(

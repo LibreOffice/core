@@ -140,7 +140,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
     }
 
     // Create property list
-    comphelper::PropertyMapEntry aInfoMap[]
+    static const comphelper::PropertyMapEntry aInfoMap[]
         = { { u"PrivateData", 0, cppu::UnoType<XInterface>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
             { u"BaseURI", 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID,
@@ -148,8 +148,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
             { u"StreamRelPath", 0, ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
             { u"StreamName", 0, ::cppu::UnoType<OUString>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { u"", 0, css::uno::Type(), 0, 0 } };
+              beans::PropertyAttribute::MAYBEVOID, 0 } };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
 
@@ -342,7 +341,7 @@ ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
     }
 
     // Create property list
-    comphelper::PropertyMapEntry aInfoMap[]
+    static const comphelper::PropertyMapEntry aInfoMap[]
         = { { u"PrivateData", 0, cppu::UnoType<XInterface>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
             { u"BaseURI", 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID,
@@ -350,8 +349,7 @@ ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
             { u"StreamRelPath", 0, ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
             { u"StreamName", 0, ::cppu::UnoType<OUString>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { u"", 0, css::uno::Type(), 0, 0 } };
+              beans::PropertyAttribute::MAYBEVOID, 0 } };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
 

@@ -271,7 +271,6 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const OUString& _sStyleName,
         {OUString(PROPERTY_FONTKERNING),      PROPERTY_ID_FONTKERNING,        cppu::UnoType<decltype(aFont.Kerning)>::get()      ,PropertyAttribute::BOUND,0},
         {OUString(PROPERTY_CHARWORDMODE),     PROPERTY_ID_FONTWORDLINEMODE,   cppu::UnoType<decltype(aFont.WordLineMode)>::get() ,PropertyAttribute::BOUND,0},
         {OUString(PROPERTY_FONTTYPE),         PROPERTY_ID_FONTTYPE,           cppu::UnoType<decltype(aFont.Type)>::get()         ,PropertyAttribute::BOUND,0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     try
     {
@@ -321,7 +320,6 @@ uno::Reference<beans::XPropertySet> OXMLHelper::createBorderPropertySet()
         {OUString(PROPERTY_BORDERRIGHT),  1,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
         {OUString(PROPERTY_BORDERTOP),    2,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
         {OUString(PROPERTY_BORDERBOTTOM), 3,          cppu::UnoType<table::BorderLine2>::get(),PropertyAttribute::BOUND,0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
 }

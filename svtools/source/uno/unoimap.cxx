@@ -141,7 +141,6 @@ rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( IMap
                 { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(),     0, 0 },
                 { OUString("IsActive"),    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),                0, 0 },
                 { OUString("Polygon"),     HANDLE_POLYGON,     cppu::UnoType<PointSequence>::get(),    0, 0 },
-                { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
             return rtl::Reference<PropertySetInfo>(new PropertySetInfo( aPolygonObj_Impl ));
@@ -158,7 +157,6 @@ rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( IMap
                 { OUString("IsActive"),    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),                0, 0 },
                 { OUString("Center"),      HANDLE_CENTER,      cppu::UnoType<awt::Point>::get(),   0, 0 },
                 { OUString("Radius"),      HANDLE_RADIUS,      cppu::UnoType<sal_Int32>::get(),    0, 0 },
-                { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
             return rtl::Reference<PropertySetInfo>(new PropertySetInfo( aCircleObj_Impl ));
@@ -175,7 +173,6 @@ rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( IMap
                 { OUString("Name"),        HANDLE_NAME,        cppu::UnoType<OUString>::get(), 0, 0 },
                 { OUString("IsActive"),    HANDLE_ISACTIVE,    cppu::UnoType<bool>::get(),            0, 0 },
                 { OUString("Boundary"),    HANDLE_BOUNDARY,    cppu::UnoType<awt::Rectangle>::get(),   0, 0 },
-                { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
             return rtl::Reference<PropertySetInfo>(new PropertySetInfo( aRectangleObj_Impl ));

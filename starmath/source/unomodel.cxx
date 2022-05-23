@@ -230,7 +230,7 @@ enum SmModelPropertyHandles
 
 static const rtl::Reference<PropertySetInfo> & lcl_createModelPropertyInfo ()
 {
-    static PropertyMapEntry aModelPropertyInfoMap[] =
+    static const PropertyMapEntry aModelPropertyInfoMap[] =
     {
         { OUString("Alignment")                        , HANDLE_ALIGNMENT                          ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
         { OUString("BaseFontHeight")                   , HANDLE_BASE_FONT_HEIGHT                   ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
@@ -302,7 +302,6 @@ static const rtl::Reference<PropertySetInfo> & lcl_createModelPropertyInfo ()
         { OUString("BaseLine")                         , HANDLE_BASELINE                           ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
         { OUString("InteropGrabBag")                   , HANDLE_INTEROP_GRAB_BAG                   ,  cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),           PROPERTY_NONE,  0                     },
         { OUString("SyntaxVersion")                    , HANDLE_STARMATH_VERSION                   ,  ::cppu::UnoType<sal_Int16>::get(),                             PROPERTY_NONE,  0                     },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static const rtl::Reference<PropertySetInfo> PROPS_INFO = new PropertySetInfo ( aModelPropertyInfoMap );
     return PROPS_INFO;

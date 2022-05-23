@@ -458,7 +458,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     mxModel->lockControllers();
 
     /** property map for import info set */
-    PropertyMapEntry const aImportInfoMap[] =
+    static PropertyMapEntry const aImportInfoMap[] =
     {
         // necessary properties for XML progress bar at load time
         { OUString("ProgressRange"),   0, cppu::UnoType<sal_Int32>::get(),               css::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -473,7 +473,6 @@ bool SdXMLFilter::Import( ErrCode& nError )
         { OUString("BuildId"),         0, cppu::UnoType<OUString>::get(),                css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("OrganizerMode"),   0, cppu::UnoType<bool>::get(),                    css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("SourceStorage"),   0, cppu::UnoType<embed::XStorage>::get(),         css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
     uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
@@ -767,7 +766,7 @@ bool SdXMLFilter::Export()
         uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
 
         /** property map for export info set */
-        PropertyMapEntry const aExportInfoMap[] =
+        static PropertyMapEntry const aExportInfoMap[] =
         {
             { OUString("ProgressRange"),    0, cppu::UnoType<sal_Int32>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0},
             { OUString("ProgressMax"),      0, cppu::UnoType<sal_Int32>::get(),   css::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -780,7 +779,6 @@ bool SdXMLFilter::Export()
             { OUString("StyleNames"),       0, cppu::UnoType<Sequence<OUString>>::get(),  css::beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("StyleFamilies"),    0, cppu::UnoType<Sequence<sal_Int32>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("TargetStorage"),    0, cppu::UnoType<embed::XStorage>::get(),     css::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString(), 0, css::uno::Type(), 0, 0 }
         };
 
         uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aExportInfoMap ) ) );
