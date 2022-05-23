@@ -5308,6 +5308,16 @@ SalInstanceIconView::SalInstanceIconView(::IconView* pIconView, SalInstanceBuild
     m_xIconView->SetPopupMenuHdl(LINK(this, SalInstanceIconView, CommandHdl));
 }
 
+int SalInstanceIconView::get_item_width() const { return m_xIconView->GetEntryWidth(); }
+void SalInstanceIconView::set_item_width(int width) { m_xIconView->SetEntryWidth(width); }
+int SalInstanceIconView::get_item_height() const { return m_xIconView->GetEntryHeight(); }
+void SalInstanceIconView::set_item_height(int height) { m_xIconView->SetEntryHeight(height); }
+
+void SalInstanceIconView::set_selection_mode(SelectionMode eMode)
+{
+    m_xIconView->SetSelectionMode(eMode);
+}
+
 void SalInstanceIconView::freeze()
 {
     bool bIsFirstFreeze = IsFirstFreeze();
@@ -5402,6 +5412,47 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
     }
 
     enable_notify_events();
+}
+
+void SalInstanceIconView::insert_separator(int pos, const OUString* /* pId */)
+{
+    const auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
+    const OUString sSep(VclResId(STR_SEPARATOR));
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
+    pEntry->SetFlags(pEntry->GetFlags() | SvTLEntryFlags::IS_SEPARATOR);
+    const Image aDummy;
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+    pEntry->AddItem(std::make_unique<SvLBoxString>(sSep));
+    pEntry->SetUserData(nullptr);
+    m_xIconView->Insert(pEntry, nullptr, nInsertPos);
+    SvViewDataEntry* pViewData = m_xIconView->GetViewDataEntry(pEntry);
+    pViewData->SetSelectable(false);
+}
+
+IMPL_LINK(SalInstanceIconView, TooltipHdl, const HelpEvent&, rHEvt, bool)
+{
+    if (notify_events_disabled())
+        return false;
+    Point aPos(m_xIconView->ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
+    SvTreeListEntry* pEntry = m_xIconView->GetEntry(aPos);
+    if (pEntry)
+    {
+        SalInstanceTreeIter aIter(pEntry);
+        OUString aTooltip = signal_query_tooltip(aIter);
+        if (aTooltip.isEmpty())
+            return false;
+        Size aSize(m_xIconView->GetOutputSizePixel().Width(), m_xIconView->GetEntryHeight());
+        tools::Rectangle aScreenRect(
+            m_xIconView->OutputToScreenPixel(m_xIconView->GetEntryPosition(pEntry)), aSize);
+        Help::ShowQuickHelp(m_xIconView, aScreenRect, aTooltip);
+    }
+    return true;
+}
+
+void SalInstanceIconView::connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink)
+{
+    weld::IconView::connect_query_tooltip(rLink);
+    m_xIconView->SetTooltipHdl(LINK(this, SalInstanceIconView, TooltipHdl));
 }
 
 OUString SalInstanceIconView::get_selected_id() const

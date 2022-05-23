@@ -33,8 +33,8 @@ IconView::IconView(vcl::Window* pParent, WinBits nBits)
 {
     nColumns = 1;
     mbCenterAndClipText = true;
-    SetEntryHeight(100);
-    SetEntryWidth(100);
+    //    SetEntryHeight(100);
+    //    SetEntryWidth(100);
 
     pImpl.reset(new IconViewImpl(this, GetModel(), GetStyle()));
 }

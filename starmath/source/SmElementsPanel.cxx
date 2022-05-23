@@ -41,10 +41,7 @@ SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBind
     : PanelLayout(&rParent, "MathElementsPanel", "modules/smath/ui/sidebarelements_math.ui")
     , mrBindings(rBindings)
     , mxCategoryList(m_xBuilder->weld_tree_view("categorylist"))
-    , mxElementsControl(std::make_unique<SmElementsControl>(
-          m_xBuilder->weld_scrolled_window("scrolledwindow", true)))
-    , mxElementsControlWin(
-          std::make_unique<weld::CustomWeld>(*m_xBuilder, "element_selector", *mxElementsControl))
+    , mpElementsGrid(m_xBuilder->weld_container("elements_grid"))
 {
     for (const auto& rCategoryId : SmElementsControl::categories())
         mxCategoryList->append_text(SmResId(rCategoryId));
@@ -53,16 +50,11 @@ SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBind
 
     mxCategoryList->connect_changed(LINK(this, SmElementsPanel, CategorySelectedHandle));
     mxCategoryList->select_text(SmResId(RID_CATEGORY_UNARY_BINARY_OPERATORS));
-
-    mxElementsControl->setVerticalMode(false); // Sidebar currently can only dock to a side
-    mxElementsControl->setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
-    mxElementsControl->SetSelectHdl(LINK(this, SmElementsPanel, ElementClickHandler));
 }
 
 SmElementsPanel::~SmElementsPanel()
 {
-    mxElementsControlWin.reset();
-    mxElementsControl.reset();
+    mpElementsGrid.reset();
     mxCategoryList.reset();
 }
 
@@ -74,9 +66,9 @@ IMPL_LINK(SmElementsPanel, CategorySelectedHandle, weld::TreeView&, rList, void)
         OUString aCurrentCategoryString = SmResId(rCategoryId);
         if (aCurrentCategoryString == sSelected)
         {
-            mxElementsControl->setElementSetId(rCategoryId);
-            if (SmViewShell* pViewSh = GetView())
-                mxElementsControl->setSmSyntaxVersion(pViewSh->GetDoc()->GetSmSyntaxVersion());
+            //            mxElementsControl->setElementSetId(rCategoryId);
+            //            if (SmViewShell* pViewSh = GetView())
+            //                mxElementsControl->setSmSyntaxVersion(pViewSh->GetDoc()->GetSmSyntaxVersion());
             return;
         }
     }

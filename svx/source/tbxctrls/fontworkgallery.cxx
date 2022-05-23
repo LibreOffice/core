@@ -131,6 +131,9 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
     {
         OUString sId = OUString::number(static_cast<sal_uInt16>(nFavorite));
         maCtlFavorites->insert(-1, nullptr, &sId, maFavoritesHorizontal[nFavorite - 1], nullptr);
+
+        if (nFavorite % 10 == 0)
+            maCtlFavorites->append_separator("");
     }
 
     if (maCtlFavorites->n_children())

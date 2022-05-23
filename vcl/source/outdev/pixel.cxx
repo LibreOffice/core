@@ -108,11 +108,13 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
     if ( mbOutputClipped )
         return;
 
+    Color aAlphaColor(255 - rColor.GetAlpha(), 255 - rColor.GetAlpha(), 255 - rColor.GetAlpha());
+    if (mpAlphaVDev)
+        aColor.SetAlpha(255);
     mpGraphics->DrawPixel( aPt.X(), aPt.Y(), aColor, *this );
 
     if (mpAlphaVDev)
     {
-        Color aAlphaColor(255 - rColor.GetAlpha(), 255 - rColor.GetAlpha(), 255 - rColor.GetAlpha());
         mpAlphaVDev->DrawPixel(rPt, aAlphaColor);
     }
 }

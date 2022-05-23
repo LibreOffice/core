@@ -18,22 +18,12 @@ ElementUIObject::ElementUIObject(SmElementsControl* pElementSelector,
 {
 }
 
-SmElement* ElementUIObject::get_element()
-{
-    sal_uInt32 nID = maID.toUInt32();
-    size_t n = mpElementsSelector->maElementList.size();
-    if (nID >= n)
-        return nullptr;
-
-    return mpElementsSelector->maElementList[nID].get();
-}
-
 StringMap ElementUIObject::get_state()
 {
     StringMap aMap;
     aMap["ID"] = maID;
 
-    SmElement* pElement = get_element();
+    SmElement* pElement = nullptr;
     if (pElement)
         aMap["Text"] = pElement->getText();
 
@@ -45,7 +35,7 @@ void ElementUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-        SmElement* pElement = get_element();
+        weld::IconView* pElement = nullptr;
         if (pElement)
             mpElementsSelector->maSelectHdlLink.Call(*pElement);
     }
@@ -53,7 +43,7 @@ void ElementUIObject::execute(const OUString& rAction,
 
 ElementSelectorUIObject::ElementSelectorUIObject(vcl::Window* pElementSelectorWindow)
     : DrawingAreaUIObject(pElementSelectorWindow)
-    , mpElementsSelector(static_cast<SmElementsControl*>(mpController))
+    , mpElementsSelector(static_cast<SmElementsControl*>(nullptr))
 {
 }
 
@@ -61,7 +51,7 @@ StringMap ElementSelectorUIObject::get_state()
 {
     StringMap aMap = DrawingAreaUIObject::get_state();
 
-    SmElement* pElement = mpElementsSelector->current();
+    SmElement* pElement = nullptr;
     if (pElement)
         aMap["CurrentEntry"] = pElement->getText();
 
@@ -73,7 +63,7 @@ StringMap ElementSelectorUIObject::get_state()
 std::unique_ptr<UIObject> ElementSelectorUIObject::get_child(const OUString& rID)
 {
     size_t nID = rID.toInt32();
-    size_t n = mpElementsSelector->maElementList.size();
+    size_t n = 0;
     if (nID >= n)
         throw css::uno::RuntimeException("invalid id");
 
@@ -84,7 +74,7 @@ std::set<OUString> ElementSelectorUIObject::get_children() const
 {
     std::set<OUString> aChildren;
 
-    size_t n = mpElementsSelector->maElementList.size();
+    size_t n = 0;
     for (size_t i = 0; i < n; ++i)
     {
         aChildren.insert(OUString::number(i));
