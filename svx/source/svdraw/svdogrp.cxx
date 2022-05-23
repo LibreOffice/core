@@ -30,22 +30,13 @@
 #include <sdr/contact/viewcontactofgroup.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <libxml/xmlwriter.h>
 #include <vcl/canvastools.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 
-IDiagramHelper::IDiagramHelper()
-: mbUseDiagramThemeData(false)
-, mbUseDiagramModelData(true)
-, mbForceThemePtrRecreation(false)
+const std::shared_ptr< svx::diagram::IDiagramHelper >& SdrObjGroup::getDiagramHelper() const
 {
-}
-
-IDiagramHelper::~IDiagramHelper() {}
-
-void IDiagramHelper::anchorToSdrObjGroup(SdrObjGroup& rTarget)
-{
-    rTarget.mp_DiagramHelper.reset(this);
+    return mp_DiagramHelper;
 }
 
 // BaseProperties section
@@ -93,6 +84,15 @@ SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel, SdrObjGroup const & rSource)
 
     // copy local parameters
     maRefPoint  = rSource.maRefPoint;
+}
+
+void SdrObjGroup::AddToHdlList(SdrHdlList& rHdlList) const
+{
+    // only for diagram, so do nothing for just groups
+    if(!isDiagram())
+        return;
+
+    svx::diagram::IDiagramHelper::AddAdditionalVisualization(*this, rHdlList);
 }
 
 SdrObjGroup::~SdrObjGroup()

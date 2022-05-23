@@ -1911,8 +1911,7 @@ void SdrEditView::UnGroupMarked()
             size_t nDstCnt=pGrp->GetOrdNum();
             SdrObjList* pDstLst=pM->GetPageView()->GetObjList();
             size_t nObjCount=pSrcLst->GetObjCount();
-            auto* pGroup(dynamic_cast<SdrObjGroup*>(pGrp));
-            const bool bIsDiagram(nullptr != pGroup && pGroup->isDiagram());
+            const bool bIsDiagram(nullptr != pGrp && pGrp->isDiagram());
 
             // If the Group is a Diagram, it has a filler BG object to guarantee
             // the Diagam's dimensions. Identify that shape

@@ -2368,6 +2368,7 @@ cui/source/customize/eventdlg.cxx
 cui/source/customize/eventdlg.hxx
 cui/source/customize/macropg.cxx
 cui/source/customize/macropg_impl.hxx
+cui/source/dialogs/DiagramDialog.cxx
 cui/source/dialogs/SpellAttrib.hxx
 cui/source/dialogs/SpellDialog.cxx
 cui/source/dialogs/about.cxx
@@ -5950,6 +5951,7 @@ include/svx/sdmetitm.hxx
 include/svx/sdooitm.hxx
 include/svx/sdprcitm.hxx
 include/svx/diagram/datamodel.hxx
+include/svx/diagram/IDiagramHelper.hxx
 include/svx/sdr/animation/animationstate.hxx
 include/svx/sdr/animation/objectanimator.hxx
 include/svx/sdr/animation/scheduler.hxx
@@ -6024,6 +6026,7 @@ include/svx/svdocapt.hxx
 include/svx/svdocirc.hxx
 include/svx/svdoedge.hxx
 include/svx/svdograf.hxx
+include/svx/svdogrp.hxx
 include/svx/svdomeas.hxx
 include/svx/svdomedia.hxx
 include/svx/svdoole2.hxx
@@ -11515,6 +11518,7 @@ svx/source/customshapes/EnhancedCustomShapeHandle.cxx
 svx/source/customshapes/EnhancedCustomShapeHandle.hxx
 svx/source/customshapes/EnhancedCustomShapeTypeNames.cxx
 svx/source/diagram/datamodel.cxx
+svx/source/diagram/IDiagramHelper.cxx
 svx/source/dialog/ClassificationDialog.cxx
 svx/source/dialog/ClassificationEditView.cxx
 svx/source/dialog/ClassificationEditView.hxx
