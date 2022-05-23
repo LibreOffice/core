@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "983e5ad5_f8617da6",
+        "filename": "starmath/source/ElementsDockingWindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-23T09:24:41Z",
+      "side": 0,
+      "message": "These lines make no difference, when I restore them in new code",
+      "range": {
+        "startLine": 548,
+        "startChar": 4,
+        "endLine": 557,
+        "endChar": 0
+      },
+      "revId": "c5b3f8853751d67c364a91fdeaed3f36cea3179c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bdc4a1d_5f913d9f",
+        "filename": "starmath/source/ElementsDockingWindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-23T09:24:41Z",
+      "side": 0,
+      "message": "Old drawing code used rContext, and that doesn\u0027t use sub-pixel positioning in master.",
+      "revId": "c5b3f8853751d67c364a91fdeaed3f36cea3179c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

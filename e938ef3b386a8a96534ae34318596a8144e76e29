@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56155e07_c90abe6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-23T09:24:41Z",
+      "side": 1,
+      "message": "Hi Caolan!\n\nCould you please suggest how to disable subpixel text positioning here? Thank you!",
+      "revId": "e938ef3b386a8a96534ae34318596a8144e76e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d16c6c8b_3cad72f0",
+        "filename": "starmath/source/ElementsDockingWindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-23T09:24:41Z",
+      "side": 1,
+      "message": "The new code creates a (default) virtual device",
+      "revId": "e938ef3b386a8a96534ae34318596a8144e76e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b652399_b0c17e18",
+        "filename": "starmath/source/ElementsDockingWindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-23T09:24:41Z",
+      "side": 1,
+      "message": "and then draws on that - and this drawing operation gives sub-pixel positioning artifacts, with red and blue pixels on different sides of lines.\n\nHow can I disable sub-pixel thing, and make it normal greyscale antialiasing?",
+      "revId": "e938ef3b386a8a96534ae34318596a8144e76e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
