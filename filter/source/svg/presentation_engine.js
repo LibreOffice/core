@@ -7033,6 +7033,8 @@ function matrixToString( aSVGMatrix )
 // eslint-disable-next-line no-unused-vars
 function numberParser( sValue )
 {
+    if( typeof sValue !== 'string' )
+        return undefined;
     if( sValue === '.' )
         return undefined;
     var reFloatNumber = /^[+-]?[0-9]*[.]?[0-9]*$/;
@@ -7045,6 +7047,9 @@ function numberParser( sValue )
 
 function booleanParser( sValue )
 {
+    if( typeof sValue !== 'string' )
+        return undefined;
+
     sValue = sValue.toLowerCase();
     if( sValue === 'true' )
         return true;
@@ -7056,6 +7061,9 @@ function booleanParser( sValue )
 
 function colorParser( sValue )
 {
+    if( typeof sValue !== 'string' )
+        return undefined;
+
     // The following 3 color functions are used in evaluating sValue string
     // so don't remove them.
 
@@ -7989,6 +7997,7 @@ var ENUM_PROPERTY           = 2;
 var COLOR_PROPERTY          = 3;
 var STRING_PROPERTY         = 4;
 var BOOL_PROPERTY           = 5;
+var TUPLE_NUMBER_PROPERTY   = 6;
 
 var aValueTypeOutMap = [ 'unknown', 'number', 'enum', 'color', 'string', 'boolean' ];
 
@@ -8005,6 +8014,14 @@ var aAttributeMap =
         'opacity':          {   'type':         NUMBER_PROPERTY,
                                 'get':          'getOpacity',
                                 'set':          'setOpacity'                    },
+
+        'scale':           {   'type':          TUPLE_NUMBER_PROPERTY,
+                                'get':          'getSize',
+                                'set':          'setSize'                       },
+
+        'translate':       {   'type':          TUPLE_NUMBER_PROPERTY,
+                                'get':          'getPos',
+                                'set':          'setPos'                        },
 
         'rotate':           {   'type':         NUMBER_PROPERTY,
                                 'get':          'getRotationAngle',
@@ -11615,10 +11632,21 @@ AnimationTransformNode.prototype.createActivity = function()
     var aActivityParamSet = this.fillActivityParams();
     var aAnimation;
 
-    aAnimation = createPropertyAnimation( this.getAttributeName(),
-                                          this.getAnimatedElement(),
-                                          this.aNodeContext.aSlideWidth,
-                                          this.aNodeContext.aSlideHeight );
+    if( this.getAttributeName() === 'scale' || this.getAttributeName() === 'translate' )
+    {
+        aAnimation = createPairPropertyAnimation( this.getAttributeName(),
+                                                  this.getAnimatedElement(),
+                                                  this.aNodeContext.aSlideWidth,
+                                                  this.aNodeContext.aSlideHeight );
+
+    }
+    else
+    {
+        aAnimation = createPropertyAnimation( this.getAttributeName(),
+                                              this.getAnimatedElement(),
+                                              this.aNodeContext.aSlideWidth,
+                                              this.aNodeContext.aSlideHeight );
+    }
 
     var aInterpolator = null;  // createActivity will compute it;
     return createActivity( aActivityParamSet, this, aAnimation, aInterpolator );
@@ -12049,6 +12077,41 @@ function createPropertyAnimation( sAttrName, aAnimatedElement, nWidth, nHeight )
 
 
 
+function createPairPropertyAnimation( sTransformType, aAnimatedElement, nWidth, nHeight )
+{
+    var aFunctorSet = aAttributeMap[ sTransformType ];
+    var sGetValueMethod = aFunctorSet.get;
+    var sSetValueMethod = aFunctorSet.set;
+
+    var aDefaultValue = [];
+    var aSizeReference = [];
+    if( sTransformType === 'scale' )
+    {
+        aDefaultValue[0] = aSizeReference[0] = aAnimatedElement.getBaseBBox().width;
+        aDefaultValue[1] = aSizeReference[1] = aAnimatedElement.getBaseBBox().height;
+    }
+    else if( sTransformType === 'translate' )
+    {
+        aDefaultValue[0] = aAnimatedElement.getBaseCenterX();
+        aDefaultValue[1] = aAnimatedElement.getBaseCenterY();
+        aSizeReference[0] = nWidth;
+        aSizeReference[1] = nHeight;
+    }
+    else
+    {
+        log( 'createPairPropertyAnimation: transform type is not handled' );
+        return null;
+    }
+
+    return new TupleAnimation( bind( aAnimatedElement, aAnimatedElement[ sGetValueMethod ] ),
+                               bind( aAnimatedElement, aAnimatedElement[ sSetValueMethod ] ),
+                               aDefaultValue,
+                               aSizeReference );
+}
+
+
+
+
 /** createShapeTransition
  *
  *  @param aActivityParamSet
@@ -12246,6 +12309,45 @@ GenericAnimation.prototype.getUnderlyingValue = function()
     return aValue;
 };
 
+
+
+function TupleAnimation( aGetValueFunc, aSetValueFunc, aDefaultValue, aReferenceSize )
+{
+    TupleAnimation.superclass.constructor.call( this, aGetValueFunc, aSetValueFunc );
+    assert( aDefaultValue && aReferenceSize,
+            'TupleAnimation constructor: default value functor and/or reference size are not valid' );
+
+    this.aDefaultValue = aDefaultValue;
+    this.aReferenceSize = aReferenceSize;
+}
+extend( TupleAnimation, GenericAnimation );
+
+TupleAnimation.prototype.perform = function( aNormValue )
+{
+    assert(aNormValue.length === this.aReferenceSize.length);
+
+    var aValue = [];
+    for( var i = 0; i < aNormValue.length; ++i )
+    {
+        aValue.push( aNormValue[i] * this.aReferenceSize[i] );
+    }
+
+    this.aSetValueFunc( aValue );
+};
+
+TupleAnimation.prototype.getUnderlyingValue = function()
+{
+    var aValue = this.aGetValueFunc();
+    assert(aValue.length === this.aReferenceSize.length);
+
+    var aNormValue = [];
+    for( var i = 0; i < aValue.length; ++i )
+    {
+        aNormValue.push( aValue[i] / this.aReferenceSize[i] );
+    }
+
+    return aNormValue;
+};
 
 
 
@@ -14565,6 +14667,11 @@ AnimatedElement.prototype.getY = function()
     return this.nCenterY;
 };
 
+AnimatedElement.prototype.getPos = function()
+{
+    return [this.getX(), this.getY()];
+};
+
 AnimatedElement.prototype.getWidth = function()
 {
     return this.nScaleFactorX * this.getBaseBBox().width;
@@ -14573,6 +14680,11 @@ AnimatedElement.prototype.getWidth = function()
 AnimatedElement.prototype.getHeight = function()
 {
     return this.nScaleFactorY * this.getBaseBBox().height;
+};
+
+AnimatedElement.prototype.getSize = function()
+{
+    return [this.getWidth(), this.getHeight()];
 };
 
 AnimatedElement.prototype.updateTransformAttribute = function()
@@ -14604,12 +14716,27 @@ AnimatedElement.prototype.setY = function( nNewCenterY )
     this.nCenterY = nNewCenterY;
 };
 
+AnimatedElement.prototype.setPos = function( aNewPos )
+{
+    var nNewCenterX = aNewPos[0];
+    var nNewCenterY = aNewPos[1];
+
+    if( nNewCenterX === this.nCenterX && nNewCenterY === this.nCenterY ) return;
+
+    this.aTransformAttrList = this.aActiveElement.transform.baseVal;
+    this.aTransformAttr = this.aTransformAttrList.getItem( 0 );
+    this.aTMatrix = this.aTransformAttr.matrix.translate( nNewCenterX - this.nCenterX, nNewCenterY - this.nCenterY );
+    this.aTransformAttr.setMatrix( this.aTMatrix );
+    this.nCenterX = nNewCenterX;
+    this.nCenterY = nNewCenterY;
+};
+
 AnimatedElement.prototype.setWidth = function( nNewWidth )
 {
     ANIMDBG.print( 'AnimatedElement.setWidth: nNewWidth = ' + nNewWidth );
     if( nNewWidth < 0 )
     {
-        log('AnimatedElement(' + this.getId() + ').setWidth: negative height!');
+        log('AnimatedElement(' + this.getId() + ').setWidth: negative width!');
         nNewWidth = 0;
     }
 
@@ -14651,6 +14778,43 @@ AnimatedElement.prototype.setHeight = function( nNewHeight )
         .translate( -this.nBaseCenterX, -this.nBaseCenterY );
     this.updateTransformAttribute();
 
+    this.nScaleFactorY = nScaleFactorY;
+};
+
+AnimatedElement.prototype.setSize= function( aNewSize )
+{
+    var nNewWidth = aNewSize[0];
+    var nNewHeight = aNewSize[1];
+    ANIMDBG.print( 'AnimatedElement.setSize:  = [' + nNewWidth + ',' + nNewHeight + ']');
+    if( nNewWidth < 0 )
+    {
+        log('AnimatedElement(' + this.getId() + ').setSize: negative width!');
+        nNewWidth = 0;
+    }
+    if( nNewHeight < 0 )
+    {
+        log('AnimatedElement(' + this.getId() + ').setSize: negative height!');
+        nNewHeight = 0;
+    }
+
+    var nBaseWidth = this.getBaseBBox().width;
+    var nScaleFactorX = nNewWidth / nBaseWidth;
+    if( nScaleFactorX < 1e-5 ) nScaleFactorX = 1e-5;
+
+    var nBaseHeight = this.getBaseBBox().height;
+    var nScaleFactorY = nNewHeight / nBaseHeight;
+    if( nScaleFactorY < 1e-5 ) nScaleFactorY = 1e-5;
+
+    if( nScaleFactorX == this.nScaleFactorX && nScaleFactorY == this.nScaleFactorY ) return;
+
+    this.aTMatrix = document.documentElement.createSVGMatrix()
+        .translate( this.nCenterX, this.nCenterY )
+        .rotate(this.nRotationAngle)
+        .scaleNonUniform( nScaleFactorX, nScaleFactorY )
+        .translate( -this.nBaseCenterX, -this.nBaseCenterY );
+    this.updateTransformAttribute();
+
+    this.nScaleFactorX = nScaleFactorX;
     this.nScaleFactorY = nScaleFactorY;
 };
 
@@ -16387,6 +16551,17 @@ aInterpolatorHandler.aLerpFunctorMap[ CALC_MODE_LINEAR ][ COLOR_PROPERTY ][ COLO
                 };
     };
 
+aInterpolatorHandler.aLerpFunctorMap[ CALC_MODE_LINEAR ][ TUPLE_NUMBER_PROPERTY ] =
+    function ( aFrom, aTo, nT )
+    {
+        var aRes = [];
+        for( var i = 0; i < aFrom.length; ++i )
+        {
+            aRes.push( ( 1.0 - nT )* aFrom[i] + nT * aTo[i] );
+        }
+        return aRes;
+    };
+
 
 
 
@@ -16553,6 +16728,36 @@ aOperatorSetMap[ STRING_PROPERTY ] = aOperatorSetMap[ ENUM_PROPERTY ];
 
 // bool operators
 aOperatorSetMap[ BOOL_PROPERTY ] = aOperatorSetMap[ ENUM_PROPERTY ];
+
+// tuple number operators
+aOperatorSetMap[ TUPLE_NUMBER_PROPERTY ] = {};
+
+aOperatorSetMap[ TUPLE_NUMBER_PROPERTY ].equal = function( a, b )
+{
+    assert( a.length === b.length, 'Tuples length mismatch.' );
+    return ( a.toString() === b.toString() );
+};
+
+aOperatorSetMap[ TUPLE_NUMBER_PROPERTY ].add = function( a, b )
+{
+    assert( a.length === b.length, 'Tuples length mismatch.' );
+    var r = [];
+    for( var i = 0; i < a.length; ++i )
+    {
+        r.push(a[i] + b[i]);
+    }
+    return r;
+};
+
+aOperatorSetMap[ TUPLE_NUMBER_PROPERTY ].scale = function( k, v )
+{
+    var r = [];
+    for( var i = 0; i < v.length; ++i )
+    {
+        r.push(k * v[i]);
+    }
+    return r;
+};
 
 
 
@@ -17961,6 +18166,22 @@ function extractAttributeValues( eValueType, aValueList, aValueSet, aBBox, nSlid
             {
                 aValue = colorParser( aValueSet[i] );
                 aValueList.push( aValue );
+            }
+            break;
+        case TUPLE_NUMBER_PROPERTY :
+            for( i = 0; i < aValueSet.length; ++i )
+            {
+                if( typeof aValueSet[i] === 'string' )
+                {
+                    var aTuple = aValueSet[i].split(',');
+                    aValue = [];
+                    evalValuesAttribute(aValue, aTuple, aBBox, nSlideWidth, nSlideHeight);
+                    aValueList.push(aValue);
+                }
+                else
+                {
+                    aValueList.push( undefined );
+                }
             }
             break;
         default:
