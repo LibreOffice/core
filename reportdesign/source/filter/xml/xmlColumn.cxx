@@ -120,7 +120,6 @@ void OXMLRowColumn::fillStyle(const OUString& _sStyleName)
         {OUString(PROPERTY_WIDTH),    PROPERTY_ID_WIDTH,        ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0},
         {OUString(PROPERTY_HEIGHT),   PROPERTY_ID_HEIGHT,       ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0 },
         {OUString(PROPERTY_MINHEIGHT), PROPERTY_ID_MINHEIGHT,    ::cppu::UnoType<sal_Int32>::get()       ,PropertyAttribute::BOUND,0 },
-        {OUString(), 0, css::uno::Type(), 0, 0 }
     };
     pInfo->add(pMap);
     Reference<XPropertySet> xProp = GenericPropertySet_CreateInstance(pInfo.get());

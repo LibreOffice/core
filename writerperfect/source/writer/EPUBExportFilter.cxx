@@ -105,10 +105,9 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue>& rDe
         uno::UNO_QUERY);
 
     // A subset of parameters are passed in as a property set.
-    comphelper::PropertyMapEntry const aInfoMap[]
+    static comphelper::PropertyMapEntry const aInfoMap[]
         = { { OUString("BaseURI"), 0, cppu::UnoType<OUString>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString(), 0, uno::Type(), 0, 0 } };
+              beans::PropertyAttribute::MAYBEVOID, 0 } };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
     xInfoSet->setPropertyValue("BaseURI", uno::Any(aSourceURL));

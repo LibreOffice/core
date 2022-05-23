@@ -434,9 +434,8 @@ namespace
         { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("UsePrettyPrinting"), 0, ::cppu::UnoType<sal_Bool>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-        {OUString("TargetStorage"), 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-        {OUString("StreamRelPath"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        { OUString("TargetStorage"), 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
+        { OUString("StreamRelPath"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
      };
 }
 
@@ -1912,7 +1911,6 @@ comphelper::PropertyMapEntry const aEmbeddedImportInfoMap[] =
     {OUString("StreamRelPath"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
     {OUString("StreamName"), 0, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
     {OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(), beans::PropertyAttribute::MAYBEVOID, 0},
-    {OUString(), 0, css::uno::Type(), 0, 0}
 };
 }
 

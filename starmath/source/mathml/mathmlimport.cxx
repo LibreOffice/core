@@ -126,7 +126,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
             bEmbedded = true;
     }
 
-    comphelper::PropertyMapEntry aInfoMap[]
+    static const comphelper::PropertyMapEntry aInfoMap[]
         = { { OUString("PrivateData"), 0, cppu::UnoType<XInterface>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("BaseURI"), 0, ::cppu::UnoType<OUString>::get(),
@@ -134,8 +134,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
             { OUString("StreamRelPath"), 0, ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
             { OUString("StreamName"), 0, ::cppu::UnoType<OUString>::get(),
-              beans::PropertyAttribute::MAYBEVOID, 0 },
-            { OUString(), 0, css::uno::Type(), 0, 0 } };
+              beans::PropertyAttribute::MAYBEVOID, 0 } };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
 
