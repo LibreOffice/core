@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "785c4f1d_d5e7399b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-23T12:26:52Z",
+      "side": 1,
+      "message": "Exporting the image as EMF or WMF from the pptx exports it the same (same size/hash and everything). Also it seems to discard the metadata completely. Possibly a bug? I could look into that and maybe reduce the size of the unit test eventually by compressing the EMF into an EMZ.",
+      "parentUuid": "0fb551ad_4ec929a7",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92de5ebf_76515ba8",
         "filename": "vcl/source/filter/graphicfilter2.cxx",
         "patchSetId": 1
