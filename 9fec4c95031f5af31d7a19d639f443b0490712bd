@@ -127,6 +127,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "109bd03f_2fe456a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-05-23T14:00:06Z",
+      "side": 1,
+      "message": "We also need a test on the low level - testing GraphicDescriptor\u0027s behavior.",
+      "parentUuid": "785c4f1d_d5e7399b",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92de5ebf_76515ba8",
         "filename": "vcl/source/filter/graphicfilter2.cxx",
         "patchSetId": 1
