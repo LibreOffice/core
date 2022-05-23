@@ -123,6 +123,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e9727da_d04a6fda",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-23T10:19:02Z",
+      "side": 1,
+      "message": "Yes, true. It is enough to just check the size",
+      "parentUuid": "8eaf4631_1b25f050",
+      "revId": "9fec4c95031f5af31d7a19d639f443b0490712bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe4fa921_8dbdee79",
