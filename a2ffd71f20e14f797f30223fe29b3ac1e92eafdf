@@ -53,6 +53,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7e8424a_a46dc935",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-23T11:41:15Z",
+      "side": 1,
+      "message": "Done here:\nhttps://gerrit.libreoffice.org/c/core/+/134819",
+      "revId": "a2ffd71f20e14f797f30223fe29b3ac1e92eafdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d43b0d3_fe9c38c1",
