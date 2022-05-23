@@ -27,12 +27,12 @@
 
 struct DirectoryItem_Impl
 {
-    rtl_String *  m_strFilePath;       /* holds native file name */
+    OString       m_strFilePath;       /* holds native file name */
     sal_Int32     m_RefCount;
     unsigned char m_DType;
 
     explicit DirectoryItem_Impl(
-        rtl_String * strFilePath, unsigned char DType = 0);
+        OString strFilePath, unsigned char DType = 0);
     ~DirectoryItem_Impl();
 
     static void * operator new(size_t n);
