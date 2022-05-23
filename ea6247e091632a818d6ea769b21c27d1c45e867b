@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e416bcde_e425c989",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-23T07:30:16Z",
+      "side": 1,
+      "message": "LGTM. Also helpful to add \"Start Center\".  (I has always been confused by just seeing \"LibreOffice\" -- maybe the same addition can be done in/for Windows?)",
+      "revId": "ea6247e091632a818d6ea769b21c27d1c45e867b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
