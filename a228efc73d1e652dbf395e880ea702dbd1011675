@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baa30d16_95ad2f30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-23T12:27:47Z",
+      "side": 1,
+      "message": "Works like a charm. But I cannot judge on the code, adding Hossein. And the help page is missing, adding Olivier.",
+      "revId": "a228efc73d1e652dbf395e880ea702dbd1011675",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
