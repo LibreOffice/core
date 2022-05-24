@@ -720,6 +720,8 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_getByName(
 /** Sets size of type description cache.
 
     @param nNewSize new size of cache
+
+    @deprecated  Do not use, it does not have any effect.
 */
 CPPU_DLLPUBLIC void SAL_CALL typelib_setCacheSize(
     sal_Int32 nNewSize )
