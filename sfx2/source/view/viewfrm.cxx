@@ -633,12 +633,14 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // If possible ask the User
             bool bDo = GetViewShell()->PrepareClose();
             const SfxBoolItem* pSilentItem = rReq.GetArg<SfxBoolItem>(SID_SILENT);
-            if ( bDo && GetFrame().DocIsModified_Impl() &&
-                 !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )
+            if (getenv("SAL_NO_QUERYSAVE"))
+                bDo = true;
+            else if (bDo && GetFrame().DocIsModified_Impl() && !rReq.IsAPI()
+                     && (!pSilentItem || !pSilentItem->GetValue()))
             {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetWindow().GetFrameWeld(),
-                                                                         VclMessageType::Question, VclButtonsType::YesNo,
-                                                                         SfxResId(STR_QUERY_LASTVERSION)));
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                    GetWindow().GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
+                    SfxResId(STR_QUERY_LASTVERSION)));
                 bDo = RET_YES == xBox->run();
             }
 
