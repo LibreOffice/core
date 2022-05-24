@@ -1740,7 +1740,8 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
 
 bool ScTextWnd::StartDrag()
 {
-    if (m_xEditView)
+    // tdf#145248 don't start a drag if actively selecting
+    if (m_xEditView && !m_xEditEngine->IsInSelectionMode())
     {
         OUString sSelection = m_xEditView->GetSelected();
         m_xHelper->SetData(sSelection);
