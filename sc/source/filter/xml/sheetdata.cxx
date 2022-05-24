@@ -186,12 +186,12 @@ void ScSheetSaveData::StoreLoadedNamespaces( const SvXMLNamespaceMap& rNamespace
     // store the loaded namespaces, so the prefixes in copied stream fragments remain valid
 
     const NameSpaceHash& rNameHash = rNamespaces.GetAllEntries();
-    for (const auto& [rName, rxEntry] : rNameHash)
+    for (const auto& [rName, rEntry] : rNameHash)
     {
         // ignore the initial namespaces
         if ( maInitialPrefixes.find( rName ) == maInitialPrefixes.end() )
         {
-            maLoadedNamespaces.emplace_back( rxEntry->sPrefix, rxEntry->sName, rxEntry->nKey );
+            maLoadedNamespaces.emplace_back( rEntry.sPrefix, rEntry.sName, rEntry.nKey );
         }
     }
 }
@@ -199,7 +199,7 @@ void ScSheetSaveData::StoreLoadedNamespaces( const SvXMLNamespaceMap& rNamespace
 static bool lcl_NameInHash( const NameSpaceHash& rNameHash, const OUString& rName )
 {
     return std::any_of(rNameHash.begin(), rNameHash.end(),
-        [&rName](const NameSpaceHash::value_type& rEntry) { return rEntry.second->sName == rName; });
+        [&rName](const NameSpaceHash::value_type& rEntry) { return rEntry.second.sName == rName; });
 }
 
 bool ScSheetSaveData::AddLoadedNamespaces( SvXMLNamespaceMap& rNamespaces ) const
@@ -214,7 +214,7 @@ bool ScSheetSaveData::AddLoadedNamespaces( SvXMLNamespaceMap& rNamespaces ) cons
             NameSpaceHash::const_iterator aHashIter = rNameHash.find( rLoadedNamespace.maPrefix );
 
             // same prefix, but different name: loaded namespaces can't be used
-            bool bNameConflict = (aHashIter != rNameHash.end()) && (aHashIter->second->sName != rLoadedNamespace.maName);
+            bool bNameConflict = (aHashIter != rNameHash.end()) && (aHashIter->second.sName != rLoadedNamespace.maName);
 
             // a second prefix for the same name would confuse SvXMLNamespaceMap lookup,
             // so this is also considered a conflict
