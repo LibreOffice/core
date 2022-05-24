@@ -16,6 +16,58 @@
       "message": "@Jan-Marek: Given you have implemented initial IM handling for qt5: Any thoughts on this?",
       "revId": "716f12d5806773e12b63579b01cc5b17ef4b39d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63f2a6ed_77d3a268",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-24T12:28:23Z",
+      "side": 1,
+      "message": "FWIW I had always problems setting up ibus, so I\u0027m just testing with fcitx. And I didn\u0027t try to port your described setup to fcitx (yet... we\u0027ll see).\n\nLooking at the gtk3 code, it has this CalcDeleteSurroundingSelection, but from your code I guess Qt simply provides the better input values, that\u0027s why the whole codepoint handling isn\u0027t needed? That\u0027s how I read the gtk3 code.",
+      "parentUuid": "c70b2f65_664c14a4",
+      "revId": "716f12d5806773e12b63579b01cc5b17ef4b39d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f764caea_2942f00b",
+        "filename": "vcl/qt5/QtWidget.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-24T12:28:23Z",
+      "side": 1,
+      "message": "Personally I would write it as\n\n    const bool bHasCommitText \u003d !pEvent-\u003ecommitString().isEmpty();\n    const int nReplacementLength \u003d pEvent-\u003ereplacementLength();\n\n    if (nReplacementLength \u003e 0 || bHasCommitText)\n    {   \n        if (nReplacementLength \u003e 0)\n            replaceText(m_rFrame, pEvent-\u003ereplacementStart(), nReplacementLength);\n        if (bHasCommitText)\n            commitText(m_rFrame, pEvent-\u003ecommitString());\n    }\n    \nThis IMHO makes the code easier to read / follow. YMMV.",
+      "revId": "716f12d5806773e12b63579b01cc5b17ef4b39d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d760c1a_500a54c6",
+        "filename": "vcl/qt5/QtWidget.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-24T12:28:23Z",
+      "side": 1,
+      "message": "Personally I would keep it like:\n\n    const bool bHasCommitText \u003d !pEvent-\u003ecommitString().isEmpty();\n    const int nReplacementLength \u003d pEvent-\u003ereplacementLength();\n\n    if (nReplacementLength \u003e 0 || bHasCommitText)\n    {   \n        if (nReplacementLength \u003e 0)\n            replaceText(m_rFrame, pEvent-\u003ereplacementStart(), nReplacementLength);\n        if (bHasCommitText)\n            commitText(m_rFrame, pEvent-\u003ecommitString());\n    }\n    \nThe const aren\u0027t strictly needed, but IMHO make reading the code easier.",
+      "revId": "716f12d5806773e12b63579b01cc5b17ef4b39d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
