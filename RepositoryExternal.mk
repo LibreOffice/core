@@ -2644,7 +2644,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,libtiff)/libtiff/.libs -ltiff \
 )
 endif
-$(call gb_LinkTarget_use_external_project,$(1),libtiff)
+$(call gb_LinkTarget_use_external_project,$(1),libtiff,full)
 
 endef
 
