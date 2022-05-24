@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "820f8ef3_1ad4c995",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-05-24T20:09:01Z",
+      "side": 1,
+      "message": "Hi. Here\u0027s another patch set.\n\nFor now, I\u0027ve used the icon in vcl/res/help.png. It is also a question mark icon. Also changed the commit message as per Mike\u0027s suggestions, hopefully it doesn\u0027t contain redundant information now.",
+      "revId": "e29e3209b9c08d98784fee3714ee0ea9f52d6b7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
