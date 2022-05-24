@@ -493,6 +493,83 @@ void QtWidget::commitText(QtFrame& rFrame, const QString& aText)
         rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
 }
 
+static Selection lcl_CalcDeleteSurroundingSelection(const OUString& rSurroundingText,
+                                                    sal_Int32 nCursorIndex, int nOffset, int nChars)
+{
+    const Selection aInvalid(SAL_MAX_UINT32, SAL_MAX_UINT32);
+
+    if (nCursorIndex == -1)
+        return aInvalid;
+
+    if (nOffset > 0)
+    {
+        while (nOffset && nCursorIndex < rSurroundingText.getLength())
+        {
+            rSurroundingText.iterateCodePoints(&nCursorIndex, 1);
+            --nOffset;
+        }
+    }
+    else if (nOffset < 0)
+    {
+        while (nOffset && nCursorIndex > 0)
+        {
+            rSurroundingText.iterateCodePoints(&nCursorIndex, -1);
+            ++nOffset;
+        }
+    }
+
+    if (nOffset)
+    {
+        SAL_WARN("vcl.qt",
+                 "lcl_CalcDeleteSurroundingSelection: unable to move to offset: " << nOffset);
+        return aInvalid;
+    }
+
+    sal_Int32 nCursorEndIndex(nCursorIndex);
+    sal_Int32 nCount(0);
+    while (nCount < nChars && nCursorEndIndex < rSurroundingText.getLength())
+    {
+        rSurroundingText.iterateCodePoints(&nCursorEndIndex, 1);
+        ++nCount;
+    }
+
+    if (nCount != nChars)
+    {
+        SAL_WARN("vcl.qt", "lcl_CalcDeleteSurroundingSelection: unable to select: "
+                               << nChars << " characters");
+        return aInvalid;
+    }
+
+    return Selection(nCursorIndex, nCursorEndIndex);
+}
+
+void QtWidget::deleteReplacementText(QtFrame& rFrame, int nReplacementStart, int nReplacementLength)
+{
+    // get the surrounding text
+    SolarMutexGuard aGuard;
+    SalSurroundingTextRequestEvent aSurroundingTextEvt;
+    aSurroundingTextEvt.maText.clear();
+    aSurroundingTextEvt.mnStart = aSurroundingTextEvt.mnEnd = 0;
+    rFrame.CallCallback(SalEvent::SurroundingTextRequest, &aSurroundingTextEvt);
+
+    // Turn nReplacementStart, nReplacementLength into a UTF-16 selection
+    const Selection aSelection = lcl_CalcDeleteSurroundingSelection(
+        aSurroundingTextEvt.maText, aSurroundingTextEvt.mnStart, nReplacementStart,
+        nReplacementLength);
+
+    const Selection aInvalid(SAL_MAX_UINT32, SAL_MAX_UINT32);
+    if (aSelection == aInvalid)
+    {
+        SAL_WARN("vcl.qt", "Invalid selection when deleting IM replacement text");
+        return;
+    }
+
+    SalSurroundingTextSelectionChangeEvent aEvt;
+    aEvt.mnStart = aSelection.Min();
+    aEvt.mnEnd = aSelection.Max();
+    rFrame.CallCallback(SalEvent::DeleteSurroundingTextRequest, &aEvt);
+}
+
 bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent,
                               const ButtonKeyState eState)
 {
@@ -721,8 +798,16 @@ static ExtTextInputAttr lcl_MapUnderlineStyle(QTextCharFormat::UnderlineStyle us
 
 void QtWidget::inputMethodEvent(QInputMethodEvent* pEvent)
 {
-    if (!pEvent->commitString().isEmpty())
-        commitText(m_rFrame, pEvent->commitString());
+    const bool bHasCommitText = !pEvent->commitString().isEmpty();
+    const int nReplacementLength = pEvent->replacementLength();
+
+    if (nReplacementLength > 0 || bHasCommitText)
+    {
+        if (nReplacementLength > 0)
+            deleteReplacementText(m_rFrame, pEvent->replacementStart(), nReplacementLength);
+        if (bHasCommitText)
+            commitText(m_rFrame, pEvent->commitString());
+    }
     else
     {
         SalExtTextInputEvent aInputEvent;

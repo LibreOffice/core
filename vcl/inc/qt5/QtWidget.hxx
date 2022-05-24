@@ -49,6 +49,8 @@ class QtWidget : public QWidget
     };
 
     static void commitText(QtFrame&, const QString& aText);
+    static void deleteReplacementText(QtFrame& rFrame, int nReplacementStart,
+                                      int nReplacementLength);
     static bool handleKeyEvent(QtFrame&, const QWidget&, QKeyEvent*, const ButtonKeyState);
     static void handleMouseButtonEvent(const QtFrame&, const QMouseEvent*, const ButtonKeyState);
     static void handleMouseEnterLeaveEvents(const QtFrame&, QEvent*);
