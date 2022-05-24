@@ -78,10 +78,10 @@ class SfxScriptLibraryContainer final : public SfxLibraryContainer, public OldBa
     // OldBasicPassword interface
     virtual void setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword ) override;
 
-    virtual const char*    getInfoFileName() const override;
-    virtual const char*    getOldInfoFileName() const override;
-    virtual const char*    getLibElementFileExtension() const override;
-    virtual const char*    getLibrariesDir() const override;
+    virtual OUString getInfoFileName() const override;
+    virtual OUString getOldInfoFileName() const override;
+    virtual OUString getLibElementFileExtension() const override;
+    virtual OUString getLibrariesDir() const override;
 
 public:
     SfxScriptLibraryContainer();

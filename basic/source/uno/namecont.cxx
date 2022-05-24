@@ -588,10 +588,10 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
     uno::Reference< embed::XStorage > xStorage = rxInitialStorage;
 
     maInitialDocumentURL = rInitialDocumentURL;
-    maInfoFileName = OUString::createFromAscii( getInfoFileName() );
-    maOldInfoFileName = OUString::createFromAscii( getOldInfoFileName() );
-    maLibElementFileExtension = OUString::createFromAscii( getLibElementFileExtension() );
-    maLibrariesDir = OUString::createFromAscii( getLibrariesDir() );
+    maInfoFileName = getInfoFileName();
+    maOldInfoFileName = getOldInfoFileName();
+    maLibElementFileExtension = getLibElementFileExtension();
+    maLibrariesDir = getLibrariesDir();
 
     meInitMode = DEFAULT;
     INetURLObject aInitUrlInetObj( maInitialDocumentURL );
