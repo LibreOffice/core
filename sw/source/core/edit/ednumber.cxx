@@ -705,7 +705,19 @@ sal_uInt8 SwEditShell::GetNumLevel() const
 
 const SwNumRule* SwEditShell::GetNumRuleAtCurrCursorPos() const
 {
-    SwPosition pos(*GetCursor()->GetPoint());
+    SwPaM* pCursor = GetCursor();
+    if (IsTableMode() && pCursor->IsMultiSelection() )
+    {
+        // Find the first valid position
+        for (SwPaM& rPaM : pCursor->GetRingContainer())
+        {
+            if (!rPaM.HasMark())
+                continue;
+            pCursor = &rPaM;
+            break;
+        }
+    }
+    SwPosition pos(*pCursor->GetPoint());
     return SwDoc::GetNumRuleAtPos( pos, GetLayout() );
 }
 
