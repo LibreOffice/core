@@ -29,8 +29,7 @@ namespace filter::config{
 FrameLoaderFactory::FrameLoaderFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
     : m_xContext(rxContext)
 {
-    BaseContainer::init(rxContext                                              ,
-                        "com.sun.star.comp.filter.config.FrameLoaderFactory"  ,
+    BaseContainer::init("com.sun.star.comp.filter.config.FrameLoaderFactory"  ,
                         { "com.sun.star.frame.FrameLoaderFactory" },
                         FilterCache::E_FRAMELOADER                         );
 }

@@ -55,8 +55,7 @@ TypeDetection::TypeDetection(const css::uno::Reference< css::uno::XComponentCont
    , m_bCancel(false)
 {
     css::frame::Desktop::create(m_xContext)->addTerminateListener(m_xTerminateListener);
-    BaseContainer::init(rxContext                                     ,
-                        "com.sun.star.comp.filter.config.TypeDetection"   ,
+    BaseContainer::init("com.sun.star.comp.filter.config.TypeDetection"   ,
                         { "com.sun.star.document.TypeDetection" },
                         FilterCache::E_TYPE                           );
 }

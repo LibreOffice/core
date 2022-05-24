@@ -29,8 +29,7 @@ namespace filter::config{
 ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
  : m_xContext(rxContext)
 {
-    BaseContainer::init(rxContext                                             ,
-                        "com.sun.star.comp.filter.config.ContentHandlerFactory"   ,
+    BaseContainer::init("com.sun.star.comp.filter.config.ContentHandlerFactory"   ,
                         { "com.sun.star.frame.ContentHandlerFactory" },
                         FilterCache::E_CONTENTHANDLER                         );
 }
