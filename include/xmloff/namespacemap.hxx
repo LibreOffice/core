@@ -38,7 +38,7 @@ const sal_uInt16 XML_NAMESPACE_NONE          = USHRT_MAX-1;
 const sal_uInt16 XML_NAMESPACE_UNKNOWN       = USHRT_MAX;
 const sal_uInt16 XML_NAMESPACE_UNKNOWN_FLAG  = 0x8000;
 
-class NameSpaceEntry final : public salhelper::SimpleReferenceObject
+class NameSpaceEntry final
 {
 public:
     // sName refers to the full namespace name
@@ -47,6 +47,11 @@ public:
     OUString     sPrefix;
     // nKey is the unique identifier of a namespace
     sal_uInt16   nKey;
+
+    bool operator==(NameSpaceEntry const & rhs) const
+    {
+        return sName == rhs.sName && sPrefix == rhs.sPrefix && nKey == rhs.nKey;
+    }
 };
 
 typedef ::std::pair < sal_uInt16, OUString > QNamePair;
@@ -63,8 +68,8 @@ struct QNamePairHash
 };
 
 typedef std::unordered_map < QNamePair, OUString, QNamePairHash > QNameCache;
-typedef std::unordered_map < OUString, ::rtl::Reference <NameSpaceEntry > > NameSpaceHash;
-typedef std::unordered_map < sal_uInt16, ::rtl::Reference < NameSpaceEntry > > NameSpaceMap;
+typedef std::unordered_map < OUString, NameSpaceEntry > NameSpaceHash;
+typedef std::unordered_map < sal_uInt16, NameSpaceEntry > NameSpaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
 {
