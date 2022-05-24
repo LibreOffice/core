@@ -9,20 +9,25 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
+#include <test/xmltesttools.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/util/Color.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
+#include <test/xmldocptr.hxx>
 
 using namespace ::com::sun::star;
 
 namespace
 {
 /// Covers sd/source/filter/eppt/ fixes.
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
 private:
     uno::Reference<lang::XComponent> mxComponent;
@@ -30,6 +35,7 @@ private:
 public:
     void setUp() override;
     void tearDown() override;
+    void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 };
 
@@ -46,6 +52,11 @@ void Test::tearDown()
         mxComponent->dispose();
 
     test::BootstrapFixture::tearDown();
+}
+
+void Test::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
+{
+    XmlTestTools::registerOOXMLNamespaces(pXmlXpathCtx);
 }
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sd/qa/filter/eppt/data/";
@@ -75,6 +86,44 @@ CPPUNIT_TEST_FIXTURE(Test, testOOXMLCustomShapeBitmapFill)
     // i.e. the custom shape geometry was kept, but the actual bitmap was lost.
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GraphicObjectShape"),
                          xShape->getShapeType());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
+{
+    // Given a document with a master slide and a theme, lt1 is set to 0x000002:
+    uno::Reference<lang::XComponent> xComponent = loadFromDesktop("private:factory/simpress");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XMasterPageTarget> xDrawPage(
+        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aMap;
+    aMap["Name"] <<= OUString("mytheme");
+    aMap["ColorSchemeName"] <<= OUString("mycolorscheme");
+    uno::Sequence<util::Color> aColorScheme
+        = { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc };
+    aMap["ColorScheme"] <<= aColorScheme;
+    uno::Any aTheme(aMap.getAsConstPropertyValueList());
+    xMasterPage->setPropertyValue("Theme", aTheme);
+
+    // When exporting to PPTX:
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("Impress Office Open XML");
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    validate(aTempFile.GetFileName(), test::OOXML);
+
+    // Then verify that this color is not lost:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "ppt/theme/theme1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    assertXPath(pXmlDoc, "//a:clrScheme/a:lt1/a:srgbClr", "val", "000002");
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//a:clrScheme/a:lt1/a:srgbClr' number of nodes is incorrect
+    // i.e. the RGB color was lost on export.
+    xComponent->dispose();
 }
 }
 
