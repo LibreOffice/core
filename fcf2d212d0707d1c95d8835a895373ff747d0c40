@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad9b65c2_2cf1759d",
+        "filename": "sw/source/uibase/utlui/glbltree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-24T09:35:01Z",
+      "side": 1,
+      "message": "why doesnt this function clear m_pActiveShell in case of rHint.GetId() \u003d\u003d SfxHintId::Dying?",
+      "revId": "fcf2d212d0707d1c95d8835a895373ff747d0c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
