@@ -3013,7 +3013,16 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 pTmp->InvalidateSize();
             }
             else
-                pCnt->InvalidatePos();
+            {
+                if (pCnt->FindPageFrame() == FindPageFrame())
+                {
+                    pCnt->InvalidatePos();
+                }
+                else
+                {
+                    SAL_WARN("sw.layout", "footnote frame on different page than ref frame?");
+                }
+            }
         }
     }
     return nReal;
