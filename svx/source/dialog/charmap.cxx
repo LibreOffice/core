@@ -376,7 +376,9 @@ Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
 int SvxShowCharSet::PixelToMapIndex( const Point& point) const
 {
     int nBase = FirstInView();
-    return (nBase + ((point.X() - m_nXGap)/nX) + ((point.Y() - m_nYGap)/nY) * COLUMN_COUNT);
+    int x = nX == 0 ? 0 : (point.X() - m_nXGap)/nX;
+    int y = nY == 0 ? 0 : (point.Y() - m_nYGap)/nY;
+    return (nBase + x + y * COLUMN_COUNT);
 }
 
 bool SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
