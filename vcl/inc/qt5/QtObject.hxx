@@ -24,10 +24,11 @@
 
 #include <QtCore/QObject>
 #include <QtGui/QRegion>
-#include <QtGui/QWindow>
+#include <QtWidgets/QWidget>
 
 class QtFrame;
-class QWidget;
+class QtObjectWidget;
+class QWindow;
 
 class QtObject final : public QObject, public SalObject
 {
@@ -35,17 +36,18 @@ class QtObject final : public QObject, public SalObject
 
     SystemEnvData m_aSystemData;
     QtFrame* m_pParent;
-    QWidget* m_pQWidget; // main widget, container
-    QWindow* m_pQWindow; // contained window, used for opengl rendering
+    QtObjectWidget* m_pQWidget;
     QRegion m_pRegion;
+    bool m_bForwardKey;
 
 public:
     QtObject(QtFrame* pParent, bool bShow);
     ~QtObject() override;
 
     QtFrame* frame() const { return m_pParent; }
-    QWidget* widget() const { return m_pQWidget; }
-    QWindow* windowHandle() const { return m_pQWindow; }
+    inline QWidget* widget() const;
+    QWindow* windowHandle() const;
+    bool forwardKey() const { return m_bForwardKey; }
 
     virtual void ResetClipRegion() override;
     virtual void BeginSetClipRegion(sal_uInt32 nRects) override;
@@ -60,22 +62,25 @@ public:
     virtual void SetForwardKey(bool bEnable) override;
 
     virtual const SystemEnvData* GetSystemData() const override { return &m_aSystemData; }
+
+    virtual void Reparent(SalFrame* pFrame) override;
 };
 
-class QtObjectWindow final : public QWindow
+class QtObjectWidget final : public QWidget
 {
     QtObject& m_rParent;
 
-    bool event(QEvent*) override;
     void focusInEvent(QFocusEvent*) override;
     void focusOutEvent(QFocusEvent*) override;
     void mousePressEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
-    // keyPressEvent(QKeyEvent*) is handled via event(QEvent*); see comment in QtWidget::event
+    void keyPressEvent(QKeyEvent*) override;
     void keyReleaseEvent(QKeyEvent*) override;
 
 public:
-    explicit QtObjectWindow(QtObject& rParent);
+    explicit QtObjectWidget(QtObject& rParent);
 };
+
+QWidget* QtObject::widget() const { return m_pQWidget; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
