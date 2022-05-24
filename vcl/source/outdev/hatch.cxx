@@ -120,6 +120,35 @@ void OutputDevice::AddHatchActions( const tools::PolyPolygon& rPolyPoly, const H
     }
 }
 
+static bool HasSaneNSteps(const Point& rPt1, const Point& rEndPt1, const Size& rInc)
+{
+    tools::Long nVertSteps = -1;
+    if (rInc.Height())
+    {
+        bool bFail = o3tl::checked_sub(rEndPt1.Y(), rPt1.Y(), nVertSteps);
+        if (bFail)
+            nVertSteps = std::numeric_limits<tools::Long>::max();
+        else
+            nVertSteps = nVertSteps / rInc.Height();
+    }
+    tools::Long nHorzSteps = -1;
+    if (rInc.Width())
+    {
+        bool bFail = o3tl::checked_sub(rEndPt1.X(), rPt1.X(), nHorzSteps);
+        if (bFail)
+            nHorzSteps = std::numeric_limits<tools::Long>::max();
+        else
+            nHorzSteps = nHorzSteps / rInc.Width();
+    }
+    auto nSteps = std::max(nVertSteps, nHorzSteps);
+    if (nSteps > 1024)
+    {
+        SAL_WARN("vcl.gdi", "skipping slow hatch with " << nSteps << " steps");
+        return false;
+    }
+    return true;
+}
+
 void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch, bool bMtf )
 {
     assert(!is_double_buffered_window());
@@ -158,39 +187,13 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         // Single hatch
         aRect.AdjustLeft( -nLogPixelWidth ); aRect.AdjustTop( -nLogPixelWidth ); aRect.AdjustRight(nLogPixelWidth ); aRect.AdjustBottom(nLogPixelWidth );
         CalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
+        if (utl::ConfigManager::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
+            return;
 
         if (aInc.Width() <= 0 && aInc.Height() <= 0)
             SAL_WARN("vcl.gdi", "invalid increment");
         else
         {
-            if (utl::ConfigManager::IsFuzzing())
-            {
-                tools::Long nVertSteps = -1;
-                if (aInc.Height())
-                {
-                    bool bFail = o3tl::checked_sub(aEndPt1.Y(), aPt1.Y(), nVertSteps);
-                    if (bFail)
-                        nVertSteps = std::numeric_limits<tools::Long>::max();
-                    else
-                        nVertSteps = nVertSteps / aInc.Height();
-                }
-                tools::Long nHorzSteps = -1;
-                if (aInc.Width())
-                {
-                    bool bFail = o3tl::checked_sub(aEndPt1.X(), aPt1.X(), nHorzSteps);
-                    if (bFail)
-                        nHorzSteps = std::numeric_limits<tools::Long>::max();
-                    else
-                        nHorzSteps = nHorzSteps / aInc.Width();
-                }
-                auto nSteps = std::max(nVertSteps, nHorzSteps);
-                if (nSteps > 1024)
-                {
-                    SAL_WARN("vcl.gdi", "skipping slow hatch with " << nSteps << " steps");
-                    return;
-                }
-            }
-
             do
             {
                 DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
@@ -204,6 +207,9 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         {
             // Double hatch
             CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900_deg10, aPt1, aPt2, aInc, aEndPt1 );
+            if (utl::ConfigManager::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
+                return;
+
             do
             {
                 DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
@@ -216,6 +222,9 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
             {
                 // Triple hatch
                 CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450_deg10, aPt1, aPt2, aInc, aEndPt1 );
+                if (utl::ConfigManager::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
+                    return;
+
                 do
                 {
                     DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
