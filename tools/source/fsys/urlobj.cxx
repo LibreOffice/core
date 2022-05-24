@@ -3360,7 +3360,7 @@ bool INetURLObject::insertName(std::u16string_view rTheName,
     }
     aNewPath.append(pSuffixBegin, pPathEnd - pSuffixBegin);
 
-    return setPath(aNewPath.makeStringAndClear(), EncodeMechanism::NotCanonical,
+    return setPath(aNewPath, EncodeMechanism::NotCanonical,
         RTL_TEXTENCODING_UTF8);
 }
 
@@ -4053,7 +4053,7 @@ bool INetURLObject::removeSegment(sal_Int32 nIndex, bool bIgnoreFinalSlash)
         aNewPath.append('/');
     }
 
-    return setPath(aNewPath.makeStringAndClear(), EncodeMechanism::NotCanonical,
+    return setPath(aNewPath, EncodeMechanism::NotCanonical,
         RTL_TEXTENCODING_UTF8);
 }
 
