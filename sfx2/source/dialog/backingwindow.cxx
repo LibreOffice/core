@@ -65,8 +65,11 @@ class BrandImage final : public weld::CustomWidgetController
 private:
     BitmapEx maBrandImage;
     bool mbIsDark = false;
+    Size m_BmpSize;
 
 public:
+    Size getSize() { return m_BmpSize; }
+
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
         weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
@@ -93,8 +96,8 @@ public:
         if (maBrandImage.GetSizePixel().Width() == nWidth)
             return;
         LoadImageForWidth(nWidth);
-        const Size aBmpSize(maBrandImage.GetSizePixel());
-        set_size_request(aBmpSize.Width(), aBmpSize.Height());
+        m_BmpSize = maBrandImage.GetSizePixel();
+        set_size_request(m_BmpSize.Width(), m_BmpSize.Height());
     }
 
     virtual void StyleUpdated() override
@@ -134,7 +137,7 @@ public:
 };
 
 // increase size of the text in the buttons on the left fMultiplier-times
-float const g_fMultiplier = 1.4f;
+float const g_fMultiplier = 1.2f;
 
 BackingWindow::BackingWindow(vcl::Window* i_pParent)
     : InterimItemWindow(i_pParent, "sfx/ui/startcenter.ui", "StartCenter", false)
@@ -370,7 +373,7 @@ void BackingWindow::ApplyStyleSettings()
     // Refetch because the brand image height to match this width is now set
     aPrefSize = mxAllButtonsBox->get_preferred_size();
 
-    set_height_request(nMenuHeight + aPrefSize.Height());
+    set_height_request(nMenuHeight + aPrefSize.Height() + mxBrandImage->getSize().getHeight());
 }
 
 void BackingWindow::initializeLocalView()
