@@ -135,7 +135,9 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
     // (for non-RTL charPos is always the start of a multi-character glyph).
     if (rtl && pos->charPos() + pos->charCount() > beginPos + 1)
         return nullptr;
-    if (!isSafeToBreak(pos, rtl))
+    if (isInsideCluster(pos, rtl))
+        return nullptr;
+    if (!isSafeToBreak(pos))
         return nullptr;
     // LinearPos needs adjusting to start at xOffset/yOffset for the first item,
     // that's how it's computed in GenericSalLayout::LayoutText().
@@ -162,39 +164,69 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
         copy->back().setLinearPos(copy->back().linearPos() - zeroPoint);
         ++pos;
     }
+    if (!isSafeToBreak(pos))
+        return nullptr;
     if (pos != end())
     {
         // Fail if the next character is not at the expected past-end position. For RTL check
         // that we're not cutting in the middle of a multi-character glyph.
         if (rtl ? pos->charPos() + pos->charCount() != endPos + 1 : pos->charPos() != endPos)
             return nullptr;
-        if (!isSafeToBreak(pos, rtl))
+        if (isInsideCluster(pos, rtl))
             return nullptr;
     }
     return copy.release();
 }
 
-bool SalLayoutGlyphsImpl::isSafeToBreak(const_iterator pos, bool rtl) const
+bool SalLayoutGlyphsImpl::isInsideCluster(const_iterator pos, bool rtl) const
 {
-    if (rtl)
-    {
-        // RTL is more complicated, because HB_GLYPH_FLAG_UNSAFE_TO_BREAK talks about beginning
-        // of a cluster, which refers to the text, not glyphs. This function is called
-        // for the first glyph of the subset and the first glyph after the subset, but since
-        // the glyphs are backwards, and we need the beginning of cluster at the start of the text
-        // and beginning of the cluster after the text, we need to check glyphs before this position.
-        if (pos == begin())
-            return true;
-        --pos;
-        while (pos >= begin() && (pos->IsInCluster() && !pos->IsClusterStart()))
-            --pos;
-        if (pos < begin())
-            return true;
-    }
-    // Don't create a subset if it's not safe to break at the beginning or end of the sequence
-    // (https://harfbuzz.github.io/harfbuzz-hb-buffer.html#hb-glyph-flags-t).
-    if (pos->IsUnsafeToBreak() || (pos->IsInCluster() && !pos->IsClusterStart()))
+    if (!rtl)
+        return pos->IsInCluster() && !pos->IsClusterStart();
+    // rtl is backwards, so this position is not inside a cluster if the position
+    // before is a start of a cluster (or not a cluster at all)
+    if (pos == begin())
         return false;
+    --pos;
+    return pos->IsInCluster() && !pos->IsClusterStart();
+}
+
+bool SalLayoutGlyphsImpl::isSafeToBreak(const_iterator pos) const
+{
+    // Harfbuzz provides HB_GLYPH_FLAG_UNSAFE_TO_BREAK to detect when it's usafe
+    // to break (https://harfbuzz.github.io/harfbuzz-hb-buffer.html#hb-glyph-flags-t).
+    // My reading of the documentation is that it should be enough to check just
+    // the cluster after the break position, but tdf#149264 fails to break properly
+    // and the only that is not safe to break there is the last one in the subset,
+    // so either that's a harfbuzz bug, or the cluster before the position should be
+    // checked too. Be safe and check whole cluster before and after the break position
+    // (a cluster has the same charPos()).
+    // RTL has glyphs backwards, but since this is checking for charPos() before and
+    // after the break position, it works for RTL too.
+    if (pos != begin())
+    {
+        const_iterator previous = pos;
+        --previous;
+        sal_Int32 previousCharPos = previous->charPos();
+        while (previous->charPos() == previousCharPos)
+        {
+            if (previous->IsUnsafeToBreak())
+                return false;
+            if (previous == begin())
+                break;
+            --previous;
+        }
+    }
+    if (pos != end())
+    {
+        const_iterator next = pos;
+        sal_Int32 nextCharPos = next->charPos();
+        while (next != end() && next->charPos() == nextCharPos)
+        {
+            if (next->IsUnsafeToBreak())
+                return false;
+            ++next;
+        }
+    }
     return true;
 }
 
