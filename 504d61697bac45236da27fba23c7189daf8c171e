@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee419b77_74ed6849",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-24T07:51:39Z",
+      "side": 1,
+      "message": "Hi Bartosz,\nNot sure why this patch was merged since we already have https://gerrit.libreoffice.org/c/core/+/134845/5",
+      "revId": "504d61697bac45236da27fba23c7189daf8c171e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
