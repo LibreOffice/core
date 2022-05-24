@@ -54,20 +54,20 @@ SvXMLNamespaceMap::SvXMLNamespaceMap()
 {
     // approx worst-case size
     aNameHash.reserve(20);
-    aNameMap.reserve(20);
+    maKeyToNamespaceMap.reserve(20);
 }
 
 SvXMLNamespaceMap::SvXMLNamespaceMap( const SvXMLNamespaceMap& rMap )
 : sXMLNS( GetXMLToken ( XML_XMLNS ) )
 {
     aNameHash = rMap.aNameHash;
-    aNameMap  = rMap.aNameMap;
+    maKeyToNamespaceMap  = rMap.maKeyToNamespaceMap;
 }
 
 SvXMLNamespaceMap& SvXMLNamespaceMap::operator=( const SvXMLNamespaceMap& rMap )
 {
     aNameHash = rMap.aNameHash;
-    aNameMap = rMap.aNameMap;
+    maKeyToNamespaceMap = rMap.maKeyToNamespaceMap;
     return *this;
 }
 
@@ -79,7 +79,7 @@ void SvXMLNamespaceMap::Clear()
 {
     aNameHash.clear();
     aNameCache.clear();
-    aNameMap.clear();
+    maKeyToNamespaceMap.clear();
     aQNameCache.clear();
 }
 
@@ -97,15 +97,15 @@ sal_uInt16 SvXMLNamespaceMap::Add_( const OUString& rPrefix, const OUString &rNa
         nKey = XML_NAMESPACE_UNKNOWN_FLAG;
         do
         {
-            NameSpaceMap::const_iterator aIter = aNameMap.find ( nKey );
-            if( aIter == aNameMap.end() )
+            auto aIter = maKeyToNamespaceMap.find ( nKey );
+            if( aIter == maKeyToNamespaceMap.end() )
                 break;
             nKey++;
         }
         while ( true );
     }
     aNameHash.insert_or_assign( rPrefix, NameSpaceEntry{ rName, rPrefix, nKey} );
-    aNameMap.insert_or_assign( nKey, NameSpaceEntry{ rName, rPrefix, nKey} );
+    maKeyToNamespaceMap.insert_or_assign( nKey, KeyToNameSpaceMapEntry{ rName, rPrefix} );
     return nKey;
 }
 
@@ -170,20 +170,20 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByName( const OUString& rName ) const
 
 const OUString& SvXMLNamespaceMap::GetPrefixByKey( sal_uInt16 nKey ) const
 {
-    NameSpaceMap::const_iterator aIter = aNameMap.find (nKey);
-    return (aIter != aNameMap.end()) ? (*aIter).second.sPrefix : sEmpty;
+    auto aIter = maKeyToNamespaceMap.find (nKey);
+    return (aIter != maKeyToNamespaceMap.end()) ? (*aIter).second.sPrefix : sEmpty;
 }
 
 const OUString& SvXMLNamespaceMap::GetNameByKey( sal_uInt16 nKey ) const
 {
-    NameSpaceMap::const_iterator aIter = aNameMap.find (nKey);
-    return (aIter != aNameMap.end()) ? (*aIter).second.sName : sEmpty;
+    auto aIter = maKeyToNamespaceMap.find (nKey);
+    return (aIter != maKeyToNamespaceMap.end()) ? (*aIter).second.sName : sEmpty;
 }
 
 OUString SvXMLNamespaceMap::GetAttrNameByKey( sal_uInt16 nKey ) const
 {
-    NameSpaceMap::const_iterator aIter = aNameMap.find ( nKey );
-    if (aIter == aNameMap.end())
+    auto aIter = maKeyToNamespaceMap.find ( nKey );
+    if (aIter == maKeyToNamespaceMap.end())
         return OUString();
 
     const OUString & prefix( (*aIter).second.sPrefix );
@@ -237,8 +237,8 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                 return (*aQCacheIter).second;
             else
             {
-                NameSpaceMap::const_iterator aIter = aNameMap.find ( nKey );
-                if ( aIter != aNameMap.end() )
+                auto aIter = maKeyToNamespaceMap.find ( nKey );
+                if ( aIter != maKeyToNamespaceMap.end() )
                 {
                     // ...if it's in our map, make the prefix
                     const OUString & prefix( (*aIter).second.sPrefix );
@@ -304,8 +304,8 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByQName(const OUString& rQName,
         nKey = rEntry.nKey;
         if ( pNamespace )
         {
-            NameSpaceMap::const_iterator aMapIter = aNameMap.find (nKey);
-            *pNamespace = aMapIter != aNameMap.end() ? (*aMapIter).second.sName : OUString();
+            auto aMapIter = maKeyToNamespaceMap.find (nKey);
+            *pNamespace = aMapIter != maKeyToNamespaceMap.end() ? (*aMapIter).second.sName : OUString();
         }
     }
     else
@@ -365,13 +365,13 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByQName(const OUString& rQName,
 
 sal_uInt16 SvXMLNamespaceMap::GetFirstKey() const
 {
-    return aNameMap.empty() ? USHRT_MAX : (*aNameMap.begin()).second.nKey;
+    return maKeyToNamespaceMap.empty() ? USHRT_MAX : (*maKeyToNamespaceMap.begin()).first;
 }
 
 sal_uInt16 SvXMLNamespaceMap::GetNextKey( sal_uInt16 nLastKey ) const
 {
-    NameSpaceMap::const_iterator aIter = aNameMap.find ( nLastKey );
-    return (++aIter == aNameMap.end()) ? USHRT_MAX : (*aIter).second.nKey;
+    auto aIter = maKeyToNamespaceMap.find ( nLastKey );
+    return (++aIter == maKeyToNamespaceMap.end()) ? USHRT_MAX : (*aIter).first;
 }
 
 
@@ -383,13 +383,13 @@ sal_uInt16 SvXMLNamespaceMap::GetIndexByKey( sal_uInt16 nKey )
 }
 sal_uInt16 SvXMLNamespaceMap::GetFirstIndex() const
 {
-    return aNameMap.empty() ? USHRT_MAX : (*aNameMap.begin()).second.nKey;
+    return maKeyToNamespaceMap.empty() ? USHRT_MAX : (*maKeyToNamespaceMap.begin()).first;
 }
 
 sal_uInt16 SvXMLNamespaceMap::GetNextIndex( sal_uInt16 nOldIdx ) const
 {
-    NameSpaceMap::const_iterator aIter = aNameMap.find ( nOldIdx );
-    return (++aIter == aNameMap.end()) ? USHRT_MAX : (*aIter).second.nKey;
+    auto aIter = maKeyToNamespaceMap.find ( nOldIdx );
+    return (++aIter == maKeyToNamespaceMap.end()) ? USHRT_MAX : (*aIter).first;
 }
 
 void SvXMLNamespaceMap::AddAtIndex( const OUString& rPrefix,
@@ -412,14 +412,14 @@ OUString SvXMLNamespaceMap::GetAttrNameByIndex( sal_uInt16 nIdx ) const
 
 const OUString& SvXMLNamespaceMap::GetPrefixByIndex( sal_uInt16 nIdx ) const
 {
-    NameSpaceMap::const_iterator aIter = aNameMap.find (nIdx);
-    return (aIter != aNameMap.end()) ? (*aIter).second.sPrefix : sEmpty;
+    auto aIter = maKeyToNamespaceMap.find (nIdx);
+    return (aIter != maKeyToNamespaceMap.end()) ? (*aIter).second.sPrefix : sEmpty;
 }
 
 const OUString& SvXMLNamespaceMap::GetNameByIndex( sal_uInt16 nIdx ) const
 {
-    NameSpaceMap::const_iterator aIter = aNameMap.find (nIdx);
-    return (aIter != aNameMap.end()) ? (*aIter).second.sName : sEmpty;
+    auto aIter = maKeyToNamespaceMap.find (nIdx);
+    return (aIter != maKeyToNamespaceMap.end()) ? (*aIter).second.sName : sEmpty;
 }
 
 sal_uInt16 SvXMLNamespaceMap::GetIndexByPrefix( const OUString& rPrefix ) const
