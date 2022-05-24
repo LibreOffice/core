@@ -123,7 +123,7 @@ void SfxPickListImpl::AddDocumentToPickList( const SfxObjectShell* pDocSh )
             }
         }
     }
-    ::std::optional<bool> const oIsReadOnly(pDocSh->IsReadOnly());
+    ::std::optional<bool> const oIsReadOnly(pMed->IsOriginallyLoadedReadOnly());
 
     // add to svtool history options
     SvtHistoryOptions::AppendItem( EHistoryType::PickList,
