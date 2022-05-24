@@ -159,8 +159,9 @@ protected:
 class ShapeSizeProvider : public PropertyValueProvider
 {
 public:
+    static constexpr OUStringLiteral sSize = u"Size";
     explicit ShapeSizeProvider( SvxShape& _shape )
-        :PropertyValueProvider( _shape, "Size" )
+        :PropertyValueProvider( _shape, sSize )
     {
     }
 

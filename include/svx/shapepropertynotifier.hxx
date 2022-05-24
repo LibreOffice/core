@@ -64,9 +64,9 @@ namespace svx
     class SVXCORE_DLLPUBLIC PropertyValueProvider
     {
     public:
-        PropertyValueProvider( ::cppu::OWeakObject& _rContext, const char* _pAsciiPropertyName )
+        PropertyValueProvider( ::cppu::OWeakObject& _rContext, OUString _aPropertyName )
             :m_rContext( _rContext )
-            ,m_sPropertyName( OUString::createFromAscii( _pAsciiPropertyName ) )
+            ,m_sPropertyName( std::move( _aPropertyName ) )
         {
         }
         virtual ~PropertyValueProvider();
