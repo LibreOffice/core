@@ -2920,6 +2920,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
         getProperty<OUString>(getParagraphOfText(1, xCellA1->getText()), "NumberingStyleName")
             .isEmpty());
 
+    // Toggle it back off
+    dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "Cell B1 must be able to toggle numbering on and off.",
+        getProperty<OUString>(getParagraphOfText(1, xCellB1->getText()), "NumberingStyleName")
+            .isEmpty());
+
     // Now test removing numbering/bullets
     // Add A1 to the current B1 selection
     pWrtSh->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
