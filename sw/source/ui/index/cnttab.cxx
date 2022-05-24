@@ -1789,6 +1789,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogControl
     , m_xChapterInfoPB(m_xBuilder->weld_button("chapterinfo"))
     , m_xPageNoPB(m_xBuilder->weld_button("pageno"))
     , m_xHyperLinkPB(m_xBuilder->weld_button("hyperlink"))
+    , m_xFieldBox(m_xBuilder->weld_widget("fieldbox"))
     , m_xAuthFieldsLB(m_xBuilder->weld_combo_box("authfield"))
     , m_xAuthInsertPB(m_xBuilder->weld_button("insert"))
     , m_xAuthRemovePB(m_xBuilder->weld_button("remove"))
@@ -1916,8 +1917,17 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogControl
     m_xSecondKeyLB->set_active(0);
     m_xThirdKeyLB->set_active(0);
 
-    //lock size
+    // lock size of dialog. Determine the field box's widest possible
+    // configuration (tdf#149186) before doing so.
+    int nFieldBoxWidth = 0;
+    for (int eType = TOX_CITATION; eType >= TOX_INDEX; --eType)
+    {
+        ShowHideControls(eType);
+        nFieldBoxWidth = std::max<int>(m_xFieldBox->get_preferred_size().Width(), nFieldBoxWidth);
+    }
+    m_xFieldBox->set_size_request(nFieldBoxWidth, -1);
     Size aPrefSize(m_xContainer->get_preferred_size());
+    m_xFieldBox->set_size_request(-1, -1);
     m_xContainer->set_size_request(aPrefSize.Width(), aPrefSize.Height());
 }
 
@@ -1997,6 +2007,39 @@ void SwTOXEntryTabPage::Reset( const SfxItemSet* )
     m_xCommaSeparatedCB->set_active(m_pCurrentForm->IsCommaSeparated());
 }
 
+void SwTOXEntryTabPage::ShowHideControls(int eType)
+{
+    bool bToxIsAuthorities = TOX_AUTHORITIES == eType;
+    bool bToxIsIndex =       TOX_INDEX == eType;
+    bool bToxIsContent =     TOX_CONTENT == eType;
+    bool bToxSupportsLinks = TOX_CONTENT == eType ||
+                             TOX_ILLUSTRATIONS == eType ||
+                             TOX_TABLES == eType ||
+                             TOX_OBJECTS == eType ||
+                             TOX_USER == eType;
+
+    //show or hide controls
+    m_xEntryNoPB->set_visible(bToxIsContent);
+    m_xHyperLinkPB->set_visible(bToxSupportsLinks);
+    m_xRelToStyleCB->set_visible(!bToxIsAuthorities);
+    m_xChapterInfoPB->set_visible(!bToxIsContent && !bToxIsAuthorities);
+    m_xEntryPB->set_visible(!bToxIsAuthorities);
+    m_xPageNoPB->set_visible(!bToxIsAuthorities);
+    m_xAuthFieldsLB->set_visible(bToxIsAuthorities);
+    m_xAuthInsertPB->set_visible(bToxIsAuthorities);
+    m_xAuthRemovePB->set_visible(bToxIsAuthorities);
+
+    m_xFormatFrame->set_visible(!bToxIsAuthorities);
+
+    m_xSortingFrame->set_visible(bToxIsAuthorities);
+    m_xSortKeyFrame->set_visible(bToxIsAuthorities);
+
+    m_xMainEntryStyleFT->set_visible(bToxIsIndex);
+    m_xMainEntryStyleLB->set_visible(bToxIsIndex);
+    m_xAlphaDelimCB->set_visible(bToxIsIndex);
+    m_xCommaSeparatedCB->set_visible(bToxIsIndex);
+}
+
 void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
 {
     SwMultiTOXTabDialog* pTOXDlg = static_cast<SwMultiTOXTabDialog*>(GetDialogController());
@@ -2007,12 +2050,6 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
     {
         bool bToxIsAuthorities = TOX_AUTHORITIES == aCurType.eType;
         bool bToxIsIndex =       TOX_INDEX == aCurType.eType;
-        bool bToxIsContent =     TOX_CONTENT == aCurType.eType;
-        bool bToxSupportsLinks = TOX_CONTENT == aCurType.eType ||
-                                 TOX_ILLUSTRATIONS == aCurType.eType ||
-                                 TOX_TABLES == aCurType.eType ||
-                                 TOX_OBJECTS == aCurType.eType ||
-                                 TOX_USER == aCurType.eType;
 
         m_xLevelLB->clear();
         for(sal_uInt16 i = 1; i < m_pCurrentForm->GetFormMax(); i++)
@@ -2075,25 +2112,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         m_xLevelLB->select(bToxIsIndex ? 1 : 0);
 
         //show or hide controls
-        m_xEntryNoPB->set_visible(bToxIsContent);
-        m_xHyperLinkPB->set_visible(bToxSupportsLinks);
-        m_xRelToStyleCB->set_visible(!bToxIsAuthorities);
-        m_xChapterInfoPB->set_visible(!bToxIsContent && !bToxIsAuthorities);
-        m_xEntryPB->set_visible(!bToxIsAuthorities);
-        m_xPageNoPB->set_visible(!bToxIsAuthorities);
-        m_xAuthFieldsLB->set_visible(bToxIsAuthorities);
-        m_xAuthInsertPB->set_visible(bToxIsAuthorities);
-        m_xAuthRemovePB->set_visible(bToxIsAuthorities);
-
-        m_xFormatFrame->set_visible(!bToxIsAuthorities);
-
-        m_xSortingFrame->set_visible(bToxIsAuthorities);
-        m_xSortKeyFrame->set_visible(bToxIsAuthorities);
-
-        m_xMainEntryStyleFT->set_visible(bToxIsIndex);
-        m_xMainEntryStyleLB->set_visible(bToxIsIndex);
-        m_xAlphaDelimCB->set_visible(bToxIsIndex);
-        m_xCommaSeparatedCB->set_visible(bToxIsIndex);
+        ShowHideControls(aCurType.eType);
     }
     aLastTOXType = aCurType;
 
