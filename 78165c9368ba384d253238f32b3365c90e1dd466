@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b17c5a1_9c0aed8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-24T11:46:53Z",
+      "side": 1,
+      "message": "This is some fallout from the debugging as mentioned in my comment in tdf#148864. I don\u0027t know how much time a proper fix would take to implement (correctly resizing while in playback + update of slider and buttons). Let\u0027s also see what QA thinks.",
+      "revId": "78165c9368ba384d253238f32b3365c90e1dd466",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
