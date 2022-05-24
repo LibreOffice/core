@@ -24,20 +24,18 @@
 #include <QtWidget.hxx>
 
 #include <QtGui/QGuiApplication>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QMouseEvent>
 
 QtObject::QtObject(QtFrame* pParent, bool bShow)
     : m_pParent(pParent)
     , m_pQWidget(nullptr)
-    , m_pQWindow(nullptr)
+    , m_bForwardKey(false)
 {
     if (!m_pParent || !pParent->GetQWidget())
         return;
 
-    m_pQWindow = new QtObjectWindow(*this);
-    m_pQWidget = QWidget::createWindowContainer(m_pQWindow, pParent->GetQWidget());
-    m_pQWidget->setAttribute(Qt::WA_NoSystemBackground);
-    connect(m_pQWidget, &QObject::destroyed, this, [this]() { m_pQWidget = nullptr; });
-
+    m_pQWidget = new QtObjectWidget(*this);
     if (bShow)
         m_pQWidget->show();
 
@@ -51,6 +49,11 @@ QtObject::~QtObject()
         m_pQWidget->setParent(nullptr);
         delete m_pQWidget;
     }
+}
+
+QWindow* QtObject::windowHandle() const
+{
+    return m_pQWidget ? m_pQWidget->windowHandle() : nullptr;
 }
 
 void QtObject::ResetClipRegion()
@@ -90,47 +93,63 @@ void QtObject::Show(bool bVisible)
         m_pQWidget->setVisible(bVisible);
 }
 
-void QtObject::SetForwardKey(bool /*bEnable*/) {}
+void QtObject::SetForwardKey(bool bEnable) { m_bForwardKey = bEnable; }
 
-QtObjectWindow::QtObjectWindow(QtObject& rParent)
-    : m_rParent(rParent)
+void QtObject::Reparent(SalFrame* pFrame)
+{
+    QtFrame* pNewParent = static_cast<QtFrame*>(pFrame);
+    if (m_pParent == pNewParent)
+        return;
+    m_pParent = pNewParent;
+    m_pQWidget->setParent(m_pParent->GetQWidget());
+}
+
+QtObjectWidget::QtObjectWidget(QtObject& rParent)
+    : QWidget(rParent.frame()->GetQWidget())
+    , m_rParent(rParent)
 {
     assert(m_rParent.frame() && m_rParent.frame()->GetQWidget());
+    setAttribute(Qt::WA_NoSystemBackground);
+    setAttribute(Qt::WA_OpaquePaintEvent);
 }
 
-void QtObjectWindow::focusInEvent(QFocusEvent* pEvent)
+void QtObjectWidget::focusInEvent(QFocusEvent*)
 {
+    SolarMutexGuard aGuard;
     m_rParent.CallCallback(SalObjEvent::GetFocus);
-    QWindow::focusInEvent(pEvent);
 }
 
-void QtObjectWindow::focusOutEvent(QFocusEvent* pEvent)
+void QtObjectWidget::focusOutEvent(QFocusEvent*)
 {
+    SolarMutexGuard aGuard;
     m_rParent.CallCallback(SalObjEvent::LoseFocus);
-    QWindow::focusOutEvent(pEvent);
 }
 
-void QtObjectWindow::mousePressEvent(QMouseEvent* pEvent)
+void QtObjectWidget::mousePressEvent(QMouseEvent* pEvent)
 {
+    SolarMutexGuard aGuard;
     m_rParent.CallCallback(SalObjEvent::ToTop);
-    QtWidget::handleMousePressEvent(*m_rParent.frame(), pEvent);
+
+    if (m_rParent.forwardKey())
+        pEvent->ignore();
 }
 
-void QtObjectWindow::mouseReleaseEvent(QMouseEvent* pEvent)
+void QtObjectWidget::mouseReleaseEvent(QMouseEvent* pEvent)
 {
-    QtWidget::handleMouseReleaseEvent(*m_rParent.frame(), pEvent);
+    if (m_rParent.forwardKey())
+        pEvent->ignore();
 }
 
-bool QtObjectWindow::event(QEvent* pEvent)
+void QtObjectWidget::keyReleaseEvent(QKeyEvent* pEvent)
 {
-    return QtWidget::handleEvent(*m_rParent.frame(), *m_rParent.widget(), pEvent)
-           || QWindow::event(pEvent);
+    if (m_rParent.forwardKey())
+        pEvent->ignore();
 }
 
-void QtObjectWindow::keyReleaseEvent(QKeyEvent* pEvent)
+void QtObjectWidget::keyPressEvent(QKeyEvent* pEvent)
 {
-    if (!QtWidget::handleKeyReleaseEvent(*m_rParent.frame(), *m_rParent.widget(), pEvent))
-        QWindow::keyReleaseEvent(pEvent);
+    if (m_rParent.forwardKey())
+        pEvent->ignore();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
