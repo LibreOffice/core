@@ -513,7 +513,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="box2">
+                      <object class="GtkBox" id="fieldbox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="margin-bottom">6</property>
@@ -544,7 +544,6 @@
                             <child>
                               <object class="GtkButton" id="insert">
                                 <property name="label" translatable="yes" context="tocentriespage|insert">_Insert</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
                                 <property name="no-show-all">True</property>
@@ -564,7 +563,6 @@
                             <child>
                               <object class="GtkButton" id="remove">
                                 <property name="label" translatable="yes" context="tocentriespage|remove">_Remove</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
                                 <property name="no-show-all">True</property>
@@ -584,7 +582,6 @@
                             <child>
                               <object class="GtkButton" id="chapterno">
                                 <property name="label" translatable="yes" context="tocentriespage|chapterno">Chapter No.</property>
-                                <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
                                 <property name="no-show-all">True</property>

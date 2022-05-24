@@ -324,6 +324,7 @@ class SwTOXEntryTabPage final : public SfxTabPage
     std::unique_ptr<weld::Button> m_xChapterInfoPB;
     std::unique_ptr<weld::Button> m_xPageNoPB;
     std::unique_ptr<weld::Button> m_xHyperLinkPB;
+    std::unique_ptr<weld::Widget> m_xFieldBox;
     std::unique_ptr<weld::ComboBox> m_xAuthFieldsLB;
     std::unique_ptr<weld::Button> m_xAuthInsertPB;
     std::unique_ptr<weld::Button> m_xAuthRemovePB;
@@ -383,6 +384,8 @@ class SwTOXEntryTabPage final : public SfxTabPage
     DECL_LINK(ModifyHdl, LinkParamNone*, void);
     void OnModify(bool bAllLevels);
     DECL_LINK(ModifyClickHdl, weld::Toggleable&, void);
+
+    void ShowHideControls(int eType);
 
 public:
     SwTOXEntryTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet);
