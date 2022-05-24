@@ -183,6 +183,8 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             m_pQWidget->setAttribute(Qt::WA_AlwaysShowToolTips);
     }
 
+    FillSystemEnvData(m_aSystemData, reinterpret_cast<sal_IntPtr>(this), m_pQWidget);
+
     QWindow* pChildWindow = windowHandle();
     connect(pChildWindow, &QWindow::screenChanged, this, &QtFrame::screenChanged);
 
@@ -193,8 +195,6 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             pChildWindow->setTransientParent(pParentWindow);
     }
 
-    FillSystemEnvData(m_aSystemData, reinterpret_cast<sal_IntPtr>(this), m_pQWidget);
-
     SetIcon(SV_ICON_ID_OFFICE);
 
     fixICCCMwindowGroup();
@@ -204,6 +204,8 @@ void QtFrame::screenChanged(QScreen*) { m_pQWidget->fakeResize(); }
 
 void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidget* pWidget)
 {
+    assert(rData.platform == SystemEnvData::Platform::Invalid);
+    assert(rData.toolkit == SystemEnvData::Toolkit::Invalid);
     if (QGuiApplication::platformName() == "wayland")
         rData.platform = SystemEnvData::Platform::Wayland;
     else if (QGuiApplication::platformName() == "xcb")
@@ -233,6 +235,7 @@ void QtFrame::fixICCCMwindowGroup()
         return;
     g_bNeedsWmHintsWindowGroup = false;
 
+    assert(m_aSystemData.platform != SystemEnvData::Platform::Invalid);
     if (m_aSystemData.platform != SystemEnvData::Platform::Xcb)
         return;
     if (QVersionNumber::fromString(qVersion()) >= QVersionNumber(5, 12))
@@ -370,10 +373,19 @@ QWindow* QtFrame::windowHandle() const
     // set attribute 'Qt::WA_NativeWindow' first to make sure a window handle actually exists
     QWidget* pChild = asChild();
     assert(pChild->window() == pChild);
-#ifndef EMSCRIPTEN
-    // no idea, why this breaks the menubar for EMSCRIPTEN
-    pChild->setAttribute(Qt::WA_NativeWindow);
-#endif
+    switch (m_aSystemData.platform)
+    {
+        case SystemEnvData::Platform::Wayland:
+        case SystemEnvData::Platform::Xcb:
+            pChild->setAttribute(Qt::WA_NativeWindow);
+            break;
+        case SystemEnvData::Platform::WASM:
+            // no idea, why Qt::WA_NativeWindow breaks the menubar for EMSCRIPTEN
+            break;
+        case SystemEnvData::Platform::Invalid:
+            std::abort();
+            break;
+    }
     return pChild->windowHandle();
 }
 
@@ -1357,6 +1369,7 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
 void QtFrame::SetApplicationID(const OUString& rWMClass)
 {
 #if CHECK_QT5_USING_X11
+    assert(m_aSystemData.platform != SystemEnvData::Platform::Invalid);
     if (m_aSystemData.platform != SystemEnvData::Platform::Xcb || !m_pTopLevel)
         return;
 
@@ -1383,6 +1396,7 @@ void QtFrame::ResolveWindowHandle(SystemEnvData& rData) const
 {
     if (!rData.pWidget)
         return;
+    assert(rData.platform != SystemEnvData::Platform::Invalid);
     if (rData.platform != SystemEnvData::Platform::Wayland)
         rData.SetWindowHandle(static_cast<QWidget*>(rData.pWidget)->winId());
 }
