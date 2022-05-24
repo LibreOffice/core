@@ -54,6 +54,15 @@ public:
     }
 };
 
+class KeyToNameSpaceMapEntry final
+{
+public:
+    // sName refers to the full namespace name
+    OUString     sName;
+    // sPrefix is the prefix used to declare a given item to be from a given namespace
+    OUString     sPrefix;
+};
+
 typedef ::std::pair < sal_uInt16, OUString > QNamePair;
 
 struct QNamePairHash
@@ -69,7 +78,7 @@ struct QNamePairHash
 
 typedef std::unordered_map < QNamePair, OUString, QNamePairHash > QNameCache;
 typedef std::unordered_map < OUString, NameSpaceEntry > NameSpaceHash;
-typedef std::unordered_map < sal_uInt16, NameSpaceEntry > NameSpaceMap;
+typedef std::unordered_map < sal_uInt16, KeyToNameSpaceMapEntry > KeyToNameSpaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
 {
@@ -77,7 +86,7 @@ class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
 
     NameSpaceHash               aNameHash;
     mutable NameSpaceHash       aNameCache;
-    NameSpaceMap                aNameMap;
+    KeyToNameSpaceMap           maKeyToNamespaceMap;
     mutable QNameCache          aQNameCache;
     SAL_DLLPRIVATE sal_uInt16 Add_( const OUString& rPrefix, const OUString &rName, sal_uInt16 nKey );
 
