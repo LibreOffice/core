@@ -1,6 +1,40 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "17fdb157_b037b91c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-05-24T23:48:34Z",
+      "side": 1,
+      "message": "Are you sure it shouldn\u0027t be\n\n  DATE \\@\"dd\\.MM\\.yyyy\"\n\ninstead? At least that\u0027s what Excel would expect for a literal, a backslash escaped character.",
+      "revId": "d93bd47b8ba5f66ff9cdab62c90fd347bcca7b6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c80690b9_7e0e4a57",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-05-24T23:48:34Z",
+      "side": 1,
+      "message": "That\u0027s abusing nOriginalLang (which was never meant for this context but the LCID embedding).\n\nBut why is that LocaleDataWrapper unreliable? It was created in MSWordExportBase::GetNumberFormat() (which creating a temporary LocaleDataWrapper for each and every formatted field is ugly anyway) for the locale of rField.GetLanguage(), it looks (didn\u0027t investigate) like there is a mismatch of the field locale (system locale?) and the number format\u0027s locale (German?). Maybe it helps already to use a proper LocaleDataWrapper, like\n\n  LocaleDataWrapper aLocDat(pNFormatr-\u003eGetComponentContext(),\n          LanguageTag(pNumFormat-\u003eGetLanguage()));",
+      "revId": "d93bd47b8ba5f66ff9cdab62c90fd347bcca7b6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "76f67c3b_5fae17a8",
