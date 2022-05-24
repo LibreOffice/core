@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74b31f1b_12749516",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-24T13:47:47Z",
+      "side": 1,
+      "message": "Looks good to me (except for the clang plugin issue).",
+      "revId": "5a80a6cc6312f20a5675a5b4f35ffa564e970ace",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
