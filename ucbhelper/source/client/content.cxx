@@ -491,8 +491,9 @@ Reference< XRow > Content::getPropertyValuesInterface(
 //        rProp.Attributes = ;
     }
 
+    static constexpr OUStringLiteral sgetPropertyValues = u"getPropertyValues";
     Command aCommand;
-    aCommand.Name     = "getPropertyValues";
+    aCommand.Name     = sgetPropertyValues;
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 

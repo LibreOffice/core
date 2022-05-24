@@ -778,14 +778,19 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
         if ( aFilterName.isEmpty() )
             throw io::IOException(); // TODO:
 
+        static constexpr OUStringLiteral sFilterName = u"FilterName";
+        static constexpr OUStringLiteral sHierarchicalDocumentName = u"HierarchicalDocumentName";
+        static constexpr OUStringLiteral sDocumentBaseURL = u"DocumentBaseURL";
+        static constexpr OUStringLiteral sSourceShellID = u"SourceShellID";
+        static constexpr OUStringLiteral sDestinationShellID = u"DestinationShellID";
         uno::Sequence<beans::PropertyValue> aArgs{
-            comphelper::makePropertyValue("FilterName", aFilterName),
-            comphelper::makePropertyValue("HierarchicalDocumentName", aHierarchName),
-            comphelper::makePropertyValue("DocumentBaseURL", aBaseURL),
-            comphelper::makePropertyValue("SourceShellID",
-                                          getStringPropertyValue(rObjArgs, u"SourceShellID")),
+            comphelper::makePropertyValue(sFilterName, aFilterName),
+            comphelper::makePropertyValue(sHierarchicalDocumentName, aHierarchName),
+            comphelper::makePropertyValue(sDocumentBaseURL, aBaseURL),
+            comphelper::makePropertyValue(sSourceShellID,
+                                          getStringPropertyValue(rObjArgs, sSourceShellID)),
             comphelper::makePropertyValue(
-                "DestinationShellID", getStringPropertyValue(rObjArgs, u"DestinationShellID"))
+                sDestinationShellID, getStringPropertyValue(rObjArgs, sDestinationShellID))
         };
 
         xDoc->storeToStorage( xStorage, aArgs );
