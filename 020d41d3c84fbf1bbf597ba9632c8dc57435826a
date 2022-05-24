@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "475bb0d3_850ada22",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-24T16:59:01Z",
+      "side": 1,
+      "message": "See the new first patch in this patch set. Thanks for catching this. Hopefully this will make this kind of \"bug\" harder to happen again.",
+      "parentUuid": "7ea2340a_ad6d19f2",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 35
+      },
+      "revId": "020d41d3c84fbf1bbf597ba9632c8dc57435826a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "99400cbc_652e3d8d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1

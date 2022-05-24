@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4560ee05_595b8730",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-24T16:59:01Z",
+      "side": 1,
+      "message": "There is something strange going on now.\n\nI\u0027ve locally upgraded the video presentation (I now switched off sound, because I\u0027ll otherwise get crazy over it), by adding a slide before and after the video with OpenGL / Fade transition. If I forward via keyboard to the black \"exit presentation\" screen and then go back to the video slide, neither mouse nor keyboard work). I guess it\u0027s some focus problem and I manually need to forward the events (or non-accept them).\n\nThere is the other problem, that going back from the \"exit presentation\" skips the last slide, but that is not related to this bug / patch and needs some extra fix / report.",
+      "revId": "35da1ee5bd958e0ff4cc77dd71e47826d49e8cf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
