@@ -871,6 +871,14 @@ IMAGE_SETEVENT:
         }
 
     }
+    else if (!m_aEmbedURL.isEmpty())
+    {
+        // This is an inner <object> image and the outer <object> has a URL for us. Set that on the
+        // image.
+        SwFormatURL aURL(pFlyFormat->GetURL());
+        aURL.SetURL(m_aEmbedURL, bIsMap);
+        pFlyFormat->SetFormatAttr(aURL);
+    }
 
     if( !aMacroItem.GetMacroTable().empty() )
     {

@@ -560,8 +560,8 @@ bool SwHTMLParser::InsertEmbed()
         aCnt.SwitchPersistence(xStorage);
         aObjName = aCnt.CreateUniqueObjectName();
         {
-            SvFileStream aFileStream(aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE),
-                                     StreamMode::READ);
+            OUString aEmbedURL = aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+            SvFileStream aFileStream(aEmbedURL, StreamMode::READ);
             uno::Reference<io::XInputStream> xInStream;
             SvMemoryStream aMemoryStream;
 
@@ -599,8 +599,13 @@ bool SwHTMLParser::InsertEmbed()
             }
 
             if (!xInStream.is())
-                // Non-RTF case.
-                xInStream.set(new utl::OStreamWrapper(aFileStream));
+            {
+                // Object data is neither OLE2 in RTF, nor an image. Then map this to an URL that
+                // will be set on the inner image.
+                m_aEmbedURL = aEmbedURL;
+                // Signal success, so the outer object won't fall back to the image handler.
+                return true;
+            }
 
             if (!xObj.is())
             {

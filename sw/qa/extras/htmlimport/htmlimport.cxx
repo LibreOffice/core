@@ -536,6 +536,33 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testUTF16_nonBMP)
                          getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testOleData)
+{
+    // Given an XHTML with an <object> (containing non-image, non-OLE2 data) and an inner <object>
+    // (containing PNG):
+    uno::Sequence<beans::PropertyValue> aLoadProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole-data.xhtml";
+
+    // When loading the document:
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+
+    // Then make sure the result is a single clickable Writer image:
+    uno::Reference<text::XTextGraphicObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getGraphicObjects(),
+                                                     uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. the image was not imported as a Writer image (but as an OLE object).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
+    uno::Reference<css::drawing::XShape> xShape = getShape(1);
+    // And then the image was not clickable: this was empty.
+    CPPUNIT_ASSERT(getProperty<OUString>(xShape, "HyperLinkURL").endsWith("/data.ole"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
