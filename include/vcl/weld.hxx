@@ -1350,6 +1350,9 @@ protected:
     OUString signal_query_tooltip(const TreeIter& rIter) { return m_aQueryTooltipHdl.Call(rIter); }
 
 public:
+    virtual int get_item_width() const = 0;
+    virtual void set_item_width(int width) = 0;
+
     virtual void insert(int pos, const OUString* pStr, const OUString* pId,
                         const OUString* pIconName, TreeIter* pRet)
         = 0;
