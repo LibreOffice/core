@@ -428,6 +428,22 @@ static GstContext* lcl_wayland_display_handle_context_new(void* display)
     return context;
 }
 
+static void lcl_set_overlay_window_handle(GstVideoOverlay* pXOverlay, tools::Long nWindowID)
+{
+    assert(pXOverlay);
+    SAL_INFO( "avmedia.gstreamer", AVVERSION "setting window id " << nWindowID << " for XOverlay " << pXOverlay);
+    gst_video_overlay_set_window_handle(pXOverlay, nWindowID);
+}
+
+static void lcl_resize_overlay(GstVideoOverlay* pXOverlay, css::awt::Rectangle& rRect)
+{
+    assert(pXOverlay);
+    if (rRect.Width <= 0 && rRect.Height <= 0)
+        return;
+    SAL_INFO("avmedia.gstreamer", "Overlay resized to " << rRect.Width << "x" << rRect.Height << "@" << rRect.X << "x" << rRect.Y);
+    gst_video_overlay_set_render_rectangle(pXOverlay, rRect.X, rRect.Y, rRect.Width, rRect.Height);
+}
+
 GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -457,10 +473,9 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
             g_object_ref( G_OBJECT ( mpXOverlay ) );
             if ( mnWindowID != 0 )
             {
-                gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
                 gst_video_overlay_handle_events(mpXOverlay, 0); // Let the parent window handle events.
-                if (maArea.Width > 0 && maArea.Height > 0)
-                    gst_video_overlay_set_render_rectangle(mpXOverlay, maArea.X, maArea.Y, maArea.Width, maArea.Height);
+                lcl_set_overlay_window_handle(mpXOverlay, mnWindowID);
+                lcl_resize_overlay(mpXOverlay, maArea);
             }
 
             return GST_BUS_DROP;
@@ -601,6 +616,17 @@ bool Player::create( const OUString& rURL )
         maURL.clear();
 
     return bRet;
+}
+
+void Player::setPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight)
+{
+    maArea.X = nX;
+    maArea.Y = nY;
+    maArea.Width = nWidth;
+    maArea.Height = nHeight;
+
+    if (mpXOverlay && mnWindowID)
+        lcl_resize_overlay(mpXOverlay, maArea);
 }
 
 void SAL_CALL Player::start()
@@ -862,20 +888,20 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
                 return nullptr;
         }
 
-        xRet = new ::avmedia::gstreamer::Window;
+        xRet = new ::avmedia::gstreamer::Window(this);
 
         g_object_set(G_OBJECT(mpPlaybin), "video-sink", pVideosink, nullptr);
         g_object_set(G_OBJECT(mpPlaybin), "force-aspect-ratio", FALSE, nullptr);
+        gst_element_set_state(mpPlaybin, GST_STATE_PAUSED);
 
         if (!mbUseGtkSink)
         {
             mnWindowID = pEnvData->GetWindowHandle(pParentWindow->ImplGetFrame());
             mpDisplay = pEnvData->pDisplay;
-            SAL_INFO( "avmedia.gstreamer", AVVERSION "set window id to " << static_cast<int>(mnWindowID) << " XOverlay " << mpXOverlay);
+            SAL_INFO("avmedia.gstreamer", AVVERSION "window id set to " << static_cast<int>(mnWindowID));
+            if (mpXOverlay)
+                lcl_set_overlay_window_handle(mpXOverlay, mnWindowID);
         }
-        gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
-        if (!mbUseGtkSink && mpXOverlay)
-            gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
     }
 
     return xRet;

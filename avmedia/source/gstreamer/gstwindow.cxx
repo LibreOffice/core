@@ -21,6 +21,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
+#include "gstplayer.hxx"
 #include "gstwindow.hxx"
 
 constexpr OUStringLiteral AVMEDIA_GST_WINDOW_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.Window_GStreamer";
@@ -33,9 +34,14 @@ namespace avmedia::gstreamer {
 // Window
 
 
-Window::Window() :
+Window::Window(Player* pPlayer) :
     meZoomLevel( media::ZoomLevel_NOT_AVAILABLE )
+    , m_pPlayer(pPlayer)
 {
+    m_aPosSize.X = 0;
+    m_aPosSize.Y = 0;
+    m_aPosSize.Width = 320;
+    m_aPosSize.Height = 200;
 }
 
 Window::~Window()
@@ -79,19 +85,19 @@ void SAL_CALL Window::setPointerType( sal_Int32 /*nPointerType*/ )
 // XWindow
 
 
-void SAL_CALL Window::setPosSize( sal_Int32 /*X*/, sal_Int32 /*Y*/, sal_Int32 /*Width*/, sal_Int32 /*Height*/, sal_Int16 /*Flags*/ )
+void SAL_CALL Window::setPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 /*Flags*/ )
 {
+    m_aPosSize.X = nX;
+    m_aPosSize.Y = nY;
+    m_aPosSize.Width = nWidth;
+    m_aPosSize.Height = nHeight;
+    if (m_pPlayer)
+        m_pPlayer->setPosSize(nX, nY, nWidth, nHeight);
 }
 
 awt::Rectangle SAL_CALL Window::getPosSize()
 {
-    awt::Rectangle aRet;
-
-    aRet.X = aRet.Y = 0;
-    aRet.Width = 320;
-    aRet.Height = 240;
-
-    return aRet;
+    return m_aPosSize;
 }
 
 void SAL_CALL Window::setVisible( sal_Bool /*bVisible*/ )

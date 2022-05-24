@@ -50,6 +50,7 @@ public:
     bool create( const OUString& rURL );
     void processMessage( GstMessage *message );
     GstBusSyncReply processSyncMessage( GstMessage *message );
+    void setPosSize(sal_Int32, sal_Int32, sal_Int32, sal_Int32);
 
     // XPlayer
     virtual void SAL_CALL start(  ) override;

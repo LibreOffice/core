@@ -34,7 +34,7 @@ class Window : public ::cppu::WeakImplHelper< css::media::XPlayerWindow,
 {
 public:
 
-    explicit Window();
+    explicit Window(Player* = nullptr);
     virtual ~Window() override;
 
     // XPlayerWindow
@@ -75,6 +75,8 @@ public:
 private:
 
     css::media::ZoomLevel                       meZoomLevel;
+    css::awt::Rectangle m_aPosSize;
+    Player* m_pPlayer;
 };
 
 } // namespace avmedia::gstreamer
