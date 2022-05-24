@@ -10,13 +10,14 @@
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
+#include <comphelper/indexedpropertyvalues.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <rtl/ref.hxx>
 #include <map>
 
 using namespace com::sun::star;
@@ -295,7 +296,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
             ScCTB* pCustTB = rWrapper.GetCustomizationData( pMenu->Name() );
             if ( pCustTB )
             {
-                 uno::Reference< container::XIndexContainer > xMenuDesc = document::IndexedPropertyValues::create( comphelper::getProcessComponentContext() );
+                 rtl::Reference< comphelper::IndexedPropertyValuesContainer > xMenuDesc = new comphelper::IndexedPropertyValuesContainer();
                  if ( !pCustTB->ImportMenuTB( rWrapper, xMenuDesc, helper ) )
                      return false;
                  if ( !bIsMenuToolbar )
@@ -307,7 +308,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
                  {
                      beans::PropertyValue aProp;
                      aProp.Name = "ItemDescriptorContainer";
-                     aProp.Value <<= xMenuDesc;
+                     aProp.Value <<= uno::Reference< container::XIndexContainer >(xMenuDesc);
                      props.push_back( aProp );
                  }
             }

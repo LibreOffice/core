@@ -117,11 +117,11 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
-#include <com/sun/star/document/IndexedPropertyValues.hpp>
 
 #include <svl/lngmisc.hxx>
 #include <svl/itemiter.hxx>
 
+#include <comphelper/indexedpropertyvalues.hxx>
 #include <comphelper/processfactory.hxx>
 #include <basic/basmgr.hxx>
 
@@ -1845,8 +1845,7 @@ void SwWW8ImplReader::ImportDop()
                 { "ZoomType", uno::Any(nZoomType) }
             }));
 
-        uno::Reference< uno::XComponentContext > xComponentContext(comphelper::getProcessComponentContext());
-        uno::Reference<container::XIndexContainer> xBox = document::IndexedPropertyValues::create(xComponentContext);
+        rtl::Reference< comphelper::IndexedPropertyValuesContainer > xBox = new comphelper::IndexedPropertyValuesContainer();
         xBox->insertByIndex(sal_Int32(0), uno::Any(aViewProps));
         uno::Reference<document::XViewDataSupplier> xViewDataSupplier(m_pDocShell->GetModel(), uno::UNO_QUERY);
         xViewDataSupplier->setViewData(xBox);

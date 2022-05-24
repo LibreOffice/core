@@ -23,11 +23,11 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <comphelper/indexedpropertyvalues.hxx>
 #include <osl/diagnose.h>
 #include <unotools/mediadescriptor.hxx>
 #include <oox/core/filterbase.hxx>
@@ -563,8 +563,8 @@ void ViewSettings::finalizeImport()
     if( !rxActiveSheetView )
         rxActiveSheetView = std::make_shared<SheetViewModel>();
 
-    Reference< XIndexContainer > xContainer = IndexedPropertyValues::create( getBaseFilter().getComponentContext() );
-    if( xContainer.is() ) try
+    rtl::Reference< comphelper::IndexedPropertyValuesContainer > xContainer = new comphelper::IndexedPropertyValuesContainer();
+    try
     {
         PropertyMap aPropMap;
         aPropMap.setProperty( PROP_Tables, xSheetsNC);

@@ -66,10 +66,10 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
-#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <comphelper/indexedpropertyvalues.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
@@ -2615,8 +2615,8 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
         SolarMutexGuard aGuard;
         if (pDocShell && pDocShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
         {
-            uno::Reference < container::XIndexContainer > xCont = document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() );
-            xRet.set( xCont, uno::UNO_QUERY_THROW );
+            rtl::Reference< comphelper::IndexedPropertyValuesContainer > xCont = new comphelper::IndexedPropertyValuesContainer();
+            xRet = xCont;
 
             OUString sName;
             pDocShell->GetDocument().GetName( pDocShell->GetDocument().GetVisibleTab(), sName );
