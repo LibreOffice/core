@@ -68,6 +68,24 @@
       "message": "Personally I would keep it like:\n\n    const bool bHasCommitText \u003d !pEvent-\u003ecommitString().isEmpty();\n    const int nReplacementLength \u003d pEvent-\u003ereplacementLength();\n\n    if (nReplacementLength \u003e 0 || bHasCommitText)\n    {   \n        if (nReplacementLength \u003e 0)\n            replaceText(m_rFrame, pEvent-\u003ereplacementStart(), nReplacementLength);\n        if (bHasCommitText)\n            commitText(m_rFrame, pEvent-\u003ecommitString());\n    }\n    \nThe const aren\u0027t strictly needed, but IMHO make reading the code easier.",
       "revId": "716f12d5806773e12b63579b01cc5b17ef4b39d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70269f09_c88bfde6",
+        "filename": "vcl/qt5/QtWidget.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-24T12:30:27Z",
+      "side": 1,
+      "message": "Ok - seems there is some Gerrit bug. It did just show two comments, but interestingly the one in the reply initially differed from the inline one...",
+      "parentUuid": "3d760c1a_500a54c6",
+      "revId": "716f12d5806773e12b63579b01cc5b17ef4b39d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
