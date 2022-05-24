@@ -16252,6 +16252,16 @@ public:
         m_nIdCol = m_nTextCol + 1;
     }
 
+    virtual int get_item_width() const override
+    {
+        return gtk_icon_view_get_item_width(m_pIconView);
+    }
+
+    virtual void set_item_width(int width) override
+    {
+        gtk_icon_view_set_item_width(m_pIconView, width);
+    }
+
     virtual void insert(int pos, const OUString* pText, const OUString* pId, const OUString* pIconName, weld::TreeIter* pRet) override
     {
         disable_notify_events();
