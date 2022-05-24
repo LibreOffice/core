@@ -1761,6 +1761,9 @@ private:
 public:
     SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
+    virtual int get_item_width() const override;
+    virtual void set_item_width(int width) override;
+
     virtual void freeze() override;
 
     virtual void thaw() override;

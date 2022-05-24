@@ -5308,6 +5308,9 @@ SalInstanceIconView::SalInstanceIconView(::IconView* pIconView, SalInstanceBuild
     m_xIconView->SetPopupMenuHdl(LINK(this, SalInstanceIconView, CommandHdl));
 }
 
+int SalInstanceIconView::get_item_width() const { return m_xIconView->GetEntryWidth(); }
+void SalInstanceIconView::set_item_width(int width) { m_xIconView->SetEntryWidth(width); }
+
 void SalInstanceIconView::freeze()
 {
     bool bIsFirstFreeze = IsFirstFreeze();
