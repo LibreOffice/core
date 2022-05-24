@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8510ccfa_2732c489",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-24T17:23:47Z",
+      "side": 1,
+      "message": "This now handles QtObject::SetForwardKey (actually for mouse and keyboard), which seems to work as expected.",
+      "revId": "46d99ceaa034c263c6bdcfdf84b3a682404e3049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
