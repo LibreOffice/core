@@ -21,11 +21,13 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 //#include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/bytereader.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
@@ -47,7 +49,9 @@ namespace comphelper
 
 namespace {
 
-class UNOMemoryStream : public WeakImplHelper<XServiceInfo, XStream, XSeekableInputStream, XOutputStream, XTruncate>
+class UNOMemoryStream :
+    public WeakImplHelper<XServiceInfo, XStream, XSeekableInputStream, XOutputStream, XTruncate, XUnoTunnel>,
+    public comphelper::ByteWriter
 {
 public:
     UNOMemoryStream();
@@ -80,6 +84,12 @@ public:
 
     // XTruncate
     virtual void SAL_CALL truncate() override;
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+
+    // comphelper::ByteWriter
+    virtual sal_Int32 writeSomeBytes(const sal_Int8* aData, sal_Int32 nBytesToWrite) override;
 
 private:
     // prevents std::vector from wasting time doing memset on data we are going to overwrite anyway
@@ -224,6 +234,30 @@ void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData )
     mnCursor += nBytesToWrite;
 }
 
+sal_Int32 UNOMemoryStream::writeSomeBytes( const sal_Int8* pInData, sal_Int32 nBytesToWrite )
+{
+    if( !nBytesToWrite )
+        return 0;
+
+    sal_Int64 nNewSize = static_cast<sal_Int64>(mnCursor) + nBytesToWrite;
+    if( nNewSize > SAL_MAX_INT32 )
+    {
+        OSL_ASSERT(false);
+        throw IOException("this implementation does not support more than 2GB!", static_cast<OWeakObject*>(this) );
+    }
+
+    if( static_cast< sal_Int32 >( nNewSize ) > static_cast< sal_Int32 >( maData.size() ) )
+        maData.resize( nNewSize );
+
+    NoInitInt8* pData = &(*maData.begin());
+    NoInitInt8* pCursor = &(pData[mnCursor]);
+    // cast to avoid -Werror=class-memaccess
+    memcpy(static_cast<void*>(pCursor), pInData, nBytesToWrite);
+
+    mnCursor += nBytesToWrite;
+    return nBytesToWrite;
+}
+
 void SAL_CALL UNOMemoryStream::flush()
 {
 }
@@ -238,6 +272,13 @@ void SAL_CALL UNOMemoryStream::truncate()
 {
     maData.clear();
     mnCursor = 0;
+}
+
+sal_Int64 SAL_CALL UNOMemoryStream::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
+{
+    if (rIdentifier == comphelper::ByteWriter::getUnoTunnelId())
+        return reinterpret_cast<sal_Int64>(static_cast<comphelper::ByteWriter*>(this));
+    return 0;
 }
 
 } // namespace comphelper
