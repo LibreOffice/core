@@ -367,10 +367,8 @@ QWindow* QtFrame::windowHandle() const
     // set attribute 'Qt::WA_NativeWindow' first to make sure a window handle actually exists
     QWidget* pChild = asChild();
     assert(pChild->window() == pChild);
-#ifndef EMSCRIPTEN
-    // no idea, why this breaks the menubar for EMSCRIPTEN
-    pChild->setAttribute(Qt::WA_NativeWindow);
-#endif
+    if (m_aSystemData.platform == SystemEnvData::Platform::Wayland)
+        pChild->setAttribute(Qt::WA_NativeWindow);
     return pChild->windowHandle();
 }
 
