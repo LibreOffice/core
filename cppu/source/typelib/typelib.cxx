@@ -161,7 +161,7 @@ typedef std::list< CallbackEntry > CallbackSet_Impl;
 typedef std::list< typelib_TypeDescription * > TypeDescriptionList_Impl;
 
 // # of cached elements
-static sal_Int32 nCacheSize = 256;
+constexpr auto nCacheSize = 256;
 
 namespace {
 
@@ -447,7 +447,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
 
         // insert into the cache
         MutexGuard aGuard( rInit.maMutex );
-        if( static_cast<sal_Int32>(rInit.maCache.size()) >= nCacheSize )
+        if( rInit.maCache.size() >= nCacheSize )
         {
             typelib_typedescription_release( rInit.maCache.front() );
             rInit.maCache.pop_front();
@@ -2031,7 +2031,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
 
         // insert into the cache
         MutexGuard aGuard( rInit.maMutex );
-        if( static_cast<sal_Int32>(rInit.maCache.size()) >= nCacheSize )
+        if( rInit.maCache.size() >= nCacheSize )
         {
             typelib_typedescription_release( rInit.maCache.front() );
             rInit.maCache.pop_front();
@@ -2085,7 +2085,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
 
                 // insert into the cache
                 MutexGuard aGuard( rInit.maMutex );
-                if( static_cast<sal_Int32>(rInit.maCache.size()) >= nCacheSize )
+                if( rInit.maCache.size() >= nCacheSize )
                 {
                     typelib_typedescription_release( rInit.maCache.front() );
                     rInit.maCache.pop_front();
@@ -2288,24 +2288,9 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_assign(
 }
 
 
-extern "C" void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize )
+extern "C" void SAL_CALL typelib_setCacheSize( sal_Int32 )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSURE( nNewSize >= 0, "### illegal cache size given!" );
-    if (nNewSize < 0)
-        return;
-
-    TypeDescriptor_Init_Impl &rInit = Init();
-    MutexGuard aGuard( rInit.maMutex );
-    if (nNewSize < nCacheSize)
-    {
-        while (static_cast<sal_Int32>(rInit.maCache.size()) != nNewSize)
-        {
-            typelib_typedescription_release( rInit.maCache.front() );
-            rInit.maCache.pop_front();
-        }
-    }
-    nCacheSize = nNewSize;
 }
 
 
