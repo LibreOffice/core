@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0944490_252ebb0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-05-24T06:17:41Z",
+      "side": 1,
+      "message": "Argh, this was still a draft comment. I hate this concept of \"draft\" comments that you have to separately post in a separate step. Anyway, just for the record.",
+      "revId": "1d58828f2285064635ed776e0641e83ee26d34da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85651ec2_73eba3f5",
@@ -31,6 +48,24 @@
       "writtenOn": "2022-05-23T16:47:50Z",
       "side": 1,
       "message": "will revert",
+      "parentUuid": "85651ec2_73eba3f5",
+      "revId": "1d58828f2285064635ed776e0641e83ee26d34da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88b57cce_9e06e68a",
+        "filename": "sal/osl/unx/file.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-05-24T06:17:41Z",
+      "side": 1,
+      "message": "Most likely that is still very relevant, and things now then are broken in a sandboxed LO process on macOS.",
       "parentUuid": "85651ec2_73eba3f5",
       "revId": "1d58828f2285064635ed776e0641e83ee26d34da",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
