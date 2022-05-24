@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e9b7d65_fd0f1011",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-05-24T10:44:06Z",
+      "side": 1,
+      "message": "I don\u0027t have any particular insight here, your commentary sounds convincing and I\u0027m unaware of a counter argument. This seems to have been basically unchanged since its introduction with:\n\ncommit 9295737074d43177681c866d4002a8e6d9f06eec\nAuthor: Herbert Duerr \u003chdu@openoffice.org\u003e\nDate:   Tue Oct 29 12:09:45 2002 +0000\n\n    #102193# first shot at font/glyph/script fallback infrastructure\n",
+      "revId": "bf3c7cb5ac94838a2fa4ce8ac857f96b1ebabd13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
