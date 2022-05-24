@@ -30,9 +30,24 @@
 #include "graphicfilter_internal.hxx"
 
 #define DATA_SIZE           640
-constexpr sal_uInt32 EMF_CHECK_SIZE    = 44;
-constexpr sal_uInt32 EMR_HEADER        = 0x00000001;
-constexpr sal_uInt32 ENHMETA_SIGNATURE = 0x464d4520;
+constexpr sal_uInt32 EMF_CHECK_SIZE      = 44;
+constexpr sal_uInt32 WMF_CHECK_SIZE      = 32;
+constexpr sal_uInt32 EMR_HEADER          = 0x00000001;
+constexpr sal_uInt32 ENHMETA_SIGNATURE   = 0x464d4520;
+constexpr sal_uInt32 PLACEABLE_SIGNATURE = 0xd7cdc69a;
+namespace
+{
+enum class MetafileType : sal_uInt16
+{
+    Memory = 0x0001,
+    Disk   = 0x0002,
+};
+enum class MetafileVersion : sal_uInt16
+{
+    Version100 = 0x0100,
+    Version300 = 0x0300,
+};
+}
 
 GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
     pFileStm( ::utl::UcbStreamHelper::CreateStream( rPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ).release() ),
@@ -1081,12 +1096,49 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectWMF( SvStream&, bool )
+bool GraphicDescriptor::ImpDetectWMF(SvStream& rStm, bool)
 {
-    bool bRet = aPathExt.startsWith( "wmf" ) || aPathExt.startsWith( "wmz" );
-    if (bRet)
+    bool bRet = false;
+    SvStream* aNewStream = &rStm;
+    SvMemoryStream aMemStream;
+    sal_uInt8 aUncompressedBuffer[WMF_CHECK_SIZE];
+    if (ZCodec::IsZCompressed(rStm))
+    {
+        ZCodec aCodec;
+        aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/ true);
+        auto nDecompressLength = aCodec.Read(rStm, aUncompressedBuffer, WMF_CHECK_SIZE);
+        aCodec.EndCompression();
+        if (nDecompressLength != WMF_CHECK_SIZE)
+            return false;
+        aMemStream.SetBuffer(aUncompressedBuffer, WMF_CHECK_SIZE, WMF_CHECK_SIZE);
+        aNewStream = &aMemStream;
+    }
+    sal_uInt32 nKey = 0;
+    sal_Int32 nStmPos = rStm.Tell();
+    aNewStream->SetEndian(SvStreamEndian::LITTLE);
+    aNewStream->ReadUInt32(nKey);
+    // Check if file is placeable WMF
+    if (nKey == PLACEABLE_SIGNATURE)
+    {
         nFormat = GraphicFileFormat::WMF;
+        bRet = true;
+    }
+    else
+    {
+        sal_uInt16 nKeyLSW = nKey & 0xFFFF;
+        sal_uInt16 nVersion = 0;
+        aNewStream->ReadUInt16(nVersion);
+        if ((nKeyLSW == static_cast<sal_uInt16>(MetafileType::Memory)
+            || nKeyLSW == static_cast<sal_uInt16>(MetafileType::Disk))
+            && (nVersion == static_cast<sal_uInt16>(MetafileVersion::Version100)
+            || nVersion == static_cast<sal_uInt16>(MetafileVersion::Version300)))
+        {
+            nFormat = GraphicFileFormat::WMF;
+            bRet = true;
+        }
+    }
 
+    rStm.Seek(nStmPos);
     return bRet;
 }
 
