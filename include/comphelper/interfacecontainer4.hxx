@@ -86,7 +86,9 @@ public:
 
 private:
     OInterfaceContainerHelper4<ListenerT>& rCont;
-    o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>> maData;
+    o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
+                      o3tl::ThreadSafeRefCountingPolicy>
+        maData;
     sal_Int32 nRemain;
 
     OInterfaceIteratorHelper4(const OInterfaceIteratorHelper4&) = delete;
@@ -228,13 +230,19 @@ public:
 
 private:
     friend class OInterfaceIteratorHelper4<ListenerT>;
-    o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>> maData;
+    o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
+                      o3tl::ThreadSafeRefCountingPolicy>
+        maData;
     OInterfaceContainerHelper4(const OInterfaceContainerHelper4&) = delete;
     OInterfaceContainerHelper4& operator=(const OInterfaceContainerHelper4&) = delete;
 
-    static o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>>& DEFAULT()
+    static o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
+                             o3tl::ThreadSafeRefCountingPolicy>&
+    DEFAULT()
     {
-        static o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>> SINGLETON;
+        static o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
+                                 o3tl::ThreadSafeRefCountingPolicy>
+            SINGLETON;
         return SINGLETON;
     }
 
