@@ -60,9 +60,6 @@ class BaseContainer : public cppu::BaseMutex
 
     protected:
 
-        // TODO
-        css::uno::WeakReference< css::util::XRefreshable > m_xRefreshBroadcaster;
-
         /** @short  the implementation name of our derived class, which we provide
                     at the interface XServiceInfo of our class... */
         OUString m_sImplementationName;
@@ -145,10 +142,9 @@ class BaseContainer : public cppu::BaseMutex
                     specify, which sub container of the used filter cache
                     must be wrapped by this container interface.
          */
-        void init(const css::uno::Reference< css::uno::XComponentContext >&     rxContext          ,
-                          const OUString&                                        sImplementationName,
-                          const css::uno::Sequence< OUString >&                  lServiceNames      ,
-                                FilterCache::EItemType                                  eType              );
+        void init( const OUString&                                        sImplementationName,
+                   const css::uno::Sequence< OUString >&                  lServiceNames      ,
+                   FilterCache::EItemType                                 eType              );
 
 
     // helper

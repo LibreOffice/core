@@ -21,7 +21,6 @@
 #include "basecontainer.hxx"
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/document/FilterConfigRefresh.hpp>
 #include <com/sun/star/uno/Type.h>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -45,8 +44,7 @@ BaseContainer::~BaseContainer()
 }
 
 
-void BaseContainer::init(const css::uno::Reference< css::uno::XComponentContext >&     rxContext              ,
-                         const OUString&                                        sImplementationName,
+void BaseContainer::init(const OUString&                                        sImplementationName,
                          const css::uno::Sequence< OUString >&                  lServiceNames      ,
                                FilterCache::EItemType                                  eType              )
 {
@@ -56,7 +54,6 @@ void BaseContainer::init(const css::uno::Reference< css::uno::XComponentContext 
     m_sImplementationName = sImplementationName;
     m_lServiceNames       = lServiceNames      ;
     m_eType               = eType              ;
-    m_xRefreshBroadcaster = css::document::FilterConfigRefresh::create(rxContext);
     // <- SAFE
 }
 
@@ -427,13 +424,8 @@ void SAL_CALL BaseContainer::flush()
 
     m_pFlushCache.reset();
 
-    css::uno::Reference< css::util::XRefreshable > xRefreshBroadcaster = m_xRefreshBroadcaster;
-
     aLock.clear();
     // <- SAFE
-
-    if (xRefreshBroadcaster.is())
-        xRefreshBroadcaster->refresh();
 
     // notify listener outside the lock!
     // The used listener helper lives if we live
