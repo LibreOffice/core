@@ -493,6 +493,29 @@ void QtWidget::commitText(QtFrame& rFrame, const QString& aText)
         rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
 }
 
+void QtWidget::replaceText(QtFrame& rFrame, int nReplacementStart, int nReplacementLength,
+                           const QString& rText)
+{
+    if (nReplacementLength > 0)
+    {
+        // get the surrounding text
+        SolarMutexGuard aGuard;
+        SalSurroundingTextRequestEvent aSurroundingTextEvt;
+        aSurroundingTextEvt.maText.clear();
+        aSurroundingTextEvt.mnStart = aSurroundingTextEvt.mnEnd = 0;
+        rFrame.CallCallback(SalEvent::SurroundingTextRequest, &aSurroundingTextEvt);
+
+        // remove selected text and text specified by nReplacementStart/nReplacementLength
+        SalSurroundingTextSelectionChangeEvent aEvt;
+        aEvt.mnStart = aSurroundingTextEvt.mnStart + nReplacementStart;
+        aEvt.mnEnd = aSurroundingTextEvt.mnEnd + nReplacementStart + nReplacementLength;
+        rFrame.CallCallback(SalEvent::DeleteSurroundingTextRequest, &aEvt);
+    }
+
+    if (!rText.isEmpty())
+        commitText(rFrame, rText);
+}
+
 bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent,
                               const ButtonKeyState eState)
 {
@@ -721,8 +744,11 @@ static ExtTextInputAttr lcl_MapUnderlineStyle(QTextCharFormat::UnderlineStyle us
 
 void QtWidget::inputMethodEvent(QInputMethodEvent* pEvent)
 {
-    if (!pEvent->commitString().isEmpty())
-        commitText(m_rFrame, pEvent->commitString());
+    if (pEvent->replacementLength() > 0 || !pEvent->commitString().isEmpty())
+    {
+        replaceText(m_rFrame, pEvent->replacementStart(), pEvent->replacementLength(),
+                    pEvent->commitString());
+    }
     else
     {
         SalExtTextInputEvent aInputEvent;
