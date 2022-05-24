@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2518b0cd_bf3784d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-24T14:31:52Z",
+      "side": 1,
+      "message": "Thank you so much - this is really helpful (I see some direction now, even though I also don\u0027t understand the difference).",
+      "parentUuid": "fd3f021c_393c6ba1",
+      "revId": "e938ef3b386a8a96534ae34318596a8144e76e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ec4a5e1_d9389b63",
