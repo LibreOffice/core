@@ -21,7 +21,7 @@
 
 #include <node.hxx>
 
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 class SfxMedium;
 class SotStorage;
@@ -46,7 +46,7 @@ struct LessMathTypeFont
     }
 };
 
-typedef ::std::set< MathTypeFont, LessMathTypeFont > MathTypeFontSet;
+typedef o3tl::sorted_vector< MathTypeFont, LessMathTypeFont > MathTypeFontSet;
 
 class MathType
 {
