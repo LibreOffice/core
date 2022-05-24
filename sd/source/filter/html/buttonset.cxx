@@ -25,6 +25,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XStream.hpp>
 
+#include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
@@ -195,7 +196,7 @@ int ButtonSetImpl::getCount() const
 
 bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButtons, Image& rImage )
 {
-    if( (nSet >= 0) && (nSet < static_cast<int>(maButtons.size())))
+    if( (nSet >= 0) && (o3tl::make_unsigned(nSet) < maButtons.size()))
     {
         ButtonsImpl& rSet = *maButtons[nSet];
 
@@ -243,7 +244,7 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
 
 bool ButtonSetImpl::exportButton( int nSet, const OUString& rPath, const OUString& rName )
 {
-    if( (nSet >= 0) && (nSet < static_cast<int>(maButtons.size())))
+    if( (nSet >= 0) && (o3tl::make_unsigned(nSet) < maButtons.size()))
     {
         ButtonsImpl& rSet = *maButtons[nSet];
 

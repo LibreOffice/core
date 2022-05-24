@@ -40,6 +40,7 @@
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 
 #include <comphelper/sequence.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -551,7 +552,7 @@ void PivotTableField::convertPageField( const PTPageFieldModel& rPageField )
     else
     {
         // single item may be selected
-        if( (0 <= rPageField.mnItem) && (rPageField.mnItem < static_cast< sal_Int32 >( maItems.size() )) )
+        if( (0 <= rPageField.mnItem) && (o3tl::make_unsigned(rPageField.mnItem) < maItems.size()) )
             nCacheItem = maItems[ rPageField.mnItem ].mnCacheItem;
     }
 

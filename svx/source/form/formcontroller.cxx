@@ -1067,7 +1067,7 @@ Any SAL_CALL FormController::getByIndex(sal_Int32 Index)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (Index < 0 ||
-        Index >= static_cast<sal_Int32>(m_aChildren.size()))
+        o3tl::make_unsigned(Index) >= m_aChildren.size())
         throw IndexOutOfBoundsException();
 
     return Any( m_aChildren[ Index ] );

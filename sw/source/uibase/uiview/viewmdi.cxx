@@ -21,6 +21,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/ruler.hxx>
 #include <editeng/lrspitem.hxx>
+#include <o3tl/safeint.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
@@ -513,7 +514,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
                 else
                 {
                     s_nActMark--;
-                    if (s_nActMark < 0 || s_nActMark >= static_cast<sal_Int32>(vNavMarkNames.size()))
+                    if (s_nActMark < 0 || o3tl::make_unsigned(s_nActMark) >= vNavMarkNames.size())
                     {
                         s_nActMark = vNavMarkNames.size()-1;
                         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::ReminderStartWrapped );

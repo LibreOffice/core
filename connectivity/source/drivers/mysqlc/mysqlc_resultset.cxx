@@ -1095,7 +1095,7 @@ css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL OResultSet::getProper
 
 void OResultSet::checkColumnIndex(sal_Int32 index)
 {
-    if (index < 1 || index > static_cast<int>(m_aFields.size()))
+    if (index < 1 || o3tl::make_unsigned(index) > m_aFields.size())
     {
         /* static object for efficiency or thread safety is a problem ? */
         throw SQLException("index out of range", *this, OUString(), 1, Any());

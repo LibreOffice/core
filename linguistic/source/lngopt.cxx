@@ -21,6 +21,7 @@
 #include <sal/macros.h>
 #include "lngopt.hxx"
 #include <linguistic/misc.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
 
@@ -124,7 +125,8 @@ OUString LinguOptions::GetName( sal_Int32 nWID )
 
     OUString aRes;
 
-    if (0 <= nWID && nWID < sal_Int32(SAL_N_ELEMENTS(aWID_Name)) && aWID_Name[ nWID ].nWID == nWID)
+    if (0 <= nWID && o3tl::make_unsigned(nWID) < SAL_N_ELEMENTS(aWID_Name)
+        && aWID_Name[ nWID ].nWID == nWID)
         aRes = aWID_Name[nWID].aPropertyName;
     else
         OSL_FAIL("lng : unknown WID");

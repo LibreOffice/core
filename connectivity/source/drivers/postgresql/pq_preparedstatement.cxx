@@ -40,6 +40,7 @@
 #include "pq_statics.hxx"
 #include "pq_statement.hxx"
 
+#include <o3tl/safeint.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -197,7 +198,7 @@ PreparedStatement::~PreparedStatement()
 
 void PreparedStatement::checkColumnIndex( sal_Int32 parameterIndex )
 {
-    if( parameterIndex < 1 || parameterIndex > static_cast<sal_Int32>(m_vars.size()) )
+    if( parameterIndex < 1 || o3tl::make_unsigned(parameterIndex) > m_vars.size() )
     {
         throw SQLException(
             "pq_preparedstatement: parameter index out of range (expected 1 to "

@@ -27,6 +27,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/unreachable.hxx>
 #include <TConnection.hxx>
 
@@ -171,7 +172,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& colum
 
 void ODatabaseMetaDataResultSet::checkIndex(sal_Int32 columnIndex )
 {
-    if(columnIndex >= static_cast<sal_Int32>((*m_aRowsIter).size()) || columnIndex < 1)
+    if(columnIndex < 1 || o3tl::make_unsigned(columnIndex) >= (*m_aRowsIter).size())
         ::dbtools::throwInvalidIndexException(*this);
 }
 

@@ -20,6 +20,7 @@
 #include "entrylisthelper.hxx"
 #include <FormComponent.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
@@ -82,13 +83,13 @@ namespace frm
 
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryChanged: where did this come from?" );
-        OSL_ENSURE( ( _rEvent.Position >= 0 ) && ( _rEvent.Position < static_cast<sal_Int32>(m_aStringItems.size()) ),
+        OSL_ENSURE( ( _rEvent.Position >= 0 ) && ( o3tl::make_unsigned(_rEvent.Position) < m_aStringItems.size() ),
             "OEntryListHelper::entryChanged: invalid index!" );
         OSL_ENSURE( _rEvent.Entries.getLength() == 1,
             "OEntryListHelper::entryChanged: invalid string list!" );
 
         if  (   ( _rEvent.Position >= 0 )
-            &&  ( _rEvent.Position < static_cast<sal_Int32>(m_aStringItems.size()) )
+            &&  ( o3tl::make_unsigned(_rEvent.Position) < m_aStringItems.size() )
             &&  _rEvent.Entries.hasElements()
             )
         {
@@ -106,11 +107,11 @@ namespace frm
 
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryRangeInserted: where did this come from?" );
-        OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Position < static_cast<sal_Int32>(m_aStringItems.size()) ) && _rEvent.Entries.hasElements(),
+        OSL_ENSURE( ( _rEvent.Position > 0 ) && ( o3tl::make_unsigned(_rEvent.Position) < m_aStringItems.size() ) && _rEvent.Entries.hasElements(),
             "OEntryListHelper::entryRangeRemoved: invalid count and/or position!" );
 
         if  (   ( _rEvent.Position > 0 )
-            &&  ( _rEvent.Position < static_cast<sal_Int32>(m_aStringItems.size()) )
+            &&  ( o3tl::make_unsigned(_rEvent.Position) < m_aStringItems.size() )
             &&  _rEvent.Entries.hasElements()
             )
         {

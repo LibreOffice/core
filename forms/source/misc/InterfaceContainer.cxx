@@ -43,6 +43,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -722,7 +723,7 @@ sal_Int32 OInterfaceContainer::getCount()
 
 Any OInterfaceContainer::getByIndex(sal_Int32 _nIndex)
 {
-    if (_nIndex < 0 || (_nIndex >= static_cast<sal_Int32>(m_aItems.size())))
+    if (_nIndex < 0 || (o3tl::make_unsigned(_nIndex) >= m_aItems.size()))
         throw IndexOutOfBoundsException();
 
     return m_aItems[_nIndex]->queryInterface( m_aElementType );
@@ -915,7 +916,7 @@ void SAL_CALL OInterfaceContainer::insertByIndex( sal_Int32 _nIndex, const Any& 
 
 void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any& _rNewElement, ::osl::ClearableMutexGuard& _rClearBeforeNotify )
 {
-    OSL_PRECOND( ( _nIndex >= 0 ) && ( _nIndex < static_cast<sal_Int32>(m_aItems.size()) ), "OInterfaceContainer::implReplaceByIndex: precondition not met (index)!" );
+    OSL_PRECOND( ( _nIndex >= 0 ) && ( o3tl::make_unsigned(_nIndex) < m_aItems.size() ), "OInterfaceContainer::implReplaceByIndex: precondition not met (index)!" );
 
     // approve the new object
     std::unique_ptr< ElementDescription > aElementMetaData( createElementMetaData() );
@@ -991,7 +992,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
 
 void OInterfaceContainer::implCheckIndex( const sal_Int32 _nIndex )
 {
-    if (_nIndex < 0 || _nIndex >= static_cast<sal_Int32>(m_aItems.size()))
+    if (_nIndex < 0 || o3tl::make_unsigned(_nIndex) >= m_aItems.size())
         throw IndexOutOfBoundsException();
 }
 
@@ -1008,7 +1009,7 @@ void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& 
 
 void OInterfaceContainer::implRemoveByIndex( const sal_Int32 _nIndex, ::osl::ClearableMutexGuard& _rClearBeforeNotify )
 {
-    OSL_PRECOND( ( _nIndex >= 0 ) && ( _nIndex < static_cast<sal_Int32>(m_aItems.size()) ), "OInterfaceContainer::implRemoveByIndex: precondition not met (index)!" );
+    OSL_PRECOND( ( _nIndex >= 0 ) && ( o3tl::make_unsigned(_nIndex) < m_aItems.size() ), "OInterfaceContainer::implRemoveByIndex: precondition not met (index)!" );
 
     OInterfaceArray::iterator i = m_aItems.begin() + _nIndex;
     css::uno::Reference<css::uno::XInterface>  xElement(*i);

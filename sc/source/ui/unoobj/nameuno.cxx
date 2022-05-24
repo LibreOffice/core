@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -1087,7 +1088,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
         ScDocument& rDoc = pDocShell->GetDocument();
         ScRangePairList* pOldList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
 
-        if ( pOldList && nIndex >= 0 && nIndex < static_cast<sal_Int32>(pOldList->size()) )
+        if ( pOldList && nIndex >= 0 && o3tl::make_unsigned(nIndex) < pOldList->size() )
         {
             ScRangePairListRef xNewList(pOldList->Clone());
 

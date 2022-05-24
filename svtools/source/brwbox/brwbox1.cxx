@@ -872,7 +872,7 @@ sal_Int32 BrowseBox::ScrollColumns( sal_Int32 nCols )
 {
 
     if ( nFirstCol + nCols < 0 ||
-         nFirstCol + nCols >= static_cast<tools::Long>(mvCols.size()) )
+         o3tl::make_unsigned(nFirstCol + nCols) >= mvCols.size() )
         return 0;
 
     // implicitly hides cursor while scrolling

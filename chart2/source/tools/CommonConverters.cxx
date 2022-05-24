@@ -24,6 +24,7 @@
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -227,7 +228,7 @@ drawing::Position3D getPointFromPoly( const std::vector<std::vector<css::drawing
 {
     drawing::Position3D aRet(0.0,0.0,0.0);
 
-    if( nPolyIndex>=0 && nPolyIndex<static_cast<sal_Int32>(rPolygon.size()))
+    if( nPolyIndex>=0 && o3tl::make_unsigned(nPolyIndex)<rPolygon.size())
     {
         if(nPointIndex<static_cast<sal_Int32>(rPolygon[nPolyIndex].size()))
         {

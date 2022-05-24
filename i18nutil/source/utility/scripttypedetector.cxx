@@ -22,6 +22,7 @@
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <i18nutil/scripttypedetector.hxx>
 #include <i18nutil/unicode.hxx>
+#include <o3tl/safeint.hxx>
 
 using namespace com::sun::star::i18n;
 
@@ -99,7 +100,7 @@ sal_Int32 ScriptTypeDetector::beginOfCTLScriptType( std::u16string_view Text, sa
 {
     if (nPos < 0)
         return 0;
-    else if (nPos >= static_cast<sal_Int32>(Text.size()))
+    else if (o3tl::make_unsigned(nPos) >= Text.size())
         return Text.size();
     else {
         sal_Int16 cType = getCTLScriptType(Text, nPos);
@@ -116,7 +117,7 @@ sal_Int32 ScriptTypeDetector::endOfCTLScriptType( std::u16string_view Text, sal_
 {
     if (nPos < 0)
         return 0;
-    else if (nPos >= static_cast<sal_Int32>(Text.size()))
+    else if (o3tl::make_unsigned(nPos) >= Text.size())
         return Text.size();
     else {
         sal_Int16 cType = getCTLScriptType(Text, nPos);

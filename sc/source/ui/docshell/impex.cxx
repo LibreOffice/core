@@ -2294,7 +2294,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     if( nCol > nEndCol )
                         nEndCol = nCol;
                 }
-                if ( 0 <= nFormat && nFormat < static_cast<sal_Int32>(aFormats.size()) && !bInvalidCol && !bInvalidRow )
+                if ( 0 <= nFormat && o3tl::make_unsigned(nFormat) < aFormats.size() && !bInvalidCol && !bInvalidRow )
                 {
                     sal_uInt32 nKey = aFormats[nFormat];
                     rDoc.ApplyAttr( nCol, nRow, aRange.aStart.Tab(),

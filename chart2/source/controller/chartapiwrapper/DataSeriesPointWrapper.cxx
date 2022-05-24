@@ -39,6 +39,7 @@
 #include "WrappedTextRotationProperty.hxx"
 #include <unonames.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <rtl/math.hxx>
 
 #include <algorithm>
@@ -560,7 +561,7 @@ rtl::Reference< DataSeries > DataSeriesPointWrapper::getDataSeries()
         std::vector< rtl::Reference< DataSeries > > aSeriesList =
             ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram );
 
-        if( m_nSeriesIndexInNewAPI >= 0 && m_nSeriesIndexInNewAPI < static_cast<sal_Int32>(aSeriesList.size()) )
+        if( m_nSeriesIndexInNewAPI >= 0 && o3tl::make_unsigned(m_nSeriesIndexInNewAPI) < aSeriesList.size() )
             xSeries = aSeriesList[m_nSeriesIndexInNewAPI];
     }
 

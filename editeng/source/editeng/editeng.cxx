@@ -23,6 +23,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <config_global.h>
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
@@ -2040,7 +2041,7 @@ bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
     // take unrotated positions for calculation here
     Point aDocPos = GetDocPos( rPaperPos );
 
-    if ( ( aDocPos.Y() > 0  ) && ( aDocPos.Y() < static_cast<tools::Long>(pImpEditEngine->GetTextHeight()) ) )
+    if ( ( aDocPos.Y() > 0  ) && ( o3tl::make_unsigned(aDocPos.Y()) < pImpEditEngine->GetTextHeight() ) )
         return pImpEditEngine->IsTextPos(aDocPos, nBorder);
     return false;
 }

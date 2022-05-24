@@ -2701,7 +2701,7 @@ void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
     if ( m_aCurrentRow.isNull() )
         ::dbtools::throwSQLException( DBA_RES( RID_STR_INVALID_CURSOR_STATE ), StandardSQLState::INVALID_CURSOR_STATE, *this );
 
-    if ( columnIndex <= 0 || sal_Int32((*m_aCurrentRow)->size()) <= columnIndex )
+    if ( columnIndex <= 0 || (*m_aCurrentRow)->size() <= o3tl::make_unsigned(columnIndex) )
         ::dbtools::throwSQLException( DBA_RES( RID_STR_INVALID_INDEX ), StandardSQLState::INVALID_DESCRIPTOR_INDEX, *this );
 }
 

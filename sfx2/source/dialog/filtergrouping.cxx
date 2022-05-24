@@ -18,6 +18,7 @@
  */
 
 #include "filtergrouping.hxx"
+#include <o3tl/safeint.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/strings.hrc>
@@ -882,7 +883,7 @@ namespace sfx2
 
     std::shared_ptr<const SfxFilter> TSortedFilterList::impl_getFilter(sal_Int32 nIndex)
     {
-        if (nIndex<0 || nIndex>=static_cast<sal_Int32>(m_lFilters.size()))
+        if (nIndex<0 || o3tl::make_unsigned(nIndex)>=m_lFilters.size())
             return nullptr;
         const OUString& sFilterName = m_lFilters[nIndex];
         if (sFilterName.isEmpty())

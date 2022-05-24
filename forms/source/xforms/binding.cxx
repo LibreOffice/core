@@ -31,6 +31,7 @@
 #include <strings.hrc>
 
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <tools/diagnose_ex.h>
@@ -1042,7 +1043,7 @@ OUString Binding::getListEntry( sal_Int32 nPosition )
 
     // check bounds and return proper item
     PathExpression::NodeVector_t aNodes = maBindingExpression.getNodeList();
-    if( nPosition < 0 || nPosition >= static_cast<sal_Int32>( aNodes.size() ) )
+    if( nPosition < 0 || o3tl::make_unsigned(nPosition) >= aNodes.size() )
         throw IndexOutOfBoundsException("", static_cast<XValueBinding*>(this));
     return lcl_getString( aNodes[ nPosition ] );
 }

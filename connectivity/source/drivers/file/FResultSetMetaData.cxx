@@ -22,6 +22,7 @@
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
+#include <o3tl/safeint.hxx>
 
 
 using namespace ::comphelper;
@@ -51,7 +52,7 @@ OResultSetMetaData::~OResultSetMetaData()
 
 void OResultSetMetaData::checkColumnIndex(sal_Int32 column)
 {
-    if(column <= 0 || column > static_cast<sal_Int32>(m_xColumns->size()))
+    if(column <= 0 || o3tl::make_unsigned(column) > m_xColumns->size())
         throwInvalidIndexException(*this);
 }
 

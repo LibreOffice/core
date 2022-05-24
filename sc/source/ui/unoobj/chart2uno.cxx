@@ -3205,7 +3205,7 @@ sal_uInt32 getDisplayNumberFormat(const ScDocument* pDoc, const ScAddress& rPos)
         return 0;
     }
 
-    if (nIndex < 0 || nIndex >= static_cast<sal_Int32>(m_aDataArray.size()))
+    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= m_aDataArray.size())
     {
         SAL_WARN("sc.ui", "Passed invalid index to getNumberFormatKeyByIndex(). Will return default value '0'.");
         return 0;

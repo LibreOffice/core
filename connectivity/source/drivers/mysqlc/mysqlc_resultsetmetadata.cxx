@@ -22,6 +22,7 @@
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <o3tl/safeint.hxx>
 
 using namespace connectivity::mysqlc;
 using namespace com::sun::star::uno;
@@ -199,7 +200,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isWritable(sal_Int32 column)
 void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
 {
     auto nColCount = m_fields.size();
-    if (columnIndex < 1 || columnIndex > static_cast<sal_Int32>(nColCount))
+    if (columnIndex < 1 || o3tl::make_unsigned(columnIndex) > nColCount)
     {
         OUString str = "Column index out of range (expected 1 to "
                        + OUString::number(sal_Int32(nColCount)) + ", got "

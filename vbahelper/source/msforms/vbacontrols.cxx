@@ -32,6 +32,7 @@
 #include "vbacontrol.hxx"
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/safeint.hxx>
 #include <unordered_map>
 
 using namespace com::sun::star;
@@ -135,7 +136,7 @@ public:
 
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
-        if ( Index < 0 || Index >= static_cast< sal_Int32 >( mControls.size() ) )
+        if ( Index < 0 || o3tl::make_unsigned(Index) >= mControls.size() )
             throw lang::IndexOutOfBoundsException();
         return uno::Any( mControls[ Index ] );
     }

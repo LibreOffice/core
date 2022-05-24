@@ -396,8 +396,8 @@ inline Int32Set_Impl::const_iterator SwAccessibleTableData_Impl::GetColumnIter(
 void SwAccessibleTableData_Impl::CheckRowAndCol(
         sal_Int32 nRow, sal_Int32 nCol, SwAccessibleTable *pThis ) const
 {
-    if( ( nRow < 0 || nRow >= static_cast< sal_Int32 >( maRows.size() ) ) ||
-        ( nCol < 0 || nCol >= static_cast< sal_Int32 >( maColumns.size() ) ) )
+    if( ( nRow < 0 || o3tl::make_unsigned(nRow) >= maRows.size() ) ||
+        ( nCol < 0 || o3tl::make_unsigned(nCol) >= maColumns.size() ) )
     {
         uno::Reference < XAccessibleTable > xThis( pThis );
         lang::IndexOutOfBoundsException aExcept(

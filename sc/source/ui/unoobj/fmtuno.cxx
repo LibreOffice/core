@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <svl/style.hxx>
 #include <vcl/svapp.hxx>
@@ -342,7 +343,7 @@ void SAL_CALL ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
-    if (nIndex < static_cast<sal_Int32>(maEntries.size()) && nIndex >= 0)
+    if (nIndex >= 0 && o3tl::make_unsigned(nIndex) < maEntries.size())
     {
         maEntries.erase(maEntries.begin()+nIndex);
     }

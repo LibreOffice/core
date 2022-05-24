@@ -23,6 +23,7 @@
 #include "mysqlc_propertyids.hxx"
 #include "mysqlc_resultsetmetadata.hxx"
 
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -569,7 +570,7 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
 
 void OPreparedStatement::checkParameterIndex(sal_Int32 column)
 {
-    if (column < 1 || column > static_cast<sal_Int32>(m_paramCount))
+    if (column < 1 || o3tl::make_unsigned(column) > m_paramCount)
     {
         throw SQLException("Parameter index out of range", *this, OUString(), 1, Any());
     }

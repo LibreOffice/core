@@ -66,6 +66,7 @@
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <o3tl/safeint.hxx>
 #include <tools/color.hxx>
 #include <tools/UnitConversion.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -193,7 +194,7 @@ void VSeriesPlotter::addSeries( std::unique_ptr<VDataSeries> pSeries, sal_Int32 
             pSeries->setXValuesIfNone( m_pExplicitCategoriesProvider->getOriginalCategories() );
     }
 
-    if(zSlot<0 || zSlot>=static_cast<sal_Int32>(m_aZSlots.size()))
+    if(zSlot<0 || o3tl::make_unsigned(zSlot)>=m_aZSlots.size())
     {
         //new z slot
         std::vector< VDataSeriesGroup > aZSlot;
@@ -205,7 +206,7 @@ void VSeriesPlotter::addSeries( std::unique_ptr<VDataSeries> pSeries, sal_Int32 
         //existing zslot
         std::vector< VDataSeriesGroup >& rXSlots = m_aZSlots[zSlot];
 
-        if(xSlot<0 || xSlot>=static_cast<sal_Int32>(rXSlots.size()))
+        if(xSlot<0 || o3tl::make_unsigned(xSlot)>=rXSlots.size())
         {
             //append the series to already existing x series
             rXSlots.emplace_back( std::move(pSeries) );

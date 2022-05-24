@@ -72,7 +72,7 @@ void VCLXAccessibleTabControl::UpdateFocused()
 
 void VCLXAccessibleTabControl::UpdateSelected( sal_Int32 i, bool bSelected )
 {
-    if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( i >= 0 && o3tl::make_unsigned(i) < m_aAccessibleChildren.size() )
     {
         Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
         if ( xChild.is() )
@@ -87,7 +87,7 @@ void VCLXAccessibleTabControl::UpdateSelected( sal_Int32 i, bool bSelected )
 
 void VCLXAccessibleTabControl::UpdatePageText( sal_Int32 i )
 {
-    if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( i >= 0 && o3tl::make_unsigned(i) < m_aAccessibleChildren.size() )
     {
         Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
         if ( xChild.is() )
@@ -102,7 +102,7 @@ void VCLXAccessibleTabControl::UpdatePageText( sal_Int32 i )
 
 void VCLXAccessibleTabControl::UpdateTabPage( sal_Int32 i, bool bNew )
 {
-    if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( i >= 0 && o3tl::make_unsigned(i) < m_aAccessibleChildren.size() )
     {
         Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
         if ( xChild.is() )
@@ -117,7 +117,7 @@ void VCLXAccessibleTabControl::UpdateTabPage( sal_Int32 i, bool bNew )
 
 void VCLXAccessibleTabControl::InsertChild( sal_Int32 i )
 {
-    if ( i < 0 || i > static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( i < 0 || o3tl::make_unsigned(i) > m_aAccessibleChildren.size() )
         return;
 
     // insert entry in child list
@@ -136,7 +136,7 @@ void VCLXAccessibleTabControl::InsertChild( sal_Int32 i )
 
 void VCLXAccessibleTabControl::RemoveChild( sal_Int32 i )
 {
-    if ( i < 0 || i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         return;
 
     // get the accessible of the removed page

@@ -40,6 +40,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
+#include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
 
@@ -668,7 +669,7 @@ rtl::Reference< RegressionCurveModel > RegressionCurveHelper::getRegressionCurve
     try
     {
         const std::vector< rtl::Reference< RegressionCurveModel > > aCurves(xCurveContainer->getRegressionCurves2());
-        if(0 <= aIndex && aIndex < static_cast<sal_Int32>(aCurves.size()))
+        if(0 <= aIndex && o3tl::make_unsigned(aIndex) < aCurves.size())
         {
             if(!isMeanValueLine(aCurves[aIndex]))
                 return aCurves[aIndex];

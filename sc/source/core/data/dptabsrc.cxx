@@ -2604,7 +2604,7 @@ const ScDPItemData* ScDPSource::GetItemDataById(sal_Int32 nDim, sal_Int32 nId)
 const ScDPItemData* ScDPMembers::GetSrcItemDataByIndex(SCROW nIndex)
 {
     const std::vector< SCROW >& memberIds = pSource->GetData()->GetColumnEntries( nDim );
-    if ( nIndex >= static_cast<tools::Long>(memberIds.size()) || nIndex < 0 )
+    if ( nIndex < 0 || o3tl::make_unsigned(nIndex) >= memberIds.size()  )
         return nullptr;
     SCROW nId =  memberIds[ nIndex ];
     return pSource->GetItemDataById( nDim, nId );

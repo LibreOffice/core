@@ -532,7 +532,7 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
 {
     auto pEntries(lcl_GetStyleFamilyEntries());
     SolarMutexGuard aGuard;
-    if(nIndex < 0 || nIndex >= static_cast<sal_Int32>(pEntries->size()))
+    if(nIndex < 0 || o3tl::make_unsigned(nIndex) >= pEntries->size())
         throw lang::IndexOutOfBoundsException();
     if(!IsValid())
         throw uno::RuntimeException();

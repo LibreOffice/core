@@ -50,6 +50,7 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
+#include <o3tl/safeint.hxx>
 #include <unotools/saveopt.hxx>
 #include <rtl/math.hxx>
 #include <svl/numformat.hxx>
@@ -655,7 +656,7 @@ rtl::Reference< ChartType >
     for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
     {
         const std::vector< rtl::Reference< ChartType > > & aChartTypeList( coords->getChartTypes2() );
-        if( nIndex >= 0 && nIndex < static_cast<sal_Int32>(nTypesSoFar + aChartTypeList.size()) )
+        if( nIndex >= 0 && o3tl::make_unsigned(nIndex) < nTypesSoFar + aChartTypeList.size() )
         {
             xChartType = aChartTypeList[nIndex - nTypesSoFar];
             break;
@@ -1211,7 +1212,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                 else
                                     nNewSeriesIndex++;
 
-                                if( nNewSeriesIndex >= 0 && nNewSeriesIndex < static_cast<sal_Int32>(aSeriesList.size()) )
+                                if( nNewSeriesIndex >= 0 && o3tl::make_unsigned(nNewSeriesIndex) < aSeriesList.size() )
                                 {
                                     //move series in the same charttype
                                     bMovedOrMoveAllowed = true;
@@ -1232,7 +1233,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                         {
                                             std::vector< rtl::Reference< DataSeries > > aOtherSeriesList = xFormerChartType->getDataSeries2();
                                             sal_Int32 nOtherSeriesIndex = aOtherSeriesList.size()-1;
-                                            if( nOtherSeriesIndex >= 0 && nOtherSeriesIndex < static_cast<sal_Int32>(aOtherSeriesList.size()) )
+                                            if( nOtherSeriesIndex >= 0 && o3tl::make_unsigned(nOtherSeriesIndex) < aOtherSeriesList.size() )
                                             {
                                                 rtl::Reference< DataSeries > xExchangeSeries( aOtherSeriesList[nOtherSeriesIndex] );
                                                 aOtherSeriesList[nOtherSeriesIndex] = xGivenDataSeries;

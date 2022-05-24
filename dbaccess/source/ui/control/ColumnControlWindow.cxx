@@ -21,6 +21,7 @@
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <connectivity/dbtools.hxx>
+#include <o3tl/safeint.hxx>
 #include <UITools.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
@@ -121,7 +122,7 @@ Reference< XNumberFormatter > OColumnControlWindow::GetFormatter() const
 
 TOTypeInfoSP OColumnControlWindow::getTypeInfo(sal_Int32 _nPos)
 {
-    return ( _nPos >= 0 && _nPos < static_cast<sal_Int32>(m_aDestTypeInfoIndex.size())) ? m_aDestTypeInfoIndex[_nPos]->second : TOTypeInfoSP();
+    return ( _nPos >= 0 && o3tl::make_unsigned(_nPos) < m_aDestTypeInfoIndex.size()) ? m_aDestTypeInfoIndex[_nPos]->second : TOTypeInfoSP();
 }
 
 const OTypeInfoMap* OColumnControlWindow::getTypeInfo() const

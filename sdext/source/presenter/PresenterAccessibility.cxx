@@ -792,7 +792,7 @@ Reference<XAccessible> SAL_CALL
 {
     ThrowIfDisposed();
 
-    if (nIndex<0 || nIndex>=sal_Int32(maChildren.size()))
+    if (nIndex<0 || o3tl::make_unsigned(nIndex)>=maChildren.size())
         throw lang::IndexOutOfBoundsException("invalid child index", static_cast<uno::XWeak*>(this));
 
     return maChildren[nIndex];
@@ -1229,7 +1229,7 @@ AccessibleStateSet::AccessibleStateSet (const sal_Int32 nStateSet)
 
 sal_uInt32 AccessibleStateSet::GetStateMask (const sal_Int16 nState)
 {
-    if (nState<0 || nState>=sal_Int16(sizeof(sal_uInt32)*8))
+    if (nState<0 || o3tl::make_unsigned(nState)>=sizeof(sal_uInt32)*8)
     {
         throw RuntimeException("AccessibleStateSet::GetStateMask: invalid state");
     }

@@ -24,6 +24,7 @@
 
 #include <svl/sharedstringpool.hxx>
 #include <svl/numformat.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -453,7 +454,7 @@ bool ScDBQueryParamMatrix::IsValidFieldIndex() const
 {
     SCSIZE nC, nR;
     mpMatrix->GetDimensions(nC, nR);
-    return 0 <= mnField && mnField <= static_cast<SCCOL>(nC);
+    return 0 <= mnField && o3tl::make_unsigned(mnField) <= nC;
 }
 
 ScDBQueryParamMatrix::~ScDBQueryParamMatrix()

@@ -40,6 +40,7 @@
 #include <TSortIndex.hxx>
 #include <TSkipDeletedSet.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <o3tl/safeint.hxx>
 
 namespace connectivity::file
     {
@@ -292,7 +293,7 @@ namespace connectivity::file
 
             OSL_ENSURE(column > 0, "file::OResultSet::mapColumn: invalid column index!");
             // the first column (index 0) is for convenience only. The first real select column is number 1.
-            if ((column > 0) && (column < static_cast<sal_Int32>(m_aColMapping.size())))
+            if ((column > 0) && (o3tl::make_unsigned(column) < m_aColMapping.size()))
                 map = m_aColMapping[column];
 
             return map;

@@ -448,7 +448,7 @@ void SbxDimArray::unoAddDim( sal_Int32 lb, sal_Int32 ub )
 
 bool SbxDimArray::GetDim( sal_Int32 n, sal_Int32& rlb, sal_Int32& rub ) const
 {
-    if( n < 1 || n > static_cast<sal_Int32>(m_vDimensions.size()) )
+    if( n < 1 || o3tl::make_unsigned(n) > m_vDimensions.size() )
     {
         SetError( ERRCODE_BASIC_OUT_OF_RANGE );
         rub = rlb = 0;

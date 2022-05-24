@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include <o3tl/safeint.hxx>
 #include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
@@ -2832,7 +2833,7 @@ sal_Int32 SAL_CALL ScDataPilotFieldGroupsObj::getCount()
 Any SAL_CALL ScDataPilotFieldGroupsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    if ((nIndex < 0) || (nIndex >= static_cast< sal_Int32 >( maGroups.size() )))
+    if ((nIndex < 0) || (o3tl::make_unsigned(nIndex) >= maGroups.size()))
         throw IndexOutOfBoundsException();
     return Any( Reference< XNameAccess >( new ScDataPilotFieldGroupObj( *this, maGroups[ nIndex ].maName ) ) );
 }
@@ -3004,7 +3005,7 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     ScFieldGroupMembers& rMembers = mxParent->getFieldGroup( maGroupName ).maMembers;
-    if ((nIndex < 0) || (nIndex >= static_cast< sal_Int32 >( rMembers.size() )))
+    if ((nIndex < 0) || (o3tl::make_unsigned(nIndex) >= rMembers.size()))
         throw IndexOutOfBoundsException();
     return Any( Reference< XNamed >( new ScDataPilotFieldGroupItemObj( *this, rMembers[ nIndex ] ) ) );
 }

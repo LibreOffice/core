@@ -23,6 +23,8 @@
 #include <segmenttree.hxx>
 #include <sheetlimits.hxx>
 
+#include <o3tl/safeint.hxx>
+
 #include <algorithm>
 
 ScMultiSel::ScMultiSel(const ScSheetLimits& rSheetLimits)
@@ -384,7 +386,7 @@ void ScMultiSel::ShiftCols(SCCOL nStartCol, sal_Int32 nColOffset)
     }
     aRowSel = aNewMultiSel.aRowSel;
 
-    if (!(nColOffset > 0 && nStartCol > 0 && nStartCol < static_cast<SCCOL>(aNewMultiSel.aMultiSelContainer.size())))
+    if (!(nColOffset > 0 && nStartCol > 0 && o3tl::make_unsigned(nStartCol) < aNewMultiSel.aMultiSelContainer.size()))
         return;
 
     // insert nColOffset new columns, and select their cells if they are selected

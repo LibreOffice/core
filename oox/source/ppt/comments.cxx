@@ -11,6 +11,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 
 namespace oox::ppt
@@ -78,7 +79,7 @@ OUString Comment::getAuthor(const CommentAuthorList& list)
 
 const Comment& CommentList::getCommentAtIndex(int index)
 {
-    if (index >= static_cast<int>(cmLst.size()) || index < 0)
+    if (index < 0 || o3tl::make_unsigned(index) >= cmLst.size())
         throw css::lang::IllegalArgumentException();
 
     return cmLst.at(index);

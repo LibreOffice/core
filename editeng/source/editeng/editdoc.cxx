@@ -50,6 +50,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <svl/grabbagitem.hxx>
@@ -690,17 +691,17 @@ sal_Int32 ParaPortionList::GetPos(const ParaPortion* p) const
 
 ParaPortion* ParaPortionList::operator [](sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
+    return 0 <= nPos && o3tl::make_unsigned(nPos) < maPortions.size() ? maPortions[nPos].get() : nullptr;
 }
 
 const ParaPortion* ParaPortionList::operator [](sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
+    return 0 <= nPos && o3tl::make_unsigned(nPos) < maPortions.size() ? maPortions[nPos].get() : nullptr;
 }
 
 std::unique_ptr<ParaPortion> ParaPortionList::Release(sal_Int32 nPos)
 {
-    if (nPos < 0 || static_cast<sal_Int32>(maPortions.size()) <= nPos)
+    if (nPos < 0 || maPortions.size() <= o3tl::make_unsigned(nPos))
     {
         SAL_WARN( "editeng", "ParaPortionList::Release - out of bounds pos " << nPos);
         return nullptr;
@@ -712,7 +713,7 @@ std::unique_ptr<ParaPortion> ParaPortionList::Release(sal_Int32 nPos)
 
 void ParaPortionList::Remove(sal_Int32 nPos)
 {
-    if (nPos < 0 || static_cast<sal_Int32>(maPortions.size()) <= nPos)
+    if (nPos < 0 || maPortions.size() <= o3tl::make_unsigned(nPos))
     {
         SAL_WARN( "editeng", "ParaPortionList::Remove - out of bounds pos " << nPos);
         return;
@@ -722,7 +723,7 @@ void ParaPortionList::Remove(sal_Int32 nPos)
 
 void ParaPortionList::Insert(sal_Int32 nPos, std::unique_ptr<ParaPortion> p)
 {
-    if (nPos < 0 || static_cast<sal_Int32>(maPortions.size()) < nPos)
+    if (nPos < 0 || maPortions.size() < o3tl::make_unsigned(nPos))
     {
         SAL_WARN( "editeng", "ParaPortionList::Insert - out of bounds pos " << nPos);
         return;
@@ -779,12 +780,12 @@ sal_Int32 ParaPortionList::FindParagraph(tools::Long nYOffset) const
 
 const ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
+    return 0 <= nPos && o3tl::make_unsigned(nPos) < maPortions.size() ? maPortions[nPos].get() : nullptr;
 }
 
 ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
+    return 0 <= nPos && o3tl::make_unsigned(nPos) < maPortions.size() ? maPortions[nPos].get() : nullptr;
 }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
@@ -2073,12 +2074,12 @@ sal_Int32 EditDoc::GetPos(const ContentNode* p) const
 
 const ContentNode* EditDoc::GetObject(sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < static_cast<sal_Int32>(maContents.size()) ? maContents[nPos].get() : nullptr;
+    return 0 <= nPos && o3tl::make_unsigned(nPos) < maContents.size() ? maContents[nPos].get() : nullptr;
 }
 
 ContentNode* EditDoc::GetObject(sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < static_cast<sal_Int32>(maContents.size()) ? maContents[nPos].get() : nullptr;
+    return 0 <= nPos && o3tl::make_unsigned(nPos) < maContents.size() ? maContents[nPos].get() : nullptr;
 }
 
 const ContentNode* EditDoc::operator[](sal_Int32 nPos) const
@@ -2103,7 +2104,7 @@ void EditDoc::Insert(sal_Int32 nPos, ContentNode* p)
 
 void EditDoc::Remove(sal_Int32 nPos)
 {
-    if (nPos < 0 || nPos >= static_cast<sal_Int32>(maContents.size()))
+    if (nPos < 0 || o3tl::make_unsigned(nPos) >= maContents.size())
     {
         SAL_WARN( "editeng", "EditDoc::Remove - out of bounds pos " << nPos);
         return;
@@ -2113,7 +2114,7 @@ void EditDoc::Remove(sal_Int32 nPos)
 
 void EditDoc::Release(sal_Int32 nPos)
 {
-    if (nPos < 0 || nPos >= static_cast<sal_Int32>(maContents.size()))
+    if (nPos < 0 || o3tl::make_unsigned(nPos) >= maContents.size())
     {
         SAL_WARN( "editeng", "EditDoc::Release - out of bounds pos " << nPos);
         return;

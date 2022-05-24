@@ -35,6 +35,7 @@
 #include <editeng/outlobj.hxx>
 #include <sot/storage.hxx>
 #include <editeng/editobj.hxx>
+#include <o3tl/safeint.hxx>
 #include <svx/svdobjkind.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/ImageMapInfo.hxx>
@@ -725,7 +726,7 @@ sal_Int32 SdTransferable::GetUserDataCount() const
 
 std::shared_ptr<SdTransferable::UserData> SdTransferable::GetUserData (const sal_Int32 nIndex) const
 {
-    if (nIndex>=0 && nIndex<sal_Int32(maUserData.size()))
+    if (nIndex>=0 && o3tl::make_unsigned(nIndex)<maUserData.size())
         return maUserData[nIndex];
     else
         return std::shared_ptr<UserData>();
