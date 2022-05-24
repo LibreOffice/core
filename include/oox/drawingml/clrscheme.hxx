@@ -34,9 +34,9 @@
 namespace oox::drawingml {
 
 enum PredefinedClrSchemeId {
-    //dk1,
-    //lt1,
-    dk2 = 0,
+    dk1 = 0,
+    lt1,
+    dk2,
     lt2,
     accent1,
     accent2,
@@ -51,8 +51,8 @@ enum PredefinedClrSchemeId {
 
 static std::map<PredefinedClrSchemeId, OUString> PredefinedClrNames =
 {
-    //{ dk1,  "dk1" },
-    //{ lt1, "lt1" },
+    { dk1,  "dk1" },
+    { lt1, "lt1" },
     { dk2, "dk2" },
     { lt2, "lt2" },
     { accent1, "accent1" },
