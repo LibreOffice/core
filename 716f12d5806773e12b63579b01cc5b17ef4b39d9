@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c70b2f65_664c14a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-24T08:46:04Z",
+      "side": 1,
+      "message": "@Jan-Marek: Given you have implemented initial IM handling for qt5: Any thoughts on this?",
+      "revId": "716f12d5806773e12b63579b01cc5b17ef4b39d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
