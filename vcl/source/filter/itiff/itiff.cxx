@@ -36,83 +36,10 @@ namespace
     {
         SvStream& rStream;
         tsize_t nSize;
-        /*
-            ORIENTATION_TOPLEFT = 1
-            ORIENTATION_TOPRIGHT = 2
-            ORIENTATION_BOTRIGHT = 3
-            ORIENTATION_BOTLEFT = 4
-            ORIENTATION_LEFTTOP = 5
-            ORIENTATION_RIGHTTOP = 6
-            ORIENTATION_RIGHTBOT = 7
-            ORIENTATION_LEFTBOT = 8
-         */
-        uint16_t nOrientation;
-
-        tileContigRoutine pOrigContig;
-        tileSeparateRoutine pOrigSeparate;
-        BitmapWriteAccess* pWriteAccess;
-        BitmapWriteAccess* pAlphaAccess;
-        std::vector<uint32_t> aBuffer;
-
         Context(SvStream& rInStream, tsize_t nInSize)
             : rStream(rInStream)
             , nSize(nInSize)
-            , nOrientation(0)
-            , pOrigContig(nullptr)
-            , pOrigSeparate(nullptr)
-            , pWriteAccess(nullptr)
-            , pAlphaAccess(nullptr)
         {
-        }
-
-        uint32_t* GetBuffer(uint32_t w, uint32_t h, int32_t toskew)
-        {
-            uint32_t nExtraPerRow;
-            if (toskew >= 0)
-                nExtraPerRow = toskew;
-            else
-            {
-                int32_t nExtraNeg = w + toskew + w;
-                nExtraPerRow = std::abs(nExtraNeg);
-            }
-            uint32_t nScanLine = w + nExtraPerRow;
-            aBuffer.resize(nScanLine * h);
-            uint32_t* pBuffer = aBuffer.data();
-            if (toskew < 0)
-                pBuffer += h * nScanLine - nScanLine;
-
-            return pBuffer;
-        }
-
-        void SetPixels(uint32_t x, uint32_t y, uint32_t w, uint32_t h, const uint32_t* pSrc, int32_t skew)
-        {
-            uint32_t nDestRow = y;
-            for (uint32_t nRow = 0; nRow < h; ++nRow)
-            {
-                for (uint32_t nCol = 0; nCol < w; ++nCol)
-                {
-                    uint32_t nDestCol;
-                    switch (nOrientation)
-                    {
-                        case ORIENTATION_LEFTBOT:
-                            nDestCol = x + w - 1 - nCol;
-                            break;
-                        default:
-                            nDestCol = x + nCol;
-                            break;
-                    }
-
-                    pWriteAccess->SetPixel(nDestRow, nDestCol,
-                        Color(TIFFGetR(*pSrc), TIFFGetG(*pSrc), TIFFGetB(*pSrc)));
-                    pAlphaAccess->SetPixelIndex(nDestRow, nDestCol, 255 - TIFFGetA(*pSrc));
-                    ++pSrc;
-                }
-                pSrc += skew;
-                if (skew >= 0)
-                    ++nDestRow;
-                else
-                    --nDestRow;
-            }
         }
     };
 }
@@ -163,36 +90,6 @@ static toff_t tiff_size(thandle_t handle)
     return pContext->nSize;
 }
 
-static void putContigPixel(TIFFRGBAImage* img, uint32_t* /*raster*/,
-                           uint32_t x, uint32_t y, uint32_t w, uint32_t h,
-                           int32_t fromskew, int32_t toskew,
-                           unsigned char* cp)
-{
-    Context* pContext = static_cast<Context*>(TIFFClientdata(img->tif));
-
-    uint32_t* pBuffer = pContext->GetBuffer(w, h, toskew);
-
-    (pContext->pOrigContig)(img, pBuffer, 0, 0, w, h,
-                            fromskew, toskew, cp);
-
-    pContext->SetPixels(x, y, w, h, pBuffer, toskew);
-}
-
-static void putSeparatePixel(TIFFRGBAImage* img, uint32_t* /*raster*/,
-                             uint32_t x, uint32_t y, uint32_t w, uint32_t h,
-                             int32_t fromskew, int32_t toskew,
-                             unsigned char* r, unsigned char* g, unsigned char* b, unsigned char* a)
-{
-    Context* pContext = static_cast<Context*>(TIFFClientdata(img->tif));
-
-    uint32_t* pBuffer = pContext->GetBuffer(w, h, toskew);
-
-    (pContext->pOrigSeparate)(img, pBuffer, 0, 0, w, h,
-                              fromskew, toskew, r, g, b, a);
-
-    pContext->SetPixels(x, y, w, h, pBuffer, toskew);
-}
-
 bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
 {
     Context aContext(rTIFF, rTIFF.remainingSize());
@@ -228,68 +125,65 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             break;
         }
 
-        aContext.nOrientation = 0;
-        TIFFGetField(tif, TIFFTAG_ORIENTATION, &aContext.nOrientation);
-
-        Bitmap bitmap(Size(w, h), vcl::PixelFormat::N24_BPP);
-        AlphaMask bitmapAlpha(Size(w, h));
-
-        BitmapScopedWriteAccess access(bitmap);
-        AlphaScopedWriteAccess accessAlpha(bitmapAlpha);
-
-        if (!access || !accessAlpha)
+        size_t npixels = w * h;
+        std::vector<uint32_t> raster(npixels);
+        if (TIFFReadRGBAImageOriented(tif, w, h, raster.data(), ORIENTATION_TOPLEFT, 1))
         {
-            SAL_WARN("filter.tiff", "could not create bitmaps");
-            break;
-        }
+            Bitmap bitmap(Size(w, h), vcl::PixelFormat::N24_BPP);
+            AlphaMask bitmapAlpha(Size(w, h));
 
-        aContext.pWriteAccess = access.get();
-        aContext.pAlphaAccess = accessAlpha.get();
+            BitmapScopedWriteAccess access(bitmap);
+            AlphaScopedWriteAccess accessAlpha(bitmapAlpha);
 
-        char emsg[1024] = "";
-        TIFFRGBAImage img;
-        bool bOk = false;
-        // Expanded out TIFFReadRGBAImageOriented to create this block then
-        // inserted custom "put" methods to write (via a limited size buffer)
-        // into the final Bitmap incrementally
-        if (TIFFRGBAImageOK(tif, emsg) && TIFFRGBAImageBegin(&img, tif, 1, emsg))
-        {
-            img.req_orientation = ORIENTATION_TOPLEFT;
-            assert(img.isContig);
-            if (img.isContig)
+            /*
+                ORIENTATION_TOPLEFT = 1
+                ORIENTATION_TOPRIGHT = 2
+                ORIENTATION_BOTRIGHT = 3
+                ORIENTATION_BOTLEFT = 4
+                ORIENTATION_LEFTTOP = 5
+                ORIENTATION_RIGHTTOP = 6
+                ORIENTATION_RIGHTBOT = 7
+                ORIENTATION_LEFTBOT = 8
+             */
+            uint16_t nOrientation;
+            if (TIFFGetField(tif, TIFFTAG_ORIENTATION, &nOrientation) != 1)
+                nOrientation = 0;
+
+            for (uint32_t y = 0; y < h; ++y)
             {
-                aContext.pOrigContig = img.put.contig;
-                img.put.contig = putContigPixel;
+                const uint32_t* src = raster.data() + w * y;
+                for (uint32_t x = 0; x < w; ++x)
+                {
+                    sal_uInt8 r = TIFFGetR(*src);
+                    sal_uInt8 g = TIFFGetG(*src);
+                    sal_uInt8 b = TIFFGetB(*src);
+                    sal_uInt8 a = TIFFGetA(*src);
+
+                    uint32_t dest;
+                    switch (nOrientation)
+                    {
+                        case ORIENTATION_LEFTBOT:
+                            dest = w - 1 - x;
+                            break;
+                        default:
+                            dest = x;
+                            break;
+                    }
+
+                    access->SetPixel(y, dest, Color(r, g, b));
+                    accessAlpha->SetPixelIndex(y, dest, 255 - a);
+                    ++src;
+                }
             }
-            else
-            {
-                aContext.pOrigSeparate = img.put.separate;
-                img.put.separate = putSeparatePixel;
-            }
 
-            // we don't access TIFFRGBAImageGet's raster argument in our custom putContigPixel/
-            // putSeparatePixel functions, but TIFFRGBAImageGet nevertheless internally
-            // advances that pointer, so passing nullptr would cause UBSan nullptr-with-offset
-            // errors; while technically still UB, this HACK of passing a non-null pointer keeps
-            // UBSan happy for now (and better use an artificial pointer value which would
-            // hopefully cause SIGSEGV if it should erroneously be dereferenced after all)
-            uint32_t* unused_raster = reinterpret_cast<uint32_t *>(sizeof (uint32_t));
-            bOk = TIFFRGBAImageGet(&img, unused_raster, w, img.height);
-            TIFFRGBAImageEnd(&img);
-        }
-        else
-        {
-            SAL_WARN("filter.tiff", "cannot import tiff, error is: " << emsg);
-        }
+            raster.clear();
 
-        access.reset();
-        accessAlpha.reset();
+            access.reset();
+            accessAlpha.reset();
 
-        if (bOk)
-        {
             BitmapEx aBitmapEx(bitmap, bitmapAlpha);
 
-            switch (aContext.nOrientation)
+            switch (nOrientation)
             {
                 case ORIENTATION_LEFTBOT:
                     aBitmapEx.Rotate(2700_deg10, COL_BLACK);
@@ -302,7 +196,6 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                                              ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back);
             aAnimation.Insert(aAnimationBitmap);
         }
-
     } while (TIFFReadDirectory(tif));
 
     TIFFClose(tif);
