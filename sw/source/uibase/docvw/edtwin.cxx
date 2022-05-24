@@ -2051,20 +2051,13 @@ KEYINPUT_CHECKTABLE_INSDEL:
                              && rSh.IsSttOfPara()
                              && !rSh.HasReadonlySel() )
                     {
-                        if ( !rSh.IsMultiSelection()
-                             && rSh.IsFirstOfNumRuleAtCursorPos()
-                             && numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
-                            eKeyState = SwKeyState::NumIndentInc;
+                        if (numfunc::NumDownChangesIndent(rSh))
+                        {
+                            eKeyState = SwKeyState::NumDown;
+                        }
                         else
                         {
-                            if (numfunc::NumDownChangesIndent(rSh))
-                            {
-                                eKeyState = SwKeyState::NumDown;
-                            }
-                            else
-                            {
-                                eKeyState = SwKeyState::InsTab;
-                            }
+                            eKeyState = SwKeyState::InsTab;
                         }
                     }
                     else if (rSh.GetSelectionType() &
@@ -2116,12 +2109,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                              && rSh.IsSttOfPara()
                              && !rSh.HasReadonlySel() )
                     {
-                        if ( !rSh.IsMultiSelection()
-                             && rSh.IsFirstOfNumRuleAtCursorPos()
-                             && numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
-                            eKeyState = SwKeyState::NumIndentDec;
-                        else
-                            eKeyState = SwKeyState::NumUp;
+                        eKeyState = SwKeyState::NumUp;
                     }
                     else if (rSh.GetSelectionType() &
                              (SelectionType::Graphic |
@@ -2176,7 +2164,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = SwKeyState::EnterDrawHandleMode;
                         else
                         {
-                            eKeyState = SwKeyState::InsTab;
+                            if ( !rSh.IsMultiSelection()
+                                && numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
+                                eKeyState = SwKeyState::NumIndentInc;
                         }
                     }
                     break;
@@ -2196,6 +2186,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 rSh.GetDrawView()->AreObjectsMarked())
                         {
                             eKeyState = SwKeyState::EnterDrawHandleMode;
+                        }
+                        else
+                        {
+                            if ( !rSh.IsMultiSelection()
+                                && numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
+                                eKeyState = SwKeyState::NumIndentDec;
                         }
                     }
                     break;
