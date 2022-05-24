@@ -719,13 +719,12 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
     // Check mime/media types.
     CPPUNIT_ASSERT_EQUAL(OUString("image/png"), getProperty<OUString>(xGraphic, "MimeType"));
 
-    uno::Reference<document::XStorageBasedDocument> xStorageProvider(mxComponent, uno::UNO_QUERY);
-    uno::Reference<embed::XStorage> xStorage = xStorageProvider->getDocumentStorage();
-    auto aStreamName = getProperty<OUString>(xObject, "StreamName");
-    uno::Reference<io::XStream> xStream
-        = xStorage->openStreamElement(aStreamName, embed::ElementModes::READ);
+    uno::Reference<beans::XPropertySet> xObjectProps(xObject, uno::UNO_QUERY);
+    uno::Reference<io::XActiveDataStreamer> xStreamProvider(
+        xObjectProps->getPropertyValue("EmbeddedObject"), uno::UNO_QUERY);
+    uno::Reference<io::XSeekable> xStream(xStreamProvider->getStream(), uno::UNO_QUERY);
     // This was empty when either import or export handling was missing.
-    CPPUNIT_ASSERT_EQUAL(OUString("text/rtf"), getProperty<OUString>(xStream, "MediaType"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(37888), xStream->getLength());
 
     // Check alternate text (it was empty, for export the 'alt' attribute was used).
     CPPUNIT_ASSERT_EQUAL(OUString("OLE Object"), getProperty<OUString>(xObject, "Title").trim());

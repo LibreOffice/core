@@ -492,6 +492,9 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
 
     std::set<OUString> m_aAllowedRTFOLEMimeTypes;
 
+    /// This is the URL of the outer <object> data if it's not OLE2 or an image.
+    OUString m_aEmbedURL;
+
     void DeleteFormImpl();
 
     void DocumentDetected();
