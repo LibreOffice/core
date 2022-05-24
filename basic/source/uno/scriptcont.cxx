@@ -66,10 +66,26 @@ using namespace osl;
 
 // Implementation class SfxScriptLibraryContainer
 
-const char* SfxScriptLibraryContainer::getInfoFileName() const { return "script"; }
-const char* SfxScriptLibraryContainer::getOldInfoFileName() const { return "script"; }
-const char* SfxScriptLibraryContainer::getLibElementFileExtension() const { return "xba"; }
-const char* SfxScriptLibraryContainer::getLibrariesDir() const { return "Basic"; }
+OUString SfxScriptLibraryContainer::getInfoFileName() const
+{
+    static constexpr OUStringLiteral script = u"script";
+    return script;
+}
+OUString SfxScriptLibraryContainer::getOldInfoFileName() const
+{
+    static constexpr OUStringLiteral script = u"script";
+    return script;
+}
+OUString SfxScriptLibraryContainer::getLibElementFileExtension() const
+{
+    static constexpr OUStringLiteral xba = u"xba";
+    return xba;
+}
+OUString SfxScriptLibraryContainer::getLibrariesDir() const
+{
+    static constexpr OUStringLiteral sBasic = u"Basic";
+    return sBasic;
+}
 
 // OldBasicPassword interface
 void SfxScriptLibraryContainer::setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword )
