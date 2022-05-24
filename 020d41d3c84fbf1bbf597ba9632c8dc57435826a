@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99400cbc_652e3d8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-24T11:11:14Z",
+      "side": 1,
+      "message": "After a lot of failed attempts, I tried this \"radical\" approach, and from all of my tests it seems to work fine. I still see some \"qt.qpa.xcb: QXcbConnection: XCB errors\"; not sure this is fixable or even needs fixes...",
+      "revId": "020d41d3c84fbf1bbf597ba9632c8dc57435826a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
