@@ -2154,7 +2154,8 @@ bool PowerPointExport::WriteColorSets(const FSHelperPtr& pFS, svx::Theme* pTheme
 {
     static std::map<PredefinedClrSchemeId, sal_Int32> aPredefinedClrTokens =
     {
-        // dk1 and lt1 is intentionally missing.
+        { dk1, XML_dk1 },
+        { lt1, XML_lt1 },
         { dk2, XML_dk2 },
         { lt2, XML_lt2 },
         { accent1, XML_accent1 },
@@ -2178,14 +2179,11 @@ bool PowerPointExport::WriteColorSets(const FSHelperPtr& pFS, svx::Theme* pTheme
         return false;
     }
 
-    for (int nId = PredefinedClrSchemeId::dk2; nId < PredefinedClrSchemeId::Count; nId++)
+    for (int nId = PredefinedClrSchemeId::dk1; nId < PredefinedClrSchemeId::Count; nId++)
     {
-        // dk1 and lt1 are not written here.
-        int nIndex = nId + 2;
-
         sal_Int32 nToken = aPredefinedClrTokens[static_cast<PredefinedClrSchemeId>(nId)];
         pFS->startElementNS(XML_a, nToken);
-        pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(static_cast<sal_Int32>(pColorSet->getColor(nIndex))));
+        pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(static_cast<sal_Int32>(pColorSet->getColor(nId))));
         pFS->endElementNS(XML_a, nToken);
     }
 
@@ -2277,15 +2275,17 @@ void PowerPointExport::WriteTheme(sal_Int32 nThemeNum, svx::Theme* pTheme)
     }
     pFS->startElementNS(XML_a, XML_clrScheme, XML_name, aColorSchemeName);
 
-    pFS->write(SYS_COLOR_SCHEMES);
-
-    if (!WriteColorSets(pFS, pTheme) && !WriteColorSchemes(pFS, sThemePath))
+    if (!WriteColorSets(pFS, pTheme))
     {
-        // if style is not defined, try to use first one
-        if (!WriteColorSchemes(pFS, "ppt/theme/theme1.xml"))
+        pFS->write(SYS_COLOR_SCHEMES);
+        if (!WriteColorSchemes(pFS, sThemePath))
         {
-            // color schemes are required - use default values
-            WriteDefaultColorSchemes(pFS);
+            // if style is not defined, try to use first one
+            if (!WriteColorSchemes(pFS, "ppt/theme/theme1.xml"))
+            {
+                // color schemes are required - use default values
+                WriteDefaultColorSchemes(pFS);
+            }
         }
     }
 

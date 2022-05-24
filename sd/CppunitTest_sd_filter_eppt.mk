@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sd_filter_eppt))
 
 $(eval $(call gb_CppunitTest_use_externals,sd_filter_eppt,\
 	boost_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_filter_eppt, \
