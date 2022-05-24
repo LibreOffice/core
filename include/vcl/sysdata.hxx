@@ -50,7 +50,7 @@ typedef struct CGContext *CGContextRef;
 
 struct VCL_DLLPUBLIC SystemEnvData
 {
-    enum class Toolkit { Gen, Gtk, Qt };
+    enum class Toolkit { Invalid, Gen, Gtk, Qt };
     Toolkit             toolkit;        // the toolkit in use
 #if defined(_WIN32)
     HWND                hWnd;           // the window hwnd
@@ -62,7 +62,7 @@ struct VCL_DLLPUBLIC SystemEnvData
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
-    enum class Platform { Wayland, Xcb, WASM };
+    enum class Platform { Invalid, Wayland, Xcb, WASM };
 
     void*               pDisplay;       // the relevant display connection
     SalFrame*           pSalFrame;      // contains a salframe, if object has one
@@ -89,7 +89,7 @@ public:
 #endif
 
     SystemEnvData()
-        : toolkit(Toolkit::Gen)
+        : toolkit(Toolkit::Invalid)
 #if defined(_WIN32)
         , hWnd(nullptr)
 #elif defined( MACOSX )
@@ -104,7 +104,7 @@ public:
         , pVisual(nullptr)
         , nScreen(0)
         , aShellWindow(0)
-        , platform(Platform())
+        , platform(Platform::Invalid)
         , aWindow(0)
 #endif
     {
