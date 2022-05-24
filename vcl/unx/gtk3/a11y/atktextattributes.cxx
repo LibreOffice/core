@@ -38,6 +38,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/UnitConversion.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <stdio.h>
@@ -451,7 +452,7 @@ Strikeout2String(const uno::Any& rAny)
 {
     sal_Int16 n = rAny.get<sal_Int16>();
 
-    if( n >= 0 && n < sal_Int16(SAL_N_ELEMENTS(font_strikethrough)) )
+    if( n >= 0 && o3tl::make_unsigned(n) < SAL_N_ELEMENTS(font_strikethrough) )
         return g_strdup( font_strikethrough[n] );
 
     return nullptr;

@@ -49,6 +49,7 @@
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <cppuhelper/exc_hlp.hxx>
+#include <o3tl/safeint.hxx>
 
 #include "pq_xkeys.hxx"
 #include "pq_xkey.hxx"
@@ -226,7 +227,7 @@ void Keys::appendByDescriptor(
 void Keys::dropByIndex( sal_Int32 index )
 {
     osl::MutexGuard guard( m_xMutex->GetMutex() );
-    if( index < 0 ||  index >= static_cast<sal_Int32>(m_values.size()) )
+    if( index < 0 ||  o3tl::make_unsigned(index) >= m_values.size() )
     {
         throw css::lang::IndexOutOfBoundsException(
             "TABLES: Index out of range (allowed 0 to " + OUString::number(m_values.size() -1)

@@ -20,6 +20,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <o3tl/safeint.hxx>
 namespace reportdesign
 {
 using namespace com::sun::star;
@@ -118,7 +119,7 @@ uno::Any OReportControlModel::getByIndex(::sal_Int32 Index)
 
 void OReportControlModel::checkIndex(sal_Int32 _nIndex)
 {
-    if (_nIndex < 0 || static_cast<sal_Int32>(m_aFormatConditions.size()) <= _nIndex)
+    if (_nIndex < 0 || m_aFormatConditions.size() <= o3tl::make_unsigned(_nIndex))
         throw lang::IndexOutOfBoundsException();
 }
 

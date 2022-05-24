@@ -20,6 +20,7 @@
 #include <core_resource.hxx>
 #include <indexfieldscontrol.hxx>
 #include <strings.hrc>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <helpids.h>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -266,7 +267,7 @@ constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMo
     bool IndexFieldsControl::implGetFieldDesc(sal_Int32 _nRow, IndexFields::const_iterator& _rPos)
     {
         _rPos = m_aFields.end();
-        if ((_nRow < 0) || (_nRow >= static_cast<sal_Int32>(m_aFields.size())))
+        if ((_nRow < 0) || (o3tl::make_unsigned(_nRow) >= m_aFields.size()))
             return false;
         _rPos = m_aFields.begin() + _nRow;
         return true;

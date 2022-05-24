@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/types.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 using namespace dbaccess;
@@ -193,7 +194,7 @@ bool OStaticSet::absolute( sal_Int32 row )
     }
     else if(row > 0)
     {
-        if(row >= static_cast<sal_Int32>(m_aSet.size()))
+        if(o3tl::make_unsigned(row) >= m_aSet.size())
         {
             if(!m_bEnd)
             {
@@ -202,7 +203,7 @@ bool OStaticSet::absolute( sal_Int32 row )
                     bNext = fetchRow();
             }
 
-            if(row > static_cast<sal_Int32>(m_aSet.size()))
+            if(o3tl::make_unsigned(row) > m_aSet.size())
                 m_aSetIter = m_aSet.end();  // check again
             else
                 m_aSetIter = m_aSet.begin() + row;

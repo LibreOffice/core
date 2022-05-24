@@ -18,6 +18,7 @@
  */
 
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <file/FPreparedStatement.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -392,7 +393,7 @@ void SAL_CALL OPreparedStatement::release() noexcept
 void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
 {
     ::connectivity::checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-    if ( m_aAssignValues.is() && (parameterIndex < 1 || parameterIndex >= static_cast<sal_Int32>(m_aParameterIndexes.size())) )
+    if ( m_aAssignValues.is() && (parameterIndex < 1 || o3tl::make_unsigned(parameterIndex) >= m_aParameterIndexes.size()) )
         throwInvalidIndexException(*this);
     else if ( static_cast<sal_Int32>(m_aParameterRow->size()) <= parameterIndex )
     {

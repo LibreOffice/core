@@ -24,6 +24,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -111,7 +112,7 @@ ImageId ImageContainer::addImage( const uno::Sequence<beans::PropertyValue>& xBi
 
 void ImageContainer::writeBase64EncodedStream( ImageId nId, EmitContext& rContext )
 {
-    OSL_ASSERT( nId >= 0 && nId < ImageId( m_aImages.size()) );
+    OSL_ASSERT( nId >= 0 && o3tl::make_unsigned(nId) < m_aImages.size() );
 
     const uno::Sequence<beans::PropertyValue>& rEntry( m_aImages[nId] );
 

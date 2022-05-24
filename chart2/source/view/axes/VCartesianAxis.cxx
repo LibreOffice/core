@@ -29,6 +29,7 @@
 #include "Tickmarks_Equidistant.hxx"
 #include <ExplicitCategoriesProvider.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <o3tl/safeint.hxx>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/color.hxx>
@@ -662,7 +663,7 @@ void VCartesianAxis::createAllTickInfos( TickInfoArraysType& rAllTickInfos )
 
 TickIter* VCartesianAxis::createLabelTickIterator( sal_Int32 nTextLevel )
 {
-    if( nTextLevel>=0 && nTextLevel < static_cast< sal_Int32 >(m_aAllTickInfos.size()) )
+    if( nTextLevel>=0 && o3tl::make_unsigned(nTextLevel) < m_aAllTickInfos.size() )
         return new PureTickIter( m_aAllTickInfos[nTextLevel] );
     return nullptr;
 }

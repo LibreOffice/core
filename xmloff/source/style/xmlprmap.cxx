@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include <rtl/ref.hxx>
 
 #include <xmloff/xmlprmap.hxx>
@@ -158,32 +159,32 @@ sal_Int32 XMLPropertySetMapper::GetEntryCount() const
 
 sal_uInt32 XMLPropertySetMapper::GetEntryFlags( sal_Int32 nIndex ) const
 {
-    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
+    assert((0 <= nIndex) && (o3tl::make_unsigned(nIndex) < mpImpl->maMapEntries.size()));
     return mpImpl->maMapEntries[nIndex].nType & ~MID_FLAG_MASK;
 }
 
 sal_uInt32 XMLPropertySetMapper::GetEntryType( sal_Int32 nIndex ) const
 {
-    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
+    assert((0 <= nIndex) && (o3tl::make_unsigned(nIndex) < mpImpl->maMapEntries.size()));
     sal_uInt32 nType = mpImpl->maMapEntries[nIndex].nType;
     return nType;
 }
 
 sal_uInt16 XMLPropertySetMapper::GetEntryNameSpace( sal_Int32 nIndex ) const
 {
-    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
+    assert((0 <= nIndex) && (o3tl::make_unsigned(nIndex) < mpImpl->maMapEntries.size()));
     return mpImpl->maMapEntries[nIndex].nXMLNameSpace;
 }
 
 const OUString& XMLPropertySetMapper::GetEntryXMLName( sal_Int32 nIndex ) const
 {
-    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
+    assert((0 <= nIndex) && (o3tl::make_unsigned(nIndex) < mpImpl->maMapEntries.size()));
     return mpImpl->maMapEntries[nIndex].sXMLAttributeName;
 }
 
 const OUString& XMLPropertySetMapper::GetEntryAPIName( sal_Int32 nIndex ) const
 {
-    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
+    assert((0 <= nIndex) && (o3tl::make_unsigned(nIndex) < mpImpl->maMapEntries.size()));
     return mpImpl->maMapEntries[nIndex].sAPIPropertyName;
 }
 
@@ -196,13 +197,13 @@ sal_Int16 XMLPropertySetMapper::GetEntryContextId( sal_Int32 nIndex ) const
 SvtSaveOptions::ODFSaneDefaultVersion
 XMLPropertySetMapper::GetEarliestODFVersionForExport(sal_Int32 const nIndex) const
 {
-    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
+    assert((0 <= nIndex) && (o3tl::make_unsigned(nIndex) < mpImpl->maMapEntries.size()));
     return mpImpl->maMapEntries[nIndex].nEarliestODFVersionForExport;
 }
 
 const XMLPropertyHandler* XMLPropertySetMapper::GetPropertyHandler( sal_Int32 nIndex ) const
 {
-    assert((0 <= nIndex) && (nIndex < static_cast<sal_Int32>(mpImpl->maMapEntries.size())));
+    assert((0 <= nIndex) && (o3tl::make_unsigned(nIndex) < mpImpl->maMapEntries.size()));
     return mpImpl->maMapEntries[nIndex].pHdl;
 }
 

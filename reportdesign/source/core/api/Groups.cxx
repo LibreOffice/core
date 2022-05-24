@@ -20,6 +20,7 @@
 #include <Group.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <o3tl/safeint.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
 
@@ -184,7 +185,7 @@ void SAL_CALL OGroups::removeContainerListener( const uno::Reference< container:
 
 void OGroups::checkIndex(sal_Int32 _nIndex)
 {
-    if ( _nIndex < 0 || static_cast<sal_Int32>(m_aGroups.size()) <= _nIndex )
+    if ( _nIndex < 0 || m_aGroups.size() <= o3tl::make_unsigned(_nIndex) )
         throw lang::IndexOutOfBoundsException();
 }
 

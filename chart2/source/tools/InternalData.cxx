@@ -22,6 +22,7 @@
 #include <strings.hrc>
 
 #include <comphelper/sequence.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #ifdef DEBUG_CHART2_TOOLS
@@ -202,7 +203,7 @@ void InternalData::setComplexColumnLabel( sal_Int32 nColumnIndex, vector< uno::A
 {
     if( nColumnIndex < 0 )
         return;
-    if( nColumnIndex >= static_cast< sal_Int32 >( m_aColumnLabels.size() ) )
+    if( o3tl::make_unsigned(nColumnIndex) >= m_aColumnLabels.size() )
     {
         m_aColumnLabels.resize(nColumnIndex+1);
         enlargeData( nColumnIndex+1, 0 );
@@ -216,7 +217,7 @@ void InternalData::setComplexRowLabel( sal_Int32 nRowIndex, vector< uno::Any >&&
 {
     if( nRowIndex < 0 )
         return;
-    if( nRowIndex >= static_cast< sal_Int32 >( m_aRowLabels.size() ) )
+    if( o3tl::make_unsigned(nRowIndex) >= m_aRowLabels.size() )
     {
         m_aRowLabels.resize(nRowIndex+1);
         enlargeData( 0, nRowIndex+1 );

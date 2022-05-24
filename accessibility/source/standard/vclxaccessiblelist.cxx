@@ -547,7 +547,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleList::getAccessibleChild (sal_Int3
 
     Reference< XAccessible > xChild;
     // search for the child
-    if ( i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         xChild = CreateChild (i);
     else
     {

@@ -57,6 +57,7 @@
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
@@ -578,7 +579,7 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::vector< DataRowPointStyl
                 sal_Int32 nNewSeriesIndex = aStyle.m_nPointIndex;
                 sal_Int32 nRepeatCount = aStyle.m_nPointRepeat;
 
-                while( nRepeatCount && (nNewSeriesIndex>=0) && (nNewSeriesIndex< static_cast<sal_Int32>(aNewSeriesVector.size()) ) )
+                while( nRepeatCount && (nNewSeriesIndex>=0) && (o3tl::make_unsigned(nNewSeriesIndex)< aNewSeriesVector.size() ) )
                 {
                     NewDonutSeries& rNewSeries( aNewSeriesVector[nNewSeriesIndex] );
                     rNewSeries.setPointStyleNameToPoint( aStyle.msStyleName, nNewPointIndex );

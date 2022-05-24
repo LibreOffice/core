@@ -30,6 +30,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/awt/vclxfont.hxx>
@@ -228,7 +229,7 @@ namespace accessibility
     {
         OExternalLockGuard aGuard( this );
 
-        if ( i < 0 || i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+        if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
             throw IndexOutOfBoundsException();
 
         Reference< XAccessible > xChild = m_aAccessibleChildren[i];

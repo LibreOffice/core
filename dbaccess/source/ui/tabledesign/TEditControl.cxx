@@ -36,6 +36,7 @@
 #include <connectivity/dbtools.hxx>
 #include <SqlNameEdit.hxx>
 #include <TableRowExchange.hxx>
+#include <o3tl/safeint.hxx>
 #include <sot/storage.hxx>
 #include <svx/svxids.hrc>
 #include <UITools.hxx>
@@ -1602,7 +1603,7 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
         // Store the old description
         pDescrWin->SaveData( pActFieldDescr );
 
-    if ( nRow < 0 || nRow > static_cast<tools::Long>(m_pRowList->size()) )
+    if ( nRow < 0 || o3tl::make_unsigned(nRow) > m_pRowList->size() )
         return;
     // Show the new description
     std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[nRow];

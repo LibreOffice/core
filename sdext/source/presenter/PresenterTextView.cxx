@@ -419,7 +419,7 @@ SharedPresenterTextParagraph PresenterTextView::GetParagraph (
 {
     if (nParagraphIndex < 0)
         return SharedPresenterTextParagraph();
-    else if (nParagraphIndex>=sal_Int32(maParagraphs.size()))
+    else if (o3tl::make_unsigned(nParagraphIndex)>=maParagraphs.size())
         return SharedPresenterTextParagraph();
     else
         return maParagraphs[nParagraphIndex];

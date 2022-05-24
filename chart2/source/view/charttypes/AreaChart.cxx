@@ -38,6 +38,7 @@
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -700,7 +701,7 @@ void AreaChart::createShapes()
                         {
                             std::vector<std::vector<css::drawing::Position3D>>& rPolygon = pSeries->m_aPolyPolygonShape3D;
                             sal_Int32& rIndex = pSeries->m_nPolygonIndex;
-                            if( 0<= rIndex && rIndex < static_cast<sal_Int32>(rPolygon.size()) )
+                            if( 0<= rIndex && o3tl::make_unsigned(rIndex) < rPolygon.size() )
                             {
                                 if( !rPolygon[ rIndex ].empty() )
                                     rIndex++; //start a new polygon for the next point if the current poly is not empty

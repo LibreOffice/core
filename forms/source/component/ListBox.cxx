@@ -1396,7 +1396,7 @@ namespace frm
         {
             sal_Int32 nSelectIndex = -1;
             OSL_VERIFY( _rExternalValue >>= nSelectIndex );
-            if ( ( nSelectIndex >= 0 ) && ( nSelectIndex < static_cast<sal_Int32>(getStringItemList().size()) ) )
+            if ( ( nSelectIndex >= 0 ) && ( o3tl::make_unsigned(nSelectIndex) < getStringItemList().size() ) )
             {
                 aSelectIndexes = { o3tl::narrowing<sal_Int16>(nSelectIndex) };
             }

@@ -2161,7 +2161,7 @@ IMPL_LINK(FmXFormShell, OnFoundData_Lock, FmFoundRecordInformation&, rfriWhere, 
     if (impl_checkDisposed_Lock())
         return;
 
-    DBG_ASSERT((rfriWhere.nContext >= 0) && (rfriWhere.nContext < static_cast<sal_Int16>(m_aSearchForms.size())),
+    DBG_ASSERT((rfriWhere.nContext >= 0) && (o3tl::make_unsigned(rfriWhere.nContext) < m_aSearchForms.size()),
         "FmXFormShell::OnFoundData : invalid context!");
     Reference< XForm> xForm( m_aSearchForms.at(rfriWhere.nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnFoundData : invalid form!");
@@ -2244,7 +2244,7 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound_Lock, FmFoundRecordInformation&, rfri
     if (impl_checkDisposed_Lock())
         return;
 
-    DBG_ASSERT((rfriWhere.nContext >= 0) && (rfriWhere.nContext < static_cast<sal_Int16>(m_aSearchForms.size())),
+    DBG_ASSERT((rfriWhere.nContext >= 0) && (o3tl::make_unsigned(rfriWhere.nContext) < m_aSearchForms.size()),
         "FmXFormShell::OnCanceledNotFound : invalid context!");
     Reference< XForm> xForm( m_aSearchForms.at(rfriWhere.nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnCanceledNotFound : invalid form!");

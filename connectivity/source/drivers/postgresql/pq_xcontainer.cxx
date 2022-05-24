@@ -37,6 +37,7 @@
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/safeint.hxx>
 
 #include "pq_xcontainer.hxx"
 #include "pq_statics.hxx"
@@ -155,7 +156,7 @@ Any Container::getByName( const OUString& aName )
             "Element " + aName + " unknown in " + m_type + "-Container",
             *this );
     }
-    OSL_ASSERT( ii->second >= 0 && ii->second < static_cast<int>(m_values.size()) );
+    OSL_ASSERT( ii->second >= 0 && o3tl::make_unsigned(ii->second) < m_values.size() );
     return m_values[ ii->second ];
 }
 
@@ -188,7 +189,7 @@ sal_Bool Container::hasElements(  )
 
 Any Container::getByIndex( sal_Int32 Index )
 {
-    if( Index < 0 || Index >= static_cast<sal_Int32>(m_values.size()) )
+    if( Index < 0 || o3tl::make_unsigned(Index) >= m_values.size() )
     {
         throw IndexOutOfBoundsException(
             "Index " + OUString::number( Index )
@@ -298,7 +299,7 @@ void Container::dropByName( const OUString& elementName )
 void Container::dropByIndex( sal_Int32 index )
 {
     osl::MutexGuard guard( m_xMutex->GetMutex() );
-    if( index < 0 ||  index >=static_cast<sal_Int32>(m_values.size()) )
+    if( index < 0 ||  o3tl::make_unsigned(index) >=m_values.size() )
     {
         throw css::lang::IndexOutOfBoundsException(
             "Index out of range (allowed 0 to "

@@ -78,6 +78,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <rtl/ref.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svtools/colrdlg.hxx>
@@ -166,7 +167,7 @@ private:
     bool getSlideAPI( sal_Int32 nSlideNumber, Reference< XDrawPage >& xSlide, Reference< XAnimationNode >& xAnimNode );
     sal_Int32 findSlideIndex( sal_Int32 nSlideNumber ) const;
 
-    bool isValidIndex( sal_Int32 nIndex ) const { return (nIndex >= 0) && (nIndex < static_cast<sal_Int32>(maSlideNumbers.size())); }
+    bool isValidIndex( sal_Int32 nIndex ) const { return (nIndex >= 0) && (o3tl::make_unsigned(nIndex) < maSlideNumbers.size()); }
     bool isValidSlideNumber( sal_Int32 nSlideNumber ) const { return (nSlideNumber >= 0) && (nSlideNumber < mnSlideCount); }
 
 private:

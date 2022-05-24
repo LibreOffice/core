@@ -486,7 +486,7 @@ uno::Any SwXAutoTextGroup::getByIndex(sal_Int32 nIndex)
     if (!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
     const sal_uInt16 nCount = pGlosGroup->GetCount();
-    if (nIndex < 0 || nIndex >= static_cast<sal_Int32>(nCount))
+    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= nCount)
         throw lang::IndexOutOfBoundsException();
     return getByName(pGlosGroup->GetShortName(o3tl::narrowing<sal_uInt16>(nIndex)));
 }

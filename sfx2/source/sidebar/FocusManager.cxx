@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include <sfx2/sidebar/FocusManager.hxx>
 #include <sfx2/sidebar/Deck.hxx>
 #include <sfx2/sidebar/Panel.hxx>
@@ -193,7 +194,7 @@ bool FocusManager::IsDeckTitleVisible() const
 
 bool FocusManager::IsPanelTitleVisible (const sal_Int32 nPanelIndex) const
 {
-    if (nPanelIndex<0 || nPanelIndex>=static_cast<sal_Int32>(maPanels.size()))
+    if (nPanelIndex<0 || o3tl::make_unsigned(nPanelIndex)>=maPanels.size())
         return false;
 
     TitleBar* pTitleBar = maPanels[nPanelIndex]->GetTitleBar();
@@ -206,7 +207,7 @@ void FocusManager::FocusPanel (
     const sal_Int32 nPanelIndex,
     const bool bFallbackToDeckTitle)
 {
-    if (nPanelIndex<0 || nPanelIndex>=static_cast<sal_Int32>(maPanels.size()))
+    if (nPanelIndex<0 || o3tl::make_unsigned(nPanelIndex)>=maPanels.size())
     {
         if (bFallbackToDeckTitle)
             FocusDeckTitle();

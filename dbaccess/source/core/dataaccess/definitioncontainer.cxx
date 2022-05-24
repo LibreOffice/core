@@ -23,6 +23,7 @@
 #include <strings.hxx>
 
 #include <tools/diagnose_ex.h>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/enumhelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -372,7 +373,7 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex )
 {
     MutexGuard aGuard(m_aMutex);
 
-    if ((_nIndex < 0) || (_nIndex >= static_cast<sal_Int32>(m_aDocuments.size())))
+    if ((_nIndex < 0) || (o3tl::make_unsigned(_nIndex) >= m_aDocuments.size()))
         throw IndexOutOfBoundsException();
 
     Documents::iterator aPos = m_aDocuments[_nIndex];

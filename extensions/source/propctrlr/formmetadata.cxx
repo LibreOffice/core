@@ -25,6 +25,7 @@
 #include <strings.hrc>
 #include <stringarrays.hrc>
 #include <comphelper/extract.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <algorithm>
@@ -675,7 +676,7 @@ namespace pcr
             --nIntValue;
 
         std::vector< OUString > aEnumStrings = m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
-        if ( ( nIntValue >= 0 ) && ( nIntValue < static_cast<sal_Int32>(aEnumStrings.size()) ) )
+        if ( ( nIntValue >= 0 ) && ( o3tl::make_unsigned(nIntValue) < aEnumStrings.size() ) )
         {
             sReturn = aEnumStrings[ nIntValue ];
         }

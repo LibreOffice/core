@@ -22,6 +22,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <o3tl/safeint.hxx>
 #include <vcl/status.hxx>
 #include <vcl/vclevent.hxx>
 
@@ -47,7 +48,7 @@ VCLXAccessibleStatusBar::VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow )
 
 void VCLXAccessibleStatusBar::UpdateShowing( sal_Int32 i, bool bShowing )
 {
-    if ( i >= 0 && i < static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( i >= 0 && o3tl::make_unsigned(i) < m_aAccessibleChildren.size() )
     {
         Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
         if ( xChild.is() )
@@ -62,7 +63,7 @@ void VCLXAccessibleStatusBar::UpdateShowing( sal_Int32 i, bool bShowing )
 
 void VCLXAccessibleStatusBar::UpdateItemName( sal_Int32 i )
 {
-    if ( i < 0 || i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         return;
 
     Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
@@ -80,7 +81,7 @@ void VCLXAccessibleStatusBar::UpdateItemName( sal_Int32 i )
 
 void VCLXAccessibleStatusBar::UpdateItemText( sal_Int32 i )
 {
-    if ( i < 0 || i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         return;
 
     Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
@@ -98,7 +99,7 @@ void VCLXAccessibleStatusBar::UpdateItemText( sal_Int32 i )
 
 void VCLXAccessibleStatusBar::InsertChild( sal_Int32 i )
 {
-    if ( i < 0 || i > static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( i < 0 || o3tl::make_unsigned(i) > m_aAccessibleChildren.size() )
         return;
 
     // insert entry in child list
@@ -117,7 +118,7 @@ void VCLXAccessibleStatusBar::InsertChild( sal_Int32 i )
 
 void VCLXAccessibleStatusBar::RemoveChild( sal_Int32 i )
 {
-    if ( i < 0 || i >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+    if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         return;
 
     // get the accessible of the removed page
@@ -290,7 +291,7 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 
 {
     OExternalLockGuard aGuard( this );
 
-    if ( i < 0 || i >= static_cast<sal_Int32> (m_aAccessibleChildren.size()) )
+    if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         throw IndexOutOfBoundsException();
 
     Reference< XAccessible > xChild = m_aAccessibleChildren[i];
@@ -323,7 +324,7 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleAtPoint( const aw
     {
         sal_uInt16 nItemId = m_pStatusBar->GetItemId( VCLPoint( rPoint ) );
         sal_Int32 nItemPos = m_pStatusBar->GetItemPos( nItemId );
-        if ( nItemPos >= 0 && nItemPos < static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
+        if ( nItemPos >= 0 && o3tl::make_unsigned(nItemPos) < m_aAccessibleChildren.size() )
             xChild = getAccessibleChild( nItemPos );
     }
 

@@ -19,6 +19,7 @@
 
 #include <bookmarkcontainer.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/enumhelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -206,7 +207,7 @@ Any SAL_CALL OBookmarkContainer::getByIndex( sal_Int32 _nIndex )
 {
     MutexGuard aGuard(m_rMutex);
 
-    if ((_nIndex < 0) || (_nIndex >= static_cast<sal_Int32>(m_aBookmarksIndexed.size())))
+    if ((_nIndex < 0) || (o3tl::make_unsigned(_nIndex) >= m_aBookmarksIndexed.size()))
         throw IndexOutOfBoundsException();
 
     return Any(m_aBookmarksIndexed[_nIndex]->second);

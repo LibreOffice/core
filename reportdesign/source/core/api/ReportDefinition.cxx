@@ -102,6 +102,7 @@
 #include <dbaccess/dbaundomanager.hxx>
 #include <editeng/paperinf.hxx>
 #include <framework/titlehelper.hxx>
+#include <o3tl/safeint.hxx>
 #include <svl/itempool.hxx>
 #include <svl/undo.hxx>
 #include <svx/svdlayer.hxx>
@@ -2282,7 +2283,7 @@ sal_Int32 SAL_CALL OStylesHelper::getCount(  )
 uno::Any SAL_CALL OStylesHelper::getByIndex( sal_Int32 Index )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( Index < 0 || Index >= static_cast<sal_Int32>(m_aElementsPos.size()) )
+    if ( Index < 0 || o3tl::make_unsigned(Index) >= m_aElementsPos.size() )
         throw lang::IndexOutOfBoundsException();
     return m_aElementsPos[Index]->second;
 }

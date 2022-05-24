@@ -28,6 +28,7 @@
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
+#include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/enumhelper.hxx>
 
@@ -310,7 +311,7 @@ namespace dbtools::param
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_checkDisposed_throw();
 
-        if ( ( _nIndex < 0 ) || ( _nIndex >= static_cast<sal_Int32>(m_aParameters.size()) ) )
+        if ( ( _nIndex < 0 ) || ( o3tl::make_unsigned(_nIndex) >= m_aParameters.size() ) )
             throw IndexOutOfBoundsException();
 
         return Any( Reference< XPropertySet >( m_aParameters[ _nIndex ] ) );

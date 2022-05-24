@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 
 #include <basic/sbx.hxx>
@@ -188,7 +189,7 @@ void SbxCollection::CollItem( SbxArray* pPar_ )
         else
         {
             short n = p->GetInteger();
-            if (n >= 1 && n <= static_cast<sal_Int32>(pObjs->Count()))
+            if (n >= 1 && o3tl::make_unsigned(n) <= pObjs->Count())
             {
                 pRes = pObjs->Get(static_cast<sal_uInt32>(n) - 1);
             }
@@ -210,7 +211,7 @@ void SbxCollection::CollRemove( SbxArray* pPar_ )
     else
     {
         short n = pPar_->Get(1)->GetInteger();
-        if (n < 1 || n > static_cast<sal_Int32>(pObjs->Count()))
+        if (n < 1 || o3tl::make_unsigned(n) > pObjs->Count())
             SetError( ERRCODE_BASIC_BAD_INDEX );
         else
             Remove(pObjs->Get(static_cast<sal_uInt32>(n) - 1));

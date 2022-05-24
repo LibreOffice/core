@@ -22,6 +22,7 @@
 #include <strings.hrc>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
+#include <o3tl/safeint.hxx>
 
 namespace reportdesign
 {
@@ -182,7 +183,7 @@ void SAL_CALL OFunctions::removeContainerListener( const uno::Reference< contain
 
 void OFunctions::checkIndex(sal_Int32 _nIndex)
 {
-    if ( _nIndex < 0 || static_cast<sal_Int32>(m_aFunctions.size()) <= _nIndex )
+    if ( _nIndex < 0 || m_aFunctions.size() <= o3tl::make_unsigned(_nIndex) )
         throw lang::IndexOutOfBoundsException();
 }
 

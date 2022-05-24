@@ -23,6 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
+#include <o3tl/safeint.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -98,7 +99,7 @@ sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::getSecurityEnvironmentNumber(  )
 uno::Reference< xml::crypto::XSecurityEnvironment > SAL_CALL
     XMLSecurityContext_NssImpl::getSecurityEnvironmentByIndex( sal_Int32 index )
 {
-    if (index < 0 || index >= static_cast<sal_Int32>(m_vSecurityEnvironments.size()))
+    if (index < 0 || o3tl::make_unsigned(index) >= m_vSecurityEnvironments.size())
         throw uno::RuntimeException();
 
     uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnvironment = m_vSecurityEnvironments[index];
@@ -108,7 +109,7 @@ uno::Reference< xml::crypto::XSecurityEnvironment > SAL_CALL
 uno::Reference< xml::crypto::XSecurityEnvironment > SAL_CALL
     XMLSecurityContext_NssImpl::getSecurityEnvironment(  )
 {
-    if (m_nDefaultEnvIndex < 0 || m_nDefaultEnvIndex >= static_cast<sal_Int32>(m_vSecurityEnvironments.size()))
+    if (m_nDefaultEnvIndex < 0 || o3tl::make_unsigned(m_nDefaultEnvIndex) >= m_vSecurityEnvironments.size())
         throw uno::RuntimeException();
 
     return getSecurityEnvironmentByIndex(m_nDefaultEnvIndex);

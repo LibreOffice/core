@@ -38,6 +38,7 @@
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <unotools/saveopt.hxx>
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
@@ -561,7 +562,7 @@ rtl::Reference< ::chart::BaseCoordinateSystem > AxisHelper::getCoordinateSystemB
     if(!xDiagram.is())
         return nullptr;
     auto & rCooSysList = xDiagram->getBaseCoordinateSystems();
-    if(0<=nIndex && nIndex < static_cast<sal_Int32>(rCooSysList.size()))
+    if(0<=nIndex && o3tl::make_unsigned(nIndex) < rCooSysList.size())
         return rCooSysList[nIndex];
     return nullptr;
 }
@@ -1048,7 +1049,7 @@ rtl::Reference< ChartType > AxisHelper::getChartTypeByIndex( const rtl::Referenc
     if( xCooSys.is() )
     {
         const std::vector< rtl::Reference< ChartType > > aChartTypeList( xCooSys->getChartTypes2() );
-        if( nIndex >= 0 && nIndex < static_cast<sal_Int32>(aChartTypeList.size()) )
+        if( nIndex >= 0 && o3tl::make_unsigned(nIndex) < aChartTypeList.size() )
             xChartType = aChartTypeList[nIndex];
     }
 

@@ -37,6 +37,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
 #include <iterator>
@@ -1758,7 +1759,7 @@ void OSQLParseTreeIterator::setOrderByColumnName(const OUString & rColumnName, O
     else
     {
         sal_Int32 nId = rColumnName.toInt32();
-        if ( nId > 0 && nId < static_cast<sal_Int32>(m_aSelectColumns->size()) )
+        if ( nId > 0 && o3tl::make_unsigned(nId) < m_aSelectColumns->size() )
             m_aOrderColumns->push_back( new OOrderColumn( (*m_aSelectColumns)[nId-1], isCaseSensitive(), bAscending ) );
     }
 
@@ -1779,7 +1780,7 @@ void OSQLParseTreeIterator::setGroupByColumnName(const OUString & rColumnName, O
     else
     {
         sal_Int32 nId = rColumnName.toInt32();
-        if ( nId > 0 && nId < static_cast<sal_Int32>(m_aSelectColumns->size()) )
+        if ( nId > 0 && o3tl::make_unsigned(nId) < m_aSelectColumns->size() )
             m_aGroupColumns->push_back(new OParseColumn((*m_aSelectColumns)[nId-1],isCaseSensitive()));
     }
 

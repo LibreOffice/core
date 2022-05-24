@@ -95,7 +95,7 @@ SwCTBWrapper::~SwCTBWrapper()
 
 Customization* SwCTBWrapper::GetCustomizaton( sal_Int16 index )
 {
-    if ( index < 0 || index >= static_cast<sal_Int16>( rCustomizations.size() ) )
+    if ( index < 0 || o3tl::make_unsigned(index) >= rCustomizations.size() )
         return nullptr;
     return &rCustomizations[ index ];
 }
