@@ -45,6 +45,7 @@ void MathType::Init()
     stored in the document
     */
     MathTypeFont aFont;
+    aUserStyles.reserve(11);
     for(sal_uInt8 i=1;i<=11;i++)
     {
         aFont.nTface = i+128;
@@ -540,7 +541,7 @@ void MathTypeFont::AppendStyleToText(OUString &rRet)
 void MathType::TypeFaceToString(OUString &rTxt,sal_uInt8 nFace)
 {
     MathTypeFont aFont(nFace);
-    MathTypeFontSet::iterator aItr = aUserStyles.find(aFont);
+    auto aItr = aUserStyles.find(aFont);
     if (aItr != aUserStyles.end())
         aFont.nStyle = aItr->nStyle;
     aFont.AppendStyleToText(rTxt);
