@@ -32,6 +32,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <officecfg/Office/Common.hxx>
+#include <comphelper/indexedpropertyvalues.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
@@ -610,7 +611,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
 
         if( !rList.empty() )
         {
-            xRet = document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() );
+            xRet = new comphelper::IndexedPropertyValuesContainer();
 
             uno::Reference < container::XIndexContainer > xCont( xRet, uno::UNO_QUERY );
             DBG_ASSERT( xCont.is(), "SdXImpressDocument::getViewData() failed for OLE object" );

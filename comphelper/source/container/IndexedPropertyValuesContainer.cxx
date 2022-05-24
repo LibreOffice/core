@@ -17,56 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <comphelper/indexedpropertyvalues.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
-
-#include <vector>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace com::sun::star;
 
-typedef std::vector < uno::Sequence< beans::PropertyValue > > IndexedPropertyValues;
 
-namespace {
+namespace comphelper {
 
-class IndexedPropertyValuesContainer : public cppu::WeakImplHelper< container::XIndexContainer, lang::XServiceInfo >
-{
-public:
-    IndexedPropertyValuesContainer() noexcept;
-
-    // XIndexContainer
-    virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, const css::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByIndex( sal_Int32 nIndex ) override;
-
-    // XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 nIndex, const css::uno::Any& aElement ) override;
-
-    // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
-
-    // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
-
-    //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-private:
-    IndexedPropertyValues maProperties;
-};
-
-}
 
 IndexedPropertyValuesContainer::IndexedPropertyValuesContainer() noexcept
 {
@@ -151,12 +114,14 @@ css::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSuppo
     return { "com.sun.star.document.IndexedPropertyValues" };
 }
 
+} // namespace comphelper
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 IndexedPropertyValuesContainer_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new IndexedPropertyValuesContainer());
+    return cppu::acquire(new comphelper::IndexedPropertyValuesContainer());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

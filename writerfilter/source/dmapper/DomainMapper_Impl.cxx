@@ -32,7 +32,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
-#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/i18n/NumberFormatMapper.hpp>
@@ -82,6 +81,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
+#include <comphelper/indexedpropertyvalues.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/unotext.hxx>
 #include <o3tl/safeint.hxx>
@@ -8265,7 +8265,7 @@ void DomainMapper_Impl::ApplySettingsTable()
                                         uno::Any(m_pSettingsTable->GetZoomType()),
                                         beans::PropertyState_DIRECT_VALUE);
             }
-            uno::Reference<container::XIndexContainer> xBox = document::IndexedPropertyValues::create(m_xComponentContext);
+            rtl::Reference< comphelper::IndexedPropertyValuesContainer > xBox = new comphelper::IndexedPropertyValuesContainer();
             xBox->insertByIndex(sal_Int32(0), uno::Any(comphelper::containerToSequence(aViewProps)));
             uno::Reference<document::XViewDataSupplier> xViewDataSupplier(m_xTextDocument, uno::UNO_QUERY);
             xViewDataSupplier->setViewData(xBox);

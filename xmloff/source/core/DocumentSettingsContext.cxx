@@ -40,9 +40,9 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
-#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/indexedpropertyvalues.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
@@ -109,7 +109,7 @@ uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
 
 uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 {
-    uno::Reference<container::XIndexContainer> xIndexContainer = document::IndexedPropertyValues::create(m_xContext);
+    rtl::Reference< comphelper::IndexedPropertyValuesContainer > xIndexContainer = new comphelper::IndexedPropertyValuesContainer();
     sal_uInt32 i(0);
     for (auto const& prop : aProps)
     {

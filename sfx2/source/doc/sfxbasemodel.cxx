@@ -42,7 +42,6 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/document/XStorageChangeListener.hpp>
-#include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -60,6 +59,7 @@
 #include <com/sun/star/util/InvalidStateException.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <comphelper/enumhelper.hxx>
+#include <comphelper/indexedpropertyvalues.hxx>
 #include <comphelper/string.hxx>
 
 #include <cppuhelper/implbase.hxx>
@@ -3293,7 +3293,7 @@ Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData()
             // currently no frame for this document at all or View is under construction
             return Reference < container::XIndexAccess >();
 
-        m_pData->m_contViewData = document::IndexedPropertyValues::create( ::comphelper::getProcessComponentContext() );
+        m_pData->m_contViewData = new comphelper::IndexedPropertyValuesContainer();
 
         if ( !m_pData->m_contViewData.is() )
         {

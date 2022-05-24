@@ -79,6 +79,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/indexedpropertyvalues.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -1838,15 +1839,15 @@ uno::Reference< container::XIndexAccess > SAL_CALL OReportDefinition::getViewDat
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     if ( !m_pImpl->m_xViewData.is() )
     {
-        m_pImpl->m_xViewData = document::IndexedPropertyValues::create(m_aProps->m_xContext);
-        uno::Reference< container::XIndexContainer > xContainer(m_pImpl->m_xViewData,uno::UNO_QUERY);
+        rtl::Reference<comphelper::IndexedPropertyValuesContainer> xNewViewData = new comphelper::IndexedPropertyValuesContainer();
+        m_pImpl->m_xViewData = xNewViewData;
         for (const auto& rxController : m_pImpl->m_aControllers)
         {
             if ( rxController.is() )
             {
                 try
                 {
-                    xContainer->insertByIndex(xContainer->getCount(), rxController->getViewData());
+                    xNewViewData->insertByIndex(xNewViewData->getCount(), rxController->getViewData());
                 }
                 catch (const uno::Exception&)
                 {
