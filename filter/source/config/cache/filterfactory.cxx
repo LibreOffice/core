@@ -55,8 +55,9 @@ FilterCache& GetTheFilterCache()
 FilterFactory::FilterFactory(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
     : m_xContext(rxContext)
 {
+    static const css::uno::Sequence<OUString> sServiceNames { "com.sun.star.document.FilterFactory" };
     BaseContainer::init("com.sun.star.comp.filter.config.FilterFactory"   ,
-                         { "com.sun.star.document.FilterFactory" },
+                         sServiceNames,
                         FilterCache::E_FILTER                         );
 }
 
