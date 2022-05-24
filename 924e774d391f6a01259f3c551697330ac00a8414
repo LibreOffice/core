@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b694899b_2d0ae90a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-24T07:48:18Z",
+      "side": 1,
+      "message": "Hi Cloph,\nany problem is this patch is backported to libreoffice-7-3 ? It removes a couple of strings to be translated",
+      "revId": "924e774d391f6a01259f3c551697330ac00a8414",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
