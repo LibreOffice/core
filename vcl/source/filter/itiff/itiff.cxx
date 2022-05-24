@@ -25,6 +25,7 @@
 #include <vcl/animate/Animation.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <tools/stream.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <tiffio.h>
 
@@ -123,6 +124,16 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
         {
             SAL_WARN("filter.tiff", "image too large");
             break;
+        }
+
+        if (utl::ConfigManager::IsFuzzing())
+        {
+            const uint64_t MAX_SIZE = 500000000;
+            if (TIFFTileSize64(tif) > MAX_SIZE)
+            {
+                SAL_WARN("filter.tiff", "skipping large tiffs");
+                return false;
+            }
         }
 
         size_t npixels = w * h;
