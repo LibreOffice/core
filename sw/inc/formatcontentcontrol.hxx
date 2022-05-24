@@ -40,6 +40,7 @@ enum class SwContentControlType
     CHECKBOX,
     DROP_DOWN_LIST,
     PICTURE,
+    DATE,
 };
 
 /// SfxPoolItem subclass that wraps an SwContentControl.
@@ -127,6 +128,12 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
 
     bool m_bPicture = false;
 
+    bool m_bDate = false;
+
+    OUString m_aDateFormat;
+
+    OUString m_aDateLanguage;
+
     /// Stores a list item index, in case the doc model is not yet updated.
     std::optional<size_t> m_oSelectedListItem;
 
@@ -192,6 +199,18 @@ public:
     void SetPicture(bool bPicture) { m_bPicture = bPicture; }
 
     bool GetPicture() const { return m_bPicture; }
+
+    void SetDate(bool bDate) { m_bDate = bDate; }
+
+    bool GetDate() const { return m_bDate; }
+
+    void SetDateFormat(const OUString& rDateFormat) { m_aDateFormat = rDateFormat; }
+
+    OUString GetDateFormat() const { return m_aDateFormat; }
+
+    void SetDateLanguage(const OUString& rDateLanguage) { m_aDateLanguage = rDateLanguage; }
+
+    OUString GetDateLanguage() const { return m_aDateLanguage; }
 
     void SetSelectedListItem(std::optional<size_t> oSelectedListItem)
     {

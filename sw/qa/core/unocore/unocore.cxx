@@ -580,6 +580,47 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlPicture)
     CPPUNIT_ASSERT(pContentControl->GetPicture());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
+{
+    // Given an empty document:
+    SwDoc* pDoc = createSwDoc();
+
+    // When inserting a date content control:
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<beans::XPropertySet> xTextGraphic(
+        xMSF->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue("AnchorType",
+                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xTextContent, false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
+    xContentControlProps->setPropertyValue("Date", uno::Any(true));
+    xContentControlProps->setPropertyValue("DateFormat", uno::Any(OUString("M/d/yyyy")));
+    xContentControlProps->setPropertyValue("DateLanguage", uno::Any(OUString("en-US")));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // Then make sure that the specified properties are set:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
+    CPPUNIT_ASSERT(pContentControl->GetDate());
+    CPPUNIT_ASSERT_EQUAL(OUString("M/d/yyyy"), pContentControl->GetDateFormat());
+    CPPUNIT_ASSERT_EQUAL(OUString("en-US"), pContentControl->GetDateLanguage());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

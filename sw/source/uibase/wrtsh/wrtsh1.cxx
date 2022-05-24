@@ -1031,6 +1031,7 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
     switch (eType)
     {
         case SwContentControlType::RICH_TEXT:
+        case SwContentControlType::DATE:
         {
             pContentControl->SetShowingPlaceHolder(true);
             if (!HasSelection())

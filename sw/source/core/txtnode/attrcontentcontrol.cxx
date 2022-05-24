@@ -224,6 +224,12 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
                                             BAD_CAST(m_aUncheckedState.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("picture"),
                                       BAD_CAST(OString::boolean(m_bPicture).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("date"),
+                                      BAD_CAST(OString::boolean(m_bDate).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("date-format"),
+                                      BAD_CAST(m_aDateFormat.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("date-language"),
+                                      BAD_CAST(m_aDateLanguage.toUtf8().getStr()));
 
     if (!m_aListItems.empty())
     {

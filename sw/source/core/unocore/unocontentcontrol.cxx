@@ -162,6 +162,9 @@ public:
     OUString m_aUncheckedState;
     std::vector<SwContentControlListItem> m_aListItems;
     bool m_bPicture;
+    bool m_bDate;
+    OUString m_aDateFormat;
+    OUString m_aDateLanguage;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
          const uno::Reference<text::XText>& xParentText,
@@ -176,6 +179,7 @@ public:
         , m_bCheckbox(false)
         , m_bChecked(false)
         , m_bPicture(false)
+        , m_bDate(false)
     {
         if (m_pContentControl)
         {
@@ -522,6 +526,9 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetUncheckedState(m_pImpl->m_aUncheckedState);
     pContentControl->SetListItems(m_pImpl->m_aListItems);
     pContentControl->SetPicture(m_pImpl->m_bPicture);
+    pContentControl->SetDate(m_pImpl->m_bDate);
+    pContentControl->SetDateFormat(m_pImpl->m_aDateFormat);
+    pContentControl->SetDateLanguage(m_pImpl->m_aDateLanguage);
 
     SwFormatContentControl aContentControl(pContentControl, nWhich);
     bool bSuccess
@@ -776,6 +783,51 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_DATE)
+    {
+        bool bValue;
+        if (rValue >>= bValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_bDate = bValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetDate(bValue);
+            }
+        }
+    }
+    else if (rPropertyName == UNO_NAME_DATE_FORMAT)
+    {
+        OUString aValue;
+        if (rValue >>= aValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_aDateFormat = aValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetDateFormat(aValue);
+            }
+        }
+    }
+    else if (rPropertyName == UNO_NAME_DATE_LANGUAGE)
+    {
+        OUString aValue;
+        if (rValue >>= aValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_aDateLanguage = aValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetDateLanguage(aValue);
+            }
+        }
+    }
     else
     {
         throw beans::UnknownPropertyException();
@@ -864,6 +916,39 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         else
         {
             aRet <<= m_pImpl->m_pContentControl->GetPicture();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_DATE)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_bDate;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetDate();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_DATE_FORMAT)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_aDateFormat;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetDateFormat();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_DATE_LANGUAGE)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_aDateLanguage;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetDateLanguage();
         }
     }
     else
