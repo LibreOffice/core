@@ -16,6 +16,24 @@
       "message": "Hi Colomban,\n\nI\u0027m not sure that using iostream like std::cout is a good idea in tests.\n\nFeel free to call me in case you have questions",
       "revId": "0a1141c703e83bcae2fa5de1643b4a285e728833",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97507059_8d6dc3fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-05-24T07:32:43Z",
+      "side": 1,
+      "message": "What would you recommend? As you might see the Java tests were very verbose, and I kind of think it\u0027s a rather good thing as it might give more context in case a test fails.  I didn\u0027t see a very verbose test to get inspiration from, so I used the most naive solution, and as the output gets redirected to the log it seemed fine to me.\n\nHowever, I\u0027d be more than happy to follow whichever guidelines here, be it using a proper logging facility or removing the verbose messages.",
+      "parentUuid": "c4f0149c_cb615ee6",
+      "revId": "0a1141c703e83bcae2fa5de1643b4a285e728833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
