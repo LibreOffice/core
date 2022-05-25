@@ -128,24 +128,28 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
 
     aLine.append("printer=");
     aLine.append(OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
-    aStream.WriteLine(aLine.makeStringAndClear());
+    aStream.WriteLine(aLine);
+    aLine.setLength(0);
 
     aLine.append("orientation=");
     if (m_eOrientation == orientation::Landscape)
         aLine.append("Landscape");
     else
         aLine.append("Portrait");
-    aStream.WriteLine(aLine.makeStringAndClear());
+    aStream.WriteLine(aLine);
+    aLine.setLength(0);
 
     aLine.append("copies=");
     aLine.append(static_cast<sal_Int32>(m_nCopies));
-    aStream.WriteLine(aLine.makeStringAndClear());
+    aStream.WriteLine(aLine);
+    aLine.setLength(0);
 
     if (m_nPDFDevice > 0)
     {
         aLine.append("collate=");
         aLine.append(OString::boolean(m_bCollate));
-        aStream.WriteLine(aLine.makeStringAndClear());
+        aStream.WriteLine(aLine);
+        aLine.setLength(0);
     }
 
     aLine.append("marginadjustment=");
@@ -156,23 +160,28 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
     aLine.append(static_cast<sal_Int32>(m_nTopMarginAdjust));
     aLine.append(',');
     aLine.append(static_cast<sal_Int32>(m_nBottomMarginAdjust));
-    aStream.WriteLine(aLine.makeStringAndClear());
+    aStream.WriteLine(aLine);
+    aLine.setLength(0);
 
     aLine.append("colordepth=");
     aLine.append(static_cast<sal_Int32>(m_nColorDepth));
-    aStream.WriteLine(aLine.makeStringAndClear());
+    aStream.WriteLine(aLine);
+    aLine.setLength(0);
 
     aLine.append("pslevel=");
     aLine.append(static_cast<sal_Int32>(m_nPSLevel));
-    aStream.WriteLine(aLine.makeStringAndClear());
+    aStream.WriteLine(aLine);
+    aLine.setLength(0);
 
     aLine.append("pdfdevice=");
     aLine.append(static_cast<sal_Int32>(m_nPDFDevice));
-    aStream.WriteLine(aLine.makeStringAndClear());
+    aStream.WriteLine(aLine);
+    aLine.setLength(0);
 
     aLine.append("colordevice=");
     aLine.append(static_cast<sal_Int32>(m_nColorDevice));
-    aStream.WriteLine(aLine.makeStringAndClear());
+    aStream.WriteLine(aLine);
+    aLine.setLength(0);
 
     // now append the PPDContext stream buffer
     aStream.WriteLine( "PPDContextData" );

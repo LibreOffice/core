@@ -111,7 +111,8 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     pDoc->GetName( nTab, aString );
     aOS.append(aString);
     aOS.append("\"\n");
-    rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
+    rOut.WriteUnicodeOrByteText(aOS);
+    aOS.setLength(0);
 
     // VECTORS
     aOS.append(pKeyVECTORS);
@@ -119,7 +120,8 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     aOS.append(static_cast<sal_Int32>(nNumCols));
     aOS.append('\n');
     aOS.append(p2DoubleQuotes_LF);
-    rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
+    rOut.WriteUnicodeOrByteText(aOS);
+    aOS.setLength(0);
 
     // TUPLES
     aOS.append(pKeyTUPLES);
@@ -127,13 +129,15 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     aOS.append(static_cast<sal_Int32>(nNumRows));
     aOS.append('\n');
     aOS.append(p2DoubleQuotes_LF);
-    rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
+    rOut.WriteUnicodeOrByteText(aOS);
+    aOS.setLength(0);
 
     // DATA
     aOS.append(pKeyDATA);
     aOS.append("\n0,0\n");
     aOS.append(p2DoubleQuotes_LF);
-    rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
+    rOut.WriteUnicodeOrByteText(aOS);
+    aOS.setLength(0);
 
     SCCOL               nColCnt;
     SCROW               nRowCnt;
@@ -144,7 +148,8 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
         aOS.append(pSpecDataType_LF);
         aOS.append(pKeyBOT);
         aOS.append('\n');
-        rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
+        rOut.WriteUnicodeOrByteText(aOS);
+        aOS.setLength(0);
         for( nColCnt = rRange.aStart.Col() ; nColCnt <= nEndCol ; nColCnt++ )
         {
             assert( aOS.isEmpty() && "aOS should be empty");
@@ -188,7 +193,10 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
             }
 
             if ( !bWriteStringData )
-                rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
+            {
+                rOut.WriteUnicodeOrByteText(aOS);
+                aOS.setLength(0);
+            }
             else
             {
                 // for an explanation why this complicated, see
@@ -198,7 +206,8 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                 assert( aOS.isEmpty() && "aOS should be empty");
                 OUString aTmpStr = aString;
                 aOS.append(pStringData);
-                rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear(), eCharSet);
+                rOut.WriteUnicodeOrByteText(aOS, eCharSet);
+                aOS.setLength(0);
                 if ( eCharSet == RTL_TEXTENCODING_UNICODE )
                 {
                     sal_Int32 nPos = aTmpStr.indexOf( cStrDelim );
@@ -260,7 +269,8 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     aOS.append(pSpecDataType_LF);
     aOS.append(pKeyEOD);
     aOS.append('\n');
-    rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
+    rOut.WriteUnicodeOrByteText(aOS);
+    aOS.setLength(0);
 
     // restore original value
     rOut.SetStreamCharSet( eStreamCharSet );

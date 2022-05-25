@@ -23,6 +23,7 @@
 #include <string_view>
 
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include <comphelper/string.hxx>
@@ -307,9 +308,10 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     // Convert fractional strings
     if (bFrac) {
         // Convert to fraction
-        sal_Int64 nWholeNum = aStr1.makeStringAndClear().toInt64();
-        sal_Int64 nNum = aStrNum.makeStringAndClear().toInt64();
-        sal_Int64 nDenom = aStrDenom.makeStringAndClear().toInt64();
+        sal_Int64 nWholeNum = o3tl::toInt64(aStr1);
+        aStr1.setLength(0);
+        sal_Int64 nNum = o3tl::toInt64(aStrNum);
+        sal_Int64 nDenom = o3tl::toInt64(aStrDenom);
         if (nDenom == 0) return false; // Division by zero
         double nFrac2Dec = nWholeNum + static_cast<double>(nNum)/nDenom; // Convert to double for floating point precision
         OUStringBuffer aStrFrac;
@@ -336,7 +338,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     if (aStr2.getLength() < nDecDigits)
         string::padToLength(aStr2, nDecDigits, '0');
 
-    aStr  = aStr1.makeStringAndClear() + aStr2.makeStringAndClear();
+    aStr = aStr1 + aStr2;
 
     // check range
     nValue = aStr.toInt64();

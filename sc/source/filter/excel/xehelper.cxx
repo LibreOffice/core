@@ -863,7 +863,8 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
             aSel.nStartPos = aSel.nEndPos;
         }
 
-        aText = ScGlobal::addToken( aText, aParaText.makeStringAndClear(), '\n' );
+        aText = ScGlobal::addToken( aText, aParaText, '\n' );
+        aParaText.setLength(0);
         if( nParaHeight == 0 )
             nParaHeight = aFontData.mnHeight * 20;  // points -> twips
         nHeight += nParaHeight;

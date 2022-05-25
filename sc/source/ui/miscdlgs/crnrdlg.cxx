@@ -388,7 +388,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             strShow.append("]");
 
             //@008 Add string to listbox
-            OUString aInsStr = aString + strShow.makeStringAndClear();
+            OUString aInsStr = aString + strShow;
             aRangeMap.emplace( aInsStr, aRange );
             m_xLbRange->append(OUString::number(nEntryDataCol), aInsStr);
         }
@@ -425,7 +425,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             }
             strShow.append("]");
 
-            OUString aInsStr = aString + strShow.makeStringAndClear();
+            OUString aInsStr = aString + strShow;
             aRangeMap.emplace( aInsStr, aRange );
             m_xLbRange->append(OUString::number(nEntryDataRow), aInsStr);
         }
