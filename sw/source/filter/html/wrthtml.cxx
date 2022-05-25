@@ -706,19 +706,22 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     if( !rName.isEmpty() && !bContinued )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_id "=\"");
-        rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+        rHTMLWrt.Strm().WriteOString( sOut );
+        sOut.setLength(0);
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName );
         sOut.append('\"');
     }
 
     SvxFrameDirection nDir = rHTMLWrt.GetHTMLDirection( rFormat.GetAttrSet() );
-    rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+    rHTMLWrt.Strm().WriteOString( sOut );
+    sOut.setLength(0);
     rHTMLWrt.OutDirection( nDir );
 
     if( SectionType::FileLink == rSection.GetType() )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_href "=\"");
-        rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+        rHTMLWrt.Strm().WriteOString( sOut );
+        sOut.setLength(0);
 
         const OUString& aFName = rSection.GetLinkFileName();
         sal_Int32 nIdx{ 0 };
@@ -771,7 +774,8 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         }
     }
 
-    rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+    rHTMLWrt.Strm().WriteOString( sOut );
+    sOut.setLength(0);
     if( rHTMLWrt.IsHTMLMode( rHTMLWrt.m_bCfgOutStyles ? HTMLMODE_ON : 0 ) )
         rHTMLWrt.OutCSS1_SectionFormatOptions( rFormat, pCol );
 
@@ -1144,7 +1148,8 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         // the body won't be indented, because then everything would be indented!
         OutNewLine();
         sOut.append("<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_body);
-        Strm().WriteOString( sOut.makeStringAndClear() );
+        Strm().WriteOString( sOut );
+        sOut.setLength(0);
 
         // language
         OutLanguage( m_eLang );
@@ -1195,7 +1200,8 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
     if (!mbXHTML)
     {
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_name "=\"");
-        Strm().WriteOString( sOut.makeStringAndClear() );
+        Strm().WriteOString( sOut );
+        sOut.setLength(0);
         HTMLOutFuncs::Out_String( Strm(), rName ).WriteCharPtr( "\">" );
     }
     else
@@ -1203,7 +1209,8 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
         // XHTML wants 'id' instead of 'name', also the value can't contain
         // spaces.
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_id "=\"");
-        Strm().WriteOString( sOut.makeStringAndClear() );
+        Strm().WriteOString( sOut );
+        sOut.setLength(0);
         HTMLOutFuncs::Out_String( Strm(), rName.replace(' ', '_') ).WriteCharPtr( "\">" );
     }
     HTMLOutFuncs::Out_AsciiTag( Strm(), OStringConcatenation(GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor), false );
@@ -1425,7 +1432,8 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
     else
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_lang);
     sOut.append("=\"");
-    Strm().WriteOString( sOut.makeStringAndClear() );
+    Strm().WriteOString( sOut );
+    sOut.setLength(0);
     HTMLOutFuncs::Out_String( Strm(), LanguageTag::convertToBcp47(nLang) ).WriteChar( '"' );
 }
 
