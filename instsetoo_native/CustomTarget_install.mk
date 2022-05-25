@@ -71,8 +71,9 @@ $(if $(GNUPARALLEL), \
 , \
     $(call gb_Helper_print_on_error, \
     cd $(dir $@) \
+    && PATH="$(SRCDIR)/solenv/bin:$$PATH" \
     $(foreach curpkg,$(1),\
-    && $(SRCDIR)/solenv/bin/call_installer.sh $(if $(verbose),-verbose,-quiet) $(curpkg) \
+    && call_installer.sh $(if $(verbose),-verbose,-quiet) $(curpkg) \
     ),$@.log))
 endef
 
