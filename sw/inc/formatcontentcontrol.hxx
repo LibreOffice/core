@@ -137,6 +137,9 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
     /// Stores a list item index, in case the doc model is not yet updated.
     std::optional<size_t> m_oSelectedListItem;
 
+    /// Stores a date timestamp, in case the doc model is not yet updated.
+    std::optional<double> m_oSelectedDate;
+
 public:
     SwTextContentControl* GetTextAttr() const;
 
@@ -212,12 +215,19 @@ public:
 
     OUString GetDateLanguage() const { return m_aDateLanguage; }
 
+    /// Formats m_oSelectedDate, taking m_aDateFormat and m_aDateLanguage into account.
+    OUString GetDateString() const;
+
     void SetSelectedListItem(std::optional<size_t> oSelectedListItem)
     {
         m_oSelectedListItem = oSelectedListItem;
     }
 
     std::optional<size_t> GetSelectedListItem() const { return m_oSelectedListItem; }
+
+    void SetSelectedDate(std::optional<double> oSelectedDate) { m_oSelectedDate = oSelectedDate; }
+
+    std::optional<double> GetSelectedDate() const { return m_oSelectedDate; }
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
