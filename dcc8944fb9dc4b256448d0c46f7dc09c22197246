@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22a00afd_0b8134d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-25T08:40:54Z",
+      "side": 1,
+      "message": "@Tibor: Very nice clean-up! I suggest only a fallback for the English-only test environments.",
+      "revId": "dcc8944fb9dc4b256448d0c46f7dc09c22197246",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "941da42c_ec2d98a3",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-25T08:40:54Z",
+      "side": 1,
+      "message": "Give a fallback for English-only test environments:\n\nCPPUNIT_ASSERT_EQUAL(True, aURL \u003d\u003d \"#Dia 1\" || aURL \u003d\u003d \"#Slide 1\")",
+      "range": {
+        "startLine": 344,
+        "startChar": 4,
+        "endLine": 344,
+        "endChar": 79
+      },
+      "revId": "dcc8944fb9dc4b256448d0c46f7dc09c22197246",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0235503c_fdeff34d",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-25T08:40:54Z",
+      "side": 1,
+      "message": "CPPUNIT_ASSERT_EQUAL(True, aURL \u003d\u003d \"#Dia 3\" || aURL \u003d\u003d \"#Slide 3\")",
+      "range": {
+        "startLine": 354,
+        "startChar": 4,
+        "endLine": 354,
+        "endChar": 79
+      },
+      "revId": "dcc8944fb9dc4b256448d0c46f7dc09c22197246",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
