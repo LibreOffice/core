@@ -606,6 +606,16 @@ public:
                 auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
                 aColorItem.GetThemeColor().SetThemeIndex(pIntItem->GetValue());
             }
+            if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_MOD, false, &pItem) == SfxItemState::SET)
+            {
+                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
+                aColorItem.GetThemeColor().SetLumMod(pIntItem->GetValue());
+            }
+            if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_OFF, false, &pItem) == SfxItemState::SET)
+            {
+                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
+                aColorItem.GetThemeColor().SetLumOff(pIntItem->GetValue());
+            }
             pArgs->Put(aColorItem);
         }
     }
