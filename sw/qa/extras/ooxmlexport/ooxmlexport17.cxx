@@ -949,6 +949,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf149200)
+{
+    loadAndSave("tdf149200.docx");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // Ensure there is no unexpected invalid structure <w14:textFill>
+    // There is just one run property
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "count(/w:document/w:body/w:p[1]/w:r[1]/w:rPr/*)");
+    CPPUNIT_ASSERT(pXmlObj);
+    CPPUNIT_ASSERT_EQUAL(double(1), pXmlObj->floatval);
+    // And it is a color definition with themeColor
+    CPPUNIT_ASSERT_EQUAL(OUString("dark1"), getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:color", "themeColor"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf135923, "tdf135923-min.docx")
 {
     uno::Reference<text::XText> xShape(getShape(1), uno::UNO_QUERY);
