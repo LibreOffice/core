@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5a7a7d5_f5b1608e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-25T12:09:04Z",
+      "side": 1,
+      "message": "@qa: do we want this for 7.3.4? Code is basically just moved and well tested in kf5. The bug is IMHO minor and it really just affects the qt plugin. Your call.",
+      "revId": "4b37e526d118501ff718b49640938e00fbaea10f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
