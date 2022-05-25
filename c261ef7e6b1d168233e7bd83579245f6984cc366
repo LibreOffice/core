@@ -49,6 +49,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1af72947_2c96b78d",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2022-05-25T19:30:24Z",
+      "side": 1,
+      "message": "Local variable \u0027currentID\u0027 is referenced before assignment",
+      "range": {
+        "startLine": 83,
+        "startChar": 8,
+        "endLine": 83,
+        "endChar": 17
+      },
+      "revId": "c261ef7e6b1d168233e7bd83579245f6984cc366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c666a439_49042b91",
         "filename": "bin/crashreportScraper.py",
         "patchSetId": 5
@@ -72,6 +95,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "57e6e5e2_c551b9be",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2022-05-25T19:30:24Z",
+      "side": 1,
+      "message": "Local variable \u0027currentOS\u0027 is referenced before assignment",
+      "range": {
+        "startLine": 85,
+        "startChar": 8,
+        "endLine": 85,
+        "endChar": 17
+      },
+      "revId": "c261ef7e6b1d168233e7bd83579245f6984cc366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d63ec53e_4152bb3f",
         "filename": "bin/crashreportScraper.py",
         "patchSetId": 5
@@ -83,6 +129,30 @@
       "writtenOn": "2022-05-25T19:25:49Z",
       "side": 1,
       "message": "Local variable \u0027currentID\u0027 and \u0027currentOS\u0027 are referenced before assignment",
+      "range": {
+        "startLine": 91,
+        "startChar": 12,
+        "endLine": 92,
+        "endChar": 26
+      },
+      "revId": "c261ef7e6b1d168233e7bd83579245f6984cc366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8030fe88_0eeeeba5",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2022-05-25T19:30:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d63ec53e_4152bb3f",
       "range": {
         "startLine": 91,
         "startChar": 12,
