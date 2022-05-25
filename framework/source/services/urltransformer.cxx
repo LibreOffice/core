@@ -238,7 +238,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL )
                             aURL.Password                                           ,
                             aURL.Server                                             ,
                              aURL.Port                                              ,
-                            aCompletePath.makeStringAndClear()                          );
+                            aCompletePath);
 
         if ( !bResult )
             return false;

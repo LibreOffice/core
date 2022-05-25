@@ -87,7 +87,7 @@ void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )
     ::comphelper::Base64::encode( aStrBuffer, aImageData );
 
     OString aEncodedShortString = OUStringToOString(
-        aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+        aStrBuffer, RTL_TEXTENCODING_UTF8 );
 
     // Start the writing
     OString aBuffer =  "slide_preview\n" +
@@ -248,8 +248,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
             aRet.insert( i+1, "br/>" );
         }
     }
-    return OUStringToOString(
-        aRet.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+    return OUStringToOString( aRet, RTL_TEXTENCODING_UTF8 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

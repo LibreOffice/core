@@ -288,7 +288,8 @@ void RtfAttributeOutput::EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t pTex
     RtfStringBuffer aParagraph;
 
     aParagraph.appendAndClear(m_aRun);
-    aParagraph->append(m_aAfterRuns.makeStringAndClear());
+    aParagraph->append(m_aAfterRuns);
+    m_aAfterRuns.setLength(0);
     if (m_bTableAfterCell)
         m_bTableAfterCell = false;
     else
@@ -329,12 +330,16 @@ void RtfAttributeOutput::SectionBreaks(const SwNode& rNode)
         OSL_ENSURE(m_aStyles.getLength() == 0, "m_aStyles is not empty");
 
         // output page/section breaks
-        m_rExport.Strm().WriteOString(m_aSectionBreaks.makeStringAndClear());
+        m_rExport.Strm().WriteOString(m_aSectionBreaks);
+        m_aSectionBreaks.setLength(0);
         m_bBufferSectionBreaks = true;
 
         // output section headers / footers
         if (!m_bBufferSectionHeaders)
-            m_rExport.Strm().WriteOString(m_aSectionHeaders.makeStringAndClear());
+        {
+            m_rExport.Strm().WriteOString(m_aSectionHeaders);
+            m_aSectionHeaders.setLength(0);
+        }
 
         if (aNextIndex.GetNode().IsTextNode())
         {
@@ -374,7 +379,7 @@ void RtfAttributeOutput::StartParagraphProperties()
         aPar.append(' ');
     }
     if (!m_bBufferSectionHeaders)
-        m_rExport.Strm().WriteOString(aPar.makeStringAndClear());
+        m_rExport.Strm().WriteOString(aPar);
     else
         m_aSectionHeaders.append(aPar);
 }
@@ -1014,8 +1019,10 @@ void RtfAttributeOutput::StartTableRow(
         return;
     // Empty the previous row closing buffer before starting the new one,
     // necessary for subtables.
-    m_rExport.Strm().WriteOString(m_aAfterRuns.makeStringAndClear());
-    m_rExport.Strm().WriteOString(m_aRowDefs.makeStringAndClear());
+    m_rExport.Strm().WriteOString(m_aAfterRuns);
+    m_aAfterRuns.setLength(0);
+    m_rExport.Strm().WriteOString(m_aRowDefs);
+    m_aRowDefs.setLength(0);
 }
 
 void RtfAttributeOutput::StartTableCell() { m_bTableCellOpen = true; }
@@ -1063,7 +1070,10 @@ void RtfAttributeOutput::EndTableRow()
         m_aAfterRuns.append(
             "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_NESTTABLEPROPRS);
         if (!m_aRowDefs.isEmpty())
-            m_aAfterRuns.append(m_aRowDefs.makeStringAndClear());
+        {
+            m_aAfterRuns.append(m_aRowDefs);
+            m_aRowDefs.setLength(0);
+        }
         else if (!m_aTables.empty())
         {
             m_aAfterRuns.append(m_aTables.back());
@@ -1141,7 +1151,8 @@ void RtfAttributeOutput::StartStyles()
 void RtfAttributeOutput::EndStyles(sal_uInt16 /*nNumberOfStyles*/)
 {
     m_rExport.Strm().WriteChar('}');
-    m_rExport.Strm().WriteOString(m_aStylesheet.makeStringAndClear());
+    m_rExport.Strm().WriteOString(m_aStylesheet);
+    m_aStylesheet.setLength(0);
     m_rExport.Strm().WriteChar('}');
 }
 
@@ -1236,7 +1247,10 @@ void RtfAttributeOutput::StartSection()
 
     m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_SECT OOO_STRING_SVTOOLS_RTF_SECTD);
     if (!m_bBufferSectionBreaks)
-        m_rExport.Strm().WriteOString(m_aSectionBreaks.makeStringAndClear());
+    {
+        m_rExport.Strm().WriteOString(m_aSectionBreaks);
+        m_aSectionBreaks.setLength(0);
+    }
 }
 
 void RtfAttributeOutput::EndSection()
@@ -1380,7 +1394,10 @@ void RtfAttributeOutput::SectionType(sal_uInt8 nBreakCode)
     }
     m_aSectionBreaks.append(sType);
     if (!m_bBufferSectionBreaks)
-        m_rExport.Strm().WriteOString(m_aSectionBreaks.makeStringAndClear());
+    {
+        m_rExport.Strm().WriteOString(m_aSectionBreaks);
+        m_aSectionBreaks.setLength(0);
+    }
 }
 
 void RtfAttributeOutput::SectFootnoteEndnotePr()
@@ -1450,7 +1467,8 @@ void RtfAttributeOutput::WriteFootnoteEndnotePr(bool bFootnote, const SwEndNoteI
 
     if (!m_bBufferSectionBreaks)
     {
-        m_rExport.Strm().WriteOString(m_aSectionBreaks.makeStringAndClear());
+        m_rExport.Strm().WriteOString(m_aSectionBreaks);
+        m_aSectionBreaks.setLength(0);
     }
 }
 
@@ -2054,8 +2072,10 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                 m_rExport.OutULong(pObject->GetOrdNum());
             }
 
-            m_rExport.Strm().WriteOString(m_aRunText.makeStringAndClear());
-            m_rExport.Strm().WriteOString(m_aStyles.makeStringAndClear());
+            m_rExport.Strm().WriteOString(m_aRunText);
+            makeStringAndClear.setLength(0);
+            m_rExport.Strm().WriteOString(m_aStyles);
+            m_aStyles.setLength(0);
             m_rExport.m_bOutFlyFrameAttrs = false;
             m_rExport.SetRTFFlySyntax(false);
             m_pFlyFrameSize = nullptr;
@@ -2901,7 +2921,8 @@ void RtfAttributeOutput::TextFootnote_Impl(const SwFormatFootnote& rFootnote)
     m_bInRun = bInRunOrig;
     m_bSingleEmptyRun = bSingleEmptyRunOrig;
     m_aRun = aRun;
-    m_aRun->append(m_aSectionHeaders.makeStringAndClear());
+    m_aRun->append(m_aSectionHeaders);
+    m_aSectionHeaders.setLength(0);
 
     m_aRun->append("}");
     m_aRun->append("}");
@@ -3161,7 +3182,10 @@ void RtfAttributeOutput::FormatFrameSize(const SwFormatFrameSize& rSize)
         m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_PGHSXN);
         m_aSectionBreaks.append(static_cast<sal_Int32>(rSize.GetHeight()));
         if (!m_bBufferSectionBreaks)
-            m_rExport.Strm().WriteOString(m_aSectionBreaks.makeStringAndClear());
+        {
+            m_rExport.Strm().WriteOString(m_aSectionBreaks);
+            m_aSectionBreaks.setLength(0);
+        }
     }
 }
 
@@ -3206,7 +3230,10 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
                 m_aSectionBreaks.append(static_cast<sal_Int32>(rLRSpace.GetGutterMargin()));
             }
             if (!m_bBufferSectionBreaks)
-                m_rExport.Strm().WriteOString(m_aSectionBreaks.makeStringAndClear());
+            {
+                m_rExport.Strm().WriteOString(m_aSectionBreaks);
+                m_aSectionBreaks.setLength(0);
+            }
         }
         else
         {
@@ -3277,7 +3304,10 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
                 m_aSectionBreaks.append(static_cast<sal_Int32>(aDistances.m_DyaHdrBottom));
             }
             if (!m_bBufferSectionBreaks)
-                m_rExport.Strm().WriteOString(m_aSectionBreaks.makeStringAndClear());
+            {
+                m_rExport.Strm().WriteOString(m_aSectionBreaks);
+                m_aSectionBreaks.setLength(0);
+            }
         }
         else
         {
@@ -3653,7 +3683,10 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
     }
 
     if (!m_bBufferSectionBreaks)
-        m_aStyles.append(m_aSectionBreaks.makeStringAndClear());
+    {
+        m_aStyles.append(m_aSectionBreaks);
+        m_aSectionBreaks.setLength(0);
+    }
 }
 
 void RtfAttributeOutput::FormatColumns_Impl(sal_uInt16 nCols, const SwFormatCol& rCol, bool bEven,
@@ -3720,7 +3753,10 @@ void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDire
             m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_STEXTFLOW);
             m_aSectionBreaks.append(static_cast<sal_Int32>(1));
             if (!m_bBufferSectionBreaks)
-                m_rExport.Strm().WriteOString(m_aSectionBreaks.makeStringAndClear());
+            {
+                m_rExport.Strm().WriteOString(m_aSectionBreaks);
+                m_aSectionBreaks.setLength(0);
+            }
         }
         return;
     }
@@ -4074,14 +4110,20 @@ static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& r
         }
         aRet.append(SAL_NEWLINE_STRING);
         if (pStream)
-            pStream->WriteOString(aRet.makeStringAndClear());
+        {
+            pStream->WriteOString(aRet);
+            aRet.setLength(0);
+        }
         if (pStream)
             msfilter::rtfutil::WriteHex(pGraphicAry, nSize, pStream);
         else
             aRet.append(msfilter::rtfutil::WriteHex(pGraphicAry, nSize));
         aRet.append('}');
         if (pStream)
-            pStream->WriteOString(aRet.makeStringAndClear());
+        {
+            pStream->WriteOString(aRet);
+            aRet.setLength(0);
+        }
     }
     return aRet.makeStringAndClear();
 }
@@ -4313,7 +4355,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
                                           + OString::number(aPoly[i].Y()) + ")");
                     aFlyProperties.push_back(std::make_pair<OString, OString>(
                         "pWrapPolygonVertices",
-                        "8;" + OString::number(aPoly.GetSize()) + aVerticies.makeStringAndClear()));
+                        "8;" + OString::number(aPoly.GetSize()) + aVerticies));
                 }
             }
         }

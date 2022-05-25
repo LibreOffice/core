@@ -168,7 +168,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
         }
 #endif
     }
-    m_pSerializer->writeEscaped(buf.makeStringAndClear());
+    m_pSerializer->writeEscaped(buf);
     m_pSerializer->endElementNS( XML_m, XML_t );
     m_pSerializer->endElementNS( XML_m, XML_r );
 }

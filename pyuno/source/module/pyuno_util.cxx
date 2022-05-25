@@ -154,7 +154,7 @@ void logException( RuntimeCargo *cargo, const char *intro,
         buf.append( OUString::Concat("].") + aFunctionName + " = " );
         buf.append(
             val2str( data, type.getTypeLibType(), VAL2STR_MODE_SHALLOW ) );
-        log( cargo,LogLevel::CALL, buf.makeStringAndClear() );
+        log( cargo,LogLevel::CALL, buf );
     }
 
 }
@@ -181,7 +181,7 @@ void logReply(
             buf.append( val2str( p.getValue(), p.getValueTypeRef(), VAL2STR_MODE_SHALLOW) );
         }
     }
-    log( cargo,LogLevel::CALL, buf.makeStringAndClear() );
+    log( cargo,LogLevel::CALL, buf );
 
 }
 
@@ -204,7 +204,7 @@ void logCall( RuntimeCargo *cargo, const char *intro,
         }
     }
     buf.append( ")" );
-    log( cargo,LogLevel::CALL, buf.makeStringAndClear() );
+    log( cargo,LogLevel::CALL, buf );
 }
 
 

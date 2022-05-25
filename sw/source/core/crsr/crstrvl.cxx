@@ -1964,7 +1964,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     {
                         if( !rContentAtPos.sStr.isEmpty() )
                             rContentAtPos.sStr += "\n";
-                        rContentAtPos.sStr += "Attr: " + sAttrs.makeStringAndClear();
+                        rContentAtPos.sStr += "Attr: " + sAttrs;
                     }
                 }
                 bRet = true;

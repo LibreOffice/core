@@ -518,7 +518,7 @@ OUString SfxHelp::CreateHelpURL_Impl( const OUString& aCommandURL, const OUStrin
 
         OUStringBuffer aTempURL = aHelpURL;
         AppendConfigToken( aTempURL, true );
-        bHasAnchor = GetHelpAnchor_Impl(aTempURL.makeStringAndClear(), aAnchor);
+        bHasAnchor = GetHelpAnchor_Impl(aTempURL, aAnchor);
     }
 
     AppendConfigToken( aHelpURL, true );

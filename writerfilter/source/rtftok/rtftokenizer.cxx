@@ -8,6 +8,7 @@
  */
 
 #include "rtftokenizer.hxx"
+#include <o3tl/string_view.hxx>
 #include <tools/stream.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -237,7 +238,7 @@ RTFError RTFTokenizer::resolveKeyword()
                 break;
             }
         }
-        nParam = aParameter.makeStringAndClear().toInt32();
+        nParam = o3tl::toInt32(aParameter);
         if (bNeg)
             nParam = -nParam;
     }

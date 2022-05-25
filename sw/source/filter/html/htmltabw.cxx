@@ -409,7 +409,8 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         }
     }
 
-    rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+    rWrt.Strm().WriteOString( sOut );
+    sOut.setLength(0);
 
     rWrt.m_bTextAttr = false;
     rWrt.m_bOutOpts = true;
@@ -455,7 +456,8 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             nNumFormat, *rWrt.m_pDoc->GetNumberFormatter()));
     }
     sOut.append('>');
-    rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+    rWrt.Strm().WriteOString( sOut );
+    sOut.setLength(0);
     rWrt.m_bLFPossible = true;
 
     rWrt.IncIndentLevel();  // indent the content of <TD>...</TD>
@@ -546,7 +548,8 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_valign
                 "=\"").append(text::VertOrientation::TOP==eRowVertOri ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom)
             .append("\"");
-        rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+        rWrt.Strm().WriteOString( sOut );
+        sOut.setLength(0);
     }
 
     rWrt.Strm().WriteChar( '>' );
@@ -620,7 +623,8 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         rWrt.m_nDirection = rWrt.GetHTMLDirection( pFrameFormat->GetAttrSet() );
     if( rWrt.m_bOutFlyFrame || nOldDirection != rWrt.m_nDirection )
     {
-        rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+        rWrt.Strm().WriteOString( sOut );
+        sOut.setLength(0);
         rWrt.OutDirection( rWrt.m_nDirection );
     }
 
@@ -695,7 +699,8 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cellspacing
             "=\"" + OString::number(SwHTMLWriter::ToPixel(m_nCellSpacing,false)) + "\"");
 
-    rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+    rWrt.Strm().WriteOString( sOut );
+    sOut.setLength(0);
 
     // output background
     if( pFrameFormat )
@@ -712,7 +717,8 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     }
 
     sOut.append('>');
-    rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+    rWrt.Strm().WriteOString( sOut );
+    sOut.setLength(0);
 
     rWrt.IncIndentLevel(); // indent content of table
 
