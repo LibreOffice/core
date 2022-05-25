@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ffb74a0_e4deb4f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2022-05-25T06:14:16Z",
+      "side": 1,
+      "message": "Thanks! this works for a single view/author case. \nBut when there are two views and each field inserts an author field, the two fields evaluate to the last author as per the asserts on layout tree.",
+      "revId": "4690e0230664f8dcb009308029b349108aaa76da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
