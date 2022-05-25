@@ -4249,7 +4249,8 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 else
                     nRefs--;
             }
-            aSymbol = aSym.makeStringAndClear() + aTmp1;
+            aSymbol = aSym + aTmp1;
+            aSym.setLength(0);
         }
         else
             bColons = false;
@@ -4286,7 +4287,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 while ( *p && rtl::isAsciiDigit( *p ) )
                     aStr2.append(*p++);
                 aRef[j] = OUString( p );
-                aRef[j] += aStr2.makeStringAndClear();
+                aRef[j] += aStr2;
                 if ( bColons || aRef[j] != aOld )
                 {
                     bChanged = true;

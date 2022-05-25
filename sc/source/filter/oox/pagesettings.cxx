@@ -686,7 +686,8 @@ double HeaderFooterParser::parse( const Reference<sheet::XHeaderFooterContent>& 
                     case '\"':
                         setAttributes();
                         convertFontName( aFontName.makeStringAndClear() );
-                        convertFontStyle( aFontStyle.makeStringAndClear() );
+                        convertFontStyle( aFontStyle );
+                        aFontStyle.setLength(0);
                         eState = STATE_TEXT;
                     break;
                     default:

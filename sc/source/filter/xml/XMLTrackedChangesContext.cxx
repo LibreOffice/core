@@ -431,8 +431,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLChangeInfoContext
 void SAL_CALL ScXMLChangeInfoContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     aInfo.sUser = sAuthorBuffer.makeStringAndClear();
-    ::sax::Converter::parseDateTime(aInfo.aDateTime,
-            sDateTimeBuffer.makeStringAndClear());
+    ::sax::Converter::parseDateTime(aInfo.aDateTime, sDateTimeBuffer);
+    sDateTimeBuffer.setLength(0);
     aInfo.sComment = sCommentBuffer.makeStringAndClear();
     pChangeTrackingImportHelper->SetActionInfo(aInfo);
 }

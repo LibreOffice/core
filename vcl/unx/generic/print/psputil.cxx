@@ -66,7 +66,7 @@ getAlignedHexValueOf (sal_Int32 nValue, OStringBuffer& pBuffer)
     {
         OStringBuffer scratch;
         nPrecision -= getHexValueOf (nValue % 256, scratch );
-        pBuffer.insert(start, scratch.makeStringAndClear());
+        pBuffer.insert(start, scratch);
         nValue /= 256;
     }
 

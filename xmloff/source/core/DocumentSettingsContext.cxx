@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sax/tools/converter.hxx>
 
@@ -408,9 +409,10 @@ void XMLConfigItemContext::endFastElement(sal_Int32 )
     uno::Sequence<sal_Int8> aDecoded;
     if (IsXMLToken(msType, XML_BASE64BINARY))
     {
-        OUString sChars = maCharBuffer.makeStringAndClear().trim();
-        if( !sChars.isEmpty() )
+        std::u16string_view sChars = o3tl::trim(maCharBuffer);
+        if( !sChars.empty() )
             ::comphelper::Base64::decodeSomeChars( aDecoded, sChars );
+        maCharBuffer.setLength(0);
     }
     else
         sValue = maCharBuffer.makeStringAndClear();

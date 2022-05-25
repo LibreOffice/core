@@ -260,7 +260,7 @@ void Window::dispose()
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
             OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+            Application::Abort(OStringToOUString(aTempStr, RTL_TEXTENCODING_UTF8));
         }
 
         if (mpWindowImpl->mpFrameData != nullptr)
@@ -320,7 +320,7 @@ void Window::dispose()
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
             OSL_FAIL( aTempStr.getStr() );
-            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+            Application::Abort(OStringToOUString(aTempStr, RTL_TEXTENCODING_UTF8));
         }
 
         vcl::Window* pMyParent = GetParent();
