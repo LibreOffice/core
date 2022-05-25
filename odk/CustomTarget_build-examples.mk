@@ -20,6 +20,7 @@ my_example_dirs = \
     DevelopersGuide/ProfUNO/CppBinding \
     DevelopersGuide/ProfUNO/SimpleBootstrap_cpp \
     OLE/activex \
+    cpp/string \
     cpp/Draw \
     cpp/Convertor \
     cpp/DocumentLoader \

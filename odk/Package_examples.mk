@@ -431,6 +431,8 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     cpp/counter/countermain.cxx \
     cpp/remoteclient/Makefile \
     cpp/remoteclient/remoteclient.cxx \
+    cpp/string/string.cxx \
+    cpp/string/Makefile \
     java/DocumentHandling/DocumentConverter.java \
     java/DocumentHandling/DocumentLoader.java \
     java/DocumentHandling/DocumentPrinter.java \
