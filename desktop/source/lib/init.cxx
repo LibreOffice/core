@@ -6842,7 +6842,7 @@ int lok_preinit(const char* install_path, const char* user_profile_url)
 }
 
 SAL_JNI_EXPORT
-int lok_preinit_2(const char* install_path, const char* user_profile_url, LibLibreOffice_Impl** kit)
+int lok_preinit_2(const char* install_path, const char* user_profile_url, LibreOfficeKit** kit)
 {
     lok_preinit_2_called = true;
     int result = lo_initialize(nullptr, install_path, user_profile_url);
