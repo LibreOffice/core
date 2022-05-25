@@ -942,30 +942,25 @@ void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
 
 OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath) const
 {
-    std::vector<OUString> lTemp;
-    lTemp.reserve(rPath.lInternalPaths.size() + rPath.lUserPaths.size() + 1);
+    OUStringBuffer sPathVal(256);
 
     for (auto const& internalPath : rPath.lInternalPaths)
     {
-        lTemp.push_back(internalPath);
+        if (sPathVal.getLength())
+            sPathVal.append(";");
+        sPathVal.append(internalPath);
     }
     for (auto const& userPath : rPath.lUserPaths)
     {
-        lTemp.push_back(userPath);
-    }
-
-    if (!rPath.sWritePath.isEmpty())
-        lTemp.push_back(rPath.sWritePath);
-
-    OUStringBuffer sPathVal(256);
-    for (  auto pIt  = lTemp.begin();
-           pIt != lTemp.end();
-                               )
-    {
-        sPathVal.append(*pIt);
-        ++pIt;
-        if (pIt != lTemp.end())
+        if (sPathVal.getLength())
             sPathVal.append(";");
+        sPathVal.append(userPath);
+    }
+    if (!rPath.sWritePath.isEmpty())
+    {
+        if (sPathVal.getLength())
+            sPathVal.append(";");
+        sPathVal.append(rPath.sWritePath);
     }
 
     return sPathVal.makeStringAndClear();
