@@ -952,6 +952,16 @@ IsoLangOtherEntry const aImplPrivateUseEntries[] =
 void MsLangId::Conversion::convertLanguageToLocaleImpl( LanguageType nLang,
         css::lang::Locale & rLocale, bool bIgnoreOverride )
 {
+    if (nLang == LANGUAGE_ENGLISH_US)
+    {
+        // Speed-up a gazillion fallback cases, not iterating through
+        // aImplBcp47CountryEntries nor aImplIsoLangScriptEntries.
+        rLocale.Language = "en";
+        rLocale.Country = "US";
+        rLocale.Variant.clear();
+        return;
+    }
+
     const Bcp47CountryEntry* pBcp47EntryOverride = nullptr;
     const IsoLanguageScriptCountryEntry* pScriptEntryOverride = nullptr;
     const IsoLanguageCountryEntry* pEntryOverride = nullptr;
