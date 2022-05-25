@@ -818,10 +818,10 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             mAny >>= isVisible;
         }
         pFS->startElementNS( mnXmlNamespace, XML_nvSpPr );
-        pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
-                XML_id, OString::number(GetNewShapeID(xShape)),
-                XML_name, GetShapeName(xShape),
-                XML_hidden, sax_fastparser::UseIf("1", !isVisible));
+        pFS->startElementNS(
+            mnXmlNamespace, XML_cNvPr, XML_id,
+            OString::number(GetShapeID(xShape) == -1 ? GetNewShapeID(xShape) : GetShapeID(xShape)),
+            XML_name, GetShapeName(xShape), XML_hidden, sax_fastparser::UseIf("1", !isVisible));
 
         if( GETA( URL ) )
         {
@@ -1745,6 +1745,11 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
             XML_name, GetShapeName(xShape));
         // non visual connector shape drawing properties
         pFS->startElementNS(mnXmlNamespace, XML_cNvCxnSpPr);
+
+        if (GetShapeID(rXShapeA) == -1)
+            GetNewShapeID(rXShapeA);
+        if (GetShapeID(rXShapeB) == -1)
+            GetNewShapeID(rXShapeB);
         WriteConnectorConnections(aConnectorEntry, GetShapeID(rXShapeA), GetShapeID(rXShapeB));
         pFS->endElementNS(mnXmlNamespace, XML_cNvCxnSpPr);
         if (GetDocumentType() == DOCUMENT_PPTX)
