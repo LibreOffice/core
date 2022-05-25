@@ -266,15 +266,15 @@ bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowV
 
     setSlides( xLeavingSlide, xEnteringSlide );
 
-    CHECK_GL_ERROR();
     return mbValidOpenGLContext;
 }
 
 void OGLTransitionerImpl::impl_initializeFlags( bool const bValidContext )
 {
-    CHECK_GL_ERROR();
     mbValidOpenGLContext = bValidContext;
     if ( bValidContext ) {
+        CHECK_GL_ERROR();
+
         mnGLVersion = OpenGLHelper::getGLVersion();
         SAL_INFO("slideshow.opengl", "GL version: " << mnGLVersion << "" );
 
@@ -283,8 +283,9 @@ void OGLTransitionerImpl::impl_initializeFlags( bool const bValidContext )
         /* TODO: check for version once the bug in fglrx driver is fixed */
         mbBrokenTexturesATI = (vendor && strcmp( reinterpret_cast<const char *>(vendor), "ATI Technologies Inc." ) == 0 );
 #endif
+
+        CHECK_GL_ERROR();
     }
-    CHECK_GL_ERROR();
 }
 
 bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presentation::XSlideShowView >& xView )
@@ -1075,6 +1076,9 @@ void SAL_CALL OGLTransitionerImpl::viewChanged( const Reference< presentation::X
 
 void OGLTransitionerImpl::disposeTextures()
 {
+    if (!mbValidOpenGLContext)
+        return;
+
     mpContext->makeCurrent();
     CHECK_GL_ERROR();
 
@@ -1088,8 +1092,11 @@ void OGLTransitionerImpl::disposeTextures()
 
 void OGLTransitionerImpl::impl_dispose()
 {
-    mpContext->makeCurrent();
-    CHECK_GL_ERROR();
+    if (mbValidOpenGLContext)
+    {
+        mpContext->makeCurrent();
+        CHECK_GL_ERROR();
+    }
 
     if( mpTransition && mpTransition->getSettings().mnRequiredGLVersion <= mnGLVersion )
         mpTransition->finish();
