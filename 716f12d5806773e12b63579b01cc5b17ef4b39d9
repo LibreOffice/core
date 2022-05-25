@@ -86,6 +86,24 @@
       "parentUuid": "3d760c1a_500a54c6",
       "revId": "716f12d5806773e12b63579b01cc5b17ef4b39d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11f18791_d06e53dc",
+        "filename": "vcl/qt5/QtWidget.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-25T05:52:09Z",
+      "side": 1,
+      "message": "And rename replaceText to something like deleteReplacementText.",
+      "parentUuid": "f764caea_2942f00b",
+      "revId": "716f12d5806773e12b63579b01cc5b17ef4b39d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
