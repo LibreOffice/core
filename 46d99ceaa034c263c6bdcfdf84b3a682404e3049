@@ -56,6 +56,30 @@
       },
       "revId": "46d99ceaa034c263c6bdcfdf84b3a682404e3049",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23c4e43c_50eead59",
+        "filename": "vcl/inc/qt5/QtObject.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-25T09:37:05Z",
+      "side": 1,
+      "message": "Done.\n\nBut at least for Qt I also need to forward mouse clicks, otherwise the slideshow won\u0027t continue when clicking the overlay widget. From my POV the correct function name would be \"[sS]etForwardInput\", but we can do that in an independent patch.",
+      "parentUuid": "75dc2ec3_5b78d5a6",
+      "range": {
+        "startLine": 41,
+        "startChar": 1,
+        "endLine": 41,
+        "endChar": 24
+      },
+      "revId": "46d99ceaa034c263c6bdcfdf84b3a682404e3049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
