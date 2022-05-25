@@ -109,6 +109,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "be90649a_12eb3318",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-25T19:09:00Z",
+      "side": 1,
+      "message": "oh! i completely missed that GetMappedFormatstring nOriginalLang was defaulted in this call, somehow i thought the caller passed in the language.\n\nyou\u0027re right, the actual language is LANGUAGE_NONE.\n\ni\u0027ve implemented your suggestion now, thanks!",
+      "parentUuid": "67ecc942_c46aba8d",
+      "revId": "d93bd47b8ba5f66ff9cdab62c90fd347bcca7b6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "76f67c3b_5fae17a8",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
