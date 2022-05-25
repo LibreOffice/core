@@ -193,11 +193,7 @@ static void testCachedGlyphs( const OUString& aText, const OUString& aFontName =
         CPPUNIT_ASSERT_EQUAL_MESSAGE(messageLevel, g1->GetFont().get(), g2->GetFont().get());
         CPPUNIT_ASSERT_EQUAL_MESSAGE(messageLevel, g1->size(), g2->size());
         for( size_t i = 0; i < g1->size(); ++i )
-        {
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(messageLevel, (*g1)[i].glyphId(), (*g2)[i].glyphId());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(messageLevel, (*g1)[i].IsRTLGlyph(), (*g2)[i].IsRTLGlyph());
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(messageLevel, (*g1)[i].IsVertical(), (*g2)[i].IsVertical());
-        }
+            CPPUNIT_ASSERT_MESSAGE(messageLevel, (*g1)[i] == (*g2)[i]);
     }
 }
 
