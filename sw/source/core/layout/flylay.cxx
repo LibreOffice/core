@@ -810,10 +810,23 @@ void SwPageFrame::AppendFlyToPage( SwFlyFrame *pNew )
     {
         //#i119945# set pFly's OrdNum to _rNewObj's. So when pFly is removed by Undo, the original OrdNum will not be changed.
         sal_uInt32 nNewNum = pObj->GetOrdNumDirect();
+        SdrObject* pDrawObj = nullptr;
+        if (auto pFormat = pFly->GetFormat())
+            if (auto pShapeFormat = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_FLYFRMFMT))
+                pDrawObj = pShapeFormat->FindRealSdrObject();
+
+        if (pDrawObj)
+        {
+            if (auto pPage = pDrawObj->getSdrPageFromSdrObject())
+                pPage->SetObjectOrdNum(pDrawObj->GetOrdNumDirect(), nNewNum);
+            else
+                pDrawObj->SetOrdNum(nNewNum);
+        }
+
         if ( pObj->getSdrPageFromSdrObject() )
-            pObj->getSdrPageFromSdrObject()->SetObjectOrdNum( pFly->GetVirtDrawObj()->GetOrdNumDirect(), nNewNum );
+            pObj->getSdrPageFromSdrObject()->SetObjectOrdNum( pFly->GetVirtDrawObj()->GetOrdNumDirect(), nNewNum + (pDrawObj ? 1 : 0) );
         else
-            pFly->GetVirtDrawObj()->SetOrdNum( nNewNum );
+            pFly->GetVirtDrawObj()->SetOrdNum( nNewNum + (pDrawObj ? 1 : 0));
     }
 
     // Don't look further at Flys that sit inside the Content.
