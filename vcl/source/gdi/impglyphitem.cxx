@@ -26,6 +26,9 @@
 #include <TextLayoutCache.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <unicode/ubidi.h>
+#include <unicode/uchar.h>
+
 // These need being explicit because of SalLayoutGlyphsImpl being private in vcl.
 SalLayoutGlyphs::SalLayoutGlyphs() {}
 
@@ -236,16 +239,56 @@ SalLayoutGlyphsCache* SalLayoutGlyphsCache::self()
     return cache.get();
 }
 
+static UBiDiDirection getBiDiDirection(const OUString& text, sal_Int32 index, sal_Int32 len)
+{
+    // Return whether all character are LTR, RTL, neutral or whether it's mixed.
+    // This is sort of ubidi_getBaseDirection() and ubidi_getDirection(),
+    // but it's meant to be fast but also check all characters.
+    sal_Int32 end = index + len;
+    UBiDiDirection direction = UBIDI_NEUTRAL;
+    while (index < end)
+    {
+        switch (u_charDirection(text.iterateCodePoints(&index)))
+        {
+            // Only characters with strong direction.
+            case U_LEFT_TO_RIGHT:
+                if (direction == UBIDI_RTL)
+                    return UBIDI_MIXED;
+                direction = UBIDI_LTR;
+                break;
+            case U_RIGHT_TO_LEFT:
+            case U_RIGHT_TO_LEFT_ARABIC:
+                if (direction == UBIDI_LTR)
+                    return UBIDI_MIXED;
+                direction = UBIDI_RTL;
+                break;
+            default:
+                break;
+        }
+    }
+    return direction;
+}
+
 static SalLayoutGlyphs makeGlyphsSubset(const SalLayoutGlyphs& source,
-                                        const OutputDevice* outputDevice, std::u16string_view text,
+                                        const OutputDevice* outputDevice, const OUString& text,
                                         sal_Int32 index, sal_Int32 len)
 {
+    // tdf#149264: We need to check if the text is LTR, RTL or mixed. Apparently
+    // harfbuzz doesn't give reproducible results (or possibly HB_GLYPH_FLAG_UNSAFE_TO_BREAK
+    // is not reliable?) when asked to lay out RTL text as LTR. So require that the whole
+    // subset ir either LTR or RTL.
+    UBiDiDirection direction = getBiDiDirection(text, index, len);
+    if (direction == UBIDI_MIXED)
+        return SalLayoutGlyphs();
     SalLayoutGlyphs ret;
     for (int level = 0;; ++level)
     {
         const SalLayoutGlyphsImpl* sourceLevel = source.Impl(level);
         if (sourceLevel == nullptr)
             break;
+        bool sourceRtl = bool(sourceLevel->GetFlags() & SalLayoutFlags::BiDiRtl);
+        if ((direction == UBIDI_LTR && sourceRtl) || (direction == UBIDI_RTL && !sourceRtl))
+            return SalLayoutGlyphs();
         SalLayoutGlyphsImpl* cloned = sourceLevel->cloneCharRange(index, len);
         // If the glyphs range cannot be cloned, bail out.
         if (cloned == nullptr)
