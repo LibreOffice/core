@@ -52,12 +52,14 @@ public:
     void testKashida();
     void testTdf95650(); // Windows-only issue
     void testCaching();
+    void testCachingSubstring();
 
     CPPUNIT_TEST_SUITE(VclComplexTextTest);
     CPPUNIT_TEST(testArabic);
     CPPUNIT_TEST(testKashida);
     CPPUNIT_TEST(testTdf95650);
     CPPUNIT_TEST(testCaching);
+    CPPUNIT_TEST(testCachingSubstring);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -187,15 +189,12 @@ static void checkCompareGlyphs( const SalLayoutGlyphs& aGlyphs1, const SalLayout
     }
 }
 
-static void testCachedGlyphs( const OUString& aText, const OUString& aFontName = OUString())
+static void testCachedGlyphs( const OUString& aText, const OUString& aFontName )
 {
     const std::string message = OUString("Font: " + aFontName + ", text: '" + aText + "'").toUtf8().getStr();
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
-    if(!aFontName.isEmpty())
-    {
-        vcl::Font aFont( aFontName, Size(0, 12));
-        pOutputDevice->SetFont( aFont );
-    }
+    vcl::Font aFont( aFontName, Size(0, 12));
+    pOutputDevice->SetFont( aFont );
     SalLayoutGlyphsCache::self()->clear();
     // Get the glyphs for the text.
     std::unique_ptr<SalLayout> pLayout1 = pOutputDevice->ImplLayout(
@@ -221,6 +220,53 @@ void VclComplexTextTest::testCaching()
     testCachedGlyphs( "test", "Dejavu Sans" );
     // This font does not have latin characters, will need fallback.
     testCachedGlyphs( "test", "KacstBook" );
+}
+
+static void testCachedGlyphsSubstring( const OUString& aText, const OUString& aFontName, bool rtl )
+{
+    const std::string prefix = OUString("Font: " + aFontName + ", text: '" + aText + "'").toUtf8().getStr();
+    ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
+    // BiDiStrong is needed, otherwise SalLayoutGlyphsImpl::cloneCharRange() will not do anything.
+    vcl::text::ComplexTextLayoutFlags layoutFlags = vcl::text::ComplexTextLayoutFlags::BiDiStrong;
+    if(rtl)
+        layoutFlags |= vcl::text::ComplexTextLayoutFlags::BiDiRtl;
+    pOutputDevice->SetLayoutMode( layoutFlags );
+    vcl::Font aFont( aFontName, Size(0, 12));
+    pOutputDevice->SetFont( aFont );
+    SalLayoutGlyphsCache::self()->clear();
+    // Get the glyphs for the entire text once, to ensure the cache can built subsets from it.
+    pOutputDevice->ImplLayout( aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
+    // Now check for all subsets. Some of them possibly do not make sense in practice, but the code
+    // should cope with them.
+    for( sal_Int32 len = 1; len <= aText.getLength(); ++len )
+        for( sal_Int32 pos = 0; pos < aText.getLength() - len; ++pos )
+        {
+            std::string message = prefix + " (" + std::to_string(pos) + "/" + std::to_string(len) + ")";
+            std::unique_ptr<SalLayout> pLayout1 = pOutputDevice->ImplLayout(
+                aText, pos, len, Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
+            SalLayoutGlyphs aGlyphs1 = pLayout1->GetGlyphs();
+            const SalLayoutGlyphs* aGlyphs2 = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
+                pOutputDevice, aText, pos, len, 0);
+            CPPUNIT_ASSERT_MESSAGE(message, aGlyphs2 != nullptr);
+            checkCompareGlyphs(aGlyphs1, *aGlyphs2, message);
+        }
+
+}
+
+// Check that SalLayoutGlyphsCache works properly when it builds a subset
+// of glyphs using SalLayoutGlyphsImpl::cloneCharRange().
+// This should preferably use fonts that come with LO.
+void VclComplexTextTest::testCachingSubstring()
+{
+    // Just something basic.
+    testCachedGlyphsSubstring( "test", "Dejavu Sans", false );
+    // And complex arabic text, taken from tdf104649.docx .
+    OUString text(u"فصل (پاره 2): درخواست حاجت از ديگران و برآوردن حاجت ديگران 90");
+    testCachedGlyphsSubstring( text, "Dejavu Sans", true );
+    // The text is RTL, but Writer will sometimes try to lay it out as LTR, for whatever reason
+    // (tdf#149264)./ So make sure that gets handled properly too (SalLayoutGlyphsCache should
+    // not use glyph subsets in that case).
+    testCachedGlyphsSubstring( text, "Dejavu Sans", false );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclComplexTextTest);
