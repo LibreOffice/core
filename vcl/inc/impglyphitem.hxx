@@ -104,7 +104,6 @@ public:
     void setLinearPos(const DevicePoint& point) { m_aLinearPos = point; }
     void setLinearPosX(double x) { m_aLinearPos.setX(x); }
     void adjustLinearPosX(double diff) { m_aLinearPos.adjustX(diff); }
-#ifdef DBG_UTIL
     bool operator==(const GlyphItem& other) const
     {
         return m_aLinearPos == other.m_aLinearPos && m_nOrigWidth == other.m_nOrigWidth
@@ -114,7 +113,6 @@ public:
                && m_nFlags == other.m_nFlags;
     }
     bool operator!=(const GlyphItem& other) const { return !(*this == other); }
-#endif
 };
 
 bool GlyphItem::GetGlyphBoundRect(const LogicalFontInstance* pFontInstance,
