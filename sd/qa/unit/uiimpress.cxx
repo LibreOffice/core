@@ -973,10 +973,12 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
                                                          uno::UNO_QUERY);
     xController->select(uno::Any(xShape));
 
-    // When setting the fill color of that shape, with theme metadata:
+    // When setting the fill color of that shape, with theme metadata & effects:
     uno::Sequence<beans::PropertyValue> aColorArgs = {
         comphelper::makePropertyValue("FillColor", static_cast<sal_Int32>(0xed7d31)), // orange
         comphelper::makePropertyValue("ColorThemeIndex", static_cast<sal_Int16>(4)), // accent 1
+        comphelper::makePropertyValue("ColorLumMod", static_cast<sal_Int16>(4000)),
+        comphelper::makePropertyValue("ColorLumOff", static_cast<sal_Int16>(6000)),
     };
     dispatchCommand(mxComponent, ".uno:FillColor", aColorArgs);
     Scheduler::ProcessEventsToIdle();
@@ -989,6 +991,18 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
     // - Actual  : -1
     // i.e. the theme index was lost during the dispatch of the command.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), nFillColorTheme);
+
+    // Then also verify the effects:
+    sal_Int16 nFillColorLumMod = 10000;
+    xShape->getPropertyValue("FillColorLumMod") >>= nFillColorLumMod;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4000
+    // - Actual  : 10000
+    // i.e. the theme index was set, but not the effects.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4000), nFillColorLumMod);
+    sal_Int16 nFillColorLumOff = 0;
+    xShape->getPropertyValue("FillColorLumOff") >>= nFillColorLumOff;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(6000), nFillColorLumOff);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
