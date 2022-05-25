@@ -344,7 +344,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 {
     OSL_FAIL("not pure virtual ... but not really implemented .-)");
 
-    return new ::comphelper::OEnumerationByName(this, css::uno::Sequence< OUString >());
+    return new ::comphelper::OEnumerationByName(this, {});
 }
 
 
@@ -383,8 +383,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
              Further its easier to work directly with the return value
              instead of checking of NULL returns! */
 
-    css::uno::Sequence< OUString > lSubSet = comphelper::containerToSequence(lKeys);
-    return new ::comphelper::OEnumerationByName(this, lSubSet);
+    return new ::comphelper::OEnumerationByName(this, std::move(lKeys));
 }
 
 

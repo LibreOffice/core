@@ -185,8 +185,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     // pack list of item names as an enum list
     // Attention: Do not return empty reference for empty list!
     // The outside check "hasMoreElements()" should be enough, to detect this state :-)
-    css::uno::Sequence< OUString > lSet = comphelper::containerToSequence(lEnumSet);
-    return new ::comphelper::OEnumerationByName(this, lSet);
+    return new ::comphelper::OEnumerationByName(this, std::move(lEnumSet));
 }
 
 
