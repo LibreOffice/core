@@ -62,6 +62,7 @@ class SfxManageStyleSheetPage final : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xFilterLb;
     std::unique_ptr<weld::Label> m_xDescFt;
     std::unique_ptr<weld::Label> m_xNameFt;
+    std::unique_ptr<weld::Label> m_xContainsLb;
 
     friend class SfxStyleDialogController;
 

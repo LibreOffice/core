@@ -66,6 +66,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::D
     , m_xFilterLb(m_xBuilder->weld_combo_box("category"))
     , m_xDescFt(m_xBuilder->weld_label("desc"))
     , m_xNameFt(m_xBuilder->weld_label("nameft"))
+    , m_xContainsLb(m_xBuilder->weld_label("label2"))
 {
     m_xFollowLb->make_sorted();
     // tdf#120188 like SwCharURLPage limit the width of the style combos
@@ -181,8 +182,10 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(weld::Container* pPage, weld::D
     }
     else
     {
-        m_xBaseFt->set_sensitive(false);
-        m_xBaseLb->set_sensitive(false);
+        m_xBaseFt->hide();
+        m_xBaseLb->hide();
+        m_xEditLinkStyleBtn->hide();
+        m_xContainsLb->hide();
     }
 
     size_t nCount = mxFamilies->size();
