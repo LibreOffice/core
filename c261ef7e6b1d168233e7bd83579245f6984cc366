@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61805e91_608c3c15",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2022-05-25T19:25:49Z",
+      "side": 1,
+      "message": "Maybe I\u0027m missing something, but I don\u0027t see the use of time beyond date formatting. It might be worth refusing to process the time.",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 50
+      },
+      "revId": "c261ef7e6b1d168233e7bd83579245f6984cc366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "421e397b_9fe81cca",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2022-05-25T19:25:49Z",
+      "side": 1,
+      "message": "variable \u0027report\u0027 is unused variable",
+      "range": {
+        "startLine": 76,
+        "startChar": 3,
+        "endLine": 76,
+        "endChar": 15
+      },
+      "revId": "c261ef7e6b1d168233e7bd83579245f6984cc366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c666a439_49042b91",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2022-05-25T19:25:49Z",
+      "side": 1,
+      "message": "Local variable \u0027currentVersion\u0027 is referenced before assignment",
+      "range": {
+        "startLine": 84,
+        "startChar": 8,
+        "endLine": 84,
+        "endChar": 63
+      },
+      "revId": "c261ef7e6b1d168233e7bd83579245f6984cc366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d63ec53e_4152bb3f",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2022-05-25T19:25:49Z",
+      "side": 1,
+      "message": "Local variable \u0027currentID\u0027 and \u0027currentOS\u0027 are referenced before assignment",
+      "range": {
+        "startLine": 91,
+        "startChar": 12,
+        "endLine": 92,
+        "endChar": 26
+      },
+      "revId": "c261ef7e6b1d168233e7bd83579245f6984cc366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "764d264f_938465f7",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2022-05-25T19:25:49Z",
+      "side": 1,
+      "message": "I see that the code does not follow the rules for line length, but this line extends beyond the edge of my monitor.",
+      "range": {
+        "startLine": 154,
+        "startChar": 11,
+        "endLine": 154,
+        "endChar": 126
+      },
+      "revId": "c261ef7e6b1d168233e7bd83579245f6984cc366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
