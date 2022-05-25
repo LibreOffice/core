@@ -39,6 +39,30 @@
       },
       "revId": "e29e3209b9c08d98784fee3714ee0ea9f52d6b7d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a0c5931_847f0d61",
+        "filename": "vcl/uiconfig/ui/openlockedquerybox.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-05-25T21:18:08Z",
+      "side": 1,
+      "message": "Hello.\n\nI\u0027ve removed the width_request and height_request totally; it now uses the icon\u0027s original size. Also removed unnecessary information from the icon like pixel-size and icon-name etc.\n\nI\u0027ve also used your UI file with the recent Glade version.",
+      "parentUuid": "444a559d_8481a376",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 61
+      },
+      "revId": "e29e3209b9c08d98784fee3714ee0ea9f52d6b7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
