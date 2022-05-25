@@ -16,6 +16,23 @@
       "message": "Miklos, got time to review this?",
       "revId": "ae1d38a5de01dd66d67b305f3927f4a3bc6e3b6f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5255d611_817548e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-25T06:15:04Z",
+      "side": 1,
+      "message": "Did you consider adding a test for this? See commit bf72417c53cbb564d7f28718b244ce94541f740c for an example that touched a similar area and has a test.",
+      "revId": "ae1d38a5de01dd66d67b305f3927f4a3bc6e3b6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
