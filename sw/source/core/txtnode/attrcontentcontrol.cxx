@@ -24,9 +24,11 @@
 #include <sal/log.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <svl/numformat.hxx>
 
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
+#include <doc.hxx>
 
 using namespace com::sun::star;
 
@@ -205,6 +207,39 @@ void SwContentControl::SwClientNotify(const SwModify&, const SfxHint& rHint)
         SetXContentControl(uno::Reference<text::XTextContent>());
         GetNotifier().Broadcast(SfxHint(SfxHintId::Deinitializing));
     }
+}
+
+OUString SwContentControl::GetDateString() const
+{
+    SwDoc& rDoc = m_pTextNode->GetDoc();
+    SvNumberFormatter* pNumberFormatter = rDoc.GetNumberFormatter();
+    sal_uInt32 nFormat = pNumberFormatter->GetEntryKey(
+        m_aDateFormat, LanguageTag(m_aDateLanguage).getLanguageType());
+
+    if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+    {
+        // Try to find a format based on just the language.
+        sal_Int32 nCheckPos = 0;
+        SvNumFormatType nType;
+        OUString aFormat = m_aDateFormat;
+        pNumberFormatter->PutEntry(aFormat, nCheckPos, nType, nFormat,
+                                   LanguageTag(m_aDateLanguage).getLanguageType());
+    }
+
+    const Color* pColor = nullptr;
+    OUString aFormatted;
+    if (!m_oSelectedDate)
+    {
+        return OUString();
+    }
+
+    if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+    {
+        return OUString();
+    }
+
+    pNumberFormatter->GetOutputString(*m_oSelectedDate, nFormat, aFormatted, &pColor, false);
+    return aFormatted;
 }
 
 void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
