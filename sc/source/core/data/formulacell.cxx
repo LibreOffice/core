@@ -1496,7 +1496,6 @@ struct TemporaryCellGroupMaker
 bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
 {
     ScRecursionHelper& rRecursionHelper = rDocument.GetRecursionHelper();
-    bool bGroupInterpreted = false;
 
     // The result would possibly depend on a cell without a valid value, bail out
     // the entire dependency computation.
@@ -1504,7 +1503,7 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
         return false;
 
     if ((mxGroup && !rRecursionHelper.CheckFGIndependence(mxGroup.get())) || !rRecursionHelper.AreGroupsIndependent())
-        return bGroupInterpreted;
+        return false;
 
     static ForceCalculationType forceType = ScCalcConfig::getForceCalculationType();
     TemporaryCellGroupMaker cellGroupMaker( this, forceType != ForceCalculationNone && forceType != ForceCalculationCore );
@@ -1524,7 +1523,7 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
         // on this one would use a possibly invalid value, so ensure the dependency
         // computation is aborted without resetting the dirty flag of any cell.
         rRecursionHelper.AbortDependencyComputation();
-        return bGroupInterpreted;
+        return false;
     }
 
 #if DEBUG_CALCULATION
@@ -1539,20 +1538,20 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
 #endif
 
     if (!IsDirtyOrInTableOpDirty() || rRecursionHelper.IsInReturn())
-        return bGroupInterpreted;     // no double/triple processing
+        return false;     // no double/triple processing
 
     //FIXME:
     //  If the call originates from a Reschedule in DdeLink update, leave dirty
     //  Better: Do a Dde Link Update without Reschedule or do it completely asynchronously!
     if ( rDocument.IsInDdeLinkUpdate() )
-        return bGroupInterpreted;
+        return false;
 
     if (bRunning)
     {
         if (!rDocument.GetDocOptions().IsIter())
         {
             aResult.SetResultError( FormulaError::CircularReference );
-            return bGroupInterpreted;
+            return false;
         }
 
         if (aResult.GetResultError() == FormulaError::CircularReference)
@@ -1563,15 +1562,16 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
                 !rRecursionHelper.GetRecursionInIterationStack().top()->bIsIterCell)
             rRecursionHelper.SetInIterationReturn( true);
 
-        return bGroupInterpreted;
+        return false;
     }
     // no multiple interprets for GetErrCode, IsValue, GetValue and
     // different entry point recursions. Would also lead to premature
     // convergence in iterations.
     if (rRecursionHelper.GetIteration() && nSeenInIteration ==
             rRecursionHelper.GetIteration())
-        return bGroupInterpreted;
+        return false;
 
+    bool bGroupInterpreted = false;
     bool bOldRunning = bRunning;
     if (rRecursionHelper.GetRecursionCount() > MAXRECURSION)
     {
@@ -1599,7 +1599,7 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
             if (!rRecursionHelper.AreGroupsIndependent())
             {
                 rDocument.DecInterpretLevel();
-                return bGroupInterpreted;
+                return false;
             }
             // Dependency calc inside InterpretFormulaGroup() failed due to
             // detection of a cycle and there are parent FG's in the cycle.
@@ -1607,7 +1607,7 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
             if (!bPartOfCycleBefore && bPartOfCycleAfter && rRecursionHelper.AnyParentFGInCycle())
             {
                 rDocument.DecInterpretLevel();
-                return bGroupInterpreted;
+                return false;
             }
 
             ScFormulaGroupCycleCheckGuard aCycleCheckGuard(rRecursionHelper, this);
