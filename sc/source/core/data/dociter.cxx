@@ -154,7 +154,7 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
             do
             {
                 ++mnCol;
-                if (mnCol > maEndPos.Col() || mnCol >= mrDoc.maTabs[mnTab]->GetAllocatedColumnsCount())
+                while (mnCol > maEndPos.Col() || mnCol >= mrDoc.maTabs[mnTab]->GetAllocatedColumnsCount())
                 {
                     mnCol = maStartPos.Col();
                     ++mnTab;
@@ -909,7 +909,7 @@ bool ScCellIterator::getCurrent()
             do
             {
                 maCurPos.IncCol();
-                if (maCurPos.Col() >= mrDoc.GetAllocatedColumnsCount(maCurPos.Tab())
+                while (maCurPos.Col() >= mrDoc.GetAllocatedColumnsCount(maCurPos.Tab())
                     || maCurPos.Col() > maEndPos.Col())
                 {
                     maCurPos.SetCol(maStartPos.Col());
