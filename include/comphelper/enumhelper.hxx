@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
+#include <variant>
 #include <comphelper/comphelperdllapi.h>
 
 namespace com::sun::star::container { class XIndexAccess; }
@@ -39,7 +40,7 @@ class COMPHELPER_DLLPUBLIC OEnumerationByName final :
                          public ::cppu::WeakImplHelper< css::container::XEnumeration ,
                                                           css::lang::XEventListener    >
 {
-    css::uno::Sequence< OUString > const                m_aNames;
+    std::variant<css::uno::Sequence< OUString >, std::vector<OUString>> m_aNames;
     css::uno::Reference< css::container::XNameAccess >  m_xAccess;
     sal_Int32                                           m_nPos;
     bool                                                m_bListening;
@@ -48,7 +49,7 @@ class COMPHELPER_DLLPUBLIC OEnumerationByName final :
 public:
     OEnumerationByName(const css::uno::Reference< css::container::XNameAccess >& _rxAccess);
     OEnumerationByName(const css::uno::Reference< css::container::XNameAccess >& _rxAccess,
-                       const css::uno::Sequence< OUString >&             _aNames  );
+                       std::vector<OUString>             _aNames  );
     virtual ~OEnumerationByName() override;
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
@@ -57,6 +58,8 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 
 private:
+    sal_Int32 getLength() const;
+    const OUString& getElement(sal_Int32 nIndex) const;
     COMPHELPER_DLLPRIVATE void impl_startDisposeListening();
     COMPHELPER_DLLPRIVATE void impl_stopDisposeListening();
 };
