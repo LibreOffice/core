@@ -701,9 +701,8 @@ ErrCode RtfExport::ExportDocument_Impl()
     WriteInfo();
     WriteUserProps();
     // Default TabSize
-    Strm()
-        .WriteOString(m_pAttrOutput->GetTabStop().makeStringAndClear())
-        .WriteCharPtr(SAL_NEWLINE_STRING);
+    Strm().WriteOString(m_pAttrOutput->GetTabStop()).WriteCharPtr(SAL_NEWLINE_STRING);
+    m_pAttrOutput->GetTabStop().setLength(0);
 
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
     // Set it's value to "auto" and disable on paragraph level, if no hyphenation is used there.
