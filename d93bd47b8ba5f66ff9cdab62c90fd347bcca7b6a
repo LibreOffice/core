@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79680969_8ab80097",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-05-25T18:10:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9550e695_f3a3b012",
+      "revId": "d93bd47b8ba5f66ff9cdab62c90fd347bcca7b6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c80690b9_7e0e4a57",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "oh, i forgot to mention this: the paragraph containing the field explicitly applies fo:language\u003d\"zxx\" - which is apparently mapped to LANGUAGE_DONTKNOW.\n\nwhy that results in \"TT.MM.JJJJ\" instead of \"DD.MM.YYYY\" isn\u0027t clear to me, but i wrote the unit test to recreate the situation from scratch.\n\nthe number format in the file clearly has \".\" separators.",
       "parentUuid": "c80690b9_7e0e4a57",
+      "revId": "d93bd47b8ba5f66ff9cdab62c90fd347bcca7b6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67ecc942_c46aba8d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-05-25T18:10:45Z",
+      "side": 1,
+      "message": "zxx is LANGUAGE_NONE, but GetMappedFormatstring\u0027s nOriginalLang defaults to LANGUAGE_DONTKNOW that is not to be confused with the LocaleDataWrapper\u0027s initialization. If a LocaleDataWrapper is created for zxx/LANGUAGE_NONE it falls back to the en-US locale because there is no locale data for zxx and no other fallback. However, the unit test creates a LocaleDataWrapper for the LANGUAGE_DONTKNOW empty locale that is explicitly resolved to the en-US locale as fallback. So, accidentally the same, but not the actual scenario.\n\nThe proper fix seems to be in MSWordExportBase::GetNumberFormat()\n\n        LanguageType nLng \u003d rField.GetLanguage();\n        if (nLng \u003d\u003d LANGUAGE_NONE || nLng \u003d\u003d LANGUAGE_DONTKNOW)\n            nLng \u003d pNumFormat-\u003eGetLanguage();\n        LocaleDataWrapper aLocDat(pNFormatr-\u003eGetComponentContext(),\n                                  LanguageTag(nLng));\n\nwhere nLng \u003d\u003d LANGUAGE_DONTKNOW should not happen (and thus maybe worth an assert) but who knows..\n\nThe unit test then should use\n\n    LocaleDataWrapper ldw(m_xContext, LanguageTag(pFormat-\u003eGetLanguage()));\n\nand no change to svl/source/numbers/zformat.cxx",
+      "parentUuid": "cc3963e3_d866f2d7",
       "revId": "d93bd47b8ba5f66ff9cdab62c90fd347bcca7b6a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
