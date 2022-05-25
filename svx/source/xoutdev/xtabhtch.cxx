@@ -59,8 +59,7 @@ XHatchEntry* XHatchList::GetHatch(tools::Long nIndex) const
 
 uno::Reference< container::XNameContainer > XHatchList::createInstance()
 {
-    return uno::Reference< container::XNameContainer >(
-        SvxUnoXHatchTable_createInstance( this ), uno::UNO_QUERY );
+    return SvxUnoXHatchTable_createInstance( *this );
 }
 
 bool XHatchList::Create()

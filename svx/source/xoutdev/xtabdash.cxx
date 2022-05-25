@@ -60,8 +60,7 @@ XDashEntry* XDashList::GetDash(tools::Long nIndex) const
 
 uno::Reference< container::XNameContainer > XDashList::createInstance()
 {
-    return uno::Reference< container::XNameContainer >(
-        SvxUnoXDashTable_createInstance( this ), uno::UNO_QUERY );
+    return SvxUnoXDashTable_createInstance( *this );
 }
 
 bool XDashList::Create()

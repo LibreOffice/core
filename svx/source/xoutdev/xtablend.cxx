@@ -53,8 +53,7 @@ XLineEndEntry* XLineEndList::GetLineEnd(tools::Long nIndex) const
 
 uno::Reference< container::XNameContainer > XLineEndList::createInstance()
 {
-    return uno::Reference< container::XNameContainer >(
-        SvxUnoXLineEndTable_createInstance( this ), uno::UNO_QUERY );
+    return SvxUnoXLineEndTable_createInstance( *this );
 }
 
 bool XLineEndList::Create()

@@ -19,17 +19,17 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <svx/xtable.hxx>
 
 // FIXME: should have a single factory method with an enumeration here [!]
 
-css::uno::Reference< css::uno::XInterface > SvxUnoXColorTable_createInstance( XPropertyList* pList ) noexcept;
-css::uno::Reference< css::uno::XInterface > SvxUnoXLineEndTable_createInstance( XPropertyList* pList ) noexcept;
-css::uno::Reference< css::uno::XInterface > SvxUnoXDashTable_createInstance( XPropertyList* pList ) noexcept;
-css::uno::Reference< css::uno::XInterface > SvxUnoXHatchTable_createInstance( XPropertyList* pList ) noexcept;
-css::uno::Reference< css::uno::XInterface > SvxUnoXGradientTable_createInstance( XPropertyList* pList ) noexcept;
-css::uno::Reference< css::uno::XInterface > SvxUnoXBitmapTable_createInstance( XPropertyList* pList ) noexcept;
+css::uno::Reference< css::container::XNameContainer > SvxUnoXColorTable_createInstance( XPropertyList& rList ) noexcept;
+css::uno::Reference< css::container::XNameContainer > SvxUnoXLineEndTable_createInstance( XPropertyList& rList ) noexcept;
+css::uno::Reference< css::container::XNameContainer > SvxUnoXDashTable_createInstance( XPropertyList& rList ) noexcept;
+css::uno::Reference< css::container::XNameContainer > SvxUnoXHatchTable_createInstance( XPropertyList& rList ) noexcept;
+css::uno::Reference< css::container::XNameContainer > SvxUnoXGradientTable_createInstance( XPropertyList& rList ) noexcept;
+css::uno::Reference< css::container::XNameContainer > SvxUnoXBitmapTable_createInstance( XPropertyList& rList ) noexcept;
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

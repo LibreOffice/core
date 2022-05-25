@@ -60,9 +60,7 @@ XGradientEntry* XGradientList::GetGradient(tools::Long nIndex) const
 
 uno::Reference< container::XNameContainer > XGradientList::createInstance()
 {
-    return uno::Reference< container::XNameContainer >(
-        SvxUnoXGradientTable_createInstance( this ),
-        uno::UNO_QUERY );
+    return SvxUnoXGradientTable_createInstance( *this );
 }
 
 bool XGradientList::Create()
