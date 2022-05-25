@@ -16,6 +16,24 @@
       "message": "Thanks! this works for a single view/author case. \nBut when there are two views and each field inserts an author field, the two fields evaluate to the last author as per the asserts on layout tree.",
       "revId": "4690e0230664f8dcb009308029b349108aaa76da",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55a2b140_df234fce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-25T09:29:45Z",
+      "side": 1,
+      "message": "I think this is working as intended. The document can only have one author, which is the \"current user\" (see https://help.libreoffice.org/7.4/en-US/text/swriter/01/04090001.html). If you have two author fields then they\u0027ll expand to the same string. If it would work differently, that would be confusing.\n\nI would suggest to just work with one view in your test. You already fixed the basic problem that the field expands to an empty string.\n\nIf there is a need to expand to multiple editor names, then probably what\u0027s necessary here is to insert the current editor\u0027s name as plain string, but that is a separate problem.",
+      "parentUuid": "6ffb74a0_e4deb4f8",
+      "revId": "4690e0230664f8dcb009308029b349108aaa76da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
