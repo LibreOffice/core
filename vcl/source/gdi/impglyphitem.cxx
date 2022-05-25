@@ -103,6 +103,7 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
     // the subset may not quite match what would a real layout call give (e.g. some characters with neutral
     // direction such as space might have different LTR/RTL flag). It seems bailing out here mostly
     // avoid relatively rare corner cases and doesn't matter for performance.
+    // This is also checked in SalLayoutGlyphsCache::GetLayoutGlyphs() below.
     if (!(GetFlags() & SalLayoutFlags::BiDiStrong)
         || rtl != bool(GetFlags() & SalLayoutFlags::BiDiRtl))
         return nullptr;
@@ -317,7 +318,10 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
     }
     bool resetLastSubstringKey = true;
     const sal_Unicode nbSpace = 0xa0; // non-breaking space
-    if (nIndex != 0 || nLen != text.getLength())
+    // SalLayoutGlyphsImpl::cloneCharRange() requires BiDiStrong, so if not set, do not even try.
+    bool skipGlyphSubsets
+        = !(outputDevice->GetLayoutMode() & vcl::text::ComplexTextLayoutFlags::BiDiStrong);
+    if ((nIndex != 0 || nLen != text.getLength()) && !skipGlyphSubsets)
     {
         // The glyphs functions are often called first for an entire string
         // and then with an increasing starting index until the end of the string.
