@@ -16,6 +16,24 @@
       "message": "@qa: do we want this for 7.3.4? Code is basically just moved and well tested in kf5. The bug is IMHO minor and it really just affects the qt plugin. Your call.",
       "revId": "4b37e526d118501ff718b49640938e00fbaea10f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bc4a060_6dbcc047",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-25T12:12:02Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s necessary considering the reports doesn\u0027t have duplicates and it being around since 2019",
+      "parentUuid": "e5a7a7d5_f5b1608e",
+      "revId": "4b37e526d118501ff718b49640938e00fbaea10f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
