@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9550e695_f3a3b012",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-25T12:38:37Z",
+      "side": 1,
+      "message": "apparently for Word it doesn\u0027t have \"\\\" before \".\"",
+      "parentUuid": "17fdb157_b037b91c",
+      "revId": "d93bd47b8ba5f66ff9cdab62c90fd347bcca7b6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c80690b9_7e0e4a57",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2022-05-24T23:48:34Z",
       "side": 1,
       "message": "That\u0027s abusing nOriginalLang (which was never meant for this context but the LCID embedding).\n\nBut why is that LocaleDataWrapper unreliable? It was created in MSWordExportBase::GetNumberFormat() (which creating a temporary LocaleDataWrapper for each and every formatted field is ugly anyway) for the locale of rField.GetLanguage(), it looks (didn\u0027t investigate) like there is a mismatch of the field locale (system locale?) and the number format\u0027s locale (German?). Maybe it helps already to use a proper LocaleDataWrapper, like\n\n  LocaleDataWrapper aLocDat(pNFormatr-\u003eGetComponentContext(),\n          LanguageTag(pNumFormat-\u003eGetLanguage()));",
+      "revId": "d93bd47b8ba5f66ff9cdab62c90fd347bcca7b6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc3963e3_d866f2d7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-25T12:38:37Z",
+      "side": 1,
+      "message": "oh, i forgot to mention this: the paragraph containing the field explicitly applies fo:language\u003d\"zxx\" - which is apparently mapped to LANGUAGE_DONTKNOW.\n\nwhy that results in \"TT.MM.JJJJ\" instead of \"DD.MM.YYYY\" isn\u0027t clear to me, but i wrote the unit test to recreate the situation from scratch.\n\nthe number format in the file clearly has \".\" separators.",
+      "parentUuid": "c80690b9_7e0e4a57",
       "revId": "d93bd47b8ba5f66ff9cdab62c90fd347bcca7b6a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
