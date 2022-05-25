@@ -202,11 +202,11 @@ void DrawAnnotationContext::endFastElement(sal_Int32)
         mxAnnotation->setInitials( maInitialsBuffer.makeStringAndClear() );
 
         util::DateTime aDateTime;
-        if (::sax::Converter::parseDateTime(aDateTime,
-                maDateBuffer.makeStringAndClear()))
+        if (::sax::Converter::parseDateTime(aDateTime, maDateBuffer))
         {
             mxAnnotation->setDateTime(aDateTime);
         }
+        maDateBuffer.setLength(0);
     }
 }
 

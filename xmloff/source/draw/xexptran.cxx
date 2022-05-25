@@ -129,11 +129,10 @@ static double Imp_GetDoubleChar(std::u16string_view rStr, sal_Int32& rPos, const
     if(!sNumberString.isEmpty())
     {
         if(bLookForUnits)
-            rConv.convertDouble(fRetval, sNumberString.makeStringAndClear());
+            rConv.convertDouble(fRetval, sNumberString);
         else
         {
-            ::sax::Converter::convertDouble(fRetval,
-                    sNumberString.makeStringAndClear());
+            ::sax::Converter::convertDouble(fRetval, sNumberString);
         }
     }
 

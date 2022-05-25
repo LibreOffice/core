@@ -369,8 +369,7 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const tools::Rectangl
                     {
                         // We know the number of vertices at the end only, so we have to prepend them here.
                         m_aShapeProps.insert(std::pair<OString, OString>(
-                            "pVerticies",
-                            "8;" + OString::number(nVertices) + aVerticies.makeStringAndClear()));
+                            "pVerticies", "8;" + OString::number(nVertices) + aVerticies));
                     }
                     if (!aSegmentInfo.isEmpty())
                         m_aShapeProps.insert(std::pair<OString, OString>(
@@ -543,7 +542,8 @@ sal_Int32 RtfSdrExport::StartShape()
     m_rAttrOutput.RunText().append(
         "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST);
 
-    m_rAttrOutput.RunText().append(m_aShapeStyle.makeStringAndClear());
+    m_rAttrOutput.RunText().append(m_aShapeStyle);
+    m_aShapeStyle.setLength(0);
     // Ignore \shpbxpage, \shpbxmargin, and \shpbxcolumn, in favor of the posrelh property.
     m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPBXIGNORE);
     // Ignore \shpbypage, \shpbymargin, and \shpbycolumn, in favor of the posrelh property.

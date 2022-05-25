@@ -167,7 +167,7 @@ void OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQ
     aSql[aSql.getLength() - 1] = ')';
     aValues[aValues.getLength() - 1] = ')';
 
-    aSql.append(aValues.makeStringAndClear());
+    aSql.append(aValues);
     // now create end execute the prepared statement
     {
         Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
@@ -282,7 +282,7 @@ void OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOri
     {
         aCondition.setLength(aCondition.getLength()-5);
 
-        aSql.append(" WHERE " + aCondition.makeStringAndClear());
+        aSql.append(" WHERE " + aCondition);
     }
     else
         ::dbtools::throwSQLException(

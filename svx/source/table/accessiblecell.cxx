@@ -546,7 +546,7 @@ OUString AccessibleCell::getCellName( sal_Int32 nCol, sal_Int32 nRow )
         }
         aStr.append(static_cast<sal_Unicode>( 'A' +
                 static_cast<sal_uInt16>(nCol)));
-        aBuf.append(comphelper::string::reverseString(aStr.makeStringAndClear()));
+        aBuf.append(comphelper::string::reverseString(aStr));
     }
     aBuf.append(nRow+1);
     return aBuf.makeStringAndClear();

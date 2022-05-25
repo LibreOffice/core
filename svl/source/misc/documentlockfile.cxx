@@ -189,7 +189,7 @@ void DocumentLockFile::WriteEntryToStream( const LockFileEntry& aEntry, const un
             aBuffer.append( ';' );
     }
 
-    OString aStringData( OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
+    OString aStringData( OUStringToOString( aBuffer, RTL_TEXTENCODING_UTF8 ) );
     uno::Sequence< sal_Int8 > aData( reinterpret_cast<sal_Int8 const *>(aStringData.getStr()), aStringData.getLength() );
     xOutput->writeBytes( aData );
 }

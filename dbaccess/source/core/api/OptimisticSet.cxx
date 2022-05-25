@@ -544,8 +544,8 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
                 OUString sCatalog,sSchema,sTable;
                 ::dbtools::qualifiedNameComponents(xMetaData,elem.first,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
                 OUString sComposedTableName = ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
-                OUString sQuery("SELECT " + elem.second + " FROM " + sComposedTableName + " WHERE " +
-                                       rCondition.makeStringAndClear());
+                OUString sQuery("SELECT " + elem.second + " FROM " + sComposedTableName + " WHERE " + rCondition);
+                rCondition.setLength(0);
 
                 try
                 {
