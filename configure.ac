@@ -7423,33 +7423,58 @@ AC_LANG_POP([C++])
 AC_SUBST([HAVE_LIBSTDCPP])
 AC_SUBST([HAVE_LIBCPP])
 
-HAVE_LIBCPP_DEBUG=
+LIBCPP_DEBUG=
 if test -z "$CROSS_COMPILING" -a -n "$HAVE_LIBCPP" -a -n "$ENABLE_DBGUTIL"; then
-    # Libc++ supports debug mode only if built for it, Mac libc++ isn't,
+    # Libc++ has two levels of debug mode, assertions mode enabled with -D_LIBCPP_DEBUG=0,
+    # and actual debug mode enabled with -D_LIBCPP_DEBUG=1 (and starting with LLVM15
+    # assertions mode will be separate and controlled by -D_LIBCPP_ENABLE_ASSERTIONS=1,
+    # although there will be backwards compatibility).
+    # Debug mode is supported by libc++ only if built for it, e.g. Mac libc++ isn't,
     # and there would be undefined references to debug functions.
     # Moreover std::to_string() has a bug (https://reviews.llvm.org/D125184).
+    # So check if debug mode can be used and disable or downgrade it to assertions
+    # if needed.
     AC_MSG_CHECKING([if libc++ has a usable debug mode])
     AC_LANG_PUSH([C++])
-    AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#define _LIBCPP_DEBUG 1
+    libcpp_debug_links=
+    AC_LINK_IFELSE([AC_LANG_SOURCE([[
+#define _LIBCPP_DEBUG 0 // only assertions
+#include <vector>
+int main()
+{
+    std::vector<int> v;
+    v.push_back( 1 );
+    return v[ 3 ];
+}
+]])], [libcpp_debug_links=1])
+    if test -n "$libcpp_debug_links"; then
+        # we can use at least assertions, check if debug mode works
+        AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#define _LIBCPP_DEBUG 1 // debug mode
 #include <string>
 #include <vector>
 int foo(const std::vector<int>& v) { return *v.begin(); }
 int main()
 {
-    std::vector<int> v{ 1, 2 };
+    std::vector<int> v;
+    v.push_back( 1 );
     std::string s = "xxxxxxxxxxxxxxxxxxxxxxxxx" + std::to_string(10);
     return (foo(v) + s.size()) != 0 ? 0 : 1;
 }
 ]])],
-    [AC_MSG_RESULT(yes)
-     HAVE_LIBCPP_DEBUG=1
-    ],
-    [AC_MSG_RESULT(no)]
-    )
+        [AC_MSG_RESULT(yes)
+         LIBCPP_DEBUG=-D_LIBCPP_DEBUG=1
+        ],
+        [AC_MSG_RESULT(no, using only assertions)
+         LIBCPP_DEBUG=-D_LIBCPP_DEBUG=0
+        ]
+        )
+    else
+        AC_MSG_RESULT(no)
+    fi
     AC_LANG_POP([C++])
 fi
-AC_SUBST([HAVE_LIBCPP_DEBUG])
+AC_SUBST([LIBCPP_DEBUG])
 
 dnl ===================================================================
 dnl Check for gperf
