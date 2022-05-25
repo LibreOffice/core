@@ -13,6 +13,7 @@
 #include <ostream>
 #include <vector>
 #include <tools/long.hxx>
+#include <vcl/glyphitemcache.hxx>
 
 #if HAVE_MORE_FONTS
 // must be declared before inclusion of test/bootstrapfixture.hxx
@@ -160,23 +161,9 @@ void VclComplexTextTest::testTdf95650()
     pOutDev->ImplLayout(aTxt, 9, 1, Point(), 0, {}, SalLayoutFlags::BiDiRtl);
 }
 
-static void testCachedGlyphs( const OUString& aText, const OUString& aFontName = OUString())
+static void checkCompareGlyphs( const SalLayoutGlyphs& aGlyphs1, const SalLayoutGlyphs& aGlyphs2,
+    const std::string& message )
 {
-    const std::string message = OUString("Font: " + aFontName + ", text: '" + aText + "'").toUtf8().getStr();
-    ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
-    if(!aFontName.isEmpty())
-    {
-        vcl::Font aFont( aFontName, Size(0, 12));
-        pOutputDevice->SetFont( aFont );
-    }
-    // Get the glyphs for the text.
-    std::unique_ptr<SalLayout> pLayout1 = pOutputDevice->ImplLayout(
-        aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
-    SalLayoutGlyphs aGlyphs1 = pLayout1->GetGlyphs();
-    // Reuse the cached glyphs to get glyphs again.
-    std::unique_ptr<SalLayout> pLayout2 = pOutputDevice->ImplLayout(
-        aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly, nullptr, &aGlyphs1);
-    SalLayoutGlyphs aGlyphs2 = pLayout2->GetGlyphs();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(message, aGlyphs1.IsValid(), aGlyphs2.IsValid());
     // And check it's the same.
     for( int level = 0; level < MAX_FALLBACK; ++level )
@@ -198,6 +185,32 @@ static void testCachedGlyphs( const OUString& aText, const OUString& aFontName =
             CPPUNIT_ASSERT_MESSAGE(messageLevel, equal);
         }
     }
+}
+
+static void testCachedGlyphs( const OUString& aText, const OUString& aFontName = OUString())
+{
+    const std::string message = OUString("Font: " + aFontName + ", text: '" + aText + "'").toUtf8().getStr();
+    ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
+    if(!aFontName.isEmpty())
+    {
+        vcl::Font aFont( aFontName, Size(0, 12));
+        pOutputDevice->SetFont( aFont );
+    }
+    SalLayoutGlyphsCache::self()->clear();
+    // Get the glyphs for the text.
+    std::unique_ptr<SalLayout> pLayout1 = pOutputDevice->ImplLayout(
+        aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
+    SalLayoutGlyphs aGlyphs1 = pLayout1->GetGlyphs();
+    // Reuse the cached glyphs to get glyphs again.
+    std::unique_ptr<SalLayout> pLayout2 = pOutputDevice->ImplLayout(
+        aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly, nullptr, &aGlyphs1);
+    SalLayoutGlyphs aGlyphs2 = pLayout2->GetGlyphs();
+    checkCompareGlyphs(aGlyphs1, aGlyphs2, message + " (reuse)");
+    // Get cached glyphs from SalLayoutGlyphsCache.
+    const SalLayoutGlyphs* aGlyphs3 = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
+        pOutputDevice, aText, 0, aText.getLength(), 0);
+    CPPUNIT_ASSERT_MESSAGE(message, aGlyphs3 != nullptr);
+    checkCompareGlyphs(aGlyphs1, *aGlyphs3, message + " (cache)");
 }
 
 // Check that caching using SalLayoutGlyphs gives same results as without caching.
