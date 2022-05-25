@@ -664,7 +664,7 @@ PrevLineCommentLbl:
         bPrevLineExtentsComment = false;
         aSym = "REM";
         sal_Int32 nLen = aLine.getLength() - nLineIdx;
-        if( bCompatible && aLine[nLineIdx + nLen - 1] == '_' && aLine[nLineIdx + nLen - 2] == ' ' )
+        if (bCompatible && aLine[nLineIdx + nLen - 1] == '_' && aLine[nLineIdx + nLen - 2] == ' ')
             bPrevLineExtentsComment = true;
         nCol2 = nCol2 + nLen;
         nLineIdx = -1;
@@ -702,6 +702,8 @@ eoln:
         aSym = "\n";
         nColLock = 0;
         bClosingUnderscore = false;
+        // tdf#149157 - break multiline continuation in a comment after a new line
+        bPrevLineExtentsComment = false;
         return true;
     }
 }
