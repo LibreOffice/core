@@ -2138,7 +2138,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                 aLocBuf.append( aCountry );
             }
             aLine.append( "/Lang" );
-            appendLiteralStringEncrypt( aLocBuf.makeStringAndClear(), rEle.m_nObject, aLine );
+            appendLiteralStringEncrypt( aLocBuf, rEle.m_nObject, aLine );
             aLine.append( "\n" );
         }
     }
@@ -3415,7 +3415,7 @@ we check in the following sequence:
                         OStringBuffer aLineLoc( 1024 );
                         appendDestinationName( aFragment , aLineLoc );
                         //substitute the fragment
-                        aTargetURL.SetMark( OStringToOUString(aLineLoc.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US) );
+                        aTargetURL.SetMark( OStringToOUString(aLineLoc, RTL_TEXTENCODING_ASCII_US) );
                     }
                     OUString aURL = bUnparsedURI ? url :
                                                    aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DecodeMechanism::WithCharset :
@@ -4457,7 +4457,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 if( rWidget.m_nDest != -1 && appendDest( m_aDestinationIdTranslation[ rWidget.m_nDest ], aDest ) )
                 {
                     aLine.append( "/AA<</D<</Type/Action/S/GoTo/D " );
-                    aLine.append( aDest.makeStringAndClear() );
+                    aLine.append( aDest );
                     aLine.append( ">>>>\n" );
                 }
                 else if( rWidget.m_aListEntries.empty() )
@@ -4762,32 +4762,32 @@ bool PDFWriterImpl::emitCatalog()
         if( aInitPageRef.getLength() > 1 )
         {
             aLine.append( "/OpenAction[" );
-            aLine.append( aInitPageRef.makeStringAndClear() );
+            aLine.append( aInitPageRef );
             aLine.append( " /XYZ null null 0]\n" );
         }
         break;
     case PDFWriter::FitInWindow :
         aLine.append( "/OpenAction[" );
-        aLine.append( aInitPageRef.makeStringAndClear() );
+        aLine.append( aInitPageRef );
         aLine.append( " /Fit]\n" ); //Open fit page
         break;
     case PDFWriter::FitWidth :
         aLine.append( "/OpenAction[" );
-        aLine.append( aInitPageRef.makeStringAndClear() );
+        aLine.append( aInitPageRef );
         aLine.append( " /FitH " );
         aLine.append( g_nInheritedPageHeight );//Open fit width
         aLine.append( "]\n" );
         break;
     case PDFWriter::FitVisible :
         aLine.append( "/OpenAction[" );
-        aLine.append( aInitPageRef.makeStringAndClear() );
+        aLine.append( aInitPageRef );
         aLine.append( " /FitBH " );
         aLine.append( g_nInheritedPageHeight );//Open fit visible
         aLine.append( "]\n" );
         break;
     case PDFWriter::ActionZoom :
         aLine.append( "/OpenAction[" );
-        aLine.append( aInitPageRef.makeStringAndClear() );
+        aLine.append( aInitPageRef );
         aLine.append( " /XYZ null null " );
         if( m_aContext.Zoom >= 50 && m_aContext.Zoom <= 1600 )
             aLine.append( static_cast<double>(m_aContext.Zoom)/100.0 );
@@ -4865,7 +4865,7 @@ bool PDFWriterImpl::emitCatalog()
                 aLocBuf.append( aCountry );
             }
             aLine.append( "/Lang" );
-            appendLiteralStringEncrypt( aLocBuf.makeStringAndClear(), m_nCatalogObject, aLine );
+            appendLiteralStringEncrypt( aLocBuf, m_nCatalogObject, aLine );
             aLine.append( "\n" );
         }
     }
@@ -4948,7 +4948,7 @@ bool PDFWriterImpl::emitSignature()
     // reserve some space for the PKCS#7 object
     OStringBuffer aContentFiller( MAX_SIGNATURE_CONTENT_LENGTH );
     comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
-    aLine.append( aContentFiller.makeStringAndClear() );
+    aLine.append( aContentFiller );
     aLine.append( ">\n/Type/Sig/SubFilter/adbe.pkcs7.detached");
 
     if( !m_aContext.DocumentInfo.Author.isEmpty() )
@@ -4973,7 +4973,7 @@ bool PDFWriterImpl::emitSignature()
     // The real value will be overwritten in the finalizeSignature method
     OStringBuffer aByteRangeFiller( 100  );
     comphelper::string::padToLength(aByteRangeFiller, 100, ' ');
-    aLine.append( aByteRangeFiller.makeStringAndClear() );
+    aLine.append( aByteRangeFiller );
     aLine.append("  /Filter/Adobe.PPKMS");
 
     //emit reason, location and contactinfo
@@ -5489,7 +5489,7 @@ bool PDFWriterImpl::emitTrailer()
     if( !aDocChecksum.isEmpty() )
     {
         aLine.append( "/DocChecksum /" );
-        aLine.append( aDocChecksum.makeStringAndClear() );
+        aLine.append( aDocChecksum );
         aLine.append( "\n" );
     }
     if( !m_aAdditionalStreams.empty() )
@@ -6088,8 +6088,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         }
         aKernedLine.append( ">]TJ\n" );
         aUnkernedLine.append( ">Tj\n" );
-        rLine.append(
-            (bNeedKern ? aKernedLine : aUnkernedLine).makeStringAndClear() );
+        rLine.append( bNeedKern ? aKernedLine : aUnkernedLine );
 
         // set beginning of next run
         nBeginRun = aRunEnds[nRun];

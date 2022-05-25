@@ -2744,7 +2744,7 @@ void SbiRuntime::StepPRINTF()       // print TOS in field
     }
     s.append(s1);
     comphelper::string::padToLength(s, 14, ' ');
-    pIosys->Write( s.makeStringAndClear() );
+    pIosys->Write( s );
     Error( pIosys->GetError() );
 }
 

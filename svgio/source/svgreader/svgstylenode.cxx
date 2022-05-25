@@ -19,6 +19,7 @@
 
 #include <svgstylenode.hxx>
 #include <svgdocument.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 namespace svgio::svgreader
@@ -97,7 +98,8 @@ namespace svgio::svgreader
                 const sal_Int32 nInitPos(nPos);
                 copyToLimiter(aSelectors, u' ', nPos, aToken, nLen);
                 skip_char(aSelectors, u' ', nPos, nLen);
-                const OUString aSelectorPart(aToken.makeStringAndClear().trim());
+                const OUString aSelectorPart(o3tl::trim(aToken));
+                aToken.setLength(0);
 
                 if(!aSelectorPart.isEmpty())
                 {
@@ -166,7 +168,8 @@ namespace svgio::svgreader
                 copyToLimiter(aSelectors, u',', nPos, aToken, nLen);
                 skip_char(aSelectors, u' ', u',', nPos, nLen);
 
-                const OUString aSingleName(aToken.makeStringAndClear().trim());
+                const OUString aSingleName(o3tl::trim(aToken));
+                aToken.setLength(0);
 
                 if(aSingleName.getLength())
                 {
@@ -199,7 +202,8 @@ namespace svgio::svgreader
                 copyToLimiter(aSelectorsAndContent, u'{', nPos, aToken, nLen);
                 skip_char(aSelectorsAndContent, u' ', u'{', nPos, nLen);
 
-                const OUString aSelectors(aToken.makeStringAndClear().trim());
+                const OUString aSelectors(o3tl::trim(aToken));
+                aToken.setLength(0);
                 OUString aContent;
 
                 if(!aSelectors.isEmpty() && nPos < nLen)
@@ -208,7 +212,8 @@ namespace svgio::svgreader
                     copyToLimiter(aSelectorsAndContent, u'}', nPos, aToken, nLen);
                     skip_char(aSelectorsAndContent, u' ', u'}', nPos, nLen);
 
-                    aContent = aToken.makeStringAndClear().trim();
+                    aContent = o3tl::trim(aToken);
+                    aToken.setLength(0);
                 }
 
                 if(!aSelectors.isEmpty() && !aContent.isEmpty())

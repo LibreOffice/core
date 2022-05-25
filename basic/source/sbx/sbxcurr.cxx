@@ -148,7 +148,7 @@ static sal_Int64 ImpStringToCurrency( std::u16string_view rStr )
         nFractDigit--;
     }
 
-    sal_Int64 result = sNormalisedNumString.makeStringAndClear().toInt64();
+    sal_Int64 result = o3tl::toInt64(sNormalisedNumString);
 
     if ( bRoundUp )
         ++result;

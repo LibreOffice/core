@@ -20,6 +20,7 @@
 
 #include <comphelper/string.hxx>
 #include <string.h>
+#include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
@@ -76,7 +77,7 @@ void IMapRectangleObject::WriteCERN( SvStream& rOStm ) const
     AppendCERNCoords(aStrBuf, aRect.BottomRight());
     AppendCERNURL(aStrBuf);
 
-    rOStm.WriteLine(aStrBuf.makeStringAndClear());
+    rOStm.WriteLine(aStrBuf);
 }
 
 void IMapRectangleObject::WriteNCSA( SvStream& rOStm ) const
@@ -87,7 +88,7 @@ void IMapRectangleObject::WriteNCSA( SvStream& rOStm ) const
     AppendNCSACoords(aStrBuf, aRect.TopLeft());
     AppendNCSACoords(aStrBuf, aRect.BottomRight());
 
-    rOStm.WriteLine(aStrBuf.makeStringAndClear());
+    rOStm.WriteLine(aStrBuf);
 }
 
 void IMapCircleObject::WriteCERN( SvStream& rOStm ) const
@@ -99,7 +100,7 @@ void IMapCircleObject::WriteCERN( SvStream& rOStm ) const
     aStrBuf.append(' ');
     AppendCERNURL(aStrBuf);
 
-    rOStm.WriteLine(aStrBuf.makeStringAndClear());
+    rOStm.WriteLine(aStrBuf);
 }
 
 void IMapCircleObject::WriteNCSA( SvStream& rOStm ) const
@@ -110,7 +111,7 @@ void IMapCircleObject::WriteNCSA( SvStream& rOStm ) const
     AppendNCSACoords(aStrBuf, aCenter);
     AppendNCSACoords(aStrBuf, aCenter + Point(nRadius, 0));
 
-    rOStm.WriteLine(aStrBuf.makeStringAndClear());
+    rOStm.WriteLine(aStrBuf);
 }
 
 void IMapPolygonObject::WriteCERN( SvStream& rOStm  ) const
@@ -123,7 +124,7 @@ void IMapPolygonObject::WriteCERN( SvStream& rOStm  ) const
 
     AppendCERNURL(aStrBuf);
 
-    rOStm.WriteLine(aStrBuf.makeStringAndClear());
+    rOStm.WriteLine(aStrBuf);
 }
 
 void IMapPolygonObject::WriteNCSA( SvStream& rOStm  ) const
@@ -136,7 +137,7 @@ void IMapPolygonObject::WriteNCSA( SvStream& rOStm  ) const
     for (sal_uInt16 i = 0; i < nCount; ++i)
         AppendNCSACoords(aStrBuf, aPoly[i]);
 
-    rOStm.WriteLine(aStrBuf.makeStringAndClear());
+    rOStm.WriteLine(aStrBuf);
 }
 
 void ImageMap::Write( SvStream& rOStm, IMapFormat nFormat ) const
@@ -327,7 +328,7 @@ Point ImageMap::ImpReadCERNCoords( const char** ppStr )
                 while( NOTEOL( cChar ) && ( cChar != ')' ) )
                     cChar = *(*ppStr)++;
 
-            aPt = Point( aStrX.makeStringAndClear().toInt32(), aStrY.makeStringAndClear().toInt32() );
+            aPt = Point( o3tl::toInt32(aStrX), o3tl::toInt32(aStrY) );
         }
     }
 
@@ -351,7 +352,7 @@ tools::Long ImageMap::ImpReadCERNRadius( const char** ppStr )
         }
     }
 
-    return aStr.makeStringAndClear().toInt32();
+    return o3tl::toInt32(aStr);
 }
 
 OUString ImageMap::ImpReadCERNURL( const char** ppStr )
@@ -477,7 +478,7 @@ Point ImageMap::ImpReadNCSACoords( const char** ppStr )
                 cChar = *(*ppStr)++;
             }
 
-            aPt = Point( aStrX.makeStringAndClear().toInt32(), aStrY.makeStringAndClear().toInt32() );
+            aPt = Point( o3tl::toInt32(aStrX), o3tl::toInt32(aStrY) );
         }
     }
 

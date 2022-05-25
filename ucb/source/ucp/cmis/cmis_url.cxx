@@ -95,7 +95,7 @@ namespace cmis
                 }
             }
             while ( nPos != -1 );
-            sUrl += sEncodedPath.makeStringAndClear();
+            sUrl += sEncodedPath;
         } else if ( !m_sId.isEmpty( ) )
         {
             sUrl += "#" + rtl::Uri::encode( m_sId,

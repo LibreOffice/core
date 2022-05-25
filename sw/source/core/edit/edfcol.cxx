@@ -1787,7 +1787,7 @@ void SwEditShell::SignParagraph()
     if (!signing.Sign(sigBuf))
         return;
 
-    const OUString signature = OStringToOUString(sigBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8, 0);
+    const OUString signature = OStringToOUString(sigBuf, RTL_TEXTENCODING_UTF8, 0);
 
     auto it = std::find_if(std::as_const(aProperties).begin(), std::as_const(aProperties).end(), [](const beans::PropertyValue& rValue)
                                                     {

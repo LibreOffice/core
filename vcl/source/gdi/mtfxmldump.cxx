@@ -818,7 +818,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                         sDxLengthString.append(pMetaTextArrayAction->GetDXArray()[aIndex + i]);
                         sDxLengthString.append(" ");
                     }
-                    rWriter.content(sDxLengthString.makeStringAndClear());
+                    rWriter.content(sDxLengthString);
                     rWriter.endElement();
                 }
 

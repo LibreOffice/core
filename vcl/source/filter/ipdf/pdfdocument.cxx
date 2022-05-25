@@ -139,7 +139,7 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
     // Reserve space for the PKCS#7 object.
     OStringBuffer aContentFiller(MAX_SIGNATURE_CONTENT_LENGTH);
     comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
-    aSigBuffer.append(aContentFiller.makeStringAndClear());
+    aSigBuffer.append(aContentFiller);
     aSigBuffer.append(">\n/Type/Sig/SubFilter");
     if (bAdES)
         aSigBuffer.append("/ETSI.CAdES.detached");
@@ -164,7 +164,7 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
     // should be enough.
     OStringBuffer aByteRangeFiller;
     comphelper::string::padToLength(aByteRangeFiller, 100, ' ');
-    aSigBuffer.append(aByteRangeFiller.makeStringAndClear());
+    aSigBuffer.append(aByteRangeFiller);
     // Finish the Sig obj.
     aSigBuffer.append(" /Filter/Adobe.PPKMS");
 
@@ -269,7 +269,7 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
         assert(pPage && "aContentStreams is only filled if there was a pPage");
         OStringBuffer aBuffer;
         aCopier.copyPageResources(pPage, aBuffer);
-        aEditBuffer.WriteOString(aBuffer.makeStringAndClear());
+        aEditBuffer.WriteOString(aBuffer);
     }
 
     aEditBuffer.WriteCharPtr("/BBox[0 0 ");
@@ -2138,7 +2138,8 @@ bool PDFNumberElement::Read(SvStream& rStream)
         {
             rStream.SeekRel(-1);
             m_nLength = rStream.Tell() - m_nOffset;
-            m_fValue = aBuf.makeStringAndClear().toDouble();
+            m_fValue = o3tl::toDouble(aBuf);
+            aBuf.setLength(0);
             SAL_INFO("vcl.filter", "PDFNumberElement::Read: m_fValue is '" << m_fValue << "'");
             return true;
         }

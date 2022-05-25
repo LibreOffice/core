@@ -398,7 +398,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                 if (pos < (types.getLength() - 1))
                     buf.append( ", " );
             }
-            dp_misc::TRACE(buf.makeStringAndClear() + "\n\n");
+            dp_misc::TRACE(buf + "\n\n");
         }
         allBackends.insert( that->m_ambiguousBackends.begin(),
                             that->m_ambiguousBackends.end() );

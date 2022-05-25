@@ -1120,7 +1120,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge )
                                       + "("
                                       + xSeq[j].formatKey
                                       + ") "
-                                      + aDupes.makeStringAndClear();
+                                      + aDupes;
                         LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg ));
                     }
                 }
@@ -2460,8 +2460,9 @@ void SvNumberFormatter::ImpAdjustFormatCodeDefault(
                 aMsg.insert(0, "SvNumberFormatter::ImpAdjustFormatCodeDefault: ");
                 aMsg.append("\nXML locale data FormatElement formatindex: ");
                 aMsg.append(static_cast<sal_Int32>(pFormatArr[nElem].Index));
-                OUString aUMsg(OStringToOUString(aMsg.makeStringAndClear(),
+                OUString aUMsg(OStringToOUString(aMsg,
                     RTL_TEXTENCODING_ASCII_US));
+                aMsg.setLength(0);
                 LocaleDataWrapper::outputCheckMessage(xLocaleData->appendLocaleInfo(aUMsg));
             }
         }
@@ -2475,7 +2476,8 @@ void SvNumberFormatter::ImpAdjustFormatCodeDefault(
         {
             aMsg.insert(0, "SvNumberFormatter::ImpAdjustFormatCodeDefault: ");
             aMsg.append("\nXML locale data FormatElement group of: ");
-            OUString aUMsg(OStringToOUString(aMsg.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US));
+            OUString aUMsg(OStringToOUString(aMsg, RTL_TEXTENCODING_ASCII_US));
+            aMsg.setLength(0);
             LocaleDataWrapper::outputCheckMessage(
                 xLocaleData->appendLocaleInfo(OUStringConcatenation(aUMsg + pFormatArr[0].NameID)));
         }

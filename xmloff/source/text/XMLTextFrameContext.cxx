@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -1090,8 +1091,8 @@ void XMLTextFrameContext_Impl::endFastElement(sal_Int32 )
           XML_TEXT_FRAME_GRAPHIC == nType) &&
         !xPropSet.is() && !bCreateFailed )
     {
-        OUString sTrimmedChars = maUrlBuffer.makeStringAndClear().trim();
-        if( !sTrimmedChars.isEmpty() )
+        std::u16string_view sTrimmedChars = o3tl::trim(maUrlBuffer);
+        if( !sTrimmedChars.empty() )
         {
             if( !xBase64Stream.is() )
             {
@@ -1128,6 +1129,7 @@ void XMLTextFrameContext_Impl::endFastElement(sal_Int32 )
                     sBase64CharsLeft = sChars.copy( nCharsDecoded );
             }
         }
+        maUrlBuffer.setLength(0);
     }
 
     CreateIfNotThere();

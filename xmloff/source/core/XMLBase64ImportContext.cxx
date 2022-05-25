@@ -20,6 +20,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <comphelper/base64.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
@@ -43,13 +44,14 @@ XMLBase64ImportContext::~XMLBase64ImportContext()
 
 void XMLBase64ImportContext::endFastElement(sal_Int32 )
 {
-    OUString sChars = maCharBuffer.makeStringAndClear().trim();
-    if( !sChars.isEmpty() )
+    std::u16string_view sChars = o3tl::trim(maCharBuffer);
+    if( !sChars.empty() )
     {
-        Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
+        Sequence< sal_Int8 > aBuffer( (sChars.size() / 4) * 3 );
         ::comphelper::Base64::decodeSomeChars( aBuffer, sChars );
         xOut->writeBytes( aBuffer );
     }
+    maCharBuffer.setLength(0);
     xOut->closeOutput();
 }
 
