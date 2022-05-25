@@ -138,7 +138,7 @@ void IDiagramHelper::anchorToSdrObjGroup(SdrObjGroup& rTarget)
 
 void IDiagramHelper::AddAdditionalVisualization(const SdrObjGroup& rTarget, SdrHdlList& rHdlList)
 {
-    // create an extra frame visuaization here
+    // create an extra frame visualization here
     basegfx::B2DHomMatrix aTransformation;
     basegfx::B2DPolyPolygon aPolyPolygon;
     rTarget.TRGetBaseGeometry(aTransformation, aPolyPolygon);
