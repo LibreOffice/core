@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8765f4f7_25304a3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-25T13:10:47Z",
+      "side": 1,
+      "message": "Sometimes the most obvious are the hardest to find...surprised that this was not in the list already...",
+      "revId": "9d9250ec4486f74ce0a9c232f77539d911facbb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e0cfef7_46df6ef6",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-25T13:10:47Z",
+      "side": 1,
+      "message": "Is there any convention for how to refer to these parts of the dialog?  The  ▸ with menu command sequences is clear enough, but it is never clear to me if ▸ should also be used their (as done here), or some other kind of marker/convention (e.g., - or –) should be used for section and control labels in the dialog boxes.",
+      "range": {
+        "startLine": 276,
+        "startChar": 122,
+        "endLine": 276,
+        "endChar": 147
+      },
+      "revId": "9d9250ec4486f74ce0a9c232f77539d911facbb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
