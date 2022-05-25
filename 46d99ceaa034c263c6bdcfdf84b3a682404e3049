@@ -16,6 +16,46 @@
       "message": "This now handles QtObject::SetForwardKey (actually for mouse and keyboard), which seems to work as expected.",
       "revId": "46d99ceaa034c263c6bdcfdf84b3a682404e3049",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "552cbc58_74c2f4c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-25T08:34:45Z",
+      "side": 1,
+      "message": "All of my tests on X11 and Wayland were fine.\n\nI ran into some issues, but all of those are unrelated to this change:\n\n* Impress crashes when starting presentation for the second time -\u003e tdf#149261\n* text rendered incorrectly with qt5 VCL plugin and unavailable font -\u003e tdf#149278, QFont-rendering-related, maybe NOTOURBUG\n* on Wayland, with slideshow in dual screen setup, the slide on the presentation screen doesn\u0027t update (reliably) -\u003e probably a Qt bug, works fine with qt6 or QT_QPA_PLATFORM\u003dxcb",
+      "revId": "46d99ceaa034c263c6bdcfdf84b3a682404e3049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75dc2ec3_5b78d5a6",
+        "filename": "vcl/inc/qt5/QtObject.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-25T08:34:45Z",
+      "side": 1,
+      "message": "Does it make sense to call this \"m_bForwardKey\" and the getter \"forwardKey()\" (without an \u0027s\u0027 at the end) for consistent naming with the setter, \"SetForwardKey\"?",
+      "range": {
+        "startLine": 41,
+        "startChar": 1,
+        "endLine": 41,
+        "endChar": 24
+      },
+      "revId": "46d99ceaa034c263c6bdcfdf84b3a682404e3049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
