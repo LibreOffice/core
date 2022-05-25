@@ -1072,6 +1072,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138194)
     assertXPath(pXmlDoc, "//textarray", 8);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146272)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf146272.odt");
+
+    uno::Reference<beans::XPropertySet> xPicture(getShape(2), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xDrawing(getShape(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xDrawing->getPropertyValue("TextBoxContent"),
+                                               uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT(xPicture);
+    CPPUNIT_ASSERT(xDrawing);
+    CPPUNIT_ASSERT(xFrame);
+
+    const sal_uInt64 nPitureZorder = xPicture->getPropertyValue("ZOrder").get<sal_uInt64>();
+    const sal_uInt64 nDrawingZorder = xDrawing->getPropertyValue("ZOrder").get<sal_uInt64>();
+    const sal_uInt64 nFrameZorder = xFrame->getPropertyValue("ZOrder").get<sal_uInt64>();
+
+    CPPUNIT_ASSERT_MESSAGE("Bad ZOrder!", nDrawingZorder < nFrameZorder);
+    CPPUNIT_ASSERT_MESSAGE("Bad ZOrder!", nFrameZorder < nPitureZorder);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138773)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf138773.docx");
