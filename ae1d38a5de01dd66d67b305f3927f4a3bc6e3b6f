@@ -50,6 +50,23 @@
       "message": "Xisco, I guess writing a test is a piece of cake for you. Got time for a subsequent patch?",
       "revId": "ae1d38a5de01dd66d67b305f3927f4a3bc6e3b6f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83043a9d_2d4681c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-25T07:38:07Z",
+      "side": 1,
+      "message": "I see nothing obviously with what the change does. Why the change is probably more controversial, the bug has quite some details on this (in short, the behavior is not friendly for new users, but if we change it, we may upset some power users).\n\nAll in all, let\u0027s give this a try, and hope that getting rid of the weird behavior has more benefit than the cost of upsetting the ones who actually used this \"tab on the first bullet adjusts the whole list\" mis-feature.",
+      "revId": "ae1d38a5de01dd66d67b305f3927f4a3bc6e3b6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
