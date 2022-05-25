@@ -95,8 +95,8 @@
 #include <strings.hrc>
 #include <window.h>
 #include <numeric>
-
 #include <boost/property_tree/ptree.hpp>
+#include <opengl/zone.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -1974,6 +1974,7 @@ private:
             {
                 if (gdk_gl_context_realize(pContext, nullptr))
                 {
+                    OpenGLZone aZone;
                     gdk_gl_context_make_current(pContext);
                     gdk_gl_context_get_version(pContext, &nMajorGLVersion, nullptr);
                     gdk_gl_context_clear_current();
