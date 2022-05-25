@@ -231,7 +231,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     OString cmd =
 #ifdef LINUX
         // avoid blocking (call it in background)
-        "( " + aBuffer.makeStringAndClear() +  " ) &";
+        "( " + aBuffer +  " ) &";
 #else
         aBuffer.makeStringAndClear();
 #endif
