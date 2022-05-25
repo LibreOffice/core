@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd90b413_5c34ebc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-05-25T10:09:55Z",
+      "side": 1,
+      "message": "I can\u0027t see how they could be zero, especially at the apparent time of the user clicking the mouse on the grid, but seems a reasonable crash avoider",
+      "revId": "d09535ea507d82e6c57ac378163955ca08982ac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
