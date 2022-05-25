@@ -94,7 +94,10 @@ void ParaULSpacingWindow::SetValue(const SvxULSpaceItem* pItem)
 
 IMPL_LINK_NOARG(ParaULSpacingWindow, ModifySpacingHdl, weld::MetricSpinButton&, void)
 {
-    SfxDispatcher* pDisp = SfxViewFrame::Current()->GetBindings().GetDispatcher();
+    SfxViewFrame* pFrame = SfxViewFrame::Current();
+    if (!pFrame)
+        return;
+    SfxDispatcher* pDisp = pFrame->GetBindings().GetDispatcher();
     if(pDisp)
     {
         SvxULSpaceItem aMargin(SID_ATTR_PARA_ULSPACE);
@@ -283,7 +286,10 @@ void ParaLRSpacingWindow::SetUnit(FieldUnit eUnit)
 
 IMPL_LINK_NOARG(ParaLRSpacingWindow, ModifySpacingHdl, weld::MetricSpinButton&, void)
 {
-    SfxDispatcher* pDisp = SfxViewFrame::Current()->GetBindings().GetDispatcher();
+    SfxViewFrame* pFrame = SfxViewFrame::Current();
+    if (!pFrame)
+        return;
+    SfxDispatcher* pDisp = pFrame->GetBindings().GetDispatcher();
     if(pDisp)
     {
         SvxLRSpaceItem aMargin(SID_ATTR_PARA_LRSPACE);
