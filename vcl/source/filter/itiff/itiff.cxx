@@ -132,7 +132,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             if (TIFFTileSize64(tif) > MAX_SIZE)
             {
                 SAL_WARN("filter.tiff", "skipping large tiffs");
-                return false;
+                break;
             }
         }
 
