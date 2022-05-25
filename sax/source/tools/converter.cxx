@@ -30,6 +30,7 @@
 #include <rtl/math.hxx>
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
@@ -1046,7 +1047,7 @@ static bool convertDurationHelper(double& rfTime, V pStr)
         double fHour = nHours;
         double fMin = nMins;
         double fSec = nSecs;
-        double fFraction = sDoubleStr.makeStringAndClear().toDouble();
+        double fFraction = o3tl::toDouble(sDoubleStr);
         double fTempTime = fHour / 24;
         fTempTime += fMin / (24 * 60);
         fTempTime += fSec / (24 * 60 * 60);

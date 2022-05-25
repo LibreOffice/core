@@ -834,7 +834,7 @@ bool UniversalContentBroker::getContentProviderData(
 
                     OSL_VERIFY(
                         createContentProviderData(
-                            aElemBuffer.makeStringAndClear(), xHierNameAccess,
+                            aElemBuffer, xHierNameAccess,
                             aInfo));
 
                     rListToFill.push_back( aInfo );

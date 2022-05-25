@@ -249,12 +249,16 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
             rItemSet.Get(XATTR_FILLCOLOR).GetColorValue();
 
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_bgcolor "=");
-        rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+        rWrt.Strm().WriteOString( sOut );
+        sOut.setLength(0);
         HTMLOutFuncs::Out_Color( rWrt.Strm(), rFillColor );
     }
 
     if (!sOut.isEmpty())
-        rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+    {
+        rWrt.Strm().WriteOString( sOut );
+        sOut.setLength(0);
+    }
 
     // and now ALIGN, HSPACE and VSPACE
     HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_MARQUEE;

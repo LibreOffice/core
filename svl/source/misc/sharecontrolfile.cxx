@@ -201,7 +201,7 @@ void ShareControlFile::SetUsersDataAndStore( std::vector< LockFileEntry >&& aUse
         }
     }
 
-    OString aStringData( OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
+    OString aStringData( OUStringToOString( aBuffer, RTL_TEXTENCODING_UTF8 ) );
     uno::Sequence< sal_Int8 > aData( reinterpret_cast<sal_Int8 const *>(aStringData.getStr()), aStringData.getLength() );
     m_xOutputStream->writeBytes( aData );
     m_aUsersData = aUsersData;

@@ -183,7 +183,7 @@ void lcl_ConvertTabsToSpaces( OUString& rLine )
             OUStringBuffer aBlanker;
             string::padToLength(aBlanker, ( 4 - ( nPos % 4 ) ), ' ');
             aResult.remove( nPos, 1 );
-            aResult.insert( nPos, aBlanker.makeStringAndClear() );
+            aResult.insert( nPos, aBlanker );
             nMax = aResult.getLength();
         }
         ++nPos;

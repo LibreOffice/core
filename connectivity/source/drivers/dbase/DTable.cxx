@@ -2683,7 +2683,7 @@ bool ODbaseTable::ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable)
 
             } while (!bReady && !m_pMemoStream->eof());
 
-            aVariable = OStringToOUString(aBStr.makeStringAndClear(),
+            aVariable = OStringToOUString(aBStr,
                 m_eEncoding);
 
         } break;
@@ -2717,7 +2717,7 @@ bool ODbaseTable::ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable)
                     //pad it out with ' ' to expected length on short read
                     sal_Int32 nRequested = sal::static_int_cast<sal_Int32>(nLength);
                     comphelper::string::padToLength(aBuffer, nRequested, ' ');
-                    aVariable = OStringToOUString(aBuffer.makeStringAndClear(), m_eEncoding);
+                    aVariable = OStringToOUString(aBuffer, m_eEncoding);
                 } // if ( bIsText )
                 else
                 {

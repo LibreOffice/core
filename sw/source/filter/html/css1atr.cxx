@@ -314,7 +314,8 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
                     "p." sCSS2_P_CLASS_leaders " span+span{float:right;padding-left:0.33em;"
                     "background:white;position:relative;z-index:1}");
         }
-        Strm().WriteOString( sOut.makeStringAndClear() );
+        Strm().WriteOString( sOut );
+        sOut.setLength(0);
 
         IncIndentLevel();
     }
@@ -359,7 +360,8 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
     if( m_nCSS1OutMode & CSS1_OUTMODE_ENCODE )
     {
         // for STYLE-Option encode string
-        Strm().WriteOString( sOut.makeStringAndClear() );
+        Strm().WriteOString( sOut );
+        sOut.setLength(0);
         if( !sVal.empty() )
             HTMLOutFuncs::Out_String( Strm(), OUString::createFromAscii(sVal) );
         else if( pSVal )
@@ -375,7 +377,7 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
     }
 
     if (!sOut.isEmpty())
-        Strm().WriteOString( sOut.makeStringAndClear() );
+        Strm().WriteOString( sOut );
 }
 
 static void AddUnitPropertyValue(OStringBuffer &rOut, tools::Long nVal,
@@ -460,7 +462,7 @@ void SwHTMLWriter::OutCSS1_UnitProperty( const char *pProp, tools::Long nVal )
 {
     OStringBuffer sOut;
     AddUnitPropertyValue(sOut, nVal, m_eCSS1Unit);
-    OutCSS1_PropertyAscii(pProp, sOut.makeStringAndClear());
+    OutCSS1_PropertyAscii(pProp, sOut);
 }
 
 void SwHTMLWriter::OutCSS1_PixelProperty( const char *pProp, tools::Long nVal,
@@ -1667,7 +1669,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
         AddUnitPropertyValue(sVal, rSz.Width(), rHTMLWrt.GetCSS1Unit());
         sVal.append(' ');
         AddUnitPropertyValue(sVal, rSz.Height(), rHTMLWrt.GetCSS1Unit());
-        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_size, sVal.makeStringAndClear());
+        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_size, sVal);
     }
 
     // Export the distance-Attributes as normally
@@ -2321,7 +2323,7 @@ static Writer& OutCSS1_SvxTextLn_SvxCrOut_SvxBlink( Writer& rWrt,
     }
 
     if (!sOut.isEmpty())
-        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_decoration, sOut.makeStringAndClear() );
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_decoration, sOut );
     else if( bNone )
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_decoration, sCSS1_PV_none );
 
@@ -2503,8 +2505,8 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
         sOut.append(OString::number(nValue  / 10) + "." + OString::number(nValue % 10) +
                     sCSS1_UNIT_pt);
 
-        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_letter_spacing,
-            sOut.makeStringAndClear());
+        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_letter_spacing, sOut);
+        sOut.setLength(0);
     }
     else
     {
@@ -3297,7 +3299,7 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     // and also the color
     sOut.append(GetCSS1_Color(pLine->GetColor()));
 
-    rHTMLWrt.OutCSS1_PropertyAscii(pProperty, sOut.makeStringAndClear());
+    rHTMLWrt.OutCSS1_PropertyAscii(pProperty, sOut);
 }
 
 Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
@@ -3360,7 +3362,7 @@ Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
             sVal.append(' ');
             AddUnitPropertyValue(sVal, nLeftDist, rHTMLWrt.GetCSS1Unit());
         }
-        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_padding, sVal.makeStringAndClear());
+        rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_padding, sVal);
     }
     else
     {
@@ -3628,7 +3630,7 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
         break;
     }
     if (!sOut.isEmpty())
-        Strm().WriteOString( sOut.makeStringAndClear() );
+        Strm().WriteOString( sOut );
 }
 
 Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt )

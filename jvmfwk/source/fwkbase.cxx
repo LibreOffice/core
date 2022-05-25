@@ -470,7 +470,7 @@ OString makeClassPathOption(std::u16string_view sUserClassPath)
         sBufCP.append(sAppCP);
     }
 
-    sPaths = OUStringToOString(sBufCP.makeStringAndClear(), PathEncoding());
+    sPaths = OUStringToOString(sBufCP, PathEncoding());
     if (sPaths.isEmpty()) {
         return "";
     }

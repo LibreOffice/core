@@ -2533,7 +2533,7 @@ namespace pcr
             sTemp.append(rQueryName);
             Reference< XNameAccess > xSubQueries(_xQueryNames->getByName(rQueryName),UNO_QUERY);
             if ( xSubQueries.is() )
-                impl_fillQueryNames_throw(xSubQueries,_out_rNames,sTemp.makeStringAndClear());
+                impl_fillQueryNames_throw(xSubQueries,_out_rNames,sTemp);
             else
                 _out_rNames.push_back( sTemp.makeStringAndClear() );
         }
