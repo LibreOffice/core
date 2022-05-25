@@ -81,6 +81,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf149124();
     void testTdf89449();
     void testTdf147459();
     void testTdf146223();
@@ -149,6 +150,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf149124);
     CPPUNIT_TEST(testTdf89449);
     CPPUNIT_TEST(testTdf147459);
     CPPUNIT_TEST(testTdf146223);
@@ -293,6 +295,22 @@ void SdImportTest::testDocumentLayout()
                 OUStringConcatenation(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf149124()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf149124.pptx"), PPTX);
+
+    uno::Reference<container::XIndexAccess> xGroupShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xStandardConnector(xGroupShape->getByIndex(2), uno::UNO_QUERY_THROW);
+
+    sal_Int32 nStartGlueId = xStandardConnector->getPropertyValue("StartGluePointIndex").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nStartGlueId);
+    sal_Int32 nEndGlueId = xStandardConnector->getPropertyValue("EndGluePointIndex").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nEndGlueId);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf89449()

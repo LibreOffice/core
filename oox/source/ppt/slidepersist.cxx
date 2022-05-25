@@ -150,6 +150,14 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
                 pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, aTransformation, &getShapeMap() );
                 if (pPPTShape->isConnectorShape())
                     maConnectorShapeId.push_back(pPPTShape->getId());
+                if (!pPPTShape->getChildren().empty())
+                {
+                    for (size_t i = 0; i < pPPTShape->getChildren().size(); i++)
+                    {
+                        if (pPPTShape->getChildren()[i]->isConnectorShape())
+                            maConnectorShapeId.push_back(pPPTShape->getChildren()[i]->getId());
+                    }
+                }
             }
             else
                 child->addShape( rFilterBase, getTheme().get(), xShapes, aTransformation, maShapesPtr->getFillProperties(), &getShapeMap() );
