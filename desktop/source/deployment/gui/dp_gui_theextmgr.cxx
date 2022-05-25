@@ -495,9 +495,12 @@ void TheExtensionManager::notifyTermination( ::lang::EventObject const & rEvt )
 void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
 {
     m_bModified = true;
-    getDialogHelper()->prepareChecking();
+    DialogHelper *pDialogHelper = getDialogHelper();
+    if (!pDialogHelper)
+        return;
+    pDialogHelper->prepareChecking();
     createPackageList();
-    getDialogHelper()->checkEntries();
+    pDialogHelper->checkEntries();
 }
 
 
