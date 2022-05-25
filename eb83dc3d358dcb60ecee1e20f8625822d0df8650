@@ -16,6 +16,24 @@
       "message": "@qa: we might still want this for 7.3.4...",
       "revId": "eb83dc3d358dcb60ecee1e20f8625822d0df8650",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b88163ab_6b1ee300",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-25T14:25:30Z",
+      "side": 1,
+      "message": "Given it\u0027s a nontrivial change and initial video playback works without it, I\u0027d tend to leave it for 7-3 only, but don\u0027t have any strong opinion.",
+      "parentUuid": "17769286_5eef1529",
+      "revId": "eb83dc3d358dcb60ecee1e20f8625822d0df8650",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
