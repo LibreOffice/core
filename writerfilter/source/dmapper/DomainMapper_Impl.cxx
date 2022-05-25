@@ -3608,13 +3608,11 @@ void DomainMapper_Impl::PopFootOrEndnote()
         uno::Reference< text::XFootnote > xFootnoteFirst, xFootnoteLast;
         auto xFootnotes = xFootnotesSupplier->getFootnotes();
         auto xEndnotes = xEndnotesSupplier->getEndnotes();
-        if (IsInFootnote())
-            xFootnotes->getByIndex(xFootnotes->getCount()-1) >>= xFootnoteLast;
-        else
-            xEndnotes->getByIndex(xEndnotes->getCount()-1) >>= xFootnoteLast;
-        if ( ( ( IsInFootnote() && xFootnotes->getCount() > 1 ) ||
-             ( !IsInFootnote() && xEndnotes->getCount() > 1 ) ) &&
-                        xFootnoteLast->getLabel().isEmpty() )
+        if ( ( ( IsInFootnote() && xFootnotes->getCount() > 1 &&
+                       ( xFootnotes->getByIndex(xFootnotes->getCount()-1) >>= xFootnoteLast ) ) ||
+               ( !IsInFootnote() && xEndnotes->getCount() > 1 &&
+                       ( xEndnotes->getByIndex(xEndnotes->getCount()-1) >>= xFootnoteLast ) )
+             ) && xFootnoteLast->getLabel().isEmpty() )
         {
             // copy content of the first remaining temporary footnote
             if ( IsInFootnote() )

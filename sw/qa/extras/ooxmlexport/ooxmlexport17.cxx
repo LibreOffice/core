@@ -13,6 +13,7 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
@@ -632,6 +633,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144563, "tdf144563.docx")
         CPPUNIT_ASSERT_EQUAL(aExpectedValues[nIndex++], xTextField->getPresentation(false));
     }
 }
+
+// broken test document?
+#if !defined(_WIN32)
+DECLARE_OOXMLEXPORT_TEST(testTdf146955, "tdf146955.odt")
+{
+    // import of a (broken?) DOCX export with dozens of frames raised a SAX exception,
+    // when the code tried to access to a non-existent footnote
+    uno::Reference<text::XFootnotesSupplier> xNotes(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xNotes->getFootnotes()->getCount());
+}
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testTdf144668, "tdf144668.odt")
 {
