@@ -160,6 +160,11 @@ void PageStylesPanel::Update()
 {
     const eFillStyle eXFS = static_cast<eFillStyle>(mxBgFillType->get_active());
     SfxObjectShell* pSh = SfxObjectShell::Current();
+    if (!pSh)
+    {
+        SAL_WARN("sw.ui", "PageStylesPanel::Update(): no SfxObjectShell found");
+        return;
+    }
     switch(eXFS)
     {
         case NONE:
