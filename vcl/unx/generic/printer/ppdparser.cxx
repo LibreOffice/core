@@ -937,7 +937,7 @@ OUString PPDParser::handleTranslation(const OString& i_rString, bool bIsGlobaliz
         else
             aTrans.append( *pStr++ );
     }
-    return OStringToOUString( aTrans.makeStringAndClear(), bIsGlobalized ? RTL_TEXTENCODING_UTF8 : m_aFileEncoding );
+    return OStringToOUString( aTrans, bIsGlobalized ? RTL_TEXTENCODING_UTF8 : m_aFileEncoding );
 }
 
 namespace

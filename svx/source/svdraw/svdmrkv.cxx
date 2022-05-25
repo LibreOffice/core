@@ -1108,7 +1108,8 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 sSelectionTextView = sSelectionText + ", " + aExtraInfo + "}";
                 aExtraInfo.append(handleArrayStr);
                 aExtraInfo.append("}");
-                sSelectionText += ", " + aExtraInfo.makeStringAndClear();
+                sSelectionText += ", " + aExtraInfo;
+                aExtraInfo.setLength(0);
             }
         }
 

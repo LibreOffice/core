@@ -953,7 +953,7 @@ namespace
         OStringBuffer aBuf(unicode::getExemplarLanguageForUScriptCode(eScript));
         if (const char* pScriptCode = uscript_getShortName(eScript))
             aBuf.append('-').append(pScriptCode);
-        return OStringToOUString(aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+        return OStringToOUString(aBuf, RTL_TEXTENCODING_UTF8);
     }
 }
 

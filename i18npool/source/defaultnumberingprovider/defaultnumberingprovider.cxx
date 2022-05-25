@@ -499,7 +499,7 @@ static void lcl_formatKoreanLegalWord(sal_Int32 nNumber, OUString& rsResult) {
         aTemp.insert(0, (table_KoreanLegalWord_decade1[digit1 - 1]));
     if (digit2 > 0)
         aTemp.insert(0, (table_KoreanLegalWord_decade2[digit2 - 1]));
-    rsResult += aTemp.makeStringAndClear();
+    rsResult += aTemp;
 }
 
 // Greek Letter Numbering

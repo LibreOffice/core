@@ -1957,7 +1957,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
         gtk_list_store_append (m_pFilterStore, &iter);
         gtk_list_store_set (m_pFilterStore, &iter,
             0, OUStringToOString(shrinkFilterName( rFilter, true ), RTL_TEXTENCODING_UTF8).getStr(),
-            1, OUStringToOString(aTokens.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr(),
+            1, OUStringToOString(aTokens, RTL_TEXTENCODING_UTF8).getStr(),
             2, aFilterName.getStr(),
             3, OUStringToOString(rType, RTL_TEXTENCODING_UTF8).getStr(),
             -1);

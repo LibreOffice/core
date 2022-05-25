@@ -221,7 +221,7 @@ void CurlUri::AppendPath(::std::u16string_view const rPath)
         path.append("/");
     }
     path.append(rPath);
-    OString const utf8Path(OUStringToOString(path.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+    OString const utf8Path(OUStringToOString(path, RTL_TEXTENCODING_UTF8));
     auto uc = curl_url_set(m_pUrl.get(), CURLUPART_PATH, utf8Path.getStr(), 0);
     if (uc != CURLUE_OK)
     {

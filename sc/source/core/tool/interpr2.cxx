@@ -3463,7 +3463,7 @@ void ScInterpreter::ScBahtText()
         if( fBaht > 0.0 )
             aBlock.insert( 0, UTF8_TH_1E6 );
 
-        aText.insert(0, aBlock.makeStringAndClear());
+        aText.insert(0, aBlock);
     }
     if (!aText.isEmpty())
         aText.append( UTF8_TH_BAHT );
@@ -3483,7 +3483,7 @@ void ScInterpreter::ScBahtText()
     if( bMinus )
         aText.insert( 0, UTF8_TH_MINUS );
 
-    PushString( OStringToOUString(aText.makeStringAndClear(), RTL_TEXTENCODING_UTF8) );
+    PushString( OStringToOUString(aText, RTL_TEXTENCODING_UTF8) );
 }
 
 void ScInterpreter::ScGetPivotData()

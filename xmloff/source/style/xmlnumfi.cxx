@@ -875,13 +875,15 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
             if ( !aContent.isEmpty() )
             {
                 lcl_EnquoteIfNecessary( aContent, rParent );
-                rParent.AddToCode( aContent.makeStringAndClear() );
+                rParent.AddToCode( aContent );
+                aContent.setLength(0);
             }
             else
             {
                 // Quoted empty text may be significant to separate.
                 aContent.append("\"\"");
-                rParent.AddToCode( aContent.makeStringAndClear() );
+                rParent.AddToCode( aContent );
+                aContent.setLength(0);
                 rParent.SetHasTrailingEmptyText(true);  // *after* AddToCode()
             }
             break;
@@ -1028,7 +1030,7 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
                     rParent.AddNumber( aNumInfo );      // number without decimals
                     OUStringBuffer sIntegerFractionDelimiter(aNumInfo.aIntegerFractionDelimiter);
                     lcl_EnquoteIfNecessary( sIntegerFractionDelimiter, rParent );
-                    rParent.AddToCode( sIntegerFractionDelimiter.makeStringAndClear() ); // default is ' '
+                    rParent.AddToCode( sIntegerFractionDelimiter ); // default is ' '
                 }
 
                 //! build string and add at once
@@ -1509,7 +1511,8 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
             aFormatCode.truncate( nBufLen - 2);
     }
 
-    aFormatCode.insert( 0, aConditions.makeStringAndClear() );
+    aFormatCode.insert( 0, aConditions );
+    aConditions.setLength(0);
     OUString sFormat = aFormatCode.makeStringAndClear();
 
     //  test special cases
@@ -2062,7 +2065,7 @@ void SvXMLNumFormatContext::AddColor( Color const nColor )
     {
         aColName.insert( 0, '[' );
         aColName.append( ']' );
-        aFormatCode.insert( 0, aColName.makeStringAndClear() );
+        aFormatCode.insert( 0, aColName );
     }
 }
 

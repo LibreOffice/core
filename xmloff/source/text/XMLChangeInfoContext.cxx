@@ -77,7 +77,8 @@ void XMLChangeInfoContext::endFastElement(sal_Int32 )
     // set values at changed region context
     rChangedRegion.SetChangeInfo(rType, sAuthorBuffer.makeStringAndClear(),
                                  sCommentBuffer.makeStringAndClear(),
-                                 sDateTimeBuffer.makeStringAndClear());
+                                 sDateTimeBuffer);
+    sDateTimeBuffer.setLength(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

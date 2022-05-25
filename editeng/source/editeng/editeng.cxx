@@ -1080,7 +1080,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     aInfo.append(bDebugPaint ? "On" : "Off");
                     std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pEditView->GetWindow()->GetFrameWeld(),
                                                                   VclMessageType::Info, VclButtonsType::Ok,
-                                                                  OStringToOUString(aInfo.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US)));
+                                                                  OStringToOUString(aInfo, RTL_TEXTENCODING_ASCII_US)));
                     xInfoBox->run();
 
                 }

@@ -850,7 +850,7 @@ void Components::parseXcsXcuIniLayer(
     if (!urls.isEmpty()) {
         parseFileList(layer, &parseXcsFile, urls, false);
     }
-    urls = prefix.makeStringAndClear() + "DATA}";
+    urls = prefix + "DATA}";
     rtl::Bootstrap::expandMacros(urls);
     if (!urls.isEmpty()) {
         parseFileList(layer + 1, &parseXcuFile, urls, recordAdditions);

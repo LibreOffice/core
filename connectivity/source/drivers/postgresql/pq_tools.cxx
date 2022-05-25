@@ -125,7 +125,7 @@ void bufferEscapeConstant( OUStringBuffer & buf, std::u16string_view value, Conn
     strbuf.setLength( len );
     // Previously here RTL_TEXTENCODING_ASCII_US; as we set the PostgreSQL client_encoding to UTF8,
     // we get UTF8 here, too. I'm not sure why it worked well before...
-    buf.append( OStringToOUString( strbuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
+    buf.append( OStringToOUString( strbuf, RTL_TEXTENCODING_UTF8 ) );
 }
 
 static void ibufferQuoteConstant( OUStringBuffer & buf, std::u16string_view value, ConnectionSettings *settings )
@@ -890,7 +890,7 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
                 digits.append(OUString(&c, 1));
                 c = str.iterateCodePoints(&start);
             } while ( c );
-            vec.push_back( digits.makeStringAndClear().toInt32() );
+            vec.push_back( o3tl::toInt32(digits) );
             do
             {
                 if(!iswspace(c))

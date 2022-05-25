@@ -1485,7 +1485,8 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
             if( !sTmp.isEmpty() )
                 sTmp.append( ';' );
             convertValue( eAttributeName, sTmp2, *pAny );
-            sTmp.append( sTmp2.makeStringAndClear() );
+            sTmp.append( sTmp2 );
+            sTmp2.setLength(0);
         }
     }
     else
@@ -1567,7 +1568,8 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
             if( !sTmp.isEmpty() )
                 sTmp.append( ';' );
             convertTiming( sTmp2, *pAny );
-            sTmp.append( sTmp2.makeStringAndClear() );
+            sTmp.append( sTmp2 );
+            sTmp2.setLength(0);
         }
     }
     else if( auto x = o3tl::tryAccess<double>(rValue) )
@@ -1593,7 +1595,8 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
 
             SvXMLUnitConverter::convertEnum( sTmp2, pEvent->Trigger, aAnimations_EnumMap_EventTrigger );
 
-            sTmp.append( sTmp2.makeStringAndClear() );
+            sTmp.append( sTmp2 );
+            sTmp2.setLength(0);
         }
 
         if( pEvent->Offset.hasValue() )
@@ -1603,7 +1606,8 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
             if( !sTmp.isEmpty() )
                 sTmp.append( '+' );
 
-            sTmp.append( sTmp2.makeStringAndClear() );
+            sTmp.append( sTmp2 );
+            sTmp2.setLength(0);
         }
     }
     else

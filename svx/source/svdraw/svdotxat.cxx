@@ -441,7 +441,7 @@ void SdrTextObj::AppendFamilyToStyleName(OUString& styleName, SfxStyleFamily fam
     aFam.append(static_cast<sal_Int32>(family));
     comphelper::string::padToLength(aFam, PADDING_LENGTH_FOR_STYLE_FAMILY , PADDING_CHARACTER_FOR_STYLE_FAMILY);
 
-    styleName += "|" + aFam.makeStringAndClear();
+    styleName += "|" + aFam;
 }
 
 SfxStyleFamily SdrTextObj::ReadFamilyFromStyleName(const OUString& styleName)

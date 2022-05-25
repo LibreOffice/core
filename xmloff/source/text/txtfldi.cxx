@@ -3309,8 +3309,7 @@ void XMLAnnotationImportContext::PrepareField(
     xPropertySet->setPropertyValue("Resolved", Any(bTmp));
 
     util::DateTime aDateTime;
-    if (::sax::Converter::parseDateTime(aDateTime,
-                                            aDateBuffer.makeStringAndClear()))
+    if (::sax::Converter::parseDateTime(aDateTime, aDateBuffer))
     {
         /*
         Date aDate;
@@ -3322,6 +3321,7 @@ void XMLAnnotationImportContext::PrepareField(
         // why is there no UNO_NAME_DATE_TIME, but only UNO_NAME_DATE_TIME_VALUE?
         xPropertySet->setPropertyValue(sAPI_date_time_value, Any(aDateTime));
     }
+    aDateBuffer.setLength(0);
 
     OUString sBuffer = aTextBuffer.makeStringAndClear();
     if ( sBuffer.getLength() )

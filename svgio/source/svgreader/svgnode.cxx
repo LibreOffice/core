@@ -94,7 +94,8 @@ namespace svgio::svgreader
                         const sal_Int32 nInitPos(nPos);
                         copyToLimiter(rClassList, u' ', nPos, aToken, nLen);
                         skip_char(rClassList, u' ', nPos, nLen);
-                        const OUString aPart(aToken.makeStringAndClear().trim());
+                        const OUString aPart(o3tl::trim(aToken));
+                        aToken.setLength(0);
 
                         if(aPart.getLength())
                         {

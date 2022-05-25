@@ -699,7 +699,8 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
                    "###########################################", pFilter );
         buf.append( "environment: " );
         buf.append( pEnv->pTypeName );
-        writeLine( stream, buf.makeStringAndClear(), pFilter );
+        writeLine( stream, buf, pFilter );
+        buf.setLength(0);
         writeLine( stream, "NO INTERFACE INFORMATION AVAILABLE!", pFilter );
         return;
     }
@@ -708,7 +709,8 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
                "######################################", pFilter );
     buf.append( "environment dump: " );
     buf.append( pEnv->pTypeName );
-    writeLine( stream, buf.makeStringAndClear(), pFilter );
+    writeLine( stream, buf, pFilter );
+    buf.setLength(0);
 
     uno_DefaultEnvironment * that =
         reinterpret_cast< uno_DefaultEnvironment * >(pEnv);
@@ -727,7 +729,8 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
         buf.append( "; oid=\"" );
         buf.append( pOEntry->oid );
         buf.append( '\"' );
-        writeLine( stream, buf.makeStringAndClear(), pFilter );
+        writeLine( stream, buf, pFilter );
+        buf.setLength(0);
 
         for ( std::size_t nPos = 0;
               nPos < pOEntry->aInterfaces.size(); ++nPos )
@@ -758,7 +761,8 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
                     buf.append( " (ptr not found in map!)" );
                 }
             }
-            writeLine( stream, buf.makeStringAndClear(), pFilter );
+            writeLine( stream, buf, pFilter );
+            buf.setLength(0);
         }
     }
     if (! ptr2obj.empty())

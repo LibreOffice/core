@@ -26,6 +26,7 @@
 #include <unokywds.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include <vector>
@@ -499,7 +500,8 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
             sBuffer.append( *pStr++ );
         }
 
-        sal_Int32 nValue = sBuffer.makeStringAndClear().toInt32();
+        sal_Int32 nValue = o3tl::toInt32(sBuffer);
+        sBuffer.setLength(0);
 
         if( aNewHelpLine.GetKind() == SdrHelpLineKind::Horizontal )
         {
@@ -519,7 +521,8 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
                     sBuffer.append( *pStr++ );
                 }
 
-                aPoint.setY( sBuffer.makeStringAndClear().toInt32() );
+                aPoint.setY( o3tl::toInt32(sBuffer) );
+                sBuffer.setLength(0);
 
             }
         }

@@ -176,7 +176,7 @@ void Broadcaster::send() {
     if (exception.hasValue()) {
         throw css::lang::WrappedTargetRuntimeException(
             ("configmgr exceptions during listener notification" +
-             messages.makeStringAndClear()),
+             messages),
             css::uno::Reference< css::uno::XInterface >(),
             exception);
     }

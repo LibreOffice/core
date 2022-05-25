@@ -355,19 +355,19 @@ OUString PrintFontManager::convertSfntName( void* pRecord )
             switch( pNameRecord->encodingID )
             {
                 case 2:
-                    aValue = OStringToOUString( aName.makeStringAndClear(), RTL_TEXTENCODING_MS_932 );
+                    aValue = OStringToOUString( aName, RTL_TEXTENCODING_MS_932 );
                     break;
                 case 3:
-                    aValue = OStringToOUString( aName.makeStringAndClear(), RTL_TEXTENCODING_MS_936 );
+                    aValue = OStringToOUString( aName, RTL_TEXTENCODING_MS_936 );
                     break;
                 case 4:
-                    aValue = OStringToOUString( aName.makeStringAndClear(), RTL_TEXTENCODING_MS_950 );
+                    aValue = OStringToOUString( aName, RTL_TEXTENCODING_MS_950 );
                     break;
                 case 5:
-                    aValue = OStringToOUString( aName.makeStringAndClear(), RTL_TEXTENCODING_MS_949 );
+                    aValue = OStringToOUString( aName, RTL_TEXTENCODING_MS_949 );
                     break;
                 case 6:
-                    aValue = OStringToOUString( aName.makeStringAndClear(), RTL_TEXTENCODING_MS_1361 );
+                    aValue = OStringToOUString( aName, RTL_TEXTENCODING_MS_1361 );
                     break;
             }
         }
