@@ -286,14 +286,16 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
         if( !aName.isEmpty() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
-            rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+            rWrt.Strm().WriteOString( sOut );
+            sOut.setLength(0);
             HTMLOutFuncs::Out_String( rWrt.Strm(), aName );
             sOut.append('\"');
         }
         if( !aValue.isEmpty() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_value "=\"");
-            rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+            rWrt.Strm().WriteOString( sOut );
+            sOut.setLength(0);
             HTMLOutFuncs::Out_String( rWrt.Strm(), aValue );
             sOut.append('\"');
         }
@@ -309,7 +311,8 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdfixed);
         }
         sOut.append('>');
-        rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+        rWrt.Strm().WriteOString( sOut );
+        sOut.setLength(0);
     }
 
     // output content of the field
@@ -560,7 +563,8 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
                 Color& rColor = SwViewOption::GetFieldShadingsColor();
                 sOut.append(GetCSS1_Color(rColor));
                 sOut.append("\">");
-                rWrt.Strm().WriteOString(sOut.makeStringAndClear());
+                rWrt.Strm().WriteOString(sOut);
+                sOut.setLength(0);
             }
 
             OutHTML_SwField( rWrt, pField, pTextField->GetTextNode(),

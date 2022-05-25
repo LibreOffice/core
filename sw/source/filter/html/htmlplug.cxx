@@ -1252,7 +1252,8 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         if( !aURL.isEmpty() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
-            rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+            rWrt.Strm().WriteOString( sOut );
+            sOut.setLength(0);
             HTMLOutFuncs::Out_String( rWrt.Strm(), aURL );
             sOut.append('\"');
         }
@@ -1262,7 +1263,8 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         if( (aAny >>= aType) && !aType.isEmpty() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"");
-            rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+            rWrt.Strm().WriteOString( sOut );
+            sOut.setLength(0);
             HTMLOutFuncs::Out_String( rWrt.Strm(), aType );
             sOut.append('\"');
         }
@@ -1296,7 +1298,8 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             if( !sCodeBase.isEmpty() )
             {
                 sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_codebase "=\"");
-                rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+                rWrt.Strm().WriteOString( sOut );
+                sOut.setLength(0);
                 HTMLOutFuncs::Out_String( rWrt.Strm(), sCodeBase );
                 sOut.append('\"');
             }
@@ -1307,7 +1310,8 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         aAny = xSet->getPropertyValue("AppletCode");
         aAny >>= aClass;
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_code "=\"");
-        rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+        rWrt.Strm().WriteOString( sOut );
+        sOut.setLength(0);
         HTMLOutFuncs::Out_String( rWrt.Strm(), aClass );
         sOut.append('\"');
 
@@ -1318,7 +1322,8 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         if( !aAppletName.isEmpty() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
-            rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+            rWrt.Strm().WriteOString( sOut );
+            sOut.setLength(0);
             HTMLOutFuncs::Out_String( rWrt.Strm(), aAppletName );
             sOut.append('\"');
         }
@@ -1337,7 +1342,8 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         // or the Floating-Frame specifics
 
         sOut.append(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_iframe);
-        rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+        rWrt.Strm().WriteOString( sOut );
+        sOut.setLength(0);
 
         SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(), rWrt.GetBaseURL(),
                                         xSet );
@@ -1346,7 +1352,8 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
                             : HTML_FRMOPTS_IFRAME;
     }
 
-    rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
+    rWrt.Strm().WriteOString( sOut );
+    sOut.setLength(0);
 
     // ALT, WIDTH, HEIGHT, HSPACE, VSPACE, ALIGN
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
@@ -1402,10 +1409,11 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
             sBuf.append("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_param
                     " " OOO_STRING_SVTOOLS_HTML_O_name
                     "=\"");
-            rWrt.Strm().WriteOString( sBuf.makeStringAndClear() );
+            rWrt.Strm().WriteOString( sBuf );
+            sOut.setLength(0);
             HTMLOutFuncs::Out_String( rWrt.Strm(), rName );
             sBuf.append("\" " OOO_STRING_SVTOOLS_HTML_O_value "=\"");
-            rWrt.Strm().WriteOString( sBuf.makeStringAndClear() );
+            rWrt.Strm().WriteOString( sBuf );
             HTMLOutFuncs::Out_String( rWrt.Strm(), rValue ).WriteCharPtr( "\">" );
         }
 

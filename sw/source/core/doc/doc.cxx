@@ -90,6 +90,7 @@
 
 #include <vector>
 #include <map>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <vbahelper/vbaaccesshelper.hxx>
@@ -620,7 +621,8 @@ OUString UIPages2PhyPages(const OUString& rUIPageRange, const std::map< sal_Int3
             aNumber.append(*pInput++);
         if (!aNumber.isEmpty())
         {
-            sal_Int32 nNumber = aNumber.makeStringAndClear().toInt32();
+            sal_Int32 nNumber = o3tl::toInt32(aNumber);
+            aNumber.setLength(0);
             if (nNumber < nUIPageMin)
                 nNumber = nPhyPageMin-1;
             else if (nNumber > nUIPageMax)

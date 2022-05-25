@@ -353,7 +353,7 @@ const std::vector< LanguageType >& LocaleDataWrapper::getInstalledLanguageTypes(
                     aMsg.append(static_cast<sal_Int32>(static_cast<sal_uInt16>(eLang)), 16);
                     aMsg.append("  ->  ");
                     aMsg.append(aBackLanguageTag.getBcp47());
-                    outputCheckMessage( aMsg.makeStringAndClear() );
+                    outputCheckMessage( aMsg );
                 }
                 eLang = LANGUAGE_DONTKNOW;
             }

@@ -565,7 +565,7 @@ bool SwAutoCorrDoc::TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         {
             const Color* pColor = nullptr;
             // Send text as NatNum12 prefix
-            OUString sPrefix("[NatNum12 " + sDisambiguatedWord.makeStringAndClear() + "]0");
+            OUString sPrefix("[NatNum12 " + sDisambiguatedWord + "]0");
             if (pFormatter->GetPreviewString(sPrefix, 0, sConverted, &pColor, LANGUAGE_USER_HUNGARIAN_ROVAS))
                 bRet = true;
         }

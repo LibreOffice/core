@@ -610,7 +610,7 @@ writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const Sequence< OU
     ::comphelper::intersperse(aItems.begin(), aItems.end(),
                               ::comphelper::OUStringBufferAppender(sRep), OUString(" "));
 
-    writeElement( pDoc, nXmlElement, sRep.makeStringAndClear() );
+    writeElement( pDoc, nXmlElement, sRep );
 }
 
 static void
