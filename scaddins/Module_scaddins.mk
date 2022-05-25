@@ -30,4 +30,8 @@ $(eval $(call gb_Module_add_l10n_targets,scaddins,\
     AllLangMoTarget_sca \
 ))
 
+$(eval $(call gb_Module_add_check_targets,scaddins,\
+    CppunitTest_analysis_addin_test \
+))
+
 # vim: set noet sw=4 ts=4:

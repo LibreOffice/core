@@ -2743,6 +2743,12 @@ bool ScaAnyConverter::getDouble(
         case uno::TypeClass_VOID:
             bContainsVal = false;
         break;
+        case uno::TypeClass_BYTE:
+        case uno::TypeClass_SHORT:
+        case uno::TypeClass_UNSIGNED_SHORT:
+        case uno::TypeClass_LONG:
+        case uno::TypeClass_UNSIGNED_LONG:
+        case uno::TypeClass_FLOAT:
         case uno::TypeClass_DOUBLE:
             rAny >>= rfResult;
         break;
