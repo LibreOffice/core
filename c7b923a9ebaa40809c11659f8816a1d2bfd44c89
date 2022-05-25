@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcb2b80a_4a435305",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003590
+      },
+      "writtenOn": "2022-05-25T18:36:38Z",
+      "side": 1,
+      "message": "Hi Everyone,\n\nI only want to confirm that LibreOffice Win64 7.3.4.1 (downloaded from pre-release directory) correctly detect \nibm-semeru-open-jre_x64_windows_11.0.15_10_openj9-0.32.0.msi.\n\nHave all a nice evening,\n\nCarlo",
+      "revId": "c7b923a9ebaa40809c11659f8816a1d2bfd44c89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
