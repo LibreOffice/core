@@ -664,7 +664,9 @@ PrevLineCommentLbl:
         bPrevLineExtentsComment = false;
         aSym = "REM";
         sal_Int32 nLen = aLine.getLength() - nLineIdx;
-        if( bCompatible && aLine[nLineIdx + nLen - 1] == '_' && aLine[nLineIdx + nLen - 2] == ' ' )
+        // tdf#149157 - don't allow multiline continuation in a comment with VBA compatibility
+        if( bCompatible && !bVBASupportOn && aLine[nLineIdx + nLen - 1] == '_'
+            && aLine[nLineIdx + nLen - 2] == ' ' )
             bPrevLineExtentsComment = true;
         nCol2 = nCol2 + nLen;
         nLineIdx = -1;
