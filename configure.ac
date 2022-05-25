@@ -7423,11 +7423,17 @@ AC_LANG_POP([C++])
 AC_SUBST([HAVE_LIBSTDCPP])
 AC_SUBST([HAVE_LIBCPP])
 
-HAVE_LIBCPP_DEBUG=
+LIBCPP_DEBUG=
 if test -z "$CROSS_COMPILING" -a -n "$HAVE_LIBCPP" -a -n "$ENABLE_DBGUTIL"; then
-    # Libc++ supports debug mode only if built for it, Mac libc++ isn't,
-    # and there would be undefined references to debug functions.
+    # Libc++ has two levels of debug mode, assertions mode enabled with -D_LIBCPP_DEBUG=0,
+    # and actual debug mode enabled with -D_LIBCPP_DEBUG=1 (and starting with LLVM15
+    # assertions mode will be separate and controlled by -D_LIBCPP_ENABLE_ASSERTIONS=1,
+    # although there will be backwards compatibility).
+    # The actual debug mode that also tracks iterators etc. is supported by libc++ only
+    # if built for it, e.g. Mac libc++ isn't, and there would be undefined references
+    # to debug functions.
     # Moreover std::to_string() has a bug (https://reviews.llvm.org/D125184).
+    # So if debug mode is not available or not working, downgrade at least to assertions.
     AC_MSG_CHECKING([if libc++ has a usable debug mode])
     AC_LANG_PUSH([C++])
     AC_RUN_IFELSE([AC_LANG_SOURCE([[
@@ -7443,13 +7449,15 @@ int main()
 }
 ]])],
     [AC_MSG_RESULT(yes)
-     HAVE_LIBCPP_DEBUG=1
+     LIBCPP_DEBUG=-D_LIBCPP_DEBUG=1
     ],
-    [AC_MSG_RESULT(no)]
+    [AC_MSG_RESULT(no, using only assertions mode)
+     LIBCPP_DEBUG=-D_LIBCPP_DEBUG=0
+    ]
     )
     AC_LANG_POP([C++])
 fi
-AC_SUBST([HAVE_LIBCPP_DEBUG])
+AC_SUBST([LIBCPP_DEBUG])
 
 dnl ===================================================================
 dnl Check for gperf
