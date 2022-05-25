@@ -79,7 +79,7 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< 
             aUTF8QueryURL.append('?');
             aUTF8QueryURL.append(aQueryString);
         }
-        OUString aQueryURL = OStringToOUString(aUTF8QueryURL.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+        OUString aQueryURL = OStringToOUString(aUTF8QueryURL, RTL_TEXTENCODING_UTF8);
         ucbhelper::Content aContent(aQueryURL, aEnvironment, m_xContext);
         css::uno::Reference< XOutputStream > aPipe( css::io::Pipe::create(m_xContext), UNO_QUERY_THROW );
         if (!aContent.openStream(aPipe))

@@ -855,8 +855,9 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         int count = 2;
 
         // Feed the destination text to a stream.
-        OString aStr = OUStringToOString(m_aStates.top().getDestinationText().makeStringAndClear(),
-                                         RTL_TEXTENCODING_ASCII_US);
+        auto& rDestinationTextBuffer = m_aStates.top().getDestinationText();
+        OString aStr = OUStringToOString(rDestinationTextBuffer, RTL_TEXTENCODING_ASCII_US);
+        rDestinationTextBuffer.setLength(0);
         for (int i = 0; i < aStr.getLength(); ++i)
         {
             char ch = aStr[i];
@@ -2551,12 +2552,13 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
         {
             if (m_bFormField)
             {
-                if (&m_aStates.top().getDestinationText()
-                    != m_aStates.top().getCurrentDestinationText())
+                OUStringBuffer* pCurrentDestinationText
+                    = m_aStates.top().getCurrentDestinationText();
+                if (&m_aStates.top().getDestinationText() != pCurrentDestinationText)
                     break; // not for nested group
-                OString aStr = OUStringToOString(
-                    m_aStates.top().getCurrentDestinationText()->makeStringAndClear(),
-                    rState.getCurrentEncoding());
+                OString aStr
+                    = OUStringToOString(*pCurrentDestinationText, rState.getCurrentEncoding());
+                pCurrentDestinationText->setLength(0);
                 // decode hex dump
                 OStringBuffer aBuf;
                 int b = 0;
@@ -2638,8 +2640,13 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 != m_aStates.top().getCurrentDestinationText())
                 break; // not for nested group
             if (m_xDocumentProperties.is())
-                m_xDocumentProperties->setKeywords(comphelper::string::convertCommaSeparated(
-                    m_aStates.top().getCurrentDestinationText()->makeStringAndClear()));
+            {
+                OUStringBuffer* pCurrentDestinationText
+                    = m_aStates.top().getCurrentDestinationText();
+                m_xDocumentProperties->setKeywords(
+                    comphelper::string::convertCommaSeparated(*pCurrentDestinationText));
+                pCurrentDestinationText->setLength(0);
+            }
             break;
         case Destination::COMMENT:
             if (&m_aStates.top().getDestinationText()
@@ -2757,13 +2764,12 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
         break;
         case Destination::ANNOTATIONDATE:
         {
-            if (&m_aStates.top().getDestinationText()
-                != m_aStates.top().getCurrentDestinationText())
+            OUStringBuffer* pCurrentDestinationText = m_aStates.top().getCurrentDestinationText();
+            if (&m_aStates.top().getDestinationText() != pCurrentDestinationText)
                 break; // not for nested group
-            OUString aStr(OStringToOUString(
-                DTTM22OString(
-                    m_aStates.top().getCurrentDestinationText()->makeStringAndClear().toInt32()),
-                rState.getCurrentEncoding()));
+            OUString aStr(OStringToOUString(DTTM22OString(o3tl::toInt32(*pCurrentDestinationText)),
+                                            rState.getCurrentEncoding()));
+            pCurrentDestinationText->setLength(0);
             auto pValue = new RTFValue(aStr);
             RTFSprms aAnnAttributes;
             aAnnAttributes.set(NS_ooxml::LN_CT_TrackChange_date, pValue);
@@ -3620,9 +3626,9 @@ RTFError RTFDocumentImpl::popState()
 
 RTFError RTFDocumentImpl::handleEmbeddedObject()
 {
-    OString aStr
-        = OUStringToOString(m_aStates.top().getCurrentDestinationText()->makeStringAndClear(),
-                            RTL_TEXTENCODING_ASCII_US);
+    OUStringBuffer* pCurrentDestinationText = m_aStates.top().getCurrentDestinationText();
+    OString aStr = OUStringToOString(*pCurrentDestinationText, RTL_TEXTENCODING_ASCII_US);
+    pCurrentDestinationText->setLength(0);
     std::unique_ptr<SvStream> pStream(new SvMemoryStream());
     if (!msfilter::rtfutil::ExtractOLE2FromObjdata(aStr, *pStream))
         return RTFError::HEX_INVALID;
