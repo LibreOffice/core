@@ -307,6 +307,43 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPictureContentControl)
     CPPUNIT_ASSERT(pContentControl->GetPicture());
     CPPUNIT_ASSERT(pTextNode->GetTextAttrForCharAt(1, RES_TXTATR_FLYCNT));
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSelectDateContentControl)
+{
+    // Given a document with a date content control:
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("Date", uno::Any(true));
+    xContentControlProps->setPropertyValue("DateFormat", uno::Any(OUString("YYYY-MM-DD")));
+    xContentControlProps->setPropertyValue("DateLanguage", uno::Any(OUString("en-US")));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When clicking on that content control:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    rFormatContentControl.GetContentControl()->SetSelectedDate(44705);
+    pWrtShell->GotoContentControl(rFormatContentControl);
+
+    // Then make sure that the document text is updated:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2022-05-24
+    // - Actual  : test
+    // i.e. the content control was not updated.
+    CPPUNIT_ASSERT_EQUAL(OUString("2022-05-24"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

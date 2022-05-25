@@ -858,7 +858,7 @@ bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rCont
     bool bRet = false;
     std::shared_ptr<SwContentControl> pContentControl = rContentControl.GetContentControl();
     if (!pContentControl->GetShowingPlaceHolder() && !pContentControl->GetCheckbox()
-        && !pContentControl->GetSelectedListItem())
+        && !pContentControl->GetSelectedListItem() && !pContentControl->GetSelectedDate())
     {
         return bRet;
     }

@@ -178,6 +178,27 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
         LockView(/*bViewLocked=*/false);
         ShowCursor();
     }
+    else if (bRet && pContentControl && pContentControl->GetSelectedDate())
+    {
+        // Date: GotoFormatContentControl() selected the old content.
+        LockView(/*bViewLocked=*/true);
+        OUString aOldState = GetCursorDescr();
+        OUString aNewState = pContentControl->GetDateString();
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, aOldState);
+        aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
+        aRewriter.AddRule(UndoArg3, SwResId(STR_START_QUOTE) + aNewState + SwResId(STR_END_QUOTE));
+        GetIDocumentUndoRedo().StartUndo(SwUndoId::REPLACE, &aRewriter);
+
+        // Update the content.
+        DelLeft();
+        pContentControl->SetSelectedDate(std::nullopt);
+        Insert(aNewState);
+
+        GetIDocumentUndoRedo().EndUndo(SwUndoId::REPLACE, &aRewriter);
+        LockView(/*bViewLocked=*/false);
+        ShowCursor();
+    }
 
     if (bRet && IsSelFrameMode())
     {

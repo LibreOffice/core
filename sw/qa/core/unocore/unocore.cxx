@@ -590,12 +590,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    uno::Reference<beans::XPropertySet> xTextGraphic(
-        xMSF->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
-    xTextGraphic->setPropertyValue("AnchorType",
-                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
-    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
-    xText->insertTextContent(xCursor, xTextContent, false);
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
