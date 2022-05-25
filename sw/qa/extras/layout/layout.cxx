@@ -56,7 +56,7 @@ public:
     void testUserFieldTypeLanguage();
     void testTdf109137();
     void testForcepoint72();
-    //    void testUXTSOREL();
+    void testUXTSOREL();
     void testForcepoint76();
     void testN4LA0OHZ();
     void testTdf118058();
@@ -98,7 +98,7 @@ public:
     CPPUNIT_TEST(testUserFieldTypeLanguage);
     CPPUNIT_TEST(testTdf109137);
     CPPUNIT_TEST(testForcepoint72);
-    //    CPPUNIT_TEST(testUXTSOREL);
+    CPPUNIT_TEST(testUXTSOREL);
     CPPUNIT_TEST(testForcepoint76);
     CPPUNIT_TEST(testN4LA0OHZ);
     CPPUNIT_TEST(testTdf118058);
@@ -2584,7 +2584,7 @@ void SwLayoutWriter::testForcepoint72() { createDoc("forcepoint72-1.rtf"); }
 // FIXME: apparently infinite loop on Mac
 #ifndef MACOSX
 //just care it doesn't crash/assert
-//void SwLayoutWriter::testUXTSOREL() { createDoc("LIBREOFFICE-UXTSOREL.rtf"); }
+void SwLayoutWriter::testUXTSOREL() { createDoc("LIBREOFFICE-UXTSOREL.rtf"); }
 #endif
 
 //just care it doesn't crash/assert
