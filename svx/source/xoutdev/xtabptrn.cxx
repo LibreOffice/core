@@ -37,8 +37,7 @@ XBitmapEntry* XPatternList::GetBitmap(tools::Long nIndex) const
 
 uno::Reference< container::XNameContainer > XPatternList::createInstance()
 {
-    return uno::Reference< container::XNameContainer >(
-        SvxUnoXBitmapTable_createInstance( this ), uno::UNO_QUERY );
+    return SvxUnoXBitmapTable_createInstance( *this );
 }
 
 bool XPatternList::Create()

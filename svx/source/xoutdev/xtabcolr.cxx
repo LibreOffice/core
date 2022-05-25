@@ -54,9 +54,7 @@ XColorEntry* XColorList::GetColor(tools::Long nIndex) const
 
 uno::Reference< container::XNameContainer > XColorList::createInstance()
 {
-    return uno::Reference< container::XNameContainer >(
-        SvxUnoXColorTable_createInstance( this ),
-        uno::UNO_QUERY );
+    return SvxUnoXColorTable_createInstance( *this );
 }
 
 bool XColorList::Create()
