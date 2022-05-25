@@ -362,6 +362,9 @@ bool SwAuthorField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= m_aContent;
         break;
 
+    case FIELD_PROP_TITLE:
+        break;
+
     default:
         assert(false);
     }
@@ -385,6 +388,9 @@ bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
     case FIELD_PROP_PAR1:
         rAny >>= m_aContent;
+        break;
+
+    case FIELD_PROP_TITLE:
         break;
 
     default:
