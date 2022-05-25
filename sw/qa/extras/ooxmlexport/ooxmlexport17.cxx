@@ -645,7 +645,7 @@ DECLARE_OOXMLEXPORT_TEST(testWPGBodyPr, "WPGbodyPr.docx")
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     // Get the WPG shape
-    uno::Reference<drawing::XShapes> xGroup(getShape(2), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     // And the embed WPG
     uno::Reference<drawing::XShapes> xEmbedGroup(xGroup->getByIndex(1), uno::UNO_QUERY);
 
