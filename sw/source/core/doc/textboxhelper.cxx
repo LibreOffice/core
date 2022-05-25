@@ -1317,7 +1317,9 @@ bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape, SdrObject* pObj)
             SAL_WARN("sw.core", "SwTextBoxHelper::changeAnchor(): " << e.Message);
         }
 
-        return doTextBoxPositioning(pShape, pObj) && DoTextBoxZOrderCorrection(pShape, pObj);
+        doTextBoxPositioning(pShape, pObj);
+        DoTextBoxZOrderCorrection(pShape, pObj);
+        return true;
     }
 
     return false;
@@ -1536,7 +1538,11 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const Sdr
     if (pShpObj)
     {
         auto pTextBox = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj);
-        SdrObject* pFrmObj = pTextBox->FindRealSdrObject();
+        SdrObject* pFrmObj = nullptr;
+        if (!pTextBox)
+            return false;
+
+        pFrmObj = pTextBox->FindRealSdrObject();
         if (!pFrmObj)
         {
             // During loading there is no ready SdrObj for z-ordering, so create and cache it here

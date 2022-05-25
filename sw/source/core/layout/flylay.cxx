@@ -814,6 +814,13 @@ void SwPageFrame::AppendFlyToPage( SwFlyFrame *pNew )
             pObj->getSdrPageFromSdrObject()->SetObjectOrdNum( pFly->GetVirtDrawObj()->GetOrdNumDirect(), nNewNum );
         else
             pFly->GetVirtDrawObj()->SetOrdNum( nNewNum );
+
+        if (auto pFormat = pFly->GetFormat())
+        {
+            if (auto pShape = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_FLYFRMFMT))
+                if (auto pShapeObj = pShape->FindRealSdrObject())
+                    SwTextBoxHelper::DoTextBoxZOrderCorrection(pShape, pShapeObj);
+        }
     }
 
     // Don't look further at Flys that sit inside the Content.
