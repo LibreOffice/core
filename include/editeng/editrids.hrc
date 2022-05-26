@@ -230,6 +230,7 @@
 #define RID_SVXITEMS_HYPHEN_MINLEAD             NC_("RID_SVXITEMS_HYPHEN_MINLEAD", "%1 characters at end of line")
 #define RID_SVXITEMS_HYPHEN_MINTRAIL            NC_("RID_SVXITEMS_HYPHEN_MINTRAIL", "%1 characters at beginning of line")
 #define RID_SVXITEMS_HYPHEN_MAX                 NC_("RID_SVXITEMS_HYPHEN_MAX", "%1 hyphens")
+#define RID_SVXITEMS_HYPHEN_MINWORDLEN          NC_("RID_SVXITEMS_HYPHEN_MINWORDLEN", "Words with at least %1 characters")
 #define RID_SVXITEMS_PAGEMODEL_COMPLETE         NC_("RID_SVXITEMS_PAGEMODEL_COMPLETE", "Page Style: ")
 #define RID_SVXITEMS_KERNING_COMPLETE           NC_("RID_SVXITEMS_KERNING_COMPLETE", "Kerning ")
 #define RID_SVXITEMS_KERNING_EXPANDED           NC_("RID_SVXITEMS_KERNING_EXPANDED", "locked ")

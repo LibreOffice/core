@@ -255,10 +255,11 @@ item SvxFontHeight SvxFontHeightItem;
 
 struct SvxHyphenZone
 {
-    BOOL        Hyphen      MID_IS_HYPHEN;
-    INT16       MinLead     MID_HYPHEN_MIN_LEAD;
-    INT16       MinTrail    MID_HYPHEN_MIN_TRAIL;
-    INT16       MaxHyphens  MID_HYPHEN_MAX_HYPHENS;
+    BOOL        Hyphen        MID_IS_HYPHEN;
+    INT16       MinLead       MID_HYPHEN_MIN_LEAD;
+    INT16       MinTrail      MID_HYPHEN_MIN_TRAIL;
+    INT16       MaxHyphens    MID_HYPHEN_MAX_HYPHENS;
+    INT16       MinWordLength MID_HYPHEN_MIN_WORD_LENGTH;
 };
 item SvxHyphenZone SvxHyphenZoneItem;
 

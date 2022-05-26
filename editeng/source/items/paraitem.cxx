@@ -558,7 +558,8 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
     bNoLastWordHyphenation(false),
     nMinLead(0),
     nMinTrail(0),
-    nMaxHyphens(255)
+    nMaxHyphens(255),
+    nMinWordLength(0)
 {
 }
 
@@ -585,6 +586,9 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
         break;
         case MID_HYPHEN_NO_LAST_WORD:
             rVal <<= bNoLastWordHyphenation;
+        break;
+        case MID_HYPHEN_MIN_WORD_LENGTH:
+            rVal <<= static_cast<sal_Int16>(nMinWordLength);
         break;
     }
     return true;
@@ -622,6 +626,9 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_HYPHEN_NO_LAST_WORD:
             bNoLastWordHyphenation = Any2Bool(rVal);
         break;
+        case MID_HYPHEN_MIN_WORD_LENGTH:
+            nMinWordLength = static_cast<sal_uInt8>(nNewVal);
+        break;
     }
     return true;
 }
@@ -638,7 +645,8 @@ bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
             && rItem.bPageEnd == bPageEnd
             && rItem.nMinLead == nMinLead
             && rItem.nMinTrail == nMinTrail
-            && rItem.nMaxHyphens == nMaxHyphens );
+            && rItem.nMaxHyphens == nMaxHyphens
+            && rItem.nMinWordLength == nMinWordLength );
 }
 
 SvxHyphenZoneItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
@@ -671,7 +679,8 @@ bool SvxHyphenZoneItem::GetPresentation
             rText += EditResId(pId) + cpDelimTmp +
                     OUString::number( nMinLead ) + cpDelimTmp +
                     OUString::number( nMinTrail ) + cpDelimTmp +
-                    OUString::number( nMaxHyphens );
+                    OUString::number( nMaxHyphens ) + cpDelimTmp +
+                    OUString::number( nMinWordLength );
             return true;
         }
         case SfxItemPresentation::Complete:
@@ -691,7 +700,9 @@ bool SvxHyphenZoneItem::GetPresentation
                     cpDelimTmp +
                     EditResId(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail)) +
                     cpDelimTmp +
-                    EditResId(RID_SVXITEMS_HYPHEN_MAX).replaceAll("%1", OUString::number(nMaxHyphens));
+                    EditResId(RID_SVXITEMS_HYPHEN_MAX).replaceAll("%1", OUString::number(nMaxHyphens)) +
+                    cpDelimTmp +
+                    EditResId(RID_SVXITEMS_HYPHEN_MINWORDLEN).replaceAll("%1", OUString::number(nMinWordLength));
             return true;
         }
         default: ;//prevent warning

@@ -39,6 +39,7 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem final : public SfxPoolItem
     sal_uInt8 nMinLead;
     sal_uInt8 nMinTrail;
     sal_uInt8 nMaxHyphens;
+    sal_uInt8 nMinWordLength;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -77,6 +78,9 @@ public:
 
     sal_uInt8 &GetMaxHyphens() { return nMaxHyphens; }
     sal_uInt8 GetMaxHyphens() const { return nMaxHyphens; }
+
+    sal_uInt8 &GetMinWordLength() { return nMinWordLength; }
+    sal_uInt8 GetMinWordLength() const { return nMinWordLength; }
 };
 
 #endif

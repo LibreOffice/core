@@ -659,6 +659,7 @@ void SwDocShell::SubInitNew()
         SvxHyphenZoneItem aHyp( m_xDoc->GetDefault(RES_PARATR_HYPHENZONE)  );
         aHyp.GetMinLead()   = static_cast< sal_uInt8 >(aLinguOpt.nHyphMinLeading);
         aHyp.GetMinTrail()  = static_cast< sal_uInt8 >(aLinguOpt.nHyphMinTrailing);
+        aHyp.GetMinWordLength()  = static_cast< sal_uInt8 >(aLinguOpt.nHyphMinWordLength);
 
         aDfltSet.Put( aHyp );
 
