@@ -41,6 +41,7 @@ inline constexpr OUStringLiteral UPN_HYPH_MIN_LEADING                = u"HyphMin
 inline constexpr OUStringLiteral UPN_HYPH_MIN_TRAILING               = u"HyphMinTrailing";
 inline constexpr OUStringLiteral UPN_HYPH_MIN_WORD_LENGTH            = u"HyphMinWordLength";
 inline constexpr OUStringLiteral UPN_HYPH_NO_CAPS                    = u"HyphNoCaps";
+inline constexpr OUStringLiteral UPN_HYPH_NO_LAST_WORD               = u"HyphNoLastWord";
 
 // UNO property names for Lingu
 // (those not covered by the SpellChecker and Hyphenator
@@ -107,6 +108,7 @@ inline constexpr OUStringLiteral UPN_IS_GRAMMAR_INTERACTIVE          = u"IsInter
 #define UPH_IS_GRAMMAR_AUTO                 34
 #define UPH_IS_GRAMMAR_INTERACTIVE          35
 #define UPH_HYPH_NO_CAPS                    36
+#define UPH_HYPH_NO_LAST_WORD               37
 
 #ifdef __GNUC__
 #pragma GCC diagnostic pop

@@ -31,6 +31,7 @@
 #include "porfld.hxx"
 #include <paratr.hxx>
 #include <doc.hxx>
+#include <unotools/linguprops.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -195,7 +196,29 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     // considering an additional "-" for hyphenation
     if( bHyph )
     {
+        // search start of the last word, if needed
+        sal_Int32 nLastWord = rInf.GetText().getLength() - 1;
+        bool bHyphenationNoLastWord;
+        const css::beans::PropertyValues & rHyphValues = rInf.GetHyphValues();
+        assert( rHyphValues.getLength() > 3 && rHyphValues[3].Name == UPN_HYPH_NO_LAST_WORD );
+        if ( rHyphValues[3].Value >>= bHyphenationNoLastWord )
+        {
+            bool bCutBlank = false;
+            for (; sal_Int32(rInf.GetIdx()) <= nLastWord; --nLastWord )
+            {
+                sal_Unicode cChar = rInf.GetText()[nLastWord];
+                if ( cChar != CH_BLANK && cChar != CH_FULL_BLANK && cChar != CH_SIX_PER_EM )
+                    bCutBlank = true;
+                else if ( bCutBlank )
+                    break;
+            }
+        }
+
         m_nCutPos = rInf.GetTextBreak( nLineWidth, nMaxLen, nMaxComp, nHyphPos, rInf.GetCachedVclData().get() );
+
+        // don't hyphenate last word of the paragraph
+        if ( bHyphenationNoLastWord && sal_Int32(m_nCutPos) > nLastWord )
+            m_nCutPos = TextFrameIndex(nLastWord);
 
         if ( !nHyphPos && rInf.GetIdx() )
             nHyphPos = rInf.GetIdx() - TextFrameIndex(1);
