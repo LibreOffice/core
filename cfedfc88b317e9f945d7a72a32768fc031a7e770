@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b60c16e8_10e77560",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-26T10:53:13Z",
+      "side": 1,
+      "message": "I do confirm it fixes the crash\nTest added in https://gerrit.libreoffice.org/c/core/+/135016",
+      "revId": "cfedfc88b317e9f945d7a72a32768fc031a7e770",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
