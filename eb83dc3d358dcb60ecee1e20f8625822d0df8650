@@ -34,6 +34,24 @@
       "parentUuid": "17769286_5eef1529",
       "revId": "eb83dc3d358dcb60ecee1e20f8625822d0df8650",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2536e47_cc61df01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-26T12:43:42Z",
+      "side": 1,
+      "message": "Ok - let\u0027s give it some testing in 7.3.5 to be and master... I honestly don\u0027t know, if the current 7.3 has the behavior described in the bug for all users; from my testing it\u0027s simply very unstable. I still have no idea, what the exact problem is, I just have a solution for the bug. From my POV the bibisected patches are fine and everything looks like a timing or multi-threading problem, which I was unable to debug ;-(",
+      "parentUuid": "b88163ab_6b1ee300",
+      "revId": "eb83dc3d358dcb60ecee1e20f8625822d0df8650",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
