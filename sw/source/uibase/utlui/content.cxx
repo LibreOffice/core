@@ -651,15 +651,13 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                         SwPosition bPos(bTextNode, b->GetStart());
                         // use anchor position for entries that are located in flys
                         if (nEndOfExtrasIndex >= aTextNode.GetIndex())
-                        {
                             if (auto pFlyFormat = aTextNode.GetFlyFormat())
-                                aPos = *pFlyFormat->GetAnchor().GetContentAnchor();
-                        }
+                                if (const SwPosition* pPos = pFlyFormat->GetAnchor().GetContentAnchor())
+                                    aPos = *pPos;
                         if (nEndOfExtrasIndex >= bTextNode.GetIndex())
-                        {
                             if (auto pFlyFormat = bTextNode.GetFlyFormat())
-                                bPos = *pFlyFormat->GetAnchor().GetContentAnchor();
-                        }
+                                if (const SwPosition* pPos = pFlyFormat->GetAnchor().GetContentAnchor())
+                                    bPos = *pPos;
                         return aPos < bPos;});
                 }
             }
@@ -856,15 +854,13 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     SwPosition bPos(const_cast<SwTextNode&>(bTextNode), b->rINetAttr.GetStart());
                     // use anchor position for entries that are located in flys
                     if (nEndOfExtrasIndex >= aTextNode.GetIndex())
-                    {
                         if (auto pFlyFormat = aTextNode.GetFlyFormat())
-                            aPos = *pFlyFormat->GetAnchor().GetContentAnchor();
-                    }
+                            if (const SwPosition* pPos = pFlyFormat->GetAnchor().GetContentAnchor())
+                                aPos = *pPos;
                     if (nEndOfExtrasIndex >= bTextNode.GetIndex())
-                    {
                         if (auto pFlyFormat = bTextNode.GetFlyFormat())
-                            bPos = *pFlyFormat->GetAnchor().GetContentAnchor();
-                    }
+                            if (const SwPosition* pPos = pFlyFormat->GetAnchor().GetContentAnchor())
+                                bPos = *pPos;
                     return aPos < bPos;});
             }
 
