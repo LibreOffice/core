@@ -71,7 +71,10 @@ $(if $(GNUPARALLEL), \
 , \
     $(call gb_Helper_print_on_error, \
     cd $(dir $@) \
-    && PATH="$(SRCDIR)/solenv/bin:$$PATH" \
+    $(if $(filter WNT,$(OS)), \
+       && PATH="$(shell cygpath -u $(SRCDIR)/solenv/bin):$$PATH" \
+    , \
+       && PATH="$(SRCDIR)/solenv/bin:$$PATH") \
     $(foreach curpkg,$(1),\
     && call_installer.sh $(if $(verbose),-verbose,-quiet) $(curpkg) \
     ),$@.log))
