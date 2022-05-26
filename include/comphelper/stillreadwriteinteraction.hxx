@@ -43,7 +43,7 @@ private:
 
 public:
     StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
-                              const css::uno::Reference< css::task::XInteractionHandler >& xAuxiliaryHandler);
+                              css::uno::Reference< css::task::XInteractionHandler > xAuxiliaryHandler);
 
     void resetInterceptions();
     void resetErrorStates();

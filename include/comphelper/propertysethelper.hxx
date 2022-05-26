@@ -62,7 +62,7 @@ protected:
     virtual css::uno::Any _getPropertyDefault( const comphelper::PropertyMapEntry* pEntry );
 
 public:
-    PropertySetHelper( rtl::Reference<comphelper::PropertySetInfo> const & xInfo ) noexcept;
+    PropertySetHelper( rtl::Reference<comphelper::PropertySetInfo> xInfo ) noexcept;
     virtual ~PropertySetHelper() noexcept;
 
     // XPropertySet

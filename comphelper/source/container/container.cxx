@@ -22,6 +22,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <comphelper/container.hxx>
 #include <o3tl/any.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 
@@ -29,8 +30,8 @@ namespace comphelper
 {
 
 
-IndexAccessIterator::IndexAccessIterator(css::uno::Reference< css::uno::XInterface> const & xStartingPoint)
-    :m_xStartingPoint(xStartingPoint)
+IndexAccessIterator::IndexAccessIterator(css::uno::Reference< css::uno::XInterface> xStartingPoint)
+    :m_xStartingPoint(std::move(xStartingPoint))
 {
     OSL_ENSURE(m_xStartingPoint.is(), "IndexAccessIterator::IndexAccessIterator : no starting point !");
 }

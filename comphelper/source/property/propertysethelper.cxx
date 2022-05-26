@@ -23,6 +23,7 @@
 #include <rtl/ref.hxx>
 
 #include <memory>
+#include <utility>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
@@ -41,8 +42,8 @@ static PropertyMapEntry const * find( const rtl::Reference<PropertySetInfo>& mxI
 }
 
 
-PropertySetHelper::PropertySetHelper( rtl::Reference<comphelper::PropertySetInfo> const & xInfo ) noexcept
-    : mxInfo(xInfo)
+PropertySetHelper::PropertySetHelper( rtl::Reference<comphelper::PropertySetInfo> xInfo ) noexcept
+    : mxInfo(std::move(xInfo))
 {
 }
 

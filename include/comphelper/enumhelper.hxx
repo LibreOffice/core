@@ -48,8 +48,8 @@ class COMPHELPER_DLLPUBLIC OEnumerationByName final :
     std::mutex m_aLock;
 
 public:
-    OEnumerationByName(const css::uno::Reference< css::container::XNameAccess >& _rxAccess);
-    OEnumerationByName(const css::uno::Reference< css::container::XNameAccess >& _rxAccess,
+    OEnumerationByName(const css::uno::Reference< css::container::XNameAccess > _xAccess);
+    OEnumerationByName(const css::uno::Reference< css::container::XNameAccess > _xAccess,
                        std::vector<OUString>             _aNames  );
     virtual ~OEnumerationByName() override;
 
@@ -78,7 +78,7 @@ class COMPHELPER_DLLPUBLIC OEnumerationByIndex final :
     std::mutex m_aLock;
 
 public:
-    OEnumerationByIndex(const css::uno::Reference< css::container::XIndexAccess >& _rxAccess);
+    OEnumerationByIndex(css::uno::Reference< css::container::XIndexAccess > _xAccess);
     virtual ~OEnumerationByIndex() override;
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override;

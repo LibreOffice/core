@@ -49,6 +49,7 @@
 
 #include <deque>
 #include <algorithm>
+#include <utility>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -140,8 +141,8 @@ class AttacherAllListener_Impl : public WeakImplHelper< XAllListener >
     /// @throws CannotConvertException
     void convertToEventReturn( Any & rRet, const Type & rRetType );
 public:
-    AttacherAllListener_Impl( ImplEventAttacherManager* pManager_, const OUString &rScriptType_,
-                                const OUString & rScriptCode_ );
+    AttacherAllListener_Impl( ImplEventAttacherManager* pManager_, OUString aScriptType_,
+                                OUString aScriptCode_ );
 
     // Methods of XAllListener
     virtual void SAL_CALL firing(const AllEventObject& Event) override;
@@ -156,12 +157,12 @@ public:
 AttacherAllListener_Impl::AttacherAllListener_Impl
 (
     ImplEventAttacherManager*   pManager_,
-    const OUString &             rScriptType_,
-    const OUString &             rScriptCode_
+    OUString              aScriptType_,
+    OUString              aScriptCode_
 )
     : mxManager( pManager_ )
-    , aScriptType( rScriptType_ )
-    , aScriptCode( rScriptCode_ )
+    , aScriptType(std::move( aScriptType_ ))
+    , aScriptCode(std::move( aScriptCode_ ))
 {
 }
 

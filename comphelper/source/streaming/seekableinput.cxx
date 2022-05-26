@@ -26,6 +26,7 @@
 
 
 #include <comphelper/seekableinput.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -57,10 +58,10 @@ static void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& xI
 
 
 OSeekableInputWrapper::OSeekableInputWrapper(
-            const uno::Reference< io::XInputStream >& xInStream,
-            const uno::Reference< uno::XComponentContext >& rxContext )
-: m_xContext( rxContext )
-, m_xOriginalStream( xInStream )
+            uno::Reference< io::XInputStream > xInStream,
+            uno::Reference< uno::XComponentContext > xContext )
+: m_xContext(std::move( xContext ))
+, m_xOriginalStream(std::move( xInStream ))
 {
     if ( !m_xContext.is() )
         throw uno::RuntimeException();

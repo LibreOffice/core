@@ -15,6 +15,7 @@
 #include <atomic>
 #include <map>
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include <osl/process.h>
@@ -84,9 +85,9 @@ protected:
     const int m_nPid;
     const OUString m_sArgs;
 
-    TraceEvent(const OUString& sArgs)
+    TraceEvent(OUString sArgs)
         : m_nPid(s_bRecording ? getPid() : 1)
-        , m_sArgs(sArgs)
+        , m_sArgs(std::move(sArgs))
     {
     }
 

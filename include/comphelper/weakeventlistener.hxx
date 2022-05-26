@@ -27,6 +27,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <utility>
 
 namespace com::sun::star::uno { class XWeak; }
 
@@ -73,10 +74,10 @@ namespace comphelper
     protected:
         OWeakListenerAdapterBase(
             const css::uno::Reference< css::uno::XWeak >& _rxListener,
-            const css::uno::Reference< css::uno::XInterface >& _rxBroadcaster
+            css::uno::Reference< css::uno::XInterface > _xBroadcaster
         )
             :m_aListener    (  _rxListener )
-            ,m_xBroadcaster ( _rxBroadcaster )
+            ,m_xBroadcaster (std::move( _xBroadcaster ))
         {
         }
 

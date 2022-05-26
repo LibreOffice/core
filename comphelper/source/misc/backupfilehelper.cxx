@@ -19,6 +19,7 @@
 #include <deque>
 #include <memory>
 #include <string_view>
+#include <utility>
 #include <vector>
 #include <zlib.h>
 
@@ -221,8 +222,8 @@ namespace
         {
         }
 
-        ExtensionInfoEntry(const OString& rName, bool bEnabled)
-        :   maName(rName),
+        ExtensionInfoEntry(OString aName, bool bEnabled)
+        :   maName(std::move(aName)),
             maRepository(USER),
             mbEnabled(bEnabled)
         {
@@ -995,13 +996,13 @@ namespace
         PackedFileEntry(
             sal_uInt32 nFullFileSize,
             sal_uInt32 nCrc32,
-            FileSharedPtr const & rFile,
+            FileSharedPtr xFile,
             bool bDoCompress)
         :   mnFullFileSize(nFullFileSize),
             mnPackFileSize(nFullFileSize),
             mnOffset(0),
             mnCrc32(nCrc32),
-            maFile(rFile),
+            maFile(std::move(xFile)),
             mbDoCompress(bDoCompress)
         {
         }

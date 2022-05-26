@@ -28,6 +28,7 @@
 #include <salhelper/thread.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <memory>
+#include <utility>
 
 namespace comphelper
 {
@@ -207,8 +208,8 @@ namespace comphelper
         EventObjectType const m_aEvent;
 
     public:
-        EventHolder( const EventObjectType& _rEvent )
-            :m_aEvent( _rEvent )
+        EventHolder( EventObjectType _aEvent )
+            :m_aEvent(std::move( _aEvent ))
         {
         }
 

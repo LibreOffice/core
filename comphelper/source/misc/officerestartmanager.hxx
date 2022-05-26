@@ -26,6 +26,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 namespace comphelper
 {
@@ -41,8 +42,8 @@ class OOfficeRestartManager : public ::cppu::WeakImplHelper< css::task::XRestart
     bool m_bRestartRequested;
 
 public:
-    explicit OOfficeRestartManager( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : m_xContext( xContext )
+    explicit OOfficeRestartManager( css::uno::Reference< css::uno::XComponentContext > xContext )
+    : m_xContext(std::move( xContext ))
     , m_bOfficeInitialized( false )
     , m_bRestartRequested( false )
     {}

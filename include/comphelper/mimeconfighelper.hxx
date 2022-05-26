@@ -50,7 +50,7 @@ class COMPHELPER_DLLPUBLIC MimeConfigurationHelper
 
 public:
 
-    MimeConfigurationHelper( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    MimeConfigurationHelper( css::uno::Reference< css::uno::XComponentContext > xContext );
 
 
     static OUString GetStringClassIDRepresentation( const css::uno::Sequence< sal_Int8 >& aClassID );
