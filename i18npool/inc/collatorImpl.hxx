@@ -24,6 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <utility>
 #include <vector>
 #include <optional>
 
@@ -79,8 +80,8 @@ private:
         OUString algorithm;
         OUString service;
         css::uno::Reference < XCollator > xC;
-        lookupTableItem(const css::lang::Locale& rLocale, const OUString& _algorithm, const OUString& _service,
-                        css::uno::Reference < XCollator > const & _xC) : aLocale(rLocale), algorithm(_algorithm), service(_service), xC(_xC) {}
+        lookupTableItem(css::lang::Locale _aLocale, OUString _algorithm, OUString _service,
+                        css::uno::Reference < XCollator > _xC) : aLocale(std::move(_aLocale)), algorithm(std::move(_algorithm)), service(std::move(_service)), xC(std::move(_xC)) {}
         bool equals(const css::lang::Locale& rLocale, std::u16string_view _algorithm) {
         return aLocale.Language == rLocale.Language &&
             aLocale.Country == rLocale.Country &&
