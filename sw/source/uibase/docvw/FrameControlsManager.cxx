@@ -125,7 +125,7 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrame* pPageFrame 
     else
     {
         SwFrameControlPtr pNewControl = std::make_shared<SwFrameControl>(
-                VclPtr<SwPageBreakWin>::Create( m_pEditWin, pPageFrame ).get() );
+                VclPtr<SwBreakDashedLine>::Create( m_pEditWin, pPageFrame ).get() );
         const SwViewOption* pViewOpt = m_pEditWin->GetView().GetWrtShell().GetViewOptions();
         pNewControl->SetReadonly( pViewOpt->IsReadonly() );
 
@@ -134,7 +134,7 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrame* pPageFrame 
         pControl.swap( pNewControl );
     }
 
-    SwPageBreakWin* pWin = static_cast<SwPageBreakWin *>(pControl->GetWindow());
+    SwBreakDashedLine* pWin = static_cast<SwBreakDashedLine*>(pControl->GetWindow());
     assert (pWin != nullptr);
     pWin->UpdatePosition();
     if (!pWin->IsVisible())
@@ -213,15 +213,20 @@ void SwFrameControlsManager::SetOutlineContentVisibilityButton(const SwContentFr
         pWin->ShowAll(true);
 }
 
+const SwPageFrame* SwFrameMenuButtonBase::GetPageFrame(const SwFrame* pFrame)
+{
+    if (pFrame->IsPageFrame())
+        return static_cast<const SwPageFrame*>(pFrame);
+
+    if (pFrame->IsFlyFrame())
+        return static_cast<const SwFlyFrame*>(pFrame)->GetAnchorFrame()->FindPageFrame();
+
+    return pFrame->FindPageFrame();
+}
+
 const SwPageFrame* SwFrameMenuButtonBase::GetPageFrame() const
 {
-    if (m_pFrame->IsPageFrame())
-        return static_cast<const SwPageFrame*>( m_pFrame );
-
-    if (m_pFrame->IsFlyFrame())
-        return static_cast<const SwFlyFrame*>(m_pFrame)->GetAnchorFrame()->FindPageFrame();
-
-    return m_pFrame->FindPageFrame();
+    return SwFrameMenuButtonBase::GetPageFrame(m_pFrame);
 }
 
 void SwFrameMenuButtonBase::dispose()
@@ -232,11 +237,16 @@ void SwFrameMenuButtonBase::dispose()
     InterimItemWindow::dispose();
 }
 
-void SwFrameMenuButtonBase::SetVirDevFont()
+void SwFrameMenuButtonBase::SetVirDevFont(OutputDevice& rVirDev)
 {
     // Get the font and configure it
     vcl::Font aFont = Application::GetSettings().GetStyleSettings().GetToolFont();
-    weld::SetPointFont(*m_xVirDev, aFont);
+    weld::SetPointFont(rVirDev, aFont);
+}
+
+void SwFrameMenuButtonBase::SetVirDevFont()
+{
+    SetVirDevFont(*m_xVirDev);
 }
 
 SwFrameControl::SwFrameControl( const VclPtr<vcl::Window> &pWindow )
