@@ -219,7 +219,7 @@ OUString CommentUIObject::get_name() const
     return "CommentUIObject";
 }
 
-PageBreakUIObject::PageBreakUIObject(const VclPtr<SwPageBreakWin>& xPageBreakUIObject):
+PageBreakUIObject::PageBreakUIObject(const VclPtr<SwBreakDashedLine>& xPageBreakUIObject):
     WindowUIObject(xPageBreakUIObject),
     mxPageBreakUIObject(xPageBreakUIObject)
 {
@@ -236,7 +236,7 @@ void PageBreakUIObject::execute(const OUString& rAction,
 
 std::unique_ptr<UIObject> PageBreakUIObject::create(vcl::Window* pWindow)
 {
-    SwPageBreakWin* pPageBreakWin = dynamic_cast<SwPageBreakWin*>(pWindow);
+    SwBreakDashedLine* pPageBreakWin = dynamic_cast<SwBreakDashedLine*>(pWindow);
     assert(pPageBreakWin);
     return std::unique_ptr<UIObject>(new PageBreakUIObject(pPageBreakWin));
 }
