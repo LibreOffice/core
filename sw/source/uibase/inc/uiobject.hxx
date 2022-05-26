@@ -65,7 +65,7 @@ class PageBreakUIObject final : public WindowUIObject
 {
 public:
 
-    PageBreakUIObject(const VclPtr<SwPageBreakWin>& xEditWin);
+    PageBreakUIObject(const VclPtr<SwBreakDashedLine>& xEditWin);
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
@@ -76,7 +76,7 @@ private:
 
     virtual OUString get_name() const override;
 
-    VclPtr<SwPageBreakWin> mxPageBreakUIObject;
+    VclPtr<SwBreakDashedLine> mxPageBreakUIObject;
 
 };
 
