@@ -31,7 +31,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     // uses non-conventional source layout, so need to reconfigure accordingly
     // ToDo move to conventional layout, so stuff can be stripped down.
     sourceSets {
@@ -48,7 +48,7 @@ android {
     }
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 31
+        targetSdkVersion 32
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
