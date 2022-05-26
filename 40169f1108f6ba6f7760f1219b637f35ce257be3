@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f151fba7_a0d66dc5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-26T12:18:33Z",
+      "side": 1,
+      "message": "I\u0027m sorry for creating a confusion in the bug. Please see my updates there, hopefully now I got it correctly. Again: sorry that I wasted your effort here.",
+      "revId": "40169f1108f6ba6f7760f1219b637f35ce257be3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
