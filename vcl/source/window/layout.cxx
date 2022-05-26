@@ -14,6 +14,7 @@
 #include <config_features.h>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <comphelper/base64.hxx>
+#include <comphelper/lok.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/string_view.hxx>
@@ -283,10 +284,14 @@ void VclBox::setAllocation(const Size &rAllocation)
 // Though the dialogs are rendered in javascript for LOK Android some widgets like weld::DrawingArea
 // is sent as bitmap but it is rendered from only the visible part
 // when it gets negative, it shrinks instead of expands and it becomes invisible
+
         if (nExtraSpace < 0)
         {
-            SAL_WARN("vcl.layout", "nExtraSpace went negative, setting to zero");
-            nExtraSpace = 0;
+            SAL_WARN("vcl.layout", "nExtraSpace went negative for VclBox: " << GetHelpId());
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                nExtraSpace = 0;
+            }
         }
     }
 
