@@ -40,6 +40,7 @@ static std::size_t ParseMathMLUnsignedNumber(std::u16string_view rStr, Fraction&
         if (validNomDen
             && (o3tl::checked_multiply(nom, sal_Int64(10), nom)
                 || o3tl::checked_add(nom, sal_Int64(cD - u'0'), nom)
+                || nom >= std::numeric_limits<sal_Int32>::max()
                 || (nDecimalPoint != std::u16string_view::npos
                     && o3tl::checked_multiply(den, sal_Int64(10), den))))
         {
