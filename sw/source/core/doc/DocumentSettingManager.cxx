@@ -106,8 +106,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbFootnoteInColumnToPageEnd(false),
     mnImagePreferredDPI(0),
     mbAutoFirstLineIndentDisregardLineSpace(true),
-    mbWrapAsCharFlysLikeInOOXML(false)
-
+    mbWrapAsCharFlysLikeInOOXML(false),
+    mbNoNumberingShowFollowBy(false)
     // COMPATIBILITY FLAGS END
 {
     // COMPATIBILITY FLAGS START
@@ -246,6 +246,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE:
             return mbAutoFirstLineIndentDisregardLineSpace;
         case DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML: return mbWrapAsCharFlysLikeInOOXML;
+        case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY: return mbNoNumberingShowFollowBy;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -426,6 +427,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML:
             mbWrapAsCharFlysLikeInOOXML = value;
+            break;
+
+        case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY:
+            mbNoNumberingShowFollowBy = value;
             break;
 
         // COMPATIBILITY FLAGS END
