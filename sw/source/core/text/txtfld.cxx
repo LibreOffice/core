@@ -731,10 +731,10 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
             else
             {
                 OUString aText( pTextNd->GetNumString(true, MAXLEVEL, m_pFrame->getRootFrame()) );
-                if ( !aText.isEmpty() )
-                {
+
+                if (pTextNd->getIDocumentSettingAccess()->get(DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY)
+                    || !aText.isEmpty())
                     aText += pTextNd->GetLabelFollowedBy();
-                }
 
                 // Not just an optimization ...
                 // A number portion without text will be assigned a width of 0.
