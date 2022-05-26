@@ -163,6 +163,9 @@ protected:
     css::uno::Reference<css::drawing::XShape> m_xParent;
     bool                                      mbIsBackgroundDark;
 
+    /// True when exporting presentation placeholder shape.
+    bool mbPlaceholder;
+
     bool GetProperty( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& aName );
     bool GetPropertyAndState( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                   const css::uno::Reference< css::beans::XPropertyState >& rXPropState,
@@ -210,7 +213,7 @@ protected:
 
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr )
-        : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS( pFS ), mpFB( pFB ), mbIsBackgroundDark( false ) {}
+        : meDocumentType( eDocumentType ), mpTextExport(pTextExport), mpFS( pFS ), mpFB( pFB ), mbIsBackgroundDark( false ), mbPlaceholder(false) {}
     void SetFS( ::sax_fastparser::FSHelperPtr pFS ) { mpFS = pFS; }
     const ::sax_fastparser::FSHelperPtr& GetFS() const { return mpFS; }
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }

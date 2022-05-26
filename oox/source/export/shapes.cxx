@@ -1949,6 +1949,9 @@ static const NameToConvertMapType& lcl_GetConverters()
 
 ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
 {
+    if (!xShape)
+        throw lang::IllegalArgumentException();
+
     OUString sShapeType = xShape->getShapeType();
     SAL_INFO("oox.shape", "write shape: " << sShapeType);
     NameToConvertMapType::const_iterator aConverter
@@ -1958,6 +1961,16 @@ ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
         SAL_INFO("oox.shape", "unknown shape");
         return WriteUnknownShape( xShape );
     }
+
+    if (GetDocumentType() == DOCUMENT_PPTX)
+    {
+        Reference< XPropertySet > xShapeProperties(xShape, UNO_QUERY);
+        if (xShapeProperties && xShapeProperties->getPropertySetInfo()
+            && xShapeProperties->getPropertySetInfo()->hasPropertyByName("IsPresentationObject")
+            && xShapeProperties->getPropertyValue("IsPresentationObject").hasValue())
+            mbPlaceholder = xShapeProperties->getPropertyValue("IsPresentationObject").get<bool>();
+    }
+
     (this->*(aConverter->second))( xShape );
 
     return *this;
