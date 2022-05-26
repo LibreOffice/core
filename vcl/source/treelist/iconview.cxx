@@ -41,12 +41,10 @@ IconView::IconView(vcl::Window* pParent, WinBits nBits)
 
 void IconView::Resize()
 {
-    Size aBoxSize = Control::GetParent()->GetOutputSizePixel();
+    Size aBoxSize = Control::GetOutputSizePixel();
 
     if (!aBoxSize.Width())
         return;
-
-    SetSizePixel(aBoxSize);
 
     nColumns = aBoxSize.Width() / nEntryWidth;
 
