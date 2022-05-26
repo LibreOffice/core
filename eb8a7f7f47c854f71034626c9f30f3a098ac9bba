@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "225e6465_73acd64a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-05-26T09:16:24Z",
+      "side": 1,
+      "message": "Stephan, fun fact: your initial c8d4ae2a commit was actually fixing this tdf#149200 :-)",
+      "revId": "eb8a7f7f47c854f71034626c9f30f3a098ac9bba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
