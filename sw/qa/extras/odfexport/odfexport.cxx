@@ -3038,6 +3038,13 @@ DECLARE_ODFEXPORT_TEST(tdf121658, "tdf121658.odt")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle1, "ParaHyphenationNoCaps"));
 }
 
+DECLARE_ODFEXPORT_TEST(tdf149248, "tdf149248.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getParagraph(2), "ParaHyphenationNoLastWord"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getParagraph(4), "ParaHyphenationNoLastWord"));
+}
+
 DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());

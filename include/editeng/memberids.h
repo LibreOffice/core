@@ -47,6 +47,7 @@
 #define MID_HYPHEN_MIN_TRAIL    2
 #define MID_HYPHEN_MAX_HYPHENS  3
 #define MID_HYPHEN_NO_CAPS      4
+#define MID_HYPHEN_NO_LAST_WORD 5
 
 // SvxBoxInfoItem
 #define MID_HORIZONTAL          1

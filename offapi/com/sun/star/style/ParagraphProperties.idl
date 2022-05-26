@@ -416,6 +416,13 @@ published service ParagraphProperties
          */
         [optional, property] boolean ParaHyphenationNoCaps;
 
+        /** Specifies whether last word of paragraph will be hyphenated.
+            Setting to `true` will disable hyphenation of last word for this paragraph.
+
+            @since LibreOffice 7.4
+         */
+        [optional, property] boolean ParaHyphenationNoLastWord;
+
 };
 
 
