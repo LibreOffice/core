@@ -20,8 +20,11 @@
 #include <QtGui/QActionGroup>
 #endif
 
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QStyle>
 
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
@@ -33,6 +36,18 @@
 #include <vcl/toolkit/floatwin.hxx>
 #include <window.h>
 
+// LO SalMenuButtonItem::mnId is sal_uInt16, so we go with -2, as -1 has a special meaning as automatic id
+constexpr int CLOSE_BUTTON_ID = -2;
+const QString gButtonGroupKey("QtMenu::ButtonGroup");
+
+static inline void lcl_force_menubar_layout_update(QMenuBar& rMenuBar)
+{
+    // just exists as a function to not comment it everywhere: forces reposition of the
+    // corner widget after its layout changes, which will otherwise just happen on resize.
+    // it unfortunatly has additional side effects; see QtMenu::GetMenuBarButtonRectPixel.
+    rMenuBar.adjustSize();
+}
+
 QtMenu::QtMenu(bool bMenuBar)
     : mpVCLMenu(nullptr)
     , mpParentSalMenu(nullptr)
@@ -40,6 +55,7 @@ QtMenu::QtMenu(bool bMenuBar)
     , mbMenuBar(bMenuBar)
     , mpQMenuBar(nullptr)
     , mpQMenu(nullptr)
+    , m_pButtonGroup(nullptr)
 {
 }
 
@@ -430,9 +446,19 @@ void QtMenu::SetFrame(const SalFrame* pFrame)
     mpQMenuBar = new QMenuBar();
     pMainWindow->setMenuBar(mpQMenuBar);
 
-    QPushButton* pButton = static_cast<QPushButton*>(mpQMenuBar->cornerWidget(Qt::TopRightCorner));
-    if (pButton)
-        connect(pButton, &QPushButton::clicked, this, &QtMenu::slotCloseDocument);
+    QWidget* pWidget = mpQMenuBar->cornerWidget(Qt::TopRightCorner);
+    if (pWidget)
+    {
+        m_pButtonGroup = pWidget->findChild<QButtonGroup*>(gButtonGroupKey);
+        assert(m_pButtonGroup);
+        connect(m_pButtonGroup, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked), this,
+                &QtMenu::slotMenuBarButtonClicked);
+        QPushButton* pButton = static_cast<QPushButton*>(m_pButtonGroup->button(CLOSE_BUTTON_ID));
+        if (pButton)
+            connect(pButton, &QPushButton::clicked, this, &QtMenu::slotCloseDocument);
+    }
+    else
+        m_pButtonGroup = nullptr;
     mpQMenu = nullptr;
 
     DoFullMenuUpdate(mpVCLMenu);
@@ -556,7 +582,7 @@ QtMenu* QtMenu::GetTopLevel()
     return pMenu;
 }
 
-bool QtMenu::validateQMenuBar()
+bool QtMenu::validateQMenuBar() const
 {
     if (!mpQMenuBar)
         return false;
@@ -565,14 +591,21 @@ bool QtMenu::validateQMenuBar()
     assert(pMainWindow);
     const bool bValid = mpQMenuBar == pMainWindow->menuBar();
     if (!bValid)
-        mpQMenuBar = nullptr;
+    {
+        QtMenu* thisPtr = const_cast<QtMenu*>(this);
+        thisPtr->mpQMenuBar = nullptr;
+    }
     return bValid;
 }
 
 void QtMenu::ShowMenuBar(bool bVisible)
 {
-    if (validateQMenuBar())
-        mpQMenuBar->setVisible(bVisible);
+    if (!validateQMenuBar())
+        return;
+
+    mpQMenuBar->setVisible(bVisible);
+    if (bVisible)
+        lcl_force_menubar_layout_update(*mpQMenuBar);
 }
 
 const QtFrame* QtMenu::GetFrame() const
@@ -645,14 +678,135 @@ void QtMenu::slotCloseDocument()
         Application::PostUserEvent(pVclMenuBar->GetCloseButtonClickHdl());
 }
 
+void QtMenu::slotMenuBarButtonClicked(QAbstractButton* pButton)
+{
+    MenuBar* pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu.get());
+    if (pVclMenuBar)
+    {
+        SolarMutexGuard aGuard;
+        pVclMenuBar->HandleMenuButtonEvent(m_pButtonGroup->id(pButton));
+    }
+}
+
+QPushButton* QtMenu::ImplAddMenuBarButton(const QIcon& rIcon, const QString& rToolTip, int nId)
+{
+    if (!validateQMenuBar())
+        return nullptr;
+
+    QWidget* pWidget = mpQMenuBar->cornerWidget(Qt::TopRightCorner);
+    QHBoxLayout* pLayout;
+    if (!pWidget)
+    {
+        assert(!m_pButtonGroup);
+        pWidget = new QWidget(mpQMenuBar);
+        assert(!pWidget->layout());
+        pLayout = new QHBoxLayout();
+        pLayout->setContentsMargins(QMargins());
+        pLayout->setSpacing(0);
+        pWidget->setLayout(pLayout);
+        m_pButtonGroup = new QButtonGroup(pLayout);
+        m_pButtonGroup->setObjectName(gButtonGroupKey);
+        m_pButtonGroup->setExclusive(false);
+        connect(m_pButtonGroup, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked), this,
+                &QtMenu::slotMenuBarButtonClicked);
+        pWidget->show();
+        mpQMenuBar->setCornerWidget(pWidget, Qt::TopRightCorner);
+    }
+    else
+        pLayout = static_cast<QHBoxLayout*>(pWidget->layout());
+    assert(m_pButtonGroup);
+    assert(pLayout);
+
+    QPushButton* pButton = static_cast<QPushButton*>(m_pButtonGroup->button(nId));
+    if (pButton)
+        ImplRemoveMenuBarButton(nId);
+
+    pButton = new QPushButton();
+    // we don't want the button to increase the QMenuBar height, so a fixed size square it is
+    const int nFixedLength
+        = mpQMenuBar->height() - 2 * mpQMenuBar->style()->pixelMetric(QStyle::PM_MenuBarVMargin);
+    pButton->setFixedSize(nFixedLength, nFixedLength);
+    pButton->setIcon(rIcon);
+    pButton->setFlat(true);
+    pButton->setFocusPolicy(Qt::NoFocus);
+    pButton->setToolTip(rToolTip);
+
+    m_pButtonGroup->addButton(pButton, nId);
+    int nPos = pLayout->count();
+    if (m_pButtonGroup->button(CLOSE_BUTTON_ID))
+        nPos--;
+    pLayout->insertWidget(nPos, pButton, 0, Qt::AlignCenter);
+    // show must happen after adding the button to the layout, otherwise the button is
+    // shown, but not correct in the layout, if at all! Some times the layout ignores it.
+    pButton->show();
+
+    lcl_force_menubar_layout_update(*mpQMenuBar);
+
+    return pButton;
+}
+
+bool QtMenu::AddMenuBarButton(const SalMenuButtonItem& rItem)
+{
+    if (!validateQMenuBar())
+        return false;
+    return !!ImplAddMenuBarButton(QIcon(QPixmap::fromImage(toQImage(rItem.maImage))),
+                                  toQString(rItem.maToolTipText), rItem.mnId);
+}
+
+void QtMenu::ImplRemoveMenuBarButton(int nId)
+{
+    if (!validateQMenuBar())
+        return;
+
+    assert(m_pButtonGroup);
+    auto* pButton = m_pButtonGroup->button(nId);
+    assert(pButton);
+    QWidget* pWidget = mpQMenuBar->cornerWidget(Qt::TopRightCorner);
+    assert(pWidget);
+    QLayout* pLayout = pWidget->layout();
+    m_pButtonGroup->removeButton(pButton);
+    pLayout->removeWidget(pButton);
+    delete pButton;
+
+    lcl_force_menubar_layout_update(*mpQMenuBar);
+}
+
+void QtMenu::RemoveMenuBarButton(sal_uInt16 nId) { ImplRemoveMenuBarButton(nId); }
+
+tools::Rectangle QtMenu::GetMenuBarButtonRectPixel(sal_uInt16 nId, SalFrame* pFrame)
+{
+#ifdef NDEBUG
+    Q_UNUSED(pFrame);
+#endif
+    if (!validateQMenuBar())
+        return tools::Rectangle();
+
+    assert(mpFrame == static_cast<QtFrame*>(pFrame));
+    assert(m_pButtonGroup);
+    auto* pButton = static_cast<QPushButton*>(m_pButtonGroup->button(nId));
+    assert(pButton);
+
+    // unfortunatly, calling lcl_force_menubar_layout_update results in a temporary wrong menubar size,
+    // but it's the correct minimal size AFAIK and the layout seems correct, so just adjust the width.
+    QPoint aPos = pButton->mapTo(mpFrame->asChild(), QPoint());
+    aPos.rx() += (mpFrame->asChild()->width() - mpQMenuBar->width());
+    return tools::Rectangle(toPoint(aPos), toSize(pButton->size()));
+}
+
 void QtMenu::ShowCloseButton(bool bShow)
 {
     if (!validateQMenuBar())
         return;
 
-    QPushButton* pButton = static_cast<QPushButton*>(mpQMenuBar->cornerWidget(Qt::TopRightCorner));
-    if (!pButton && !bShow)
+    if (!bShow && !m_pButtonGroup)
         return;
+
+    QPushButton* pButton = nullptr;
+    if (m_pButtonGroup)
+        pButton = static_cast<QPushButton*>(m_pButtonGroup->button(CLOSE_BUTTON_ID));
+    if (!bShow && !pButton)
+        return;
+
     if (!pButton)
     {
         QIcon aIcon;
@@ -661,12 +815,8 @@ void QtMenu::ShowCloseButton(bool bShow)
         else
             aIcon = QIcon(
                 QPixmap::fromImage(toQImage(Image(StockImage::Yes, SV_RESID_BITMAP_CLOSEDOC))));
-        pButton = new QPushButton(mpQMenuBar);
-        pButton->setIcon(aIcon);
-        pButton->setFlat(true);
-        pButton->setFocusPolicy(Qt::NoFocus);
-        pButton->setToolTip(toQString(VclResId(SV_HELPTEXT_CLOSEDOCUMENT)));
-        mpQMenuBar->setCornerWidget(pButton, Qt::TopRightCorner);
+        pButton = ImplAddMenuBarButton(aIcon, toQString(VclResId(SV_HELPTEXT_CLOSEDOCUMENT)),
+                                       CLOSE_BUTTON_ID);
         connect(pButton, &QPushButton::clicked, this, &QtMenu::slotCloseDocument);
     }
 
@@ -674,6 +824,8 @@ void QtMenu::ShowCloseButton(bool bShow)
         pButton->show();
     else
         pButton->hide();
+
+    lcl_force_menubar_layout_update(*mpQMenuBar);
 }
 
 bool QtMenu::ShowNativePopupMenu(FloatingWindow*, const tools::Rectangle&,
@@ -687,6 +839,14 @@ bool QtMenu::ShowNativePopupMenu(FloatingWindow*, const tools::Rectangle&,
     mpQMenu->exec(aPos);
 
     return true;
+}
+
+int QtMenu::GetMenuBarHeight() const
+{
+    if (!validateQMenuBar() || !mpQMenuBar->isVisible())
+        return 0;
+
+    return mpQMenuBar->height();
 }
 
 QtMenuItem::QtMenuItem(const SalItemParams* pItemData)
