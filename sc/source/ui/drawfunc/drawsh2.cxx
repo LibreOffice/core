@@ -270,7 +270,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
             rSet.DisableItem( SID_FITCELLSIZE );
 
         // Support advanced DiagramHelper
-        if(!pObj || !pObj->isDiagram())
+        if (!pObj->isDiagram())
         {
             rSet.DisableItem( SID_REGENERATE_DIAGRAM );
             rSet.DisableItem( SID_EDIT_DIAGRAM );
