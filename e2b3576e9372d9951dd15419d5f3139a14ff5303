@@ -33,6 +33,23 @@
       "message": "Seems it failed with the same error\n\nC:/jenkins/workspace/gerrit_windows_co-2021_64bit/svx/source/core/extedit.cxx: fatal error C1852: \u0027C:/jenkins/workspace/gerrit_windows_co-2021_64bit/workdir/PrecompiledHeader/debug/precompiled_svxcore.hxx.pch\u0027 is not a valid precompiled header file\nmake[1]: *** [C:/jenkins/workspace/gerrit_windows_co-2021_64bit/solenv/gbuild/LinkTarget.mk:301: C:/jenkins/workspace/gerrit_windows_co-2021_64bit/workdir/CxxObject/svx/source/core/extedit.o] Error 2\nmake[1]: *** Waiting for unfinished jobs....\nmake: *** [Makefile:282: build] Error 2",
       "revId": "e2b3576e9372d9951dd15419d5f3139a14ff5303",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19165c88_650f6073",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002326
+      },
+      "writtenOn": "2022-05-26T13:59:10Z",
+      "side": 1,
+      "message": "https://cpci.cbg.collabora.co.uk:8080/job/Gerrit%20for%20co-2021/1762/",
+      "revId": "e2b3576e9372d9951dd15419d5f3139a14ff5303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
