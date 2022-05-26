@@ -125,6 +125,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/items/intitem \
     svl/source/items/int64item \
     svl/source/items/itemiter \
+    svl/source/items/itemsetiter \
     svl/source/items/itempool \
     svl/source/items/itemprop \
     svl/source/items/IndexedStyleSheets \

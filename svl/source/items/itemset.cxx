@@ -30,6 +30,7 @@
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/itemsetiter.hxx>
 #include <svl/setitem.hxx>
 #include <svl/whiter.hxx>
 
@@ -309,40 +310,65 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                                         bool bSrchInParent,
                                         const SfxPoolItem **ppItem ) const
 {
+    return GetItemStateImpl(nWhich, bSrchInParent, ppItem, std::nullopt);
+}
+
+SfxItemState SfxItemSet::GetItemStateImpl( sal_uInt16 nWhich,
+                                           bool bSrchInParent,
+                                           const SfxPoolItem **ppItem,
+                                           std::optional<sal_uInt16> oItemsOffsetHint) const
+{
     // Find the range in which the Which is located
     const SfxItemSet* pCurrentSet = this;
     SfxItemState eRet = SfxItemState::UNKNOWN;
     do
     {
-        SfxPoolItem const** ppFnd = pCurrentSet->m_ppItems;
-        for (const WhichPair& rPair : pCurrentSet->m_pWhichRanges)
+        SfxPoolItem const** pFoundOne = nullptr;
+        if (oItemsOffsetHint)
         {
-            if ( rPair.first <= nWhich && nWhich <= rPair.second )
+            pFoundOne = pCurrentSet->m_ppItems + *oItemsOffsetHint;
+            assert(!*pFoundOne || IsInvalidItem(*pFoundOne) || (*pFoundOne)->Which() == nWhich);
+            oItemsOffsetHint.reset(); // in case we need to search parent
+        }
+        else
+        {
+            SfxPoolItem const** ppFnd = pCurrentSet->m_ppItems;
+            for (const WhichPair& rPair : pCurrentSet->m_pWhichRanges)
             {
-                // Within this range
-                ppFnd += nWhich - rPair.first;
-                if ( !*ppFnd )
+                if ( rPair.first <= nWhich && nWhich <= rPair.second )
                 {
-                    eRet = SfxItemState::DEFAULT;
-                    if( !bSrchInParent )
-                        return eRet; // Not present
-                    break; // Keep searching in the parents!
+                    // Within this range
+                    pFoundOne = ppFnd + nWhich - rPair.first;
+                    break;
                 }
+                ppFnd += rPair.second - rPair.first + 1;
+            }
+        }
 
-                if ( IsInvalidItem(*ppFnd) )
+        if (pFoundOne)
+        {
+            if ( !*pFoundOne )
+            {
+                eRet = SfxItemState::DEFAULT;
+                if( !bSrchInParent )
+                    return eRet; // Not present
+                // Keep searching in the parents!
+            }
+            else
+            {
+                if ( IsInvalidItem(*pFoundOne) )
                     // Different ones are present
                     return SfxItemState::DONTCARE;
 
-                if ( (*ppFnd)->IsVoidItem() )
+                if ( (*pFoundOne)->IsVoidItem() )
                     return SfxItemState::DISABLED;
 
                 if (ppItem)
                 {
-                    *ppItem = *ppFnd;
+                    *ppItem = *pFoundOne;
                 }
                 return SfxItemState::SET;
             }
-            ppFnd += rPair.second - rPair.first + 1;
         }
         if (!bSrchInParent)
             break;
@@ -708,7 +734,7 @@ bool SfxItemSet::Set
     if ( bDeep )
     {
         SfxWhichIter aIter1(*this);
-        SfxWhichIter aIter2(rSet);
+        SfxItemSetIter aIter2(rSet);
         sal_uInt16 nWhich1 = aIter1.FirstWhich();
         sal_uInt16 nWhich2 = aIter2.FirstWhich();
         for (;;)
@@ -726,7 +752,7 @@ bool SfxItemSet::Set
                 continue;
             }
             const SfxPoolItem* pItem;
-            if( SfxItemState::SET == rSet.GetItemState( nWhich1, true, &pItem ) )
+            if( SfxItemState::SET == aIter2.GetItemState( true, &pItem ) )
                 bRet |= nullptr != Put( *pItem, pItem->Which() );
             nWhich1 = aIter1.NextWhich();
             nWhich2 = aIter2.NextWhich();
