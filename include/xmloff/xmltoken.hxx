@@ -3495,6 +3495,8 @@ namespace xmloff::token {
         XML_UNCHECKED_STATE,
         XML_DISPLAY_TEXT,
         XML_PICTURE,
+        XML_DATE_FORMAT,
+        XML_DATE_RFC_LANGUAGE_TAG,
 
         XML_TOKEN_END
     };

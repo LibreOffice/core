@@ -3943,6 +3943,29 @@ void XMLTextParagraphExport::ExportContentControl(
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_PICTURE,
                                      aBuffer.makeStringAndClear());
         }
+
+        bool bDate = false;
+        xPropertySet->getPropertyValue("Date") >>= bDate;
+        if (bDate)
+        {
+            OUStringBuffer aBuffer;
+            sax::Converter::convertBool(aBuffer, bDate);
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATE, aBuffer.makeStringAndClear());
+        }
+
+        OUString aDateFormat;
+        xPropertySet->getPropertyValue("DateFormat") >>= aDateFormat;
+        if (!aDateFormat.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATE_FORMAT, aDateFormat);
+        }
+
+        OUString aDateLanguage;
+        xPropertySet->getPropertyValue("DateLanguage") >>= aDateLanguage;
+        if (!aDateLanguage.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATE_RFC_LANGUAGE_TAG, aDateLanguage);
+        }
     }
 
     SvXMLElementExport aElem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_CONTENT_CONTROL, false,

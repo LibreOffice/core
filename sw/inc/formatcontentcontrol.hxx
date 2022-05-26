@@ -130,8 +130,10 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
 
     bool m_bDate = false;
 
+    /// If m_bDate is true, the date format in a syntax accepted by SvNumberFormatter::PutEntry().
     OUString m_aDateFormat;
 
+    /// If m_bDate is true, the date's BCP 47 language tag.
     OUString m_aDateLanguage;
 
     /// Stores a list item index, in case the doc model is not yet updated.
