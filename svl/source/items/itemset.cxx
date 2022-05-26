@@ -707,14 +707,29 @@ bool SfxItemSet::Set
         ClearItem();
     if ( bDeep )
     {
-        SfxWhichIter aIter(*this);
-        sal_uInt16 nWhich = aIter.FirstWhich();
-        while ( nWhich )
+        SfxWhichIter aIter1(*this);
+        SfxWhichIter aIter2(rSet);
+        sal_uInt16 nWhich1 = aIter1.FirstWhich();
+        sal_uInt16 nWhich2 = aIter2.FirstWhich();
+        for (;;)
         {
+            if (!nWhich1 || !nWhich2)
+                break;
+            if (nWhich1 > nWhich2)
+            {
+                nWhich2 = aIter2.NextWhich();
+                continue;
+            }
+            if (nWhich1 < nWhich2)
+            {
+                nWhich1 = aIter1.NextWhich();
+                continue;
+            }
             const SfxPoolItem* pItem;
-            if( SfxItemState::SET == rSet.GetItemState( nWhich, true, &pItem ) )
+            if( SfxItemState::SET == rSet.GetItemState( nWhich1, true, &pItem ) )
                 bRet |= nullptr != Put( *pItem, pItem->Which() );
-            nWhich = aIter.NextWhich();
+            nWhich1 = aIter1.NextWhich();
+            nWhich2 = aIter2.NextWhich();
         }
     }
     else
