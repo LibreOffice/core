@@ -981,11 +981,12 @@ namespace
    nTransparency defines minimal transparency level.
 */
 AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius,
-                                  double fBlurRadius, sal_uInt8 nTransparency)
+                                  double fBlurRadius, sal_uInt8 nTransparency,
+                                  bool bConvertTo1Bit = true)
 {
     // Only completely white pixels on the initial mask must be considered for transparency. Any
     // other color must be treated as black. This creates 1-bit B&W bitmap.
-    BitmapEx mask(rMask.CreateMask(COL_WHITE));
+    BitmapEx mask(bConvertTo1Bit ? rMask.CreateMask(COL_WHITE) : rMask);
 
     // Scaling down increases performance without noticeable quality loss. Additionally,
     // current blur implementation can only handle blur radius between 2 and 254.
@@ -1177,7 +1178,7 @@ void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrim
 
         BitmapEx bitmapEx = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
 
-        AlphaMask mask = ProcessAndBlurAlphaMask(bitmapEx.GetAlpha(), 0, fBlurRadius, 0);
+        AlphaMask mask = ProcessAndBlurAlphaMask(bitmapEx.GetAlpha(), 0, fBlurRadius, 0, false);
 
         const basegfx::BColor aShadowColor(
             maBColorModifierStack.getModifiedColor(rCandidate.getShadowColor()));
