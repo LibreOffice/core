@@ -444,6 +444,12 @@ bool OGLTransitionerImpl::setTransition( const std::shared_ptr<OGLTransitionImpl
     }
 
     impl_prepareSlides();
+
+    // tdf#91456: When the OpenGL context is initialized but nothing has been rendered on it
+    // it can happen, that an "empty" screen is drawn. Therefore, drawing the content of time 0
+    // onto the context
+    update(0);
+
     return true;
 }
 
