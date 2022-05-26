@@ -20,6 +20,7 @@
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 #include <vector>
 #include <optional>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -68,9 +69,9 @@ public:
 
 private:
     struct lookupTableItem {
-        lookupTableItem(const css::lang::Locale& rLocale, const OUString& rName,
-                        css::uno::Reference < XCharacterClassification > const & rxCI) :
-            aLocale(rLocale), aName(rName), xCI(rxCI) {};
+        lookupTableItem(css::lang::Locale _aLocale, OUString _aName,
+                        css::uno::Reference < XCharacterClassification > _xCI) :
+            aLocale(std::move(_aLocale)), aName(std::move(_aName)), xCI(std::move(_xCI)) {};
         css::lang::Locale aLocale;
         OUString aName;
         css::uno::Reference < XCharacterClassification > xCI;

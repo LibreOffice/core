@@ -22,6 +22,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <cppuhelper/implbase.hxx>
 
+#include <utility>
 #include <vector>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -103,7 +104,7 @@ protected:
 private:
 
     struct lookupTableItem {
-        lookupTableItem(const css::lang::Locale& _aLocale, css::uno::Reference < XBreakIterator > const & _xBI) : aLocale(_aLocale), xBI(_xBI) {};
+        lookupTableItem(css::lang::Locale _aLocale, css::uno::Reference < XBreakIterator > _xBI) : aLocale(std::move(_aLocale)), xBI(std::move(_xBI)) {};
         css::lang::Locale aLocale;
         css::uno::Reference < XBreakIterator > xBI;
     };
