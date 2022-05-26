@@ -39,6 +39,30 @@
       },
       "revId": "a1317129c004f4925106775e597445adc940b390",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3a28615_c9bbbd3b",
+        "filename": "vcl/uiconfig/ui/openlockedquerybox.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-05-26T07:21:28Z",
+      "side": 1,
+      "message": "Hi. Yes, I initially did use valign\u003dcenter. But when the dialog was expanded, the icon was reshifting to the new center, and that was looking a bit weird. So I thought of putting a fixed margin so that the icon stays in place.",
+      "parentUuid": "c98e17ae_b5be36a8",
+      "range": {
+        "startLine": 75,
+        "startChar": 44,
+        "endLine": 75,
+        "endChar": 46
+      },
+      "revId": "a1317129c004f4925106775e597445adc940b390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
