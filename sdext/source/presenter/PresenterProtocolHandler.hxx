@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <rtl/ref.hxx>
+#include <framework/dispatchhelper.hxx>
 
 namespace sdext::presenter {
 
@@ -40,6 +41,7 @@ class PresenterController;
 
 class PresenterProtocolHandler
     : protected ::cppu::BaseMutex,
+      public framework::CacheInfo,
       public PresenterProtocolHandlerInterfaceBase
 {
 public:
@@ -70,6 +72,9 @@ public:
     virtual css::uno::Sequence<css::uno::Reference<css::frame::XDispatch> > SAL_CALL
         queryDispatches(
             const css::uno::Sequence< css::frame::DispatchDescriptor>& rDescriptors) override;
+
+    /// See framework::CacheInfo::IsCachingAllowed().
+    bool IsCachingAllowed() const override { return false; }
 
 private:
     class Dispatch;

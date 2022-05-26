@@ -36,6 +36,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
+#include <framework/dispatchhelper.hxx>
 
 namespace framework{
 
@@ -451,7 +452,13 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                         css::uno::Reference<css::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW)
                           ->createInstance(aHandler.m_sUNOName),
                         css::uno::UNO_QUERY);
-                    m_aProtocolHandlers.emplace(aHandler.m_sUNOName, xHandler);
+
+                    // Check if the handler explicitly requested to avoid caching.
+                    auto pCacheInfo = dynamic_cast<framework::CacheInfo*>(xHandler.get());
+                    if (!pCacheInfo || pCacheInfo->IsCachingAllowed())
+                    {
+                        m_aProtocolHandlers.emplace(aHandler.m_sUNOName, xHandler);
+                    }
                 }
                 else
                 {
