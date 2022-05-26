@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6f13a5d_1ea5595e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-26T17:29:46Z",
+      "side": 1,
+      "message": "Note: verified on all platform, except Windows, but built there successfully, too.",
+      "revId": "a02d0fdd6a4ab07f3c8026d576011b8cb4e2b4ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
