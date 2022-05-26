@@ -2850,6 +2850,22 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:ref name="boolean"/>
         </rng:attribute>
       </rng:optional>
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:date">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:date-format">
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:date-rfc-language-tag">
+          <rng:ref name="language"/>
+        </rng:attribute>
+      </rng:optional>
       <rng:zeroOrMore>
         <rng:element name="loext:list-item">
           <rng:attribute name="loext:display-text">

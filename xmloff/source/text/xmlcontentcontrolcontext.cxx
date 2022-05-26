@@ -94,6 +94,24 @@ void XMLContentControlContext::startFastElement(
                 }
                 break;
             }
+            case XML_ELEMENT(LO_EXT, XML_DATE):
+            {
+                if (sax::Converter::convertBool(bTmp, rIter.toView()))
+                {
+                    m_bDate = bTmp;
+                }
+                break;
+            }
+            case XML_ELEMENT(LO_EXT, XML_DATE_FORMAT):
+            {
+                m_aDateFormat = rIter.toString();
+                break;
+            }
+            case XML_ELEMENT(LO_EXT, XML_DATE_RFC_LANGUAGE_TAG):
+            {
+                m_aDateLanguage = rIter.toString();
+                break;
+            }
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", rIter);
         }
@@ -161,6 +179,19 @@ void XMLContentControlContext::endFastElement(sal_Int32)
     if (m_bPicture)
     {
         xPropertySet->setPropertyValue("Picture", uno::Any(m_bPicture));
+    }
+
+    if (m_bDate)
+    {
+        xPropertySet->setPropertyValue("Date", uno::Any(m_bDate));
+    }
+    if (!m_aDateFormat.isEmpty())
+    {
+        xPropertySet->setPropertyValue("DateFormat", uno::Any(m_aDateFormat));
+    }
+    if (!m_aDateLanguage.isEmpty())
+    {
+        xPropertySet->setPropertyValue("DateLanguage", uno::Any(m_aDateLanguage));
     }
 }
 

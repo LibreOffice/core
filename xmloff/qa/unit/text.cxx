@@ -715,6 +715,81 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlImport)
     CPPUNIT_ASSERT(bPicture);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlExport)
+{
+    // Given a document with a date content control around a text portion:
+    getComponent() = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "choose a date", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("Date", uno::Any(true));
+    xContentControlProps->setPropertyValue("DateFormat", uno::Any(OUString("YYYY-MM-DD")));
+    xContentControlProps->setPropertyValue("DateLanguage", uno::Any(OUString("en-US")));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When exporting to ODT:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer8")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    validate(aTempFile.GetFileName(), test::ODF);
+
+    // Then make sure the expected markup is used:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//loext:content-control' no attribute 'date' exist
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    assertXPath(pXmlDoc, "//loext:content-control", "date", "true");
+    assertXPath(pXmlDoc, "//loext:content-control", "date-format", "YYYY-MM-DD");
+    assertXPath(pXmlDoc, "//loext:content-control", "date-rfc-language-tag", "en-US");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlImport)
+{
+    // Given an ODF document with a date content control:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control-date.fodt";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the content control is not lost on import:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    bool bDate{};
+    xContentControlProps->getPropertyValue("Date") >>= bDate;
+    // Without the accompanying fix in place, this test would have failed, the content control was
+    // imported as a default rich text one.
+    CPPUNIT_ASSERT(bDate);
+    OUString aDateFormat;
+    xContentControlProps->getPropertyValue("DateFormat") >>= aDateFormat;
+    CPPUNIT_ASSERT_EQUAL(OUString("YYYY-MM-DD"), aDateFormat);
+    OUString aDateLanguage;
+    xContentControlProps->getPropertyValue("DateLanguage") >>= aDateLanguage;
+    CPPUNIT_ASSERT_EQUAL(OUString("en-US"), aDateLanguage);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

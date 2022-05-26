@@ -3241,4 +3241,6 @@ checked-state
 unchecked-state
 display-text
 picture
+date-format
+date-rfc-language-tag
 TOKEN_END_DUMMY
