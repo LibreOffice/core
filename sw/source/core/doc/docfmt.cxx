@@ -296,10 +296,10 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
 
     // #i96644#
-    std::unique_ptr< SwDataChanged > xDataChanged;
+    std::optional< SwDataChanged > oDataChanged;
     if ( bSendDataChangedEvents )
     {
-        xDataChanged.reset( new SwDataChanged( *pPam ) );
+        oDataChanged.emplace( *pPam );
     }
     SwHistory* pHst = nullptr;
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -395,7 +395,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
     getIDocumentState().SetModified();
 
-    xDataChanged.reset(); //before delete pPam
+    oDataChanged.reset(); //before delete pPam
 
     if( pPam != &rRg )
         delete pPam;
