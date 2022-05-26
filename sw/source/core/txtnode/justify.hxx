@@ -29,15 +29,15 @@ SW_DLLPUBLIC void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OU
 /// Snap ideographs to text grids:
 /// a) Ideographic open brackets are aligned to the rightmost edge of spanned grids so that
 //  they can be closer to the next ideograph.
-/// b) Ideographic close brackets, ideogrpahic comma, and idographic fullstop are aligned
+/// b) Ideographic close brackets, ideographic comma, and ideographic fullstop are aligned
 /// to the leftmost edge of spanned grids so that they can be closer to the previous
 /// ideograph.
-/// c) Other ideographs are aligned to the center of the spnaned grids.
+/// c) Other ideographs are aligned to the center of the spanned grids.
 /// @param[in,out] rKernArray text positions from OutDev::GetTextArray().
 /// @param rText string used to determine where space and kern are inserted.
 /// @param nStt starting index of rText.
 /// @param nLen number of elements to process in rKernArray and rText.
-/// @param nGirdWidth width of a text gird
+/// @param nGridWidth width of a text grid
 /// @param nWidth width of the whole portion.
 /// @return the delta offset of first glyph so text origin can be updated accordingly.
 SW_DLLPUBLIC tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, const OUString& rText,
