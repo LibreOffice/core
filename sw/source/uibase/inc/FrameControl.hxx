@@ -73,6 +73,9 @@ public:
     virtual const SwFrame* GetFrame()   override { return m_pFrame; }
     virtual SwEditWin*   GetEditWin() override { return m_pEditWin; }
     const SwPageFrame*     GetPageFrame() const;
+
+    static const SwPageFrame* GetPageFrame(const SwFrame* pFrame);
+    static void SetVirDevFont(OutputDevice& rDevice);
 };
 
 #endif
