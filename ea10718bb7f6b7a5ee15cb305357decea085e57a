@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21b8118d_d626715b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-26T22:30:51Z",
+      "side": 1,
+      "message": "For some reason, expert users want the interface to be transparent, without having to read the manual...so I have taken the liberty of proposing to add a tooltip to \"Minimal Row Height\" and \"Minimal Column Width\" -- which will appear when the mouse hovers over them in the Optimize Size dropdown dialog in the Table toolbar -- and also in the Customize dialog -- which should make it easier to \"guess\" what this command does.\n\nIf it does not please -- then I will remove it.\n\nMeanwhile -- have I guessed some reasonable tdf numbers for the commit message? or should they be supplemented or replaced with another?",
+      "revId": "ea10718bb7f6b7a5ee15cb305357decea085e57a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
