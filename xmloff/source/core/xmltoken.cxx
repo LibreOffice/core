@@ -3476,6 +3476,8 @@ namespace xmloff::token {
         TOKEN("unchecked-state", XML_UNCHECKED_STATE),
         TOKEN("display-text", XML_DISPLAY_TEXT),
         TOKEN("picture", XML_PICTURE),
+        TOKEN("date-format", XML_DATE_FORMAT),
+        TOKEN("date-rfc-language-tag", XML_DATE_RFC_LANGUAGE_TAG),
 
 
 #if OSL_DEBUG_LEVEL > 0
