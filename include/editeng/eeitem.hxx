@@ -80,18 +80,19 @@ constexpr TypedWhichId<SvxScriptSpaceItem>        EE_PARA_ASIANCJKSPACING    (EE
 constexpr TypedWhichId<SvxNumBulletItem>          EE_PARA_NUMBULLET          (EE_PARA_START+5);
 constexpr TypedWhichId<SfxBoolItem>               EE_PARA_HYPHENATE          (EE_PARA_START+6);
 constexpr TypedWhichId<SfxBoolItem>               EE_PARA_HYPHENATE_NO_CAPS  (EE_PARA_START+7);
-constexpr TypedWhichId<SfxBoolItem>               EE_PARA_BULLETSTATE        (EE_PARA_START+8);
-constexpr TypedWhichId<SvxLRSpaceItem>            EE_PARA_OUTLLRSPACE        (EE_PARA_START+9);
-constexpr TypedWhichId<SfxInt16Item>              EE_PARA_OUTLLEVEL          (EE_PARA_START+10);
-constexpr TypedWhichId<SvxBulletItem>             EE_PARA_BULLET             (EE_PARA_START+11);
-constexpr TypedWhichId<SvxLRSpaceItem>            EE_PARA_LRSPACE            (EE_PARA_START+12);
-constexpr TypedWhichId<SvxULSpaceItem>            EE_PARA_ULSPACE            (EE_PARA_START+13);
-constexpr TypedWhichId<SvxLineSpacingItem>        EE_PARA_SBL                (EE_PARA_START+14);
-constexpr TypedWhichId<SvxAdjustItem>             EE_PARA_JUST               (EE_PARA_START+15);
-constexpr TypedWhichId<SvxTabStopItem>            EE_PARA_TABS               (EE_PARA_START+16);
-constexpr TypedWhichId<SvxJustifyMethodItem>      EE_PARA_JUST_METHOD        (EE_PARA_START+17);
-constexpr TypedWhichId<SvxVerJustifyItem>         EE_PARA_VER_JUST           (EE_PARA_START+18);
-constexpr sal_uInt16                              EE_PARA_END                (EE_PARA_START + 18);
+constexpr TypedWhichId<SfxBoolItem>               EE_PARA_HYPHENATE_NO_LAST_WORD  (EE_PARA_START+8);
+constexpr TypedWhichId<SfxBoolItem>               EE_PARA_BULLETSTATE        (EE_PARA_START+9);
+constexpr TypedWhichId<SvxLRSpaceItem>            EE_PARA_OUTLLRSPACE        (EE_PARA_START+10);
+constexpr TypedWhichId<SfxInt16Item>              EE_PARA_OUTLLEVEL          (EE_PARA_START+11);
+constexpr TypedWhichId<SvxBulletItem>             EE_PARA_BULLET             (EE_PARA_START+12);
+constexpr TypedWhichId<SvxLRSpaceItem>            EE_PARA_LRSPACE            (EE_PARA_START+13);
+constexpr TypedWhichId<SvxULSpaceItem>            EE_PARA_ULSPACE            (EE_PARA_START+14);
+constexpr TypedWhichId<SvxLineSpacingItem>        EE_PARA_SBL                (EE_PARA_START+15);
+constexpr TypedWhichId<SvxAdjustItem>             EE_PARA_JUST               (EE_PARA_START+16);
+constexpr TypedWhichId<SvxTabStopItem>            EE_PARA_TABS               (EE_PARA_START+17);
+constexpr TypedWhichId<SvxJustifyMethodItem>      EE_PARA_JUST_METHOD        (EE_PARA_START+18);
+constexpr TypedWhichId<SvxVerJustifyItem>         EE_PARA_VER_JUST           (EE_PARA_START+19);
+constexpr sal_uInt16                              EE_PARA_END                (EE_PARA_START + 19);
 
 // Character attributes:
 constexpr sal_uInt16                           EE_CHAR_START          (EE_PARA_END + 1);

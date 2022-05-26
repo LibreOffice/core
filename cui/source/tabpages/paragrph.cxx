@@ -1352,6 +1352,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
     if ( m_xHyphenBox->get_state_changed_from_saved() ||
          m_xHyphenNoCapsBox->get_state_changed_from_saved() ||
+         m_xHyphenNoLastWordBox->get_state_changed_from_saved() ||
          m_xExtHyphenBeforeBox->get_value_changed_from_saved() ||
          m_xExtHyphenAfterBox->get_value_changed_from_saved() ||
          m_xMaxHyphenEdit->get_value_changed_from_saved() )
@@ -1360,6 +1361,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             static_cast<const SvxHyphenZoneItem&>(GetItemSet().Get( _nWhich )) );
         aHyphen.SetHyphen( eHyphenState == TRISTATE_TRUE );
         aHyphen.SetNoCapsHyphenation(m_xHyphenNoCapsBox->get_state() == TRISTATE_TRUE);
+        aHyphen.SetNoLastWordHyphenation(m_xHyphenNoLastWordBox->get_state() == TRISTATE_TRUE);
 
         if ( eHyphenState == TRISTATE_TRUE )
         {
@@ -1570,6 +1572,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         bIsHyphen = rHyphen.IsHyphen();
         m_xHyphenBox->set_state(bIsHyphen ? TRISTATE_TRUE : TRISTATE_FALSE);
         m_xHyphenNoCapsBox->set_state(rHyphen.IsNoCapsHyphenation() ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xHyphenNoLastWordBox->set_state(rHyphen.IsNoLastWordHyphenation() ? TRISTATE_TRUE : TRISTATE_FALSE);
 
         m_xExtHyphenBeforeBox->set_value(rHyphen.GetMinLead());
         m_xExtHyphenAfterBox->set_value(rHyphen.GetMinTrail());
@@ -1579,9 +1582,11 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     {
         m_xHyphenBox->set_state(TRISTATE_INDET);
         m_xHyphenNoCapsBox->set_state(TRISTATE_INDET);
+        m_xHyphenNoLastWordBox->set_state(TRISTATE_INDET);
     }
     bool bEnable = bItemAvailable && bIsHyphen;
     m_xHyphenNoCapsBox->set_sensitive(bEnable);
+    m_xHyphenNoLastWordBox->set_sensitive(bEnable);
     m_xExtHyphenBeforeBox->set_sensitive(bEnable);
     m_xExtHyphenAfterBox->set_sensitive(bEnable);
     m_xBeforeText->set_sensitive(bEnable);
@@ -1843,6 +1848,7 @@ void SvxExtParagraphTabPage::ChangesApplied()
 {
     m_xHyphenBox->save_state();
     m_xHyphenNoCapsBox->save_state();
+    m_xHyphenNoLastWordBox->save_state();
     m_xExtHyphenBeforeBox->set_value(m_xExtHyphenBeforeBox->get_value());
     m_xExtHyphenAfterBox->set_value(m_xExtHyphenAfterBox->get_value());
     m_xMaxHyphenEdit->set_value(m_xMaxHyphenEdit->get_value());
@@ -1889,6 +1895,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     // Hyphenation
     , m_xHyphenBox(m_xBuilder->weld_check_button("checkAuto"))
     , m_xHyphenNoCapsBox(m_xBuilder->weld_check_button("checkNoCaps"))
+    , m_xHyphenNoLastWordBox(m_xBuilder->weld_check_button("checkNoLastWord"))
     , m_xBeforeText(m_xBuilder->weld_label("labelLineBegin"))
     , m_xExtHyphenBeforeBox(m_xBuilder->weld_spin_button("spinLineEnd"))
     , m_xAfterText(m_xBuilder->weld_label("labelLineEnd"))
@@ -1956,6 +1963,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     bHtmlMode = true;
     m_xHyphenBox->set_sensitive(false);
     m_xHyphenNoCapsBox->set_sensitive(false);
+    m_xHyphenNoLastWordBox->set_sensitive(false);
     m_xBeforeText->set_sensitive(false);
     m_xExtHyphenBeforeBox->set_sensitive(false);
     m_xAfterText->set_sensitive(false);
@@ -2088,6 +2096,7 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
 {
     bool bEnable = m_xHyphenBox->get_state() == TRISTATE_TRUE;
     m_xHyphenNoCapsBox->set_sensitive(bEnable);
+    m_xHyphenNoLastWordBox->set_sensitive(bEnable);
     m_xBeforeText->set_sensitive(bEnable);
     m_xExtHyphenBeforeBox->set_sensitive(bEnable);
     m_xAfterText->set_sensitive(bEnable);

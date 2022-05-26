@@ -4161,6 +4161,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf121658)
     assertXPath(pXmlDoc, "//Special[@nType='PortionType::Hyphen']", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf149248)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    createSwDoc(DATA_DIRECTORY, "tdf149248.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Only 1 hyphenated word should appear in the document (last word of the second
+    // paragraph). Last word should not be hyphenated for the fourth paragraph
+    // (the same paragraph, but with forbidden hyphenation of the last word).
+    assertXPath(pXmlDoc, "//Special[@nType='PortionType::Hyphen']", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testWriterImageNoCapture)
 {
     createSwDoc(DATA_DIRECTORY, "writer-image-no-capture.docx");

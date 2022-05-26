@@ -1051,6 +1051,7 @@ namespace xmloff::token {
         XML_HYPHENATION_PUSH_CHAR_COUNT,
         XML_HYPHENATION_REMAIN_CHAR_COUNT,
         XML_HYPHENATION_NO_CAPS,
+        XML_HYPHENATION_NO_LAST_WORD,
         XML_I,
         XML_ICON,
         XML_ICON_SET,
