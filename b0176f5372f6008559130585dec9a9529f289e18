@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1386971_fd6c99cc",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-05-26T07:42:56Z",
+      "side": 1,
+      "message": "We have this magic number used elsewhere in:\n vcl/source/filter/GraphicFormatDetector.cxx:463",
+      "revId": "b0176f5372f6008559130585dec9a9529f289e18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
