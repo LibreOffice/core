@@ -23,9 +23,12 @@
 #include <svl/whichranges.hxx>
 
 class SfxItemSet;
+class SfxPoolItem;
+enum class SfxItemState;
 
 class SVL_DLLPUBLIC SfxWhichIter
 {
+    const SfxItemSet& mrSet;
     const WhichRangesContainer& pStart;
     const WhichPair* pRanges;
     sal_uInt16 nOffset;
@@ -36,6 +39,8 @@ public:
     sal_uInt16 GetCurWhich() const;
     sal_uInt16 NextWhich();
     sal_uInt16 FirstWhich();
+    SfxItemState GetItemState(bool bSrchInParent = true,
+                              const SfxPoolItem** ppItem = nullptr) const;
 };
 
 #endif

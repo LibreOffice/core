@@ -22,6 +22,7 @@
 #include <svl/itemset.hxx>
 
 SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet ):
+    mrSet(rSet),
     pStart(rSet.GetRanges()),
     pRanges(pStart.begin()),
     nOffset(0)
@@ -57,6 +58,12 @@ sal_uInt16 SfxWhichIter::FirstWhich()
     pRanges = pStart.begin();
     nOffset = 0;
     return pRanges->first;
+}
+
+SfxItemState SfxWhichIter::GetItemState( bool bSrchInParent,
+                           const SfxPoolItem **ppItem ) const
+{
+    return mrSet.GetItemStateImpl(pRanges->first + nOffset, bSrchInParent, ppItem, pRanges - mrSet.GetRanges().begin());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
