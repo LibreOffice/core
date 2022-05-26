@@ -557,7 +557,8 @@ namespace
 
         void testTdf141709()
         {
-#if HAVE_FEATURE_POPPLER
+// this test crashes on the windows jenkins boxes, but no-one can catch it locally
+#if HAVE_FEATURE_POPPLER && !defined(_WIN32)
             rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
             xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
 
