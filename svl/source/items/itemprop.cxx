@@ -180,7 +180,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry& rEntry
             throw IllegalArgumentException();
         }
         // apply new item
-        rSet.Put( *pNewItem );
+        rSet.Put( std::move(pNewItem) );
     }
 }
 
