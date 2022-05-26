@@ -4185,12 +4185,18 @@ bool SwTextNode::HasVisibleNumberingOrBullet() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if ( pRule && IsCountedInList())
     {
-        // #i87154#
-        // Correction of #newlistlevelattrs#:
-        // The numbering type has to be checked for bullet lists.
-        const SwNumFormat& rFormat = pRule->Get( lcl_BoundListLevel(GetActualListLevel()) );
-        return SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType() ||
-               !pRule->MakeNumString( *(GetNum()) ).isEmpty();
+        const SwNumFormat& rFormat = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
+        if (getIDocumentSettingAccess()->get(DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY))
+            // True if we have something in label text or there is a non-empty
+            // FollowedBy separator (space, tab or whatsoever)
+            return rFormat.GetLabelFollowedBy() != SvxNumberFormat::LabelFollowedBy::NOTHING ||
+                !pRule->MakeNumString(*GetNum()).isEmpty();
+        else
+            // #i87154#
+            // Correction of #newlistlevelattrs#:
+            // The numbering type has to be checked for bullet lists.
+            return SVX_NUM_NUMBER_NONE != rFormat.GetNumberingType() ||
+                !pRule->MakeNumString(*(GetNum())).isEmpty();
     }
 
     return false;

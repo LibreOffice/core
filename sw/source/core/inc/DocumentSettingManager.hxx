@@ -176,6 +176,7 @@ class DocumentSettingManager final :
     bool mbAutoFirstLineIndentDisregardLineSpace;
     // If this is on as_char flys wrapping will be handled the same like in Word
     bool mbWrapAsCharFlysLikeInOOXML;
+    bool mbNoNumberingShowFollowBy;
 
 public:
 

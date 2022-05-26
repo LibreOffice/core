@@ -1043,6 +1043,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149313, "tdf149313.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8000), getXPath(pXmlDoc, "/root/page[2]/infos/bounds", "width").toInt32());
 }
 
+#include <docsh.hxx>
+#include <unotxdoc.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
+
+DECLARE_OOXMLEXPORT_TEST(testTdf148360, "tdf148360.docx")
+{
+    const auto& pLayout = parseLayoutDump();
+
+    // Ensure first element is a tab
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::TabLeft");
+    // and only then goes content
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[2]", "nType", "PortionType::Text");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf135923, "tdf135923-min.docx")
 {
     uno::Reference<text::XText> xShape(getShape(1), uno::UNO_QUERY);

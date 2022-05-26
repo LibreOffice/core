@@ -764,7 +764,8 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                             aText += pTextNd->GetLabelFollowedBy();
                     }
                 }
-                else if (!aText.isEmpty())
+                else if (pTextNd->getIDocumentSettingAccess()->get(DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY)
+                    || !aText.isEmpty())
                     aText += pTextNd->GetLabelFollowedBy();
 
                 // Not just an optimization ...

@@ -131,8 +131,8 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
                                          uno::Any(true));
     m_pImpl->SetDocumentSettingsProperty("FrameAutowidthWithMorePara", uno::Any(true));
     m_pImpl->SetDocumentSettingsProperty("FootnoteInColumnToPageEnd", uno::Any(true));
-
     m_pImpl->SetDocumentSettingsProperty("TabAtLeftIndentForParagraphsInList", uno::Any(true));
+    m_pImpl->SetDocumentSettingsProperty("NoNumberingShowFollowBy", uno::Any(true));
 
     // Initialize RDF metadata, to be able to add statements during the import.
     try
