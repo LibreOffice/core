@@ -953,7 +953,7 @@ OUString WinSalInstance::getOSVersion()
                     {
                         VS_FIXEDFILEINFO* vi1 = static_cast<VS_FIXEDFILEINFO*>(pBlock);
                         aVer.append(OUString::number(HIWORD(vi1->dwProductVersionMS)) + "."
-                                    + OUString::number(LOWORD(vi1->dwProductVersionMS)));
+                                    + OUString::number(LOWORD(vi1->dwProductVersionMS)));//Must run test win11
                         bHaveVerFromKernel32 = true;
                     }
                 }
