@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e26ab4ec_24d3887b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-05-26T22:15:14Z",
+      "side": 1,
+      "message": "Before merging patches, please remove the \"WIP\" part of the commit message; otherwise it looks like a mistake.",
+      "revId": "b9070eedb3b0296a04fcb53aad62f98bb528476b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
