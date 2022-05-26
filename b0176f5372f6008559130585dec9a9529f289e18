@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd2f648a_2c16123b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-26T11:37:55Z",
+      "side": 1,
+      "message": "Tomaz, is GraphicFormatDetectors goal to replace what GraphicDescriptor does? If so this patch is probably not needed.",
+      "revId": "b0176f5372f6008559130585dec9a9529f289e18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1386971_fd6c99cc",
