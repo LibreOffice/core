@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9e41bae_e98a698c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-26T16:50:23Z",
+      "side": 1,
+      "message": "Except for the SAL_WARNs, it\u0027s the same code. So please just move it as a static function into SalFrame. Nothing in it is either qt or gtk related. Sorry to be this nitpicking.\n\nAnd I\u0027ve now read the whole comment in the Qt source and it really looks, like this is just some forwarded accessibility API, just like gtk, which has even sparser docs, so now I also think the unicode codepoint based character walking is needed for Qt too.",
+      "range": {
+        "startLine": 37,
+        "startChar": 29,
+        "endLine": 38,
+        "endChar": 45
+      },
+      "revId": "df035b6351f432f13f4ff9c97ae304e206d2be13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
