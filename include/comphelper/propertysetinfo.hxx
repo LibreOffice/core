@@ -28,7 +28,7 @@
 #include <o3tl/span.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <unordered_map>
-#include <vector>
+#include <utility>
 
 enum class PropertyMoreFlags : sal_uInt8 {
     NONE            = 0x00,
@@ -53,7 +53,7 @@ struct PropertyMapEntry
 
     PropertyMapEntry(OUString _aName, sal_Int32 _nHandle, css::uno::Type const & _rType,
                      sal_Int16 _nAttributes, sal_uInt8 _nMemberId, PropertyMoreFlags _nMoreFlags = PropertyMoreFlags::NONE)
-        : maName( _aName )
+        : maName(std::move( _aName ))
         , maType( _rType )
         , mnHandle( _nHandle )
         , mnAttributes( _nAttributes )

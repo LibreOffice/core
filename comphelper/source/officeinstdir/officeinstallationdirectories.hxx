@@ -41,7 +41,7 @@ class OfficeInstallationDirectories : public cppu::BaseMutex, public UnoImplBase
 {
 public:
     explicit OfficeInstallationDirectories(
-        const css::uno::Reference< css::uno::XComponentContext > & xCtx );
+        css::uno::Reference< css::uno::XComponentContext > xCtx );
     virtual ~OfficeInstallationDirectories() override;
 
     // XOfficeInstallationDirectories

@@ -53,8 +53,8 @@ private:
 
 public:
     OSeekableInputWrapper(
-                const css::uno::Reference< css::io::XInputStream >& xInStream,
-                const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                css::uno::Reference< css::io::XInputStream > xInStream,
+                css::uno::Reference< css::uno::XComponentContext > xContext );
 
     virtual ~OSeekableInputWrapper() override;
 

@@ -98,8 +98,8 @@ namespace comphelper
                     m_aContinuations;   /// all registered continuations
 
     public:
-        OInteractionRequest(const css::uno::Any& _rRequestDescription);
-        OInteractionRequest(const css::uno::Any& rRequestDescription,
+        OInteractionRequest(css::uno::Any aRequestDescription);
+        OInteractionRequest(css::uno::Any aRequestDescription,
             std::vector<css::uno::Reference<css::task::XInteractionContinuation>>&& rContinuations);
 
         /// add a new continuation

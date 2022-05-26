@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/embed/Actions.hpp>
 #include <com/sun/star/embed/XActionsApproval.hpp>
+#include <utility>
 
 #include "instancelocker.hxx"
 
@@ -188,13 +189,13 @@ uno::Sequence< OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames()
 // OLockListener
 
 
-OLockListener::OLockListener( const uno::WeakReference< lang::XComponent >& xWrapper,
-                    const uno::Reference< uno::XInterface >& xInstance,
+OLockListener::OLockListener( uno::WeakReference< lang::XComponent > xWrapper,
+                    uno::Reference< uno::XInterface > xInstance,
                     sal_Int32 nMode,
-                    const uno::Reference< embed::XActionsApproval >& rApproval )
-: m_xInstance( xInstance )
-, m_xApproval( rApproval )
-, m_xWrapper( xWrapper )
+                    uno::Reference< embed::XActionsApproval > xApproval )
+: m_xInstance(std::move( xInstance ))
+, m_xApproval(std::move( xApproval ))
+, m_xWrapper(std::move( xWrapper ))
 , m_bDisposed( false )
 , m_bInitialized( false )
 , m_nMode( nMode )

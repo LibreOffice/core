@@ -18,6 +18,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <o3tl/deleter.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 namespace comphelper
@@ -76,9 +77,9 @@ private:
         unique_disposing_ptr<T>& m_rItem;
         bool const mbComponentDLL;
     public:
-        TerminateListener(const css::uno::Reference< css::lang::XComponent > &rComponent,
+        TerminateListener(css::uno::Reference< css::lang::XComponent > xComponent,
             unique_disposing_ptr<T>& rItem, bool bComponentDLL) :
-                    m_xComponent(rComponent),
+                    m_xComponent(std::move(xComponent)),
                     m_rItem(rItem),
                     mbComponentDLL(bComponentDLL)
         {

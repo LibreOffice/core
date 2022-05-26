@@ -21,13 +21,14 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <utility>
 
 namespace comphelper
 {
 
-OEnumerationByName::OEnumerationByName(const css::uno::Reference<css::container::XNameAccess>& _rxAccess)
-    :m_aNames(_rxAccess->getElementNames())
-    ,m_xAccess(_rxAccess)
+OEnumerationByName::OEnumerationByName(css::uno::Reference<css::container::XNameAccess> _xAccess)
+    :m_aNames(_xAccess->getElementNames())
+    ,m_xAccess(_xAccess)
     ,m_nPos(0)
     ,m_bListening(false)
 {
@@ -35,10 +36,10 @@ OEnumerationByName::OEnumerationByName(const css::uno::Reference<css::container:
 }
 
 
-OEnumerationByName::OEnumerationByName(const css::uno::Reference<css::container::XNameAccess>& _rxAccess,
+OEnumerationByName::OEnumerationByName(const css::uno::Reference<css::container::XNameAccess> _xAccess,
                                        std::vector<OUString> _aNames  )
     :m_aNames(std::move(_aNames))
-    ,m_xAccess(_rxAccess)
+    ,m_xAccess(std::move(_xAccess))
     ,m_nPos(0)
     ,m_bListening(false)
 {
@@ -147,8 +148,8 @@ const OUString& OEnumerationByName::getElement(sal_Int32 nIndex) const
 }
 
 
-OEnumerationByIndex::OEnumerationByIndex(const css::uno::Reference< css::container::XIndexAccess >& _rxAccess)
-    :m_xAccess(_rxAccess)
+OEnumerationByIndex::OEnumerationByIndex(css::uno::Reference< css::container::XIndexAccess > _xAccess)
+    :m_xAccess(std::move(_xAccess))
     ,m_nPos(0)
     ,m_bListening(false)
 {

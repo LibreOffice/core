@@ -350,7 +350,7 @@ private:
 public:
     NaturalStringSorter(
         const css::uno::Reference< css::uno::XComponentContext > &rContext,
-        const css::lang::Locale &rLocale);
+        css::lang::Locale aLocale);
     sal_Int32 compare(const OUString &rLHS, const OUString &rRHS) const
     {
         return compareNatural(rLHS, rRHS, m_xCollator, m_xBI, m_aLocale);

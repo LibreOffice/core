@@ -85,10 +85,10 @@ class OLockListener : public ::cppu::WeakImplHelper< css::util::XCloseListener,
     sal_Int32 m_nMode;
 
 public:
-    OLockListener(  const css::uno::WeakReference< css::lang::XComponent >& xWrapper,
-                    const css::uno::Reference< css::uno::XInterface >& xInstance,
+    OLockListener(  css::uno::WeakReference< css::lang::XComponent > xWrapper,
+                    css::uno::Reference< css::uno::XInterface > xInstance,
                     sal_Int32 nMode,
-                    const css::uno::Reference< css::embed::XActionsApproval >& rApproval );
+                    css::uno::Reference< css::embed::XActionsApproval > xApproval );
 
     virtual ~OLockListener() override;
 
