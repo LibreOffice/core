@@ -16,11 +16,13 @@
 #include <memory>
 
 class MenuItemList;
+class QAbstractButton;
 class QAction;
 class QActionGroup;
-class QPushButton;
+class QButtonGroup;
 class QMenu;
 class QMenuBar;
+class QPushButton;
 class QtMenuItem;
 class QtFrame;
 
@@ -49,6 +51,7 @@ private:
     std::unique_ptr<QMenu> mpOwnedQMenu;
     // pointer to QMenu owned by the corresponding QtMenuItem or self (-> mpOwnedQMenu)
     QMenu* mpQMenu;
+    QButtonGroup* m_pButtonGroup;
 
     void DoFullMenuUpdate(Menu* pMenuBar);
     static void NativeItemText(OUString& rItemText);
@@ -58,7 +61,10 @@ private:
     void ReinitializeActionGroup(unsigned nPos);
     void ResetAllActionGroups();
     void UpdateActionGroupItem(const QtMenuItem* pSalMenuItem);
-    bool validateQMenuBar();
+    bool validateQMenuBar() const;
+    QPushButton* ImplAddMenuBarButton(const QIcon& rIcon, const QString& rToolTip, int nId);
+    void ImplRemoveMenuBarButton(int nId);
+    void adjustButtonSizes();
 
 public:
     QtMenu(bool bMenuBar);
@@ -86,6 +92,10 @@ public:
                                 const vcl::KeyCode& rKeyCode, const OUString& rKeyName) override;
     virtual void GetSystemMenuData(SystemMenuData* pData) override;
     virtual void ShowCloseButton(bool bShow) override;
+    virtual bool AddMenuBarButton(const SalMenuButtonItem&) override;
+    virtual void RemoveMenuBarButton(sal_uInt16 nId) override;
+    virtual tools::Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId, SalFrame*) override;
+    virtual int GetMenuBarHeight() const override;
 
     void SetMenu(Menu* pMenu) { mpVCLMenu = pMenu; }
     Menu* GetMenu() { return mpVCLMenu; }
@@ -97,6 +107,7 @@ private slots:
     static void slotMenuAboutToShow(QtMenuItem* pQItem);
     static void slotMenuAboutToHide(QtMenuItem* pQItem);
     void slotCloseDocument();
+    void slotMenuBarButtonClicked(QAbstractButton*);
 };
 
 class QtMenuItem : public SalMenuItem
