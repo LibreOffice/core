@@ -66,6 +66,8 @@
 #include <docsh.hxx>
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>
+#include <fmtanchr.hxx>
+#include <textcontentcontrol.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/tiledrendering/data/";
 
@@ -169,6 +171,7 @@ public:
     void testRedlinePortions();
     void testContentControl();
     void testDropDownContentControl();
+    void testPictureContentControl();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -258,6 +261,7 @@ public:
     CPPUNIT_TEST(testRedlinePortions);
     CPPUNIT_TEST(testContentControl);
     CPPUNIT_TEST(testDropDownContentControl);
+    CPPUNIT_TEST(testPictureContentControl);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3712,6 +3716,72 @@ void SwTiledRenderingTest::testDropDownContentControl()
     // - Actual  : choose an item
     // i.e. the document text was not updated.
     CPPUNIT_ASSERT_EQUAL(OUString("green"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
+}
+
+void SwTiledRenderingTest::testPictureContentControl()
+{
+    // Given a document with a picture content control:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<beans::XPropertySet> xTextGraphic(
+        xMSF->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    xTextGraphic->setPropertyValue("AnchorType",
+                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xTextContent, false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("ShowingPlaceHolder", uno::Any(true));
+    xContentControlProps->setPropertyValue("Picture", uno::Any(true));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    m_aContentControl.clear();
+
+    // When clicking on that content control:
+    pWrtShell->GotoObj(/*bNext=*/true, GotoObjFlags::Any);
+    pWrtShell->EnterSelFrameMode();
+    const SwFrameFormat* pFlyFormat = pWrtShell->GetFlyFrameFormat();
+    const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
+    const SwPosition* pAnchorPos = rFormatAnchor.GetContentAnchor();
+    SwTextNode* pTextNode = pAnchorPos->nNode.GetNode().GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    pWrtShell->GotoContentControl(rFormatContentControl);
+
+    // Then make sure that the callback is emitted:
+    // Without the accompanying fix in place, this test would have failed, no callback was emitted.
+    CPPUNIT_ASSERT(!m_aContentControl.isEmpty());
+    std::stringstream aStream(m_aContentControl.getStr());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+    CPPUNIT_ASSERT_EQUAL(OString("change-picture"), sAction);
+
+    // And when replacing the image:
+    std::map<OUString, OUString> aArguments;
+    aArguments.emplace("type", "picture");
+    OUString aURL = m_directories.getURLFromSrc(u"sw/qa/extras/uiwriter/data/ole2.png");
+    aArguments.emplace("changed", aURL);
+    pXTextDocument->executeContentControlEvent(aArguments);
+
+    // Then make sure that the document is updated accordingly:
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    auto xGraphic = getProperty<uno::Reference<beans::XPropertySet>>(xShape, "Graphic");
+    // Without the accompanying fix in place, this test would have failed, xGraphic was empty after
+    // executeContentControlEvent().
+    CPPUNIT_ASSERT(xGraphic.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("image/png"), getProperty<OUString>(xGraphic, "MimeType"));
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
