@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d3ab0c3_376037b0",
+        "filename": "sc/qa/uitest/calc_tests3/clearCells.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2022-05-26T19:11:41Z",
+      "side": 1,
+      "message": "Now I\u0027m getting a completely different error.\nI\u0027ll try rebuilding LIbreOffice and keep digging.\nI understand why you started using the operator, but using it increases copy-paste. I think it\u0027s worth using the standard methods to set and down the document.\n\nlera@infineco:~/project/libreoffice$ UITEST_TEST_NAME\u003d\"clearCells.clearCells.test_clear_cells_number\" ../execute.sh\ntest_clear_cells_number (clearCells.clearCells) ... OfficeConnection: connecting to: uno:pipe,name\u003dpytestc80a045a-dd26-11ec-bf45-adf85903a8b3;urp;StarOffice.ComponentContext\nwarn:io.connector:11394:11394:io/source/connector/connector.cxx:93: Connector : couldn\u0027t connect to pipe \"pytestc80a045a-dd26-11ec-bf45-adf85903a8b3\": 10\nNoConnectException: sleeping...\nERROR\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nERROR: test_clear_cells_number (clearCells.clearCells)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/lera/project/libreoffice/sc/qa/uitest/calc_tests3/clearCells.py\", line 22, in setUp\n    super(clearCells, self).setUp()\n  File \"/home/lera/project/libreoffice/uitest/uitest/framework.py\", line 25, in setUp\n    self.connection.setUp()\n  File \"/home/lera/project/libreoffice/uitest/libreoffice/connection.py\", line 176, in setUp\n    conn.setUp()\n  File \"/home/lera/project/libreoffice/uitest/libreoffice/connection.py\", line 57, in setUp\n    self.xContext \u003d self.connect(socket)\n  File \"/home/lera/project/libreoffice/uitest/libreoffice/connection.py\", line 104, in connect\n    raise Exception(\"soffice has stopped.\")\nException: soffice has stopped.\n\n----------------------------------------------------------------------\nRan 1 test in 1.012s\n\nFAILED (errors\u003d1)\nTests run: 1\nTests failed: 0\nTests errors: 1\nTests skipped: 0",
+      "parentUuid": "1012a4a2_f3370021",
+      "revId": "cfbfe7da34e92938f88e37f72d875119ae7b4c6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f1bffe7_4bb16e1d",
         "filename": "sc/qa/uitest/calc_tests3/clearCells.py",
         "patchSetId": 1
