@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1012a4a2_f3370021",
+        "filename": "sc/qa/uitest/calc_tests3/clearCells.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-26T18:55:05Z",
+      "side": 1,
+      "message": "I mean the document will be closed at the end of the with statement",
+      "parentUuid": "d5b183ca_cf494ef5",
+      "revId": "cfbfe7da34e92938f88e37f72d875119ae7b4c6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f1bffe7_4bb16e1d",
         "filename": "sc/qa/uitest/calc_tests3/clearCells.py",
         "patchSetId": 1
