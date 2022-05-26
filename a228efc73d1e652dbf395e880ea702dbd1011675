@@ -81,6 +81,30 @@
       },
       "revId": "a228efc73d1e652dbf395e880ea702dbd1011675",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "500202b6_448cfdae",
+        "filename": "sc/source/ui/view/tabvwsh3.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-05-26T08:29:24Z",
+      "side": 1,
+      "message": "Bad idea for \"Select sheets\" UI: if you select hidden sheet, you can then interact with it (delete cells, add text...). Not sure if it is intended, but no need to change this behavior.",
+      "parentUuid": "f67cc517_303860b7",
+      "range": {
+        "startLine": 544,
+        "startChar": 30,
+        "endLine": 544,
+        "endChar": 36
+      },
+      "revId": "a228efc73d1e652dbf395e880ea702dbd1011675",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
