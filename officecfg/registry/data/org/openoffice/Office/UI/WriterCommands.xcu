@@ -2536,7 +2536,10 @@
       </node>
       <node oor:name=".uno:SetMinimalColumnWidth" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Minimize Column Width</value>
+          <value xml:lang="en-US">Minimal Column Width</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Minimal Column Width: Adjust width of selected columns to fit content</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2557,7 +2560,10 @@
       </node>
       <node oor:name=".uno:SetMinimalRowHeight" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Minimize Row Height</value>
+          <value xml:lang="en-US">Minimal Row Height</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Minimal Row Height: Adjust height of selected rows to fit content</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
