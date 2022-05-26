@@ -17,46 +17,57 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <svl/whiter.hxx>
 #include <svl/itemset.hxx>
+#include <svl/whiter.hxx>
 
-SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet ):
-    pStart(rSet.GetRanges()),
-    pRanges(pStart.begin()),
-    nOffset(0)
+SfxWhichIter::SfxWhichIter(const SfxItemSet& rSet)
+    : m_rItemSet(rSet)
+    , m_pCurrentWhichPair(rSet.m_pWhichRanges.begin())
+    , m_nOffsetFromStartOfCurrentWhichPair(0)
+    , m_nItemsOffset(0)
 {
 }
 
 sal_uInt16 SfxWhichIter::GetCurWhich() const
 {
-    if ( pRanges >= (pStart.begin() + pStart.size()) )
+    const WhichRangesContainer& rWhichRanges = m_rItemSet.m_pWhichRanges;
+    if (m_pCurrentWhichPair >= (rWhichRanges.begin() + rWhichRanges.size()))
         return 0;
-    return pRanges->first + nOffset;
+    return m_pCurrentWhichPair->first + m_nOffsetFromStartOfCurrentWhichPair;
 }
 
 sal_uInt16 SfxWhichIter::NextWhich()
 {
-    if ( pRanges >= (pStart.begin() + pStart.size()) )
+    const WhichRangesContainer& rWhichRanges = m_rItemSet.m_pWhichRanges;
+    if (m_pCurrentWhichPair >= (rWhichRanges.begin() + rWhichRanges.size()))
         return 0;
 
-    const sal_uInt16 nLastWhich = pRanges->first + nOffset;
-    ++nOffset;
-    if (pRanges->second == nLastWhich)
+    const sal_uInt16 nLastWhich = m_pCurrentWhichPair->first + m_nOffsetFromStartOfCurrentWhichPair;
+    ++m_nOffsetFromStartOfCurrentWhichPair;
+    if (m_pCurrentWhichPair->second == nLastWhich)
     {
-        ++pRanges;
-        nOffset = 0;
+        m_nItemsOffset += m_pCurrentWhichPair->second - m_pCurrentWhichPair->first + 1;
+        ++m_pCurrentWhichPair;
+        m_nOffsetFromStartOfCurrentWhichPair = 0;
     }
-    if ( pRanges >= (pStart.begin() + pStart.size()) )
+    if (m_pCurrentWhichPair >= (rWhichRanges.begin() + rWhichRanges.size()))
         return 0;
-    return pRanges->first + nOffset;
+    return m_pCurrentWhichPair->first + m_nOffsetFromStartOfCurrentWhichPair;
 }
 
 sal_uInt16 SfxWhichIter::FirstWhich()
 {
-    pRanges = pStart.begin();
-    nOffset = 0;
-    return pRanges->first;
+    m_pCurrentWhichPair = m_rItemSet.m_pWhichRanges.begin();
+    m_nOffsetFromStartOfCurrentWhichPair = 0;
+    m_nItemsOffset = 0;
+    return m_pCurrentWhichPair->first;
+}
+
+SfxItemState SfxWhichIter::GetItemState(bool bSrchInParent, const SfxPoolItem** ppItem) const
+{
+    sal_uInt16 nWhich = m_pCurrentWhichPair->first + m_nOffsetFromStartOfCurrentWhichPair;
+    sal_uInt16 nItemsOffsetHint = m_nItemsOffset + m_nOffsetFromStartOfCurrentWhichPair;
+    return m_rItemSet.GetItemStateImpl(nWhich, bSrchInParent, ppItem, nItemsOffsetHint);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

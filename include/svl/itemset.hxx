@@ -23,6 +23,7 @@
 #include <cassert>
 #include <cstddef>
 #include <memory>
+#include <optional>
 #include <utility>
 
 #include <svl/svldllapi.h>
@@ -35,6 +36,7 @@ class SfxItemPool;
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 {
     friend class SfxItemIter;
+    friend class SfxWhichIter;
 
     SfxItemPool*      m_pPool;         ///< pool that stores the items
     const SfxItemSet* m_pParent;       ///< derivation
@@ -223,6 +225,12 @@ public:
     bool                        Equals(const SfxItemSet &, bool bComparePool) const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+private:
+    SfxItemState  GetItemStateImpl( sal_uInt16 nWhich,
+                                bool bSrchInParent,
+                                const SfxPoolItem **ppItem,
+                                std::optional<sal_uInt16> oItemsOffsetHint) const;
 };
 
 inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
