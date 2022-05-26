@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2d30ca2_29fbebf6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-05-26T15:16:39Z",
+      "side": 1,
+      "message": "In MS it is not possible to create an extended comment with an empty space at the end of a line.",
+      "revId": "81f6255b3ef8dba3eefb329ada81832bd96a3964",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
