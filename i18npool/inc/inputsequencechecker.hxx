@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 
+#include <utility>
 #include <vector>
 #include <optional>
 
@@ -57,8 +58,8 @@ private:
     const char *serviceName;
 
     struct lookupTableItem {
-        lookupTableItem(const char* rLanguage, const css::uno::Reference < css::i18n::XExtendedInputSequenceChecker >& rxISC) :
-            aLanguage(rLanguage), xISC(rxISC) {}
+        lookupTableItem(const char* rLanguage, css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > _xISC) :
+            aLanguage(rLanguage), xISC(std::move(_xISC)) {}
         const char* aLanguage;
         css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > xISC;
     };

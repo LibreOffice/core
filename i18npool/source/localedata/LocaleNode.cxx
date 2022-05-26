@@ -21,6 +21,7 @@
 #include <string.h>
 #include <algorithm>
 #include <memory>
+#include <utility>
 #include <vector>
 #include <map>
 #include <o3tl/sorted_vector.hxx>
@@ -42,8 +43,8 @@ typedef ::o3tl::sorted_vector< sal_Int16 > ValueSet;
 
 namespace cssi = ::com::sun::star::i18n;
 
-LocaleNode::LocaleNode (const OUString& name, const Reference< XAttributeList > & attr)
-    : aName(name)
+LocaleNode::LocaleNode (OUString name, const Reference< XAttributeList > & attr)
+    : aName(std::move(name))
     , aAttribs(attr)
     , parent(nullptr)
     , nError(0)

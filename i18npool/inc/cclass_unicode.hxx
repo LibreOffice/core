@@ -64,7 +64,7 @@ namespace i18npool {
 class cclass_Unicode final : public cppu::WeakImplHelper < css::i18n::XCharacterClassification, css::lang::XServiceInfo >
 {
 public:
-    cclass_Unicode(const css::uno::Reference < css::uno::XComponentContext >& rxContext );
+    cclass_Unicode(css::uno::Reference < css::uno::XComponentContext > xContext );
     virtual ~cclass_Unicode() override;
 
     virtual OUString SAL_CALL toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,

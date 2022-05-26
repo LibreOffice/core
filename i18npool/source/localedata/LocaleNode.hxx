@@ -85,7 +85,7 @@ protected:
     mutable int nError;
 
 public:
-    LocaleNode (const OUString& name, const Reference< XAttributeList > & attr);
+    LocaleNode (OUString name, const Reference< XAttributeList > & attr);
     void setValue(std::u16string_view oValue) { aValue += oValue; };
     const OUString& getName() const { return aName; };
     const OUString& getValue() const { return aValue; };

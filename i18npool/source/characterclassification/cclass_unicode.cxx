@@ -27,6 +27,7 @@
 #include <breakiteratorImpl.hxx>
 #include <transliteration_body.hxx>
 #include <rtl/ref.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -38,11 +39,11 @@ namespace i18npool {
 //  class cclass_Unicode
 //  ----------------------------------------------------;
 
-cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxContext ) :
+cclass_Unicode::cclass_Unicode( uno::Reference < XComponentContext > xContext ) :
         transToUpper( new Transliteration_casemapping() ),
         transToLower( new Transliteration_casemapping() ),
         transToTitle( new Transliteration_casemapping() ),
-        m_xContext( rxContext ),
+        m_xContext(std::move( xContext )),
         nStartTypes( 0 ),
         nContTypes( 0 ),
         cGroupSep( ',' ),

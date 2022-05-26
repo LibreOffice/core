@@ -21,6 +21,7 @@
 #include <com/sun/star/i18n/XCalendar4.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <utility>
 #include <vector>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -92,8 +93,8 @@ public:
 
 private:
     struct lookupTableItem {
-        lookupTableItem(const OUString& rCacheID, css::uno::Reference < css::i18n::XCalendar4 > const & _xCalendar)
-            : m_aCacheID(rCacheID), xCalendar(_xCalendar) {}
+        lookupTableItem(OUString aCacheID, css::uno::Reference < css::i18n::XCalendar4 > _xCalendar)
+            : m_aCacheID(std::move(aCacheID)), xCalendar(std::move(_xCalendar)) {}
         OUString                                      m_aCacheID;
         css::uno::Reference < css::i18n::XCalendar4 > xCalendar;
     };

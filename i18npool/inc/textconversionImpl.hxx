@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -35,7 +36,7 @@ class TextConversionImpl final : public cppu::WeakImplHelper
 >
 {
 public:
-    TextConversionImpl( const css::uno::Reference < css::uno::XComponentContext >& rxContext ) : m_xContext(rxContext) {};
+    TextConversionImpl( css::uno::Reference < css::uno::XComponentContext > xContext ) : m_xContext(std::move(xContext)) {};
 
         // Methods
         css::i18n::TextConversionResult SAL_CALL
