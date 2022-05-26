@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb787af5_f2e09bf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-26T06:03:47Z",
+      "side": 1,
+      "message": "Anything to add, Hossein, Michael, Mike? Otherwise please submit.",
+      "revId": "a1317129c004f4925106775e597445adc940b390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c98e17ae_b5be36a8",
+        "filename": "vcl/uiconfig/ui/openlockedquerybox.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-26T06:03:47Z",
+      "side": 1,
+      "message": "Well, 70px is some very specific distance. You could use valign\u003dcenter. But I guess the chosen icon looks good and the icon designers can change this later.",
+      "range": {
+        "startLine": 75,
+        "startChar": 44,
+        "endLine": 75,
+        "endChar": 46
+      },
+      "revId": "a1317129c004f4925106775e597445adc940b390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
