@@ -1355,7 +1355,8 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
          m_xHyphenNoLastWordBox->get_state_changed_from_saved() ||
          m_xExtHyphenBeforeBox->get_value_changed_from_saved() ||
          m_xExtHyphenAfterBox->get_value_changed_from_saved() ||
-         m_xMaxHyphenEdit->get_value_changed_from_saved() )
+         m_xMaxHyphenEdit->get_value_changed_from_saved() ||
+         m_xMinWordLength->get_value_changed_from_saved() )
     {
         SvxHyphenZoneItem aHyphen(
             static_cast<const SvxHyphenZoneItem&>(GetItemSet().Get( _nWhich )) );
@@ -1367,6 +1368,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         {
             aHyphen.GetMinLead() = static_cast<sal_uInt8>(m_xExtHyphenBeforeBox->get_value());
             aHyphen.GetMinTrail() = static_cast<sal_uInt8>(m_xExtHyphenAfterBox->get_value());
+            aHyphen.GetMinWordLength() = static_cast<sal_uInt8>(m_xMinWordLength->get_value());
         }
         aHyphen.GetMaxHyphens() = static_cast<sal_uInt8>(m_xMaxHyphenEdit->get_value());
 
@@ -1577,6 +1579,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         m_xExtHyphenBeforeBox->set_value(rHyphen.GetMinLead());
         m_xExtHyphenAfterBox->set_value(rHyphen.GetMinTrail());
         m_xMaxHyphenEdit->set_value(rHyphen.GetMaxHyphens());
+        m_xMinWordLength->set_value(rHyphen.GetMinWordLength());
     }
     else
     {
@@ -1593,6 +1596,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     m_xAfterText->set_sensitive(bEnable);
     m_xMaxHyphenLabel->set_sensitive(bEnable);
     m_xMaxHyphenEdit->set_sensitive(bEnable);
+    m_xMinWordLength->set_sensitive(bEnable);
 
     switch (rSet->GetItemState(SID_ATTR_PARA_PAGENUM))
     {
@@ -1852,6 +1856,7 @@ void SvxExtParagraphTabPage::ChangesApplied()
     m_xExtHyphenBeforeBox->set_value(m_xExtHyphenBeforeBox->get_value());
     m_xExtHyphenAfterBox->set_value(m_xExtHyphenAfterBox->get_value());
     m_xMaxHyphenEdit->set_value(m_xMaxHyphenEdit->get_value());
+    m_xMinWordLength->set_value(m_xMinWordLength->get_value());
     m_xPageBreakBox->save_state();
     m_xBreakPositionLB->save_value();
     m_xBreakTypeLB->save_value();
@@ -1902,6 +1907,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     , m_xExtHyphenAfterBox(m_xBuilder->weld_spin_button("spinLineBegin"))
     , m_xMaxHyphenLabel(m_xBuilder->weld_label("labelMaxNum"))
     , m_xMaxHyphenEdit(m_xBuilder->weld_spin_button("spinMaxNum"))
+    , m_xMinWordLength(m_xBuilder->weld_spin_button("spinMinLen"))
     //Page break
     , m_xPageBreakBox(m_xBuilder->weld_check_button("checkInsert"))
     , m_xBreakTypeFT(m_xBuilder->weld_label("labelType"))
@@ -1970,6 +1976,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     m_xExtHyphenAfterBox->set_sensitive(false);
     m_xMaxHyphenLabel->set_sensitive(false);
     m_xMaxHyphenEdit->set_sensitive(false);
+    m_xMinWordLength->set_sensitive(false);
     m_xPageNumBox->set_sensitive(false);
     m_xPagenumEdit->set_sensitive(false);
     // no column break in HTML
@@ -2103,6 +2110,7 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
     m_xExtHyphenAfterBox->set_sensitive(bEnable);
     m_xMaxHyphenLabel->set_sensitive(bEnable);
     m_xMaxHyphenEdit->set_sensitive(bEnable);
+    m_xMinWordLength->set_sensitive(bEnable);
     m_xHyphenBox->set_state(bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
 

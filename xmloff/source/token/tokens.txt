@@ -965,6 +965,7 @@ hyphenation-push-char-count
 hyphenation-remain-char-count
 hyphenation-no-caps
 hyphenation-no-last-word
+hyphenation-word-char-count
 i
 icon
 icon-set

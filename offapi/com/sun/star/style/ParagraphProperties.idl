@@ -423,6 +423,11 @@ published service ParagraphProperties
          */
         [optional, property] boolean ParaHyphenationNoLastWord;
 
+        /** specifies the minimum word length in characters, when hyphenation is applied.
+
+            @since LibreOffice 7.4
+         */
+        [optional, property] short ParaHyphenationMinWordLength;
 };
 
 
