@@ -39,6 +39,30 @@
       },
       "revId": "8b972708481d2ae307b76a9dd1ccd4372cd53ddf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba7115d9_7e965815",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport17.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-26T15:46:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e34f50bc_82b043e6",
+      "range": {
+        "startLine": 874,
+        "startChar": 25,
+        "endLine": 874,
+        "endChar": 39
+      },
+      "revId": "8b972708481d2ae307b76a9dd1ccd4372cd53ddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
