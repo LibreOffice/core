@@ -1177,7 +1177,9 @@ void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrim
 
         BitmapEx bitmapEx = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
 
-        AlphaMask mask = ProcessAndBlurAlphaMask(bitmapEx.GetAlpha(), 0, fBlurRadius, 0);
+        AlphaMask mask = bitmapEx.GetAlpha();
+        AlphaMask blurMask = ProcessAndBlurAlphaMask(mask, 0, fBlurRadius, 0);
+        mask.BlendWith(blurMask);
 
         const basegfx::BColor aShadowColor(
             maBColorModifierStack.getModifiedColor(rCandidate.getShadowColor()));
