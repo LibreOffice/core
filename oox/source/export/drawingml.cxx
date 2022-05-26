@@ -122,6 +122,7 @@
 #include <editeng/unoprnms.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/escapementitem.hxx>
+#include <editeng/unonrule.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/unoshape.hxx>
@@ -2705,13 +2706,7 @@ static OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBeh
 void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropSet, float fFirstCharHeight, sal_Int16 nLevel )
 {
     if (nLevel < 0 || !GetProperty(rXPropSet, "NumberingRules"))
-    {
-        if (GetDocumentType() == DOCUMENT_PPTX)
-        {
-            mpFS->singleElementNS(XML_a, XML_buNone);
-        }
         return;
-    }
 
     Reference< XIndexAccess > rXIndexAccess;
 
@@ -3015,6 +3010,32 @@ bool DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     if (GetProperty(rXPropSet, "NumberingLevel"))
         mAny >>= nLevel;
 
+    bool bWriteNumbering = true;
+    bool bForceZeroIndent = false;
+    if (mbPlaceholder)
+    {
+        Reference< text::XTextRange > xParaText(rParagraph, UNO_QUERY);
+        if (xParaText)
+        {
+            bool bNumberingOnThisLevel = false;
+            if (nLevel > -1)
+            {
+                Reference< XIndexAccess > xNumberingRules(rXPropSet->getPropertyValue("NumberingRules"), UNO_QUERY);
+                const PropertyValues& rNumRuleOfLevel = xNumberingRules->getByIndex(nLevel).get<PropertyValues>();
+                for (const PropertyValue& rRule : rNumRuleOfLevel)
+                    if (rRule.Name == "NumberingType" && rRule.Value.hasValue())
+                        bNumberingOnThisLevel = rRule.Value.get<sal_uInt16>() != style::NumberingType::NUMBER_NONE;
+            }
+
+            const bool bIsNumberingVisible = rXPropSet->getPropertyValue("NumberingIsNumber").get<bool>();
+            const bool bIsLineEmpty = !xParaText->getString().getLength();
+
+            bWriteNumbering = !bIsLineEmpty && bIsNumberingVisible && (nLevel != -1);
+            bForceZeroIndent = (!bIsNumberingVisible || bIsLineEmpty || !bNumberingOnThisLevel);
+        }
+
+    }
+
     sal_Int16 nTmp = sal_Int16(style::ParagraphAdjust_LEFT);
     if (GetProperty(rXPropSet, "ParaAdjust"))
         mAny >>= nTmp;
@@ -3058,23 +3079,26 @@ bool DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     sal_Int32 nLeftMargin =  getBulletMarginIndentation ( rXPropSet, nLevel,u"LeftMargin");
     sal_Int32 nLineIndentation = getBulletMarginIndentation ( rXPropSet, nLevel,u"FirstLineOffset");
 
-    if( !(nLevel != -1
-        || nAlignment != style::ParagraphAdjust_LEFT
-        || bHasLinespacing) )
-        return false;
+    if (bWriteNumbering && !bForceZeroIndent)
+    {
+        if (!(nLevel != -1
+            || nAlignment != style::ParagraphAdjust_LEFT
+            || bHasLinespacing))
+            return false;
+    }
 
     if (nParaLeftMargin) // For Paragraph
         mpFS->startElementNS( XML_a, nElement,
                            XML_lvl, sax_fastparser::UseIf(OString::number(nLevel), nLevel > 0),
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)), nParaLeftMargin > 0),
-                           XML_indent, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaFirstLineIndent)), nParaFirstLineIndent != 0),
+                           XML_indent, sax_fastparser::UseIf(OString::number(!bForceZeroIndent ? oox::drawingml::convertHmmToEmu(nParaFirstLineIndent) : 0), (bForceZeroIndent || (nParaFirstLineIndent != 0))),
                            XML_algn, GetAlignment( nAlignment ),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
     else
         mpFS->startElementNS( XML_a, nElement,
                            XML_lvl, sax_fastparser::UseIf(OString::number(nLevel), nLevel > 0),
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
-                           XML_indent, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLineIndentation)), nLineIndentation != 0),
+                           XML_indent, sax_fastparser::UseIf(OString::number(!bForceZeroIndent ? oox::drawingml::convertHmmToEmu(nLineIndentation) : 0), (bForceZeroIndent || ( nLineIndentation != 0))),
                            XML_algn, GetAlignment( nAlignment ),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
 
@@ -3106,7 +3130,10 @@ bool DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
         mpFS->endElementNS( XML_a, XML_spcAft );
     }
 
-    WriteParagraphNumbering( rXPropSet, fFirstCharHeight, nLevel );
+    if (!bWriteNumbering)
+        mpFS->singleElementNS(XML_a, XML_buNone);
+    else
+        WriteParagraphNumbering( rXPropSet, fFirstCharHeight, nLevel );
 
     WriteParagraphTabStops( rXPropSet );
 
