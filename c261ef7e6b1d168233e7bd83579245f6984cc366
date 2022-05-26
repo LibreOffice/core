@@ -71,6 +71,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5f93e26_c44b7a76",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-26T11:07:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "421e397b_9fe81cca",
+      "range": {
+        "startLine": 76,
+        "startChar": 3,
+        "endLine": 76,
+        "endChar": 15
+      },
+      "revId": "c261ef7e6b1d168233e7bd83579245f6984cc366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1af72947_2c96b78d",
@@ -200,6 +224,30 @@
       "writtenOn": "2022-05-25T19:25:49Z",
       "side": 1,
       "message": "I see that the code does not follow the rules for line length, but this line extends beyond the edge of my monitor.",
+      "range": {
+        "startLine": 154,
+        "startChar": 11,
+        "endLine": 154,
+        "endChar": 126
+      },
+      "revId": "c261ef7e6b1d168233e7bd83579245f6984cc366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29a0136e_126e3b0f",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-26T11:07:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "764d264f_938465f7",
       "range": {
         "startLine": 154,
         "startChar": 11,
