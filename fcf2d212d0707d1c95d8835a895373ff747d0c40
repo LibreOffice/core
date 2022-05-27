@@ -16,6 +16,24 @@
       "message": "why doesnt this function clear m_pActiveShell in case of rHint.GetId() \u003d\u003d SfxHintId::Dying?",
       "revId": "fcf2d212d0707d1c95d8835a895373ff747d0c40",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04187b0e_c0996073",
+        "filename": "sw/source/uibase/utlui/glbltree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-05-27T07:18:25Z",
+      "side": 1,
+      "message": "please see https://gerrit.libreoffice.org/c/core/+/135034",
+      "parentUuid": "ad9b65c2_2cf1759d",
+      "revId": "fcf2d212d0707d1c95d8835a895373ff747d0c40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
