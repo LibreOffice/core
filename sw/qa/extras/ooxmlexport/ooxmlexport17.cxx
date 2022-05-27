@@ -371,6 +371,40 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureContentControlExport)
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:picture", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
+{
+    // Given a document with a date content control around a text portion:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("Date", uno::Any(true));
+    xContentControlProps->setPropertyValue("DateFormat", uno::Any(OUString("M/d/yyyy")));
+    xContentControlProps->setPropertyValue("DateLanguage", uno::Any(OUString("en-US")));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When exporting to DOCX:
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+
+    // Then make sure the expected markup is used:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//w:sdt/w:sdtPr/w:date/w:dateFormat' number of nodes is incorrect
+    // i.e. the <w:date> was lost on export.
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date/w:dateFormat", "val", "M/d/yyyy");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date/w:lid", "val", "en-US");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
 {
     loadAndSave("tdf148494.docx");
