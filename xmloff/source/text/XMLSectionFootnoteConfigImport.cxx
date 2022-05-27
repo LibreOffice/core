@@ -113,7 +113,7 @@ void XMLSectionFootnoteConfigImport::startFastElement(
                 bNumOwn = true;
                 break;
             }
-            case XML_ELEMENT(TEXT, XML_NUM_LETTER_SYNC):
+            case XML_ELEMENT(STYLE, XML_NUM_LETTER_SYNC):
             {
                 sNumLetterSync = aIter.toString();
                 bNumOwn = true;
