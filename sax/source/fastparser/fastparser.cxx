@@ -19,6 +19,7 @@
 
 #include <sax/fastparser.hxx>
 #include <sax/fastattribs.hxx>
+#include <utility>
 #include <xml2utf.hxx>
 
 #include <com/sun/star/io/XSeekable.hpp>
@@ -98,8 +99,8 @@ struct NameWithToken
     OUString msName;
     sal_Int32 mnToken;
 
-    NameWithToken(const OUString& sName, sal_Int32 nToken) :
-        msName(sName), mnToken(nToken) {}
+    NameWithToken(OUString sName, sal_Int32 nToken) :
+        msName(std::move(sName)), mnToken(nToken) {}
 };
 
 struct SaxContext
@@ -136,7 +137,8 @@ struct NamespaceDefine
     sal_Int32   mnToken;
     OUString    maNamespaceURL;
 
-    NamespaceDefine( const OString& rPrefix, sal_Int32 nToken, const OUString& rNamespaceURL ) : maPrefix( rPrefix ), mnToken( nToken ), maNamespaceURL( rNamespaceURL ) {}
+    NamespaceDefine( OString aPrefix, sal_Int32 nToken, OUString aNamespaceURL )
+        : maPrefix(std::move( aPrefix )), mnToken( nToken ), maNamespaceURL(std::move( aNamespaceURL )) {}
     NamespaceDefine() : mnToken(-1) {}
 };
 

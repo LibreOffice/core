@@ -22,6 +22,7 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <rtl/math.h>
 #include <sax/fastattribs.hxx>
+#include <utility>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml;
@@ -34,13 +35,13 @@ FastTokenHandlerBase::~FastTokenHandlerBase()
 {
 }
 
-UnknownAttribute::UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const OString& value )
-    : maNamespaceURL( rNamespaceURL ), maName( rName ), maValue( value )
+UnknownAttribute::UnknownAttribute( OUString aNamespaceURL, OString aName, OString value )
+    : maNamespaceURL(std::move( aNamespaceURL )), maName(std::move( aName )), maValue(std::move( value ))
 {
 }
 
-UnknownAttribute::UnknownAttribute( const OString& rName, const OString& value )
-    : maName( rName ), maValue( value )
+UnknownAttribute::UnknownAttribute( OString aName, OString value )
+    : maName(std::move( aName )), maValue(std::move( value ))
 {
 }
 

@@ -43,8 +43,8 @@ struct UnknownAttribute
     OString maName;
     OString maValue;
 
-    UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const OString& value );
-    UnknownAttribute( const OString& rName, const OString& value );
+    UnknownAttribute( OUString sNamespaceURL, OString aName, OString value );
+    UnknownAttribute( OString sName, OString value );
 
     void FillAttribute( css::xml::Attribute* pAttrib ) const;
 };
