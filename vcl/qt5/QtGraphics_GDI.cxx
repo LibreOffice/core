@@ -601,55 +601,24 @@ bool QtGraphicsBackend::blendAlphaBitmap(const SalTwoRect&, const SalBitmap& /*r
     return false;
 }
 
-static bool getAlphaImage(const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap,
-                          QImage& rAlphaImage)
+static QImage getAlphaImage(const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap)
 {
-    if (rAlphaBitmap.GetBitCount() != 8 && rAlphaBitmap.GetBitCount() != 1)
-    {
-        SAL_WARN("vcl.gdi", "unsupported alpha depth case: " << rAlphaBitmap.GetBitCount());
-        return false;
-    }
+    assert(rSourceBitmap.GetSize() == rAlphaBitmap.GetSize());
+    assert(rAlphaBitmap.GetBitCount() == 8 || rAlphaBitmap.GetBitCount() == 1);
+
+    QImage aAlphaMask = *static_cast<const QtBitmap*>(&rAlphaBitmap)->GetQImage();
+    aAlphaMask.invertPixels();
 
     const QImage* pBitmap = static_cast<const QtBitmap*>(&rSourceBitmap)->GetQImage();
-    const QImage* pAlpha = static_cast<const QtBitmap*>(&rAlphaBitmap)->GetQImage();
-    rAlphaImage = pBitmap->convertToFormat(Qt_DefaultFormat32);
-
-    if (rAlphaBitmap.GetBitCount() == 8)
-    {
-        for (int y = 0; y < rAlphaImage.height(); ++y)
-        {
-            uchar* image_line = rAlphaImage.scanLine(y);
-            const uchar* alpha_line = pAlpha->scanLine(y);
-            for (int x = 0; x < rAlphaImage.width(); ++x, image_line += 4)
-                image_line[3] = 255 - alpha_line[x];
-        }
-    }
-    else
-    {
-        for (int y = 0; y < rAlphaImage.height(); ++y)
-        {
-            uchar* image_line = rAlphaImage.scanLine(y);
-            const uchar* alpha_line = pAlpha->scanLine(y);
-            for (int x = 0; x < rAlphaImage.width(); ++x, image_line += 4)
-            {
-                if (x && !(x % 8))
-                    ++alpha_line;
-                if (0 != (*alpha_line & (1 << (7 - x % 8))))
-                    image_line[3] = 0;
-            }
-        }
-    }
-
-    return true;
+    QImage aImage = pBitmap->convertToFormat(Qt_DefaultFormat32);
+    aImage.setAlphaChannel(aAlphaMask);
+    return aImage;
 }
 
 bool QtGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
                                         const SalBitmap& rAlphaBitmap)
 {
-    QImage aImage;
-    if (!getAlphaImage(rSourceBitmap, rAlphaBitmap, aImage))
-        return false;
-    drawScaledImage(rPosAry, aImage);
+    drawScaledImage(rPosAry, getAlphaImage(rSourceBitmap, rAlphaBitmap));
     return true;
 }
 
@@ -659,20 +628,17 @@ bool QtGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                               const SalBitmap& rSourceBitmap,
                                               const SalBitmap* pAlphaBitmap, double fAlpha)
 {
-    if (fAlpha != 1.0)
-        return false;
     QImage aImage;
-    if (pAlphaBitmap && !getAlphaImage(rSourceBitmap, *pAlphaBitmap, aImage))
-        return false;
+    if (!pAlphaBitmap)
+        aImage = *static_cast<const QtBitmap*>(&rSourceBitmap)->GetQImage();
     else
-    {
-        const QImage* pBitmap = static_cast<const QtBitmap*>(&rSourceBitmap)->GetQImage();
-        aImage = pBitmap->convertToFormat(Qt_DefaultFormat32);
-    }
+        aImage = getAlphaImage(rSourceBitmap, *pAlphaBitmap);
 
-    QtPainter aPainter(*this);
     const basegfx::B2DVector aXRel = rX - rNull;
     const basegfx::B2DVector aYRel = rY - rNull;
+
+    QtPainter aPainter(*this);
+    aPainter.setOpacity(fAlpha);
     aPainter.setTransform(QTransform(aXRel.getX() / aImage.width(), aXRel.getY() / aImage.width(),
                                      aYRel.getX() / aImage.height(), aYRel.getY() / aImage.height(),
                                      rNull.getX(), rNull.getY()));
