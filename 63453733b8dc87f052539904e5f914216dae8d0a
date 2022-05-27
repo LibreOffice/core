@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90b1b6e7_e6513d8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-05-27T07:09:40Z",
+      "side": 1,
+      "message": "I merged the patch at https://gerrit.libreoffice.org/c/core/+/134978 so a rebased build should pass now.",
+      "revId": "63453733b8dc87f052539904e5f914216dae8d0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
