@@ -226,7 +226,10 @@ void QtWidget::handleMouseEnterLeaveEvents(const QtFrame& rFrame, QEvent* pQEven
     if (pQEvent->type() == QEvent::Enter)
         nEventType = SalEvent::MouseMove;
     else
+    {
         nEventType = SalEvent::MouseLeave;
+        const_cast<QtFrame*>(&rFrame)->m_ePointerStyle = static_cast<PointerStyle>(0xffff);
+    }
     rFrame.CallCallback(nEventType, &aEvent);
     pQEvent->accept();
 }

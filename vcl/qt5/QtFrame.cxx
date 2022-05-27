@@ -108,7 +108,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_bUseCairo(bUseCairo)
     , m_bNullRegion(true)
     , m_bGraphicsInUse(false)
-    , m_ePointerStyle(PointerStyle::Arrow)
+    , m_ePointerStyle(static_cast<PointerStyle>(0xffff))
     , m_pDragSource(nullptr)
     , m_pDropTarget(nullptr)
     , m_bInDrag(false)
@@ -835,14 +835,11 @@ void QtFrame::ToTop(SalFrameToTop nFlags)
 
 void QtFrame::SetPointer(PointerStyle ePointerStyle)
 {
-    QWindow* pWindow = m_pQWidget->window()->windowHandle();
-    if (!pWindow)
-        return;
     if (ePointerStyle == m_ePointerStyle)
         return;
     m_ePointerStyle = ePointerStyle;
 
-    pWindow->setCursor(GetQtData()->getCursor(ePointerStyle));
+    m_pQWidget->setCursor(GetQtData()->getCursor(ePointerStyle));
 }
 
 void QtFrame::CaptureMouse(bool bMouse)
