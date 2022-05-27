@@ -136,8 +136,14 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             }
         }
 
-        size_t npixels = w * h;
-        std::vector<uint32_t> raster(npixels);
+        uint32_t nPixelsRequired;
+        if (o3tl::checked_multiply(w, h, nPixelsRequired))
+        {
+            SAL_WARN("filter.tiff", "skipping oversized tiff image");
+            break;
+        }
+
+        std::vector<uint32_t> raster(nPixelsRequired);
         if (TIFFReadRGBAImageOriented(tif, w, h, raster.data(), ORIENTATION_TOPLEFT, 1))
         {
             Bitmap bitmap(Size(w, h), vcl::PixelFormat::N24_BPP);
