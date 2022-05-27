@@ -2809,6 +2809,52 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPilcrowRedlining)
     comphelper::dispatchCommand(".uno:ControlCodes", {});
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf43244_SpacesOnMargin)
+{
+    // Load a document where the top left tile contains
+    // paragraph and line break symbols with redlining.
+    SwXTextDocument* pXTextDocument = createDoc("tdf43244_SpacesOnMargin.odt");
+
+    // show non printing characters, including pilcrow and
+    // line break symbols with redlining
+    comphelper::dispatchCommand(".uno:ControlCodes", {});
+
+    // Render a larger area, and then get the colors from the right side of the page.
+    size_t nCanvasWidth = 1024;
+    size_t nCanvasHeight = 512;
+    size_t nTileSize = 64;
+    std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
+            Fraction(1.0), Point(), aPixmap.data());
+    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
+        /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
+    pDevice->EnableMapMode(false);
+    Bitmap aBitmap = pDevice->GetBitmap(Point(730, 120), Size(nTileSize, nTileSize));
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+
+    //Test if we see any spaces on the right margin in a 47x48 rectangle
+    bool bSpaceFound = false;
+    for (int i = 1; i < 48 && !bSpaceFound; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            Color aColor2(pAccess->GetPixel(j, i));
+            Color aColor1(pAccess->GetPixel(i, j + 1));
+
+            if (aColor1.GetRed() < 255 || aColor2.GetRed() < 255)
+            {
+                bSpaceFound = true;
+                break;
+            }
+        }
+    }
+    CPPUNIT_ASSERT(bSpaceFound);
+
+    comphelper::dispatchCommand(".uno:ControlCodes", {});
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClipText)
 {
     // Load a document where the top left tile contains table text with
