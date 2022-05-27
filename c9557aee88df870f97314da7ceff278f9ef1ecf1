@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1c00fd9_57452f00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-27T10:28:05Z",
+      "side": 1,
+      "message": "@Tibor: thanks for the very nice clean-up! I suggest only a small improvement. (I\u0027ll upload it in the next patch set for testing.)",
+      "revId": "c9557aee88df870f97314da7ceff278f9ef1ecf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fef2cc43_a0d0bf80",
+        "filename": "oox/source/ppt/pptshape.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-27T10:28:05Z",
+      "side": 1,
+      "message": "It\u0027s better to check that we have the requested string to avoid crash at the bad string length. We can also reuse the number without its conversions:\n\n else if (-1 !\u003d (nSplitPos \u003d sURL.indexOf( \u0027 \u0027 )))\n {\n     setBookmark(true);\n     // reuse slide number from \u0027#Slide [Num]\u0027 or \"#Notes [Num]\"\n     sURL \u003d OUString::Concat(\"#page\") + sURL.subView(nSplitPos);\n }",
+      "range": {
+        "startLine": 618,
+        "startChar": 23,
+        "endLine": 623,
+        "endChar": 75
+      },
+      "revId": "c9557aee88df870f97314da7ceff278f9ef1ecf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
