@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c317856_2b7c6f6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-05-27T07:25:35Z",
+      "side": 1,
+      "message": "Hi Michael, per your comment from https://gerrit.libreoffice.org/c/core/+/134788, I tried rHint.GetId() \u003d\u003d SfxHintId::Dying but it seems SfxHintId::Dying is never sent to Notify. Here I have followed the code used in SwContentTree::Notify to end listening and clear the active shell when the active shell view is dying.  ",
+      "revId": "0ce1fa27ba808a5c84e25cfae0c63006d6c275e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
