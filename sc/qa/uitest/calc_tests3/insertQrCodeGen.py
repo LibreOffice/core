@@ -14,9 +14,6 @@ class insertQrCode(UITestCase):
 
    def test_insert_qr_code_gen(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             with self.ui_test.execute_dialog_through_command(".uno:InsertQrCode") as xDialog:
 
                 # Get elements in the Dialog Box

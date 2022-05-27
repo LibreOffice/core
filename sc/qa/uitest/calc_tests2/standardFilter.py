@@ -17,7 +17,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class standardFilter(UITestCase):
     def test_standard_filter(self):
-        with self.ui_test.load_file(get_url_for_data_file("standardFilter.ods")) as calc_doc:
+        with self.ui_test.load_file(get_url_for_data_file("standardFilter.ods")):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C8"}))

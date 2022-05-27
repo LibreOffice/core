@@ -21,12 +21,7 @@ class tdf104117(UITestCase):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:RandomNumberGeneratorDialog") as xDialog:
                 xcellrangeedit = xDialog.getChild("cell-range-edit")
                 xdistributioncombo = xDialog.getChild("distribution-combo")
-                xparameter1spin = xDialog.getChild("parameter1-spin")
                 xparameter2spin = xDialog.getChild("parameter2-spin")
-                xenableseedcheck = xDialog.getChild("enable-seed-check")
-                xseedspin = xDialog.getChild("seed-spin")
-                xenableroundingcheck = xDialog.getChild("enable-rounding-check")
-                xdecimalplacesspin = xDialog.getChild("decimal-places-spin")
 
                 xcellrangeedit.executeAction("TYPE", mkPropertyValues({"TEXT":"$Sheet1.$A$1:$A$2"}))
                 select_by_text(xdistributioncombo, "Uniform Integer")

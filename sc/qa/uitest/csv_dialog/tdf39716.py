@@ -16,7 +16,7 @@ class Tdf39716(UITestCase):
 
     def test_tdf39716(self):
 
-        with load_csv_file(self, "tdf39716.csv", True) as xDialog:
+        with load_csv_file(self, "tdf39716.csv", True):
             pass
 
         document = self.ui_test.get_component()

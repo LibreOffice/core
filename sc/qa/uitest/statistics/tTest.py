@@ -52,7 +52,6 @@ class tTest(UITestCase):
                 xvariable1rangeedit = xDialog.getChild("variable1-range-edit")
                 xvariable2rangeedit = xDialog.getChild("variable2-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
-                xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
                 xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
 
                 xvariable1rangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

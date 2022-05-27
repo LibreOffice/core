@@ -21,7 +21,7 @@ class hashIncompatible(UITestCase):
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, "hashIncompatible-temp.ods")
 
-            with self.ui_test.load_file(get_url_for_data_file("hashIncompatible.xlsx")) as document:
+            with self.ui_test.load_file(get_url_for_data_file("hashIncompatible.xlsx")):
 
                 # Save the XLSX document as ODS with a sheet protected with an unsupported hash format
                 with self.ui_test.execute_dialog_through_command(".uno:SaveAs", close_button="") as xSaveDialog:

@@ -18,7 +18,7 @@ class ManualCalcTests(UITestCase):
     # http://manual-test.libreoffice.org/manage/case/189/
     def test_define_database_range(self):
 
-        with self.ui_test.create_doc_in_start_center("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             # Select range A1:D10
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
@@ -86,7 +86,7 @@ class ManualCalcTests(UITestCase):
 
     # http://manual-test.libreoffice.org/manage/case/191/
     def test_validation(self):
-        with self.ui_test.create_doc_in_start_center("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C10"}))

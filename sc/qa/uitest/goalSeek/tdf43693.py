@@ -21,7 +21,6 @@ class tdf43693(UITestCase):
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "K248"}))
             with self.ui_test.execute_modeless_dialog_through_command(".uno:GoalSeekDialog", close_button="") as xDialog:
-                xformulaedit = xDialog.getChild("formulaedit")
                 xtarget = xDialog.getChild("target")
                 xvaredit = xDialog.getChild("varedit")
                 xtarget.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))

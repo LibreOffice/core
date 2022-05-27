@@ -175,7 +175,7 @@ class clearCells(UITestCase):
 
 
     def test_clear_cells_formats(self):
-        with self.ui_test.create_doc_in_start_center("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A1", "aa")
@@ -230,13 +230,6 @@ class clearCells(UITestCase):
             self.xUITest.executeCommand(".uno:Bold")
             with self.ui_test.execute_dialog_through_command(".uno:Delete") as xDialog:
                 xdeleteall = xDialog.getChild("deleteall")
-                xtext = xDialog.getChild("text")
-                xdatetime = xDialog.getChild("datetime")
-                xcomments = xDialog.getChild("comments")
-                xobjects = xDialog.getChild("objects")
-                xnumbers = xDialog.getChild("numbers")
-                xformulas = xDialog.getChild("formulas")
-                xformats = xDialog.getChild("formats")
 
                 if (get_state_as_dict(xdeleteall)["Selected"]) == "false":
                     xdeleteall.executeAction("CLICK", tuple())

@@ -53,8 +53,6 @@ class sampling(UITestCase):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SamplingDialog") as xDialog:
                 xinputrangeedit = xDialog.getChild("input-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
-                xrandommethodradio = xDialog.getChild("random-method-radio")
-                xsamplesizespin = xDialog.getChild("sample-size-spin")
                 xperiodicmethodradio = xDialog.getChild("periodic-method-radio")
                 xperiodspin = xDialog.getChild("period-spin")
 

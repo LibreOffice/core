@@ -25,12 +25,8 @@ class anova(UITestCase):
             #3. Choose Data - Analysis of Variance (ANOVA).
             #4. Choose an arbitrary output cell and click OK.
             with self.ui_test.execute_modeless_dialog_through_command(".uno:AnalysisOfVarianceDialog") as xDialog:
-                xinputrangeedit = xDialog.getChild("input-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
-                xradiotwofactor = xDialog.getChild("radio-two-factor")
                 xradiosinglefactor = xDialog.getChild("radio-single-factor")
-                xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
-                xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
                 xalphaspin = xDialog.getChild("alpha-spin")
 
                 xoutputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

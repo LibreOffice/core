@@ -13,7 +13,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf132783(UITestCase):
 
    def test_tdf132783(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf132783.ods")) as calc_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf132783.ods")):
 
             for i in range(5):
                 with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:

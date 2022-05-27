@@ -45,7 +45,6 @@ class chartDataLabels(UITestCase):
             self.assertFalse(xDataSeries[0].Label.ShowLegendSymbol)
             self.assertEqual(xDataSeries[0].LabelSeparator, " ")
 
-            valueAsNumber = xDialog.getChild("CB_VALUE_AS_NUMBER")
             category = xDialog.getChild("CB_CATEGORY")
             legend = xDialog.getChild("CB_SYMBOL")
             wrapText = xDialog.getChild("CB_WRAP_TEXT")
@@ -137,13 +136,6 @@ class chartDataLabels(UITestCase):
 
             valueAsNumber = xDialog.getChild("CB_VALUE_AS_NUMBER")
             valueAsPercentage = xDialog.getChild("CB_VALUE_AS_PERCENTAGE")
-            category = xDialog.getChild("CB_CATEGORY")
-            legend = xDialog.getChild("CB_SYMBOL")
-            wrapText = xDialog.getChild("CB_WRAP_TEXT")
-            separator = xDialog.getChild("LB_TEXT_SEPARATOR")
-            placement = xDialog.getChild("LB_LABEL_PLACEMENT")
-            degrees = xDialog.getChild("NF_LABEL_DEGREES")
-            textDirection = xDialog.getChild("LB_LABEL_TEXTDIR")
             buttonPercentage = xDialog.getChild("PB_PERCENT_NUMBERFORMAT")
 
             valueAsNumber.executeAction("CLICK", tuple())
@@ -194,18 +186,9 @@ class chartDataLabels(UITestCase):
 
             valueAsNumber = xDialog.getChild("CB_VALUE_AS_NUMBER")
             valueAsPercentage = xDialog.getChild("CB_VALUE_AS_PERCENTAGE")
-            category = xDialog.getChild("CB_CATEGORY")
-            legend = xDialog.getChild("CB_SYMBOL")
-            wrapText = xDialog.getChild("CB_WRAP_TEXT")
-            separator = xDialog.getChild("LB_TEXT_SEPARATOR")
-            placement = xDialog.getChild("LB_LABEL_PLACEMENT")
-            degrees = xDialog.getChild("NF_LABEL_DEGREES")
-            textDirection = xDialog.getChild("LB_LABEL_TEXTDIR")
-            buttonPercentage = xDialog.getChild("PB_PERCENT_NUMBERFORMAT")
 
             self.assertEqual(get_state_as_dict(valueAsNumber)["Selected"], "false")
             self.assertEqual(get_state_as_dict(valueAsPercentage)["Selected"], "true")
-
 
         self.assertFalse(xDataSeries[0].Label.ShowNumber)
         self.assertTrue(xDataSeries[0].Label.ShowNumberInPercent)
@@ -272,7 +255,7 @@ class chartDataLabels(UITestCase):
         self.assertEqual(xDataSeries[0].NumberFormat, xFormat)
 
    def test_tdf136573(self):
-    with self.ui_test.load_file(get_url_for_data_file("dataLabels.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("dataLabels.ods")):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

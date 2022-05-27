@@ -22,9 +22,6 @@ class regression(UITestCase):
 
     def _regression_check(self, data_groupedby_column = True):
         with self.ui_test.load_file(get_url_for_data_file("regression.ods")) as calc_doc:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             # Initially the final check status is "FALSE" (failed).
             self.assertEqual(get_cell_by_position(calc_doc, 14, 1, 6).getString(), "FALSE",
                              "Check status must be FALSE before the test")

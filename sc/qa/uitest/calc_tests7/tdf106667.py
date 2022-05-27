@@ -26,7 +26,7 @@ class tdf106667(UITestCase):
 
             self.xUITest.executeCommand(".uno:SelectAll")
 
-            with self.ui_test.execute_dialog_through_command(".uno:About", close_button="btnClose") as xAboutDlg:
+            with self.ui_test.execute_dialog_through_command(".uno:About", close_button="btnClose"):
                 pass
 
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "A")
