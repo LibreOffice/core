@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9a03bfa1_1f0eddda",
+        "filename": "sw/source/uibase/utlui/glbltree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-27T19:00:37Z",
+      "side": 1,
+      "message": "ah no, now i notice pDyingShell would be null in that case",
+      "parentUuid": "dbec9ceb_ea047bbf",
+      "revId": "0ce1fa27ba808a5c84e25cfae0c63006d6c275e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "56657ac6_50fd8c57",
         "filename": "sw/source/uibase/utlui/glbltree.cxx",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-27T18:59:44Z",
       "side": 1,
       "message": "this is pointless, it was just dereferenced 2 lines above",
+      "revId": "0ce1fa27ba808a5c84e25cfae0c63006d6c275e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c858a4f_3eaaeb15",
+        "filename": "sw/source/uibase/utlui/glbltree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-27T19:00:37Z",
+      "side": 1,
+      "message": "this is still pointless",
+      "parentUuid": "56657ac6_50fd8c57",
       "revId": "0ce1fa27ba808a5c84e25cfae0c63006d6c275e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
