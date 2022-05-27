@@ -17,24 +17,37 @@ import os
 import math
 from datetime import datetime
 
+
 def convert_str_to_date(value):
+    """ Reformat datetime of crashtest to date of csv report.
+
+    :param value: A string from html report.
+    :type value: str
+    :return: Date in year/month/day format.
+    :rtype: datetime
+    """
     value = value.replace('.', '')
     value = value.replace('March', 'Mar')
     value = value.replace('April', 'Apr')
     value = value.replace('June', 'Jun')
     value = value.replace('July', 'Jul')
     value = value.replace('Sept', 'Sep')
-    value = value.replace('noon', '12:00 pm')
+    # reset the time leaving the date
+    value = ", ".join(value.split(", ")[:-1])
+    dtDate = datetime.strptime(value, '%b %d, %Y')
 
-    if ':' not in value:
-        if 'am' in value:
-            value = value.replace(' am', ':00 am')
-        elif 'pm' in value:
-            value = value.replace(' pm', ':00 pm')
+    return dtDate.strftime('%y/%m/%d')
 
-    return datetime.strptime(value, '%b %d, %Y, %H:%M %p')
 
 def parse_version_url(url):
+    """ Scraping of crashtest page by version.
+
+    :param url: URL to crashtest page.
+    :type url: str
+    :return: Dictionary with a signature name and a list with crashes number and start and end
+            dates of reports.
+    :rtype:  dict[str, list[int, datetime, datetime]]
+    """
     crashReports = {}
     html_text = requests.get(url).text
     soup = BeautifulSoup(html_text, 'html.parser')
@@ -50,7 +63,15 @@ def parse_version_url(url):
 
     return crashReports
 
+
 def parse_reports_and_get_most_recent_report_from_last_page(url):
+    """ Search count of crashes, last version, its ID and OS by signature crash.
+
+    :param url: An Url to the page with list of crash reports of the signature.
+    :type url: str
+    :return: The number of crash, version LO, ID and OS of last crash.
+    :rtype: tuple[int, str, str, str]
+    """
     html_text = requests.get(url).text
     soup = BeautifulSoup(html_text, 'html.parser')
 
@@ -72,7 +93,7 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
 
     reports = soup.find("div", {"id": "reports"}).tbody
     ID, currentID = "", ""
-    version, currentVersion = "", ""
+    sVersion, currentVersion = "", ""
     OS, currentOS = "", ""
 
     tr_list = reports.find_all("tr")
@@ -85,13 +106,13 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
 
         # get most recent version
         # symbols on linux are not very informative generally
-        if currentOS == "windows" and currentVersion > version:
-            version = currentVersion
+        if currentOS == "windows" and currentVersion > sVersion:
+            sVersion = currentVersion
             ID = currentID
             OS = currentOS
 
-    if not version:
-        version = currentVersion
+    if not sVersion:
+        sVersion = currentVersion
 
     if not ID:
         ID = currentID
@@ -99,9 +120,17 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
     if not OS:
         OS = currentOS
 
-    return count, ID, version, OS
+    return count, ID, sVersion, OS
+
 
 def parse_details_and_get_info(url):
+    """ Get reason of crash and stac, if it is.
+
+    :param url: An url to page with detail information.
+    :type url: str
+    :return: Reason and stack
+    :rtype: tuple[str, str]
+    """
     html_text = requests.get(url).text
     soup = BeautifulSoup(html_text, 'html.parser')
 
@@ -155,7 +184,7 @@ if __name__ == '__main__':
             f.write(line)
             f.flush()
 
-        for k, v in crashes.items():
+        for k, lDate in crashes.items():
             # ignore unresolved crash signatures
             if len(k) < 254 and k not in crashesInFile and '`' not in k and not k.lower().endswith('.dll') and \
                     not k.lower().endswith('.so') and ".so." not in k.lower():
@@ -164,8 +193,7 @@ if __name__ == '__main__':
                         "https://crashreport.libreoffice.org/stats/signature/" + k)
                 crashReason, crashStack = parse_details_and_get_info(
                         "https://crashreport.libreoffice.org/stats/crash_details/" + crashID)
-                line = '\t'.join([k, str(crashCount), v[1].strftime('%y/%m/%d'), v[2].strftime('%y/%m/%d'),
+                line = '\t'.join([k, str(crashCount), lDate[1], lDate[2],
                         crashID, crashVersion, crashReason, crashOS, crashStack, '\n'])
                 f.write(line)
                 f.flush()
-
