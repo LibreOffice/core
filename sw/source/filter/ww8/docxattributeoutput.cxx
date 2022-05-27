@@ -2372,6 +2372,24 @@ void DocxAttributeOutput::WriteContentControlStart()
         m_pSerializer->endElementNS(XML_w, XML_dropDownList);
     }
 
+    if (m_pContentControl->GetDate())
+    {
+        m_pSerializer->startElementNS(XML_w, XML_date);
+        OUString aDateFormat = m_pContentControl->GetDateFormat();
+        if (!aDateFormat.isEmpty())
+        {
+            m_pSerializer->singleElementNS(XML_w, XML_dateFormat, FSNS(XML_w, XML_val),
+                                           aDateFormat);
+        }
+        OUString aDateLanguage = m_pContentControl->GetDateLanguage();
+        if (!aDateLanguage.isEmpty())
+        {
+            m_pSerializer->singleElementNS(XML_w, XML_lid, FSNS(XML_w, XML_val),
+                                           aDateLanguage);
+        }
+        m_pSerializer->endElementNS(XML_w, XML_date);
+    }
+
     m_pSerializer->endElementNS(XML_w, XML_sdtPr);
     m_pSerializer->startElementNS(XML_w, XML_sdtContent);
     m_pContentControl = nullptr;
