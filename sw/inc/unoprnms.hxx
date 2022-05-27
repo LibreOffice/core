@@ -882,6 +882,7 @@
 #define UNO_NAME_PICTURE "Picture"
 #define UNO_NAME_DATE_FORMAT "DateFormat"
 #define UNO_NAME_DATE_LANGUAGE "DateLanguage"
+#define UNO_NAME_CURRENT_DATE "CurrentDate"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

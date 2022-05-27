@@ -3966,6 +3966,12 @@ void XMLTextParagraphExport::ExportContentControl(
         {
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DATE_RFC_LANGUAGE_TAG, aDateLanguage);
         }
+        OUString aCurrentDate;
+        xPropertySet->getPropertyValue("CurrentDate") >>= aCurrentDate;
+        if (!aCurrentDate.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_CURRENT_DATE, aCurrentDate);
+        }
     }
 
     SvXMLElementExport aElem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_CONTENT_CONTROL, false,

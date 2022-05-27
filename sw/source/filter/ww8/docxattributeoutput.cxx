@@ -2374,7 +2374,15 @@ void DocxAttributeOutput::WriteContentControlStart()
 
     if (m_pContentControl->GetDate())
     {
-        m_pSerializer->startElementNS(XML_w, XML_date);
+        OUString aCurrentDate = m_pContentControl->GetCurrentDate();
+        if (aCurrentDate.isEmpty())
+        {
+            m_pSerializer->startElementNS(XML_w, XML_date);
+        }
+        else
+        {
+            m_pSerializer->startElementNS(XML_w, XML_date, FSNS(XML_w, XML_fullDate), aCurrentDate);
+        }
         OUString aDateFormat = m_pContentControl->GetDateFormat();
         if (!aDateFormat.isEmpty())
         {

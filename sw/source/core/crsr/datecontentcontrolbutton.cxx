@@ -45,6 +45,18 @@ void SwDateContentControlButton::LaunchPopup()
                                                  "modules/swriter/ui/contentcontrolcalendar.ui");
     m_xPopup = m_xPopupBuilder->weld_popover("Calendar");
     m_xCalendar = m_xPopupBuilder->weld_calendar("date");
+
+    // Read the doc model.
+    if (m_pContentControl)
+    {
+        const Date& rNullDate = m_pNumberFormatter->GetNullDate();
+        double fCurrentDate = m_pContentControl->GetCurrentDateValue();
+        if (fCurrentDate != 0)
+        {
+            m_xCalendar->set_date(rNullDate + sal_Int32(fCurrentDate));
+        }
+    }
+
     m_xCalendar->connect_activated(LINK(this, SwDateContentControlButton, SelectHandler));
     SwContentControlButton::LaunchPopup();
     m_xCalendar->grab_focus();
