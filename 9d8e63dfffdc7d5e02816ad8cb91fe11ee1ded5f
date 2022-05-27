@@ -16,6 +16,24 @@
       "message": "The convention is to use the same character regardless.",
       "revId": "9d8e63dfffdc7d5e02816ad8cb91fe11ee1ded5f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a68f1e8_cc1a628f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-27T11:54:45Z",
+      "side": 1,
+      "message": "Thanks for clarification.",
+      "parentUuid": "b2f72e9f_a1b82050",
+      "revId": "9d8e63dfffdc7d5e02816ad8cb91fe11ee1ded5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
