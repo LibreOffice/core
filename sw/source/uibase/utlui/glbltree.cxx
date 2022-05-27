@@ -52,6 +52,9 @@
 #include <swabstdlg.hxx>
 #include <memory>
 
+#include <sfx2/event.hxx>
+#include <unotxvw.hxx>
+
 using namespace ::com::sun::star::uno;
 
 #define GLOBAL_UPDATE_TIMEOUT 2000
@@ -1118,9 +1121,21 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
 
 void SwGlobalTree::Notify(SfxBroadcaster& rBC, SfxHint const& rHint)
 {
-    SfxListener::Notify(rBC, rHint);
-    if (rHint.GetId() == SfxHintId::SwNavigatorUpdateTracking)
-        UpdateTracking();
+    SfxViewEventHint const*const pVEHint(dynamic_cast<SfxViewEventHint const*>(&rHint));
+    SwXTextView* pDyingShell = nullptr;
+    if (m_pActiveShell && pVEHint && pVEHint->GetEventName() == "OnViewClosed")
+        pDyingShell = dynamic_cast<SwXTextView*>(pVEHint->GetController().get());
+    if (pDyingShell && pDyingShell->GetView() == &m_pActiveShell->GetView())
+    {
+        EndListening(*m_pActiveShell->GetView().GetDocShell());
+        m_pActiveShell = nullptr;
+    }
+    else
+    {
+        SfxListener::Notify(rBC, rHint);
+        if (rHint.GetId() == SfxHintId::SwNavigatorUpdateTracking)
+            UpdateTracking();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
