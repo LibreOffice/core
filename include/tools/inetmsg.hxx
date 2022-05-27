@@ -26,6 +26,7 @@
 #include <tools/stream.hxx>
 
 #include <string_view>
+#include <utility>
 #include <vector>
 #include <map>
 #include <memory>
@@ -42,9 +43,8 @@ public:
     INetMessageHeader()
     {}
 
-    INetMessageHeader (
-        const OString& rName, const OString& rValue)
-        : m_aName (rName), m_aValue (rValue)
+    INetMessageHeader(OString aName, OString aValue)
+        : m_aName (std::move(aName)), m_aValue (std::move(aValue))
     {}
 
     INetMessageHeader (
