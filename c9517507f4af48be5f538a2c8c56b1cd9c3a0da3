@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46335b43_6a729d57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-27T07:36:59Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! I\u0027ve added more details to the description.",
+      "revId": "c9517507f4af48be5f538a2c8c56b1cd9c3a0da3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
