@@ -16,6 +16,40 @@
       "message": "Hi Michael, per your comment from https://gerrit.libreoffice.org/c/core/+/134788, I tried rHint.GetId() \u003d\u003d SfxHintId::Dying but it seems SfxHintId::Dying is never sent to Notify. Here I have followed the code used in SwContentTree::Notify to end listening and clear the active shell when the active shell view is dying.  ",
       "revId": "0ce1fa27ba808a5c84e25cfae0c63006d6c275e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbec9ceb_ea047bbf",
+        "filename": "sw/source/uibase/utlui/glbltree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-27T18:59:44Z",
+      "side": 1,
+      "message": "i think here a check if m_pActiveShell is null is missing",
+      "revId": "0ce1fa27ba808a5c84e25cfae0c63006d6c275e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56657ac6_50fd8c57",
+        "filename": "sw/source/uibase/utlui/glbltree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-27T18:59:44Z",
+      "side": 1,
+      "message": "this is pointless, it was just dereferenced 2 lines above",
+      "revId": "0ce1fa27ba808a5c84e25cfae0c63006d6c275e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
