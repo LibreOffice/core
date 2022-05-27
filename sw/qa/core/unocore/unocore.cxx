@@ -603,6 +603,17 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     xContentControlProps->setPropertyValue("DateLanguage", uno::Any(OUString("en-US")));
     xContentControlProps->setPropertyValue("CurrentDate",
                                            uno::Any(OUString("2022-05-25T00:00:00Z")));
+    xContentControlProps->setPropertyValue("PlaceholderDocPart",
+                                           uno::Any(OUString("DefaultPlaceholder_-1854013437")));
+    xContentControlProps->setPropertyValue(
+        "DataBindingPrefixMappings",
+        uno::Any(OUString("xmlns:ns0='http://schemas.microsoft.com/vsto/samples' ")));
+    xContentControlProps->setPropertyValue(
+        "DataBindingXpath",
+        uno::Any(OUString("/ns0:employees[1]/ns0:employee[1]/ns0:hireDate[1]")));
+    xContentControlProps->setPropertyValue(
+        "DataBindingStoreItemID", uno::Any(OUString("{241A8A02-7FFD-488D-8827-63FBE74E8BC9}")));
+    xContentControlProps->setPropertyValue("Color", uno::Any(OUString("008000")));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // Then make sure that the specified properties are set:
@@ -617,6 +628,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     CPPUNIT_ASSERT_EQUAL(OUString("M/d/yyyy"), pContentControl->GetDateFormat());
     CPPUNIT_ASSERT_EQUAL(OUString("en-US"), pContentControl->GetDateLanguage());
     CPPUNIT_ASSERT_EQUAL(OUString("2022-05-25T00:00:00Z"), pContentControl->GetCurrentDate());
+    CPPUNIT_ASSERT_EQUAL(OUString("DefaultPlaceholder_-1854013437"),
+                         pContentControl->GetPlaceholderDocPart());
+    CPPUNIT_ASSERT_EQUAL(OUString("xmlns:ns0='http://schemas.microsoft.com/vsto/samples' "),
+                         pContentControl->GetDataBindingPrefixMappings());
+    CPPUNIT_ASSERT_EQUAL(OUString("/ns0:employees[1]/ns0:employee[1]/ns0:hireDate[1]"),
+                         pContentControl->GetDataBindingXpath());
+    CPPUNIT_ASSERT_EQUAL(OUString("{241A8A02-7FFD-488D-8827-63FBE74E8BC9}"),
+                         pContentControl->GetDataBindingStoreItemID());
+    CPPUNIT_ASSERT_EQUAL(OUString("008000"), pContentControl->GetColor());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

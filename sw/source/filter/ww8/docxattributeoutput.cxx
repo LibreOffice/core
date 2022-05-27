@@ -2330,6 +2330,28 @@ void DocxAttributeOutput::WriteContentControlStart()
 
     m_pSerializer->startElementNS(XML_w, XML_sdt);
     m_pSerializer->startElementNS(XML_w, XML_sdtPr);
+    if (!m_pContentControl->GetPlaceholderDocPart().isEmpty())
+    {
+        m_pSerializer->startElementNS(XML_w, XML_placeholder);
+        m_pSerializer->singleElementNS(XML_w, XML_docPart, FSNS(XML_w, XML_val),
+                                       m_pContentControl->GetPlaceholderDocPart());
+        m_pSerializer->endElementNS(XML_w, XML_placeholder);
+    }
+
+    if (!m_pContentControl->GetDataBindingPrefixMappings().isEmpty() || !m_pContentControl->GetDataBindingXpath().isEmpty() || !m_pContentControl->GetDataBindingStoreItemID().isEmpty())
+    {
+        m_pSerializer->singleElementNS( XML_w, XML_dataBinding,
+            FSNS(XML_w, XML_prefixMappings), m_pContentControl->GetDataBindingPrefixMappings(),
+            FSNS(XML_w, XML_xpath), m_pContentControl->GetDataBindingXpath(),
+            FSNS(XML_w, XML_storeItemID), m_pContentControl->GetDataBindingStoreItemID());
+    }
+
+    if (!m_pContentControl->GetColor().isEmpty())
+    {
+        m_pSerializer->singleElementNS(XML_w15, XML_color, FSNS(XML_w, XML_val),
+                                       m_pContentControl->GetColor());
+    }
+
     if (m_pContentControl->GetShowingPlaceHolder())
     {
         m_pSerializer->singleElementNS(XML_w, XML_showingPlcHdr);
