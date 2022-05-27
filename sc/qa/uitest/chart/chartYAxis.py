@@ -7,9 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import change_measurement_unit, type_text
+from uitest.uihelper.common import change_measurement_unit, select_by_text, select_pos
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
-from uitest.uihelper.common import select_by_text, select_pos
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
