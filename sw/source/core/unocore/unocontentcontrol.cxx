@@ -165,6 +165,7 @@ public:
     bool m_bDate;
     OUString m_aDateFormat;
     OUString m_aDateLanguage;
+    OUString m_aCurrentDate;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
          const uno::Reference<text::XText>& xParentText,
@@ -529,6 +530,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetDate(m_pImpl->m_bDate);
     pContentControl->SetDateFormat(m_pImpl->m_aDateFormat);
     pContentControl->SetDateLanguage(m_pImpl->m_aDateLanguage);
+    pContentControl->SetCurrentDate(m_pImpl->m_aCurrentDate);
 
     SwFormatContentControl aContentControl(pContentControl, nWhich);
     bool bSuccess
@@ -828,6 +830,21 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_CURRENT_DATE)
+    {
+        OUString aValue;
+        if (rValue >>= aValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_aCurrentDate = aValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetCurrentDate(aValue);
+            }
+        }
+    }
     else
     {
         throw beans::UnknownPropertyException();
@@ -949,6 +966,17 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         else
         {
             aRet <<= m_pImpl->m_pContentControl->GetDateLanguage();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_CURRENT_DATE)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_aCurrentDate;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetCurrentDate();
         }
     }
     else

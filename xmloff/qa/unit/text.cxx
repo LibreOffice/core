@@ -732,6 +732,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlExport)
     xContentControlProps->setPropertyValue("Date", uno::Any(true));
     xContentControlProps->setPropertyValue("DateFormat", uno::Any(OUString("YYYY-MM-DD")));
     xContentControlProps->setPropertyValue("DateLanguage", uno::Any(OUString("en-US")));
+    xContentControlProps->setPropertyValue("CurrentDate",
+                                           uno::Any(OUString("2022-05-25T00:00:00Z")));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
@@ -752,6 +754,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlExport)
     assertXPath(pXmlDoc, "//loext:content-control", "date", "true");
     assertXPath(pXmlDoc, "//loext:content-control", "date-format", "YYYY-MM-DD");
     assertXPath(pXmlDoc, "//loext:content-control", "date-rfc-language-tag", "en-US");
+    assertXPath(pXmlDoc, "//loext:content-control", "current-date", "2022-05-25T00:00:00Z");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlImport)
@@ -788,6 +791,9 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlImport)
     OUString aDateLanguage;
     xContentControlProps->getPropertyValue("DateLanguage") >>= aDateLanguage;
     CPPUNIT_ASSERT_EQUAL(OUString("en-US"), aDateLanguage);
+    OUString aCurrentDate;
+    xContentControlProps->getPropertyValue("CurrentDate") >>= aCurrentDate;
+    CPPUNIT_ASSERT_EQUAL(OUString("2022-05-25T00:00:00Z"), aCurrentDate);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
