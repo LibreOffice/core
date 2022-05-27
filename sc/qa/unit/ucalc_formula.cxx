@@ -308,6 +308,7 @@ public:
     void testFuncRowsHidden();
     void testFuncSUMIFS();
     void testFuncCOUNTIFEmpty();
+    void testFuncCOUNTIFSRangeReduce();
     void testFuncRefListArraySUBTOTAL();
     void testFuncJumpMatrixArrayIF();
     void testFuncJumpMatrixArrayOFFSET();
@@ -427,6 +428,7 @@ public:
     CPPUNIT_TEST(testFuncRowsHidden);
     CPPUNIT_TEST(testFuncSUMIFS);
     CPPUNIT_TEST(testFuncCOUNTIFEmpty);
+    CPPUNIT_TEST(testFuncCOUNTIFSRangeReduce);
     CPPUNIT_TEST(testFuncRefListArraySUBTOTAL);
     CPPUNIT_TEST(testFuncJumpMatrixArrayIF);
     CPPUNIT_TEST(testFuncJumpMatrixArrayOFFSET);
@@ -9352,6 +9354,56 @@ void TestFormula::testFuncCOUNTIFEmpty()
     m_pDoc->SetFormula( ScAddress(10, 0, 0), "=COUNTIFS($A1:$A" + OUString::number(maxRow + 1) + "; \"\")",
         formula::FormulaGrammar::GRAM_NATIVE_UI);
     CPPUNIT_ASSERT_EQUAL( double(maxRow + 1 - 7), m_pDoc->GetValue(ScAddress(10, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Test that COUNTIFS counts properly empty cells if asked to.
+void TestFormula::testFuncCOUNTIFSRangeReduce()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Test");
+
+    // Data in A1:C9.
+    std::vector<std::vector<const char*>> aData = {
+        { "" },
+        { "a",  "1", "1" },
+        { "b",  "2", "2" },
+        { "c",  "4", "3" },
+        { "d",  "8", "4" },
+        { "a", "16", "5" },
+        { "" },
+        { "b", "", "6" },
+        { "c", "64", "7" }
+    };
+
+    insertRangeData(m_pDoc, ScAddress(0,0,0), aData);
+
+    constexpr SCROW maxRow = 20; // so that the unittest is not slow in dbgutil builds
+    ScRange aSubRange( ScAddress( 0, 0, 0 ), ScAddress( 2, maxRow, 0 ));
+    m_pDoc->GetDataAreaSubrange(aSubRange);
+    // This is the range the data should be reduced to in ScInterpreter::IterateParametersIfs().
+    CPPUNIT_ASSERT_EQUAL( SCROW(1), aSubRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL( SCROW(8), aSubRange.aEnd.Row());
+
+    m_pDoc->SetFormula( ScAddress(10, 0, 0), "=COUNTIFS($A1:$A" + OUString::number(maxRow+1)
+        + "; \"\"; $B1:$B" + OUString::number(maxRow+1)
+        + "; \"\"; $C1:$C" + OUString::number(maxRow+1) +"; \"\")",
+        formula::FormulaGrammar::GRAM_NATIVE_UI);
+    // But it should find out that it can't range reduce and must count all the empty rows.
+    CPPUNIT_ASSERT_EQUAL( double(maxRow + 1 - 7), m_pDoc->GetValue(ScAddress(10, 0, 0)));
+
+    // Check also with criteria set as cell references, the middle one resulting in matching
+    // empty cells (which should cause ScInterpreter::IterateParametersIfs() to undo
+    // the range reduction). This should only match the A8-C8 row, but it also shouldn't crash.
+    // Matching empty cells using a cell reference needs a formula to set the cell to
+    // an empty string, plain empty cell wouldn't do, so use K2 for that.
+    m_pDoc->SetFormula( ScAddress(10, 1, 0), "=\"\"", formula::FormulaGrammar::GRAM_NATIVE_UI );
+    m_pDoc->SetFormula( ScAddress(10, 0, 0), "=COUNTIFS($A1:$A" + OUString::number(maxRow+1)
+        + "; A8; $B1:$B" + OUString::number(maxRow+1)
+        + "; K2; $C1:$C" + OUString::number(maxRow+1) + "; C8)",
+        formula::FormulaGrammar::GRAM_NATIVE_UI);
+    CPPUNIT_ASSERT_EQUAL( double(1), m_pDoc->GetValue(ScAddress(10, 0, 0)));
 
     m_pDoc->DeleteTab(0);
 }

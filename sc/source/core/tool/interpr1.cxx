@@ -5844,6 +5844,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     // matrix formula.
     vConditions.clear();
 
+    // Range-reduce optimization
     SCCOL nStartColDiff = 0;
     SCCOL nEndColDiff = 0;
     SCROW nStartRowDiff = 0;
@@ -5851,43 +5852,39 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     bool bRangeReduce = false;
     ScRange aMainRange;
 
-    // Range-reduce optimization
-    if (nParamCount % 2) // Not COUNTIFS
+    bool bHasDoubleRefCriteriaRanges = true;
+    // Do not attempt main-range reduce if any of the criteria-ranges are not double-refs.
+    // For COUNTIFS queries it's possible to range-reduce too, if the query is not supposed
+    // to match empty cells (will be checked and undone later if needed), so simply treat
+    // the first criteria range as the main range for purposes of detecting if this can be done.
+    for (sal_uInt16 nParamIdx = 2; nParamIdx < nParamCount; nParamIdx += 2 )
     {
-        bool bHasDoubleRefCriteriaRanges = true;
-        // Do not attempt main-range reduce if any of the criteria-ranges are not double-refs.
-        for (sal_uInt16 nParamIdx = 2; nParamIdx < nParamCount; nParamIdx += 2 )
+        const formula::FormulaToken* pCriteriaRangeToken = pStack[ sp-nParamIdx ];
+        if (pCriteriaRangeToken->GetType() != svDoubleRef )
         {
-            const formula::FormulaToken* pCriteriaRangeToken = pStack[ sp-nParamIdx ];
-            if (pCriteriaRangeToken->GetType() != svDoubleRef )
-            {
-                bHasDoubleRefCriteriaRanges = false;
-                break;
-            }
+            bHasDoubleRefCriteriaRanges = false;
+            break;
         }
+    }
 
-        // Probe the main range token, and try if we can shrink the range without altering results.
-        const formula::FormulaToken* pMainRangeToken = pStack[ sp-nParamCount ];
-        if (pMainRangeToken->GetType() == svDoubleRef && bHasDoubleRefCriteriaRanges)
+    // Probe the main range token, and try if we can shrink the range without altering results.
+    const formula::FormulaToken* pMainRangeToken = pStack[ sp-nParamCount ];
+    if (pMainRangeToken->GetType() == svDoubleRef && bHasDoubleRefCriteriaRanges)
+    {
+        const ScComplexRefData* pRefData = pMainRangeToken->GetDoubleRef();
+        if (!pRefData->IsDeleted())
         {
-            const ScComplexRefData* pRefData = pMainRangeToken->GetDoubleRef();
-            if (!pRefData->IsDeleted())
+            DoubleRefToRange( *pRefData, aMainRange);
+            if (aMainRange.aStart.Tab() == aMainRange.aEnd.Tab())
             {
-                DoubleRefToRange( *pRefData, aMainRange);
-
-                if (aMainRange.aStart.Tab() == aMainRange.aEnd.Tab())
-                {
-                    // Shrink the range to actual data content.
-                    ScRange aSubRange = aMainRange;
-                    mrDoc.GetDataAreaSubrange(aSubRange);
-
-                    nStartColDiff = aSubRange.aStart.Col() - aMainRange.aStart.Col();
-                    nStartRowDiff = aSubRange.aStart.Row() - aMainRange.aStart.Row();
-
-                    nEndColDiff = aSubRange.aEnd.Col() - aMainRange.aEnd.Col();
-                    nEndRowDiff = aSubRange.aEnd.Row() - aMainRange.aEnd.Row();
-                    bRangeReduce = nStartColDiff || nStartRowDiff || nEndColDiff || nEndRowDiff;
-                }
+                // Shrink the range to actual data content.
+                ScRange aSubRange = aMainRange;
+                mrDoc.GetDataAreaSubrange(aSubRange);
+                nStartColDiff = aSubRange.aStart.Col() - aMainRange.aStart.Col();
+                nStartRowDiff = aSubRange.aStart.Row() - aMainRange.aStart.Row();
+                nEndColDiff = aSubRange.aEnd.Col() - aMainRange.aEnd.Col();
+                nEndRowDiff = aSubRange.aEnd.Row() - aMainRange.aEnd.Row();
+                bRangeReduce = nStartColDiff || nStartRowDiff || nEndColDiff || nEndRowDiff;
             }
         }
     }
@@ -6077,6 +6074,56 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                 return;
             }
 
+            ScQueryParam rParam;
+            ScQueryEntry& rEntry = rParam.GetEntry(0);
+            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+            rEntry.bDoQuery = true;
+            if (!bIsString)
+            {
+                rItem.meType = ScQueryEntry::ByValue;
+                rItem.mfVal = fVal;
+                rEntry.eOp = SC_EQUAL;
+            }
+            else
+            {
+                rParam.FillInExcelSyntax(mrDoc.GetSharedStringPool(), aString.getString(), 0, pFormatter);
+                if (rItem.meType == ScQueryEntry::ByString)
+                    rParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
+            }
+
+            // Undo bRangeReduce if asked to match empty cells (which should be rare).
+            assert(rEntry.GetQueryItems().size() == 1);
+            if((rEntry.IsQueryByEmpty() || rItem.mbMatchEmpty) && bRangeReduce)
+            {
+                bRangeReduce = false;
+                // All criteria ranges are svDoubleRef's, so only vConditions needs adjusting.
+                assert(vRefArrayConditions.empty());
+                if(!vConditions.empty())
+                {
+                    std::vector<sal_uInt8> newConditions;
+                    SCCOL newDimensionCols = nCol2 - nCol1 + 1;
+                    SCROW newDimensionRows = nRow2 - nRow1 + 1;
+                    newConditions.reserve( newDimensionCols * newDimensionRows );
+                    SCCOL col = nCol1;
+                    for(; col < nCol1 + nStartColDiff; ++col)
+                        newConditions.insert( newConditions.end(), newDimensionRows, 0 );
+                    for(; col <= nCol2 - nStartColDiff; ++col)
+                    {
+                        newConditions.insert( newConditions.end(), nStartRowDiff, 0 );
+                        SCCOL oldCol = col - ( nCol1 + nStartColDiff );
+                        auto it = vConditions.begin() + oldCol * nDimensionRows;
+                        newConditions.insert( newConditions.end(), it, it + nDimensionRows );
+                        newConditions.insert( newConditions.end(), -nEndRowDiff, 0 );
+                    }
+                    for(; col <= nCol2; ++col)
+                        newConditions.insert( newConditions.end(), newDimensionRows, 0 );
+                    assert( newConditions.size() == o3tl::make_unsigned( newDimensionCols * newDimensionRows ));
+                    vConditions = std::move( newConditions );
+                    nDimensionCols = newDimensionCols;
+                    nDimensionRows = newDimensionRows;
+                }
+            }
+
             if (bRangeReduce)
             {
                 // All reference ranges must be of the same size as the main range.
@@ -6115,25 +6162,8 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             if (vConditions.empty())
                 vConditions.resize( nDimensionCols * nDimensionRows, 0);
 
-            ScQueryParam rParam;
-            rParam.nRow1       = nRow1;
-            rParam.nRow2       = nRow2;
-
-            ScQueryEntry& rEntry = rParam.GetEntry(0);
-            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            rEntry.bDoQuery = true;
-            if (!bIsString)
-            {
-                rItem.meType = ScQueryEntry::ByValue;
-                rItem.mfVal = fVal;
-                rEntry.eOp = SC_EQUAL;
-            }
-            else
-            {
-                rParam.FillInExcelSyntax(mrDoc.GetSharedStringPool(), aString.getString(), 0, pFormatter);
-                if (rItem.meType == ScQueryEntry::ByString)
-                    rParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
-            }
+            rParam.nRow1  = nRow1;
+            rParam.nRow2  = nRow2;
             rParam.nCol1  = nCol1;
             rParam.nCol2  = nCol2;
             rEntry.nField = nCol1;
