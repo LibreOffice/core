@@ -760,8 +760,10 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
     if( !rInf.GetOut() )
         return;
 
+    bool bPDFExport = rInf.GetVsh()->GetViewOptions()->IsPDFExport();
+
     // #i16816# export stuff only needed for tagged pdf support
-    if (!SwTaggedPDFHelper::IsExportTaggedPDF( *rInf.GetOut()) )
+    if (bPDFExport && !SwTaggedPDFHelper::IsExportTaggedPDF( *rInf.GetOut()) )
         return;
 
     // #i68503# the hole must have no decoration for a consistent visual appearance
@@ -779,7 +781,16 @@ void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
         pFontSave.reset(new SwFontSave( rInf, pHoleFont.get() ));
     }
 
-    rInf.DrawText(" ", *this, TextFrameIndex(0), TextFrameIndex(1));
+    if (bPDFExport)
+    {
+        rInf.DrawText(" ", *this, TextFrameIndex(0), TextFrameIndex(1));
+    }
+    else
+    {
+        // tdf#43244: Paint spaces even at end of line,
+        // but only if this paint is not called for pdf export, to keep that pdf export intact
+        rInf.DrawText(*this, rInf.GetLen());
+    }
 
     pFontSave.reset();
     pHoleFont.reset();
