@@ -15,7 +15,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf89958(UITestCase):
     def test_td89958_standard_filter(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf89958.ods")) as calc_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf89958.ods")):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select A1-> Column .uno:SelectColumn

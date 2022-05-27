@@ -18,9 +18,6 @@ class tdf118938(UITestCase):
     def test_tdf118938(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf118938.xlsx")):
             #The document was created in Calc after this fix.
-            calcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = calcDoc.getChild("grid_window")
-
             document = self.ui_test.get_component()
 
             # Without the fix in place, this test would have failed with

@@ -14,9 +14,6 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf114992(UITestCase):
     def test_tdf114992_delete_sheet_crash(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf114992.ods")) as calc_doc:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             with self.ui_test.execute_dialog_through_command(".uno:Remove", close_button="yes"):
                 pass
 

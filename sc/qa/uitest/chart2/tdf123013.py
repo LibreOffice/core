@@ -16,7 +16,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 # Bug 123013 - Can not change Trendline name in charts
 class tdf123013(UITestCase):
    def test_tdf96432_chart_trendline_name(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf123013.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("tdf123013.ods")):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))

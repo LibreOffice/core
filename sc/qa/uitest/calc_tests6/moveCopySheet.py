@@ -14,8 +14,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class moveCopySheet(UITestCase):
     def test_copy_move_sheet(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
             #default - 1 sheet; select the sheet (is selected), dialog move/copy sheet
             with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
                 #new name = newName
@@ -67,7 +65,7 @@ class moveCopySheet(UITestCase):
 
     #tdf#139464 Set OK button label to selected action: Move or Copy
     def test_tdf139464_move_sheet(self):
-        with self.ui_test.create_doc_in_start_center("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc"):
             with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
                 xOkButton = xDialog.getChild("ok")
                 xCopyButton = xDialog.getChild("copy")

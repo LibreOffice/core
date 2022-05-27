@@ -28,7 +28,6 @@ class tdf65686(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
                 xallow = xDialog.getChild("allow")
-                xallowempty = xDialog.getChild("allowempty")
                 minlist = xDialog.getChild("minlist")
 
                 select_by_text(xallow, "List")
@@ -41,7 +40,6 @@ class tdf65686(UITestCase):
             #> there are empty lines in the list Entries
             with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
                 xallow = xDialog.getChild("allow")
-                xallowempty = xDialog.getChild("allowempty")
                 minlist = xDialog.getChild("minlist")
 
                 self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "List")

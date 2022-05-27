@@ -14,9 +14,6 @@ from uitest.uihelper.common import get_state_as_dict
 class tdf116996(UITestCase):
     def test_tdf116996_enable_experimental_feature(self):
         with self.ui_test.create_doc_in_start_center("calc"):
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog", close_button="") as xDialogOpt:
                 xPages = xDialogOpt.getChild("pages")
                 xLOEntry = xPages.getChild('0')                 # Libreoffice

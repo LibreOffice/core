@@ -28,8 +28,6 @@ class tdf77509(UITestCase):
                 xeddataarea = xDialog.getChild("eddataarea")
                 xadd = xDialog.getChild("add")
                 xbyrow = xDialog.getChild("byrow")
-                xbycol = xDialog.getChild("bycol")
-                xeddestarea = xDialog.getChild("eddestarea")
 
                 select_by_text(xfunc, "Sum")
                 #4. Source data ranges: $Sheet1.$A$1:$B$7

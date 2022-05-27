@@ -15,7 +15,7 @@ from libreoffice.calc.document import get_cell_by_position
 class tdf118308(UITestCase):
 
     def test_tdf118308(self):
-        with self.ui_test.create_doc_in_start_center("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

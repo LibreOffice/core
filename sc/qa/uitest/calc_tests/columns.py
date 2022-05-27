@@ -59,7 +59,6 @@ class CalcColumns(UITestCase):
 
             with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
                 xvalue = xDialog.getChild("value")
-                xdefault = xDialog.getChild("default")
                 #write your own value
                 xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))

@@ -26,13 +26,7 @@ class tdf122509(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")  #tab Numbers
-                xliststore1 = xDialog.getChild("categorylb")  #1st list / Category
-                xliststore2 = xDialog.getChild("formatlb")  #2nd list / Format
-                xdecimalsed = xDialog.getChild("decimalsed")
-                xleadzerosed = xDialog.getChild("leadzerosed")
                 xnegnumred = xDialog.getChild("negnumred")
-                xthousands = xDialog.getChild("thousands")
-                xlanguagelb = xDialog.getChild("languagelb")
                 xformatted = xDialog.getChild("formatted")
 
                 self.assertEqual(get_state_as_dict(xformatted)["Text"], "#,##0.00 [$USD];[RED]-#,##0.00 [$USD]")

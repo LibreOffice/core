@@ -27,7 +27,6 @@ class tdf96698(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
                 xallow = xDialog.getChild("allow")
-                xallowempty = xDialog.getChild("allowempty")
                 xmin = xDialog.getChild("min")
 
                 select_by_text(xallow, "Custom")
@@ -35,7 +34,6 @@ class tdf96698(UITestCase):
             #verify
             with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
                 xallow = xDialog.getChild("allow")
-                xallowempty = xDialog.getChild("allowempty")
                 xmin = xDialog.getChild("min")
 
                 self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Custom")
@@ -47,7 +45,6 @@ class tdf96698(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
                 xallow = xDialog.getChild("allow")
-                xallowempty = xDialog.getChild("allowempty")
                 xmin = xDialog.getChild("min")
 
                 select_by_text(xallow, "Custom")
@@ -55,7 +52,6 @@ class tdf96698(UITestCase):
             #verify
             with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
                 xallow = xDialog.getChild("allow")
-                xallowempty = xDialog.getChild("allowempty")
                 xmin = xDialog.getChild("min")
 
                 self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Custom")
@@ -67,7 +63,6 @@ class tdf96698(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
                 xallow = xDialog.getChild("allow")
-                xallowempty = xDialog.getChild("allowempty")
                 xmin = xDialog.getChild("min")
 
                 select_by_text(xallow, "Custom")
@@ -75,7 +70,6 @@ class tdf96698(UITestCase):
             #verify
             with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
                 xallow = xDialog.getChild("allow")
-                xallowempty = xDialog.getChild("allowempty")
                 xmin = xDialog.getChild("min")
 
                 self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Custom")
@@ -87,7 +81,6 @@ class tdf96698(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
                 xallow = xDialog.getChild("allow")
-                xallowempty = xDialog.getChild("allowempty")
                 xmin = xDialog.getChild("min")
 
                 select_by_text(xallow, "Custom")
@@ -95,7 +88,6 @@ class tdf96698(UITestCase):
             #verify
             with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
                 xallow = xDialog.getChild("allow")
-                xallowempty = xDialog.getChild("allowempty")
                 xmin = xDialog.getChild("min")
 
                 self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Custom")

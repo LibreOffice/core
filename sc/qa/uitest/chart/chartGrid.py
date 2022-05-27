@@ -16,7 +16,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 # Bug 98390 - Crash when modifying minor grid
 class chartGrid(UITestCase):
    def test_tdf98390_chart_grid_dialog(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf98390.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("tdf98390.ods")):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 
