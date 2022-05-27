@@ -819,14 +819,11 @@ void QtFrame::ToTop(SalFrameToTop nFlags)
 
 void QtFrame::SetPointer(PointerStyle ePointerStyle)
 {
-    QWindow* pWindow = m_pQWidget->window()->windowHandle();
-    if (!pWindow)
-        return;
     if (ePointerStyle == m_ePointerStyle)
         return;
     m_ePointerStyle = ePointerStyle;
 
-    pWindow->setCursor(static_cast<QtData*>(GetSalData())->getCursor(ePointerStyle));
+    m_pQWidget->setCursor(static_cast<QtData*>(GetSalData())->getCursor(ePointerStyle));
 }
 
 void QtFrame::CaptureMouse(bool bMouse)
