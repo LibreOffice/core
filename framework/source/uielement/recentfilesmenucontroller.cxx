@@ -264,14 +264,17 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
     Sequence< PropertyValue > aArgsList{
         comphelper::makePropertyValue("Referer", OUString( "private:user" )),
 
-        comphelper::makePropertyValue("ReadOnly", m_aRecentFilesItems[nIndex].second),
-
         // documents in the picklist will never be opened as templates
         comphelper::makePropertyValue("AsTemplate", false),
 
         // Type detection needs to know which app we are opening it from.
         comphelper::makePropertyValue("DocumentService", m_aModuleName)
     };
+    if (m_aRecentFilesItems[nIndex].second) // tdf#149170 only add if true
+    {
+        aArgsList.realloc(aArgsList.size()+1);
+        aArgsList.getArray()[aArgsList.size()-1] = comphelper::makePropertyValue("ReadOnly", true);
+    }
     dispatchCommand(m_aRecentFilesItems[nIndex].first, aArgsList, "_default");
 }
 
