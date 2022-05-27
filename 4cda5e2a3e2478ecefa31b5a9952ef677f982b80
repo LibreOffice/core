@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd995d5f_fdda29ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000198
+      },
+      "writtenOn": "2022-05-27T07:51:10Z",
+      "side": 1,
+      "message": "Could somebody tell me if I have something more to do in the review process?\nShould I choose one more reviewer or should I wait until until the reviewing process is completed.\nThis is my first patch so I have many things to learn. :-)\nMany thanks.  ",
+      "revId": "4cda5e2a3e2478ecefa31b5a9952ef677f982b80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
