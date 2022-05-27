@@ -2029,10 +2029,10 @@ void SvTreeListBox::AdjustEntryHeight( const Image& rBmp )
 
 void SvTreeListBox::AdjustEntryHeight()
 {
-    Size aSize( GetTextWidth(OUString('X')), GetTextHeight() );
-    if( aSize.Height()  >  nEntryHeight )
+    tools::Long nHeight = GetTextHeight();
+    if( nHeight  >  nEntryHeight )
     {
-        nEntryHeight = static_cast<short>(aSize.Height()) + nEntryHeightOffs;
+        nEntryHeight = static_cast<short>(nHeight) + nEntryHeightOffs;
         pImpl->SetEntryHeight();
     }
 }
