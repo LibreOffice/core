@@ -43,6 +43,17 @@ SW_DLLPUBLIC void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OU
 SW_DLLPUBLIC tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, const OUString& rText,
                                     sal_Int32 nStt, sal_Int32 nLen, tools::Long nGridWidth,
                                     tools::Long nWidth);
+
+/// Simulate DrawStretch and adjust text.
+/// It is called under (1) a printing device (2) enable Writer compatibility option
+/// "Use printer metrics for document formatting." (3) device MapMode.ScaleX set to values
+/// other than 1.0. Unfortunately we can only reproduce the case by changing ScaleX value
+/// in SwViewShell::PrintOrPDFExport().
+/// @param[in,out] rKernArray text positions from OutDev::GetTextArray().
+/// @param nWidth width of the whole portion.
+/// @param nKern kern value.
+SW_DLLPUBLIC void StretchText(std::vector<sal_Int32>& rKernArray, sal_Int32 nLen,
+                              tools::Long nWidth, tools::Long nKern);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -203,6 +203,34 @@ tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, const OUString& rText
 
     return nDelta;
 }
+
+void StretchText(std::vector<sal_Int32>& rKernArray, sal_Int32 nLen, tools::Long nWidth,
+                 tools::Long nKern)
+{
+    sal_Int32 nZwi = nLen - 1;
+    tools::Long nDiff = nWidth - rKernArray[nZwi] - nLen * nKern;
+    tools::Long nRest = nDiff % nZwi;
+    tools::Long nAdd;
+    if (nRest < 0)
+    {
+        nAdd = -1;
+        nRest += nZwi;
+    }
+    else
+    {
+        nAdd = +1;
+        nRest = nZwi - nRest;
+    }
+    nDiff /= nZwi;
+    tools::Long nSum = nDiff;
+    for (sal_Int32 i = 0; i < nZwi;)
+    {
+        rKernArray[i] += nSum;
+        if (++i == nRest)
+            nDiff += nAdd;
+        nSum += nDiff;
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

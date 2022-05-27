@@ -124,4 +124,24 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGrid)
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
     CPPUNIT_ASSERT_EQUAL(tools::Long(160), nDelta);
 }
+
+// This unit test capture current input and output.
+// Calculation and correctness are in fact suspecious.
+CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testStretchText1)
+{
+    CharWidthArray aActual{ 211, 211, 212, 211, 211 };
+    CharWidthArray aExpected{ 186, 186, 187, 186, 311 };
+    aActual.InvokeWithKernArray([&] { Justify::StretchText(aActual.maArray, 5, 1456, 100); });
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+// This unit test capture current input and output.
+// Calculation and correctness are in fact suspecious.
+CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testStretchText2)
+{
+    CharWidthArray aActual{ 211, 211, 212, 211, 211 };
+    CharWidthArray aExpected{ 311, 311, 312, 311, -189 };
+    aActual.InvokeWithKernArray([&] { Justify::StretchText(aActual.maArray, 5, 1456, 0); });
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

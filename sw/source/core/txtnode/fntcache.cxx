@@ -1125,30 +1125,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             if( bStretch )
             {
-                sal_Int32 nZwi = sal_Int32(rInf.GetLen()) - 1;
-                tools::Long nDiff = rInf.GetWidth() - aKernArray[ nZwi ]
-                             - sal_Int32(rInf.GetLen()) * rInf.GetKern();
-                tools::Long nRest = nDiff % nZwi;
-                tools::Long nAdd;
-                if( nRest < 0 )
-                {
-                    nAdd = -1;
-                    nRest += nZwi;
-                }
-                else
-                {
-                    nAdd = +1;
-                    nRest = nZwi - nRest;
-                }
-                nDiff /= nZwi;
-                tools::Long nSum = nDiff;
-                for( sal_Int32 i = 0; i < nZwi; )
-                {
-                    aKernArray[ i ] += nSum;
-                    if( ++i == nRest )
-                        nDiff += nAdd;
-                    nSum += nDiff;
-                }
+                Justify::StretchText(aKernArray, sal_Int32(rInf.GetLen()), rInf.GetWidth(), rInf.GetKern());
             }
 
             // Modify Array for special justifications
