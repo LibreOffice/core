@@ -17,14 +17,11 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf44861(UITestCase):
    def test_tdf44861_find_replaceAll_regexp(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf44861.ods")) as calc_doc:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
             # 2. ctrl-h, in dialog
             # Search: ([0-9]{2})([0-9]{2})
             # Replace: $1.$2
             # check option "Enable regular expressions"
             # Press "Replace all"
-
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

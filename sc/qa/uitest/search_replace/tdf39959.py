@@ -17,15 +17,11 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf39959(UITestCase):
    def test_tdf39959_find_replace_all_sheets(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf39959.ods")) as calc_doc:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
-            # 1. Open a new document
+             # 1. Open a new document
             # 2. Enter "asdf" in A1
             # 3. Activate Sheet2
             # 4. Try Find-and-replace (Ctrl+Alt+F) to search for "asdf"
             # Whether the checkbox "in allen Tabellen suchen" is activated or not: LibO Calc never seems to find the text
-
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

@@ -59,10 +59,6 @@ class Tdf117899(UITestCase):
         self.ui_test.wait_until_file_is_available(xFilePath)
 
         with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
-
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             # Without the fix in place, this test would have failed here
             self.execute_conditional_format_manager_dialog()
 

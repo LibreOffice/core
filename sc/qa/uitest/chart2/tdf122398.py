@@ -16,7 +16,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 # Bug 122398 - UI: Cannot specify min/max in axis scale or axis position. Limited between 0 and 100
 class tdf122398(UITestCase):
    def test_tdf122398_chart_min_max_x_axis(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf122398.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("tdf122398.ods")):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

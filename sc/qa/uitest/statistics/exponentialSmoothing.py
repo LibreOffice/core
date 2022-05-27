@@ -50,8 +50,6 @@ class exponentialSmoothing(UITestCase):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:ExponentialSmoothingDialog") as xDialog:
                 xinputrangeedit = xDialog.getChild("input-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
-                xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
-                xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
                 xmoothingfactorspin = xDialog.getChild("smoothing-factor-spin")
 
                 xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
@@ -144,7 +142,6 @@ class exponentialSmoothing(UITestCase):
                 xinputrangeedit = xDialog.getChild("input-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
                 xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
-                xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
                 xmoothingfactorspin = xDialog.getChild("smoothing-factor-spin")
 
                 xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

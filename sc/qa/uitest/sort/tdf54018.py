@@ -17,9 +17,6 @@ from libreoffice.calc.document import get_cell_by_position
 class tdf54018(UITestCase):
     def test_td54018_sort_with_comments(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf54018.ods")) as calc_doc:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             #click top left columns / rows heading field to select all cells
             self.xUITest.executeCommand(".uno:SelectAll")
             #Menu 'Data -> Sort -> Column D -> Descending' <ok>

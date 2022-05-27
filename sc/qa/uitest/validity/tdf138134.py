@@ -33,7 +33,6 @@ class DetectiveCircle(UITestCase):
                 xallowempty = xDialog.getChild("allowempty")
                 xdata = xDialog.getChild("data")
                 xmin = xDialog.getChild("min")
-                xmax = xDialog.getChild("max")
 
                 select_by_text(xallow, "Whole Numbers")
                 xallowempty.executeAction("CLICK", tuple())

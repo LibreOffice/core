@@ -21,9 +21,8 @@ class tdf125051(UITestCase):
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A1", "text")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-            with self.ui_test.execute_dialog_through_command(".uno:SpellDialog") as xDialog2:
+            with self.ui_test.execute_dialog_through_command(".uno:SpellDialog"):
                 pass
-
 
             xDialog = self.xUITest.getTopFocusWindow()  #Spelling dialog
             #open options

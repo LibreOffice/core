@@ -12,11 +12,8 @@ class tdf137726(UITestCase):
 
     def test_tdf137726(self):
         with self.ui_test.create_doc_in_start_center("calc"):
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             # three dialogs are displayed one after the other, click OK in all of them
-            with self.ui_test.execute_dialog_through_command(".uno:DataDataPilotRun") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataDataPilotRun"):
                 pass
 
             for i in range(2):

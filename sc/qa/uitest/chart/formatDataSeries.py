@@ -16,7 +16,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 # test Chart - Data series dialog  /core/chart2/uiconfig/ui/tp_SeriesToAxis.ui
 class chartFormatDataSeries(UITestCase):
    def test_chart_format_data_series_dialog(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf93506.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("tdf93506.ods")):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 
@@ -32,11 +32,8 @@ class chartFormatDataSeries(UITestCase):
             tabcontrol = xDialog.getChild("tabcontrol")
             select_pos(tabcontrol, "0")
 
-            primaryYAxis = xDialog.getChild("RBT_OPT_AXIS_1")
             secondaryYAxis = xDialog.getChild("RBT_OPT_AXIS_2")
             leaveGap = xDialog.getChild("RB_DONT_PAINT")
-            assumeZero = xDialog.getChild("RB_ASSUME_ZERO")
-            continueLine = xDialog.getChild("RB_CONTINUE_LINE")
             includeHiddenCells = xDialog.getChild("CB_INCLUDE_HIDDEN_CELLS")
             hideLegend = xDialog.getChild("CB_LEGEND_ENTRY_HIDDEN")
 
@@ -69,11 +66,8 @@ class chartFormatDataSeries(UITestCase):
             tabcontrol = xDialog.getChild("tabcontrol")
             select_pos(tabcontrol, "0")
 
-            primaryYAxis = xDialog.getChild("RBT_OPT_AXIS_1")
             secondaryYAxis = xDialog.getChild("RBT_OPT_AXIS_2")
             leaveGap = xDialog.getChild("RB_DONT_PAINT")
-            assumeZero = xDialog.getChild("RB_ASSUME_ZERO")
-            continueLine = xDialog.getChild("RB_CONTINUE_LINE")
             includeHiddenCells = xDialog.getChild("CB_INCLUDE_HIDDEN_CELLS")
             hideLegend = xDialog.getChild("CB_LEGEND_ENTRY_HIDDEN")
 

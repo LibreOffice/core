@@ -51,7 +51,6 @@ class chiSquare(UITestCase):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:ChiSquareTestDialog") as xDialog:
                 xinputrangeedit = xDialog.getChild("input-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
-                xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
                 xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
 
                 xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

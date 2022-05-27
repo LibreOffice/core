@@ -19,8 +19,7 @@ import datetime
 class CalcTrackedChanges(UITestCase):
 
     def test_tdf131907(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf131907.ods")) as calc_doc:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("tdf131907.ods")):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptChanges", close_button="close") as xTrackDlg:
 
                 xChangesList = xTrackDlg.getChild("calcchanges")
@@ -41,10 +40,8 @@ class CalcTrackedChanges(UITestCase):
 
 
     def test_tdf66263_Protect_Records(self):
-        with self.ui_test.create_doc_in_start_center("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc"):
             self.ui_test.wait_until_child_is_available("grid_window")
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
             self.xUITest.executeCommand(".uno:TraceChangeMode")
             #protect dialog
             with self.ui_test.execute_dialog_through_command(".uno:ProtectTraceChangeMode") as xDialog:

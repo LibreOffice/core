@@ -15,9 +15,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 # Bug 123508 - "Fit print range(s) to width/height" value falls back to default when window closes
 class tdf123508(UITestCase):
    def test_tdf123508_format_page_scale(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf123508.ods")) as calc_doc:
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
+    with self.ui_test.load_file(get_url_for_data_file("tdf123508.ods")):
         #open "Format > Page - Sheet > Scale
         with self.ui_test.execute_dialog_through_command(".uno:PageFormatDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")

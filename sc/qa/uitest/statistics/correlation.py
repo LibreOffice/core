@@ -154,7 +154,6 @@ class correlation(UITestCase):
                 xinputrangeedit = xDialog.getChild("input-range-edit")
                 xoutputrangeedit = xDialog.getChild("output-range-edit")
                 xgroupedbyrowsradio = xDialog.getChild("groupedby-rows-radio")
-                xgroupedbycolumnsradio = xDialog.getChild("groupedby-columns-radio")
 
                 xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 xinputrangeedit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))

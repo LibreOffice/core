@@ -13,7 +13,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf86253(UITestCase):
 
     def test_tdf86253(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf86253.ods")) as calc_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf86253.ods")):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

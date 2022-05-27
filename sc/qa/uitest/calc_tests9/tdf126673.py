@@ -16,7 +16,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 # Bug 126673 - Calc: Auto-fit column and auto-fit row don't work with line break
 class tdf126673(UITestCase):
     def test_tdf126673_auto_fit_row_height(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf126673.ods")) as calc_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf126673.ods")):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

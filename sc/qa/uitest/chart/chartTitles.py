@@ -85,7 +85,7 @@ class chartTitles(UITestCase):
 
    def test_title_move_with_arrows_keys(self):
 
-    with self.ui_test.load_file(get_url_for_data_file("chartArea.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("chartArea.ods")):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

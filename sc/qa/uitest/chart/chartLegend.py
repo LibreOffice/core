@@ -16,7 +16,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 # Chart Display Legend dialog
 class chartLegend(UITestCase):
    def test_chart_display_legend_dialog(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf98390.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("tdf98390.ods")):
       xCalcDoc = self.xUITest.getTopFocusWindow()
       gridwin = xCalcDoc.getChild("grid_window")
 
@@ -27,9 +27,6 @@ class chartLegend(UITestCase):
       xSeriesObj =  xChartMain.getChild("CID/D=0:CS=0:CT=0:Series=0")
       with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "InsertMenuLegend"})) as xDialog:
         left = xDialog.getChild("left")
-        right = xDialog.getChild("right")
-        top = xDialog.getChild("top")
-        bottom = xDialog.getChild("bottom")
 
         left.executeAction("CLICK", tuple())
 
@@ -75,7 +72,7 @@ class chartLegend(UITestCase):
 
    def test_legends_move_with_arrows_keys(self):
 
-    with self.ui_test.load_file(get_url_for_data_file("dataLabels.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("dataLabels.ods")):
       xCalcDoc = self.xUITest.getTopFocusWindow()
       gridwin = xCalcDoc.getChild("grid_window")
 
