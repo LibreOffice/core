@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "87cf896b_c3cbc0a8",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-27T08:14:34Z",
+      "side": 1,
+      "message": "feel free to submit a patch for it but please make sure the script works before doing it",
+      "parentUuid": "ed14ae62_ff9f799b",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 50
+      },
+      "revId": "c261ef7e6b1d168233e7bd83579245f6984cc366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "421e397b_9fe81cca",
         "filename": "bin/crashreportScraper.py",
         "patchSetId": 5
