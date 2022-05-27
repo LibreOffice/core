@@ -111,7 +111,7 @@ Fix MSVC 2015 build
 --- pdfium/core/fpdfapi/page/cpdf_meshstream.cpp.orig	2020-12-03 16:54:09.233498800 +0100
 +++ pdfium/core/fpdfapi/page/cpdf_meshstream.cpp	2020-12-03 16:41:29.173766500 +0100
 @@ -209,7 +209,7 @@
-       func->Call(color_value, 1, result, &nResults);
+       func->Call(pdfium::make_span(color_value, 1), result);
    }
  
 -  m_pCS->GetRGB(result, &r, &g, &b);
