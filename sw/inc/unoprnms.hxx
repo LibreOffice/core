@@ -883,6 +883,11 @@
 #define UNO_NAME_DATE_FORMAT "DateFormat"
 #define UNO_NAME_DATE_LANGUAGE "DateLanguage"
 #define UNO_NAME_CURRENT_DATE "CurrentDate"
+#define UNO_NAME_PLACEHOLDER_DOC_PART "PlaceholderDocPart"
+#define UNO_NAME_DATA_BINDING_PREFIX_MAPPINGS "DataBindingPrefixMappings"
+#define UNO_NAME_DATA_BINDING_XPATH "DataBindingXpath"
+#define UNO_NAME_DATA_BINDING_STORE_ITEM_ID "DataBindingStoreItemID"
+#define UNO_NAME_COLOR "Color"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

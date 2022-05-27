@@ -326,6 +326,16 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(m_aDateLanguage.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("current-date"),
                                       BAD_CAST(m_aCurrentDate.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("placeholder-doc-part"),
+                                      BAD_CAST(m_aPlaceholderDocPart.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("data-binding-prefix-mappings"),
+                                      BAD_CAST(m_aDataBindingPrefixMappings.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("data-binding-xpath"),
+                                      BAD_CAST(m_aDataBindingXpath.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("data-binding-store-item-id"),
+                                      BAD_CAST(m_aDataBindingStoreItemID.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("color"),
+                                      BAD_CAST(m_aColor.toUtf8().getStr()));
 
     if (!m_aListItems.empty())
     {

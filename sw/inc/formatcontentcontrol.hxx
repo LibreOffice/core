@@ -139,6 +139,21 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
     /// Date in YYYY-MM-DDT00:00:00Z format.
     OUString m_aCurrentDate;
 
+    /// The placeholder's doc part: just remembered.
+    OUString m_aPlaceholderDocPart;
+
+    /// The data bindings's prefix mappings: just remembered.
+    OUString m_aDataBindingPrefixMappings;
+
+    /// The data bindings's XPath: just remembered.
+    OUString m_aDataBindingXpath;
+
+    /// The data bindings's store item ID: just remembered.
+    OUString m_aDataBindingStoreItemID;
+
+    /// The color: just remembered.
+    OUString m_aColor;
+
     /// Stores a list item index, in case the doc model is not yet updated.
     std::optional<size_t> m_oSelectedListItem;
 
@@ -233,6 +248,13 @@ public:
     /// Formats m_oSelectedDate, taking m_aDateFormat and m_aDateLanguage into account.
     OUString GetDateString() const;
 
+    void SetPlaceholderDocPart(const OUString& rPlaceholderDocPart)
+    {
+        m_aPlaceholderDocPart = rPlaceholderDocPart;
+    }
+
+    OUString GetPlaceholderDocPart() const { return m_aPlaceholderDocPart; }
+
     void SetSelectedListItem(std::optional<size_t> oSelectedListItem)
     {
         m_oSelectedListItem = oSelectedListItem;
@@ -245,6 +267,31 @@ public:
     std::optional<double> GetSelectedDate() const { return m_oSelectedDate; }
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+    void SetDataBindingPrefixMappings(const OUString& rDataBindingPrefixMappings)
+    {
+        m_aDataBindingPrefixMappings = rDataBindingPrefixMappings;
+    }
+
+    OUString GetDataBindingPrefixMappings() const { return m_aDataBindingPrefixMappings; }
+
+    void SetDataBindingXpath(const OUString& rDataBindingXpath)
+    {
+        m_aDataBindingXpath = rDataBindingXpath;
+    }
+
+    OUString GetDataBindingXpath() const { return m_aDataBindingXpath; }
+
+    void SetDataBindingStoreItemID(const OUString& rDataBindingStoreItemID)
+    {
+        m_aDataBindingStoreItemID = rDataBindingStoreItemID;
+    }
+
+    OUString GetDataBindingStoreItemID() const { return m_aDataBindingStoreItemID; }
+
+    void SetColor(const OUString& rColor) { m_aColor = rColor; }
+
+    OUString GetColor() const { return m_aColor; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
