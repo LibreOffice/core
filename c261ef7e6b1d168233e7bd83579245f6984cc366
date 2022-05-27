@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ed14ae62_ff9f799b",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2022-05-27T05:08:47Z",
+      "side": 1,
+      "message": "it could be done something like this, and the person who will maintain the script will know that only dates are important, but not time.\n\n    value \u003d \", \".join(value.split(\", \")[:-1])\n\n    return datetime.strptime(value, \u0027%b %d, %Y\u0027)",
+      "parentUuid": "aeeeeec8_0e23df08",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 50
+      },
+      "revId": "c261ef7e6b1d168233e7bd83579245f6984cc366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "421e397b_9fe81cca",
         "filename": "bin/crashreportScraper.py",
         "patchSetId": 5
