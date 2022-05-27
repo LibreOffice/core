@@ -320,9 +320,13 @@ void RecentDocsViewItem::OpenDocument()
     xTrans->parseStrict(aTargetURL);
 
     aArgsList = { comphelper::makePropertyValue("Referer", OUString("private:user")),
-                  comphelper::makePropertyValue("ReadOnly", m_isReadOnly),
                   // documents will never be opened as templates
                   comphelper::makePropertyValue("AsTemplate", false) };
+    if (m_isReadOnly) // tdf#149170 only add if true
+    {
+        aArgsList.realloc(aArgsList.size()+1);
+        aArgsList.getArray()[aArgsList.size()-1] = comphelper::makePropertyValue("ReadOnly", true);
+    }
 
     xDispatch = xDesktop->queryDispatch(aTargetURL, "_default", 0);
 
