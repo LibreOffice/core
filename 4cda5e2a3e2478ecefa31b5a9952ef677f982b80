@@ -16,6 +16,23 @@
       "message": "Could somebody tell me if I have something more to do in the review process?\nShould I choose one more reviewer or should I wait until until the reviewing process is completed.\nThis is my first patch so I have many things to learn. :-)\nMany thanks.  ",
       "revId": "4cda5e2a3e2478ecefa31b5a9952ef677f982b80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8c46d01_35fca285",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-27T19:10:09Z",
+      "side": 1,
+      "message": "argh, what a disaster, terribly sorry i missed this patch, and the bug for that matter, thanks! will backport it immediately",
+      "revId": "4cda5e2a3e2478ecefa31b5a9952ef677f982b80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
