@@ -39,6 +39,30 @@
       },
       "revId": "ea10718bb7f6b7a5ee15cb305357decea085e57a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b19ea1a_88e4327d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 2534,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-27T07:36:39Z",
+      "side": 1,
+      "message": "Repeated name because (a) this will appear in the Optimize Size menu, where all the icons have only their name as tool tip, so it will look strange that one only has an explanation and the others have nothing, and (b) given that the name is also used in the help and the menus, then it is useful to know that the same command was involved.",
+      "parentUuid": "f75aac96_d50e78fd",
+      "range": {
+        "startLine": 2534,
+        "startChar": 34,
+        "endLine": 2534,
+        "endChar": 56
+      },
+      "revId": "ea10718bb7f6b7a5ee15cb305357decea085e57a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
