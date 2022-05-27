@@ -11,6 +11,7 @@
 #define INCLUDED_BASEGFX_DRAWCOMMANDS_H
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include <basegfx/color/bcolor.hxx>
@@ -141,9 +142,9 @@ public:
     std::shared_ptr<basegfx::BColor> mpStrokeColor;
     std::shared_ptr<GradientInfo> mpFillGradient;
 
-    DrawPath(basegfx::B2DPolyPolygon const& rPolyPolygon)
+    DrawPath(basegfx::B2DPolyPolygon aPolyPolygon)
         : DrawBase(DrawCommandType::Path)
-        , maPolyPolygon(rPolyPolygon)
+        , maPolyPolygon(std::move(aPolyPolygon))
         , mnStrokeWidth(1.0)
         , mnOpacity(1.0)
     {

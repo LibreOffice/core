@@ -24,6 +24,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
+#include <utility>
 #include <basegfx/basegfxdllapi.h>
 
 namespace basegfx { class B2DRange; }
@@ -197,8 +198,8 @@ namespace basegfx::utils
             }
 
         public:
-            B2DHomMatrixBufferedOnDemandDecompose(const B2DHomMatrix& rB2DHomMatrix = B2DHomMatrix())
-            :   maB2DHomMatrix(rB2DHomMatrix),
+            B2DHomMatrixBufferedOnDemandDecompose(B2DHomMatrix aB2DHomMatrix = B2DHomMatrix())
+            :   maB2DHomMatrix(std::move(aB2DHomMatrix)),
                 mfRotate(0.0),
                 mfShearX(0.0),
                 mbDecomposed(false)

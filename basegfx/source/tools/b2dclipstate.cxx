@@ -26,6 +26,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <utility>
 
 
 namespace basegfx::utils
@@ -39,8 +40,8 @@ namespace basegfx::utils
             mePendingOps(UNION)
         {}
 
-        explicit ImplB2DClipState( const B2DPolyPolygon& rPoly ) :
-            maClipPoly(rPoly),
+        explicit ImplB2DClipState( B2DPolyPolygon aPoly ) :
+            maClipPoly(std::move(aPoly)),
             mePendingOps(UNION)
         {}
 
