@@ -73,8 +73,9 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
     SCROW endRow = maRange.aEnd.Row();
     SCCOL startCol = maRange.aStart.Col();
     SCCOL endCol = maRange.aEnd.Col();
-    if (!pDoc->ShrinkToDataArea(nTab, startCol, startRow, endCol, endRow))
-        return;
+    if (!item.mbMatchEmpty)
+        if (!pDoc->ShrinkToDataArea(nTab, startCol, startRow, endCol, endRow))
+            return;
 
     if (mValues == ValueType::Values)
     {
