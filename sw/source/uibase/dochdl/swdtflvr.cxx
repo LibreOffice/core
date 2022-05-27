@@ -1487,6 +1487,11 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                                     &nActionFlags );
     }
 
+    // when HTML is just an image don't generate new section
+    if (rData.HasFormat(SotClipboardFormatId::HTML_SIMPLE) && rData.HasFormat(SotClipboardFormatId::HTML_NO_COMMENT)
+        && rData.HasFormat(SotClipboardFormatId::BITMAP) && nFormat == SotClipboardFormatId::FILE_LIST)
+        nFormat = SotClipboardFormatId::BITMAP;
+
     // tdf#37223 avoid non-native insertion of Calc worksheets in the following cases:
     // content of 1-cell worksheets are inserted as simple text using RTF format,
     // bigger worksheets within native (Writer) table cells are inserted as native tables,
@@ -3100,7 +3105,7 @@ bool SwTransferable::PasteFileName( TransferableDataHelper& rData,
                 OUString sFileURL = URIHelper::SmartRel2Abs(INetURLObject(), sFile, Link<OUString *, bool>(), false );
                 std::shared_ptr<const SfxFilter> pFlt = SwPasteSdr::SetAttr == nAction
                         ? nullptr : SwIoSystem::GetFileFilter(sFileURL);
-                if( pFlt && dynamic_cast< const SwWebDocShell *>( rSh.GetView().GetDocShell() ) == nullptr )
+                if( pFlt && dynamic_cast< const SwWebDocShell *>( rSh.GetView().GetDocShell() ) == nullptr && !bIsURLFile)
                 {
                     // and then pull up the insert-region-dialog
                     SwSectionData aSect(
