@@ -50,6 +50,24 @@
       "message": "https://cpci.cbg.collabora.co.uk:8080/job/Gerrit%20for%20co-2021/1762/",
       "revId": "e2b3576e9372d9951dd15419d5f3139a14ff5303",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a30c45f0_a574822e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2022-05-27T09:57:42Z",
+      "side": 1,
+      "message": "It seems the failed CI instance is not using the latest patch - patchset 5.",
+      "parentUuid": "19165c88_650f6073",
+      "revId": "e2b3576e9372d9951dd15419d5f3139a14ff5303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
