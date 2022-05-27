@@ -40,7 +40,7 @@ namespace basegfx::unotools
         : public UnoPolyPolygonBase
     {
     public:
-        explicit UnoPolyPolygon( const B2DPolyPolygon& );
+        explicit UnoPolyPolygon( B2DPolyPolygon );
 
         // XPolyPolygon2D
         SAL_DLLPRIVATE virtual void SAL_CALL addPolyPolygon( const css::geometry::RealPoint2D& position, const css::uno::Reference< css::rendering::XPolyPolygon2D >& polyPolygon ) override;

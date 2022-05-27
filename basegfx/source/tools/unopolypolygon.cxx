@@ -28,13 +28,14 @@
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
 namespace basegfx::unotools
 {
-    UnoPolyPolygon::UnoPolyPolygon( const B2DPolyPolygon& rPolyPoly ) :
-        maPolyPoly( rPolyPoly ),
+    UnoPolyPolygon::UnoPolyPolygon( B2DPolyPolygon aPolyPoly ) :
+        maPolyPoly(std::move( aPolyPoly )),
         meFillRule( rendering::FillRule_EVEN_ODD )
     {
         // or else races will haunt us.

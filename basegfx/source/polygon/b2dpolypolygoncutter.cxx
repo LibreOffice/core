@@ -28,6 +28,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <sal/log.hxx>
+#include <utility>
 #include <vector>
 #include <algorithm>
 
@@ -513,8 +514,8 @@ namespace basegfx
                 impSolve();
             }
 
-            explicit solver(const B2DPolyPolygon& rOriginal, size_t* pPointLimit = nullptr)
-            :   maOriginal(rOriginal),
+            explicit solver(B2DPolyPolygon aOriginal, size_t* pPointLimit = nullptr)
+            :   maOriginal(std::move(aOriginal)),
                 mbIsCurve(false),
                 mbChanged(false)
             {

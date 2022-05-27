@@ -23,6 +23,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <utility>
 #include <basegfx/basegfxdllapi.h>
 
 namespace basegfx { class B2DRange; }
@@ -72,10 +73,10 @@ namespace basegfx
         }
 
         ODFGradientInfo(
-            const B2DHomMatrix& rTextureTransform,
+            B2DHomMatrix aTextureTransform,
             double fAspectRatio,
             sal_uInt32 nSteps)
-        :   maTextureTransform(rTextureTransform),
+        :   maTextureTransform(std::move(aTextureTransform)),
             mfAspectRatio(fAspectRatio),
             mnSteps(nSteps)
         {
