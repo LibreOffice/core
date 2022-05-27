@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2f72e9f_a1b82050",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-05-27T10:44:15Z",
+      "side": 1,
+      "message": "The convention is to use the same character regardless.",
+      "revId": "9d8e63dfffdc7d5e02816ad8cb91fe11ee1ded5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
