@@ -33,6 +33,23 @@
       "message": "argh, what a disaster, terribly sorry i missed this patch, and the bug for that matter, thanks! will backport it immediately",
       "revId": "4cda5e2a3e2478ecefa31b5a9952ef677f982b80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb3d37c5_691cdab6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-27T19:11:24Z",
+      "side": 1,
+      "message": "copying V+1 from patchset 1",
+      "revId": "4cda5e2a3e2478ecefa31b5a9952ef677f982b80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
