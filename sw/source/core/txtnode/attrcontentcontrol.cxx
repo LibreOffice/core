@@ -32,6 +32,11 @@
 
 using namespace com::sun::star;
 
+namespace
+{
+inline constexpr OUStringLiteral CURRENT_DATE_FORMAT = u"YYYY-MM-DD";
+}
+
 SwFormatContentControl* SwFormatContentControl::CreatePoolDefault(sal_uInt16 nWhich)
 {
     return new SwFormatContentControl(nWhich);
@@ -218,7 +223,7 @@ OUString SwContentControl::GetDateString() const
 
     if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
-        // Try to find a format based on just the language.
+        // If not found, then create it.
         sal_Int32 nCheckPos = 0;
         SvNumFormatType nType;
         OUString aFormat = m_aDateFormat;
@@ -240,6 +245,60 @@ OUString SwContentControl::GetDateString() const
 
     pNumberFormatter->GetOutputString(*m_oSelectedDate, nFormat, aFormatted, &pColor, false);
     return aFormatted;
+}
+
+void SwContentControl::SetCurrentDateValue(double fCurrentDate)
+{
+    SwDoc& rDoc = m_pTextNode->GetDoc();
+    SvNumberFormatter* pNumberFormatter = rDoc.GetNumberFormatter();
+    OUString aFormatted;
+    sal_uInt32 nFormat = pNumberFormatter->GetEntryKey(CURRENT_DATE_FORMAT, LANGUAGE_ENGLISH_US);
+    if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+    {
+        // If not found, then create it.
+        sal_Int32 nCheckPos = 0;
+        SvNumFormatType nType;
+        OUString sFormat = CURRENT_DATE_FORMAT;
+        pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat, LANGUAGE_ENGLISH_US);
+    }
+
+    if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+    {
+        return;
+    }
+
+    const Color* pColor = nullptr;
+    pNumberFormatter->GetOutputString(fCurrentDate, nFormat, aFormatted, &pColor, false);
+    m_aCurrentDate = aFormatted + "T00:00:00Z";
+}
+
+double SwContentControl::GetCurrentDateValue() const
+{
+    if (m_aCurrentDate.isEmpty())
+    {
+        return 0;
+    }
+
+    SwDoc& rDoc = m_pTextNode->GetDoc();
+    SvNumberFormatter* pNumberFormatter = rDoc.GetNumberFormatter();
+    sal_uInt32 nFormat = pNumberFormatter->GetEntryKey(CURRENT_DATE_FORMAT, LANGUAGE_ENGLISH_US);
+    if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+    {
+        sal_Int32 nCheckPos = 0;
+        SvNumFormatType nType;
+        OUString sFormat = CURRENT_DATE_FORMAT;
+        pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat, LANGUAGE_ENGLISH_US);
+    }
+
+    if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+    {
+        return 0;
+    }
+
+    double dCurrentDate = 0;
+    OUString aCurrentDate = m_aCurrentDate.replaceAll("T00:00:00Z", "");
+    pNumberFormatter->IsNumberFormat(aCurrentDate, nFormat, dCurrentDate);
+    return dCurrentDate;
 }
 
 void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -265,6 +324,8 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(m_aDateFormat.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("date-language"),
                                       BAD_CAST(m_aDateLanguage.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("current-date"),
+                                      BAD_CAST(m_aCurrentDate.toUtf8().getStr()));
 
     if (!m_aListItems.empty())
     {

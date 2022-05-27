@@ -190,9 +190,12 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
         aRewriter.AddRule(UndoArg3, SwResId(STR_START_QUOTE) + aNewState + SwResId(STR_END_QUOTE));
         GetIDocumentUndoRedo().StartUndo(SwUndoId::REPLACE, &aRewriter);
 
+        // Write the doc model.
+        pContentControl->SetCurrentDateValue(*pContentControl->GetSelectedDate());
+        pContentControl->SetSelectedDate(std::nullopt);
+
         // Update the content.
         DelLeft();
-        pContentControl->SetSelectedDate(std::nullopt);
         Insert(aNewState);
 
         GetIDocumentUndoRedo().EndUndo(SwUndoId::REPLACE, &aRewriter);

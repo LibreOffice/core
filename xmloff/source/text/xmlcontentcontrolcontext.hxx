@@ -47,6 +47,7 @@ class XMLContentControlContext : public SvXMLImportContext
     bool m_bDate = false;
     OUString m_aDateFormat;
     OUString m_aDateLanguage;
+    OUString m_aCurrentDate;
 
 public:
     XMLContentControlContext(SvXMLImport& rImport, sal_Int32 nElement, XMLHints_Impl& rHints,
