@@ -112,6 +112,11 @@ void XMLContentControlContext::startFastElement(
                 m_aDateLanguage = rIter.toString();
                 break;
             }
+            case XML_ELEMENT(LO_EXT, XML_CURRENT_DATE):
+            {
+                m_aCurrentDate = rIter.toString();
+                break;
+            }
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", rIter);
         }
@@ -192,6 +197,10 @@ void XMLContentControlContext::endFastElement(sal_Int32)
     if (!m_aDateLanguage.isEmpty())
     {
         xPropertySet->setPropertyValue("DateLanguage", uno::Any(m_aDateLanguage));
+    }
+    if (!m_aCurrentDate.isEmpty())
+    {
+        xPropertySet->setPropertyValue("CurrentDate", uno::Any(m_aCurrentDate));
     }
 }
 

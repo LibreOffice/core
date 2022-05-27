@@ -343,6 +343,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDateContentControl)
     // - Actual  : test
     // i.e. the content control was not updated.
     CPPUNIT_ASSERT_EQUAL(OUString("2022-05-24"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
+    CPPUNIT_ASSERT_EQUAL(OUString("2022-05-24T00:00:00Z"),
+                         rFormatContentControl.GetContentControl()->GetCurrentDate());
 }
 }
 
