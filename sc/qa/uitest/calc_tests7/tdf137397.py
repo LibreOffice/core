@@ -15,7 +15,7 @@ class tdf137397(UITestCase):
 
     def test_tdf137397(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf137397.ods")) as calc_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf137397.ods")):
 
             change_measurement_unit(self, 'Centimeter')
 

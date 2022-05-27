@@ -19,7 +19,7 @@ class CreateRangeNameTest(UITestCase):
 
     def test_create_range_name(self):
 
-        with self.ui_test.create_doc_in_start_center("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             calcDoc = self.xUITest.getTopFocusWindow()
             xPosWindow = calcDoc.getChild('pos_window')

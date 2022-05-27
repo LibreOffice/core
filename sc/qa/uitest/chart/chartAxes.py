@@ -15,7 +15,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 # Chart Enable Axes dialog
 class chartAxes(UITestCase):
    def test_chart_enable_grids_dialog(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf98390.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("tdf98390.ods")):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

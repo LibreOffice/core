@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class namedRanges(UITestCase):
 
     def test_tdf130371(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf130371.ods")) as calc_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf130371.ods")):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

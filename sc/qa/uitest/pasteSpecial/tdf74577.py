@@ -26,10 +26,6 @@ class tdf74577(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
 
         with self.ui_test.load_empty_file("calc") as calc_document:
-
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial", close_button="") as xDialog:
 
                 xList = xDialog.getChild('list')

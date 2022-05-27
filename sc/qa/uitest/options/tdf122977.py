@@ -14,9 +14,6 @@ from uitest.uihelper.common import get_state_as_dict
 class chartDefaultColors(UITestCase):
     def test_tdf122977_crash_chart_default_colors_options(self):
         with self.ui_test.create_doc_in_start_center("calc"):
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             #Go to Tools -> Options -> Charts -> Default Colors
             with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog", close_button="cancel") as xDialogOpt:
 

@@ -16,10 +16,6 @@ class tdf101894(UITestCase):
 
   def test_tdf101894(self):
     with self.ui_test.load_file(get_url_for_data_file("tdf101894.ods")) as calc_doc:
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-
-
         xChart = calc_doc.Sheets[0].Charts[0]
         xDataSeries = xChart.getEmbeddedObject().getFirstDiagram().CoordinateSystems[0].ChartTypes[0].DataSeries
 

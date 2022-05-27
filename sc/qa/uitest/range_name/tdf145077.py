@@ -16,7 +16,7 @@ class tdf145077(UITestCase):
 
     def test_tdf145077(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf145077.ods")) as document:
+        with self.ui_test.load_file(get_url_for_data_file("tdf145077.ods")):
 
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")

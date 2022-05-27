@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class ReplaceTest(UITestCase):
 
     def test_tdf106194(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf106194.ods")) as doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf106194.ods")):
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 

@@ -14,9 +14,6 @@ class tdf133629(UITestCase):
 
     def test_tdf133629(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             with self.ui_test.execute_dialog_through_command(".uno:Insert"):
                 pass
 

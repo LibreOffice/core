@@ -72,9 +72,6 @@ class calcSheetDelete(UITestCase):
     def test_delete_more_sheets_at_once(self):
 
         with self.ui_test.create_doc_in_start_center("calc") as document:
-
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            xGridWindow = xCalcDoc.getChild("grid_window")
             nrSheets = document.Sheets.getCount()  #default number
             i = 0
             while i < 6:
@@ -103,9 +100,6 @@ class calcSheetDelete(UITestCase):
     def test_tdf105105_delete_lots_of_sheets_at_once(self):
 
         with self.ui_test.create_doc_in_start_center("calc") as document:
-
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            xGridWindow = xCalcDoc.getChild("grid_window")
             nrSheets = document.Sheets.getCount()  #default number
             i = 0
             while i < 100:

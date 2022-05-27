@@ -202,7 +202,7 @@ class CalcSorting(UITestCase):
 
 
     def test_Sorting_sort_criteria(self):
-        with self.ui_test.create_doc_in_start_center("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #In column A enter: Number; 3; 4; 6; 2 / In column B enter: Misc; s; d; f; g

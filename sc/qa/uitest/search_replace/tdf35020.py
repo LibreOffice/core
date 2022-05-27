@@ -17,9 +17,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf35020(UITestCase):
    def test_tdf39959_find_replace_all_sheets(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf35020.ods")) as calc_doc:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

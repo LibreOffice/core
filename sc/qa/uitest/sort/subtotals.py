@@ -71,8 +71,6 @@ class Subtotals(UITestCase):
 
     def test_tdf88735(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf88735.ods")) as calc_doc:
-            XcalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = XcalcDoc.getChild("grid_window")
             # 1 select all cells
             self.xUITest.executeCommand(".uno:SelectAll")#use uno command Menu Edit->Select All
             # 2 invoke sub-total menu and select none
@@ -88,8 +86,6 @@ class Subtotals(UITestCase):
 
     def test_tdf56958(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf56958.ods")) as calc_doc:
-            XcalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = XcalcDoc.getChild("grid_window")
             # 1. Open the test file
             # 2. Data->Subtotals
             with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:

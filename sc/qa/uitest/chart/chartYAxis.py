@@ -16,7 +16,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 # Chart - Y Axis
 class chartYAxis(UITestCase):
    def test_chart_y_axis_dialog(self):
-    with self.ui_test.load_file(get_url_for_data_file("tdf122398.ods")) as calc_doc:
+    with self.ui_test.load_file(get_url_for_data_file("tdf122398.ods")):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 

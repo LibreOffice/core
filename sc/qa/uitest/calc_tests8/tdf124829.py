@@ -15,9 +15,6 @@ class tdf124829(UITestCase):
     def test_tdf124829_Crash_cutting_undo_sheet_external_links(self):
         #numberingformatpage.ui
         with self.ui_test.load_file(get_url_for_data_file("tdf124829.ods")) as calc_doc:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             self.xUITest.executeCommand(".uno:SelectAll")
             self.xUITest.executeCommand(".uno:Cut")
             for i in range(40):

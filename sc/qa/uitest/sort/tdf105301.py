@@ -14,7 +14,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf105301(UITestCase):
 
     def test_tdf105301(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf105301.ods")) as calc_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf105301.ods")):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

@@ -17,7 +17,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf105544(UITestCase):
     def test_tdf105544_Manage_Conditional_Formatting_edit_condition(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf105544.ods")) as calc_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf105544.ods")):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #2. select B3. Format> conditional formatting> manage

@@ -15,9 +15,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class consolidate(UITestCase):
     def test_consolidate(self):
         with self.ui_test.load_file(get_url_for_data_file("consolidate.ods")) as calc_doc:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
             with self.ui_test.execute_modeless_dialog_through_command(".uno:DataConsolidate") as xDialog:
                 xfunc = xDialog.getChild("func")
                 xlbdataarea = xDialog.getChild("lbdataarea")
