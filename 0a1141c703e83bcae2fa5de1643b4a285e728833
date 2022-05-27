@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aa16527a_cadd5ba6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-05-27T06:35:39Z",
+      "side": 1,
+      "message": "I don\u0027t think there is anything wrong with cout in the tests - we already use it in some tests. Anything that is written to the stdout isn\u0027t shown unless the test actually fails anyway.\n\nAlternative to this would be SAL_INFO, SAL_WARN,...  which are the logger we use in the production code, but usually not in the tests.",
+      "parentUuid": "97507059_8d6dc3fd",
+      "revId": "0a1141c703e83bcae2fa5de1643b4a285e728833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "32e98238_ce1b5fb2",
         "filename": "toolkit/qa/cppunit/a11y/AccessibilityTools.cxx",
         "patchSetId": 6
