@@ -601,6 +601,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     xContentControlProps->setPropertyValue("Date", uno::Any(true));
     xContentControlProps->setPropertyValue("DateFormat", uno::Any(OUString("M/d/yyyy")));
     xContentControlProps->setPropertyValue("DateLanguage", uno::Any(OUString("en-US")));
+    xContentControlProps->setPropertyValue("CurrentDate",
+                                           uno::Any(OUString("2022-05-25T00:00:00Z")));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // Then make sure that the specified properties are set:
@@ -614,6 +616,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     CPPUNIT_ASSERT(pContentControl->GetDate());
     CPPUNIT_ASSERT_EQUAL(OUString("M/d/yyyy"), pContentControl->GetDateFormat());
     CPPUNIT_ASSERT_EQUAL(OUString("en-US"), pContentControl->GetDateLanguage());
+    CPPUNIT_ASSERT_EQUAL(OUString("2022-05-25T00:00:00Z"), pContentControl->GetCurrentDate());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

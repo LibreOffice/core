@@ -136,6 +136,9 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
     /// If m_bDate is true, the date's BCP 47 language tag.
     OUString m_aDateLanguage;
 
+    /// Date in YYYY-MM-DDT00:00:00Z format.
+    OUString m_aCurrentDate;
+
     /// Stores a list item index, in case the doc model is not yet updated.
     std::optional<size_t> m_oSelectedListItem;
 
@@ -216,6 +219,16 @@ public:
     void SetDateLanguage(const OUString& rDateLanguage) { m_aDateLanguage = rDateLanguage; }
 
     OUString GetDateLanguage() const { return m_aDateLanguage; }
+
+    void SetCurrentDate(const OUString& rCurrentDate) { m_aCurrentDate = rCurrentDate; }
+
+    OUString GetCurrentDate() const { return m_aCurrentDate; }
+
+    /// Formats fCurrentDate and sets it.
+    void SetCurrentDateValue(double fCurrentDate);
+
+    /// Parses m_aCurrentDate and returns it.
+    double GetCurrentDateValue() const;
 
     /// Formats m_oSelectedDate, taking m_aDateFormat and m_aDateLanguage into account.
     OUString GetDateString() const;
