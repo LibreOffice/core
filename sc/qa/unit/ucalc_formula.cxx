@@ -307,6 +307,7 @@ public:
     void testFormulaErrorPropagation();
     void testFuncRowsHidden();
     void testFuncSUMIFS();
+    void testFuncCOUNTIFEmpty();
     void testFuncRefListArraySUBTOTAL();
     void testFuncJumpMatrixArrayIF();
     void testFuncJumpMatrixArrayOFFSET();
@@ -425,6 +426,7 @@ public:
     CPPUNIT_TEST(testFormulaErrorPropagation);
     CPPUNIT_TEST(testFuncRowsHidden);
     CPPUNIT_TEST(testFuncSUMIFS);
+    CPPUNIT_TEST(testFuncCOUNTIFEmpty);
     CPPUNIT_TEST(testFuncRefListArraySUBTOTAL);
     CPPUNIT_TEST(testFuncJumpMatrixArrayIF);
     CPPUNIT_TEST(testFuncJumpMatrixArrayOFFSET);
@@ -9312,6 +9314,44 @@ void TestFormula::testFuncSUMIFS()
                 "SUMIFS, COUNTIFS and AVERAGEIFS with reference list array and normal data and criteria range, swapped");
         CPPUNIT_ASSERT_MESSAGE("SUMIFS, COUNTIFS or AVERAGEIFS with reference list array and normal data and criteria range failed, swapped", bGood);
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+// Test that COUNTIF counts properly empty cells if asked to.
+void TestFormula::testFuncCOUNTIFEmpty()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Test");
+
+    // Data in A1:A9.
+    std::vector<std::vector<const char*>> aData = {
+        { "" },
+        { "a" },
+        { "b" },
+        { "c" },
+        { "d" },
+        { "a" },
+        { "" },
+        { "b" },
+        { "c" }
+    };
+
+    insertRangeData(m_pDoc, ScAddress(0,0,0), aData);
+
+    constexpr SCROW maxRow = 20; // so that the unittest is not slow in dbgutil builds
+    SCROW startRow = 0;
+    SCROW endRow = maxRow;
+    SCCOL startCol = 0;
+    SCCOL endCol = 0;
+    // ScSortedRangeCache would normally shrink data range to this.
+    CPPUNIT_ASSERT(m_pDoc->ShrinkToDataArea(0, startCol, startRow, endCol, endRow));
+    CPPUNIT_ASSERT_EQUAL(SCROW(8), endRow);
+
+    // But not if matching empty cells.
+    m_pDoc->SetFormula( ScAddress(10, 0, 0), "=COUNTIFS($A1:$A" + OUString::number(maxRow + 1) + "; \"\")",
+        formula::FormulaGrammar::GRAM_NATIVE_UI);
+    CPPUNIT_ASSERT_EQUAL( double(maxRow + 1 - 7), m_pDoc->GetValue(ScAddress(10, 0, 0)));
 
     m_pDoc->DeleteTab(0);
 }
