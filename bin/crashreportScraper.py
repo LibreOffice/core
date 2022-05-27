@@ -24,15 +24,11 @@ def convert_str_to_date(value):
     value = value.replace('June', 'Jun')
     value = value.replace('July', 'Jul')
     value = value.replace('Sept', 'Sep')
-    value = value.replace('noon', '12:00 pm')
+    # reset the time leaving the date
+    value = ", ".join(value.split(", ")[:-1])
+    dtDate = datetime.strptime(value, '%b %d, %Y')
 
-    if ':' not in value:
-        if 'am' in value:
-            value = value.replace(' am', ':00 am')
-        elif 'pm' in value:
-            value = value.replace(' pm', ':00 pm')
-
-    return datetime.strptime(value, '%b %d, %Y, %H:%M %p')
+    return dtDate.strftime('%y/%m/%d')
 
 def parse_version_url(url):
     crashReports = {}
@@ -193,7 +189,7 @@ if __name__ == '__main__':
             f.write(line)
             f.flush()
 
-        for k, v in crashes.items():
+        for k, lDate in crashes.items():
             if len(k) < 254 and k not in crashesInFile and '`' not in k:
                 print("Parsing " + k)
                 try:
@@ -201,10 +197,9 @@ if __name__ == '__main__':
                             "https://crashreport.libreoffice.org/stats/signature/" + k)
                     crashReason, crashStack, codeLine = parse_details_and_get_info(
                             "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, gitRepo)
-                    line = '\t'.join([k, str(crashCount), v[1].strftime('%y/%m/%d'), v[2].strftime('%y/%m/%d'),
+                    line = '\t'.join([k, str(crashCount), lDate[1], lDate[2],
                             crashID, crashVersion, crashReason, crashOS, crashStack, codeLine, '\n'])
                     f.write(line)
                     f.flush()
                 except requests.exceptions.Timeout:
                     continue
-
