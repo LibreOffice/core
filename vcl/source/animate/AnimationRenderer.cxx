@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <impanmvw.hxx>
+#include <animate/AnimationRenderer.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
@@ -26,7 +26,7 @@
 
 #include <window.h>
 
-ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
+AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
                             const Point& rPt, const Size& rSz,
                             sal_uLong nExtraData,
                             OutputDevice* pFirstFrameOutDev ) :
@@ -89,7 +89,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
     }
 }
 
-ImplAnimView::~ImplAnimView()
+AnimationRenderer::~AnimationRenderer()
 {
     mpBackground.disposeAndClear();
     mpRestore.disposeAndClear();
@@ -97,12 +97,12 @@ ImplAnimView::~ImplAnimView()
     Animation::ImplDecAnimCount();
 }
 
-bool ImplAnimView::matches(const OutputDevice* pOut, tools::Long nExtraData) const
+bool AnimationRenderer::matches(const OutputDevice* pOut, tools::Long nExtraData) const
 {
     return (!pOut || pOut == mpRenderContext) && (nExtraData == 0 || nExtraData == mnExtraData);
 }
 
-void ImplAnimView::getPosSize( const AnimationBitmap& rAnimationBitmap, Point& rPosPix, Size& rSizePix )
+void AnimationRenderer::getPosSize( const AnimationBitmap& rAnimationBitmap, Point& rPosPix, Size& rSizePix )
 {
     const Size& rAnmSize = mpParent->GetDisplaySizePixel();
     Point       aPt2( rAnimationBitmap.maPositionPixel.X() + rAnimationBitmap.maSizePixel.Width() - 1,
@@ -139,7 +139,7 @@ void ImplAnimView::getPosSize( const AnimationBitmap& rAnimationBitmap, Point& r
         rPosPix.setY( maSzPix.Height() - 1 - aPt2.Y() );
 }
 
-void ImplAnimView::drawToPos( sal_uLong nPos )
+void AnimationRenderer::drawToPos( sal_uLong nPos )
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
@@ -173,7 +173,7 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
         pRenderContext->SetClipRegion(*xOldClip);
 }
 
-void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
+void AnimationRenderer::draw( sal_uLong nPos, VirtualDevice* pVDev )
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
@@ -296,7 +296,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
     }
 }
 
-void ImplAnimView::repaint()
+void AnimationRenderer::repaint()
 {
     const bool bOldPause = mbIsPaused;
 
@@ -307,14 +307,14 @@ void ImplAnimView::repaint()
     mbIsPaused = bOldPause;
 }
 
-AInfo* ImplAnimView::createAInfo() const
+AInfo* AnimationRenderer::createAInfo() const
 {
     AInfo* pAInfo = new AInfo;
 
     pAInfo->aStartOrg = maPt;
     pAInfo->aStartSize = maSz;
     pAInfo->pOutDev = mpRenderContext;
-    pAInfo->pViewData = const_cast<ImplAnimView *>(this);
+    pAInfo->pRendererData = const_cast<AnimationRenderer *>(this);
     pAInfo->nExtraData = mnExtraData;
     pAInfo->bPause = mbIsPaused;
 
