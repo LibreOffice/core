@@ -46,6 +46,7 @@ public:
     sal_uInt16 FirstWhich();
     SfxItemState GetItemState(bool bSrchInParent = true,
                               const SfxPoolItem** ppItem = nullptr) const;
+    void ClearItem();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

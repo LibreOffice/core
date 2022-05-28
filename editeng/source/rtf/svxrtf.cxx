@@ -654,7 +654,7 @@ void SvxRTFParser::ClearStyleAttr_( SvxRTFItemStackType& rStkType )
             if (SfxItemPool::IsWhich(nWhich) &&
                 SfxItemState::SET == aIter.GetItemState( false, &pItem ) &&
                      rPool.GetDefaultItem( nWhich ) == *pItem )
-                rSet.ClearItem( nWhich );       // delete
+                aIter.ClearItem();       // delete
         }
     }
     else
@@ -707,7 +707,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                 if( SfxItemState::SET == pCurrent->aAttrSet.GetItemState(
                     pItem->Which(), false, &pGet ) &&
                     *pItem == *pGet )
-                    pOld->aAttrSet.ClearItem( pItem->Which() );
+                    aIter.ClearItem();
 
                 pItem = aIter.NextItem();
             } while (pItem);
@@ -1109,7 +1109,7 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
                 sal_uInt16 nWhich = pIterItem->Which();
                 if( SfxItemState::SET != pTmp->aAttrSet.GetItemState( nWhich,
                       false, &pItem ) || *pItem != *pIterItem)
-                    aMrgSet.ClearItem( nWhich );
+                    aIter.ClearItem();
 
                 pIterItem = aIter.NextItem();
             } while(pIterItem);
