@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97a34c59_cd5438df",
+        "filename": "vcl/qt5/QtFrame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-28T09:32:15Z",
+      "side": 1,
+      "message": "The reason for this change (and the one in QtWidget::handleMouseEnterLeaveEvents) is not mentioned in the commit msg (use an invalid value by default?) and it seems to be unnecessary to fix the bug itself. Does it make sense to move that to a separate change (or mention why it\u0027s done in this change\u0027s commit msg)?",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 56
+      },
+      "revId": "d2604fc66aebaae944313802a1b2a2a2f06d245d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
