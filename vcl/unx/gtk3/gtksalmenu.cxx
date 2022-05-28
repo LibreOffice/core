@@ -653,7 +653,7 @@ GtkSalMenu::~GtkSalMenu()
         mpFrame->SetMenu(nullptr);
 }
 
-bool GtkSalMenu::VisibleMenuBar()
+bool GtkSalMenu::HasNativeMenuBar()
 {
     return mbMenuBar && (bUnityMode || mpMenuBarContainerWidget);
 }
@@ -1618,10 +1618,7 @@ void GtkSalMenu::GetSystemMenuData( SystemMenuData* )
 {
 }
 
-int GtkSalMenu::GetMenuBarHeight() const
-{
-    return mpMenuBarWidget ? gtk_widget_get_allocated_height(mpMenuBarWidget) : 0;
-}
+int GtkSalMenu::GetMenuBarHeight() const { return 0; }
 
 /*
  * GtkSalMenuItem
