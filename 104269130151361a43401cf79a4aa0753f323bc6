@@ -52,6 +52,23 @@
       "parentUuid": "e9939431_fc41d764",
       "revId": "104269130151361a43401cf79a4aa0753f323bc6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97bc3b04_7796ac1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-28T12:02:37Z",
+      "side": 1,
+      "message": "Apart from the gap between button and popup, this looks good to me with the standard UI. When switching to \"Tabbed\", the button doesn\u0027t show up. It\u0027s the same with gtk3, however.",
+      "revId": "104269130151361a43401cf79a4aa0753f323bc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
