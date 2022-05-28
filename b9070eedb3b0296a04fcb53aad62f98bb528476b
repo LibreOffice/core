@@ -33,6 +33,23 @@
       "message": "Also: I may teach English, but y\u0027all should have a sense of humo(u)r too :-)",
       "revId": "b9070eedb3b0296a04fcb53aad62f98bb528476b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bfb4631_76994aa1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-28T21:39:14Z",
+      "side": 1,
+      "message": "You\u0027re right, I was just focus on the content, not on the \"WIP\" in comment.\nFor humor part, I had indeed missed it, IHMO I would have added quotes to have hodler\" so it would have showed more obviously it was on purpose. Feel free to \nrevert and add them if you want, no pb for me :-)",
+      "revId": "b9070eedb3b0296a04fcb53aad62f98bb528476b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
