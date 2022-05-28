@@ -34,6 +34,24 @@
       "parentUuid": "8336b5a6_05c8b3e1",
       "revId": "104269130151361a43401cf79a4aa0753f323bc6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98966d6f_5be53375",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-28T10:15:16Z",
+      "side": 1,
+      "message": "Oh sorry, I see it now, wasn\u0027t looking at the right place because there is a gap between the popup and the button. Without having looked at the code yet: Is the popup position something that could easily be adapted?",
+      "parentUuid": "e9939431_fc41d764",
+      "revId": "104269130151361a43401cf79a4aa0753f323bc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
