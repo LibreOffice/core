@@ -1880,7 +1880,7 @@ void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyl
             if(SfxItemState::SET == aParaIter.GetItemState() &&
                SfxItemState::SET == rStyleSet.GetItemState(nWhich))
             {
-                aCoreSet.ClearItem(nWhich);
+                aParaIter.ClearItem();
                 bReset = true;
             }
         }

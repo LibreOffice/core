@@ -70,4 +70,11 @@ SfxItemState SfxWhichIter::GetItemState(bool bSrchInParent, const SfxPoolItem** 
     return m_rItemSet.GetItemStateImpl(nWhich, bSrchInParent, ppItem, nItemsOffsetHint);
 }
 
+void SfxWhichIter::ClearItem()
+{
+    sal_uInt16 nWhich = m_pCurrentWhichPair->first + m_nOffsetFromStartOfCurrentWhichPair;
+    sal_uInt16 nItemOffsetHint = m_nItemsOffset + m_nOffsetFromStartOfCurrentWhichPair;
+    const_cast<SfxItemSet&>(m_rItemSet).ClearSingleItemImpl(nWhich, nItemOffsetHint);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

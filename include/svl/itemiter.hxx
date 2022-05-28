@@ -49,6 +49,7 @@ public:
 
     SfxItemState GetItemState(bool bSrchInParent = true,
                               const SfxPoolItem** ppItem = nullptr) const;
+    void ClearItem();
 
 private:
     const SfxPoolItem* ImplNextItem();
