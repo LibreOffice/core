@@ -55,7 +55,7 @@ public:
     AquaSalMenu( bool bMenuBar );
     virtual ~AquaSalMenu() override;
 
-    virtual bool VisibleMenuBar() override;
+    virtual bool HasNativeMenuBar() override;
 
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) override;
     virtual void RemoveItem( unsigned nPos ) override;

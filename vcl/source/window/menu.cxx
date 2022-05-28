@@ -2449,14 +2449,12 @@ VclPtr<vcl::Window> MenuBar::ImplCreate(vcl::Window* pParent, vcl::Window* pWind
     pMenu->pStartedFrom = nullptr;
     pMenu->pWindow = pWindow;
     pMenuBarWindow->SetMenu(pMenu);
-    tools::Long nHeight = pWindow ? pMenu->ImplCalcSize(pWindow).Height() : 0;
+    tools::Long nHeight = 0;
 
-    // depending on the native implementation or the displayable flag
-    // the menubar windows is suppressed (ie, height=0)
-    if (!pMenu->IsDisplayable() || (pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar()))
-    {
-        nHeight = 0;
-    }
+    if (pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->HasNativeMenuBar())
+        nHeight = pMenu->ImplGetSalMenu()->GetMenuBarHeight();
+    else if (pWindow && (!pMenu->ImplGetSalMenu() || pMenu->IsDisplayable()))
+        nHeight = pMenu->ImplCalcSize(pWindow).Height();
 
     pMenuBarWindow->SetHeight(nHeight);
     return pWindow;
@@ -2486,7 +2484,7 @@ bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent )
 
     // No keyboard processing when system handles the menu.
     SalMenu *pNativeMenu = ImplGetSalMenu();
-    if (pNativeMenu && pNativeMenu->VisibleMenuBar())
+    if (pNativeMenu && pNativeMenu->HasNativeMenuBar())
     {
         // Except when the event is the F6 cycle pane event and we can put our
         // focus into it (i.e. the gtk3 menubar case but not the mac/unity case

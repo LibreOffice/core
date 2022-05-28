@@ -172,24 +172,32 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     m_pMenu = pMen;
     KillActivePopup();
     m_nHighlightedItem = ITEMPOS_INVALID;
-    if (pMen)
+
+    const bool bHasNativeMenuImpl = m_pMenu && m_pMenu->ImplGetSalMenu();
+    // no menubar window drawing needed in case of a native menu bar
+    SetPaintTransparent(bHasNativeMenuImpl);
+    if (!m_pMenu)
     {
-        m_aCloseBtn->ShowItem(ToolBoxItemId(IID_DOCUMENTCLOSE), pMen->HasCloseButton());
-        m_aCloseBtn->Show(pMen->HasCloseButton() || !m_aAddButtons.empty());
-        m_aFloatBtn->Show(pMen->HasFloatButton());
-        m_aHideBtn->Show(pMen->HasHideButton());
+        Invalidate();
+        return;
     }
-    Invalidate();
+
+    m_aCloseBtn->ShowItem(ToolBoxItemId(IID_DOCUMENTCLOSE), !bHasNativeMenuImpl && pMen->HasCloseButton());
+    m_aCloseBtn->Show(!bHasNativeMenuImpl && (pMen->HasCloseButton() || !m_aAddButtons.empty()));
+    m_aFloatBtn->Show(!bHasNativeMenuImpl && pMen->HasFloatButton());
+    m_aHideBtn->Show(!bHasNativeMenuImpl && pMen->HasHideButton());
 
     // show and connect native menubar
-    if( m_pMenu && m_pMenu->ImplGetSalMenu() )
+    if (bHasNativeMenuImpl)
     {
-        if( m_pMenu->ImplGetSalMenu()->VisibleMenuBar() )
+        if (m_pMenu->ImplGetSalMenu()->HasNativeMenuBar())
             ImplGetFrame()->SetMenu( m_pMenu->ImplGetSalMenu() );
 
         m_pMenu->ImplGetSalMenu()->SetFrame( ImplGetFrame() );
         m_pMenu->ImplGetSalMenu()->ShowMenuBar(true);
     }
+    else
+        Invalidate();
 }
 
 void MenuBarWindow::SetHeight(tools::Long nHeight)
@@ -724,7 +732,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     }
 
     // no key events if native menus
-    if (m_pMenu->ImplGetSalMenu() && m_pMenu->ImplGetSalMenu()->VisibleMenuBar())
+    if (m_pMenu->ImplGetSalMenu() && m_pMenu->ImplGetSalMenu()->HasNativeMenuBar())
     {
         return false;
     }
@@ -862,7 +870,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     Size aOutputSize = GetOutputSizePixel();
 
     // no VCL paint if native menus
-    if (m_pMenu->ImplGetSalMenu() && m_pMenu->ImplGetSalMenu()->VisibleMenuBar())
+    if (m_pMenu->ImplGetSalMenu() && m_pMenu->ImplGetSalMenu()->HasNativeMenuBar())
     {
         ImplGetFrame()->DrawMenuBar();
         return;
@@ -1013,7 +1021,7 @@ void MenuBarWindow::LayoutChanged()
     // depending on the native implementation or the displayable flag
     // the menubar windows is suppressed (ie, height=0)
     if (!static_cast<MenuBar*>(m_pMenu.get())->IsDisplayable() ||
-        (m_pMenu->ImplGetSalMenu() && m_pMenu->ImplGetSalMenu()->VisibleMenuBar()))
+        (m_pMenu->ImplGetSalMenu() && m_pMenu->ImplGetSalMenu()->HasNativeMenuBar()))
     {
         nHeight = 0;
     }
@@ -1214,7 +1222,7 @@ bool MenuBarWindow::CanGetFocus() const
        to 0 in this case
     */
     SalMenu *pNativeMenu = m_pMenu ? m_pMenu->ImplGetSalMenu() : nullptr;
-    if (pNativeMenu && pNativeMenu->VisibleMenuBar())
+    if (pNativeMenu && pNativeMenu->HasNativeMenuBar())
         return pNativeMenu->CanGetFocus();
     return GetSizePixel().Height() > 0;
 }
