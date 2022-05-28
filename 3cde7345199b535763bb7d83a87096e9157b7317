@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54a54218_0f39e41b",
+        "filename": "vcl/qt5/QtPainter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-28T09:48:54Z",
+      "side": 0,
+      "message": "Changes in this file are unrelated and I\u0027d suggest doing them in a separate change.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 64
+      },
+      "revId": "3cde7345199b535763bb7d83a87096e9157b7317",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
