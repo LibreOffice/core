@@ -170,7 +170,7 @@ namespace accessibility
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-        int getNotifierClientId() const { return mnNotifierClientId; }
+        comphelper::AccessibleEventNotifier::TClientId getNotifierClientId() const { return mnNotifierClientId; }
 
         // lock solar mutex before
         SvxTextForwarder& GetTextForwarder() const;
@@ -222,7 +222,9 @@ namespace accessibility
         Point maOffset;
 
         /// client Id from AccessibleEventNotifier
-        int mnNotifierClientId;
+        comphelper::AccessibleEventNotifier::TClientId mnNotifierClientId;
+        static constexpr comphelper::AccessibleEventNotifier::TClientId snNotifierClientRevoked
+            = std::numeric_limits<comphelper::AccessibleEventNotifier::TClientId>::max();
     };
 
     AccessibleTextHelper_Impl::AccessibleTextHelper_Impl() :
@@ -1353,7 +1355,7 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::Dispose()
     {
-        if( getNotifierClientId() != -1 )
+        if( getNotifierClientId() != snNotifierClientRevoked)
         {
             try
             {
@@ -1363,7 +1365,7 @@ namespace accessibility
             }
             catch( const uno::Exception& ) {}
 
-            mnNotifierClientId = -1;
+            mnNotifierClientId = snNotifierClientRevoked;
         }
 
         try
@@ -1411,8 +1413,8 @@ namespace accessibility
     void AccessibleTextHelper_Impl::FireEvent( const AccessibleEventObject& rEvent ) const
     {
         // #106234# Delegate to EventNotifier
-        ::comphelper::AccessibleEventNotifier::addEvent( getNotifierClientId(),
-                                                         rEvent );
+        if (getNotifierClientId() != snNotifierClientRevoked)
+            ::comphelper::AccessibleEventNotifier::addEvent( getNotifierClientId(), rEvent );
     }
 
     // XAccessibleContext
@@ -1441,13 +1443,13 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     {
-        if( getNotifierClientId() != -1 )
+        if( getNotifierClientId() != snNotifierClientRevoked )
             ::comphelper::AccessibleEventNotifier::addEventListener( getNotifierClientId(), xListener );
     }
 
     void AccessibleTextHelper_Impl::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     {
-        if( getNotifierClientId() == -1 )
+        if( getNotifierClientId() == snNotifierClientRevoked )
             return;
 
         const sal_Int32 nListenerCount = ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
@@ -1458,7 +1460,7 @@ namespace accessibility
             // and at least to us not firing any events anymore, in case somebody calls
             // NotifyAccessibleEvent, again
             ::comphelper::AccessibleEventNotifier::TClientId nId( getNotifierClientId() );
-            mnNotifierClientId = -1;
+            mnNotifierClientId = snNotifierClientRevoked;
             ::comphelper::AccessibleEventNotifier::revokeClient( nId );
         }
     }
