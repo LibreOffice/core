@@ -448,7 +448,7 @@ void AquaSalMenu::removeFallbackMenuItem( NSMenuItem* pOldItem )
     }
 }
 
-bool AquaSalMenu::VisibleMenuBar()
+bool AquaSalMenu::HasNativeMenuBar()
 {
     return true;
 }
