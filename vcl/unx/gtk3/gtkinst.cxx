@@ -18019,7 +18019,7 @@ public:
         OUString sSurroundingText;
         sal_Int32 nCursorIndex = pThis->m_pArea->im_context_get_surrounding(sSurroundingText);
 
-        Selection aSelection = GtkSalFrame::CalcDeleteSurroundingSelection(sSurroundingText, nCursorIndex, nOffset, nChars);
+        Selection aSelection = SalFrame::CalcDeleteSurroundingSelection(sSurroundingText, nCursorIndex, nOffset, nChars);
         if (aSelection != Selection(SAL_MAX_UINT32, SAL_MAX_UINT32))
             bRet = pThis->m_pArea->im_context_delete_surrounding(aSelection);
         return bRet;
