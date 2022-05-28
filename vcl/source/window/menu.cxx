@@ -2207,6 +2207,11 @@ void Menu::ImplFillLayoutData() const
     }
 }
 
+SalMenu* Menu::GetNativeMenuBar()
+{
+    return mpSalMenu && mpSalMenu->HasNativeMenuBar() ? mpSalMenu.get() : nullptr;
+}
+
 tools::Rectangle Menu::GetCharacterBounds( sal_uInt16 nItemID, tools::Long nIndex ) const
 {
     tools::Long nItemIndex = -1;
@@ -2440,26 +2445,16 @@ void MenuBar::SetDisplayable( bool bDisplayable )
 
 VclPtr<vcl::Window> MenuBar::ImplCreate(vcl::Window* pParent, vcl::Window* pWindow, MenuBar* pMenu)
 {
+    // can't this be a static_cast? is there a real possibility, the pWindow is not the MenuBarWindow or nullptr?
     VclPtr<MenuBarWindow> pMenuBarWindow = dynamic_cast<MenuBarWindow*>(pWindow);
     if (!pMenuBarWindow)
-    {
-        pWindow = pMenuBarWindow = VclPtr<MenuBarWindow>::Create( pParent );
-    }
+        pMenuBarWindow = VclPtr<MenuBarWindow>::Create(pParent);
 
     pMenu->pStartedFrom = nullptr;
-    pMenu->pWindow = pWindow;
+    pMenu->pWindow = pMenuBarWindow;
     pMenuBarWindow->SetMenu(pMenu);
-    tools::Long nHeight = pWindow ? pMenu->ImplCalcSize(pWindow).Height() : 0;
 
-    // depending on the native implementation or the displayable flag
-    // the menubar windows is suppressed (ie, height=0)
-    if (!pMenu->IsDisplayable() || (pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar()))
-    {
-        nHeight = 0;
-    }
-
-    pMenuBarWindow->SetHeight(nHeight);
-    return pWindow;
+    return pMenuBarWindow;
 }
 
 void MenuBar::ImplDestroy( MenuBar* pMenu, bool bDelete )
@@ -2486,7 +2481,7 @@ bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent )
 
     // No keyboard processing when system handles the menu.
     SalMenu *pNativeMenu = ImplGetSalMenu();
-    if (pNativeMenu && pNativeMenu->VisibleMenuBar())
+    if (pNativeMenu && pNativeMenu->HasNativeMenuBar())
     {
         // Except when the event is the F6 cycle pane event and we can put our
         // focus into it (i.e. the gtk3 menubar case but not the mac/unity case

@@ -82,18 +82,21 @@ void QtWidget::paintEvent(QPaintEvent* pEvent)
         aImage = *m_rFrame.m_pQImage;
 
     const qreal fRatio = m_rFrame.devicePixelRatioF();
+    assert(aImage.size() == scaledQSize(m_rFrame.asChild()->size(), fRatio));
     aImage.setDevicePixelRatio(fRatio);
-    QRectF source(pEvent->rect().topLeft() * fRatio, pEvent->rect().size() * fRatio);
-    p.drawImage(pEvent->rect(), aImage, source);
+    QPoint aPos = m_rFrame.mapToParent(pEvent->rect().topLeft());
+    QRectF source(aPos * fRatio, scaledQSize(pEvent->rect().size(), fRatio));
+    p.drawImage(pEvent->rect().topLeft(), aImage, source);
 }
 
-void QtWidget::resizeEvent(QResizeEvent* pEvent)
+void QtWidget::resizeEvent(QResizeEvent*)
 {
+    // this uses the actual frame size for the double buffering backing store.
+    // while children get a resize event before their parents, the size of the
+    // frame / window is already updated at this point.
     const qreal fRatio = m_rFrame.devicePixelRatioF();
-    const int nWidth = ceil(pEvent->size().width() * fRatio);
-    const int nHeight = ceil(pEvent->size().height() * fRatio);
-
-    m_rFrame.maGeometry.setSize({ nWidth, nHeight });
+    const int nWidth = ceil(m_rFrame.asChild()->size().width() * fRatio);
+    const int nHeight = ceil(m_rFrame.asChild()->size().height() * fRatio);
 
     if (m_rFrame.m_bUseCairo)
     {
@@ -128,6 +131,13 @@ void QtWidget::resizeEvent(QResizeEvent* pEvent)
         }
     }
 
+    const QRect aQtFrameGeometry = m_rFrame.asChild()->frameGeometry();
+    const QRect aQtGeometry = m_rFrame.asChild()->geometry();
+    m_rFrame.maGeometry.setLeftDecoration(aQtGeometry.left() - aQtFrameGeometry.left());
+    m_rFrame.maGeometry.setTopDecoration(aQtGeometry.top() - aQtFrameGeometry.top());
+    m_rFrame.maGeometry.setRightDecoration(aQtFrameGeometry.right() - aQtGeometry.right());
+    m_rFrame.maGeometry.setBottomDecoration(aQtFrameGeometry.bottom() - aQtGeometry.bottom());
+    m_rFrame.maGeometry.setSize({ nWidth, nHeight });
     m_rFrame.CallCallback(SalEvent::Resize, nullptr);
 }
 
@@ -142,7 +152,7 @@ void QtWidget::fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEven
                                          SalAbstractMouseEvent& aSalEvent)
 {
     const qreal fRatio = rFrame.devicePixelRatioF();
-    const Point aPos = toPoint(rPos * fRatio);
+    const Point aPos = toPoint(rFrame.mapToParent(rPos) * fRatio);
 
     aSalEvent.mnX = QGuiApplication::isLeftToRight() ? aPos.X() : round(nWidth * fRatio) - aPos.X();
     aSalEvent.mnY = aPos.Y();
@@ -206,7 +216,7 @@ void QtWidget::mouseMoveEvent(QMouseEvent* pEvent)
 void QtWidget::handleMouseEnterLeaveEvents(const QtFrame& rFrame, QEvent* pQEvent)
 {
     const qreal fRatio = rFrame.devicePixelRatioF();
-    const QWidget* pWidget = rFrame.GetQWidget();
+    const QWidget* pWidget = rFrame.asChild();
     const Point aPos = toPoint(pWidget->mapFromGlobal(QCursor::pos()) * fRatio);
 
     SalMouseEvent aEvent;
