@@ -227,7 +227,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 private:
-    sal_uInt16 ClearSingleItemImpl( sal_uInt16 nWhich );
+    sal_uInt16 ClearSingleItemImpl( sal_uInt16 nWhich, std::optional<sal_uInt16> oItemOffsetHint );
     sal_uInt16 ClearAllItemsImpl();
     SfxItemState  GetItemStateImpl( sal_uInt16 nWhich,
                                 bool bSrchInParent,

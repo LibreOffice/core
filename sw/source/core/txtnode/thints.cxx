@@ -899,7 +899,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                         {
                             // Do not clear item if the attribute is set in a character format:
                             if ( !pCurrentCharFormat || nullptr == CharFormat::GetItem( *pCurrentCharFormat, pItem->Which() ) )
-                                aNewSet.ClearItem( pItem->Which() );
+                                aIter2.ClearItem();
                         }
                     }
                     while ((pItem = aIter2.NextItem()));
@@ -2365,7 +2365,7 @@ struct RemovePresentAttrs
             const sal_uInt16 nWhich(pItem->Which());
             if (CharFormat::IsItemIncluded(nWhich, pAutoStyle))
             {
-                m_rAttrSet.ClearItem(nWhich);
+                aIter.ClearItem();
             }
         }
     }
