@@ -1045,7 +1045,21 @@ void VSeriesPlotter::createErrorBar(
                     fLocalX-=fLength;
                     aNegative = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
                 }
-                bCreateNegativeBorder = m_pPosHelper->isLogicVisible( fLocalX, fLocalY, fZ);
+                if (std::isfinite(aNegative.PositionX) &&
+                        std::isfinite(aNegative.PositionY) &&
+                        std::isfinite(aNegative.PositionZ)) {
+                    bCreateNegativeBorder = m_pPosHelper->isLogicVisible( fLocalX, fLocalY, fZ);
+                } else {
+                    // If error bars result in a numerical problem (e.g., an
+                    // error bar on a logarithmic chart that results in a point
+                    // <= 0) then just turn off the error bar.
+                    //
+                    // TODO: This perhaps should display a warning, so the user
+                    // knows why a bar is not appearing.
+                    // TODO: This test could also be added to the positive case,
+                    // though a numerical overflow there is less likely.
+                    bShowNegative = false;
+                }
             }
             else
                 bShowNegative = false;
