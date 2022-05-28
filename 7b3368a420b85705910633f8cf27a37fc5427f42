@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d26709f_d71da43e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-28T22:21:58Z",
+      "side": 1,
+      "message": "This WFM, but the code is on top of my DPI scaling changes. It should be independent, but I don\u0027t know yet, if I reverted all my function renames in that branch correctly. Qt code changes quite a bit and I just did some basic testing with qt5 and kf5.\n\nComments very welcome (and testing too ;-)).",
+      "revId": "7b3368a420b85705910633f8cf27a37fc5427f42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
