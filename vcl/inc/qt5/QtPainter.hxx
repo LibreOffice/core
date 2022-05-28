@@ -43,20 +43,22 @@ public:
     void update(int nx, int ny, int nw, int nh)
     {
         if (m_rGraphics.m_pFrame)
-            m_aRegion += scaledQRect({ nx, ny, nw, nh }, 1 / m_rGraphics.devicePixelRatioF());
+        {
+            QPoint aPos = m_rGraphics.m_pFrame->mapFromParent({ nx, ny });
+            m_aRegion += scaledQRect({ aPos, QSize(nw, nh) }, 1 / m_rGraphics.devicePixelRatioF());
+        }
     }
 
     void update(const QRect& rRect)
     {
         if (m_rGraphics.m_pFrame)
-            m_aRegion += scaledQRect(rRect, 1 / m_rGraphics.devicePixelRatioF());
+        {
+            QPoint aPos = m_rGraphics.m_pFrame->mapFromParent(rRect.topLeft());
+            m_aRegion += scaledQRect({ aPos, rRect.size() }, 1 / m_rGraphics.devicePixelRatioF());
+        }
     }
 
-    void update(const QRectF& rRectF)
-    {
-        if (m_rGraphics.m_pFrame)
-            update(scaledQRect(rRectF.toAlignedRect(), 1 / m_rGraphics.devicePixelRatioF()));
-    }
+    void update(const QRectF& rRectF) { update(rRectF.toAlignedRect()); }
 
     void update()
     {

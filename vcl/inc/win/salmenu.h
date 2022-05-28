@@ -28,8 +28,7 @@ class WinSalMenu : public SalMenu
 public:
     WinSalMenu();
     virtual ~WinSalMenu() override;
-    virtual bool VisibleMenuBar() override;  // must return TRUE to actually DISPLAY native menu bars
-                            // otherwise only menu messages are processed (eg, OLE on Windows)
+    virtual bool HasNativeMenuBar() override;
 
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) override;
     virtual void RemoveItem( unsigned nPos ) override;

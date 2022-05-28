@@ -133,7 +133,6 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     bool isMinimized() const;
     bool isMaximized() const;
     void SetWindowStateImpl(Qt::WindowStates eState);
-    int menuBarOffset() const;
 
     void fixICCCMwindowGroup();
 
@@ -148,6 +147,8 @@ public:
     QtMainWindow* GetTopLevelWindow() const { return m_pTopLevel; }
     QWidget* asChild() const;
     qreal devicePixelRatioF() const;
+    QPoint mapToParent(const QPoint&) const;
+    QPoint mapFromParent(const QPoint&) const;
 
     void Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                 sal_Int32 nExtentsHeight) const;
