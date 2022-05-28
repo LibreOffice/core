@@ -7375,4 +7375,54 @@ weld::Window* SalFrame::GetFrameWeld() const
     return m_xFrameWeld.get();
 }
 
+Selection SalFrame::CalcDeleteSurroundingSelection(const OUString& rSurroundingText,
+                                                   sal_Int32 nCursorIndex, int nOffset, int nChars)
+{
+    Selection aInvalid(SAL_MAX_UINT32, SAL_MAX_UINT32);
+
+    if (nCursorIndex == -1)
+        return aInvalid;
+
+    if (nOffset > 0)
+    {
+        while (nOffset && nCursorIndex < rSurroundingText.getLength())
+        {
+            rSurroundingText.iterateCodePoints(&nCursorIndex, 1);
+            --nOffset;
+        }
+    }
+    else if (nOffset < 0)
+    {
+        while (nOffset && nCursorIndex > 0)
+        {
+            rSurroundingText.iterateCodePoints(&nCursorIndex, -1);
+            ++nOffset;
+        }
+    }
+
+    if (nOffset)
+    {
+        SAL_WARN("vcl",
+                 "SalFrame::CalcDeleteSurroundingSelection, unable to move to offset: " << nOffset);
+        return aInvalid;
+    }
+
+    sal_Int32 nCursorEndIndex(nCursorIndex);
+    sal_Int32 nCount(0);
+    while (nCount < nChars && nCursorEndIndex < rSurroundingText.getLength())
+    {
+        rSurroundingText.iterateCodePoints(&nCursorEndIndex, 1);
+        ++nCount;
+    }
+
+    if (nCount != nChars)
+    {
+        SAL_WARN("vcl", "SalFrame::CalcDeleteSurroundingSelection, unable to select: "
+                            << nChars << " characters");
+        return aInvalid;
+    }
+
+    return Selection(nCursorIndex, nCursorEndIndex);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

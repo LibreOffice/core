@@ -633,7 +633,6 @@ public:
         GdkModifierType, gpointer pFrame);
 #endif
     static OUString             GetPreeditDetails(GtkIMContext* pIMContext, std::vector<ExtTextInputAttr>& rInputFlags, sal_Int32& rCursorPos, sal_uInt8& rCursorFlags);
-    static Selection            CalcDeleteSurroundingSelection(const OUString& rSurroundingText, sal_Int32 nCursorIndex, int nOffset, int nChars);
 
     const cairo_font_options_t* get_font_options();
 
