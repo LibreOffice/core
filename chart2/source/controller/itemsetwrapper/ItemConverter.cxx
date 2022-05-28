@@ -157,7 +157,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 
     for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
-        if( rItemSet.GetItemState( pItem->Which(), false ) == SfxItemState::SET )
+        if( aIter.GetItemState( false ) == SfxItemState::SET )
         {
             if( GetItemProperty( pItem->Which(), aProperty ))
             {
