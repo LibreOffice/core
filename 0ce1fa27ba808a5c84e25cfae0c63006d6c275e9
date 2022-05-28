@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d511fc9a_02331f6c",
+        "filename": "sw/source/uibase/utlui/glbltree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-05-28T04:16:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9a03bfa1_1f0eddda",
+      "revId": "0ce1fa27ba808a5c84e25cfae0c63006d6c275e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56657ac6_50fd8c57",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "this is still pointless",
       "parentUuid": "56657ac6_50fd8c57",
+      "revId": "0ce1fa27ba808a5c84e25cfae0c63006d6c275e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08f78fac_3fa9d048",
+        "filename": "sw/source/uibase/utlui/glbltree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-05-28T04:16:35Z",
+      "side": 1,
+      "message": "removed in patch set 2",
+      "parentUuid": "0c858a4f_3eaaeb15",
       "revId": "0ce1fa27ba808a5c84e25cfae0c63006d6c275e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
