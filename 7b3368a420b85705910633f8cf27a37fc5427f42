@@ -16,6 +16,23 @@
       "message": "This WFM, but the code is on top of my DPI scaling changes. It should be independent, but I don\u0027t know yet, if I reverted all my function renames in that branch correctly. Qt code changes quite a bit and I just did some basic testing with qt5 and kf5.\n\nComments very welcome (and testing too ;-)).",
       "revId": "7b3368a420b85705910633f8cf27a37fc5427f42",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6c73b4e_d8c1ad0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-28T22:31:18Z",
+      "side": 1,
+      "message": "Any quoting my own comment to the SalMenu MenuBar button implementation:\n\nI\u0027ve tried to fix \"this\" / the gap before. This happens because somehow we still handle the native menu bar offset wrong. OTOH, since gtk can do it, qt5 should also correctly handle it. But that is an extra fix, which would also fix tdf#64438, tdf#134704, handling of undocked toolbars, placement of some tooltips in Calc and maybe other wrong positioning. I need to check if tdf#130893 still happens with current gtk and also tdf#137471. It\u0027s AFAIK all the same problem. And definitely an extra patch.",
+      "revId": "7b3368a420b85705910633f8cf27a37fc5427f42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
