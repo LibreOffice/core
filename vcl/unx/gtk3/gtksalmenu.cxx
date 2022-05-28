@@ -653,7 +653,7 @@ GtkSalMenu::~GtkSalMenu()
         mpFrame->SetMenu(nullptr);
 }
 
-bool GtkSalMenu::VisibleMenuBar()
+bool GtkSalMenu::HasNativeMenuBar()
 {
     return mbMenuBar && (bUnityMode || mpMenuBarContainerWidget);
 }
