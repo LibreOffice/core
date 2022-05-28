@@ -493,6 +493,33 @@ void QtWidget::commitText(QtFrame& rFrame, const QString& aText)
         rFrame.CallCallback(SalEvent::EndExtTextInput, nullptr);
 }
 
+void QtWidget::deleteReplacementText(QtFrame& rFrame, int nReplacementStart, int nReplacementLength)
+{
+    // get the surrounding text
+    SolarMutexGuard aGuard;
+    SalSurroundingTextRequestEvent aSurroundingTextEvt;
+    aSurroundingTextEvt.maText.clear();
+    aSurroundingTextEvt.mnStart = aSurroundingTextEvt.mnEnd = 0;
+    rFrame.CallCallback(SalEvent::SurroundingTextRequest, &aSurroundingTextEvt);
+
+    // Turn nReplacementStart, nReplacementLength into a UTF-16 selection
+    const Selection aSelection = SalFrame::CalcDeleteSurroundingSelection(
+        aSurroundingTextEvt.maText, aSurroundingTextEvt.mnStart, nReplacementStart,
+        nReplacementLength);
+
+    const Selection aInvalid(SAL_MAX_UINT32, SAL_MAX_UINT32);
+    if (aSelection == aInvalid)
+    {
+        SAL_WARN("vcl.qt", "Invalid selection when deleting IM replacement text");
+        return;
+    }
+
+    SalSurroundingTextSelectionChangeEvent aEvt;
+    aEvt.mnStart = aSelection.Min();
+    aEvt.mnEnd = aSelection.Max();
+    rFrame.CallCallback(SalEvent::DeleteSurroundingTextRequest, &aEvt);
+}
+
 bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent,
                               const ButtonKeyState eState)
 {
@@ -724,8 +751,16 @@ static ExtTextInputAttr lcl_MapUnderlineStyle(QTextCharFormat::UnderlineStyle us
 
 void QtWidget::inputMethodEvent(QInputMethodEvent* pEvent)
 {
-    if (!pEvent->commitString().isEmpty())
-        commitText(m_rFrame, pEvent->commitString());
+    const bool bHasCommitText = !pEvent->commitString().isEmpty();
+    const int nReplacementLength = pEvent->replacementLength();
+
+    if (nReplacementLength > 0 || bHasCommitText)
+    {
+        if (nReplacementLength > 0)
+            deleteReplacementText(m_rFrame, pEvent->replacementStart(), nReplacementLength);
+        if (bHasCommitText)
+            commitText(m_rFrame, pEvent->commitString());
+    }
     else
     {
         SalExtTextInputEvent aInputEvent;
