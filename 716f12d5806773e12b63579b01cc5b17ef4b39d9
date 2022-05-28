@@ -54,6 +54,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "492f99cb_f9769d96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-28T09:03:31Z",
+      "side": 1,
+      "message": "Done, uses CalcDeleteSurroundingSelection as well now, which has been moved to SalFrame in preparatory change https://gerrit.libreoffice.org/c/core/+/135052",
+      "parentUuid": "badb819f_43edc169",
+      "revId": "716f12d5806773e12b63579b01cc5b17ef4b39d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f764caea_2942f00b",
