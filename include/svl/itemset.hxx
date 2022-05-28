@@ -227,6 +227,8 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 private:
+    sal_uInt16 ClearSingleItemImpl( sal_uInt16 nWhich );
+    sal_uInt16 ClearAllItemsImpl();
     SfxItemState  GetItemStateImpl( sal_uInt16 nWhich,
                                 bool bSrchInParent,
                                 const SfxPoolItem **ppItem,
