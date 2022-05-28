@@ -346,7 +346,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
             pIter.reset(new SfxWhichIter( *pSet ));
             nWhch = pIter->FirstWhich();
             while( nWhch &&
-                SfxItemState::SET != pSet->GetItemState( nWhch, true, &pTmpItem ) )
+                SfxItemState::SET != pIter->GetItemState( true, &pTmpItem ) )
                 nWhch = pIter->NextWhich();
             if( !nWhch )
                 pTmpItem = nullptr;
@@ -506,7 +506,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
             pIter.reset( new SfxWhichIter( *pSet ) );
             nWhch = pIter->FirstWhich();
             while( nWhch &&
-                SfxItemState::SET != pSet->GetItemState( nWhch, true, &pTmpItem ) )
+                SfxItemState::SET != pIter->GetItemState( true, &pTmpItem ) )
                 nWhch = pIter->NextWhich();
             if( !nWhch )
                 pTmpItem = nullptr;

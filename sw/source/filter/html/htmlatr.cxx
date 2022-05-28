@@ -1816,7 +1816,7 @@ void HTMLEndPosLst::Insert( const SfxItemSet& rItemSet,
     while( nWhich )
     {
         const SfxPoolItem *pItem;
-        if( SfxItemState::SET == rItemSet.GetItemState( nWhich, bDeep, &pItem ) )
+        if( SfxItemState::SET == aIter.GetItemState( bDeep, &pItem ) )
         {
             Insert( *pItem, nStart, nEnd, rFormatInfos, bParaAttrs );
         }

@@ -925,12 +925,12 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
         {
             if(!bOnlyHardAttr)
             {
-                if(SfxItemState::DONTCARE == rSet.GetItemState(nWhich, false))
+                if(SfxItemState::DONTCARE == aIter.GetItemState(false))
                     rAttr.InvalidateItem(nWhich);
                 else
                     rAttr.MergeValue(rSet.Get(nWhich), true);
             }
-            else if(SfxItemState::SET == rSet.GetItemState(nWhich, false))
+            else if(SfxItemState::SET == aIter.GetItemState(false))
             {
                 const SfxPoolItem& rItem = rSet.Get(nWhich);
                 rAttr.MergeValue(rItem, true);
@@ -1103,7 +1103,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
     sal_uInt16 nWhich = aIter.FirstWhich();
     while(!bPossibleGeomChange && nWhich)
     {
-        SfxItemState eState = rAttr.GetItemState(nWhich);
+        SfxItemState eState = aIter.GetItemState();
         if(eState == SfxItemState::SET)
         {
             if((nWhich >= SDRATTR_TEXT_MINFRAMEHEIGHT && nWhich <= SDRATTR_TEXT_CONTOURFRAME)

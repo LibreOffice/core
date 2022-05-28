@@ -733,7 +733,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
         while( nWhich )
         {
             if (nWhich >= XATTR_LINE_FIRST && nWhich <= XATTR_LINE_LAST
-                && SfxItemState::DEFAULT == pSet->GetItemState(nWhich) )
+                && SfxItemState::DEFAULT == aNewIter.GetItemState() )
             {
                 rSet.ClearItem( nWhich );
                 rSet.DisableItem( nWhich );

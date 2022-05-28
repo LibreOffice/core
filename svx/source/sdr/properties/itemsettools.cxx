@@ -70,7 +70,7 @@ namespace sdr::properties
 
             while(nWhich)
             {
-                if(SfxItemState::SET == rSet.GetItemState(nWhich, false, &pItem))
+                if(SfxItemState::SET == aIter.GetItemState(false, &pItem))
                 {
                     if(pItem->HasMetrics())
                     {

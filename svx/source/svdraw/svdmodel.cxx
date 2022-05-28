@@ -1636,7 +1636,7 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
 
     while(nWhich)
     {
-        if(SfxItemState::SET == pSourceSet->GetItemState(nWhich, false, &pPoolItem))
+        if(SfxItemState::SET == aWhichIter.GetItemState(false, &pPoolItem))
         {
             std::unique_ptr<SfxPoolItem> pResultItem;
 

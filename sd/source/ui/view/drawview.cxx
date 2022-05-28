@@ -363,7 +363,7 @@ void DrawView::SetMasterAttributes( SdrObject* pObject, const SdPage& rPage, Sfx
                     sal_uInt16 nWhich(aWhichIter.FirstWhich());
                     while( nWhich )
                     {
-                        if( SfxItemState::SET == rSet.GetItemState( nWhich ) )
+                        if( SfxItemState::SET == aWhichIter.GetItemState() )
                             aTempSet.ClearItem( nWhich );
                         nWhich = aWhichIter.NextWhich();
                     }
@@ -390,7 +390,7 @@ void DrawView::SetMasterAttributes( SdrObject* pObject, const SdPage& rPage, Sfx
             sal_uInt16 nWhich(aWhichIter.FirstWhich());
             while( nWhich )
             {
-                if( SfxItemState::SET == rSet.GetItemState( nWhich ) )
+                if( SfxItemState::SET == aWhichIter.GetItemState() )
                     pObject->ClearMergedItem( nWhich );
                 nWhich = aWhichIter.NextWhich();
             }

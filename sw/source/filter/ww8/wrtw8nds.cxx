@@ -447,7 +447,7 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
                     sal_uInt16 nWhichId = aIter.FirstWhich();
                     while( nWhichId )
                     {
-                        if( SfxItemState::SET == pSet->GetItemState( nWhichId, false, &pItem ))
+                        if( SfxItemState::SET == aIter.GetItemState( false, &pItem ))
                         {
                             if (nWhichId == nFontId)
                                 pFont = &(item_cast<SvxFontItem>(*pItem));

@@ -364,7 +364,7 @@ void SdrUndoAttrObj::Undo()
 
                 while(nWhich)
                 {
-                    if(SfxItemState::SET != moUndoSet->GetItemState(nWhich, false))
+                    if(SfxItemState::SET != aIter.GetItemState(false))
                     {
                         pObj->ClearMergedItem(nWhich);
                     }
@@ -445,7 +445,7 @@ void SdrUndoAttrObj::Redo()
 
                 while(nWhich)
                 {
-                    if(SfxItemState::SET != moRedoSet->GetItemState(nWhich, false))
+                    if(SfxItemState::SET != aIter.GetItemState(false))
                     {
                         pObj->ClearMergedItem(nWhich);
                     }

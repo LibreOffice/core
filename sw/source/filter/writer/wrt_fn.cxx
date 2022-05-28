@@ -88,7 +88,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
         sal_uInt16 nWhich = aIter.FirstWhich();
         while( nWhich )
         {
-            if( SfxItemState::SET == pSet->GetItemState( nWhich, bDeep, &pItem ) &&
+            if( SfxItemState::SET == aIter.GetItemState( bDeep, &pItem ) &&
                 (   *pItem != rPool.GetDefaultItem( nWhich )
                     || ( pSet->GetParent() &&
                         *pItem != pSet->GetParent()->Get( nWhich ))

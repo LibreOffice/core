@@ -987,7 +987,7 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
     {
         const SfxPoolItem *pRefItem, *pItem;
         bool bItemSet = ( SfxItemState::SET ==
-                rItemSet.GetItemState( nWhich, false, &pItem) );
+                aIter.GetItemState( false, &pItem) );
         bool bRefItemSet;
 
         if( pRefScriptItemSet )

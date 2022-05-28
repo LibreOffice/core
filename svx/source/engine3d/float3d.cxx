@@ -1650,7 +1650,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
         while(nWhich)
         {
-            SfxItemState eState = mpRemember2DAttributes->GetItemState(nWhich, false);
+            SfxItemState eState = aIter.GetItemState(false);
             if(SfxItemState::DONTCARE == eState)
                 rAttrs.InvalidateItem(nWhich);
             else if(SfxItemState::SET == eState)
