@@ -87,6 +87,24 @@
       "parentUuid": "98966d6f_5be53375",
       "revId": "104269130151361a43401cf79a4aa0753f323bc6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baeceff4_16752c0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-28T13:14:17Z",
+      "side": 1,
+      "message": "The Tabbed UI has no menu per default. Maybe we want the button to show up in the toolbar right of the tabs instead, next to the hamburger menu. That would be an enhancement, no bug.",
+      "parentUuid": "97bc3b04_7796ac1a",
+      "revId": "104269130151361a43401cf79a4aa0753f323bc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
