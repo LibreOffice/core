@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
-#define INCLUDED_VCL_SOURCE_GDI_IMPANMVW_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/animate/Animation.hxx>
@@ -34,7 +33,7 @@ struct AInfo
     Point           aStartOrg;
     Size            aStartSize;
     VclPtr<OutputDevice>   pOutDev;
-    void*           pViewData;
+    void*           pRendererData;
     tools::Long            nExtraData;
     bool            bPause;
 
@@ -42,7 +41,7 @@ struct AInfo
 };
 
 
-class VCL_DLLPUBLIC ImplAnimView
+class VCL_DLLPUBLIC AnimationRenderer
 {
 private:
 
@@ -69,11 +68,11 @@ private:
     bool            mbIsMirroredVertically;
 
 public:
-                    ImplAnimView( Animation* pParent, OutputDevice* pOut,
+                    AnimationRenderer( Animation* pParent, OutputDevice* pOut,
                                   const Point& rPt, const Size& rSz, sal_uLong nExtraData,
                                   OutputDevice* pFirstFrameOutDev = nullptr );
-                    ImplAnimView(ImplAnimView&&) = delete;
-                    ~ImplAnimView();
+                    AnimationRenderer(AnimationRenderer&&) = delete;
+                    ~AnimationRenderer();
 
     bool            matches(const OutputDevice* pOut, tools::Long nExtraData) const;
     void            drawToPos( sal_uLong nPos );
@@ -93,7 +92,5 @@ public:
     void            setMarked( bool bIsMarked ) { mbIsMarked = bIsMarked; }
     bool            isMarked() const { return mbIsMarked; }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

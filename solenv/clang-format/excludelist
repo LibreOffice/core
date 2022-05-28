@@ -14300,6 +14300,7 @@ vcl/inc/WidgetThemeLibraryTypes.hxx
 vcl/inc/bitmap/bmpfast.hxx
 vcl/inc/accel.hxx
 vcl/inc/accmgr.hxx
+vcl/inc/animate/AnimationRenderer.hxx
 vcl/inc/brdwin.hxx
 vcl/inc/bubblewindow.hxx
 vcl/inc/calendar.hxx
@@ -14330,7 +14331,6 @@ vcl/inc/helpwin.hxx
 vcl/inc/hyperlabel.hxx
 vcl/inc/image.h
 vcl/inc/imagerepository.hxx
-vcl/inc/impanmvw.hxx
 vcl/inc/impdel.hxx
 vcl/inc/impfont.hxx
 vcl/inc/impfontcache.hxx
@@ -14655,6 +14655,7 @@ vcl/quartz/salgdi.cxx
 vcl/quartz/salgdicommon.cxx
 vcl/quartz/salvd.cxx
 vcl/quartz/utils.cxx
+vcl/source/animate/AnimationRenderer.cxx
 vcl/source/app/IconThemeInfo.cxx
 vcl/source/app/IconThemeScanner.cxx
 vcl/source/app/IconThemeSelector.cxx
@@ -14840,7 +14841,6 @@ vcl/source/gdi/gradient.cxx
 vcl/source/gdi/graph.cxx
 vcl/source/gdi/graphictools.cxx
 vcl/source/gdi/hatch.cxx
-vcl/source/gdi/impanmvw.cxx
 vcl/source/gdi/impgraph.cxx
 vcl/source/gdi/impvect.hxx
 vcl/source/gdi/jobset.cxx
