@@ -22,6 +22,30 @@
       },
       "revId": "d2604fc66aebaae944313802a1b2a2a2f06d245d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24fd35a0_74d38a50",
+        "filename": "vcl/qt5/QtFrame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-28T13:31:46Z",
+      "side": 1,
+      "message": "I retested and the QWidget hunk is not needed. The invalid init hunk is needed for tdf#144302, but not this fix.",
+      "parentUuid": "97a34c59_cd5438df",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 56
+      },
+      "revId": "d2604fc66aebaae944313802a1b2a2a2f06d245d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
