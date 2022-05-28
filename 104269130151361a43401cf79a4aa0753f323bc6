@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8336b5a6_05c8b3e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-28T10:07:18Z",
+      "side": 1,
+      "message": "For me, the icon of the update button still doesn\u0027t show up with this change in place when I apply the extensions/source/update/check/updatecheck.cxx part of https://gerrit.libreoffice.org/c/core/+/106922, build with --enable-online-update and --with-privacy-policy-url\u003ddummyvalue, start Writer and wait a minute.\n\nScreenshot: https://nextcloud.documentfoundation.org/s/aGDB8k74JHLfHPs\n",
+      "revId": "104269130151361a43401cf79a4aa0753f323bc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
