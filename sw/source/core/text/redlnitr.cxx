@@ -749,7 +749,7 @@ short SwRedlineItr::Seek(SwFont& rFnt,
                     {
                         const SfxPoolItem* pItem;
                         if( ( nWhich < RES_CHRATR_END ) &&
-                            ( SfxItemState::SET == m_pSet->GetItemState( nWhich, true, &pItem ) ) )
+                            ( SfxItemState::SET == aIter.GetItemState( true, &pItem ) ) )
                         {
                             SwTextAttr* pAttr = MakeRedlineTextAttr(
                                 const_cast<SwDoc&>(m_rDoc),

@@ -1246,7 +1246,7 @@ void MSWord_SdrAttrIter::SetItemsThatDifferFromStandard(bool bCharAttr, SfxItemS
     SfxWhichIter aWhichIter(rSet);
     for (sal_uInt16 nEEWhich = aWhichIter.FirstWhich(); nEEWhich; nEEWhich = aWhichIter.NextWhich())
     {
-        if (SfxItemState::SET != rSet.GetItemState(nEEWhich, false))
+        if (SfxItemState::SET != aWhichIter.GetItemState(false))
         {
             sal_uInt16 nSwWhich = sw::hack::TransformWhichBetweenPools(m_rExport.m_rDoc.GetAttrPool(),
                 *m_pEditPool, nEEWhich);

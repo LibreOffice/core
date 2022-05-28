@@ -93,7 +93,7 @@ IMPL_LINK_NOARG(SfxStyleDialogController, CancelHdl, weld::Button&, void)
 
     while (nWhich)
     {
-        SfxItemState eState = pInSet->GetItemState(nWhich, false);
+        SfxItemState eState = aIter.GetItemState(false);
 
         if (SfxItemState::DEFAULT == eState)
             m_xExampleSet->ClearItem(nWhich);

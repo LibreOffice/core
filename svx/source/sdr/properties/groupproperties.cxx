@@ -77,7 +77,7 @@ namespace sdr::properties
 
                 while(nWhich)
                 {
-                    if(SfxItemState::DONTCARE == rSet.GetItemState(nWhich, false))
+                    if(SfxItemState::DONTCARE == aIter.GetItemState(false))
                     {
                         mxItemSet->InvalidateItem(nWhich);
                     }

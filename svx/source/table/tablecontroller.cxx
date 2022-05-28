@@ -2422,14 +2422,15 @@ void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnl
                 sal_uInt16 nWhich(aIter.FirstWhich());
                 while(nWhich)
                 {
+                    SfxItemState nState = aIter.GetItemState(false);
                     if(!bOnlyHardAttr)
                     {
-                        if(SfxItemState::DONTCARE == rSet.GetItemState(nWhich, false))
+                        if(SfxItemState::DONTCARE == nState)
                             rAttr.InvalidateItem(nWhich);
                         else
                             rAttr.MergeValue(rSet.Get(nWhich), true);
                     }
-                    else if(SfxItemState::SET == rSet.GetItemState(nWhich, false))
+                    else if(SfxItemState::SET == nState)
                     {
                         const SfxPoolItem& rItem = rSet.Get(nWhich);
                         rAttr.MergeValue(rItem, true);

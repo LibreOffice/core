@@ -1116,7 +1116,7 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet )
         while( 0 != ( nWhich = aIter.NextWhich() ) )
         {
             const SfxPoolItem* pItem = nullptr;
-            (void)rSet.GetItemState( nWhich, true, &pItem );
+            (void)aIter.GetItemState( true, &pItem );
             if( !pItem )
             {
                 // Not set, so default

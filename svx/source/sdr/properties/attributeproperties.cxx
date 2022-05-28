@@ -53,7 +53,7 @@ namespace sdr::properties
 
                     while(nWhich)
                     {
-                        if(SfxItemState::SET == rStyle.GetItemState(nWhich))
+                        if(SfxItemState::SET == aIter.GetItemState())
                         {
                             mxItemSet->ClearItem(nWhich);
                         }

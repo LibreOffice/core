@@ -72,8 +72,7 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
     while( nEEWhich )
     {
         const SfxPoolItem *pEEItem;
-        bool bSet = SfxItemState::SET == rObjItemSet.GetItemState( nEEWhich, false,
-                                                              &pEEItem );
+        bool bSet = SfxItemState::SET == aIter.GetItemState( false, &pEEItem );
 
         sal_uInt16 nSwWhich = 0;
         switch( nEEWhich )

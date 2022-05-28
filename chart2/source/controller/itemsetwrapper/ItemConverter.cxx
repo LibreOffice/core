@@ -198,7 +198,8 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
 
     while (nWhich)
     {
-        if ((rSourceSet.GetItemState(nWhich, true, &pPoolItem) == SfxItemState::SET) &&
+        SfxItemState nSourceItemState = aIter.GetItemState(true, &pPoolItem);
+        if ((nSourceItemState == SfxItemState::SET) &&
             (rDestSet.GetItemState(nWhich, true, &pPoolItem) == SfxItemState::SET))
         {
             if (rSourceSet.Get(nWhich) != rDestSet.Get(nWhich))
@@ -209,7 +210,7 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
                 }
             }
         }
-        else if( rSourceSet.GetItemState(nWhich, true, &pPoolItem) == SfxItemState::DONTCARE )
+        else if( nSourceItemState == SfxItemState::DONTCARE )
             rDestSet.InvalidateItem(nWhich);
 
         nWhich = aIter.NextWhich ();

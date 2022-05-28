@@ -225,7 +225,7 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
                     // now set all none hard attributes from the style
                     while(nWhich)
                     {
-                        if(SfxItemState::SET != aParaSet.GetItemState(nWhich))
+                        if(SfxItemState::SET != aIter.GetItemState())
                         {
                             aParaSet.Put(rStyleSet.Get(nWhich));
                             bItemChange = true;

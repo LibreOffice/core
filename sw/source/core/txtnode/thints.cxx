@@ -2018,10 +2018,11 @@ static void lcl_MergeAttr( SfxItemSet& rSet, const SfxPoolItem& rAttr )
         sal_uInt16 nWhich = aIter.FirstWhich();
         while( nWhich )
         {
+            const SfxPoolItem* pItem = nullptr;
             if( ( nWhich < RES_CHRATR_END ||
                   RES_TXTATR_UNKNOWN_CONTAINER == nWhich ) &&
-                ( SfxItemState::SET == pCFSet->GetItemState( nWhich ) ) )
-                rSet.Put( pCFSet->Get( nWhich ) );
+                ( SfxItemState::SET == aIter.GetItemState( true, &pItem ) ) )
+                rSet.Put( *pItem );
             nWhich = aIter.NextWhich();
         }
     }
@@ -2043,10 +2044,11 @@ static void lcl_MergeAttr_ExpandChrFormat( SfxItemSet& rSet, const SfxPoolItem& 
             sal_uInt16 nWhich = aIter.FirstWhich();
             while( nWhich )
             {
+                const SfxPoolItem* pItem = nullptr;
                 if( ( nWhich < RES_CHRATR_END ||
                       ( RES_TXTATR_AUTOFMT == rAttr.Which() && RES_TXTATR_UNKNOWN_CONTAINER == nWhich ) ) &&
-                    ( SfxItemState::SET == pCFSet->GetItemState( nWhich ) ) )
-                    rSet.Put( pCFSet->Get( nWhich ) );
+                    ( SfxItemState::SET == aIter.GetItemState( true, &pItem ) ) )
+                    rSet.Put( *pItem );
                 nWhich = aIter.NextWhich();
             }
         }
