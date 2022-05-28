@@ -120,7 +120,6 @@ public:
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 
     void    SetMenu(MenuBar* pMenu);
-    void    SetHeight(tools::Long nHeight);
     void    KillActivePopup();
     void    PopupClosed(Menu const * pMenu);
     sal_uInt16 GetHighlightedItem() const { return m_nHighlightedItem; }

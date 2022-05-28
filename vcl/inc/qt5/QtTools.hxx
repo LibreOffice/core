@@ -69,6 +69,11 @@ inline QRect scaledQRect(const QRect& rRect, const qreal fScale)
                  ceil(rRect.height() * fScale));
 }
 
+inline QSize scaledQSize(const QSize& rSize, const qreal fScale)
+{
+    return QSize(ceil(rSize.width() * fScale), ceil(rSize.height() * fScale));
+}
+
 inline tools::Rectangle toRectangle(const QRect& rRect)
 {
     return tools::Rectangle(rRect.left(), rRect.top(), rRect.right(), rRect.bottom());

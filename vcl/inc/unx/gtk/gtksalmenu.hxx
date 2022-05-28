@@ -71,8 +71,8 @@ public:
     GtkSalMenu( bool bMenuBar );
     virtual ~GtkSalMenu() override;
 
-    virtual bool                VisibleMenuBar() override;   // must return TRUE to actually DISPLAY native menu bars
-                                                    // otherwise only menu messages are processed (eg, OLE on Windows)
+    virtual bool HasNativeMenuBar() override;
+    virtual void ShowMenuBar(bool bVisible) override;
 
     virtual void                InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) override;
     virtual void                RemoveItem( unsigned nPos ) override;
@@ -112,7 +112,6 @@ public:
     static void                 Activate(const gchar* pMenuCommand);
     static void                 Deactivate(const gchar* pMenuCommand);
     void                        EnableUnity(bool bEnable);
-    virtual void                ShowMenuBar( bool bVisible ) override;
     bool                        PrepUpdate() const;
     virtual void                Update() override;  // Update this menu only.
     // Update full menu hierarchy from this menu.
@@ -139,7 +138,6 @@ public:
     virtual tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame ) override;
     virtual bool CanGetFocus() const override;
     virtual bool TakeFocus() override;
-    virtual int GetMenuBarHeight() const override;
     virtual void ApplyPersona() override;
 };
 

@@ -179,6 +179,8 @@ protected:
 
     SAL_DLLPRIVATE void ImplFillLayoutData() const;
     SAL_DLLPRIVATE SalMenu* ImplGetSalMenu() { return mpSalMenu.get(); }
+    // convenience function; just returns the SalMenu*, if HasNativeMenuBar() is true
+    SAL_DLLPRIVATE SalMenu* GetNativeMenuBar();
     SAL_DLLPRIVATE OUString ImplGetHelpText( sal_uInt16 nItemId ) const;
 
     // returns native check and option menu symbol height in rCheckHeight and rRadioHeight

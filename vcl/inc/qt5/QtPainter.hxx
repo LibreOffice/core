@@ -34,34 +34,26 @@ class QtPainter final : public QPainter
 public:
     QtPainter(QtGraphicsBackend& rGraphics, bool bPrepareBrush = false,
               sal_uInt8 nTransparency = 255);
-    ~QtPainter()
-    {
-        if (m_rGraphics.m_pFrame && !m_aRegion.isEmpty())
-            m_rGraphics.m_pFrame->GetQWidget()->update(m_aRegion);
-    }
+    ~QtPainter();
 
     void update(int nx, int ny, int nw, int nh)
     {
         if (m_rGraphics.m_pFrame)
-            m_aRegion += scaledQRect({ nx, ny, nw, nh }, 1 / m_rGraphics.devicePixelRatioF());
+            m_aRegion += QRect(nx, ny, nw, nh);
     }
 
     void update(const QRect& rRect)
     {
         if (m_rGraphics.m_pFrame)
-            m_aRegion += scaledQRect(rRect, 1 / m_rGraphics.devicePixelRatioF());
+            m_aRegion += rRect;
     }
 
-    void update(const QRectF& rRectF)
-    {
-        if (m_rGraphics.m_pFrame)
-            update(scaledQRect(rRectF.toAlignedRect(), 1 / m_rGraphics.devicePixelRatioF()));
-    }
+    void update(const QRectF& rRectF) { update(rRectF.toAlignedRect()); }
 
     void update()
     {
         if (m_rGraphics.m_pFrame)
-            m_aRegion += m_rGraphics.m_pFrame->GetQWidget()->rect();
+            m_aRegion += m_rGraphics.m_pFrame->GetQWidget()->geometry();
     }
 };
 
