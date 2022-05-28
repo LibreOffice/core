@@ -59,7 +59,7 @@ QtMenu::QtMenu(bool bMenuBar)
 {
 }
 
-bool QtMenu::VisibleMenuBar() { return true; }
+bool QtMenu::HasNativeMenuBar() { return true; }
 
 void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
 {

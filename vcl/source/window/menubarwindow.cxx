@@ -167,34 +167,40 @@ void MenuBarWindow::dispose()
     Window::dispose();
 }
 
-void MenuBarWindow::SetMenu( MenuBar* pMen )
+void MenuBarWindow::SetMenu(MenuBar* pMenu)
 {
-    m_pMenu = pMen;
+    if (pMenu == m_pMenu)
+        return;
+    m_pMenu = pMenu;
+
     KillActivePopup();
     m_nHighlightedItem = ITEMPOS_INVALID;
-    if (pMen)
+
+    if (!pMenu)
     {
-        m_aCloseBtn->ShowItem(ToolBoxItemId(IID_DOCUMENTCLOSE), pMen->HasCloseButton());
-        m_aCloseBtn->Show(pMen->HasCloseButton() || !m_aAddButtons.empty());
-        m_aFloatBtn->Show(pMen->HasFloatButton());
-        m_aHideBtn->Show(pMen->HasHideButton());
+        LayoutChanged();
+        return;
     }
-    Invalidate();
+
+    const bool bHasNativeMenuImpl = m_pMenu && m_pMenu->ImplGetSalMenu();
+    // no menubar window drawing needed in case of a native menu bar
+    SetPaintTransparent(bHasNativeMenuImpl);
+    m_aCloseBtn->ShowItem(ToolBoxItemId(IID_DOCUMENTCLOSE), !bHasNativeMenuImpl && pMenu->HasCloseButton());
+    m_aCloseBtn->Show(!bHasNativeMenuImpl && (pMenu->HasCloseButton() || !m_aAddButtons.empty()));
+    m_aFloatBtn->Show(!bHasNativeMenuImpl && pMenu->HasFloatButton());
+    m_aHideBtn->Show(!bHasNativeMenuImpl && pMenu->HasHideButton());
 
     // show and connect native menubar
-    if( m_pMenu && m_pMenu->ImplGetSalMenu() )
+    if (bHasNativeMenuImpl)
     {
-        if( m_pMenu->ImplGetSalMenu()->VisibleMenuBar() )
-            ImplGetFrame()->SetMenu( m_pMenu->ImplGetSalMenu() );
+        if (pMenu->GetNativeMenuBar())
+            ImplGetFrame()->SetMenu(pMenu->ImplGetSalMenu());
 
-        m_pMenu->ImplGetSalMenu()->SetFrame( ImplGetFrame() );
-        m_pMenu->ImplGetSalMenu()->ShowMenuBar(true);
+        pMenu->ImplGetSalMenu()->SetFrame(ImplGetFrame());
+        pMenu->ImplGetSalMenu()->ShowMenuBar(true);
     }
-}
 
-void MenuBarWindow::SetHeight(tools::Long nHeight)
-{
-    setPosSizePixel(0, 0, 0, nHeight, PosSizeFlags::Height);
+    LayoutChanged();
 }
 
 void MenuBarWindow::ShowButtons( bool bClose, bool bFloat, bool bHide )
@@ -724,10 +730,8 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     }
 
     // no key events if native menus
-    if (m_pMenu->ImplGetSalMenu() && m_pMenu->ImplGetSalMenu()->VisibleMenuBar())
-    {
+    if (m_pMenu->GetNativeMenuBar())
         return false;
-    }
 
     if ( nCode == KEY_MENU && !rKEvent.GetKeyCode().IsShift() ) // only F10, not Shift-F10
     {
@@ -862,7 +866,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     Size aOutputSize = GetOutputSizePixel();
 
     // no VCL paint if native menus
-    if (m_pMenu->ImplGetSalMenu() && m_pMenu->ImplGetSalMenu()->VisibleMenuBar())
+    if (m_pMenu->GetNativeMenuBar())
     {
         ImplGetFrame()->DrawMenuBar();
         return;
@@ -1007,22 +1011,24 @@ void MenuBarWindow::LayoutChanged()
 
     ApplySettings(*GetOutDev());
 
-    // if the font was changed.
-    tools::Long nHeight = m_pMenu->ImplCalcSize(this).Height();
-
     // depending on the native implementation or the displayable flag
     // the menubar windows is suppressed (ie, height=0)
-    if (!static_cast<MenuBar*>(m_pMenu.get())->IsDisplayable() ||
-        (m_pMenu->ImplGetSalMenu() && m_pMenu->ImplGetSalMenu()->VisibleMenuBar()))
-    {
-        nHeight = 0;
-    }
+    tools::Long nHeight = 0;
+    const bool bHasNativeMenuBar = m_pMenu->GetNativeMenuBar();
+    if (bHasNativeMenuBar)
+        nHeight = m_pMenu->ImplGetSalMenu()->GetMenuBarHeight();
+    else if (static_cast<MenuBar*>(m_pMenu.get())->IsDisplayable())
+        nHeight = m_pMenu->ImplCalcSize(this).Height();
+
     setPosSizePixel(0, 0, 0, nHeight, PosSizeFlags::Height);
     GetParent()->Resize();
-    Invalidate();
-    Resize();
 
-    m_pMenu->ImplKillLayoutData();
+    if (!bHasNativeMenuBar)
+    {
+        Invalidate();
+        Resize();
+        m_pMenu->ImplKillLayoutData();
+    }
 }
 
 void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
@@ -1214,7 +1220,7 @@ bool MenuBarWindow::CanGetFocus() const
        to 0 in this case
     */
     SalMenu *pNativeMenu = m_pMenu ? m_pMenu->ImplGetSalMenu() : nullptr;
-    if (pNativeMenu && pNativeMenu->VisibleMenuBar())
+    if (pNativeMenu && pNativeMenu->HasNativeMenuBar())
         return pNativeMenu->CanGetFocus();
     return GetSizePixel().Height() > 0;
 }
