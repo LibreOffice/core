@@ -59,9 +59,18 @@ class VCL_PLUGIN_PUBLIC SalMenu
 public:
     virtual ~SalMenu();
 
-    virtual bool VisibleMenuBar() = 0;  // must return true to actually DISPLAY native menu bars
-                                            // otherwise only menu messages are processed (eg, OLE on Windows)
-    virtual void ShowMenuBar( bool ) {}
+    /**
+     * Return true, if the implementation supports a native menu bar
+     * (or wants to suppress LO's menu bar, like on Mac).
+     *
+     * You might need to implement the matching SalFrame::SetMenu.
+     **/
+    virtual bool HasNativeMenuBar() = 0;
+    /** Return the height of the native menu bar. Must return 0, if it's hidden. */
+    virtual int GetMenuBarHeight() const;
+    /** Change visibility of the native menu bar. */
+    virtual void ShowMenuBar(bool);
+
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) = 0;
     virtual void RemoveItem( unsigned nPos ) = 0;
     virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos ) = 0;
@@ -89,8 +98,6 @@ public:
     // return Rectangle( Point( -1, -1 ), Size( 1, 1 ) ) if menu bar buttons implemented
     // but rectangle cannot be determined
     virtual tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame );
-
-    virtual int GetMenuBarHeight() const;
 
     virtual void ApplyPersona();
 };

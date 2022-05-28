@@ -56,3 +56,23 @@ QtPainter::QtPainter(QtGraphicsBackend& rGraphics, bool bPrepareBrush, sal_uInt8
     setCompositionMode(rGraphics.m_eCompositionMode);
     setRenderHint(QPainter::Antialiasing, m_rGraphics.getAntiAlias());
 }
+
+QtPainter::~QtPainter()
+{
+    if (!m_rGraphics.m_pFrame || m_aRegion.isEmpty())
+        return;
+
+    QWidget* pWidget = m_rGraphics.m_pFrame->GetQWidget();
+    QRect aParentUpdateRect(
+        scaledQRect(m_aRegion.boundingRect(), 1 / m_rGraphics.devicePixelRatioF()));
+    if (!m_rGraphics.m_pFrame->GetTopLevelWindow())
+        pWidget->update(m_aRegion);
+    else
+    {
+        QRect aIntersectedRect(aParentUpdateRect.intersected(pWidget->geometry()));
+        if (!aIntersectedRect.isEmpty())
+            pWidget->update(aIntersectedRect.translated(-pWidget->geometry().topLeft()));
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
