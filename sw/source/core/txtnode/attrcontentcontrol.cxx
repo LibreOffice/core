@@ -297,7 +297,7 @@ double SwContentControl::GetCurrentDateValue() const
 
     double dCurrentDate = 0;
     OUString aCurrentDate = m_aCurrentDate.replaceAll("T00:00:00Z", "");
-    pNumberFormatter->IsNumberFormat(aCurrentDate, nFormat, dCurrentDate);
+    (void)pNumberFormatter->IsNumberFormat(aCurrentDate, nFormat, dCurrentDate);
     return dCurrentDate;
 }
 
