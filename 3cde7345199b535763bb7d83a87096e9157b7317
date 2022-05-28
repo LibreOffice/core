@@ -22,6 +22,30 @@
       },
       "revId": "3cde7345199b535763bb7d83a87096e9157b7317",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "278b3cf2_dfdb0a22",
+        "filename": "vcl/qt5/QtPainter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-28T13:35:28Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "54a54218_0f39e41b",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 64
+      },
+      "revId": "3cde7345199b535763bb7d83a87096e9157b7317",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
