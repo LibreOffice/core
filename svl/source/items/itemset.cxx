@@ -887,17 +887,14 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
     }
     else
     {
-        SfxItemIter aIter( *this );
-        const SfxPoolItem* pItem = aIter.GetCurItem();
-        do
+        SfxWhichIter aIter( *this );
+        sal_uInt16 nWhich = aIter.FirstWhich();
+        while ( nWhich )
         {
-            sal_uInt16 nWhich = IsInvalidItem( pItem )
-                                ? GetWhichByPos( aIter.GetCurPos() )
-                                : pItem->Which();
             if( SfxItemState::UNKNOWN == rSet.GetItemState( nWhich, false ) )
-                ClearItem( nWhich );        // Delete
-            pItem = aIter.NextItem();
-        } while (pItem);
+                ClearItem( nWhich ); // Delete
+            nWhich = aIter.NextWhich();
+        }
     }
 }
 
@@ -936,18 +933,14 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
     }
     else
     {
-        SfxItemIter aIter( *this );
-        const SfxPoolItem* pItem = aIter.GetCurItem();
-        do
+        SfxWhichIter aIter( *this );
+        sal_uInt16 nWhich = aIter.FirstWhich();
+        while ( nWhich )
         {
-            sal_uInt16 nWhich = IsInvalidItem( pItem )
-                                ? GetWhichByPos( aIter.GetCurPos() )
-                                : pItem->Which();
             if( SfxItemState::SET == rSet.GetItemState( nWhich, false ) )
                 ClearItem( nWhich ); // Delete
-            pItem = aIter.NextItem();
-        } while (pItem);
-
+            nWhich = aIter.NextWhich();
+        }
     }
 }
 
