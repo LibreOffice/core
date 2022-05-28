@@ -69,6 +69,24 @@
       "message": "Apart from the gap between button and popup, this looks good to me with the standard UI. When switching to \"Tabbed\", the button doesn\u0027t show up. It\u0027s the same with gtk3, however.",
       "revId": "104269130151361a43401cf79a4aa0753f323bc6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18cc003c_1a6f4985",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-28T13:10:18Z",
+      "side": 1,
+      "message": "\u003e Without having looked at the code yet: Is the popup position something that could easily be adapted?\n\nNot easily. In fact I\u0027ve tried to fix \"this\" / the gap before. This happens because somehow we still handle the native menu bar offset wrong. OTOH, since gtk can do it, qt5 should also correctly handle it. But that is an extra fix, which would also fix tdf#64438, tdf#134704, handling of undocked toolbars, placement of some tooltips in Calc and maybe other wrong positioning. I need to check if tdf#130893 still happens with current gtk and also tdf#137471. It\u0027s AFAIK all the same problem. And definitely an extra patch.",
+      "parentUuid": "98966d6f_5be53375",
+      "revId": "104269130151361a43401cf79a4aa0753f323bc6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
