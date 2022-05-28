@@ -14,7 +14,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
-#include <impanmvw.hxx>
+#include <animate/AnimationRenderer.hxx>
 
 namespace
 {
@@ -33,10 +33,10 @@ public:
 };
 }
 
-class VclImplAnimViewTest : public test::BootstrapFixture
+class VclAnimationRendererTest : public test::BootstrapFixture
 {
 public:
-    VclImplAnimViewTest()
+    VclAnimationRendererTest()
         : BootstrapFixture(true, false)
     {
     }
@@ -45,7 +45,7 @@ public:
     void testDrawToPos();
     void testGetPosSizeWindow();
 
-    CPPUNIT_TEST_SUITE(VclImplAnimViewTest);
+    CPPUNIT_TEST_SUITE(VclAnimationRendererTest);
     CPPUNIT_TEST(testMatching);
     CPPUNIT_TEST(testDrawToPos);
     CPPUNIT_TEST(testGetPosSizeWindow);
@@ -55,54 +55,54 @@ private:
     Animation createAnimation();
 };
 
-void VclImplAnimViewTest::testMatching()
+void VclAnimationRendererTest::testMatching()
 {
     Animation aTestAnim = createAnimation();
     ScopedVclPtrInstance<TestRenderingContext> pTestRC;
 
-    ImplAnimView* pImplAnimView
-        = new ImplAnimView(&aTestAnim, pTestRC, Point(0, 0), Size(10, 10), 5);
-    CPPUNIT_ASSERT(pImplAnimView->matches(pTestRC, 5));
-    CPPUNIT_ASSERT(!pImplAnimView->matches(pTestRC, 10));
+    AnimationRenderer* pAnimationRenderer
+        = new AnimationRenderer(&aTestAnim, pTestRC, Point(0, 0), Size(10, 10), 5);
+    CPPUNIT_ASSERT(pAnimationRenderer->matches(pTestRC, 5));
+    CPPUNIT_ASSERT(!pAnimationRenderer->matches(pTestRC, 10));
 
     // caller ID of 0 only matches the OutputDevice
-    CPPUNIT_ASSERT(pImplAnimView->matches(pTestRC, 0));
+    CPPUNIT_ASSERT(pAnimationRenderer->matches(pTestRC, 0));
 }
 
-void VclImplAnimViewTest::testDrawToPos()
+void VclAnimationRendererTest::testDrawToPos()
 {
     Animation aTestAnim = createAnimation();
     ScopedVclPtrInstance<VirtualDevice> pTestRC;
 
-    ImplAnimView* pImplAnimView
-        = new ImplAnimView(&aTestAnim, pTestRC.get(), Point(0, 0), Size(10, 10), 5);
-    pImplAnimView->drawToPos(0);
-    pImplAnimView->drawToPos(1);
-    pImplAnimView->drawToPos(2);
-    pImplAnimView->drawToPos(10);
+    AnimationRenderer* pAnimationRenderer
+        = new AnimationRenderer(&aTestAnim, pTestRC.get(), Point(0, 0), Size(10, 10), 5);
+    pAnimationRenderer->drawToPos(0);
+    pAnimationRenderer->drawToPos(1);
+    pAnimationRenderer->drawToPos(2);
+    pAnimationRenderer->drawToPos(10);
 
     CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestRC->GetOutputSizePixel());
 }
 
-void VclImplAnimViewTest::testGetPosSizeWindow()
+void VclAnimationRendererTest::testGetPosSizeWindow()
 {
     Animation aTestAnim = createAnimation();
     ScopedVclPtrInstance<TestRenderingContext> pTestRC;
 
-    ImplAnimView* pImplAnimView
-        = new ImplAnimView(&aTestAnim, pTestRC, Point(0, 0), Size(10, 10), 5);
+    AnimationRenderer* pAnimationRenderer
+        = new AnimationRenderer(&aTestAnim, pTestRC, Point(0, 0), Size(10, 10), 5);
     AnimationBitmap aAnimBmp(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0),
                              Size(10, 10));
     Point aPos;
     Size aSize;
 
-    pImplAnimView->getPosSize(aAnimBmp, aPos, aSize);
+    pAnimationRenderer->getPosSize(aAnimBmp, aPos, aSize);
 
     CPPUNIT_ASSERT_EQUAL(Point(0, 0), aPos);
     CPPUNIT_ASSERT_EQUAL(Size(10, 10), aSize);
 }
 
-Animation VclImplAnimViewTest::createAnimation()
+Animation VclAnimationRendererTest::createAnimation()
 {
     Animation aAnimation;
 
@@ -114,7 +114,7 @@ Animation VclImplAnimViewTest::createAnimation()
     return aAnimation;
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(VclImplAnimViewTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(VclAnimationRendererTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
