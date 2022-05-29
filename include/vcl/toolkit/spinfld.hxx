@@ -61,6 +61,11 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 
+    SAL_DLLPRIVATE void SetUpperEnabled(bool bEnabled);
+    SAL_DLLPRIVATE void SetLowerEnabled(bool bEnabled);
+    SAL_DLLPRIVATE bool IsUpperEnabled() const { return mbUpperEnabled; }
+    SAL_DLLPRIVATE bool IsLowerEnabled() const { return mbLowerEnabled; }
+
 protected:
     tools::Rectangle       maUpperRect;
     tools::Rectangle       maLowerRect;
@@ -91,7 +96,9 @@ private:
                     mbInitialDown:1,
                     mbUpperIn:1,
                     mbLowerIn:1,
-                    mbInDropDown:1;
+                    mbInDropDown:1,
+                    mbUpperEnabled:1,
+                    mbLowerEnabled:1;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
