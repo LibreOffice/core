@@ -74,7 +74,7 @@ namespace drawinglayer::primitive2d
             Primitive2DReference                        maBufferedFirstFrame;
 
             /// buffering of all frames
-            Primitive2DContainer                        maBufferedPrimitives;
+            std::vector<Primitive2DReference>           maBufferedPrimitives;
             bool                                        mbBufferingAllowed;
 
             /// set if the animation is huge so that just always the next frame
@@ -402,7 +402,7 @@ namespace drawinglayer::primitive2d
             // prepare buffer space
             if (mbBufferingAllowed && isValidData())
             {
-                maBufferedPrimitives = Primitive2DContainer(maAnimation.Count());
+                maBufferedPrimitives.resize(maAnimation.Count());
             }
         }
 
