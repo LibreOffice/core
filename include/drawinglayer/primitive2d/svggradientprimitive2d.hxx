@@ -134,8 +134,8 @@ namespace drawinglayer::primitive2d
             virtual void checkPreconditions();
             void createResult(
                 Primitive2DContainer& rContainer,
-                const Primitive2DContainer& rTargetColor,
-                const Primitive2DContainer& rTargetOpacity,
+                Primitive2DContainer aTargetColor,
+                Primitive2DContainer aTargetOpacity,
                 const basegfx::B2DHomMatrix& rUnitGradientToObject,
                 bool bInvert = false) const;
             bool getCreatesContent() const { return mbCreatesContent; }
