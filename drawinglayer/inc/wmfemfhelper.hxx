@@ -53,6 +53,10 @@ namespace wmfemfhelper
         {
             append(pCandidate.get());
         }
+        void append(drawinglayer::primitive2d::Primitive2DContainer xCandidate)
+        {
+            aTargets.append(std::move(xCandidate));
+        }
         void append(drawinglayer::primitive2d::BasePrimitive2D* pCandidate);
         drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequence(const PropertyHolder& rPropertyHolder);
     };

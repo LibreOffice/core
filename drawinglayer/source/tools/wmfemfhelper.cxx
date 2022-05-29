@@ -1292,7 +1292,7 @@ namespace wmfemfhelper
         if(!(bUnderlineUsed || bStrikeoutUsed || bOverlineUsed))
             return;
 
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* > aTargetVector;
+        drawinglayer::primitive2d::Primitive2DContainer aTargets;
         basegfx::B2DVector aAlignmentOffset(0.0, 0.0);
         drawinglayer::attribute::FontAttribute aFontAttribute;
         basegfx::B2DHomMatrix aTextTransform;
@@ -1314,7 +1314,7 @@ namespace wmfemfhelper
         if(bOverlineUsed)
         {
             // create primitive geometry for overline
-            aTargetVector.push_back(
+            aTargets.push_back(
                 new drawinglayer::primitive2d::TextLinePrimitive2D(
                     aTextTransform,
                     fLineWidth,
@@ -1327,7 +1327,7 @@ namespace wmfemfhelper
         if(bUnderlineUsed)
         {
             // create primitive geometry for underline
-            aTargetVector.push_back(
+            aTargets.push_back(
                 new drawinglayer::primitive2d::TextLinePrimitive2D(
                     aTextTransform,
                     fLineWidth,
@@ -1349,7 +1349,7 @@ namespace wmfemfhelper
                 const css::lang::Locale aLocale(LanguageTag(
                     rProperty.getLanguageType()).getLocale());
 
-                aTargetVector.push_back(
+                aTargets.push_back(
                     new drawinglayer::primitive2d::TextCharacterStrikeoutPrimitive2D(
                         aTextTransform,
                         fLineWidth,
@@ -1361,7 +1361,7 @@ namespace wmfemfhelper
             else
             {
                 // strikeout with geometry
-                aTargetVector.push_back(
+                aTargets.push_back(
                     new drawinglayer::primitive2d::TextGeometryStrikeoutPrimitive2D(
                         aTextTransform,
                         fLineWidth,
@@ -1372,31 +1372,21 @@ namespace wmfemfhelper
             }
         }
 
-        if(aTargetVector.empty())
+        if(aTargets.empty())
             return;
 
         // add created text primitive to target
         if(rProperty.getTransformation().isIdentity())
         {
-            for(drawinglayer::primitive2d::BasePrimitive2D* a : aTargetVector)
-            {
-                rTarget.append(a);
-            }
+            rTarget.append(std::move(aTargets));
         }
         else
         {
             // when a transformation is set, embed to it
-            drawinglayer::primitive2d::Primitive2DContainer xTargets(aTargetVector.size());
-
-            for(size_t a(0); a < aTargetVector.size(); a++)
-            {
-                xTargets[a] = drawinglayer::primitive2d::Primitive2DReference(aTargetVector[a]);
-            }
-
             rTarget.append(
                 new drawinglayer::primitive2d::TransformPrimitive2D(
                     rProperty.getTransformation(),
-                    std::move(xTargets)));
+                    std::move(aTargets)));
         }
     }
 
