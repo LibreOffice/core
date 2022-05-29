@@ -202,6 +202,33 @@ tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, const OUString& rText
 
     return nDelta;
 }
+
+void SnapToGridEdge(std::vector<sal_Int32>& rKernArray, sal_Int32 nLen, tools::Long nGridWidth,
+                    tools::Long nSpace, tools::Long nKern)
+{
+    assert(nLen <= sal_Int32(rKernArray.size()));
+
+    tools::Long nCharWidth = rKernArray[0];
+    tools::Long nEdge = lcl_MinGridWidth(nGridWidth, nCharWidth + nKern) + nSpace;
+
+    sal_Int32 nLast = 0;
+
+    for (sal_Int32 i = 1; i < nLen; ++i)
+    {
+        if (rKernArray[i] == rKernArray[nLast])
+            continue;
+
+        nCharWidth = rKernArray[i] - rKernArray[nLast];
+        tools::Long nMinWidth = lcl_MinGridWidth(nGridWidth, nCharWidth + nKern);
+        while (nLast < i)
+            rKernArray[nLast++] = nEdge;
+
+        nEdge += nMinWidth + nSpace;
+    }
+
+    while (nLast < nLen)
+        rKernArray[nLast++] = nEdge;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

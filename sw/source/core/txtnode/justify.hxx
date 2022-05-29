@@ -50,6 +50,16 @@ SW_DLLPUBLIC void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OU
 SW_DLLPUBLIC tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, const OUString& rText,
                                     sal_Int32 nStt, sal_Int32 nLen, tools::Long nGridWidth,
                                     bool bForceLeft);
+
+/// Snap ideographs to text grids edge ( used when snap to char is off ):
+/// space will be distributed ( in case that alignment is set to justify. ).
+/// @param[in,out] rKernArray text positions from OutDev::GetTextArray().
+/// @param nLen number of elements to process in rKernArray and rText.
+/// @param nGridWidth width of a text grid
+/// @param nSpace amount of space distributed under justify text alignment mode.
+/// @param nKern letter spacing.
+SW_DLLPUBLIC void SnapToGridEdge(std::vector<sal_Int32>& rKernArray, sal_Int32 nLen,
+                                 tools::Long nGridWidth, tools::Long nSpace, tools::Long nKern);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

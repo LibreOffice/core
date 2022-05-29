@@ -72,24 +72,6 @@ tools::Long SwFntObj::s_nPixWidth;
 MapMode* SwFntObj::s_pPixMap = nullptr;
 static vcl::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut {};
 
-namespace
-{
-
-tools::Long EvalGridWidthAdd( const SwTextGridItem *const pGrid,
-        const SwDrawTextInfo &rInf, tools::Long nFontWidth )
-{
-    const SwDoc* pDoc = rInf.GetShell()->GetDoc();
-    const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
-    tools::Long nGridWidthAdd = nGridWidth - nFontWidth;
-
-    while (nGridWidthAdd < 0)
-        nGridWidthAdd += nGridWidth;
-
-    return nGridWidthAdd;
-}
-
-}
-
 void SwFntCache::Flush( )
 {
     if ( pLastFont )
@@ -933,13 +915,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
 
-        // ASIAN LINE AND CHARACTER GRID MODE: Do we want to snap asian characters to the grid?
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars())
+        // ASIAN LINE AND CHARACTER GRID MODE
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
         {
             //for textgrid refactor
-            //const sal_uInt16 nGridWidth = pGrid->GetBaseHeight();
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
-            const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
+            const tools::Long nGridWidth = GetGridWidth(*pGrid, *pDoc);
+            tools::Long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
 
             // kerning array - gives the absolute position of end of each character
             std::vector<sal_Int32> aKernArray;
@@ -949,9 +931,18 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             else
                 GetTextArray(rInf.GetOut(), rInf, aKernArray);
 
-            tools::Long nDelta
-                = Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+            tools::Long nDelta = 0;
+
+            if (pGrid->IsSnapToChars())
+            {
+                nDelta = Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
                                       sal_Int32(rInf.GetLen()), nGridWidth, false);
+            }
+            else
+            {
+                Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth,
+                        nSpaceAdd, rInf.GetKern());
+            }
 
             if (nDelta)
                 aTextOriginPos.AdjustX(nDelta);
@@ -962,139 +953,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                 aKernArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
 
-            return;
-        }
-    }
-
-    // For text grid refactor
-    // ASIAN LINE AND CHARACTER GRID MODE START: not snap to characters
-
-    if ( rInf.GetFrame() && rInf.SnapToGrid() && rInf.GetFont() &&
-         SwFontScript::CJK == rInf.GetFont()->GetActual() )
-    {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-
-        // ASIAN LINE AND CHARACTER GRID MODE - do not snap to characters
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
-        {
-            std::vector<sal_Int32> aKernArray;
-
-            if ( m_pPrinter )
-                GetTextArray(*m_pPrinter, rInf, aKernArray);
-            else
-                GetTextArray(rInf.GetOut(), rInf, aKernArray);
-
-            const tools::Long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf, aKernArray[0] );
-
-            if ( bSwitchH2V )
-                rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
-            if ( rInf.GetSpace() || rInf.GetKanaComp())
-            {
-                tools::Long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
-                if ( rInf.GetFont() && rInf.GetLen() )
-                {
-                    bool bSpecialJust = false;
-                    const SwScriptInfo* pSI = rInf.GetScriptInfo();
-                    const SwFontScript nActual = rInf.GetFont()->GetActual();
-                    ///Kana Compression
-                    if( SwFontScript::CJK == nActual && rInf.GetKanaComp() &&
-                        pSI && pSI->CountCompChg() &&
-                        lcl_IsMonoSpaceFont( *(rInf.GetpOut()) ) )
-                    {
-                        pSI->Compress( aKernArray.data(), rInf.GetIdx(), rInf.GetLen(),
-                            rInf.GetKanaComp(), o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered( rInf.GetOut() ) , &aTextOriginPos );
-                        bSpecialJust = true;
-                    }
-                    ///Asian Justification
-                    if ( ( SwFontScript::CJK == nActual || SwFontScript::Latin == nActual ) && nSpaceAdd )
-                    {
-                        LanguageType aLang = rInf.GetFont()->GetLanguage( SwFontScript::CJK );
-                        if (!MsLangId::isKorean(aLang))
-                        {
-                            tools::Long nSpaceSum = nSpaceAdd;
-                            for (sal_Int32 nI = 0; nI < sal_Int32(rInf.GetLen()); ++nI)
-                            {
-                                aKernArray[ nI ] += nSpaceSum;
-                                nSpaceSum += nSpaceAdd;
-                            }
-                            bSpecialJust = true;
-                            nSpaceAdd = 0;
-                        }
-                    }
-                    tools::Long nGridAddSum = nGridWidthAdd;
-                    for (sal_Int32 i = 0; i < sal_Int32(rInf.GetLen()); i++, nGridAddSum += nGridWidthAdd )
-                    {
-                        aKernArray[i] += nGridAddSum;
-                    }
-                    tools::Long nKernSum = rInf.GetKern();
-                    if ( bSpecialJust || rInf.GetKern() )
-                    {
-                        for (sal_Int32 i = 0; i < sal_Int32(rInf.GetLen()); i++, nKernSum += rInf.GetKern())
-                        {
-                            if (CH_BLANK == rInf.GetText()[sal_Int32(rInf.GetIdx())+i])
-                                nKernSum += nSpaceAdd;
-                            aKernArray[i] += nKernSum;
-                        }
-                        ///With through/uderstr. Grouped style requires a blank at the end
-                        ///of a text edition special measures:
-                        if( m_bPaintBlank && rInf.GetLen() && (CH_BLANK ==
-                            rInf.GetText()[sal_Int32(rInf.GetIdx() + rInf.GetLen()) - 1]))
-                        {
-                            ///If it concerns a singular, underlined space acts,
-                            ///we must spend two:
-                            if (TextFrameIndex(1) == rInf.GetLen())
-                            {
-                                aKernArray[0] = rInf.GetWidth() + nSpaceAdd;
-                                rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                    aKernArray, sal_Int32(rInf.GetIdx()), 1);
-                            }
-                            else
-                            {
-                                aKernArray[sal_Int32(rInf.GetLen()) - 2] += nSpaceAdd;
-                                rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                    aKernArray, sal_Int32(rInf.GetIdx()),
-                                    sal_Int32(rInf.GetLen()));
-                            }
-                        }
-                        else
-                        {
-                            rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                                aKernArray, sal_Int32(rInf.GetIdx()),
-                                sal_Int32(rInf.GetLen()));
-                        }
-                    }
-                    else
-                    {
-                        sal_Int32 i;
-                        tools::Long nSpaceSum = 0;
-                        for (i = 0; i < sal_Int32(rInf.GetLen()); i++)
-                        {
-                            if(CH_BLANK == rInf.GetText()[sal_Int32(rInf.GetIdx()) + i])
-                                nSpaceSum += nSpaceAdd + nKernSum;
-
-                            aKernArray[i] += nSpaceSum;
-                        }
-
-                        rInf.GetOut().DrawTextArray(aTextOriginPos,
-                                rInf.GetText(), aKernArray,
-                                sal_Int32(rInf.GetIdx()),
-                                sal_Int32(rInf.GetLen()));
-                    }
-                }
-            }
-            else
-            {
-                //long nKernAdd = rInf.GetKern();
-                tools::Long nKernAdd = 0;
-                tools::Long nGridAddSum = nGridWidthAdd + nKernAdd;
-                for (sal_Int32 i = 0; i < sal_Int32(rInf.GetLen());
-                     i++, nGridAddSum += nGridWidthAdd + nKernAdd)
-                {
-                    aKernArray[i] += nGridAddSum;
-                }
-                rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
-                    aKernArray, sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
-            }
             return;
         }
     }
@@ -1678,7 +1536,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
          SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
         {
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
@@ -1705,42 +1563,19 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
             std::vector<sal_Int32> aKernArray;
             GetTextArray(*pOutDev, rInf, aKernArray, sal_Int32(rInf.GetLen()));
-            Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
-                                  sal_Int32(rInf.GetLen()), nGridWidth, true);
-
-            aTextSize.setWidth(aKernArray[sal_Int32(rInf.GetLen()) - 1]);
-            rInf.SetKanaDiff( 0 );
-            return aTextSize;
-        }
-    }
-
-    //for textgrid refactor
-    if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
-         SwFontScript::CJK == rInf.GetFont()->GetActual() )
-    {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
-        {
-            OutputDevice* pOutDev;
-            if ( m_pPrinter )
+            if (pGrid->IsSnapToChars())
             {
-                if( !m_pPrtFont->IsSameInstance( m_pPrinter->GetFont() ) )
-                    m_pPrinter->SetFont(*m_pPrtFont);
-                pOutDev = m_pPrinter;
+                Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+                                  sal_Int32(rInf.GetLen()), nGridWidth, true);
             }
             else
-                pOutDev = rInf.GetpOut();
+            {
+                // use 0 to calculate raw width without rInf.GetSpace().
+                Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth, 0,
+                        rInf.GetKern());
+            }
 
-            tools::Long nWidth = pOutDev->GetTextWidth(rInf.GetText(),
-                        sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
-            const tools::Long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf, nWidth / sal_Int32(nLn) );
-            aTextSize.setWidth(nWidth);
-            aTextSize.setHeight( pOutDev->GetTextHeight() +
-                                GetFontLeading( rInf.GetShell(), rInf.GetOut() ) );
-            aTextSize.AdjustWidth(sal_Int32(nLn) * nGridWidthAdd);
-            //if ( rInf.GetKern() && nLn )
-            //    aTextSize.Width() += ( nLn ) * long( rInf.GetKern() );
-
+            aTextSize.setWidth(aKernArray[sal_Int32(rInf.GetLen()) - 1]);
             rInf.SetKanaDiff( 0 );
             return aTextSize;
         }
@@ -1845,13 +1680,21 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
          rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
         {
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
-            Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
-                                  sal_Int32(rInf.GetLen()), nGridWidth, true);
+            if (pGrid->IsSnapToChars())
+            {
+                Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+                                      sal_Int32(rInf.GetLen()), nGridWidth, true);
+            }
+            else
+            {
+                Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth,
+                        nSpaceAdd, rInf.GetKern());
+            }
 
             return  TextFrameIndex(Justify::GetModelPosition(aKernArray, sal_Int32(rInf.GetLen()),
                         rInf.GetOffset()));
@@ -1924,29 +1767,6 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
     TextFrameIndex nCnt(0);
     tools::Long nSpaceSum = 0;
     tools::Long nKernSum = 0;
-
-    //for textgrid refactor
-    if ( rInf.GetFrame() && rInf.GetLen() && rInf.SnapToGrid() &&
-         rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() )
-    {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
-        {
-
-            const tools::Long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf, aKernArray[0] );
-
-            for (TextFrameIndex j(0); j < rInf.GetLen(); j++)
-            {
-                tools::Long nScr = aKernArray[sal_Int32(j)] + (nSpaceAdd + nGridWidthAdd) * (sal_Int32(j) + 1);
-                if( nScr >= rInf.GetOffset())
-                {
-                    nCnt = j;
-                    break;
-                }
-            }
-            return nCnt;
-        }
-    }
 
     sal_Int32 nDone = 0;
     TextFrameIndex nIdx = rInf.GetIdx();
@@ -2133,7 +1953,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
          rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType())
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
         {
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
@@ -2142,8 +1962,17 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
             GetTextArray( rInf.GetOut(), rInf.GetText(), aKernArray,
                     sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
 
-            Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+            if (pGrid->IsSnapToChars())
+            {
+                Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
                                   sal_Int32(rInf.GetLen()), nGridWidth, true);
+            }
+            else
+            {
+                // use 0 to calculate raw width without rInf.GetSpace().
+                Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth,
+                        0, rInf.GetKern());
+            }
 
             while(nTextBreak < rInf.GetLen() && aKernArray[sal_Int32(nTextBreak)] <= nTextWidth)
                 ++nTextBreak;

@@ -154,4 +154,29 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridIVS)
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
     CPPUNIT_ASSERT_EQUAL(tools::Long(0), nDelta);
 }
+
+CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridEdge1)
+{
+    CharWidthArray aActual{ 640, 640, 640, 640, 640, 640, 320, 960 };
+    CharWidthArray aExpected{ 840, 840, 840, 840, 840, 840, 440, 1240 };
+    aActual.InvokeWithKernArray([&] { Justify::SnapToGridEdge(aActual.maArray, 8, 400, 40, 0); });
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridEdge2)
+{
+    CharWidthArray aActual{ 640, 640, 640, 640, 640, 640, 320, 640 };
+    CharWidthArray aExpected{ 840, 840, 840, 840, 840, 840, 440, 840 };
+    aActual.InvokeWithKernArray([&] { Justify::SnapToGridEdge(aActual.maArray, 8, 100, 40, 80); });
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridEdgeIVS)
+{
+    CharWidthArray aActual{ 640, 0, 0, 640, 640, 640, 640, 640 };
+    CharWidthArray aExpected{ 840, 0, 0, 840, 840, 840, 840, 840 };
+    aActual.InvokeWithKernArray([&] { Justify::SnapToGridEdge(aActual.maArray, 8, 400, 40, 0); });
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
