@@ -835,18 +835,21 @@ void DrawDocShell::GotoBookmark(std::u16string_view rBookmark)
                 pDrawViewShell->SwitchPage(nSdPgNum);
             }
 
-            if (pDrawViewShell->GetDispatcher())
-            {
-                // show page
-                SvxZoomItem aZoom;
-                aZoom.SetType( SvxZoomType::WHOLEPAGE );
-                pDrawViewShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, { &aZoom });
-            }
+// This is the cause of zoom being reset when an object is selected from the Navigator.
+//            if (pDrawViewShell->GetDispatcher())
+//            {
+//                // show page
+//                SvxZoomItem aZoom;
+//                aZoom.SetType( SvxZoomType::WHOLEPAGE );
+//                pDrawViewShell->GetDispatcher()->ExecuteList(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, { &aZoom });
+//            }
 
+            // Setting UnmarkAll here makes Navigator object tracking not jump back to marked object
+            // when slide entry is selected in which there is a marked object in the slide.
+            pDrawViewShell->GetView()->UnmarkAll();
             if (pObj != nullptr)
             {
                 // select object
-                pDrawViewShell->GetView()->UnmarkAll();
                 pDrawViewShell->GetView()->MarkObj(
                     pObj,
                     pDrawViewShell->GetView()->GetSdrPageView());
