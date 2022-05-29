@@ -20,11 +20,58 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <inscodlg.hxx>
+#include <officecfg/Office/Common.hxx>
 
-InsertDeleteFlags ScInsertContentsDlg::nPreviousChecks   = InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING;
+InsertDeleteFlags ScInsertContentsDlg::nPreviousChecks = InsertDeleteFlags::NONE;
 ScPasteFunc  ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::NONE;
 InsertContentsFlags ScInsertContentsDlg::nPreviousChecks2 = InsertContentsFlags::NONE;
 InsCellCmd ScInsertContentsDlg::nPreviousMoveMode = InsCellCmd::INS_NONE;
+
+//whether the dialog has loaded for the first time
+static bool firstLoad = true;
+
+void ScInsertContentsDlg::storeFlagsInRegistry()
+{
+    //store the flags in the registry
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+
+    //InsertDeleteFlags
+    officecfg::Office::Common::PasteSpecial::Option::Paste::All::set(ScInsertContentsDlg::mxBtnInsAll->get_active(), batch);
+    officecfg::Office::Common::PasteSpecial::Option::Paste::Numbers::set(ScInsertContentsDlg::mxBtnInsNumbers->get_active(), batch);
+    officecfg::Office::Common::PasteSpecial::Option::Paste::Text::set(ScInsertContentsDlg::mxBtnInsStrings->get_active(), batch);
+    officecfg::Office::Common::PasteSpecial::Option::Paste::DateTime::set(ScInsertContentsDlg::mxBtnInsDateTime->get_active(), batch);
+    officecfg::Office::Common::PasteSpecial::Option::Paste::Formats::set(ScInsertContentsDlg::mxBtnInsAttrs->get_active(), batch);
+    officecfg::Office::Common::PasteSpecial::Option::Paste::Comments::set(ScInsertContentsDlg::mxBtnInsNotes->get_active(), batch);
+    officecfg::Office::Common::PasteSpecial::Option::Paste::Objects::set(ScInsertContentsDlg::mxBtnInsObjects->get_active(), batch);
+    officecfg::Office::Common::PasteSpecial::Option::Paste::Formulas::set(ScInsertContentsDlg::mxBtnInsFormulas->get_active(), batch);
+
+    //ScPasteFunc
+    if(ScInsertContentsDlg::mxRbNoOp->get_active())
+        officecfg::Office::Common::PasteSpecial::Option::Operations::OptionValue::set(0, batch);
+    else if(ScInsertContentsDlg::mxRbAdd->get_active())
+        officecfg::Office::Common::PasteSpecial::Option::Operations::OptionValue::set(1, batch);
+    else if(ScInsertContentsDlg::mxRbSub->get_active())
+        officecfg::Office::Common::PasteSpecial::Option::Operations::OptionValue::set(2, batch);
+    else if(ScInsertContentsDlg::mxRbMul->get_active())
+        officecfg::Office::Common::PasteSpecial::Option::Operations::OptionValue::set(3, batch);
+    else if(ScInsertContentsDlg::mxRbDiv->get_active())
+        officecfg::Office::Common::PasteSpecial::Option::Operations::OptionValue::set(4, batch);
+
+    //InsertContentsFlags
+    officecfg::Office::Common::PasteSpecial::Option::Options::AsLink::set(ScInsertContentsDlg::mxBtnLink->get_active(), batch);
+    officecfg::Office::Common::PasteSpecial::Option::Options::Transpose::set(ScInsertContentsDlg::mxBtnTranspose->get_active(), batch);
+    officecfg::Office::Common::PasteSpecial::Option::Options::SkipEmptyCells::set(ScInsertContentsDlg::mxBtnSkipEmptyCells->get_active(), batch);
+
+    //InsCellCmd
+    if(ScInsertContentsDlg::mxRbMoveNone->get_active())
+        officecfg::Office::Common::PasteSpecial::Option::ShiftCells::OptionValue::set(4, batch);
+    else if(ScInsertContentsDlg::mxRbMoveDown->get_active())
+        officecfg::Office::Common::PasteSpecial::Option::ShiftCells::OptionValue::set(0, batch);
+    else if(ScInsertContentsDlg::mxRbMoveRight->get_active())
+        officecfg::Office::Common::PasteSpecial::Option::ShiftCells::OptionValue::set(1, batch);
+
+    batch->commit();
+}
 
 ScInsertContentsDlg::ScInsertContentsDlg(weld::Window* pParent,
                                          const OUString* pStrTitle )
@@ -57,10 +104,87 @@ ScInsertContentsDlg::ScInsertContentsDlg(weld::Window* pParent,
     , mxBtnShortCutPasteValuesFormats(m_xBuilder->weld_button("paste_values_formats"))
     , mxBtnShortCutPasteTranspose(m_xBuilder->weld_button("paste_transpose"))
     , mxBtnShortCutPasteFormats(m_xBuilder->weld_button("paste_formats"))
+    , mxOKBtn(m_xBuilder->weld_button("ok"))
     , mxImmediately(m_xBuilder->weld_check_button("cbImmediately"))
 {
     if (pStrTitle)
         m_xDialog->set_title(*pStrTitle);
+
+    if (firstLoad)
+    {
+        //unset firstLoad
+        firstLoad = false;
+
+        //set the flags from the registry
+
+        /*
+         * Flags for nPreviousChecks
+         */
+        if(officecfg::Office::Common::PasteSpecial::Option::Paste::All::get())
+             nPreviousChecks |= InsertDeleteFlags::ALL;
+        if(officecfg::Office::Common::PasteSpecial::Option::Paste::Numbers::get())
+             nPreviousChecks |= InsertDeleteFlags::VALUE;
+        if(officecfg::Office::Common::PasteSpecial::Option::Paste::Text::get())
+             nPreviousChecks |= InsertDeleteFlags::STRING;
+        if(officecfg::Office::Common::PasteSpecial::Option::Paste::DateTime::get())
+             nPreviousChecks |= InsertDeleteFlags::DATETIME;
+        if(officecfg::Office::Common::PasteSpecial::Option::Paste::Formats::get())
+             nPreviousChecks |= InsertDeleteFlags::ATTRIB;
+        if(officecfg::Office::Common::PasteSpecial::Option::Paste::Comments::get())
+             nPreviousChecks |= InsertDeleteFlags::NOTE;
+        if(officecfg::Office::Common::PasteSpecial::Option::Paste::Objects::get())
+             nPreviousChecks |= InsertDeleteFlags::OBJECTS;
+        if(officecfg::Office::Common::PasteSpecial::Option::Paste::Formulas::get())
+             nPreviousChecks |= InsertDeleteFlags::FORMULA;
+
+        /*
+         * Flags for nPreviousFormulaChecks
+         */
+        int optionFlagValue = officecfg::Office::Common::PasteSpecial::Option::Operations::OptionValue::get();
+        switch(optionFlagValue)
+        {
+            case 0:     nPreviousFormulaChecks = ScPasteFunc::NONE;
+                        break;
+
+            case 1:     nPreviousFormulaChecks = ScPasteFunc::ADD;
+                        break;
+
+            case 2:     nPreviousFormulaChecks = ScPasteFunc::SUB;
+                        break;
+
+            case 3:     nPreviousFormulaChecks = ScPasteFunc::MUL;
+                        break;
+
+            case 4:     nPreviousFormulaChecks = ScPasteFunc::DIV;
+                        break;
+        }
+
+        /*
+         * Flags for nPreviousChecks2
+         */
+        if(officecfg::Office::Common::PasteSpecial::Option::Options::AsLink::get())
+            nPreviousChecks2 |= InsertContentsFlags::Link;
+        if(officecfg::Office::Common::PasteSpecial::Option::Options::Transpose::get())
+             nPreviousChecks2 |= InsertContentsFlags::Trans;
+        if(officecfg::Office::Common::PasteSpecial::Option::Options::SkipEmptyCells::get())
+             nPreviousChecks2 |= InsertContentsFlags::NoEmpty;
+
+        /*
+         * Flags for nPreviousMoveMode
+         */
+        int shiftFlagValue = officecfg::Office::Common::PasteSpecial::Option::ShiftCells::OptionValue::get();
+        switch(shiftFlagValue)
+        {
+            case 0:     nPreviousMoveMode = InsCellCmd::INS_CELLSDOWN;
+                        break;
+
+            case 1:     nPreviousMoveMode = InsCellCmd::INS_CELLSRIGHT;
+                        break;
+
+            case 4:     nPreviousMoveMode = InsCellCmd::INS_NONE;
+                        break;
+        }
+    }
 
     SetInsContentsCmdBits( ScInsertContentsDlg::nPreviousChecks );
     SetFormulaCmdBits( ScInsertContentsDlg::nPreviousFormulaChecks );
@@ -74,6 +198,7 @@ ScInsertContentsDlg::ScInsertContentsDlg(weld::Window* pParent,
     mxBtnShortCutPasteValuesFormats->connect_clicked( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
     mxBtnShortCutPasteTranspose->connect_clicked( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
     mxBtnShortCutPasteFormats->connect_clicked( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
+    mxOKBtn->connect_clicked( LINK( this, ScInsertContentsDlg, ClickHdl ) );
 }
 
 InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const
@@ -316,7 +441,18 @@ IMPL_LINK(ScInsertContentsDlg, ShortCutHdl, weld::Button&, rBtn, void)
 
     SetCellCmdFlags( InsCellCmd::INS_NONE );
     SetFormulaCmdBits(ScPasteFunc::NONE);
-    if (mxImmediately->get_active()) m_xDialog->response(RET_OK);
+
+    if (mxImmediately->get_active())
+    {
+        storeFlagsInRegistry();
+        m_xDialog->response(RET_OK);
+    }
+}
+
+IMPL_LINK_NOARG(ScInsertContentsDlg, ClickHdl, weld::Button&, void)
+{
+    storeFlagsInRegistry();
+    m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl, weld::Toggleable&, void)
