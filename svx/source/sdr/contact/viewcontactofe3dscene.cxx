@@ -300,20 +300,18 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createSce
             const basegfx::B3DRange aContentRange(aAllSequence.getB3DRange(aNeutralViewInformation3D));
 
             // create 2d primitive 3dscene with generated sub-list from collector
-            const drawinglayer::primitive2d::Primitive2DReference xReference(
+            xRetval = drawinglayer::primitive2d::Primitive2DContainer{
                 new drawinglayer::primitive2d::ScenePrimitive2D(
                     bTestVisibility ? aVisibleSequence : aAllSequence,
                     getSdrSceneAttribute(),
                     getSdrLightingAttribute(),
                     getObjectTransformation(),
-                    getViewInformation3D(aContentRange)));
-
-            xRetval = drawinglayer::primitive2d::Primitive2DContainer{ xReference };
+                    getViewInformation3D(aContentRange)) };
         }
     }
 
     // always append an invisible outline for the cases where no visible content exists
-    xRetval.push_back(
+    xRetval.append(
         drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
             getObjectTransformation()));
 

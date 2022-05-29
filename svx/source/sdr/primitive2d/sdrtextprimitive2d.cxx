@@ -90,7 +90,7 @@ namespace drawinglayer::primitive2d
         // ATM there is only one text block per SdrObject, this may get more in the future
         void SdrTextPrimitive2D::encapsulateWithTextHierarchyBlockPrimitive2D(Primitive2DContainer& rContainer, Primitive2DContainer&& aCandidate)
         {
-            rContainer.push_back(new TextHierarchyBlockPrimitive2D(drawinglayer::primitive2d::Primitive2DContainer(aCandidate)));
+            rContainer.append(new TextHierarchyBlockPrimitive2D(drawinglayer::primitive2d::Primitive2DContainer(aCandidate)));
         }
 
         SdrTextPrimitive2D::SdrTextPrimitive2D(

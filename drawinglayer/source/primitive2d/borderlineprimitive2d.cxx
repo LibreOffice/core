@@ -85,14 +85,14 @@ namespace drawinglayer::primitive2d
 
             if (rStrokeAttribute.isDefault())
             {
-                rContainer.push_back(
+                rContainer.append(
                     new PolygonStrokePrimitive2D(
                         aPolygon,
                         rLineAttribute));
             }
             else
             {
-                rContainer.push_back(
+                rContainer.append(
                     new PolygonStrokePrimitive2D(
                         aPolygon,
                         rLineAttribute,
@@ -162,7 +162,7 @@ namespace drawinglayer::primitive2d
                             aPolygon.append(aEnd + aHalfLineOffset + (aVector * candidate.getEndRight()));
                             aPolygon.append(aStart + aHalfLineOffset - (aVector * candidate.getStartRight()));
 
-                            rContainer.push_back(
+                            rContainer.append(
                                 new PolyPolygonColorPrimitive2D(
                                     basegfx::B2DPolyPolygon(aPolygon),
                                     candidate.getLineAttribute().getColor()));
@@ -197,7 +197,7 @@ namespace drawinglayer::primitive2d
                                     aPolygon.append(aStart + aHalfLineOffset - (aVector * candidate.getStartRight()));
                                 }
 
-                                rContainer.push_back(
+                                rContainer.append(
                                     new PolyPolygonColorPrimitive2D(
                                         basegfx::B2DPolyPolygon(aPolygon),
                                         candidate.getLineAttribute().getColor()));
@@ -226,7 +226,7 @@ namespace drawinglayer::primitive2d
                                 aPolygon.append(aEnd + aHalfLineOffset + (aVector * fMin));
                                 aPolygon.append(aEnd - aHalfLineOffset + (aVector * fMin));
 
-                                rContainer.push_back(
+                                rContainer.append(
                                     new PolyPolygonColorPrimitive2D(
                                         basegfx::B2DPolyPolygon(aPolygon),
                                         candidate.getLineAttribute().getColor()));

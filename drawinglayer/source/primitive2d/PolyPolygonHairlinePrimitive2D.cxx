@@ -37,7 +37,7 @@ void PolyPolygonHairlinePrimitive2D::create2DDecomposition(
     {
         for (sal_uInt32 a(0); a < nCount; a++)
         {
-            rContainer.push_back(
+            rContainer.append(
                 new PolygonHairlinePrimitive2D(aPolyPolygon.getB2DPolygon(a), getBColor()));
         }
     }

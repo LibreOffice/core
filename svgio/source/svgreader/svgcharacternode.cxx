@@ -505,7 +505,7 @@ namespace svgio::svgreader
 
             if(!rSvgTextPosition.isRotated())
             {
-                rTarget.push_back(xRef);
+                rTarget.append(xRef);
             }
             else
             {

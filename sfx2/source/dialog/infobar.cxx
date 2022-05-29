@@ -111,7 +111,8 @@ void SfxInfoBarWindow::SetCloseButtonImage()
 
     const ::tools::Rectangle aRect(aBtnPos, xDevice->PixelToLogic(aSize));
 
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(2);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
+    aSeq.reserve(2);
 
     //  background
     B2DPolygon aPolygon;
@@ -121,7 +122,7 @@ void SfxInfoBarWindow::SetCloseButtonImage()
     aPolygon.append(B2DPoint(aRect.Left(), aRect.Bottom()));
     aPolygon.setClosed(true);
 
-    aSeq[0] = new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), m_aBackgroundColor);
+    aSeq.append(new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), m_aBackgroundColor));
 
     LineAttribute aLineAttribute(m_aForegroundColor, 2.0);
 
@@ -138,7 +139,7 @@ void SfxInfoBarWindow::SetCloseButtonImage()
     aLine2.append(B2DPoint(aRect.Left(), aRect.Bottom()));
     aCross.append(aLine2);
 
-    aSeq[1] = new PolyPolygonStrokePrimitive2D(aCross, aLineAttribute, StrokeAttribute());
+    aSeq.append(new PolyPolygonStrokePrimitive2D(aCross, aLineAttribute, StrokeAttribute()));
 
     pProcessor->process(aSeq);
 

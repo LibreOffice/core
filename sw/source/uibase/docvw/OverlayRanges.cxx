@@ -63,12 +63,12 @@ namespace sw::overlay
         {
             const sal_uInt32 nCount(getRanges().size());
             drawinglayer::primitive2d::Primitive2DContainer aRetval;
-            aRetval.resize(nCount);
+            aRetval.reserve(nCount);
             for ( sal_uInt32 a = 0; a < nCount; ++a )
             {
                 const basegfx::BColor aRGBColor(getBaseColor().getBColor());
                 const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(maRanges[a]));
-                aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
+                aRetval.append(
                     new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                     basegfx::B2DPolyPolygon(aPolygon),
                     aRGBColor));

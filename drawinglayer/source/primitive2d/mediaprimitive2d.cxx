@@ -34,7 +34,6 @@ namespace drawinglayer::primitive2d
         void MediaPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DContainer xRetval;
-            xRetval.resize(1);
 
             // create background object
             basegfx::B2DPolygon aBackgroundPolygon(basegfx::utils::createUnitPolygon());
@@ -43,14 +42,13 @@ namespace drawinglayer::primitive2d
                 new PolyPolygonColorPrimitive2D(
                     basegfx::B2DPolyPolygon(aBackgroundPolygon),
                     getBackgroundColor()));
-            xRetval[0] = xRefBackground;
+            xRetval.append(xRefBackground);
 
             if(GraphicType::Bitmap == maSnapshot.GetType() || GraphicType::GdiMetafile == maSnapshot.GetType())
             {
                 const GraphicObject aGraphicObject(maSnapshot);
                 const GraphicAttr aGraphicAttr;
-                xRetval.resize(2);
-                xRetval[1] = new GraphicPrimitive2D(getTransform(), aGraphicObject, aGraphicAttr);
+                xRetval.append(new GraphicPrimitive2D(getTransform(), aGraphicObject, aGraphicAttr));
             }
 
             if(getDiscreteBorder())

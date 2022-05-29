@@ -61,7 +61,7 @@ namespace drawinglayer::primitive2d
                 aTransform.set(0, 2, aRange.getMinX());
                 aTransform.set(1, 2, aRange.getMinY());
 
-                rContainer.push_back(
+                rContainer.append(
                     new BitmapPrimitive2D(
                         VCLUnoHelper::CreateVCLXBitmap(getMarker()),
                         aTransform));

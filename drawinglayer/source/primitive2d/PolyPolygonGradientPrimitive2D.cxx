@@ -40,7 +40,7 @@ void PolyPolygonGradientPrimitive2D::create2DDecomposition(
         Primitive2DContainer aSubSequence{ pNewGradient };
 
         // create mask primitive
-        rContainer.push_back(new MaskPrimitive2D(getB2DPolyPolygon(), std::move(aSubSequence)));
+        rContainer.append(new MaskPrimitive2D(getB2DPolyPolygon(), std::move(aSubSequence)));
     }
 }
 

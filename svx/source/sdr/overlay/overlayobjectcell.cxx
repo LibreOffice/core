@@ -49,7 +49,7 @@ namespace sdr::overlay
             if(nCount)
             {
                 const basegfx::BColor aRGBColor(getBaseColor().getBColor());
-                aRetval.resize(nCount);
+                aRetval.reserve(nCount);
 
                 // create primitives for all ranges
                 for(sal_uInt32 a(0); a < nCount; a++)
@@ -57,7 +57,7 @@ namespace sdr::overlay
                     const basegfx::B2DRange& rRange(maRectangles[a]);
                     const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(rRange));
 
-                    aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
+                    aRetval.append(
                         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                             basegfx::B2DPolyPolygon(aPolygon),
                             aRGBColor));

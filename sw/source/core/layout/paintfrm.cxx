@@ -231,9 +231,7 @@ public:
     void AddBorderLines(drawinglayer::primitive2d::Primitive2DContainer&& rContainer);
     drawinglayer::primitive2d::Primitive2DContainer GetBorderLines_Clear()
     {
-        drawinglayer::primitive2d::Primitive2DContainer lines;
-        lines.swap(m_Lines);
-        return lines;
+        return std::move(m_Lines);
     }
 };
 
@@ -1788,9 +1786,9 @@ bool DrawFillAttributes(
                 if (rPaintRegion.size() > 1 || rPaintRegion[0] != rPaintRegion.GetOrigin())
                 {
                     basegfx::B2DPolyPolygon const& maskRegion(rClipState.getClipPoly());
-                    primitives.resize(1);
-                    primitives[0] = new drawinglayer::primitive2d::MaskPrimitive2D(
-                            maskRegion, drawinglayer::primitive2d::Primitive2DContainer(rSequence));
+                    primitives.append(
+                        new drawinglayer::primitive2d::MaskPrimitive2D(
+                            maskRegion, drawinglayer::primitive2d::Primitive2DContainer(rSequence)) );
                     pPrimitives = &primitives;
                 }
                 assert(pPrimitives && pPrimitives->size());
@@ -2662,12 +2660,10 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
     // SdrFrameBorderDataVector is used
     if(!aData->empty())
     {
-        drawinglayer::primitive2d::Primitive2DContainer aSequence;
-        aSequence.append(
-            drawinglayer::primitive2d::Primitive2DReference(
+        drawinglayer::primitive2d::Primitive2DContainer aSequence {
                 new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
                     aData,
-                    true)));    // force visualization to minimal one discrete unit (pixel)
+                    true) };    // force visualization to minimal one discrete unit (pixel)
         // paint
         mrTabFrame.ProcessPrimitives(aSequence);
     }
@@ -3618,7 +3614,7 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateDashedIndicator
         const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd,
         basegfx::BColor aColor )
 {
-    drawinglayer::primitive2d::Primitive2DContainer aSeq( 1 );
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
 
     std::vector< double > aStrokePattern;
     basegfx::B2DPolygon aLinePolygon;
@@ -3644,23 +3640,21 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateDashedIndicator
         const basegfx::BColor aOtherColor = basegfx::utils::hsl2rgb( aHslLine );
 
         // Compute the plain line
-        aSeq[0] =
+        aSeq.append(
             new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                    aLinePolygon, aOtherColor );
+                    aLinePolygon, aOtherColor ) );
 
         // Dashed line in twips
         aStrokePattern.push_back( 40 );
         aStrokePattern.push_back( 40 );
-
-        aSeq.resize( 2 );
     }
 
     // Compute the dashed line primitive
-    aSeq[ aSeq.size( ) - 1 ] =
+    aSeq.append(
             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D (
                 basegfx::B2DPolyPolygon( aLinePolygon ),
                 drawinglayer::attribute::LineAttribute( aColor ),
-                drawinglayer::attribute::StrokeAttribute( std::move(aStrokePattern) ) );
+                drawinglayer::attribute::StrokeAttribute( std::move(aStrokePattern) ) ) );
 
 
     return aSeq;
@@ -3776,7 +3770,7 @@ void SwColumnFrame::PaintBreak( ) const
                 aRect.Right(), aRect.Top() + nTextOff );
     }
 
-    aSeq.push_back(
+    aSeq.append(
             new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                 aTextMatrix,
                 aBreakText, 0, aBreakText.getLength(),
@@ -4858,10 +4852,9 @@ namespace drawinglayer::primitive2d
             if(!aData->empty())
             {
                 rContainer.append(
-                    drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::SdrFrameBorderPrimitive2D(
                             aData,
-                            true)));    // force visualization to minimal one discrete unit (pixel)
+                            true));    // force visualization to minimal one discrete unit (pixel)
             }
         }
 
@@ -4988,13 +4981,12 @@ void PaintCharacterBorder(
     drawinglayer::primitive2d::Primitive2DContainer aBorderLineTarget;
 
     aBorderLineTarget.append(
-        drawinglayer::primitive2d::Primitive2DReference(
             new drawinglayer::primitive2d::SwBorderRectanglePrimitive2D(
                 aBorderTransform,
                 aStyleTop,
                 aStyleRight,
                 aStyleBottom,
-                aStyleLeft)));
+                aStyleLeft));
     gProp.pBLines->AddBorderLines(std::move(aBorderLineTarget));
 }
 
@@ -5425,7 +5417,7 @@ void SwFrame::PaintSwFrameShadowAndBorder(
                 aRetval = xClipped;
             }
 
-            aBorderLineTarget.append(aRetval);
+            aBorderLineTarget.append(std::move(aRetval));
             gProp.pBLines->AddBorderLines(std::move(aBorderLineTarget));
         }
     }
@@ -6835,7 +6827,7 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
 static drawinglayer::primitive2d::Primitive2DContainer lcl_CreatePageAreaDelimiterPrimitives(
         const SwRect& rRect )
 {
-    drawinglayer::primitive2d::Primitive2DContainer aSeq( 4 );
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
 
     basegfx::BColor aLineColor = SwViewOption::GetDocBoundariesColor().getBColor();
     double nLineLength = 200.0; // in Twips
@@ -6857,8 +6849,8 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreatePageAreaDelimit
         aPolygon.append( aBPoint );
         aPolygon.append( aBPoint + aVertVector * nLineLength );
 
-        aSeq[i] = new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                    aPolygon, aLineColor );
+        aSeq.append( new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                    aPolygon, aLineColor ) );
     }
 
     return aSeq;
@@ -6867,7 +6859,6 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreatePageAreaDelimit
 static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateRectangleDelimiterPrimitives (
         const SwRect& rRect )
 {
-    drawinglayer::primitive2d::Primitive2DContainer aSeq( 1 );
     basegfx::BColor aLineColor = SwViewOption::GetDocBoundariesColor().getBColor();
 
     basegfx::B2DPolygon aPolygon;
@@ -6877,8 +6868,9 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateRectangleDelimi
     aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Bottom() ) );
     aPolygon.setClosed( true );
 
-    aSeq[0] = new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                aPolygon, aLineColor );
+    drawinglayer::primitive2d::Primitive2DContainer aSeq {
+        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                aPolygon, aLineColor ) };
 
     return aSeq;
 }
@@ -6886,7 +6878,7 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateRectangleDelimi
 static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateColumnAreaDelimiterPrimitives(
         const SwRect& rRect )
 {
-    drawinglayer::primitive2d::Primitive2DContainer aSeq( 4 );
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
 
     basegfx::BColor aLineColor = SwViewOption::GetDocBoundariesColor().getBColor();
     double nLineLength = 100.0; // in Twips
@@ -6908,8 +6900,8 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateColumnAreaDelim
         aPolygon.append( aBPoint );
         aPolygon.append( aBPoint + aVertVector * nLineLength );
 
-        aSeq[i] = new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                    aPolygon, aLineColor );
+        aSeq.append( new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                    aPolygon, aLineColor ) );
     }
 
     return aSeq;

@@ -1553,7 +1553,7 @@ namespace sdr::contact {
 
         // create a primitive and hand over the existing xControl. This will
         // allow the primitive to not need to create another one on demand.
-        rContainer.push_back( new ::drawinglayer::primitive2d::ControlPrimitive2D(
+        rContainer.append( new ::drawinglayer::primitive2d::ControlPrimitive2D(
             m_aTransformation, xControlModel, rControl.getControl() ) );
     }
 

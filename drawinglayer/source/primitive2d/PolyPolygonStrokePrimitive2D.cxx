@@ -37,7 +37,7 @@ void PolyPolygonStrokePrimitive2D::create2DDecomposition(
     {
         for (sal_uInt32 a(0); a < nCount; a++)
         {
-            rContainer.push_back(new PolygonStrokePrimitive2D(
+            rContainer.append(new PolygonStrokePrimitive2D(
                 aPolyPolygon.getB2DPolygon(a), getLineAttribute(), getStrokeAttribute()));
         }
     }

@@ -54,7 +54,7 @@ void PolyPolygonSelectionPrimitive2D::create2DDecomposition(
         const Primitive2DReference aFatLine(
             new PolyPolygonStrokePrimitive2D(getB2DPolyPolygon(), aLineAttribute));
 
-        aRetval.push_back(aFatLine);
+        aRetval.append(aFatLine);
     }
 
     // embed filled to transparency (if used)

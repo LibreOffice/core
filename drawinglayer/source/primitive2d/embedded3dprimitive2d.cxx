@@ -64,7 +64,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DRange aLocal2DRange(getB2DRange(rViewInformation));
             const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aLocal2DRange));
             const basegfx::BColor aYellow(1.0, 1.0, 0.0);
-            rContainer.push_back(new PolygonHairlinePrimitive2D(aOutline, aYellow));
+            rContainer.append(new PolygonHairlinePrimitive2D(aOutline, aYellow));
         }
 
         Embedded3DPrimitive2D::Embedded3DPrimitive2D(

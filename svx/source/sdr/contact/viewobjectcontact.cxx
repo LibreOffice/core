@@ -97,8 +97,7 @@ void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::p
             if((rSwitchPrimitive.isTextAnimation() && mbTextAnimationAllowed)
                 || (rSwitchPrimitive.isGraphicAnimation() && mbGraphicAnimationAllowed))
             {
-                const drawinglayer::primitive2d::Primitive2DReference xReference(const_cast< drawinglayer::primitive2d::BasePrimitive2D* >(&rCandidate));
-                maPrimitive2DSequence.push_back(xReference);
+                maPrimitive2DSequence.append(const_cast< drawinglayer::primitive2d::BasePrimitive2D* >(&rCandidate));
             }
             break;
         }
@@ -307,11 +306,11 @@ void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInf
         // handle GluePoint
         if(!GetObjectContact().isOutputToPrinter() && GetObjectContact().AreGluePointsVisible())
         {
-            const drawinglayer::primitive2d::Primitive2DContainer xGlue(GetViewContact().createGluePointPrimitive2DSequence());
+            drawinglayer::primitive2d::Primitive2DContainer xGlue(GetViewContact().createGluePointPrimitive2DSequence());
 
             if(!xGlue.empty())
             {
-                xRetval.append(xGlue);
+                xRetval.append(std::move(xGlue));
             }
         }
 

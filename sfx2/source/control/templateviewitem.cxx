@@ -56,7 +56,8 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
 {
     BColor aFillColor = pAttrs->aFillColor;
 
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(5);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
+    aSeq.reserve(5);
     double fTransparence = 0.0;
 
     // Draw background
@@ -69,7 +70,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
             fTransparence = pAttrs->fHighlightTransparence;
     }
 
-    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
+    aSeq.append(
             new PolyPolygonSelectionPrimitive2D( B2DPolyPolygon(::tools::Polygon(maDrawArea,5,5).getB2DPolygon()),
                                                  aFillColor,
                                                  fTransparence,
@@ -91,10 +92,10 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
     aBounds.setClosed(true);
 
-    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonColorPrimitive2D(
+    aSeq.append( new PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(aBounds), COL_WHITE.getBColor()));
 
-    aSeq[2] = drawinglayer::primitive2d::Primitive2DReference( new FillGraphicPrimitive2D(
+    aSeq.append( new FillGraphicPrimitive2D(
                                         createTranslateB2DHomMatrix(maPrev1Pos.X(),maPrev1Pos.Y()),
                                         FillGraphicAttribute(Graphic(maPreview1),
                                                             B2DRange(
@@ -104,13 +105,13 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
                                         ));
 
     // draw thumbnail borders
-    aSeq[3] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
+    aSeq.append(createBorderLine(aBounds));
 
     if(mbIsDefaultTemplate)
     {
         Point aIconPos(getDefaultIconArea().TopLeft());
 
-        aSeq[4] = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D( maDefaultBitmap,
+        aSeq.append(new DiscreteBitmapPrimitive2D( maDefaultBitmap,
                     B2DPoint(aIconPos.X(), aIconPos.Y())));
     }
 

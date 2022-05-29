@@ -97,7 +97,7 @@ namespace drawinglayer::primitive2d
                 basegfx::B2DPolyPolygon aTransformed(aUnitPolyPolygon);
 
                 aTransformed.transform(getTransform());
-                rContainer.push_back(
+                rContainer.append(
                     createPolyPolygonFillPrimitive(
                         aTransformed,
                         getSdrFTAttribute().getFill(),
@@ -106,7 +106,7 @@ namespace drawinglayer::primitive2d
             else
             {
                 // if no fill create one for HitTest and BoundRect fallback
-                rContainer.push_back(
+                rContainer.append(
                     createHiddenGeometryPrimitives2D(
                         true,
                         aUnitPolyPolygon,
@@ -116,7 +116,7 @@ namespace drawinglayer::primitive2d
             // add text
             if(!getSdrFTAttribute().getText().isDefault())
             {
-                rContainer.push_back(
+                rContainer.append(
                     createTextPrimitive(
                         aUnitPolyPolygon,
                         getTransform(),
@@ -320,10 +320,9 @@ namespace sdr::contact
 
                                     // always create cell primitives for BoundRect and HitTest
                                     {
-                                        const drawinglayer::primitive2d::Primitive2DReference xCellReference(
+                                        aRetval.append(
                                             new drawinglayer::primitive2d::SdrCellPrimitive2D(
                                                 aCellMatrix, aAttribute));
-                                        aRetval.append(xCellReference);
                                     }
 
                                     // Create cell primitive without text.
@@ -341,9 +340,7 @@ namespace sdr::contact
                                         pCellReference->setTransparenceForShadow(nTransparence);
                                     }
 
-                                    const drawinglayer::primitive2d::Primitive2DReference
-                                        xCellReference(pCellReference);
-                                    aRetvalForShadow.append(xCellReference);
+                                    aRetvalForShadow.append(std::move(pCellReference));
                                 }
                             }
                         }

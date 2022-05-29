@@ -141,7 +141,8 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                const ThumbnailItemAttributes *pAttrs)
 {
     BColor aFillColor = pAttrs->aFillColor;
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(4);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
+    aSeq.reserve(4);
     double fTransparence = 0.0;
 
     // Draw background
@@ -154,8 +155,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
             fTransparence = pAttrs->fHighlightTransparence;
     }
 
-    sal_uInt32 nPrimitive = 0;
-    aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference(
+    aSeq.append(
             new PolyPolygonSelectionPrimitive2D( B2DPolyPolygon(::tools::Polygon(maDrawArea, THUMBNAILVIEW_ITEM_CORNER, THUMBNAILVIEW_ITEM_CORNER).getB2DPolygon()),
                                                  aFillColor,
                                                  fTransparence,
@@ -166,7 +166,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     Point aPos = maPrev1Pos;
     Size aImageSize = maPreview1.GetSizePixel();
 
-    aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference( new FillGraphicPrimitive2D(
+    aSeq.append( new FillGraphicPrimitive2D(
                                         createTranslateB2DHomMatrix(aPos.X(),aPos.Y()),
                                         FillGraphicAttribute(Graphic(maPreview1),
                                                             B2DRange(
@@ -190,7 +190,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
         aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
         aBounds.setClosed(true);
 
-        aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
+        aSeq.append(createBorderLine(aBounds));
     }
 
     // Draw text below thumbnail
@@ -220,10 +220,6 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
                               css::lang::Locale()));
     aTextEngine.SetMaxTextWidth(maDrawArea.getWidth());
     aTextEngine.SetText(aOrigText);
-
-    sal_Int32 nPrimitives = rSeq.size();
-    sal_Int32 nFinalPrimCount = nPrimitives + aTextEngine.GetLineCount(0);
-    rSeq.resize(nFinalPrimCount);
 
     // Create the text primitives
     sal_uInt16 nLineStart = 0;
@@ -265,7 +261,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
                 aTextColor = pAttrs->aHighlightTextColor;
         }
 
-        rSeq[nPrimitives++] = drawinglayer::primitive2d::Primitive2DReference(
+        rSeq.append(
                     new TextSimplePortionPrimitive2D(aTextMatrix,
                                                      aText, nLineStart, nLineLength,
                                                      std::vector<double>(),
@@ -275,8 +271,6 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
 
         if (nMnemonicPos != -1 && nMnemonicPos >= nLineStart && nMnemonicPos < nLineStart + nLineLength)
         {
-            rSeq.resize(nFinalPrimCount + 1);
-
             auto aCaretPositions = aTextDev.getCaretPositions(aText, nLineStart, nLineLength);
 
             auto lc_x1 = aCaretPositions[2*(nMnemonicPos - nLineStart)];
@@ -293,8 +287,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
 
             drawinglayer::attribute::LineAttribute aLineAttribute(Color(aTextColor).getBColor(), fMnemonicHeight);
 
-            rSeq[nPrimitives++] = drawinglayer::primitive2d::Primitive2DReference(
-                        new PolygonStrokePrimitive2D(aLine, aLineAttribute));
+            rSeq.append(new PolygonStrokePrimitive2D(aLine, aLineAttribute));
         }
 
         nLineStart += nLineLength;

@@ -33,7 +33,7 @@ namespace drawinglayer::primitive2d
                 // To really use the Eps data, a renderer has to know and interpret this primitive
                 // directly.
 
-                rContainer.push_back(
+                rContainer.append(
                     new MetafilePrimitive2D(
                         getEpsTransform(),
                         rSubstituteContent));

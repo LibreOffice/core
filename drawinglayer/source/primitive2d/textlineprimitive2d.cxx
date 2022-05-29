@@ -215,7 +215,7 @@ namespace drawinglayer::primitive2d
             }
 
             // add primitive
-            rContainer.push_back(aNewPrimitive);
+            rContainer.append(aNewPrimitive);
 
             if(!bDoubleLine)
                 return;
@@ -243,7 +243,7 @@ namespace drawinglayer::primitive2d
 
             // add transform primitive
             Primitive2DContainer aContent { aNewPrimitive };
-            rContainer.push_back( new TransformPrimitive2D(aTransform, std::move(aContent)) );
+            rContainer.append( new TransformPrimitive2D(aTransform, std::move(aContent)) );
         }
 
         TextLinePrimitive2D::TextLinePrimitive2D(

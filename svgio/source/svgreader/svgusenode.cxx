@@ -169,12 +169,10 @@ namespace svgio::svgreader
 
             if(!aTransform.isIdentity())
             {
-                const drawinglayer::primitive2d::Primitive2DReference xRef(
+                rTarget.append(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
                         aTransform,
                         std::move(aNewTarget)));
-
-                rTarget.push_back(xRef);
             }
             else
             {

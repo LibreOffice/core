@@ -38,13 +38,13 @@ namespace drawinglayer::primitive2d
             if(getSdrLSTAttribute().getLine().isDefault())
             {
                 // create invisible line for HitTest/BoundRect
-                aRetval.push_back(
+                aRetval.append(
                     createHiddenGeometryPrimitives2D(
                         basegfx::B2DPolyPolygon(getUnitPolygon())));
             }
             else
             {
-                aRetval.push_back(
+                aRetval.append(
                     createPolygonLinePrimitive(
                         getUnitPolygon(),
                         getSdrLSTAttribute().getLine(),
@@ -54,7 +54,7 @@ namespace drawinglayer::primitive2d
             // add text
             if(!getSdrLSTAttribute().getText().isDefault())
             {
-                aRetval.push_back(
+                aRetval.append(
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(getUnitPolygon()),
                         basegfx::B2DHomMatrix(),

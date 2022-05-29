@@ -61,13 +61,10 @@ namespace sw::overlay
             {
                 const basegfx::BColor aRGBColor(getBaseColor().getBColor());
                 const basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges()));
-                const drawinglayer::primitive2d::Primitive2DReference aOutline(
+                aRetval = {
                     new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                    aPolyPolygon,
-                    aRGBColor));
-
-                aRetval.resize(1);
-                aRetval[0] = aOutline;
+                        aPolyPolygon,
+                        aRGBColor) };
             }
 
             return aRetval;

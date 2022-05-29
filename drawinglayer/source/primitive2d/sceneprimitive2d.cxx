@@ -469,7 +469,7 @@ namespace drawinglayer::primitive2d
             aNew2DTransform *= aInverseOToV;
 
             // create bitmap primitive and add
-            rContainer.push_back(
+            rContainer.append(
                 new BitmapPrimitive2D(
                     VCLUnoHelper::CreateVCLXBitmap(maOldRenderedBitmap),
                     aNew2DTransform));
@@ -481,7 +481,7 @@ namespace drawinglayer::primitive2d
             {
                 basegfx::B2DPolygon aOutline(basegfx::utils::createUnitPolygon());
                 aOutline.transform(aNew2DTransform);
-                rContainer.push_back(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
+                rContainer.append(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
             }
         }
 

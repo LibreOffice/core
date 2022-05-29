@@ -84,14 +84,14 @@ void TextEffectPrimitive2D::create2DDecomposition(
                 const Primitive2DReference xModifiedColor(new ModifiedColorPrimitive2D(
                     Primitive2DContainer(getTextContent()), aBColorModifierToGray));
 
-                rContainer.push_back(
+                rContainer.append(
                     new TransformPrimitive2D(aTransform, Primitive2DContainer{ xModifiedColor }));
 
                 // add original, too
                 const basegfx::BColorModifierSharedPtr aBColorModifierToWhite
                     = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1.0));
 
-                rContainer.push_back(new ModifiedColorPrimitive2D(
+                rContainer.append(new ModifiedColorPrimitive2D(
                     Primitive2DContainer(getTextContent()), aBColorModifierToWhite));
             }
             else
@@ -103,11 +103,11 @@ void TextEffectPrimitive2D::create2DDecomposition(
                 const Primitive2DReference xModifiedColor(new ModifiedColorPrimitive2D(
                     Primitive2DContainer(getTextContent()), aBColorModifierToGray));
 
-                rContainer.push_back(
+                rContainer.append(
                     new TransformPrimitive2D(aTransform, Primitive2DContainer{ xModifiedColor }));
 
                 // add original, too
-                rContainer.push_back(new GroupPrimitive2D(Primitive2DContainer(getTextContent())));
+                rContainer.append(new GroupPrimitive2D(Primitive2DContainer(getTextContent())));
             }
 
             break;
@@ -119,49 +119,49 @@ void TextEffectPrimitive2D::create2DDecomposition(
 
             aTransform.set(0, 2, aDistance.getX());
             aTransform.set(1, 2, 0.0);
-            rContainer.push_back(
+            rContainer.append(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, aDiagonalDistance.getX());
             aTransform.set(1, 2, aDiagonalDistance.getY());
-            rContainer.push_back(
+            rContainer.append(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, 0.0);
             aTransform.set(1, 2, aDistance.getY());
-            rContainer.push_back(
+            rContainer.append(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, -aDiagonalDistance.getX());
             aTransform.set(1, 2, aDiagonalDistance.getY());
-            rContainer.push_back(
+            rContainer.append(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, -aDistance.getX());
             aTransform.set(1, 2, 0.0);
-            rContainer.push_back(
+            rContainer.append(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, -aDiagonalDistance.getX());
             aTransform.set(1, 2, -aDiagonalDistance.getY());
-            rContainer.push_back(
+            rContainer.append(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, 0.0);
             aTransform.set(1, 2, -aDistance.getY());
-            rContainer.push_back(
+            rContainer.append(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             aTransform.set(0, 2, aDiagonalDistance.getX());
             aTransform.set(1, 2, -aDiagonalDistance.getY());
-            rContainer.push_back(
+            rContainer.append(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             // at last, place original over it, but force to white
             const basegfx::BColorModifierSharedPtr aBColorModifierToWhite
                 = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1.0, 1.0, 1.0));
-            rContainer.push_back(new ModifiedColorPrimitive2D(
-                Primitive2DContainer(getTextContent()), aBColorModifierToWhite));
+            rContainer.append(new ModifiedColorPrimitive2D(Primitive2DContainer(getTextContent()),
+                                                           aBColorModifierToWhite));
 
             break;
         }

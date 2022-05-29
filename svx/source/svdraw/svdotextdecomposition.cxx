@@ -373,7 +373,7 @@ namespace
             pNewPrimitive = impCheckFieldPrimitive(pNewPrimitive.get(), rInfo);
         }
 
-        maTextPortionPrimitives.push_back(pNewPrimitive);
+        maTextPortionPrimitives.append(std::move(pNewPrimitive));
 
         // support for WrongSpellVector. Create WrongSpellPrimitives as needed
         if(!rInfo.mpWrongSpellVector || aDXArray.empty())
@@ -428,7 +428,7 @@ namespace
                         fEnd /= fFontScaleX;
                     }
 
-                    maTextPortionPrimitives.push_back(new drawinglayer::primitive2d::WrongSpellPrimitive2D(
+                    maTextPortionPrimitives.append(new drawinglayer::primitive2d::WrongSpellPrimitive2D(
                         aNewTransform,
                         fStart,
                         fEnd,
@@ -453,8 +453,7 @@ namespace
 
             if(pPrimitive)
             {
-                aSequence.resize(1);
-                aSequence[0] = drawinglayer::primitive2d::Primitive2DReference(pPrimitive);
+                aSequence = { pPrimitive };
             }
 
             if(pURLField)
@@ -487,7 +486,7 @@ namespace
         // empty line primitives (contrary to paragraphs, see below).
         if(!maTextPortionPrimitives.empty())
         {
-            maLinePrimitives.push_back(new drawinglayer::primitive2d::TextHierarchyLinePrimitive2D(std::move(maTextPortionPrimitives)));
+            maLinePrimitives.append(new drawinglayer::primitive2d::TextHierarchyLinePrimitive2D(std::move(maTextPortionPrimitives)));
         }
     }
 
@@ -502,7 +501,7 @@ namespace
         // ALWAYS create a paragraph primitive, even when no content was added. This is done to
         // have the correct paragraph count even with empty paragraphs. Those paragraphs will
         // have an empty sub-PrimitiveSequence.
-        maParagraphPrimitives.push_back(
+        maParagraphPrimitives.append(
             new drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D(
                 std::move(maLinePrimitives),
                 nOutlineLevel));
@@ -553,7 +552,7 @@ namespace
         rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive = new drawinglayer::primitive2d::TextHierarchyBulletPrimitive2D(std::move(aNewSequence));
 
         // add to output
-        maTextPortionPrimitives.push_back(pNewPrimitive);
+        maTextPortionPrimitives.append(std::move(pNewPrimitive));
     }
 
     IMPL_LINK(impTextBreakupHandler, decomposeContourTextPrimitive, DrawPortionInfo*, pInfo, void)

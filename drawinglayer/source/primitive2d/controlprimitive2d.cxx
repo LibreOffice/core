@@ -237,7 +237,7 @@ namespace drawinglayer::primitive2d
                 xReference = createPlaceholderDecomposition();
             }
 
-            rContainer.push_back(xReference);
+            rContainer.append(xReference);
         }
 
         ControlPrimitive2D::ControlPrimitive2D(

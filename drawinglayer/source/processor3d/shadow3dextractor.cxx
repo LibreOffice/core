@@ -88,7 +88,7 @@ namespace drawinglayer::processor3d
                             rPrimitive.getShadowTransparence());
                     }
 
-                    mpPrimitive2DSequence->push_back(pNew);
+                    mpPrimitive2DSequence->append(pNew);
 
                     break;
                 }
@@ -152,7 +152,7 @@ namespace drawinglayer::processor3d
                         if(a2DHairline.count())
                         {
                             a2DHairline.transform(getObjectTransformation());
-                            mpPrimitive2DSequence->push_back(
+                            mpPrimitive2DSequence->append(
                                 new primitive2d::PolygonHairlinePrimitive2D(
                                     a2DHairline,
                                     basegfx::BColor()));
@@ -183,7 +183,7 @@ namespace drawinglayer::processor3d
                         if(a2DFill.count())
                         {
                             a2DFill.transform(getObjectTransformation());
-                            mpPrimitive2DSequence->push_back(
+                            mpPrimitive2DSequence->append(
                                 new primitive2d::PolyPolygonColorPrimitive2D(
                                     a2DFill,
                                     basegfx::BColor()));

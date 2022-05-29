@@ -123,13 +123,11 @@ namespace sdr::contact
 
                 const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject();
                 const GraphicAttr aLocalGrafInfo;
-                const drawinglayer::primitive2d::Primitive2DReference xReferenceB(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
+                xRetval.append(new drawinglayer::primitive2d::SdrGrafPrimitive2D(
                     aSmallerMatrix,
                     drawinglayer::attribute::SdrLineFillEffectsTextAttribute(),
                     rGraphicObject,
                     aLocalGrafInfo));
-
-                xRetval.push_back(xReferenceB);
             }
 
             return xRetval;
@@ -159,11 +157,10 @@ namespace sdr::contact
                 basegfx::B2DPolygon aOutline(basegfx::utils::createUnitPolygon());
                 aOutline.transform(rObjectMatrix);
 
-                xRetval.push_back(
-                    drawinglayer::primitive2d::Primitive2DReference(
+                xRetval.append(
                         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                             aOutline,
-                            aBColor)));
+                            aBColor));
             }
 
             // decompose object matrix to get single values
@@ -209,11 +206,10 @@ namespace sdr::contact
                     const basegfx::B2DHomMatrix aBitmapMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                         fWidth, fHeight, fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
-                    xRetval.push_back(
-                        drawinglayer::primitive2d::Primitive2DReference(
+                    xRetval.append(
                             new drawinglayer::primitive2d::BitmapPrimitive2D(
                                 VCLUnoHelper::CreateVCLXBitmap(aDraftBitmap),
-                                aBitmapMatrix)));
+                                aBitmapMatrix));
 
                     // consume bitmap size in X
                     aScale.setX(std::max(0.0, aScale.getX() - (fWidth + fDistance)));

@@ -49,7 +49,7 @@ namespace drawinglayer::primitive2d
                     basegfx::B2DPolyPolygon aTransformedDefinition(getUnitDefinitionPolyPolygon());
                     aTransformedDefinition.transform(getTransform());
 
-                    aRetval.push_back(
+                    aRetval.append(
                         createPolyPolygonFillPrimitive(
                             aTransformed,
                             aTransformedDefinition.getB2DRange(),
@@ -58,7 +58,7 @@ namespace drawinglayer::primitive2d
                 }
                 else
                 {
-                    aRetval.push_back(
+                    aRetval.append(
                         createPolyPolygonFillPrimitive(
                             aTransformed,
                             getSdrLFSTAttribute().getFill(),
@@ -70,7 +70,7 @@ namespace drawinglayer::primitive2d
             if(getSdrLFSTAttribute().getLine().isDefault())
             {
                 // if initially no line is defined, create one for HitTest and BoundRect
-                aRetval.push_back(
+                aRetval.append(
                     createHiddenGeometryPrimitives2D(
                         false,
                         getUnitPolyPolygon(),
@@ -78,26 +78,27 @@ namespace drawinglayer::primitive2d
             }
             else
             {
-                Primitive2DContainer aTemp(getUnitPolyPolygon().count());
+                Primitive2DContainer aTemp;
+                aTemp.reserve(getUnitPolyPolygon().count());
 
                 for(sal_uInt32 a(0); a < getUnitPolyPolygon().count(); a++)
                 {
                     basegfx::B2DPolygon aTransformed(getUnitPolyPolygon().getB2DPolygon(a));
 
                     aTransformed.transform(getTransform());
-                    aTemp[a] = createPolygonLinePrimitive(
+                    aTemp.append( createPolygonLinePrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getLine(),
-                        getSdrLFSTAttribute().getLineStartEnd());
+                        getSdrLFSTAttribute().getLineStartEnd()) );
                 }
 
-                aRetval.append(aTemp);
+                aRetval.append(std::move(aTemp));
             }
 
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                aRetval.push_back(
+                aRetval.append(
                     createTextPrimitive(
                         getUnitPolyPolygon(),
                         getTransform(),

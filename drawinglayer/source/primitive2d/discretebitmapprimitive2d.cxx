@@ -64,7 +64,7 @@ namespace drawinglayer::primitive2d
             aObjectTransform = aInverseObjectTransformation * aObjectTransform;
 
             // create BitmapPrimitive2D with now object-local coordinate data
-            rContainer.push_back(
+            rContainer.append(
                 new BitmapPrimitive2D(
                     VCLUnoHelper::CreateVCLXBitmap(getBitmapEx()),
                     aObjectTransform));

@@ -395,7 +395,7 @@ namespace svgio::svgreader
                     aEnd *= aGeoToUnit;
                 }
 
-                rTarget.push_back(
+                rTarget.append(
                     new drawinglayer::primitive2d::SvgLinearGradientPrimitive2D(
                         aGradientTransform,
                         rPath,
@@ -456,7 +456,7 @@ namespace svgio::svgreader
                     }
                 }
 
-                rTarget.push_back(
+                rTarget.append(
                     new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
                         aGradientTransform,
                         rPath,
@@ -490,7 +490,7 @@ namespace svgio::svgreader
 
                 if(!aNewTarget.empty())
                 {
-                    rTarget.push_back(
+                    rTarget.append(
                         new drawinglayer::primitive2d::TransformPrimitive2D(
                             *rFillPattern.getPatternTransform(),
                             std::move(aNewTarget)));
@@ -586,7 +586,7 @@ namespace svgio::svgreader
             }
 
             // embed in PatternFillPrimitive2D
-            rTarget.push_back(
+            rTarget.append(
                 new drawinglayer::primitive2d::PatternFillPrimitive2D(
                     rPath,
                     std::move(aPrimitives),
@@ -625,10 +625,9 @@ namespace svgio::svgreader
             else // if(pFill)
             {
                 // create fill content
-                aNewFill.resize(1);
-                aNewFill[0] = new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                aNewFill = { new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                     rPath,
-                    *pFill);
+                    *pFill) };
             }
 
             if(aNewFill.empty())
@@ -637,7 +636,7 @@ namespace svgio::svgreader
             if(basegfx::fTools::less(fFillOpacity, 1.0))
             {
                 // embed in UnifiedTransparencePrimitive2D
-                rTarget.push_back(
+                rTarget.append(
                     new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                         std::move(aNewFill),
                         1.0 - fFillOpacity));
@@ -784,7 +783,7 @@ namespace svgio::svgreader
             }
             else // if(pStroke)
             {
-                aNewStroke.push_back(aNewLinePrimitive);
+                aNewStroke.append(aNewLinePrimitive);
             }
 
             if(aNewStroke.empty())
@@ -793,7 +792,7 @@ namespace svgio::svgreader
             if(basegfx::fTools::less(fStrokeOpacity, 1.0))
             {
                 // embed in UnifiedTransparencePrimitive2D
-                rTarget.push_back(
+                rTarget.append(
                     new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                         std::move(aNewStroke),
                         1.0 - fStrokeOpacity));
@@ -1072,7 +1071,7 @@ namespace svgio::svgreader
                         }
 
                         // add marker
-                        rTarget.push_back(xMarker);
+                        rTarget.append(xMarker);
                     }
                 }
             }

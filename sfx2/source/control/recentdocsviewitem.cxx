@@ -275,13 +275,12 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
     // paint the remove icon when highlighted
     if (isHighlighted())
     {
-        drawinglayer::primitive2d::Primitive2DContainer aSeq(1);
-
         Point aIconPos(getRemoveIconArea().TopLeft());
 
-        aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D(
+        drawinglayer::primitive2d::Primitive2DContainer aSeq {
+                new DiscreteBitmapPrimitive2D(
                     m_bRemoveIconHighlighted ? m_aRemoveRecentBitmapHighlighted : m_aRemoveRecentBitmap,
-                    B2DPoint(aIconPos.X(), aIconPos.Y())));
+                    B2DPoint(aIconPos.X(), aIconPos.Y())) };
 
         pProcessor->process(aSeq);
     }

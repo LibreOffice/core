@@ -91,23 +91,21 @@ namespace drawinglayer::primitive2d
                     aInnerObjectMatrix = basegfx::utils::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
                         * aInnerObjectMatrix;
 
-                    const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
+                    rContainer.append(
                         new drawinglayer::primitive2d::GraphicPrimitive2D(
                             aInnerObjectMatrix,
                             aGraphicObject,
                             aGraphicAttr));
-                    rContainer.push_back(aGraphicPrimitive);
                 }
             }
             else
             {
                 // create graphic primitive for content
-                const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
+                rContainer.append(
                     new drawinglayer::primitive2d::GraphicPrimitive2D(
                         getObjectTransform(),
                         aGraphicObject,
                         aGraphicAttr));
-                rContainer.push_back(aGraphicPrimitive);
             }
 
             // a standard gray outline is created for scaled content
@@ -122,9 +120,8 @@ namespace drawinglayer::primitive2d
                 basegfx::B2DPolygon aOutline(basegfx::utils::createUnitPolygon());
                 const Color aVclColor(aColor.nColor);
                 aOutline.transform(getObjectTransform());
-                const drawinglayer::primitive2d::Primitive2DReference xOutline(
+                rContainer.append(
                     new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aVclColor.getBColor()));
-                rContainer.push_back(xOutline);
             }
         }
 

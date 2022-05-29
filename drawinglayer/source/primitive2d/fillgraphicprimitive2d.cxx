@@ -71,7 +71,7 @@ namespace drawinglayer::primitive2d
 
                 for(const auto &a : aMatrices)
                 {
-                    rContainer.push_back(new TransformPrimitive2D(
+                    rContainer.append(new TransformPrimitive2D(
                         getTransformation() * a,
                         Primitive2DContainer(xSeq)));
                 }

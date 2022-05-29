@@ -89,7 +89,7 @@ namespace drawinglayer::primitive2d
                                 1.0 - fOpacity));
                     }
 
-                    rContainer.push_back(xRef);
+                    rContainer.append(xRef);
                 }
             }
             else
@@ -336,7 +336,7 @@ namespace drawinglayer::primitive2d
                     std::move(aTargetColorEntries));
             }
 
-            rContainer.push_back(new MaskPrimitive2D(
+            rContainer.append(new MaskPrimitive2D(
                 getPolyPolygon(),
                 Primitive2DContainer { xRefContent }));
         }
@@ -445,7 +445,7 @@ namespace drawinglayer::primitive2d
             }
             else
             {
-                rTargetColor.push_back(
+                rTargetColor.append(
                     new SvgLinearAtomPrimitive2D(
                         rFrom.getColor(), rFrom.getOffset() + nOffsetFrom,
                         rTo.getColor(), rTo.getOffset() + nOffsetTo));
@@ -457,7 +457,7 @@ namespace drawinglayer::primitive2d
                     const basegfx::BColor aColorFrom(fTransFrom, fTransFrom, fTransFrom);
                     const basegfx::BColor aColorTo(fTransTo, fTransTo, fTransTo);
 
-                    rTargetOpacity.push_back(
+                    rTargetOpacity.append(
                         new SvgLinearAtomPrimitive2D(
                             aColorFrom, rFrom.getOffset() + nOffsetFrom,
                             aColorTo, rTo.getOffset() + nOffsetTo));
@@ -646,14 +646,14 @@ namespace drawinglayer::primitive2d
                     const basegfx::B2DVector aTranslateFrom(maFocalVector * (maFocalLength - fScaleFrom));
                     const basegfx::B2DVector aTranslateTo(maFocalVector * (maFocalLength - fScaleTo));
 
-                    rTargetColor.push_back(
+                    rTargetColor.append(
                         new SvgRadialAtomPrimitive2D(
                             rFrom.getColor(), fScaleFrom, aTranslateFrom,
                             rTo.getColor(), fScaleTo, aTranslateTo));
                 }
                 else
                 {
-                    rTargetColor.push_back(
+                    rTargetColor.append(
                         new SvgRadialAtomPrimitive2D(
                             rFrom.getColor(), fScaleFrom,
                             rTo.getColor(), fScaleTo));
@@ -671,14 +671,14 @@ namespace drawinglayer::primitive2d
                         const basegfx::B2DVector aTranslateFrom(maFocalVector * (maFocalLength - fScaleFrom));
                         const basegfx::B2DVector aTranslateTo(maFocalVector * (maFocalLength - fScaleTo));
 
-                        rTargetOpacity.push_back(
+                        rTargetOpacity.append(
                             new SvgRadialAtomPrimitive2D(
                                 aColorFrom, fScaleFrom, aTranslateFrom,
                                 aColorTo, fScaleTo, aTranslateTo));
                     }
                     else
                     {
-                        rTargetOpacity.push_back(
+                        rTargetOpacity.append(
                             new SvgRadialAtomPrimitive2D(
                                 aColorFrom, fScaleFrom,
                                 aColorTo, fScaleTo));
@@ -903,7 +903,7 @@ namespace drawinglayer::primitive2d
                 basegfx::B2DPolygon aNew(aPolygon);
 
                 aNew.transform(basegfx::utils::createTranslateB2DHomMatrix(fDelta * fUnitScale, 0.0));
-                rContainer.push_back(new PolyPolygonColorPrimitive2D(
+                rContainer.append(new PolyPolygonColorPrimitive2D(
                     basegfx::B2DPolyPolygon(aNew),
                     basegfx::interpolate(getColorA(), getColorB(), fUnitScale)));
             }
@@ -998,7 +998,7 @@ namespace drawinglayer::primitive2d
                 basegfx::B2DPolygon aNew(basegfx::utils::createPolygonFromUnitCircle());
 
                 aNew.transform(aTransform);
-                rContainer.push_back(new PolyPolygonColorPrimitive2D(
+                rContainer.append(new PolyPolygonColorPrimitive2D(
                     basegfx::B2DPolyPolygon(aNew),
                     basegfx::interpolate(getColorB(), getColorA(), fUnitScale)));
             }

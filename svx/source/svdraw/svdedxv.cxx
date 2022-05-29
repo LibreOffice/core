@@ -458,7 +458,7 @@ TextEditOverlayObject::createOverlayObjectPrimitive2DSequence()
         const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
         const sal_uInt16 nPixSiz(getOutlinerView().GetInvalidateMore() - 1);
 
-        aRetval.push_back(new drawinglayer::primitive2d::OverlayRectanglePrimitive(
+        aRetval.append(new drawinglayer::primitive2d::OverlayRectanglePrimitive(
             maRange, getBaseColor().getBColor(), fTransparence, std::max(6, nPixSiz - 2), // grow
             0.0, // shrink
             0.0));

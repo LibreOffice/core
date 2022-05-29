@@ -32,28 +32,22 @@ namespace sdr::animation
         {
             double fRetval(0.0);
 
-            if(!maAnimatedPrimitives.empty())
+            for(const drawinglayer::primitive2d::Primitive2DReference & xRef : maAnimatedPrimitives)
             {
-                const sal_Int32 nCount(maAnimatedPrimitives.size());
+                const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D* pCandidate = static_cast< const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D* >(xRef.get());
 
-                for(sal_Int32 a(0); a < nCount; a++)
+                const drawinglayer::animation::AnimationEntry& rAnimEntry = pCandidate->getAnimationEntry();
+                const double fNextTime(rAnimEntry.getNextEventTime(fCurrentTime));
+
+                if(!::basegfx::fTools::equalZero(fNextTime))
                 {
-                    const drawinglayer::primitive2d::Primitive2DReference xRef(maAnimatedPrimitives[a]);
-                    const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D* pCandidate = static_cast< const drawinglayer::primitive2d::AnimatedSwitchPrimitive2D* >(xRef.get());
-
-                    const drawinglayer::animation::AnimationEntry& rAnimEntry = pCandidate->getAnimationEntry();
-                    const double fNextTime(rAnimEntry.getNextEventTime(fCurrentTime));
-
-                    if(!::basegfx::fTools::equalZero(fNextTime))
+                    if(::basegfx::fTools::equalZero(fRetval))
                     {
-                        if(::basegfx::fTools::equalZero(fRetval))
-                        {
-                            fRetval = fNextTime;
-                        }
-                        else if(::basegfx::fTools::less(fNextTime, fRetval))
-                        {
-                            fRetval = fNextTime;
-                        }
+                        fRetval = fNextTime;
+                    }
+                    else if(::basegfx::fTools::less(fNextTime, fRetval))
+                    {
+                        fRetval = fNextTime;
                     }
                 }
             }

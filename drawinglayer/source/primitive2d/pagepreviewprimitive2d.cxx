@@ -97,7 +97,7 @@ namespace drawinglayer::primitive2d
             aPageTrans = aCombined * aPageTrans;
 
             // embed in necessary transformation to map from SdrPage to SdrPageObject
-            rContainer.push_back(new TransformPrimitive2D(aPageTrans, std::move(aContent)));
+            rContainer.append(new TransformPrimitive2D(aPageTrans, std::move(aContent)));
         }
 
         PagePreviewPrimitive2D::PagePreviewPrimitive2D(

@@ -40,7 +40,7 @@ void SdrGrafPrimitive2D::create2DDecomposition(
         basegfx::B2DPolyPolygon aTransformed(aUnitOutline);
 
         aTransformed.transform(getTransform());
-        aRetval.push_back(
+        aRetval.append(
             createPolyPolygonFillPrimitive(aTransformed, getSdrLFSTAttribute().getFill(),
                                            getSdrLFSTAttribute().getFillFloatTransGradient()));
     }
@@ -49,9 +49,8 @@ void SdrGrafPrimitive2D::create2DDecomposition(
     if (0 != getGraphicAttr().GetAlpha())
     {
         // standard graphic fill
-        const Primitive2DReference xGraphicContentPrimitive(
+        aRetval.append(
             new GraphicPrimitive2D(getTransform(), getGraphicObject(), getGraphicAttr()));
-        aRetval.push_back(xGraphicContentPrimitive);
     }
 
     // add line
@@ -76,18 +75,17 @@ void SdrGrafPrimitive2D::create2DDecomposition(
                 basegfx::utils::createPolygonFromRect(aExpandedRange));
 
             aExpandedUnitOutline.transform(getTransform());
-            aRetval.push_back(createPolygonLinePrimitive(aExpandedUnitOutline,
-                                                         getSdrLFSTAttribute().getLine(),
-                                                         attribute::SdrLineStartEndAttribute()));
+            aRetval.append(createPolygonLinePrimitive(aExpandedUnitOutline,
+                                                      getSdrLFSTAttribute().getLine(),
+                                                      attribute::SdrLineStartEndAttribute()));
         }
         else
         {
             basegfx::B2DPolygon aTransformed(aUnitOutline);
 
             aTransformed.transform(getTransform());
-            aRetval.push_back(createPolygonLinePrimitive(aTransformed,
-                                                         getSdrLFSTAttribute().getLine(),
-                                                         attribute::SdrLineStartEndAttribute()));
+            aRetval.append(createPolygonLinePrimitive(aTransformed, getSdrLFSTAttribute().getLine(),
+                                                      attribute::SdrLineStartEndAttribute()));
         }
     }
 
@@ -101,9 +99,9 @@ void SdrGrafPrimitive2D::create2DDecomposition(
     // add text
     if (!getSdrLFSTAttribute().getText().isDefault())
     {
-        aRetval.push_back(createTextPrimitive(basegfx::B2DPolyPolygon(aUnitOutline), getTransform(),
-                                              getSdrLFSTAttribute().getText(),
-                                              getSdrLFSTAttribute().getLine(), false, false));
+        aRetval.append(createTextPrimitive(basegfx::B2DPolyPolygon(aUnitOutline), getTransform(),
+                                           getSdrLFSTAttribute().getText(),
+                                           getSdrLFSTAttribute().getLine(), false, false));
     }
 
     // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite

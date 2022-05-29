@@ -152,7 +152,7 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DPolygon& rUnitPolygon) const
         {
             // create solid fill with outmost color
-            rContainer.push_back(
+            rContainer.append(
                 new PolyPolygonColorPrimitive2D(
                     basegfx::B2DPolyPolygon(
                         basegfx::utils::createPolygonFromRect(getOutputRange())),
@@ -167,7 +167,7 @@ namespace drawinglayer::primitive2d
                 aNewPoly.transform(a.maB2DHomMatrix);
 
                 // create solid fill
-                rContainer.push_back(
+                rContainer.append(
                     new PolyPolygonColorPrimitive2D(
                         basegfx::B2DPolyPolygon(aNewPoly),
                         a.maBColor));
@@ -196,7 +196,7 @@ namespace drawinglayer::primitive2d
 
             // add outmost range to combined polypolygon (in 1st place), create first primitive
             aCombinedPolyPoly.insert(0, basegfx::utils::createPolygonFromRect(aOutmostRange));
-            rContainer.push_back(
+            rContainer.append(
                 new PolyPolygonColorPrimitive2D(
                     aCombinedPolyPoly,
                     rOuterColor));
@@ -216,7 +216,7 @@ namespace drawinglayer::primitive2d
                 aCombinedPolyPoly.append(aNextPoly);
 
                 // create primitive with correct color
-                rContainer.push_back(
+                rContainer.append(
                     new PolyPolygonColorPrimitive2D(
                         aCombinedPolyPoly,
                         rEntries[a].maBColor));
@@ -226,7 +226,7 @@ namespace drawinglayer::primitive2d
             }
 
             // add last inner polygon with last color
-            rContainer.push_back(
+            rContainer.append(
                 new PolyPolygonColorPrimitive2D(
                     aCombinedPolyPoly,
                     rEntries[rEntries.size() - 1].maBColor));

@@ -37,9 +37,9 @@ void PolyPolygonMarkerPrimitive2D::create2DDecomposition(
     {
         for (sal_uInt32 a(0); a < nCount; a++)
         {
-            rContainer.push_back(new PolygonMarkerPrimitive2D(aPolyPolygon.getB2DPolygon(a),
-                                                              getRGBColorA(), getRGBColorB(),
-                                                              getDiscreteDashLength()));
+            rContainer.append(new PolygonMarkerPrimitive2D(aPolyPolygon.getB2DPolygon(a),
+                                                           getRGBColorA(), getRGBColorB(),
+                                                           getDiscreteDashLength()));
         }
     }
 }

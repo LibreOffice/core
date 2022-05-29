@@ -64,7 +64,7 @@ namespace drawinglayer::primitive2d
             const attribute::LineAttribute aLineAttribute(getColor());
 
             // create the waveline primitive
-            rContainer.push_back(new PolygonWavePrimitive2D(aPolygon, aLineAttribute, fWaveWidth, 0.5 * fWaveWidth));
+            rContainer.append(new PolygonWavePrimitive2D(aPolygon, aLineAttribute, fWaveWidth, 0.5 * fWaveWidth));
         }
 
         WrongSpellPrimitive2D::WrongSpellPrimitive2D(

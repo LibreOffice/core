@@ -341,11 +341,9 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
     // create line geometry if a LineColor is set at the target device
     if (rRenderContext.IsLineColor())
     {
-        const drawinglayer::primitive2d::Primitive2DReference xOutline(
+        aSequence.append(
             new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                 basegfx::utils::createPolygonFromRect(aPaintRange), rRenderContext.GetLineColor().getBColor()));
-
-        aSequence.push_back(xOutline);
     }
 
     // draw that if we have something to draw

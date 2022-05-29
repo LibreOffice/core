@@ -327,7 +327,7 @@ namespace wmfemfhelper
     {
         if (pCandidate)
         {
-            aTargets.push_back(pCandidate);
+            aTargets.append(pCandidate);
         }
     }
 
@@ -1232,18 +1232,17 @@ namespace wmfemfhelper
 
                 aTextTransform.translate(rTextStartPosition.X(), rTextStartPosition.Y());
 
-                // prepare Primitive2DSequence, put text in foreground
-                drawinglayer::primitive2d::Primitive2DContainer aSequence(2);
-                aSequence[1] = pResult;
 
                 // prepare filled polygon
                 basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aTextRange));
                 aOutline.transform(aTextTransform);
 
-                aSequence[0] = drawinglayer::primitive2d::Primitive2DReference(
+                // prepare Primitive2DSequence, put text in foreground
+                drawinglayer::primitive2d::Primitive2DContainer aSequence {
                     new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                         basegfx::B2DPolyPolygon(aOutline),
-                        rProperty.getTextFillColor()));
+                        rProperty.getTextFillColor()),
+                    pResult };
 
                 // set as group at pResult
                 pResult = new drawinglayer::primitive2d::GroupPrimitive2D(std::move(aSequence));
@@ -1314,7 +1313,7 @@ namespace wmfemfhelper
         if(bOverlineUsed)
         {
             // create primitive geometry for overline
-            aTargets.push_back(
+            aTargets.append(
                 new drawinglayer::primitive2d::TextLinePrimitive2D(
                     aTextTransform,
                     fLineWidth,
@@ -1327,7 +1326,7 @@ namespace wmfemfhelper
         if(bUnderlineUsed)
         {
             // create primitive geometry for underline
-            aTargets.push_back(
+            aTargets.append(
                 new drawinglayer::primitive2d::TextLinePrimitive2D(
                     aTextTransform,
                     fLineWidth,
@@ -1349,7 +1348,7 @@ namespace wmfemfhelper
                 const css::lang::Locale aLocale(LanguageTag(
                     rProperty.getLanguageType()).getLocale());
 
-                aTargets.push_back(
+                aTargets.append(
                     new drawinglayer::primitive2d::TextCharacterStrikeoutPrimitive2D(
                         aTextTransform,
                         fLineWidth,
@@ -1361,7 +1360,7 @@ namespace wmfemfhelper
             else
             {
                 // strikeout with geometry
-                aTargets.push_back(
+                aTargets.append(
                     new drawinglayer::primitive2d::TextGeometryStrikeoutPrimitive2D(
                         aTextTransform,
                         fLineWidth,
@@ -2094,21 +2093,21 @@ namespace wmfemfhelper
                             {
                                 // really a gradient
                                 aRange.transform(rPropertyHolders.Current().getTransformation());
-                                drawinglayer::primitive2d::Primitive2DContainer xGradient(1);
+                                drawinglayer::primitive2d::Primitive2DContainer xGradient;
 
                                 if(rPropertyHolders.Current().isRasterOpInvert())
                                 {
                                     // use a special version of FillGradientPrimitive2D which creates
                                     // non-overlapping geometry on decomposition to make the old XOR
                                     // paint 'trick' work.
-                                    xGradient[0] = drawinglayer::primitive2d::Primitive2DReference(
+                                    xGradient.append(
                                         new drawinglayer::primitive2d::NonOverlappingFillGradientPrimitive2D(
                                             aRange,
                                             aAttribute));
                                 }
                                 else
                                 {
-                                    xGradient[0] = drawinglayer::primitive2d::Primitive2DReference(
+                                    xGradient.append(
                                         new drawinglayer::primitive2d::FillGradientPrimitive2D(
                                             aRange,
                                             aAttribute));

@@ -127,7 +127,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
 
         rRange.expand(pMessage->getB2DRange(aDummy));
 
-        aSeq.push_back(pMessage);
+        aSeq.append(std::move(pMessage));
 
         aLineStart.AdjustY(nLineHeight );
         nLineCount++;
@@ -152,8 +152,8 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
             aPoly, aBorderColor));
 
-    aSeq.insert(aSeq.begin(), aBorder);
-    aSeq.insert(aSeq.begin(), aBg);
+    aSeq.insert_front(aBorder);
+    aSeq.insert_front(aBg);
 
     return aSeq;
 }

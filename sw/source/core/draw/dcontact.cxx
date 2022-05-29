@@ -2163,7 +2163,7 @@ namespace sdr::contact
 
                         if(!aNewSequence.empty())
                         {
-                            rxTarget.append(aNewSequence);
+                            rxTarget.append(std::move(aNewSequence));
                         }
                     }
                 }

@@ -76,7 +76,7 @@ namespace drawinglayer::primitive2d
                 nIndex = nLen - 1;
             }
 
-            const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_SET_THROW);
+            const Primitive2DReference xRef(getChildren().getChild(nIndex), uno::UNO_SET_THROW);
             rVisitor.visit(xRef);
         }
 

@@ -226,14 +226,14 @@ namespace drawinglayer::primitive2d
             Primitive2DContainer aContent(createContent(rViewInformation));
 
             // resize result
-            aRetval.resize(aMatrices.size());
+            aRetval.reserve(aMatrices.size());
 
             // create one primitive for each matrix
             for(size_t a(0); a < aMatrices.size(); a++)
             {
-                aRetval[a] = new TransformPrimitive2D(
+                aRetval.append(new TransformPrimitive2D(
                     aMatrices[a],
-                    Primitive2DContainer(aContent));
+                    Primitive2DContainer(aContent)));
             }
 
             // transform result which is in unit coordinates to mask's object coordinates
@@ -253,7 +253,7 @@ namespace drawinglayer::primitive2d
 
             // embed result in mask
             {
-                rContainer.push_back(
+                rContainer.append(
                     new MaskPrimitive2D(
                         getMask(),
                         std::move(aRetval)));

@@ -172,7 +172,7 @@ namespace emfio::emfreader
                     // and a MetafileAccessor hook at the MetafilePrimitive2D inside of
                     // ImpGraphic::ImplGetGDIMetaFile to get the Metafile. Thus, the first
                     // and only primitive in this case *has to be* a MetafilePrimitive2D.
-                    aRetval.push_back(
+                    aRetval.append(
                         new drawinglayer::primitive2d::MetafilePrimitive2D(
                             aMetafileTransform,
                             aMtf));

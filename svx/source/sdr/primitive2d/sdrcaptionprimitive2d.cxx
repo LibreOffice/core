@@ -44,7 +44,7 @@ namespace drawinglayer::primitive2d
             if(getSdrLFSTAttribute().getFill().isDefault())
             {
                 // create invisible fill for HitTest
-                aRetval.push_back(
+                aRetval.append(
                     createHiddenGeometryPrimitives2D(
                         true,
                         basegfx::B2DPolyPolygon(aUnitOutline),
@@ -55,7 +55,7 @@ namespace drawinglayer::primitive2d
                 basegfx::B2DPolyPolygon aTransformed(aUnitOutline);
 
                 aTransformed.transform(getTransform());
-                aRetval.push_back(
+                aRetval.append(
                     createPolyPolygonFillPrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getFill(),
@@ -66,13 +66,13 @@ namespace drawinglayer::primitive2d
             if(getSdrLFSTAttribute().getLine().isDefault())
             {
                 // create invisible line for HitTest/BoundRect
-                aRetval.push_back(
+                aRetval.append(
                     createHiddenGeometryPrimitives2D(
                         false,
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform()));
 
-                aRetval.push_back(
+                aRetval.append(
                     createHiddenGeometryPrimitives2D(
                         false,
                         basegfx::B2DPolyPolygon(getTail()),
@@ -83,13 +83,13 @@ namespace drawinglayer::primitive2d
                 basegfx::B2DPolygon aTransformed(aUnitOutline);
 
                 aTransformed.transform(getTransform());
-                aRetval.push_back(
+                aRetval.append(
                     createPolygonLinePrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getLine(),
                         attribute::SdrLineStartEndAttribute()));
 
-                aRetval.push_back(
+                aRetval.append(
                     createPolygonLinePrimitive(
                         getTail(),
                         getSdrLFSTAttribute().getLine(),
@@ -99,7 +99,7 @@ namespace drawinglayer::primitive2d
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                aRetval.push_back(
+                aRetval.append(
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform(),

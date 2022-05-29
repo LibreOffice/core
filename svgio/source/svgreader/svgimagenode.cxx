@@ -298,12 +298,11 @@ namespace svgio::svgreader
 
                 // create content from created bitmap, use calculated unit range size
                 // as transformation to map the picture data correctly
-                aNewTarget.resize(1);
-                aNewTarget[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
+                aNewTarget = { new drawinglayer::primitive2d::BitmapPrimitive2D(
                     VCLUnoHelper::CreateVCLXBitmap(aBitmapEx),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         aViewBox.getRange(),
-                        aViewBox.getMinimum()));
+                        aViewBox.getMinimum())) };
             }
 
             if(aNewTarget.empty())

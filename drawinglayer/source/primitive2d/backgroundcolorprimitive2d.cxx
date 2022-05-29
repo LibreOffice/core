@@ -35,7 +35,7 @@ namespace drawinglayer::primitive2d
             if(!rViewInformation.getViewport().isEmpty())
             {
                 const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(rViewInformation.getViewport()));
-                rContainer.push_back(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), getBColor()));
+                rContainer.append(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), getBColor()));
             }
         }
 

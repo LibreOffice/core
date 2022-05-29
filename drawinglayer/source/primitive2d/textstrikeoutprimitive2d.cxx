@@ -89,7 +89,7 @@ namespace drawinglayer::primitive2d
             }
 
             auto len = aStrikeoutString.getLength();
-            rContainer.push_back(
+            rContainer.append(
                 new TextSimplePortionPrimitive2D(
                     getObjectTransformation(),
                     aStrikeoutString.makeStringAndClear(),
@@ -189,8 +189,8 @@ namespace drawinglayer::primitive2d
 
             // add primitive
             const attribute::LineAttribute aLineAttribute(getFontColor(), fStrikeoutHeight, basegfx::B2DLineJoin::NONE);
-            Primitive2DContainer xRetval(1);
-            xRetval[0] = new PolygonStrokePrimitive2D(aStrikeoutLine, aLineAttribute);
+            Primitive2DContainer xRetval {
+                new PolygonStrokePrimitive2D(aStrikeoutLine, aLineAttribute) };
 
             if(bDoubleLine)
             {
@@ -211,7 +211,7 @@ namespace drawinglayer::primitive2d
                 aTransform.translate(aTranslate.getX(), aTranslate.getY());
 
                 // add transform primitive
-                xRetval.push_back(
+                xRetval.append(
                         new TransformPrimitive2D(
                             aTransform,
                             Primitive2DContainer(xRetval)));

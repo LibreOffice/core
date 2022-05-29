@@ -109,22 +109,21 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createP
             aColB.invert();
         }
 
-        aRetval.resize(2);
-        aRetval[0] = new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
-            aCopy,
-            aColA,
-            aColB,
-            fStripeLength);
-
         const basegfx::BColor aHilightColor(SvtOptionsDrawinglayer::getHilightColor().getBColor());
         const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
 
-        aRetval[1] = new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
-            aCopy,
-            aHilightColor,
-            fTransparence,
-            3.0,
-            false);
+        aRetval = {
+            new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
+                aCopy,
+                aColA,
+                aColB,
+                fStripeLength),
+            new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
+                aCopy,
+                aHilightColor,
+                fTransparence,
+                3.0,
+                false) };
     }
 
     return aRetval;
@@ -768,12 +767,12 @@ void SdrDragMethod::CreateOverlayGeometry(
 
         if(DoAddConnectorOverlays())
         {
-            const drawinglayer::primitive2d::Primitive2DContainer aConnectorOverlays(AddConnectorOverlays());
+            drawinglayer::primitive2d::Primitive2DContainer aConnectorOverlays(AddConnectorOverlays());
 
             if(!aConnectorOverlays.empty())
             {
                 // add connector overlays to transparent part
-                aResultTransparent.append(aConnectorOverlays);
+                aResultTransparent.append(std::move(aConnectorOverlays));
             }
         }
 
@@ -910,7 +909,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragMethod::AddConnectorOverl
                                     rItemSet,
                                     aLine.getWidth()));
 
-                            aRetval.push_back(drawinglayer::primitive2d::createPolygonLinePrimitive(
+                            aRetval.append(drawinglayer::primitive2d::createPolygonLinePrimitive(
                                     aEdgePolygon,
                                     aLine,
                                     aLineStartEnd));
@@ -928,10 +927,9 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragMethod::AddConnectorOverl
                             aColB.invert();
                         }
 
-                        drawinglayer::primitive2d::Primitive2DReference aPolyPolygonMarkerPrimitive2D(
+                        aRetval.append(
                             new drawinglayer::primitive2d::PolygonMarkerPrimitive2D(
                                 aEdgePolygon, aColA, aColB, fStripeLength));
-                        aRetval.push_back(aPolyPolygonMarkerPrimitive2D);
                     }
                 }
             }

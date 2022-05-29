@@ -267,12 +267,12 @@ namespace drawinglayer::primitive2d
                     const basegfx::B2DPoint aMainLeftLeft(aMainLeft.getX() - fLenLeft, aMainLeft.getY());
                     const basegfx::B2DPoint aMainRightRight(aMainRight.getX() + fLenRight, aMainRight.getY());
 
-                    aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aMainLeftLeft, aMainLeft, false, true));
-                    aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aMainRight, aMainRightRight, true, false));
+                    aRetval.append(impCreatePart(rLineAttribute, aObjectMatrix, aMainLeftLeft, aMainLeft, false, true));
+                    aRetval.append(impCreatePart(rLineAttribute, aObjectMatrix, aMainRight, aMainRightRight, true, false));
 
                     if(!bMainLineSplitted || MEASURETEXTPOSITION_CENTERED != eHorizontal)
                     {
-                        aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainRight, false, false));
+                        aRetval.append(impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainRight, false, false));
                     }
                 }
                 else
@@ -283,12 +283,12 @@ namespace drawinglayer::primitive2d
                         const basegfx::B2DPoint aMainInnerLeft(aMainLeft.getX() + fHalfLength, aMainLeft.getY());
                         const basegfx::B2DPoint aMainInnerRight(aMainRight.getX() - fHalfLength, aMainRight.getY());
 
-                        aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainInnerLeft, true, false));
-                        aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aMainInnerRight, aMainRight, false, true));
+                        aRetval.append(impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainInnerLeft, true, false));
+                        aRetval.append(impCreatePart(rLineAttribute, aObjectMatrix, aMainInnerRight, aMainRight, false, true));
                     }
                     else
                     {
-                        aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainRight, true, true));
+                        aRetval.append(impCreatePart(rLineAttribute, aObjectMatrix, aMainLeft, aMainRight, true, true));
                     }
                 }
 
@@ -301,13 +301,13 @@ namespace drawinglayer::primitive2d
                 const basegfx::B2DPoint aLeftUp(0.0, fTopEdge);
                 const basegfx::B2DPoint aLeftDown(0.0, fBottomLeft);
 
-                aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aLeftDown, aLeftUp, false, false));
+                aRetval.append(impCreatePart(rLineAttribute, aObjectMatrix, aLeftDown, aLeftUp, false, false));
 
                 // right help line
                 const basegfx::B2DPoint aRightUp(fDistance, fTopEdge);
                 const basegfx::B2DPoint aRightDown(fDistance, fBottomRight);
 
-                aRetval.push_back(impCreatePart(rLineAttribute, aObjectMatrix, aRightDown, aRightUp, false, false));
+                aRetval.append(impCreatePart(rLineAttribute, aObjectMatrix, aRightDown, aRightUp, false, false));
 
                 // text horizontal position
                 if(MEASURETEXTPOSITION_NEGATIVE == eHorizontal)
@@ -419,7 +419,7 @@ namespace drawinglayer::primitive2d
                 xBlockText.clear();
 
                 // add to local primitives
-                aRetval.push_back(pNewBlockText);
+                aRetval.append(std::move(pNewBlockText));
             }
 
             // add shadow

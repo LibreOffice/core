@@ -219,7 +219,6 @@ void ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& /*
         if(bInCreatePrimitive2D)
         {
             // Recursion is possible. Create a replacement primitive
-            xPageContent.resize(2);
             const Color aDocColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
             svtools::ColorConfigValue aBorderConfig = aColorConfig.GetColorValue(svtools::DOCBOUNDARIES);
             const Color aBorderColor = aBorderConfig.bIsVisible ? aBorderConfig.nColor : aDocColor;
@@ -227,11 +226,11 @@ void ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& /*
             const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aPageBound));
 
             // add replacement fill
-            xPageContent[0] = drawinglayer::primitive2d::Primitive2DReference(
+            xPageContent.append(
                 new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), aDocColor.getBColor()));
 
             // add replacement border
-            xPageContent[1] = drawinglayer::primitive2d::Primitive2DReference(
+            xPageContent.append(
                 new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aBorderColor.getBColor()));
         }
         else

@@ -56,7 +56,7 @@ namespace sdr::overlay
 
                 if (maFillColor.GetAlpha() != 0)
                 {
-                    aReturnContainer.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(maLinePolyPolygon, maFillColor.getBColor()));
+                    aReturnContainer.append(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(maLinePolyPolygon, maFillColor.getBColor()));
                 }
 
                 sal_uInt8 nTransparency = 255 - getBaseColor().GetAlpha();
@@ -92,15 +92,13 @@ namespace sdr::overlay
                 const basegfx::BColor aHilightColor(SvtOptionsDrawinglayer::getHilightColor().getBColor());
                 const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
 
-                const drawinglayer::primitive2d::Primitive2DReference aFilled(
+                aRetval.append(
                     new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
                         getLinePolyPolygon(),
                         aHilightColor,
                         fTransparence,
                         3.0,
                         false));
-
-                aRetval.push_back(aFilled);
             }
 
             return aRetval;

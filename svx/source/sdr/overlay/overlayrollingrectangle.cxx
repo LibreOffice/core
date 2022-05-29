@@ -44,35 +44,32 @@ namespace sdr::overlay
                     // view-independent part, create directly
                     const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(aRollingRectangle));
 
-                    aRetval.resize(2);
-                    aRetval[0] = new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
+                    aRetval.append(new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
                         basegfx::B2DPolyPolygon(aPolygon),
                         aRGBColorA,
                         aRGBColorB,
-                        fStripeLengthPixel);
+                        fStripeLengthPixel));
 
                     const basegfx::BColor aHilightColor(SvtOptionsDrawinglayer::getHilightColor().getBColor());
                     const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
 
-                    aRetval[1] = new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
+                    aRetval.append(new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
                         basegfx::B2DPolyPolygon(aPolygon),
                         aHilightColor,
                         fTransparence,
                         3.0,
-                        false);
+                        false));
                 }
 
                 if(mbExtendedLines)
                 {
                     // view-dependent part, use helper primitive
-                    const drawinglayer::primitive2d::Primitive2DReference aReference(
+                    aRetval.append(
                         new drawinglayer::primitive2d::OverlayRollingRectanglePrimitive(
                             aRollingRectangle,
                             aRGBColorA,
                             aRGBColorB,
                             fStripeLengthPixel));
-
-                    aRetval.push_back(aReference);
                 }
             }
 

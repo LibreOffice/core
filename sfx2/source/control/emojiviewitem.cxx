@@ -54,7 +54,8 @@ void EmojiViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProcessor
 {
     BColor aFillColor = pAttrs->aFillColor;
 
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(2);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq;
+    aSeq.reserve(2);
     double fTransparence = 0.0;
 
     // Draw background
@@ -66,7 +67,7 @@ void EmojiViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProcessor
     if (mbHover)
         fTransparence = pAttrs->fHighlightTransparence;
 
-    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
+    aSeq.append(
             new PolyPolygonSelectionPrimitive2D( B2DPolyPolygon(::tools::Polygon(maDrawArea,5,5).getB2DPolygon()),
                                                  aFillColor,
                                                  fTransparence,

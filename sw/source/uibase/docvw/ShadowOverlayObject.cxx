@@ -91,7 +91,7 @@ void ShadowPrimitive::create2DDecomposition(
                 basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
                 basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0));
 
-            rContainer.push_back(
+            rContainer.append(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     aRange,
                     aFillGradientAttribute));
@@ -109,7 +109,7 @@ void ShadowPrimitive::create2DDecomposition(
                 basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
                 basegfx::BColor(180.0/255.0,180.0/255.0,180.0/255.0));
 
-            rContainer.push_back(
+            rContainer.append(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     aRange,
                     aFillGradientAttribute));
@@ -127,7 +127,7 @@ void ShadowPrimitive::create2DDecomposition(
                 basegfx::BColor(230.0/255.0,230.0/255.0,230.0/255.0),
                 basegfx::BColor(83.0/255.0,83.0/255.0,83.0/255.0));
 
-            rContainer.push_back(
+            rContainer.append(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     aRange,
                     aFillGradientAttribute));

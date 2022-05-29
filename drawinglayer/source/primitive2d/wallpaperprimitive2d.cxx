@@ -214,7 +214,7 @@ namespace drawinglayer::primitive2d
             }
 
             if (aRetval.is())
-                rContainer.push_back(aRetval);
+                rContainer.append(std::move(aRetval));
         }
 
         WallpaperBitmapPrimitive2D::WallpaperBitmapPrimitive2D(

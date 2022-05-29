@@ -47,7 +47,7 @@ namespace drawinglayer::primitive2d
                 basegfx::B2DPolyPolygon aTransformed(aUnitOutline);
 
                 aTransformed.transform(getTransform());
-                aRetval.push_back(
+                aRetval.append(
                     createPolyPolygonFillPrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getFill(),
@@ -57,7 +57,7 @@ namespace drawinglayer::primitive2d
             {
                 // if no fill and it's a text frame, create a fill for HitTest and
                 // BoundRect fallback
-                aRetval.push_back(
+                aRetval.append(
                     createHiddenGeometryPrimitives2D(
                         true,
                         basegfx::B2DPolyPolygon(aUnitOutline),
@@ -70,7 +70,7 @@ namespace drawinglayer::primitive2d
                 basegfx::B2DPolygon aTransformed(aUnitOutline);
 
                 aTransformed.transform(getTransform());
-                aRetval.push_back(
+                aRetval.append(
                     createPolygonLinePrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getLine(),
@@ -80,7 +80,7 @@ namespace drawinglayer::primitive2d
             {
                 // if initially no line is defined and it's not a text frame, create
                 // a line for HitTest and BoundRect
-                aRetval.push_back(
+                aRetval.append(
                     createHiddenGeometryPrimitives2D(
                         false,
                         basegfx::B2DPolyPolygon(aUnitOutline),
@@ -90,7 +90,7 @@ namespace drawinglayer::primitive2d
             // add text
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                aRetval.push_back(
+                aRetval.append(
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform(),

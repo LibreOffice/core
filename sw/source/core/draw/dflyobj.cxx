@@ -200,7 +200,7 @@ namespace drawinglayer::primitive2d
             // the old SwVirtFlyDrawObj::CheckHit implementation are handled now in SwDrawView::PickObj;
             // this removed the 'hack' to get a view from inside model data or to react on null-tolerance
             // as it was done in the old implementation
-            rContainer.push_back(
+            rContainer.append(
                 createHiddenGeometryPrimitives2D(
                     true,
                     getOuterRange()));

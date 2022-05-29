@@ -130,7 +130,7 @@ namespace drawinglayer::primitive2d
             if(pTextDecoratedPortionPrimitive2D)
             {
                 // create a TextDecoratedPortionPrimitive2D
-                rTempResult.push_back(
+                rTempResult.append(
                     new TextDecoratedPortionPrimitive2D(
                         aNewTransform,
                         mrSource.getText(),
@@ -161,7 +161,7 @@ namespace drawinglayer::primitive2d
             else
             {
                 // create a SimpleTextPrimitive
-                rTempResult.push_back(
+                rTempResult.append(
                     new TextSimplePortionPrimitive2D(
                         aNewTransform,
                         mrSource.getText(),

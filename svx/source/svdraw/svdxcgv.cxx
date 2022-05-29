@@ -472,7 +472,8 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
             {
                 // collect sub-primitives as group objects, thus no expensive append
                 // to existing sequence is needed
-                drawinglayer::primitive2d::Primitive2DContainer xPrimitives(nCount);
+                drawinglayer::primitive2d::Primitive2DContainer xPrimitives;
+                xPrimitives.reserve(nCount);
 
                 for(sal_uInt32 a(0); a < nCount; a++)
                 {
@@ -487,8 +488,8 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
 
                     drawinglayer::primitive2d::Primitive2DContainer xRetval;
                     pCandidate->GetViewContact().getViewIndependentPrimitive2DContainer(xRetval);
-                    xPrimitives[a] = new drawinglayer::primitive2d::GroupPrimitive2D(
-                        std::move(xRetval));
+                    xPrimitives.append( new drawinglayer::primitive2d::GroupPrimitive2D(
+                        std::move(xRetval)) );
                 }
 
                 // get logic range

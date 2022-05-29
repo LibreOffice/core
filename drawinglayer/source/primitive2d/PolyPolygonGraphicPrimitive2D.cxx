@@ -92,7 +92,7 @@ void PolyPolygonGraphicPrimitive2D::create2DDecomposition(
     }
 
     // embed to mask primitive
-    rContainer.push_back(new MaskPrimitive2D(getB2DPolyPolygon(), Primitive2DContainer{ xSubRef }));
+    rContainer.append(new MaskPrimitive2D(getB2DPolyPolygon(), Primitive2DContainer{ xSubRef }));
 }
 
 PolyPolygonGraphicPrimitive2D::PolyPolygonGraphicPrimitive2D(

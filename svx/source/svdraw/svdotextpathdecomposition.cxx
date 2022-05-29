@@ -495,7 +495,7 @@ namespace
                                 const Color aShadowColor(maSdrFormTextAttribute.getFormTextShdwColor());
                                 const basegfx::BColor aRGBShadowColor(aShadowColor.getBColor());
 
-                                mrShadowDecomposition.push_back(
+                                mrShadowDecomposition.append(
                                     new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                                         aNewTransformB * aNewShadowTransform * aNewTransformA,
                                         pCandidate->getText(),
@@ -512,7 +512,7 @@ namespace
                                 const Color aColor(pCandidate->getFont().GetColor());
                                 const basegfx::BColor aRGBColor(aColor.getBColor());
 
-                                mrDecomposition.push_back(
+                                mrDecomposition.append(
                                     new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                                         aNewTransformB * aNewTransformA,
                                         pCandidate->getText(),
@@ -558,7 +558,7 @@ namespace
             for(auto const& rPolygon : std::as_const(aB2DPolyPolygon))
             {
                 // create one primitive per polygon
-                rTarget.push_back(
+                rTarget.append(
                     new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
                         rPolygon, rLineAttribute, rStrokeAttribute) );
             }
@@ -571,7 +571,7 @@ namespace
     {
         drawinglayer::primitive2d::Primitive2DContainer aNewPrimitives;
 
-        for(const drawinglayer::primitive2d::Primitive2DReference& a : rSource)
+        for(auto const & a : rSource)
         {
             const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pTextCandidate = dynamic_cast< const drawinglayer::primitive2d::TextSimplePortionPrimitive2D* >(a.get());
 
@@ -593,14 +593,13 @@ namespace
                         rOutlineAttribute.getLineAttribute(),
                         rOutlineAttribute.getStrokeAttribute(),
                         aStrokePrimitives);
-                    const sal_uInt32 nStrokeCount(aStrokePrimitives.size());
 
-                    if(nStrokeCount)
+                    if(!aStrokePrimitives.empty())
                     {
                         if(rOutlineAttribute.getTransparence())
                         {
                             // create UnifiedTransparencePrimitive2D
-                            aNewPrimitives.push_back(
+                            aNewPrimitives.append(
                                 new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                     std::move(aStrokePrimitives),
                                     static_cast<double>(rOutlineAttribute.getTransparence()) / 100.0) );
@@ -701,12 +700,10 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                     && !rFormTextAttribute.getShadowOutline().isDefault())
                 {
                     aRetvalA = aShadowDecomposition;
-                    const drawinglayer::primitive2d::Primitive2DContainer aOutlines(
+                    aRetvalA.append(
                         impAddPathTextOutlines(
                             aShadowDecomposition,
                             rFormTextAttribute.getShadowOutline()));
-
-                    aRetvalA.append(aOutlines);
                 }
                 else
                     aRetvalA = std::move(aShadowDecomposition);
@@ -721,12 +718,10 @@ void SdrTextObj::impDecomposePathTextPrimitive(
                     && !rFormTextAttribute.getOutline().isDefault())
                 {
                     aRetvalB = aRegularDecomposition;
-                    const drawinglayer::primitive2d::Primitive2DContainer aOutlines(
+                    aRetvalB.append(
                         impAddPathTextOutlines(
                             aRegularDecomposition,
                             rFormTextAttribute.getOutline()));
-
-                    aRetvalB.append(aOutlines);
                 }
                 else
                     aRetvalB = std::move(aRegularDecomposition);

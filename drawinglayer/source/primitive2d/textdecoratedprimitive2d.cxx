@@ -39,7 +39,7 @@ namespace drawinglayer::primitive2d
             const attribute::FontAttribute& rFontAttribute) const
         {
             // create the SimpleTextPrimitive needed in any case
-            rTarget.push_back(Primitive2DReference(
+            rTarget.append(Primitive2DReference(
                 new TextSimplePortionPrimitive2D(
                     rDecTrans.getB2DHomMatrix(),
                     rText,
@@ -92,7 +92,7 @@ namespace drawinglayer::primitive2d
             if(bOverlineUsed)
             {
                 // create primitive geometry for overline
-                rTarget.push_back(Primitive2DReference(
+                rTarget.append(Primitive2DReference(
                     new TextLinePrimitive2D(
                         rDecTrans.getB2DHomMatrix(),
                         fTextWidth,
@@ -105,7 +105,7 @@ namespace drawinglayer::primitive2d
             if(bUnderlineUsed)
             {
                 // create primitive geometry for underline
-                rTarget.push_back(Primitive2DReference(
+                rTarget.append(Primitive2DReference(
                     new TextLinePrimitive2D(
                         rDecTrans.getB2DHomMatrix(),
                         fTextWidth,
@@ -124,7 +124,7 @@ namespace drawinglayer::primitive2d
                 // strikeout with character
                 const sal_Unicode aStrikeoutChar(TEXT_STRIKEOUT_SLASH == getTextStrikeout() ? '/' : 'X');
 
-                rTarget.push_back(Primitive2DReference(
+                rTarget.append(Primitive2DReference(
                     new TextCharacterStrikeoutPrimitive2D(
                         rDecTrans.getB2DHomMatrix(),
                         fTextWidth,
@@ -136,7 +136,7 @@ namespace drawinglayer::primitive2d
             else
             {
                 // strikeout with geometry
-                rTarget.push_back(Primitive2DReference(
+                rTarget.append(Primitive2DReference(
                     new TextGeometryStrikeoutPrimitive2D(
                         rDecTrans.getB2DHomMatrix(),
                         fTextWidth,
@@ -279,7 +279,7 @@ namespace drawinglayer::primitive2d
                     {
                         // put shadow in front if there is one to paint timely before
                         // but placed behind content
-                        aRetval.insert(aRetval.begin(), aShadow);
+                        aRetval.insert_front(std::move(aShadow));
                     }
                 }
             }

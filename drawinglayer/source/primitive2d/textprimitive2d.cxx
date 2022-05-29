@@ -171,7 +171,7 @@ void TextSimplePortionPrimitive2D::create2DDecomposition(
         return;
 
     // alloc space for the primitives
-    aRetval.resize(nCount);
+    aRetval.reserve(nCount);
 
     // color-filled polypolygons
     for (sal_uInt32 a(0); a < nCount; a++)
@@ -179,7 +179,7 @@ void TextSimplePortionPrimitive2D::create2DDecomposition(
         // prepare polypolygon
         basegfx::B2DPolyPolygon& rPolyPolygon = aB2DPolyPolyVector[a];
         rPolyPolygon.transform(aPolygonTransform);
-        aRetval[a] = new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor());
+        aRetval.append(new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor()));
     }
 
     if (getFontAttribute().getOutline())

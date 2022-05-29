@@ -104,7 +104,7 @@ namespace drawinglayer::primitive2d
             if(bFillBackground)
             {
                 // create primitive for background
-                rContainer.push_back(
+                rContainer.append(
                     new PolyPolygonColorPrimitive2D(
                         basegfx::B2DPolyPolygon(
                             basegfx::utils::createPolygonFromRect(getOutputRange())), getBColor()));
@@ -123,7 +123,7 @@ namespace drawinglayer::primitive2d
                 aNewLine.append(rMatrix * aEnd);
 
                 // create hairline
-                rContainer.push_back(new PolygonHairlinePrimitive2D(aNewLine, aHatchColor));
+                rContainer.append(new PolygonHairlinePrimitive2D(aNewLine, aHatchColor));
             }
         }
 

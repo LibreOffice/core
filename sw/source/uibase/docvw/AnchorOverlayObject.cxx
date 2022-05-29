@@ -95,12 +95,10 @@ void AnchorPrimitive::create2DDecomposition(
          AnchorState::All == maAnchorState )
     {
         // create triangle
-        const drawinglayer::primitive2d::Primitive2DReference aTriangle(
+        rContainer.append(
             new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                 basegfx::B2DPolyPolygon(maTriangle),
                 getColor()));
-
-        rContainer.push_back(aTriangle);
     }
 
     // prepare view-independent LineWidth and color
@@ -113,12 +111,10 @@ void AnchorPrimitive::create2DDecomposition(
         // create line start
         if(getLineSolid())
         {
-            const drawinglayer::primitive2d::Primitive2DReference aSolidLine(
+            rContainer.append(
                 new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
                     getLine(),
                     aLineAttribute));
-
-            rContainer.push_back(aSolidLine);
         }
         else
         {
@@ -133,13 +129,11 @@ void AnchorPrimitive::create2DDecomposition(
                 std::move(aDotDashArray),
                 fDistance + fDashLen);
 
-            const drawinglayer::primitive2d::Primitive2DReference aStrokedLine(
+            rContainer.append(
                 new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
                     getLine(),
                     aLineAttribute,
                     aStrokeAttribute));
-
-            rContainer.push_back(aStrokedLine);
         }
     }
 
@@ -148,13 +142,11 @@ void AnchorPrimitive::create2DDecomposition(
     {
         // LineTop has to be created, too, but uses no shadow, so add after
         // the other parts are created
-        const drawinglayer::primitive2d::Primitive2DReference aLineTop(
+        rContainer.append(
             new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
                 maLineTop,
                 aLineAttribute));
-
-        rContainer.push_back(aLineTop);
-    }
+   }
 }
 
 bool AnchorPrimitive::operator==( const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive ) const

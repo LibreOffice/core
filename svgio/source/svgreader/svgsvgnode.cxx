@@ -439,17 +439,15 @@ namespace svgio::svgreader
                                 if(rRatio.isMeetOrSlice())
                                 {
                                     // embed in transformation
-                                    rTarget.push_back(xRef);
+                                    rTarget.append(xRef);
                                 }
                                 else
                                 {
                                     // need to embed in MaskPrimitive2D, too
-                                    const drawinglayer::primitive2d::Primitive2DReference xMask(
+                                    rTarget.append(
                                         new drawinglayer::primitive2d::MaskPrimitive2D(
                                             basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aTarget)),
                                             drawinglayer::primitive2d::Primitive2DContainer { xRef }));
-
-                                    rTarget.push_back(xMask);
                                 }
                             }
                         }
@@ -471,15 +469,12 @@ namespace svgio::svgreader
                             }
 
                             // embed in MaskPrimitive2D to clip
-                            const drawinglayer::primitive2d::Primitive2DReference xMask(
+                            rTarget.append(
                                 new drawinglayer::primitive2d::MaskPrimitive2D(
                                     basegfx::B2DPolyPolygon(
                                         basegfx::utils::createPolygonFromRect(
                                             basegfx::B2DRange(fX, fY, fX + fW, fY + fH))),
                                     drawinglayer::primitive2d::Primitive2DContainer(aSequence)));
-
-                            // append
-                            rTarget.push_back(xMask);
                         }
                     }
                 }
@@ -632,7 +627,7 @@ namespace svgio::svgreader
                                 new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
                                     drawinglayer::primitive2d::Primitive2DContainer { xLine }));
 
-                            aSequence.push_back(xHidden);
+                            aSequence.append(xHidden);
                         }
                         else if(aSvgCanvasRange.overlaps(aContentRange))
                         {
@@ -715,7 +710,7 @@ namespace svgio::svgreader
                 new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
                     drawinglayer::primitive2d::Primitive2DContainer { xLine }));
 
-            rTarget.push_back(xHidden);
+            rTarget.append(xHidden);
         }
 
         basegfx::B2DRange SvgSvgNode::getCurrentViewPort() const

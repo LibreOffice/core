@@ -581,8 +581,8 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
                 });
             if (nContentWithTransparence == 0)
             {
-                Primitive2DContainer aRetval(2);
-                aRetval[0] = Primitive2DReference(
+                Primitive2DContainer aRetval;
+                aRetval.append(
                     new ShadowPrimitive2D(
                         aShadowOffset,
                         rShadow.getColor(),
@@ -592,15 +592,15 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
                 if (0.0 != rShadow.getTransparence())
                 {
                     // create SimpleTransparencePrimitive2D
-                    Primitive2DContainer aTempContent{ aRetval[0] };
+                    Primitive2DContainer aTempContent{ aRetval.front() };
 
-                    aRetval[0] = Primitive2DReference(
+                    aRetval.front() =
                         new UnifiedTransparencePrimitive2D(
                             std::move(aTempContent),
-                            rShadow.getTransparence()));
+                            rShadow.getTransparence());
                 }
 
-                aRetval[1] = Primitive2DReference(new GroupPrimitive2D(std::move(rContent)));
+                aRetval.append(new GroupPrimitive2D(std::move(rContent)));
                 return aRetval;
             }
 
@@ -614,7 +614,7 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
                         fChildTransparence = pChild->getTransparenceForShadow();
                         fChildTransparence /= 100;
                 }
-                aRetval.push_back(Primitive2DReference(
+                aRetval.append(Primitive2DReference(
                     new ShadowPrimitive2D(aShadowOffset, rShadow.getColor(), rShadow.getBlur(),
                                             Primitive2DContainer({ xChild }))));
                 if (rShadow.getTransparence() != 0.0 || fChildTransparence != 0.0)
@@ -624,12 +624,12 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
                     double fChildAlpha = 1.0 - fChildTransparence;
                     double fShadowAlpha = 1.0 - rShadow.getTransparence();
                     double fTransparence = 1.0 - fChildAlpha * fShadowAlpha;
-                    aRetval.back() = Primitive2DReference(new UnifiedTransparencePrimitive2D(
-                            std::move(aTempContent), fTransparence));
+                    aRetval.back() = new UnifiedTransparencePrimitive2D(
+                            std::move(aTempContent), fTransparence);
                 }
             }
 
-            aRetval.push_back(
+            aRetval.append(
                     Primitive2DReference(new GroupPrimitive2D(std::move(rContent))));
             return aRetval;
         }
@@ -640,10 +640,9 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
         {
             if(rContent.empty())
                 return std::move(rContent);
-            Primitive2DContainer aRetval(2);
-            aRetval[0] = Primitive2DReference(
-                new GlowPrimitive2D(rGlow.getColor(), rGlow.getRadius(), Primitive2DContainer(rContent)));
-            aRetval[1] = Primitive2DReference(new GroupPrimitive2D(Primitive2DContainer(rContent)));
+            Primitive2DContainer aRetval {
+                new GlowPrimitive2D(rGlow.getColor(), rGlow.getRadius(), Primitive2DContainer(rContent)),
+                new GroupPrimitive2D(Primitive2DContainer(rContent)) };
             return aRetval;
         }
 
@@ -652,8 +651,8 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
         {
             if (aContent.empty() || !nRadius)
                 return std::move(aContent);
-            Primitive2DContainer aRetval(1);
-            aRetval[0] = Primitive2DReference(new SoftEdgePrimitive2D(nRadius, std::move(aContent)));
+            Primitive2DContainer aRetval {
+                new SoftEdgePrimitive2D(nRadius, std::move(aContent)) };
             return aRetval;
         }
 

@@ -80,7 +80,7 @@ namespace drawinglayer::primitive2d
                 basegfx::B2DPolyPolygon aTransformed(aUnitOutline);
 
                 aTransformed.transform(getTransform());
-                aRetval.push_back(
+                aRetval.append(
                     createPolyPolygonFillPrimitive(
                         aTransformed,
                         getSdrLFSTAttribute().getFill(),
@@ -109,7 +109,7 @@ namespace drawinglayer::primitive2d
                     basegfx::B2DPolygon aExpandedUnitOutline(basegfx::utils::createPolygonFromRect(aExpandedRange));
 
                     aExpandedUnitOutline.transform(getTransform());
-                    aRetval.push_back(
+                    aRetval.append(
                         createPolygonLinePrimitive(
                             aExpandedUnitOutline,
                             getSdrLFSTAttribute().getLine(),
@@ -120,7 +120,7 @@ namespace drawinglayer::primitive2d
                     basegfx::B2DPolygon aTransformed(aUnitOutline);
 
                     aTransformed.transform(getTransform());
-                    aRetval.push_back(
+                    aRetval.append(
                         createPolygonLinePrimitive(
                             aTransformed,
                             getSdrLFSTAttribute().getLine(),
@@ -130,7 +130,7 @@ namespace drawinglayer::primitive2d
             else
             {
                 // if initially no line is defined, create one for HitTest and BoundRect
-                aRetval.push_back(
+                aRetval.append(
                     createHiddenGeometryPrimitives2D(
                         false,
                         basegfx::B2DPolyPolygon(aUnitOutline),
@@ -144,7 +144,7 @@ namespace drawinglayer::primitive2d
             // always supported by the old paints, too
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
-                aRetval.push_back(
+                aRetval.append(
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform(),

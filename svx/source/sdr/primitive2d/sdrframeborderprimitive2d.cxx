@@ -602,12 +602,11 @@ namespace
         const basegfx::B2DPoint aStart(rOrigin + (aPerpendX * aCombination.getRefModeOffset()));
 
         rTarget.append(
-            drawinglayer::primitive2d::Primitive2DReference(
                 new drawinglayer::primitive2d::BorderLinePrimitive2D(
                     aStart,
                     aStart + rX,
                     std::move(aBorderlines),
-                    aStrokeAttribute)));
+                    aStrokeAttribute));
     }
 
     double getMinimalNonZeroValue(double fCurrent, double fNew)
@@ -805,7 +804,7 @@ namespace drawinglayer::primitive2d
                             for(auto& aCandidateRetval : aRetval)
                             {
                                 // try to merge by appending new data to existing data
-                                const drawinglayer::primitive2d::Primitive2DReference aMergeRetvalPartial(
+                                drawinglayer::primitive2d::Primitive2DReference aMergeRetvalPartial(
                                     drawinglayer::primitive2d::tryMergeBorderLinePrimitive2D(
                                         static_cast<BorderLinePrimitive2D*>(aCandidateRetval.get()),
                                         static_cast<BorderLinePrimitive2D*>(aCandidatePartial.get())));
@@ -813,13 +812,13 @@ namespace drawinglayer::primitive2d
                                 if(aMergeRetvalPartial.is())
                                 {
                                     // could append, replace existing data with merged data, done
-                                    aCandidateRetval = aMergeRetvalPartial;
+                                    aCandidateRetval = std::move(aMergeRetvalPartial);
                                     bDidMerge = true;
                                     break;
                                 }
 
                                 // try to merge by appending existing data to new data
-                                const drawinglayer::primitive2d::Primitive2DReference aMergePartialRetval(
+                                drawinglayer::primitive2d::Primitive2DReference aMergePartialRetval(
                                     drawinglayer::primitive2d::tryMergeBorderLinePrimitive2D(
                                         static_cast<BorderLinePrimitive2D*>(aCandidatePartial.get()),
                                         static_cast<BorderLinePrimitive2D*>(aCandidateRetval.get())));
@@ -827,7 +826,7 @@ namespace drawinglayer::primitive2d
                                 if(aMergePartialRetval.is())
                                 {
                                     // could append, replace existing data with merged data, done
-                                    aCandidateRetval = aMergePartialRetval;
+                                    aCandidateRetval = std::move(aMergePartialRetval);
                                     bDidMerge = true;
                                     break;
                                 }

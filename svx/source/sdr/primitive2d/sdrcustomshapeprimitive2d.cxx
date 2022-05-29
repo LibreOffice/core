@@ -47,7 +47,7 @@ namespace drawinglayer::primitive2d
             {
                 const basegfx::B2DPolygon& aUnitOutline(basegfx::utils::createUnitPolygon());
 
-                aRetval.push_back(
+                aRetval.append(
                     createTextPrimitive(
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTextBox(),
