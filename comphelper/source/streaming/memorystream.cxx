@@ -240,10 +240,10 @@ sal_Int32 UNOMemoryStream::writeSomeBytes( const sal_Int8* pInData, sal_Int32 nB
     if( static_cast< sal_Int32 >( nNewSize ) > static_cast< sal_Int32 >( maData.size() ) )
         maData.resize( nNewSize );
 
-    NoInitInt8* pData = &(*maData.begin());
-    NoInitInt8* pCursor = &(pData[mnCursor]);
+    sal_Int8* pData = &(*maData.begin());
+    sal_Int8* pCursor = &(pData[mnCursor]);
     // cast to avoid -Werror=class-memaccess
-    memcpy(static_cast<void*>(pCursor), pInData, nBytesToWrite);
+    memcpy(pCursor, pInData, nBytesToWrite);
 
     mnCursor += nBytesToWrite;
     return nBytesToWrite;
