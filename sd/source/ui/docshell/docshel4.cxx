@@ -836,12 +836,14 @@ void DrawDocShell::GotoBookmark(std::u16string_view rBookmark)
                 pDrawViewShell->SwitchPage(nSdPgNum);
             }
 
+            // Do UnmarkAll here to stop the Navigator from reselecting the previously marked
+            // entry when a slide entry is selected.
+            pDrawViewShell->GetView()->UnmarkAll();
             if (pObj != nullptr)
             {
                 // show and select object
                 if (vcl::Window* pWindow = pDrawViewShell->GetActiveWindow())
                     pDrawViewShell->MakeVisible(pObj->GetSnapRect(), *pWindow);
-                pDrawViewShell->GetView()->UnmarkAll();
                 pDrawViewShell->GetView()->MarkObj(
                     pObj,
                     pDrawViewShell->GetView()->GetSdrPageView());
