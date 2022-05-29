@@ -16,6 +16,7 @@
 #include <string>
 #include <string_view>
 
+#include <o3tl/intcmp.hxx>
 #include <rtl/ustring.h>
 #include <rtl/math.h>
 
@@ -121,7 +122,7 @@ inline std::basic_string_view<charT, traits> getToken(std::basic_string_view<cha
                                                       sal_Int32 nToken, charT cTok,
                                                       sal_Int32& rnIndex)
 {
-    assert(rnIndex <= static_cast<sal_Int32>(pStr.size()));
+    assert(o3tl::IntCmp(rnIndex) <= o3tl::IntCmp(pStr.size()));
 
     // Return an empty string and set rnIndex to -1 if either nToken or rnIndex is
     // negative:
