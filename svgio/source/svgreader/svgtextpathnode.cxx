@@ -412,19 +412,19 @@ namespace svgio::svgreader
 
                 if(pCandidate)
                 {
-                    const pathTextBreakupHelper aPathTextBreakupHelper(
+                    pathTextBreakupHelper aPathTextBreakupHelper(
                         *pCandidate,
                         aPolygon,
                         fBasegfxPathLength,
                         fPosition,
                         rTextStart);
 
-                    const drawinglayer::primitive2d::Primitive2DContainer& aResult(
-                        aPathTextBreakupHelper.getResult());
+                    drawinglayer::primitive2d::Primitive2DContainer aResult =
+                        aPathTextBreakupHelper.extractResult();
 
                     if(!aResult.empty())
                     {
-                        rTarget.append(aResult);
+                        rTarget.append(std::move(aResult));
                     }
 
                     // advance position to consumed

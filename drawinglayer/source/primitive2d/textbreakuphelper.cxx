@@ -261,14 +261,14 @@ namespace drawinglayer::primitive2d
             mxResult = aTempResult;
         }
 
-        const Primitive2DContainer& TextBreakupHelper::getResult(BreakupUnit aBreakupUnit) const
+        Primitive2DContainer TextBreakupHelper::extractResult(BreakupUnit aBreakupUnit)
         {
             if(mxResult.empty())
             {
-                const_cast< TextBreakupHelper* >(this)->breakup(aBreakupUnit);
+                breakup(aBreakupUnit);
             }
 
-            return mxResult;
+            return std::move(mxResult);
         }
 
 } // end of namespace
