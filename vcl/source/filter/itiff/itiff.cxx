@@ -120,7 +120,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             break;
         }
 
-        if (w > SAL_MAX_INT32 / 8 || h > SAL_MAX_INT32 / 8)
+        if (w > SAL_MAX_INT32 / 32 || h > SAL_MAX_INT32 / 32)
         {
             SAL_WARN("filter.tiff", "image too large");
             break;
@@ -147,10 +147,20 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
         if (TIFFReadRGBAImageOriented(tif, w, h, raster.data(), ORIENTATION_TOPLEFT, 1))
         {
             Bitmap bitmap(Size(w, h), vcl::PixelFormat::N24_BPP);
-            AlphaMask bitmapAlpha(Size(w, h));
-
             BitmapScopedWriteAccess access(bitmap);
+            if (!access)
+            {
+                SAL_WARN("filter.tiff", "cannot create image " << w << " x " << h);
+                break;
+            }
+
+            AlphaMask bitmapAlpha(Size(w, h));
             AlphaScopedWriteAccess accessAlpha(bitmapAlpha);
+            if (!accessAlpha)
+            {
+                SAL_WARN("filter.tiff", "cannot create alpha " << w << " x " << h);
+                break;
+            }
 
             /*
                 ORIENTATION_TOPLEFT = 1
