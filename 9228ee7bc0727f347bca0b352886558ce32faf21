@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42e07a55_fe64373b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-05-29T09:05:12Z",
+      "side": 1,
+      "message": "There may be something missing for translating Menu",
+      "revId": "9228ee7bc0727f347bca0b352886558ce32faf21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4582c28a_db4b0b31",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-05-29T09:05:12Z",
+      "side": 1,
+      "message": "This menu entry did not get a QTZ code, when using KeyID UI. I may have forget something... Dialog UI has QTZ code everywhere.",
+      "range": {
+        "startLine": 596,
+        "startChar": 39,
+        "endLine": 596,
+        "endChar": 50
+      },
+      "revId": "9228ee7bc0727f347bca0b352886558ce32faf21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
