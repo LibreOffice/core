@@ -333,15 +333,8 @@ namespace wmfemfhelper
 
     drawinglayer::primitive2d::Primitive2DContainer TargetHolder::getPrimitive2DSequence(const PropertyHolder& rPropertyHolder)
     {
-        const sal_uInt32 nCount(aTargets.size());
-        drawinglayer::primitive2d::Primitive2DContainer xRetval(nCount);
+        drawinglayer::primitive2d::Primitive2DContainer xRetval = std::move(aTargets);
 
-        for (sal_uInt32 a(0); a < nCount; a++)
-        {
-            xRetval[a] = aTargets[a].get();
-        }
-        // Since we have released them from the list
-        aTargets.clear();
 
         if (!xRetval.empty() && rPropertyHolder.getClipPolyPolygonActive())
         {
