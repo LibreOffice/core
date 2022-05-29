@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "284c82dd_240e4233",
+        "filename": "comphelper/source/streaming/memorystream.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-29T16:57:21Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be changed to sal_Int8 too?",
+      "revId": "3ca1a169e571a829598a00a2ffef6e1018d2cb18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
