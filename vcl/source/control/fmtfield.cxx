@@ -922,6 +922,13 @@ namespace
         {
             m_rSpinButton.SpinField::Modify();
         }
+
+        virtual void UpdateCurrentValue(double dCurrentValue) override
+        {
+            Formatter::UpdateCurrentValue(dCurrentValue);
+            m_rSpinButton.SetUpperEnabled(!m_bHasMax || dCurrentValue < m_dMaxValue);
+            m_rSpinButton.SetLowerEnabled(!m_bHasMin || dCurrentValue > m_dMinValue);
+        }
     };
 
     class DoubleNumericFormatter : public FieldFormatter
