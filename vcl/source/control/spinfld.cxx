@@ -298,6 +298,8 @@ void SpinField::ImplInitSpinFieldData()
     mbInitialUp     = false;
     mbInitialDown   = false;
     mbInDropDown    = false;
+    mbUpperEnabled  = true;
+    mbLowerEnabled  = true;
 }
 
 void SpinField::ImplInit(vcl::Window* pParent, WinBits nWinStyle)
@@ -578,13 +580,38 @@ void SpinField::FillLayoutData() const
         Edit::FillLayoutData();
 }
 
+void SpinField::SetUpperEnabled(bool bEnabled)
+{
+    if (mbUpperEnabled == bEnabled)
+        return;
+
+    mbUpperEnabled = bEnabled;
+
+    if (mbSpin)
+        Invalidate(maUpperRect);
+}
+
+void SpinField::SetLowerEnabled(bool bEnabled)
+{
+    if (mbLowerEnabled == bEnabled)
+        return;
+
+    mbLowerEnabled = bEnabled;
+
+    if (mbSpin)
+        Invalidate(maLowerRect);
+}
+
 void SpinField::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     if (mbSpin)
     {
-        bool bEnable = IsEnabled();
+        bool bEnabled = IsEnabled();
+        bool bUpperEnabled = bEnabled && IsUpperEnabled();
+        bool bLowerEnabled = bEnabled && IsLowerEnabled();
         ImplDrawSpinButton(rRenderContext, this, maUpperRect, maLowerRect,
-                           mbUpperIn, mbLowerIn, bEnable, bEnable);
+                           mbUpperIn && bUpperEnabled, mbLowerIn && bLowerEnabled,
+                           bUpperEnabled, bLowerEnabled);
     }
 
     if (GetStyle() & WB_DROPDOWN)
