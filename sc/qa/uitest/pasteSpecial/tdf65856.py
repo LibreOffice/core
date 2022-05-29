@@ -56,7 +56,7 @@ class tdf65856(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
             #mark cell B2
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
-            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial"):
                 reset_default_values(self, xDialog)
 
                 xmove_right = xDialog.getChild("move_right")
