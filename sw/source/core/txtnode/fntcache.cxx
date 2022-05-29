@@ -1655,7 +1655,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
          SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
         {
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
@@ -1687,38 +1687,6 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                             1;
 
             aTextSize.setWidth(i * nGridWidth * sal_Int32(nLn));
-            rInf.SetKanaDiff( 0 );
-            return aTextSize;
-        }
-    }
-
-    //for textgrid refactor
-    if ( rInf.GetFrame() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
-         SwFontScript::CJK == rInf.GetFont()->GetActual() )
-    {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
-        {
-            OutputDevice* pOutDev;
-            if ( m_pPrinter )
-            {
-                if( !m_pPrtFont->IsSameInstance( m_pPrinter->GetFont() ) )
-                    m_pPrinter->SetFont(*m_pPrtFont);
-                pOutDev = m_pPrinter;
-            }
-            else
-                pOutDev = rInf.GetpOut();
-
-            tools::Long nWidth = pOutDev->GetTextWidth(rInf.GetText(),
-                        sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
-            const tools::Long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf, nWidth / sal_Int32(nLn) );
-            aTextSize.setWidth(nWidth);
-            aTextSize.setHeight( pOutDev->GetTextHeight() +
-                                GetFontLeading( rInf.GetShell(), rInf.GetOut() ) );
-            aTextSize.AdjustWidth(sal_Int32(nLn) * nGridWidthAdd);
-            //if ( rInf.GetKern() && nLn )
-            //    aTextSize.Width() += ( nLn ) * long( rInf.GetKern() );
-
             rInf.SetKanaDiff( 0 );
             return aTextSize;
         }
@@ -1890,7 +1858,7 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
          rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
         {
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
@@ -1908,29 +1876,6 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
             if (2 * (rInf.GetOffset() - sal_Int32(nCnt) * nAvgWidthPerChar) > nAvgWidthPerChar)
                 ++nCnt;
 
-            return nCnt;
-        }
-    }
-
-    //for textgrid refactor
-    if ( rInf.GetFrame() && rInf.GetLen() && rInf.SnapToGrid() &&
-         rInf.GetFont() && SwFontScript::CJK == rInf.GetFont()->GetActual() )
-    {
-        SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrame()->FindPageFrame()));
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
-        {
-
-            const tools::Long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf, aKernArray[0] );
-
-            for (TextFrameIndex j(0); j < rInf.GetLen(); j++)
-            {
-                tools::Long nScr = aKernArray[sal_Int32(j)] + (nSpaceAdd + nGridWidthAdd) * (sal_Int32(j) + 1);
-                if( nScr >= rInf.GetOffset())
-                {
-                    nCnt = j;
-                    break;
-                }
-            }
             return nCnt;
         }
     }
