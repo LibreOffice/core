@@ -18,6 +18,9 @@
  */
 
 #include <algorithm>
+#include <memory>
+
+#include <boost/core/noinit_adaptor.hpp>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -82,18 +85,7 @@ public:
     virtual void SAL_CALL truncate() override;
 
 private:
-    // prevents std::vector from wasting time doing memset on data we are going to overwrite anyway
-    struct NoInitInt8
-    {
-        sal_Int8 value;
-        NoInitInt8() noexcept {
-            static_assert(sizeof(NoInitInt8) == sizeof(sal_Int8), "invalid size");
-            static_assert(alignof(NoInitInt8) == alignof(sal_Int8), "invalid alignment");
-            /* coverity[uninit_member] - deliberately do nothing to leave uninitialized */
-        }
-    };
-
-    std::vector< NoInitInt8 > maData;
+    std::vector< sal_Int8, boost::noinit_adaptor<std::allocator<sal_Int8>> > maData;
     sal_Int32 mnCursor;
 };
 
@@ -143,9 +135,9 @@ sal_Int32 SAL_CALL UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_
 
     if( nBytesToRead )
     {
-        NoInitInt8* pData = &(*maData.begin());
-        NoInitInt8* pCursor = &(pData[mnCursor]);
-        memcpy( static_cast<void*>(aData.getArray()), static_cast<void*>(pCursor), nBytesToRead );
+        sal_Int8* pData = &(*maData.begin());
+        sal_Int8* pCursor = &(pData[mnCursor]);
+        memcpy( aData.getArray(), static_cast<void*>(pCursor), nBytesToRead );
 
         mnCursor += nBytesToRead;
     }
@@ -216,10 +208,9 @@ void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData )
     if( static_cast< sal_Int32 >( nNewSize ) > static_cast< sal_Int32 >( maData.size() ) )
         maData.resize( nNewSize );
 
-    NoInitInt8* pData = &(*maData.begin());
-    NoInitInt8* pCursor = &(pData[mnCursor]);
-    // cast to avoid -Werror=class-memaccess
-    memcpy(static_cast<void*>(pCursor), aData.getConstArray(), nBytesToWrite);
+    sal_Int8* pData = &(*maData.begin());
+    sal_Int8* pCursor = &(pData[mnCursor]);
+    memcpy(pCursor, aData.getConstArray(), nBytesToWrite);
 
     mnCursor += nBytesToWrite;
 }
