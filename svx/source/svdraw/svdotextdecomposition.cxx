@@ -145,7 +145,7 @@ namespace
             mrOutliner.SetDrawBulletHdl(Link<DrawBulletInfo*,void>());
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer const & getPrimitive2DSequence();
+        drawinglayer::primitive2d::Primitive2DContainer extractPrimitive2DSequence();
     };
 
     void impTextBreakupHandler::impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo)
@@ -643,7 +643,7 @@ namespace
         }
     }
 
-    drawinglayer::primitive2d::Primitive2DContainer const & impTextBreakupHandler::getPrimitive2DSequence()
+    drawinglayer::primitive2d::Primitive2DContainer impTextBreakupHandler::extractPrimitive2DSequence()
     {
         if(!maTextPortionPrimitives.empty())
         {
@@ -657,7 +657,7 @@ namespace
             impFlushLinePrimitivesToParagraphPrimitives(mrOutliner.GetParagraphCount() - 1);
         }
 
-        return maParagraphPrimitives;
+        return std::move(maParagraphPrimitives);
     }
 } // end of anonymous namespace
 
@@ -712,7 +712,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     rOutliner.Clear();
     rOutliner.setVisualizedPage(nullptr);
 
-    rTarget = aConverter.getPrimitive2DSequence();
+    rTarget = aConverter.extractPrimitive2DSequence();
 }
 
 void SdrTextObj::impDecomposeAutoFitTextPrimitive(
@@ -851,7 +851,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     rOutliner.setVisualizedPage(nullptr);
     rOutliner.SetControlWord(nOriginalControlWord);
 
-    rTarget = aConverter.getPrimitive2DSequence();
+    rTarget = aConverter.extractPrimitive2DSequence();
 }
 
 // Resolves: fdo#35779 set background color of this shape as the editeng background if there
@@ -1147,7 +1147,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     rOutliner.Clear();
     rOutliner.setVisualizedPage(nullptr);
 
-    rTarget = aConverter.getPrimitive2DSequence();
+    rTarget = aConverter.extractPrimitive2DSequence();
 }
 
 void SdrTextObj::impDecomposeStretchTextPrimitive(
@@ -1226,7 +1226,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     rOutliner.Clear();
     rOutliner.setVisualizedPage(nullptr);
 
-    rTarget = aConverter.getPrimitive2DSequence();
+    rTarget = aConverter.extractPrimitive2DSequence();
 }
 
 
@@ -1656,7 +1656,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     rOutliner.setVisualizedPage(nullptr);
     rOutliner.SetControlWord(nOriginalControlWord);
 
-    rTarget = aConverter.getPrimitive2DSequence();
+    rTarget = aConverter.extractPrimitive2DSequence();
 }
 
 // Direct decomposer for text visualization when you already have a prepared
@@ -1670,7 +1670,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitiveDirect(
 {
     impTextBreakupHandler aConverter(rOutliner);
     aConverter.decomposeBlockTextPrimitive(rNewTransformA, rNewTransformB, rClipRange);
-    rTarget.append(aConverter.getPrimitive2DSequence());
+    rTarget.append(aConverter.extractPrimitive2DSequence());
 }
 
 double SdrTextObj::GetCameraZRotation() const
