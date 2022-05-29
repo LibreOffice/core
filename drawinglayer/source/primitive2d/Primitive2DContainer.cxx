@@ -54,24 +54,11 @@ Primitive2DContainer::toSequence() const
     return aVal;
 }
 
-Primitive2DContainer Primitive2DContainer::maybeInvert(bool bInvert) const
+Primitive2DContainer Primitive2DContainer::maybeInvert(bool bInvert)
 {
-    const sal_uInt32 nSize(size());
-    Primitive2DContainer aRetval;
-
-    aRetval.resize(nSize);
-
-    for (sal_uInt32 a(0); a < nSize; a++)
-    {
-        aRetval[bInvert ? nSize - 1 - a : a] = (*this)[a];
-    }
-
-    // all entries taken over to Uno References as owners. To avoid
-    // errors with users of this mechanism to delete pointers to BasePrimitive2D
-    // itself, clear given vector
-    const_cast<Primitive2DContainer&>(*this).clear();
-
-    return aRetval;
+    if (bInvert)
+        std::reverse(begin(), end());
+    return std::move(*this);
 }
 
 // get B2DRange from a given Primitive2DSequence

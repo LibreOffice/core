@@ -306,13 +306,13 @@ namespace drawinglayer::primitive2d
 
         void SvgGradientHelper::createResult(
             Primitive2DContainer& rContainer,
-            const Primitive2DContainer& rTargetColor,
-            const Primitive2DContainer& rTargetOpacity,
+            Primitive2DContainer aTargetColor,
+            Primitive2DContainer aTargetOpacity,
             const basegfx::B2DHomMatrix& rUnitGradientToObject,
             bool bInvert) const
         {
-            Primitive2DContainer aTargetColorEntries(rTargetColor.maybeInvert(bInvert));
-            Primitive2DContainer aTargetOpacityEntries(rTargetOpacity.maybeInvert(bInvert));
+            Primitive2DContainer aTargetColorEntries(aTargetColor.maybeInvert(bInvert));
+            Primitive2DContainer aTargetOpacityEntries(aTargetOpacity.maybeInvert(bInvert));
 
             if(aTargetColorEntries.empty())
                 return;
@@ -781,7 +781,7 @@ namespace drawinglayer::primitive2d
                         fMax);
                 }
 
-                createResult(rContainer, aTargetColor, aTargetOpacity, aUnitGradientToObject, true);
+                createResult(rContainer, std::move(aTargetColor), std::move(aTargetOpacity), aUnitGradientToObject, true);
             }
         }
 

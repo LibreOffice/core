@@ -86,7 +86,7 @@ public:
     bool operator==(const Primitive2DContainer& rB) const;
     bool operator!=(const Primitive2DContainer& rB) const { return !operator==(rB); }
     basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& aViewInformation) const;
-    Primitive2DContainer maybeInvert(bool bInvert = false) const;
+    Primitive2DContainer maybeInvert(bool bInvert = false);
 
     css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>> toSequence() const;
 };
