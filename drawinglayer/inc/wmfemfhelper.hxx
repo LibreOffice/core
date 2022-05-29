@@ -43,7 +43,7 @@ namespace wmfemfhelper
     class TargetHolder
     {
     private:
-        std::vector< rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> > aTargets;
+        drawinglayer::primitive2d::Primitive2DContainer aTargets;
 
     public:
         TargetHolder();
