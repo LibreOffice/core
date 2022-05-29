@@ -33,6 +33,24 @@
       "message": "Any quoting my own comment to the SalMenu MenuBar button implementation:\n\nI\u0027ve tried to fix \"this\" / the gap before. This happens because somehow we still handle the native menu bar offset wrong. OTOH, since gtk can do it, qt5 should also correctly handle it. But that is an extra fix, which would also fix tdf#64438, tdf#134704, handling of undocked toolbars, placement of some tooltips in Calc and maybe other wrong positioning. I need to check if tdf#130893 still happens with current gtk and also tdf#137471. It\u0027s AFAIK all the same problem. And definitely an extra patch.",
       "revId": "7b3368a420b85705910633f8cf27a37fc5427f42",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1474385b_d333139b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-29T06:53:52Z",
+      "side": 1,
+      "message": "I\u0027ll be away for the next week, but could do some testing after that.",
+      "parentUuid": "0d26709f_d71da43e",
+      "revId": "7b3368a420b85705910633f8cf27a37fc5427f42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
