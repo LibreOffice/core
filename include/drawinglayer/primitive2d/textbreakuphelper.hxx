@@ -66,7 +66,7 @@ namespace drawinglayer::primitive2d
             virtual ~TextBreakupHelper();
 
             /// get result
-            const Primitive2DContainer& getResult(BreakupUnit aBreakupUnit = BreakupUnit::Character) const;
+            Primitive2DContainer extractResult(BreakupUnit aBreakupUnit = BreakupUnit::Character);
         };
 
 } // end of namespace drawinglayer::primitive2d
