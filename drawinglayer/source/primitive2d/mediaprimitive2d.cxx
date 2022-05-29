@@ -87,7 +87,7 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            rContainer.insert(rContainer.end(), xRetval.begin(), xRetval.end());
+            rContainer.append(std::move(xRetval));
         }
 
         MediaPrimitive2D::MediaPrimitive2D(

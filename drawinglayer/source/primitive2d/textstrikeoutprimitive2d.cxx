@@ -217,7 +217,7 @@ namespace drawinglayer::primitive2d
                             Primitive2DContainer(xRetval)));
             }
 
-            rContainer.insert(rContainer.end(), xRetval.begin(), xRetval.end());
+            rContainer.append(std::move(xRetval));
         }
 
         TextGeometryStrikeoutPrimitive2D::TextGeometryStrikeoutPrimitive2D(

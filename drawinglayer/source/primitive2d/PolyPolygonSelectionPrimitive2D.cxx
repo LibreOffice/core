@@ -66,7 +66,7 @@ void PolyPolygonSelectionPrimitive2D::create2DDecomposition(
         aRetval = Primitive2DContainer{ aTrans };
     }
 
-    rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
+    rContainer.append(std::move(aRetval));
 }
 
 PolyPolygonSelectionPrimitive2D::PolyPolygonSelectionPrimitive2D(

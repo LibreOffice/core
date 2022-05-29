@@ -82,7 +82,7 @@ namespace drawinglayer::primitive2d
                 xRetval = Primitive2DContainer { aEmbeddedTransform };
             }
 
-            rContainer.insert(rContainer.end(), xRetval.begin(), xRetval.end());
+            rContainer.append(std::move(xRetval));
         }
 
         MetafilePrimitive2D::MetafilePrimitive2D(

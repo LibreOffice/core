@@ -223,7 +223,7 @@ namespace drawinglayer::primitive2d
                 if(aViewRange.isEmpty() || aShadow2DRange.overlaps(aViewRange))
                 {
                     // add extracted 2d shadows (before 3d scene creations itself)
-                    rContainer.insert(rContainer.end(), maShadowPrimitives.begin(), maShadowPrimitives.end());
+                    rContainer.append(maShadowPrimitives);
                 }
             }
 

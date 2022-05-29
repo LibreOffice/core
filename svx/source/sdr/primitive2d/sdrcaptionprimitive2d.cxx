@@ -115,7 +115,7 @@ namespace drawinglayer::primitive2d
                 aRetval = createEmbeddedShadowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getShadow());
             }
 
-            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
+            rContainer.append(std::move(aRetval));
         }
 
         SdrCaptionPrimitive2D::SdrCaptionPrimitive2D(

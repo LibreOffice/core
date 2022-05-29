@@ -167,7 +167,7 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
         aRetval = Primitive2DContainer{ xPrimitive };
     }
 
-    rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
+    rContainer.append(std::move(aRetval));
 }
 
 GraphicPrimitive2D::GraphicPrimitive2D(const basegfx::B2DHomMatrix& rTransform,

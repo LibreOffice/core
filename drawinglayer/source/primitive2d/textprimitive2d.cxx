@@ -196,7 +196,7 @@ void TextSimplePortionPrimitive2D::create2DDecomposition(
         aRetval = Primitive2DContainer{ aNewTextEffect };
     }
 
-    rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
+    rContainer.append(std::move(aRetval));
 }
 
 TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
