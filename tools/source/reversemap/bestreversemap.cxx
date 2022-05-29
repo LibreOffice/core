@@ -91,7 +91,7 @@ int main()
     sal_Unicode c = 0;
     while (c < 0xFFFF)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aConverters); ++i)
+        for (size_t i = 0; i < std::size(aConverters); ++i)
             aConverters[i].reset();
 
         int nMostCapable = -1;
@@ -99,7 +99,7 @@ int main()
         while(c < 0xFFFF)
         {
             bool bSomethingCapable = false;
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aConverters); ++i)
+            for (size_t i = 0; i < std::size(aConverters); ++i)
             {
                 if (aConverters[i].isOK())
                     aConverters[i].checkSupports(c);
@@ -119,7 +119,7 @@ int main()
         while(c < 0xFFFF)
         {
             bool bNothingCapable = true;
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aConverters); ++i)
+            for (size_t i = 0; i < std::size(aConverters); ++i)
             {
                 aConverters[i].checkSupports(c);
                 if (aConverters[i].isOK())
