@@ -547,7 +547,7 @@ namespace
         const basegfx::B2DHomMatrix& rTransform,
         const drawinglayer::attribute::LineAttribute& rLineAttribute,
         const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute,
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& rTarget)
+        drawinglayer::primitive2d::Primitive2DContainer& rTarget)
     {
         for(const auto& rB2DPolyPolygon : rB2DPolyPolyVector)
         {
@@ -569,7 +569,7 @@ namespace
         const std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& rSource,
         const drawinglayer::attribute::SdrFormTextOutlineAttribute& rOutlineAttribute)
     {
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* > aNewPrimitives;
+        drawinglayer::primitive2d::Primitive2DContainer aNewPrimitives;
 
         for(drawinglayer::primitive2d::BasePrimitive2D* a : rSource)
         {
@@ -586,7 +586,7 @@ namespace
                 if(!aB2DPolyPolyVector.empty())
                 {
                     // create stroke primitives
-                    std::vector< drawinglayer::primitive2d::BasePrimitive2D* > aStrokePrimitives;
+                    drawinglayer::primitive2d::Primitive2DContainer aStrokePrimitives;
                     impAddPolygonStrokePrimitives(
                         aB2DPolyPolyVector,
                         aPolygonTransform,
@@ -600,45 +600,22 @@ namespace
                         if(rOutlineAttribute.getTransparence())
                         {
                             // create UnifiedTransparencePrimitive2D
-                            drawinglayer::primitive2d::Primitive2DContainer aStrokePrimitiveSequence(nStrokeCount);
-
-                            for(sal_uInt32 b(0); b < nStrokeCount; b++)
-                            {
-                                aStrokePrimitiveSequence[b] = drawinglayer::primitive2d::Primitive2DReference(aStrokePrimitives[b]);
-                            }
-
                             aNewPrimitives.push_back(
                                 new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                                    std::move(aStrokePrimitiveSequence),
+                                    std::move(aStrokePrimitives),
                                     static_cast<double>(rOutlineAttribute.getTransparence()) / 100.0) );
                         }
                         else
                         {
                             // add polygons to rDecomposition as polygonStrokePrimitives
-                            aNewPrimitives.insert(aNewPrimitives.end(), aStrokePrimitives.begin(), aStrokePrimitives.end());
+                            aNewPrimitives.append( std::move(aStrokePrimitives) );
                         }
                     }
                 }
             }
         }
 
-        const sal_uInt32 nNewCount(aNewPrimitives.size());
-
-        if(nNewCount)
-        {
-            drawinglayer::primitive2d::Primitive2DContainer aRetval(nNewCount);
-
-            for(sal_uInt32 a(0); a < nNewCount; a++)
-            {
-                aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(aNewPrimitives[a]);
-            }
-
-            return aRetval;
-        }
-        else
-        {
-            return drawinglayer::primitive2d::Primitive2DContainer();
-        }
+        return aNewPrimitives;
     }
 } // end of anonymous namespace
 
