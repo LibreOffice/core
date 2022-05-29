@@ -105,7 +105,7 @@ namespace drawinglayer::primitive2d
                     getSdrLFSTAttribute().getShadow());
             }
 
-            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
+            rContainer.append(std::move(aRetval));
         }
 
         SdrEllipsePrimitive2D::SdrEllipsePrimitive2D(
@@ -219,7 +219,7 @@ namespace drawinglayer::primitive2d
                     getSdrLFSTAttribute().getShadow());
             }
 
-            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
+            rContainer.append(std::move(aRetval));
         }
 
         SdrEllipseSegmentPrimitive2D::SdrEllipseSegmentPrimitive2D(

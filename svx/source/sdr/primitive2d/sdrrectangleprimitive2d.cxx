@@ -108,7 +108,7 @@ namespace drawinglayer::primitive2d
                     getSdrLFSTAttribute().getShadow());
             }
 
-            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
+            rContainer.append(std::move(aRetval));
         }
 
         SdrRectanglePrimitive2D::SdrRectanglePrimitive2D(

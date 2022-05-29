@@ -99,7 +99,7 @@ void OverlayStaticRectanglePrimitive::create2DDecomposition(Primitive2DContainer
         }
     }
 
-    rContainer.insert(rContainer.end(), aPrimitive2DSequence.begin(), aPrimitive2DSequence.end());
+    rContainer.append(std::move(aPrimitive2DSequence));
 }
 
 bool OverlayStaticRectanglePrimitive::operator==(const BasePrimitive2D& rPrimitive) const
@@ -377,7 +377,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
                 }
             }
 
-            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
+            rContainer.append(std::move(aRetval));
         }
 
         bool OverlayRectanglePrimitive::operator==( const BasePrimitive2D& rPrimitive ) const

@@ -120,7 +120,7 @@ void SdrGrafPrimitive2D::create2DDecomposition(
                                                 getSdrLFSTAttribute().getShadow(), getTransform());
     }
 
-    rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
+    rContainer.append(std::move(aRetval));
 }
 
 SdrGrafPrimitive2D::SdrGrafPrimitive2D(

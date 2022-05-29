@@ -572,7 +572,7 @@ namespace drawinglayer::primitive2d
                 }
             }
 
-            rContainer.insert(rContainer.end(), aRetval.begin(), aRetval.end());
+            rContainer.append(std::move(aRetval));
         }
 
         Primitive2DContainer create2DColorModifierEmbeddingsAsNeeded(
