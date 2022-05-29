@@ -515,13 +515,12 @@ namespace svgio::svgreader
 
                 if(pCandidate)
                 {
-                    const localTextBreakupHelper alocalTextBreakupHelper(*pCandidate, rSvgTextPosition);
-                    const Primitive2DContainer& aResult(
-                        alocalTextBreakupHelper.getResult());
+                    localTextBreakupHelper alocalTextBreakupHelper(*pCandidate, rSvgTextPosition);
+                    Primitive2DContainer aResult = alocalTextBreakupHelper.extractResult();
 
                     if(!aResult.empty())
                     {
-                        rTarget.append(aResult);
+                        rTarget.append(std::move(aResult));
                     }
 
                     // also consume for the implied single space
