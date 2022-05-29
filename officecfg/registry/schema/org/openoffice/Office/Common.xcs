@@ -6599,5 +6599,142 @@
         <value>true</value>
       </prop>
     </group>
+    <group oor:name="PasteSpecial">
+      <info>
+        <desc>Stores properties related to the paste special feature in Calc.</desc>
+      </info>
+      <group oor:name="Paste">
+        <info>
+          <desc>Stores options under the "Paste" section.</desc>
+        </info>
+        <prop oor:name="All" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Option to set all options.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Numbers" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Option for numbers.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Text" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Option for text.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="DateTime" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Option for date and time.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="Formats" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Option for formats.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Comments" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Option for comments.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Objects" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Option for objects.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Formulas" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Option for formulas.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <prop oor:name="ShiftCells" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Stores the option to be used for the "Shift Cells" section.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>Shift cells down (`InsCellCmd::INS_CELLSDOWN`).</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>Shift cells right (`InsCellCmd::INS_CELLSRIGHT`).</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="4">
+            <info>
+              <desc>None (`InsCellCmd::INS_NONE`). This is the default value.</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>4</value>
+      </prop>
+      <group oor:name="Options">
+        <info>
+          <desc>Stores options under the "Options" section.</desc>
+        </info>
+        <prop oor:name="AsLink" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Option for as link.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="Transpose" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Option for transpose.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="SkipEmptyCells" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Option for skipping empty cells.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
+      <prop oor:name="Operations" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Stores the option to be used for the "Operations" section.</desc>
+        </info>
+        <constraints>
+          <enumeration oor:value="0">
+            <info>
+              <desc>No operation (`ScPasteFunc::NONE`). This is the default value.</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="1">
+            <info>
+              <desc>Add (`ScPasteFunc::ADD`).</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>Subtract (`ScPasteFunc::SUB`).</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="3">
+            <info>
+              <desc>Multiply (`ScPasteFunc::MUL`).</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="4">
+            <info>
+              <desc>Divide (`ScPasteFunc::DIV`).</desc>
+            </info>
+          </enumeration>
+        </constraints>
+        <value>0</value>
+      </prop>
+    </group>
   </component>
 </oor:component-schema>
