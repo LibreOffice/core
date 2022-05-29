@@ -43,6 +43,7 @@ public:
     void    SetFillMode( bool bSet );
     void    SetChangeTrack( bool bSet );
     void    SetCellShiftDisabled( CellShiftDisabledFlags nDisable );
+    void    storeFlagsInRegistry();
 
 private:
     bool              bOtherDoc;
@@ -82,6 +83,7 @@ private:
     std::unique_ptr<weld::Button>      mxBtnShortCutPasteValuesFormats;
     std::unique_ptr<weld::Button>      mxBtnShortCutPasteTranspose;
     std::unique_ptr<weld::Button>      mxBtnShortCutPasteFormats;
+    std::unique_ptr<weld::Button>      mxOKBtn;
 
     std::unique_ptr<weld::CheckButton>     mxImmediately;
 
@@ -97,6 +99,7 @@ private:
     DECL_LINK( InsAllHdl, weld::Toggleable&, void );
     DECL_LINK( LinkBtnHdl, weld::Toggleable&, void );
     DECL_LINK( ShortCutHdl, weld::Button&, void );
+    DECL_LINK( ClickHdl, weld::Button&, void );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
