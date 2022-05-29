@@ -147,7 +147,7 @@ sal_Int32 SAL_CALL UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_
     {
         sal_Int8* pData = &(*maData.begin());
         sal_Int8* pCursor = &(pData[mnCursor]);
-        memcpy( aData.getArray(), static_cast<void*>(pCursor), nBytesToRead );
+        memcpy( aData.getArray(), pCursor, nBytesToRead );
 
         mnCursor += nBytesToRead;
     }
