@@ -2775,6 +2775,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149184)
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149089)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf149089.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nTextPortionWidth = getXPath(pXmlDoc, "(//SwLinePortion)[1]", "width").toInt32();
+    sal_Int32 nKernPortionWidth = getXPath(pXmlDoc, "(//SwLinePortion)[2]", "width").toInt32();
+    // nKernPortionWidth was about 1/3 of nTextPortionWidth
+    double nRatio = double(nKernPortionWidth) / nTextPortionWidth;
+    CPPUNIT_ASSERT_LESS(0.05, nRatio);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
