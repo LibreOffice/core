@@ -155,13 +155,13 @@ namespace drawinglayer::primitive2d
             {
                 // support for single word mode; split to single word primitives
                 // using TextBreakupHelper
-                const TextBreakupHelper aTextBreakupHelper(*this);
-                const Primitive2DContainer& aBroken(aTextBreakupHelper.getResult(BreakupUnit::Word));
+                TextBreakupHelper aTextBreakupHelper(*this);
+                Primitive2DContainer aBroken(aTextBreakupHelper.extractResult(BreakupUnit::Word));
 
                 if(!aBroken.empty())
                 {
                     // was indeed split to several words, use as result
-                    rContainer.insert(rContainer.end(), aBroken.begin(), aBroken.end());
+                    rContainer.append(std::move(aBroken));
                     return;
                 }
                 else
