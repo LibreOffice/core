@@ -1180,25 +1180,37 @@ public:
     template< typename T >
     friend typename libreoffice_internal::CharPtrDetector< T, bool >::Type operator==( const OString& rStr1, const T& value )
     {
-        return rStr1.compareTo( value ) == 0;
+        return
+            rtl_str_compare_WithLength(
+                rStr1.getStr(), rStr1.getLength(), value, rtl_str_getLength(value))
+            == 0;
     }
 
     template< typename T >
     friend typename libreoffice_internal::NonConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr1, T& value )
     {
-        return rStr1.compareTo( value ) == 0;
+        return
+            rtl_str_compare_WithLength(
+                rStr1.getStr(), rStr1.getLength(), value, rtl_str_getLength(value))
+            == 0;
     }
 
     template< typename T >
     friend typename libreoffice_internal::CharPtrDetector< T, bool >::Type operator==( const T& value, const OString& rStr2 )
     {
-        return rStr2.compareTo( value ) == 0;
+        return
+            rtl_str_compare_WithLength(
+                value, rtl_str_getLength(value), rStr2.getStr(), rStr2.getLength())
+            == 0;
     }
 
     template< typename T >
     friend typename libreoffice_internal::NonConstCharArrayDetector< T, bool >::Type operator==( T& value, const OString& rStr2 )
     {
-        return rStr2.compareTo( value ) == 0;
+        return
+            rtl_str_compare_WithLength(
+                value, rtl_str_getLength(value), rStr2.getStr(), rStr2.getLength())
+            == 0;
     }
 
     /**
