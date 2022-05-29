@@ -125,6 +125,17 @@ SdNavigatorWin::~SdNavigatorWin()
     mxLbDocs.reset();
 }
 
+static void lcl_select_marked_object(const sd::ViewShell* pViewShell, SdPageObjsTLV* pTlbObjects)
+{
+    if (const SdrView* pView = pViewShell->GetDrawView())
+    {
+        auto vMarkedObjects = pView->GetMarkedObjects();
+        // tree is only single selection so always select first in vMarkedObjects
+        if (vMarkedObjects.size())
+            pTlbObjects->SelectEntry(vMarkedObjects[0]);
+    }
+}
+
 //when object is marked , fresh the corresponding entry tree .
 void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
 {
@@ -132,9 +143,14 @@ void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
     sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
     const OUString& aDocShName( pDocShell->GetName() );
     OUString aDocName = pDocShell->GetMedium()->GetName();
-    mxTlbObjects->Fill( pDoc, false, aDocName ); // Only normal pages
-    RefreshDocumentLB();
-    mxLbDocs->set_active_text(aDocShName);
+    if (!mxTlbObjects->IsEqualToDoc(pDoc))
+    {
+        mxTlbObjects->Fill( pDoc, false, aDocName ); // Only normal pages
+        RefreshDocumentLB();
+        mxLbDocs->set_active_text(aDocShName);
+    }
+    if (const sd::ViewShell* pViewShell = pDocShell->GetViewShell())
+        lcl_select_marked_object(pViewShell, mxTlbObjects.get());
 }
 
 void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
@@ -181,6 +197,9 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
             mxLbDocs->set_active_text(aDocShName);
         }
     }
+
+    if (pViewShell)
+        lcl_select_marked_object(pViewShell, mxTlbObjects.get());
 
     SfxViewFrame* pViewFrame = ( ( pViewShell && pViewShell->GetViewFrame() ) ? pViewShell->GetViewFrame() : SfxViewFrame::Current() );
     if( pViewFrame )
