@@ -721,14 +721,12 @@ void SbRtl_SendKeys(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_Exp(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    else
-    {
-        double aDouble = rPar.Get(1)->GetDouble();
-        aDouble = exp( aDouble );
-        checkArithmeticOverflow( aDouble );
-        rPar.Get(0)->PutDouble(aDouble);
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    double aDouble = rPar.Get(1)->GetDouble();
+    aDouble = exp( aDouble );
+    checkArithmeticOverflow( aDouble );
+    rPar.Get(0)->PutDouble(aDouble);
 }
 
 void SbRtl_FileLen(StarBASIC *, SbxArray & rPar, bool)
