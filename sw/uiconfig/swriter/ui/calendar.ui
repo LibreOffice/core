@@ -15,9 +15,6 @@
           <object class="GtkCalendar" id="date">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="year">2019</property>
-            <property name="month">1</property>
-            <property name="day">14</property>
           </object>
           <packing>
             <property name="expand">False</property>
