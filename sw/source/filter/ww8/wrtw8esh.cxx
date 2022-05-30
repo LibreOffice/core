@@ -102,7 +102,7 @@ using ::com::sun::star::drawing::XShape;
 bool SwBasicEscherEx::IsRelUrl() const
 {
     bool bRelUrl = false;
-    SfxMedium * pMedium = rWrt.GetWriter().GetMedia();
+    SfxMedium * pMedium = mrWrt.GetWriter().GetMedia();
     if ( pMedium )
         bRelUrl = pMedium->IsRemote()
             ? officecfg::Office::Common::Save::URL::Internet::get()
@@ -113,7 +113,7 @@ bool SwBasicEscherEx::IsRelUrl() const
 OUString SwBasicEscherEx::GetBasePath() const
 {
     OUString sDocUrl;
-    SfxMedium * pMedium = rWrt.GetWriter().GetMedia();
+    SfxMedium * pMedium = mrWrt.GetWriter().GetMedia();
     if (pMedium)
     {
         const SfxItemSet* pPItemSet = pMedium->GetItemSet();
@@ -312,14 +312,14 @@ namespace
     class CompareDrawObjs
     {
     private:
-        const WW8Export& wrt;
+        const WW8Export& m_rWrt;
 
     public:
-        explicit CompareDrawObjs(const WW8Export& rWrt) : wrt(rWrt) {};
+        explicit CompareDrawObjs(const WW8Export& rWrt) : m_rWrt(rWrt) {};
         bool operator()(DrawObj const *a, DrawObj const *b) const
         {
-            sal_uLong aSort = lcl_getSdrOrderNumber(wrt, a);
-            sal_uLong bSort = lcl_getSdrOrderNumber(wrt, b);
+            sal_uLong aSort = lcl_getSdrOrderNumber(m_rWrt, a);
+            sal_uLong bSort = lcl_getSdrOrderNumber(m_rWrt, b);
             return aSort < bSort;
         }
     };
@@ -1481,11 +1481,11 @@ void SwEscherEx::WritePictures()
     if( SvStream* pPicStrm = static_cast< SwEscherExGlobal& >( *mxGlobal ).GetPictureStream() )
     {
         // set the blip - entries to the correct stream pos
-        sal_Int32 nEndPos = rWrt.Strm().Tell();
+        sal_Int32 nEndPos = mrWrt.Strm().Tell();
         mxGlobal->SetNewBlipStreamOffset( nEndPos );
 
         pPicStrm->Seek( 0 );
-        rWrt.Strm().WriteStream( *pPicStrm );
+        mrWrt.Strm().WriteStream( *pPicStrm );
     }
     Flush();
 }
@@ -1509,7 +1509,7 @@ SvStream* SwEscherExGlobal::ImplQueryPictureStream()
 }
 
 SwBasicEscherEx::SwBasicEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
-    : EscherEx( std::make_shared<SwEscherExGlobal>(), pStrm), rWrt(rWW8Wrt), pEscherStrm(pStrm)
+    : EscherEx( std::make_shared<SwEscherExGlobal>(), pStrm), mrWrt(rWW8Wrt), mpEscherStrm(pStrm)
 {
     Init();
 }
@@ -1583,7 +1583,7 @@ void SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
     aPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
     const Color aTmpColor( COL_WHITE );
     std::shared_ptr<SvxBrushItem> aBrush(std::make_shared<SvxBrushItem>(aTmpColor, RES_BACKGROUND));
-    const SvxBrushItem* pRet = rWrt.GetCurrentPageBgBrush();
+    const SvxBrushItem* pRet = mrWrt.GetCurrentPageBgBrush();
     if (pRet && (pRet->GetGraphic() ||( pRet->GetColor() != COL_TRANSPARENT)))
         aBrush.reset(pRet->Clone());
     WriteBrushAttr(*aBrush, aPropOpt);
@@ -2028,7 +2028,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
     else
     {
         // for unknown reasons, force exporting a non-transparent background on fly frames.
-        std::shared_ptr<SvxBrushItem> aBrush(rWrt.TrueFrameBgBrush(rFormat));
+        std::shared_ptr<SvxBrushItem> aBrush(mrWrt.TrueFrameBgBrush(rFormat));
 
         if(aBrush)
         {
@@ -2116,7 +2116,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eS
 void SwBasicEscherEx::Init()
 {
     MapUnit eMap = MapUnit::MapTwip;
-    if (SwDrawModel *pModel = rWrt.m_rDoc.getIDocumentDrawModelAccess().GetDrawModel())
+    if (SwDrawModel *pModel = mrWrt.m_rDoc.getIDocumentDrawModelAccess().GetDrawModel())
     {
         // PPT works only with units of 576DPI
         // WW however is using twips, i.e 1440DPI.
@@ -2129,7 +2129,7 @@ void SwBasicEscherEx::Init()
     mnEmuMul = aFact.GetNumerator();
     mnEmuDiv = aFact.GetDenominator();
 
-    SetHellLayerId(rWrt.m_rDoc.getIDocumentDrawModelAccess().GetHellId());
+    SetHellLayerId(mrWrt.m_rDoc.getIDocumentDrawModelAccess().GetHellId());
 }
 
 sal_Int32 SwBasicEscherEx::ToFract16(sal_Int32 nVal, sal_uInt32 nMax)
@@ -2155,7 +2155,7 @@ sal_Int32 SwBasicEscherEx::ToFract16(sal_Int32 nVal, sal_uInt32 nMax)
 
 SdrLayerID SwBasicEscherEx::GetInvisibleHellId() const
 {
-    return rWrt.m_rDoc.getIDocumentDrawModelAccess().GetInvisibleHellId();
+    return mrWrt.m_rDoc.getIDocumentDrawModelAccess().GetInvisibleHellId();
 }
 
 void SwBasicEscherEx::WritePictures()
@@ -2164,10 +2164,10 @@ void SwBasicEscherEx::WritePictures()
     {
         // set the blip - entries to the correct stream pos
         sal_Int32 nEndPos = pPicStrm->Tell();
-        mxGlobal->WriteBlibStoreEntry(*pEscherStrm, 1, nEndPos);
+        mxGlobal->WriteBlibStoreEntry(*mpEscherStrm, 1, nEndPos);
 
         pPicStrm->Seek(0);
-        pEscherStrm->WriteStream( *pPicStrm );
+        mpEscherStrm->WriteStream( *pPicStrm );
     }
 }
 
@@ -2190,18 +2190,18 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
     CloseContainer();   // ESCHER_DggContainer
 
     sal_uInt8 i = 2;     // for header/footer and the other
-    PlcDrawObj *pSdrObjs = rWrt.m_pHFSdrObjs.get();
-    pTextBxs = rWrt.m_pHFTextBxs.get();
+    PlcDrawObj *pSdrObjs = mrWrt.m_pHFSdrObjs.get();
+    pTextBxs = mrWrt.m_pHFTextBxs.get();
 
     // if no header/footer -> skip over
     if (!pSdrObjs->size())
     {
         --i;
-        pSdrObjs = rWrt.m_pSdrObjs.get();
-        pTextBxs = rWrt.m_pTextBxs.get();
+        pSdrObjs = mrWrt.m_pSdrObjs.get();
+        pTextBxs = mrWrt.m_pTextBxs.get();
     }
 
-    for( ; i--; pSdrObjs = rWrt.m_pSdrObjs.get(), pTextBxs = rWrt.m_pTextBxs.get() )
+    for( ; i--; pSdrObjs = mrWrt.m_pSdrObjs.get(), pTextBxs = mrWrt.m_pTextBxs.get() )
     {
         // "dummy char" (or any Count ?) - why? Only Microsoft knows it.
         GetStream().WriteChar( i );
@@ -2210,7 +2210,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
 
         EnterGroup();
 
-        sal_uLong nSecondShapeId = pSdrObjs == rWrt.m_pSdrObjs.get() ? GenerateShapeId() : 0;
+        sal_uLong nSecondShapeId = pSdrObjs == mrWrt.m_pSdrObjs.get() ? GenerateShapeId() : 0;
 
         // write now all Writer-/DrawObjects
         DrawObjPointerVector aSorted;
@@ -2274,7 +2274,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                       nSecondShapeId );
 
             EscherPropertyContainer aPropOpt;
-            const SwFrameFormat &rFormat = rWrt.m_rDoc.GetPageDesc(0).GetMaster();
+            const SwFrameFormat &rFormat = mrWrt.m_rDoc.GetPageDesc(0).GetMaster();
             if (const SvxBrushItem* pBrush = rFormat.GetItemIfSet(RES_BACKGROUND))
             {
                 WriteBrushAttr(*pBrush, aPropOpt);
@@ -2310,10 +2310,10 @@ SwEscherEx::~SwEscherEx()
 
 void SwEscherEx::FinishEscher()
 {
-    pEscherStrm->Seek(0);
-    rWrt.m_pTableStrm->WriteStream( *pEscherStrm );
-    delete pEscherStrm;
-    pEscherStrm = nullptr;
+    mpEscherStrm->Seek(0);
+    mrWrt.m_pTableStrm->WriteStream( *mpEscherStrm );
+    delete mpEscherStrm;
+    mpEscherStrm = nullptr;
 }
 
 
@@ -2906,7 +2906,7 @@ void SwEscherEx::WriteOCXControl( const SwFrameFormat& rFormat, sal_uInt32 nShap
 
     OpenContainer( ESCHER_SpContainer );
 
-    SwDrawModel *pModel = rWrt.m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
+    SwDrawModel *pModel = mrWrt.m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
     OutputDevice *pDevice = Application::GetDefaultDevice();
     OSL_ENSURE(pModel && pDevice, "no model or device");
 
@@ -2932,7 +2932,7 @@ void SwEscherEx::WriteOCXControl( const SwFrameFormat& rFormat, sal_uInt32 nShap
 void SwEscherEx::MakeZOrderArrAndFollowIds(
     std::vector<DrawObj>& rSrcArr, DrawObjPointerVector&rDstArr)
 {
-    ::lcl_makeZOrderArray(rWrt, rSrcArr, rDstArr);
+    ::lcl_makeZOrderArray(mrWrt, rSrcArr, rDstArr);
 
     //Now set up the follow IDs
     aFollowShpIds.clear();

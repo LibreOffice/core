@@ -95,8 +95,8 @@ class SwBasicEscherEx : public EscherEx
 private:
     void Init();
 protected:
-    WW8Export& rWrt;
-    SvStream* pEscherStrm;
+    WW8Export& mrWrt;
+    SvStream* mpEscherStrm;
     tools::Long mnEmuMul, mnEmuDiv;
 
     virtual sal_Int32 WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eShapeType,

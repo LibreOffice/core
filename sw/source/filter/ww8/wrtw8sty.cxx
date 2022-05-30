@@ -393,9 +393,9 @@ void WW8AttributeOutput::EndStyle()
     impl_SkipOdd( m_rWW8Export.m_pO, m_rWW8Export.m_pTableStrm->Tell() );
 
     short nLen = m_rWW8Export.m_pO->size() - 2;            // length of the style
-    sal_uInt8* p = m_rWW8Export.m_pO->data() + nPOPosStdLen1;
+    sal_uInt8* p = m_rWW8Export.m_pO->data() + m_nPOPosStdLen1;
     ShortToSVBT16( nLen, p );               // add
-    p = m_rWW8Export.m_pO->data() + nPOPosStdLen2;
+    p = m_rWW8Export.m_pO->data() + m_nPOPosStdLen2;
     ShortToSVBT16( nLen, p );               // also
 
     m_rWW8Export.m_pTableStrm->WriteBytes(m_rWW8Export.m_pO->data(), m_rWW8Export.m_pO->size());
@@ -432,12 +432,12 @@ void WW8AttributeOutput::StartStyle( const OUString& rName, StyleType eType, sal
     sal_uInt16 nLen = static_cast< sal_uInt16 >( ( pData - aWW8_STD ) + 1 +
                 (2 * (rName.getLength() + 1)) );  // temporary
 
-    nPOPosStdLen1 = m_rWW8Export.m_pO->size();        // Adr1 for adding the length
+    m_nPOPosStdLen1 = m_rWW8Export.m_pO->size();        // Adr1 for adding the length
 
     SwWW8Writer::InsUInt16( *m_rWW8Export.m_pO, nLen );
     m_rWW8Export.m_pO->insert( m_rWW8Export.m_pO->end(), aWW8_STD, pData );
 
-    nPOPosStdLen2 = nPOPosStdLen1 + 8;  // Adr2 for adding of "end of upx"
+    m_nPOPosStdLen2 = m_nPOPosStdLen1 + 8;  // Adr2 for adding of "end of upx"
 
     // write names
     SwWW8Writer::InsUInt16( *m_rWW8Export.m_pO, rName.getLength() ); // length
