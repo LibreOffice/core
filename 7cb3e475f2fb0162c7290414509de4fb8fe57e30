@@ -52,6 +52,24 @@
       "parentUuid": "44ce6df7_df673e04",
       "revId": "7cb3e475f2fb0162c7290414509de4fb8fe57e30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bb3ef70_e9196bbb",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-30T18:49:44Z",
+      "side": 1,
+      "message": "It\u0027s quite clear why the assert is failing, if you see the values in the debugger. Generally speaking, the HFONT handling is broken. Because font instances depend on the hDC on Windows and the SetGraphics usage just works most times. So the LogicalFontInstance is shared by multiple HDC / SalGraphics, but it shouldn\u0027t. Originally a SalGraphics had it\u0027s own list of HFONTs, which I dropped in commit 334df91c6e464fe6434500f63e2fb12438722845. And quite some functions of LogicalFontInstance were in SalGraphics, eventuall because of this problem. As always, undocumented. Now, if the last caller of WinFontInstance::SetGraphics goes away, you end with an invalid SalGraphics on the WinFontInstance \u003d\u003e assert or crash. Well actually it doesn\u0027t depend on the SalGraphics, but this stores the needed meta info to handle printer SalGraphics in ImplDoSetFont to get the right HFONT for printing.\n\nSo today I tried to find a way to \"heal\" this without a larger rewrite. No luck. Nothing assumes a font depends on something like the HDC. The ImplFontCache would probably need a replacement for win or some backend specific comparison function and then somehow the HDC must end in the lookup, so you get the right HFONT and the correct HDC. Then there is the lazy init of hb_font_t. It seems there is no easy fix for this.",
+      "parentUuid": "ee262c19_502fbbf3",
+      "revId": "7cb3e475f2fb0162c7290414509de4fb8fe57e30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
