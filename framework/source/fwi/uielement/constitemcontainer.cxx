@@ -190,12 +190,24 @@ Any SAL_CALL ConstItemContainer::getByIndex( sal_Int32 Index )
     return Any( m_aItemVector[Index] );
 }
 
+namespace
+{
+    std::vector<comphelper::PropertyMapEntry> makePropertyMap(const css::uno::Sequence<css::beans::Property>& rProps)
+    {
+        std::vector<comphelper::PropertyMapEntry> aEntries;
+        for (auto const& it : rProps)
+            aEntries.emplace_back(it.Name, it.Handle, it.Type, it.Attributes, 0);
+        return aEntries;
+    }
+}
+
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL ConstItemContainer::getPropertySetInfo()
 {
     // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
     // (Use method "getInfoHelper()".)
-    static Reference< XPropertySetInfo > xInfo(new comphelper::PropertySetInfo(getInfoHelper().getProperties()));
+    static std::vector<comphelper::PropertyMapEntry> aPropertyInfos(makePropertyMap(getInfoHelper().getProperties()));
+    static Reference< XPropertySetInfo > xInfo(new comphelper::PropertySetInfo(aPropertyInfos));
 
     return xInfo;
 }

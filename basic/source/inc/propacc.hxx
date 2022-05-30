@@ -22,11 +22,13 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <vector>
 
 typedef std::vector<css::beans::PropertyValue> SbPropertyValueArr_Impl;
+typedef std::vector<comphelper::PropertyMapEntry> SbPropertyInfoArr_Impl;
 
 typedef ::cppu::WeakImplHelper< css::beans::XPropertySet,
                                 css::beans::XPropertyAccess > SbPropertyValuesHelper;
@@ -35,6 +37,7 @@ typedef ::cppu::WeakImplHelper< css::beans::XPropertySet,
 class SbPropertyValues final : public SbPropertyValuesHelper
 {
     SbPropertyValueArr_Impl m_aPropVals;
+    SbPropertyInfoArr_Impl m_aPropInfos;
     css::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;
 
 private:
