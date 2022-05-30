@@ -34,6 +34,24 @@
       "parentUuid": "b7eece32_459f2e9e",
       "revId": "fc0dadcca30c15337a2926035027a25dfdfba8dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9228feb2_d4c96e2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-30T08:31:10Z",
+      "side": 1,
+      "message": "In fact, it looks more like something for gerrit / check, than for a pre-commit hook to me, so that it would catch, put -1, and prevent merging.",
+      "parentUuid": "ae28c971_aefcc4e4",
+      "revId": "fc0dadcca30c15337a2926035027a25dfdfba8dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
