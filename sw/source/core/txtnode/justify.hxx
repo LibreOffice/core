@@ -12,6 +12,12 @@
 
 namespace Justify
 {
+/// Get model position base on given kern array.
+/// @param rKernArray text positions from OutDev::GetTextArray().
+/// @param nLen number of elements to process in rKernArray.
+/// @param nX the visual position
+SW_DLLPUBLIC sal_Int32 GetModelPosition(const std::vector<sal_Int32>& rKernArray, sal_Int32 nLen,
+                                        tools::Long nX);
 /// Distribute space between words and letters.
 /// @param[in,out] rKernArray text positions from OutDev::GetTextArray().
 /// @param rText string used to determine where space and kern are inserted.
@@ -38,11 +44,12 @@ SW_DLLPUBLIC void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OU
 /// @param nStt starting index of rText.
 /// @param nLen number of elements to process in rKernArray and rText.
 /// @param nGridWidth width of a text grid
-/// @param nWidth width of the whole portion.
+/// @param bForceLeft for align to the left edge of the grid disregard of the punctuation type.
+/// This is useful for calculate text width, line break, and conversion model position.
 /// @return the delta offset of first glyph so text origin can be updated accordingly.
 SW_DLLPUBLIC tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, const OUString& rText,
                                     sal_Int32 nStt, sal_Int32 nLen, tools::Long nGridWidth,
-                                    tools::Long nWidth);
+                                    bool bForceLeft);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
