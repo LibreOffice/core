@@ -1162,12 +1162,12 @@ void ScAttrArray::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLine
 
 // ApplyFrame - on an entry into the array
 
-bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
+bool ScAttrArray::ApplyFrame( const SvxBoxItem&     rBoxItem,
                               const SvxBoxInfoItem* pBoxInfoItem,
                               SCROW nStartRow, SCROW nEndRow,
                               bool bLeft, SCCOL nDistRight, bool bTop, SCROW nDistBottom )
 {
-    OSL_ENSURE( pBoxItem && pBoxInfoItem, "Missing line attributes!" );
+    OSL_ENSURE( pBoxInfoItem, "Missing line attributes!" );
 
     const ScPatternAttr* pPattern = GetPattern( nStartRow );
     const SvxBoxItem* pOldFrame = &pPattern->GetItemSet().Get( ATTR_BORDER );
@@ -1187,34 +1187,34 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
         if( bLeft && nDistRight==0)
         {
             if ( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::LEFT) )
-                aNewFrame.SetLine( pBoxItem->GetLeft(), SvxBoxItemLine::RIGHT );
+                aNewFrame.SetLine( rBoxItem.GetLeft(), SvxBoxItemLine::RIGHT );
             if ( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::RIGHT) )
-                aNewFrame.SetLine( pBoxItem->GetRight(), SvxBoxItemLine::LEFT );
+                aNewFrame.SetLine( rBoxItem.GetRight(), SvxBoxItemLine::LEFT );
         }
         else
         {
             if ( (nDistRight==0) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::LEFT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
-                aNewFrame.SetLine( (nDistRight==0) ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(),
+                aNewFrame.SetLine( (nDistRight==0) ? rBoxItem.GetLeft() : pBoxInfoItem->GetVert(),
                     SvxBoxItemLine::RIGHT );
             if ( bLeft ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::RIGHT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
-                aNewFrame.SetLine( bLeft ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(),
+                aNewFrame.SetLine( bLeft ? rBoxItem.GetRight() : pBoxInfoItem->GetVert(),
                     SvxBoxItemLine::LEFT );
         }
     }
     else
     {
         if ( bLeft ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::LEFT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
-            aNewFrame.SetLine( bLeft ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(),
+            aNewFrame.SetLine( bLeft ? rBoxItem.GetLeft() : pBoxInfoItem->GetVert(),
                 SvxBoxItemLine::LEFT );
         if ( (nDistRight==0) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::RIGHT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
-            aNewFrame.SetLine( (nDistRight==0) ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(),
+            aNewFrame.SetLine( (nDistRight==0) ? rBoxItem.GetRight() : pBoxInfoItem->GetVert(),
                 SvxBoxItemLine::RIGHT );
     }
     if ( bTop ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::TOP) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::HORI) )
-        aNewFrame.SetLine( bTop ? pBoxItem->GetTop() : pBoxInfoItem->GetHori(),
+        aNewFrame.SetLine( bTop ? rBoxItem.GetTop() : pBoxInfoItem->GetHori(),
             SvxBoxItemLine::TOP );
     if ( (nDistBottom==0) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::BOTTOM) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::HORI) )
-        aNewFrame.SetLine( (nDistBottom==0) ? pBoxItem->GetBottom() : pBoxInfoItem->GetHori(),
+        aNewFrame.SetLine( (nDistBottom==0) ? rBoxItem.GetBottom() : pBoxInfoItem->GetHori(),
             SvxBoxItemLine::BOTTOM );
 
     if (aNewFrame == *pOldFrame)
@@ -1235,10 +1235,10 @@ void ScAttrArray::ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfo
                                   SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight)
 {
     if (nStartRow == nEndRow)
-        ApplyFrame(&rLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight, true, 0);
+        ApplyFrame(rLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight, true, 0);
     else if ( !mvData.empty() )
     {
-        ApplyFrame(&rLineOuter, pLineInner, nStartRow, nStartRow, bLeft, nDistRight,
+        ApplyFrame(rLineOuter, pLineInner, nStartRow, nStartRow, bLeft, nDistRight,
                    true, nEndRow-nStartRow);
 
         if ( nEndRow > nStartRow+1 )     // inner part available?
@@ -1252,7 +1252,7 @@ void ScAttrArray::ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfo
             for (SCSIZE i=nStartIndex; i<=nEndIndex;)
             {
                 nTmpEnd = std::min( static_cast<SCROW>(nEndRow-1), mvData[i].nEndRow );
-                bool bChanged = ApplyFrame(&rLineOuter, pLineInner, nTmpStart, nTmpEnd,
+                bool bChanged = ApplyFrame(rLineOuter, pLineInner, nTmpStart, nTmpEnd,
                                            bLeft, nDistRight, false, nEndRow - nTmpEnd);
                 nTmpStart = nTmpEnd+1;
                 if (bChanged)
@@ -1265,11 +1265,11 @@ void ScAttrArray::ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfo
             }
         }
 
-        ApplyFrame(&rLineOuter, pLineInner, nEndRow, nEndRow, bLeft, nDistRight, false, 0);
+        ApplyFrame(rLineOuter, pLineInner, nEndRow, nEndRow, bLeft, nDistRight, false, 0);
     }
     else
     {
-        ApplyFrame(&rLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight, true, 0);
+        ApplyFrame(rLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight, true, 0);
     }
 }
 
