@@ -187,10 +187,10 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
                                         XMLPropertyState const * pFontFamily,
                                         XMLPropertyState const * pFontPitch,
                                         XMLPropertyState const * pFontCharSet,
-                                        std::unique_ptr<XMLPropertyState>* ppNewFontStyleName,
-                                        std::unique_ptr<XMLPropertyState>* ppNewFontFamily,
-                                        std::unique_ptr<XMLPropertyState>* ppNewFontPitch,
-                                        std::unique_ptr<XMLPropertyState>* ppNewFontCharSet ) const
+                                        std::optional<XMLPropertyState>* ppNewFontStyleName,
+                                        std::optional<XMLPropertyState>* ppNewFontFamily,
+                                        std::optional<XMLPropertyState>* ppNewFontPitch,
+                                        std::optional<XMLPropertyState>* ppNewFontCharSet ) const
 {
     if( pFontFamilyName )
     {
@@ -204,8 +204,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
                                                 pFontFamilyName->mnIndex + 1 );
             assert(nTmp == CTF_FONTSTYLENAME || nTmp == CTF_FONTSTYLENAME_CJK || nTmp == CTF_FONTSTYLENAME_CTL);
     #endif
-            ppNewFontStyleName->reset(new XMLPropertyState( pFontFamilyName->mnIndex + 1,
-                                                       aAny ));
+            ppNewFontStyleName->emplace( pFontFamilyName->mnIndex + 1, aAny );
         }
 
         if( !pFontFamily )
@@ -217,8 +216,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
                                                 pFontFamilyName->mnIndex + 2 );
             assert(nTmp == CTF_FONTFAMILY || nTmp == CTF_FONTFAMILY_CJK || nTmp == CTF_FONTFAMILY_CTL);
     #endif
-            ppNewFontFamily->reset(new XMLPropertyState( pFontFamilyName->mnIndex + 2,
-                                                       aAny ));
+            ppNewFontFamily->emplace( pFontFamilyName->mnIndex + 2, aAny );
         }
 
         if( !pFontPitch )
@@ -229,8 +227,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
                                                 pFontFamilyName->mnIndex + 3 );
             assert(nTmp == CTF_FONTPITCH || nTmp == CTF_FONTPITCH_CJK || nTmp == CTF_FONTPITCH_CTL);
     #endif
-            ppNewFontPitch->reset(new XMLPropertyState( pFontFamilyName->mnIndex + 3,
-                                                       aAny ));
+            ppNewFontPitch->emplace( pFontFamilyName->mnIndex + 3, aAny );
         }
 
         if( !pFontCharSet )
@@ -241,8 +238,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
                                                 pFontFamilyName->mnIndex + 4 );
             assert(nTmp == CTF_FONTCHARSET || nTmp == CTF_FONTCHARSET_CJK || nTmp == CTF_FONTCHARSET_CTL);
     #endif
-            ppNewFontCharSet->reset(new XMLPropertyState( pFontFamilyName->mnIndex + 4,
-                                                       aAny ));
+            ppNewFontCharSet->emplace( pFontFamilyName->mnIndex + 4, aAny );
         }
     }
 
@@ -366,28 +362,28 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pFontFamily = nullptr;
     XMLPropertyState* pFontPitch = nullptr;
     XMLPropertyState* pFontCharSet = nullptr;
-    std::unique_ptr<XMLPropertyState> pNewFontStyleName;
-    std::unique_ptr<XMLPropertyState> pNewFontFamily;
-    std::unique_ptr<XMLPropertyState> pNewFontPitch;
-    std::unique_ptr<XMLPropertyState> pNewFontCharSet;
+    std::optional<XMLPropertyState> pNewFontStyleName;
+    std::optional<XMLPropertyState> pNewFontFamily;
+    std::optional<XMLPropertyState> pNewFontPitch;
+    std::optional<XMLPropertyState> pNewFontCharSet;
     XMLPropertyState* pFontFamilyNameCJK = nullptr;
     XMLPropertyState* pFontStyleNameCJK = nullptr;
     XMLPropertyState* pFontFamilyCJK = nullptr;
     XMLPropertyState* pFontPitchCJK = nullptr;
     XMLPropertyState* pFontCharSetCJK = nullptr;
-    std::unique_ptr<XMLPropertyState> pNewFontStyleNameCJK;
-    std::unique_ptr<XMLPropertyState> pNewFontFamilyCJK;
-    std::unique_ptr<XMLPropertyState> pNewFontPitchCJK;
-    std::unique_ptr<XMLPropertyState> pNewFontCharSetCJK;
+    std::optional<XMLPropertyState> pNewFontStyleNameCJK;
+    std::optional<XMLPropertyState> pNewFontFamilyCJK;
+    std::optional<XMLPropertyState> pNewFontPitchCJK;
+    std::optional<XMLPropertyState> pNewFontCharSetCJK;
     XMLPropertyState* pFontFamilyNameCTL = nullptr;
     XMLPropertyState* pFontStyleNameCTL = nullptr;
     XMLPropertyState* pFontFamilyCTL = nullptr;
     XMLPropertyState* pFontPitchCTL = nullptr;
     XMLPropertyState* pFontCharSetCTL = nullptr;
-    std::unique_ptr<XMLPropertyState> pNewFontStyleNameCTL;
-    std::unique_ptr<XMLPropertyState> pNewFontFamilyCTL;
-    std::unique_ptr<XMLPropertyState> pNewFontPitchCTL;
-    std::unique_ptr<XMLPropertyState> pNewFontCharSetCTL;
+    std::optional<XMLPropertyState> pNewFontStyleNameCTL;
+    std::optional<XMLPropertyState> pNewFontFamilyCTL;
+    std::optional<XMLPropertyState> pNewFontPitchCTL;
+    std::optional<XMLPropertyState> pNewFontCharSetCTL;
     XMLPropertyState* pAllBorderDistance = nullptr;
     XMLPropertyState* pBorderDistances[4] = { nullptr, nullptr, nullptr, nullptr };
     XMLPropertyState* pNewBorderDistances[4] = { nullptr, nullptr, nullptr, nullptr };
@@ -410,10 +406,10 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pBackTransparent = nullptr;  // transparency as boolean
     XMLPropertyState* pAllParaMargin = nullptr;
     XMLPropertyState* pParaMargins[4] = { nullptr, nullptr, nullptr, nullptr };
-    ::std::unique_ptr<XMLPropertyState> pNewParaMargins[4];
+    ::std::optional<XMLPropertyState> pNewParaMargins[4];
     XMLPropertyState* pAllMargin = nullptr;
     XMLPropertyState* pMargins[4] = { nullptr, nullptr, nullptr, nullptr };
-    ::std::unique_ptr<XMLPropertyState> pNewMargins[4];
+    ::std::optional<XMLPropertyState> pNewMargins[4];
     XMLPropertyState* pFillStyle(nullptr);
     XMLPropertyState* pFillColor(nullptr);
 
@@ -551,8 +547,8 @@ void XMLTextImportPropertyMapper::finished(
             assert(nTmp >= CTF_PARALEFTMARGIN &&
                    nTmp <= CTF_PARABOTTOMMARGIN_REL);
 #endif
-            pNewParaMargins[i].reset(new XMLPropertyState(
-                pAllParaMargin->mnIndex + (2*i) + 2, pAllParaMargin->maValue));
+            pNewParaMargins[i].emplace(
+                pAllParaMargin->mnIndex + (2*i) + 2, pAllParaMargin->maValue);
         }
         if (pAllMargin && !pMargins[i])
         {
@@ -561,8 +557,8 @@ void XMLTextImportPropertyMapper::finished(
                                         pAllMargin->mnIndex + i + 1 );
             assert(nTmp >= CTF_MARGINLEFT && nTmp <= CTF_MARGINBOTTOM);
 #endif
-            pNewMargins[i].reset(new XMLPropertyState(
-                pAllMargin->mnIndex + i + 1, pAllMargin->maValue));
+            pNewMargins[i].emplace(
+                pAllMargin->mnIndex + i + 1, pAllMargin->maValue);
         }
 
         lcl_SeparateBorder(

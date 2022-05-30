@@ -21,7 +21,7 @@
 
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlimppr.hxx>
-#include <memory>
+#include <optional>
 
 class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper final : public SvXMLImportPropertyMapper
 {
@@ -41,10 +41,10 @@ class XMLOFF_DLLPUBLIC XMLTextImportPropertyMapper final : public SvXMLImportPro
                 XMLPropertyState const * pFontFamily,
                 XMLPropertyState const * pFontPitch,
                 XMLPropertyState const * pFontCharSet,
-                std::unique_ptr<XMLPropertyState>* ppNewFontStyleName,
-                std::unique_ptr<XMLPropertyState>* ppNewFontFamily,
-                std::unique_ptr<XMLPropertyState>* ppNewFontPitch,
-                std::unique_ptr<XMLPropertyState>* ppNewFontCharSet ) const;
+                std::optional<XMLPropertyState>* ppNewFontStyleName,
+                std::optional<XMLPropertyState>* ppNewFontFamily,
+                std::optional<XMLPropertyState>* ppNewFontPitch,
+                std::optional<XMLPropertyState>* ppNewFontCharSet ) const;
 
     virtual bool handleSpecialItem(
             XMLPropertyState& rProperty,
