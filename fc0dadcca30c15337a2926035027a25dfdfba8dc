@@ -16,6 +16,24 @@
       "message": "Hi Mike,\nI would have expected f3665d2a42b39814764f3eb9e20498b8a4be1d00 to catch it...",
       "revId": "fc0dadcca30c15337a2926035027a25dfdfba8dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae28c971_aefcc4e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-30T08:29:26Z",
+      "side": 1,
+      "message": "I\u0027m unsure what is implies :-) Should I update my hooks (how?), and shouldn\u0027t there be some automatic procedure - possibly a notification - telling one to update hooks when there exist updates, like the notification shown when one didn\u0027t install hooks at all?",
+      "parentUuid": "b7eece32_459f2e9e",
+      "revId": "fc0dadcca30c15337a2926035027a25dfdfba8dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
