@@ -119,6 +119,12 @@ class SdtHelper final : public virtual SvRefBase
 
     void loadPropertiesXMLs();
 
+    /// <w:placeholder>'s <w:docPart w:val="...">.
+    OUString m_aPlaceholderDocPart;
+
+    /// <w:sdtPr>'s <w15:color w:val="...">.
+    OUString m_aColor;
+
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl,
                        css::uno::Reference<css::uno::XComponentContext> const& xContext);
@@ -136,8 +142,13 @@ public:
     {
         m_sDataBindingPrefixMapping = sValue;
     }
+    OUString GetDataBindingPrefixMapping() const { return m_sDataBindingPrefixMapping; }
+
     void setDataBindingXPath(const OUString& sValue) { m_sDataBindingXPath = sValue; }
+    OUString GetDataBindingXPath() const { return m_sDataBindingXPath; }
+
     void setDataBindingStoreItemID(const OUString& sValue) { m_sDataBindingStoreItemID = sValue; }
+    OUString GetDataBindingStoreItemID() const { return m_sDataBindingStoreItemID; }
 
     void setDateFieldStartRange(const css::uno::Reference<css::text::XTextRange>& xStartRange)
     {
@@ -183,6 +194,12 @@ public:
 
     /// Clear all collected attributes for further reuse
     void clear();
+
+    void SetPlaceholderDocPart(const OUString& rPlaceholderDocPart);
+    OUString GetPlaceholderDocPart() const;
+
+    void SetColor(const OUString& rColor);
+    OUString GetColor() const;
 };
 
 } // namespace writerfilter::dmapper
