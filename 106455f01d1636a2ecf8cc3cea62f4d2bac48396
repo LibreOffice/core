@@ -16,6 +16,24 @@
       "message": "if you do it for one variable, do it for all of them, otherwise it\u0027s inconsistent",
       "revId": "106455f01d1636a2ecf8cc3cea62f4d2bac48396",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83d99600_c983475a",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2022-05-30T19:38:19Z",
+      "side": 1,
+      "message": "What do you mean by \u0027all\u0027? Should it be all \u0027version\u0027 variables or all variables in the file?\nIn fact, if you change all the variables, then it is better to separate the functions into smaller ones, so that if there is a need to do a unittest, you no longer need to make global changes.\nBut you apparently wrote it as a temporary script to solve, apparently, a \"one-time\" task.\nI changed the variable because it was a reference to a global one, and executing  the code could create a situation of ambiguous behavior. The interpreter could treat it differently every time you run the script, even though you assign an empty string to it in this function.\nI put the letter s because it\u0027s a string variable. I have been using Bulgarian notation for many years and I probably already do it automatically.\nIf you prefer to use uninformative variable names, let me know and I\u0027ll fix it.",
+      "parentUuid": "e9f2974c_6d52f2be",
+      "revId": "106455f01d1636a2ecf8cc3cea62f4d2bac48396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
