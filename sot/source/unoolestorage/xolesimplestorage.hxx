@@ -66,7 +66,7 @@ class OLESimpleStorage : public cppu::WeakImplHelper<css::embed::XOLESimpleStora
 
 public:
 
-    OLESimpleStorage(css::uno::Reference<css::uno::XComponentContext> const & xContext,
+    OLESimpleStorage(css::uno::Reference<css::uno::XComponentContext> xContext,
             css::uno::Sequence<css::uno::Any> const &arguments);
 
     virtual ~OLESimpleStorage() override;
