@@ -104,16 +104,6 @@ public:
     // XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 };
-
-/// Interface that allows a protocol handler implementation to opt out from framework caching.
-class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI CacheInfo
-{
-public:
-    virtual bool IsCachingAllowed() const = 0;
-
-protected:
-    ~CacheInfo() noexcept = default;
-};
 }
 
 #endif

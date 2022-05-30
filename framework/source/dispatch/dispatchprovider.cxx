@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/util/XCacheInfo.hpp>
 
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>
@@ -454,8 +455,8 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                         css::uno::UNO_QUERY);
 
                     // Check if the handler explicitly requested to avoid caching.
-                    auto pCacheInfo = dynamic_cast<framework::CacheInfo*>(xHandler.get());
-                    if (!pCacheInfo || pCacheInfo->IsCachingAllowed())
+                    css::uno::Reference<css::util::XCacheInfo> xCacheInfo(xHandler, css::uno::UNO_QUERY);
+                    if (!xCacheInfo.is() || xCacheInfo->isCachingAllowed())
                     {
                         m_aProtocolHandlers.emplace(aHandler.m_sUNOName, xHandler);
                     }

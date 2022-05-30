@@ -4157,6 +4157,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/util,\
 	XAtomServer \
 	XBinaryDataContainer \
 	XBroadcaster \
+	XCacheInfo \
 	XCancellable \
 	XChainable \
 	XChangesBatch \

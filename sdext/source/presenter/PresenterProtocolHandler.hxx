@@ -26,14 +26,15 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/util/XCacheInfo.hpp>
 #include <rtl/ref.hxx>
-#include <framework/dispatchhelper.hxx>
 
 namespace sdext::presenter {
 
 typedef ::cppu::WeakComponentImplHelper <
     css::lang::XInitialization,
     css::lang::XServiceInfo,
+    css::util::XCacheInfo,
     css::frame::XDispatchProvider
 > PresenterProtocolHandlerInterfaceBase;
 
@@ -41,7 +42,6 @@ class PresenterController;
 
 class PresenterProtocolHandler
     : protected ::cppu::BaseMutex,
-      public framework::CacheInfo,
       public PresenterProtocolHandlerInterfaceBase
 {
 public:
@@ -73,8 +73,8 @@ public:
         queryDispatches(
             const css::uno::Sequence< css::frame::DispatchDescriptor>& rDescriptors) override;
 
-    /// See framework::CacheInfo::IsCachingAllowed().
-    bool IsCachingAllowed() const override { return false; }
+    /// See XCacheInfo::IsCachingAllowed().
+    sal_Bool SAL_CALL isCachingAllowed() override { return false; }
 
 private:
     class Dispatch;
