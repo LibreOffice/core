@@ -1074,12 +1074,12 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             {
                 // Still not determined content type? and it is even not unsupported? Then it is plain text field
                 m_pImpl->m_pSdtHelper->setControlType(SdtControlType::plainText);
-                if (nName == NS_ooxml::LN_CT_SdtRun_sdtContent)
-                {
-                    m_pImpl->m_pSdtHelper->setControlType(SdtControlType::richText);
-                    m_pImpl->PushSdt();
-                    break;
-                }
+            }
+            if (nName == NS_ooxml::LN_CT_SdtRun_sdtContent)
+            {
+                m_pImpl->m_pSdtHelper->setControlType(SdtControlType::richText);
+                m_pImpl->PushSdt();
+                break;
             }
             m_pImpl->SetSdt(true);
         break;
@@ -1094,6 +1094,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     case SdtControlType::checkBox:
                     case SdtControlType::dropDown:
                     case SdtControlType::picture:
+                    case SdtControlType::datePicker:
                         m_pImpl->PopSdt();
                         break;
                     default:
@@ -1180,9 +1181,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_SdtPlaceholder_docPart_val:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtPlaceholder_docPart_val", sStringValue);
+            m_pImpl->m_pSdtHelper->SetPlaceholderDocPart(sStringValue);
             break;
         case NS_ooxml::LN_CT_SdtColor_val:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtColor_val", sStringValue);
+            m_pImpl->m_pSdtHelper->SetColor(sStringValue);
             break;
         case NS_ooxml::LN_CT_SdtText_multiLine:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtText_multiLine", sStringValue);
@@ -2766,6 +2769,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     {
         if (!m_pImpl->GetSdtStarts().empty())
         {
+            if (nSprmId == NS_ooxml::LN_CT_SdtPr_color)
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if (pProperties)
+                {
+                    pProperties->resolve(*this);
+                }
+                break;
+            }
+
             if (nSprmId == NS_ooxml::LN_CT_SdtPr_checkbox)
             {
                 m_pImpl->m_pSdtHelper->setControlType(SdtControlType::checkBox);
@@ -2779,6 +2792,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             else if (nSprmId == NS_ooxml::LN_CT_SdtPr_picture)
             {
                 m_pImpl->m_pSdtHelper->setControlType(SdtControlType::picture);
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if (pProperties)
+                {
+                    pProperties->resolve(*this);
+                }
+                break;
+            }
+            else if (nSprmId == NS_ooxml::LN_CT_SdtPr_date)
+            {
+                m_pImpl->m_pSdtHelper->setControlType(SdtControlType::datePicker);
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if (pProperties)
                 {
