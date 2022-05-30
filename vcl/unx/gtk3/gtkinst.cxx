@@ -16288,6 +16288,12 @@ public:
         enable_notify_events();
     }
 
+    virtual void insert_separator(int /* pos */, const OUString* /* pId */) override
+    {
+        // TODO: can't just copy from GtkInstanceTreeView, since there's
+        // no IconView analog for gtk_tree_view_get_row_separator_func
+    }
+
     virtual void connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink) override
     {
         weld::IconView::connect_query_tooltip(rLink);

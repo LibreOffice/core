@@ -18,6 +18,7 @@
  */
 
 #include <vcl/svapp.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
 #include <tools/debug.hxx>
 #include <iconview.hxx>
 #include "iconviewimpl.hxx"
@@ -27,29 +28,177 @@ IconViewImpl::IconViewImpl( SvTreeListBox* pTreeListBox, SvTreeList* pTreeList, 
 {
 }
 
+static bool IsSeparator(const SvTreeListEntry* entry)
+{
+    return entry && entry->GetFlags() & SvTLEntryFlags::IS_SEPARATOR;
+}
+
+Size IconViewImpl::GetEntrySize(const SvTreeListEntry& entry) const
+{
+    return static_cast<const IconView*>(m_pView.get())->GetEntrySize(entry);
+}
+
+void IconViewImpl::IterateVisibleEntryAreas(const IterateEntriesFunc& f, bool fromStartEntry) const
+{
+    tools::Long x = 0, y = 0;
+    short column = 0;
+    const tools::Long rowWidth = m_pView->GetEntryWidth() * m_pView->GetColumnsCount();
+    tools::Long nPrevHeight = 0;
+    for (auto entry = fromStartEntry ? m_pStartEntry : m_pView->FirstVisible(); entry;
+         entry = m_pView->NextVisible(entry))
+    {
+        const Size s = GetEntrySize(*entry);
+        if (x >= rowWidth || IsSeparator(entry))
+        {
+            column = 0;
+            x = 0;
+            y += nPrevHeight;
+        }
+        EntryAreaInfo info{ entry, column, tools::Rectangle{ Point{ x, y }, s } };
+        const auto result = f(info);
+        if (result == CallbackResult::Stop)
+            return;
+        ++column;
+        x += s.Width();
+        nPrevHeight = s.Height();
+    }
+}
+
+tools::Long IconViewImpl::GetEntryRow(const SvTreeListEntry* entry) const
+{
+    tools::Long nEntryRow = -1;
+    auto GetRow = [entry, &nEntryRow, row = -1](const EntryAreaInfo& info) mutable
+    {
+        if (info.column == 0 && !IsSeparator(info.entry))
+            ++row;
+        if (info.entry != entry)
+            return CallbackResult::Continue;
+        nEntryRow = row;
+        return CallbackResult::Stop;
+    };
+    IterateVisibleEntryAreas(GetRow);
+    return nEntryRow;
+}
+
+void IconViewImpl::SetStartEntry(SvTreeListEntry* entry)
+{
+    const tools::Long max = m_aVerSBar->GetRangeMax() - m_aVerSBar->GetVisibleSize();
+    tools::Long row = -1;
+    auto GetEntryAndRow = [&entry, &row, max, found = entry](const EntryAreaInfo& info) mutable
+    {
+        if (info.column == 0 && !IsSeparator(info.entry))
+        {
+            found = info.entry;
+            ++row;
+        }
+        if (row >= max || info.entry == entry)
+        {
+            entry = found;
+            return CallbackResult::Stop;
+        }
+        return CallbackResult::Continue;
+    };
+    IterateVisibleEntryAreas(GetEntryAndRow);
+
+    m_pStartEntry = entry;
+    m_aVerSBar->SetThumbPos(row);
+    m_pView->Invalidate(GetVisibleArea());
+}
+
+void IconViewImpl::ScrollTo(SvTreeListEntry* entry)
+{
+    if (!m_aVerSBar->IsVisible())
+        return;
+    const tools::Long entryRow = GetEntryRow(entry);
+    const tools::Long oldStartRow = m_aVerSBar->GetThumbPos();
+    if (entryRow < oldStartRow)
+        IconViewImpl::SetStartEntry(entry);
+    const tools::Long visibleRows = m_aVerSBar->GetVisibleSize();
+    const tools::Long posRelativeToBottom = entryRow - (oldStartRow + visibleRows) + 1;
+    if (posRelativeToBottom > 0)
+        IconViewImpl::SetStartEntry(GoToNextRow(m_pStartEntry, posRelativeToBottom));
+}
+
+SvTreeListEntry* IconViewImpl::GoToPrevRow(SvTreeListEntry* pEntry, int nRows) const
+{
+    SvTreeListEntry* pPrev = pEntry;
+    auto FindPrev = [this, pEntry, nRows, &pPrev,
+                     prevs = std::vector<SvTreeListEntry*>()](const EntryAreaInfo& info) mutable
+    {
+        if (info.column == 0 && !IsSeparator(info.entry))
+            prevs.push_back(info.entry);
+        if (pEntry == info.entry)
+        {
+            if (prevs.size() > 1)
+            {
+                int i = std::max(0, static_cast<int>(prevs.size()) - nRows - 1);
+                pPrev = prevs[i];
+                for (short column = info.column; column; --column)
+                {
+                    SvTreeListEntry* pNext = m_pView->NextVisible(pPrev);
+                    if (!pNext || IsSeparator(pNext))
+                        break;
+                    pPrev = pNext;
+                }
+            }
+            return CallbackResult::Stop;
+        }
+        return CallbackResult::Continue;
+    };
+    IterateVisibleEntryAreas(FindPrev);
+
+    return pPrev;
+}
+
+SvTreeListEntry* IconViewImpl::GoToNextRow(SvTreeListEntry* pEntry, int nRows) const
+{
+    SvTreeListEntry* pNext = pEntry;
+    auto FindNext
+        = [pEntry, nRows, &pNext, column = -1](const EntryAreaInfo& info) mutable
+    {
+        if (info.column <= column && !IsSeparator(info.entry))
+        {
+            if (info.column == 0 && --nRows < 0)
+                return CallbackResult::Stop;
+            pNext = info.entry;
+            if (info.column == column && nRows == 0)
+                return CallbackResult::Stop;
+        }
+        else if (pEntry == info.entry)
+        {
+            column = info.column;
+        }
+        return CallbackResult::Continue;
+    };
+    IterateVisibleEntryAreas(FindNext);
+
+    return pNext;
+}
+
+SvTreeListEntry* IconViewImpl::GetFirstInRow(SvTreeListEntry* pEntry) const
+{
+    SvTreeListEntry* pFirst = nullptr;
+    auto FindFirst = [pEntry, &pFirst](const EntryAreaInfo& info)
+    {
+        if (info.column == 0)
+            pFirst = info.entry;
+        return pEntry == info.entry ? CallbackResult::Stop : CallbackResult::Continue;
+    };
+    IterateVisibleEntryAreas(FindFirst);
+
+    return pFirst;
+}
+
 void IconViewImpl::CursorUp()
 {
     if (!m_pStartEntry)
         return;
 
-    SvTreeListEntry* pPrevFirstToDraw = m_pStartEntry;
-
-    for(short i = 0; i < m_pView->GetColumnsCount() && pPrevFirstToDraw; i++)
-        pPrevFirstToDraw = m_pView->PrevVisible(pPrevFirstToDraw);
-
-    if( !pPrevFirstToDraw )
-        return;
+    SvTreeListEntry* pPrevFirstToDraw = GoToPrevRow(m_pStartEntry, 1);
 
     m_nFlags &= ~LBoxFlags::Filling;
-    tools::Long nEntryHeight = m_pView->GetEntryHeight();
     ShowCursor( false );
-    m_pView->PaintImmediately();
-    m_pStartEntry = pPrevFirstToDraw;
-    tools::Rectangle aArea( GetVisibleArea() );
-    if (aArea.GetHeight() > nEntryHeight)
-        aArea.AdjustBottom(-nEntryHeight);
-    m_pView->Scroll( 0, nEntryHeight, aArea, ScrollFlags::NoChildren );
-    m_pView->PaintImmediately();
+    SetStartEntry(pPrevFirstToDraw);
     ShowCursor( true );
     m_pView->NotifyScrolled();
 }
@@ -59,92 +208,47 @@ void IconViewImpl::CursorDown()
     if (!m_pStartEntry)
         return;
 
-    SvTreeListEntry* pNextFirstToDraw = m_pStartEntry;
+    SvTreeListEntry* pNextFirstToDraw = GoToNextRow(m_pStartEntry, 1);
 
-    for(short i = 0; i < m_pView->GetColumnsCount(); i++)
-        pNextFirstToDraw = m_pView->NextVisible(pNextFirstToDraw);
-
-    if( pNextFirstToDraw )
-    {
-        m_nFlags &= ~LBoxFlags::Filling;
-        ShowCursor( false );
-        m_pView->PaintImmediately();
-        m_pStartEntry = pNextFirstToDraw;
-        tools::Rectangle aArea( GetVisibleArea() );
-        m_pView->Scroll( 0, -(m_pView->GetEntryHeight()), aArea, ScrollFlags::NoChildren );
-        m_pView->PaintImmediately();
-        ShowCursor( true );
-        m_pView->NotifyScrolled();
-    }
+    m_nFlags &= ~LBoxFlags::Filling;
+    ShowCursor( false );
+    SetStartEntry(pNextFirstToDraw);
+    ShowCursor( true );
+    m_pView->NotifyScrolled();
 }
 
 void IconViewImpl::PageDown( sal_uInt16 nDelta )
 {
-    sal_uInt16 nRealDelta = nDelta * m_pView->GetColumnsCount();
-
     if( !nDelta )
         return;
 
     if (!m_pStartEntry)
         return;
 
-    SvTreeListEntry* pNext = m_pView->NextVisible(m_pStartEntry, nRealDelta);
-    if( pNext == m_pStartEntry )
-        return;
+    SvTreeListEntry* pNext = GoToNextRow(m_pStartEntry, nDelta);
 
     ShowCursor( false );
 
     m_nFlags &= ~LBoxFlags::Filling;
-    m_pStartEntry = pNext;
-
-    if( nRealDelta >= m_nVisibleCount )
-    {
-        m_pView->Invalidate( GetVisibleArea() );
-    }
-    else
-    {
-        tools::Rectangle aArea( GetVisibleArea() );
-        tools::Long nScroll = m_pView->GetEntryHeight() * static_cast<tools::Long>(nRealDelta);
-        nScroll = -nScroll;
-        m_pView->PaintImmediately();
-        m_pView->Scroll( 0, nScroll, aArea, ScrollFlags::NoChildren );
-        m_pView->PaintImmediately();
-        m_pView->NotifyScrolled();
-    }
+    SetStartEntry(pNext);
 
     ShowCursor( true );
 }
 
 void IconViewImpl::PageUp( sal_uInt16 nDelta )
 {
-    sal_uInt16 nRealDelta = nDelta * m_pView->GetColumnsCount();
     if( !nDelta )
         return;
 
     if (!m_pStartEntry)
         return;
 
-    SvTreeListEntry* pPrev = m_pView->PrevVisible(m_pStartEntry, nRealDelta);
-    if( pPrev == m_pStartEntry )
-        return;
+    SvTreeListEntry* pPrev = GoToPrevRow(m_pStartEntry, nDelta);
 
     m_nFlags &= ~LBoxFlags::Filling;
     ShowCursor( false );
 
-    m_pStartEntry = pPrev;
-    if( nRealDelta >= m_nVisibleCount )
-    {
-        m_pView->Invalidate( GetVisibleArea() );
-    }
-    else
-    {
-        tools::Long nEntryHeight = m_pView->GetEntryHeight();
-        tools::Rectangle aArea( GetVisibleArea() );
-        m_pView->PaintImmediately();
-        m_pView->Scroll( 0, nEntryHeight*nRealDelta, aArea, ScrollFlags::NoChildren );
-        m_pView->PaintImmediately();
-        m_pView->NotifyScrolled();
-    }
+    SetStartEntry(pPrev);
 
     ShowCursor( true );
 }
@@ -160,14 +264,11 @@ void IconViewImpl::KeyDown( bool bPageDown )
     else
         nDelta = 1;
 
-    tools::Long nThumbPos = m_aVerSBar->GetThumbPos();
-
     if( nDelta <= 0 )
         return;
 
     m_nFlags &= ~LBoxFlags::Filling;
 
-    m_aVerSBar->SetThumbPos( nThumbPos+nDelta );
     if( bPageDown )
         PageDown( static_cast<short>(nDelta) );
     else
@@ -185,17 +286,8 @@ void IconViewImpl::KeyUp( bool bPageUp )
     else
         nDelta = 1;
 
-    tools::Long nThumbPos = m_aVerSBar->GetThumbPos();
-
-    if( nThumbPos < nDelta )
-        nDelta = nThumbPos;
-
-    if( nDelta < 0 )
-        return;
-
     m_nFlags &= ~LBoxFlags::Filling;
 
-    m_aVerSBar->SetThumbPos( nThumbPos - nDelta );
     if( bPageUp )
         PageUp( static_cast<short>(nDelta) );
     else
@@ -207,21 +299,27 @@ tools::Long IconViewImpl::GetEntryLine(const SvTreeListEntry* pEntry) const
     if(!m_pStartEntry )
         return -1; // invisible position
 
-    tools::Long nFirstVisPos = m_pView->GetVisiblePos( m_pStartEntry );
-    tools::Long nEntryVisPos = m_pView->GetVisiblePos( pEntry );
-    nFirstVisPos = nEntryVisPos - nFirstVisPos;
-
-    return nFirstVisPos;
+    return IconViewImpl::GetEntryPosition(pEntry).Y();
 }
 
 Point IconViewImpl::GetEntryPosition(const SvTreeListEntry* pEntry) const
 {
-    const int pos = m_pView->GetAbsPos( pEntry );
+    Point result{ -m_pView->GetEntryWidth(), -m_pView->GetEntryHeight() }; // invisible
+    auto FindEntryPos = [pEntry, &result](const EntryAreaInfo& info)
+    {
+        if (pEntry == info.entry)
+        {
+            result = info.area.TopLeft();
+            return CallbackResult::Stop;
+        }
+        return CallbackResult::Continue;
+    };
+    IterateVisibleEntryAreas(FindEntryPos, true);
 
-    return Point( ( pos % m_pView->GetColumnsCount() ) * m_pView->GetEntryWidth(),
-                 ( pos / m_pView->GetColumnsCount() ) * m_pView->GetEntryHeight() );
+    return result;
 }
 
+// Returns the last entry (in respective row) if position is just past the last entry
 SvTreeListEntry* IconViewImpl::GetClickedEntry( const Point& rPoint ) const
 {
     DBG_ASSERT( m_pView->GetModel(), "IconViewImpl::GetClickedEntry: how can this ever happen?" );
@@ -230,11 +328,25 @@ SvTreeListEntry* IconViewImpl::GetClickedEntry( const Point& rPoint ) const
     if( m_pView->GetEntryCount() == 0 || !m_pStartEntry || !m_pView->GetEntryHeight() || !m_pView->GetEntryWidth())
         return nullptr;
 
-    sal_uInt16 nY = static_cast<sal_uInt16>(rPoint.Y() / m_pView->GetEntryHeight() );
-    sal_uInt16 nX = static_cast<sal_uInt16>(rPoint.X() / m_pView->GetEntryWidth() );
-    sal_uInt16 nTemp = nY * m_pView->GetColumnsCount() + nX;
-
-    SvTreeListEntry* pEntry = m_pView->NextVisible(m_pStartEntry, nTemp);
+    SvTreeListEntry* pEntry = nullptr;
+    auto FindEntryByPos = [&pEntry, &rPoint](const EntryAreaInfo& info)
+    {
+        if (info.area.Contains(rPoint))
+        {
+            pEntry = info.entry;
+            return CallbackResult::Stop;
+        }
+        else if (info.area.Top() > rPoint.Y())
+        {
+            return CallbackResult::Stop; // we are already below the clicked row
+        }
+        else if (info.area.Bottom() > rPoint.Y())
+        {
+            pEntry = info.entry; // Same row; store the entry in case the click is past all entries
+        }
+        return CallbackResult::Continue;
+    };
+    IterateVisibleEntryAreas(FindEntryByPos, true);
 
     return pEntry;
 }
@@ -245,16 +357,15 @@ bool IconViewImpl::IsEntryInView( SvTreeListEntry* pEntry ) const
     if( !m_pView->IsEntryVisible(pEntry) )
         return false;
 
-    tools::Long nY = GetEntryLine( pEntry ) / m_pView->GetColumnsCount() * m_pView->GetEntryHeight();
+    tools::Long nY = GetEntryLine( pEntry );
     if( nY < 0 )
         return false;
 
-    tools::Long nMax = m_nVisibleCount / m_pView->GetColumnsCount() * m_pView->GetEntryHeight();
-    if( nY >= nMax )
+    tools::Long height = GetEntrySize(*pEntry).Height();
+    if (nY + height > m_aOutputSize.Height())
         return false;
 
-    tools::Long nStart = GetEntryLine( pEntry ) - GetEntryLine( m_pStartEntry );
-    return nStart >= 0;
+    return true;
 }
 
 void IconViewImpl::AdjustScrollBars( Size& rSize )
@@ -270,18 +381,34 @@ void IconViewImpl::AdjustScrollBars( Size& rSize )
     const WinBits nWindowStyle = m_pView->GetStyle();
     bool bVerSBar = ( nWindowStyle & WB_VSCROLL ) != 0;
 
-    // number of entries that are not collapsed
-    sal_uLong nTotalCount = m_pView->GetVisibleCount();
-
     // number of entries visible within the view
-    m_nVisibleCount = aOSize.Height() / nEntryHeight * m_pView->GetColumnsCount();
+    const tools::Long nVisibleRows = aOSize.Height() / nEntryHeight;
+    m_nVisibleCount = nVisibleRows * m_pView->GetColumnsCount();
 
-    tools::Long nRows = ( nTotalCount / m_pView->GetColumnsCount() ) + 1;
+    tools::Long nTotalRows = 0;
+    tools::Long totalHeight = 0;
+    auto CountRowsAndHeight = [&nTotalRows, &totalHeight](const EntryAreaInfo& info)
+    {
+        totalHeight = std::max(totalHeight, info.area.Bottom());
+        if (info.column == 0 && !IsSeparator(info.entry))
+            ++nTotalRows;
+        return CallbackResult::Continue;
+    };
+    IterateVisibleEntryAreas(CountRowsAndHeight);
 
     // do we need a vertical scrollbar?
-    if( bVerSBar || nTotalCount > m_nVisibleCount )
+    if( bVerSBar || totalHeight > aOSize.Height())
     {
         nResult = 1;
+    }
+
+    // do we need a Horizontal scrollbar?
+    bool bHorSBar = (nWindowStyle & WB_HSCROLL) != 0;
+    if (bHorSBar || m_pView->GetEntryWidth() > aOSize.Width())
+    {
+        nResult += 2;
+        m_aHorSBar->SetRange(Range(0, m_pView->GetEntryWidth()));
+        m_aHorSBar->SetVisibleSize(aOSize.Width());
     }
 
     PositionScrollBars( aOSize, nResult );
@@ -296,8 +423,9 @@ void IconViewImpl::AdjustScrollBars( Size& rSize )
     // vertical scrollbar
     if( !m_bInVScrollHdl )
     {
-        m_aVerSBar->SetPageSize( nTotalCount );
-        m_aVerSBar->SetVisibleSize( nTotalCount - nRows );
+        m_aVerSBar->SetRange(Range(0, nTotalRows));
+        m_aVerSBar->SetPageSize(nVisibleRows);
+        m_aVerSBar->SetVisibleSize(nVisibleRows);
     }
     else
     {
@@ -308,6 +436,11 @@ void IconViewImpl::AdjustScrollBars( Size& rSize )
         m_aVerSBar->Show();
     else
         m_aVerSBar->Hide();
+
+    if (nResult & 0x0002)
+        m_aHorSBar->Show();
+    else
+        m_aHorSBar->Hide();
 
     rSize = aOSize;
 }
@@ -321,29 +454,33 @@ SvTreeListEntry* IconViewImpl::GetEntry( const Point& rPoint ) const
         || !m_pView->GetEntryWidth())
         return nullptr;
 
-    sal_uInt16 nClickedEntry = static_cast<sal_uInt16>(rPoint.Y() / m_pView->GetEntryHeight() * m_pView->GetColumnsCount() + rPoint.X() / m_pView->GetEntryWidth() );
-    sal_uInt16 nTemp = nClickedEntry;
-    SvTreeListEntry* pEntry = m_pView->NextVisible(m_pStartEntry, nTemp);
-    if( nTemp != nClickedEntry )
-        pEntry = nullptr;
+    SvTreeListEntry* pEntry = nullptr;
+    auto FindEntryByPos = [&pEntry, &rPoint](const EntryAreaInfo& info)
+    {
+        if (info.area.Contains(rPoint))
+        {
+            pEntry = info.entry;
+            return CallbackResult::Stop;
+        }
+        else if (info.area.Top() > rPoint.Y())
+        {
+            return CallbackResult::Stop; // we are already below the clicked row
+        }
+        return CallbackResult::Continue;
+    };
+    IterateVisibleEntryAreas(FindEntryByPos, true);
+
     return pEntry;
 }
 
 void IconViewImpl::SyncVerThumb()
 {
-    if( m_pStartEntry )
-    {
-        tools::Long nEntryPos = m_pView->GetVisiblePos( m_pStartEntry );
-        m_aVerSBar->SetThumbPos( nEntryPos );
-    }
-    else
-        m_aVerSBar->SetThumbPos( 0 );
+    m_aVerSBar->SetThumbPos(GetEntryRow(m_pStartEntry));
 }
 
 void IconViewImpl::UpdateAll( bool bInvalidateCompleteView )
 {
     FindMostRight();
-    m_aVerSBar->SetRange( Range( 0, m_pView->GetVisibleCount() ) );
     SyncVerThumb();
     FillView();
     ShowVerSBar();
@@ -384,25 +521,6 @@ void IconViewImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         m_pStartEntry = m_pView->First();
     }
 
-    tools::Long nRectHeight = rRect.GetHeight();
-    tools::Long nRectWidth = rRect.GetWidth();
-    tools::Long nEntryHeight = m_pView->GetEntryHeight();
-    tools::Long nEntryWidth = m_pView->GetEntryWidth();
-
-    // calculate area for the entries we want to draw
-    sal_uInt16 nStartId = static_cast<sal_uInt16>(rRect.Top() / nEntryHeight * m_pView->GetColumnsCount() + (rRect.Left() / nEntryWidth));
-    sal_uInt16 nCount = static_cast<sal_uInt16>(( nRectHeight / nEntryHeight + 1 ) * nRectWidth / nEntryWidth);
-    nCount += 2; // don't miss an entry
-
-    tools::Long nY = nStartId / m_pView->GetColumnsCount() * nEntryHeight;
-    tools::Long nX = 0;
-    SvTreeListEntry* pEntry = m_pStartEntry;
-    while (nStartId && pEntry)
-    {
-        pEntry = m_pView->NextVisible(pEntry);
-        nStartId--;
-    }
-
     if (!m_pCursor && !mbNoAutoCurEntry)
     {
         // do not select if multiselection or explicit set
@@ -410,18 +528,20 @@ void IconViewImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         SetCursor(m_pStartEntry, bNotSelect);
     }
 
-    for(sal_uInt16 n = 0; n< nCount && pEntry; n++)
+    auto PaintEntry = [iconView = static_cast<IconView*>(m_pView.get()), &rRect,
+                       &rRenderContext](const EntryAreaInfo& info)
     {
-        static_cast<IconView*>(m_pView.get())->PaintEntry(*pEntry, nX, nY, rRenderContext);
-        nX += nEntryWidth;
-
-        if(nX + m_pView->GetEntryWidth() > nEntryWidth * m_pView->GetColumnsCount())
+        if (!info.area.GetIntersection(rRect).IsEmpty())
         {
-            nY += nEntryHeight;
-            nX = 0;
+            iconView->PaintEntry(*info.entry, info.area.Left(), info.area.Top(), rRenderContext);
         }
-        pEntry = m_pView->NextVisible(pEntry);
-    }
+        else if (info.area.Top() > rRect.Bottom())
+        {
+            return CallbackResult::Stop; // we are already below the last visible row
+        }
+        return CallbackResult::Continue;
+    };
+    IterateVisibleEntryAreas(PaintEntry, true);
 
     m_nFlags &= ~LBoxFlags::DeselectAll;
     rRenderContext.SetClipRegion();
@@ -432,16 +552,14 @@ void IconViewImpl::InvalidateEntry( tools::Long nId ) const
 {
     if( m_nFlags & LBoxFlags::InPaint )
         return;
-
-    tools::Rectangle aRect( GetVisibleArea() );
-    tools::Long nMaxBottom = aRect.Bottom();
-    aRect.SetTop( nId / m_pView->GetColumnsCount() * m_pView->GetEntryHeight() );
-    aRect.SetBottom( aRect.Top() ); aRect.AdjustBottom(m_pView->GetEntryHeight() );
-
-    if( aRect.Top() > nMaxBottom )
+    if (nId < 0)
         return;
-    if( aRect.Bottom() > nMaxBottom )
-        aRect.SetBottom( nMaxBottom );
+
+    // nId is a Y coordinate of the top of the element, coming from GetEntryLine
+    tools::Rectangle aRect( GetVisibleArea() );
+    if (nId > aRect.Bottom())
+        return;
+    aRect.SetTop(nId); // Invalidate everything below
     m_pView->Invalidate( aRect );
 }
 
@@ -467,9 +585,6 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
     SvTreeListEntry* pNewCursor;
 
     bool bHandled = true;
-
-    tools::Long i;
-    tools::Long nColumns = m_pView->GetColumnsCount();
 
     switch( aCode )
     {
@@ -531,72 +646,68 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
 
         case KEY_UP:
         {
-            if( !IsEntryInView( m_pCursor ) )
-                MakeVisible( m_pCursor );
-
-            pNewCursor = m_pCursor;
-            for( i = 0; i < nColumns && pNewCursor; i++)
-            {
-                do
-                {
-                    pNewCursor = m_pView->PrevVisible(pNewCursor);
-                } while( pNewCursor && !IsSelectable(pNewCursor) );
-            }
-
-            // if there is no next entry, take the current one
-            // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
-            // the cursor key
-            if ( !pNewCursor && m_pCursor )
-                pNewCursor = m_pCursor;
+            pNewCursor = GoToPrevRow(m_pCursor, 1);
 
             if( pNewCursor )
             {
                 m_aSelEng.CursorPosChanging( bShift, bMod1 );
                 SetCursor( pNewCursor, bMod1 );     // no selection, when Ctrl is on
-                if( !IsEntryInView( pNewCursor ) )
-                    KeyUp( false );
+                ScrollTo(pNewCursor);
             }
             break;
         }
 
         case KEY_DOWN:
         {
-            if( !IsEntryInView( m_pCursor ) )
-                MakeVisible( m_pCursor );
-
-            pNewCursor = m_pCursor;
-            for( i = 0; i < nColumns && pNewCursor; i++)
-            {
-                do
-                {
-                    pNewCursor = m_pView->NextVisible(pNewCursor);
-                } while( pNewCursor && !IsSelectable(pNewCursor) );
-            }
-
-            // if there is no next entry, take the current one
-            // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
-            // the cursor key
-            if ( !pNewCursor && m_pCursor )
-                pNewCursor = m_pCursor;
+            pNewCursor = GoToNextRow(m_pCursor, 1);
 
             if( pNewCursor )
             {
                 m_aSelEng.CursorPosChanging( bShift, bMod1 );
-                if( IsEntryInView( pNewCursor ) )
-                    SetCursor( pNewCursor, bMod1 ); // no selection, when Ctrl is on
-                else
-                {
-                    if( m_pCursor )
-                        m_pView->Select( m_pCursor, false );
-                    KeyDown( false );
-                    SetCursor( pNewCursor, bMod1 ); // no selection, when Ctrl is on
-                }
+                ScrollTo(pNewCursor);
+                SetCursor(pNewCursor, bMod1); // no selection, when Ctrl is on
             }
             else
                 KeyDown( false );   // because scrollbar range might still
                                         // allow scrolling
             break;
         }
+
+        case KEY_PAGEUP:
+            if (!bMod1)
+            {
+                const sal_uInt16 nDelta = m_aVerSBar->GetPageSize();
+                pNewCursor = GoToPrevRow(m_pCursor, nDelta);
+
+                if (pNewCursor)
+                {
+                    m_aSelEng.CursorPosChanging(bShift, bMod1);
+                    ScrollTo(pNewCursor);
+                    SetCursor(pNewCursor);
+                }
+            }
+            else
+                bHandled = false;
+            break;
+
+        case KEY_PAGEDOWN:
+            if (!bMod1)
+            {
+                const sal_uInt16 nDelta = m_aVerSBar->GetPageSize();
+                pNewCursor = GoToNextRow(m_pCursor, nDelta);
+
+                if (pNewCursor)
+                {
+                    m_aSelEng.CursorPosChanging(bShift, bMod1);
+                    ScrollTo(pNewCursor);
+                    SetCursor(pNewCursor);
+                }
+                else
+                    KeyDown(false);
+            }
+            else
+                bHandled = false;
+            break;
 
         case KEY_RETURN:
         {
@@ -613,19 +724,13 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
                 pNewCursor = m_pView->PrevVisible(pNewCursor);
             }
 
-            m_pStartEntry = pNewCursor;
-
-            while( m_pStartEntry && m_pView->GetAbsPos( m_pStartEntry ) % m_pView->GetColumnsCount() != 0 )
-            {
-                m_pStartEntry = m_pView->PrevVisible(m_pStartEntry);
-            }
+            SetStartEntry(pNewCursor);
 
             if( pNewCursor && pNewCursor != m_pCursor)
             {
 //              SelAllDestrAnch( false );
                 m_aSelEng.CursorPosChanging( bShift, bMod1 );
                 SetCursor( pNewCursor );
-                SyncVerThumb();
             }
 
             bHandled = true;

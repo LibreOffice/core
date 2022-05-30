@@ -4437,7 +4437,7 @@ void SalInstanceTreeView::set_image(SvTreeListEntry* pEntry, const Image& rImage
         static_cast<SvLBoxContextBmp&>(rItem).SetBitmap2(rImage);
     }
 
-    m_xTreeView->SetEntryHeight(pEntry);
+    m_xTreeView->CalcEntryHeight(pEntry);
     InvalidateModelEntry(pEntry);
 }
 
@@ -5309,7 +5309,11 @@ SalInstanceIconView::SalInstanceIconView(::IconView* pIconView, SalInstanceBuild
 }
 
 int SalInstanceIconView::get_item_width() const { return m_xIconView->GetEntryWidth(); }
-void SalInstanceIconView::set_item_width(int width) { m_xIconView->SetEntryWidth(width); }
+void SalInstanceIconView::set_item_width(int width)
+{
+    m_xIconView->SetEntryWidth(width);
+    m_xIconView->Resize();
+}
 
 void SalInstanceIconView::freeze()
 {
@@ -5405,6 +5409,21 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
     }
 
     enable_notify_events();
+}
+
+void SalInstanceIconView::insert_separator(int pos, const OUString* /* pId */)
+{
+    const auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
+    const OUString sSep(VclResId(STR_SEPARATOR));
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
+    pEntry->SetFlags(pEntry->GetFlags() | SvTLEntryFlags::IS_SEPARATOR);
+    const Image aDummy;
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+    pEntry->AddItem(std::make_unique<SvLBoxString>(sSep));
+    pEntry->SetUserData(nullptr);
+    m_xIconView->Insert(pEntry, nullptr, nInsertPos);
+    SvViewDataEntry* pViewData = m_xIconView->GetViewDataEntry(pEntry);
+    pViewData->SetSelectable(false);
 }
 
 IMPL_LINK(SalInstanceIconView, TooltipHdl, const HelpEvent&, rHEvt, bool)
