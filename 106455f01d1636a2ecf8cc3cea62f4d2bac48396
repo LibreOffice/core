@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9f2974c_6d52f2be",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-30T11:55:33Z",
+      "side": 1,
+      "message": "if you do it for one variable, do it for all of them, otherwise it\u0027s inconsistent",
+      "revId": "106455f01d1636a2ecf8cc3cea62f4d2bac48396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
