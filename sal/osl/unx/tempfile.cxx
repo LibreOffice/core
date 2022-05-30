@@ -278,7 +278,7 @@ oslFileError SAL_CALL osl_createTempFile(
     rtl_uString**  ppustrTempFileURL)
 {
     rtl_uString*  base_directory     = nullptr;
-    oslFileHandle temp_file_handle;
+    oslFileHandle temp_file_handle = nullptr;
     bool      b_delete_on_close;
     oslFileError  osl_error;
 
