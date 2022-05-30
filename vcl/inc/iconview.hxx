@@ -27,15 +27,20 @@ class IconView final : public SvTreeListBox
 public:
     IconView(vcl::Window* pParent, WinBits nBits);
 
+    Size GetEntrySize(const SvTreeListEntry&) const;
+
     virtual void Resize() override;
 
-    virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, tools::Long nEntryPos) override;
+    virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, tools::Long) override;
 
     void PaintEntry(SvTreeListEntry&, tools::Long nX, tools::Long nY,
                     vcl::RenderContext& rRenderContext);
 
     virtual FactoryFunction GetUITestFactory() const override;
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
+
+protected:
+    virtual void CalcEntryHeight(SvTreeListEntry const* pEntry) override;
 };
 
 #endif

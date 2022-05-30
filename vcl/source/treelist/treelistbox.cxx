@@ -1593,7 +1593,7 @@ void SvTreeListBox::SetExpandedEntryBmp( SvTreeListEntry* pEntry, const Image& a
     pItem->SetBitmap2( aBmp );
 
     ModelHasEntryInvalidated(pEntry);
-    SetEntryHeight( pEntry );
+    CalcEntryHeight( pEntry );
     Size aSize = aBmp.GetSizePixel();
     short nWidth = pImpl->UpdateContextBmpWidthVector( pEntry, static_cast<short>(aSize.Width()) );
     if( nWidth > nContextBmpWidthMax )
@@ -1611,7 +1611,7 @@ void SvTreeListBox::SetCollapsedEntryBmp(SvTreeListEntry* pEntry,const Image& aB
     pItem->SetBitmap1( aBmp );
 
     ModelHasEntryInvalidated(pEntry);
-    SetEntryHeight( pEntry );
+    CalcEntryHeight( pEntry );
     Size aSize = aBmp.GetSizePixel();
     short nWidth = pImpl->UpdateContextBmpWidthVector( pEntry, static_cast<short>(aSize.Width()) );
     if( nWidth > nContextBmpWidthMax )
@@ -1663,7 +1663,7 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
             nTreeFlags |= SvTreeFlags::RECALCTABS;
         }
     }
-    SetEntryHeight( pEntry );
+    CalcEntryHeight( pEntry );
 
     if( !(nTreeFlags & SvTreeFlags::CHKBTN) )
         return;
@@ -1976,7 +1976,7 @@ void SvTreeListBox::SetDragDropMode( DragDropMode nDDMode )
     pImpl->SetDragDropMode( nDDMode );
 }
 
-void SvTreeListBox::SetEntryHeight( SvTreeListEntry const * pEntry )
+void SvTreeListBox::CalcEntryHeight( SvTreeListEntry const * pEntry )
 {
     short nHeightMax=0;
     sal_uInt16 nCount = pEntry->ItemCount();
