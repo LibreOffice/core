@@ -16,6 +16,41 @@
       "message": "Stephan: do you have an opinion on if crash in dynamic_cast\u003c\u003e is expected in this generated c++ objects (proxy of java uno components)? I expected I get a nullptr worst case. Do we fail to generate some RTTI here in bridges/ code?",
       "revId": "b3f2ae52e381f7d5fa466dc9df7d04d3d13ca4b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47b06598_9fb57e4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-30T12:04:55Z",
+      "side": 1,
+      "message": "\u003e Stephan: do you have an opinion on if crash in dynamic_cast\u003c\u003e is expected in this generated c++ objects (proxy of java uno components)? I expected I get a nullptr worst case. Do we fail to generate some RTTI here in bridges/ code?\n\nA crash is indeed expected, see the recent discussion in the comments at \u003chttps://gerrit.libreoffice.org/c/core/+/134348/8#message-1e0bf69cbbecafe47a5ebc5962d3e5836cb8cbaf\u003e \"add utl::ByteReader pure class\":  \"Maybe that\u0027s doing a dynamic_cast on a fake UNO proxy C++ object.  That\u0027s not supported in general [...]; the RTTI slot of such proxy objects is only set up for some architectures in specific build scenarios, e.g., \u003chttps://git.libreoffice.org/core/+/9c9f0ea2c38929d133b0fe2faf616ecab17e07c9%5E!/\u003e \u0027Include RTTI in generated vtables for ubsan\u0027s vptr-based checks\u0027.\"",
+      "parentUuid": "4c0afa06_020b4ad6",
+      "revId": "b3f2ae52e381f7d5fa466dc9df7d04d3d13ca4b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87c94f16_a2270340",
+        "filename": "offapi/com/sun/star/util/XCacheInfo.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-30T12:04:55Z",
+      "side": 1,
+      "message": "please use the header/footer boilerplate from TEMPLATE.SOURCECODE.HEADER (and is this the appropriate license?)",
+      "revId": "b3f2ae52e381f7d5fa466dc9df7d04d3d13ca4b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
