@@ -137,9 +137,10 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
         }
 
         uint32_t nPixelsRequired;
-        if (o3tl::checked_multiply(w, h, nPixelsRequired))
+        bool bOk = !o3tl::checked_multiply(w, h, nPixelsRequired) && nPixelsRequired <= SAL_MAX_INT32/4;
+        if (!bOk)
         {
-            SAL_WARN("filter.tiff", "skipping oversized tiff image");
+            SAL_WARN("filter.tiff", "skipping oversized tiff image " << w << " x " << h);
             break;
         }
 
