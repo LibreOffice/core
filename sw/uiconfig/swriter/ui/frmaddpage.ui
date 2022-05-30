@@ -65,7 +65,7 @@
                 <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="altname-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="frmaddpage|extended_tip|altname">Enter the text to display in a web browser when the selected item is unavailable. Alternate text is also used to assist people with disabilities.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="frmaddpage|extended_tip|altname">Enter a short description of the essential details of the selected object for a person who cannot see the object. This text is available for use by assistive technologies. For images, this text is exported with an appropriate tag to HTML and PDF format.</property>
                   </object>
                 </child>
               </object>
@@ -93,6 +93,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="frmaddpage|altname_label">Text _Alternative:</property>
+                <property name="tooltip_text" translatable="yes" context="frmaddpage|altname_label|tooltip_text">Give a short description for users who do not see this object.</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">altname</property>
                 <property name="xalign">0</property>
@@ -175,6 +176,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="frmaddpage|description_label">_Description:</property>
+                <property name="tooltip_text" translatable="yes" context="frmaddpage|description_label">Give a longer explanation of the content if it is too complex to be described briefly in “Text Alternative.”</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">description</property>
                 <property name="xalign">0</property>
@@ -199,6 +201,11 @@
                     <property name="vexpand">True</property>
                     <property name="wrap_mode">word</property>
                     <property name="buffer">textbuffer1</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="altname-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="frmaddpage|extended_tip|description">Enter a longer description of the object, especially if the object is too complex or contains too much detail to be described adequately with the short “Text Alternative.” This text is available for use by assistive technologies. For images, this text is exported with an appropriate tag to HTML and PDF format.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
