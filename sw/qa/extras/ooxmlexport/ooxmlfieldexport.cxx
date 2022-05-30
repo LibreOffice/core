@@ -11,6 +11,7 @@
 
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 
 #include <xmloff/odffields.hxx>
 #include <o3tl/string_view.hxx>
@@ -496,19 +497,44 @@ DECLARE_OOXMLEXPORT_TEST(testSdtDateDuplicate, "sdt-date-duplicate.docx")
     {
         // Single <w:sdt> was exported as 2 <w:sdt> elements.
         assertXPath(pXmlDoc, "//w:sdt", 1);
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
+        uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+        uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+        uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+        OUString aPortionType;
+        xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+        CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+        uno::Reference<text::XTextContent> xContentControl;
+        xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+        bool bDate{};
+        xContentControlProps->getPropertyValue("Date") >>= bDate;
+        CPPUNIT_ASSERT(bDate);
+        uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xContentControlEnum = xContentControlEnumAccess->createEnumeration();
+        uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("4/26/2012"), xTextPortionRange->getString());
     }
+    else
+    {
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
-
-    ::sw::mark::IDateFieldmark* pFieldmark
-          = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
-    CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
-    CPPUNIT_ASSERT_EQUAL(OUString("4/26/2012"), pFieldmark->GetContent());
+        ::sw::mark::IDateFieldmark* pFieldmark
+            = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
+        CPPUNIT_ASSERT(pFieldmark);
+        CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+        CPPUNIT_ASSERT_EQUAL(OUString("4/26/2012"), pFieldmark->GetContent());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo81492)
@@ -670,33 +696,75 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf66401)
 DECLARE_OOXMLEXPORT_TEST( testDateFieldInShape, "date_field_in_shape.docx" )
 {
     // This was crashed on export.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
+    if (mbExported)
+    {
+        uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
+        uno::Reference<text::XText> xShapeText = xShape->getText();
+        uno::Reference<beans::XPropertySet> xTextPortion(getRun(getParagraphOfText(1, xShapeText), 1), uno::UNO_QUERY);
+        OUString aPortionType;
+        xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+        CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+        uno::Reference<text::XTextContent> xContentControl;
+        xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+        bool bDate{};
+        xContentControlProps->getPropertyValue("Date") >>= bDate;
+        CPPUNIT_ASSERT(bDate);
+        uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xContentControlEnum = xContentControlEnumAccess->createEnumeration();
+        uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("Click here to enter a date."), xTextPortionRange->getString());
+    }
+    else
+    {
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
-    ::sw::mark::IDateFieldmark* pFieldmark
-          = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
-    CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
-    CPPUNIT_ASSERT_EQUAL(OUString("Click here to enter a date."), pFieldmark->GetContent());
+        ::sw::mark::IDateFieldmark* pFieldmark
+            = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
+        CPPUNIT_ASSERT(pFieldmark);
+        CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+        CPPUNIT_ASSERT_EQUAL(OUString("Click here to enter a date."), pFieldmark->GetContent());
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST( testDateFieldAtEndOfParagraph, "date_field_at_end_of_paragraph.docx" )
 {
     // Additional line end was added by import and it was crashed on export
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
+    if (mbExported)
+    {
+        uno::Reference<beans::XPropertySet> xTextPortion(getRun(getParagraph(2), 1), uno::UNO_QUERY);
+        OUString aPortionType;
+        xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+        CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+        uno::Reference<text::XTextContent> xContentControl;
+        xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+        bool bDate{};
+        xContentControlProps->getPropertyValue("Date") >>= bDate;
+        CPPUNIT_ASSERT(bDate);
+        uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xContentControlEnum = xContentControlEnumAccess->createEnumeration();
+        uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("Click here to enter a date."), xTextPortionRange->getString());
+    }
+    else
+    {
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
-    ::sw::mark::IDateFieldmark* pFieldmark
-          = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
-    CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
-    CPPUNIT_ASSERT_EQUAL(OUString("Click here to enter a date."), pFieldmark->GetContent());
+        ::sw::mark::IDateFieldmark* pFieldmark
+            = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
+        CPPUNIT_ASSERT(pFieldmark);
+        CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+        CPPUNIT_ASSERT_EQUAL(OUString("Click here to enter a date."), pFieldmark->GetContent());
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDropDownFieldEntryLimit, "tdf126792.odt" )

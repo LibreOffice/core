@@ -1650,92 +1650,170 @@ void Test::testDateFormField()
         mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
 
         // Check the document after round trip
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(5), pMarkAccess->getAllMarksCount());
-
-        int nIndex = 0;
-        for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
+        if (rFilterName == "writer8")
         {
-            ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*aIter);
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+            SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
+            SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+            IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
 
-            // Check date form field's parameters.
-            const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
-            OUString sDateFormat;
-            auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
-            if (pResult != pParameters->end())
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(5), pMarkAccess->getAllMarksCount());
+
+            int nIndex = 0;
+            for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
             {
-                pResult->second >>= sDateFormat;
+                ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*aIter);
+                CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+
+                // Check date form field's parameters.
+                const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+                OUString sDateFormat;
+                auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
+                if (pResult != pParameters->end())
+                {
+                    pResult->second >>= sDateFormat;
+                }
+
+                OUString sLang;
+                pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
+                if (pResult != pParameters->end())
+                {
+                    pResult->second >>= sLang;
+                }
+
+                OUString sCurrentDate = pFieldmark->GetContent();
+
+                // The first one has the default field content
+                if(nIndex == 0)
+                {
+
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
+                    sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(vEnSpaces, 5), sCurrentDate);
+
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(5), pFieldmark->GetMarkStart().nContent.GetIndex());
+                }
+                else if (nIndex == 1) // The second has the default format
+                {
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("06/12/19"), sCurrentDate);
+
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(20), pFieldmark->GetMarkStart().nContent.GetIndex());
+                }
+                else if (nIndex == 2) // The third one has special format
+                {
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("[NatNum12 MMMM=abbreviation]YYYY\". \"MMMM D."), sDateFormat);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("hu-HU"), sLang);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("2019. febr. 12."), sCurrentDate);
+
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(40), pFieldmark->GetMarkStart().nContent.GetIndex());
+
+                }
+                else if (nIndex == 3) // The fourth one has placeholder text
+                {
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("D, MMM YY"), sDateFormat);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("bm-ML"), sLang);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("[select date]"), sCurrentDate);
+
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(62), pFieldmark->GetMarkStart().nContent.GetIndex());
+
+                }
+                else // The last one is really empty
+                {
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(""), sCurrentDate);
+
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(82), pFieldmark->GetMarkStart().nContent.GetIndex());
+
+                }
+                ++nIndex;
             }
-
-            OUString sLang;
-            pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
-            if (pResult != pParameters->end())
-            {
-                pResult->second >>= sLang;
-            }
-
-            OUString sCurrentDate = pFieldmark->GetContent();
-
-            // The first one has the default field content
-            if(nIndex == 0)
-            {
-
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
-                sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(vEnSpaces, 5), sCurrentDate);
-
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(5), pFieldmark->GetMarkStart().nContent.GetIndex());
-            }
-            else if (nIndex == 1) // The second has the default format
-            {
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("06/12/19"), sCurrentDate);
-
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(20), pFieldmark->GetMarkStart().nContent.GetIndex());
-            }
-            else if (nIndex == 2) // The third one has special format
-            {
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("[NatNum12 MMMM=abbreviation]YYYY\". \"MMMM D."), sDateFormat);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("hu-HU"), sLang);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("2019. febr. 12."), sCurrentDate);
-
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(40), pFieldmark->GetMarkStart().nContent.GetIndex());
-
-            }
-            else if (nIndex == 3) // The fourth one has placeholder text
-            {
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("D, MMM YY"), sDateFormat);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("bm-ML"), sLang);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("[select date]"), sCurrentDate);
-
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(62), pFieldmark->GetMarkStart().nContent.GetIndex());
-
-            }
-            else // The last one is really empty
-            {
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(""), sCurrentDate);
-
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(82), pFieldmark->GetMarkStart().nContent.GetIndex());
-
-            }
-            ++nIndex;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(5), nIndex);
         }
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(5), nIndex);
+        else
+        {
+            // Import from DOCX, so the fieldmark is now a content control.
+            uno::Reference<container::XEnumerationAccess> xEnumAccess(getParagraph(1), uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xTextPortions = xEnumAccess->createEnumeration();
+
+            int nIndex = 0;
+            while (xTextPortions->hasMoreElements())
+            {
+                uno::Reference<beans::XPropertySet> xTextPortion(xTextPortions->nextElement(), uno::UNO_QUERY);
+                OUString aPortionType;
+                xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+                if (aPortionType != "ContentControl")
+                {
+                    continue;
+                }
+
+                uno::Reference<text::XTextContent> xContentControl;
+                xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+                uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+
+                bool bDate{};
+                xContentControlProps->getPropertyValue("Date") >>= bDate;
+                CPPUNIT_ASSERT(bDate);
+
+                // Check date form field's parameters.
+                OUString sDateFormat;
+                xContentControlProps->getPropertyValue("DateFormat") >>= sDateFormat;
+
+                OUString sLang;
+                xContentControlProps->getPropertyValue("DateLanguage") >>= sLang;
+
+                uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl,
+                        uno::UNO_QUERY);
+                uno::Reference<container::XEnumeration> xContentControlEnum
+                    = xContentControlEnumAccess->createEnumeration();
+                uno::Reference<text::XTextRange> xContentControlTextPortion(xContentControlEnum->nextElement(), uno::UNO_QUERY);
+                OUString sCurrentDate = xContentControlTextPortion->getString();
+
+                // The first one has the default field content
+                if(nIndex == 0)
+                {
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
+                    sal_Unicode vEnSpaces[ODF_FORMFIELD_DEFAULT_LENGTH] = {8194, 8194, 8194, 8194, 8194};
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(vEnSpaces, 5), sCurrentDate);
+                }
+                else if (nIndex == 1) // The second has the default format
+                {
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("06/12/19"), sCurrentDate);
+                }
+                else if (nIndex == 2) // The third one has special format
+                {
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("[NatNum12 MMMM=abbreviation]YYYY\". \"MMMM D."), sDateFormat);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("hu-HU"), sLang);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("2019. febr. 12."), sCurrentDate);
+                }
+                else if (nIndex == 3) // The fourth one has placeholder text
+                {
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("D, MMM YY"), sDateFormat);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("bm-ML"), sLang);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("[select date]"), sCurrentDate);
+                }
+                else // The last one is really empty
+                {
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("MM/DD/YY"), sDateFormat);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("en-US"), sLang);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(""), sCurrentDate);
+                }
+                ++nIndex;
+            }
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), int(5), nIndex);
+        }
     }
 }
 
@@ -1766,24 +1844,52 @@ void Test::testDateFormFieldCharacterFormatting()
         mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
 
         // Check the document after round trip
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+        if (rFilterName == "writer8")
+        {
+            SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
+            SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+            IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
 
-        // Check that we have the field at the right place
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(1), pMarkAccess->getAllMarksCount());
-        ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0), pFieldmark->GetMarkStart().nContent.GetIndex());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(11), pFieldmark->GetMarkEnd().nContent.GetIndex());
+            // Check that we have the field at the right place
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(1), pMarkAccess->getAllMarksCount());
+            ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0), pFieldmark->GetMarkStart().nContent.GetIndex());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(11), pFieldmark->GetMarkEnd().nContent.GetIndex());
 
-        // We have one date field, first half of the field has bold character weight and second part has red character color
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 3), "CharWeight"));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_AUTO, getProperty<Color>(getRun(getParagraph(1), 3), "CharColor"));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::NORMAL, getProperty<float>(getRun(getParagraph(1), 4), "CharWeight"));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), Color(0xff0000), getProperty<Color>(getRun(getParagraph(1), 4), "CharColor"));
+            // We have one date field, first half of the field has bold character weight and second part has red character color
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 3), "CharWeight"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_AUTO, getProperty<Color>(getRun(getParagraph(1), 3), "CharColor"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::NORMAL, getProperty<float>(getRun(getParagraph(1), 4), "CharWeight"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), Color(0xff0000), getProperty<Color>(getRun(getParagraph(1), 4), "CharColor"));
+        }
+        else
+        {
+            uno::Reference<beans::XPropertySet> xTextPortion(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+            OUString aPortionType;
+            xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+            CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+
+            uno::Reference<text::XTextContent> xContentControl;
+            xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+            uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+            bool bDate{};
+            xContentControlProps->getPropertyValue("Date") >>= bDate;
+            CPPUNIT_ASSERT(bDate);
+
+            uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl,
+                                                                                    uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xContentControlEnum
+                = xContentControlEnumAccess->createEnumeration();
+            xTextPortion.set(xContentControlEnum->nextElement(), uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::BOLD, getProperty<float>(xTextPortion, "CharWeight"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_AUTO, getProperty<Color>(xTextPortion, "CharColor"));
+            xTextPortion.set(xContentControlEnum->nextElement(), uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::NORMAL, getProperty<float>(xTextPortion, "CharWeight"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), Color(0xff0000), getProperty<Color>(xTextPortion, "CharColor"));
+        }
     }
 }
 

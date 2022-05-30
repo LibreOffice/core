@@ -2405,7 +2405,7 @@ void DocxAttributeOutput::WriteContentControlStart()
         {
             m_pSerializer->startElementNS(XML_w, XML_date, FSNS(XML_w, XML_fullDate), aCurrentDate);
         }
-        OUString aDateFormat = m_pContentControl->GetDateFormat();
+        OUString aDateFormat = m_pContentControl->GetDateFormat().replaceAll("\"", "'");
         if (!aDateFormat.isEmpty())
         {
             m_pSerializer->singleElementNS(XML_w, XML_dateFormat, FSNS(XML_w, XML_val),

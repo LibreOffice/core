@@ -999,23 +999,51 @@ DECLARE_OOXMLEXPORT_TEST(testN820509, "n820509.docx")
     // M.d.yyyy date format was unhandled.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
-
-    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*pMarkAccess->getAllMarksBegin());
-
-    CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
-
-    const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
-    OUString sDateFormat;
-    auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
-    if (pResult != pParameters->end())
+    if (mbExported)
     {
-        pResult->second >>= sDateFormat;
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
+        uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+        uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+        uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+        OUString aPortionType;
+        xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+        CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+        uno::Reference<text::XTextContent> xContentControl;
+        xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+        bool bDate{};
+        xContentControlProps->getPropertyValue("Date") >>= bDate;
+        CPPUNIT_ASSERT(bDate);
+        OUString aDateFormat;
+        xContentControlProps->getPropertyValue("DateFormat") >>= aDateFormat;
+        CPPUNIT_ASSERT_EQUAL(OUString("M.d.yyyy"), aDateFormat);
     }
-    CPPUNIT_ASSERT_EQUAL(OUString("M.d.yyyy"), sDateFormat);
+    else
+    {
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
+
+        ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*pMarkAccess->getAllMarksBegin());
+
+        CPPUNIT_ASSERT(pFieldmark);
+        CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+
+        const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+        OUString sDateFormat;
+        auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
+        if (pResult != pParameters->end())
+        {
+            pResult->second >>= sDateFormat;
+        }
+        CPPUNIT_ASSERT_EQUAL(OUString("M.d.yyyy"), sDateFormat);
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN830205, "n830205.docx")

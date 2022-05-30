@@ -528,39 +528,25 @@ CPPUNIT_TEST_FIXTURE(Test, testDateControl)
     // Check that we exported the empty date control correctly
     // Date form field is converted to date content control.
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    uno::Reference<beans::XPropertySet> xTextPortion(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    bool bDate{};
+    xContentControlProps->getPropertyValue("Date") >>= bDate;
+    CPPUNIT_ASSERT(bDate);
 
-
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
-    ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*pMarkAccess->getAllMarksBegin());
-
-    CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
-
-    const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
     OUString sDateFormat;
-    auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
-    if (pResult != pParameters->end())
-    {
-        pResult->second >>= sDateFormat;
-    }
+    xContentControlProps->getPropertyValue("DateFormat") >>= sDateFormat;
 
     OUString sLang;
-    pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
-    if (pResult != pParameters->end())
-    {
-        pResult->second >>= sLang;
-    }
+    xContentControlProps->getPropertyValue("DateLanguage") >>= sLang;
 
     OUString sCurrentDate;
-    pResult = pParameters->find(ODF_FORMDATE_CURRENTDATE);
-    if (pResult != pParameters->end())
-    {
-        pResult->second >>= sCurrentDate;
-    }
+    xContentControlProps->getPropertyValue("CurrentDate") >>= sCurrentDate;
 
     CPPUNIT_ASSERT_EQUAL(OUString("dd/MM/yyyy"), sDateFormat);
     CPPUNIT_ASSERT_EQUAL(OUString("en-US"), sLang);
@@ -1033,45 +1019,36 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121663)
 DECLARE_OOXMLEXPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx")
 {
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pMarkAccess->getAllMarksCount());
+    uno::Reference<container::XEnumerationAccess> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
 
     int nIndex = 0;
-    for(auto aIter = pMarkAccess->getAllMarksBegin(); aIter != pMarkAccess->getAllMarksEnd(); ++aIter)
+    while (xPortions->hasMoreElements())
     {
-        ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
-
-        if(!pFieldmark)
-            continue;
-
-        CPPUNIT_ASSERT(pFieldmark);
-        CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
-
-        // Check date field's parameters.
-        const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
-        OUString sDateFormat;
-        auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
-        if (pResult != pParameters->end())
+        uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+        OUString aPortionType;
+        xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+        if (aPortionType != "ContentControl")
         {
-            pResult->second >>= sDateFormat;
+            continue;
         }
+
+        uno::Reference<text::XTextContent> xContentControl;
+        xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+        bool bDate{};
+        xContentControlProps->getPropertyValue("Date") >>= bDate;
+        CPPUNIT_ASSERT(bDate);
+
+        // Check date content control's parameters.
+        OUString sDateFormat;
+        xContentControlProps->getPropertyValue("DateFormat") >>= sDateFormat;
 
         OUString sLang;
-        pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
-        if (pResult != pParameters->end())
-        {
-            pResult->second >>= sLang;
-        }
+        xContentControlProps->getPropertyValue("DateLanguage") >>= sLang;
 
         OUString sCurrentDate;
-        pResult = pParameters->find(ODF_FORMDATE_CURRENTDATE);
-        if (pResult != pParameters->end())
-        {
-            pResult->second >>= sCurrentDate;
-        }
+        xContentControlProps->getPropertyValue("CurrentDate") >>= sCurrentDate;
 
         // The first one has invalid date format (invalid = LO can't parse it)
         if(nIndex == 0)
@@ -1081,26 +1058,20 @@ DECLARE_OOXMLEXPORT_TEST(testInvalidDateFormField, "invalid_date_form_field.docx
             CPPUNIT_ASSERT_EQUAL(OUString("en-US"), sLang);
             CPPUNIT_ASSERT_EQUAL(OUString(""), sCurrentDate);
 
-            CPPUNIT_ASSERT_EQUAL(SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pFieldmark->GetMarkStart().nContent.GetIndex());
         }
         else if (nIndex == 1) // The second has wrong date
         {
             CPPUNIT_ASSERT_EQUAL(OUString("MM/DD/YY"), sDateFormat);
             CPPUNIT_ASSERT_EQUAL(OUString("en-US"), sLang);
-            CPPUNIT_ASSERT_EQUAL(OUString("2019.06.34"), sCurrentDate);
+            CPPUNIT_ASSERT_EQUAL(OUString("2019.06.34T00:00:00Z"), sCurrentDate);
 
-            CPPUNIT_ASSERT_EQUAL(SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(15), pFieldmark->GetMarkStart().nContent.GetIndex());
         }
         else // The third one has wrong local
         {
             CPPUNIT_ASSERT_EQUAL(OUString("[NatNum12 MMMM=abbreviation]YYYY\". \"MMMM D."), sDateFormat);
             CPPUNIT_ASSERT_EQUAL(OUString("xxxx"), sLang);
-            CPPUNIT_ASSERT_EQUAL(OUString("2019.06.11"), sCurrentDate);
+            CPPUNIT_ASSERT_EQUAL(OUString("2019.06.11T00:00:00Z"), sCurrentDate);
 
-            CPPUNIT_ASSERT_EQUAL(SwNodeOffset(9), pFieldmark->GetMarkStart().nNode.GetIndex());
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(35), pFieldmark->GetMarkStart().nContent.GetIndex());
         }
         ++nIndex;
     }
