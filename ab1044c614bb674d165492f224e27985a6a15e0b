@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ee44697_060a76a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-30T07:13:04Z",
+      "side": 1,
+      "message": "Thanks. FWIW 0 is already a reasonable return value here, so I think just silencing coverity here is a correct fix.",
+      "revId": "ab1044c614bb674d165492f224e27985a6a15e0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
