@@ -26,6 +26,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <tools/stream.hxx>
 #include <mutex>
+#include <utility>
 
 namespace utl
 {
@@ -41,9 +42,9 @@ class UNOTOOLS_DLLPUBLIC OInputStreamHelper final : public cppu::WeakImplHelper<
     sal_Int32       m_nAvailable;   // this is typically the chunk(buffer) size
 
 public:
-    OInputStreamHelper(const SvLockBytesRef& _xLockBytes,
+    OInputStreamHelper(SvLockBytesRef _xLockBytes,
                        sal_uInt32 _nAvailable)
-        :m_xLockBytes(_xLockBytes)
+        :m_xLockBytes(std::move(_xLockBytes))
         ,m_nActPos(0)
         ,m_nAvailable(_nAvailable){}
 

@@ -38,7 +38,7 @@ class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) ProgressHandlerWrap final
     css::uno::Reference<css::task::XStatusIndicator> m_xStatusIndicator;
 
 public:
-    ProgressHandlerWrap(css::uno::Reference<css::task::XStatusIndicator> const& xSI);
+    ProgressHandlerWrap(css::uno::Reference<css::task::XStatusIndicator> xSI);
 
     // XProgressHandler
     virtual void SAL_CALL push(const css::uno::Any& Status) override;

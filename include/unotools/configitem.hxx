@@ -109,7 +109,7 @@ namespace utl
             virtual void            ImplCommit() = 0;
 
         protected:
-            explicit ConfigItem(const OUString &rSubTree,
+            explicit ConfigItem(OUString aSubTree,
                         ConfigItemMode nMode = ConfigItemMode::NONE);
 
             void                    SetModified  (); // mark item as modified

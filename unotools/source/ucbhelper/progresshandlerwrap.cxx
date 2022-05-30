@@ -19,6 +19,7 @@
 
 #include <unotools/progresshandlerwrap.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <utility>
 
 namespace utl
 {
@@ -27,8 +28,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ucb;
 
-ProgressHandlerWrap::ProgressHandlerWrap( css::uno::Reference< css::task::XStatusIndicator > const & xSI )
-: m_xStatusIndicator( xSI )
+ProgressHandlerWrap::ProgressHandlerWrap( css::uno::Reference< css::task::XStatusIndicator > xSI )
+: m_xStatusIndicator(std::move( xSI ))
 {
 }
 

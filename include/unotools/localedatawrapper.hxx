@@ -118,14 +118,14 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 public:
     LocaleDataWrapper(
         const css::uno::Reference< css::uno::XComponentContext > & rxContext,
-        const LanguageTag& rLanguageTag
+        LanguageTag aLanguageTag
         );
     /**
         @param rOverrideDateAcceptancePatterns Override locale's date acceptance patterns.
             An empty sequence resets the patterns to the locale's pattern sequence.
      */
     LocaleDataWrapper(
-        const LanguageTag& rLanguageTag,
+        LanguageTag aLanguageTag,
         const std::vector<OUString> & rOverrideDateAcceptancePatterns = {}
         );
     ~LocaleDataWrapper();

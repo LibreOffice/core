@@ -11,6 +11,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/XServiceDocumenter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <utility>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -20,8 +21,8 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
     css::script::XServiceDocumenter, css::lang::XServiceInfo>
 {
     public:
-        ServiceDocumenter(css::uno::Reference< css::uno::XComponentContext> const& xContext)
-            : m_xContext(xContext)
+        ServiceDocumenter(css::uno::Reference< css::uno::XComponentContext> xContext)
+            : m_xContext(std::move(xContext))
             , m_sCoreBaseUrl("http://example.com")
             , m_sServiceBaseUrl("https://api.libreoffice.org/docs/idl/ref")
             {};
