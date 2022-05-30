@@ -696,6 +696,10 @@ private:
     SVL_DLLPRIVATE static void ImpAppendEraG( OUStringBuffer& OutStringBuffer, const CalendarWrapper& rCal,
                                               sal_Int16 nNatNum );
 
+    SVL_DLLPRIVATE bool ImpGetLogicalOutput( double fNumber,
+                                             sal_uInt16 nIx,
+                                             OUStringBuffer& OutString );
+
     SVL_DLLPRIVATE bool ImpGetNumberOutput( double fNumber,
                                             sal_uInt16 nIx,
                                             OUStringBuffer& OutString );
