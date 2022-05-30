@@ -59,7 +59,7 @@ public:
     bool         m_bInvalid;                  // true: invalid entry
     StgDirEntry(const void* pBuffer, sal_uInt32 nBufferLen,
                 sal_uInt64 nUnderlyingStreamSize, bool * pbOk);
-    explicit StgDirEntry( const StgEntry& );
+    explicit StgDirEntry( StgEntry );
     virtual ~StgDirEntry() override;
 
     void Invalidate( bool );                // invalidate all open entries

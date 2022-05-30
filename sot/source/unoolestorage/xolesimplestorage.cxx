@@ -35,6 +35,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <sot/stg.hxx>
 #include <sot/storinfo.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -42,11 +43,11 @@ const sal_Int32 nBytesCount = 32000;
 
 
 OLESimpleStorage::OLESimpleStorage(
-        css::uno::Reference<css::uno::XComponentContext> const & xContext,
+        css::uno::Reference<css::uno::XComponentContext> xContext,
         css::uno::Sequence<css::uno::Any> const &aArguments)
 : m_bDisposed( false )
 , m_pListenersContainer( nullptr )
-, m_xContext( xContext )
+, m_xContext(std::move( xContext ))
 , m_bNoTemporaryCopy( false )
 {
     sal_Int32 nArgNum = aArguments.getLength();

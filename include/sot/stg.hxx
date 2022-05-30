@@ -154,7 +154,7 @@ class UNLESS_MERGELIBS(SOT_DLLPUBLIC) Storage final : public BaseStorage, public
                                 Storage( StgIo*, StgDirEntry*, StreamMode );
                                 virtual ~Storage() override;
 public:
-                                Storage( const OUString &, StreamMode, bool bDirect );
+                                Storage( OUString, StreamMode, bool bDirect );
                                 Storage( SvStream& rStrm, bool bDirect );
                                 Storage( UCBStorageStream& rStrm, bool bDirect );
 
