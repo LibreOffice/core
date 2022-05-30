@@ -115,19 +115,19 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
     XMLPropertyState* pFooterBorderWidths[4] = { nullptr, nullptr, nullptr, nullptr };
     XMLPropertyState* pHeaderHeight = nullptr;
     XMLPropertyState* pHeaderMinHeight = nullptr;
-    std::unique_ptr<XMLPropertyState> xHeaderDynamic;
+    std::optional<XMLPropertyState> xHeaderDynamic;
     XMLPropertyState* pFooterHeight = nullptr;
     XMLPropertyState* pFooterMinHeight = nullptr;
-    std::unique_ptr<XMLPropertyState> xFooterDynamic;
+    std::optional<XMLPropertyState> xFooterDynamic;
     XMLPropertyState* pAllMarginProperty = nullptr;
     XMLPropertyState* pMargins[4] = { nullptr, nullptr, nullptr, nullptr };
-    std::unique_ptr<XMLPropertyState> pNewMargins[4];
+    std::optional<XMLPropertyState> pNewMargins[4];
     XMLPropertyState* pAllHeaderMarginProperty = nullptr;
     XMLPropertyState* pHeaderMargins[4] = { nullptr, nullptr, nullptr, nullptr };
-    std::unique_ptr<XMLPropertyState> pNewHeaderMargins[4];
+    std::optional<XMLPropertyState> pNewHeaderMargins[4];
     XMLPropertyState* pAllFooterMarginProperty = nullptr;
     XMLPropertyState* pFooterMargins[4] = { nullptr, nullptr, nullptr, nullptr };
-    std::unique_ptr<XMLPropertyState> pNewFooterMargins[4];
+    std::optional<XMLPropertyState> pNewFooterMargins[4];
     XMLPropertyState* pMarginGutter = nullptr;
     XMLPropertyState* pRtlGutter = nullptr;
 
@@ -232,21 +232,21 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
     {
         if (pAllMarginProperty && !pMargins[i])
         {
-            pNewMargins[i].reset(new XMLPropertyState(
+            pNewMargins[i].emplace(
                 pAllMarginProperty->mnIndex + 1 + i,
-                pAllMarginProperty->maValue));
+                pAllMarginProperty->maValue);
         }
         if (pAllHeaderMarginProperty && !pHeaderMargins[i])
         {
-            pNewHeaderMargins[i].reset(new XMLPropertyState(
+            pNewHeaderMargins[i].emplace(
                 pAllHeaderMarginProperty->mnIndex + 1 + i,
-                pAllHeaderMarginProperty->maValue));
+                pAllHeaderMarginProperty->maValue);
         }
         if (pAllFooterMarginProperty && !pFooterMargins[i])
         {
-            pNewFooterMargins[i].reset(new XMLPropertyState(
+            pNewFooterMargins[i].emplace(
                 pAllFooterMarginProperty->mnIndex + 1 + i,
-                pAllFooterMarginProperty->maValue));
+                pAllFooterMarginProperty->maValue);
         }
         if (pAllPaddingProperty && !pPadding[i])
             pNewPadding[i] = new XMLPropertyState(pAllPaddingProperty->mnIndex + 1 + i, pAllPaddingProperty->maValue);
@@ -324,19 +324,19 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
 
     if (pHeaderHeight)
     {
-        xHeaderDynamic.reset(new XMLPropertyState(pHeaderHeight->mnIndex + 2, Any(false)));
+        xHeaderDynamic.emplace(pHeaderHeight->mnIndex + 2, Any(false));
     }
     if (pHeaderMinHeight)
     {
-        xHeaderDynamic.reset(new XMLPropertyState(pHeaderMinHeight->mnIndex + 1, Any(true)));
+        xHeaderDynamic.emplace(pHeaderMinHeight->mnIndex + 1, Any(true));
     }
     if (pFooterHeight)
     {
-        xFooterDynamic.reset(new XMLPropertyState(pFooterHeight->mnIndex + 2, Any(false)));
+        xFooterDynamic.emplace(pFooterHeight->mnIndex + 2, Any(false));
     }
     if (pFooterMinHeight)
     {
-        xFooterDynamic.reset(new XMLPropertyState(pFooterMinHeight->mnIndex + 1, Any(true)));
+        xFooterDynamic.emplace(pFooterMinHeight->mnIndex + 1, Any(true));
     }
 
     // fdo#38056: nerf the various AllFoo properties so they do not override

@@ -1224,12 +1224,12 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
     if ( !maEquations.empty() )
     {
         // creating hash map containing the name and index of each equation
-        std::unique_ptr<EquationHashMap> pH = std::make_unique<EquationHashMap>();
+        EquationHashMap aH;
         std::vector< OUString >::iterator aEquationNameIter = maEquationNames.begin();
         std::vector< OUString >::iterator aEquationNameEnd  = maEquationNames.end();
         while( aEquationNameIter != aEquationNameEnd )
         {
-            (*pH)[ *aEquationNameIter ] = static_cast<sal_Int32>( aEquationNameIter - maEquationNames.begin() );
+            aH[ *aEquationNameIter ] = static_cast<sal_Int32>( aEquationNameIter - maEquationNames.begin() );
             ++aEquationNameIter;
         }
 
@@ -1247,8 +1247,8 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
                     {
                         // copying first characters inclusive '?'
                         sal_Int32 nIndex = 0;
-                        EquationHashMap::iterator aHashIter( pH->find( aEquationName ) );
-                        if ( aHashIter != pH->end() )
+                        EquationHashMap::iterator aHashIter( aH.find( aEquationName ) );
+                        if ( aHashIter != aH.end() )
                             nIndex = (*aHashIter).second;
                         OUString aNew = rEquation.subView( 0, nIndexOf + 1 ) +
                             OUString::number( nIndex ) +
@@ -1274,8 +1274,8 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
                             rPathItem.Value);
                     for ( const auto& rElem : rSeq )
                     {
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.First), pH.get() );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.Second), pH.get() );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.First), &aH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.Second), &aH );
                     }
                 }
                 break;
@@ -1286,10 +1286,10 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
                             rPathItem.Value);
                     for ( const auto& rElem : rSeq )
                     {
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.TopLeft.First), pH.get() );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.TopLeft.Second), pH.get() );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.BottomRight.First), pH.get() );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.BottomRight.Second), pH.get() );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.TopLeft.First), &aH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.TopLeft.Second), &aH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.BottomRight.First), &aH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rElem.BottomRight.Second), &aH );
                     }
                 }
                 break;
@@ -1311,7 +1311,7 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
                     case EAS_RadiusRangeMaximum :
                     {
                         CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(*o3tl::doAccess<css::drawing::EnhancedCustomShapeParameter>(
-                            propValue.Value)), pH.get() );
+                            propValue.Value)), &aH );
                     }
                     break;
 
@@ -1319,9 +1319,9 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
                     case EAS_Polar :
                     {
                         CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*o3tl::doAccess<css::drawing::EnhancedCustomShapeParameterPair>(
-                            propValue.Value)).First), pH.get() );
+                            propValue.Value)).First), &aH );
                         CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*o3tl::doAccess<css::drawing::EnhancedCustomShapeParameterPair>(
-                            propValue.Value)).Second), pH.get() );
+                            propValue.Value)).Second), &aH );
                     }
                     break;
                     default:
