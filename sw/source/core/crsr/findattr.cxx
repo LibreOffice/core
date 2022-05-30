@@ -467,7 +467,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
             assert(pSet && "otherwise no oIter");
             nWhch = oIter->NextWhich();
             while( nWhch &&
-                SfxItemState::SET != pSet->GetItemState( nWhch, true, &pTmpItem ) )
+                SfxItemState::SET != oIter->GetItemState( true, &pTmpItem ) )
                 nWhch = oIter->NextWhich();
             if( !nWhch )
                 break;
@@ -625,7 +625,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
             assert(pSet && "otherwise no oIter");
             nWhch = oIter->NextWhich();
             while( nWhch &&
-                SfxItemState::SET != pSet->GetItemState( nWhch, true, &pTmpItem ) )
+                SfxItemState::SET != oIter->GetItemState( true, &pTmpItem ) )
                 nWhch = oIter->NextWhich();
             if( !nWhch )
                 break;
