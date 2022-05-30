@@ -28,15 +28,52 @@
 #include <vcl/cvtgrf.hxx>
 #include <comphelper/base64.hxx>
 
+namespace
+{
+const int separatorHeight = 10;
+const int nSpacing = 5; // 5 pixels from top, from bottom, between icon and label
+}
+
 IconView::IconView(vcl::Window* pParent, WinBits nBits)
     : SvTreeListBox(pParent, nBits)
 {
     nColumns = 1;
     mbCenterAndClipText = true;
-    SetEntryHeight(100);
     SetEntryWidth(100);
 
     pImpl.reset(new IconViewImpl(this, GetModel(), GetStyle()));
+}
+
+Size IconView::GetEntrySize(const SvTreeListEntry& entry) const
+{
+    if (entry.GetFlags() & SvTLEntryFlags::IS_SEPARATOR)
+        return { GetEntryWidth() * GetColumnsCount(), separatorHeight };
+    return { GetEntryWidth(), GetEntryHeight() };
+}
+
+void IconView::CalcEntryHeight(SvTreeListEntry const* pEntry)
+{
+    int nHeight = nSpacing * 2;
+    SvViewDataEntry* pViewData = GetViewDataEntry(pEntry);
+    const size_t nCount = pEntry->ItemCount();
+    bool bHasIcon = false;
+    for (size_t nCur = 0; nCur < nCount; ++nCur)
+    {
+        nHeight += SvLBoxItem::GetHeight(pViewData, nCur);
+
+        if (!bHasIcon && pEntry->GetItem(nCur).GetType() == SvLBoxItemType::ContextBmp)
+            bHasIcon = true;
+    }
+
+    if (bHasIcon && nCount > 1)
+        nHeight += nSpacing; // between icon and label
+
+    if (nHeight > nEntryHeight)
+    {
+        nEntryHeight = nHeight;
+        Control::SetFont(GetFont());
+        pImpl->SetEntryHeight();
+    }
 }
 
 void IconView::Resize()
@@ -46,46 +83,24 @@ void IconView::Resize()
     if (!aBoxSize.Width())
         return;
 
-    nColumns = aBoxSize.Width() / nEntryWidth;
+    nColumns = nEntryWidth ? aBoxSize.Width() / nEntryWidth : 1;
 
     SvTreeListBox::Resize();
 }
 
-tools::Rectangle IconView::GetFocusRect(const SvTreeListEntry*, tools::Long nEntryPos)
+tools::Rectangle IconView::GetFocusRect(const SvTreeListEntry* pEntry, tools::Long)
 {
-    Size aSize;
-    aSize.setHeight(nEntryHeight);
-    aSize.setWidth(nEntryWidth);
-
-    Point aPos;
-    aPos.setX(0);
-    aPos.setY(0);
-
-    tools::Rectangle aRect;
-
-    short nCols = GetColumnsCount();
-
-    if (nCols)
-    {
-        aPos.setY((nEntryPos / nCols) * nEntryHeight);
-        aPos.setX((nEntryPos % nCols) * nEntryWidth);
-    }
-
-    aRect.SetPos(aPos);
-    aRect.SetSize(aSize);
-
-    return aRect;
+    return { GetEntryPosition(pEntry), GetEntrySize(*pEntry) };
 }
 
 void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long nY,
                           vcl::RenderContext& rRenderContext)
 {
-    const int nSpacing = 5; // 5 pixels from top, from bottom, between icon and label
-
     pImpl->UpdateContextBmpWidthMax(&rEntry);
 
-    short nTempEntryHeight = GetEntryHeight();
-    short nTempEntryWidth = GetEntryWidth();
+    const Size entrySize = GetEntrySize(rEntry);
+    short nTempEntryHeight = entrySize.Height();
+    short nTempEntryWidth = entrySize.Width();
 
     Point aEntryPos(nX, nY);
 

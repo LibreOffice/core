@@ -60,6 +60,34 @@ protected:
 
     void SyncVerThumb() override;
     void AdjustScrollBars(Size& rSize) override;
+
+private:
+    enum class CallbackResult
+    {
+        Continue,
+        Stop, // Stop iteration
+    };
+    struct EntryAreaInfo
+    {
+        SvTreeListEntry* entry;
+        short column;
+        tools::Rectangle area; // The area for the entry
+    };
+    using IterateEntriesFunc = std::function<CallbackResult(const EntryAreaInfo&)>;
+
+    void IterateVisibleEntryAreas(const IterateEntriesFunc& f, bool fromStartEntry = false) const;
+
+    Size GetEntrySize(const SvTreeListEntry& entry) const;
+    // Get first entry at most n rows above; nullptr if no rows above
+    SvTreeListEntry* GoToPrevRow(SvTreeListEntry* pEntry, int n) const;
+    // Get first entry at most n rows below; nullptr if no rows below
+    SvTreeListEntry* GoToNextRow(SvTreeListEntry* pEntry, int n) const;
+
+    SvTreeListEntry* GetFirstInRow(SvTreeListEntry* pEntry) const;
+
+    tools::Long GetEntryRow(const SvTreeListEntry* entry) const;
+    void SetStartEntry(SvTreeListEntry* entry);
+    void ScrollTo(SvTreeListEntry* entry);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
