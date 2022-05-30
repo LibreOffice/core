@@ -1241,9 +1241,10 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem&     rBoxItem,
 void ScAttrArray::ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfoItem* pLineInner,
                                   SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight)
 {
+    SetDefaultIfNotInit();
     if (nStartRow == nEndRow)
         ApplyFrame(rLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight, true, 0);
-    else if ( !mvData.empty() )
+    else
     {
         ApplyFrame(rLineOuter, pLineInner, nStartRow, nStartRow, bLeft, nDistRight,
                    true, nEndRow-nStartRow);
@@ -1273,10 +1274,6 @@ void ScAttrArray::ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfo
         }
 
         ApplyFrame(rLineOuter, pLineInner, nEndRow, nEndRow, bLeft, nDistRight, false, 0);
-    }
-    else
-    {
-        ApplyFrame(rLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight, true, 0);
     }
 }
 
