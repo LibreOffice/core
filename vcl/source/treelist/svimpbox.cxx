@@ -49,11 +49,11 @@ Image*  SvImpLBox::s_pDefExpanded       = nullptr;
 oslInterlockedCount SvImpLBox::s_nImageRefCount   = 0;
 
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinStyle)
-    : m_aHorSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_HSCROLL))
-    , m_aScrBarBox(VclPtr<ScrollBarBox>::Create(pLBView))
+    : m_aScrBarBox(VclPtr<ScrollBarBox>::Create(pLBView))
     , m_aFctSet(this, pLBView)
     , mbForceMakeVisible (false)
     , m_aEditIdle("SvImpLBox m_aEditIdle")
+    , m_aHorSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_HSCROLL))
     , m_aVerSBar(VclPtr<ScrollBar>::Create(pLBView, WB_DRAG | WB_VSCROLL))
     , m_aOutputSize(0, 0)
     , mbNoAutoCurEntry(false)
