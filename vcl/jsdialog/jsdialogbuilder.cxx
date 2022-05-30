@@ -1702,6 +1702,12 @@ void JSIconView::insert(int pos, const OUString* pStr, const OUString* pId,
     sendUpdate();
 }
 
+void JSIconView::insert_separator(int pos, const OUString* pId)
+{
+    SalInstanceIconView::insert_separator(pos, pId);
+    sendUpdate();
+}
+
 void JSIconView::clear()
 {
     SalInstanceIconView::clear();
