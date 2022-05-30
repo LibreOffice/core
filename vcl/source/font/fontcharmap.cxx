@@ -69,11 +69,11 @@ ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
 ImplFontCharMapRef const & ImplFontCharMap::getDefaultMap( bool bSymbols )
 {
     const sal_UCS4* pRangeCodes = aDefaultUnicodeRanges;
-    int nCodesCount = SAL_N_ELEMENTS(aDefaultUnicodeRanges);
+    int nCodesCount = std::size(aDefaultUnicodeRanges);
     if( bSymbols )
     {
         pRangeCodes = aDefaultSymbolRanges;
-        nCodesCount = SAL_N_ELEMENTS(aDefaultSymbolRanges);
+        nCodesCount = std::size(aDefaultSymbolRanges);
     }
 
     CmapResult aDefaultCR( bSymbols, pRangeCodes, nCodesCount/2 );
