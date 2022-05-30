@@ -157,6 +157,7 @@ public:
     void testFormulaPosition();
     void testFormulaWizardSubformula();
     void testDiagonalBorders();
+    void testWholeDocBorders();
 
     /**
      * Make sure the sheet streams are invalidated properly.
@@ -290,6 +291,7 @@ public:
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testFormulaWizardSubformula);
     CPPUNIT_TEST(testDiagonalBorders);
+    CPPUNIT_TEST(testWholeDocBorders);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);
@@ -6306,6 +6308,78 @@ void Test::testDiagonalBorders()
     CPPUNIT_ASSERT_MESSAGE("Diagonal down border was not expected, but is found!", !pLine);
     pLine = pPat->GetItem(ATTR_BORDER_BLTR).GetLine();
     CPPUNIT_ASSERT_MESSAGE("Diagonal up border was not expected, but is found!", !pLine);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testWholeDocBorders()
+{
+    m_pDoc->InsertTab(0, "Borders");
+
+    // Set outside border to be on all sides, and inside borders to be only vertical.
+    // This should result in edge borders of the spreadsheets being set, but internal
+    // borders between cells should be only vertical, not horizontal.
+    ::editeng::SvxBorderLine line(nullptr, 50, SvxBorderLineStyle::SOLID);
+    SvxBoxItem borderItem(ATTR_BORDER);
+    borderItem.SetLine(&line, SvxBoxItemLine::LEFT);
+    borderItem.SetLine(&line, SvxBoxItemLine::RIGHT);
+    borderItem.SetLine(&line, SvxBoxItemLine::TOP);
+    borderItem.SetLine(&line, SvxBoxItemLine::BOTTOM);
+    SvxBoxInfoItem boxInfoItem(ATTR_BORDER);
+    boxInfoItem.SetLine(&line, SvxBoxInfoItemLine::VERT);
+
+    ScMarkData mark( m_pDoc->GetSheetLimits(), ScRange( 0, 0, 0, m_pDoc->MaxCol(), m_pDoc->MaxRow(), 0 ));
+    m_pDoc->ApplySelectionFrame( mark, borderItem, &boxInfoItem );
+
+    const ScPatternAttr* attr;
+    attr = m_pDoc->GetPattern( 0, 0, 0 );
+    CPPUNIT_ASSERT(attr);
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetTop());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetLeft());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetRight());
+    CPPUNIT_ASSERT(!attr->GetItem(ATTR_BORDER).GetBottom());
+
+    attr = m_pDoc->GetPattern( 1, 0, 0 );
+    CPPUNIT_ASSERT(attr);
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetTop());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetLeft());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetRight());
+    CPPUNIT_ASSERT(!attr->GetItem(ATTR_BORDER).GetBottom());
+
+    attr = m_pDoc->GetPattern( 0, 1, 0 );
+    CPPUNIT_ASSERT(attr);
+    CPPUNIT_ASSERT(!attr->GetItem(ATTR_BORDER).GetTop());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetLeft());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetRight());
+    CPPUNIT_ASSERT(!attr->GetItem(ATTR_BORDER).GetBottom());
+
+    attr = m_pDoc->GetPattern( 1, 1, 0 );
+    CPPUNIT_ASSERT(attr);
+    CPPUNIT_ASSERT(!attr->GetItem(ATTR_BORDER).GetTop());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetLeft());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetRight());
+    CPPUNIT_ASSERT(!attr->GetItem(ATTR_BORDER).GetBottom());
+
+    attr = m_pDoc->GetPattern( m_pDoc->MaxCol(), 0, 0 );
+    CPPUNIT_ASSERT(attr);
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetTop());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetLeft());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetRight());
+    CPPUNIT_ASSERT(!attr->GetItem(ATTR_BORDER).GetBottom());
+
+    attr = m_pDoc->GetPattern( 0, m_pDoc->MaxRow(), 0 );
+    CPPUNIT_ASSERT(attr);
+    CPPUNIT_ASSERT(!attr->GetItem(ATTR_BORDER).GetTop());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetLeft());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetRight());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetBottom());
+
+    attr = m_pDoc->GetPattern( m_pDoc->MaxCol(), m_pDoc->MaxRow(), 0 );
+    CPPUNIT_ASSERT(attr);
+    CPPUNIT_ASSERT(!attr->GetItem(ATTR_BORDER).GetTop());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetLeft());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetRight());
+    CPPUNIT_ASSERT(attr->GetItem(ATTR_BORDER).GetBottom());
 
     m_pDoc->DeleteTab(0);
 }
