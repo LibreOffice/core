@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecb631d2_bd7ed3c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-30T10:47:57Z",
+      "side": 1,
+      "message": "@Tibor: very nice fix! It seems, this fixed the PPTX round-trip of the document, too, not only the PowerPoint interoperability of the LO export.",
+      "revId": "5409b505b9206ba57bed458a443dce9e345e13b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
