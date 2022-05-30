@@ -51,6 +51,24 @@
       "message": "please use the header/footer boilerplate from TEMPLATE.SOURCECODE.HEADER (and is this the appropriate license?)",
       "revId": "b3f2ae52e381f7d5fa466dc9df7d04d3d13ca4b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8d28d38_d1e3d2c0",
+        "filename": "offapi/com/sun/star/util/XCacheInfo.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-30T12:16:12Z",
+      "side": 1,
+      "message": "Fixed (and the actual contents is written from scratch, so indeed incorrect):\n\nhttps://gerrit.libreoffice.org/c/core/+/135126",
+      "parentUuid": "87c94f16_a2270340",
+      "revId": "b3f2ae52e381f7d5fa466dc9df7d04d3d13ca4b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
