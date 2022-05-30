@@ -2079,7 +2079,7 @@ class UpdateRefOnNonCopy
         ScFormulaCell** ppEnd = pp + rGroup.mnLength;
         ScFormulaCell* pTop = *pp;
         ScTokenArray* pCode = pTop->GetCode();
-        std::unique_ptr<ScTokenArray> pOldCode(pCode->Clone());
+        ScTokenArray aOldCode(pCode->CloneValue());
         ScAddress aOldPos = pTop->aPos;
 
         // Run this before the position gets updated.
@@ -2124,7 +2124,7 @@ class UpdateRefOnNonCopy
 
         if (aRes.mbReferenceModified || aRes.mbNameModified || bGroupShifted)
         {
-            sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pOldCode.get());
+            sc::EndListeningContext aEndCxt(mpCxt->mrDoc, &aOldCode);
             aEndCxt.setPositionDelta(
                 ScAddress(-mpCxt->mnColDelta, -mpCxt->mnRowDelta, -mpCxt->mnTabDelta));
 
@@ -2137,7 +2137,7 @@ class UpdateRefOnNonCopy
 
             mbUpdated = true;
 
-            fillUndoDoc(aOldPos, rGroup.mnLength, *pOldCode);
+            fillUndoDoc(aOldPos, rGroup.mnLength, aOldCode);
         }
 
         if (aRes.mbValueChanged)
@@ -2164,7 +2164,7 @@ class UpdateRefOnNonCopy
         ScFormulaCell** ppEnd = pp + rGroup.mnLength;
         ScFormulaCell* pTop = *pp;
         ScTokenArray* pCode = pTop->GetCode();
-        std::unique_ptr<ScTokenArray> pOldCode(pCode->Clone());
+        ScTokenArray aOldCode(pCode->CloneValue());
 
         ScAddress aPos = pTop->aPos;
         ScAddress aOldPos = aPos;
@@ -2211,7 +2211,7 @@ class UpdateRefOnNonCopy
         auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(mpCxt->mrDoc);
 
         sc::StartListeningContext aStartCxt(mpCxt->mrDoc, pPosSet);
-        sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pPosSet, pOldCode.get());
+        sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pPosSet, &aOldCode);
 
         aEndCxt.setPositionDelta(
             ScAddress(-mpCxt->mnColDelta, -mpCxt->mnRowDelta, -mpCxt->mnTabDelta));
@@ -2229,7 +2229,7 @@ class UpdateRefOnNonCopy
         // Move from clipboard is Cut&Paste, then do not copy the original
         // positions' formula cells to the Undo document.
         if (!mbClipboardSource || !bCellMoved)
-            fillUndoDoc(aOldPos, rGroup.mnLength, *pOldCode);
+            fillUndoDoc(aOldPos, rGroup.mnLength, aOldCode);
     }
 
     void fillUndoDoc( const ScAddress& rOldPos, SCROW nLength, const ScTokenArray& rOldCode )

@@ -352,8 +352,8 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                 // Reference in each cell must point to the origin cell relative to the current cell.
                 aRefData.SetAddress(GetSheetLimits(), aBasePos, aPos);
                 *t->GetSingleRef() = aRefData;
-                std::unique_ptr<ScTokenArray> pTokArr(aArr.Clone());
-                pCell = new ScFormulaCell(*this, aPos, *pTokArr, eGram, ScMatrixMode::Reference);
+                ScTokenArray aTokArr(aArr.CloneValue());
+                pCell = new ScFormulaCell(*this, aPos, aTokArr, eGram, ScMatrixMode::Reference);
                 pTab->SetFormulaCell(nCol, nRow, pCell);
             }
         }
