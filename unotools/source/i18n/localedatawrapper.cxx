@@ -42,6 +42,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <o3tl/string_view.hxx>
+#include <utility>
 
 const sal_uInt16 nCurrFormatDefault = 0;
 
@@ -59,25 +60,25 @@ sal_uInt8 LocaleDataWrapper::nLocaleDataChecking = 0;
 
 LocaleDataWrapper::LocaleDataWrapper(
             const Reference< uno::XComponentContext > & rxContext,
-            const LanguageTag& rLanguageTag
+            LanguageTag aLanguageTag
             )
         :
         m_xContext( rxContext ),
         xLD( LocaleData2::create(rxContext) ),
-        maLanguageTag( rLanguageTag )
+        maLanguageTag(std::move( aLanguageTag ))
 {
     loadData();
     loadDateAcceptancePatterns({});
 }
 
 LocaleDataWrapper::LocaleDataWrapper(
-            const LanguageTag& rLanguageTag,
+            LanguageTag aLanguageTag,
             const std::vector<OUString> & rOverrideDateAcceptancePatterns
             )
         :
         m_xContext( comphelper::getProcessComponentContext() ),
         xLD( LocaleData2::create(m_xContext) ),
-        maLanguageTag( rLanguageTag )
+        maLanguageTag(std::move( aLanguageTag ))
 {
     loadData();
     loadDateAcceptancePatterns(rOverrideDateAcceptancePatterns);

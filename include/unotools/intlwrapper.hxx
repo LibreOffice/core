@@ -61,7 +61,7 @@ private:
     void                ImplNewCollator( bool bCaseSensitive ) const;
 
 public:
-    IntlWrapper(const LanguageTag& rLanguageTag);
+    IntlWrapper(LanguageTag aLanguageTag);
     ~IntlWrapper();
 
     const LocaleDataWrapper*    getLocaleData() const

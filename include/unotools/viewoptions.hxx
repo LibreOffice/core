@@ -113,8 +113,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final
             @onerror    An assertion is thrown in debug version. Otherwise we do nothing!
         *//*-*****************************************************************************************************/
 
-         SvtViewOptions(       EViewType        eType     ,
-                         const OUString& sViewName );
+         SvtViewOptions( EViewType eType, OUString sViewName );
 
         //  interface
 

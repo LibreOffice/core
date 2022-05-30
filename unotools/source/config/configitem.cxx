@@ -49,6 +49,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::configuration;
 
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 /*
     The ConfigChangeListener_Impl receives notifications from the configuration about changes that
@@ -137,8 +138,8 @@ void ConfigChangeListener_Impl::disposing( const EventObject& /*rSource*/ )
     pParent->RemoveChangesListener();
 }
 
-ConfigItem::ConfigItem(const OUString &rSubTree, ConfigItemMode nSetMode ) :
-    sSubTree(rSubTree),
+ConfigItem::ConfigItem(OUString aSubTree, ConfigItemMode nSetMode ) :
+    sSubTree(std::move(aSubTree)),
     m_nMode(nSetMode),
     m_bIsModified(false),
     m_bEnableInternalNotification(false),

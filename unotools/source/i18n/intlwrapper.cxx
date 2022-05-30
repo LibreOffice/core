@@ -22,11 +22,11 @@
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <comphelper/processfactory.hxx>
+#include <utility>
 
-IntlWrapper::IntlWrapper(
-            const LanguageTag& rLanguageTag )
+IntlWrapper::IntlWrapper( LanguageTag aLanguageTag )
         :
-        maLanguageTag( rLanguageTag ),
+        maLanguageTag(std::move( aLanguageTag )),
         m_xContext( comphelper::getProcessComponentContext() )
 {
 }

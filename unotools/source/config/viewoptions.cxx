@@ -27,6 +27,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 constexpr OUStringLiteral PACKAGE_VIEWS = u"org.openoffice.Office.Views";
@@ -36,9 +37,9 @@ constexpr OUStringLiteral PROPERTY_VISIBLE = u"Visible";
 constexpr OUStringLiteral PROPERTY_USERDATA = u"UserData";
 
 
-SvtViewOptions::SvtViewOptions( EViewType eType, const OUString& sViewName )
+SvtViewOptions::SvtViewOptions( EViewType eType, OUString sViewName )
     :   m_eViewType ( eType     )
-    ,   m_sViewName ( sViewName )
+    ,   m_sViewName (std::move( sViewName ))
 {
     (void)m_eViewType; // so the release build does not complain, since we only use it in assert
     // we must know, which view type we must support
