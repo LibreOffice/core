@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c0afa06_020b4ad6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-30T11:18:37Z",
+      "side": 1,
+      "message": "Stephan: do you have an opinion on if crash in dynamic_cast\u003c\u003e is expected in this generated c++ objects (proxy of java uno components)? I expected I get a nullptr worst case. Do we fail to generate some RTTI here in bridges/ code?",
+      "revId": "b3f2ae52e381f7d5fa466dc9df7d04d3d13ca4b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
