@@ -2209,7 +2209,7 @@ bool SwTextNode::GetParaAttr(SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                 if( bChkInvalid )
                 {
                     // ambiguous?
-                    std::unique_ptr< SfxItemIter > pItemIter;
+                    std::optional< SfxItemIter > oItemIter;
                     const SfxPoolItem* pItem = nullptr;
 
                     if ( RES_TXTATR_AUTOFMT == pHt->Which() )
@@ -2217,8 +2217,8 @@ bool SwTextNode::GetParaAttr(SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                         const SfxItemSet* pAutoSet = CharFormat::GetItemSet( pHt->GetAttr() );
                         if ( pAutoSet )
                         {
-                            pItemIter.reset( new SfxItemIter( *pAutoSet ) );
-                            pItem = pItemIter->GetCurItem();
+                            oItemIter.emplace( *pAutoSet );
+                            pItem = oItemIter->GetCurItem();
                         }
                     }
                     else
@@ -2226,7 +2226,7 @@ bool SwTextNode::GetParaAttr(SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
 
                     const sal_Int32 nHintEnd = *pAttrEnd;
 
-                    for (; pItem; pItem = pItemIter ? pItemIter->NextItem() : nullptr)
+                    for (; pItem; pItem = oItemIter ? oItemIter->NextItem() : nullptr)
                     {
                         const sal_uInt16 nHintWhich = pItem->Which();
                         OSL_ENSURE(!isUNKNOWNATR(nHintWhich),
