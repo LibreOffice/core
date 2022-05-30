@@ -16,6 +16,24 @@
       "message": "Shouldn\u0027t this be changed to sal_Int8 too?",
       "revId": "3ca1a169e571a829598a00a2ffef6e1018d2cb18",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6292e872_2aa49658",
+        "filename": "comphelper/source/streaming/memorystream.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-30T11:34:23Z",
+      "side": 1,
+      "message": "yeah, I unfortunately blindly pushed this only after letting it sit for some days, so it then required \u003chttps://git.libreoffice.org/core/+/3c7378d54b7a04e3f6dfc75a994744bdd953af7b%5E%21\u003e \"Fix mid-air collision\"; sorry about that",
+      "parentUuid": "284c82dd_240e4233",
+      "revId": "3ca1a169e571a829598a00a2ffef6e1018d2cb18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
