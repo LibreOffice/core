@@ -258,8 +258,8 @@ OUString ScRangeData::GetSymbol( const ScAddress& rPos, const FormulaGrammar::Gr
 
 void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos )
 {
-    std::unique_ptr<ScTokenArray> pTemp( pCode->Clone() );
-    ScCompiler aComp(rDoc, rPos, *pTemp, formula::FormulaGrammar::GRAM_DEFAULT);
+    ScTokenArray aTemp( pCode->CloneValue() );
+    ScCompiler aComp(rDoc, rPos, aTemp, formula::FormulaGrammar::GRAM_DEFAULT);
     aComp.MoveRelWrap();
     aComp.CreateStringFromTokenArray( rBuffer );
 }
