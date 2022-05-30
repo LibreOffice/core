@@ -54,17 +54,10 @@ Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo()
     // create on demand?
     if (!m_xInfo.is())
     {
-        uno::Sequence<beans::Property> props(m_aPropVals.size());
-        for (size_t n = 0; n < m_aPropVals.size(); ++n)
-        {
-            Property &rProp = props.getArray()[n];
-            const PropertyValue &rPropVal = m_aPropVals[n];
-            rProp.Name = rPropVal.Name;
-            rProp.Handle = rPropVal.Handle;
-            rProp.Type = cppu::UnoType<void>::get();
-            rProp.Attributes = 0;
-        }
-        m_xInfo.set(new ::comphelper::PropertySetInfo(props));
+        assert(m_aPropInfos.empty());
+        for (auto const& it : m_aPropVals)
+            m_aPropInfos.emplace_back(it.Name, it.Handle, cppu::UnoType<void>::get(), 0, 0);
+        m_xInfo.set(new ::comphelper::PropertySetInfo(m_aPropInfos));
     }
     return m_xInfo;
 }

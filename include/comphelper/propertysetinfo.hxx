@@ -91,7 +91,6 @@ class COMPHELPER_DLLPUBLIC PropertySetInfo final
 public:
     PropertySetInfo() noexcept;
     PropertySetInfo( o3tl::span<const PropertyMapEntry> pMap ) noexcept;
-    PropertySetInfo(css::uno::Sequence<css::beans::Property> const &) noexcept;
     virtual ~PropertySetInfo() noexcept override;
 
     /** returns a stl map with all PropertyMapEntry pointer.<p>

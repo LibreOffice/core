@@ -47,26 +47,6 @@ PropertySetInfo::PropertySetInfo( o3tl::span<const PropertyMapEntry> pMap ) noex
     }
 }
 
-PropertySetInfo::PropertySetInfo(uno::Sequence<beans::Property> const& rProps) noexcept
-{
-    PropertyMapEntry * pEntries(new PropertyMapEntry[rProps.getLength()]);
-    PropertyMapEntry * pEntry(&pEntries[0]);
-    for (auto const& it : rProps)
-    {
-        // check for duplicates
-        assert(maPropertyMap.find(it.Name) == maPropertyMap.end());
-
-        pEntry->maName = it.Name;
-        pEntry->mnHandle = it.Handle;
-        pEntry->maType = it.Type;
-        pEntry->mnAttributes = it.Attributes;
-        pEntry->mnMemberId = 0;
-
-        maPropertyMap.emplace(it.Name, pEntry);
-        ++pEntry;
-    }
-}
-
 PropertySetInfo::~PropertySetInfo() noexcept
 {
 }
