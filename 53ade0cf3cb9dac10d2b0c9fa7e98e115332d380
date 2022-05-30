@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9662eebc_e5142a1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-05-30T05:42:12Z",
+      "side": 1,
+      "message": "Please amend you patch and improve your commit message: https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Submitting_a_new_version\n\nRefer to the bug at the start of the message like tdf#56580\n\nDescribe what your commit does in imperative mood.\n\nhttps://dev.blog.documentfoundation.org/2022/05/05/how-to-write-a-good-commit-message/",
+      "revId": "53ade0cf3cb9dac10d2b0c9fa7e98e115332d380",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
