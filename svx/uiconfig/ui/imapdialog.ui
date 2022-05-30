@@ -492,7 +492,7 @@
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="text-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="imapdialog|extended_tip|text">Enter the text that you want to display when the mouse rests on the hotspot in a browser.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="imapdialog|extended_tip|text">Enter the text that you want to display when the mouse rests on the hotspot in a browser. This text is also used by assistive technologies</property>
                           </object>
                         </child>
                       </object>
@@ -530,7 +530,8 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes" context="imapdialog|textft">Text:</property>
+                    <property name="label" translatable="yes" context="imapdialog|textft">_Text Alternative:</property>
+                    <property name="tooltip_text" translatable="yes" context="imapdialog|textft">Enter a short description of essential features of the image map for persons who do not see the image.</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">text</property>
                   </object>
