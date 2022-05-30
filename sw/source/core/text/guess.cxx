@@ -198,7 +198,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     {
         // search start of the last word, if needed
         sal_Int32 nLastWord = rInf.GetText().getLength() - 1;
-        bool bHyphenationNoLastWord;
+        bool bHyphenationNoLastWord = false;
         const css::beans::PropertyValues & rHyphValues = rInf.GetHyphValues();
         assert( rHyphValues.getLength() > 3 && rHyphValues[3].Name == UPN_HYPH_NO_LAST_WORD );
         if ( rHyphValues[3].Value >>= bHyphenationNoLastWord )
