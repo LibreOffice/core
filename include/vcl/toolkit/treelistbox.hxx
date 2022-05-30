@@ -476,7 +476,7 @@ public:
 
 protected:
 
-    VCL_DLLPRIVATE void         SetEntryHeight( SvTreeListEntry const * pEntry );
+    virtual void                CalcEntryHeight(SvTreeListEntry const* pEntry);
                    void         AdjustEntryHeight( const Image& rBmp );
     VCL_DLLPRIVATE void         AdjustEntryHeight();
 

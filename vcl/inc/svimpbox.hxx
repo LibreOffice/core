@@ -92,7 +92,6 @@ private:
     SvTreeListEntry*     m_pActiveEntry;
     SvLBoxTab*           m_pActiveTab;
 
-    VclPtr<ScrollBar>    m_aHorSBar;
     VclPtr<ScrollBarBox> m_aScrBarBox;
 
     ::vcl::AccessibleFactoryAccess
@@ -185,6 +184,7 @@ private:
 
 protected:
     VclPtr<SvTreeListBox>   m_pView;
+    VclPtr<ScrollBar>       m_aHorSBar;
     VclPtr<ScrollBar>       m_aVerSBar;
     SvTreeListEntry*        m_pCursor;
     SvTreeListEntry*        m_pCursorOld;

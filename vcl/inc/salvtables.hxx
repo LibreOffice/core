@@ -1774,6 +1774,8 @@ public:
     virtual void insert(int pos, const OUString* pStr, const OUString* pId,
                         const VirtualDevice* pIcon, weld::TreeIter* pRet) override;
 
+    virtual void insert_separator(int pos, const OUString* pId) override;
+
     virtual void connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink) override;
 
     virtual OUString get_selected_id() const override;

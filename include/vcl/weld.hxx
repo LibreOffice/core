@@ -1361,6 +1361,8 @@ public:
                         const VirtualDevice* pIcon, TreeIter* pRet)
         = 0;
 
+    virtual void insert_separator(int pos, const OUString* pId) = 0;
+
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
         insert(-1, &rStr, &rId, &rImage, nullptr);
@@ -1370,6 +1372,8 @@ public:
     {
         insert(-1, &rStr, &rId, pImage, nullptr);
     }
+
+    void append_separator(const OUString& rId) { insert_separator(-1, &rId); }
 
     void connect_selection_changed(const Link<IconView&, void>& rLink)
     {
