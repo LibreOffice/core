@@ -875,7 +875,15 @@ void DomainMapper_Impl::PopSdt()
 
     if (aPosition.m_bIsStartOfText)
     {
-        xCursor->gotoStart(/*bExpand=*/false);
+        // Go to the start of the end's paragraph. This helps in case
+        // DomainMapper_Impl::AddDummyParaForTableInSection() would make our range multi-paragraph,
+        // while the intention is to keep start/end inside the same paragraph for run SDTs.
+        uno::Reference<text::XParagraphCursor> xParagraphCursor(xCursor, uno::UNO_QUERY);
+        if (xParagraphCursor.is())
+        {
+            xCursor->gotoRange(xEnd, /*bExpand=*/false);
+            xParagraphCursor->gotoStartOfParagraph(/*bExpand=*/false);
+        }
     }
     else
     {
@@ -890,6 +898,34 @@ void DomainMapper_Impl::PopSdt()
     {
         xContentControlProps->setPropertyValue("ShowingPlaceHolder",
                                                uno::Any(m_pSdtHelper->GetShowingPlcHdr()));
+    }
+
+    if (!m_pSdtHelper->GetPlaceholderDocPart().isEmpty())
+    {
+        xContentControlProps->setPropertyValue("PlaceholderDocPart",
+                                               uno::Any(m_pSdtHelper->GetPlaceholderDocPart()));
+    }
+
+    if (!m_pSdtHelper->GetDataBindingPrefixMapping().isEmpty())
+    {
+        xContentControlProps->setPropertyValue("DataBindingPrefixMappings",
+                                               uno::Any(m_pSdtHelper->GetDataBindingPrefixMapping()));
+    }
+    if (!m_pSdtHelper->GetDataBindingXPath().isEmpty())
+    {
+        xContentControlProps->setPropertyValue("DataBindingXpath",
+                                               uno::Any(m_pSdtHelper->GetDataBindingXPath()));
+    }
+    if (!m_pSdtHelper->GetDataBindingStoreItemID().isEmpty())
+    {
+        xContentControlProps->setPropertyValue("DataBindingStoreItemID",
+                                               uno::Any(m_pSdtHelper->GetDataBindingStoreItemID()));
+    }
+
+    if (!m_pSdtHelper->GetColor().isEmpty())
+    {
+        xContentControlProps->setPropertyValue("Color",
+                                               uno::Any(m_pSdtHelper->GetColor()));
     }
 
     if (m_pSdtHelper->getControlType() == SdtControlType::checkBox)
@@ -928,6 +964,18 @@ void DomainMapper_Impl::PopSdt()
     if (m_pSdtHelper->getControlType() == SdtControlType::picture)
     {
         xContentControlProps->setPropertyValue("Picture", uno::Any(true));
+    }
+
+    if (m_pSdtHelper->getControlType() == SdtControlType::datePicker)
+    {
+        xContentControlProps->setPropertyValue("Date", uno::Any(true));
+        OUString aDateFormat = m_pSdtHelper->getDateFormat().makeStringAndClear();
+        xContentControlProps->setPropertyValue("DateFormat",
+                                               uno::Any(aDateFormat.replaceAll("'", "\"")));
+        xContentControlProps->setPropertyValue("DateLanguage",
+                                               uno::Any(m_pSdtHelper->getLocale().makeStringAndClear()));
+        xContentControlProps->setPropertyValue("CurrentDate",
+                                               uno::Any(m_pSdtHelper->getDate().makeStringAndClear()));
     }
 
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);

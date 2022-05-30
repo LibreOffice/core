@@ -172,34 +172,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121203)
 {
     load(mpTestDocumentPath, "tdf121203.docx");
     // We imported the date field
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    uno::Reference<beans::XPropertySet> xTextPortion(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
 
     // Custom sdt date content is imported correctly
-    ::sw::mark::IDateFieldmark* pFieldmark
-        = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
-    CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    bool bDate{};
+    xContentControlProps->getPropertyValue("Date") >>= bDate;
+    CPPUNIT_ASSERT(bDate);
 
-    const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
     OUString sDateFormat;
-    auto pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT);
-    if (pResult != pParameters->end())
-    {
-        pResult->second >>= sDateFormat;
-    }
+    xContentControlProps->getPropertyValue("DateFormat") >>= sDateFormat;
 
     OUString sLang;
-    pResult = pParameters->find(ODF_FORMDATE_DATEFORMAT_LANGUAGE);
-    if (pResult != pParameters->end())
-    {
-        pResult->second >>= sLang;
-    }
+    xContentControlProps->getPropertyValue("DateLanguage") >>= sLang;
 
-    OUString sCurrentDate = pFieldmark->GetContent();
+    uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl,
+                                                                            uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xContentControlEnum
+        = xContentControlEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(),
+                                                       uno::UNO_QUERY);
+    OUString sCurrentDate = xTextPortionRange->getString();
     CPPUNIT_ASSERT_EQUAL(OUString("dd-MMM-yy"), sDateFormat);
     CPPUNIT_ASSERT_EQUAL(OUString("en-GB"), sLang);
     CPPUNIT_ASSERT_EQUAL(OUString("17-Oct-2018 09:00"), sCurrentDate);

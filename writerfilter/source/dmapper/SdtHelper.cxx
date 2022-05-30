@@ -453,6 +453,17 @@ void SdtHelper::clear()
     m_aUncheckedState.clear();
 }
 
+void SdtHelper::SetPlaceholderDocPart(const OUString& rPlaceholderDocPart)
+{
+    m_aPlaceholderDocPart = rPlaceholderDocPart;
+}
+
+OUString SdtHelper::GetPlaceholderDocPart() const { return m_aPlaceholderDocPart; }
+
+void SdtHelper::SetColor(const OUString& rColor) { m_aColor = rColor; }
+
+OUString SdtHelper::GetColor() const { return m_aColor; }
+
 } // namespace writerfilter::dmapper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
