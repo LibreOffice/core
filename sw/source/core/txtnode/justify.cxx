@@ -37,10 +37,66 @@ IdeographicPunctuationClass lcl_WhichPunctuationClass(sal_Unicode cChar)
 
     return IdeographicPunctuationClass::OPEN_BRACKET;
 }
+
+tools::Long lcl_MinGridWidth(tools::Long nGridWidth, tools::Long nCharWidth)
+{
+    tools::Long nCount = nCharWidth > nGridWidth ? (nCharWidth - 1) / nGridWidth + 1 : 1;
+    return nCount * nGridWidth;
+}
+
+tools::Long lcl_OffsetFromGridEdge(tools::Long nMinWidth, tools::Long nCharWidth, sal_Unicode cChar,
+                                   bool bForceLeft)
+{
+    if (bForceLeft)
+        return 0;
+
+    tools::Long nOffset = 0;
+
+    switch (lcl_WhichPunctuationClass(cChar))
+    {
+        case IdeographicPunctuationClass::NONE:
+            // Centered
+            nOffset = (nMinWidth - nCharWidth) / 2;
+            break;
+        case IdeographicPunctuationClass::OPEN_BRACKET:
+            // Align to next edge, closer to next ideograph
+            nOffset = nMinWidth - nCharWidth;
+            break;
+        default:
+            // CLOSE_BRACKET ro COMMA_OR_FULLSTOP:
+            // Align to previous edge, closer to previous ideograph.
+            break;
+    }
+    return nOffset;
+}
 }
 
 namespace Justify
 {
+sal_Int32 GetModelPosition(const std::vector<sal_Int32>& rKernArray, sal_Int32 nLen, tools::Long nX)
+{
+    tools::Long nLeft = 0, nRight = 0;
+    sal_Int32 nLast = 0, nIdx = 0;
+
+    do
+    {
+        nRight = rKernArray[nLast];
+        ++nIdx;
+        while (nIdx < nLen && rKernArray[nIdx] == rKernArray[nLast])
+            ++nIdx;
+
+        if (nIdx < nLen)
+        {
+            if (nX < nRight)
+                return (nX - nLeft < nRight - nX) ? nLast : nIdx;
+
+            nLeft = nRight;
+            nLast = nIdx;
+        }
+    } while (nIdx < nLen);
+    return nIdx;
+}
+
 void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OUString& rText, sal_Int32 nStt,
                        sal_Int32 nLen, tools::Long nSpaceAdd, tools::Long nKern, bool bNoHalfSpace)
 {
@@ -114,92 +170,35 @@ void SpaceDistribution(std::vector<sal_Int32>& rKernArray, const OUString& rText
 }
 
 tools::Long SnapToGrid(std::vector<sal_Int32>& rKernArray, const OUString& rText, sal_Int32 nStt,
-                       sal_Int32 nLen, tools::Long nGridWidth, tools::Long nWidth)
+                       sal_Int32 nLen, tools::Long nGridWidth, bool bForceLeft)
 {
     assert(nStt + nLen <= rText.getLength());
     assert(nLen <= sal_Int32(rKernArray.size()));
 
-    tools::Long nDelta = 0; // delta offset to text origin
-
-    // Change the average width per character to an appropriate grid width
-    // basically get the ratio of the avg width to the grid unit width, then
-    // multiple this ratio to give the new avg width - which in this case
-    // gives a new grid width unit size
-
-    tools::Long nAvgWidthPerChar = rKernArray[nLen - 1] / nLen;
-
-    const sal_uLong nRatioAvgWidthCharToGridWidth
-        = nAvgWidthPerChar ? (nAvgWidthPerChar - 1) / nGridWidth + 1 : 1;
-
-    nAvgWidthPerChar = nRatioAvgWidthCharToGridWidth * nGridWidth;
-
-    // the absolute end position of the first character is also its width
     tools::Long nCharWidth = rKernArray[0];
-    sal_uLong nHalfWidth = nAvgWidthPerChar / 2;
+    tools::Long nMinWidth = lcl_MinGridWidth(nGridWidth, nCharWidth);
+    tools::Long nDelta = lcl_OffsetFromGridEdge(nMinWidth, nCharWidth, rText[nStt], bForceLeft);
+    tools::Long nEdge = nMinWidth - nDelta;
 
-    tools::Long nNextFix = 0;
+    sal_Int32 nLast = 0;
 
-    // we work out the start position (origin) of the first character,
-    // and we set the next "fix" offset to half the width of the char.
-    // The exceptions are for punctuation characters that are not centered
-    // so in these cases we just add half a regular "average" character width
-    // to the first characters actual width to allow the next character to
-    // be centered automatically
-    // If the character is "special right", then the offset is correct already
-    // so the fix offset is as normal - half the average character width
-
-    sal_Unicode cChar = rText[nStt];
-    IdeographicPunctuationClass eClass = lcl_WhichPunctuationClass(cChar);
-    switch (eClass)
+    for (sal_Int32 i = 1; i < nLen; ++i)
     {
-        case IdeographicPunctuationClass::NONE:
-            // Centered
-            nDelta = (nAvgWidthPerChar - nCharWidth) / 2;
-            nNextFix = nCharWidth / 2;
-            break;
-        case IdeographicPunctuationClass::CLOSE_BRACKET:
-        case IdeographicPunctuationClass::COMMA_OR_FULLSTOP:
-            // Closer to previous ideograph
-            nNextFix = nHalfWidth;
-            break;
-        default:
-            // case IdeographicPunctuationClass::OPEN_BRACKET: closer to next ideograph.
-            nDelta = nAvgWidthPerChar - nCharWidth;
-            nNextFix = nCharWidth - nHalfWidth;
+        if (rKernArray[i] == rKernArray[nLast])
+            continue;
+
+        nCharWidth = rKernArray[i] - rKernArray[nLast];
+        nMinWidth = lcl_MinGridWidth(nGridWidth, nCharWidth);
+        tools::Long nX
+            = nEdge + lcl_OffsetFromGridEdge(nMinWidth, nCharWidth, rText[nStt + i], bForceLeft);
+        nEdge += nMinWidth;
+
+        while (nLast < i)
+            rKernArray[nLast++] = nX;
     }
 
-    // calculate offsets
-    for (sal_Int32 j = 1; j < nLen; ++j)
-    {
-        tools::Long nCurrentCharWidth = rKernArray[j] - rKernArray[j - 1];
-        nNextFix += nAvgWidthPerChar;
-
-        // almost the same as getting the offset for the first character:
-        // punctuation characters are not centered, so just add half an
-        // average character width minus the characters actual char width
-        // to get the offset into the centre of the next character
-
-        cChar = rText[nStt + j];
-        eClass = lcl_WhichPunctuationClass(cChar);
-        switch (eClass)
-        {
-            case IdeographicPunctuationClass::NONE:
-                // Centered
-                rKernArray[j - 1] = nNextFix - (nCurrentCharWidth / 2);
-                break;
-            case IdeographicPunctuationClass::CLOSE_BRACKET:
-            case IdeographicPunctuationClass::COMMA_OR_FULLSTOP:
-                // Closer to previous ideograph
-                rKernArray[j - 1] = nNextFix - nHalfWidth;
-                break;
-            default:
-                // case IdeographicPunctuationClass::OPEN_BRACKET: closer to next ideograph.
-                rKernArray[j - 1] = nNextFix + nHalfWidth - nCurrentCharWidth;
-        }
-    }
-
-    // the layout engine requires the total width of the output
-    rKernArray[nLen - 1] = nWidth - nDelta;
+    while (nLast < nLen)
+        rKernArray[nLast++] = nEdge;
 
     return nDelta;
 }
