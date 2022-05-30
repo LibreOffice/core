@@ -16,6 +16,24 @@
       "message": "Trying to use the generated crashes_7_3_3_2.csv attached to \u003chttps://lists.freedesktop.org/archives/libreoffice/2022-May/088917.html\u003e \"crashreport scraper\", it is unfortunate that it doesn\u0027t quote embedded commas, when the Calc \"Text Import\" dialog for csv has \"Separator Options: Separated by: Comma\" (among others) selected by default (and thus presentation of the file in LibreOffice is garbled by default).",
       "revId": "e09f49f944fa1d4163bfd52fd824f4216f93558f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bf65166_1d3f349e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-30T08:06:46Z",
+      "side": 1,
+      "message": "Hi Stephan,\nthe script uses tab separators. Probably I should have mentioned in the email",
+      "parentUuid": "57608744_a52e978d",
+      "revId": "e09f49f944fa1d4163bfd52fd824f4216f93558f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
