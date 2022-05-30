@@ -102,7 +102,7 @@ friend class ScDocumentIterator;
 friend class ScAttrIterator;
 friend class ScHorizontalAttrIterator;
 
-    bool    ApplyFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
+    bool    ApplyFrame( const SvxBoxItem& rLineOuter, const SvxBoxInfoItem* pLineInner,
                             SCROW nStartRow, SCROW nEndRow,
                             bool bLeft, SCCOL nDistRight, bool bTop, SCROW nDistBottom );
 
