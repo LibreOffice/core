@@ -34,6 +34,24 @@
       "parentUuid": "57608744_a52e978d",
       "revId": "e09f49f944fa1d4163bfd52fd824f4216f93558f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc50ab0f_01340a5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-30T11:47:54Z",
+      "side": 1,
+      "message": "I naively assume that the script should quote elements containing commas (and probably other problematic characters, too), so that the content is interpreted correctly by LibreOffice irrespective of whether a user happens to have \"Separator Options: Separated by: Comma\" selected or not.  (But I don\u0027t really know much about csv.)",
+      "parentUuid": "4bf65166_1d3f349e",
+      "revId": "e09f49f944fa1d4163bfd52fd824f4216f93558f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
