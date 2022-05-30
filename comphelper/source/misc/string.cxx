@@ -25,6 +25,7 @@
 #include <vector>
 #include <algorithm>
 
+#include <o3tl/safeint.hxx>
 #include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -645,7 +646,7 @@ void replaceAt(OUStringBuffer& rIn, sal_Int32 nIndex, sal_Int32 nCount, std::u16
     }
 
     sal_Int32 nNewLength = nOldLength + newStr.size() - nCount;
-    if (static_cast<sal_Int32>(newStr.size()) > nCount)
+    if (newStr.size() > o3tl::make_unsigned(nCount))
         rIn.ensureCapacity(nOldLength + newStr.size() - nCount);
 
     sal_Unicode* pStr = const_cast<sal_Unicode*>(rIn.getStr());
