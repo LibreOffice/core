@@ -10,9 +10,9 @@ fi
 SUBMODULES_ALL="dictionaries helpcontent2 translations"
 
 pushd $(dirname $0) > /dev/null
-if [ -f config_host.mk ] ; then
-    # we are in the BUILDDIR
-    SRC_ROOT=$(< config_host.mk grep -a SRC_ROOT | sed -e "s/.*=//")
+if [ -f ${BUILDDIR}/config_host.mk ] ; then
+    # we are in the SRCDIR
+    SRC_ROOT=$(< ${BUILDDIR}/config_host.mk grep -a SRC_ROOT | sed -e "s/.*=//")
 else
     SRC_ROOT=$(pwd)
 fi
@@ -138,8 +138,8 @@ get_active_submodules()
 get_configured_submodules()
 {
     SUBMODULES_CONFIGURED=""
-    if [ -f config_host.mk ] ; then
-        SUBMODULES_CONFIGURED=$(< config_host.mk grep -a GIT_NEEDED_SUBMODULES | sed -e "s/.*=//")
+    if [ -f ${BUILDDIR}/config_host.mk ] ; then
+        SUBMODULES_CONFIGURED=$(< ${BUILDDIR}/config_host.mk grep -a GIT_NEEDED_SUBMODULES | sed -e "s/.*=//")
     else
         # if we need the configured submodule before the configuration is done. we assumed you want them all
         SUBMODULES_CONFIGURED=${SUBMODULES_ALL?}
@@ -149,12 +149,12 @@ get_configured_submodules()
 get_git_reference()
 {
     REFERENCED_GIT=""
-    if [ -f config_host.mk ]; then
-        REFERENCED_GIT=$(< config_host.mk grep -a GIT_REFERENCE_SRC | sed -e "s/.*=//")
+    if [ -f ${BUILDDIR}/config_host.mk ]; then
+        REFERENCED_GIT=$(< ${BUILDDIR}/config_host.mk grep -a GIT_REFERENCE_SRC | sed -e "s/.*=//")
     fi
     LINKED_GIT=""
-    if [ -f config_host.mk ]; then
-        LINKED_GIT=$(< config_host.mk grep -a GIT_LINK_SRC | sed -e "s/.*=//")
+    if [ -f ${BUILDDIR}/config_host.mk ]; then
+        LINKED_GIT=$(< ${BUILDDIR}/config_host.mk grep -a GIT_LINK_SRC | sed -e "s/.*=//")
     fi
 }
 
