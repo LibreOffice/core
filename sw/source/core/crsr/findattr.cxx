@@ -332,7 +332,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
     const SfxPoolItem* pItem;
     // here we explicitly also search in character templates
     sal_uInt16 nWhch = rAttr.Which();
-    std::unique_ptr<SfxWhichIter> pIter;
+    std::optional<SfxWhichIter> oIter;
     const SfxPoolItem* pTmpItem = nullptr;
     const SfxItemSet* pSet = nullptr;
     if( RES_TXTATR_CHARFMT == nWhch || RES_TXTATR_AUTOFMT == nWhch )
@@ -343,11 +343,11 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
         pSet = CharFormat::GetItemSet( rAttr.GetAttr() );
         if ( pSet )
         {
-            pIter.reset(new SfxWhichIter( *pSet ));
-            nWhch = pIter->FirstWhich();
+            oIter.emplace( *pSet );
+            nWhch = oIter->FirstWhich();
             while( nWhch &&
-                SfxItemState::SET != pIter->GetItemState( true, &pTmpItem ) )
-                nWhch = pIter->NextWhich();
+                SfxItemState::SET != oIter->GetItemState( true, &pTmpItem ) )
+                nWhch = oIter->NextWhich();
             if( !nWhch )
                 pTmpItem = nullptr;
         }
@@ -462,20 +462,20 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTextAttr& rAttr )
                 }
             }
         }
-        if( pIter )
+        if( oIter )
         {
-            assert(pSet && "otherwise no pIter");
-            nWhch = pIter->NextWhich();
+            assert(pSet && "otherwise no oIter");
+            nWhch = oIter->NextWhich();
             while( nWhch &&
                 SfxItemState::SET != pSet->GetItemState( nWhch, true, &pTmpItem ) )
-                nWhch = pIter->NextWhich();
+                nWhch = oIter->NextWhich();
             if( !nWhch )
                 break;
         }
         else
             break;
     }
-    pIter.reset();
+    oIter.reset();
     return Found();
 }
 
@@ -492,7 +492,7 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
     const SfxPoolItem* pItem;
     // here we explicitly also search in character templates
     sal_uInt16 nWhch = rAttr.Which();
-    std::unique_ptr<SfxWhichIter> pIter;
+    std::optional<SfxWhichIter> oIter;
     const SfxPoolItem* pTmpItem = nullptr;
     const SfxItemSet* pSet = nullptr;
     if( RES_TXTATR_CHARFMT == nWhch || RES_TXTATR_AUTOFMT == nWhch )
@@ -503,11 +503,11 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
         pSet = CharFormat::GetItemSet( rAttr.GetAttr() );
         if ( pSet )
         {
-            pIter.reset( new SfxWhichIter( *pSet ) );
-            nWhch = pIter->FirstWhich();
+            oIter.emplace( *pSet );
+            nWhch = oIter->FirstWhich();
             while( nWhch &&
-                SfxItemState::SET != pIter->GetItemState( true, &pTmpItem ) )
-                nWhch = pIter->NextWhich();
+                SfxItemState::SET != oIter->GetItemState( true, &pTmpItem ) )
+                nWhch = oIter->NextWhich();
             if( !nWhch )
                 pTmpItem = nullptr;
         }
@@ -620,20 +620,20 @@ bool SwAttrCheckArr::SetAttrBwd( const SwTextAttr& rAttr )
                 }
             }
         }
-        if( pIter )
+        if( oIter )
         {
-            assert(pSet && "otherwise no pIter");
-            nWhch = pIter->NextWhich();
+            assert(pSet && "otherwise no oIter");
+            nWhch = oIter->NextWhich();
             while( nWhch &&
                 SfxItemState::SET != pSet->GetItemState( nWhch, true, &pTmpItem ) )
-                nWhch = pIter->NextWhich();
+                nWhch = oIter->NextWhich();
             if( !nWhch )
                 break;
         }
         else
             break;
     }
-    pIter.reset();
+    oIter.reset();
     return Found();
 }
 
