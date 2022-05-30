@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 #include <justify.hxx>
+#include <cstddef>
 #include <vector>
 
 namespace
@@ -54,7 +55,7 @@ std::ostream& operator<<(std::ostream& rStrm, const CharWidthArray& rCharWidthAr
 
 void CharWidthArray::ConvertToKernArray()
 {
-    for (sal_Int32 i = 1; i < sal_Int32(maArray.size()); ++i)
+    for (std::size_t i = 1; i < maArray.size(); ++i)
         maArray[i] += maArray[i - 1];
 }
 
