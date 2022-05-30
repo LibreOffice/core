@@ -101,7 +101,7 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
 
     return count, ID, version, OS
 
-def parse_details_and_get_info(url):
+def parse_details_and_get_info(url, gitRepo):
     html_text = requests.get(url).text
     soup = BeautifulSoup(html_text, 'html.parser')
 
@@ -110,6 +110,8 @@ def parse_details_and_get_info(url):
     reason = tr_list[8].td.text.strip()
 
     stack = ""
+    codeLine = ""
+
     count = 0
     frames = soup.find("div", {"id": "frames"}).tbody
     for tr in frames.find_all("tr"):
@@ -120,10 +122,27 @@ def parse_details_and_get_info(url):
             stack += source + "\n"
             count += 1
 
+            codeFile = source.split(":")[0]
+            codeNumber = source.split(":")[1]
+            try:
+                with open(os.path.join(gitRepo, codeFile)) as f:
+                    lines = f.readlines()
+                    for index, line in enumerate(lines):
+                        if index + 1 == int(codeNumber):
+                            codeLine += line.strip() + "\n"
+            except FileNotFoundError:
+                codeLine += "\n"
+                continue
+
     if stack:
         #multiline
         stack = "\"" + stack + "\""
-    return reason, stack
+
+    if codeLine:
+        #multiline
+        codeLine = "\"" + codeLine + "\""
+
+    return reason, stack, codeLine
 
 
 if __name__ == '__main__':
@@ -132,6 +151,8 @@ if __name__ == '__main__':
 
     crashes = parse_version_url(
             "https://crashreport.libreoffice.org/stats/version/" + version + "?limit=1000&days=30")
+
+    gitRepo = os.path.dirname(os.path.realpath(__file__)) + "/../"
 
     print(str(len(crashes)) + " crash reports in version " + version)
 
@@ -151,7 +172,7 @@ if __name__ == '__main__':
     with open(fileName, "a") as f:
         if bInsertHeader:
             line = '\t'.join(["Name", "Count", "First report", "Last Report",
-                "ID", "Version", "Reason", "OS", "Stack", '\n'])
+                "ID", "Version", "Reason", "OS", "Stack", "Code Lines" '\n'])
             f.write(line)
             f.flush()
 
@@ -162,10 +183,10 @@ if __name__ == '__main__':
                 print("Parsing " + k)
                 crashCount, crashID, crashVersion, crashOS = parse_reports_and_get_most_recent_report_from_last_page(
                         "https://crashreport.libreoffice.org/stats/signature/" + k)
-                crashReason, crashStack = parse_details_and_get_info(
-                        "https://crashreport.libreoffice.org/stats/crash_details/" + crashID)
+                crashReason, crashStack, codeLine = parse_details_and_get_info(
+                        "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, gitRepo)
                 line = '\t'.join([k, str(crashCount), v[1].strftime('%y/%m/%d'), v[2].strftime('%y/%m/%d'),
-                        crashID, crashVersion, crashReason, crashOS, crashStack, '\n'])
+                        crashID, crashVersion, crashReason, crashOS, crashStack, codeLine, '\n'])
                 f.write(line)
                 f.flush()
 
