@@ -2855,7 +2855,7 @@ void ScTable::ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfoItem
     {
         PutInOrder(nStartCol, nEndCol);
         PutInOrder(nStartRow, nEndRow);
-        nEndCol = ClampToAllocatedColumns(nEndCol);
+        CreateColumnIfNotExists(nEndCol);
         for (SCCOL i=nStartCol; i<=nEndCol; i++)
             aCol[i].ApplyBlockFrame(rLineOuter, pLineInner,
                                     nStartRow, nEndRow, (i==nStartCol), nEndCol-i);
