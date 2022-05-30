@@ -62,7 +62,7 @@ public:
 private:
 
     std::unique_ptr<ExternalRefListener> mpExtRefListener;
-    std::unique_ptr<std::vector<ScTokenRef> > mpTokens;
+    std::vector<ScTokenRef> maTokens;
 
     OUString maName;
     std::unique_ptr<ScChartUnoData> pUnoData;
@@ -76,7 +76,7 @@ public:
     ScChartListener( const OUString& rName, ScDocument& rDoc,
                      const ScRangeListRef& rRangeListRef );
     ScChartListener( const OUString& rName, ScDocument& rDoc,
-                     std::unique_ptr<::std::vector<ScTokenRef>> pTokens );
+                     ::std::vector<ScTokenRef> aTokens );
     ScChartListener( const ScChartListener& ) = delete;
     virtual ~ScChartListener() override;
 
