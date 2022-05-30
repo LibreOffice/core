@@ -306,13 +306,11 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                     *pCell, *this, ScAddress(nCol1, nRow1, rTab), ScCloneFlags::StartListening));
     }
 
-    ScAddress aBasePos(nCol1, nRow1, nTab1);
     ScSingleRefData aRefData;
     aRefData.InitFlags();
-    aRefData.SetColRel( true );
-    aRefData.SetRowRel( true );
-    aRefData.SetTabRel( true );
-    aRefData.SetAddress(GetSheetLimits(), aBasePos, aBasePos);
+    aRefData.SetRelCol(0);
+    aRefData.SetRelRow(0);
+    aRefData.SetRelTab(0);  // 2D matrix, always same sheet
 
     ScTokenArray aArr(*this); // consists only of one single reference token.
     formula::FormulaToken* t = aArr.AddMatrixSingleReference(aRefData);
@@ -326,27 +324,36 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
         if (!pTab)
             continue;
 
-        if (nTab != nTab1)
+        for (SCCOL nCol : GetWritableColumnsRange(nTab, nCol1, nCol2))
         {
+<<<<<<< HEAD   (daafc3 tdf#145875 don't open Insert section dialog when pasting ima)
             aRefData.SetRelTab(nTab - aBasePos.Tab());
             *t->GetSingleRef() = aRefData;
         }
 
         for (SCCOL nCol : GetColumnsRange(nTab1, nCol1, nCol2))
         {
+=======
+            aRefData.SetRelCol(nCol1 - nCol);
+>>>>>>> CHANGE (dfd508 InsertMatrixFormula: correct references for across sheets ar)
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
                 if (nCol == nCol1 && nRow == nRow1)
                     // Skip the base position.
                     continue;
 
-                // Token array must be cloned so that each formula cell receives its own copy.
-                aPos = ScAddress(nCol, nRow, nTab);
                 // Reference in each cell must point to the origin cell relative to the current cell.
-                aRefData.SetAddress(GetSheetLimits(), aBasePos, aPos);
+                aRefData.SetRelRow(nRow1 - nRow);
                 *t->GetSingleRef() = aRefData;
+<<<<<<< HEAD   (daafc3 tdf#145875 don't open Insert section dialog when pasting ima)
                 std::unique_ptr<ScTokenArray> pTokArr(aArr.Clone());
                 pCell = new ScFormulaCell(*this, aPos, *pTokArr, eGram, ScMatrixMode::Reference);
+=======
+                // Token array must be cloned so that each formula cell receives its own copy.
+                ScTokenArray aTokArr(aArr.CloneValue());
+                aPos = ScAddress(nCol, nRow, nTab);
+                pCell = new ScFormulaCell(*this, aPos, aTokArr, eGram, ScMatrixMode::Reference);
+>>>>>>> CHANGE (dfd508 InsertMatrixFormula: correct references for across sheets ar)
                 pTab->SetFormulaCell(nCol, nRow, pCell);
             }
         }
