@@ -445,7 +445,7 @@ protected:
     ///
     /// We have to remember these positions between the StartStyle() and
     /// EndStyle().
-    sal_uInt16 nPOPosStdLen1, nPOPosStdLen2;
+    sal_uInt16 m_nPOPosStdLen1, m_nPOPosStdLen2;
 
     /// For output of styles.
     ///
@@ -475,8 +475,8 @@ public:
         : AttributeOutputBase(rWW8Export.GetWriter().GetMedia()->GetURLObject().GetMainURL(
             INetURLObject::DecodeMechanism::NONE))
         , m_rWW8Export(rWW8Export)
-        , nPOPosStdLen1(0)
-        , nPOPosStdLen2(0)
+        , m_nPOPosStdLen1(0)
+        , m_nPOPosStdLen2(0)
         , m_nStyleStartSize(0)
         , m_nStyleLenPos(0)
         , m_nStyleCountPos(0)

@@ -144,12 +144,12 @@ bool wwSectionManager::CurrentSectionIsProtected() const
 
 sal_uInt32 wwSectionManager::GetPageLeft() const
 {
-    return !maSegments.empty() ? maSegments.back().nPgLeft : 0;
+    return !maSegments.empty() ? maSegments.back().m_nPgLeft : 0;
 }
 
 sal_uInt32 wwSectionManager::GetPageRight() const
 {
-    return !maSegments.empty() ? maSegments.back().nPgRight : 0;
+    return !maSegments.empty() ? maSegments.back().m_nPgRight : 0;
 }
 
 sal_uInt32 wwSectionManager::GetPageWidth() const

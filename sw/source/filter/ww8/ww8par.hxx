@@ -778,16 +778,16 @@ class wwSection
 public:
     explicit wwSection(const SwPosition &rPos);
     SEPr maSep;
-    WW8_BRCVer9 brc[4];
+    WW8_BRCVer9 m_brc[4];
     SwNodeIndex maStart;
     SwSection *mpSection;
     SwPageDesc *mpPage;
     SvxFrameDirection meDir;
 
-    sal_uInt32 nPgWidth;
-    sal_uInt32 nPgLeft;
-    sal_uInt32 nPgRight;
-    sal_uInt32 nPgGutter;
+    sal_uInt32 m_nPgWidth;
+    sal_uInt32 m_nPgLeft;
+    sal_uInt32 m_nPgRight;
+    sal_uInt32 m_nPgGutter;
     bool m_bRtlGutter = false;
 
     css::drawing::TextVerticalAdjust mnVerticalAdjustment;
@@ -803,12 +803,12 @@ public:
     sal_uInt16 PageStartAt() const { return maSep.pgnStart; }
     bool PageRestartNo() const { return maSep.fPgnRestart != 0; }
     bool IsBiDi() const { return maSep.fBiDi != 0; }
-    sal_uInt32 GetPageWidth() const { return nPgWidth; }
+    sal_uInt32 GetPageWidth() const { return m_nPgWidth; }
     sal_uInt32 GetTextAreaWidth() const
-        { return GetPageWidth() - GetPageLeft() - nPgGutter - GetPageRight(); }
+        { return GetPageWidth() - GetPageLeft() - m_nPgGutter - GetPageRight(); }
     sal_uInt32 GetPageHeight() const { return maSep.yaPage; }
-    sal_uInt32 GetPageLeft() const { return nPgLeft; }
-    sal_uInt32 GetPageRight() const { return nPgRight; }
+    sal_uInt32 GetPageLeft() const { return m_nPgLeft; }
+    sal_uInt32 GetPageRight() const { return m_nPgRight; }
     bool IsLandScape() const { return maSep.dmOrientPage != 0; }
     bool IsFixedHeightHeader() const { return maSep.dyaTop < 0; }
     bool IsFixedHeightFooter() const { return maSep.dyaBottom < 0; }

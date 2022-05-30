@@ -491,7 +491,7 @@ void wwSectionManager::SetLeftRight(wwSection &rSection)
     }
 
     // Left / Right
-    if ((rSection.nPgWidth - nWWLe - nWWRi) < MINLAY)
+    if ((rSection.m_nPgWidth - nWWLe - nWWRi) < MINLAY)
     {
         /*
         There are some label templates which are "broken", they specify
@@ -506,12 +506,12 @@ void wwSectionManager::SetLeftRight(wwSection &rSection)
         it will add up the values to give a wider page than is actually being
         used.
         */
-        nWWRi = rSection.nPgWidth - nWWLe - MINLAY;
+        nWWRi = rSection.m_nPgWidth - nWWLe - MINLAY;
     }
 
-    rSection.nPgLeft = nWWLe;
-    rSection.nPgRight = nWWRi;
-    rSection.nPgGutter = nWWGu;
+    rSection.m_nPgLeft = nWWLe;
+    rSection.m_nPgRight = nWWRi;
+    rSection.m_nPgGutter = nWWGu;
 }
 
 void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrameFormat &rFormat,
@@ -527,7 +527,7 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrameFormat &rFormat,
     rFormat.SetFormatAttr(aSz);
 
     SvxLRSpaceItem aLR(rSection.GetPageLeft(), rSection.GetPageRight(), 0, 0, RES_LR_SPACE);
-    aLR.SetGutterMargin(rSection.nPgGutter);
+    aLR.SetGutterMargin(rSection.m_nPgGutter);
     rFormat.SetFormatAttr(aLR);
 
     SfxBoolItem aRtlGutter(RES_RTL_GUTTER, rSection.m_bRtlGutter);
@@ -557,12 +557,12 @@ tools::Long SetBorderDistance(bool bFromEdge, SvxBoxItem& aBox, SvxBoxItemLine e
 
 void SwWW8ImplReader::SetPageBorder(SwFrameFormat &rFormat, const wwSection &rSection)
 {
-    if (!IsBorder(rSection.brc))
+    if (!IsBorder(rSection.m_brc))
         return;
 
     SfxItemSet aSet(rFormat.GetAttrSet());
     short aSizeArray[5]={0};
-    SetFlyBordersShadow(aSet, rSection.brc, &aSizeArray[0]);
+    SetFlyBordersShadow(aSet, rSection.m_brc, &aSizeArray[0]);
     SvxLRSpaceItem aLR(aSet.Get(RES_LR_SPACE));
     SvxULSpaceItem aUL(aSet.Get(RES_UL_SPACE));
     SvxBoxItem aBox(aSet.Get(RES_BOX));
@@ -825,10 +825,10 @@ wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.nNode)
     , mpSection(nullptr)
     , mpPage(nullptr)
     , meDir(SvxFrameDirection::Horizontal_LR_TB)
-    , nPgWidth(SvxPaperInfo::GetPaperSize(PAPER_A4).Width())
-    , nPgLeft(MM_250)
-    , nPgRight(MM_250)
-    , nPgGutter(0)
+    , m_nPgWidth(SvxPaperInfo::GetPaperSize(PAPER_A4).Width())
+    , m_nPgLeft(MM_250)
+    , m_nPgRight(MM_250)
+    , m_nPgGutter(0)
     , mnVerticalAdjustment(drawing::TextVerticalAdjust_TOP)
     , mnBorders(0)
     , mbHasFootnote(false)
@@ -1080,7 +1080,7 @@ void wwSectionManager::CreateSep(const tools::Long nTextPos)
 
     // 2. paper size
     aNewSection.maSep.xaPage = ReadUSprm(pSep, pIds[1], lLetterWidth);
-    aNewSection.nPgWidth = SvxPaperInfo::GetSloppyPaperDimension(aNewSection.maSep.xaPage);
+    aNewSection.m_nPgWidth = SvxPaperInfo::GetSloppyPaperDimension(aNewSection.maSep.xaPage);
 
     aNewSection.maSep.yaPage = ReadUSprm(pSep, pIds[2], lLetterHeight);
 
@@ -1198,7 +1198,7 @@ void wwSectionManager::CreateSep(const tools::Long nTextPos)
         aNewSection.maSep.pgbPageDepth = (pgbProp & 0x0018) >> 3;
         aNewSection.maSep.pgbOffsetFrom = (pgbProp & 0x00E0) >> 5;
 
-        aNewSection.mnBorders = ::lcl_ReadBorders(false, aNewSection.brc, nullptr, nullptr, pSep);
+        aNewSection.mnBorders = ::lcl_ReadBorders(false, aNewSection.m_brc, nullptr, nullptr, pSep);
     }
 
     // check if Line Numbering must be activated or reset
