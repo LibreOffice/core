@@ -588,9 +588,9 @@ void ScDocument::TrackFormulas( SfxHintId nHintId )
 void ScDocument::StartAllListeners()
 {
     sc::StartListeningContext aCxt(*this);
-    for ( SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); ++i )
-        if ( maTabs[i] )
-            maTabs[i]->StartListeners(aCxt, true);
+    for ( auto const & i: maTabs )
+        if ( i )
+            i->StartListeners(aCxt, true);
 }
 
 void ScDocument::UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
