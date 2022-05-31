@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdd854b1_c59d3bf7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-05-31T11:29:18Z",
+      "side": 1,
+      "message": "To fix: if we type \"- \" it becomes a list, then we undo - it is a plain text. Then every usage of \"space\" in the sentence makes it bullet list again.",
+      "revId": "a9058939ca5b6d36b8fe7ad945def77ec7804841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
