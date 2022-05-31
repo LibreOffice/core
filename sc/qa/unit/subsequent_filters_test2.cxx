@@ -505,7 +505,7 @@ void ScFiltersTest2::testPrintRangeODS()
 {
     ScDocShellRef xDocSh = loadDoc(u"print-range.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    const ScRange* pRange = rDoc.GetRepeatRowRange(0);
+    std::optional<ScRange> pRange = rDoc.GetRepeatRowRange(0);
     CPPUNIT_ASSERT(pRange);
     CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 0, 1, 0), *pRange);
 

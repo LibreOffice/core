@@ -719,15 +719,15 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
 
             ScRangeList aTitleList;
             // repeated columns
-            if( const ScRange* pColRange = rDoc.GetRepeatColRange( nScTab ) )
+            if( std::optional<ScRange> oColRange = rDoc.GetRepeatColRange( nScTab ) )
                 aTitleList.push_back( ScRange(
-                    pColRange->aStart.Col(), 0, nScTab,
-                    pColRange->aEnd.Col(), GetXclMaxPos().Row(), nScTab ) );
+                    oColRange->aStart.Col(), 0, nScTab,
+                    oColRange->aEnd.Col(), GetXclMaxPos().Row(), nScTab ) );
             // repeated rows
-            if( const ScRange* pRowRange = rDoc.GetRepeatRowRange( nScTab ) )
+            if( std::optional<ScRange> oRowRange = rDoc.GetRepeatRowRange( nScTab ) )
                 aTitleList.push_back( ScRange(
-                    0, pRowRange->aStart.Row(), nScTab,
-                    GetXclMaxPos().Col(), pRowRange->aEnd.Row(), nScTab ) );
+                    0, oRowRange->aStart.Row(), nScTab,
+                    GetXclMaxPos().Col(), oRowRange->aEnd.Row(), nScTab ) );
             // create the NAME record
             GetAddressConverter().ValidateRangeList( aTitleList, false );
             if( !aTitleList.empty() )
