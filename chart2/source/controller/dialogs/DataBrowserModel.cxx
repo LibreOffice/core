@@ -791,10 +791,10 @@ void DataBrowserModel::updateFromModel()
         const std::vector< rtl::Reference< ChartType > > aChartTypes( coords->getChartTypes2());
         sal_Int32 nXAxisNumberFormat = DataSeriesHelper::getNumberFormatKeyFromAxis( nullptr, coords, 0, 0 );
 
-        for( sal_Int32 nCTIdx=0; nCTIdx < static_cast<sal_Int32>(aChartTypes.size()); ++nCTIdx )
+        for( auto const & CT: aChartTypes )
         {
-            rtl::Reference< ChartType > xSeriesCnt( aChartTypes[nCTIdx] );
-            OUString aRoleForDataLabelNumberFormat = ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( aChartTypes[nCTIdx] );
+            rtl::Reference< ChartType > xSeriesCnt( CT );
+            OUString aRoleForDataLabelNumberFormat = ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( CT );
 
             const std::vector< rtl::Reference< DataSeries > > & aSeries( xSeriesCnt->getDataSeries2());
             lcl_tSharedSeqVec aSharedSequences( lcl_getSharedSequences( aSeries ));
@@ -871,7 +871,7 @@ void DataBrowserModel::updateFromModel()
 
                     m_aHeaders.emplace_back(
                             dataSeries,
-                            aChartTypes[nCTIdx],
+                            CT,
                             bSwapXAndYAxis,
                             nHeaderStart,
                             nHeaderEnd - 1 );
