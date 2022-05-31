@@ -57,7 +57,7 @@ namespace drawinglayer::primitive2d
 
             /// helper methods
             void impCreateGeometryContent(
-                std::vector< Primitive2DReference >& rTarget,
+                Primitive2DContainer& rTarget,
                 basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose const & rDecTrans,
                 const OUString& rText,
                 sal_Int32 nTextPosition,
