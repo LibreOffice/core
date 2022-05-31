@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "546cd879_5a646527",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-05-31T12:29:05Z",
+      "side": 1,
+      "message": "Hello.\n\nUploaded new patch with updated default values.",
+      "parentUuid": "ea1e0a5e_41bb5f58",
+      "revId": "eb6eab50cf62e28e18f571ccf018a84d0c790c37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "489164f6_e8fe54ef",
