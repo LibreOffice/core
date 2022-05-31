@@ -204,10 +204,10 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
 
     std::vector<SubstitutionStruct> aFontSubs = svtools::GetFontSubstitutions();
     std::unique_ptr<weld::TreeIter> xIter(m_xCheckLB->make_iterator());
-    for (sal_Int32  i = 0; i < static_cast<sal_Int32>(aFontSubs.size()); ++i)
+    for (auto const & i: aFontSubs)
     {
         m_xCheckLB->append(xIter.get());
-        const SubstitutionStruct* pSubs = &aFontSubs[i];
+        const SubstitutionStruct* pSubs = &i;
         m_xCheckLB->set_toggle(*xIter, pSubs->bReplaceAlways ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
         m_xCheckLB->set_toggle(*xIter, pSubs->bReplaceOnScreenOnly ? TRISTATE_TRUE : TRISTATE_FALSE, 1);
         m_xCheckLB->set_text(*xIter, pSubs->sFont, 2);
