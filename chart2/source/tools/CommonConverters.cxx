@@ -397,17 +397,17 @@ basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
 {
     basegfx::B2DPolyPolygon aRetval;
 
-    for(sal_Int32 nN = 0; nN < static_cast<sal_Int32>(rPolyPolygon.size()); nN++)
+    for(auto const & nN: rPolyPolygon)
     {
         basegfx::B2DPolygon aNewPolygon;
-        sal_Int32 nInnerLength = rPolyPolygon[nN].size();
+        sal_Int32 nInnerLength = nN.size();
         if(nInnerLength)
         {
             aNewPolygon.reserve(nInnerLength);
             for( sal_Int32 nM = 0; nM < nInnerLength; nM++)
             {
-                auto X = static_cast<sal_Int32>(rPolyPolygon[nN][nM].PositionX);
-                auto Y = static_cast<sal_Int32>(rPolyPolygon[nN][nM].PositionY);
+                auto X = static_cast<sal_Int32>(nN[nM].PositionX);
+                auto Y = static_cast<sal_Int32>(nN[nM].PositionY);
                 aNewPolygon.append(basegfx::B2DPoint(X, Y));
             }
             // check for closed state flag
