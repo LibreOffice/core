@@ -1236,9 +1236,10 @@ void ScTabView::MoveCursorAbs( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
     }
     else
     {
-        if (!bShift)
+        if (!bShift && !SC_MOD()->IsFormulaMode())
         {
-            // Remove all marked data on cursor movement unless the Shift is locked.
+            // Remove all marked data on cursor movement unless the Shift is
+            // locked or while editing a formula.
             ScMarkData& rMark = aViewData.GetMarkData();
             bool bMarked = rMark.IsMarked() || rMark.IsMultiMarked();
             if (bMarked)
