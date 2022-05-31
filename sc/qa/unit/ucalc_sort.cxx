@@ -573,9 +573,9 @@ void TestSort::testSortInFormulaGroup()
 
     m_pDoc->InsertTab(0, "sorttest");
 
-    for ( SCROW i = 0; i < SCROW(SAL_N_ELEMENTS( aEntries )); ++i )
-        m_pDoc->SetString( aEntries[i].nCol, aEntries[i].nRow, 0,
-                           OUString::createFromAscii( aEntries[i].pData) );
+    for ( auto const & i: aEntries )
+        m_pDoc->SetString( i.nCol, i.nRow, 0,
+                           OUString::createFromAscii( i.pData) );
 
     ScSortParam aSortData;
     aSortData.nCol1 = 0;
