@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffd816f6_f263dbf5",
+        "filename": "uui/source/interactionhandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-31T13:20:59Z",
+      "side": 1,
+      "message": "m_pImpl -\u003e m_aImpl ?",
+      "revId": "3096a920e2ebbd4454593bc4181642f3e3ca1287",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
