@@ -65,8 +65,6 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
     ::ucbhelper::Content aContent;
     if( ::ucbhelper::Content::create( aFolderUrl, xComEnv, comphelper::getProcessComponentContext(), aContent ) )
     {
-        std::unique_ptr<SvStream> pTempStream;
-
         OUString aTempURL = ::utl::TempFile().GetURL();
         try {
             if ( aContent.isFolder() )
@@ -80,18 +78,18 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
 
                 if ( !aTempURL.isEmpty() )
                 {
-                    pTempStream.reset(new SvFileStream( aTempURL, StreamMode::STD_READWRITE ));
-                    tools::SvRef<SotStorage> aTargetStorage = new SotStorage( true, *pTempStream );
+                    SvFileStream aTempStream( aTempURL, StreamMode::STD_READWRITE );
+                    tools::SvRef<SotStorage> aTargetStorage = new SotStorage( true, aTempStream );
                     aStorage->CopyTo( aTargetStorage.get() );
                     aTargetStorage->Commit();
 
-                    if ( aStorage->GetError() || aTargetStorage->GetError() || pTempStream->GetError() )
+                    if ( aStorage->GetError() || aTargetStorage->GetError() || aTempStream.GetError() )
                         throw io::IOException();
 
                     aTargetStorage = nullptr;
                     aStorage = nullptr;
 
-                    pTempStream->Seek( 0 );
+                    aTempStream.Seek( 0 );
 
                     uno::Sequence< sal_Int8 > aSeq( 32000 );
                     sal_uInt32 nRead = 0;
@@ -99,13 +97,13 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
                         if ( aSeq.getLength() < 32000 )
                             aSeq.realloc( 32000 );
 
-                        nRead = pTempStream->ReadBytes(aSeq.getArray(), 32000);
+                        nRead = aTempStream.ReadBytes(aSeq.getArray(), 32000);
                         if ( nRead < 32000 )
                             aSeq.realloc( nRead );
                         xTargetStream->writeBytes( aSeq );
-                    } while (pTempStream->good() && nRead);
+                    } while (aTempStream.good() && nRead);
 
-                    if ( pTempStream->GetError() )
+                    if ( aTempStream.GetError() )
                         throw io::IOException();
 
                     bSuccess = true;
@@ -114,8 +112,6 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
         }
         catch (const uno::RuntimeException&)
         {
-            pTempStream.reset();
-
             if ( !aTempURL.isEmpty() )
                 ::utl::UCBContentHelper::Kill( aTempURL );
 
@@ -123,8 +119,6 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
         }
         catch (const io::IOException&)
         {
-            pTempStream.reset();
-
             if ( !aTempURL.isEmpty() )
                 ::utl::UCBContentHelper::Kill( aTempURL );
 
@@ -133,8 +127,6 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
         catch (const uno::Exception&)
         {
         }
-
-        pTempStream.reset();
 
         if ( !aTempURL.isEmpty() )
             ::utl::UCBContentHelper::Kill( aTempURL );

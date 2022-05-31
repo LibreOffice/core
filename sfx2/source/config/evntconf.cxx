@@ -205,10 +205,10 @@ static void PropagateEvent_Impl( SfxObjectShell const *pDoc, const OUString& aEv
 
 void SfxEventConfiguration::ConfigureEvent( const OUString& aName, const SvxMacro& rMacro, SfxObjectShell const *pDoc )
 {
-    std::unique_ptr<SvxMacro> pMacro;
+    std::optional<SvxMacro> pMacro;
     if ( rMacro.HasMacro() )
-        pMacro.reset( new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() ) );
-    PropagateEvent_Impl( pDoc ? pDoc : nullptr, aName, pMacro.get() );
+        pMacro.emplace( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() );
+    PropagateEvent_Impl( pDoc ? pDoc : nullptr, aName, pMacro ? &*pMacro : nullptr );
 }
 
 

@@ -110,18 +110,18 @@ std::unique_ptr<SfxMedium> DocumentInserter::CreateMedium(char const*const pFall
                 m_pURLList[0], SFX_STREAM_READONLY,
                 SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_xItemSet ));
         pMedium->UseInteractionHandler( true );
-        std::unique_ptr<SfxFilterMatcher> pMatcher;
+        std::optional<SfxFilterMatcher> pMatcher;
         if ( !m_sDocFactory.isEmpty() )
-            pMatcher.reset(new SfxFilterMatcher(m_sDocFactory));
+            pMatcher.emplace(m_sDocFactory);
         else
-            pMatcher.reset(new SfxFilterMatcher());
+            pMatcher.emplace();
 
         std::shared_ptr<const SfxFilter> pFilter;
         ErrCode nError = pMatcher->DetectFilter( *pMedium, pFilter );
         // tdf#101813 hack: check again if it's a global document
         if (ERRCODE_NONE != nError && pFallbackHack)
         {
-            pMatcher.reset(new SfxFilterMatcher(OUString::createFromAscii(pFallbackHack)));
+            pMatcher.emplace(OUString::createFromAscii(pFallbackHack));
             nError = pMatcher->DetectFilter( *pMedium, pFilter );
         }
         if ( nError == ERRCODE_NONE && pFilter )
