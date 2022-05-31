@@ -15,15 +15,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-    <node oor:name="wmf_MS_Windows_Metafile" oor:op="replace" >
-        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
-        <prop oor:name="URLPattern"/>
-        <prop oor:name="Extensions"><value>wmf</value></prop>
-        <prop oor:name="MediaType"><value>image/x-wmf</value></prop>
-        <prop oor:name="Preferred"><value>false</value></prop>
-        <prop oor:name="PreferredFilter"><value>WMF - MS Windows Metafile</value></prop>
+    <node oor:name="wmz_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>wmz_Compressed_MS_Windows_Metafile</value></prop>
+        <prop oor:name="FormatName"><value>SVWMZ</value></prop>
+        <prop oor:name="RealFilterName"><value>WMZ - Compressed MS Windows Metafile</value></prop>
+        <prop oor:name="UIComponent"/>
         <prop oor:name="UIName">
-            <value>WMF - Windows Metafile</value>
+            <value xml:lang="en-US">WMZ - Compressed Windows Metafile</value>
         </prop>
-        <prop oor:name="ClipboardFormat"/>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
     </node>

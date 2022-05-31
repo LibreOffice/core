@@ -29,6 +29,7 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
+#include <rtl/crc.h>
 #include <fltcall.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/filter/PngImageReader.hxx>
@@ -875,7 +876,9 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
             eLinkType = GfxLinkType::NativeMov;
         }
         else if (aFilterName.equalsIgnoreAsciiCase(IMP_WMF) ||
-                 aFilterName.equalsIgnoreAsciiCase(IMP_EMF))
+                aFilterName.equalsIgnoreAsciiCase(IMP_EMF) ||
+                aFilterName.equalsIgnoreAsciiCase(IMP_WMZ) ||
+                aFilterName.equalsIgnoreAsciiCase(IMP_EMZ))
         {
             nGraphicContentSize = nStreamLength;
             pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
@@ -1449,11 +1452,11 @@ ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPat
         {
             nStatus = readWithTypeSerializer(rIStream, rGraphic, eLinkType, aFilterName);
         }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_WMF))
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_WMF) || aFilterName.equalsIgnoreAsciiCase(IMP_WMZ))
         {
             nStatus = readWMF(rIStream, rGraphic, eLinkType);
         }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_EMF))
+        else if (aFilterName.equalsIgnoreAsciiCase(IMP_EMF) || aFilterName.equalsIgnoreAsciiCase(IMP_EMZ))
         {
             nStatus = readEMF(rIStream, rGraphic, eLinkType);
         }
@@ -1584,12 +1587,12 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
     sal_uInt16 nFormatCount = GetExportFormatCount();
 
     ResetLastError();
+    bool bShouldCompress = false;
+    SvMemoryStream rCompressableStm;
 
     if( nFormat == GRFILTER_FORMAT_DONTKNOW )
     {
-        INetURLObject aURL( rPath );
-        OUString aExt( aURL.GetFileExtension().toAsciiUpperCase() );
-
+        OUString aExt = ImpGetExtension( rPath );
         for( sal_uInt16 i = 0; i < nFormatCount; i++ )
         {
             if ( pConfig->GetExportFormatExtension( i ).equalsIgnoreAsciiCase( aExt ) )
@@ -1685,10 +1688,17 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                 if( rOStm.GetError() )
                     nStatus = ERRCODE_GRFILTER_IOERROR;
             }
-            else if ( aFilterName.equalsIgnoreAsciiCase( EXP_WMF ) )
+            else if ( aFilterName.equalsIgnoreAsciiCase( EXP_WMF ) || aFilterName.equalsIgnoreAsciiCase( EXP_WMZ ) )
             {
                 bool bDone(false);
-
+                SvStream* rTempStm = &rOStm;
+                if (aFilterName.equalsIgnoreAsciiCase(EXP_WMZ))
+                {
+                    // Write to a different stream so that we can compress to rOStm later
+                    rCompressableStm.SetBufferSize( rOStm.GetBufferSize() );
+                    rTempStm = &rCompressableStm;
+                    bShouldCompress = true;
+                }
                 // do we have a native Vector Graphic Data RenderGraphic, whose data can be written directly?
                 auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
@@ -1702,9 +1712,9 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                     && !bIsEMF)
                 {
                     auto & aDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
-                    rOStm.WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
+                    rTempStm->WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
 
-                    if (rOStm.GetError())
+                    if (rTempStm->GetError())
                     {
                         nStatus = ERRCODE_GRFILTER_IOERROR;
                     }
@@ -1717,17 +1727,24 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                 if (!bDone)
                 {
                     // #i119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
-                    if (!ConvertGraphicToWMF(aGraphic, rOStm, &aConfigItem))
+                    if (!ConvertGraphicToWMF(aGraphic, *rTempStm, &aConfigItem))
                         nStatus = ERRCODE_GRFILTER_FORMATERROR;
 
-                    if (rOStm.GetError())
+                    if (rTempStm->GetError())
                         nStatus = ERRCODE_GRFILTER_IOERROR;
                 }
             }
-            else if ( aFilterName.equalsIgnoreAsciiCase( EXP_EMF ) )
+            else if ( aFilterName.equalsIgnoreAsciiCase( EXP_EMF ) || aFilterName.equalsIgnoreAsciiCase( EXP_EMZ ) )
             {
                 bool bDone(false);
-
+                SvStream* rTempStm = &rOStm;
+                if (aFilterName.equalsIgnoreAsciiCase(EXP_EMZ))
+                {
+                    // Write to a different stream so that we can compress to rOStm later
+                    rCompressableStm.SetBufferSize( rOStm.GetBufferSize() );
+                    rTempStm = &rCompressableStm;
+                    bShouldCompress = true;
+                }
                 // do we have a native Vector Graphic Data RenderGraphic, whose data can be written directly?
                 auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
@@ -1736,9 +1753,9 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                     && !rVectorGraphicDataPtr->getBinaryDataContainer().isEmpty())
                 {
                     auto & aDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
-                    rOStm.WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
+                    rTempStm->WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
 
-                    if (rOStm.GetError())
+                    if (rTempStm->GetError())
                     {
                         nStatus = ERRCODE_GRFILTER_IOERROR;
                     }
@@ -1751,10 +1768,10 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                 if (!bDone)
                 {
                     // #i119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
-                    if (!ConvertGDIMetaFileToEMF(aGraphic.GetGDIMetaFile(), rOStm))
+                    if (!ConvertGDIMetaFileToEMF(aGraphic.GetGDIMetaFile(), *rTempStm))
                         nStatus = ERRCODE_GRFILTER_FORMATERROR;
 
-                    if (rOStm.GetError())
+                    if (rTempStm->GetError())
                         nStatus = ERRCODE_GRFILTER_IOERROR;
                 }
             }
@@ -1908,6 +1925,21 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
     if( nStatus != ERRCODE_NONE )
     {
         ImplSetError( nStatus, &rOStm );
+    }
+    else if ( bShouldCompress )
+    {
+        sal_uInt32 nUncompressedCRC32
+            = rtl_crc32( 0, rCompressableStm.GetData(), rCompressableStm.GetSize() );
+        ZCodec aCodec;
+        rCompressableStm.Seek( 0 );
+        aCodec.BeginCompression( ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true );
+        // the inner modify time/filename doesn't really matter in this context because
+        // compressed graphic formats are meant to be opened as is - not to be extracted
+        aCodec.SetCompressionMetadata( "inner", 0, nUncompressedCRC32 );
+        aCodec.Compress( rCompressableStm, rOStm );
+        tools::Long nCompressedLength = aCodec.EndCompression();
+        if ( rOStm.GetError() || nCompressedLength <= 0 )
+            nStatus = ERRCODE_GRFILTER_IOERROR;
     }
     return nStatus;
 }
