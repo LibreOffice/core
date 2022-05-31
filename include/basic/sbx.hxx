@@ -28,6 +28,7 @@
 #include <basic/sbxobj.hxx>
 #include <basic/basicdllapi.h>
 
+#include <utility>
 #include <vector>
 #include <memory>
 
@@ -42,8 +43,8 @@ struct SbxParamInfo
     SbxDataType    eType;          // Data type
     SbxFlagBits    nFlags;         // Flag-Bits
     sal_uInt32     nUserData;      // IDs etc.
-    SbxParamInfo( const OUString& s, SbxDataType t, SbxFlagBits n )
-        : aName( s ), eType( t ), nFlags( n ), nUserData( 0 ) {}
+    SbxParamInfo( OUString s, SbxDataType t, SbxFlagBits n )
+        : aName(std::move( s )), eType( t ), nFlags( n ), nUserData( 0 ) {}
 };
 
 typedef std::vector<std::unique_ptr<SbxParamInfo>> SbxParams;
@@ -66,7 +67,7 @@ class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) SbxInfo final : public SvRefBase
     virtual ~SbxInfo() override;
 public:
     SbxInfo();
-    SbxInfo( const OUString&, sal_uInt32 );
+    SbxInfo( OUString , sal_uInt32 );
 
     void                AddParam( const OUString&, SbxDataType, SbxFlagBits=SbxFlagBits::Read );
     const SbxParamInfo* GetParam( sal_uInt16 n ) const; // index starts with 1!

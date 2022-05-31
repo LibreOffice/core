@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <rtl/character.hxx>
 #include <basic/sberrors.hxx>
+#include <utility>
 
 // All symbol names are laid down int the symbol-pool's stringpool, so that
 // all symbols are handled in the same case. On saving the code-image, the
@@ -276,8 +277,8 @@ void SbiSymPool::CheckRefs()
     }
 }
 
-SbiSymDef::SbiSymDef( const OUString& rName ) :
-    aName(rName),
+SbiSymDef::SbiSymDef( OUString _aName ) :
+    aName(std::move(_aName)),
     eType(SbxEMPTY),
     pIn(nullptr),
     nLen(0),

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/errinf.hxx>
 #include <tools/stream.hxx>
 #include <sot/storage.hxx>
@@ -107,9 +108,9 @@ class BasMgrContainerListenerImpl: public ContainerListenerHelper
     OUString maLibName;      // empty -> no lib, but lib container
 
 public:
-    BasMgrContainerListenerImpl( BasicManager* pMgr, const OUString& aLibName )
+    BasMgrContainerListenerImpl( BasicManager* pMgr, OUString aLibName )
         : mpMgr( pMgr )
-        , maLibName( aLibName ) {}
+        , maLibName(std::move( aLibName )) {}
 
     static void insertLibraryImpl( const uno::Reference< script::XLibraryContainer >& xScriptCont, BasicManager* pMgr,
                                    const uno::Any& aLibAny, const OUString& aLibName );
@@ -1573,8 +1574,8 @@ class ModuleInfo_Impl : public ModuleInfoHelper
     OUString maSource;
 
 public:
-    ModuleInfo_Impl( const OUString& aName, const OUString& aLanguage, const OUString& aSource )
-        : maName( aName ), maLanguage( aLanguage), maSource( aSource ) {}
+    ModuleInfo_Impl( OUString aName, OUString aLanguage, OUString aSource )
+        : maName(std::move( aName )), maLanguage(std::move( aLanguage)), maSource(std::move( aSource )) {}
 
     // Methods XStarBasicModuleInfo
     virtual OUString SAL_CALL getName() override
@@ -1592,8 +1593,8 @@ class DialogInfo_Impl : public WeakImplHelper< script::XStarBasicDialogInfo >
     uno::Sequence< sal_Int8 > mData;
 
 public:
-    DialogInfo_Impl( const OUString& aName, const uno::Sequence< sal_Int8 >& Data )
-        : maName( aName ), mData( Data ) {}
+    DialogInfo_Impl( OUString aName, const uno::Sequence< sal_Int8 >& Data )
+        : maName(std::move( aName )), mData( Data ) {}
 
     // Methods XStarBasicDialogInfo
     virtual OUString SAL_CALL getName() override
@@ -1615,19 +1616,19 @@ class LibraryInfo_Impl : public WeakImplHelper< script::XStarBasicLibraryInfo >
 public:
     LibraryInfo_Impl
     (
-        const OUString& aName,
-        uno::Reference< container::XNameContainer > const & xModuleContainer,
-        uno::Reference< container::XNameContainer > const & xDialogContainer,
-        const OUString& aPassword,
-        const OUString& aExternaleSourceURL,
-        const OUString& aLinkTargetURL
+        OUString aName,
+        uno::Reference< container::XNameContainer > xModuleContainer,
+        uno::Reference< container::XNameContainer > xDialogContainer,
+        OUString aPassword,
+        OUString aExternaleSourceURL,
+        OUString aLinkTargetURL
     )
-        : maName( aName )
-        , mxModuleContainer( xModuleContainer )
-        , mxDialogContainer( xDialogContainer )
-        , maPassword( aPassword )
-        , maExternaleSourceURL( aExternaleSourceURL )
-        , maLinkTargetURL( aLinkTargetURL )
+        : maName(std::move( aName ))
+        , mxModuleContainer(std::move( xModuleContainer ))
+        , mxDialogContainer(std::move( xDialogContainer ))
+        , maPassword(std::move( aPassword ))
+        , maExternaleSourceURL(std::move( aExternaleSourceURL ))
+        , maLinkTargetURL(std::move( aLinkTargetURL ))
     {}
 
     // Methods XStarBasicLibraryInfo

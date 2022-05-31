@@ -74,14 +74,14 @@ class SbxBasicFormater {
     // Constructor takes signs for decimal point, thousand separation sign
     // and necessary resource strings.
     SbxBasicFormater( sal_Unicode _cDecPoint, sal_Unicode _cThousandSep,
-                      const OUString& _sOnStrg,
-                      const OUString& _sOffStrg,
-                      const OUString& _sYesStrg,
-                      const OUString& _sNoStrg,
-                      const OUString& _sTrueStrg,
-                      const OUString& _sFalseStrg,
-                      const OUString& _sCurrencyStrg,
-                      const OUString& _sCurrencyFormatStrg );
+                      OUString _sOnStrg,
+                      OUString _sOffStrg,
+                      OUString _sYesStrg,
+                      OUString _sNoStrg,
+                      OUString _sTrueStrg,
+                      OUString _sFalseStrg,
+                      OUString _sCurrencyStrg,
+                      OUString _sCurrencyFormatStrg );
 
     /* Basic command: Format$( number,format-string )
 

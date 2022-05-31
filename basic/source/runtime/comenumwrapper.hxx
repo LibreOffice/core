@@ -23,6 +23,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 class ComEnumerationWrapper : public ::cppu::WeakImplHelper<css::container::XEnumeration>
 {
@@ -30,8 +31,8 @@ class ComEnumerationWrapper : public ::cppu::WeakImplHelper<css::container::XEnu
     sal_Int32 m_nCurInd;
 
 public:
-    explicit ComEnumerationWrapper(const css::uno::Reference<css::script::XInvocation>& xInvocation)
-        : m_xInvocation(xInvocation)
+    explicit ComEnumerationWrapper(css::uno::Reference<css::script::XInvocation> xInvocation)
+        : m_xInvocation(std::move(xInvocation))
         , m_nCurInd(0)
     {
     }

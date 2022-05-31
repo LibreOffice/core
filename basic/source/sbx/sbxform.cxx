@@ -25,6 +25,7 @@
 
 #include <rtl/character.hxx>
 #include <o3tl/string_view.hxx>
+#include <utility>
 
 /*
 TODO: are there any Star-Basic characteristics unconsidered?
@@ -92,24 +93,24 @@ static double get_number_of_digits( double dNumber )
 
 
 SbxBasicFormater::SbxBasicFormater( sal_Unicode _cDecPoint, sal_Unicode _cThousandSep,
-                      const OUString& _sOnStrg,
-                      const OUString& _sOffStrg,
-                      const OUString& _sYesStrg,
-                      const OUString& _sNoStrg,
-                      const OUString& _sTrueStrg,
-                      const OUString& _sFalseStrg,
-                      const OUString& _sCurrencyStrg,
-                      const OUString& _sCurrencyFormatStrg )
+                      OUString _sOnStrg,
+                      OUString _sOffStrg,
+                      OUString _sYesStrg,
+                      OUString _sNoStrg,
+                      OUString _sTrueStrg,
+                      OUString _sFalseStrg,
+                      OUString _sCurrencyStrg,
+                      OUString _sCurrencyFormatStrg )
     : cDecPoint(_cDecPoint)
     , cThousandSep(_cThousandSep)
-    , sOnStrg(_sOnStrg)
-    , sOffStrg(_sOffStrg)
-    , sYesStrg(_sYesStrg)
-    , sNoStrg(_sNoStrg)
-    , sTrueStrg(_sTrueStrg)
-    , sFalseStrg(_sFalseStrg)
-    , sCurrencyStrg(_sCurrencyStrg)
-    , sCurrencyFormatStrg(_sCurrencyFormatStrg)
+    , sOnStrg(std::move(_sOnStrg))
+    , sOffStrg(std::move(_sOffStrg))
+    , sYesStrg(std::move(_sYesStrg))
+    , sNoStrg(std::move(_sNoStrg))
+    , sTrueStrg(std::move(_sTrueStrg))
+    , sFalseStrg(std::move(_sFalseStrg))
+    , sCurrencyStrg(std::move(_sCurrencyStrg))
+    , sCurrencyFormatStrg(std::move(_sCurrencyFormatStrg))
     , dNum(0.0)
     , nNumExp(0)
     , nExpExp(0)

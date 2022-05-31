@@ -35,6 +35,7 @@
 
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include <map>
 
@@ -83,7 +84,7 @@ class SbUnoStructRefObject final : public SbxObject
 public:
     StructRefInfo getStructMember( const OUString& rMember );
     const StructRefInfo& getStructInfo() const { return maMemberInfo; }
-    SbUnoStructRefObject( const OUString& aName_, const StructRefInfo& rMemberInfo );
+    SbUnoStructRefObject( const OUString& aName_, StructRefInfo aMemberInfo );
     virtual ~SbUnoStructRefObject() override;
 
     // override Find to support e. g. NameAccess
@@ -193,7 +194,7 @@ class SbUnoProperty final : public SbxProperty
 public:
 
     SbUnoProperty( const OUString& aName_, SbxDataType eSbxType, SbxDataType eRealSbxType,
-        const css::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation, bool bUnoStruct );
+        css::beans::Property aUnoProp_, sal_Int32 nId_, bool bInvocation, bool bUnoStruct );
 
     bool isUnoStruct() const { return mbUnoStruct; }
     bool isInvocationBased() const
@@ -218,9 +219,9 @@ public:
     SbUnoClass( const OUString& aName_ )
         : SbxObject( aName_ )
     {}
-    SbUnoClass( const OUString& aName_, const css::uno::Reference< css::reflection::XIdlClass >& xClass_ )
+    SbUnoClass( const OUString& aName_, css::uno::Reference< css::reflection::XIdlClass > xClass_ )
         : SbxObject( aName_ )
-        , m_xClass( xClass_ )
+        , m_xClass(std::move( xClass_ ))
     {}
 
 
@@ -245,9 +246,9 @@ class SbUnoService final : public SbxObject
 
 public:
     SbUnoService( const OUString& aName_,
-        const css::uno::Reference< css::reflection::XServiceTypeDescription2 >& xServiceTypeDesc )
+        css::uno::Reference< css::reflection::XServiceTypeDescription2 >  xServiceTypeDesc )
             : SbxObject( aName_ )
-            , m_xServiceTypeDesc( xServiceTypeDesc )
+            , m_xServiceTypeDesc(std::move( xServiceTypeDesc ))
             , m_bNeedsInit( true )
     {}
 
@@ -294,9 +295,9 @@ class SbUnoAnyObject final : public SbxObject
     css::uno::Any     mVal;
 
 public:
-    SbUnoAnyObject( const css::uno::Any& rVal )
+    SbUnoAnyObject( css::uno::Any  rVal )
         : SbxObject( OUString() )
-        , mVal( rVal )
+        , mVal(std::move( rVal ))
     {}
 
     const css::uno::Any& getValue() const
