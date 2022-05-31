@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02bbc178_01fb6f4a",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1729,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-31T09:39:57Z",
+      "side": 1,
+      "message": "Instead of converting to uppercase, and then comparing, which allocates in addition to GetFileExtension itself, please use\n\n  if (aURL.GetFileExtension().equalsIgnoreAsciiCase(\"WMZ\"))\n\nBut generally, deciding on a format based on extension is ... questionable.",
+      "range": {
+        "startLine": 1728,
+        "startChar": 16,
+        "endLine": 1729,
+        "endChar": 34
+      },
+      "revId": "d5094c3657f72bc2dbc1bce42d2339b53920f8f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
