@@ -14,6 +14,8 @@
 
 #include <global.h>
 
+#include <memory>
+
 namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace css;

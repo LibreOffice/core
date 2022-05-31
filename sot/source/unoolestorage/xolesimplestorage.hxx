@@ -28,6 +28,8 @@
 
 #include <osl/mutex.hxx>
 
+#include <memory>
+
 namespace com::sun::star::container { class XNameAccess; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::io { class XStream; }

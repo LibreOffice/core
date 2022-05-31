@@ -20,6 +20,7 @@
 #include "acceptor.hxx"
 
 #include <unordered_set>
+#include <memory>
 
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>

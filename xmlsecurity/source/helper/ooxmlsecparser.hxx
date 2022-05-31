@@ -17,6 +17,7 @@
 
 #include <xmloff/nmspmap.hxx>
 
+#include <memory>
 #include <stack>
 
 class XSecController;
