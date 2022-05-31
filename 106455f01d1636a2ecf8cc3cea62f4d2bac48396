@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc1904d5_7695e430",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-05-31T07:26:23Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to add this functionality to the crashreporter directly? We own the code, so why have some extra tool that scrapes the html?",
+      "revId": "106455f01d1636a2ecf8cc3cea62f4d2bac48396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9f2974c_6d52f2be",
