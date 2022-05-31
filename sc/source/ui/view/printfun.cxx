@@ -1001,8 +1001,8 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     //! walk through all PrintAreas of the table !!!
     const ScRange*  pPrintArea = rDoc.GetPrintRange( nPrintTab, 0 );
-    const ScRange*  pRepeatCol = rDoc.GetRepeatColRange( nPrintTab );
-    const ScRange*  pRepeatRow = rDoc.GetRepeatRowRange( nPrintTab );
+    std::optional<ScRange> oRepeatCol = rDoc.GetRepeatColRange( nPrintTab );
+    std::optional<ScRange> oRepeatRow = rDoc.GetRepeatRowRange( nPrintTab );
 
     //  ignoring ATTR_PAGE_PRINTTABLES
 
@@ -1055,11 +1055,11 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         }
     }
 
-    if ( pRepeatCol )
+    if ( oRepeatCol )
     {
         aAreaParam.bRepeatCol = true;
-        nRepeatStartCol = pRepeatCol->aStart.Col();
-        nRepeatEndCol   = pRepeatCol->aEnd  .Col();
+        nRepeatStartCol = oRepeatCol->aStart.Col();
+        nRepeatEndCol   = oRepeatCol->aEnd  .Col();
     }
     else
     {
@@ -1067,11 +1067,11 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         nRepeatStartCol = nRepeatEndCol = SCCOL_REPEAT_NONE;
     }
 
-    if ( pRepeatRow )
+    if ( oRepeatRow )
     {
         aAreaParam.bRepeatRow = true;
-        nRepeatStartRow = pRepeatRow->aStart.Row();
-        nRepeatEndRow   = pRepeatRow->aEnd  .Row();
+        nRepeatStartRow = oRepeatRow->aStart.Row();
+        nRepeatEndRow   = oRepeatRow->aEnd  .Row();
     }
     else
     {
