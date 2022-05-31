@@ -1066,7 +1066,7 @@ void SwFormatCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
     {
         tools::Long nTmp = rCol.GetWishWidth();
         nTmp *= GetWishWidth();
-        nTmp /= nAct;
+        nTmp = nAct == 0 ? nTmp : nTmp / nAct;
         rCol.SetWishWidth(sal_uInt16(nTmp));
     }
 }
