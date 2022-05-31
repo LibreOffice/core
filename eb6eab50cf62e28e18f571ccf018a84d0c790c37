@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea1e0a5e_41bb5f58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-31T09:01:03Z",
+      "side": 1,
+      "message": "Default today is Number, Text, Date\u0026Time checked, Don\u0027t shift, and None (operation). Besides, works nicely.",
+      "revId": "eb6eab50cf62e28e18f571ccf018a84d0c790c37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "489164f6_e8fe54ef",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 6624,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-31T09:01:03Z",
+      "side": 1,
+      "message": "Should this be true",
+      "range": {
+        "startLine": 6624,
+        "startChar": 19,
+        "endLine": 6624,
+        "endChar": 24
+      },
+      "revId": "eb6eab50cf62e28e18f571ccf018a84d0c790c37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eebbd2ff_e9c591f0",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 6630,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-31T09:01:03Z",
+      "side": 1,
+      "message": "Should this be true",
+      "range": {
+        "startLine": 6630,
+        "startChar": 19,
+        "endLine": 6630,
+        "endChar": 24
+      },
+      "revId": "eb6eab50cf62e28e18f571ccf018a84d0c790c37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b216ed8f_c3551a1b",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 6636,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-31T09:01:03Z",
+      "side": 1,
+      "message": "Should this be true",
+      "range": {
+        "startLine": 6636,
+        "startChar": 19,
+        "endLine": 6636,
+        "endChar": 24
+      },
+      "revId": "eb6eab50cf62e28e18f571ccf018a84d0c790c37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
