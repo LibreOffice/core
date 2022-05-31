@@ -2102,8 +2102,8 @@ public:
     SC_DLLPUBLIC bool           HasPrintRange();
     SC_DLLPUBLIC sal_uInt16     GetPrintRangeCount( SCTAB nTab );
     SC_DLLPUBLIC const ScRange* GetPrintRange( SCTAB nTab, sal_uInt16 nPos );
-    SC_DLLPUBLIC const ScRange* GetRepeatColRange( SCTAB nTab );
-    SC_DLLPUBLIC const ScRange* GetRepeatRowRange( SCTAB nTab );
+    SC_DLLPUBLIC std::optional<ScRange> GetRepeatColRange( SCTAB nTab );
+    SC_DLLPUBLIC std::optional<ScRange> GetRepeatRowRange( SCTAB nTab );
     /** Returns true, if the specified sheet is always printed. */
     bool                        IsPrintEntireSheet( SCTAB nTab ) const;
 
@@ -2113,8 +2113,8 @@ public:
     SC_DLLPUBLIC void            AddPrintRange( SCTAB nTab, const ScRange& rNew );
     /** Marks the specified sheet to be printed completely. Deletes old print ranges on the sheet! */
     SC_DLLPUBLIC void            SetPrintEntireSheet( SCTAB nTab );
-    SC_DLLPUBLIC void            SetRepeatColRange( SCTAB nTab, std::unique_ptr<ScRange> pNew );
-    SC_DLLPUBLIC void            SetRepeatRowRange( SCTAB nTab, std::unique_ptr<ScRange> pNew );
+    SC_DLLPUBLIC void            SetRepeatColRange( SCTAB nTab, std::optional<ScRange> oNew );
+    SC_DLLPUBLIC void            SetRepeatRowRange( SCTAB nTab, std::optional<ScRange> oNew );
     std::unique_ptr<ScPrintRangeSaver> CreatePrintRangeSaver() const;
     void                         RestorePrintRanges( const ScPrintRangeSaver& rSaver );
 

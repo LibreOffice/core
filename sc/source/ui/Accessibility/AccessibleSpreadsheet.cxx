@@ -777,10 +777,10 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessib
     uno::Reference< XAccessibleTable > xAccessibleTable;
     if( mpDoc && mbIsSpreadsheet )
     {
-        if( const ScRange* pRowRange = mpDoc->GetRepeatRowRange( mnTab ) )
+        if( std::optional<ScRange> oRowRange = mpDoc->GetRepeatRowRange( mnTab ) )
         {
-            SCROW nStart = pRowRange->aStart.Row();
-            SCROW nEnd = pRowRange->aEnd.Row();
+            SCROW nStart = oRowRange->aStart.Row();
+            SCROW nEnd = oRowRange->aEnd.Row();
             ScDocument* pDoc = GetDocument(mpViewShell);
             if( (0 <= nStart) && (nStart <= nEnd) && (nEnd <= pDoc->MaxRow()) )
                 xAccessibleTable.set( new ScAccessibleSpreadsheet( *this, ScRange( 0, nStart, mnTab, pDoc->MaxCol(), nEnd, mnTab ) ) );
@@ -796,10 +796,10 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessib
     uno::Reference< XAccessibleTable > xAccessibleTable;
     if( mpDoc && mbIsSpreadsheet )
     {
-        if( const ScRange* pColRange = mpDoc->GetRepeatColRange( mnTab ) )
+        if( std::optional<ScRange> oColRange = mpDoc->GetRepeatColRange( mnTab ) )
         {
-            SCCOL nStart = pColRange->aStart.Col();
-            SCCOL nEnd = pColRange->aEnd.Col();
+            SCCOL nStart = oColRange->aStart.Col();
+            SCCOL nEnd = oColRange->aEnd.Col();
             ScDocument* pDoc = GetDocument(mpViewShell);
             if( (0 <= nStart) && (nStart <= nEnd) && (nEnd <= pDoc->MaxCol()) )
                 xAccessibleTable.set( new ScAccessibleSpreadsheet( *this, ScRange( nStart, 0, mnTab, nEnd, pDoc->MaxRow(), mnTab ) ) );

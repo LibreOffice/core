@@ -335,8 +335,8 @@ ScTable::~ScTable() COVERITY_NOEXCEPT_FALSE
     pSheetEvents.reset();
     pOutlineTable.reset();
     pSearchText.reset();
-    pRepeatColRange.reset();
-    pRepeatRowRange.reset();
+    moRepeatColRange.reset();
+    moRepeatRowRange.reset();
     pScenarioRanges.reset();
     mpRangeName.reset();
     pDBDataNoName.reset();
@@ -1873,12 +1873,12 @@ void ScTable::UpdateReference(
             }
         }
 
-        if ( pRepeatColRange )
+        if ( moRepeatColRange )
         {
-            nSCol = pRepeatColRange->aStart.Col();
-            nSRow = pRepeatColRange->aStart.Row();
-            nECol = pRepeatColRange->aEnd.Col();
-            nERow = pRepeatColRange->aEnd.Row();
+            nSCol = moRepeatColRange->aStart.Col();
+            nSRow = moRepeatColRange->aStart.Row();
+            nECol = moRepeatColRange->aEnd.Col();
+            nERow = moRepeatColRange->aEnd.Row();
 
             // do not try to modify sheet index of repeat range
             if ( ScRefUpdate::Update( &rDocument, eUpdateRefMode,
@@ -1886,19 +1886,19 @@ void ScTable::UpdateReference(
                                       nDx,nDy,0,
                                       nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
             {
-                *pRepeatColRange = ScRange( nSCol, nSRow, 0, nECol, nERow, 0 );
+                *moRepeatColRange = ScRange( nSCol, nSRow, 0, nECol, nERow, 0 );
                 bRecalcPages = true;
                 nRepeatStartX = nSCol;  // for UpdatePageBreaks
                 nRepeatEndX = nECol;
             }
         }
 
-        if ( pRepeatRowRange )
+        if ( moRepeatRowRange )
         {
-            nSCol = pRepeatRowRange->aStart.Col();
-            nSRow = pRepeatRowRange->aStart.Row();
-            nECol = pRepeatRowRange->aEnd.Col();
-            nERow = pRepeatRowRange->aEnd.Row();
+            nSCol = moRepeatRowRange->aStart.Col();
+            nSRow = moRepeatRowRange->aStart.Row();
+            nECol = moRepeatRowRange->aEnd.Col();
+            nERow = moRepeatRowRange->aEnd.Row();
 
             // do not try to modify sheet index of repeat range
             if ( ScRefUpdate::Update( &rDocument, eUpdateRefMode,
@@ -1906,7 +1906,7 @@ void ScTable::UpdateReference(
                                       nDx,nDy,0,
                                       nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
             {
-                *pRepeatRowRange = ScRange( nSCol, nSRow, 0, nECol, nERow, 0 );
+                *moRepeatRowRange = ScRange( nSCol, nSRow, 0, nECol, nERow, 0 );
                 bRecalcPages = true;
                 nRepeatStartY = nSRow;  // for UpdatePageBreaks
                 nRepeatEndY = nERow;
@@ -2252,35 +2252,35 @@ void ScTable::CopyPrintRange(const ScTable& rTable)
 
     bPrintEntireSheet = rTable.bPrintEntireSheet;
 
-    pRepeatColRange.reset();
-    if (rTable.pRepeatColRange)
+    moRepeatColRange.reset();
+    if (rTable.moRepeatColRange)
     {
-        pRepeatColRange.reset(new ScRange(*rTable.pRepeatColRange));
-        pRepeatColRange->aStart.SetTab(nTab);
-        pRepeatColRange->aEnd.SetTab(nTab);
+        moRepeatColRange.emplace(*rTable.moRepeatColRange);
+        moRepeatColRange->aStart.SetTab(nTab);
+        moRepeatColRange->aEnd.SetTab(nTab);
     }
 
-    pRepeatRowRange.reset();
-    if (rTable.pRepeatRowRange)
+    moRepeatRowRange.reset();
+    if (rTable.moRepeatRowRange)
     {
-        pRepeatRowRange.reset(new ScRange(*rTable.pRepeatRowRange));
-        pRepeatRowRange->aStart.SetTab(nTab);
-        pRepeatRowRange->aEnd.SetTab(nTab);
+        moRepeatRowRange.emplace(*rTable.moRepeatRowRange);
+        moRepeatRowRange->aStart.SetTab(nTab);
+        moRepeatRowRange->aEnd.SetTab(nTab);
     }
 }
 
-void ScTable::SetRepeatColRange( std::unique_ptr<ScRange> pNew )
+void ScTable::SetRepeatColRange( std::optional<ScRange> oNew )
 {
-    pRepeatColRange = std::move(pNew);
+    moRepeatColRange = std::move(oNew);
 
     SetStreamValid(false);
 
     InvalidatePageBreaks();
 }
 
-void ScTable::SetRepeatRowRange( std::unique_ptr<ScRange> pNew )
+void ScTable::SetRepeatRowRange( std::optional<ScRange> oNew )
 {
-    pRepeatRowRange = std::move(pNew);
+    moRepeatRowRange = std::move(oNew);
 
     SetStreamValid(false);
 
@@ -2325,17 +2325,15 @@ const ScRange* ScTable::GetPrintRange(sal_uInt16 nPos) const
 void ScTable::FillPrintSaver( ScPrintSaverTab& rSaveTab ) const
 {
     rSaveTab.SetAreas( std::vector(aPrintRanges), bPrintEntireSheet );
-    rSaveTab.SetRepeat( pRepeatColRange.get(), pRepeatRowRange.get() );
+    rSaveTab.SetRepeat( moRepeatColRange, moRepeatRowRange );
 }
 
 void ScTable::RestorePrintRanges( const ScPrintSaverTab& rSaveTab )
 {
     aPrintRanges = rSaveTab.GetPrintRanges();
     bPrintEntireSheet = rSaveTab.IsEntireSheet();
-    auto p = rSaveTab.GetRepeatCol();
-    SetRepeatColRange( std::unique_ptr<ScRange>(p ? new ScRange(*p) : nullptr) );
-    p = rSaveTab.GetRepeatRow();
-    SetRepeatRowRange( std::unique_ptr<ScRange>(p ? new ScRange(*p) : nullptr) );
+    SetRepeatColRange( rSaveTab.GetRepeatCol() );
+    SetRepeatRowRange( rSaveTab.GetRepeatRow() );
 
     InvalidatePageBreaks();     // #i117952# forget page breaks for an old print range
     UpdatePageBreaks(nullptr);

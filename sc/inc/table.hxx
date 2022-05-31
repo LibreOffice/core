@@ -216,8 +216,8 @@ private:
 
     ScRangeVec      aPrintRanges;
 
-    std::unique_ptr<ScRange> pRepeatColRange;
-    std::unique_ptr<ScRange> pRepeatRowRange;
+    std::optional<ScRange> moRepeatColRange;
+    std::optional<ScRange> moRepeatRowRange;
 
     sal_uInt16          nLockCount;
 
@@ -793,10 +793,10 @@ public:
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
-    const ScRange*  GetRepeatColRange() const   { return pRepeatColRange.get(); }
-    const ScRange*  GetRepeatRowRange() const   { return pRepeatRowRange.get(); }
-    void            SetRepeatColRange( std::unique_ptr<ScRange> pNew );
-    void            SetRepeatRowRange( std::unique_ptr<ScRange> pNew );
+    const std::optional<ScRange>& GetRepeatColRange() const { return moRepeatColRange; }
+    const std::optional<ScRange>& GetRepeatRowRange() const { return moRepeatRowRange; }
+    void            SetRepeatColRange( std::optional<ScRange> oNew );
+    void            SetRepeatRowRange( std::optional<ScRange> oNew );
 
     sal_uInt16          GetPrintRangeCount() const          { return static_cast< sal_uInt16 >( aPrintRanges.size() ); }
     const ScRange*  GetPrintRange(sal_uInt16 nPos) const;
