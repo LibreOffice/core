@@ -578,7 +578,7 @@ void SbiImage::MakeStrings( short nSize )
 // growing in 1K-Steps
 void SbiImage::AddString( const OUString& r )
 {
-    if( nStringIdx >= short(mvStringOffsets.size()) )
+    if( nStringIdx >= mvStringOffsets.size() )
     {
         bError = true;
     }
@@ -606,7 +606,7 @@ void SbiImage::AddString( const OUString& r )
         memcpy( pStrings.get() + nStringOff, r.getStr(), len * sizeof( sal_Unicode ) );
         nStringOff = nStringOff + len;
         // Last String? The update the size of the buffer
-        if( nStringIdx >= short(mvStringOffsets.size()) )
+        if( nStringIdx >= mvStringOffsets.size() )
         {
             nStringSize = nStringOff;
         }

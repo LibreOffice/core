@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include "filefmt.hxx"
 #include <o3tl/typed_flags_set.hxx>
+#include <cstddef>
 #include <vector>
 
 // This class reads in the image that's been produced by the compiler
@@ -56,7 +57,7 @@ class SbiImage {
     sal_uInt16     nDimBase;        // OPTION BASE value
     rtl_TextEncoding eCharSet;
                                     // temporary management-variable:
-    short          nStringIdx;
+    std::size_t    nStringIdx;
     sal_uInt32     nStringOff;      // current Pos in the stringbuffer
                                     // routines for the compiler:
     void MakeStrings( short );      // establish StringPool
