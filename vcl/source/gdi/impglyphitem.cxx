@@ -230,6 +230,8 @@ bool SalLayoutGlyphsImpl::IsValid() const
     return true;
 }
 
+void SalLayoutGlyphsCache::clear() { mCachedGlyphs.clear(); }
+
 SalLayoutGlyphsCache* SalLayoutGlyphsCache::self()
 {
     static vcl::DeleteOnDeinit<SalLayoutGlyphsCache> cache(

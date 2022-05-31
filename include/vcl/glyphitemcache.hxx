@@ -55,7 +55,7 @@ public:
                                            const OUString& text, sal_Int32 nIndex, sal_Int32 nLen,
                                            tools::Long nLogicWidth = 0,
                                            const vcl::text::TextLayoutCache* layoutCache = nullptr);
-    void clear() { mCachedGlyphs.clear(); }
+    void clear();
 
     static SalLayoutGlyphsCache* self();
     SalLayoutGlyphsCache(int size) // needs to be public for vcl::DeleteOnDeinit
