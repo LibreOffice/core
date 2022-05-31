@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca9ea258_84b1cd41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-31T13:11:45Z",
+      "side": 1,
+      "message": "Hi Michael, Miklos,\nI would appreciate if you could review this patch",
+      "revId": "49438a65d377daa9dabe9d32cfba2e522aea6377",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
