@@ -55,6 +55,7 @@
 #include <svx/svdundo.hxx>
 
 #include <svx/sdrhittesthelper.hxx>
+#include <svx/diagram/IDiagramHelper.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
@@ -674,7 +675,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             }
 
             mpView->SetDragWithCopy(bDragWithCopy);
-            mpView->EndDragObj( mpView->IsDragWithCopy() );
+            bool bWasDragged(mpView->EndDragObj( mpView->IsDragWithCopy() ));
 
             mpView->ForceMarkedToAnotherPage();
 
@@ -695,9 +696,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     mpView->MarkObj(pObj,pPV);
                     return true;
                 }
-                /**************************************************************
-                * Toggle between selection and rotation
-                **************************************************************/
+
+                // check for single object selected
                 SdrObject* pSingleObj = nullptr;
 
                 if (mpView->GetMarkedObjectList().GetMarkCount()==1)
@@ -705,6 +705,24 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 }
 
+                // Check for klick on svx::diagram::DiagramFrameHdl
+                // - if we hit a SdrHdl
+                // - if it was not moved
+                // - if single object is selected
+                //   - and it is a Diagram
+                if(pHdl && !bWasDragged && nullptr != pSingleObj && pSingleObj->isDiagram())
+                {
+                    svx::diagram::DiagramFrameHdl* pDiagramFrameHdl(dynamic_cast<svx::diagram::DiagramFrameHdl*>(pHdl));
+                    if(nullptr != pDiagramFrameHdl)
+                    {
+                        // let the DiagramFrameHdl decide what to do
+                        svx::diagram::DiagramFrameHdl::clicked(aPnt);
+                    }
+                }
+
+                /**************************************************************
+                * Toggle between selection and rotation
+                **************************************************************/
                 if (nSlotId == SID_OBJECT_SELECT
                     && !comphelper::LibreOfficeKit::isActive()
                     && mpView->IsRotateAllowed()
