@@ -224,6 +224,7 @@ class SwUINumRuleItem;
 #define FN_INSERT_DROPDOWN_CONTENT_CONTROL (FN_INSERT + 24)  /* Dropdown content control */
 #define FN_CONTENT_CONTROL_PROPERTIES (FN_INSERT + 25)  /* Content control properties */
 #define FN_INSERT_PICTURE_CONTENT_CONTROL (FN_INSERT + 26) /* Picture content control */
+#define FN_INSERT_DATE_CONTENT_CONTROL (FN_INSERT + 27) /* Date content control */
 #define FN_POSTIT               (FN_INSERT + 29)    /* Insert/edit PostIt */
 #define FN_INSERT_TABLE         (FN_INSERT + 30)    /* Insert Table */
 #define FN_INSERT_STRING        (FN_INSERT+31)

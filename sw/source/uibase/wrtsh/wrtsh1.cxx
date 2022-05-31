@@ -104,6 +104,8 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <svl/numformat.hxx>
+#include <svl/zformat.hxx>
 #include <memory>
 
 #include <frmtool.hxx>
@@ -1031,7 +1033,6 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
     switch (eType)
     {
         case SwContentControlType::RICH_TEXT:
-        case SwContentControlType::DATE:
         {
             pContentControl->SetShowingPlaceHolder(true);
             if (!HasSelection())
@@ -1104,6 +1105,21 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
 
             // Select before the anchor position.
             Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+            break;
+        }
+        case SwContentControlType::DATE:
+        {
+            pContentControl->SetShowingPlaceHolder(true);
+            pContentControl->SetDate(true);
+            SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
+            sal_uInt32 nStandardFormat = pFormatter->GetStandardFormat(SvNumFormatType::DATE);
+            const SvNumberformat* pFormat = pFormatter->GetEntry(nStandardFormat);
+            pContentControl->SetDateFormat(pFormat->GetFormatstring());
+            pContentControl->SetDateLanguage(LanguageTag(pFormat->GetLanguage()).getBcp47());
+            if (!HasSelection())
+            {
+                aPlaceholder = SwResId(STR_DATE_CONTENT_CONTROL_PLACEHOLDER);
+            }
             break;
         }
     }
