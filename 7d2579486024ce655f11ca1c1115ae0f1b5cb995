@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26735ba2_9e75a3ff",
+        "filename": "toolkit/qa/cppunit/a11y/XAccessibleExtendedComponentTester.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-05-31T20:28:18Z",
+      "side": 1,
+      "message": "You can just use #pragma once instead of this...",
+      "range": {
+        "startLine": 20,
+        "startChar": 1,
+        "endLine": 20,
+        "endChar": 79
+      },
+      "revId": "7d2579486024ce655f11ca1c1115ae0f1b5cb995",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
