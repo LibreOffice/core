@@ -124,6 +124,7 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
 
     WinSalGraphics* pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE,
                                                       pGraphics->isScreen(), nullptr, pVDev);
+    SAL_INFO("vcl.temp", "new WinSalGraphics: " << pVirGraphics << " for " << pVDev);
 
     // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
     pVirGraphics->SetLayout( SalLayoutFlags::NONE );

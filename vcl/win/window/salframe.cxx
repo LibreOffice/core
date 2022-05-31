@@ -828,6 +828,7 @@ void SetForegroundWindow_Impl(HWND hwnd)
 
 WinSalFrame::WinSalFrame()
 {
+    SAL_INFO("vcl.temp", "new WinSalFrame: " << this);
     SalData* pSalData = GetSalData();
 
     mhWnd               = nullptr;
@@ -929,6 +930,7 @@ bool WinSalFrame::ReleaseFrameGraphicsDC( WinSalGraphics* pGraphics )
 
 WinSalFrame::~WinSalFrame()
 {
+    SAL_INFO("vcl.temp", "del WinSalFrame: " << this);
     SalData* pSalData = GetSalData();
 
     if( mpClipRgnData )
@@ -945,6 +947,7 @@ WinSalFrame::~WinSalFrame()
     if ( mpThreadGraphics )
     {
         ReleaseFrameGraphicsDC( mpThreadGraphics );
+        SAL_INFO("vcl.temp", "del WinSalGraphics: " << mpThreadGraphics << " on " << this);
         delete mpThreadGraphics;
         mpThreadGraphics = nullptr;
     }
@@ -953,6 +956,7 @@ WinSalFrame::~WinSalFrame()
     if ( mpLocalGraphics )
     {
         ReleaseFrameGraphicsDC( mpLocalGraphics );
+        SAL_INFO("vcl.temp", "del WinSalGraphics: " << mpLocalGraphics << " on " << this);
         delete mpLocalGraphics;
         mpLocalGraphics = nullptr;
     }
@@ -1028,7 +1032,10 @@ SalGraphics* WinSalFrame::AcquireGraphics()
             return nullptr;
 
         if ( !mpThreadGraphics )
+        {
             mpThreadGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
+            SAL_INFO("vcl.temp", "new WinSalGraphics: " << mpThreadGraphics << " on " << this);
+        }
         pGraphics = mpThreadGraphics;
         assert( !pGraphics->getHDC() );
         hDC = reinterpret_cast<HDC>(static_cast<sal_IntPtr>(SendMessageW( pSalData->mpInstance->mhComWnd,
@@ -1037,7 +1044,10 @@ SalGraphics* WinSalFrame::AcquireGraphics()
     else
     {
         if ( !mpLocalGraphics )
+        {
             mpLocalGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
+            SAL_INFO("vcl.temp", "new WinSalGraphics: " << mpLocalGraphics << " on " << this);
+        }
         pGraphics = mpLocalGraphics;
         hDC = pGraphics->getHDC();
         if ( !hDC )

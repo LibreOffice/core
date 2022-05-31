@@ -86,6 +86,7 @@ Window::Window( WindowType nType )
     : OutputDevice(OUTDEV_WINDOW)
     , mpWindowImpl(new WindowImpl( nType ))
 {
+    SAL_INFO("vcl.temp", "Window::Window: " << this);
     // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
     mbEnableRTL = AllSettings::GetLayoutRTL();
 }
@@ -94,6 +95,7 @@ Window::Window( vcl::Window* pParent, WinBits nStyle )
     : OutputDevice(OUTDEV_WINDOW)
     , mpWindowImpl(new WindowImpl( WindowType::WINDOW ))
 {
+    SAL_INFO("vcl.temp", "Window::Window: " << this);
     // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
     mbEnableRTL = AllSettings::GetLayoutRTL();
 
@@ -140,6 +142,7 @@ bool Window::IsDisposed() const
 
 void Window::dispose()
 {
+    SAL_INFO("vcl.temp", "Window::dispose: " << this << " mpFrame " << (mpWindowImpl ? mpWindowImpl->mpFrame : nullptr));
     assert( mpWindowImpl );
     assert( !mpWindowImpl->mbInDispose ); // should only be called from disposeOnce()
     assert( (!mpWindowImpl->mpParent ||
@@ -1037,6 +1040,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
             pFrame = pSVData->mpDefInst->CreateChildFrame( pSystemParentData, nFrameStyle | SalFrameStyleFlags::PLUG );
         else
             pFrame = pSVData->mpDefInst->CreateFrame( pParentFrame, nFrameStyle );
+        SAL_INFO("vcl.temp", "Window::ImplInit: " << this << " pFrame " << pFrame);
         if ( !pFrame )
         {
             // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
