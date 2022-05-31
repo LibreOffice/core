@@ -63,7 +63,7 @@ UUIInteractionRequestStringResolver::getStringFromInformationalRequest(
 {
     try
     {
-        return m_pImpl->getStringFromRequest(Request);
+        return m_pImpl.getStringFromRequest(Request);
     }
     catch (uno::RuntimeException const & ex)
     {
