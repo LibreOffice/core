@@ -27,6 +27,8 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
+#include <memory>
+
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

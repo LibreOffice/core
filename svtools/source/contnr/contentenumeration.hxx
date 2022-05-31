@@ -29,6 +29,8 @@
 #include <vcl/image.hxx>
 
 
+#include <memory>
+
 namespace svt
 {
 
