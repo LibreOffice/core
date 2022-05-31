@@ -465,11 +465,11 @@ PointerStyles const styles[] = {
 static tools::Long lcl_loPointerToMsoPointer( PointerStyle eType )
 {
     tools::Long nRet = msforms::fmMousePointer::fmMousePointerDefault;
-    for ( int i = 0; i < int(SAL_N_ELEMENTS( styles )); ++i )
+    for ( auto const & i: styles )
     {
-        if ( styles[ i ].loPointStyle == eType )
+        if ( i.loPointStyle == eType )
         {
-            nRet = styles[ i ].msoPointerStyle;
+            nRet = i.msoPointerStyle;
             break;
         }
     }
@@ -479,11 +479,11 @@ static tools::Long lcl_loPointerToMsoPointer( PointerStyle eType )
 static PointerStyle lcl_msoPointerToLOPointer( tools::Long msoPointerStyle )
 {
     PointerStyle aPointer( PointerStyle::Arrow );
-    for ( int i = 0; i < int(SAL_N_ELEMENTS( styles )); ++i )
+    for ( auto const & i: styles )
     {
-        if ( styles[ i ].msoPointerStyle == msoPointerStyle )
+        if ( i.msoPointerStyle == msoPointerStyle )
         {
-            aPointer = styles[ i ].loPointStyle;
+            aPointer = i.loPointStyle;
             break;
         }
     }
