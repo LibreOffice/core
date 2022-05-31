@@ -239,6 +239,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         rReq.Done();
         break;
 
+    case FN_INSERT_DATE_CONTENT_CONTROL:
+        rSh.InsertContentControl(SwContentControlType::DATE);
+        rReq.Done();
+        break;
+
     case FN_CONTENT_CONTROL_PROPERTIES:
     {
         SwWrtShell& rWrtSh = GetShell();
