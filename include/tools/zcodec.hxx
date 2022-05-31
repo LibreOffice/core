@@ -23,6 +23,7 @@
 #include <tools/toolsdllapi.h>
 #include <tools/long.hxx>
 #include <memory>
+#include <rtl/string.hxx>
 
 #define ZCODEC_NO_COMPRESSION       0
 #define ZCODEC_DEFAULT_COMPRESSION  6
@@ -31,6 +32,7 @@ class SvStream;
 
 // The overall client call protocol is one of:
 // * BeginCompression, Compress, EndCompression
+// * BeginCompression, SetCompressionMetadata, Compress, EndCompression (for gz files)
 // * BeginCompression, Decompress, EndCompression
 // * BeginCompression, Write*, EndCompression
 // * BeginCompression, Read*, EndCompression
@@ -47,6 +49,10 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ZCodec
     SvStream*       mpOStm;
     std::unique_ptr<sal_uInt8[]> mpOutBuf;
     size_t          mnOutBufSize;
+    sal_uInt32      mnUncompressedSize;
+    sal_uInt32      mnInBufCRC32;
+    sal_uInt32      mnLastModifiedTime;
+    OString         msFilename;
 
     int             mnCompressLevel;
     bool            mbGzLib;
@@ -69,6 +75,14 @@ public:
     void            BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool gzLib = false );
     tools::Long            EndCompression();
 
+    /**
+     * @brief Set metadata for gzlib compression
+     *
+     * @param sFilename the uncompressed file filename
+     * @param nLastModifiedTime the files last modified time in unix format
+     */
+    void            SetCompressionMetadata( const OString& sFilename,
+                            sal_uInt32 nLastModifiedTime, sal_uInt32 nInBufCRC32 );
     void            Compress( SvStream& rIStm, SvStream& rOStm );
     tools::Long            Decompress( SvStream& rIStm, SvStream& rOStm );
     bool            AttemptDecompression( SvStream& rIStm, SvStream& rOStm );
