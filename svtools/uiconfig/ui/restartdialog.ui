@@ -274,6 +274,21 @@
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="reason_save">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="label" translatable="yes" context="restartdialog|reason_save">For the modified save settings to take effect, %PRODUCTNAME must be restarted.</property>
+                <property name="wrap">True</property>
+                <property name="max-width-chars">50</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">14</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -284,7 +299,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">14</property>
+                <property name="position">15</property>
               </packing>
             </child>
             <child>
@@ -299,7 +314,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">15</property>
+                <property name="position">16</property>
               </packing>
             </child>
           </object>
