@@ -16,6 +16,24 @@
       "message": "nCTIdx -\u003e nCT ?\n\nIt\u0027s not an index anymore",
       "revId": "d67757fdedd5e670e71cb91e06d0ba9178af320f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a51e8643_eea72b22",
+        "filename": "chart2/source/controller/dialogs/DataBrowserModel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-31T14:04:33Z",
+      "side": 1,
+      "message": "yeah, the naming was arguably too misleading now (and while at it, also dropped the prefix \"n\" noise)",
+      "parentUuid": "e410f0e7_3108e29e",
+      "revId": "d67757fdedd5e670e71cb91e06d0ba9178af320f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
