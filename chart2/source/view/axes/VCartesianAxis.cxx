@@ -1580,11 +1580,11 @@ sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
         FixedNumberFormatter aFixedNumberFormatterTest(m_xNumberFormatsSupplier, m_aAxisLabelProperties.m_nNumberFormatKey);
         OUString sPreviousValueLabel;
         sal_Int32 nSameLabel = 0;
-        for (sal_Int32 nLabel = 0; nLabel < static_cast<sal_Int32>(m_aAllTickInfos[0].size()); ++nLabel)
+        for (auto const & nLabel: m_aAllTickInfos[0])
         {
             Color nColor = COL_AUTO;
             bool bHasColor = false;
-            OUString sValueLabel = aFixedNumberFormatterTest.getFormattedString(m_aAllTickInfos[0][nLabel].fScaledTickValue, nColor, bHasColor);
+            OUString sValueLabel = aFixedNumberFormatterTest.getFormattedString(nLabel.fScaledTickValue, nColor, bHasColor);
             if (sValueLabel == sPreviousValueLabel)
             {
                 nSameLabel++;
