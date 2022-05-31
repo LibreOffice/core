@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7753d48_3cd9f7e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2022-05-31T19:43:56Z",
+      "side": 1,
+      "message": "It\u0027s a good idea to get data from the database, as this script takes up to 12 seconds per request to get the html documents.\nIt takes about 2 hours and 20 minutes to create the file. I think direct from the database it will take a maximum of 10 minutes.",
+      "parentUuid": "86bab191_7ecb1148",
+      "revId": "106455f01d1636a2ecf8cc3cea62f4d2bac48396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9f2974c_6d52f2be",
