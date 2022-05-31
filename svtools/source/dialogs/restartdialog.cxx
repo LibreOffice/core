@@ -71,6 +71,9 @@ public:
         case svtools::RESTART_REASON_MSCOMPATIBLE_FORMS_MENU:
             reason_ = m_xBuilder->weld_widget("reason_mscompatible_formsmenu");
             break;
+        case svtools::RESTART_REASON_SAVE:
+            reason_ = m_xBuilder->weld_widget("reason_save");
+            break;
         case svtools::RESTART_REASON_UI_CHANGE:
             reason_ = m_xBuilder->weld_widget("reason_uichange");
             break;
