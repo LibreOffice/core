@@ -69,6 +69,24 @@
       "parentUuid": "e9f2974c_6d52f2be",
       "revId": "106455f01d1636a2ecf8cc3cea62f4d2bac48396",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb81d661_29d7cb34",
+        "filename": "bin/crashreportScraper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-31T08:44:35Z",
+      "side": 1,
+      "message": "oh, I see, thanks for the clarification",
+      "parentUuid": "83d99600_c983475a",
+      "revId": "106455f01d1636a2ecf8cc3cea62f4d2bac48396",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
