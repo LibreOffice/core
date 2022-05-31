@@ -141,6 +141,11 @@ endif
 endif
 
 # that one is generated...
+ifeq ($(HOST_PLATFORM),powerpc64le-unknown-linux-gnu)
+$(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
+        LO_lib/_sysconfigdata_$(if $(ENABLE_DBGUTIL),d)_linux_powerpc64le-linux-gnu.py \
+))
+else
 # note: python configure overrides config.guess with something that doesn't
 # put -pc in its linux platform triplets, so filter that...
 ifneq ($(OS),WNT)
@@ -152,6 +157,7 @@ else
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
 	LO_lib/_sysconfigdata_$(if $(ENABLE_DBGUTIL),d)_$(python3_MACHDEP)_$(subst i686,i386,$(subst -pc,,$(HOST_PLATFORM))).py \
 ))
+endif
 endif
 endif
 
