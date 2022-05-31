@@ -36,8 +36,13 @@ def convert_str_to_date(value):
 
 def parse_version_url(url):
     crashReports = {}
-    html_text = requests.get(url).text
-    soup = BeautifulSoup(html_text, 'html.parser')
+
+    try:
+        html_text = requests.get(url, timeout=200).text
+        soup = BeautifulSoup(html_text, 'html.parser')
+    except requests.exceptions.Timeout:
+        print("Timeout requesting " + url)
+        sys.exit(1)
 
     table = soup.find("table", {"id": "data-table"}).tbody
     for tr in table.find_all("tr"):
@@ -51,8 +56,12 @@ def parse_version_url(url):
     return crashReports
 
 def parse_reports_and_get_most_recent_report_from_last_page(url):
-    html_text = requests.get(url).text
-    soup = BeautifulSoup(html_text, 'html.parser')
+    try:
+        html_text = requests.get(url, timeout=200).text
+        soup = BeautifulSoup(html_text, 'html.parser')
+    except requests.exceptions.Timeout:
+        print("Timeout")
+        raise
 
     count = 0
     os_tab = soup.find("table", {"id": "os_tab"}).tbody
@@ -67,8 +76,12 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
 
     if last_page > 1:
         url = url + "?page=" + str(last_page)
-        html_text = requests.get(url).text
-        soup = BeautifulSoup(html_text, 'html.parser')
+        try:
+            html_text = requests.get(url, timeout=200).text
+            soup = BeautifulSoup(html_text, 'html.parser')
+        except requests.exceptions.Timeout:
+            print("Timeout")
+            raise
 
     reports = soup.find("div", {"id": "reports"}).tbody
     ID, currentID = "", ""
@@ -102,8 +115,12 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
     return count, ID, version, OS
 
 def parse_details_and_get_info(url, gitRepo):
-    html_text = requests.get(url).text
-    soup = BeautifulSoup(html_text, 'html.parser')
+    try:
+        html_text = requests.get(url, timeout=200).text
+        soup = BeautifulSoup(html_text, 'html.parser')
+    except requests.exceptions.Timeout:
+        print("Timeout")
+        raise
 
     details = soup.find("div", {"id": "details"}).tbody
     tr_list = details.find_all("tr")
@@ -177,16 +194,17 @@ if __name__ == '__main__':
             f.flush()
 
         for k, v in crashes.items():
-            # ignore unresolved crash signatures
-            if len(k) < 254 and k not in crashesInFile and '`' not in k and not k.lower().endswith('.dll') and \
-                    not k.lower().endswith('.so') and ".so." not in k.lower():
+            if len(k) < 254 and k not in crashesInFile and '`' not in k:
                 print("Parsing " + k)
-                crashCount, crashID, crashVersion, crashOS = parse_reports_and_get_most_recent_report_from_last_page(
-                        "https://crashreport.libreoffice.org/stats/signature/" + k)
-                crashReason, crashStack, codeLine = parse_details_and_get_info(
-                        "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, gitRepo)
-                line = '\t'.join([k, str(crashCount), v[1].strftime('%y/%m/%d'), v[2].strftime('%y/%m/%d'),
-                        crashID, crashVersion, crashReason, crashOS, crashStack, codeLine, '\n'])
-                f.write(line)
-                f.flush()
+                try:
+                    crashCount, crashID, crashVersion, crashOS = parse_reports_and_get_most_recent_report_from_last_page(
+                            "https://crashreport.libreoffice.org/stats/signature/" + k)
+                    crashReason, crashStack, codeLine = parse_details_and_get_info(
+                            "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, gitRepo)
+                    line = '\t'.join([k, str(crashCount), v[1].strftime('%y/%m/%d'), v[2].strftime('%y/%m/%d'),
+                            crashID, crashVersion, crashReason, crashOS, crashStack, codeLine, '\n'])
+                    f.write(line)
+                    f.flush()
+                except requests.exceptions.Timeout:
+                    continue
 
