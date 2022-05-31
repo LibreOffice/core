@@ -24,6 +24,7 @@
 #include <basegfx/range/b2drange.hxx>
 
 #include <vector>
+#include <memory>
 
 class SwView;
 

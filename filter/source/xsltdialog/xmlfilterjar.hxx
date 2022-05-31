@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <memory>
 #include <vector>
 
 class filter_info_impl;

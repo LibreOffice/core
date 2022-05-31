@@ -25,6 +25,8 @@
 #include <vcl/ColorMask.hxx>
 #include <vcl/Scanline.hxx>
 
+#include <memory>
+
 struct SalTwoRect;
 
 struct VCL_DLLPUBLIC BitmapBuffer
