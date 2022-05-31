@@ -449,7 +449,7 @@
           <menu:menuitem menu:id=".uno:UngroupSparklines"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:ObjectMenu">
+      <menu:menu menu:id=".uno:FormatObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:TransformDialog"/>
           <menu:menuitem menu:id=".uno:FormatLine"/>
