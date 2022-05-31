@@ -694,6 +694,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_typ
 	bmp_MS_Windows \
 	dxf_AutoCAD_Interchange \
 	emf_MS_Windows_Metafile \
+	emz_Compressed_MS_Windows_Metafile \
 	eps_Encapsulated_PostScript \
 	gif_Graphics_Interchange \
 	graphic_HTML \
@@ -713,11 +714,13 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_typ
 	ras_Sun_Rasterfile \
 	svg_Scalable_Vector_Graphics_Draw \
 	svg_Scalable_Vector_Graphics \
+	svgz_Compressed_Scalable_Vector_Graphics \
 	svm_StarView_Metafile \
 	tga_Truevision_TARGA \
 	tif_Tag_Image_File \
 	webp_WebP \
 	wmf_MS_Windows_Metafile \
+	wmz_Compressed_MS_Windows_Metafile \
 	xbm_X_Consortium \
 	xpm_XPM \
 ))
@@ -726,6 +729,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	BMP___MS_Windows \
 	DXF___AutoCAD_Interchange \
 	EMF___MS_Windows_Metafile \
+	EMZ___Compressed_MS_Windows_Metafile \
 	EPS___Encapsulated_PostScript \
 	GIF___Graphics_Interchange \
 	JPG___JPEG \
@@ -741,11 +745,13 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	RAS___Sun_Rasterfile \
 	SVG___Scalable_Vector_Graphics_Draw \
 	SVG___Scalable_Vector_Graphics \
+	SVGZ___Compressed_Scalable_Vector_Graphics \
 	SVM___StarView_Metafile \
 	TGA___Truevision_TARGA \
 	TIF___Tag_Image_File \
 	WEBP___WebP \
 	WMF___MS_Windows_Metafile \
+	WMZ___Compressed_MS_Windows_Metafile \
 	XBM___X_Consortium \
 	XPM \
 	draw_PCD_Photo_CD_Base \
@@ -753,21 +759,25 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	draw_PCD_Photo_CD_Base4 \
 	draw_bmp_Export \
 	draw_emf_Export \
+	draw_emz_Export \
 	draw_eps_Export \
 	draw_gif_Export \
 	draw_html_Export \
 	draw_jpg_Export \
 	draw_png_Export \
 	draw_svg_Export \
+	draw_svgz_Export \
 	draw_tif_Export \
 	draw_webp_Export \
 	draw_wmf_Export \
+	draw_wmz_Export \
 ))
 
 # fcfg_impressgraphics
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_types.xcu,filter/source/config/fragments/types,\
 	bmp_MS_Windows \
 	emf_MS_Windows_Metafile \
+	emz_Compressed_MS_Windows_Metafile \
 	eps_Encapsulated_PostScript \
 	gif_Graphics_Interchange \
 	graphic_HTML \
@@ -782,9 +792,11 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_
 	ras_Sun_Rasterfile \
 	svg_Scalable_Vector_Graphics_Draw \
 	svg_Scalable_Vector_Graphics \
+	svgz_Compressed_Scalable_Vector_Graphics \
 	svm_StarView_Metafile \
 	tif_Tag_Image_File \
 	wmf_MS_Windows_Metafile \
+	wmz_Compressed_MS_Windows_Metafile \
 	webp_WebP \
 	xpm_XPM \
 ))
@@ -836,6 +848,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics
 	bmp_MS_Windows \
 	dxf_AutoCAD_Interchange \
 	emf_MS_Windows_Metafile \
+	emz_Compressed_MS_Windows_Metafile \
 	eps_Encapsulated_PostScript \
 	gif_Graphics_Interchange \
 	jpg_JPEG \
@@ -853,11 +866,13 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics
 	psd_Adobe_Photoshop \
 	ras_Sun_Rasterfile \
 	svg_Scalable_Vector_Graphics \
+	svgz_Compressed_Scalable_Vector_Graphics \
 	svm_StarView_Metafile \
 	tga_Truevision_TARGA \
 	tif_Tag_Image_File \
 	webp_WebP \
 	wmf_MS_Windows_Metafile \
+	wmz_Compressed_MS_Windows_Metafile \
 	xbm_X_Consortium \
 	xpm_XPM \
 ))
@@ -867,7 +882,9 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	bmp_Import \
 	dxf_Import \
 	emf_Export \
+	emz_Export \
 	emf_Import \
+	emz_Import \
 	eps_Export \
 	eps_Import \
 	gif_Export \
@@ -890,7 +907,9 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	psd_Import \
 	ras_Import \
 	svg_Export \
+	svgz_Export \
 	svg_Import \
+	svgz_Import \
 	svm_Export \
 	svm_Import \
 	tga_Import \
@@ -899,7 +918,9 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	webp_Export \
 	webp_Import \
 	wmf_Export \
+	wmz_Export \
 	wmf_Import \
+	wmz_Import \
 	xbm_Import \
 	xpm_Import \
 	mov_Import \
