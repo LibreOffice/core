@@ -98,38 +98,35 @@ void QtWidget::resizeEvent(QResizeEvent* pEvent)
 
     if (m_rFrame.m_bUseCairo)
     {
-        if (m_rFrame.m_pSvpGraphics)
+        if (m_rFrame.m_pSurface)
         {
-            cairo_surface_t* pSurface
-                = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
-            cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
-                                        &m_rFrame.m_aDamageHandler, nullptr);
-            m_rFrame.m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(nWidth, nHeight));
-            UniqueCairoSurface old_surface(m_rFrame.m_pSurface.release());
-            m_rFrame.m_pSurface.reset(pSurface);
+            const int nOldWidth = cairo_image_surface_get_width(m_rFrame.m_pSurface.get());
+            const int nOldHeight = cairo_image_surface_get_height(m_rFrame.m_pSurface.get());
+            if (nOldWidth != nWidth || nOldHeight != nHeight)
+            {
+                cairo_surface_t* pSurface
+                    = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
+                cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
+                                            &m_rFrame.m_aDamageHandler, nullptr);
+                m_rFrame.m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(nWidth, nHeight));
+                UniqueCairoSurface old_surface(m_rFrame.m_pSurface.release());
+                m_rFrame.m_pSurface.reset(pSurface);
 
-            int min_width = qMin(cairo_image_surface_get_width(old_surface.get()), nWidth);
-            int min_height = qMin(cairo_image_surface_get_height(old_surface.get()), nHeight);
-
-            SalTwoRect rect(0, 0, min_width, min_height, 0, 0, min_width, min_height);
-
-            m_rFrame.m_pSvpGraphics->copySource(rect, old_surface.get());
+                const int nMinWidth = qMin(nOldWidth, nWidth);
+                const int nMinHeight = qMin(nOldHeight, nHeight);
+                SalTwoRect rect(0, 0, nMinWidth, nMinHeight, 0, 0, nMinWidth, nMinHeight);
+                m_rFrame.m_pSvpGraphics->copySource(rect, old_surface.get());
+            }
         }
     }
     else
     {
-        QImage* pImage = nullptr;
-
-        if (m_rFrame.m_pQImage)
-            pImage = new QImage(m_rFrame.m_pQImage->copy(0, 0, nWidth, nHeight));
-        else
+        if (m_rFrame.m_pQImage && m_rFrame.m_pQImage->size() != QSize(nWidth, nHeight))
         {
-            pImage = new QImage(nWidth, nHeight, Qt_DefaultFormat32);
-            pImage->fill(Qt::transparent);
+            QImage* pImage = new QImage(m_rFrame.m_pQImage->copy(0, 0, nWidth, nHeight));
+            m_rFrame.m_pQtGraphics->ChangeQImage(pImage);
+            m_rFrame.m_pQImage.reset(pImage);
         }
-
-        m_rFrame.m_pQtGraphics->ChangeQImage(pImage);
-        m_rFrame.m_pQImage.reset(pImage);
     }
 
     m_rFrame.CallCallback(SalEvent::Resize, nullptr);
