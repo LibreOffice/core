@@ -19,6 +19,7 @@
 
 
 #include <com/sun/star/drawing/XShape.hpp>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include "mediashape.hxx"
@@ -175,12 +176,12 @@ namespace slideshow::internal
         bool MediaShape::implRender( const ::basegfx::B2DRange& rCurrBounds ) const
         {
             // redraw all view shapes, by calling their update() method
-            if( ::std::count_if( maViewMediaShapes.begin(),
+            if( o3tl::make_unsigned(::std::count_if( maViewMediaShapes.begin(),
                                  maViewMediaShapes.end(),
                                  [&rCurrBounds]
                                  ( const ViewMediaShapeSharedPtr& pShape )
-                                 { return pShape->render( rCurrBounds ); } )
-                != static_cast<ViewMediaShapeVector::difference_type>(maViewMediaShapes.size()) )
+                                 { return pShape->render( rCurrBounds ); } ))
+                != maViewMediaShapes.size() )
             {
                 // at least one of the ViewShape::update() calls did return
                 // false - update failed on at least one ViewLayer

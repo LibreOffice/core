@@ -23,6 +23,7 @@
 #include "viewappletshape.hxx"
 #include <tools.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -210,12 +211,12 @@ namespace slideshow::internal
         bool AppletShape::implRender( const ::basegfx::B2DRange& rCurrBounds ) const
         {
             // redraw all view shapes, by calling their update() method
-            if( ::std::count_if( maViewAppletShapes.begin(),
+            if( o3tl::make_unsigned(::std::count_if( maViewAppletShapes.begin(),
                                  maViewAppletShapes.end(),
                                  [&rCurrBounds]
                                  ( const ViewAppletShapeSharedPtr& pShape )
-                                 { return pShape->render( rCurrBounds ); } )
-                != static_cast<ViewAppletShapeVector::difference_type>(maViewAppletShapes.size()) )
+                                 { return pShape->render( rCurrBounds ); } ))
+                != maViewAppletShapes.size() )
             {
                 // at least one of the ViewShape::update() calls did return
                 // false - update failed on at least one ViewLayer
