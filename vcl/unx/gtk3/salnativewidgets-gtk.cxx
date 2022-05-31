@@ -2643,16 +2643,17 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
 
     aStyleSet.SetToolbarIconSize( ToolbarIconSize::Large );
 
-    // finally update the collected settings
-    rSettings.SetStyleSettings( aStyleSet );
-#if OSL_DEBUG_LEVEL > 1
-    gchar* pThemeName = NULL;
+    gchar* pThemeName = nullptr;
     g_object_get( pSettings, "gtk-theme-name", &pThemeName, nullptr );
     SAL_INFO("vcl.gtk3", "Theme name is \""
             << pThemeName
             << "\".");
+    // High contrast
+    aStyleSet.SetHighContrastMode(g_strcmp0(pThemeName, "HighContrast") == 0);
     g_free(pThemeName);
-#endif
+
+    // finally update the collected settings
+    rSettings.SetStyleSettings( aStyleSet );
 
     return true;
 }
