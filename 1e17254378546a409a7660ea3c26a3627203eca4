@@ -16,6 +16,24 @@
       "message": "For this \"ShiftCells\" and the below \"Operations\" group, which each correspond to a set of radio buttons (i.e., with exactly one out of N choices selected) in sc/uiconfig/scalc/ui/pastespecial.ui, it looks odd to encode them each as a set of N xs:boolean props (rather than each as a single xs:int prop, say).",
       "revId": "1e17254378546a409a7660ea3c26a3627203eca4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff775a90_d81a94b7",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 6663,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-05-31T13:32:10Z",
+      "side": 1,
+      "message": "Ohhh yes, I didn\u0027t think of that. I\u0027ll try to encode these as a single integer, and will put it in the next patch. Thanks for the idea.",
+      "parentUuid": "1709155b_804b802d",
+      "revId": "1e17254378546a409a7660ea3c26a3627203eca4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
