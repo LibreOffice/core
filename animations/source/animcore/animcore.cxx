@@ -55,6 +55,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <array>
@@ -446,7 +447,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mnIterateType( css::presentation::ShapeAnimationSubType::AS_WHOLE ),
     mfIterateInterval(0.0)
 {
-    assert(nNodeType < int(mpTypes.size()));
+    assert(nNodeType >= 0 && o3tl::make_unsigned(nNodeType) < mpTypes.size());
 }
 
 AnimationNode::AnimationNode( const AnimationNode& rNode )
