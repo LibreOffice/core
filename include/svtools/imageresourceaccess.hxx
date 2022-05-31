@@ -24,6 +24,8 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <memory>
+
 namespace com :: sun :: star :: io { class XInputStream; }
 namespace com :: sun :: star :: uno { class XComponentContext; }
 
