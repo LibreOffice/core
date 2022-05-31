@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fc60830_30f02b5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-05-31T10:31:20Z",
+      "side": 1,
+      "message": "I will submit a follow-up for the whitespace after the underscore.",
+      "revId": "b94275f6d2cb4dc28d1563fd7994251042b6d51a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
