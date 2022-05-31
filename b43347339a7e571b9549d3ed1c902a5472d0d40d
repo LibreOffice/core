@@ -16,6 +16,24 @@
       "message": "@Attila: very nice fix!\n\nA question: can PowerPoint create documents without explicit zeroes for removed/disabled bullets which loaded in Impress differently?\n",
       "revId": "b43347339a7e571b9549d3ed1c902a5472d0d40d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bcb438a_71e679f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-05-31T12:07:50Z",
+      "side": 1,
+      "message": "@Laszlo: PP puts explicit zeroes for every paragraph where bullets missing, excepted that case when the paragraph is empty. In addition, in PP there are two states of lists having or not having bullet/numbering, so when backspace is used it turns of the bullet/numbering. In Impress this behaviour is different, there are three states, one case when bullet/numbering on and visible (in empty paragraph too) one case when turned on but invisible (when backspace used) and off state. When using backspace indent changes in PP bu not in Impress. And when buNone is used, there have to be the indent\u003d0. Hopefully i do not make it too complicated :)",
+      "parentUuid": "fe70c8db_a008a5eb",
+      "revId": "b43347339a7e571b9549d3ed1c902a5472d0d40d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
