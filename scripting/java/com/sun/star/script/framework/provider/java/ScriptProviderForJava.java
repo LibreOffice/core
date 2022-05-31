@@ -45,8 +45,6 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 
-import java.io.IOException;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 
 public class ScriptProviderForJava {
@@ -184,63 +182,56 @@ class ScriptImpl implements XScript {
         ScriptDescriptor scriptDesc =
             new ScriptDescriptor(metaData.getLanguageName());
 
-        Object[] invocationArgs = null;
-        ScriptProxy script = null;
-
         LogUtils.DEBUG("Classloader starting...");
 
-        try (URLClassLoader scriptLoader = ClassLoaderFactory.getURLClassLoader(metaData)) {
-            LogUtils.DEBUG("Classloader finished...");
+        ClassLoader scriptLoader =
+            ClassLoaderFactory.getURLClassLoader(metaData);
 
-            ArrayList<Object> invocationArgList = new ArrayList<Object>();
+        LogUtils.DEBUG("Classloader finished...");
 
-            LogUtils.DEBUG("Parameter Mapping...");
+        ArrayList<Object> invocationArgList = new ArrayList<Object>();
+        Object[] invocationArgs = null;
 
-            // Setup Context Object
-            XScriptContext xSc =
-                ScriptContext.createContext(m_xModel, m_xInvocContext,
-                                            m_xContext, m_xMultiComponentFactory);
+        LogUtils.DEBUG("Parameter Mapping...");
 
-            scriptDesc.addArgumentType(XScriptContext.class);
-            invocationArgList.add(xSc);
+        // Setup Context Object
+        XScriptContext xSc =
+            ScriptContext.createContext(m_xModel, m_xInvocContext,
+                                        m_xContext, m_xMultiComponentFactory);
 
-            for (int i = 0; i < params.length; i++) {
-                scriptDesc.addArgumentType(params[ i ].getClass());
-                invocationArgList.add(params[ i ]);
-            }
+        scriptDesc.addArgumentType(XScriptContext.class);
+        invocationArgList.add(xSc);
 
-            if (!invocationArgList.isEmpty()) {
-                invocationArgs = invocationArgList.toArray();
-            }
+        for (int i = 0; i < params.length; i++) {
+            scriptDesc.addArgumentType(params[ i ].getClass());
+            invocationArgList.add(params[ i ]);
+        }
 
-            LogUtils.DEBUG("ScriptProxy starting... ");
+        if (!invocationArgList.isEmpty()) {
+            invocationArgs = invocationArgList.toArray();
+        }
+
+        LogUtils.DEBUG("ScriptProxy starting... ");
+        ScriptProxy script = null;
+
+        try {
+
+            String className = metaData.getLanguageName().substring(0,
+                               metaData.getLanguageName().lastIndexOf('.'));
+
+            LogUtils.DEBUG("About to load Class " + className + " starting... ");
+
+            long start = new java.util.Date().getTime();
+            Class<?> c = scriptLoader.loadClass(className);
+            long end = new java.util.Date().getTime();
+
+            LogUtils.DEBUG("loadClass took: " + (end - start) + "milliseconds");
 
             try {
-
-                String className = metaData.getLanguageName().substring(0,
-                                   metaData.getLanguageName().lastIndexOf('.'));
-
-                LogUtils.DEBUG("About to load Class " + className + " starting... ");
-
-                long start = new java.util.Date().getTime();
-                Class<?> c = scriptLoader.loadClass(className);
-                long end = new java.util.Date().getTime();
-
-                LogUtils.DEBUG("loadClass took: " + (end - start) + "milliseconds");
-
-                try {
-                    LogUtils.DEBUG("class loaded ... ");
-                    script = m_resolutionPolicy.getProxy(scriptDesc, c);
-                    LogUtils.DEBUG("script resolved ... ");
-                } catch (NoSuchMethodException e) {
-                    // Framework error
-                    ScriptFrameworkErrorException e2 = new ScriptFrameworkErrorException(
-                        e.toString(), null, metaData.getLanguageName(),
-                        metaData.getLanguage(), ScriptFrameworkErrorType.NO_SUCH_SCRIPT);
-                    e2.initCause(e);
-                    throw e2;
-                }
-            } catch (ClassNotFoundException e) {
+                LogUtils.DEBUG("class loaded ... ");
+                script = m_resolutionPolicy.getProxy(scriptDesc, c);
+                LogUtils.DEBUG("script resolved ... ");
+            } catch (NoSuchMethodException e) {
                 // Framework error
                 ScriptFrameworkErrorException e2 = new ScriptFrameworkErrorException(
                     e.toString(), null, metaData.getLanguageName(),
@@ -248,11 +239,11 @@ class ScriptImpl implements XScript {
                 e2.initCause(e);
                 throw e2;
             }
-        } catch (IOException e) {
+        } catch (ClassNotFoundException e) {
             // Framework error
             ScriptFrameworkErrorException e2 = new ScriptFrameworkErrorException(
-                e.toString(), null, metaData.getLanguageName(), metaData.getLanguage(),
-                ScriptFrameworkErrorType.NO_SUCH_SCRIPT);
+                e.toString(), null, metaData.getLanguageName(),
+                metaData.getLanguage(), ScriptFrameworkErrorType.NO_SUCH_SCRIPT);
             e2.initCause(e);
             throw e2;
         }
