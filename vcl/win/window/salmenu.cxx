@@ -96,19 +96,6 @@ std::unique_ptr<SalMenuItem> WinSalInstance::CreateMenuItem( const SalItemParams
     return std::unique_ptr<SalMenuItem>(pSalMenuItem);
 }
 
-static void ImplDrawMenuBar( SalMenu *pMenu )
-{
-    if( pMenu->VisibleMenuBar() )
-    {
-        // redrawing the menubar all the time actually seems to be unnecessary (it just flickers)
-        /*
-        WinSalMenu *pMenuBar = ImplFindMenuBar( pMenu );
-        if( pMenuBar && pMenuBar->mhWnd )
-            ::DrawMenuBar( pMenuBar->mhWnd );
-            */
-    }
-}
-
 /*
  * WinSalMenu
  */
@@ -166,10 +153,7 @@ void WinSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
         if(!::InsertMenuItemW( mhMenu, nPos, TRUE, &pWItem->mInfo ))
             myerr = GetLastError();
         else
-        {
             pWItem->mpSalMenu = this;
-            ImplDrawMenuBar( this );
-        }
     }
 }
 
@@ -194,7 +178,6 @@ void WinSalMenu::RemoveItem( unsigned nPos )
         {
             if( pSalMenuItem )
                 pSalMenuItem->mpSalMenu = nullptr;
-            ImplDrawMenuBar( this );
         }
     }
 }
@@ -220,7 +203,6 @@ static void ImplRemoveItemById( WinSalMenu *pSalMenu, unsigned nItemId )
     {
         if( pSalMenuItem )
             pSalMenuItem->mpSalMenu = nullptr;
-        ImplDrawMenuBar( pSalMenu );
     }
 }
 
@@ -247,21 +229,17 @@ void WinSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
 
         if(!::SetMenuItemInfoW( mhMenu, nPos, TRUE, &pWMenuItem->mInfo ) )
             myerr = GetLastError();
-        else
-            ImplDrawMenuBar( this );
     }
 }
 
 void WinSalMenu::CheckItem( unsigned nPos, bool bCheck )
 {
-    if( static_cast<unsigned>( -1 ) != ::CheckMenuItem( mhMenu, nPos, MF_BYPOSITION|(bCheck ? MF_CHECKED : MF_UNCHECKED) ) )
-        ImplDrawMenuBar( this );
+    ::CheckMenuItem(mhMenu, nPos, MF_BYPOSITION|(bCheck ? MF_CHECKED : MF_UNCHECKED));
 }
 
 void WinSalMenu::EnableItem( unsigned nPos, bool bEnable )
 {
-    if( -1 != ::EnableMenuItem( mhMenu, nPos, MF_BYPOSITION|(bEnable ? MF_ENABLED : (MF_DISABLED|MF_GRAYED) ) ) )
-        ImplDrawMenuBar( this );
+    ::EnableMenuItem(mhMenu, nPos, MF_BYPOSITION|(bEnable ? MF_ENABLED : (MF_DISABLED|MF_GRAYED)));
 }
 
 void WinSalMenu::SetItemImage( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, const Image& rImage )
@@ -298,8 +276,6 @@ void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OU
 
         if(!::SetMenuItemInfoW( mhMenu, nPos, TRUE, &pWItem->mInfo ))
             myerr = GetLastError();
-        else
-            ImplDrawMenuBar( this );
     }
 }
 
@@ -323,8 +299,6 @@ void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const
 
         if(!::SetMenuItemInfoW( mhMenu, nPos, TRUE, &pWItem->mInfo ))
             myerr = GetLastError();
-        else
-            ImplDrawMenuBar( this );
     }
 }
 
