@@ -73,10 +73,10 @@ class UnderLineMapper
 private:
     UnderLineMapper()
     {
-        for ( sal_Int32 index=0; index<sal_Int32(SAL_N_ELEMENTS( UnderLineTable )); ++index )
+        for ( auto const & index: UnderLineTable )
         {
-            MSO2OOO[ UnderLineTable[ index ].nMSOConst ] = UnderLineTable[ index ].nOOOConst;
-            OOO2MSO[ UnderLineTable[ index ].nOOOConst ] = UnderLineTable[ index ].nMSOConst;
+            MSO2OOO[ index.nMSOConst ] = index.nOOOConst;
+            OOO2MSO[ index.nOOOConst ] = index.nMSOConst;
         }
     }
 public:
