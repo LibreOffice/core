@@ -300,7 +300,7 @@ static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const tools::Long nOld,
         sal_uInt64 nBox = pFormat->GetFrameSize().GetWidth();
         nOriginalSum += nBox;
         nBox *= nNew;
-        nBox /= nOld;
+        nBox = nOld == 0 ? nBox : nBox / nOld;
         const sal_uInt64 nWishedSum = lcl_MulDiv64<sal_uInt64>(nOriginalSum, nNew, nOld) - nSum;
         if( nWishedSum > 0 )
         {
