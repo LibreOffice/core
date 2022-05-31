@@ -23,7 +23,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-msvc.patch.1 \
 	external/curl/curl-msvc-zlib.patch.1 \
 	external/curl/curl-msvc-disable-protocols.patch.1 \
-	external/curl/curl-7.26.0_win-proxy.patch \
 	external/curl/zlib.patch.0 \
 	external/curl/configurable-z-option.patch.0 \
 ))
