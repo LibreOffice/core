@@ -16,6 +16,24 @@
       "message": "Caolan, could you please take a look how to implement insertion of the separators here? I remember you mentioned that that should be possible using model, but I feel confused here. I saw the separators-related functions for tree view, but not for image view.\n\nThank you!",
       "revId": "edac660e15373d1e136f72e1f89ed6b69b46342b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f000de7_4d9e1e67",
+        "filename": "vcl/unx/gtk3/gtkinst.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 16294,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-05-31T15:04:03Z",
+      "side": 1,
+      "message": "hmm, maybe not as easy as I have imagined initially. Don\u0027t let it block you, I can try and figure out something in my own leisure afterwards.",
+      "parentUuid": "753f0766_f2600131",
+      "revId": "edac660e15373d1e136f72e1f89ed6b69b46342b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
