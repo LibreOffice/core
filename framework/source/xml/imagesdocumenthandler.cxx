@@ -98,7 +98,7 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageItemDescriptorList&
     m_rImageList( rItems )
 {
     // create hash map to speed up lookup
-    for ( int i = 0; i < int(IMG_XML_ENTRY_COUNT); i++ )
+    for ( int i = 0; i < IMG_XML_ENTRY_COUNT; i++ )
     {
         OUStringBuffer temp( 20 );
 
