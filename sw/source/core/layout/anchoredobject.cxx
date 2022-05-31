@@ -651,7 +651,8 @@ void SwAnchoredObject::UpdateObjInSortedList()
     AnchorFrame()->GetDrawObjs()->Update( *this );
     // update its position in the sorted object list of its page frame
     // note: as-character anchored object aren't registered at a page frame
-    if ( GetFrameFormat().GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR )
+    if ( GetPageFrame() && GetPageFrame()->GetSortedObjs() &&
+        GetFrameFormat().GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR )
     {
         GetPageFrame()->GetSortedObjs()->Update( *this );
     }
