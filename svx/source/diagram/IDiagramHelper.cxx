@@ -116,7 +116,7 @@ class OverlayDiagramPrimitive final : public drawinglayer::primitive2d::Discrete
 private:
     basegfx::B2DHomMatrix maTransformation;  // object dimensions
     double mfDiscreteDistance; // distance from object in pixels
-    double mfDiscreteGap; // gap/widh of visualization in pixels
+    double mfDiscreteGap; // gap/width of visualization in pixels
     Color maColor;  // base color (made lighter/darker as needed, should be system selection color)
 
     virtual void create2DDecomposition(
@@ -153,7 +153,7 @@ void OverlayDiagramPrimitive::create2DDecomposition(
     // initially try to create lap
     if(bCreateLap)
     {
-        // take a ressource text (for now existing one that fits)
+        // take a resource text (for now existing one that fits)
         const OUString aName(SvxResId(RID_STR_DATANAV_EDIT_ELEMENT));
         drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
         basegfx::B2DPolyPolygonVector aTarget;
