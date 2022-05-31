@@ -25,6 +25,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include "optsave.hxx"
+#include <treeopt.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -37,6 +38,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/docfilt.hxx>
+#include <svtools/restartdialog.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
@@ -225,7 +227,7 @@ void SvxSaveTabPage::DetectHiddenControls()
 bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 {
     auto xChanges = comphelper::ConfigurationChanges::create();
-    bool bModified = false;
+    bool bModified = false, bRequestRestart = false;
     if(m_xLoadUserSettingsCB->get_state_changed_from_saved())
         officecfg::Office::Common::Load::UserDefinedSettings::set(m_xLoadUserSettingsCB->get_active(), xChanges);
 
@@ -255,7 +257,7 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
     {
         rSet->Put( SfxBoolItem( SID_ATTR_AUTOSAVE,
                                m_xAutoSaveCB->get_active() ) );
-        bModified = true;
+        bModified = bRequestRestart = true;
     }
     if ( m_xWarnAlienFormatCB->get_state_changed_from_saved() )
     {
@@ -268,7 +270,7 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
     {
         rSet->Put( SfxUInt16Item( SID_ATTR_AUTOSAVEMINUTE,
                                  static_cast<sal_uInt16>(m_xAutoSaveEdit->get_value()) ) );
-        bModified = true;
+        bModified = bRequestRestart = true;
     }
 
     if ( m_xUserAutoSaveCB->get_state_changed_from_saved() )
@@ -322,6 +324,14 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::EFactory::WRITERGLOBAL, pImpl->aDefaultArr[APP_WRITER_GLOBAL]);
 
     xChanges->commit();
+
+    if (bRequestRestart)
+    {
+        OfaTreeOptionsDialog* pParentDlg(static_cast<OfaTreeOptionsDialog*>(GetDialogController()));
+        if (pParentDlg)
+            pParentDlg->SetNeedsRestart(svtools::RESTART_REASON_SAVE);
+    }
+
     return bModified;
 }
 
