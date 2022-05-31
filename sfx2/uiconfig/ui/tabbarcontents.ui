@@ -104,6 +104,11 @@
                     <property name="always-show-image">True</property>
                     <property name="popup">mainmenu</property>
                     <property name="use-popover">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="menubutton-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="tabbar|menubutton|tool_tip">Sidebar Settings</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
