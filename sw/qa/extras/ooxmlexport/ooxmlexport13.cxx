@@ -33,16 +33,6 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
-
-protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return o3tl::ends_with(filename, ".docx")
-            || filename == std::string_view("ooo39250-1-min.rtf");
-    }
 };
 
 // TODO: the re-import doesn't work just yet, but that isn't a regression...
@@ -68,8 +58,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126994_lostPageBreak, "tdf126994_lostPageBreak.d
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 3, getPages() );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF, "tdf121374_sectionHF.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF)
 {
+    loadAndReload("tdf121374_sectionHF.odt");
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFooterText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "FooterText");
     CPPUNIT_ASSERT_EQUAL( OUString("footer"), xFooterText->getString() );
@@ -78,8 +69,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF, "tdf121374_sectionHF.odt")
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Number of Pages", 6, getPages() );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf121374_sectionHF2, "tdf121374_sectionHF2.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121374_sectionHF2)
 {
+    loadAndReload("tdf121374_sectionHF2.doc");
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xHeaderText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "HeaderText");
     CPPUNIT_ASSERT( xHeaderText->getString().startsWith("virkamatka-anomus") );
@@ -343,8 +335,9 @@ DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
                          rFormats[1]->GetAttrSet().GetFrameDir().GetValue());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf127316_autoEscapement, "tdf127316_autoEscapement.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf127316_autoEscapement)
 {
+    loadAndReload("tdf127316_autoEscapement.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // This should be roughly .8*35% of the ORIGINAL(non-reduced) size. However, during export the
     // proportional height has to be changed into direct formatting, which then changes the relative percent.
@@ -385,8 +378,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript, "tdf99602_charStyleSub
     CPPUNIT_ASSERT_EQUAL( sal_Int16(DFLT_ESC_PROP), getProperty<sal_Int16>(getRun(xPara, 2), "CharEscapementHeight") );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf99602_charStyleSubscript2, "tdf99602_charStyleSubscript2.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf99602_charStyleSubscript2)
 {
+    loadAndReload("tdf99602_charStyleSubscript2.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // *_In styles_*, don't let the proportionality/escapement affect the fontsize - otherwise it starts doubling up,
     // so instead just throw away the values and use the default settings instead - meaning fontsize is unaffected.
@@ -496,8 +490,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118947_tableStyle2, "tdf118947_tableStyle2.docx"
                                  static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
 }
 
-DECLARE_OOXMLEXPORT_TEST(tdf123912_protectedForm, "tdf123912_protectedForm.odt")
+CPPUNIT_TEST_FIXTURE(Test, tdf123912_protectedForm)
 {
+    loadAndReload("tdf123912_protectedForm.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -553,8 +548,9 @@ CPPUNIT_TEST_FIXTURE(Test, testDateControl)
     CPPUNIT_ASSERT_EQUAL(OUString(""), sCurrentDate);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf121867, "tdf121867.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121867)
 {
+    loadAndReload("tdf121867.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwEditShell* pEditShell = pTextDoc->GetDocShell()->GetEditShell();
@@ -583,8 +579,9 @@ DECLARE_OOXMLEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.docx"
                              getProperty<sal_Int16>(getParagraph(2), "ParaLastLineAdjust")));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
+CPPUNIT_TEST_FIXTURE(Test, testInputListExport)
 {
+    loadAndReload("tdf122186_input_list.odt");
     if (!mbExported) // importing the ODT, an input field
     {
         uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -630,8 +627,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123435, "tdf123435.docx")
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf116371, "tdf116371.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf116371)
 {
+    loadAndReload("tdf116371.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure the rotation is exported correctly, and size not distorted
@@ -1262,8 +1260,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127579)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "InternetLink");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf128304, "tdf128304.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf128304)
 {
+    loadAndReload("tdf128304.odt");
     CPPUNIT_ASSERT_EQUAL(4, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     css::text::WritingMode eMode;
