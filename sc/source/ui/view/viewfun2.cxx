@@ -1109,10 +1109,10 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
         if ( pRepCol )
         {
             if ( pRepCol->isEmpty() )
-                rDoc.SetRepeatColRange( nTab, nullptr );
+                rDoc.SetRepeatColRange( nTab, std::nullopt );
             else
                 if ( aRange.ParseAny( *pRepCol, rDoc, aDetails ) & ScRefFlags::VALID )
-                    rDoc.SetRepeatColRange( nTab, std::unique_ptr<ScRange>(new ScRange(aRange)) );
+                    rDoc.SetRepeatColRange( nTab, aRange );
         }
 
         //  repeat rows
@@ -1120,10 +1120,10 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
         if ( pRepRow )
         {
             if ( pRepRow->isEmpty() )
-                rDoc.SetRepeatRowRange( nTab, nullptr );
+                rDoc.SetRepeatRowRange( nTab, std::nullopt );
             else
                 if ( aRange.ParseAny( *pRepRow, rDoc, aDetails ) & ScRefFlags::VALID )
-                    rDoc.SetRepeatRowRange( nTab, std::unique_ptr<ScRange>(new ScRange(aRange)) );
+                    rDoc.SetRepeatRowRange( nTab, aRange );
         }
     }
 

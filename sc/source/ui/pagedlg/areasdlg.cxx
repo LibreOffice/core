@@ -63,7 +63,7 @@ namespace
 // global functions (->at the end of the file):
 
 static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument& rDoc, bool bIsRow, ScRange* pRange );
-static void lcl_GetRepeatRangeString( const ScRange* pRange, const ScDocument& rDoc, bool bIsRow, OUString& rStr );
+static void lcl_GetRepeatRangeString( std::optional<ScRange> oRange, const ScDocument& rDoc, bool bIsRow, OUString& rStr );
 
 #if 0
 // this method is useful when debugging address flags.
@@ -187,7 +187,7 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument& /* rDoc */ 
     else
     {
         bool bRow = ( m_xEdRepeatRow.get() == m_pRefInputEdit );
-        lcl_GetRepeatRangeString(&rRef, *pDoc, bRow, aStr);
+        lcl_GetRepeatRangeString(rRef, *pDoc, bRow, aStr);
         m_pRefInputEdit->SetRefString( aStr );
     }
     Impl_ModifyHdl( *m_pRefInputEdit );
@@ -234,8 +234,8 @@ void ScPrintAreasDlg::SetActive()
 void ScPrintAreasDlg::Impl_Reset()
 {
     OUString        aStrRange;
-    const ScRange*  pRepeatColRange = pDoc->GetRepeatColRange( nCurTab );
-    const ScRange*  pRepeatRowRange = pDoc->GetRepeatRowRange( nCurTab );
+    std::optional<ScRange> oRepeatColRange = pDoc->GetRepeatColRange( nCurTab );
+    std::optional<ScRange> oRepeatRowRange = pDoc->GetRepeatRowRange( nCurTab );
 
     m_xEdPrintArea->SetModifyHdl   (LINK( this, ScPrintAreasDlg, Impl_ModifyHdl));
     m_xEdRepeatRow->SetModifyHdl   (LINK( this, ScPrintAreasDlg, Impl_ModifyHdl));
@@ -274,12 +274,12 @@ void ScPrintAreasDlg::Impl_Reset()
 
     // repeat row
 
-    lcl_GetRepeatRangeString(pRepeatRowRange, *pDoc, true, aStrRange);
+    lcl_GetRepeatRangeString(oRepeatRowRange, *pDoc, true, aStrRange);
     m_xEdRepeatRow->SetText( aStrRange );
 
     // repeat column
 
-    lcl_GetRepeatRangeString(pRepeatColRange, *pDoc, false, aStrRange);
+    lcl_GetRepeatRangeString(oRepeatColRange, *pDoc, false, aStrRange);
     m_xEdRepeatCol->SetText( aStrRange );
 
     Impl_ModifyHdl( *m_xEdPrintArea );
@@ -427,13 +427,13 @@ void ScPrintAreasDlg::Impl_FillLists()
 
             if (rEntry.second->HasType(ScRangeData::Type::RowHeader))
             {
-                lcl_GetRepeatRangeString(&aRange, *pDoc, true, aSymbol);
+                lcl_GetRepeatRangeString(aRange, *pDoc, true, aSymbol);
                 m_xLbRepeatRow->append(aSymbol, aName);
             }
 
             if (rEntry.second->HasType(ScRangeData::Type::ColHeader))
             {
-                lcl_GetRepeatRangeString(&aRange, *pDoc, false, aSymbol);
+                lcl_GetRepeatRangeString(aRange, *pDoc, false, aSymbol);
                 m_xLbRepeatCol->append(aSymbol, aName);
             }
         }
@@ -762,15 +762,15 @@ static bool lcl_CheckRepeatString( const OUString& rStr, const ScDocument& rDoc,
     return true;
 }
 
-static void lcl_GetRepeatRangeString( const ScRange* pRange, const ScDocument& rDoc, bool bIsRow, OUString& rStr )
+static void lcl_GetRepeatRangeString( std::optional<ScRange> oRange, const ScDocument& rDoc, bool bIsRow, OUString& rStr )
 {
     rStr.clear();
-    if (!pRange)
+    if (!oRange)
         return;
 
     const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
-    const ScAddress& rStart = pRange->aStart;
-    const ScAddress& rEnd   = pRange->aEnd;
+    const ScAddress& rStart = oRange->aStart;
+    const ScAddress& rEnd   = oRange->aEnd;
 
     const ScRefFlags nFmt = bIsRow
                             ? (ScRefFlags::ROW_VALID | ScRefFlags::ROW_ABS)

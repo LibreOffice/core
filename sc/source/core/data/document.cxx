@@ -6386,20 +6386,20 @@ const ScRange* ScDocument::GetPrintRange( SCTAB nTab, sal_uInt16 nPos )
     return nullptr;
 }
 
-const ScRange* ScDocument::GetRepeatColRange( SCTAB nTab )
+std::optional<ScRange> ScDocument::GetRepeatColRange( SCTAB nTab )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetRepeatColRange();
 
-    return nullptr;
+    return std::nullopt;
 }
 
-const ScRange* ScDocument::GetRepeatRowRange( SCTAB nTab )
+std::optional<ScRange> ScDocument::GetRepeatRowRange( SCTAB nTab )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetRepeatRowRange();
 
-    return nullptr;
+    return std::nullopt;
 }
 
 void ScDocument::ClearPrintRanges( SCTAB nTab )
@@ -6420,16 +6420,16 @@ void ScDocument::SetPrintEntireSheet( SCTAB nTab )
         maTabs[nTab]->SetPrintEntireSheet();
 }
 
-void ScDocument::SetRepeatColRange( SCTAB nTab, std::unique_ptr<ScRange> pNew )
+void ScDocument::SetRepeatColRange( SCTAB nTab, std::optional<ScRange> oNew )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->SetRepeatColRange( std::move(pNew) );
+        maTabs[nTab]->SetRepeatColRange( std::move(oNew) );
 }
 
-void ScDocument::SetRepeatRowRange( SCTAB nTab, std::unique_ptr<ScRange> pNew )
+void ScDocument::SetRepeatRowRange( SCTAB nTab, std::optional<ScRange> oNew )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->SetRepeatRowRange( std::move(pNew) );
+        maTabs[nTab]->SetRepeatRowRange( std::move(oNew) );
 }
 
 std::unique_ptr<ScPrintRangeSaver> ScDocument::CreatePrintRangeSaver() const

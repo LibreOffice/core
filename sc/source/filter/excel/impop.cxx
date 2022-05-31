@@ -1371,13 +1371,13 @@ void ImportExcel::PostDocLoad()
             {
                 if( p->aStart.Col() == 0 && p->aEnd.Col() == rD.MaxCol() && bRowVirgin )
                 {
-                    rD.SetRepeatRowRange( n, std::unique_ptr<ScRange>(new ScRange(*p)) );
+                    rD.SetRepeatRowRange( n, *p );
                     bRowVirgin = false;
                 }
 
                 if( p->aStart.Row() == 0 && p->aEnd.Row() == rD.MaxRow() && bColVirgin )
                 {
-                    rD.SetRepeatColRange( n, std::unique_ptr<ScRange>(new ScRange(*p)) );
+                    rD.SetRepeatColRange( n, *p );
                     bColVirgin = false;
                 }
 

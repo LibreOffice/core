@@ -1696,8 +1696,8 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         bool bHeaders = rSet.Get(ATTR_PAGE_HEADERS).GetValue();
         sal_uInt16 nOldScale = rSet.Get(ATTR_PAGE_SCALE).GetValue();
         sal_uInt16 nOldPages = rSet.Get(ATTR_PAGE_SCALETOPAGES).GetValue();
-        const ScRange* pRepeatCol = m_pDocument->GetRepeatColRange( nTab );
-        const ScRange* pRepeatRow = m_pDocument->GetRepeatRowRange( nTab );
+        std::optional<ScRange> oRepeatCol = m_pDocument->GetRepeatColRange( nTab );
+        std::optional<ScRange> oRepeatRow = m_pDocument->GetRepeatRowRange( nTab );
 
         //  calculate needed scaling for selection
 
@@ -1708,12 +1708,12 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
             nBlkTwipsX += PRINT_HEADER_WIDTH;
         SCCOL nStartCol = rRange.aStart.Col();
         SCCOL nEndCol = rRange.aEnd.Col();
-        if ( pRepeatCol && nStartCol >= pRepeatCol->aStart.Col() )
+        if ( oRepeatCol && nStartCol >= oRepeatCol->aStart.Col() )
         {
-            for (SCCOL i=pRepeatCol->aStart.Col(); i<=pRepeatCol->aEnd.Col(); i++ )
+            for (SCCOL i=oRepeatCol->aStart.Col(); i<=oRepeatCol->aEnd.Col(); i++ )
                 nBlkTwipsX += m_pDocument->GetColWidth( i, nTab );
-            if ( nStartCol <= pRepeatCol->aEnd.Col() )
-                nStartCol = pRepeatCol->aEnd.Col() + 1;
+            if ( nStartCol <= oRepeatCol->aEnd.Col() )
+                nStartCol = oRepeatCol->aEnd.Col() + 1;
         }
         // legacy compilers' own scope for i
         {
@@ -1726,12 +1726,12 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
             nBlkTwipsY += PRINT_HEADER_HEIGHT;
         SCROW nStartRow = rRange.aStart.Row();
         SCROW nEndRow = rRange.aEnd.Row();
-        if ( pRepeatRow && nStartRow >= pRepeatRow->aStart.Row() )
+        if ( oRepeatRow && nStartRow >= oRepeatRow->aStart.Row() )
         {
-            nBlkTwipsY += m_pDocument->GetRowHeight( pRepeatRow->aStart.Row(),
-                    pRepeatRow->aEnd.Row(), nTab );
-            if ( nStartRow <= pRepeatRow->aEnd.Row() )
-                nStartRow = pRepeatRow->aEnd.Row() + 1;
+            nBlkTwipsY += m_pDocument->GetRowHeight( oRepeatRow->aStart.Row(),
+                    oRepeatRow->aEnd.Row(), nTab );
+            if ( nStartRow <= oRepeatRow->aEnd.Row() )
+                nStartRow = oRepeatRow->aEnd.Row() + 1;
         }
         nBlkTwipsY += m_pDocument->GetRowHeight( nStartRow, nEndRow, nTab );
 
