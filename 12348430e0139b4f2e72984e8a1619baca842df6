@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45e9e925_513d96c8",
+        "filename": "cui/source/options/fontsubs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-31T16:58:20Z",
+      "side": 1,
+      "message": "This looks odd after the change. Using \u0027i\u0027 instead of \u0027pSubs\u0027, or naming \u0027i\u0027 \u0027rSubs\u0027 if it looks more logical, would look cleaner than using another variable to point to the already obtained reference, and follow the logic of \"Use a range-based for loop\" change, isn\u0027t it? In this change, the \"smallest possible change\" logic hardly applies IMO.",
+      "revId": "12348430e0139b4f2e72984e8a1619baca842df6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
