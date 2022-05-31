@@ -1584,6 +1584,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
     sal_uInt16 nFormatCount = GetExportFormatCount();
 
     ResetLastError();
+    bool bShouldCompress = false;
 
     if( nFormat == GRFILTER_FORMAT_DONTKNOW )
     {
@@ -1723,6 +1724,12 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                     if (rOStm.GetError())
                         nStatus = ERRCODE_GRFILTER_IOERROR;
                 }
+                INetURLObject aURL(rPath);
+                OUString aExt(aURL.GetFileExtension().toAsciiUpperCase());
+                if (aExt == "WMZ")
+                {
+                    bShouldCompress = true;
+                }
             }
             else if ( aFilterName.equalsIgnoreAsciiCase( EXP_EMF ) )
             {
@@ -1756,6 +1763,12 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
 
                     if (rOStm.GetError())
                         nStatus = ERRCODE_GRFILTER_IOERROR;
+                }
+                INetURLObject aURL(rPath);
+                OUString aExt(aURL.GetFileExtension().toAsciiUpperCase());
+                if (aExt == "EMZ")
+                {
+                    bShouldCompress = true;
                 }
             }
             else if( aFilterName.equalsIgnoreAsciiCase( EXP_JPEG ) )
@@ -1893,6 +1906,12 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                         nStatus = ERRCODE_GRFILTER_IOERROR;
                     }
                 }
+                INetURLObject aURL( rPath );
+                OUString aExt( aURL.GetFileExtension().toAsciiUpperCase() );
+                if ( aExt == "SVGZ" )
+                {
+                    bShouldCompress = true;
+                }
             }
             else if (aFilterName.equalsIgnoreAsciiCase(EXP_WEBP))
             {
@@ -1908,6 +1927,20 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
     if( nStatus != ERRCODE_NONE )
     {
         ImplSetError( nStatus, &rOStm );
+    }
+    else if ( bShouldCompress )
+    {
+        SvStream rCStm;
+        ZCodec aCodec;
+        tools::Long nCompressedLength;
+        rCStm.SetBufferSize( rOStm.GetBufferSize() );
+        aCodec.BeginCompression( ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true );
+        aCodec.Compress( rOStm, rCStm );
+        nCompressedLength = aCodec.EndCompression();
+        if ( !rCStm.GetError() && nCompressedLength > 0 ) {}
+            // std::swap( rOStm, rCStm );
+        else
+            nStatus = ERRCODE_GRFILTER_IOERROR;
     }
     return nStatus;
 }
