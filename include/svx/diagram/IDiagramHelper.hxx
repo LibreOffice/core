@@ -22,12 +22,31 @@
 #include <vector>
 #include <svx/svxdllapi.h>
 #include <rtl/ustring.hxx>
+#include <svx/svdhdl.hxx>
 
 // Forward declarations
 class SdrObjGroup;
 class SdrHdlList;
 
 namespace svx { namespace diagram {
+
+// Helper class to visualize an imminently recognizable
+// additional visualization for DynamicDiagrams that can also
+// be used to show/hide the DiagramDialog by the user
+// Note: is also used as additional drag/move handle
+class SVXCORE_DLLPUBLIC DiagramFrameHdl final : public SdrHdl
+{
+    // object dimensions
+    basegfx::B2DHomMatrix maTransformation;
+
+    // create marker for this kind
+    virtual void CreateB2dIAObject() override;
+
+public:
+    DiagramFrameHdl(const basegfx::B2DHomMatrix& rTransformation);
+
+    static void clicked(const Point& rPnt);
+};
 
 class DiagramDataState;
 
