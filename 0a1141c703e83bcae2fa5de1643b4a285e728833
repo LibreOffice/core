@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ac33d751_c3b9015b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-05-31T19:19:44Z",
+      "side": 1,
+      "message": "That\u0027s what I gathered from looking around, and I wasn\u0027t sure using SAL_* here was idiomatic anyway.  I can change either way if needed though.",
+      "parentUuid": "aa16527a_cadd5ba6",
+      "revId": "0a1141c703e83bcae2fa5de1643b4a285e728833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "32e98238_ce1b5fb2",
         "filename": "toolkit/qa/cppunit/a11y/AccessibilityTools.cxx",
         "patchSetId": 6
@@ -67,6 +85,30 @@
       "writtenOn": "2022-05-27T06:32:28Z",
       "side": 1,
       "message": "if you set these then you don\u0027t need to write the full in the code below, however I would only use \"using namespace css\" here to make it more concise in the code, but remove \"using namespace css::uno;\" and \"using namespace css::accessibility;\" because those make the code harder to read (if omitted).",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 35
+      },
+      "revId": "0a1141c703e83bcae2fa5de1643b4a285e728833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29f3ab8d_54361b69",
+        "filename": "toolkit/qa/cppunit/a11y/AccessibilityTools.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-05-31T19:19:44Z",
+      "side": 1,
+      "message": "Good point, fixed in v7.  I\u0027m not sure about css:uno as I\u0027m using uno::Reference massively, but it\u0027s not too bad like that.",
+      "parentUuid": "32e98238_ce1b5fb2",
       "range": {
         "startLine": 32,
         "startChar": 0,

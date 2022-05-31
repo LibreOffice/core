@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6fafd14_58f7e82b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-05-31T19:19:44Z",
+      "side": 1,
+      "message": "I fixed the `using` usage mentioned by Tomaž in v7, removed needless boolean returns suggested by Arnaud (out of band) in v8, and removed the Java test case in v9, also suggested by Arnaud (that last one I\u0027ll cross my fingers I did it right).",
+      "revId": "617a05f5bb9deec5ec0b548b5e456bdd2006b328",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
