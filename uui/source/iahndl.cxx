@@ -121,16 +121,6 @@ public:
 } /* namespace */
 
 UUIInteractionHelper::UUIInteractionHelper(
-    uno::Reference< uno::XComponentContext > const & rxContext,
-    uno::Reference< awt::XWindow > const & rxWindowParam,
-    const OUString & rContextParam)
-    :   m_xContext(rxContext),
-        m_xWindowParam(rxWindowParam),
-        m_aContextParam(rContextParam)
-{
-}
-
-UUIInteractionHelper::UUIInteractionHelper(
     uno::Reference< uno::XComponentContext > const & rxContext)
     :  m_xContext(rxContext)
 {
