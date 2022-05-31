@@ -24,6 +24,7 @@
 #include <basic/sbx.hxx>
 #include <runtime.hxx>
 
+#include <cstddef>
 #include <optional>
 
 struct SbxVarEntry
@@ -562,7 +563,7 @@ bool SbxDimArray::StoreData( SvStream& rStrm ) const
 {
     assert(m_vDimensions.size() <= sal::static_int_cast<size_t>(std::numeric_limits<sal_Int16>::max()));
     rStrm.WriteInt16( m_vDimensions.size() );
-    for( sal_Int32 i = 1; i <= static_cast<sal_Int32>(m_vDimensions.size()); i++ )
+    for( std::size_t i = 1; i <= m_vDimensions.size(); i++ )
     {
         sal_Int32 lb32, ub32;
         GetDim(i, lb32, ub32);
