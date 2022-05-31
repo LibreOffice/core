@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32817ff8_0e199f86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-31T08:39:46Z",
+      "side": 1,
+      "message": "Unselecting a shape (click on the blank canvas) is not reverting the Navigator tree selection. And multi-selection does not work (different topic).",
+      "revId": "abc2c51817cf8c19b1d4787a97f523773df31b9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
