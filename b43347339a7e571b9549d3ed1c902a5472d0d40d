@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe70c8db_a008a5eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-31T11:00:32Z",
+      "side": 1,
+      "message": "@Attila: very nice fix!\n\nA question: can PowerPoint create documents without explicit zeroes for removed/disabled bullets which loaded in Impress differently?\n",
+      "revId": "b43347339a7e571b9549d3ed1c902a5472d0d40d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
