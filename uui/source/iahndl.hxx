@@ -73,21 +73,19 @@ class UUIInteractionHelper
 private:
     css::uno::Reference< css::uno::XComponentContext >      m_xContext;
     css::uno::Reference< css::awt::XWindow >                m_xWindowParam;
-    const OUString                                          m_aContextParam;
+    OUString                                                m_aContextParam;
     StringHashMap                                           m_aTypedCustomHandlers;
     UUIInteractionHelper(UUIInteractionHelper const &) = delete;
     UUIInteractionHelper& operator =(UUIInteractionHelper const &) = delete;
 
 public:
-    UUIInteractionHelper(
-        css::uno::Reference< css::uno::XComponentContext > const & rxContext,
-        css::uno::Reference< css::awt::XWindow > const & rxWindow,
-        const OUString & rContextParam);
     explicit UUIInteractionHelper(
         css::uno::Reference< css::uno::XComponentContext > const & rxContext);
 
     const css::uno::Reference<css::awt::XWindow> & GetParentWindow() const { return m_xWindowParam; }
     void SetParentWindow(const css::uno::Reference<css::awt::XWindow>& rWindow) { m_xWindowParam = rWindow; }
+
+    void setContext(OUString const & context) { m_aContextParam = context; }
 
     ~UUIInteractionHelper();
 
@@ -103,9 +101,6 @@ public:
             const OUString& aMessage,
             std::vector< OUString > const & rArguments );
 
-    const css::uno::Reference< css::uno::XComponentContext >&
-    getORB() const
-    { return m_xContext; }
 private:
     bool
     handleRequest_impl(
