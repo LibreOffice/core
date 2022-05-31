@@ -27,6 +27,7 @@
 #include <o3tl/sorted_vector.hxx>
 #include <typeinfo>
 #include <algorithm>
+#include <cstddef>
 #include <unordered_set>
 #include <memory>
 
@@ -83,7 +84,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
     std::unordered_set< sal_Int32 > existingHandles;
     existingHandles.reserve( m_aProperties.size() );
     sal_Int32 nAggregateHandle = _nFirstAggregateId;
-    for ( sal_Int32 nMPLoop = 0; nMPLoop < static_cast< sal_Int32 >( m_aProperties.size() ); ++nMPLoop )
+    for ( std::size_t nMPLoop = 0; nMPLoop < m_aProperties.size(); ++nMPLoop )
     {
         auto &prop = m_aProperties[ nMPLoop ];
         if ( aDelegatorProps.find( prop.Name ) != aDelegatorProps.end() )
@@ -209,7 +210,7 @@ bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
             *_pOriginalHandle = (*i).second.nOriginalHandle;
         if (_pPropName)
         {
-            OSL_ENSURE((*i).second.nPos < static_cast<sal_Int32>(m_aProperties.size()),"Invalid index for sequence!");
+            OSL_ENSURE((*i).second.nPos < m_aProperties.size(),"Invalid index for sequence!");
             const css::beans::Property& rProperty = m_aProperties[(*i).second.nPos];
             *_pPropName = rProperty.Name;
         }
