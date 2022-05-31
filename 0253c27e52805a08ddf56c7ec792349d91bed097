@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea40b6cb_2dec7c7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-05-31T19:33:32Z",
+      "side": 1,
+      "message": "@QA: can you test this on non-linux? I assumed nothing would break, but I can effectively just test Linux and Windows. It\u0027s quite some fundamental change for native menubars, but in theory should only affect Linux... and I might have missed additional bugs fixed by this; I just tested the obvious ones.",
+      "revId": "0253c27e52805a08ddf56c7ec792349d91bed097",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
