@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1812f69_f519eaea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-31T23:25:15Z",
+      "side": 1,
+      "message": "Note: This works on my machine and the output file is a working GZ archive that can be uncompressed with gzip. CRC32 and size are set correctly.",
+      "revId": "d0a749496c83a0c99d3e41248e295ebdf4bcd449",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
