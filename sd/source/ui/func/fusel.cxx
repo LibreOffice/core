@@ -705,7 +705,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
                 }
 
-                // Check for klick on svx::diagram::DiagramFrameHdl
+                // Check for click on svx::diagram::DiagramFrameHdl
                 // - if we hit a SdrHdl
                 // - if it was not moved
                 // - if single object is selected
