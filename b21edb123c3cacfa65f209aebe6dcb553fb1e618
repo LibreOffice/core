@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "204b15cc_c9280c9f",
+        "filename": "uui/source/requeststringresolver.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-31T13:21:27Z",
+      "side": 1,
+      "message": "m_pImpl -\u003e m_aImpl ?",
+      "revId": "b21edb123c3cacfa65f209aebe6dcb553fb1e618",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
