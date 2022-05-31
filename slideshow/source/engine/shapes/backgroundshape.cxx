@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -258,11 +259,11 @@ namespace slideshow::internal
             }
 
             // redraw all view shapes, by calling their render() method
-            if( ::std::count_if( maViewShapes.begin(),
+            if( o3tl::make_unsigned(::std::count_if( maViewShapes.begin(),
                                  maViewShapes.end(),
                                  [this]( const ViewBackgroundShapeSharedPtr& pBgShape )
-                                 { return pBgShape->render( this->mpMtf ); } )
-                != static_cast<ViewBackgroundShapeVector::difference_type>(maViewShapes.size()) )
+                                 { return pBgShape->render( this->mpMtf ); } ))
+                != maViewShapes.size() )
             {
                 // at least one of the ViewBackgroundShape::render() calls did return
                 // false - update failed on at least one ViewLayer

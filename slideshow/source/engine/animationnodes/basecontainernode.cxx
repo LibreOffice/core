@@ -24,6 +24,7 @@
 #include <eventqueue.hxx>
 #include "nodetools.hxx"
 #include <delayevent.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
 #include <functional>
@@ -80,10 +81,10 @@ bool BaseContainerNode::init_children()
     mnFinishedChildren = 0;
 
     // initialize all children
-    return (std::count_if(
+    return (o3tl::make_unsigned(std::count_if(
                 maChildren.begin(), maChildren.end(),
-                std::mem_fn(&AnimationNode::init) ) ==
-            static_cast<VectorOfNodes::difference_type>(maChildren.size()));
+                std::mem_fn(&AnimationNode::init) )) ==
+            maChildren.size());
 }
 
 void BaseContainerNode::deactivate_st( NodeState eDestState )

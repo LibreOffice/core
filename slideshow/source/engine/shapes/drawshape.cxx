@@ -21,6 +21,7 @@
 
 #include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <o3tl/safeint.hxx>
 
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
@@ -146,15 +147,15 @@ namespace slideshow::internal
             // redraw all view shapes, by calling their update() method
             ViewShape::RenderArgs renderArgs( getViewRenderArgs() );
             bool bVisible = isVisible();
-            if( ::std::count_if( maViewShapes.begin(),
+            if( o3tl::make_unsigned(::std::count_if( maViewShapes.begin(),
                                  maViewShapes.end(),
                                  [this, &bVisible, &renderArgs, &nUpdateFlags]
                                  ( const ViewShapeSharedPtr& pShape )
                                  { return pShape->update( this->mpCurrMtf,
                                                           renderArgs,
                                                           nUpdateFlags,
-                                                          bVisible ); } )
-                != static_cast<ViewShapeVector::difference_type>(maViewShapes.size()) )
+                                                          bVisible ); } ))
+                != maViewShapes.size() )
             {
                 // at least one of the ViewShape::update() calls did return
                 // false - update failed on at least one ViewLayer
