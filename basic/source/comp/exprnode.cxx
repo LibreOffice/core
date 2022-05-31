@@ -28,6 +28,7 @@
 #include <basic/sberrors.hxx>
 
 #include <rtl/math.hxx>
+#include <utility>
 
 SbiExprNode::SbiExprNode( std::unique_ptr<SbiExprNode> l, SbiToken t, std::unique_ptr<SbiExprNode> r ) :
     pLeft(std::move(l)),
@@ -50,8 +51,8 @@ SbiExprNode::SbiExprNode( double n, SbxDataType t ):
 {
 }
 
-SbiExprNode::SbiExprNode( const OUString& rVal ):
-    aStrVal(rVal),
+SbiExprNode::SbiExprNode( OUString aVal ):
+    aStrVal(std::move(aVal)),
     pWithParent(nullptr),
     eNodeType(SbxSTRVAL),
     eType(SbxSTRING),

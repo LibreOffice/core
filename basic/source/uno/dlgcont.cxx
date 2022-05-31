@@ -34,6 +34,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
@@ -483,17 +484,17 @@ Sequence< OUString > SAL_CALL SfxDialogLibraryContainer::getSupportedServiceName
 
 // Ctor
 SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
-                                    const OUString& aName,
+                                    OUString aName,
                                     const Reference< XSimpleFileAccess3 >& xSFI,
                                     SfxDialogLibraryContainer* pParent )
     : SfxLibrary( _rModifiable, cppu::UnoType<XInputStreamProvider>::get(), xSFI )
     , m_pParent( pParent )
-    , m_aName( aName )
+    , m_aName(std::move( aName ))
 {
 }
 
 SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
-                                    const OUString& aName,
+                                    OUString aName,
                                     const Reference< XSimpleFileAccess3 >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
@@ -502,7 +503,7 @@ SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
     : SfxLibrary( _rModifiable, cppu::UnoType<XInputStreamProvider>::get(),
                        xSFI, aLibInfoFileURL, aStorageURL, ReadOnly)
     , m_pParent( pParent )
-    , m_aName( aName )
+    , m_aName(std::move( aName ))
 {
 }
 

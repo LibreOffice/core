@@ -34,6 +34,7 @@
 #include <unotools/transliterationwrapper.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
+#include <utility>
 using namespace com::sun::star::uno;
 
 // SbxVariable
@@ -563,8 +564,8 @@ SbxInfo::SbxInfo()
         :  nHelpId(0)
 {}
 
-SbxInfo::SbxInfo( const OUString& r, sal_uInt32 n )
-       : aHelpFile( r ), nHelpId( n )
+SbxInfo::SbxInfo( OUString a, sal_uInt32 n )
+       : aHelpFile(std::move( a )), nHelpId( n )
 {}
 
 void SbxVariable::Dump( SvStream& rStrm, bool bFill )

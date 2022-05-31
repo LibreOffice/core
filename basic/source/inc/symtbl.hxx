@@ -107,7 +107,7 @@ protected:
     sal_uInt16     nDefaultId;          // Symbol number of default value
     short      nFixedStringLength;  // String length in: Dim foo As String*Length
 public:
-    SbiSymDef( const OUString& );
+    SbiSymDef( OUString );
     virtual ~SbiSymDef();
     virtual SbiProcDef* GetProcDef();
     virtual SbiConstDef* GetConstDef();

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_BASIC_BASMGR_HXX
 #define INCLUDED_BASIC_BASMGR_HXX
 
+#include <utility>
 #include <vcl/errcode.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <basic/sbstar.hxx>
@@ -90,12 +91,12 @@ struct LibraryContainerInfo
 
     LibraryContainerInfo
     (
-        css::uno::Reference< css::script::XPersistentLibraryContainer > const & xScriptCont,
-        css::uno::Reference< css::script::XPersistentLibraryContainer > const & xDialogCont,
+        css::uno::Reference< css::script::XPersistentLibraryContainer > xScriptCont,
+        css::uno::Reference< css::script::XPersistentLibraryContainer > xDialogCont,
         OldBasicPassword* pOldBasicPassword
     )
-        : mxScriptCont( xScriptCont )
-        , mxDialogCont( xDialogCont )
+        : mxScriptCont(std::move( xScriptCont ))
+        , mxDialogCont(std::move( xDialogCont ))
         , mpOldBasicPassword( pOldBasicPassword )
     {}
 };

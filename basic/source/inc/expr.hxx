@@ -114,7 +114,7 @@ class SbiExprNode final {           // operators (and operands)
 public:
     SbiExprNode();
     SbiExprNode( double, SbxDataType );
-    SbiExprNode( const OUString& );
+    SbiExprNode( OUString );
     SbiExprNode( const SbiSymDef&, SbxDataType, SbiExprListPtr = nullptr );
     SbiExprNode( std::unique_ptr<SbiExprNode>, SbiToken, std::unique_ptr<SbiExprNode> );
     SbiExprNode( std::unique_ptr<SbiExprNode>, sal_uInt16 );    // #120061 TypeOf
