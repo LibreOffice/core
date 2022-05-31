@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df03d27d_cb6b3e3f",
+        "filename": "include/LibreOfficeKit/LibreOfficeKitEnums.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-05-31T12:46:50Z",
+      "side": 1,
+      "message": "If this is the same as `LOK_SELTYPE_COMPLEX`, then perhaps we should define the latter to be equal to `LOK_SELTYPE_LARGE_TEXT` ?",
+      "revId": "60126d0cf23f2785be2efe1c9218c4964d26aada",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
