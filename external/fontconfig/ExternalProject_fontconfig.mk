@@ -28,6 +28,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			$(if $(filter ANDROID,$(OS)),LIBS="-lm") \
 		LDFLAGS="$(call gb_ExternalProject_get_link_flags,fontconfig)" \
 		$(gb_RUN_CONFIGURE) ./configure \
+			--enable-libxml2 \
 			--disable-shared \
 			--disable-silent-rules \
 			--with-pic \
