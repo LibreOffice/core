@@ -355,14 +355,14 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
 {
     // load configuration
 
-    std::unique_ptr<SvtViewOptions> xWinOpt;
+    std::optional<SvtViewOptions> xWinOpt;
     // first see if a module specific id exists
     if (rInfo.aModule.getLength())
-        xWinOpt.reset(new SvtViewOptions(EViewType::Window, rInfo.aModule + "/" + OUString::number(nId)));
+        xWinOpt.emplace(EViewType::Window, rInfo.aModule + "/" + OUString::number(nId));
 
     // if not then try the generic id
     if (!xWinOpt || !xWinOpt->Exists())
-        xWinOpt.reset(new SvtViewOptions(EViewType::Window, OUString::number(nId)));
+        xWinOpt.emplace(EViewType::Window, OUString::number(nId));
 
     if (xWinOpt->Exists() && xWinOpt->HasVisible() )
         rInfo.bVisible  = xWinOpt->IsVisible(); // set state from configuration. Can be overwritten by UserData, see below
