@@ -38,8 +38,9 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem final : public SfxPoolItem
     bool      bNoLastWordHyphenation : 1;
     sal_uInt8 nMinLead;
     sal_uInt8 nMinTrail;
-    sal_uInt8 nMaxHyphens;
-    sal_uInt8 nMinWordLength;
+    sal_uInt8 nMaxHyphens;      // max. consecutive lines with hyphenation
+    sal_uInt8 nMinWordLength;   // hyphenate only words with at least nMinWordLength characters
+    sal_uInt16 nTextHyphenZone; // don't force hyphenation at line end, allow this extra white space
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -81,6 +82,9 @@ public:
 
     sal_uInt8 &GetMinWordLength() { return nMinWordLength; }
     sal_uInt8 GetMinWordLength() const { return nMinWordLength; }
+
+    sal_uInt16 &GetTextHyphenZone() { return nTextHyphenZone; }
+    sal_uInt16 GetTextHyphenZone() const { return nTextHyphenZone; }
 };
 
 #endif
