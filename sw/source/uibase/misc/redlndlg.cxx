@@ -207,7 +207,8 @@ SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
 
 void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
 {
-    SwWait aWait( *::GetActiveView()->GetDocShell(), false );
+    SwView *pView = ::GetActiveView();
+    std::unique_ptr<SwWait> xWait(pView ? new SwWait(*pView->GetDocShell(), false) : nullptr);
     weld::TreeView& rTreeView = m_pTable->GetWidget();
     m_aUsedSeqNo.clear();
 
@@ -235,10 +236,11 @@ void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
 
 void SwRedlineAcceptDlg::InitAuthors()
 {
-    SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
-
     if (!m_xTabPagesCTRL)
         return;
+
+    SwView *pView = ::GetActiveView();
+    SwWrtShell* pSh = pView ? pView->GetWrtShellPtr() : nullptr;
 
     SvxTPFilter *pFilterPage = m_xTabPagesCTRL->GetFilterPage();
 
@@ -246,7 +248,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     OUString sOldAuthor(pFilterPage->GetSelectedAuthor());
     pFilterPage->ClearAuthors();
 
-    SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
+    SwRedlineTable::size_type nCount = pSh ? pSh->GetRedlineCount() : 0;
 
     m_bOnlyFormatedRedlines = true;
     bool bIsNotFormated = false;
@@ -277,7 +279,7 @@ void SwRedlineAcceptDlg::InitAuthors()
         pFilterPage->SelectAuthor(aStrings[0]);
 
     weld::TreeView& rTreeView = m_pTable->GetWidget();
-    bool const bEnable = !pSh->GetDoc()->GetDocShell()->IsReadOnly()
+    bool const bEnable = pSh && !pSh->GetDoc()->GetDocShell()->IsReadOnly()
         && rTreeView.n_children() != 0
         && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
     bool bSel = rTreeView.get_selected(nullptr);
@@ -725,7 +727,10 @@ void SwRedlineAcceptDlg::RemoveParents(SwRedlineTable::size_type nStart, SwRedli
 
 void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedlineTable::size_type nEnd)
 {
-    SwView *pView   = ::GetActiveView();
+    SwView *pView = ::GetActiveView();
+    if (!pView)
+        return;
+
     SwWrtShell* pSh = pView->GetWrtShellPtr();
     bool bHasRedlineAutoFormat = HasRedlineAutoFormat();
 
