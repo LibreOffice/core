@@ -52,6 +52,24 @@
       "parentUuid": "ff775a90_d81a94b7",
       "revId": "1e17254378546a409a7660ea3c26a3627203eca4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6288fe8e_071ff1fb",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 4
+      },
+      "lineNbr": 6663,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-06-01T13:56:02Z",
+      "side": 1,
+      "message": "1) Okay, I\u0027ll study that file and make the relevant changes. \n2) Sure, I didn\u0027t have a preference either; I just blindly followed the structure of the Printer options.",
+      "parentUuid": "6df09905_57ede958",
+      "revId": "1e17254378546a409a7660ea3c26a3627203eca4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

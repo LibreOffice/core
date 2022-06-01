@@ -22,6 +22,30 @@
       },
       "revId": "8e177d0479e93902d86331f2e17f12661961eeb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d664acf7_99094a16",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 5
+      },
+      "lineNbr": 6671,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-06-01T13:56:02Z",
+      "side": 1,
+      "message": "For this, I didn\u0027t choose the mapping myself. The enum is defined in sc/inc/global.hxx (`InsCellCmd`), and I had to look up the ordering of the values there. If you want, I can change the ordering, but I don\u0027t know what other consequences it might have.",
+      "parentUuid": "e03c22c2_56018542",
+      "range": {
+        "startLine": 6671,
+        "startChar": 19,
+        "endLine": 6671,
+        "endChar": 20
+      },
+      "revId": "8e177d0479e93902d86331f2e17f12661961eeb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
