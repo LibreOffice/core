@@ -129,19 +129,30 @@ QtFontFace* QtFontFace::fromQFont(const QFont& rFont)
 
 QtFontFace* QtFontFace::fromQFontDatabase(const QString& aFamily, const QString& aStyle)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    auto const isFixedPitch = QFontDatabase::isFixedPitch(aFamily, aStyle);
+    auto const weigh = QFontDatabase::weight(aFamily, aStyle);
+    auto const italic = QFontDatabase::italic(aFamily, aStyle);
+    auto const aPointList = QFontDatabase::pointSizes(aFamily, aStyle);
+#else
     QFontDatabase aFDB;
+    auto const isFixedPitch = aFDB.isFixedPitch(aFamily, aStyle);
+    auto const weigh = aFDB.weight(aFamily, aStyle);
+    auto const italic = aFDB.italic(aFamily, aStyle);
+    auto const aPointList = aFDB.pointSizes(aFamily, aStyle);
+#endif
+
     FontAttributes aFA;
 
     aFA.SetFamilyName(toOUString(aFamily));
     if (IsStarSymbol(aFA.GetFamilyName()))
         aFA.SetSymbolFlag(true);
     aFA.SetStyleName(toOUString(aStyle));
-    aFA.SetPitch(aFDB.isFixedPitch(aFamily, aStyle) ? PITCH_FIXED : PITCH_VARIABLE);
-    aFA.SetWeight(QtFontFace::toFontWeight(aFDB.weight(aFamily, aStyle)));
-    aFA.SetItalic(aFDB.italic(aFamily, aStyle) ? ITALIC_NORMAL : ITALIC_NONE);
+    aFA.SetPitch(isFixedPitch ? PITCH_FIXED : PITCH_VARIABLE);
+    aFA.SetWeight(QtFontFace::toFontWeight(weigh));
+    aFA.SetItalic(italic ? ITALIC_NORMAL : ITALIC_NONE);
 
     int nPointSize = 0;
-    QList<int> aPointList = aFDB.pointSizes(aFamily, aStyle);
     if (!aPointList.empty())
         nPointSize = aPointList[0];
 
@@ -167,10 +178,16 @@ QFont QtFontFace::CreateFont() const
     {
         case FontDB:
         {
-            QFontDatabase aFDB;
             QStringList aStrList = m_aFontId.split(",");
             if (3 == aStrList.size())
+            {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                aFont = QFontDatabase::font(aStrList[0], aStrList[1], aStrList[2].toInt());
+#else
+                QFontDatabase aFDB;
                 aFont = aFDB.font(aStrList[0], aStrList[1], aStrList[2].toInt());
+#endif
+            }
             else
                 SAL_WARN("vcl.qt", "Invalid QFontDatabase font ID " << m_aFontId);
             break;
