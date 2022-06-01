@@ -16,6 +16,24 @@
       "message": "I wonder whether it would be more appropriate, at least semantically, to have the three BaseURL, Username, and ApiKey string props be nillable, instead of somewhat randomly using the empty string value for \"not specified\".",
       "revId": "3dca965dd80b66745826133a2870db9237fba87f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74f93561_293525f9",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Linguistic.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1001306
+      },
+      "writtenOn": "2022-06-01T08:20:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5e6adeb_51abf473",
+      "revId": "3dca965dd80b66745826133a2870db9237fba87f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
