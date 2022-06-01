@@ -23,6 +23,7 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
+#include <utility>
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bitmapex.hxx>
@@ -219,7 +220,7 @@ void TBCHeader::Print( FILE* fp )
 }
 #endif
 
-TBCData::TBCData( const TBCHeader& Header ) : rHeader( Header )
+TBCData::TBCData( TBCHeader Header ) : rHeader(std::move( Header ))
 {
 }
 

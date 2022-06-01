@@ -37,6 +37,7 @@
 #include <rtl/character.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/streamwrap.hxx>
+#include <utility>
 
 using namespace ::cppu;
 using namespace ::osl;
@@ -131,14 +132,14 @@ namespace T602ImportFilter {
 
 static inistruct ini;
 
-T602ImportFilter::T602ImportFilter(const css::uno::Reference<css::uno::XComponentContext > &r )
-    : mxContext(r)
+T602ImportFilter::T602ImportFilter(css::uno::Reference<css::uno::XComponentContext > x )
+    : mxContext(std::move(x))
     , node(tnode::START)
 {
 }
 
-T602ImportFilter::T602ImportFilter(css::uno::Reference<css::io::XInputStream> const & xInputStream)
-    : mxInputStream(xInputStream)
+T602ImportFilter::T602ImportFilter(css::uno::Reference<css::io::XInputStream> xInputStream)
+    : mxInputStream(std::move(xInputStream))
     , node(tnode::START)
 {
 }

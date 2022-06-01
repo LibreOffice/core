@@ -31,6 +31,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <editeng/outlobj.hxx>
+#include <utility>
 #include <vcl/graph.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
@@ -4373,8 +4374,8 @@ struct EscherShapeListEntry
     uno::Reference<drawing::XShape>aXShape;
     sal_uInt32 n_EscherId;
 
-    EscherShapeListEntry(const uno::Reference<drawing::XShape> & rShape, sal_uInt32 nId)
-        : aXShape(rShape)
+    EscherShapeListEntry(uno::Reference<drawing::XShape> xShape, sal_uInt32 nId)
+        : aXShape(std::move(xShape))
         , n_EscherId(nId)
     {}
 };
@@ -4862,8 +4863,8 @@ public:
 
 }
 
-EscherEx::EscherEx(const std::shared_ptr<EscherExGlobal>& rxGlobal, SvStream* pOutStrm, bool bOOXML)
-    : mxGlobal(rxGlobal)
+EscherEx::EscherEx(std::shared_ptr<EscherExGlobal> xGlobal, SvStream* pOutStrm, bool bOOXML)
+    : mxGlobal(std::move(xGlobal))
     , mpOutStrm(pOutStrm)
     , mbOwnsStrm(false)
     , mnCurrentDg(0)

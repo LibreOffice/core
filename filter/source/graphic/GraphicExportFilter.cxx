@@ -25,14 +25,15 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 #include <vcl/graphicfilter.hxx>
 #include <svl/outstrm.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
 using namespace css;
 
-GraphicExportFilter::GraphicExportFilter( const uno::Reference< uno::XComponentContext > & rxContext  )
-    : mxContext(rxContext)
+GraphicExportFilter::GraphicExportFilter( uno::Reference< uno::XComponentContext > xContext  )
+    : mxContext(std::move(xContext))
     , mnTargetWidth(0)
     , mnTargetHeight(0)
     , mbSelectionOnly(false)

@@ -13,6 +13,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
+#include <utility>
 #include <vcl/BitmapPalette.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
@@ -329,8 +330,8 @@ std::u16string_view findQuotedText( std::u16string_view rCommand,
 
 }
 
-WW8ReadFieldParams::WW8ReadFieldParams( const OUString& _rData )
-    : aData( _rData )
+WW8ReadFieldParams::WW8ReadFieldParams( OUString _aData )
+    : aData(std::move( _aData ))
     , nFnd( 0 )
     , nNext( 0 )
     , nSavPtr( 0 )

@@ -66,6 +66,7 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/xml/xslt/XSLT2Transformer.hpp>
 #include <com/sun/star/xml/xslt/XSLTTransformer.hpp>
+#include <utility>
 
 #define TRANSFORMATION_TIMEOUT_SEC 60
 
@@ -147,7 +148,7 @@ namespace XSLT
     public:
 
         // ctor...
-        explicit XSLTFilter(const css::uno::Reference<XComponentContext> &r);
+        explicit XSLTFilter(css::uno::Reference<XComponentContext> x);
 
         //  XServiceInfo
         virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
@@ -180,8 +181,8 @@ namespace XSLT
 
     }
 
-    XSLTFilter::XSLTFilter(const css::uno::Reference<XComponentContext> &r):
-        m_xContext(r), m_bTerminated(false), m_bError(false)
+    XSLTFilter::XSLTFilter(css::uno::Reference<XComponentContext> x):
+        m_xContext(std::move(x)), m_bTerminated(false), m_bError(false)
     {}
 
     void

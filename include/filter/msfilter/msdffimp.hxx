@@ -600,7 +600,7 @@ public:
         @param bSkipImages         skipping images for text extraction/indexing
     */
     SvxMSDffManager( SvStream& rStCtrl,
-                     const OUString& rBaseURL,
+                     OUString  aBaseURL,
                      sal_uInt32 nOffsDgg,
                      SvStream* pStData,
                      SdrModel* pSdrModel_,
@@ -611,7 +611,7 @@ public:
 
     // in PPT the parameters DGGContainerOffset and PicStream are provided by an
     // init method
-    SvxMSDffManager( SvStream& rStCtrl, const OUString& rBaseURL );
+    SvxMSDffManager( SvStream& rStCtrl, OUString aBaseURL );
     void InitSvxMSDffManager( sal_uInt32 nOffsDgg_,
                               SvStream* pStData_,
                               sal_uInt32 nSvxMSDffOLEConvFlags);

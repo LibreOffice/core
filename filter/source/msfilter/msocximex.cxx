@@ -28,12 +28,13 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <osl/diagnose.h>
 #include <filter/msfilter/msocximex.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
 constexpr OUStringLiteral sWW8_form( u"WW-Standard" );
 
-SvxMSConvertOCXControls::SvxMSConvertOCXControls( const uno::Reference< frame::XModel >& rxModel) : mxModel(rxModel)
+SvxMSConvertOCXControls::SvxMSConvertOCXControls( uno::Reference< frame::XModel > xModel) : mxModel(std::move(xModel))
 {
 }
 

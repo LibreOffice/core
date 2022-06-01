@@ -386,8 +386,8 @@ namespace XSLT
     }
 
     LibXSLTTransformer::LibXSLTTransformer(
-            const css::uno::Reference<XComponentContext> & rxContext) :
-        m_xContext(rxContext)
+            css::uno::Reference<XComponentContext> xContext) :
+        m_xContext(std::move(xContext))
     {
     }
 

@@ -75,7 +75,7 @@ class CacheUpdateListener : public ::cppu::WeakImplHelper< css::util::XChangesLi
                     specify the type of configuration.
          */
         CacheUpdateListener(FilterCache &rFilterCache,
-                            const css::uno::Reference< css::uno::XInterface >& xConfigAccess,
+                            css::uno::Reference< css::uno::XInterface > xConfigAccess,
                             FilterCache::EItemType eConfigType);
 
 

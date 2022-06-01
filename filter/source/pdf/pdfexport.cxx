@@ -24,6 +24,7 @@
 #include <tools/poly.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/resmgr.hxx>
+#include <utility>
 #include <vcl/canvastools.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/gdimtf.hxx>
@@ -1053,7 +1054,7 @@ class PDFErrorRequest : private cppu::BaseMutex,
 {
     task::PDFExportException maExc;
 public:
-    explicit PDFErrorRequest( const task::PDFExportException& i_rExc );
+    explicit PDFErrorRequest( task::PDFExportException aExc );
 
     // XInteractionRequest
     virtual uno::Any SAL_CALL getRequest() override;
@@ -1061,9 +1062,9 @@ public:
 };
 
 
-PDFErrorRequest::PDFErrorRequest( const task::PDFExportException& i_rExc ) :
+PDFErrorRequest::PDFErrorRequest( task::PDFExportException aExc ) :
     PDFErrorRequestBase( m_aMutex ),
-    maExc( i_rExc )
+    maExc(std::move( aExc ))
 {
 }
 

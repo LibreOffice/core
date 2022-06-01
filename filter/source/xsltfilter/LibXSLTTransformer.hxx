@@ -131,7 +131,7 @@ namespace XSLT
     public:
 
         // ctor...
-        LibXSLTTransformer(const css::uno::Reference<css::uno::XComponentContext> &r);
+        LibXSLTTransformer(css::uno::Reference<css::uno::XComponentContext> x);
 
         //  XServiceInfo
         virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;

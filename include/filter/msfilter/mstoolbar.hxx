@@ -285,7 +285,7 @@ class MSFILTER_DLLPUBLIC TBCData final : public TBBase
     TBCData(const TBCData&) = delete;
     TBCData& operator = ( const TBCData&) = delete;
 public:
-    TBCData( const TBCHeader& Header );
+    TBCData( TBCHeader Header );
     bool Read(SvStream &rS) override;
 #ifdef DEBUG_FILTER_MSTOOLBAR
     virtual void Print( FILE* ) override;

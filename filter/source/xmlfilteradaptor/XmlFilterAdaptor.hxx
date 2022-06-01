@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 
 enum FilterType
@@ -64,8 +65,8 @@ class XmlFilterAdaptor final : public cppu::WeakImplHelper
 
 public:
 
-    explicit XmlFilterAdaptor( const css::uno::Reference< css::uno::XComponentContext > & rxContext)
-        : mxContext(rxContext)
+    explicit XmlFilterAdaptor( css::uno::Reference< css::uno::XComponentContext > xContext)
+        : mxContext(std::move(xContext))
         , meType(FILTER_IMPORT)
     {
     }
