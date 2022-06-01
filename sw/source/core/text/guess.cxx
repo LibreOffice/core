@@ -196,29 +196,69 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     // considering an additional "-" for hyphenation
     if( bHyph )
     {
-        // search start of the last word, if needed
-        sal_Int32 nLastWord = rInf.GetText().getLength() - 1;
-        bool bHyphenationNoLastWord = false;
+        // nHyphZone is the first character not fitting in the hyphenation zone,
+        // or 0, if the whole line in the hyphenation zone,
+        // or -1, if no hyphenation zone defined (i.e. it is 0)
+        sal_Int32 nHyphZone = -1;
         const css::beans::PropertyValues & rHyphValues = rInf.GetHyphValues();
-        assert( rHyphValues.getLength() > 3 && rHyphValues[3].Name == UPN_HYPH_NO_LAST_WORD );
-        if ( rHyphValues[3].Value >>= bHyphenationNoLastWord )
-        {
-            bool bCutBlank = false;
-            for (; sal_Int32(rInf.GetIdx()) <= nLastWord; --nLastWord )
-            {
-                sal_Unicode cChar = rInf.GetText()[nLastWord];
-                if ( cChar != CH_BLANK && cChar != CH_FULL_BLANK && cChar != CH_SIX_PER_EM )
-                    bCutBlank = true;
-                else if ( bCutBlank )
-                    break;
-            }
-        }
+        assert( rHyphValues.getLength() > 5 && rHyphValues[5].Name == UPN_HYPH_ZONE );
+        // hyphenation zone (distance from the line end in twips)
+        sal_uInt16 nTextHyphenZone;
+        if ( rHyphValues[5].Value >>= nTextHyphenZone )
+            nHyphZone = nTextHyphenZone >= nLineWidth
+                ? 0
+                : sal_Int32(rInf.GetTextBreak( nLineWidth - nTextHyphenZone,
+                                        nMaxLen, nMaxComp, rInf.GetCachedVclData().get() ));
 
         m_nCutPos = rInf.GetTextBreak( nLineWidth, nMaxLen, nMaxComp, nHyphPos, rInf.GetCachedVclData().get() );
 
-        // don't hyphenate last word of the paragraph
-        if ( bHyphenationNoLastWord && sal_Int32(m_nCutPos) > nLastWord )
-            m_nCutPos = TextFrameIndex(nLastWord);
+        // don't try to hyphenate in the hyphenation zone
+        if ( nHyphZone != -1 && TextFrameIndex(COMPLETE_STRING) != m_nCutPos )
+        {
+            sal_Int32 nZonePos = sal_Int32(m_nCutPos);
+            // disable hyphenation, if there is a space within the hyphenation zone
+            // Note: for better interoperability, not fitting space character at
+            // rInf.GetIdx()[nHyphZone] always disables the hyphenation, don't need to calculate
+            // with its fitting part. Moreover, do not check double or more spaces there, they
+            // are accepted outside of the hyphenation zone, too.
+            for (; sal_Int32(rInf.GetIdx()) <= nZonePos && nHyphZone <= nZonePos; --nZonePos )
+            {
+                sal_Unicode cChar = rInf.GetText()[nZonePos];
+                if ( cChar == CH_BLANK || cChar == CH_FULL_BLANK || cChar == CH_SIX_PER_EM )
+                {
+                    bHyph = false;
+                }
+            }
+        }
+
+        // search start of the last word, if needed
+        if ( bHyph )
+        {
+            // nLastWord is the space character before the last word
+            sal_Int32 nLastWord = rInf.GetText().getLength() - 1;
+            bool bHyphenationNoLastWord = false;
+            assert( rHyphValues.getLength() > 3 && rHyphValues[3].Name == UPN_HYPH_NO_LAST_WORD );
+            if ( rHyphValues[3].Value >>= bHyphenationNoLastWord )
+            {
+                // skip spaces after the last word
+                bool bCutBlank = false;
+                for (; sal_Int32(rInf.GetIdx()) <= nLastWord; --nLastWord )
+                {
+                    sal_Unicode cChar = rInf.GetText()[nLastWord];
+                    if ( cChar != CH_BLANK && cChar != CH_FULL_BLANK && cChar != CH_SIX_PER_EM )
+                        bCutBlank = true;
+                    else if ( bCutBlank )
+                        break;
+                }
+            }
+
+            // don't hyphenate the last word of the paragraph
+            if ( bHyphenationNoLastWord && sal_Int32(m_nCutPos) > nLastWord &&
+                            TextFrameIndex(COMPLETE_STRING) != m_nCutPos )
+            {
+                m_nCutPos = TextFrameIndex(nLastWord);
+            }
+        }
 
         if ( !nHyphPos && rInf.GetIdx() )
             nHyphPos = rInf.GetIdx() - TextFrameIndex(1);

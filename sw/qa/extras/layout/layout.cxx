@@ -4379,6 +4379,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf121658)
     assertXPath(pXmlDoc, "//Special[@nType='PortionType::Hyphen']", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf149420)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    createSwDoc(DATA_DIRECTORY, "tdf149420.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Only 3 hyphenated words should appear in the document (last paragraph
+    // has got a 1 cm hyphenation zone, removing two hyphenations, which visible
+    // in the second paragraph).
+    assertXPath(pXmlDoc, "//Special[@nType='PortionType::Hyphen']", 8);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf149324)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();

@@ -258,6 +258,7 @@ static OUString PropertyNametoRID(const OUString& rName)
         { "ParaHyphenationNoCaps", RID_PARA_HYPHENATION_NO_CAPS },
         { "ParaHyphenationNoLastWord", RID_PARA_HYPHENATION_NO_LAST_WORD },
         { "ParaHyphenationMinWordLength", RID_PARA_HYPHENATION_MIN_WORD_LENGTH },
+        { "ParaHyphenationZone", RID_PARA_HYPHENATION_ZONE },
         { "ParaInteropGrabBag", RID_PARA_INTEROP_GRAB_BAG },
         { "ParaIsAutoFirstLineIndent", RID_PARA_IS_AUTO_FIRST_LINE_INDENT },
         { "ParaIsCharacterDistance", RID_PARA_IS_CHARACTER_DISTANCE },

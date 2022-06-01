@@ -559,7 +559,8 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
     nMinLead(0),
     nMinTrail(0),
     nMaxHyphens(255),
-    nMinWordLength(0)
+    nMinWordLength(0),
+    nTextHyphenZone(0)
 {
 }
 
@@ -589,6 +590,9 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
         break;
         case MID_HYPHEN_MIN_WORD_LENGTH:
             rVal <<= static_cast<sal_Int16>(nMinWordLength);
+        break;
+        case MID_HYPHEN_ZONE:
+            rVal <<= static_cast<sal_Int16>(nTextHyphenZone);
         break;
     }
     return true;
@@ -629,6 +633,9 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_HYPHEN_MIN_WORD_LENGTH:
             nMinWordLength = static_cast<sal_uInt8>(nNewVal);
         break;
+        case MID_HYPHEN_ZONE:
+            nTextHyphenZone = nNewVal;
+        break;
     }
     return true;
 }
@@ -646,7 +653,8 @@ bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
             && rItem.nMinLead == nMinLead
             && rItem.nMinTrail == nMinTrail
             && rItem.nMaxHyphens == nMaxHyphens
-            && rItem.nMinWordLength == nMinWordLength );
+            && rItem.nMinWordLength == nMinWordLength
+            && rItem.nTextHyphenZone == nTextHyphenZone );
 }
 
 SvxHyphenZoneItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
@@ -657,9 +665,9 @@ SvxHyphenZoneItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
 bool SvxHyphenZoneItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    MapUnit             /*eCoreUnit*/,
-    MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper&
+    MapUnit             eCoreUnit,
+    MapUnit             ePresUnit,
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     OUString cpDelimTmp(cpDelim);
@@ -680,7 +688,16 @@ bool SvxHyphenZoneItem::GetPresentation
                     OUString::number( nMinLead ) + cpDelimTmp +
                     OUString::number( nMinTrail ) + cpDelimTmp +
                     OUString::number( nMaxHyphens ) + cpDelimTmp +
-                    OUString::number( nMinWordLength );
+                    OUString::number( nMinWordLength ) + cpDelimTmp +
+                    GetMetricText( nTextHyphenZone, eCoreUnit, ePresUnit, &rIntl ) +
+                        " " + EditResId(GetMetricId(ePresUnit));
+
+            if ( bNoCapsHyphenation )
+                rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_NO_CAPS_TRUE);
+
+            if ( bNoLastWordHyphenation )
+                rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_LAST_WORD_TRUE);
+
             return true;
         }
         case SfxItemPresentation::Complete:
@@ -703,6 +720,20 @@ bool SvxHyphenZoneItem::GetPresentation
                     EditResId(RID_SVXITEMS_HYPHEN_MAX).replaceAll("%1", OUString::number(nMaxHyphens)) +
                     cpDelimTmp +
                     EditResId(RID_SVXITEMS_HYPHEN_MINWORDLEN).replaceAll("%1", OUString::number(nMinWordLength));
+
+            if ( nTextHyphenZone > 0 )
+            {
+                rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_ZONE) +
+                        GetMetricText( nTextHyphenZone, eCoreUnit, ePresUnit, &rIntl ) +
+                        " " + EditResId(GetMetricId(ePresUnit));
+            }
+
+            if ( bNoCapsHyphenation )
+                rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_NO_CAPS_TRUE);
+
+            if ( bNoLastWordHyphenation )
+                rText += cpDelimTmp + EditResId(RID_SVXITEMS_HYPHEN_LAST_WORD_TRUE);
+
             return true;
         }
         default: ;//prevent warning
