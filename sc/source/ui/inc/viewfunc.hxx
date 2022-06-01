@@ -91,7 +91,7 @@ public:
     OUString        GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr, const OpCode eCode );
 
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
-                               const EditTextObject* pData = nullptr );
+                               const EditTextObject* pData = nullptr, bool bMatrixExpand = false );
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                const EditTextObject& rData, bool bTestSimple = false );
     void            EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue );

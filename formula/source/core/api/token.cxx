@@ -512,6 +512,13 @@ FormulaToken* FormulaTokenArray::FirstRPNToken() const
     return pRPN[0];
 }
 
+FormulaToken* FormulaTokenArray::LastRPNToken() const
+{
+    if (!pRPN || nRPN == 0)
+        return nullptr;
+    return pRPN[nRPN - 1];
+}
+
 bool FormulaTokenArray::HasReferences() const
 {
     for (auto i: Tokens())
