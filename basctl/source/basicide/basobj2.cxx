@@ -216,9 +216,9 @@ namespace
 
         // in case this is a document-local macro, try to protect the document's Undo Manager from
         // flawed scripts
-        std::unique_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
+        std::optional< ::framework::DocumentUndoGuard > pUndoGuard;
         if ( pData->aDocument.isDocument() )
-            pUndoGuard.reset( new ::framework::DocumentUndoGuard( pData->aDocument.getDocument() ) );
+            pUndoGuard.emplace( pData->aDocument.getDocument() );
 
         RunMethod( pData->xMethod.get() );
     }
