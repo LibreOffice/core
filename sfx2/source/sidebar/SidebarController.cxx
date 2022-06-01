@@ -506,6 +506,8 @@ void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
     {
         // Deck became large enough to be shown.  Show it.
         mnSavedSidebarWidth = nNewWidth;
+        // Store nNewWidth to mnWidthOnSplitterButtonDown when dragging sidebar Splitter
+        mnWidthOnSplitterButtonDown = nNewWidth;
         if (!*mbIsDeckOpen)
             RequestOpenDeck();
     }
@@ -653,8 +655,12 @@ void SidebarController::OpenThenToggleDeck (
     if (mpCurrentDeck && mpTabBar)
     {
         sal_Int32 nRequestedWidth = mpCurrentDeck->GetMinimalWidth() + TabBar::GetDefaultWidth();
-        if (mnSavedSidebarWidth < nRequestedWidth)
+        // if sidebar was dragged
+        if(mnWidthOnSplitterButtonDown > 0 && mnWidthOnSplitterButtonDown > nRequestedWidth){
+            SetChildWindowWidth(mnWidthOnSplitterButtonDown);
+        }else{
             SetChildWindowWidth(nRequestedWidth);
+        }
     }
 }
 
@@ -1060,7 +1066,6 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
             case VclEventId::WindowMouseButtonUp:
             {
                 ProcessNewWidth(mpParentWindow->GetSizePixel().Width());
-                mnWidthOnSplitterButtonDown = 0;
                 break;
             }
 
