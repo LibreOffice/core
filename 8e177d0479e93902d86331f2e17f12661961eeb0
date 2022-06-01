@@ -70,6 +70,30 @@
       },
       "revId": "8e177d0479e93902d86331f2e17f12661961eeb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c751207a_9652975d",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 5
+      },
+      "lineNbr": 6671,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-06-01T14:26:03Z",
+      "side": 1,
+      "message": "Yes, sure, I\u0027ll add it in the \u003cinfo\u003e. \n\nBy the way, is it `enum class DelCellCmd` or `InsCellCmd`? In the original sc/source/ui/miscdlgs/inscodlg.cxx line 27, `InsCellCmd` is being used.",
+      "parentUuid": "57094d29_e1a0526b",
+      "range": {
+        "startLine": 6671,
+        "startChar": 19,
+        "endLine": 6671,
+        "endChar": 20
+      },
+      "revId": "8e177d0479e93902d86331f2e17f12661961eeb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
