@@ -773,7 +773,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
                     pSet->Put( pRepr->GetCol() );
 
                 std::unique_ptr<SvxBrushItem> aBrush(pFormat->makeBackgroundBrushItem(false));
-                if( aBrush && pRepr->GetBackground() && *aBrush != *pRepr->GetBackground() )
+                if( pRepr->GetBackground() && *aBrush != *pRepr->GetBackground() )
                     pSet->Put( *pRepr->GetBackground() );
 
                 if( pFormat->GetFootnoteAtTextEnd(false) != pRepr->GetFootnoteNtAtEnd() )

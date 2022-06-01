@@ -4123,9 +4123,9 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
                 //     to determine, if background has to be painted, by checking, if
                 //     background color is not COL_TRANSPARENT ("no fill"/"auto fill")
                 //     or a background graphic exists.
-                bPaintCompleteBack = aBack &&
-                    ((aBack->GetColor() != COL_TRANSPARENT) ||
-                    aBack->GetGraphicPos() != GPOS_NONE);
+                bPaintCompleteBack =
+                    aBack->GetColor() != COL_TRANSPARENT ||
+                    aBack->GetGraphicPos() != GPOS_NONE;
             }
         }
         // paint of margin needed.

@@ -529,7 +529,7 @@ bool SwDoc::GetRowBackground( const SwCursor& rCursor, std::unique_ptr<SvxBrushI
             {
                 std::unique_ptr<SvxBrushItem> aAlternative(aRowArr[i]->GetFrameFormat()->makeBackgroundBrushItem());
 
-                if ( rToFill && aAlternative && *rToFill != *aAlternative )
+                if ( *rToFill != *aAlternative )
                 {
                     bRet = false;
                     break;
