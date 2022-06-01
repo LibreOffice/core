@@ -35,6 +35,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
+#include <cstddef>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -285,7 +286,7 @@ void StockChartTypeTemplate::createChartTypes(
         getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE ) >>= bJapaneseStyle;
         getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH ) >>= bShowHighLow;
 
-        sal_Int32 nSeriesIndex = 0;
+        std::size_t nSeriesIndex = 0;
 
         std::vector< rtl::Reference< ChartType > > aChartTypeVec;
         // Bars (Volume)
@@ -295,7 +296,7 @@ void StockChartTypeTemplate::createChartTypes(
             rtl::Reference< ChartType > xCT = new ColumnChartType();
             aChartTypeVec.push_back( xCT );
 
-            if( static_cast<sal_Int32>(aSeriesSeq.size()) > nSeriesIndex &&
+            if( aSeriesSeq.size() > nSeriesIndex &&
                !aSeriesSeq[nSeriesIndex].empty() )
             {
                 xCT->setDataSeries( aSeriesSeq[ nSeriesIndex ] );
@@ -310,7 +311,7 @@ void StockChartTypeTemplate::createChartTypes(
         xCT->setPropertyValue( "ShowFirst", uno::Any( bShowFirst ));
         xCT->setPropertyValue( "ShowHighLow", uno::Any( bShowHighLow ));
 
-        if( static_cast<sal_Int32>(aSeriesSeq.size()) > nSeriesIndex &&
+        if( aSeriesSeq.size() > nSeriesIndex &&
             !aSeriesSeq[ nSeriesIndex ].empty() )
         {
             xCT->setDataSeries( aSeriesSeq[ nSeriesIndex ] );
@@ -318,7 +319,7 @@ void StockChartTypeTemplate::createChartTypes(
         ++nSeriesIndex;
 
         // Lines (remaining series)
-        if( static_cast<sal_Int32>(aSeriesSeq.size()) > nSeriesIndex &&
+        if( aSeriesSeq.size() > nSeriesIndex &&
             !aSeriesSeq[ nSeriesIndex ].empty() )
         {
             xCT = new LineChartType();

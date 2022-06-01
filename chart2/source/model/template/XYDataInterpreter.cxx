@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include "XYDataInterpreter.hxx"
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
@@ -105,7 +109,7 @@ InterpretedData XYDataInterpreter::interpretDataSource(
     Reference< data::XLabeledDataSequence > xClonedXValues = xValuesX;
     Reference< util::XCloneable > xCloneable( xValuesX, uno::UNO_QUERY );
 
-    sal_Int32 nSeriesIndex = 0;
+    std::size_t nSeriesIndex = 0;
     for (auto const& elem : aSequencesVec)
     {
         vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewData;
@@ -118,7 +122,7 @@ InterpretedData XYDataInterpreter::interpretDataSource(
         aNewData.push_back(elem);
 
         rtl::Reference< DataSeries > xSeries;
-        if( nSeriesIndex < static_cast<sal_Int32>(aSeriesToReUse.size()))
+        if( nSeriesIndex < aSeriesToReUse.size())
             xSeries = aSeriesToReUse[nSeriesIndex];
         else
             xSeries = new DataSeries;

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include "WrappedGapwidthProperty.hxx"
 #include "Chart2ModelContact.hxx"
 #include <ChartType.hxx>
@@ -113,7 +117,7 @@ Any WrappedBarPositionProperty_Base::getPropertyValue( const Reference< beans::X
         if( m_nDimensionIndex==1 )
         {
             std::vector< rtl::Reference< ChartType > > aChartTypeList( DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
-            for( sal_Int32 nN = 0; nN < static_cast<sal_Int32>(aChartTypeList.size()) && !bInnerValueDetected; nN++ )
+            for( std::size_t nN = 0; nN < aChartTypeList.size() && !bInnerValueDetected; nN++ )
             {
                 try
                 {

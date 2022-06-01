@@ -46,6 +46,7 @@
 #include <comphelper/property.hxx>
 
 #include <algorithm>
+#include <cstddef>
 #include <limits>
 
 using namespace ::com::sun::star;
@@ -137,7 +138,7 @@ lcl_tSharedSeqVec lcl_getSharedSequences( const std::vector< rtl::Reference< Dat
     {
         Reference< chart2::data::XDataSequence > xValues( labeledDataSeq->getValues());
         bool bShared = true;
-        for( sal_Int32 nSeriesIdx=1; nSeriesIdx<static_cast<sal_Int32>(rSeries.size()); ++nSeriesIdx )
+        for( std::size_t nSeriesIdx=1; nSeriesIdx<rSeries.size(); ++nSeriesIdx )
         {
             bShared = lcl_SequenceOfSeriesIsShared( rSeries[nSeriesIdx], xValues );
             if( !bShared )

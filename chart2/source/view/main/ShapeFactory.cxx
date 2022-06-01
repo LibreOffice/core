@@ -58,6 +58,7 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <cstddef>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -84,7 +85,7 @@ css::drawing::PolyPolygonShape3D toPolyPolygonShape3D(const std::vector<std::vec
     aUnoPoly.SequenceX.realloc(rPoints.size());
     aUnoPoly.SequenceY.realloc(rPoints.size());
     aUnoPoly.SequenceZ.realloc(rPoints.size());
-    for (sal_Int32 nPolygonIndex=0; nPolygonIndex<static_cast<sal_Int32>(rPoints.size()); ++nPolygonIndex)
+    for (std::size_t nPolygonIndex=0; nPolygonIndex<rPoints.size(); ++nPolygonIndex)
     {
         drawing::DoubleSequence* pOuterSequenceX = &aUnoPoly.SequenceX.getArray()[nPolygonIndex];
         drawing::DoubleSequence* pOuterSequenceY = &aUnoPoly.SequenceY.getArray()[nPolygonIndex];
@@ -95,7 +96,7 @@ css::drawing::PolyPolygonShape3D toPolyPolygonShape3D(const std::vector<std::vec
         double* pInnerSequenceX = pOuterSequenceX->getArray();
         double* pInnerSequenceY = pOuterSequenceY->getArray();
         double* pInnerSequenceZ = pOuterSequenceZ->getArray();
-        for (sal_Int32 nPointIndex=0; nPointIndex<static_cast<sal_Int32>(rPoints[nPolygonIndex].size()); ++nPointIndex)
+        for (std::size_t nPointIndex=0; nPointIndex<rPoints[nPolygonIndex].size(); ++nPointIndex)
         {
             auto& rPos = rPoints[nPolygonIndex][nPointIndex];
             pInnerSequenceX[nPointIndex] = rPos.PositionX;

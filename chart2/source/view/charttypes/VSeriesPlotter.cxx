@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cstddef>
 #include <limits>
 #include <memory>
 #include <VSeriesPlotter.hxx>
@@ -1301,7 +1302,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
 
     const std::vector< rtl::Reference< ::chart::RegressionCurveModel > > & aCurveList = xContainer->getRegressionCurves2();
 
-    for(sal_Int32 nN=0; nN<static_cast<sal_Int32>(aCurveList.size()); nN++)
+    for(std::size_t nN=0; nN<aCurveList.size(); nN++)
     {
         const auto & rCurve = aCurveList[nN];
         uno::Reference< XRegressionCurveCalculator > xCalculator( rCurve->getCalculator() );

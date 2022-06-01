@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <RegressionCurveHelper.hxx>
 #include <MeanValueRegressionCurveCalculator.hxx>
 #include <LinearRegressionCurveCalculator.hxx>
@@ -884,7 +888,7 @@ sal_Int32 RegressionCurveHelper::getRegressionCurveIndex(
         const std::vector< rtl::Reference< RegressionCurveModel > > & aCurves(
             xContainer->getRegressionCurves2());
 
-        for( sal_Int32 i = 0; i < static_cast<sal_Int32>(aCurves.size()); ++i )
+        for( std::size_t i = 0; i < aCurves.size(); ++i )
         {
             if( xCurve == aCurves[i] )
                 return i;

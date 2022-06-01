@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include "BubbleDataInterpreter.hxx"
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
@@ -114,7 +118,7 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
     }
 
     // create DataSeries
-    sal_Int32 nSeriesIndex = 0;
+    std::size_t nSeriesIndex = 0;
     vector< rtl::Reference< DataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSizeValuesVector.size());
 
@@ -135,7 +139,7 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
         aNewData.push_back(aSizeValuesVector[nN]);
 
         rtl::Reference< DataSeries > xSeries;
-        if( nSeriesIndex < static_cast<sal_Int32>(aSeriesToReUse.size()))
+        if( nSeriesIndex < aSeriesToReUse.size())
             xSeries = aSeriesToReUse[nSeriesIndex];
         else
             xSeries = new DataSeries;
