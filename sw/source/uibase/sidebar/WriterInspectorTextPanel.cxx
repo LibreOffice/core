@@ -65,7 +65,7 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
     : InspectorTextPanel(pParent)
     , m_nParIdx(0)
 {
-    SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
+    SwDocShell* pDocSh = dynamic_cast<SwDocShell*>(SfxObjectShell::Current());
     m_pShell = pDocSh ? pDocSh->GetWrtShell() : nullptr;
     if (m_pShell)
     {
