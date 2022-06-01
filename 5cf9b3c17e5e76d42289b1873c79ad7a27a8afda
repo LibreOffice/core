@@ -16,6 +16,23 @@
       "message": "one more needed",
       "revId": "5cf9b3c17e5e76d42289b1873c79ad7a27a8afda",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e93d9374_8b215f96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-01T20:44:20Z",
+      "side": 1,
+      "message": "it is 1 on the major-minor branch and two additional ones on the major-minor-micro one",
+      "revId": "5cf9b3c17e5e76d42289b1873c79ad7a27a8afda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
