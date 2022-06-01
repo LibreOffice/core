@@ -39,6 +39,7 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <osl/diagnose.h>
+#include <formula/paramclass.hxx>
 
 #include <viewfunc.hxx>
 #include <tabvwsh.hxx>
@@ -363,7 +364,8 @@ namespace
 //  input - undo OK
 void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                             const OUString& rString,
-                            const EditTextObject* pData )
+                            const EditTextObject* pData,
+                            bool bMatrixExpand )
 {
     ScDocument& rDoc = GetViewData().GetDocument();
     ScMarkData rMark(GetViewData().GetMarkData());
@@ -519,6 +521,29 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             if ( bOptChanged )
             {
                 pScMod->SetAppOptions(aAppOpt);
+            }
+
+            if (bMatrixExpand)
+            {
+                // If the outer function/operator returns an array/matrix then
+                // enter a matrix formula. ScViewFunc::EnterMatrix() takes care
+                // of selection/mark of the result dimensions or preselected
+                // mark. If the user wanted less or a single cell then should
+                // mark such prior to entering the formula.
+                const formula::FormulaToken* pToken = pArr->LastRPNToken();
+                if (pToken && (formula::FormulaCompiler::IsMatrixFunction( pToken->GetOpCode())
+                            || pToken->IsInForceArray()))
+                {
+                    // Discard this (still empty here) Undo action,
+                    // EnterMatrix() will create its own.
+                    if (bRecord)
+                        rFunc.EndListAction();
+
+                    // Use corrected formula string.
+                    EnterMatrix( aFormula, rDoc.GetGrammar());
+
+                    return;
+                }
             }
         }
 
@@ -737,7 +762,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             if (bCommon)
                 AdjustRowHeight(nRow,nRow,true);
 
-            EnterData(nCol,nRow,nTab,aString);
+            EnterData( nCol, nRow, nTab, aString, nullptr, true /*bMatrixExpand*/);
         }
         else
         {

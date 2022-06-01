@@ -337,6 +337,7 @@ public:
     }
 
     FormulaToken* FirstRPNToken() const;
+    FormulaToken* LastRPNToken() const;
 
     bool HasReferences() const;
 

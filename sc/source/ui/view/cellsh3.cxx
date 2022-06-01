@@ -289,7 +289,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         pTabViewShell->EnterData( GetViewData().GetCurX(),
                                                   GetViewData().GetCurY(),
                                                   GetViewData().GetTabNo(),
-                                                  aStr );
+                                                  aStr, nullptr,
+                                                  true /*bMatrixExpand*/);
                     }
                     else if (pHdl)
                     {
@@ -357,7 +358,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else if ( !aString.isEmpty() && ( aString[0] == '=' || aString[0] == '+' || aString[0] == '-' ) )
                     {
-                        pTabViewShell->EnterData( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aString, pData );
+                        pTabViewShell->EnterData( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(),
+                                aString, pData, true /*bMatrixExpand*/);
                     }
                     else
                     {
@@ -386,7 +388,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             pTabViewShell->EnterData( aCursorPos.Col(),
                                                     aCursorPos.Row(),
                                                     aCursorPos.Tab(),
-                                                    aString );
+                                                    aString, nullptr,
+                                                    true /*bMatrixExpand*/);
                             rReq.Done();
                         }
                     }
