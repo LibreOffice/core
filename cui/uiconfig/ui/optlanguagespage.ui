@@ -92,7 +92,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optlanguagespage|label1">Language Of</property>
+            <property name="label" translatable="yes" context="optlanguagespage|label1">Localization</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -326,7 +326,7 @@
             <property name="margin-top">6</property>
             <child>
               <object class="GtkCheckButton" id="ignorelanguagechange">
-                <property name="label" translatable="yes" context="optlanguagespage|ignorelanguagechange">Ignore s_ystem input language</property>
+                <property name="label" translatable="yes" context="optlanguagespage|ignorelanguagechange">Input _method changes language</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -349,7 +349,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optlanguagespage|label3">Enhanced Language Support</property>
+            <property name="label" translatable="yes" context="optlanguagespage|label3">Other</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
