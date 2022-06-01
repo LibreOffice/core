@@ -207,7 +207,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                             SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
                             ::dbaccess::getColumnPositions(xSelColumns,xPrimaryKeyColumns->getElementNames(),aUpdateTableName,aColumnNames);
-                            bAllKeysFound = !aColumnNames.empty() && sal_Int32(aColumnNames.size()) == xPrimaryKeyColumns->getElementNames().getLength();
+                            bAllKeysFound = !aColumnNames.empty() && aColumnNames.size() == o3tl::make_unsigned(xPrimaryKeyColumns->getElementNames().getLength());
                         }
                     }
                 }

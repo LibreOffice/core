@@ -106,6 +106,7 @@
 #include <frame.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
@@ -482,7 +483,7 @@ static void lcl_Flags(OStringBuffer& rOut, const SwFrame* pFrame)
 
 static void lcl_Padded(OStringBuffer& rOut, const OString& s, size_t length)
 {
-    if (sal_Int32(length) < s.getLength())
+    if (length < o3tl::make_unsigned(s.getLength()))
         length = s.getLength();
     rOut.append(s);
     for (size_t i = 0; i < length - s.getLength(); i++)

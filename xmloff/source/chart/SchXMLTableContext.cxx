@@ -959,7 +959,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                     }
                 }
 
-                if( static_cast<sal_Int32>(aRemainingSeries.size()) != aSeriesSeq.getLength() )
+                if( aRemainingSeries.size() != o3tl::make_unsigned(aSeriesSeq.getLength()) )
                 {
                     //remove the series that have only hidden data
                     xSeriesContainer->setDataSeries( comphelper::containerToSequence(aRemainingSeries) );

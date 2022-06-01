@@ -22,6 +22,7 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
@@ -4336,7 +4337,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
     // [>|>=|<=|...]searchtext for GREATER_value, GREATER_EQUAL_value etc.
     if ( sCriteria1.startsWith( EQUALS ) )
     {
-        if ( sCriteria1.getLength() == static_cast<sal_Int32>(strlen(EQUALS)) )
+        if ( o3tl::make_unsigned(sCriteria1.getLength()) == strlen(EQUALS) )
             rFilterField.Operator = sheet::FilterOperator2::EMPTY;
         else
         {
@@ -4351,7 +4352,7 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
     }
     else if ( sCriteria1.startsWith( NOTEQUALS ) )
     {
-        if ( sCriteria1.getLength() == static_cast<sal_Int32>(strlen(NOTEQUALS)) )
+        if ( o3tl::make_unsigned(sCriteria1.getLength()) == strlen(NOTEQUALS) )
             rFilterField.Operator = sheet::FilterOperator2::NOT_EMPTY;
         else
         {

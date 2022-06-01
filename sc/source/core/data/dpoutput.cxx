@@ -493,7 +493,7 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
         }
     }
 
-    if (aNames.getLength() == static_cast<sal_Int32>(aRes.size()))
+    if (o3tl::make_unsigned(aNames.getLength()) == aRes.size())
         // All members are visible.  Return empty result.
         return uno::Sequence<sheet::MemberResult>();
 

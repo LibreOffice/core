@@ -43,6 +43,7 @@
 
 #include <memory>
 #include <optional>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
@@ -157,7 +158,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData
     checkError();
 
     // if read characters < MaxLength, adjust sequence
-    if (static_cast<sal_Int32>(nRead) < aData.getLength())
+    if (nRead < o3tl::make_unsigned(aData.getLength()))
         aData.realloc( nRead );
 
     return nRead;

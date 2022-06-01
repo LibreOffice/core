@@ -55,6 +55,7 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <o3tl/safeint.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
@@ -2784,7 +2785,7 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, DbGridControlNavigationBarState, nSlot
 
     const std::vector<DbGridControlNavigationBarState>& aSlots = getSupportedGridSlots();
 
-    DBG_ASSERT(static_cast<sal_Int32>(aSlots.size()) == aUrls.getLength(), "FmXGridPeer::OnExecuteGridSlot : inconsistent data returned by getSupportedURLs/getSupportedGridSlots!");
+    DBG_ASSERT(aSlots.size() == o3tl::make_unsigned(aUrls.getLength()), "FmXGridPeer::OnExecuteGridSlot : inconsistent data returned by getSupportedURLs/getSupportedGridSlots!");
 
     for (size_t i=0; i<aSlots.size(); ++i, ++pUrls)
     {
