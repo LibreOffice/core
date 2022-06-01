@@ -14,5 +14,6 @@
 
 #define STR_DIAGRAM_TITLE                        NC_("STR_DIAGRAM_TITLE", "Chart Title")
 #define STR_DIAGRAM_AXISTITLE                    NC_("STR_DIAGRAM_AXISTITLE", "Axis Title")
+#define STR_SLIDE_NAME                           NC_("STR_SLIDE_NAME", "Slide" )
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

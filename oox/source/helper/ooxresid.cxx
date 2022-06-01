@@ -12,5 +12,6 @@
 #include <unotools/resmgr.hxx>
 
 OUString OoxResId(TranslateId aId) { return Translate::get(aId, Translate::Create("oox")); }
+OUString URLResId(TranslateId aId) { return Translate::get(aId, Translate::Create("sd")); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -60,6 +60,8 @@
 
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
+#include <ooxresid.hxx>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::oox::core;
@@ -195,7 +197,10 @@ static void ResolveTextFields( XmlFilterBase const & rFilter )
                             xDrawPage = xPresentationPage->getNotesPage();
                         }
                         Reference< container::XNamed > xNamed( xDrawPage, UNO_QUERY_THROW );
-                        aURL = "#" + xNamed->getName();
+                        if (!xNamed->getName().startsWith("page"))
+                            aURL = "#" + xNamed->getName();
+                        else
+                            aURL = "#" + URLResId(STR_SLIDE_NAME) + " " + OUString::number(nPageNumber);
                         xPropSet->setPropertyValue( sURL, Any( aURL ) );
                         Reference< text::XTextContent > xContent( rTextField.xTextField);
                         Reference< text::XTextRange > xTextRange = rTextField.xTextCursor;
