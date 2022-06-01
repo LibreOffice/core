@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18456ad2_afd5fce6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-01T13:59:37Z",
+      "side": 1,
+      "message": "@sberg: FYI Michael is away this week and I never built Qt6, but the patch seems obviously right, just looking at https://doc.qt.io/qt-6/qfontdatabase.html",
+      "revId": "86b3ff236da74c15f16440c05739dc78a7a07054",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
