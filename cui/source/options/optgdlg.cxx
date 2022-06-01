@@ -1046,7 +1046,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     , m_xCurrentDocCB(m_xBuilder->weld_check_button("currentdoc"))
     , m_xAsianSupportCB(m_xBuilder->weld_check_button("asiansupport"))
     , m_xCTLSupportCB(m_xBuilder->weld_check_button("ctlsupport"))
-    , m_xIgnoreLanguageChangeCB(m_xBuilder->weld_check_button("ignorelanguagechange"))
+    , m_xUseInputLanguageCB(m_xBuilder->weld_check_button("useinputlanguage"))
 {
     // tdf#125483 save original default label
     m_sDecimalSeparatorLabel = m_xDecimalSeparatorCB->get_label();
@@ -1194,7 +1194,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     m_xCTLSupportCB->set_sensitive(!bReadonly);
     SupportHdl(*m_xCTLSupportCB);
 
-    m_xIgnoreLanguageChangeCB->set_active( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange() );
+    m_xUseInputLanguageCB->set_active(!( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange() ));
 }
 
 OfaLanguagesTabPage::~OfaLanguagesTabPage()
@@ -1330,8 +1330,8 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     if(m_xDecimalSeparatorCB->get_state_changed_from_saved())
         pLangConfig->aSysLocaleOptions.SetDecimalSeparatorAsLocale(m_xDecimalSeparatorCB->get_active());
 
-    if(m_xIgnoreLanguageChangeCB->get_state_changed_from_saved())
-        pLangConfig->aSysLocaleOptions.SetIgnoreLanguageChange(m_xIgnoreLanguageChangeCB->get_active());
+    if(m_xUseInputLanguageCB->get_state_changed_from_saved())
+        pLangConfig->aSysLocaleOptions.SetIgnoreLanguageChange(!(m_xUseInputLanguageCB->get_active()));
 
     // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default.
     OUString sOldCurr = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
@@ -1477,8 +1477,8 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     m_xDecimalSeparatorCB->set_active( pLangConfig->aSysLocaleOptions.IsDecimalSeparatorAsLocale());
     m_xDecimalSeparatorCB->save_state();
 
-    m_xIgnoreLanguageChangeCB->set_active( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange());
-    m_xIgnoreLanguageChangeCB->save_state();
+    m_xUseInputLanguageCB->set_active(!( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange()));
+    m_xUseInputLanguageCB->save_state();
 
     // let LocaleSettingHdl enable/disable checkboxes for CJK/CTL support
     // #i15812# must be done *before* the configured currency is set
@@ -1593,7 +1593,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     m_xWesternLanguageLB->save_active_id();
     m_xAsianLanguageLB->save_active_id();
     m_xComplexLanguageLB->save_active_id();
-    m_xIgnoreLanguageChangeCB->save_state();
+    m_xUseInputLanguageCB->save_state();
     m_xCurrentDocCB->save_state();
 
     bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( u"DefaultLocale" );

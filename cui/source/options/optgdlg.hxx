@@ -162,7 +162,7 @@ class OfaLanguagesTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xCurrentDocCB;
     std::unique_ptr<weld::CheckButton> m_xAsianSupportCB;
     std::unique_ptr<weld::CheckButton> m_xCTLSupportCB;
-    std::unique_ptr<weld::CheckButton> m_xIgnoreLanguageChangeCB;
+    std::unique_ptr<weld::CheckButton> m_xUseInputLanguageCB;
 
     DECL_LINK(SupportHdl, weld::Toggleable&, void);
     DECL_LINK(LocaleSettingHdl, weld::ComboBox&, void);
