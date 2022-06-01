@@ -394,6 +394,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/dndhelp \
     vcl/source/app/help \
     vcl/source/app/i18nhelp \
+    vcl/source/app/IconViewAccessible \
+    vcl/source/app/IconViewItemAccessible \
     vcl/source/app/idle \
     vcl/source/app/salplug \
     vcl/source/app/salusereventlist \
