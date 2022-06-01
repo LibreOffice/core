@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <com/sun/star/uno/Sequence.h>
+#include <utility>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 
@@ -176,8 +177,8 @@ struct SvtContentEntry
     bool     mbIsFolder;
     OUString maURL;
 
-    SvtContentEntry( const OUString& rURL, bool bIsFolder ) :
-        mbIsFolder( bIsFolder ), maURL( rURL ) {}
+    SvtContentEntry( OUString aURL, bool bIsFolder ) :
+        mbIsFolder( bIsFolder ), maURL(std::move( aURL )) {}
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

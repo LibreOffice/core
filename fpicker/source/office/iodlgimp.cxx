@@ -30,14 +30,15 @@
 #include <svtools/imagemgr.hxx>
 #include <svl/svlresid.hxx>
 #include <svl/svl.hrc>
+#include <utility>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::utl;
 
-SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( const OUString& rName, const OUString& rType )
-    : m_aName( rName )
-    , m_aType( rType )
+SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( OUString aName, OUString aType )
+    : m_aName(std::move( aName ))
+    , m_aType(std::move( aType ))
 {
     m_aType = m_aType.toAsciiLowerCase();
 }

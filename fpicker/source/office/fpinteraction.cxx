@@ -25,6 +25,7 @@
 #include <com/sun/star/task/XInteractionRetry.hpp>
 
 #include <sal/log.hxx>
+#include <utility>
 
 
 namespace svt
@@ -34,8 +35,8 @@ namespace svt
     using namespace ::com::sun::star::task;
     using namespace ::com::sun::star::ucb;
 
-    OFilePickerInteractionHandler::OFilePickerInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _rxMaster )
-        :m_xMaster( _rxMaster )
+    OFilePickerInteractionHandler::OFilePickerInteractionHandler( css::uno::Reference< css::task::XInteractionHandler > _xMaster )
+        :m_xMaster(std::move( _xMaster ))
         ,m_bUsed( false )
         ,m_eInterceptions( OFilePickerInteractionHandler::E_NOINTERCEPTION )
     {
