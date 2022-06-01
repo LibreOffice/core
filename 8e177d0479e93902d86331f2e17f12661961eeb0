@@ -94,6 +94,30 @@
       },
       "revId": "8e177d0479e93902d86331f2e17f12661961eeb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3784358a_db16509e",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 5
+      },
+      "lineNbr": 6671,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-01T14:32:25Z",
+      "side": 1,
+      "message": "\u003e By the way, is it `enum class DelCellCmd` or `InsCellCmd`? In the original sc/source/ui/miscdlgs/inscodlg.cxx line 27, `InsCellCmd` is being used.\n\nI have absolutely no idea.  I just searched for some enum that matched your \"defined in sc/inc/global.hxx\", had some \"none\" enumerator with value 4, and looked related to \"cell shifting\", and that\u0027s what I happened to come up with :)",
+      "parentUuid": "c751207a_9652975d",
+      "range": {
+        "startLine": 6671,
+        "startChar": 19,
+        "endLine": 6671,
+        "endChar": 20
+      },
+      "revId": "8e177d0479e93902d86331f2e17f12661961eeb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
