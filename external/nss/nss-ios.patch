@@ -68,13 +68,13 @@
  secmod_LoadPKCS11Module(SECMODModule *mod, SECMODModule **oldModule)
  {
 @@ -465,6 +465,7 @@
-         /* load the library. If this succeeds, then we have to remember to
+ /* load the library. If this succeeds, then we have to remember to
           * unload the library if anything goes wrong from here on out...
           */
 +#ifndef NSS_STATIC_PKCS11 // With NSS_STATIC_PKCS11, the only module wodule we load here is nssckbi
-         library = PR_LoadLibrary(mod->dllName);
-         mod->library = (void *)library;
- 
+ #if defined(_WIN32)
+         if (nssUTF8_Length(mod->dllName, NULL)) {
+             wchar_t *dllNameWide = _NSSUTIL_UTF8ToWide(mod->dllName);
 @@ -487,6 +487,11 @@
              mod->moduleDBFunc = (void *)
                  PR_FindSymbol(library, "NSS_ReturnModuleSpecData");
