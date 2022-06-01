@@ -34,6 +34,24 @@
       "parentUuid": "45e9e925_513d96c8",
       "revId": "12348430e0139b4f2e72984e8a1619baca842df6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7488f30a_bf6b1986",
+        "filename": "cui/source/options/fontsubs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-01T06:47:27Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/135215\u003e \"Clean up some loop a bit\"",
+      "parentUuid": "31040d2f_aa5a761a",
+      "revId": "12348430e0139b4f2e72984e8a1619baca842df6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
