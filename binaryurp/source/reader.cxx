@@ -71,7 +71,7 @@ css::uno::Sequence< sal_Int8 > read(
     if (n == 0 && eofOk) {
         return css::uno::Sequence< sal_Int8 >();
     }
-    if (n != static_cast< sal_Int32 >(size)) {
+    if (o3tl::make_unsigned(n) != size) {
         throw css::io::IOException(
             "binaryurp::Reader: premature end of input");
     }
