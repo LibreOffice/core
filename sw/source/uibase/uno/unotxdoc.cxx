@@ -3359,6 +3359,11 @@ SwXTextDocument::getSearchResultRectangles(const char* pPayload)
     return std::vector<basegfx::B2DRange>();
 }
 
+namespace
+{
+inline constexpr OUStringLiteral SELECTED_DATE_FORMAT = u"YYYY-MM-DD";
+}
+
 void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
 {
     auto it = rArguments.find("type");
@@ -3420,6 +3425,62 @@ void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)
         SfxStringItem aItem(SID_INSERT_GRAPHIC, it->second);
         pView->GetViewFrame()->GetDispatcher()->ExecuteList(SID_INSERT_GRAPHIC,
                                                             SfxCallMode::SYNCHRON, { &aItem });
+    }
+    else if (it->second == "date")
+    {
+        SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
+        const SwPosition* pStart = pWrtShell->GetCursor()->Start();
+        SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+        if (!pTextNode)
+        {
+            return;
+        }
+
+        SwTextAttr* pAttr = pTextNode->GetTextAttrAt(pStart->nContent.GetIndex(),
+                                                     RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+        if (!pAttr)
+        {
+            return;
+        }
+
+        auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+        const SwFormatContentControl& rFormatContentControl
+            = pTextContentControl->GetContentControl();
+        std::shared_ptr<SwContentControl> pContentControl
+            = rFormatContentControl.GetContentControl();
+        if (!pContentControl->GetDate())
+        {
+            return;
+        }
+
+        it = rArguments.find("selected");
+        if (it == rArguments.end())
+        {
+            return;
+        }
+
+        OUString aSelectedDate = it->second.replaceAll("T00:00:00Z", "");
+        SwDoc& rDoc = pTextNode->GetDoc();
+        SvNumberFormatter* pNumberFormatter = rDoc.GetNumberFormatter();
+        sal_uInt32 nFormat
+            = pNumberFormatter->GetEntryKey(SELECTED_DATE_FORMAT, LANGUAGE_ENGLISH_US);
+        if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+        {
+            sal_Int32 nCheckPos = 0;
+            SvNumFormatType nType;
+            OUString sFormat = SELECTED_DATE_FORMAT;
+            pNumberFormatter->PutEntry(sFormat, nCheckPos, nType, nFormat, LANGUAGE_ENGLISH_US);
+        }
+
+        if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+        {
+            return;
+        }
+
+        double dCurrentDate = 0;
+        pNumberFormatter->IsNumberFormat(aSelectedDate, nFormat, dCurrentDate);
+        pContentControl->SetSelectedDate(dCurrentDate);
+        pWrtShell->GotoContentControl(rFormatContentControl);
     }
 }
 

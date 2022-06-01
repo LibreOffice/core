@@ -822,6 +822,13 @@ typedef enum
      * {
      *     "action": "change-picture"
      * }
+     *
+     * Entered a date content control:
+     * {
+     *     "action": "show",
+     *     "rectangles": "...",
+     *     "date": "true"
+     * }
      */
     LOK_CALLBACK_CONTENT_CONTROL = 55,
 

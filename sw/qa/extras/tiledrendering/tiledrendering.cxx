@@ -172,6 +172,7 @@ public:
     void testContentControl();
     void testDropDownContentControl();
     void testPictureContentControl();
+    void testDateContentControl();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -262,6 +263,7 @@ public:
     CPPUNIT_TEST(testContentControl);
     CPPUNIT_TEST(testDropDownContentControl);
     CPPUNIT_TEST(testPictureContentControl);
+    CPPUNIT_TEST(testDateContentControl);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3782,6 +3784,61 @@ void SwTiledRenderingTest::testPictureContentControl()
     CPPUNIT_ASSERT(xGraphic.is());
     CPPUNIT_ASSERT_EQUAL(OUString("image/png"), getProperty<OUString>(xGraphic, "MimeType"));
 
+}
+
+void SwTiledRenderingTest::testDateContentControl()
+{
+    // Given a document with a date content control:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "choose a date", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("Date", uno::Any(true));
+    xContentControlProps->setPropertyValue("DateFormat", uno::Any(OUString("YYYY-MM-DD")));
+    xContentControlProps->setPropertyValue("DateLanguage", uno::Any(OUString("en-US")));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    m_aContentControl.clear();
+
+    // When entering that content control:
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
+
+    // Then make sure that the callback is emitted:
+    CPPUNIT_ASSERT(!m_aContentControl.isEmpty());
+    {
+        std::stringstream aStream(m_aContentControl.getStr());
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
+        OString sRectangles = aTree.get_child("rectangles").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT(!sRectangles.isEmpty());
+        boost::optional<boost::property_tree::ptree&> oDate = aTree.get_child_optional("date");
+        CPPUNIT_ASSERT(oDate);
+    }
+
+    // And when selecting a date:
+    std::map<OUString, OUString> aArguments;
+    aArguments.emplace("type", "date");
+    aArguments.emplace("selected", "2022-05-30T00:00:00Z");
+    pXTextDocument->executeContentControlEvent(aArguments);
+
+    // Then make sure that the document is updated accordingly:
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2022-05-30
+    // - Actual  : choose a date
+    // i.e. the document text was not updated.
+    CPPUNIT_ASSERT_EQUAL(OUString("2022-05-30"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
