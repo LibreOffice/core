@@ -113,6 +113,8 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
     if (!tif)
         return false;
 
+    const auto nOrigPos = rTIFF.Tell();
+
     Animation aAnimation;
 
     do
@@ -246,9 +248,14 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             rGraphic = aAnimation.GetBitmapEx();
         else
             rGraphic = aAnimation;
+
+        // seek to end of TIFF if succeeded
+        rTIFF.Seek(STREAM_SEEK_TO_END);
+
         return true;
     }
 
+    rTIFF.Seek(nOrigPos);
     return false;
 }
 
