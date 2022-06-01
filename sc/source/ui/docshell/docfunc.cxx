@@ -1248,9 +1248,9 @@ bool ScDocFunc::SetCellText(
         {
             ScDocument& rDoc = rDocShell.GetDocument();
 
-            ::std::unique_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard;
+            ::std::optional<ScExternalRefManager::ApiGuard> pExtRefGuard;
             if (bApi)
-                pExtRefGuard.reset(new ScExternalRefManager::ApiGuard(rDoc));
+                pExtRefGuard.emplace(rDoc);
 
             ScInputStringType aRes =
                 ScStringUtil::parseInputString(*rDoc.GetFormatTable(), rText, LANGUAGE_ENGLISH_US);
