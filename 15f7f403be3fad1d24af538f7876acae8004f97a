@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3db04fd7_8f6f71bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-01T21:02:49Z",
+      "side": 1,
+      "message": "using releng position to short-circuit this one, even if the default setup uses system nss now and thus TDF provided builds wouldn\u0027t be affected anymore regardless whether the CVEs affect LO in the first place.",
+      "revId": "15f7f403be3fad1d24af538f7876acae8004f97a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
