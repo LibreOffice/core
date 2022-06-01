@@ -57,8 +57,8 @@ void TitleDialogData::readFromModel( const rtl::Reference<::chart::ChartModel>& 
     auto pTextList = aTextList.getArray();
     //find out which title exists and get their text
     //main title:
-    for( sal_Int32 nTitleIndex = static_cast< sal_Int32 >( TitleHelper::TITLE_BEGIN);
-         nTitleIndex < static_cast< sal_Int32 >( TitleHelper::NORMAL_TITLE_END );
+    for( auto nTitleIndex = +TitleHelper::TITLE_BEGIN;
+         nTitleIndex < +TitleHelper::NORMAL_TITLE_END;
          nTitleIndex++)
     {
         uno::Reference< XTitle > xTitle =  TitleHelper::getTitle(
@@ -74,8 +74,8 @@ bool TitleDialogData::writeDifferenceToModel(
                         , const TitleDialogData* pOldState )
 {
     bool bChanged = false;
-    for( sal_Int32 nN = static_cast< sal_Int32 >( TitleHelper::TITLE_BEGIN );
-         nN < static_cast< sal_Int32 >( TitleHelper::NORMAL_TITLE_END );
+    for( auto nN = +TitleHelper::TITLE_BEGIN;
+         nN < +TitleHelper::NORMAL_TITLE_END;
          nN++)
     {
         if( !pOldState || ( pOldState->aExistenceList[nN] != aExistenceList[nN] ) )
