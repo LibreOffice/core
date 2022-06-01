@@ -62,7 +62,7 @@ class LoginDialog : public weld::GenericDialogController
 
 public:
     LoginDialog(weld::Window* pParent, LoginFlags nFlags,
-        const OUString& rServer, const OUString &rRealm);
+        OUString aServer, OUString aRealm);
     virtual ~LoginDialog() override;
 
     OUString        GetName() const                             { return m_xNameED->get_text(); }
