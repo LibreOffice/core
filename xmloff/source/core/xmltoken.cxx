@@ -1066,6 +1066,7 @@ namespace xmloff::token {
         TOKEN( "hyphenation-no-caps",             XML_HYPHENATION_NO_CAPS ),
         TOKEN( "hyphenation-no-last-word",        XML_HYPHENATION_NO_LAST_WORD ),
         TOKEN( "hyphenation-word-char-count",     XML_HYPHENATION_WORD_CHAR_COUNT ),
+        TOKEN( "hyphenation-zone",                XML_HYPHENATION_ZONE ),
         TOKEN( "i",                               XML_I ),
         TOKEN( "icon",                            XML_ICON ),
         TOKEN( "icon-set",                        XML_ICON_SET ),
