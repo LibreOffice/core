@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ba6baee_994df700",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-01T10:34:19Z",
+      "side": 1,
+      "message": "Hi Hossien, Miklos,\nI would appreciate if you could review this patch. Thanks in advance",
+      "revId": "b277ed8c9359841196f05051091d3dfc9a53f3d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
