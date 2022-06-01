@@ -46,6 +46,30 @@
       },
       "revId": "8e177d0479e93902d86331f2e17f12661961eeb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57094d29_e1a0526b",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 5
+      },
+      "lineNbr": 6671,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-01T14:11:31Z",
+      "side": 1,
+      "message": "You mean `enum class DelCellCmd`?  Would probably make sense to mention that here in the \u003cinfo\u003e if you intend these values here to match that enum.",
+      "parentUuid": "d664acf7_99094a16",
+      "range": {
+        "startLine": 6671,
+        "startChar": 19,
+        "endLine": 6671,
+        "endChar": 20
+      },
+      "revId": "8e177d0479e93902d86331f2e17f12661961eeb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
