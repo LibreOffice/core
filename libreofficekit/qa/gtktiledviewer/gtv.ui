@@ -446,6 +446,27 @@
       </packing>
     </child>
     <child>
+      <object class="GtkToolItem" id="contentcontroldateselectortoolitem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkMenuButton" id="menu_contentcontroldateselector">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="tooltip_text">Content control date</property>
+            <property name="popover">calendar</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkToggleToolButton" id="btn_editmode">
         <property name="visible">True</property>
         <property name="label" translatable="yes">Turn on/off edit mode</property>
@@ -777,6 +798,30 @@
         <property name="expand">False</property>
         <property name="homogeneous">True</property>
       </packing>
+    </child>
+  </object>
+  <object class="GtkPopover" id="calendar">
+    <property name="can-focus">False</property>
+    <property name="position">bottom</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkCalendar" id="date">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <signal name="day-selected-double-click" handler="changeDateContentControl" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
     </child>
   </object>
 </interface>

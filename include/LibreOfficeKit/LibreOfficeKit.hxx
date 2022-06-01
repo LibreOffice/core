@@ -851,6 +851,12 @@ public:
      *     "type": "picture",
      *     "changed": "file:///path/to/test.png"
      * }
+     *
+     * To select a date of the current date content control:
+     * {
+     *     "type": "date",
+     *     "selected": "2022-05-29T00:00:00Z"
+     * }
      */
     void sendContentControlEvent(const char* pArguments)
     {
