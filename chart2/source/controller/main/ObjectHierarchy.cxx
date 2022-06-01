@@ -38,6 +38,7 @@
 
 #include <map>
 #include <algorithm>
+#include <cstddef>
 
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -313,10 +314,10 @@ void ObjectHierarchy::createDataSeriesTree(
         sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
         std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysSeq(
             xDiagram->getBaseCoordinateSystems());
-        for( sal_Int32 nCooSysIdx=0; nCooSysIdx<static_cast<sal_Int32>(aCooSysSeq.size()); ++nCooSysIdx )
+        for( std::size_t nCooSysIdx=0; nCooSysIdx<aCooSysSeq.size(); ++nCooSysIdx )
         {
             std::vector< rtl::Reference< ChartType > > aChartTypeSeq( aCooSysSeq[nCooSysIdx]->getChartTypes2());
-            for( sal_Int32 nCTIdx=0; nCTIdx<static_cast<sal_Int32>(aChartTypeSeq.size()); ++nCTIdx )
+            for( std::size_t nCTIdx=0; nCTIdx<aChartTypeSeq.size(); ++nCTIdx )
             {
                 rtl::Reference< ChartType > xChartType( aChartTypeSeq[nCTIdx] );
                 std::vector< rtl::Reference< DataSeries > > aSeriesSeq( xChartType->getDataSeries2() );

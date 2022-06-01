@@ -51,6 +51,7 @@
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <cstddef>
 #include <map>
 
 namespace chart
@@ -786,7 +787,7 @@ bool AxisHelper::getIndicesForAxis( const rtl::Reference< Axis >& xAxis, const r
     rOutAxisIndex = -1;
 
     const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysList = xDiagram->getBaseCoordinateSystems();
-    for( sal_Int32 nC=0; nC < static_cast<sal_Int32>(aCooSysList.size()); ++nC )
+    for( std::size_t nC=0; nC < aCooSysList.size(); ++nC )
     {
         if( AxisHelper::getIndicesForAxis( xAxis, aCooSysList[nC], rOutDimensionIndex, rOutAxisIndex ) )
         {

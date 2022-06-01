@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <dlg_ObjectProperties.hxx>
 #include <strings.hrc>
 #include "tp_AxisLabel.hxx"
@@ -218,9 +222,8 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
         Sequence< double > aXValues, aYValues;
         bool bXValuesFound = false, bYValuesFound = false;
         m_nNbPoints = 0;
-        sal_Int32 i = 0;
-        for( i=0;
-             ! (bXValuesFound && bYValuesFound) && i<static_cast<sal_Int32>(aDataSeqs.size());
+        for( std::size_t i=0;
+             ! (bXValuesFound && bYValuesFound) && i<aDataSeqs.size();
              ++i )
         {
             try
@@ -253,7 +256,7 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
             //first category (index 0) matches with real number 1.0
             aXValues.realloc( aYValues.getLength() );
             auto pXValues = aXValues.getArray();
-            for( i=0; i<aXValues.getLength(); ++i )
+            for( sal_Int32 i=0; i<aXValues.getLength(); ++i )
                 pXValues[i] = i+1;
             bXValuesFound = true;
         }

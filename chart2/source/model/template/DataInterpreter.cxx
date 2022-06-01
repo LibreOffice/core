@@ -27,6 +27,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
+#include <cstddef>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -100,7 +101,7 @@ InterpretedData DataInterpreter::interpretDataSource(
     }
 
     // create DataSeries
-    sal_Int32 nSeriesIndex = 0;
+    std::size_t nSeriesIndex = 0;
     vector< rtl::Reference< DataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSequencesVec.size());
 
@@ -108,7 +109,7 @@ InterpretedData DataInterpreter::interpretDataSource(
     {
         std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewData { elem };
         rtl::Reference< DataSeries > xSeries;
-        if( nSeriesIndex < static_cast<sal_Int32>(aSeriesToReUse.size()))
+        if( nSeriesIndex < aSeriesToReUse.size())
             xSeries = aSeriesToReUse[nSeriesIndex];
         else
             xSeries = new DataSeries;
@@ -346,7 +347,7 @@ bool DataInterpreter::HasCategories(
     if( rArguments.hasElements() )
         GetProperty( rArguments, u"HasCategories" ) >>= bHasCategories;
 
-    for( sal_Int32 nLSeqIdx=0; ! bHasCategories && nLSeqIdx<static_cast<sal_Int32>(rData.size()); ++nLSeqIdx )
+    for( std::size_t nLSeqIdx=0; ! bHasCategories && nLSeqIdx<rData.size(); ++nLSeqIdx )
         bHasCategories = ( rData[nLSeqIdx].is() && GetRole( rData[nLSeqIdx]->getValues() ) == "categories");
 
     return bHasCategories;

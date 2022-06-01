@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <cstddef>
 #include <map>
 
 #include <ObjectIdentifier.hxx>
@@ -468,9 +469,9 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
     rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     if( xDiagram.is() )
     {
-        sal_Int32 nCooSysIndex = 0;
+        std::size_t nCooSysIndex = 0;
         const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysList( xDiagram->getBaseCoordinateSystems() );
-        for( ; nCooSysIndex < static_cast<sal_Int32>(aCooSysList.size()); ++nCooSysIndex )
+        for( ; nCooSysIndex < aCooSysList.size(); ++nCooSysIndex )
         {
             if( xCooSys == aCooSysList[nCooSysIndex] )
             {

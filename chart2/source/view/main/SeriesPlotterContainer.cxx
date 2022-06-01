@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include "SeriesPlotterContainer.hxx"
 
 #include <ChartView.hxx>
@@ -175,7 +179,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
     uno::Reference<XColorScheme> xColorScheme(xDiagram->getDefaultColorScheme());
     auto& rCooSysList = xDiagram->getBaseCoordinateSystems();
     sal_Int32 nGlobalSeriesIndex = 0; //for automatic symbols
-    for (sal_Int32 nCS = 0; nCS < static_cast<sal_Int32>(rCooSysList.size()); ++nCS)
+    for (std::size_t nCS = 0; nCS < rCooSysList.size(); ++nCS)
     {
         rtl::Reference<BaseCoordinateSystem> xCooSys(rCooSysList[nCS]);
         VCoordinateSystem* pVCooSys
@@ -195,7 +199,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
         }
         //iterate through all chart types in the current coordinate system
         std::vector<rtl::Reference<ChartType>> aChartTypeList(xCooSys->getChartTypes2());
-        for (sal_Int32 nT = 0; nT < static_cast<sal_Int32>(aChartTypeList.size()); ++nT)
+        for (std::size_t nT = 0; nT < aChartTypeList.size(); ++nT)
         {
             rtl::Reference<ChartType> xChartType(aChartTypeList[nT]);
             if (nDimensionCount == 3
@@ -243,7 +247,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
             sal_Int32 ySlot = -1;
             const std::vector<rtl::Reference<DataSeries>>& aSeriesList
                 = xChartType->getDataSeries2();
-            for (sal_Int32 nS = 0; nS < static_cast<sal_Int32>(aSeriesList.size()); ++nS)
+            for (std::size_t nS = 0; nS < aSeriesList.size(); ++nS)
             {
                 rtl::Reference<DataSeries> const& xDataSeries = aSeriesList[nS];
                 if (!bIncludeHiddenCells && !DataSeriesHelper::hasUnhiddenData(xDataSeries))

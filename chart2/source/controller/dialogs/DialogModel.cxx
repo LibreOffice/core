@@ -44,6 +44,7 @@
 
 #include <utility>
 #include <algorithm>
+#include <cstddef>
 #include <iterator>
 #include <numeric>
 
@@ -241,15 +242,15 @@ rtl::Reference< ::chart::DataSeries > lcl_CreateNewSeries(
         Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
         if( xColorScheme.is())
             xResult->setPropertyValue( "Color" , uno::Any( xColorScheme->getColorByIndex( nNewSeriesIndex )));
-        sal_Int32 nGroupIndex=0;
+        std::size_t nGroupIndex=0;
         if( xChartType.is())
         {
             std::vector< rtl::Reference< ::chart::ChartType > > aCTs(
                 ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ));
-            for( ; nGroupIndex < static_cast<sal_Int32>(aCTs.size()); ++nGroupIndex)
+            for( ; nGroupIndex < aCTs.size(); ++nGroupIndex)
                 if( aCTs[nGroupIndex] == xChartType )
                     break;
-            if( nGroupIndex == static_cast<sal_Int32>(aCTs.size()))
+            if( nGroupIndex == aCTs.size())
                 nGroupIndex = 0;
         }
         xTemplate->applyStyle( xResult, nGroupIndex, nNewSeriesIndex, nTotalNumberOfSeriesInCTGroup );

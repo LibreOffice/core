@@ -41,6 +41,7 @@
 #include <comphelper/property.hxx>
 
 #include <algorithm>
+#include <cstddef>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -257,9 +258,9 @@ void ChartTypeTemplate::changeDiagramData(
             xInterpreter->interpretDataSource( xDataSource, aArguments, aFlatSeriesSeq );
 
         // data series
-        sal_Int32 i, j, nIndex = 0;
-        for( i=0; i<static_cast<sal_Int32>(aData.Series.size()); ++i )
-            for( j=0; j<static_cast<sal_Int32>(aData.Series[i].size()); ++j, ++nIndex )
+        sal_Int32 nIndex = 0;
+        for( std::size_t i=0; i<aData.Series.size(); ++i )
+            for( std::size_t j=0; j<aData.Series[i].size(); ++j, ++nIndex )
             {
                 if( nIndex >= nFormerSeriesCount )
                 {
@@ -274,7 +275,7 @@ void ChartTypeTemplate::changeDiagramData(
         std::vector< rtl::Reference< ChartType > > aChartTypes =
             DiagramHelper::getChartTypesFromDiagram( xDiagram );
         sal_Int32 nMax = std::min( aChartTypes.size(), aData.Series.size());
-        for( i=0; i<nMax; ++i )
+        for( sal_Int32 i=0; i<nMax; ++i )
         {
             aChartTypes[i]->setDataSeries( aData.Series[i] );
         }
@@ -310,13 +311,13 @@ bool ChartTypeTemplate::matchesTemplate(
 
             const OUString aChartTypeToMatch = xOldCT->getChartType();
             const sal_Int32 nDimensionToMatch = getDimension();
-            for( sal_Int32 nCooSysIdx=0; bResult && (nCooSysIdx < static_cast<sal_Int32>(aCooSysSeq.size())); ++nCooSysIdx )
+            for( std::size_t nCooSysIdx=0; bResult && (nCooSysIdx < aCooSysSeq.size()); ++nCooSysIdx )
             {
                 // match dimension
                 bResult = bResult && (aCooSysSeq[nCooSysIdx]->getDimension() == nDimensionToMatch);
 
                 const std::vector< rtl::Reference< ChartType > > & aChartTypeSeq( aCooSysSeq[nCooSysIdx]->getChartTypes2());
-                for( sal_Int32 nCTIdx=0; bResult && (nCTIdx < static_cast<sal_Int32>(aChartTypeSeq.size())); ++nCTIdx )
+                for( std::size_t nCTIdx=0; bResult && (nCTIdx < aChartTypeSeq.size()); ++nCTIdx )
                 {
                     // match chart type
                     bResult = bResult && aChartTypeSeq[nCTIdx]->getChartType() == aChartTypeToMatch;
@@ -393,7 +394,7 @@ void ChartTypeTemplate::applyStyles( const rtl::Reference< ::chart::Diagram >& x
     // apply chart-type specific styles, like "symbols on" for example
     std::vector< std::vector< rtl::Reference< DataSeries > > > aNewSeriesSeq(
         DiagramHelper::getDataSeriesGroups( xDiagram ));
-    for( sal_Int32 i=0; i<static_cast<sal_Int32>(aNewSeriesSeq.size()); ++i )
+    for( std::size_t i=0; i<aNewSeriesSeq.size(); ++i )
     {
         const sal_Int32 nNumSeries = aNewSeriesSeq[i].size();
         for( sal_Int32 j=0; j<nNumSeries; ++j )
@@ -501,7 +502,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     if( !aCoordinateSystems.empty() )
     {
         bool bOk = true;
-        for( sal_Int32 i=0; bOk && i<static_cast<sal_Int32>(aCoordinateSystems.size()); ++i )
+        for( std::size_t i=0; bOk && i<aCoordinateSystems.size(); ++i )
             bOk = bOk && ( xCooSys->getCoordinateSystemType() == aCoordinateSystems[i]->getCoordinateSystemType() &&
                            (xCooSys->getDimension() == aCoordinateSystems[i]->getDimension()) );
         // coordinate systems are ok
@@ -729,7 +730,7 @@ void ChartTypeTemplate::createChartTypes(
 
     try
     {
-        sal_Int32 nCooSysIdx=0;
+        std::size_t nCooSysIdx=0;
         rtl::Reference< ChartType > xCT;
         if( aSeriesSeq.empty() )
         {
@@ -739,7 +740,7 @@ void ChartTypeTemplate::createChartTypes(
         }
         else
         {
-            for( sal_Int32 nSeriesIdx=0; nSeriesIdx<static_cast<sal_Int32>(aSeriesSeq.size()); ++nSeriesIdx )
+            for( std::size_t nSeriesIdx=0; nSeriesIdx<aSeriesSeq.size(); ++nSeriesIdx )
             {
                 if( nSeriesIdx == nCooSysIdx )
                 {
@@ -770,7 +771,7 @@ void ChartTypeTemplate::createChartTypes(
                 }
 
                 // spread the series over the available coordinate systems
-                if( static_cast<sal_Int32>(rCoordSys.size()) > (nCooSysIdx + 1) )
+                if( rCoordSys.size() > (nCooSysIdx + 1) )
                     ++nCooSysIdx;
             }
         }

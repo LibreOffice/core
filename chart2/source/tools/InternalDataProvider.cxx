@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cstddef>
 #include <iterator>
 
 #include <InternalDataProvider.hxx>
@@ -119,7 +120,7 @@ struct lcl_internalizeSeries
     {
         const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aOldSeriesData = xSeries->getDataSequences2();
         std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewSeriesData( aOldSeriesData.size() );
-        for( sal_Int32 i=0; i<static_cast<sal_Int32>(aOldSeriesData.size()); ++i )
+        for( std::size_t i=0; i<aOldSeriesData.size(); ++i )
         {
             sal_Int32 nNewIndex( m_bDataInColumns ? m_rInternalData.appendColumn() : m_rInternalData.appendRow() );
             OUString aIdentifier( OUString::number( nNewIndex ));

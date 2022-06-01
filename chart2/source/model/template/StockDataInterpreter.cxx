@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include "StockDataInterpreter.hxx"
 #include "StockChartTypeTemplate.hxx"
 #include <DataSeries.hxx>
@@ -220,7 +224,8 @@ InterpretedData StockDataInterpreter::interpretDataSource(
 
     // create DataSeries
     std::vector< std::vector< rtl::Reference< DataSeries > > > aResultSeries( nNumberOfGroups );
-    sal_Int32 nGroupIndex, nReUsedSeriesIdx = 0;
+    sal_Int32 nGroupIndex;
+    std::size_t nReUsedSeriesIdx = 0;
     for( nGroupIndex=0; nGroupIndex<nNumberOfGroups; ++nGroupIndex )
     {
         const sal_Int32 nNumSeriesData = aSequences[nGroupIndex].size();
@@ -231,7 +236,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
             try
             {
                 rtl::Reference< DataSeries > xSeries;
-                if( nReUsedSeriesIdx < static_cast<sal_Int32>(rSeriesToReUse.size()))
+                if( nReUsedSeriesIdx < rSeriesToReUse.size())
                     xSeries = rSeriesToReUse[nReUsedSeriesIdx];
                 else
                     xSeries = new DataSeries;
@@ -258,7 +263,7 @@ bool StockDataInterpreter::isDataCompatible(
     const InterpretedData& aInterpretedData )
 {
     // high/low/close
-    sal_Int32 nNumberOfNecessarySequences = 3;
+    std::size_t nNumberOfNecessarySequences = 3;
     // open
     StockChartTypeTemplate::StockVariant eVar( GetStockVariant());
     if( ( eVar == StockChartTypeTemplate::StockVariant::Open ) ||
@@ -292,7 +297,7 @@ bool StockDataInterpreter::isDataCompatible(
         {
             try
             {
-                if( static_cast<sal_Int32>(dataSeries->getDataSequences2().size()) != nNumberOfNecessarySequences )
+                if( dataSeries->getDataSequences2().size() != nNumberOfNecessarySequences )
                     return false;
             }
             catch( const uno::Exception & )
