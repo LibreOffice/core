@@ -175,27 +175,29 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 if (sAction == "click")
                 {
                     OUString sClickData = rData["data"];
-                    int separatorPos = sClickData.indexOf(';');
-                    if (separatorPos > 0)
+                    int nSeparatorPos = sClickData.indexOf(';');
+                    if (nSeparatorPos > 0)
                     {
                         // x;y
-                        std::u16string_view clickPosX = sClickData.subView(0, separatorPos);
-                        std::u16string_view clickPosY = sClickData.subView(separatorPos + 1);
-                        if (!clickPosX.empty() && !clickPosY.empty())
-                        {
-                            double posX = o3tl::toDouble(clickPosX);
-                            double posY = o3tl::toDouble(clickPosY);
-                            OutputDevice& rRefDevice = pArea->get_ref_device();
-                            // We send OutPutSize for the drawing area bitmap
-                            // get_size_request is not necessarily updated
-                            // therefore it may be incorrect.
-                            Size size = rRefDevice.GetOutputSize();
-                            posX = posX * size.Width();
-                            posY = posY * size.Height();
-                            LOKTrigger::trigger_click(*pArea, Point(posX, posY));
+                        std::u16string_view nClickPosX = sClickData.subView(0, nSeparatorPos);
+                        std::u16string_view nClickPosY = sClickData.subView(nSeparatorPos + 1);
+
+                        if (nClickPosX.empty() || nClickPosY.empty())
                             return true;
-                        }
+
+                        double posX = o3tl::toDouble(nClickPosX);
+                        double posY = o3tl::toDouble(nClickPosY);
+                        OutputDevice& rRefDevice = pArea->get_ref_device();
+                        // We send OutPutSize for the drawing area bitmap
+                        // get_size_request is not necessarily updated
+                        // therefore it may be incorrect.
+                        Size size = rRefDevice.GetOutputSize();
+                        posX = posX * size.Width();
+                        posY = posY * size.Height();
+                        LOKTrigger::trigger_click(*pArea, Point(posX, posY));
+                        return true;
                     }
+
                     LOKTrigger::trigger_click(*pArea, Point(10, 10));
                     return true;
                 }
