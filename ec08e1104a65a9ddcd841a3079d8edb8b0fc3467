@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76ecabb6_cb8dc731",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-06-01T12:58:01Z",
+      "side": 1,
+      "message": "Cloph commented in the chat:\n\ndoesn\u0027t look like the patch fulfills PEP8 formatting rules - no hard feelings, but if there\u0027s some reformatting done on lines without any other changes, I guess the formatting should be extended to match all of PEP8, not just a selection. (pycodestyle E501, long lines) - and in mobile-config.py there\u0027s complaints about not using same indent as next logical line (E125) (pylint also complains about the too-long-lines and also has more stylistic complaints, e.g. variables \"f\" and \"r\" not conforming to snake_case style or that some constants don\u0027t follow UPPER_CASE naming style..",
+      "revId": "ec08e1104a65a9ddcd841a3079d8edb8b0fc3467",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
