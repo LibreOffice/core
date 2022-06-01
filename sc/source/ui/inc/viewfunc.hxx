@@ -104,7 +104,7 @@ public:
      */
     void            EnterBlock( const OUString& rString, const EditTextObject* pData );
 
-    void            EnterDataAtCursor( const OUString& rString );         //! Not used?
+    void            EnterDataAtCursor( const OUString& rString );
 
     SC_DLLPUBLIC void           CutToClip();
     SC_DLLPUBLIC bool           CopyToClip( ScDocument* pClipDoc, bool bCut, bool bApi = false,
