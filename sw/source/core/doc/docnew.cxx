@@ -1054,19 +1054,19 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
         {
             SwNodeIndex aBreakIdx( GetNodes().GetEndOfContent(), -1 );
             SwPosition aBreakPos( aBreakIdx );
-            // InsertPageBreak just works on SwTextNode nodes, so make
-            // sure the last node is one!
-            bool bIsTextNode = aBreakIdx.GetNode().IsTextNode();
-            if ( !bIsTextNode )
-                getIDocumentContentOperations().AppendTextNode( aBreakPos );
-            const OUString name = pTargetPageDesc->GetName();
-            pTargetShell->InsertPageBreak( &name, nStartPageNumber );
-            if ( !bIsTextNode )
-            {
-                pTargetShell->SttEndDoc( false );
-                --aBreakIdx;
-                GetNodes().Delete( aBreakIdx );
-            }
+            // insert new node - will be removed at the end...
+            // (don't SplitNode() as it may move flys to the wrong node)
+            getIDocumentContentOperations().AppendTextNode(aBreakPos);
+            SwFormatPageDesc pageDesc(pTargetPageDesc);
+            pageDesc.SetNumOffset(nStartPageNumber);
+            // set break on the last paragraph
+            getIDocumentContentOperations().InsertPoolItem(SwPaM(aBreakPos),
+                    pageDesc, SetAttrMode::DEFAULT, pTargetShell->GetLayout());
+            // tdf#148309 move to the last node - so that the "flush page break"
+            // code below will format the frame of the node with the page break,
+            // which is required for new page frames to be created!  Else layout
+            // performance will be terrible.
+            pTargetShell->SttEndDoc(false);
 
             // There is now a new empty text node on the new page. If it has
             // any marks, those are from the previous page: move them back
@@ -1097,6 +1097,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             if ( !bDeletePrevious )
             {
                 SAL_INFO( "sw.pageframe", "(Flush pagebreak AKA EndAllAction" );
+                assert(pTargetShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetSwAttrSet().HasItem(RES_PAGEDESC));
                 pTargetShell->EndAllAction();
                 SAL_INFO( "sw.pageframe",  "Flush changes AKA EndAllAction)" );
                 pTargetShell->StartAllAction();
