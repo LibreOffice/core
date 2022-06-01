@@ -16,7 +16,6 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,nss,nspr/build/autoconf
 $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/nss.patch \
     external/nss/nss.aix.patch \
-    external/nss/nss-3.13.5-zlib-werror.patch \
     external/nss/nss_macosx.patch \
     external/nss/nss-win32-make.patch.1 \
     external/nss/ubsan.patch.0 \
