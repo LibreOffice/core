@@ -93,8 +93,7 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
 
 void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
 {
-    std::unique_ptr<SvxBrushItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
-    rSh.GetBoxBackground(aBrush);
+    std::unique_ptr<SvxBrushItem> aBrush = rSh.GetBoxBackground(RES_BACKGROUND).second;
     rSet.Put( *aBrush );
     if(rSh.GetRowBackground(aBrush))
     {
@@ -111,11 +110,11 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
     rSet.Put(aBoxInfo);
     rSh.GetTabBorders( rSet );
 
-    std::unique_ptr<SvxFrameDirectionItem> aBoxDirection(std::make_unique<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR));
-    if(rSh.GetBoxDirection( aBoxDirection ))
+    std::pair<bool, std::unique_ptr<SvxFrameDirectionItem>> aPair = rSh.GetBoxDirection( RES_FRAMEDIR );
+    if(aPair.first)
     {
-        aBoxDirection->SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
-        rSet.Put(*aBoxDirection);
+        aPair.second->SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
+        rSet.Put(*aPair.second);
     }
 
     rSet.Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, rSh.GetBoxAlign()));

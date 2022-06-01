@@ -1637,10 +1637,10 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
     {
         case FN_UNO_TABLE_CELL_BACKGROUND:
         {
-            std::unique_ptr<SfxPoolItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
-            SwDoc::GetBoxAttr(rUnoCursor, aBrush);
-            aBrush->PutValue(aValue, pEntry->nMemberId);
-            rDoc.SetBoxAttr(rUnoCursor, *aBrush);
+            std::pair<bool, std::unique_ptr<SfxPoolItem>> aPair =
+                SwDoc::GetBoxAttr(rUnoCursor, RES_BACKGROUND);
+            aPair.second->PutValue(aValue, pEntry->nMemberId);
+            rDoc.SetBoxAttr(rUnoCursor, *aPair.second);
 
         }
         break;
@@ -1690,9 +1690,9 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
     {
         case FN_UNO_TABLE_CELL_BACKGROUND:
         {
-            std::unique_ptr<SfxPoolItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
-            if (SwDoc::GetBoxAttr(rUnoCursor, aBrush))
-                aBrush->QueryValue(aResult, pEntry->nMemberId);
+            std::pair<bool, std::unique_ptr<SfxPoolItem>> aPair = SwDoc::GetBoxAttr(rUnoCursor, RES_BACKGROUND);
+            if (aPair.first)
+                aPair.second->QueryValue(aResult, pEntry->nMemberId);
         }
         break;
         case RES_BOXATR_FORMAT:
@@ -3358,10 +3358,10 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     {
         case FN_UNO_TABLE_CELL_BACKGROUND:
         {
-            std::unique_ptr<SfxPoolItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
-            SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, aBrush);
-            aBrush->PutValue(aValue, pEntry->nMemberId);
-            rDoc.SetBoxAttr(*m_pImpl->m_pTableCursor, *aBrush);
+            std::pair<bool, std::unique_ptr<SfxPoolItem>> aPair =
+                SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, RES_BACKGROUND);
+            aPair.second->PutValue(aValue, pEntry->nMemberId);
+            rDoc.SetBoxAttr(*m_pImpl->m_pTableCursor, *aPair.second);
 
         }
         break;
@@ -3468,9 +3468,10 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
         {
             case FN_UNO_TABLE_CELL_BACKGROUND:
             {
-                std::unique_ptr<SfxPoolItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
-                if (SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, aBrush))
-                    aBrush->QueryValue(aRet, pEntry->nMemberId);
+                std::pair<bool, std::unique_ptr<SfxPoolItem>> aPair =
+                    SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, RES_BACKGROUND);
+                if (aPair.first)
+                    aPair.second->QueryValue(aRet, pEntry->nMemberId);
 
             }
             break;
@@ -3507,12 +3508,10 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
             break;
             case RES_VERT_ORIENT:
             {
-                std::unique_ptr<SfxPoolItem> aVertOrient(
-                    std::make_unique<SwFormatVertOrient>(RES_VERT_ORIENT));
-                if (SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, aVertOrient))
-                {
-                    aVertOrient->QueryValue( aRet, pEntry->nMemberId );
-                }
+                std::pair<bool, std::unique_ptr<SfxPoolItem>> aPair =
+                    SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, RES_VERT_ORIENT);
+                if (aPair.first)
+                    aPair.second->QueryValue( aRet, pEntry->nMemberId );
             }
             break;
             default:

@@ -2397,11 +2397,13 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich(aIter.FirstWhich());
     SelectionType nSelType(rSh.GetSelectionType());
-    std::unique_ptr<SvxBrushItem> aBrushItem(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
+    std::unique_ptr<SvxBrushItem> aBrushItem;
 
     if( nWhich == SID_TABLE_CELL_BACKGROUND_COLOR )
     {
-        rSh.GetBoxBackground( aBrushItem );
+        aBrushItem = rSh.GetBoxBackground( RES_BACKGROUND ).second;
+        if (!aBrushItem)
+            aBrushItem = std::make_unique<SvxBrushItem>(RES_BACKGROUND);
     }
     else
     {
@@ -2461,11 +2463,11 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         return;
     }
 
-    std::unique_ptr<SvxBrushItem> aBrushItem(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
+    std::unique_ptr<SvxBrushItem> aBrushItem;
 
     if ( nSlot == SID_TABLE_CELL_BACKGROUND_COLOR )
     {
-        rSh.GetBoxBackground( aBrushItem );
+        aBrushItem = rSh.GetBoxBackground( RES_BACKGROUND ).second;
     }
     else
     {
@@ -2752,8 +2754,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             {
                 // Get background attributes of the table and put it in the set
                 // tdf#144843 calling GetBoxBackground *requires* an incarnation to be handed over
-                std::unique_ptr<SvxBrushItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
-                rSh.GetBoxBackground( aBrush );
+                std::unique_ptr<SvxBrushItem> aBrush = rSh.GetBoxBackground( RES_BACKGROUND ).second;
                 pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(pMDI, aSet));
                 aSet.Put( *aBrush );
                 if ( pDlg->Execute() == RET_OK )

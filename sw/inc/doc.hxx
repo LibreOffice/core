@@ -1508,7 +1508,7 @@ public:
     the values of the same property over any other boxes in the selection; if any value is different from
     that of the first box, the property is unset (and false is returned).
     */
-    static bool GetBoxAttr( const SwCursor& rCursor, std::unique_ptr<SfxPoolItem>& rToFill );
+    static std::pair<bool, std::unique_ptr<SfxPoolItem>> GetBoxAttr( const SwCursor& rCursor, sal_uInt16 nWhich );
     void SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign );
     static sal_uInt16 GetBoxAlign( const SwCursor& rCursor );
     /// Adjusts selected cell widths in such a way, that their content does not need to be wrapped (if possible).

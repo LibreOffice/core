@@ -1285,18 +1285,16 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
     getIDocumentState().SetModified();
 }
 
-bool SwDoc::GetBoxAttr( const SwCursor& rCursor, std::unique_ptr<SfxPoolItem>& rToFill )
+std::pair<bool, std::unique_ptr<SfxPoolItem>> SwDoc::GetBoxAttr( const SwCursor& rCursor, sal_uInt16 nWhich )
 {
-    // tdf#144843 calling GetBoxAttr *requires* object
-    assert(rToFill && "requires object here");
     bool bRet = false;
+    std::unique_ptr<SfxPoolItem> xRetItem;
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     SwSelBoxes aBoxes;
     if( pTableNd && lcl_GetBoxSel( rCursor, aBoxes ))
     {
         bRet = true;
         bool bOneFound = false;
-        const sal_uInt16 nWhich = rToFill->Which();
         for (size_t i = 0; i < aBoxes.size(); ++i)
         {
             switch ( nWhich )
@@ -1307,10 +1305,10 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, std::unique_ptr<SfxPoolItem>& r
                         aBoxes[i]->GetFrameFormat()->makeBackgroundBrushItem();
                     if( !bOneFound )
                     {
-                        rToFill = std::move(xBack);
+                        xRetItem = std::move(xBack);
                         bOneFound = true;
                     }
-                    else if( *rToFill != *xBack )
+                    else if( *xRetItem != *xBack )
                         bRet = false;
                 }
                 break;
@@ -1321,10 +1319,10 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, std::unique_ptr<SfxPoolItem>& r
                                     aBoxes[i]->GetFrameFormat()->GetFrameDir();
                     if( !bOneFound )
                     {
-                        rToFill.reset(rDir.Clone());
+                        xRetItem.reset(rDir.Clone());
                         bOneFound = true;
                     }
-                    else if( rToFill && *rToFill != rDir )
+                    else if( *xRetItem != rDir )
                         bRet = false;
                 }
                 break;
@@ -1334,10 +1332,10 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, std::unique_ptr<SfxPoolItem>& r
                                     aBoxes[i]->GetFrameFormat()->GetVertOrient();
                     if( !bOneFound )
                     {
-                        rToFill.reset(rOrient.Clone());
+                        xRetItem.reset(rOrient.Clone());
                         bOneFound = true;
                     }
-                    else if( rToFill && *rToFill != rOrient )
+                    else if( *xRetItem != rOrient )
                         bRet = false;
                 }
                 break;
@@ -1347,7 +1345,7 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, std::unique_ptr<SfxPoolItem>& r
                 break;
         }
     }
-    return bRet;
+    return { bRet, std::move(xRetItem) };
 }
 
 void SwDoc::SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign )

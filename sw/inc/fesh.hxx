@@ -680,10 +680,12 @@ public:
     void GetTabBackground( std::unique_ptr<SvxBrushItem>& rToFill ) const;
 
     void SetBoxBackground( const SvxBrushItem &rNew );
-    bool GetBoxBackground( std::unique_ptr<SvxBrushItem>& rToFill ) const; ///< FALSE ambiguous.
+    std::pair<bool, std::unique_ptr<SvxBrushItem>>
+    GetBoxBackground( TypedWhichId<SvxBrushItem> ) const; ///< FALSE ambiguous.
 
     void SetBoxDirection( const SvxFrameDirectionItem& rNew );
-    bool GetBoxDirection( std::unique_ptr<SvxFrameDirectionItem>& rToFill ) const; ///< FALSE ambiguous.
+    std::pair<bool, std::unique_ptr<SvxFrameDirectionItem>>
+    GetBoxDirection( TypedWhichId<SvxFrameDirectionItem> ) const; ///< FALSE ambiguous.
 
     void SetRowBackground( const SvxBrushItem &rNew );
     bool GetRowBackground( std::unique_ptr<SvxBrushItem>& rToFill ) const; ///< FALSE ambiguous.

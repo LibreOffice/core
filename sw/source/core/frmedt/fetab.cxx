@@ -859,12 +859,10 @@ void SwFEShell::SetBoxBackground( const SvxBrushItem &rNew )
     EndAllActionAndCall();
 }
 
-bool SwFEShell::GetBoxBackground( std::unique_ptr<SvxBrushItem>& rToFill ) const
+std::pair<bool, std::unique_ptr<SvxBrushItem>> SwFEShell::GetBoxBackground( TypedWhichId<SvxBrushItem> nWhich ) const
 {
-    std::unique_ptr<SfxPoolItem> aTemp = std::move(rToFill);
-    bool bRetval(SwDoc::GetBoxAttr(*getShellCursor( false ), aTemp));
-    rToFill.reset(static_cast<SvxBrushItem*>(aTemp.release()));
-    return bRetval;
+    std::pair<bool, std::unique_ptr<SfxPoolItem>> bRetval = SwDoc::GetBoxAttr(*getShellCursor( false ), nWhich);
+    return std::pair<bool, std::unique_ptr<SvxBrushItem>>( bRetval.first, static_cast<SvxBrushItem*>(bRetval.second.release()) );
 }
 
 void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
@@ -875,12 +873,11 @@ void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
     EndAllActionAndCall();
 }
 
-bool SwFEShell::GetBoxDirection( std::unique_ptr<SvxFrameDirectionItem>& rToFill ) const
+std::pair<bool, std::unique_ptr<SvxFrameDirectionItem>>
+SwFEShell::GetBoxDirection( TypedWhichId<SvxFrameDirectionItem> nWhich ) const
 {
-    std::unique_ptr<SfxPoolItem> aTemp = std::move(rToFill);
-    bool bRetval(SwDoc::GetBoxAttr(*getShellCursor( false ), aTemp));
-    rToFill.reset(static_cast<SvxFrameDirectionItem*>(aTemp.release()));
-    return bRetval;
+    std::pair<bool, std::unique_ptr<SfxPoolItem>> bPair(SwDoc::GetBoxAttr(*getShellCursor( false ), nWhich));
+    return std::pair<bool, std::unique_ptr<SvxFrameDirectionItem>>( bPair.first, static_cast<SvxFrameDirectionItem*>(bPair.second.release()) );
 }
 
 void SwFEShell::SetBoxAlign( sal_uInt16 nAlign )

@@ -166,11 +166,12 @@ static std::shared_ptr<SwTableRep> lcl_TableParamToItemSet( SfxItemSet& rSet, Sw
     rSet.Put( *aBrush );
 
     // text direction in boxes
-    std::unique_ptr<SvxFrameDirectionItem> aBoxDirection(std::make_unique<SvxFrameDirectionItem>(SvxFrameDirection::Environment, RES_FRAMEDIR));
-    if(rSh.GetBoxDirection( aBoxDirection ))
+    std::pair<bool, std::unique_ptr<SvxFrameDirectionItem>> aPair =
+        rSh.GetBoxDirection( RES_FRAMEDIR );
+    if (aPair.first)
     {
-        aBoxDirection->SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
-        rSet.Put(*aBoxDirection);
+        aPair.second->SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
+        rSet.Put(*aPair.second);
     }
 
     bool bSelectAll = rSh.StartsWithTable() && rSh.ExtendedSelectedAll();
@@ -615,9 +616,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             rSh.GetTableAttr(aCoreSet);
             // GetTableAttr overwrites the background!
-            std::unique_ptr<SvxBrushItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
-            if(rSh.GetBoxBackground(aBrush))
-                aCoreSet.Put( *aBrush );
+            std::pair<bool, std::unique_ptr<SvxBrushItem>> aPair = rSh.GetBoxBackground(RES_BACKGROUND);
+            if(aPair.first)
+                aCoreSet.Put( *aPair.second );
             else
                 aCoreSet.InvalidateItem( RES_BACKGROUND );
 
