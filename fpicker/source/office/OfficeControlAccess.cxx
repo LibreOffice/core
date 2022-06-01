@@ -31,6 +31,7 @@
 #include <tools/debug.hxx>
 
 #include <algorithm>
+#include <utility>
 
 
 namespace svt
@@ -139,8 +140,8 @@ namespace svt
         struct ControlPropertyLookup
         {
             OUString m_sLookup;
-            explicit ControlPropertyLookup(const OUString& rLookup)
-                : m_sLookup(rLookup)
+            explicit ControlPropertyLookup(OUString aLookup)
+                : m_sLookup(std::move(aLookup))
             {
             }
 

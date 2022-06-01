@@ -48,7 +48,7 @@ private:
     OUString m_aType;    // filter wildcard - if empty, the entry marks a group
 
 public:
-    SvtFileDialogFilter_Impl( const OUString& rName, const OUString& rType );
+    SvtFileDialogFilter_Impl( OUString aName, OUString aType );
     ~SvtFileDialogFilter_Impl();
 
     const OUString&     GetName() const     { return m_aName; }

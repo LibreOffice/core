@@ -28,6 +28,7 @@
 #include <ucbhelper/content.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/datetime.hxx>
+#include <utility>
 
 namespace svt
 {
@@ -132,8 +133,8 @@ namespace svt
 
         FolderDescriptor() { }
 
-        explicit FolderDescriptor( const OUString& _rURL )
-            :sURL( _rURL )
+        explicit FolderDescriptor( OUString _aURL )
+            :sURL(std::move( _aURL ))
         {
         }
     };
