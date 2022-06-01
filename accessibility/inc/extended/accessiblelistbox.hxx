@@ -37,7 +37,7 @@ namespace accessibility
 
     /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
     */
-    class AccessibleListBox final :
+    class AccessibleListBox :
         public cppu::ImplHelper2<
             css::accessibility::XAccessible,
             css::accessibility::XAccessibleSelection>,
@@ -45,18 +45,17 @@ namespace accessibility
     {
 
         css::uno::Reference< css::accessibility::XAccessible > m_xParent;
-
-        virtual ~AccessibleListBox() override;
-
         // OComponentHelper overridables
         /** this function is called upon disposing the component */
         virtual void SAL_CALL   disposing() override;
 
+    protected:
         // VCLXAccessibleComponent
         virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
         virtual void    ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent ) override;
         virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
 
+    private:
         VclPtr< SvTreeListBox > getListBox() const;
 
         void            RemoveChildEntries(SvTreeListEntry*);
@@ -72,6 +71,8 @@ namespace accessibility
         */
         AccessibleListBox( SvTreeListBox const & _rListBox,
                            const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
+
+        virtual ~AccessibleListBox() override;
 
         rtl::Reference<AccessibleListBoxEntry> implGetAccessible(SvTreeListEntry & rEntry);
 
