@@ -85,6 +85,24 @@
       "parentUuid": "dccec909_8b1fa7df",
       "revId": "87ebaef1907e103538051bc6256f35d12342e97f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d82947d_c72d9c6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-01T07:33:10Z",
+      "side": 1,
+      "message": "It looks like a export issue, thus I would recommend you to look at the existing tests in sc/qa/unit/subsequent_export_test*",
+      "parentUuid": "3556d2d0_d08b6579",
+      "revId": "87ebaef1907e103538051bc6256f35d12342e97f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
