@@ -79,7 +79,11 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
     updateEntries(aStore, m_nParIdx);
 }
 
-WriterInspectorTextPanel::~WriterInspectorTextPanel() { m_pShell->SetChgLnk(m_oldLink); }
+WriterInspectorTextPanel::~WriterInspectorTextPanel()
+{
+    if (m_pShell)
+        m_pShell->SetChgLnk(m_oldLink);
+}
 
 static OUString PropertyNametoRID(const OUString& rName)
 {
