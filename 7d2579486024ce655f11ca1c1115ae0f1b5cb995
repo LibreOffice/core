@@ -22,6 +22,30 @@
       },
       "revId": "7d2579486024ce655f11ca1c1115ae0f1b5cb995",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9076931a_61294a33",
+        "filename": "toolkit/qa/cppunit/a11y/XAccessibleExtendedComponentTester.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-06-01T07:50:24Z",
+      "side": 1,
+      "message": "Oh, nice, I didn\u0027t catch on the fact LO was happy with this 😊",
+      "parentUuid": "26735ba2_9e75a3ff",
+      "range": {
+        "startLine": 20,
+        "startChar": 1,
+        "endLine": 20,
+        "endChar": 79
+      },
+      "revId": "7d2579486024ce655f11ca1c1115ae0f1b5cb995",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
