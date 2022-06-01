@@ -59,7 +59,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="optlanguagespage|label4">_User interface:</property>
+                <property name="label" translatable="yes" context="optlanguagespage|label4">_Language:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">userinterface</property>
                 <property name="xalign">0</property>
@@ -92,7 +92,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optlanguagespage|label1">Language Of</property>
+            <property name="label" translatable="yes" context="optlanguagespage|label1">User Interface</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -326,12 +326,13 @@
             <property name="margin-top">6</property>
             <child>
               <object class="GtkCheckButton" id="ignorelanguagechange">
-                <property name="label" translatable="yes" context="optlanguagespage|ignorelanguagechange">Ignore s_ystem input language</property>
+                <property name="label" translatable="yes" context="optlanguagespage|ignorelanguagechange">Apply s_ystem input language to new text.</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
+                <property name="tooltip_text" translatable="yes" context="optlanguagespage|ignorelanguagechange">The current system input language will be applied to the new text being entered.</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="ignorelanguagechange-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ignorelanguagechange">Indicates whether changes to the system input language/keyboard will be ignored. If ignored, when new text is typed that text will follow the language of the document or current paragraph, not the current system language.</property>
