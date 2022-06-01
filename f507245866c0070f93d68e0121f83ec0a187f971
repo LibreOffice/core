@@ -62,6 +62,30 @@
       },
       "revId": "f507245866c0070f93d68e0121f83ec0a187f971",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56008c32_d710ec46",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-01T18:14:55Z",
+      "side": 1,
+      "message": "No need to parse arguments manually in the first place. Python has argparse module, using it is more pythonic way of parsing. Something like\n\n```\nimport argparse\n\nparser \u003d argparse.ArgumentParser()\n# add positional arguments: symbols, config, etc.\ngroup \u003d parser.add_mutually_exclusive_group()\ngroup.add_argument(\u0027--system\u0027, action\u003d\u0027store_true\u0027)\ngroup.add_argument(\u0027--platform\u0027, choices\u003d(\u0027Windows\u0027, \u0027Linux\u0027))\nargs \u003d parser.parse_args()\n\nif args.system:\n    data[\u0027system\u0027] \u003d True\nelif args.platform:\n    data[\u0027platform\u0027] \u003d args.platform\n```",
+      "parentUuid": "18ccc7be_a04a9156",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 48
+      },
+      "revId": "f507245866c0070f93d68e0121f83ec0a187f971",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
