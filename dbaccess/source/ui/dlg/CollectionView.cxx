@@ -26,6 +26,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <UITools.hxx>
@@ -256,9 +257,9 @@ void OCollectionView::initCurrentPath()
             static const char s_sReportsCID[] = "private:reports";
             m_bCreateForm = s_sFormsCID == sCID;
             OUString sPath("/");
-            if ( m_bCreateForm && sCID.getLength() != static_cast<sal_Int32>(strlen(s_sFormsCID)))
+            if ( m_bCreateForm && o3tl::make_unsigned(sCID.getLength()) != strlen(s_sFormsCID))
                 sPath = sCID.copy(strlen(s_sFormsCID));
-            else if ( !m_bCreateForm && sCID.getLength() != static_cast<sal_Int32>(strlen(s_sReportsCID)) )
+            else if ( !m_bCreateForm && o3tl::make_unsigned(sCID.getLength()) != strlen(s_sReportsCID) )
                 sPath = sCID.copy(strlen(s_sReportsCID) - 2);
 
             m_xFTCurrentPath->set_label(sPath);

@@ -68,6 +68,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
+#include <o3tl/safeint.hxx>
 #include <sal/macros.h>
 #include <svl/numformat.hxx>
 #include <tools/diagnose_ex.h>
@@ -1393,7 +1394,7 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
         aFiltersRange[i] = rFilters[i];
 
     uno::Sequence<double> aRes = xDPResults->getFilteredResults(aFilters);
-    if (static_cast<sal_Int32>(nDataIndex) >= aRes.getLength())
+    if (nDataIndex >= o3tl::make_unsigned(aRes.getLength()))
         return std::numeric_limits<double>::quiet_NaN();
 
     return aRes[nDataIndex];

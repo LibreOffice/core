@@ -19,6 +19,7 @@
 
 #include <conditionalexpression.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 
@@ -108,7 +109,7 @@ namespace rptui
         bool bHaveRHS( nRHSIndex != -1 );
         sal_Int32 nRightMostIndex( bHaveRHS ? nRHSIndex : nLHSIndex );
         const std::u16string_view sMatchExprPart3( sMatchExpression.subView( nRightMostIndex + 2 ) );
-        if ( _rExpression.getLength() < static_cast<sal_Int32>(sMatchExprPart3.size()) )
+        if ( o3tl::make_unsigned(_rExpression.getLength()) < sMatchExprPart3.size() )
             // the expression is not even long enough to hold the right-most part of the match expression
             return false;
         const std::u16string_view sExprPart3( _rExpression.subView( _rExpression.getLength() - sMatchExprPart3.size() ) );
