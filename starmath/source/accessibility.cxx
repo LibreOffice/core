@@ -84,8 +84,7 @@ void SmGraphicAccessible::ClearWin()
 
     if ( nClientId )
     {
-        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, *this );
-        nClientId =  0;
+        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( std::exchange(nClientId, 0), *this );
     }
 }
 
@@ -391,8 +390,7 @@ void SAL_CALL SmGraphicAccessible::removeAccessibleEventListener(
         // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
         // and at least to us not firing any events anymore, in case somebody calls
         // NotifyAccessibleEvent, again
-        comphelper::AccessibleEventNotifier::revokeClient( nClientId );
-        nClientId = 0;
+        comphelper::AccessibleEventNotifier::revokeClient( std::exchange(nClientId, 0) );
     }
 }
 

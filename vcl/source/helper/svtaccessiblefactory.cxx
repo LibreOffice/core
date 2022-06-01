@@ -82,6 +82,15 @@ namespace vcl
                 return nullptr;
             }
 
+            virtual css::uno::Reference< css::accessibility::XAccessible >
+                createAccessibleIconView(
+                    SvTreeListBox& /*_rListBox*/,
+                    const css::uno::Reference< css::accessibility::XAccessible >& /*_xParent*/
+                ) const override
+            {
+                return nullptr;
+            }
+
             virtual vcl::IAccessibleBrowseBox*
                 createAccessibleBrowseBox(
                     const css::uno::Reference< css::accessibility::XAccessible >& /*_rxParent*/,
