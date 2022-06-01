@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <utility>
 #include "logindlg.hxx"
 
 #ifdef UNX
@@ -111,7 +112,7 @@ IMPL_LINK_NOARG(LoginDialog, UseSysCredsHdl_Impl, weld::Toggleable&, void)
 }
 
 LoginDialog::LoginDialog(weld::Window* pParent, LoginFlags nFlags,
-    const OUString& rServer, const OUString& rRealm)
+    OUString aServer, OUString aRealm)
     : GenericDialogController(pParent, "uui/ui/logindialog.ui", "LoginDialog")
     , m_xErrorFT(m_xBuilder->weld_label("errorft"))
     , m_xErrorInfo(m_xBuilder->weld_label("errorinfo"))
@@ -125,7 +126,7 @@ LoginDialog::LoginDialog(weld::Window* pParent, LoginFlags nFlags,
     , m_xSavePasswdBtn(m_xBuilder->weld_check_button("remember"))
     , m_xUseSysCredsCB(m_xBuilder->weld_check_button("syscreds"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
-    , m_server(rServer), m_realm(rRealm)
+    , m_server(std::move(aServer)), m_realm(std::move(aRealm))
 {
     if ( !( nFlags & LoginFlags::NoUseSysCreds ) )
       EnableUseSysCredsControls_Impl( m_xUseSysCredsCB->get_active() );
