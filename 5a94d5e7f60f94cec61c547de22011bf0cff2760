@@ -46,6 +46,30 @@
       },
       "revId": "5a94d5e7f60f94cec61c547de22011bf0cff2760",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47c9b6e2_e8b59e15",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-01T10:30:44Z",
+      "side": 1,
+      "message": "Crashreporting is only available for windows and linux, so those are the two systems in question - but even if it wasn\u0027t: the main point I was making is having a useless function that just returns its default parameter and nothing else and is also only used once, so it is superfluous. getting rid of that indirection is a valid solution to the problem.\n\nThe point about making the function do some validation was given as one of the ways keeping the function would make sense. It could ensure that the platforms are really valid strings (but that\u0027s not necessarily, the strings are informational/for human use only, so typos or non-matching values don\u0027t do any real harm.",
+      "parentUuid": "0a528330_a4482a69",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 0
+      },
+      "revId": "5a94d5e7f60f94cec61c547de22011bf0cff2760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

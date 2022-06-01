@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d7debae_9e8ea505",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-01T10:30:44Z",
+      "side": 1,
+      "message": "see comment - typo in the argument check, the erroring out is not a big deal/can live without. After all the script is only used by a handful people, so no need to make it bullet-proof",
+      "revId": "f507245866c0070f93d68e0121f83ec0a187f971",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "983cd540_aa473644",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-01T10:30:44Z",
+      "side": 1,
+      "message": "typo should check for --platform otherwise it duplicates the check above / is a noop.\nguess it is a matter of preference if you put the len(sys.argv) \u003e 4 into an encapsulating if or query it both timnes.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 57
+      },
+      "revId": "f507245866c0070f93d68e0121f83ec0a187f971",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18ccc7be_a04a9156",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-01T10:30:44Z",
+      "side": 1,
+      "message": "arguably should print an error here and abort, using --platform without value doesn\u0027t make sense.\nAlso wouldn\u0027t fit the help/usgage output that specifies either Windows or Linux as valid and required argument.\n\ninstead of checking for \u003e 5, you could also check for exactly 6, since anything else also is a mistake, multi word platform values are not accepted/expected, and even if it were, for the script to properly use them they would need to be quoted so they are treated as a single argument. (but fine to keep it with the \u003e 5, the system one also had it like that for ages and just silently ignored any additional parameters)",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 48
+      },
+      "revId": "f507245866c0070f93d68e0121f83ec0a187f971",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
