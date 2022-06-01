@@ -125,7 +125,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <utility>
 #include <rtl/strbuf.hxx>
 #include <tools/time.hxx>
 #include <memory>
