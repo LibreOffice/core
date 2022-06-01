@@ -64,8 +64,6 @@ $(eval $(call gb_Library_use_libraries,sm,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sm,\
-        starmath/source/AccessibleSmElement \
-        starmath/source/AccessibleSmElementsControl \
         starmath/source/ElementsDockingWindow \
         starmath/source/SmElementsPanel \
         starmath/source/SmPanelFactory \
@@ -94,7 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/symbol \
         starmath/source/tmpdevice \
         starmath/source/typemap \
-        starmath/source/uiobject \
         starmath/source/unodoc \
         starmath/source/unofilter \
         starmath/source/unomodel \
