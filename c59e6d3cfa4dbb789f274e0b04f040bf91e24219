@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dc11735_c24a6945",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Linguistic.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-01T08:21:12Z",
+      "side": 1,
+      "message": "here and elsewhere: or, you can just drop the implied `oor:nillable\u003d\"true\"` (and this is something that survives into the .xcd files processed at runtime, so cutting its size ever so slightly will improve start-up time ever so slightly...)",
+      "range": {
+        "startLine": 384,
+        "startChar": 56,
+        "endLine": 384,
+        "endChar": 75
+      },
+      "revId": "c59e6d3cfa4dbb789f274e0b04f040bf91e24219",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc46ab08_b85c6831",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Linguistic.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-01T08:21:12Z",
+      "side": 1,
+      "message": "here and elsewhere: you should drop those empty string values, and instead let the nil default values kick in",
+      "range": {
+        "startLine": 389,
+        "startChar": 12,
+        "endLine": 389,
+        "endChar": 27
+      },
+      "revId": "c59e6d3cfa4dbb789f274e0b04f040bf91e24219",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
