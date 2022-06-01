@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdd27783_e1045925",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Linguistic.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-01T10:15:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9dc11735_c24a6945",
+      "range": {
+        "startLine": 384,
+        "startChar": 56,
+        "endLine": 384,
+        "endChar": 75
+      },
+      "revId": "c59e6d3cfa4dbb789f274e0b04f040bf91e24219",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc46ab08_b85c6831",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-06-01T08:21:12Z",
       "side": 1,
       "message": "here and elsewhere: you should drop those empty string values, and instead let the nil default values kick in",
+      "range": {
+        "startLine": 389,
+        "startChar": 12,
+        "endLine": 389,
+        "endChar": 27
+      },
+      "revId": "c59e6d3cfa4dbb789f274e0b04f040bf91e24219",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88588404_c4e0f59f",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Linguistic.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-01T10:15:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc46ab08_b85c6831",
       "range": {
         "startLine": 389,
         "startChar": 12,
