@@ -16,6 +16,23 @@
       "message": "Note: This works on my machine and the output file is a working GZ archive that can be uncompressed with gzip. CRC32 and size are set correctly.",
       "revId": "d0a749496c83a0c99d3e41248e295ebdf4bcd449",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5495d33_874aa501",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-01T06:23:37Z",
+      "side": 1,
+      "message": "\u003e error: unknown type name \"OString\" in file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/include/tools/zcodec.hxx ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/114967/ )\n\nMissing rtl/string.hxx include for rtl::OString?",
+      "revId": "d0a749496c83a0c99d3e41248e295ebdf4bcd449",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
