@@ -92,7 +92,6 @@ void QtGraphics::GetDevFontList(vcl::font::PhysicalFontCollection* pPFC)
     if (pPFC->Count())
         return;
 
-    QFontDatabase aFDB;
     FreetypeManager& rFontManager = FreetypeManager::get();
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     ::std::vector<psp::fontID> aList;
@@ -118,9 +117,16 @@ void QtGraphics::GetDevFontList(vcl::font::PhysicalFontCollection* pPFC)
     if (bUseFontconfig)
         SalGenericInstance::RegisterFontSubstitutors(pPFC);
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    for (auto& family : QFontDatabase::families())
+        for (auto& style : QFontDatabase::styles(family))
+            pPFC->Add(QtFontFace::fromQFontDatabase(family, style));
+#else
+    QFontDatabase aFDB;
     for (auto& family : aFDB.families())
         for (auto& style : aFDB.styles(family))
             pPFC->Add(QtFontFace::fromQFontDatabase(family, style));
+#endif
 }
 
 void QtGraphics::ClearDevFontCache() {}
