@@ -245,7 +245,6 @@ void AffineBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
     if (m_innerThreadId == 0) // no inner thread yet
     {
         m_pInnerThread.reset(new InnerThread(this));
-        m_pInnerThread->resume();
     }
 
     bool bResetId = false;
