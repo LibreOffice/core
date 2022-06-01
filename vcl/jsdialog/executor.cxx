@@ -174,29 +174,33 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
             {
                 if (sAction == "click")
                 {
-                    int separatorPos = rData["data"].indexOf(';');
-                    if (separatorPos > 0)
+                    int nSeparatorPos = rData["data"].indexOf(';');
+                    if (nSeparatorPos > 0)
                     {
                         // x;y
-                        std::string_view clickPosX = OUStringToOString(
-                            rData["data"].subView(0, separatorPos), RTL_TEXTENCODING_ASCII_US);
-                        std::string_view clickPosY = OUStringToOString(
-                            rData["data"].subView(separatorPos + 1), RTL_TEXTENCODING_ASCII_US);
-                        if (!clickPosX.empty() && !clickPosY.empty())
-                        {
-                            double posX = std::atof(clickPosX.data());
-                            double posY = std::atof(clickPosY.data());
-                            OutputDevice& rRefDevice = pArea->get_ref_device();
-                            // We send OutPutSize for the drawing area bitmap
-                            // get_size_request is not necessarily updated
-                            // therefore it may be incorrect.
-                            Size size = rRefDevice.GetOutputSize();
-                            posX = posX * size.Width();
-                            posY = posY * size.Height();
-                            LOKTrigger::trigger_click(*pArea, Point(posX, posY));
+                        std::u16string_view nClickPosX = rData["data"].subView(0, nSeparatorPos);
+                        std::u16string_view nClickPosY = rData["data"].subView(nSeparatorPos + 1);
+
+                        if (nClickPosX.empty() || nClickPosY.empty())
                             return true;
-                        }
+
+                        double posX = std::atof(
+                            OUStringToOString(nClickPosX.data(), RTL_TEXTENCODING_ASCII_US)
+                                .getStr());
+                        double posY = std::atof(
+                            OUStringToOString(nClickPosY.data(), RTL_TEXTENCODING_ASCII_US)
+                                .getStr());
+                        OutputDevice& rRefDevice = pArea->get_ref_device();
+                        // We send OutPutSize for the drawing area bitmap
+                        // get_size_request is not necessarily updated
+                        // therefore it may be incorrect.
+                        Size size = rRefDevice.GetOutputSize();
+                        posX = posX * size.Width();
+                        posY = posY * size.Height();
+                        LOKTrigger::trigger_click(*pArea, Point(posX, posY));
+                        return true;
                     }
+
                     LOKTrigger::trigger_click(*pArea, Point(10, 10));
                     return true;
                 }
