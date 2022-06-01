@@ -1750,6 +1750,7 @@ private:
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(TooltipHdl, const HelpEvent&, bool);
+    DECL_LINK(EntryAccessibleDescriptionHdl, SvTreeListEntry*, OUString);
 
 public:
     SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder, bool bTakeOwnership);

@@ -440,33 +440,12 @@ namespace accessibility
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if( getAccessibleRole() == AccessibleRole::TREE_ITEM )
         {
             return OUString();
         }
-        //want to count the real column number in the list box.
-        sal_uInt16 iRealItemCount = 0;
-        sal_uInt16 iCount = 0;
-        sal_uInt16 iTotleItemCount = pEntry->ItemCount();
-        while( iCount < iTotleItemCount )
-        {
-            const SvLBoxItem& rItem = pEntry->GetItem( iCount );
-            if ( rItem.GetType() == SvLBoxItemType::String &&
-                 !static_cast<const SvLBoxString&>( rItem ).GetText().isEmpty() )
-            {
-                iRealItemCount++;
-            }
-            iCount++;
-        }
-        if(iRealItemCount<=1  )
-        {
-            return OUString();
-        }
-        else
-        {
-            return SvTreeListBox::SearchEntryTextWithHeadTitle( pEntry );
-        }
+        return m_pTreeListBox->GetEntryAccessibleDescription(
+            m_pTreeListBox->GetEntryFromPath(m_aEntryPath));
     }
 
     OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  )

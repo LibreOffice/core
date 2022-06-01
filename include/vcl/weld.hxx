@@ -1328,7 +1328,10 @@ protected:
 
     void signal_selection_changed() { m_aSelectionChangeHdl.Call(*this); }
     bool signal_item_activated() { return m_aItemActivatedHdl.Call(*this); }
-    OUString signal_query_tooltip(const TreeIter& rIter) { return m_aQueryTooltipHdl.Call(rIter); }
+    OUString signal_query_tooltip(const TreeIter& rIter) const
+    {
+        return m_aQueryTooltipHdl.Call(rIter);
+    }
 
 public:
     virtual int get_item_width() const = 0;
