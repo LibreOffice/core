@@ -87,9 +87,9 @@
  # Also, -z defs conflicts with Address Sanitizer, which emits relocations
  # against the libsanitizer runtime built into the main executable.
  ZDEFS_FLAG		= -Wl,-z,defs
--DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG))
-+DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) $(if $(filter-out $(OS),ANDROID),-Wl$(COMMA)-z$(COMMA)origin '-Wl$(COMMA)-rpath$(COMMA)$$ORIGIN')
- LDFLAGS			+= $(ARCHFLAG) -z noexecstack
+-DSO_LDOPTS     += $(if $(findstring 2.11.90.0.8,$(shell $(LD) -v)),,$(ZDEFS_FLAG))
++DSO_LDOPTS     += $(if $(findstring 2.11.90.0.8,$(shell $(LD) -v)),,$(ZDEFS_FLAG)) $(if $(filter-out $(OS),ANDROID),-Wl$(COMMA)-z$(COMMA)origin '-Wl$(COMMA)-rpath$(COMMA)$$ORIGIN')
+ LDFLAGS		   += $(ARCHFLAG) -z noexecstack
  
  # On Maemo, we need to use the -rpath-link flag for even the standard system
 @@ -177,8 +177,13 @@
