@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0df99ca1_c99851ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-01T08:27:15Z",
+      "side": 1,
+      "message": "Hi Caolan, Michael!\nCould you please take a look what I\u0027m doing wrong here?\nI need an a11y for IconView, that would at least provide selected item name, when I drop the custom SM elements control and its custom a11y in https://gerrit.libreoffice.org/c/core/+/134761. But building the https://gerrit.libreoffice.org/c/core/+/134761 with all the chained dependency commits, I try NVDA on my Windows, and do not hear the names of the elements - no matter if I hover over using mouse, or click in the elements.\n\nI am completely noob in a11y, so obviously I do stupid things in a trained monkey way. Appreciate any pointers! Thank you.",
+      "revId": "882d6059136e3d2f5c292162f19cd94b9943d2f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
