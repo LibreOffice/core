@@ -18,7 +18,7 @@
 
 namespace o3tl
 {
-// An implementation of the C++23 integer comparison functions
+// An approximation of the C++20 integer comparison functions
 // (<https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0586r2.html> "Safe integral
 // comparisons"):
 #if defined __cpp_lib_integer_comparison_functions
