@@ -33,6 +33,23 @@
       "message": "\u003e error: unknown type name \"OString\" in file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/include/tools/zcodec.hxx ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/114967/ )\n\nMissing rtl/string.hxx include for rtl::OString?",
       "revId": "d0a749496c83a0c99d3e41248e295ebdf4bcd449",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d87a165f_d2429929",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-01T06:42:25Z",
+      "side": 1,
+      "message": "em... we use Zlib not CLucene or deflate, no?",
+      "revId": "d0a749496c83a0c99d3e41248e295ebdf4bcd449",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
