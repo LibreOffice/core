@@ -416,7 +416,7 @@
           will be ignored. If ignored, when new text is typed that text will
           follow the language of the document or current paragraph, not the
           current system language.</desc>
-          <label>Ignore system input language.</label>
+          <label>Input method changes language.</label>
         </info>
         <value>false</value>
       </prop>
