@@ -69,6 +69,7 @@ gboolean signalFormulabar(GtkWidget* /*pWidget*/, GdkEventKey* /*pEvent*/, gpoin
 
 void changeContentControl(GtkWidget* pSelector, gpointer /*pItem*/);
 
+void changeDateContentControl(GtkWidget* pSelector, gpointer /*pItem*/);
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

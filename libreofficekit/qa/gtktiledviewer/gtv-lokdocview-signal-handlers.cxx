@@ -229,6 +229,9 @@ void LOKDocViewSigHandlers::contentControl(LOKDocView* pDocView, gchar* pJson, g
         }
     }
 
+    boost::optional<boost::property_tree::ptree&> oDate = aTree.get_child_optional("date");
+    gtk_widget_set_sensitive(GTK_WIDGET(toolbar->m_pContentControlDateSelector), bool(oDate));
+
     gtv_application_window_set_part_broadcast(window, true);
 }
 
