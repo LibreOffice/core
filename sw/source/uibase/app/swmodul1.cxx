@@ -424,6 +424,11 @@ OUString const & SwModule::GetRedlineAuthor(std::size_t nPos)
     return m_pAuthorNames[nPos];
 }
 
+void SwModule::ClearRedlineAuthors()
+{
+    m_pAuthorNames.clear();
+}
+
 static Color lcl_GetAuthorColor(std::size_t nPos)
 {
     static const Color aColArr[] =

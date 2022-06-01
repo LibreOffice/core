@@ -198,6 +198,7 @@ public:
     // Redlining.
     std::size_t         GetRedlineAuthor();
     OUString const &    GetRedlineAuthor(std::size_t nPos);
+    void ClearRedlineAuthors();
     /// See SwXTextDocument::getTrackedChangeAuthors().
     void                GetRedlineAuthorInfo(tools::JsonWriter& rJsonWriter);
     std::size_t         InsertRedlineAuthor(const OUString& rAuthor);
