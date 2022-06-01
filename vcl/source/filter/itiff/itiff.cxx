@@ -37,9 +37,11 @@ namespace
     {
         SvStream& rStream;
         tsize_t nSize;
+        int nShortReads;
         Context(SvStream& rInStream, tsize_t nInSize)
             : rStream(rInStream)
             , nSize(nInSize)
+            , nShortReads(0)
         {
         }
     };
@@ -48,7 +50,16 @@ namespace
 static tsize_t tiff_read(thandle_t handle, tdata_t buf, tsize_t size)
 {
     Context* pContext = static_cast<Context*>(handle);
-    return pContext->rStream.ReadBytes(buf, size);
+    tsize_t nRead = pContext->rStream.ReadBytes(buf, size);
+    // tdf#149417 allow one short read, which is similar to what
+    // we do for jpeg since tdf#138950
+    if (nRead < size && !pContext->nShortReads)
+    {
+        memset(static_cast<char*>(buf) + nRead, 0, size - nRead);
+        ++pContext->nShortReads;
+        return size;
+    }
+    return nRead;
 }
 
 static tsize_t tiff_write(thandle_t, tdata_t, tsize_t)
