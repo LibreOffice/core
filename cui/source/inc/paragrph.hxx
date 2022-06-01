@@ -233,6 +233,7 @@ private:
     std::unique_ptr<weld::Label> m_xMaxHyphenLabel;
     std::unique_ptr<weld::SpinButton> m_xMaxHyphenEdit;
     std::unique_ptr<weld::SpinButton> m_xMinWordLength;
+    std::unique_ptr<SvxRelativeField> m_xHyphenZone;
 
     // pagebreak
     std::unique_ptr<weld::CheckButton> m_xPageBreakBox;
