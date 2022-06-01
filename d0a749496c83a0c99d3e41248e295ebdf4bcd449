@@ -50,6 +50,23 @@
       "message": "em... we use Zlib not CLucene or deflate, no?",
       "revId": "d0a749496c83a0c99d3e41248e295ebdf4bcd449",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0602467_4da820a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-01T06:45:08Z",
+      "side": 1,
+      "message": "Next would be to add unit tests for ZCodec as they seem missing. Would be better to add tests first and then change the functionality so you would be sure that your change doesn\u0027t create a regression.",
+      "revId": "d0a749496c83a0c99d3e41248e295ebdf4bcd449",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
