@@ -27,6 +27,7 @@
 
 #include <memory>
 #include <vector>
+#include <optional>
 
 namespace {
 
