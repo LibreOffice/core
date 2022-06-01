@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/errcode.hxx>
@@ -1534,7 +1535,7 @@ static Any invokeAutomationMethod( const OUString& Name, Sequence< Any > const &
         for( sal_uInt32 j = 0 ; j < nLen ; j++ )
         {
             sal_Int16 iTarget = pIndices[ j ];
-            if( iTarget >= static_cast<sal_Int16>(nParamCount) )
+            if( o3tl::make_unsigned(iTarget) >= nParamCount )
                 break;
             unoToSbxValue(pParams->Get(j + 1), pNewValues[j]);
         }
