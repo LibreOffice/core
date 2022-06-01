@@ -28,6 +28,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <utility>
 
 #define DEBUG_MSO_ENCRYPTION_STD97 0
 
@@ -246,8 +247,8 @@ void MSCodec_Xor95::Skip( std::size_t nBytes )
     mnOffset = (mnOffset + nBytes) & 0x0F;
 }
 
-MSCodec97::MSCodec97(size_t nHashLen, const OUString& rEncKeyName)
-    : m_sEncKeyName(rEncKeyName)
+MSCodec97::MSCodec97(size_t nHashLen, OUString aEncKeyName)
+    : m_sEncKeyName(std::move(aEncKeyName))
     , m_nHashLen(nHashLen)
     , m_hCipher(rtl_cipher_create(rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream))
     , m_aDocId(16, 0)

@@ -57,7 +57,7 @@ class GraphicExportFilter :
             const css::uno::Reference< css::drawing::XShape > & rxShape ) const;
 
 public:
-    explicit GraphicExportFilter( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+    explicit GraphicExportFilter( css::uno::Reference< css::uno::XComponentContext > xContext );
     virtual ~GraphicExportFilter() override;
 
     //  XServiceInfo

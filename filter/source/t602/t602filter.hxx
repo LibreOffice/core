@@ -224,8 +224,8 @@ private:
     bool importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
     public:
-        explicit T602ImportFilter(const css::uno::Reference<css::uno::XComponentContext > &r );
-        explicit T602ImportFilter(css::uno::Reference<css::io::XInputStream> const & xInputStream);
+        explicit T602ImportFilter(css::uno::Reference<css::uno::XComponentContext > x );
+        explicit T602ImportFilter(css::uno::Reference<css::io::XInputStream> xInputStream);
         virtual ~T602ImportFilter() override;
 
     // XFilter

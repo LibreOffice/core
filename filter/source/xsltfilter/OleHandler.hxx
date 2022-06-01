@@ -13,6 +13,7 @@
 #include <cstring>
 #include <map>
 #include <string_view>
+#include <utility>
 #include <vector>
 #include <iostream>
 #include <libxml/parser.h>
@@ -56,8 +57,8 @@ namespace XSLT
     class OleHandler
     {
     public:
-        OleHandler(const css::uno::Reference<XComponentContext>& rxContext)
-            : m_xContext(rxContext)
+        OleHandler(css::uno::Reference<XComponentContext> xContext)
+            : m_xContext(std::move(xContext))
             , m_tcontext(nullptr)
         {
         }

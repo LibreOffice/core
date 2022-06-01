@@ -48,7 +48,7 @@ namespace com::sun::star {
 class MSFILTER_DLLPUBLIC SvxMSConvertOCXControls
 {
 public:
-    SvxMSConvertOCXControls( const  css::uno::Reference< css::frame::XModel >& xModel );
+    SvxMSConvertOCXControls( css::uno::Reference< css::frame::XModel > xModel );
     virtual ~SvxMSConvertOCXControls();
 
     virtual bool InsertControl(

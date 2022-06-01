@@ -723,7 +723,7 @@ struct PPTBuGraEntry
     sal_uInt32  nInstance;
     Graphic     aBuGra;
 
-                PPTBuGraEntry( Graphic const & rGraphic, sal_uInt32 nInstance );
+                PPTBuGraEntry( Graphic aGraphic, sal_uInt32 nInstance );
 };
 
 class PPTExtParaProv

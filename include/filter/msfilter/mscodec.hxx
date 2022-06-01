@@ -179,7 +179,7 @@ public:
 class MSFILTER_DLLPUBLIC MSCodec97
 {
 public:
-    MSCodec97(size_t nHashLen, const OUString& rEncKeyName);
+    MSCodec97(size_t nHashLen, OUString aEncKeyName);
     virtual ~MSCodec97();
 
     /** Initializes the algorithm with the encryption data.

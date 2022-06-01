@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 namespace com::sun::star::uno {
     class XComponentContext;
@@ -38,8 +39,8 @@ class FilterDetect final : public cppu::WeakImplHelper <
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
 
 public:
-    explicit FilterDetect( const css::uno::Reference< css::uno::XComponentContext > &rxCtx)
-        : mxCtx( rxCtx ) {}
+    explicit FilterDetect( css::uno::Reference< css::uno::XComponentContext > xCtx)
+        : mxCtx(std::move( xCtx )) {}
 
     //XExtendedFilterDetection
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) override;
