@@ -26,90 +26,44 @@
 
 #include "node.hxx"
 #include "parsebase.hxx"
-#include "AccessibleSmElementsControl.hxx"
+
+#include <memory>
+#include <vector>
 
 class SmDocShell;
+class SvTreeListBox;
+struct ElementData;
 
-class SmElement
+class SmElementsControl
 {
-    std::unique_ptr<SmNode> mpNode;
-    OUString                maText;
-    OUString                maHelpText;
-
-public:
-    Point mBoxLocation;
-    Size  mBoxSize;
-
-    SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, const OUString& aHelpText);
-    virtual ~SmElement();
-
-    const std::unique_ptr<SmNode>& getNode() const;
-    const OUString& getText() const { return maText; }
-    const OUString& getHelpText() const { return maHelpText; }
-
-    virtual bool isSeparator() const { return false; }
-};
-
-class SmElementSeparator final : public SmElement
-{
-public:
-    SmElementSeparator();
-
-    bool isSeparator() const override { return true; }
-};
-
-class SmElementsControl : public weld::CustomWidgetController
-{
-    friend class ElementSelectorUIObject;
-    friend class ElementUIObject;
-
     std::unique_ptr<AbstractSmParser> maParser;
-
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual bool MouseMove(const MouseEvent& rMEvt) override;
-    virtual OUString RequestHelp(tools::Rectangle& rRect) override;
-    virtual void Resize() override;
-    virtual void GetFocus() override;
-    virtual void LoseFocus() override;
-    virtual bool KeyInput(const KeyEvent& rKEvt) override;
-    css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
     SmDocShell*   mpDocShell;
     SmFormat      maFormat;
     TranslateId   msCurrentSetId;
-    sal_uInt16    m_nCurrentElement;
-    sal_uInt16    m_nCurrentRolloverElement;
-    sal_uInt16    m_nCurrentOffset;
     sal_uInt16    m_nSmSyntaxVersion;
-    Link<SmElement&,void> maSelectHdlLink;
 
-    std::vector< std::unique_ptr<SmElement> > maElementList;
-    Size          maMaxElementDimensions;
     bool          mbVerticalMode;
-    std::unique_ptr<weld::ScrolledWindow> mxScroll;
-    bool m_bFirstPaintAfterLayout;
-    rtl::Reference<AccessibleSmElementsControl> m_xAccessible;
+    std::vector<std::unique_ptr<ElementData>> maItemDatas;
+    std::unique_ptr<weld::IconView> mpIconView;
+
+    Link<OUString, void> maSelectHdlLink;
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
-    SmElement* current() const;
-    void setCurrentElement(sal_uInt16);
-    bool hasRollover() const { return m_nCurrentRolloverElement != SAL_MAX_UINT16; }
-
-    void stepFocus(const bool bBackward);
-    void pageFocus(const bool bBackward);
-    // common code of page and step focus
-    inline void scrollToElement(const bool, const SmElement*);
-    inline sal_uInt16 nextElement(const bool, const sal_uInt16, const sal_uInt16);
+    void addElements(const TranslateId& rCategory);
 
     void build();
 
-    //if bDraw is true, then draw, otherwise just layout
-    void LayoutOrPaintContents(vcl::RenderContext& rContext, bool bDraw);
+    DECL_LINK(QueryTooltipHandler, const weld::TreeIter&, OUString);
+    DECL_LINK(ElementActivatedHandler, weld::IconView&, bool);
+
+    static OUString GetElementSource(const OUString& itemId);
+    static OUString GetElementHelpText(const OUString& itemId);
 
 public:
-    explicit SmElementsControl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
-    virtual ~SmElementsControl() override;
+
+    explicit SmElementsControl(std::unique_ptr<weld::IconView> pIconView);
+    ~SmElementsControl();
 
     static const std::vector<TranslateId>& categories();
     const TranslateId& elementSetId() const { return msCurrentSetId; }
@@ -117,41 +71,23 @@ public:
 
     void setVerticalMode(bool bVertical);
 
-    sal_uInt16 itemCount() const;
-    sal_uInt16 itemHighlighted() const;
-    sal_uInt16 itemAtPos(const Point& rPos) const;
-    tools::Rectangle itemPosRect(sal_uInt16) const;
-    bool itemIsSeparator(sal_uInt16) const;
-    bool itemIsVisible(sal_uInt16) const;
-    OUString itemName(sal_uInt16) const;
-    bool itemTrigger(sal_uInt16);
-    void setItemHighlighted(sal_uInt16);
     void setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion);
-    sal_uInt16 itemOffset() const { return m_nCurrentOffset; }
 
-    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    void SetSelectHdl(const Link<OUString, void>& rLink) { maSelectHdlLink = rLink; }
 
-    DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void );
-
-    void SetSelectHdl(const Link<SmElement&,void>& rLink) { maSelectHdlLink = rLink; }
-
-    const rtl::Reference<AccessibleSmElementsControl> & GetAccessible() const { return m_xAccessible; }
     static Color GetTextColor();
     static Color GetControlBackground();
-
-    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 class SmElementsDockingWindow final : public SfxDockingWindow
 {
     std::unique_ptr<SmElementsControl> mxElementsControl;
-    std::unique_ptr<weld::CustomWeld> mxElementsControlWin;
     std::unique_ptr<weld::ComboBox> mxElementListBox;
 
     virtual void Resize() override;
     SmViewShell* GetView();
 
-    DECL_LINK(SelectClickHandler, SmElement&, void);
+    DECL_LINK(SelectClickHandler, OUString, void);
     DECL_LINK(ElementSelectedHandle, weld::ComboBox&, void);
 
 public:

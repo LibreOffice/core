@@ -41,7 +41,7 @@ public:
 
 private:
     DECL_LINK(CategorySelectedHandle, weld::TreeView&, void);
-    DECL_LINK(ElementClickHandler, SmElement&, void);
+    DECL_LINK(ElementClickHandler, OUString, void);
 
     SmViewShell* GetView() const;
 
@@ -49,7 +49,6 @@ private:
 
     std::unique_ptr<weld::TreeView> mxCategoryList;
     std::unique_ptr<SmElementsControl> mxElementsControl;
-    std::unique_ptr<weld::CustomWeld> mxElementsControlWin;
 };
 
 } // end of namespace sm::sidebar

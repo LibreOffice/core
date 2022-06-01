@@ -43,7 +43,6 @@ class SimpleMathTest(UITestCase):
 
             self.assertEqual("E=mc^2", get_state_as_dict(xEditView)["Text"])
 
-    @unittest.skipIf(platform.system() == "Windows", "on windows the f4 does not always work")
     def test_complete_math(self):
         with self.ui_test.create_doc_in_start_center("math"):
 
@@ -56,10 +55,10 @@ class SimpleMathTest(UITestCase):
             state = get_state_as_dict(xList)
             self.assertEqual(state["SelectEntryText"], "Relations")
 
-            xMathSelector = xMathDoc.getChild("element_selector")
+            xMathSelector = xMathDoc.getChild("elements")
 
             xElement = xMathSelector.getChild("1")
-            xElement.executeAction("SELECT", tuple())
+            xElement.executeAction("DOUBLECLICK", tuple())
 
             xEditView = xMathDoc.getChild("editview")
             type_text(xEditView, "1")
