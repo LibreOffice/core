@@ -269,6 +269,8 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
         else
         {
             const SwFrameFormat *pRight = rHead.GetHeaderFormat();
+            if (!pRight)
+                return;
             const SwFormatContent &aRCnt = pRight->GetContent();
             const SwFormatContent &aCnt = rFormatHead.GetHeaderFormat()->GetContent();
 
@@ -344,6 +346,8 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
         else
         {
             const SwFrameFormat *pRight = rFoot.GetFooterFormat();
+            if (!pRight)
+                return;
             const SwFormatContent &aRCnt = pRight->GetContent();
             const SwFormatContent &aLCnt = rFormatFoot.GetFooterFormat()->GetContent();
             if( !aLCnt.GetContentIdx() )
