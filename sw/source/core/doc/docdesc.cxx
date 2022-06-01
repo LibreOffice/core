@@ -268,8 +268,6 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
         }
         else
         {
-            const SwFrameFormat *pRight = rHead.GetHeaderFormat();
-            const SwFormatContent &aRCnt = pRight->GetContent();
             const SwFormatContent &aCnt = rFormatHead.GetHeaderFormat()->GetContent();
 
             if (!aCnt.GetContentIdx())
@@ -277,36 +275,44 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
                 const SwFrameFormat& rChgedFrameFormat = getConstFrameFormat(rChged, bLeft, bFirst);
                 rDescFrameFormat.SetFormatAttr( rChgedFrameFormat.GetHeader() );
             }
-            else if ((*aRCnt.GetContentIdx() == *aCnt.GetContentIdx()) ||
-                // The ContentIdx is _always_ different when called from
-                // SwDocStyleSheet::SetItemSet, because it deep-copies the
-                // PageDesc.  So check if it was previously shared.
-                 (bFirst ? rDesc.IsFirstShared() : rDesc.IsHeaderShared()))
-            {
-                SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(),
-                        bFirst ? "First header" : "Left header",
-                                                GetDfltFrameFormat() );
-                ::lcl_DescSetAttr( *pRight, *pFormat, false );
-                // The section which the right header attribute is pointing
-                // is copied, and the Index to the StartNode is set to
-                // the left or first header attribute.
-                SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
-                SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmp, SwHeaderStartNode );
-                SwNodeRange aRange( aRCnt.GetContentIdx()->GetNode(), SwNodeOffset(0),
-                            *aRCnt.GetContentIdx()->GetNode().EndOfSectionNode() );
-                aTmp = *pSttNd->EndOfSectionNode();
-                GetNodes().Copy_( aRange, aTmp, false );
-                aTmp = *pSttNd;
-                GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, nullptr, aTmp);
-                SwPaM const source(aRange.aStart, aRange.aEnd);
-                SwPosition dest(aTmp);
-                sw::CopyBookmarks(source, dest);
-                pFormat->SetFormatAttr( SwFormatContent( pSttNd ) );
-                rDescFrameFormat.SetFormatAttr( SwFormatHeader( pFormat ) );
-            }
             else
-                ::lcl_DescSetAttr( *pRight,
-                               *const_cast<SwFrameFormat*>(rFormatHead.GetHeaderFormat()), false );
+            {
+                const SwFrameFormat *pRight = rHead.GetHeaderFormat();
+                if (!pRight)
+                    return;
+                const SwFormatContent &aRCnt = pRight->GetContent();
+
+                if ((*aRCnt.GetContentIdx() == *aCnt.GetContentIdx()) ||
+                    // The ContentIdx is _always_ different when called from
+                    // SwDocStyleSheet::SetItemSet, because it deep-copies the
+                    // PageDesc.  So check if it was previously shared.
+                     (bFirst ? rDesc.IsFirstShared() : rDesc.IsHeaderShared()))
+                {
+                    SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(),
+                            bFirst ? "First header" : "Left header",
+                                                    GetDfltFrameFormat() );
+                    ::lcl_DescSetAttr( *pRight, *pFormat, false );
+                    // The section which the right header attribute is pointing
+                    // is copied, and the Index to the StartNode is set to
+                    // the left or first header attribute.
+                    SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
+                    SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmp, SwHeaderStartNode );
+                    SwNodeRange aRange( aRCnt.GetContentIdx()->GetNode(), SwNodeOffset(0),
+                                *aRCnt.GetContentIdx()->GetNode().EndOfSectionNode() );
+                    aTmp = *pSttNd->EndOfSectionNode();
+                    GetNodes().Copy_( aRange, aTmp, false );
+                    aTmp = *pSttNd;
+                    GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, nullptr, aTmp);
+                    SwPaM const source(aRange.aStart, aRange.aEnd);
+                    SwPosition dest(aTmp);
+                    sw::CopyBookmarks(source, dest);
+                    pFormat->SetFormatAttr( SwFormatContent( pSttNd ) );
+                    rDescFrameFormat.SetFormatAttr( SwFormatHeader( pFormat ) );
+                }
+                else
+                    ::lcl_DescSetAttr( *pRight,
+                                   *const_cast<SwFrameFormat*>(rFormatHead.GetHeaderFormat()), false );
+            }
         }
     }
 }
@@ -343,44 +349,50 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
         }
         else
         {
-            const SwFrameFormat *pRight = rFoot.GetFooterFormat();
-            const SwFormatContent &aRCnt = pRight->GetContent();
             const SwFormatContent &aLCnt = rFormatFoot.GetFooterFormat()->GetContent();
             if( !aLCnt.GetContentIdx() )
             {
                 const SwFrameFormat& rChgedFrameFormat = getConstFrameFormat(rChged, bLeft, bFirst);
                 rDescFrameFormat.SetFormatAttr( rChgedFrameFormat.GetFooter() );
             }
-            else if ((*aRCnt.GetContentIdx() == *aLCnt.GetContentIdx()) ||
-                // The ContentIdx is _always_ different when called from
-                // SwDocStyleSheet::SetItemSet, because it deep-copies the
-                // PageDesc.  So check if it was previously shared.
-                 (bFirst ? rDesc.IsFirstShared() : rDesc.IsFooterShared()))
-            {
-                SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(),
-                        bFirst ? "First footer" : "Left footer",
-                                                GetDfltFrameFormat() );
-                ::lcl_DescSetAttr( *pRight, *pFormat, false );
-                // The section to which the right footer attribute is pointing
-                // is copied, and the Index to the StartNode is set to
-                // the left footer attribute.
-                SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
-                SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmp, SwFooterStartNode );
-                SwNodeRange aRange( aRCnt.GetContentIdx()->GetNode(), SwNodeOffset(0),
-                            *aRCnt.GetContentIdx()->GetNode().EndOfSectionNode() );
-                aTmp = *pSttNd->EndOfSectionNode();
-                GetNodes().Copy_( aRange, aTmp, false );
-                aTmp = *pSttNd;
-                GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, nullptr, aTmp);
-                SwPaM const source(aRange.aStart, aRange.aEnd);
-                SwPosition dest(aTmp);
-                sw::CopyBookmarks(source, dest);
-                pFormat->SetFormatAttr( SwFormatContent( pSttNd ) );
-                rDescFrameFormat.SetFormatAttr( SwFormatFooter( pFormat ) );
-            }
             else
-                ::lcl_DescSetAttr( *pRight,
-                               *const_cast<SwFrameFormat*>(rFormatFoot.GetFooterFormat()), false );
+            {
+                const SwFrameFormat *pRight = rFoot.GetFooterFormat();
+                if (!pRight)
+                    return;
+                const SwFormatContent &aRCnt = pRight->GetContent();
+
+                if ((*aRCnt.GetContentIdx() == *aLCnt.GetContentIdx()) ||
+                    // The ContentIdx is _always_ different when called from
+                    // SwDocStyleSheet::SetItemSet, because it deep-copies the
+                    // PageDesc.  So check if it was previously shared.
+                     (bFirst ? rDesc.IsFirstShared() : rDesc.IsFooterShared()))
+                {
+                    SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(),
+                            bFirst ? "First footer" : "Left footer",
+                                                    GetDfltFrameFormat() );
+                    ::lcl_DescSetAttr( *pRight, *pFormat, false );
+                    // The section to which the right footer attribute is pointing
+                    // is copied, and the Index to the StartNode is set to
+                    // the left footer attribute.
+                    SwNodeIndex aTmp( GetNodes().GetEndOfAutotext() );
+                    SwStartNode* pSttNd = SwNodes::MakeEmptySection( aTmp, SwFooterStartNode );
+                    SwNodeRange aRange( aRCnt.GetContentIdx()->GetNode(), SwNodeOffset(0),
+                                *aRCnt.GetContentIdx()->GetNode().EndOfSectionNode() );
+                    aTmp = *pSttNd->EndOfSectionNode();
+                    GetNodes().Copy_( aRange, aTmp, false );
+                    aTmp = *pSttNd;
+                    GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRange, nullptr, aTmp);
+                    SwPaM const source(aRange.aStart, aRange.aEnd);
+                    SwPosition dest(aTmp);
+                    sw::CopyBookmarks(source, dest);
+                    pFormat->SetFormatAttr( SwFormatContent( pSttNd ) );
+                    rDescFrameFormat.SetFormatAttr( SwFormatFooter( pFormat ) );
+                }
+                else
+                    ::lcl_DescSetAttr( *pRight,
+                                   *const_cast<SwFrameFormat*>(rFormatFoot.GetFooterFormat()), false );
+            }
         }
     }
 }
