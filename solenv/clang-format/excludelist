@@ -13784,6 +13784,7 @@ tools/qa/cppunit/test_inetmime.cxx
 tools/qa/cppunit/test_reversemap.cxx
 tools/qa/cppunit/test_stream.cxx
 tools/qa/cppunit/test_urlobj.cxx
+tools/qa/cppunit/test_zcodec.cxx
 tools/source/datetime/datetime.cxx
 tools/source/datetime/datetimeutils.cxx
 tools/source/datetime/tdate.cxx
