@@ -85,6 +85,8 @@
 #include <salvtables.hxx>
 #include <comphelper/lok.hxx>
 
+#include "IconViewAccessible.hxx"
+
 SalFrame::SalFrame()
     : m_pWindow(nullptr)
     , m_pProc(nullptr)
@@ -5301,11 +5303,14 @@ SalInstanceIconView::SalInstanceIconView(::IconView* pIconView, SalInstanceBuild
                                          bool bTakeOwnership)
     : SalInstanceWidget(pIconView, pBuilder, bTakeOwnership)
     , m_xIconView(pIconView)
+    , m_pAccessible(new SalInstanceIconViewAccessible(*this))
 {
     m_xIconView->SetSelectHdl(LINK(this, SalInstanceIconView, SelectHdl));
     m_xIconView->SetDeselectHdl(LINK(this, SalInstanceIconView, DeSelectHdl));
     m_xIconView->SetDoubleClickHdl(LINK(this, SalInstanceIconView, DoubleClickHdl));
     m_xIconView->SetPopupMenuHdl(LINK(this, SalInstanceIconView, CommandHdl));
+
+    getWidget()->SetAccessible(m_pAccessible);
 }
 
 int SalInstanceIconView::get_item_width() const { return m_xIconView->GetEntryWidth(); }
@@ -5329,6 +5334,13 @@ void SalInstanceIconView::thaw()
     if (bIsLastThaw)
         m_xIconView->SetUpdateMode(true);
     SalInstanceWidget::thaw();
+    AccessibleAddAllIfNotFrozen();
+}
+
+void SalInstanceIconView::AccessibleAddAllIfNotFrozen() const
+{
+    if (!IsFirstFreeze())
+        m_pAccessible->AddAllItems();
 }
 
 void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* pId,
@@ -5366,6 +5378,8 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
         SalInstanceTreeIter* pVclRetIter = static_cast<SalInstanceTreeIter*>(pRet);
         pVclRetIter->iter = pEntry;
     }
+
+    AccessibleAddAllIfNotFrozen();
 
     enable_notify_events();
 }
@@ -5408,6 +5422,8 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
         pVclRetIter->iter = pEntry;
     }
 
+    AccessibleAddAllIfNotFrozen();
+
     enable_notify_events();
 }
 
@@ -5424,6 +5440,7 @@ void SalInstanceIconView::insert_separator(int pos, const OUString* /* pId */)
     m_xIconView->Insert(pEntry, nullptr, nInsertPos);
     SvViewDataEntry* pViewData = m_xIconView->GetViewDataEntry(pEntry);
     pViewData->SetSelectable(false);
+    AccessibleAddAllIfNotFrozen();
 }
 
 IMPL_LINK(SalInstanceIconView, TooltipHdl, const HelpEvent&, rHEvt, bool)
@@ -5587,7 +5604,63 @@ void SalInstanceIconView::clear()
     disable_notify_events();
     m_xIconView->Clear();
     m_aUserData.clear();
+    m_pAccessible->ReleaseAllItems(); // even when frozen
     enable_notify_events();
+}
+
+a11yref SalInstanceIconView::get_accessible() const { return m_pAccessible.get(); }
+
+bool SalInstanceIconView::item_is_separator(int pos) const
+{
+    if (pos < 0)
+        return false;
+
+    const SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
+    return pEntry && (pEntry->GetFlags() & SvTLEntryFlags::IS_SEPARATOR);
+}
+
+bool SalInstanceIconView::item_is_visible(int pos) const
+{
+    if (pos < 0)
+        return false;
+
+    SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
+    return pEntry && m_xIconView->IsEntryVisible(pEntry);
+}
+
+int SalInstanceIconView::get_selected_pos() const
+{
+    if (SvTreeListEntry* pEntry = m_xIconView->FirstSelected())
+        return pEntry->GetChildListPos();
+    return -1;
+}
+
+bool SalInstanceIconView::item_activate(int pos)
+{
+    select(pos);
+    return DoubleClickHdl(m_xIconView);
+}
+
+OUString SalInstanceIconView::get_item_accessible_text(int pos) const
+{
+    if (pos < 0)
+        return {};
+    if (SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos))
+    {
+        if (OUString s = m_xIconView->GetEntryText(pEntry); !s.isEmpty())
+            return s;
+        else
+            return signal_query_tooltip(SalInstanceTreeIter(pEntry));
+    }
+    return {};
+}
+
+tools::Rectangle SalInstanceIconView::get_item_rect(int pos) const
+{
+    if (pos >= 0)
+        if (SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos))
+            return m_xIconView->GetFocusRect(pEntry, -1);
+    return {};
 }
 
 SalInstanceIconView::~SalInstanceIconView()

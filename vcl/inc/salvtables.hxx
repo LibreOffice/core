@@ -21,6 +21,7 @@
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/menubtn.hxx>
 #include <vcl/toolkit/combobox.hxx>
+#include <vcl/toolboxid.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/svtabbx.hxx>
@@ -615,6 +616,8 @@ public:
 
     virtual ~SalInstanceEntry() override;
 };
+
+class FormattedField;
 
 class SalInstanceSpinButton : public SalInstanceEntry, public virtual weld::SpinButton
 {
@@ -1745,12 +1748,17 @@ public:
     virtual ~SalInstanceExpander() override;
 };
 
+class SalInstanceIconViewAccessible;
+
 class SalInstanceIconView : public SalInstanceWidget, public virtual weld::IconView
 {
 private:
     // owner for UserData
     std::vector<std::unique_ptr<OUString>> m_aUserData;
     VclPtr<::IconView> m_xIconView;
+    rtl::Reference<SalInstanceIconViewAccessible> m_pAccessible;
+
+    void AccessibleAddAllIfNotFrozen() const;
 
     DECL_LINK(SelectHdl, SvTreeListBox*, void);
     DECL_LINK(DeSelectHdl, SvTreeListBox*, void);
@@ -1808,6 +1816,22 @@ public:
     virtual OUString get_id(const weld::TreeIter& rIter) const override;
 
     virtual void clear() override;
+
+    // For SalInstanceIconViewAccessible and SalInstanceIconViewItemAccessible
+
+    a11yref get_accessible() const;
+
+    bool item_is_separator(int pos) const;
+
+    bool item_is_visible(int pos) const;
+
+    int get_selected_pos() const;
+
+    bool item_activate(int pos);
+
+    OUString get_item_accessible_text(int pos) const;
+
+    tools::Rectangle get_item_rect(int pos) const;
 
     virtual ~SalInstanceIconView() override;
 };
