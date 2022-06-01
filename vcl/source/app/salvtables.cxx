@@ -5193,6 +5193,10 @@ SalInstanceIconView::SalInstanceIconView(::IconView* pIconView, SalInstanceBuild
     m_xIconView->SetDeselectHdl(LINK(this, SalInstanceIconView, DeSelectHdl));
     m_xIconView->SetDoubleClickHdl(LINK(this, SalInstanceIconView, DoubleClickHdl));
     m_xIconView->SetPopupMenuHdl(LINK(this, SalInstanceIconView, CommandHdl));
+
+    m_xIconView->SetEntryAccessibleDescriptionHdl(
+        LINK(this, SalInstanceIconView, EntryAccessibleDescriptionHdl));
+    m_xIconView->SetAccessible(m_xIconView->CreateAccessible());
 }
 
 int SalInstanceIconView::get_item_width() const { return m_xIconView->GetEntryWidth(); }
@@ -5331,6 +5335,14 @@ IMPL_LINK(SalInstanceIconView, TooltipHdl, const HelpEvent&, rHEvt, bool)
         Help::ShowQuickHelp(m_xIconView, aScreenRect, aTooltip);
     }
     return true;
+}
+
+IMPL_LINK(SalInstanceIconView, EntryAccessibleDescriptionHdl, SvTreeListEntry*, pEntry, OUString)
+{
+    OUString s = SvTreeListBox::SearchEntryTextWithHeadTitle(pEntry);
+    if (s.isEmpty())
+        s = signal_query_tooltip(SalInstanceTreeIter(pEntry));
+    return s;
 }
 
 void SalInstanceIconView::connect_query_tooltip(const Link<const weld::TreeIter&, OUString>& rLink)

@@ -45,6 +45,7 @@
 #include <extended/accessibletablistbox.hxx>
 #include <extended/AccessibleBrowseBox.hxx>
 #include <extended/accessibleiconchoicectrl.hxx>
+#include <extended/AccessibleIconView.hxx>
 #include <extended/accessibletabbar.hxx>
 #include <extended/accessiblelistbox.hxx>
 #include <extended/AccessibleBrowseBoxHeaderBar.hxx>
@@ -150,6 +151,12 @@ public:
 
     virtual css::uno::Reference< css::accessibility::XAccessible >
         createAccessibleTreeListBox(
+            SvTreeListBox& _rListBox,
+            const css::uno::Reference< css::accessibility::XAccessible >& _xParent
+        ) const override;
+
+    virtual css::uno::Reference< css::accessibility::XAccessible >
+        createAccessibleIconView(
             SvTreeListBox& _rListBox,
             const css::uno::Reference< css::accessibility::XAccessible >& _xParent
         ) const override;
@@ -399,6 +406,12 @@ Reference< XAccessible > AccessibleFactory::createAccessibleTreeListBox(
     SvTreeListBox& _rListBox, const Reference< XAccessible >& _xParent ) const
 {
     return new AccessibleListBox( _rListBox, _xParent );
+}
+
+Reference< XAccessible > AccessibleFactory::createAccessibleIconView(
+    SvTreeListBox& _rListBox, const Reference< XAccessible >& _xParent ) const
+{
+    return new AccessibleIconView( _rListBox, _xParent );
 }
 
 Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderBar(
