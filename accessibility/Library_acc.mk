@@ -61,6 +61,7 @@ $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/extended/accessibleeditbrowseboxcell \
     accessibility/source/extended/accessibleiconchoicectrl \
     accessibility/source/extended/accessibleiconchoicectrlentry \
+    accessibility/source/extended/AccessibleIconView \
     accessibility/source/extended/accessiblelistbox \
     accessibility/source/extended/accessiblelistboxentry \
     accessibility/source/extended/accessibletabbar \

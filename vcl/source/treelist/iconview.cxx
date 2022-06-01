@@ -21,6 +21,7 @@
 #include <vcl/toolkit/viewdataentry.hxx>
 #include <iconview.hxx>
 #include "iconviewimpl.hxx"
+#include <vcl/accessiblefactory.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <tools/json_writer.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
@@ -229,6 +230,30 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         rRenderContext.SetTextColor(aBackupTextColor);
         rRenderContext.SetFont(aBackupFont);
     }
+}
+
+css::uno::Reference<css::accessibility::XAccessible> IconView::CreateAccessible()
+{
+    if (vcl::Window* pParent = GetAccessibleParentWindow())
+    {
+        if (auto xAccParent = pParent->GetAccessible())
+        {
+            // need to be done here to get the vclxwindow later on in the accessible
+            css::uno::Reference<css::awt::XWindowPeer> xHoldAlive(GetComponentInterface());
+            return pImpl->m_aFactoryAccess.getFactory().createAccessibleIconView(*this, xAccParent);
+        }
+    }
+    return {};
+}
+
+OUString IconView::GetEntryAccessibleDescription(SvTreeListEntry* pEntry) const
+{
+    assert(pEntry);
+
+    if (maEntryAccessibleDescriptionHdl.IsSet())
+        return maEntryAccessibleDescriptionHdl.Call(pEntry);
+
+    return SvTreeListBox::GetEntryAccessibleDescription(pEntry);
 }
 
 FactoryFunction IconView::GetUITestFactory() const { return IconViewUIObject::create; }
