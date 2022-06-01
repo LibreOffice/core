@@ -260,9 +260,8 @@ sal_uInt16 SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
                     std::unique_ptr<SvxBrushItem> aBrush = rFrameFormat.makeBackgroundBrushItem();
                     /// background is not empty, if it has a background graphic
                     /// or its background color is not "no fill"/"auto fill".
-                    if( aBrush &&
-                        (GPOS_NONE != aBrush->GetGraphicPos() ||
-                        aBrush->GetColor() != COL_TRANSPARENT ))
+                    if( GPOS_NONE != aBrush->GetGraphicPos() ||
+                        aBrush->GetColor() != COL_TRANSPARENT )
                     {
                         bEmpty = false;
                     }

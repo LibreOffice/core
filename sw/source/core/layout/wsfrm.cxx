@@ -1726,7 +1726,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
 
             //Trigger a repaint if necessary.
             std::unique_ptr<SvxBrushItem> aBack(pUp->GetFormat()->makeBackgroundBrushItem());
-            const SvxGraphicPosition ePos = aBack ? aBack->GetGraphicPos() : GPOS_NONE;
+            const SvxGraphicPosition ePos = aBack->GetGraphicPos();
             if ( ePos != GPOS_NONE && ePos != GPOS_TILED )
                 pViewShell->InvalidateWindows( pUp->getFrameArea() );
 
@@ -2783,7 +2783,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
                 InvaPercentLowers( nReal );
 
             std::unique_ptr<SvxBrushItem> aBack(GetFormat()->makeBackgroundBrushItem());
-            const SvxGraphicPosition ePos = aBack ? aBack->GetGraphicPos() : GPOS_NONE;
+            const SvxGraphicPosition ePos = aBack->GetGraphicPos();
             if ( GPOS_NONE != ePos && GPOS_TILED != ePos )
                 SetCompletePaint();
         }
@@ -2984,7 +2984,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
             if (pFormat)
             {
                 std::unique_ptr<SvxBrushItem> aBack(pFormat->makeBackgroundBrushItem());
-                const SvxGraphicPosition ePos = aBack ? aBack->GetGraphicPos() : GPOS_NONE;
+                const SvxGraphicPosition ePos = aBack->GetGraphicPos();
                 if ( GPOS_NONE == ePos || GPOS_TILED == ePos )
                     bCompletePaint = false;
             }

@@ -2019,11 +2019,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
     if (bIsInHeader || bIsThrough)
     {
         std::unique_ptr<SvxBrushItem> aBrush(rFormat.makeBackgroundBrushItem());
-
-        if(aBrush)
-        {
-            WriteBrushAttr(*aBrush, rPropOpt);
-        }
+        WriteBrushAttr(*aBrush, rPropOpt);
     }
     else
     {

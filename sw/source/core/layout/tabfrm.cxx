@@ -3334,7 +3334,7 @@ SwTwips SwTabFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         SetComplete();
 
         std::unique_ptr<SvxBrushItem> aBack = GetFormat()->makeBackgroundBrushItem();
-        const SvxGraphicPosition ePos = aBack ? aBack->GetGraphicPos() : GPOS_NONE;
+        const SvxGraphicPosition ePos = aBack->GetGraphicPos();
         if ( GPOS_NONE != ePos && GPOS_TILED != ePos )
             SetCompletePaint();
     }

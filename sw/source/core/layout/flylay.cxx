@@ -357,7 +357,7 @@ bool SwFlyFreeFrame::supportsAutoContour() const
     {
         const std::unique_ptr<SvxBrushItem> aBack(GetFormat()->makeBackgroundBrushItem());
 
-        if(aBack && aBack->isUsed())
+        if(aBack->isUsed())
         {
             return false;
         }

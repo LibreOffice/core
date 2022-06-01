@@ -143,8 +143,8 @@ bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
 
         /// The table box has a background, if its background color is not "no fill"/
         /// "auto fill" or it has a background graphic.
-        bRet = aBrushItem && (aBrushItem->GetColor() != COL_TRANSPARENT ||
-               !aBrushItem->GetGraphicLink().isEmpty() || aBrushItem->GetGraphic());
+        bRet = aBrushItem->GetColor() != COL_TRANSPARENT ||
+               !aBrushItem->GetGraphicLink().isEmpty() || aBrushItem->GetGraphic();
     }
     else
     {
@@ -172,8 +172,8 @@ bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
     std::unique_ptr<SvxBrushItem> aBrushItem = rLine.GetFrameFormat()->makeBackgroundBrushItem();
     /// The table line has a background, if its background color is not "no fill"/
     /// "auto fill" or it has a background graphic.
-    bool bRet = aBrushItem && (aBrushItem->GetColor() != COL_TRANSPARENT ||
-           !aBrushItem->GetGraphicLink().isEmpty() || aBrushItem->GetGraphic());
+    bool bRet = aBrushItem->GetColor() != COL_TRANSPARENT ||
+           !aBrushItem->GetGraphicLink().isEmpty() || aBrushItem->GetGraphic();
 
     if( !bRet )
     {
