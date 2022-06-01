@@ -51,9 +51,9 @@ Reference< XPropertySetInfo > SAL_CALL ChainablePropertySet::getPropertySetInfo(
 void SAL_CALL ChainablePropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::unique_ptr< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
+    std::optional< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
     if (mpMutex)
-        xMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
+        xMutexGuard.emplace( mpMutex );
 
     PropertyInfoHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
 
@@ -68,9 +68,9 @@ void SAL_CALL ChainablePropertySet::setPropertyValue( const OUString& rPropertyN
 Any SAL_CALL ChainablePropertySet::getPropertyValue( const OUString& rPropertyName )
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::unique_ptr< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
+    std::optional< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
     if (mpMutex)
-        xMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
+        xMutexGuard.emplace( mpMutex );
 
     PropertyInfoHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
 
@@ -109,9 +109,9 @@ void SAL_CALL ChainablePropertySet::removeVetoableChangeListener( const OUString
 void SAL_CALL ChainablePropertySet::setPropertyValues(const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rValues)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::unique_ptr< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
+    std::optional< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
     if (mpMutex)
-        xMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
+        xMutexGuard.emplace( mpMutex );
 
     const sal_Int32 nCount = rPropertyNames.getLength();
 
@@ -142,9 +142,9 @@ void SAL_CALL ChainablePropertySet::setPropertyValues(const Sequence< OUString >
 Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues(const Sequence< OUString >& rPropertyNames)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::unique_ptr< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
+    std::optional< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
     if (mpMutex)
-        xMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
+        xMutexGuard.emplace( mpMutex );
 
     const sal_Int32 nCount = rPropertyNames.getLength();
 
