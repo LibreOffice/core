@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09755635_46243fe4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-06-01T17:35:37Z",
+      "side": 1,
+      "message": "Minor nitpick about commit message: change \u0027Renaming\u0027 to \u0027Rename\u0027.",
+      "revId": "432120278a267ef7bd73c0ce462fe7e3fc759a3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
