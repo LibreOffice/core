@@ -428,6 +428,13 @@ published service ParagraphProperties
             @since LibreOffice 7.4
          */
         [optional, property] short ParaHyphenationMinWordLength;
+
+        /** specifies the hyphenation zone, i.e. allowed extra white space
+            in the line before applying hyphenation.
+
+            @since LibreOffice 7.4
+         */
+        [optional, property] long ParaHyphenationZone;
 };
 
 

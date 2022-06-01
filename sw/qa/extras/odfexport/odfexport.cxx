@@ -3052,6 +3052,13 @@ DECLARE_ODFEXPORT_TEST(tdf149324, "tdf149324.odt")
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(7), getProperty<sal_uInt16>(getParagraph(4), "ParaHyphenationMinWordLength"));
 }
 
+DECLARE_ODFEXPORT_TEST(tdf149420, "tdf149420.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), getProperty<sal_uInt16>(getParagraph(2), "ParaHyphenationZone"));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(567), getProperty<sal_uInt16>(getParagraph(4), "ParaHyphenationZone"));
+}
+
 DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
