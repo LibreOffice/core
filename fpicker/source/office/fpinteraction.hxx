@@ -55,7 +55,7 @@ namespace svt
         EInterceptedInteractions                              m_eInterceptions; // enable/disable interception of some special interactions
 
     public:
-        explicit OFilePickerInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _rxMaster );
+        explicit OFilePickerInteractionHandler( css::uno::Reference< css::task::XInteractionHandler > _xMaster );
 
         // some generic functions
         void     enableInterceptions( EInterceptedInteractions eInterceptions );

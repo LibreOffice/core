@@ -23,6 +23,7 @@
 #include "iodlg.hxx"
 #include "RemoteFilesDialog.hxx"
 
+#include <utility>
 #include <vector>
 #include <algorithm>
 #include <sal/log.hxx>
@@ -56,13 +57,13 @@ protected:
     UnoFilterList       m_aSubFilters;
 
 public:
-    FilterEntry( const OUString& _rTitle, const OUString& _rFilter )
-        :m_sTitle( _rTitle )
-        ,m_sFilter( _rFilter )
+    FilterEntry( OUString _aTitle, OUString _aFilter )
+        :m_sTitle(std::move( _aTitle ))
+        ,m_sFilter(std::move( _aFilter ))
     {
     }
 
-    FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters );
+    FilterEntry( OUString _aTitle, const UnoFilterList& _rSubFilters );
 
     const OUString& getTitle() const { return m_sTitle; }
     const OUString& getFilter() const { return m_sFilter; }
@@ -80,8 +81,8 @@ public:
 };
 
 
-FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )
-    :m_sTitle( _rTitle )
+FilterEntry::FilterEntry( OUString _aTitle, const UnoFilterList& _rSubFilters )
+    :m_sTitle(std::move( _aTitle ))
     ,m_aSubFilters( _rSubFilters )
 {
 }
