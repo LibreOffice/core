@@ -41,10 +41,7 @@ SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBind
     : PanelLayout(&rParent, "MathElementsPanel", "modules/smath/ui/sidebarelements_math.ui")
     , mrBindings(rBindings)
     , mxCategoryList(m_xBuilder->weld_tree_view("categorylist"))
-    , mxElementsControl(std::make_unique<SmElementsControl>(
-          m_xBuilder->weld_scrolled_window("scrolledwindow", true)))
-    , mxElementsControlWin(
-          std::make_unique<weld::CustomWeld>(*m_xBuilder, "element_selector", *mxElementsControl))
+    , mxElementsControl(std::make_unique<SmElementsControl>(m_xBuilder->weld_icon_view("elements")))
 {
     for (const auto& rCategoryId : SmElementsControl::categories())
         mxCategoryList->append_text(SmResId(rCategoryId));
@@ -54,14 +51,12 @@ SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBind
     mxCategoryList->connect_changed(LINK(this, SmElementsPanel, CategorySelectedHandle));
     mxCategoryList->select_text(SmResId(RID_CATEGORY_UNARY_BINARY_OPERATORS));
 
-    mxElementsControl->setVerticalMode(false); // Sidebar currently can only dock to a side
     mxElementsControl->setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
     mxElementsControl->SetSelectHdl(LINK(this, SmElementsPanel, ElementClickHandler));
 }
 
 SmElementsPanel::~SmElementsPanel()
 {
-    mxElementsControlWin.reset();
     mxElementsControl.reset();
     mxCategoryList.reset();
 }
@@ -82,14 +77,13 @@ IMPL_LINK(SmElementsPanel, CategorySelectedHandle, weld::TreeView&, rList, void)
     }
 }
 
-IMPL_LINK(SmElementsPanel, ElementClickHandler, SmElement&, rElement, void)
+IMPL_LINK(SmElementsPanel, ElementClickHandler, OUString, ElementSource, void)
 {
     if (SmViewShell* pViewSh = GetView())
     {
-        std::unique_ptr<SfxStringItem> pInsertCommand
-            = std::make_unique<SfxStringItem>(SID_INSERTCOMMANDTEXT, rElement.getText());
+        SfxStringItem aInsertCommand(SID_INSERTCOMMANDTEXT, ElementSource);
         pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
-            SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD, { pInsertCommand.get() });
+            SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD, { &aInsertCommand });
     }
 }
 
