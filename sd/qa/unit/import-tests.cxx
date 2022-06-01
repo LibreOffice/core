@@ -83,6 +83,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf149314();
     void testTdf149124();
     void testTdf148965();
     void testTdf89449();
@@ -153,6 +154,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf149314);
     CPPUNIT_TEST(testTdf149124);
     CPPUNIT_TEST(testTdf148965);
     CPPUNIT_TEST(testTdf89449);
@@ -299,6 +301,35 @@ void SdImportTest::testDocumentLayout()
                 OUStringConcatenation(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf149314()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf149314.pptx"), PPTX);
+
+    OUString aURL;
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 1, xDocShRef));
+
+    uno::Reference<text::XTextRange> const xParagraph1(getParagraphFromShape(0, xShape));
+    uno::Reference<text::XTextRange> xRun1(getRunFromParagraph(0, xParagraph1));
+    uno::Reference<beans::XPropertySet> xPropSet1(xRun1, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextField> xField1;
+    xPropSet1->getPropertyValue("TextField") >>= xField1;
+    xPropSet1.set(xField1, uno::UNO_QUERY);
+    xPropSet1->getPropertyValue("URL") >>= aURL;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("URLs don't match", OUString("#Slide 1"), aURL);
+
+    uno::Reference<text::XTextRange> const xParagraph2(getParagraphFromShape(1, xShape));
+    uno::Reference<text::XTextRange> xRun2(getRunFromParagraph(0, xParagraph2));
+    uno::Reference<beans::XPropertySet> xPropSet2(xRun2, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextField> xField2;
+    xPropSet2->getPropertyValue("TextField") >>= xField2;
+    xPropSet2.set(xField2, uno::UNO_QUERY);
+    xPropSet2->getPropertyValue("URL") >>= aURL;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("URLs don't match", OUString("#Slide 3"), aURL);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf149124()
