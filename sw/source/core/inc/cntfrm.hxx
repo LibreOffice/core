@@ -50,6 +50,10 @@ namespace o3tl {
     template<> struct typed_flags<SwContentFrameInvFlags> : is_typed_flags<SwContentFrameInvFlags, 0xff> {};
 }
 
+/**
+ * SwContentFrame is the layout for content nodes: a common base class for text (paragraph) and
+ * non-text (e.g. graphic) frames.
+ */
 class SAL_DLLPUBLIC_RTTI SwContentFrame: public SwFrame, public SwFlowFrame
 {
     friend void MakeNxt( SwFrame *pFrame, SwFrame *pNxt );    // calls MakePrtArea
