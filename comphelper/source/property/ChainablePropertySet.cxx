@@ -23,6 +23,7 @@
 
 
 #include <memory>
+#include <optional>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
