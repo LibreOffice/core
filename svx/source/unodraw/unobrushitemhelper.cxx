@@ -205,11 +205,10 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
         return std::make_unique<SvxBrushItem>(aFillColor, nBackgroundID);
     }
 
-    auto aRetval = std::make_unique<SvxBrushItem>(nBackgroundID);
+    std::unique_ptr<SvxBrushItem> xRetval;
 
     switch(pXFillStyleItem->GetValue())
     {
-        default:
         case drawing::FillStyle_NONE:
         {
             // already handled above, can not happen again
@@ -218,7 +217,7 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
         case drawing::FillStyle_SOLID:
         {
             // create SvxBrushItem with fill color
-            aRetval = getSvxBrushItemForSolid(rSourceSet, bSearchInParents, nBackgroundID);
+            xRetval = getSvxBrushItemForSolid(rSourceSet, bSearchInParents, nBackgroundID);
             break;
         }
         case drawing::FillStyle_GRADIENT:
@@ -244,7 +243,7 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
                 aMixedColor.SetAlpha(255 - aTargetTrans);
             }
 
-            aRetval = std::make_unique<SvxBrushItem>(aMixedColor, nBackgroundID);
+            xRetval = std::make_unique<SvxBrushItem>(aMixedColor, nBackgroundID);
             break;
         }
         case drawing::FillStyle_HATCH:
@@ -256,7 +255,7 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
             if(bFillBackground)
             {
                 // hatch is background-filled, use FillColor as if drawing::FillStyle_SOLID
-                aRetval = getSvxBrushItemForSolid(rSourceSet, bSearchInParents, nBackgroundID);
+                xRetval = getSvxBrushItemForSolid(rSourceSet, bSearchInParents, nBackgroundID);
             }
             else
             {
@@ -276,7 +275,7 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
                 const sal_uInt8 aTargetTrans(std::min(sal_uInt8(0xfe), static_cast< sal_uInt8 >((nFillTransparence * 254) / 100)));
 
                 aHatchColor.SetAlpha(255 - aTargetTrans);
-                aRetval = std::make_unique<SvxBrushItem>(aHatchColor, nBackgroundID);
+                xRetval = std::make_unique<SvxBrushItem>(aHatchColor, nBackgroundID);
             }
 
             break;
@@ -319,7 +318,7 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
             }
 
             // create with given graphic and position
-            aRetval = std::make_unique<SvxBrushItem>(aGraphic, aSvxGraphicPosition, nBackgroundID);
+            xRetval = std::make_unique<SvxBrushItem>(aGraphic, aSvxGraphicPosition, nBackgroundID);
 
             // get evtl. mixed transparence
             const sal_uInt16 nFillTransparence(getTransparenceForSvxBrushItem(rSourceSet, bSearchInParents));
@@ -327,14 +326,17 @@ std::unique_ptr<SvxBrushItem> getSvxBrushItemFromSourceSet(const SfxItemSet& rSo
             if(0 != nFillTransparence)
             {
                 // #i125189# nFillTransparence is in range [0..100] and needs to be in [0..100] signed
-                aRetval->setGraphicTransparency(static_cast< sal_Int8 >(nFillTransparence));
+                xRetval->setGraphicTransparency(static_cast< sal_Int8 >(nFillTransparence));
             }
 
             break;
         }
+        default:
+            xRetval = std::make_unique<SvxBrushItem>(nBackgroundID);
+            break;
     }
 
-    return aRetval;
+    return xRetval;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
