@@ -21,6 +21,7 @@
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/menubtn.hxx>
 #include <vcl/toolkit/combobox.hxx>
+#include <vcl/toolboxid.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/svtabbx.hxx>
@@ -1759,6 +1760,7 @@ private:
     DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(TooltipHdl, const HelpEvent&, bool);
+    DECL_LINK(EntryAccessibleDescriptionHdl, SvTreeListEntry*, OUString);
 
 public:
     SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder, bool bTakeOwnership);

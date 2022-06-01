@@ -200,6 +200,7 @@ class VCL_DLLPUBLIC SvTreeListBox
     Link<const HelpEvent&, bool> aTooltipHdl;
     Link<svtree_render_args, void> aCustomRenderHdl;
     Link<svtree_measure_args, Size> aCustomMeasureHdl;
+    Link<SvTreeListEntry*, OUString> maEntryAccessibleDescriptionHdl;
 
     Image           aPrevInsertedExpBmp;
     Image           aPrevInsertedColBmp;
@@ -412,6 +413,7 @@ public:
     void SetTooltipHdl(const Link<const HelpEvent&, bool>& rLink) { aTooltipHdl = rLink; }
     void SetCustomRenderHdl(const Link<svtree_render_args, void>& rLink) { aCustomRenderHdl = rLink; }
     void SetCustomMeasureHdl(const Link<svtree_measure_args, Size>& rLink) { aCustomMeasureHdl = rLink; }
+    void SetEntryAccessibleDescriptionHdl(const Link<SvTreeListEntry*, OUString>& rLink) { maEntryAccessibleDescriptionHdl = rLink; }
 
     void            ExpandedHdl();
     bool            ExpandingHdl();
@@ -455,6 +457,8 @@ public:
 
     /** Fills the StateSet of one entry. */
     void FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const;
+
+    OUString GetEntryAccessibleDescription(SvTreeListEntry* pEntry) const;
 
     /** Calculate and return the bounding rectangle of an entry.
         @param pEntry
