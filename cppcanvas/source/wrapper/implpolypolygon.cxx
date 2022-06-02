@@ -27,6 +27,7 @@
 
 #include "implpolypolygon.hxx"
 #include <tools.hxx>
+#include <utility>
 
 
 using namespace ::com::sun::star;
@@ -35,9 +36,9 @@ using namespace ::com::sun::star;
 namespace cppcanvas::internal
 {
         ImplPolyPolygon::ImplPolyPolygon( const CanvasSharedPtr& rParentCanvas,
-                                          const uno::Reference< rendering::XPolyPolygon2D >& rPolyPoly ) :
+                                          uno::Reference< rendering::XPolyPolygon2D > xPolyPoly ) :
             CanvasGraphicHelper( rParentCanvas ),
-            mxPolyPoly( rPolyPoly ),
+            mxPolyPoly(std::move( xPolyPoly )),
             maStrokeAttributes(1.0,
                                10.0,
                                uno::Sequence< double >(),

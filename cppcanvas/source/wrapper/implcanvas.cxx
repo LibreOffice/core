@@ -25,6 +25,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <canvas/canvastools.hxx>
+#include <utility>
 
 #include "implcanvas.hxx"
 
@@ -34,8 +35,8 @@ using namespace ::com::sun::star;
 namespace cppcanvas::internal
 {
 
-        ImplCanvas::ImplCanvas( const uno::Reference< rendering::XCanvas >& xCanvas ) :
-            mxCanvas( xCanvas )
+        ImplCanvas::ImplCanvas( uno::Reference< rendering::XCanvas > xCanvas ) :
+            mxCanvas(std::move( xCanvas ))
         {
             OSL_ENSURE( mxCanvas.is(), "Canvas::Canvas() invalid XCanvas" );
 

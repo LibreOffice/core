@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 
 #include <cppcanvas/canvas.hxx>
+#include <utility>
 
 #include "mtftools.hxx"
 
@@ -45,7 +46,7 @@ namespace cppcanvas::internal
             public:
                 LineAction( const ::basegfx::B2DPoint&,
                             const ::basegfx::B2DPoint&,
-                            const CanvasSharedPtr&,
+                            CanvasSharedPtr,
                             const OutDevState& );
 
                 LineAction(const LineAction&) = delete;
@@ -70,11 +71,11 @@ namespace cppcanvas::internal
 
             LineAction::LineAction( const ::basegfx::B2DPoint& rStartPoint,
                                     const ::basegfx::B2DPoint& rEndPoint,
-                                    const CanvasSharedPtr&     rCanvas,
+                                    CanvasSharedPtr            xCanvas,
                                     const OutDevState&         rState ) :
                 maStartPoint( rStartPoint ),
                 maEndPoint( rEndPoint ),
-                mpCanvas( rCanvas )
+                mpCanvas(std::move( xCanvas ))
             {
                 tools::initRenderState(maState,rState);
                 maState.DeviceColor = rState.lineColor;

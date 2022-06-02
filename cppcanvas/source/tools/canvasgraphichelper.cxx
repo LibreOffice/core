@@ -25,6 +25,7 @@
 #include <canvas/canvastools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <utility>
 
 
 using namespace ::com::sun::star;
@@ -33,8 +34,8 @@ using namespace ::com::sun::star;
 
 namespace cppcanvas::internal
 {
-        CanvasGraphicHelper::CanvasGraphicHelper( const CanvasSharedPtr& rParentCanvas ) :
-            mpCanvas( rParentCanvas )
+        CanvasGraphicHelper::CanvasGraphicHelper( CanvasSharedPtr xParentCanvas ) :
+            mpCanvas(std::move( xParentCanvas ))
         {
             OSL_ENSURE( mpCanvas && mpCanvas->getUNOCanvas().is(),
                         "CanvasGraphicHelper::CanvasGraphicHelper: no valid canvas" );

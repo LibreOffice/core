@@ -33,6 +33,7 @@
 #include "cachedprimitivebase.hxx"
 #include "polypolyaction.hxx"
 #include <outdevstate.hxx>
+#include <utility>
 #include "mtftools.hxx"
 
 
@@ -226,7 +227,7 @@ namespace cppcanvas::internal
                 TexturedPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
                                         const CanvasSharedPtr&           rCanvas,
                                         const OutDevState&               rState,
-                                        const rendering::Texture&        rTexture );
+                                        rendering::Texture               aTexture );
 
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -254,12 +255,12 @@ namespace cppcanvas::internal
             TexturedPolyPolyAction::TexturedPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPolyPoly,
                                                             const CanvasSharedPtr&           rCanvas,
                                                             const OutDevState&               rState,
-                                                            const rendering::Texture&        rTexture ) :
+                                                            rendering::Texture               aTexture ) :
                 CachedPrimitiveBase( rCanvas, true ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
                 maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
-                maTexture( rTexture )
+                maTexture(std::move( aTexture ))
             {
                 tools::initRenderState(maState,rState);
             }
@@ -337,7 +338,7 @@ namespace cppcanvas::internal
                 StrokedPolyPolyAction( const ::basegfx::B2DPolyPolygon&     rPoly,
                                        const CanvasSharedPtr&               rCanvas,
                                        const OutDevState&                   rState,
-                                       const rendering::StrokeAttributes&   rStrokeAttributes );
+                                       rendering::StrokeAttributes          aStrokeAttributes );
 
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -363,12 +364,12 @@ namespace cppcanvas::internal
             StrokedPolyPolyAction::StrokedPolyPolyAction( const ::basegfx::B2DPolyPolygon&      rPolyPoly,
                                                           const CanvasSharedPtr&                rCanvas,
                                                           const OutDevState&                    rState,
-                                                          const rendering::StrokeAttributes&    rStrokeAttributes ) :
+                                                          rendering::StrokeAttributes           aStrokeAttributes ) :
                 CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
                 maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
-                maStrokeAttributes( rStrokeAttributes )
+                maStrokeAttributes(std::move( aStrokeAttributes ))
             {
                 tools::initRenderState(maState,rState);
                 maState.DeviceColor = rState.lineColor;

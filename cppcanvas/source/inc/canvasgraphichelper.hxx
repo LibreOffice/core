@@ -41,7 +41,7 @@ namespace cppcanvas::internal
         class CanvasGraphicHelper : public virtual CanvasGraphic
         {
         public:
-            CanvasGraphicHelper( const CanvasSharedPtr& rParentCanvas );
+            CanvasGraphicHelper( CanvasSharedPtr xParentCanvas );
 
             // CanvasGraphic implementation
             virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) override;

@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/canvastools.hxx>
 
 #include <basegfx/range/b2drange.hxx>
@@ -45,7 +46,7 @@ namespace cppcanvas::internal
             {
             public:
                 PointAction( const ::basegfx::B2DPoint&,
-                             const CanvasSharedPtr&,
+                             CanvasSharedPtr,
                              const OutDevState& );
                 PointAction( const ::basegfx::B2DPoint&,
                              const CanvasSharedPtr&,
@@ -72,10 +73,10 @@ namespace cppcanvas::internal
             };
 
             PointAction::PointAction( const ::basegfx::B2DPoint& rPoint,
-                                      const CanvasSharedPtr&     rCanvas,
+                                      CanvasSharedPtr            xCanvas,
                                       const OutDevState&         rState ) :
                 maPoint( rPoint ),
-                mpCanvas( rCanvas )
+                mpCanvas(std::move( xCanvas ))
             {
                 tools::initRenderState(maState,rState);
                 maState.DeviceColor = rState.lineColor;
