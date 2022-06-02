@@ -292,7 +292,7 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
         }
         if (!sNumber.isEmpty())
         {
-            sBuildId += ";" + sNumber.makeStringAndClear();
+            sBuildId += ";" + sNumber;
         }
     }
 
