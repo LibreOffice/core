@@ -27,6 +27,7 @@
 #include <string_view>
 
 #include <o3tl/typed_flags_set.hxx>
+#include <utility>
 
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::frame { class XModel; }
@@ -151,8 +152,8 @@ OUString GetFilename(OUString const& rSourceURL);
 struct AVMEDIA_DLLPUBLIC MediaTempFile
 {
     OUString const m_TempFileURL;
-    MediaTempFile(OUString const& rURL)
-        : m_TempFileURL(rURL)
+    MediaTempFile(OUString aURL)
+        : m_TempFileURL(std::move(aURL))
     {}
     ~MediaTempFile();
 };
