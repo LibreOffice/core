@@ -62,6 +62,7 @@
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <comphelper/sequence.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
@@ -2853,7 +2854,7 @@ void XMLTextFieldExport::ExplodeFieldMasterName(
     size_t nSeparator = sMasterName.find('.', nLength);
 
     // '.' found?
-    if (static_cast<sal_Int32>(nSeparator) == nLength || nSeparator == std::u16string_view::npos) {
+    if (nSeparator == o3tl::make_unsigned(nLength) || nSeparator == std::u16string_view::npos) {
         SAL_WARN("xmloff.text", "no field var name!");
     }
     else
