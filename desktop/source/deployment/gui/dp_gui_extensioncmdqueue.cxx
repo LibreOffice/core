@@ -55,6 +55,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/anytostring.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
@@ -127,12 +128,12 @@ public:
     will be handled and in the second case a VersionException will be handled.
     */
 
-    ProgressCmdEnv( const uno::Reference< uno::XComponentContext >& rContext,
+    ProgressCmdEnv( uno::Reference< uno::XComponentContext > xContext,
                     DialogHelper* pDialogHelper,
-                    const OUString& rTitle )
-        : m_xContext( rContext )
+                    OUString aTitle )
+        : m_xContext(std::move( xContext ))
         , m_pDialogHelper( pDialogHelper )
-        , m_sTitle( rTitle )
+        , m_sTitle(std::move( aTitle ))
         , m_bWarnUser( false )
         , m_nCurrentProgress(0)
         {}
@@ -171,18 +172,18 @@ struct ExtensionCmd
     std::vector< uno::Reference< deployment::XPackage > >        m_vExtensionList;
 
     ExtensionCmd( const E_CMD_TYPE eCommand,
-                  const OUString &rExtensionURL,
-                  const OUString &rRepository,
+                  OUString aExtensionURL,
+                  OUString aRepository,
                   const bool bWarnUser )
         : m_eCmdType( eCommand ),
           m_bWarnUser( bWarnUser ),
-          m_sExtensionURL( rExtensionURL ),
-          m_sRepository( rRepository ) {};
+          m_sExtensionURL(std::move( aExtensionURL )),
+          m_sRepository(std::move( aRepository )) {};
     ExtensionCmd( const E_CMD_TYPE eCommand,
-                  const uno::Reference< deployment::XPackage > &rPackage )
+                  uno::Reference< deployment::XPackage > xPackage )
         : m_eCmdType( eCommand ),
           m_bWarnUser( false ),
-          m_xPackage( rPackage ) {};
+          m_xPackage(std::move( xPackage )) {};
     ExtensionCmd( const E_CMD_TYPE eCommand,
                 std::vector<uno::Reference<deployment::XPackage > >&&vExtensionList )
         : m_eCmdType( eCommand ),
@@ -200,7 +201,7 @@ class ExtensionCmdQueue::Thread: public salhelper::Thread
 public:
     Thread( DialogHelper *pDialogHelper,
             TheExtensionManager *pManager,
-            const uno::Reference< uno::XComponentContext > & rContext );
+            uno::Reference< uno::XComponentContext > xContext );
 
     void addExtension( const OUString &rExtensionURL,
                        const OUString &rRepository,
@@ -580,9 +581,9 @@ void ProgressCmdEnv::pop()
 
 ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
                                    TheExtensionManager *pManager,
-                                   const uno::Reference< uno::XComponentContext > & rContext ) :
+                                   uno::Reference< uno::XComponentContext > xContext ) :
     salhelper::Thread( "dp_gui_extensioncmdqueue" ),
-    m_xContext( rContext ),
+    m_xContext(std::move( xContext )),
     m_pDialogHelper( pDialogHelper ),
     m_pManager( pManager ),
     m_sEnablingPackages( DpResId( RID_STR_ENABLING_PACKAGES ) ),

@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -42,8 +43,8 @@ oslSignalAction SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSignalInfo* p
 // that was given by command line or by IPC pipe communication.
 struct ProcessDocumentsRequest
 {
-    explicit ProcessDocumentsRequest(std::optional< OUString > const & cwdUrl):
-        aCwdUrl(cwdUrl), pcProcessed( nullptr ), bTextCat( false ), bScriptCat( false ) {}
+    explicit ProcessDocumentsRequest(std::optional< OUString > cwdUrl):
+        aCwdUrl(std::move(cwdUrl)), pcProcessed( nullptr ), bTextCat( false ), bScriptCat( false ) {}
 
     std::optional< OUString > aCwdUrl;
     OUString aModule;

@@ -21,6 +21,7 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <utility>
 
 namespace com::sun::star::deployment {
         class XPackage;
@@ -34,8 +35,8 @@ namespace dp_gui {
 
 struct UpdateData
 {
-    explicit UpdateData( css::uno::Reference< css::deployment::XPackage > const & aExt):
-        bIsShared(false), aInstalledPackage(aExt) {};
+    explicit UpdateData( css::uno::Reference< css::deployment::XPackage > xExt):
+        bIsShared(false), aInstalledPackage(std::move(xExt)) {};
 
     //When entries added to the listbox then there can be one for the user update and one
     //for the shared update. However, both list entries will contain the same UpdateData.

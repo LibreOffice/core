@@ -48,6 +48,7 @@
 #if defined(UNX)
   #include <unistd.h>
 #endif
+#include <utility>
 #include <vector>
 
 
@@ -61,7 +62,7 @@ namespace {
 struct ExtensionName
 {
     OUString m_str;
-    explicit ExtensionName( OUString const & str ) : m_str( str ) {}
+    explicit ExtensionName( OUString str ) : m_str(std::move( str )) {}
     bool operator () ( Reference<deployment::XPackage> const & e ) const
     {
         return m_str == dp_misc::getIdentifier(e)

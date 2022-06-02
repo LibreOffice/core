@@ -31,6 +31,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <unordered_map>
 #include <strings.hrc>
+#include <utility>
 
 namespace dp_registry::backend
 {
@@ -85,14 +86,13 @@ protected:
         = 0;
 
     virtual ~Package() override;
-    Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
-             OUString const & url,
-             OUString const & name,
-             OUString const & displayName,
-             css::uno::Reference<css::deployment::XPackageTypeInfo> const &
-             xPackageType,
+    Package( ::rtl::Reference<PackageRegistryBackend> myBackend,
+             OUString url,
+             OUString name,
+             OUString displayName,
+             css::uno::Reference<css::deployment::XPackageTypeInfo> const & xPackageType,
              bool bRemoved,
-             OUString const & identifier);
+             OUString identifier);
 
 public:
 
@@ -104,11 +104,11 @@ public:
         const OUString m_shortDescr;
     public:
         virtual ~TypeInfo() override;
-        TypeInfo( OUString const & mediaType,
-                  OUString const & fileFilter,
-                  OUString const & shortDescr )
-            : m_mediaType(mediaType), m_fileFilter(fileFilter),
-              m_shortDescr(shortDescr)
+        TypeInfo( OUString mediaType,
+                  OUString fileFilter,
+                  OUString shortDescr )
+            : m_mediaType(std::move(mediaType)), m_fileFilter(std::move(fileFilter)),
+              m_shortDescr(std::move(shortDescr))
             {}
         // XPackageTypeInfo
         virtual OUString SAL_CALL getMediaType() override;

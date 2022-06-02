@@ -239,7 +239,7 @@ namespace desktop {
         std::map<size_t, std::shared_ptr<CallbackFlushHandler>> mpCallbackFlushHandlers;
         const int mnDocumentId;
 
-        explicit LibLODocument_Impl(const css::uno::Reference<css::lang::XComponent>& xComponent,
+        explicit LibLODocument_Impl(css::uno::Reference<css::lang::XComponent> xComponent,
                                     int nDocumentId);
         ~LibLODocument_Impl();
     };
