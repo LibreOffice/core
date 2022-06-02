@@ -52,6 +52,46 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82511cd9_43778750",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-02T12:35:27Z",
+      "side": 1,
+      "message": "Here is extended tooltip proposal, plus an additional \"label\" change proposal (that did not make it out with the original proposal).",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c89ffbe_ee8fe0f8",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-02T12:35:27Z",
+      "side": 1,
+      "message": "Language:",
+      "range": {
+        "startLine": 62,
+        "startChar": 92,
+        "endLine": 62,
+        "endChar": 108
+      },
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2522abe_a3d148b6",
@@ -117,6 +157,29 @@
         "startChar": 106,
         "endLine": 329,
         "endChar": 136
+      },
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d163187f_0c043721",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-02T12:35:27Z",
+      "side": 1,
+      "message": "Proposal for revised extended tooltip:\n\n Indicates whether the keyboard language setting in the operating system is applied when new text is typed into the document. If enabled, the keyboard language is not applied to the new text. If not enabled, then the language setting of the keyboard is applied to the new text being entered.\n\n\n@Ilmari, I remember you discussed once \"enabled\" vs. \"activated\" in relation to \"checkboxes\" -- but I cannot remember the result of that discussion. Either word is fine with me here, so adjust as needed.",
+      "range": {
+        "startLine": 337,
+        "startChar": 134,
+        "endLine": 337,
+        "endChar": 356
       },
       "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
