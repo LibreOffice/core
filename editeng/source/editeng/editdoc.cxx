@@ -2223,8 +2223,6 @@ void EditDoc::ClearSpellErrors()
 
 void EditDoc::SetModified( bool b )
 {
-    if (bModified == b)
-        return;
     bModified = b;
     if ( bModified )
     {
