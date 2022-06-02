@@ -53,11 +53,10 @@ SwSyncChildWin::SwSyncChildWin(vcl::Window* _pParent,
         else
             aPos = _pParent->OutputToScreenPixel(Point(0, 0));
 
-        WindowStateData aState;
-        aState.SetMask(WindowStateMask::Pos);
-        aState.SetX(aPos.X());
-        aState.SetY(aPos.Y());
-        pDlg->set_window_state(aState.ToStr());
+        vcl::WindowData aState;
+        aState.setMask(vcl::WindowDataMask::Pos);
+        aState.setPos(aPos);
+        pDlg->set_window_state(aState.toStr());
 
         pInfo->aPos = pDlg->get_position();
         pInfo->aSize = pDlg->get_size();
