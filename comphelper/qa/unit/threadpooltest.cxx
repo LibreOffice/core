@@ -17,6 +17,7 @@
 
 #include <stdlib.h>
 #include <atomic>
+#include <cstddef>
 #include <thread>
 #include <mutex>
 
@@ -42,7 +43,7 @@ void ThreadPoolTest::testPreferredConcurrency()
 {
     // Check default.
     auto nThreads = comphelper::ThreadPool::getPreferredConcurrency();
-    sal_Int32 nExpected = 4; // UTs are capped to 4.
+    std::size_t nExpected = 4; // UTs are capped to 4.
     CPPUNIT_ASSERT_MESSAGE("Expected no more than 4 threads", nExpected >= nThreads);
 
 #ifndef _WIN32
@@ -51,7 +52,7 @@ void ThreadPoolTest::testPreferredConcurrency()
     setenv("MAX_CONCURRENCY", std::to_string(nThreads).c_str(), true);
     nThreads = comphelper::ThreadPool::getPreferredConcurrency();
     CPPUNIT_ASSERT_MESSAGE("Expected no more than hardware threads",
-                           nThreads <= static_cast<sal_Int32>(std::thread::hardware_concurrency()));
+                           nThreads <= std::thread::hardware_concurrency());
 
     // Revert and check. Again, nothing should change.
     unsetenv("MAX_CONCURRENCY");

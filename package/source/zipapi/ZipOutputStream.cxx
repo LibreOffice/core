@@ -143,13 +143,13 @@ void ZipOutputStream::consumeFinishedScheduledThreadTaskEntries()
     m_aEntries = aNonFinishedEntries;
 }
 
-void ZipOutputStream::reduceScheduledThreadTasksToGivenNumberOrLess(sal_Int32 nThreadTasks)
+void ZipOutputStream::reduceScheduledThreadTasksToGivenNumberOrLess(std::size_t nThreadTasks)
 {
-    while(static_cast< sal_Int32 >(m_aEntries.size()) > nThreadTasks)
+    while(m_aEntries.size() > nThreadTasks)
     {
         consumeFinishedScheduledThreadTaskEntries();
 
-        if(static_cast< sal_Int32 >(m_aEntries.size()) > nThreadTasks)
+        if(m_aEntries.size() > nThreadTasks)
         {
             osl::Thread::wait(std::chrono::microseconds(100));
         }

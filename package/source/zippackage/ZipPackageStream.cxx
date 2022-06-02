@@ -57,6 +57,7 @@
 #include <PackageConstants.hxx>
 
 #include <algorithm>
+#include <cstddef>
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::packages::zip;
@@ -771,7 +772,7 @@ bool ZipPackageStream::saveChild(
                     // cores and allow 4-times the amount for having the queue well filled. The
                     // 2nd parameter is the time to wait between cleanups in 10th of a second.
                     // Both values may be added to the configuration settings if needed.
-                    static sal_Int32 nAllowedTasks(comphelper::ThreadPool::getPreferredConcurrency() * 4);
+                    static std::size_t nAllowedTasks(comphelper::ThreadPool::getPreferredConcurrency() * 4); //TODO: overflow
                     rZipOut.reduceScheduledThreadTasksToGivenNumberOrLess(nAllowedTasks);
 
                     // Start a new thread task deflating this zip entry
