@@ -34,6 +34,7 @@ using std::cmp_greater_equal;
 
 template <typename T1, typename T2> constexpr bool cmp_equal(T1 value1, T2 value2) noexcept
 {
+    // coverity[same_on_both_sides: FALSE]
     if constexpr (std::is_signed_v<T1> == std::is_signed_v<T2>)
     {
         return value1 == value2;
