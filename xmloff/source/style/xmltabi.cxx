@@ -93,7 +93,7 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
             break;
         case XML_ELEMENT(STYLE, XML_CHAR):
             if( !aIter.isEmpty() )
-                aTabStop.DecimalChar = aIter.toView()[0];
+                aTabStop.DecimalChar = aIter.toString()[0];
             break;
         case XML_ELEMENT(STYLE, XML_LEADER_STYLE):
             if( IsXMLToken( aIter, XML_NONE ) )
@@ -105,7 +105,7 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
             break;
         case XML_ELEMENT(STYLE, XML_LEADER_TEXT):
             if( !aIter.isEmpty() )
-                cTextFillChar = aIter.toView()[0];
+                cTextFillChar = aIter.toString()[0];
             break;
         default:
             XMLOFF_WARN_UNKNOWN("xmloff", aIter);
