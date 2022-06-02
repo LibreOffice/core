@@ -114,15 +114,13 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
     , m_pGeneralPage( nullptr )
     , m_pMySQLIntroPage( nullptr )
     , m_pFinalPage( nullptr )
-    , m_pCollection( nullptr )
 {
     // no local resources needed anymore
     // extract the datasource type collection from the item set
-    const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( _pItems->GetItem(DSID_TYPECOLLECTION) );
-    if (pCollectionItem)
-        m_pCollection = pCollectionItem->getCollection();
+    const DbuTypeCollectionItem& rCollectionItem = dynamic_cast<const DbuTypeCollectionItem&>(*_pItems->GetItem(DSID_TYPECOLLECTION));
+    m_pCollection = rCollectionItem.getCollection();
 
-    OSL_ENSURE(m_pCollection, "ODbTypeWizDialogSetup::ODbTypeWizDialogSetup : really need a DSN type collection !");
+    assert(m_pCollection && "ODbTypeWizDialogSetup::ODbTypeWizDialogSetup : really need a DSN type collection !");
 
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxORB, m_xAssistant.get(), _pParent, this));
     m_pImpl->setDataSourceOrName(_aDataSourceName);
