@@ -45,6 +45,7 @@ public:
     void testTdf126460();
     void testTdf115863();
     void testTdf138818();
+    void testTdf149418();
     void testTdf74331();
     void testRoundtrip();
     void testRGB8bits();
@@ -55,6 +56,7 @@ public:
     CPPUNIT_TEST(testTdf126460);
     CPPUNIT_TEST(testTdf115863);
     CPPUNIT_TEST(testTdf138818);
+    CPPUNIT_TEST(testTdf149418);
     CPPUNIT_TEST(testTdf74331);
     CPPUNIT_TEST(testRoundtrip);
     CPPUNIT_TEST(testRGB8bits);
@@ -128,6 +130,23 @@ void TiffFilterTest::testTdf138818()
     // - Expected: 46428
     // - Actual  : 45951
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(46428), aGraphic.GetGfxLink().GetDataSize());
+}
+
+void TiffFilterTest::testTdf149418()
+{
+    OUString aURL = getUrl() + "tdf149418.tif";
+    SvFileStream aFileStream(aURL, StreamMode::READ);
+    Graphic aGraphic;
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
+
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 50938
+    // - Actual  : 50029
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(50938), aGraphic.GetGfxLink().GetDataSize());
 }
 
 void TiffFilterTest::testTdf74331()
