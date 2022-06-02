@@ -114,7 +114,7 @@ namespace comphelper_ifcontainer
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE("query contents",
                                    nTests, static_cast<int>(aElements.size()));
-            if (static_cast<int>(aElements.size()) == nTests)
+            if (aElements.size() == nTests)
             {
                 for (i = 0; i < nTests; i++)
                 {
