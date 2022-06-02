@@ -380,7 +380,8 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             }
 
             ParaPortion* pPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );
-            pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex() );
+            if (pPortion)
+                pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex() );
 
             bool bWasCursorOverwrite = mpIMEInfos->bWasCursorOverwrite;
 
