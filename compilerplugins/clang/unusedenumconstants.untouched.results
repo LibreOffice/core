@@ -139,9 +139,9 @@ include/vcl/toolkit/treelistbox.hxx:150
 include/vcl/toolkit/treelistbox.hxx:154
     enum DragDropMode ALL
 include/vcl/vclenum.hxx:310
-    enum WindowStateState Rollup
+    enum vcl::WindowState Rollup
 include/vcl/vclenum.hxx:313
-    enum WindowStateState FullScreen
+    enum vcl::WindowState FullScreen
 include/vcl/vclenum.hxx:408
     enum TrackingEventFlags Focus
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:70
