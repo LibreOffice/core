@@ -4667,14 +4667,15 @@ static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
         return LOK_SELTYPE_NONE;
     }
 
-    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(pDoc->getSelection(), css::uno::UNO_QUERY);
+    css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
         SetLastExceptionMsg("No selection available");
         return LOK_SELTYPE_NONE;
     }
 
-    if (xTransferable->isComplex())
+    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(xTransferable, css::uno::UNO_QUERY);
+    if (xTransferable2.is() && xTransferable2->isComplex())
         return LOK_SELTYPE_COMPLEX;
 
     OString aRet;
@@ -4704,14 +4705,15 @@ static int doc_getSelectionTypeAndText(LibreOfficeKitDocument* pThis, const char
         return LOK_SELTYPE_NONE;
     }
 
-    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(pDoc->getSelection(), css::uno::UNO_QUERY);
+    css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
         SetLastExceptionMsg("No selection available");
         return LOK_SELTYPE_NONE;
     }
 
-    if (xTransferable->isComplex())
+    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(xTransferable, css::uno::UNO_QUERY);
+    if (xTransferable2.is() && xTransferable2->isComplex())
         return LOK_SELTYPE_COMPLEX;
 
     const char *pType = pMimeType;
