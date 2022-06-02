@@ -43,8 +43,8 @@ SalFrameGeometry SalFrame::GetGeometry() const
     if( pParent && AllSettings::GetLayoutRTL() )
     {
         SalFrameGeometry aGeom = maGeometry;
-        int parent_x = aGeom.nX - pParent->maGeometry.nX;
-        aGeom.nX = pParent->maGeometry.nX + pParent->maGeometry.nWidth - maGeometry.nWidth - parent_x;
+        const int nParentX = aGeom.x() - pParent->maGeometry.x();
+        aGeom.setX(pParent->maGeometry.x() + pParent->maGeometry.width() - maGeometry.width() - nParentX);
         return aGeom;
     }
     else

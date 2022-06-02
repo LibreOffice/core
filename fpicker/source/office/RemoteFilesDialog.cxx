@@ -124,7 +124,7 @@ RemoteFilesDialog::~RemoteFilesDialog()
     if( !m_sIniKey.isEmpty() )
     {
         SvtViewOptions aDlgOpt( EViewType::Dialog, m_sIniKey );
-        aDlgOpt.SetWindowState(OStringToOUString(m_xDialog->get_window_state(WindowStateMask::All), RTL_TEXTENCODING_UTF8));
+        aDlgOpt.SetWindowState(OStringToOUString(m_xDialog->get_window_state(vcl::WindowDataMask::All), RTL_TEXTENCODING_UTF8));
 
         Size aSize(m_xDialog->get_size());
 

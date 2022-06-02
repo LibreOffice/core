@@ -2721,7 +2721,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             if( AllSettings::GetLayoutRTL() )
             {
                 SalFrame* pSalFrame = pWindow->ImplGetWindowImpl()->mpFrame;
-                const_cast<SalPaintEvent *>(pPaintEvt)->mnBoundX = pSalFrame->maGeometry.nWidth-pPaintEvt->mnBoundWidth-pPaintEvt->mnBoundX;
+                const_cast<SalPaintEvent *>(pPaintEvt)->mnBoundX = pSalFrame->maGeometry.width() - pPaintEvt->mnBoundWidth - pPaintEvt->mnBoundX;
             }
 
             tools::Rectangle aBoundRect( Point( pPaintEvt->mnBoundX, pPaintEvt->mnBoundY ),
@@ -2746,7 +2746,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
         case SalEvent::MoveResize:
             {
             SalFrameGeometry g = pWindow->ImplGetWindowImpl()->mpFrame->GetGeometry();
-            ImplHandleMoveResize( pWindow, g.nWidth, g.nHeight );
+            ImplHandleMoveResize(pWindow, g.width(), g.height());
             }
             break;
 

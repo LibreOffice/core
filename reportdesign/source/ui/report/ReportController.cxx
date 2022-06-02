@@ -294,7 +294,7 @@ void OReportController::disposing()
     if ( m_xGroupsFloater )
     {
         SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_xGroupsFloater->get_help_id(), RTL_TEXTENCODING_UTF8));
-        aDlgOpt.SetWindowState(OStringToOUString(m_xGroupsFloater->getDialog()->get_window_state(WindowStateMask::All), RTL_TEXTENCODING_ASCII_US));
+        aDlgOpt.SetWindowState(OStringToOUString(m_xGroupsFloater->getDialog()->get_window_state(vcl::WindowDataMask::All), RTL_TEXTENCODING_ASCII_US));
         if (m_xGroupsFloater->getDialog()->get_visible())
             m_xGroupsFloater->response(RET_CANCEL);
         m_xGroupsFloater.reset();
