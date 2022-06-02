@@ -36,6 +36,11 @@ class SwContentControlDlg final : public SfxDialogController
     std::vector<SwContentControlListItem> m_aSavedListItems;
 
     std::unique_ptr<weld::CheckButton> m_xShowingPlaceHolderCB;
+    std::unique_ptr<weld::Frame> m_xCheckboxFrame;
+    std::unique_ptr<weld::Entry> m_xCheckedState;
+    std::unique_ptr<weld::Button> m_xCheckedStateBtn;
+    std::unique_ptr<weld::Entry> m_xUncheckedState;
+    std::unique_ptr<weld::Button> m_xUncheckedStateBtn;
     std::unique_ptr<weld::Frame> m_xListItemsFrame;
     std::unique_ptr<weld::TreeView> m_xListItems;
     std::unique_ptr<weld::Box> m_xListItemButtons;
@@ -54,6 +59,7 @@ class SwContentControlDlg final : public SfxDialogController
     DECL_LINK(MoveDownHdl, weld::Button&, void);
     DECL_LINK(SelectionChangedHdl, weld::TreeView&, void);
     DECL_LINK(OkHdl, weld::Button&, void);
+    DECL_LINK(SelectCharHdl, weld::Button&, void);
 
 public:
     SwContentControlDlg(weld::Window* pParent, SwWrtShell& rSh);
