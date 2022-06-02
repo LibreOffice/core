@@ -11,6 +11,7 @@
 
 #include <com/sun/star/uno/Exception.hpp>
 #include <config_options.h>
+#include <o3tl/safeint.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <salhelper/thread.hxx>
@@ -18,6 +19,7 @@
 #include <memory>
 #include <thread>
 #include <chrono>
+#include <cstddef>
 #include <comphelper/debuggerinfo.hxx>
 #include <utility>
 
@@ -91,7 +93,7 @@ public:
     }
 };
 
-ThreadPool::ThreadPool(sal_Int32 nWorkers)
+ThreadPool::ThreadPool(std::size_t nWorkers)
     : mbTerminate(true)
     , mnMaxWorkers(nWorkers)
     , mnBusyWorkers(0)
@@ -116,7 +118,7 @@ std::shared_ptr< ThreadPool >& GetStaticThreadPool()
     static std::shared_ptr< ThreadPool > POOL =
     []()
     {
-        const sal_Int32 nThreads = ThreadPool::getPreferredConcurrency();
+        const std::size_t nThreads = ThreadPool::getPreferredConcurrency();
         return std::make_shared< ThreadPool >( nThreads );
     }();
     return POOL;
@@ -129,21 +131,22 @@ ThreadPool& ThreadPool::getSharedOptimalPool()
     return *GetStaticThreadPool();
 }
 
-sal_Int32 ThreadPool::getPreferredConcurrency()
+std::size_t ThreadPool::getPreferredConcurrency()
 {
-    static sal_Int32 ThreadCount = []()
+    static std::size_t ThreadCount = []()
     {
-        const sal_Int32 nHardThreads = std::max(std::thread::hardware_concurrency(), 1U);
-        sal_Int32 nThreads = nHardThreads;
+        const std::size_t nHardThreads = o3tl::clamp_to_unsigned<std::size_t>(
+            std::max(std::thread::hardware_concurrency(), 1U));
+        std::size_t nThreads = nHardThreads;
         const char *pEnv = getenv("MAX_CONCURRENCY");
         if (pEnv != nullptr)
         {
             // Override with user/admin preference.
-            nThreads = rtl_str_toInt32(pEnv, 10);
+            nThreads = o3tl::clamp_to_unsigned<std::size_t>(rtl_str_toInt32(pEnv, 10));
         }
 
         nThreads = std::min(nHardThreads, nThreads);
-        return std::max<sal_Int32>(nThreads, 1);
+        return std::max<std::size_t>(nThreads, 1);
     }();
 
     return ThreadCount;

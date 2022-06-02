@@ -25,6 +25,7 @@
 #include "ByteChucker.hxx"
 #include <comphelper/threadpool.hxx>
 
+#include <cstddef>
 #include <vector>
 
 struct ZipEntry;
@@ -85,7 +86,7 @@ private:
 
 public:
     void reduceScheduledThreadTasksToGivenNumberOrLess(
-        sal_Int32 nThreadTasks);
+        std::size_t nThreadTasks);
 
     const std::shared_ptr<comphelper::ThreadTaskTag>& getThreadTaskTag() const { return mpThreadTaskTag; }
 };
