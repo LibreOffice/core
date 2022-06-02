@@ -798,9 +798,9 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                         SetLine( pNewBLTRItem->GetLine(), pLine );
                 }
             }
-            if( pNewBoxItem )   rNewSet.Put( *pNewBoxItem );
-            if( pNewTLBRItem )  rNewSet.Put( *pNewTLBRItem );
-            if( pNewBLTRItem )  rNewSet.Put( *pNewBLTRItem );
+            if( pNewBoxItem )   rNewSet.Put( std::move(pNewBoxItem) );
+            if( pNewTLBRItem )  rNewSet.Put( std::move(pNewTLBRItem) );
+            if( pNewBLTRItem )  rNewSet.Put( std::move(pNewBLTRItem) );
 
             nStart = mvData[nPos].nEndRow + 1;
 

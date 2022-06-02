@@ -2731,7 +2731,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
         if (!aTarFrame.isEmpty())
             pFormatURL->SetTargetFrameName(aTarFrame);
         pFormatURL->SetMap(nullptr);
-        aFlySet.Put(*pFormatURL);
+        aFlySet.Put(std::move(pFormatURL));
     }
 
     // If we are to be "below text" then we are not to be opaque

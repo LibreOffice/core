@@ -527,7 +527,6 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     const ScPatternAttr*    pOldAttrs       = GetSelectionPattern();
 
     auto pOldSet = std::make_shared<SfxItemSet>(pOldAttrs->GetItemSet());
-    std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
     pOldSet->MergeRange(XATTR_FILLSTYLE, XATTR_FILLCOLOR);
 
@@ -566,7 +565,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
         aLineInner->SetValid( SvxBoxInfoItemValidFlags::LEFT, aTempInfo->IsValid(SvxBoxInfoItemValidFlags::RIGHT));
         aLineInner->SetValid( SvxBoxInfoItemValidFlags::RIGHT, aTempInfo->IsValid(SvxBoxInfoItemValidFlags::LEFT));
 
-        pOldSet->Put( *aNewFrame );
+        pOldSet->Put( std::move(aNewFrame) );
     }
     else
     {
@@ -579,10 +578,9 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     pOldSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
         pOldAttrs->GetNumberFormat( rDoc.GetFormatTable() ) ) );
 
-    pNumberInfoItem = MakeNumberInfoItem(rDoc, GetViewData());
-
+    std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem = MakeNumberInfoItem(rDoc, GetViewData());
     pOldSet->MergeRange( SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO );
-    pOldSet->Put(*pNumberInfoItem );
+    pOldSet->Put( std::move(pNumberInfoItem) );
 
     bInFormatDialog = true;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();

@@ -555,7 +555,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             }
 
             pZoomItem->SetValueSet( nZoomValues );
-            rSet.Put( *pZoomItem );
+            rSet.Put( std::move(pZoomItem) );
         }
     }
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )

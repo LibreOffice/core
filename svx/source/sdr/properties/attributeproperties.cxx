@@ -339,10 +339,7 @@ namespace sdr::properties
                 if(pResultItem)
                 {
                     // force ItemSet
-                    mxItemSet->Put(*pResultItem);
-
-                    // delete item if it was a generated one
-                    pResultItem.reset();
+                    mxItemSet->Put(std::move(pResultItem));
                 }
                 else
                 {

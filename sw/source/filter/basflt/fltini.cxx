@@ -366,7 +366,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
         aSz->SetWidth( nWidth );
         if( MINFLY > aSz->GetHeight() )
             aSz->SetHeight( MINFLY );
-        rFlySet.Put( *aSz );
+        rFlySet.Put( std::move(aSz) );
     }
     else if( MINFLY > pFrameSizeItem->GetHeight() )
     {

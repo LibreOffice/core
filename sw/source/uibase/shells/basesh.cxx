@@ -2755,7 +2755,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 std::unique_ptr<SvxBrushItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
                 rSh.GetBoxBackground( aBrush );
                 pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(pMDI, aSet));
-                aSet.Put( *aBrush );
+                aSet.Put( std::move(aBrush) );
                 if ( pDlg->Execute() == RET_OK )
                 {
 

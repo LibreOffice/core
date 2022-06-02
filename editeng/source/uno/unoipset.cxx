@@ -142,7 +142,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMapEntry* pMap, 
     {
         // Set new item in item set
         pNewItem->SetWhich(pMap->nWID);
-        rSet.Put(*pNewItem);
+        rSet.Put(std::move(pNewItem));
     }
 }
 

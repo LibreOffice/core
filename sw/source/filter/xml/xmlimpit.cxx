@@ -134,7 +134,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                     }
 
                     if( bPut )
-                        rSet.Put( *pNewItem );
+                        rSet.Put( std::move(pNewItem) );
                 }
                 else
                 {

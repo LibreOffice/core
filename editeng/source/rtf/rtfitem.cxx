@@ -775,7 +775,7 @@ ATTR_SETUNDERLINE:
 
                     aUL->SetColor(GetColor(sal_uInt16(nTokenValue)));
 
-                    pSet->Put(*aUL);
+                    pSet->Put(std::move(aUL));
                 }
                 break;
 
@@ -876,7 +876,7 @@ ATTR_SETOVERLINE:
 
                     aOL->SetColor(GetColor(sal_uInt16(nTokenValue)));
 
-                    pSet->Put(*aOL);
+                    pSet->Put(std::move(aOL));
                 }
                 break;
 
@@ -1529,7 +1529,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
 
     SetBorderLine( nBorderTyp, *aAttr, aBrd );
 
-    rSet.Put( *aAttr );
+    rSet.Put( std::move(aAttr) );
     SkipToken();
 }
 

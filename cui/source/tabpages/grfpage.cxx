@@ -270,7 +270,7 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
         pNew->SetRight( lcl_GetValue( *m_xRightMF, eUnit ) );
         pNew->SetTop( lcl_GetValue( *m_xTopMF, eUnit ) );
         pNew->SetBottom( lcl_GetValue( *m_xBottomMF, eUnit ) );
-        bModified |= nullptr != rSet->Put( *pNew );
+        bModified |= nullptr != rSet->Put( std::move(pNew) );
     }
 
     if( m_xZoomConstRB->get_state_changed_from_saved() )

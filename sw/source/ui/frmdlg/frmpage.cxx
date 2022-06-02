@@ -2752,7 +2752,7 @@ bool SwFrameURLPage::FillItemSet(SfxItemSet *rSet)
         pFormatURL->SetTargetFrameName(m_xFrameCB->get_active_text());
         bModified = true;
     }
-    rSet->Put(*pFormatURL);
+    rSet->Put(std::move(pFormatURL));
     return bModified;
 }
 

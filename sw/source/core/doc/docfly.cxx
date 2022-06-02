@@ -546,7 +546,7 @@ void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
 
         if(pResult)
         {
-            rSet.Put(*pResult);
+            rSet.Put(std::move(pResult));
         }
     }
 }

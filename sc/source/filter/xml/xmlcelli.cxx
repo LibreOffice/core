@@ -393,8 +393,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
         if (nLastItemID != pEntry->mnItemID && pPoolItem)
         {
             // Flush the last item when the item ID changes.
-            rFmt.maItemSet.Put(*pPoolItem);
-            pPoolItem.reset();
+            rFmt.maItemSet.Put(std::move(pPoolItem));
         }
 
         switch (pEntry->mnItemID)
@@ -562,7 +561,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
     }
 
     if (pPoolItem)
-        rFmt.maItemSet.Put(*pPoolItem);
+        rFmt.maItemSet.Put(std::move(pPoolItem));
 }
 
 OUString ScXMLTableRowCellContext::GetFirstParagraph() const

@@ -1837,7 +1837,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAGEDESC)>(const SfxItemPropertyM
         if(!pPageDesc)
             throw lang::IllegalArgumentException();
         pNewDesc->RegisterToPageDesc(*pPageDesc);
-        rStyleSet.Put(*pNewDesc);
+        rStyleSet.Put(std::move(pNewDesc));
     }
 }
 template<>
@@ -1954,7 +1954,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_TXTATR_CJK_RUBY)>(const SfxItemPr
         const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(sValue, SwGetPoolIdFromName::ChrFmt));
         pRuby->SetCharFormatId(nId);
     }
-    rStyleSet.Put(*pRuby);
+    rStyleSet.Put(std::move(pRuby));
     SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, rValue, o_rStyleBase);
 }
 template<>
@@ -1983,7 +1983,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_DROP)>(const SfxItemProper
         throw lang::IllegalArgumentException();
     }
     pDrop->SetCharFormat(pStyle->GetCharFormat());
-    rStyleSet.Put(*pDrop);
+    rStyleSet.Put(std::move(pDrop));
 }
 template<>
 void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_NUMRULE)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
@@ -2840,7 +2840,7 @@ SwXPageStyle::SwXPageStyle(SwDocShell* pDocSh)
 void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertyMapEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl)
 {
     // create a new SvxSetItem and get it's ItemSet as new target
-    const std::unique_ptr<SvxSetItem> pNewSetItem(pSetItem->Clone());
+    std::unique_ptr<SvxSetItem> pNewSetItem(pSetItem->Clone());
     SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
 
     // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
@@ -2857,7 +2857,7 @@ void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet
     rSetSet.SetParent(nullptr);
 
     // set the new SvxSetItem at the real target and delete it
-    rBaseImpl.GetItemSet().Put(*pNewSetItem);
+    rBaseImpl.GetItemSet().Put(std::move(pNewSetItem));
 }
 
 void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNames, const uno::Sequence<uno::Any>& rValues)
@@ -3010,7 +3010,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                         rSetSet.SetParent(nullptr);
 
                         // set the new SvxSetItem at the real target and delete it
-                        aBaseImpl.GetItemSet().Put(*pNewSetItem);
+                        aBaseImpl.GetItemSet().Put(std::move(pNewSetItem));
                     }
                 }
                 continue;
