@@ -69,6 +69,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d7c4498_de6dd7bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-02T12:59:41Z",
+      "side": 1,
+      "message": "Final comments: \n\nCan see from bugs listed in comment 11 that \"system language input\" is used in relation to Linux.  Maybe \"keyboard setting\" is a MS tradition?  and Mac?\n\nIdeally a phrase can/should be used to refer to \"keyboard setting\" or \"system language\" or whatever that is likely to be recognized/understood by the greatest number of users (without assuming they have knowledge about the \"technically correct\" label).  (can only point to this issue, have inadequate knowledge to offer a solution.)\n\n@Isha - remember to update help page (shared/optionen/01140000.xhp) with new label names, whatever they become (and also the explanation about \"system input language\") or file a BZ ticket for updating that page.",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c89ffbe_ee8fe0f8",
@@ -180,6 +197,29 @@
         "startChar": 134,
         "endLine": 337,
         "endChar": 356
+      },
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfca2553_1af9341e",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-02T12:59:41Z",
+      "side": 1,
+      "message": "Proposal:  Keyboard\n\nBZ suggested \"Other\" as a generic container that does not have to be changed in the future.  otoh -- is it likely that more entries will come here?  \"Keyboard\" is neutral -- but gives a hint about likely contents of section, without having to study the detail of the control. \"Other\" is frustrating (imo) -- because forces the need to study the contents of the section.",
+      "range": {
+        "startLine": 352,
+        "startChar": 88,
+        "endLine": 352,
+        "endChar": 93
       },
       "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
