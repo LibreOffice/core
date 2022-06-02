@@ -197,10 +197,9 @@ void WorkWindow::StartPresentationMode( bool bPresentation, PresentationFlags nF
 
 bool WorkWindow::IsMinimized() const
 {
-    //return mpWindowImpl->mpFrameData->mbMinimized;
-    SalFrameState aState;
-    if (mpWindowImpl->mpFrame->GetWindowState(&aState))
-        return bool(aState.mnState & WindowStateState::Minimized);
+    vcl::WindowData aData;
+    if (mpWindowImpl->mpFrame->GetWindowState(&aData))
+        return bool(aData.state() & vcl::WindowState::Minimized);
     else
         return false;
 }
@@ -220,22 +219,22 @@ void WorkWindow::SetPluginParent( SystemParentData* pParent )
         Window::ImplStartDnd();
 }
 
-void WorkWindow::ImplSetFrameState( WindowStateState aFrameState )
+void WorkWindow::ImplSetFrameState(vcl::WindowState aFrameState )
 {
-    SalFrameState   aState;
-    aState.mnMask   = WindowStateMask::State;
-    aState.mnState  = aFrameState;
-    mpWindowImpl->mpFrame->SetWindowState( &aState );
+    vcl::WindowData aState;
+    aState.setMask(vcl::WindowDataMask::State);
+    aState.setState(aFrameState);
+    mpWindowImpl->mpFrame->SetWindowState(&aState);
 }
 
 void WorkWindow::Minimize()
 {
-    ImplSetFrameState( WindowStateState::Minimized );
+    ImplSetFrameState( vcl::WindowState::Minimized );
 }
 
 void WorkWindow::Restore()
 {
-    ImplSetFrameState( WindowStateState::Normal );
+    ImplSetFrameState( vcl::WindowState::Normal );
 }
 
 bool WorkWindow::Close()
@@ -251,19 +250,19 @@ bool WorkWindow::Close()
 
 void WorkWindow::Maximize( bool bMaximize )
 {
-    ImplSetFrameState( bMaximize ? WindowStateState::Maximized : WindowStateState::Normal );
+    ImplSetFrameState( bMaximize ? vcl::WindowState::Maximized : vcl::WindowState::Normal );
 }
 
 bool WorkWindow::IsMaximized() const
 {
     bool bRet = false;
 
-    SalFrameState aState;
+    vcl::WindowData aState;
     if( mpWindowImpl->mpFrame->GetWindowState( &aState ) )
     {
-        if( aState.mnState & (WindowStateState::Maximized          |
-                              WindowStateState::MaximizedHorz     |
-                              WindowStateState::MaximizedVert ) )
+        if( aState.state() & (vcl::WindowState::Maximized          |
+                              vcl::WindowState::MaximizedHorz     |
+                              vcl::WindowState::MaximizedVert ) )
             bRet = true;
     }
     return bRet;

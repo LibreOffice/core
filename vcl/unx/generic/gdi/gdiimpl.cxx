@@ -1437,7 +1437,7 @@ bool X11SalGraphicsImpl::drawPolyPolygon(
 tools::Long X11SalGraphicsImpl::GetGraphicsHeight() const
 {
     if( mrParent.m_pFrame )
-        return mrParent.m_pFrame->maGeometry.nHeight;
+        return mrParent.m_pFrame->maGeometry.height();
     else if( mrParent.m_pVDev )
         return static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetHeight();
     else
@@ -1971,7 +1971,7 @@ sal_uInt16 X11SalGraphicsImpl::GetBitCount() const
 tools::Long X11SalGraphicsImpl::GetGraphicsWidth() const
 {
     if( mrParent.m_pFrame )
-        return mrParent.m_pFrame->maGeometry.nWidth;
+        return mrParent.m_pFrame->maGeometry.width();
     else if( mrParent.m_pVDev )
         return static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetWidth();
     else

@@ -1315,7 +1315,7 @@ void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
 {
     Reference< XPropertySet > xP( rxCtrl->getModel(), UNO_QUERY );
 
-    sal_Int32 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
+    sal_Int32 nX = 0, nY = 0, nWidth = 1, nHeight = 1;
     xP->getPropertyValue("PositionX") >>= nX;
     xP->getPropertyValue("PositionY") >>= nY;
     xP->getPropertyValue("Width") >>= nWidth;

@@ -769,7 +769,7 @@ void PrintDialog::storeToSettings()
 
     pItem->setValue( "PrintDialog",
                      "WindowState",
-                     OStringToOUString(m_xDialog->get_window_state(WindowStateMask::All), RTL_TEXTENCODING_UTF8) );
+                     OStringToOUString(m_xDialog->get_window_state(vcl::WindowDataMask::All), RTL_TEXTENCODING_UTF8) );
 
     pItem->setValue( "PrintDialog",
                      "CopyCount",
