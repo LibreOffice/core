@@ -18,6 +18,46 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da76bbd2_72cb0060",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-02T11:36:34Z",
+      "side": 1,
+      "message": "Thanks for patch Isha. Discussion is BZ is diverse, with no definite conclusions - though mentioned that patch-maker could decide.\n\nHave made some suggestions in comments to individual controls.",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2522abe_a3d148b6",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-02T11:36:34Z",
+      "side": 1,
+      "message": "\"User Interface\"",
+      "range": {
+        "startLine": 95,
+        "startChar": 88,
+        "endLine": 95,
+        "endChar": 100
+      },
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da5e2cc4_ce628e24",
@@ -36,6 +76,29 @@
         "startChar": 106,
         "endLine": 329,
         "endChar": 136
+      },
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71aa4a3a_1087ef58",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-02T11:36:34Z",
+      "side": 1,
+      "message": "Localization",
+      "range": {
+        "startLine": 515,
+        "startChar": 88,
+        "endLine": 515,
+        "endChar": 95
       },
       "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
