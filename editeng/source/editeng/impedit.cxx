@@ -242,9 +242,6 @@ const OutlinerViewShell* ImpEditView::GetViewShell() const
 
 void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 {
-    if (aEditSelection == rEditSelection)
-        return;
-
     // set state before notification
     aEditSelection = rEditSelection;
 
