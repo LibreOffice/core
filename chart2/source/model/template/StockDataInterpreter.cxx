@@ -274,7 +274,7 @@ bool StockDataInterpreter::isDataCompatible(
                        ( eVar == StockChartTypeTemplate::StockVariant::VolumeOpen ));
 
     // 1. correct number of sub-types
-    if( static_cast<sal_Int32>(aInterpretedData.Series.size()) < (bHasVolume ? 2 : 1 ))
+    if( aInterpretedData.Series.size() < (bHasVolume ? 2U : 1U ))
         return false;
 
     // 2. a. volume -- use default check
@@ -289,7 +289,7 @@ bool StockDataInterpreter::isDataCompatible(
 
     // 2. b. candlestick
     {
-        OSL_ASSERT( static_cast<sal_Int32>(aInterpretedData.Series.size()) > (bHasVolume ? 1 : 0));
+        OSL_ASSERT( aInterpretedData.Series.size() > (bHasVolume ? 1U : 0U));
         const std::vector< rtl::Reference< DataSeries > > & aSeries = aInterpretedData.Series[(bHasVolume ? 1 : 0)];
         if(aSeries.empty())
             return false;
