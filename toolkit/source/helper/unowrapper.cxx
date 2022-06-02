@@ -224,10 +224,13 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
         VclPtr< vcl::Window > pNextChild = pChild->GetWindow( GetWindowType::Next );
 
         VclPtr< vcl::Window > pClient = pChild->GetWindow( GetWindowType::Client );
-        if ( pClient && pClient->GetWindowPeer() )
+        if ( pClient  )
         {
-            css::uno::Reference< css::lang::XComponent > xComp = pClient->GetComponentInterface( false );
-            xComp->dispose();
+            // Create the window peer (true argument for pClient->GetComponentInterface) when it's not yet there.
+            // We need it to dispose the child windows properly, otherwise the vcl::Window will be leaked.
+            css::uno::Reference< css::lang::XComponent > xComp = pClient->GetComponentInterface( true );
+            if (xComp.is())
+                xComp->dispose();
         }
 
         pChild = pNextChild;
