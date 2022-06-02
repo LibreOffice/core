@@ -523,7 +523,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
     pNode->Arrange(*pDevice, maFormat);
 
     Size aSize = pDevice->LogicToPixel(Size(pNode->GetWidth(), pNode->GetHeight()));
-    aSize.extendBy(10, 0); // Add 5 pixels from both sides to accomodate extending parts of italics
+    aSize.extendBy(10, 0); // Add 5 pixels from both sides to accommodate extending parts of italics
     pDevice->SetOutputSizePixel(aSize);
     SmDrawingVisitor(*pDevice, pDevice->PixelToLogic(Point(5, 0)), pNode.get());
 
