@@ -41,6 +41,7 @@
 #include "digestcontext.hxx"
 #include "ciphercontext.hxx"
 
+#include <cstddef>
 #include <memory>
 #include <vector>
 
@@ -222,7 +223,7 @@ const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Refer
 
     if (xMozillaBootstrap.is())
     {
-        for (int i=0; i<int(SAL_N_ELEMENTS(productTypes)); ++i)
+        for (std::size_t i=0; i<SAL_N_ELEMENTS(productTypes); ++i)
         {
             OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
 
@@ -262,7 +263,7 @@ css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNS
 
     if (xMozillaBootstrap.is())
     {
-        for (int i=0; i<int(SAL_N_ELEMENTS(productTypes)); ++i)
+        for (std::size_t i=0; i<SAL_N_ELEMENTS(productTypes); ++i)
         {
             uno::Sequence<OUString> aProductProfileList;
             xMozillaBootstrap->getProfileList(productTypes[i], aProductProfileList);
