@@ -1616,7 +1616,7 @@ void SalInstanceWindow::set_window_state(const OString& rStr)
     pSysWin->SetWindowState(rStr);
 }
 
-OString SalInstanceWindow::get_window_state(WindowStateMask nMask) const
+OString SalInstanceWindow::get_window_state(vcl::WindowDataMask nMask) const
 {
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
     assert(pSysWin);
