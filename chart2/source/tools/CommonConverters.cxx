@@ -192,7 +192,7 @@ void AddPointToPoly( std::vector<std::vector<css::drawing::Position3D>>& rPoly, 
     }
 
     //make sure that we have enough polygons
-    if(nPolygonIndex >= static_cast<sal_Int32>(rPoly.size()) )
+    if(o3tl::make_unsigned(nPolygonIndex) >= rPoly.size() )
     {
         rPoly.resize(nPolygonIndex+1);
     }
