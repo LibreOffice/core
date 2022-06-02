@@ -139,7 +139,7 @@ protected:
     explicit SystemWindow(WindowType nType, const char* pIdleDebugName);
     void loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
 
-    void     SetWindowStateData( const WindowStateData& rData );
+    void SetWindowState(const vcl::WindowData& rData);
 
     virtual void settingOptimalLayoutSize(Window *pBox);
 
@@ -177,7 +177,7 @@ public:
     const Size&     GetMaxOutputSizePixel() const;
 
     void            SetWindowState(std::string_view rStr);
-    OString         GetWindowState(WindowStateMask nMask = WindowStateMask::All) const;
+    OString GetWindowState(vcl::WindowDataMask nMask = vcl::WindowDataMask::All) const;
 
     void            SetMenuBar(MenuBar* pMenuBar);
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
@@ -194,7 +194,7 @@ public:
     VclPtr<NotebookBar> const & GetNotebookBar() const;
 
     TaskPaneList*   GetTaskPaneList();
-    void            GetWindowStateData( WindowStateData& rData ) const;
+    void GetWindowState(vcl::WindowData& rData) const;
 
     virtual void     SetText( const OUString& rStr ) override;
     virtual OUString GetText() const override;
