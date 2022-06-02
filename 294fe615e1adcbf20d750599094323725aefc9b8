@@ -34,6 +34,24 @@
       "parentUuid": "d0e12194_4915773b",
       "revId": "294fe615e1adcbf20d750599094323725aefc9b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce16877d_483f218e",
+        "filename": "svx/source/unodraw/unobrushitemhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-02T08:01:08Z",
+      "side": 1,
+      "message": "Ah, so the \"default\", added in 1e6ff8f7f8b5322bed7a1b4483f2f483b00212ba, is not considered \"can not happen again\".\n\nI\u0027d think that it\u0027s better to just drop this case, since it really cannot happen, and only looks confusing; the \u0027default\u0027 case is enough fallback for the really possible (?) unexpected values.",
+      "parentUuid": "0832c476_106ec830",
+      "revId": "294fe615e1adcbf20d750599094323725aefc9b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
