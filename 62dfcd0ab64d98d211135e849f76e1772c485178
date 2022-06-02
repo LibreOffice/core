@@ -204,6 +204,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "adc39ae8_0afdb100",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-06-02T13:27:54Z",
+      "side": 1,
+      "message": "Activated seems like the correct word here. \"Disabled\" is when some item is grayed out.",
+      "parentUuid": "d163187f_0c043721",
+      "range": {
+        "startLine": 337,
+        "startChar": 134,
+        "endLine": 337,
+        "endChar": 356
+      },
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bfca2553_1af9341e",
         "filename": "cui/uiconfig/ui/optlanguagespage.ui",
         "patchSetId": 2
