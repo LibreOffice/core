@@ -51,7 +51,7 @@ class Oxt_Handler final  :  public  ::cppu::WeakImplHelper<
 
     public:
 
-                 Oxt_Handler( const css::uno::Reference< css::uno::XComponentContext >&  );
+                 Oxt_Handler( css::uno::Reference< css::uno::XComponentContext > );
         virtual ~Oxt_Handler(                                                                        ) override;
 
         /* interface XServiceInfo */

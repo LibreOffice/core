@@ -36,6 +36,7 @@
 
 #include <functional>
 #include <set>
+#include <utility>
 
 namespace framework
 {
@@ -108,7 +109,7 @@ class LanguageGuessingHelper
     css::uno::Reference< css::uno::XComponentContext >                    m_xContext;
 
 public:
-    LanguageGuessingHelper(const css::uno::Reference< css::uno::XComponentContext >& _xContext) : m_xContext(_xContext){}
+    LanguageGuessingHelper(css::uno::Reference< css::uno::XComponentContext > _xContext) : m_xContext(std::move(_xContext)){}
 
     css::uno::Reference< css::linguistic2::XLanguageGuessing > const &  GetGuesser() const;
 };

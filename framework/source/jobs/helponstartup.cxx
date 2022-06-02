@@ -27,6 +27,7 @@
 
 // include others
 #include <comphelper/sequenceashashmap.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 
@@ -56,8 +57,8 @@ css::uno::Sequence< OUString > SAL_CALL HelpOnStartup::getSupportedServiceNames(
     return { SERVICENAME_JOB };
 }
 
-HelpOnStartup::HelpOnStartup(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : m_xContext    (xContext)
+HelpOnStartup::HelpOnStartup(css::uno::Reference< css::uno::XComponentContext > xContext)
+    : m_xContext    (std::move(xContext))
 {
     // create some needed uno services and cache it
     m_xModuleManager = css::frame::ModuleManager::create( m_xContext );

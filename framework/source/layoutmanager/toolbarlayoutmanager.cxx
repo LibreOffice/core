@@ -39,6 +39,7 @@
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <utility>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/dockingarea.hxx>
 #include <vcl/settings.hxx>
@@ -53,11 +54,11 @@ namespace framework
 {
 
 ToolbarLayoutManager::ToolbarLayoutManager(
-    const uno::Reference< uno::XComponentContext >& rxContext,
-    const uno::Reference< ui::XUIElementFactory >& xUIElementFactory,
+    uno::Reference< uno::XComponentContext > xContext,
+    uno::Reference< ui::XUIElementFactory > xUIElementFactory,
     LayoutManager* pParentLayouter ):
-    m_xContext( rxContext),
-    m_xUIElementFactoryManager( xUIElementFactory ),
+    m_xContext(std::move( xContext)),
+    m_xUIElementFactoryManager(std::move( xUIElementFactory )),
     m_pParentLayouter( pParentLayouter ),
     m_aDockingArea(0, 0, 0, 0),
     m_aDockingAreaOffsets(0, 0, 0, 0),

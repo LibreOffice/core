@@ -37,7 +37,7 @@ typedef ::cppu::WeakImplHelper<
     class MenuBarFactory : public MenuBarFactory_BASE
     {
         public:
-            MenuBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+            MenuBarFactory( css::uno::Reference< css::uno::XComponentContext > xContext );
             virtual ~MenuBarFactory() override;
 
             virtual OUString SAL_CALL getImplementationName() override

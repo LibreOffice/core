@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/frame/XFrame.hpp>
@@ -130,12 +131,12 @@ class MenuBarManager final :
         struct MenuItemHandler
         {
             MenuItemHandler( sal_uInt16             aItemId,
-                             css::uno::Reference< css::frame::XStatusListener > const & xManager,
-                             css::uno::Reference< css::frame::XDispatch > const & rDispatch ) :
+                             css::uno::Reference< css::frame::XStatusListener > xManager,
+                             css::uno::Reference< css::frame::XDispatch > xDispatch ) :
                              nItemId( aItemId ),
                              bMadeInvisible ( false ),
-                             xSubMenuManager( xManager ),
-                             xMenuItemDispatch( rDispatch ) {}
+                             xSubMenuManager(std::move( xManager )),
+                             xMenuItemDispatch(std::move( xDispatch )) {}
 
             sal_uInt16                                                        nItemId;
             bool                                                              bMadeInvisible;

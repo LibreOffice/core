@@ -27,7 +27,7 @@ namespace framework
 class GlobalSettings
 {
     public:
-        GlobalSettings( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        GlobalSettings( css::uno::Reference< css::uno::XComponentContext > xContext );
         ~GlobalSettings();
 
         enum StateInfo

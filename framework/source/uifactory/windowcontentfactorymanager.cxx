@@ -34,6 +34,7 @@
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -48,7 +49,7 @@ typedef comphelper::WeakComponentImplHelper<
 class WindowContentFactoryManager : public WindowContentFactoryManager_BASE
 {
 public:
-    explicit WindowContentFactoryManager( const css::uno::Reference< css::uno::XComponentContext>& rxContext );
+    explicit WindowContentFactoryManager( css::uno::Reference< css::uno::XComponentContext> xContext );
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -77,8 +78,8 @@ private:
     rtl::Reference<ConfigurationAccess_FactoryManager> m_pConfigAccess;
 };
 
-WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< uno::XComponentContext >& rxContext ) :
-    m_xContext( rxContext ),
+WindowContentFactoryManager::WindowContentFactoryManager( uno::Reference< uno::XComponentContext > xContext ) :
+    m_xContext(std::move( xContext )),
     m_bConfigRead( false ),
     m_pConfigAccess(
         new ConfigurationAccess_FactoryManager(

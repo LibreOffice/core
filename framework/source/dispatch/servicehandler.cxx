@@ -26,6 +26,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 
 namespace framework{
 
@@ -56,8 +57,8 @@ css::uno::Sequence< OUString > SAL_CALL ServiceHandler::getSupportedServiceNames
     @param      xFactory
                 reference to uno servicemanager for creation of new services
 */
-ServiceHandler::ServiceHandler( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-        : m_xContext    ( xContext                      )
+ServiceHandler::ServiceHandler( css::uno::Reference< css::uno::XComponentContext > xContext )
+        : m_xContext    (std::move( xContext                      ))
 {
 }
 

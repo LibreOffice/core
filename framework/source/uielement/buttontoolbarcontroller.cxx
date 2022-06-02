@@ -28,6 +28,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 
@@ -43,13 +44,13 @@ namespace framework
 {
 
 ButtonToolbarController::ButtonToolbarController(
-    const uno::Reference< uno::XComponentContext >& rxContext,
+    uno::Reference< uno::XComponentContext >  xContext,
     ToolBox*                                            pToolBar,
-    const OUString&                                aCommand ) :
+    OUString                                 aCommand ) :
     m_bInitialized( false ),
     m_bDisposed( false ),
-    m_aCommandURL( aCommand ),
-    m_xContext( rxContext ),
+    m_aCommandURL(std::move( aCommand )),
+    m_xContext(std::move( xContext )),
     m_pToolbar( pToolBar )
 {
 }

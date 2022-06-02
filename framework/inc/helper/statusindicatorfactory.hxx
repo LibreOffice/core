@@ -170,7 +170,7 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
     // interface
 
     public:
-        StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+        StatusIndicatorFactory(css::uno::Reference< css::uno::XComponentContext > xContext);
 
         virtual OUString SAL_CALL getImplementationName() override
         {

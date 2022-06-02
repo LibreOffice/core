@@ -80,8 +80,8 @@ class DispatchProvider final : public ::cppu::WeakImplHelper< css::frame::XDispa
     /* interface */
     public:
 
-        DispatchProvider( const css::uno::Reference< css::uno::XComponentContext >&     xContext ,
-                          const css::uno::Reference< css::frame::XFrame >&              xFrame   );
+        DispatchProvider( css::uno::Reference< css::uno::XComponentContext >      xContext ,
+                          const css::uno::Reference< css::frame::XFrame >&        xFrame   );
 
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL             ,
                                                                                                              const OUString&                                      sTargetFrameName ,

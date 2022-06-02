@@ -25,6 +25,7 @@
 #include <com/sun/star/awt/Size.hpp>
 
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <vcl/toolbox.hxx>
 
 namespace framework
@@ -65,12 +66,12 @@ struct UIElement
                   m_nStyle( ButtonType::SYMBOLONLY )
                   {}
 
-    UIElement( const OUString& rName,
-               const OUString& rType,
-               const css::uno::Reference< css::ui::XUIElement >& rUIElement
-               ) : m_aType( rType ),
-                   m_aName( rName ),
-                   m_xUIElement( rUIElement ),
+    UIElement( OUString aName,
+               OUString aType,
+               css::uno::Reference< css::ui::XUIElement > xUIElement
+               ) : m_aType(std::move( aType )),
+                   m_aName(std::move( aName )),
+                   m_xUIElement(std::move( xUIElement )),
                    m_bFloating( false ),
                    m_bVisible( true ),
                    m_bUserActive( false ),

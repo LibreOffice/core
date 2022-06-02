@@ -61,7 +61,7 @@ class ServiceHandler final : public  ::cppu::WeakImplHelper<
     public:
 
         // ctor/dtor
-                 ServiceHandler( const css::uno::Reference< css::uno::XComponentContext >& );
+                 ServiceHandler( css::uno::Reference< css::uno::XComponentContext > );
         virtual ~ServiceHandler(                                                                        ) override;
 
         /* interface XServiceInfo */

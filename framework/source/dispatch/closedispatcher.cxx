@@ -36,6 +36,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <osl/diagnose.h>
+#include <utility>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
@@ -55,10 +56,10 @@ constexpr OUStringLiteral URL_CLOSEDOC = u".uno:CloseDoc";
 constexpr OUStringLiteral URL_CLOSEWIN = u".uno:CloseWin";
 const char URL_CLOSEFRAME[] = ".uno:CloseFrame";
 
-CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponentContext >& rxContext ,
+CloseDispatcher::CloseDispatcher(css::uno::Reference< css::uno::XComponentContext >        xContext ,
                                  const css::uno::Reference< css::frame::XFrame >&          xFrame ,
                                  std::u16string_view                                       sTarget)
-    : m_xContext         (rxContext                                       )
+    : m_xContext(std::move(xContext))
     , m_aAsyncCallback(
         new vcl::EventPoster(LINK(this, CloseDispatcher, impl_asyncCallback)))
     , m_eOperation(E_CLOSE_DOC)

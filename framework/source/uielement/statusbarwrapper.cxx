@@ -26,6 +26,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <tools/solar.h>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star::uno;
@@ -40,10 +41,10 @@ namespace framework
 {
 
 StatusBarWrapper::StatusBarWrapper(
-    const css::uno::Reference< css::uno::XComponentContext >& rxContext
+    css::uno::Reference< css::uno::XComponentContext > xContext
     )
  :  UIConfigElementWrapperBase( UIElementType::STATUSBAR ),
-    m_xContext( rxContext )
+    m_xContext(std::move( xContext ))
 {
 }
 

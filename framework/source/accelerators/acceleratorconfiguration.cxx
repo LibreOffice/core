@@ -476,8 +476,8 @@ OUString XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
 *
 *******************************************************************************/
 
-XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-                                : m_xContext      (xContext                     )
+XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(css::uno::Reference< css::uno::XComponentContext > xContext)
+                                : m_xContext      (std::move(xContext                     ))
 {
     m_xCfg.set(
              ::comphelper::ConfigurationHelper::openConfig( m_xContext, "org.openoffice.Office.Accelerators", ::comphelper::EConfigurationModes::AllLocales ),

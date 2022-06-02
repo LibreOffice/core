@@ -37,7 +37,7 @@ public:
     explicit StatusbarItem(
                             StatusBar              *pStatusBar,
                             sal_uInt16              nId,
-                            const OUString&   aCommand );
+                            OUString                aCommand );
     virtual ~StatusbarItem() override;
 
     void disposing(std::unique_lock<std::mutex>&) override;

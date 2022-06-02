@@ -45,8 +45,8 @@ class StatusBarManager final: public ::cppu::WeakImplHelper<
     friend class FrameworkStatusBar;
 
     public:
-        StatusBarManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                          const css::uno::Reference< css::frame::XFrame >& rFrame,
+        StatusBarManager( css::uno::Reference< css::uno::XComponentContext > xContext,
+                          css::uno::Reference< css::frame::XFrame > xFrame,
                           StatusBar* pStatusBar );
         virtual ~StatusBarManager() override;
 

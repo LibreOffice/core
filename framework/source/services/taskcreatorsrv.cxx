@@ -39,6 +39,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/colorcfg.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -61,7 +62,7 @@ private:
 
 public:
 
-    explicit TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit TaskCreatorService(css::uno::Reference< css::uno::XComponentContext >  xContext);
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -103,8 +104,8 @@ private:
     OUString impl_filterNames( const OUString& sName );
 };
 
-TaskCreatorService::TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : m_xContext         (xContext                     )
+TaskCreatorService::TaskCreatorService(css::uno::Reference< css::uno::XComponentContext >  xContext)
+    : m_xContext         (std::move(xContext                     ))
 {
 }
 

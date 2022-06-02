@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/StartModule.hpp>
 
 #include <unotools/moduleoptions.hxx>
+#include <utility>
 
 namespace framework{
 
@@ -36,8 +37,8 @@ namespace framework{
     #error "Who uses \"fpf\" as define. It will overwrite my namespace alias ..."
 #endif
 
-StartModuleDispatcher::StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext)
-    : m_xContext         (rxContext                         )
+StartModuleDispatcher::StartModuleDispatcher(css::uno::Reference< css::uno::XComponentContext > xContext)
+    : m_xContext         (std::move(xContext                         ))
 {
 }
 

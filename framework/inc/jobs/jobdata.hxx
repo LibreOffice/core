@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 
 #include <string_view>
+#include <utility>
 #include <vector>
 
 namespace framework{
@@ -86,10 +87,10 @@ class JobData final
             OUString m_sJobName;
             OUString m_sDocEvent;
 
-            TJob2DocEventBinding(const OUString& sJobName ,
-                                 const OUString& sDocEvent)
-                : m_sJobName (sJobName )
-                , m_sDocEvent(sDocEvent)
+            TJob2DocEventBinding(OUString sJobName ,
+                                 OUString sDocEvent)
+                : m_sJobName (std::move(sJobName ))
+                , m_sDocEvent(std::move(sDocEvent))
             {}
         };
 
@@ -164,7 +165,7 @@ class JobData final
 
     public:
 
-                 JobData( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                 JobData( css::uno::Reference< css::uno::XComponentContext > xContext );
                  JobData( const JobData&                                                rCopy );
                  ~JobData(                                                                     );
 

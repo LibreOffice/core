@@ -41,6 +41,7 @@
 #include <mutex>
 #include <stack>
 #include <queue>
+#include <utility>
 
 namespace framework
 {
@@ -145,8 +146,8 @@ namespace framework
     class UndoManagerRequest : public ::comphelper::AnyEvent
     {
     public:
-        explicit UndoManagerRequest( ::std::function<void ()> const& i_request )
-            :m_request( i_request )
+        explicit UndoManagerRequest( ::std::function<void ()>  i_request )
+            :m_request(std::move( i_request ))
         {
             m_finishCondition.reset();
         }

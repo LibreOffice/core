@@ -77,7 +77,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) DispatchHelper final
 public:
     // ctor/dtor
 
-    DispatchHelper(const css::uno::Reference<css::uno::XComponentContext>& xContext);
+    DispatchHelper(css::uno::Reference<css::uno::XComponentContext> xContext);
     virtual ~DispatchHelper() override;
 
     // XServiceInfo

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <accelerators/keymapping.hxx>
+#include <utility>
 #include <xml/acceleratorconfigurationwriter.hxx>
 
 #include <acceleratorconst.h>
@@ -33,8 +34,8 @@
 namespace framework{
 
 AcceleratorConfigurationWriter::AcceleratorConfigurationWriter(const AcceleratorCache&                                       rContainer,
-                                                               const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig   )
-    : m_xConfig     (xConfig                      )
+                                                               css::uno::Reference< css::xml::sax::XDocumentHandler >  xConfig   )
+    : m_xConfig     (std::move(xConfig                      ))
     , m_rContainer  (rContainer                   )
 {
 }

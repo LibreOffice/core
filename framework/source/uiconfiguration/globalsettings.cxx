@@ -29,6 +29,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
+#include <utility>
 
 //  Defines
 
@@ -48,7 +49,7 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
                                   css::lang::XEventListener>
 {
     public:
-        explicit GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+        explicit GlobalSettings_Access( css::uno::Reference< css::uno::XComponentContext > xContext );
 
         // XComponent
         virtual void SAL_CALL dispose() override;
@@ -78,14 +79,14 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
 
 }
 
-GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
+GlobalSettings_Access::GlobalSettings_Access( css::uno::Reference< css::uno::XComponentContext > xContext ) :
     m_bDisposed( false ),
     m_bConfigRead( false ),
     m_aNodeRefStates( "States" ),
     m_aPropStatesEnabled( "StatesEnabled" ),
     m_aPropLocked( "Locked" ),
     m_aPropDocked( "Docked" ),
-    m_xContext( rxContext )
+    m_xContext(std::move( xContext ))
 {
 }
 
@@ -226,8 +227,8 @@ static GlobalSettings_Access* GetGlobalSettings( const css::uno::Reference< css:
     return pStaticSettings.get();
 }
 
-GlobalSettings::GlobalSettings( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
-    m_xContext( rxContext )
+GlobalSettings::GlobalSettings( css::uno::Reference< css::uno::XComponentContext > xContext ) :
+    m_xContext(std::move( xContext ))
 {
 }
 

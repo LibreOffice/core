@@ -56,8 +56,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
             PREVIEWFRAME_YES
         };
 
-        ToolbarLayoutManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                              const css::uno::Reference< css::ui::XUIElementFactory >& xUIElementFactory,
+        ToolbarLayoutManager( css::uno::Reference< css::uno::XComponentContext > xContext,
+                              css::uno::Reference< css::ui::XUIElementFactory >  xUIElementFactory,
                               LayoutManager* pParentLayouter );
         virtual ~ToolbarLayoutManager() override;
 

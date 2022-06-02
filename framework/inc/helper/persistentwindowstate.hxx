@@ -72,7 +72,7 @@ class PersistentWindowState final : public  ::cppu::WeakImplHelper<
     public:
 
         // ctor/dtor
-                 PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+                 PersistentWindowState(css::uno::Reference< css::uno::XComponentContext > xContext);
         virtual ~PersistentWindowState(                                                                   ) override;
 
         // XInitialization

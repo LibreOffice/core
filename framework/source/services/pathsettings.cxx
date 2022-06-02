@@ -166,7 +166,7 @@ public:
         Attention: It's necessary for right function of this class, that the order of base
         classes is the right one. Because we transfer information from one base to another
         during this ctor runs! */
-    explicit PathSettings(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit PathSettings(css::uno::Reference< css::uno::XComponentContext >  xContext);
 
     /** free all used resources ... if it was not already done. */
     virtual ~PathSettings() override;
@@ -428,10 +428,10 @@ private:
     css::uno::Reference< css::container::XNameAccess >    fa_getCfgNew();
 };
 
-PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentContext >& xContext )
+PathSettings::PathSettings( css::uno::Reference< css::uno::XComponentContext >  xContext )
     : PathSettings_BASE(m_aMutex)
     , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
-    ,   m_xContext (xContext)
+    ,   m_xContext (std::move(xContext))
 {
 }
 

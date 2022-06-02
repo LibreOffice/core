@@ -26,6 +26,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <framework/actiontriggerhelper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 using namespace cppu;
@@ -44,10 +45,10 @@ const css::uno::Sequence<sal_Int8>& RootActionTriggerContainer::getUnoTunnelId()
     return seqID;
 }
 
-RootActionTriggerContainer::RootActionTriggerContainer(const css::uno::Reference<css::awt::XPopupMenu>& rMenu,
+RootActionTriggerContainer::RootActionTriggerContainer(css::uno::Reference<css::awt::XPopupMenu> xMenu,
                                                        const OUString* pMenuIdentifier)
     : m_bContainerCreated(false)
-    , m_xMenu(rMenu)
+    , m_xMenu(std::move(xMenu))
     , m_pMenuIdentifier(pMenuIdentifier)
 {
 }

@@ -45,9 +45,9 @@ class ButtonToolbarController final : public css::frame::XStatusListener,
                                 public ::cppu::OWeakObject
 {
     public:
-        ButtonToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        ButtonToolbarController( css::uno::Reference< css::uno::XComponentContext > xContext,
                                  ToolBox* pToolBar,
-                                 const OUString& aCommand );
+                                 OUString aCommand );
         virtual ~ButtonToolbarController() override;
 
         // XInterface

@@ -24,6 +24,7 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/long.hxx>
+#include <utility>
 
 namespace framework{
 
@@ -55,8 +56,8 @@ css::uno::Sequence< OUString > SAL_CALL Oxt_Handler::getSupportedServiceNames()
     @onerror    Show an assertion and do nothing else.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-Oxt_Handler::Oxt_Handler( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-        :   m_xContext          ( xContext )
+Oxt_Handler::Oxt_Handler( css::uno::Reference< css::uno::XComponentContext > xContext )
+        :   m_xContext          (std::move( xContext ))
 {
 }
 

@@ -44,8 +44,8 @@ sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  ///< static counter for 
 
 constexpr OUStringLiteral PROGRESS_RESOURCE = u"private:resource/progressbar/progressbar";
 
-StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : m_xContext          (xContext )
+StatusIndicatorFactory::StatusIndicatorFactory(css::uno::Reference< css::uno::XComponentContext >  xContext)
+    : m_xContext          (std::move(xContext ))
     , m_bAllowReschedule  (false)
     , m_bAllowParentShow  (false)
     , m_bDisableReschedule(false)

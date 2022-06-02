@@ -158,9 +158,9 @@ class Job final : public  ::cppu::WeakImplHelper<
     public:
 
                  Job( const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
-                      const css::uno::Reference< css::frame::XFrame >&              xFrame );
+                      css::uno::Reference< css::frame::XFrame >               xFrame );
                  Job( const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
-                      const css::uno::Reference< css::frame::XModel >&              xModel );
+                      css::uno::Reference< css::frame::XModel >               xModel );
         virtual ~Job(                                                                      ) override;
 
         void     setDispatchResultFake( const css::uno::Reference< css::frame::XDispatchResultListener >& xListener    ,

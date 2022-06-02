@@ -73,6 +73,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
+#include <utility>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/syswin.hxx>
@@ -130,8 +131,8 @@ class LoadEnvListener : public ::cppu::WeakImplHelper< css::frame::XLoadEventLis
 
 }
 
-LoadEnv::LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : m_xContext(xContext)
+LoadEnv::LoadEnv(css::uno::Reference< css::uno::XComponentContext >  xContext)
+    : m_xContext(std::move(xContext))
     , m_nSearchFlags(0)
     , m_eFeature(LoadEnvFeatures::NONE)
     , m_eContentType(E_UNSUPPORTED_CONTENT)

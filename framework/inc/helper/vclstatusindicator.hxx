@@ -59,7 +59,7 @@ class VCLStatusIndicator final : public  ::cppu::WeakImplHelper< css::task::XSta
     public:
 
         /// ctor
-        VCLStatusIndicator(const css::uno::Reference< css::awt::XWindow >&               xParentWindow);
+        VCLStatusIndicator(css::uno::Reference< css::awt::XWindow > xParentWindow);
 
         /// dtor
         virtual ~VCLStatusIndicator() override;

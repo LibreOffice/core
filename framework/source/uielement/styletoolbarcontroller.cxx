@@ -10,6 +10,7 @@
 #include <uielement/styletoolbarcontroller.hxx>
 
 #include <tools/urlobj.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <sal/log.hxx>
@@ -80,10 +81,10 @@ OUString GetDisplayFromInternalName( const css::uno::Reference< css::frame::XFra
 namespace framework {
 
 StyleDispatcher::StyleDispatcher( const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                  const css::uno::Reference< css::util::XURLTransformer >& rUrlTransformer,
+                                  css::uno::Reference< css::util::XURLTransformer > xUrlTransformer,
                                   const css::util::URL& rURL )
     : m_aCommand( rURL.Complete )
-    , m_xUrlTransformer( rUrlTransformer )
+    , m_xUrlTransformer(std::move( xUrlTransformer ))
     , m_xFrame( rFrame, css::uno::UNO_QUERY )
 {
     SAL_WARN_IF( !m_aCommand.startsWith( ".uno:StyleApply?" ), "fwk.uielement", "Wrong dispatcher!" );

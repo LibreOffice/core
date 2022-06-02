@@ -52,6 +52,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <comphelper/interfacecontainer4.hxx>
@@ -155,8 +156,8 @@ private:
 
     struct UIElementInfo
     {
-        UIElementInfo( const OUString& rResourceURL, const OUString& rUIName ) :
-            aResourceURL( rResourceURL), aUIName( rUIName ) {}
+        UIElementInfo( OUString _aResourceURL, OUString _aUIName ) :
+            aResourceURL(std::move( _aResourceURL)), aUIName(std::move( _aUIName )) {}
         OUString   aResourceURL;
         OUString   aUIName;
     };

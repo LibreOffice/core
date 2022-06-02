@@ -64,7 +64,7 @@ class PopupMenuDispatcher final : public  ::cppu::WeakImplHelper<
     public:
 
         //  constructor / destructor
-        PopupMenuDispatcher( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        PopupMenuDispatcher( css::uno::Reference< css::uno::XComponentContext > xContext );
 
         /* interface XServiceInfo */
         virtual OUString SAL_CALL getImplementationName() override;

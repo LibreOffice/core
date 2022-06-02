@@ -220,7 +220,7 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
     public:
 
-        XCUBasedAcceleratorConfiguration( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        XCUBasedAcceleratorConfiguration( css::uno::Reference< css::uno::XComponentContext >  xContext );
         virtual ~XCUBasedAcceleratorConfiguration(                                                           ) override;
 
         // uno interface!
