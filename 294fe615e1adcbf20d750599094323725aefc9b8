@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0e12194_4915773b",
+        "filename": "svx/source/unodraw/unobrushitemhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-02T07:22:58Z",
+      "side": 1,
+      "message": "This case is now returning nullptr, unlike the default case?",
+      "revId": "294fe615e1adcbf20d750599094323725aefc9b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
