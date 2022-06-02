@@ -218,6 +218,8 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
     catch (const css::uno::Exception&)
     {
     }
+
+    xComponent->dispose();
 }
 
 }
