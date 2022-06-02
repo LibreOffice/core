@@ -270,7 +270,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
 
             if (PropertyDescription::LocationType::HoldMyself == aPos->eLocated)
             {
-                OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < static_cast<sal_Int32>(m_aHoldProperties.size()),
+                OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < m_aHoldProperties.size(),
                     "OPropertyContainerHelper::convertFastPropertyValue: invalid position !");
                 auto aIter = m_aHoldProperties.begin() + aPos->aLocation.nOwnClassVectorIndex;
                 pPropContainer = &(*aIter);
@@ -408,7 +408,7 @@ void OPropertyContainerHelper::getFastPropertyValue(Any& _rValue, sal_Int32 _nHa
     switch (aPos->eLocated)
     {
         case PropertyDescription::LocationType::HoldMyself:
-            OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < static_cast<sal_Int32>(m_aHoldProperties.size()),
+            OSL_ENSURE(aPos->aLocation.nOwnClassVectorIndex < m_aHoldProperties.size(),
                 "OPropertyContainerHelper::convertFastPropertyValue: invalid position !");
             _rValue = m_aHoldProperties[aPos->aLocation.nOwnClassVectorIndex];
             break;

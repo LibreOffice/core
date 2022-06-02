@@ -22,6 +22,8 @@
 
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/beans/Property.hpp>
+#include <cstddef>
+#include <limits>
 #include <vector>
 #include <comphelper/comphelperdllapi.h>
 
@@ -44,7 +46,7 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
     union LocationAccess
     {
         void*       pDerivedClassMember;        // a pointer to a member of an object of a derived class
-        sal_Int32   nOwnClassVectorIndex;       // an index within m_aHoldProperties
+        std::size_t nOwnClassVectorIndex;       // an index within m_aHoldProperties
     };
 
     css::beans::Property aProperty;
@@ -55,7 +57,7 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
         :aProperty( OUString(), -1, css::uno::Type(), 0 )
         ,eLocated( LocationType::HoldMyself )
     {
-        aLocation.nOwnClassVectorIndex = -1;
+        aLocation.nOwnClassVectorIndex = std::numeric_limits<std::size_t>::max();
     }
 };
 
