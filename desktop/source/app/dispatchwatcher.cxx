@@ -63,6 +63,7 @@
 #include <osl/file.hxx>
 #include <iostream>
 #include <string_view>
+#include <utility>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -84,8 +85,8 @@ namespace {
 
 struct DispatchHolder
 {
-    DispatchHolder( const URL& rURL, Reference< XDispatch > const & rDispatch ) :
-        aURL( rURL ), xDispatch( rDispatch ) {}
+    DispatchHolder( URL _aURL, Reference< XDispatch > const & rDispatch ) :
+        aURL(std::move( _aURL )), xDispatch( rDispatch ) {}
 
     URL aURL;
     Reference< XDispatch > xDispatch;

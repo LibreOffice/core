@@ -88,7 +88,7 @@ public:
     LicenseCommandEnv(
         css::uno::Reference< css::task::XInteractionHandler> const & handler,
         bool bSuppressLicense,
-        OUString const & repository);
+        OUString repository);
 
 // XInteractionHandler
     virtual void SAL_CALL handle(

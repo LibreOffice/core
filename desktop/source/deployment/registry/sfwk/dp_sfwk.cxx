@@ -31,6 +31,7 @@
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 
 
 using namespace ::dp_misc;
@@ -71,7 +72,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     public:
         PackageImpl(
             ::rtl::Reference<BackendImpl> const & myBackend,
-            OUString const & url, OUString const & libType, bool bRemoved,
+            OUString const & url, OUString libType, bool bRemoved,
             OUString const & identifier);
         // XPackage
         virtual OUString SAL_CALL getDescription() override;
@@ -135,11 +136,11 @@ OUString BackendImpl::PackageImpl::getLicenseText()
 
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<BackendImpl> const & myBackend,
-    OUString const & url, OUString const & libType, bool bRemoved,
+    OUString const & url, OUString  libType, bool bRemoved,
     OUString const & identifier)
     : Package( myBackend, url, OUString(), OUString(),
                myBackend->m_xTypeInfo, bRemoved, identifier),
-      m_descr(libType)
+      m_descr(std::move(libType))
 {
     initPackageHandler();
 

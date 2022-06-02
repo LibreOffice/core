@@ -51,6 +51,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 #include <app.hxx>
+#include <utility>
 
 #include <dp_misc.h>
 
@@ -75,7 +76,7 @@ class SilentCommandEnv
 
 public:
     SilentCommandEnv(
-        uno::Reference<uno::XComponentContext> const & xContext,
+        uno::Reference<uno::XComponentContext> xContext,
         Desktop* pDesktop );
     virtual ~SilentCommandEnv() override;
 
@@ -97,9 +98,9 @@ public:
 
 
 SilentCommandEnv::SilentCommandEnv(
-    uno::Reference<uno::XComponentContext> const & xContext,
+    uno::Reference<uno::XComponentContext> xContext,
     Desktop* pDesktop ):
-    mxContext( xContext ),
+    mxContext(std::move( xContext )),
     mpDesktop( pDesktop ),
     mnLevel( 0 ),
     mnProgress( 25 )

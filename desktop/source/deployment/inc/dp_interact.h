@@ -24,6 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/task/XAbortChannel.hpp>
+#include <utility>
 #include "dp_misc_api.hxx"
 
 namespace dp_misc
@@ -124,9 +125,9 @@ public:
         const ::rtl::Reference<AbortChannel> m_abortChannel;
     public:
         Chain(
-            ::rtl::Reference<AbortChannel> const & abortChannel,
+            ::rtl::Reference<AbortChannel> abortChannel,
             css::uno::Reference<css::task::XAbortChannel> const & xNext )
-            : m_abortChannel( abortChannel )
+            : m_abortChannel(std::move( abortChannel ))
             { if (m_abortChannel.is()) m_abortChannel->m_xNext = xNext; }
         ~Chain()
             { if (m_abortChannel.is()) m_abortChannel->m_xNext.clear(); }

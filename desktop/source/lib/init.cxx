@@ -40,6 +40,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/errinf.hxx>
 #include <vcl/lok.hxx>
 #include <o3tl/any.hxx>
@@ -1201,8 +1202,8 @@ vcl::Font FindFont_FallbackToDefault(std::u16string_view rFontName)
 }
 } // anonymous namespace
 
-LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent, int nDocumentId)
-    : mxComponent(xComponent)
+LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xComponent, int nDocumentId)
+    : mxComponent(std::move(xComponent))
     , mnDocumentId(nDocumentId)
 {
     assert(nDocumentId != -1 && "Cannot set mnDocumentId to -1");
@@ -4032,9 +4033,9 @@ class DispatchResultListener : public cppu::WeakImplHelper<css::frame::XDispatch
     std::shared_ptr<CallbackFlushHandler> mpCallback; ///< Callback to call.
 
 public:
-    DispatchResultListener(const char* pCommand, std::shared_ptr<CallbackFlushHandler> const & pCallback)
+    DispatchResultListener(const char* pCommand, std::shared_ptr<CallbackFlushHandler> pCallback)
         : maCommand(pCommand)
-        , mpCallback(pCallback)
+        , mpCallback(std::move(pCallback))
     {
         assert(mpCallback);
     }

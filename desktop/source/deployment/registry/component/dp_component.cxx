@@ -33,6 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/sequence.hxx>
+#include <utility>
 #include <xmlscript/xml_helper.hxx>
 #include <svl/inettype.hxx>
 #include <tools/diagnose_ex.h>
@@ -143,7 +144,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
             Reference<deployment::XPackageTypeInfo> const & xPackageType,
-            OUString const & loader, bool bRemoved,
+            OUString loader, bool bRemoved,
             OUString const & identifier);
     };
     friend class ComponentPackageImpl;
@@ -211,7 +212,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
             Reference<deployment::XPackageTypeInfo> const & xPackageType,
-            bool bRemoved, OUString const & identifier, OUString const& rPlatform);
+            bool bRemoved, OUString const & identifier, OUString platform);
 
     private:
         BackendImpl * getMyBackend() const;
@@ -335,11 +336,11 @@ BackendImpl::ComponentPackageImpl::ComponentPackageImpl(
     ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     OUString const & url, OUString const & name,
     Reference<deployment::XPackageTypeInfo> const & xPackageType,
-    OUString const & loader, bool bRemoved,
+    OUString loader, bool bRemoved,
     OUString const & identifier)
     : Package( myBackend, url, name, name /* display-name */,
                xPackageType, bRemoved, identifier),
-      m_loader( loader ),
+      m_loader(std::move( loader )),
       m_registered( Reg::Uninit )
 {}
 
@@ -1523,9 +1524,9 @@ BackendImpl::OtherPlatformPackageImpl::OtherPlatformPackageImpl(
     ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     OUString const & url, OUString const & name,
     Reference<deployment::XPackageTypeInfo> const & xPackageType,
-    bool bRemoved, OUString const & identifier, OUString const& rPlatform)
+    bool bRemoved, OUString const & identifier, OUString platform)
     : Package(myBackend, url, name, name, xPackageType, bRemoved, identifier)
-    , m_aPlatform(rPlatform)
+    , m_aPlatform(std::move(platform))
 {
     OSL_PRECOND(bRemoved, "this class can only be used for removing packages!");
 }

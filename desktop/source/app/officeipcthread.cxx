@@ -31,6 +31,7 @@
 #include <salhelper/thread.hxx>
 #include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <unotools/configmgr.hxx>
 #include <osl/pipe.hxx>
@@ -100,7 +101,7 @@ namespace {
 
 class Parser: public CommandLineArgs::Supplier {
 public:
-    explicit Parser(OString const & input): m_input(input) {
+    explicit Parser(OString input): m_input(std::move(input)) {
         if (!m_input.match(ARGUMENT_PREFIX) ||
             m_input.getLength() == RTL_CONSTASCII_LENGTH(ARGUMENT_PREFIX))
         {
@@ -378,8 +379,8 @@ public:
     static RequestHandler::Status enable(rtl::Reference<IpcThread> * thread);
 
 private:
-    explicit PipeIpcThread(osl::Pipe const & pipe):
-        IpcThread("PipeIPC"), pipe_(pipe)
+    explicit PipeIpcThread(osl::Pipe pipe):
+        IpcThread("PipeIPC"), pipe_(std::move(pipe))
     {}
 
     virtual ~PipeIpcThread() override {}
