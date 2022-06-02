@@ -115,7 +115,7 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
     if(rSh.GetBoxDirection( aBoxDirection ))
     {
         aBoxDirection->SetWhich(FN_TABLE_BOX_TEXTORIENTATION);
-        rSet.Put(*aBoxDirection);
+        rSet.Put(std::move(aBoxDirection));
     }
 
     rSet.Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, rSh.GetBoxAlign()));

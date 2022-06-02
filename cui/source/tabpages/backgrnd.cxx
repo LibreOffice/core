@@ -180,7 +180,7 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
         {
             std::unique_ptr<SvxBrushItem> aBrushItem( getSvxBrushItemFromSourceSet( maSet, nWhich ) );
             if ( GraphicType::NONE != aBrushItem->GetGraphicObject()->GetType() )
-                rCoreSet->Put( *aBrushItem );
+                rCoreSet->Put( std::move(aBrushItem) );
             break;
         }
         default:
@@ -281,7 +281,7 @@ IMPL_LINK(SvxBkgTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, void)
         // fill local item set with XATTR_FILL settings gathered from tab page
         // and convert to SvxBrushItem and store in table destination slot Which
         SvxAreaTabPage::FillItemSet(&maSet);
-        maSet.Put(*getSvxBrushItemFromSourceSet(maSet, maSet.GetPool()->GetWhich(lcl_GetTableDestSlot(m_nActPos))));
+        maSet.Put(getSvxBrushItemFromSourceSet(maSet, maSet.GetPool()->GetWhich(lcl_GetTableDestSlot(m_nActPos))));
     }
 
     sal_Int32 nSelPos = rBox.get_active();

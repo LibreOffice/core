@@ -2620,21 +2620,17 @@ void SvxScriptSetItem::PutItemForScriptType( SvtScriptType nScriptType,
     sal_uInt16 nLatin, nAsian, nComplex;
     GetWhichIds( nLatin, nAsian, nComplex );
 
-    std::unique_ptr<SfxPoolItem> pCpy(rItem.Clone());
     if( SvtScriptType::LATIN & nScriptType )
     {
-        pCpy->SetWhich( nLatin );
-        GetItemSet().Put( *pCpy );
+        GetItemSet().Put( rItem.CloneSetWhich(nLatin) );
     }
     if( SvtScriptType::ASIAN & nScriptType )
     {
-        pCpy->SetWhich( nAsian );
-        GetItemSet().Put( *pCpy );
+        GetItemSet().Put( rItem.CloneSetWhich(nAsian) );
     }
     if( SvtScriptType::COMPLEX & nScriptType )
     {
-        pCpy->SetWhich( nComplex );
-        GetItemSet().Put( *pCpy );
+        GetItemSet().Put( rItem.CloneSetWhich(nComplex) );
     }
 }
 

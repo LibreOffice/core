@@ -2836,7 +2836,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
                 pFormat->DelFrames();
                 pAnchorItem->SetAnchor( pCopySource->Start() );
                 SfxItemSetFixed<RES_ANCHOR, RES_ANCHOR> aAnchorSet( pDoc->GetAttrPool() );
-                aAnchorSet.Put( *pAnchorItem );
+                aAnchorSet.Put( std::move(pAnchorItem) );
                 pDoc->SetFlyFrameAttr( *pFormat, aAnchorSet );
             }
         }

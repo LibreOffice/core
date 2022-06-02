@@ -223,7 +223,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         assert(pIndentItem);
         std::unique_ptr<SfxUInt16Item> pNewIndentItem(pIndentItem->Clone());
         pNewIndentItem->SetValue(m_xEdIndent->get_value(FieldUnit::TWIP));
-        rSet->Put(*pNewIndentItem);
+        rSet->Put(std::move(pNewIndentItem));
         bChanged = true;
     }
     else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
@@ -266,7 +266,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         assert(pAngleItem);
         std::unique_ptr<SdrAngleItem> pNewAngleItem(pAngleItem->Clone());
         pNewAngleItem->SetValue(m_xCtrlDial->GetRotation());
-        rSet->Put(*pNewAngleItem);
+        rSet->Put(std::move(pNewAngleItem));
         bChanged = true;
     }
     else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
@@ -303,7 +303,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         assert(pStackItem);
         std::unique_ptr<SfxBoolItem> pNewStackItem(pStackItem->Clone());
         pNewStackItem->SetValue(m_xCbStacked->get_active());
-        rSet->Put(*pNewStackItem);
+        rSet->Put(std::move(pNewStackItem));
         bChanged = true;
     }
     else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
@@ -326,7 +326,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         assert(pWrapItem);
         std::unique_ptr<SfxBoolItem> pNewWrapItem(pWrapItem->Clone());
         pNewWrapItem->SetValue(m_xBtnWrap->get_active());
-        rSet->Put(*pNewWrapItem);
+        rSet->Put(std::move(pNewWrapItem));
         bChanged = true;
     }
     else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
@@ -340,7 +340,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         assert(pHyphItem);
         std::unique_ptr<SfxBoolItem> pNewHyphItem(pHyphItem->Clone());
         pNewHyphItem->SetValue(m_xBtnHyphen->get_active());
-        rSet->Put(*pNewHyphItem);
+        rSet->Put(std::move(pNewHyphItem));
         bChanged = true;
     }
     else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))
@@ -354,7 +354,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
         assert(pShrinkItem);
         std::unique_ptr<SfxBoolItem> pNewShrinkItem(pShrinkItem->Clone());
         pNewShrinkItem->SetValue(m_xBtnShrink->get_active());
-        rSet->Put(*pNewShrinkItem);
+        rSet->Put(std::move(pNewShrinkItem));
         bChanged = true;
     }
     else if (SfxItemState::DEFAULT == rOldSet.GetItemState(nWhich, false))

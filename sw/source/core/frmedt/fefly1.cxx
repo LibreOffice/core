@@ -799,7 +799,7 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
                     }
                 }
 
-                const_cast<SfxItemSet&>(rSet).Put( *pOldAnchor );
+                const_cast<SfxItemSet&>(rSet).Put( std::move(pOldAnchor) );
 
                 if( bHOriChgd )
                     const_cast<SfxItemSet&>(rSet).Put( *aOldH );

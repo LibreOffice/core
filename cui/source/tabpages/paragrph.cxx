@@ -384,14 +384,14 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
                             *rOutSet, SID_ATTR_PARA_REGISTER));
         if (!pBoolItem)
             return bModified;
-        std::unique_ptr<SfxBoolItem> pRegItem(pBoolItem->Clone());
         sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_REGISTER );
-        bool bSet = pRegItem->GetValue();
+        bool bSet = pBoolItem->GetValue();
 
         if (m_xRegisterCB->get_active() != bSet)
         {
+            std::unique_ptr<SfxBoolItem> pRegItem(pBoolItem->Clone());
             pRegItem->SetValue(!bSet);
-            rOutSet->Put(*pRegItem);
+            rOutSet->Put(std::move(pRegItem));
             bModified = true;
         }
         else if ( SfxItemState::DEFAULT == GetItemSet().GetItemState( _nWhich, false ) )

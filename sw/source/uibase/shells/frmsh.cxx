@@ -1241,7 +1241,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
     {
         aBoxItem->SetAllDistances(MIN_BORDER_DIST);
     }
-    aFrameSet.Put( *aBoxItem );
+    aFrameSet.Put( std::move(aBoxItem) );
     // Template AutoUpdate
     SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
     if(pFormat && pFormat->IsAutoUpdateFormat())

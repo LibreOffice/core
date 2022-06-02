@@ -190,7 +190,7 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
 
         if (!pOld || *static_cast<const SvxTabStopItem*>(pOld) != *aTmp)
         {
-            rSet->Put(*aTmp);
+            rSet->Put(std::move(aTmp));
             bModified = true;
         }
     }

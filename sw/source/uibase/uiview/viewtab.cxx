@@ -808,7 +808,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     if( pColl && pColl->IsAutoUpdateFormat())
                     {
                         SfxItemSetFixed<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP> aSetTmp(GetPool());
-                        aSetTmp.Put(*aTabStops);
+                        aSetTmp.Put(std::move(aTabStops));
                         rSh.AutoUpdatePara( pColl, aSetTmp );
                     }
                     else

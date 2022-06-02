@@ -264,7 +264,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 
             // at least one part of the complex item must be present; other parts can have default values
             if ( nFound > 0 )
-                rSet.Put( *pItem );
+                rSet.Put( std::move(pItem) );
         }
 
         return;
@@ -370,7 +370,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 
                 if ( bRet )
                     // only use successfully converted items
-                    rSet.Put( *pItem );
+                    rSet.Put( std::move(pItem) );
 
             }
         }

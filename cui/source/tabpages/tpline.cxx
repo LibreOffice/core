@@ -413,7 +413,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             pOld = GetOldItem( *rAttrs, XATTR_LINESTYLE );
             if ( !pOld || !( *static_cast<const XLineStyleItem*>(pOld) == *pStyleItem ) )
             {
-                rAttrs->Put( *pStyleItem );
+                rAttrs->Put( std::move(pStyleItem) );
                 bModified = true;
             }
         }
@@ -480,7 +480,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             pOld = GetOldItem( *rAttrs, XATTR_LINESTART );
             if( pItem && ( !pOld || *pOld != *pItem ) )
             {
-                rAttrs->Put( *pItem );
+                rAttrs->Put( std::move(pItem) );
                 bModified = true;
             }
         }
@@ -497,7 +497,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             if( pItem &&
                 ( !pOld || !( *static_cast<const XLineEndItem*>(pOld) == *pItem ) ) )
             {
-                rAttrs->Put( *pItem );
+                rAttrs->Put( std::move(pItem) );
                 bModified = true;
             }
         }
@@ -575,7 +575,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
 
             if(!pOld || !(*static_cast<const XLineJointItem*>(pOld) == *pNew))
             {
-                rAttrs->Put( *pNew );
+                rAttrs->Put( std::move(pNew) );
                 bModified = true;
             }
         }
@@ -612,7 +612,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
 
             if(!pOld || !(*static_cast<const XLineCapItem*>(pOld) == *pNew))
             {
-                rAttrs->Put( *pNew );
+                rAttrs->Put( std::move(pNew) );
                 bModified = true;
             }
         }

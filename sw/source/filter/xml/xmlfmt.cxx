@@ -655,7 +655,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     if( pFormatPageDesc )
     {
         pFormatPageDesc->RegisterToPageDesc( *pPageDesc );
-        m_oItemSet->Put( *pFormatPageDesc );
+        m_oItemSet->Put( std::move(pFormatPageDesc) );
     }
 }
 

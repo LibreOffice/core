@@ -395,7 +395,7 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
                     // #i92811#
                     if ( pNewListIdItem != nullptr )
                     {
-                        tmpSet->Put( *pNewListIdItem );
+                        tmpSet->Put( std::move(pNewListIdItem) );
                     }
                     pCNd->SetAttr( *tmpSet );
                 }
@@ -410,7 +410,7 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
                 if ( pNewListIdItem != nullptr )
                 {
                     SfxItemSet aTmpSet( *this );
-                    aTmpSet.Put( *pNewListIdItem );
+                    aTmpSet.Put( std::move(pNewListIdItem) );
                     pCNd->SetAttr( aTmpSet );
                 }
                 else

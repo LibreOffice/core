@@ -299,7 +299,7 @@ SwUnoCursorHelper::SetPageDesc(
         }
         else
         {
-            rSet.Put(*pNewDesc);
+            rSet.Put(std::move(pNewDesc));
         }
     }
     return true;
@@ -393,7 +393,7 @@ lcl_setDropcapCharStyle(SwPaM const & rPam, SfxItemSet & rItemSet,
     }
     const rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*pStyle));
     pDrop->SetCharFormat(xStyle->GetCharFormat());
-    rItemSet.Put(*pDrop);
+    rItemSet.Put(std::move(pDrop));
 }
 
 static void
@@ -425,7 +425,7 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
                 sStyle, SwGetPoolIdFromName::ChrFmt);
         pRuby->SetCharFormatId(nId);
     }
-    rItemSet.Put(*pRuby);
+    rItemSet.Put(std::move(pRuby));
 }
 
 bool

@@ -103,7 +103,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
         }
 
         pZoomItem->SetValueSet( nZoomValues );
-        aNewAttr.Put( *pZoomItem );
+        aNewAttr.Put( std::move(pZoomItem) );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(rReq.GetFrameWeld(), aNewAttr));

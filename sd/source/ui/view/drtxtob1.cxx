@@ -197,8 +197,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         pNewItem->SetLeftValue( static_cast<sal_uInt16>(nLeft) );
 
                         SfxItemSet aNewAttrs( aAttr );
-                        aNewAttrs.Put( *pNewItem );
-                        pNewItem.reset();
+                        aNewAttrs.Put( std::move(pNewItem) );
                         pOLV->GetOutliner()->SetParaAttribs( nPara, aNewAttrs );
                     }
                 }
@@ -264,8 +263,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         pNewItem->SetLower( static_cast<sal_uInt16>(nLower) );
 
                         SfxItemSet aNewAttrs( aAttr );
-                        aNewAttrs.Put( *pNewItem );
-                        pNewItem.reset();
+                        aNewAttrs.Put( std::move(pNewItem) );
                         pOLV->GetOutliner()->SetParaAttribs( nPara, aNewAttrs );
                     }
                 }
@@ -306,8 +304,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     }
                     pNewItem->SetLower( static_cast<sal_uInt16>(nLower) );
 
-                    aNewAttrs.Put( *pNewItem );
-                    pNewItem.reset();
+                    aNewAttrs.Put( std::move(pNewItem) );
 
                     mpView->SetAttributes( aNewAttrs );
                 }
@@ -836,7 +833,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             }
             if (pColorItem)
             {
-                pNewArgs->Put(*pColorItem);
+                pNewArgs->Put(std::move(pColorItem));
             }
 
             mpView->SetAttributes(*pNewArgs);

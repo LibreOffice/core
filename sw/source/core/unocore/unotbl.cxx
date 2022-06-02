@@ -1788,7 +1788,7 @@ void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet,
         std::unique_ptr<SfxPoolItem> aItem(aItemFactory());
         for(const auto& aMemberAndAny : vMemberAndAny)
             aItem->PutValue(*aMemberAndAny.second, aMemberAndAny.first | (bAddTwips ? CONVERT_TWIPS : 0) );
-        rSet.Put(*aItem);
+        rSet.Put(std::move(aItem));
     }
 }
 void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)

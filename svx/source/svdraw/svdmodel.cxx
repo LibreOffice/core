@@ -1668,10 +1668,7 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
 
             // set item
             if( pResultItem )
-            {
-                pDestSet->Put(*pResultItem);
-                pResultItem.reset();
-            }
+                pDestSet->Put(std::move(pResultItem));
             else
                 pDestSet->Put(*pPoolItem);
         }
