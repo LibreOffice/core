@@ -60,7 +60,7 @@ private:
 protected:
     explicit        WorkWindow( WindowType nType );
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData = nullptr );
-    SAL_DLLPRIVATE void ImplSetFrameState( WindowStateState aFrameState );
+    SAL_DLLPRIVATE void ImplSetFrameState(vcl::WindowState);
 
 public:
     explicit        WorkWindow( vcl::Window* pParent, WinBits nStyle = WB_STDWORK );

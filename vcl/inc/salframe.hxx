@@ -35,7 +35,7 @@ class SalGraphics;
 class SalBitmap;
 class SalMenu;
 
-struct SalFrameState;
+namespace vcl { class WindowData; }
 struct SalInputContext;
 struct SystemEnvData;
 
@@ -126,11 +126,11 @@ public:
                             SalFrame();
     virtual                 ~SalFrame() override;
 
-    SalFrameGeometry        maGeometry = {}; ///< absolute, unmirrored values
+    SalFrameGeometry maGeometry; ///< absolute, unmirrored values
 
     // SalGeometryProvider
-    virtual tools::Long GetWidth() const override { return maGeometry.nWidth; }
-    virtual tools::Long GetHeight() const override { return maGeometry.nHeight; }
+    virtual tools::Long GetWidth() const override { return maGeometry.width(); }
+    virtual tools::Long GetHeight() const override { return maGeometry.height(); }
     virtual bool IsOffScreen() const override { return false; }
 
     // SalGraphics or NULL, but two Graphics for all SalFrames
@@ -166,11 +166,11 @@ public:
     SalFrameGeometry        GetGeometry() const;
     const SalFrameGeometry& GetUnmirroredGeometry() const { return maGeometry; }
 
-    virtual void            SetWindowState( const SalFrameState* pState ) = 0;
+    virtual void SetWindowState(const vcl::WindowData*) = 0;
     // return the absolute, unmirrored system frame state
     // if this returns false the structure is uninitialised
     [[nodiscard]]
-    virtual bool            GetWindowState( SalFrameState* pState ) = 0;
+    virtual bool GetWindowState(vcl::WindowData*) = 0;
     virtual void            ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay ) = 0;
     virtual void            PositionByToolkit( const tools::Rectangle&, FloatWinPopupFlags ) {};
 

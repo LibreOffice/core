@@ -136,7 +136,7 @@ void ODesignView::dispose()
     if ( m_xAddField )
     {
         SvtViewOptions aDlgOpt( EViewType::Window, UID_RPT_RPT_APP_VIEW );
-        aDlgOpt.SetWindowState(OStringToOUString(m_xAddField->getDialog()->get_window_state(WindowStateMask::All), RTL_TEXTENCODING_ASCII_US));
+        aDlgOpt.SetWindowState(OStringToOUString(m_xAddField->getDialog()->get_window_state(vcl::WindowDataMask::All), RTL_TEXTENCODING_ASCII_US));
 
         if (m_xAddField->getDialog()->get_visible())
             m_xAddField->response(RET_CANCEL);
@@ -146,7 +146,7 @@ void ODesignView::dispose()
     if ( m_xReportExplorer )
     {
         SvtViewOptions aDlgOpt(EViewType::Window, OStringToOUString(m_xReportExplorer->get_help_id(), RTL_TEXTENCODING_UTF8));
-        aDlgOpt.SetWindowState(OStringToOUString(m_xReportExplorer->getDialog()->get_window_state(WindowStateMask::All), RTL_TEXTENCODING_ASCII_US));
+        aDlgOpt.SetWindowState(OStringToOUString(m_xReportExplorer->getDialog()->get_window_state(vcl::WindowDataMask::All), RTL_TEXTENCODING_ASCII_US));
 
         if (m_xReportExplorer->getDialog()->get_visible())
             m_xReportExplorer->response(RET_CANCEL);

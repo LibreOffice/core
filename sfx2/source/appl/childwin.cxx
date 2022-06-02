@@ -310,9 +310,9 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
         weld::Dialog* pDialog = xController->getDialog();
         aInfo.aPos  = pDialog->get_position();
         aInfo.aSize = pDialog->get_size();
-        WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
+        vcl::WindowDataMask nMask = vcl::WindowDataMask::Pos | vcl::WindowDataMask::State;
         if (pDialog->get_resizable())
-            nMask |= WindowStateMask::Size;
+            nMask |= vcl::WindowDataMask::Size;
         aInfo.aWinState = pDialog->get_window_state(nMask);
     }
     else if (pWindow)
@@ -321,9 +321,9 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
         aInfo.aSize = pWindow->GetSizePixel();
         if ( pWindow->IsSystemWindow() )
         {
-            WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
+            vcl::WindowDataMask nMask = vcl::WindowDataMask::Pos | vcl::WindowDataMask::State;
             if ( pWindow->GetStyle() & WB_SIZEABLE )
-                nMask |= WindowStateMask::Size;
+                nMask |= vcl::WindowDataMask::Size;
             aInfo.aWinState = static_cast<SystemWindow*>(pWindow.get())->GetWindowState( nMask );
         }
         else if (DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pWindow.get()))
