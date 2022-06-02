@@ -21,6 +21,7 @@
 #include <CommonConverters.hxx>
 #include <BaseGFXHelper.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/drawing/Position3D.hpp>
@@ -217,7 +218,7 @@ void lcl_addPointToPoly( std::vector<std::vector<css::drawing::Position3D>>& rPo
     }
 
     //make sure that we have enough polygons
-    if(nPolygonIndex >= static_cast<sal_Int32>(rPoly.size()) )
+    if(o3tl::make_unsigned(nPolygonIndex) >= rPoly.size() )
     {
         rPoly.resize(nPolygonIndex+1);
         rResultPointCount.resize(nPolygonIndex+1,0);
