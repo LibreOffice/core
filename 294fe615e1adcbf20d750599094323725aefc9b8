@@ -16,6 +16,24 @@
       "message": "This case is now returning nullptr, unlike the default case?",
       "revId": "294fe615e1adcbf20d750599094323725aefc9b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0832c476_106ec830",
+        "filename": "svx/source/unodraw/unobrushitemhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-02T07:45:16Z",
+      "side": 1,
+      "message": "this is a \"cannot possibly happen case\"",
+      "parentUuid": "d0e12194_4915773b",
+      "revId": "294fe615e1adcbf20d750599094323725aefc9b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
