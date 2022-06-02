@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "939bea0c_5c5b0240",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-02T08:11:02Z",
+      "side": 1,
+      "message": "Worth an assert before returning from getSvxBrushItemFromSourceSet and makeBackgroundBrushItem maybe? That would document the post-condition.",
+      "revId": "6585fe3fc154c518d657202295a2c5214de55b56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
