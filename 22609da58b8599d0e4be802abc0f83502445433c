@@ -16,6 +16,24 @@
       "message": "Please mention the respective bug report in the commit message\u0027s first line, like\n\n  tdf#XXXXXX Fix the sidebar\u0027s width\n\n  ...\n\nThis allows to connect the change to the bug; also it allows to see the bug, and maybe understand it better, from the bug\u0027s description, maybe screenshots, etc.",
       "revId": "22609da58b8599d0e4be802abc0f83502445433c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa5901c2_35098a90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-06-02T14:41:58Z",
+      "side": 1,
+      "message": "I have created the bug report tdf#149431 as you said.",
+      "parentUuid": "e96fef46_a8645e50",
+      "revId": "22609da58b8599d0e4be802abc0f83502445433c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
