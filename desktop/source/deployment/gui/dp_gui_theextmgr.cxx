@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -53,10 +54,10 @@ namespace dp_gui {
 //                             TheExtensionManager
 
 
-TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &xParent,
+TheExtensionManager::TheExtensionManager( uno::Reference< awt::XWindow > xParent,
                                           const uno::Reference< uno::XComponentContext > &xContext ) :
     m_xContext( xContext ),
-    m_xParent( xParent ),
+    m_xParent(std::move( xParent )),
     m_bModified(false),
     m_bExtMgrDialogExecuting(false)
 {

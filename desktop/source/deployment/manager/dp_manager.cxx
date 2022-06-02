@@ -41,6 +41,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/logging.hxx>
 #include <comphelper/sequence.hxx>
+#include <utility>
 #include <xmlscript/xml_helper.hxx>
 #include <svl/inettype.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -85,7 +86,7 @@ namespace {
 struct MatchTempDir
 {
     OUString m_str;
-    explicit MatchTempDir( OUString const & str ) : m_str( str ) {}
+    explicit MatchTempDir( OUString str ) : m_str(std::move( str )) {}
     bool operator () ( ActivePackages::Entries::value_type const & v ) const {
         return v.second.temporaryName.equalsIgnoreAsciiCase( m_str );
     }

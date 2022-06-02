@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 
+#include <utility>
 #include <vector>
 
 #define APP_NAME "unopkg"
@@ -39,8 +40,8 @@ struct OptionInfo
 
 struct LockFileException
 {
-    explicit LockFileException(OUString const & sMessage) :
-        Message(sMessage) {}
+    explicit LockFileException(OUString sMessage) :
+        Message(std::move(sMessage)) {}
 
     OUString Message;
 };

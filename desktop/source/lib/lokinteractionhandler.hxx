@@ -82,7 +82,7 @@ public:
     void SetPassword(char const* pPassword);
 
     explicit LOKInteractionHandler(
-            const OString& rCommand,
+            OString command,
             desktop::LibLibreOffice_Impl *,
             desktop::LibLODocument_Impl *pLOKDocumt = nullptr);
 

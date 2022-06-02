@@ -34,6 +34,7 @@
 
 #include <fpicker/strings.hrc>
 
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 
@@ -1357,8 +1358,8 @@ ShowLicenseDialog::~ShowLicenseDialog()
 // UpdateRequiredDialogService
 
 UpdateRequiredDialogService::UpdateRequiredDialogService( SAL_UNUSED_PARAMETER uno::Sequence< uno::Any > const&,
-                                                          uno::Reference< uno::XComponentContext > const& xComponentContext )
-    : m_xComponentContext( xComponentContext )
+                                                          uno::Reference< uno::XComponentContext > xComponentContext )
+    : m_xComponentContext(std::move( xComponentContext ))
 {
 }
 

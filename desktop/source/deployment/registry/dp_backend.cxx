@@ -45,6 +45,7 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/tempfile.hxx>
 #include <optional>
+#include <utility>
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -297,21 +298,21 @@ Package::~Package()
 }
 
 
-Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
-                  OUString const & url,
-                  OUString const & rName,
-                  OUString const & displayName,
+Package::Package( ::rtl::Reference<PackageRegistryBackend>  myBackend,
+                  OUString url,
+                  OUString aName,
+                  OUString displayName,
                   Reference<deployment::XPackageTypeInfo> const & xPackageType,
                   bool bRemoved,
-                  OUString const & identifier)
+                  OUString identifier)
     : t_PackageBase( m_aMutex ),
-      m_myBackend( myBackend ),
-      m_url( url ),
-      m_name( rName ),
-      m_displayName( displayName ),
+      m_myBackend(std::move( myBackend )),
+      m_url(std::move( url )),
+      m_name(std::move( aName )),
+      m_displayName(std::move( displayName )),
       m_xPackageType( xPackageType ),
       m_bRemoved(bRemoved),
-      m_identifier(identifier)
+      m_identifier(std::move(identifier))
 {
     if (m_bRemoved)
     {

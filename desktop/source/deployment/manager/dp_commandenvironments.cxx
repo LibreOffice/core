@@ -26,6 +26,7 @@
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <utility>
 #include "dp_commandenvironments.hxx"
 #include <osl/diagnose.h>
 
@@ -154,8 +155,8 @@ void TmpRepositoryCommandEnv::handle(
 LicenseCommandEnv::LicenseCommandEnv(
     css::uno::Reference< css::task::XInteractionHandler> const & handler,
     bool bSuppressLicense,
-    OUString const & repository):
-    BaseCommandEnv(handler), m_repository(repository),
+    OUString repository):
+    BaseCommandEnv(handler), m_repository(std::move(repository)),
     m_bSuppressLicense(bSuppressLicense)
 {
 }

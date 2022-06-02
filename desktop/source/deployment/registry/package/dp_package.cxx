@@ -73,6 +73,7 @@
 #include <algorithm>
 #include <memory>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 #include "dp_extbackenddb.hxx"
@@ -253,7 +254,7 @@ class XPackage_eq
 {
     OUString m_URL;
 public:
-    explicit XPackage_eq(const OUString & s) : m_URL(s) {}
+    explicit XPackage_eq(OUString s) : m_URL(std::move(s)) {}
     bool operator() (const Reference<deployment::XPackage> & p) const
     {
         return m_URL == p->getURL();

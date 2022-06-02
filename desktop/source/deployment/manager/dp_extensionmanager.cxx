@@ -41,6 +41,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <comphelper/sequence.hxx>
+#include <utility>
 #include <xmlscript/xml_helper.hxx>
 #include <osl/diagnose.h>
 #include <dp_interact.h>
@@ -125,9 +126,9 @@ class ExtensionRemoveGuard
 public:
     ExtensionRemoveGuard(){};
     ExtensionRemoveGuard(
-        css::uno::Reference<css::deployment::XPackage> const & extension,
-        css::uno::Reference<css::deployment::XPackageManager> const & xPackageManager):
-        m_extension(extension), m_xPackageManager(xPackageManager) {}
+        css::uno::Reference<css::deployment::XPackage> extension,
+        css::uno::Reference<css::deployment::XPackageManager> xPackageManager):
+        m_extension(std::move(extension)), m_xPackageManager(std::move(xPackageManager)) {}
     ~ExtensionRemoveGuard();
 
     void set(css::uno::Reference<css::deployment::XPackage> const & extension,

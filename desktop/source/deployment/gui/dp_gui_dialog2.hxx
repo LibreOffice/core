@@ -250,7 +250,7 @@ class UpdateRequiredDialogService : public ::cppu::WeakImplHelper< css::ui::dial
     css::uno::Reference< css::uno::XComponentContext > const m_xComponentContext;
 public:
     UpdateRequiredDialogService( css::uno::Sequence< css::uno::Any > const & args,
-                                 css::uno::Reference< css::uno::XComponentContext> const & xComponentContext );
+                                 css::uno::Reference< css::uno::XComponentContext> xComponentContext );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

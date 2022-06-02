@@ -28,6 +28,7 @@
 #include <com/sun/star/deployment/XPackageManager.hpp>
 #include <memory>
 #include <string_view>
+#include <utility>
 
 namespace dp_manager {
 
@@ -116,11 +117,10 @@ class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
 
     virtual ~PackageManagerImpl() override;
     PackageManagerImpl(
-        css::uno::Reference<css::uno::XComponentContext>
-        const & xComponentContext, OUString const & context )
+        css::uno::Reference<css::uno::XComponentContext> xComponentContext, OUString context )
         : t_pm_helper( m_aMutex ),
-          m_xComponentContext( xComponentContext ),
-          m_context( context ),
+          m_xComponentContext(std::move( xComponentContext )),
+          m_context(std::move( context )),
           m_readOnly( true )
         {}
 
