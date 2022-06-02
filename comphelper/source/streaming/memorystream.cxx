@@ -33,6 +33,7 @@
 #include <comphelper/bytereader.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <string.h>
@@ -185,7 +186,7 @@ void SAL_CALL UNOMemoryStream::seek( sal_Int64 location )
         throw IllegalArgumentException("this implementation does not support more than 2GB!", static_cast<OWeakObject*>(this), 0 );
 
     // seek operation should be able to resize the stream
-    if ( location > static_cast< sal_Int64 >( maData.size() ) )
+    if ( o3tl::make_unsigned(location) > maData.size() )
         maData.resize( static_cast< sal_Int32 >( location ) );
 
     mnCursor = static_cast< sal_Int32 >( location );
