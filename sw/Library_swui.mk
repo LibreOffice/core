@@ -56,6 +56,7 @@ $(eval $(call gb_Library_use_libraries,swui,\
     comphelper \
     cppu \
     cppuhelper \
+    cui \
     $(call gb_Helper_optional,DBCONNECTIVITY, \
         dbtools) \
     editeng \
