@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adf15e19_6bb315ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-02T12:25:56Z",
+      "side": 1,
+      "message": "A comment on the \"input language\" and its tooltip.",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2522abe_a3d148b6",
@@ -71,6 +88,30 @@
       "writtenOn": "2022-06-02T11:33:55Z",
       "side": 1,
       "message": "Technically correct and following the suggestion on the ticket, so +1. But this label leaves me still confused, sounds as if the meaning was inverted, and I believe we need a tooltip. Seth, any good idea?",
+      "range": {
+        "startLine": 329,
+        "startChar": 106,
+        "endLine": 329,
+        "endChar": 136
+      },
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cd7154a_c72d1d44",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-02T12:25:56Z",
+      "side": 1,
+      "message": "1. Agree that \"new label\" is confusing.\n2. Looks like \"new label\" has inverted meaning (incorrectly!) compared to \"old label\".  (more evidence that this is a confusing option)\n3. Have also been confused (in the past) by the old label.\n4. As a user, have studied the existing extended tooltip many times -- without being able to match tooltip and OS software.\n\nBefore proposing alternative labels/tooltips, need to be sure the operation is clear.\n\nDo we agree that the idea (intended behavior) is:\n\nIf option is NOT enabled (with checkmark), then keyboard language setting (as determined by OS) IS applied as \"Language\" to the \"character\"(s) being entered, (overriding whatever language was currently set at the cursor).\n\nIf option IS enabled, then keyboard language setting (as determined by OS) is NOT applied as the \"language\" to the entered characters.\n\n(Have just tested/confirmed those descriptions with 7.4.0.0.alpha1+ and Win 10)\n\niiuc -- my claim (in point 2) is correct. The new label is wrong. \n\nMy suggestion: \n[X] Do not apply keyboard language setting when (entering text.)\n\nTooltip:  Use this option to prevent your keyboard language setting being applied to (text being entered.)\n\n(maybe parts in parenthesis can be improved.)\n\nShould also review the extended tooltip!\n\nMeanwhile -- from UX perspective:\n\nWhat is the expected default here?  \nimo, seems like one would expect the need to \"turn on\" the keyboard language setting, in which case, seems better if control was:\n\n[X] Apply keyboard language setting to text entry\n\nBut that would require inverting the software at the backend?  Is that hard to do?",
+      "parentUuid": "da5e2cc4_ce628e24",
       "range": {
         "startLine": 329,
         "startChar": 106,
