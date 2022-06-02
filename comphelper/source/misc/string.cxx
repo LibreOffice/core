@@ -26,6 +26,7 @@
 #include <algorithm>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -329,69 +330,21 @@ OUString convertCommaSeparated(
     return buf.makeStringAndClear();
 }
 
-/* copy of getToken from sal/, modified to take a string_view */
-static sal_Int32 getToken( OUString& ppThis,
-                        std::u16string_view pStr,
-                        sal_Int32 nToken,
-                        sal_Unicode cTok,
-                        sal_Int32 nIndex )
-{
-    assert(nIndex <= static_cast<sal_Int32>(pStr.size()));
-
-    // Set ppThis to an empty string and return -1 if either nToken or nIndex is
-    // negative:
-    if (nIndex >= 0 && nToken >= 0)
-    {
-        const auto* pOrgCharStr = pStr.data();
-        const auto* pCharStr = pOrgCharStr + nIndex;
-        sal_Int32 nLen = pStr.size() - nIndex;
-        sal_Int32 nTokCount = 0;
-        const auto* pCharStrStart = pCharStr;
-        while (nLen > 0)
-        {
-            if (*pCharStr == cTok)
-            {
-                nTokCount++;
-
-                if (nTokCount > nToken)
-                    break;
-                if (nTokCount == nToken)
-                    pCharStrStart = pCharStr + 1;
-            }
-
-            pCharStr++;
-            nLen--;
-        }
-        if (nTokCount >= nToken)
-        {
-            ppThis = OUString(pCharStrStart, pCharStr - pCharStrStart);
-            if (nLen > 0)
-                return pCharStr - pOrgCharStr + 1;
-            else
-                return -1;
-        }
-    }
-
-    ppThis.clear();
-    return -1;
-}
-
 std::vector<OUString>
     split(std::u16string_view rStr, sal_Unicode cSeparator)
 {
     std::vector< OUString > vec;
-    sal_Int32 idx = 0;
+    std::size_t idx = 0;
     do
     {
-        OUString kw;
-        idx = getToken(kw, rStr, 0, cSeparator, idx);
-        kw = kw.trim();
-        if (!kw.isEmpty())
+        std::u16string_view kw = o3tl::getToken(rStr, cSeparator, idx);
+        kw = o3tl::trim(kw);
+        if (!kw.empty())
         {
-            vec.push_back(kw);
+            vec.push_back(OUString(kw));
         }
 
-    } while (idx >= 0);
+    } while (idx != std::u16string_view::npos);
 
     return vec;
 }
