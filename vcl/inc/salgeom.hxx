@@ -23,44 +23,91 @@
 #include <iostream>
 
 #include <vcl/dllapi.h>
+#include <vcl/WindowPosSize.hxx>
 #include <tools/long.hxx>
 
-struct SalFrameGeometry {
-    // screen position of upper left corner of drawable area in pixel
-    tools::Long                nX, nY;
-    // dimensions of the drawable area in pixel
-    tools::ULong        nWidth, nHeight;
-    // thickness of the decoration in pixel
-    tools::ULong        nLeftDecoration,
-                        nTopDecoration,
-                        nRightDecoration,
-                        nBottomDecoration;
-    unsigned int        nDisplayScreenNumber;
+// There are some unused functions, which I would keep to ease understanding.
+class SalFrameGeometry : public vcl::WindowPosSize
+{
+    // non-drawable area / margins / frame / decorations around the client area
+    sal_uInt32 m_nLeftDecoration, m_nTopDecoration, m_nRightDecoration, m_nBottomDecoration;
+    unsigned int m_nDisplayScreenNumber;
 
-    SalFrameGeometry() :
-        nX( 0 ),
-        nY( 0 ),
-        nWidth( 1 ),
-        nHeight( 1 ),
-        nLeftDecoration( 0 ),
-        nTopDecoration( 0 ),
-        nRightDecoration( 0 ),
-        nBottomDecoration( 0 ),
-        nDisplayScreenNumber( 0 )
-    {}
+public:
+    SalFrameGeometry()
+        : m_nLeftDecoration(0)
+        , m_nTopDecoration(0)
+        , m_nRightDecoration(0)
+        , m_nBottomDecoration(0)
+        , m_nDisplayScreenNumber(0)
+    {
+    }
+
+    constexpr tools::Rectangle clientArea() const
+    {
+        tools::Long nX(x() + m_nLeftDecoration), nY(y() + m_nTopDecoration);
+        return { { nX, nY }, size() };
+    }
+    void setClientArea(const tools::Rectangle& rRect)
+    {
+        setX(rRect.getX() - m_nLeftDecoration);
+        setY(rRect.getY() - m_nTopDecoration);
+        setSize(rRect.GetSize());
+    }
+    constexpr tools::Rectangle clientRect() const { return { { 0, 0 }, size() }; }
+
+    // returns the position and size of the window, including all margins
+    constexpr tools::Rectangle frameArea() const
+    {
+        tools::Long nWidth(width() + m_nLeftDecoration + m_nRightDecoration);
+        tools::Long nHeight(height() + m_nTopDecoration + m_nBottomDecoration);
+        return { pos(), Size(nWidth, nHeight) };
+    }
+    // no setFrameArea, as it can't really be implemented, e.g. what happens, if size() > frameArea.size() etc.
+
+    constexpr sal_uInt32 leftDecoration() const { return m_nLeftDecoration; }
+    void setLeftDecoration(sal_uInt32 nLeftDecoration) { m_nLeftDecoration = nLeftDecoration; }
+    constexpr sal_uInt32 topDecoration() const { return m_nTopDecoration; }
+    void setTopDecoration(sal_uInt32 nTopDecoration) { m_nTopDecoration = nTopDecoration; }
+    constexpr sal_uInt32 rightDecoration() const { return m_nRightDecoration; }
+    void setRightDecoration(sal_uInt32 nRightDecoration) { m_nRightDecoration = nRightDecoration; }
+    constexpr sal_uInt32 bottomDecoration() const { return m_nBottomDecoration; }
+    void setBottomDecoration(sal_uInt32 nBottomDecoration)
+    {
+        m_nBottomDecoration = nBottomDecoration;
+    }
+    void decorations(sal_uInt32& nLeft, sal_uInt32& nTop, sal_uInt32& nRight,
+                     sal_uInt32& nBottom) const
+    {
+        nLeft = m_nLeftDecoration;
+        nTop = m_nTopDecoration;
+        nRight = m_nRightDecoration;
+        nBottom = m_nBottomDecoration;
+    }
+    void setDecorations(sal_uInt32 nLeft, sal_uInt32 nTop, sal_uInt32 nRight, sal_uInt32 nBottom)
+    {
+        m_nLeftDecoration = nLeft;
+        m_nTopDecoration = nTop;
+        m_nRightDecoration = nRight;
+        m_nBottomDecoration = nBottom;
+    }
+
+    unsigned int screen() const { return m_nDisplayScreenNumber; }
+    void setScreen(unsigned int nScreen) { m_nDisplayScreenNumber = nScreen; }
 };
 
-inline std::ostream &operator <<(std::ostream& s, const SalFrameGeometry& rGeom)
+inline std::ostream& operator<<(std::ostream& s, const SalFrameGeometry& rGeom)
 {
-    s << rGeom.nWidth << "x" << rGeom.nHeight << "@(" << rGeom.nX << "," << rGeom.nY << "):{"
-      << rGeom.nLeftDecoration << "," << rGeom.nTopDecoration << "," << rGeom.nRightDecoration << "," << rGeom.nBottomDecoration << "}";
-
+    s << static_cast<const vcl::WindowPosSize*>(&rGeom) << ":{" << rGeom.leftDecoration() << ","
+      << rGeom.topDecoration() << "," << rGeom.rightDecoration() << "," << rGeom.bottomDecoration()
+      << "}s" << rGeom.screen();
     return s;
 }
 
 /// Interface used to share logic on sizing between
 /// SalVirtualDevices and SalFrames
-class VCL_PLUGIN_PUBLIC SalGeometryProvider {
+class VCL_PLUGIN_PUBLIC SalGeometryProvider
+{
 public:
     virtual ~SalGeometryProvider() {}
     virtual tools::Long GetWidth() const = 0;

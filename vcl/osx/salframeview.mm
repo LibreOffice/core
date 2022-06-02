@@ -166,8 +166,8 @@ static AquaSalFrame* getMouseContainerFrame()
 {
     mDraggingDestinationHandler = nil;
     mpFrame = pFrame;
-    NSRect aRect = { { static_cast<CGFloat>(pFrame->maGeometry.nX), static_cast<CGFloat>(pFrame->maGeometry.nY) },
-                     { static_cast<CGFloat>(pFrame->maGeometry.nWidth), static_cast<CGFloat>(pFrame->maGeometry.nHeight) } };
+    NSRect aRect = { { static_cast<CGFloat>(pFrame->maGeometry.x()), static_cast<CGFloat>(pFrame->maGeometry.y()) },
+                     { static_cast<CGFloat>(pFrame->maGeometry.width()), static_cast<CGFloat>(pFrame->maGeometry.height()) } };
     pFrame->VCLToCocoa( aRect );
     NSWindow* pNSWindow = [super initWithContentRect: aRect
                                  styleMask: mpFrame->getStyleMask()
@@ -473,7 +473,7 @@ static AquaSalFrame* getMouseContainerFrame()
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
         // FIXME: does this leak the returned NSCursor of getCurrentCursor ?
-        const NSRect aRect = { NSZeroPoint, NSMakeSize( mpFrame->maGeometry.nWidth, mpFrame->maGeometry.nHeight) };
+        const NSRect aRect = { NSZeroPoint, NSMakeSize(mpFrame->maGeometry.width(), mpFrame->maGeometry.height()) };
         [self addCursorRect: aRect cursor: mpFrame->getCurrentCursor()];
     }
 }
@@ -600,13 +600,13 @@ static AquaSalFrame* getMouseContainerFrame()
 
         SalMouseEvent aEvent;
         aEvent.mnTime   = pDispatchFrame->mnLastEventTime;
-        aEvent.mnX      = static_cast<tools::Long>(aPt.x) - pDispatchFrame->maGeometry.nX;
-        aEvent.mnY      = static_cast<tools::Long>(aPt.y) - pDispatchFrame->maGeometry.nY;
+        aEvent.mnX = static_cast<tools::Long>(aPt.x) - pDispatchFrame->maGeometry.x();
+        aEvent.mnY = static_cast<tools::Long>(aPt.y) - pDispatchFrame->maGeometry.y();
         aEvent.mnButton = nButton;
         aEvent.mnCode   =  aEvent.mnButton | nModMask;
 
         if( AllSettings::GetLayoutRTL() )
-            aEvent.mnX = pDispatchFrame->maGeometry.nWidth-1-aEvent.mnX;
+            aEvent.mnX = pDispatchFrame->maGeometry.width() - 1 - aEvent.mnX;
 
         pDispatchFrame->CallCallback( nEvent, &aEvent );
     }
@@ -760,14 +760,14 @@ static AquaSalFrame* getMouseContainerFrame()
 
         SalWheelMouseEvent aEvent;
         aEvent.mnTime           = mpFrame->mnLastEventTime;
-        aEvent.mnX              = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY              = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.x();
+        aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.y();
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mnCode           |= KEY_MOD1; // we want zooming, no scrolling
         aEvent.mbDeltaIsPixel   = true;
 
         if( AllSettings::GetLayoutRTL() )
-            aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
+            aEvent.mnX = mpFrame->maGeometry.width() - 1 - aEvent.mnX;
 
         aEvent.mnDelta = nDeltaZ;
         aEvent.mnNotchDelta = (nDeltaZ >= 0) ? +1 : -1;
@@ -817,13 +817,13 @@ static AquaSalFrame* getMouseContainerFrame()
 
         SalWheelMouseEvent aEvent;
         aEvent.mnTime           = mpFrame->mnLastEventTime;
-        aEvent.mnX              = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY              = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.x();
+        aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.y();
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mbDeltaIsPixel   = true;
 
         if( AllSettings::GetLayoutRTL() )
-            aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
+            aEvent.mnX = mpFrame->maGeometry.width() - 1 - aEvent.mnX;
 
         if( dX != 0.0 )
         {
@@ -876,13 +876,13 @@ static AquaSalFrame* getMouseContainerFrame()
 
         SalWheelMouseEvent aEvent;
         aEvent.mnTime         = mpFrame->mnLastEventTime;
-        aEvent.mnX            = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY            = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.nY;
+        aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.x();
+        aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.y();
         aEvent.mnCode         = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mbDeltaIsPixel = false;
 
         if( AllSettings::GetLayoutRTL() )
-            aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
+            aEvent.mnX = mpFrame->maGeometry.width() - 1 - aEvent.mnX;
 
         if( dX != 0.0 )
         {
@@ -1666,8 +1666,8 @@ static AquaSalFrame* getMouseContainerFrame()
 
     NSRect rect;
 
-    rect.origin.x = aPosEvent.mnX + mpFrame->maGeometry.nX;
-    rect.origin.y =   aPosEvent.mnY + mpFrame->maGeometry.nY + 4; // add some space for underlines
+    rect.origin.x = aPosEvent.mnX + mpFrame->maGeometry.x();
+    rect.origin.y = aPosEvent.mnY + mpFrame->maGeometry.y() + 4; // add some space for underlines
     rect.size.width = aPosEvent.mnWidth;
     rect.size.height = aPosEvent.mnHeight;
 
