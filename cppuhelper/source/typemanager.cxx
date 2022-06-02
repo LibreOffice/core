@@ -2147,9 +2147,9 @@ css::uno::Any cppuhelper::TypeManager::getInstantiatedStruct(
 }
 
 css::uno::Any cppuhelper::TypeManager::getInterfaceMember(
-    std::u16string_view name, sal_Int32 separator)
+    std::u16string_view name, std::size_t separator)
 {
-    assert(static_cast<sal_Int32>(name.find(u"::")) == separator && separator != -1);
+    assert(name.find(u"::") == separator && separator != std::u16string_view::npos);
     css::uno::Reference< css::reflection::XInterfaceTypeDescription2 > ifc(
         resolveTypedefs(find(OUString(name.substr(0, separator)))), css::uno::UNO_QUERY);
     if (!ifc.is()) {

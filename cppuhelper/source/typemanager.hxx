@@ -11,6 +11,8 @@
 
 #include <sal/config.h>
 
+#include <cstddef>
+
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -100,7 +102,7 @@ private:
         OUString const & name, sal_Int32 separator);
 
     css::uno::Any getInterfaceMember(
-        std::u16string_view name, sal_Int32 separator);
+        std::u16string_view name, std::size_t separator);
 
     css::uno::Any getNamed(
         OUString const & name,
