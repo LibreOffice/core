@@ -495,7 +495,7 @@ public:
     constexpr Rectangle( tools::Long nLeft, tools::Long nTop );
     constexpr Rectangle( const Point& rLT, const Size& rSize );
 
-    inline constexpr static Rectangle Justify(const Point& rLT, const Point& rRB);
+    constexpr inline static Rectangle Justify(const Point& rLT, const Point& rRB);
 
     constexpr tools::Long Left() const { return nLeft; }
     constexpr tools::Long Right() const { return IsWidthEmpty() ? nLeft : nRight; }
@@ -531,41 +531,13 @@ public:
     inline void         SetPos( const Point& rPoint );
     void                SetSize( const Size& rSize );
 
+    constexpr Point GetPos() const { return TopLeft(); }
     constexpr Size GetSize() const { return { GetWidth(), GetHeight() }; }
 
     /// Returns the difference between right and left, assuming the range is inclusive.
-    constexpr tools::Long GetWidth() const
-    {
-        tools::Long n = 0;
-
-        if (!IsWidthEmpty())
-        {
-            n = nRight - nLeft;
-            if (n < 0)
-                n--;
-            else
-                n++;
-        }
-
-        return n;
-    }
-
+    constexpr inline tools::Long GetWidth() const;
     /// Returns the difference between bottom and top, assuming the range is inclusive.
-    constexpr tools::Long GetHeight() const
-    {
-        tools::Long n = 0;
-
-        if (!IsHeightEmpty())
-        {
-            n = nBottom - nTop;
-            if (n < 0)
-                n--;
-            else
-                n++;
-        }
-
-        return n;
-    }
+    constexpr inline tools::Long GetHeight() const;
 
     tools::Rectangle&          Union( const tools::Rectangle& rRect );
     tools::Rectangle&          Intersection( const tools::Rectangle& rRect );
@@ -689,6 +661,38 @@ inline void tools::Rectangle::SetPos( const Point& rPoint )
 {
     SetPosX(rPoint.X());
     SetPosY(rPoint.Y());
+}
+
+constexpr inline tools::Long tools::Rectangle::GetWidth() const
+{
+    tools::Long n = 0;
+
+    if (!IsWidthEmpty())
+    {
+        n = nRight - nLeft;
+        if (n < 0)
+            n--;
+        else
+            n++;
+    }
+
+    return n;
+}
+
+constexpr inline tools::Long tools::Rectangle::GetHeight() const
+{
+    tools::Long n = 0;
+
+    if (!IsHeightEmpty())
+    {
+        n = nBottom - nTop;
+        if (n < 0)
+            n--;
+        else
+            n++;
+    }
+
+    return n;
 }
 
 inline tools::Rectangle tools::Rectangle::GetUnion( const tools::Rectangle& rRect ) const
