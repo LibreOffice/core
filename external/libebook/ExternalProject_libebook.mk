@@ -28,6 +28,7 @@ $(call gb_ExternalProject_get_state_target,libebook,build) :
 	$(call gb_Trace_StartRange,libebook,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
+		&& autoreconf \
 		&& MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic \
 			--enable-static \

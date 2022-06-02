@@ -26,6 +26,7 @@ hunspell_LDFLAGS:=$(gb_LTOFLAGS) $(call gb_ExternalProject_get_link_flags,hunspe
 $(call gb_ExternalProject_get_state_target,hunspell,build):
 	$(call gb_Trace_StartRange,hunspell,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
+		autoreconf && \
 		$(gb_RUN_CONFIGURE) ./configure --disable-shared --disable-nls --with-pic \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
