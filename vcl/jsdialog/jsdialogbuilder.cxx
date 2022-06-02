@@ -1792,6 +1792,7 @@ void JSMenuButton::set_active(bool bActive)
 JSPopover::JSPopover(JSDialogSender* pSender, DockingWindow* pDockingWindow,
                      SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstancePopover, DockingWindow>(pSender, pDockingWindow, pBuilder, bTakeOwnership)
+    , mnWindowId(0)
 {
 }
 
