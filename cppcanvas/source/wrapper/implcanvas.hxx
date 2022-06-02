@@ -47,7 +47,7 @@ namespace cppcanvas::internal
         class ImplCanvas : public virtual Canvas
         {
         public:
-            explicit ImplCanvas( const css::uno::Reference< css::rendering::XCanvas >& rCanvas );
+            explicit ImplCanvas( css::uno::Reference< css::rendering::XCanvas > xCanvas );
             virtual ~ImplCanvas() override;
 
             ImplCanvas(ImplCanvas const &) = default;

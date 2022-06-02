@@ -21,6 +21,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <canvas/canvastools.hxx>
+#include <utility>
 
 #include "implsprite.hxx"
 
@@ -31,10 +32,10 @@ namespace cppcanvas::internal
 {
 
         ImplSprite::ImplSprite( const uno::Reference< rendering::XSpriteCanvas >&       rParentCanvas,
-                                const uno::Reference< rendering::XSprite >&             rSprite,
-                                const ImplSpriteCanvas::TransformationArbiterSharedPtr& rTransformArbiter ) :
-            mxSprite( rSprite ),
-            mpTransformArbiter( rTransformArbiter )
+                                uno::Reference< rendering::XSprite >              rSprite,
+                                ImplSpriteCanvas::TransformationArbiterSharedPtr  xTransformArbiter ) :
+            mxSprite(std::move( rSprite )),
+            mpTransformArbiter(std::move( xTransformArbiter ))
         {
             // Avoiding ternary operator in initializer list (Solaris
             // compiler bug, when function call and temporary is

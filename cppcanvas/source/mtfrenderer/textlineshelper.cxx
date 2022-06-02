@@ -13,6 +13,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <outdevstate.hxx>
+#include <utility>
 #include "textlineshelper.hxx"
 #include "mtftools.hxx"
 
@@ -30,8 +31,8 @@ void initLineStyleWaveline(sal_uInt32 nLineStyle, bool& bIsWaveline, bool& bIsBo
 
 namespace cppcanvas::internal
 {
-TextLinesHelper::TextLinesHelper(const CanvasSharedPtr& rCanvas, const OutDevState& rState)
-    : mpCanvas(rCanvas)
+TextLinesHelper::TextLinesHelper(CanvasSharedPtr xCanvas, const OutDevState& rState)
+    : mpCanvas(std::move(xCanvas))
     , mbIsOverlineColorSet(rState.isTextOverlineColorSet)
     , maOverlineColor(rState.textOverlineColor)
     , mbIsUnderlineColorSet(rState.isTextLineColorSet)

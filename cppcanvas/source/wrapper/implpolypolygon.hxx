@@ -39,8 +39,8 @@ namespace cppcanvas::internal
         {
         public:
             ImplPolyPolygon( const CanvasSharedPtr& rParentCanvas,
-                             const css::uno::Reference<
-                                 css::rendering::XPolyPolygon2D >& rPolyPoly );
+                             css::uno::Reference<
+                                 css::rendering::XPolyPolygon2D > xPolyPoly );
 
             virtual ~ImplPolyPolygon() override;
 

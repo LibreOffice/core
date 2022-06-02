@@ -33,6 +33,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <tools/gen.hxx>
+#include <utility>
 #include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
 
@@ -1575,7 +1576,7 @@ namespace cppcanvas::internal
                                const ::basegfx::B2DSize&                            rShadowOffset,
                                const ::Color&                                       rShadowColor,
                                const ::basegfx::B2DRectangle&                       rOutlineBounds,
-                               const uno::Reference< rendering::XPolyPolygon2D >&   rTextPoly,
+                               uno::Reference< rendering::XPolyPolygon2D >          xTextPoly,
                                const uno::Sequence< double >&                       rOffsets,
                                VirtualDevice const &                                rVDev,
                                const CanvasSharedPtr&                               rCanvas,
@@ -1586,7 +1587,7 @@ namespace cppcanvas::internal
                                const ::basegfx::B2DSize&                            rShadowOffset,
                                const ::Color&                                       rShadowColor,
                                const ::basegfx::B2DRectangle&                       rOutlineBounds,
-                               const uno::Reference< rendering::XPolyPolygon2D >&   rTextPoly,
+                               uno::Reference< rendering::XPolyPolygon2D >          xTextPoly,
                                const uno::Sequence< double >&                       rOffsets,
                                VirtualDevice const &                                rVDev,
                                const CanvasSharedPtr&                               rCanvas,
@@ -1653,12 +1654,12 @@ namespace cppcanvas::internal
                                           const ::basegfx::B2DSize&                             rShadowOffset,
                                           const ::Color&                                        rShadowColor,
                                           const ::basegfx::B2DRectangle&                        rOutlineBounds,
-                                          const uno::Reference< rendering::XPolyPolygon2D >&    rTextPoly,
+                                          uno::Reference< rendering::XPolyPolygon2D >           xTextPoly,
                                           const uno::Sequence< double >&                        rOffsets,
                                           VirtualDevice const &                                 rVDev,
                                           const CanvasSharedPtr&                                rCanvas,
                                           const OutDevState&                                    rState  ) :
-                mxTextPoly( rTextPoly ),
+                mxTextPoly(std::move( xTextPoly )),
                 maOffsets( rOffsets ),
                 mpCanvas( rCanvas ),
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),
@@ -1695,13 +1696,13 @@ namespace cppcanvas::internal
                                           const ::basegfx::B2DSize&                             rShadowOffset,
                                           const ::Color&                                        rShadowColor,
                                           const ::basegfx::B2DRectangle&                        rOutlineBounds,
-                                          const uno::Reference< rendering::XPolyPolygon2D >&    rTextPoly,
+                                          uno::Reference< rendering::XPolyPolygon2D >           xTextPoly,
                                           const uno::Sequence< double >&                        rOffsets,
                                           VirtualDevice const &                                 rVDev,
                                           const CanvasSharedPtr&                                rCanvas,
                                           const OutDevState&                                    rState,
                                           const ::basegfx::B2DHomMatrix&                        rTextTransform ) :
-                mxTextPoly( rTextPoly ),
+                mxTextPoly(std::move( xTextPoly )),
                 maOffsets( rOffsets ),
                 mpCanvas( rCanvas ),
                 mnOutlineWidth( calcOutlineWidth(rState,rVDev) ),

@@ -26,14 +26,15 @@
 
 #include "cachedprimitivebase.hxx"
 #include <sal/log.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
 namespace cppcanvas::internal
 {
-        CachedPrimitiveBase::CachedPrimitiveBase( const CanvasSharedPtr& rCanvas,
+        CachedPrimitiveBase::CachedPrimitiveBase( CanvasSharedPtr        xCanvas,
                                                   bool                   bOnlyRedrawWithSameTransform ) :
-            mpCanvas( rCanvas ),
+            mpCanvas(std::move( xCanvas )),
             mbOnlyRedrawWithSameTransform( bOnlyRedrawWithSameTransform )
         {
             // TODO(F2): also store last view transform, and refuse to
