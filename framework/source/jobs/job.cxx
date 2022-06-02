@@ -32,6 +32,7 @@
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 namespace framework{
@@ -50,10 +51,10 @@ namespace framework{
                 (May be null!)
 */
 Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
-          /*IN*/ const css::uno::Reference< css::frame::XFrame >&              xFrame )
+          /*IN*/ css::uno::Reference< css::frame::XFrame >               xFrame )
     : m_aJobCfg            (xContext                     )
     , m_xContext           (xContext                     )
-    , m_xFrame             (xFrame                       )
+    , m_xFrame             (std::move(xFrame                       ))
     , m_bListenOnDesktop   (false                    )
     , m_bListenOnFrame     (false                    )
     , m_bListenOnModel     (false                    )
@@ -77,10 +78,10 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
                 (May be null!)
 */
 Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
-          /*IN*/ const css::uno::Reference< css::frame::XModel >&              xModel )
+          /*IN*/ css::uno::Reference< css::frame::XModel >               xModel )
     : m_aJobCfg            (xContext                     )
     , m_xContext           (xContext                     )
-    , m_xModel             (xModel                       )
+    , m_xModel             (std::move(xModel                       ))
     , m_bListenOnDesktop   (false                    )
     , m_bListenOnFrame     (false                    )
     , m_bListenOnModel     (false                    )

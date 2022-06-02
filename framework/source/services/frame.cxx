@@ -113,7 +113,7 @@ class XFrameImpl:
 {
 public:
 
-    explicit XFrameImpl(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit XFrameImpl(css::uno::Reference< css::uno::XComponentContext >  xContext);
 
     /// Initialization function after having acquire()'d.
     void initListeners();
@@ -452,10 +452,10 @@ private:
                     The value must be different from NULL!
     @onerror    ASSERT in debug version or nothing in release version.
 *//*-*****************************************************************************************************/
-XFrameImpl::XFrameImpl( const css::uno::Reference< css::uno::XComponentContext >& xContext )
+XFrameImpl::XFrameImpl( css::uno::Reference< css::uno::XComponentContext >  xContext )
         : PartialWeakComponentImplHelper(m_aMutex)
         //  init member
-        , m_xContext                  ( xContext )
+        , m_xContext                  (std::move( xContext ))
         , m_aListenerContainer        ( m_aMutex )
         , m_eActiveState              ( E_INACTIVE )
         , m_bIsFrameTop               ( true ) // I think we are top without a parent ... and there is no parent yet!

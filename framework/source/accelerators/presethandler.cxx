@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -68,8 +69,8 @@ struct SharedStorages: public rtl::Static<TSharedStorages, SharedStorages> {};
 
 }
 
-PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : m_xContext(xContext)
+PresetHandler::PresetHandler(css::uno::Reference< css::uno::XComponentContext > xContext)
+    : m_xContext(std::move(xContext))
     , m_eConfigType(E_GLOBAL)
 {
 }

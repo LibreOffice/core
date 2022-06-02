@@ -48,7 +48,7 @@ class TaskCreator final
     // interface
     public:
 
-                 TaskCreator( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+                 TaskCreator( css::uno::Reference< css::uno::XComponentContext > xContext );
                  ~TaskCreator(                                                                     );
 
         css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName, const utl::MediaDescriptor& rDescriptor );

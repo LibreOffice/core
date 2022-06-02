@@ -30,6 +30,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
+#include <utility>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
@@ -41,8 +42,8 @@ namespace framework{
 const ::sal_Int32 INVALID_ICON_ID = -1;
 const ::sal_Int32 DEFAULT_ICON_ID =  0;
 
-TitleBarUpdate::TitleBarUpdate(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : m_xContext              (xContext                     )
+TitleBarUpdate::TitleBarUpdate(css::uno::Reference< css::uno::XComponentContext >  xContext)
+    : m_xContext              (std::move(xContext                     ))
 {
 }
 

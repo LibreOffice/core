@@ -25,6 +25,7 @@
 
 #include <comphelper/profilezone.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <utility>
 #include <vcl/threadex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -51,8 +52,8 @@ css::uno::Sequence<OUString> SAL_CALL DispatchHelper::getSupportedServiceNames()
 
     @param xSMGR    the global uno service manager, which can be used to create own needed services.
 */
-DispatchHelper::DispatchHelper(const css::uno::Reference<css::uno::XComponentContext>& xContext)
-    : m_xContext(xContext)
+DispatchHelper::DispatchHelper(css::uno::Reference<css::uno::XComponentContext> xContext)
+    : m_xContext(std::move(xContext))
     , m_aBlockFlag(false)
 {
 }

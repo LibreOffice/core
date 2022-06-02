@@ -78,7 +78,7 @@ class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceIn
                     reference to the uno service manager, which created this instance.
                     Can be used later to create own needed uno resources on demand.
          */
-        HelpOnStartup(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+        HelpOnStartup(css::uno::Reference< css::uno::XComponentContext > xContext);
 
         /** @short  does nothing real ...
 

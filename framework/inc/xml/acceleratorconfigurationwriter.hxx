@@ -55,7 +55,7 @@ class AcceleratorConfigurationWriter final
                     used to write the configuration there.
           */
         AcceleratorConfigurationWriter(const AcceleratorCache&                                       rContainer,
-                                       const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig   );
+                                       css::uno::Reference< css::xml::sax::XDocumentHandler >        xConfig   );
 
         /** @short  does nothing real ... */
         ~AcceleratorConfigurationWriter();

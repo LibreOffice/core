@@ -22,6 +22,7 @@
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/diagnose.h>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -30,9 +31,9 @@ using namespace com::sun::star;
 namespace framework{
 
 InterceptionHelper::InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
-                                       const css::uno::Reference< css::frame::XDispatchProvider >& xSlave)
+                                       css::uno::Reference< css::frame::XDispatchProvider >  xSlave)
     : m_xOwnerWeak  (xOwner                       )
-    , m_xSlave      (xSlave                       )
+    , m_xSlave      (std::move(xSlave                       ))
 {
 }
 

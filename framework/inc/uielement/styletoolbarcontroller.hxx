@@ -34,7 +34,7 @@ class StyleDispatcher final : public cppu::WeakImplHelper< css::frame::XDispatch
 {
 public:
     StyleDispatcher( const css::uno::Reference< css::frame::XFrame >& rFrame,
-                     const css::uno::Reference< css::util::XURLTransformer >& rUrlTransformer,
+                     css::uno::Reference< css::util::XURLTransformer > xUrlTransformer,
                      const css::util::URL& rURL );
 
     // XDispatch

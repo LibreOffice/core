@@ -18,6 +18,7 @@
  */
 
 #include "imagemanagerimpl.hxx"
+#include <utility>
 #include <xml/imagesconfiguration.hxx>
 #include <uiconfiguration/imagetype.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
@@ -100,10 +101,10 @@ static GlobalImageList* getGlobalImageList( const uno::Reference< uno::XComponen
     return pGlobalImageList;
 }
 
-CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxContext, const OUString& aModuleIdentifier ) :
+CmdImageList::CmdImageList( uno::Reference< uno::XComponentContext >  rxContext, OUString aModuleIdentifier ) :
     m_bInitialized(false),
-    m_aModuleIdentifier( aModuleIdentifier ),
-    m_xContext( rxContext )
+    m_aModuleIdentifier(std::move( aModuleIdentifier )),
+    m_xContext(std::move( rxContext ))
 {
 }
 
@@ -473,8 +474,8 @@ CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
     return m_pDefaultImageList.get();
 }
 
-ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext >& rxContext,::cppu::OWeakObject* pOwner,bool _bUseGlobal ) :
-    m_xContext( rxContext )
+ImageManagerImpl::ImageManagerImpl( uno::Reference< uno::XComponentContext > xContext, ::cppu::OWeakObject* pOwner, bool _bUseGlobal ) :
+    m_xContext(std::move( xContext ))
     , m_pOwner(pOwner)
     , m_aResourceString( "private:resource/images/moduleimages" )
     , m_bUseGlobal(_bUseGlobal)

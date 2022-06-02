@@ -25,6 +25,7 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <utility>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
 
@@ -34,8 +35,8 @@
 
 namespace framework{
 
-PersistentWindowState::PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : m_xContext              (xContext                     )
+PersistentWindowState::PersistentWindowState(css::uno::Reference< css::uno::XComponentContext >  xContext)
+    : m_xContext              (std::move(xContext                     ))
     , m_bWindowStateAlreadySet(false                    )
 {
 }

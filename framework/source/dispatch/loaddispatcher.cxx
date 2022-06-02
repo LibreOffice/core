@@ -22,15 +22,16 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <utility>
 
 namespace framework{
 
 LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::uno::XComponentContext >& xContext    ,
                                const css::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
-                               const OUString&                                           sTargetName ,
+                               OUString                                                  sTargetName ,
                                      sal_Int32                                           nSearchFlags)
     : m_xOwnerFrame (xOwnerFrame )
-    , m_sTarget     (sTargetName )
+    , m_sTarget     (std::move(sTargetName ))
     , m_nSearchFlags(nSearchFlags)
     , m_aLoader     (xContext    )
 {

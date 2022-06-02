@@ -31,7 +31,7 @@ class StatusBarWrapper final : public UIConfigElementWrapperBase
 {
     public:
         StatusBarWrapper(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+            css::uno::Reference< css::uno::XComponentContext > xContext );
         virtual ~StatusBarWrapper() override;
 
         // XComponent

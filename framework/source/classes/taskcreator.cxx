@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <utility>
 
 namespace framework{
 
@@ -36,8 +37,8 @@ namespace framework{
     @param      xContext
                     points to the valid uno service manager
 *//*-*****************************************************************************************************/
-TaskCreator::TaskCreator( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : m_xContext    ( xContext )
+TaskCreator::TaskCreator( css::uno::Reference< css::uno::XComponentContext > xContext )
+    : m_xContext    (std::move( xContext ))
 {
 }
 

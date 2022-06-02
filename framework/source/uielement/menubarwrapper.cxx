@@ -29,6 +29,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
@@ -107,11 +108,11 @@ css::uno::Sequence< css::uno::Type > SAL_CALL MenuBarWrapper::getTypes()
 }
 
 MenuBarWrapper::MenuBarWrapper(
-    const css::uno::Reference< css::uno::XComponentContext >& rxContext
+    css::uno::Reference< css::uno::XComponentContext > xContext
     )
 :    UIConfigElementWrapperBase( UIElementType::MENUBAR ),
      m_bRefreshPopupControllerCache( true ),
-     m_xContext( rxContext )
+     m_xContext(std::move( xContext ))
 {
 }
 

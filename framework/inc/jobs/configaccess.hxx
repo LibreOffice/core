@@ -72,8 +72,8 @@ class ConfigAccess final
         void      closeImpl();
     public:
 
-                 ConfigAccess( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                               const OUString&                                    sRoot );
+                 ConfigAccess( css::uno::Reference< css::uno::XComponentContext > xContext,
+                               OUString                                     sRoot );
                  ~ConfigAccess();
 
         void      open   ( EOpenMode eMode );

@@ -30,6 +30,7 @@
 #include <mutex>
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 
 //  Namespace
 
@@ -42,7 +43,7 @@ class ConfigurationAccess_ControllerFactory final : // interfaces
                                                     public  ::cppu::WeakImplHelper< css::container::XContainerListener>
 {
 public:
-                    ConfigurationAccess_ControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const OUString& _sRoot );
+                    ConfigurationAccess_ControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& rxContext, OUString _sRoot );
     virtual       ~ConfigurationAccess_ControllerFactory() override;
 
     void          readConfigurationData();
@@ -67,7 +68,7 @@ private:
     {
         OUString m_aImplementationName;
         OUString m_aValue;
-        ControllerInfo(const OUString& _aImplementationName,const OUString& _aValue) : m_aImplementationName(_aImplementationName),m_aValue(_aValue){}
+        ControllerInfo(OUString _aImplementationName, OUString _aValue) : m_aImplementationName(std::move(_aImplementationName)),m_aValue(std::move(_aValue)){}
         ControllerInfo(){}
     };
     class MenuControllerMap : public std::unordered_map< OUString,

@@ -35,6 +35,7 @@
 #include <com/sun/star/util/XCacheInfo.hpp>
 
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <framework/dispatchhelper.hxx>
@@ -55,9 +56,9 @@ namespace framework{
     @param      xFrame
                     reference to our owner frame.
 */
-DispatchProvider::DispatchProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext  ,
-                                    const css::uno::Reference< css::frame::XFrame >&              xFrame    )
-        : m_xContext    ( rxContext                     )
+DispatchProvider::DispatchProvider( css::uno::Reference< css::uno::XComponentContext >  xContext  ,
+                                    const css::uno::Reference< css::frame::XFrame >&    xFrame    )
+        : m_xContext    (std::move( xContext                     ))
         , m_xFrame      ( xFrame                        )
 {
 }

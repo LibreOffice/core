@@ -18,6 +18,7 @@
  */
 
 #include <uielement/statusbaritem.hxx>
+#include <utility>
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
 
@@ -61,11 +62,11 @@ sal_uInt16 impl_convertItemBitsToItemStyle( StatusBarItemBits nItemBits )
 StatusbarItem::StatusbarItem(
     StatusBar              *pStatusBar,
     sal_uInt16              nId,
-    const OUString&    aCommand )
+    OUString                aCommand )
     : m_pStatusBar( pStatusBar )
     , m_nId( nId )
     , m_nStyle( 0 )
-    , m_aCommand( aCommand )
+    , m_aCommand(std::move( aCommand ))
 {
     if ( m_pStatusBar )
         m_nStyle = impl_convertItemBitsToItemStyle(

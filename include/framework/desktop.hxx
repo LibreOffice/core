@@ -110,7 +110,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
     public:
 
         //  constructor / destructor
-                 Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+                 Desktop( css::uno::Reference< css::uno::XComponentContext >  xContext );
         virtual ~Desktop(                                                                    ) override;
 
         void constructorInit();

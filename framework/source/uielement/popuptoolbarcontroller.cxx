@@ -29,6 +29,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
+#include <utility>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
@@ -70,7 +71,7 @@ public:
 
 protected:
     PopupMenuToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                const OUString &rPopupCommand = OUString() );
+                                OUString aPopupCommand = OUString() );
     virtual void functionExecuted( const OUString &rCommand );
     virtual ToolBoxItemBits getDropDownStyle() const;
     void createPopupMenuController();
@@ -87,11 +88,11 @@ private:
 
 PopupMenuToolbarController::PopupMenuToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-    const OUString &rPopupCommand )
+    OUString aPopupCommand )
     : ToolBarBase( xContext, css::uno::Reference< css::frame::XFrame >(), /*aCommandURL*/OUString() )
     , m_bHasController( false )
     , m_bResourceURL( false )
-    , m_aPopupCommand( rPopupCommand )
+    , m_aPopupCommand(std::move( aPopupCommand ))
 {
 }
 

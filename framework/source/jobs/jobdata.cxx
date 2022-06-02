@@ -32,6 +32,7 @@
 
 #include <tools/wldcrd.hxx>
 #include <unotools/configpaths.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 namespace framework{
@@ -45,8 +46,8 @@ namespace framework{
     @param      rxContext
                     reference to the uno service manager
 */
-JobData::JobData( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-    : m_xContext    (rxContext                    )
+JobData::JobData( css::uno::Reference< css::uno::XComponentContext > xContext )
+    : m_xContext    (std::move(xContext                    ))
 {
     // share code for member initialization with defaults!
     impl_reset();

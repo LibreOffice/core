@@ -57,7 +57,7 @@ class MailToDispatcher final : public  ::cppu::WeakImplHelper<
     public:
 
         // ctor/dtor
-                 MailToDispatcher( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                 MailToDispatcher( css::uno::Reference< css::uno::XComponentContext > xContext );
         virtual ~MailToDispatcher(                                                                     ) override;
 
         /* interface XServiceInfo */

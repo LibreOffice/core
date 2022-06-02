@@ -74,8 +74,8 @@ class WindowCommandDispatch final
             @param  xFrame
                     used as for new detected commands.
          */
-        WindowCommandDispatch(const css::uno::Reference< css::uno::XComponentContext >&     xContext ,
-                              const css::uno::Reference< css::frame::XFrame >&              xFrame);
+        WindowCommandDispatch(css::uno::Reference< css::uno::XComponentContext >      xContext ,
+                              const css::uno::Reference< css::frame::XFrame >&        xFrame);
 
         /** @short  used to free internal resources.
          */

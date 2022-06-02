@@ -39,6 +39,7 @@
 #include <svtools/statusbarcontroller.hxx>
 #include <tools/debug.hxx>
 
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>
@@ -120,15 +121,15 @@ StatusBarItemBits impl_convertItemStyleToItemBits( sal_Int16 nStyle )
 }
 
 StatusBarManager::StatusBarManager(
-    const uno::Reference< uno::XComponentContext >& rxContext,
-    const uno::Reference< frame::XFrame >& rFrame,
+    uno::Reference< uno::XComponentContext > xContext,
+    uno::Reference< frame::XFrame >  rFrame,
     StatusBar* pStatusBar ) :
     m_bDisposed( false ),
     m_bFrameActionRegistered( false ),
     m_bUpdateControllers( false ),
     m_pStatusBar( pStatusBar ),
-    m_xFrame( rFrame ),
-    m_xContext( rxContext )
+    m_xFrame(std::move( rFrame )),
+    m_xContext(std::move( xContext ))
 {
 
     m_xStatusbarControllerFactory = frame::theStatusbarControllerFactory::get(

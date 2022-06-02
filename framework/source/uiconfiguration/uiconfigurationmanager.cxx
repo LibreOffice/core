@@ -51,6 +51,7 @@
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
@@ -90,7 +91,7 @@ public:
         return {"com.sun.star.ui.UIConfigurationManager"};
     }
 
-    explicit UIConfigurationManager( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
+    explicit UIConfigurationManager( css::uno::Reference< css::uno::XComponentContext > xContext );
 
     // XComponent
     virtual void SAL_CALL dispose() override;
@@ -136,8 +137,8 @@ private:
 
     struct UIElementInfo
     {
-        UIElementInfo( const OUString& rResourceURL, const OUString& rUIName ) :
-            aResourceURL( rResourceURL), aUIName( rUIName ) {}
+        UIElementInfo( OUString _aResourceURL, OUString _aUIName ) :
+            aResourceURL(std::move( _aResourceURL)), aUIName(std::move( _aUIName )) {}
         OUString   aResourceURL;
         OUString   aUIName;
     };
@@ -670,12 +671,12 @@ void UIConfigurationManager::impl_Initialize()
     }
 }
 
-UIConfigurationManager::UIConfigurationManager( const css::uno::Reference< css::uno::XComponentContext > & rxContext ) :
+UIConfigurationManager::UIConfigurationManager( css::uno::Reference< css::uno::XComponentContext > xContext ) :
       m_bReadOnly( true )
     , m_bModified( false )
     , m_bDisposed( false )
     , m_aPropUIName( "UIName" )
-    , m_xContext( rxContext )
+    , m_xContext(std::move( xContext ))
 {
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!

@@ -20,6 +20,7 @@
 #include <menuconfiguration.hxx>
 
 #include <addonmenu.hxx>
+#include <utility>
 #include <xml/menudocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
 
@@ -41,9 +42,8 @@ using namespace ::com::sun::star::io;
 namespace framework
 {
 
-MenuConfiguration::MenuConfiguration(
-    const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-:   m_xContext( rxContext )
+MenuConfiguration::MenuConfiguration( css::uno::Reference< css::uno::XComponentContext > xContext )
+:   m_xContext(std::move( xContext ))
 {
 }
 

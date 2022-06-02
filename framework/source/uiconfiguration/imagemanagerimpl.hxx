@@ -44,7 +44,7 @@ namespace framework
     class CmdImageList
     {
         public:
-            CmdImageList(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const OUString& aModuleIdentifier);
+            CmdImageList(css::uno::Reference< css::uno::XComponentContext > xContext, OUString aModuleIdentifier);
             virtual ~CmdImageList();
 
             virtual Image getImageFromCommandURL(vcl::ImageType nImageType, const OUString& rCommandURL);
@@ -76,7 +76,7 @@ namespace framework
     class ImageManagerImpl
     {
         public:
-            ImageManagerImpl(const css::uno::Reference< css::uno::XComponentContext >& rxContext
+            ImageManagerImpl(css::uno::Reference< css::uno::XComponentContext > xContext
                 ,::cppu::OWeakObject *pOwner
                 ,bool _bUseGlobal);
             ~ImageManagerImpl();

@@ -25,12 +25,13 @@
 #include <comphelper/sequence.hxx>
 
 #include <unordered_map>
+#include <utility>
 
 namespace framework{
 
-DispatchInformationProvider::DispatchInformationProvider(const css::uno::Reference< css::uno::XComponentContext >& xContext ,
+DispatchInformationProvider::DispatchInformationProvider(css::uno::Reference< css::uno::XComponentContext >  xContext ,
                                                          const css::uno::Reference< css::frame::XFrame >&          xFrame)
-    : m_xContext    (xContext                     )
+    : m_xContext    (std::move(xContext                     ))
     , m_xFrame      (xFrame                       )
 {
 }

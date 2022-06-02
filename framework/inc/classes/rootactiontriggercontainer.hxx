@@ -40,7 +40,7 @@ class RootActionTriggerContainer final : public PropertySetContainer,
                                     public css::container::XNamed
 {
     public:
-        RootActionTriggerContainer(const css::uno::Reference<css::awt::XPopupMenu>& rMenu, const OUString* pMenuIdentifier);
+        RootActionTriggerContainer(css::uno::Reference<css::awt::XPopupMenu> xMenu, const OUString* pMenuIdentifier);
         virtual ~RootActionTriggerContainer() override;
 
         // XInterface

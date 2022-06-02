@@ -79,7 +79,7 @@ class LoadDispatcher final : public  ::cppu::WeakImplHelper< css::frame::XNotify
          */
         LoadDispatcher(const css::uno::Reference< css::uno::XComponentContext >& xContext,
                        const css::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
-                       const OUString&                                           sTargetName ,
+                       OUString                                                  sTargetName ,
                              sal_Int32                                           nSearchFlags);
 
         /** @short  used to free internal resources.

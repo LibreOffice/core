@@ -75,7 +75,7 @@ class FWK_DLLPUBLIC TitleHelper final : private ::cppu::BaseMutex
             @param  xNumbers
                     provides the right string and number for  an untitled component.
          */
-        TitleHelper(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        TitleHelper(css::uno::Reference< css::uno::XComponentContext > xContext,
             const css::uno::Reference< css::uno::XInterface >& xOwner,
             const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers);
 

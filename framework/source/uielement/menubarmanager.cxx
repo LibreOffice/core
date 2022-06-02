@@ -48,6 +48,7 @@
 #include <uno/current_context.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/menu.hxx>
@@ -526,9 +527,8 @@ class QuietInteractionContext:
 {
 public:
     explicit QuietInteractionContext(
-        css::uno::Reference< css::uno::XCurrentContext >
-            const & context):
-        context_(context) {}
+        css::uno::Reference< css::uno::XCurrentContext > context):
+        context_(std::move(context)) {}
     QuietInteractionContext(const QuietInteractionContext&) = delete;
     QuietInteractionContext& operator=(const QuietInteractionContext&) = delete;
 

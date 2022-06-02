@@ -20,6 +20,7 @@
 #pragma once
 
 #include <cppuhelper/weakref.hxx>
+#include <utility>
 
 namespace com::sun::star::container { class XIndexAccess; }
 namespace com::sun::star::frame { class XDispatchProvider; }
@@ -35,16 +36,16 @@ struct MenuAttributes
 private:
     oslInterlockedCount refCount;
 
-    MenuAttributes(const OUString& rFrame, const OUString& rImageIdStr)
+    MenuAttributes(OUString sFrame, OUString sImageIdStr)
         : refCount(0)
-        , aTargetFrame(rFrame)
-        , aImageId(rImageIdStr)
+        , aTargetFrame(std::move(sFrame))
+        , aImageId(std::move(sImageIdStr))
     {
     }
 
-    MenuAttributes(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider)
+    MenuAttributes(css::uno::WeakReference<css::frame::XDispatchProvider> _xDispatchProvider)
         : refCount(0)
-        , xDispatchProvider(rDispatchProvider)
+        , xDispatchProvider(std::move(_xDispatchProvider))
     {
     }
 
@@ -76,7 +77,7 @@ class MenuConfiguration final
 public:
         MenuConfiguration(
             // use const when giving a UNO reference by reference
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+            css::uno::Reference< css::uno::XComponentContext >  rxContext );
 
         ~MenuConfiguration();
 

@@ -26,6 +26,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 
 namespace framework{
 
@@ -48,8 +49,8 @@ css::uno::Sequence< OUString > SAL_CALL SystemExec::getSupportedServiceNames()
     return { SERVICENAME_PROTOCOLHANDLER };
 }
 
-SystemExec::SystemExec( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-        : m_xContext    ( rxContext                     )
+SystemExec::SystemExec( css::uno::Reference< css::uno::XComponentContext > xContext )
+        : m_xContext    (std::move( xContext                     ))
 {
 }
 

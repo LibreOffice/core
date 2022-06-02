@@ -62,7 +62,7 @@ class StartModuleDispatcher final : public  ::cppu::WeakImplHelper<
             @param  xFrame
                     the frame where the corresponding dispatch was started.
          */
-        StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext);
+        StartModuleDispatcher(css::uno::Reference< css::uno::XComponentContext > xContext);
 
         /** @short  does nothing real. */
         virtual ~StartModuleDispatcher() override;

@@ -39,7 +39,7 @@ namespace framework {
 class ConfigurationAccess_FactoryManager final : public ::cppu::WeakImplHelper< css::container::XContainerListener>
 {
     public:
-                      ConfigurationAccess_FactoryManager( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const OUString& _sRoot );
+                      ConfigurationAccess_FactoryManager( const css::uno::Reference< css::uno::XComponentContext>& rxContext, OUString  _sRoot );
         virtual       ~ConfigurationAccess_FactoryManager() override;
 
         void          readConfigurationData();

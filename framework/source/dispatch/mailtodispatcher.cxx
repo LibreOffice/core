@@ -26,6 +26,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 
 namespace framework{
 
@@ -54,8 +55,8 @@ css::uno::Sequence< OUString > SAL_CALL MailToDispatcher::getSupportedServiceNam
     @param      rxContext
                     reference to uno servicemanager for creation of new services
 */
-MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-        : m_xContext    ( rxContext                     )
+MailToDispatcher::MailToDispatcher( css::uno::Reference< css::uno::XComponentContext > xContext )
+        : m_xContext    (std::move( xContext                     ))
 {
 }
 
