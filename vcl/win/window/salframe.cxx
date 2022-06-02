@@ -131,6 +131,22 @@ bool WinSalFrame::mbInReparent = false;
 static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame );
 static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect = nullptr );
 
+static void UpdateGeometry(WinSalFrame* pFrame, RECT& aRect)
+{
+    RECT aRect2 = aRect;
+    AdjustWindowRectEx(&aRect2, GetWindowStyle(pFrame->mhWnd),
+                       FALSE, GetWindowExStyle(pFrame->mhWnd));
+    tools::Long nTopDeco = abs(aRect.top - aRect2.top);
+    tools::Long nLeftDeco = abs(aRect.left - aRect2.left);
+    tools::Long nBottomDeco = abs(aRect.bottom - aRect2.bottom);
+    tools::Long nRightDeco = abs(aRect.right - aRect2.right);
+
+    pFrame->maState.mnX = aRect.left + nLeftDeco;
+    pFrame->maState.mnY = aRect.top + nTopDeco;
+    pFrame->maState.mnWidth = aRect.right - aRect.left - nLeftDeco - nRightDeco;
+    pFrame->maState.mnHeight = aRect.bottom - aRect.top - nTopDeco - nBottomDeco;
+}
+
 static void ImplSaveFrameState( WinSalFrame* pFrame )
 {
     // save position, size and state for GetWindowState()
@@ -154,42 +170,15 @@ static void ImplSaveFrameState( WinSalFrame* pFrame )
             WINDOWPLACEMENT aPlacement;
             aPlacement.length = sizeof(aPlacement);
             if( GetWindowPlacement( pFrame->mhWnd, &aPlacement ) )
-            {
-                RECT aRect = aPlacement.rcNormalPosition;
-                RECT aRect2 = aRect;
-                AdjustWindowRectEx( &aRect2, GetWindowStyle( pFrame->mhWnd ),
-                                    FALSE,  GetWindowExStyle( pFrame->mhWnd ) );
-                tools::Long nTopDeco = abs( aRect.top - aRect2.top );
-                tools::Long nLeftDeco = abs( aRect.left - aRect2.left );
-                tools::Long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
-                tools::Long nRightDeco = abs( aRect.right - aRect2.right );
-
-                pFrame->maState.mnX      = aRect.left + nLeftDeco;
-                pFrame->maState.mnY      = aRect.top + nTopDeco;
-                pFrame->maState.mnWidth  = aRect.right - aRect.left - nLeftDeco - nRightDeco;
-                pFrame->maState.mnHeight = aRect.bottom - aRect.top - nTopDeco - nBottomDeco;
-            }
+                UpdateGeometry(pFrame, aPlacement.rcNormalPosition);
         }
         else
         {
             RECT aRect;
             GetWindowRect( pFrame->mhWnd, &aRect );
-
-            // to be consistent with Unix, the frame state is without(!) decoration
-            RECT aRect2 = aRect;
-            AdjustWindowRectEx( &aRect2, GetWindowStyle( pFrame->mhWnd ),
-                            FALSE,     GetWindowExStyle( pFrame->mhWnd ) );
-            tools::Long nTopDeco = abs( aRect.top - aRect2.top );
-            tools::Long nLeftDeco = abs( aRect.left - aRect2.left );
-            tools::Long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
-            tools::Long nRightDeco = abs( aRect.right - aRect2.right );
+            UpdateGeometry(pFrame, aRect);
 
             pFrame->maState.mnState &= ~WindowStateState(WindowStateState::Minimized | WindowStateState::Maximized);
-            // subtract decoration
-            pFrame->maState.mnX      = aRect.left+nLeftDeco;
-            pFrame->maState.mnY      = aRect.top+nTopDeco;
-            pFrame->maState.mnWidth  = aRect.right-aRect.left-nLeftDeco-nRightDeco;
-            pFrame->maState.mnHeight = aRect.bottom-aRect.top-nTopDeco-nBottomDeco;
             if ( bVisible )
                 pFrame->mnShowState = SW_SHOWNORMAL;
             pFrame->mbRestoreMaximize = false;
