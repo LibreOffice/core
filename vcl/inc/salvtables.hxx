@@ -480,7 +480,7 @@ public:
 
     virtual void set_window_state(const OString& rStr) override;
 
-    virtual OString get_window_state(WindowStateMask nMask) const override;
+    virtual OString get_window_state(vcl::WindowDataMask nMask) const override;
 
     virtual SystemEnvData get_system_data() const override;
 

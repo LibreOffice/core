@@ -56,11 +56,10 @@ SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl(vcl::Window* pParen
     aPos.AdjustX(20);
     aPos.AdjustY(10);
 
-    WindowStateData aState;
-    aState.SetMask(WindowStateMask::Pos);
-    aState.SetX(aPos.X());
-    aState.SetY(aPos.Y());
-    pDlg->set_window_state(aState.ToStr());
+    vcl::WindowData aState;
+    aState.setMask(vcl::WindowDataMask::Pos);
+    aState.setPos(aPos);
+    pDlg->set_window_state(aState.toStr());
 
     pFloatDlg->Initialize(pInfo);
 }

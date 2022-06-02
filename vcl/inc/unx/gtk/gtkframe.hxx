@@ -443,7 +443,7 @@ public:
     GtkWidget*  getMouseEventWidget() const;
     GtkGrid*    getTopLevelGridWidget() const { return m_pTopLevelGrid; }
     const SalX11Screen& getXScreenNumber() const { return m_nXScreen; }
-    int          GetDisplayScreen() const { return maGeometry.nDisplayScreenNumber; }
+    int GetDisplayScreen() const { return maGeometry.screen(); }
     void updateScreenNumber();
 
     cairo_t* getCairoContext() const;
@@ -521,8 +521,8 @@ public:
     virtual void                GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
-    virtual void                SetWindowState( const SalFrameState* pState ) override;
-    virtual bool                GetWindowState( SalFrameState* pState ) override;
+    virtual void SetWindowState(const vcl::WindowData*) override;
+    virtual bool GetWindowState(vcl::WindowData*) override;
     virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay ) override;
     // Enable/Disable ScreenSaver, SystemAgents, ...
     virtual void                StartPresentation( bool bStart ) override;
