@@ -31,6 +31,7 @@
 
 #include <map>
 #include <memory>
+#include <utility>
 
 using cppu::UnoUrl;
 using cppu::UnoUrlDescriptor;
@@ -187,10 +188,10 @@ public:
 private:
     Impl(OUString const & rConnectionDescriptor,
          OUString const & rProtocolDescriptor,
-         OUString const & rObjectName):
+         OUString aObjectName):
         m_aConnection(rConnectionDescriptor),
         m_aProtocol(rProtocolDescriptor),
-        m_aObjectName(rObjectName)
+        m_aObjectName(std::move(aObjectName))
     {}
 };
 

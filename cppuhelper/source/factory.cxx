@@ -43,6 +43,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <memory>
+#include <utility>
 
 
 using namespace osl;
@@ -66,14 +67,14 @@ class OSingleFactoryHelper
 public:
     OSingleFactoryHelper(
         const Reference<XMultiServiceFactory > & rServiceManager,
-        const OUString & rImplementationName_,
+        OUString aImplementationName_,
         ComponentInstantiation pCreateFunction_,
         ComponentFactoryFunc fptr,
         const Sequence< OUString > * pServiceNames_ )
         : xSMgr( rServiceManager )
         , pCreateFunction( pCreateFunction_ )
         , m_fptr( fptr )
-        , aImplementationName( rImplementationName_ )
+        , aImplementationName(std::move( aImplementationName_ ))
         {
             if( pServiceNames_ )
                 aServiceNames = *pServiceNames_;

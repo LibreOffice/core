@@ -24,6 +24,7 @@
 #include <map>
 #include <mutex>
 #include <set>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/beans/Property.hpp>
@@ -79,8 +80,8 @@ namespace {
 
 struct PropertyData {
     explicit PropertyData(
-        css::beans::Property const & theProperty, bool thePresent):
-        property(theProperty), present(thePresent) {}
+        css::beans::Property theProperty, bool thePresent):
+        property(std::move(theProperty)), present(thePresent) {}
 
     css::beans::Property property;
     bool present;
