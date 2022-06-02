@@ -20,6 +20,7 @@
 #include <contentcontroldlg.hxx>
 
 #include <vcl/weld.hxx>
+#include <cui/cuicharmap.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -34,6 +35,11 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
                           "ContentControlDialog")
     , m_rWrtShell(rWrtShell)
     , m_xShowingPlaceHolderCB(m_xBuilder->weld_check_button("showing_place_holder"))
+    , m_xCheckboxFrame(m_xBuilder->weld_frame("checkboxframe"))
+    , m_xCheckedState(m_xBuilder->weld_entry("checkboxcheckedentry"))
+    , m_xCheckedStateBtn(m_xBuilder->weld_button("btncheckboxchecked"))
+    , m_xUncheckedState(m_xBuilder->weld_entry("checkboxuncheckedentry"))
+    , m_xUncheckedStateBtn(m_xBuilder->weld_button("btncheckboxunchecked"))
     , m_xListItemsFrame(m_xBuilder->weld_frame("listitemsframe"))
     , m_xListItems(m_xBuilder->weld_tree_view("listitems"))
     , m_xListItemButtons(m_xBuilder->weld_box("listitembuttons"))
@@ -44,6 +50,8 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
     , m_xMoveDownBtn(m_xBuilder->weld_button("movedown"))
     , m_xOk(m_xBuilder->weld_button("ok"))
 {
+    m_xCheckedStateBtn->connect_clicked(LINK(this, SwContentControlDlg, SelectCharHdl));
+    m_xUncheckedStateBtn->connect_clicked(LINK(this, SwContentControlDlg, SelectCharHdl));
     m_xListItems->connect_changed(LINK(this, SwContentControlDlg, SelectionChangedHdl));
     m_xOk->connect_clicked(LINK(this, SwContentControlDlg, OkHdl));
 
@@ -81,6 +89,18 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
     m_xShowingPlaceHolderCB->set_state(eShowingPlaceHolder);
     m_xShowingPlaceHolderCB->save_state();
 
+    if (m_pContentControl->GetCheckbox())
+    {
+        m_xCheckedState->set_text(m_pContentControl->GetCheckedState());
+        m_xCheckedState->save_value();
+        m_xUncheckedState->set_text(m_pContentControl->GetUncheckedState());
+        m_xUncheckedState->save_value();
+    }
+    else
+    {
+        m_xCheckboxFrame->set_visible(false);
+    }
+
     if (m_pContentControl->HasListItems())
     {
         for (const auto& rListItem : m_pContentControl->GetListItems())
@@ -115,6 +135,16 @@ IMPL_LINK_NOARG(SwContentControlDlg, OkHdl, weld::Button&, void)
         bChanged = true;
     }
 
+    if (m_xCheckedState->get_value_changed_from_saved())
+    {
+        m_pContentControl->SetCheckedState(m_xCheckedState->get_text());
+    }
+
+    if (m_xUncheckedState->get_value_changed_from_saved())
+    {
+        m_pContentControl->SetUncheckedState(m_xUncheckedState->get_text());
+    }
+
     std::vector<SwContentControlListItem> aItems;
     for (int i = 0; i < m_xListItems->n_children(); ++i)
     {
@@ -135,6 +165,36 @@ IMPL_LINK_NOARG(SwContentControlDlg, OkHdl, weld::Button&, void)
     }
 
     m_xDialog->response(RET_OK);
+}
+
+IMPL_LINK(SwContentControlDlg, SelectCharHdl, weld::Button&, rButton, void)
+{
+    SvxCharacterMap aMap(m_xDialog.get(), nullptr, nullptr);
+    sal_UCS4 cBullet = 0;
+    sal_Int32 nIndex = 0;
+    if (&rButton == m_xCheckedStateBtn.get())
+    {
+        cBullet = m_pContentControl->GetCheckedState().iterateCodePoints(&nIndex);
+    }
+    else if (&rButton == m_xUncheckedStateBtn.get())
+    {
+        cBullet = m_pContentControl->GetUncheckedState().iterateCodePoints(&nIndex);
+    }
+    aMap.SetChar(cBullet);
+    if (aMap.run() != RET_OK)
+    {
+        return;
+    }
+
+    cBullet = aMap.GetChar();
+    if (&rButton == m_xCheckedStateBtn.get())
+    {
+        m_xCheckedState->set_text(OUString(&cBullet, 1));
+    }
+    else if (&rButton == m_xUncheckedStateBtn.get())
+    {
+        m_xUncheckedState->set_text(OUString(&cBullet, 1));
+    }
 }
 
 IMPL_LINK_NOARG(SwContentControlDlg, InsertHdl, weld::Button&, void)
