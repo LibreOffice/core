@@ -148,8 +148,8 @@ bool AquaSharedAttributes::checkContext()
 {
     if (mbWindow && mpFrame && (mpFrame->getNSWindow() || Application::IsBitmapRendering()))
     {
-        const unsigned int nWidth = mpFrame->maGeometry.nWidth;
-        const unsigned int nHeight = mpFrame->maGeometry.nHeight;
+        const unsigned int nWidth = mpFrame->maGeometry.width();
+        const unsigned int nHeight = mpFrame->maGeometry.height();
         const float fScale = sal::aqua::getWindowScaling();
         CGLayerRef rReleaseLayer = nullptr;
 

@@ -2254,7 +2254,7 @@ namespace
             // this is the relatively unusual case where pParent is the toplevel GtkSalFrame and not a stock GtkWidget
             // so use the same style of logic as GtkSalMenu::ShowNativePopupMenu to get the right position
             tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pFrame->GetWindow(), rInRect);
-            aFloatRect.Move(-pFrame->maGeometry.nX, -pFrame->maGeometry.nY);
+            aFloatRect.Move(-pFrame->maGeometry.x(), -pFrame->maGeometry.y());
 
             rOutRect = GdkRectangle{static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
                                     static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
@@ -6334,66 +6334,57 @@ public:
 
     virtual void set_window_state(const OString& rStr) override
     {
-        WindowStateData aData;
+        vcl::WindowData aData;
         ImplWindowStateFromStr( aData, rStr );
 
-        auto nMask = aData.GetMask();
-        auto nState = aData.GetState() & WindowStateState::SystemMask;
+        const auto nMask = aData.mask();
+        const auto nState = aData.state() & vcl::WindowState::SystemMask;
 
-        if (nMask & WindowStateMask::Width && nMask & WindowStateMask::Height)
+        if ((nMask & vcl::WindowDataMask::Size) == vcl::WindowDataMask::Size)
         {
-            gtk_window_set_default_size(m_pWindow, aData.GetWidth(), aData.GetHeight());
+            gtk_window_set_default_size(m_pWindow, aData.width(), aData.height());
         }
-        if (nMask & WindowStateMask::State)
+        if (nMask & vcl::WindowDataMask::State)
         {
-            if (nState & WindowStateState::Maximized)
+            if (nState & vcl::WindowState::Maximized)
                 gtk_window_maximize(m_pWindow);
             else
                 gtk_window_unmaximize(m_pWindow);
         }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        if (isPositioningAllowed() && (nMask & WindowStateMask::X && nMask & WindowStateMask::Y))
+        if (isPositioningAllowed() && ((nMask & vcl::WindowDataMask::Pos) == vcl::WindowDataMask::Pos))
         {
-            gtk_window_move(m_pWindow, aData.GetX(), aData.GetY());
+            gtk_window_move(m_pWindow, aData.x(), aData.y());
         }
 #endif
     }
 
-    virtual OString get_window_state(WindowStateMask nMask) const override
+    virtual OString get_window_state(vcl::WindowDataMask nMask) const override
     {
         bool bPositioningAllowed = isPositioningAllowed();
 
-        WindowStateData aData;
-        WindowStateMask nAvailable = WindowStateMask::State |
-                                     WindowStateMask::Width | WindowStateMask::Height;
+        vcl::WindowData aData;
+        vcl::WindowDataMask nAvailable = vcl::WindowDataMask::State | vcl::WindowDataMask::Size;
         if (bPositioningAllowed)
-            nAvailable |= WindowStateMask::X | WindowStateMask::Y;
-        aData.SetMask(nMask & nAvailable);
+            nAvailable |= vcl::WindowDataMask::Pos;
+        aData.setMask(nMask & nAvailable);
 
-        if (nMask & WindowStateMask::State)
+        if (nMask & vcl::WindowDataMask::State)
         {
-            WindowStateState nState = WindowStateState::Normal;
+            vcl::WindowState nState = vcl::WindowState::Normal;
             if (gtk_window_is_maximized(m_pWindow))
-                nState |= WindowStateState::Maximized;
-            aData.SetState(nState);
+                nState |= vcl::WindowState::Maximized;
+            aData.setState(nState);
         }
 
-        if (bPositioningAllowed && (nMask & (WindowStateMask::X | WindowStateMask::Y)))
-        {
-            auto aPos = get_position();
-            aData.SetX(aPos.X());
-            aData.SetY(aPos.Y());
-        }
+        if (bPositioningAllowed && (nMask & vcl::WindowDataMask::Pos))
+            aData.setPos(get_position());
 
-        if (nMask & (WindowStateMask::Width | WindowStateMask::Height))
-        {
-            auto aSize = get_size();
-            aData.SetWidth(aSize.Width());
-            aData.SetHeight(aSize.Height());
-        }
+        if (nMask & vcl::WindowDataMask::Size)
+            aData.setSize(get_size());
 
-        return aData.ToStr();
+        return aData.toStr();
     }
 
     virtual void connect_container_focus_changed(const Link<Container&, void>& rLink) override
