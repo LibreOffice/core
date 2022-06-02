@@ -16,6 +16,7 @@
 #include <memory>
 #include <mutex>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -71,32 +72,30 @@ public:
 
         struct Implementation {
             Implementation(
-                OUString const & theName, OUString const & theLoader,
-                OUString const & theUri, OUString const & theEnvironment,
-                OUString const & theConstructorName,
-                OUString const & thePrefix,
+                OUString theName, OUString theLoader,
+                OUString theUri, OUString theEnvironment,
+                OUString theConstructorName,
+                OUString thePrefix,
                 bool theIsSingleInstance,
-                css::uno::Reference< css::uno::XComponentContext > const &
-                    theAlienContext,
-                OUString const & theRdbFile):
-                name(theName), loader(theLoader), uri(theUri), environment(theEnvironment),
-                constructorName(theConstructorName), prefix(thePrefix),
+                css::uno::Reference< css::uno::XComponentContext > theAlienContext,
+                OUString theRdbFile):
+                name(std::move(theName)), loader(std::move(theLoader)), uri(std::move(theUri)), environment(std::move(theEnvironment)),
+                constructorName(std::move(theConstructorName)), prefix(std::move(thePrefix)),
                 isSingleInstance(theIsSingleInstance),
-                alienContext(theAlienContext), rdbFile(theRdbFile),
+                alienContext(std::move(theAlienContext)), rdbFile(std::move(theRdbFile)),
                 constructorFn(nullptr), status(STATUS_NEW), dispose(true)
             {}
 
             Implementation(
-                OUString const & theName,
+                OUString theName,
                 css::uno::Reference< css::lang::XSingleComponentFactory >
                     const & theFactory1,
                 css::uno::Reference< css::lang::XSingleServiceFactory > const &
                     theFactory2,
-                css::uno::Reference< css::lang::XComponent > const &
-                    theComponent):
-                name(theName), isSingleInstance(false), constructorFn(nullptr),
+                css::uno::Reference< css::lang::XComponent > theComponent):
+                name(std::move(theName)), isSingleInstance(false), constructorFn(nullptr),
                 factory1(theFactory1), factory2(theFactory2),
-                component(theComponent), status(STATUS_LOADED), dispose(true)
+                component(std::move(theComponent)), status(STATUS_LOADED), dispose(true)
             { assert(theFactory1.is() || theFactory2.is()); }
 
             Implementation(const Implementation&) = delete;

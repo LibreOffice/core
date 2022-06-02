@@ -14,6 +14,7 @@
 #include <iostream>
 #include <mutex>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -106,7 +107,7 @@ class Parser {
 public:
     Parser(
         OUString const & uri,
-        css::uno::Reference< css::uno::XComponentContext > const & alienContext,
+        css::uno::Reference< css::uno::XComponentContext > alienContext,
         cppuhelper::ServiceManager::Data * data);
 
     Parser(const Parser&) = delete;
@@ -136,9 +137,9 @@ private:
 
 Parser::Parser(
     OUString const & uri,
-    css::uno::Reference< css::uno::XComponentContext > const & alienContext,
+    css::uno::Reference< css::uno::XComponentContext > alienContext,
     cppuhelper::ServiceManager::Data * data):
-    reader_(uri), alienContext_(alienContext), data_(data)
+    reader_(uri), alienContext_(std::move(alienContext)), data_(data)
 {
     assert(data != nullptr);
     int ucNsId = reader_.registerNamespaceIri(

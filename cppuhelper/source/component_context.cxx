@@ -44,6 +44,7 @@
 #include <comphelper/sequence.hxx>
 
 #include <memory>
+#include <utility>
 
 constexpr OUStringLiteral SMGR_SINGLETON = u"/singletons/com.sun.star.lang.theServiceManager";
 constexpr OUStringLiteral TDMGR_SINGLETON = u"/singletons/com.sun.star.reflection.theTypeDescriptionManager";
@@ -127,8 +128,8 @@ protected:
         Any value;
         bool lateInit;
 
-        ContextEntry( Any const & value_, bool lateInit_ )
-            : value( value_ )
+        ContextEntry( Any value_, bool lateInit_ )
+            : value(std::move( value_ ))
             , lateInit( lateInit_ )
             {}
     };
