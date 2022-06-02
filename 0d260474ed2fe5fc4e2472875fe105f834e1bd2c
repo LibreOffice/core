@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54fe7b7c_3aac0b4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-06-02T14:40:19Z",
+      "side": 1,
+      "message": "this does fix the problem at little risk, so we probably want this in our LTS branch, but:\n\ncreating a VLCX* UNO wrapper service in order to dispose() it because there is apparently no other way for the VCL buttons in BASIC/API dialogs to be disposed seems a bit silly.\n\n(apparently there\u0027s a Dialog::add_button() but it\u0027s not called for these BASIC .xdl dialogs)",
+      "revId": "0d260474ed2fe5fc4e2472875fe105f834e1bd2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
