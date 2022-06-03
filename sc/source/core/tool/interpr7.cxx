@@ -444,7 +444,7 @@ void ScInterpreter::ScEncodeURL()
             aUrlBuf.append(convertedChar);
         }
     }
-    PushString( OUString::fromUtf8( aUrlBuf.makeStringAndClear() ) );
+    PushString( OUString::fromUtf8( aUrlBuf ) );
 }
 
 void ScInterpreter::ScDebugVar()

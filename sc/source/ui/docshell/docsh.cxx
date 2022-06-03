@@ -318,7 +318,7 @@ void ScDocShell::AfterXMLLoading(bool bRet)
                             if( *pNameBuffer == SC_COMPILER_FILE_TAB_SEP )  // after the last quote of the docname should be the # char
                             {
                                 sal_Int32 nIndex = nNameLength - nLinkTabNameLength;
-                                INetURLObject aINetURLObject(aDocURLBuffer.makeStringAndClear());
+                                INetURLObject aINetURLObject(aDocURLBuffer);
                                 if(aName.match( aLinkTabName, nIndex) &&
                                     (aName[nIndex - 1] == '#') && // before the table name should be the # char
                                     !aINetURLObject.HasError()) // the docname should be a valid URL
