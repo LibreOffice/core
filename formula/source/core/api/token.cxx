@@ -175,7 +175,7 @@ void FormulaToken::SetByte( sal_uInt8 )
 ParamClass FormulaToken::GetInForceArray() const
 {
     // ok to be called for any derived class
-    return ParamClass::Unknown;
+    return (eOp == ocPush && eType == svMatrix) ? ParamClass::ForceArrayReturn : ParamClass::Unknown;
 }
 
 void FormulaToken::SetInForceArray( ParamClass )

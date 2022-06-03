@@ -2783,19 +2783,25 @@ formula::ParamClass FormulaCompiler::GetForceArrayParameter( const FormulaToken*
 
 void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
 {
-    if (rCurr->GetInForceArray() != ParamClass::Unknown)
-        // Already set, unnecessary to evaluate again. This happens by calls to
-        // CurrentFactor::operator=() while descending through Factor() and
-        // then ascending back (and down and up, ...),
-        // CheckSetForceArrayParameter() and later PutCode().
+    if (pCurrentFactorToken.get() == rCurr.get())
         return;
 
     const OpCode eOp = rCurr->GetOpCode();
     const StackVar eType = rCurr->GetType();
-    bool bInlineArray = false;
-    if (!(eOp != ocPush && (eType == svByte || eType == svJump))
-            && !(bInlineArray = (eOp == ocPush && eType == svMatrix)))
-        return;
+    const bool bInlineArray = (eOp == ocPush && eType == svMatrix);
+
+    if (!bInlineArray)
+    {
+        if (rCurr->GetInForceArray() != ParamClass::Unknown)
+            // Already set, unnecessary to evaluate again. This happens by calls to
+            // CurrentFactor::operator=() while descending through Factor() and
+            // then ascending back (and down and up, ...),
+            // CheckSetForceArrayParameter() and later PutCode().
+            return;
+
+        if (!(eOp != ocPush && (eType == svByte || eType == svJump)))
+            return;
+    }
 
     // Return class for inline arrays and functions returning array/matrix.
     // It's somewhat unclear what Excel actually does there and in
@@ -2815,7 +2821,8 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
 
     if (bInlineArray)
     {
-        // rCurr->SetInForceArray() can not be used with ocPush.
+        // rCurr->SetInForceArray() can not be used with ocPush, but ocPush
+        // with svMatrix has an implicit ParamClass::ForceArrayReturn.
         if (nCurrentFactorParam > 0 && pCurrentFactorToken
                 && pCurrentFactorToken->GetInForceArray() == ParamClass::Unknown
                 && GetForceArrayParameter( pCurrentFactorToken.get(), static_cast<sal_uInt16>(nCurrentFactorParam - 1))
@@ -2828,14 +2835,49 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
         return;
     }
 
-    if (!pCurrentFactorToken || (pCurrentFactorToken.get() == rCurr.get()))
+    if (!pCurrentFactorToken)
     {
-        if (!pCurrentFactorToken && mbMatrixFlag)
+        if (mbMatrixFlag)
         {
             // An array/matrix formula acts as ForceArray on all top level
             // operators and function calls, so that can be inherited properly
             // below.
             rCurr->SetInForceArray( ParamClass::ForceArray);
+        }
+        else if (pc >= 2 && SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP)
+        {
+            // Binary operators are not functions followed by arguments
+            // and need some peeking into RPN to inspect their operands.
+            // Note that array context is not forced if only one
+            // of the operands is an array like "={1;2}+A1:A2" returns #VALUE!
+            // if entered in column A and not input in array mode, because it
+            // involves a range reference with an implicit intersection. Check
+            // both arguments are arrays, or the other is ocPush without ranges
+            // for "={1;2}+3" or "={1;2}+A1".
+            // Note this does not catch "={1;2}+ABS(A1)" that could be forced
+            // to array, user still has to close in array mode.
+            // The IsMatrixFunction() is only necessary because not all
+            // functions returning matrix have ForceArrayReturn (yet?), see
+            // OOXML comment above.
+
+            const OpCode eOp1 = pCode[-1]->GetOpCode();
+            const OpCode eOp2 = pCode[-2]->GetOpCode();
+            const bool b1 = (pCode[-1]->GetInForceArray() != ParamClass::Unknown || IsMatrixFunction(eOp1));
+            const bool b2 = (pCode[-2]->GetInForceArray() != ParamClass::Unknown || IsMatrixFunction(eOp2));
+            if ((b1 && b2)
+                    || (b1 && eOp2 == ocPush && pCode[-2]->GetType() != svDoubleRef)
+                    || (b2 && eOp1 == ocPush && pCode[-1]->GetType() != svDoubleRef))
+            {
+                rCurr->SetInForceArray( eArrayReturn);
+            }
+        }
+        else if (pc >= 1 && SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)
+        {
+            // Similar for unary operators.
+            if (pCode[-1]->GetInForceArray() != ParamClass::Unknown || IsMatrixFunction(pCode[-1]->GetOpCode()))
+            {
+                rCurr->SetInForceArray( eArrayReturn);
+            }
         }
         return;
     }
