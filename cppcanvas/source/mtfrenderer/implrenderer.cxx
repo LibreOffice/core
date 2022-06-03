@@ -67,7 +67,6 @@
 #include "polypolyaction.hxx"
 #include "textaction.hxx"
 #include "transparencygroupaction.hxx"
-#include <utility>
 #include <vector>
 #include <algorithm>
 #include <memory>
