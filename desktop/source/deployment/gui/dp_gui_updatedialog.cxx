@@ -117,7 +117,7 @@ struct UpdateDialog::IgnoredUpdate {
     OUString sExtensionID;
     OUString sVersion;
 
-    IgnoredUpdate( OUString axtensionID, OUString aersion );
+    IgnoredUpdate( OUString aExtensionID, OUString aVersion );
 };
 
 
