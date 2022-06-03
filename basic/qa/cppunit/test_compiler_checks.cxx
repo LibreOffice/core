@@ -73,4 +73,45 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149157_vba)
     CPPUNIT_ASSERT(!aMacro.HasError());
 }
 
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149402)
+{
+    MacroSnippet aMacro("Function extentComment() As Integer\n"
+                        "  ' _ \n"
+                        "  If Not extentComment Then\n"
+                        "     extentComment = 1\n"
+                        "  Else\n"
+                        "  End If\n"
+                        "End Function\n");
+    aMacro.Compile();
+    CPPUNIT_ASSERT(!aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149402_compatible)
+{
+    MacroSnippet aMacro("Option Compatible\n"
+                        "Function extentComment() As Integer\n"
+                        "  ' _ \n"
+                        "  If Not extentComment Then\n"
+                        "     extentComment = 1\n"
+                        "  Else\n"
+                        "  End If\n"
+                        "End Function\n");
+    aMacro.Compile();
+    CPPUNIT_ASSERT(!aMacro.HasError());
+}
+
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149402_vba)
+{
+    MacroSnippet aMacro("Option VBASupport 1\n"
+                        "Function extentComment() As Integer\n"
+                        "  ' _ \n"
+                        "  If Not extentComment Then\n"
+                        "     extentComment = 1\n"
+                        "  Else\n"
+                        "  End If\n"
+                        "End Function\n");
+    aMacro.Compile();
+    CPPUNIT_ASSERT(!aMacro.HasError());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

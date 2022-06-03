@@ -55,6 +55,7 @@ SbiScanner::SbiScanner(OUString _aBuf, StarBASIC* p)
     , bVBASupportOn(false)
     , bPrevLineExtentsComment(false)
     , bClosingUnderscore(false)
+    , bLineEndsWithWhitespace(false)
     , bInStatement(false)
 {
 }
@@ -188,6 +189,8 @@ bool SbiScanner::readLine()
     while(nBufPos < nEnd && BasicCharClass::isWhitespace(aBuf[nEnd - 1]))
         --nEnd;
 
+    // tdf#149402 - check if line ends with a whitespace
+    bLineEndsWithWhitespace = (n > nEnd);
     aLine = aBuf.copy(nBufPos, nEnd - nBufPos);
 
     // Fast-forward past the line ending
@@ -665,7 +668,9 @@ PrevLineCommentLbl:
         bPrevLineExtentsComment = false;
         aSym = "REM";
         sal_Int32 nLen = aLine.getLength() - nLineIdx;
-        if( bCompatible && aLine[nLineIdx + nLen - 1] == '_' && aLine[nLineIdx + nLen - 2] == ' ' )
+        // tdf#149402 - don't extend comment if line ends in a whitespace (asicCharClass::isWhitespace)
+        if (bCompatible && !bLineEndsWithWhitespace && aLine[nLineIdx + nLen - 1] == '_'
+            && aLine[nLineIdx + nLen - 2] == ' ')
             bPrevLineExtentsComment = true;
         nCol2 = nCol2 + nLen;
         nLineIdx = -1;

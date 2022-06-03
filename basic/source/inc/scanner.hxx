@@ -62,6 +62,7 @@ protected:
     bool   bVBASupportOn;               // true: OPTION VBASupport 1 otherwise default False
     bool   bPrevLineExtentsComment;     // true: Previous line is comment and ends on "... _"
     bool   bClosingUnderscore;          // true: Closing underscore followed by end of line
+    bool   bLineEndsWithWhitespace;     // true: Line ends with whitespace (BasicCharClass::isWhitespace)
 
     bool   bInStatement;
     void   GenError( ErrCode );
