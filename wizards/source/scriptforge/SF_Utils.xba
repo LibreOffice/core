@@ -51,8 +51,9 @@ Global Const	V_SFOBJECT		= 103	&apos;													ScriptForge object: has Object
 Global Const	V_BASICOBJECT	= 104	&apos;													User Basic object
 
 Type _ObjectDescriptor					&apos; Returned by the _VarTypeObj() method
-	iVarType	As Integer				&apos; One of the V_NOTHING, V_xxxOBJECT constants
-	sObjectType	As String				&apos; Either &quot;&quot; or &quot;com.sun.star...&quot; or a ScriptForge object type (ex. &quot;SF_SESSION&quot; or &quot;DICTIONARY&quot;)
+	iVarType		As Integer			&apos; One of the V_NOTHING, V_xxxOBJECT constants
+	sObjectType		As String			&apos; Either &quot;&quot; or &quot;com.sun.star...&quot; or a ScriptForge object type (ex. &quot;SF_SESSION&quot; or &quot;DICTIONARY&quot;)
+	sServiceName	As String			&apos; Either &quot;&quot; or the service name of a ScriptForge object type (ex. &quot;ScriptForge.Exception&quot;-
 End Type
 
 REM ================================================================== EXCEPTIONS
@@ -1065,6 +1066,7 @@ Try:
 	With oObjDesc
 		.iVarType = VarType(pvValue)
 		.sObjectType = &quot;&quot;
+		.sServiceName = &quot;&quot;
 		bUno = False
 		If .iVarType = V_OBJECT Then
 			If IsNull(pvValue) Then
@@ -1089,6 +1091,7 @@ Try:
 					bUno = False
 					&apos;	Try if the Basic object has an ObjectType property
 					.sObjectType = oValue.ObjectType
+					.sServiceName = oValue.ServiceName
 				End If
 				&apos;	Derive the return value from the object type
 				Select Case True

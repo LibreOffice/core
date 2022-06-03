@@ -130,6 +130,7 @@ Try:
 														sLibrary = &quot;SFDocuments&quot;
 			Case &quot;dialog&quot;, &quot;dialogevent&quot;			:	sLibrary = &quot;SFDialogs&quot;
 			Case &quot;database&quot;							:	sLibrary = &quot;SFDatabases&quot;
+			Case &quot;unittest&quot;							:	sLibrary = &quot;SFUnitTests&quot;
 			Case &quot;menu&quot;, &quot;popupmenu&quot;				:	sLibrary = &quot;SFWidgets&quot;
 			Case Else
 		End Select

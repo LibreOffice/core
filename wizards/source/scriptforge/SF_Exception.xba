@@ -133,6 +133,10 @@ Const SQLSYNTAXERROR			=	&quot;SQLSYNTAXERROR&quot;
 &apos;	Python
 Const PYTHONSHELLERROR			=	&quot;PYTHONSHELLERROR&quot;
 
+&apos;	SF_UnitTest
+Const UNITTESTLIBRARYERROR		=	&quot;UNITTESTLIBRARYERROR&quot;
+Const UNITTESTMETHODERROR		=	&quot;UNITTESTMETHODERROR&quot;
+
 REM ============================================================= PRIVATE MEMBERS
 
 &apos;	User defined errors
@@ -1025,6 +1029,12 @@ Try:
 			Case PYTHONSHELLERROR	&apos;	SF_Exception.PythonShell (Python only)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;PYTHONSHELL&quot;)
+			Case UNITTESTLIBRARYERROR	&apos;	SFUnitTests._NewUnitTest(LibraryName)
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;UNITTESTLIBRARY&quot;, pvArgs(0))
+			Case UNITTESTMETHODERROR	&apos;	SFUnitTests.SF_UnitTest(Method)
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;UNITTESTMETHOD&quot;, pvArgs(0))
 			Case Else
 		End Select
 	End With

@@ -1012,6 +1012,21 @@ Try:
 						, Comment :=	&quot;SF_Exception.PythonShell error message&quot; _
 									&amp;	&quot;APSO: to leave unchanged&quot; _
 					)
+	&apos;	SFUnitTests._NewUnitTest
+			.AddText(	Context := &quot;UNITTESTLIBRARY&quot; _
+						, MsgId := &quot;The requested library could not be located.\n&quot; _
+									&amp; &quot;The UnitTest service has not been initialized.\n\n&quot; _
+									&amp; &quot;Library name : « %1 »&quot; _
+						, Comment :=	&quot;SFUnitTest could not locate the library gven as argument\n&quot; _
+									&amp;	&quot;%1: The name of the library&quot; _
+					)
+	&apos;	SFUnitTests.SF_UnitTest
+			.AddText(	Context := &quot;UNITTESTMETHOD&quot; _
+						, MsgId := &quot;The method &apos;%1&apos; is unexpected in the current context.\n&quot; _
+									&amp; &quot;The UnitTest service cannot proceed further with the on-going test.&quot; _
+						, Comment :=	&quot;SFUnitTest finds a RunTest() call in a inappropriate location\n&quot; _
+									&amp;	&quot;%1: The name of a method&quot; _
+					)
 		End With
 	End If
 
