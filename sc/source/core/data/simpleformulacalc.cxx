@@ -15,7 +15,7 @@
 #include <compiler.hxx>
 #include <sfx2/linkmgr.hxx>
 
-#define DISPLAY_LEN 15
+#define DISPLAY_LEN 66
 
 ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument& rDoc, const ScAddress& rAddr,
         const OUString& rFormula, bool bMatrixFormula, formula::FormulaGrammar::Grammar eGram )
