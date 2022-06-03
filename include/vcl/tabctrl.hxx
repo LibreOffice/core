@@ -57,6 +57,7 @@ protected:
     sal_uInt16          mnActPageId;
     sal_uInt16          mnCurPageId;
     bool                mbFormat;
+    bool                mbShowTabs;
     bool                mbRestoreHelpId;
     bool                mbSmallInvalidate;
     bool                mbLayoutDirty;
@@ -187,6 +188,8 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
+
+    virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 };

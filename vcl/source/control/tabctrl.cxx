@@ -105,6 +105,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnActPageId                 = 0;
     mnCurPageId                 = 0;
     mbFormat                    = true;
+    mbShowTabs                  = true;
     mbRestoreHelpId             = false;
     mbSmallInvalidate           = false;
     mpTabCtrlData.reset(new ImplTabCtrlData);
@@ -576,10 +577,15 @@ tools::Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, tools::Long nW
         if (aRect.IsEmpty())
             return aRect;
 
+        // with show-tabs of true (the usual) the page rect is from under the
+        // visible tab to the bottom of the TabControl, otherwise it extends
+        // from the top of the TabControl
+        tools::Long nTabBottom = mbShowTabs ? aRect.Bottom() : 0;
+
         tools::Long nW = nWidth-TAB_OFFSET*2;
-        tools::Long nH = nHeight-aRect.Bottom()-TAB_OFFSET*2;
+        tools::Long nH = nHeight - nTabBottom - TAB_OFFSET*2;
         return (nW > 0 && nH > 0)
-            ? tools::Rectangle( Point( TAB_OFFSET, aRect.Bottom()+TAB_OFFSET ), Size( nW, nH ) )
+            ? tools::Rectangle( Point( TAB_OFFSET, nTabBottom + TAB_OFFSET ), Size( nW, nH ) )
             : tools::Rectangle();
     }
 
@@ -1122,7 +1128,7 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
 
     if (rRenderContext.IsNativeControlSupported(ControlType::TabPane, ControlPart::Entire))
     {
-        const bool bPaneWithHeader = rRenderContext.IsNativeControlSupported(ControlType::TabPane, ControlPart::TabPaneWithHeader);
+        const bool bPaneWithHeader = mbShowTabs && rRenderContext.IsNativeControlSupported(ControlType::TabPane, ControlPart::TabPaneWithHeader);
         tools::Rectangle aHeaderRect(aRect.Left(), 0, aRect.Right(), aRect.Top());
         if (bPaneWithHeader)
         {
@@ -1161,7 +1167,7 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
             rRenderContext.SetLineColor(rStyleSettings.GetLightColor());
         else
             rRenderContext.SetLineColor(COL_BLACK);
-        if (pCurItem && !pCurItem->maRect.IsEmpty())
+        if (mbShowTabs && pCurItem && !pCurItem->maRect.IsEmpty())
         {
             aCurRect = pCurItem->maRect;
             rRenderContext.DrawLine(aRect.TopLeft(), Point(aCurRect.Left() - 2, aRect.Top()));
@@ -1203,7 +1209,7 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
         }
     }
 
-    if (!mpTabCtrlData->maItemList.empty() && mpTabCtrlData->mpListBox == nullptr)
+    if (mbShowTabs && !mpTabCtrlData->maItemList.empty() && mpTabCtrlData->mpListBox == nullptr)
     {
         // Some native toolkits (GTK+) draw tabs right-to-left, with an
         // overlap between adjacent tabs
@@ -1344,14 +1350,29 @@ void TabControl::GetFocus()
 {
     if( ! mpTabCtrlData->mpListBox )
     {
-        ImplShowFocus();
-        SetInputContext( InputContext( GetFont() ) );
+        if (mbShowTabs)
+        {
+            ImplShowFocus();
+            SetInputContext( InputContext( GetFont() ) );
+        }
+        else
+        {
+            // no tabs, focus first thing in current page
+            ImplTabItem* pItem = ImplGetItem(GetCurPageId());
+            if (pItem && pItem->mpTabPage)
+            {
+                vcl::Window* pFirstChild = pItem->mpTabPage->ImplGetDlgWindow(0, GetDlgWindowType::First);
+                if ( pFirstChild )
+                    pFirstChild->ImplControlFocus(GetFocusFlags::Init);
+            }
+        }
     }
     else
     {
         if( mpTabCtrlData->mpListBox->IsReallyVisible() )
             mpTabCtrlData->mpListBox->GrabFocus();
     }
+
     Control::GetFocus();
 }
 
@@ -2119,19 +2140,22 @@ Size TabControl::ImplCalculateRequisition(sal_uInt16& nHeaderHeight) const
     }
 
     tools::Long nTabLabelsBottom = 0, nTabLabelsRight = 0;
-    for (sal_uInt16 nPos(0), sizeList(static_cast <sal_uInt16> (mpTabCtrlData->maItemList.size()));
-            nPos < sizeList; ++nPos)
+    if (mbShowTabs)
     {
-        TabControl* pThis = const_cast<TabControl*>(this);
-
-        tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
-        if (aTabRect.Bottom() > nTabLabelsBottom)
+        for (sal_uInt16 nPos(0), sizeList(static_cast <sal_uInt16> (mpTabCtrlData->maItemList.size()));
+                nPos < sizeList; ++nPos)
         {
-            nTabLabelsBottom = aTabRect.Bottom();
-            nHeaderHeight = nTabLabelsBottom;
+            TabControl* pThis = const_cast<TabControl*>(this);
+
+            tools::Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
+            if (aTabRect.Bottom() > nTabLabelsBottom)
+            {
+                nTabLabelsBottom = aTabRect.Bottom();
+                nHeaderHeight = nTabLabelsBottom;
+            }
+            if (!aTabRect.IsEmpty() && aTabRect.Right() > nTabLabelsRight)
+                nTabLabelsRight = aTabRect.Right();
         }
-        if (!aTabRect.IsEmpty() && aTabRect.Right() > nTabLabelsRight)
-            nTabLabelsRight = aTabRect.Right();
     }
 
     Size aOptimalSize(aOptimalPageSize);
@@ -2170,6 +2194,18 @@ std::vector<sal_uInt16> TabControl::GetPageIDs() const
     }
 
     return aIDs;
+}
+
+bool TabControl::set_property(const OString &rKey, const OUString &rValue)
+{
+    if (rKey == "show-tabs")
+    {
+        mbShowTabs = toBool(rValue);
+        queue_resize();
+    }
+    else
+        return Control::set_property(rKey, rValue);
+    return true;
 }
 
 FactoryFunction TabControl::GetUITestFactory() const
