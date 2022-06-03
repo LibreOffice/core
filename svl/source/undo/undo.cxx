@@ -29,6 +29,7 @@
 #include <unotools/datetime.hxx>
 
 #include <memory>
+#include <utility>
 #include <vector>
 #include <limits.h>
 #include <algorithm>
@@ -218,10 +219,10 @@ namespace svl::undo::impl
         {
         }
 
-        NotifyUndoListener( UndoListenerStringMethod i_notificationMethod, const OUString& i_actionComment )
+        NotifyUndoListener( UndoListenerStringMethod i_notificationMethod, OUString i_actionComment )
             :m_notificationMethod( nullptr )
             ,m_altNotificationMethod( i_notificationMethod )
-            ,m_sActionComment( i_actionComment )
+            ,m_sActionComment(std::move( i_actionComment ))
         {
         }
 
@@ -1274,8 +1275,8 @@ struct SfxListUndoAction::Impl
     OUString maComment;
     OUString maRepeatComment;
 
-    Impl( sal_uInt16 nId, ViewShellId nViewShellId, const OUString& rComment, const OUString& rRepeatComment ) :
-        mnId(nId), mnViewShellId(nViewShellId), maComment(rComment), maRepeatComment(rRepeatComment) {}
+    Impl( sal_uInt16 nId, ViewShellId nViewShellId, OUString aComment, OUString aRepeatComment ) :
+        mnId(nId), mnViewShellId(nViewShellId), maComment(std::move(aComment)), maRepeatComment(std::move(aRepeatComment)) {}
 };
 
 sal_uInt16 SfxListUndoAction::GetId() const

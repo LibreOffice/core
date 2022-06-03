@@ -34,6 +34,7 @@
 #include <unotools/syslocale.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 
 #ifdef DBG_UTIL
 namespace {
@@ -62,11 +63,11 @@ static DbgStyleSheetReferences aDbgStyleSheetReferences;
 
 SfxStyleSheetModifiedHint::SfxStyleSheetModifiedHint
 (
-    const OUString&     rOldName,
+    OUString            aOldName,
     SfxStyleSheetBase&  rStyleSheet     // Remains with the caller
 )
 :   SfxStyleSheetHint( SfxHintId::StyleSheetModified, rStyleSheet ),
-    aName( rOldName )
+    aName(std::move( aOldName ))
 {}
 
 

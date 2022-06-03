@@ -26,6 +26,7 @@
 #include <tools/debug.hxx>
 #include <memory>
 #include <o3tl/sorted_vector.hxx>
+#include <utility>
 
 class SfxPoolItem;
 class SfxItemPoolUser;
@@ -162,9 +163,9 @@ struct SfxItemPool_Impl
     sal_uInt16                      mnEnd;
     MapUnit                         eDefMetric;
 
-    SfxItemPool_Impl( SfxItemPool* pMaster, const OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
+    SfxItemPool_Impl( SfxItemPool* pMaster, OUString _aName, sal_uInt16 nStart, sal_uInt16 nEnd )
         : maPoolItemArrays(nEnd - nStart + 1)
-        , aName(rName)
+        , aName(std::move(_aName))
         , maPoolDefaults(nEnd - nStart + 1)
         , mpStaticDefaults(nullptr)
         , mpMaster(pMaster)

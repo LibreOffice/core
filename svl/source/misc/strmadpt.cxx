@@ -31,6 +31,7 @@
 #include <osl/diagnose.h>
 #include <svl/instrm.hxx>
 #include <svl/outstrm.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -313,8 +314,8 @@ void SvInputStream::SetSize(sal_uInt64)
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }
 
-SvInputStream::SvInputStream( css::uno::Reference< css::io::XInputStream > const & rTheStream):
-    m_xStream(rTheStream),
+SvInputStream::SvInputStream( css::uno::Reference< css::io::XInputStream > xTheStream):
+    m_xStream(std::move(xTheStream)),
     m_nSeekedFrom(STREAM_SEEK_TO_END)
 {
     SetBufferSize(0);
@@ -408,9 +409,8 @@ void SvOutputStream::SetSize(sal_uInt64)
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }
 
-SvOutputStream::SvOutputStream(uno::Reference< io::XOutputStream > const &
-                                   rTheStream):
-    m_xStream(rTheStream)
+SvOutputStream::SvOutputStream(uno::Reference< io::XOutputStream > xTheStream):
+    m_xStream(std::move(xTheStream))
 {
     SetBufferSize(0);
 }

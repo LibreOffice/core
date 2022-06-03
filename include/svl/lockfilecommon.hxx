@@ -53,7 +53,7 @@ protected:
     static OUString GenerateOwnLockFileURL(std::u16string_view aOrigURL, std::u16string_view aPrefix);
 
 public:
-    LockFileCommon(const OUString& aLockFileURL);
+    LockFileCommon(OUString aLockFileURL);
     virtual ~LockFileCommon();
 
     const OUString& GetURL() const;

@@ -27,6 +27,7 @@
 #include <svl/numformat.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star::uno;
@@ -36,8 +37,8 @@ using namespace ::com::sun::star::util;
 using namespace ::utl;
 
 
-SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(const css::uno::Reference< css::uno::XComponentContext >& _rxORB)
-    :m_xORB(_rxORB)
+SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(css::uno::Reference< css::uno::XComponentContext > _xORB)
+    :m_xORB(std::move(_xORB))
 {
 }
 

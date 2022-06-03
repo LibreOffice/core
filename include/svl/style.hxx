@@ -337,7 +337,7 @@ class UNLESS_MERGELIBS(SVL_DLLPUBLIC) SfxStyleSheetModifiedHint final : public S
     OUString            aName;
 
 public:
-                        SfxStyleSheetModifiedHint( const OUString& rOld,
+                        SfxStyleSheetModifiedHint( OUString aOld,
                                                    SfxStyleSheetBase& );
     const OUString&     GetOldName() const { return aName; }
 };
