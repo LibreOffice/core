@@ -371,10 +371,10 @@ CuiInputDialog::CuiInputDialog(weld::Window * pParent, InputDialogMode nMode)
 
 // ScriptOrgDialog ------------------------------------------------------------
 
-SvxScriptOrgDialog::SvxScriptOrgDialog(weld::Window* pParent, const OUString& language)
+SvxScriptOrgDialog::SvxScriptOrgDialog(weld::Window* pParent, OUString language)
     : SfxDialogController(pParent, "cui/ui/scriptorganizer.ui", "ScriptOrganizerDialog")
     , m_pParent(pParent)
-    , m_sLanguage(language)
+    , m_sLanguage(std::move(language))
     , m_delErrStr(CuiResId(RID_CUISTR_DELFAILED))
     , m_delErrTitleStr(CuiResId(RID_CUISTR_DELFAILED_TITLE))
     , m_delQueryStr(CuiResId(RID_CUISTR_DELQUERY))

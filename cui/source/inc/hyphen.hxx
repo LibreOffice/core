@@ -71,7 +71,7 @@ class SvxHyphenWordDialog : public SfxDialogController
     DECL_LINK(CursorChangeHdl_Impl, weld::Entry&, void);
 
 public:
-    SvxHyphenWordDialog(const OUString &rWord, LanguageType nLang,
+    SvxHyphenWordDialog(OUString aWord, LanguageType nLang,
                         weld::Widget* pParent,
                         css::uno::Reference<css::linguistic2::XHyphenator> const &xHyphen,
                         SvxSpellWrapper* pWrapper);

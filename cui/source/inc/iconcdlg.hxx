@@ -20,6 +20,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <utility>
 
 // forward-declarations
 struct IconChoicePageData;
@@ -39,8 +40,8 @@ struct IconChoicePageData
     bool bRefresh;          ///< Flag: page has to be newly initialized
 
     // constructor
-    IconChoicePageData(const OString& rId, std::unique_ptr<IconChoicePage> xInPage)
-        : sId(rId)
+    IconChoicePageData(OString aId, std::unique_ptr<IconChoicePage> xInPage)
+        : sId(std::move(aId))
         , xPage(std::move(xInPage))
         , bRefresh(false)
     {}

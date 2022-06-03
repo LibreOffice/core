@@ -27,6 +27,7 @@
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
+#include <utility>
 
 #define HYPH_POS_CHAR       '='
 
@@ -402,13 +403,13 @@ IMPL_LINK_NOARG(SvxHyphenWordDialog, GetFocusHdl_Impl, weld::Widget&, void)
 // class SvxHyphenWordDialog ---------------------------------------------
 
 SvxHyphenWordDialog::SvxHyphenWordDialog(
-    const OUString &rWord, LanguageType nLang,
+    OUString aWord, LanguageType nLang,
     weld::Widget* pParent,
     uno::Reference< linguistic2::XHyphenator > const &xHyphen,
     SvxSpellWrapper* pWrapper)
     : SfxDialogController(pParent, "cui/ui/hyphenate.ui", "HyphenateDialog")
     , m_pHyphWrapper(pWrapper)
-    , m_aActWord(rWord)
+    , m_aActWord(std::move(aWord))
     , m_nActLanguage(nLang)
     , m_nMaxHyphenationPos(0)
     , m_nOldPos(0)
