@@ -1644,7 +1644,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     std::vector<Reference<XInterface>>& rInterfaces2 = pAccess->aInterfaceSeq2;
     std::vector<sal_Int16>& rMapTypeArray = pAccess->maMapTypeSeq;
     std::vector<sal_Int32>& rPropertyConceptArray = pAccess->maPropertyConceptSeq;
-    sal_Int32 i;
 
     // References to important data from pAccess
     sal_Int32& rPropCount = pAccess->mnPropCount;
@@ -1662,7 +1661,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         {
             SupportedClassSeq.resize( nTypeCount );
 
-            for( i = 0 ; i < static_cast<sal_Int32>(nTypeCount) ; i++ )
+            for( size_t i = 0 ; i < nTypeCount ; i++ )
                 SupportedClassSeq[i] = reflection->forName( SupportedTypesSeq[i].getTypeName() );
         }
 
@@ -1684,7 +1683,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
             if( bFast )
                 pAccess->mpOrgPropertyHandleArray.reset( new sal_Int32[ nLen ] );
 
-            for( i = 0 ; i < nLen ; i++ )
+            for( sal_Int32 i = 0 ; i < nLen ; i++ )
             {
                 // Put property in its own list
                 pAccess->checkPropertyArraysSize( rPropCount );
@@ -1742,7 +1741,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         bool bFoundXInterface = false;
 
         size_t nClassCount = SupportedClassSeq.size();
-        for( sal_Int32 nIdx = 0 ; nIdx < static_cast<sal_Int32>(nClassCount); nIdx++ )
+        for( size_t nIdx = 0 ; nIdx < nClassCount; nIdx++ )
         {
             Reference<XIdlClass> xImplClass2 = SupportedClassSeq[nIdx];
             while( xImplClass2.is() )
@@ -1835,13 +1834,13 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                     };
                     std::unique_ptr<MethodType[]> pMethodTypes( new MethodType[ nSourceMethodCount ] );
                     std::unique_ptr<sal_Int32[]> pLocalMethodConcepts( new sal_Int32[ nSourceMethodCount ] );
-                    for( i = 0 ; i < nSourceMethodCount ; i++ )
+                    for( sal_Int32 i = 0 ; i < nSourceMethodCount ; i++ )
                     {
                         pMethodTypes[ i ] = STANDARD_METHOD;
                         pLocalMethodConcepts[ i ] = 0;
                     }
 
-                    for( i = 0 ; i < nSourceMethodCount ; i++ )
+                    for( sal_Int32 i = 0 ; i < nSourceMethodCount ; i++ )
                     {
                         // Address method
                         const Reference<XIdlMethod>& rxMethod_i = pSourceMethods[i];
@@ -2111,7 +2110,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                     // A set method could still exist without a corresponding get method,
                     // this must be a write-only property
-                    for( i = 0 ; i < nSourceMethodCount ; i++ )
+                    for( sal_Int32 i = 0 ; i < nSourceMethodCount ; i++ )
                     {
                         // Address method
                         const Reference<XIdlMethod>& rxMethod_i = pSourceMethods[i];
@@ -2202,7 +2201,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                     // How many methods in the method sequence
                     sal_Int32 nExportedMethodCount = 0;
                     sal_Int32 nSupportedListenerCount = 0;
-                    for( i = 0 ; i < nSourceMethodCount ; i++ )
+                    for( sal_Int32 i = 0 ; i < nSourceMethodCount ; i++ )
                     {
                         if( pMethodTypes[ i ] != INVALID_METHOD )
                         {
@@ -2220,7 +2219,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                     pAccess->maSupportedListenerSeq.resize( nSupportedListenerCount + iAllSupportedListener );
 
                     // Write in methods
-                    for( i = 0 ; i < nSourceMethodCount ; i++ )
+                    for( sal_Int32 i = 0 ; i < nSourceMethodCount ; i++ )
                     {
                         if( pMethodTypes[ i ] != INVALID_METHOD )
                         {
