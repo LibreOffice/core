@@ -2964,6 +2964,30 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf149378)
     // - Expected: {=MINVERSE(A1:C3)}
     // - Actual  : =MINVERSE(A1:C3)
     CPPUNIT_ASSERT_EQUAL(OUString("{=MINVERSE(A1:C3)}"), pDoc->GetFormula(0, 0, 0));
+
+    insertStringToCell(*pModelObj, "B1", "={1;2}");
+    CPPUNIT_ASSERT_EQUAL(OUString("{={1;2}}"), pDoc->GetFormula(1, 0, 0));
+
+    insertStringToCell(*pModelObj, "C1", "={1;2}+3");
+    CPPUNIT_ASSERT_EQUAL(OUString("{={1;2}+3}"), pDoc->GetFormula(2, 0, 0));
+
+    insertStringToCell(*pModelObj, "D1", "={1;2}+{3;4}");
+    CPPUNIT_ASSERT_EQUAL(OUString("{={1;2}+{3;4}}"), pDoc->GetFormula(3, 0, 0));
+
+    insertStringToCell(*pModelObj, "E1", "={1;2}+A1");
+    CPPUNIT_ASSERT_EQUAL(OUString("{={1;2}+A1}"), pDoc->GetFormula(4, 0, 0));
+
+    insertStringToCell(*pModelObj, "F1", "={1;2}+A1:A2");
+    CPPUNIT_ASSERT_EQUAL(OUString("={1;2}+A1:A2"), pDoc->GetFormula(5, 0, 0));
+
+    insertStringToCell(*pModelObj, "G1", "=SUM(MUNIT(3))");
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(MUNIT(3))"), pDoc->GetFormula(6, 0, 0));
+
+    insertStringToCell(*pModelObj, "H1", "=SUM({1;2})");
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM({1;2})"), pDoc->GetFormula(7, 0, 0));
+
+    insertStringToCell(*pModelObj, "I1", "=ABS({-1;-2})");
+    CPPUNIT_ASSERT_EQUAL(OUString("{=ABS({-1;-2})}"), pDoc->GetFormula(8, 0, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126926)
