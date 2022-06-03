@@ -113,8 +113,8 @@ protected:
 public:
 
     SaveInData(
-        const css::uno::Reference < css::ui::XUIConfigurationManager >& xCfgMgr,
-        const css::uno::Reference < css::ui::XUIConfigurationManager >& xParentCfgMgr,
+        css::uno::Reference < css::ui::XUIConfigurationManager > xCfgMgr,
+        css::uno::Reference < css::ui::XUIConfigurationManager > xParentCfgMgr,
         const OUString& aModuleId,
         bool docConfig );
 
@@ -253,8 +253,8 @@ private:
 
 public:
 
-    SvxConfigEntry( const OUString& rDisplayName,
-                    const OUString& rCommandURL,
+    SvxConfigEntry( OUString aDisplayName,
+                    OUString aCommandURL,
                     bool bPopup,
                     bool bParentData );
 
@@ -647,8 +647,8 @@ public:
 
     SvxIconSelectorDialog(
         weld::Window *pWindow,
-        const css::uno::Reference< css::ui::XImageManager >& rXImageManager,
-        const css::uno::Reference< css::ui::XImageManager >& rXParentImageManager);
+        css::uno::Reference< css::ui::XImageManager > xImageManager,
+        css::uno::Reference< css::ui::XImageManager > xParentImageManager);
 
     virtual ~SvxIconSelectorDialog() override;
 

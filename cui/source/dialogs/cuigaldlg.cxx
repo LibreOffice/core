@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cassert>
 
+#include <utility>
 #include <vcl/errinf.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>
@@ -65,11 +66,11 @@ using namespace ::com::sun::star::uno;
 
 SearchThread::SearchThread(SearchProgress* pProgress,
                            TPGalleryThemeProperties* pBrowser,
-                           const INetURLObject& rStartURL)
+                           INetURLObject aStartURL)
     : Thread("cuiSearchThread")
     , mpProgress(pProgress)
     , mpBrowser(pBrowser)
-    , maStartURL(rStartURL)
+    , maStartURL(std::move(aStartURL))
 {
 }
 
@@ -188,9 +189,9 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
     }
 }
 
-SearchProgress::SearchProgress(weld::Window* pParent, TPGalleryThemeProperties* pTabPage, const INetURLObject& rStartURL)
+SearchProgress::SearchProgress(weld::Window* pParent, TPGalleryThemeProperties* pTabPage, INetURLObject aStartURL)
     : GenericDialogController(pParent, "cui/ui/gallerysearchprogress.ui", "GallerySearchProgress")
-    , startUrl_(rStartURL)
+    , startUrl_(std::move(aStartURL))
     , m_pTabPage(pTabPage)
     , m_xFtSearchDir(m_xBuilder->weld_label("dir"))
     , m_xFtSearchType(m_xBuilder->weld_label("file"))

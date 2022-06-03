@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/settings.hxx>
 #include <vcl/weld.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -127,12 +128,12 @@ class ModuleUserData_Impl
     OUString  sImplName;
 
 public:
-    ModuleUserData_Impl( const OUString& sImpName, bool bIsParent, bool bChecked, sal_uInt8 nSetType, sal_uInt8 nSetIndex ) :
+    ModuleUserData_Impl( OUString sImpName, bool bIsParent, bool bChecked, sal_uInt8 nSetType, sal_uInt8 nSetIndex ) :
         bParent(bIsParent),
         bIsChecked(bChecked),
         nType(nSetType),
         nIndex(nSetIndex),
-        sImplName(sImpName)
+        sImplName(std::move(sImpName))
         {
         }
     bool IsParent() const {return bParent;}

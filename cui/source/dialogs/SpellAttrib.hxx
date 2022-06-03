@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
+#include <utility>
 
 namespace svx{
 struct SpellErrorDescription
@@ -37,21 +38,21 @@ struct SpellErrorDescription
     OUString                                     sRuleId;
 
     SpellErrorDescription( bool bGrammar,
-                      const OUString& rText,
-                      const css::lang::Locale& rLocale,
+                      OUString aText,
+                      css::lang::Locale _aLocale,
                       const css::uno::Sequence< OUString >& rSuggestions,
-                      css::uno::Reference< css::linguistic2::XProofreader > const & rxGrammarChecker,
+                      css::uno::Reference< css::linguistic2::XProofreader > _xGrammarChecker,
                       const OUString* pDialogTitle = nullptr,
                       const OUString* pExplanation = nullptr,
                       const OUString* pRuleId = nullptr,
                       const OUString* pExplanationURL = nullptr ) :
         bIsGrammarError( bGrammar ),
-        sErrorText( rText ),
+        sErrorText(std::move( aText )),
         sDialogTitle( ),
         sExplanation( ),
         sExplanationURL( ),
-        aLocale( rLocale ),
-        xGrammarChecker( rxGrammarChecker ),
+        aLocale(std::move( _aLocale )),
+        xGrammarChecker(std::move( _xGrammarChecker )),
         aSuggestions( rSuggestions )
     {
         if( pDialogTitle )

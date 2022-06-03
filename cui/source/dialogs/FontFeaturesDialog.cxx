@@ -10,6 +10,7 @@
 
 #include <FontFeaturesDialog.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 #include <vcl/font/FeatureParser.hxx>
 #include <FontFeatures.hxx>
 #include <unordered_set>
@@ -18,9 +19,9 @@ using namespace css;
 
 namespace cui
 {
-FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString const& rFontName)
+FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString aFontName)
     : GenericDialogController(pParent, "cui/ui/fontfeaturesdialog.ui", "FontFeaturesDialog")
-    , m_sFontName(rFontName)
+    , m_sFontName(std::move(aFontName))
     , m_xContentWindow(m_xBuilder->weld_scrolled_window("contentWindow"))
     , m_xContentGrid(m_xBuilder->weld_container("contentGrid"))
     , m_xPreviewWindow(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWindow))
