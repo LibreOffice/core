@@ -709,7 +709,7 @@ namespace {
 }
 
 namespace {
-    bool lcl_PasteFlyOrDrawFormat(SwPaM& rPaM, SwFrameFormat* pCpyFormat, SwFEShell& rSh)
+    SwFrameFormat* lcl_PasteFlyOrDrawFormat(SwPaM& rPaM, SwFrameFormat* pCpyFormat, SwFEShell& rSh)
     {
         auto& rImp = *rSh.Imp();
         auto& rDoc = *rSh.GetDoc();
@@ -752,7 +752,7 @@ namespace {
                 // positioning for group members
                 pNew->NbcSetAnchorPos(aGrpAnchor);
                 pNew->SetSnapRect(aSnapRect);
-                return true;
+                return nullptr;
             }
         }
         SwFormatAnchor aAnchor(pCpyFormat->GetAnchor());
@@ -766,18 +766,18 @@ namespace {
             {
                 const SdrObject *pCpyObj = pCpyFormat->FindSdrObject();
                 if(pCpyObj && CheckControlLayer(pCpyObj))
-                    return true;
+                    return nullptr;
             }
             else if(pCpyFormat->Which() == RES_FLYFRMFMT && IsInTextBox(pCpyFormat))
             {
                 // This is a fly frame which is anchored in a TextBox, ignore it as
                 // it's already copied as part of copying the content of the
                 // TextBox.
-                return true;
+                return nullptr;
             }
             // Ignore TextBoxes, they are already handled in sw::DocumentLayoutManager::CopyLayoutFormat().
             if(SwTextBoxHelper::isTextBox(pCpyFormat, RES_FLYFRMFMT))
-                return true;
+                return nullptr;
             aAnchor.SetAnchor(pPos);
         }
         else if(RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId())
@@ -791,9 +791,13 @@ namespace {
         }
 
         SwFrameFormat* pNew = rDoc.getIDocumentLayoutAccess().CopyLayoutFormat(*pCpyFormat, aAnchor, true, true);
+        return pNew;
+    }
 
+    void lcl_SelectFlyFormat(SwFrameFormat *const pNew, SwFEShell& rSh)
+    {
         if(!pNew)
-            return true;
+            return;
         switch(pNew->Which())
         {
             case RES_FLYFRMFMT:
@@ -803,10 +807,11 @@ namespace {
                 SwFlyFrame* pFlyFrame = static_cast<SwFlyFrameFormat*>(pNew)->GetFrame(&aPt);
                 if(pFlyFrame)
                     rSh.SelectFlyFrame(*pFlyFrame);
-                return false;
+                break;
             }
             case RES_DRAWFRMFMT:
             {
+                auto& rDrawView = *rSh.Imp()->GetDrawView();
                 assert(dynamic_cast<SwDrawFrameFormat*>(pNew));
                 SwDrawFrameFormat* pDrawFormat = static_cast<SwDrawFrameFormat*>(pNew);
                 // #i52780# - drawing object has to be made visible on paste.
@@ -821,7 +826,6 @@ namespace {
             default:
                 SAL_WARN("sw.core", "unknown fly type");
         }
-        return true;
     }
 }
 
@@ -1038,13 +1042,24 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                 // we need a DrawView
                 if(!Imp()->GetDrawView())
                     MakeDrawView();
-                for(auto pCpyFormat: *rClpDoc.GetSpzFrameFormats())
-                    if(pCpyFormat->Which() != RES_FLYFRMFMT)
-                        lcl_PasteFlyOrDrawFormat(rPaM, pCpyFormat, *this);
-                for(auto pCpyFormat: *rClpDoc.GetSpzFrameFormats())
-                    if(pCpyFormat->Which() == RES_FLYFRMFMT)
-                        if(!lcl_PasteFlyOrDrawFormat(rPaM, pCpyFormat, *this))
-                            break;
+                ::std::vector<SwFrameFormat*> inserted;
+                for (auto const pFlyFormat : *rClpDoc.GetSpzFrameFormats())
+                {
+                    // if anchored inside other fly, will be copied when copying
+                    // top-level fly, so skip here! (other non-body anchor
+                    // shouldn't happen here)
+                    SwFormatAnchor const& rAnchor(pFlyFormat->GetAnchor());
+                    if (RndStdIds::FLY_AT_PAGE == rAnchor.GetAnchorId()
+                        || rClpDoc.GetNodes().GetEndOfExtras().GetIndex() < rAnchor.GetContentAnchor()->nNode.GetIndex())
+                    {
+                        inserted.emplace_back(
+                            lcl_PasteFlyOrDrawFormat(rPaM, pFlyFormat, *this));
+                    }
+                }
+                for (auto const pFlyFormat : inserted)
+                {
+                    lcl_SelectFlyFormat(pFlyFormat, *this);
+                }
             }
             else
             {
