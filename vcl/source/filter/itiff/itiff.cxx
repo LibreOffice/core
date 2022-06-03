@@ -104,6 +104,9 @@ static toff_t tiff_size(thandle_t handle)
 
 bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
 {
+    auto origErrorHandler = TIFFSetErrorHandler(nullptr);
+    auto origWarningHandler = TIFFSetWarningHandler(nullptr);
+
     Context aContext(rTIFF, rTIFF.remainingSize());
     TIFF* tif = TIFFClientOpen("libtiff-svstream", "r", &aContext,
                                tiff_read, tiff_write,
@@ -240,6 +243,9 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
     } while (TIFFReadDirectory(tif));
 
     TIFFClose(tif);
+
+    TIFFSetErrorHandler(origErrorHandler);
+    TIFFSetWarningHandler(origWarningHandler);
 
     const auto nImages = aAnimation.Count();
     if (nImages)
