@@ -659,7 +659,7 @@ namespace
                     if  ( field->isAggregateFunction() )
                     {
                         OSL_ENSURE(!field->GetFunction().isEmpty(),"Function name must not be empty! ;-(");
-                        OUStringBuffer aTmpStr2( field->GetFunction() + "(" + aTmpStr.makeStringAndClear() + ")");
+                        OUStringBuffer aTmpStr2( field->GetFunction() + "(" + aTmpStr + ")");
                         aTmpStr = aTmpStr2;
                     }
 
@@ -671,7 +671,8 @@ namespace
                         aTmpStr.append(" AS ");
                         aTmpStr.append(::dbtools::quoteName(aQuote, rFieldAlias));
                     }
-                    aFieldListStr.append(aTmpStr.makeStringAndClear());
+                    aFieldListStr.append(aTmpStr);
+                    aTmpStr.setLength(0);
                     aFieldListStr.append(", ");
                 }
             }
@@ -2777,7 +2778,7 @@ OUString OQueryDesignView::getStatement()
     if (!aCriteriaListStr.isEmpty())
     {
         aSqlCmd.append(" WHERE ");
-        aSqlCmd.append(aCriteriaListStr.makeStringAndClear());
+        aSqlCmd.append(aCriteriaListStr);
     }
     Reference<XDatabaseMetaData> xMeta;
     if ( xConnection.is() )
@@ -2791,7 +2792,7 @@ OUString OQueryDesignView::getStatement()
     if(!aHavingStr.isEmpty())
     {
         aSqlCmd.append(" HAVING ");
-        aSqlCmd.append(aHavingStr.makeStringAndClear());
+        aSqlCmd.append(aHavingStr);
     }
     // ----------------- construct sorting and attach ------------
     OUString sOrder;

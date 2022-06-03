@@ -328,7 +328,7 @@ namespace dbaui
             {
             }
             // report the output
-            addOutputText(out.makeStringAndClear());
+            addOutputText(out);
         }
     }
 
