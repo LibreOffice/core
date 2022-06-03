@@ -54,6 +54,12 @@ public:
         setY(rRect.getY() - m_nTopDecoration);
         setSize(rRect.GetSize());
     }
+    constexpr tools::Rectangle savedClientArea() const
+    {
+        const tools::Rectangle& rRect = rSavedGeometry();
+        return { { rRect.Left() + m_nLeftDecoration, rRect.Top() + m_nTopDecoration },
+                 rRect.GetSize() };
+    }
     constexpr tools::Rectangle clientRect() const { return { { 0, 0 }, size() }; }
 
     // returns the position and size of the window, including all margins

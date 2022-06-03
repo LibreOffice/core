@@ -208,19 +208,16 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
 
     if (xWindow.is())
     {
-        // SOLAR SAFE -> ------------------------
         SolarMutexGuard aSolarGuard;
-
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
         // check for system window is necessary to guarantee correct pointer cast!
         if ( pWindow && pWindow->IsSystemWindow() )
         {
-            vcl::WindowDataMask const nMask = vcl::WindowDataMask::All & ~vcl::WindowDataMask::Minimized;
+            vcl::WindowDataMask const nMask = vcl::WindowDataMask::All;
             sWindowState = OStringToOUString(
                             static_cast<SystemWindow*>(pWindow.get())->GetWindowState(nMask),
                             RTL_TEXTENCODING_UTF8);
         }
-        // <- SOLAR SAFE ------------------------
     }
 
     return sWindowState;
@@ -235,9 +232,7 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
        )
         return;
 
-    // SOLAR SAFE -> ------------------------
     SolarMutexGuard aSolarGuard;
-
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
     if (!pWindow)
         return;
@@ -259,7 +254,6 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     OUString sOldWindowState = OStringToOUString( pSystemWindow->GetWindowState(), RTL_TEXTENCODING_ASCII_US );
     if ( sOldWindowState != sWindowState )
         pSystemWindow->SetWindowState(OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
-    // <- SOLAR SAFE ------------------------
 }
 
 } // namespace framework
