@@ -22,6 +22,7 @@
 
 #include "stgelem.hxx"
 #include "stgole.hxx"
+#include <o3tl/safeint.hxx>
 #include <sot/storinfo.hxx>
 
 ///////////////////////// class StgInternalStream
@@ -116,7 +117,7 @@ bool StgCompObjStream::Load()
 
             std::unique_ptr<char[]> p(new char[ nStrLen+1 ]);
             p[nStrLen] = 0;
-            if (static_cast<sal_Int32>(ReadBytes( p.get(), nStrLen )) == nStrLen)
+            if (ReadBytes( p.get(), nStrLen ) == o3tl::make_unsigned(nStrLen))
             {
                 //The encoding here is "ANSI", which is pretty useless seeing as
                 //the actual codepage used doesn't seem to be specified/stored
