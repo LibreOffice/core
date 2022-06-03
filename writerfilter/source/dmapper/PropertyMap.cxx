@@ -1565,7 +1565,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
     }
 
-    if (m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous)
+    if (m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_continuous
         && !rDM_Impl.IsInComments())
     {
         //todo: insert a section or access the already inserted section
@@ -1671,7 +1671,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     // If the section is of type "New column" (0x01), then simply insert a column break.
     // But only if there actually are columns on the page, otherwise a column break
     // seems to be handled like a page break by MSO.
-    else if (m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_nextColumn)
+    else if (m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_nextColumn
             && m_nColumnCount > 1 && !rDM_Impl.IsInComments())
     {
         try
@@ -1845,7 +1845,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             // Handle page breaks with odd/even page numbering. We need to use an extra page style for setting the page style
             // to left/right, because if we set it to the normal style, we'd set it to "First Page"/"Default Style", which would
             // break them (all default pages would be only left or right).
-            if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_evenPage) || m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_oddPage) )
+            if ( m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_evenPage || m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_oddPage )
             {
                 OUString* pageStyle = m_bTitlePage ? &m_sFirstPageStyleName : &m_sFollowPageStyleName;
                 OUString evenOddStyleName = rDM_Impl.GetUnusedPageStyleName();
@@ -1875,9 +1875,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 evenOddStyle->setPropertyValue( "FooterIsOn", uno::Any( false ) );
                 CopyHeaderFooter(rDM_Impl, pageProperties, evenOddStyle);
                 *pageStyle = evenOddStyleName; // And use it instead of the original one (which is set as follow of this one).
-                if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_evenPage) )
+                if ( m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_evenPage )
                     evenOddStyle->setPropertyValue( getPropertyName( PROP_PAGE_STYLE_LAYOUT ), uno::Any( style::PageStyleLayout_LEFT ) );
-                else if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_oddPage) )
+                else if ( m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_oddPage )
                     evenOddStyle->setPropertyValue( getPropertyName( PROP_PAGE_STYLE_LAYOUT ), uno::Any( style::PageStyleLayout_RIGHT ) );
             }
 
