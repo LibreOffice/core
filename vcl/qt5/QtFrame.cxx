@@ -673,14 +673,8 @@ void QtFrame::SetWindowState(const vcl::WindowData* pState)
     if (!isWindow() || !pState || isChild(true, false))
         return;
 
-    const vcl::WindowDataMask nMaxGeometryMask
-        = vcl::WindowDataMask::PosSize | vcl::WindowDataMask::MaximizedX
-          | vcl::WindowDataMask::MaximizedY | vcl::WindowDataMask::MaximizedWidth
-          | vcl::WindowDataMask::MaximizedHeight;
-
-    if ((pState->mask() & vcl::WindowDataMask::State)
-        && (pState->state() & vcl::WindowState::Maximized) && !isMaximized()
-        && (pState->mask() & nMaxGeometryMask) == nMaxGeometryMask)
+    if ((pState->mask() & vcl::WindowDataMask::PosSizeState) == vcl::WindowDataMask::PosSizeState
+        && (pState->state() & vcl::WindowState::Maximized) && !isMaximized())
     {
         const qreal fRatio = devicePixelRatioF();
         QWidget* const pChild = asChild();
@@ -715,18 +709,20 @@ void QtFrame::SetWindowState(const vcl::WindowData* pState)
 bool QtFrame::GetWindowState(vcl::WindowData* pState)
 {
     pState->setState(vcl::WindowState::Normal);
-    pState->setMask(vcl::WindowDataMask::State);
+    pState->setMask(vcl::WindowDataMask::PosSizeState);
     if (isMinimized())
         pState->rState() |= vcl::WindowState::Minimized;
     else if (isMaximized())
         pState->rState() |= vcl::WindowState::Maximized;
-    else
+    if (maGeometry.hasSavedGeometry())
     {
-        // we want the frame position and the client area size
-        QRect rect = scaledQRect({ asChild()->pos(), asChild()->size() }, devicePixelRatioF());
-        pState->setPosSize(toRectangle(rect));
-        pState->rMask() |= vcl::WindowDataMask::PosSize;
+        pState->setPosSize(maGeometry.savedGeometry());
+        pState->setSavedGeometry();
     }
+
+    // we want the frame position and the client area size
+    QRect aRect = scaledQRect({ asChild()->pos(), asChild()->size() }, devicePixelRatioF());
+    pState->setPosSize(toRectangle(aRect));
 
     return true;
 }
@@ -748,7 +744,7 @@ void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
 
     if (m_bFullScreen)
     {
-        m_aRestoreGeometry = m_pTopLevel->geometry();
+        maGeometry.setSavedGeometry();
         m_nRestoreScreen = maGeometry.screen();
         SetScreenNumber(m_bFullScreenSpanAll ? m_nRestoreScreen : nScreen);
         if (!m_bFullScreenSpanAll)
@@ -760,7 +756,11 @@ void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
     {
         SetScreenNumber(m_nRestoreScreen);
         windowHandle()->showNormal();
-        m_pTopLevel->setGeometry(m_aRestoreGeometry);
+        assert(maGeometry.hasSavedGeometry());
+        if (!maGeometry.hasSavedGeometry())
+            return;
+        m_pTopLevel->setGeometry(toQRect(maGeometry.savedClientArea()));
+        maGeometry.clearSavedGeometry();
     }
 }
 

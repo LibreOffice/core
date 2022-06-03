@@ -57,6 +57,9 @@ class VCL_PLUGIN_PUBLIC WindowPosSize
     sal_Int32 m_nWidth;
     sal_Int32 m_nHeight;
 
+    // to unify handling of un-maximize
+    tools::Rectangle m_aSavedGeometry;
+
 protected:
     WindowPosSize()
         : m_nX(0)
@@ -122,6 +125,22 @@ public:
     }
     // because tools::Rectangle has the ambiguous (Point&, Point&) constructor, which we don't want here
     void setPosSize(const Point& rPos, const Size& rSize) { setPosSize({ rPos, rSize }); }
+
+    // infrastructure to unify handling of un-maximize; especially when saving the maximized window
+    // state, LO needs to save the non-maximized values.
+    constexpr tools::Rectangle savedGeometry() const { return m_aSavedGeometry; }
+    constexpr const tools::Rectangle& rSavedGeometry() const { return m_aSavedGeometry; }
+    void setSavedGeometry()
+    {
+        m_aSavedGeometry = posSize();
+        assert(!m_aSavedGeometry.IsEmpty());
+    }
+    void clearSavedGeometry()
+    {
+        assert(!m_aSavedGeometry.IsEmpty());
+        m_aSavedGeometry.SetEmpty();
+    }
+    constexpr bool hasSavedGeometry() const { return !m_aSavedGeometry.IsEmpty(); }
 };
 
 inline std::ostream& operator<<(std::ostream& s, const WindowPosSize& rGeom)

@@ -92,7 +92,6 @@ class X11SalFrame final : public SalFrame
     X11ShowState    nShowState_;        // show state
     int             nWidth_;            // client width
     int             nHeight_;           // client height
-    tools::Rectangle       maRestorePosSize;
     SalFrameStyleFlags nStyle_;
     SalExtStyle     mnExtStyle;
     bool            bAlwaysOnTop_;

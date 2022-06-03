@@ -48,16 +48,11 @@ enum class WindowDataMask
     Height = 0x0008,
     State = 0x0010,
     Minimized = 0x0020,
-    MaximizedX = 0x0100,
-    MaximizedY = 0x0200,
-    MaximizedWidth = 0x0400,
-    MaximizedHeight = 0x0800,
     Pos = X | Y,
     Size = Width | Height,
     PosSize = Pos | Size,
     PosSizeState = Pos | Size | State,
-    All = X | Y | Width | Height | MaximizedX | MaximizedY | MaximizedWidth | MaximizedHeight
-          | State | Minimized
+    All = X | Y | Width | Height | State | Minimized
 };
 
 class VCL_PLUGIN_PUBLIC WindowData final : public WindowPosSize
@@ -65,19 +60,10 @@ class VCL_PLUGIN_PUBLIC WindowData final : public WindowPosSize
     WindowState m_nState;
     WindowDataMask m_nMask;
 
-    int mnMaximizedX;
-    int mnMaximizedY;
-    unsigned int mnMaximizedWidth;
-    unsigned int mnMaximizedHeight;
-
 public:
     WindowData()
         : m_nState(WindowState::NONE)
         , m_nMask(WindowDataMask::NONE)
-        , mnMaximizedX(0)
-        , mnMaximizedY(0)
-        , mnMaximizedWidth(0)
-        , mnMaximizedHeight(0)
     {
     }
 
@@ -91,15 +77,6 @@ public:
     void setMask(WindowDataMask nMask) { m_nMask = nMask; }
     WindowDataMask mask() const { return m_nMask; }
     WindowDataMask& rMask() { return m_nMask; }
-
-    void SetMaximizedX(int nRX) { mnMaximizedX = nRX; }
-    int GetMaximizedX() const { return mnMaximizedX; }
-    void SetMaximizedY(int nRY) { mnMaximizedY = nRY; }
-    int GetMaximizedY() const { return mnMaximizedY; }
-    void SetMaximizedWidth(unsigned int nRWidth) { mnMaximizedWidth = nRWidth; }
-    unsigned int GetMaximizedWidth() const { return mnMaximizedWidth; }
-    void SetMaximizedHeight(unsigned int nRHeight) { mnMaximizedHeight = nRHeight; }
-    unsigned int GetMaximizedHeight() const { return mnMaximizedHeight; }
 };
 
 } // namespace vcl

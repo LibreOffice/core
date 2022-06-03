@@ -214,7 +214,6 @@ class GtkSalFrame final : public SalFrame
 
     Size                            m_aMaxSize;
     Size                            m_aMinSize;
-    tools::Rectangle                m_aRestorePosSize;
 
     OUString                        m_aTooltip;
     tools::Rectangle                m_aHelpArea;

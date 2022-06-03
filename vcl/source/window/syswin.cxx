@@ -461,52 +461,6 @@ void ImplWindowStateFromStr(vcl::WindowData& rData, std::string_view rStr)
     else
         rData.setState(vcl::WindowState::NONE);
 
-    // read maximized pos/size
-    aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
-    if (!aTokenStr.empty())
-    {
-        rData.SetMaximizedX(o3tl::toInt32(aTokenStr));
-        if (rData.GetMaximizedX() > -16384 && rData.GetMaximizedX() < 16384)
-            nValidMask |= vcl::WindowDataMask::MaximizedX;
-        else
-            rData.SetMaximizedX(0);
-    }
-    else
-        rData.SetMaximizedX(0);
-    aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
-    if (!aTokenStr.empty())
-    {
-        rData.SetMaximizedY(o3tl::toInt32(aTokenStr));
-        if (rData.GetMaximizedY() > -16384 && rData.GetMaximizedY() < 16384)
-            nValidMask |= vcl::WindowDataMask::MaximizedY;
-        else
-            rData.SetMaximizedY(0);
-    }
-    else
-        rData.SetMaximizedY(0);
-    aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
-    if (!aTokenStr.empty())
-    {
-        rData.SetMaximizedWidth(o3tl::toInt32(aTokenStr));
-        if (rData.GetMaximizedWidth() > 0 && rData.GetMaximizedWidth() < 16384)
-            nValidMask |= vcl::WindowDataMask::MaximizedWidth;
-        else
-            rData.SetMaximizedWidth(0);
-    }
-    else
-        rData.SetMaximizedWidth(0);
-    aTokenStr = o3tl::getToken(rStr, 0, ';', nIndex);
-    if (!aTokenStr.empty())
-    {
-        rData.SetMaximizedHeight(o3tl::toInt32(aTokenStr));
-        if (rData.GetMaximizedHeight() > 0 && rData.GetMaximizedHeight() < 16384)
-            nValidMask |= vcl::WindowDataMask::MaximizedHeight;
-        else
-            rData.SetMaximizedHeight(0);
-    }
-    else
-        rData.SetMaximizedHeight(0);
-
     // mark valid fields
     rData.setMask(nValidMask);
 }
@@ -519,7 +473,7 @@ OString vcl::WindowData::toStr() const
 
     OStringBuffer rStrBuf(64);
 
-    tools::Rectangle aRect = posSize();
+    tools::Rectangle aRect = hasSavedGeometry() ? savedGeometry() : posSize();
 
     if (nValidMask & vcl::WindowDataMask::X)
         rStrBuf.append(static_cast<sal_Int32>(aRect.Left()));
@@ -534,23 +488,7 @@ OString vcl::WindowData::toStr() const
         rStrBuf.append(static_cast<sal_Int32>(aRect.GetHeight()));
     rStrBuf.append( ';' );
     if (nValidMask & vcl::WindowDataMask::State)
-    {
-        // #94144# allow Minimize again, should be masked out when read from configuration
-        // 91625 - ignore Minimize
         rStrBuf.append(static_cast<sal_Int32>(state()));
-    }
-    rStrBuf.append(';');
-    if (nValidMask & vcl::WindowDataMask::MaximizedX)
-        rStrBuf.append(static_cast<sal_Int32>(GetMaximizedX()));
-    rStrBuf.append(',');
-    if (nValidMask & vcl::WindowDataMask::MaximizedY)
-        rStrBuf.append(static_cast<sal_Int32>(GetMaximizedY()));
-    rStrBuf.append( ',' );
-    if (nValidMask & vcl::WindowDataMask::MaximizedWidth)
-        rStrBuf.append(static_cast<sal_Int32>(GetMaximizedWidth()));
-    rStrBuf.append(',');
-    if (nValidMask & vcl::WindowDataMask::MaximizedHeight)
-        rStrBuf.append(static_cast<sal_Int32>(GetMaximizedHeight()));
     rStrBuf.append(';');
 
     return rStrBuf.makeStringAndClear();
@@ -648,11 +586,6 @@ void SystemWindow::SetWindowState(const vcl::WindowData& rData)
         tools::Long nX = aState.x(), nY = aState.y();
         ImplMoveToScreen(nX, nY, aState.width(), aState.height(), pWindow);
         aState.setPos({ nX, nY });
-        nX = aState.GetMaximizedX();
-        nY = aState.GetMaximizedY();
-        ImplMoveToScreen(nX, nY, aState.GetMaximizedWidth(), aState.GetMaximizedHeight(), pWindow);
-        aState.SetMaximizedX(nX);
-        aState.SetMaximizedY(nY);
 
         // #96568# avoid having multiple frames at the same screen location
         //  do the check only if not maximized
@@ -767,35 +700,15 @@ void SystemWindow::GetWindowState(vcl::WindowData& rData) const
         aState.setMask(vcl::WindowDataMask::All);
         if ( mpWindowImpl->mpFrame->GetWindowState( &aState ) )
         {
-            if ( nValidMask & vcl::WindowDataMask::X )
-                rData.setX( aState.x() );
-            if ( nValidMask & vcl::WindowDataMask::Y )
-                rData.setY( aState.y() );
-            if ( nValidMask & vcl::WindowDataMask::Width )
-                rData.setWidth( aState.width() );
-            if ( nValidMask & vcl::WindowDataMask::Height )
-                rData.setHeight( aState.height() );
-            if ( aState.mask() & vcl::WindowDataMask::MaximizedX )
-            {
-                rData.SetMaximizedX( aState.GetMaximizedX() );
-                nValidMask |= vcl::WindowDataMask::MaximizedX;
-            }
-            if ( aState.mask() & vcl::WindowDataMask::MaximizedY )
-            {
-                rData.SetMaximizedY( aState.GetMaximizedY() );
-                nValidMask |= vcl::WindowDataMask::MaximizedY;
-            }
-            if ( aState.mask() & vcl::WindowDataMask::MaximizedWidth )
-            {
-                rData.SetMaximizedWidth( aState.GetMaximizedWidth() );
-                nValidMask |= vcl::WindowDataMask::MaximizedWidth;
-            }
-            if ( aState.mask() & vcl::WindowDataMask::MaximizedHeight )
-            {
-                rData.SetMaximizedHeight( aState.GetMaximizedHeight() );
-                nValidMask |= vcl::WindowDataMask::MaximizedHeight;
-            }
-            if ( nValidMask & vcl::WindowDataMask::State )
+            if (nValidMask & vcl::WindowDataMask::X)
+                rData.setX(aState.x());
+            if (nValidMask & vcl::WindowDataMask::Y)
+                rData.setY(aState.y());
+            if (nValidMask & vcl::WindowDataMask::Width)
+                rData.setWidth(aState.width());
+            if (nValidMask & vcl::WindowDataMask::Height)
+                rData.setHeight(aState.height());
+            if (nValidMask & vcl::WindowDataMask::State)
             {
                 // #94144# allow Minimize again, should be masked out when read from configuration
                 // 91625 - ignore Minimize
@@ -803,7 +716,7 @@ void SystemWindow::GetWindowState(vcl::WindowData& rData) const
                     aState.rState() &= ~vcl::WindowState::Minimized;
                 rData.setState(aState.state());
             }
-            rData.setMask( nValidMask );
+            rData.setMask(nValidMask);
         }
         else
             rData.setMask(vcl::WindowDataMask::NONE);
