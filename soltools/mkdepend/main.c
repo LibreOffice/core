@@ -473,7 +473,7 @@ struct filepointer *getfile(char *file)
     struct stat st;
     off_t       size_backup;
     ssize_t     bytes_read;
-    unsigned    malloc_size;
+    size_t      malloc_size;
 
     content = (struct filepointer *)malloc(sizeof(struct filepointer));
     if ((fd = open(file, O_RDONLY)) < 0) {
@@ -486,7 +486,7 @@ struct filepointer *getfile(char *file)
 
     size_backup = st.st_size;
     malloc_size = size_backup;
-    /* Since off_t usually is larger than unsigned, need to test for
+    /* Since off_t usually is larger than size_t, need to test for
      * truncation.
      */
     if ( (off_t)malloc_size != size_backup )
