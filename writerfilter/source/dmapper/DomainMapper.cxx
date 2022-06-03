@@ -627,7 +627,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             break;
         case NS_ooxml::LN_CT_PageSz_orient:
-            CT_PageSz.orient = (nIntValue != static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_PageOrientation_portrait));
+            CT_PageSz.orient = (nIntValue != NS_ooxml::LN_Value_ST_PageOrientation_portrait);
             break;
         case NS_ooxml::LN_CT_PageSz_w:
             {
@@ -998,7 +998,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                         pSectionContext->SetdxaLnn( nIntValue );
                 break;
                 case NS_ooxml::LN_CT_LineNumber_restart:
-                    aSettings.bRestartAtEachPage = nIntValue == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_LineNumberRestart_newPage);
+                    aSettings.bRestartAtEachPage = nIntValue == NS_ooxml::LN_Value_ST_LineNumberRestart_newPage;
                     OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
                     if( pSectionContext )
                         pSectionContext->SetLnc( nIntValue );
@@ -1995,7 +1995,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         {
             //continuous break only allowed if it is not the only section break
             SectionPropertyMap* pLastContext = m_pImpl->GetLastSectionContext();
-            if ( nIntValue != static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_continuous) || pLastContext || m_pImpl->GetParaSectpr() )
+            if ( nIntValue != NS_ooxml::LN_Value_ST_SectionMark_continuous || pLastContext || m_pImpl->GetParaSectpr() )
                 pSectionContext->SetBreakType( nIntValue );
         }
         break;
