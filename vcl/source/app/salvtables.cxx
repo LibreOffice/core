@@ -2569,6 +2569,11 @@ void SalInstanceNotebook::set_tab_label_text(const OString& rIdent, const OUStri
     return m_xNotebook->SetPageText(m_xNotebook->GetPageId(rIdent), rText);
 }
 
+void SalInstanceNotebook::set_show_tabs(bool bShow)
+{
+    m_xNotebook->set_property("show-tabs", OUString::boolean(bShow));
+}
+
 SalInstanceNotebook::~SalInstanceNotebook()
 {
     for (auto& rItem : m_aAddedPages)
@@ -2690,6 +2695,12 @@ public:
     virtual OUString get_tab_label_text(const OString& rIdent) const override
     {
         return m_xNotebook->GetPageText(rIdent);
+    }
+
+    virtual void set_show_tabs(bool /*bShow*/) override
+    {
+        // if someone needs this they will have to to implement it in VerticalTabControl
+        assert(false && "not implemented");
     }
 
     virtual ~SalInstanceVerticalNotebook() override
