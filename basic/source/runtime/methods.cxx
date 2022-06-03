@@ -733,39 +733,38 @@ void SbRtl_FileLen(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    }
+    
+    SbxVariableRef pArg = rPar.Get(1);
+    OUString aStr( pArg->GetOUString() );
+    sal_Int32 nLen = 0;
+    if( hasUno() )
+    {
+        const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
+        if( xSFI.is() )
+        {
+            try
+            {
+                nLen = xSFI->getSize( getFullPath( aStr ) );
+            }
+            catch(const Exception & )
+            {
+                StarBASIC::Error( ERRCODE_IO_GENERAL );
+            }
+        }
     }
     else
     {
-        SbxVariableRef pArg = rPar.Get(1);
-        OUString aStr( pArg->GetOUString() );
-        sal_Int32 nLen = 0;
-        if( hasUno() )
-        {
-            const uno::Reference< ucb::XSimpleFileAccess3 >& xSFI = getFileAccess();
-            if( xSFI.is() )
-            {
-                try
-                {
-                    nLen = xSFI->getSize( getFullPath( aStr ) );
-                }
-                catch(const Exception & )
-                {
-                    StarBASIC::Error( ERRCODE_IO_GENERAL );
-                }
-            }
-        }
-        else
-        {
-            DirectoryItem aItem;
-            (void)DirectoryItem::get( getFullPath( aStr ), aItem );
-            FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
-            (void)aItem.getFileStatus( aFileStatus );
-            nLen = static_cast<sal_Int32>(aFileStatus.getFileSize());
-        }
-        rPar.Get(0)->PutLong(nLen);
+        DirectoryItem aItem;
+        (void)DirectoryItem::get( getFullPath( aStr ), aItem );
+        FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
+        (void)aItem.getFileStatus( aFileStatus );
+        nLen = static_cast<sal_Int32>(aFileStatus.getFileSize());
     }
+    rPar.Get(0)->PutLong(nLen);
 }
+
 
 
 void SbRtl_Hex(StarBASIC *, SbxArray & rPar, bool)
