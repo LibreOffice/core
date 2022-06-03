@@ -84,6 +84,23 @@
       "message": "Both TarFile and ZipFile are context managers. More pythonic way to use \u0027with\u0027 and remove manual \u0027close()\u0027.",
       "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3292e2ff_fbb2d9bf",
+        "filename": "bin/update/tools.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-03T19:58:02Z",
+      "side": 1,
+      "message": "I guess :\u003d from Python 3.8 is not yet applicable. Otherwise can use\n```\nwhile data :\u003d f.read(BUF_SIZE):\n```",
+      "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
