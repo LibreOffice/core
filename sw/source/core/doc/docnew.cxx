@@ -1099,6 +1099,11 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             // set break on the last paragraph
             getIDocumentContentOperations().InsertPoolItem(SwPaM(aBreakPos),
                     pageDesc, SetAttrMode::DEFAULT, pTargetShell->GetLayout());
+            // tdf#148309 move to the last node - so that the "flush page break"
+            // code below will format the frame of the node with the page break,
+            // which is required for new page frames to be created!  Else layout
+            // performance will be terrible.
+            pTargetShell->SttEndDoc(false);
 
             // There is now a new empty text node on the new page. If it has
             // any marks, those are from the previous page: move them back
@@ -1129,6 +1134,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             if ( !bDeletePrevious )
             {
                 SAL_INFO( "sw.pageframe", "(Flush pagebreak AKA EndAllAction" );
+                assert(pTargetShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetSwAttrSet().HasItem(RES_PAGEDESC));
                 pTargetShell->EndAllAction();
                 SAL_INFO( "sw.pageframe",  "Flush changes AKA EndAllAction)" );
                 pTargetShell->StartAllAction();
