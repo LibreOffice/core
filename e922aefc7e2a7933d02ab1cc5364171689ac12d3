@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "450365ef_36de08ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-03T19:44:24Z",
+      "side": 1,
+      "message": "In general consider using argparse instead of manual parsing, pathlib.Path instead of strings and os.path, f-strings instead of printf-style. Probably in separate PRs.",
+      "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "795f8546_994af5bb",
+        "filename": "bin/update/create_full_mar.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-03T19:44:24Z",
+      "side": 1,
+      "message": "Wrong script name. If not argparse can print sys.argv[0] here.",
+      "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e599139f_e3100511",
+        "filename": "bin/update/path.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-03T19:44:24Z",
+      "side": 1,
+      "message": "os.makedirs() has exist_ok flag since Python 3.2. This function could be removed.",
+      "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c110a66e_185018da",
+        "filename": "bin/update/tools.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-03T19:44:24Z",
+      "side": 1,
+      "message": "Probably os.makedirs(exist_ok\u003dTrue) fits here too.",
+      "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd719379_a387c176",
+        "filename": "bin/update/tools.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-03T19:44:24Z",
+      "side": 1,
+      "message": "Both TarFile and ZipFile are context managers. More pythonic way to use \u0027with\u0027 and remove manual \u0027close()\u0027.",
+      "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

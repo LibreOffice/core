@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c37a7afb_79e6ca38",
+        "filename": "bin/update/tools.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-03T19:44:24Z",
+      "side": 0,
+      "message": "Both \u0027command\u0027 are local variables. Nothing should happen.",
+      "parentUuid": "b3c40d37_f4d3cb65",
+      "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1392c7c6_544f1867",
         "filename": "bin/update/uncompress_mar.py",
         "patchSetId": 5
@@ -120,6 +138,24 @@
       "side": 0,
       "message": "I see, I thought the same thing but it\u0027s a string instead of a reference.",
       "parentUuid": "1392c7c6_544f1867",
+      "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7feef2bc_ddea05f9",
+        "filename": "bin/update/uncompress_mar.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-03T19:44:24Z",
+      "side": 0,
+      "message": "Looks like a bug. I\u0027d rather replace \"bzip2\" with variable in check_call().",
+      "parentUuid": "0f7974fb_649ead82",
       "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

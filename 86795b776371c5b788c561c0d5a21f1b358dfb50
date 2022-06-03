@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b66d46e_1bbb284b",
+        "filename": "bin/update/create_partial_update.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-03T19:44:24Z",
+      "side": 0,
+      "message": "Would be great if you sort imports in other files too.",
+      "revId": "86795b776371c5b788c561c0d5a21f1b358dfb50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
