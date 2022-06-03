@@ -143,7 +143,7 @@ protected:
 public:
     // prob need another arg in the ctor
     // to specify the language or provider
-    SvxScriptOrgDialog(weld::Window* pParent, const OUString& language);
+    SvxScriptOrgDialog(weld::Window* pParent, OUString language);
     virtual ~SvxScriptOrgDialog() override;
 
     virtual short run() override;

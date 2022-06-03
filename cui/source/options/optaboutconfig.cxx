@@ -30,6 +30,7 @@
 #include <cppu/unotype.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/textsearch.hxx>
+#include <utility>
 #include <vcl/event.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -52,10 +53,10 @@ struct Prop_Impl
     OUString    Property;
     Any         Value;
 
-    Prop_Impl( const OUString& sName, const OUString& sProperty, const Any& aValue )
-        : Name( sName )
-        , Property( sProperty )
-        , Value( aValue )
+    Prop_Impl( OUString sName, OUString sProperty, Any aValue )
+        : Name(std::move( sName ))
+        , Property(std::move( sProperty ))
+        , Value(std::move( aValue ))
     {}
 };
 
@@ -66,9 +67,9 @@ struct UserData
     int aLineage;
     Reference<XNameAccess> aXNameAccess;
 
-    explicit UserData( OUString const & rPropertyPath )
+    explicit UserData( OUString aPropertyPath )
         : bIsPropertyPath( true )
-        , sPropertyPath(rPropertyPath)
+        , sPropertyPath(std::move(aPropertyPath))
         , aLineage(0)
     {}
 

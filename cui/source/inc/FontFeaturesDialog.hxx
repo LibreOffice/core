@@ -62,7 +62,7 @@ private:
     DECL_LINK(CheckBoxToggledHdl, weld::Toggleable&, void);
 
 public:
-    FontFeaturesDialog(weld::Window* pParent, OUString const& rFontName);
+    FontFeaturesDialog(weld::Window* pParent, OUString aFontName);
     ~FontFeaturesDialog() override;
     virtual short run() override;
 

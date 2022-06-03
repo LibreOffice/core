@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -52,11 +53,11 @@
 using namespace css;
 
 SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
-                                 const css::uno::Reference<css::frame::XFrame>& rFrame)
+                                 css::uno::Reference<css::frame::XFrame> xFrame)
     : SfxDialogController(pParent, "cui/ui/specialcharacters.ui", "SpecialCharactersDialog")
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
     , isSearchMode(true)
-    , m_xFrame(rFrame)
+    , m_xFrame(std::move(xFrame))
     , m_aRecentCharView{SvxCharView(m_xVirDev),
                         SvxCharView(m_xVirDev),
                         SvxCharView(m_xVirDev),

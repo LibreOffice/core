@@ -19,6 +19,7 @@
 
 #include <i18nutil/unicode.hxx>
 #include <o3tl/safeint.hxx>
+#include <utility>
 #include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>
@@ -2184,11 +2185,11 @@ struct ImplSmartTagLBUserData
     uno::Reference< smarttags::XSmartTagRecognizer > mxRec;
     sal_Int32 mnSmartTagIdx;
 
-    ImplSmartTagLBUserData( const OUString& rSmartTagType,
-                            uno::Reference< smarttags::XSmartTagRecognizer > const & xRec,
+    ImplSmartTagLBUserData( OUString aSmartTagType,
+                            uno::Reference< smarttags::XSmartTagRecognizer >  xRec,
                             sal_Int32 nSmartTagIdx ) :
-        maSmartTagType( rSmartTagType ),
-        mxRec( xRec ),
+        maSmartTagType(std::move( aSmartTagType )),
+        mxRec(std::move( xRec )),
         mnSmartTagIdx( nSmartTagIdx ) {}
 };
 

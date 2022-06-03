@@ -42,6 +42,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
@@ -72,9 +73,9 @@ uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( 
 
 InsertObjectDialog_Impl::InsertObjectDialog_Impl(weld::Window* pParent,
     const OUString& rUIXMLDescription, const OString& rID,
-    const css::uno::Reference < css::embed::XStorage >& xStorage)
+    css::uno::Reference < css::embed::XStorage > xStorage)
     : GenericDialogController(pParent, rUIXMLDescription, rID)
-    , m_xStorage( xStorage )
+    , m_xStorage(std::move( xStorage ))
     , aCnt( m_xStorage )
 {
 }

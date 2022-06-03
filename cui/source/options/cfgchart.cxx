@@ -23,6 +23,7 @@
 #include "cfgchart.hxx"
 #include <dialmgr.hxx>
 #include <strings.hrc>
+#include <utility>
 
 #define ROW_COLOR_COUNT 12
 
@@ -258,9 +259,9 @@ void SvxChartOptions::Notify( const css::uno::Sequence< OUString >& )
 
 
 
-SvxChartColorTableItem::SvxChartColorTableItem( sal_uInt16 nWhich_, const SvxChartColorTable& aTable ) :
+SvxChartColorTableItem::SvxChartColorTableItem( sal_uInt16 nWhich_, SvxChartColorTable aTable ) :
     SfxPoolItem( nWhich_ ),
-    m_aColorTable( aTable )
+    m_aColorTable(std::move( aTable ))
 {
 }
 

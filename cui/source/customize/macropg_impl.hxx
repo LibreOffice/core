@@ -46,7 +46,7 @@ private:
     DECL_LINK(ButtonHandler, weld::Button&, void);
 
 public:
-    AssignComponentDialog(weld::Window* pParent, const OUString& rURL);
+    AssignComponentDialog(weld::Window* pParent, OUString aURL);
     virtual ~AssignComponentDialog() override;
 
     const OUString& getURL() const { return maURL; }

@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
+
 #include "connpoolsettings.hxx"
 
 
 namespace offapp
 {
 
-    DriverPooling::DriverPooling( const OUString& _rName )
-        :sName(_rName)
+    DriverPooling::DriverPooling( OUString _aName )
+        :sName(std::move(_aName))
         ,bEnabled(false)
         ,nTimeoutSeconds(120)
     {
@@ -43,9 +45,9 @@ namespace offapp
     }
 
 
-    DriverPoolingSettingsItem::DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings )
+    DriverPoolingSettingsItem::DriverPoolingSettingsItem( sal_uInt16 _nId, DriverPoolingSettings _aSettings )
         :SfxPoolItem(_nId)
-        ,m_aSettings(_rSettings)
+        ,m_aSettings(std::move(_aSettings))
     {
     }
 

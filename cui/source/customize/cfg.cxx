@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <typeinfo>
 
+#include <utility>
 #include <vcl/stdtext.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
@@ -272,16 +273,16 @@ void SvxConfigDialog::PageCreated(const OString &rId, SfxTabPage& rPage)
 uno::Reference< css::ui::XImageManager>* SaveInData::xDefaultImgMgr = nullptr;
 
 SaveInData::SaveInData(
-    const uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
-    const uno::Reference< css::ui::XUIConfigurationManager >& xParentCfgMgr,
+    uno::Reference< css::ui::XUIConfigurationManager > xCfgMgr,
+    uno::Reference< css::ui::XUIConfigurationManager > xParentCfgMgr,
     const OUString& aModuleId,
     bool isDocConfig )
         :
             bModified( false ),
             bDocConfig( isDocConfig ),
             bReadOnly( false ),
-            m_xCfgMgr( xCfgMgr ),
-            m_xParentCfgMgr( xParentCfgMgr ),
+            m_xCfgMgr(std::move( xCfgMgr )),
+            m_xParentCfgMgr(std::move( xParentCfgMgr )),
             m_aSeparatorSeq{ comphelper::makePropertyValue(ITEM_DESCRIPTOR_TYPE,
                                                            css::ui::ItemType::SEPARATOR_LINE) }
 {
@@ -1888,11 +1889,11 @@ SvxConfigEntry* SvxMainMenuOrganizerDialog::GetSelectedEntry()
     return weld::fromId<SvxConfigEntry*>(m_xMenuListBox->get_id(nSelected));
 }
 
-SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
-                                const OUString& rCommandURL, bool bPopup, bool bParentData )
+SvxConfigEntry::SvxConfigEntry( OUString aDisplayName,
+                                OUString aCommandURL, bool bPopup, bool bParentData )
     : nId( 1 )
-    , aLabel(rDisplayName)
-    , aCommand(rCommandURL)
+    , aLabel(std::move(aDisplayName))
+    , aCommand(std::move(aCommandURL))
     , bPopUp(bPopup)
     , bStrEdited( false )
     , bIsUserDefined( false )
@@ -2680,11 +2681,11 @@ SvxNewToolbarDialog::~SvxNewToolbarDialog()
 *
 *******************************************************************************/
 SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
-    const uno::Reference< css::ui::XImageManager >& rXImageManager,
-    const uno::Reference< css::ui::XImageManager >& rXParentImageManager)
+    uno::Reference< css::ui::XImageManager > xImageManager,
+    uno::Reference< css::ui::XImageManager > xParentImageManager)
     : GenericDialogController(pWindow, "cui/ui/iconselectordialog.ui", "IconSelector")
-    , m_xImageManager(rXImageManager)
-    , m_xParentImageManager(rXParentImageManager)
+    , m_xImageManager(std::move(xImageManager))
+    , m_xParentImageManager(std::move(xParentImageManager))
     , m_xTbSymbol(new ValueSet(m_xBuilder->weld_scrolled_window("symbolswin", true)))
     , m_xTbSymbolWin(new weld::CustomWeld(*m_xBuilder, "symbolsToolbar", *m_xTbSymbol))
     , m_xFtNote(m_xBuilder->weld_label("noteLabel"))

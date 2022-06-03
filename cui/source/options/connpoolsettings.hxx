@@ -36,7 +36,7 @@ namespace offapp
         bool                bEnabled;
         sal_Int32           nTimeoutSeconds;
 
-        explicit DriverPooling( const OUString& _rName );
+        explicit DriverPooling( OUString  _aName );
 
         bool operator == (const DriverPooling& _rR) const;
         bool operator != (const DriverPooling& _rR) const { return !operator ==(_rR); }
@@ -72,7 +72,7 @@ namespace offapp
 
     public:
 
-        DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings );
+        DriverPoolingSettingsItem( sal_uInt16 _nId, DriverPoolingSettings _aSettings );
 
         virtual bool             operator==( const SfxPoolItem& ) const override;
         virtual DriverPoolingSettingsItem* Clone( SfxItemPool *pPool = nullptr ) const override;

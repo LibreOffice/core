@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <tools/urlobj.hxx>
@@ -60,7 +61,7 @@ struct DocumentTypeData
 {
     OUString aStrURL;
     OUString aStrExt;
-    DocumentTypeData (const OUString& aURL, const OUString& aExt) : aStrURL(aURL), aStrExt(aExt)
+    DocumentTypeData (OUString aURL, OUString aExt) : aStrURL(std::move(aURL)), aStrExt(std::move(aExt))
     {}
 };
 
