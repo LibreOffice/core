@@ -2885,8 +2885,9 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow_Lock( const Reference<
 
             // and descend
             impl_collectFormSearchContexts_nothrow_Lock(
-                xCurrentAsForm, aNextLevelPrefix.makeStringAndClear(),
+                xCurrentAsForm, aNextLevelPrefix,
                 _out_rForms, _out_rNames);
+            aNextLevelPrefix.setLength(0);
         }
     }
     catch( const Exception& )
