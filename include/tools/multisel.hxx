@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <rtl/ustring.hxx>
 
+#include <cstddef>
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
 
@@ -34,14 +35,14 @@ private:
     std::vector< Range >
                     aSels;      // array of SV-selections
     Range           aTotRange;  // total range of indexes
-    sal_Int32       nCurSubSel; // index in aSels of current selected index
+    std::size_t     nCurSubSel; // index in aSels of current selected index
     sal_Int32       nCurIndex;  // current selected entry
     sal_Int32       nSelCount;  // number of selected indexes
     bool            bCurValid;  // are nCurIndex and nCurSubSel valid
 
     TOOLS_DLLPRIVATE void           ImplClear();
-    TOOLS_DLLPRIVATE sal_Int32      ImplFindSubSelection( sal_Int32 nIndex ) const;
-    TOOLS_DLLPRIVATE void           ImplMergeSubSelections( sal_Int32 nPos1, sal_Int32 nPos2 );
+    TOOLS_DLLPRIVATE std::size_t    ImplFindSubSelection( sal_Int32 nIndex ) const;
+    TOOLS_DLLPRIVATE void           ImplMergeSubSelections( sal_Int32 nPos1, std::size_t nPos2 );
 
 public:
                     MultiSelection();

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>
 
@@ -29,20 +33,20 @@ void MultiSelection::ImplClear()
     aSels.clear();
 }
 
-sal_Int32 MultiSelection::ImplFindSubSelection( sal_Int32 nIndex ) const
+std::size_t MultiSelection::ImplFindSubSelection( sal_Int32 nIndex ) const
 {
     // iterate through the sub selections
-    sal_Int32 n = 0;
+    std::size_t n = 0;
     for ( ;
-          n < sal_Int32(aSels.size()) && nIndex > aSels[ n ].Max();
+          n < aSels.size() && nIndex > aSels[ n ].Max();
           ++n ) {} /* empty loop */
     return n;
 }
 
-void MultiSelection::ImplMergeSubSelections( sal_Int32 nPos1, sal_Int32 nPos2 )
+void MultiSelection::ImplMergeSubSelections( sal_Int32 nPos1, std::size_t nPos2 )
 {
     // didn't a sub selection at nPos2 exist?
-    if ( nPos2 >= sal_Int32(aSels.size()) )
+    if ( nPos2 >= aSels.size() )
         return;
 
     // did the sub selections touch each other?
@@ -141,12 +145,12 @@ bool MultiSelection::Select( sal_Int32 nIndex, bool bSelect )
         return false;
 
     // find the virtual target position
-    sal_Int32 nSubSelPos = ImplFindSubSelection( nIndex );
+    std::size_t nSubSelPos = ImplFindSubSelection( nIndex );
 
     if ( bSelect )
     {
         // is it included in the found sub selection?
-        if ( nSubSelPos < sal_Int32(aSels.size()) && aSels[ nSubSelPos ].Contains( nIndex ) )
+        if ( nSubSelPos < aSels.size() && aSels[ nSubSelPos ].Contains( nIndex ) )
             // already selected, nothing to do
             return false;
 
@@ -164,7 +168,7 @@ bool MultiSelection::Select( sal_Int32 nIndex, bool bSelect )
             ImplMergeSubSelections( nSubSelPos-1, nSubSelPos );
         }
         // is it at the beginning of the found sub selection
-        else if (  nSubSelPos < sal_Int32(aSels.size())
+        else if (  nSubSelPos < aSels.size()
                 && aSels[ nSubSelPos ].Min() == (nIndex+1)
         )
             // expand the found sub selection
@@ -172,7 +176,7 @@ bool MultiSelection::Select( sal_Int32 nIndex, bool bSelect )
         else
         {
             // create a new sub selection
-            if ( nSubSelPos < sal_Int32(aSels.size()) ) {
+            if ( nSubSelPos < aSels.size() ) {
                 aSels.insert( aSels.begin() + nSubSelPos, Range( nIndex, nIndex ) );
             } else {
                 aSels.push_back( Range( nIndex, nIndex ) );
@@ -184,7 +188,7 @@ bool MultiSelection::Select( sal_Int32 nIndex, bool bSelect )
     else
     {
         // is it excluded from the found sub selection?
-        if (  nSubSelPos >= sal_Int32(aSels.size())
+        if (  nSubSelPos >= aSels.size()
            || !aSels[ nSubSelPos ].Contains( nIndex )
         ) {
             // not selected, nothing to do
@@ -212,7 +216,7 @@ bool MultiSelection::Select( sal_Int32 nIndex, bool bSelect )
         else
         {
             // split the sub selection
-            if ( nSubSelPos < sal_Int32(aSels.size()) ) {
+            if ( nSubSelPos < aSels.size() ) {
                 aSels.insert( aSels.begin() + nSubSelPos, Range( aSels[ nSubSelPos ].Min(), nIndex-1 ) );
             } else {
                 aSels.push_back( Range( aSels[ nSubSelPos ].Min(), nIndex-1 ) );
@@ -302,23 +306,23 @@ void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
 bool MultiSelection::IsSelected( sal_Int32 nIndex ) const
 {
     // find the virtual target position
-    sal_Int32 nSubSelPos = ImplFindSubSelection( nIndex );
+    std::size_t nSubSelPos = ImplFindSubSelection( nIndex );
 
-    return nSubSelPos < sal_Int32(aSels.size()) && aSels[ nSubSelPos ].Contains(nIndex);
+    return nSubSelPos < aSels.size() && aSels[ nSubSelPos ].Contains(nIndex);
 }
 
 void MultiSelection::Insert( sal_Int32 nIndex, sal_Int32 nCount )
 {
     // find the virtual target position
-    sal_Int32 nSubSelPos = ImplFindSubSelection( nIndex );
+    std::size_t nSubSelPos = ImplFindSubSelection( nIndex );
 
     // did we need to shift the sub selections?
-    if ( nSubSelPos < sal_Int32(aSels.size()) )
+    if ( nSubSelPos < aSels.size() )
     {   // did we insert an unselected into an existing sub selection?
         if (  aSels[ nSubSelPos ].Min() != nIndex
            && aSels[ nSubSelPos ].Contains(nIndex)
         ) { // split the sub selection
-            if ( nSubSelPos < sal_Int32(aSels.size()) ) {
+            if ( nSubSelPos < aSels.size() ) {
                 aSels.insert( aSels.begin() + nSubSelPos, Range( aSels[ nSubSelPos ].Min(), nIndex-1 ) );
             } else {
                 aSels.push_back( Range( aSels[ nSubSelPos ].Min(), nIndex-1 ) );
@@ -328,7 +332,7 @@ void MultiSelection::Insert( sal_Int32 nIndex, sal_Int32 nCount )
         }
 
         // shift the sub selections behind the inserting position
-        for ( sal_Int32 nPos = nSubSelPos; nPos < sal_Int32(aSels.size()); ++nPos )
+        for ( std::size_t nPos = nSubSelPos; nPos < aSels.size(); ++nPos )
         {
             aSels[ nPos ].Min() += nCount;
             aSels[ nPos ].Max() += nCount;
@@ -342,10 +346,10 @@ void MultiSelection::Insert( sal_Int32 nIndex, sal_Int32 nCount )
 void MultiSelection::Remove( sal_Int32 nIndex )
 {
     // find the virtual target position
-    sal_Int32 nSubSelPos = ImplFindSubSelection( nIndex );
+    std::size_t nSubSelPos = ImplFindSubSelection( nIndex );
 
     // did we remove from an existing sub selection?
-    if (  nSubSelPos < sal_Int32(aSels.size())
+    if (  nSubSelPos < aSels.size()
        && aSels[ nSubSelPos ].Contains(nIndex)
     ) {
         // does this sub selection only contain the index to be deleted
@@ -362,7 +366,7 @@ void MultiSelection::Remove( sal_Int32 nIndex )
     }
 
     // shift the sub selections behind the removed index
-    for ( sal_Int32 nPos = nSubSelPos; nPos < sal_Int32(aSels.size()); ++nPos )
+    for ( std::size_t nPos = nSubSelPos; nPos < aSels.size(); ++nPos )
     {
         --( aSels[ nPos ].Min() );
         --( aSels[ nPos ].Max() );
@@ -386,12 +390,12 @@ sal_Int32 MultiSelection::FirstSelected()
 
 sal_Int32 MultiSelection::LastSelected()
 {
-    nCurSubSel = aSels.size() - 1;
     bCurValid = !aSels.empty();
 
     if ( !bCurValid )
         return SFX_ENDOFSELECTION;
 
+    nCurSubSel = aSels.size() - 1;
     nCurIndex = aSels[ nCurSubSel ].Max();
     return nCurIndex;
 }
@@ -406,7 +410,7 @@ sal_Int32 MultiSelection::NextSelected()
         return ++nCurIndex;
 
     // are there further sub selections?
-    if ( ++nCurSubSel >= sal_Int32(aSels.size()) )
+    if ( ++nCurSubSel >= aSels.size() )
         // we are at the end!
         return SFX_ENDOFSELECTION;
 
