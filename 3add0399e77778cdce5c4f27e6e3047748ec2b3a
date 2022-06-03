@@ -55,6 +55,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "17e994fa_61305cc9",
+        "filename": "cui/source/tabpages/chardlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-03T09:06:33Z",
+      "side": 1,
+      "message": "\"hide tabs\" might work sufficiently well after https://gerrit.libreoffice.org/c/core/+/135345 to be useful",
+      "parentUuid": "f301cfb7_efc40321",
+      "revId": "3add0399e77778cdce5c4f27e6e3047748ec2b3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8ca6d398_3efec11f",
         "filename": "cui/uiconfig/ui/charnamepage.ui",
         "patchSetId": 3
