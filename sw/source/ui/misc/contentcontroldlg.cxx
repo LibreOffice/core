@@ -21,12 +21,15 @@
 
 #include <vcl/weld.hxx>
 #include <cui/cuicharmap.hxx>
+#include <svl/numformat.hxx>
+#include <svl/zformat.hxx>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
 #include <IDocumentState.hxx>
 #include <swuiexp.hxx>
+#include <numfmtlb.hxx>
 
 using namespace com::sun::star;
 
@@ -48,6 +51,8 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
     , m_xDeleteBtn(m_xBuilder->weld_button("remove"))
     , m_xMoveUpBtn(m_xBuilder->weld_button("moveup"))
     , m_xMoveDownBtn(m_xBuilder->weld_button("movedown"))
+    , m_xDateFrame(m_xBuilder->weld_frame("dateframe"))
+    , m_xDateFormat(new SwNumFormatTreeView(m_xBuilder->weld_tree_view("date_formats_treeview")))
     , m_xOk(m_xBuilder->weld_button("ok"))
 {
     m_xCheckedStateBtn->connect_clicked(LINK(this, SwContentControlDlg, SelectCharHdl));
@@ -116,6 +121,42 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
         m_xListItemsFrame->set_visible(false);
         m_xListItemButtons->set_visible(false);
     }
+
+    if (m_pContentControl->GetDate())
+    {
+        m_xDateFormat->SetFormatType(SvNumFormatType::DATE);
+        m_xDateFormat->SetShowLanguageControl(true);
+
+        // Set height to double of the default.
+        weld::TreeView& rTreeView = dynamic_cast<weld::TreeView&>(m_xDateFormat->get_widget());
+        rTreeView.set_size_request(rTreeView.get_preferred_size().Width(),
+                                   rTreeView.get_height_rows(10));
+
+        OUString sFormatString = m_pContentControl->GetDateFormat();
+        OUString sLang = m_pContentControl->GetDateLanguage();
+        if (!sFormatString.isEmpty() && !sLang.isEmpty())
+        {
+            SvNumberFormatter* pNumberFormatter = m_rWrtShell.GetNumberFormatter();
+            LanguageType aLangType = LanguageTag(sLang).getLanguageType();
+            sal_uInt32 nFormat = pNumberFormatter->GetEntryKey(sFormatString, aLangType);
+            if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+            {
+                sal_Int32 nCheckPos = 0;
+                SvNumFormatType nType;
+                pNumberFormatter->PutEntry(sFormatString, nCheckPos, nType, nFormat,
+                                           LanguageTag(sLang).getLanguageType());
+            }
+
+            if (aLangType != LANGUAGE_DONTKNOW && nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
+            {
+                m_xDateFormat->SetDefFormat(nFormat);
+            }
+        }
+    }
+    else
+    {
+        m_xDateFrame->set_visible(false);
+    }
 }
 
 SwContentControlDlg::~SwContentControlDlg() {}
@@ -157,6 +198,27 @@ IMPL_LINK_NOARG(SwContentControlDlg, OkHdl, weld::Button&, void)
     {
         m_pContentControl->SetListItems(aItems);
         bChanged = true;
+    }
+
+    if (m_pContentControl->GetDate())
+    {
+        SvNumberFormatter* pNumberFormatter = m_rWrtShell.GetNumberFormatter();
+        const SvNumberformat* pFormat = pNumberFormatter->GetEntry(m_xDateFormat->GetFormat());
+        if (pFormat)
+        {
+            if (pFormat->GetFormatstring() != m_pContentControl->GetDateFormat())
+            {
+                m_pContentControl->SetDateFormat(pFormat->GetFormatstring());
+                bChanged = true;
+            }
+
+            OUString aLanguage = LanguageTag(pFormat->GetLanguage()).getBcp47();
+            if (aLanguage != m_pContentControl->GetDateLanguage())
+            {
+                m_pContentControl->SetDateLanguage(aLanguage);
+                bChanged = true;
+            }
+        }
     }
 
     if (bChanged)

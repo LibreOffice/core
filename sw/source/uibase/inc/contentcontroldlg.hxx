@@ -24,6 +24,7 @@
 class SwWrtShell;
 class SwContentControl;
 class SwContentControlListItem;
+class SwNumFormatTreeView;
 
 /**
  * The content control dialog allows editing the properties of the content control under the
@@ -49,6 +50,8 @@ class SwContentControlDlg final : public SfxDialogController
     std::unique_ptr<weld::Button> m_xDeleteBtn;
     std::unique_ptr<weld::Button> m_xMoveUpBtn;
     std::unique_ptr<weld::Button> m_xMoveDownBtn;
+    std::unique_ptr<weld::Frame> m_xDateFrame;
+    std::unique_ptr<SwNumFormatTreeView> m_xDateFormat;
 
     std::unique_ptr<weld::Button> m_xOk;
 
