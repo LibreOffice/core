@@ -14,5 +14,6 @@
  <library:library library:name="SFDatabases" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/SFDatabases/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  <library:library library:name="SFDialogs" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/SFDialogs/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  <library:library library:name="SFDocuments" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/SFDocuments/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
+ <library:library library:name="SFUnitTests" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/SFUnitTests/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  <library:library library:name="SFWidgets" xlink:href="$(INST)/@LIBO_SHARE_FOLDER@/basic/SFWidgets/dialog.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
  </library:libraries>

@@ -285,6 +285,11 @@ Directory gid_Dir_Basic_SFDocuments
     DosName = "SFDocuments";
 End
 
+Directory gid_Dir_Basic_SFUnitTests
+    ParentID = gid_Dir_Basic;
+    DosName = "SFUnitTests";
+End
+
 Directory gid_Dir_Basic_SFWidgets
     ParentID = gid_Dir_Basic;
     DosName = "SFWidgets";
