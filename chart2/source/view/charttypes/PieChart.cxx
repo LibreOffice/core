@@ -246,17 +246,47 @@ bool PieChart::shouldSnapRectToUsedArea()
 rtl::Reference<SvxShape> PieChart::createDataPoint(
     const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
     const uno::Reference<beans::XPropertySet>& xObjectProperties,
-    const ShapeParam& rParam )
+    const ShapeParam& rParam,
+    const sal_Int32 nPointCount,
+    const bool bConcentricExplosion)
 {
     //transform position:
     drawing::Direction3D aOffset;
-    if (rParam.mfExplodePercentage != 0.0)
-    {
-        double fAngle  = rParam.mfUnitCircleStartAngleDegree + rParam.mfUnitCircleWidthAngleDegree/2.0;
-        double fRadius = (rParam.mfUnitCircleOuterRadius-rParam.mfUnitCircleInnerRadius)*rParam.mfExplodePercentage;
-        drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
-        drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene(fAngle, fRadius, rParam.mfLogicZ);
-        aOffset = aNewOrigin - aOrigin;
+    double fExplodedInnerRadius = rParam.mfUnitCircleInnerRadius;
+    double fExplodedOuterRadius = rParam.mfUnitCircleOuterRadius;
+    double fStartAngle = rParam.mfUnitCircleStartAngleDegree;
+    double fWidthAngle = rParam.mfUnitCircleWidthAngleDegree;
+
+    if (rParam.mfExplodePercentage != 0.0) {
+        double fRadius = (fExplodedOuterRadius-fExplodedInnerRadius)*rParam.mfExplodePercentage;
+
+        if (bConcentricExplosion) {
+
+            // For concentric explosion, increase the radius but retain the original
+            // arc length of all ring segments together. This results in a gap
+            // that's evenly divided among all segments, assuming they all have
+            // the same explosion percentage
+            assert(fExplodedInnerRadius >= 0 && fExplodedOuterRadius > 0);
+            double fAngleRatio = (fExplodedInnerRadius + fExplodedOuterRadius) /
+                (fExplodedInnerRadius + fExplodedOuterRadius + 2 * fRadius);
+
+            assert(nPointCount > 0);
+            double fAngleGap = 360 * (1.0 - fAngleRatio) / nPointCount;
+            fStartAngle += fAngleGap / 2;
+            fWidthAngle -= fAngleGap;
+
+            fExplodedInnerRadius += fRadius;
+            fExplodedOuterRadius += fRadius;
+
+        } else {
+            // For the non-concentric explosion case, keep the original radius
+            // but shift the circle origin
+            double fAngle  = fStartAngle + fWidthAngle/2.0;
+
+            drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
+            drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene(fAngle, fRadius, rParam.mfLogicZ);
+            aOffset = aNewOrigin - aOrigin;
+        }
     }
 
     //create point
@@ -264,16 +294,16 @@ rtl::Reference<SvxShape> PieChart::createDataPoint(
     if(m_nDimension==3)
     {
         xShape = ShapeFactory::createPieSegment( xTarget
-            , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
-            , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius
+            , fStartAngle, fWidthAngle
+            , fExplodedInnerRadius, fExplodedOuterRadius
             , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() )
             , rParam.mfDepth );
     }
     else
     {
         xShape = ShapeFactory::createPieSegment2D( xTarget
-            , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
-            , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius
+            , fStartAngle, fWidthAngle
+            , fExplodedInnerRadius, fExplodedOuterRadius
             , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() ) );
     }
     PropertyMapper::setMappedProperties( *xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
@@ -808,9 +838,13 @@ void PieChart::createShapes()
 
                 ///create data point
                 aParam.mfLogicZ = -1.0; // For 3D pie chart label position
+
+                // Do concentric explosion if it's a donut chart with more than one series
+                const bool bConcentricExplosion = m_bUseRings && (m_aZSlots.front().size() > 1);
                 rtl::Reference<SvxShape> xPointShape =
                     createDataPoint(
-                        xSeriesGroupShape_Shapes, xPointProperties, aParam);
+                        xSeriesGroupShape_Shapes, xPointProperties, aParam, nPointCount,
+                        bConcentricExplosion);
 
                 ///point color:
                 if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
