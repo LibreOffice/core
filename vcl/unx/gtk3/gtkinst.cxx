@@ -22117,7 +22117,7 @@ public:
 #endif
         g_signal_handler_unblock(pWidget, m_nEntryInsertTextSignalId);
         m_pTreeView->enable_notify_events();
-        GtkInstanceContainer::disable_notify_events();
+        GtkInstanceContainer::enable_notify_events();
     }
 
     virtual bool changed_by_direct_pick() const override
