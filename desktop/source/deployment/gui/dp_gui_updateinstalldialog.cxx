@@ -380,7 +380,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                         ++nPos;
                     }
                     m_dialog.setError(UpdateInstallDialog::ERROR_DOWNLOAD, updateData.aInstalledPackage->getDisplayName(),
-                        buf.makeStringAndClear());
+                        buf);
                 }
             }
 

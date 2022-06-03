@@ -512,15 +512,15 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
         aSql.append(" WHERE ");
         if(!sKeyCondition.isEmpty() && !sIndexCondition.isEmpty())
         {
-            aSql.append(sKeyCondition.makeStringAndClear() + sIndexCondition.makeStringAndClear());
+            aSql.append(sKeyCondition + sIndexCondition);
         }
         else if(!sKeyCondition.isEmpty())
         {
-            aSql.append(sKeyCondition.makeStringAndClear());
+            aSql.append(sKeyCondition);
         }
         else if(!sIndexCondition.isEmpty())
         {
-            aSql.append(sIndexCondition.makeStringAndClear());
+            aSql.append(sIndexCondition);
         }
         aSql.setLength(aSql.getLength()-5); // remove the last AND
     }
@@ -620,7 +620,7 @@ void OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLT
 
     aSql[aSql.getLength() - 1] = ')';
     aValues[aValues.getLength() - 1] = ')';
-    aSql.append(aValues.makeStringAndClear());
+    aSql.append(aValues);
     // now create,fill and execute the prepared statement
     executeInsert(_rInsertRow,aSql.makeStringAndClear(),u"",bRefetch);
 }
@@ -723,7 +723,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
         if(!sMaxStmt.isEmpty())
         {
             sMaxStmt[sMaxStmt.getLength()-1] = ' ';
-            OUString sStmt = "SELECT " + sMaxStmt.makeStringAndClear() + "FROM ";
+            OUString sStmt = "SELECT " + sMaxStmt + "FROM ";
             OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),m_sUpdateTableName,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
             sStmt += ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
@@ -884,7 +884,7 @@ void OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTa
             }
         }
     }
-    aSql.append(sIndexCondition.makeStringAndClear());
+    aSql.append(sIndexCondition);
     aSql.setLength(aSql.getLength()-5);
 
     // now create end execute the prepared statement
