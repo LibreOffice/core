@@ -477,11 +477,11 @@ public:
     }
     virtual void set_tab_label_text(const OString& rIdent, const OUString& rLabel) = 0;
     virtual OUString get_tab_label_text(const OString& rIdent) const = 0;
+    virtual void set_show_tabs(bool bShow) = 0;
     virtual int get_n_pages() const = 0;
     virtual weld::Container* get_page(const OString& rIdent) const = 0;
 
     void connect_leave_page(const Link<const OString&, bool>& rLink) { m_aLeavePageHdl = rLink; }
-
     void connect_enter_page(const Link<const OString&, void>& rLink) { m_aEnterPageHdl = rLink; }
 };
 

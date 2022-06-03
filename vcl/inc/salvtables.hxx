@@ -1078,6 +1078,8 @@ public:
 
     virtual void set_tab_label_text(const OString& rIdent, const OUString& rText) override;
 
+    virtual void set_show_tabs(bool bShow) override;
+
     virtual ~SalInstanceNotebook() override;
 };
 
