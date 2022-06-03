@@ -2816,7 +2816,10 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
     if (bInlineArray)
     {
         // rCurr->SetInForceArray() can not be used with ocPush.
-        if (pCurrentFactorToken && pCurrentFactorToken->GetInForceArray() == ParamClass::Unknown)
+        if (nCurrentFactorParam > 0 && pCurrentFactorToken
+                && pCurrentFactorToken->GetInForceArray() == ParamClass::Unknown
+                && GetForceArrayParameter( pCurrentFactorToken.get(), static_cast<sal_uInt16>(nCurrentFactorParam - 1))
+                == ParamClass::Value)
         {
             // Propagate to caller as if a function returning an array/matrix
             // was called (see also below).
