@@ -177,7 +177,7 @@ public:
     const Size&     GetMaxOutputSizePixel() const;
 
     void            SetWindowState(std::string_view rStr);
-    OString GetWindowState(vcl::WindowDataMask nMask = vcl::WindowDataMask::All) const;
+    OString GetWindowState(vcl::WindowDataMask nMask = vcl::WindowDataMask::All, bool bSave = false) const;
 
     void            SetMenuBar(MenuBar* pMenuBar);
     MenuBar*        GetMenuBar() const { return mpMenuBar; }

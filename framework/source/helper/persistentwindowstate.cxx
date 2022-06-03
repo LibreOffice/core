@@ -217,7 +217,7 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
         {
             vcl::WindowDataMask const nMask = vcl::WindowDataMask::All & ~vcl::WindowDataMask::Minimized;
             sWindowState = OStringToOUString(
-                            static_cast<SystemWindow*>(pWindow.get())->GetWindowState(nMask),
+                            static_cast<SystemWindow*>(pWindow.get())->GetWindowState(nMask, true),
                             RTL_TEXTENCODING_UTF8);
         }
         // <- SOLAR SAFE ------------------------
