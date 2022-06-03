@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e99d9277_637d4e93",
+        "filename": "toolkit/qa/cppunit/a11y/AccessibleStatusBarTest.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-03T10:26:44Z",
+      "side": 1,
+      "message": "These various ProcessEventstoIdle are because somethings, presumably like toFront() (to bring the window into the foreground) typically send an event and return immediately, and the event is processed later in the event loop (and/or there are a whole pile of other events \"posted\" to get processed by the event loop in the future.\n\nSo right after \"toFront()\" the window is not likely to really be in the foreground yet, but will be put there when the related events get processed. The ProcessEventstoIdle() will process all outstanding events until there are no more of them, at which point the attempt to bring to the foreground should be complete and its either there or will never get there.",
+      "revId": "9f6a735d03bbda711bb2f6f1db95f20efc528251",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
