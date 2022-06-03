@@ -25,6 +25,7 @@
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 #include <map>
+#include <utility>
 
 class SvStream;
 enum class SvMacroItemId : sal_uInt16;
@@ -48,9 +49,9 @@ class SVL_DLLPUBLIC SvxMacro
 
 public:
 
-    SvxMacro( const OUString &rMacName, const OUString &rLanguage);
+    SvxMacro( OUString aMacName, const OUString &rLanguage);
 
-    SvxMacro( const OUString &rMacName, const OUString &rLibName,
+    SvxMacro( OUString aMacName, OUString aLibName,
                 ScriptType eType); //  = STARBASIC removes
 
     const OUString &GetLibName() const        { return aLibName; }
@@ -62,9 +63,9 @@ public:
     bool HasMacro() const { return !aMacName.isEmpty(); }
 };
 
-inline SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLibName,
+inline SvxMacro::SvxMacro( OUString _aMacName, OUString _aLibName,
                             ScriptType eTyp )
-    : aMacName( rMacName ), aLibName( rLibName ), eType( eTyp )
+    : aMacName(std::move( _aMacName )), aLibName(std::move( _aLibName )), eType( eTyp )
 {}
 
 // Macro Table, destroys the pointers in the DTor!

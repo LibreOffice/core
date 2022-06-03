@@ -27,9 +27,10 @@
 #include <svl/macitem.hxx>
 #include <stringio.hxx>
 #include <algorithm>
+#include <utility>
 
-SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLanguage)
-    : aMacName( rMacName ), aLibName( rLanguage),
+SvxMacro::SvxMacro( OUString _aMacName, const OUString &rLanguage)
+    : aMacName(std::move( _aMacName )), aLibName( rLanguage),
       eType( EXTENDED_STYPE)
 {
     if ( rLanguage == SVX_MACRO_LANGUAGE_STARBASIC )

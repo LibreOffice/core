@@ -44,7 +44,7 @@ class SvNumberFormatsSupplierServiceObject final
     void implEnsureFormatter();
 
 public:
-    explicit SvNumberFormatsSupplierServiceObject(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+    explicit SvNumberFormatsSupplierServiceObject(css::uno::Reference< css::uno::XComponentContext > _xORB);
     virtual ~SvNumberFormatsSupplierServiceObject() override;
 
     // XInterface

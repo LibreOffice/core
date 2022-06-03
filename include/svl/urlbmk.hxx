@@ -21,6 +21,7 @@
 #define INCLUDED_SVL_URLBMK_HXX
 
 #include <rtl/ustring.hxx>
+#include <utility>
 
 
 /**
@@ -36,8 +37,8 @@ class INetBookmark
     OUString          aDescr;
 
 public:
-                    INetBookmark( const OUString &rUrl, const OUString &rDescr )
-                        : aUrl( rUrl ), aDescr( rDescr )
+                    INetBookmark( OUString _aUrl, OUString _aDescr )
+                        : aUrl(std::move( _aUrl )), aDescr(std::move( _aDescr ))
                     {}
                     INetBookmark()
                     {}

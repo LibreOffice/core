@@ -27,6 +27,7 @@
 #include <svl/svldllapi.h>
 #include <o3tl/sorted_vector.hxx>
 #include <string_view>
+#include <utility>
 
 // values from com/sun/star/beans/PropertyAttribute
 #define PROPERTY_NONE 0
@@ -44,9 +45,9 @@ struct SfxItemPropertyMapEntry
     sal_uInt8                           nMemberId;
     PropertyMoreFlags                   nMoreFlags;
 
-    SfxItemPropertyMapEntry(const OUString & _aName, sal_uInt16 _nWID, css::uno::Type const & _rType,
+    SfxItemPropertyMapEntry(OUString _aName, sal_uInt16 _nWID, css::uno::Type const & _rType,
                                sal_Int16 _nFlags, sal_uInt8 const _nMemberId, PropertyMoreFlags _nMoreFlags = PropertyMoreFlags::NONE)
-        : aName(      _aName )
+        : aName(std::move( _aName ))
         , aType(     _rType )
         , nWID(      _nWID )
         , nFlags(    _nFlags )

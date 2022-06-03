@@ -90,7 +90,7 @@ private:
     mutable ::comphelper::SharedMutex          m_aMutex;
 
 public:
-                    SvNumberFormatsObj(SvNumberFormatsSupplierObj& pParent, ::comphelper::SharedMutex const & _rMutex);
+                    SvNumberFormatsObj(SvNumberFormatsSupplierObj& pParent, ::comphelper::SharedMutex _aMutex);
     virtual         ~SvNumberFormatsObj() override;
 
 
@@ -140,7 +140,7 @@ private:
     mutable ::comphelper::SharedMutex   m_aMutex;
 
 public:
-    SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uLong nK, const ::comphelper::SharedMutex& _rMutex );
+    SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uLong nK, ::comphelper::SharedMutex _aMutex );
     virtual         ~SvNumberFormatObj() override;
 
     // XPropertySet
@@ -186,7 +186,7 @@ private:
     mutable ::comphelper::SharedMutex   m_aMutex;
 
 public:
-                    SvNumberFormatSettingsObj( SvNumberFormatsSupplierObj& rParent, const ::comphelper::SharedMutex& _rMutex);
+                    SvNumberFormatSettingsObj( SvNumberFormatsSupplierObj& rParent, ::comphelper::SharedMutex _aMutex);
     virtual         ~SvNumberFormatSettingsObj() override;
 
 

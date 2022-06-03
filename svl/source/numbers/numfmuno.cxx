@@ -36,6 +36,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/itemprop.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -344,9 +345,9 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServic
     return { "com.sun.star.util.NumberFormatter" };
 }
 
-SvNumberFormatsObj::SvNumberFormatsObj( SvNumberFormatsSupplierObj& _rParent, ::comphelper::SharedMutex const & _rMutex )
+SvNumberFormatsObj::SvNumberFormatsObj( SvNumberFormatsSupplierObj& _rParent, ::comphelper::SharedMutex  _aMutex )
     :m_xSupplier( &_rParent )
-    ,m_aMutex( _rMutex )
+    ,m_aMutex(std::move( _aMutex ))
 {
 }
 
@@ -584,10 +585,10 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
     return { "com.sun.star.util.NumberFormats" };
 }
 
-SvNumberFormatObj::SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uLong nK, const ::comphelper::SharedMutex& _rMutex )
+SvNumberFormatObj::SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uLong nK, ::comphelper::SharedMutex _aMutex )
     :m_xSupplier( &rParent )
     ,nKey( nK )
-    ,m_aMutex( _rMutex )
+    ,m_aMutex(std::move( _aMutex ))
 {
 }
 
@@ -794,9 +795,9 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
     return { "com.sun.star.util.NumberFormatProperties" };
 }
 
-SvNumberFormatSettingsObj::SvNumberFormatSettingsObj( SvNumberFormatsSupplierObj& rParent, const ::comphelper::SharedMutex& _rMutex )
+SvNumberFormatSettingsObj::SvNumberFormatSettingsObj( SvNumberFormatsSupplierObj& rParent, ::comphelper::SharedMutex _aMutex )
     :m_xSupplier( &rParent )
-    ,m_aMutex( _rMutex )
+    ,m_aMutex(std::move( _aMutex ))
 {
 }
 

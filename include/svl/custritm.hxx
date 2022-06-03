@@ -23,6 +23,7 @@
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 #include <cassert>
+#include <utility>
 
 class SVL_DLLPUBLIC CntUnencodedStringItem: public SfxPoolItem
 {
@@ -33,8 +34,8 @@ public:
     CntUnencodedStringItem(sal_uInt16 which): SfxPoolItem(which)
     {}
 
-    CntUnencodedStringItem(sal_uInt16 which, const OUString & rTheValue):
-        SfxPoolItem(which), m_aValue(rTheValue)
+    CntUnencodedStringItem(sal_uInt16 which, OUString aTheValue):
+        SfxPoolItem(which), m_aValue(std::move(aTheValue))
     {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;

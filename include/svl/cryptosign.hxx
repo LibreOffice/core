@@ -9,6 +9,7 @@
 
 #include <sal/types.h>
 
+#include <utility>
 #include <vector>
 
 #include <rtl/strbuf.hxx>
@@ -48,8 +49,8 @@ class SVL_DLLPUBLIC Signing
 {
 public:
 
-    Signing(const css::uno::Reference<css::security::XCertificate>& xCertificate) :
-        m_xCertificate(xCertificate)
+    Signing(css::uno::Reference<css::security::XCertificate> xCertificate) :
+        m_xCertificate(std::move(xCertificate))
     {
     }
 

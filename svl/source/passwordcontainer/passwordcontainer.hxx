@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVL_SOURCE_PASSWORDCONTAINER_PASSWORDCONTAINER_HXX
 #define INCLUDED_SVL_SOURCE_PASSWORDCONTAINER_PASSWORDCONTAINER_HXX
 
+#include <utility>
 #include <vector>
 #include <map>
 #include <optional>
@@ -73,19 +74,19 @@ class NamePasswordRecord
 
 public:
 
-    NamePasswordRecord( const OUString& aName )
-        : m_aName( aName )
+    NamePasswordRecord( OUString aName )
+        : m_aName(std::move( aName ))
         , m_bHasMemoryPasswords( false )
         , m_bHasPersistentPassword( false )
     {
     }
 
-    NamePasswordRecord( const OUString& aName, const OUString& aPersistentList, const OUString& aPersistentIV )
-        : m_aName( aName )
+    NamePasswordRecord( OUString aName, OUString aPersistentList, OUString aPersistentIV )
+        : m_aName(std::move( aName ))
         , m_bHasMemoryPasswords( false )
         , m_bHasPersistentPassword( true )
-        , m_aPersistentPassword( aPersistentList )
-        , m_aPersistentIV( aPersistentIV )
+        , m_aPersistentPassword(std::move( aPersistentList ))
+        , m_aPersistentIV(std::move( aPersistentIV ))
     {
     }
 

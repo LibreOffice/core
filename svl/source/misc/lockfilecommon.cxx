@@ -41,14 +41,15 @@
 #include <salhelper/linkhelper.hxx>
 
 #include <svl/lockfilecommon.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
 namespace svt {
 
 
-LockFileCommon::LockFileCommon(const OUString& aLockFileURL)
-    : m_aURL(aLockFileURL)
+LockFileCommon::LockFileCommon(OUString aLockFileURL)
+    : m_aURL(std::move(aLockFileURL))
 {
 }
 

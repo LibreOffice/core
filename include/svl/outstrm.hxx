@@ -44,7 +44,7 @@ class SVL_DLLPUBLIC SvOutputStream final : public SvStream
     SVL_DLLPRIVATE virtual void SetSize(sal_uInt64) override;
 
 public:
-    SvOutputStream(css::uno::Reference<css::io::XOutputStream> const& rTheStream);
+    SvOutputStream(css::uno::Reference<css::io::XOutputStream> xTheStream);
 
     virtual ~SvOutputStream() override;
 };
