@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <dp_misc.h>
 #include <dp_persmap.h>
 #include <rtl/byteseq.hxx>
@@ -175,7 +179,7 @@ void PersistentMap::readAll()
     if( nBytesRead != sizeof(aHeaderBytes))
         return;
     // check header magic
-    for( int i = 0; i < int(sizeof(PmapMagic)); ++i)
+    for( std::size_t i = 0; i < sizeof(PmapMagic); ++i)
         if( aHeaderBytes[i] != PmapMagic[i])
             return;
 
