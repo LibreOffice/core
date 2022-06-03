@@ -471,13 +471,14 @@ static sal_Bool send_args(int fd, rtl_uString const *pCwdPath)
     }
 
     nLen = rtl_string_getLength(pOut) + 1;
-    bResult = (write(fd, rtl_string_getStr(pOut), nLen) == (ssize_t) nLen);
+    ssize_t n = write(fd, rtl_string_getStr(pOut), nLen);
+    bResult = (n >= 0 && (size_t) n == nLen);
 
     if ( bResult )
     {
         char resp[SAL_N_ELEMENTS("InternalIPC::ProcessingDone")];
-        ssize_t n = read(fd, resp, SAL_N_ELEMENTS(resp));
-        bResult = n == (ssize_t) SAL_N_ELEMENTS(resp)
+        n = read(fd, resp, SAL_N_ELEMENTS(resp));
+        bResult = n == SAL_N_ELEMENTS(resp)
             && (memcmp(
                     resp, "InternalIPC::ProcessingDone",
                     SAL_N_ELEMENTS(resp))
