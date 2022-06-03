@@ -9101,6 +9101,18 @@ public:
         }
     }
 
+    virtual void set_show_tabs(bool bShow) override
+    {
+        if (m_bOverFlowBoxActive)
+        {
+            unsplit_notebooks();
+            reset_split_data();
+        }
+
+        gtk_notebook_set_show_tabs(m_pNotebook, bShow);
+        gtk_notebook_set_show_tabs(m_pOverFlowNotebook, bShow);
+    }
+
     virtual void disable_notify_events() override
     {
         g_signal_handler_block(m_pNotebook, m_nSwitchPageSignalId);
