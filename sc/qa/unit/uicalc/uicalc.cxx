@@ -2950,6 +2950,22 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf99386)
     CPPUNIT_ASSERT_EQUAL(OUString("This"), pDoc->GetString(ScAddress(1, 1, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf149378)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "=MINVERSE(A1:C3)");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: {=MINVERSE(A1:C3)}
+    // - Actual  : =MINVERSE(A1:C3)
+    CPPUNIT_ASSERT_EQUAL(OUString("{=MINVERSE(A1:C3)}"), pDoc->GetFormula(0, 0, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126926)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
