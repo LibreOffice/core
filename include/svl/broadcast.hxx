@@ -21,6 +21,7 @@
 
 #include <svl/svldllapi.h>
 
+#include <cstddef>
 #include <vector>
 
 class SvtListener;
@@ -84,7 +85,7 @@ private:
 
     mutable sal_Int32 mnEmptySlots;
     // The first item in maListeners that is not sorted. The container can become large, so this optimizes sorting.
-    mutable sal_Int32 mnListenersFirstUnsorted;
+    mutable std::size_t mnListenersFirstUnsorted;
     /// Indicate that this broadcaster will be destructed (we indicate this on all ScColumn's broadcasters during the ScTable destruction, eg.)
     bool mbAboutToDie:1;
     bool mbDisposing:1;

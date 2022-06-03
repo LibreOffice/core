@@ -101,7 +101,7 @@ void SvtBroadcaster::Normalize() const
         mnEmptySlots = 0;
     }
 
-    if (mnListenersFirstUnsorted != static_cast<sal_Int32>(maListeners.size()))
+    if (mnListenersFirstUnsorted != maListeners.size())
     {
         sortListeners(maListeners, mnListenersFirstUnsorted);
         mnListenersFirstUnsorted = maListeners.size();
@@ -121,7 +121,7 @@ void SvtBroadcaster::Add( SvtListener* p )
     if (mbDisposing || mbAboutToDie)
         return;
     // Avoid normalizing if the item appended keeps the container sorted.
-    auto nRealSize = static_cast<sal_Int32>(maListeners.size() - mnEmptySlots);
+    auto nRealSize = maListeners.size() - mnEmptySlots;
     auto bSorted = mnListenersFirstUnsorted == nRealSize;
     if (maListeners.empty() || (bSorted && maListeners.back() <= p))
     {
@@ -160,7 +160,7 @@ void SvtBroadcaster::Remove( SvtListener* p )
     }
 
     // We only need to fully normalize if one or more Add()s have been performed that make the array unsorted.
-    auto nRealSize = static_cast<sal_Int32>(maListeners.size() - mnEmptySlots);
+    auto nRealSize = maListeners.size() - mnEmptySlots;
     if (mnListenersFirstUnsorted != nRealSize || (maListeners.size() > 1024 && maListeners.size() / nRealSize > 16))
         Normalize();
 
