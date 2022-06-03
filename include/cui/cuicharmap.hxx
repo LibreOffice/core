@@ -148,7 +148,7 @@ private:
 
 public:
     SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
-                    const css::uno::Reference<css::frame::XFrame>& rFrame);
+                    css::uno::Reference<css::frame::XFrame> xFrame);
     virtual short run() override;
 
     void set_title(const OUString& rTitle) { m_xDialog->set_title(rTitle); }

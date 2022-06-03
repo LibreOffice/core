@@ -89,7 +89,7 @@ namespace svx
         SfxItemSet  m_aRegistrationItems;
 
     protected:
-        RegistrationItemSetHolder( const SfxItemSet& _rMasterSet );
+        RegistrationItemSetHolder( SfxItemSet _aMasterSet );
         ~RegistrationItemSetHolder();
 
     protected:

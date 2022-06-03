@@ -24,6 +24,7 @@
 #include <map>
 
 #include <svl/poolitem.hxx>
+#include <utility>
 
 
 namespace svx
@@ -41,8 +42,8 @@ namespace svx
         {
         }
 
-        DatabaseRegistration( const OUString& _rLocation, const bool _bReadOnly )
-            :sLocation( _rLocation )
+        DatabaseRegistration( OUString _aLocation, const bool _bReadOnly )
+            :sLocation(std::move( _aLocation ))
             ,bReadOnly( _bReadOnly )
         {
         }

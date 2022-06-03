@@ -99,6 +99,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <unotools/viewoptions.hxx>
+#include <utility>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
@@ -1954,11 +1955,11 @@ short OfaTreeOptionsDialog::run()
 
 // class ExtensionsTabPage -----------------------------------------------
 ExtensionsTabPage::ExtensionsTabPage(
-    weld::Container* pParent, const OUString& rPageURL,
-    const OUString& rEvtHdl, const Reference< awt::XContainerWindowProvider >& rProvider )
+    weld::Container* pParent, OUString aPageURL,
+    OUString aEvtHdl, const Reference< awt::XContainerWindowProvider >& rProvider )
     : m_pContainer(pParent)
-    , m_sPageURL(rPageURL)
-    , m_sEventHdl(rEvtHdl)
+    , m_sPageURL(std::move(aPageURL))
+    , m_sEventHdl(std::move(aEvtHdl))
     , m_xWinProvider(rProvider)
 {
 }

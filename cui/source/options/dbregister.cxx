@@ -29,6 +29,7 @@
 #include <tools/debug.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/itemset.hxx>
@@ -51,8 +52,8 @@ using namespace ::svt;
 
 // class RegistrationItemSetHolder  -------------------------------------------------
 
-RegistrationItemSetHolder::RegistrationItemSetHolder( const SfxItemSet& _rMasterSet )
-    :m_aRegistrationItems( _rMasterSet )
+RegistrationItemSetHolder::RegistrationItemSetHolder( SfxItemSet _aMasterSet )
+    :m_aRegistrationItems(std::move( _aMasterSet ))
 {
     DbRegisteredNamesConfig::GetOptions( m_aRegistrationItems );
 }

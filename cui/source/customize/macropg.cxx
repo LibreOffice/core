@@ -33,6 +33,7 @@
 #include <strings.hrc>
 #include <comphelper/namedvaluecollection.hxx>
 #include <o3tl/string_view.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -625,9 +626,9 @@ IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-AssignComponentDialog::AssignComponentDialog(weld::Window* pParent, const OUString& rURL)
+AssignComponentDialog::AssignComponentDialog(weld::Window* pParent, OUString aURL)
     : GenericDialogController(pParent, "cui/ui/assigncomponentdialog.ui", "AssignComponent")
-    , maURL( rURL )
+    , maURL(std::move( aURL ))
     , mxMethodEdit(m_xBuilder->weld_entry("methodEntry"))
     , mxOKButton(m_xBuilder->weld_button("ok"))
 {

@@ -65,7 +65,7 @@ public:
 
                                 SearchThread(SearchProgress* pProgress,
                                              TPGalleryThemeProperties* pBrowser,
-                                             const INetURLObject& rStartURL);
+                                             INetURLObject aStartURL);
 };
 
 class SearchProgress : public weld::GenericDialogController
@@ -81,7 +81,7 @@ private:
     DECL_LINK(ClickCancelBtn, weld::Button&, void);
 
 public:
-    SearchProgress(weld::Window* pParent, TPGalleryThemeProperties* pTabPage, const INetURLObject& rStartURL);
+    SearchProgress(weld::Window* pParent, TPGalleryThemeProperties* pTabPage, INetURLObject aStartURL);
     void LaunchThread();
     virtual ~SearchProgress() override;
 

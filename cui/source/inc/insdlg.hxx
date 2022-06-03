@@ -37,7 +37,7 @@ protected:
 
     InsertObjectDialog_Impl(weld::Window * pParent,
         const OUString& rUIXMLDescription, const OString& rID,
-        const css::uno::Reference < css::embed::XStorage >& xStorage);
+        css::uno::Reference < css::embed::XStorage > xStorage);
 public:
     const css::uno::Reference<css::embed::XEmbeddedObject>& GetObject() const { return m_xObj; }
     virtual css::uno::Reference<css::io::XInputStream> GetIconIfIconified(OUString* pGraphicMediaType);
