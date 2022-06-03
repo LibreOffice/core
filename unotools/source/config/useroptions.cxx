@@ -221,7 +221,7 @@ OUString SvtUserOptions::Impl::GetFullName () const
         sFullName += o3tl::trim(GetToken(UserOptToken::FathersName));
         if (!sFullName.isEmpty())
             sFullName += " ";
-        sFullName += GetToken(UserOptToken::LastName);
+        sFullName += o3tl::trim(GetToken(UserOptToken::LastName));
     }
     else
     {
@@ -230,14 +230,14 @@ OUString SvtUserOptions::Impl::GetFullName () const
             sFullName = GetToken(UserOptToken::LastName).trim();
             if (!sFullName.isEmpty())
                 sFullName += " ";
-            sFullName += GetToken(UserOptToken::FirstName);
+            sFullName += o3tl::trim(GetToken(UserOptToken::FirstName));
         }
         else
         {
             sFullName = GetToken(UserOptToken::FirstName).trim();
             if (!sFullName.isEmpty())
                 sFullName += " ";
-            sFullName += GetToken(UserOptToken::LastName);
+            sFullName += o3tl::trim(GetToken(UserOptToken::LastName));
         }
     }
     sFullName = sFullName.trim();
