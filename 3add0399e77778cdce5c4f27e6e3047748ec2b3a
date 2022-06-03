@@ -109,6 +109,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1800161a_b620c067",
+        "filename": "cui/source/tabpages/chardlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-06-03T10:19:40Z",
+      "side": 1,
+      "message": "Yes, the tab \"Western\" should be hidden without CJK and/or CTL. I added this tab only to achieve pixel-perfect alignment of controls and guess many non-CJK/CTL users don\u0027t know what Western means.",
+      "parentUuid": "0cdbdae1_813c8bbb",
+      "revId": "3add0399e77778cdce5c4f27e6e3047748ec2b3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8ca6d398_3efec11f",
         "filename": "cui/uiconfig/ui/charnamepage.ui",
         "patchSetId": 3
