@@ -771,17 +771,15 @@ void SbRtl_Hex(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    else
-    {
-        SbxVariableRef pArg = rPar.Get(1);
-        // converting value to unsigned and limit to 2 or 4 byte representation
-        sal_uInt32 nVal = pArg->IsInteger() ?
-            static_cast<sal_uInt16>(pArg->GetInteger()) :
-            static_cast<sal_uInt32>(pArg->GetLong());
-        rPar.Get(0)->PutString(OUString::number(nVal, 16).toAsciiUpperCase());
-    }
+
+    SbxVariableRef pArg = rPar.Get(1);
+    // converting value to unsigned and limit to 2 or 4 byte representation
+    sal_uInt32 nVal = pArg->IsInteger() ?
+        static_cast<sal_uInt16>(pArg->GetInteger()) :
+        static_cast<sal_uInt32>(pArg->GetLong());
+    rPar.Get(0)->PutString(OUString::number(nVal, 16).toAsciiUpperCase());
 }
 
 void SbRtl_FuncCaller(StarBASIC *, SbxArray & rPar, bool)
