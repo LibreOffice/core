@@ -127,6 +127,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "983c317e_d698057a",
+        "filename": "cui/source/tabpages/chardlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-03T10:30:48Z",
+      "side": 1,
+      "message": "alright, then https://gerrit.libreoffice.org/c/core/+/135350/1 is something (additional) that should work. A new \"set_show_tabs(true/false)\" which can be called on weld::Notebook as returned from weld_notebook(\"whatever_it_was)",
+      "parentUuid": "1800161a_b620c067",
+      "revId": "3add0399e77778cdce5c4f27e6e3047748ec2b3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8ca6d398_3efec11f",
         "filename": "cui/uiconfig/ui/charnamepage.ui",
         "patchSetId": 3
