@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <comphelper/scopeguard.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/animate/Animation.hxx>
@@ -104,6 +105,13 @@ static toff_t tiff_size(thandle_t handle)
 
 bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
 {
+    auto origErrorHandler = TIFFSetErrorHandler(nullptr);
+    auto origWarningHandler = TIFFSetWarningHandler(nullptr);
+    comphelper::ScopeGuard restoreDefaultHandlers([&]() {
+        TIFFSetErrorHandler(origErrorHandler);
+        TIFFSetWarningHandler(origWarningHandler);
+    });
+
     Context aContext(rTIFF, rTIFF.remainingSize());
     TIFF* tif = TIFFClientOpen("libtiff-svstream", "r", &aContext,
                                tiff_read, tiff_write,
