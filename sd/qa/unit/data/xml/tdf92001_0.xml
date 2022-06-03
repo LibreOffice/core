@@ -15,7 +15,10 @@
   </Transformation>
   <CustomShapeGeometry>
    <PropertyValue name="AdjustmentValues">
-    <AdjustmentValues/>
+    <AdjustmentValues>
+     <EnhancedCustomShapeAdjustmentValue value="47433" propertyState="DIRECT_VALUE"/>
+     <EnhancedCustomShapeAdjustmentValue value="90654" propertyState="DIRECT_VALUE"/>
+    </AdjustmentValues>
    </PropertyValue>
    <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
@@ -27,31 +30,31 @@
       <Coordinates>
        <EnhancedCustomShapeParameterPair>
         <First value="0" type="0"/>
-        <Second value="5677" type="0"/>
+        <Second value="8" type="1"/>
        </EnhancedCustomShapeParameterPair>
        <EnhancedCustomShapeParameterPair>
-        <First value="8631" type="0"/>
-        <Second value="5677" type="0"/>
+        <First value="5" type="1"/>
+        <Second value="8" type="1"/>
        </EnhancedCustomShapeParameterPair>
        <EnhancedCustomShapeParameterPair>
-        <First value="8631" type="0"/>
+        <First value="5" type="1"/>
         <Second value="0" type="0"/>
        </EnhancedCustomShapeParameterPair>
        <EnhancedCustomShapeParameterPair>
-        <First value="21600" type="0"/>
-        <Second value="10800" type="0"/>
+        <First value="14" type="1"/>
+        <Second value="7" type="1"/>
        </EnhancedCustomShapeParameterPair>
        <EnhancedCustomShapeParameterPair>
-        <First value="8631" type="0"/>
-        <Second value="21600" type="0"/>
+        <First value="5" type="1"/>
+        <Second value="13" type="1"/>
        </EnhancedCustomShapeParameterPair>
        <EnhancedCustomShapeParameterPair>
-        <First value="8631" type="0"/>
-        <Second value="15923" type="0"/>
+        <First value="5" type="1"/>
+        <Second value="9" type="1"/>
        </EnhancedCustomShapeParameterPair>
        <EnhancedCustomShapeParameterPair>
         <First value="0" type="0"/>
-        <Second value="15923" type="0"/>
+        <Second value="9" type="1"/>
        </EnhancedCustomShapeParameterPair>
       </Coordinates>
      </PropertyValue>
@@ -63,11 +66,12 @@
        <EnhancedCustomShapeSegment command="5" count="0"/>
       </Segments>
      </PropertyValue>
-     <PropertyValue name="SubViewSize" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
-   <PropertyValue name="Type" value="ooxml-non-primitive" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" value="ooxml-rightArrow" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="0" height="0"/>
    </PropertyValue>
