@@ -148,7 +148,7 @@ hchar_string DateCode::GetString()
     format[DATE_SIZE - 1] = 0;
     fmt = format[0] ? format : defaultform;
 
-    for (; *fmt && (static_cast<int>(ret.size()) < DATE_SIZE); fmt++)
+    for (; *fmt && (ret.size() < DATE_SIZE); fmt++)
     {
         form = add_zero ? "%02d" : "%d";
 
