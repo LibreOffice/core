@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e527b3a6_803738a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-03T09:05:55Z",
+      "side": 1,
+      "message": "this seems to work reasonably well to support a \"show-tabs\" of false",
+      "revId": "d25fe42e5c62db4279f417ecf43810ffe9007604",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
