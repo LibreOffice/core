@@ -66,7 +66,7 @@ sfx2::SvBaseLink::UpdateResult ScWebServiceLink::DataChanged(const OUString&, co
 
     xStream->closeInput();
 
-    aResult = OStringToOUString(aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+    aResult = OStringToOUString(aBuffer, RTL_TEXTENCODING_UTF8);
     bHasResult = true;
 
     //  Something happened...
