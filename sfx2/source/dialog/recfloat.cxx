@@ -59,7 +59,7 @@ SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl(vcl::Window* pParen
     vcl::WindowData aState;
     aState.setMask(vcl::WindowDataMask::Pos);
     aState.setPos(aPos);
-    pDlg->set_window_state(aState.toStr());
+    pDlg->set_window_state(aState.toStr(false));
 
     pFloatDlg->Initialize(pInfo);
 }

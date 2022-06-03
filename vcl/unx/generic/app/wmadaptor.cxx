@@ -1417,9 +1417,11 @@ void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType 
 /*
  *  WMAdaptor::maximizeFrame
  */
-
-void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVertical ) const
+void WMAdaptor::maximizeFrame(X11SalFrame* pFrame, const bool bHorizontal, const bool bVertical) const
 {
+    if (pFrame->mbMaximizedVert == bVertical && pFrame->mbMaximizedHorz == bHorizontal)
+        return;
+
     pFrame->mbMaximizedVert = bVertical;
     pFrame->mbMaximizedHorz = bHorizontal;
 
@@ -1460,8 +1462,8 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
                                  aScreenSize.Height() - rGeom.topDecoration() - rGeom.bottomDecoration() )
                            );
 
-        const tools::Rectangle aReferenceGeometry = !pFrame->maRestorePosSize.IsEmpty() ?
-                                                    pFrame->maRestorePosSize : rGeom.posSize();
+        const tools::Rectangle aReferenceGeometry = pFrame->maGeometry.savedPosSizeRefs() ?
+                                                    pFrame->maGeometry.savedPosSize() : rGeom.posSize();
         if( ! bHorizontal )
         {
             aTarget.SetSize({ aReferenceGeometry.GetWidth(), aTarget.GetHeight() });
@@ -1483,8 +1485,11 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
                             );
         }
 
-        if( pFrame->maRestorePosSize.IsEmpty() )
-            pFrame->maRestorePosSize = aRestore;
+        if (!pFrame->maGeometry.savedPosSizeRefs())
+        {
+            pFrame->maGeometry.setPosSize(aRestore);
+            pFrame->maGeometry.refOrSavePosSize();
+        }
 
         pFrame->SetPosSize( aTarget );
         pFrame->nWidth_     = aTarget.GetWidth();
@@ -1500,8 +1505,8 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
     }
     else
     {
-        pFrame->SetPosSize( pFrame->maRestorePosSize );
-        pFrame->maRestorePosSize = tools::Rectangle();
+        pFrame->SetPosSize(pFrame->maGeometry.savedPosSize());
+        pFrame->maGeometry.unrefOrClearSavedPosSize();
         pFrame->nWidth_             = rGeom.width();
         pFrame->nHeight_            = rGeom.height();
     }
@@ -1511,18 +1516,18 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
  *  NetWMAdaptor::maximizeFrame
  *  changes _NET_WM_STATE by sending a client message
  */
-
-void NetWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVertical ) const
+void NetWMAdaptor::maximizeFrame(X11SalFrame* pFrame, const bool bHorizontal, const bool bVertical) const
 {
-    pFrame->mbMaximizedVert = bVertical;
-    pFrame->mbMaximizedHorz = bHorizontal;
-
     if( m_aWMAtoms[ NET_WM_STATE ]
         && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ]
         && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_HORZ ]
         && ( pFrame->nStyle_ & ~SalFrameStyleFlags::DEFAULT )
         )
     {
+        const bool bWasAnyMax = pFrame->mbMaximizedHorz || pFrame->mbMaximizedVert;
+        pFrame->mbMaximizedVert = bVertical;
+        pFrame->mbMaximizedHorz = bHorizontal;
+
         if( pFrame->bMapped_ )
         {
             // window already mapped, send WM a message
@@ -1561,13 +1566,14 @@ void NetWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bV
             // window not mapped yet, set _NET_WM_STATE directly
             setNetWMState( pFrame );
         }
-        if( !bHorizontal && !bVertical )
-            pFrame->maRestorePosSize = tools::Rectangle();
-        else if( pFrame->maRestorePosSize.IsEmpty() )
+
+        const bool bHasAnyMax = bHorizontal && bVertical;
+        if (bWasAnyMax != bHasAnyMax)
         {
-            const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
-            pFrame->maRestorePosSize =
-                tools::Rectangle( Point( rGeom.x(), rGeom.y() ), Size( rGeom.width(), rGeom.height() ) );
+            if (!bHasAnyMax)
+                pFrame->maGeometry.unrefOrClearSavedPosSize();
+            else
+                pFrame->maGeometry.refOrSavePosSize();
         }
     }
     else
@@ -1578,16 +1584,16 @@ void NetWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bV
  *  GnomeWMAdaptor::maximizeFrame
  *  changes _WIN_STATE by sending a client message
  */
-
-void GnomeWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVertical ) const
+void GnomeWMAdaptor::maximizeFrame(X11SalFrame* pFrame, const bool bHorizontal, const bool bVertical) const
 {
-    pFrame->mbMaximizedVert = bVertical;
-    pFrame->mbMaximizedHorz = bHorizontal;
-
     if( m_aWMAtoms[ WIN_STATE ]
         && ( pFrame->nStyle_ & ~SalFrameStyleFlags::DEFAULT )
         )
     {
+        const bool bWasAnyMax = pFrame->mbMaximizedHorz || pFrame->mbMaximizedVert;
+        pFrame->mbMaximizedVert = bVertical;
+        pFrame->mbMaximizedHorz = bHorizontal;
+
         if( pFrame->bMapped_ )
         {
              // window already mapped, send WM a message
@@ -1615,13 +1621,13 @@ void GnomeWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool 
             // window not mapped yet, set _WIN_STATE directly
             setGnomeWMState( pFrame );
 
-        if( !bHorizontal && !bVertical )
-            pFrame->maRestorePosSize = tools::Rectangle();
-        else if( pFrame->maRestorePosSize.IsEmpty() )
+        const bool bHasAnyMax = bHorizontal && bVertical;
+        if (bWasAnyMax != bHasAnyMax)
         {
-            const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
-            pFrame->maRestorePosSize =
-                tools::Rectangle( Point( rGeom.x(), rGeom.y() ), Size( rGeom.width(), rGeom.height() ) );
+            if (!bHasAnyMax)
+                pFrame->maGeometry.unrefOrClearSavedPosSize();
+            else
+                pFrame->maGeometry.refOrSavePosSize();
         }
     }
     else
@@ -1753,6 +1759,7 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
     int nHandled = 1;
     if( pEvent->atom == m_aWMAtoms[ NET_WM_STATE ] )
     {
+        const bool bWasAnyMax = pFrame->mbMaximizedHorz || pFrame->mbMaximizedVert;
         pFrame->mbMaximizedHorz = pFrame->mbMaximizedVert = false;
 
         if( pEvent->state == PropertyNewValue )
@@ -1796,16 +1803,15 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
             } while( nBytesLeft > 0 );
         }
 
-        if( ! (pFrame->mbMaximizedHorz || pFrame->mbMaximizedVert ) )
-            pFrame->maRestorePosSize = tools::Rectangle();
-        else
+        const bool bHasAnyMax = pFrame->mbMaximizedHorz || pFrame->mbMaximizedVert;
+        if (bWasAnyMax != bHasAnyMax)
         {
-            const SalFrameGeometry& rGeom = pFrame->GetUnmirroredGeometry();
-            // the current geometry may already be changed by the corresponding
-            // ConfigureNotify, but this cannot be helped
-            pFrame->maRestorePosSize =
-                tools::Rectangle( Point( rGeom.x(), rGeom.y() ),
-                           Size( rGeom.width(), rGeom.height() ) );
+            if (!bHasAnyMax)
+                pFrame->maGeometry.unrefOrClearSavedPosSize();
+            else
+                // the current geometry may already be changed by the corresponding
+                // ConfigureNotify, but this cannot be helped
+                pFrame->maGeometry.refOrSavePosSize();
         }
     }
     else if( pEvent->atom == m_aWMAtoms[ NET_WM_DESKTOP ] )
@@ -1826,6 +1832,7 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
     int nHandled = 1;
     if( pEvent->atom == m_aWMAtoms[ WIN_STATE ] )
     {
+        const bool bWasAnyMax = pFrame->mbMaximizedHorz || pFrame->mbMaximizedVert;
         pFrame->mbMaximizedHorz = pFrame->mbMaximizedVert = false;
 
         if( pEvent->state == PropertyNewValue )
@@ -1859,16 +1866,15 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
             }
         }
 
-        if( ! (pFrame->mbMaximizedHorz || pFrame->mbMaximizedVert ) )
-            pFrame->maRestorePosSize = tools::Rectangle();
-        else
+        const bool bHasAnyMax = pFrame->mbMaximizedHorz || pFrame->mbMaximizedVert;
+        if (bWasAnyMax != bHasAnyMax)
         {
-            const SalFrameGeometry& rGeom = pFrame->GetUnmirroredGeometry();
-            // the current geometry may already be changed by the corresponding
-            // ConfigureNotify, but this cannot be helped
-            pFrame->maRestorePosSize =
-                tools::Rectangle( Point( rGeom.x(), rGeom.y() ),
-                           Size( rGeom.width(), rGeom.height() ) );
+            if (!bHasAnyMax)
+                pFrame->maGeometry.unrefOrClearSavedPosSize();
+            else
+                // the current geometry may already be changed by the corresponding
+                // ConfigureNotify, but this cannot be helped
+                pFrame->maGeometry.refOrSavePosSize();
         }
     }
     else if( pEvent->atom == m_aWMAtoms[ NET_WM_DESKTOP ] )

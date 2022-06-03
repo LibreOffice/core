@@ -688,14 +688,8 @@ void QtFrame::SetWindowState(const vcl::WindowData* pState)
     if (!isWindow() || !pState || isChild(true, false))
         return;
 
-    const vcl::WindowDataMask nMaxGeometryMask
-        = vcl::WindowDataMask::PosSize | vcl::WindowDataMask::MaximizedX
-          | vcl::WindowDataMask::MaximizedY | vcl::WindowDataMask::MaximizedWidth
-          | vcl::WindowDataMask::MaximizedHeight;
-
-    if ((pState->mask() & vcl::WindowDataMask::State)
-        && (pState->state() & vcl::WindowState::Maximized) && !isMaximized()
-        && (pState->mask() & nMaxGeometryMask) == nMaxGeometryMask)
+    if ((pState->mask() & vcl::WindowDataMask::PosSizeState) == vcl::WindowDataMask::PosSizeState
+        && (pState->state() & vcl::WindowState::Maximized) && !isMaximized())
     {
         const qreal fRatio = devicePixelRatioF();
         QWidget* const pChild = asChild();

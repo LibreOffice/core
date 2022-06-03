@@ -1970,23 +1970,18 @@ void GtkSalFrame::SetWindowState(const vcl::WindowData* pState)
     if( ! m_pWindow || ! pState || isChild( true, false ) )
         return;
 
-    const vcl::WindowDataMask nMaxGeometryMask = vcl::WindowDataMask::PosSize |
-        vcl::WindowDataMask::MaximizedX | vcl::WindowDataMask::MaximizedY |
-        vcl::WindowDataMask::MaximizedWidth | vcl::WindowDataMask::MaximizedHeight;
-
-    if( (pState->mask() & vcl::WindowDataMask::State) &&
+    if ((pState->mask() & vcl::WindowDataMask::PosSizeState) == vcl::WindowDataMask::PosSizeState &&
         ! ( m_nState & GDK_TOPLEVEL_STATE_MAXIMIZED ) &&
-        (pState->state() & vcl::WindowState::Maximized) &&
-        (pState->mask() & nMaxGeometryMask) == nMaxGeometryMask )
+        (pState->state() & vcl::WindowState::Maximized))
     {
         resizeWindow(pState->width(), pState->height());
         moveWindow(pState->x(), pState->y());
+        maGeometry.refOrSavePosSize();
         m_bDefaultPos = m_bDefaultSize = false;
 
         updateScreenNumber();
 
         m_nState = GdkToplevelState(m_nState | GDK_TOPLEVEL_STATE_MAXIMIZED);
-        m_aRestorePosSize = pState->posSize();
     }
     else if (pState->mask() & vcl::WindowDataMask::PosSize)
     {
@@ -2069,28 +2064,26 @@ namespace
 
 bool GtkSalFrame::GetWindowState(vcl::WindowData* pState)
 {
-    pState->setState(vcl::WindowState::Normal);
-    pState->setMask(vcl::WindowDataMask::PosSizeState);
+    if (!pState)
+        return false;
 
-    // rollup ? gtk 2.2 does not seem to support the shaded state
-    if( m_nState & GDK_TOPLEVEL_STATE_MINIMIZED )
-        pState->rState() |= vcl::WindowState::Minimized;
-    if( m_nState & GDK_TOPLEVEL_STATE_MAXIMIZED )
+    if (maGeometry.savedPosSizeRefs())
     {
-        pState->rState() |= vcl::WindowState::Maximized;
-        pState->setPosSize(m_aRestorePosSize);
-        tools::Rectangle aPosSize = GetPosAndSize(GTK_WINDOW(m_pWindow));
-        pState->SetMaximizedX(aPosSize.Left());
-        pState->SetMaximizedY(aPosSize.Top());
-        pState->SetMaximizedWidth(aPosSize.GetWidth());
-        pState->SetMaximizedHeight(aPosSize.GetHeight());
-        pState->rMask() |= vcl::WindowDataMask::MaximizedX          |
-                           vcl::WindowDataMask::MaximizedY          |
-                           vcl::WindowDataMask::MaximizedWidth      |
-                           vcl::WindowDataMask::MaximizedHeight;
+        pState->setPosSize(maGeometry.savedPosSize());
+        pState->refOrSavePosSize();
     }
+
+    if (m_nState & GDK_TOPLEVEL_STATE_MINIMIZED)
+        pState->setState(vcl::WindowState::Minimized);
+    else if (m_nState & GDK_TOPLEVEL_STATE_MAXIMIZED)
+        pState->setState(vcl::WindowState::Maximized);
     else
-        pState->setPosSize(GetPosAndSize(GTK_WINDOW(m_pWindow)));
+        pState->setState(vcl::WindowState::Normal);
+    if (m_bFullscreen)
+        pState->rState() |= vcl::WindowState::FullScreen;
+
+    pState->setPosSize(GetPosAndSize(GTK_WINDOW(m_pWindow)));
+    pState->setMask(vcl::WindowDataMask::PosSizeState);
 
     return true;
 }
@@ -2334,23 +2327,22 @@ void GtkSalFrame::SetApplicationID( const OUString &rWMClass )
     }
 }
 
-void GtkSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
+void GtkSalFrame::ShowFullScreen(const bool bFullScreen, sal_Int32 nScreen)
 {
-    m_bFullscreen = bFullScreen;
-
-    if( !m_pWindow || isChild() )
+    if (!m_pWindow || isChild() || (bFullScreen == m_bFullscreen))
         return;
+    m_bFullscreen = bFullScreen;
 
     if( bFullScreen )
     {
-        m_aRestorePosSize = GetPosAndSize(GTK_WINDOW(m_pWindow));
+        maGeometry.refOrSavePosSize();
         SetScreen( nScreen, SetType::Fullscreen );
     }
     else
     {
         SetScreen( nScreen, SetType::UnFullscreen,
-                   !m_aRestorePosSize.IsEmpty() ? &m_aRestorePosSize : nullptr );
-        m_aRestorePosSize = tools::Rectangle();
+                   maGeometry.savedPosSizeRefs() ? &maGeometry.rSavedPosSize() : nullptr );
+        maGeometry.unrefOrClearSavedPosSize();
     }
 }
 
@@ -2628,7 +2620,7 @@ SalFrame::SalPointerState GtkSalFrame::GetPointerState()
     gint x, y;
     GdkModifierType aMask;
     gdk_display_get_pointer( getGdkDisplay(), &pScreen, &x, &y, &aMask );
-    aState.maPos = Point( x - maGeometry.x(), y - maGeometry.y() );
+    aState.maPos = { x - maGeometry.x(), y - maGeometry.y() };
     aState.mnState = GetMouseModCode( aMask );
 #endif
     return aState;
@@ -2831,7 +2823,7 @@ gboolean GtkSalFrame::signalTooltipQuery(GtkWidget*, gint /*x*/, gint /*y*/,
     aHelpArea.width = pThis->m_aHelpArea.GetWidth();
     aHelpArea.height = pThis->m_aHelpArea.GetHeight();
     if (AllSettings::GetLayoutRTL())
-        aHelpArea.x = pThis->maGeometry.width()-aHelpArea.width-1-aHelpArea.x;
+        aHelpArea.x = pThis->maGeometry.width() - aHelpArea.width - 1 - aHelpArea.x;
     gtk_tooltip_set_tip_area(tooltip, &aHelpArea);
     return true;
 }
@@ -4434,7 +4426,8 @@ gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer 
     if ((pEvent->window_state.new_window_state & GDK_TOPLEVEL_STATE_MAXIMIZED) &&
         !(pThis->m_nState & GDK_TOPLEVEL_STATE_MAXIMIZED))
     {
-        pThis->m_aRestorePosSize = GetPosAndSize(GTK_WINDOW(pThis->m_pWindow));
+        pThis->maGeometry.setPosSize(GetPosAndSize(GTK_WINDOW(pThis->m_pWindow)));
+        pThis->maGeometry.refOrSavePosSize();
     }
 
     if ((pEvent->window_state.new_window_state & GDK_WINDOW_STATE_WITHDRAWN) &&
@@ -4463,7 +4456,8 @@ void GtkSalFrame::signalWindowState(GdkToplevel* pSurface, GParamSpec*, gpointer
     if ((eNewWindowState & GDK_TOPLEVEL_STATE_MAXIMIZED) &&
         !(pThis->m_nState & GDK_TOPLEVEL_STATE_MAXIMIZED))
     {
-        pThis->m_aRestorePosSize = GetPosAndSize(GTK_WINDOW(pThis->m_pWindow));
+        pThis->maGeometry.setPosSize(GetPosAndSize(GTK_WINDOW(pThis->m_pWindow)));
+        pThis->maGeometry.refOrSavePosSize();
     }
 
     pThis->m_nState = eNewWindowState;

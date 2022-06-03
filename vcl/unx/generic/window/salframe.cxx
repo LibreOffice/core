@@ -1597,10 +1597,6 @@ void X11SalFrame::SetAlwaysOnTop( bool bOnTop )
     }
 }
 
-constexpr auto FRAMESTATE_MASK_MAXIMIZED_GEOMETRY =
-     vcl::WindowDataMask::MaximizedX     | vcl::WindowDataMask::MaximizedY |
-     vcl::WindowDataMask::MaximizedWidth | vcl::WindowDataMask::MaximizedHeight;
-
 void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
 {
     if (pState == nullptr)
@@ -1616,9 +1612,12 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
         if( ! IsChildWindow() &&
             (pState->mask() & vcl::WindowDataMask::PosSizeState) == vcl::WindowDataMask::PosSizeState &&
             (pState->state() & vcl::WindowState::Maximized) &&
-            (pState->mask() & FRAMESTATE_MASK_MAXIMIZED_GEOMETRY) == FRAMESTATE_MASK_MAXIMIZED_GEOMETRY
+            pState->savedPosSizeRefs()
             )
         {
+            maGeometry.setPosSize(pState->savedPosSize());
+            maGeometry.refOrSavePosSize();
+
             XSizeHints* pHints = XAllocSizeHints();
             tools::Long nSupplied = 0;
             XGetWMNormalHints( GetXDisplay(),
@@ -1634,9 +1633,6 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
 
             XMoveResizeWindow(GetXDisplay(), GetShellWindow(), pState->x(), pState->y(),
                               pState->width(), pState->height());
-            // guess maximized geometry from last time
-            maGeometry.setPos({ pState->GetMaximizedX(), pState->GetMaximizedY() });
-            maGeometry.setSize({ pState->GetMaximizedWidth(), pState->GetMaximizedHeight() });
             updateScreenNumber();
         }
         else
@@ -1718,6 +1714,8 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
     if (pState->state() & vcl::WindowState::Maximized)
     {
         nShowState_ = X11ShowState::Normal;
+        maGeometry.setPosSize(pState->savedPosSize());
+        maGeometry.refOrSavePosSize();
         if( ! (pState->state() & (vcl::WindowState::MaximizedHorz|vcl::WindowState::MaximizedVert) ) )
             Maximize();
         else
@@ -1726,7 +1724,6 @@ void X11SalFrame::SetWindowState( const vcl::WindowData *pState )
             bool bVert(pState->state() & vcl::WindowState::MaximizedVert);
             GetDisplay()->getWMAdaptor()->maximizeFrame( this, bHorz, bVert );
         }
-        maRestorePosSize = pState->posSize();
     }
     else if( mbMaximizedHorz || mbMaximizedVert )
         GetDisplay()->getWMAdaptor()->maximizeFrame( this, false, false );
@@ -1751,31 +1748,21 @@ bool X11SalFrame::GetWindowState( vcl::WindowData* pState )
     else
         pState->setState(vcl::WindowState::Normal);
 
-    tools::Rectangle aPosSize;
-    if( maRestorePosSize.IsEmpty() )
-        GetPosSize( aPosSize );
-    else
-        aPosSize = maRestorePosSize;
-
     if( mbMaximizedHorz )
         pState->rState() |= vcl::WindowState::MaximizedHorz;
     if( mbMaximizedVert )
         pState->rState() |= vcl::WindowState::MaximizedVert;
 
-    pState->setPosSize(aPosSize);
-    pState->setMask(vcl::WindowDataMask::PosSizeState);
-
-    if (! maRestorePosSize.IsEmpty() )
+    if (maGeometry.savedPosSizeRefs())
     {
-        GetPosSize( aPosSize );
-        pState->rState() |= vcl::WindowState::Maximized;
-        pState->SetMaximizedX(aPosSize.Left());
-        pState->SetMaximizedY(aPosSize.Top());
-        pState->SetMaximizedWidth(aPosSize.GetWidth());
-        pState->SetMaximizedHeight(aPosSize.GetHeight());
-        pState->rMask() |= FRAMESTATE_MASK_MAXIMIZED_GEOMETRY;
+        pState->setPosSize(maGeometry.savedPosSize());
+        pState->refOrSavePosSize();
     }
 
+    tools::Rectangle aPosSize;
+    GetPosSize(aPosSize);
+    pState->setPosSize(aPosSize);
+    pState->setMask(vcl::WindowDataMask::PosSizeState);
     return true;
 }
 
@@ -2068,7 +2055,7 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             return;
         if( bFullScreen )
         {
-            maRestorePosSize = maGeometry.posSize();
+            maGeometry.refOrSavePosSize();
             tools::Rectangle aRect;
             if( nScreen < 0 || o3tl::make_unsigned(nScreen) >= GetDisplay()->GetXineramaScreens().size() )
                 aRect = tools::Rectangle( Point(0,0), GetDisplay()->GetScreenSize( m_nXScreen ) );
@@ -2095,8 +2082,8 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             mbFullScreen = false;
             m_bIsPartialFullScreen = false;
             bool bVisible = bMapped_;
-            tools::Rectangle aRect = maRestorePosSize;
-            maRestorePosSize = tools::Rectangle();
+            const tools::Rectangle aRect = maGeometry.savedPosSize();
+            maGeometry.unrefOrClearSavedPosSize();
             if( bVisible )
                 Show( false );
             createNewWindow( None, m_nXScreen );

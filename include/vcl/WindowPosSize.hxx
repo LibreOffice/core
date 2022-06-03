@@ -57,12 +57,17 @@ class VCL_PLUGIN_PUBLIC WindowPosSize
     sal_Int32 m_nWidth;
     sal_Int32 m_nHeight;
 
+    // to unify handling of un-maximize
+    tools::Rectangle m_aSavedPosSize;
+    sal_Int32 m_nRestoreCounter;
+
 protected:
     WindowPosSize()
         : m_nX(0)
         , m_nY(0)
         , m_nWidth(1)
         , m_nHeight(1)
+        , m_nRestoreCounter(0)
     {
     }
 
@@ -122,12 +127,47 @@ public:
     }
     // because tools::Rectangle has the ambiguous (Point&, Point&) constructor, which we don't want here
     void setPosSize(const Point& rPos, const Size& rSize) { setPosSize({ rPos, rSize }); }
+
+    // infrastructure to unify handling of un-maximize; especially when saving the maximized window
+    // state, LO needs to save the non-maximized values.
+    // Can't use "Empty", because the Windows VCL plugin uses 0x0 windows.
+    constexpr tools::Rectangle savedPosSize() const { return m_aSavedPosSize; }
+    constexpr const tools::Rectangle& rSavedPosSize() const { return m_aSavedPosSize; }
+    void refOrSavePosSize()
+    {
+        if (m_nRestoreCounter == 0)
+            m_aSavedPosSize = posSize();
+        m_nRestoreCounter++;
+        // only way to get to two is to fullscreen a maximized window
+        assert(m_nRestoreCounter <= 2);
+    }
+    // returns true, if the saved values were released / emptied
+    bool unrefOrClearSavedPosSize()
+    {
+        assert(m_nRestoreCounter > 0);
+        if (m_nRestoreCounter > 1)
+            m_nRestoreCounter--;
+        else if (m_nRestoreCounter == 1)
+        {
+            m_nRestoreCounter--;
+            m_aSavedPosSize.SetEmpty();
+            return true;
+        }
+        return false;
+    }
+    constexpr sal_Int32 savedPosSizeRefs() const
+    {
+        assert(m_nRestoreCounter >= 0);
+        return m_nRestoreCounter;
+    }
 };
 
 inline std::ostream& operator<<(std::ostream& s, const WindowPosSize& rPosSize)
 {
     s << rPosSize.width() << "x" << rPosSize.height() << "@(" << rPosSize.x() << "," << rPosSize.y()
       << ")";
+    if (rPosSize.savedPosSizeRefs())
+        s << "_saved:" << rPosSize.rSavedPosSize() << "^" << rPosSize.savedPosSizeRefs();
     return s;
 }
 

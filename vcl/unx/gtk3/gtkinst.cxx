@@ -6382,7 +6382,7 @@ public:
         if (nMask & vcl::WindowDataMask::Size)
             aData.setSize(get_size());
 
-        return aData.toStr();
+        return aData.toStr(false);
     }
 
     virtual void connect_container_focus_changed(const Link<Container&, void>& rLink) override
