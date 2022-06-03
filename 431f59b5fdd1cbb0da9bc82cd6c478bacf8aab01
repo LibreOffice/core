@@ -16,6 +16,24 @@
       "message": "This works nicely now for kf5 and gen, with tabs in case of western + cjk|ctl and no hidden tabs otherwise. However, with gtk3 I get the wrong font name for Western (Alef / lang \u003d Germany) and if only one of the two non-Western is enabled I get the third in an extra \"column\" at the dialog.",
       "revId": "431f59b5fdd1cbb0da9bc82cd6c478bacf8aab01",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b801f97_d5119885",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-03T15:38:34Z",
+      "side": 1,
+      "message": "\"I get the third in an extra \"column\" at the dialog.\" Moving the remove_page after the \"weld_entry_tree_view\" calls helps there. The font name in the entry+list doesn\u0027t quite look fully right yet, but maybe a little better. I might be able to have another look at that later.",
+      "parentUuid": "6243c905_52988697",
+      "revId": "431f59b5fdd1cbb0da9bc82cd6c478bacf8aab01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
