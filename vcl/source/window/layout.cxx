@@ -285,11 +285,11 @@ void VclBox::setAllocation(const Size &rAllocation)
 // is sent as bitmap but it is rendered from only the visible part
 // when it gets negative, it shrinks instead of expands and it becomes invisible
 
-        if( comphelper::LibreOfficeKit::isActive() )
+        if (nExtraSpace < 0)
         {
-            if (nExtraSpace < 0)
+            SAL_WARN("vcl.layout", "nExtraSpace went negative for VclBox: " << GetHelpId());
+            if (comphelper::LibreOfficeKit::isActive())
             {
-                SAL_WARN("vcl.layout", "nExtraSpace went negative, setting to zero for VclBox: " << GetHelpId());
                 nExtraSpace = 0;
             }
         }
