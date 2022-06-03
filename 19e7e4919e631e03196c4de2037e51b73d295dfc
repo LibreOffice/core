@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c59560a_6ced44ca",
+        "filename": "vcl/source/filter/itiff/itiff.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-03T16:31:08Z",
+      "side": 1,
+      "message": "possibly use a comphelper::ScopeGuard?",
+      "revId": "19e7e4919e631e03196c4de2037e51b73d295dfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac34aee1_33d683ef",
+        "filename": "vcl/source/filter/itiff/itiff.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-03T16:31:08Z",
+      "side": 1,
+      "message": "because there is a return here, and maybe something might throw, too",
+      "revId": "19e7e4919e631e03196c4de2037e51b73d295dfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
