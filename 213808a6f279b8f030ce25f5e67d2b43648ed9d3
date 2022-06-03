@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e099ee16_d1c96d69",
+        "filename": "include/svl/broadcast.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-03T11:47:53Z",
+      "side": 1,
+      "message": "is this really necessary? This class is incredibly performance sensitive, and this messes with the alignment, probably adding about 7 bytes of dead space between mnListenersFirstUnsorted and the bool flags.",
+      "revId": "213808a6f279b8f030ce25f5e67d2b43648ed9d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
