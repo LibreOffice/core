@@ -70,6 +70,7 @@ static void assertMotionPath(std::u16string_view rStr1, std::u16string_view rStr
 class SdOOXMLExportTest2 : public SdModelTestBaseXML
 {
 public:
+    void testTdf149126();
     void testTdf131905();
     void testTdf93883();
     void testTdf91378();
@@ -137,6 +138,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
+    CPPUNIT_TEST(testTdf149126);
     CPPUNIT_TEST(testTdf131905);
     CPPUNIT_TEST(testTdf93883);
     CPPUNIT_TEST(testTdf91378);
@@ -209,6 +211,20 @@ public:
         XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
     }
 };
+
+void SdOOXMLExportTest2::testTdf149126()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf149126.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom", "prst",
+                "triangle");
+
+    xDocShRef->DoClose();
+}
 
 void SdOOXMLExportTest2::testTdf131905()
 {
@@ -661,7 +677,7 @@ void SdOOXMLExportTest2::testPresetShapesExport()
         "donut",
         "adj","val 9601",
         "bevel",
-        "adj","val 42587",
+        "adj","val 42592",
         "foldedCorner",
         "adj","val 10750",
         "verticalScroll",
@@ -692,9 +708,9 @@ void SdOOXMLExportTest2::testPresetShapesExport()
         "adj5","val -22375",
         "adj6","val -134550",
         "blockArc",
-        "adj1","val 13020000",
-        "adj2","val 19380000",
-        "adj3","val 3773",
+        "adj1","val 12975429",
+        "adj2","val 19424571",
+        "adj3","val 3770",
     };
 
     utl::TempFile tempFile;
@@ -720,9 +736,8 @@ void SdOOXMLExportTest2::testPresetShapesExport()
 
 void SdOOXMLExportTest2::testTdf92527()
 {
-    // We draw a diamond in an empty document. A newly created diamond shape does not have
-    // CustomShapeGeometry - Path - Segments property, and previously DrawingML exporter
-    // did not export custom shapes which did not have CustomShapeGeometry - Path - Segments property.
+    // We draw a diamond in an empty document.
+    // If custom shape has name and preset information in OOXML, should be export as preset shape.
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/empty.fodp"), FODG );
     uno::Reference<css::lang::XMultiServiceFactory> xFactory(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape1(xFactory->createInstance("com.sun.star.drawing.CustomShape"), uno::UNO_QUERY);
@@ -759,8 +774,8 @@ void SdOOXMLExportTest2::testTdf92527()
             aCoordinates = rProp.Value.get< uno::Sequence<drawing::EnhancedCustomShapeParameterPair> >();
     }
 
-    // 5 coordinate pairs, 1 MoveTo, 4 LineTo
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aCoordinates.getLength());
+    // 4 coordinate pairs
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aCoordinates.getLength());
     xDocShRef->DoClose();
 }
 
@@ -1050,27 +1065,17 @@ void SdOOXMLExportTest2::testTdf111798()
     xDocShRef->DoClose();
     xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
 
-    const OUString data[][26] =
+    const OUString data[][11] =
     {
         {
             "2700000", "2458080", "2414880", "1439640", "1440000",
-            "moveTo",  "0",     "5400",
-            "lnTo[1]", "16200", "5400",
-            "lnTo[2]", "16200", "0",
-            "lnTo[3]", "21600", "10800",
-            "lnTo[4]", "16200", "21600",
-            "lnTo[5]", "16200", "16200",
-            "lnTo[6]", "0",     "16200"
+            "gd[1]", "adj1", "val 50000",
+            "gd[2]", "adj2", "val 25000"
         },
         {
             "2700000", "6778080", "2414880", "1439640", "1440000",
-            "moveTo",  "5400",  "0",
-            "lnTo[1]", "5400",  "16200",
-            "lnTo[2]", "0",     "16200",
-            "lnTo[3]", "10800", "21600",
-            "lnTo[4]", "21600", "16200",
-            "lnTo[5]", "16200", "16200",
-            "lnTo[6]", "16200", "0"
+            "gd[1]", "adj1", "val 50000",
+            "gd[2]", "adj2", "val 25006"
         }
     };
 
@@ -1090,9 +1095,9 @@ void SdOOXMLExportTest2::testTdf111798()
 
         while (nDataIndex < SAL_N_ELEMENTS(data[nShapeIndex]))
         {
-            const OString sPt = sSpPr + "/a:custGeom/a:pathLst/a:path/a:" + data[nShapeIndex][nDataIndex++].toUtf8() + "/a:pt";
-            assertXPath(pXmlDoc, sPt, "x", data[nShapeIndex][nDataIndex++]);
-            assertXPath(pXmlDoc, sPt, "y", data[nShapeIndex][nDataIndex++]);
+            const OString sGd = sSpPr + "/a:prstGeom/a:avLst/a:" + data[nShapeIndex][nDataIndex++].toUtf8() + "";
+            assertXPath(pXmlDoc, sGd, "name", data[nShapeIndex][nDataIndex++]);
+            assertXPath(pXmlDoc, sGd, "fmla", data[nShapeIndex][nDataIndex++]);
         }
     }
 }
