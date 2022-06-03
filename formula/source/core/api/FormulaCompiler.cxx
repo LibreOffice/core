@@ -2885,8 +2885,8 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
 
     // Propagate a ForceArrayReturn to caller if the called function
     // returns one and the caller so far does not have a stronger array
-    // mode set.
-    if (pCurrentFactorToken->GetInForceArray() == ParamClass::Unknown)
+    // mode set and expects a scalar value for this parameter.
+    if (eParamType == ParamClass::Value && pCurrentFactorToken->GetInForceArray() == ParamClass::Unknown)
     {
         if (IsMatrixFunction( eOp))
             pCurrentFactorToken->SetInForceArray( eArrayReturn);
