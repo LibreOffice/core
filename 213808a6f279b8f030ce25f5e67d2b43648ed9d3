@@ -34,6 +34,24 @@
       "parentUuid": "e099ee16_d1c96d69",
       "revId": "213808a6f279b8f030ce25f5e67d2b43648ed9d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccb2f3a6_2003dee8",
+        "filename": "include/svl/broadcast.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-03T12:31:03Z",
+      "side": 1,
+      "message": "I don\u0027t like unsigned (and thus std::size_t) and I\u0027d prefer there to be less (not more of it). But it\u0027s a preference.\n\nI\u0027m quite happy to add comments to places like this where we need to maintain the existing types. There are very few of them that are sufficiently sensitive that I think it makes a difference.",
+      "parentUuid": "78cbd7f7_72b9d2e1",
+      "revId": "213808a6f279b8f030ce25f5e67d2b43648ed9d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
