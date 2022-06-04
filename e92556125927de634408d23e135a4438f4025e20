@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "615cacdb_8c148dfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-04T15:52:04Z",
+      "side": 1,
+      "message": "\"However, with gtk3 I get the wrong font name for Western\", this seems to good now. There was one liststore \"liststore1\" used in two different places rather than two different liststores. I need to add some sort of assert to alert if that arises.",
+      "revId": "e92556125927de634408d23e135a4438f4025e20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
