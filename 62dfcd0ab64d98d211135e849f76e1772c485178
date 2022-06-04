@@ -229,6 +229,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bd6ad4e8_122b77cf",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-04T11:48:21Z",
+      "side": 1,
+      "message": "Could you please show a screenshot of the dialog in the resulting form after the changes? Only then I could actually see if the changes make sense - note that e.g. I didn\u0027t tell that \"following changes are being agreed upon\", only that I noticed the problem with \"Ignore system input language\" rename.",
+      "parentUuid": "39faec97_6b9a1855",
+      "range": {
+        "startLine": 329,
+        "startChar": 106,
+        "endLine": 329,
+        "endChar": 136
+      },
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d163187f_0c043721",
         "filename": "cui/uiconfig/ui/optlanguagespage.ui",
         "patchSetId": 2
