@@ -218,7 +218,10 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
             aFontDrawPosition.AdjustY((aRectangle.GetHeight() - aPixelSize.Height()) / 2 );
     }
 
-    mrOutputDev.DrawText(aFontDrawPosition, rText);
+    if (m_pFont)
+        m_pFont->QuickDrawText( &mrOutputDev, aFontDrawPosition, rText, 0, rText.getLength(), {} );
+    else
+        mrOutputDev.DrawText(aFontDrawPosition, rText);
 
     mrOutputDev.Pop();
 
