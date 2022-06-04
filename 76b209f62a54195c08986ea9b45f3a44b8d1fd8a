@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea703af8_7e65bf33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-06-04T11:50:10Z",
+      "side": 1,
+      "message": "Exporting as SVGZ doesn\u0027t work because when exporting SVG/SVGZ the filter name is SVMETAFILE instead of SVESVG/SVESVGZ",
+      "revId": "76b209f62a54195c08986ea9b45f3a44b8d1fd8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
