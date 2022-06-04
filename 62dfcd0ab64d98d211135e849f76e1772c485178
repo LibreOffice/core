@@ -122,6 +122,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd875442_223d99a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-04T16:11:34Z",
+      "side": 1,
+      "message": "\u003e Do not apply operating system language to new text\n\n\"Operating system language\" is absolutely confusing: do you mean UI language of OS? In case of Windows, for instance, you may even have system language (say, en-US Windows), and a MUI package applied atop of that, making some user profile\u0027s UI language; if I met \"Operating system language\" anywhere, the UI language would be the first thing coming to my mind, and not input language.",
+      "parentUuid": "d42c615c_d093a02b",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4c89ffbe_ee8fe0f8",
         "filename": "cui/uiconfig/ui/optlanguagespage.ui",
         "patchSetId": 2
