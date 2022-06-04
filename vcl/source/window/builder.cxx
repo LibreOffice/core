@@ -544,9 +544,13 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
         }
     }
 
+#ifndef NDEBUG
+    o3tl::sorted_vector<OUString> models;
+#endif
     //Set ComboBox models when everything has been imported
     for (auto const& elem : m_pParserState->m_aModelMaps)
     {
+        assert(models.insert(elem.m_sValue).second && "a liststore or treestore is used in duplicate widgets");
         vcl::Window* pTarget = get(elem.m_sID);
         ListBox *pListBoxTarget = dynamic_cast<ListBox*>(pTarget);
         ComboBox *pComboBoxTarget = dynamic_cast<ComboBox*>(pTarget);
