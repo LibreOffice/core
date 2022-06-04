@@ -72,11 +72,6 @@
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="annot-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|annot">Specifies that a small rectangle in the top right corner of the cell indicates that a comment exists. The comment will be shown only when you enable tips under General in the Options dialog box.</property>
-                      </object>
-                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>

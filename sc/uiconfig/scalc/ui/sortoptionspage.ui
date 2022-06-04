@@ -207,7 +207,6 @@
                 <child internal-child="accessible">
                   <object class="AtkObject" id="sortuserlb-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sortoptionspage|sortuserlb-atkobject">Custom sort order</property>
-                    <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|sortuserlb">Select the custom sort order that you want to apply. To define a custom sort order, choose Tools - Options - Calc - Sort Lists.</property>
                   </object>
                 </child>
               </object>

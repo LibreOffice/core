@@ -71,6 +71,7 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     m_xFormulaCB->connect_toggled(aCBHdl);
     m_xNilCB->connect_toggled(aCBHdl);
     m_xAnnotCB->connect_toggled(aCBHdl);
+    m_xAnnotCB->set_accessible_description(ScResId(STR_A11Y_DESC_ANNOT));
     m_xValueCB->connect_toggled(aCBHdl);
     m_xAnchorCB->connect_toggled(aCBHdl);
     m_xClipMarkCB->connect_toggled(aCBHdl);
