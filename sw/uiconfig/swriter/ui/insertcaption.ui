@@ -25,11 +25,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="auto-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="insertcaption|extended_tip|auto">Opens the Caption dialog. It has the same information as the dialog you get by menu Writer - AutoCaption in the Options dialog box.</property>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>

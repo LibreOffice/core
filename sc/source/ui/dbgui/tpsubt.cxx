@@ -454,6 +454,8 @@ ScTpSubTotalOptions::ScTpSubTotalOptions(weld::Container* pPage, weld::DialogCon
     , m_xBtnUserDef(m_xBuilder->weld_check_button("btnuserdef"))
     , m_xLbUserDef(m_xBuilder->weld_combo_box("lbuserdef"))
 {
+    m_xLbUserDef->set_accessible_description(ScResId(STR_A11Y_DESC_USERDEF));
+    m_xBtnUserDef->set_accessible_description(ScResId(STR_A11Y_DESC_USERDEF));
     Init();
 }
 
