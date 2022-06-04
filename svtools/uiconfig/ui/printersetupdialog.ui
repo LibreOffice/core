@@ -41,11 +41,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="options-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="printersetupdialog|extended_tip|options">Opens the Printer Options dialog where you can override the global printer options set on the Tools - Options - Writer/Web - Print panel for the current document.</property>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>

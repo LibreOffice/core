@@ -271,6 +271,10 @@
 #define STR_WARNING_INVALIDJAVASETTINGS_TITLE   NC_("STR_WARNING_INVALIDJAVASETTINGS_TITLE", "Select JRE")
 #define STR_ERROR_JVMCREATIONFAILED_TITLE       NC_("STR_ERROR_JVMCREATIONFAILED_TITLE", "JRE is Defective")
 
+// acccessibility descriptions that use %PRODUCTNAME, we set these explicitly because querying a11y descs
+// in order to change %PRODUCTNAME at runtime is expensive, so limit doing that as much as possible.
+#define STR_A11Y_DESC_OPTIONS                   NC_("printersetupdialog|extended_tip|options", "Opens the Printer Options dialog where you can override the global printer options set on the Tools - Options - %PRODUCTNAME Writer/Web - Print panel for the current document.")
+
 #define STR_DESCRIPTION_SOURCEFILE              NC_("STR_DESCRIPTION_SOURCEFILE", "Source code")
 #define STR_DESCRIPTION_BOOKMARKFILE            NC_("STR_DESCRIPTION_BOOKMARKFILE", "Bookmark file")
 #define STR_DESCRIPTION_GRAPHIC_DOC             NC_("STR_DESCRIPTION_GRAPHIC_DOC", "Graphics")

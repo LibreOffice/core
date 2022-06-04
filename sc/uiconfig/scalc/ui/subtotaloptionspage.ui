@@ -196,11 +196,6 @@
                 <accessibility>
                   <relation type="label-for" target="lbuserdef"/>
                 </accessibility>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="btnuserdef-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|btnuserdef">Uses a custom sorting order that you defined in the Options dialog box at Calc - Sort Lists.</property>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -215,11 +210,6 @@
                 <accessibility>
                   <relation type="labelled-by" target="btnuserdef"/>
                 </accessibility>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="lbuserdef-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|lbuserdef">Uses a custom sorting order that you defined in the Options dialog box at Calc - Sort Lists.</property>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>

@@ -186,11 +186,6 @@
         <property name="no-show-all">True</property>
         <property name="use-underline">True</property>
         <property name="draw-indicator">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="userdatacb-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="documentinfopage|extended_tip|userdatacb">Saves the user's full name with the file. You can edit the name by choosing Tools - Options - User Data.</property>
-          </object>
-        </child>
       </object>
       <packing>
         <property name="left-attach">1</property>

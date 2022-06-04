@@ -695,6 +695,8 @@ SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController*
     , m_xImagePreferredDpiCheckButton(m_xBuilder->weld_check_button("image-preferred-dpi-checkbutton"))
     , m_xImagePreferredDpiComboBox(m_xBuilder->weld_combo_box("image-preferred-dpi-combobox"))
 {
+    m_xUseUserDataCB->set_accessible_description(SfxResId(STR_A11Y_DESC_USERDATA));
+
     m_aUnknownSize = m_xShowSizeFT->get_label();
     m_xShowSizeFT->set_label(OUString());
 

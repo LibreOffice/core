@@ -250,6 +250,7 @@ PrinterSetupDialog::~PrinterSetupDialog()
 void PrinterSetupDialog::SetOptionsHdl(const Link<weld::Button&, void>& rLink)
 {
     m_xBtnOptions->connect_clicked(rLink);
+    m_xBtnOptions->set_accessible_description(SvtResId(STR_A11Y_DESC_OPTIONS));
     m_xBtnOptions->set_visible(rLink.IsSet());
 }
 

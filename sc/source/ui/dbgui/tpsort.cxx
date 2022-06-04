@@ -511,6 +511,7 @@ ScTabPageSortOptions::ScTabPageSortOptions(weld::Container* pPage, weld::DialogC
     , m_xBtnIncImages(m_xBuilder->weld_check_button("includeimages"))
 {
     m_xLbSortUser->set_size_request(m_xLbSortUser->get_approximate_digit_width() * 50, -1);
+    m_xLbSortUser->set_accessible_description(ScResId(STR_A11Y_DESC_SORTUSER));
     Init();
     SetExchangeSupport();
 }

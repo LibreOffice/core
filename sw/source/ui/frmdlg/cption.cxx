@@ -139,6 +139,7 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     m_xFormatBox->connect_changed(LINK(this, SwCaptionDialog, SelectListBoxHdl));
     m_xOptionButton->connect_clicked(LINK(this, SwCaptionDialog, OptionHdl));
     m_xAutoCaptionButton->connect_clicked(LINK(this, SwCaptionDialog, CaptionHdl));
+    m_xAutoCaptionButton->set_accessible_description(SwResId(STR_A11Y_DESC_AUTO));
 
     m_xCategoryBox->append_text(m_sNone);
     size_t nCount = pMgr->GetFieldTypeCount();

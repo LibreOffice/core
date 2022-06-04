@@ -78,6 +78,10 @@ const std::pair<TranslateId, CustomProperties> SFX_LB_PROPERTY_STRINGARRAY[] =
     { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Yes or no")   , Custom_Type_Boolean }
 };
 
+// acccessibility descriptions that use %PRODUCTNAME, we set these explicitly because querying a11y descs
+// in order to change %PRODUCTNAME at runtime is expensive, so limit doing that as much as possible.
+#define STR_A11Y_DESC_USERDATA                      NC_("documentinfopage|extended_tip|userdatacb", "Saves the user's full name with the file. You can edit the name by choosing Tools - Options - %PRODUCTNAME - User Data.")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
