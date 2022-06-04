@@ -9,8 +9,9 @@
 
 #pragma once
 
-#include <memory>
+#include <optional>
 
+#include <editeng/svxfont.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
 #include <rtl/ustring.hxx>
@@ -19,13 +20,12 @@
 
 class OutputDevice;
 class SfxStyleSheetBase;
-class SvxFont;
 
 namespace svx
 {
 class CommonStylePreviewRenderer final : public sfx2::StylePreviewRenderer
 {
-    std::unique_ptr<SvxFont> m_pFont;
+    std::optional<SvxFont> m_oFont;
     Color maFontColor;
     Color maHighlightColor;
     Color maBackgroundColor;
