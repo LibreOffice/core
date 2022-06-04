@@ -277,6 +277,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c9006bcb_a192ed6c",
+        "filename": "cui/uiconfig/ui/optlanguagespage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-04T12:46:33Z",
+      "side": 1,
+      "message": "Thank you!\n\nReplacing \"Language of\" - \"User Interface\" with \"User Interface\" - \"Language\" looks nice.\n\n\"Formats\" looked odd, but \"Localization\" is very general, and actually I\u0027d move the UI language under the Localization category ... but OK, this is a separate idea. No objections.\n\nBut \"Enhanced Language Support\" replaced to \"Keyboard\" is odd. It is no more related to keyboard than to any other input device; one could use voice recorder or mouse to enter the characters, and the system input language would be taken into account.\n\nBy the way, it\u0027s also ideologically similar to \"Decimal separator key\", so I\u0027d again reorder the setting into the \"Localization\" category, and avoid the heading at all.\n\nAnd if you need to change the \"Ignore system input language\", my suggestion would be to reimplement the checkbox to be checked when it\u0027s currently unchecked, and make it \"positive\", like \"Take system input language into account\" (checked by default).\n\nNote that it\u0027s just my opinion; UX team has its last word on such things.",
+      "parentUuid": "7290f246_d4f3ea72",
+      "range": {
+        "startLine": 329,
+        "startChar": 106,
+        "endLine": 329,
+        "endChar": 136
+      },
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d163187f_0c043721",
         "filename": "cui/uiconfig/ui/optlanguagespage.ui",
         "patchSetId": 2
