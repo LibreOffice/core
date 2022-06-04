@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <memory>
+#include <optional>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
@@ -25,7 +25,7 @@ namespace svx
 {
 class CommonStylePreviewRenderer final : public sfx2::StylePreviewRenderer
 {
-    std::unique_ptr<SvxFont> m_pFont;
+    std::optional<SvxFont> m_oFont;
     Color maFontColor;
     Color maHighlightColor;
     Color maBackgroundColor;
