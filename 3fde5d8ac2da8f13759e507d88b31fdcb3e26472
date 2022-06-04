@@ -16,6 +16,23 @@
       "message": "\u003e Uploaded patch set 11.\n\nmanually fixed merge conflicts of this relation chain against master",
       "revId": "3fde5d8ac2da8f13759e507d88b31fdcb3e26472",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8735350_c3c0ce14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2022-06-04T10:23:47Z",
+      "side": 1,
+      "message": "FYI Gerrit signals to me a merge conflict with commit #135365.\nThe latter modifies the file Repository.mk by inserting\n\twizards_basicsrvsfunittests \\\nbelow\n\twizards_basicsrvsfdatabases \\\n\twizards_basicsrvsfdialogs \\\n\twizards_basicsrvsfdocuments \\\n+/- line 1000.\n\nIf it is needed and if I can help to solve it, please tell me.",
+      "revId": "3fde5d8ac2da8f13759e507d88b31fdcb3e26472",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
