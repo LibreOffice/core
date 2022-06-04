@@ -16,6 +16,24 @@
       "message": "It seems tdf#148491 was a typo. What is the correct bug reference?",
       "revId": "3a78fb5d750ae462bf62d4568ad3a504a6db17a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e08f888_37c331ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-04T20:22:18Z",
+      "side": 1,
+      "message": "Should have been tdf#148941. Will leave a note in BZ, and tag the mistake as no-value.  Thanks.",
+      "parentUuid": "559bfe8a_2f70e8c4",
+      "revId": "3a78fb5d750ae462bf62d4568ad3a504a6db17a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
