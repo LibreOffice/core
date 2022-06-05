@@ -725,8 +725,8 @@ bool QtFrame::GetWindowState(SalFrameState* pState)
     }
     else
     {
-        // geometry() is the drawable area, which is wanted here
-        QRect rect = scaledQRect(asChild()->geometry(), devicePixelRatioF());
+        // we want the frame position and the client area size
+        QRect rect = scaledQRect({ asChild()->pos(), asChild()->size() }, devicePixelRatioF());
         pState->mnX = rect.x();
         pState->mnY = rect.y();
         pState->mnWidth = rect.width();
