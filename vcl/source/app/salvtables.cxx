@@ -2699,7 +2699,7 @@ public:
 
     virtual void set_show_tabs(bool /*bShow*/) override
     {
-        // if someone needs this they will have to to implement it in VerticalTabControl
+        // if someone needs this they will have to implement it in VerticalTabControl
         assert(false && "not implemented");
     }
 
