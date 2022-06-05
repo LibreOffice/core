@@ -382,7 +382,7 @@
 #define STR_BORDER_DOUBLE_3                         NC_("STR_BORDER_DOUBLE_3", "Medium/Hairline (%s pt)")
 #define STR_BORDER_DOUBLE_4                         NC_("STR_BORDER_DOUBLE_4", "Medium/Medium (%s pt)")
 
-// acccessibility descriptions that use %PRODUCTNAME, we set these explicitly because querying a11y descs
+// accessibility descriptions that use %PRODUCTNAME, we set these explicitly because querying a11y descs
 // in order to change %PRODUCTNAME at runtime is expensive, so limit doing that as much as possible.
 #define STR_A11Y_DESC_SORTUSER                      NC_("sortoptionspage|extended_tip|sortuserlb", "Select the custom sort order that you want to apply. To define a custom sort order, choose Tools - Options - %PRODUCTNAME Calc - Sort Lists.")
 #define STR_A11Y_DESC_USERDEF                       NC_("subtotaloptionspage|extended_tip|lbuserdef", "Uses a custom sorting order that you defined in the Options dialog box at %PRODUCTNAME Calc - Sort Lists.")
