@@ -16,6 +16,23 @@
       "message": "Nice, but it would also be great to add a test case for this - similar to VBAMacroTest::testSimpleCopyAndPaste (located in sc/qa/extras/vba-macro-test.cxx).\n\nThe macro and the document doesn\u0027t need to be complicated, just test getting and setting with Value2. Something like:\n\nSub testValue2()\n   Range(\"A2\").Value2 \u003d Range(\"A1\").Value2\nEnd Sub\n\nwhere the data in the cell A1 is \"Test string\" or whatever string you like, and in A2 it should be empty or set to some other value.\n\nBefore running the macro in the test, you assert that A1 has the \"Test string\" value and A2 doesn\u0027t. After running the macro just assert cell A2 should contain the same value as A1.\n\nFirst create and check it works as expected in MS Excel.\n\nYou can even add this test for \"Value\" property. The next step would then be to create a test where Value and Value2 would give you different results, then you can fix the implementation of Value2 in LibreOffice, so it gives you the same result as in Excel. \n",
       "revId": "86aee8cbb261954b35e44359d803a2fe033d6d92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7a99016_ffcb5ab2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2022-06-05T12:28:05Z",
+      "side": 1,
+      "message": "nicer if tdf#99514 is prepended to the commit message, I guess.",
+      "revId": "86aee8cbb261954b35e44359d803a2fe033d6d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
