@@ -1051,21 +1051,24 @@ bool PrintFontManager::createFontSubset(
     rInfo.m_aFontBBox   = tools::Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
     rInfo.m_nCapHeight  = yMax; // Well ...
 
-    // fill in glyph advance widths
-    std::unique_ptr<sal_uInt16[]> pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
-                                                              pGID,
-                                                              nGlyphs,
-                                                              false/*bVertical*/ );
-    if( pMetrics )
+    if (pWidths)
     {
-        for( int i = 0; i < nGlyphs; i++ )
-            pWidths[pOldIndex[i]] = pMetrics[i];
-        pMetrics.reset();
-    }
-    else
-    {
-        CloseTTFont( pTTFont );
-        return false;
+        // fill in glyph advance widths
+        std::unique_ptr<sal_uInt16[]> pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
+                                                                  pGID,
+                                                                  nGlyphs,
+                                                                  false/*bVertical*/ );
+        if( pMetrics )
+        {
+            for( int i = 0; i < nGlyphs; i++ )
+                pWidths[pOldIndex[i]] = pMetrics[i];
+            pMetrics.reset();
+        }
+        else
+        {
+            CloseTTFont( pTTFont );
+            return false;
+        }
     }
 
     bool bSuccess = ( SFErrCodes::Ok == CreateTTFromTTGlyphs( pTTFont,

@@ -1029,17 +1029,20 @@ bool SalGraphics::CreateTTFfontSubset(vcl::AbstractTrueTypeFont& rTTF, const OSt
         aTempEncs[0] = 0;
     }
 
-    std::unique_ptr<sal_uInt16[]> pMetrics
-        = GetTTSimpleGlyphMetrics(&rTTF, aShortIDs, nGlyphCount, bVertical);
-    if (!pMetrics)
-        return false;
+    if (pGlyphWidths)
+    {
+        std::unique_ptr<sal_uInt16[]> pMetrics
+            = GetTTSimpleGlyphMetrics(&rTTF, aShortIDs, nGlyphCount, bVertical);
+        if (!pMetrics)
+            return false;
 
-    sal_uInt16 nNotDefAdv = pMetrics[0];
-    pMetrics[0] = pMetrics[nNotDef];
-    pMetrics[nNotDef] = nNotDefAdv;
-    for (i = 0; i < nOrigGlyphCount; ++i)
-        pGlyphWidths[i] = pMetrics[i];
-    pMetrics.reset();
+        sal_uInt16 nNotDefAdv = pMetrics[0];
+        pMetrics[0] = pMetrics[nNotDef];
+        pMetrics[nNotDef] = nNotDefAdv;
+        for (i = 0; i < nOrigGlyphCount; ++i)
+            pGlyphWidths[i] = pMetrics[i];
+        pMetrics.reset();
+    }
 
     // write subset into destination file
     return (CreateTTFromTTGlyphs(&rTTF, rSysPath.getStr(), aShortIDs, aTempEncs, nGlyphCount)
