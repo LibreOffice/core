@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "996c45db_736650d6",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-05T15:08:11Z",
+      "side": 1,
+      "message": "lcl_MulDiv64 divides by nOld so if nOld is 0 the problem remains",
+      "revId": "a46af912cb309fa47bd11e7d57652c52372873c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
