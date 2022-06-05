@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "808e9982_4dd8adf5",
+        "filename": "toolkit/source/helper/unowrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-05T15:02:39Z",
+      "side": 0,
+      "message": "and is it of any use to do a pClient.disposeAndClear() if there was no GetWindowPeer(), or is that totally orthogonal to the problem?",
+      "revId": "86922db292f5708d2431959d15c5ceea70aee7fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
