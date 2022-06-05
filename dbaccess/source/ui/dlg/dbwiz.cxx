@@ -77,8 +77,9 @@ ODbTypeWizDialog::ODbTypeWizDialog(weld::Window* _pParent, SfxItemSet const * _p
     m_xFinish->set_help_id(HID_DBWIZ_FINISH);
     // no local resources needed anymore
 
-    const DbuTypeCollectionItem& rCollectionItem = dynamic_cast<const DbuTypeCollectionItem&>(*_pItems->GetItem(DSID_TYPECOLLECTION));
-    m_pCollection = rCollectionItem.getCollection();
+    const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>(_pItems->GetItem(DSID_TYPECOLLECTION));
+    assert(pCollectionItem && "must exist");
+    m_pCollection = pCollectionItem->getCollection();
 
     ActivatePage();
     setTitleBase(DBA_RES(STR_DATABASE_TYPE_CHANGE));
