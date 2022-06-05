@@ -1433,7 +1433,7 @@
 #define STR_DROPDOWN_CONTENT_CONTROL_PLACEHOLDER NC_("STR_DROPDOWN_CONTENT_CONTROL_PLACEHOLDER", "Choose an item")
 #define STR_DATE_CONTENT_CONTROL_PLACEHOLDER NC_("STR_DATE_CONTENT_CONTROL_PLACEHOLDER", "Choose a date")
 
-// acccessibility descriptions that use %PRODUCTNAME, we set these explicitly because querying a11y descs
+// accessibility descriptions that use %PRODUCTNAME, we set these explicitly because querying a11y descs
 // in order to change %PRODUCTNAME at runtime is expensive, so limit doing that as much as possible.
 #define STR_A11Y_DESC_AUTO                  NC_("insertcaption|extended_tip|auto", "Opens the Caption dialog. It has the same information as the dialog you get by menu %PRODUCTNAME Writer - AutoCaption in the Options dialog box.")
 
