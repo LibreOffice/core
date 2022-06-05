@@ -287,14 +287,18 @@ class GlyphEmit
     // performance: actually this should probably a vector;
     std::vector<sal_Ucs>            m_CodeUnits;
     sal_uInt8                       m_nSubsetGlyphID;
+    sal_Int32                       m_nGlyphWidth;
 
 public:
-    GlyphEmit() : m_nSubsetGlyphID(0)
+    GlyphEmit() : m_nSubsetGlyphID(0), m_nGlyphWidth(0)
     {
     }
 
     void setGlyphId( sal_uInt8 i_nId ) { m_nSubsetGlyphID = i_nId; }
     sal_uInt8 getGlyphId() const { return m_nSubsetGlyphID; }
+
+    void setGlyphWidth( sal_Int32 nWidth ) { m_nGlyphWidth = nWidth; }
+    sal_Int32 getGlyphWidth() const { return m_nGlyphWidth; }
 
     void addCode( sal_Ucs i_cCode )
     {
@@ -817,7 +821,7 @@ i12626
     void appendLiteralStringEncrypt( std::string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyph(const GlyphItem* pGlyph, const vcl::font::PhysicalFontFace* pFont, const std::vector<sal_Ucs>& rCodeUnits, sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject);
+    void registerGlyph(const GlyphItem* pGlyph, const vcl::font::PhysicalFontFace* pFont, const std::vector<sal_Ucs>& rCodeUnits, sal_Int32 nGlyphWidth, sal_uInt8& nMappedGlyph, sal_Int32& nMappedFontObject);
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
