@@ -2681,6 +2681,7 @@ bool PDFWriterImpl::emitFonts()
                 pEncoding[ nEnc ] = nEnc;
                 pEncToUnicodeIndex[ nEnc ] = static_cast<sal_Int32>(aCodeUnits.size());
                 pCodeUnitsPerGlyph[ nEnc ] = item.second.countCodes();
+                pWidths[ nEnc ] = item.second.getGlyphWidth();
                 for( sal_Int32 n = 0; n < pCodeUnitsPerGlyph[ nEnc ]; n++ )
                     aCodeUnits.push_back( item.second.getCode( n ) );
                 if( item.second.getCode(0) )
@@ -2693,7 +2694,7 @@ bool PDFWriterImpl::emitFonts()
                 }
             }
             FontSubsetInfo aSubsetInfo;
-            if( pGraphics->CreateFontSubset( aTmpName, subset.first, aGlyphIds, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
+            if( pGraphics->CreateFontSubset( aTmpName, subset.first, aGlyphIds, pEncoding, nullptr, nGlyphs, aSubsetInfo ) )
             {
                 // create font stream
                 osl::File aFontFile(aTmpName);
@@ -3901,9 +3902,17 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     const GlyphItem aItem(0, 0, pMap->GetGlyphIndex(cMark),
                           DevicePoint(), GlyphItemFlags::NONE, 0, 0, 0);
     const std::vector<sal_Ucs> aCodeUnits={ cMark };
+    sal_Int32 nGlyphWidth = 0;
+    SalGraphics *pGraphics = GetGraphics();
+    if (pGraphics)
+        nGlyphWidth = m_aFontCache.getGlyphWidth(pDevFont,
+                                                 aItem.glyphId(),
+                                                 aItem.IsVertical(),
+                                                 pGraphics);
+
     sal_uInt8 nMappedGlyph;
     sal_Int32 nMappedFontObject;
-    registerGlyph(&aItem, pDevFont, aCodeUnits, nMappedGlyph, nMappedFontObject);
+    registerGlyph(&aItem, pDevFont, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject);
 
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
     aDA.append( ' ' );
@@ -5801,6 +5810,7 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 void PDFWriterImpl::registerGlyph(const GlyphItem* pGlyph,
                                   const vcl::font::PhysicalFontFace* pFont,
                                   const std::vector<sal_Ucs>& rCodeUnits,
+                                  sal_Int32 nGlyphWidth,
                                   sal_uInt8& nMappedGlyph,
                                   sal_Int32& nMappedFontObject)
 {
@@ -5831,6 +5841,7 @@ void PDFWriterImpl::registerGlyph(const GlyphItem* pGlyph,
         // add new glyph to emitted font subset
         GlyphEmit& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[ nFontGlyphId ];
         rNewGlyphEmit.setGlyphId( nNewId );
+        rNewGlyphEmit.setGlyphWidth( nGlyphWidth );
         for (const auto nCode : rCodeUnits)
             rNewGlyphEmit.addCode(nCode);
 
@@ -6291,10 +6302,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         assert(!aCodeUnits.empty() || bUseActualText || pGlyph->IsInCluster());
 
-        sal_uInt8 nMappedGlyph;
-        sal_Int32 nMappedFontObject;
-        registerGlyph(pGlyph, pFont, aCodeUnits, nMappedGlyph, nMappedFontObject);
-
         sal_Int32 nGlyphWidth = 0;
         SalGraphics *pGraphics = GetGraphics();
         if (pGraphics)
@@ -6302,6 +6309,10 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                                                      pGlyph->glyphId(),
                                                      pGlyph->IsVertical(),
                                                      pGraphics);
+
+        sal_uInt8 nMappedGlyph;
+        sal_Int32 nMappedFontObject;
+        registerGlyph(pGlyph, pFont, aCodeUnits, nGlyphWidth, nMappedGlyph, nMappedFontObject);
 
         int nCharPos = -1;
         if (bUseActualText || pGlyph->IsInCluster())
