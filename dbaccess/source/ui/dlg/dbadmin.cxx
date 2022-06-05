@@ -91,8 +91,9 @@ void ODbAdminDialog::impl_selectDataSource(const css::uno::Any& _aDataSourceName
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
     impl_resetPages( xDatasource );
 
-    const DbuTypeCollectionItem& rCollectionItem = dynamic_cast<const DbuTypeCollectionItem&>(*getOutputSet()->GetItem(DSID_TYPECOLLECTION));
-    ::dbaccess::ODsnTypeCollection* pCollection = rCollectionItem.getCollection();
+    const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>(getOutputSet()->GetItem(DSID_TYPECOLLECTION));
+    assert(pCollectionItem && "must exist");
+    ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
     ::dbaccess::DATASOURCE_TYPE eType = pCollection->determineType(getDatasourceType(*getOutputSet()));
 
     // and insert the new ones
@@ -177,8 +178,9 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
 
     // special case: MySQL Native does not have the generic "advanced" page
 
-    const DbuTypeCollectionItem& rCollectionItem = dynamic_cast<const DbuTypeCollectionItem&>(*getOutputSet()->GetItem(DSID_TYPECOLLECTION));
-    ::dbaccess::ODsnTypeCollection* pCollection = rCollectionItem.getCollection();
+    const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>(getOutputSet()->GetItem(DSID_TYPECOLLECTION));
+    assert(pCollectionItem && "must exist");
+    ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
     if ( pCollection->determineType(getDatasourceType( *m_xExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
         OString sMySqlNative("mysqlnative");

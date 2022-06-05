@@ -117,8 +117,9 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
 {
     // no local resources needed anymore
     // extract the datasource type collection from the item set
-    const DbuTypeCollectionItem& rCollectionItem = dynamic_cast<const DbuTypeCollectionItem&>(*_pItems->GetItem(DSID_TYPECOLLECTION));
-    m_pCollection = rCollectionItem.getCollection();
+    const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>(_pItems->GetItem(DSID_TYPECOLLECTION));
+    assert(pCollectionItem && "must exist");
+    m_pCollection = pCollectionItem->getCollection();
 
     assert(m_pCollection && "ODbTypeWizDialogSetup::ODbTypeWizDialogSetup : really need a DSN type collection !");
 
