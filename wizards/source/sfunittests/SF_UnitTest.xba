@@ -34,7 +34,7 @@ Option Explicit
 &apos;&apos;&apos;		The code to be tested may be released as an extension. It does not need to make
 &apos;&apos;&apos;		use of ScriptForge services in any way.
 &apos;&apos;&apos;
-&apos;&apos;&apos;		The test reporting device is the Console. Read abount the console in the ScriptForge.Exception service.
+&apos;&apos;&apos;		The test reporting device is the Console. Read about the console in the ScriptForge.Exception service.
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Definitions:
 &apos;&apos;&apos;			- Test Case
@@ -271,7 +271,7 @@ End Property	&apos;	SFUnitTests.SF_UnitTest.ReturnCode (get)
 
 REM -----------------------------------------------------------------------------
 Property Get Verbose() As Variant
-&apos;&apos;&apos;	The Verbose property indicates if all sertions are reported
+&apos;&apos;&apos;	The Verbose property indicates if all assertions are reported
 	Verbose = _PropertyGet(&quot;Verbose&quot;)
 End Property	&apos;	SFUnitTests.SF_UnitTest.Verbose (get)
 
@@ -422,7 +422,7 @@ Public Function AssertGreater(Optional ByRef A As Variant _
 &apos;&apos;&apos;	Returns True when A is greater than B.
 &apos;&apos;&apos;	To compare A and B:
 &apos;&apos;&apos;		They should have the same VarType or both be numeric
-&apos;&apos;&apos;		Elgible datatypes are String, Date or numeric.
+&apos;&apos;&apos;		Eligible datatypes are String, Date or numeric.
 &apos;&apos;&apos;		String comparisons are case-sensitive.
 
 Dim bAssert As Boolean			&apos;	Return value
@@ -452,7 +452,7 @@ Public Function AssertGreaterEqual(Optional ByRef A As Variant _
 &apos;&apos;&apos;	Returns True when A is greater than or equal to B.
 &apos;&apos;&apos;	To compare A and B:
 &apos;&apos;&apos;		They should have the same VarType or both be numeric
-&apos;&apos;&apos;		Elgible datatypes are String, Date or numeric.
+&apos;&apos;&apos;		Eligible datatypes are String, Date or numeric.
 &apos;&apos;&apos;		String comparisons are case-sensitive.
 
 Dim bAssert As Boolean			&apos;	Return value
@@ -599,7 +599,7 @@ Public Function AssertLess(Optional ByRef A As Variant _
 &apos;&apos;&apos;	Returns True when A is less than B.
 &apos;&apos;&apos;	To compare A and B:
 &apos;&apos;&apos;		They should have the same VarType or both be numeric
-&apos;&apos;&apos;		Elgible datatypes are String, Date or numeric.
+&apos;&apos;&apos;		Eligible datatypes are String, Date or numeric.
 &apos;&apos;&apos;		String comparisons are case-sensitive.
 
 Dim bAssert As Boolean			&apos;	Return value
@@ -629,7 +629,7 @@ Public Function AssertLessEqual(Optional ByRef A As Variant _
 &apos;&apos;&apos;	Returns True when A is less than or equal to B.
 &apos;&apos;&apos;	To compare A and B:
 &apos;&apos;&apos;		They should have the same VarType or both be numeric
-&apos;&apos;&apos;		Elgible datatypes are String, Date or numeric.
+&apos;&apos;&apos;		Eligible datatypes are String, Date or numeric.
 &apos;&apos;&apos;		String comparisons are case-sensitive.
 
 Dim bAssert As Boolean			&apos;	Return value
@@ -996,7 +996,7 @@ End Sub	&apos;	SFUnitTests.SF_UnitTest.Fail
 
 REM -----------------------------------------------------------------------------
 Public Sub Log(Optional ByVal Message As Variant)
-&apos;&apos;&apos;	Forces a test Logure
+&apos;&apos;&apos;	Forces to record the given message in the test report (console)
 
 Dim bAssert As Boolean			&apos;	Fictive return value
 Dim bVerbose As Boolean			:	bVerbose = _Verbose
@@ -1164,13 +1164,13 @@ Public Function RunTest(Optional ByVal TestSuite As Variant _
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		TestSuite: the name of the module containing the set of test cases to run
 &apos;&apos;&apos;		TestCasePattern: the pattern that the test cases must match. The comparison is not case-sensitive.
-&apos;&apos;&apos;			Non-matching finctions and subs are ignored.
+&apos;&apos;&apos;			Non-matching functions and subs are ignored.
 &apos;&apos;&apos;			Admitted wildcard are:	the &quot;?&quot; represents any single character
 &apos;&apos;&apos;									the &quot;*&quot; represents zero, one, or multiple characters
 &apos;&apos;&apos;			The default pattern is &quot;Test_*&quot;
 &apos;&apos;&apos;		Message: the message to be displayed in the console when the test starts.
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		The return code of the esecution (RCxxx constants
+&apos;&apos;&apos;		The return code of the execution (RCxxx constants)
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		GlobalScope.BasicLibraries.loadLibrary(&quot;ScriptForge&quot;)
 &apos;&apos;&apos;		Dim test	:	test = CreateScriptService(&quot;UnitTest&quot;, ThisComponent, &quot;Tests&quot;)
@@ -1326,7 +1326,7 @@ Public Function SkipTest(Optional ByVal Message As Variant) As Boolean
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Message: the message to be displayed in the console
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		The return code of the esecution (RCxxx constants
+&apos;&apos;&apos;		The return code of the execution (RCxxx constants)
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		GlobalScope.BasicLibraries.loadLibrary(&quot;ScriptForge&quot;)
 &apos;&apos;&apos;		Dim test	:	test = CreateScriptService(&quot;UnitTest&quot;, ThisComponent, &quot;Tests&quot;)
