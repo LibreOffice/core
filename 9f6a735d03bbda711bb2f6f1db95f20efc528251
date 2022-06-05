@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8573008d_2528697d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-05T16:45:08Z",
+      "side": 1,
+      "message": "all looks decent to me and merge-ready, unless anyone sees anything that makes their eyes twitch?",
+      "revId": "9f6a735d03bbda711bb2f6f1db95f20efc528251",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e99d9277_637d4e93",
@@ -14,6 +31,23 @@
       "writtenOn": "2022-06-03T10:26:44Z",
       "side": 1,
       "message": "These various ProcessEventstoIdle are because somethings, presumably like toFront() (to bring the window into the foreground) typically send an event and return immediately, and the event is processed later in the event loop (and/or there are a whole pile of other events \"posted\" to get processed by the event loop in the future.\n\nSo right after \"toFront()\" the window is not likely to really be in the foreground yet, but will be put there when the related events get processed. The ProcessEventstoIdle() will process all outstanding events until there are no more of them, at which point the attempt to bring to the foreground should be complete and its either there or will never get there.",
+      "revId": "9f6a735d03bbda711bb2f6f1db95f20efc528251",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf8d4a76_e702e0a8",
+        "filename": "toolkit/qa/cppunit/a11y/XAccessibleContextTester.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-05T16:45:08Z",
+      "side": 1,
+      "message": "I see that the original java is:\n    public boolean _getAccessibleDescription() {\n        String descr \u003d oObj.getAccessibleDescription();\n        System.out.println(\"The description is \u0027\" + descr + \"\u0027\");\n        return descr !\u003d null;\n    }\nand I don\u0027t see a way the descr could ever have been null (?) so presumably the old test is really only testing that there was no exception on calling getAccessibleDescription so the new replacement one looks like-for-like to me here. \n\nMaybe a follow up to see if asserting that the string is not empty might be a useful future change (not something I\u0027d do here though as its a change of test behaviour)",
       "revId": "9f6a735d03bbda711bb2f6f1db95f20efc528251",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
