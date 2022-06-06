@@ -21,12 +21,15 @@
 #define INCLUDED_OOX_DRAWINGML_TEXTBODYPROPERTIES_HXX
 
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <optional>
+#include <array>
+
+class Size;
 
 namespace oox::drawingml {
-
 
 struct TextBodyProperties
 {
@@ -35,7 +38,7 @@ struct TextBodyProperties
     bool                                            mbAnchorCtr;
     OptValue< sal_Int32 >                           moVert;
     bool                                            moUpright = false;
-    std::optional< sal_Int32 >                    moInsets[4];
+    std::array<std::optional<sal_Int32>, 4> moInsets;
     std::optional< sal_Int32 >                    moTextOffUpper;
     std::optional< sal_Int32 >                    moTextOffLeft;
     std::optional< sal_Int32 >                    moTextOffLower;
@@ -47,10 +50,14 @@ struct TextBodyProperties
     OUString msHorzOverflow;
     OUString msVertOverflow;
 
-    explicit            TextBodyProperties();
+    std::array<std::optional<sal_Int32>, 4> maTextDistanceValues;
 
-    void                pushRotationAdjustments();
-    void                pushVertSimulation();
+    explicit TextBodyProperties();
+
+    void pushTextDistances(Size const& rShapeSize);
+    void readjustTextDistances(css::uno::Reference<css::drawing::XShape> const& xShape);
+    void pushVertSimulation();
+
 };
 
 
