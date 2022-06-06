@@ -22,6 +22,7 @@
 
 #include <extended/accessibleeditbrowseboxcell.hxx>
 #include <comphelper/processfactory.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 namespace accessibility
@@ -180,12 +181,12 @@ namespace accessibility
 
     // EditBrowseBoxTableCell
     EditBrowseBoxTableCellAccess::EditBrowseBoxTableCellAccess(
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, const css::uno::Reference< css::accessibility::XAccessible >& _rxControlAccessible,
-            const css::uno::Reference< css::awt::XWindow >& _rxFocusWindow,
+            css::uno::Reference< css::accessibility::XAccessible > _xParent, css::uno::Reference< css::accessibility::XAccessible > _xControlAccessible,
+            css::uno::Reference< css::awt::XWindow > _xFocusWindow,
             ::vcl::IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowPos, sal_uInt16 _nColPos )
-        :m_xParent( _rxParent )
-        ,m_xControlAccessible( _rxControlAccessible )
-        ,m_xFocusWindow( _rxFocusWindow )
+        :m_xParent(std::move( _xParent ))
+        ,m_xControlAccessible(std::move( _xControlAccessible ))
+        ,m_xFocusWindow(std::move( _xFocusWindow ))
         ,m_pBrowseBox( &_rBrowseBox )
         ,m_nRowPos( _nRowPos )
         ,m_nColPos( _nColPos )
