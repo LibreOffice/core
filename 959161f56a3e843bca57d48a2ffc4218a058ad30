@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dea49f91_431f2d92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-06T16:26:59Z",
+      "side": 1,
+      "message": "Hi Caolán,\nI created this little script to download the attachments from OO forums. I ran it for 45 minutes and I could download ~3800 files. I don\u0027t know how long it will take to download all the attachments though. Maybe you could let it run overnight in the crashtesting instance ? I think this could help to catch new crashes",
+      "revId": "959161f56a3e843bca57d48a2ffc4218a058ad30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
