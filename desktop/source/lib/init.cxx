@@ -3169,6 +3169,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:GroupSparklines"),
         OUString(".uno:UngroupSparklines"),
         OUString(".uno:FormatSparklineMenu"),
+        OUString(".uno:Protect"),
+        OUString(".uno:UnsetCellsReadOnly")
     };
 
     util::URL aCommandURL;
