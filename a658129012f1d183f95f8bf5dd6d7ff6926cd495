@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea27f740_e9573484",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-06T09:01:26Z",
+      "side": 1,
+      "message": "👍🏻 Nice! This uses much less CPU time than what I proposed; thank you for fixing this!",
+      "revId": "a658129012f1d183f95f8bf5dd6d7ff6926cd495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
