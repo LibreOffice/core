@@ -129,7 +129,7 @@ bool ScSingleRefData::IsDeleted() const
 
 bool ScSingleRefData::Valid(const ScDocument& rDoc) const
 {
-    return ColValid(rDoc) && RowValid(rDoc) && TabValid();
+    return !IsDeleted() && ColValid(rDoc) && RowValid(rDoc) && TabValid();
 }
 
 bool ScSingleRefData::ColValid(const ScDocument& rDoc) const
