@@ -158,6 +158,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3d0d30db_ca9274dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-06T10:58:04Z",
+      "side": 1,
+      "message": "\u003e does this control in Options apply to input forms that do not use the keyboard?\n\nYes. See e.g. commit 9d96088c2832b681ae079b29cbc977231674ad52 implementing the functionality on Qt5; the QGuiApplication::inputMethod()-\u003elocale() used there is not limited to any specific input method.",
+      "parentUuid": "72ef728a_27caee3b",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4c89ffbe_ee8fe0f8",
         "filename": "cui/uiconfig/ui/optlanguagespage.ui",
         "patchSetId": 2
