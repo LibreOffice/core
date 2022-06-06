@@ -72,7 +72,7 @@ class LocalizationMgr
     void implEnableDisableResourceForAllLibraryDialogs( HandleResourceMode eMode );
 
 public:
-    LocalizationMgr(Shell*, ScriptDocument const&, OUString const& aLibName,
+    LocalizationMgr(Shell*, ScriptDocument , OUString aLibName,
         const css::uno::Reference < css::resource::XStringResourceManager >& xStringResourceManager );
 
     const css::uno::Reference< css::resource::XStringResourceManager >& getStringResourceManager() const

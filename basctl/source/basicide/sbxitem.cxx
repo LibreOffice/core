@@ -19,37 +19,38 @@
 
 #include <sbxitem.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 namespace basctl
 {
 SfxPoolItem* SbxItem::CreateDefault() { SAL_WARN( "basctl.basicide", "No SbxItem factory available"); return nullptr; }
 SbxItem::SbxItem (
     sal_uInt16 nWhichItem,
-    ScriptDocument const& rDocument,
-    OUString const& aLibName,
-    OUString const& aName,
+    ScriptDocument aDocument,
+    OUString aLibName,
+    OUString aName,
     ItemType eType
 ) :
     SfxPoolItem(nWhichItem),
-    m_aDocument(rDocument),
-    m_aLibName(aLibName),
-    m_aName(aName),
+    m_aDocument(std::move(aDocument)),
+    m_aLibName(std::move(aLibName)),
+    m_aName(std::move(aName)),
     m_eType(eType)
 { }
 
 SbxItem::SbxItem (
     sal_uInt16 nWhichItem,
-    ScriptDocument const& rDocument,
-    OUString const& aLibName,
-    OUString const& aName,
-    OUString const& aMethodName,
+    ScriptDocument aDocument,
+    OUString aLibName,
+    OUString aName,
+    OUString aMethodName,
     ItemType eType
 ) :
     SfxPoolItem(nWhichItem),
-    m_aDocument(rDocument),
-    m_aLibName(aLibName),
-    m_aName(aName),
-    m_aMethodName(aMethodName),
+    m_aDocument(std::move(aDocument)),
+    m_aLibName(std::move(aLibName)),
+    m_aName(std::move(aName)),
+    m_aMethodName(std::move(aMethodName)),
     m_eType(eType)
 { }
 

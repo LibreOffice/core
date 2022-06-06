@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <utility>
 #include <vcl/weld.hxx>
 
 class SvxLanguageBox;
@@ -33,9 +34,9 @@ struct LanguageEntry
     css::lang::Locale               m_aLocale;
     bool                            m_bIsDefault;
 
-    LanguageEntry( const css::lang::Locale& _rLocale,
+    LanguageEntry( css::lang::Locale _aLocale,
                    bool _bIsDefault ) :
-        m_aLocale( _rLocale ),
+        m_aLocale(std::move( _aLocale )),
         m_bIsDefault( _bIsDefault ) {}
 };
 
@@ -65,7 +66,7 @@ private:
     DECL_LINK(SelectHdl, weld::TreeView&, void);
 
 public:
-    ManageLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> const & _pLMgr);
+    ManageLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> _pLMgr);
     virtual ~ManageLanguageDialog() override;
 };
 
@@ -86,7 +87,7 @@ private:
     std::unique_ptr<SvxLanguageBox> m_xLanguageCB;
 
 public:
-    SetDefaultLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> const & xLMgr);
+    SetDefaultLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> xLMgr);
     virtual ~SetDefaultLanguageDialog() override;
 
     css::uno::Sequence< css::lang::Locale >   GetLocales() const;
