@@ -16,6 +16,24 @@
       "message": "lcl_MulDiv64 divides by nOld so if nOld is 0 the problem remains",
       "revId": "a46af912cb309fa47bd11e7d57652c52372873c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77acdee9_36f4990b",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-06T08:51:04Z",
+      "side": 1,
+      "message": "Hi Caolán,\nYou are right. My take on it: https://gerrit.libreoffice.org/c/core/+/135443",
+      "parentUuid": "996c45db_736650d6",
+      "revId": "a46af912cb309fa47bd11e7d57652c52372873c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
