@@ -70,6 +70,24 @@
       "parentUuid": "ccb2f3a6_2003dee8",
       "revId": "213808a6f279b8f030ce25f5e67d2b43648ed9d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a47c0d8_1bb41e5d",
+        "filename": "include/svl/broadcast.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-06T09:06:46Z",
+      "side": 1,
+      "message": "\u003e \n\u003e Those unsigned types are forced upon us by the standard library (C++20 \u003chttps://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1227r2.html\u003e \"P1227: Signed ssize() functions, unsigned size() functions (Revision 2)\" notwithstanding).  (And sal_Int32 isn\u0027t really an appropriate signed alternative for std::size_t, given that it is easily of lower rank.)\n\u003e \n\nEh, no, you are what is forcing them on us. It is not beholden upon us to follow such things. I would quite happily disable that silly signed/unsigned mismatch warning globally for LO.\n\nsal_Int32 is perfectly fine for the vast majority of stuff in LO. There are incredibly few places where we even support indexes of magnitude \u003e 2^23, let alone 2^31",
+      "parentUuid": "0c984017_58f6e461",
+      "revId": "213808a6f279b8f030ce25f5e67d2b43648ed9d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
