@@ -1187,6 +1187,7 @@ void FormattedField::Up()
 
     sal_Int64 nValue = std::round(rFormatter.GetValue() * nScale);
     sal_Int64 nSpinSize = std::round(rFormatter.GetSpinSize() * nScale);
+    assert(nSpinSize != 0);
     sal_Int64 nRemainder = rFormatter.GetDisableRemainderFactor() || nSpinSize == 0 ? 0 : nValue % nSpinSize;
     if (nValue >= 0)
         nValue = (nRemainder == 0) ? nValue + nSpinSize : nValue + nSpinSize - nRemainder;
@@ -1208,6 +1209,7 @@ void FormattedField::Down()
 
     sal_Int64 nValue = std::round(rFormatter.GetValue() * nScale);
     sal_Int64 nSpinSize = std::round(rFormatter.GetSpinSize() * nScale);
+    assert(nSpinSize != 0);
     sal_Int64 nRemainder = rFormatter.GetDisableRemainderFactor() || nSpinSize == 0 ? 0 : nValue % nSpinSize;
     if (nValue >= 0)
         nValue = (nRemainder == 0) ? nValue - nSpinSize : nValue - nRemainder;

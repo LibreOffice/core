@@ -1061,6 +1061,7 @@ void SwFormatCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
     rLastCol.SetLeft(nGutterHalf);
     rLastCol.SetRight(0);
 
+    assert(nAct != 0);
     //Convert the current width to the requested width.
     for (SwColumn &rCol: m_aColumns)
     {
