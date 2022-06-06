@@ -94,6 +94,7 @@ public:
     virtual void ConnectCallbacks(ToolBarManager* pManager) = 0;
     virtual void SetMenuType(ToolBoxMenuType eType) = 0;
     virtual void MergeToolbar(ToolBoxItemId & rItemId,
+                              sal_uInt16 nFirstItem,
                               const OUString& rModuleIdentifier,
                               CommandToInfoMap& rCommandMap,
                               MergeToolbarInstruction& rInstruction) = 0;
@@ -144,7 +145,9 @@ class ToolBarManager final : public ToolbarManager_Base
 
         void CheckAndUpdateImages();
         void RequestImages();
-        void FillToolbar( const css::uno::Reference< css::container::XIndexAccess >& rToolBarData );
+        void FillToolbar( const css::uno::Reference< css::container::XIndexAccess >& rToolBarData,
+                          const css::uno::Reference< css::container::XIndexAccess >& rContextData,
+                          const OUString& rContextToolbarName );
         void FillAddonToolbar( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rAddonToolbar );
         void FillOverflowToolbar( ToolBox const * pParent );
         void notifyRegisteredControllers( const OUString& aUIElementName, const OUString& aCommand );
@@ -193,6 +196,9 @@ class ToolBarManager final : public ToolbarManager_Base
 
     private:
         void Init();
+        void FillToolbarFromContainer(const css::uno::Reference< css::container::XIndexAccess >& rItemContainer,
+                                      const OUString& rResourceName, ToolBoxItemId& nId, ToolBoxItemId& nAddonId);
+        void ToggleButton(const OUString& rResourceName, std::u16string_view rCommand);
         void AddCustomizeMenuItems(ToolBox const * pToolBar);
         void InitImageManager();
         void RemoveControllers();
@@ -219,12 +225,14 @@ class ToolBarManager final : public ToolbarManager_Base
              m_bUpdateControllers : 1;
 
         sal_Int16 m_eSymbolSize;
+        sal_uInt16 m_nContextMinPos;
 
         std::unique_ptr<ToolBarManagerImpl>                          m_pImpl;
         VclPtr<ToolBox>                                              m_pToolBar;
 
         OUString                                                     m_aModuleIdentifier;
         OUString                                                     m_aResourceName;
+        OUString                                                     m_aContextResourceName;
 
         css::uno::Reference< css::util::XURLTransformer >            m_xURLTransformer;
         css::uno::Reference< css::frame::XFrame >                    m_xFrame;

@@ -221,7 +221,7 @@ void SfxNotebookBar::UnlockNotebookBar()
     m_bLock = false;
 }
 
-bool SfxNotebookBar::IsActive()
+bool SfxNotebookBar::IsActive(bool bConsiderSingleToolbar)
 {
     if (m_bHide)
         return false;
@@ -264,6 +264,9 @@ bool SfxNotebookBar::IsActive()
         return false;
 
     OUString aActive = comphelper::getString( aAppNode.getNodeValue( "Active" ) );
+
+    if (bConsiderSingleToolbar && aActive == "Single")
+        return true;
 
     if (comphelper::LibreOfficeKit::isActive() && aActive == "notebookbar_online.ui")
         return true;
