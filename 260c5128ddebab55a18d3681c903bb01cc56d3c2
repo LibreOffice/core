@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "78c672f0_5727d6ce",
+        "filename": "wizards/source/sfunittests/SF_UnitTest.xba",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2022-06-06T08:39:25Z",
+      "side": 1,
+      "message": "assertions",
+      "range": {
+        "startLine": 274,
+        "startChar": 57,
+        "endLine": 274,
+        "endChar": 65
+      },
+      "revId": "260c5128ddebab55a18d3681c903bb01cc56d3c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca2ba19a_bd95c230",
         "filename": "wizards/source/sfunittests/SF_UnitTest.xba",
         "patchSetId": 1
@@ -36,6 +59,75 @@
         "startChar": 34,
         "endLine": 999,
         "endChar": 40
+      },
+      "revId": "260c5128ddebab55a18d3681c903bb01cc56d3c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "240f37af_73947a71",
+        "filename": "wizards/source/sfunittests/SF_UnitTest.xba",
+        "patchSetId": 1
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2022-06-06T08:39:25Z",
+      "side": 1,
+      "message": "Record the given message in the test report (console).",
+      "range": {
+        "startLine": 999,
+        "startChar": 19,
+        "endLine": 999,
+        "endChar": 41
+      },
+      "revId": "260c5128ddebab55a18d3681c903bb01cc56d3c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8be55b42_f6d71c11",
+        "filename": "wizards/source/sfunittests/SF_UnitTest.xba",
+        "patchSetId": 1
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2022-06-06T08:39:25Z",
+      "side": 1,
+      "message": "(RCxxx constants)",
+      "range": {
+        "startLine": 1173,
+        "startChar": 53,
+        "endLine": 1173,
+        "endChar": 69
+      },
+      "revId": "260c5128ddebab55a18d3681c903bb01cc56d3c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3d0ccac_278ce5bf",
+        "filename": "wizards/source/sfunittests/SF_UnitTest.xba",
+        "patchSetId": 1
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2022-06-06T08:39:25Z",
+      "side": 1,
+      "message": "(RCxxx constants)",
+      "range": {
+        "startLine": 1329,
+        "startChar": 53,
+        "endLine": 1329,
+        "endChar": 69
       },
       "revId": "260c5128ddebab55a18d3681c903bb01cc56d3c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
