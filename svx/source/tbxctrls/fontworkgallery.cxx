@@ -58,7 +58,7 @@ FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSd
     , mnThemeId(0xffff)
     , mrSdrView(rSdrView)
     , mbInsertIntoPage(true)
-    , mppSdrObject(nullptr)
+    , mpSdrObject(nullptr)
     , mpDestModel(nullptr)
     , maCtlFavorites(m_xBuilder->weld_icon_view("ctlFavoriteswin"))
     , mxOKButton(m_xBuilder->weld_button("ok"))
@@ -237,7 +237,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 
     if (bUseSpecialCalcMode)
     {
-        mppSdrObject = pNewObject;
+        mpSdrObject = pNewObject;
     }
     else
     {
