@@ -22,9 +22,17 @@
 #include <drawingml/textbodyproperties.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <tools/gen.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdotext.hxx>
+#include <svx/svdoashp.hxx>
+#include <svx/sdtditm.hxx>
+
+#include <array>
 
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
+using namespace css;
 
 namespace oox::drawingml {
 
@@ -57,14 +65,21 @@ void TextBodyProperties::pushVertSimulation()
         maPropertyMap.setProperty( PROP_TextHorizontalAdjust, TextHorizontalAdjust_CENTER);
 }
 
-/* Push adjusted values, taking into consideration Shape Rotation */
-void TextBodyProperties::pushRotationAdjustments()
+/* Push text distances / insets, taking into consideration Shape Rotation */
+void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
 {
-    sal_Int32 nOff      = 0;
-    static sal_Int32 const aProps[] { PROP_TextLeftDistance, PROP_TextUpperDistance, PROP_TextRightDistance, PROP_TextLowerDistance };
-    sal_Int32 n         = SAL_N_ELEMENTS( aProps );
+    for (auto & rValue : maTextDistanceValues)
+        rValue.reset();
 
-    switch( moRotation.get(0) )
+    sal_Int32 nOff = 0;
+    static constexpr const std::array<sal_Int32, 4> aProps {
+        PROP_TextLeftDistance,
+        PROP_TextUpperDistance,
+        PROP_TextRightDistance,
+        PROP_TextLowerDistance
+    };
+
+    switch (moRotation.get(0))
     {
         case 90*1*60000: nOff = 3; break;
         case 90*2*60000: nOff = 2; break;
@@ -72,27 +87,103 @@ void TextBodyProperties::pushRotationAdjustments()
         default: break;
     }
 
-    for( sal_Int32 i = 0; i < n; i++ )
+    for (size_t i = 0; i < aProps.size(); i++)
     {
         sal_Int32 nVal = 0;
 
         // Hack for n#760986
         // TODO: Preferred method would be to have a textbox on top
         // of the shape and the place it according to the (off,ext)
-        if( nOff == 0 && moTextOffLeft  ) nVal = *moTextOffLeft;
-        if( nOff == 1 && moTextOffUpper ) nVal = *moTextOffUpper;
-        if( nOff == 2 && moTextOffRight ) nVal = *moTextOffRight;
-        if( nOff == 3 && moTextOffLower ) nVal = *moTextOffLower;
-        if( nVal < 0 ) nVal = 0;
+        if (nOff == 0 && moTextOffLeft)
+            nVal = *moTextOffLeft;
 
-        if( moInsets[i] )
-            maPropertyMap.setProperty( aProps[ nOff ], static_cast< sal_Int32 >( *moInsets[i] + nVal ));
-        else if( nVal )
-            maPropertyMap.setProperty( aProps[ nOff ], nVal );
+        if (nOff == 1 && moTextOffUpper)
+            nVal = *moTextOffUpper;
 
-        nOff = (nOff+1) % n;
+
+        if (nOff == 2 && moTextOffRight)
+            nVal = *moTextOffRight;
+
+        if (nOff == 3 && moTextOffLower)
+            nVal = *moTextOffLower;
+
+
+        if( nVal < 0 )
+            nVal = 0;
+
+        sal_Int32 nTextOffsetValue = nVal;
+
+        if (moInsets[i])
+        {
+            nTextOffsetValue = *moInsets[i] + nVal;
+        }
+
+        // if inset is set, then always set the value
+        // this prevents the default to be set (0 is a valid value)
+        if (moInsets[i] || nTextOffsetValue)
+        {
+            maTextDistanceValues[nOff] = nTextOffsetValue;
+        }
+
+        nOff = (nOff + 1) % aProps.size();
+    }
+
+    // Check if bottom and top are set
+    if (maTextDistanceValues[1] && maTextDistanceValues[3])
+    {
+        double nHeight = rTextAreaSize.getHeight();
+
+        double nTop = *maTextDistanceValues[1];
+        double nBottom = *maTextDistanceValues[3];
+
+        // Check if top + bottom is more than text area height.
+        // If yes, we need to adjust the values as defined in OOXML.
+        if (nTop + nBottom >= nHeight)
+        {
+            double diffFactor = (nTop + nBottom - nHeight) / 2.0;
+
+            maTextDistanceValues[1] = nTop - diffFactor;
+            maTextDistanceValues[3] = nBottom - diffFactor;
+        }
+    }
+
+    for (size_t i = 0; i < aProps.size(); i++)
+    {
+        if (maTextDistanceValues[i])
+            maPropertyMap.setProperty(aProps[i], *maTextDistanceValues[i]);
     }
 }
+
+/* Readjust the text distances / insets if necessary to take
+   the text area into account, not just the shape area*/
+void TextBodyProperties::readjustTextDistances(uno::Reference<drawing::XShape> const& xShape)
+{
+    // Only for custom shapes (for now)
+    auto* pCustomShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+    if (pCustomShape)
+    {
+        sal_Int32 nLower = pCustomShape->GetTextLowerDistance();
+        sal_Int32 nUpper = pCustomShape->GetTextUpperDistance();
+
+        pCustomShape->SetMergedItem(makeSdrTextUpperDistItem(0));
+        pCustomShape->SetMergedItem(makeSdrTextLowerDistItem(0));
+
+        tools::Rectangle aAnchorRect;
+        pCustomShape->TakeTextAnchorRect(aAnchorRect);
+        Size aAnchorSize = aAnchorRect.GetSize();
+
+        pushTextDistances(aAnchorSize);
+        if (maTextDistanceValues[1] && maTextDistanceValues[3])
+        {
+            nLower = *maTextDistanceValues[3];
+            nUpper = *maTextDistanceValues[1];
+        }
+
+        pCustomShape->SetMergedItem(makeSdrTextLowerDistItem(nLower));
+        pCustomShape->SetMergedItem(makeSdrTextUpperDistItem(nUpper));
+    }
+}
+
 
 } // namespace oox::drawingml
 

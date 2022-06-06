@@ -3132,20 +3132,22 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                           sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles)
 {
     // ToDo: Fontwork in DOCX
-    Reference< XText > xXText( rXIface, UNO_QUERY );
+    uno::Reference<XText> xXText(rXIface, UNO_QUERY);
     if( !xXText.is() )
         return;
 
-    Reference< XPropertySet > rXPropSet( rXIface, UNO_QUERY );
+    uno::Reference<drawing::XShape> xShape(rXIface, UNO_QUERY);
+    uno::Reference<XPropertySet> rXPropSet(rXIface, UNO_QUERY);
 
     sal_Int32 nTextPreRotateAngle = 0;
     double nTextRotateAngle = 0;
 
-#define DEFLRINS 254
-#define DEFTBINS 127
-    sal_Int32 nLeft, nRight, nTop, nBottom;
-    nLeft = nRight = DEFLRINS;
-    nTop = nBottom = DEFTBINS;
+    constexpr const sal_Int32 constDefaultLeftRightInset = 254;
+    constexpr const sal_Int32 constDefaultTopBottomInset = 127;
+    sal_Int32 nLeft = constDefaultLeftRightInset;
+    sal_Int32 nRight = constDefaultLeftRightInset;
+    sal_Int32 nTop = constDefaultTopBottomInset;
+    sal_Int32 nBottom = constDefaultTopBottomInset;
 
     // top inset looks a bit different compared to ppt export
     // check if something related doesn't work as expected
@@ -3157,6 +3159,27 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         mAny >>= nTop;
     if (GetProperty(rXPropSet, "TextLowerDistance"))
         mAny >>= nBottom;
+
+    // Transform the text distance values so they are compatible with OOXML insets
+    if (xShape.is())
+    {
+        sal_Int32 nTextHeight = xShape->getSize().Width;
+
+        auto* pCustomShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+        if (pCustomShape)
+        {
+            tools::Rectangle aAnchorRect;
+            pCustomShape->TakeTextAnchorRect(aAnchorRect);
+            nTextHeight = aAnchorRect.GetSize().getHeight();
+        }
+
+        if (nTop + nBottom >= nTextHeight)
+        {
+            sal_Int32 nDiff = std::abs(std::min(nTop, nBottom));
+            nTop += nDiff;
+            nBottom += nDiff;
+        }
+    }
 
     TextVerticalAdjust eVerticalAlignment( TextVerticalAdjust_TOP );
     const char* sVerticalAlignment = nullptr;
@@ -3229,7 +3252,6 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     {
         if (mpTextExport)
         {
-            uno::Reference<drawing::XShape> xShape(rXIface, uno::UNO_QUERY);
             if (xShape)
             {
                 auto xTextFrame = mpTextExport->GetUnoTextFrame(xShape);
@@ -3377,10 +3399,10 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                                XML_horzOverflow, sHorzOverflow,
                                XML_vertOverflow, sVertOverflow,
                                XML_fromWordArt, sax_fastparser::UseIf("1", bFromWordArt),
-                               XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)), nLeft != DEFLRINS),
-                               XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)), nRight != DEFLRINS),
-                               XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)), nTop != DEFTBINS),
-                               XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)), nBottom != DEFTBINS),
+                               XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)), nLeft != constDefaultLeftRightInset),
+                               XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)), nRight != constDefaultLeftRightInset),
+                               XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)), nTop != constDefaultTopBottomInset),
+                               XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)), nBottom != constDefaultTopBottomInset),
                                XML_anchor, sVerticalAlignment,
                                XML_anchorCtr, sax_fastparser::UseIf("1", bHorizontalCenter),
                                XML_vert, sWritingMode,
@@ -3465,7 +3487,6 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         {
             // tdf#112312: only custom shapes obey the TextAutoGrowHeight option
             bool bTextAutoGrowHeight = false;
-            uno::Reference<drawing::XShape> xShape(rXIface, uno::UNO_QUERY);
             auto pSdrObjCustomShape = xShape.is() ? dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)) : nullptr;
             if (pSdrObjCustomShape && GetProperty(rXPropSet, "TextAutoGrowHeight"))
             {
@@ -3517,7 +3538,6 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     if( !enumeration.is() )
         return;
 
-    uno::Reference<drawing::XShape> xShape(rXIface, uno::UNO_QUERY);
     SdrObject* pSdrObject = xShape.is() ? SdrObject::getSdrObjectFromXShape(xShape) : nullptr;
     const SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>( pSdrObject );
     if (pTxtObj && mpTextExport)
