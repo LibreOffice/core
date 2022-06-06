@@ -83,11 +83,13 @@ public:
     SwFont* GetFont() const { return m_pFnt.get(); }
     void IncLineNr() { ++m_nLineNr; }
     bool HasNumber() const {
+        assert( m_rLineInf.GetCountBy() != 0 );
         if( m_rLineInf.GetCountBy() == 0 )
             return false;
         return !( m_nLineNr % m_rLineInf.GetCountBy() );
     }
     bool HasDivider() const {
+        assert( m_rLineInf.GetDividerCountBy() != 0 );
         if( !m_nDivider || m_rLineInf.GetDividerCountBy() == 0 )
             return false;
         return !(m_nLineNr % m_rLineInf.GetDividerCountBy());
