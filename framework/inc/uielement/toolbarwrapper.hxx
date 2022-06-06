@@ -23,6 +23,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
+#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
@@ -37,18 +38,13 @@ namespace weld
 namespace framework
 {
 
-class ToolBarManager;
-class ToolBarWrapper final : public css::ui::XUIFunctionListener,
-                       public UIConfigElementWrapperBase
+class ToolBarWrapper final : public cppu::ImplInheritanceHelper<UIConfigElementWrapperBase,
+                                                                css::ui::XUIFunctionListener,
+                                                                css::ui::XContextChangeEventListener>
 {
     public:
         ToolBarWrapper( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~ToolBarWrapper() override;
-
-        // XInterface
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
 
         // XComponent
         virtual void SAL_CALL dispose() override;
@@ -68,6 +64,9 @@ class ToolBarWrapper final : public css::ui::XUIFunctionListener,
         // XUIFunctionListener
         virtual void SAL_CALL functionExecute( const OUString& aUIElementName, const OUString& aCommand ) override;
 
+        // XContextChangeEventListener
+        virtual void SAL_CALL notifyContextChangeEvent( const css::ui::ContextChangeEventObject& aEvent ) override;
+
         // XEventListener
         using cppu::OPropertySetHelper::disposing;
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
@@ -78,6 +77,7 @@ class ToolBarWrapper final : public css::ui::XUIFunctionListener,
 
         css::uno::Reference< css::lang::XComponent >            m_xToolBarManager;
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;
+        css::uno::Reference< css::ui::XUIElement >              m_xSubElement;
 
         std::unique_ptr<weld::Builder>                          m_xBuilder;
         std::unique_ptr<weld::Container>                        m_xTopLevel;
