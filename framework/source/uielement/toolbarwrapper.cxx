@@ -20,11 +20,11 @@
 #include <uielement/toolbarwrapper.hxx>
 #include <uielement/toolbarmanager.hxx>
 
+#include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <cppuhelper/queryinterface.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -43,7 +43,7 @@ namespace framework
 {
 
 ToolBarWrapper::ToolBarWrapper( const Reference< XComponentContext >& rxContext ) :
-    UIConfigElementWrapperBase( UIElementType::TOOLBAR ),
+    ImplInheritanceHelper( UIElementType::TOOLBAR ),
     m_xContext( rxContext )
 {
 }
@@ -53,29 +53,6 @@ ToolBarWrapper::~ToolBarWrapper()
     m_xWeldedToolbar.reset(nullptr);
     m_xTopLevel.reset(nullptr);
     m_xBuilder.reset(nullptr);
-}
-
-// XInterface
-void SAL_CALL ToolBarWrapper::acquire() noexcept
-{
-    UIConfigElementWrapperBase::acquire();
-}
-
-void SAL_CALL ToolBarWrapper::release() noexcept
-{
-    UIConfigElementWrapperBase::release();
-}
-
-uno::Any SAL_CALL ToolBarWrapper::queryInterface( const uno::Type & rType )
-{
-    Any a = ::cppu::queryInterface(
-                rType ,
-                static_cast< css::ui::XUIFunctionListener* >(this) );
-
-    if( a.hasValue() )
-        return a;
-
-    return UIConfigElementWrapperBase::queryInterface( rType );
 }
 
 // XComponent
@@ -93,6 +70,14 @@ void SAL_CALL ToolBarWrapper::dispose()
     m_aListenerContainer.disposeAndClear( aEvent );
 
     SolarMutexGuard g;
+
+    auto xMultiplexer( ContextChangeEventMultiplexer::get( m_xContext ) );
+    xMultiplexer->removeAllContextChangeEventListeners( this );
+
+    Reference< XComponent > xComponent( m_xSubElement, UNO_QUERY );
+    if ( xComponent.is() )
+        xComponent->removeEventListener( Reference< XUIConfigurationListener >( this ));
+    m_xSubElement.clear();
 
     if ( m_xToolBarManager.is() )
         m_xToolBarManager->dispose();
@@ -134,9 +119,23 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
     if ( !(xFrame.is() && m_xConfigSource.is()) )
         return;
 
+    OUString aContextPart;
+    if ( m_aResourceURL.startsWith( "private:resource/toolbar/singlemode", &aContextPart ) && aContextPart.isEmpty() )
+    {
+        auto xMultiplexer( ContextChangeEventMultiplexer::get( m_xContext ) );
+        try
+        {
+            xMultiplexer->addContextChangeEventListener( this, xFrame->getController() );
+        }
+        catch( const Exception& )
+        {
+        }
+    }
+
     // Create VCL based toolbar which will be filled with settings data
     VclPtr<ToolBox> pToolBar;
     rtl::Reference<ToolBarManager> pToolBarManager;
+    if ( aContextPart.isEmpty() )
     {
         SolarMutexGuard aSolarMutexGuard;
         if ( !xParentWindow.is() )
@@ -171,7 +170,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
         if ( m_xConfigData.is() && (pToolBar || m_xWeldedToolbar) && pToolBarManager )
         {
             // Fill toolbar with container contents
-            pToolBarManager->FillToolbar( m_xConfigData );
+            impl_fillNewData();
             if (pToolBar)
             {
                 pToolBar->EnableCustomize();
@@ -199,9 +198,10 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
 }
 
 // XEventListener
-void SAL_CALL ToolBarWrapper::disposing( const css::lang::EventObject& )
+void SAL_CALL ToolBarWrapper::disposing( const css::lang::EventObject& aEvent )
 {
-    // nothing todo
+    if ( aEvent.Source == m_xSubElement )
+        m_xSubElement.clear();
 }
 
 // XUpdatable
@@ -225,22 +225,21 @@ void SAL_CALL ToolBarWrapper::updateSettings()
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( !m_xToolBarManager.is() )
-        return;
-
     if ( m_xConfigSource.is() && m_bPersistent )
     {
         try
         {
-            ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
-
             m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
             if ( m_xConfigData.is() )
-                pToolBarManager->FillToolbar( m_xConfigData );
+                impl_fillNewData();
         }
         catch ( const NoSuchElementException& )
         {
         }
+
+        auto pContainer( m_aListenerContainer.getContainer( cppu::UnoType< XEventListener >::get() ) );
+        if ( pContainer )
+            pContainer->forEach< XUIElementSettings >([]( const Reference<XUIElementSettings>& xListener ){ xListener->updateSettings(); });
     }
     else if ( !m_bPersistent )
     {
@@ -250,10 +249,55 @@ void SAL_CALL ToolBarWrapper::updateSettings()
 
 void ToolBarWrapper::impl_fillNewData()
 {
-    // Transient toolbar => Fill toolbar with new data
     ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
     if ( pToolBarManager )
-        pToolBarManager->FillToolbar( m_xConfigData );
+    {
+        Reference< XUIElementSettings > xUIElementSettings( m_xSubElement, UNO_QUERY );
+        Reference< XIndexAccess > xContextData = xUIElementSettings.is() ? xUIElementSettings->getSettings( false ) : nullptr;
+        OUString aContextToolbar = xContextData.is() ? m_xSubElement->getResourceURL() : OUString();
+        pToolBarManager->FillToolbar( m_xConfigData, xContextData, aContextToolbar );
+    }
+}
+
+//XContextChangeEventListener
+void SAL_CALL ToolBarWrapper::notifyContextChangeEvent( const ContextChangeEventObject& aEvent )
+{
+    SolarMutexGuard g;
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    if ( aEvent.ContextName.isEmpty() )
+        return;
+
+    const OUString aContextToolbar( m_aResourceURL + "-" + aEvent.ContextName.toAsciiLowerCase() );
+    if ( m_xSubElement.is() && m_xSubElement->getResourceURL() == aContextToolbar )
+        return;
+
+    Reference< XComponent > xComponent( m_xSubElement, UNO_QUERY );
+    if ( xComponent.is() )
+        xComponent->removeEventListener( Reference< XUIConfigurationListener >( this ));
+    m_xSubElement.clear();
+
+    Reference< XLayoutManager > xLayoutManager;
+    Reference< XPropertySet > xPropSet( m_xWeakFrame.get(), UNO_QUERY );
+    if ( xPropSet.is() )
+        xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
+    if ( !xLayoutManager.is() )
+        return;
+
+    xLayoutManager->createElement( aContextToolbar );
+    m_xSubElement.set( xLayoutManager->getElement( aContextToolbar ) );
+    xComponent.set( m_xSubElement, UNO_QUERY );
+    if ( xComponent.is() )
+        xComponent->addEventListener( Reference< XUIConfigurationListener >( this ));
+
+    if ( m_xConfigData.is() )
+    {
+        xLayoutManager->lock();
+        impl_fillNewData();
+        xLayoutManager->unlock();
+    }
 }
 
 // XUIElement interface

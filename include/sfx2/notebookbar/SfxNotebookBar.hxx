@@ -44,7 +44,7 @@ public:
     static void CloseMethod(SfxBindings& rBindings);
     static void CloseMethod(SystemWindow* pSysWindow);
 
-    static bool IsActive();
+    static bool IsActive(bool bConsiderSingleToolbar = false);
 
     /// Function to be called from the sdi's ExecMethod.
     static void ExecMethod(SfxBindings& rBindings, const OUString& rUIName);
