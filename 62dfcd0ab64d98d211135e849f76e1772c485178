@@ -140,6 +140,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72ef728a_27caee3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-06T10:38:42Z",
+      "side": 1,
+      "message": "\u003e do you mean UI language of OS? \nNo. I mean whatever word is used to describe the language that is associated with keyboard input (in Windows). The UI can remain in one language, but the keyboard (or input language) can be changed to different languages. My original proposal for \"Keyboard\" was rejected -- because you pointed out that other inputs (e.g., voice) are possible -- but this raises a new question: does this control in Options apply to input forms that do not use the keyboard?  If not, then \"Keyboard\" might be an appropriate section label.",
+      "parentUuid": "cd875442_223d99a0",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4c89ffbe_ee8fe0f8",
         "filename": "cui/uiconfig/ui/optlanguagespage.ui",
         "patchSetId": 2
