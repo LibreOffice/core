@@ -20,13 +20,14 @@
 <Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
   <LC_INFO>
     <Language>
-      <LangID>oc</LangID>
-      <DefaultName>Aranese</DefaultName>
+      <LangID>qlt</LangID>
+      <DefaultName>Occitan (Aranese)</DefaultName>
     </Language>
     <Country>
       <CountryID>ES</CountryID>
       <DefaultName>Spain</DefaultName>
     </Country>
+    <Variant>oc-ES-aranes</Variant>
   </LC_INFO>
   <LC_CTYPE>
     <Separators>

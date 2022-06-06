@@ -20,13 +20,14 @@
 <Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.9">
   <LC_INFO>
     <Language>
-      <LangID>oc</LangID>
-      <DefaultName>Languedocien</DefaultName>
+      <LangID>qlt</LangID>
+      <DefaultName>Occitan (Languedocien)</DefaultName>
     </Language>
     <Country>
       <CountryID>FR</CountryID>
       <DefaultName>France</DefaultName>
     </Country>
+    <Variant>oc-FR-lengadoc</Variant>
   </LC_INFO>
   <LC_CTYPE unoid="generic">
     <Separators>
