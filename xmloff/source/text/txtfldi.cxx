@@ -3161,7 +3161,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnnotationImportCon
              nElement == XML_ELEMENT(LO_EXT, XML_SENDER_INITIALS) ||
              nElement == XML_ELEMENT(META, XML_CREATOR_INITIALS))
         return new XMLStringBufferImportContext(GetImport(), aInitialsBuffer);
-
+    //TO-DO: fix need to do +1 to satisfy the condition
+    else if (nElement == XML_ELEMENT(LO_EXT,XML_FEDERATED_ID) + 1)
+    {
+        return new XMLStringBufferImportContext(GetImport(), aFederatedIdBuffer);
+    }
     try
     {
         bool bOK = true;
@@ -3334,6 +3338,9 @@ void XMLAnnotationImportContext::PrepareField(
 
     if (!aName.isEmpty())
         xPropertySet->setPropertyValue(sAPI_name, makeAny(aName));
+
+    OUString sFederatedId( aFederatedIdBuffer.makeStringAndClear() );
+    xPropertySet->setPropertyValue("FederatedId", makeAny(sFederatedId));
 }
 
 

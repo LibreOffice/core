@@ -4600,7 +4600,10 @@ SfxVoidItem InPlaceObjectResize SID_OBJECTRESIZE
 
 
 SfxVoidItem InsertAnnotation SID_INSERT_POSTIT
-(SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,SvxPostItDateItem Date SID_ATTR_POSTIT_DATE,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
+(SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,
+SvxPostItDateItem Date SID_ATTR_POSTIT_DATE,
+SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,
+SvxPostItFederatedIdItem FederatedId SID_ATTR_POSTIT_FEDERATEDID)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

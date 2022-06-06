@@ -3479,6 +3479,7 @@ namespace xmloff::token {
         TOKEN("date-format", XML_DATE_FORMAT),
         TOKEN("date-rfc-language-tag", XML_DATE_RFC_LANGUAGE_TAG),
 
+        TOKEN("federated-id", XML_FEDERATED_ID),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }

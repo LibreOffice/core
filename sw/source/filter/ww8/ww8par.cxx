@@ -2175,7 +2175,7 @@ tools::Long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     m_xFormatOfJustInsertedApo.reset();
     SwPostItField aPostIt(
         static_cast<SwPostItFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::Postit)), sAuthor,
-        sText, sInitials, OUString(), aDate );
+        sText, sInitials, OUString(), OUString(), aDate );
     aPostIt.SetTextObject(std::move(pOutliner));
 
     SwPaM aEnd(*m_pPaM->End(), *m_pPaM->End());

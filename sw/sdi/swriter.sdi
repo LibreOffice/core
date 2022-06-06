@@ -2485,7 +2485,10 @@ SfxVoidItem IndexMarkToIndex FN_IDX_MARK_TO_IDX
 ]
 
 SfxVoidItem InsertAnnotation FN_POSTIT
-(SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,SvxPostItDateItem Date SID_ATTR_POSTIT_DATE)
+(SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,
+SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,
+SvxPostItDateItem Date SID_ATTR_POSTIT_DATE,
+SvxPostItFederatedIdItem FederatedId SID_ATTR_POSTIT_FEDERATEDID)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

@@ -342,6 +342,7 @@ constexpr OUStringLiteral gsPropertyItems(u"Items");
 constexpr OUStringLiteral gsPropertyLevel(u"Level");
 constexpr OUStringLiteral gsPropertyMeasureKind(u"Kind");
 constexpr OUStringLiteral gsPropertyName(u"Name");
+constexpr OUStringLiteral gsPropertyFederatedId(u"FederatedId");
 constexpr OUStringLiteral gsPropertyNumberFormat(u"NumberFormat");
 constexpr OUStringLiteral gsPropertyNumberingSeparator(u"NumberingSeparator");
 constexpr OUStringLiteral gsPropertyNumberingType(u"NumberingType");
@@ -1793,6 +1794,15 @@ void XMLTextFieldExport::ExportFieldHelper(
                                               XML_DATE, true,
                                               false );
             GetExport().Characters(aBuffer.makeStringAndClear());
+        }
+
+        OUString aFederatedId( GetStringProperty(gsPropertyFederatedId, rPropSet) );
+        if( !aFederatedId.isEmpty() )
+        {
+            SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_LO_EXT,
+                                            XML_FEDERATED_ID, true,
+                                            false );
+            GetExport().Characters(aFederatedId);
         }
 
         if (GetExport().getSaneDefaultVersion() > SvtSaveOptions::ODFSVER_012)

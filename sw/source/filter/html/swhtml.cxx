@@ -5445,7 +5445,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
 
     SwPostItField aPostItField(
         static_cast<SwPostItFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Postit )),
-        OUString(), sText.makeStringAndClear(), OUString(), OUString(), DateTime(DateTime::SYSTEM));
+        OUString(), sText.makeStringAndClear(), OUString(), OUString(), OUString(), DateTime(DateTime::SYSTEM));
     SwFormatField aFormatField( aPostItField );
     InsertAttr( aFormatField,  false );
 }

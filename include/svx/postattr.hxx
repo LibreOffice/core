@@ -95,6 +95,16 @@ public:
     virtual SvxPostItIdItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
+class SVX_DLLPUBLIC SvxPostItFederatedIdItem final : public SfxStringItem
+{
+public:
+    static SfxPoolItem* CreateDefault();
+
+    SvxPostItFederatedIdItem( sal_uInt16 nWhich );
+
+    virtual SvxPostItFederatedIdItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

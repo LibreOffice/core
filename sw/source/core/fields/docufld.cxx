@@ -1728,6 +1728,7 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
         const OUString& rText,
         const OUString& rInitials,
         const OUString& rName,
+        const OUString& rFederatedId,
         const DateTime& rDateTime,
         const bool bResolved,
         const sal_uInt32 nPostItId
@@ -1737,6 +1738,7 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
     , m_sAuthor( rAuthor )
     , m_sInitials( rInitials )
     , m_sName( rName )
+    , m_sFederatedId( rFederatedId )
     , m_aDateTime( rDateTime )
     , m_bResolved( bResolved )
 {
@@ -1780,7 +1782,7 @@ bool SwPostItField::GetResolved() const
 
 std::unique_ptr<SwField> SwPostItField::Copy() const
 {
-    std::unique_ptr<SwPostItField> pRet(new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), m_sAuthor, m_sText, m_sInitials, m_sName,
+    std::unique_ptr<SwPostItField> pRet(new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), m_sAuthor, m_sText, m_sInitials, m_sName, m_sFederatedId,
                                                            m_aDateTime, m_bResolved, m_nPostItId));
     if (mpText)
         pRet->SetTextObject( *mpText );
@@ -1854,6 +1856,9 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_PAR4:
         rAny <<= m_sName;
         break;
+    case FIELD_PROP_PAR5:
+        rAny <<= m_sFederatedId;
+        break;
     case FIELD_PROP_BOOL1:
         rAny <<= m_bResolved;
         break;
@@ -1909,6 +1914,9 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_PAR4:
         rAny >>= m_sName;
+        break;
+    case FIELD_PROP_PAR5:
+        rAny >>= m_sFederatedId;
         break;
     case FIELD_PROP_BOOL1:
         rAny >>= m_bResolved;

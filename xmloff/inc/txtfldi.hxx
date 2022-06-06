@@ -962,6 +962,7 @@ class XMLAnnotationImportContext final : public XMLTextFieldImportContext
     OUStringBuffer aInitialsBuffer;
     OUString aName;
     OUStringBuffer aTextBuffer;
+    OUStringBuffer aFederatedIdBuffer;
     OUStringBuffer aDateBuffer;
     OUString aResolved;
 
