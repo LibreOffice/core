@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d820d70_3cdc27dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2022-06-06T03:26:48Z",
+      "side": 1,
+      "message": "I hope the review request doesn\u0027t bother you. Please let me know if it\u0027s not ok. Thank you!",
+      "revId": "a6046c9de2e4dc321ab8a08d04bf3f4194a2b353",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
