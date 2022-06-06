@@ -16,6 +16,24 @@
       "message": "Hi Caolán,\nI created this little script to download the attachments from OO forums. I ran it for 45 minutes and I could download ~3800 files. I don\u0027t know how long it will take to download all the attachments though. Maybe you could let it run overnight in the crashtesting instance ? I think this could help to catch new crashes",
       "revId": "959161f56a3e843bca57d48a2ffc4218a058ad30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6870fafa_d442be94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-06T18:14:30Z",
+      "side": 1,
+      "message": "This looks clever, I like it. I haven\u0027t actually even run the existing get-bugzilla-attachments-by-mimetype in a long time because we have had the outstanding known failures already so it didn\u0027t seem to make sense to add to it until that got better. We\u0027ve quite close to having those remaining ones fixed.\n\nWhat I might do is to run this on the crashtesting instance, but not put the results into the testing just yet, just download for now with the plan to add them in soon.",
+      "parentUuid": "dea49f91_431f2d92",
+      "revId": "959161f56a3e843bca57d48a2ffc4218a058ad30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
