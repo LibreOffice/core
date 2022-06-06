@@ -3203,7 +3203,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:RunMacro"),
         OUString(".uno:SpacePara1"),
         OUString(".uno:SpacePara15"),
-        OUString(".uno:SpacePara2")
+        OUString(".uno:SpacePara2"),
+        OUString(".uno:Protect"),
+        OUString(".uno:UnsetCellsReadOnly")
     };
 
     util::URL aCommandURL;
