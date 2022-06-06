@@ -139,7 +139,9 @@ bool isBuilderEnabledForSidebar(std::u16string_view rUIFile)
         || rUIFile == u"modules/swriter/ui/sidebarstylepresets.ui"
         || rUIFile == u"modules/swriter/ui/sidebartheme.ui"
         || rUIFile == u"modules/swriter/ui/sidebartableedit.ui"
-        || rUIFile == u"modules/simpress/ui/customanimationfragment.ui")
+        || rUIFile == u"modules/simpress/ui/customanimationfragment.ui"
+        || rUIFile == u"modules/smath/ui/sidebarelements_math.ui"
+        || rUIFile == u"modules/smath/ui/sidebarproperties_math.ui")
         return true;
 
     return false;
