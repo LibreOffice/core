@@ -209,6 +209,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61a8a81d_ef7c48eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-06T21:47:36Z",
+      "side": 1,
+      "message": "\u003e Apply system input language to new text.\n\nIf this proposal is supposed to be used for the enabled checkbox in the Options dialog, then it is wrong, according to the current implementation -- unless you or someone else has changed the implementation in the past week.",
+      "parentUuid": "4e121532_21747059",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c89ffbe_ee8fe0f8",
