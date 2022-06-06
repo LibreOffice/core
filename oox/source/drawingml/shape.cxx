@@ -1119,7 +1119,7 @@ Reference< XShape > const & Shape::createAndInsert(
         // add properties from textbody to shape properties
         if( mpTextBody )
         {
-            mpTextBody->getTextProperties().pushRotationAdjustments();
+            mpTextBody->getTextProperties().pushTextDistances(Size(aShapeRectHmm.Width, aShapeRectHmm.Height));
             aShapeProps.assignUsed( mpTextBody->getTextProperties().maPropertyMap );
             // Push char properties as well - specifically useful when this is a placeholder
             if( mpMasterTextListStyle &&  mpMasterTextListStyle->getListStyle()[0].getTextCharacterProperties().moHeight.has() )
@@ -1685,8 +1685,13 @@ Reference< XShape > const & Shape::createAndInsert(
         }
     }
 
-    if( mxShape.is() )
+    if (mxShape.is())
+    {
         finalizeXShape( rFilterBase, rxShapes );
+
+        if (mpTextBody)
+            mpTextBody->getTextProperties().readjustTextDistances(mxShape);
+    }
 
     return mxShape;
 }
