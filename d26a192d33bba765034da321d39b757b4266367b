@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d393bfc6_c56a73be",
+        "filename": "vcl/source/app/IconViewItemAccessible.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-06T15:31:26Z",
+      "side": 1,
+      "message": "This looks like it might be relevant; missing focus event (STATE_CHANGED: FOCUSED) might be the cause for AT not announcing newly focused item.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 43
+      },
+      "revId": "d26a192d33bba765034da321d39b757b4266367b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
