@@ -19,6 +19,7 @@
 
 #include <extended/AccessibleGridControlBase.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <utility>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -47,11 +48,11 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 
 
 AccessibleGridControlBase::AccessibleGridControlBase(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        css::uno::Reference< css::accessibility::XAccessible > xParent,
         ::vcl::table::IAccessibleTable& rTable,
         ::vcl::table::AccessibleTableControlObjType      eObjType ) :
     AccessibleGridControlImplHelper( m_aMutex ),
-    m_xParent( rxParent ),
+    m_xParent(std::move( xParent )),
     m_aTable( rTable),
     m_eObjType( eObjType ),
     m_aClientId(0)

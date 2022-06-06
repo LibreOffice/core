@@ -206,7 +206,7 @@ private:
 
 public:
     AccessibleBrowseBoxAccess(
-        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+        css::uno::Reference< css::accessibility::XAccessible > _xParent,
         ::vcl::IAccessibleTableProvider& _rBrowseBox
     );
 

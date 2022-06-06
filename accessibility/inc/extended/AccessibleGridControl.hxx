@@ -171,7 +171,7 @@ private:
 
 public:
     AccessibleGridControlAccess(
-        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+        css::uno::Reference< css::accessibility::XAccessible > _xParent,
         ::vcl::table::IAccessibleTable& _rTable
     );
 
