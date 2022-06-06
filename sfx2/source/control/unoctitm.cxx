@@ -1113,7 +1113,9 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "UngroupSparklines" ||
              aEvent.FeatureURL.Path == "FormatSparklineMenu" ||
              aEvent.FeatureURL.Path == "NumberFormatDecDecimals" ||
-             aEvent.FeatureURL.Path == "NumberFormatIncDecimals")
+             aEvent.FeatureURL.Path == "NumberFormatIncDecimals" ||
+             aEvent.FeatureURL.Path == "Protect" ||
+             aEvent.FeatureURL.Path == "UnsetCellsReadOnly")
     {
         aBuffer.append(aEvent.IsEnabled ? std::u16string_view(u"enabled") : std::u16string_view(u"disabled"));
     }
