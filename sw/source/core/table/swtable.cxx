@@ -249,7 +249,8 @@ namespace
 template<class T>
 T lcl_MulDiv64(sal_uInt64 nA, sal_uInt64 nM, sal_uInt64 nD)
 {
-    return static_cast<T>((nA*nM)/nD);
+    assert(nD != 0);
+    return nD == 0 ? static_cast<T>(nA*nM) : static_cast<T>((nA*nM)/nD);
 }
 
 }
@@ -299,8 +300,7 @@ static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const tools::Long nOld,
         SwFrameFormat *pFormat = rBox.GetFrameFormat();
         sal_uInt64 nBox = pFormat->GetFrameSize().GetWidth();
         nOriginalSum += nBox;
-        nBox *= nNew;
-        nBox = nOld == 0 ? nBox : nBox / nOld;
+        nBox = lcl_MulDiv64<sal_uInt64>(nBox, nNew, nOld);
         const sal_uInt64 nWishedSum = lcl_MulDiv64<sal_uInt64>(nOriginalSum, nNew, nOld) - nSum;
         if( nWishedSum > 0 )
         {
