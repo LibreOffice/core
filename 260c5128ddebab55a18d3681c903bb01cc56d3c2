@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46818ad7_2b3ddc64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-06T07:32:08Z",
+      "side": 1,
+      "message": "Jean-Pierre: what did you mean with \"Logure\"? (see inline comment)",
+      "revId": "260c5128ddebab55a18d3681c903bb01cc56d3c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca2ba19a_bd95c230",
+        "filename": "wizards/source/sfunittests/SF_UnitTest.xba",
+        "patchSetId": 1
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-06T07:32:08Z",
+      "side": 1,
+      "message": "Indeed, perhaps \"Loger\" ?",
+      "range": {
+        "startLine": 999,
+        "startChar": 34,
+        "endLine": 999,
+        "endChar": 40
+      },
+      "revId": "260c5128ddebab55a18d3681c903bb01cc56d3c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
