@@ -1195,7 +1195,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
 
     // Iterate over all Toolboxes
     xLayoutManager->lock();
-    const bool isNotebookBarActive = sfx2::SfxNotebookBar::IsActive();
+    const bool isNotebookBarActive = sfx2::SfxNotebookBar::IsActive(true);
     for ( auto const & n: aObjBarList )
     {
         ToolbarId eId = n.eId;

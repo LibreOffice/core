@@ -216,6 +216,10 @@ void ToolBarMerger::ConvertSequenceToValues(
 
      Must be a valid pointer to a toolbar with items which
      should be searched.
+@param
+     nFirstItem
+
+     First toolbar item to search from.
 
  @param
      rReferencePoint
@@ -228,7 +232,7 @@ void ToolBarMerger::ConvertSequenceToValues(
      position of the reference point and the toolbar used.
 */
 ReferenceToolbarPathInfo ToolBarMerger::FindReferencePoint(
-    const ToolBox*   pToolbar,
+    const ToolBox* pToolbar, sal_uInt16 nFirstItem,
     std::u16string_view rReferencePoint )
 {
     ReferenceToolbarPathInfo aResult;
@@ -237,7 +241,7 @@ ReferenceToolbarPathInfo ToolBarMerger::FindReferencePoint(
 
     const ToolBox::ImplToolItems::size_type nSize( pToolbar->GetItemCount() );
 
-    for ( ToolBox::ImplToolItems::size_type i = 0; i < nSize; i++ )
+    for ( ToolBox::ImplToolItems::size_type i = nFirstItem; i < nSize; i++ )
     {
         const ToolBoxItemId nItemId = pToolbar->GetItemId( i );
         if ( nItemId > ToolBoxItemId(0) )
