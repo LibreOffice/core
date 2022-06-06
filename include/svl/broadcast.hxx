@@ -82,6 +82,11 @@ private:
     /// When the broadcaster is about to die, collect listeners that asked for removal.
     mutable ListenersType maDestructedListeners;
 
+    /**
+        Note that this class is very performance sensitive, so the following fields have been
+        carefully sized and packed so we can access them quickly, while also taking as little CPU cache
+        space as possible (because e.g. calc can have a LOT of them)
+    */
     mutable sal_Int32 mnEmptySlots;
     // The first item in maListeners that is not sorted. The container can become large, so this optimizes sorting.
     mutable sal_Int32 mnListenersFirstUnsorted;
