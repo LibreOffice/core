@@ -101,7 +101,7 @@ const struct {
     { "es_UY",  lcl_DATA_ES },
     { "es_VE",  lcl_DATA_ES },
     { "gl_ES",  lcl_DATA_ES },
-    { "oc_ES",  lcl_DATA_ES },
+    { "oc_ES_aranes",  lcl_DATA_ES },
 
     { "de_DE",  lcl_DATA_EURO },
     { "de_AT",  lcl_DATA_EURO },
@@ -178,7 +178,7 @@ const struct {
     { "fur_IT", lcl_DATA_EURO },
     { "gsc_FR", lcl_DATA_EURO },
     { "fy_NL",  lcl_DATA_EURO },
-    { "oc_FR",  lcl_DATA_EURO },
+    { "oc_FR_lengadoc",  lcl_DATA_EURO },
     { "mt_MT",  lcl_DATA_EURO },
     { "sc_IT",  lcl_DATA_EURO },
     { "ast_ES", lcl_DATA_EURO },

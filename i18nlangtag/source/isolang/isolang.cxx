@@ -489,8 +489,8 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_LOWER_SORBIAN_GERMANY,      "dsb", "DE", k0    },    // MS maps this to 'wee-DE', which is nonsense. 'WEE' is a SIL code, see http://www.ethnologue.com/14/show_language.asp?code=WEE
     { LANGUAGE_LOWER_SORBIAN_LSO,          "dsb", ""  , k0    },
     { LANGUAGE_OBSOLETE_USER_LOWER_SORBIAN,"dsb", "DE", k0    },
-    { LANGUAGE_OCCITAN_FRANCE,              "oc", "FR", k0    },
-    { LANGUAGE_OBSOLETE_USER_OCCITAN,       "oc", "FR", k0    },
+    { LANGUAGE_OCCITAN_FRANCE,              "oc", "FR", kSAME },
+    { LANGUAGE_OBSOLETE_USER_OCCITAN,       "oc", "FR", LANGUAGE_OCCITAN_FRANCE },
     { LANGUAGE_USER_KURDISH_TURKEY,        "kmr", "TR", kSAME },
     { LANGUAGE_USER_KURDISH_TURKEY,         "ku", "TR", kSAME },
     { LANGUAGE_USER_KURDISH_SYRIA,         "kmr", "SY", kSAME },
@@ -639,7 +639,7 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_CHURCH_SLAVIC,          "cu", "RU", k0    },
     { LANGUAGE_USER_VENETIAN,              "vec", "IT", k0    },
     { LANGUAGE_USER_ENGLISH_GAMBIA,         "en", "GM", k0    },
-    { LANGUAGE_USER_OCCITAN_ARANESE,        "oc", "ES", k0    },
+    { LANGUAGE_USER_OCCITAN_ARANESE,        "oc", "ES", kSAME },
     { LANGUAGE_USER_ARPITAN_FRANCE,        "frp", "FR", k0    },
     { LANGUAGE_USER_ARPITAN_ITALY,         "frp", "IT", k0    },
     { LANGUAGE_USER_ARPITAN_SWITZERLAND,   "frp", "CH", k0    },
@@ -779,6 +779,8 @@ Bcp47CountryEntry const aImplBcp47CountryEntries[] =
     { LANGUAGE_USER_ENGLISH_UK_OED,           "en-GB-oed", "GB", "", LANGUAGE_USER_ENGLISH_UK_OXENDICT },   // grandfathered, deprecated, prefer en-GB-oxendict
     { LANGUAGE_SPANISH_DATED,           "es-ES-u-co-trad", "ES", "es-u-co-trad", k0 },  // RFC6067/CLDR
     { LANGUAGE_SPANISH_DATED,              "es-ES_tradnl", "ES", "", kSAME },           // MS malformed
+    { LANGUAGE_OCCITAN_FRANCE,           "oc-FR-lengadoc", "FR", "oc-lengadoc", k0 },
+    { LANGUAGE_USER_OCCITAN_ARANESE,       "oc-ES-aranes", "ES", "oc-aranes", k0 },
 //  { LANGUAGE_YUE_CHINESE_HONGKONG,         "zh-yue-HK", "HK", "", 0 },   // MS reserved, prefer yue-HK; do not add unless LanguageTag::simpleExtract() can handle it to not call liblangtag for rsc!
     { LANGUAGE_YIDDISH,                          "yi-001",   "", "", k0 },  // MS since rev.15, was "yi-Hebr" reserved, "001"="World"
     { LANGUAGE_FRENCH_WEST_INDIES,               "fr-029",   "", "", k0 },  // MS since rev.15, was "Neither defined nor reserved", "029"="Caribbean"
