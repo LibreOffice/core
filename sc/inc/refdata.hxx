@@ -94,7 +94,7 @@ public:
     bool Valid(const ScDocument& rDoc) const;
     bool ColValid(const ScDocument& rDoc) const;
     bool RowValid(const ScDocument& rDoc) const;
-    bool TabValid() const;
+    bool TabValid(const ScDocument& rDoc) const;
     /** In external references nTab is -1 if the external document was not
         loaded but the sheet was cached, or >=0 if the external document was
         loaded. */
