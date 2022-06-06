@@ -21,15 +21,30 @@ class FaxWizardDialogResources(object):
     def __init__(self):
         import sys, os
 
-        # imp is deprecated since Python v.3.4
-        if sys.version_info >= (3,3):
-            from importlib.machinery import SourceFileLoader
-            SourceFileLoader('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc')).load_module()
-        else:
+        if sys.version_info < (3,4):
             import imp
             imp.load_source('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc'))
-
-        import strings
+            import strings
+        elif sys.version_info < (3,7):
+            # imp is deprecated since Python v.3.4
+            from importlib.machinery import SourceFileLoader
+            SourceFileLoader('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc')).load_module()
+            import strings
+        else:
+            # have to jump through hoops since 3.7, partly because python does not like loading modules that do have a .py extension
+            import importlib
+            import importlib.util
+            import importlib.machinery
+            module_name = 'strings'
+            path = os.path.join(os.path.dirname(__file__), '../common/strings.hrc')
+            spec = importlib.util.spec_from_loader(
+                module_name,
+                importlib.machinery.SourceFileLoader(module_name, path)
+            )
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            sys.modules[module_name] = module
+            strings = module
 
         self.resFaxWizardDialog_title = strings.RID_FAXWIZARDDIALOG_START_1
         self.resoptBusinessFax_value = strings.RID_FAXWIZARDDIALOG_START_3
