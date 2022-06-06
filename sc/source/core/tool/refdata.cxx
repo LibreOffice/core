@@ -129,7 +129,7 @@ bool ScSingleRefData::IsDeleted() const
 
 bool ScSingleRefData::Valid(const ScDocument& rDoc) const
 {
-    return !IsDeleted() && ColValid(rDoc) && RowValid(rDoc) && TabValid();
+    return !IsDeleted() && ColValid(rDoc) && RowValid(rDoc) && TabValid(rDoc);
 }
 
 bool ScSingleRefData::ColValid(const ScDocument& rDoc) const
@@ -164,7 +164,7 @@ bool ScSingleRefData::RowValid(const ScDocument& rDoc) const
     return true;
 }
 
-bool ScSingleRefData::TabValid() const
+bool ScSingleRefData::TabValid(const ScDocument& rDoc) const
 {
     if (Flags.bTabRel)
     {
@@ -173,7 +173,7 @@ bool ScSingleRefData::TabValid() const
     }
     else
     {
-        if (mnTab < 0 || MAXTAB < mnTab)
+        if (mnTab < 0 || rDoc.GetTableCount() <= mnTab)
             return false;
     }
 
