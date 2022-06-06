@@ -176,6 +176,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4736c24_a745a607",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-06T20:56:32Z",
+      "side": 1,
+      "message": "Override System Input Language\n\n[X] Do not apply system language setting to new text",
+      "parentUuid": "3d0d30db_ca9274dd",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4c89ffbe_ee8fe0f8",
         "filename": "cui/uiconfig/ui/optlanguagespage.ui",
         "patchSetId": 2
