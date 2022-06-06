@@ -7415,8 +7415,8 @@ void TestFormula::testFuncRangeOp()
     // have to be adapted.
     aPos.IncRow();
     m_pDoc->SetString( aPos, "=SUM(B1:Sheet2.B2:Sheet3.B3)");
-    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "SUM(#REF!.B2:#REF!.B3)", "Wrong formula.");
-    CPPUNIT_ASSERT_EQUAL( OUString("#REF!"), m_pDoc->GetString(aPos));
+    ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "SUM(b1:sheet2.b2:Sheet3.B3)", "Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL( OUString("#NAME?"), m_pDoc->GetString(aPos));
 
     aPos.IncRow();
     m_pDoc->SetString( aPos, "=SUM(Sheet1.B1:Sheet3.B2:Sheet2.B3)");
