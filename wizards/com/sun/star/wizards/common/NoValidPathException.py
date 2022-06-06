@@ -25,12 +25,15 @@ class NoValidPathException(Exception):
             import sys, os
 
             # imp is deprecated since Python v.3.4
-            if sys.version_info >= (3,3):
-                from importlib.machinery import SourceFileLoader
-                SourceFileLoader('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc')).load_module()
-            else:
+            if sys.version_info < (3,4):
                 import imp
                 imp.load_source('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc'))
+            else:
+                import types
+                from importlib.machinery import SourceFileLoader
+                loader = SourceFileLoader('strings', os.path.join(os.path.dirname(__file__), '../common/strings.hrc'))
+                mod = types.ModuleType(loader.name)
+                loader.exec_module(mod)
 
             import strings
             SystemDialog.showErrorBox(xMSF, strings.RID_COMMON_START_21) #OfficePathnotavailable
