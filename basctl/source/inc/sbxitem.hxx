@@ -44,8 +44,8 @@ class SbxItem : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
-    SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, ItemType);
-    SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType);
+    SbxItem(sal_uInt16 nWhich, ScriptDocument aDocument, OUString aLibName, OUString aName, ItemType);
+    SbxItem(sal_uInt16 nWhich, ScriptDocument aDocument, OUString aLibName, OUString aName, OUString aMethodName, ItemType eType);
 
     virtual SbxItem* Clone(SfxItemPool *pPool = nullptr) const override;
     virtual bool operator==(const SfxPoolItem&) const override;

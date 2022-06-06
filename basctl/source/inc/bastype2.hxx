@@ -90,7 +90,7 @@ private:
 
 public:
     DocumentEntry (
-        ScriptDocument const& rDocument,
+        ScriptDocument aDocument,
         LibraryLocation eLocation,
         EntryType eType = OBJ_TYPE_DOCUMENT
     );
@@ -109,7 +109,7 @@ public:
     LibEntry (
         ScriptDocument const& rDocument,
         LibraryLocation eLocation,
-        OUString       const& rLibName
+        OUString aLibName
     );
     virtual ~LibEntry () override;
 
@@ -129,20 +129,20 @@ class EntryDescriptor
 public:
     EntryDescriptor ();
     EntryDescriptor (
-        ScriptDocument const& rDocument,
+        ScriptDocument aDocument,
         LibraryLocation eLocation,
-        OUString      const& rLibName,
-        OUString      const& rLibSubName,
-        OUString      const& rName,
+        OUString aLibName,
+        OUString aLibSubName,
+        OUString aName,
         EntryType eType
     );
     EntryDescriptor (
-        ScriptDocument const& rDocument,
+        ScriptDocument aDocument,
         LibraryLocation eLocation,
-        OUString      const& rLibName,
-        OUString      const& rLibSubName,
-        OUString      const& rName,
-        OUString      const& rMethodName,
+        OUString aLibName,
+        OUString aLibSubName,
+        OUString aName,
+        OUString aMethodName,
         EntryType eType
     );
 

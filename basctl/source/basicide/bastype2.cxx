@@ -41,6 +41,7 @@
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <utility>
 
 namespace basctl
 {
@@ -87,12 +88,12 @@ Entry::~Entry()
 { }
 
 DocumentEntry::DocumentEntry (
-    ScriptDocument const& rDocument,
+    ScriptDocument aDocument,
     LibraryLocation eLocation,
     EntryType eType
 ) :
     Entry(eType),
-    m_aDocument(rDocument),
+    m_aDocument(std::move(aDocument)),
     m_eLocation(eLocation)
 {
     OSL_ENSURE( m_aDocument.isValid(), "DocumentEntry::DocumentEntry: illegal document!" );
@@ -104,10 +105,10 @@ DocumentEntry::~DocumentEntry()
 LibEntry::LibEntry (
     ScriptDocument const& rDocument,
     LibraryLocation eLocation,
-    OUString const& rLibName
+    OUString aLibName
 ) :
     DocumentEntry(rDocument, eLocation, OBJ_TYPE_LIBRARY),
-    m_aLibName(rLibName)
+    m_aLibName(std::move(aLibName))
 { }
 
 LibEntry::~LibEntry()
@@ -120,38 +121,38 @@ EntryDescriptor::EntryDescriptor () :
 { }
 
 EntryDescriptor::EntryDescriptor (
-    ScriptDocument const& rDocument,
+    ScriptDocument aDocument,
     LibraryLocation eLocation,
-    OUString const& rLibName,
-    OUString const& rLibSubName,
-    OUString const& rName,
+    OUString aLibName,
+    OUString aLibSubName,
+    OUString aName,
     EntryType eType
 ) :
-    m_aDocument(rDocument),
+    m_aDocument(std::move(aDocument)),
     m_eLocation(eLocation),
-    m_aLibName(rLibName),
-    m_aLibSubName(rLibSubName),
-    m_aName(rName),
+    m_aLibName(std::move(aLibName)),
+    m_aLibSubName(std::move(aLibSubName)),
+    m_aName(std::move(aName)),
     m_eType(eType)
 {
     OSL_ENSURE( m_aDocument.isValid(), "EntryDescriptor::EntryDescriptor: invalid document!" );
 }
 
 EntryDescriptor::EntryDescriptor (
-    ScriptDocument const& rDocument,
+    ScriptDocument aDocument,
     LibraryLocation eLocation,
-    OUString const& rLibName,
-    OUString const& rLibSubName,
-    OUString const& rName,
-    OUString const& rMethodName,
+    OUString aLibName,
+    OUString aLibSubName,
+    OUString aName,
+    OUString aMethodName,
     EntryType eType
 ) :
-    m_aDocument(rDocument),
+    m_aDocument(std::move(aDocument)),
     m_eLocation(eLocation),
-    m_aLibName(rLibName),
-    m_aLibSubName(rLibSubName),
-    m_aName(rName),
-    m_aMethodName(rMethodName),
+    m_aLibName(std::move(aLibName)),
+    m_aLibSubName(std::move(aLibSubName)),
+    m_aName(std::move(aName)),
+    m_aMethodName(std::move(aMethodName)),
     m_eType(eType)
 {
     OSL_ENSURE( m_aDocument.isValid(), "EntryDescriptor::EntryDescriptor: invalid document!" );
