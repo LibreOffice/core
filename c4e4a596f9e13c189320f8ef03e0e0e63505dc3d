@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a7236b8_e1ad9126",
+        "filename": "include/vcl/WindowPosSize.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-07T06:34:11Z",
+      "side": 1,
+      "message": "I\u0027m not a big fan of unsigned types, but if you prefer them, perhaps add an assert here to catch the obvious mistake:\n   assert(rSize.Width() \u003e\u003d 0 \u0026\u0026 rSize.Height() \u003e\u003d 0);\n?\n\nIt\u0027s not obvious, but it is fairly common for things to temporarily have negative width/height in the middle of calculations involve transforming coordinates.",
+      "revId": "c4e4a596f9e13c189320f8ef03e0e0e63505dc3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
