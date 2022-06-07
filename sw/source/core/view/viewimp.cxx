@@ -149,8 +149,13 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
                     if(last2.Top() == last.Top() && last2.Height() == last.Height()
                         && last2.Right() + 1 >= last.Left() && last2.Right() <= last2.Right())
                     {
+<<<<<<< HEAD   (092434 sw: prefer view's redline author name...)
                         last2 = SwRect( last.TopLeft(), rRect.BottomRight());
                         m_pRegion->pop_back();
+=======
+                        last2 = SwRect( last2.TopLeft(), last.BottomRight());
+                        m_pPaintRegion->pop_back();
+>>>>>>> CHANGE (0372da fix SwViewShellImp::AddPaintRect() rectangle compression (td)
                         return true;
                     }
                 }
