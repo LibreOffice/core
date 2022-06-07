@@ -752,6 +752,31 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121661)
     loadAndSave("tdf121661.docx");
     xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
     assertXPath(pXmlSettings, "/w:settings/w:hyphenationZone", "val", "851");
+
+    // tdf#149421
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
+    // This was false
+    CPPUNIT_ASSERT_GREATER( static_cast<sal_Int16>(0), getProperty<sal_Int16>(xStyle, "ParaHyphenationZone"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf149421, "tdf121661.docx")
+{
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
+    // This was false
+    CPPUNIT_ASSERT_GREATER( static_cast<sal_Int16>(0), getProperty<sal_Int16>(xStyle, "ParaHyphenationZone"));
+
+    if (!mbExported)
+    {
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(851), getProperty<sal_Int16>(xStyle, "ParaHyphenationZone"));
+        // modify hyphenation zone (note: only hyphenation zone set in Standard paragraph style
+        // is exported, according to the document-level hyphenation settings of OOXML)
+        xStyle->setPropertyValue("ParaHyphenationZone", uno::Any(static_cast<sal_Int16>(2000)));
+    }
+    else
+    {
+        // check the export of the modified hyphenation zone
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(2000), getProperty<sal_Int16>(xStyle, "ParaHyphenationZone"));
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121658)
