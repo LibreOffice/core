@@ -52,6 +52,24 @@
       "parentUuid": "5f5ca98c_e3bf3b10",
       "revId": "882d6059136e3d2f5c292162f19cd94b9943d2f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e13cdbd3_240c7dfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-07T15:15:33Z",
+      "side": 1,
+      "message": "\u003e Fixed with https://git.libreoffice.org/core/+/6ccff201088590274247fb9f63b7fa997cfee327\n\nNice, thanks!",
+      "parentUuid": "d242f1cb_5f8b80b3",
+      "revId": "882d6059136e3d2f5c292162f19cd94b9943d2f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
