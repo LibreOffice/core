@@ -82,6 +82,16 @@ namespace o3tl
     template<> struct typed_flags<SwCopyFlags> : is_typed_flags<SwCopyFlags, 0x07> {};
 }
 
+enum class SwDeleteFlags
+{
+    Default = 0,
+    ArtificialSelection = (1<<0), ///< keyboard delete, artificial selection, avoid deleting flys
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SwDeleteFlags> : is_typed_flags<SwDeleteFlags, 0x01> {};
+}
+
 /** Text operation/manipulation interface
 */
 class IDocumentContentOperations
@@ -139,7 +149,7 @@ public:
 
     /** complete delete of a given PaM
     */
-    virtual bool DeleteAndJoin( SwPaM& ) = 0;
+    virtual bool DeleteAndJoin(SwPaM&, SwDeleteFlags flags = SwDeleteFlags::Default) = 0;
 
     virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags) = 0;
 

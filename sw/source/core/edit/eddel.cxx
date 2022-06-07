@@ -31,7 +31,7 @@
 #include <strings.hrc>
 #include <vector>
 
-void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
+void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool *const pUndo)
 {
     bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();
     // only for selections
@@ -114,7 +114,8 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
             pPam = &*pNewPam;
         }
         // delete everything
-        GetDoc()->getIDocumentContentOperations().DeleteAndJoin(*pPam);
+        GetDoc()->getIDocumentContentOperations().DeleteAndJoin(*pPam,
+            isArtificialSelection ? SwDeleteFlags::ArtificialSelection : SwDeleteFlags::Default);
         SaveTableBoxContent( pPam->GetPoint() );
     }
 
@@ -122,7 +123,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
     rPam.DeleteMark();
 }
 
-bool SwEditShell::Delete()
+bool SwEditShell::Delete(bool const isArtificialSelection)
 {
     CurrShell aCurr( this );
     bool bRet = false;
@@ -141,7 +142,7 @@ bool SwEditShell::Delete()
 
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
-            DeleteSel( rPaM, &bUndo );
+            DeleteSel(rPaM, isArtificialSelection, &bUndo);
         }
 
         // If undo container then close here
