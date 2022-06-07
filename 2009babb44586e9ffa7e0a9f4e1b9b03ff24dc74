@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19199017_fea16d1c",
+        "filename": "bin/get-forum-attachments.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-07T11:05:14Z",
+      "side": 1,
+      "message": "Hi Caolán,\nThis part was missing, that\u0027s why you didn\u0027t get any error. I also added a mechanism to save the last requested index, so if the script is resumed, the processes start from there",
+      "revId": "2009babb44586e9ffa7e0a9f4e1b9b03ff24dc74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
