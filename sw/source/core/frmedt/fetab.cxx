@@ -355,7 +355,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
         if ( !bRecordAndHideChanges )
         {
             SwEditShell* pEditShell = GetDoc()->GetEditShell();
-            pEditShell->Delete();
+            pEditShell->Delete(false);
 
             EndAllActionAndCall();
             EndUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
@@ -457,7 +457,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                     pWrtShell->UpdateCursor();
                 }
 
-                pEditShell->Delete();
+                pEditShell->Delete(false);
             }
 
             SwNodeOffset nIdx;

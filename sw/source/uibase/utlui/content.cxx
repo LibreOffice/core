@@ -4728,7 +4728,7 @@ void SwContentTree::DeleteOutlineSelections()
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, SwResId(STR_CHAPTERS, nChapters));
     m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);
-    m_pActiveShell->Delete();
+    m_pActiveShell->Delete(false);
     m_pActiveShell->EndUndo();
 
     m_pActiveShell->EndAction();

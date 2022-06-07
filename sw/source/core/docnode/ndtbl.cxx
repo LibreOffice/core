@@ -2065,7 +2065,7 @@ bool SwDoc::DeleteRowCol(const SwSelBoxes& rBoxes, RowColMode const eMode)
                     bSavePageBreak = true;
                 }
             }
-            std::unique_ptr<SwUndoDelete> pUndo(new SwUndoDelete( aPaM ));
+            std::unique_ptr<SwUndoDelete> pUndo(new SwUndoDelete(aPaM, SwDeleteFlags::Default));
             if( bNewTextNd )
                 pUndo->SetTableDelLastNd();
             pUndo->SetPgBrkFlags( bSavePageBreak, bSavePageDesc );

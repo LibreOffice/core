@@ -6552,7 +6552,7 @@ bool SwEditWin::DeleteSurroundingText(const Selection& rSelection)
 
     if (rSh.SelectTextView(nStartPos + TextFrameIndex(rSelection.Min()), nStartPos + TextFrameIndex(rSelection.Max())))
     {
-        rSh.Delete();
+        rSh.Delete(false);
         return true;
     }
 
