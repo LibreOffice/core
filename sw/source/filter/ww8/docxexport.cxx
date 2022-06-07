@@ -1175,6 +1175,10 @@ void DocxExport::WriteSettings()
     {
         if (pZoneItem->IsNoCapsHyphenation())
             pFS->singleElementNS(XML_w, XML_doNotHyphenateCaps);
+
+        if ( sal_Int16 nHyphenZone = pZoneItem->GetTextHyphenZone() )
+            pFS->singleElementNS(XML_w, XML_hyphenationZone, FSNS(XML_w, XML_val),
+                                         OString::number(nHyphenZone));
     }
 
     // Even and Odd Headers
