@@ -493,7 +493,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         bool bJoinText, bJoinPrev;
         sw_GetJoinFlags(rPam, bJoinText, bJoinPrev);
 
-        m_pUndoDelete.reset( new SwUndoDelete(rPam, false) );
+        m_pUndoDelete.reset(new SwUndoDelete(rPam, SwDeleteFlags::Default, false));
 
         if( bJoinText )
             sw_JoinText(rPam, bJoinPrev);
@@ -510,7 +510,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
                 ++rPam.GetPoint()->nNode;
                 rPam.GetBound().nContent.Assign( nullptr, 0 );
                 rPam.GetBound( false ).nContent.Assign( nullptr, 0 );
-                m_pUndoDelete2.reset( new SwUndoDelete(rPam, true) );
+                m_pUndoDelete2.reset(new SwUndoDelete(rPam, SwDeleteFlags::Default, true));
             }
         }
         rPam.DeleteMark();
