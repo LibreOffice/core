@@ -2420,11 +2420,11 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
                 else
                     *aPam.GetPoint() = SwPosition( aTmpIdx );
             }
-            pUndo = std::make_unique<SwUndoDelete>( aPam, bDeleteCompleteParagraph, true );
+            pUndo = std::make_unique<SwUndoDelete>(aPam, SwDeleteFlags::Default, bDeleteCompleteParagraph, true);
         }
         else
         {
-            pUndo = std::make_unique<SwUndoDelete>( aPam, true );
+            pUndo = std::make_unique<SwUndoDelete>(aPam, SwDeleteFlags::Default, true);
             if( pEntry->pUndo )
             {
                 pEntry->pUndo->UndoImpl(rContext);
@@ -2501,7 +2501,9 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         // b62341295: Redline for copying tables - Start.
         rDoc.GetNodes().MakeTextNode( aInsIdx, rDoc.GetDfltTextFormatColl() );
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode());
-        std::unique_ptr<SwUndo> pUndo = IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) ? nullptr : std::make_unique<SwUndoDelete>( aPam, true );
+        std::unique_ptr<SwUndo> pUndo(IDocumentRedlineAccess::IsRedlineOn(GetRedlineFlags())
+            ? nullptr
+            : std::make_unique<SwUndoDelete>(aPam, SwDeleteFlags::Default, true));
         if( pEntry->pUndo )
         {
             pEntry->pUndo->UndoImpl(rContext);
@@ -2582,7 +2584,7 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode() );
 
         if( !pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
-            pEntry->pUndo = std::make_unique<SwUndoDelete>( aPam, true );
+            pEntry->pUndo = std::make_unique<SwUndoDelete>(aPam, SwDeleteFlags::Default, true);
     }
 
     pEntry->pBoxNumAttr = std::make_unique<SfxItemSet>(
@@ -2682,7 +2684,7 @@ std::unique_ptr<SwUndo> SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const 
         aCellEnd = SwPosition(
             SwNodeIndex( *rBox.GetSttNd()->EndOfSectionNode() ));
         SwPaM aTmpPam( aDeleteStart, aCellEnd );
-        pUndo = std::make_unique<SwUndoDelete>( aTmpPam, true );
+        pUndo = std::make_unique<SwUndoDelete>(aTmpPam, SwDeleteFlags::Default, true);
     }
     SwPosition aCellStart( SwNodeIndex( *rBox.GetSttNd(), 2 ) );
     pText = aCellStart.nNode.GetNode().GetTextNode();
@@ -2754,7 +2756,7 @@ void SwUndoCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     SwPaM aPam( *pTNd, *pTNd->EndOfSectionNode(), 0 , 1 );
-    pDel.reset( new SwUndoDelete( aPam, true ) );
+    pDel.reset( new SwUndoDelete( aPam, SwDeleteFlags::Default, true ) );
 }
 
 void SwUndoCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)

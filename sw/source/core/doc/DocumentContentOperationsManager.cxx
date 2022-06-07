@@ -618,8 +618,9 @@ namespace sw
 namespace
 {
 
-    bool lcl_DoWithBreaks(::sw::DocumentContentOperationsManager & rDocumentContentOperations, SwPaM & rPam,
-            bool (::sw::DocumentContentOperationsManager::*pFunc)(SwPaM&, bool), const bool bForceJoinNext = false)
+    bool lcl_DoWithBreaks(::sw::DocumentContentOperationsManager & rDocumentContentOperations,
+            SwPaM & rPam, SwDeleteFlags const flags,
+            bool (::sw::DocumentContentOperationsManager::*pFunc)(SwPaM&, SwDeleteFlags, bool), const bool bForceJoinNext = false)
     {
         std::vector<std::pair<sal_uLong, sal_Int32>> Breaks;
 
@@ -627,7 +628,7 @@ namespace
 
         if (Breaks.empty())
         {
-            return (rDocumentContentOperations.*pFunc)(rPam, bForceJoinNext);
+            return (rDocumentContentOperations.*pFunc)(rPam, flags, bForceJoinNext);
         }
 
         // Deletion must be split into several parts if the text node
@@ -651,7 +652,7 @@ namespace
             rStart = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second + 1);
             if (rStart < rEnd) // check if part is empty
             {
-                bRet &= (rDocumentContentOperations.*pFunc)(aPam, bForceJoinNext);
+                bRet &= (rDocumentContentOperations.*pFunc)(aPam, flags, bForceJoinNext);
                 nOffset = iter->first - rStart.nNode.GetIndex(); // deleted fly nodes...
             }
             rEnd = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
@@ -661,7 +662,7 @@ namespace
         rStart = *rPam.Start(); // set to original start
         if (rStart < rEnd) // check if part is empty
         {
-            bRet &= (rDocumentContentOperations.*pFunc)(aPam, bForceJoinNext);
+            bRet &= (rDocumentContentOperations.*pFunc)(aPam, flags, bForceJoinNext);
         }
 
         return bRet;
@@ -1997,7 +1998,7 @@ void DocumentContentOperationsManager::DeleteDummyChar(
     assert(aPam.GetText().getLength() == 1 && aPam.GetText()[0] == cDummy);
     (void) cDummy;
 
-    DeleteRangeImpl(aPam);
+    DeleteRangeImpl(aPam, SwDeleteFlags::Default);
 
     if (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
         && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
@@ -2008,7 +2009,7 @@ void DocumentContentOperationsManager::DeleteDummyChar(
 
 void DocumentContentOperationsManager::DeleteRange( SwPaM & rPam )
 {
-    lcl_DoWithBreaks( *this, rPam, &DocumentContentOperationsManager::DeleteRangeImpl );
+    lcl_DoWithBreaks(*this, rPam, SwDeleteFlags::Default, &DocumentContentOperationsManager::DeleteRangeImpl);
 
     if (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
         && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
@@ -2111,7 +2112,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             ::PaMCorrAbs( aDelPam, aTmpPos );
         }
 
-        std::unique_ptr<SwUndoDelete> pUndo(new SwUndoDelete( aDelPam, true ));
+        std::unique_ptr<SwUndoDelete> pUndo(new SwUndoDelete(aDelPam, SwDeleteFlags::Default, true));
 
         *rPam.GetPoint() = *aDelPam.GetPoint();
         pUndo->SetPgBrkFlags( bSavePageBreak, bSavePageDesc );
@@ -2206,13 +2207,13 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
 }
 
 // #i100466# Add handling of new optional parameter <bForceJoinNext>
-bool DocumentContentOperationsManager::DeleteAndJoin( SwPaM & rPam,
+bool DocumentContentOperationsManager::DeleteAndJoin(SwPaM & rPam, SwDeleteFlags const flags,
                            const bool bForceJoinNext )
 {
     if ( lcl_StrLenOverflow( rPam ) )
         return false;
 
-    bool const ret = lcl_DoWithBreaks( *this, rPam, (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
+    bool const ret = lcl_DoWithBreaks( *this, rPam, flags, (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
                 ? &DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl
                 : &DocumentContentOperationsManager::DeleteAndJoinImpl,
                 bForceJoinNext );
@@ -3345,8 +3346,8 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
         if (rStart < rEnd) // check if part is empty
         {
             bRet &= (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
-                ? DeleteAndJoinWithRedlineImpl(aPam)
-                : DeleteAndJoinImpl(aPam, false);
+                ? DeleteAndJoinWithRedlineImpl(aPam, SwDeleteFlags::Default)
+                : DeleteAndJoinImpl(aPam, SwDeleteFlags::Default, false);
             nOffset = iter->first - rStart.nNode.GetIndex(); // deleted fly nodes...
         }
         rEnd = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
@@ -3914,7 +3915,7 @@ DocumentContentOperationsManager::~DocumentContentOperationsManager()
 }
 //Private methods
 
-bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
+bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl(SwPaM & rPam, SwDeleteFlags const /*flags*/, const bool)
 {
     assert(m_rDoc.getIDocumentRedlineAccess().IsRedlineOn());
 
@@ -4055,7 +4056,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
     return true;
 }
 
-bool DocumentContentOperationsManager::DeleteAndJoinImpl( SwPaM & rPam,
+bool DocumentContentOperationsManager::DeleteAndJoinImpl(SwPaM & rPam, SwDeleteFlags const flags,
                                const bool bForceJoinNext )
 {
     bool bJoinText, bJoinPrev;
@@ -4067,7 +4068,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinImpl( SwPaM & rPam,
     }
 
     {
-        bool const bSuccess( DeleteRangeImpl( rPam ) );
+        bool const bSuccess( DeleteRangeImpl(rPam, flags) );
         if (!bSuccess)
             return false;
     }
@@ -4086,14 +4087,14 @@ bool DocumentContentOperationsManager::DeleteAndJoinImpl( SwPaM & rPam,
     return true;
 }
 
-bool DocumentContentOperationsManager::DeleteRangeImpl(SwPaM & rPam, const bool)
+bool DocumentContentOperationsManager::DeleteRangeImpl(SwPaM & rPam, SwDeleteFlags const flags, const bool)
 {
     // Move all cursors out of the deleted range, but first copy the
     // passed PaM, because it could be a cursor that would be moved!
     SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
     ::PaMCorrAbs( aDelPam, *aDelPam.GetPoint() );
 
-    bool const bSuccess( DeleteRangeImplImpl( aDelPam ) );
+    bool const bSuccess( DeleteRangeImplImpl(aDelPam, flags) );
     if (bSuccess)
     {   // now copy position from temp copy to given PaM
         *rPam.GetPoint() = *aDelPam.GetPoint();
@@ -4102,7 +4103,7 @@ bool DocumentContentOperationsManager::DeleteRangeImpl(SwPaM & rPam, const bool)
     return bSuccess;
 }
 
-bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
+bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDeleteFlags const flags)
 {
     SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
@@ -4167,7 +4168,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
         }
         if (!bMerged)
         {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoDelete>( rPam ) );
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoDelete>(rPam, flags));
         }
 
         m_rDoc.getIDocumentState().SetModified();
@@ -4179,8 +4180,11 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
         m_rDoc.getIDocumentRedlineAccess().DeleteRedline( rPam, true, RedlineType::Any );
 
     // Delete and move all "Flys at the paragraph", which are within the Selection
-    DelFlyInRange(rPam.GetMark()->nNode, rPam.GetPoint()->nNode,
-        &rPam.GetMark()->nContent, &rPam.GetPoint()->nContent);
+    if (!(flags & SwDeleteFlags::ArtificialSelection))
+    {
+        DelFlyInRange(rPam.GetMark()->nNode, rPam.GetPoint()->nNode,
+            &rPam.GetMark()->nContent, &rPam.GetPoint()->nContent);
+    }
     DelBookmarks(
         pStt->nNode,
         pEnd->nNode,
