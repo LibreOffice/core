@@ -1313,6 +1313,20 @@ SvxBoxItem::~SvxBoxItem()
 {
 }
 
+void SvxBoxItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxBoxItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("top-dist"),
+                                      BAD_CAST(OString::number(nTopDist).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bottom-dist"),
+                                      BAD_CAST(OString::number(nBottomDist).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("left-dist"),
+                                      BAD_CAST(OString::number(nLeftDist).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("right-dist"),
+                                      BAD_CAST(OString::number(nRightDist).getStr()));
+    SfxPoolItem::dumpAsXml(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
+}
 
 boost::property_tree::ptree SvxBoxItem::dumpAsJSON() const
 {
@@ -1380,7 +1394,7 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     table::BorderLine2 aRetLine;
-    sal_uInt16 nDist = 0;
+    sal_Int16 nDist = 0;
     bool bDistMember = false;
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -1670,7 +1684,6 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         if(!(rVal >>= nDist))
             return false;
 
-        if(nDist >= 0)
         {
             if( bConvert )
                 nDist = o3tl::toTwips(nDist, o3tl::Length::mm100);
@@ -1883,10 +1896,10 @@ void SvxBoxItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
     if ( pBottom )  pBottom->ScaleMetrics( nMult, nDiv );
     if ( pLeft )    pLeft->ScaleMetrics( nMult, nDiv );
     if ( pRight )   pRight->ScaleMetrics( nMult, nDiv );
-    nTopDist = static_cast<sal_uInt16>(BigInt::Scale( nTopDist, nMult, nDiv ));
-    nBottomDist = static_cast<sal_uInt16>(BigInt::Scale( nBottomDist, nMult, nDiv ));
-    nLeftDist = static_cast<sal_uInt16>(BigInt::Scale( nLeftDist, nMult, nDiv ));
-    nRightDist = static_cast<sal_uInt16>(BigInt::Scale( nRightDist, nMult, nDiv ));
+    nTopDist = static_cast<sal_Int16>(BigInt::Scale( nTopDist, nMult, nDiv ));
+    nBottomDist = static_cast<sal_Int16>(BigInt::Scale( nBottomDist, nMult, nDiv ));
+    nLeftDist = static_cast<sal_Int16>(BigInt::Scale( nLeftDist, nMult, nDiv ));
+    nRightDist = static_cast<sal_Int16>(BigInt::Scale( nRightDist, nMult, nDiv ));
 }
 
 
@@ -1962,9 +1975,9 @@ sal_uInt16 SvxBoxItem::GetSmallestDistance() const
 }
 
 
-sal_uInt16 SvxBoxItem::GetDistance( SvxBoxItemLine nLine ) const
+sal_Int16 SvxBoxItem::GetDistance( SvxBoxItemLine nLine, bool bAllowNegative ) const
 {
-    sal_uInt16 nDist = 0;
+    sal_Int16 nDist = 0;
     switch ( nLine )
     {
         case SvxBoxItemLine::TOP:
@@ -1983,11 +1996,15 @@ sal_uInt16 SvxBoxItem::GetDistance( SvxBoxItemLine nLine ) const
             OSL_FAIL( "wrong line" );
     }
 
+    if (!bAllowNegative && nDist < 0)
+    {
+        nDist = 0;
+    }
     return nDist;
 }
 
 
-void SvxBoxItem::SetDistance( sal_uInt16 nNew, SvxBoxItemLine nLine )
+void SvxBoxItem::SetDistance( sal_Int16 nNew, SvxBoxItemLine nLine )
 {
     switch ( nLine )
     {
@@ -2036,10 +2053,10 @@ sal_uInt16 SvxBoxItem::CalcLineWidth( SvxBoxItemLine nLine ) const
     return nWidth;
 }
 
-sal_uInt16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine ) const
+sal_Int16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine, bool bAllowNegative ) const
 {
     SvxBorderLine* pTmp = nullptr;
-    sal_uInt16 nDist = 0;
+    sal_Int16 nDist = 0;
     switch ( nLine )
     {
     case SvxBoxItemLine::TOP:
@@ -2068,6 +2085,12 @@ sal_uInt16 SvxBoxItem::CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine )
     }
     else if( !bEvenIfNoLine )
         nDist = 0;
+
+    if (!bAllowNegative && nDist < 0)
+    {
+        nDist = 0;
+    }
+
     return nDist;
 }
 
@@ -2429,7 +2452,7 @@ namespace editeng
 {
 
 void BorderDistanceFromWord(bool bFromEdge, sal_Int32& nMargin, sal_Int32& nBorderDistance,
-    sal_Int32 nBorderWidth)
+    sal_Int32 nBorderWidth, bool bAllowNegativeBorderDistance)
 {
     // See https://wiki.openoffice.org/wiki/Writer/MSInteroperability/PageBorder
 
@@ -2456,8 +2479,15 @@ void BorderDistanceFromWord(bool bFromEdge, sal_Int32& nMargin, sal_Int32& nBord
     }
     else if (nNewBorderDistance < 0)
     {
-        nNewMargin = std::max<sal_Int32>(nMargin - nBorderWidth, 0);
-        nNewBorderDistance = 0;
+        if (bAllowNegativeBorderDistance)
+        {
+            nNewMargin = nMargin;
+        }
+        else
+        {
+            nNewMargin = std::max<sal_Int32>(nMargin - nBorderWidth, 0);
+            nNewBorderDistance = 0;
+        }
     }
 
     nMargin = nNewMargin;
@@ -2481,10 +2511,10 @@ void BorderDistancesToWord(const SvxBoxItem& rBox, const WordPageMargins& rMargi
     WordBorderDistances& rDistances)
 {
     // Use signed sal_Int32 that can hold sal_uInt16, to prevent overflow at subtraction below
-    const sal_Int32 nT = rBox.GetDistance(SvxBoxItemLine::TOP);
-    const sal_Int32 nL = rBox.GetDistance(SvxBoxItemLine::LEFT);
-    const sal_Int32 nB = rBox.GetDistance(SvxBoxItemLine::BOTTOM);
-    const sal_Int32 nR = rBox.GetDistance(SvxBoxItemLine::RIGHT);
+    const sal_Int32 nT = rBox.GetDistance(SvxBoxItemLine::TOP, /*bAllowNegative=*/true);
+    const sal_Int32 nL = rBox.GetDistance(SvxBoxItemLine::LEFT, /*bAllowNegative=*/true);
+    const sal_Int32 nB = rBox.GetDistance(SvxBoxItemLine::BOTTOM, /*bAllowNegative=*/true);
+    const sal_Int32 nR = rBox.GetDistance(SvxBoxItemLine::RIGHT, /*bAllowNegative=*/true);
 
     // Only take into account existing borders
     const SvxBorderLine* pLnT = rBox.GetLine(SvxBoxItemLine::TOP);
@@ -2512,7 +2542,7 @@ void BorderDistancesToWord(const SvxBoxItem& rBox, const WordPageMargins& rMargi
 
     const sal_Int32 n32pt = 32 * 20;
     // 1. If all borders are in range of 31 pts from text
-    if (nT2BT < n32pt && nT2BL < n32pt && nT2BB < n32pt && nT2BR < n32pt)
+    if (nT2BT >= 0 && nT2BT < n32pt && nT2BL >= 0 && nT2BL < n32pt && nT2BB >= 0 && nT2BB < n32pt && nT2BR >= 0 && nT2BR < n32pt)
     {
         rDistances.bFromEdge = false;
     }

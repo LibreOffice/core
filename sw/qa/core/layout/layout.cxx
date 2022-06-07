@@ -743,6 +743,77 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoublePageBorder)
     CPPUNIT_ASSERT_GREATER(aBorderWidthVec[2], aBorderWidthVec[3]);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorder)
+{
+    // Given a document with a top margin and a negative border distance:
+    createSwDoc();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert("test");
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    xPageStyle->setPropertyValue("TopMargin", uno::Any(static_cast<sal_Int32>(501))); // 284 twips
+    table::BorderLine2 aBorder;
+    aBorder.LineWidth = 159; // 90 twips
+    aBorder.OuterLineWidth = 159;
+    xPageStyle->setPropertyValue("TopBorder", uno::Any(aBorder));
+    sal_Int32 nTopBorderDistance = -646; // -366 twips
+    xPageStyle->setPropertyValue("TopBorderDistance", uno::Any(nTopBorderDistance));
+    nTopBorderDistance = 0;
+    xPageStyle->getPropertyValue("TopBorderDistance") >>= nTopBorderDistance;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-646), nTopBorderDistance);
+
+    // When rendering that border:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    // Then make sure that the negative distance pushes the horizontal borderline down:
+    MetafileXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 899
+    // - Actual  : 524
+    // i.e. the negative border distance was rounded up to 0 in lcl_CalcBorderRect().
+    // Ideally this would be 284 (top of first page) + 284 (top margin) + 366 (border distance) =
+    // 934.
+    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]", "y", "899");
+    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[2]", "y", "899");
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorderNoMargin)
+{
+    // Given a document with no top margin and a negative border distance:
+    createSwDoc();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert("test");
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    xPageStyle->setPropertyValue("TopMargin", uno::Any(static_cast<sal_Int32>(0))); // 0 twips
+    table::BorderLine2 aBorder;
+    aBorder.LineWidth = 159; // 90 twips
+    aBorder.OuterLineWidth = 159;
+    xPageStyle->setPropertyValue("TopBorder", uno::Any(aBorder));
+    sal_Int32 nTopBorderDistance = -1147; // -650 twips
+    xPageStyle->setPropertyValue("TopBorderDistance", uno::Any(nTopBorderDistance));
+
+    // When rendering that border:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    // Then make sure that the negative distance pushes the horizontal borderline down:
+    MetafileXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 899
+    // - Actual  : 329
+    // i.e. this failed differently: the lack of top margin caused a second problem.
+    // Ideally this would be 284 (top of first page) + 650 (border distance) =
+    // 934.
+    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[1]", "y", "899");
+    assertXPath(pXmlDoc, "//polyline[@style='solid']/point[2]", "y", "899");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

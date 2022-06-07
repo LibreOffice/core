@@ -59,7 +59,7 @@ class EDITENG_DLLPUBLIC SvxBoxItem final : public SfxPoolItem
                     pBottom,
                     pLeft,
                     pRight;
-    sal_uInt16      nTopDist,
+    sal_Int16       nTopDist,
                     nBottomDist,
                     nLeftDist,
                     nRightDist;
@@ -97,29 +97,30 @@ public:
     //The Pointers are being copied!
     void    SetLine( const editeng::SvxBorderLine* pNew, SvxBoxItemLine nLine );
 
-    sal_uInt16  GetDistance( SvxBoxItemLine nLine ) const;
+    sal_Int16  GetDistance( SvxBoxItemLine nLine, bool bAllowNegative = false ) const;
     sal_uInt16  GetSmallestDistance() const;
 
     bool IsRemoveAdjacentCellBorder() const { return bRemoveAdjCellBorder; }
 
-    void    SetDistance( sal_uInt16 nNew, SvxBoxItemLine nLine );
-    inline void SetAllDistances( sal_uInt16 nNew );
+    void    SetDistance( sal_Int16 nNew, SvxBoxItemLine nLine );
+    inline void SetAllDistances( sal_Int16 nNew );
 
     void SetRemoveAdjacentCellBorder( bool bSet ) { bRemoveAdjCellBorder = bSet; }
 
     // Line width plus Space plus inward distance
     // bEvenIfNoLine = TRUE -> Also return distance, when no Line is set
     sal_uInt16  CalcLineWidth( SvxBoxItemLine nLine ) const;
-    sal_uInt16  CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine = false ) const;
+    sal_Int16  CalcLineSpace( SvxBoxItemLine nLine, bool bEvenIfNoLine = false, bool bAllowNegative = false ) const;
     bool HasBorder( bool bTreatPaddingAsBorder ) const;
     static css::table::BorderLine2 SvxLineToLine( const editeng::SvxBorderLine* pLine, bool bConvert );
     static bool LineToSvxLine(const css::table::BorderLine& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
     static bool LineToSvxLine(const css::table::BorderLine2& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
 
     virtual boost::property_tree::ptree dumpAsJSON() const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
-inline void SvxBoxItem::SetAllDistances(sal_uInt16 const nNew)
+inline void SvxBoxItem::SetAllDistances(sal_Int16 const nNew)
 {
     nTopDist = nBottomDist = nLeftDist = nRightDist = nNew;
 }
@@ -240,7 +241,7 @@ namespace editeng
 {
 
 void EDITENG_DLLPUBLIC BorderDistanceFromWord(bool bFromEdge, sal_Int32& nMargin,
-    sal_Int32& nBorderDistance, sal_Int32 nBorderWidth);
+    sal_Int32& nBorderDistance, sal_Int32 nBorderWidth, bool bAllowNegativeBorderDistance = false);
 
 struct EDITENG_DLLPUBLIC WordPageMargins final
 {

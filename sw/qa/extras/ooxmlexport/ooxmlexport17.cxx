@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <swmodeltestbase.hxx>
+
+#include <queue>
+
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
@@ -25,8 +29,9 @@
 #include <o3tl/string_view.hxx>
 #include <comphelper/propertyvalue.hxx>
 
-#include <queue>
-#include <swmodeltestbase.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 
@@ -415,6 +420,39 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dataBinding", "xpath", "/ns0:employees[1]/ns0:employee[1]/ns0:hireDate[1]");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dataBinding", "storeItemID", "{241A8A02-7FFD-488D-8827-63FBE74E8BC9}");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w15:color", "val", "008000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
+{
+    // Given a document with a negative border distance:
+    createSwDoc();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert("test");
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    xPageStyle->setPropertyValue("TopMargin", uno::Any(static_cast<sal_Int32>(501)));
+    table::BorderLine2 aBorder;
+    aBorder.LineWidth = 159;
+    aBorder.OuterLineWidth = 159;
+    xPageStyle->setPropertyValue("TopBorder", uno::Any(aBorder));
+    sal_Int32 nTopBorderDistance = -646;
+    xPageStyle->setPropertyValue("TopBorderDistance", uno::Any(nTopBorderDistance));
+
+    // When exporting to DOCX:
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+
+    // Then make sure that the page edge -> border space is correct:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//w:pgMar", "top", "284");
+    assertXPath(pXmlDoc, "//w:pgBorders/w:top", "sz", "36");
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 28
+    // - Actual  : 0
+    // i.e. editeng::BorderDistancesToWord() mis-handled negative border distances.
+    assertXPath(pXmlDoc, "//w:pgBorders/w:top", "space", "28");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148494)

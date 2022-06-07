@@ -2594,7 +2594,7 @@ void WW8AttributeOutput::TableCellBorders(
             sal_uInt8 nSideBits[4] = {0, 0, 0, 0}; // 0001:top, 0010:left, 0100:bottom, 1000:right
             for ( int i = 0; i < 4; ++i )  // sides: top, left, bottom, right
             {
-                nMargin[i] = std::min(sal_uInt16(31680), pLastBox->GetDistance( aBorders[i] ));
+                nMargin[i] = std::min(sal_Int16(31680), pLastBox->GetDistance( aBorders[i] ));
                 if ( nMargin[i] == nDefaultMargin[i] )
                     continue;
 

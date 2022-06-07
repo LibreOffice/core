@@ -670,7 +670,7 @@ void SectionPropertyMap::SetBorderDistance( const uno::Reference< beans::XProper
     sal_Int32 nMargin = 0;
     aMargin >>= nMargin;
     editeng::BorderDistanceFromWord(eOffsetFrom == BorderOffsetFrom::Edge, nMargin, nDistance,
-                                    nLineWidth);
+                                    nLineWidth, /*bAllowNegativeBorderDistance=*/true);
 
     if (eOffsetFrom == BorderOffsetFrom::Edge)
     {
