@@ -5651,6 +5651,7 @@ if test "$cross_compiling" = "yes"; then
         LibO
         LIBFFI
         LIBPN
+        LIBTIFF
         LIBXML2
         LIBXSLT
         MDDS
