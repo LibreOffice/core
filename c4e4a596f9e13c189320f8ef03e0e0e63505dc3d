@@ -16,6 +16,24 @@
       "message": "I\u0027m not a big fan of unsigned types, but if you prefer them, perhaps add an assert here to catch the obvious mistake:\n   assert(rSize.Width() \u003e\u003d 0 \u0026\u0026 rSize.Height() \u003e\u003d 0);\n?\n\nIt\u0027s not obvious, but it is fairly common for things to temporarily have negative width/height in the middle of calculations involve transforming coordinates.",
       "revId": "c4e4a596f9e13c189320f8ef03e0e0e63505dc3d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c481a9c_0b8a3afa",
+        "filename": "include/vcl/WindowPosSize.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-07T09:17:29Z",
+      "side": 1,
+      "message": "I have (obviously?) additional patches based on this, not yet posted. Initial patches had other stuff in it, like \"width / height \u003e 0\" and unifying restoring a window from maximized state. I really hope I correctly split them and (also obviously) I can\u0027t test them on all archs. This also interferes with  https://gerrit.libreoffice.org/c/core/+/135082, so I really want to get this right as refactoring only, just in case 135082 needs a revert for some unforeseen problems, but this patch stays (much larger).",
+      "parentUuid": "9a7236b8_e1ad9126",
+      "revId": "c4e4a596f9e13c189320f8ef03e0e0e63505dc3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
