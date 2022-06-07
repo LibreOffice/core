@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad291a91_e0c71e32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-06-07T17:28:39Z",
+      "side": 1,
+      "message": "@Szücsi: very nice and useful fix! Thanks for the unit test! I gave more details to the description, because this fix helps to solve serious interoperability problems.",
+      "revId": "cfa1239a41a2ec9220f5c9650b16a1340cc02ecc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
