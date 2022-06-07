@@ -245,7 +245,7 @@ void SwInputWindow::ShowWin()
             if( pWrtShell->SwCursorShell::HasSelection() )
             {
                 pWrtShell->StartUndo( SwUndoId::DELETE );
-                pWrtShell->Delete();
+                pWrtShell->Delete(false);
                 if( SwUndoId::EMPTY != pWrtShell->EndUndo( SwUndoId::DELETE ))
                 {
                     m_bCallUndo = true;
@@ -451,7 +451,7 @@ void SwInputWindow::DelBoxContent()
         pWrtShell->MoveSection( GoCurrSection, fnSectionStart );
         pWrtShell->SetMark();
         pWrtShell->MoveSection( GoCurrSection, fnSectionEnd );
-        pWrtShell->SwEditShell::Delete();
+        pWrtShell->SwEditShell::Delete(false);
         pWrtShell->EndAllAction();
     }
 }

@@ -272,7 +272,7 @@ void SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
                 rPos.nNode = pMyDoc->GetNodes().GetEndOfContent();
             --rPos.nNode;
             if( !pMyDoc->getIDocumentContentOperations().DelFullPara( *pCursor ) )
-                Delete();
+                Delete(false);
         }
         break;
 

@@ -48,6 +48,7 @@ public:
     // Add optional parameter <bForceJoinNext>, default value <false>
     // Needed for hiding of deletion redlines
     bool DeleteAndJoin( SwPaM&,
+        SwDeleteFlags flags = SwDeleteFlags::Default,
         const bool bForceJoinNext = false ) override;
 
     bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags) override;
@@ -159,10 +160,10 @@ public:
 private:
     SwDoc& m_rDoc;
 
-    bool DeleteAndJoinImpl(SwPaM&, const bool);
-    bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);
-    bool DeleteRangeImpl(SwPaM&, const bool unused = false);
-    bool DeleteRangeImplImpl(SwPaM &);
+    bool DeleteAndJoinImpl(SwPaM&, SwDeleteFlags, const bool);
+    bool DeleteAndJoinWithRedlineImpl(SwPaM&, SwDeleteFlags, const bool unused = false);
+    bool DeleteRangeImpl(SwPaM&, SwDeleteFlags, const bool unused = false);
+    bool DeleteRangeImplImpl(SwPaM &, SwDeleteFlags);
     bool ReplaceRangeImpl(SwPaM&, OUString const&, const bool);
     SwFlyFrameFormat* InsNoTextNode( const SwPosition&rPos, SwNoTextNode*,
                                 const SfxItemSet* pFlyAttrSet,

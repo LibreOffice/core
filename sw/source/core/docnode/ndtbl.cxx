@@ -2040,7 +2040,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
                     bSavePageBreak = true;
                 }
             }
-            std::unique_ptr<SwUndoDelete> pUndo(new SwUndoDelete( aPaM ));
+            std::unique_ptr<SwUndoDelete> pUndo(new SwUndoDelete(aPaM, SwDeleteFlags::Default));
             if( bNewTextNd )
                 pUndo->SetTableDelLastNd();
             pUndo->SetPgBrkFlags( bSavePageBreak, bSavePageDesc );

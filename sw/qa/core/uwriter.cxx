@@ -1149,7 +1149,7 @@ void SwDocTest::randomTest()
                     break;
                 case 2:
                     *pCrs->GetMark() = getRandomPosition(m_pDoc, 42);
-                    m_pDoc->getIDocumentContentOperations().DeleteAndJoin(*pCrs, !!getRand(1));
+                    m_pDoc->getIDocumentContentOperations().DeleteAndJoin(*pCrs, SwDeleteFlags::Default, !!getRand(1));
                     break;
                 case 3:
                 default:
