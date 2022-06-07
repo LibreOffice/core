@@ -33,6 +33,24 @@
       "message": "FYI Gerrit signals to me a merge conflict with commit #135365.\nThe latter modifies the file Repository.mk by inserting\n\twizards_basicsrvsfunittests \\\nbelow\n\twizards_basicsrvsfdatabases \\\n\twizards_basicsrvsfdialogs \\\n\twizards_basicsrvsfdocuments \\\n+/- line 1000.\n\nIf it is needed and if I can help to solve it, please tell me.",
       "revId": "3fde5d8ac2da8f13759e507d88b31fdcb3e26472",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48a28ac5_0d4995c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-07T07:12:15Z",
+      "side": 1,
+      "message": "Thanks for noticing, but I think you can happily ignore that.  (I think those Gerrit conflict notifications are very conservative, and trigger even if two changes make modifications to the same file that would be handled just fine by the git merge algorithm.)  I\u0027ll take care of any conflicts when eventually submitting this chain \"towards LO 7.5\".",
+      "parentUuid": "c8735350_c3c0ce14",
+      "revId": "3fde5d8ac2da8f13759e507d88b31fdcb3e26472",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
