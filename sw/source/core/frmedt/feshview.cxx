@@ -313,7 +313,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
         {
             const SwFlyFrame *pTmp = GetFlyFromMarked( &rMrkList, this );
             OSL_ENSURE( pTmp, "Graphic without Fly" );
-            if ( static_cast<const SwNoTextFrame*>(pTmp->Lower())->HasAnimation() )
+            if ( pTmp && static_cast<const SwNoTextFrame*>(pTmp->Lower())->HasAnimation() )
                 static_cast<const SwNoTextFrame*>(pTmp->Lower())->StopAnimation( GetOut() );
         }
     }
