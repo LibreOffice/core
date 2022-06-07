@@ -227,6 +227,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39f02af9_cca75d2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-07T10:01:19Z",
+      "side": 1,
+      "message": "It is supposed to be part of the \"revert the control\" proposal. Without that, the change of the text looks useless, and mostly wrong with all those attempts to replace a great \"system input language\" with anything less specific and correct.",
+      "parentUuid": "61a8a81d_ef7c48eb",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c89ffbe_ee8fe0f8",
