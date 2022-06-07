@@ -220,6 +220,8 @@ class SW_DLLPUBLIC SwPagePreview final : public SfxViewShell
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange ) override;
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) override;
 
+    void Activate(bool bMDI) override;
+
     void         SetZoom(SvxZoomType eSet, sal_uInt16 nFactor);
 
 public:
