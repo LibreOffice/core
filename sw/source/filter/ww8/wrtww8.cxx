@@ -125,15 +125,15 @@ using namespace sw::types;
 */
 class WW8_WrFkp
 {
-    sal_uInt8* pFkp;         // Fkp total ( first and only FCs and Sprms )
-    sal_uInt8* pOfs;         // pointer to the offset area, later copied to pFkp
-    ePLCFT ePlc;
-    short nStartGrp;    // from here on grpprls
-    short nOldStartGrp;
-    sal_uInt8 nItemSize;
-    sal_uInt8 nIMax;         // number of entry pairs
-    sal_uInt8 nOldVarLen;
-    bool bCombined;     // true : paste not allowed
+    sal_uInt8* m_pFkp;         // Fkp total ( first and only FCs and Sprms )
+    sal_uInt8* m_pOfs;         // pointer to the offset area, later copied to pFkp
+    ePLCFT m_ePlc;
+    short m_nStartGrp;    // from here on grpprls
+    short m_nOldStartGrp;
+    sal_uInt8 m_nItemSize;
+    sal_uInt8 m_nIMax;         // number of entry pairs
+    sal_uInt8 m_nOldVarLen;
+    bool m_bCombined;     // true : paste not allowed
 
     sal_uInt8 SearchSameSprm( sal_uInt16 nVarLen, const sal_uInt8* pSprms );
 
@@ -148,12 +148,12 @@ public:
     void Write( SvStream& rStrm, SwWW8WrGrf& rGrf );
 
     bool IsEqualPos(WW8_FC nEndFc) const
-    {   return !bCombined && nIMax && nEndFc == reinterpret_cast<sal_Int32*>(pFkp)[nIMax]; }
+    {   return !m_bCombined && m_nIMax && nEndFc == reinterpret_cast<sal_Int32*>(m_pFkp)[m_nIMax]; }
     void MergeToNew( short& rVarLen, sal_uInt8 *& pNewSprms );
     bool IsEmptySprm() const
-    {   return !bCombined && nIMax && !nOldVarLen;  }
+    {   return !m_bCombined && m_nIMax && !m_nOldVarLen;  }
     void SetNewEnd( WW8_FC nEnd )
-    {   reinterpret_cast<sal_Int32*>(pFkp)[nIMax] = nEnd; }
+    {   reinterpret_cast<sal_Int32*>(m_pFkp)[m_nIMax] = nEnd; }
 
     WW8_FC GetStartFc() const;
     WW8_FC GetEndFc() const;
@@ -1081,21 +1081,21 @@ void WW8_WrPlcPn::WritePlc()
 }
 
 WW8_WrFkp::WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc)
-    : ePlc(ePl), nStartGrp(511), nOldStartGrp(511),
-    nItemSize( ( CHP == ePl ) ? 1 : 13 ),
-    nIMax(0), nOldVarLen(0), bCombined(false)
+    : m_ePlc(ePl), m_nStartGrp(511), m_nOldStartGrp(511),
+    m_nItemSize( ( CHP == ePl ) ? 1 : 13 ),
+    m_nIMax(0), m_nOldVarLen(0), m_bCombined(false)
 {
-    pFkp = reinterpret_cast<sal_uInt8*>(new sal_Int32[128]);           // 512 Byte
-    pOfs = reinterpret_cast<sal_uInt8*>(new sal_Int32[128]);           // 512 Byte
-    memset( pFkp, 0, 4 * 128 );
-    memset( pOfs, 0, 4 * 128 );
-    reinterpret_cast<sal_Int32*>(pFkp)[0] = nStartFc;         // 0th entry FC at nStartFc
+    m_pFkp = reinterpret_cast<sal_uInt8*>(new sal_Int32[128]);           // 512 Byte
+    m_pOfs = reinterpret_cast<sal_uInt8*>(new sal_Int32[128]);           // 512 Byte
+    memset( m_pFkp, 0, 4 * 128 );
+    memset( m_pOfs, 0, 4 * 128 );
+    reinterpret_cast<sal_Int32*>(m_pFkp)[0] = nStartFc;         // 0th entry FC at nStartFc
 }
 
 WW8_WrFkp::~WW8_WrFkp()
 {
-    delete[] reinterpret_cast<sal_Int32 *>(pFkp);
-    delete[] reinterpret_cast<sal_Int32 *>(pOfs);
+    delete[] reinterpret_cast<sal_Int32 *>(m_pFkp);
+    delete[] reinterpret_cast<sal_Int32 *>(m_pOfs);
 }
 
 sal_uInt8 WW8_WrFkp::SearchSameSprm( sal_uInt16 nVarLen, const sal_uInt8* pSprms )
@@ -1111,13 +1111,13 @@ sal_uInt8 WW8_WrFkp::SearchSameSprm( sal_uInt16 nVarLen, const sal_uInt8* pSprms
     }
 
     short i;
-    for( i = 0; i < nIMax; i++ )
+    for( i = 0; i < m_nIMax; i++ )
     {
-        sal_uInt8 nStart = pOfs[i * nItemSize];
+        sal_uInt8 nStart = m_pOfs[i * m_nItemSize];
         if( nStart )
         {                               // has Sprms
-            const sal_uInt8* p = pFkp + ( o3tl::narrowing<sal_uInt16>(nStart) << 1 );
-            if( ( CHP == ePlc
+            const sal_uInt8* p = m_pFkp + ( o3tl::narrowing<sal_uInt16>(nStart) << 1 );
+            if( ( CHP == m_ePlc
                     ? (*p++ == nVarLen)
                     : ((o3tl::narrowing<sal_uInt16>(*p++) << 1 ) == (( nVarLen+1) & 0xfffe)) )
                 && !memcmp( p, pSprms, nVarLen ) )
@@ -1132,14 +1132,14 @@ sal_uInt8 *WW8_WrFkp::CopyLastSprms(sal_uInt8 &rLen)
     rLen=0;
     sal_uInt8 *pStart=nullptr,*pRet=nullptr;
 
-    if (!bCombined)
-        pStart = pOfs;
+    if (!m_bCombined)
+        pStart = m_pOfs;
     else
-        pStart = pFkp + ( nIMax + 1 ) * 4;
+        pStart = m_pFkp + ( m_nIMax + 1 ) * 4;
 
-    sal_uInt8 nStart = *(pStart + (nIMax-1) * nItemSize);
+    sal_uInt8 nStart = *(pStart + (m_nIMax-1) * m_nItemSize);
 
-    const sal_uInt8* p = pFkp + ( o3tl::narrowing<sal_uInt16>(nStart) << 1 );
+    const sal_uInt8* p = m_pFkp + ( o3tl::narrowing<sal_uInt16>(nStart) << 1 );
 
     if (!*p)
         p++;
@@ -1147,7 +1147,7 @@ sal_uInt8 *WW8_WrFkp::CopyLastSprms(sal_uInt8 &rLen)
     if (*p)
     {
         rLen = *p++;
-        if (PAP == ePlc)
+        if (PAP == m_ePlc)
             rLen *= 2;
         pRet = new sal_uInt8[rLen];
         memcpy(pRet,p,rLen);
@@ -1159,14 +1159,14 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
 {
     assert((!nVarLen || pSprms) && "Item pointer missing");
 
-    OSL_ENSURE( nVarLen < ( ( ePlc == PAP ) ? 497U : 502U ), "Sprms too long !" );
+    OSL_ENSURE( nVarLen < ( ( m_ePlc == PAP ) ? 497U : 502U ), "Sprms too long !" );
 
-    if( bCombined )
+    if( m_bCombined )
     {
         OSL_ENSURE( false, "Fkp::Append: Fkp is already combined" );
         return false;
     }
-    sal_Int32 n = reinterpret_cast<sal_Int32*>(pFkp)[nIMax];        // last entry
+    sal_Int32 n = reinterpret_cast<sal_Int32*>(m_pFkp)[m_nIMax];        // last entry
     if( nEndFc <= n )
     {
         OSL_ENSURE( nEndFc >= n, "+Fkp: FC backwards" );
@@ -1179,61 +1179,61 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
 
     sal_uInt8 nOldP = nVarLen ? SearchSameSprm( nVarLen, pSprms ) : 0;
                                             // Combine equal entries
-    short nOffset=0, nPos = nStartGrp;
+    short nOffset=0, nPos = m_nStartGrp;
     if (nVarLen && !nOldP)
     {
-        nPos = PAP == ePlc
-                ? ( 13 == nItemSize     // HACK: PAP and bWrtWW8 !!
-                     ? (nStartGrp & 0xFFFE ) - nVarLen - 1
-                     : (nStartGrp - (((nVarLen + 1) & 0xFFFE)+1)) & 0xFFFE )
-                : ((nStartGrp - nVarLen - 1) & 0xFFFE);
+        nPos = PAP == m_ePlc
+                ? ( 13 == m_nItemSize     // HACK: PAP and bWrtWW8 !!
+                     ? (m_nStartGrp & 0xFFFE ) - nVarLen - 1
+                     : (m_nStartGrp - (((nVarLen + 1) & 0xFFFE)+1)) & 0xFFFE )
+                : ((m_nStartGrp - nVarLen - 1) & 0xFFFE);
         if( nPos < 0 )
             return false;           // doesn't fit at all
         nOffset = nPos;             // save offset (can also be uneven!)
         nPos &= 0xFFFE;             // Pos for Sprms ( gerade Pos )
     }
 
-    if( o3tl::make_unsigned(nPos) <= ( nIMax + 2U ) * 4U + ( nIMax + 1U ) * nItemSize )
+    if( o3tl::make_unsigned(nPos) <= ( m_nIMax + 2U ) * 4U + ( m_nIMax + 1U ) * m_nItemSize )
                                             // does it fits after the CPs and offsets?
         return false;                       // no
 
-    reinterpret_cast<sal_Int32*>(pFkp)[nIMax + 1] = nEndFc;     // insert FC
+    reinterpret_cast<sal_Int32*>(m_pFkp)[m_nIMax + 1] = nEndFc;     // insert FC
 
-    nOldVarLen = static_cast<sal_uInt8>(nVarLen);
+    m_nOldVarLen = static_cast<sal_uInt8>(nVarLen);
     if( nVarLen && !nOldP )
     {               // insert it for real
-        nOldStartGrp = nStartGrp;
+        m_nOldStartGrp = m_nStartGrp;
 
-        nStartGrp = nPos;
-        pOfs[nIMax * nItemSize] = static_cast<sal_uInt8>( nStartGrp >> 1 );
+        m_nStartGrp = nPos;
+        m_pOfs[m_nIMax * m_nItemSize] = static_cast<sal_uInt8>( m_nStartGrp >> 1 );
                                             // insert (start-of-data >> 1)
-        sal_uInt8 nCnt = static_cast< sal_uInt8 >(CHP == ePlc
+        sal_uInt8 nCnt = static_cast< sal_uInt8 >(CHP == m_ePlc
                         ? ( nVarLen < 256 ) ? static_cast<sal_uInt8>(nVarLen) : 255
                         : ( ( nVarLen + 1 ) >> 1 ));
 
-        pFkp[ nOffset ] = nCnt;                     // Enter data length
-        memcpy( pFkp + nOffset + 1, pSprms, nVarLen );  // store Sprms
+        m_pFkp[ nOffset ] = nCnt;                     // Enter data length
+        memcpy( m_pFkp + nOffset + 1, pSprms, nVarLen );  // store Sprms
     }
     else
     {
         // do not enter for real ( no Sprms or recurrence )
         // start-of-data 0 ( no data ) or recurrence
-        pOfs[nIMax * nItemSize] = nOldP;
+        m_pOfs[m_nIMax * m_nItemSize] = nOldP;
     }
-    nIMax++;
+    m_nIMax++;
     return true;
 }
 
 void WW8_WrFkp::Combine()
 {
-    if( bCombined )
+    if( m_bCombined )
         return;
-    if( nIMax )
-        memcpy( pFkp + ( nIMax + 1 ) * 4, pOfs, nIMax * nItemSize );
-    delete[] pOfs;
-    pOfs = nullptr;
-    pFkp[511] = nIMax;
-    bCombined = true;
+    if( m_nIMax )
+        memcpy( m_pFkp + ( m_nIMax + 1 ) * 4, m_pOfs, m_nIMax * m_nItemSize );
+    delete[] m_pOfs;
+    m_pOfs = nullptr;
+    m_pFkp[511] = m_nIMax;
+    m_bCombined = true;
 
 #if defined OSL_BIGENDIAN           // only the FCs will be rotated here
     sal_uInt16 i;                   // the Sprms must be rotated elsewhere
@@ -1249,8 +1249,8 @@ void WW8_WrFkp::Write( SvStream& rStrm, SwWW8WrGrf& rGrf )
     Combine();                      // If not already combined
 
     sal_uInt8* p;               //  search magic for nPicLocFc
-    sal_uInt8* pEnd = pFkp + nStartGrp;
-    for( p = pFkp + 511 - 4; p >= pEnd; p-- )
+    sal_uInt8* pEnd = m_pFkp + m_nStartGrp;
+    for( p = m_pFkp + 511 - 4; p >= pEnd; p-- )
     {
         if( *p != GRF_MAGIC_1 )     // search for signature 0x12 0x34 0x56 0xXX
             continue;
@@ -1263,40 +1263,40 @@ void WW8_WrFkp::Write( SvStream& rStrm, SwWW8WrGrf& rGrf )
         UInt32ToSVBT32( rGrf.GetFPos(), nPos );   // FilePos the graphics
         memcpy( p, nPos, 4 );       // patch FilePos over the signature
     }
-    rStrm.WriteBytes(pFkp, 512);
+    rStrm.WriteBytes(m_pFkp, 512);
 }
 
 void WW8_WrFkp::MergeToNew( short& rVarLen, sal_uInt8 *& rpNewSprms )
 {
-    sal_uInt8 nStart = pOfs[ (nIMax-1) * nItemSize ];
+    sal_uInt8 nStart = m_pOfs[ (m_nIMax-1) * m_nItemSize ];
     if( !nStart )
         return;
 
 // has Sprms
-    sal_uInt8* p = pFkp + ( o3tl::narrowing<sal_uInt16>(nStart) << 1 );
+    sal_uInt8* p = m_pFkp + ( o3tl::narrowing<sal_uInt16>(nStart) << 1 );
 
     // old and new equal? Then copy only one into the new sprms
-    if( nOldVarLen == rVarLen && !memcmp( p+1, rpNewSprms, nOldVarLen ))
+    if( m_nOldVarLen == rVarLen && !memcmp( p+1, rpNewSprms, m_nOldVarLen ))
     {
-        sal_uInt8* pNew = new sal_uInt8[ nOldVarLen ];
-        memcpy( pNew, p+1, nOldVarLen );
+        sal_uInt8* pNew = new sal_uInt8[ m_nOldVarLen ];
+        memcpy( pNew, p+1, m_nOldVarLen );
         rpNewSprms = pNew;
     }
     else
     {
-        sal_uInt8* pNew = new sal_uInt8[ nOldVarLen + rVarLen ];
-        memcpy( pNew, p+1, nOldVarLen );
-        memcpy( pNew + nOldVarLen, rpNewSprms, rVarLen );
+        sal_uInt8* pNew = new sal_uInt8[ m_nOldVarLen + rVarLen ];
+        memcpy( pNew, p+1, m_nOldVarLen );
+        memcpy( pNew + m_nOldVarLen, rpNewSprms, rVarLen );
 
         rpNewSprms = pNew;
-        rVarLen = rVarLen + nOldVarLen;
+        rVarLen = rVarLen + m_nOldVarLen;
     }
-    --nIMax;
+    --m_nIMax;
     // if this Sprms don't used from others, remove it
     bool bFnd = false;
-    for (sal_uInt16 n = 0; n < nIMax; ++n)
+    for (sal_uInt16 n = 0; n < m_nIMax; ++n)
     {
-        if (nStart == pOfs[n * nItemSize])
+        if (nStart == m_pOfs[n * m_nItemSize])
         {
             bFnd = true;
             break;
@@ -1304,8 +1304,8 @@ void WW8_WrFkp::MergeToNew( short& rVarLen, sal_uInt8 *& rpNewSprms )
     }
     if (!bFnd)
     {
-        nStartGrp = nOldStartGrp;
-        memset( p, 0, nOldVarLen+1 );
+        m_nStartGrp = m_nOldStartGrp;
+        memset( p, 0, m_nOldVarLen+1 );
     }
 }
 
@@ -1314,16 +1314,16 @@ WW8_FC WW8_WrFkp::GetStartFc() const
     // when bCombined, then the array beginning with pFkp is already byte-swapped
     // to LittleEndian, so to extract the start and end positions they must
     // be swapped back.
-    if( bCombined )
-        return SVBT32ToUInt32( pFkp );        // 0. Element
-    return reinterpret_cast<sal_Int32*>(pFkp)[0];
+    if( m_bCombined )
+        return SVBT32ToUInt32( m_pFkp );        // 0. Element
+    return reinterpret_cast<sal_Int32*>(m_pFkp)[0];
 }
 
 WW8_FC WW8_WrFkp::GetEndFc() const
 {
-    if( bCombined )
-        return SVBT32ToUInt32( &(pFkp[nIMax*4]) );    // nIMax-th SVBT32-Element
-    return reinterpret_cast<sal_Int32*>(pFkp)[nIMax];
+    if( m_bCombined )
+        return SVBT32ToUInt32( &(m_pFkp[m_nIMax*4]) );    // nIMax-th SVBT32-Element
+    return reinterpret_cast<sal_Int32*>(m_pFkp)[m_nIMax];
 }
 
 // Method for managing the piece table

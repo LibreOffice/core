@@ -1763,8 +1763,8 @@ void SwBasicEscherEx::SetPicId(const SdrObject &, sal_uInt32,
 void SwEscherEx::SetPicId(const SdrObject &rSdrObj, sal_uInt32 nShapeId,
     EscherPropertyContainer &rPropOpt)
 {
-    pTextBxs->Append(rSdrObj, nShapeId);
-    sal_uInt32 nPicId = pTextBxs->Count();
+    m_pTextBxs->Append(rSdrObj, nShapeId);
+    sal_uInt32 nPicId = m_pTextBxs->Count();
     nPicId *= 0x10000;
     rPropOpt.AddOpt( ESCHER_Prop_pictureId, nPicId );
 }
@@ -2169,9 +2169,9 @@ void SwBasicEscherEx::WritePictures()
 
 SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
     : SwBasicEscherEx(pStrm, rWW8Wrt),
-    pTextBxs(nullptr)
+    m_pTextBxs(nullptr)
 {
-    aHostData.SetClientData(&aWinwordAnchoring);
+    m_aHostData.SetClientData(&m_aWinwordAnchoring);
     OpenContainer( ESCHER_DggContainer );
 
     sal_uInt16 nColorCount = 4;
@@ -2187,17 +2187,17 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
 
     sal_uInt8 i = 2;     // for header/footer and the other
     PlcDrawObj *pSdrObjs = mrWrt.m_pHFSdrObjs.get();
-    pTextBxs = mrWrt.m_pHFTextBxs.get();
+    m_pTextBxs = mrWrt.m_pHFTextBxs.get();
 
     // if no header/footer -> skip over
     if (!pSdrObjs->size())
     {
         --i;
         pSdrObjs = mrWrt.m_pSdrObjs.get();
-        pTextBxs = mrWrt.m_pTextBxs.get();
+        m_pTextBxs = mrWrt.m_pTextBxs.get();
     }
 
-    for( ; i--; pSdrObjs = mrWrt.m_pSdrObjs.get(), pTextBxs = mrWrt.m_pTextBxs.get() )
+    for( ; i--; pSdrObjs = mrWrt.m_pSdrObjs.get(), m_pTextBxs = mrWrt.m_pTextBxs.get() )
     {
         // "dummy char" (or any Count ?) - why? Only Microsoft knows it.
         GetStream().WriteChar( i );
@@ -2235,7 +2235,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                     break;
                 case ww8::Frame::eDrawing:
                 {
-                    aWinwordAnchoring.SetAnchoring(rFormat);
+                    m_aWinwordAnchoring.SetAnchoring(rFormat);
                     const SdrObject* pSdrObj = rFormat.FindRealSdrObject();
                     if (pSdrObj)
                     {
@@ -2706,8 +2706,8 @@ void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
 
 void SwEscherEx::WriteFrameExtraData( const SwFrameFormat& rFormat )
 {
-    aWinwordAnchoring.SetAnchoring(rFormat);
-    aWinwordAnchoring.WriteData(*this);
+    m_aWinwordAnchoring.SetAnchoring(rFormat);
+    m_aWinwordAnchoring.WriteData(*this);
 
     AddAtom(4, ESCHER_ClientAnchor);
     GetStream().WriteInt32( 0 );
@@ -2753,11 +2753,11 @@ sal_Int32 SwEscherEx::WriteFlyFrame(const DrawObj &rObj, sal_uInt32 &rShapeId,
                 rShapeId = GetFlyShapeId(rFormat, rObj.mnHdFtIndex, rPVec);
                 if( !nOff )
                 {
-                    nTextId = pTextBxs->GetPos( pObj );
+                    nTextId = m_pTextBxs->GetPos( pObj );
                     if( USHRT_MAX == nTextId )
                     {
-                        pTextBxs->Append( *pObj, rShapeId );
-                        nTextId = pTextBxs->Count();
+                        m_pTextBxs->Append( *pObj, rShapeId );
+                        nTextId = m_pTextBxs->Count();
                     }
                     else
                         ++nTextId;
@@ -2765,13 +2765,13 @@ sal_Int32 SwEscherEx::WriteFlyFrame(const DrawObj &rObj, sal_uInt32 &rShapeId,
                 else
                 {
                     const SdrObject* pPrevObj = pFormat->FindRealSdrObject();
-                    nTextId = pTextBxs->GetPos( pPrevObj );
+                    nTextId = m_pTextBxs->GetPos( pPrevObj );
                     if( USHRT_MAX == nTextId )
                     {
                         sal_uInt32 nPrevShapeId =
                             GetFlyShapeId(*pFormat, rObj.mnHdFtIndex, rPVec);
-                        pTextBxs->Append( *pPrevObj, nPrevShapeId );
-                        nTextId = pTextBxs->Count();
+                        m_pTextBxs->Append( *pPrevObj, nPrevShapeId );
+                        nTextId = m_pTextBxs->Count();
                     }
                     else
                         ++nTextId;
@@ -2791,8 +2791,8 @@ sal_Int32 SwEscherEx::WriteFlyFrame(const DrawObj &rObj, sal_uInt32 &rShapeId,
                 if( !rFormat.GetChain().GetPrev() )//obj in header/footer?
                 {
                     rShapeId = GetFlyShapeId(rFormat, rObj.mnHdFtIndex, rPVec);
-                    pTextBxs->Append( &rFormat, rShapeId );
-                    sal_uInt32 nTextId = pTextBxs->Count();
+                    m_pTextBxs->Append( &rFormat, rShapeId );
+                    sal_uInt32 nTextId = m_pTextBxs->Count();
 
                     nTextId *= 0x10000;
                     nBorderThick = WriteTextFlyFrame(rObj, rShapeId, nTextId, rPVec);
@@ -2834,8 +2834,8 @@ sal_Int32 SwEscherEx::WriteTextFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId
     if (const SwFrameFormat *pNext = rFormat.GetChain().GetNext())
     {
         sal_uInt16 nPos = FindPos(*pNext, rObj.mnHdFtIndex, rPVec);
-        if (USHRT_MAX != nPos && aFollowShpIds[nPos])
-            aPropOpt.AddOpt(ESCHER_Prop_hspNext, aFollowShpIds[nPos]);
+        if (USHRT_MAX != nPos && m_aFollowShpIds[nPos])
+            aPropOpt.AddOpt(ESCHER_Prop_hspNext, m_aFollowShpIds[nPos]);
     }
     nBorderThick = WriteFlyFrameAttr( rFormat, mso_sptTextBox, aPropOpt );
 
@@ -2931,7 +2931,7 @@ void SwEscherEx::MakeZOrderArrAndFollowIds(
     ::lcl_makeZOrderArray(mrWrt, rSrcArr, rDstArr);
 
     //Now set up the follow IDs
-    aFollowShpIds.clear();
+    m_aFollowShpIds.clear();
 
     for (DrawObj* p : rDstArr)
     {
@@ -2947,7 +2947,7 @@ void SwEscherEx::MakeZOrderArrAndFollowIds(
 
         sal_uLong nShapeId = bNeedsShapeId ? GenerateShapeId() : 0;
 
-        aFollowShpIds.push_back(nShapeId);
+        m_aFollowShpIds.push_back(nShapeId);
     }
 }
 
@@ -2958,11 +2958,11 @@ sal_uInt32 SwEscherEx::GetFlyShapeId(const SwFrameFormat& rFormat,
     sal_uInt32 nShapeId;
     if (USHRT_MAX != nPos)
     {
-        nShapeId = aFollowShpIds[nPos];
+        nShapeId = m_aFollowShpIds[nPos];
         if (0 == nShapeId)
         {
             nShapeId = GenerateShapeId();
-            aFollowShpIds[ nPos ] = nShapeId;
+            m_aFollowShpIds[ nPos ] = nShapeId;
         }
     }
     else
@@ -2976,8 +2976,8 @@ sal_uInt32 SwEscherEx::QueryTextID(
     sal_uInt32 nId = 0;
     if (SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xXShapeRef))
     {
-        pTextBxs->Append( *pObj, nShapeId );
-        nId = pTextBxs->Count();
+        m_pTextBxs->Append( *pObj, nShapeId );
+        nId = m_pTextBxs->Count();
         nId *= 0x10000;
     }
     return nId;

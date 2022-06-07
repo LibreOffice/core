@@ -104,15 +104,15 @@ struct WW8_SED
 class WW8_WrPlc0
 {
 private:
-    std::vector<sal_uLong> aPos;      // PTRARR of CPs / FCs
-    sal_uLong nOfs;
+    std::vector<sal_uLong> m_aPos;      // PTRARR of CPs / FCs
+    sal_uLong m_nOfs;
 
     WW8_WrPlc0(WW8_WrPlc0 const&) = delete;
     WW8_WrPlc0& operator=(WW8_WrPlc0 const&) = delete;
 
 public:
     explicit WW8_WrPlc0( sal_uLong nOffset );
-    sal_uInt16 Count() const                { return aPos.size(); }
+    sal_uInt16 Count() const                { return m_aPos.size(); }
     void Append( sal_uLong nStartCpOrFc );
     void Write( SvStream& rStrm );
 };
@@ -972,18 +972,18 @@ void wwFontHelper::WriteFontTable( const RtfAttributeOutput& rAttrOutput )
 }
 
 WW8_WrPlc0::WW8_WrPlc0( sal_uLong nOffset )
-    : nOfs( nOffset )
+    : m_nOfs( nOffset )
 {
 }
 
 void WW8_WrPlc0::Append( sal_uLong nStartCpOrFc )
 {
-    aPos.push_back( nStartCpOrFc - nOfs );
+    m_aPos.push_back( nStartCpOrFc - m_nOfs );
 }
 
 void WW8_WrPlc0::Write( SvStream& rStrm )
 {
-    for( const auto& rPos : aPos )
+    for( const auto& rPos : m_aPos )
     {
         rStrm.WriteUInt32(rPos);
     }
