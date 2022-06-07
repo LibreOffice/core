@@ -16,6 +16,24 @@
       "message": "and is it of any use to do a pClient.disposeAndClear() if there was no GetWindowPeer(), or is that totally orthogonal to the problem?",
       "revId": "86922db292f5708d2431959d15c5ceea70aee7fb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4d43843_1b519ab3",
+        "filename": "toolkit/source/helper/unowrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-06-07T09:35:24Z",
+      "side": 0,
+      "message": "hmm that might indeed be slightly better than this fix, if it works, which i haven\u0027t tested, but really i\u0027m wondering why the Dialog class isn\u0027t able to dispose all its children automatically when it\u0027s disposed itself.",
+      "parentUuid": "808e9982_4dd8adf5",
+      "revId": "86922db292f5708d2431959d15c5ceea70aee7fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
