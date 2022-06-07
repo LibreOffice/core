@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aead9ee_22591dd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-07T19:10:02Z",
+      "side": 1,
+      "message": "Living dangerously is half the fun",
+      "revId": "d1ebca2cc32e292daf52ed233b2112cab9ca863f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
