@@ -26,7 +26,7 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkTreeStore" id="liststore4">
+  <object class="GtkTreeStore" id="liststore5">
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
@@ -545,7 +545,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="model">liststore4</property>
+                        <property name="model">liststore5</property>
                         <property name="headers_visible">False</property>
                         <property name="headers_clickable">False</property>
                         <property name="search_column">0</property>
