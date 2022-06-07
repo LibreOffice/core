@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <utility>
 
 #include <vcl/layout.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
@@ -22,6 +23,7 @@
 #include <osl/file.hxx>
 #include <config_folders.h>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <comphelper/lok.hxx>
 
@@ -43,14 +45,26 @@ static bool doesFileExist(std::u16string_view sUIDir, std::u16string_view sUIFil
 /**
  * split from the main class since it needs different ref-counting mana
  */
-class NotebookBarContextChangeEventListener : public ::cppu::WeakImplHelper<css::ui::XContextChangeEventListener>
+class NotebookBarContextChangeEventListener : public ::cppu::WeakImplHelper<css::ui::XContextChangeEventListener, css::frame::XFrameActionListener>
 {
+    bool mbActive;
     VclPtr<NotebookBar> mpParent;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
 public:
-    explicit NotebookBarContextChangeEventListener(NotebookBar *p) : mpParent(p) {}
+    NotebookBarContextChangeEventListener(NotebookBar *p, css::uno::Reference<css::frame::XFrame> xFrame) :
+        mbActive(false),
+        mpParent(p),
+        mxFrame(std::move(xFrame))
+    {}
+
+    void setupFrameListener(bool bListen);
+    void setupListener(bool bListen);
 
     // XContextChangeEventListener
     virtual void SAL_CALL notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent) override;
+
+    // XFrameActionListener
+    virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& rEvent) override;
 
     virtual void SAL_CALL disposing(const ::css::lang::EventObject&) override;
 };
@@ -59,12 +73,12 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
                          const css::uno::Reference<css::frame::XFrame>& rFrame,
                          const NotebookBarAddonsItem& aNotebookBarAddonsItem)
     : Control(pParent)
-    , m_pEventListener(new NotebookBarContextChangeEventListener(this))
+    , m_pEventListener(new NotebookBarContextChangeEventListener(this, rFrame))
     , m_pViewShell(nullptr)
     , m_bIsWelded(false)
     , m_sUIXMLDescription(rUIXMLDescription)
 {
-    mxFrame = rFrame;
+    m_pEventListener->setupFrameListener(true);
 
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     OUString sUIDir = AllSettings::GetUIRootDir();
@@ -133,7 +147,8 @@ void NotebookBar::dispose()
     else
         disposeBuilder();
 
-    assert(m_alisteningControllers.empty());
+    m_pEventListener->setupFrameListener(false);
+    m_pEventListener->setupListener(false);
     m_pEventListener.clear();
 
     Control::dispose();
@@ -225,45 +240,58 @@ void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(co
     }
 }
 
-void NotebookBar::ControlListenerForCurrentController(bool bListen)
+void NotebookBarContextChangeEventListener::setupListener(bool bListen)
 {
     if (comphelper::LibreOfficeKit::isActive())
         return;
 
-    auto xController = mxFrame->getController();
-    if(bListen)
+    auto xMultiplexer(css::ui::ContextChangeEventMultiplexer::get(::comphelper::getProcessComponentContext()));
+
+    if (bListen)
     {
-        // add listeners
-        if (m_alisteningControllers.count(xController) == 0)
+        try
         {
-            auto xMultiplexer(css::ui::ContextChangeEventMultiplexer::get(
-                ::comphelper::getProcessComponentContext()));
-            xMultiplexer->addContextChangeEventListener(m_pEventListener, xController);
-            m_alisteningControllers.insert(xController);
+            xMultiplexer->addContextChangeEventListener(this, mxFrame->getController());
+        }
+        catch (const css::uno::Exception&)
+        {
         }
     }
     else
+        xMultiplexer->removeAllContextChangeEventListeners(this);
+
+    mbActive = bListen;
+}
+
+void NotebookBarContextChangeEventListener::setupFrameListener(bool bListen)
+{
+    if (bListen)
+        mxFrame->addFrameActionListener(this);
+    else
+        mxFrame->removeFrameActionListener(this);
+}
+
+void SAL_CALL NotebookBarContextChangeEventListener::frameAction(const css::frame::FrameActionEvent& rEvent)
+{
+    if (!mbActive)
+        return;
+
+    if (rEvent.Action == css::frame::FrameAction_COMPONENT_REATTACHED)
     {
-        // remove listeners
-        if (m_alisteningControllers.count(xController))
-        {
-            auto xMultiplexer(css::ui::ContextChangeEventMultiplexer::get(
-                ::comphelper::getProcessComponentContext()));
-            xMultiplexer->removeContextChangeEventListener(m_pEventListener, xController);
-            m_alisteningControllers.erase(xController);
-        }
+        setupListener(true);
+    }
+    else if (rEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING)
+    {
+        setupListener(false);
+        // We don't want to give up on listening; just wait for
+        // another controller to be attached to the frame.
+        mbActive = true;
     }
 }
 
-void NotebookBar::StopListeningAllControllers()
+void NotebookBar::SetupListener(bool bListen)
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        return;
-
-    auto xMultiplexer(
-        css::ui::ContextChangeEventMultiplexer::get(comphelper::getProcessComponentContext()));
-    xMultiplexer->removeAllContextChangeEventListeners(m_pEventListener);
-    m_alisteningControllers.clear();
+    m_pEventListener->setupListener(bListen);
 }
 
 void SAL_CALL NotebookBarContextChangeEventListener::disposing(const ::css::lang::EventObject&)

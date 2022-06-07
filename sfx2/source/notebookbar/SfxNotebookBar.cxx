@@ -202,7 +202,6 @@ void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
 {
     if (pSysWindow)
     {
-        RemoveListeners(pSysWindow);
         if(pSysWindow->GetNotebookBar())
             pSysWindow->CloseNotebookBar();
         if (SfxViewFrame::Current())
@@ -432,7 +431,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
             if(pView)
             {
-                pNotebookBar->ControlListenerForCurrentController(true);
+                pNotebookBar->SetupListener(true);
             }
         }
 
@@ -441,7 +440,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     else if (auto pNotebookBar = pSysWindow->GetNotebookBar())
     {
         vcl::Window* pParent = pNotebookBar->GetParent();
-        RemoveListeners(pSysWindow);
         pSysWindow->CloseNotebookBar();
         pParent->Resize();
         SfxNotebookBar::ShowMenubar(true);
@@ -454,7 +452,7 @@ void SfxNotebookBar::RemoveListeners(SystemWindow const * pSysWindow)
 {
     if (auto pNotebookBar = pSysWindow->GetNotebookBar())
     {
-        pNotebookBar->StopListeningAllControllers();
+        pNotebookBar->SetupListener(false);
     }
 }
 

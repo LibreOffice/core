@@ -804,6 +804,7 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
         {
             EndListening(*m_pCreateView);
             m_pCreateView = nullptr;
+            m_xContentTree->SetActiveShell(nullptr);
         }
     }
     else
