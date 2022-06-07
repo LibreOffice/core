@@ -595,6 +595,11 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
         uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
         xPropertySet->setPropertyValue("ParaHyphenationNoCaps", uno::Any(true));
     }
+    if (m_pImpl->m_nHyphenationZone)
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
+        xPropertySet->setPropertyValue("ParaHyphenationZone", uno::Any(GetHyphenationZone()));
+    }
     if (m_pImpl->m_bWidowControl && lcl_isDefault(xPropertyState, "ParaWidows") && lcl_isDefault(xPropertyState, "ParaOrphans"))
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
