@@ -5060,11 +5060,11 @@ namespace {
 
 class SwWW8WrTabu
 {
-    std::unique_ptr<sal_uInt8[]> pDel;            // DelArray
-    std::unique_ptr<sal_uInt8[]> pAddPos;         // AddPos-Array
-    std::unique_ptr<sal_uInt8[]> pAddTyp;         // AddTyp-Array
-    sal_uInt16 nAdd;            // number of tabs to be added
-    sal_uInt16 nDel;            // number of tabs to be deleted
+    std::unique_ptr<sal_uInt8[]> m_pDel;            // DelArray
+    std::unique_ptr<sal_uInt8[]> m_pAddPos;         // AddPos-Array
+    std::unique_ptr<sal_uInt8[]> m_pAddTyp;         // AddTyp-Array
+    sal_uInt16 m_nAdd;            // number of tabs to be added
+    sal_uInt16 m_nDel;            // number of tabs to be deleted
 
     SwWW8WrTabu(const SwWW8WrTabu&) = delete;
     SwWW8WrTabu& operator=(const SwWW8WrTabu&) = delete;
@@ -5080,12 +5080,12 @@ public:
 }
 
 SwWW8WrTabu::SwWW8WrTabu(sal_uInt16 nDelMax, sal_uInt16 nAddMax)
-    : nAdd(0), nDel(0)
+    : m_nAdd(0), m_nDel(0)
 {
     if (nDelMax)
-        pDel.reset( new sal_uInt8[nDelMax * 2] );
-    pAddPos.reset( new sal_uInt8[nAddMax * 2] );
-    pAddTyp.reset( new sal_uInt8[nAddMax] );
+        m_pDel.reset( new sal_uInt8[nDelMax * 2] );
+    m_pAddPos.reset( new sal_uInt8[nAddMax * 2] );
+    m_pAddTyp.reset( new sal_uInt8[nAddMax] );
 }
 
 /**
@@ -5095,7 +5095,7 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, tools::Long nAdjustment)
 {
     // insert tab position
     ShortToSVBT16(msword_cast<sal_Int16>(rTS.GetTabPos() + nAdjustment),
-        pAddPos.get() + (nAdd * 2));
+        m_pAddPos.get() + (m_nAdd * 2));
 
     // insert tab type
     sal_uInt8 nPara = 0;
@@ -5136,8 +5136,8 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, tools::Long nAdjustment)
             break;
     }
 
-    pAddTyp[nAdd] = nPara;
-    ++nAdd;
+    m_pAddTyp[m_nAdd] = nPara;
+    ++m_nAdd;
 }
 
 /**
@@ -5147,8 +5147,8 @@ void SwWW8WrTabu::Del(const SvxTabStop &rTS, tools::Long nAdjustment)
 {
     // insert tab position
     ShortToSVBT16(msword_cast<sal_Int16>(rTS.GetTabPos() + nAdjustment),
-        pDel.get() + (nDel * 2));
-    ++nDel;
+        m_pDel.get() + (m_nDel * 2));
+    ++m_nDel;
 }
 
 /**
@@ -5156,16 +5156,16 @@ void SwWW8WrTabu::Del(const SvxTabStop &rTS, tools::Long nAdjustment)
  */
 void SwWW8WrTabu::PutAll(WW8Export& rWrt)
 {
-    if (!nAdd && !nDel) //If it's a no-op
+    if (!m_nAdd && !m_nDel) //If it's a no-op
         return;
-    OSL_ENSURE(nAdd <= 255, "more than 255 added tabstops?");
-    OSL_ENSURE(nDel <= 255, "more than 244 removed tabstops?");
-    if (nAdd > 255)
-        nAdd = 255;
-    if (nDel > 255)
-        nDel = 255;
+    OSL_ENSURE(m_nAdd <= 255, "more than 255 added tabstops?");
+    OSL_ENSURE(m_nDel <= 255, "more than 244 removed tabstops?");
+    if (m_nAdd > 255)
+        m_nAdd = 255;
+    if (m_nDel > 255)
+        m_nDel = 255;
 
-    sal_uInt16 nSiz = 2 * nDel + 3 * nAdd + 2;
+    sal_uInt16 nSiz = 2 * m_nDel + 3 * m_nAdd + 2;
     if (nSiz > 255)
         nSiz = 255;
 
@@ -5173,12 +5173,12 @@ void SwWW8WrTabu::PutAll(WW8Export& rWrt)
     // insert cch
     rWrt.m_pO->push_back(msword_cast<sal_uInt8>(nSiz));
     // write DelArr
-    rWrt.m_pO->push_back(msword_cast<sal_uInt8>(nDel));
-    rWrt.OutSprmBytes(pDel.get(), nDel * 2);
+    rWrt.m_pO->push_back(msword_cast<sal_uInt8>(m_nDel));
+    rWrt.OutSprmBytes(m_pDel.get(), m_nDel * 2);
     // write InsArr
-    rWrt.m_pO->push_back(msword_cast<sal_uInt8>(nAdd));
-    rWrt.OutSprmBytes(pAddPos.get(), 2 * nAdd);         // AddPosArray
-    rWrt.OutSprmBytes(pAddTyp.get(), nAdd);             // AddTypArray
+    rWrt.m_pO->push_back(msword_cast<sal_uInt8>(m_nAdd));
+    rWrt.OutSprmBytes(m_pAddPos.get(), 2 * m_nAdd);         // AddPosArray
+    rWrt.OutSprmBytes(m_pAddTyp.get(), m_nAdd);             // AddTypArray
 }
 
 static void ParaTabStopAdd( WW8Export& rWrt,
