@@ -271,7 +271,7 @@ End Property	&apos;	SFUnitTests.SF_UnitTest.ReturnCode (get)
 
 REM -----------------------------------------------------------------------------
 Property Get Verbose() As Variant
-&apos;&apos;&apos;	The Verbose property indicates if all assertions are reported
+&apos;&apos;&apos;	The Verbose property indicates if all assertions (True AND False) are reported
 	Verbose = _PropertyGet(&quot;Verbose&quot;)
 End Property	&apos;	SFUnitTests.SF_UnitTest.Verbose (get)
 
@@ -975,8 +975,6 @@ End Function	&apos;	SFUnitTests.SF_UnitTest.AssertTrue
 REM -----------------------------------------------------------------------------
 Public Sub Fail(Optional ByVal Message As Variant)
 &apos;&apos;&apos;	Forces a test failure
-&apos;&apos;&apos;	Args:
-
 
 Dim bAssert As Boolean			&apos;	Fictive return value
 Const cstThisSub = &quot;UnitTest.Fail&quot;
@@ -996,7 +994,7 @@ End Sub	&apos;	SFUnitTests.SF_UnitTest.Fail
 
 REM -----------------------------------------------------------------------------
 Public Sub Log(Optional ByVal Message As Variant)
-&apos;&apos;&apos;	Forces to record the given message in the test report (console)
+&apos;&apos;&apos;	Records the given message in the test report (console)
 
 Dim bAssert As Boolean			&apos;	Fictive return value
 Dim bVerbose As Boolean			:	bVerbose = _Verbose
@@ -1170,7 +1168,7 @@ Public Function RunTest(Optional ByVal TestSuite As Variant _
 &apos;&apos;&apos;			The default pattern is &quot;Test_*&quot;
 &apos;&apos;&apos;		Message: the message to be displayed in the console when the test starts.
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		The return code of the execution (RCxxx constants)
+&apos;&apos;&apos;		One of the return codes of the execution (RCxxx constants)
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		GlobalScope.BasicLibraries.loadLibrary(&quot;ScriptForge&quot;)
 &apos;&apos;&apos;		Dim test	:	test = CreateScriptService(&quot;UnitTest&quot;, ThisComponent, &quot;Tests&quot;)
@@ -1326,7 +1324,7 @@ Public Function SkipTest(Optional ByVal Message As Variant) As Boolean
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Message: the message to be displayed in the console
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		The return code of the execution (RCxxx constants)
+&apos;&apos;&apos;		True when successful
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		GlobalScope.BasicLibraries.loadLibrary(&quot;ScriptForge&quot;)
 &apos;&apos;&apos;		Dim test	:	test = CreateScriptService(&quot;UnitTest&quot;, ThisComponent, &quot;Tests&quot;)
@@ -1357,7 +1355,7 @@ Try:
 		_ReturnCode = RCSKIPTEST
 		bSkip = True
 		&apos;	Exit message
-		sSkipMessage = _Duration(&quot;Test&quot;, True) &amp; &quot;SKIPTEST TESTSUITE=&apos;&quot; &amp; _Module &amp; &quot;&apos;&quot;
+		sSkipMessage = &quot;    SKIPTEST testsuite=&apos;&quot; &amp; LibraryName &amp; &quot;.&quot; &amp; _Module &amp; &quot;&apos; &quot; &amp; _Duration(&quot;Suite&quot;, True)
 		_ReportMessage(sSkipMessage, Message)
 	End If
 
@@ -1630,7 +1628,7 @@ Try:
 	End Select
 	If Not IsNull(oTimer) Then
 		sDuration = CStr(oTimer.Duration) &amp; &quot; &quot;
-		If pvBrackets Then sDuration = &quot;(&quot; &amp; Trim(sDuration) &amp; &quot; sec) &quot;
+		If pvBrackets Then sDuration = &quot;(&quot; &amp; Trim(sDuration) &amp; &quot; sec)&quot;
 	Else
 		sDuration = &quot;&quot;
 	End If
