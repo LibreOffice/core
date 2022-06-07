@@ -88,6 +88,23 @@
       "parentUuid": "c40e378a_e786f331",
       "revId": "959161f56a3e843bca57d48a2ffc4218a058ad30",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ec232c7_8138273f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-07T10:24:17Z",
+      "side": 1,
+      "message": "Hi Caolán,\nJust curious, did you ignore any extension ? I ran the script locally and just from italian, english, spanish and french forums I have already more than 9000 files",
+      "revId": "959161f56a3e843bca57d48a2ffc4218a058ad30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
