@@ -24,7 +24,7 @@ class formatCharacter(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
 
-                # xNoteBook = xDialog.getChild("nbWestern") //western notbook is always active
+                # xNoteBook = xDialog.getChild("nbWestern") //western notebook is always active
                 xSizeFont = xDialog.getChild("cbWestSize")
                 xLangFont = xDialog.getChild("cbWestLanguage")
                 xSizeFont.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

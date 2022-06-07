@@ -63,7 +63,7 @@ tools::Long lcl_OffsetFromGridEdge(tools::Long nMinWidth, tools::Long nCharWidth
             nOffset = nMinWidth - nCharWidth;
             break;
         default:
-            // CLOSE_BRACKET ro COMMA_OR_FULLSTOP:
+            // CLOSE_BRACKET or COMMA_OR_FULLSTOP:
             // Align to previous edge, closer to previous ideograph.
             break;
     }
