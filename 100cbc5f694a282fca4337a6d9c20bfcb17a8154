@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3f411d3_b47d92c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-07T14:54:09Z",
+      "side": 1,
+      "message": "Hi Caolán,\nif you have some time, could you please try again with patch 4 ? It should be much faster now and it shouldn\u0027t fail with HTTPSConnectionPool error.\nI\u0027m running it locally and so far I\u0027ve downloaded 40.000 files\n",
+      "revId": "100cbc5f694a282fca4337a6d9c20bfcb17a8154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
