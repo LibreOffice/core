@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4448b530_26314aae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-07T18:31:43Z",
+      "side": 1,
+      "message": "As you can see now, patchset 2 was OK, and CI could build it correctly.\n\nSometimes CI build for some platforms fail. In such a case, you can ask on #tdf-infra IRC channel to get it resumed, or just click on the REBASE button on the top yourself.\n\nNow, please go back to the patchset 2.\n\nAlso, you should have said this sentence as a comment. Commit description is not a suitable place to talk about changes from a patchset to another.",
+      "revId": "054285ece620c470920da326b302fa6858b9a03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
