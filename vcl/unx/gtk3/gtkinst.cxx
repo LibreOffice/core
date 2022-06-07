@@ -16186,9 +16186,10 @@ private:
 
     void insert_item(GtkTreeIter& iter, int pos, const OUString* pId, const OUString* pText, const OUString* pIconName)
     {
+        // m_nTextCol may be -1, so pass it last, to not terminate the sequence before the Id value
         gtk_tree_store_insert_with_values(m_pTreeStore, &iter, nullptr, pos,
-                                          m_nTextCol, !pText ? nullptr : OUStringToOString(*pText, RTL_TEXTENCODING_UTF8).getStr(),
                                           m_nIdCol, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
+                                          m_nTextCol, !pText ? nullptr : OUStringToOString(*pText, RTL_TEXTENCODING_UTF8).getStr(),
                                           -1);
         if (pIconName)
         {
@@ -16201,9 +16202,10 @@ private:
 
     void insert_item(GtkTreeIter& iter, int pos, const OUString* pId, const OUString* pText, const VirtualDevice* pIcon)
     {
+        // m_nTextCol may be -1, so pass it last, to not terminate the sequence before the Id value
         gtk_tree_store_insert_with_values(m_pTreeStore, &iter, nullptr, pos,
-                                          m_nTextCol, !pText ? nullptr : OUStringToOString(*pText, RTL_TEXTENCODING_UTF8).getStr(),
                                           m_nIdCol, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
+                                          m_nTextCol, !pText ? nullptr : OUStringToOString(*pText, RTL_TEXTENCODING_UTF8).getStr(),
                                           -1);
         if (pIcon)
         {
@@ -16251,7 +16253,7 @@ public:
         : GtkInstanceWidget(GTK_WIDGET(pIconView), pBuilder, bTakeOwnership)
         , m_pIconView(pIconView)
         , m_pTreeStore(GTK_TREE_STORE(gtk_icon_view_get_model(m_pIconView)))
-        , m_nTextCol(gtk_icon_view_get_text_column(m_pIconView))
+        , m_nTextCol(gtk_icon_view_get_text_column(m_pIconView)) // May be -1
         , m_nImageCol(gtk_icon_view_get_pixbuf_column(m_pIconView))
         , m_nSelectionChangedSignalId(g_signal_connect(pIconView, "selection-changed",
                                       G_CALLBACK(signalSelectionChanged), this))
@@ -16261,7 +16263,7 @@ public:
 #endif
         , m_pSelectionChangeEvent(nullptr)
     {
-        m_nIdCol = m_nTextCol + 1;
+        m_nIdCol = std::max(m_nTextCol, m_nImageCol) + 1;
     }
 
     virtual int get_item_width() const override
@@ -16310,6 +16312,7 @@ public:
     {
         weld::IconView::connect_query_tooltip(rLink);
         m_nQueryTooltipSignalId = g_signal_connect(m_pIconView, "query-tooltip", G_CALLBACK(signalQueryTooltip), this);
+        gtk_widget_set_has_tooltip(GTK_WIDGET(m_pIconView), true);
     }
 
     virtual OUString get_selected_id() const override
