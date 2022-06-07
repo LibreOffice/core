@@ -44,7 +44,7 @@ public:
 
     bool DelFullPara(SwPaM&) override;
 
-    bool DeleteAndJoin( SwPaM& ) override;
+    bool DeleteAndJoin(SwPaM&, SwDeleteFlags flags = SwDeleteFlags::Default) override;
 
     bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags) override;
 
@@ -160,10 +160,10 @@ private:
 
     bool m_bIME = false;
 
-    bool DeleteAndJoinImpl(SwPaM&);
-    bool DeleteAndJoinWithRedlineImpl(SwPaM&);
-    bool DeleteRangeImpl(SwPaM&);
-    bool DeleteRangeImplImpl(SwPaM &);
+    bool DeleteAndJoinImpl(SwPaM &, SwDeleteFlags);
+    bool DeleteAndJoinWithRedlineImpl(SwPaM &, SwDeleteFlags);
+    bool DeleteRangeImpl(SwPaM &, SwDeleteFlags);
+    bool DeleteRangeImplImpl(SwPaM &, SwDeleteFlags);
     bool ReplaceRangeImpl(SwPaM&, OUString const&, const bool);
     SwFlyFrameFormat* InsNoTextNode( const SwPosition&rPos, SwNoTextNode*,
                                 const SfxItemSet* pFlyAttrSet,

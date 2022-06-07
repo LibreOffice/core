@@ -1783,7 +1783,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132725)
     dispatchCommand(mxComponent, ".uno:SwBackspace", {});
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    // tdf#137587 fly is no longer deleted by backspace
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
@@ -1797,7 +1798,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132725)
     dispatchCommand(mxComponent, ".uno:Redo", {});
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    // tdf#137587 fly is no longer deleted by backspace
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 
     //Without the fix in place, it would crash here
