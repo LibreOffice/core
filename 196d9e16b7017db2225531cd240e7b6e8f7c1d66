@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61bb5c5e_58609276",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-06-07T15:58:17Z",
+      "side": 1,
+      "message": "Can we have a generalized code path to make information labels smaller across several dialogs? This would be a way to solve e.g. tdf#119827 (where I attempted to make labels smaller via GtkBuilder’s “scale” attribute), and there are more dialogs where I would love to set some text apart in a typographical hierarchy scale, to aid in their visual parsing.",
+      "revId": "196d9e16b7017db2225531cd240e7b6e8f7c1d66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
