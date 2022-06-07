@@ -1336,7 +1336,7 @@ DECLARE_MAILMERGE_TEST(testGrabBag, "grabbagtest.docx", "onecell.xlsx", "Sheet1"
         mxComponent, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     pTextDoc->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(13), aInteropGrabBag.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aInteropGrabBag.getLength());
 
     // check table border - comes from table style "Tabellenraster"
     uno::Reference<text::XTextTable> const xTable(getParagraphOrTable(1, pTextDoc->getText()), uno::UNO_QUERY_THROW);

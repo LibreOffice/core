@@ -2003,6 +2003,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     m_xMaxHyphenLabel->set_sensitive(false);
     m_xMaxHyphenEdit->set_sensitive(false);
     m_xMinWordLength->set_sensitive(false);
+    m_xHyphenZone->set_sensitive(false);
     m_xPageNumBox->set_sensitive(false);
     m_xPagenumEdit->set_sensitive(false);
     // no column break in HTML
@@ -2137,6 +2138,7 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
     m_xMaxHyphenLabel->set_sensitive(bEnable);
     m_xMaxHyphenEdit->set_sensitive(bEnable);
     m_xMinWordLength->set_sensitive(bEnable);
+    m_xHyphenZone->set_sensitive(bEnable);
     m_xHyphenBox->set_state(bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
 
