@@ -75,7 +75,6 @@ gb_CFLAGS_COMMON := \
 	-fno-common \
 	-pipe \
 	$(if $(filter EMSCRIPTEN,$(OS)),-fno-stack-protector,-fstack-protector-strong) \
-	$(if $(gb_COLOR),-fdiagnostics-color=always) \
 
 gb_CXXFLAGS_COMMON := \
 	-Wall \
@@ -93,7 +92,6 @@ gb_CXXFLAGS_COMMON := \
 	-fno-common \
 	-pipe \
 	$(if $(filter EMSCRIPTEN,$(OS)),-fno-stack-protector,-fstack-protector-strong) \
-	$(if $(gb_COLOR),-fdiagnostics-color=always) \
 
 ifeq ($(HAVE_WDEPRECATED_COPY_DTOR),TRUE)
 gb_CXXFLAGS_COMMON += -Wdeprecated-copy-dtor
