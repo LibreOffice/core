@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2544c0a2_e50d69ae",
+        "filename": "toolkit/qa/cppunit/a11y/AccessibleStatusBarTest.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-06-07T07:56:29Z",
+      "side": 1,
+      "message": "Yeah, actually if you look at the Java version there is a redundant one only in the Calc case (line 196, but getTestObject() has it line 221), but after refactoring the C++ a bit I already removed it apparently. I\u0027ll get rid of the comment that doesn\u0027t make sense anymore.",
+      "parentUuid": "e99d9277_637d4e93",
+      "revId": "9f6a735d03bbda711bb2f6f1db95f20efc528251",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf8d4a76_e702e0a8",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-06-05T16:45:08Z",
       "side": 1,
       "message": "I see that the original java is:\n    public boolean _getAccessibleDescription() {\n        String descr \u003d oObj.getAccessibleDescription();\n        System.out.println(\"The description is \u0027\" + descr + \"\u0027\");\n        return descr !\u003d null;\n    }\nand I don\u0027t see a way the descr could ever have been null (?) so presumably the old test is really only testing that there was no exception on calling getAccessibleDescription so the new replacement one looks like-for-like to me here. \n\nMaybe a follow up to see if asserting that the string is not empty might be a useful future change (not something I\u0027d do here though as its a change of test behaviour)",
+      "revId": "9f6a735d03bbda711bb2f6f1db95f20efc528251",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d315c16_580ca58b",
+        "filename": "toolkit/qa/cppunit/a11y/XAccessibleContextTester.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-06-07T07:56:29Z",
+      "side": 1,
+      "message": "With the C++ API there is no way to get a NULL here indeed, so I neither have any idea if the Java null check made any specific sense as an exception would have prevented the NULL check itself, but maybe that was just a tad overzealous on the author part.\n\n\u003e Maybe a follow up to see if asserting that the string is not empty might be a useful future change\n\nI don\u0027t think it would be, it\u0027s perfectly valid not to have a description, and it\u0027s probably the case for very many objects -- and it\u0027s not something that a11y users need everywhere, but rather in a case-by-case basis where it makes sense to provide that additional information.",
+      "parentUuid": "bf8d4a76_e702e0a8",
       "revId": "9f6a735d03bbda711bb2f6f1db95f20efc528251",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
