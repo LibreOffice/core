@@ -38,6 +38,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "006efc5d_f7420222",
+        "filename": "sfx2/source/appl/openuriexternally.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-07T12:43:09Z",
+      "side": 1,
+      "message": "Note that this catches (and shows the confirmation) e.g. on\n\n  \"XSystemShellExecute.execute, PathResolve(M:\\NonExistingPath\\NoFile.avi) failed\"\n\npassing respective \"file:///M:/NonExistingPath/NoFile.avi\" url there.",
+      "revId": "70009098fd70df021048c540d1796c928554b494",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e703d6c_e7f9e640",
         "filename": "sfx2/source/appl/openuriexternally.cxx",
         "patchSetId": 2
