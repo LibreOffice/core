@@ -512,7 +512,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if ( pBoxItem )
             {
                 aBox.reset(pBoxItem->Clone());
-                sal_uInt16 nDefValue = MIN_BORDER_DIST;
+                sal_Int16 nDefValue = MIN_BORDER_DIST;
                 if ( !rReq.IsAPI() )
                     nDefValue = 55;
                 if (!rReq.IsAPI() || aBox->GetSmallestDistance() < MIN_BORDER_DIST)

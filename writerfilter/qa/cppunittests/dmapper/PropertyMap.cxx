@@ -16,6 +16,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 using namespace ::com::sun::star;
 
@@ -107,6 +108,65 @@ CPPUNIT_TEST_FIXTURE(Test, testTableNegativeVerticalPos)
     // - Actual  : 0
     // i.e. this was imported as a plain table, resulting in a 0 top margin (y pos too large).
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
+{
+    // Given a document with a top margin and a border which has more spacing than the margin:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "negative-page-border.docx";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the border distance is negative, so it can appear at the correct
+    // position:
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
+                                                        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
+    auto nTopMargin = xStyle->getPropertyValue("TopMargin").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(501), nTopMargin);
+    auto aTopBorder = xStyle->getPropertyValue("TopBorder").get<table::BorderLine2>();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(159), aTopBorder.LineWidth);
+    auto nTopBorderDistance = xStyle->getPropertyValue("TopBorderDistance").get<sal_Int32>();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -646
+    // - Actual  : 0
+    // i.e. the border negative distance was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-646), nTopBorderDistance);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderNoMargin)
+{
+    // Given a document with no top margin and a border which has spacing:
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "negative-page-border-no-margin.docx";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the border distance is negative, so it can appear at the correct
+    // position:
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
+                                                        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
+    auto nTopMargin = xStyle->getPropertyValue("TopMargin").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nTopMargin);
+    auto aTopBorder = xStyle->getPropertyValue("TopBorder").get<table::BorderLine2>();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(159), aTopBorder.LineWidth);
+    auto nTopBorderDistance = xStyle->getPropertyValue("TopBorderDistance").get<sal_Int32>();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -1147
+    // - Actual  : 0
+    // i.e. the border negative distance was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1147), nTopBorderDistance);
 }
 }
 

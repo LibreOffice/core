@@ -1291,10 +1291,10 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
 
         const SvxBoxItem &rBox = rAttrs.GetBox();
         const bool bTop = 0 != (pFrame->*fnRect->fnGetTopMargin)();
-        if ( bTop )
+        if ( bTop || rBox.GetTop() )
         {
             SwTwips nDiff = rBox.GetTop() ?
-                rBox.CalcLineSpace( SvxBoxItemLine::TOP ) :
+                rBox.CalcLineSpace( SvxBoxItemLine::TOP, /*bEvenIfNoLine=*/false, /*bAllowNegative=*/true ) :
                 rBox.GetDistance( SvxBoxItemLine::TOP );
             if( nDiff )
                 (rRect.*fnRect->fnSubTop)( nDiff );

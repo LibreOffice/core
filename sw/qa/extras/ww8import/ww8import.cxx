@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121734)
         for (auto eLine : { SvxBoxItemLine::TOP, SvxBoxItemLine::BOTTOM,
                             SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT })
         {
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pBox->GetDistance(eLine));
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(0), pBox->GetDistance(eLine));
             CPPUNIT_ASSERT(!pBox->GetLine(eLine));
         }
     }
@@ -251,7 +251,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122425_1)
         for (auto eLine : { SvxBoxItemLine::TOP, SvxBoxItemLine::BOTTOM,
                             SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT })
         {
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pBox->GetDistance(eLine));
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(0), pBox->GetDistance(eLine));
             CPPUNIT_ASSERT(!pBox->GetLine(eLine));
         }
     }
