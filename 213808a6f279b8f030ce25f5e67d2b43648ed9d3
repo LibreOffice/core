@@ -105,6 +105,24 @@
       "parentUuid": "0c984017_58f6e461",
       "revId": "213808a6f279b8f030ce25f5e67d2b43648ed9d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a63a7411_8dfa3970",
+        "filename": "include/svl/broadcast.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-07T07:42:42Z",
+      "side": 1,
+      "message": "\u003e Eh, no, you are what is forcing them on us. It is not beholden upon us to follow such things. I would quite happily disable that silly signed/unsigned mismatch warning globally for LO.\n\nWhen interacting with e.g. standard container and string classes, why would you choose to not use by default those classes\u0027 size types, and rather use types of different size and signedness that then require all kinds of scaffolding to make up for the mismatch.\n\nI think those signed/unsigned mismatch warnings are, in general, our friends, not our enemies.  For example, when changing code from OString to std::string_view, they help prevent silently converting a OString \"not found\" -1 to a large std::size_t value and silently altering the meaning of an existing `pos \u003c len` check.\n\nC/C++ integer types are hostile enough that IMHO it is best to just not unnecessarily mix them.\n\n\u003e sal_Int32 is perfectly fine for the vast majority of stuff in LO. There are incredibly few places where we even support indexes of magnitude \u003e 2^23, let alone 2^31\n\nIn addition to my above reasoning, I think it may also be hard to judge which cases might require the full size type rank, and which can safely make do with an artificially reduced one.  Intuition may not always be a helpful guide here (\"640K ought to be enough for anyone\"), so IMO one more reason to just stick to the defaults by default.",
+      "parentUuid": "2a47c0d8_1bb41e5d",
+      "revId": "213808a6f279b8f030ce25f5e67d2b43648ed9d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
