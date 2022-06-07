@@ -326,7 +326,7 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
         // restore those for the new text
         m_rWrtShell.GetCurAttr( aItemSet );
 
-        m_rWrtShell.Delete();
+        m_rWrtShell.Delete(true);
         m_rWrtShell.Insert( rNewText );
 
         // select new inserted text (currently the Point is right after the new text)
@@ -346,7 +346,7 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
     }
     else
     {
-        m_rWrtShell.Delete();
+        m_rWrtShell.Delete(true);
         m_rWrtShell.Insert( rNewText );
     }
 }

@@ -172,6 +172,7 @@ static void DelFullParaMoveFrames(SwDoc & rDoc, SwUndRng const& rRange,
 //    move the paragraph into this section and to record this in nSectDiff.
 SwUndoDelete::SwUndoDelete(
     SwPaM& rPam,
+    SwDeleteFlags const flags,
     bool bFullPara,
     bool bCalledByTableCpy )
     : SwUndo(SwUndoId::DELETE, rPam.GetDoc()),
@@ -190,7 +191,9 @@ SwUndoDelete::SwUndoDelete(
     m_bResetPgDesc( false ),
     m_bResetPgBrk( false ),
     m_bFromTableCopy( bCalledByTableCpy )
+    , m_DeleteFlags(flags)
 {
+    assert(!m_bDelFullPara || !(m_DeleteFlags & SwDeleteFlags::ArtificialSelection));
 
     m_bCacheComment = false;
 
@@ -226,7 +229,9 @@ SwUndoDelete::SwUndoDelete(
     }
     else
     {
-        DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
+        DelContentIndex(*rPam.GetMark(), *rPam.GetPoint(),
+            DelContentType::AllMask
+            | ((m_DeleteFlags & SwDeleteFlags::ArtificialSelection) ? DelContentType::Replace : DelContentType(0)));
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         if (m_nEndNode - m_nSttNode > 1) // check for fully selected nodes
         {
@@ -1200,7 +1205,11 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             DelBookmarks(rPam.GetMark()->nNode, rPam.GetPoint()->nNode);
         }
         else
-            DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
+        {
+            DelContentIndex(*rPam.GetMark(), *rPam.GetPoint(),
+                DelContentType::AllMask
+                | ((m_DeleteFlags & SwDeleteFlags::ArtificialSelection) ? DelContentType::Replace : DelContentType(0)));
+        }
         m_nSetPos = m_pHistory ? m_pHistory->Count() : 0;
 
         m_pHistory->Move( m_nSetPos, &aHstr );
@@ -1216,7 +1225,11 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             DelBookmarks( rPam.GetMark()->nNode, rPam.GetPoint()->nNode );
         }
         else
-            DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
+        {
+            DelContentIndex(*rPam.GetMark(), *rPam.GetPoint(),
+                DelContentType::AllMask
+                | ((m_DeleteFlags & SwDeleteFlags::ArtificialSelection) ? DelContentType::Replace : DelContentType(0)));
+        }
         m_nSetPos = m_pHistory ? m_pHistory->Count() : 0;
     }
 
@@ -1291,7 +1304,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.getIDocumentContentOperations().DelFullPara( rPam );
     }
     else
-        rDoc.getIDocumentContentOperations().DeleteAndJoin( rPam );
+        rDoc.getIDocumentContentOperations().DeleteAndJoin(rPam, m_DeleteFlags);
 }
 
 void SwUndoDelete::RepeatImpl(::sw::RepeatContext & rContext)

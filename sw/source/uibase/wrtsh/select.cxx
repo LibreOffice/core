@@ -914,7 +914,7 @@ int SwWrtShell::IntelligentCut(SelectionType nSelection, bool bCut)
             ClearMark();
             SetMark();
             SwCursorShell::Left(1,CRSR_SKIP_CHARS);
-            SwFEShell::Delete();
+            SwFEShell::Delete(true);
             Pop(SwCursorShell::PopMode::DeleteCurrent);
         }
     }
@@ -928,7 +928,7 @@ int SwWrtShell::IntelligentCut(SelectionType nSelection, bool bCut)
             ClearMark();
             SetMark();
             SwCursorShell::Right(1,CRSR_SKIP_CHARS);
-            SwFEShell::Delete();
+            SwFEShell::Delete(true);
             Pop(SwCursorShell::PopMode::DeleteCurrent);
         }
     }

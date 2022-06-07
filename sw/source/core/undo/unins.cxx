@@ -917,7 +917,7 @@ void SwUndoInsertLabel::UndoImpl(::sw::UndoRedoContext & rContext)
         aPam.GetPoint()->nNode = NODE.nNode;
         aPam.SetMark();
         aPam.GetPoint()->nNode = NODE.nNode + 1;
-        NODE.pUndoInsNd = new SwUndoDelete( aPam, true );
+        NODE.pUndoInsNd = new SwUndoDelete(aPam, SwDeleteFlags::Default, true);
     }
 }
 

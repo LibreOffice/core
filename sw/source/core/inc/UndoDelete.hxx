@@ -27,6 +27,7 @@
 
 class SwRedlineSaveDatas;
 class SwTextNode;
+enum class SwDeleteFlags;
 
 namespace sfx2 {
     class MetadatableUndo;
@@ -59,6 +60,7 @@ class SwUndoDelete
     bool m_bResetPgDesc : 1;   // TRUE: reset PgDsc on following node
     bool m_bResetPgBrk : 1;    // TRUE: reset PgBreak on following node
     bool const m_bFromTableCopy : 1; // TRUE: called by SwUndoTableCpyTable
+    SwDeleteFlags m_DeleteFlags;
 
     bool SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTextNode* pSttTextNd, SwTextNode* pEndTextNd );
@@ -66,6 +68,7 @@ class SwUndoDelete
 public:
     SwUndoDelete(
         SwPaM&,
+        SwDeleteFlags flags,
         bool bFullPara = false,
         bool bCalledByTableCpy = false );
     virtual ~SwUndoDelete() override;

@@ -1196,7 +1196,7 @@ void SwAutoFormat::DeleteSelImpl(SwPaM & rDelPam, SwPaM & rPamToCorrect)
         SwPaM* pPrev = rPamToCorrect.GetPrev();
         rPamToCorrect.GetRingContainer().merge( pShCursor->GetRingContainer() );
 
-        m_pEditShell->DeleteSel( rDelPam );
+        m_pEditShell->DeleteSel(rDelPam, true);
 
         // and remove Pam again:
         SwPaM* p;
@@ -1212,7 +1212,7 @@ void SwAutoFormat::DeleteSelImpl(SwPaM & rDelPam, SwPaM & rPamToCorrect)
         m_pCurTextFrame = GetFrame(*m_pCurTextNd); // keep it up to date
     }
     else
-        m_pEditShell->DeleteSel( rDelPam );
+        m_pEditShell->DeleteSel(rDelPam, true);
 }
 
 bool SwAutoFormat::DeleteJoinCurNextPara(SwTextFrame const*const pNextFrame,

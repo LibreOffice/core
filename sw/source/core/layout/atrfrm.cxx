@@ -3363,7 +3363,7 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg() COVERITY_NOEXCEPT_FALSE
     mpWrtShell->SwEditShell::Copy(mpWrtShell);
     mpWrtShell->DestroyCursor();
 
-    mpWrtShell->Delete();
+    mpWrtShell->Delete(false);
 
     mpWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
 }
