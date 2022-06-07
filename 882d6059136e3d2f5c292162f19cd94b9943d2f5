@@ -34,6 +34,24 @@
       "parentUuid": "0df99ca1_c99851ac",
       "revId": "882d6059136e3d2f5c292162f19cd94b9943d2f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d242f1cb_5f8b80b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-07T10:03:57Z",
+      "side": 1,
+      "message": "Thank you very much! I will look at your proposal now.\n\n\u003e As a side note, with gtk3 after d79c527c2a599c7821d27cf03b95cb79e2abe685 (\"Use IconView in SmElementsControl\"):\n\u003e \n\u003e * I no longer see tooltips when hovering over the items\n\u003e * Math crashes when left-clicking any of the items\n\u003e \n\u003e Should I create 2 separate bug reports for that?\n\nFixed with https://git.libreoffice.org/core/+/6ccff201088590274247fb9f63b7fa997cfee327",
+      "parentUuid": "5f5ca98c_e3bf3b10",
+      "revId": "882d6059136e3d2f5c292162f19cd94b9943d2f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
