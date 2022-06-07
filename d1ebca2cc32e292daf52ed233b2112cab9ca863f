@@ -16,6 +16,23 @@
       "message": "Living dangerously is half the fun",
       "revId": "d1ebca2cc32e292daf52ed233b2112cab9ca863f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5205a064_22de1ff0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-07T20:32:15Z",
+      "side": 1,
+      "message": "It\u0027s possibly going to be dodgy when designers modify the dialogs and their contents don\u0027t fit right anymore but it will look fine for people without a prior config. Its already weird and wonderful if you change resolution or default font size.",
+      "revId": "d1ebca2cc32e292daf52ed233b2112cab9ca863f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
