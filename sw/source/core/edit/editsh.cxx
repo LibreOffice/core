@@ -659,7 +659,7 @@ bool SwEditShell::InsertURL( const SwFormatINetFormat& rFormat, const OUString& 
                 bDelText = bInsText = false;
 
             if( bDelText )
-                Delete();
+                Delete(true);
         }
         else if( pCursor->IsMultiSelection() && rFormat.GetValue() == rStr )
             bInsText = false;
@@ -728,7 +728,7 @@ void SwEditShell::DelINetAttrWithText()
 {
     bool bRet = SelectTextAttr( RES_TXTATR_INETFMT, false );
     if( bRet )
-        DeleteSel( *GetCursor() );
+        DeleteSel(*GetCursor(), true);
 }
 
 /// Set the DontExpand flag at the text character attributes

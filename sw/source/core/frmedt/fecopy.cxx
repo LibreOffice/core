@@ -1050,7 +1050,7 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
             {
                 if( bDelTable && IsTableMode() )
                 {
-                    SwEditShell::Delete();
+                    SwEditShell::Delete(false);
                     bDelTable = false;
                 }
 
