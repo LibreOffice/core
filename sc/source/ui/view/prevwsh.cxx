@@ -155,26 +155,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
     nMaxVertPos(0)
 {
     Construct( &pViewFrame->GetWindow() );
-
-    try
-    {
-        SfxShell::SetContextBroadcasterEnabled(true);
-        SfxShell::SetContextName(
-            vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Printpreview));
-        SfxShell::BroadcastContextForActivation(true);
-    }
-    catch (const css::uno::RuntimeException& e)
-    {
-        // tdf#130559: allow BackingComp to fail adding listener when opening document
-        css::uno::Reference<css::lang::XServiceInfo> xServiceInfo(e.Context, css::uno::UNO_QUERY);
-        if (!xServiceInfo || !xServiceInfo->supportsService("com.sun.star.frame.StartModule"))
-            throw;
-        SAL_WARN("sc.ui", "Opening file from StartModule straight into print preview");
-    }
-
-    auto& pNotebookBar = pViewFrame->GetWindow().GetSystemWindow()->GetNotebookBar();
-    if (pNotebookBar)
-        pNotebookBar->ControlListenerForCurrentController(false); // stop listening
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Printpreview));
 
     if ( auto pTabViewShell = dynamic_cast<ScTabViewShell*>( pOldSh) )
     {
@@ -201,9 +182,6 @@ ScPreviewShell::~ScPreviewShell()
 {
     if (mpFrameWindow)
         mpFrameWindow->SetCloseHdl(Link<SystemWindow&,void>()); // Remove close handler.
-
-    if (auto& pBar = GetViewFrame()->GetWindow().GetSystemWindow()->GetNotebookBar())
-        pBar->ControlListenerForCurrentController(true); // let it start listening now
 
     // #108333#; notify Accessibility that Shell is dying and before destroy all
     BroadcastAccessibility( SfxHint( SfxHintId::Dying ) );
@@ -560,6 +538,8 @@ void ScPreviewShell::Activate(bool bMDI)
         if ( pInputHdl )
             pInputHdl->NotifyChange( nullptr );
     }
+
+    SfxShell::Activate(bMDI);
 }
 
 void ScPreviewShell::Execute( SfxRequest& rReq )

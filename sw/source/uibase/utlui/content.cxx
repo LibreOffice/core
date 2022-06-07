@@ -2956,16 +2956,14 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
     bool bClear = m_pActiveShell != pSh;
     if (State::ACTIVE == m_eState && bClear)
     {
-        if (m_pActiveShell)
-            EndListening(*m_pActiveShell->GetView().GetDocShell());
+        EndListeningAll();
         m_pActiveShell = pSh;
         FindActiveTypeAndRemoveUserData();
         clear();
     }
     else if (State::CONSTANT == m_eState)
     {
-        if (m_pActiveShell)
-            EndListening(*m_pActiveShell->GetView().GetDocShell());
+        EndListeningAll();
         m_pActiveShell = pSh;
         m_eState = State::ACTIVE;
         bClear = true;
@@ -2997,8 +2995,7 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
 
 void SwContentTree::SetConstantShell(SwWrtShell* pSh)
 {
-    if (m_pActiveShell)
-        EndListening(*m_pActiveShell->GetView().GetDocShell());
+    EndListeningAll();
     m_pActiveShell = pSh;
     m_eState = State::CONSTANT;
     StartListening(*m_pActiveShell->GetView().GetDocShell());

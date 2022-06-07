@@ -18,6 +18,7 @@
 
 namespace com::sun::star::ui { class XContextChangeEventListener; }
 
+class NotebookBarContextChangeEventListener;
 class NotebookbarContextControl;
 class SystemWindow;
 class SfxViewShell;
@@ -44,8 +45,7 @@ public:
 
     void DataChanged(const DataChangedEvent& rDCEvt) override;
 
-    void ControlListenerForCurrentController(bool bListen);
-    void StopListeningAllControllers();
+    void SetupListener(bool bListen);
 
     bool IsWelded() const { return m_bIsWelded; }
     VclPtr<vcl::Window>& GetMainContainer() { return m_xVclContentArea; }
@@ -54,10 +54,8 @@ public:
 
 private:
     VclPtr<SystemWindow> m_pSystemWindow;
-    css::uno::Reference<css::ui::XContextChangeEventListener> m_pEventListener;
-    std::set<css::uno::Reference<css::frame::XController>> m_alisteningControllers;
+    rtl::Reference<NotebookBarContextChangeEventListener> m_pEventListener;
     std::vector<NotebookbarContextControl*> m_pContextContainers;
-    css::uno::Reference<css::frame::XFrame> mxFrame;
     const SfxViewShell* m_pViewShell;
 
     VclPtr<vcl::Window> m_xVclContentArea;

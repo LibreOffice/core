@@ -1152,14 +1152,7 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     CreateScrollbar( true );
     CreateScrollbar( false );
 
-    //notify notebookbar change in context
-    SfxShell::SetContextBroadcasterEnabled(true);
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Printpreview));
-    SfxShell::BroadcastContextForActivation(true);
-    //removelisteners for notebookbar
-    if (SfxViewFrame* pCurrent = SfxViewFrame::Current())
-        if (auto& pBar = pCurrent->GetWindow().GetSystemWindow()->GetNotebookBar())
-            pBar->ControlListenerForCurrentController(false);
 
     SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
     if ( !pOldSh )
@@ -1225,12 +1218,15 @@ SwPagePreview::~SwPagePreview()
     delete pVShell;
 
     m_pViewWin.disposeAndClear();
-    if (SfxViewFrame* pCurrent = SfxViewFrame::Current())
-        if (auto& pBar = pCurrent->GetWindow().GetSystemWindow()->GetNotebookBar())
-            pBar->ControlListenerForCurrentController(true); // start listening now
     m_pScrollFill.disposeAndClear();
     m_pHScrollbar.disposeAndClear();
     m_pVScrollbar.disposeAndClear();
+}
+
+void SwPagePreview::Activate(bool bMDI)
+{
+    SfxViewShell::Activate(bMDI);
+    SfxShell::Activate(bMDI);
 }
 
 SwDocShell* SwPagePreview::GetDocShell()
