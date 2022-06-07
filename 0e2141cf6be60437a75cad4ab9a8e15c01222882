@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dbfcdbe_843d4178",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-07T21:00:37Z",
+      "side": 1,
+      "message": "I found the segment limit in Firebird code\nsrc/common/classes/BlobWrapper.cpp:30:static const USHORT SEGMENT_LIMIT \u003d 65535;",
+      "revId": "0e2141cf6be60437a75cad4ab9a8e15c01222882",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
