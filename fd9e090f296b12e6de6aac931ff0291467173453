@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c019241b_dcc6f6fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-07T22:30:38Z",
+      "side": 1,
+      "message": "This is a rather blind fix. Don\u0027t know if any additional Windows Arm64 fixes are needed.",
+      "revId": "fd9e090f296b12e6de6aac931ff0291467173453",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
