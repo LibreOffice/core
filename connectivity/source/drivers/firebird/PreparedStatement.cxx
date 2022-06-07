@@ -50,6 +50,8 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.firebird.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
+constexpr size_t MAX_SIZE_SEGMENT = 65535; // max value of a segment of CLOB, if we want more than 65535 bytes, we need more segments
+
 
 OPreparedStatement::OPreparedStatement( Connection* _pConnection,
                                         const OUString& sql)
@@ -661,10 +663,41 @@ void OPreparedStatement::setClob( sal_Int32 nParameterIndex, const OUString& rSt
     OString sData = OUStringToOString(
             rStr,
             RTL_TEXTENCODING_UTF8);
-    ISC_STATUS aErr = isc_put_segment( m_statusVector,
+    size_t nDataSize = sData.getLength();
+    ISC_STATUS aErr = 0;
+    // we can't store  more than MAX_SIZE_SEGMENT in a segment
+    if (nDataSize <= MAX_SIZE_SEGMENT)
+    {
+        aErr = isc_put_segment( m_statusVector,
                             &aBlobHandle,
                             sData.getLength(),
                             sData.getStr() );
+    }
+    else
+    {
+        // if we need more, let's split the input and first let's calculate the nb of entire chunks needed
+        size_t nNbEntireChunks = nDataSize / MAX_SIZE_SEGMENT;
+        for (size_t i = 0; i < nNbEntireChunks; ++i)
+        {
+            OString strCurrentChunk = sData.copy(i * MAX_SIZE_SEGMENT, MAX_SIZE_SEGMENT);
+            aErr = isc_put_segment( m_statusVector,
+                            &aBlobHandle,
+                            strCurrentChunk.getLength(),
+                            strCurrentChunk.getStr() );
+            if (aErr)
+                break;
+        }
+        size_t nRemainingBytes = nDataSize - (nNbEntireChunks * MAX_SIZE_SEGMENT);
+        if (nRemainingBytes && !aErr)
+        {
+            // then copy the remaining
+            OString strCurrentChunk = sData.copy(nNbEntireChunks * MAX_SIZE_SEGMENT, nRemainingBytes);
+            aErr = isc_put_segment( m_statusVector,
+                            &aBlobHandle,
+                            strCurrentChunk.getLength(),
+                            strCurrentChunk.getStr() );
+        }
+    }
 
     // We need to make sure we close the Blob even if there are errors, hence evaluate
     // errors after closing.
