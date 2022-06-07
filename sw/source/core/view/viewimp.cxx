@@ -147,7 +147,7 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
                     if(last2.Top() == last.Top() && last2.Height() == last.Height()
                         && last2.Right() + 1 >= last.Left() && last2.Right() <= last2.Right())
                     {
-                        last2 = SwRect( last.TopLeft(), rRect.BottomRight());
+                        last2 = SwRect( last2.TopLeft(), last.BottomRight());
                         m_pPaintRegion->pop_back();
                         return true;
                     }
