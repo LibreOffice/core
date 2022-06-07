@@ -4229,7 +4229,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             if ( bTableSel )
             {
                 /* delete table contents not cells */
-                rSrcSh.Delete();
+                rSrcSh.Delete(false);
             }
             else
             {

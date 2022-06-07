@@ -110,7 +110,7 @@ void SwWrtShell::DelLine()
     SetMark();
     SwCursorShell::RightMargin();
 
-    bool bRet = Delete();
+    bool bRet = Delete(false);
     Pop(SwCursorShell::PopMode::DeleteCurrent);
     if( bRet )
         UpdateAttr();
@@ -120,7 +120,7 @@ void SwWrtShell::DelToStartOfLine()
 {
     OpenMark();
     SwCursorShell::LeftMargin();
-    bool bRet = Delete();
+    bool bRet = Delete(false);
     CloseMark( bRet );
 }
 
@@ -128,7 +128,7 @@ void SwWrtShell::DelToEndOfLine()
 {
     OpenMark();
     SwCursorShell::RightMargin();
-    bool bRet = Delete();
+    bool bRet = Delete(false);
     CloseMark( bRet );
 }
 
@@ -170,7 +170,7 @@ bool SwWrtShell::DelLeft()
             {
                 SwActContext aActContext(this);
                 ResetCursorStack();
-                Delete();
+                Delete(false);
                 UpdateAttr();
             }
             if( IsBlockMode() )
@@ -279,7 +279,7 @@ bool SwWrtShell::DelLeft()
             }
         }
     }
-    bool bRet = Delete();
+    bool bRet = Delete(true);
     if( !bRet && bSwap )
         SwCursorShell::SwapPam();
     CloseMark( bRet );
@@ -319,7 +319,7 @@ bool SwWrtShell::DelRight()
                 {
                     SwActContext aActContext(this);
                     ResetCursorStack();
-                    Delete();
+                    Delete(false);
                     UpdateAttr();
                 }
                 if( IsBlockMode() )
@@ -402,7 +402,7 @@ bool SwWrtShell::DelRight()
 
         OpenMark();
         SwCursorShell::Right(1, CRSR_SKIP_CELLS);
-        bRet = Delete();
+        bRet = Delete(true);
         CloseMark( bRet );
         if (!bRet)
         {   // false indicates HasReadonlySel failed
@@ -485,7 +485,7 @@ bool SwWrtShell::DelRight()
                 }
                 OpenMark();
                 SwCursorShell::Right(nRedlineLength, CRSR_SKIP_CHARS);
-                bRet = Delete();
+                bRet = Delete(false);
                 CloseMark( bRet );
             }
             else
@@ -561,7 +561,7 @@ void SwWrtShell::DelToEndOfPara()
         Pop(SwCursorShell::PopMode::DeleteCurrent);
         return;
     }
-    bool bRet = Delete();
+    bool bRet = Delete(false);
     Pop(SwCursorShell::PopMode::DeleteCurrent);
     if( bRet )
         UpdateAttr();
@@ -578,7 +578,7 @@ void SwWrtShell::DelToStartOfPara()
         Pop(SwCursorShell::PopMode::DeleteCurrent);
         return;
     }
-    bool bRet = Delete();
+    bool bRet = Delete(false);
     Pop(SwCursorShell::PopMode::DeleteCurrent);
     if( bRet )
         UpdateAttr();
@@ -593,7 +593,7 @@ void SwWrtShell::DelToStartOfSentence()
     if(IsStartOfDoc())
         return;
     OpenMark();
-    bool bRet = BwdSentence_() && Delete();
+    bool bRet = BwdSentence_() && Delete(false);
     CloseMark( bRet );
 }
 
@@ -625,7 +625,7 @@ bool SwWrtShell::DelToEndOfSentence()
     }
     else
     {
-        bRet = FwdSentence_() && Delete();
+        bRet = FwdSentence_() && Delete(false);
     }
     CloseMark( bRet );
     return bRet;
@@ -646,7 +646,7 @@ void SwWrtShell::DelNxtWord()
     else
         EndWrd();
 
-    bool bRet = Delete();
+    bool bRet = Delete(false);
     if( bRet )
         UpdateAttr();
     else
@@ -670,7 +670,7 @@ void SwWrtShell::DelPrvWord()
         else
             SttWrd();
     }
-    bool bRet = Delete();
+    bool bRet = Delete(false);
     if( bRet )
         UpdateAttr();
     else

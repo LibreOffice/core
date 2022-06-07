@@ -539,7 +539,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
             {
                 SwNodeIndex aUpdIdx( *pIdx );
                 SwPaM aPaM( *pSectNd->EndOfSectionNode(), *pSectNd );
-                GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoDelete>( aPaM ));
+                GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoDelete>(aPaM, SwDeleteFlags::Default));
                 if( pFootnoteEndAtTextEnd )
                     GetFootnoteIdxs().UpdateFootnote( aUpdIdx );
                 getIDocumentState().SetModified();
