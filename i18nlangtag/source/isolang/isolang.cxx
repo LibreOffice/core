@@ -778,6 +778,8 @@ Bcp47CountryEntry const aImplBcp47CountryEntries[] =
     { LANGUAGE_USER_ENGLISH_UK_OED,           "en-GB-oed", "GB", "", LANGUAGE_USER_ENGLISH_UK_OXENDICT },   // grandfathered, deprecated, prefer en-GB-oxendict
     { LANGUAGE_SPANISH_DATED,           "es-ES-u-co-trad", "ES", "es-u-co-trad", k0 },  // RFC6067/CLDR
     { LANGUAGE_SPANISH_DATED,              "es-ES_tradnl", "ES", "", kSAME },           // MS malformed
+    { LANGUAGE_OCCITAN_FRANCE,           "oc-FR-lengadoc", "FR", "oc-lengadoc", kSAME },  // forward compatibility
+    { LANGUAGE_USER_OCCITAN_ARANESE,       "oc-ES-aranes", "ES", "oc-aranes", kSAME },  // forward compatibility
 //  { LANGUAGE_YUE_CHINESE_HONGKONG,         "zh-yue-HK", "HK", "", 0 },   // MS reserved, prefer yue-HK; do not add unless LanguageTag::simpleExtract() can handle it to not call liblangtag for rsc!
     { LANGUAGE_YIDDISH,                          "yi-001",   "", "", k0 },  // MS since rev.15, was "yi-Hebr" reserved, "001"="World"
     { LANGUAGE_FRENCH_WEST_INDIES,               "fr-029",   "", "", k0 },  // MS since rev.15, was "Neither defined nor reserved", "029"="Caribbean"
