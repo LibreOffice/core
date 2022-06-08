@@ -33,6 +33,24 @@
       "message": "I don\u0027t know much about this, overall it looks plausible to me. For the case that the nDataSize is a round number of MAX_SIZE_SEGMENT, i.e. that strCurrentChunk is of length 0, maybe the write of an empty trailing chunk shouldn\u0027t happen?",
       "revId": "0e2141cf6be60437a75cad4ab9a8e15c01222882",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b35bbbb_6fd176d2",
+        "filename": "connectivity/source/drivers/firebird/PreparedStatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-08T16:40:40Z",
+      "side": 1,
+      "message": "Indeed! I uploaded a new version of patch.\nI also added an extra check on the return since it\u0027s what\u0027s done in the other setClob method above this one.",
+      "parentUuid": "b3cc0037_ae2c5778",
+      "revId": "0e2141cf6be60437a75cad4ab9a8e15c01222882",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
