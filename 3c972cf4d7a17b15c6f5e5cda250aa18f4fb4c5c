@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59843749_1c2c996f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-08T16:47:03Z",
+      "side": 1,
+      "message": "Sigh. Patchset 6 announces when I hover over elements. Patchset 7 announces selected item with keyboard. I don\u0027t understand what controls the hover announcement .. and debugging shows just two elements in the call stack from COM:\n\n  vcllo.dll!SalInstanceIconViewItemAccessible::getAccessibleDescription() Line 221\tC++\n  UAccCOM.dll!CMAccessible::get_accDescription(tagVARIANT varChild, wchar_t * * pszDescription) Line 463\tC++\n\nit doesn\u0027t make it clear why it decides to call it.",
+      "revId": "3c972cf4d7a17b15c6f5e5cda250aa18f4fb4c5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
