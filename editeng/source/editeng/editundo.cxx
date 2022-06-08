@@ -22,6 +22,7 @@
 #include "editundo.hxx"
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 
@@ -213,13 +214,13 @@ void EditUndoDelContent::Redo()
 
 EditUndoConnectParas::EditUndoConnectParas(
     EditEngine* pEE, sal_Int32 nN, sal_uInt16 nSP,
-    const SfxItemSet& rLeftParaAttribs, const SfxItemSet& rRightParaAttribs,
+    SfxItemSet _aLeftParaAttribs, SfxItemSet _aRightParaAttribs,
     const SfxStyleSheet* pLeftStyle, const SfxStyleSheet* pRightStyle, bool bBkwrd) :
     EditUndo(EDITUNDO_CONNECTPARAS, pEE),
     nNode(nN),
     nSepPos(nSP),
-    aLeftParaAttribs(rLeftParaAttribs),
-    aRightParaAttribs(rRightParaAttribs),
+    aLeftParaAttribs(std::move(_aLeftParaAttribs)),
+    aRightParaAttribs(std::move(_aRightParaAttribs)),
     eLeftStyleFamily(SfxStyleFamily::All),
     eRightStyleFamily(SfxStyleFamily::All),
     bBackward(bBkwrd)
@@ -303,10 +304,10 @@ void EditUndoSplitPara::Redo()
 }
 
 EditUndoInsertChars::EditUndoInsertChars(
-    EditEngine* pEE, const EPaM& rEPaM, const OUString& rStr) :
+    EditEngine* pEE, const EPaM& rEPaM, OUString aStr) :
     EditUndo(EDITUNDO_INSERTCHARS, pEE),
     aEPaM(rEPaM),
-    aText(rStr) {}
+    aText(std::move(aStr)) {}
 
 void EditUndoInsertChars::Undo()
 {
@@ -346,9 +347,9 @@ bool EditUndoInsertChars::Merge( SfxUndoAction* pNextAction )
 }
 
 EditUndoRemoveChars::EditUndoRemoveChars(
-    EditEngine* pEE, const EPaM& rEPaM, const OUString& rStr) :
+    EditEngine* pEE, const EPaM& rEPaM, OUString aStr) :
     EditUndo(EDITUNDO_REMOVECHARS, pEE),
-    aEPaM(rEPaM), aText(rStr) {}
+    aEPaM(rEPaM), aText(std::move(aStr)) {}
 
 void EditUndoRemoveChars::Undo()
 {
@@ -444,15 +445,15 @@ void EditUndoMoveParagraphs::Redo()
 }
 
 EditUndoSetStyleSheet::EditUndoSetStyleSheet(
-    EditEngine* pEE, sal_Int32 nP, const OUString& rPrevName, SfxStyleFamily ePrevFam,
-    const OUString& rNewName, SfxStyleFamily eNewFam, const SfxItemSet& rPrevParaAttribs) :
+    EditEngine* pEE, sal_Int32 nP, OUString _aPrevName, SfxStyleFamily ePrevFam,
+    OUString _aNewName, SfxStyleFamily eNewFam, SfxItemSet _aPrevParaAttribs) :
     EditUndo(EDITUNDO_STYLESHEET, pEE),
     nPara(nP),
-    aPrevName(rPrevName),
-    aNewName(rNewName),
+    aPrevName(std::move(_aPrevName)),
+    aNewName(std::move(_aNewName)),
     ePrevFamily(ePrevFam),
     eNewFamily(eNewFam),
-    aPrevParaAttribs(rPrevParaAttribs)
+    aPrevParaAttribs(std::move(_aPrevParaAttribs))
 {
 }
 
@@ -476,11 +477,11 @@ void EditUndoSetStyleSheet::Redo()
 }
 
 EditUndoSetParaAttribs::EditUndoSetParaAttribs(
-    EditEngine* pEE, sal_Int32 nP, const SfxItemSet& rPrevItems, const SfxItemSet& rNewItems) :
+    EditEngine* pEE, sal_Int32 nP, SfxItemSet _aPrevItems, SfxItemSet _aNewItems) :
     EditUndo(EDITUNDO_PARAATTRIBS, pEE),
     nPara(nP),
-    aPrevItems(rPrevItems),
-    aNewItems(rNewItems) {}
+    aPrevItems(std::move(_aPrevItems)),
+    aNewItems(std::move(_aNewItems)) {}
 
 EditUndoSetParaAttribs::~EditUndoSetParaAttribs() {}
 
@@ -498,10 +499,10 @@ void EditUndoSetParaAttribs::Redo()
     lcl_DoSetSelection( GetEditEngine()->GetActiveView(), nPara );
 }
 
-EditUndoSetAttribs::EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel, const SfxItemSet& rNewItems) :
+EditUndoSetAttribs::EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel, SfxItemSet aNewItems) :
     EditUndo(EDITUNDO_ATTRIBS, pEE),
     aESel(rESel),
-    aNewAttribs(rNewItems),
+    aNewAttribs(std::move(aNewItems)),
     nSpecial(SetAttribsMode::NONE),
     m_bSetSelection(true),
     // When EditUndoSetAttribs actually is a RemoveAttribs this could be

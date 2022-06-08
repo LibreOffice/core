@@ -33,6 +33,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/lingucfg.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <linguistic/misc.hxx>
@@ -709,8 +710,8 @@ SvxAlternativeSpelling SvxGetAltSpelling(
 }
 
 
-SvxDicListChgClamp::SvxDicListChgClamp( uno::Reference< XSearchableDictionaryList > const &rxDicList ) :
-    xDicList    ( rxDicList )
+SvxDicListChgClamp::SvxDicListChgClamp( uno::Reference< XSearchableDictionaryList > _xDicList ) :
+    xDicList    (std::move( _xDicList ))
 {
     if (xDicList.is())
     {

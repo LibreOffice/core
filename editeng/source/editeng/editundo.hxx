@@ -70,7 +70,7 @@ private:
 
 public:
     EditUndoConnectParas(EditEngine* pEE, sal_Int32 nNode, sal_uInt16 nSepPos,
-                         const SfxItemSet& rLeftParaAttribs, const SfxItemSet& rRightParaAttribs,
+                         SfxItemSet aLeftParaAttribs, SfxItemSet aRightParaAttribs,
                          const SfxStyleSheet* pLeftStyle, const SfxStyleSheet* pRightStyle, bool bBackward);
     virtual ~EditUndoConnectParas() override;
 
@@ -105,7 +105,7 @@ private:
     OUString        aText;
 
 public:
-    EditUndoInsertChars(EditEngine* pEE, const EPaM& rEPaM, const OUString& rStr);
+    EditUndoInsertChars(EditEngine* pEE, const EPaM& rEPaM, OUString aStr);
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -123,7 +123,7 @@ private:
     OUString        aText;
 
 public:
-    EditUndoRemoveChars(EditEngine* pEE, const EPaM& rEPaM, const OUString& rStr);
+    EditUndoRemoveChars(EditEngine* pEE, const EPaM& rEPaM, OUString aStr);
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -178,9 +178,9 @@ private:
 
 public:
     EditUndoSetStyleSheet(EditEngine* pEE, sal_Int32 nPara,
-        const OUString& rPrevName, SfxStyleFamily ePrevFamily,
-        const OUString& rNewName, SfxStyleFamily eNewFamily,
-        const SfxItemSet& rPrevParaAttribs);
+        OUString aPrevName, SfxStyleFamily ePrevFamily,
+        OUString aNewName, SfxStyleFamily eNewFamily,
+        SfxItemSet aPrevParaAttribs);
     virtual ~EditUndoSetStyleSheet() override;
 
     virtual void    Undo() override;
@@ -198,7 +198,7 @@ private:
     SfxItemSet      aNewItems;
 
 public:
-    EditUndoSetParaAttribs(EditEngine* pEE, sal_Int32 nPara, const SfxItemSet& rPrevItems, const SfxItemSet& rNewItems);
+    EditUndoSetParaAttribs(EditEngine* pEE, sal_Int32 nPara, SfxItemSet aPrevItems, SfxItemSet aNewItems);
     virtual ~EditUndoSetParaAttribs() override;
 
     virtual void    Undo() override;
@@ -228,7 +228,7 @@ private:
 
 
 public:
-    EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel, const SfxItemSet& rNewItems);
+    EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel, SfxItemSet aNewItems);
     virtual ~EditUndoSetAttribs() override;
 
     SfxItemSet&         GetNewAttribs()     { return aNewAttribs; }

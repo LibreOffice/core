@@ -9,6 +9,7 @@
  */
 
 #include <editeng/CustomPropertyField.hxx>
+#include <utility>
 #include <vcl/metaact.hxx>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -19,9 +20,9 @@ using namespace css;
 namespace editeng
 {
 
-CustomPropertyField::CustomPropertyField(OUString const & rName, OUString const & rCurrentPresentation)
-    : msName(rName)
-    , msCurrentPresentation(rCurrentPresentation)
+CustomPropertyField::CustomPropertyField(OUString aName, OUString aCurrentPresentation)
+    : msName(std::move(aName))
+    , msCurrentPresentation(std::move(aCurrentPresentation))
 {}
 
 CustomPropertyField::~CustomPropertyField()

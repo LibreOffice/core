@@ -23,6 +23,7 @@
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -32,8 +33,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::cppu;
 
-SvxUnoForbiddenCharsTable::SvxUnoForbiddenCharsTable(std::shared_ptr<SvxForbiddenCharactersTable> const & xForbiddenChars)
-    : mxForbiddenChars(xForbiddenChars)
+SvxUnoForbiddenCharsTable::SvxUnoForbiddenCharsTable(std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenChars)
+    : mxForbiddenChars(std::move(xForbiddenChars))
 {
 }
 

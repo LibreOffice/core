@@ -18,6 +18,7 @@
  */
 
 #include <osl/file.hxx>
+#include <utility>
 #include <vcl/metaact.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
@@ -436,8 +437,8 @@ SvxURLField::SvxURLField()
 }
 
 
-SvxURLField::SvxURLField( const OUString& rURL, const OUString& rRepres, SvxURLFormat eFmt )
-    : aURL( rURL ), aRepresentation( rRepres )
+SvxURLField::SvxURLField( OUString _aURL, OUString aRepres, SvxURLFormat eFmt )
+    : aURL(std::move( _aURL )), aRepresentation(std::move( aRepres ))
 {
     eFormat = eFmt;
 }

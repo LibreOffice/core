@@ -30,7 +30,7 @@ private:
     OUString msCurrentPresentation;
 
 public:
-    explicit CustomPropertyField(OUString const & rName, OUString const & rCurrentPresentation);
+    explicit CustomPropertyField(OUString aName, OUString aCurrentPresentation);
 
     virtual ~CustomPropertyField() override;
 

@@ -35,7 +35,7 @@ class AccessibleStringWrap
 {
 public:
 
-    AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, const OUString& rText );
+    AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, OUString aText );
 
     void GetCharacterBounds( sal_Int32 nIndex, tools::Rectangle& rRect );
     sal_Int32 GetIndexAtPoint( const Point& rPoint );

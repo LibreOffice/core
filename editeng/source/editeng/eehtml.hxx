@@ -71,7 +71,7 @@ protected:
     virtual void            NextToken( HtmlTokenId nToken ) override;
 
 public:
-    EditHTMLParser(SvStream& rIn, const OUString& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs);
+    EditHTMLParser(SvStream& rIn, OUString aBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs);
     virtual ~EditHTMLParser() override;
 
     SvParserState CallParser(EditEngine* pEE, const EditPaM& rPaM);

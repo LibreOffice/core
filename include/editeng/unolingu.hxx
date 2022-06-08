@@ -120,7 +120,7 @@ private:
 
 public:
     SvxDicListChgClamp( css::uno::Reference<
-        css::linguistic2::XSearchableDictionaryList > const &rxDicList );
+        css::linguistic2::XSearchableDictionaryList > xDicList );
     ~SvxDicListChgClamp();
 };
 

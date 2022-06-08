@@ -28,6 +28,7 @@
 #include <editeng/editdata.hxx>
 
 #include <editdoc.hxx>
+#include <utility>
 
 
 std::optional<OutlinerParaObject> TextChainingUtils::JuxtaposeParaObject(
@@ -102,8 +103,8 @@ css::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::Creat
 
 
 
-OverflowingText::OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent) :
-        mxOverflowingContent(xOverflowingContent)
+OverflowingText::OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent) :
+        mxOverflowingContent(std::move(xOverflowingContent))
 {
 
 }
