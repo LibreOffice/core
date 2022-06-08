@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38d3940b_e4c75d40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-08T10:07:05Z",
+      "side": 1,
+      "message": "Michael: your coolstress cmdline completes for me with this, so at the end it was unrelated to the jsdialog problem, it seems.",
+      "revId": "176b9c2f3bfe388c8de70c3e7c3df8a5424c8ee0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
