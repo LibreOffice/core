@@ -57,7 +57,7 @@ class EDITENG_DLLPUBLIC SvxUnoTextField final : public cppu::BaseMutex,
 
 public:
     SvxUnoTextField( sal_Int32 nServiceId ) noexcept;
-    SvxUnoTextField( css::uno::Reference< css::text::XTextRange > const & xAnchor, const OUString& rPresentation, const SvxFieldData* pFieldData ) noexcept;
+    SvxUnoTextField( css::uno::Reference< css::text::XTextRange > xAnchor, const OUString& rPresentation, const SvxFieldData* pFieldData ) noexcept;
     virtual ~SvxUnoTextField() noexcept override;
 
     // Internal

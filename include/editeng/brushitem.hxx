@@ -64,7 +64,7 @@ public:
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const GraphicObject& rGraphicObj,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
-    SvxBrushItem( const OUString& rLink, const OUString& rFilter,
+    SvxBrushItem( OUString  rLink, OUString aFilter,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const SvxBrushItem& );
     SvxBrushItem(SvxBrushItem&&);

@@ -31,12 +31,13 @@
 #include <tools/tenccvt.hxx>
 
 #include <editeng/editeng.hxx>
+#include <utility>
 
 #define STYLE_PRE               101
 
-EditHTMLParser::EditHTMLParser( SvStream& rIn, const OUString& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs )
+EditHTMLParser::EditHTMLParser( SvStream& rIn, OUString _aBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs )
     : HTMLParser( rIn, true ),
-    aBaseURL( rBaseURL ),
+    aBaseURL(std::move( _aBaseURL )),
     mpEditEngine(nullptr),
     bInPara(false),
     bWasInPara(false),

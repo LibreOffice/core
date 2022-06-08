@@ -43,10 +43,10 @@ namespace accessibility {
 // internal
 
 AccessibleContextBase::AccessibleContextBase (
-        const uno::Reference<XAccessible>& rxParent,
+        uno::Reference<XAccessible> xParent,
         const sal_Int16 aRole)
     :   WeakComponentImplHelper(m_aMutex),
-        mxParent(rxParent),
+        mxParent(std::move(xParent)),
         meDescriptionOrigin(NotSet),
         meNameOrigin(NotSet),
         mnClientId(0),

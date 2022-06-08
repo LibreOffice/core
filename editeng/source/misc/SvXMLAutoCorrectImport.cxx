@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
+
 #include "SvXMLAutoCorrectImport.hxx"
 #include "SvXMLAutoCorrectTokenHandler.hxx"
 
@@ -27,11 +29,11 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     const uno::Reference< uno::XComponentContext > & xContext,
     SvxAutocorrWordList *pNewAutocorr_List,
     SvxAutoCorrect &rNewAutoCorrect,
-    const css::uno::Reference < css::embed::XStorage >& rNewStorage)
+    css::uno::Reference < css::embed::XStorage > xNewStorage)
 :   SvXMLImport( xContext, "" ),
     pAutocorr_List (pNewAutocorr_List),
     rAutoCorrect ( rNewAutoCorrect ),
-    xStorage ( rNewStorage )
+    xStorage (std::move( xNewStorage ))
 {
 }
 
