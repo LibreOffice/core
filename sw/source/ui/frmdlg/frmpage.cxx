@@ -2793,6 +2793,7 @@ SwFrameAddPage::SwFrameAddPage(weld::Container* pPage, weld::DialogController* p
     , m_xAltNameED(m_xBuilder->weld_entry("altname"))
     , m_xDescriptionFT(m_xBuilder->weld_label("description_label"))
     , m_xDescriptionED(m_xBuilder->weld_text_view("description"))
+    , m_xSequenceFrame(m_xBuilder->weld_widget("frmSequence"))
     , m_xPrevFT(m_xBuilder->weld_label("prev_label"))
     , m_xPrevLB(m_xBuilder->weld_combo_box("prev"))
     , m_xNextFT(m_xBuilder->weld_label("next_label"))
@@ -2840,6 +2841,7 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
     }
     if (m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog")
     {
+        m_xSequenceFrame->hide();
         m_xEditInReadonlyCB->hide();
         if (m_bHtmlMode)
         {
