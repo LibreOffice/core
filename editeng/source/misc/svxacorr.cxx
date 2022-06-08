@@ -30,6 +30,7 @@
 #include <i18nutil/transliteration.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svl/fstathelper.hxx>
@@ -324,10 +325,10 @@ const sal_Unicode aStopDoubleAngleQuoteEndRo[] = { cLeftDoubleAngleQuote, cRight
 const sal_Unicode aStopSingleQuoteEnd[] = { 0x201A, 0x2018, 0x201C, 0x201E, 0 };
 const sal_Unicode aStopSingleQuoteEndRuUa[] = { 0x201E, 0x201C, cRightDoubleAngleQuote, cLeftDoubleAngleQuote, 0 };
 
-SvxAutoCorrect::SvxAutoCorrect( const OUString& rShareAutocorrFile,
-                                const OUString& rUserAutocorrFile )
-    : sShareAutoCorrFile( rShareAutocorrFile )
-    , sUserAutoCorrFile( rUserAutocorrFile )
+SvxAutoCorrect::SvxAutoCorrect( OUString aShareAutocorrFile,
+                                OUString aUserAutocorrFile )
+    : sShareAutoCorrFile(std::move( aShareAutocorrFile ))
+    , sUserAutoCorrFile(std::move( aUserAutocorrFile ))
     , eCharClassLang( LANGUAGE_DONTKNOW )
     , nFlags(SvxAutoCorrect::GetDefaultFlags())
     , cStartDQuote( 0 )
@@ -2129,10 +2130,10 @@ OUString SvxAutoCorrect::GetAutoCorrFileName( const LanguageTag& rLanguageTag,
 
 SvxAutoCorrectLanguageLists::SvxAutoCorrectLanguageLists(
                 SvxAutoCorrect& rParent,
-                const OUString& rShareAutoCorrectFile,
-                const OUString& rUserAutoCorrectFile)
-:   sShareAutoCorrFile( rShareAutoCorrectFile ),
-    sUserAutoCorrFile( rUserAutoCorrectFile ),
+                OUString aShareAutoCorrectFile,
+                OUString aUserAutoCorrectFile)
+:   sShareAutoCorrFile(std::move( aShareAutoCorrectFile )),
+    sUserAutoCorrFile(std::move( aUserAutoCorrectFile )),
     aModifiedDate( Date::EMPTY ),
     aModifiedTime( tools::Time::EMPTY ),
     aLastCheckTime( tools::Time::EMPTY ),

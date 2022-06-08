@@ -38,8 +38,8 @@ public:
     static SfxPoolItem* CreateDefault();
 
     explicit SvxFontItem(const sal_uInt16 nId);
-    SvxFontItem(const FontFamily eFam, const OUString& rFamilyName,
-                const OUString& rStyleName,
+    SvxFontItem(const FontFamily eFam, OUString aFamilyName,
+                OUString aStyleName,
                 const FontPitch eFontPitch /*= PITCH_DONTKNOW*/,
                 const rtl_TextEncoding eFontTextEncoding /*= RTL_TEXTENCODING_DONTKNOW*/,
                 const sal_uInt16 nId);

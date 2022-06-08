@@ -154,7 +154,7 @@ public:
     virtual sal_Int32  GetClassId() const override { return CLASS_ID; }
 
                             SvxURLField();
-                            SvxURLField( const OUString& rURL, const OUString& rRepres, SvxURLFormat eFmt = SvxURLFormat::Url );
+                            SvxURLField( OUString aURL, OUString aRepres, SvxURLFormat eFmt = SvxURLFormat::Url );
 
     const OUString&         GetURL() const { return aURL; }
     void                    SetURL( const OUString& rURL ) { aURL = rURL; }

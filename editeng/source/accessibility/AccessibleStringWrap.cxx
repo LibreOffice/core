@@ -22,6 +22,7 @@
 #include <cstdlib>
 
 #include <tools/debug.hxx>
+#include <utility>
 #include <vcl/outdev.hxx>
 
 #include <editeng/svxfont.hxx>
@@ -31,10 +32,10 @@
 // AccessibleStringWrap implementation
 
 
-AccessibleStringWrap::AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, const OUString& rText ) :
+AccessibleStringWrap::AccessibleStringWrap( OutputDevice& rDev, SvxFont& rFont, OUString aText ) :
     mrDev( rDev ),
     mrFont( rFont ),
-    maText( rText )
+    maText(std::move( aText ))
 {
 }
 
