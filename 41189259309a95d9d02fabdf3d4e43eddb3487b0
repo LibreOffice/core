@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87873bd6_42726774",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-06-08T12:17:50Z",
+      "side": 1,
+      "message": "Please have a look that my patch wont destroy your tooltips.",
+      "revId": "41189259309a95d9d02fabdf3d4e43eddb3487b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
