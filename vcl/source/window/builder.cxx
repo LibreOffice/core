@@ -2491,6 +2491,15 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
         else
             BuilderUtils::set_properties(pCurrentChild, rProps);
 
+        // tdf#119827 handle size before scale so we can trivially
+        // scale on the current font size whether size is present
+        // or not.
+        VclBuilder::stringmap::iterator aSize = rPango.find(OString("size"));
+        if (aSize != rPango.end())
+        {
+            pCurrentChild->set_font_attribute(aSize->first, aSize->second);
+            rPango.erase(aSize);
+        }
         for (auto const& elem : rPango)
         {
             const OString &rKey = elem.first;

@@ -309,6 +309,9 @@
                 <property name="width-chars">30</property>
                 <property name="max-width-chars">30</property>
                 <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="scale" value="0.8"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -582,6 +585,9 @@
                 <property name="width-chars">30</property>
                 <property name="max-width-chars">30</property>
                 <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="scale" value="0.8"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -830,6 +836,9 @@
                 <property name="width-chars">30</property>
                 <property name="max-width-chars">30</property>
                 <property name="xalign">0</property>
+                <attributes>
+                  <attribute name="scale" value="0.8"/>
+                </attributes>
               </object>
               <packing>
                 <property name="left-attach">1</property>

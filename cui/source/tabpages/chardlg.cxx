@@ -258,15 +258,6 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
     else if (!bShowCTL) m_xCJK_CTL->remove_page("nbCTL");
 
 
-    // info at 80% font size
-    vcl::Font aFont(m_xWestFontTypeFT->get_font());
-    Size aSize(aFont.GetFontSize());
-    aSize.setHeight(aSize.Height() * 0.8);
-    aFont.SetFontSize(aSize);
-    m_xWestFontTypeFT->set_font(aFont);
-    m_xEastFontTypeFT->set_font(aFont);
-    m_xCTLFontTypeFT->set_font(aFont);
-
     //In MacOSX the standard dialogs name font-name, font-style as
     //Family, Typeface
     //In GNOME the standard dialogs name font-name, font-style as
