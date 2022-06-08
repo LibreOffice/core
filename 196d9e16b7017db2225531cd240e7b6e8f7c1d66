@@ -34,6 +34,24 @@
       "parentUuid": "61bb5c5e_58609276",
       "revId": "196d9e16b7017db2225531cd240e7b6e8f7c1d66",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95311130_b34dbb47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-06-08T05:04:33Z",
+      "side": 1,
+      "message": "This scaled text is probably not a good solution and we may soon get complaints from users. And if we go this way it should better be some kind of \"is_static\" flag assigned to an appearance that follows the OS. If there is one.",
+      "parentUuid": "41492d6d_43b4ed14",
+      "revId": "196d9e16b7017db2225531cd240e7b6e8f7c1d66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
