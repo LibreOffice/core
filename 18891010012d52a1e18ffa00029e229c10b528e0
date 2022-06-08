@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e87dc5c_d19b62c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-06-08T15:11:31Z",
+      "side": 1,
+      "message": "Looks ready for review to me\n\nI\u0027ve removed anything SVGZ related from this patch as I need to add it to SVGFilter and to not complicate this patch too much.",
+      "revId": "18891010012d52a1e18ffa00029e229c10b528e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
