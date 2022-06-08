@@ -33,6 +33,23 @@
       "message": "Thanks Miklos - if you\u0027re happy with this and it passes CI on master I\u0027m happy. I wonder if we have the same issue in 21.11 ? anyhow +2 from me.",
       "revId": "176b9c2f3bfe388c8de70c3e7c3df8a5424c8ee0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a2b22a9_64b6594d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-08T11:40:28Z",
+      "side": 1,
+      "message": "Yes, I think the fix will be relevant for all branches we care about: it\u0027s a regression from 79f53401c6801e240800fb6e1eaae8f55974f9c6 (Header/Footer: just don\u0027t always drop and create SwHeaderFooterWin, 2011-09-07). Will backport to co-2021 once this change is in.\n\nRegarding the CI, online.git unit-paste failed, resuming.",
+      "revId": "176b9c2f3bfe388c8de70c3e7c3df8a5424c8ee0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
