@@ -22,6 +22,12 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/UnitConversion.hxx>
 
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <fmtpdsc.hxx>
+#include <IDocumentContentOperations.hxx>
+
 using namespace css;
 
 class Test : public SwModelTestBase
@@ -432,6 +438,58 @@ CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
     verify();
     reload(mpFilter, "rtl-gutter.rtf");
     verify();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
+{
+    {
+        // Given a document with a top margin and a border which has more spacing than the margin on
+        // its 2nd page:
+        createSwDoc();
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        SwDocShell* pDocShell = pTextDoc->GetDocShell();
+        SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+        pWrtShell->Insert("first");
+        pWrtShell->SplitNode();
+        pWrtShell->Insert("second");
+        SwPageDesc* pDesc = pWrtShell->FindPageDescByName("Left Page", true);
+        SwPaM aPaM(*pWrtShell->GetCursor()->GetPoint());
+        SwFormatPageDesc aFormatPageDesc(pDesc);
+        pDocShell->GetDoc()->getIDocumentContentOperations().InsertPoolItem(aPaM, aFormatPageDesc);
+        uno::Reference<beans::XPropertySet> xPageStyle(
+            getStyles("PageStyles")->getByName("Left Page"), uno::UNO_QUERY);
+        xPageStyle->setPropertyValue("TopMargin", uno::Any(static_cast<sal_Int32>(501)));
+        table::BorderLine2 aBorder;
+        aBorder.LineWidth = 159;
+        aBorder.OuterLineWidth = 159;
+        xPageStyle->setPropertyValue("TopBorder", uno::Any(aBorder));
+        sal_Int32 nTopBorderDistance = -646;
+        xPageStyle->setPropertyValue("TopBorderDistance", uno::Any(nTopBorderDistance));
+        pDocShell->GetDoc()->dumpAsXml();
+    }
+
+    // When saving that document to RTF:
+    reload(mpFilter, "negative-page-border.rtf");
+
+    // Then make sure that the border distance is negative, so the first line of body text appears
+    // on top of the page border:
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    OUString aPageStyle = pWrtShell->GetCurPageStyle();
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(aPageStyle),
+                                                   uno::UNO_QUERY);
+    auto nTopMargin = xPageStyle->getPropertyValue("TopMargin").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(501), nTopMargin);
+    auto aTopBorder = xPageStyle->getPropertyValue("TopBorder").get<table::BorderLine2>();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(159), aTopBorder.LineWidth);
+    auto nTopBorderDistance = xPageStyle->getPropertyValue("TopBorderDistance").get<sal_Int32>();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -646
+    // - Actual  : 0
+    // i.e. the border negative distance was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-646), nTopBorderDistance);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

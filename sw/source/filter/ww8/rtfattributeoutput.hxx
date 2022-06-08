@@ -29,6 +29,7 @@
 #include <wrtswtbl.hxx>
 
 #include <rtl/strbuf.hxx>
+#include <editeng/boxitem.hxx>
 
 #include <optional>
 
@@ -639,6 +640,8 @@ private:
     bool m_bParaAfterAutoSpacing;
     /// If m_bParaBeforeAutoSpacing is set, value of \sa.
     sal_Int32 m_nParaAfterSpacing;
+
+    editeng::WordPageMargins m_aPageMargins;
 
 public:
     explicit RtfAttributeOutput(RtfExport& rExport);
