@@ -206,13 +206,6 @@ void SvxTextEncodingTreeView::FillFromTextEncodingTable(
     m_xControl->thaw();
 }
 
-void SvxTextEncodingBox::FillWithMimeAndSelectBest()
-{
-    FillFromTextEncodingTable( false, 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
-    rtl_TextEncoding nEnc = SvtSysLocale::GetBestMimeEncoding();
-    SelectTextEncoding( nEnc );
-}
-
 void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
             const OUString& rEntry )
 {

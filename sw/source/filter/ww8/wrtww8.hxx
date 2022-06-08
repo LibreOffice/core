@@ -1455,10 +1455,6 @@ public:
         return static_cast<const T*>(HasTextItem(sal_uInt16(nWhich)));
     }
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const = 0;
-    template<class T> const T* GetItem( TypedWhichId<T> nWhich ) const
-    {
-        return static_cast<const T*>(GetItem(sal_uInt16(nWhich)));
-    }
 };
 
 /// Used to export formatted text associated to drawings.

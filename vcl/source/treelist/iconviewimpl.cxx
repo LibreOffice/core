@@ -175,20 +175,6 @@ SvTreeListEntry* IconViewImpl::GoToNextRow(SvTreeListEntry* pEntry, int nRows) c
     return pNext;
 }
 
-SvTreeListEntry* IconViewImpl::GetFirstInRow(SvTreeListEntry* pEntry) const
-{
-    SvTreeListEntry* pFirst = nullptr;
-    auto FindFirst = [pEntry, &pFirst](const EntryAreaInfo& info)
-    {
-        if (info.column == 0)
-            pFirst = info.entry;
-        return pEntry == info.entry ? CallbackResult::Stop : CallbackResult::Continue;
-    };
-    IterateVisibleEntryAreas(FindFirst);
-
-    return pFirst;
-}
-
 void IconViewImpl::CursorUp()
 {
     if (!m_pStartEntry)

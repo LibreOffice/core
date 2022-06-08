@@ -1090,8 +1090,6 @@ public:
         return aSize;
     }
 
-    PDFWriter::PDFVersion getVersion() const { return m_aContext.Version; }
-
     void setDocumentLocale( const css::lang::Locale& rLoc )
     { m_aContext.DocumentLocale = rLoc; }
 

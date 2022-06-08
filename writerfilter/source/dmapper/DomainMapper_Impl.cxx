@@ -8350,47 +8350,6 @@ void DomainMapper_Impl::ApplySettingsTable()
     }
 }
 
-uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRules(sal_Int32* pListLevel)
-{
-    uno::Reference<container::XIndexAccess> xRet;
-    try
-    {
-        OUString aStyle = GetCurrentParaStyleName();
-        if (aStyle.isEmpty())
-            return xRet;
-        const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(aStyle);
-        if (!pEntry)
-            return xRet;
-        const StyleSheetPropertyMap* pStyleSheetProperties = pEntry->pProperties.get();
-        if (!pStyleSheetProperties)
-            return xRet;
-        sal_Int32 nListId = pStyleSheetProperties->GetListId();
-        if (nListId < 0)
-            return xRet;
-        if (pListLevel)
-            *pListLevel = pStyleSheetProperties->GetListLevel();
-
-        // So we are in a paragraph style and it has numbering. Look up the relevant numbering rules.
-        auto const pList(GetListTable()->GetList(nListId));
-        OUString aListName;
-        if (pList)
-        {
-            aListName = pList->GetStyleName();
-        }
-        uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY_THROW);
-        uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
-        uno::Reference<container::XNameAccess> xNumberingStyles;
-        xStyleFamilies->getByName("NumberingStyles") >>= xNumberingStyles;
-        uno::Reference<beans::XPropertySet> xStyle(xNumberingStyles->getByName(aListName), uno::UNO_QUERY);
-        xRet.set(xStyle->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
-    }
-    catch (const uno::Exception&)
-    {
-        TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "GetCurrentNumberingRules: exception caught");
-    }
-    return xRet;
-}
-
 SectionPropertyMap * DomainMapper_Impl::GetSectionContext()
 {
     SectionPropertyMap* pSectionContext = nullptr;

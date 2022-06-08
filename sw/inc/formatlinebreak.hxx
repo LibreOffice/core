@@ -67,15 +67,9 @@ public:
 
     sal_uInt16 GetValueCount() const override;
 
-    void InvalidateLineBreak();
-
     css::uno::Reference<css::text::XTextRange> GetAnchor() const;
 
     void SetTextLineBreak(SwTextLineBreak* pTextAttr) { m_pTextAttr = pTextAttr; }
-
-    const SwTextLineBreak* GetTextLineBreak() const { return m_pTextAttr; }
-
-    SwTextLineBreak* GetTextLineBreak() { return m_pTextAttr; }
 
     css::uno::WeakReference<css::text::XTextContent> const& GetXTextContent() const
     {

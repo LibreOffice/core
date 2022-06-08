@@ -1065,16 +1065,6 @@ static bool convertDurationHelper(double& rfTime, V pStr)
 
 /** convert ISO "duration" string to double; negative durations allowed */
 bool Converter::convertDuration(double& rfTime,
-                                std::u16string_view rString)
-{
-    std::u16string_view aTrimmed = trim(rString);
-    const sal_Unicode* pStr = aTrimmed.data();
-
-    return convertDurationHelper(rfTime, pStr);
-}
-
-/** convert ISO "duration" string to double; negative durations allowed */
-bool Converter::convertDuration(double& rfTime,
                                 std::string_view rString)
 {
     std::string_view aTrimmed = trim(rString);

@@ -80,11 +80,6 @@ public:
 
     void SetRectanglePixel(const ::tools::Rectangle& rRect);
 
-    const SwPageFrame* GetPageFrame() const
-    {
-        return SwFrameMenuButtonBase::GetPageFrame(m_pFrame);
-    }
-
 private:
     DECL_LINK( FadeHandler, Timer *, void );
     /// Hide the button when the menu is toggled closed, e.g by clicking outside

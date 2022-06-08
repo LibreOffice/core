@@ -822,28 +822,6 @@ public:
         @return  The text, encoded according to the given mechanism and
         charset ('forbidden' characters replaced by escape sequences).
      */
-    static void encode( OUStringBuffer& rOutputBuffer,
-                           std::u16string_view rText, Part ePart,
-                           EncodeMechanism eMechanism,
-                           rtl_TextEncoding eCharset
-                               = RTL_TEXTENCODING_UTF8);
-
-    /** Encode some text as part of a URI.
-
-        @param rText  Some text (for its interpretation, see the general
-        discussion for set-methods).
-
-        @param ePart  The part says which characters are 'forbidden' and must
-        be encoded (replaced by escape sequences).  Characters outside the US-
-        ASCII range are always 'forbidden.'
-
-        @param eMechanism  See the general discussion for set-methods.
-
-        @param eCharset  See the general discussion for set-methods.
-
-        @return  The text, encoded according to the given mechanism and
-        charset ('forbidden' characters replaced by escape sequences).
-     */
     static OUString encode( std::u16string_view rText, Part ePart,
                            EncodeMechanism eMechanism,
                            rtl_TextEncoding eCharset
@@ -1308,15 +1286,6 @@ inline bool INetURLObject::SetMark(std::u16string_view rTheFragment,
     return rTheFragment.empty() ?
                clearFragment() :
                setFragment(rTheFragment, eMechanism, eCharset);
-}
-
-// static
-inline void INetURLObject::encode(OUStringBuffer& rOutputBuffer,
-                                   std::u16string_view rText, Part ePart,
-                                   EncodeMechanism eMechanism,
-                                   rtl_TextEncoding eCharset)
-{
-    encodeText(rOutputBuffer, rText, ePart, eMechanism, eCharset, false);
 }
 
 // static
