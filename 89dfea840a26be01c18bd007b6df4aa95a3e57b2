@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bf63fc2_0d64aa72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-08T13:31:26Z",
+      "side": 1,
+      "message": "I\u0027ll update this patch, merge-conflict wise, after https://gerrit.libreoffice.org/c/core/+/135426 went in. I\u0027ll then also push a preliminary Gtk variant, which almost works: almost, because there are initial refresh problems and native widgets are positioned wrong w.r.t the menu bar, but it seems just in the toolbars. That\u0027s mainly, because GetMenuBarHeight() initially returns 1. Not yet sure what else is missing; maybe some manual gtk_widget_realize will fix this.",
+      "revId": "89dfea840a26be01c18bd007b6df4aa95a3e57b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
