@@ -44,7 +44,7 @@ class SvxUnoNumberingRules final : public ::cppu::WeakAggImplHelper5< css::conta
 private:
     SvxNumRule maRule;
 public:
-    SvxUnoNumberingRules(const SvxNumRule& rRule);
+    SvxUnoNumberingRules(SvxNumRule aRule);
     virtual ~SvxUnoNumberingRules() noexcept override;
 
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoNumberingRules )

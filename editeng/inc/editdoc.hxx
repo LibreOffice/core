@@ -117,7 +117,7 @@ private:
     CharAttribsType     aPrevCharAttribs;
 
 public:
-                        ContentAttribsInfo( const SfxItemSet& rParaAttribs );
+                        ContentAttribsInfo( SfxItemSet aParaAttribs );
 
     const SfxItemSet&       GetPrevParaAttribs() const  { return aPrevParaAttribs; }
     const CharAttribsType&  GetPrevCharAttribs() const  { return aPrevCharAttribs; }
@@ -244,7 +244,7 @@ private:
 
 public:
                     ContentNode( SfxItemPool& rItemPool );
-                    ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs );
+                    ContentNode( OUString aStr, ContentAttribs aContentAttribs );
                     ~ContentNode();
                     ContentNode(const ContentNode&) = delete;
     ContentNode&    operator=(const ContentNode&) = delete;

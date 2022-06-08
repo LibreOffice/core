@@ -36,7 +36,7 @@ public:
 private:
     Map                                                maMap;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    SvxForbiddenCharactersTable(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+    SvxForbiddenCharactersTable(css::uno::Reference< css::uno::XComponentContext > xContext);
 
 public:
     static std::shared_ptr<SvxForbiddenCharactersTable> makeForbiddenCharactersTable(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
