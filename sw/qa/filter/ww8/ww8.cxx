@@ -26,7 +26,7 @@ class Test : public SwModelTestBase
 {
 };
 
-CPPUNIT_TEST_FIXTURE(Test, testSwAttrSet)
+CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorderDocImport)
 {
     // Given a document with a border distance that is larger than the margin, when loading that
     // document:
