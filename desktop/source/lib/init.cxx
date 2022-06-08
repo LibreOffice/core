@@ -1460,7 +1460,7 @@ void CallbackFlushHandler::libreOfficeKitViewInvalidateTilesCallback(const tools
 void CallbackFlushHandler::libreOfficeKitViewUpdatedCallback(int nType)
 {
     assert(isUpdatedType( nType ));
-    std::unique_lock<std::mutex> lock(m_mutex);
+    std::unique_lock<std::recursive_mutex> lock(m_mutex);
     SAL_INFO("lok", "Updated: [" << nType << "]");
     setUpdatedType(nType, true);
 }
@@ -1468,7 +1468,7 @@ void CallbackFlushHandler::libreOfficeKitViewUpdatedCallback(int nType)
 void CallbackFlushHandler::libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId)
 {
     assert(isUpdatedTypePerViewId( nType ));
-    std::unique_lock<std::mutex> lock(m_mutex);
+    std::unique_lock<std::recursive_mutex> lock(m_mutex);
     SAL_INFO("lok", "Updated: [" << nType << "]");
     setUpdatedTypePerViewId(nType, nViewId, nSourceViewId, true);
 }
@@ -1539,7 +1539,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         return;
     }
 
-    std::unique_lock<std::mutex> lock(m_mutex);
+    std::unique_lock<std::recursive_mutex> lock(m_mutex);
 
     // Update types should be received via the updated callbacks for performance,
     // getting them as normal callbacks is technically not wrong, but probably should be avoided.
@@ -2133,7 +2133,7 @@ void CallbackFlushHandler::Invoke()
         viewShell->flushPendingLOKInvalidateTiles();
     }
 
-    std::scoped_lock<std::mutex> lock(m_mutex);
+    std::unique_lock<std::recursive_mutex> lock(m_mutex);
 
     // Append messages for updated types, fetch them only now.
     enqueueUpdatedTypes();

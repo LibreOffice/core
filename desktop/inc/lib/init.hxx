@@ -220,7 +220,7 @@ namespace desktop {
         LibreOfficeKitCallback m_pCallback;
         void *m_pData;
         int m_nDisableCallbacks;
-        std::mutex m_mutex;
+        std::recursive_mutex m_mutex;
         class TimeoutIdle : public Timer
         {
         public:
