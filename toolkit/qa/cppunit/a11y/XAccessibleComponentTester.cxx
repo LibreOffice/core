@@ -214,7 +214,7 @@ void XAccessibleComponentTester::testAccessibleAtPoint()
 }
 
 /**
- * @brief Tests reults of XAccessibleComponent::getLocation()
+ * @brief Tests results of XAccessibleComponent::getLocation()
  *
  * Succeeds if the location is the same as location of boundary obtained by
  * the <code>getBounds()</code> method.
