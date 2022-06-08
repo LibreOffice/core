@@ -1450,6 +1450,13 @@ bool Window::set_font_attribute(const OString &rKey, std::u16string_view rValue)
         aFont.SetUnderline(toBool(rValue) ? LINESTYLE_SINGLE : LINESTYLE_NONE);
         SetControlFont(aFont);
     }
+    else if (rKey == "scale")
+    {
+        // if no control font was set yet, take the underlying font from the device
+        vcl::Font aFont(IsControlFont() ? GetControlFont() : GetPointFont(*GetOutDev()));
+        aFont.SetFontHeight(aFont.GetFontHeight() * o3tl::toDouble(rValue));
+        SetControlFont(aFont);
+    }
     else if (rKey == "size")
     {
         vcl::Font aFont(GetControlFont());
