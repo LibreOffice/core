@@ -52,6 +52,24 @@
       "parentUuid": "41492d6d_43b4ed14",
       "revId": "196d9e16b7017db2225531cd240e7b6e8f7c1d66",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ee8d5ba_a2a32e61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-08T15:08:31Z",
+      "side": 1,
+      "message": "The gtkbuilder file format supports \"styles\" for widgets, e.g. for labels https://docs.gtk.org/gtk4/class.Label.html stuff like \".title, .subtitle, .dim-label\", and we make some limited use of that sort of thing at the moment \"small-button\" (our own invention) and \"destructive-action\"/\"suggested-action\" (existing gtk ones).\n\nI don\u0027t know if any of the existing gtk styles for labels captures what you want.\n\nIt is possible to invent a style of our own (like small-button) which has e.g. just \"font-size: smaller\" or something like that in it for gtk and we could map to 80% font size for the gen case.",
+      "parentUuid": "95311130_b34dbb47",
+      "revId": "196d9e16b7017db2225531cd240e7b6e8f7c1d66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
