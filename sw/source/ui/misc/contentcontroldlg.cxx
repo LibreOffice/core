@@ -224,6 +224,10 @@ IMPL_LINK_NOARG(SwContentControlDlg, OkHdl, weld::Button&, void)
     if (bChanged)
     {
         m_rWrtShell.GetDoc()->getIDocumentState().SetModified();
+
+        // Make sure that the cursor gets updated with the new list items.
+        m_rWrtShell.HideCursor();
+        m_rWrtShell.ShowCursor();
     }
 
     m_xDialog->response(RET_OK);
