@@ -1003,10 +1003,14 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                             // Moving the anchor?
                             else if (!((DelContentType::CheckNoCntnt|DelContentType::ExcludeFlyAtStartEnd)
                                     & nDelContentType) &&
-                                // at least for calls from SwUndoDelete,
-                                // this should work - other Undos don't
-                                // remember the order of the cursor
-                                (rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex())
+                                // for SwUndoDelete: rPoint is the node that
+                                // will be Joined - so anchor should be moved
+                                // off it - but UndoImpl() split will insert
+                                // new node *before* existing one so a no-op
+                                // may need to be done here to add it to
+                                // history for Undo.
+                                (rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex()
+                                 || pStt->nNode.GetIndex() == pAPos->nNode.GetIndex())
                                 // Do not try to move the anchor to a table!
                                 && rMark.nNode.GetNode().IsTextNode())
                             {
