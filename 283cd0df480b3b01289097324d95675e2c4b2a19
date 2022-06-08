@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e92d605e_82e87f5a",
+        "filename": "bin/update/path.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-08T17:34:47Z",
+      "side": 1,
+      "message": "Requires exist_ok\u003dTrue otherwise will raise FileExistsError if the target directory already exists.",
+      "revId": "283cd0df480b3b01289097324d95675e2c4b2a19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
