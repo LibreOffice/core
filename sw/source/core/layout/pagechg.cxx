@@ -255,13 +255,19 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
 
 void SwPageFrame::DestroyImpl()
 {
-    // Cleanup the header-footer controls in the SwEditWin
+    // Cleanup the header-footer controls in all SwEditWins
     SwViewShell* pSh = getRootFrame()->GetCurrShell();
-    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pSh );
-    if ( pWrtSh )
+    if (pSh)
     {
-        SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
-        rEditWin.GetFrameControlsManager( ).RemoveControls( this );
+        for (SwViewShell& rSh : pSh->GetRingContainer())
+        {
+            SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( &rSh );
+            if ( pWrtSh )
+            {
+                SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+                rEditWin.GetFrameControlsManager( ).RemoveControls( this );
+            }
+        }
     }
 
     // empty FlyContainer, deletion of the Flys is done by the anchor (in base class SwFrame)
