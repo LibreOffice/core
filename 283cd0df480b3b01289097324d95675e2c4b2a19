@@ -16,6 +16,24 @@
       "message": "Requires exist_ok\u003dTrue otherwise will raise FileExistsError if the target directory already exists.",
       "revId": "283cd0df480b3b01289097324d95675e2c4b2a19",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67cd14b6_de82d9f3",
+        "filename": "bin/update/path.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-08T18:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e92d605e_82e87f5a",
+      "revId": "283cd0df480b3b01289097324d95675e2c4b2a19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
