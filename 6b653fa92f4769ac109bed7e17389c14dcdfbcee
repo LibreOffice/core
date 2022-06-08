@@ -125,6 +125,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6f733c3_a5d1d6c0",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T15:58:19Z",
+      "side": 1,
+      "message": "pylint is still unhappy, it gives 4 more conventions/refactors for me. To what should I pay attention?",
+      "parentUuid": "485091b0_6c504ad6",
+      "revId": "6b653fa92f4769ac109bed7e17389c14dcdfbcee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38b35554_1a4a3a91",

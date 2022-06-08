@@ -18,6 +18,41 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd00f8ea_3227bc8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T15:58:19Z",
+      "side": 1,
+      "message": "Thanks for the feedback!",
+      "revId": "f507245866c0070f93d68e0121f83ec0a187f971",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6593591_f2eaaf6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T15:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d7debae_9e8ea505",
+      "revId": "f507245866c0070f93d68e0121f83ec0a187f971",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "983cd540_aa473644",
@@ -31,6 +66,30 @@
       "writtenOn": "2022-06-01T10:30:44Z",
       "side": 1,
       "message": "typo should check for --platform otherwise it duplicates the check above / is a noop.\nguess it is a matter of preference if you put the len(sys.argv) \u003e 4 into an encapsulating if or query it both timnes.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 57
+      },
+      "revId": "f507245866c0070f93d68e0121f83ec0a187f971",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d435e3c_16e65c4c",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T15:58:19Z",
+      "side": 1,
+      "message": "whoopsie thanks",
+      "parentUuid": "983cd540_aa473644",
       "range": {
         "startLine": 39,
         "startChar": 0,
@@ -78,6 +137,30 @@
       "side": 1,
       "message": "No need to parse arguments manually in the first place. Python has argparse module, using it is more pythonic way of parsing. Something like\n\n```\nimport argparse\n\nparser \u003d argparse.ArgumentParser()\n# add positional arguments: symbols, config, etc.\ngroup \u003d parser.add_mutually_exclusive_group()\ngroup.add_argument(\u0027--system\u0027, action\u003d\u0027store_true\u0027)\ngroup.add_argument(\u0027--platform\u0027, choices\u003d(\u0027Windows\u0027, \u0027Linux\u0027))\nargs \u003d parser.parse_args()\n\nif args.system:\n    data[\u0027system\u0027] \u003d True\nelif args.platform:\n    data[\u0027platform\u0027] \u003d args.platform\n```",
       "parentUuid": "18ccc7be_a04a9156",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 48
+      },
+      "revId": "f507245866c0070f93d68e0121f83ec0a187f971",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "374292d7_30178ddb",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T15:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56008c32_d710ec46",
       "range": {
         "startLine": 43,
         "startChar": 0,
