@@ -86,6 +86,24 @@
       "parentUuid": "bf8d4a76_e702e0a8",
       "revId": "9f6a735d03bbda711bb2f6f1db95f20efc528251",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c11360b_b282313c",
+        "filename": "toolkit/qa/cppunit/a11y/XAccessibleContextTester.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-08T10:23:53Z",
+      "side": 1,
+      "message": "ok, makes sense. overzealous null checking by the author is plausible to me.",
+      "parentUuid": "4d315c16_580ca58b",
+      "revId": "9f6a735d03bbda711bb2f6f1db95f20efc528251",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a325d98_d5530ac9",
+        "filename": "toolkit/qa/cppunit/a11y/AccessibleStatusBarTest.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-08T10:23:53Z",
+      "side": 1,
+      "message": "one more \"not sure why\" here, want to remove that one too?",
+      "revId": "406e434aef2fdf132dfa165667d668190a08bce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
