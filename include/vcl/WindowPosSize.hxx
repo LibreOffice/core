@@ -30,7 +30,7 @@ namespace vcl
 {
 /**
  * There are multiple ways to store the two different areas of a vcl::Window.
- * But this representataion is hopefully less error prone from the used types
+ * But this representation is hopefully less error prone from the used types
  * and more clear in what values in- or exclude the non-drawable window frame.
  *
  * There are especially two things to remember:
@@ -120,7 +120,7 @@ public:
         setPos(rRect.GetPos());
         setSize(rRect.GetSize());
     }
-    // because tools::Rectangle has the ambigious (Point&, Point&) constructor, which we don't want here
+    // because tools::Rectangle has the ambiguous (Point&, Point&) constructor, which we don't want here
     void setPosSize(const Point& rPos, const Size& rSize) { setPosSize({ rPos, rSize }); }
 };
 
