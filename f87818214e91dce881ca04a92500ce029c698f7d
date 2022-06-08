@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f47ee97_aa830d0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-08T12:40:33Z",
+      "side": 1,
+      "message": "Hi Caolán,\nI\u0027m sorry for the back and forth but I found 2 more forums about mso that we could use to get more files.\nIn order to download the files, you need to login first. I sent you the credentials by email. Just put it where the script it. I\u0027m not sure wether one single login will be enough to download all the files or you have to launch the script a few times.",
+      "revId": "f87818214e91dce881ca04a92500ce029c698f7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
