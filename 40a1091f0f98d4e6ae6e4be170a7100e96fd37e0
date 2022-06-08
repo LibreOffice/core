@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8431f304_1c5e2331",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-08T05:26:46Z",
+      "side": 1,
+      "message": "Since Jan-Marek had also made the same patch (see https://gerrit.libreoffice.org/c/core/+/135481), let\u0027s push this one then.",
+      "revId": "40a1091f0f98d4e6ae6e4be170a7100e96fd37e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
