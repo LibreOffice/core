@@ -2452,7 +2452,7 @@ namespace editeng
 {
 
 void BorderDistanceFromWord(bool bFromEdge, sal_Int32& nMargin, sal_Int32& nBorderDistance,
-    sal_Int32 nBorderWidth, bool bAllowNegativeBorderDistance)
+    sal_Int32 nBorderWidth)
 {
     // See https://wiki.openoffice.org/wiki/Writer/MSInteroperability/PageBorder
 
@@ -2479,15 +2479,7 @@ void BorderDistanceFromWord(bool bFromEdge, sal_Int32& nMargin, sal_Int32& nBord
     }
     else if (nNewBorderDistance < 0)
     {
-        if (bAllowNegativeBorderDistance)
-        {
-            nNewMargin = nMargin;
-        }
-        else
-        {
-            nNewMargin = std::max<sal_Int32>(nMargin - nBorderWidth, 0);
-            nNewBorderDistance = 0;
-        }
+        nNewMargin = nMargin;
     }
 
     nMargin = nNewMargin;

@@ -241,7 +241,7 @@ namespace editeng
 {
 
 void EDITENG_DLLPUBLIC BorderDistanceFromWord(bool bFromEdge, sal_Int32& nMargin,
-    sal_Int32& nBorderDistance, sal_Int32 nBorderWidth, bool bAllowNegativeBorderDistance = false);
+    sal_Int32& nBorderDistance, sal_Int32 nBorderWidth);
 
 struct EDITENG_DLLPUBLIC WordPageMargins final
 {
