@@ -517,7 +517,10 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
 {
     // when it is a popup we initialize sender in weld_popover
     if (bPopup)
+    {
+        m_sTypeOfJSON = "popup";
         return;
+    }
 
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
 
@@ -666,6 +669,9 @@ JSInstanceBuilder* JSInstanceBuilder::CreatePopupBuilder(weld::Widget* pParent,
 
 JSInstanceBuilder::~JSInstanceBuilder()
 {
+    if (m_sTypeOfJSON == "popup")
+        sendClosePopup(m_nWindowId);
+
     if (m_aWindowToRelease)
     {
         m_aWindowToRelease->ReleaseLOKNotifier();
