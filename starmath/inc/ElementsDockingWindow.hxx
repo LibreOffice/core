@@ -66,7 +66,6 @@ public:
     ~SmElementsControl();
 
     static const std::vector<TranslateId>& categories();
-    const TranslateId& elementSetId() const { return msCurrentSetId; }
     void setElementSetId(TranslateId pSetId);
 
     void setVerticalMode(bool bVertical);

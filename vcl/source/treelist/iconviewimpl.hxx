@@ -83,8 +83,6 @@ private:
     // Get first entry at most n rows below; nullptr if no rows below
     SvTreeListEntry* GoToNextRow(SvTreeListEntry* pEntry, int n) const;
 
-    SvTreeListEntry* GetFirstInRow(SvTreeListEntry* pEntry) const;
-
     tools::Long GetEntryRow(const SvTreeListEntry* entry) const;
     void SetStartEntry(SvTreeListEntry* entry);
     void ScrollTo(SvTreeListEntry* entry);

@@ -220,10 +220,6 @@ public:
 
     /** convert XMLSchema-2 "duration" string to double; negative durations allowed */
     static bool convertDuration(double & rfTime,
-                                std::u16string_view rString);
-
-    /** convert XMLSchema-2 "duration" string to double; negative durations allowed */
-    static bool convertDuration(double & rfTime,
                                 std::string_view rString);
 
     /** convert XMLSchema-2 "duration" string to util::Duration */

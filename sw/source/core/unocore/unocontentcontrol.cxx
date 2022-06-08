@@ -337,65 +337,6 @@ bool SwXContentControl::SetContentRange(SwTextNode*& rpNode, sal_Int32& rStart,
     return false;
 }
 
-bool SwXContentControl::CheckForOwnMemberContentControl(const SwPaM& rPam, bool bAbsorb)
-{
-    SwTextNode* pTextNode;
-    sal_Int32 nContentControlStart;
-    sal_Int32 nContentControlEnd;
-    bool bSuccess = SetContentRange(pTextNode, nContentControlStart, nContentControlEnd);
-    if (!bSuccess)
-    {
-        SAL_WARN("sw.core", "SwXContentControl::CheckForOwnMemberContentControl: no pam");
-        throw lang::DisposedException();
-    }
-
-    const SwPosition* pStartPos(rPam.Start());
-    if (&pStartPos->nNode.GetNode() != pTextNode)
-    {
-        throw lang::IllegalArgumentException(
-            "trying to insert into a nesting text content, but start "
-            "of text range not in same paragraph as text content",
-            nullptr, 0);
-    }
-    bool bForceExpandHints(false);
-    sal_Int32 nStartPos = pStartPos->nContent.GetIndex();
-    if ((nStartPos < nContentControlStart) || (nStartPos > nContentControlEnd))
-    {
-        throw lang::IllegalArgumentException(
-            "trying to insert into a nesting text content, but start "
-            "of text range not inside text content",
-            nullptr, 0);
-    }
-    else if (nStartPos == nContentControlEnd)
-    {
-        bForceExpandHints = true;
-    }
-    if (rPam.HasMark() && bAbsorb)
-    {
-        const SwPosition* pEndPos = rPam.End();
-        if (&pEndPos->nNode.GetNode() != pTextNode)
-        {
-            throw lang::IllegalArgumentException(
-                "trying to insert into a nesting text content, but end "
-                "of text range not in same paragraph as text content",
-                nullptr, 0);
-        }
-        sal_Int32 nEndPos = pEndPos->nContent.GetIndex();
-        if ((nEndPos < nContentControlStart) || (nEndPos > nContentControlEnd))
-        {
-            throw lang::IllegalArgumentException(
-                "trying to insert into a nesting text content, but end "
-                "of text range not inside text content",
-                nullptr, 0);
-        }
-        else if (nEndPos == nContentControlEnd)
-        {
-            bForceExpandHints = true;
-        }
-    }
-    return bForceExpandHints;
-}
-
 const uno::Sequence<sal_Int8>& SwXContentControl::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit theSwXContentControlUnoTunnelId;

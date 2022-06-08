@@ -258,11 +258,6 @@ public:
                                 std::string_view rString,
                                 const css::util::Date& aNullDate);
 
-
-    /** convert string to ::basegfx::B3DVector */
-    static bool convertB3DVector( ::basegfx::B3DVector& rVector,
-                              std::u16string_view rValue );
-
     /** convert string to ::basegfx::B3DVector */
     static bool convertB3DVector( ::basegfx::B3DVector& rVector,
                               std::string_view rValue );

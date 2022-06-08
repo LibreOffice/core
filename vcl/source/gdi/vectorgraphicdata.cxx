@@ -140,16 +140,6 @@ bool VectorGraphicData::operator==(const VectorGraphicData& rCandidate) const
     return false;
 }
 
-void VectorGraphicData::setWmfExternalHeader(const WmfExternal& aExtHeader)
-{
-    if (!mpExternalHeader)
-    {
-        mpExternalHeader.reset( new WmfExternal );
-    }
-
-    *mpExternalHeader = aExtHeader;
-}
-
 void VectorGraphicData::ensurePdfReplacement()
 {
     assert(getType() == VectorGraphicDataType::Pdf);
@@ -226,15 +216,10 @@ void VectorGraphicData::ensureSequenceAndRange()
             std::copy(maDataContainer.cbegin(), maDataContainer.cend(), aDataSequence.getArray());
             const uno::Reference<io::XInputStream> xInputStream(new comphelper::SequenceInputStream(aDataSequence));
 
-            uno::Sequence< ::beans::PropertyValue > aPropertySequence;
-
-            if (mpExternalHeader)
-            {
-                aPropertySequence = mpExternalHeader->getSequence();
-            }
-
             if (xInputStream.is())
             {
+                uno::Sequence< ::beans::PropertyValue > aPropertySequence;
+
                 // Pass the size hint of the graphic to the EMF parser.
                 geometry::RealPoint2D aSizeHint;
                 aSizeHint.X = maSizeHint.getX();
@@ -243,9 +228,7 @@ void VectorGraphicData::ensureSequenceAndRange()
 
                 if (!mbEnableEMFPlus)
                 {
-                    auto aVector = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aPropertySequence);
-                    aVector.push_back(comphelper::makePropertyValue("EMFPlusEnable", uno::Any(false)));
-                    aPropertySequence = comphelper::containerToSequence(aVector);
+                    aPropertySequence = { comphelper::makePropertyValue("EMFPlusEnable", uno::Any(false)) };
                 }
 
                 maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(xInputStream, OUString(), aPropertySequence));

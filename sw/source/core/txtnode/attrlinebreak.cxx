@@ -69,13 +69,6 @@ sal_uInt16 SwFormatLineBreak::GetValueCount() const
     return static_cast<sal_uInt16>(SwLineBreakClear::LAST) + 1;
 }
 
-void SwFormatLineBreak::InvalidateLineBreak()
-{
-    SwPtrMsgPoolItem const aItem(RES_REMOVE_UNO_OBJECT,
-                                 &static_cast<sw::BroadcastingModify&>(*this));
-    CallSwClientNotify(sw::LegacyModifyHint(&aItem, &aItem));
-}
-
 uno::Reference<text::XTextRange> SwFormatLineBreak::GetAnchor() const
 {
     SolarMutexGuard aGuard;

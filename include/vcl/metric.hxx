@@ -72,7 +72,6 @@ public:
     bool                EqualIgnoreColor( const FontMetric& ) const;
 
     // Compute value usable as hash.
-    size_t              GetHashValue() const;
     size_t              GetHashValueIgnoreColor() const;
 
 private:

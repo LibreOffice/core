@@ -122,13 +122,6 @@ size_t FontMetric::GetHashValueNoBase() const
     return hash;
 }
 
-size_t FontMetric::GetHashValue() const
-{
-    size_t hash = GetHashValueNoBase();
-    o3tl::hash_combine( hash, Font::GetHashValue());
-    return hash;
-}
-
 size_t FontMetric::GetHashValueIgnoreColor() const
 {
     size_t hash = GetHashValueNoBase();

@@ -550,37 +550,6 @@ bool SvXMLTokenEnumerator::getNextToken( std::u16string_view& rToken )
     return true;
 }
 
-static bool lcl_getPositions(std::u16string_view _sValue, std::u16string_view& _rContentX, std::u16string_view& _rContentY, std::u16string_view& _rContentZ)
-{
-    if(_sValue.empty() || _sValue[0] != '(')
-        return false;
-
-    size_t nPos(1);
-    size_t nFound = _sValue.find(' ', nPos);
-
-    if(nFound == std::u16string_view::npos || nFound <= nPos)
-        return false;
-
-    _rContentX = _sValue.substr(nPos, nFound - nPos);
-
-    nPos = nFound + 1;
-    nFound = _sValue.find(' ', nPos);
-
-    if(nFound == std::u16string_view::npos || nFound <= nPos)
-        return false;
-
-    _rContentY = _sValue.substr(nPos, nFound - nPos);
-
-    nPos = nFound + 1;
-    nFound = _sValue.find(')', nPos);
-
-    if(nFound == std::u16string_view::npos || nFound <= nPos)
-        return false;
-
-    _rContentZ = _sValue.substr(nPos, nFound - nPos);
-    return true;
-}
-
 static bool lcl_getPositions(std::string_view _sValue, std::string_view& _rContentX, std::string_view& _rContentY, std::string_view& _rContentZ)
 {
     if(_sValue.empty() || _sValue[0] != '(')
@@ -611,34 +580,6 @@ static bool lcl_getPositions(std::string_view _sValue, std::string_view& _rConte
     _rContentZ = _sValue.substr(nPos, nFound - nPos);
     return true;
 
-}
-
-/** convert string to ::basegfx::B3DVector */
-bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, std::u16string_view rValue )
-{
-    std::u16string_view aContentX,aContentY,aContentZ;
-    if ( !lcl_getPositions(rValue,aContentX,aContentY,aContentZ) )
-        return false;
-
-    rtl_math_ConversionStatus eStatus;
-
-    rVector.setX(::rtl::math::stringToDouble(aContentX, '.',
-            ',', &eStatus));
-
-    if( eStatus != rtl_math_ConversionStatus_Ok )
-        return false;
-
-    rVector.setY(::rtl::math::stringToDouble(aContentY, '.',
-            ',', &eStatus));
-
-    if( eStatus != rtl_math_ConversionStatus_Ok )
-        return false;
-
-    rVector.setZ(::rtl::math::stringToDouble(aContentZ, '.',
-            ',', &eStatus));
-
-
-    return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
 /** convert string to ::basegfx::B3DVector */
