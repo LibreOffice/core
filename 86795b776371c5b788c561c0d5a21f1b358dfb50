@@ -16,6 +16,24 @@
       "message": "Would be great if you sort imports in other files too.",
       "revId": "86795b776371c5b788c561c0d5a21f1b358dfb50",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f1af624_1050b719",
+        "filename": "bin/update/create_partial_update.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T16:09:15Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "3b66d46e_1bbb284b",
+      "revId": "86795b776371c5b788c561c0d5a21f1b358dfb50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

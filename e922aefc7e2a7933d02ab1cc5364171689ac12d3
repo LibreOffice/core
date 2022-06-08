@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a229467c_e359d648",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T16:09:15Z",
+      "side": 1,
+      "message": "Thanks for the feedback!",
+      "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "795f8546_994af5bb",
@@ -31,6 +48,24 @@
       "writtenOn": "2022-06-03T19:44:24Z",
       "side": 1,
       "message": "Wrong script name. If not argparse can print sys.argv[0] here.",
+      "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e28e4a7e_cfceeee6",
+        "filename": "bin/update/create_full_mar.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T16:09:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "795f8546_994af5bb",
       "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -52,6 +87,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc98de26_27bba962",
+        "filename": "bin/update/path.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T16:09:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e599139f_e3100511",
+      "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c110a66e_185018da",
@@ -65,6 +118,24 @@
       "writtenOn": "2022-06-03T19:44:24Z",
       "side": 1,
       "message": "Probably os.makedirs(exist_ok\u003dTrue) fits here too.",
+      "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e322cc3f_f13e53f3",
+        "filename": "bin/update/tools.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T16:09:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c110a66e_185018da",
       "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -86,6 +157,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "746554ae_3ea8736f",
+        "filename": "bin/update/tools.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T16:09:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd719379_a387c176",
+      "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3292e2ff_fbb2d9bf",
@@ -99,6 +188,24 @@
       "writtenOn": "2022-06-03T19:58:02Z",
       "side": 1,
       "message": "I guess :\u003d from Python 3.8 is not yet applicable. Otherwise can use\n```\nwhile data :\u003d f.read(BUF_SIZE):\n```",
+      "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a96c1cce_df169e4c",
+        "filename": "bin/update/tools.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T16:09:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3292e2ff_fbb2d9bf",
       "revId": "e922aefc7e2a7933d02ab1cc5364171689ac12d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

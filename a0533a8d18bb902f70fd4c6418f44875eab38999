@@ -107,6 +107,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e7e348c_f189d9e6",
+        "filename": "bin/update/tools.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T16:09:15Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "c37a7afb_79e6ca38",
+      "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1392c7c6_544f1867",
@@ -156,6 +174,24 @@
       "side": 0,
       "message": "Looks like a bug. I\u0027d rather replace \"bzip2\" with variable in check_call().",
       "parentUuid": "0f7974fb_649ead82",
+      "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9897b929_09fd5f58",
+        "filename": "bin/update/uncompress_mar.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-06-08T16:09:15Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "7feef2bc_ddea05f9",
       "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
