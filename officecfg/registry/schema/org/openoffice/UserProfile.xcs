@@ -61,7 +61,7 @@
       <prop oor:name="street" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools - Options - General - User Data -->
         <info>
-          <desc>Specifies the street where the use lives.</desc>
+          <desc>Specifies the street where the user lives.</desc>
         </info>
         <value/>
         <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -109,7 +109,7 @@
       <prop oor:name="position" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools - Options - General - User Data -->
         <info>
-          <desc>Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
+          <desc>Specifies the user's position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
         </info>
         <value/>
         <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -170,21 +170,21 @@
       <prop oor:name="signingkey" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools - Options - General - User Data -->
         <info>
-          <desc>Specifies user's preferred OpenPGP key used for document signing</desc>
+          <desc>Specifies user's preferred OpenPGP key used for document signing.</desc>
         </info>
         <value/>
       </prop>
       <prop oor:name="encryptionkey" oor:type="xs:string" oor:nillable="false">
         <!-- UIHints: Tools - Options - General - User Data -->
         <info>
-          <desc>Specifies user's preferred OpenPGP key used for document encryption</desc>
+          <desc>Specifies user's preferred OpenPGP key used for document encryption.</desc>
         </info>
         <value/>
       </prop>
       <prop oor:name="encrypttoself" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools - Options - General - User Data -->
         <info>
-          <desc>Whether to encrypt documents for recipient(s) and also for the user with their preferred encryption key</desc>
+          <desc>Whether to encrypt documents for recipient(s) and also for the user with their preferred encryption key.</desc>
         </info>
         <value>true</value>
       </prop>
