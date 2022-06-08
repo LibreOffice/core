@@ -45,7 +45,6 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="model">liststore1</property>
-            <property name="columns">2</property>
             <property name="pixbuf-column">0</property>
             <property name="activate-on-single-click">True</property>
           </object>
