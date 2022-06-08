@@ -41,15 +41,6 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text") {}
-
-protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return o3tl::ends_with(filename, ".docx");
-    }
 };
 
 DECLARE_OOXMLEXPORT_TEST(Tdf130907, "tdf130907.docx")
@@ -97,8 +88,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128197)
     CPPUNIT_ASSERT_LESS(nHeight15, nHeight14);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf135595_HFtableWrap, "tdf135595_HFtableWrap.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf135595_HFtableWrap)
 {
+    loadAndReload("tdf135595_HFtableWrap.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nRowHeight = getXPath(pXmlDoc, "//page[1]/header/tab/row/infos/bounds", "height").toInt32();
     // tdf#77794: always force bLayoutInCell from false to true for MSO2013+
@@ -467,8 +459,9 @@ CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:footnotePr/w:numFmt", "val", "chicago");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testListNotCountedIndent, "list_notcounted_indent.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testListNotCountedIndent)
 {
+    loadAndReload("list_notcounted_indent.fodt");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:numPr/w:numId", "val", "0");
     // wrong: 720
@@ -503,8 +496,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf87569d, "tdf87569_drawingml.docx")
                                  true, bValue);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf130610, "tdf130610_bold_in_2_styles.ott")
+CPPUNIT_TEST_FIXTURE(Test, testTdf130610)
 {
+    loadAndReload("tdf130610_bold_in_2_styles.ott");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // check character properties
     {
@@ -563,8 +557,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf78352, "tdf78352.docx")
     CPPUNIT_ASSERT_LESS(150, nWidth);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf81567, "tdf81567.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf81567)
 {
+    loadAndReload("tdf81567.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
@@ -657,8 +652,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108350_noFontdefaults, "tdf108350_noFontdefaults
     //CPPUNIT_ASSERT_EQUAL_MESSAGE("Font size", 10.f, getProperty<float>(xStyleProps, "CharHeight"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf123116_oversizedRowSplit, "tdf123116_oversizedRowSplit.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf123116_oversizedRowSplit)
 {
+    loadAndReload("tdf123116_oversizedRowSplit.odt");
     // Intentionally require a very non-backward-compatible, natural continuation of the table
     // instead of an ugly "page break" like MS Word does (and LO used to do).
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row splits over 4 pages", 4, getPages());
@@ -675,8 +671,9 @@ DECLARE_OOXMLEXPORT_TEST(testPageContentBottom, "page-content-bottom.docx")
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf129522_removeShadowStyle, "tdf129522_removeShadowStyle.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf129522_removeShadowStyle)
 {
+    loadAndReload("tdf129522_removeShadowStyle.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles("ParagraphStyles");
     uno::Reference< beans::XPropertySet > xStyleProps(paragraphStyles->getByName("Shadow"), uno::UNO_QUERY_THROW);
@@ -1330,8 +1327,9 @@ DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testHyphenationAuto, "hyphenation.odt")
+CPPUNIT_TEST_FIXTURE(Test, testHyphenationAuto)
 {
+    loadAndReload("hyphenation.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Explicitly set hyphenation=auto on document level
     xmlDocUniquePtr pXmlSettings = parseExport("word/settings.xml");
