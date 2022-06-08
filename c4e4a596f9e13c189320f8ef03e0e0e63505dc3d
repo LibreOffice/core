@@ -52,6 +52,24 @@
       "parentUuid": "9c481a9c_0b8a3afa",
       "revId": "c4e4a596f9e13c189320f8ef03e0e0e63505dc3d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd88332c_3e23efba",
+        "filename": "include/vcl/WindowPosSize.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-08T16:17:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f959def0_e990793f",
+      "revId": "c4e4a596f9e13c189320f8ef03e0e0e63505dc3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
