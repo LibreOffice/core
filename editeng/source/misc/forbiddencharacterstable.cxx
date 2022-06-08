@@ -20,10 +20,11 @@
 #include <editeng/forbiddencharacterstable.hxx>
 
 #include <unotools/localedatawrapper.hxx>
+#include <utility>
 
 SvxForbiddenCharactersTable::SvxForbiddenCharactersTable(
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext)
-    : m_xContext(rxContext)
+    css::uno::Reference<css::uno::XComponentContext> xContext)
+    : m_xContext(std::move(xContext))
 {
 }
 

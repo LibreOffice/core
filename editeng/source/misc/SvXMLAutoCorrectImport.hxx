@@ -41,7 +41,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         SvxAutocorrWordList *pNewAutocorr_List,
         SvxAutoCorrect &rNewAutoCorrect,
-        const css::uno::Reference < css::embed::XStorage >& rNewStorage);
+        css::uno::Reference < css::embed::XStorage > xNewStorage);
 
     virtual ~SvXMLAutoCorrectImport() noexcept override;
 };

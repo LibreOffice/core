@@ -25,6 +25,7 @@
 #include <editeng/editengdllapi.h>
 #include <o3tl/sorted_vector.hxx>
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <vcl/font.hxx>
 #include <vcl/vclenum.hxx>
 
@@ -37,7 +38,7 @@ class EDITENG_DLLPUBLIC IAutoCompleteString
 private:
     OUString m_String;
 public:
-    explicit IAutoCompleteString(OUString const& rString) : m_String(rString) {}
+    explicit IAutoCompleteString(OUString aString) : m_String(std::move(aString)) {}
     virtual ~IAutoCompleteString() {}
     OUString const& GetAutoCompleteString() const { return m_String; }
 };

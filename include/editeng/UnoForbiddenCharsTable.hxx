@@ -39,7 +39,7 @@ protected:
     std::shared_ptr<SvxForbiddenCharactersTable> mxForbiddenChars;
 
 public:
-    SvxUnoForbiddenCharsTable(std::shared_ptr<SvxForbiddenCharactersTable> const & xForbiddenChars);
+    SvxUnoForbiddenCharsTable(std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenChars);
     virtual ~SvxUnoForbiddenCharsTable() override;
 
     // XForbiddenCharacters
