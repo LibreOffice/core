@@ -16,6 +16,40 @@
       "message": "I hope the review request doesn\u0027t bother you. Please let me know if it\u0027s not ok. Thank you!",
       "revId": "a6046c9de2e4dc321ab8a08d04bf3f4194a2b353",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89607216_042f1562",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-08T06:14:22Z",
+      "side": 1,
+      "message": "Not at all! I don\u0027t see any obvious problems with this change, thanks. See the inline comment for a nitpick, can be done in a follow-up change.",
+      "revId": "a6046c9de2e4dc321ab8a08d04bf3f4194a2b353",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "906754d1_e6d345e6",
+        "filename": "sw/source/core/txtnode/justify.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-08T06:14:22Z",
+      "side": 1,
+      "message": "You may want to rename this to sw::Justify, just to avoid collision in case some other module starts to have a symbol called Justify.",
+      "revId": "a6046c9de2e4dc321ab8a08d04bf3f4194a2b353",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
