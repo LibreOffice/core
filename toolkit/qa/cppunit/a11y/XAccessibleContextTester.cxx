@@ -124,7 +124,7 @@ void XAccessibleContextTester::testGetAccessibleRelationSet()
 }
 
 /**
- * @breif Get the accessible role of component.
+ * @brief Get the accessible role of component.
  *
  * Checks that the role is a non-negative number.
  */
