@@ -1803,6 +1803,19 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
         }
         break;
+        case RTFKeyword::PGBRDROPT:
+        {
+            sal_Int16 nOffsetFrom = (nParam & 0xe0) >> 5;
+            bool bFromEdge = nOffsetFrom == 1;
+            if (bFromEdge)
+            {
+                Id nId = NS_ooxml::LN_Value_doc_ST_PageBorderOffset_page;
+                putNestedAttribute(m_aStates.top().getSectionSprms(),
+                                   NS_ooxml::LN_EG_SectPrContents_pgBorders,
+                                   NS_ooxml::LN_CT_PageBorders_offsetFrom, new RTFValue(nId));
+            }
+        }
+        break;
         default:
         {
             SAL_INFO("writerfilter", "TODO handle value '" << keywordToString(nKeyword) << "'");

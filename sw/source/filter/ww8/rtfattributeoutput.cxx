@@ -1281,22 +1281,32 @@ void RtfAttributeOutput::SectionPageBorders(const SwFrameFormat* pFormat,
                                             const SwFrameFormat* /*pFirstPageFormat*/)
 {
     const SvxBoxItem& rBox = pFormat->GetBox();
+    editeng::WordBorderDistances aDistances;
+    editeng::BorderDistancesToWord(rBox, m_aPageMargins, aDistances);
+
+    if (aDistances.bFromEdge)
+    {
+        sal_uInt16 nOpt = (1 << 5);
+        m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_PGBRDROPT);
+        m_aSectionBreaks.append(static_cast<sal_Int32>(nOpt));
+    }
+
     const editeng::SvxBorderLine* pLine = rBox.GetTop();
     if (pLine)
-        m_aSectionBreaks.append(OutBorderLine(m_rExport, pLine, OOO_STRING_SVTOOLS_RTF_PGBRDRT,
-                                              rBox.GetDistance(SvxBoxItemLine::TOP)));
+        m_aSectionBreaks.append(
+            OutBorderLine(m_rExport, pLine, OOO_STRING_SVTOOLS_RTF_PGBRDRT, aDistances.nTop));
     pLine = rBox.GetBottom();
     if (pLine)
-        m_aSectionBreaks.append(OutBorderLine(m_rExport, pLine, OOO_STRING_SVTOOLS_RTF_PGBRDRB,
-                                              rBox.GetDistance(SvxBoxItemLine::BOTTOM)));
+        m_aSectionBreaks.append(
+            OutBorderLine(m_rExport, pLine, OOO_STRING_SVTOOLS_RTF_PGBRDRB, aDistances.nBottom));
     pLine = rBox.GetLeft();
     if (pLine)
-        m_aSectionBreaks.append(OutBorderLine(m_rExport, pLine, OOO_STRING_SVTOOLS_RTF_PGBRDRL,
-                                              rBox.GetDistance(SvxBoxItemLine::LEFT)));
+        m_aSectionBreaks.append(
+            OutBorderLine(m_rExport, pLine, OOO_STRING_SVTOOLS_RTF_PGBRDRL, aDistances.nLeft));
     pLine = rBox.GetRight();
     if (pLine)
-        m_aSectionBreaks.append(OutBorderLine(m_rExport, pLine, OOO_STRING_SVTOOLS_RTF_PGBRDRR,
-                                              rBox.GetDistance(SvxBoxItemLine::RIGHT)));
+        m_aSectionBreaks.append(
+            OutBorderLine(m_rExport, pLine, OOO_STRING_SVTOOLS_RTF_PGBRDRR, aDistances.nRight));
 }
 
 void RtfAttributeOutput::SectionBiDi(bool bBiDi)
@@ -3166,15 +3176,29 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
     {
         if (m_rExport.m_bOutPageDescs)
         {
+            m_aPageMargins.nLeft = 0;
+            m_aPageMargins.nRight = 0;
+
+            if (const SvxBoxItem* pBoxItem = m_rExport.HasItem(RES_BOX))
+            {
+                m_aPageMargins.nLeft
+                    = pBoxItem->CalcLineSpace(SvxBoxItemLine::LEFT, /*bEvenIfNoLine*/ true);
+                m_aPageMargins.nRight
+                    = pBoxItem->CalcLineSpace(SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/ true);
+            }
+
+            m_aPageMargins.nLeft += sal::static_int_cast<sal_uInt16>(rLRSpace.GetLeft());
+            m_aPageMargins.nRight += sal::static_int_cast<sal_uInt16>(rLRSpace.GetRight());
+
             if (rLRSpace.GetLeft())
             {
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGLSXN);
-                m_aSectionBreaks.append(static_cast<sal_Int32>(rLRSpace.GetLeft()));
+                m_aSectionBreaks.append(static_cast<sal_Int32>(m_aPageMargins.nLeft));
             }
             if (rLRSpace.GetRight())
             {
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGRSXN);
-                m_aSectionBreaks.append(static_cast<sal_Int32>(rLRSpace.GetRight()));
+                m_aSectionBreaks.append(static_cast<sal_Int32>(m_aPageMargins.nRight));
             }
             if (rLRSpace.GetGutterMargin())
             {
@@ -3233,6 +3257,7 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
             {
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGTSXN);
                 m_aSectionBreaks.append(static_cast<sal_Int32>(aDistances.m_DyaTop));
+                m_aPageMargins.nTop = aDistances.m_DyaTop;
             }
             if (aDistances.HasHeader())
             {
@@ -3244,6 +3269,7 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
             {
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGBSXN);
                 m_aSectionBreaks.append(static_cast<sal_Int32>(aDistances.m_DyaBottom));
+                m_aPageMargins.nBottom = aDistances.m_DyaBottom;
             }
             if (aDistances.HasFooter())
             {
