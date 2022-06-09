@@ -62,8 +62,8 @@ private:
     VclPtr<sfx2::sidebar::Deck> mpDeck;
     std::weak_ptr<sfx2::sidebar::Panel> mxPanel;
 
-    sal_Int32 GetMaxOrderIndex(sfx2::sidebar::ResourceManager::PanelContextDescriptorContainer aPanels);
-    sal_Int32 GetMinOrderIndex(sfx2::sidebar::ResourceManager::PanelContextDescriptorContainer aPanels);
+    sal_Int32 GetMaxOrderIndex(const sfx2::sidebar::ResourceManager::PanelContextDescriptorContainer& rPanels);
+    sal_Int32 GetMinOrderIndex(const sfx2::sidebar::ResourceManager::PanelContextDescriptorContainer& rPanels);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
