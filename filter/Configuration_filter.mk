@@ -714,6 +714,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_typ
 	ras_Sun_Rasterfile \
 	svg_Scalable_Vector_Graphics_Draw \
 	svg_Scalable_Vector_Graphics \
+	svgz_Compressed_Scalable_Vector_Graphics \
 	svm_StarView_Metafile \
 	tga_Truevision_TARGA \
 	tif_Tag_Image_File \
@@ -744,6 +745,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	RAS___Sun_Rasterfile \
 	SVG___Scalable_Vector_Graphics_Draw \
 	SVG___Scalable_Vector_Graphics \
+	SVGZ___Compressed_Scalable_Vector_Graphics \
 	SVM___StarView_Metafile \
 	TGA___Truevision_TARGA \
 	TIF___Tag_Image_File \
@@ -789,6 +791,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_
 	ras_Sun_Rasterfile \
 	svg_Scalable_Vector_Graphics_Draw \
 	svg_Scalable_Vector_Graphics \
+	svgz_Compressed_Scalable_Vector_Graphics \
 	svm_StarView_Metafile \
 	tif_Tag_Image_File \
 	wmf_MS_Windows_Metafile \
@@ -862,6 +865,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics
 	psd_Adobe_Photoshop \
 	ras_Sun_Rasterfile \
 	svg_Scalable_Vector_Graphics \
+	svgz_Compressed_Scalable_Vector_Graphics \
 	svm_StarView_Metafile \
 	tga_Truevision_TARGA \
 	tif_Tag_Image_File \
@@ -903,6 +907,8 @@ $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_inter
 	ras_Import \
 	svg_Export \
 	svg_Import \
+	svgz_Export \
+	svgz_Import \
 	svm_Export \
 	svm_Import \
 	tga_Import \
