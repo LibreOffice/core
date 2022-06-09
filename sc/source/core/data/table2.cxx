@@ -1315,13 +1315,21 @@ void ScTable::CopyToTable(
     if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
         return;
 
-    bool bIsUndoDoc = pDestTab->rDocument.IsUndo();
+    const bool bToUndoDoc = pDestTab->rDocument.IsUndo();
+    const bool bFromUndoDoc = rDocument.IsUndo();
 
-    if (bIsUndoDoc && (nFlags & InsertDeleteFlags::CONTENTS))
+    if ((bToUndoDoc || bFromUndoDoc) && (nFlags & InsertDeleteFlags::CONTENTS) && mpRangeName)
     {
         // Copying formulas may create sheet-local named expressions on the
         // destination sheet. Add existing to Undo first.
+        // During Undo restore the previous named expressions.
         pDestTab->SetRangeName( std::unique_ptr<ScRangeName>( new ScRangeName( *GetRangeName())));
+        if (!pDestTab->rDocument.IsClipOrUndo())
+        {
+            ScDocShell* pDocSh = static_cast<ScDocShell*>(pDestTab->rDocument.GetDocumentShell());
+            if (pDocSh)
+                pDocSh->SetAreasChangedNeedBroadcast();
+        }
     }
 
     if (nFlags != InsertDeleteFlags::NONE)
@@ -1333,14 +1341,14 @@ void ScTable::CopyToTable(
         // quadratically expensive with large groups. So do the grouping just once at the end.
         sc::DelayFormulaGroupingSwitch delayGrouping( pDestTab->rDocument, true );
         for (SCCOL i = nCol1; i <= ClampToAllocatedColumns(nCol2); i++)
-            aCol[i].CopyToColumn(rCxt, nRow1, nRow2, bIsUndoDoc ? nFlags : nTempFlags, bMarked,
+            aCol[i].CopyToColumn(rCxt, nRow1, nRow2, bToUndoDoc ? nFlags : nTempFlags, bMarked,
                                  pDestTab->CreateColumnIfNotExists(i), pMarkData, bAsLink, bGlobalNamesToLocal);
     }
 
     if (!bColRowFlags)      // Column widths/Row heights/Flags
         return;
 
-    if(bIsUndoDoc && (nFlags & InsertDeleteFlags::ATTRIB))
+    if (bToUndoDoc && (nFlags & InsertDeleteFlags::ATTRIB))
     {
         pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->rDocument, *mpCondFormatList));
     }
@@ -1453,7 +1461,7 @@ void ScTable::CopyToTable(
         CopySparklinesToTable(nCol1, nRow1, nCol2, nRow2, pDestTab);
     }
 
-    if (!bIsUndoDoc && bCopyCaptions && (nFlags & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)))
+    if (!bToUndoDoc && bCopyCaptions && (nFlags & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)))
     {
         bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
         CopyCaptionsToTable( nCol1, nRow1, nCol2, nRow2, pDestTab, bCloneCaption);
