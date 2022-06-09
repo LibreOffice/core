@@ -2531,7 +2531,7 @@ ctorParam:
       }
       pad->constructors.back().parameters.push_back(
           unoidl::detail::SourceProviderSingleInterfaceBasedServiceEntityPad::Constructor::Parameter(
-              id, t, $5));
+              id, std::move(t), $5));
   }
 ;
 

@@ -836,7 +836,7 @@ void SwNumberTreeNode::IsSane(bool bRecursive) const
 {
     vector<const SwNumberTreeNode*> aParents;
 
-    return IsSane(bRecursive, aParents);
+    return IsSane(bRecursive, std::move(aParents));
 }
 
 void SwNumberTreeNode::IsSane(bool bRecursive,

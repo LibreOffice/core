@@ -383,7 +383,8 @@ void RTFDocumentImpl::outputSettingsTable()
         = new RTFReferenceProperties(m_aSettingsTableAttributes, m_aSettingsTableSprms);
     RTFReferenceTable::Entries_t aSettingsTableEntries;
     aSettingsTableEntries.insert(std::make_pair(0, pProp));
-    writerfilter::Reference<Table>::Pointer_t pTable = new RTFReferenceTable(aSettingsTableEntries);
+    writerfilter::Reference<Table>::Pointer_t pTable
+        = new RTFReferenceTable(std::move(aSettingsTableEntries));
     Mapper().table(NS_ooxml::LN_settings_settings, pTable);
 }
 
@@ -2250,9 +2251,9 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
         break;
         case Destination::STYLESHEET:
         {
-            RTFReferenceTable::Entries_t const pStyleTableDeduplicated(deduplicateStyleTable());
+            RTFReferenceTable::Entries_t pStyleTableDeduplicated(deduplicateStyleTable());
             writerfilter::Reference<Table>::Pointer_t const pTable(
-                new RTFReferenceTable(pStyleTableDeduplicated));
+                new RTFReferenceTable(std::move(pStyleTableDeduplicated)));
             Mapper().table(NS_ooxml::LN_STYLESHEET, pTable);
         }
         break;
@@ -2264,7 +2265,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             RTFReferenceTable::Entries_t aListTableEntries;
             aListTableEntries.insert(std::make_pair(0, pProp));
             writerfilter::Reference<Table>::Pointer_t const pTable(
-                new RTFReferenceTable(aListTableEntries));
+                new RTFReferenceTable(std::move(aListTableEntries)));
             Mapper().table(NS_ooxml::LN_NUMBERING, pTable);
         }
         break;
@@ -3330,7 +3331,7 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
                 RTFReferenceTable::Entries_t aListTableEntries;
                 aListTableEntries.insert(std::make_pair(0, pProp));
                 writerfilter::Reference<Table>::Pointer_t const pTable(
-                    new RTFReferenceTable(aListTableEntries));
+                    new RTFReferenceTable(std::move(aListTableEntries)));
                 Mapper().table(NS_ooxml::LN_NUMBERING, pTable);
 
                 // Use it

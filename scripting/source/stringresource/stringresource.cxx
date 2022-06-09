@@ -1421,7 +1421,7 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
         Reference< io::XInputStream > xInput = aIn.getInputStreamForSection( nSize );
         if( xInput.is() )
         {
-            LocaleItem* pLocaleItem = new LocaleItem( aLocale );
+            LocaleItem* pLocaleItem = new LocaleItem( std::move(aLocale) );
             if( iDefault == i )
                 pUseAsDefaultItem = pLocaleItem;
             m_aLocaleItemVector.emplace_back( pLocaleItem );
