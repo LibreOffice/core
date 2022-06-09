@@ -50,6 +50,24 @@
       "message": "Any particular reason this FSQRT2 value was not made a constexpr?",
       "revId": "e8bf66f6577ee9ffab874b862538ea25c67fcbb1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92fd9792_5270a907",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-06-09T22:40:25Z",
+      "side": 1,
+      "message": "FSQRT2 should be replaced with M_SQRT2 to avoid duplication of symbolic constants. There is connected EasyHack tdf#145759. Replacement could be done here or in separate PR.",
+      "parentUuid": "0c73bed2_a353de87",
+      "revId": "e8bf66f6577ee9ffab874b862538ea25c67fcbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
