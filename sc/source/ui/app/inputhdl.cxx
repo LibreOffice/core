@@ -1080,14 +1080,14 @@ void ScInputHandler::GetFormulaData()
 IMPL_LINK( ScInputHandler, ShowHideTipVisibleParentListener, VclWindowEvent&, rEvent, void )
 {
     if (rEvent.GetId() == VclEventId::ObjectDying || rEvent.GetId() == VclEventId::WindowHide
-        || rEvent.GetId() == VclEventId::WindowLoseFocus)
+        || rEvent.GetId() == VclEventId::WindowLoseFocus || rEvent.GetId() == VclEventId::ControlLoseFocus)
         HideTip();
 }
 
 IMPL_LINK( ScInputHandler, ShowHideTipVisibleSecParentListener, VclWindowEvent&, rEvent, void )
 {
     if (rEvent.GetId() == VclEventId::ObjectDying || rEvent.GetId() == VclEventId::WindowHide
-        || rEvent.GetId() == VclEventId::WindowLoseFocus)
+        || rEvent.GetId() == VclEventId::WindowLoseFocus || rEvent.GetId() == VclEventId::ControlLoseFocus)
         HideTipBelow();
 }
 
