@@ -51,7 +51,7 @@ class tdf137802(UITestCase):
 
             # Delete the second paragraph. Shape 2 is anchored to this paragraph
             # so it should be deleted
-            # tdf#137587 fly is no longer deleted by backspace so explictly select
+            # tdf#137587 fly is no longer deleted by backspace so explicitly select
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "SHIFT+LEFT"}))
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
 
