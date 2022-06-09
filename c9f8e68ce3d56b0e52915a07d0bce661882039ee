@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8911e2b3_08c6fea8",
+        "filename": "vcl/source/window/layout.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-09T06:24:17Z",
+      "side": 1,
+      "message": "This fires on Windows with NVDA active, opening Tools-\u003eOptions and Advanced tab",
+      "revId": "c9f8e68ce3d56b0e52915a07d0bce661882039ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
