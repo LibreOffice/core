@@ -2382,78 +2382,121 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
             xmlXPathFreeObject(pXmlObj);
         }
 
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "fo");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[2]", "nType", "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[2]", "Portion", "o");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[1]/Text[1]", "nType",
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type",
                     "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[1]/Text[1]", "Portion",
-                    "j");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[1]/Text[2]", "nType",
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                    "portion", "fo");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "type",
                     "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[1]/Text[2]", "Portion",
-                    "kl");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[1]/Text[1]",
-            "nType", "PortionType::Text");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[1]/Text[1]",
-            "Portion", "ab");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[1]/Text[2]",
-            "nType", "PortionType::Text");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[1]/Text[2]",
-            "Portion", "c");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[2]/Text[1]",
-            "nType", "PortionType::Para");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[2]/Text[1]",
-            "Portion", "def");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[3]/Text[1]",
-            "nType", "PortionType::Text");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[3]/Text[1]",
-            "Portion", "g");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[3]/Text[2]",
-            "nType", "PortionType::Text");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[3]/Text[2]",
-            "Portion", "hi");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/Special[1]", "nType",
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                    "portion", "o");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[1]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[1]",
+                    "portion", "j");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[2]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[2]",
+                    "portion", "kl");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[1]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[1]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                    "portion", "ab");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[1]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[1]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                    "portion", "c");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[2]/"
+                    "SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                    "type", "PortionType::Para");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[2]/"
+                    "SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                    "portion", "def");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[3]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[3]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                    "portion", "g");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[3]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/anchored[1]/fly[1]/txt[3]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                    "portion", "hi");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/SwParaPortion/SwLineLayout/"
+                    "SwFixPortion[1]",
+                    "type",
                     "PortionType::Fly"); // remove???
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/Text[1]", "nType",
-                    "PortionType::Lay");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/Text[1]", "Portion",
-                    "mno");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[3]/Text[1]", "nType",
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/SwParaPortion/SwLineLayout/"
+                    "SwLineLayout[1]",
+                    "type", "PortionType::Lay");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[2]/SwParaPortion/SwLineLayout/"
+                    "SwLineLayout[1]",
+                    "portion", "mno");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[3]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[1]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[3]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[1]",
+                    "portion", "p");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[3]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[2]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[3]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[2]",
+                    "portion", "qr");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwParaPortion[1]", "type",
+                    "PortionType::Para");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                    "portion", "bar");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type",
                     "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[3]/Text[1]", "Portion",
-                    "p");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[3]/Text[2]", "nType",
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                    "portion", "b");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "type",
                     "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly[1]/txt[3]/Text[2]", "Portion",
-                    "qr");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1]", "nType", "PortionType::Para");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1]", "Portion", "bar");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[1]", "nType", "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[1]", "Portion", "b");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[2]", "nType", "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[2]", "Portion", "az");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                    "portion", "az");
     }
 
     // anchor to 3rd paragraph
@@ -2493,22 +2536,33 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
             pXmlDoc,
             "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/anchored[1]/fly[1]/txt[1]/merged",
             "paraPropsNodeIndex", "11");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/anchored[1]/fly[1]/txt[1]/Text[1]",
-            "nType", "PortionType::Para");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/anchored[1]/fly[1]/txt[1]/Text[1]",
-            "Portion", "jqr");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/Special[1]", "nType",
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/anchored[1]/fly[1]/txt[1]/"
+                    "SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                    "type", "PortionType::Para");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/anchored[1]/fly[1]/txt[1]/"
+                    "SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                    "portion", "jqr");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwFixPortion[1]",
+                    "type",
                     "PortionType::Fly"); // remove???
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/Text[1]", "nType",
-                    "PortionType::Lay");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/Text[1]", "Portion",
-                    "abhi");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Para");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "foaz");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwLineLayout[1]",
+                    "type", "PortionType::Lay");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwLineLayout[1]",
+                    "portion", "abhi");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]", "type",
+                    "PortionType::Para");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                    "portion", "foaz");
 
         dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
         CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
@@ -2522,78 +2576,121 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
             xmlXPathFreeObject(pXmlObj);
         }
 
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "fo");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[2]", "nType", "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[2]", "Portion", "o");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1]", "nType", "PortionType::Para");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1]", "Portion", "bar");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[1]/Text[1]", "nType",
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type",
                     "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[1]/Text[1]", "Portion",
-                    "ab");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[1]/Text[2]", "nType",
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                    "portion", "fo");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "type",
                     "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[1]/Text[2]", "Portion",
-                    "c");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[2]/Text[1]", "nType",
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                    "portion", "o");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwParaPortion[1]", "type",
                     "PortionType::Para");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[2]/Text[1]", "Portion",
-                    "def");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[1]/Text[1]",
-            "nType", "PortionType::Text");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[1]/Text[1]",
-            "Portion", "j");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[1]/Text[2]",
-            "nType", "PortionType::Text");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[1]/Text[2]",
-            "Portion", "kl");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[2]/Text[1]",
-            "nType", "PortionType::Para");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[2]/Text[1]",
-            "Portion", "mno");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[3]/Text[1]",
-            "nType", "PortionType::Text");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[3]/Text[1]",
-            "Portion", "p");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[3]/Text[2]",
-            "nType", "PortionType::Text");
-        assertXPath(
-            pXmlDoc,
-            "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[3]/Text[2]",
-            "Portion", "qr");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/Text[1]", "nType",
-                    "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/Special[1]", "nType",
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                    "portion", "bar");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[1]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[1]",
+                    "portion", "ab");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[2]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[2]",
+                    "portion", "c");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[2]/SwParaPortion/SwLineLayout/"
+                    "SwParaPortion[1]",
+                    "type", "PortionType::Para");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[2]/SwParaPortion/SwLineLayout/"
+                    "SwParaPortion[1]",
+                    "portion", "def");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[1]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[1]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                    "portion", "j");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[1]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[1]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                    "portion", "kl");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[2]/"
+                    "SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                    "type", "PortionType::Para");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[2]/"
+                    "SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                    "portion", "mno");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[3]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[3]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                    "portion", "p");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[3]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/anchored[1]/fly[1]/txt[3]/"
+                    "SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                    "portion", "qr");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[1]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/SwParaPortion/SwLineLayout/"
+                    "SwFixPortion[1]",
+                    "type",
                     "PortionType::Fly"); // remove???
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/Text[1]", "Portion",
-                    "g");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/Text[2]", "nType",
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[1]",
+                    "portion", "g");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[2]",
+                    "type", "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/SwParaPortion/SwLineLayout/"
+                    "SwLinePortion[2]",
+                    "portion", "hi");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type",
                     "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly[1]/txt[3]/Text[2]", "Portion",
-                    "hi");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[1]", "nType", "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[1]", "Portion", "b");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[2]", "nType", "PortionType::Text");
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[2]", "Portion", "az");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                    "portion", "b");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "type",
+                    "PortionType::Text");
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                    "portion", "az");
     }
 }
 
