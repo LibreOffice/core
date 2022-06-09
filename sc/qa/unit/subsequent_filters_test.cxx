@@ -175,6 +175,7 @@ public:
 
     void testImportCrashes();
     void testTdf129681();
+    void testTdf149484();
     void testEscapedUnicodeXLSX();
     void testTdf144758_DBDataDefaultOrientation();
 
@@ -272,6 +273,7 @@ public:
 
     CPPUNIT_TEST(testImportCrashes);
     CPPUNIT_TEST(testTdf129681);
+    CPPUNIT_TEST(testTdf149484);
     CPPUNIT_TEST(testEscapedUnicodeXLSX);
     CPPUNIT_TEST(testTdf144758_DBDataDefaultOrientation);
 
@@ -2999,6 +3001,19 @@ void ScFiltersTest::testTdf129681()
     CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(6, 7, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(6, 8, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("#VALUE!"), rDoc.GetString(ScAddress(6, 9, 0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf149484()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf149484.", FORMAT_ODS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: -TRUE-
+    // - Actual  : TRUE
+    CPPUNIT_ASSERT_EQUAL(OUString("-TRUE-"), rDoc.GetString(0, 2, 0));
 
     xDocSh->DoClose();
 }
