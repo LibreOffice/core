@@ -16,6 +16,23 @@
       "message": "Just FYI",
       "revId": "cd4a413398747b7dd7d0bf789131f1930f30681a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7811b22e_7ce3580b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-09T08:54:03Z",
+      "side": 1,
+      "message": "This also implements un-maximize handling handling for Qt. Might be an extra patch in the end.",
+      "revId": "cd4a413398747b7dd7d0bf789131f1930f30681a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
