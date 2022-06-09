@@ -820,6 +820,94 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
     CPPUNIT_ASSERT_EQUAL(OUString("foo"), pWrtShell->GetCursor()->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140007)
+{
+    typedef sal_uLong SwNodeOffset;
+    SwDoc* const pDoc = createDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Insert("foo");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("bar");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("baz");
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(13), pDoc->GetNodes().Count());
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"),
+                         pDoc->GetNodes()[SwNodeOffset(9)]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("bar"),
+                         pDoc->GetNodes()[SwNodeOffset(10)]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("baz"),
+                         pDoc->GetNodes()[SwNodeOffset(11)]->GetTextNode()->GetText());
+
+    pWrtShell->SttEndDoc(true);
+    pWrtShell->EndPara(false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Replace(" ", true);
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12), pDoc->GetNodes().Count());
+    CPPUNIT_ASSERT_EQUAL(OUString("foo bar"),
+                         pDoc->GetNodes()[SwNodeOffset(9)]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("baz"),
+                         pDoc->GetNodes()[SwNodeOffset(10)]->GetTextNode()->GetText());
+
+    pWrtShell->SttEndDoc(true);
+    pWrtShell->EndPara(false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Replace(" ", true);
+    CPPUNIT_ASSERT_EQUAL(OUString("foo bar baz"),
+                         pDoc->GetNodes()[SwNodeOffset(9)]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(11), pDoc->GetNodes().Count());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12), pDoc->GetNodes().Count());
+    CPPUNIT_ASSERT_EQUAL(OUString("foo bar"),
+                         pDoc->GetNodes()[SwNodeOffset(9)]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("baz"),
+                         pDoc->GetNodes()[SwNodeOffset(10)]->GetTextNode()->GetText());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(13), pDoc->GetNodes().Count());
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"),
+                         pDoc->GetNodes()[SwNodeOffset(9)]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("bar"),
+                         pDoc->GetNodes()[SwNodeOffset(10)]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("baz"),
+                         pDoc->GetNodes()[SwNodeOffset(11)]->GetTextNode()->GetText());
+
+    pWrtShell->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12), pDoc->GetNodes().Count());
+    CPPUNIT_ASSERT_EQUAL(OUString("foo bar"),
+                         pDoc->GetNodes()[SwNodeOffset(9)]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("baz"),
+                         pDoc->GetNodes()[SwNodeOffset(10)]->GetTextNode()->GetText());
+
+    pWrtShell->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("foo bar baz"),
+                         pDoc->GetNodes()[SwNodeOffset(9)]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(11), pDoc->GetNodes().Count());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12), pDoc->GetNodes().Count());
+    CPPUNIT_ASSERT_EQUAL(OUString("foo bar"),
+                         pDoc->GetNodes()[SwNodeOffset(9)]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("baz"),
+                         pDoc->GetNodes()[SwNodeOffset(10)]->GetTextNode()->GetText());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(SwNodeOffset(13), pDoc->GetNodes().Count());
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"),
+                         pDoc->GetNodes()[SwNodeOffset(9)]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("bar"),
+                         pDoc->GetNodes()[SwNodeOffset(10)]->GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString("baz"),
+                         pDoc->GetNodes()[SwNodeOffset(11)]->GetTextNode()->GetText());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
 {
     load(DATA_DIRECTORY, "tdf54819.fodt");
