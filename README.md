@@ -53,6 +53,14 @@ run and compile LibreOffice, also used by the TDF builds:
     * Build: Qt 5.15 with Qt supported Emscripten 1.39.8
     * See [README.wasm](static/README.wasm.md)
 
+Java is required for building many parts of LibreOffice. In TDF Wiki article
+[Development/Java](https://wiki.documentfoundation.org/Development/Java), the
+exact modules that depend on Java are listed.
+
+The baseline for Java is Java Development Kit (JDK) Version 11 or later. It is
+possible to build LibreOffice with JDK version 9, but it is no longer supported
+by the JDK vendors, thus it should be avoided.
+
 If you want to use Clang with the LibreOffice compiler plugins, the minimal
 version of Clang is 12.0.1. Since Xcode doesn't provide the compiler plugin
 headers, you have to compile your own Clang to use them on macOS.
@@ -64,7 +72,7 @@ the LibreOffice Development Environment
 ([LODE](https://wiki.documentfoundation.org/Development/lode)) scripts.
 
 For more information see the build instructions for your platform in the
-[TDF wiki](https://wiki.documentfoundation.org/Development).
+[TDF wiki](https://wiki.documentfoundation.org/Development/How_to_build).
 
 ## The Important Bits of Code
 
