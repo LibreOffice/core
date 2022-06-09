@@ -755,7 +755,10 @@ void SystemWindow::GetWindowState(vcl::WindowData& rData) const
         return;
 
     if ( mbSysChild )
+    {
+        rData.SetMask( WindowStateMask::NONE );
         return;
+    }
 
     const vcl::Window* pWindow = this;
     while ( pWindow->mpWindowImpl->mpBorderWindow )
@@ -767,6 +770,9 @@ void SystemWindow::GetWindowState(vcl::WindowData& rData) const
         aState.setMask(vcl::WindowDataMask::All);
         if ( mpWindowImpl->mpFrame->GetWindowState( &aState ) )
         {
+            // Limit mask only to what we've received, the rest is not set.
+            nValidMask &= aState.mnMask;
+            rData.SetMask( nValidMask );
             if ( nValidMask & vcl::WindowDataMask::X )
                 rData.setX( aState.x() );
             if ( nValidMask & vcl::WindowDataMask::Y )
@@ -775,26 +781,14 @@ void SystemWindow::GetWindowState(vcl::WindowData& rData) const
                 rData.setWidth( aState.width() );
             if ( nValidMask & vcl::WindowDataMask::Height )
                 rData.setHeight( aState.height() );
-            if ( aState.mask() & vcl::WindowDataMask::MaximizedX )
-            {
+            if ( nValidMask & vcl::WindowDataMask::MaximizedX )
                 rData.SetMaximizedX( aState.GetMaximizedX() );
-                nValidMask |= vcl::WindowDataMask::MaximizedX;
-            }
-            if ( aState.mask() & vcl::WindowDataMask::MaximizedY )
-            {
+            if ( nValidMask & vcl::WindowDataMask::MaximizedY )
                 rData.SetMaximizedY( aState.GetMaximizedY() );
-                nValidMask |= vcl::WindowDataMask::MaximizedY;
-            }
-            if ( aState.mask() & vcl::WindowDataMask::MaximizedWidth )
-            {
+            if ( nValidMask & vcl::WindowDataMask::MaximizedWidth )
                 rData.SetMaximizedWidth( aState.GetMaximizedWidth() );
-                nValidMask |= vcl::WindowDataMask::MaximizedWidth;
-            }
-            if ( aState.mask() & vcl::WindowDataMask::MaximizedHeight )
-            {
+            if ( nValidMask & vcl::WindowDataMask::MaximizedHeight )
                 rData.SetMaximizedHeight( aState.GetMaximizedHeight() );
-                nValidMask |= vcl::WindowDataMask::MaximizedHeight;
-            }
             if ( nValidMask & vcl::WindowDataMask::State )
             {
                 // #94144# allow Minimize again, should be masked out when read from configuration
@@ -814,6 +808,9 @@ void SystemWindow::GetWindowState(vcl::WindowData& rData) const
         Size    aSize = GetSizePixel();
         vcl::WindowState nState = vcl::WindowState::NONE;
 
+        nValidMask &= vcl::WindowDataMask::X | WindowDataMask::Y
+            | WindowDataMask::Width | WindowDataMask::Height | WindowDataMask::State;
+        rData.SetMask( nValidMask );
         if (nValidMask & vcl::WindowDataMask::X)
             rData.setX(aPos.X());
         if (nValidMask & vcl::WindowDataMask::Y)
