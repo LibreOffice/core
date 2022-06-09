@@ -269,6 +269,10 @@ namespace basegfx
             }
         }
 
+#if defined _MSC_VER && defined(_M_ARM64)
+#pragma warning(push)
+#pragma warning(disable: 4723) /* ignore: warning for C4723 on windows arm64 build */
+#endif
         typename Traits::DifferenceType getRange() const
         {
             if(isEmpty())
@@ -280,6 +284,9 @@ namespace basegfx
                 return (mnMaximum - mnMinimum);
             }
         }
+#if defined _MSC_VER && defined(_M_ARM64)
+#pragma warning( pop )
+#endif
     };
 
     // some pre-fabricated traits
