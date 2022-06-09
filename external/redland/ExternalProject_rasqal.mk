@@ -22,7 +22,7 @@ $(eval $(call gb_ExternalProject_register_targets,rasqal,\
 $(call gb_ExternalProject_get_state_target,rasqal,build):
 	$(call gb_Trace_StartRange,rasqal,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		CFLAGS="$(CFLAGS) $(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) $(call gb_ExternalProject_get_build_flags,rasqal)" \
+		CFLAGS="$(CFLAGS) $(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) $(call gb_ExternalProject_get_build_flags,rasqal) $(gb_EMSCRIPTEN_CPPFLAGS)" \
 		LDFLAGS=" \
 			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN") \
 			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
