@@ -2160,7 +2160,7 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
     m_nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 #ifdef OSL_BIGENDIAN
     for( nIdx = 0; nIdx <= nIMax; nIdx++ )
-        pPLCF_PosArray[nIdx] = OSL_SWAPDWORD( pPLCF_PosArray[nIdx] );
+        m_pPLCF_PosArray[nIdx] = OSL_SWAPDWORD( m_pPLCF_PosArray[nIdx] );
     nIdx = 0;
 #endif // OSL_BIGENDIAN
     if( nStruct ) // Pointer to content array
