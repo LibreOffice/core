@@ -1239,7 +1239,7 @@ void WW8_WrFkp::Combine()
     sal_uInt16 i;                   // the Sprms must be rotated elsewhere
 
     sal_uInt32* p;
-    for( i = 0, p = (sal_uInt32*)pFkp; i <= nIMax; i++, p++ )
+    for( i = 0, p = (sal_uInt32*)m_pFkp; i <= m_nIMax; i++, p++ )
         *p = OSL_SWAPDWORD( *p );
 #endif // ifdef OSL_BIGENDIAN
 }

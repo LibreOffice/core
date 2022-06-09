@@ -2159,9 +2159,9 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
 
     m_nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 #ifdef OSL_BIGENDIAN
-    for( nIdx = 0; nIdx <= nIMax; nIdx++ )
-        pPLCF_PosArray[nIdx] = OSL_SWAPDWORD( pPLCF_PosArray[nIdx] );
-    nIdx = 0;
+    for( m_nIdx = 0; m_nIdx <= m_nIMax; nIdx++ )
+        m_pPLCF_PosArray[m_nIdx] = OSL_SWAPDWORD( m_pPLCF_PosArray[m_nIdx] );
+    m_nIdx = 0;
 #endif // OSL_BIGENDIAN
     if( nStruct ) // Pointer to content array
         m_pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&m_pPLCF_PosArray[m_nIMax + 1]);
@@ -2327,9 +2327,9 @@ void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
     if (bValid)
     {
 #ifdef OSL_BIGENDIAN
-        for( nIdx = 0; nIdx <= nIMax; nIdx++ )
-            pPLCF_PosArray[nIdx] = OSL_SWAPDWORD( pPLCF_PosArray[nIdx] );
-        nIdx = 0;
+        for( m_nIdx = 0; m_nIdx <= m_nIMax; m_nIdx++ )
+            m_pPLCF_PosArray[m_nIdx] = OSL_SWAPDWORD( m_pPLCF_PosArray[m_nIdx] );
+        m_nIdx = 0;
 #endif // OSL_BIGENDIAN
         // Pointer to content array
         m_pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&m_pPLCF_PosArray[m_nIMax + 1]);
@@ -2545,8 +2545,8 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
 
     m_nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 #ifdef OSL_BIGENDIAN
-    for( tools::Long nI = 0; nI <= nIMax; nI++ )
-      pPLCF_PosArray[nI] = OSL_SWAPDWORD( pPLCF_PosArray[nI] );
+    for( tools::Long nI = 0; nI <= m_nIMax; nI++ )
+      m_pPLCF_PosArray[nI] = OSL_SWAPDWORD( m_pPLCF_PosArray[nI] );
 #endif // OSL_BIGENDIAN
 
     // Pointer to content array
