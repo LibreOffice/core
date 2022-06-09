@@ -24,6 +24,7 @@
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <formatcontentcontrol.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/txtnode/data/";
 
@@ -206,6 +207,17 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitNodeSuperscriptCopy)
     // Without the accompanying fix in place, this test would have failed, the unexpected
     // superscript appeared in the next paragraph.
     CPPUNIT_ASSERT(!aSet.HasItem(RES_CHRATR_ESCAPEMENT));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testInsertDropDownContentControlTwice)
+{
+    // Given an already selected dropdown content control:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
+
+    // When trying to insert an inner one, make sure that we don't crash:
+    pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
