@@ -100,6 +100,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     mbWriterFilter = false;
     mbCalcFilter = false;
     mbImpressFilter = false;
+    mbShouldCompress = false;
 
     if(mxDstDoc.is()) // Import works for Impress / draw only
         return filterImpressOrDraw(rDescriptor);
@@ -136,6 +137,10 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             {
                 mbCalcFilter = true;
                 return filterWriterOrCalc(rDescriptor);
+            }
+            else if(sFilterName == "draw_svgz_Export")
+            {
+                mbShouldCompress = true;
             }
             break;
         }
