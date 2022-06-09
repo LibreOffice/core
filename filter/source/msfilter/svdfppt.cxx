@@ -3284,7 +3284,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                             if ( SvxMSDffManager::GetBLIPDirect( rSt, aGraphic ) )
                             {
                                 sal_uInt32 nInstance = aBuGraAtomHd.nRecInstance;
-                                PPTBuGraEntry* pBuGra = new PPTBuGraEntry( aGraphic, nInstance );
+                                PPTBuGraEntry* pBuGra = new PPTBuGraEntry( std::move(aGraphic), nInstance );
                                 size_t n = 0;
                                 size_t nBuGraCount = aBuGraList.size();
                                 if ( nBuGraCount )

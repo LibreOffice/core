@@ -6340,7 +6340,7 @@ WW8Fib::WW8Fib(sal_uInt8 nVer, bool bDot):
         m_lidFE = m_lid;
 
     LanguageTag aLanguageTag( m_lid );
-    LocaleDataWrapper aLocaleWrapper( aLanguageTag );
+    LocaleDataWrapper aLocaleWrapper( std::move(aLanguageTag) );
     m_nNumDecimalSep = aLocaleWrapper.getNumDecimalSep()[0];
 }
 

@@ -1020,8 +1020,7 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
             auto pFormulaManager = std::make_shared<FunctionManager>(xMgr);
             ReportFormula aFormula( _in_out_rFormula );
 
-            LanguageTag aLangTag(LANGUAGE_SYSTEM);
-            CharClass aCC(_xContext, aLangTag);
+            CharClass aCC(_xContext, LanguageTag(LANGUAGE_SYSTEM));
             svl::SharedStringPool aStringPool(aCC);
 
             FormulaDialog aDlg(

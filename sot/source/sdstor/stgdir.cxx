@@ -709,7 +709,7 @@ StgDirStrm::StgDirStrm( StgIo& r )
         static constexpr OUStringLiteral sRootEntry = u"Root Entry";
         aRoot.SetName( sRootEntry );
         aRoot.SetType( STG_ROOT );
-        m_pRoot = new StgDirEntry( aRoot );
+        m_pRoot = new StgDirEntry( std::move(aRoot) );
         m_pRoot->SetDirty();
     }
     else
@@ -890,7 +890,7 @@ StgDirEntry* StgDirStrm::Find( StgDirEntry& rStg, const OUString& rName )
         aEntry.Init();
         aEntry.SetName( rName );
         // Look in the directory attached to the entry
-        StgDirEntry aTest( aEntry );
+        StgDirEntry aTest( std::move(aEntry) );
         return static_cast<StgDirEntry*>( rStg.m_pDown->Find( &aTest ) );
     }
     else
@@ -921,7 +921,7 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
     }
     else
     {
-        std::unique_ptr<StgDirEntry> pNewRes(new StgDirEntry( aEntry ));
+        std::unique_ptr<StgDirEntry> pNewRes(new StgDirEntry( std::move(aEntry) ));
         if( StgAvlNode::Insert( reinterpret_cast<StgAvlNode**>(&rStg.m_pDown), pNewRes.get() ) )
         {
             pNewRes->m_pUp    = &rStg;

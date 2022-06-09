@@ -367,7 +367,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                             aAttributes.set(NS_ooxml::LN_CT_Comment_initials, pValue);
                         }
                         writerfilter::Reference<Properties>::Pointer_t pProperties
-                            = new RTFReferenceProperties(aAttributes);
+                            = new RTFReferenceProperties(std::move(aAttributes));
                         Mapper().props(pProperties);
                     }
                 }

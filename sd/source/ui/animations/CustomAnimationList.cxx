@@ -538,7 +538,7 @@ sal_Int8 CustomAnimationList::ExecuteDrop(const ExecuteDropEvent& rEvt)
         // Callback to observer to have it update the model.
         // If pTarget is null, pass nullptr to indicate end of list.
         mpController->onDragNDropComplete(
-            aEffects,
+            std::move(aEffects),
             pTarget ? pTarget->getEffect() : nullptr );
 
         // Reset selection

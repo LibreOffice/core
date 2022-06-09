@@ -474,7 +474,7 @@ namespace emfio
                     tools::Polygon aPoly(nPoints);
                     for (sal_uInt16 i(0); i < nPoints && mpInputStream->good(); ++i)
                         aPoly[ i ] = ReadPoint();
-                    DrawPolygon(aPoly, false/*bRecordPath*/);
+                    DrawPolygon(std::move(aPoly), false/*bRecordPath*/);
                 }
 
                 SAL_WARN_IF(!bRecordOk, "emfio", "polygon record has more points than we can handle");
@@ -581,7 +581,7 @@ namespace emfio
                     tools::Polygon aPoly(nPoints);
                     for (sal_uInt16 i(0); i < nPoints && mpInputStream->good(); ++i)
                         aPoly[ i ] = ReadPoint();
-                    DrawPolyLine( aPoly );
+                    DrawPolyLine( std::move(aPoly) );
                 }
 
                 SAL_WARN_IF(!bRecordOk, "emfio", "polyline record has more points than we can handle");

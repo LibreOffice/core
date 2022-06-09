@@ -82,7 +82,7 @@ namespace sdr::contact
             if(!xRetval.empty())
             {
                 // allow evtl. embedding in object-specific infos, e.g. Name, Title, Description
-                xRetval = rViewContact.embedToObjectSpecificInformation(xRetval);
+                xRetval = rViewContact.embedToObjectSpecificInformation(std::move(xRetval));
 
                 // handle GluePoint
                 if(!GetObjectContact().isOutputToPrinter() && GetObjectContact().AreGluePointsVisible())

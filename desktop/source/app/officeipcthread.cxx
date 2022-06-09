@@ -663,9 +663,7 @@ void RequestHandler::EnableRequests()
         if (pGlobal->mState != State::Downing) {
             pGlobal->mState = State::RequestsEnabled;
         }
-        // hit the compiler over the head - this avoids GCC -Werror=maybe-uninitialized
-        std::optional<OUString> tmp;
-        ProcessDocumentsRequest aEmptyReq(tmp);
+        ProcessDocumentsRequest aEmptyReq(std::nullopt);
         // trigger already queued requests
         RequestHandler::ExecuteCmdLineRequests(aEmptyReq, true);
     }

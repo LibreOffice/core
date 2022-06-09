@@ -362,7 +362,7 @@ uno::Reference<rendering::XPolyPolygon2D> LineParser::readPath()
     }
 
     return static_cast<rendering::XLinePolyPolygon2D*>(
-        new basegfx::unotools::UnoPolyPolygon(aResult));
+        new basegfx::unotools::UnoPolyPolygon(std::move(aResult)));
 }
 
 void LineParser::readChar()

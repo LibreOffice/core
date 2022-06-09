@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl, weld::ComboBox&, void)
     }
     if(!bAvail)
     {
-        LocaleDataWrapper aWrap( aLanguageTag );
+        LocaleDataWrapper aWrap( std::move(aLanguageTag) );
         ForbiddenCharacters aForbidden = aWrap.getForbiddenCharacters();
         sStart = aForbidden.beginLine;
         sEnd = aForbidden.endLine;

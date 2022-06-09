@@ -1459,7 +1459,8 @@ JSDrawingArea::JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingAr
                              SalInstanceBuilder* pBuilder, const a11yref& rAlly,
                              FactoryFunction pUITestFactoryFunction, void* pUserData)
     : JSWidget<SalInstanceDrawingArea, VclDrawingArea>(pSender, pDrawingArea, pBuilder, rAlly,
-                                                       pUITestFactoryFunction, pUserData, false)
+                                                       std::move(pUITestFactoryFunction), pUserData,
+                                                       false)
 {
 }
 

@@ -177,7 +177,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                         mvDicts[k].aPtr = nullptr;
                         mvDicts[k].eEnc = RTL_TEXTENCODING_DONTKNOW;
                         mvDicts[k].aLoc = aLanguageTag.getLocale();
-                        mvDicts[k].apCC.reset( new CharClass( aLanguageTag ) );
+                        mvDicts[k].apCC.reset( new CharClass( std::move(aLanguageTag) ) );
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).
                         // Thus we use the first location only and strip the extension part.

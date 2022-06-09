@@ -1137,7 +1137,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         RTFSprms aAttributes;
         aAttributes.set(NS_ooxml::LN_CT_Background_color,
                         new RTFValue(xPropertySet->getPropertyValue("FillColor").get<sal_Int32>()));
-        m_rImport.Mapper().props(new RTFReferenceProperties(aAttributes));
+        m_rImport.Mapper().props(new RTFReferenceProperties(std::move(aAttributes)));
 
         uno::Reference<lang::XComponent> xComponent(xShape, uno::UNO_QUERY);
         xComponent->dispose();

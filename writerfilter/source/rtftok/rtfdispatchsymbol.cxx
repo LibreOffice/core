@@ -114,7 +114,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     RTFSprms aSprms;
                     aSprms.set(NS_ooxml::LN_tblEnd, new RTFValue(1));
                     writerfilter::Reference<Properties>::Pointer_t pProperties
-                        = new RTFReferenceProperties(aAttributes, aSprms);
+                        = new RTFReferenceProperties(std::move(aAttributes), std::move(aSprms));
                     Mapper().props(pProperties);
                 }
                 m_nCellxMax = 0;

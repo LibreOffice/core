@@ -175,7 +175,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                         LanguageTag aLanguageTag(rLocaleName);
                         mvThesInfo[k].aEncoding = RTL_TEXTENCODING_DONTKNOW;
                         mvThesInfo[k].aLocale  = aLanguageTag.getLocale();
-                        mvThesInfo[k].aCharSetInfo.reset( new CharClass( aLanguageTag ) );
+                        mvThesInfo[k].aCharSetInfo.reset( new CharClass( std::move(aLanguageTag) ) );
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).
                         // Thus we use the first location only and strip the extension part.
