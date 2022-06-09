@@ -655,6 +655,7 @@ GtkSalMenu::~GtkSalMenu()
 
 bool GtkSalMenu::VisibleMenuBar()
 {
+//    SAL_DEBUG(__func__ << " " << (mbMenuBar && (bUnityMode || mpMenuBarContainerWidget)));
     return mbMenuBar && (bUnityMode || mpMenuBarContainerWidget);
 }
 
@@ -988,6 +989,17 @@ static gboolean MenuBarSignalKey(GtkWidget*, GdkEventKey* pEvent, gpointer menu)
 }
 #endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+void GtkSalMenu::sizeAllocated(GtkWidget* widget, GdkRectangle*, gpointer frame)
+#else
+void GtkSalMenu::sizeAllocated(GtkWidget* widget, int, int, gpointer frame)
+#endif
+{
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+    pThis->CallCallbackExc(SalEvent::Resize, nullptr);
+    SAL_DEBUG(__func__ << " " << gtk_widget_get_allocated_height(widget));
+}
+
 void GtkSalMenu::CreateMenuBarWidget()
 {
     if (mpMenuBarContainerWidget)
@@ -995,6 +1007,12 @@ void GtkSalMenu::CreateMenuBarWidget()
 
     GtkGrid* pGrid = mpFrame->getTopLevelGridWidget();
     mpMenuBarContainerWidget = gtk_grid_new();
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    g_signal_connect(G_OBJECT(mpMenuBarContainerWidget), "size-allocate", G_CALLBACK(sizeAllocated), this);
+#else
+    g_signal_connect(G_OBJECT(mpMenuBarContainerWidget), "resize", G_CALLBACK(sizeAllocated), this);
+#endif
 
     gtk_widget_set_hexpand(GTK_WIDGET(mpMenuBarContainerWidget), true);
     gtk_grid_insert_row(pGrid, 0);
@@ -1620,7 +1638,8 @@ void GtkSalMenu::GetSystemMenuData( SystemMenuData* )
 
 int GtkSalMenu::GetMenuBarHeight() const
 {
-    return mpMenuBarWidget ? gtk_widget_get_allocated_height(mpMenuBarWidget) : 0;
+//    SAL_DEBUG(__func__ << " " << (mpMenuBarContainerWidget ? gtk_widget_get_allocated_height(mpMenuBarContainerWidget) : 0));
+    return mpMenuBarContainerWidget ? gtk_widget_get_allocated_height(mpMenuBarContainerWidget) : 0;
 }
 
 /*

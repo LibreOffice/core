@@ -229,8 +229,6 @@ class GtkSalFrame final : public SalFrame
     bool                            m_bGeometryIsProvisional;
     bool                            m_bIconSetWhileUnmapped;
 
-    GtkSalMenu*                     m_pSalMenu;
-
 #if ENABLE_DBUS && ENABLE_GIO
     private:
     friend void on_registrar_available (GDBusConnection*, const gchar*, const gchar*, gpointer);
@@ -417,6 +415,7 @@ class GtkSalFrame final : public SalFrame
     void ListenPortalSettings();
 
 public:
+    GtkSalMenu*                     m_pSalMenu;
     cairo_surface_t*                m_pSurface;
     basegfx::B2IVector              m_aFrameSize;
     DamageHandler                   m_aDamageHandler;
