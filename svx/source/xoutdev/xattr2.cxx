@@ -39,6 +39,7 @@
 #include <svx/xflbstit.hxx>
 #include <svx/xflboxy.hxx>
 #include <svx/xflbckit.hxx>
+#include <svx/xfilluseslidebackgrounditem.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/xdef.hxx>
 #include <AffineMatrixItem.hxx>
@@ -692,5 +693,39 @@ bool XFillBackgroundItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUni
     rText.clear();
     return true;
 }
+
+void XFillBackgroundItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillBackgroundItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
+XFillUseSlideBackgroundItem::XFillUseSlideBackgroundItem( bool bFill ) :
+    SfxBoolItem( XATTR_FILLUSESLIDEBACKGROUND, bFill )
+{
+}
+
+XFillUseSlideBackgroundItem* XFillUseSlideBackgroundItem::Clone( SfxItemPool* /*pPool*/) const
+{
+    return new XFillUseSlideBackgroundItem( *this );
+}
+
+bool XFillUseSlideBackgroundItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*eCoreUnit*/,
+                                           MapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper&) const
+{
+    rText.clear();
+    return true;
+}
+
+void XFillUseSlideBackgroundItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillUseSlideBackgroundItem"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -749,7 +749,8 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
 
         {   // want the dialog to be destroyed before our set
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog(pParent, &aDescriptor, pModel.get(), true));
+            ScopedVclPtr<AbstractSvxAreaTabDialog> pDialog(
+                pFact->CreateSvxAreaTabDialog(pParent, &aDescriptor, pModel.get(), true, false));
             if ( RET_OK == pDialog->Execute() )
             {
                 bSuccess = true;

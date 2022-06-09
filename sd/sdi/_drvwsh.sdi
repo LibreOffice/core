@@ -1402,6 +1402,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
     ]
+    SID_ATTR_FILL_USE_SLIDE_BACKGROUND // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+    ]
     SID_ATTR_FILL_TRANSPARENCE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

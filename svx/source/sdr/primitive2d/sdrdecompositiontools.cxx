@@ -51,6 +51,12 @@
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
 #include <osl/diagnose.h>
 
+// for SlideBackgroundFillPrimitive2D
+#include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+#include <svx/unoapi.hxx>
+#include <svx/svdpage.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/contact/viewcontactofmasterpagedescriptor.hxx>
 
 using namespace com::sun::star;
 
@@ -122,7 +128,216 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
     }
     return aAnchorRange;
 }
+
+drawinglayer::attribute::SdrFillAttribute getMasterPageFillAttribute(
+    const geometry::ViewInformation2D& rViewInformation,
+    basegfx::B2DVector& rPageSize)
+{
+    drawinglayer::attribute::SdrFillAttribute aRetval;
+
+    // get SdrPage
+    const SdrPage* pVisualizedPage(GetSdrPageFromXDrawPage(rViewInformation.getVisualizedPage()));
+
+    if(nullptr != pVisualizedPage)
+    {
+        // copy needed values for further processing
+        rPageSize.setX(pVisualizedPage->GetWidth());
+        rPageSize.setY(pVisualizedPage->GetHeight());
+
+        if(pVisualizedPage->IsMasterPage())
+        {
+            // the page is a MasterPage, so we are in MasterPage view
+            // still need #i110846#, see ViewContactOfMasterPage
+            if(pVisualizedPage->getSdrPageProperties().GetStyleSheet())
+            {
+                // create page fill attributes with correct properties
+                aRetval = drawinglayer::primitive2d::createNewSdrFillAttribute(
+                    pVisualizedPage->getSdrPageProperties().GetItemSet());
+            }
+        }
+        else
+        {
+            // the page is *no* MasterPage, we are in normal Page view, get the MasterPage
+            if(pVisualizedPage->TRG_HasMasterPage())
+            {
+                sdr::contact::ViewContact& rVC(pVisualizedPage->TRG_GetMasterPageDescriptorViewContact());
+                sdr::contact::ViewContactOfMasterPageDescriptor* pVCOMPD(
+                    dynamic_cast<sdr::contact::ViewContactOfMasterPageDescriptor*>(&rVC));
+
+                if(nullptr != pVCOMPD)
+                {
+                    // in this case the still needed #i110846# is part of
+                    //  getCorrectSdrPageProperties, that's the main reason to re-use
+                    // that call/functionality here
+                    const SdrPageProperties* pCorrectProperties(
+                        pVCOMPD->GetMasterPageDescriptor().getCorrectSdrPageProperties());
+
+                    if(pCorrectProperties)
+                    {
+                        // create page fill attributes when correct properties were identified
+                        aRetval = drawinglayer::primitive2d::createNewSdrFillAttribute(
+                            pCorrectProperties->GetItemSet());
+                    }
+                }
+            }
+        }
+    }
+
+    return aRetval;
+}
+
+// provide a Primitive2D for the SlideBackgroundFill-mode. It is capable
+// of expressing that state of fill and it's decomposition implements all
+// needed preparation of the geometry in an isolated and controllable
+// space and way.
+// It is currently simple buffered (due to being derived from
+// BufferedDecompositionPrimitive2D) and detects if FillStyle changes
+class SlideBackgroundFillPrimitive2D final : public BufferedDecompositionPrimitive2D
+{
+private:
+    /// the basegfx::B2DPolyPolygon geometry
+    basegfx::B2DPolyPolygon maPolyPolygon;
+
+    /// the last SdrFillAttribute the geometry was created for
+    drawinglayer::attribute::SdrFillAttribute maLastFill;
+
+protected:
+    // create decomposition data
+    virtual void create2DDecomposition(
+        Primitive2DContainer& rContainer,
+        const geometry::ViewInformation2D& rViewInformation) const override;
+
+public:
+    /// constructor
+    SlideBackgroundFillPrimitive2D(
+        const basegfx::B2DPolyPolygon& rPolyPolygon);
+
+    /// check existing decomposition data, call parent
+    virtual void get2DDecomposition(
+        Primitive2DDecompositionVisitor& rVisitor,
+        const geometry::ViewInformation2D& rViewInformation) const override;
+
+    /// data read access
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+
+    /// compare operator
+    virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+    /// get range
+    virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const override;
+
+    /// provide unique ID
+    virtual sal_uInt32 getPrimitive2DID() const override;
 };
+
+SlideBackgroundFillPrimitive2D::SlideBackgroundFillPrimitive2D(
+    const basegfx::B2DPolyPolygon& rPolyPolygon)
+: BufferedDecompositionPrimitive2D()
+, maPolyPolygon(rPolyPolygon)
+, maLastFill()
+{
+}
+
+void SlideBackgroundFillPrimitive2D::create2DDecomposition(
+    Primitive2DContainer& rContainer,
+    const geometry::ViewInformation2D& rViewInformation) const
+{
+    basegfx::B2DVector aPageSize;
+
+    // get fill from target Page, this will check for all needed things
+    // like MasterPage/relationships, etc. (see getMasterPageFillAttribute impl above)
+    drawinglayer::attribute::SdrFillAttribute aFill(
+        getMasterPageFillAttribute(rViewInformation, aPageSize));
+
+    // if fill is on default (empty), nothing will be shown, we are done
+    if(aFill.isDefault())
+        return;
+
+    // Get PolygonRange of own local geometry
+    const basegfx::B2DRange aPolygonRange(getB2DPolyPolygon().getB2DRange());
+
+    // if local geometry is empty, nothing will be shown, we are done
+    if(aPolygonRange.isEmpty())
+        return;
+
+    // Get PageRange
+    const basegfx::B2DRange aPageRange(0.0, 0.0, aPageSize.getX(), aPageSize.getY());
+
+    // if local geometry does not overlap with PageRange, nothing will be shown, we are done
+    if(!aPageRange.overlaps(aPolygonRange))
+        return;
+
+    // create FillPrimitive2D with the geometry (the PolyPolygon) and
+    // the page's definitonRange to:
+    // - on one hand limit to geometry
+    // - on the other hand allow continutation of fill outside of
+    //   MasterPage's range
+    const attribute::FillGradientAttribute aEmptyFillTransparenceGradient;
+    const Primitive2DReference aCreatedFill(
+        createPolyPolygonFillPrimitive(
+            getB2DPolyPolygon(), // geometry
+            aPageRange, // definition range
+            aFill,
+            aEmptyFillTransparenceGradient));
+
+    rContainer = Primitive2DContainer { aCreatedFill };
+}
+
+void SlideBackgroundFillPrimitive2D::get2DDecomposition(
+    Primitive2DDecompositionVisitor& rVisitor,
+    const geometry::ViewInformation2D& rViewInformation) const
+{
+    basegfx::B2DVector aPageSize;
+    drawinglayer::attribute::SdrFillAttribute aFill;
+
+    if(!getBuffered2DDecomposition().empty())
+    {
+        aFill = getMasterPageFillAttribute(rViewInformation, aPageSize);
+
+        if(!(aFill == maLastFill))
+        {
+            // conditions of last local decomposition have changed, delete
+            const_cast< SlideBackgroundFillPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
+        }
+    }
+
+    if(getBuffered2DDecomposition().empty())
+    {
+        // remember last Fill
+        const_cast< SlideBackgroundFillPrimitive2D* >(this)->maLastFill = aFill;
+    }
+
+    // use parent implementation
+    BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+}
+
+bool SlideBackgroundFillPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+{
+    if (BufferedDecompositionPrimitive2D::operator==(rPrimitive))
+    {
+        const SlideBackgroundFillPrimitive2D& rCompare
+            = static_cast<const SlideBackgroundFillPrimitive2D&>(rPrimitive);
+
+        return getB2DPolyPolygon() == rCompare.getB2DPolyPolygon();
+    }
+
+    return false;
+}
+
+basegfx::B2DRange SlideBackgroundFillPrimitive2D::getB2DRange(
+    const geometry::ViewInformation2D& /*rViewInformation*/) const
+{
+    // return range
+    return basegfx::utils::getRange(getB2DPolyPolygon());
+}
+
+// provide unique ID
+sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
+{
+    return PRIMITIVE2D_ID_SLIDEBACKGROUNDFILLPRIMITIVE2D;
+}
+
+}; // end of anonymous namespace
 
         class TransparencePrimitive2D;
 
@@ -177,6 +392,13 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
                     rPolyPolygon,
                     rDefinitionRange,
                     rFill.getFillGraphic().createFillGraphicAttribute(rDefinitionRange));
+            }
+            else if(rFill.isSlideBackgroundFill())
+            {
+                // create needed Primitive2D representation for
+                // SlideBackgroundFill-mode
+                pNewFillPrimitive = new SlideBackgroundFillPrimitive2D(
+                    rPolyPolygon);
             }
             else
             {

@@ -552,7 +552,7 @@ void ScDrawShell::ExecuteAreaDlg( const SfxRequest& rReq )
     weld::Window* pWin = rViewData.GetDialogParent();
     VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
         pWin, &aNewAttr,
-        rViewData.GetDocument().GetDrawLayer(), true));
+        rViewData.GetDocument().GetDrawLayer(), true, false));
 
     pDlg->StartExecuteAsync([=](sal_Int32 nResult){
         if ( nResult == RET_OK )

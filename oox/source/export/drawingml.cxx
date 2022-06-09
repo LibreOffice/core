@@ -4772,6 +4772,10 @@ void DrawingML::WriteFill( const Reference< XPropertySet >& xPropSet )
             aFillStyle = FillStyle_NONE;
     }
 
+    bool bUseBackground(false);
+    if (GetProperty(xPropSet, "FillUseSlideBackground"))
+        xPropSet->getPropertyValue("FillUseSlideBackground") >>= bUseBackground;
+
     switch( aFillStyle )
     {
     case FillStyle_SOLID :
@@ -4787,7 +4791,8 @@ void DrawingML::WriteFill( const Reference< XPropertySet >& xPropSet )
         WritePattFill( xPropSet );
         break;
     case FillStyle_NONE:
-        mpFS->singleElementNS(XML_a, XML_noFill);
+        if (!bUseBackground) // attribute `useBgFill` will be written at parent p:sp shape
+            mpFS->singleElementNS(XML_a, XML_noFill);
         break;
     default:
         ;
