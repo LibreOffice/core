@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be915354_72b7626e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-09T10:00:50Z",
+      "side": 1,
+      "message": "Rashesh: this is meant to fix the lack of list item updates you mentioned the other day. (Right after insert, on adding list items with the property dialog.)",
+      "revId": "76756cb3a9a66cf48efbebe5b5f27b1a36f7e620",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
