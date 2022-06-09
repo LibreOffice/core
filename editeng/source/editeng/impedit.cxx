@@ -2177,9 +2177,6 @@ void ImpEditView::ShowDDCursor( const tools::Rectangle& rRect )
     aSaveRect.AdjustRight(1 );
     aSaveRect.AdjustBottom(1 );
 
-#ifdef DBG_UTIL
-    Size aNewSzPx( aSaveRect.GetSize() );
-#endif
     if ( !pDragAndDropInfo->pBackground )
     {
         pDragAndDropInfo->pBackground = VclPtr<VirtualDevice>::Create(rOutDev);
@@ -2189,14 +2186,13 @@ void ImpEditView::ShowDDCursor( const tools::Rectangle& rRect )
 
     }
 
-#ifdef DBG_UTIL
+    Size aNewSzPx( aSaveRect.GetSize() );
     Size aCurSzPx( pDragAndDropInfo->pBackground->GetOutputSizePixel() );
     if ( ( aCurSzPx.Width() < aNewSzPx.Width() ) ||( aCurSzPx.Height() < aNewSzPx.Height() ) )
     {
         bool bDone = pDragAndDropInfo->pBackground->SetOutputSizePixel( aNewSzPx );
         DBG_ASSERT( bDone, "Virtual Device broken?" );
     }
-#endif
 
     aSaveRect = rOutDev.PixelToLogic( aSaveRect );
 
