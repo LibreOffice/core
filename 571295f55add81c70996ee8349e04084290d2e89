@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ef05371_9ccb7715",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-06-09T17:31:56Z",
+      "side": 1,
+      "message": "verified in a s390x build on zelenka.debian.org",
+      "revId": "571295f55add81c70996ee8349e04084290d2e89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
