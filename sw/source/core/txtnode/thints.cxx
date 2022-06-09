@@ -107,10 +107,13 @@ SwpHints::SwpHints(const SwTextNode& rParent)
 static void TextAttrDelete( SwDoc & rDoc, SwTextAttr * const pAttr )
 {
     if (RES_TXTATR_META == pAttr->Which() ||
-        RES_TXTATR_METAFIELD == pAttr->Which() ||
-        pAttr->Which() == RES_TXTATR_CONTENTCONTROL)
+        RES_TXTATR_METAFIELD == pAttr->Which())
     {
         static_txtattr_cast<SwTextMeta *>(pAttr)->ChgTextNode(nullptr); // prevents ASSERT
+    }
+    else if (pAttr->Which() == RES_TXTATR_CONTENTCONTROL)
+    {
+        static_txtattr_cast<SwTextContentControl*>(pAttr)->ChgTextNode(nullptr);
     }
     SwTextAttr::Destroy( pAttr, rDoc.GetAttrPool() );
 }
