@@ -655,6 +655,7 @@ GtkSalMenu::~GtkSalMenu()
 
 bool GtkSalMenu::HasNativeMenuBar()
 {
+//    SAL_DEBUG(__func__ << " " << (mbMenuBar && (bUnityMode || mpMenuBarContainerWidget)));
     return mbMenuBar && (bUnityMode || mpMenuBarContainerWidget);
 }
 
@@ -988,6 +989,23 @@ static gboolean MenuBarSignalKey(GtkWidget*, GdkEventKey* pEvent, gpointer menu)
 }
 #endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+void GtkSalMenu::sizeAllocated(GtkWidget*, GdkRectangle*, gpointer self)
+#else
+void GtkSalMenu::sizeAllocated(GtkWidget*, int, int, gpointer self)
+#endif
+{
+    GtkSalMenu *pThis = static_cast<GtkSalMenu*>(self);
+    SAL_DEBUG("GtkSalMenu::" << __func__ << " " << pThis->mpFrame);
+    if (!pThis->mpFrame)
+        return;
+    vcl::Window *pWindow = pThis->mpFrame->GetWindow();
+    SystemWindow *pSysWin = pWindow ? pWindow->GetSystemWindow() : nullptr;
+    MenuBar *pMenuBar = pSysWin ? pSysWin->GetMenuBar() : nullptr;
+    if (pMenuBar)
+        pMenuBar->LayoutChanged();
+}
+
 void GtkSalMenu::CreateMenuBarWidget()
 {
     if (mpMenuBarContainerWidget)
@@ -995,6 +1013,12 @@ void GtkSalMenu::CreateMenuBarWidget()
 
     GtkGrid* pGrid = mpFrame->getTopLevelGridWidget();
     mpMenuBarContainerWidget = gtk_grid_new();
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    g_signal_connect(G_OBJECT(mpMenuBarContainerWidget), "size-allocate", G_CALLBACK(sizeAllocated), this);
+#else
+    g_signal_connect(G_OBJECT(mpMenuBarContainerWidget), "resize", G_CALLBACK(sizeAllocated), this);
+#endif
 
     gtk_widget_set_hexpand(GTK_WIDGET(mpMenuBarContainerWidget), true);
     gtk_grid_insert_row(pGrid, 0);
@@ -1618,7 +1642,11 @@ void GtkSalMenu::GetSystemMenuData( SystemMenuData* )
 {
 }
 
-int GtkSalMenu::GetMenuBarHeight() const { return 0; }
+int GtkSalMenu::GetMenuBarHeight() const
+{
+//    SAL_DEBUG_IF(mpMenuBarContainerWidget, __func__ << " " << gtk_widget_get_allocated_height(mpMenuBarContainerWidget));
+    return mpMenuBarContainerWidget ? gtk_widget_get_allocated_height(mpMenuBarContainerWidget) : 0;
+}
 
 /*
  * GtkSalMenuItem

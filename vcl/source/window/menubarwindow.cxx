@@ -920,8 +920,19 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     }
 }
 
+Size MenuBarWindow::GetSizePixel() const
+{
+    Size aSize = vcl::Window::GetSizePixel();
+    SalMenu* pMenuBar = m_pMenu ? m_pMenu->GetNativeMenuBar() : nullptr;
+    if (pMenuBar)
+        aSize.setHeight(pMenuBar->GetMenuBarHeight());
+    SAL_DEBUG("MenuBarWindow::" << __func__ << " " << aSize);
+    return aSize;
+}
+
 void MenuBarWindow::Resize()
 {
+    SAL_DEBUG("MenuBarWindow::" << __func__);
     Size aOutSz = GetOutputSizePixel();
     tools::Long n      = aOutSz.Height()-4;
     tools::Long nX     = aOutSz.Width()-3;

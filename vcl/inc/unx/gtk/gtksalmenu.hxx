@@ -66,6 +66,11 @@ private:
     DECL_LINK(MenuBarHierarchyChangeHandler, Timer*, void);
 
     static GtkWidget* AddButton(GtkWidget *pImage);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    static void sizeAllocated(GtkWidget*, GdkRectangle *pAllocation, gpointer frame);
+#else
+    static void sizeAllocated(GtkWidget*, int nWidth, int nHeight, gpointer frame);
+#endif
 
 public:
     GtkSalMenu( bool bMenuBar );

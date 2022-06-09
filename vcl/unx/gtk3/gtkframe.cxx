@@ -785,6 +785,7 @@ void GtkSalFrame::moveWindow( tools::Long nX, tools::Long nY )
 
 void GtkSalFrame::widget_set_size_request(tools::Long nWidth, tools::Long nHeight)
 {
+    SAL_DEBUG(__func__ << " " << nWidth << " " << nHeight);
     gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), nWidth, nHeight );
 }
 
@@ -898,8 +899,10 @@ static void damaged(void *handle,
                     sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                     sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight)
 {
+    SAL_DEBUG(__func__ << " " << nExtentsWidth << "x" << nExtentsHeight << "@(" << nExtentsX << "," << nExtentsY << ")");
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(handle);
     pThis->damaged(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight);
+//    pThis->damaged(nExtentsX, nExtentsY + (pThis->m_pSalMenu ? -1 * pThis->m_pSalMenu->GetMenuBarHeight() : 0), nExtentsWidth, nExtentsHeight);
 }
 
 void GtkSalFrame::InitCommon()
@@ -1871,7 +1874,7 @@ void GtkSalFrame::AllocateFrame()
     m_aFrameSize = aFrameSize;
 
     cairo_surface_set_user_data(m_pSurface, SvpSalGraphics::getDamageKey(), &m_aDamageHandler, nullptr);
-    SAL_INFO("vcl.gtk3", "allocated Frame size of " << maGeometry.width() << " x " << maGeometry.height());
+    SAL_DEBUG("allocated surface size of " << aFrameSize.getX() << " x " << aFrameSize.getY());
 
     if (m_pGraphics)
         m_pGraphics->setSurface(m_pSurface, m_aFrameSize);
@@ -1936,6 +1939,7 @@ void GtkSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
     {
         rWidth = maGeometry.width();
         rHeight = maGeometry.height();
+	SAL_DEBUG(__func__ << " " << maGeometry);
     }
     else
         rWidth = rHeight = 0;
@@ -3105,7 +3109,7 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
     }
 
     int nEventX = pEvent->x;
-    int nEventY = pEvent->y;
+    int nEventY = pEvent->y - (pThis->m_pSalMenu ? -1 * pThis->m_pSalMenu->GetMenuBarHeight() : 0);
 
     if (bDifferentEventWindow)
         translate_coords(pEvent->window, pEventWidget, nEventX, nEventY);
@@ -3222,7 +3226,7 @@ IMPL_LINK_NOARG(GtkSalFrame, AsyncScroll, Timer *, void)
 
     GdkEvent* pEvent = m_aPendingScrollEvents.back();
     auto nEventX = pEvent->scroll.x;
-    auto nEventY = pEvent->scroll.y;
+    auto nEventY = pEvent->scroll.y - (m_pSalMenu ? -1 * m_pSalMenu->GetMenuBarHeight() : 0);
     auto nTime = pEvent->scroll.time;
     auto nState = pEvent->scroll.state;
 
@@ -3308,6 +3312,7 @@ gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEvent* pInEvent, gpointer fram
     }
 
     SalWheelMouseEvent aEvent(GetWheelEvent(rEvent));
+    aEvent.mnY -= (pThis->m_pSalMenu ? -1 * pThis->m_pSalMenu->GetMenuBarHeight() : 0);
 
     // --- RTL --- (mirror mouse pos)
     if (AllSettings::GetLayoutRTL())
@@ -3355,6 +3360,7 @@ void GtkSalFrame::gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdo
         aEvent.mnY = y;
 
         GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+        aEvent.mnY -= pThis->m_pSalMenu ? -1 * pThis->m_pSalMenu->GetMenuBarHeight() : 0;
         pThis->CallCallbackExc(SalEvent::Swipe, &aEvent);
     }
 }
@@ -3369,6 +3375,7 @@ void GtkSalFrame::gestureLongPress(GtkGestureLongPress* gesture, gdouble x, gdou
         aEvent.mnY = y;
 
         GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+        aEvent.mnY -= pThis->m_pSalMenu ? -1 * pThis->m_pSalMenu->GetMenuBarHeight() : 0;
         pThis->CallCallbackExc(SalEvent::LongPress, &aEvent);
     }
 }
@@ -3435,7 +3442,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
     if (!aDel.isDeleted())
     {
         pThis->DrawingAreaMotion(pEvent->x_root - pThis->maGeometry.x(),
-                                 pEvent->y_root - pThis->maGeometry.y(),
+                                 pEvent->y_root - pThis->maGeometry.y() - (pThis->m_pSalMenu ? -1 * pThis->m_pSalMenu->GetMenuBarHeight() : 0),
                                  pEvent->time, pEvent->state);
     }
 
@@ -3507,7 +3514,6 @@ cairo_t* GtkSalFrame::getCairoContext() const
 void GtkSalFrame::damaged(sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                           sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight) const
 {
-#if OSL_DEBUG_LEVEL > 0
     if (dumpframes)
     {
         static int frame;
@@ -3516,7 +3522,6 @@ void GtkSalFrame::damaged(sal_Int32 nExtentsX, sal_Int32 nExtentsY,
         cairo_surface_write_to_png(cairo_get_target(cr), tmp.getStr());
         cairo_destroy(cr);
     }
-#endif
 
     // quite a bit of noise in RTL mode with negative widths
     if (nExtentsWidth <= 0 || nExtentsHeight <= 0)
@@ -3534,52 +3539,85 @@ void GtkSalFrame::damaged(sal_Int32 nExtentsX, sal_Int32 nExtentsY,
 }
 
 // blit our backing cairo surface to the target cairo context
-void GtkSalFrame::DrawingAreaDraw(cairo_t *cr)
+void GtkSalFrame::DrawingAreaDraw(cairo_t *cr, int nWidth, int nHeight)
 {
+    SAL_DEBUG(__func__ << " " << (m_pSalMenu ? -1 * m_pSalMenu->GetMenuBarHeight() : 0) << " " << nWidth << "x" << nHeight);
+#if 1
+    const int nOffset = m_pSalMenu ? m_pSalMenu->GetMenuBarHeight() : 0;
+    cairo_surface_t *pSurface = cairo_surface_create_similar(m_pSurface, cairo_surface_get_content(m_pSurface), nWidth, nHeight);
+    cairo_t* copy_cr = cairo_create(pSurface);
+
+        cairo_set_source_surface(copy_cr, m_pSurface, 0, -nOffset);
+        cairo_rectangle(cr, 0, 0, nWidth, nHeight);
+        cairo_fill(copy_cr);
+    cairo_destroy(copy_cr);
+
+    cairo_save(cr);
+    cairo_set_source_surface(cr, pSurface, 0, 0);
+    cairo_paint(cr);
+    cairo_restore(cr);
+    cairo_surface_destroy(pSurface);
+#else
+#if 1
+    const int nOffset = m_pSalMenu ? m_pSalMenu->GetMenuBarHeight() : 0;
+    cairo_surface_t *pSurface = cairo_surface_create_for_rectangle(m_pSurface, 0, nOffset, nWidth, nHeight);
+    cairo_set_source_surface(cr, pSurface, 0, 0);
+    cairo_paint(cr);
+    cairo_surface_destroy(pSurface);
+#else
+    (void) nWidth;
+    (void) nHeight;
     cairo_set_source_surface(cr, m_pSurface, 0, 0);
     cairo_paint(cr);
+#endif
+#endif
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-gboolean GtkSalFrame::signalDraw(GtkWidget*, cairo_t *cr, gpointer frame)
+gboolean GtkSalFrame::signalDraw(GtkWidget* pWidget, cairo_t *cr, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->DrawingAreaDraw(cr);
+    GtkAllocation aAllocation;
+    gtk_widget_get_allocated_size(pWidget, &aAllocation, 0);
+    pThis->DrawingAreaDraw(cr, aAllocation.width, aAllocation.height);
     return false;
 }
 #else
-void GtkSalFrame::signalDraw(GtkDrawingArea*, cairo_t *cr, int /*width*/, int /*height*/, gpointer frame)
+void GtkSalFrame::signalDraw(GtkDrawingArea*, cairo_t *cr, int nWidth, int nHeight, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->DrawingAreaDraw(cr);
+    pThis->DrawingAreaDraw(cr, nWidth, nHeight);
 }
 #endif
 
-void GtkSalFrame::DrawingAreaResized(GtkWidget* pWidget, int nWidth, int nHeight)
+void GtkSalFrame::DrawingAreaResized()
 {
     // ignore size-allocations that occur during configuring an embedded SalObject
     if (m_bSalObjectSetPosSize)
         return;
-    maGeometry.setSize({ nWidth, nHeight });
-    bool bRealized = gtk_widget_get_realized(pWidget);
+    SAL_DEBUG(__func__ << " " << maGeometry.posSize());
+    maGeometry.setPosSize(GetPosAndSize(GTK_WINDOW(m_pWindow)));
+    const bool bRealized = gtk_widget_get_realized(GTK_WIDGET(m_pWindow));
     if (bRealized)
         AllocateFrame();
     CallCallbackExc( SalEvent::Resize, nullptr );
+#if 0
     if (bRealized)
         TriggerPaintEvent();
+#endif
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-void GtkSalFrame::sizeAllocated(GtkWidget* pWidget, GdkRectangle *pAllocation, gpointer frame)
+void GtkSalFrame::sizeAllocated(GtkWidget*, GdkRectangle*, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->DrawingAreaResized(pWidget, pAllocation->width, pAllocation->height);
+    pThis->DrawingAreaResized();
 }
 #else
-void GtkSalFrame::sizeAllocated(GtkWidget* pWidget, int nWidth, int nHeight, gpointer frame)
+void GtkSalFrame::sizeAllocated(GtkWidget*, int, int, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->DrawingAreaResized(pWidget, nWidth, nHeight);
+    pThis->DrawingAreaResized();
 }
 #endif
 
@@ -3700,6 +3738,12 @@ void GtkSalFrame::queue_draw()
     gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
 }
 
+inline std::ostream& operator<<(std::ostream& s, const SalPaintEvent& rPE)
+{
+    s << rPE.mnBoundWidth << "x" << rPE.mnBoundHeight << "@(" << rPE.mnBoundX << "," << rPE.mnBoundY << ")";
+    return s;
+}
+
 void GtkSalFrame::TriggerPaintEvent()
 {
     //Under gtk2 we can basically paint directly into the XWindow and on
@@ -3714,8 +3758,9 @@ void GtkSalFrame::TriggerPaintEvent()
     //
     //The other alternative was to always paint everything on "draw", but
     //that duplicates the amount of drawing and is hideously slow
-    SAL_INFO("vcl.gtk3", "force painting" << 0 << "," << 0 << " " << maGeometry.width() << "x" << maGeometry.height());
-    SalPaintEvent aPaintEvt(0, 0, maGeometry.width(), maGeometry.height(), true);
+    int nMenuBarHeight = m_pSalMenu ? m_pSalMenu->GetMenuBarHeight() : 0;
+    SalPaintEvent aPaintEvt(0, nMenuBarHeight, maGeometry.width(), maGeometry.height() - nMenuBarHeight, true);
+    SAL_DEBUG("force painting " << aPaintEvt);
     CallCallbackExc(SalEvent::Paint, &aPaintEvt);
     queue_draw();
 }

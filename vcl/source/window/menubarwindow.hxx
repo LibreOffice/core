@@ -118,6 +118,7 @@ public:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    Resize() override;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
+    virtual Size GetSizePixel() const override;
 
     void    SetMenu(MenuBar* pMenu);
     void    KillActivePopup();
