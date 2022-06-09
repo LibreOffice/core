@@ -15,15 +15,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-    <node oor:name="svg_Scalable_Vector_Graphics" oor:op="replace" >
-        <prop oor:name="DetectService"><value>com.sun.star.comp.Draw.SVGFilter</value></prop>
-        <prop oor:name="URLPattern"/>
-        <prop oor:name="Extensions"><value>svg</value></prop>
-        <prop oor:name="MediaType"><value>image/svg+xml</value></prop>
-        <prop oor:name="Preferred"><value>false</value></prop>
-        <prop oor:name="PreferredFilter"><value>SVG - Scalable Vector Graphics</value></prop>
+    <node oor:name="svgz_Export" oor:op="replace"  >
+        <prop oor:name="Type"><value>svgz_Compressed_Scalable_Vector_Graphics</value></prop>
+        <prop oor:name="FormatName"><value>SVESVGZ</value></prop>
+        <prop oor:name="RealFilterName"/>
+        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
         <prop oor:name="UIName">
-            <value>SVG - Scalable Vector Graphics</value>
+            <value xml:lang="en-US">SVGZ - Compressed Scalable Vector Graphics</value>
         </prop>
-        <prop oor:name="ClipboardFormat"/>
+        <prop oor:name="Flags"><value>EXPORT</value></prop>
     </node>
