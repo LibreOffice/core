@@ -1156,9 +1156,11 @@ VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFil
 VclPtr<AbstractSvxAreaTabDialog> AbstractDialogFactory_Impl::CreateSvxAreaTabDialog(weld::Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,
-                                                            bool bShadow)
+                                                            bool bShadow,
+                                                            bool bSlideBackground)
 {
-    return VclPtr<AbstractSvxAreaTabDialog_Impl>::Create(std::make_shared<SvxAreaTabDialog>(pParent, pAttr, pModel, bShadow));
+    return VclPtr<AbstractSvxAreaTabDialog_Impl>::Create(
+        std::make_shared<SvxAreaTabDialog>(pParent, pAttr, pModel, bShadow, bSlideBackground));
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxLineTabDialog(weld::Window* pParent, const SfxItemSet* pAttr, //add forSvxLineTabDialog

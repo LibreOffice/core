@@ -1211,6 +1211,25 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
         return;
     }
 
+    // tdf#149754 VCL gradient draw is not capable to handle all primitive gradient definitions,
+    // what should be clear due to being developed to ectend/replace them in
+    // capabilities & precision.
+    // It is e.g. not capable to correctly paint if the OutputRange is not completely
+    // inside the DefinitionRange, thus forcing to paint gradent parts *outside* the
+    // DefinitionRange.
+    // This happens for Writer with Frames anchored in Frames (and was broken due to
+    // falling back to VCL Gradient paint here), and for the new SlideBackgroundFill
+    // Fill mode for objects using it that reach outside the page (which is the
+    // DefinitionRange in that case).
+    // I see no real reason to fallback here to OutputDevice::DrawGradient and VCL
+    // gradient paint at all (system-dependent renderers wouldn't in the future), but
+    // will for convenience only add that needed additional correcting case
+    if (!rPrimitive.getDefinitionRange().isInside(rPrimitive.getOutputRange()))
+    {
+        process(rPrimitive);
+        return;
+    }
+
     GradientStyle eGradientStyle = convertGradientStyle(rFillGradient.getStyle());
 
     Gradient aGradient(eGradientStyle, Color(rFillGradient.getStartColor()),
