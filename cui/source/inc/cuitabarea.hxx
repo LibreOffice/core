@@ -115,7 +115,8 @@ class SvxAreaTabDialog final : public SfxTabDialogController
     void                SavePalettes();
 
 public:
-    SvxAreaTabDialog(weld::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow);
+    SvxAreaTabDialog(weld::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, bool bShadow,
+                     bool bSlideBackground);
 
     void                SetNewColorList( XColorListRef const & pColorList )
                             { mpNewColorList = pColorList; }
@@ -241,6 +242,7 @@ protected:
     std::unique_ptr<weld::Toggleable> m_xBtnHatch;
     std::unique_ptr<weld::Toggleable> m_xBtnBitmap;
     std::unique_ptr<weld::Toggleable> m_xBtnPattern;
+    std::unique_ptr<weld::Toggleable> m_xBtnUseBackground;
 
     void SetOptimalSize(weld::DialogController* pController);
 
@@ -260,10 +262,14 @@ private:
     DeactivateRC DeactivatePage_Impl( SfxItemSet* pSet );
 
 public:
-    SvxAreaTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
+    SvxAreaTabPage(weld::Container* pPage, weld::DialogController* pController,
+                   const SfxItemSet& rInAttrs, bool bSlideBackground = false);
     virtual ~SvxAreaTabPage() override;
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
+    static std::unique_ptr<SfxTabPage>
+    CreateWithSlideBackground(weld::Container* pPage, weld::DialogController* pController,
+                              const SfxItemSet*);
     static WhichRangesContainer GetRanges() { return pAreaRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;

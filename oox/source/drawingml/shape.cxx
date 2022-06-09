@@ -191,7 +191,6 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mnZOrderOff(pSourceShape->mnZOrderOff)
 , mnDataNodeType(pSourceShape->mnDataNodeType)
 , mfAspectRatio(pSourceShape->mfAspectRatio)
-, mbUseBgFill(pSourceShape->mbUseBgFill)
 , mpDiagramHelper( nullptr )
 , msDiagramDataModelID(pSourceShape->msDiagramDataModelID)
 {}
@@ -1197,7 +1196,7 @@ Reference< XShape > const & Shape::createAndInsert(
             }
             if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
             {
-                if (!mbUseBgFill)
+                if (!getFillProperties().moUseBgFill.get(false))
                 {
                     nFillPhClr = pFillRef->maPhClr.getColor(rGraphicHelper);
                     nFillPhClrTheme = pFillRef->maPhClr.getSchemeColorIndex();

@@ -128,6 +128,7 @@ struct FillProperties
 {
     OptValue< sal_Int32 > moFillType;           /// Fill type (OOXML token).
     Color               maFillColor;            /// Solid fill color and transparence.
+    OptValue< bool > moUseBgFill;               /// Whether the background is used as fill type
     GradientFillProperties maGradientProps;     /// Properties for gradient fills.
     PatternFillProperties maPatternProps;       /// Properties for pattern fills.
     BlipFillProperties  maBlipProps;            /// Properties for bitmap fills.

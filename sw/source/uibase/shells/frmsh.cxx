@@ -1385,6 +1385,7 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest const & rReq)
                     GetView().GetFrameWeld(),
                     &aNewAttr,
                     pDoc,
+                    false,
                     false));
 
                 pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult){

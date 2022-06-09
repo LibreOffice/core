@@ -55,7 +55,9 @@ void FuArea::DoExecute( SfxRequest& rReq )
     mpView->GetAttributes( aNewAttr );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc, true));
+    bool bHasSlideBackground = mpViewShell->GetDoc()->GetDocumentType() == DocumentType::Impress;
+    VclPtr<AbstractSvxAreaTabDialog> pDlg(
+        pFact->CreateSvxAreaTabDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc, true, bHasSlideBackground));
 
     pDlg->StartExecuteAsync([pDlg, pView = this->mpView, pViewShell = this->mpViewShell](sal_Int32 nResult){
         if (nResult == RET_OK)
@@ -71,6 +73,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
                 SID_ATTR_FILL_BITMAP,
                 SID_ATTR_FILL_TRANSPARENCE,
                 SID_ATTR_FILL_FLOATTRANSPARENCE,
+                SID_ATTR_FILL_USE_SLIDE_BACKGROUND,
                 0 };
 
             pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
