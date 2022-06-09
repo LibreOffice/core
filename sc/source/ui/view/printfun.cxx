@@ -3094,6 +3094,10 @@ void PrintPageRanges::calculate(ScDocument& rDoc,
 
     rDoc.SetPageSize(nPrintTab, rDocSize);
 
+    // Clear the map to prevent any outdated values to "survive" when
+    // we have to recalculate the new values anyway
+    m_xPageRows->clear();
+
     // #i123672# use dynamic mem to react on size changes
     if (m_xPageEndX->size() < static_cast<size_t>(rDoc.MaxCol()) + 1)
     {
