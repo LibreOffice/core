@@ -686,7 +686,8 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( m_bSplitNext )
     {
-        SwPosition aPos(*pNd, pNd->Len());
+        assert(m_nSttCnt + m_sOld.getLength() <= pNd->Len());
+        SwPosition aPos(*pNd, m_nSttCnt + m_sOld.getLength());
         pDoc->getIDocumentContentOperations().SplitNode( aPos, false );
         pNd->RestoreMetadata(m_pMetadataUndoEnd);
         pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTextNode();
@@ -720,7 +721,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     rPam.GetPoint()->nNode = m_nSttNd;
-    rPam.GetPoint()->nContent = m_nSttCnt;
+    rPam.GetPoint()->nContent.Assign(rPam.GetPoint()->nNode.GetNode().GetTextNode(), m_nSttCnt);
 }
 
 void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
