@@ -16,6 +16,24 @@
       "message": "This fires on Windows with NVDA active, opening Tools-\u003eOptions and Advanced tab",
       "revId": "c9f8e68ce3d56b0e52915a07d0bce661882039ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44e4cec7_9d439569",
+        "filename": "vcl/source/window/layout.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1446,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-09T08:14:38Z",
+      "side": 1,
+      "message": "I see it happens during creation of the frame when I guess all its children have not been set yet. https://gerrit.libreoffice.org/c/core/+/135526 to adjust.",
+      "parentUuid": "8911e2b3_08c6fea8",
+      "revId": "c9f8e68ce3d56b0e52915a07d0bce661882039ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
