@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb6a919f_d477a0af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-09T19:15:30Z",
+      "side": 1,
+      "message": "Just the minor nitpick. Otherwise +1 from me.",
+      "revId": "52a91eb9299270d1b6aacc683980c9dc941377a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f6911d4_3a77d586",
+        "filename": "vcl/source/window/syswin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-09T19:15:30Z",
+      "side": 1,
+      "message": "There is now vcl::WindowDataMask::PosSizeState",
+      "revId": "52a91eb9299270d1b6aacc683980c9dc941377a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
