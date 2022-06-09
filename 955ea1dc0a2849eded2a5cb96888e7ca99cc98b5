@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7117ac3c_5bed4904",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-09T08:52:29Z",
+      "side": 1,
+      "message": "FYI: this currently doesn\u0027t work. It actually depends on https://gerrit.libreoffice.org/c/core/+/135082\n\nThe reported menubar size of 1px breaks it.",
+      "revId": "955ea1dc0a2849eded2a5cb96888e7ca99cc98b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
