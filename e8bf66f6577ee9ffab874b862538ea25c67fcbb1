@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b25302b4_2f5ea9a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-09T09:57:44Z",
+      "side": 1,
+      "message": "Note this change conflicts with\nhttps://gerrit.libreoffice.org/c/core/+/135496\n\nYou should abandon one of them and work only on one, and instead of creating new changes with each iteration submit a new patch set with the same Change-Id so gerrit sees it as belonging to the same change.",
+      "revId": "e8bf66f6577ee9ffab874b862538ea25c67fcbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3db35fe5_fc1a2131",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-09T09:57:44Z",
+      "side": 1,
+      "message": "Nitpick: it would serve readability if grouped alignment was somehow preserved, like\n\n constexpr int EDGE_LEFT   \u003d 1;\n constexpr int EDGE_TOP    \u003d 2;\n constexpr int EDGE_RIGHT  \u003d 4;\n constexpr int EDGE_BOTTOM \u003d 8;\n constexpr int EDGE_HORZ   \u003d EDGE_RIGHT | EDGE_LEFT;\n constexpr int EDGE_VERT   \u003d EDGE_TOP | EDGE_BOTTOM;",
+      "revId": "e8bf66f6577ee9ffab874b862538ea25c67fcbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c73bed2_a353de87",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-09T09:57:44Z",
+      "side": 1,
+      "message": "Any particular reason this FSQRT2 value was not made a constexpr?",
+      "revId": "e8bf66f6577ee9ffab874b862538ea25c67fcbb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
