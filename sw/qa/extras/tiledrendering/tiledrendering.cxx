@@ -2826,7 +2826,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf43244_SpacesOnMargin)
     std::vector<unsigned char> aPixmap(nCanvasWidth * nCanvasHeight * 4, 0);
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
+    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nCanvasWidth, nCanvasHeight),
             Fraction(1.0), Point(), aPixmap.data());
     pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0,
         /*nTilePosY=*/0, /*nTileWidth=*/15360, /*nTileHeight=*/7680);
