@@ -1,0 +1,164 @@
+From 87cf58d0604e4bfd70da1044894c3e8f073133a1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Sun, 22 May 2022 14:20:21 +0100
+Subject: [PATCH] add 16bit-cielab support
+
+add an internal TIFFCIELab16ToXYZ that assumes 16bit encoding
+
+multiply the 8bit variant input to use that, keep TIFFCIELabToXYZ
+unchanged so no different to existing potential consumers
+
+motivation: https://bugs.documentfoundation.org/show_bug.cgi?id=131199
+the "clavijo16bitlab.tiff" example where tiffinfo says:
+
+  Image Width: 2601 Image Length: 3503
+  Resolution: 96, 96 pixels/inch
+  Bits/Sample: 16
+  Compression Scheme: AdobeDeflate
+  Photometric Interpretation: CIE L*a*b*
+  Orientation: row 0 top, col 0 lhs
+  Samples/Pixel: 3
+  Rows/Strip: 1
+  Planar Configuration: single image plane
+  DateTime: 2020:03:07 10:20:42
+---
+ libtiff/tif_color.c    | 19 ++++++++++++++++---
+ libtiff/tif_getimage.c | 38 ++++++++++++++++++++++++++++++++++----
+ libtiff/tiffiop.h      |  2 ++
+ 3 files changed, 52 insertions(+), 7 deletions(-)
+
+diff --git a/libtiff/tif_color.c b/libtiff/tif_color.c
+index 20e41684..e0fc4bf0 100644
+--- libtiff/tif_color.c
++++ libtiff/tif_color.c
+@@ -44,7 +44,20 @@ void
+ TIFFCIELabToXYZ(TIFFCIELabToRGB *cielab, uint32_t l, int32_t a, int32_t b,
+                 float *X, float *Y, float *Z)
+ {
+-	float L = (float)l * 100.0F / 255.0F;
++	TIFFCIELab16ToXYZ(cielab, l * 257, a * 256, b * 256, X, Y, Z);
++}
++
++/*
++ * For CIELab encoded in 16 bits, L is an unsigned integer range [0,65535].
++ * The a* and b* components are signed integers range [-32768,32767]. The 16
++ * bit chrominance values are encoded as 256 times the 1976 CIE a* and b*
++ * values
++ */
++void
++TIFFCIELab16ToXYZ(TIFFCIELabToRGB *cielab, uint32_t l, int32_t a, int32_t b,
++                  float *X, float *Y, float *Z)
++{
++	float L = (float)l * 100.0F / 65535.0F;
+ 	float cby, tmp;
+ 
+ 	if( L < 8.856F ) {
+@@ -55,13 +68,13 @@ TIFFCIELabToXYZ(TIFFCIELabToRGB *cielab, uint32_t l, int32_t a, int32_t b,
+ 		*Y = cielab->Y0 * cby * cby * cby;
+ 	}
+ 
+-	tmp = (float)a / 500.0F + cby;
++	tmp = (float)a / 256.0F / 500.0F + cby;
+ 	if( tmp < 0.2069F )
+ 		*X = cielab->X0 * (tmp - 0.13793F) / 7.787F;
+ 	else
+ 		*X = cielab->X0 * tmp * tmp * tmp;
+ 
+-	tmp = cby - (float)b / 200.0F;
++	tmp = cby - (float)b / 256.0F / 200.0F;
+ 	if( tmp < 0.2069F )
+ 		*Z = cielab->Z0 * (tmp - 0.13793F) / 7.787F;
+ 	else
+diff --git a/libtiff/tif_getimage.c b/libtiff/tif_getimage.c
+index a1b6570b..9e2ac2c9 100644
+--- libtiff/tif_getimage.c
++++ libtiff/tif_getimage.c
+@@ -194,7 +194,7 @@ TIFFRGBAImageOK(TIFF* tif, char emsg[1024])
+                         }
+ 			break;
+ 		case PHOTOMETRIC_CIELAB:
+-                        if ( td->td_samplesperpixel != 3 || colorchannels != 3 || td->td_bitspersample != 8 ) {
++                        if ( td->td_samplesperpixel != 3 || colorchannels != 3 || (td->td_bitspersample != 8 && td->td_bitspersample != 16) ) {
+                                 sprintf(emsg,
+                                         "Sorry, can not handle image with %s=%"PRIu16", %s=%d and %s=%"PRIu16,
+                                         "Samples/pixel", td->td_samplesperpixel,
+@@ -1784,7 +1784,7 @@ DECLARESepPutFunc(putRGBUAseparate16bittile)
+ /*
+  * 8-bit packed CIE L*a*b 1976 samples => RGB
+  */
+-DECLAREContigPutFunc(putcontig8bitCIELab)
++DECLAREContigPutFunc(putcontig8bitCIELab8)
+ {
+ 	float X, Y, Z;
+ 	uint32_t r, g, b;
+@@ -1806,6 +1806,32 @@ DECLAREContigPutFunc(putcontig8bitCIELab)
+ 	}
+ }
+ 
++/*
++ * 16-bit packed CIE L*a*b 1976 samples => RGB
++ */
++DECLAREContigPutFunc(putcontig8bitCIELab16)
++{
++	float X, Y, Z;
++	uint32_t r, g, b;
++	uint16_t *wp = (uint16_t *)pp;
++	(void) y;
++	fromskew *= 3;
++	for( ; h > 0; --h) {
++		for (x = w; x > 0; --x) {
++			TIFFCIELab16ToXYZ(img->cielab,
++					  (uint16_t)wp[0],
++					  (int16_t)wp[1],
++					  (int16_t)wp[2],
++					  &X, &Y, &Z);
++			TIFFXYZToRGB(img->cielab, X, Y, Z, &r, &g, &b);
++			*cp++ = PACK(r, g, b);
++			wp += 3;
++		}
++		cp += toskew;
++		wp += fromskew;
++	}
++}
++
+ /*
+  * YCbCr -> RGB conversion and packing routines.
+  */
+@@ -2395,7 +2421,11 @@ initCIELabConversion(TIFFRGBAImage* img)
+ 		return NULL;
+ 	}
+ 
+-	return putcontig8bitCIELab;
++	if (img->bitspersample == 8)
++		return putcontig8bitCIELab8;
++	else if (img->bitspersample == 16)
++		return putcontig8bitCIELab16;
++	return NULL;
+ }
+ 
+ /*
+@@ -2777,7 +2807,7 @@ PickContigCase(TIFFRGBAImage* img)
+ 			break;
+ 		case PHOTOMETRIC_CIELAB:
+ 			if (img->samplesperpixel == 3 && buildMap(img)) {
+-				if (img->bitspersample == 8)
++				if (img->bitspersample == 8 || img->bitspersample == 16)
+ 					img->put.contig = initCIELabConversion(img);
+ 				break;
+ 			}
+diff --git a/libtiff/tiffiop.h b/libtiff/tiffiop.h
+index e3af461d..7bd50514 100644
+--- libtiff/tiffiop.h
++++ libtiff/tiffiop.h
+@@ -429,6 +429,8 @@ extern int TIFFInitZSTD(TIFF*, int);
+ extern int TIFFInitWebP(TIFF*, int);
+ #endif
+ extern const TIFFCodec _TIFFBuiltinCODECS[];
++extern void TIFFCIELab16ToXYZ(TIFFCIELabToRGB *, uint32_t l, int32_t a, int32_t b,
++                              float *, float *, float *);
+ 
+ #if defined(__cplusplus)
+ }
+-- 
+2.36.1
+
