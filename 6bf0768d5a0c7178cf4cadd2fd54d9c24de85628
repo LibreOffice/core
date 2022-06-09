@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08705797_cc12549f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-09T17:55:20Z",
+      "side": 1,
+      "message": "Do you know what the deal is with PamRanges? Perhaps it is something old? It seems to work rather differently from normal SwPaM and SwPaM seems (relatively) nice. In any case, I had to make this change in order for GetMark to work properly IIRC (and yes, within 4 weeks I have lost most of my detailed memory about these patches).",
+      "revId": "6bf0768d5a0c7178cf4cadd2fd54d9c24de85628",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
