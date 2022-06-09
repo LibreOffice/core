@@ -63,6 +63,8 @@
 #include <svx/svdxcgv.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/zcodec.hxx>
+#include <rtl/crc.h>
 
 #include <memory>
 #include <string_view>
@@ -657,12 +659,16 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
 {
     Reference< XComponentContext >        xContext( ::comphelper::getProcessComponentContext() ) ;
     bool                                  bRet = false;
+    // Instead of writing to rxOStm directly, we write here in case we need
+    // to compress the output later
+    SvMemoryStream                        aTempStm;
 
     if( rxOStm.is() )
     {
         if( !mSelectedPages.empty() && !mMasterPageTargets.empty() )
         {
-            Reference< XDocumentHandler > xDocHandler = implCreateExportDocumentHandler( rxOStm );
+            ::rtl::Reference< ::utl::OStreamWrapper > aTempStmWrapper = new ::utl::OStreamWrapper( aTempStm );
+            Reference< XDocumentHandler > xDocHandler = implCreateExportDocumentHandler( aTempStmWrapper );
 
             if( xDocHandler.is() )
             {
@@ -736,6 +742,38 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
                 mbPresentation = false;
             }
         }
+    }
+    if ( bRet )
+    {
+        const sal_Int8* aDataPtr = static_cast< const sal_Int8* >( aTempStm.GetData() );
+        sal_uInt32 aDataSize = aTempStm.GetSize();
+        SvMemoryStream aCompressedStm;
+        if ( mbShouldCompress )
+        {
+            sal_uInt32 nUncompressedCRC32
+                = rtl_crc32( 0, aTempStm.GetData(), aTempStm.GetSize() );
+            ZCodec aCodec;
+            aTempStm.Seek( 0 );
+            aCodec.BeginCompression( ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true );
+            // the inner modify time/filename doesn't really matter in this context because
+            // compressed graphic formats are meant to be opened as is - not to be extracted
+            aCodec.SetCompressionMetadata( "inner", 0, nUncompressedCRC32 );
+            aCodec.Compress( aTempStm, aCompressedStm );
+            sal_uInt32 nTotalIn = static_cast< sal_uInt32 >( aCodec.EndCompression() );
+            if ( aCompressedStm.GetError() || nTotalIn != aDataSize )
+            {
+                bRet = false;
+                return bRet;
+            }
+            else
+            {
+                aDataPtr = static_cast< const sal_Int8* >( aCompressedStm.GetData() );
+                aDataSize = aCompressedStm.GetSize();
+            }
+        }
+
+        Sequence< sal_Int8 > aTempSeq( aDataPtr, aDataSize );
+        rxOStm->writeBytes( aTempSeq );
     }
     return bRet;
 }
