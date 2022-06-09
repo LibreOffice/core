@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/security/AccessControlException.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
@@ -85,29 +86,32 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
     for (sal_Int32 flags = css::system::SystemShellExecuteFlags::URIS_ONLY;;) {
         try {
             exec->execute(msURI, OUString(), flags);
+        } catch (css::security::AccessControlException & e) {
+            if (e.LackingPermission.hasValue() || flags == 0) {
+                throw css::uno::RuntimeException(
+                    "unexpected AccessControlException: " + e.Message);
+            }
+            SolarMutexGuard g;
+            std::unique_ptr<weld::MessageDialog> eb(
+                Application::CreateMessageDialog(
+                    mpDialogParent, VclMessageType::Warning, VclButtonsType::OkCancel,
+                    SfxResId(STR_DANGEROUS_TO_OPEN)));
+            eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", INetURLObject::decode(msURI, INetURLObject::DecodeMechanism::Unambiguous)));
+            if (eb->run() == RET_OK) {
+                flags = 0;
+                continue;
+            }
         } catch (css::lang::IllegalArgumentException & e) {
             if (e.ArgumentPosition != 0) {
                 throw css::uno::RuntimeException(
                     "unexpected IllegalArgumentException: " + e.Message);
             }
             SolarMutexGuard g;
-            if (flags == css::system::SystemShellExecuteFlags::URIS_ONLY) {
-                std::unique_ptr<weld::MessageDialog> eb(
-                    Application::CreateMessageDialog(
-                        mpDialogParent, VclMessageType::Warning, VclButtonsType::OkCancel,
-                        SfxResId(STR_DANGEROUS_TO_OPEN)));
-                eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", INetURLObject::decode(msURI, INetURLObject::DecodeMechanism::Unambiguous)));
-                if (eb->run() == RET_OK) {
-                    flags = 0;
-                    continue;
-                }
-            } else {
-                std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(mpDialogParent,
-                                                                         VclMessageType::Warning, VclButtonsType::Ok,
-                                                                         SfxResId(STR_NO_ABS_URI_REF)));
-                eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", INetURLObject::decode(msURI, INetURLObject::DecodeMechanism::Unambiguous)));
-                eb->run();
-            }
+            std::unique_ptr<weld::MessageDialog> eb(Application::CreateMessageDialog(mpDialogParent,
+                                                                     VclMessageType::Warning, VclButtonsType::Ok,
+                                                                     SfxResId(STR_NO_ABS_URI_REF)));
+            eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", INetURLObject::decode(msURI, INetURLObject::DecodeMechanism::Unambiguous)));
+            eb->run();
         } catch (css::system::SystemShellExecuteException & e) {
             if (!mbHandleSystemShellExecuteException) {
                 throw;
