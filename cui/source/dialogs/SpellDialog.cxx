@@ -1808,7 +1808,7 @@ void SentenceEditWindow_Impl::SetAlternatives( const Reference< XSpellAlternativ
         aLocale = xAlt->getLocale();
         aAlts   = xAlt->getAlternatives();
     }
-    SpellErrorDescription aDesc( false, aWord, aLocale, aAlts, nullptr);
+    SpellErrorDescription aDesc( false, aWord, std::move(aLocale), aAlts, nullptr);
     SfxGrabBagItem aSpellErrorDescription(EE_CHAR_GRABBAG);
     aSpellErrorDescription.GetGrabBag()["SpellErrorDescription"] <<= aDesc.toSequence();
     SetAttrib(aSpellErrorDescription, m_nErrorStart, m_nErrorEnd);

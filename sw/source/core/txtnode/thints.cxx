@@ -3320,7 +3320,7 @@ bool SwpHints::TryInsertHint(
     // ... and notify listeners
     if ( rNode.HasWriterListeners() )
     {
-        const SwUpdateAttr aHint(nHtStart, nHintEnd, nWhich, aWhichSublist);
+        const SwUpdateAttr aHint(nHtStart, nHintEnd, nWhich, std::move(aWhichSublist));
         rNode.TriggerNodeUpdate(sw::LegacyModifyHint(&aHint, &aHint));
     }
 

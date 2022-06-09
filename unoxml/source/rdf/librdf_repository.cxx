@@ -864,7 +864,7 @@ librdf_NamedGraph::getStatements(
         std::unique_lock g(m_CacheMutex);
         m_aStatementsCache.emplace(cacheKey, vStatements);
     }
-    return new librdf_GraphResult2(vStatements);
+    return new librdf_GraphResult2(std::move(vStatements));
 }
 
 

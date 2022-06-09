@@ -730,7 +730,7 @@ namespace emfio
         for ( sal_uInt32 i = 0; ( i < nNumberOfPolylines ) && mpInputStream->good(); i++ )
         {
             tools::Polygon aPolygon = ReadPolygon<T>(0, pnPolylinePointCount[i], nNextPos);
-            DrawPolyLine(aPolygon, false, mbRecordPath);
+            DrawPolyLine(std::move(aPolygon), false, mbRecordPath);
         }
     }
 
@@ -1218,7 +1218,7 @@ namespace emfio
                             tools::Long dh = h / 2;
                             Point aCenter( nX32 + dw, nY32 + dh );
                             tools::Polygon aPoly( aCenter, dw, dh );
-                            DrawPolygon( aPoly, mbRecordPath );
+                            DrawPolygon( std::move(aPoly), mbRecordPath );
                         }
                     }
                     break;
@@ -1233,7 +1233,7 @@ namespace emfio
                                           Point(nX32, ny32) };
                         tools::Polygon aPoly(4, aPoints);
                         aPoly.Optimize( PolyOptimizeFlags::CLOSE );
-                        DrawPolygon( aPoly, mbRecordPath );
+                        DrawPolygon( std::move(aPoly), mbRecordPath );
                     }
                     break;
 
@@ -1241,7 +1241,7 @@ namespace emfio
                     {
                         mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nW ).ReadUInt32( nH );
                         tools::Polygon aRoundRectPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), nW, nH );
-                        DrawPolygon( aRoundRectPoly, mbRecordPath );
+                        DrawPolygon( std::move(aRoundRectPoly), mbRecordPath );
                     }
                     break;
 
@@ -1259,9 +1259,9 @@ namespace emfio
                             tools::Polygon aPoly(ReadRectangle(nX32, nY32, nx32, ny32), Point(nStartX, nStartY), Point(nEndX, nEndY), PolyStyle::Arc, IsArcDirectionClockWise());
 
                             if ( nRecType == EMR_CHORD )
-                                DrawPolygon( aPoly, mbRecordPath );
+                                DrawPolygon( std::move(aPoly), mbRecordPath );
                             else
-                                DrawPolyLine( aPoly, nRecType == EMR_ARCTO, mbRecordPath );
+                                DrawPolyLine( std::move(aPoly), nRecType == EMR_ARCTO, mbRecordPath );
                         }
                     }
                     break;
@@ -1275,7 +1275,7 @@ namespace emfio
                         else
                         {
                             tools::Polygon aPoly(ReadRectangle(nX32, nY32, nx32, ny32), Point(nStartX, nStartY), Point(nEndX, nEndY), PolyStyle::Pie, IsArcDirectionClockWise());
-                            DrawPolygon( aPoly, mbRecordPath );
+                            DrawPolygon( std::move(aPoly), mbRecordPath );
                         }
                     }
                     break;

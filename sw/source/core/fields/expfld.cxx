@@ -1002,8 +1002,7 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFormatField& rFormat, SwDo
         {
             TypedWhichId<SvxLanguageItem> nLangWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nSrcpt ) ;
             LanguageType eLang = aSet.Get(nLangWhich).GetLanguage();
-            LanguageTag aLanguageTag( eLang);
-            CharClass aCC( aLanguageTag);
+            CharClass aCC(( LanguageTag(eLang) ));
             sal_Unicode c0 = sNodeText[0];
             bool bIsAlphaNum = aCC.isAlphaNumeric( sNodeText, 0 );
             if( !bIsAlphaNum ||

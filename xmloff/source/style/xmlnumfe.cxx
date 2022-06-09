@@ -229,7 +229,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         LanguageTag aLanguageTag( MsLangId::getConfiguredSystemLanguage() );
 
-        pLocaleData.reset( new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag ) );
+        pLocaleData.reset( new LocaleDataWrapper( rExport.getComponentContext(), std::move(aLanguageTag) ) );
     }
 
     pUsedList.reset(new SvXMLNumUsedList_Impl);
@@ -259,7 +259,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         LanguageTag aLanguageTag( MsLangId::getConfiguredSystemLanguage() );
 
-        pLocaleData.reset( new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag ) );
+        pLocaleData.reset( new LocaleDataWrapper( rExport.getComponentContext(), std::move(aLanguageTag) ) );
     }
 
     pUsedList.reset(new SvXMLNumUsedList_Impl);

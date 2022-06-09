@@ -125,7 +125,7 @@ void CPDManager::printerAdded (GDBusConnection *connection,
             g_free(contents);
             g_dbus_node_info_unref(introspection_data);
             std::pair<std::string, GDBusProxy *> new_backend (sender_name, proxy);
-            current->addBackend(new_backend);
+            current->addBackend(std::move(new_backend));
         }
     }
     CPDPrinter *pDest = static_cast<CPDPrinter *>(malloc(sizeof(CPDPrinter)));

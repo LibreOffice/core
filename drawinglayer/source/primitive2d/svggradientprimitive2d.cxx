@@ -555,7 +555,7 @@ namespace drawinglayer::primitive2d
                         aUnitRange.getMaxX());
                 }
 
-                createResult(rContainer, aTargetColor, aTargetOpacity, aUnitGradientToObject);
+                createResult(rContainer, std::move(aTargetColor), std::move(aTargetOpacity), aUnitGradientToObject);
             }
         }
 

@@ -330,8 +330,7 @@ css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
                 }
 
                 // the remaining is the locale
-                LanguageTag aLanguageTag( sDefaultCurrency);
-                LocaleDataWrapper aLocaleInfo( m_xContext, aLanguageTag );
+                LocaleDataWrapper aLocaleInfo( m_xContext, LanguageTag(sDefaultCurrency) );
                 if ( sBankSymbol.isEmpty() )
                     sBankSymbol = aLocaleInfo.getCurrBankSymbol();
 

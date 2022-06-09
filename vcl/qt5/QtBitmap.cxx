@@ -53,7 +53,7 @@ bool QtBitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat, const Bi
         QVector<QRgb> aColorTable(count);
         for (unsigned i = 0; i < count; ++i)
             aColorTable[i] = qRgb(rPal[i].GetRed(), rPal[i].GetGreen(), rPal[i].GetBlue());
-        m_pImage->setColorTable(aColorTable);
+        m_pImage->setColorTable(std::move(aColorTable));
     }
     return true;
 }
@@ -162,7 +162,7 @@ void QtBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
         for (unsigned i = 0; i < count; ++i)
             aColorTable[i]
                 = qRgb(m_aPalette[i].GetRed(), m_aPalette[i].GetGreen(), m_aPalette[i].GetBlue());
-        m_pImage->setColorTable(aColorTable);
+        m_pImage->setColorTable(std::move(aColorTable));
     }
     delete pBuffer;
     if (nMode == BitmapAccessMode::Write)

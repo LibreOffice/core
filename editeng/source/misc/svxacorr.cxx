@@ -225,7 +225,7 @@ static LocaleDataWrapper& GetLocaleDataWrapper( LanguageType nLang )
     static std::unique_ptr<LocaleDataWrapper> xLclDtWrp;
     LanguageTag aLcl( nLang );
     if (!xLclDtWrp || xLclDtWrp->getLoadedLanguageTag() != aLcl)
-        xLclDtWrp.reset(new LocaleDataWrapper(aLcl));
+        xLclDtWrp.reset(new LocaleDataWrapper(std::move(aLcl)));
     return *xLclDtWrp;
 }
 static TransliterationWrapper& GetIgnoreTranslWrapper()
