@@ -1093,7 +1093,7 @@ void PDFExport::showErrors( const std::set< vcl::PDFWriter::ErrorCode >& rErrors
     {
         task::PDFExportException aExc;
         aExc.ErrorCodes = comphelper::containerToSequence<sal_Int32>( rErrors );
-        Reference< task::XInteractionRequest > xReq( new PDFErrorRequest( aExc ) );
+        Reference< task::XInteractionRequest > xReq( new PDFErrorRequest( std::move(aExc) ) );
         mxIH->handle( xReq );
     }
 }

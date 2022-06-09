@@ -1545,7 +1545,7 @@ namespace frm
             m_xParser->setOrder( OUString() );
 
             impl_appendOrderByColumn_throw aAction(this, xBoundField, _bUp);
-            impl_doActionInSQLContext_throw(aAction, RID_STR_COULD_NOT_SET_ORDER );
+            impl_doActionInSQLContext_throw(std::move(aAction), RID_STR_COULD_NOT_SET_ORDER );
 
             weld::WaitObject aWO(Application::GetFrameWeld(GetDialogParent()));
             try
@@ -1616,7 +1616,7 @@ namespace frm
             }
 
             impl_appendFilterByColumn_throw aAction(this, m_xParser, xBoundField);
-            impl_doActionInSQLContext_throw( aAction, RID_STR_COULD_NOT_SET_FILTER );
+            impl_doActionInSQLContext_throw( std::move(aAction), RID_STR_COULD_NOT_SET_FILTER );
 
             weld::WaitObject aWO(Application::GetFrameWeld(GetDialogParent()));
             try

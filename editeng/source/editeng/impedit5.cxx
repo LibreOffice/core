@@ -192,7 +192,7 @@ std::unique_ptr<EditUndoSetAttribs> ImpEditEngine::CreateAttribUndo( EditSelecti
     {
         SfxItemSet aTmpSet( GetEmptyItemSet() );
         aTmpSet.Put( rSet );
-        pUndo.reset( new EditUndoSetAttribs(pEditEngine, aESel, aTmpSet) );
+        pUndo.reset( new EditUndoSetAttribs(pEditEngine, aESel, std::move(aTmpSet)) );
     }
     else
     {

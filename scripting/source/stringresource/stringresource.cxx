@@ -1421,7 +1421,7 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
         Reference< io::XInputStream > xInput = aIn.getInputStreamForSection( nSize );
         if( xInput.is() )
         {
-            LocaleItem* pLocaleItem = new LocaleItem( aLocale );
+            LocaleItem* pLocaleItem = new LocaleItem( std::move(aLocale) );
             if( iDefault == i )
                 pUseAsDefaultItem = pLocaleItem;
             m_aLocaleItemVector.emplace_back( pLocaleItem );
@@ -1510,7 +1510,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< OUStrin
 
             if( checkNamingSceme( aPureName, m_aNameBase, aLocale ) )
             {
-                LocaleItem* pLocaleItem = new LocaleItem( aLocale, false );
+                LocaleItem* pLocaleItem = new LocaleItem( std::move(aLocale), false );
                 m_aLocaleItemVector.emplace_back( pLocaleItem );
 
                 if( m_pCurrentLocaleItem == nullptr )

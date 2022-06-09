@@ -138,7 +138,7 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
     };
 
     Notifier notifier;
-    ExecuteWrapper* pWrapper = new ExecuteWrapper(func, LINK(&notifier, Notifier, NotifyHdl));
+    ExecuteWrapper* pWrapper = new ExecuteWrapper(std::move(func), LINK(&notifier, Notifier, NotifyHdl));
     aIdle->SetInvokeHandler(LINK(pWrapper, ExecuteWrapper, ExecuteActionHdl));
     {
         SolarMutexGuard aGuard;

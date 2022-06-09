@@ -2284,7 +2284,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, true) );
 
     // ContentNode constructor copies also the paragraph attributes
-    ContentNode* pNode = new ContentNode( aStr, aContentAttribs );
+    ContentNode* pNode = new ContentNode( aStr, std::move(aContentAttribs) );
 
     // Copy the Default Font
     pNode->GetCharAttribs().GetDefFont() = aPaM.GetNode()->GetCharAttribs().GetDefFont();

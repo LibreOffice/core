@@ -1680,8 +1680,7 @@ IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
     m_xCurrencyLB->set_active_text(aDefaultCurr);
 
     // obtain corresponding locale data
-    LanguageTag aLanguageTag( eLang);
-    LocaleDataWrapper aLocaleWrapper( aLanguageTag );
+    LocaleDataWrapper aLocaleWrapper(( LanguageTag(eLang) ));
 
     // update the decimal separator key of the related CheckBox
     OUString sTempLabel(m_sDecimalSeparatorLabel);

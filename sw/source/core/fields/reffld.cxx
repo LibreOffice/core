@@ -236,8 +236,7 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
     // (http://publications.europa.eu/code/hu/hu-120700.htm,
     // http://publications.europa.eu/code/hu/hu-4100600.htm)
 
-    LanguageTag aLanguageTag(eLang);
-    CharClass aCharClass( aLanguageTag );
+    CharClass aCharClass(( LanguageTag(eLang) ));
     sal_Int32 nLen = rRefText.getLength();
     sal_Int32 i;
     // substring of rRefText starting with letter or number
@@ -727,8 +726,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
             if( !pFieldTextAttr || !pFieldTextAttr->GetpTextNode() )
                 break;
 
-            LanguageTag aLanguageTag( GetLanguage());
-            LocaleDataWrapper aLocaleData( aLanguageTag );
+            LocaleDataWrapper aLocaleData(( LanguageTag( GetLanguage() ) ));
 
             // first a "short" test - in case both are in the same node
             if( pFieldTextAttr->GetpTextNode() == pTextNd )

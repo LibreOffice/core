@@ -383,7 +383,8 @@ void RTFDocumentImpl::outputSettingsTable()
         = new RTFReferenceProperties(m_aSettingsTableAttributes, m_aSettingsTableSprms);
     RTFReferenceTable::Entries_t aSettingsTableEntries;
     aSettingsTableEntries.insert(std::make_pair(0, pProp));
-    writerfilter::Reference<Table>::Pointer_t pTable = new RTFReferenceTable(aSettingsTableEntries);
+    writerfilter::Reference<Table>::Pointer_t pTable
+        = new RTFReferenceTable(std::move(aSettingsTableEntries));
     Mapper().table(NS_ooxml::LN_settings_settings, pTable);
 }
 
@@ -539,16 +540,15 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
         }
 
         // Get rid of direct formatting what is already in the style.
-        RTFSprms const sprms(aSprms.cloneAndDeduplicate(aStyleSprms, nStyleType, true, &aSprms));
-        RTFSprms const attributes(
-            rAttributes.cloneAndDeduplicate(aStyleAttributes, nStyleType, true));
-        return new RTFReferenceProperties(attributes, sprms);
+        RTFSprms sprms(aSprms.cloneAndDeduplicate(aStyleSprms, nStyleType, true, &aSprms));
+        RTFSprms attributes(rAttributes.cloneAndDeduplicate(aStyleAttributes, nStyleType, true));
+        return new RTFReferenceProperties(std::move(attributes), std::move(sprms));
     }
 
     if (pAbstractList)
         aSprms.duplicateList(pAbstractList);
     writerfilter::Reference<Properties>::Pointer_t pRet
-        = new RTFReferenceProperties(rAttributes, aSprms);
+        = new RTFReferenceProperties(rAttributes, std::move(aSprms));
     return pRet;
 }
 
@@ -695,7 +695,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     RTFSprms aSprms;
     aSprms.set(NS_ooxml::LN_CT_PPr_sectPr, pValue);
     writerfilter::Reference<Properties>::Pointer_t pProperties
-        = new RTFReferenceProperties(aAttributes, aSprms);
+        = new RTFReferenceProperties(std::move(aAttributes), std::move(aSprms));
 
     if (bFinal && !m_pSuperstream)
         // This is the end of the document, not just the end of e.g. a header.
@@ -1160,12 +1160,12 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         auto pValue = new RTFValue(m_aStates.top().getShape().getAnchorAttributes(), aAnchorSprms);
         aSprms.set(NS_ooxml::LN_anchor_anchor, pValue);
     }
-    writerfilter::Reference<Properties>::Pointer_t pProperties
-        = new RTFReferenceProperties(aAttributes, aSprms);
     checkFirstRun();
 
     if (!m_aStates.top().getCurrentBuffer())
     {
+        writerfilter::Reference<Properties>::Pointer_t pProperties
+            = new RTFReferenceProperties(std::move(aAttributes), std::move(aSprms));
         Mapper().props(pProperties);
         // Make sure we don't lose these properties with a too early reset.
         m_bHadPicture = true;
@@ -2177,18 +2177,18 @@ RTFReferenceTable::Entries_t RTFDocumentImpl::deduplicateStyleTable()
                         NS_ooxml::LN_CT_Style_type));
                 assert(pStyleType);
                 int const nStyleType(pStyleType->getInt());
-                RTFSprms const sprms(
+                RTFSprms sprms(
                     static_cast<RTFReferenceProperties&>(*pStyle).getSprms().cloneAndDeduplicate(
                         static_cast<RTFReferenceProperties&>(*itParent->second).getSprms(),
                         nStyleType));
-                RTFSprms const attributes(
+                RTFSprms attributes(
                     static_cast<RTFReferenceProperties&>(*pStyle)
                         .getAttributes()
                         .cloneAndDeduplicate(
                             static_cast<RTFReferenceProperties&>(*itParent->second).getAttributes(),
                             nStyleType));
 
-                ret[it.first] = new RTFReferenceProperties(attributes, sprms);
+                ret[it.first] = new RTFReferenceProperties(std::move(attributes), std::move(sprms));
             }
             else
             {
@@ -2250,9 +2250,9 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
         break;
         case Destination::STYLESHEET:
         {
-            RTFReferenceTable::Entries_t const pStyleTableDeduplicated(deduplicateStyleTable());
+            RTFReferenceTable::Entries_t pStyleTableDeduplicated(deduplicateStyleTable());
             writerfilter::Reference<Table>::Pointer_t const pTable(
-                new RTFReferenceTable(pStyleTableDeduplicated));
+                new RTFReferenceTable(std::move(pStyleTableDeduplicated)));
             Mapper().table(NS_ooxml::LN_STYLESHEET, pTable);
         }
         break;
@@ -2260,11 +2260,11 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
         {
             RTFSprms aListTableAttributes;
             writerfilter::Reference<Properties>::Pointer_t pProp
-                = new RTFReferenceProperties(aListTableAttributes, m_aListTableSprms);
+                = new RTFReferenceProperties(std::move(aListTableAttributes), m_aListTableSprms);
             RTFReferenceTable::Entries_t aListTableEntries;
             aListTableEntries.insert(std::make_pair(0, pProp));
             writerfilter::Reference<Table>::Pointer_t const pTable(
-                new RTFReferenceTable(aListTableEntries));
+                new RTFReferenceTable(std::move(aListTableEntries)));
             Mapper().table(NS_ooxml::LN_NUMBERING, pTable);
         }
         break;
@@ -2282,7 +2282,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             if (!m_aStates.top().getCurrentBuffer())
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties
-                    = new RTFReferenceProperties(aFFAttributes, aFFSprms);
+                    = new RTFReferenceProperties(std::move(aFFAttributes), std::move(aFFSprms));
                 Mapper().props(pProperties);
             }
             else
@@ -2738,7 +2738,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             auto pValue = new RTFValue(m_aObjectAttributes, aObjectSprms);
             aObjSprms.set(NS_ooxml::LN_object, pValue);
             writerfilter::Reference<Properties>::Pointer_t pProperties
-                = new RTFReferenceProperties(aObjAttributes, aObjSprms);
+                = new RTFReferenceProperties(std::move(aObjAttributes), std::move(aObjSprms));
             uno::Reference<drawing::XShape> xShape;
             RTFValue::Pointer_t pShape = m_aObjectAttributes.find(NS_ooxml::LN_shape);
             OSL_ASSERT(pShape);
@@ -2768,7 +2768,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             RTFSprms aAnnAttributes;
             aAnnAttributes.set(NS_ooxml::LN_CT_TrackChange_date, pValue);
             writerfilter::Reference<Properties>::Pointer_t pProperties
-                = new RTFReferenceProperties(aAnnAttributes);
+                = new RTFReferenceProperties(std::move(aAnnAttributes));
             Mapper().props(pProperties);
         }
         break;
@@ -2797,10 +2797,10 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeStart, pValue);
             else
                 aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeEnd, pValue);
-            writerfilter::Reference<Properties>::Pointer_t pProperties
-                = new RTFReferenceProperties(aAttributes);
             if (!m_aStates.top().getCurrentBuffer())
             {
+                writerfilter::Reference<Properties>::Pointer_t pProperties
+                    = new RTFReferenceProperties(std::move(aAttributes));
                 Mapper().props(pProperties);
             }
             else
@@ -2818,7 +2818,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
             OUString aStr = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
             RTFSprms aAnnAttributes;
             aAnnAttributes.set(NS_ooxml::LN_CT_Markup_id, new RTFValue(aStr.toInt32()));
-            Mapper().props(new RTFReferenceProperties(aAnnAttributes));
+            Mapper().props(new RTFReferenceProperties(std::move(aAnnAttributes)));
         }
         break;
         case Destination::FALT:
@@ -2930,7 +2930,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 RTFSprms aMathAttributes;
                 aMathAttributes.set(NS_ooxml::LN_starmath, pValue);
                 writerfilter::Reference<Properties>::Pointer_t pProperties
-                    = new RTFReferenceProperties(aMathAttributes);
+                    = new RTFReferenceProperties(std::move(aMathAttributes));
                 Mapper().props(pProperties);
             }
 
@@ -3324,13 +3324,13 @@ void RTFDocumentImpl::afterPopState(RTFParserState& rState)
 
                 // Table
                 RTFSprms aListTableAttributes;
-                writerfilter::Reference<Properties>::Pointer_t pProp
-                    = new RTFReferenceProperties(aListTableAttributes, aListTableSprms);
+                writerfilter::Reference<Properties>::Pointer_t pProp = new RTFReferenceProperties(
+                    std::move(aListTableAttributes), std::move(aListTableSprms));
 
                 RTFReferenceTable::Entries_t aListTableEntries;
                 aListTableEntries.insert(std::make_pair(0, pProp));
                 writerfilter::Reference<Table>::Pointer_t const pTable(
-                    new RTFReferenceTable(aListTableEntries));
+                    new RTFReferenceTable(std::move(aListTableEntries)));
                 Mapper().table(NS_ooxml::LN_NUMBERING, pTable);
 
                 // Use it
@@ -3567,7 +3567,7 @@ RTFError RTFDocumentImpl::popState()
         auto pValue = new RTFValue(0);
         aTCSprms.set(NS_ooxml::LN_endtrackchange, pValue);
         if (!m_aStates.top().getCurrentBuffer())
-            Mapper().props(new RTFReferenceProperties(RTFSprms(), aTCSprms));
+            Mapper().props(new RTFReferenceProperties(RTFSprms(), std::move(aTCSprms)));
         else
             bufferProperties(*m_aStates.top().getCurrentBuffer(),
                              new RTFValue(RTFSprms(), aTCSprms), nullptr);

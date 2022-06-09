@@ -699,7 +699,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage(weld::Container* pPage, weld::Dia
     LanguageTag aLanguageTag( eLastDialogLanguage );
     pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
     pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
-    pCharClass.reset( new CharClass( aLanguageTag ) );
+    pCharClass.reset( new CharClass( std::move(aLanguageTag) ) );
 
     auto nColWidth = m_xReplaceTLB->get_approximate_digit_width() * 32;
     m_aReplaceFixedWidths.push_back(nColWidth);
@@ -904,7 +904,7 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
         LanguageTag aLanguageTag( eLastDialogLanguage );
         pCompareClass.reset( new CollatorWrapper( comphelper::getProcessComponentContext() ) );
         pCompareClass->loadDefaultCollator( aLanguageTag.getLocale(), 0 );
-        pCharClass.reset( new CharClass( aLanguageTag ) );
+        pCharClass.reset( new CharClass( std::move(aLanguageTag) ) );
         ModifyHdl(*m_xShortED);
     }
 }

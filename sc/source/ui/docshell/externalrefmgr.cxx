@@ -872,7 +872,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
             };
             pMat->ExecuteOperation(std::pair<size_t, size_t>(0, 0),
                     std::pair<size_t, size_t>(nRow2-nRow1, nCol2-nCol1),
-                    aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
+                    std::move(aDoubleFunc), std::move(aBoolFunc), std::move(aStringFunc), std::move(aEmptyFunc));
             // Mark the whole range 'cached'.
             pTabData->setCachedCellRange(nCol1, nRow1, nCol2, nRow2);
         }

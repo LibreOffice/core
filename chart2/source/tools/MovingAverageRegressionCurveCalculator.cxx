@@ -62,19 +62,19 @@ void SAL_CALL MovingAverageRegressionCurveCalculator::recalculateRegression(
         case MovingAverageType::Central:
         {
 
-            calculateValuesCentral(aValues);
+            calculateValuesCentral(std::move(aValues));
             break;
         }
 
         case MovingAverageType::AveragedAbscissa:
         {
-            calculateValues(aValues, true);
+            calculateValues(std::move(aValues), true);
             break;
         }
         case MovingAverageType::Prior:
         default:
         {
-            calculateValues(aValues, false);
+            calculateValues(std::move(aValues), false);
             break;
         }
     }

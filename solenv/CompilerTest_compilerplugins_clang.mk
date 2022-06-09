@@ -48,6 +48,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/loopvartoosmall \
     compilerplugins/clang/test/mapindex \
     compilerplugins/clang/test/makeshared \
+    compilerplugins/clang/test/moveit \
     compilerplugins/clang/test/moveparam \
     compilerplugins/clang/test/namespaceindentation \
     compilerplugins/clang/test/noexcept \

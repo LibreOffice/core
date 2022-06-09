@@ -964,7 +964,7 @@ uno::Reference< XSpellAlternatives >
 
             if ( xSpellAlt.is() )   // error found?
             {
-                HandleCorrectionError( aText, aPos, nBegin, nLen, pPt, rSelectRect );
+                HandleCorrectionError( aText, std::move(aPos), nBegin, nLen, pPt, rSelectRect );
             }
         }
     }
@@ -1041,7 +1041,7 @@ bool SwEditShell::GetGrammarCorrection(
 
             if (rResult.aErrors.hasElements())    // error found?
             {
-                HandleCorrectionError( aText, aPos, nBegin, nLen, pPt, rSelectRect );
+                HandleCorrectionError( aText, std::move(aPos), nBegin, nLen, pPt, rSelectRect );
             }
         }
     }

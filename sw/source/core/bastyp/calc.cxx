@@ -235,7 +235,7 @@ SwCalc::SwCalc( SwDoc& rD )
     {
         m_pCharClass = new CharClass( ::comphelper::getProcessComponentContext(), aLanguageTag );
     }
-    m_xLocaleDataWrapper.reset(new LocaleDataWrapper( aLanguageTag ));
+    m_xLocaleDataWrapper.reset(new LocaleDataWrapper( std::move(aLanguageTag) ));
 
     m_sCurrSym = comphelper::string::strip(m_xLocaleDataWrapper->getCurrSymbol(), ' ');
     m_sCurrSym  = m_pCharClass->lowercase( m_sCurrSym );
