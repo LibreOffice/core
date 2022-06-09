@@ -29,6 +29,7 @@
 #include <osl/file.hxx>
 #include <sal/macros.h>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/security/AccessControlException.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -268,8 +269,8 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                 SHFILEINFOW info;
                 if (SHGetFileInfoW(path, 0, &info, sizeof info, SHGFI_EXETYPE) != 0)
                 {
-                    throw css::lang::IllegalArgumentException(
-                        "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {}, 0);
+                    throw css::security::AccessControlException(
+                        "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {}, {});
                 }
                 if (SHGetFileInfoW(path, 0, &info, sizeof info, SHGFI_ATTRIBUTES) == 0)
                 {
@@ -353,9 +354,9 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                               ".PS1XML;.PS2;.PS2XML;.PSC1;.PSC2;.PY;.REG;.SCF;.SCR;.SCT;.SHB;.SYS;"
                               ".VB;.VBE;.VBS;.VXD;.WS;.WSC;.WSF;.WSH;")))
                     {
-                        throw css::lang::IllegalArgumentException(
+                        throw css::security::AccessControlException(
                             "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {},
-                            0);
+                            {});
                     }
                 }
             }

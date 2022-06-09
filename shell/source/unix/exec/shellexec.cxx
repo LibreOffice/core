@@ -27,6 +27,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/security/AccessControlException.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -136,13 +137,17 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
                 auto const e3 = errno;
                 SAL_INFO("shell", "lstat(" << pathname8 << ") failed with errno " << e3);
             }
-            if (e2 == 0 && (S_ISDIR(st.st_mode) || S_ISLNK(st.st_mode))) {
-                dir = true;
-            } else if (e2 != 0 || !S_ISREG(st.st_mode)
-                       || (st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) != 0)
-            {
+            if (e2 != 0) {
                 throw css::lang::IllegalArgumentException(
                     "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {}, 0);
+            } else if (S_ISDIR(st.st_mode) || S_ISLNK(st.st_mode)) {
+                dir = true;
+            } else if ((nFlags & css::system::SystemShellExecuteFlags::URIS_ONLY) != 0
+                       && (!S_ISREG(st.st_mode)
+                           || (st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) != 0))
+            {
+                throw css::security::AccessControlException(
+                    "XSystemShellExecute.execute, bad <" + aCommand + ">", {}, {});
             } else if (pathname.endsWithIgnoreAsciiCase(".class")
                        || pathname.endsWithIgnoreAsciiCase(".dmg")
                        || pathname.endsWithIgnoreAsciiCase(".fileloc")
