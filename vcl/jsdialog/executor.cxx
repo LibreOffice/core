@@ -284,8 +284,9 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
                 else if (sAction == "togglemenu")
                 {
-                    pToolbar->set_menu_item_active(
-                        OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US), true);
+                    OString sId = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                    bool bIsActive = pToolbar->get_menu_item_active(sId);
+                    pToolbar->set_menu_item_active(sId, !bIsActive);
                     return true;
                 }
             }
