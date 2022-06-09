@@ -210,6 +210,7 @@ private:
     Reference< css::drawing::XDrawPage > mxDefaultPage;
     std::vector< Reference< css::drawing::XDrawPage > > mSelectedPages;
     bool                                mbIsPreview;
+    bool                                mbShouldCompress;
 
     bool                                mbWriterFilter;
     bool                                mbCalcFilter;
