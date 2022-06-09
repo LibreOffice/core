@@ -12917,7 +12917,7 @@ then
             AC_MSG_ERROR([No Qt5 WASM QPA plugin found in ${qt5_platformsdir} or ${QT5_PLATFORMS_SRCDIR}])
         fi
 
-        EMSDK_LLVM_NM="$(em-config EMSCRIPTEN_ROOT)"/../bin/llvm-nm
+        EMSDK_LLVM_NM="$(em-config LLVM_ROOT)"/llvm-nm
         if ! test -x "$EMSDK_LLVM_NM"; then
             AC_MSG_ERROR([Missing llvm-nm expected to be found at "$EMSDK_LLVM_NM".])
         fi
