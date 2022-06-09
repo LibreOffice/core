@@ -76,12 +76,9 @@ void SwLabDlg::PageCreated(const OString &rId, SfxTabPage &rPage)
 {
     if (rId == "labels")
     {
-        if (m_bLabel)
-        {
-            static_cast<SwLabPage*>(&rPage)->SetDBManager(pDBManager);
-            static_cast<SwLabPage*>(&rPage)->InitDatabaseBox();
-        }
-        else
+        static_cast<SwLabPage*>(&rPage)->SetDBManager(pDBManager);
+        static_cast<SwLabPage*>(&rPage)->InitDatabaseBox();
+        if (!m_bLabel)
             static_cast<SwLabPage*>(&rPage)->SetToBusinessCard();
     }
     else if (rId == "options")
@@ -137,19 +134,16 @@ SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
 
     AddTabPage("format", SwLabFormatPage::Create, nullptr);
     AddTabPage("options", SwLabPrtPage::Create, nullptr);
+    AddTabPage("labels", SwLabPage::Create, nullptr);
     m_sBusinessCardDlg = SwResId(STR_BUSINESS_CARDS);
 
     if (m_bLabel)
     {
         RemoveTabPage("business");
         RemoveTabPage("private");
-        RemoveTabPage("medium");
-        AddTabPage("labels", SwLabPage::Create, nullptr);
     }
     else
     {
-        RemoveTabPage("labels");
-        AddTabPage("medium", SwLabPage::Create, nullptr);
         AddTabPage("business", SwBusinessDataPage::Create, nullptr );
         AddTabPage("private", SwPrivateDataPage::Create, nullptr);
         m_xDialog->set_title(m_sBusinessCardDlg);
@@ -275,7 +269,6 @@ void SwLabPage::SetToBusinessCard()
     m_xSheetButton->set_help_id(HID_BUSINESS_FMT_PAGE_SHEET);
     m_xMakeBox->set_help_id(HID_BUSINESS_FMT_PAGE_BRAND);
     m_xTypeBox->set_help_id(HID_BUSINESS_FMT_PAGE_TYPE);
-    m_xAddressFrame->hide();
 };
 
 IMPL_LINK_NOARG(SwLabPage, AddrHdl, weld::Toggleable&, void)
