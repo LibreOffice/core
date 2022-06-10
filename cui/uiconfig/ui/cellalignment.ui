@@ -129,7 +129,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="checkVertStack-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|checkVertStack">Aligns text vertically.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="cellalignment|extended_tip|checkVertStack">Text direction vertically.</property>
                       </object>
                     </child>
                   </object>
