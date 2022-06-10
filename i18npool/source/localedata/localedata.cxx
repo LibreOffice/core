@@ -80,6 +80,7 @@ const struct {
     { "en_NG",  lcl_DATA_EN },
     { "en_KE",  lcl_DATA_EN },
     { "en_DK",  lcl_DATA_EN },
+    { "en_MU",  lcl_DATA_EN },
 
     { "es_ES",  lcl_DATA_ES },
     { "es_AR",  lcl_DATA_ES },
