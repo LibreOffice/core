@@ -48,10 +48,10 @@ void XAccessibleComponentTester::testBounds()
     auto bounds = mxComponent->getBounds();
     std::cout << "bounds: " << bounds.Width << "x" << bounds.Height << std::showpos << bounds.X
               << bounds.Y << std::noshowpos << std::endl;
-    CPPUNIT_ASSERT_GREATEREQUAL(0, bounds.X);
-    CPPUNIT_ASSERT_GREATEREQUAL(0, bounds.Y);
-    CPPUNIT_ASSERT_GREATER(0, bounds.Width);
-    CPPUNIT_ASSERT_GREATER(0, bounds.Height);
+    CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int16>(0), bounds.X);
+    CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int16>(0), bounds.Y);
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int16>(0), bounds.Width);
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int16>(0), bounds.Height);
 }
 
 /**
