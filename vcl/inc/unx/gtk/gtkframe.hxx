@@ -506,7 +506,6 @@ public:
     virtual void                SetIcon( sal_uInt16 nIcon ) override;
     virtual void                SetMenu( SalMenu *pSalMenu ) override;
     SalMenu*                    GetMenu();
-    virtual void                DrawMenuBar() override;
     void                        EnsureAppMenuWatch();
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle ) override;

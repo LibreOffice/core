@@ -1586,10 +1586,6 @@ LanguageType AquaSalFrame::GetInputLanguage()
     return LANGUAGE_DONTKNOW;
 }
 
-void AquaSalFrame::DrawMenuBar()
-{
-}
-
 void AquaSalFrame::SetMenu( SalMenu* pSalMenu )
 {
     OSX_SALDATA_RUNINMAIN( SetMenu( pSalMenu ) )

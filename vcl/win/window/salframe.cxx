@@ -1110,11 +1110,6 @@ void WinSalFrame::SetMenu( SalMenu* pSalMenu )
         ::SetMenu( mhWnd, pWMenu->mhMenu );
 }
 
-void WinSalFrame::DrawMenuBar()
-{
-    ::DrawMenuBar( mhWnd );
-}
-
 static HWND ImplGetParentHwnd( HWND hWnd )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );

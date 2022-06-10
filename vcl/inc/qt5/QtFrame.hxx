@@ -160,7 +160,6 @@ public:
     virtual void SetTitle(const OUString& rTitle) override;
     virtual void SetIcon(sal_uInt16 nIcon) override;
     virtual void SetMenu(SalMenu* pMenu) override;
-    virtual void DrawMenuBar() override;
 
     virtual void registerDragSource(QtDragSource* pDragSource);
     virtual void deregisterDragSource(QtDragSource const* pDragSource);
