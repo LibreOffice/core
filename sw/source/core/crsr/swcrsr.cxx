@@ -2434,7 +2434,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
         // compare old and new ones
         SwNodes& rNds = pCurrentCursor->GetDoc().GetNodes();
         const SwStartNode* pSttNd;
-        SwPaM* pCur = pCurrentCursor;
+        SwCursor* pCur = pCurrentCursor;
         do {
             size_t nPos;
             bool bDel = false;
@@ -2473,7 +2473,9 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
             pCur = pCur->GetNext();
             if( bDel )
             {
-                SwPaM* pDel = pCur->GetPrev();
+                SwCursor* pDel = pCur->GetPrev();
+                if (pDel == pCurrentCursor)
+                    pCurrentCursor = pDel->GetPrev();
 
                 if( pDel == pCurrentCursor )
                     pCurrentCursor->DeleteMark();
