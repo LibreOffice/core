@@ -228,7 +228,7 @@
                             </child>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="dicts-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaoptdialog|extended_tip|dicts">Lists all user-defined dictionaries. Select the check box next to the dictionary that you want to use. Clear the check box next to the dictionary that you do not want to use.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="hangulhanjaoptdialog|extended_tip|dicts">Lists all user-defined dictionaries. Select the check box next to the dictionaries that you want to use. Clear the check box next to the dictionaries that you do not want to use.</property>
                               </object>
                             </child>
                           </object>
