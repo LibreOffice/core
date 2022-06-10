@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_XModuleUIConfigurationManager_idl__
-#define __com_sun_star_ui_XModuleUIConfigurationManager_idl__
-
-#include <com/sun/star/container/XIndexContainer.idl>
-#include <com/sun/star/container/XIndexAccess.idl>
-#include <com/sun/star/container/NoSuchElementException.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/lang/IllegalAccessException.idl>
-
 module com { module sun { module star { module ui {
 
 /** specifies specific functions of a module based user interface
@@ -86,7 +77,5 @@ interface XModuleUIConfigurationManager : ::com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

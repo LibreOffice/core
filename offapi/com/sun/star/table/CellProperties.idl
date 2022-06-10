@@ -17,22 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_table_CellProperties_idl__
-#define __com_sun_star_table_CellProperties_idl__
-
-#include <com/sun/star/util/Color.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/table/ShadowFormat.idl>
-#include <com/sun/star/table/CellHoriJustify.idl>
-#include <com/sun/star/table/CellVertJustify.idl>
-#include <com/sun/star/table/CellOrientation.idl>
-#include <com/sun/star/util/CellProtection.idl>
-#include <com/sun/star/table/TableBorder.idl>
-#include <com/sun/star/table/TableBorder2.idl>
-#include <com/sun/star/table/BorderLine.idl>
-#include <com/sun/star/table/BorderLine2.idl>
-#include <com/sun/star/container/XNameContainer.idl>
-
 
 module com {  module sun {  module star {  module table {
 
@@ -277,7 +261,5 @@ published service CellProperties
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

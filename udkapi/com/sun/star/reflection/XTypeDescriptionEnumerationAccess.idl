@@ -17,16 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_reflection_XTypeDescriptionEnumerationAccess_idl__
-#define __com_sun_star_reflection_XTypeDescriptionEnumerationAccess_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/uno/TypeClass.idl>
-#include <com/sun/star/reflection/XTypeDescriptionEnumeration.idl>
-#include <com/sun/star/reflection/TypeDescriptionSearchDepth.idl>
-#include <com/sun/star/reflection/NoSuchTypeNameException.idl>
-#include <com/sun/star/reflection/InvalidTypeNameException.idl>
-
 
  module com {  module sun {  module star {  module reflection {
 
@@ -158,7 +148,5 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

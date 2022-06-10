@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_ConfigurationEvent_idl__
-#define __com_sun_star_ui_ConfigurationEvent_idl__
-
-#include <com/sun/star/container/ContainerEvent.idl>
-
 module com { module sun { module star { module ui {
 
 /** this event is broadcasted by a configuration manager whenever the state of
@@ -44,7 +39,5 @@ published struct ConfigurationEvent : ::com::sun::star::container::ContainerEven
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

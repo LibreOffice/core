@@ -17,18 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_TextRangeContentProperties_idl__
-#define __com_sun_star_text_TextRangeContentProperties_idl__
-
-#include <com/sun/star/table/XCell.idl>
-#include <com/sun/star/text/XTextContent.idl>
-#include <com/sun/star/text/XDocumentIndex.idl>
-#include <com/sun/star/text/XTextTable.idl>
-#include <com/sun/star/text/XTextFrame.idl>
-#include <com/sun/star/text/XTextSection.idl>
-#include <com/sun/star/text/XDocumentIndexMark.idl>
-#include <com/sun/star/text/XFootnote.idl>
-
 
 
 module com {  module sun {  module star {  module text {
@@ -91,7 +79,5 @@ service TextRangeContentProperties
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_security_XCertificate_idl_
-#define __com_sun_star_security_XCertificate_idl_
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/util/DateTime.idl>
-#include <com/sun/star/security/XCertificateExtension.idl>
-#include <com/sun/star/security/CertificateKind.idl>
-
 module com { module sun { module star { module security {
 
 /**
@@ -131,7 +123,5 @@ interface XCertificate : com::sun::star::uno::XInterface
 } ;
 
 } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

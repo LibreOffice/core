@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _com_sun_star_deployment_ui_PackageManagerDialog_idl
-#define _com_sun_star_deployment_ui_PackageManagerDialog_idl
-
-#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.idl>
-#include <com/sun/star/awt/XWindow.idl>
-
 
 module com { module sun { module star { module deployment { module ui {
 
@@ -62,7 +56,5 @@ service PackageManagerDialog : com::sun::star::ui::dialogs::XAsynchronousExecuta
 };
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

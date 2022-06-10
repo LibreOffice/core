@@ -17,17 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _com_sun_star_presentation_SlideShow_idl
-#define _com_sun_star_presentation_SlideShow_idl
-
-#include <com/sun/star/presentation/XSlideShow.idl>
-
 module com {  module sun {  module star {  module presentation {
 
 service SlideShow : XSlideShow;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

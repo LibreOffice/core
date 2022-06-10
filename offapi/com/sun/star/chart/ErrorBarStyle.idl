@@ -16,8 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef com_sun_star_chart_ErrorBarStyle_idl
-#define com_sun_star_chart_ErrorBarStyle_idl
 
 module com {  module sun {  module star {  module chart {
 
@@ -85,7 +83,5 @@ published constants ErrorBarStyle
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

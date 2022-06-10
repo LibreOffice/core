@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_datatransfer_dnd_XDragSourceListener_idl__
-#define __com_sun_star_datatransfer_dnd_XDragSourceListener_idl__
-
-#include <com/sun/star/datatransfer/dnd/DragSourceDragEvent.idl>
-#include <com/sun/star/datatransfer/dnd/DragSourceDropEvent.idl>
-#include <com/sun/star/lang/XEventListener.idl>
-
 
 module com { module sun { module star { module datatransfer { module dnd {
 
@@ -86,7 +79,5 @@ published interface XDragSourceListener: com::sun::star::lang::XEventListener
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

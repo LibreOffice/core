@@ -16,10 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_ucb_ResultSetException_idl__
-#define __com_sun_star_ucb_ResultSetException_idl__
-
-#include <com/sun/star/sdbc/SQLException.idl>
 
 
 
@@ -36,7 +32,5 @@ published exception ResultSetException: com::sun::star::sdbc::SQLException
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

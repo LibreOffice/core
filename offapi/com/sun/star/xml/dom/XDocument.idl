@@ -17,19 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_dom_XDocument_idl__
-#define __com_sun_star_xml_dom_XDocument_idl__
-
-#include <com/sun/star/xml/dom/XNode.idl>
-#include <com/sun/star/xml/dom/XAttr.idl>
-#include <com/sun/star/xml/dom/XCDATASection.idl>
-#include <com/sun/star/xml/dom/XComment.idl>
-#include <com/sun/star/xml/dom/XDocumentFragment.idl>
-#include <com/sun/star/xml/dom/XEntityReference.idl>
-#include <com/sun/star/xml/dom/XProcessingInstruction.idl>
-#include <com/sun/star/xml/dom/XDocumentType.idl>
-#include <com/sun/star/xml/dom/XDOMImplementation.idl>
-
 module com { module sun { module star { module xml { module dom {
 
 interface XDocument: XNode
@@ -165,7 +152,5 @@ interface XDocument: XNode
     XNode importNode([in] XNode importedNode, [in] boolean deep) raises (DOMException);
 };
 };};};};};
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

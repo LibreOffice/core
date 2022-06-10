@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_document_XDocumentRecovery_idl__
-#define __com_sun_star_document_XDocumentRecovery_idl__
-
-#include <com/sun/star/beans/PropertyValue.idl>
-#include <com/sun/star/io/IOException.idl>
-#include <com/sun/star/lang/WrappedTargetException.idl>
-
 
 module com { module sun { module star { module document {
 
@@ -113,7 +106,5 @@ interface XDocumentRecovery
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

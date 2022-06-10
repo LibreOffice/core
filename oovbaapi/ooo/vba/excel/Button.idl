@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba_excel_Button_idl__
-#define __ooo_vba_excel_Button_idl__
-
-#include <ooo/vba/excel/XSheetObject.idl>
-#include <ooo/vba/excel/XControlObject.idl>
-#include <ooo/vba/excel/XButton.idl>
-
 
 
 /*  Note: This file collects all compatibility interfaces for drawing objects
@@ -49,7 +42,5 @@ service Button
 
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_DataPilotDescriptor_idl__
-#define __com_sun_star_sheet_DataPilotDescriptor_idl__
-
-#include <com/sun/star/sheet/XDataPilotDescriptor.idl>
-#include <com/sun/star/sheet/XDataPilotDataLayoutFieldSupplier.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/beans/PropertyValue.idl>
-
 
 module com { module sun { module star { module sheet {
 
@@ -120,7 +112,5 @@ published service DataPilotDescriptor
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

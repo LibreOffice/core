@@ -17,18 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_accessibility_XAccessibleExtendedComponent_idl__
-#define __com_sun_star_accessibility_XAccessibleExtendedComponent_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/awt/XFocusListener.idl>
-#include <com/sun/star/awt/XFont.idl>
-#include <com/sun/star/awt/FontDescriptor.idl>
-#include <com/sun/star/awt/Point.idl>
-#include <com/sun/star/awt/Rectangle.idl>
-#include <com/sun/star/awt/Size.idl>
-#include <com/sun/star/accessibility/XAccessibleComponent.idl>
-
 module com { module sun { module star { module accessibility {
 
 /** The XAccessibleExtendedComponent interface contains
@@ -81,7 +69,5 @@ interface XAccessibleExtendedComponent : XAccessibleComponent
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

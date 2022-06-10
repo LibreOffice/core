@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_table_BorderLine_idl__
-#define __com_sun_star_table_BorderLine_idl__
-
-#include <com/sun/star/util/Color.idl>
-
 
 module com {  module sun {  module star {  module table {
 
@@ -59,7 +54,5 @@ published struct BorderLine
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

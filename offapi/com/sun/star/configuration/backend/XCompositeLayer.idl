@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_configuration_backend_XCompositeLayer_idl__
-#define __com_sun_star_configuration_backend_XCompositeLayer_idl__
-
-#include <com/sun/star/configuration/backend/XLayer.idl>
-#include <com/sun/star/lang/NullPointerException.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#include <com/sun/star/configuration/backend/MalformedDataException.idl>
-
 
 module com { module sun { module star { module configuration { module backend {
 
@@ -87,6 +78,5 @@ published interface XCompositeLayer : XLayer
 
 
 } ; } ; } ; } ; } ;
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

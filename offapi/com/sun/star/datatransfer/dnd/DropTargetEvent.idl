@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_datatransfer_dnd_DropTargetEvent_idl__
-#define __com_sun_star_datatransfer_dnd_DropTargetEvent_idl__
-
-#include <com/sun/star/lang/EventObject.idl>
-
 
 module com { module sun { module star { module datatransfer { module dnd {
 
@@ -43,7 +38,5 @@ published struct DropTargetEvent: com::sun::star::lang::EventObject
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_reflection_XConstantTypeDescription_idl__
-#define __com_sun_star_reflection_XConstantTypeDescription_idl__
-
-#include <com/sun/star/reflection/XTypeDescription.idl>
-
 
  module com {  module sun {  module star {  module reflection {
 
@@ -63,7 +58,5 @@ published interface XConstantTypeDescription : com::sun::star::reflection::XType
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

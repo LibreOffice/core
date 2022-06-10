@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_chart2_XFormattedString2_idl
-#define com_sun_star_chart2_XFormattedString2_idl
-
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/style/CharacterProperties.idl>
-#include <com/sun/star/style/CharacterPropertiesAsian.idl>
-#include <com/sun/star/style/CharacterPropertiesComplex.idl>
-#include <com/sun/star/chart2/XFormattedString.idl>
-
 module com { module sun { module star { module chart2 {
 
 /**
@@ -49,7 +40,5 @@ interface XFormattedString2
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

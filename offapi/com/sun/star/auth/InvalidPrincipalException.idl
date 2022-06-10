@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_auth_InvalidPrincipalException_idl__
-#define __com_sun_star_auth_InvalidPrincipalException_idl__
-
-#include <com/sun/star/uno/Exception.idl>
-
 module com { module sun { module star { module auth {
 
 /** indicates an invalid principal was specified.
@@ -34,7 +29,5 @@ published exception InvalidPrincipalException : ::com::sun::star::uno::Exception
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

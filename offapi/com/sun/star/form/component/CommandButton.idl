@@ -16,15 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_form_component_CommandButton_idl__
-#define __com_sun_star_form_component_CommandButton_idl__
-
-#include <com/sun/star/form/FormControlModel.idl>
-#include <com/sun/star/awt/UnoControlButtonModel.idl>
-#include <com/sun/star/form/XImageProducerSupplier.idl>
-#include <com/sun/star/form/XApproveActionBroadcaster.idl>
-#include <com/sun/star/form/FormButtonType.idl>
-#include <com/sun/star/form/XReset.idl>
 
 
 
@@ -100,7 +91,5 @@ published service CommandButton
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

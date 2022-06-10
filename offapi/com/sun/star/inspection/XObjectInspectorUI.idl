@@ -16,13 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_inspection_XObjectInspectorUI_idl__
-#define __com_sun_star_inspection_XObjectInspectorUI_idl__
-
-#include <com/sun/star/inspection/XPropertyControl.idl>
-#include <com/sun/star/beans/Optional.idl>
-#include <com/sun/star/container/NoSuchElementException.idl>
-#include <com/sun/star/lang/NoSupportException.idl>
 
 module com {  module sun {  module star {  module inspection {
 
@@ -163,7 +156,5 @@ interface XObjectInspectorUI
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

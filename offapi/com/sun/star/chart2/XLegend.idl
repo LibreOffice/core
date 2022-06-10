@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_chart2_XLegend_idl
-#define com_sun_star_chart2_XLegend_idl
-
-#include <com/sun/star/uno/XInterface.idl>
-
 module com
 {
 module sun
@@ -41,7 +36,5 @@ interface XLegend : ::com::sun::star::uno::XInterface
 } ; // com
 } ; // sun
 } ; // star
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_framework_XPaneBorderPainter_idl__
-#define __com_sun_star_drawing_framework_XPaneBorderPainter_idl__
-
-#include <com/sun/star/awt/Rectangle.idl>
-#include <com/sun/star/awt/Point.idl>
-#include <com/sun/star/rendering/XCanvas.idl>
-#include <com/sun/star/drawing/framework/BorderType.idl>
-
 module com { module sun { module star { module drawing { module framework {
 
 /** Paint the border around a rectangular region, typically a pane.
@@ -146,7 +138,5 @@ interface XPaneBorderPainter
 };
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

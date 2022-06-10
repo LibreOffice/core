@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_graphic_Graphic_idl
-#define com_sun_star_graphic_Graphic_idl
-
-#include <com/sun/star/graphic/XGraphic.idl>
-#include <com/sun/star/graphic/GraphicDescriptor.idl>
-
 module com { module sun { module star { module graphic
 {
 
@@ -50,7 +44,5 @@ published service Graphic
 };
 
 } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

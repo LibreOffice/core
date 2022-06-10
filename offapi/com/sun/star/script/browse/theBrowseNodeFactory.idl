@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_script_browse_theBrowseNodeFactory_idl__
-#define __com_sun_star_script_browse_theBrowseNodeFactory_idl__
-
-#include <com/sun/star/script/browse/XBrowseNodeFactory.idl>
-
 module com { module sun { module star { module script { module browse {
 
 /**
@@ -37,7 +32,5 @@ module com { module sun { module star { module script { module browse {
 singleton theBrowseNodeFactory : XBrowseNodeFactory;
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

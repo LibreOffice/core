@@ -7,11 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef com_sun_star_graphic_PdfTools_idl
-#define com_sun_star_graphic_PdfTools_idl
-
-#include <com/sun/star/graphic/XPdfDecomposer.idl>
-
 module com { module sun { module star { module graphic
 {
 
@@ -23,7 +18,5 @@ module com { module sun { module star { module graphic
 service PdfTools : XPdfDecomposer;
 
 } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

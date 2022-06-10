@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_script_browse_XBrowseNodeFactory_idl__
-#define __com_sun_star_script_browse_XBrowseNodeFactory_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/script/browse/XBrowseNode.idl>
-#include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.idl>
-
 
 module com { module sun { module star { module script { module browse {
 
@@ -44,7 +37,5 @@ interface XBrowseNodeFactory : ::com::sun::star::uno::XInterface {
 };
 
 }; }; }; }; }; // com::sun::star::script::provider
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

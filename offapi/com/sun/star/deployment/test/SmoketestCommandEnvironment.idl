@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _com_sun_star_deployment_test_SmoketestCommandEnvironment_idl_
-#define _com_sun_star_deployment_test_SmoketestCommandEnvironment_idl_
 
-
-#include <com/sun/star/ucb/XCommandEnvironment.idl>
 
 
 module com { module sun { module star { module deployment { module test {
@@ -31,7 +27,5 @@ module com { module sun { module star { module deployment { module test {
  */
         service SmoketestCommandEnvironment: ::com::sun::star::ucb::XCommandEnvironment;
 };};};};};
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

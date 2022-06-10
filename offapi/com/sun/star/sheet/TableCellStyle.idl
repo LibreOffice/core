@@ -17,16 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_TableCellStyle_idl__
-#define __com_sun_star_sheet_TableCellStyle_idl__
-
-#include <com/sun/star/table/CellProperties.idl>
-#include <com/sun/star/style/CellStyle.idl>
-#include <com/sun/star/style/CharacterProperties.idl>
-#include <com/sun/star/style/CharacterPropertiesAsian.idl>
-#include <com/sun/star/style/CharacterPropertiesComplex.idl>
-#include <com/sun/star/style/ParagraphProperties.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -73,7 +63,5 @@ published service TableCellStyle
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

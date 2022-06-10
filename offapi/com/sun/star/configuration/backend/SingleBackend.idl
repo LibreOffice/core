@@ -16,12 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_configuration_backend_SingleBackend_idl__
-#define __com_sun_star_configuration_backend_SingleBackend_idl__
-
-#include <com/sun/star/configuration/backend/XBackendEntities.idl>
-#include <com/sun/star/configuration/backend/XSchemaSupplier.idl>
-#include <com/sun/star/configuration/backend/XMultiLayerStratum.idl>
 
 
 module com { module sun { module star { module configuration { module backend {
@@ -74,7 +68,5 @@ published service SingleBackend
 
 
 } ; } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

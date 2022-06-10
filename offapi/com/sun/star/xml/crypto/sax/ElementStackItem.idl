@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_crypto_sax_ElementStackItem_idl_
-#define __com_sun_star_xml_crypto_sax_ElementStackItem_idl_
-
-#include <com/sun/star/xml/sax/XAttributeList.idl>
-
 module com { module sun { module star { module xml { module crypto { module sax {
 
 /**
@@ -46,7 +41,5 @@ struct ElementStackItem
 };
 
 } ; } ; } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

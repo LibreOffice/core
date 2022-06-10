@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba_excel_XStyle_idl__
-#define __ooo_vba_excel_XStyle_idl__
-
-#include <com/sun/star/script/BasicErrorException.idl>
-#include <ooo/vba/XHelperInterface.idl>
-#include <ooo/vba/excel/XFormat.idl>
-
 module ooo {  module vba { module excel {
 interface XStyle
 {
@@ -79,7 +72,5 @@ interface XStyle
 };
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

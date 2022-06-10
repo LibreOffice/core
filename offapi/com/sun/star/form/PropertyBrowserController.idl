@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_PropertyBrowserController_idl__
-#define __com_sun_star_form_PropertyBrowserController_idl__
-
-#include <com/sun/star/frame/XController.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/beans/XFastPropertySet.idl>
-#include <com/sun/star/beans/XMultiPropertySet.idl>
-
 
  module com {  module sun {  module star {  module form {
 
@@ -120,7 +112,5 @@ published service PropertyBrowserController
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

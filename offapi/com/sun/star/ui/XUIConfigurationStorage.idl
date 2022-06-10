@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_XUIConfigurationStorage_idl__
-#define __com_sun_star_ui_XUIConfigurationStorage_idl__
-
-#include <com/sun/star/embed/XStorage.idl>
-
 
 module com { module sun { module star { module ui {
 
@@ -69,7 +64,5 @@ published interface XUIConfigurationStorage : ::com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

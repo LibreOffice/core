@@ -17,34 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_SpreadsheetDocument_idl__
-#define __com_sun_star_sheet_SpreadsheetDocument_idl__
-
-#include <com/sun/star/document/OfficeDocument.idl>
-#include <com/sun/star/sheet/SpreadsheetDocumentSettings.idl>
 
 
-#include <com/sun/star/lang/XMultiServiceFactory.idl>
-#include <com/sun/star/frame/XModel.idl>
-#include <com/sun/star/document/XActionLockable.idl>
-#include <com/sun/star/document/XLinkTargetSupplier.idl>
-#include <com/sun/star/util/XProtectable.idl>
-#include <com/sun/star/sheet/XSpreadsheetDocument.idl>
-#include <com/sun/star/sheet/XCalculatable.idl>
-#include <com/sun/star/sheet/XDocumentAuditing.idl>
-#include <com/sun/star/sheet/XConsolidatable.idl>
-#include <com/sun/star/sheet/XGoalSeek.idl>
-#include <com/sun/star/drawing/XDrawPagesSupplier.idl>
-#include <com/sun/star/style/XStyleFamiliesSupplier.idl>
-#include <com/sun/star/util/XNumberFormatsSupplier.idl>
-
-
-#include <com/sun/star/sheet/XNamedRanges.idl>
-#include <com/sun/star/sheet/XDatabaseRanges.idl>
-#include <com/sun/star/sheet/XLabelRanges.idl>
-#include <com/sun/star/container/XNameAccess.idl>
-#include <com/sun/star/sheet/XAreaLinks.idl>
-#include <com/sun/star/sheet/XExternalDocLinks.idl>
 
 
 module com {  module sun {  module star {  module sheet {
@@ -186,7 +160,5 @@ published service SpreadsheetDocument
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_textfield_PageNumber_idl__
-#define __com_sun_star_text_textfield_PageNumber_idl__
-
-#include <com/sun/star/text/TextField.idl>
-#include <com/sun/star/text/PageNumberType.idl>
-
 
 module com { module sun { module star { module text { module textfield {
 
@@ -54,7 +48,5 @@ published service PageNumber
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

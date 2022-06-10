@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_theUIElementFactoryManager_idl__
-#define __com_sun_star_ui_theUIElementFactoryManager_idl__
-
-#include <com/sun/star/ui/XUIElementFactoryManager.idl>
-
 
 module com { module sun { module star { module ui {
 
@@ -38,7 +33,5 @@ module com { module sun { module star { module ui {
 singleton theUIElementFactoryManager : XUIElementFactoryManager;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

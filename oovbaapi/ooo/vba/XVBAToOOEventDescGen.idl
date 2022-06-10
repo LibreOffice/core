@@ -16,11 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __ooo_vba_XVBAToOOEventDescGen_idl__
-#define __ooo_vba_XVBAToOOEventDescGen_idl__
-
-#include <com/sun/star/script/ScriptEventDescriptor.idl>
-#include <com/sun/star/script/XScriptEventsSupplier.idl>
 
 module ooo {  module vba {
 interface XVBAToOOEventDescGen : com::sun::star::uno::XInterface
@@ -30,6 +25,5 @@ interface XVBAToOOEventDescGen : com::sun::star::uno::XInterface
 };
 
 }; };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

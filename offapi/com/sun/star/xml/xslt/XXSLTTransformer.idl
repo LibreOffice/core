@@ -7,14 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __COM_SUN_STAR_XML_XSLT_XXSLTTRANSFORMER_IDL__
-#define __COM_SUN_STAR_XML_XSLT_XXSLTTRANSFORMER_IDL__
-
-#include <com/sun/star/io/XActiveDataControl.idl>
-#include <com/sun/star/io/XActiveDataSink.idl>
-#include <com/sun/star/io/XActiveDataSource.idl>
-#include <com/sun/star/lang/XInitialization.idl>
-
 module com { module sun { module star { module xml { module xslt {
 
 /** An interface for XSLT transformers.
@@ -30,7 +22,5 @@ interface XXSLTTransformer
 };
 
 }; }; }; }; };
-
-#endif // INCLUDED_COM_SUN_STAR_XML_XSLT_XXSLTTRANSFORMER_IDL
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba_excel_Hyperlink_idl__
-#define __ooo_vba_excel_Hyperlink_idl__
-
-#include <ooo/vba/excel/XHyperlink.idl>
-#include <com/sun/star/uno/XComponentContext.idl>
-#include <com/sun/star/frame/XModel.idl>
-
 module ooo {  module vba { module excel {
 service Hyperlink : XHyperlink
 {
@@ -31,7 +24,5 @@ service Hyperlink : XHyperlink
 };
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

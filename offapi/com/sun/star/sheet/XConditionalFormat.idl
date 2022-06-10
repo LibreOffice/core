@@ -7,12 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_sheet_XConditionalFormat_idl__
-#define __com_sun_star_sheet_XConditionalFormat_idl__
-
-#include <com/sun/star/container/XIndexAccess.idl>
-#include <com/sun/star/sheet/XConditionEntry.idl>
-
 module com { module sun { module star { module sheet {
 
 interface XConditionalFormat : com::sun::star::container::XIndexAccess
@@ -33,7 +27,5 @@ interface XConditionalFormat : com::sun::star::container::XIndexAccess
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

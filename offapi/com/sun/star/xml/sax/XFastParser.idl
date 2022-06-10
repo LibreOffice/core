@@ -16,32 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_xml_sax_XFastParser_idl__
-#define __com_sun_star_xml_sax_XFastParser_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-#include <com/sun/star/xml/sax/InputSource.idl>
-
-#include <com/sun/star/xml/sax/SAXException.idl>
-
-#include <com/sun/star/io/IOException.idl>
-
-#include <com/sun/star/xml/sax/XFastDocumentHandler.idl>
-#include <com/sun/star/xml/sax/XFastTokenHandler.idl>
-#include <com/sun/star/xml/sax/XErrorHandler.idl>
-
-#include <com/sun/star/xml/sax/XDTDHandler.idl>
-
-#include <com/sun/star/xml/sax/XEntityResolver.idl>
-
-#include <com/sun/star/lang/Locale.idl>
-
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
-#include <com/sum/star/xml/sax/XFastNamespaceHandler.idl>
-
-#include <com/sun/star/beans/Pair.idl>
 
 
 module com {  module sun {  module star {  module xml {  module sax {
@@ -170,7 +144,5 @@ interface XFastParser: com::sun::star::uno::XInterface
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_Spreadsheets_idl__
-#define __com_sun_star_sheet_Spreadsheets_idl__
-
-#include <com/sun/star/sheet/XSpreadsheets.idl>
-#include <com/sun/star/container/XIndexAccess.idl>
-#include <com/sun/star/container/XEnumerationAccess.idl>
-#include <com/sun/star/sheet/XCellRangesAccess.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -64,7 +56,5 @@ published service Spreadsheets
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

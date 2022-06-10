@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_auth_InvalidContextException_idl__
-#define __com_sun_star_auth_InvalidContextException_idl__
-
-#include <com/sun/star/uno/Exception.idl>
-
 module com { module sun { module star { module auth {
 
 /** indicates an attempt was made to use an invalid source or target context.
@@ -33,7 +28,5 @@ published exception InvalidContextException : ::com::sun::star::uno::Exception
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

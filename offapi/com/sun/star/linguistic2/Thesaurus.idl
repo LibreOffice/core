@@ -16,12 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_linguistic2_Thesaurus_idl__
-#define __com_sun_star_linguistic2_Thesaurus_idl__
-
-#include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/XServiceDisplayName.idl>
 
 
 module com { module sun { module star { module linguistic2 {
@@ -40,7 +34,5 @@ published service Thesaurus
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

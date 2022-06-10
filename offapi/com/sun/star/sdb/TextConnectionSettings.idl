@@ -18,11 +18,6 @@
  */
 
 
-#ifndef __com_sun_star_sdb_TextConnectionSettings_idl__
-#define __com_sun_star_sdb_TextConnectionSettings_idl__
-
-#include <com/sun/star/sdb/XTextConnectionSettings.idl>
-
 module com {  module sun {  module star {  module sdb {
 
 /**
@@ -32,7 +27,5 @@ service TextConnectionSettings : XTextConnectionSettings;
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

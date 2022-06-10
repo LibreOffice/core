@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_table_CellVertJustify_idl__
-#define __com_sun_star_table_CellVertJustify_idl__
-
 
 module com {  module sun {  module star {  module table {
 
@@ -52,7 +49,5 @@ published enum CellVertJustify
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_mail_SendMailMessageFailedException_idl__
-#define __com_sun_star_mail_SendMailMessageFailedException_idl__
-
-#include <com/sun/star/mail/MailException.idl>
-
 module com { module sun { module star { module mail {
 
 /**
@@ -54,7 +49,5 @@ exception SendMailMessageFailedException: com::sun::star::mail::MailException
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

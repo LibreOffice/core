@@ -16,10 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_form_XDatabaseParameterBroadcaster2_idl__
-#define __com_sun_star_form_XDatabaseParameterBroadcaster2_idl__
-
-#include <com/sun/star/form/XDatabaseParameterBroadcaster.idl>
 
 
 module com {  module sun {  module star {  module form {
@@ -57,7 +53,5 @@ interface XDatabaseParameterBroadcaster2: XDatabaseParameterBroadcaster
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

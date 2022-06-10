@@ -17,25 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_runtime_XFormController_idl__
-#define __com_sun_star_form_runtime_XFormController_idl__
-
-#include <com/sun/star/awt/XTabController.idl>
-#include <com/sun/star/container/XChild.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/container/XIndexAccess.idl>
-#include <com/sun/star/container/XEnumerationAccess.idl>
-#include <com/sun/star/util/XModifyBroadcaster.idl>
-#include <com/sun/star/util/XModeSelector.idl>
-#include <com/sun/star/form/XConfirmDeleteBroadcaster.idl>
-#include <com/sun/star/sdb/XSQLErrorBroadcaster.idl>
-#include <com/sun/star/sdb/XRowSetApproveBroadcaster.idl>
-#include <com/sun/star/form/XDatabaseParameterBroadcaster2.idl>
-#include <com/sun/star/form/XFormControllerListener.idl>
-#include <com/sun/star/task/XInteractionHandler.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/form/runtime/XFilterController.idl>
-
 
 module com { module sun { module star { module form { module runtime {
 
@@ -358,7 +339,5 @@ interface XFormController
 
 }; }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

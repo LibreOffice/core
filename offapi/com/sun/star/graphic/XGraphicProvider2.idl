@@ -7,11 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef com_sun_star_graphic_XGraphicProvider2_idl
-#define com_sun_star_graphic_XGraphicProvider2_idl
-
-#include <com/sun/star/graphic/XGraphicProvider.idl>
-
 module com { module sun { module star { module graphic
 {
 
@@ -41,7 +36,5 @@ interface XGraphicProvider2 : XGraphicProvider
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

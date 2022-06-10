@@ -16,12 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_sdb_Table_idl__
-#define __com_sun_star_sdb_Table_idl__
-
-#include <com/sun/star/sdbcx/Table.idl>
-
-#include <com/sun/star/sdb/DataSettings.idl>
 
  module com {  module sun {  module star {  module sdb {
 
@@ -48,7 +42,5 @@ published service Table
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

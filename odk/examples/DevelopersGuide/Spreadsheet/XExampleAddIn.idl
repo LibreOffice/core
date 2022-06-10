@@ -33,12 +33,6 @@
  *
  *************************************************************************/
 
-#ifndef _ORG_OPENOFFICE_SHEET_ADDIN_XEXAMPLEADDIN_IDL_
-#define _ORG_OPENOFFICE_SHEET_ADDIN_XEXAMPLEADDIN_IDL_
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/sheet/XVolatileResult.idl>
-
 module org {
     module openoffice {
         module sheet {
@@ -56,7 +50,5 @@ module org {
         };
     };
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

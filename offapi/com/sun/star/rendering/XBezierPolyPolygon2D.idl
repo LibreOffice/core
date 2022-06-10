@@ -16,13 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_rendering_XBezierPolyPolygon2D_idl__
-#define __com_sun_star_rendering_XBezierPolyPolygon2D_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#include <com/sun/star/rendering/XPolyPolygon2D.idl>
-#include <com/sun/star/geometry/RealBezierSegment2D.idl>
 
 module com { module sun { module star { module rendering {
 
@@ -154,7 +147,5 @@ interface XBezierPolyPolygon2D : XPolyPolygon2D
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

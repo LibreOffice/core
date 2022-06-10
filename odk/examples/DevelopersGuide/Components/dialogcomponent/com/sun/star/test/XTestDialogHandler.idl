@@ -33,14 +33,6 @@
  *
  *************************************************************************/
 
-#ifndef INCLUDED_COM_SUN_STAR_TEST_XTESTDIALOGHANDLER_IDL
-#define INCLUDED_COM_SUN_STAR_TEST_XTESTDIALOGHANDLER_IDL
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/awt/XDialog.idl>
-#include <com/sun/star/frame/XModel.idl>
-#include <com/sun/star/frame/XFrame.idl>
-
 module com {  module sun {  module star {  module test {
     interface XTestDialogHandler {
         string createDialog( [in] string DialogURL, [in] ::com::sun::star::frame::XModel xModel,
@@ -50,7 +42,5 @@ module com {  module sun {  module star {  module test {
         void handleEventWithArguments( [in] ::com::sun::star::awt::XDialog xDialog, [in] any aEventObject );
     };
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

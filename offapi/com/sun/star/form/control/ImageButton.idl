@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_control_ImageButton_idl__
-#define __com_sun_star_form_control_ImageButton_idl__
-
-#include <com/sun/star/awt/UnoControlImageControl.idl>
-#include <com/sun/star/form/XApproveActionBroadcaster.idl>
-
 
  module com {  module sun {  module star {  module form {  module control {
 
@@ -62,8 +56,6 @@ published service ImageButton
 
 
 }; }; }; }; };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

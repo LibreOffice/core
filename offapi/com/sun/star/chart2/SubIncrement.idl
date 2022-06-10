@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_chart2_SubIncrement_idl
-#define com_sun_star_chart2_SubIncrement_idl
-
 
 module com {  module sun {  module star {  module chart2 {
 
@@ -39,7 +36,5 @@ struct SubIncrement
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

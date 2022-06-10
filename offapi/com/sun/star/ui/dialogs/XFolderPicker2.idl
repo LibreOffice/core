@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_dialogs_XFolderPicker2_idl__
-#define __com_sun_star_ui_dialogs_XFolderPicker2_idl__
-
-#include <com/sun/star/ui/dialogs/XFolderPicker.idl>
-#include <com/sun/star/util/XCancellable.idl>
-
 
 module com { module sun { module star { module ui { module dialogs {
 
@@ -47,7 +41,5 @@ published interface XFolderPicker2
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

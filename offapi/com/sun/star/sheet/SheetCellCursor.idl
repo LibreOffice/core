@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_SheetCellCursor_idl__
-#define __com_sun_star_sheet_SheetCellCursor_idl__
-
-#include <com/sun/star/table/CellCursor.idl>
-#include <com/sun/star/sheet/SheetCellRange.idl>
-#include <com/sun/star/sheet/XSheetCellCursor.idl>
-#include <com/sun/star/sheet/XUsedAreaCursor.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -61,7 +53,5 @@ published service SheetCellCursor
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

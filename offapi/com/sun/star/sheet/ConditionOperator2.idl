@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_sheet_ConditionOperator2_idl__
-#define __com_sun_star_sheet_ConditionOperator2_idl__
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -81,7 +78,5 @@ constants ConditionOperator2
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,16 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_chart2_ScaleData_idl
-#define com_sun_star_chart2_ScaleData_idl
-
-#include <com/sun/star/chart2/XScaling.idl>
-#include <com/sun/star/chart2/AxisOrientation.idl>
-#include <com/sun/star/chart2/data/XLabeledDataSequence.idl>
-#include <com/sun/star/chart2/AxisType.idl>
-#include <com/sun/star/chart2/IncrementData.idl>
-#include <com/sun/star/chart/TimeIncrement.idl>
-
 
 module com {  module sun {  module star {  module chart2 {
 
@@ -105,7 +95,5 @@ struct ScaleData
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

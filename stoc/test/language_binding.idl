@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _TEST_LANGUAGE_BINDING_IDL_
-#define _TEST_LANGUAGE_BINDING_IDL_
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
 module test
 {
 
@@ -157,7 +151,5 @@ interface XLanguageBindingTest : test::XLBTestBase
 
 }; // test
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,10 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef com_sun_star_chart2_XTimeBased_idl
-#define com_sun_star_chart2_XTimeBased_idl
-
-#include <com/sun/star/uno/XInterface.idl>
 
 module com { module sun { module star { module chart2 {
 
@@ -33,7 +29,5 @@ interface XTimeBased : com::sun::star::uno::XInterface
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

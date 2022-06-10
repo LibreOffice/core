@@ -18,15 +18,6 @@
  */
 
 
-#ifndef __com_sun_star_sdb_DataSourceBrowser_idl__
-#define __com_sun_star_sdb_DataSourceBrowser_idl__
-
-#include <com/sun/star/frame/XController.idl>
-#include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/frame/XDispatchProvider.idl>
-#include <com/sun/star/form/FormController.idl>
-#include <com/sun/star/ui/XContextMenuInterception.idl>
-
 module com {  module sun {  module star {  module sdb {
 
 /** implements a component which allows browsing the data sources registered on the system.
@@ -262,7 +253,5 @@ published service DataSourceBrowser
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

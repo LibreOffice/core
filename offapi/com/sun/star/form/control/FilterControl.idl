@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_control_FilterControl_idl__
-#define __com_sun_star_form_control_FilterControl_idl__
-
-#include <com/sun/star/awt/XControl.idl>
-#include <com/sun/star/awt/XWindow.idl>
-#include <com/sun/star/util/XNumberFormatter.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-
 
  module com {  module sun {  module star {  module form {  module control {
 
@@ -46,8 +38,6 @@ service FilterControl : com::sun::star::awt::XControl
 
 
 }; }; }; }; };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

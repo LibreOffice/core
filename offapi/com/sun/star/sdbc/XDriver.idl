@@ -16,16 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_sdbc_XDriver_idl__
-#define __com_sun_star_sdbc_XDriver_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-#include <com/sun/star/beans/PropertyValue.idl>
-
-#include <com/sun/star/sdbc/SQLException.idl>
-
-#include <com/sun/star/sdbc/DriverPropertyInfo.idl>
 
  module com {  module sun {  module star {  module sdbc {
 
@@ -157,7 +147,5 @@ published interface XDriver: com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

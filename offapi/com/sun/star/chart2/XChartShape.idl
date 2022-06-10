@@ -17,17 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_chart2_XChartShape_idl
-#define com_sun_star_chart2_XChartShape_idl
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/beans/UnknownPropertyException.idl>
-#include <com/sun/star/beans/PropertyVetoException.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#include <com/sun/star/awt/Point.idl>
-#include <com/sun/star/awt/Size.idl>
-
 
 
 module com {  module sun {  module star {  module chart2 {
@@ -81,7 +70,5 @@ interface XChartShape : ::com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

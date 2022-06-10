@@ -17,17 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_office_XAnnotation_idl__
-#define __com_sun_star_office_XAnnotation_idl__
-
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/beans/XMultiPropertySet.idl>
-#include <com/sun/star/util/DateTime.idl>
-#include <com/sun/star/text/XText.idl>
-#include <com/sun/star/geometry/RealPoint2D.idl>
-#include <com/sun/star/geometry/RealSize2D.idl>
-#include <com/sun/star/lang/XComponent.idl>
-
 
 module com {  module sun {  module star {  module office {
 
@@ -70,7 +59,5 @@ interface XAnnotation
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

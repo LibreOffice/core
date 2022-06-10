@@ -8,12 +8,6 @@
  *
  */
 
-#ifndef __com_sun_star_document_GraphicStorageHandler_idl__
-#define __com_sun_star_document_GraphicStorageHandler_idl__
-
-#include <com/sun/star/document/GraphicStorageHandler.idl>
-#include <com/sun/star/embed/XStorage.idl>
-
 module com {  module sun {  module star {  module document {
 
 /**
@@ -28,7 +22,5 @@ service GraphicStorageHandler : XGraphicStorageHandler
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

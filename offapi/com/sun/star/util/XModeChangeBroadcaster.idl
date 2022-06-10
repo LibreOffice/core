@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_util_XModeChangeBroadcaster_idl__
-#define __com_sun_star_util_XModeChangeBroadcaster_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/lang/NoSupportException.idl>
-#include <com/sun/star/util/XModeChangeListener.idl>
-#include <com/sun/star/util/XModeChangeApproveListener.idl>
-
 
 module com {  module sun {  module star {  module util {
 
@@ -70,7 +62,5 @@ published interface XModeChangeBroadcaster : com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef com_sun_star_chart2_DataPointCustomLabelFieldType_idl
-#define com_sun_star_chart2_DataPointCustomLabelFieldType_idl
-
 module com { module sun { module star { module chart2 {
 
 /** The Field type enumeration for custom data point labels.
@@ -29,7 +26,5 @@ enum DataPointCustomLabelFieldType
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

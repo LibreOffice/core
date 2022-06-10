@@ -17,16 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_XSlidePreviewCache_idl__
-#define __com_sun_star_drawing_XSlidePreviewCache_idl__
-
-#include <com/sun/star/container/XIndexAccess.idl>
-#include <com/sun/star/geometry/IntegerSize2D.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/rendering/XBitmap.idl>
-#include <com/sun/star/rendering/XCanvas.idl>
-#include <com/sun/star/drawing/XSlidePreviewCacheListener.idl>
-
 module com { module sun { module star { module drawing {
 
 /** A cache of preview bitmaps for the slides of one Impress or Draw
@@ -102,7 +92,5 @@ interface XSlidePreviewCache
 };
 
 }; }; }; }; // ::com::sun::star::drawing
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

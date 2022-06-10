@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_linguistic2_XLinguProperties_idl__
-#define __com_sun_star_linguistic2_XLinguProperties_idl__
-
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/beans/XFastPropertySet.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/Locale.idl>
-
 
 module com { module sun { module star { module linguistic2 {
 
@@ -118,7 +110,5 @@ published interface XLinguProperties
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

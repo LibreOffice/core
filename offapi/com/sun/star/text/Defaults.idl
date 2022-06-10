@@ -16,16 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_text_Defaults_idl__
-#define __com_sun_star_text_Defaults_idl__
-
-#include <com/sun/star/style/CharacterProperties.idl>
-#include <com/sun/star/style/ParagraphProperties.idl>
-#include <com/sun/star/style/CharacterPropertiesAsian.idl>
-#include <com/sun/star/style/CharacterPropertiesComplex.idl>
-#include <com/sun/star/style/ParagraphPropertiesAsian.idl>
-#include <com/sun/star/style/ParagraphPropertiesComplex.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
 
 
  module com {  module sun {  module star {  module text {
@@ -58,7 +48,5 @@ published service Defaults
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

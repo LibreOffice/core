@@ -17,18 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_smarttags_XSmartTagRecognizer_idl__
-#define __com_sun_star_smarttags_XSmartTagRecognizer_idl__
-
-#include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/lang/Locale.idl>
-#include <com/sun/star/i18n/XBreakIterator.idl>
-#include <com/sun/star/smarttags/SmartTagRecognizerMode.idl>
-#include <com/sun/star/text/XTextMarkup.idl>
-#include <com/sun/star/text/XTextRange.idl>
-#include <com/sun/star/frame/XController.idl>
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-
 module com {  module sun {  module star {  module smarttags {
 
 
@@ -188,7 +176,5 @@ interface XSmartTagRecognizer: com::sun::star::lang::XInitialization
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

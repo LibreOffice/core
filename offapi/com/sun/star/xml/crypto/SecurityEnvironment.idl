@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_crypto_SecurityEnvironment_idl_
-#define __com_sun_star_xml_crypto_SecurityEnvironment_idl_
-
-#include <com/sun/star/xml/crypto/XSecurityEnvironment.idl>
-
 module com { module sun { module star { module xml { module crypto {
 
 /**
@@ -30,7 +25,5 @@ module com { module sun { module star { module xml { module crypto {
 service SecurityEnvironment : XSecurityEnvironment;
 
 } ; } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

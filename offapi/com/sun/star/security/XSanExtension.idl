@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_security_XSanExtension_idl_
-#define __com_sun_star_security_XSanExtension_idl_
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/security/XCertificateExtension.idl>
-#include <com/sun/star/security/CertAltNameEntry.idl>
-
 module com { module sun { module star { module security {
 
 /**
@@ -40,7 +33,5 @@ interface XSanExtension : com::sun::star::security::XCertificateExtension
 };
 
 } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

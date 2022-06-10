@@ -17,18 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _com_sun_star_comp_smoketest_LocationTest_idl_
-#define _com_sun_star_comp_smoketest_LocationTest_idl_
-
-#include <com/sun/star/lang/XServiceInfo.idl>
-
 
 module com { module sun { module star { module comp { module smoketest {
         // example service, XServiceInfo is implemented here for demonstration
         // issues. XServiceInfo must be implemented by all components.
         service TestExtension: ::com::sun::star::lang::XServiceInfo;
 };};};};};
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

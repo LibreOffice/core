@@ -16,19 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_text_TextSection_idl__
-#define __com_sun_star_text_TextSection_idl__
-
-#include <com/sun/star/text/TextContent.idl>
-#include <com/sun/star/text/XTextSection.idl>
-#include <com/sun/star/container/XNamed.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/beans/XPropertyState.idl>
-#include <com/sun/star/text/SectionFileLink.idl>
-#include <com/sun/star/style/GraphicLocation.idl>
-#include <com/sun/star/text/XTextColumns.idl>
-#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
-#include <com/sun/star/graphic/XGraphic.idl>
 
 module com { module sun { module star { module text {
 
@@ -201,7 +188,5 @@ published service TextSection
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,25 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_rdf_XDocumentMetadataAccess_idl__
-#define __com_sun_star_rdf_XDocumentMetadataAccess_idl__
-
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#include <com/sun/star/beans/PropertyValue.idl>
-#include <com/sun/star/container/ElementExistException.idl>
-#include <com/sun/star/container/NoSuchElementException.idl>
-#include <com/sun/star/io/IOException.idl>
-#include <com/sun/star/io/XInputStream.idl>
-#include <com/sun/star/datatransfer/UnsupportedFlavorException.idl>
-#include <com/sun/star/embed/XStorage.idl>
-#include <com/sun/star/task/XInteractionHandler.idl>
-#include <com/sun/star/rdf/FileFormat.idl>
-#include <com/sun/star/rdf/ParseException.idl>
-#include <com/sun/star/rdf/XURI.idl>
-#include <com/sun/star/rdf/XMetadatable.idl>
-#include <com/sun/star/rdf/XRepositorySupplier.idl>
-
 
 
 module com {   module sun {   module star {   module rdf {
@@ -391,7 +372,5 @@ interface XDocumentMetadataAccess
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

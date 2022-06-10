@@ -8,12 +8,6 @@
  *
  */
 
-#ifndef __com_sun_star_datatransfer_XTransferableTextSupplier_idl__
-#define __com_sun_star_datatransfer_XTransferableTextSupplier_idl__
-
-#include <com/sun/star/datatransfer/XTransferable.idl>
-#include <com/sun/star/text/XTextRange.idl>
-
 
 module com { module sun { module star { module datatransfer {
 
@@ -38,7 +32,5 @@ interface XTransferableTextSupplier
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

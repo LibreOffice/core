@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_SheetLink_idl__
-#define __com_sun_star_sheet_SheetLink_idl__
-
-#include <com/sun/star/container/XNamed.idl>
-#include <com/sun/star/util/XRefreshable.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -79,7 +72,5 @@ published service SheetLink
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

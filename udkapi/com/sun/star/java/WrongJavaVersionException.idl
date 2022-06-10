@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_java_WrongJavaVersionException_idl__
-#define __com_sun_star_java_WrongJavaVersionException_idl__
-
-#include <com/sun/star/uno/Exception.idl>
-
 module com { module sun { module star { module java {
 
 /** indicates that an operation involving Java (probably executing Java code)
@@ -46,7 +41,5 @@ published exception WrongJavaVersionException: com::sun::star::uno::Exception
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

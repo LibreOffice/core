@@ -7,12 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_ui_XUpdateModel_idl__
-#define __com_sun_star_ui_XUpdateModel_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/frame/XModel.idl>
-
 
 module com { module sun { module star { module ui {
 
@@ -29,7 +23,5 @@ interface XUpdateModel : com::sun::star::uno::XInterface
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

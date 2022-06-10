@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_accessibility_XAccessibleEventListener_idl__
-#define __com_sun_star_accessibility_XAccessibleEventListener_idl__
-
-#include <com/sun/star/lang/XEventListener.idl>
-#include <com/sun/star/accessibility/AccessibleEventObject.idl>
-
 module com { module sun { module star { module accessibility {
 
 /** makes it possible to register a component as a listener, which is called whenever
@@ -41,7 +35,5 @@ interface XAccessibleEventListener: ::com::sun::star::lang::XEventListener
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

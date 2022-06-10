@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_AsyncCallback_idl__
-#define __com_sun_star_awt_AsyncCallback_idl__
-
-#include <com/sun/star/awt/XRequestCallback.idl>
-
 module com { module sun { module star { module awt {
 
 /** An implementation which uses the message queue to call the
@@ -32,7 +27,5 @@ module com { module sun { module star { module awt {
 service AsyncCallback: XRequestCallback;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

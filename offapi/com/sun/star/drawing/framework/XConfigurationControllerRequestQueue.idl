@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_framework_XConfigurationControllerRequestQueue_idl__
-#define __com_sun_star_drawing_framework_XConfigurationControllerRequestQueue_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
 module com { module sun { module star { module drawing { module framework {
 
 interface XConfigurationChangeRequest;
@@ -61,7 +56,5 @@ interface XConfigurationControllerRequestQueue
 };
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

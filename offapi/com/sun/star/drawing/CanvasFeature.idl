@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_CanvasFeature_idl__
-#define __com_sun_star_drawing_CanvasFeature_idl__
-
 module com { module sun { module star { module drawing {
 
 constants CanvasFeature
@@ -31,7 +28,5 @@ constants CanvasFeature
 
 
 }; }; }; }; // ::com::sun::star::drawing
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

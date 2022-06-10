@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#include <com/sun/star/uno/Exception.idl>
-#include <com/sun/star/uno/RuntimeException.idl>
-#include <com/sun/star/uno/XInterface.idl>
-
 module test { module registrytdprovider {
 
 published enum Enum1 { E1 };

@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_binding_XListEntrySource_idl__
-#define __com_sun_star_form_binding_XListEntrySource_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/lang/NullPointerException.idl>
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-
 
 module com {  module sun {  module star {  module form { module binding {
 
@@ -79,7 +72,5 @@ interface XListEntrySource : com::sun::star::uno::XInterface
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

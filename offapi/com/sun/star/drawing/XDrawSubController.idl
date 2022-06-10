@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_XDrawSubController_idl__
-#define __com_sun_star_drawing_XDrawSubController_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-#include <com/sun/star/beans/XFastPropertySet.idl>
-#include <com/sun/star/drawing/XDrawView.idl>
-#include <com/sun/star/view/XSelectionSupplier.idl>
-
 
 
 module com {  module sun {  module star {  module drawing {
@@ -53,7 +44,5 @@ interface XDrawSubController
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

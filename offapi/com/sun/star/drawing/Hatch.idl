@@ -16,12 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_drawing_Hatch_idl__
-#define __com_sun_star_drawing_Hatch_idl__
-
-#include <com/sun/star/drawing/HatchStyle.idl>
-
-#include <com/sun/star/util/Color.idl>
 
 
 
@@ -55,7 +49,5 @@ published struct Hatch
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

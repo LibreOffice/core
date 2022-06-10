@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sdb_DataAccessDescriptor_idl__
-#define __com_sun_star_sdb_DataAccessDescriptor_idl__
-
-#include <com/sun/star/sdbc/Connection.idl>
-#include <com/sun/star/sdbc/ResultSet.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/beans/PropertyValue.idl>
-
 module com {  module sun {  module star {  module sdb {
 
 /** descriptor for accessing basic data access objects.
@@ -247,7 +239,5 @@ published service DataAccessDescriptor
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

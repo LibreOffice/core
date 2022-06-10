@@ -17,19 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_TextPageStyle_idl__
-#define __com_sun_star_text_TextPageStyle_idl__
-
-#include <com/sun/star/util/Color.idl>
-#include <com/sun/star/table/ShadowFormat.idl>
-#include <com/sun/star/table/BorderLine.idl>
-#include <com/sun/star/style/PageStyleLayout.idl>
-#include <com/sun/star/style/GraphicLocation.idl>
-#include <com/sun/star/awt/Size.idl>
-#include <com/sun/star/text/XText.idl>
-#include <com/sun/star/text/XTextColumns.idl>
-#include <com/sun/star/container/XNameContainer.idl>
-
 
 module com {  module sun {  module star {  module text {
 
@@ -167,7 +154,5 @@ published service TextPageStyle
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

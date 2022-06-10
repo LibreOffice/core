@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_inspection_ObjectInspectorModel_idl__
-#define __com_sun_star_inspection_ObjectInspectorModel_idl__
-
-#include <com/sun/star/inspection/XObjectInspectorModel.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
 module com {  module sun {  module star {  module inspection {
 
 /** describes a default implementation of an ObjectInspectorModel
@@ -99,8 +93,6 @@ service ObjectInspectorModel : XObjectInspectorModel
 
 
 }; }; }; };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

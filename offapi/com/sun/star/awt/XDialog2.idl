@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_XDialog2_idl__
-#define __com_sun_star_awt_XDialog2_idl__
-
-#include <com/sun/star/awt/XDialog.idl>
-
 
 
 module com {  module sun {  module star {  module awt {
@@ -45,7 +40,5 @@ published interface XDialog2: com::sun::star::awt::XDialog
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sdb_application_DatabaseObjectContainer_idl__
-#define __com_sun_star_sdb_application_DatabaseObjectContainer_idl__
-
 
 module com { module sun { module star { module sdb { module application {
 
@@ -89,7 +86,5 @@ constants DatabaseObjectContainer
 
 }; }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

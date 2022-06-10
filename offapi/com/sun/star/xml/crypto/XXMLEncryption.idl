@@ -17,17 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_crypto_xxmlencryption_idl_
-#define __com_sun_star_xml_crypto_xxmlencryption_idl_
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/uno/Exception.idl>
-#include <com/sun/star/uno/SecurityException.idl>
-#include <com/sun/star/xml/crypto/XXMLEncryptionTemplate.idl>
-#include <com/sun/star/xml/wrapper/XXMLElementWrapper.idl>
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.idl>
-#include <com/sun/star/xml/crypto/XMLEncryptionException.idl>
-
 module com { module sun { module star { module xml { module crypto {
 
 /**
@@ -67,7 +56,5 @@ interface XXMLEncryption : com::sun::star::uno::XInterface
 } ;
 
 } ; } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

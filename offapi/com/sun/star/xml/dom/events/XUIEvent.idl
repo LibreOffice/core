@@ -16,10 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_xml_dom_events_XUIEvent_idl__
-#define __com_sun_star_xml_dom_events_XUIEvent_idl__
-
-#include <com/sun/star/xml/dom/events/XEvent.idl>
 
 module com { module sun { module star { module xml { module dom { module views {
     interface XAbstractView;
@@ -38,6 +34,5 @@ interface XUIEvent : XEvent {
                      [in] long detailArg);
 };
 }; }; }; }; }; };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

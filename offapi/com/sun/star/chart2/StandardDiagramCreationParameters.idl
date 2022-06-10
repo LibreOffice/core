@@ -16,10 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef com_sun_star_chart2_StandardDiagramCreationParameters_idl
-#define com_sun_star_chart2_StandardDiagramCreationParameters_idl
-
-#include <com/sun/star/beans/PropertyValue.idl>
 
 module com
 {
@@ -50,7 +46,5 @@ service StandardDiagramCreationParameters
 } ; // com
 } ; // sun
 } ; // star
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

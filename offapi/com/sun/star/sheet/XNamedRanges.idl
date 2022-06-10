@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_XNamedRanges_idl__
-#define __com_sun_star_sheet_XNamedRanges_idl__
-
-#include <com/sun/star/container/XNameAccess.idl>
-#include <com/sun/star/table/CellAddress.idl>
-#include <com/sun/star/table/CellRangeAddress.idl>
-#include <com/sun/star/sheet/Border.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -111,7 +103,5 @@ published interface XNamedRanges: com::sun::star::container::XNameAccess
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

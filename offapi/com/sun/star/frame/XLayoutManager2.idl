@@ -17,16 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_frame_XLayoutManager2_idl__
-#define __com_sun_star_frame_XLayoutManager2_idl__
-
-#include <com/sun/star/frame/XLayoutManager.idl>
-#include <com/sun/star/frame/XFrameActionListener.idl>
-#include <com/sun/star/ui/XUIConfigurationListener.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/frame/XMenuBarMergingAcceptor.idl>
-#include <com/sun/star/frame/XLayoutManagerEventBroadcaster.idl>
-
 
  module com { module sun { module star { module frame {
 
@@ -82,7 +72,5 @@ interface XLayoutManager2
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

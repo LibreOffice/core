@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_linguistic2_NumberText_idl__
-#define __com_sun_star_linguistic2_NumberText_idl__
-
-#include <com/sun/star/linguistic2/XNumberText.idl>
-
 module com { module sun { module star { module linguistic2 {
 
 /** provides converter to spell out numbers and money amounts
@@ -40,7 +35,5 @@ module com { module sun { module star { module linguistic2 {
     service NumberText:XNumberText;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

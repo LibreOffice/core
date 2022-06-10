@@ -7,12 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_sheet_XSheetFilterDescriptor3_idl__
-#define __com_sun_star_sheet_XSheetFilterDescriptor3_idl__
-
-#include <com/sun/star/sheet/TableFilterField3.idl>
-#include <com/sun/star/uno/XInterface.idl>
-
 module com {  module sun {  module star {  module sheet {
 
 /** provides access to a collection of filter conditions (filter fields).
@@ -40,7 +34,5 @@ interface XSheetFilterDescriptor3: com::sun::star::uno::XInterface
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

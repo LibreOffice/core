@@ -6,10 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef __com_sun_star_frame_theAutoRecovery_idl__
-#define __com_sun_star_frame_theAutoRecovery_idl__
-
-#include <com/sun/star/frame/XDispatch.idl>
 
 module com {  module sun {  module star {  module frame {
 
@@ -22,7 +18,5 @@ module com {  module sun {  module star {  module frame {
 singleton theAutoRecovery : XDispatch;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

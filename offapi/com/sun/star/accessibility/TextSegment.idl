@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_accessibility_TextSegment_idl__
-#define __com_sun_star_accessibility_TextSegment_idl__
-
 module com { module sun { module star { module accessibility {
 
 /** This structure describes a text segment that is embedded in a larger
@@ -73,7 +70,5 @@ struct TextSegment
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

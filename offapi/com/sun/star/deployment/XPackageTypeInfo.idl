@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _com_sun_star_deployment_XPackageTypeInfo_idl
-#define _com_sun_star_deployment_XPackageTypeInfo_idl
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/deployment/ExtensionRemovedException.idl>
-
 module com { module sun { module star { module deployment {
 
 /** Objects of this interface provide information about a package's type.
@@ -80,7 +74,5 @@ interface XPackageTypeInfo
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

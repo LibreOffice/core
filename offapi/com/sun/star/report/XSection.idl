@@ -16,17 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_report_XSection_idl__
-#define __com_sun_star_report_XSection_idl__
-
-#include <com/sun/star/container/XChild.idl>
-#include <com/sun/star/drawing/XShapes.idl>
-#include <com/sun/star/container/XEnumerationAccess.idl>
-#include <com/sun/star/container/XContainer.idl>
-#include <com/sun/star/util/Color.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/report/XReportDefinition.idl>
-#include <com/sun/star/report/XReportComponent.idl>
 
  module com {  module sun {  module star {  module report {
  interface XGroup;
@@ -159,7 +148,5 @@ interface XSection
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

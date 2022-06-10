@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_rendering_BitmapCanvas_idl__
-#define __com_sun_star_rendering_BitmapCanvas_idl__
-
-#include <com/sun/star/rendering/XBitmap.idl>
-#include <com/sun/star/rendering/XBitmapCanvas.idl>
-
 
 module com { module sun { module star { module rendering {
 
@@ -42,7 +36,5 @@ service BitmapCanvas
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

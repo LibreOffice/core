@@ -16,18 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_drawing_Shape_idl__
-#define __com_sun_star_drawing_Shape_idl__
-
-#include <com/sun/star/document/LinkTarget.idl>
-#include <com/sun/star/drawing/XShape.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/style/XStyle.idl>
-#include <com/sun/star/drawing/HomogenMatrix3.idl>
-#include <com/sun/star/drawing/XGluePointsSupplier.idl>
-#include <com/sun/star/container/XNameContainer.idl>
-#include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
-#include <com/sun/star/beans/PropertyValue.idl>
 
  module com {  module sun {  module star {  module drawing {
 
@@ -198,7 +186,5 @@ published service Shape
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,16 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_gallery_XGalleryTheme_idl__
-#define __com_sun_star_gallery_XGalleryTheme_idl__
-
-#include <com/sun/star/container/XIndexAccess.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#include <com/sun/star/graphic/XGraphic.idl>
-#include <com/sun/star/gallery/XGalleryItem.idl>
-
 
 module com {  module sun {  module star {  module gallery {
 
@@ -145,7 +135,5 @@ interface XGalleryTheme : com::sun::star::container::XIndexAccess
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

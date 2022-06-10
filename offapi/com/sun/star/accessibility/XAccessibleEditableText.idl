@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_accessibility_XAccessibleEditableText_idl__
-#define __com_sun_star_accessibility_XAccessibleEditableText_idl__
-
-#include <com/sun/star/accessibility/XAccessibleText.idl>
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-#include <com/sun/star/beans/PropertyValue.idl>
-
 module com { module sun { module star { module accessibility {
 
 /** Implement this interface to give read and write access to a text
@@ -222,7 +215,5 @@ interface XAccessibleEditableText
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

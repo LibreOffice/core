@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_table_CellRangeListSource_idl__
-#define __com_sun_star_table_CellRangeListSource_idl__
-
-#include <com/sun/star/form/binding/ListEntrySource.idl>
-#include <com/sun/star/table/CellRangeAddress.idl>
-#include <com/sun/star/lang/XInitialization.idl>
-
 
 module com {  module sun {  module star {  module table {
 
@@ -74,7 +67,5 @@ service CellRangeListSource
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

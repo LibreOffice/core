@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sdb_tools_ConnectionTools_idl__
-#define __com_sun_star_sdb_tools_ConnectionTools_idl__
-
-#include <com/sun/star/sdb/tools/XConnectionTools.idl>
-
 module com {  module sun {  module star {  module sdbc {
  published interface XConnection;
 };};};};
@@ -37,7 +32,5 @@ service ConnectionTools : XConnectionTools
 };
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

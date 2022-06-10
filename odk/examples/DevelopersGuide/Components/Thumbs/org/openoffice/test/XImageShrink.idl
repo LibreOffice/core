@@ -33,12 +33,6 @@
  *
  *************************************************************************/
 
-#ifndef _org_openoffice_test_XImageShrink_idl_
-#define _org_openoffice_test_XImageShrink_idl_
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/awt/Size.idl>
-
 module org { module openoffice { module test {
 
 interface XImageShrink {
@@ -50,7 +44,5 @@ interface XImageShrink {
 };
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

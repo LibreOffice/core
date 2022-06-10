@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba_XDocumentProperty_idl__
-#define __ooo_vba_XDocumentProperty_idl__
-
-#include <com/sun/star/script/BasicErrorException.idl>
-#include <com/sun/star/script/XDefaultProperty.idl>
-#include <ooo/vba/XHelperInterface.idl>
-
 module ooo { module vba {
 
 /**
@@ -84,7 +77,5 @@ interface XDocumentProperty
 };
 
 }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_mail_XConnectionListener_idl__
-#define __com_sun_star_mail_XConnectionListener_idl__
-
-#include <com/sun/star/lang/XEventListener.idl>
-#include <com/sun/star/lang/EventObject.idl>
-
 module com { module sun { module star { module mail {
 
 /**
@@ -56,7 +50,5 @@ interface XConnectionListener: ::com::sun::star::lang::XEventListener {
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

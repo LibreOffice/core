@@ -16,12 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_form_component_FixedText_idl__
-#define __com_sun_star_form_component_FixedText_idl__
-
-#include <com/sun/star/awt/UnoControlFixedTextModel.idl>
-
-#include <com/sun/star/form/FormControlModel.idl>
 
 
 
@@ -45,7 +39,5 @@ published service FixedText
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

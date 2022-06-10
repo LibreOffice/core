@@ -17,17 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __testtools_servicetests_TestService1_idl__
-#define __testtools_servicetests_TestService1_idl__
-
-#include <com/sun/star/beans/Ambiguous.idl>
-#include <com/sun/star/beans/Defaulted.idl>
-#include <com/sun/star/beans/Optional.idl>
-#include <com/sun/star/beans/PropertyVetoException.idl>
-#include <com/sun/star/beans/UnknownPropertyException.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/uno/XInterface.idl>
-
 module test { module cppuhelper { module propertysetmixin {
 
 interface XTest1 {
@@ -73,7 +62,5 @@ service CppSupplier: XSupplier;
 service JavaSupplier: XSupplier;
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

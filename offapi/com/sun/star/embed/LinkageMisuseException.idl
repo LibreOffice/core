@@ -16,10 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_embed_LinkageMisuseException_idl__
-#define __com_sun_star_embed_LinkageMisuseException_idl__
-
-#include <com/sun/star/uno/Exception.idl>
 
 
 
@@ -38,7 +34,5 @@ published exception LinkageMisuseException: com::sun::star::uno::Exception
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

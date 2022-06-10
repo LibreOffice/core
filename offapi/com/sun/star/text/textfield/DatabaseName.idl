@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_textfield_DatabaseName_idl__
-#define __com_sun_star_text_textfield_DatabaseName_idl_
 
-
-#include <com/sun/star/text/DependentTextField.idl>
 
 
 module com { module sun { module star { module text { module textfield {
@@ -65,7 +61,5 @@ published service DatabaseName
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

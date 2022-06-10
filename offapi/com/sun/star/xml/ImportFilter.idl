@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COM_SUN_STAR_XML_IMPORTFILTER_IDL__
-#define _COM_SUN_STAR_XML_IMPORTFILTER_IDL__
-
-#include <com/sun/star/xml/XImportFilter.idl>
-
 
 module com { module sun { module star { module xml {
 
@@ -35,7 +30,5 @@ published service ImportFilter
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

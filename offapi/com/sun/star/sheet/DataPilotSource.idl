@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_DataPilotSource_idl__
-#define __com_sun_star_sheet_DataPilotSource_idl__
-
-#include <com/sun/star/sheet/XDimensionsSupplier.idl>
-#include <com/sun/star/sheet/XDataPilotResults.idl>
-#include <com/sun/star/util/XRefreshable.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -93,7 +85,5 @@ service DataPilotSource
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

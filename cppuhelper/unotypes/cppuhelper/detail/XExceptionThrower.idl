@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_cppuhelper_detail_XExceptionThrower_idl
-#define INCLUDED_cppuhelper_detail_XExceptionThrower_idl
-
-#include <com/sun/star/uno/Exception.idl>
-#include <com/sun/star/uno/XInterface.idl>
-
 
 module cppuhelper { module detail {
 
@@ -35,7 +29,5 @@ interface XExceptionThrower : com::sun::star::uno::XInterface
 };
 
 }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

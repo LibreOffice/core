@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_framework_XConfigurationController_idl__
-#define __com_sun_star_drawing_framework_XConfigurationController_idl__
-
-#include <com/sun/star/drawing/framework/ConfigurationChangeEvent.idl>
-#include <com/sun/star/drawing/framework/XConfigurationControllerBroadcaster.idl>
-#include <com/sun/star/drawing/framework/XConfigurationControllerRequestQueue.idl>
-#include <com/sun/star/drawing/framework/XResourceFactoryManager.idl>
-#include <com/sun/star/drawing/framework/ResourceActivationMode.idl>
-
 module com { module sun { module star { module drawing { module framework {
 
 interface XConfigurationChangeListener;
@@ -249,7 +240,5 @@ interface XConfigurationController
 };
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

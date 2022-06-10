@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_CellAnnotation_idl__
-#define __com_sun_star_sheet_CellAnnotation_idl__
-
-#include <com/sun/star/sheet/XSheetAnnotation.idl>
-#include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.idl>
-#include <com/sun/star/container/XChild.idl>
-#include <com/sun/star/text/XSimpleText.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -60,7 +52,5 @@ published service CellAnnotation
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

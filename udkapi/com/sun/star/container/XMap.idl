@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_container_XMap_idl__
-#define __com_sun_star_container_XMap_idl__
-
-#include <com/sun/star/beans/IllegalTypeException.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/container/NoSuchElementException.idl>
-#include <com/sun/star/lang/NoSupportException.idl>
-#include <com/sun/star/container/XElementAccess.idl>
-
 
 module com { module sun { module star { module container {
 
@@ -187,7 +178,5 @@ interface XMap
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

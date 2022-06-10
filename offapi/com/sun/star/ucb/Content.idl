@@ -17,20 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ucb_Content_idl__
-#define __com_sun_star_ucb_Content_idl__
-
-#include <com/sun/star/ucb/XContent.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/ucb/XCommandProcessor.idl>
-#include <com/sun/star/ucb/XCommandProcessor2.idl>
-#include <com/sun/star/ucb/XCommandInfoChangeNotifier.idl>
-#include <com/sun/star/beans/XPropertyContainer.idl>
-#include <com/sun/star/beans/XPropertySetInfoChangeNotifier.idl>
-#include <com/sun/star/beans/XPropertiesChangeNotifier.idl>
-#include <com/sun/star/ucb/XContentCreator.idl>
-#include <com/sun/star/container/XChild.idl>
-
 module com { module sun { module star { module ucb {
 
 /** A Content is a service that provides access to data of a
@@ -977,7 +963,5 @@ published service Content
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

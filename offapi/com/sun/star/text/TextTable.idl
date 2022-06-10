@@ -17,27 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_TextTable_idl__
-#define __com_sun_star_text_TextTable_idl__
-
-#include <com/sun/star/text/TextContent.idl>
-#include <com/sun/star/util/Color.idl>
-#include <com/sun/star/text/XTextTable.idl>
-#include <com/sun/star/text/TableColumnSeparator.idl>
-#include <com/sun/star/container/XNamed.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/style/GraphicLocation.idl>
-#include <com/sun/star/style/BreakType.idl>
-#include <com/sun/star/table/ShadowFormat.idl>
-#include <com/sun/star/table/TableBorder.idl>
-#include <com/sun/star/table/XCellRange.idl>
-#include <com/sun/star/table/XAutoFormattable.idl>
-#include <com/sun/star/chart/XChartDataArray.idl>
-#include <com/sun/star/util/XSortable.idl>
-#include <com/sun/star/sheet/XCellRangeData.idl>
-#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
-#include <com/sun/star/graphic/XGraphic.idl>
-
 module com {  module sun {  module star {  module text {
 
 /** is a table of text cells which is anchored to a surrounding text.
@@ -242,7 +221,5 @@ published service TextTable
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

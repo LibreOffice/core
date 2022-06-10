@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_dom_XSAXDocumentBuilder_idl__
-#define __com_sun_star_xml_dom_XSAXDocumentBuilder_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/xml/dom/XDocument.idl>
-#include <com/sun/star/xml/dom/XDocumentFragment.idl>
-#include <com/sun/star/xml/dom/SAXDocumentBuilderState.idl>
-
 module com { module sun { module star { module xml { module dom {
 
 /**
@@ -44,7 +36,5 @@ interface XSAXDocumentBuilder : com::sun::star::uno::XInterface
 };
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

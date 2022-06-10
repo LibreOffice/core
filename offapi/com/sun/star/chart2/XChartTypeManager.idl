@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_chart2_XChartTypeManager_idl
-#define com_sun_star_chart2_XChartTypeManager_idl
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/chart2/XChartTypeTemplate.idl>
-
 module com
 {
 module sun
@@ -41,7 +34,5 @@ interface XChartTypeManager : ::com::sun::star::uno::XInterface
 } ; // com
 } ; // sun
 } ; // star
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_script_provider_theMasterScriptProviderFactory_idl__
-#define __com_sun_star_script_provider_theMasterScriptProviderFactory_idl__
 
-
-#include <com/sun/star/script/provider/XScriptProviderFactory.idl>
 
 module com { module sun { module star { module script { module provider {
 
@@ -37,7 +33,5 @@ module com { module sun { module star { module script { module provider {
 singleton theMasterScriptProviderFactory : XScriptProviderFactory;
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,11 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_awt_XToolkitExperimental_idl__
-#define __com_sun_star_awt_XToolkitExperimental_idl__
-
-#include <com/sun/star/awt/XToolkit3.idl>
-
 module com {  module sun {  module star {  module awt {
 
 /** Work in progress, don't use unless you know what you are doing.
@@ -59,7 +54,5 @@ interface XToolkitExperimental : XToolkit3
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_XUserInputInterception_idl__
-#define __com_sun_star_awt_XUserInputInterception_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/awt/XKeyHandler.idl>
-#include <com/sun/star/awt/XMouseClickHandler.idl>
-
 module com {  module sun {  module star {  module awt {
 
 /** Interface to add handlers for key and mouse events. A handler is not a passive
@@ -80,7 +73,5 @@ published interface XUserInputInterception : ::com::sun::star::uno::XInterface
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

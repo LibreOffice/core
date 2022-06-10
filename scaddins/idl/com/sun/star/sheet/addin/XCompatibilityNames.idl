@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_sheet_addin_XCompatibilityNames_idl
-#define com_sun_star_sheet_addin_XCompatibilityNames_idl
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/sheet/LocalizedName.idl>
-
 module com
 {
 module sun
@@ -43,7 +37,5 @@ module addin
 };
 };
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

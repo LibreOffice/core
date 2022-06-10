@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_dom_XElement_idl__
-#define __com_sun_star_xml_dom_XElement_idl__
-
-#include <com/sun/star/xml/dom/XNode.idl>
-#include <com/sun/star/xml/dom/XAttr.idl>
-
 module com { module sun { module star { module xml { module dom {
 
 interface XElement: XNode
@@ -140,7 +134,5 @@ interface XElement: XNode
     [in] string namespaceURI, [in] string qualifiedName, [in] string value) raises (DOMException);
 };
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

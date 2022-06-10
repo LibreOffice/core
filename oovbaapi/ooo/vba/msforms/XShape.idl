@@ -16,13 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __ooo_vba_msforms_XShape_idl__
-#define __ooo_vba_msforms_XShape_idl__
-
-#include <ooo/vba/XHelperInterface.idl>
-#include <ooo/vba/msforms/XLineFormat.idl>
-#include <ooo/vba/msforms/XFillFormat.idl>
-#include <ooo/vba/msforms/XPictureFormat.idl>
 
 module ooo {  module vba { module msforms {
 interface XShapeRange;
@@ -59,7 +52,5 @@ interface XShape : ooo::vba::XHelperInterface
     any ShapeRange( [in] any index );  // only here for convenience
 };
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_script_browse_BrowseNode_idl__
-#define __com_sun_star_script_browse_BrowseNode_idl__
-
-#include <com/sun/star/script/browse/XBrowseNode.idl>
-#include <com/sun/star/script/XInvocation.idl>
-
 module com {
  module sun {
   module star {
@@ -47,6 +41,5 @@ service BrowseNode
   };
  };
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

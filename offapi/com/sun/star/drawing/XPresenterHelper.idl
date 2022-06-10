@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_XPresenterHelper_idl__
-#define __com_sun_star_drawing_XPresenterHelper_idl__
-
-#include <com/sun/star/awt/XWindow.idl>
-#include <com/sun/star/rendering/XCanvas.idl>
-#include <com/sun/star/rendering/XSpriteCanvas.idl>
-#include <com/sun/star/awt/Rectangle.idl>
-#include <com/sun/star/drawing/CanvasFeature.idl>
-
 module com { module sun { module star { module drawing {
 
 /** This interface is a collection of functions that were necessary to
@@ -152,7 +143,5 @@ interface XPresenterHelper
 
 
 }; }; }; }; // ::com::sun::star::drawing
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

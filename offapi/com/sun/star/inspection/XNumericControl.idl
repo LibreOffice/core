@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_inspection_XNumericControl_idl__
-#define __com_sun_star_inspection_XNumericControl_idl__
-
-#include <com/sun/star/inspection/XPropertyControl.idl>
-#include <com/sun/star/beans/Optional.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
 module com {  module sun {  module star {  module inspection {
 
 /** defines the interface for an XPropertyControl which supports
@@ -76,7 +69,5 @@ interface XNumericControl : XPropertyControl
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

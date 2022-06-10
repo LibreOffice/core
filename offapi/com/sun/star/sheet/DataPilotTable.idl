@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_DataPilotTable_idl__
-#define __com_sun_star_sheet_DataPilotTable_idl__
-
-#include <com/sun/star/sheet/XDataPilotDescriptor.idl>
-#include <com/sun/star/sheet/XDataPilotTable.idl>
-#include <com/sun/star/util/XModifyBroadcaster.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -53,7 +46,5 @@ published service DataPilotTable
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_logging_LoggerPool_idl__
-#define __com_sun_star_logging_LoggerPool_idl__
-
-#include <com/sun/star/logging/XLoggerPool.idl>
-
 
 module com { module sun { module star { module logging {
 
@@ -37,7 +32,5 @@ singleton LoggerPool : XLoggerPool;
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

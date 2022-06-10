@@ -16,12 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_drawing_PolyPolygonBezierCoords_idl__
-#define __com_sun_star_drawing_PolyPolygonBezierCoords_idl__
-
-#include <com/sun/star/drawing/PointSequenceSequence.idl>
-
-#include <com/sun/star/drawing/FlagSequenceSequence.idl>
 
 
 
@@ -38,7 +32,5 @@ published struct PolyPolygonBezierCoords
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

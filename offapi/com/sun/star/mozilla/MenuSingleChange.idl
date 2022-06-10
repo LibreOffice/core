@@ -18,11 +18,6 @@
  */
 
 
-#ifndef __com_sun_star_mozilla_MenuSingleChange_idl__
-#define __com_sun_star_mozilla_MenuSingleChange_idl__
-
-#include <com/sun/star/lang/XComponent.idl>
-
 
  module com {  module sun {  module star {  module mozilla {
 
@@ -48,7 +43,5 @@ published struct MenuSingleChange
 }; }; }; };
 
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

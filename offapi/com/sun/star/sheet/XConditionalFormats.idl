@@ -7,13 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_sheet_XConditionalFormats_idl__
-#define __com_sun_star_sheet_XConditionalFormats_idl__
-
-#include <com/sun/star/sheet/XConditionalFormat.idl>
-#include <com/sun/star/sheet/XSheetCellRanges.idl>
-#include <com/sun/star/uno/XInterface.idl>
-
 module com { module sun { module star { module sheet {
 
 interface XConditionalFormats : com::sun::star::uno::XInterface
@@ -33,7 +26,5 @@ interface XConditionalFormats : com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

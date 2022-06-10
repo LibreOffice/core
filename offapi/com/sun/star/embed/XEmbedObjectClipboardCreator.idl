@@ -16,16 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_embed_XEmbedObjectClipboardCreator_idl__
-#define __com_sun_star_embed_XEmbedObjectClipboardCreator_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/embed/XStorage.idl>
-#include <com/sun/star/embed/InsertedObjectInfo.idl>
-#include <com/sun/star/io/IOException.idl>
-#include <com/sun/star/embed/WrongStateException.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/beans/PropertyValue.idl>
 
 
  module com {  module sun {  module star {  module embed {
@@ -85,7 +75,5 @@ published interface XEmbedObjectClipboardCreator: com::sun::star::uno::XInterfac
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

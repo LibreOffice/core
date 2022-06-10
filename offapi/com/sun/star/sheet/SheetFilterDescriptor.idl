@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_SheetFilterDescriptor_idl__
-#define __com_sun_star_sheet_SheetFilterDescriptor_idl__
-
-#include <com/sun/star/sheet/XSheetFilterDescriptor.idl>
-#include <com/sun/star/sheet/XSheetFilterDescriptor2.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/table/TableOrientation.idl>
-#include <com/sun/star/table/CellAddress.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -123,7 +114,5 @@ published service SheetFilterDescriptor
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

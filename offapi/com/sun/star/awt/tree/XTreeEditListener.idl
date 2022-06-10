@@ -16,12 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_awt_tree_XTreeEditListener_idl__
-#define __com_sun_star_awt_tree_XTreeEditListener_idl__
-
-#include <com/sun/star/awt/tree/XTreeNode.idl>
-#include <com/sun/star/lang/XEventListener.idl>
-#include <com/sun/star/util/VetoException.idl>
 
 
 module com {  module sun {  module star {  module awt {  module tree {
@@ -66,7 +60,5 @@ interface XTreeEditListener : ::com::sun::star::lang::XEventListener
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

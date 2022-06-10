@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_embed_InstanceLocker_idl__
-#define __com_sun_star_embed_InstanceLocker_idl__
-
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/embed/XActionsApproval.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/frame/DoubleInitializationException.idl>
-
 module com {  module sun {  module star {  module embed {
 
 /** The main task of this service is to prevent closing, terminating and/or
@@ -91,7 +82,5 @@ published service InstanceLocker : com::sun::star::lang::XComponent
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

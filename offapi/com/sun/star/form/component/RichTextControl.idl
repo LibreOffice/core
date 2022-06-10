@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_component_RichTextControl_idl__
-#define __com_sun_star_form_component_RichTextControl_idl__
-
-#include <com/sun/star/awt/UnoControlEditModel.idl>
-#include <com/sun/star/form/FormControlModel.idl>
-#include <com/sun/star/text/TextRange.idl>
-
 
  module com {  module sun {  module star {  module form {  module component {
 
@@ -68,7 +61,5 @@ published service RichTextControl
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_uri_ExternalUriReferenceTranslator_idl__
-#define __com_sun_star_uri_ExternalUriReferenceTranslator_idl__
-
-#include <com/sun/star/uri/XExternalUriReferenceTranslator.idl>
-
 module com { module sun { module star { module uri {
 
 /**
@@ -33,7 +28,5 @@ published service ExternalUriReferenceTranslator:
     XExternalUriReferenceTranslator;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

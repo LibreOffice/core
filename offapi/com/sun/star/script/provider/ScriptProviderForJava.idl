@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_script_provider_ScriptProviderForJava_idl__
-#define __com_sun_star_script_provider_ScriptProviderForJava_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/script/provider/LanguageScriptProvider.idl>
-
 
 module com { module sun { module star { module script { module provider {
 
@@ -34,7 +28,5 @@ service ScriptProviderForJava {
 };
 
 }; }; }; }; }; // ::com::sun::star::script::provider
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

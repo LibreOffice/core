@@ -16,16 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_configuration_HierarchyAccess_idl__
-#define __com_sun_star_configuration_HierarchyAccess_idl__
-
-#include <com/sun/star/container/XNameAccess.idl>
-#include <com/sun/star/container/XHierarchicalNameAccess.idl>
-#include <com/sun/star/container/XContainer.idl>
-#include <com/sun/star/beans/XExactName.idl>
-#include <com/sun/star/beans/XPropertySetInfo.idl>
-#include <com/sun/star/beans/XPropertyState.idl>
-#include <com/sun/star/beans/XMultiPropertyStates.idl>
 
 
 module com { module sun { module star { module configuration {
@@ -152,7 +142,5 @@ published service HierarchyAccess
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

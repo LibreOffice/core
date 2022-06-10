@@ -33,11 +33,6 @@
  *
  *************************************************************************/
 
-#ifndef INCLUDED_ORG_OPENOFFICE_XINSTANCEINSPECTOR_IDL
-#define INCLUDED_ORG_OPENOFFICE_XINSTANCEINSPECTOR_IDL
-
-#include <com/sun/star/uno/XInterface.idl>
-
 module org {  module openoffice {
 
     interface XInstanceInspector {
@@ -53,7 +48,5 @@ module org {  module openoffice {
     };
 
 }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

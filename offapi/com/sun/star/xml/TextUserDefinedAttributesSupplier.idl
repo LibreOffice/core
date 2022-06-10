@@ -16,10 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _com_sun_star_xml_TextUserDefinedAttributesSupplier_idl_
-#define _com_sun_star_xml_TextUserDefinedAttributesSupplier_idl_
-
-#include <com/sun/star/container/XNameContainer.idl>
 
 module com { module sun { module star { module xml {
 
@@ -48,7 +44,5 @@ published service TextUserDefinedAttributesSupplier
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

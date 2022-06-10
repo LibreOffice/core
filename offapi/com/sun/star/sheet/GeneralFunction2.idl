@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_GeneralFunction2_idl__
-#define __com_sun_star_sheet_GeneralFunction2_idl__
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -105,7 +102,5 @@ published constants GeneralFunction2
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

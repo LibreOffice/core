@@ -16,10 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _COM_SUN_STAR_BRIDGE_XBRIDGE_IDL_
-#define _COM_SUN_STAR_BRIDGE_XBRIDGE_IDL_
-
-#include <com/sun/star/uno/XInterface.idl>
 
 module com {  module sun {  module star {  module bridge {
 
@@ -52,7 +48,5 @@ published interface XBridge: com::sun::star::uno::XInterface
 };
 
 };};};};
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

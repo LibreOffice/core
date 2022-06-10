@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_configuration_backend_UpdatableLayer_idl__
-#define __com_sun_star_configuration_backend_UpdatableLayer_idl__
-
-#include <com/sun/star/configuration/backend/Layer.idl>
-#include <com/sun/star/configuration/backend/XUpdatableLayer.idl>
-
 
 module com { module sun { module star { module configuration { module backend {
 
@@ -103,7 +97,5 @@ published service UpdatableLayer
 
 
 } ; } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

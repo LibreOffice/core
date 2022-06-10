@@ -7,11 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __COM_SUN_STAR_XML_XSLT_XSLTTRANSFORMER_IDL__
-#define __COM_SUN_STAR_XML_XSLT_XSLTTRANSFORMER_IDL__
-
-#include <com/sun/star/xml/xslt/XXSLTTransformer.idl>
-
 module com { module sun { module star { module xml { module xslt {
 
 /** Get unspecified XSLT filter transformer.
@@ -26,7 +21,5 @@ service XSLTTransformer : XXSLTTransformer
 };
 
 }; }; }; }; };
-
-#endif // INCLUDED_COM_SUN_STAR_XML_XSLT_XSLTTRANSFORMER_IDL
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

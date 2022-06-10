@@ -7,11 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_sheet_IconSet_idl__
-#define __com_sun_star_sheet_IconSet_idl__
-
-#include <com/sun/star/sheet/XConditionEntry.idl>
-
 module com {  module sun {  module star {  module sheet {
 
 service IconSet
@@ -33,8 +28,6 @@ service IconSet
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

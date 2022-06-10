@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_rdf_FileFormat_idl__
-#define __com_sun_star_rdf_FileFormat_idl__
-
 
 
 module com {   module sun {   module star {   module rdf {
@@ -67,7 +64,5 @@ constants FileFormat
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_DialogProvider2_idl__
-#define __com_sun_star_awt_DialogProvider2_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/awt/XDialogProvider2.idl>
-
 
 
 module com { module sun { module star { module awt {
@@ -35,7 +29,5 @@ service DialogProvider2 : com::sun::star::awt::XDialogProvider2;
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

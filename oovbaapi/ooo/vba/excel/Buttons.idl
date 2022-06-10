@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba_excel_Buttons_idl__
-#define __ooo_vba_excel_Buttons_idl__
-
-#include <ooo/vba/XCollection.idl>
-#include <ooo/vba/excel/XGraphicObjects.idl>
-
 module ooo {  module vba { module excel {
 
 /** Represents the collection of drawing button controls in a spreadsheet.
@@ -37,7 +31,5 @@ service Buttons
 };
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

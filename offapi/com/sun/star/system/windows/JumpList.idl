@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_system_windows_JumpList_idl__
-#define __com_sun_star_system_windows_JumpList_idl__
-
 
 module com { module sun { module star { module system { module windows {
 
@@ -27,7 +24,5 @@ service JumpList : XJumpList;
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

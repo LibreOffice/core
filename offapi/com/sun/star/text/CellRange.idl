@@ -17,23 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_CellRange_idl__
-#define __com_sun_star_text_CellRange_idl__
-
-#include <com/sun/star/table/XCellRange.idl>
-#include <com/sun/star/util/Color.idl>
-#include <com/sun/star/sheet/XCellRangeData.idl>
-#include <com/sun/star/container/XNamed.idl>
-#include <com/sun/star/style/ParagraphProperties.idl>
-#include <com/sun/star/style/ParagraphPropertiesAsian.idl>
-#include <com/sun/star/style/ParagraphPropertiesComplex.idl>
-#include <com/sun/star/style/CharacterPropertiesAsian.idl>
-#include <com/sun/star/style/CharacterPropertiesComplex.idl>
-#include <com/sun/star/style/CharacterProperties.idl>
-#include <com/sun/star/style/GraphicLocation.idl>
-#include <com/sun/star/chart/XChartDataArray.idl>
-#include <com/sun/star/graphic/XGraphic.idl>
-
 module com {  module sun {  module star {  module text {
 
 /** area of cells within a text table.
@@ -118,7 +101,5 @@ published service CellRange
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

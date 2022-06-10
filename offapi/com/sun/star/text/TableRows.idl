@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_TableRows_idl__
-#define __com_sun_star_text_TableRows_idl__
-
-#include <com/sun/star/table/XTableRows.idl>
-#include <com/sun/star/container/XIndexAccess.idl>
-
 
 module com {  module sun {  module star {  module text {
 
@@ -44,7 +38,5 @@ published service TableRows
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

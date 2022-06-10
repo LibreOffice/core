@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_UIElement_idl__
-#define __com_sun_star_ui_UIElement_idl__
-
-#include <com/sun/star/ui/XUIElement.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/util/XUpdatable.idl>
-
 
 module com { module sun { module star { module ui {
 
@@ -83,7 +74,5 @@ service UIElement
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

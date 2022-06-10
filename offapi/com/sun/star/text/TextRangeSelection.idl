@@ -7,11 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_text_TextRangeSelection_idl__
-#define __com_sun_star_text_TextRangeSelection_idl__
-
-#include <com/sun/star/text/TextPosition.idl>
-
 module com {  module sun {  module star { module text {
 
 struct TextRangeSelection
@@ -22,7 +17,5 @@ struct TextRangeSelection
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

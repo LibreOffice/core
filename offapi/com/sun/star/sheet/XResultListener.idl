@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_XResultListener_idl__
-#define __com_sun_star_sheet_XResultListener_idl__
-
-#include <com/sun/star/lang/XEventListener.idl>
-#include <com/sun/star/sheet/ResultEvent.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -42,7 +36,5 @@ published interface XResultListener: com::sun::star::lang::XEventListener
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_AccessibleFixedText_idl__
-#define __com_sun_star_awt_AccessibleFixedText_idl__
-
-#include <com/sun/star/accessibility/XAccessibleContext.idl>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
-#include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#include <com/sun/star/accessibility/XAccessibleExtendedComponent.idl>
-#include <com/sun/star/accessibility/XAccessibleText.idl>
-
 module com { module sun { module star { module awt {
 
 /** specifies accessibility support for a fixed text.
@@ -86,7 +77,5 @@ service AccessibleFixedText
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

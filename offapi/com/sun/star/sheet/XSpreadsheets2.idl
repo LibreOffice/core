@@ -7,14 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_sheet_XSpreadsheets2_idl__
-#define __com_sun_star_sheet_XSpreadsheets2_idl__
-
-#include <com/sun/star/sheet/XSpreadsheets.idl>
-#include <com/sun/star/sheet/XSpreadsheetDocument.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -53,7 +45,5 @@ interface XSpreadsheets2: com::sun::star::sheet::XSpreadsheets
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_CameraGeometry_idl__
-#define __com_sun_star_drawing_CameraGeometry_idl__
-
-#include <com/sun/star/drawing/Direction3D.idl>
-#include <com/sun/star/drawing/Position3D.idl>
-
 
  module com {  module sun {  module star {  module drawing {
 
@@ -43,7 +37,5 @@ published struct CameraGeometry
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

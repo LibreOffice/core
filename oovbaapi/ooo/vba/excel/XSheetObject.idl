@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba_excel_XSheetObject_idl__
-#define __ooo_vba_excel_XSheetObject_idl__
-
-#include <ooo/vba/XHelperInterface.idl>
-
 /*  Note: This is a compatibility interface for drawing objects and drawing
     controls embedded in sheets. All these symbols are deprecated
     in VBA and kept for compatibility with old VBA scripts. */
@@ -68,7 +63,5 @@ interface XSheetObject : ooo::vba::XHelperInterface
 
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

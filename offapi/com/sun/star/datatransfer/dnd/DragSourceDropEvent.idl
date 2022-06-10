@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_datatransfer_dnd_DragSourceDropEvent_idl__
-#define __com_sun_star_datatransfer_dnd_DragSourceDropEvent_idl__
-
-#include <com/sun/star/datatransfer/dnd/DragSourceEvent.idl>
-
 
 module com { module sun { module star { module datatransfer { module dnd {
 
@@ -51,7 +46,5 @@ published struct DragSourceDropEvent: com::sun::star::datatransfer::dnd::DragSou
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

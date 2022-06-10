@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_smarttags_SmartTagAction_idl__
-#define __com_sun_star_smarttags_SmartTagAction_idl__
-
 
 module com { module sun { module star { module smarttags {
         interface XSmartTagAction; };
@@ -42,7 +39,5 @@ service SmartTagAction : XSmartTagAction {};
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

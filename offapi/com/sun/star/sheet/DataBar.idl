@@ -7,14 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_sheet_Databar_idl__
-#define __com_sun_star_sheet_Databar_idl__
-
-#include <com/sun/star/sheet/XConditionEntry.idl>
-#include <com/sun/star/sheet/XColorScaleEntry.idl>
-#include <com/sun/star/sheet/DataBarAxis.idl>
-#include <com/sun/star/util/Color.idl>
-
 module com {  module sun {  module star {  module sheet {
 
 service DataBar
@@ -57,7 +49,5 @@ service DataBar
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

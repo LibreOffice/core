@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ucb_RemoteContentProviderChangeEvent_idl__
-#define __com_sun_star_ucb_RemoteContentProviderChangeEvent_idl__
-
-#include <com/sun/star/lang/EventObject.idl>
-#include <com/sun/star/ucb/RemoteContentProviderChangeAction.idl>
-
 module com { module sun { module star { module ucb {
 
 /** The description of a change to a
@@ -45,7 +39,5 @@ published struct RemoteContentProviderChangeEvent: com::sun::star::lang::EventOb
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

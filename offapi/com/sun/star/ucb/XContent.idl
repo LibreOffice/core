@@ -16,12 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_ucb_XContent_idl__
-#define __com_sun_star_ucb_XContent_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/ucb/XContentIdentifier.idl>
-#include <com/sun/star/ucb/XContentEventListener.idl>
 
 
 
@@ -75,7 +69,5 @@ published interface XContent: com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
