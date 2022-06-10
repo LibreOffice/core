@@ -9,7 +9,10 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_uicalc))
 
-$(eval $(call gb_CppunitTest_use_external,sc_uicalc,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,sc_uicalc, \
+	boost_headers \
+	mdds_headers \
+))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_uicalc, \
     sc/qa/unit/uicalc/uicalc \

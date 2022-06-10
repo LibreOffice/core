@@ -1331,6 +1331,8 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
             if (nField < 0)
                 break;
 
+            if (pColFields.size() < o3tl::make_unsigned(nField) + 1 )
+                break;
             const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nField].maResult;
             if (!rSequence.hasElements())
                 break;
@@ -1360,6 +1362,8 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
             if (nField < 0)
                 break;
 
+            if (pRowFields.size() < o3tl::make_unsigned(nField) + 1 )
+                break;
             const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nField].maResult;
             if (!rSequence.hasElements())
                 break;
