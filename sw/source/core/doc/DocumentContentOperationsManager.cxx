@@ -4606,6 +4606,14 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 InsertItemSet( aTmpRange, aSet );
             }
 
+            // tdf#139982: Appending the redline may immediately delete flys
+            // anchored in the previous text if it's inside an insert redline.
+            // Also flys will be deleted if the redline is accepted. Move them
+            // to the position between the previous text and the new text,
+            // there the chance of surviving both accept and reject is best.
+            SaveFlyArr flys;
+            SaveFlyInRange(aDelPam, *aDelPam.End(), flys, false);
+
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
@@ -4616,6 +4624,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
             pCursor->SetMark();
             *pCursor->GetPoint() = *aDelPam.GetPoint();
             m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Delete, aDelPam ), true);
+            RestFlyInRange(flys, *aDelPam.End(), &aDelPam.End()->nNode, true);
             sw::UpdateFramesForAddDeleteRedline(m_rDoc, *pCursor);
 
             *rPam.GetMark() = *aDelPam.GetMark();
