@@ -1118,6 +1118,18 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
 
     if (!bColumnsOnly)
     {
+        while (rStartRow < rEndRow)
+        {
+            SCROW nLastDataRow = GetLastDataRow(rStartCol, rEndCol, rEndRow, pDataAreaExtras);
+            if (0 <= nLastDataRow && nLastDataRow < rEndRow)
+            {
+                rEndRow = std::max( rStartRow, nLastDataRow);
+                o_bShrunk = true;
+            }
+            else
+                break;  // while
+        }
+
         if (!bStickyTopRow)
         {
             while (rStartRow < rEndRow)
@@ -1136,18 +1148,6 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
                 else
                     break;  // while
             }
-        }
-
-        while (rStartRow < rEndRow)
-        {
-            SCROW nLastDataRow = GetLastDataRow(rStartCol, rEndCol, rEndRow, pDataAreaExtras);
-            if (0 <= nLastDataRow && nLastDataRow < rEndRow)
-            {
-                rEndRow = std::max( rStartRow, nLastDataRow);
-                o_bShrunk = true;
-            }
-            else
-                break;  // while
         }
     }
 
