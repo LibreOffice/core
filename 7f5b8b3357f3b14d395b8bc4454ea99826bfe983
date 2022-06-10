@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92d10922_bbc19130",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-10T08:36:08Z",
+      "side": 1,
+      "message": "Hi Eike, Julien,\nI\u0027d appreciate if you could review this patch",
+      "revId": "7f5b8b3357f3b14d395b8bc4454ea99826bfe983",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
