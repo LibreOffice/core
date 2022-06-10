@@ -281,6 +281,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa9abace_0ba78bfe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-10T06:05:56Z",
+      "side": 1,
+      "message": "FTR: the option was introduced in https://git.libreoffice.org/core/+/b4d1aaa074e2be9fd778134c40f99d2ab8a01e93",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c89ffbe_ee8fe0f8",
