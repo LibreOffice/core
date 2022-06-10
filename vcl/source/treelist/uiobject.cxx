@@ -38,9 +38,7 @@ StringMap TreeListUIObject::get_state()
     aMap["LevelChildren"] = OUString::number(mxTreeList->GetLevelChildCount(nullptr));
     aMap["CheckBoxList"] = OUString::boolean(isCheckBoxList(mxTreeList));
     SvTreeListEntry* pEntry = mxTreeList->FirstSelected();
-    aMap["SelectEntryText"] = (pEntry && SvTreeListBox::HasEntryText(pEntry))
-                                  ? mxTreeList->GetEntryText(pEntry)
-                                  : OUString();
+    aMap["SelectEntryText"] = pEntry ? mxTreeList->GetEntryText(pEntry) : OUString();
 
     return aMap;
 }
