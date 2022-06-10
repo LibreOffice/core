@@ -255,6 +255,20 @@ typedef std::set<std::unique_ptr<SwHTMLFormatInfo>,
 
 class IDocumentStylePoolAccess;
 
+namespace sw
+{
+enum class Css1Background
+{
+    Attr = 1,
+    Page = 2,
+    Table = 3,
+    Fly = 4,
+    Section = 5,
+    TableRow = 6,
+    TableCell = 7,
+};
+}
+
 class SW_DLLPUBLIC SwHTMLWriter : public Writer
 {
     std::unique_ptr<SwHTMLPosFlyFrames> m_pHTMLPosFlyFrames;
@@ -465,7 +479,7 @@ public:
                                        std::string_view rVal );
     inline void OutCSS1_Property( const char *pProp, const OUString& rVal );
     void OutCSS1_Property( const char *pProp, std::string_view pVal,
-                           const OUString *pSVal, bool bTable = false );
+                           const OUString *pSVal, std::optional<sw::Css1Background> oBackground = std::nullopt );
     void OutCSS1_UnitProperty( const char *pProp, tools::Long nVal );
     void OutCSS1_PixelProperty( const char *pProp, tools::Long nVal, bool bVert );
     void OutCSS1_SfxItemSet( const SfxItemSet& rItemSet, bool bDeep=true );
@@ -491,8 +505,12 @@ public:
 
     void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, std::u16string_view rAltText, HtmlFrmOpts nFrameOpts);
 
+    /// Writes the formatting for tables.
     void OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameFormat );
+
+    /// Writes the borders and background for table cells.
     void OutCSS1_TableCellBordersAndBG(const SwFrameFormat& rFrameFormat, const SvxBrushItem *pBrushItem);
+
     void OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameFormat, const SwFormatCol *pCol );
     void OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat, HtmlFrmOpts nFrameOpts,
                                      const SdrObject *pSdrObj=nullptr,
@@ -694,7 +712,9 @@ Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
 Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutCSS1_HintStyleOpt( Writer& rWrt, const SfxPoolItem& rHt );
 
+/// Writes the background of table rows.
 Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt );
+
 Writer& OutCSS1_NumberBulletListStyleOpt( Writer& rWrt, const SwNumRule& rNumRule,
                                     sal_uInt8 nLevel );
 
@@ -709,7 +729,7 @@ OString GetCSS1_Color(const Color& rColor);
 
 /// Determines if rProperty with a given rValue has to be suppressed due to ReqIF mode.
 bool IgnorePropertyForReqIF(bool bReqIF, std::string_view rProperty, std::string_view rValue,
-                            bool bTable = false);
+                            std::optional<sw::Css1Background> oBackground = std::nullopt);
 
 #endif // INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
 
