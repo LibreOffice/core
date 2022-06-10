@@ -103,14 +103,6 @@ using editeng::SvxBorderLine;
 
 namespace {
 
-enum class Css1Background {
-    Attr    = 1,
-    Page    = 2,
-    Table   = 3,
-    Fly     = 4,
-    Section = 5
-};
-
 enum class Css1FrameSize {
     NONE       = 0x00,
     Width      = 0x01,
@@ -153,7 +145,7 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
 static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
                                         const SfxItemSet& rItemSet );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
-                                 Css1Background nMode,
+                                 sw::Css1Background nMode,
                                  const OUString *pGraphicName );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt );
 static Writer& OutCSS1_SwFormatFrameSize( Writer& rWrt, const SfxPoolItem& rHt,
@@ -191,9 +183,9 @@ OString lclConvToHex(sal_uInt16 nHex)
 }
 
 bool IgnorePropertyForReqIF(bool bReqIF, std::string_view rProperty, std::string_view rValue,
-                            bool bTable)
+                            std::optional<sw::Css1Background> oMode)
 {
-    if (!bReqIF || bTable)
+    if (!bReqIF || (oMode.has_value() && *oMode != sw::Css1Background::TableCell))
         return false;
 
     // Only allow these two keys, nothing else in ReqIF mode.
@@ -250,9 +242,9 @@ public:
 void SwHTMLWriter::OutCSS1_Property( const char *pProp,
                                      std::string_view sVal,
                                      const OUString *pSVal,
-                                     bool bTable )
+                                     std::optional<sw::Css1Background> oMode )
 {
-    if (IgnorePropertyForReqIF(mbReqIF, pProp, sVal, bTable))
+    if (IgnorePropertyForReqIF(mbReqIF, pProp, sVal, oMode))
         return;
 
     OStringBuffer sOut;
@@ -1765,7 +1757,7 @@ Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
                                                &pItem ) )
     {
         OUString rEmbeddedGraphicName;
-        OutCSS1_SvxBrush( rWrt, *pItem, Css1Background::Page, &rEmbeddedGraphicName );
+        OutCSS1_SvxBrush( rWrt, *pItem, sw::Css1Background::Page, &rEmbeddedGraphicName );
     }
 
     if( SfxItemState::SET == rItemSet.GetItemState( RES_BOX, false,
@@ -1795,7 +1787,6 @@ Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
     return rWrt;
 }
 
-// Wrapper for Table background
 Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
@@ -1803,7 +1794,7 @@ Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
     SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT_ON |
                                    CSS1_OUTMODE_ENCODE|
                                    CSS1_OUTMODE_TABLEBOX, nullptr );
-    OutCSS1_SvxBrush( rWrt, rHt, Css1Background::Table, nullptr );
+    OutCSS1_SvxBrush( rWrt, rHt, sw::Css1Background::TableRow, nullptr );
 
     if (!rHTMLWrt.m_bFirstCSS1Property)
         rWrt.Strm().WriteChar(cCSS1_style_opt_end);
@@ -2051,7 +2042,7 @@ void SwHTMLWriter::OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameF
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
-        OutCSS1_SvxBrush( *this, *pItem, Css1Background::Table, nullptr );
+        OutCSS1_SvxBrush( *this, *pItem, sw::Css1Background::Table, nullptr );
 
     if( IsHTMLMode( HTMLMODE_PRINT_EXT ) )
         OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( *this, rItemSet, false );
@@ -2068,7 +2059,7 @@ void SwHTMLWriter::OutCSS1_TableCellBordersAndBG(SwFrameFormat const& rFrameForm
     SwCSS1OutMode const aMode( *this,
         CSS1_OUTMODE_STYLE_OPT_ON|CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_TABLEBOX, nullptr );
     if (pBrushItem)
-        OutCSS1_SvxBrush(*this, *pBrushItem, Css1Background::Table, nullptr);
+        OutCSS1_SvxBrush(*this, *pBrushItem, sw::Css1Background::TableCell, nullptr);
     OutCSS1_SvxBox(*this, rFrameFormat.GetBox());
     if (!m_bFirstCSS1Property)
         Strm().WriteChar(cCSS1_style_opt_end);
@@ -2083,7 +2074,7 @@ void SwHTMLWriter::OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameForm
     const SfxPoolItem *pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
-        OutCSS1_SvxBrush( *this, *pItem, Css1Background::Section, nullptr );
+        OutCSS1_SvxBrush( *this, *pItem, sw::Css1Background::Section, nullptr );
 
     if (pCol)
     {
@@ -2105,7 +2096,7 @@ static bool OutCSS1_FrameFormatBrush( SwHTMLWriter& rWrt,
         !rBrushItem.GetGraphicLink().isEmpty() ||
         0 != rBrushItem.GetGraphicPos() )
     {
-        OutCSS1_SvxBrush( rWrt, rBrushItem, Css1Background::Fly, nullptr );
+        OutCSS1_SvxBrush( rWrt, rBrushItem, sw::Css1Background::Fly, nullptr );
         bWritten = true;
     }
     return bWritten;
@@ -3044,12 +3035,12 @@ static Writer& OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( Writer& rWrt,
 // Wrapper for OutCSS1_SfxItemSet etc.
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    OutCSS1_SvxBrush( rWrt, rHt, Css1Background::Attr, nullptr );
+    OutCSS1_SvxBrush( rWrt, rHt, sw::Css1Background::Attr, nullptr );
     return rWrt;
 }
 
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
-                                 Css1Background nMode,
+                                 sw::Css1Background nMode,
                                  const OUString* pGraphicName)
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
@@ -3066,7 +3057,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     OUString aLink = pGraphicName ? *pGraphicName
                             : static_cast<const SvxBrushItem &>(rHt).GetGraphicLink();
     SvxGraphicPosition ePos = static_cast<const SvxBrushItem &>(rHt).GetGraphicPos();
-    if( Css1Background::Page == nMode && !rHTMLWrt.mbEmbedImages )
+    if( sw::Css1Background::Page == nMode && !rHTMLWrt.mbEmbedImages )
     {
         // page style images are exported if not tiled
         if( aLink.isEmpty() || GPOS_TILED==ePos )
@@ -3108,7 +3099,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         aLink = aGraphicAsLink;
     }
     // In tables we only export something if there is a Graphic
-    if( Css1Background::Table==nMode && !pGrf && !aLink.isEmpty())
+    if( (nMode == sw::Css1Background::Table || nMode == sw::Css1Background::TableRow) && !pGrf && !aLink.isEmpty())
         return rWrt;
 
     // if necessary, add the orientation of the Graphic
@@ -3179,7 +3170,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     if( !pGrf && aLink.isEmpty() && !bColor )
     {
         // no color and no Link, but a transparent Brush
-        if( bTransparent && Css1Background::Fly != nMode )
+        if( bTransparent && sw::Css1Background::Fly != nMode )
             sOut += OStringToOUString(sCSS1_PV_transparent, RTL_TEXTENCODING_ASCII_US);
     }
     else
@@ -3226,8 +3217,10 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     }
 
     if( !sOut.isEmpty() )
+    {
         rHTMLWrt.OutCSS1_Property(sCSS1_P_background, std::string_view(), &sOut,
-                                  nMode == Css1Background::Table);
+                                  nMode);
+    }
 
     return rWrt;
 }

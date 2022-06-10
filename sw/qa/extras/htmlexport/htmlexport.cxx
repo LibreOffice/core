@@ -803,9 +803,8 @@ DECLARE_HTMLEXPORT_TEST(testReqIfTable, "reqif-table.xhtml")
     // <div> was missing, so the XHTML fragment wasn't a valid
     // xhtml.BlkStruct.class type anymore.
     assertXPath(pDoc, "/html/body/div/table/tr/th", 1);
-    // Make sure that row background is written using CSS.
-    OUString aStyle = getXPath(pDoc, "/html/body/div/table/tr/th", "style");
-    CPPUNIT_ASSERT(aStyle.startsWith("background: "));
+    // Make sure that the cell background is not written using CSS.
+    assertXPathNoAttribute(pDoc, "/html/body/div/table/tr/th", "style");
     // The attribute was present, which is not valid in reqif-xhtml.
     assertXPathNoAttribute(pDoc, "/html/body/div/table/tr/th", "bgcolor");
 }
