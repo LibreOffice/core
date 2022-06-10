@@ -1894,7 +1894,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_BREAK_DLG:
         case FN_INSERT_COLUMN_BREAK:
         case FN_INSERT_PAGEBREAK:
-            if( rSh.CursorInsideInputField() )
+            if( rSh.CursorInsideInputField() || rSh.CursorInsideContentControl() )
             {
                 rSet.DisableItem( nWhich );
             }
