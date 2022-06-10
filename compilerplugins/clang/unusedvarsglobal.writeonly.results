@@ -1,51 +1,127 @@
-basctl/source/basicide/localizationmgr.cxx:56
+basctl/source/basicide/localizationmgr.cxx:57
     rtl::OUStringLiteral<2> aSemi
 chart2/source/view/inc/ViewDefines.hxx:29
     double ZDIRECTION
-connectivity/source/drivers/hsqldb/HDriver.cxx:345
+connectivity/source/drivers/hsqldb/HDriver.cxx:346
     Reference<class com::sun::star::frame::XTerminateListener> s_xTerminateListener
-connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx:38
+connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx:39
     std::string wild
-cppuhelper/source/servicemanager.cxx:2024
+connectivity/source/inc/dbase/DIndex.hxx:26
+    rtl::OStringLiteral<10> dBASE_III_GROUP
+cppuhelper/source/servicemanager.cxx:2009
     std::vector<css::uno::Mapping> maMaps
-dbaccess/source/ui/browser/genericcontroller.cxx:462
-    sal_Int32 s_nRecursions
-hwpfilter/source/grammar.cxx:399
+hwpfilter/source/grammar.cxx:307
     int yynerrs
-hwpfilter/source/hbox.h:66
+hwpfilter/source/hbox.h:67
     int boxCount
 hwpfilter/source/ksc5601.h:184
-    hchar [4888] ksc5601_2uni_page4a
-hwpfilter/source/nodes.h:98
+    hchar[4888] ksc5601_2uni_page4a
+hwpfilter/source/nodes.h:95
     std::vector<std::unique_ptr<Node> > nodelist
-i18npool/inc/calendar_hijri.hxx:46
-    double SynMonth
-i18npool/inc/calendar_hijri.hxx:56
-    double SA_TimeZone
-i18npool/inc/calendar_hijri.hxx:59
-    double EveningPeriod
-i18npool/inc/calendar_hijri.hxx:62
-    sal_Int32 [] LeapYear
-idlc/source/idlccompile.cxx:51
+idlc/source/idlccompile.cxx:47
     int yydebug
-include/vcl/animate/Animation.hxx:96
+include/comphelper/storagehelper.hxx:29
+    rtl::OUStringLiteral<14> PACKAGE_STORAGE_FORMAT_STRING
+include/editeng/unoprnms.hxx:24
+    rtl::OUStringLiteral<15> UNO_NAME_CHAR_COLOR_THEME
+include/editeng/unoprnms.hxx:25
+    rtl::OUStringLiteral<21> UNO_NAME_CHAR_COLOR_TINT_OR_SHADE
+include/editeng/unoprnms.hxx:29
+    rtl::OUStringLiteral<14> UNO_NAME_CHAR_UNDERLINE
+include/svl/inettype.hxx:106
+    rtl::OUStringLiteral<11> CONTENT_TYPE_STR_IMAGE_WEBP
+include/svtools/soerr.hxx:36
+    ErrMsgCode[] RID_SO_ERROR_HANDLER
+include/tools/color.hxx:471
+    Color COL_AUTHOR1_DARK
+include/tools/color.hxx:472
+    Color COL_AUTHOR1_NORMAL
+include/tools/color.hxx:473
+    Color COL_AUTHOR1_LIGHT
+include/tools/color.hxx:474
+    Color COL_AUTHOR2_DARK
+include/tools/color.hxx:475
+    Color COL_AUTHOR2_NORMAL
+include/tools/color.hxx:476
+    Color COL_AUTHOR2_LIGHT
+include/tools/color.hxx:477
+    Color COL_AUTHOR3_DARK
+include/tools/color.hxx:478
+    Color COL_AUTHOR3_NORMAL
+include/tools/color.hxx:479
+    Color COL_AUTHOR3_LIGHT
+include/tools/color.hxx:480
+    Color COL_AUTHOR4_DARK
+include/tools/color.hxx:481
+    Color COL_AUTHOR4_NORMAL
+include/tools/color.hxx:482
+    Color COL_AUTHOR4_LIGHT
+include/tools/color.hxx:483
+    Color COL_AUTHOR5_DARK
+include/tools/color.hxx:484
+    Color COL_AUTHOR5_NORMAL
+include/tools/color.hxx:485
+    Color COL_AUTHOR5_LIGHT
+include/tools/color.hxx:486
+    Color COL_AUTHOR6_DARK
+include/tools/color.hxx:487
+    Color COL_AUTHOR6_NORMAL
+include/tools/color.hxx:488
+    Color COL_AUTHOR6_LIGHT
+include/tools/color.hxx:489
+    Color COL_AUTHOR7_DARK
+include/tools/color.hxx:490
+    Color COL_AUTHOR7_NORMAL
+include/tools/color.hxx:491
+    Color COL_AUTHOR7_LIGHT
+include/tools/color.hxx:492
+    Color COL_AUTHOR8_DARK
+include/tools/color.hxx:493
+    Color COL_AUTHOR8_NORMAL
+include/tools/color.hxx:494
+    Color COL_AUTHOR8_LIGHT
+include/tools/color.hxx:495
+    Color COL_AUTHOR9_DARK
+include/tools/color.hxx:496
+    Color COL_AUTHOR9_NORMAL
+include/tools/color.hxx:497
+    Color COL_AUTHOR9_LIGHT
+include/tools/color.hxx:498
+    Color COL_AUTHOR_TABLE_INS
+include/tools/color.hxx:499
+    Color COL_AUTHOR_TABLE_DEL
+include/tools/urlobj.hxx:40
+    rtl::OUStringLiteral<7> INET_FTP_SCHEME
+include/tools/urlobj.hxx:41
+    rtl::OUStringLiteral<8> INET_HTTP_SCHEME
+include/tools/urlobj.hxx:42
+    rtl::OUStringLiteral<9> INET_HTTPS_SCHEME
+include/tools/urlobj.hxx:43
+    rtl::OUStringLiteral<8> INET_FILE_SCHEME
+include/tools/urlobj.hxx:44
+    rtl::OUStringLiteral<8> INET_MAILTO_SCHEME
+include/vcl/animate/Animation.hxx:97
     sal_uLong mnAnimCount
-include/xmloff/xmlimp.hxx:531
-    rtl::OUStringLiteral<1> aDefaultNamespace
+include/vcl/salnativewidgets.hxx:351
+    int m_nOverlap
+include/xmloff/odffields.hxx:45
+    rtl::OUStringLiteral<11> ODF_FORMDATE_CURRENTDATE_FORMAT
 libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.cxx:31
     gpointer gtv_comments_sidebar_parent_class
-libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:61
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:62
     gpointer gtv_lok_dialog_parent_class
 sal/osl/unx/system.cxx:164
     void *[3] dummy
 sal/qa/osl/condition/osl_Condition_Const.h:41
     rtl::OUString aTestCon
 sal/qa/osl/condition/osl_Condition_Const.h:43
-    char [17] pTestString
+    char[17] pTestString
 sal/qa/osl/file/osl_File_Const.h:63
-    char [11] pBuffer_Number
+    char[11] pBuffer_Number
 sal/qa/osl/file/osl_File_Const.h:64
-    char [1] pBuffer_Blank
+    char[1] pBuffer_Blank
+sal/qa/osl/file/osl_File_Const.h:119
+    rtl::OUString aRootURL
 sal/qa/osl/file/osl_File_Const.h:129
     rtl::OUString aCanURL2
 sal/qa/osl/file/osl_File_Const.h:131
@@ -85,96 +161,116 @@ sal/qa/osl/file/osl_File_Const.h:189
 sal/qa/osl/file/osl_File_Const.h:190
     rtl::OUString aVolURL6
 sal/qa/osl/security/osl_Security_Const.h:48
-    char [17] pTestString
+    char[17] pTestString
 sal/qa/OStringBuffer/rtl_String_Const.h:275
-    sal_Unicode [3] uTestStr31
+    sal_Unicode[3] uTestStr31
 sal/qa/OStringBuffer/rtl_String_Const.h:276
-    sal_Unicode [4] uTestStr32
+    sal_Unicode[4] uTestStr32
 sal/qa/OStringBuffer/rtl_String_Const.h:297
-    sal_Int32 [5] kInt32MaxNums
+    sal_Int32[5] kInt32MaxNums
 sal/qa/OStringBuffer/rtl_String_Const.h:306
-    sal_Int64 [7] kInt64MaxNums
+    sal_Int64[7] kInt64MaxNums
 sal/qa/OStringBuffer/rtl_String_Const.h:335
-    double [24] expValDouble
+    double[24] expValDouble
 sal/qa/OStringBuffer/rtl_String_Const.h:345
-    float [22] expValFloat
+    float[22] expValFloat
 sal/qa/OStringBuffer/rtl_String_Const.h:355
-    sal_Unicode [15] expValChar
+    sal_Unicode[15] expValChar
 sal/qa/OStringBuffer/rtl_String_Const.h:364
-    sal_Unicode [6] input1Default
+    sal_Unicode[6] input1Default
 sal/qa/OStringBuffer/rtl_String_Const.h:368
-    sal_Int32 [6] input2Default
+    sal_Int32[6] input2Default
 sal/qa/OStringBuffer/rtl_String_Const.h:372
-    sal_Int32 [6] expValDefault
+    sal_Int32[6] expValDefault
 sal/qa/OStringBuffer/rtl_String_Const.h:378
-    sal_Unicode [10] input1Normal
+    sal_Unicode[10] input1Normal
 sal/qa/OStringBuffer/rtl_String_Const.h:382
-    sal_Int32 [10] input2Normal
+    sal_Int32[10] input2Normal
 sal/qa/OStringBuffer/rtl_String_Const.h:386
-    sal_Int32 [10] expValNormal
+    sal_Int32[10] expValNormal
 sal/qa/OStringBuffer/rtl_String_Const.h:392
-    sal_Unicode [5] input1lastDefault
+    sal_Unicode[5] input1lastDefault
 sal/qa/OStringBuffer/rtl_String_Const.h:396
-    sal_Int32 [5] input2lastDefault
+    sal_Int32[5] input2lastDefault
 sal/qa/OStringBuffer/rtl_String_Const.h:400
-    sal_Int32 [5] expVallastDefault
+    sal_Int32[5] expVallastDefault
 sal/qa/OStringBuffer/rtl_String_Const.h:406
-    sal_Unicode [8] input1lastNormal
+    sal_Unicode[8] input1lastNormal
 sal/qa/OStringBuffer/rtl_String_Const.h:410
-    sal_Int32 [8] input2lastNormal
+    sal_Int32[8] input2lastNormal
 sal/qa/OStringBuffer/rtl_String_Const.h:414
-    sal_Int32 [8] expVallastNormal
+    sal_Int32[8] expVallastNormal
 sal/qa/OStringBuffer/rtl_String_Const.h:420
-    sal_Int32 [6] input2StrDefault
+    sal_Int32[6] input2StrDefault
 sal/qa/OStringBuffer/rtl_String_Const.h:424
-    sal_Int32 [6] expValStrDefault
+    sal_Int32[6] expValStrDefault
 sal/qa/OStringBuffer/rtl_String_Const.h:430
-    sal_Int32 [9] input2StrNormal
+    sal_Int32[9] input2StrNormal
 sal/qa/OStringBuffer/rtl_String_Const.h:434
-    sal_Int32 [9] expValStrNormal
+    sal_Int32[9] expValStrNormal
 sal/qa/OStringBuffer/rtl_String_Const.h:440
-    sal_Int32 [6] input2StrLastDefault
+    sal_Int32[6] input2StrLastDefault
 sal/qa/OStringBuffer/rtl_String_Const.h:444
-    sal_Int32 [6] expValStrLastDefault
+    sal_Int32[6] expValStrLastDefault
 sal/qa/OStringBuffer/rtl_String_Const.h:450
-    sal_Int32 [12] input2StrLastNormal
+    sal_Int32[12] input2StrLastNormal
 sal/qa/OStringBuffer/rtl_String_Const.h:454
-    sal_Int32 [12] expValStrLastNormal
-sal/qa/rtl/strings/test_oustring_stringliterals.cxx:47
-    rtlunittest::OUStringLiteral<6> dummy
+    sal_Int32[12] expValStrLastNormal
+sc/inc/mtvelements.hxx:116
+    mdds::mtv::lu_factor_t loop_unrolling
 sc/source/core/data/drwlayer.cxx:86
     E3dObjFactory * pF3d
-sd/source/ui/inc/framework/FrameworkHelper.hxx:80
-    rtl::OUStringLiteral<28> msTaskPanelURLPrefix
-sfx2/source/appl/appdata.cxx:48
+sfx2/inc/strings.hxx:48
+    rtl::OUStringLiteral<7> STR_TEMPLATE_NAME31_DEF
+sfx2/inc/strings.hxx:49
+    rtl::OUStringLiteral<5> STR_TEMPLATE_NAME32_DEF
+sfx2/source/appl/appdata.cxx:44
     BasicDLL * pBasic
-sfx2/source/appl/shutdownicon.hxx:108
+sfx2/source/appl/shutdownicon.hxx:53
+    rtl::OUStringLiteral<24> WRITER_URL
+sfx2/source/appl/shutdownicon.hxx:54
+    rtl::OUStringLiteral<22> CALC_URL
+sfx2/source/appl/shutdownicon.hxx:55
+    rtl::OUStringLiteral<25> IMPRESS_URL
+sfx2/source/appl/shutdownicon.hxx:56
+    rtl::OUStringLiteral<35> IMPRESS_WIZARD_URL
+sfx2/source/appl/shutdownicon.hxx:57
+    rtl::OUStringLiteral<22> DRAW_URL
+sfx2/source/appl/shutdownicon.hxx:58
+    rtl::OUStringLiteral<22> MATH_URL
+sfx2/source/appl/shutdownicon.hxx:59
+    rtl::OUStringLiteral<38> BASE_URL
+sfx2/source/appl/shutdownicon.hxx:60
+    rtl::OUStringLiteral<21> STARTMODULE_URL
+sfx2/source/appl/shutdownicon.hxx:106
     _Bool bModalMode
 soltools/cpp/cpp.h:246
     Nlist * kwdefined
+starmath/inc/mathml/attribute.hxx:192
+    SmMlAttributePos[1] MlAttributeListEmpty
+starmath/inc/mathml/attribute.hxx:193
+    SmMlAttributePos[1] MlAttributeListMath
 starmath/inc/mathml/mathmlMo.hxx:106
     std::vector<moOperatorData> moOperatorDataDictionary
 starmath/inc/mathml/starmathdatabase.hxx:189
     Color COL_SM_DIV_BLACK
 starmath/inc/mathml/starmathdatabase.hxx:190
     Color COL_SM_DIV_BLUE
-svl/source/items/style.cxx:59
+svl/source/items/style.cxx:60
     (anonymous namespace)::DbgStyleSheetReferences aDbgStyleSheetReferences
-sw/source/core/inc/swfont.hxx:989
+sw/source/core/inc/swfont.hxx:996
     SvStatistics g_SvStat
-sw/source/filter/ww8/ww8par6.cxx:1083
-    sal_uInt16 [2] nLef
-sw/source/filter/ww8/ww8par6.cxx:1084
-    sal_uInt16 [2] nRig
-sw/source/filter/ww8/ww8par6.cxx:1135
-    sal_uInt16 [2] nTop
-sw/source/filter/ww8/ww8par6.cxx:1136
-    sal_uInt16 [2] nBot
+sw/source/filter/ww8/ww8par6.cxx:1088
+    sal_uInt16[2] nLef
+sw/source/filter/ww8/ww8par6.cxx:1089
+    sal_uInt16[2] nRig
+sw/source/filter/ww8/ww8par6.cxx:1141
+    sal_uInt16[2] nTop
+sw/source/filter/ww8/ww8par6.cxx:1142
+    sal_uInt16[2] nBot
+unotools/source/config/eventcfg.cxx:377
+    rtl::Reference<GlobalEventConfig> createImpl
 vcl/qa/cppunit/timer.cxx:54
     (anonymous namespace)::WatchDog * aWatchDog
-vcl/source/filter/FilterConfigCache.hxx:49
-    char *[] InternalVectorFilterNameList
-vcl/unx/gtk3/a11y/gtk3atkutil.cxx:447
+vcl/unx/gtk3/a11y/atkutil.cxx:444
     (anonymous namespace)::WindowList g_aWindowList
-xmloff/source/draw/sdpropls.cxx:365
-    XMLPropertyMapEntry [5] aXMLSDPresPageProps_onlyHeadersFooter

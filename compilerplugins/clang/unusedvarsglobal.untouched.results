@@ -1,44 +1,96 @@
-canvas/workben/canvasdemo.cxx:669
+canvas/workben/canvasdemo.cxx:666
     (anonymous namespace)::DemoApp aApp
-cppu/source/uno/check.cxx:315
+connectivity/source/drivers/evoab2/EApi.h:51
+    gconstpointer (*)(EContact *, EContactField) e_contact_get_const
+connectivity/source/drivers/evoab2/EApi.h:55
+    char *(*)(ESource *) e_source_peek_name
+connectivity/source/drivers/evoab2/EApi.h:64
+    GSList *(*)(ESourceList *) e_source_list_peek_groups
+connectivity/source/drivers/evoab2/EApi.h:70
+    GSList *(*)(ESourceGroup *) e_source_group_peek_sources
+connectivity/source/drivers/evoab2/EApi.h:71
+    char *(*)(ESourceGroup *) e_source_group_peek_base_uri
+connectivity/source/drivers/evoab2/EApi.h:90
+    char *(*)(EBook *) e_book_get_uri
+connectivity/source/drivers/evoab2/EApi.h:93
+    gboolean (*)(ESourceList **, GError **) e_book_get_addressbooks
+connectivity/source/drivers/evoab2/EApi.h:101
+    gboolean (*)(EBook *, const char *, const char *, const char *, GError **) e_book_authenticate_user
+cppu/source/uno/check.cxx:329
     (anonymous namespace)::BinaryCompatible_Impl aTest
-framework/source/services/ContextChangeEventMultiplexer.cxx:370
+desktop/source/lib/init.cxx:6493
+    SvtOptionsDialogOptions aDialogOptions
+desktop/source/lib/init.cxx:6494
+    SvtCTLOptions aSvtCTLOptions
+desktop/source/lib/init.cxx:6495
+    SvtAccessibilityOptions aSvtAccessibilityOptions
+desktop/source/lib/init.cxx:6496
+    svtools::ColorConfig aColorConfig
+desktop/source/lib/init.cxx:6497
+    SvtMiscOptions aSvtMiscOptions
+desktop/source/lib/init.cxx:6498
+    SvtSlideSorterBarOptions aSvtSlideSorterBarOptions
+desktop/source/lib/init.cxx:6499
+    SvtCommandOptions aSvtCommandOptions
+desktop/source/lib/init.cxx:6500
+    SvtCompatibilityOptions aSvtCompatibilityOptions
+desktop/source/lib/init.cxx:6501
+    SvtFilterOptions aSvtFilterOptions
+desktop/source/lib/init.cxx:6502
+    SvtLinguConfig aSvtLinguConfig
+desktop/source/lib/init.cxx:6503
+    SvtModuleOptions aSvtModuleOptions
+desktop/source/lib/init.cxx:6504
+    SvtPathOptions aSvtPathOptions
+desktop/source/lib/init.cxx:6505
+    SvtSearchOptions aSvtSearchOptions
+desktop/source/lib/init.cxx:6506
+    SvtSysLocaleOptions aSvtSysLocaleOptions
+desktop/source/lib/init.cxx:6507
+    SvtUserOptions aSvtUserOptions
+desktop/source/lib/init.cxx:6509
+    MouseSettings aMouseSettings
+desktop/source/lib/init.cxx:6510
+    StyleSettings aStyleSettings
+desktop/source/lib/init.cxx:6511
+    MiscSettings aMiscSettings
+desktop/source/lib/init.cxx:6512
+    HelpSettings aHelpSettings
+desktop/source/lib/init.cxx:6513
+    AllSettings aAllSettings
+framework/source/services/ContextChangeEventMultiplexer.cxx:352
     framework::(anonymous namespace)::Hook g_hook
-hwpfilter/source/nodes.h:92
+hwpfilter/source/nodes.h:89
     int count
 pyuno/source/module/pyuno_gc.cxx:45
     pyuno::(anonymous namespace)::StaticDestructorGuard guard
 sal/osl/all/utility.cxx:45
     osl::(anonymous namespace)::OGlobalTimer aGlobalTimer
-sal/qa/osl/file/osl_File.cxx:4970
+sal/qa/osl/file/osl_File.cxx:4978
     (anonymous namespace)::GlobalObject theGlobalObject
 sal/rtl/cmdargs.cxx:46
     (anonymous namespace)::ArgHolder argHolder
-sal/rtl/strtmpl.hxx:1258
+sal/rtl/strtmpl.hxx:890
     IMPL_RTL_STRINGDATA data
-sc/source/ui/inc/inscodlg.hxx:88
-    _Bool bPreviousAllCheck
-sdext/source/presenter/PresenterHelper.hxx:33
-    rtl::OUString msCenterPaneURL
+sc/source/core/inc/sharedstringpoolpurge.hxx:43
+    sc::SharedStringPoolPurge * self
+sfx2/source/bastyp/fltfnc.cxx:80
+    SfxFilterListener theSfxFilterListener
 soltools/cpp/cpp.h:239
     int Lflag
 soltools/mkdepend/parse.c:40
     symhash * maininclist
 soltools/mkdepend/pr.c:34
     int width
-starmath/inc/ElementsDockingWindow.hxx:81
-    std::tuple<const char *, const SmElementDescr *, size_t> [0] m_a6Categories
 svx/source/gengal/gengal.cxx:323
     (anonymous namespace)::GalApp aGalApp
-vcl/backendtest/VisualBackendTest.cxx:799
+svx/source/items/svxerr.cxx:32
+    SvxErrorHandler SINGLETON
+vcl/backendtest/VisualBackendTest.cxx:883
     (anonymous namespace)::VisualBackendTestApp aApplication
-vcl/source/uipreviewer/previewer.cxx:113
-    (anonymous namespace)::UIPreviewApp aApp
-vcl/workben/icontest.cxx:214
+vcl/workben/icontest.cxx:212
     (anonymous namespace)::IconTestApp aApp
-vcl/workben/mtfdemo.cxx:162
+vcl/workben/mtfdemo.cxx:243
     (anonymous namespace)::DemoMtfApp aApp
-vcl/workben/vcldemo.cxx:2258
+vcl/workben/vcldemo.cxx:2268
     (anonymous namespace)::DemoApp aApp
-xmloff/source/forms/elementimport.hxx:54
-    xmloff::OElementNameMap::MapString2Element s_sElementTranslations

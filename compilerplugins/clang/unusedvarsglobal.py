@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import sys
 import re
@@ -12,7 +12,7 @@ defToTypeMap = dict()
 def parseFieldInfo( tokens ):
     return (tokens[1].strip(), tokens[2].strip())
 
-with io.open("workdir/loplugin.unusedvarsglobal.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.unusedvarsglobal.log", "r", buffering=16*1024*1024) as txt:
     for line in txt:
         try:
             tokens = line.strip().split("\t")
@@ -46,7 +46,7 @@ with io.open("workdir/loplugin.unusedvarsglobal.log", "rb", buffering=1024*1024)
             else:
                 print( "unknown line: " + line)
         except IndexError:
-            print "problem with line " + line.strip()
+            print("problem with line " + line.strip())
             raise
 
 definitionSet2 = set()
