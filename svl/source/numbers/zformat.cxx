@@ -2448,7 +2448,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
     bool bRes = false;
     OutString.clear();
     *ppColor = nullptr; // No color change
-    if (eType & SvNumFormatType::LOGICAL)
+    if (eType & SvNumFormatType::LOGICAL && sFormatstring == rScan.GetKeywords()[NF_KEY_BOOLEAN])
     {
         if (fNumber)
         {
@@ -2613,6 +2613,9 @@ bool SvNumberformat::GetOutputString(double fNumber,
         case SvNumFormatType::PERCENT:
         case SvNumFormatType::CURRENCY:
             bRes |= ImpGetNumberOutput(fNumber, nIx, sBuff);
+            break;
+        case SvNumFormatType::LOGICAL:
+            bRes |= ImpGetLogicalOutput(fNumber, nIx, sBuff);
             break;
         case SvNumFormatType::FRACTION:
             bRes |= ImpGetFractionOutput(fNumber, nIx, sBuff);
@@ -4283,6 +4286,29 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     {
         rCal.loadCalendar( aOrgCalendar, rLoc().getLanguageTag().getLocale() );  // restore calendar
     }
+    return bRes;
+}
+
+bool SvNumberformat::ImpGetLogicalOutput(double fNumber,
+                                         sal_uInt16 nIx,
+                                         OUStringBuffer& sStr)
+{
+    bool bRes = false;
+    const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
+    const sal_uInt16 nCnt = NumFor[nIx].GetCount();
+    for (sal_uInt16 j = 0; j < nCnt; ++j)
+    {
+        switch (rInfo.nTypeArray[j])
+        {
+            case NF_KEY_BOOLEAN:
+                sStr.append( fNumber ? rScan.GetTrueString() : rScan.GetFalseString());
+            break;
+            case NF_SYMBOLTYPE_STRING:
+                sStr.append( rInfo.sStrArray[j]);
+            break;
+        }
+    }
+    impTransliterate(sStr, NumFor[nIx].GetNatNum());
     return bRes;
 }
 
