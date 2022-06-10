@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <config_wasm_strip.h>
 
 #include <memory>
@@ -2497,6 +2499,30 @@ void SwTableNode::RemoveRedlines()
     SwDoc& rDoc = GetDoc();
     SwTable& rTable = GetTable();
     rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAllTableRedlines(rDoc, rTable, true, RedlineType::Any);
+}
+
+void SwTableNode::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableNode"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(sal_Int32(GetIndex())).getStr()));
+
+    if (m_pTable)
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTable"));
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", m_pTable.get());
+        m_pTable->GetFrameFormat()->dumpAsXml(pWriter);
+        for (const auto& pLine : m_pTable->GetTabLines())
+        {
+            (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTableLine"));
+            (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pLine);
+            pLine->GetFrameFormat()->dumpAsXml(pWriter);
+            (void)xmlTextWriterEndElement(pWriter);
+        }
+        (void)xmlTextWriterEndElement(pWriter);
+    }
+
+    // (void)xmlTextWriterEndElement(pWriter); - it is a start node, so don't end, will make xml better nested
 }
 
 void SwDoc::GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame )

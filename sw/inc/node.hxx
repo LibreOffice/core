@@ -524,6 +524,8 @@ public:
     // Removes redline objects that relate to this table from the 'Extra Redlines' table
     void RemoveRedlines();
 
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+
 private:
     SwTableNode( const SwTableNode & rNode ) = delete;
     SwTableNode & operator= ( const SwTableNode & rNode ) = delete;
