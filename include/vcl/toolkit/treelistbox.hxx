@@ -565,8 +565,6 @@ public:
     void            SetCheckButtonState( SvTreeListEntry*, SvButtonState );
     SvButtonState   GetCheckButtonState( SvTreeListEntry* ) const;
 
-    static bool     HasEntryText(const SvTreeListEntry* pEntry);
-
     void            SetEntryText(SvTreeListEntry*, const OUString& );
     void            SetExpandedEntryBmp( SvTreeListEntry* _pEntry, const Image& _rImage );
     void            SetCollapsedEntryBmp( SvTreeListEntry* _pEntry, const Image& _rImage );

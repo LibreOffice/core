@@ -1513,8 +1513,9 @@ OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
 {
     assert(pEntry);
     SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SvLBoxItemType::String));
-    assert(pItem);
-    return pItem->GetText();
+    if (pItem) // There may be entries without text items, e.g. in IconView
+        return pItem->GetText();
+    return {};
 }
 
 const Image& SvTreeListBox::GetExpandedEntryBmp(const SvTreeListEntry* pEntry)
@@ -1570,13 +1571,6 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     nTreeFlags &= ~SvTreeFlags::MANINS;
 
     return pEntry;
-}
-
-// static
-bool SvTreeListBox::HasEntryText(const SvTreeListEntry* pEntry)
-{
-    assert(pEntry);
-    return pEntry->GetFirstItem(SvLBoxItemType::String) != nullptr;
 }
 
 void SvTreeListBox::SetEntryText(SvTreeListEntry* pEntry, const OUString& rStr)
