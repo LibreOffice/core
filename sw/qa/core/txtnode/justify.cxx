@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSpaceDistributionHalfSpace)
     CharWidthArray aExpected{ 720, 851, 573, 720, 639, 612, 573, 720, 480, 720 };
 
     aActual.InvokeWithKernArray(
-        [&] { Justify::SpaceDistribution(aActual.maArray, aText, 0, 10, 425, 0, false); });
+        [&] { sw::Justify::SpaceDistribution(aActual.maArray, aText, 0, 10, 425, 0, false); });
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSpaceDistributionNoHalfSpace)
     CharWidthArray aExpected{ 720, 639, 785, 720, 639, 400, 785, 720, 480, 720 };
 
     aActual.InvokeWithKernArray(
-        [&] { Justify::SpaceDistribution(aActual.maArray, aText, 0, 10, 425, 0, true); });
+        [&] { sw::Justify::SpaceDistribution(aActual.maArray, aText, 0, 10, 425, 0, true); });
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSpaceDistributionUnicodeIVS)
     CharWidthArray aActual{ 1600, 1600, 1600, 0, 0, 1600, 1600, 1600, 1600, 1600, 0, 0 };
     CharWidthArray aExpected{ 1800, 1800, 1800, 0, 0, 1800, 1800, 1800, 1800, 1800, 0, 0 };
     aActual.InvokeWithKernArray(
-        [&] { Justify::SpaceDistribution(aActual.maArray, aText, 0, 12, 0, 200, false); });
+        [&] { sw::Justify::SpaceDistribution(aActual.maArray, aText, 0, 12, 0, 200, false); });
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
@@ -121,7 +121,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGrid)
         1360, 1040, 1200, 1200, 1200, 1200, 1200, 1200, 1040, 1360, 1200, 1040
     };
     aActual.InvokeWithKernArray(
-        [&] { nDelta = Justify::SnapToGrid(aActual.maArray, aText, 0, 12, 400, false); });
+        [&] { nDelta = sw::Justify::SnapToGrid(aActual.maArray, aText, 0, 12, 400, false); });
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
     CPPUNIT_ASSERT_EQUAL(tools::Long(160), nDelta);
 }
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridMixWidth)
     CharWidthArray aActual{ 640, 640, 640, 320, 320, 320, 320, 320, 320, 320, 320, 320, 320 };
     CharWidthArray aExpected{ 800, 800, 760, 400, 400, 400, 400, 400, 400, 400, 400, 400, 360 };
     aActual.InvokeWithKernArray(
-        [&] { nDelta = Justify::SnapToGrid(aActual.maArray, aText, 0, 13, 400, false); });
+        [&] { nDelta = sw::Justify::SnapToGrid(aActual.maArray, aText, 0, 13, 400, false); });
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
     CPPUNIT_ASSERT_EQUAL(tools::Long(80), nDelta);
 }
@@ -150,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridIVS)
     CharWidthArray aActual{ 800, 800, 800, 0, 0, 800, 800 };
     CharWidthArray aExpected{ 800, 800, 800, 0, 0, 800, 800 };
     aActual.InvokeWithKernArray(
-        [&] { nDelta = Justify::SnapToGrid(aActual.maArray, aText, 0, 7, 400, false); });
+        [&] { nDelta = sw::Justify::SnapToGrid(aActual.maArray, aText, 0, 7, 400, false); });
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
     CPPUNIT_ASSERT_EQUAL(tools::Long(0), nDelta);
 }
@@ -159,7 +159,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridEdge1)
 {
     CharWidthArray aActual{ 640, 640, 640, 640, 640, 640, 320, 960 };
     CharWidthArray aExpected{ 840, 840, 840, 840, 840, 840, 440, 1240 };
-    aActual.InvokeWithKernArray([&] { Justify::SnapToGridEdge(aActual.maArray, 8, 400, 40, 0); });
+    aActual.InvokeWithKernArray(
+        [&] { sw::Justify::SnapToGridEdge(aActual.maArray, 8, 400, 40, 0); });
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
@@ -167,7 +168,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridEdge2)
 {
     CharWidthArray aActual{ 640, 640, 640, 640, 640, 640, 320, 640 };
     CharWidthArray aExpected{ 840, 840, 840, 840, 840, 840, 440, 840 };
-    aActual.InvokeWithKernArray([&] { Justify::SnapToGridEdge(aActual.maArray, 8, 100, 40, 80); });
+    aActual.InvokeWithKernArray(
+        [&] { sw::Justify::SnapToGridEdge(aActual.maArray, 8, 100, 40, 80); });
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
@@ -175,7 +177,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridEdgeIVS)
 {
     CharWidthArray aActual{ 640, 0, 0, 640, 640, 640, 640, 640 };
     CharWidthArray aExpected{ 840, 0, 0, 840, 840, 840, 840, 840 };
-    aActual.InvokeWithKernArray([&] { Justify::SnapToGridEdge(aActual.maArray, 8, 400, 40, 0); });
+    aActual.InvokeWithKernArray(
+        [&] { sw::Justify::SnapToGridEdge(aActual.maArray, 8, 400, 40, 0); });
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 

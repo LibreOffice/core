@@ -935,12 +935,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             if (pGrid->IsSnapToChars())
             {
-                nDelta = Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+                nDelta = sw::Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
                                       sal_Int32(rInf.GetLen()), nGridWidth, false);
             }
             else
             {
-                Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth,
+                sw::Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth,
                         nSpaceAdd, rInf.GetKern());
             }
 
@@ -1349,7 +1349,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             if (m_pPrtFont->IsWordLineMode())
                 bNoHalfSpace = true;
 
-            Justify::SpaceDistribution(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+            sw::Justify::SpaceDistribution(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
                     sal_Int32(nCnt), nSpaceAdd, rInf.GetKern(), bNoHalfSpace);
 
             if( rInf.GetGreyWave() )
@@ -1565,13 +1565,13 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             GetTextArray(*pOutDev, rInf, aKernArray, sal_Int32(rInf.GetLen()));
             if (pGrid->IsSnapToChars())
             {
-                Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+                sw::Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
                                   sal_Int32(rInf.GetLen()), nGridWidth, true);
             }
             else
             {
                 // use 0 to calculate raw width without rInf.GetSpace().
-                Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth, 0,
+                sw::Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth, 0,
                         rInf.GetKern());
             }
 
@@ -1687,16 +1687,16 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
 
             if (pGrid->IsSnapToChars())
             {
-                Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+                sw::Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
                                       sal_Int32(rInf.GetLen()), nGridWidth, true);
             }
             else
             {
-                Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth,
+                sw::Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth,
                         nSpaceAdd, rInf.GetKern());
             }
 
-            return  TextFrameIndex(Justify::GetModelPosition(aKernArray, sal_Int32(rInf.GetLen()),
+            return  TextFrameIndex(sw::Justify::GetModelPosition(aKernArray, sal_Int32(rInf.GetLen()),
                         rInf.GetOffset()));
         }
     }
@@ -1964,13 +1964,13 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
 
             if (pGrid->IsSnapToChars())
             {
-                Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
+                sw::Justify::SnapToGrid(aKernArray, rInf.GetText(), sal_Int32(rInf.GetIdx()),
                                   sal_Int32(rInf.GetLen()), nGridWidth, true);
             }
             else
             {
                 // use 0 to calculate raw width without rInf.GetSpace().
-                Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth,
+                sw::Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth,
                         0, rInf.GetKern());
             }
 
