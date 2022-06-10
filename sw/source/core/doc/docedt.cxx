@@ -48,7 +48,7 @@ using namespace ::com::sun::star::i18n;
 
 
 void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
-                      const SwNodeIndex* pInsertPos )
+                      const SwNodeIndex* pInsertPos, bool const isForceToStartPos)
 {
     SwPosition aPos(rStartPos);
     for(const SaveFly & rSave : rArr)
@@ -57,7 +57,7 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
         SwFrameFormat* pFormat = rSave.pFrameFormat;
         SwFormatAnchor aAnchor( pFormat->GetAnchor() );
 
-        if (rSave.isAtInsertNode)
+        if (rSave.isAtInsertNode || isForceToStartPos)
         {
             if( pInsertPos != nullptr )
             {
