@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0ad9b9c_a4934ae0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-10T11:08:45Z",
+      "side": 1,
+      "message": "My ideal would be to get rid of this at-para fly completely (and make sure that at-char fly is good for all anchored use-cases), but I fear from the angry mob. ;-)",
+      "revId": "cd74338e8c1f84b912f396a34e8711e8cd5395c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
