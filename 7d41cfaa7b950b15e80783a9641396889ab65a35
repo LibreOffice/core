@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4bf4b78_b3577f48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-06-10T10:43:39Z",
+      "side": 1,
+      "message": "The change of the xcu file IS the on-screen help. The other two files are doing the actual assignment.",
+      "parentUuid": "c40ab4f4_1a0afeb5",
+      "revId": "7d41cfaa7b950b15e80783a9641396889ab65a35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5be2ef8c_9a6c2e2f",
