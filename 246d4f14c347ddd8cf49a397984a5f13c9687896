@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4259599_59e54ed4",
+        "filename": "include/basegfx/range/basicrange.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-10T11:21:00Z",
+      "side": 1,
+      "message": "would have preferred if that wasn\u0027t just repeating the number from the pragma statement, but the human readable version (possible divide by zero)",
+      "range": {
+        "startLine": 274,
+        "startChar": 42,
+        "endLine": 274,
+        "endChar": 59
+      },
+      "revId": "246d4f14c347ddd8cf49a397984a5f13c9687896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
