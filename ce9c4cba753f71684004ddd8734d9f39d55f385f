@@ -16,6 +16,23 @@
       "message": "Does it seem ok to you?",
       "revId": "ce9c4cba753f71684004ddd8734d9f39d55f385f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba113558_e197aa8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-10T16:32:27Z",
+      "side": 1,
+      "message": "No complain, let\u0027s push this one and let\u0027s see. As always, at worst it can be reverted. Moreover branch fork has been done with 7.4.0 so it\u0027ll give enough time to test it if needed.",
+      "revId": "ce9c4cba753f71684004ddd8734d9f39d55f385f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
