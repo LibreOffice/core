@@ -162,7 +162,7 @@ public:
 
     TheExtensionManager*    getExtensionManager() const { return m_pManager; }
 
-    virtual void    updateList();
+    void updateList();
     virtual void    prepareChecking() override;
     virtual void    checkEntries() override;
 
