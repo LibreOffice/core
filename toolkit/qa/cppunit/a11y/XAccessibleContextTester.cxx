@@ -57,7 +57,7 @@ void XAccessibleContextTester::testGetAccessibleChildCount()
 {
     auto childCount = mxContext->getAccessibleChildCount();
     std::cout << childCount << " children found." << std::endl;
-    CPPUNIT_ASSERT_GREATEREQUAL(0, childCount);
+    CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int32>(0), childCount);
 }
 
 /**
@@ -130,10 +130,10 @@ void XAccessibleContextTester::testGetAccessibleRelationSet()
  */
 void XAccessibleContextTester::testGetAccessibleRole()
 {
-    sal_Int16 role = mxContext->getAccessibleRole();
+    sal_Int32 role = mxContext->getAccessibleRole();
     std::cout << "The role is " << role << " (" << AccessibilityTools::getRoleName(role) << ")"
               << std::endl;
-    CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int16>(0), role);
+    CPPUNIT_ASSERT_GREATEREQUAL(static_cast<sal_Int32>(0), role);
 }
 
 /**
@@ -157,8 +157,8 @@ void XAccessibleContextTester::testGetLocale()
 {
     auto loc = mxContext->getLocale();
     std::cout << "The locale is " << loc.Language << "," << loc.Country << std::endl;
-    CPPUNIT_ASSERT_GREATER(0, loc.Language.getLength());
-    CPPUNIT_ASSERT_GREATER(0, loc.Country.getLength());
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), loc.Language.getLength());
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), loc.Country.getLength());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
