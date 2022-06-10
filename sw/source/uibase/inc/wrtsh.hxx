@@ -279,7 +279,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool    DelLeft();
 
     // also deletes the frame or sets the cursor in the frame when bDelFrame == false
-    bool    DelRight();
+    bool    DelRight(bool isReplaceHeuristic = false);
     void    DelToEndOfPara();
     void    DelToStartOfPara();
     bool    DelToEndOfSentence();
