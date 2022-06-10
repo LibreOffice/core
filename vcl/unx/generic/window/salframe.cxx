@@ -1782,11 +1782,6 @@ bool X11SalFrame::GetWindowState( vcl::WindowData* pState )
     return true;
 }
 
-// native menu implementation - currently empty
-void X11SalFrame::DrawMenuBar()
-{
-}
-
 void X11SalFrame::SetMenu( SalMenu* )
 {
 }

@@ -1653,10 +1653,6 @@ SalMenu* GtkSalFrame::GetMenu()
     return m_pSalMenu;
 }
 
-void GtkSalFrame::DrawMenuBar()
-{
-}
-
 void GtkSalFrame::Center()
 {
     if (!GTK_IS_WINDOW(m_pWindow))

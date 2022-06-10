@@ -863,10 +863,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     // no VCL paint if native menus
     if (m_pMenu->ImplGetSalMenu() && m_pMenu->ImplGetSalMenu()->VisibleMenuBar())
-    {
-        ImplGetFrame()->DrawMenuBar();
         return;
-    }
 
     // Make sure that all actual rendering happens in one go to avoid flicker.
     vcl::BufferDevice pBuffer(this, rRenderContext);

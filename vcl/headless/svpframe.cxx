@@ -200,10 +200,6 @@ void SvpSalFrame::SetMenu( SalMenu* )
 {
 }
 
-void SvpSalFrame::DrawMenuBar()
-{
-}
-
 void SvpSalFrame::SetExtendedFrameStyle( SalExtStyle )
 {
 }
