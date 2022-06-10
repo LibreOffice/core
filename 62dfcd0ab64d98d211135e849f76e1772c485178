@@ -263,6 +263,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74dc0ce9_777e04e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-10T05:51:48Z",
+      "side": 1,
+      "message": "\u003e I hope someone will advise Isha on how to proceed\n\nCode pointer:\nm_xIgnoreLanguageChangeCB in OfaLanguagesTabPage (cui/source/options/optgdlg.cxx) is used to control the setting. Renaming the control itself to, say, \"m_xFollowLanguageChangeCB\", and reverting its function, making it checked exactly when it was unchecked previously, would make it mean \"Apply system input language to new text\".\n\n(That is, *iif* my proposal is accepted. IMO, the UX opinion has priority here.)",
+      "parentUuid": "a5e6f698_232dde3e",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c89ffbe_ee8fe0f8",
