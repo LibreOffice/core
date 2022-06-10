@@ -36,11 +36,6 @@ public:
     /** Fill with all known encodings but exclude those matching one or more
         given flags as defined in rtl/tencinfo.h
 
-         <p> If nButIncludeInfoFlags is given, encodings are included even if they
-         match nExcludeInfoFlags. Thus it is possible to exclude 16/32-bit
-         Unicode with RTL_TEXTENCODING_INFO_UNICODE but to include UTF7 and UTF8
-         with RTL_TEXTENCODING_INFO_MIME </p>
-
         @param bExcludeImportSubsets
             If <TRUE/>, some specific encodings are not listed, as they are a
             subset of another encoding. This is the case for
@@ -50,8 +45,7 @@ public:
             <TRUE/> whenever the box is used in import dialogs. */
     void                FillFromTextEncodingTable(
                             bool bExcludeImportSubsets,
-                            sal_uInt32 nExcludeInfoFlags = 0,
-                            sal_uInt32 nButIncludeInfoFlags = 0
+                            sal_uInt32 nExcludeInfoFlags = 0
                             );
 
     /** Fill with all encodings known to the dbtools::OCharsetMap but exclude

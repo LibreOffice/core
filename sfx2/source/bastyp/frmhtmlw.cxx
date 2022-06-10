@@ -215,8 +215,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
 }
 
 void SfxFrameHTMLWriter::Out_FrameDescriptor(
-    SvStream& rOut, const OUString& rBaseURL, const uno::Reference < beans::XPropertySet >& xSet,
-    OUString *pNonConvertableChars )
+    SvStream& rOut, const OUString& rBaseURL, const uno::Reference < beans::XPropertySet >& xSet )
 {
     try
     {
@@ -232,7 +231,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
                     rBaseURL, aURL );
                 sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
                 rOut.WriteOString( sOut.makeStringAndClear() );
-                HTMLOutFuncs::Out_String( rOut, aURL, pNonConvertableChars );
+                HTMLOutFuncs::Out_String( rOut, aURL );
                 sOut.append('\"');
             }
         }
@@ -242,7 +241,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
             rOut.WriteOString( sOut.makeStringAndClear() );
-            HTMLOutFuncs::Out_String( rOut, aStr, pNonConvertableChars );
+            HTMLOutFuncs::Out_String( rOut, aStr );
             sOut.append('\"');
         }
 

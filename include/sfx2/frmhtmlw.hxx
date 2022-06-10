@@ -53,8 +53,7 @@ public:
             OUString *pNonConvertableChars = nullptr );
 
     static void Out_FrameDescriptor(
-        SvStream&, const OUString& rBaseURL, const css::uno::Reference < css::beans::XPropertySet >& xSet,
-        OUString *pNonConvertableChars = nullptr );
+        SvStream&, const OUString& rBaseURL, const css::uno::Reference < css::beans::XPropertySet >& xSet);
 };
 
 inline void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
