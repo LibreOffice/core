@@ -6,8 +6,6 @@
     <columns>
       <!-- column-name expander -->
       <column type="GdkPixbuf"/>
-      <!-- column-name text -->
-      <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
@@ -122,10 +120,7 @@
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="model">liststore1</property>
-                    <property name="columns">3</property>
-                    <property name="item_width">100</property>
                     <property name="pixbuf-column">0</property>
-                    <property name="text-column">1</property>
                   </object>
                 </child>
               </object>
