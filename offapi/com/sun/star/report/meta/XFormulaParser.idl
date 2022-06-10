@@ -16,15 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_report_meta_XFormulaParser_idl__
-#define __com_sun_star_report_meta_XFormulaParser_idl__
 
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/DisposedException.idl>
-#include <com/sun/star/sheet/XFormulaParser.idl>
-#include <com/sun/star/sheet/FormulaOpCodeMapEntry.idl>
-#include <com/sun/star/sheet/XFormulaOpCodeMapper.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
 module com {  module sun {  module star {  module report { module meta {
 /** identifies a XFormulaParser which allows to retrieve the meta data of all supported functions.
 
@@ -54,7 +46,5 @@ interface XFormulaParser
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

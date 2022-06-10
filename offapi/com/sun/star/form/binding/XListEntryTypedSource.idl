@@ -7,11 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_form_binding_XListEntryTypedSource_idl__
-#define __com_sun_star_form_binding_XListEntryTypedSource_idl__
-
-#include <com/sun/star/form/binding/XListEntrySource.idl>
-
 
 module com {  module sun {  module star {  module form { module binding {
 
@@ -41,7 +36,5 @@ interface XListEntryTypedSource : com::sun::star::form::binding::XListEntrySourc
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

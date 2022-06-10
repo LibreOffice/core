@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef com_sun_star_util_XBinaryDataContainer_idl
-#define com_sun_star_util_XBinaryDataContainer_idl
-
 module com { module sun { module star { module util
 {
 
@@ -28,7 +25,5 @@ interface XBinaryDataContainer
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

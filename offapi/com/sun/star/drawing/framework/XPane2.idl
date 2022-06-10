@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_framework_XPane2_idl__
-#define __com_sun_star_drawing_framework_XPane2_idl__
-
-#include <com/sun/star/accessibility/XAccessible.idl>
-
 module com { module sun { module star { module drawing { module framework {
 
 /** An extension of the XPane interface that adds support for
@@ -62,7 +57,5 @@ interface XPane2
 };
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

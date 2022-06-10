@@ -16,15 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_drawing_EnhancedCustomShapePath_idl__
-#define __com_sun_star_drawing_EnhancedCustomShapePath_idl__
-
-#include <com/sun/star/awt/Size.idl>
-#include <com/sun/star/awt/Point.idl>
-#include <com/sun/star/beans/PropertyValue.idl>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.idl>
-#include <com/sun/star/drawing/EnhancedCustomShapeSegment.idl>
-#include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.idl>
 
 
 module com { module sun { module star { module drawing {
@@ -94,7 +85,5 @@ service EnhancedCustomShapePath
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

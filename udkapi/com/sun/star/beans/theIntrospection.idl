@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_com_sun_star_beans_theIntrospection_idl
-#define INCLUDED_com_sun_star_beans_theIntrospection_idl
-
 module com {  module sun {  module star {  module beans {
 
 published interface XIntrospection;
@@ -28,7 +25,5 @@ published interface XIntrospection;
 published singleton theIntrospection: XIntrospection;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

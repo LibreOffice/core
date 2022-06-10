@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba__XErrObject_idl__
-#define __ooo_vba__XErrObject_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
 module ooo {  module vba  {
 
 interface XErrObject : ::com::sun::star::uno::XInterface
@@ -38,6 +33,5 @@ interface XErrObject : ::com::sun::star::uno::XInterface
 };
 
 }; };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

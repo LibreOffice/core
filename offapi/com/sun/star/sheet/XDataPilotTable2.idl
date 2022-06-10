@@ -17,18 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_XDataPilotTable2_idl__
-#define __com_sun_star_sheet_XDataPilotTable2_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/table/CellAddress.idl>
-#include <com/sun/star/table/CellRangeAddress.idl>
-#include <com/sun/star/sheet/XDataPilotTable.idl>
-#include <com/sun/star/sheet/DataPilotOutputRangeType.idl>
-#include <com/sun/star/sheet/DataPilotFieldFilter.idl>
-#include <com/sun/star/sheet/DataPilotTablePositionData.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
 module com {  module sun {  module star {  module sheet {
 
 /** additional methods to extend com::sun::star::sheet::XDataPilotTable.
@@ -100,7 +88,5 @@ interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

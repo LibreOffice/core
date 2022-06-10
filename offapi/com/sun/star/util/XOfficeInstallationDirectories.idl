@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_util_XOfficeInstallationDirectories_idl__
-#define __com_sun_star_util_XOfficeInstallationDirectories_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
 module com { module sun { module star { module util {
 
 /** encapsulates access to the current office installation directory and
@@ -96,7 +91,5 @@ published interface XOfficeInstallationDirectories : com::sun::star::uno::XInter
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

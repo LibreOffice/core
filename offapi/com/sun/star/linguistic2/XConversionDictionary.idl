@@ -16,17 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_linguistic2_XConversionDictionary_idl__
-#define __com_sun_star_linguistic2_XConversionDictionary_idl__
 
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/lang/Locale.idl>
-#include <com/sun/star/linguistic2/ConversionDictionaryType.idl>
-#include <com/sun/star/linguistic2/ConversionDirection.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/container/ElementExistException.idl>
-#include <com/sun/star/container/NoSuchElementException.idl>
 
 
 
@@ -196,7 +186,5 @@ published interface XConversionDictionary : com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

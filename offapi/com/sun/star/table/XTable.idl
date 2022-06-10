@@ -17,19 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_table_XTable_idl__
-#define __com_sun_star_table_XTable_idl__
-
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/table/XCellRange.idl>
-#include <com/sun/star/table/XColumnRowRange.idl>
-#include <com/sun/star/table/XCellCursor.idl>
-#include <com/sun/star/util/XModifiable.idl>
-#include <com/sun/star/beans/XMultiPropertySet.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/beans/XFastPropertySet.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
 
 module com {  module sun {  module star {  module table {
 
@@ -93,7 +80,5 @@ interface XTable
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

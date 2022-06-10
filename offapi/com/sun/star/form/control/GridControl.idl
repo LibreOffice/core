@@ -17,21 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_control_GridControl_idl__
-#define __com_sun_star_form_control_GridControl_idl__
-
-#include <com/sun/star/awt/UnoControl.idl>
-#include <com/sun/star/form/XGrid.idl>
-#include <com/sun/star/form/XBoundComponent.idl>
-#include <com/sun/star/form/XGridFieldDataSupplier.idl>
-#include <com/sun/star/util/XModifyBroadcaster.idl>
-#include <com/sun/star/util/XModeSelector.idl>
-#include <com/sun/star/container/XIndexAccess.idl>
-#include <com/sun/star/container/XEnumerationAccess.idl>
-#include <com/sun/star/container/XContainer.idl>
-#include <com/sun/star/frame/XDispatchProviderInterception.idl>
-#include <com/sun/star/view/XSelectionSupplier.idl>
-
 
 module com {  module sun {  module star {  module form {
 
@@ -125,7 +110,5 @@ published service GridControl
 
 }; }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

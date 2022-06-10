@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_configuration_XUpdate_idl__
-#define __com_sun_star_configuration_XUpdate_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
 module com { module sun { module star { module configuration {
 
 /* Provides access to internal update features of the configuration provider.
@@ -45,7 +40,5 @@ interface XUpdate {
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,14 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_sheet_XSheetCondition2_idl__
-#define __com_sun_star_sheet_XSheetCondition2_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/sheet/ConditionOperator2.idl>
-#include <com/sun/star/sheet/XSheetCondition.idl>
-#include <com/sun/star/table/CellAddress.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -42,7 +34,5 @@ interface XSheetCondition2: com::sun::star::sheet::XSheetCondition
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

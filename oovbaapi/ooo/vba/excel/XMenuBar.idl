@@ -6,11 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef __ooo_vba_excel_XMenuBar_idl__
-#define __ooo_vba_excel_XMenuBar_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <ooo/vba/XHelperInterface.idl>
 
 
 module ooo {  module vba {  module excel {
@@ -24,7 +19,5 @@ interface XMenuBar
 };
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

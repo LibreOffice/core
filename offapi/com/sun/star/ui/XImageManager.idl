@@ -17,19 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_XImageManager_idl__
-#define __com_sun_star_ui_XImageManager_idl__
-
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/graphic/XGraphic.idl>
-#include <com/sun/star/ui/XUIConfigurationListener.idl>
-#include <com/sun/star/ui/XUIConfigurationPersistence.idl>
-#include <com/sun/star/ui/XUIConfiguration.idl>
-#include <com/sun/star/ui/ImageType.idl>
-#include <com/sun/star/lang/XInitialization.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/lang/IllegalAccessException.idl>
-
 module com { module sun { module star { module ui {
 
 /** specifies access functions to an images manager interface to add,
@@ -217,7 +204,5 @@ interface XImageManager
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

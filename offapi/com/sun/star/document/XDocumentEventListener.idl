@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_document_XDocumentEventListener_idl__
-#define __com_sun_star_document_XDocumentEventListener_idl__
-
-#include <com/sun/star/lang/XEventListener.idl>
-#include <com/sun/star/document/DocumentEvent.idl>
-
 
 module com { module sun { module star { module document {
 
@@ -45,7 +39,5 @@ interface XDocumentEventListener : ::com::sun::star::lang::XEventListener
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

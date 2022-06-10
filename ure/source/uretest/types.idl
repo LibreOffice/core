@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Exception.idl>
-#include <com/sun/star/uno/XInterface.idl>
-
 module test { module types {
 
 exception TestException: com::sun::star::uno::Exception {};

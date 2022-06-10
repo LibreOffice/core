@@ -16,13 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_awt_XVclWindowPeer_idl__
-#define __com_sun_star_awt_XVclWindowPeer_idl__
-
-#include <com/sun/star/awt/XWindowPeer.idl>
-
-#include <com/sun/star/util/Color.idl>
-#include <com/sun/star/awt/FontDescriptor.idl>
 
 
 
@@ -90,7 +83,5 @@ published interface XVclWindowPeer: com::sun::star::awt::XWindowPeer
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

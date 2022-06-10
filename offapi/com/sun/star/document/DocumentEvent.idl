@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_document_DocumentEvent_idl__
-#define __com_sun_star_document_DocumentEvent_idl__
-
-#include <com/sun/star/lang/EventObject.idl>
-#include <com/sun/star/frame/XController2.idl>
-
 
 module com { module sun { module star { module document {
 
@@ -66,7 +60,5 @@ struct DocumentEvent : ::com::sun::star::lang::EventObject
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

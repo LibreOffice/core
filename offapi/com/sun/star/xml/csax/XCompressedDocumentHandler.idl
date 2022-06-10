@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_csax_XCompressedDocumentHandler_idl__
-#define __com_sun_star_xml_csax_XCompressedDocumentHandler_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/xml/sax/SAXException.idl>
-#include <com/sun/star/xml/csax/XMLAttribute.idl>
-
 module com { module sun { module star { module xml { module csax {
 
 /**
@@ -66,7 +59,5 @@ interface XCompressedDocumentHandler: com::sun::star::uno::XInterface
 };
 
 } ; } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

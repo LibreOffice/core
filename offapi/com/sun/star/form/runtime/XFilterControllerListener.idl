@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_runtime_XFilterControllerListener_idl__
-#define __com_sun_star_form_runtime_XFilterControllerListener_idl__
-
-#include <com/sun/star/lang/XEventListener.idl>
-#include <com/sun/star/form/runtime/FilterEvent.idl>
-
 
 module com { module sun { module star { module form { module runtime {
 
@@ -70,7 +64,5 @@ interface XFilterControllerListener : ::com::sun::star::lang::XEventListener
 
 }; }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

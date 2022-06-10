@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/uno/Exception.idl>
-#include <com/sun/star/uno/Any.idl>
-
 module com { module sun { module star { module lib { module uno {
 module protocols { module urp {
 

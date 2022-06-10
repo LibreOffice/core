@@ -18,12 +18,6 @@
  */
 
 
-#ifndef __com_sun_star_datatransfer_XDataFormatTranslator_idl__
-#define __com_sun_star_datatransfer_XDataFormatTranslator_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/datatransfer/DataFlavor.idl>
-
 module com { module sun { module star { module datatransfer {
 
 /** Interface to be implemented by objects used to translate a DataFlavor to
@@ -63,7 +57,5 @@ published interface XDataFormatTranslator : com::sun::star::uno::XInterface
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

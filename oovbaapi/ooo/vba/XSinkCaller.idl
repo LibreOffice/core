@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __ooo_vba_XSinkCaller_idl__
-#define __ooo_vba_XSinkCaller_idl__
-
 module ooo {  module vba {
 
 // Despite being here in ooo::vba, this has nothing to do with "VBA" (Visual Basic for
@@ -23,7 +20,5 @@ interface XSinkCaller
 };
 
 }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

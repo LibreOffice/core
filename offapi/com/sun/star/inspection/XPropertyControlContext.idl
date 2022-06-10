@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_inspection_XPropertyControlContext_idl__
-#define __com_sun_star_inspection_XPropertyControlContext_idl__
-
-#include <com/sun/star/inspection/XPropertyControlObserver.idl>
-
 module com {  module sun {  module star {  module inspection {
 
 /** specifies the interface of the context of an XPropertyControl.
@@ -42,7 +37,5 @@ interface XPropertyControlContext : XPropertyControlObserver
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

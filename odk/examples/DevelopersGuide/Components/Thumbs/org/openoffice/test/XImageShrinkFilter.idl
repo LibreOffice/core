@@ -33,12 +33,6 @@
  *
  *************************************************************************/
 
-#ifndef _org_openoffice_test_XImageShrinkFilter_idl_
-#define _org_openoffice_test_XImageShrinkFilter_idl_
-
-#include <com/sun/star/document/XFilter.idl>
-#include <org/openoffice/test/XImageShrink.idl>
-
 module org { module openoffice { module test {
 
 interface XImageShrinkFilter {
@@ -47,7 +41,5 @@ interface XImageShrinkFilter {
 };
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

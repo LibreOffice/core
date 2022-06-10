@@ -33,17 +33,10 @@
  *
  *************************************************************************/
 
-#ifndef _org_openoffice_test_ImageShrink_idl_
-#define _org_openoffice_test_ImageShrink_idl_
-
-#include <org/openoffice/test/XImageShrinkFilter.idl>
-
 module org { module openoffice { module test {
 
     service ImageShrink : XImageShrinkFilter;
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

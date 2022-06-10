@@ -6,10 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef __com_sun_star_task_XInteractionApprove_idl__
-#define __com_sun_star_task_XInteractionApprove_idl__
-
-#include <com/sun/star/task/XInteractionContinuation.idl>
 
 
 
@@ -27,7 +23,5 @@ interface XInteractionAuthFallback: com::sun::star::task::XInteractionContinuati
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

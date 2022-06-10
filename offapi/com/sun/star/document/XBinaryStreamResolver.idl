@@ -16,12 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_document_XBinaryStreamResolver_idl__
-#define __com_sun_star_document_XBinaryStreamResolver_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/io/XInputStream.idl>
-#include <com/sun/star/io/XOutputStream.idl>
 
 
 module com {  module sun {  module star {  module document {
@@ -63,7 +57,5 @@ published interface XBinaryStreamResolver: com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

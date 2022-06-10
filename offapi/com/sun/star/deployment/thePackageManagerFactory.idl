@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _com_sun_star_deployment_thePackageManagerFactory_idl
-#define _com_sun_star_deployment_thePackageManagerFactory_idl
-
-#include <com/sun/star/deployment/XPackageManagerFactory.idl>
-
 
 module com { module sun { module star { module deployment {
 
@@ -41,7 +36,5 @@ module com { module sun { module star { module deployment {
 singleton thePackageManagerFactory : XPackageManagerFactory;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

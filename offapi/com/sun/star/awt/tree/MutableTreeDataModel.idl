@@ -16,11 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_awt_tree_MutableTreeDataModel_idl__
-#define __com_sun_star_awt_tree_MutableTreeDataModel_idl__
-
-#include <com/sun/star/awt/tree/XMutableTreeDataModel.idl>
-#include <com/sun/star/awt/tree/XMutableTreeNode.idl>
 
 
 module com {  module sun {  module star {  module awt {  module tree {
@@ -35,7 +30,5 @@ service MutableTreeDataModel : XMutableTreeDataModel
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

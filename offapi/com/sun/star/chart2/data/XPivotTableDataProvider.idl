@@ -7,12 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef com_sun_star_chart2_data_XPivotTableDataProvider_idl
-#define com_sun_star_chart2_data_XPivotTableDataProvider_idl
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/chart2/data/PivotTableFieldEntry.idl>
-
 module com { module sun { module star { module chart2 { module data {
 
 /**
@@ -77,7 +71,5 @@ interface XPivotTableDataProvider : com::sun::star::uno::XInterface
 };
 
 };};};};};
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

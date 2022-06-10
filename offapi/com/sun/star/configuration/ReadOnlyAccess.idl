@@ -7,11 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _COM_SUN_STAR_CONFIGURATION_READONLYACCESS_IDL
-#define _COM_SUN_STAR_CONFIGURATION_READONLYACCESS_IDL
-
-#include <com/sun/star/container/XHierarchicalNameAccess.idl>
-
 module com { module sun { module star { module configuration {
 
 /** Provides easy read-only access to the complete configuration.
@@ -30,7 +25,5 @@ service ReadOnlyAccess: com::sun::star::container::XHierarchicalNameAccess {
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

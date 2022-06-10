@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_graphic_MediaProperties_idl
-#define com_sun_star_graphic_MediaProperties_idl
-
-#include <com/sun/star/beans/PropertyValues.idl>
-#include <com/sun/star/io/XInputStream.idl>
-#include <com/sun/star/io/XStream.idl>
-
 module com { module sun { module star { module graphic
 {
 
@@ -111,7 +104,5 @@ published service MediaProperties
 };
 
 } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

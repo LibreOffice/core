@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_framework_BasicViewFactory_idl__
-#define __com_sun_star_drawing_framework_BasicViewFactory_idl__
-
-#include <com/sun/star/frame/XController.idl>
-#include <com/sun/star/drawing/framework/XResourceFactory.idl>
-
 module com { module sun { module star { module drawing { module framework {
 
 /** The BasicViewFactory is a view factory that provides the
@@ -51,7 +45,5 @@ service BasicViewFactory : XResourceFactory
 };
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

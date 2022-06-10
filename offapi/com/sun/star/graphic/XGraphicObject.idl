@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_graphic_XGraphicObject_idl
-#define com_sun_star_graphic_XGraphicObject_idl
-
-#include <com/sun/star/uno/XInterface.idl>
-
 module com { module sun { module star { module graphic
 {
 interface XGraphic;
@@ -41,7 +36,5 @@ interface XGraphicObject : ::com::sun::star::uno::XInterface
 };
 
 } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,11 +32,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-#ifndef INCLUDED_ORG_OPENOFFICE_SHEET_ADDIN_XCALCADDIN_IDL
-#define INCLUDED_ORG_OPENOFFICE_SHEET_ADDIN_XCALCADDIN_IDL
-
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/sheet/AddIn.idl>
 
 
 module org {
@@ -97,7 +92,5 @@ module org {
       };
     };
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

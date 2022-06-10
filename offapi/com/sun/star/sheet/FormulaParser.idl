@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_FormulaParser_idl__
-#define __com_sun_star_sheet_FormulaParser_idl__
-
-#include <com/sun/star/beans/PropertySet.idl>
-#include <com/sun/star/sheet/XFormulaParser.idl>
-#include <com/sun/star/sheet/FormulaOpCodeMapEntry.idl>
-#include <com/sun/star/sheet/ExternalLinkInfo.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -95,7 +87,5 @@ service FormulaParser
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

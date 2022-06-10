@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_crypto_XNSSInitializer_idl_
-#define __com_sun_star_xml_crypto_XNSSInitializer_idl_
-
-#include <com/sun/star/xml/crypto/XCipherContextSupplier.idl>
-#include <com/sun/star/xml/crypto/XDigestContextSupplier.idl>
-#include <com/sun/star/xml/crypto/NSSProfile.idl>
-#include <com/sun/star/xml/lang/XInitialization.idl>
-
 module com { module sun { module star { module xml { module crypto {
 
 /**
@@ -63,7 +55,5 @@ interface XNSSInitializer {
 
 } ; } ; } ; } ; } ;
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

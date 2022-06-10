@@ -33,11 +33,6 @@
  *
  *************************************************************************/
 
-#ifndef _org_openoffice_LicenseTest_idl_
-#define _org_openoffice_LicenseTest_idl_
-
-#include <com/sun/star/lang/XServiceInfo.idl>
-
 // org
 module org {
     // openoffice
@@ -47,7 +42,5 @@ module org {
         service LicenseTest: ::com::sun::star::lang::XServiceInfo;
     };
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

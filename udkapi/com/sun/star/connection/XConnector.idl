@@ -16,13 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _COM_SUN_STAR_CONNECTION_XCONNECTOR_IDL_
-#define _COM_SUN_STAR_CONNECTION_XCONNECTOR_IDL_
-
-#include <com/sun/star/connection/ConnectionSetupException.idl>
-#include <com/sun/star/connection/NoConnectException.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/connection/XConnection.idl>
 
 
 module com {  module sun {  module star {  module connection {
@@ -58,7 +51,5 @@ published interface XConnector: com::sun::star::uno::XInterface
 
 
 };};};};
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

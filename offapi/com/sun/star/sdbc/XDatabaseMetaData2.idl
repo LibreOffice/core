@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sdbc_XDatabaseMetaData2_idl__
-#define __com_sun_star_sdbc_XDatabaseMetaData2_idl__
-
-#include <com/sun/star/sdbc/XDatabaseMetaData.idl>
-#include <com/sun/star/beans/PropertyValue.idl>
-
 
 module com { module sun { module star { module sdbc {
 
@@ -45,7 +39,5 @@ interface XDatabaseMetaData2 : XDatabaseMetaData
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

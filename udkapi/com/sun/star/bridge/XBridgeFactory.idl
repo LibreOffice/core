@@ -16,15 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _COM_SUN_STAR_BRIDGE_XBRIDGEFACTORY_IDL_
-#define _COM_SUN_STAR_BRIDGE_XBRIDGEFACTORY_IDL_
-
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
-#include <com/sun/star/connection/XConnection.idl>
-#include <com/sun/star/bridge/XBridge.idl>
-#include <com/sun/star/bridge/BridgeExistsException.idl>
-#include <com/sun/star/bridge/XInstanceProvider.idl>
 
  module com {  module sun {  module star {  module bridge {
 
@@ -83,7 +74,5 @@ published interface XBridgeFactory: com::sun::star::uno::XInterface
 
 
 };};};};
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

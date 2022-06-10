@@ -16,14 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_embed_XOLESimpleStorage_idl__
-#define __com_sun_star_embed_XOLESimpleStorage_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/container/XNameContainer.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/embed/XTransactedObject.idl>
-#include <com/sun/star/embed/XClassifiedObject.idl>
 
 
 module com { module sun { module star { module embed {
@@ -71,7 +63,5 @@ published interface XOLESimpleStorage
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

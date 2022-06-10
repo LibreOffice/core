@@ -16,14 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_util_ChangesEvent_idl__
-#define __com_sun_star_util_ChangesEvent_idl__
-
-#include <com/sun/star/lang/EventObject.idl>
-
-#include <com/sun/star/util/ElementChange.idl>
-
-#include <com/sun/star/util/ChangesSet.idl>
 
 
 module com {  module sun {  module star {  module util {
@@ -54,7 +46,5 @@ published struct ChangesEvent: com::sun::star::lang::EventObject
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

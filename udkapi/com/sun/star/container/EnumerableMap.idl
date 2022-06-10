@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_container_EnumerableMap_idl__
-#define __com_sun_star_container_EnumerableMap_idl__
-
-#include <com/sun/star/beans/IllegalTypeException.idl>
-#include <com/sun/star/beans/Pair.idl>
-#include <com/sun/star/container/XEnumerableMap.idl>
-
 
 module com { module sun { module star { module container {
 
@@ -125,7 +118,5 @@ service EnumerableMap : XEnumerableMap
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

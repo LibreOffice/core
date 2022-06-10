@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sdb_tools_XObjectNames_idl__
-#define __com_sun_star_sdb_tools_XObjectNames_idl__
-
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/sdbc/SQLException.idl>
-
 module com {  module sun {  module star {  module sdb { module tools {
 
 /** encapsulates functionality which you might find useful when writing a
@@ -158,7 +152,5 @@ interface XObjectNames
 };
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,11 +21,6 @@
     controls embedded in sheets. All these symbols are deprecated
     in VBA and kept for compatibility with old VBA scripts. */
 
-#ifndef __ooo_vba_excel_XGraphicObjects_idl__
-#define __ooo_vba_excel_XGraphicObjects_idl__
-
-#include <ooo/vba/XCollection.idl>
-
 
 
 /*  Note: This file collects all compatibility interfaces for collections of
@@ -83,7 +78,5 @@ interface XGraphicObjects : com::sun::star::uno::XInterface
 
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

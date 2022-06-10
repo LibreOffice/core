@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_AccessibleCsvCell_idl__
-#define __com_sun_star_sheet_AccessibleCsvCell_idl__
-
-#include <com/sun/star/accessibility/XAccessibleContext.idl>
-#include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#include <com/sun/star/accessibility/XAccessibleText.idl>
-
 
 
 module com {  module sun {  module star {  module sheet {
@@ -55,7 +48,5 @@ service AccessibleCsvCell
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

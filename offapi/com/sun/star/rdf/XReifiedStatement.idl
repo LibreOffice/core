@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_rdf_XReifiedStatement_idl__
-#define __com_sun_star_rdf_XReifiedStatement_idl__
-
-#include <com/sun/star/rdf/Statement.idl>
-
 
 
 module com {   module sun {   module star {   module rdf {
@@ -40,7 +35,5 @@ interface XReifiedStatement : XResource
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,9 +33,6 @@
  *
  *************************************************************************/
 
-#ifndef INCLUDED_ORG_OPENOFFICE_XTODO_IDL
-#define INCLUDED_ORG_OPENOFFICE_XTODO_IDL
-
 
 /// org
 module org {
@@ -47,7 +44,5 @@ module org {
         };
     };
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

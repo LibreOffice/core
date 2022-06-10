@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_configuration_backend_CannotConnectException_idl__
-#define __com_sun_star_configuration_backend_CannotConnectException_idl__
-
-#include <com/sun/star/configuration/backend/BackendSetupException.idl>
-
 module com { module sun { module star { module configuration {
 module backend {
 
@@ -45,7 +40,5 @@ published exception CannotConnectException : BackendSetupException {
 
 } ;
 } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

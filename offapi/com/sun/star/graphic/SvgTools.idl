@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_graphic_SvgTools_idl
-#define com_sun_star_graphic_SvgTools_idl
-
-#include <com/sun/star/graphic/XSvgParser.idl>
-
 module com { module sun { module star { module graphic
 {
 
@@ -33,7 +28,5 @@ module com { module sun { module star { module graphic
 service SvgTools : XSvgParser;
 
 } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

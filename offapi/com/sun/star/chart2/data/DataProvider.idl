@@ -16,11 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef com_sun_star_chart2_data_DataProvider_idl
-#define com_sun_star_chart2_data_DataProvider_idl
-
-#include <com/sun/star/chart2/data/XDataProvider.idl>
-#include <com/sun/star/chart2/data/XRangeXMLConversion.idl>
 
 module com
 {
@@ -55,7 +50,5 @@ service DataProvider
 } ; // com
 } ; // sun
 } ; // star
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

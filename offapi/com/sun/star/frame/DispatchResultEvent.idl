@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_frame_DispatchResultEvent_idl__
-#define __com_sun_star_frame_DispatchResultEvent_idl__
-
-#include <com/sun/star/lang/EventObject.idl>
-#include <com/sun/star/util/URL.idl>
-
 
  module com {  module sun {  module star {  module frame {
 
@@ -51,7 +45,5 @@ published struct DispatchResultEvent: com::sun::star::lang::EventObject
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,19 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_BaseIndex_idl__
-#define __com_sun_star_text_BaseIndex_idl__
-
-#include <com/sun/star/util/Color.idl>
-#include <com/sun/star/util/XRefreshable.idl>
-#include <com/sun/star/text/XDocumentIndex.idl>
-#include <com/sun/star/container/XIndexReplace.idl>
-#include <com/sun/star/text/XTextColumns.idl>
-#include <com/sun/star/style/GraphicLocation.idl>
-#include <com/sun/star/lang/Locale.idl>
-#include <com/sun/star/text/XTextSection.idl>
-#include <com/sun/star/graphic/XGraphic.idl>
-
 module com {  module sun {  module star {  module text {
 
 /** specifies the basic service of different indexes within a document.@see com::sun::star::text::DocumentIndex
@@ -128,8 +115,6 @@ published service BaseIndex
 
 
 }; }; }; };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

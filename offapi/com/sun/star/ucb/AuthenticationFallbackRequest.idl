@@ -7,10 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  */
-#ifndef __com_sun_star_ucb_AuthenticationFallbackRequest_idl__
-#define __com_sun_star_ucb_AuthenticationFallbackRequest_idl__
-
-#include <com/sun/star/task/ClassifiedInteractionRequest.idl>
 
 module com { module sun { module star { module ucb {
 
@@ -31,7 +27,5 @@ exception AuthenticationFallbackRequest: com::sun::star::task::ClassifiedInterac
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_container_XEnumerableMap_idl__
-#define __com_sun_star_container_XEnumerableMap_idl__
-
-#include <com/sun/star/container/XMap.idl>
-#include <com/sun/star/container/XEnumeration.idl>
-#include <com/sun/star/lang/NoSupportException.idl>
-
 
 module com { module sun { module star { module container {
 
@@ -94,7 +87,5 @@ interface XEnumerableMap : XMap
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

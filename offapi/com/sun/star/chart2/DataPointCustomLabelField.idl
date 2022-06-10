@@ -7,11 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef com_sun_star_chart2_DataPointCustomLabelField_idl
-#define com_sun_star_chart2_DataPointCustomLabelField_idl
-
-#include <com/sun/star/chart2/XDataPointCustomLabelField.idl>
-
 module com { module sun { module star { module chart2 {
 
 /**
@@ -20,7 +15,5 @@ module com { module sun { module star { module chart2 {
 service DataPointCustomLabelField : XDataPointCustomLabelField;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

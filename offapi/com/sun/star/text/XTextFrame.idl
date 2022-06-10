@@ -16,11 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_text_XTextFrame_idl__
-#define __com_sun_star_text_XTextFrame_idl__
-
-#include <com/sun/star/text/XTextContent.idl>
-#include <com/sun/star/text/XText.idl>
 
 
 
@@ -41,7 +36,5 @@ published interface XTextFrame: com::sun::star::text::XTextContent
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

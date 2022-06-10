@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef OOO_VBA_XOLLECTIONBASE_IDL
-#define OOO_VBA_XOLLECTIONBASE_IDL
-
-#include <com/sun/star/container/XEnumerationAccess.idl>
-#include <com/sun/star/script/XDefaultMethod.idl>
-
 
 
 module ooo { module vba {
@@ -65,7 +59,5 @@ interface XCollectionBase
 
 
 }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

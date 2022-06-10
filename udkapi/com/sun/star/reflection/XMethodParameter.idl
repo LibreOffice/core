@@ -16,12 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_reflection_XMethodParameter_idl__
-#define __com_sun_star_reflection_XMethodParameter_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-#include <com/sun/star/reflection/XTypeDescription.idl>
 
 
 
@@ -76,7 +70,5 @@ published interface XMethodParameter: com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

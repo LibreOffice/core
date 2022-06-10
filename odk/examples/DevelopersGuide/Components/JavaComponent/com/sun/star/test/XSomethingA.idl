@@ -33,18 +33,11 @@
  *
  *************************************************************************/
 
-#ifndef INCLUDED_COM_SUN_STAR_TEST_XSOMETHINGA_IDL
-#define INCLUDED_COM_SUN_STAR_TEST_XSOMETHINGA_IDL
-
-#include <com/sun/star/uno/XInterface.idl>
-
 module com {  module sun {  module star {  module test {
     interface XSomethingA {
         string methodOne([in]string value);
     };
 }; }; }; };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

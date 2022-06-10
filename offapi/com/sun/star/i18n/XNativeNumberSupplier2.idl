@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_i18n_XNativeNumberSupplier2_idl__
-#define __com_sun_star_i18n_XNativeNumberSupplier2_idl__
-
-#include <com/sun/star/i18n/XNativeNumberSupplier.idl>
-
 
 module com { module sun { module star { module i18n {
 
@@ -63,7 +58,5 @@ interface XNativeNumberSupplier2 : ::com::sun::star::i18n::XNativeNumberSupplier
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

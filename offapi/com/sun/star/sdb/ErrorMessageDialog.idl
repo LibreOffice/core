@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sdb_ErrorMessageDialog_idl__
-#define __com_sun_star_sdb_ErrorMessageDialog_idl__
-
-#include <com/sun/star/awt/XWindow.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
-
 module com {  module sun {  module star {  module sdb {
 
 /** provides a dialog for displaying database related exceptions.
@@ -88,7 +81,5 @@ published service ErrorMessageDialog : com::sun::star::ui::dialogs::XExecutableD
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

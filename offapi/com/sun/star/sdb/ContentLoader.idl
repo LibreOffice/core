@@ -18,11 +18,6 @@
  */
 
 
-#ifndef __com_sun_star_sdb_ContentLoader_idl__
-#define __com_sun_star_sdb_ContentLoader_idl__
-
-#include <com/sun/star/frame/FrameLoader.idl>
-
 module com {  module sun {  module star {  module sdb {
 
 /** implements a loader for various datasource-related user interface components.
@@ -87,7 +82,5 @@ published service ContentLoader
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

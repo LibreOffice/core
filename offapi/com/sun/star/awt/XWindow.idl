@@ -16,24 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_awt_XWindow_idl__
-#define __com_sun_star_awt_XWindow_idl__
-
-#include <com/sun/star/lang/XComponent.idl>
-
-#include <com/sun/star/awt/Rectangle.idl>
-
-#include <com/sun/star/awt/XWindowListener.idl>
-
-#include <com/sun/star/awt/XFocusListener.idl>
-
-#include <com/sun/star/awt/XKeyListener.idl>
-
-#include <com/sun/star/awt/XMouseListener.idl>
-
-#include <com/sun/star/awt/XMouseMotionListener.idl>
-
-#include <com/sun/star/awt/XPaintListener.idl>
 
 
 
@@ -162,7 +144,5 @@ published interface XWindow: com::sun::star::lang::XComponent
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

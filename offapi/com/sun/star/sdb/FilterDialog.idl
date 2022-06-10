@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sdb_FilterDialog_idl__
-#define __com_sun_star_sdb_FilterDialog_idl__
-
-#include <com/sun/star/awt/XWindow.idl>
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.idl>
-#include <com/sun/star/sdbc/XRowSet.idl>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
-
 
 module com { module sun { module star { module sdb {
 
@@ -45,7 +37,5 @@ service FilterDialog : com::sun::star::ui::dialogs::XExecutableDialog
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

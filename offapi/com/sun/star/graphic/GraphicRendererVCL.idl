@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_graphic_GraphicRendererVCL_idl
-#define com_sun_star_graphic_GraphicRendererVCL_idl
-
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/graphic/XGraphicRenderer.idl>
-#include <com/sun/star/awt/Rectangle.idl>
-
 module com { module sun { module star { module graphic
 {
 
@@ -67,7 +60,5 @@ service GraphicRendererVCL
 };
 
 } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

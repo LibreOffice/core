@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_validation_ValidatableControlModel_idl__
-#define __com_sun_star_form_validation_ValidatableControlModel_idl__
-
-#include <com/sun/star/form/FormControlModel.idl>
-#include <com/sun/star/form/validation/XValidatableFormComponent.idl>
-#include <com/sun/star/form/validation/XValidityConstraintListener.idl>
-
 
 module com {  module sun {  module star {  module form { module validation {
 
@@ -75,7 +68,5 @@ service ValidatableControlModel
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

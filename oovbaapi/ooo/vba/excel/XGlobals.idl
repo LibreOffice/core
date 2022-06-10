@@ -16,15 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __ooo_vba_excel_XGlobals_idl__
-#define __ooo_vba_excel_XGlobals_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/script/BasicErrorException.idl>
-#include <ooo/vba/excel/XWorkbook.idl>
-#include <ooo/vba/excel/XWorksheet.idl>
-#include <ooo/vba/XAssistant.idl>
-#include <ooo/vba/excel/XApplication.idl>
 
 
 module ooo {  module vba {  module excel {
@@ -65,8 +56,6 @@ XRange Intersect([in] XRange Arg1, [in] XRange Arg2, [in] /*Optional*/ any Arg3,
 };
 
 }; }; };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

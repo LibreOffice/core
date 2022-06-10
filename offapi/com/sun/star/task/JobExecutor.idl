@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_task_JobExecutor_idl__
-#define __com_sun_star_task_JobExecutor_idl__
-
-#include <com/sun/star/task/XJobExecutor.idl>
-
 
 module com { module sun { module star { module task {
 
@@ -33,7 +28,5 @@ module com { module sun { module star { module task {
 published service JobExecutor : XJobExecutor;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

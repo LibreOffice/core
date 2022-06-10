@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ucb_XRemoteContentProviderDoneListener_idl__
-#define __com_sun_star_ucb_XRemoteContentProviderDoneListener_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
 module com { module sun { module star { module ucb {
 
  published interface XRemoteContentProviderAcceptor;
@@ -48,7 +43,5 @@ published interface XRemoteContentProviderDoneListener: com::sun::star::uno::XIn
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

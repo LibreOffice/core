@@ -6,11 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef __com_sun_star_chart2_XDataProviderCreator_idl__
-#define __com_sun_star_chart2_XDataProviderCreator_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/uno/chart/data/XDataProvider.idl>
 
 module com {  module sun {  module star {  module chart2 {
 
@@ -34,7 +29,5 @@ interface XDataProviderAccess : com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _com_sun_star_deployment_ExtensionManager_idl
-#define _com_sun_star_deployment_ExtensionManager_idl
-
-#include <com/sun/star/deployment/XExtensionManager.idl>
-
 
 module com { module sun { module star { module deployment {
 
@@ -37,7 +32,5 @@ module com { module sun { module star { module deployment {
 singleton ExtensionManager : XExtensionManager;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

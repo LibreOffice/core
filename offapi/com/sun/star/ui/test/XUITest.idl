@@ -7,12 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_ui_test_XUITest_idl__
-#define __com_sun_star_ui_test_XUITest_idl__
-
-#include <com/sun/star/ui/test/XUIObject.idl>
-#include <com/sun/star/beans/PropertyValues.idl>
-
 module com { module sun { module star { module ui { module test {
 
 interface XUITest
@@ -30,7 +24,5 @@ interface XUITest
 };
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

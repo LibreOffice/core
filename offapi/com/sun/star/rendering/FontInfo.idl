@@ -16,11 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_rendering_FontInfo_idl__
-#define __com_sun_star_rendering_FontInfo_idl__
-
-#include <com/sun/star/util/TriState.idl>
-#include <com/sun/star/rendering/Panose.idl>
 
 
 module com { module sun { module star { module rendering {
@@ -104,7 +99,5 @@ struct FontInfo
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

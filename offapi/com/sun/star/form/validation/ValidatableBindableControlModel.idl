@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_validation_ValidatableBindableControlModel_idl__
-#define __com_sun_star_form_validation_ValidatableBindableControlModel_idl__
-
-#include <com/sun/star/form/validation/ValidatableControlModel.idl>
-#include <com/sun/star/form/binding/BindableControlModel.idl>
-
 module com {  module sun {  module star {  module form { module validation {
 
 /** specifies a control model which supports both binding to an external value supplier,
@@ -60,7 +54,5 @@ service ValidatableBindableControlModel
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

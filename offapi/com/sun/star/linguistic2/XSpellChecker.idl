@@ -16,14 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_linguistic2_XSpellChecker_idl__
-#define __com_sun_star_linguistic2_XSpellChecker_idl__
-
-#include <com/sun/star/linguistic2/XSupportedLocales.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/linguistic2/XDictionaryList.idl>
-#include <com/sun/star/linguistic2/XSpellAlternatives.idl>
-#include <com/sun/star/beans/PropertyValues.idl>
 
 
 module com { module sun { module star { module linguistic2 {
@@ -104,7 +96,5 @@ published interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocal
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

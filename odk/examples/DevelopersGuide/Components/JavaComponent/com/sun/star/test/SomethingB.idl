@@ -33,16 +33,9 @@
  *
  *************************************************************************/
 
-#ifndef INCLUDED_COM_SUN_STAR_TEST_SOMETHINGB_IDL
-#define INCLUDED_COM_SUN_STAR_TEST_SOMETHINGB_IDL
-
-#include <XSomethingB.idl>
-
 module com {  module sun {  module star {  module test {
     service SomethingB : XSomethingB;
 }; }; }; };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

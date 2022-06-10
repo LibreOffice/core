@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba_word__XTables_idl__
-#define __ooo_vba_word__XTables_idl__
-
-#include <ooo/vba/XHelperInterface.idl>
-#include <ooo/vba/XCollection.idl>
-#include <ooo/vba/word/XTable.idl>
-#include <com/sun/star/script/BasicErrorException.idl>
-
 module ooo { module vba { module word {
 
 interface XRange;
@@ -47,7 +39,5 @@ interface XTables
 };
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

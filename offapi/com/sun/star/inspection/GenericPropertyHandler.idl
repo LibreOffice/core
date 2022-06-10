@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_inspection_GenericPropertyHandler_idl__
-#define __com_sun_star_inspection_GenericPropertyHandler_idl__
-
-#include <com/sun/star/inspection/XPropertyHandler.idl>
-
 module com {  module sun {  module star {  module inspection {
 
 /** implements a general-purpose XPropertyHandler
@@ -44,8 +39,6 @@ service GenericPropertyHandler : XPropertyHandler;
 
 
 }; }; }; };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_DDELink_idl__
-#define __com_sun_star_sheet_DDELink_idl__
-
-#include <com/sun/star/container/XNamed.idl>
-#include <com/sun/star/sheet/XDDELink.idl>
-#include <com/sun/star/util/XRefreshable.idl>
-#include <com/sun/star/sheet/XDDELinkResults.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -63,7 +55,5 @@ published service DDELink
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

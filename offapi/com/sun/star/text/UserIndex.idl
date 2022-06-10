@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_UserIndex_idl__
-#define __com_sun_star_text_UserIndex_idl__
-
-#include <com/sun/star/text/BaseIndex.idl>
-
 
 module com { module sun { module star { module text {
 
@@ -68,7 +63,5 @@ published service UserIndex
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

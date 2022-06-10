@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_Scenario_idl__
-#define __com_sun_star_sheet_Scenario_idl__
-
-#include <com/sun/star/sheet/XScenario.idl>
-#include <com/sun/star/sheet/XScenarioEnhanced.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/container/XNamed.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -87,7 +79,5 @@ service Scenario
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_crypto_XMLSignatureException_idl__
-#define __com_sun_star_xml_crypto_XMLSignatureException_idl__
-
-#include <com/sun/star/security/SignatureException.idl>
-
 module com { module sun { module star { module xml { module crypto {
 
 exception XMLSignatureException : com::sun::star::security::SignatureException
@@ -29,7 +24,5 @@ exception XMLSignatureException : com::sun::star::security::SignatureException
 };
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

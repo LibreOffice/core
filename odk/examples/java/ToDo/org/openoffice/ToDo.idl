@@ -33,11 +33,6 @@
  *
  *************************************************************************/
 
-#ifndef INCLUDED_ORG_OPENOFFICE_TODO_IDL
-#define INCLUDED_ORG_OPENOFFICE_TODO_IDL
-
-#include <XToDo.idl>
-
 /// org
 module org {
     ///  openoffice
@@ -47,7 +42,5 @@ module org {
         service ToDo: XToDo;
     };
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

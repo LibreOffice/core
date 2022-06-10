@@ -17,18 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_runtime_XFormOperations_idl__
-#define __com_sun_star_form_runtime_XFormOperations_idl__
-
-#include <com/sun/star/form/runtime/FeatureState.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/sdbc/XRowSet.idl>
-#include <com/sun/star/sdbc/XResultSetUpdate.idl>
-#include <com/sun/star/form/runtime/XFormController.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/lang/WrappedTargetException.idl>
-#include <com/sun/star/beans/NamedValue.idl>
-
 
 module com { module sun { module star { module form { module runtime {
 
@@ -251,7 +239,5 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
 
 }; }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

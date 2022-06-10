@@ -16,14 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_chart_XAxisXSupplier_idl__
-#define __com_sun_star_chart_XAxisXSupplier_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
-#include <com/sun/star/drawing/XShape.idl>
-
-#include <com/sun/star/beans/XPropertySet.idl>
 
 
 
@@ -80,7 +72,5 @@ published interface XAxisXSupplier: com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,26 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_form_FormController_idl__
-#define __com_sun_star_form_FormController_idl__
-
-#include <com/sun/star/form/XFormController.idl>
-
-#include <com/sun/star/awt/XTabController.idl>
-
-#include <com/sun/star/container/XChild.idl>
-
-#include <com/sun/star/lang/XComponent.idl>
-
-#include <com/sun/star/container/XEnumerationAccess.idl>
-
-#include <com/sun/star/util/XModifyBroadcaster.idl>
-#include <com/sun/star/form/XConfirmDeleteBroadcaster.idl>
-#include <com/sun/star/sdb/XSQLErrorBroadcaster.idl>
-#include <com/sun/star/sdb/XRowSetApproveBroadcaster.idl>
-
-#include <com/sun/star/form/XDatabaseParameterBroadcaster.idl>
-#include <com/sun/star/form/FormControllerDispatcher.idl>
 
 
  module com {  module sun {  module star {  module form {
@@ -65,7 +45,5 @@ published service FormController
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

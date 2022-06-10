@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_AccessibleListBox_idl__
-#define __com_sun_star_awt_AccessibleListBox_idl__
-
-#include <com/sun/star/accessibility/AccessibleContext.idl>
-
 module com { module sun { module star { module accessibility {
 
  interface XAccessibleSelection;
@@ -86,7 +81,5 @@ service AccessibleListBox
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

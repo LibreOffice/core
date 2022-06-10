@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_XUIConfigurationListener_idl__
-#define __com_sun_star_ui_XUIConfigurationListener_idl__
-
-#include <com/sun/star/lang/XEventListener.idl>
-#include <com/sun/star/ui/ConfigurationEvent.idl>
-
 
 module com { module sun { module star { module ui {
 
@@ -64,7 +58,5 @@ published interface XUIConfigurationListener : com::sun::star::lang::XEventListe
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

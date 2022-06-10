@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sdb_application_XCopyTableWizard_idl__
-#define __com_sun_star_sdb_application_XCopyTableWizard_idl__
-
-#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/sdbc/SQLException.idl>
-#include <com/sun/star/beans/Optional.idl>
-
 module com { module sun { module star { module sdb { module application {
 
 interface XCopyTableListener;
@@ -132,7 +124,5 @@ interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
 
 }; }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

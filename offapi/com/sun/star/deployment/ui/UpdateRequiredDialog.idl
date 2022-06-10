@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _com_sun_star_deployment_ui_UpdateRequiredDialog_idl
-#define _com_sun_star_deployment_ui_UpdateRequiredDialog_idl
-
-#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
-#include <com/sun/star/awt/XWindow.idl>
-
 
 module com { module sun { module star { module deployment { module ui {
 
@@ -40,7 +34,5 @@ service UpdateRequiredDialog : com::sun::star::ui::dialogs::XExecutableDialog
 };
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

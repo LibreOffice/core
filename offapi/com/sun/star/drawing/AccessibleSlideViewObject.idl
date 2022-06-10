@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_AccessibleSlideViewObject_idl__
-#define __com_sun_star_drawing_AccessibleSlideViewObject_idl__
-
-#include <com/sun/star/accessibility/XAccessible.idl>
-#include <com/sun/star/accessibility/XAccessibleContext.idl>
-#include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
-
 module com {  module sun {  module star {  module drawing {
 
 /** The AccessibleSlideViewObject service is implemented by
@@ -44,7 +36,5 @@ service AccessibleSlideViewObject
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

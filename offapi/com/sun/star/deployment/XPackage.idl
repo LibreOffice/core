@@ -17,24 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _com_sun_star_deployment_XPackage_idl
-#define _com_sun_star_deployment_XPackage_idl
-
-#include <com/sun/star/beans/Optional.idl>
-#include <com/sun/star/beans/Ambiguous.idl>
-#include <com/sun/star/beans/StringPair.idl>
-#include <com/sun/star/deployment/DeploymentException.idl>
-#include <com/sun/star/deployment/XPackageTypeInfo.idl>
-#include <com/sun/star/deployment/ExtensionRemovedException.idl>
-#include <com/sun/star/graphic/XGraphic.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/task/XAbortChannel.idl>
-#include <com/sun/star/ucb/CommandFailedException.idl>
-#include <com/sun/star/ucb/CommandAbortedException.idl>
-#include <com/sun/star/ucb/XCommandEnvironment.idl>
-#include <com/sun/star/util/XModifyBroadcaster.idl>
-
 
 module com { module sun { module star { module deployment {
 
@@ -364,7 +346,5 @@ interface XPackage
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba_excel_TextFrame_idl__
-#define __ooo_vba_excel_TextFrame_idl__
-
-#include <ooo/vba/excel/XTextFrame.idl>
-#include <com/sun/star/uno/XComponentContext.idl>
-
 module ooo {  module vba { module excel {
 service TextFrame : XTextFrame
 {
@@ -30,7 +24,5 @@ service TextFrame : XTextFrame
 };
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

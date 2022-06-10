@@ -16,15 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_sdb_OfficeDatabaseDocument_idl__
-#define __com_sun_star_sdb_OfficeDatabaseDocument_idl__
-
-#include <com/sun/star/document/OfficeDocument.idl>
-#include <com/sun/star/sdb/XOfficeDatabaseDocument.idl>
-#include <com/sun/star/document/XDocumentEventBroadcaster.idl>
-#include <com/sun/star/script/provider/XScriptProviderSupplier.idl>
-#include <com/sun/star/frame/XLoadable.idl>
-#include <com/sun/star/util/XCloseable.idl>
 
 module com {  module sun {  module star {  module sdb {
 
@@ -221,6 +212,5 @@ service OfficeDatabaseDocument
 
 /*===========================================================================
 ===========================================================================*/
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

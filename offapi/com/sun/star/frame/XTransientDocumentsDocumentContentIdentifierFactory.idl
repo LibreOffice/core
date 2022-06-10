@@ -7,13 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  */
-#ifndef __com_sun_star_frame_XTransientDocumentsDocumentContentIdentifierFactory_idl__
-#define __com_sun_star_frame_XTransientDocumentsDocumentContentIdentifierFactory_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/ucb/XContentIdentifier.idl>
-#include <com/sun/star/frame/XModel.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
 module com { module sun { module star { module frame {
@@ -53,7 +46,5 @@ interface XTransientDocumentsDocumentContentIdentifierFactory
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

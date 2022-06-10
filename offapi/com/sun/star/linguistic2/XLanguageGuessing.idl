@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_linguistic2_XLanguageGuessing_idl__
-#define __com_sun_star_linguistic2_XLanguageGuessing_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/lang/Locale.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
 module com { module sun { module star { module linguistic2 {
 
 /** This interface allows to guess the language of a text
@@ -180,7 +173,5 @@ interface XLanguageGuessing
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

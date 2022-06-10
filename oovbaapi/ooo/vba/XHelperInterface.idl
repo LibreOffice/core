@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba_XHelperInterface_idl__
-#define __ooo_vba_XHelperInterface_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/uno/Exception.idl>
-#include <com/sun/star/script/BasicErrorException.idl>
-#include <com/sun/star/lang/XServiceInfo.idl>
-
 module ooo {  module vba {
 
 interface XHelperInterface
@@ -46,7 +38,5 @@ interface XHelperInterface
 };
 
 }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

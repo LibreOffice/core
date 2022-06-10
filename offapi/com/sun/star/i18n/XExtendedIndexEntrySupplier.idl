@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_i18n_XExtendedIndexEntrySupplier_idl__
-#define __com_sun_star_i18n_XExtendedIndexEntrySupplier_idl__
-
-#include <com/sun/star/i18n/XIndexEntrySupplier.idl>
-#include <com/sun/star/lang/Locale.idl>
-
 
 module com { module sun { module star { module i18n {
 
@@ -137,7 +131,5 @@ published interface XExtendedIndexEntrySupplier : ::com::sun::star::i18n::XIndex
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

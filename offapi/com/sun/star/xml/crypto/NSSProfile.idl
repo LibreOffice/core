@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_crypto_NSSProfile_idl_
-#define __com_sun_star_xml_crypto_NSSProfile_idl_
-
-#include <com/sun/star/mozilla/MozillaProductType.idl>
-
 module com { module sun { module star { module xml { module crypto {
 
 /**
@@ -48,7 +43,5 @@ struct NSSProfile {
 };
 
 } ; } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

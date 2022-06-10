@@ -7,10 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  */
-#ifndef __com_sun_star_ui_XDeck_idl__
-#define __com_sun_star_ui_XDeck_idl__
-
-#include <com/sun/star/ui/XPanels.idl>
 
 
  module com {  module sun {  module star {  module ui {
@@ -86,7 +82,5 @@ interface XDeck
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

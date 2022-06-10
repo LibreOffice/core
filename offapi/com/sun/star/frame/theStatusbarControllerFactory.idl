@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_frame_theStatusbarControllerFactory_idl__
-#define __com_sun_star_frame_theStatusbarControllerFactory_idl__
-
-#include <com/sun/star/frame/XUIControllerFactory.idl>
-
 module com { module sun { module star { module frame {
 
 /** specifies a factory that creates instances of registered status bar
@@ -41,7 +36,5 @@ module com { module sun { module star { module frame {
 singleton theStatusbarControllerFactory : XUIControllerFactory;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

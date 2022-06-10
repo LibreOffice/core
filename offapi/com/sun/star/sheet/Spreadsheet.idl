@@ -17,29 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_Spreadsheet_idl__
-#define __com_sun_star_sheet_Spreadsheet_idl__
-
-#include <com/sun/star/sheet/SheetCellRange.idl>
-#include <com/sun/star/sheet/XSpreadsheet.idl>
-#include <com/sun/star/container/XNamed.idl>
-#include <com/sun/star/util/XProtectable.idl>
-#include <com/sun/star/sheet/XDataPilotTablesSupplier.idl>
-#include <com/sun/star/sheet/XScenariosSupplier.idl>
-#include <com/sun/star/sheet/XSheetAnnotationsSupplier.idl>
-#include <com/sun/star/drawing/XDrawPageSupplier.idl>
-#include <com/sun/star/table/XTableChartsSupplier.idl>
-#include <com/sun/star/sheet/XCellRangeMovement.idl>
-#include <com/sun/star/sheet/XPrintAreas.idl>
-#include <com/sun/star/sheet/XSheetPageBreak.idl>
-#include <com/sun/star/sheet/XSheetOutline.idl>
-#include <com/sun/star/sheet/XSheetAuditing.idl>
-#include <com/sun/star/sheet/XSheetLinkable.idl>
-#include <com/sun/star/sheet/Scenario.idl>
-#include <com/sun/star/sheet/XExternalSheetName.idl>
-#include <com/sun/star/sheet/XConditionalFormats.idl>
-#include <com/sun/star/util/Color.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -196,7 +173,5 @@ service Spreadsheet
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

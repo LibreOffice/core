@@ -16,31 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_drawing_TextProperties_idl__
-#define __com_sun_star_drawing_TextProperties_idl__
-
-#include <com/sun/star/container/XIndexReplace.idl>
-
-#include <com/sun/star/style/CharacterProperties.idl>
-#include <com/sun/star/style/CharacterPropertiesAsian.idl>
-#include <com/sun/star/style/CharacterPropertiesComplex.idl>
-
-#include <com/sun/star/style/ParagraphProperties.idl>
-#include <com/sun/star/style/ParagraphPropertiesAsian.idl>
-#include <com/sun/star/style/ParagraphPropertiesComplex.idl>
-
-#include <com/sun/star/drawing/TextFitToSizeType.idl>
-
-#include <com/sun/star/drawing/TextAdjust.idl>
-
-#include <com/sun/star/drawing/TextAnimationDirection.idl>
-
-#include <com/sun/star/drawing/TextAnimationKind.idl>
-
-#include <com/sun/star/drawing/TextVerticalAdjust.idl>
-#include <com/sun/star/drawing/TextHorizontalAdjust.idl>
-#include <com/sun/star/text/WritingMode.idl>
-#include <com/sun/star/text/XTextColumns.idl>
 
 
  module com {  module sun {  module star {  module drawing {
@@ -261,7 +236,5 @@ published service TextProperties
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

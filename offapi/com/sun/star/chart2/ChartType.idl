@@ -16,12 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef com_sun_star_chart2_ChartType_idl
-#define com_sun_star_chart2_ChartType_idl
-
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/chart2/XChartType.idl>
-#include <com/sun/star/chart2/XDataSeriesContainer.idl>
 
 module com
 {
@@ -50,7 +44,5 @@ service ChartType
 } ; // sun
 } ; // com
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

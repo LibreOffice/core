@@ -18,12 +18,6 @@
  */
 
 
-#ifndef __com_sun_star_datatransfer_XMimeContentType_idl__
-#define __com_sun_star_datatransfer_XMimeContentType_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/container/NoSuchElementException.idl>
-
 module com { module sun { module star { module datatransfer {
 
 /** An implementation of this interface represents a MIME content-type that
@@ -90,7 +84,5 @@ published interface XMimeContentType : com::sun::star::uno::XInterface
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

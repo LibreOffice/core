@@ -16,21 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_document_OfficeDocument_idl__
-#define __com_sun_star_document_OfficeDocument_idl__
-
-#include <com/sun/star/frame/XModel.idl>
-#include <com/sun/star/util/XModifiable.idl>
-#include <com/sun/star/frame/XStorable.idl>
-#include <com/sun/star/view/XPrintable.idl>
-#include <com/sun/star/view/XPrintJobBroadcaster.idl>
-#include <com/sun/star/document/XEventBroadcaster.idl>
-#include <com/sun/star/document/XEventsSupplier.idl>
-#include <com/sun/star/document/XViewDataSupplier.idl>
-#include <com/sun/star/document/XDocumentEventBroadcaster.idl>
-#include <com/sun/star/document/XEmbeddedScripts.idl>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.idl>
-#include <com/sun/star/document/XUndoManagerSupplier.idl>
 
 
 module com {   module sun {   module star {   module document {
@@ -170,7 +155,5 @@ published service OfficeDocument
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

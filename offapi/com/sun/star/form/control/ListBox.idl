@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_control_ListBox_idl__
-#define __com_sun_star_form_control_ListBox_idl__
-
-#include <com/sun/star/awt/UnoControlListBox.idl>
-#include <com/sun/star/form/XBoundControl.idl>
-#include <com/sun/star/form/XChangeBroadcaster.idl>
-
 
  module com {  module sun {  module star {  module form {  module control {
 
@@ -57,8 +50,6 @@ published service ListBox
 
 
 }; }; }; }; };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,21 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_DataPilotField_idl__
-#define __com_sun_star_sheet_DataPilotField_idl__
-
-#include <com/sun/star/container/XNamed.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/sheet/XDataPilotField.idl>
-#include <com/sun/star/sheet/XDataPilotFieldGrouping.idl>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.idl>
-#include <com/sun/star/sheet/GeneralFunction.idl>
-#include <com/sun/star/sheet/DataPilotFieldReference.idl>
-#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.idl>
-#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.idl>
-#include <com/sun/star/sheet/DataPilotFieldSortInfo.idl>
-#include <com/sun/star/sheet/DataPilotFieldGroupInfo.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -209,7 +194,5 @@ published service DataPilotField
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

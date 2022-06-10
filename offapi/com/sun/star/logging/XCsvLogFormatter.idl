@@ -18,12 +18,6 @@
  */
 
 
-#ifndef __com_sun_star_logging_XCsvLogFormatter_idl__
-#define __com_sun_star_logging_XCsvLogFormatter_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/logging/XLogFormatter.idl>
-
 
 module com { module sun { module star { module logging {
 
@@ -63,7 +57,5 @@ interface XCsvLogFormatter : XLogFormatter
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

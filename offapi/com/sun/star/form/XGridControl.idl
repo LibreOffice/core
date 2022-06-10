@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_XGridControl_idl__
-#define __com_sun_star_form_XGridControl_idl__
-
-#include <com/sun/star/form/XGrid.idl>
-#include <com/sun/star/form/XGridControlListener.idl>
-#include <com/sun/star/form/XGridFieldDataSupplier.idl>
-
 
 module com { module sun { module star { module form {
 
@@ -54,7 +47,5 @@ interface XGridControl
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

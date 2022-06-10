@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba_excel_XAxes_idl__
-#define __ooo_vba_excel_XAxes_idl__
-
-#include <ooo/vba/excel/XAxis.idl>
-#include <com/sun/star/script/BasicErrorException.idl>
-#include <ooo/vba/XHelperInterface.idl>
-#include <ooo/vba/XCollection.idl>
-
 module ooo {  module vba { module excel {
 
 interface XAxes
@@ -33,7 +25,5 @@ interface XAxes
 };
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

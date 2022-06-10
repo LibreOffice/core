@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xsd_Boolean_idl__
-#define __com_sun_star_xsd_Boolean_idl__
-
-#include <com/sun/star/xsd/XDataType.idl>
-
 module com {  module sun {  module star {  module xsd {
 
 /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#boolean">XSD compliant boolean type</a>
@@ -36,7 +31,5 @@ service Boolean
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

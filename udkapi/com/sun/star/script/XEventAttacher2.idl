@@ -7,13 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_script_XEventAttacher2_idl__
-#define __com_sun_star_script_XEventAttacher2_idl__
-
-#include <com/sun/star/script/XEventAttacher.idl>
-#include <com/sun/star/lang/XEventListener.idl>
-#include <com/sun/star/script/EventListener.idl>
-
 module com {  module sun {  module star {  module script {
 
 interface XEventAttacher2: com::sun::star::script::XEventAttacher
@@ -36,7 +29,5 @@ interface XEventAttacher2: com::sun::star::script::XEventAttacher
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

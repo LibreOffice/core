@@ -7,13 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_frame_XInfobarProvider_idl__
-#define __com_sun_star_frame_XInfobarProvider_idl__
-
-#include <com/sun/star/beans/StringPair.idl>
-#include <com/sun/star/frame/InfobarType.idl>
-#include <com/sun/star/uno/XInterface.idl>
-
 module com {  module sun {  module star {  module frame {
 
 /** Allows to add Infobars to a frame.
@@ -140,7 +133,5 @@ interface XInfobarProvider: uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

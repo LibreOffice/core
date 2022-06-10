@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_binding_ListEntrySource_idl__
-#define __com_sun_star_form_binding_ListEntrySource_idl__
-
-#include <com/sun/star/form/binding/XListEntrySource.idl>
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/util/XModifyBroadcaster.idl>
-
 
 module com {  module sun {  module star {  module form { module binding {
 
@@ -52,7 +45,5 @@ service ListEntrySource
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

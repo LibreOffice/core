@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_table_TableSortDescriptor2_idl__
-#define __com_sun_star_table_TableSortDescriptor2_idl__
-
-#include <com/sun/star/util/SortDescriptor2.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/table/TableSortField.idl>
-
 
 module com {  module sun {  module star {  module table {
 
@@ -62,7 +55,5 @@ published service TableSortDescriptor2
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

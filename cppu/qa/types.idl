@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Exception.idl>
-#include <com/sun/star/uno/XInterface.idl>
-
 enum Enum1 { M0, M1, M2 };
 
 enum Enum2 { M0, M1, M2 };

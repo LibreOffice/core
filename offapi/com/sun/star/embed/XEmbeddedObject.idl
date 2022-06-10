@@ -16,23 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_embed_XEmbeddedObject_idl__
-#define __com_sun_star_embed_XEmbeddedObject_idl__
-
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/embed/XEmbeddedClient.idl>
-#include <com/sun/star/embed/XVisualObject.idl>
-#include <com/sun/star/embed/XClassifiedObject.idl>
-#include <com/sun/star/embed/XComponentSupplier.idl>
-#include <com/sun/star/embed/XStateChangeBroadcaster.idl>
-#include <com/sun/star/datatransfer/XTransferable.idl>
-#include <com/sun/star/document/XEventBroadcaster.idl>
-#include <com/sun/star/embed/VerbDescriptor.idl>
-#include <com/sun/star/embed/UnreachableStateException.idl>
-#include <com/sun/star/embed/WrongStateException.idl>
-#include <com/sun/star/embed/NeedsRunningStateException.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/util/XCloseable.idl>
 
 
 
@@ -230,7 +213,5 @@ published interface XEmbeddedObject
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

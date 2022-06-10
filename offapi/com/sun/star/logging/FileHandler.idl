@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_logging_FileHandler_idl__
-#define __com_sun_star_logging_FileHandler_idl__
-
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/beans/NamedValue.idl>
-
 
 module com { module sun { module star { module logging {
 
@@ -77,7 +71,5 @@ service FileHandler : XLogHandler
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,15 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  */
-#ifndef __com_sun_star_ui_XSidebarProvider_idl__
-#define __com_sun_star_ui_XSidebarProvider_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/frame/XFrame.idl>
-#include <com/sun/star/awt/XWindow2.idl>
-
-#include <com/sun/star/ui/XSidebar.idl>
-#include <com/sun/star/ui/XDecks.idl>
 
 
 module com { module sun { module star { module ui {
@@ -62,7 +53,5 @@ interface XSidebarProvider: com::sun::star::uno::XInterface
 } ;
 
 } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

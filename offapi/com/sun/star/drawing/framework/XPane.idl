@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_framework_XPane_idl__
-#define __com_sun_star_drawing_framework_XPane_idl__
-
-#include <com/sun/star/awt/XWindow.idl>
-#include <com/sun/star/rendering/XCanvas.idl>
-#include <com/sun/star/drawing/framework/XResource.idl>
-#include <com/sun/star/drawing/framework/XRelocatableResource.idl>
-
 module com { module sun { module star { module drawing { module framework {
 
 /** A pane is an abstraction of a window and is one of the resources managed
@@ -54,7 +46,5 @@ interface XPane
 };
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

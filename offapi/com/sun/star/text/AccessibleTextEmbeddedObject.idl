@@ -16,13 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_text_AccessibleTextEmbeddedObject_idl__
-#define __com_sun_star_text_AccessibleTextEmbeddedObject_idl__
-
-#include <com/sun/star/accessibility/XAccessibleContext.idl>
-#include <com/sun/star/accessibility/XAccessibleComponent.idl>
-#include <com/sun/star/accessibility/XAccessibleImage.idl>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
 
 
 
@@ -100,7 +93,5 @@ service AccessibleTextEmbeddedObject
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

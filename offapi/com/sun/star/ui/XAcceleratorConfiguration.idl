@@ -16,15 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_ui_XAcceleratorConfiguration_idl__
-#define __com_sun_star_ui_XAcceleratorConfiguration_idl__
-
-#include <com/sun/star/ui/XUIConfiguration.idl>
-#include <com/sun/star/ui/XUIConfigurationPersistence.idl>
-#include <com/sun/star/ui/XUIConfigurationStorage.idl>
-#include <com/sun/star/awt/KeyEvent.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/container/NoSuchElementException.idl>
 
 module com {  module sun {  module star {  module ui {
 
@@ -266,7 +257,5 @@ published interface XAcceleratorConfiguration
 }; // interface XAcceleratorConfiguration
 
 }; }; }; }; // com.sun.star
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_sheet_XDataBarEntry_idl__
-#define __com_sun_star_sheet_XDataBarEntry_idl__
-
 module com { module sun { module star { module sheet {
 
 interface XDataBarEntry
@@ -31,8 +28,6 @@ interface XDataBarEntry
 
 
 }; }; }; };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

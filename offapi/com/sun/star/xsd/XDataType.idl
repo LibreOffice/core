@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xsd_XDataType_idl__
-#define __com_sun_star_xsd_XDataType_idl__
-
-#include <com/sun/star/container/XNamed.idl>
-#include <com/sun/star/util/VetoException.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-
 module com {  module sun {  module star {  module xsd {
 
 /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#built-in-datatypes">XSD compliant simple data type</a>
@@ -79,7 +71,5 @@ interface XDataType
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

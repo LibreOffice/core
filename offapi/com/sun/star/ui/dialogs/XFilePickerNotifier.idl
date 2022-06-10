@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_dialogs_XFilePickerNotifier_idl__
-#define __com_sun_star_ui_dialogs_XFilePickerNotifier_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/ui/dialogs/XFilePickerListener.idl>
-
 
 module com { module sun { module star { module ui { module dialogs {
 
@@ -52,7 +46,5 @@ published interface XFilePickerNotifier: com::sun::star::uno::XInterface
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

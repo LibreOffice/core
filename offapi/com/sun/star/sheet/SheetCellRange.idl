@@ -17,46 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_SheetCellRange_idl__
-#define __com_sun_star_sheet_SheetCellRange_idl__
 
 
-#include <com/sun/star/table/CellRange.idl>
-#include <com/sun/star/style/CharacterProperties.idl>
-#include <com/sun/star/style/CharacterPropertiesAsian.idl>
-#include <com/sun/star/style/CharacterPropertiesComplex.idl>
-#include <com/sun/star/style/ParagraphProperties.idl>
-#include <com/sun/star/sheet/SheetRangesQuery.idl>
 
 
-#include <com/sun/star/util/XReplaceable.idl>
-#include <com/sun/star/util/XMergeable.idl>
-#include <com/sun/star/util/XIndent.idl>
-#include <com/sun/star/table/XColumnRowRange.idl>
-#include <com/sun/star/table/XAutoFormattable.idl>
-#include <com/sun/star/sheet/XSheetCellRange.idl>
-#include <com/sun/star/sheet/XCellRangeData.idl>
-#include <com/sun/star/sheet/XCellRangeFormula.idl>
-#include <com/sun/star/sheet/XCellRangeAddressable.idl>
-#include <com/sun/star/sheet/XSheetOperation.idl>
-#include <com/sun/star/sheet/XCellSeries.idl>
-#include <com/sun/star/sheet/XArrayFormulaRange.idl>
-#include <com/sun/star/sheet/XMultipleOperation.idl>
-#include <com/sun/star/util/XSortable.idl>
-#include <com/sun/star/util/XImportable.idl>
-#include <com/sun/star/sheet/XSubTotalCalculatable.idl>
-#include <com/sun/star/sheet/XSheetFilterableEx.idl>
-#include <com/sun/star/sheet/XCellFormatRangesSupplier.idl>
-#include <com/sun/star/sheet/XUniqueCellFormatRangesSupplier.idl>
-#include <com/sun/star/chart/XChartDataArray.idl>
-
-
-#include <com/sun/star/awt/Point.idl>
-#include <com/sun/star/awt/Size.idl>
-#include <com/sun/star/sheet/XSheetConditionalEntries.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
-#include <com/sun/star/util/XModifyBroadcaster.idl>
 
 
 module com {  module sun {  module star {  module sheet {
@@ -290,7 +254,5 @@ published service SheetCellRange
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

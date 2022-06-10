@@ -18,9 +18,6 @@
  */
 
 
-#ifndef __com_sun_star_mozilla_MozillaProductType_idl__
-#define __com_sun_star_mozilla_MozillaProductType_idl__
-
 
 
  module com {  module sun {  module star {  module mozilla {
@@ -49,7 +46,5 @@ published enum  MozillaProductType
 }; }; }; };
 
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

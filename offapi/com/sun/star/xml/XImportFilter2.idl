@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COM_SUN_STAR_XML_XIMPORTFILTER2_IDL__
-#define _COM_SUN_STAR_XML_XIMPORTFILTER2_IDL__
-
-#include <com/sun/star/uno/RuntimeException.idl>
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/beans/PropertyValue.idl>
-#include <com/sun/star/xml/sax/XFastParser.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
 
 module com { module sun { module star { module xml {
 
@@ -66,6 +57,5 @@ interface XImportFilter2: com::sun::star::uno::XInterface
 };
 
 }; }; }; };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

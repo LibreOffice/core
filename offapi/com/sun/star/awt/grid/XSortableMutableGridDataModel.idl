@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_grid_XSortableMutableGridDataModel_idl__
-#define __com_sun_star_awt_grid_XSortableMutableGridDataModel_idl__
-
-#include <com/sun/star/awt/grid/XMutableGridDataModel.idl>
-#include <com/sun/star/awt/grid/XSortableGridData.idl>
-
 
 module com { module sun { module star { module awt { module grid {
 
@@ -46,7 +40,5 @@ interface XSortableMutableGridDataModel
 
 }; }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

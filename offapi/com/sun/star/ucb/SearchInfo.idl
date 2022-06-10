@@ -16,11 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_ucb_SearchInfo_idl__
-#define __com_sun_star_ucb_SearchInfo_idl__
-
-#include <com/sun/star/ucb/SearchCriterium.idl>
-#include <com/sun/star/ucb/SearchRecursion.idl>
 
 
 
@@ -64,7 +59,5 @@ published struct SearchInfo
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

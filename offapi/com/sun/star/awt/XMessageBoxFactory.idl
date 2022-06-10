@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_XMessageBoxFactory_idl__
-#define __com_sun_star_awt_XMessageBoxFactory_idl__
-
-#include <com/sun/star/awt/XWindowPeer.idl>
-#include <com/sun/star/awt/XMessageBox.idl>
-#include <com/sun/star/awt/MessageBoxButtons.idl>
-#include <com/sun/star/awt/MessageBoxType.idl>
-
 module com { module sun { module star { module awt {
 
 /** specifies a factory interface for creating message boxes.
@@ -68,7 +60,5 @@ published interface XMessageBoxFactory : com::sun::star::uno::XInterface
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

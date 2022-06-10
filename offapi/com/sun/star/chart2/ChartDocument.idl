@@ -16,15 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef com_sun_star_chart2_ChartDocument_idl
-#define com_sun_star_chart2_ChartDocument_idl
-
-#include <com/sun/star/style/XStyleFamiliesSupplier.idl>
-#include <com/sun/star/util/XNumberFormatsSupplier.idl>
-#include <com/sun/star/chart2/XChartDocument.idl>
-#include <com/sun/star/chart2/data/XDataReceiver.idl>
-#include <com/sun/star/chart2/XTitled.idl>
-#include <com/sun/star/lang/XInitialization.idl>
 
 module com
 {
@@ -75,7 +66,5 @@ service ChartDocument
 } ; // com
 } ; // sun
 } ; // star
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

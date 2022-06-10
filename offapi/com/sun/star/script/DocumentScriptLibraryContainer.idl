@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_script_DocumentScriptLibraryContainer_idl__
-#define __com_sun_star_script_DocumentScriptLibraryContainer_idl__
-
-#include <com/sun/star/script/XStorageBasedLibraryContainer.idl>
-#include <com/sun/star/document/XStorageBasedDocument.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
 
 
 module com { module sun { module star { module script {
@@ -61,7 +54,5 @@ service DocumentScriptLibraryContainer : XStorageBasedLibraryContainer
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

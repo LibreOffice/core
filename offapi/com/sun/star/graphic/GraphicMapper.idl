@@ -8,11 +8,6 @@
  *
  */
 
-#ifndef com_sun_star_graphic_GraphicMapper_idl
-#define com_sun_star_graphic_GraphicMapper_idl
-
-#include <com/sun/star/graphic/XGraphicMapper.idl>
-
 module com { module sun { module star { module graphic
 {
 
@@ -24,7 +19,5 @@ module com { module sun { module star { module graphic
 service GraphicMapper : XGraphicMapper;
 
 } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

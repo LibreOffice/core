@@ -17,18 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_text_CellProperties_idl__
-#define __com_sun_star_text_CellProperties_idl__
-
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/util/Color.idl>
-#include <com/sun/star/text/XTextSection.idl>
-#include <com/sun/star/style/GraphicLocation.idl>
-#include <com/sun/star/table/BorderLine.idl>
-#include <com/sun/star/container/XNameContainer.idl>
-#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
-#include <com/sun/star/graphic/XGraphic.idl>
-
 module com {  module sun {  module star {  module text {
 
 /** service that holds all cell properties of a text table cell in a text document.
@@ -146,6 +134,5 @@ published service CellProperties
 
 
 }; }; }; };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

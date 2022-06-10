@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _COM_SUN_STAR_DEPLOYMENT_VERSIONEXCEPTION_IDL
-#define _COM_SUN_STAR_DEPLOYMENT_VERSIONEXCEPTION_IDL
-
-#include <com/sun/star/uno/Exception.idl>
-
 module com { module sun { module star { module deployment {
 
 interface XPackage;
@@ -53,7 +48,5 @@ exception VersionException: com::sun::star::uno::Exception {
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

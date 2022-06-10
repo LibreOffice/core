@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_auth_XSSOAcceptorContext_idl__
-#define __com_sun_star_auth_XSSOAcceptorContext_idl__
-
-#include <com/sun/star/auth/AuthenticationFailedException.idl>
-#include <com/sun/star/auth/InvalidArgumentException.idl>
-#include <com/sun/star/auth/InvalidContextException.idl>
-#include <com/sun/star/auth/InvalidCredentialException.idl>
-#include <com/sun/star/auth/XSSOContext.idl>
-
 module com { module sun { module star { module auth {
 
 /** represents an acceptor side security context.
@@ -61,7 +52,5 @@ published interface XSSOAcceptorContext : ::com::sun::star::auth::XSSOContext
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

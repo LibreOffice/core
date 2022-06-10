@@ -6,8 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef __ooo_vba_word_XMailMerge_idl__
-#define __ooo_vba_word_XMailMerge_idl__
 
 module ooo {  module vba {  module word {
 
@@ -34,7 +32,5 @@ interface XMailMerge : XHelperInterface
 };
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

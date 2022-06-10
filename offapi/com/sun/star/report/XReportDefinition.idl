@@ -16,28 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_report_XReportDefinition_idl__
-#define __com_sun_star_report_XReportDefinition_idl__
-
-#include <com/sun/star/report/XReportComponent.idl>
-#include <com/sun/star/report/XFunctionsSupplier.idl>
-#include <com/sun/star/view/PaperOrientation.idl>
-#include <com/sun/star/container/NoSuchElementException.idl>
-#include <com/sun/star/style/GraphicLocation.idl>
-#include <com/sun/star/view/PaperFormat.idl>
-#include <com/sun/star/util/XCloseable.idl>
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.idl>
-#include <com/sun/star/document/XDocumentSubStorageSupplier.idl>
-#include <com/sun/star/frame/XModel.idl>
-#include <com/sun/star/document/XViewDataSupplier.idl>
-#include <com/sun/star/frame/XLoadable.idl>
-#include <com/sun/star/embed/XVisualObject.idl>
-#include <com/sun/star/document/XStorageBasedDocument.idl>
-#include <com/sun/star/awt/Size.idl>
-#include <com/sun/star/util/XModifiable2.idl>
-#include <com/sun/star/document/XEventBroadcaster.idl>
-#include <com/sun/star/lang/DisposedException.idl>
-#include <com/sun/star/style/XStyleFamiliesSupplier.idl>
 
 module com {  module sun {  module star {  module sdbc {
 published interface XConnection;
@@ -303,7 +281,5 @@ interface XReportDefinition
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

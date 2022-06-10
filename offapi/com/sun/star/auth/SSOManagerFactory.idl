@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_auth_SSOManagerFactory_idl__
-#define __com_sun_star_auth_SSOManagerFactory_idl__
-
-#include <com/sun/star/auth/XSSOManagerFactory.idl>
-
 module com { module sun { module star { module auth {
 
 /** represents a starting point for Single Sign-on interactions.
@@ -58,7 +53,5 @@ module com { module sun { module star { module auth {
 published service SSOManagerFactory: XSSOManagerFactory;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

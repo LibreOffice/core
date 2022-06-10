@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_chart2_XChartShapeContainer_idl
-#define com_sun_star_chart2_XChartShapeContainer_idl
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/drawing/XShape.idl>
-
 
 module com {  module sun {  module star {  module chart2 {
 
@@ -43,7 +37,5 @@ interface XChartShapeContainer : ::com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

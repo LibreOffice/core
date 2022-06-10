@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __testtools_servicetests_XTestService1_idl__
-#define __testtools_servicetests_XTestService1_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-
 module servicetests {
 
 interface XTestService1: com::sun::star::uno::XInterface {
@@ -29,7 +24,5 @@ interface XTestService1: com::sun::star::uno::XInterface {
 };
 
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

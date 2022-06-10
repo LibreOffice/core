@@ -17,14 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xforms_XSubmission_idl__
-#define __com_sun_star_xforms_XSubmission_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/container/XNamed.idl>
-#include <com/sun/star/form/submission/XSubmission.idl>
-
 module com {  module sun {  module star {  module xforms {
 
 /** specifies a submission object, associated with an XModel
@@ -53,7 +45,5 @@ interface XSubmission
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,20 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_TableAutoFormatField_idl__
-#define __com_sun_star_sheet_TableAutoFormatField_idl__
-
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/util/Color.idl>
-#include <com/sun/star/lang/Locale.idl>
-#include <com/sun/star/awt/FontSlant.idl>
-#include <com/sun/star/table/ShadowFormat.idl>
-#include <com/sun/star/table/CellHoriJustify.idl>
-#include <com/sun/star/table/CellVertJustify.idl>
-#include <com/sun/star/table/CellOrientation.idl>
-#include <com/sun/star/table/TableBorder.idl>
-#include <com/sun/star/table/TableBorder2.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -276,7 +262,5 @@ published service TableAutoFormatField
 
 }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,11 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_util_SearchOptions2_idl__
-#define __com_sun_star_util_SearchOptions2_idl__
 
-
-#include <com/sun/star/util/SearchOptions.idl>
 
 
 module com { module sun { module star { module util {
@@ -46,7 +42,5 @@ struct SearchOptions2 : com::sun::star::util::SearchOptions {
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

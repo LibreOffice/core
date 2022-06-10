@@ -16,21 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _com_sun_star_presentation_XSlideShow_idl
-#define _com_sun_star_presentation_XSlideShow_idl
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/beans/PropertyValue.idl>
-#include <com/sun/star/geometry/RealRectangle2D.idl>
-#include <com/sun/star/rendering/XSpriteCanvas.idl>
-#include <com/sun/star/animations/XAnimationNode.idl>
-#include <com/sun/star/lang/XMultiServiceFactory.idl>
-#include <com/sun/star/drawing/XDrawPage.idl>
-#include <com/sun/star/drawing/XDrawPagesSupplier.idl>
-#include <com/sun/star/drawing/XShape.idl>
-#include <com/sun/star/presentation/XSlideShowView.idl>
-#include <com/sun/star/presentation/XSlideShowListener.idl>
-#include <com/sun/star/presentation/XShapeEventListener.idl>
 
 module com {  module sun {  module star {  module presentation {
 
@@ -338,7 +323,5 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

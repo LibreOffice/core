@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_datatransfer_dnd_XDropTargetDragContext_idl__
-#define __com_sun_star_datatransfer_dnd_XDropTargetDragContext_idl__
-
-#include <com/sun/star/datatransfer/dnd/InvalidDNDOperationException.idl>
-#include <com/sun/star/uno/XInterface.idl>
-
 
 module com { module sun { module star { module datatransfer { module dnd {
 
@@ -69,7 +63,5 @@ published interface XDropTargetDragContext: com::sun::star::uno::XInterface
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

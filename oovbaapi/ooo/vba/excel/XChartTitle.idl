@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba_excel_XChartTitle_idl__
-#define __ooo_vba_excel_XChartTitle_idl__
-
-#include <ooo/vba/excel/XTitle.idl>
-#include <com/sun/star/script/BasicErrorException.idl>
-
 module ooo {  module vba { module excel {
 
 interface XTitle;
@@ -32,7 +26,5 @@ interface XChartTitle
 };
 
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

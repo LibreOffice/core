@@ -16,11 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __ooo_vba_msforms_XPictureFormat_idl__
-#define __ooo_vba_msforms_XPictureFormat_idl__
 
-
-#include <ooo/vba/XHelperInterface.idl>
 
 module ooo {  module vba { module msforms {
 interface XPictureFormat : ooo::vba::XHelperInterface
@@ -31,7 +27,5 @@ interface XPictureFormat : ooo::vba::XHelperInterface
     void IncrementContrast( [in] double increment );
 };
 }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

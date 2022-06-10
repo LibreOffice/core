@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_rendering_CanvasFactory_idl__
-#define __com_sun_star_rendering_CanvasFactory_idl__
-
-#include <com/sun/star/lang/XMultiComponentFactory.idl>
-
 
 module com { module sun { module star { module rendering {
 
@@ -46,7 +41,5 @@ module com { module sun { module star { module rendering {
 service CanvasFactory : com::sun::star::lang::XMultiComponentFactory;
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

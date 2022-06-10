@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_MessageBoxResults_idl__
-#define __com_sun_star_awt_MessageBoxResults_idl__
-
 module com {  module sun {  module star {  module awt {
 
 /** These constants are used to specify a result of executing a XMessageBox.
@@ -54,7 +51,5 @@ constants MessageBoxResults
 };
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

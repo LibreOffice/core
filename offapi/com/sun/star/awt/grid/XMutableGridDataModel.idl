@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_awt_grid_XMutableGridDataModel_idl__
-#define __com_sun_star_awt_grid_XMutableGridDataModel_idl__
-
-#include <com/sun/star/awt/grid/XGridDataModel.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-
 
 module com { module sun { module star { module awt { module grid {
 
@@ -178,7 +171,5 @@ published interface XMutableGridDataModel : XGridDataModel
 
 }; }; }; }; };
 
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_datatransfer_dnd_DNDConstants_idl__
-#define __com_sun_star_datatransfer_dnd_DNDConstants_idl__
-
 
 module com { module sun { module star { module datatransfer { module dnd {
 
@@ -67,7 +64,5 @@ published constants DNDConstants
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

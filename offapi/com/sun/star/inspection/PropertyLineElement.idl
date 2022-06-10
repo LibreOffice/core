@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_inspection_PropertyLineElement_idl__
-#define __com_sun_star_inspection_PropertyLineElement_idl__
-
 module com {  module sun {  module star {  module inspection {
 
 /** describes elements of a single line in an object inspector, used to represent a
@@ -45,7 +42,5 @@ constants PropertyLineElement
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

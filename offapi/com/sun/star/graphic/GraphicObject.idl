@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef com_sun_star_graphic_GraphicObject_idl
-#define com_sun_star_graphic_GraphicObject_idl
-
-#include <com/sun/star/graphic/XGraphicObject.idl>
-
 module com { module sun { module star { module graphic
 {
 /** The <code>GraphicObject</code> service can be used to create XGraphicObject instances.
@@ -40,7 +35,5 @@ service GraphicObject : XGraphicObject
 };
 
 } ; } ; } ; } ;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

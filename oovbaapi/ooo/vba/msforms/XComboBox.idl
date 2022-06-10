@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __ooo_vba_msforms_XComboBox_idl__
-#define __ooo_vba_msforms_XComboBox_idl__
-
-#include <ooo/vba/msforms/XNewFont.idl>
-
 
 
 module ooo {  module vba {  module msforms {
@@ -56,8 +51,6 @@ interface XComboBox
 
 
 }; }; };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

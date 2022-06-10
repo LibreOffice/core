@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_XMultiFormulaTokens_idl__
-#define __com_sun_star_sheet_XMultiFormulaTokens_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/sheet/FormulaToken.idl>
-#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -72,7 +65,5 @@ interface XMultiFormulaTokens
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

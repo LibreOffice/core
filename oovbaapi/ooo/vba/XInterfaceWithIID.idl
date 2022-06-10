@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __ooo_vba_XInterfaceWithIID_idl__
-#define __ooo_vba_XInterfaceWithIID_idl__
-
 module ooo {  module vba {
 
 // Despite being here in ooo::vba, this has nothing to do with "VBA" (Visual Basic for
@@ -28,7 +25,5 @@ interface XInterfaceWithIID : com::sun::star::uno::XInterface
 };
 
 }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

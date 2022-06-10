@@ -16,10 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_loader_SharedLibrary_idl__
-#define __com_sun_star_loader_SharedLibrary_idl__
-
-#include <com/sun/star/lang/XServiceInfo.idl>
 
  module com {  module sun {  module star {  module loader {
 
@@ -42,6 +38,5 @@ published service SharedLibrary : XImplementationLoader;
       Source Code Control System - Update
 
 =====================================================================*/
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

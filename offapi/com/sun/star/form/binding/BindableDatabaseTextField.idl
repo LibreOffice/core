@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_form_binding_BindableDatabaseTextField_idl__
-#define __com_sun_star_form_binding_BindableDatabaseTextField_idl__
-
-#include <com/sun/star/form/component/DatabaseTextField.idl>
-#include <com/sun/star/form/binding/BindableDataAwareControlModel.idl>
-
 
 module com {  module sun {  module star {  module form {  module binding {
 
@@ -52,7 +46,5 @@ service BindableDatabaseTextField
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

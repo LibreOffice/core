@@ -17,37 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_SheetCell_idl__
-#define __com_sun_star_sheet_SheetCell_idl__
 
 
-#include <com/sun/star/table/Cell.idl>
-#include <com/sun/star/text/Text.idl>
-#include <com/sun/star/style/CharacterProperties.idl>
-#include <com/sun/star/style/CharacterPropertiesAsian.idl>
-#include <com/sun/star/style/CharacterPropertiesComplex.idl>
-#include <com/sun/star/style/ParagraphProperties.idl>
-#include <com/sun/star/style/ParagraphPropertiesAsian.idl>
-#include <com/sun/star/style/ParagraphPropertiesComplex.idl>
-#include <com/sun/star/sheet/SheetRangesQuery.idl>
 
 
-#include <com/sun/star/document/XActionLockable.idl>
-#include <com/sun/star/util/XReplaceable.idl>
-#include <com/sun/star/util/XIndent.idl>
-#include <com/sun/star/table/XColumnRowRange.idl>
-#include <com/sun/star/sheet/XCellAddressable.idl>
-#include <com/sun/star/sheet/XSheetAnnotationAnchor.idl>
-#include <com/sun/star/text/XTextFieldsSupplier.idl>
-
-
-#include <com/sun/star/awt/Point.idl>
-#include <com/sun/star/awt/Size.idl>
-#include <com/sun/star/table/CellContentType.idl>
-#include <com/sun/star/sheet/XSheetConditionalEntries.idl>
-#include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
-#include <com/sun/star/util/XModifyBroadcaster.idl>
 
 
 module com {  module sun {  module star {  module sheet {
@@ -256,7 +229,5 @@ published service SheetCell
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

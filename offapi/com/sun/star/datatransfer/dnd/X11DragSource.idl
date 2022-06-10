@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_datatransfer_dnd_X11DragSource_idl__
-#define __com_sun_star_datatransfer_dnd_X11DragSource_idl__
-
-#include <com/sun/star/lang/XComponent.idl>
-#include <com/sun/star/lang/XInitialization.idl>
-
 
 module com { module sun { module star { module datatransfer { module dnd {
 
@@ -55,7 +49,5 @@ published service X11DragSource
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

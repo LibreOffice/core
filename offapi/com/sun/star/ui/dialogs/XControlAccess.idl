@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_ui_dialogs_XControlAccess_idl__
-#define __com_sun_star_ui_dialogs_XControlAccess_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
 
 module com { module sun { module star { module ui { module dialogs {
 
@@ -82,7 +76,5 @@ any getControlProperty( [in] string aControlName, [in] string aControlProperty )
 
 
 }; }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

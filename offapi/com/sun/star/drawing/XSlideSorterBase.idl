@@ -17,16 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_drawing_XSlideSorterBase_idl__
-#define __com_sun_star_drawing_XSlideSorterBase_idl__
-
-#include <com/sun/star/drawing/framework/XView.idl>
-#include <com/sun/star/drawing/XDrawView.idl>
-#include <com/sun/star/awt/XWindow.idl>
-#include <com/sun/star/container/XIndexAccess.idl>
-#include <com/sun/star/frame/XController.idl>
-#include <com/sun/star/util/Color.idl>
-
 module com {  module sun {  module star {  module drawing {
 
 /** This interface exists only because services do not directly support
@@ -113,7 +103,5 @@ interface XSlideSorterBase
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

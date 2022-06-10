@@ -17,15 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_sheet_XCellRangeMovement_idl__
-#define __com_sun_star_sheet_XCellRangeMovement_idl__
-
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/table/CellRangeAddress.idl>
-#include <com/sun/star/sheet/CellInsertMode.idl>
-#include <com/sun/star/sheet/CellDeleteMode.idl>
-#include <com/sun/star/table/CellAddress.idl>
-
 
 module com {  module sun {  module star {  module sheet {
 
@@ -97,7 +88,5 @@ published interface XCellRangeMovement: com::sun::star::uno::XInterface
 
 
 }; }; }; };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

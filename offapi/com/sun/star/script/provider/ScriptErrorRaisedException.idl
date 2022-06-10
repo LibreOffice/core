@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_script_provider_ScriptErrorRaisedException_idl__
-#define __com_sun_star_script_provider_ScriptErrorRaisedException_idl__
-
-#include <com/sun/star/uno/Exception.idl>
-
 
 module com { module sun { module star { module script { module provider {
 
@@ -42,7 +37,5 @@ exception ScriptErrorRaisedException : com::sun::star::uno::Exception {
 };
 
 }; }; }; }; }; // ::com::sun::star::script::provider
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
