@@ -437,7 +437,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="TSB_PARALLEL-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|TSB_PARALLEL">Displays the text parallel to or at 90 degrees to the dimension line.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|TSB_PARALLEL">If enabled, displays the text parallel to the dimension line. If disabled, the text is shown at 90 degrees to the dimension line.</property>
                       </object>
                     </child>
                   </object>
@@ -458,7 +458,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="TSB_SHOW_UNIT-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|TSB_SHOW_UNIT">Shows or hides the dimension measurement units. You can also select a measurement unit you want to display from the list.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="dimensionlinestabpage|extended_tip|TSB_SHOW_UNIT">Shows or hides the dimension measurement unit. You can select a measurement unit you want to display from the list.</property>
                       </object>
                     </child>
                   </object>
