@@ -51,7 +51,7 @@
                 <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="startshow-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="customslideshows|extended_tip|startshow">Runs the slide show. Ensure that Use Custom Slide Show is selected if you want to run a custom presentation.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="customslideshows|extended_tip|startshow">Runs the slide show. Ensure that a custom slide show is selected if you want to run a custom presentation.</property>
                   </object>
                 </child>
               </object>
