@@ -2165,6 +2165,23 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf147027)
     CPPUNIT_ASSERT_EQUAL(778, pPdfPage->getObjectCount());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf135346)
+{
+    // Load the Calc document.
+    aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
+    saveAsPDF(u"tdf135346.ods");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 56
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(56, pPdfPage->getObjectCount());
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf147164)
 {
     aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
