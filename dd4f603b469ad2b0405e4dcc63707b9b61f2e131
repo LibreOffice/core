@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "771649a0_12362f46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-06-10T06:16:58Z",
+      "side": 1,
+      "message": "Now, with Caolán’s patch 6f17d42f251bf4a20b4192c16fa007226dcf17ed, you can make the explanatory labels smaller, which will look even nicer!",
+      "revId": "dd4f603b469ad2b0405e4dcc63707b9b61f2e131",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
