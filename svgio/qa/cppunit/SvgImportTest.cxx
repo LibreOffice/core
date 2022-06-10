@@ -415,8 +415,8 @@ void Test::testTdf97542_2()
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "focusx", "1");
-    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "focusy", "1");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "focalx", "1");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "focaly", "1");
     assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "radius", "3");
 }
 
