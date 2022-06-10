@@ -154,10 +154,10 @@ public:
     virtual void        EnableRTL( bool bEnable = true ) override;
 
     bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true );
-    bool                SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize,
-                                                                const Fraction& rScale,
-                                                                const Point& rNewOffset,
-                                                                sal_uInt8* pBuffer);
+    bool                SetOutputSizePixelScaleOffsetAndLOKBuffer( const Size& rNewSize,
+                                                                   const Fraction& rScale,
+                                                                   const Point& rNewOffset,
+                                                                   sal_uInt8* pBuffer);
 
     bool                SetOutputSize( const Size& rNewSize )
                             { return SetOutputSizePixel( LogicToPixel( rNewSize ) ); }
