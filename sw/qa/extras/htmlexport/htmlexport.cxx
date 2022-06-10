@@ -2266,9 +2266,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTableBackground)
     pWrtShell->SetTabBackground(aBrush);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->SplitNode();
-    pWrtShell->InsertTable(aInsertTableOptions, /*nRows=*/1, /*nCols=*/1);
+    pWrtShell->InsertTable(aInsertTableOptions, /*nRows=*/2, /*nCols=*/1);
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
     aBrush.SetColor(0x00ff00);
+    pWrtShell->SetRowBackground(aBrush);
+    pWrtShell->Down(/*bSelect=*/false);
+    // Second row has an explicit transparent background.
+    aBrush.SetColor(COL_TRANSPARENT);
     pWrtShell->SetRowBackground(aBrush);
 
     // When exporting to reqif-xhtml:
@@ -2286,6 +2290,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTableBackground)
     assertXPath(pXmlDoc, "//reqif-xhtml:table[2]/reqif-xhtml:tr[1]", "style",
                 "background: #00ff00");
     assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:table[2]/reqif-xhtml:tr[1]", "bgcolor");
+    // Second row has no explicit style, the default is not written.
+    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:table[2]/reqif-xhtml:tr[2]", "style");
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testImageKeepRatio)
