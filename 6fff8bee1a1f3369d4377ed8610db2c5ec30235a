@@ -33,6 +33,24 @@
       "message": "If there\u0027s some smart condition that could be used to evaluate whether or not an entry is supposed to have text/support the XAccessibleText interface, I\u0027m wondering whether something along these lines might be a potential solution:\n\n* split AccessibleListBoxEntry into two classes by dropping the inheritance to XAccessibleText from the current version\n* add a new class, for now called AccessibleListBoxEntryWithText that derives from AccessibleListBoxEntry and in addition XAccessibleText, and takes over the implementations of the XAccessibleText methods currently in AccessibleListBoxEntry\n   \n* then, use $SOME_SMART_CONDITION in  AccessibleListBox::implGetAccessible() to create an instance of the \"correct\" class\n\n",
       "revId": "6fff8bee1a1f3369d4377ed8610db2c5ec30235a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d5712ef_61aad863",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-10T14:32:48Z",
+      "side": 1,
+      "message": "\u003e If there\u0027s some smart condition that could be used to evaluate whether or not an entry is supposed to have text/support the XAccessibleText interface (...)\n\nAnd maybe what SvTreeListBox::HasEntryText did, originally added in 54725f6e5f06b074d1c08d8efbd16518b96882d5 (\"Don\u0027t add empty labels to fontwork\u0027s icon view\"), might even be such a condition?\n(reading that commit message sounds like it might, but I don\u0027t have enough knowledge of the involved classes)",
+      "parentUuid": "631bfaf7_289af438",
+      "revId": "6fff8bee1a1f3369d4377ed8610db2c5ec30235a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
