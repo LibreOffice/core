@@ -1253,6 +1253,37 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         WriteBooleanElement_Impl();
         bAnyContent = true;
     }
+    else if (eType == XML_BOOLEAN_STYLE)
+    {
+        // <number:boolean-style> may contain only <number:boolean> and
+        // <number:text> elements.
+        sal_uInt16 nPos = 0;
+        bool bEnd = false;
+        while (!bEnd)
+        {
+            const short nElemType = rFormat.GetNumForType( nPart, nPos );
+            switch (nElemType)
+            {
+                case 0:
+                    bEnd = true;                // end of format reached
+                    if (bHasText && sTextContent.isEmpty())
+                        bHasText = false;       // don't write trailing empty text
+                break;
+                case NF_SYMBOLTYPE_STRING:
+                    {
+                        const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos );
+                        if (pElemStr)
+                            AddToTextElement_Impl( *pElemStr );
+                    }
+                break;
+                case NF_KEY_BOOLEAN:
+                    WriteBooleanElement_Impl();
+                    bAnyContent = true;
+                break;
+            }
+            ++nPos;
+        }
+    }
     else
     {
         //  first loop to collect attributes
