@@ -37,7 +37,7 @@ namespace accessibility
 
     /** the class OAccessibleListBoxEntry represents the base class for an accessible object of a listbox entry
     */
-    class AccessibleListBox :
+    class AccessibleListBox final :
         public cppu::ImplHelper2<
             css::accessibility::XAccessible,
             css::accessibility::XAccessibleSelection>,

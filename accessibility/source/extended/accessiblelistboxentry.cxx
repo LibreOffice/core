@@ -453,7 +453,10 @@ namespace accessibility
 
         EnsureIsAlive();
 
-        return implGetText();
+        OUString s = implGetText();
+        if (s.isEmpty())
+            s = getAccessibleDescription();
+        return s;
     }
 
     Reference< XAccessibleRelationSet > SAL_CALL AccessibleListBoxEntry::getAccessibleRelationSet(  )
