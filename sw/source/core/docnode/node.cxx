@@ -1022,13 +1022,7 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(static_cast<sal_uInt8>(GetNodeType())).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(sal_Int32(GetIndex())).getStr()));
 
-    if (IsTableNode())
-    {
-        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("attrset"));
-        GetTableNode()->GetTable().GetFrameFormat()->GetAttrSet().dumpAsXml(pWriter);
-        (void)xmlTextWriterEndElement(pWriter);
-    }
-    else if (GetStartNodeType() == SwTableBoxStartNode)
+    if (GetStartNodeType() == SwTableBoxStartNode)
     {
         if (SwTableBox* pBox = GetTableBox())
             (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("rowspan"), BAD_CAST(OString::number(pBox->getRowSpan()).getStr()));
