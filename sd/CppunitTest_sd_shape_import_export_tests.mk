@@ -71,4 +71,9 @@ $(eval $(call gb_CppunitTest_use_ure,sd_shape_import_export_tests))
 $(eval $(call gb_CppunitTest_use_vcl,sd_shape_import_export_tests))
 $(eval $(call gb_CppunitTest_use_rdb,sd_shape_import_export_tests,services))
 $(eval $(call gb_CppunitTest_use_configuration,sd_shape_import_export_tests))
+
+$(eval $(call gb_CppunitTest_add_arguments,sd_shape_import_export_tests, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 # vim: set noet sw=4 ts=4:
