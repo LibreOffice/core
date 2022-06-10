@@ -249,7 +249,8 @@ void SwWrtShell::Insert( const OUString &rStr )
         StartUndo(SwUndoId::REPLACE, &aRewriter);
         bStarted = true;
         Push();
-        bDeleted = DelRight();
+        // let's interpret a selection within the same node as "replace"
+        bDeleted = DelRight(GetCursor()->GetPoint()->nNode == GetCursor()->GetMark()->nNode);
         Pop(SwCursorShell::PopMode::DeleteCurrent); // Restore selection (if tracking changes)
         NormalizePam(false); // tdf#127635 put point at the end of deletion
         ClearMark();
@@ -1931,7 +1932,7 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
 
         StartUndo( SwUndoId::REPLACE, &aRewriter );
         bStarted = true;
-        DelRight();
+        DelRight(true);
     }
     SwEditShell::AutoCorrect( rACorr, IsInsMode(), cChar );
 
