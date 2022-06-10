@@ -29,6 +29,7 @@
 #include <document.hxx>
 #include <docuno.hxx>
 #include <docsh.hxx>
+#include <dpobject.hxx>
 #include <drwlayer.hxx>
 #include <inputopt.hxx>
 #include <postit.hxx>
@@ -1509,6 +1510,26 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf86166)
     dispatchCommand(mxComponent, ".uno:Remove", aArgs);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf149503)
+{
+    ScModelObj* pModelObj = createDoc("tdf149503.xls");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    ScDPCollection* pDPs = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108292)
