@@ -21,8 +21,6 @@
 #include <rtl/ustring.hxx>
 
 inline constexpr OUStringLiteral UNO_NAME_CHAR_COLOR = u"CharColor";
-inline constexpr OUStringLiteral UNO_NAME_CHAR_COLOR_THEME = u"CharColorTheme";
-inline constexpr OUStringLiteral UNO_NAME_CHAR_COLOR_TINT_OR_SHADE = u"CharColorTintOrShade";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_HEIGHT = u"CharHeight";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_POSTURE = u"CharPosture";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_SHADOWED = u"CharShadowed";

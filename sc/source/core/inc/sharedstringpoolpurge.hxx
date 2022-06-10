@@ -40,7 +40,6 @@ private:
     void cleanup();
     std::vector<std::shared_ptr<svl::SharedStringPool>> mPoolsToPurge;
     Timer mTimer;
-    static SharedStringPoolPurge* self;
     DECL_LINK(timerHandler, Timer*, void);
 };
 }
