@@ -71,7 +71,7 @@ tools::Long lcl_OffsetFromGridEdge(tools::Long nMinWidth, tools::Long nCharWidth
 }
 }
 
-namespace Justify
+namespace sw::Justify
 {
 sal_Int32 GetModelPosition(const std::vector<sal_Int32>& rKernArray, sal_Int32 nLen, tools::Long nX)
 {
