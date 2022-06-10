@@ -1163,6 +1163,14 @@
             <value xml:lang="en-US">Switches monitors</value>
           </prop>
         </node>
+        <node oor:name="z" oor:op="replace">
+          <prop oor:name="Left">
+            <value xml:lang="en-US">Ctrl-'A'</value>
+          </prop>
+          <prop oor:name="Right">
+            <value xml:lang="en-US">Turn off pointer as pen mode</value>
+          </prop>
+        </node>
       </node>
     </node>
   </node>
