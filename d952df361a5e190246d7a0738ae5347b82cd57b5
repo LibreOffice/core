@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be6957c0_a2b6bc12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001306
+      },
+      "writtenOn": "2022-06-10T14:01:54Z",
+      "side": 1,
+      "message": "thank you for merging it!. Unfortunately I was late to update the patch so I created a new one https://gerrit.libreoffice.org/c/core/+/135598 This is critical I think.",
+      "revId": "d952df361a5e190246d7a0738ae5347b82cd57b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
