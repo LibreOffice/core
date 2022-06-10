@@ -148,9 +148,11 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
         GetIDocumentUndoRedo().StartUndo(SwUndoId::REPLACE, &aRewriter);
 
         // Toggle the state.
+        pContentControl->SetReadWrite(true);
         DelLeft();
         pContentControl->SetChecked(!pContentControl->GetChecked());
         Insert(aNewState);
+        pContentControl->SetReadWrite(false);
 
         GetIDocumentUndoRedo().EndUndo(SwUndoId::REPLACE, &aRewriter);
         LockView(/*bViewLocked=*/false);

@@ -49,6 +49,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <editsh.hxx>
+#include <textcontentcontrol.hxx>
 
 // for the dump "MSC-" compiler
 static sal_Int32 GetSttOrEnd( bool bCondition, const SwContentNode& rNd )
@@ -806,6 +807,31 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
                             return true;
                         }
                     }
+                }
+            }
+        }
+    }
+
+    if (!bRet)
+    {
+        // See if we're inside a read-only content control.
+        const SwPosition* pStart = Start();
+        SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+        if (pTextNode)
+        {
+            sal_Int32 nIndex = pStart->nContent.GetIndex();
+            SwTextAttr* pAttr
+                = pTextNode->GetTextAttrAt(nIndex, RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+            auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+            if (pTextContentControl)
+            {
+                const SwFormatContentControl& rFormatContentControl
+                    = pTextContentControl->GetContentControl();
+                std::shared_ptr<SwContentControl> pContentControl
+                    = rFormatContentControl.GetContentControl();
+                if (pContentControl && !pContentControl->GetReadWrite())
+                {
+                    bRet = pContentControl->GetCheckbox() || pContentControl->GetPicture();
                 }
             }
         }
