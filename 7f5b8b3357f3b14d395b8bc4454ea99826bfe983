@@ -16,6 +16,40 @@
       "message": "Hi Eike, Julien,\nI\u0027d appreciate if you could review this patch",
       "revId": "7f5b8b3357f3b14d395b8bc4454ea99826bfe983",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9af7f4eb_080f463e",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-10T09:41:58Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this rather hit also if pColFields is shorter than nField+1 elements, not just if empty?",
+      "revId": "7f5b8b3357f3b14d395b8bc4454ea99826bfe983",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8f0bb21_d0acb468",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-10T09:41:58Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "7f5b8b3357f3b14d395b8bc4454ea99826bfe983",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
