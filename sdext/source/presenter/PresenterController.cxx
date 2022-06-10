@@ -878,6 +878,17 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
             }
             break;
 
+        // tdf#149351 Ctrl+A disables pointer as pen mode
+        case awt::Key::A:
+            if (mxSlideShowController.is())
+            {
+                if (rEvent.Modifiers == awt::KeyModifier::MOD1)
+                {
+                    mxSlideShowController->setUsePen( false );
+                }
+            }
+            break;
+
         case awt::Key::E:
             if (mxSlideShowController.is())
             {
