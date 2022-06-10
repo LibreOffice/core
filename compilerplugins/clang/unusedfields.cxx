@@ -163,8 +163,6 @@ public:
 
 private:
     MyFieldInfo niceName(const FieldDecl*);
-    bool ignoreLocation(SourceLocation loc);
-    bool checkIgnoreLocation(SourceLocation loc);
     void checkTouchedFromOutside(const FieldDecl* fieldDecl, const Expr* memberExpr);
     void checkIfReadFrom(const FieldDecl* fieldDecl, const Expr* memberExpr);
     void checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memberExpr);
@@ -184,6 +182,8 @@ private:
 
 void UnusedFields::run()
 {
+    handler.enableTreeWideAnalysisMode();
+
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
     if (!isUnitTestMode())
@@ -280,42 +280,6 @@ MyFieldInfo UnusedFields::niceName(const FieldDecl* fieldDecl)
 
     return aInfo;
 }
-
-/**
- * Our need to see everything conflicts with the PCH code in pluginhandler::ignoreLocation,
- * so we have to do this ourselves.
- */
-bool UnusedFields::ignoreLocation(SourceLocation loc)
-{
-    static std::unordered_map<SourceLocation, bool> checkedMap;
-    auto it = checkedMap.find(loc);
-    if (it != checkedMap.end())
-        return it->second;
-    bool ignore = checkIgnoreLocation(loc);
-    checkedMap.emplace(loc, ignore);
-    return ignore;
-}
-
-bool UnusedFields::checkIgnoreLocation(SourceLocation loc)
-{
-    // simplified form of the code in PluginHandler::checkIgnoreLocation
-    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
-    if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
-        return true;
-    PresumedLoc presumedLoc = compiler.getSourceManager().getPresumedLoc( expansionLoc );
-    if( presumedLoc.isInvalid())
-        return true;
-    const char* bufferName = presumedLoc.getFilename();
-    if (bufferName == NULL
-        || loplugin::hasPathnamePrefix(bufferName, SRCDIR "/external/")
-        || loplugin::hasPathnamePrefix(bufferName, WORKDIR "/"))
-        return true;
-    if( loplugin::hasPathnamePrefix(bufferName, BUILDDIR "/")
-        || loplugin::hasPathnamePrefix(bufferName, SRCDIR "/") )
-        return false; // ok
-    return true;
-}
-
 
 bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
 {

@@ -175,6 +175,8 @@ private:
 
 void UnusedVarsGlobal::run()
 {
+    handler.enableTreeWideAnalysisMode();
+
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
     if (!isUnitTestMode())

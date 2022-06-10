@@ -230,16 +230,21 @@ bool PluginHandler::ignoreLocation(SourceLocation loc) {
 
 bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
 {
-    // If a location comes from a PCH, it is not necessary to check it
-    // in every compilation using the PCH, since with Clang we use
-    // -building-pch-with-obj to build a separate precompiled_foo.cxx file
-    // for the PCH, and so it is known that everything in the PCH will
-    // be checked while compiling this file. Skip the checks for all
-    // other files using the PCH.
-    if( !compiler.getSourceManager().isLocalSourceLocation( loc ))
+    // The tree-wide analysis plugins (like unusedmethods) don't want
+    // this logic, they only want to ignore externl code
+    if (!treeWideAnalysisMode)
     {
-        if( !compiler.getLangOpts().BuildingPCHWithObjectFile )
-            return true;
+        // If a location comes from a PCH, it is not necessary to check it
+        // in every compilation using the PCH, since with Clang we use
+        // -building-pch-with-obj to build a separate precompiled_foo.cxx file
+        // for the PCH, and so it is known that everything in the PCH will
+        // be checked while compiling this file. Skip the checks for all
+        // other files using the PCH.
+        if( !compiler.getSourceManager().isLocalSourceLocation( loc ))
+        {
+            if( !compiler.getLangOpts().BuildingPCHWithObjectFile )
+                return true;
+        }
     }
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
     if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
