@@ -10,7 +10,7 @@
 #pragma once
 #include <sal/types.h>
 
-namespace Justify
+namespace sw::Justify
 {
 /// Get model position base on given kern array.
 /// @param rKernArray text positions from OutDev::GetTextArray().
