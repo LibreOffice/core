@@ -61,6 +61,8 @@ public:
 
     virtual void run() override
     {
+        handler.enableTreeWideAnalysisMode();
+
         // ignore some files that make clang crash inside EvaluateAsInt
         std::string fn(handler.getMainFileName());
         loplugin::normalizeDotDotInFilePath(fn);

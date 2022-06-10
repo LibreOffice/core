@@ -84,6 +84,8 @@ public:
 
     virtual void run() override
     {
+        handler.enableTreeWideAnalysisMode();
+
         StringRef fn(handler.getMainFileName());
         // ignore external code, makes this run faster
         if (fn.contains("UnpackedTarball"))
@@ -133,8 +135,6 @@ private:
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
     std::string toString(SourceLocation loc);
     void functionTouchedFromExpr( const FunctionDecl* calleeFunctionDecl, const Expr* expr );
-    bool ignoreLocation(SourceLocation loc);
-    bool checkIgnoreLocation(SourceLocation loc);
 
     CXXRecordDecl const * currentCxxRecordDecl = nullptr;
     FunctionDecl const * currentFunctionDecl = nullptr;
@@ -195,41 +195,6 @@ MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
     aInfo.sourceLocation = toString( functionDecl->getLocation() );
 
     return aInfo;
-}
-
-/**
- * Our need to see everything conflicts with the PCH code in pluginhandler::ignoreLocation,
- * so we have to do this ourselves.
- */
-bool UnusedMethods::ignoreLocation(SourceLocation loc)
-{
-    static std::unordered_map<SourceLocation, bool> checkedMap;
-    auto it = checkedMap.find(loc);
-    if (it != checkedMap.end())
-        return it->second;
-    bool ignore = checkIgnoreLocation(loc);
-    checkedMap.emplace(loc, ignore);
-    return ignore;
-}
-
-bool UnusedMethods::checkIgnoreLocation(SourceLocation loc)
-{
-    // simplified form of the code in PluginHandler::checkIgnoreLocation
-    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( loc );
-    if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
-        return true;
-    PresumedLoc presumedLoc = compiler.getSourceManager().getPresumedLoc( expansionLoc );
-    if( presumedLoc.isInvalid())
-        return true;
-    const char* bufferName = presumedLoc.getFilename();
-    if (bufferName == NULL
-        || loplugin::hasPathnamePrefix(bufferName, SRCDIR "/external/")
-        || loplugin::hasPathnamePrefix(bufferName, WORKDIR "/"))
-        return true;
-    if( loplugin::hasPathnamePrefix(bufferName, BUILDDIR "/")
-        || loplugin::hasPathnamePrefix(bufferName, SRCDIR "/") )
-        return false; // ok
-    return true;
 }
 
 std::string UnusedMethods::toString(SourceLocation loc)
