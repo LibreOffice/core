@@ -16,6 +16,24 @@
       "message": "\u003e Uploaded patch set 7.\n\nPart of this has been split out as \u003chttps://git.libreoffice.org/core/+/40f2aee6584eafcf4cd1d95fcf1f775e5435440d%5E%21\u003e \"Provide unoidl-write also for the SDK\", what remains here will only be submitted towards LO 7.5.",
       "revId": "6cd3eddb9f32220ac6e21607072965fe12526696",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70ba28cc_662da746",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-10T15:15:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1219e00b_50aea9f2",
+      "revId": "6cd3eddb9f32220ac6e21607072965fe12526696",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

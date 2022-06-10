@@ -88,6 +88,24 @@
       "parentUuid": "e1e332f4_2efc958e",
       "revId": "5c40ebef723b10dab56c33277f3d56cf93c17814",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f24649ef_c71371ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-10T15:15:36Z",
+      "side": 1,
+      "message": "the LO DevGuide is meanwhile available at \u003chttps://wiki.documentfoundation.org/Documentation/DevGuide\u003e; it will be updated accordingly",
+      "parentUuid": "e4d8a717_7a51d7c0",
+      "revId": "5c40ebef723b10dab56c33277f3d56cf93c17814",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
