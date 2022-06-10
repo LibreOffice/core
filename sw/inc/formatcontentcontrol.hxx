@@ -266,7 +266,7 @@ public:
 
     std::optional<double> GetSelectedDate() const { return m_oSelectedDate; }
 
-    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
     void SetDataBindingPrefixMappings(const OUString& rDataBindingPrefixMappings)
     {
