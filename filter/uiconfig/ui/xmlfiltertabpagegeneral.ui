@@ -116,7 +116,7 @@
             <property name="truncate-multiline">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="extension-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="xmlfiltertabpagegeneral|extended_tip|extension">Enter the file extension to use when you open a file without specifying a filter. The file extension to used to determine which filter to use.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="xmlfiltertabpagegeneral|extended_tip|extension">Enter the file extension to use when you open a file without specifying a filter. The file extension is used to determine which filter to use.</property>
               </object>
             </child>
           </object>
