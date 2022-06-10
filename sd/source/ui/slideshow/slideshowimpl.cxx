@@ -1816,6 +1816,15 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                 setUsePen( !mbUsePen );
                 break;
 
+            // tdf#149351 Ctrl+A disables pointer as pen mode
+            case KEY_A:
+                if(rKEvt.GetKeyCode().IsMod1())
+                {
+                    setUsePen( false );
+                    break;
+                }
+            break;
+
             case KEY_E:
                 setEraseAllInk( true );
                 updateSlideShow();
