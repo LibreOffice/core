@@ -251,7 +251,7 @@
                     <property name="group">fitdefault</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="fitvis-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|fitvis">Select to generate a PDF file that shows the text and graphics on the page zoomed to fit the width of the reader's window.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|fitvis">Select to generate a PDF file that shows the text and graphics on the page zoomed to fit the reader's window.</property>
                       </object>
                     </child>
                   </object>
