@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f97cf276_fd5afedd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-10T11:40:16Z",
+      "side": 1,
+      "message": "Thanks for sticking with it :-)\n\nIf I\u0027m extra nitpicky I can argue that it is not a symbols directory or config directory but a file in both cases (so symbols_file or symbols_path and same for config would be more fitting), but I guess we had enough tweaking for this script already :-)\n\nAs for remaining pylint: my copy only has two complaints about missing docstrings, but that\u0027s fine, it is single-use/not used from other components and it\u0027s short enough to be self-explanatory.",
+      "revId": "b905154a34f792990f136de8e762895018753820",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
