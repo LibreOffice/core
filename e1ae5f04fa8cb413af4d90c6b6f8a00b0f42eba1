@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "741da754_059a71e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-10T06:13:48Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1:\n\u003e \n\u003e A polite ping, still working on this patch? Do not forget to rebase it first.\n\nyap :P",
+      "revId": "e1ae5f04fa8cb413af4d90c6b6f8a00b0f42eba1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
