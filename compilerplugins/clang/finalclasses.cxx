@@ -47,6 +47,8 @@ public:
 
     virtual void run() override
     {
+        handler.enableTreeWideAnalysisMode();
+
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
         // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes

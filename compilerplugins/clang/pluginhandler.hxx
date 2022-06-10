@@ -68,6 +68,8 @@ public:
     // Is all code that could see `decl` defined in this TU?
     bool isAllRelevantCodeDefined(NamedDecl const * decl);
 
+    void enableTreeWideAnalysisMode() { treeWideAnalysisMode = true; }
+
 private:
     void handleOption( const std::string& option );
     void createPlugins( std::set< std::string > rewriters );
@@ -81,6 +83,8 @@ private:
     std::string warningsOnly;
     bool warningsAsErrors;
     bool debugMode = false;
+    //// Used by the tree-wide analysis plugins like unusedmethods, etc.
+    bool treeWideAnalysisMode = false;
     std::vector<std::pair<char const*, char const*>> mvModifiedRanges;
 
     // Used internally by isAllRelevantCodeDefined:
