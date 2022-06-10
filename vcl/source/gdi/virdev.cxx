@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <comphelper/lok.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
@@ -409,17 +410,19 @@ bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase )
     return ImplSetOutputSizePixel(rNewSize, bErase, nullptr);
 }
 
-bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(
+bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(
     const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset,
     sal_uInt8 *const pBuffer)
 {
-    if (pBuffer) {
-        MapMode mm = GetMapMode();
-        mm.SetOrigin( rNewOffset );
-        mm.SetScaleX( rScale );
-        mm.SetScaleY( rScale );
-        SetMapMode( mm );
-    }
+    // If this is ever needed for something else than LOK, changes will
+    // be needed in SvpSalVirtualDevice::CreateSurface() .
+    assert(comphelper::LibreOfficeKit::isActive());
+    assert(pBuffer);
+    MapMode mm = GetMapMode();
+    mm.SetOrigin( rNewOffset );
+    mm.SetScaleX( rScale );
+    mm.SetScaleY( rScale );
+    SetMapMode( mm );
     return ImplSetOutputSizePixel(rNewSize, true, pBuffer);
 }
 
