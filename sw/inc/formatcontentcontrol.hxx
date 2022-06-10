@@ -159,6 +159,12 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
     /// Stores a date timestamp, in case the doc model is not yet updated.
     std::optional<double> m_oSelectedDate;
 
+    /**
+     * E.g. checkbox is read-only by default, but we still update contents on interaction
+     * internally. This flag is true for the duration of that interaction.
+     */
+    bool m_bReadWrite = false;
+
 public:
     SwTextContentControl* GetTextAttr() const;
 
@@ -291,6 +297,10 @@ public:
     void SetColor(const OUString& rColor) { m_aColor = rColor; }
 
     OUString GetColor() const { return m_aColor; }
+
+    void SetReadWrite(bool bReadWrite) { m_bReadWrite = bReadWrite; }
+
+    bool GetReadWrite() const { return m_bReadWrite; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
