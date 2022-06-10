@@ -59,8 +59,7 @@ struct HTMLOutFuncs
                                    bool bOutStarBasic,
                                    const char *pDelim,
                                    const char *pIndentArea,
-                                   const char *pIndentMap,
-                                   OUString *pNonConvertableChars = nullptr );
+                                   const char *pIndentMap );
     SVT_DLLPUBLIC static SvStream& FlushToAscii( SvStream& );
 
     SVT_DLLPUBLIC static SvStream& OutScript( SvStream& rStrm,
@@ -70,8 +69,7 @@ struct HTMLOutFuncs
                                 ScriptType eScriptType,
                                 const OUString& rSrc,
                                 const OUString *pSBLibrary,
-                                const OUString *pSBModule,
-                                OUString *pNonConvertableChars = nullptr );
+                                const OUString *pSBModule );
 
     // the 3rd parameter is an array of HTMLOutEvents which is terminated
     // by an entry that consists only of 0s

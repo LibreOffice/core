@@ -598,8 +598,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                                       bool bOutStarBasic,
                                       const char *pDelim,
                                       const char *pIndentArea,
-                                      const char *pIndentMap,
-                                      OUString *pNonConvertableChars    )
+                                      const char *pIndentMap   )
 {
     const OUString& rOutName = !rName.isEmpty() ? rName : rIMap.GetName();
     DBG_ASSERT( !rOutName.isEmpty(), "No ImageMap-Name" );
@@ -613,7 +612,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
             OOO_STRING_SVTOOLS_HTML_O_name
             "=\"");
     rStream.WriteOString( sOut.makeStringAndClear() );
-    Out_String( rStream, rOutName, pNonConvertableChars );
+    Out_String( rStream, rOutName );
     rStream.WriteCharPtr( "\">" );
 
     for( size_t i=0; i<rIMap.GetIMapObjectCount(); i++ )
@@ -714,7 +713,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                         rBaseURL, aURL );
                     sOut.append(OOO_STRING_SVTOOLS_HTML_O_href "=\"");
                     rStream.WriteOString( sOut.makeStringAndClear() );
-                    Out_String( rStream, aURL, pNonConvertableChars ).WriteChar( '\"' );
+                    Out_String( rStream, aURL ).WriteChar( '\"' );
                 }
                 else
                     rStream.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_nohref );
@@ -724,7 +723,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 {
                     sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
                     rStream.WriteOString( sOut.makeStringAndClear() );
-                    Out_String( rStream, rObjName, pNonConvertableChars ).WriteChar( '\"' );
+                    Out_String( rStream, rObjName ).WriteChar( '\"' );
                 }
 
                 const OUString& rTarget = pObj->GetTarget();
@@ -732,7 +731,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 {
                     sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_target "=\"");
                     rStream.WriteOString( sOut.makeStringAndClear() );
-                    Out_String( rStream, rTarget, pNonConvertableChars ).WriteChar( '\"' );
+                    Out_String( rStream, rTarget ).WriteChar( '\"' );
                 }
 
                 OUString rDesc( pObj->GetAltText() );
@@ -743,13 +742,13 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 {
                     sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_alt "=\"");
                     rStream.WriteOString( sOut.makeStringAndClear() );
-                    Out_String( rStream, rDesc, pNonConvertableChars ).WriteChar( '\"' );
+                    Out_String( rStream, rDesc ).WriteChar( '\"' );
                 }
 
                 const SvxMacroTableDtor& rMacroTab = pObj->GetMacroTable();
                 if( pEventTable && !rMacroTab.empty() )
                     Out_Events( rStream, rMacroTab, pEventTable,
-                                bOutStarBasic, pNonConvertableChars );
+                                bOutStarBasic );
 
                 rStream.WriteChar( '>' );
             }
@@ -773,8 +772,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
                                    ScriptType eScriptType,
                                    const OUString& rSrc,
                                    const OUString *pSBLibrary,
-                                   const OUString *pSBModule,
-                                   OUString *pNonConvertableChars )
+                                   const OUString *pSBModule )
 {
     // script is not indented!
     OStringBuffer sOut;
@@ -785,7 +783,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_language "=\"");
         rStrm.WriteOString( sOut.makeStringAndClear() );
-        Out_String( rStrm, rLanguage, pNonConvertableChars );
+        Out_String( rStrm, rLanguage );
         sOut.append('\"');
     }
 
@@ -793,7 +791,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
         rStrm.WriteOString( sOut.makeStringAndClear() );
-        Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(rBaseURL, rSrc), pNonConvertableChars );
+        Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(rBaseURL, rSrc) );
         sOut.append('\"');
     }
 
@@ -801,7 +799,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_sdlibrary "=\"");
         rStrm.WriteOString( sOut.makeStringAndClear() );
-        Out_String( rStrm, *pSBLibrary, pNonConvertableChars );
+        Out_String( rStrm, *pSBLibrary );
         sOut.append('\"');
     }
 
@@ -809,7 +807,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_sdmodule "=\"");
         rStrm.WriteOString( sOut.makeStringAndClear() );
-        Out_String( rStrm, *pSBModule, pNonConvertableChars );
+        Out_String( rStrm, *pSBModule );
         sOut.append('\"');
     }
 
