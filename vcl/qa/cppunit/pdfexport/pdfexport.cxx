@@ -2132,6 +2132,22 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceSmallImage)
     CPPUNIT_ASSERT_EQUAL(16, nHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf114256)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
+    saveAsPDF(u"tdf114256.ods");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 13
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(13, pPdfPage->getObjectCount());
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf147027)
 {
     // Load the Calc document.
