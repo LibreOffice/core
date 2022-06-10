@@ -180,8 +180,20 @@ OString lclConvToHex(sal_uInt16 nHex)
 bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty, const OString& rValue,
                             std::optional<sw::Css1Background> oMode)
 {
-    if (!bReqIF || (oMode.has_value() && *oMode != sw::Css1Background::TableCell))
+    if (!bReqIF)
         return false;
+
+    if (oMode.has_value() && *oMode != sw::Css1Background::TableCell)
+    {
+        // Table or row.
+        if (rProperty == sCSS1_P_background && rValue == "transparent")
+        {
+            // This is the default already.
+            return true;
+        }
+
+        return false;
+    }
 
     // Only allow these two keys, nothing else in ReqIF mode.
     if (rProperty == sCSS1_P_text_decoration)
@@ -239,7 +251,12 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
                                      const OUString *pSVal,
                                      std::optional<sw::Css1Background> oMode )
 {
-    if (IgnorePropertyForReqIF(mbReqIF, pProp, pVal, oMode))
+    OString aPropertyValue(pVal);
+    if (aPropertyValue.isEmpty() && pSVal)
+    {
+        aPropertyValue = pSVal->toUtf8();
+    }
+    if (IgnorePropertyForReqIF(mbReqIF, pProp, aPropertyValue, oMode))
         return;
 
     OStringBuffer sOut;
