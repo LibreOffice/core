@@ -86,9 +86,9 @@ public:
         X11SalGraphicsImpl::SetFillRule();
     }
 
-    void SetFillRule(PolyFillMode eFillRule) override
+    void SetFillRule(PolyFillRule eFillRule) override
     {
-        if (eFillRule == PolyFillMode::NON_ZERO_RULE_WINDING)
+        if (eFillRule == PolyFillRule::NON_ZERO_RULE_WINDING)
             meFillRule = _cairo_fill_rule::CAIRO_FILL_RULE_WINDING;
         else
             meFillRule = _cairo_fill_rule::CAIRO_FILL_RULE_EVEN_ODD;

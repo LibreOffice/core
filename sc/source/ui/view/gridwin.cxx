@@ -1577,7 +1577,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
     //  MouseEvent buttons must only be checked if bAction==TRUE
     //  to allow changing the mouse pointer in MouseMove,
     //  but not start AutoFill with right button (#74229#).
-    //  with bAction==sal_True, SetFillMode / SetDragMode is called
+    //  with bAction==sal_True, SetFillRule / SetDragMode is called
 
     if ( bAction && !rMEvt.IsLeft() )
         return false;
@@ -1613,7 +1613,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
                             mrViewData.SetDragMode(
                                 aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), nX, nY, ScFillMode::MATRIX );
                         else
-                            mrViewData.SetFillMode(
+                            mrViewData.SetFillRule(
                                 aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), nX, nY );
 
                         //  The simple selection must also be recognized when dragging,

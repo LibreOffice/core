@@ -29,7 +29,7 @@ class VCL_DLLPUBLIC SvmWriter
 private:
     SvStream& mrStream;
 
-    void WriteFill(PolyFillMode mePolyFillMode);
+    void WriteFill(PolyFillRule mePolyFillRule);
     void WriteColor(::Color aColor);
 
 public:

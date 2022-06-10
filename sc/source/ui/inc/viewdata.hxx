@@ -505,7 +505,7 @@ public:
                     /// Determine DOOM condition, i.e. from selected range.
     static bool     SelectionFillDOOM( const ScRange& rRange );
 
-    void            SetFillMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
+    void            SetFillRule( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
     void            SetDragMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     ScFillMode nMode );
     void            GetFillData( SCCOL& rStartCol, SCROW& rStartRow,

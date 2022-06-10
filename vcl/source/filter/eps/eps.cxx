@@ -66,7 +66,7 @@ struct StackMember
     Color       aLineCol;
     bool        bFillCol;
     Color       aFillCol;
-    PolyFillMode eFillMode;
+    PolyFillRule eFillMode;
     Color       aTextCol;
     bool        bTextFillCol;
     Color       aTextFillCol;
@@ -125,7 +125,7 @@ private:
     bool                bLineColor;
     Color               aLineColor;         // current GDIMetafile color settings
     bool                bFillMode;
-    PolyFillMode        eFillMode;
+    PolyFillRule        eFillMode;
     bool                bFillColor;
     Color               aFillColor;
     Color               aTextColor;

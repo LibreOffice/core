@@ -73,34 +73,34 @@ void OutputDevice::SetFillColor( const Color& rColor )
         mpAlphaVDev->SetFillColor( COL_BLACK );
 }
 
-void OutputDevice::SetFillMode()
+void OutputDevice::SetFillRule()
 {
     if (mpMetaFile)
     {
-        mpMetaFile->AddAction(new MetaFillModeAction(meFillMode, true));
+        mpMetaFile->AddAction(new MetaFillModeAction(meFillRule, true));
     }
 
-    if (mbFillMode)
+    if (mbFillRule)
     {
         mbInitFillMode = true;
-        mbFillMode = false;
-        meFillMode = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+        mbFillRule = false;
+        meFillRule = PolyFillRule::EVEN_ODD_RULE_ALTERNATE;
     }
 
 }
 
-void OutputDevice::SetFillMode(const PolyFillMode& rMode)
+void OutputDevice::SetFillRule(const PolyFillRule& rMode)
 {
     if (mpMetaFile)
     {
         mpMetaFile->AddAction(new MetaFillModeAction(rMode, true));
     }
 
-    if (mbFillMode)
+    if (mbFillRule)
     {
         mbInitFillMode = true;
-        mbFillMode = false;
-        meFillMode = rMode;
+        mbFillRule = false;
+        meFillRule = rMode;
     }
 }
 
@@ -129,9 +129,9 @@ void OutputDevice::InitFillColor()
 
 void OutputDevice::InitFillMode()
 {
-    if (mbFillMode)
+    if (mbFillRule)
     {
-        mpGraphics->SetFillRule(meFillMode);
+        mpGraphics->SetFillRule(meFillRule);
     }
     else
     {

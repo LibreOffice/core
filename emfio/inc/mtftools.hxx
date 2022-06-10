@@ -569,7 +569,7 @@ namespace emfio
         BackgroundMode              nBkMode;
         MappingMode         eMapMode;
         GraphicsMode        eGfxMode;
-        PolyFillMode        nPolyFillMode;
+        PolyFillRule        nPolyFillMode;
         vcl::text::ComplexTextLayoutFlags nTextLayoutMode;
         sal_Int32           nWinOrgX, nWinOrgY, nWinExtX, nWinExtY;
         sal_Int32           nDevOrgX, nDevOrgY, nDevWidth, nDevHeight;
@@ -659,8 +659,8 @@ namespace emfio
         Color               maBkColor;
         vcl::text::ComplexTextLayoutFlags  mnLatestTextLayoutMode;
         vcl::text::ComplexTextLayoutFlags  mnTextLayoutMode;
-        PolyFillMode        meLatestPolyFillMode;
-        PolyFillMode        mePolyFillMode;
+        PolyFillRule        meLatestPolyFillRule;
+        PolyFillRule        mePolyFillRule;
         BackgroundMode      mnLatestBkMode;
         BackgroundMode      mnBkMode;
         RasterOp            meLatestRasterOp;
@@ -760,7 +760,7 @@ namespace emfio
         void                SetGfxMode(GraphicsMode nGfxMode) { meGfxMode = nGfxMode; };
         GraphicsMode        GetGfxMode() const { return meGfxMode; };
         void                SetBkMode(BackgroundMode nMode);
-        void                setPolyFillMode(PolyFillMode nMode);
+        void                setPolyFillMode(PolyFillRule nMode);
         void                SetBkColor(const Color& rColor);
         void                SetTextColor(const Color& rColor);
         void                SetTextAlign(sal_uInt32 nAlign);

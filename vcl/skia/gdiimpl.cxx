@@ -637,10 +637,10 @@ void SkiaSalGraphicsImpl::SetFillColor(Color nColor)
 void SkiaSalGraphicsImpl::SetFillRule()
 {
     checkPendingDrawing();
-    meFillRule = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+    meFillRule = PolyFillRule::EVEN_ODD_RULE_ALTERNATE;
 }
 
-void SkiaSalGraphicsImpl::SetFillRule(PolyFillMode eFillRule)
+void SkiaSalGraphicsImpl::SetFillRule(PolyFillRule eFillRule)
 {
     checkPendingDrawing();
     meFillRule = eFillRule;

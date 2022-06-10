@@ -7283,7 +7283,7 @@ void PDFWriterImpl::drawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
         m_aGraphicsStack.front().m_aFillColor != COL_TRANSPARENT )
     {
         aLine.append( "B" );
-        if( GetFillMode() == PolyFillMode::EVEN_ODD_RULE_ALTERNATE )
+        if( GetFillRule() == PolyFillRule::EVEN_ODD_RULE_ALTERNATE )
             aLine.append( "*" );
     }
     else if( m_aGraphicsStack.front().m_aLineColor != COL_TRANSPARENT )
@@ -7293,7 +7293,7 @@ void PDFWriterImpl::drawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     else
     {
         aLine.append( "f" );
-        if( GetFillMode() == PolyFillMode::EVEN_ODD_RULE_ALTERNATE )
+        if( GetFillRule() == PolyFillRule::EVEN_ODD_RULE_ALTERNATE )
             aLine.append( "*" );
     }
     aLine.append( "\n" );

@@ -1302,7 +1302,7 @@ namespace emfio
             {
                 sal_uInt32 nFillMode  = 0;
                 mpInputStream->ReadUInt32( nFillMode );
-                setPolyFillMode( static_cast<PolyFillMode>(nFillMode) );
+                setPolyFillMode( static_cast<PolyFillRule>(nFillMode) );
                 SAL_INFO("emfio", "\t\tPolyFillMode: 0x" << std::hex << nFillMode << std::dec);
             }
             break;

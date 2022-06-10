@@ -895,9 +895,9 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaFillModeAction* pA = static_cast<const MetaFillModeAction*>(pAction);
                     if( pA->IsSetting() )
-                        m_rOuterFace.SetFillMode( pA->GetFillMode() );
+                        m_rOuterFace.SetFillRule( pA->GetFillMode() );
                     else
-                        m_rOuterFace.SetFillMode();
+                        m_rOuterFace.SetFillRule();
                 }
                 break;
 

@@ -30,10 +30,10 @@ SvmWriter::SvmWriter(SvStream& rIStm)
 {
 }
 
-void SvmWriter::WriteFill(PolyFillMode mePolyFillMode)
+void SvmWriter::WriteFill(PolyFillMode mePolyFillRule)
 {
     //TODO: make sure that writes appropriately
-    mrStream.WriteUInt32(static_cast<sal_uInt32>(mePolyFillMode));
+    mrStream.WriteUInt32(static_cast<sal_uInt32>(mePolyFillRule));
 }
 
 void SvmWriter::WriteColor(::Color aColor)

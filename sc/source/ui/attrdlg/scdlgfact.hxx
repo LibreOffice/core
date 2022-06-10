@@ -277,7 +277,7 @@ public:
     virtual ScPasteFunc   GetFormulaCmdBits() const override;
     virtual bool        IsSkipEmptyCells() const override;
     virtual bool        IsLink() const override;
-    virtual void        SetFillMode( bool bSet ) override;
+    virtual void        SetFillRule( bool bSet ) override;
     virtual void        SetOtherDoc( bool bSet ) override;
     virtual bool        IsTranspose() const override;
     virtual void        SetChangeTrack( bool bSet ) override;

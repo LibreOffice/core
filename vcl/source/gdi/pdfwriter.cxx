@@ -244,9 +244,9 @@ void PDFWriter::SetLineColor( const Color& rColor )
     xImplementation->setLineColor( rColor );
 }
 
-void PDFWriter::SetFillMode( const PolyFillMode& rFillMode )
+void PDFWriter::SetFillRule( const PolyFillRule& rFillMode )
 {
-    xImplementation->SetFillMode( rFillMode );
+    xImplementation->SetFillRule( rFillMode );
 }
 
 void PDFWriter::SetFillColor( const Color& rColor )

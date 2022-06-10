@@ -52,7 +52,7 @@ class QtGraphicsBackend final : public SalGraphicsImpl, public QtGraphicsBase
     QPainterPath m_aClipPath;
     Color m_aLineColor;
     Color m_aFillColor;
-    PolyFillMode m_eFillRule;
+    PolyFillRule m_eFillRule;
     QPainter::CompositionMode m_eCompositionMode;
 
 public:
@@ -81,7 +81,7 @@ public:
     void SetFillColor() override;
     void SetFillColor(Color nColor) override;
     void SetFillRule() override;
-    void SetFillRule(PolyFillMode eFillRule) override;
+    void SetFillRule(PolyFillRule eFillRule) override;
     void SetXORMode(bool bSet, bool bInvertOnly) override;
     void SetROPLineColor(SalROPColor nROPColor) override;
     void SetROPFillColor(SalROPColor nROPColor) override;

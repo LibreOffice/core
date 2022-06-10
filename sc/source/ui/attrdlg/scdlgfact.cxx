@@ -545,9 +545,9 @@ bool    AbstractScInsertContentsDlg_Impl::IsLink() const
     return m_xDlg->IsLink();
 }
 
-void    AbstractScInsertContentsDlg_Impl::SetFillMode( bool bSet )
+void    AbstractScInsertContentsDlg_Impl::SetFillRule( bool bSet )
 {
-    m_xDlg->SetFillMode( bSet );
+    m_xDlg->SetFillRule( bSet );
 }
 
 void    AbstractScInsertContentsDlg_Impl::SetOtherDoc( bool bSet )

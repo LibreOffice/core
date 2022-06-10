@@ -1482,7 +1482,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
         {
             MetaFillModeAction* pMetaFillAction = static_cast<MetaFillModeAction*>(pAction);
             rWriter.startElement(sCurrentElementTag);
-            rWriter.attribute("fillmode", pMetaFillAction->GetFillMode() == PolyFillMode::EVEN_ODD_RULE_ALTERNATE
+            rWriter.attribute("fillmode", pMetaFillAction->GetFillRule() == PolyFillRule::EVEN_ODD_RULE_ALTERNATE
                               ? "Even odd rule (alternate)" : "Non zero rule (winding)");
             rWriter.endElement();
         }

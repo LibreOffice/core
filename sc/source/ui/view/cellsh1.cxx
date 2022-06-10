@@ -492,7 +492,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     ScopedVclPtr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg(pTabViewShell->GetFrameWeld(),
                                                                                                     new OUString(ScResId(STR_FILL_TAB))));
-                    pDlg->SetFillMode(true);
+                    pDlg->SetFillRule(true);
 
                     if (pDlg->Execute() == RET_OK)
                     {

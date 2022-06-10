@@ -139,7 +139,7 @@ public:
     virtual void                SetFillRule() = 0;
 
     // set the fill rule to specific rule (FillRule_NON_ZERO OR FillRule_EVEN_ODD)
-    virtual void                SetFillRule( PolyFillMode eFillRule ) = 0;
+    virtual void                SetFillRule( PolyFillRule eFillRule ) = 0;
 
     // enable/disable XOR drawing
     virtual void                SetXORMode( bool bSet, bool bInvertOnly ) = 0;
@@ -760,7 +760,7 @@ public:
         GetImpl()->SetFillRule();
     }
 
-    void SetFillRule( PolyFillMode eFillRule ) override
+    void SetFillRule( PolyFillRule eFillRule ) override
     {
         GetImpl()->SetFillRule(eFillRule);
     }

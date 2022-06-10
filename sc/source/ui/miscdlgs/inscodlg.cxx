@@ -251,7 +251,7 @@ void ScInsertContentsDlg::SetOtherDoc( bool bSet )
     }
 }
 
-void ScInsertContentsDlg::SetFillMode( bool bSet )
+void ScInsertContentsDlg::SetFillRule( bool bSet )
 {
     if ( bSet != bFillMode )
     {

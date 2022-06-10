@@ -49,7 +49,7 @@ private:
     // remember RGB values for SetLineColor/SetFillColor
     Color                maLineColor;
     Color                maFillColor;
-    PolyFillMode         meFillRule;
+    PolyFillRule         meFillRule;
 
     bool TryDrawBitmapGDIPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap);
     void DrawPixelImpl(tools::Long nX, tools::Long nY, COLORREF crColor);
@@ -101,7 +101,7 @@ public:
     virtual void SetFillRule() override;
 
     // set the fill rule to specific rule (FillRule_NON_ZERO OR FillRule_EVEN_ODD)
-    virtual void SetFillRule( PolyFillMode eFillRule ) override;
+    virtual void SetFillRule( PolyFillRule eFillRule ) override;
 
     // enable/disable XOR drawing
     virtual void SetXORMode( bool bSet, bool bInvertOnly ) override;

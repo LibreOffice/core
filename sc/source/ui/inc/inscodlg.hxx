@@ -40,7 +40,7 @@ public:
     InsCellCmd      GetMoveMode() const;
 
     void    SetOtherDoc( bool bSet );
-    void    SetFillMode( bool bSet );
+    void    SetFillRule( bool bSet );
     void    SetChangeTrack( bool bSet );
     void    SetCellShiftDisabled( CellShiftDisabledFlags nDisable );
 

@@ -671,16 +671,16 @@ void VclOutdevTest::testFillRule()
     aMtf.Record(pVDev.get());
 
     CPPUNIT_ASSERT(pVDev->IsFillMode());
-    CPPUNIT_ASSERT_EQUAL(PolyFillMode::EVEN_ODD_RULE_ALTERNATE, pVDev->GetFillMode());
+    CPPUNIT_ASSERT_EQUAL(PolyFillRule::EVEN_ODD_RULE_ALTERNATE, pVDev->GetFillRule());
 
-    pVDev->SetFillMode(PolyFillMode::NON_ZERO_RULE_WINDING);
+    pVDev->SetFillRule(PolyFillRule::NON_ZERO_RULE_WINDING);
     CPPUNIT_ASSERT(pVDev->IsFillMode());
-    CPPUNIT_ASSERT_EQUAL(PolyFillMode::NON_ZERO_RULE_WINDING, pVDev->GetFillMode());
+    CPPUNIT_ASSERT_EQUAL(PolyFillRule::NON_ZERO_RULE_WINDING, pVDev->GetFillRule());
     MetaAction* pAction = aMtf.GetAction(0);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::FILLMODE, pAction->GetType());
     auto pFillAction = static_cast<MetaFillModeAction*>(pAction);
-    const PolyFillMode aFillMode = pFillAction->GetFillMode();
-    CPPUNIT_ASSERT_EQUAL(PolyFillMode::NON_ZERO_RULE_WINDING, aFillMode);
+    const PolyFillRule aFillMode = pFillAction->GetFillMode();
+    CPPUNIT_ASSERT_EQUAL(PolyFillRule::NON_ZERO_RULE_WINDING, aFillMode);
 }
 
 

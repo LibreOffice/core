@@ -49,7 +49,7 @@ class OutputDevice;
 class SvStream;
 enum class DrawTextFlags;
 
-enum class PolyFillMode
+enum class PolyFillRule
 {
     EVEN_ODD_RULE_ALTERNATE = 0x01,
     NON_ZERO_RULE_WINDING = 0x02,
@@ -104,8 +104,8 @@ public:
     virtual bool        IsTransparent() const { return false; }
 
 protected:
-    static void         ReadFillMode(SvStream &rIStm, PolyFillMode &eFillMode);
-    static void         WriteFillMode(SvStream &rIStm, PolyFillMode eFillMode);
+    static void         ReadFillMode(SvStream &rIStm, PolyFillRule &eFillMode);
+    static void         WriteFillMode(SvStream &rIStm, PolyFillRule eFillMode);
     static void         ReadColor(SvStream& rIStm, ::Color& rColor);
     static void         WriteColor(SvStream& rIStm, ::Color aColor);
 };
@@ -1290,7 +1290,7 @@ class VCL_DLLPUBLIC MetaFillModeAction final : public MetaAction
 {
 private:
 
-    PolyFillMode mePolyFillMode;
+    PolyFillRule mePolyFillRule;
     bool                mbSet;
 
 public:
@@ -1305,13 +1305,13 @@ public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual rtl::Reference<MetaAction> Clone() const override;
 
-                        MetaFillModeAction( const PolyFillMode& rPolyFillMode,
+                        MetaFillModeAction( const PolyFillRule& rPolyFillMode,
                                             bool bSet );
 
-    const PolyFillMode& GetFillMode() const { return mePolyFillMode; }
+    const PolyFillRule& GetFillRule() const { return mePolyFillRule; }
     bool                IsSetting() const { return mbSet; }
     void                SetSetting(bool rSet) { mbSet = rSet; }
-    void                SetFillMode(PolyFillMode& rFillRule) { mePolyFillMode = rFillRule; }
+    void                SetFillRule(PolyFillRule& rFillRule) { mePolyFillRule = rFillRule; }
 
 };
 

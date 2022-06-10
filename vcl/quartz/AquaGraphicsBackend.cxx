@@ -320,10 +320,10 @@ void AquaGraphicsBackend::SetFillColor(Color nColor)
 
 void AquaGraphicsBackend::SetFillRule()
 {
-    mrShared.maFillMode = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+    mrShared.maFillMode = PolyFillRule::EVEN_ODD_RULE_ALTERNATE;
 }
 
-void AquaGraphicsBackend::SetFillRule(PolyFillMode eFillRule) { mrShared.maFillMode = eFillRule; }
+void AquaGraphicsBackend::SetFillRule(PolyFillRule eFillRule) { mrShared.maFillMode = eFillRule; }
 
 void AquaGraphicsBackend::SetXORMode(bool bSet, bool bInvertOnly)
 {
@@ -517,7 +517,7 @@ void AquaGraphicsBackend::drawPolygon(sal_uInt32 nPoints, const Point* pPointArr
     CGPathDrawingMode eMode;
     if (mrShared.isBrushVisible() && mrShared.isPenVisible())
     {
-        if (mrShared.maFillMode == PolyFillMode::NON_ZERO_RULE_WINDING)
+        if (mrShared.maFillMode == PolyFillRule::NON_ZERO_RULE_WINDING)
             eMode = kCGPathFillStroke;
         else
             eMode = kCGPathEOFillStroke;
@@ -528,7 +528,7 @@ void AquaGraphicsBackend::drawPolygon(sal_uInt32 nPoints, const Point* pPointArr
     }
     else if (mrShared.isBrushVisible())
     {
-        if (mrShared.maFillMode == PolyFillMode::NON_ZERO_RULE_WINDING)
+        if (mrShared.maFillMode == PolyFillRule::NON_ZERO_RULE_WINDING)
             eMode = kCGPathFill;
         else
             eMode = kCGPathEOFill;
@@ -613,7 +613,7 @@ void AquaGraphicsBackend::drawPolyPolygon(sal_uInt32 nPolyCount, const sal_uInt3
     CGPathDrawingMode eMode;
     if (mrShared.isBrushVisible() && mrShared.isPenVisible())
     {
-        if (mrShared.maFillMode == PolyFillMode::NON_ZERO_RULE_WINDING)
+        if (mrShared.maFillMode == PolyFillRule::NON_ZERO_RULE_WINDING)
             eMode = kCGPathFillStroke;
         else
             eMode = kCGPathEOFillStroke;
@@ -624,7 +624,7 @@ void AquaGraphicsBackend::drawPolyPolygon(sal_uInt32 nPolyCount, const sal_uInt3
     }
     else if (mrShared.isBrushVisible())
     {
-        if (mrShared.maFillMode == PolyFillMode::NON_ZERO_RULE_WINDING)
+        if (mrShared.maFillMode == PolyFillRule::NON_ZERO_RULE_WINDING)
             eMode = kCGPathFill;
         else
             eMode = kCGPathEOFill;
@@ -725,7 +725,7 @@ bool AquaGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
 
         if (mrShared.isBrushVisible() && mrShared.isPenVisible())
         {
-            if (mrShared.maFillMode == PolyFillMode::NON_ZERO_RULE_WINDING)
+            if (mrShared.maFillMode == PolyFillRule::NON_ZERO_RULE_WINDING)
                 eMode = kCGPathFillStroke;
             else
                 eMode = kCGPathEOFillStroke;
@@ -736,7 +736,7 @@ bool AquaGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
         }
         else if (mrShared.isBrushVisible())
         {
-            if (mrShared.maFillMode == PolyFillMode::NON_ZERO_RULE_WINDING)
+            if (mrShared.maFillMode == PolyFillRule::NON_ZERO_RULE_WINDING)
                 eMode = kCGPathFill;
             else
                 eMode = kCGPathEOFill;
@@ -1084,7 +1084,7 @@ void AquaGraphicsBackend::pattern50Fill()
     SAL_WARN_IF(!mrShared.maContextHolder.get(), "vcl.quartz", "maContextHolder.get() is NULL");
     CGContextSetFillColorSpace(mrShared.maContextHolder.get(), mxP50Space);
     CGContextSetFillPattern(mrShared.maContextHolder.get(), mxP50Pattern, aFillCol);
-    if (mrShared.maFillMode == PolyFillMode::NON_ZERO_RULE_WINDING)
+    if (mrShared.maFillMode == PolyFillRule::NON_ZERO_RULE_WINDING)
         CGContextFillPath(mrShared.maContextHolder.get());
     else
         CGContextEOFillPath(mrShared.maContextHolder.get());
@@ -1164,7 +1164,7 @@ void AquaGraphicsBackend::invert(sal_uInt32 nPoints, const Point* pPtAry, SalInv
         {
             CGContextSetBlendMode(mrShared.maContextHolder.get(), kCGBlendModeDifference);
             CGContextSetRGBFillColor(mrShared.maContextHolder.get(), 1.0, 1.0, 1.0, 1.0);
-            if (mrShared.maFillMode == PolyFillMode::NON_ZERO_RULE_WINDING)
+            if (mrShared.maFillMode == PolyFillRule::NON_ZERO_RULE_WINDING)
                 CGContextFillPath(mrShared.maContextHolder.get());
             else
                 CGContextEOFillPath(mrShared.maContextHolder.get());
@@ -1352,7 +1352,7 @@ bool AquaGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::L
 
     CGContextBeginPath(mrShared.maContextHolder.get());
     CGContextAddRect(mrShared.maContextHolder.get(), aRect);
-    if (mrShared.maFillMode == PolyFillMode::NON_ZERO_RULE_WINDING)
+    if (mrShared.maFillMode == PolyFillRule::NON_ZERO_RULE_WINDING)
         CGContextDrawPath(mrShared.maContextHolder.get(), kCGPathFill);
     else
         CGContextDrawPath(mrShared.maContextHolder.get(), kCGPathEOFill);

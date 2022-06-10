@@ -727,8 +727,8 @@ The following structure describes the permissions used in PDF security
     void               SetFillColor( const Color& rColor );
     void               SetFillColor() { SetFillColor( COL_TRANSPARENT ); }
 
-    void               SetFillMode( const PolyFillMode& rFillMode );
-    void               SetFillMode() { SetFillMode( PolyFillMode::EVEN_ODD_RULE_ALTERNATE ); }
+    void               SetFillRule( const PolyFillRule& rFillMode );
+    void               SetFillRule() { SetFillRule( PolyFillRule::EVEN_ODD_RULE_ALTERNATE ); }
 
     void               SetFont( const vcl::Font& rNewFont );
     void               SetTextColor( const Color& rColor );

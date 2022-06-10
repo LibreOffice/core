@@ -191,9 +191,9 @@ void GenPspGfxBackend::SetFillColor(Color nColor)
     m_pPrinterGfx->SetFillColor(aColor);
 }
 
-void GenPspGfxBackend::SetFillRule() { m_eFillRule = PolyFillMode::EVEN_ODD_RULE_ALTERNATE; }
+void GenPspGfxBackend::SetFillRule() { m_eFillRule = PolyFillRule::EVEN_ODD_RULE_ALTERNATE; }
 
-void GenPspGfxBackend::SetFillRule(PolyFillMode eFillRule) { m_eFillRule = eFillRule; }
+void GenPspGfxBackend::SetFillRule(PolyFillRule eFillRule) { m_eFillRule = eFillRule; }
 
 void GenPspGfxBackend::SetXORMode(bool bSet, bool /*bInvertOnly*/)
 {

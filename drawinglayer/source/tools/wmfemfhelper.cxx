@@ -2424,10 +2424,10 @@ namespace wmfemfhelper
                 case MetaActionType::FILLMODE:
                 {
                     const MetaFillModeAction* pA = static_cast<const MetaFillModeAction*>(pAction);
-                    const bool bActive(PolyFillMode::EVEN_ODD_RULE_ALTERNATE != pA->GetFillMode());
+                    const bool bActive(PolyFillRule::EVEN_ODD_RULE_ALTERNATE != pA->GetFillRule());
                     rPropertyHolders.Current().setFillModeActive(bActive);
                     if(bActive)
-                        rPropertyHolders.Current().setFillMode(pA->GetFillMode());
+                        rPropertyHolders.Current().setFillMode(pA->GetFillRule());
 
                     break;
                 }

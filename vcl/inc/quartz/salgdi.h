@@ -150,7 +150,7 @@ struct AquaSharedAttributes
 
     /// brush color RGBA
     RGBAColor maFillColor;
-    PolyFillMode maFillMode;
+    PolyFillRule maFillMode;
 
     // Graphics types
 #ifdef MACOSX
@@ -363,7 +363,7 @@ public:
     void SetFillColor() override;
     void SetFillColor(Color nColor) override;
     void SetFillRule() override;
-    void SetFillRule(PolyFillMode eFillRule) override;
+    void SetFillRule(PolyFillRule eFillRule) override;
 
     void SetXORMode(bool bSet, bool bInvertOnly) override;
     void SetROPLineColor(SalROPColor nROPColor) override;

@@ -70,7 +70,7 @@ public:
     virtual void SetFillRule() override;
 
     // set the fill rule to specific rule (FillRule_NON_ZERO OR FillRule_EVEN_ODD)
-    virtual void SetFillRule(PolyFillMode eFillRule) override;
+    virtual void SetFillRule(PolyFillRule eFillRule) override;
 
     // set the fill color to transparent (= don't fill)
     virtual void SetFillColor() override;
@@ -365,7 +365,7 @@ protected:
         Xor
     };
     XorMode mXorMode;
-    PolyFillMode meFillRule;
+    PolyFillRule meFillRule;
     SkBitmap mXorBitmap;
     std::unique_ptr<SkCanvas> mXorCanvas;
     SkRegion mXorRegion; // the area that needs updating for the xor operation

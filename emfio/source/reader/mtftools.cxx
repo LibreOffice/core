@@ -864,9 +864,9 @@ namespace emfio
         mbClockWiseArcDirection = bClockWise;
     }
 
-    void MtfTools::setPolyFillMode( PolyFillMode nMode )
+    void MtfTools::setPolyFillMode( PolyFillRule nMode )
     {
-        mePolyFillMode = nMode;
+        mePolyFillRule = nMode;
     }
 
     void MtfTools::SetBkMode( BackgroundMode nMode )
@@ -1070,8 +1070,8 @@ namespace emfio
         maBkColor(COL_WHITE),
         mnLatestTextLayoutMode(vcl::text::ComplexTextLayoutFlags::Default),
         mnTextLayoutMode(vcl::text::ComplexTextLayoutFlags::Default),
-        meLatestPolyFillMode(PolyFillMode::EVEN_ODD_RULE_ALTERNATE), // The default Fill Mode for LibreOffice is EvenOdd
-        mePolyFillMode(PolyFillMode::NON_ZERO_RULE_WINDING), // The default Fill Mode for EMF/WMF is NonZeroWinding
+        meLatestPolyFillRule(PolyFillRule::EVEN_ODD_RULE_ALTERNATE), // The default Fill Mode for LibreOffice is EvenOdd
+        mePolyFillRule(PolyFillRule::NON_ZERO_RULE_WINDING), // The default Fill Mode for EMF/WMF is NonZeroWinding
         mnLatestBkMode(BackgroundMode::NONE),
         mnBkMode(BackgroundMode::OPAQUE),
         meLatestRasterOp(RasterOp::Invert),
@@ -1198,10 +1198,10 @@ namespace emfio
 
     void MtfTools::UpdateFillMode()
     {
-        if ( meLatestPolyFillMode != mePolyFillMode )
+        if ( meLatestPolyFillRule != mePolyFillRule )
         {
-            meLatestPolyFillMode = mePolyFillMode;
-            mpGDIMetaFile->AddAction( new MetaFillModeAction(mePolyFillMode, true) );
+            meLatestPolyFillRule = mePolyFillRule;
+            mpGDIMetaFile->AddAction( new MetaFillModeAction(mePolyFillRule, true) );
         }
     }
 
@@ -1548,7 +1548,7 @@ namespace emfio
                         SvtGraphicFill aFill( tools::PolyPolygon( rPolygon ),
                                               Color(),
                                               0.0,
-                                              (meLatestPolyFillMode == PolyFillMode::EVEN_ODD_RULE_ALTERNATE)
+                                              (meLatestPolyFillRule == PolyFillRule::EVEN_ODD_RULE_ALTERNATE)
                                                   ? SvtGraphicFill::fillNonZero
                                                   : SvtGraphicFill::fillEvenOdd,
                                               SvtGraphicFill::fillTexture,
@@ -2402,7 +2402,7 @@ namespace emfio
         pSave->eMapMode = meMapMode;
         pSave->eGfxMode = meGfxMode;
         pSave->nBkMode = mnBkMode;
-        pSave->nPolyFillMode = mePolyFillMode;
+        pSave->nPolyFillMode = mePolyFillRule;
         pSave->aBkColor = maBkColor;
         pSave->bClockWiseArcDirection = mbClockWiseArcDirection;
         pSave->bFillStyleSelected = mbFillStyleSelected;
@@ -2465,7 +2465,7 @@ namespace emfio
         mnBkMode = pSave->nBkMode;
         meGfxMode = pSave->eGfxMode;
         meMapMode = pSave->eMapMode;
-        mePolyFillMode = pSave->nPolyFillMode;
+        mePolyFillRule = pSave->nPolyFillMode;
         maBkColor = pSave->aBkColor;
         mbClockWiseArcDirection = pSave->bClockWiseArcDirection;
         mbFillStyleSelected = pSave->bFillStyleSelected;

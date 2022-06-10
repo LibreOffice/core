@@ -1072,10 +1072,10 @@ void X11SalGraphicsImpl::SetFillColor( Color nColor )
 
 void X11SalGraphicsImpl::SetFillRule()
 {
-    meFillRule = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+    meFillRule = PolyFillRule::EVEN_ODD_RULE_ALTERNATE;
 }
 
-void X11SalGraphicsImpl::SetFillRule( PolyFillMode eFillRule )
+void X11SalGraphicsImpl::SetFillRule( PolyFillRule eFillRule )
 {
     meFillRule = eFillRule;
 }

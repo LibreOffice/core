@@ -1338,7 +1338,7 @@ bool ScViewData::SelectionFillDOOM( const ScRange& rRange )
     return (rRange.aEnd.Row() - rRange.aStart.Row() + 1) > (kMax / (rRange.aEnd.Col() - rRange.aStart.Col() + 1));
 }
 
-void ScViewData::SetFillMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
+void ScViewData::SetFillRule( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
     nFillMode   = ScFillMode::FILL;
     nFillStartX = nStartCol;

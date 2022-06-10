@@ -112,14 +112,14 @@ void MetaAction::Scale( double, double )
 {
 }
 
-void MetaAction::ReadFillMode(SvStream& rIStm, PolyFillMode &rFillMode)
+void MetaAction::ReadFillMode(SvStream& rIStm, PolyFillRule &rFillMode)
 {
     sal_uInt32 nTmp;
     rIStm.ReadUInt32(nTmp);
-    rFillMode = PolyFillMode(nTmp);
+    rFillMode = PolyFillRule(nTmp);
 }
 
-void MetaAction::WriteFillMode(SvStream& rIStm, PolyFillMode eFillMode)
+void MetaAction::WriteFillMode(SvStream& rIStm, PolyFillRule eFillMode)
 {
     rIStm.WriteUInt32(static_cast<sal_uInt32>(eFillMode));
 }
@@ -1509,9 +1509,9 @@ MetaFillModeAction::~MetaFillModeAction()
 void MetaFillModeAction::Execute( OutputDevice* pOut )
 {
     if( mbSet )
-        pOut->SetFillMode( mePolyFillMode );
+        pOut->SetFillRule( mePolyFillRule );
     else
-        pOut->SetFillMode();
+        pOut->SetFillRule();
 }
 
 rtl::Reference<MetaAction> MetaFillModeAction::Clone() const
@@ -1519,9 +1519,9 @@ rtl::Reference<MetaAction> MetaFillModeAction::Clone() const
     return new MetaFillModeAction( *this );
 }
 
-MetaFillModeAction::MetaFillModeAction( const PolyFillMode& rPolyFillMode, bool bSet )
+MetaFillModeAction::MetaFillModeAction( const PolyFillRule& rPolyFillRule, bool bSet )
     :    MetaAction  ( MetaActionType::FILLMODE),
-      mePolyFillMode     ( rPolyFillMode ),
+      mePolyFillRule     ( rPolyFillRule ),
       mbSet       ( bSet )
 {}
 

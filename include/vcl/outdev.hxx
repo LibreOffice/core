@@ -232,7 +232,7 @@ private:
     vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)
     Color                           maLineColor;
     Color                           maFillColor;
-    PolyFillMode                    meFillMode;
+    PolyFillRule                    meFillRule;
     vcl::Font                       maFont;
     Color                           maTextColor;
     Color                           maTextLineColor;
@@ -254,7 +254,7 @@ private:
     mutable bool                    mbOutputClipped : 1;
     mutable bool                    mbLineColor : 1;
     mutable bool                    mbFillColor : 1;
-    mutable bool                    mbFillMode : 1;
+    mutable bool                    mbFillRule : 1;
     mutable bool                    mbInitLineColor : 1;
     mutable bool                    mbInitFillColor : 1;
     mutable bool                    mbInitFillMode : 1;
@@ -530,10 +530,10 @@ public:
     const Color&                GetFillColor() const { return maFillColor; }
     bool                        IsFillColor() const { return mbFillColor; }
 
-    void                        SetFillMode();
-    void                        SetFillMode( const PolyFillMode& rMode );
-    const PolyFillMode&         GetFillMode() const { return meFillMode; }
-    bool                        IsFillMode() const { return mbFillMode; }
+    void                        SetFillRule();
+    void                        SetFillRule( const PolyFillRule& rMode );
+    const PolyFillRule&         GetFillRule() const { return meFillRule; }
+    bool                        IsFillMode() const { return mbFillRule; }
 
     void                        SetBackground();
     void                        SetBackground( const Wallpaper& rBackground );

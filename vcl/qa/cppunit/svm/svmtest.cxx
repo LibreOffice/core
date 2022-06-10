@@ -1760,7 +1760,7 @@ void SvmTest::testFillRule()
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
     pVirtualDev->Push();
-    pVirtualDev->SetFillMode(PolyFillMode::NON_ZERO_RULE_WINDING);
+    pVirtualDev->SetFillRule(PolyFillRule::NON_ZERO_RULE_WINDING);
     pVirtualDev->Pop();
 
     checkFillRule(writeAndReadStream(aGDIMetaFile));
