@@ -16,6 +16,24 @@
       "message": "Thanks! Confirmed to fix the crash mentioned in https://gerrit.libreoffice.org/c/core/+/135226/10#message-82c94932855aa365f59b2daa439cb39fe5ac7128\n\nThe selected entry in the math panel still doesn\u0027t appear to be activated when pressing space (nothing inserted) as happens when pressing Enter, which would IMHO be nice, but that\u0027s a different matter.)",
       "revId": "e7582bb81a9ae7d9ca798f9a369cbebec899e73c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3319afc7_f5abecb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-10T11:19:25Z",
+      "side": 1,
+      "message": "\u003e The selected entry in the math panel still doesn\u0027t appear to be activated when pressing space (nothing inserted) as happens when pressing Enter\n\nNote that this works in GTK, so it\u0027s something that should be amended to non-GTK for consistency as well.\n\nPlease create a bug report for this. Thanks!",
+      "parentUuid": "043ae8da_49d1dfb9",
+      "revId": "e7582bb81a9ae7d9ca798f9a369cbebec899e73c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
