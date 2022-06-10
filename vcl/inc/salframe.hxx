@@ -146,7 +146,6 @@ public:
     virtual void            SetIcon( sal_uInt16 nIcon ) = 0;
     virtual void            SetRepresentedURL( const OUString& );
     virtual void            SetMenu( SalMenu *pSalMenu ) = 0;
-    virtual void            DrawMenuBar() = 0;
 
     virtual void            SetExtendedFrameStyle( SalExtStyle nExtStyle ) = 0;
 

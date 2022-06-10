@@ -448,8 +448,6 @@ void QtFrame::SetIcon(sal_uInt16 nIcon)
 
 void QtFrame::SetMenu(SalMenu*) {}
 
-void QtFrame::DrawMenuBar() { /* not needed */}
-
 void QtFrame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed */}
 
 void QtFrame::Show(bool bVisible, bool bNoActivate)

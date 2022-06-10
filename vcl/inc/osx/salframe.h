@@ -116,7 +116,6 @@ public:
     virtual void                SetIcon( sal_uInt16 nIcon ) override;
     virtual void                SetRepresentedURL( const OUString& ) override;
     virtual void                SetMenu( SalMenu* pSalMenu ) override;
-    virtual void                DrawMenuBar() override;
     virtual void                Show( bool bVisible, bool bNoActivate = false ) override;
     virtual void                SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
         override;
