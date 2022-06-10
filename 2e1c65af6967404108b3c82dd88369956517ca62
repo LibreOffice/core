@@ -16,6 +16,24 @@
       "message": "So all CI seems to fail with \"CppunitTest_sc_macros_test\" on Windows.\n\n@michael: you wanted to do some testing? Still on it?\n\nOtherwise I\u0027ll merge this, once Win CI is happy again.",
       "revId": "2e1c65af6967404108b3c82dd88369956517ca62",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fcd4c9a_8c950f4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-10T19:13:37Z",
+      "side": 1,
+      "message": "\u003e @michael: you wanted to do some testing? Still on it?\n\nI had actually hoped to get to that earlier this week. Some first test results:\n\n1) qt/kf5 looks mostly good. Unrelated to this change, LO windows open very small (looks like a window width of 0 or 1 or somesuch) quite often in the recent past, as shown in this screencast: https://nextcloud.documentfoundation.org/s/xQLEmgcxLgsqB3N\nI don\u0027t have any specific steps to reproduce it reliably though (but happens in around 30-50 % of the cases, I\u0027d guess).\nThat happened from time to time in the past as well (maybe only when switching from another VCL plugin to kf5, but I don\u0027t know exactly, it happened seldomly enough to not bother me much), but it seems to be happening much more often now, with or without this change in place (maybe related to some other recent qt5-related change?).\n\n2) A few times when 1) happened and I resized the window, I ran into an assert added by this change:\n\nsoffice.bin: /home/michi/development/git/libreoffice/vcl/qt5/QtWidget.cxx:85: virtual void QtWidget::paintEvent(QPaintEvent*): Assertion `aImage.size() \u003d\u003d m_rFrame.asChild()-\u003esize()\u0027 failed.\n\nThis only happens ocassionally, not each time that 1) happens.\n\n3) For gtk3, the Writer toolbar looks broken (OK when starting for the first time with a fresh profile, where an info toolbar shows up in addition, but broken on subsequent runs).\nScreenshot with only this change in place: https://nextcloud.documentfoundation.org/s/jBHw7NiraXCP5ef\nScreenshot with this change and https://gerrit.libreoffice.org/c/core/+/135530 (v1) in place, where it\u0027s broken differently, font-related comboboxes are misplaced: https://nextcloud.documentfoundation.org/s/RyfFBRZyScDg86S",
+      "parentUuid": "28b2d99e_beef8427",
+      "revId": "2e1c65af6967404108b3c82dd88369956517ca62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
