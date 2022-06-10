@@ -265,6 +265,10 @@ walk_up:
     {
         goto walk_up;
     }
+    else if (isa<ParenListExpr>(parent))
+    {
+        goto walk_up;
+    }
     else if (isa<UnresolvedLookupExpr>(parent)
             || isa<CompoundStmt>(parent))
     {
