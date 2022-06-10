@@ -27,6 +27,7 @@
 #include <document.hxx>
 #include <docuno.hxx>
 #include <docsh.hxx>
+#include <dpobject.hxx>
 #include <drwlayer.hxx>
 #include <inputopt.hxx>
 #include <postit.hxx>
@@ -643,6 +644,26 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), pDoc->GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("A3"), pDoc->GetString(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 2, 0)));
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf149503)
+{
+    ScModelObj* pModelObj = createDoc("tdf149503.xls");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    ScDPCollection* pDPs = pDoc->GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDPs->GetCount());
 }
 
 // Inspired from testTdf117706, test columns instead of rows
