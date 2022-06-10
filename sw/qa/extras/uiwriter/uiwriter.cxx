@@ -7750,6 +7750,25 @@ void SwUiWriterTest::testTdf38394()
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf148868)
+{
+    SwDoc* pDoc = createDoc("tdf148868.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    pWrtShell->EndPg(/*bSelect=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    pWrtShell->Insert("X");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134021)
 {
     load(DATA_DIRECTORY, "tdf134021.docx");
