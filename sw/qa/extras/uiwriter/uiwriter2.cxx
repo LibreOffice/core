@@ -908,6 +908,56 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140007)
                          pDoc->GetNodes()[SwNodeOffset(11)]->GetTextNode()->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139982)
+{
+    SwDoc* const pDoc = createDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // turn on redlining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    pWrtShell->Insert("helloo");
+
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    {
+        SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
+        anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+        SfxItemSet flySet(pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{});
+        flySet.Put(anchor);
+        SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
+        CPPUNIT_ASSERT(pFly != nullptr);
+    }
+
+    pWrtShell->SttEndDoc(true);
+    pWrtShell->EndPara(/*bSelect=*/true);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+
+    pWrtShell->Replace("hello", true);
+
+    // the problem was that a redline delete with the same author as redline
+    // insert has its text deleted immediately, including anchored flys.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+
+    pWrtShell->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
 {
     load(DATA_DIRECTORY, "tdf54819.fodt");
