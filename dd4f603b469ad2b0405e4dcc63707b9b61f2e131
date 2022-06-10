@@ -16,6 +16,23 @@
       "message": "Now, with Caolán’s patch 6f17d42f251bf4a20b4192c16fa007226dcf17ed, you can make the explanatory labels smaller, which will look even nicer!",
       "revId": "dd4f603b469ad2b0405e4dcc63707b9b61f2e131",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a1a808b_6251b1d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-10T11:52:11Z",
+      "side": 1,
+      "message": "please remember to add a snippet to https://wiki.documentfoundation.org/ReleaseNotes/7.4",
+      "revId": "dd4f603b469ad2b0405e4dcc63707b9b61f2e131",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
