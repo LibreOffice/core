@@ -527,7 +527,7 @@ include/vcl/transfer.hxx:358
     const class rtl::OUString & rDestDoc
     ""
 include/vcl/virdev.hxx:164
-    _Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(const class Size &,const class Fraction &,const class Point &,unsigned char *)
+    _Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(const class Size &,const class Fraction &,const class Point &,unsigned char *)
     const class Point & rNewOffset
     Point()
 include/vcl/weld.hxx:635

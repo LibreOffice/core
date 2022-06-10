@@ -3489,7 +3489,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     // Set background to transparent by default.
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
+    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
                 pBuffer);
 
@@ -5734,7 +5734,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
 
     memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
     aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-    aDevice->SetOutputSizePixelScaleOffsetAndBuffer(
+    aDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(
                 Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
                 pBuffer);
 
@@ -5834,7 +5834,7 @@ static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKW
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nWidth, nHeight), Fraction(1.0), Point(), pBuffer);
+    pDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(Size(nWidth, nHeight), Fraction(1.0), Point(), pBuffer);
 
     MapMode aMapMode(pDevice->GetMapMode());
     aMapMode.SetOrigin(Point(-(nX / fDPIScale), -(nY / fDPIScale)));
