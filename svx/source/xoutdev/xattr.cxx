@@ -450,7 +450,7 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
 
     if (fLineWidth == 0.0)
         fLineWidth = SMALLEST_DASH_WIDTH;
-
+/*
     if(GetDashStyle() == css::drawing::DashStyle_RECTRELATIVE || GetDashStyle() == css::drawing::DashStyle_ROUNDRELATIVE)
     {
         double fFactor = fLineWidth / 100.0;
@@ -575,7 +575,7 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
         fFullDotDashLen += fSingleDashLen;
         rDotDashArray[nIns++] = fDashDotDistance;
         fFullDotDashLen += fDashDotDistance;
-    }
+    }*/
 
     return fFullDotDashLen;
 }

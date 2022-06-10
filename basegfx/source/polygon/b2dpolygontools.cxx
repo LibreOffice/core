@@ -1138,14 +1138,14 @@ namespace basegfx::utils
                 nullptr == pGapTarget
                 ? std::function<void(const basegfx::B2DPolygon&)>()
                 : [&pGapTarget](const basegfx::B2DPolygon& rSnippet){ pGapTarget->append(rSnippet); });
-
+/*
             // call version that uses callbacks
             applyLineDashing(
                 rCandidate,
                 rDotDashArray,
                 aLineCallback,
                 aGapCallback,
-                fDotDashLength);
+                fDotDashLength);*/
         }
 
         static void implHandleSnippet(
@@ -1208,7 +1208,8 @@ namespace basegfx::utils
             std::function<void(const basegfx::B2DPolygon& rSnippet)> aGapTargetCallback,
             double fDotDashLength)
         {
-            const sal_uInt32 nPointCount(rCandidate.count());
+
+/*            const sal_uInt32 nPointCount(rCandidate.count());
             const sal_uInt32 nDotDashCount(rDotDashArray.size());
 
             if(fTools::lessOrEqual(fDotDashLength, 0.0))
@@ -1265,9 +1266,9 @@ namespace basegfx::utils
             aCurrentEdge.setStartPoint(rCandidate.getB2DPoint(0));
 
             // prepare DotDashArray iteration and the line/gap switching bool
-            sal_uInt32 nDotDashIndex(0);
-            bool bIsLine(true);
-            double fDotDashMovingLength(aDotDashArray[0]);
+            sal_uInt32 nDotDashIndex(1);
+            bool bIsLine((nDotDashIndex % 2 == 0));
+            double fDotDashMovingLength(aDotDashArray[nDotDashIndex]);
             B2DPolygon aSnippet;
 
             // remember 1st and last snippets to try to merge after execution
@@ -1447,6 +1448,7 @@ namespace basegfx::utils
             {
                 implHandleFirstLast(aGapTargetCallback, aFirstGap, aLastGap);
             }
+            */
         }
 
         // test if point is inside epsilon-range around an edge defined

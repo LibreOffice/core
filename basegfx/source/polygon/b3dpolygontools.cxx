@@ -108,13 +108,13 @@ namespace basegfx::utils
                 nullptr == pLineTarget
                 ? std::function<void(const basegfx::B3DPolygon&)>()
                 : [&pLineTarget](const basegfx::B3DPolygon& rSnippet){ pLineTarget->append(rSnippet); });
-
+/*
             // call version that uses callbacks
             applyLineDashing(
                 rCandidate,
                 rDotDashArray,
                 aLineCallback,
-                fDotDashLength);
+                fDotDashLength);*/
         }
 
         static void implHandleSnippet(

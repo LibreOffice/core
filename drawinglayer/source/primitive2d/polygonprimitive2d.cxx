@@ -100,8 +100,8 @@ void PolygonMarkerPrimitive2D::create2DDecomposition(
 
         aDash.push_back(fLogicDashLength);
         aDash.push_back(fLogicDashLength);
-        basegfx::utils::applyLineDashing(getB2DPolygon(), aDash, &aDashedPolyPolyA,
-                                         &aDashedPolyPolyB, 2.0 * fLogicDashLength);
+        //basegfx::utils::applyLineDashing(getB2DPolygon(), aDash, &aDashedPolyPolyA,
+        //                                 &aDashedPolyPolyB, 2.0 * fLogicDashLength);
 
         rContainer.push_back(new PolyPolygonHairlinePrimitive2D(aDashedPolyPolyA, getRGBColorA()));
         rContainer.push_back(new PolyPolygonHairlinePrimitive2D(aDashedPolyPolyB, getRGBColorB()));

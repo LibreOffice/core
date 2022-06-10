@@ -220,7 +220,7 @@ namespace basegfx::utils
                 return;
 
             B2DPolyPolygon aLineTarget;
-
+/*
             for(auto const& rPolygon : rCandidate)
             {
                 applyLineDashing(
@@ -234,7 +234,7 @@ namespace basegfx::utils
                 {
                     pLineTarget->append(aLineTarget);
                 }
-            }
+            }*/
         }
 
         bool isInEpsilonRange(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance)
