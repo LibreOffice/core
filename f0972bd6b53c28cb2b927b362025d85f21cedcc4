@@ -16,6 +16,23 @@
       "message": "besides jenkins, that also makes my autopkgtest run pass",
       "revId": "f0972bd6b53c28cb2b927b362025d85f21cedcc4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28bc5eb5_7f381de9",
+        "filename": "sc/qa/uitest/statistics/descriptiveStatistics.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-10T13:35:38Z",
+      "side": 1,
+      "message": "assertAlmostEqual() rounds both arguments to default 7 decimals, so completely overrides the 14 decimals of the nested round(), effectively comparing against 0.015241 making this test quite useless. (and the inner round() is superfluous anyway).\nSee https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertAlmostEqual\n\nProbably better would be one of\n\n self.assertAlmostEqual(get_cell_by_position(document, 0, 6, 10).getValue(), 0.0152409532904, 13)\n\nor just, as that shouldn\u0027t do anything different\n\n self.assertEqual(round(get_cell_by_position(document, 0, 6, 10).getValue(),13) , 0.0152409532904)",
+      "revId": "f0972bd6b53c28cb2b927b362025d85f21cedcc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
