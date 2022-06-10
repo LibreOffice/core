@@ -76,28 +76,24 @@ void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
         cairo_surface_destroy(m_pSurface);
     }
 
-    double fXScale, fYScale;
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // Force scaling of the painting
-        fXScale = fYScale = comphelper::LibreOfficeKit::getDPIScale();
-    }
-    else
-    {
-        dl_cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
-    }
-
     if (pBuffer)
     {
-        nNewDX *= fXScale;
-        nNewDY *= fYScale;
+        // The buffer should only be set by VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer()
+        // when used to draw a tile for LOK. It cannot be used for something else, because otherwise
+        // this would need a way to detect whether this is a tiled paint that needs LOK handling
+        // or whether it's that something else that just might happen to be called with LOK active.
+        assert(comphelper::LibreOfficeKit::isActive());
+        // Force scaling of the painting
+        double fScale = comphelper::LibreOfficeKit::getDPIScale();
 
         m_pSurface = cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
                             nNewDX, nNewDY, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nNewDX));
-        dl_cairo_surface_set_device_scale(m_pSurface, fXScale, fYScale);
+        dl_cairo_surface_set_device_scale(m_pSurface, fScale, fScale);
     }
     else if(nNewDX <= 32 && nNewDY <= 32)
     {
+        double fXScale, fYScale;
+        dl_cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
         nNewDX *= fXScale;
         nNewDY *= fYScale;
 
