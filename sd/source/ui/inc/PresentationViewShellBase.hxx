@@ -26,7 +26,7 @@ namespace sd
 /** This class exists to be able to register another factory that
     creates the view shell for the presentation.
 */
-class PresentationViewShellBase : public ViewShellBase
+class PresentationViewShellBase final : public ViewShellBase
 {
 public:
     SFX_DECL_VIEWFACTORY(PresentationViewShellBase);

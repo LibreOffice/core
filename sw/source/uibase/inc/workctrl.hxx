@@ -154,7 +154,7 @@ public:
     }
 };
 
-class NavElementToolBoxControl : public svt::ToolboxController, public lang::XServiceInfo
+class NavElementToolBoxControl final : public svt::ToolboxController, public lang::XServiceInfo
 {
 public:
     explicit NavElementToolBoxControl(

@@ -23,7 +23,7 @@
 
 namespace sd {
 
-    class PaneDockingWindow : public ::sd::TitledDockingWindow
+class PaneDockingWindow final : public ::sd::TitledDockingWindow
 {
 public:
     /** Create a new docking window.

@@ -32,7 +32,7 @@ namespace sd {
 
 /** Show a textual overview of the text contents of all slides.
 */
-class OutlineViewShell
+class OutlineViewShell final
     : public ViewShell
 {
 public:

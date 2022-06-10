@@ -70,7 +70,7 @@ public:
 };
 
 /** The UI part of the GraphicSizeViolation used by GenericCheckDialog */
-class GraphicSizeCheckGUIEntry : public svx::CheckData
+class GraphicSizeCheckGUIEntry final : public svx::CheckData
 {
 private:
     SwDoc* m_pDocument;
@@ -98,7 +98,7 @@ public:
  * The UI part presenting the graphic size check results, which is
  * used by GenericCheckDialog
  */
-class GraphicSizeCheckGUIResult : public svx::CheckDataCollection
+class GraphicSizeCheckGUIResult final : public svx::CheckDataCollection
 {
 public:
     GraphicSizeCheckGUIResult(SwDoc* pDocument);

@@ -28,7 +28,7 @@ class SdCustomShowList;
 /**
  * Dialog to define optionsm_xnd to start the presentation
  */
-class SdStartPresentationDlg : public weld::GenericDialogController
+class SdStartPresentationDlg final : public weld::GenericDialogController
 {
 private:
     SdCustomShowList*   pCustomShowList;

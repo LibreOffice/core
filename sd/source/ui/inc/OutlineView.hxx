@@ -50,7 +50,7 @@ const int MAX_OUTLINERVIEWS = 4;
 |*
 \************************************************************************/
 
-class OutlineView
+class OutlineView final
     : public ::sd::View
 {
     friend class OutlineViewModelChangeGuard;

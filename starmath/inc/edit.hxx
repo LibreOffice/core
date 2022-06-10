@@ -36,7 +36,7 @@ void SmGetLeftSelectionPart(const ESelection& rSelection, sal_Int32& nPara, sal_
 
 class SmEditWindow;
 
-class SmEditTextWindow : public WeldEditView
+class SmEditTextWindow final : public WeldEditView
 {
 private:
     SmEditWindow& mrEditWindow;

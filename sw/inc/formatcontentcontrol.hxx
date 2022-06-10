@@ -100,7 +100,7 @@ public:
 };
 
 /// Stores the properties of a content control.
-class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
+class SW_DLLPUBLIC SwContentControl final : public sw::BroadcastingModify
 {
     css::uno::WeakReference<css::text::XTextContent> m_wXContentControl;
 

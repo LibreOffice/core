@@ -73,7 +73,7 @@ private:
                                       const tools::Rectangle& aContentRect, const Color& aColor);
 };
 
-class StylesListUpdateTask : public Idle
+class StylesListUpdateTask final : public Idle
 {
     StylesPreviewWindow_Base& m_rStylesList;
 

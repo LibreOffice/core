@@ -45,7 +45,7 @@ class SwContentControl;
  * UNO API wrapper around an SwContentControl, exposed as the com.sun.star.text.ContentControl
  * service.
  */
-class SwXContentControl
+class SwXContentControl final
     : public cppu::WeakImplHelper<css::lang::XUnoTunnel, css::lang::XServiceInfo,
                                   css::container::XEnumerationAccess, css::text::XTextContent,
                                   css::text::XText, css::beans::XPropertySet>

@@ -79,7 +79,7 @@ public:
     void SetFont(const vcl::Font& rFont);
 };
 
-class SmFontDialog : public weld::GenericDialogController
+class SmFontDialog final : public weld::GenericDialogController
 {
     vcl::Font maFont;
     SmShowFont m_aShowFont;

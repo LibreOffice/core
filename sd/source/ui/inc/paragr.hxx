@@ -24,7 +24,7 @@
 /**
  * Paragraph-Tab-Dialog
  */
-class SdParagraphDlg : public SfxTabDialogController
+class SdParagraphDlg final : public SfxTabDialogController
 {
 private:
     virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
