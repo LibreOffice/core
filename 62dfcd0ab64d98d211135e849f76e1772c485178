@@ -298,6 +298,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a21934a_24df7997",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-06-10T06:09:36Z",
+      "side": 1,
+      "message": "From BZ: \"Ignore system input language\" is misleading with proposal to use “Input method changes language in Writer” and Mike\u0027s suggestion is \"Apply system input language to new text\". I don\u0027t think any of these options is self-explanatory, we need a tooltip and documentation. More generally speaking, checkboxes should be phrased positively (false: [x] Avoid Foo, correct: [ ] Foo), which makes Mike\u0027s suggestion better than the other ideas.",
+      "parentUuid": "74dc0ce9_777e04e4",
+      "revId": "62dfcd0ab64d98d211135e849f76e1772c485178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c89ffbe_ee8fe0f8",
