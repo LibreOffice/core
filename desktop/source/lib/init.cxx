@@ -136,6 +136,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/deeplcfg.hxx>
+#include <svtools/languagetoolcfg.hxx>
 #include <vcl/fontcharmap.hxx>
 #ifdef IOS
 #include <vcl/sysdata.hxx>
@@ -7036,6 +7037,37 @@ void setDeeplConfig()
     }
 }
 
+void setLanguageToolConfig()
+{
+    const char* pEnabled = ::getenv("LANGUAGETOOL_ENABLED");
+    const char* pBaseUrlString = ::getenv("LANGUAGETOOL_BASEURL");
+    const char* pUsername = ::getenv("LANGUAGETOOL_USERNAME");
+    const char* pApikey = ::getenv("LANGUAGETOOL_APIKEY");
+    if (pEnabled && pBaseUrlString)
+    {
+        OUString aEnabled = OStringToOUString(pEnabled, RTL_TEXTENCODING_UTF8);
+        if (aEnabled != "true")
+            return;
+        OUString aBaseUrl = OStringToOUString(pBaseUrlString, RTL_TEXTENCODING_UTF8);
+        try
+        {
+            SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
+            rLanguageOpts.setBaseURL(aBaseUrl);
+            rLanguageOpts.setEnabled(true);
+            if (pUsername && pApikey)
+            {
+                OUString aUsername = OStringToOUString(pUsername, RTL_TEXTENCODING_UTF8);
+                OUString aApiKey = OStringToOUString(pApikey, RTL_TEXTENCODING_UTF8);
+                rLanguageOpts.setUsername(aUsername);
+                rLanguageOpts.setApiKey(aApiKey);
+            }
+        }
+        catch(uno::Exception const& rException)
+        {
+            SAL_WARN("lok", "Failed to set LanguageTool API settings: " << rException.Message);
+        }
+    }
+}
 
 }
 
@@ -7359,6 +7391,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     setCertificateDir();
     setDeeplConfig();
+    setLanguageToolConfig();
 
     if (bNotebookbar)
     {
