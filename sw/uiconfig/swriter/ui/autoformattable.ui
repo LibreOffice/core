@@ -295,7 +295,7 @@
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="numformatcb-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|numformatcb">Includes numbering formats in the selected table style.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="autoformattable|extended_tip|numformatcb">Includes number formats in the selected table style.</property>
                           </object>
                         </child>
                       </object>
