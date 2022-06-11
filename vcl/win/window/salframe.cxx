@@ -1656,11 +1656,23 @@ void WinSalFrame::SetWindowState(const vcl::WindowData* pState)
         if (mbOverwriteState && (pState->mask() & vcl::WindowDataMask::State))
         {
             if (pState->state() & vcl::WindowState::Minimized)
+            {
+                if (!bIsMinimized && !maGeometry.hasSavedPosSize())
+                    maGeometry.refOrSavePosSize();
                 mnShowState = SW_SHOWMINIMIZED;
+            }
             else if (pState->state() & vcl::WindowState::Maximized)
             {
+                if (!bIsMaximized && !maGeometry.hasSavedPosSize())
+                    maGeometry.refOrSavePosSize();
                 mnShowState = SW_SHOWMAXIMIZED;
                 bUpdateHiddenFramePos = true;
+            }
+            else if (pState->state() & vcl::WindowState::Normal)
+            {
+                if (bIsMinimized || bIsMaximized)
+                    maGeometry.unrefOrClearSavedPosSize();
+                mnShowState = SW_SHOWNORMAL;
             }
             else if (pState->state() & vcl::WindowState::Normal)
                 mnShowState = SW_SHOWNORMAL;
@@ -1672,14 +1684,24 @@ void WinSalFrame::SetWindowState(const vcl::WindowData* pState)
         {
             if ( pState->state() & vcl::WindowState::Minimized )
             {
+                if (!bIsMinimized && !maGeometry.hasSavedPosSize())
+                    maGeometry.refOrSavePosSize();
                 if ( pState->state() & vcl::WindowState::Maximized )
                     aPlacement.flags |= WPF_RESTORETOMAXIMIZED;
                 aPlacement.showCmd = SW_SHOWMINIMIZED;
             }
             else if ( pState->state() & vcl::WindowState::Maximized )
+            {
+                if (!bIsMaximized && !maGeometry.hasSavedPosSize())
+                    maGeometry.refOrSavePosSize();
                 aPlacement.showCmd = SW_SHOWMAXIMIZED;
+            }
             else if ( pState->state() & vcl::WindowState::Normal )
+            {
+                if (bIsMinimized || bIsMaximized)
+                    maGeometry.unrefOrClearSavedPosSize();
                 aPlacement.showCmd = SW_RESTORE;
+            }
         }
     }
 
@@ -1725,6 +1747,11 @@ void WinSalFrame::SetWindowState(const vcl::WindowData* pState)
 
 bool WinSalFrame::GetWindowState(vcl::WindowData* pState)
 {
+    if (maGeometry.hasSavedPosSize())
+    {
+        pState->setPosSize(maGeometry.savedPosSize());
+        pState->refOrSavePosSize();
+    }
     pState->setPosSize(maGeometry.posSize());
     pState->setState(m_eState);
     pState->setMask(vcl::WindowDataMask::PosSizeState);
@@ -1799,6 +1826,8 @@ void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
 
     if ( bFullScreen )
     {
+        maGeometry.refOrSavePosSize();
+
         // to hide the Windows taskbar
         DWORD nExStyle = GetWindowExStyle( mhWnd );
         if ( nExStyle & WS_EX_TOOLWINDOW )
@@ -1807,8 +1836,6 @@ void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
             nExStyle &= ~WS_EX_TOOLWINDOW;
             SetWindowExStyle( mhWnd, nExStyle );
         }
-        // save old position
-        GetWindowRect( mhWnd, &maFullScreenRect );
 
         // save show state
         mnFullScreenShowState = mnShowState;
@@ -1829,6 +1856,10 @@ void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
     }
     else
     {
+        assert(maGeometry.hasSavedPosSize());
+        if (!maGeometry.hasSavedPosSize())
+            return;
+
         // when the ShowState has to be reset, hide the window first to
         // reduce flicker
         bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
@@ -1847,12 +1878,12 @@ void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         }
         mbCaption = mbFullScreenCaption;
 
-        SetWindowPos( mhWnd, nullptr,
-                      maFullScreenRect.left,
-                      maFullScreenRect.top,
-                      maFullScreenRect.right-maFullScreenRect.left,
-                      maFullScreenRect.bottom-maFullScreenRect.top,
-                      SWP_NOZORDER | SWP_NOACTIVATE );
+        tools::Rectangle aRect = maGeometry.savedPosSize();
+        maGeometry.unrefOrClearSavedPosSize();
+        aRect.Move(maGeometry.leftDecoration(), maGeometry.topDecoration());
+
+        SetWindowPos(mhWnd, nullptr, aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
+                     SWP_NOZORDER | SWP_NOACTIVATE);
 
         // restore show state
         if ( mnShowState != mnFullScreenShowState )
@@ -3910,18 +3941,26 @@ static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pPa
 
 static void UpdateFrameGeometry(WinSalFrame* pFrame)
 {
-    if( !pFrame )
+    if (!pFrame)
         return;
     const HWND hWnd = pFrame->mhWnd;
 
+    if (IsIconic(hWnd))
+    {
+        if (pFrame->state() & vcl::WindowState::Minimized)
+            return;
+        pFrame->maGeometry.refOrSavePosSize();
+        pFrame->maGeometry.setPosSize({ 0, 0 }, { 0, 0 });
+        pFrame->maGeometry.setDecorations(0, 0, 0, 0);
+        pFrame->maGeometry.setScreen(0);
+        return;
+    }
+
+    if (IsZoomed(hWnd) && !(pFrame->state() & vcl::WindowState::Maximized))
+        pFrame->maGeometry.refOrSavePosSize();
+
     RECT aRect;
     GetWindowRect( hWnd, &aRect );
-    pFrame->maGeometry.setPosSize({ 0, 0 }, { 0, 0 });
-    pFrame->maGeometry.setDecorations(0, 0, 0, 0);
-    pFrame->maGeometry.setScreen(0);
-
-    if ( IsIconic( hWnd ) )
-        return;
 
     POINT aPt;
     aPt.x=0;
