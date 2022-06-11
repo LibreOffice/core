@@ -8,6 +8,7 @@
     <property name="title" translatable="yes" context="objectdialog|ObjectDialog">Object</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
+    <property name="modal">True</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
