@@ -39,7 +39,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="exthelp-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | exthelp">Displays a help text when you rest the cursor on an icon, a menu command, or a control on a dialog.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | exthelp">Displays a help text when you rest the mouse pointer on an icon, a menu command, or a control on a dialog.</property>
                   </object>
                 </child>
               </object>
