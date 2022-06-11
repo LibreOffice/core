@@ -605,7 +605,7 @@
                     <property name="can-focus">False</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="format-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|format">Select the envelope size that want, or select "User Defined", and then enter the width and the height of the custom size.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="envformatpage|extended_tip|format">Select the envelope size that you want, or select "User Defined", and then enter the width and the height of the custom size.</property>
                       </object>
                     </child>
                   </object>
