@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48f39bb3_c3470868",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-06-11T06:45:02Z",
+      "side": 1,
+      "message": "verfied in a 7.4.0 beta1 build on  zelenka.debian.org",
+      "revId": "6502332c8e0090e730181b454a4402ff361a5a06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
