@@ -993,7 +993,7 @@
                     <property name="adjustment">adjustment6</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="slant-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|slant">Enter an angle from 0 to 90 degrees for casting the shadow.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="docking3deffects|extended_tip|slant">Enter an angle from 0 to 90 degrees for an imaginary plane on which the shadow is cast.</property>
                       </object>
                     </child>
                   </object>
