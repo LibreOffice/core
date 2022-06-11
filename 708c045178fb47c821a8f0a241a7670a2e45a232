@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d0ef664_aa357234",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-06-11T16:28:29Z",
+      "side": 1,
+      "message": "Hi Heiko! I just removed the has_entry option for every frame widget. I\u0027m not sure if we should remove it from the entire hyperlink dialog like done in this patch. Do you have something in mind where this should not be the case? Thank you!",
+      "revId": "708c045178fb47c821a8f0a241a7670a2e45a232",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
