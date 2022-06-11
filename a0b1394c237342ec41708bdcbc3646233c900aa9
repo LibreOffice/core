@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a1717e_287c45bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-11T18:31:50Z",
+      "side": 1,
+      "message": "I\u0027ve had enough with that Jenkins Windows nonsense, failing on CppunitTest_sc_macros_test is bullshit.",
+      "revId": "a0b1394c237342ec41708bdcbc3646233c900aa9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
