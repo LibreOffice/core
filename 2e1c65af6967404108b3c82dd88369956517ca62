@@ -34,6 +34,24 @@
       "parentUuid": "28b2d99e_beef8427",
       "revId": "2e1c65af6967404108b3c82dd88369956517ca62",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cb5846f_35a10782",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-11T11:00:27Z",
+      "side": 1,
+      "message": "\u003e \u003e @michael: you wanted to do some testing? Still on it?\n\u003e \n\u003e I had actually hoped to get to that earlier this week. Some first test results:\n\u003e \n\u003e 1) qt/kf5 looks mostly good. Unrelated to this change, LO windows open very small (looks like a window width of 0 or 1 or somesuch) quite often in the recent past, as shown in this screencast: https://nextcloud.documentfoundation.org/s/xQLEmgcxLgsqB3N\n\u003e I don\u0027t have any specific steps to reproduce it reliably though (but happens in around 30-50 % of the cases, I\u0027d guess).\n\u003e That happened from time to time in the past as well (maybe only when switching from another VCL plugin to kf5, but I don\u0027t know exactly, it happened seldomly enough to not bother me much), but it seems to be happening much more often now, with or without this change in place (maybe related to some other recent qt5-related change?).\n\nI\u0027ve never seen this. But luckily I just got an update mail from tdf#125543, which I wasn\u0027t remembering anymore. And I\u0027ve never seen this, because I never maximize the LO window, because I\u0027m expecting debug output in the shell, so LO \"just sits next to it\". And there is https://gerrit.libreoffice.org/c/core/+/135529, which I created, because the Qt VCL plug un-maximize implementation is non-existant and probably even broken. And everyone is already doing the same. IMHO the whole original handling is \"questionable\", so I changed it. This is mainly used for storing the maximized state of a window + un-maximized position and size, but I guess it also affects normal behavior. Really WIP and largely untested yet; but OTOH it\u0027s mainly a refactoring with minor tweaks. I\u0027ll update the commit message later.\n\n\u003e 2) A few times when 1) happened and I resized the window, I ran into an assert added by this change:\n\u003e \n\u003e soffice.bin: /home/michi/development/git/libreoffice/vcl/qt5/QtWidget.cxx:85: virtual void QtWidget::paintEvent(QPaintEvent*): Assertion `aImage.size() \u003d\u003d m_rFrame.asChild()-\u003esize()\u0027 failed.\n\u003e \n\u003e This only happens ocassionally, not each time that 1) happens.\n\nI\u0027ll check, if I can reproduce it without the linked patch. I currently can\u0027t, which might be a good reason to have it ;-)\n\n\u003e 3) For gtk3, the Writer toolbar looks broken (OK when starting for the first time with a fresh profile, where an info toolbar shows up in addition, but broken on subsequent runs).\n\u003e Screenshot with only this change in place: https://nextcloud.documentfoundation.org/s/jBHw7NiraXCP5ef\n\nThat should be fixed by the latest upload. I missed this, because I always had the gtk patch applied...\n\n\u003e Screenshot with this change and https://gerrit.libreoffice.org/c/core/+/135530 (v1) in place, where it\u0027s broken differently, font-related comboboxes are misplaced: https://nextcloud.documentfoundation.org/s/RyfFBRZyScDg86S\n\nI spend a few hours trying to find a solution that works. I\u0027ve updated the commit message of it. The patch has many SAL_DEBUG and commented code, which might indicate, what I\u0027ve already tried. The toolbar native widget placement is one problem, which interestingly doesn\u0027t affect a document with a form (I used the example from tdf#130841), which is the test document to fix bug tdf#130893 to fix by the change.",
+      "parentUuid": "1fcd4c9a_8c950f4d",
+      "revId": "2e1c65af6967404108b3c82dd88369956517ca62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
