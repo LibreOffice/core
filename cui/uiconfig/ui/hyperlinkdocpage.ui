@@ -386,14 +386,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="has_entry">True</property>
-                    <child internal-child="entry">
-                      <object class="GtkEntry" id="combobox-entry">
-                        <property name="can_focus">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="activates_default">True</property>
-                      </object>
-                    </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="frame-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkdocpage|extended_tip|frame">Enter the name of the frame that you want the linked file to open in, or select a predefined frame from the list. If you leave this box blank, the linked file opens in the current browser window.</property>
