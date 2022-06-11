@@ -686,15 +686,18 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                                  0;
                 const SwTwips nTmpWidth = i * nGridWidth;
                 const SwTwips nKernWidth = std::min(nTmpWidth - nSumWidth, nRestWidth);
-                const SwTwips nKernWidth_1 = nKernWidth / 2;
+                const SwTwips nKernWidth_1 = pGrid->IsSnapToChars() ?
+                    nKernWidth / 2 : 0;
 
                 OSL_ENSURE( nKernWidth <= nRestWidth,
                         "Not enough space left for adjusting non-asian text in grid mode" );
+                if (nKernWidth_1)
+                {
+                    pGridKernPortion->Width( pGridKernPortion->Width() + nKernWidth_1 );
+                    rInf.X( rInf.X() + nKernWidth_1 );
+                }
 
-                pGridKernPortion->Width( pGridKernPortion->Width() + nKernWidth_1 );
-                rInf.X( rInf.X() + nKernWidth_1 );
-
-                if ( ! bFull )
+                if ( ! bFull && nKernWidth - nKernWidth_1 > 0 )
                     new SwKernPortion( *pPor, static_cast<short>(nKernWidth - nKernWidth_1),
                                        false, true );
 
