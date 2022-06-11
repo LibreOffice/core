@@ -205,7 +205,7 @@ const std::tuple<TranslateId, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Do not get lost in large documents. Use the Navigator (F5) to find your way through the content."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Edit ▸ Find and Replace lets you insert special characters directly: right click in input fields or press Shift+%MOD1+S."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Need custom contents for metadata properties? File ▸ Properties ▸ Custom Properties tab lets you create what you want."), "", ""},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Want to see, but not print, an object in Draw? Draw it on a layer for which the “Printable” flag is not set (right click on the tab and “Modify Layer”)."), "", "tipoftheday_d.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Want to see, but not print, an object in Draw? Draw it on a layer for which the “Printable” flag is not set (right-click the layer’s tab and choose “Modify Layer”)."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To insert the current date in your document, use Insert ▸ Field ▸ Date."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Got many images in your Writer document? Speed up the display by disabling View ▸ Images and charts."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Sheet ▸ Fill Cells ▸ Random Number to generate a random series based on various distributions."), "modules/scalc/ui/randomnumbergenerator/RandomNumberGeneratorDialog", "tipoftheday_c.png"}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/02140700.html
