@@ -464,7 +464,7 @@
                 <property name="use_underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="setup-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="envprinterpage|extended_tip|setup">Opens the Print Setup dialog where you can define additional printer settings, such as paper format and orientation.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="envprinterpage|extended_tip|setup">Opens the Printer Setup dialog where you can define additional printer settings, such as paper format and orientation.</property>
                   </object>
                 </child>
               </object>
