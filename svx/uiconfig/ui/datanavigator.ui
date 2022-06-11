@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkMenu" id="instancesmenu">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkMenuItem" id="instancesadd">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|instancesadd">_Add...</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="instancesadd-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|instancesadd">Opens a dialog where you can add a new instance.</property>
@@ -21,9 +21,9 @@
     <child>
       <object class="GtkMenuItem" id="instancesedit">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|instancesedit">_Edit...</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="instancesedit-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|instancesedit">Opens a dialog where you can modify the current instance.</property>
@@ -34,9 +34,9 @@
     <child>
       <object class="GtkMenuItem" id="instancesremove">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|instancesremove">_Remove...</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="instancesremove-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|instancesremove">Deletes the current instance. You cannot delete the last instance.</property>
@@ -47,15 +47,15 @@
     <child>
       <object class="GtkSeparatorMenuItem" id="menuitem1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
       </object>
     </child>
     <child>
       <object class="GtkCheckMenuItem" id="instancesdetails">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|instancesdetails">_Show Details</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="instancesdetails-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|instancesdetails">Switches the display to show or hide details.</property>
@@ -66,13 +66,13 @@
   </object>
   <object class="GtkMenu" id="modelsmenu">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkMenuItem" id="modelsadd">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|modelsadd">_Add...</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="modelsadd-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|modelsadd">Opens the Add Model dialog where you can add an XForm model.</property>
@@ -83,9 +83,9 @@
     <child>
       <object class="GtkMenuItem" id="modelsedit">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|modelsedit">_Edit...</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="modelsedit-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|modelsedit">Renames the selected Xform model.</property>
@@ -96,9 +96,9 @@
     <child>
       <object class="GtkMenuItem" id="modelsremove">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="datanavigator|modelsremove">_Remove</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="modelsremove-atkobject">
             <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|modelsremove">Deletes the selected XForm model. You cannot delete the last model.</property>
@@ -109,28 +109,28 @@
   </object>
   <object class="GtkBox" id="DataNavigator">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="border_width">0</property>
+        <property name="border-width">0</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=2 n-rows=1 -->
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="column_spacing">12</property>
+            <property name="can-focus">False</property>
+            <property name="column-spacing">12</property>
             <child>
               <object class="GtkComboBoxText" id="modelslist">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="modelslist-atkobject">
@@ -139,21 +139,21 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkMenuButton" id="modelsbutton">
                 <property name="label" translatable="yes" context="datanavigator|modelsbutton">_Models</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="hexpand">True</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="popup">modelsmenu</property>
-                <property name="use_popover">False</property>
+                <property name="use-popover">False</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -164,8 +164,8 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
           </object>
@@ -178,40 +178,16 @@
         <child>
           <object class="GtkNotebook" id="tabcontrol">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="scrollable">True</property>
-            <property name="enable_popup">True</property>
+            <property name="enable-popup">True</property>
             <child>
               <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
+                <property name="can-focus">False</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -220,42 +196,18 @@
             <child type="tab">
               <object class="GtkLabel" id="instance">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="datanavigator|instance">Instance</property>
               </object>
               <packing>
-                <property name="tab_fill">False</property>
+                <property name="tab-fill">False</property>
               </packing>
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
+                <property name="can-focus">False</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -267,43 +219,19 @@
             <child type="tab">
               <object class="GtkLabel" id="submissions">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="datanavigator|submissions">Submissions</property>
               </object>
               <packing>
                 <property name="position">1</property>
-                <property name="tab_fill">False</property>
+                <property name="tab-fill">False</property>
               </packing>
             </child>
             <child>
               <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
+                <property name="can-focus">False</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -315,12 +243,12 @@
             <child type="tab">
               <object class="GtkLabel" id="bindings">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="datanavigator|bindings">Bindings</property>
               </object>
               <packing>
                 <property name="position">2</property>
-                <property name="tab_fill">False</property>
+                <property name="tab-fill">False</property>
               </packing>
             </child>
           </object>
@@ -334,13 +262,13 @@
           <object class="GtkMenuButton" id="instances">
             <property name="label" translatable="yes" context="datanavigator|instances">_Instances</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="halign">end</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
             <property name="popup">instancesmenu</property>
-            <property name="use_popover">False</property>
+            <property name="use-popover">False</property>
             <child>
               <placeholder/>
             </child>
