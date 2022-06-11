@@ -88,7 +88,7 @@
         <property name="use_underline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="modelsedit-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|modelsedit">Renames the selected Xform model.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="datanavigator|extended_tip|modelsedit">Renames the selected XForms model.</property>
           </object>
         </child>
       </object>
