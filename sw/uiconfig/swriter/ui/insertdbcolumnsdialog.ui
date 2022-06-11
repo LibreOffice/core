@@ -556,7 +556,7 @@
                                 </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="tabletxtcols-atkobject">
-                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tabletxtcols">Select the database columns that you want to insert it in the document.</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="insertdbcolumnsdialog|extended_tip|tabletxtcols">Select the database columns that you want to insert in the document.</property>
                                   </object>
                                 </child>
                               </object>
