@@ -51,15 +51,4 @@ $(eval $(call gb_CppunitTest_use_vcl,toolkit_a11y))
 
 $(eval $(call gb_CppunitTest_use_rdb,toolkit_a11y,services))
 
-#~ $(eval $(call gb_CppunitTest_use_components,toolkit_a11y,\
-#~ 	comphelper/util/comphelp \
-#~ 	configmgr/source/configmgr \
-#~ 	framework/util/fwk \
-#~ 	i18npool/util/i18npool \
-#~ 	sfx2/util/sfx \
-#~ 	toolkit/util/tk \
-#~ 	ucb/source/core/ucb1 \
-#~ 	ucb/source/ucp/file/ucpfile1 \
-#~ ))
-
 # vim: set noet sw=4 ts=4:
