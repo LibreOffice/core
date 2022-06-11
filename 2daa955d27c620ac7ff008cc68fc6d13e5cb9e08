@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0354640_f5289b0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-06-11T14:32:11Z",
+      "side": 1,
+      "message": "The 13150x bug number is incorrect in the commit message, should end with 6 not 5.",
+      "revId": "2daa955d27c620ac7ff008cc68fc6d13e5cb9e08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
