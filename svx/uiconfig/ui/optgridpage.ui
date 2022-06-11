@@ -173,7 +173,7 @@
                     <property name="digits">2</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="mtrflddrawy-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrflddrawy">Defines the grid points spacing in the desired unit of measurement on the Y-axis.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|mtrflddrawy">Defines the grid points spacing in the currently selected unit of measurement on the Y-axis.</property>
                       </object>
                     </child>
                   </object>
