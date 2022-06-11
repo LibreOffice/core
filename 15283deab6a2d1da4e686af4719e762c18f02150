@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e457b054_70afb1fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-06-11T07:08:27Z",
+      "side": 1,
+      "message": "verfied in my local build of 7.4.0 beta1 with this patch in i386 chroot",
+      "revId": "15283deab6a2d1da4e686af4719e762c18f02150",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
