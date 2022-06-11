@@ -2779,11 +2779,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149089)
 {
     createSwDoc(DATA_DIRECTORY, "tdf149089.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nTextPortionWidth = getXPath(pXmlDoc, "(//SwLinePortion)[1]", "width").toInt32();
-    sal_Int32 nKernPortionWidth = getXPath(pXmlDoc, "(//SwLinePortion)[2]", "width").toInt32();
-    // nKernPortionWidth was about 1/3 of nTextPortionWidth
-    double nRatio = double(nKernPortionWidth) / nTextPortionWidth;
-    CPPUNIT_ASSERT_LESS(0.05, nRatio);
+    sal_Int32 nPorLen1 = getXPath(pXmlDoc, "(//SwLinePortion)[1]", "length").toInt32();
+    sal_Int32 nPorLen2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]", "length").toInt32();
+    sal_Int32 nPorLen3 = getXPath(pXmlDoc, "(//SwLinePortion)[3]", "length").toInt32();
+    // Two SwTextPortion and one SwKernPortion
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nPorLen1); // SwTextPortion "&#x4E00;&#x4E00; "
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12), nPorLen2); // SwTextPortion "BUG 11111111"
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nPorLen3); // SwKernPortion
+
+    sal_Int32 nPorWidth1 = getXPath(pXmlDoc, "(//SwLinePortion)[1]", "width").toInt32();
+    sal_Int32 nPorWidth2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]", "width").toInt32();
+    sal_Int32 nPorWidth3 = getXPath(pXmlDoc, "(//SwLinePortion)[3]", "width").toInt32();
+    sal_Int32 nGridWidth1 = nPorWidth1 / 3;
+    sal_Int32 nGridWidth2 = (nPorWidth2 + nPorWidth3) / 7;
+    CPPUNIT_ASSERT_EQUAL(nGridWidth1, nGridWidth2);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
