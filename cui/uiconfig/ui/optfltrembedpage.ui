@@ -149,6 +149,9 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="optfltrembedpage|label2" comments="The [L] here is repeated as the column title for the &quot;Load&quot; column of this options page">[L]: Load and convert the object</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.8"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -162,6 +165,9 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="optfltrembedpage|label3" comments="The [S] here is repeated as the column title for the &quot;Save&quot; column of this options page">[S]: Convert and save the object</property>
                     <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="scale" value="0.8"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="expand">False</property>
