@@ -4332,8 +4332,17 @@ static OUString lcl_ParseFormat( const OUString& rCommand )
     if (delimPos != -1)
     {
         // Remove whitespace permitted by standard between \@ and "
-        sal_Int32 wsChars = rCommand.indexOf('\"') - delimPos - 2;
-        command = rCommand.replaceAt(delimPos+2, wsChars, u"");
+        const sal_Int32 nQuoteIndex = rCommand.indexOf('\"');
+        if (nQuoteIndex != -1)
+        {
+            sal_Int32 wsChars = nQuoteIndex - delimPos - 2;
+            command = rCommand.replaceAt(delimPos+2, wsChars, u"");
+        }
+        else
+        {
+            // turn date \@ MM into date \@"MM"
+            command = rCommand.copy(0, delimPos + 2) + "\"" + rCommand.copy(delimPos + 2).trim() + "\"";
+        }
         return OUString(msfilter::util::findQuotedText(command, "\\@\"", '\"'));
     }
 
