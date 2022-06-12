@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c35f5e94_b406b42e",
+        "filename": "sc/source/ui/inc/printfun.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-12T18:03:27Z",
+      "side": 1,
+      "message": "This SCROW must be SCCOL.",
+      "range": {
+        "startLine": 152,
+        "startChar": 4,
+        "endLine": 152,
+        "endChar": 9
+      },
+      "revId": "2e46f1b638adee32b4a2039b50a915142668f2cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
