@@ -110,15 +110,17 @@ static void lcl_setBookmark(uno::Reference<drawing::XShape>& rShape,
                             std::vector<SlidePersistPtr>& rSlidePersist)
 {
     OUString aBookmark;
-    sal_Int32 nPageNumber;
     static const OUStringLiteral sSlideName = u"#page";
     uno::Reference<beans::XPropertySet> xPropSet(rShape, uno::UNO_QUERY);
     xPropSet->getPropertyValue("Bookmark") >>= aBookmark;
-    nPageNumber = o3tl::toInt32(aBookmark.subView(sSlideName.getLength()));
-    Reference<XDrawPage> xDrawPage(rSlidePersist[nPageNumber - 1]->getPage());
-    Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
-    aBookmark = xNamed->getName();
-    xPropSet->setPropertyValue("Bookmark", Any(aBookmark));
+    if (aBookmark.startsWith(sSlideName))
+    {
+        sal_Int32 nPageNumber = o3tl::toInt32(aBookmark.subView(sSlideName.getLength()));
+        Reference<XDrawPage> xDrawPage(rSlidePersist[nPageNumber - 1]->getPage());
+        Reference<container::XNamed> xNamed(xDrawPage, UNO_QUERY_THROW);
+        aBookmark = xNamed->getName();
+        xPropSet->setPropertyValue("Bookmark", Any(aBookmark));
+    }
 }
 
 static void ResolveShapeBookmark(std::vector<SlidePersistPtr>& rSlidePersist)
