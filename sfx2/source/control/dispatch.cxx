@@ -1850,7 +1850,7 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
     else
     {
         OUString aMenuURL = "private:resource/popupmenu/" + rResName;
-        if (GetFrame()->GetViewShell()->TryContextMenuInterception(xPopupMenu, aMenuURL, std::move(aEvent)))
+        if (GetFrame()->GetViewShell()->TryContextMenuInterception(xPopupMenu, aMenuURL, aEvent))
         {
             css::uno::Reference<css::awt::XWindowPeer> xParent(aEvent.SourceWindow, css::uno::UNO_QUERY);
             xPopupMenu->execute(xParent, css::awt::Rectangle(aPos.X(), aPos.Y(), 1, 1), css::awt::PopupMenuDirection::EXECUTE_DOWN);
