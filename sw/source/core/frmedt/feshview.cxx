@@ -1865,8 +1865,8 @@ bool SwFEShell::EndCreate( SdrCreateCmd eSdrCreateCmd )
 
 bool SwFEShell::ImpEndCreate()
 {
-    OSL_ENSURE( Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1,
-            "New object not selected." );
+    if (Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() == 0)
+        return false;
 
     SdrObject& rSdrObj = *Imp()->GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
 
