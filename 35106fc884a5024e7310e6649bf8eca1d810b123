@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69ab0599_c4e94867",
+        "filename": "tools/qa/cppunit/test_zcodec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-12T08:15:42Z",
+      "side": 1,
+      "message": "what is returned exactly?",
+      "revId": "35106fc884a5024e7310e6649bf8eca1d810b123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "001a41a9_d1203be9",
+        "filename": "tools/qa/cppunit/test_zcodec.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-12T08:15:42Z",
+      "side": 1,
+      "message": "what CRC32 value exactly?",
+      "revId": "35106fc884a5024e7310e6649bf8eca1d810b123",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
