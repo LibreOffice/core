@@ -65,6 +65,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestSetArcDirection();
     void TestDrawPolyLine16WithClip();
     void TestFillRegion();
+    void TestEmfPlusBrushPathGradientWithBlendColors();
     void TestExtTextOutOpaqueAndClipTransform();
 
     void TestBitBltStretchBltWMF();
@@ -109,6 +110,7 @@ public:
     CPPUNIT_TEST(TestSetArcDirection);
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
+    CPPUNIT_TEST(TestEmfPlusBrushPathGradientWithBlendColors);
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipTransform);
 
     CPPUNIT_TEST(TestBitBltStretchBltWMF);
@@ -452,6 +454,7 @@ void Test::TestLinearGradient()
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "width", "15232");
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path", "m0 0h15232v7610h-15232z");
 
+    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "spreadmethod", "repeat");
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "startx", "0");
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "starty", "-1");
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]", "endx", "0");
@@ -460,6 +463,8 @@ void Test::TestLinearGradient()
                 "0.392156862745098");
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[1]/polypolygon", "path",
                 "m0 0.216110019646294h7615.75822989746v7610.21611001965h-7615.75822989746z");
+
+    assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "spreadmethod", "repeat");
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "startx", "-1");
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "starty", "-1");
     assertXPath(pDocument, aXPathPrefix + "mask/svglineargradient[2]", "endx", "0");
@@ -888,6 +893,25 @@ void Test::TestPolylinetoCloseStroke()
         "1150,1400 1140,1420 1120,1440 1110,1460 1110,1490 1100,1510 1100,1530 1100,1550 1100,1580 "
         "1110,1600 1120,1620 1130,1650 1140,1670 1160,1690 1170,1710 1190,1730");
     assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color", "#000000");
+}
+
+void Test::TestEmfPlusBrushPathGradientWithBlendColors()
+{
+    // tdf#131506 EMF+ records: FillRects, Brush with PathGradient and BlendColor, FillRects
+    Primitive2DSequence aSequence
+        = parseEmf(u"emfio/qa/cppunit/emf/data/TestEmfPlusBrushPathGradientWithBlendColors.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument
+        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "radius", "0.7");
+    assertXPath(pDocument, aXPathPrefix + "svgradialgradient/focalx", 0);
+    assertXPath(pDocument, aXPathPrefix + "svgradialgradient/focaly", 0);
+    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "startx", "0");
+    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "starty", "0");
+    assertXPath(pDocument, aXPathPrefix + "svgradialgradient", "spreadmethod", "pad");
 }
 
 void Test::TestExtTextOutOpaqueAndClipTransform()

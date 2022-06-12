@@ -458,6 +458,25 @@ void writeMaterialAttribute(::tools::XmlWriter& rWriter,
     rWriter.endElement();
 }
 
+void writeSpreadMethod(::tools::XmlWriter& rWriter,
+                       const drawinglayer::primitive2d::SpreadMethod& rSpreadMethod)
+{
+    switch (rSpreadMethod)
+    {
+        case drawinglayer::primitive2d::SpreadMethod::Pad:
+            rWriter.attribute("spreadmethod", "pad");
+            break;
+        case drawinglayer::primitive2d::SpreadMethod::Reflect:
+            rWriter.attribute("spreadmethod", "reflect");
+            break;
+        case drawinglayer::primitive2d::SpreadMethod::Repeat:
+            rWriter.attribute("spreadmethod", "repeat");
+            break;
+        default:
+            rWriter.attribute("spreadmethod", "unknown");
+    }
+}
+
 } // end anonymous namespace
 
 Primitive2dXmlDump::Primitive2dXmlDump()
@@ -887,13 +906,28 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 const SvgRadialGradientPrimitive2D& rSvgRadialGradientPrimitive2D
                     = dynamic_cast<const SvgRadialGradientPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("svgradialgradient");
-                basegfx::B2DPoint aFocusAttribute = rSvgRadialGradientPrimitive2D.getFocal();
+                if (rSvgRadialGradientPrimitive2D.isFocalSet())
+                {
+                    basegfx::B2DPoint aFocalAttribute = rSvgRadialGradientPrimitive2D.getFocal();
+                    rWriter.attribute("focalx", aFocalAttribute.getX());
+                    rWriter.attribute("focaly", aFocalAttribute.getY());
+                }
 
+                basegfx::B2DPoint aStartPoint = rSvgRadialGradientPrimitive2D.getStart();
+                rWriter.attribute("startx", aStartPoint.getX());
+                rWriter.attribute("starty", aStartPoint.getY());
                 rWriter.attribute("radius",
                                   OString::number(rSvgRadialGradientPrimitive2D.getRadius()));
-                rWriter.attribute("focusx", aFocusAttribute.getX());
-                rWriter.attribute("focusy", aFocusAttribute.getY());
+                writeSpreadMethod(rWriter, rSvgRadialGradientPrimitive2D.getSpreadMethod());
+                rWriter.attributeDouble(
+                    "opacity",
+                    rSvgRadialGradientPrimitive2D.getGradientEntries().front().getOpacity());
 
+                rWriter.startElement("transform");
+                writeMatrix(rWriter, rSvgRadialGradientPrimitive2D.getGradientTransform());
+                rWriter.endElement();
+
+                writePolyPolygon(rWriter, rSvgRadialGradientPrimitive2D.getPolyPolygon());
                 rWriter.endElement();
             }
             break;
@@ -910,7 +944,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.attribute("starty", aStartAttribute.getY());
                 rWriter.attribute("endx", aEndAttribute.getX());
                 rWriter.attribute("endy", aEndAttribute.getY());
-                //rWriter.attribute("spreadmethod", (int)rSvgLinearGradientPrimitive2D.getSpreadMethod());
+                writeSpreadMethod(rWriter, rSvgLinearGradientPrimitive2D.getSpreadMethod());
                 rWriter.attributeDouble(
                     "opacity",
                     rSvgLinearGradientPrimitive2D.getGradientEntries().front().getOpacity());
