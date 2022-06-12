@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82a909a8_c4f902ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-12T11:08:30Z",
+      "side": 1,
+      "message": "Apparently Jenkins doesn\u0027t pick up on 7-4 yet.",
+      "revId": "40b9f1a8148f81d7ea494098b17cc2dc34b038c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
