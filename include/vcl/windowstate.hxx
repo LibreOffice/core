@@ -114,6 +114,35 @@ template <> struct typed_flags<vcl::WindowDataMask> : is_typed_flags<vcl::Window
 };
 }
 
+namespace vcl
+{
+inline std::ostream& operator<<(std::ostream& s, const WindowData& rData)
+{
+    if (rData.mask() & WindowDataMask::Width)
+        s << rData.width() << "x";
+    else
+        s << "?x";
+    if (rData.mask() & WindowDataMask::Height)
+        s << rData.height() << "@(";
+    else
+        s << "?@(";
+    if (rData.mask() & WindowDataMask::X)
+        s << rData.x() << ",";
+    else
+        s << "?,";
+    if (rData.mask() & WindowDataMask::Y)
+        s << rData.y() << ")^";
+    else
+        s << "?)^";
+    if (rData.mask() & WindowDataMask::State)
+        s << "0x" << std::hex << static_cast<unsigned>(rData.state()) << std::dec;
+    else
+        s << "?";
+    return s;
+}
+
+} // namespace vcl
+
 #endif // INCLUDED_VCL_WINDOWSTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
