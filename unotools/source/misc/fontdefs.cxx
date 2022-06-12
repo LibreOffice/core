@@ -226,6 +226,25 @@ OUString StripScriptFromName(const OUString& _aName)
     return aName;
 }
 
+//return true if the character is stripped from the string
+static bool toOnlyLowerAscii(sal_Unicode c, OUStringBuffer &rName, sal_Int32 nIndex, sal_Int32& rLen)
+{
+    // To Lowercase-Ascii
+    if ( (c >= 'A') && (c <= 'Z') )
+    {
+        c += 'a' - 'A';
+        rName[nIndex] = c;
+    }
+    else if( ((c < '0') || (c > '9')) && (c != ';') && (c != '(') && (c != ')') ) // not 0-9, semicolon, or brackets
+    {
+        // Remove white spaces and special characters
+        rName.remove(nIndex, 1);
+        rLen--;
+        return true;
+    }
+    return false;
+}
+
 OUString GetEnglishSearchFontName(std::u16string_view rInName)
 {
     OUStringBuffer rName(rInName);
@@ -270,19 +289,8 @@ OUString GetEnglishSearchFontName(std::u16string_view rInName)
         // not lowercase Ascii
         else if ( (c < 'a') || (c > 'z') )
         {
-            // To Lowercase-Ascii
-            if ( (c >= 'A') && (c <= 'Z') )
-            {
-                c += 'a' - 'A';
-                rName[ i ] = c;
-            }
-            else if( ((c < '0') || (c > '9')) && (c != ';') && (c != '(') && (c != ')') ) // not 0-9, semicolon, or brackets
-            {
-                // Remove white spaces and special characters
-                rName.remove(i,1);
-                nLen--;
-                continue;
-            }
+            if (toOnlyLowerAscii(c, rName, i, nLen))
+               continue;
         }
 
         i++;
