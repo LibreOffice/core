@@ -412,9 +412,13 @@ void Test::testTdf97542_2()
 
     CPPUNIT_ASSERT (pDocument);
 
-    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "focusx", "1");
-    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "focusy", "1");
-    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient[1]", "radius", "3");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient", "startx", "1");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient", "starty", "1");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient/focalx", 0);
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient/focaly", 0);
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient", "radius", "3");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient", "spreadmethod", "pad");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/svgradialgradient", "opacity", "1");
 }
 
 void Test::testTdf97543()
@@ -738,8 +742,12 @@ void Test::testTdf94765()
     CPPUNIT_ASSERT (pDocument);
 
     //Check that both rectangles use the gradient as fill
+    assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[1]", "startx", "1");
+    assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[1]", "starty", "1");
     assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[1]", "endx", "2");
     assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[1]", "endy", "1");
+    assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[2]", "startx", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[2]", "starty", "0");
     assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[2]", "endx", "0");
     assertXPath(pDocument, "/primitive2D/transform/transform/svglineargradient[2]", "endy", "0");
 }
