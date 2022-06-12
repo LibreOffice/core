@@ -6334,9 +6334,7 @@ public:
 
     virtual void set_window_state(const OString& rStr) override
     {
-        vcl::WindowData aData;
-        ImplWindowStateFromStr( aData, rStr );
-
+        const vcl::WindowData aData(rStr);
         const auto nMask = aData.mask();
         const auto nState = aData.state() & vcl::WindowState::SystemMask;
 
