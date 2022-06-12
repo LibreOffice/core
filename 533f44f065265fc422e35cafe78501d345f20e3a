@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4e56850_137ea66f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-06-12T08:37:55Z",
+      "side": 1,
+      "message": "I plan to look into the sidebar issue, but in the meantime this seems to be good enough.",
+      "revId": "533f44f065265fc422e35cafe78501d345f20e3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
