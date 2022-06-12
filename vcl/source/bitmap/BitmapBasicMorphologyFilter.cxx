@@ -342,7 +342,7 @@ Bitmap BitmapBasicMorphologyFilter::filter(Bitmap const& rBitmap) const
     ScanlineFormat nScanlineFormat;
     {
         Bitmap::ScopedReadAccess pReadAccess(bitmapCopy);
-        nScanlineFormat = pReadAccess->GetScanlineFormat();
+        nScanlineFormat = pReadAccess ? pReadAccess->GetScanlineFormat() : ScanlineFormat::NONE;
     }
 
     switch (nScanlineFormat)
