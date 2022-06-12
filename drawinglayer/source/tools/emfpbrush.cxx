@@ -182,6 +182,12 @@ namespace emfplushelper
                     SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tUse brush transformation: " << brush_transformation);
                 }
 
+                // BrushDataPresetColors and BrushDataBlendFactorsH
+                if ((additionalFlags & 0x04) && (additionalFlags & 0x08))
+                {
+                    SAL_WARN("drawinglayer.emf", "EMF+\t Brush must not contain both BrushDataPresetColors and BrushDataBlendFactorsH");
+                    return;
+                }
                 if (additionalFlags & 0x08) // BrushDataBlendFactorsH
                 {
                     s.ReadUInt32(blendPoints);
@@ -249,6 +255,12 @@ namespace emfplushelper
                     EmfPlusHelperData::readXForm(s, brush_transformation);
                     hasTransformation = true;
                     SAL_INFO("drawinglayer.emf", "EMF+\t\t\t\tUse brush transformation: " << brush_transformation);
+                }
+                // BrushDataPresetColors and BrushDataBlendFactorsH
+                if ((additionalFlags & 0x04) && (additionalFlags & 0x08))
+                {
+                    SAL_WARN("drawinglayer.emf", "EMF+\t Brush must not contain both BrushDataPresetColors and BrushDataBlendFactorsH");
+                    return;
                 }
 
                 if (additionalFlags & 0x08) // BrushDataBlendFactorsH
