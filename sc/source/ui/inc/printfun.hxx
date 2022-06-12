@@ -100,22 +100,64 @@ struct PrintPageRangesInput
 {
     bool m_bSkipEmpty;
     bool m_bPrintArea;
-    SCROW m_nStartRow;
-    SCROW m_nEndRow;
-    SCCOL m_nStartCol;
-    SCCOL m_nEndCol;
-    SCTAB m_nPrintTab;
+    ScRange m_aRange;
     Size  m_aDocSize;
 
     PrintPageRangesInput()
         : m_bSkipEmpty(false)
         , m_bPrintArea(false)
-        , m_nStartRow(0)
-        , m_nEndRow(0)
-        , m_nStartCol(0)
-        , m_nEndCol(0)
-        , m_nPrintTab(0)
     {}
+
+    PrintPageRangesInput(bool bSkipEmpty, bool bPrintArea, ScRange const& rRange, Size const& rDocSize)
+        : m_bSkipEmpty(bSkipEmpty)
+        , m_bPrintArea(bPrintArea)
+        , m_aRange(rRange)
+        , m_aDocSize(rDocSize)
+    {}
+
+    bool operator==(PrintPageRangesInput const& rInput) const
+    {
+        return
+            m_bSkipEmpty == rInput.m_bSkipEmpty &&
+            m_bPrintArea == rInput.m_bPrintArea &&
+            m_aRange == rInput.m_aRange &&
+            m_aDocSize   == rInput.m_aDocSize;
+    }
+
+    PrintPageRangesInput& operator=(PrintPageRangesInput const& rInput)
+    {
+        m_bSkipEmpty = rInput.m_bSkipEmpty;
+        m_bPrintArea = rInput.m_bPrintArea;
+        m_aRange = rInput.m_aRange;
+        m_aDocSize = rInput.m_aDocSize;
+
+        return *this;
+    }
+
+    SCROW getStartRow() const
+    {
+        return m_aRange.aStart.Row();
+    }
+
+    SCROW getEndRow() const
+    {
+        return m_aRange.aEnd.Row();
+    }
+
+    SCCOL getStartColumn() const
+    {
+        return m_aRange.aStart.Col();
+    }
+
+    SCCOL getEndColumn() const
+    {
+        return m_aRange.aEnd.Col();
+    }
+
+    SCROW getPrintTab() const
+    {
+        return m_aRange.aStart.Tab();
+    }
 };
 
 class PrintPageRanges
@@ -134,19 +176,12 @@ public:
 
     PrintPageRangesInput m_aInput;
 
-    bool checkIfAlreadyCalculatedAndSet(bool bSkipEmpty, bool bPrintArea,
-                                        SCROW nStartRow, SCROW nEndRow,
-                                        SCCOL nStartCol, SCCOL nEndCol,
-                                        SCTAB nPrintTab, Size const & aDocSize);
-
-    void calculate(ScDocument& rDoc, bool bSkipEmpty, bool bPrintArea,
-                   SCROW nStartRow, SCROW nEndRow, SCCOL nStartCol, SCCOL nEndCol,
-                   SCTAB nPrintTab, Size const & aDocSize);
+    void calculate(ScDocument& rDoc, PrintPageRangesInput const& rInput);
 };
 
-}
+} // end sc namespace
 
-struct ScPrintState                         //  Save Variables from ScPrintFunc
+struct ScPrintState //  Save Variables from ScPrintFunc
 {
     SCTAB   nPrintTab;
     SCCOL   nStartCol;
