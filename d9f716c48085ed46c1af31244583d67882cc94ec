@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be8a10cc_6999a7a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-12T08:25:17Z",
+      "side": 1,
+      "message": "The regression seems due to:\n3aa5aa83039b04f1412185e49cad9e3b694d49ca\ntdf#149141 - Writer - Added default object creation when drag size too low\nPatch in case consistency is required for suggested Draw/Impress change here : https://gerrit.libreoffice.org/c/core/+/134499",
+      "revId": "d9f716c48085ed46c1af31244583d67882cc94ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
