@@ -1718,10 +1718,15 @@ void DocxSdrExport::writeBoxItemLine(const SvxBoxItem& rBox)
     }
 
     sax_fastparser::FSHelperPtr pFS = m_pImpl->getSerializer();
-    double fConverted(editeng::ConvertBorderWidthToWord(pBorderLine->GetBorderLineStyle(),
-                                                        pBorderLine->GetWidth()));
-    OString sWidth(OString::number(TwipsToEMU(fConverted)));
-    pFS->startElementNS(XML_a, XML_ln, XML_w, sWidth);
+    if (pBorderLine->GetWidth() == SvxBorderLineWidth::Hairline)
+        pFS->startElementNS(XML_a, XML_ln);
+    else
+    {
+        double fConverted(editeng::ConvertBorderWidthToWord(pBorderLine->GetBorderLineStyle(),
+                                                            pBorderLine->GetWidth()));
+        OString sWidth(OString::number(TwipsToEMU(fConverted)));
+        pFS->startElementNS(XML_a, XML_ln, XML_w, sWidth);
+    }
 
     pFS->startElementNS(XML_a, XML_solidFill);
     OString sColor(msfilter::util::ConvertColor(pBorderLine->GetColor()));

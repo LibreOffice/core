@@ -647,6 +647,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48557)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextRightDistance"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextUpperDistance"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextLowerDistance"));
+
+    //tdf#140967 frame border was too small. Expected 0 (hairline), actual was 2
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xFrame, "LineWidth"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testI120928, "i120928.docx")
