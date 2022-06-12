@@ -399,8 +399,9 @@ const Size& SystemWindow::GetMaxOutputSizePixel() const
     return mpImplData->maMaxOutSize;
 }
 
-void ImplWindowStateFromStr(vcl::WindowData& rData, std::string_view rStr)
+vcl::WindowData::WindowData(std::string_view rStr)
 {
+    vcl::WindowData& rData = *this;
     vcl::WindowDataMask nValidMask = vcl::WindowDataMask::NONE;
     sal_Int32 nIndex      = 0;
 
@@ -826,10 +827,7 @@ void SystemWindow::SetWindowState(std::string_view rStr)
 {
     if (rStr.empty())
         return;
-
-    vcl::WindowData aData;
-    ImplWindowStateFromStr( aData, rStr );
-    SetWindowState( aData );
+    SetWindowState(vcl::WindowData(rStr));
 }
 
 OString SystemWindow::GetWindowState(vcl::WindowDataMask nMask) const
