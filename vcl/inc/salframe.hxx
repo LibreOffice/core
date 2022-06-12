@@ -78,8 +78,6 @@ enum class SalFrameStyleFlags
     DIALOG              = 0x00000080,
     // the window containing the intro bitmap, aka splashscreen
     INTRO               = 0x00000100,
-    // partial fullscreen: fullscreen on one monitor of a multimonitor display
-    PARTIAL_FULLSCREEN  = 0x00800000,
     // tdf#144624: don't set icon
     NOICON              = 0x01000000,
     // system child window inside another SalFrame
