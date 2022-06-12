@@ -227,20 +227,24 @@ OUString StripScriptFromName(const OUString& _aName)
 }
 
 //return true if the character is stripped from the string
-static bool toOnlyLowerAscii(sal_Unicode c, OUStringBuffer &rName, sal_Int32 nIndex, sal_Int32& rLen)
+static bool toOnlyLowerAsciiOrStrip(sal_Unicode c, OUStringBuffer &rName, sal_Int32 nIndex, sal_Int32& rLen)
 {
-    // To Lowercase-Ascii
-    if ( (c >= 'A') && (c <= 'Z') )
+    // not lowercase Ascii
+    if (c < 'a' || c > 'z')
     {
-        c += 'a' - 'A';
-        rName[nIndex] = c;
-    }
-    else if( ((c < '0') || (c > '9')) && (c != ';') && (c != '(') && (c != ')') ) // not 0-9, semicolon, or brackets
-    {
-        // Remove white spaces and special characters
-        rName.remove(nIndex, 1);
-        rLen--;
-        return true;
+        // To Lowercase-Ascii
+        if ( (c >= 'A') && (c <= 'Z') )
+        {
+            c += 'a' - 'A';
+            rName[nIndex] = c;
+        }
+        else if( ((c < '0') || (c > '9')) && (c != ';') && (c != '(') && (c != ')') ) // not 0-9, semicolon, or brackets
+        {
+            // Remove white spaces and special characters
+            rName.remove(nIndex, 1);
+            rLen--;
+            return true;
+        }
     }
     return false;
 }
@@ -273,12 +277,9 @@ OUString GetEnglishSearchFontName(std::u16string_view rInName)
             if ( (c >= 0xFF00) && (c <= 0xFF5E) )
             {
                 c -= 0xFF00-0x0020;
-                // Upper to Lower
-                if ( (c >= 'A') && (c <= 'Z') )
-                    c += 'a' - 'A';
-
                 rName[ i ] = c;
-
+                if (toOnlyLowerAsciiOrStrip(c, rName, i, nLen))
+                   continue;
             }
             else
             {
@@ -286,12 +287,8 @@ OUString GetEnglishSearchFontName(std::u16string_view rInName)
                 bNeedTranslation = true;
             }
         }
-        // not lowercase Ascii
-        else if ( (c < 'a') || (c > 'z') )
-        {
-            if (toOnlyLowerAscii(c, rName, i, nLen))
-               continue;
-        }
+        else if (toOnlyLowerAsciiOrStrip(c, rName, i, nLen))
+            continue;
 
         i++;
     }
