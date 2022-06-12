@@ -928,6 +928,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
 namespace {
 
 void handleFont(
+    SvXMLExport & rExport,
     std::vector<XMLPropertyState>& rPropStates,
     const SfxPoolItem* p, const rtl::Reference<XMLPropertySetMapper>& xMapper, std::u16string_view rXMLName )
 {
@@ -941,14 +942,23 @@ void handleFont(
     if (nIndexFontName == -1 || nIndexFontName >= nEntryCount)
         return;
 
-    uno::Any aAny;
-    if (!pItem->QueryValue(aAny, MID_FONT_FAMILY_NAME))
-        return;
+    OUString const sFamilyName(pItem->GetFamilyName());
+    OUString const sStyleName(pItem->GetStyleName());
+    auto const nFamily(pItem->GetFamily());
+    auto const nPitch(pItem->GetPitch());
+    auto const eEnc(pItem->GetCharSet());
+    OUString const sName(rExport.GetFontAutoStylePool()->Find(
+                            sFamilyName, sStyleName, nFamily, nPitch, eEnc));
+    if (sName.isEmpty())
+    {
+        assert(false); // fallback to fo:font-family etc. probably not needed
+    }
 
-    rPropStates.emplace_back(nIndexFontName, aAny);
+    rPropStates.emplace_back(nIndexFontName, uno::Any(sName));
 }
 
 const SvxFieldData* toXMLPropertyStates(
+    SvXMLExport & rExport,
     std::vector<XMLPropertyState>& rPropStates, const std::vector<const SfxPoolItem*>& rSecAttrs,
     const rtl::Reference<XMLPropertySetMapper>& xMapper, const ScXMLEditAttributeMap& rAttrMap )
 {
@@ -977,13 +987,13 @@ const SvxFieldData* toXMLPropertyStates(
         switch (p->Which())
         {
             case EE_CHAR_FONTINFO:
-                handleFont(rPropStates, p, xMapper, u"font-name");
+                handleFont(rExport, rPropStates, p, xMapper, u"font-name");
             break;
             case EE_CHAR_FONTINFO_CJK:
-                handleFont(rPropStates, p, xMapper, u"font-name-asian");
+                handleFont(rExport, rPropStates, p, xMapper, u"font-name-asian");
             break;
             case EE_CHAR_FONTINFO_CTL:
-                handleFont(rPropStates, p, xMapper, u"font-name-complex");
+                handleFont(rExport, rPropStates, p, xMapper, u"font-name-complex");
             break;
             case EE_CHAR_WEIGHT:
             case EE_CHAR_WEIGHT_CJK:
@@ -1268,7 +1278,7 @@ void ScXMLExport::ExportCellTextAutoStyles(sal_Int32 nTable)
                 continue;
 
             std::vector<XMLPropertyState> aPropStates;
-            toXMLPropertyStates(aPropStates, rSecAttrs, xMapper, rAttrMap);
+            toXMLPropertyStates(*this, aPropStates, rSecAttrs, xMapper, rAttrMap);
             if (!aPropStates.empty())
                 xStylePool->Add(XmlStyleFamily::TEXT_TEXT, OUString(), std::move(aPropStates));
         }
@@ -3105,7 +3115,7 @@ void flushParagraph(
         OUString aContent(rParaText.copy(rSec.mnStart, rSec.mnEnd - rSec.mnStart));
 
         std::vector<XMLPropertyState> aPropStates;
-        const SvxFieldData* pField = toXMLPropertyStates(aPropStates, rSec.maAttributes, xMapper, rAttrMap);
+        const SvxFieldData* pField = toXMLPropertyStates(rExport, aPropStates, rSec.maAttributes, xMapper, rAttrMap);
         OUString aStyleName = xStylePool->Find(XmlStyleFamily::TEXT_TEXT, OUString(), aPropStates);
         writeContent(rExport, aStyleName, aContent, pField);
     }
