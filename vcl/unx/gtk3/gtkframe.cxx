@@ -2173,7 +2173,6 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
         nY = aNewMonitor.y;
         nWidth = aNewMonitor.width;
         nHeight = aNewMonitor.height;
-        m_nStyle |= SalFrameStyleFlags::PARTIAL_FULLSCREEN;
         bResize = true;
 
         // #i110881# for the benefit of compiz set a max size here
@@ -2188,7 +2187,6 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
         nY = pSize->Top();
         nWidth = pSize->GetWidth();
         nHeight = pSize->GetHeight();
-        m_nStyle &= ~SalFrameStyleFlags::PARTIAL_FULLSCREEN;
         bResize = true;
     }
 
@@ -2262,8 +2260,6 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
             gtk_window_set_resizable(GTK_WINDOW(m_pWindow), true);
         }
 
-        m_nStyle |= SalFrameStyleFlags::PARTIAL_FULLSCREEN;
-
         if (pMenuBarContainerWidget)
             gtk_widget_hide(pMenuBarContainerWidget);
         if (bSpanMonitorsWhenFullscreen)
@@ -2280,8 +2276,6 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
     }
     else if (eType == SetType::UnFullscreen)
     {
-        m_nStyle &= ~SalFrameStyleFlags::PARTIAL_FULLSCREEN;
-
         if (pMenuBarContainerWidget)
             gtk_widget_show(pMenuBarContainerWidget);
         gtk_window_unfullscreen(GTK_WINDOW(m_pWindow));

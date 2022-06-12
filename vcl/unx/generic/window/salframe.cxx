@@ -721,9 +721,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
         }
 #define DECOFLAGS (SalFrameStyleFlags::MOVEABLE | SalFrameStyleFlags::SIZEABLE | SalFrameStyleFlags::CLOSEABLE)
         int nDecoFlags = WMAdaptor::decoration_All;
-        if( (nStyle_ & SalFrameStyleFlags::PARTIAL_FULLSCREEN) ||
-            (nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION)
-            )
+        if (m_bIsPartialFullScreen || (nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION))
             nDecoFlags = 0;
         else if( (nStyle_ & DECOFLAGS ) != DECOFLAGS || (nStyle_ & SalFrameStyleFlags::TOOLWINDOW) )
         {
@@ -757,8 +755,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
             eType = WMWindowType::Utility;
         if( nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION )
             eType = WMWindowType::Toolbar;
-        if(    (nStyle_ & SalFrameStyleFlags::PARTIAL_FULLSCREEN)
-            && GetDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+        if (m_bIsPartialFullScreen && GetDisplay()->getWMAdaptor()->isLegacyPartialFullscreen())
             eType = WMWindowType::Dock;
 
         GetDisplay()->getWMAdaptor()->
@@ -767,11 +764,10 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                                        nDecoFlags,
                                        hPresentationWindow ? nullptr : mpParent );
 
-        if( (nStyle_ & (SalFrameStyleFlags::DEFAULT |
+        if (!m_bIsPartialFullScreen && (nStyle_ & (SalFrameStyleFlags::DEFAULT |
                         SalFrameStyleFlags::OWNERDRAWDECORATION|
                         SalFrameStyleFlags::FLOAT |
-                        SalFrameStyleFlags::INTRO |
-                        SalFrameStyleFlags::PARTIAL_FULLSCREEN) )
+                        SalFrameStyleFlags::INTRO))
              == SalFrameStyleFlags::DEFAULT )
             pDisplay_->getWMAdaptor()->maximizeFrame( this );
 
@@ -844,6 +840,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     mbMaximizedVert             = false;
     mbMaximizedHorz             = false;
     mbFullScreen                = false;
+    m_bIsPartialFullScreen = false;
 
     mnIconID                    = SV_ICON_ID_OFFICE;
 
@@ -1154,7 +1151,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
     // even though transient frames should be kept above their parent
     // this does not necessarily hold true for DOCK type windows
     // so artificially set ABOVE and remove it again on hide
-    if( mpParent && (mpParent->nStyle_ & SalFrameStyleFlags::PARTIAL_FULLSCREEN ) && pDisplay_->getWMAdaptor()->isLegacyPartialFullscreen())
+    if( mpParent && mpParent->m_bIsPartialFullScreen && pDisplay_->getWMAdaptor()->isLegacyPartialFullscreen())
         pDisplay_->getWMAdaptor()->enableAlwaysOnTop( this, bVisible );
 
     bMapped_   = bVisible;
@@ -2077,7 +2074,7 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
                 aRect = tools::Rectangle( Point(0,0), GetDisplay()->GetScreenSize( m_nXScreen ) );
             else
                 aRect = GetDisplay()->GetXineramaScreens()[nScreen];
-            nStyle_ |= SalFrameStyleFlags::PARTIAL_FULLSCREEN;
+            m_bIsPartialFullScreen = true;
             bool bVisible = bMapped_;
             if( bVisible )
                 Show( false );
@@ -2096,7 +2093,7 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
         else
         {
             mbFullScreen = false;
-            nStyle_ &= ~SalFrameStyleFlags::PARTIAL_FULLSCREEN;
+            m_bIsPartialFullScreen = false;
             bool bVisible = bMapped_;
             tools::Rectangle aRect = maRestorePosSize;
             maRestorePosSize = tools::Rectangle();

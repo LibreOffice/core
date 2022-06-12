@@ -114,6 +114,7 @@ class X11SalFrame final : public SalFrame
     bool            mbMaximizedVert;
     bool            mbMaximizedHorz;
     bool            mbFullScreen;
+    bool m_bIsPartialFullScreen;
 
     // icon id
     int             mnIconID;
@@ -167,6 +168,8 @@ public:
     bool            Dispatch( XEvent *pEvent );
     void            Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nScreen,
                           SystemParentData const * pParentData, bool bUseGeometry = false );
+
+    bool IsPartialFullScreen() const { return m_bIsPartialFullScreen; }
 
     SalDisplay* GetDisplay() const
     {
