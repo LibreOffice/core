@@ -98,7 +98,7 @@ public:
 
 inline std::ostream& operator<<(std::ostream& s, const SalFrameGeometry& rGeom)
 {
-    s << static_cast<const vcl::WindowPosSize*>(&rGeom) << ":{" << rGeom.leftDecoration() << ","
+    s << *static_cast<const vcl::WindowPosSize*>(&rGeom) << ":{" << rGeom.leftDecoration() << ","
       << rGeom.topDecoration() << "," << rGeom.rightDecoration() << "," << rGeom.bottomDecoration()
       << "}s" << rGeom.screen();
     return s;

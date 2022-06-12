@@ -124,9 +124,10 @@ public:
     void setPosSize(const Point& rPos, const Size& rSize) { setPosSize({ rPos, rSize }); }
 };
 
-inline std::ostream& operator<<(std::ostream& s, const WindowPosSize& rGeom)
+inline std::ostream& operator<<(std::ostream& s, const WindowPosSize& rPosSize)
 {
-    s << rGeom.width() << "x" << rGeom.height() << "@(" << rGeom.x() << "," << rGeom.y() << ")";
+    s << rPosSize.width() << "x" << rPosSize.height() << "@(" << rPosSize.x() << "," << rPosSize.y()
+      << ")";
     return s;
 }
 
