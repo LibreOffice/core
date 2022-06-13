@@ -1696,7 +1696,15 @@ bool PowerPointShapeExport::WritePlaceholder(const Reference< XShape >& xShape, 
 
 ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShape >& xShape, PlaceholderType ePlaceholder)
 {
-    mpFS->startElementNS(XML_p, XML_sp);
+    Reference<XPropertySet> xProps(xShape, UNO_QUERY);
+    bool bUseBackground(false);
+    if (xProps.is() && xProps->getPropertySetInfo()->hasPropertyByName("FillBackground"))
+        xProps->getPropertyValue("FillBackground") >>= bUseBackground;
+
+    if (bUseBackground)
+        mpFS->startElementNS(XML_p, XML_sp, XML_useBgFill, "1");
+    else
+        mpFS->startElementNS(XML_p, XML_sp);
 
     // non visual shape properties
     mpFS->startElementNS(XML_p, XML_nvSpPr);
@@ -1734,7 +1742,6 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     mpFS->startElementNS(XML_p, XML_spPr);
     WriteShapeTransformation(xShape, XML_a);
     WritePresetShape("rect");
-    Reference< XPropertySet > xProps(xShape, UNO_QUERY);
     if (xProps.is())
     {
         WriteBlipFill(xProps, "Graphic");

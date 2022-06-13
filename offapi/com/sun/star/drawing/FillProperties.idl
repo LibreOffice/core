@@ -86,8 +86,12 @@ published service FillProperties
     */
     [optional, property] Hatch FillHatch;
 
-    /** if this is `TRUE`, the transparent background of a
-        hatch filled area is drawn in the current background color.
+    /** If this is `TRUE`,
+        <ul>
+          <li>for FillStyle::HATCH: The transparent background of a hatch filled area
+              is drawn in the current background color.</li>
+          <li>for FillStyle::NONE: The area displays the page/slide background (@since LibreOffice 8.0).</li>
+        </ul>
     */
     [property] boolean FillBackground;
 
