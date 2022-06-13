@@ -94,6 +94,41 @@ inline constexpr OUStringLiteral ODM_16_8 = u"res/odm_16_8.png";
 inline constexpr OUStringLiteral ODB_16_8 = u"res/odb_16_8.png";
 inline constexpr OUStringLiteral ODF_16_8 = u"res/odf_16_8.png";
 
+//start, Throbber::getDefaultImageURLs constructs these dynamically (not unused)
+#define SPINNER_16_01                                "vcl/res/spinner-16-01.png"
+#define SPINNER_16_02                                "vcl/res/spinner-16-02.png"
+#define SPINNER_16_03                                "vcl/res/spinner-16-03.png"
+#define SPINNER_16_04                                "vcl/res/spinner-16-04.png"
+#define SPINNER_16_05                                "vcl/res/spinner-16-05.png"
+#define SPINNER_16_06                                "vcl/res/spinner-16-06.png"
+
+#define SPINNER_32_01                                "vcl/res/spinner-32-01.png"
+#define SPINNER_32_02                                "vcl/res/spinner-32-02.png"
+#define SPINNER_32_03                                "vcl/res/spinner-32-03.png"
+#define SPINNER_32_04                                "vcl/res/spinner-32-04.png"
+#define SPINNER_32_05                                "vcl/res/spinner-32-05.png"
+#define SPINNER_32_06                                "vcl/res/spinner-32-06.png"
+#define SPINNER_32_07                                "vcl/res/spinner-32-07.png"
+#define SPINNER_32_08                                "vcl/res/spinner-32-08.png"
+#define SPINNER_32_09                                "vcl/res/spinner-32-09.png"
+#define SPINNER_32_10                                "vcl/res/spinner-32-10.png"
+#define SPINNER_32_11                                "vcl/res/spinner-32-11.png"
+#define SPINNER_32_12                                "vcl/res/spinner-32-12.png"
+
+#define SPINNER_64_01                                "vcl/res/spinner-64-01.png"
+#define SPINNER_64_02                                "vcl/res/spinner-64-02.png"
+#define SPINNER_64_03                                "vcl/res/spinner-64-03.png"
+#define SPINNER_64_04                                "vcl/res/spinner-64-04.png"
+#define SPINNER_64_05                                "vcl/res/spinner-64-05.png"
+#define SPINNER_64_06                                "vcl/res/spinner-64-06.png"
+#define SPINNER_64_07                                "vcl/res/spinner-64-07.png"
+#define SPINNER_64_08                                "vcl/res/spinner-64-08.png"
+#define SPINNER_64_09                                "vcl/res/spinner-64-09.png"
+#define SPINNER_64_10                                "vcl/res/spinner-64-10.png"
+#define SPINNER_64_11                                "vcl/res/spinner-64-11.png"
+#define SPINNER_64_12                                "vcl/res/spinner-64-12.png"
+//end, Throbber::getDefaultImageURLs
+
 inline constexpr OUStringLiteral IMG_WARN = u"dbaccess/res/exwarning.png";
 inline constexpr OUStringLiteral IMG_ERROR = u"dbaccess/res/exerror.png";
 inline constexpr OUStringLiteral IMG_INFO = u"dbaccess/res/exinfo.png";
