@@ -293,7 +293,7 @@ void SlideBackgroundFillPrimitive2D::create2DDecomposition(
             // create MaskPrimitive2D to limit display to PolygonGeometry
             const Primitive2DReference aMasked(
                 new MaskPrimitive2D(
-                    aPolyPolygon,
+                    std::move(aPolyPolygon),
                     std::move(rContainer)));
 
             rContainer = Primitive2DContainer { aMasked };
