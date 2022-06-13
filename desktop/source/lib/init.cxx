@@ -5833,7 +5833,9 @@ static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKW
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nWidth, nHeight), Fraction(1.0), Point(), pBuffer);
+    const Size aTargetSize(nWidth / fDPIScale, nHeight / fDPIScale);
+    const Fraction fScale(fDPIScale);
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(aTargetSize, fScale, Point(), pBuffer);
 
     MapMode aMapMode(pDevice->GetMapMode());
     aMapMode.SetOrigin(Point(-(nX / fDPIScale), -(nY / fDPIScale)));
