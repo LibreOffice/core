@@ -2374,17 +2374,29 @@ ScVbaRange::Activate()
 
 }
 
+ScRange ScVbaRange::obtainRangeEvenIfRangeListIsEmpty( const ScCellRangesBase* pUnoRangesBase ) const
+{
+    // XXX It may be that using the current range list was never correct, but
+    // always the initial sheet range would be instead, history is unclear.
+
+    const ScRangeList& rCellRanges = pUnoRangesBase->GetRangeList();
+    if (!rCellRanges.empty())
+        return rCellRanges.front();
+
+    table::CellRangeAddress aRA( lclGetRangeAddress( mxRange ));
+    return ScRange( aRA.StartColumn, aRA.StartRow, aRA.Sheet, aRA.EndColumn, aRA.EndRow, aRA.Sheet);
+}
+
 uno::Reference< excel::XRange >
 ScVbaRange::Rows(const uno::Any& aIndex )
 {
     if ( aIndex.hasValue() )
     {
-        sal_Int32 nValue = 0;
         ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
-        ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-        OUString sAddress;
+        ScRange aRange( obtainRangeEvenIfRangeListIsEmpty( pUnoRangesBase));
 
-        ScRange aRange = aCellRanges.front();
+        sal_Int32 nValue = 0;
+        OUString sAddress;
         if( aIndex >>= nValue )
         {
             aRange.aStart.SetRow( aRange.aStart.Row() + --nValue );
@@ -2420,9 +2432,8 @@ uno::Reference< excel::XRange >
 ScVbaRange::Columns(const uno::Any& aIndex )
 {
     ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
-    ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
+    ScRange aRange( obtainRangeEvenIfRangeListIsEmpty( pUnoRangesBase));
 
-    ScRange aRange = aCellRanges.front();
     if ( aIndex.hasValue() )
     {
         OUString sAddress;
