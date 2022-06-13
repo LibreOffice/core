@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2baa7264_2ffddda3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-06-13T12:11:24Z",
+      "side": 1,
+      "message": "How will you bring this to ODF? Currently \"FillBackground\" is written as attribute \"draw:fill-hatch-solid\".",
+      "revId": "686115ab070cbd1dd6ae7b08f9c9a394a6258311",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
