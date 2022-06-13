@@ -12,6 +12,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
 #include <connectivity/sdbcx/VCollection.hxx>
+#include <utility>
 
 namespace connectivity::mysqlc
 {
@@ -38,11 +39,11 @@ protected:
     virtual void dropObject(sal_Int32 nPosition, const OUString& rName) override;
 
 public:
-    Tables(const css::uno::Reference<css::sdbc::XDatabaseMetaData>& rMetaData,
+    Tables(css::uno::Reference<css::sdbc::XDatabaseMetaData> xMetaData,
            ::cppu::OWeakObject& rParent, ::osl::Mutex& rMutex,
            ::std::vector<OUString> const& rNames)
         : sdbcx::OCollection(rParent, true, rMutex, rNames)
-        , m_xMetaData(rMetaData)
+        , m_xMetaData(std::move(xMetaData))
     {
     }
 

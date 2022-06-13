@@ -44,6 +44,7 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
+#include <utility>
 
 
 using osl::MutexGuard;
@@ -79,14 +80,14 @@ ResultSet::ResultSet( const ::rtl::Reference< comphelper::RefCountedMutex > & re
                       const Reference< XInterface > & owner,
                       ConnectionSettings **ppSettings,
                       PGresult * result,
-                      const OUString &schema,
-                      const OUString &table)
+                      OUString schema,
+                      OUString table)
     : BaseResultSet(
         refMutex, owner, PQntuples( result ),
         PQnfields( result ),(*ppSettings)->tc ),
       m_result( result ),
-      m_schema( schema ),
-      m_table( table ),
+      m_schema(std::move( schema )),
+      m_table(std::move( table )),
       m_ppSettings( ppSettings )
 {
     // LEM TODO: shouldn't these things be inherited from the statement or something like that?

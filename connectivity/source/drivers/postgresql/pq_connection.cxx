@@ -34,6 +34,7 @@
  *
  ************************************************************************/
 
+#include <utility>
 #include <vector>
 #include <string.h>
 
@@ -96,8 +97,8 @@ class ClosableReference : public cppu::WeakImplHelper< css::uno::XReference >
     rtl::Reference<Connection> m_conn;
     ::rtl::ByteSequence m_id;
 public:
-    ClosableReference( const ::rtl::ByteSequence & id , Connection *that )
-      :  m_conn( that ), m_id( id )
+    ClosableReference( ::rtl::ByteSequence id , Connection *that )
+      :  m_conn( that ), m_id(std::move( id ))
     {
     }
 
@@ -115,9 +116,9 @@ public:
 
 Connection::Connection(
     const rtl::Reference< comphelper::RefCountedMutex > &refMutex,
-    const css::uno::Reference< css::uno::XComponentContext > & ctx )
+    css::uno::Reference< css::uno::XComponentContext > ctx )
     : ConnectionBase( refMutex->GetMutex() ),
-      m_ctx( ctx ) ,
+      m_ctx(std::move( ctx )) ,
       m_xMutex( refMutex )
 {
 }

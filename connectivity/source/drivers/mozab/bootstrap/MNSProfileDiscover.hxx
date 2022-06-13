@@ -37,7 +37,7 @@ namespace connectivity::mozab
         {
         public:
             ProfileStruct();
-            ProfileStruct(const OUString& aProfileName, const OUString &aProfilePath);
+            ProfileStruct(OUString aProfileName, OUString aProfilePath);
             const OUString& getProfileName() const { return profileName;}
             const OUString& getProfilePath() const;
         private:

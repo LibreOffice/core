@@ -19,6 +19,7 @@
 #pragma once
 
 #include <file/fcode.hxx>
+#include <utility>
 
 namespace connectivity
 {
@@ -86,7 +87,7 @@ namespace connectivity
             ::rtl::Reference<OPredicateCompiler> m_rCompiler;
 
         public:
-            OPredicateInterpreter(const ::rtl::Reference<OPredicateCompiler>& rComp) : m_rCompiler(rComp){}
+            OPredicateInterpreter(::rtl::Reference<OPredicateCompiler> xComp) : m_rCompiler(std::move(xComp)){}
             virtual ~OPredicateInterpreter() override;
 
             bool        evaluate(OCodeList& rCodeList);

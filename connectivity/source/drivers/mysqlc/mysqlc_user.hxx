@@ -25,11 +25,11 @@ public:
     /**
     * Create a "new" descriptor, which isn't yet in the database.
     */
-    User(const css::uno::Reference<css::sdbc::XConnection>& rConnection);
+    User(css::uno::Reference<css::sdbc::XConnection> xConnection);
     /**
     * For a user that already exists in the db.
     */
-    User(const css::uno::Reference<css::sdbc::XConnection>& rConnection, const OUString& rName);
+    User(css::uno::Reference<css::sdbc::XConnection> xConnection, const OUString& rName);
 
     // XAuthorizable
     virtual void SAL_CALL changePassword(const OUString&, const OUString& newPassword) override;

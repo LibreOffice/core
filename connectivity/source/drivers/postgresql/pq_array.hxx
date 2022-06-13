@@ -39,6 +39,7 @@
 #include <com/sun/star/sdbc/XArray.hpp>
 
 #include "pq_connection.hxx"
+#include <utility>
 #include <vector>
 
 namespace pq_sdbc_driver
@@ -53,14 +54,14 @@ class Array : public cppu::WeakImplHelper< css::sdbc::XArray >
 
 public:
     Array(
-        const rtl::Reference< comphelper::RefCountedMutex > & mutex,
+        rtl::Reference< comphelper::RefCountedMutex > mutex,
         std::vector< css::uno::Any > && data,
-        const css::uno::Reference< css::uno::XInterface > & owner,
-        const css::uno::Reference< css::script::XTypeConverter > &tc) :
+        css::uno::Reference< css::uno::XInterface > owner,
+        css::uno::Reference< css::script::XTypeConverter > tc) :
         m_data( std::move(data) ),
-        m_owner( owner ),
-        m_tc( tc ),
-        m_xMutex( mutex )
+        m_owner(std::move( owner )),
+        m_tc(std::move( tc )),
+        m_xMutex(std::move( mutex ))
     {}
 
 public: // XArray

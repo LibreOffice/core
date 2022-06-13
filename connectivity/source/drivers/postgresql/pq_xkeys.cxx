@@ -50,6 +50,7 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/safeint.hxx>
+#include <utility>
 
 #include "pq_xkeys.hxx"
 #include "pq_xkey.hxx"
@@ -79,11 +80,11 @@ Keys::Keys(
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const OUString &schemaName,
-        const OUString &tableName)
+        OUString schemaName,
+        OUString tableName)
     : Container( refMutex, origin, pSettings,  getStatics().KEY ),
-      m_schemaName( schemaName ),
-      m_tableName( tableName )
+      m_schemaName(std::move( schemaName )),
+      m_tableName(std::move( tableName ))
 {}
 
 Keys::~Keys()

@@ -20,6 +20,7 @@
 #define INCLUDED_CONNECTIVITY_PARAMETERS_HXX
 
 #include <map>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
@@ -87,9 +88,9 @@ namespace dbtools
             ::std::vector< sal_Int32 >  aInnerIndexes;
 
             /// ctor with composer column
-            ParameterMetaData( const css::uno::Reference< css::beans::XPropertySet >& _rxColumn )
+            ParameterMetaData( css::uno::Reference< css::beans::XPropertySet > _xColumn )
                 :eType           ( ParameterClassification::FilledExternally )
-                ,xComposerColumn ( _rxColumn         )
+                ,xComposerColumn (std::move( _xColumn         ))
             {
             }
         };

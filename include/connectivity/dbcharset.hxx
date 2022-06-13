@@ -105,7 +105,7 @@ namespace dbtools
         const OUString&     getIanaName() const { return m_aIanaName; }
 
     protected:
-        CharsetIteratorDerefHelper( const rtl_TextEncoding _eEncoding, const OUString& _rIanaName );
+        CharsetIteratorDerefHelper( const rtl_TextEncoding _eEncoding, OUString _sIanaName );
 
     };
 
@@ -137,7 +137,7 @@ namespace dbtools
         const CharsetIterator&  operator--();
 
     protected:
-        CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator const & _aPos );
+        CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator _aPos );
     };
 
 

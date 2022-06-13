@@ -46,7 +46,7 @@ namespace connectivity::file
             virtual ~OResultSetMetaData() override;
         public:
             // a Constructor, that is needed for when Returning the Object is needed:
-            OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,const OUString& _aTableName,OFileTable* _pTable);
+            OResultSetMetaData(::rtl::Reference<connectivity::OSQLColumns> _xColumns, OUString  _aTableName, OFileTable* _pTable);
 
             virtual sal_Int32 SAL_CALL getColumnCount(  ) override;
             virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) override;

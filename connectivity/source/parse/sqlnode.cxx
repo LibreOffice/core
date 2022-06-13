@@ -59,6 +59,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;
@@ -191,7 +192,7 @@ namespace connectivity
 
 SQLParseNodeParameter::SQLParseNodeParameter( const Reference< XConnection >& _rxConnection,
         const Reference< XNumberFormatter >& _xFormatter, const Reference< XPropertySet >& _xField,
-        const OUString &_sPredicateTableAlias,
+        OUString _sPredicateTableAlias,
         const Locale& _rLocale, const IParseContext* _pContext,
         bool _bIntl, bool _bQuote, OUString _sDecSep, bool _bPredicate, bool _bParseToSDBC )
     :rLocale(_rLocale)
@@ -200,9 +201,9 @@ SQLParseNodeParameter::SQLParseNodeParameter( const Reference< XConnection >& _r
     ,pSubQueryHistory( std::make_shared<QueryNameSet>() )
     ,xFormatter(_xFormatter)
     ,xField(_xField)
-    ,sPredicateTableAlias(_sPredicateTableAlias)
+    ,sPredicateTableAlias(std::move(_sPredicateTableAlias))
     ,m_rContext( _pContext ? *_pContext : OSQLParser::s_aDefaultContext )
-    ,sDecSep(_sDecSep)
+    ,sDecSep(std::move(_sDecSep))
     ,bQuote(_bQuote)
     ,bInternational(_bIntl)
     ,bPredicate(_bPredicate)
@@ -1316,12 +1317,12 @@ std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage
 }
 
 
-OSQLParser::OSQLParser(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const IParseContext* _pContext)
+OSQLParser::OSQLParser(css::uno::Reference< css::uno::XComponentContext > xContext, const IParseContext* _pContext)
     :m_pContext(_pContext)
     ,m_pData( new OSQLParser_Data )
     ,m_nFormatKey(0)
     ,m_nDateFormatKey(0)
-    ,m_xContext(rxContext)
+    ,m_xContext(std::move(xContext))
 {
 
 
@@ -1611,11 +1612,11 @@ OSQLParseNode::OSQLParseNode(std::string_view _rNewValue,
     OSL_ENSURE(m_eNodeType >= SQLNodeType::Rule && m_eNodeType <= SQLNodeType::Concat,"OSQLParseNode: created with invalid NodeType");
 }
 
-OSQLParseNode::OSQLParseNode(const OUString &_rNewValue,
+OSQLParseNode::OSQLParseNode(OUString _aNewValue,
                                  SQLNodeType eNewNodeType,
                                  sal_uInt32 nNewNodeID)
         :m_pParent(nullptr)
-        ,m_aNodeValue(_rNewValue)
+        ,m_aNodeValue(std::move(_aNewValue))
         ,m_eNodeType(eNewNodeType)
         ,m_nNodeID(nNewNodeID)
 {

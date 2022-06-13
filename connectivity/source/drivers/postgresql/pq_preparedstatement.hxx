@@ -98,7 +98,7 @@ public:
     PreparedStatement( const rtl::Reference< comphelper::RefCountedMutex > & refMutex,
                        const css::uno::Reference< css::sdbc::XConnection> & con,
                        struct ConnectionSettings *pSettings,
-                       const OString &stmt );
+                       OString stmt );
 
      virtual ~PreparedStatement() override;
 public: // XInterface

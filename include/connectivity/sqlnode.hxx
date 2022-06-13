@@ -87,7 +87,7 @@ namespace connectivity
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const css::uno::Reference< css::util::XNumberFormatter >& _xFormatter,
             const css::uno::Reference< css::beans::XPropertySet >& _xField,
-            const OUString &_sPredicateTableAlias,
+            OUString _sPredicateTableAlias,
             const css::lang::Locale& _rLocale,
             const IParseContext* _pContext,
             bool _bIntl,
@@ -235,7 +235,7 @@ namespace connectivity
                       SQLNodeType eNewNodeType,
                       sal_uInt32 nNewNodeID=0);
 
-        OSQLParseNode(const OUString& _rValue,
+        OSQLParseNode(OUString _sValue,
                       SQLNodeType _eNodeType,
                       sal_uInt32 _nNodeID = 0);
 

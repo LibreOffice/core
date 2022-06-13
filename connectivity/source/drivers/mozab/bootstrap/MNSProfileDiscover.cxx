@@ -18,6 +18,8 @@
  */
 
 
+#include <utility>
+
 #include "MNSProfileDiscover.hxx"
 #include "MNSFolders.hxx"
 #include "MNSINIParser.hxx"
@@ -28,10 +30,10 @@ namespace connectivity::mozab
         {
         }
 
-        ProfileStruct::ProfileStruct(const OUString& aProfileName,
-                                     const OUString& aProfilePath)
-            : profileName(aProfileName)
-            , profilePath(aProfilePath)
+        ProfileStruct::ProfileStruct(OUString aProfileName,
+                                     OUString aProfilePath)
+            : profileName(std::move(aProfileName))
+            , profilePath(std::move(aProfilePath))
         {
         }
 

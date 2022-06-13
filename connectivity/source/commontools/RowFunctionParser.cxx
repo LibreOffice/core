@@ -38,6 +38,7 @@
 #endif
 #include <algorithm>
 #include <stack>
+#include <utility>
 
 namespace connectivity
 {
@@ -56,8 +57,8 @@ class ConstantValueExpression : public ExpressionNode
 
 public:
 
-    explicit ConstantValueExpression( ORowSetValueDecoratorRef const & rValue ) :
-        maValue( rValue )
+    explicit ConstantValueExpression( ORowSetValueDecoratorRef aValue ) :
+        maValue(std::move( aValue ))
     {
     }
     virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const override
@@ -81,10 +82,10 @@ class BinaryFunctionExpression : public ExpressionNode
 
 public:
 
-    BinaryFunctionExpression( const ExpressionFunct eFunct, const std::shared_ptr<ExpressionNode>& rFirstArg, const std::shared_ptr<ExpressionNode>& rSecondArg ) :
+    BinaryFunctionExpression( const ExpressionFunct eFunct, std::shared_ptr<ExpressionNode> xFirstArg, std::shared_ptr<ExpressionNode> xSecondArg ) :
         meFunct( eFunct ),
-        mpFirstArg( rFirstArg ),
-        mpSecondArg( rSecondArg )
+        mpFirstArg(std::move( xFirstArg )),
+        mpSecondArg(std::move( xSecondArg ))
     {
     }
     virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const override
@@ -93,13 +94,13 @@ public:
         switch(meFunct)
         {
             case ExpressionFunct::Equation:
-                aRet = new ORowSetValueDecorator( mpFirstArg->evaluate(_aRow )->getValue() == mpSecondArg->evaluate(_aRow )->getValue() );
+                aRet = new ORowSetValueDecorator( ORowSetValue(mpFirstArg->evaluate(_aRow )->getValue() == mpSecondArg->evaluate(_aRow )->getValue()) );
                 break;
             case ExpressionFunct::And:
-                aRet = new ORowSetValueDecorator( mpFirstArg->evaluate(_aRow )->getValue().getBool() && mpSecondArg->evaluate(_aRow )->getValue().getBool() );
+                aRet = new ORowSetValueDecorator( ORowSetValue(mpFirstArg->evaluate(_aRow )->getValue().getBool() && mpSecondArg->evaluate(_aRow )->getValue().getBool()) );
                 break;
             case ExpressionFunct::Or:
-                aRet = new ORowSetValueDecorator( mpFirstArg->evaluate(_aRow )->getValue().getBool() || mpSecondArg->evaluate(_aRow )->getValue().getBool() );
+                aRet = new ORowSetValueDecorator( ORowSetValue(mpFirstArg->evaluate(_aRow )->getValue().getBool() || mpSecondArg->evaluate(_aRow )->getValue().getBool()) );
                 break;
             default:
                 break;
@@ -148,8 +149,8 @@ class ConstantFunctor
 
 public:
 
-    explicit ConstantFunctor( const ParserContextSharedPtr& rContext ) :
-        mpContext( rContext )
+    explicit ConstantFunctor( ParserContextSharedPtr xContext ) :
+        mpContext(std::move( xContext ))
     {
     }
     void operator()( StringIteratorT rFirst,StringIteratorT rSecond) const
@@ -166,8 +167,8 @@ class IntConstantFunctor
     ParserContextSharedPtr  mpContext;
 
 public:
-    explicit IntConstantFunctor( const ParserContextSharedPtr& rContext ) :
-        mpContext( rContext )
+    explicit IntConstantFunctor( ParserContextSharedPtr xContext ) :
+        mpContext(std::move( xContext ))
     {
     }
     void operator()( sal_Int32 n ) const
@@ -190,9 +191,9 @@ class BinaryFunctionFunctor
 
 public:
 
-    BinaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
+    BinaryFunctionFunctor( const ExpressionFunct eFunct, ParserContextSharedPtr xContext ) :
         meFunct( eFunct ),
-        mpContext( rContext )
+        mpContext(std::move( xContext ))
     {
     }
 
@@ -223,8 +224,8 @@ class UnaryFunctionExpression : public ExpressionNode
     std::shared_ptr<ExpressionNode> mpArg;
 
 public:
-    explicit UnaryFunctionExpression( const std::shared_ptr<ExpressionNode>& rArg ) :
-        mpArg( rArg )
+    explicit UnaryFunctionExpression( std::shared_ptr<ExpressionNode> xArg ) :
+        mpArg(std::move( xArg ))
     {
     }
     virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const override
@@ -242,8 +243,8 @@ class UnaryFunctionFunctor
 
 public:
 
-    explicit UnaryFunctionFunctor(const ParserContextSharedPtr& rContext)
-        : mpContext(rContext)
+    explicit UnaryFunctionFunctor(ParserContextSharedPtr xContext)
+        : mpContext(std::move(xContext))
     {
     }
     void operator()( StringIteratorT, StringIteratorT ) const
@@ -290,8 +291,8 @@ public:
         @param rParserContext
         Contains context info for the parser
         */
-    explicit ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
-        mpParserContext( rParserContext )
+    explicit ExpressionGrammar( ParserContextSharedPtr xParserContext ) :
+        mpParserContext(std::move( xParserContext ))
     {
     }
 

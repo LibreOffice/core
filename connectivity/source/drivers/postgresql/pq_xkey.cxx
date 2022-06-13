@@ -37,6 +37,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <rtl/ref.hxx>
+#include <utility>
 
 #include "pq_xkey.hxx"
 #include "pq_xkeycolumns.hxx"
@@ -57,8 +58,8 @@ namespace pq_sdbc_driver
 Key::Key( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
           const Reference< css::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings,
-          const OUString & schemaName,
-          const OUString & tableName )
+          OUString schemaName,
+          OUString tableName )
     : ReflectionBase(
         getStatics().refl.key.implName,
         getStatics().refl.key.serviceNames,
@@ -66,8 +67,8 @@ Key::Key( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         connection,
         pSettings,
         * getStatics().refl.key.pProps ),
-      m_schemaName( schemaName ),
-      m_tableName( tableName )
+      m_schemaName(std::move( schemaName )),
+      m_tableName(std::move( tableName ))
 {}
 
 Reference< XPropertySet > Key::createDataDescriptor(  )

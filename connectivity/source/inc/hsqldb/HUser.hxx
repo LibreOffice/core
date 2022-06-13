@@ -38,8 +38,8 @@ namespace connectivity::hsqldb
         public:
             virtual void refreshGroups() override;
         public:
-            OHSQLUser(  const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
-            OHSQLUser(  const css::uno::Reference< css::sdbc::XConnection >& _xConnection,const OUString& Name);
+            OHSQLUser(  css::uno::Reference< css::sdbc::XConnection > _xConnection);
+            OHSQLUser(  css::uno::Reference< css::sdbc::XConnection > _xConnection, const OUString& Name);
 
             // XUser
             virtual void SAL_CALL changePassword( const OUString& objPassword, const OUString& newPassword ) override;

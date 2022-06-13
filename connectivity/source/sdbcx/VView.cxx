@@ -22,6 +22,7 @@
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
 #include <TConnection.hxx>
+#include <utility>
 
 
 using namespace connectivity;
@@ -36,24 +37,24 @@ IMPLEMENT_SERVICE_INFO(OView,"com.sun.star.sdbcx.VView","com.sun.star.sdbcx.View
 
 OView::OView(bool _bCase,
             const OUString& Name,
-            const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData,
-            const OUString& Command,
-            const OUString& SchemaName,
-            const OUString& CatalogName) : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper,_bCase)
-            ,m_CatalogName(CatalogName)
-            ,m_SchemaName(SchemaName)
-            ,m_Command(Command)
+            css::uno::Reference< css::sdbc::XDatabaseMetaData >  _xMetaData,
+            OUString Command,
+            OUString SchemaName,
+            OUString CatalogName) : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper,_bCase)
+            ,m_CatalogName(std::move(CatalogName))
+            ,m_SchemaName(std::move(SchemaName))
+            ,m_Command(std::move(Command))
             ,m_CheckOption(0)
-            ,m_xMetaData(_xMetaData)
+            ,m_xMetaData(std::move(_xMetaData))
 
 {
     m_Name = Name;
     construct();
 }
 
-OView::OView(bool _bCase, const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData)
+OView::OView(bool _bCase, css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData)
     : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper, _bCase, true)
-    ,m_xMetaData(_xMetaData)
+    ,m_xMetaData(std::move(_xMetaData))
 {
     construct();
 }

@@ -40,7 +40,7 @@ namespace connectivity::evoab
         protected:
             virtual ~OEvoabResultSetMetaData() override;
         public:
-          explicit OEvoabResultSetMetaData(const OUString& _aTableName);
+          explicit OEvoabResultSetMetaData(OUString _aTableName);
           /// @throws css::sdbc::SQLException
           void setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns);
           sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const

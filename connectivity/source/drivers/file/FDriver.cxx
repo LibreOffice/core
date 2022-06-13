@@ -26,6 +26,7 @@
 #include <connectivity/dbexception.hxx>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
+#include <utility>
 
 
 using namespace connectivity::file;
@@ -36,9 +37,9 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
-OFileDriver::OFileDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
+OFileDriver::OFileDriver(css::uno::Reference< css::uno::XComponentContext > _xContext)
     : ODriver_BASE(m_aMutex)
-    ,m_xContext(_rxContext)
+    ,m_xContext(std::move(_xContext))
 {
 }
 

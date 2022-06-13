@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <TConnection.hxx>
+#include <utility>
 
 using namespace connectivity;
 using namespace connectivity::sdbcx;
@@ -50,7 +51,7 @@ OKeyColumn::OKeyColumn(bool _bCase) : OColumn(_bCase)
     construct();
 }
 
-OKeyColumn::OKeyColumn( const OUString&  ReferencedColumn,
+OKeyColumn::OKeyColumn( OUString ReferencedColumn,
                         const OUString&  Name,
                         const OUString&  TypeName,
                         const OUString&  DefaultValue,
@@ -77,7 +78,7 @@ OKeyColumn::OKeyColumn( const OUString&  ReferencedColumn,
                             CatalogName,
                             SchemaName,
                             TableName)
-                        ,   m_ReferencedColumn(ReferencedColumn)
+                        ,   m_ReferencedColumn(std::move(ReferencedColumn))
 {
     construct();
 }

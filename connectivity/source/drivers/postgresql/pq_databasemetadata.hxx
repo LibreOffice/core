@@ -74,8 +74,8 @@ class DatabaseMetaData :
 
 public:
     DatabaseMetaData(
-        const ::rtl::Reference< comphelper::RefCountedMutex > & reMutex,
-        const css::uno::Reference< css::sdbc::XConnection >  & origin,
+        ::rtl::Reference< comphelper::RefCountedMutex > reMutex,
+        css::uno::Reference< css::sdbc::XConnection > origin,
         ConnectionSettings *pSettings
         );
 

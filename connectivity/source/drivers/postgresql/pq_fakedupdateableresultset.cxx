@@ -38,6 +38,7 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <utility>
 
 
 using com::sun::star::uno::Sequence;
@@ -58,9 +59,9 @@ FakedUpdateableResultSet::FakedUpdateableResultSet(
         PGresult *result,
         const OUString &schema,
         const OUString &table,
-        const OUString &aReason )
+        OUString aReason )
     : ResultSet( mutex, owner, pSettings, result, schema, table ),
-      m_aReason( aReason )
+      m_aReason(std::move( aReason ))
 {}
 
 

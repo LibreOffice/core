@@ -35,6 +35,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <utility>
 #include <vector>
 
 namespace drivermanager
@@ -225,7 +226,7 @@ namespace
     struct EqualDriverAccessToName
     {
         OUString m_sImplName;
-        explicit EqualDriverAccessToName(const OUString& _sImplName) : m_sImplName(_sImplName){}
+        explicit EqualDriverAccessToName(OUString _sImplName) : m_sImplName(std::move(_sImplName)){}
 
         bool operator()( const DriverAccess& lhs)
         {

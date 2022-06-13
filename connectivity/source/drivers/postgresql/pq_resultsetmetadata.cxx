@@ -46,6 +46,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <utility>
 
 #include <string.h>
 
@@ -113,18 +114,18 @@ static void extractPrecisionAndScale( sal_Int32 atttypmod, sal_Int32 *precision,
 }
 
 ResultSetMetaData::ResultSetMetaData(
-    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
-    const css::uno::Reference< css::sdbc::XResultSet >  & origin,
+    ::rtl::Reference< comphelper::RefCountedMutex > refMutex,
+    css::uno::Reference< css::sdbc::XResultSet > origin,
     ResultSet * pResultSet,
     ConnectionSettings **ppSettings,
     PGresult const *pResult,
-    const OUString &schemaName,
-    const OUString &tableName ) :
-    m_xMutex( refMutex ),
+    OUString schemaName,
+    OUString tableName ) :
+    m_xMutex(std::move( refMutex )),
     m_ppSettings( ppSettings ),
-    m_origin( origin ),
-    m_tableName( tableName ),
-    m_schemaName( schemaName ),
+    m_origin(std::move( origin )),
+    m_tableName(std::move( tableName )),
+    m_schemaName(std::move( schemaName )),
     m_colDesc( PQnfields( pResult ) ),
     m_pResultSet( pResultSet ),
     m_checkedForTable( false ),

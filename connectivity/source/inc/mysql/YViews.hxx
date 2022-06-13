@@ -20,6 +20,7 @@
 
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <utility>
 namespace connectivity::mysql
     {
         class OViews final : public sdbcx::OCollection
@@ -34,9 +35,9 @@ namespace connectivity::mysql
 
             void createView( const css::uno::Reference< css::beans::XPropertySet >& descriptor );
         public:
-            OViews(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+            OViews(css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const ::std::vector< OUString> &_rVector) : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
-                ,m_xMetaData(_rMetaData)
+                ,m_xMetaData(std::move(_xMetaData))
                 ,m_bInDrop(false)
             {}
 

@@ -21,14 +21,15 @@
 #include "NDatabaseMetaData.hxx"
 #include <connectivity/dbexception.hxx>
 #include <strings.hrc>
+#include <utility>
 
 using namespace connectivity::evoab;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
-OEvoabResultSetMetaData::OEvoabResultSetMetaData(const OUString& _aTableName)
-    : m_aTableName(_aTableName)
+OEvoabResultSetMetaData::OEvoabResultSetMetaData(OUString _aTableName)
+    : m_aTableName(std::move(_aTableName))
 {
 
 }

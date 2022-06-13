@@ -134,7 +134,7 @@ private:
 public:
     Connection(
         const rtl::Reference< comphelper::RefCountedMutex > &refMutex,
-        const css::uno::Reference< css::uno::XComponentContext > & ctx );
+        css::uno::Reference< css::uno::XComponentContext > ctx );
 
     virtual ~Connection( ) override;
 

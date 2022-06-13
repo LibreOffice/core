@@ -23,6 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <TConnection.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <utility>
 
 using namespace connectivity;
 using namespace connectivity::sdbcx;
@@ -65,9 +66,9 @@ OColumn::OColumn(bool _bCase)
 }
 
 OColumn::OColumn(   const OUString& Name,
-                    const OUString& TypeName,
-                    const OUString& DefaultValue,
-                    const OUString& Description,
+                    OUString TypeName,
+                    OUString DefaultValue,
+                    OUString Description,
                     sal_Int32       IsNullable,
                     sal_Int32       Precision,
                     sal_Int32       Scale,
@@ -76,14 +77,14 @@ OColumn::OColumn(   const OUString& Name,
                     bool            IsRowVersion,
                     bool            IsCurrency,
                     bool            _bCase,
-                    const OUString& CatalogName,
-                    const OUString& SchemaName,
-                    const OUString& TableName)
+                    OUString CatalogName,
+                    OUString SchemaName,
+                    OUString TableName)
     :OColumnDescriptor_BASE(m_aMutex)
     ,ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase)
-    ,m_TypeName(TypeName)
-    ,m_Description(Description)
-    ,m_DefaultValue(DefaultValue)
+    ,m_TypeName(std::move(TypeName))
+    ,m_Description(std::move(Description))
+    ,m_DefaultValue(std::move(DefaultValue))
     ,m_IsNullable(IsNullable)
     ,m_Precision(Precision)
     ,m_Scale(Scale)
@@ -91,9 +92,9 @@ OColumn::OColumn(   const OUString& Name,
     ,m_IsAutoIncrement(IsAutoIncrement)
     ,m_IsRowVersion(IsRowVersion)
     ,m_IsCurrency(IsCurrency)
-    ,m_CatalogName(CatalogName)
-    ,m_SchemaName(SchemaName)
-    ,m_TableName(TableName)
+    ,m_CatalogName(std::move(CatalogName))
+    ,m_SchemaName(std::move(SchemaName))
+    ,m_TableName(std::move(TableName))
 {
     m_Name = Name;
 

@@ -24,6 +24,7 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <TConnection.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::connectivity;
@@ -64,13 +65,13 @@ OIndex::OIndex(bool _bCase) : ODescriptor_BASE(m_aMutex)
 }
 
 OIndex::OIndex( const OUString& Name,
-                const OUString& Catalog,
+                OUString Catalog,
                 bool _isUnique,
                 bool _isPrimaryKeyIndex,
                 bool _isClustered,
                 bool _bCase) :  ODescriptor_BASE(m_aMutex)
                         ,ODescriptor(ODescriptor_BASE::rBHelper, _bCase)
-                        ,m_Catalog(Catalog)
+                        ,m_Catalog(std::move(Catalog))
                         ,m_IsUnique(_isUnique)
                         ,m_IsPrimaryKeyIndex(_isPrimaryKeyIndex)
                         ,m_IsClustered(_isClustered)

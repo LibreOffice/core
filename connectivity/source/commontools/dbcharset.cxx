@@ -18,6 +18,7 @@
  */
 
 #include <connectivity/dbcharset.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 
@@ -129,15 +130,15 @@ namespace dbtools
     }
 
 
-    CharsetIteratorDerefHelper:: CharsetIteratorDerefHelper(const rtl_TextEncoding _eEncoding, const OUString& _rIanaName )
+    CharsetIteratorDerefHelper:: CharsetIteratorDerefHelper(const rtl_TextEncoding _eEncoding, OUString _aIanaName )
         :m_eEncoding( _eEncoding )
-        ,m_aIanaName( _rIanaName )
+        ,m_aIanaName(std::move( _aIanaName ))
     {
     }
 
-    OCharsetMap::CharsetIterator::CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator const & _aPos )
+    OCharsetMap::CharsetIterator::CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator _aPos )
         :m_pContainer( _pContainer )
-        ,m_aPos( _aPos )
+        ,m_aPos(std::move( _aPos ))
     {
         OSL_ENSURE( m_pContainer, "OCharsetMap::CharsetIterator::CharsetIterator : invalid container!" );
     }

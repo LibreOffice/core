@@ -20,6 +20,7 @@
 
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <utility>
 
 namespace connectivity::evoab
 {
@@ -30,11 +31,11 @@ namespace connectivity::evoab
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
             virtual void impl_refresh() override;
         public:
-            OEvoabTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,
+            OEvoabTables(css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData,
                          ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                          const ::std::vector< OUString> &_rVector) :
                     sdbcx::OCollection(_rParent,true,_rMutex,_rVector),
-                    m_xMetaData(_rMetaData)
+                    m_xMetaData(std::move(_xMetaData))
                         {}
             virtual void disposing() override;
         };

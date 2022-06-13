@@ -30,6 +30,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <memory>
+#include <utility>
 
 namespace connectivity::sdbcx
     {
@@ -41,11 +42,11 @@ namespace connectivity::sdbcx
             sal_Int32       m_Type;
             sal_Int32       m_UpdateRule;
             sal_Int32       m_DeleteRule;
-            KeyProperties(const OUString& ReferencedTable,
+            KeyProperties(OUString ReferencedTable,
                           sal_Int32     Type,
                           sal_Int32     UpdateRule,
                           sal_Int32     DeleteRule)
-                          :m_ReferencedTable(ReferencedTable),
+                          :m_ReferencedTable(std::move(ReferencedTable)),
                           m_Type(Type),
                           m_UpdateRule(UpdateRule),
                           m_DeleteRule(DeleteRule)
@@ -75,7 +76,7 @@ namespace connectivity::sdbcx
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
         public:
             OKey(bool _bCase);
-            OKey(const OUString& Name,const std::shared_ptr<KeyProperties>& _rProps,bool _bCase);
+            OKey(const OUString& Name,std::shared_ptr<KeyProperties> _xProps,bool _bCase);
 
             virtual ~OKey( ) override;
 

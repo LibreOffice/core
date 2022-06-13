@@ -27,6 +27,7 @@
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <TConnection.hxx>
 #include <strings.hrc>
+#include <utility>
 
 using namespace connectivity;
 using namespace connectivity::hsqldb;
@@ -37,16 +38,16 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OHSQLUser::OHSQLUser(   const css::uno::Reference< css::sdbc::XConnection >& _xConnection) : connectivity::sdbcx::OUser(true)
-                ,m_xConnection(_xConnection)
+OHSQLUser::OHSQLUser(   css::uno::Reference< css::sdbc::XConnection > _xConnection) : connectivity::sdbcx::OUser(true)
+                ,m_xConnection(std::move(_xConnection))
 {
     construct();
 }
 
-OHSQLUser::OHSQLUser(   const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
+OHSQLUser::OHSQLUser(   css::uno::Reference< css::sdbc::XConnection > _xConnection,
                 const OUString& Name
             ) : connectivity::sdbcx::OUser(Name,true)
-                ,m_xConnection(_xConnection)
+                ,m_xConnection(std::move(_xConnection))
 {
     construct();
 }

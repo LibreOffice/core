@@ -31,6 +31,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <utility>
 
 namespace com::sun::star::sdb { class XColumn; }
 namespace com::sun::star::sdbc { class XRow; }
@@ -402,7 +403,7 @@ namespace connectivity
         ORowSetValue    m_aValue;   // my own value
     public:
         ORowSetValueDecorator(){m_aValue.setBound(true);}
-        ORowSetValueDecorator(const ORowSetValue& _aValue) : m_aValue(_aValue){m_aValue.setBound(true);}
+        ORowSetValueDecorator(ORowSetValue _aValue) : m_aValue(std::move(_aValue)){m_aValue.setBound(true);}
         ORowSetValueDecorator& operator=(const ORowSetValue& _aValue);
 
         operator const ORowSetValue&()   const               { return m_aValue; }

@@ -27,6 +27,7 @@
 #include <TConnection.hxx>
 #include <strings.hrc>
 #include <comphelper/types.hxx>
+#include <utility>
 
 using namespace connectivity;
 using namespace connectivity::mysql;
@@ -37,17 +38,17 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OMySQLUser::OMySQLUser(const css::uno::Reference<css::sdbc::XConnection>& _xConnection)
+OMySQLUser::OMySQLUser(css::uno::Reference<css::sdbc::XConnection> _xConnection)
     : connectivity::sdbcx::OUser(true)
-    , m_xConnection(_xConnection)
+    , m_xConnection(std::move(_xConnection))
 {
     construct();
 }
 
-OMySQLUser::OMySQLUser(const css::uno::Reference<css::sdbc::XConnection>& _xConnection,
+OMySQLUser::OMySQLUser(css::uno::Reference<css::sdbc::XConnection> _xConnection,
                        const OUString& Name)
     : connectivity::sdbcx::OUser(Name, true)
-    , m_xConnection(_xConnection)
+    , m_xConnection(std::move(_xConnection))
 {
     construct();
 }

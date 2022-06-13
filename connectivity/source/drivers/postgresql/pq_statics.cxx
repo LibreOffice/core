@@ -37,6 +37,7 @@
 #include "pq_statics.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <utility>
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Any;
@@ -68,8 +69,8 @@ struct BaseTypeDef { const char * typeName; sal_Int32 value; };
 
 struct PropertyDef
 {
-    PropertyDef( const OUString &str, const Type &t )
-        : name( str ) , type( t ) {}
+    PropertyDef( OUString str, const Type &t )
+        : name(std::move( str )) , type( t ) {}
     OUString name;
     css::uno::Type type;
 };
