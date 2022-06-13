@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7368636f_8c3310bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-06-13T10:32:38Z",
+      "side": 1,
+      "message": "@lubos said this is duplicate of his fix",
+      "revId": "0a2efa2f96c7f4a052f003837adab5177def1ad6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
