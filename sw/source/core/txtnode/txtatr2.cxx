@@ -131,23 +131,14 @@ SwCharFormat* SwTextINetFormat::GetCharFormat()
 
         // JP 10.02.2000, Bug 72806: don't modify the doc for getting the
         //      correct charstyle.
-        bool bResetMod = !rDoc.getIDocumentState().IsModified();
-        Link<bool,void> aOle2Lnk;
-        if ( bResetMod )
-        {
-            aOle2Lnk = rDoc.GetOle2Link();
-            rDoc.SetOle2Link( Link<bool,void>() );
-        }
+        bool bModifiedEnabled = rDoc.getIDocumentState().IsEnableSetModified();
+        rDoc.getIDocumentState().SetEnableSetModified(false);
 
         pRet = IsPoolUserFormat( nId )
                ? rDoc.FindCharFormatByName( rStr )
                : rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
 
-        if ( bResetMod )
-        {
-            rDoc.getIDocumentState().ResetModified();
-            rDoc.SetOle2Link( aOle2Lnk );
-        }
+        rDoc.getIDocumentState().SetEnableSetModified(bModifiedEnabled);
     }
 
     if ( pRet )
