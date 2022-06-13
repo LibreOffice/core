@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d100e675_05140104",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-13T15:30:22Z",
+      "side": 1,
+      "message": "problems with UItests should be fixed now. Note this patch depends on https://gerrit.libreoffice.org/c/core/+/135733/1",
+      "revId": "2b28ae47779b3db6bb15c75cc85c7b53c3128644",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
