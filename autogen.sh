@@ -322,6 +322,11 @@ if (defined $ENV{NOCONFIGURE}) {
     system (@args) && die "Error running configure";
 }
 
+my @args2;
+push @args2, "make";
+push @args2, "clean";
+system (@args2)
+
 # Local Variables:
 # mode: perl
 # cperl-indent-level: 4
