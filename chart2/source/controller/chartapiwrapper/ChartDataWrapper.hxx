@@ -44,8 +44,8 @@ class ChartDataWrapper final : public cppu::BaseMutex, public
     css::lang::XComponent >
 {
 public:
-    explicit ChartDataWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
-    ChartDataWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact
+    explicit ChartDataWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
+    ChartDataWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact
         , const css::uno::Reference< css::chart::XChartData >& xNewData );
     virtual ~ChartDataWrapper() override;
 

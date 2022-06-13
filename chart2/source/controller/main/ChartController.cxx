@@ -71,6 +71,7 @@
 #include <tools/debug.hxx>
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/mutex.hxx>
@@ -99,10 +100,10 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-ChartController::ChartController(uno::Reference<uno::XComponentContext> const & xContext) :
+ChartController::ChartController(uno::Reference<uno::XComponentContext> xContext) :
     m_aLifeTimeManager( nullptr ),
     m_bSuspended( false ),
-    m_xCC(xContext),
+    m_xCC(std::move(xContext)),
     m_aModel( nullptr, m_aModelMutex ),
     m_eDragMode(SdrDragMode::Move),
     m_aDoubleClickTimer("chart2 ChartController m_aDoubleClickTimer"),
@@ -125,8 +126,8 @@ ChartController::~ChartController()
     stopDoubleClickWaiting();
 }
 
-ChartController::TheModel::TheModel( const rtl::Reference<::chart::ChartModel> & xModel ) :
-    m_xModel( xModel ),
+ChartController::TheModel::TheModel( rtl::Reference<::chart::ChartModel> xModel ) :
+    m_xModel(std::move( xModel )),
     m_bOwnership( true )
 {
 }

@@ -63,7 +63,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS Diagram final :
     public ::property::OPropertySet
 {
 public:
-    Diagram( css::uno::Reference< css::uno::XComponentContext > const & xContext );
+    Diagram( css::uno::Reference< css::uno::XComponentContext > xContext );
     virtual ~Diagram() override;
 
     /// XServiceInfo declarations

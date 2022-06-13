@@ -26,6 +26,7 @@
 #include <svx/svdundo.hxx>
 
 #include <memory>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -35,10 +36,10 @@ namespace chart::impl
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::lang::DisposedException;
 
-UndoElement::UndoElement( const OUString& i_actionString, const rtl::Reference<::chart::ChartModel>& i_documentModel, const std::shared_ptr< ChartModelClone >& i_modelClone )
-    :m_sActionString( i_actionString )
-    ,m_xDocumentModel( i_documentModel )
-    ,m_pModelClone( i_modelClone )
+UndoElement::UndoElement( OUString i_actionString, rtl::Reference<::chart::ChartModel> i_documentModel, std::shared_ptr< ChartModelClone > i_modelClone )
+    :m_sActionString(std::move( i_actionString ))
+    ,m_xDocumentModel(std::move( i_documentModel ))
+    ,m_pModelClone(std::move( i_modelClone ))
 {
 }
 

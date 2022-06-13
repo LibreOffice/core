@@ -51,7 +51,7 @@ public:
         , SCALE_PROP_REVERSEDIRECTION
     };
 
-    WrappedScaleProperty(tScaleProperty eScaleProperty, const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
+    WrappedScaleProperty(tScaleProperty eScaleProperty, std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
     virtual ~WrappedScaleProperty() override;
 
     static void addWrappedProperties( std::vector< std::unique_ptr<WrappedProperty> >& rList, const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact );

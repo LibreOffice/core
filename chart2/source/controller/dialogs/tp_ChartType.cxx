@@ -31,6 +31,7 @@
 
 #include <svtools/valueset.hxx>
 
+#include <utility>
 #include <vcl/weld.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/diagnose_ex.h>
@@ -40,7 +41,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogController* pController, const rtl::Reference<::chart::ChartModel>& xChartModel,
+ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogController* pController, rtl::Reference<::chart::ChartModel> xChartModel,
                                    bool bShowDescription)
     : OWizardPage(pPage, pController, "modules/schart/ui/tp_ChartType.ui", "tp_ChartType")
     , m_pDim3DLookResourceGroup( new Dim3DLookResourceGroup(m_xBuilder.get()) )
@@ -48,7 +49,7 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
     , m_pSplineResourceGroup( new SplineResourceGroup(m_xBuilder.get(), pController->getDialog()) )
     , m_pGeometryResourceGroup( new GeometryResourceGroup(m_xBuilder.get()) )
     , m_pSortByXValuesResourceGroup( new SortByXValuesResourceGroup(m_xBuilder.get()) )
-    , m_xChartModel( xChartModel )
+    , m_xChartModel(std::move( xChartModel ))
     , m_aChartTypeDialogControllerList(0)
     , m_pCurrentMainType(nullptr)
     , m_nChangingCalls(0)

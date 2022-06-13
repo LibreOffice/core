@@ -32,7 +32,7 @@ class ChartModel;
 class DragMethod_Base : public SdrDragMethod
 {
 public:
-    DragMethod_Base( DrawViewWrapper& rDrawViewWrapper, const OUString& rObjectCID
+    DragMethod_Base( DrawViewWrapper& rDrawViewWrapper, OUString aObjectCID
         , const rtl::Reference<::chart::ChartModel>& xChartModel
         , ActionDescriptionProvider::ActionType eActionType = ActionDescriptionProvider::ActionType::Move );
     virtual ~DragMethod_Base() override;

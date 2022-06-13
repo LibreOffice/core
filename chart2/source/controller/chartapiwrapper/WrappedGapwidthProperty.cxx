@@ -26,6 +26,7 @@
 #include <ChartType.hxx>
 #include <DiagramHelper.hxx>
 #include <tools/long.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -40,15 +41,15 @@ const sal_Int32 DEFAULT_OVERLAP = 0;
 
 WrappedBarPositionProperty_Base::WrappedBarPositionProperty_Base(
                   const OUString& rOuterName
-                , const OUString& rInnerSequencePropertyName
+                , OUString aInnerSequencePropertyName
                 , sal_Int32 nDefaultValue
-                , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact )
+                , std::shared_ptr<Chart2ModelContact> spChart2ModelContact )
             : WrappedDefaultProperty( rOuterName, OUString(), uno::Any( nDefaultValue ) )
             , m_nDimensionIndex(0)
             , m_nAxisIndex(0)
-            , m_spChart2ModelContact( spChart2ModelContact )
+            , m_spChart2ModelContact(std::move( spChart2ModelContact ))
             , m_nDefaultValue( nDefaultValue )
-            , m_InnerSequencePropertyName( rInnerSequencePropertyName )
+            , m_InnerSequencePropertyName(std::move( aInnerSequencePropertyName ))
 {
 }
 

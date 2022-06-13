@@ -32,7 +32,7 @@ class ThreeD_SceneAppearance_TabPage
 public:
     ThreeD_SceneAppearance_TabPage(
         weld::Container* pParent,
-        const rtl::Reference<::chart::ChartModel> & xChartModel,
+        rtl::Reference<::chart::ChartModel> xChartModel,
         ControllerLockHelper & rControllerLockHelper );
     void ActivatePage();
     ~ThreeD_SceneAppearance_TabPage();

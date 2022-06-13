@@ -39,6 +39,7 @@
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -137,12 +138,12 @@ GraphicPropertyItemConverter::GraphicPropertyItemConverter(
     beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
+    uno::Reference< lang::XMultiServiceFactory > xNamedPropertyContainerFactory,
     GraphicObjectType eObjectType /* = FILL_PROPERTIES */ ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_GraphicObjectType( eObjectType ),
         m_rDrawModel( rDrawModel ),
-        m_xNamedPropertyTableFactory( xNamedPropertyContainerFactory )
+        m_xNamedPropertyTableFactory(std::move( xNamedPropertyContainerFactory ))
 {}
 
 GraphicPropertyItemConverter::~GraphicPropertyItemConverter()

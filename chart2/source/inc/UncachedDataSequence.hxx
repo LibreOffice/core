@@ -79,11 +79,11 @@ public:
         lifetime is at least as long as the one of this object.
      */
     UncachedDataSequence(
-        const rtl::Reference< InternalDataProvider > & xIntDataProv,
-        const OUString & rRangeRepresentation );
+        rtl::Reference< InternalDataProvider > xIntDataProv,
+        OUString aRangeRepresentation );
     UncachedDataSequence(
-        const rtl::Reference< InternalDataProvider > & xIntDataProv,
-        const OUString & rRangeRepresentation,
+        rtl::Reference< InternalDataProvider > xIntDataProv,
+        OUString aRangeRepresentation,
         const OUString & rRole );
     UncachedDataSequence( const UncachedDataSequence & rSource );
     virtual ~UncachedDataSequence() override;

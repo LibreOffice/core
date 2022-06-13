@@ -30,6 +30,7 @@
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -78,7 +79,7 @@ namespace chart::wrapper
 {
 
 ErrorBarItemConverter::ErrorBarItemConverter(
-    const uno::Reference< frame::XModel > & xModel,
+    uno::Reference< frame::XModel > xModel,
     const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
@@ -88,7 +89,7 @@ ErrorBarItemConverter::ErrorBarItemConverter(
                                   rPropertySet, rItemPool, rDrawModel,
                                   xNamedPropertyContainerFactory,
                                   GraphicObjectType::LineProperties )),
-        m_xModel( xModel )
+        m_xModel(std::move( xModel ))
 {}
 
 ErrorBarItemConverter::~ErrorBarItemConverter()

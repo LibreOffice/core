@@ -28,6 +28,7 @@
 #include <WrappedProperty.hxx>
 #include "Chart2ModelContact.hxx"
 #include <TitleHelper.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -43,7 +44,7 @@ class WrappedAxisAndGridExistenceProperty : public WrappedProperty
 {
 public:
     WrappedAxisAndGridExistenceProperty( bool bAxis, bool bMain, sal_Int32 nDimensionIndex
-        , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact );
+        , std::shared_ptr<Chart2ModelContact> spChart2ModelContact );
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
@@ -79,9 +80,9 @@ void WrappedAxisAndGridExistenceProperties::addWrappedProperties( std::vector< s
 }
 
 WrappedAxisAndGridExistenceProperty::WrappedAxisAndGridExistenceProperty( bool bAxis, bool bMain, sal_Int32 nDimensionIndex
-                , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact )
+                , std::shared_ptr<Chart2ModelContact> spChart2ModelContact )
             : WrappedProperty(OUString(),OUString())
-            , m_spChart2ModelContact( spChart2ModelContact )
+            , m_spChart2ModelContact(std::move( spChart2ModelContact ))
             , m_bAxis( bAxis )
             , m_bMain( bMain )
             , m_nDimensionIndex( nDimensionIndex )
@@ -203,7 +204,7 @@ class WrappedAxisTitleExistenceProperty : public WrappedProperty
 {
 public:
     WrappedAxisTitleExistenceProperty( sal_Int32 nTitleIndex
-        , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact );
+        , std::shared_ptr<Chart2ModelContact> spChart2ModelContact );
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
@@ -229,9 +230,9 @@ void WrappedAxisTitleExistenceProperties::addWrappedProperties( std::vector< std
 }
 
 WrappedAxisTitleExistenceProperty::WrappedAxisTitleExistenceProperty(sal_Int32 nTitleIndex
-                , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
+                , std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
             : WrappedProperty(OUString(),OUString())
-            , m_spChart2ModelContact( spChart2ModelContact )
+            , m_spChart2ModelContact(std::move( spChart2ModelContact ))
             , m_eTitleType( TitleHelper::Y_AXIS_TITLE )
 {
     switch( nTitleIndex )
@@ -309,7 +310,7 @@ class WrappedAxisLabelExistenceProperty : public WrappedProperty
 {
 public:
     WrappedAxisLabelExistenceProperty( bool bMain, sal_Int32 nDimensionIndex
-        , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact );
+        , std::shared_ptr<Chart2ModelContact> spChart2ModelContact );
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
@@ -336,9 +337,9 @@ void WrappedAxisLabelExistenceProperties::addWrappedProperties( std::vector< std
 }
 
 WrappedAxisLabelExistenceProperty::WrappedAxisLabelExistenceProperty(bool bMain, sal_Int32 nDimensionIndex
-                , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
+                , std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
             : WrappedProperty(OUString(),OUString())
-            , m_spChart2ModelContact( spChart2ModelContact )
+            , m_spChart2ModelContact(std::move( spChart2ModelContact ))
             , m_bMain( bMain )
             , m_nDimensionIndex( nDimensionIndex )
 {

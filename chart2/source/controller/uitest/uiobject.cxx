@@ -18,14 +18,15 @@
 
 #include <comphelper/servicehelper.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <algorithm>
 #include <iterator>
 
 ChartUIObject::ChartUIObject(const VclPtr<chart::ChartWindow>& xChartWindow,
-        const OUString& rCID):
-    maCID(rCID),
+        OUString aCID):
+    maCID(std::move(aCID)),
     mxChartWindow(xChartWindow)
 {
 }

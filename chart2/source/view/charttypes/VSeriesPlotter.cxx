@@ -78,6 +78,7 @@
 
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/sequence.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
@@ -140,11 +141,11 @@ sal_Int32 VDataSeriesGroup::getSeriesCount() const
     return m_aSeriesVector.size();
 }
 
-VSeriesPlotter::VSeriesPlotter( const rtl::Reference<ChartType>& xChartTypeModel
+VSeriesPlotter::VSeriesPlotter( rtl::Reference<ChartType> xChartTypeModel
                                , sal_Int32 nDimensionCount, bool bCategoryXAxis )
         : PlotterBase( nDimensionCount )
         , m_pMainPosHelper( nullptr )
-        , m_xChartTypeModel(xChartTypeModel)
+        , m_xChartTypeModel(std::move(xChartTypeModel))
         , m_bCategoryXAxis(bCategoryXAxis)
         , m_nTimeResolution(css::chart::TimeUnit::DAY)
         , m_aNullDate(30,12,1899)

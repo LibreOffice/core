@@ -29,6 +29,7 @@
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
 #include <UserDefinedProperties.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -123,8 +124,8 @@ namespace chart::wrapper
 {
 
 UpDownBarWrapper::UpDownBarWrapper(
-    bool bUp, const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
-        : m_spChart2ModelContact( spChart2ModelContact )
+    bool bUp, std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
+        : m_spChart2ModelContact(std::move( spChart2ModelContact ))
         , m_aEventListenerContainer( m_aMutex )
         , m_aPropertySetName( bUp ? OUString( "WhiteDay" ) : OUString( "BlackDay" ))
 {

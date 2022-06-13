@@ -53,9 +53,9 @@ public:
             is the cloned model from before the changes, which the Undo action represents, have been applied.
             Upon <member>invoking</member>, the clone model is applied to the document model.
     */
-    UndoElement( const OUString & i_actionString,
-                 const rtl::Reference<::chart::ChartModel>& i_documentModel,
-                 const std::shared_ptr< ChartModelClone >& i_modelClone
+    UndoElement( OUString  i_actionString,
+                 rtl::Reference<::chart::ChartModel> i_documentModel,
+                 std::shared_ptr< ChartModelClone > i_modelClone
                );
     virtual ~UndoElement() override;
 

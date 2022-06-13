@@ -44,7 +44,7 @@ struct TickInfo
 
 //methods:
     TickInfo() = delete;
-    explicit TickInfo( const css::uno::Reference<css::chart2::XScaling>& xInverse );
+    explicit TickInfo( css::uno::Reference<css::chart2::XScaling> xInverse );
 
     /**
      * Return a value associated with the tick mark. It's normally an original
@@ -83,8 +83,8 @@ class TickFactory
 {
 public:
     TickFactory(
-         const ExplicitScaleData& rScale
-        , const ExplicitIncrementData& rIncrement );
+         ExplicitScaleData aScale
+        , ExplicitIncrementData aIncrement );
     virtual ~TickFactory();
 
     void getAllTicks( TickInfoArraysType& rAllTickInfos ) const;

@@ -39,6 +39,7 @@
 #include <iterator>
 #include <o3tl/functional.hxx>
 #include <map>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -212,8 +213,8 @@ namespace chart
 
 ChartTypeManager::ChartTypeManager(
     uno::Reference<
-        uno::XComponentContext > const & xContext ) :
-    m_xContext( xContext )
+        uno::XComponentContext > xContext ) :
+    m_xContext(std::move( xContext ))
 {}
 
 ChartTypeManager::~ChartTypeManager()

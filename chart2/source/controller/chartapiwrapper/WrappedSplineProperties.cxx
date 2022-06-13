@@ -30,6 +30,7 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
@@ -48,14 +49,14 @@ template< typename PROPERTYTYPE >
 class WrappedSplineProperty : public WrappedProperty
 {
 public:
-    explicit WrappedSplineProperty( const OUString& rOuterName, const OUString& rInnerName
+    explicit WrappedSplineProperty( const OUString& rOuterName, OUString aInnerName
         , const css::uno::Any& rDefaulValue
-        , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact )
+        , std::shared_ptr<Chart2ModelContact> spChart2ModelContact )
             : WrappedProperty(rOuterName,OUString())
-            , m_spChart2ModelContact(spChart2ModelContact)
+            , m_spChart2ModelContact(std::move(spChart2ModelContact))
             , m_aOuterValue(rDefaulValue)
             , m_aDefaultValue(rDefaulValue)
-            , m_aOwnInnerName(rInnerName)
+            , m_aOwnInnerName(std::move(aInnerName))
     {
     }
 

@@ -101,8 +101,8 @@ class EquidistantTickFactory
 {
 public:
     EquidistantTickFactory(
-         const ExplicitScaleData& rScale
-        , const ExplicitIncrementData& rIncrement );
+         ExplicitScaleData aScale
+        , ExplicitIncrementData aIncrement );
     ~EquidistantTickFactory();
 
     void getAllTicks( TickInfoArraysType& rAllTickInfos ) const;

@@ -458,8 +458,8 @@ void WrappedLineStyleProperty::setPropertyToDefault( const Reference< beans::XPr
 namespace chart::wrapper
 {
 
-DataSeriesPointWrapper::DataSeriesPointWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
-    : m_spChart2ModelContact( spChart2ModelContact )
+DataSeriesPointWrapper::DataSeriesPointWrapper( std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
+    : m_spChart2ModelContact( std::move(spChart2ModelContact) )
     , m_aEventListenerContainer( m_aMutex )
     , m_eType( DATA_SERIES )
     , m_nSeriesIndexInNewAPI( -1 )

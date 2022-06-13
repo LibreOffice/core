@@ -43,6 +43,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <utility>
 #include <vector>
 #include <set>
 
@@ -58,8 +59,8 @@ namespace
 class lcl_MatchesRole
 {
 public:
-    explicit lcl_MatchesRole( const OUString & aRole, bool bMatchPrefix ) :
-            m_aRole( aRole ),
+    explicit lcl_MatchesRole( OUString aRole, bool bMatchPrefix ) :
+            m_aRole(std::move( aRole )),
             m_bMatchPrefix( bMatchPrefix )
     {}
 

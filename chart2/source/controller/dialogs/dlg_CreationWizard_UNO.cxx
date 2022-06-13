@@ -22,6 +22,7 @@
 #include <ChartModel.hxx>
 #include <servicenames.hxx>
 #include <TimerTriggeredControllerLock.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/awt/Point.hpp>
@@ -35,9 +36,9 @@ namespace chart
 {
 using namespace ::com::sun::star;
 
-CreationWizardUnoDlg::CreationWizardUnoDlg(const uno::Reference<uno::XComponentContext>& xContext)
+CreationWizardUnoDlg::CreationWizardUnoDlg(uno::Reference<uno::XComponentContext> xContext)
     : OComponentHelper(m_aMutex)
-    , m_xCC(xContext)
+    , m_xCC(std::move(xContext))
     , m_bUnlockControllersOnExecute(false)
 {
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xCC);

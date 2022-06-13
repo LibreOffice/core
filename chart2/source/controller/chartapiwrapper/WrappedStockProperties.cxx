@@ -28,6 +28,7 @@
 #include <tools/diagnose_ex.h>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -42,8 +43,8 @@ class WrappedStockProperty : public WrappedProperty
 {
 public:
     explicit WrappedStockProperty( const OUString& rOuterName
-        , const css::uno::Any& rDefaulValue
-        , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact );
+        , css::uno::Any aDefaulValue
+        , std::shared_ptr<Chart2ModelContact> spChart2ModelContact );
 
     void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
@@ -60,11 +61,11 @@ protected:
 }
 
 WrappedStockProperty::WrappedStockProperty( const OUString& rOuterName
-    , const css::uno::Any& rDefaulValue
-    , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact )
+    , css::uno::Any aDefaultValue
+    , std::shared_ptr<Chart2ModelContact> spChart2ModelContact )
     : WrappedProperty(rOuterName,OUString())
-        , m_spChart2ModelContact(spChart2ModelContact)
-        , m_aDefaultValue(rDefaulValue)
+        , m_spChart2ModelContact(std::move(spChart2ModelContact))
+        , m_aDefaultValue(std::move(aDefaultValue))
 {
 }
 

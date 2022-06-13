@@ -53,6 +53,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <utility>
 #include <vcl/settings.hxx>
 
 #include <com/sun/star/drawing/ShapeCollection.hpp>
@@ -256,7 +257,7 @@ namespace {
 class WrappedDataSourceLabelsInFirstRowProperty : public WrappedProperty
 {
 public:
-    explicit WrappedDataSourceLabelsInFirstRowProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
+    explicit WrappedDataSourceLabelsInFirstRowProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
@@ -271,9 +272,9 @@ private: //member
 
 }
 
-WrappedDataSourceLabelsInFirstRowProperty::WrappedDataSourceLabelsInFirstRowProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
+WrappedDataSourceLabelsInFirstRowProperty::WrappedDataSourceLabelsInFirstRowProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
             : WrappedProperty("DataSourceLabelsInFirstRow",OUString())
-            , m_spChart2ModelContact( spChart2ModelContact )
+            , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
     m_aOuterValue = WrappedDataSourceLabelsInFirstRowProperty::getPropertyDefault( nullptr );
 }
@@ -346,7 +347,7 @@ namespace {
 class WrappedDataSourceLabelsInFirstColumnProperty : public WrappedProperty
 {
 public:
-    explicit WrappedDataSourceLabelsInFirstColumnProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
+    explicit WrappedDataSourceLabelsInFirstColumnProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
@@ -361,9 +362,9 @@ private: //member
 
 }
 
-WrappedDataSourceLabelsInFirstColumnProperty::WrappedDataSourceLabelsInFirstColumnProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
+WrappedDataSourceLabelsInFirstColumnProperty::WrappedDataSourceLabelsInFirstColumnProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
             : WrappedProperty("DataSourceLabelsInFirstColumn",OUString())
-            , m_spChart2ModelContact( spChart2ModelContact )
+            , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
     m_aOuterValue = WrappedDataSourceLabelsInFirstColumnProperty::getPropertyDefault( nullptr );
 }
@@ -436,7 +437,7 @@ namespace {
 class WrappedHasLegendProperty : public WrappedProperty
 {
 public:
-    explicit WrappedHasLegendProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
+    explicit WrappedHasLegendProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
@@ -450,9 +451,9 @@ private: //member
 
 }
 
-WrappedHasLegendProperty::WrappedHasLegendProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
+WrappedHasLegendProperty::WrappedHasLegendProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
     : WrappedProperty("HasLegend",OUString())
-    , m_spChart2ModelContact( spChart2ModelContact )
+    , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
 }
 
@@ -512,7 +513,7 @@ namespace {
 class WrappedHasMainTitleProperty : public WrappedProperty
 {
 public:
-    explicit WrappedHasMainTitleProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
+    explicit WrappedHasMainTitleProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
@@ -526,9 +527,9 @@ private: //member
 
 }
 
-WrappedHasMainTitleProperty::WrappedHasMainTitleProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
+WrappedHasMainTitleProperty::WrappedHasMainTitleProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
     : WrappedProperty("HasMainTitle",OUString())
-    , m_spChart2ModelContact( spChart2ModelContact )
+    , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
 }
 
@@ -578,7 +579,7 @@ namespace {
 class WrappedHasSubTitleProperty : public WrappedProperty
 {
 public:
-    explicit WrappedHasSubTitleProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
+    explicit WrappedHasSubTitleProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
@@ -592,9 +593,9 @@ private: //member
 
 }
 
-WrappedHasSubTitleProperty::WrappedHasSubTitleProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
+WrappedHasSubTitleProperty::WrappedHasSubTitleProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
             : WrappedProperty("HasSubTitle",OUString())
-            , m_spChart2ModelContact( spChart2ModelContact )
+            , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
 }
 

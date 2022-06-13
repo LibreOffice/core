@@ -47,7 +47,7 @@ class RangeSelectionListener final
 {
 public:
     explicit RangeSelectionListener(
-        RangeSelectionListenerParent& rParent, const OUString& rInitialRange,
+        RangeSelectionListenerParent& rParent, OUString aInitialRange,
         const rtl::Reference<::chart::ChartModel>& xModelToLockController);
     virtual ~RangeSelectionListener() override;
 

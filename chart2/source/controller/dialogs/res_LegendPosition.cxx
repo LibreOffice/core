@@ -32,6 +32,7 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/weld.hxx>
 
 namespace chart
@@ -50,8 +51,8 @@ LegendPositionResources::LegendPositionResources(weld::Builder& rBuilder)
 }
 
 LegendPositionResources::LegendPositionResources(weld::Builder& rBuilder,
-    const uno::Reference< uno::XComponentContext >& xCC)
-    : m_xCC(xCC)
+    uno::Reference< uno::XComponentContext > xCC)
+    : m_xCC(std::move(xCC))
     , m_xCbxShow(rBuilder.weld_check_button("show"))
     , m_xRbtLeft(rBuilder.weld_radio_button("left"))
     , m_xRbtRight(rBuilder.weld_radio_button("right"))

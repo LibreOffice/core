@@ -64,7 +64,7 @@ struct DialogModelTimeBasedInfo
 class DialogModel
 {
 public:
-    explicit DialogModel( const rtl::Reference<::chart::ChartModel> & xChartDocument );
+    explicit DialogModel( rtl::Reference<::chart::ChartModel> xChartDocument );
     ~DialogModel();
 
     typedef std::pair<

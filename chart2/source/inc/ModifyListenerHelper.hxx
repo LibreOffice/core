@@ -26,6 +26,7 @@
 
 #include <mutex>
 #include <algorithm>
+#include <utility>
 
 namespace chart
 {
@@ -74,8 +75,8 @@ namespace impl
 template< class InterfaceRef >
 struct addListenerFunctor
 {
-    explicit addListenerFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
-            m_xListener( xListener )
+    explicit addListenerFunctor( css::uno::Reference< css::util::XModifyListener > xListener ) :
+            m_xListener(std::move( xListener ))
     {}
 
     void operator() ( const InterfaceRef & xObject )
@@ -92,8 +93,8 @@ private:
 template< class InterfaceRef >
 struct removeListenerFunctor
 {
-    explicit removeListenerFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
-            m_xListener( xListener )
+    explicit removeListenerFunctor( css::uno::Reference< css::util::XModifyListener > xListener ) :
+            m_xListener(std::move( xListener ))
     {}
 
     void operator() ( const InterfaceRef & xObject )
@@ -110,8 +111,8 @@ private:
 template< class Pair >
 struct addListenerToMappedElementFunctor
 {
-    explicit addListenerToMappedElementFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
-            m_xListener( xListener )
+    explicit addListenerToMappedElementFunctor( css::uno::Reference< css::util::XModifyListener >  xListener ) :
+            m_xListener(std::move( xListener ))
     {}
 
     void operator() ( const Pair & aPair )
@@ -128,8 +129,8 @@ private:
 template< class Pair >
 struct removeListenerFromMappedElementFunctor
 {
-    explicit removeListenerFromMappedElementFunctor( const css::uno::Reference< css::util::XModifyListener > & xListener ) :
-            m_xListener( xListener )
+    explicit removeListenerFromMappedElementFunctor( css::uno::Reference< css::util::XModifyListener > xListener ) :
+            m_xListener(std::move( xListener ))
     {}
 
     void operator() ( const Pair & aPair )

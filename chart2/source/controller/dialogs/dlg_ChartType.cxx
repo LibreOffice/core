@@ -20,6 +20,7 @@
 #include <dlg_ChartType.hxx>
 #include "tp_ChartType.hxx"
 #include <ChartModel.hxx>
+#include <utility>
 
 namespace chart
 {
@@ -27,9 +28,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 ChartTypeDialog::ChartTypeDialog(weld::Window* pParent,
-                                 const rtl::Reference<::chart::ChartModel>& xChartModel)
+                                 rtl::Reference<::chart::ChartModel> xChartModel)
     : GenericDialogController(pParent, "modules/schart/ui/charttypedialog.ui", "ChartTypeDialog")
-    , m_xChartModel(xChartModel)
+    , m_xChartModel(std::move(xChartModel))
     , m_xContentArea(m_xDialog->weld_content_area())
 {
     m_xChartTypeTabPage = std::make_unique<ChartTypeTabPage>(

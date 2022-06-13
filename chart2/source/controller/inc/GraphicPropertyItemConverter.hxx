@@ -42,7 +42,7 @@ public:
         const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        const css::uno::Reference< css::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
+        css::uno::Reference< css::lang::XMultiServiceFactory > xNamedPropertyContainerFactory,
         GraphicObjectType eObjectType );
     virtual ~GraphicPropertyItemConverter() override;
 

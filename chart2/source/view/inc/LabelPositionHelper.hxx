@@ -39,7 +39,7 @@ public:
     LabelPositionHelper() = delete;
     LabelPositionHelper(
           sal_Int32 nDimensionCount
-        , const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget );
+        , rtl::Reference<SvxShapeGroupAnyD> xLogicTarget );
     virtual ~LabelPositionHelper();
 
     css::awt::Point transformSceneToScreenPosition(

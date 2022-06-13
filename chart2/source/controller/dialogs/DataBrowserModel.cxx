@@ -48,6 +48,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <limits>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -217,14 +218,14 @@ struct DataBrowserModel::tDataColumn
     tDataColumn() : m_eCellType( TEXT ), m_nNumberFormatKey( 0 ) {}
     // "full" CTOR
     tDataColumn(
-        const rtl::Reference<DataSeries> & xDataSeries,
-        const OUString& aUIRoleName,
-        const uno::Reference<chart2::data::XLabeledDataSequence>& xLabeledDataSequence,
+        rtl::Reference<DataSeries> xDataSeries,
+        OUString aUIRoleName,
+        uno::Reference<chart2::data::XLabeledDataSequence> xLabeledDataSequence,
         eCellType aCellType,
         sal_Int32 nNumberFormatKey ) :
-            m_xDataSeries( xDataSeries ),
-            m_aUIRoleName( aUIRoleName ),
-            m_xLabeledDataSequence( xLabeledDataSequence ),
+            m_xDataSeries(std::move( xDataSeries )),
+            m_aUIRoleName(std::move( aUIRoleName )),
+            m_xLabeledDataSequence(std::move( xLabeledDataSequence )),
             m_eCellType( aCellType ),
             m_nNumberFormatKey( nNumberFormatKey )
     {}
@@ -259,8 +260,8 @@ namespace
 struct lcl_DataSeriesOfHeaderMatches
 {
     explicit lcl_DataSeriesOfHeaderMatches(
-        const rtl::Reference< ::chart::DataSeries > & xSeriesToCompareWith ) :
-            m_xSeries( xSeriesToCompareWith )
+        rtl::Reference< ::chart::DataSeries > xSeriesToCompareWith ) :
+            m_xSeries(std::move( xSeriesToCompareWith ))
     {}
     bool operator() ( const ::chart::DataBrowserModel::tDataHeader & rHeader )
     {

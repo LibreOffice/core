@@ -44,6 +44,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/UnitConversion.hxx>
 
+#include <utility>
 #include <vector>
 #include <algorithm>
 
@@ -870,13 +871,13 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
 } // anonymous namespace
 
 VLegend::VLegend(
-    const rtl::Reference< Legend > & xLegend,
+    rtl::Reference< Legend > xLegend,
     const Reference< uno::XComponentContext > & xContext,
     std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
-    const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
+    rtl::Reference<SvxShapeGroupAnyD> xTargetPage,
     ChartModel& rModel )
-        : m_xTarget(xTargetPage)
-        , m_xLegend(xLegend)
+        : m_xTarget(std::move(xTargetPage))
+        , m_xLegend(std::move(xLegend))
         , mrModel(rModel)
         , m_xContext(xContext)
         , m_aLegendEntryProviderList(std::move(rLegendEntryProviderList))
