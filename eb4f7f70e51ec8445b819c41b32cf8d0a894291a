@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43365f04_eec8b35c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-13T19:14:03Z",
+      "side": 1,
+      "message": "It\u0027s a revert of a commit 24hours old, no need to wait for Jenkins approval.\n\nThe patch worked with a brand new odg file with A4 page format but doesn\u0027t work with the file attached in bugtracker.",
+      "revId": "eb4f7f70e51ec8445b819c41b32cf8d0a894291a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
