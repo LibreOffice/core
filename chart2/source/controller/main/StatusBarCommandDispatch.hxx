@@ -49,7 +49,7 @@ class StatusBarCommandDispatch : public impl::StatusBarCommandDispatch_Base
 public:
     explicit StatusBarCommandDispatch(
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
-        const rtl::Reference<::chart::ChartModel> & xModel,
+        rtl::Reference<::chart::ChartModel> xModel,
         const css::uno::Reference< css::view::XSelectionSupplier > & xSelSupp );
     virtual ~StatusBarCommandDispatch() override;
 

@@ -36,7 +36,7 @@ class SeriesOptionsItemConverter final : public ItemConverter
 public:
     SeriesOptionsItemConverter(
         const rtl::Reference<::chart::ChartModel> & xChartModel,
-        const css::uno::Reference< css::uno::XComponentContext > & xContext,
+        css::uno::Reference< css::uno::XComponentContext > xContext,
         const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool );
     virtual ~SeriesOptionsItemConverter() override;

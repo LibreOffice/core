@@ -24,9 +24,9 @@ namespace chart::sidebar {
 class ChartColorWrapper
 {
 public:
-    ChartColorWrapper(rtl::Reference<::chart::ChartModel> const & xModel,
+    ChartColorWrapper(rtl::Reference<::chart::ChartModel> xModel,
             SvxColorToolBoxControl* pControl,
-            const OUString& rPropertyName);
+            OUString  rPropertyName);
 
     void operator()(const OUString& rCommand, const svx::NamedThemedColor& rColor);
         // ColorSelectFunction signature
@@ -47,7 +47,7 @@ private:
 class ChartLineStyleWrapper
 {
 public:
-    ChartLineStyleWrapper(rtl::Reference<::chart::ChartModel> const & xModel,
+    ChartLineStyleWrapper(rtl::Reference<::chart::ChartModel> xModel,
             SvxLineStyleToolBoxControl* pControl);
 
     bool operator()(std::u16string_view rCommand, const css::uno::Any& rValue);

@@ -38,7 +38,7 @@ namespace chart
 class VTitle final
 {
 public:
-    explicit VTitle( const css::uno::Reference< css::chart2::XTitle > & xTitle );
+    explicit VTitle( css::uno::Reference< css::chart2::XTitle > xTitle );
     ~VTitle();
 
     void    init( const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage

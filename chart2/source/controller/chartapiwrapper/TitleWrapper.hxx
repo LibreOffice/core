@@ -45,7 +45,7 @@ class TitleWrapper final : public ::cppu::ImplInheritanceHelper<
 {
 public:
     TitleWrapper( ::chart::TitleHelper::eTitleType eTitleType,
-                  const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact );
+                  std::shared_ptr<Chart2ModelContact> spChart2ModelContact );
     virtual ~TitleWrapper() override;
 
     /// XServiceInfo declarations

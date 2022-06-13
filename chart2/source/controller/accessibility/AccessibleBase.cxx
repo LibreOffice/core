@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -64,7 +65,7 @@ namespace chart
 /** @param bMayHaveChildren is false per default
  */
 AccessibleBase::AccessibleBase(
-    const AccessibleElementInfo & rAccInfo,
+    AccessibleElementInfo aAccInfo,
     bool bMayHaveChildren,
     bool bAlwaysTransparent /* default: false */ ) :
         impl::AccessibleBase_Base( m_aMutex ),
@@ -73,7 +74,7 @@ AccessibleBase::AccessibleBase(
         m_bChildrenInitialized( false ),
         m_nEventNotifierId(0),
         m_xStateSetHelper( new ::utl::AccessibleStateSetHelper() ),
-        m_aAccInfo( rAccInfo ),
+        m_aAccInfo(std::move( aAccInfo )),
         m_bAlwaysTransparent( bAlwaysTransparent ),
         m_bStateSetInitialized( false )
 {

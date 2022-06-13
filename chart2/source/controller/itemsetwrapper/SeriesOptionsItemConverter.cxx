@@ -37,6 +37,7 @@
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>
 #include <svx/sdangitm.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -47,12 +48,12 @@ namespace chart::wrapper
 
 SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         const rtl::Reference<::chart::ChartModel>& xChartModel
-        , const uno::Reference< uno::XComponentContext > & xContext
+        , uno::Reference< uno::XComponentContext > xContext
         , const uno::Reference< beans::XPropertySet >& xPropertySet
         , SfxItemPool& rItemPool )
         : ItemConverter( xPropertySet, rItemPool )
         , m_xChartModel(xChartModel)
-        , m_xCC(xContext)
+        , m_xCC(std::move(xContext))
         , m_bAttachToMainAxis(true)
         , m_bSupportingOverlapAndGapWidthProperties(false)
         , m_bSupportingBarConnectors(false)

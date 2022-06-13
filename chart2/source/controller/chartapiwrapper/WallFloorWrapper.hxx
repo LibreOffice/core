@@ -38,7 +38,7 @@ class WallFloorWrapper : public ::cppu::ImplInheritanceHelper<
                     >
 {
 public:
-    WallFloorWrapper(bool bWall, const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
+    WallFloorWrapper(bool bWall, std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
     virtual ~WallFloorWrapper() override;
 
     /// XServiceInfo declarations

@@ -31,7 +31,7 @@ class StatisticsItemConverter final : public ItemConverter
 {
 public:
     StatisticsItemConverter(
-        const rtl::Reference<::chart::ChartModel> & xChartModel,
+        rtl::Reference<::chart::ChartModel> xChartModel,
         const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool );
     virtual ~StatisticsItemConverter() override;

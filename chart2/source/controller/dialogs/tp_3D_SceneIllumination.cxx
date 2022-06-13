@@ -29,6 +29,7 @@
 #include <svtools/colrdlg.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svddef.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -183,9 +184,9 @@ namespace
 
 ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage(weld::Container* pParent,
     weld::Window* pTopLevel,
-    const uno::Reference< beans::XPropertySet > & xSceneProperties,
+    uno::Reference< beans::XPropertySet > xSceneProperties,
     const rtl::Reference<::chart::ChartModel>& xChartModel)
-    : m_xSceneProperties( xSceneProperties )
+    : m_xSceneProperties(std::move( xSceneProperties ))
     , m_aTimerTriggeredControllerLock( xChartModel )
     , m_bInCommitToModel( false )
     , m_aModelChangeListener( LINK( this, ThreeD_SceneIllumination_TabPage, fillControlsFromModel ) )

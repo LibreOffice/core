@@ -58,6 +58,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <sal/log.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 #include <libxml/xmlwriter.h>
 
@@ -84,7 +85,7 @@ constexpr OUStringLiteral lcl_aGDIMetaFileMIMETypeHighContrast(
 namespace chart
 {
 
-ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
+ChartModel::ChartModel(uno::Reference<uno::XComponentContext > xContext)
     : m_aLifeTimeManager( this, this )
     , m_bReadOnly( false )
     , m_bModified( false )
@@ -93,7 +94,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , mbTimeBased(false)
     , m_aControllers( m_aModelMutex )
     , m_nControllerLockCount(0)
-    , m_xContext( xContext )
+    , m_xContext(std::move( xContext ))
     , m_aVisualAreaSize( ChartModelHelper::getDefaultPageSize() )
     , m_xPageBackground( new PageBackground )
     , m_xXMLNamespaceMap( new NameContainer() )

@@ -40,8 +40,8 @@ public:
     //constructor without Display checkbox
     LegendPositionResources(weld::Builder& rBuilder);
     //constructor inclusive Display checkbox
-    LegendPositionResources(weld::Builder& rBuilder, const css::uno::Reference<
-                       css::uno::XComponentContext>& xCC );
+    LegendPositionResources(weld::Builder& rBuilder, css::uno::Reference<
+                       css::uno::XComponentContext> xCC );
     ~LegendPositionResources();
 
     void writeToResources( const rtl::Reference<::chart::ChartModel>& xChartModel );

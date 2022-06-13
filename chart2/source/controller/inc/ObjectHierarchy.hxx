@@ -99,8 +99,8 @@ private:
 class ObjectKeyNavigation
 {
 public:
-    explicit ObjectKeyNavigation( const ObjectIdentifier & rCurrentOID,
-                                  const rtl::Reference<::chart::ChartModel> & xChartDocument,
+    explicit ObjectKeyNavigation( ObjectIdentifier aCurrentOID,
+                                  rtl::Reference<::chart::ChartModel> xChartDocument,
                                   ExplicitValueProvider * pExplicitValueProvider );
 
     bool handleKeyEvent( const css::awt::KeyEvent & rEvent );

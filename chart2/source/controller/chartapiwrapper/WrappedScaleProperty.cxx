@@ -25,6 +25,7 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart/ChartAxisType.hpp>
 #include <chartview/ExplicitScaleValues.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -38,9 +39,9 @@ namespace chart::wrapper
 {
 
 WrappedScaleProperty::WrappedScaleProperty(tScaleProperty eScaleProperty
-                , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
+                , std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
             : WrappedProperty(OUString(),OUString())
-            , m_spChart2ModelContact( spChart2ModelContact )
+            , m_spChart2ModelContact(std::move( spChart2ModelContact ))
             , m_eScaleProperty( eScaleProperty )
 {
     switch( m_eScaleProperty )

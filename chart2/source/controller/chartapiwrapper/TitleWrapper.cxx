@@ -39,6 +39,7 @@
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/propshlp.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::beans::Property;
@@ -189,8 +190,8 @@ namespace chart::wrapper
 {
 
 TitleWrapper::TitleWrapper( ::chart::TitleHelper::eTitleType eTitleType,
-    const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact ) :
-        m_spChart2ModelContact( spChart2ModelContact ),
+    std::shared_ptr<Chart2ModelContact> spChart2ModelContact ) :
+        m_spChart2ModelContact(std::move( spChart2ModelContact )),
         m_aEventListenerContainer( m_aMutex ),
         m_eTitleType(eTitleType)
 {

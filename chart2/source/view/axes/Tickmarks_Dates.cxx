@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <DateHelper.hxx>
 #include <com/sun/star/chart/TimeUnit.hpp>
+#include <utility>
 
 namespace chart
 {
@@ -34,9 +35,9 @@ using ::com::sun::star::chart::TimeUnit::MONTH;
 using ::com::sun::star::chart::TimeUnit::YEAR;
 
 DateTickFactory::DateTickFactory(
-          const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement )
-            : m_aScale( rScale )
-            , m_aIncrement( rIncrement )
+          ExplicitScaleData aScale, ExplicitIncrementData aIncrement )
+            : m_aScale(std::move( aScale ))
+            , m_aIncrement(std::move( aIncrement ))
 {
     //@todo: make sure that the scale is valid for the scaling
 

@@ -39,7 +39,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS ChartTypeManager final :
 {
 public:
     explicit ChartTypeManager(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext );
+        css::uno::Reference< css::uno::XComponentContext > xContext );
     virtual ~ChartTypeManager() override;
 
     virtual OUString SAL_CALL

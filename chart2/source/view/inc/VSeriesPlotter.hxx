@@ -256,7 +256,7 @@ public:
 
 protected:
 
-    VSeriesPlotter( const rtl::Reference< ::chart::ChartType >& xChartTypeModel
+    VSeriesPlotter( rtl::Reference< ::chart::ChartType > xChartTypeModel
                 , sal_Int32 nDimensionCount
                 , bool bCategoryXAxis=true );
 

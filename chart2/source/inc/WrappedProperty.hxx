@@ -39,7 +39,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS WrappedProperty
     a corresponding property of the inner PropertySet. Use this class to do the conversion between the two.
     */
 public:
-    WrappedProperty( const OUString& rOuterName, const OUString& rInnerName );
+    WrappedProperty( OUString aOuterName, OUString aInnerName );
     virtual ~WrappedProperty();
 
     const OUString& getOuterName() const { return m_aOuterName;}

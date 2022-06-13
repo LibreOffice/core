@@ -139,7 +139,7 @@ public:
     void setSeriesNamesForAxis( const css::uno::Sequence< OUString >& rSeriesNames );
 
 protected: //methods
-    VCoordinateSystem( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
+    VCoordinateSystem( rtl::Reference< ::chart::BaseCoordinateSystem > xCooSys );
 
     rtl::Reference< ::chart::Axis >
         getAxisByDimension( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex  ) const;

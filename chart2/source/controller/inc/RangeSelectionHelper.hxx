@@ -42,7 +42,7 @@ class RangeSelectionHelper
 {
 public:
     explicit RangeSelectionHelper(
-        const rtl::Reference<::chart::ChartModel> & xChartDocument );
+        rtl::Reference<::chart::ChartModel> xChartDocument );
     ~RangeSelectionHelper();
 
     bool hasRangeSelection();

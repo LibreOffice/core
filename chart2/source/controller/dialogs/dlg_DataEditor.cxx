@@ -23,6 +23,7 @@
 #include <comphelper/stl_types.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -31,11 +32,11 @@ namespace chart
 {
 
 DataEditor::DataEditor(weld::Window* pParent,
-    const rtl::Reference<::chart::ChartModel> & xChartDoc,
+    rtl::Reference<::chart::ChartModel> xChartDoc,
     const Reference< uno::XComponentContext > & xContext)
     : GenericDialogController(pParent, "modules/schart/ui/chartdatadialog.ui", "ChartDataDialog")
     , m_bReadOnly(false)
-    , m_xChartDoc(xChartDoc)
+    , m_xChartDoc(std::move(xChartDoc))
     , m_xContext(xContext)
     , m_xTbxData(m_xBuilder->weld_toolbar("toolbar"))
     , m_xCloseBtn(m_xBuilder->weld_button("close"))

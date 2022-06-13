@@ -104,7 +104,7 @@ private:
 
 public:
     ChartView() = delete;
-    ChartView(css::uno::Reference< css::uno::XComponentContext > const & xContext,
+    ChartView(css::uno::Reference< css::uno::XComponentContext > xContext,
                ChartModel& rModel);
 
     virtual ~ChartView() override;

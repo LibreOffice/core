@@ -41,6 +41,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <utility>
 
 namespace chart
 {
@@ -68,8 +69,8 @@ std::unique_ptr<VCoordinateSystem> VCoordinateSystem::createCoordinateSystem(
     return pRet;
 }
 
-VCoordinateSystem::VCoordinateSystem( const rtl::Reference< BaseCoordinateSystem >& xCooSys )
-    : m_xCooSysModel(xCooSys)
+VCoordinateSystem::VCoordinateSystem( rtl::Reference< BaseCoordinateSystem > xCooSys )
+    : m_xCooSysModel(std::move(xCooSys))
     , m_eLeftWallPos(CuboidPlanePosition_Left)
     , m_eBackWallPos(CuboidPlanePosition_Back)
     , m_eBottomPos(CuboidPlanePosition_Bottom)

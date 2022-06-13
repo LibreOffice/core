@@ -19,7 +19,7 @@ class ChartUIObject final : public UIObject
 public:
 
     ChartUIObject(const VclPtr<chart::ChartWindow>& xChartWindow,
-            const OUString& rCID);
+            OUString aCID);
 
     StringMap get_state() override;
 

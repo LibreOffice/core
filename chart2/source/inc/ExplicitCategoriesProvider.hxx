@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
+#include <utility>
 #include <vector>
 
 namespace chart { class ChartModel; }
@@ -41,7 +42,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS ComplexCategory
     OUString Text;
     sal_Int32 Count;
 
-    ComplexCategory( const OUString& rText, sal_Int32 nCount ) : Text( rText ), Count (nCount)
+    ComplexCategory( OUString aText, sal_Int32 nCount ) : Text(std::move( aText )), Count (nCount)
     {}
 };
 

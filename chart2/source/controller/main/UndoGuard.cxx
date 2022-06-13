@@ -23,6 +23,7 @@
 #include <ChartModel.hxx>
 
 #include <com/sun/star/document/XUndoManager.hpp>
+#include <utility>
 
 #include <tools/diagnose_ex.h>
 
@@ -33,10 +34,10 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-UndoGuard::UndoGuard( const OUString& i_undoString, const uno::Reference< document::XUndoManager > & i_undoManager,
+UndoGuard::UndoGuard( OUString i_undoString, const uno::Reference< document::XUndoManager > & i_undoManager,
                                const ModelFacet i_facet )
     :m_xUndoManager( i_undoManager )
-    ,m_aUndoString( i_undoString )
+    ,m_aUndoString(std::move( i_undoString ))
     ,m_bActionPosted( false )
 {
     m_xChartModel = dynamic_cast<::chart::ChartModel*>(i_undoManager->getParent().get());

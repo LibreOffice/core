@@ -24,15 +24,16 @@
 #include "VAxisProperties.hxx"
 #include <osl/diagnose.h>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using ::basegfx::B2DVector;
 
 namespace chart {
 
-TickInfo::TickInfo( const uno::Reference<chart2::XScaling>& xInverse )
+TickInfo::TickInfo( uno::Reference<chart2::XScaling> xInverse )
 : fScaledTickValue( 0.0 )
-, xInverseScaling( xInverse )
+, xInverseScaling(std::move( xInverse ))
 , aTickScreenPosition(0.0,0.0)
 , nFactorForLimitedTextWidth(1)
 , bPaintIt( true )
@@ -85,9 +86,9 @@ TickInfo* PureTickIter::nextInfo()
 }
 
 TickFactory::TickFactory(
-          const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement )
-            : m_rScale( rScale )
-            , m_rIncrement( rIncrement )
+          ExplicitScaleData aScale, ExplicitIncrementData aIncrement )
+            : m_rScale(std::move( aScale ))
+            , m_rIncrement(std::move( aIncrement ))
 {
     //@todo: make sure that the scale is valid for the scaling
 

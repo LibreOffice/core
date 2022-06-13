@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
+
 #include "WrappedSeriesAreaOrLineProperty.hxx"
 #include "DataSeriesPointWrapper.hxx"
 
@@ -25,13 +27,13 @@ namespace chart::wrapper
 
 WrappedSeriesAreaOrLineProperty::WrappedSeriesAreaOrLineProperty(
       const OUString& rOuterName
-    , const OUString& rInnerAreaTypeName
-    , const OUString& rInnerLineTypeName
+    , OUString aInnerAreaTypeName
+    , OUString aInnerLineTypeName
     , DataSeriesPointWrapper* pDataSeriesPointWrapper )
     : WrappedProperty( rOuterName, OUString() )
     , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
-    , m_aInnerAreaTypeName( rInnerAreaTypeName )
-    , m_aInnerLineTypeName( rInnerLineTypeName )
+    , m_aInnerAreaTypeName(std::move( aInnerAreaTypeName ))
+    , m_aInnerLineTypeName(std::move( aInnerLineTypeName ))
 {
 }
 WrappedSeriesAreaOrLineProperty::~WrappedSeriesAreaOrLineProperty()

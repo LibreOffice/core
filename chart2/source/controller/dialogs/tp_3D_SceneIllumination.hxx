@@ -39,10 +39,9 @@ class ChartModel;
 class ThreeD_SceneIllumination_TabPage
 {
 public:
-    ThreeD_SceneIllumination_TabPage(
-        weld::Container* pParent, weld::Window* pTopLevel,
-        const css::uno::Reference<css::beans::XPropertySet>& xSceneProperties,
-        const rtl::Reference<::chart::ChartModel>& xChartModel);
+    ThreeD_SceneIllumination_TabPage(weld::Container* pParent, weld::Window* pTopLevel,
+                                     css::uno::Reference<css::beans::XPropertySet> xSceneProperties,
+                                     const rtl::Reference<::chart::ChartModel>& xChartModel);
     ~ThreeD_SceneIllumination_TabPage();
 
 private:

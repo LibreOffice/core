@@ -39,7 +39,7 @@ class TitlesAndObjectsTabPage final : public vcl::OWizardPage
 {
 public:
     TitlesAndObjectsTabPage(weld::Container* pPage, weld::DialogController* pController,
-                            const rtl::Reference<::chart::ChartModel>& xChartModel,
+                            rtl::Reference<::chart::ChartModel> xChartModel,
                             const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~TitlesAndObjectsTabPage() override;
 

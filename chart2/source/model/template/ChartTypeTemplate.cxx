@@ -42,6 +42,7 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -126,9 +127,9 @@ namespace chart
 
 ChartTypeTemplate::ChartTypeTemplate(
     Reference< uno::XComponentContext > const & xContext,
-    const OUString & rServiceName ) :
+    OUString aServiceName ) :
         m_xContext( xContext ),
-        m_aServiceName( rServiceName )
+        m_aServiceName(std::move( aServiceName ))
 {
 }
 

@@ -83,7 +83,7 @@ class SAL_DLLPUBLIC_RTTI ChartTypeTemplate : public ::cppu::WeakImplHelper<
 {
 public:
     explicit ChartTypeTemplate( css::uno::Reference< css::uno::XComponentContext > const & xContext,
-        const OUString & rServiceName );
+        OUString aServiceName );
     virtual ~ChartTypeTemplate() override;
 
     OOO_DLLPUBLIC_CHARTTOOLS

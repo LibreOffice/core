@@ -27,15 +27,16 @@
 #include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
 namespace chart::wrapper {
 
 ItemConverter::ItemConverter(
-    const uno::Reference< beans::XPropertySet > & rPropertySet,
+    uno::Reference< beans::XPropertySet > xPropertySet,
     SfxItemPool& rItemPool ) :
-        m_xPropertySet( rPropertySet ),
+        m_xPropertySet(std::move( xPropertySet )),
         m_rItemPool( rItemPool )
 {
     resetPropertySet( m_xPropertySet );

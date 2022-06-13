@@ -45,6 +45,7 @@
 #include <tools/diagnose_ex.h>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
+#include <utility>
 
 namespace com::sun::star::drawing { class XShape; }
 
@@ -235,8 +236,8 @@ ObjectIdentifier::ObjectIdentifier()
 {
 }
 
-ObjectIdentifier::ObjectIdentifier( const OUString& rObjectCID )
-    :m_aObjectCID( rObjectCID )
+ObjectIdentifier::ObjectIdentifier( OUString aObjectCID )
+    :m_aObjectCID(std::move( aObjectCID ))
 {
 }
 

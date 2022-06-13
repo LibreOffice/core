@@ -25,6 +25,7 @@
 #include <Diagram.hxx>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -87,9 +88,9 @@ namespace chart
 #define POS_3DSCHEME_CUSTOM 2
 
 ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(weld::Container* pParent,
-        const rtl::Reference<::chart::ChartModel>& xChartModel,
+        rtl::Reference<::chart::ChartModel> xChartModel,
         ControllerLockHelper& rControllerLockHelper)
-    : m_xChartModel(xChartModel)
+    : m_xChartModel(std::move(xChartModel))
     , m_bUpdateOtherControls(true)
     , m_bCommitToModel(true)
     , m_rControllerLockHelper(rControllerLockHelper)

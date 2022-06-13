@@ -22,6 +22,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -32,9 +33,9 @@ namespace chart
 
 WrappedDefaultProperty::WrappedDefaultProperty(
     const OUString& rOuterName, const OUString& rInnerName,
-    const uno::Any& rNewOuterDefault ) :
+    uno::Any aNewOuterDefault ) :
         WrappedProperty( rOuterName, rInnerName ),
-        m_aOuterDefaultValue( rNewOuterDefault )
+        m_aOuterDefaultValue(std::move( aNewOuterDefault ))
 {}
 
 WrappedDefaultProperty::~WrappedDefaultProperty()

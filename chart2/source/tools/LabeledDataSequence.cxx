@@ -20,6 +20,7 @@
 #include <LabeledDataSequence.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -36,18 +37,18 @@ LabeledDataSequence::LabeledDataSequence() :
 {}
 
 LabeledDataSequence::LabeledDataSequence(
-    const uno::Reference< chart2::data::XDataSequence > & rValues ) :
-        m_xData( rValues ),
+    uno::Reference< chart2::data::XDataSequence > xValues ) :
+        m_xData(std::move( xValues )),
         m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     ModifyListenerHelper::addListener( m_xData, m_xModifyEventForwarder );
 }
 
 LabeledDataSequence::LabeledDataSequence(
-    const uno::Reference< chart2::data::XDataSequence > & rValues,
-    const uno::Reference< chart2::data::XDataSequence > & rLabel ) :
-        m_xData( rValues ),
-        m_xLabel( rLabel ),
+    uno::Reference< chart2::data::XDataSequence > xValues,
+    uno::Reference< chart2::data::XDataSequence > xLabel ) :
+        m_xData(std::move( xValues )),
+        m_xLabel(std::move( xLabel )),
         m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     ModifyListenerHelper::addListener( m_xData, m_xModifyEventForwarder );
