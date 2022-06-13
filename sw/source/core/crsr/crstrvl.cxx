@@ -76,6 +76,8 @@
 #include <wrtsh.hxx>
 #include <textcontentcontrol.hxx>
 
+#include <IDocumentState.hxx>
+
 using namespace ::com::sun::star;
 
 void SwCursorShell::MoveCursorToNum()
@@ -1363,7 +1365,11 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
         aTmpState.m_pSpecialPos = ( IsAttrAtPos::SmartTag & rContentAtPos.eContentAtPos ) ?
                                 &aSpecialPos : nullptr;
 
+        bool bModifiedEnabled = GetDoc()->getIDocumentState().IsEnableSetModified();
+        GetDoc()->getIDocumentState().SetEnableSetModified(false);
         const bool bCursorFoundExact = GetLayout()->GetModelPositionForViewPoint( &aPos, aPt, &aTmpState );
+        GetDoc()->getIDocumentState().SetEnableSetModified(bModifiedEnabled);
+
         pTextNd = aPos.nNode.GetNode().GetTextNode();
 
         const SwNodes& rNds = GetDoc()->GetNodes();
