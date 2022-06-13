@@ -45,15 +45,13 @@ class ScSortedRangeCache final : public SvtListener
 public:
     /// MUST be new'd because Notify() deletes.
     ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange, const ScQueryParam& param,
-                       ScSortedRangeCacheMap& cacheMap, ScInterpreterContext* context);
+                       ScInterpreterContext* context);
 
     /// Remove from document structure and delete (!) cache on modify hint.
     virtual void Notify(const SfxHint& rHint) override;
 
     const ScRange& getRange() const { return maRange; }
     bool isDescending() const { return mDescending; }
-
-    ScSortedRangeCacheMap& getCacheMap() const { return mCacheMap; }
 
     enum class ValueType
     {
@@ -102,7 +100,6 @@ private:
     std::vector<size_t> mRowToIndex; // indexed by 'SCROW - maRange.aStart.Row()'
     ScRange maRange;
     ScDocument* mpDoc;
-    ScSortedRangeCacheMap& mCacheMap;
     bool mDescending;
     ValueType mValues;
 

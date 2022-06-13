@@ -64,15 +64,13 @@ void ScInterpreterContext::initFormatTable()
 
 void ScInterpreterContext::Cleanup()
 {
-    // Do not disturb mxScLookupCache/mxScSortedRangeCache
+    // Do not disturb mxScLookupCache.
     maConditions.clear();
     maDelayedSetNumberFormat.clear();
     ResetTokens();
 }
 
 void ScInterpreterContext::ClearLookupCache() { mxScLookupCache.reset(); }
-
-void ScInterpreterContext::ClearSortedRangeCache() { mxScSortedRangeCache.reset(); }
 
 SvNumFormatType ScInterpreterContext::GetNumberFormatType(sal_uInt32 nFIndex) const
 {
@@ -165,14 +163,6 @@ void ScInterpreterContextPool::ClearLookupCaches()
         rPtr->ClearLookupCache();
     for (auto& rPtr : aNonThreadedInterpreterPool.maPool)
         rPtr->ClearLookupCache();
-}
-
-void ScInterpreterContextPool::ClearSortedRangeCaches()
-{
-    for (auto& rPtr : aThreadedInterpreterPool.maPool)
-        rPtr->ClearSortedRangeCache();
-    for (auto& rPtr : aNonThreadedInterpreterPool.maPool)
-        rPtr->ClearSortedRangeCache();
 }
 
 /* ScThreadedInterpreterContextGetterGuard */
