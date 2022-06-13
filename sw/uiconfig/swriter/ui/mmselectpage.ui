@@ -188,7 +188,7 @@
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="margin-start">18</property>
-                <property name="label" translatable="yes" context="mmselectpage|extended_tip|datasourcewarning">Data source of the current document is not registered. Please exchange database.</property>
+                <property name="label" translatable="yes" context="mmselectpage|datasourcewarning">Data source of the current document is not registered. Please exchange database.</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -197,12 +197,17 @@
             </child>
             <child>
               <object class="GtkButton" id="exchangedatabase">
-                <property name="label" translatable="yes" context="mmselectpage|extended_tip|exchangedatabase">Exchange Database...</property>
+                <property name="label" translatable="yes" context="mmselectpage|exchangedatabase">Exchange Databases...</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="halign">start</property>
                 <property name="margin-start">18</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="exchangedatabase-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="mmselectpage|extended_tip|exchangedatabase">Click to exchange the databases of your mail merge.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
