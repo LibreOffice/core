@@ -191,8 +191,15 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem const * pF
 
                 if ( ImplWriteHeader( aAnimation.Count() > 0 ) )
                 {
-                    ImplWriteResolution( mnXResPos, 96 );
-                    ImplWriteResolution( mnYResPos, 96 );
+                    Size aDestMapSize( 300, 300 );
+                    const MapMode& aMapMode( aBmp.GetPrefMapMode() );
+                    if ( aMapMode.GetMapUnit() != MapUnit::MapPixel )
+                    {
+                        const Size aPrefSize( rGraphic.GetPrefSize() );
+                        aDestMapSize = OutputDevice::LogicToLogic(aPrefSize, aMapMode, MapMode(MapUnit::MapInch));
+                    }
+                    ImplWriteResolution( mnXResPos, aDestMapSize.Width() );
+                    ImplWriteResolution( mnYResPos, aDestMapSize.Height() );
                     if  ( mnPalPos )
                         ImplWritePalette();
                     ImplWriteBody();
@@ -440,14 +447,14 @@ void TIFFWriter::ImplWriteBody()
 }
 
 
-void TIFFWriter::ImplWriteResolution( sal_uInt64 nStreamPos, sal_uInt32 nResolutionValue )
+void TIFFWriter::ImplWriteResolution( sal_uInt64 nStreamPos, sal_uInt32 nResolutionUnit )
 {
     sal_uInt64 nCurrentPos = m_rOStm.Tell();
     m_rOStm.Seek( nStreamPos + 8 );
     m_rOStm.WriteUInt32( nCurrentPos - mnStreamOfs );
     m_rOStm.Seek( nCurrentPos );
-    m_rOStm.WriteUInt32( nResolutionValue );
     m_rOStm.WriteUInt32( 1 );
+    m_rOStm.WriteUInt32( nResolutionUnit );
 }
 
 
