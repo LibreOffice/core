@@ -14,6 +14,7 @@
 # Run configure with checked args
 #
     eval 'exec perl -S $0 ${1+"$@"}'
+make clean
         if 0;
 
 use strict;
