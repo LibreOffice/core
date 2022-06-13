@@ -1198,22 +1198,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
     // SDRATTR_TEXT_LEFTDIST
     assertXPath(pXmlDoc,
                 "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject"
-                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item[@whichId='1071']",
+                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item[@whichId='1072']",
                 "value", "567");
     // SDRATTR_TEXT_RIGHTDIST
     assertXPath(pXmlDoc,
                 "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject"
-                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item[@whichId='1072']",
+                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item[@whichId='1073']",
                 "value", "1134");
     // SDRATTR_TEXT_UPPERDIST
     assertXPath(pXmlDoc,
                 "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject"
-                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item[@whichId='1073']",
+                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item[@whichId='1074']",
                 "value", "1701");
     // SDRATTR_TEXT_LOWERDIST
     assertXPath(pXmlDoc,
                 "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject"
-                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item[@whichId='1074']",
+                "/DefaultProperties/SfxItemSet/SdrMetricItem/SfxInt32Item[@whichId='1075']",
                 "value", "2268");
 
     // Check the textbox-shape import too

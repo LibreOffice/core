@@ -348,6 +348,7 @@ void FillProperties::assignUsed( const FillProperties& rSourceProps )
 {
     moFillType.assignIfUsed( rSourceProps.moFillType );
     maFillColor.assignIfUsed( rSourceProps.maFillColor );
+    moUseBgFill.assignIfUsed( rSourceProps.moUseBgFill );
     maGradientProps.assignUsed( rSourceProps.maGradientProps );
     maPatternProps.assignUsed( rSourceProps.maPatternProps );
     maBlipProps.assignUsed( rSourceProps.maBlipProps );
@@ -390,7 +391,10 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
     switch( moFillType.get() )
     {
         case XML_noFill:
+        {
             eFillStyle = FillStyle_NONE;
+            rPropMap.setProperty(ShapeProperty::FillUseSlideBackground, moUseBgFill.get(false));
+        }
         break;
 
         case XML_solidFill:
