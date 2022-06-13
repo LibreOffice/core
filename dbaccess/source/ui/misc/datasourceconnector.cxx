@@ -30,6 +30,7 @@
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <UITools.hxx>
+#include <utility>
 #include <vcl/outdev.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
@@ -59,10 +60,10 @@ namespace dbaui
     }
 
     ODatasourceConnector::ODatasourceConnector( const Reference< XComponentContext >& _rxContext, weld::Window* _pMessageParent,
-        const OUString& _rContextInformation )
+        OUString _sContextInformation )
         :m_pErrorMessageParent(_pMessageParent)
         ,m_xContext(_rxContext)
-        ,m_sContextInformation( _rContextInformation )
+        ,m_sContextInformation(std::move( _sContextInformation ))
     {
     }
 

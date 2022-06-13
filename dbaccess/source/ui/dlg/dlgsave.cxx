@@ -27,6 +27,7 @@
 #include <SqlNameEdit.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <objectnamecheck.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace dbaui;
@@ -64,11 +65,11 @@ public:
 
     OSaveAsDlgImpl( weld::Builder* pParent, sal_Int32 _rType,
                     const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-                    const OUString& rDefault,
+                    OUString sDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     SADFlags _nFlags);
     OSaveAsDlgImpl( weld::Builder* pParent,
-                    const OUString& rDefault,
+                    OUString sDefault,
                     const IObjectNameCheck& _rObjectNameCheck,
                     SADFlags _nFlags);
 };
@@ -86,12 +87,12 @@ IMPL_LINK(OSaveAsDlgImpl, TextFilterHdl, OUString&, rTest, bool)
 OSaveAsDlgImpl::OSaveAsDlgImpl(weld::Builder* pBuilder,
                                sal_Int32 _rType,
                                const Reference< XConnection>& _xConnection,
-                               const OUString& rDefault,
+                               OUString sDefault,
                                const IObjectNameCheck& _rObjectNameCheck,
                                SADFlags _nFlags)
     : m_aQryLabel(DBA_RES(STR_QRY_LABEL))
     , m_sTblLabel(DBA_RES(STR_TBL_LABEL))
-    , m_aName(rDefault)
+    , m_aName(std::move(sDefault))
     , m_rObjectNameCheck( _rObjectNameCheck )
     , m_nType(_rType)
     , m_nFlags(_nFlags)
@@ -120,12 +121,12 @@ OSaveAsDlgImpl::OSaveAsDlgImpl(weld::Builder* pBuilder,
 }
 
 OSaveAsDlgImpl::OSaveAsDlgImpl(weld::Builder* pBuilder,
-                               const OUString& rDefault,
+                               OUString sDefault,
                                const IObjectNameCheck& _rObjectNameCheck,
                                SADFlags _nFlags)
     : m_aQryLabel(DBA_RES(STR_QRY_LABEL))
     , m_sTblLabel(DBA_RES(STR_TBL_LABEL))
-    , m_aName(rDefault)
+    , m_aName(std::move(sDefault))
     , m_rObjectNameCheck( _rObjectNameCheck )
     , m_nType(CommandType::COMMAND)
     , m_nFlags(_nFlags)

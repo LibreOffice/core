@@ -144,7 +144,7 @@ namespace dbaui
     class DataSourceMetaData_Impl
     {
     public:
-        explicit DataSourceMetaData_Impl(const OUString& rURL);
+        explicit DataSourceMetaData_Impl(OUString sURL);
 
         const OUString& getType() const { return m_sURL; }
 
@@ -152,8 +152,8 @@ namespace dbaui
         const OUString m_sURL;
     };
 
-    DataSourceMetaData_Impl::DataSourceMetaData_Impl( const OUString& _sURL )
-        :m_sURL( _sURL )
+    DataSourceMetaData_Impl::DataSourceMetaData_Impl( OUString _sURL )
+        :m_sURL(std::move( _sURL ))
     {
     }
 

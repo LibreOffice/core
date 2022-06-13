@@ -18,15 +18,16 @@
  */
 
 #include <ConnectionLineData.hxx>
+#include <utility>
 
 using namespace dbaui;
 OConnectionLineData::OConnectionLineData()
 {
 }
 
-OConnectionLineData::OConnectionLineData( const OUString& rSourceFieldName, const OUString& rDestFieldName )
-    :m_aSourceFieldName( rSourceFieldName )
-    ,m_aDestFieldName( rDestFieldName )
+OConnectionLineData::OConnectionLineData( OUString sSourceFieldName, OUString sDestFieldName )
+    :m_aSourceFieldName(std::move( sSourceFieldName ))
+    ,m_aDestFieldName(std::move( sDestFieldName ))
 {
 }
 

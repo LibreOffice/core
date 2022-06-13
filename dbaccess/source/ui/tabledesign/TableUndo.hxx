@@ -78,7 +78,7 @@ namespace dbaui
         virtual void    Undo() override;
         virtual void    Redo() override;
     public:
-        OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, sal_Int32 nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType );
+        OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, sal_Int32 nRowID, sal_uInt16 nColumn, TOTypeInfoSP _pOldType );
         virtual ~OTableEditorTypeSelUndoAct() override;
     };
 

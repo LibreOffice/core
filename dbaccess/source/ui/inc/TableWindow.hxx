@@ -112,7 +112,7 @@ namespace dbaui
         */
         void    impl_updateImage();
 
-        OTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData );
+        OTableWindow( vcl::Window* pParent, TTableWindowData::value_type  aTabWinData );
 
     public:
         virtual ~OTableWindow() override;

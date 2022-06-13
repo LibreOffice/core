@@ -20,6 +20,7 @@
 #pragma once
 
 #include <connectivity/TIndexes.hxx>
+#include <utility>
 
 namespace dbaccess
 {
@@ -35,9 +36,9 @@ namespace dbaccess
         OIndexes(connectivity::OTableHelper* _pTable,
                  ::osl::Mutex& _rMutex,
                  const std::vector< OUString> &_rVector,
-                 const css::uno::Reference< css::container::XNameAccess >& _rxIndexes
+                 css::uno::Reference< css::container::XNameAccess >  _rxIndexes
                  ) : connectivity::OIndexesHelper(_pTable,_rMutex,_rVector)
-            ,m_xIndexes(_rxIndexes)
+            ,m_xIndexes(std::move(_rxIndexes))
         {}
 
         virtual void disposing() override;

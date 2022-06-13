@@ -48,7 +48,7 @@ namespace dbaui
         ODatasourceConnector(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             weld::Window* _pMessageParent,
-            const OUString& _rContextInformation
+            OUString _sContextInformation
         );
 
         /// returns <TRUE/> if the object is able to create data source connections

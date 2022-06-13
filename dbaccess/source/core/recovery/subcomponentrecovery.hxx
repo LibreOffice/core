@@ -24,6 +24,7 @@
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <utility>
 
 namespace dbaccess
 {
@@ -35,10 +36,10 @@ namespace dbaccess
         SubComponentRecovery(
                 const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
                 const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& i_rController,
-                const css::uno::Reference< css::lang::XComponent >& i_rComponent )
+                css::uno::Reference< css::lang::XComponent > i_xComponent )
             :m_rContext( i_rContext )
             ,m_xDocumentUI( i_rController, css::uno::UNO_SET_THROW )
-            ,m_xComponent( i_rComponent )
+            ,m_xComponent(std::move( i_xComponent ))
             ,m_eType( UNKNOWN )
             ,m_aCompDesc()
         {

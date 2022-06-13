@@ -22,6 +22,7 @@
 #include <TableWindow.hxx>
 #include <TableWindowListBox.hxx>
 #include <TableConnection.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <math.h>
 #include <osl/diagnose.h>
@@ -121,9 +122,9 @@ namespace
     }
 }
 
-OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataRef const & _pLineData )
+OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataRef _pLineData )
     : m_pTabConn( _pConn )
-    , m_pData( _pLineData )
+    , m_pData(std::move( _pLineData ))
 {
 }
 

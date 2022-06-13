@@ -21,6 +21,7 @@
 #include "xmlComponent.hxx"
 #include "xmlColumn.hxx"
 #include "xmlfilter.hxx"
+#include <utility>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
@@ -40,10 +41,10 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 ,const Reference< XFastAttributeList > & _xAttrList
                 ,const Reference< XNameAccess >& _xParentContainer
                 ,const OUString& _sCollectionServiceName
-                ,const OUString& _sComponentServiceName) :
+                ,OUString _sComponentServiceName) :
     SvXMLImportContext( rImport )
     ,m_sCollectionServiceName(_sCollectionServiceName)
-    ,m_sComponentServiceName(_sComponentServiceName)
+    ,m_sComponentServiceName(std::move(_sComponentServiceName))
 {
     OUString sName;
     for (auto &aIter : sax_fastparser::castToFastAttributeList( _xAttrList ))

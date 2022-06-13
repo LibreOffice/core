@@ -48,6 +48,7 @@
 #include <svtools/htmlout.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <svl/numuno.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <UITools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -95,11 +96,11 @@ ODatabaseImportExport::ODatabaseImportExport(const svx::ODataAccessDescriptor& _
 }
 
 // import data
-ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection& _rxConnection,
+ODatabaseImportExport::ODatabaseImportExport( ::dbtools::SharedConnection _xConnection,
         const Reference< XNumberFormatter >& _rxNumberF, const Reference< XComponentContext >& _rM )
     :m_bBookmarkSelection( false )
     ,m_pStream(nullptr)
-    ,m_xConnection(_rxConnection)
+    ,m_xConnection(std::move(_xConnection))
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rM)
     ,m_nCommandType(css::sdb::CommandType::TABLE)

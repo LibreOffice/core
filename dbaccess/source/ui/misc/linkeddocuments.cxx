@@ -38,6 +38,7 @@
 #include <browserids.hxx>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <comphelper/mimeconfighelper.hxx>
+#include <utility>
 #include <vcl/weld.hxx>
 
 #include <cppuhelper/exc_hlp.hxx>
@@ -88,13 +89,13 @@ namespace dbaui
     // OLinkedDocumentsAccess
     OLinkedDocumentsAccess::OLinkedDocumentsAccess( weld::Window* pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
         const Reference< XComponentContext >& _rxContext, const Reference< XNameAccess >& _rxContainer,
-        const Reference< XConnection>& _xConnection, const OUString& _sDataSourceName )
+        const Reference< XConnection>& _xConnection, OUString _sDataSourceName )
         :m_xContext(_rxContext)
         ,m_xDocumentContainer(_rxContainer)
         ,m_xConnection(_xConnection)
         ,m_xDocumentUI( i_rDocumentUI )
         ,m_pDialogParent(pDialogParent)
-        ,m_sDataSourceName(_sDataSourceName)
+        ,m_sDataSourceName(std::move(_sDataSourceName))
     {
         OSL_ENSURE(m_xContext.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");
         assert(m_pDialogParent && "OLinkedDocumentsAccess::OLinkedDocumentsAccess: really need a dialog parent!");

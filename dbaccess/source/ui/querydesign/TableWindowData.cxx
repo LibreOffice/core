@@ -26,6 +26,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <utility>
 
 using namespace dbaui;
 using namespace ::com::sun::star::lang;
@@ -37,13 +38,13 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
 OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
-                                   ,const OUString& _rComposedName
-                                   ,const OUString& rTableName
-                                   ,const OUString& rWinName )
+                                   ,OUString _sComposedName
+                                   ,OUString sTableName
+                                   ,OUString sWinName )
     :m_xTable(_xTable)
-    ,m_aTableName( rTableName )
-    ,m_aWinName( rWinName )
-    ,m_sComposedName(_rComposedName)
+    ,m_aTableName(std::move( sTableName ))
+    ,m_aWinName(std::move( sWinName ))
+    ,m_sComposedName(std::move(_sComposedName))
     ,m_aPosition( Point(-1,-1) )
     ,m_aSize( Size(-1,-1) )
     ,m_bShowAll( true )

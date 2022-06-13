@@ -72,7 +72,7 @@ namespace dbaui
         const OUString& getDisplayName() const      { return m_sDisplayName; }
 
     private:
-        CharsetDisplayDerefHelper(const ::dbtools::CharsetIteratorDerefHelper& _rBase, const OUString& _rDisplayName);
+        CharsetDisplayDerefHelper(const ::dbtools::CharsetIteratorDerefHelper& _rBase, OUString _sDisplayName);
     };
 
     //- OCharsetDisplay::ExtendedCharsetIterator
@@ -97,7 +97,7 @@ namespace dbaui
         const ExtendedCharsetIterator&  operator++();
 
     protected:
-        ExtendedCharsetIterator( const OCharsetDisplay* _pContainer, const base_iterator& _rPosition );
+        ExtendedCharsetIterator( const OCharsetDisplay* _pContainer, base_iterator _aPosition );
     };
 
 }   // namespace dbaui

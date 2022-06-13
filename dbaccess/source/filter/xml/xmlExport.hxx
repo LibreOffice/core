@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <utility>
 #include <xmloff/maptype.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlexp.hxx>
@@ -74,10 +75,10 @@ class ODBExport : public SvXMLExport
         css::uno::Type   Type;
         css::uno::Any    Value;
 
-        TypedPropertyValue( const OUString& _name, const css::uno::Type& _type, const css::uno::Any& _value )
-            :Name( _name )
+        TypedPropertyValue( OUString _name, const css::uno::Type& _type, css::uno::Any _value )
+            :Name(std::move( _name ))
             ,Type( _type )
-            ,Value( _value )
+            ,Value(std::move( _value ))
         {
         }
     };

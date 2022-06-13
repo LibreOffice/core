@@ -122,7 +122,7 @@ namespace dbaccess
 
         OContentHelper( const css::uno::Reference< css::uno::XComponentContext >& _xORB
                         ,const css::uno::Reference< css::uno::XInterface >&   _xParentContainer
-                        ,const TContentPtr& _pImpl
+                        ,TContentPtr _pImpl
                     );
 
         // css::lang::XTypeProvider

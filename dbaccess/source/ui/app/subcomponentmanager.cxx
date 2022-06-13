@@ -33,6 +33,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <dbaccess/dataview.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
@@ -93,9 +94,9 @@ namespace dbaui
             {
             }
 
-            SubComponentDescriptor( const OUString& i_rName, const sal_Int32 i_nComponentType,
+            SubComponentDescriptor( OUString i_sName, const sal_Int32 i_nComponentType,
                     const ElementOpenMode i_eOpenMode, const Reference< XComponent >& i_rComponent )
-                :sName( i_rName )
+                :sName(std::move( i_sName ))
                 ,nComponentType( i_nComponentType )
                 ,eOpenMode( i_eOpenMode )
             {
@@ -168,9 +169,9 @@ namespace dbaui
         struct SubComponentMatch
         {
         public:
-            SubComponentMatch( const OUString& i_rName, const sal_Int32 i_nComponentType,
+            SubComponentMatch( OUString i_sName, const sal_Int32 i_nComponentType,
                     const ElementOpenMode i_eOpenMode )
-                :m_sName( i_rName )
+                :m_sName(std::move( i_sName ))
                 ,m_nComponentType( i_nComponentType )
                 ,m_eOpenMode( i_eOpenMode )
             {
@@ -192,9 +193,9 @@ namespace dbaui
     // SubComponentManager_Data
     struct SubComponentManager_Data
     {
-        SubComponentManager_Data( OApplicationController& _rController, const ::comphelper::SharedMutex& _rMutex )
+        SubComponentManager_Data( OApplicationController& _rController, ::comphelper::SharedMutex  _aMutex )
             :m_rController( _rController )
-            ,m_aMutex( _rMutex )
+            ,m_aMutex(std::move( _aMutex ))
         {
         }
 
