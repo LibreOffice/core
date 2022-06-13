@@ -137,7 +137,7 @@
                             <property name="image-position">top</property>
                             <property name="always-show-image">True</property>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="values-only-atkobject">
+                              <object class="AtkObject" id="paste_values_only-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|paste_values_only">Pastes numbers, text, dates and the results of formulas.</property>
                               </object>
                             </child>
@@ -160,7 +160,7 @@
                             <property name="image-position">top</property>
                             <property name="always-show-image">True</property>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="values-formats-atkobject">
+                              <object class="AtkObject" id="paste_values_formats-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|paste_values_formats">Pastes cell values, formula results and formats applied to cells.</property>
                               </object>
                             </child>
@@ -183,7 +183,7 @@
                             <property name="image-position">top</property>
                             <property name="always-show-image">True</property>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="formats-only-atkobject">
+                              <object class="AtkObject" id="paste_formats-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|paste_formats">Pastes only the formats from the source range without changing the values in the destination range.</property>
                               </object>
                             </child>
@@ -206,7 +206,7 @@
                             <property name="image-position">top</property>
                             <property name="always-show-image">True</property>
                             <child internal-child="accessible">
-                              <object class="AtkObject" id="paste-transpose-atkobject">
+                              <object class="AtkObject" id="paste_transpose-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|paste_transpose">Pastes cell contents transposed, hence columns are converted to rows.</property>
                               </object>
                             </child>
@@ -234,7 +234,7 @@
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="immediately-atkobject">
+                          <object class="AtkObject" id="cbImmediately-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|cbImmediately">Check this option to run the preset immediately. Uncheck it to manipulate the options before clicking OK.</property>
                           </object>
                         </child>
@@ -822,7 +822,7 @@
     </action-widgets>
     <child internal-child="accessible">
       <object class="AtkObject" id="PasteSpecial-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|PasteSpecial">Inserts the contents of the clipboard into the current file in a format that you can specify.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="pastespecial|extended_tip|PasteSpecial">Inserts the contents of the clipboard into the current document in a format that you can specify.</property>
       </object>
     </child>
   </object>
