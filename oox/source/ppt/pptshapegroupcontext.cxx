@@ -100,35 +100,7 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
     case PPT_TOKEN( sp ):           // Shape
         {
             auto pShape = std::make_shared<PPTShape>( meShapeLocation, "com.sun.star.drawing.CustomShape" );
-            bool bUseBgFill = rAttribs.getBool(XML_useBgFill, false);
-            pShape->setUseBgFill(bUseBgFill);
-            if (bUseBgFill)
-            {
-                oox::drawingml::FillPropertiesPtr pBackgroundPropertiesPtr = mpSlidePersistPtr->getBackgroundProperties();
-                if (!pBackgroundPropertiesPtr)
-                {
-                    // The shape wants a background, but the slide doesn't have one.
-                    SlidePersistPtr pMaster = mpSlidePersistPtr->getMasterPersist();
-                    if (pMaster)
-                    {
-                        oox::drawingml::FillPropertiesPtr pMasterBackground
-                            = pMaster->getBackgroundProperties();
-                        if (pMasterBackground)
-                        {
-                            if (pMasterBackground->moFillType.has()
-                                && pMasterBackground->moFillType.get() == XML_solidFill)
-                            {
-                                // Master has a solid background, use that.
-                                pBackgroundPropertiesPtr = pMasterBackground;
-                            }
-                        }
-                    }
-                }
-                if (pBackgroundPropertiesPtr)
-                {
-                    pShape->getFillProperties().assignUsed(*pBackgroundPropertiesPtr);
-                }
-            }
+            pShape->getFillProperties().moUseBgFill = rAttribs.getBool(XML_useBgFill, false);
             pShape->setModelId(rAttribs.getString( XML_modelId ).get());
             return new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape );
         }
