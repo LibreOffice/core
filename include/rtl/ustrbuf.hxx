@@ -975,6 +975,17 @@ public:
     }
 
     /**
+       "Stream" operator to append a type to this OUStringBuffer.
+
+       @since LibreOffice 7.5
+     */
+    template<typename T>
+    inline OUStringBuffer& operator<<(T& rType)
+    {
+        return append(rType);
+    }
+
+    /**
         Inserts the string into this string buffer.
 
         The characters of the <code>String</code> argument are inserted, in

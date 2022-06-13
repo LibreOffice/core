@@ -111,6 +111,29 @@ void SalFrame::SetRepresentedURL(const OUString&)
     // currently this is Mac only functionality
 }
 
+OUStringBuffer SalFrame::DumpSetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                        tools::Long nHeight, sal_uInt16 nFlags)
+{
+    OUStringBuffer aBuffer(4 * 4 + 5);
+    if (nFlags & SAL_FRAME_POSSIZE_WIDTH)
+        aBuffer << nWidth << "x";
+    else
+        aBuffer << "?x";
+    if (nFlags & SAL_FRAME_POSSIZE_HEIGHT)
+        aBuffer << nHeight << "@(";
+    else
+        aBuffer << "?@(";
+    if (nFlags & SAL_FRAME_POSSIZE_X)
+        aBuffer << nX << ",";
+    else
+        aBuffer << "?,";
+    if (nFlags & SAL_FRAME_POSSIZE_Y)
+        aBuffer << nY << ")";
+    else
+        aBuffer << "?)";
+    return aBuffer;
+}
+
 SalInstance::SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex)
     : m_pYieldMutex(std::move(pMutex))
 {
