@@ -441,6 +441,7 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
         case XATTR_FILLBMP_POSOFFSETX   : pResId = SIP_XA_FILLBMP_POSOFFSETX;break;
         case XATTR_FILLBMP_POSOFFSETY   : pResId = SIP_XA_FILLBMP_POSOFFSETY;break;
         case XATTR_FILLBACKGROUND       : pResId = SIP_XA_FILLBACKGROUND;break;
+        case XATTR_FILLUSESLIDEBACKGROUND: pResId = SIP_XA_FILLUSESLIDEBACKGROUND;break;
 
         case XATTRSET_FILL             : pResId = SIP_XATTRSET_FILL;break;
 
