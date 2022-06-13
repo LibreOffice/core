@@ -9606,7 +9606,6 @@ sd/source/ui/dlg/AnimationChildWindow.cxx
 sd/source/ui/dlg/LayerTabBar.cxx
 sd/source/ui/dlg/NavigatorChildWindow.cxx
 sd/source/ui/dlg/PaneChildWindows.cxx
-sd/source/ui/dlg/PaneDockingWindow.cxx
 sd/source/ui/dlg/PaneShells.cxx
 sd/source/ui/dlg/PhotoAlbumDialog.cxx
 sd/source/ui/dlg/PhotoAlbumDialog.hxx
@@ -9775,7 +9774,6 @@ sd/source/ui/inc/OutlineView.hxx
 sd/source/ui/inc/OutlineViewShell.hxx
 sd/source/ui/inc/OutlinerIteratorImpl.hxx
 sd/source/ui/inc/PaneChildWindows.hxx
-sd/source/ui/inc/PaneDockingWindow.hxx
 sd/source/ui/inc/PreviewRenderer.hxx
 sd/source/ui/inc/RemoteServer.hxx
 sd/source/ui/inc/Ruler.hxx

@@ -18,7 +18,7 @@
  */
 
 #include <PaneChildWindows.hxx>
-#include <PaneDockingWindow.hxx>
+#include <titledockwin.hxx>
 #include <ViewShellBase.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <app.hrc>
@@ -43,7 +43,7 @@ PaneChildWindow::PaneChildWindow (
     TranslateId pTitleBarResId)
     : SfxChildWindow (pParentWindow, nId)
 {
-    SetWindow( VclPtr<PaneDockingWindow>::Create(
+    SetWindow( VclPtr<TitledDockingWindow>::Create(
         pBindings,
         this,
         pParentWindow,
@@ -64,7 +64,7 @@ PaneChildWindow::PaneChildWindow (
 PaneChildWindow::~PaneChildWindow()
 {
     ViewShellBase* pBase = nullptr;
-    PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(GetWindow());
+    TitledDockingWindow* pDockingWindow = dynamic_cast<TitledDockingWindow*>(GetWindow());
     if (pDockingWindow != nullptr)
         pBase = ViewShellBase::GetViewShellBase(
             pDockingWindow->GetBindings().GetDispatcher()->GetFrame());
