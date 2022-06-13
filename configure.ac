@@ -12079,6 +12079,10 @@ if test "$enable_skia" != "no" -a "$build_skia" = "yes" -a -z "$DISABLE_GUI"; th
             ENABLE_SKIA_DEBUG=
         fi
         ENABLE_SKIA=TRUE
+	if test "$ENDIANNESS" = "big" && test "$ENABLE_SKIA" = "TRUE"; then
+		AC_MSG_ERROR([skia doesn't work/isn't supported upstream on big-endian. Use --disable-skia])
+	fi
+
         AC_DEFINE(HAVE_FEATURE_SKIA)
         BUILD_TYPE="$BUILD_TYPE SKIA"
 
