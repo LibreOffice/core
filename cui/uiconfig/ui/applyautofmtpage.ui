@@ -78,7 +78,7 @@
                 <property name="label" translatable="yes" context="applyautofmtpage|label1">[M]: Replace while modifying existing text</property>
                 <property name="xalign">0</property>
                 <attributes>
-                  <attribute name="scale" value="0.8"/>
+                  <attribute name="scale" value="0.9"/>
                 </attributes>
               </object>
               <packing>
@@ -93,7 +93,7 @@
                 <property name="label" translatable="yes" context="applyautofmtpage|label2">[T]: AutoCorrect while typing</property>
                 <property name="xalign">0</property>
                 <attributes>
-                  <attribute name="scale" value="0.8"/>
+                  <attribute name="scale" value="0.9"/>
                 </attributes>
               </object>
               <packing>
