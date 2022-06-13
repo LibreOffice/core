@@ -75,6 +75,7 @@
 #include <view.hxx>
 #include <edtwin.hxx>
 #include <FrameControlsManager.hxx>
+#include <comphelper/lok.hxx>
 
 namespace sw {
 
@@ -4046,13 +4047,20 @@ SwTwips SwTextFrame::GetBaseVertOffsetForFly(bool bIgnoreFlysAnchoredAtThisFrame
 void SwTextFrame::repaintTextFrames( const SwTextNode& rNode )
 {
     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(rNode);
+    SwViewShell *pCurShell = nullptr;
     for( const SwTextFrame *pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
     {
         SwRect aRec( pFrame->GetPaintArea() );
         const SwRootFrame *pRootFrame = pFrame->getRootFrame();
-        SwViewShell *pCurShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
+        pCurShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
         if( pCurShell )
+        {
             pCurShell->InvalidateWindows( aRec );
+        }
+    }
+    if (pCurShell && comphelper::LibreOfficeKit::isActive())
+    {
+        pCurShell->FlushPendingLOKInvalidateTiles(true);
     }
 }
 
