@@ -38,7 +38,7 @@ DocumentStateManager::DocumentStateManager( SwDoc& i_rSwdoc ) :
 
 void DocumentStateManager::SetModified()
 {
-    if (!IsEnableSetModified())
+    if (!IsEnableSetModified() || IsInCallModified())
         return;
 
     m_rDoc.GetDocumentLayoutManager().ClearSwLayouterEntries();
