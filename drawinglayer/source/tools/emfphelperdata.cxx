@@ -880,22 +880,12 @@ namespace emfplushelper
                     // store the blendpoints in the vector
                     for (sal_uInt32 i = 0; i < brush->blendPoints; i++)
                     {
-                        double aBlendPoint;
                         basegfx::BColor aColor;
-                        if (brush->type == BrushTypeLinearGradient)
-                        {
-                            aBlendPoint = brush->blendPositions [i];
-                        }
-                        else
-                        {
-                            // seems like SvgRadialGradientPrimitive2D needs doubled, inverted radius
-                            aBlendPoint = 2. * ( 1. - brush->blendPositions [i] );
-                        }
-                        aColor.setGreen( aStartColor.getGreen() + brush->blendFactors[i] * ( aEndColor.getGreen() - aStartColor.getGreen() ) );
-                        aColor.setBlue ( aStartColor.getBlue()  + brush->blendFactors[i] * ( aEndColor.getBlue() - aStartColor.getBlue() ) );
-                        aColor.setRed  ( aStartColor.getRed()   + brush->blendFactors[i] * ( aEndColor.getRed() - aStartColor.getRed() ) );
-                        const double aAlpha = brush->solidColor.GetAlpha() + brush->blendFactors[i] * ( brush->secondColor.GetAlpha() - brush->solidColor.GetAlpha() );
-                        aVector.emplace_back(aBlendPoint, aColor, aAlpha / 255.0);
+                        aColor.setGreen(aStartColor.getGreen() + brush->blendFactors[i] * (aEndColor.getGreen() - aStartColor.getGreen()));
+                        aColor.setBlue (aStartColor.getBlue()  + brush->blendFactors[i] * (aEndColor.getBlue() - aStartColor.getBlue()));
+                        aColor.setRed  (aStartColor.getRed()   + brush->blendFactors[i] * (aEndColor.getRed() - aStartColor.getRed()));
+                        const double aAlpha = brush->solidColor.GetAlpha() + brush->blendFactors[i] * (brush->secondColor.GetAlpha() - brush->solidColor.GetAlpha());
+                        aVector.emplace_back(brush->blendPositions[i], aColor, aAlpha / 255.0);
                     }
                 }
                 else if (brush->colorblendPositions)
@@ -905,19 +895,9 @@ namespace emfplushelper
                     // store the colorBlends in the vector
                     for (sal_uInt32 i = 0; i < brush->colorblendPoints; i++)
                     {
-                        double aBlendPoint;
                         basegfx::BColor aColor;
-                        if (brush->type == BrushTypeLinearGradient)
-                        {
-                            aBlendPoint = brush->colorblendPositions [i];
-                        }
-                        else
-                        {
-                            // seems like SvgRadialGradientPrimitive2D needs doubled, inverted radius
-                            aBlendPoint = 2. * ( 1. - brush->colorblendPositions [i] );
-                        }
                         aColor = brush->colorblendColors[i].getBColor();
-                        aVector.emplace_back(aBlendPoint, aColor, brush->colorblendColors[i].GetAlpha() / 255.0 );
+                        aVector.emplace_back(brush->colorblendPositions[i], aColor, brush->colorblendColors[i].GetAlpha() / 255.0);
                     }
                 }
                 else // ok, no extra points: just start and end
@@ -982,7 +962,7 @@ namespace emfplushelper
                             aSpreadMethod));
                 }
                 else // BrushTypePathGradient
-                {
+                { // TODO The PathGradient is not implemented, and Radial Gradient is used instead
                     basegfx::B2DPoint aCenterPoint = Map(brush->firstPointX, brush->firstPointY);
                     aCenterPoint = aPolygonTransformation * aCenterPoint;
 
@@ -993,9 +973,9 @@ namespace emfplushelper
                             polygon,
                             std::move(aVector),
                             aCenterPoint,
-                            0.5,                   // relative radius
-                            true,                  // use UnitCoordinates to stretch the gradient
-                            drawinglayer::primitive2d::SpreadMethod::Repeat,
+                            0.7, // relative radius little bigger to cover all elements
+                            true, // use UnitCoordinates to stretch the gradient
+                            drawinglayer::primitive2d::SpreadMethod::Pad,
                             nullptr));
                 }
             }
