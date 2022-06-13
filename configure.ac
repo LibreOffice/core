@@ -5653,7 +5653,7 @@ if test "$cross_compiling" = "yes"; then
             ;;
         esac
     else
-        sub_conf_opts="$sub_conf_opts --disable-scripting"
+        sub_conf_opts="$sub_conf_opts --without-java"
     fi
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no --disable-database-connectivity"
@@ -5664,6 +5664,7 @@ if test "$cross_compiling" = "yes"; then
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     test "${with_system_lockfile+set}" = set && sub_conf_opts="$sub_conf_opts --with-system-lockfile=${with_system_lockfile}"
     test "${enable_fuzzers}" = yes && sub_conf_opts="$sub_conf_opts --without-system-libxml"
+    test -n "$with_vendor" -a "$with_vendor" != "no" && sub_conf_opts="$sub_conf_opts --with-vendor=$with_vendor"
     if test "$_os" = "Emscripten"; then
         sub_conf_opts="$sub_conf_opts --without-system-libxml --without-system-fontconfig --without-system-freetype --without-system-zlib"
     fi
