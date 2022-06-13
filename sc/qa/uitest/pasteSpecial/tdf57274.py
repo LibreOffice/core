@@ -10,6 +10,7 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from libreoffice.calc.paste_special import reset_default_values
 
 #Bug:  Paste Special Link Checkbox fails to insert cell references when the source cell is blank
 
@@ -25,6 +26,7 @@ class tdf57274(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B11"}))
             with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial", close_button="") as xDialog:
+                reset_default_values(self, xDialog)
                 #We paste here using Paste Special with 'Link' Checkbox activated
                 xLink = xDialog.getChild("link")
                 xLink.executeAction("CLICK", tuple())

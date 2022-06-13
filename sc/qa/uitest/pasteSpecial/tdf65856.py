@@ -10,6 +10,7 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
+from libreoffice.calc.paste_special import reset_default_values
 
 class tdf65856(UITestCase):
 
@@ -24,10 +25,10 @@ class tdf65856(UITestCase):
             #mark cell D1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
             with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
+                reset_default_values(self, xDialog)
 
                 xmove_right = xDialog.getChild("move_right")
                 xmove_right.executeAction("CLICK", tuple())
-
 
             #check
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "T1")
@@ -56,10 +57,10 @@ class tdf65856(UITestCase):
             #mark cell B2
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
             with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
+                reset_default_values(self, xDialog)
 
                 xmove_right = xDialog.getChild("move_right")
                 xmove_right.executeAction("CLICK", tuple())
-
 
             #check
             self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getString(), "1")

@@ -9,6 +9,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from libreoffice.calc.paste_special import reset_default_values
 
 class tdf86253(UITestCase):
 
@@ -22,6 +23,7 @@ class tdf86253(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C1:C17"}))
             with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
+                reset_default_values(self, xDialog)
 
                 xtext = xDialog.getChild("text")
                 xnumbers = xDialog.getChild("numbers")
@@ -46,6 +48,5 @@ class tdf86253(UITestCase):
 
                 xTreeEntry = xList.getChild('0')
                 self.assertEqual(get_state_as_dict(xTreeEntry)["Text"], "A1:A6,C1:C17\tCell value >= 0")
-
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

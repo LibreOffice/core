@@ -10,6 +10,7 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
+from libreoffice.calc.paste_special import reset_default_values
 
 class tdf69450(UITestCase):
 
@@ -25,6 +26,7 @@ class tdf69450(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
             with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
+                reset_default_values(self, xDialog)
 
                 xtext = xDialog.getChild("text")
                 xnumbers = xDialog.getChild("numbers")
@@ -35,7 +37,6 @@ class tdf69450(UITestCase):
                 xnumbers.executeAction("CLICK", tuple())
                 xdatetime.executeAction("CLICK", tuple())
                 xformats.executeAction("CLICK", tuple())
-
 
             #check B1 text
             self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "B")

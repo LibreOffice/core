@@ -11,9 +11,8 @@ from uitest.framework import UITestCase
 
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-
 from uitest.uihelper.calc import enter_text_to_cell
-
+from libreoffice.calc.paste_special import reset_default_values
 
 class ManualCalcTests(UITestCase):
     def test_paste_special(self):
@@ -36,6 +35,7 @@ class ManualCalcTests(UITestCase):
 
             # Choose Paste Special Options and paste data
             with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xPasteSpecialDlg:
+                reset_default_values(self, xPasteSpecialDlg)
                 xAllChkBox = xPasteSpecialDlg.getChild("paste_all")
                 xAllChkBox.executeAction("CLICK", tuple())
                 xLinkChkBox = xPasteSpecialDlg.getChild("link")
