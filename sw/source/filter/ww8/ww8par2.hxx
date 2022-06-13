@@ -38,8 +38,8 @@ public:
 private:
     WW8DupProperties(const WW8DupProperties&) = delete;
     WW8DupProperties& operator=(const WW8DupProperties&) = delete;
-    SwWW8FltControlStack* pCtrlStck;
-    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1> aChrSet,aParSet;
+    SwWW8FltControlStack* m_pCtrlStck;
+    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1> m_aChrSet,m_aParSet;
 };
 
 struct WW8SwFlyPara
@@ -159,12 +159,12 @@ private:
     WW8SelBoxInfo& operator=(WW8SelBoxInfo const&) = delete;
 
 public:
-    short nGroupXStart;
-    short nGroupWidth;
-    bool bGroupLocked;
+    short m_nGroupXStart;
+    short m_nGroupWidth;
+    bool m_bGroupLocked;
 
     WW8SelBoxInfo(short nXCenter, short nWidth)
-        : nGroupXStart( nXCenter ), nGroupWidth( nWidth ), bGroupLocked(false)
+        : m_nGroupXStart( nXCenter ), m_nGroupWidth( nWidth ), m_bGroupLocked(false)
     {}
 
     size_t size() const

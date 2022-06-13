@@ -2679,7 +2679,7 @@ void WW8TabDesc::MergeCells()
                             }
                             else
                                 break;
-                        pActMGroup->nGroupWidth = nSizCell;
+                        pActMGroup->m_nGroupWidth = nSizCell;
 
                         // locked previously created merge groups,
                         // after determining the size for the new merge group.
@@ -2688,12 +2688,12 @@ void WW8TabDesc::MergeCells()
                         for (;;)
                         {
                             WW8SelBoxInfo* p = FindMergeGroup(
-                                nX1, pActMGroup->nGroupWidth, false );
+                                nX1, pActMGroup->m_nGroupWidth, false );
                             if (p == nullptr)
                             {
                                 break;
                             }
-                            p->bGroupLocked = true;
+                            p->m_bGroupLocked = true;
                         }
 
                         // 3. push to group array
@@ -2798,7 +2798,7 @@ void WW8TabDesc::FinishSwTable()
         if((1 < groupIt->size()) && groupIt->row(0)[0])
         {
             SwFrameFormat* pNewFormat = groupIt->row(0)[0]->ClaimFrameFormat();
-            pNewFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Variable, groupIt->nGroupWidth, 0));
+            pNewFormat->SetFormatAttr(SwFormatFrameSize(SwFrameSize::Variable, groupIt->m_nGroupWidth, 0));
             const sal_uInt16 nRowSpan = groupIt->rowsCount();
             for (sal_uInt16 n = 0; n < nRowSpan; ++n)
             {
@@ -2850,12 +2850,12 @@ WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
         {
             // the currently inspected group
             WW8SelBoxInfo& rActGroup = *m_MergeGroups[ iGr ];
-            if (!rActGroup.bGroupLocked)
+            if (!rActGroup.m_bGroupLocked)
             {
                 // approximate group boundary with room (tolerance) to the *outside*
-                nGrX1 = rActGroup.nGroupXStart - nTolerance;
-                nGrX2 = rActGroup.nGroupXStart
-                        + rActGroup.nGroupWidth + nTolerance;
+                nGrX1 = rActGroup.m_nGroupXStart - nTolerance;
+                nGrX2 = rActGroup.m_nGroupXStart
+                        + rActGroup.m_nGroupWidth + nTolerance;
 
                 // If box fits report success
 
