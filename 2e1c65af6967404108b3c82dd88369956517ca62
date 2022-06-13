@@ -52,6 +52,24 @@
       "parentUuid": "1fcd4c9a_8c950f4d",
       "revId": "2e1c65af6967404108b3c82dd88369956517ca62",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c52e1670_e46be9f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-13T15:52:31Z",
+      "side": 1,
+      "message": "\u003e I\u0027ve never seen this. But luckily I just got an update mail from tdf#125543, which I wasn\u0027t remembering anymore. And I\u0027ve never seen this, because I never maximize the LO window, because I\u0027m expecting debug output in the shell, so LO \"just sits next to it\". And there is https://gerrit.libreoffice.org/c/core/+/135529, which I created, because the Qt VCL plug un-maximize implementation is non-existant and probably even broken. And everyone is already doing the same. IMHO the whole original handling is \"questionable\", so I changed it. This is mainly used for storing the maximized state of a window + un-maximized position and size, but I guess it also affects normal behavior. Really WIP and largely untested yet; but OTOH it\u0027s mainly a refactoring with minor tweaks. I\u0027ll update the commit message later.\n\nThanks, that helped indeed (but needed to add back the ImplWindowStateFromStr declaration for the build to work, s.a. Jenkins build failure in the change).\n\n\u003e I\u0027ll check, if I can reproduce it without the linked patch. I currently can\u0027t, which might be a good reason to have it ;-)\n\nSame here. :-) Should merging this patch here then wait for the other patch to be finished + in a mergeable state as well? (Merging this patch that adds the assert might otherwise not be ideal IMHO.)\n\n\u003e \u003e For gtk3 (...)\n\u003e That should be fixed by the latest upload. I missed this, because I always had the gtk patch applied...\n\nYes, all looked good now in my tests.",
+      "parentUuid": "5cb5846f_35a10782",
+      "revId": "2e1c65af6967404108b3c82dd88369956517ca62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
