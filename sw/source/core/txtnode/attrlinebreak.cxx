@@ -24,7 +24,6 @@
 #include <vcl/svapp.hxx>
 
 #include <hintids.hxx>
-#include <hints.hxx>
 #include <pam.hxx>
 #include <textlinebreak.hxx>
 #include <ndtxt.hxx>

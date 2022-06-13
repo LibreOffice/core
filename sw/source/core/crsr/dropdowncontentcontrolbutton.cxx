@@ -14,7 +14,6 @@
 
 #include <edtwin.hxx>
 #include <view.hxx>
-#include <docsh.hxx>
 #include <strings.hrc>
 #include <formatcontentcontrol.hxx>
 #include <wrtsh.hxx>
