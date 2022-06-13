@@ -360,7 +360,7 @@
                         <property name="digits">2</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="spinMF_RUBYSIZE-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|spinMF_RUBYSIZE">Enter the font size for the Ruby text.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|spinMF_RUBYSIZE">Enter the maximum font size for the Ruby text.</property>
                           </object>
                         </child>
                       </object>
