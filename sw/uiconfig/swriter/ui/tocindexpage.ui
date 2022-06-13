@@ -1000,7 +1000,7 @@
                         <property name="draw_indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="casesens-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|casesens">Distinguishes between uppercase and lowercase letters in identical index entries. For Asian languages special handling applies.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocindexpage|extended_tip|casesens">Distinguishes between uppercase and lowercase letters in otherwise identical index entries. For Asian languages special handling applies.</property>
                           </object>
                         </child>
                       </object>
