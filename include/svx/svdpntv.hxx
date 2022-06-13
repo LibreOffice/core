@@ -114,81 +114,81 @@ BitmapEx convertMetafileToBitmapEx(
 class SVXCORE_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster, public ::utl::ConfigurationListener
 {
 private:
-    friend class                SdrPageView;
-    friend class                SdrGrafObj;
+    friend class SdrPageView;
+    friend class SdrGrafObj;
 
     // the SdrModel this view was created with, unchanged during lifetime
-    SdrModel&                   mrSdrModelFromSdrView;
+    SdrModel& mrSdrModelFromSdrView;
 
     std::unique_ptr<SdrPageView> mpPageView;
 protected:
-    SdrModel*                   mpModel;
-    VclPtr<OutputDevice>        mpActualOutDev; // Only for comparison
-    VclPtr<OutputDevice>        mpDragWin;
-    SfxStyleSheet*              mpDefaultStyleSheet;
+    SdrModel* mpModel;
+    VclPtr<OutputDevice> mpActualOutDev; // Only for comparison
+    VclPtr<OutputDevice> mpDragWin;
+    SfxStyleSheet* mpDefaultStyleSheet;
 
-    OUString                    maActualLayer;     // Current drawing layer
-    OUString                    maMeasureLayer; // Current layer for measurements
+    OUString maActualLayer;     // Current drawing layer
+    OUString maMeasureLayer; // Current layer for measurements
 
 //  Container                   aPagV;         // List of SdrPageViews
 
     // All windows this view is displayed on
-    std::vector< std::unique_ptr<SdrPaintWindow> >  maPaintWindows;
+    std::vector<std::unique_ptr<SdrPaintWindow>>  maPaintWindows;
 
-    Size                        maGridBig;   // FIXME: We need to get rid of this eventually
-    Size                        maGridFin;   // FIXME: We need to get rid of this eventually
-    SdrDragStat                 maDragStat;
-    tools::Rectangle            maMaxWorkArea;
-    SfxItemSet                  maDefaultAttr;
-    Idle                        maComeBackIdle;
+    Size maGridBig; // FIXME: We need to get rid of this eventually
+    Size maGridFin; // FIXME: We need to get rid of this eventually
+    SdrDragStat maDragStat;
+    tools::Rectangle maMaxWorkArea;
+    SfxItemSet maDefaultAttr;
+    Idle maComeBackIdle;
 
-    SdrAnimationMode            meAnimationMode;
+    SdrAnimationMode meAnimationMode;
 
-    sal_uInt16                  mnHitTolPix;
-    sal_uInt16                  mnMinMovPix;
-    sal_uInt16                  mnHitTolLog;
-    sal_uInt16                  mnMinMovLog;
+    sal_uInt16 mnHitTolPix;
+    sal_uInt16 mnMinMovPix;
+    sal_uInt16 mnHitTolLog;
+    sal_uInt16 mnMinMovLog;
 
-    bool                        mbPageVisible : 1;
-    bool                        mbPageShadowVisible : 1;
-    bool                        mbPageBorderVisible : 1;
-    bool                        mbBordVisible : 1;
-    bool                        mbGridVisible : 1;
-    bool                        mbGridFront : 1;
-    bool                        mbHlplVisible : 1;
-    bool                        mbHlplFront : 1;
-    bool                        mbGlueVisible : 1;    // Persistent; show gluepoints
-    bool                        mbGlueVisible2 : 1;   // Also show gluepoints for GluePointEdit
-    bool                        mbGlueVisible3 : 1;   // Also show gluepoints for EdgeTool
-    bool                        mbGlueVisible4 : 1;   // Show gluepoints, if one edge is selected
-    bool                        mbSomeObjChgdFlag : 1;
-    bool                        mbSwapAsynchron : 1;
-    bool                        mbPrintPreview : 1;
+    bool mbPageVisible : 1;
+    bool mbPageShadowVisible : 1;
+    bool mbPageBorderVisible : 1;
+    bool mbBordVisible : 1;
+    bool mbGridVisible : 1;
+    bool mbGridFront : 1;
+    bool mbHlplVisible : 1;
+    bool mbHlplFront : 1;
+    bool mbGlueVisible : 1;    // Persistent; show gluepoints
+    bool mbGlueVisible2 : 1;   // Also show gluepoints for GluePointEdit
+    bool mbGlueVisible3 : 1;   // Also show gluepoints for EdgeTool
+    bool mbGlueVisible4 : 1;   // Show gluepoints, if one edge is selected
+    bool mbSomeObjChgdFlag : 1;
+    bool mbSwapAsynchron : 1;
+    bool mbPrintPreview : 1;
 
     // These bools manage, the status that is displayed
     //
-    bool                        mbAnimationPause : 1;
+    bool mbAnimationPause : 1;
 
     // Flag which decides if buffered output for this view is allowed. When
     // set, PreRendering for PageView rendering will be used. Default is sal_False
-    bool                        mbBufferedOutputAllowed : 1;
+    bool mbBufferedOutputAllowed : 1;
 
     // Flag which decides if buffered overlay for this view is allowed. When
     // set, the output will be buffered in an overlay vdev. When not, overlay is
     // directly painted to OutDev. Default is sal_False.
-    bool                        mbBufferedOverlayAllowed : 1;
+    bool mbBufferedOverlayAllowed : 1;
 
     // Allow page painting at all?
-    bool                        mbPagePaintingAllowed : 1;
+    bool mbPagePaintingAllowed : 1;
 
     // Is this a preview renderer?
-    bool                        mbPreviewRenderer : 1;
+    bool mbPreviewRenderer : 1;
 
     // Flags for calc and sw for suppressing OLE, CHART or DRAW objects
-    bool                        mbHideOle : 1;
-    bool                        mbHideChart : 1;
-    bool                        mbHideDraw : 1;             // hide draw objects other than form controls
-    bool                        mbHideFormControl : 1;      // hide form controls only
+    bool mbHideOle : 1;
+    bool mbHideChart : 1;
+    bool mbHideDraw : 1; // hide draw objects other than form controls
+    bool mbHideFormControl : 1; // hide form controls only
 
 public:
     // Interface for PagePaintingAllowed flag
@@ -206,8 +206,8 @@ public:
     virtual rtl::Reference<sdr::overlay::OverlayManager> CreateOverlayManager(OutputDevice& rDevice) const;
 
 protected:
-    svtools::ColorConfig            maColorConfig;
-    Color                           maGridColor;
+    svtools::ColorConfig maColorConfig;
+    Color maGridColor;
 
     // Interface to SdrPaintWindow
     void DeletePaintWindow(const SdrPaintWindow& rOld);

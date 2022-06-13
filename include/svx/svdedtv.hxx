@@ -70,48 +70,48 @@ namespace o3tl
 
 class SVXCORE_DLLPUBLIC SdrEditView : public SdrMarkView
 {
-    friend class                SdrPageView;
-    friend class                SdrDragDistort;
-    friend class                SdrDragCrook;
+    friend class SdrPageView;
+    friend class SdrDragDistort;
+    friend class SdrDragCrook;
 
 protected:
 
     // cache the transformation queries, etc. a little
-    bool                        m_bPossibilitiesDirty : 1;
-    bool                        m_bReadOnly : 1;
-    bool                        m_bGroupPossible : 1;
-    bool                        m_bUnGroupPossible : 1;
-    bool                        m_bGrpEnterPossible : 1;
-    bool                        m_bToTopPossible : 1;
-    bool                        m_bToBtmPossible : 1;
-    bool                        m_bReverseOrderPossible : 1;
-    bool                        m_bImportMtfPossible : 1;
-    bool                        m_bCombinePossible : 1;
-    bool                        m_bDismantlePossible : 1;
-    bool                        m_bCombineNoPolyPolyPossible : 1;
-    bool                        m_bDismantleMakeLinesPossible : 1;
-    bool                        m_bOrthoDesiredOnMarked : 1;
-    bool                        m_bOneOrMoreMovable : 1;        // at least one object is moveable
-    bool                        m_bMoreThanOneNoMovRot : 1;     // more than one object is not movable nor turnable (Crook)
-    bool                        m_bContortionPossible : 1;      // all polygones (grouped if necessary)
-    bool                        m_bMoveAllowed : 1;
-    bool                        m_bResizeFreeAllowed : 1;
-    bool                        m_bResizePropAllowed : 1;
-    bool                        m_bRotateFreeAllowed : 1;
-    bool                        m_bRotate90Allowed : 1;
-    bool                        m_bMirrorFreeAllowed : 1;
-    bool                        m_bMirror45Allowed : 1;
-    bool                        m_bMirror90Allowed : 1;
-    bool                        m_bShearAllowed : 1;
-    bool                        m_bEdgeRadiusAllowed : 1;
-    bool                        m_bTransparenceAllowed : 1;
-    bool                        m_bCropAllowed : 1;
-    bool                        m_bGradientAllowed : 1;
-    bool                        m_bCanConvToPath : 1;
-    bool                        m_bCanConvToPoly : 1;
-    bool                        m_bCanConvToContour : 1;
-    bool                        m_bMoveProtect : 1;
-    bool                        m_bResizeProtect : 1;
+    bool m_bPossibilitiesDirty : 1;
+    bool m_bReadOnly : 1;
+    bool m_bGroupPossible : 1;
+    bool m_bUnGroupPossible : 1;
+    bool m_bGrpEnterPossible : 1;
+    bool m_bToTopPossible : 1;
+    bool m_bToBtmPossible : 1;
+    bool m_bReverseOrderPossible : 1;
+    bool m_bImportMtfPossible : 1;
+    bool m_bCombinePossible : 1;
+    bool m_bDismantlePossible : 1;
+    bool m_bCombineNoPolyPolyPossible : 1;
+    bool m_bDismantleMakeLinesPossible : 1;
+    bool m_bOrthoDesiredOnMarked : 1;
+    bool m_bOneOrMoreMovable : 1;        // at least one object is moveable
+    bool m_bMoreThanOneNoMovRot : 1;     // more than one object is not movable nor turnable (Crook)
+    bool m_bContortionPossible : 1;      // all polygones (grouped if necessary)
+    bool m_bMoveAllowed : 1;
+    bool m_bResizeFreeAllowed : 1;
+    bool m_bResizePropAllowed : 1;
+    bool m_bRotateFreeAllowed : 1;
+    bool m_bRotate90Allowed : 1;
+    bool m_bMirrorFreeAllowed : 1;
+    bool m_bMirror45Allowed : 1;
+    bool m_bMirror90Allowed : 1;
+    bool m_bShearAllowed : 1;
+    bool m_bEdgeRadiusAllowed : 1;
+    bool m_bTransparenceAllowed : 1;
+    bool m_bCropAllowed : 1;
+    bool m_bGradientAllowed : 1;
+    bool m_bCanConvToPath : 1;
+    bool m_bCanConvToPoly : 1;
+    bool m_bCanConvToContour : 1;
+    bool m_bMoveProtect : 1;
+    bool m_bResizeProtect : 1;
 
 private:
     SVX_DLLPRIVATE void ImpResetPossibilityFlags();

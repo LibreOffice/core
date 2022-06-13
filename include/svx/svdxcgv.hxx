@@ -30,12 +30,12 @@ class SVXCORE_DLLPUBLIC SdrExchangeView : public SdrObjEditView
 
 protected:
 
-    void                ImpGetPasteObjList(Point& rPos, SdrObjList*& rpLst);
-    void                ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, SdrInsertFlags nOptions);
-    bool                ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& rLayer) const;
+    void ImpGetPasteObjList(Point& rPos, SdrObjList*& rpLst);
+    void ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, SdrInsertFlags nOptions);
+    bool ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& rLayer) const;
 
     // Returns true if rPt has changed
-    bool                ImpLimitToWorkArea(Point& rPt) const;
+    bool ImpLimitToWorkArea(Point& rPt) const;
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
@@ -46,7 +46,7 @@ protected:
 public:
     // Output all marked objects on the specified OutputDevice
     ::std::vector< SdrObject* > GetMarkedObjects() const;
-    virtual void        DrawMarkedObj(OutputDevice& rOut) const;
+    virtual void DrawMarkedObj(OutputDevice& rOut) const;
 
     // E.g. for Clipboard, Drag'n'Drop, ...
     // Add all marked objects to a metafile.
@@ -106,8 +106,8 @@ public:
     virtual bool Paste(
         const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
 
-    bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
-    bool            Paste(SvStream& rInput, EETextFormat eFormat, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
+    bool Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
+    bool Paste(SvStream& rInput, EETextFormat eFormat, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -99,31 +99,31 @@ protected:
     // #114409#-2 Migrate HelpLine
     class ImplHelpLineOverlay*              mpHelpLineOverlay;
 
-    Size                        aMagnSiz;
-    Fraction                    aSnapWdtX;
-    Fraction                    aSnapWdtY;
+    Size aMagnSiz;
+    Fraction aSnapWdtX;
+    Fraction aSnapWdtY;
 
-    sal_uInt16                  nMagnSizPix;
-    Degree100                   nSnapAngle;
-    Degree100                   nEliminatePolyPointLimitAngle;
+    sal_uInt16 nMagnSizPix;
+    Degree100 nSnapAngle;
+    Degree100 nEliminatePolyPointLimitAngle;
 
-    SdrCrookMode                eCrookMode;
+    SdrCrookMode eCrookMode;
 
-    bool                        bSnapEnab : 1;
-    bool                        bGridSnap : 1;
-    bool                        bBordSnap : 1;
-    bool                        bHlplSnap : 1;
-    bool                        bOFrmSnap : 1;
-    bool                        bOPntSnap : 1;
-    bool                        bOConSnap : 1;
-    bool                        bMoveSnapOnlyTopLeft : 1;    //  Special for dialogeditor
-    bool                        bOrtho : 1;
-    bool                        bBigOrtho : 1;
-    bool                        bAngleSnapEnab : 1;
-    bool                        bMoveOnlyDragging : 1;       // only move objects while Resize/Rotate/...
-    bool                        bSlantButShear : 1;          // use slant instead of shear
-    bool                        bCrookNoContortion : 1;      // no contorsion while Crook
-    bool                        bEliminatePolyPoints : 1;
+    bool bSnapEnab : 1;
+    bool bGridSnap : 1;
+    bool bBordSnap : 1;
+    bool bHlplSnap : 1;
+    bool bOFrmSnap : 1;
+    bool bOPntSnap : 1;
+    bool bOConSnap : 1;
+    bool bMoveSnapOnlyTopLeft : 1;    //  Special for dialogeditor
+    bool bOrtho : 1;
+    bool bBigOrtho : 1;
+    bool bAngleSnapEnab : 1;
+    bool bMoveOnlyDragging : 1;       // only move objects while Resize/Rotate/...
+    bool bSlantButShear : 1;          // use slant instead of shear
+    bool bCrookNoContortion : 1;      // no contorsion while Crook
+    bool bEliminatePolyPoints : 1;
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
