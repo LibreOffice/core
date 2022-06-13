@@ -75,6 +75,7 @@
 #include <view.hxx>
 #include <edtwin.hxx>
 #include <FrameControlsManager.hxx>
+#include <comphelper/lok.hxx>
 
 namespace sw {
 
@@ -4052,7 +4053,11 @@ void SwTextFrame::repaintTextFrames( const SwTextNode& rNode )
         const SwRootFrame *pRootFrame = pFrame->getRootFrame();
         SwViewShell *pCurShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
         if( pCurShell )
+        {
             pCurShell->InvalidateWindows( aRec );
+            if ( comphelper::LibreOfficeKit::isActive() && pCurShell->VisArea().Overlaps( aRec ) )
+                pCurShell->GetWin()->Invalidate( aRec.SVRect() );
+        }
     }
 }
 
