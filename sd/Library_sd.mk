@@ -212,7 +212,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/dlg/LayerTabBar \
 	sd/source/ui/dlg/NavigatorChildWindow \
 	sd/source/ui/dlg/PaneChildWindows \
-	sd/source/ui/dlg/PaneDockingWindow \
 	sd/source/ui/dlg/PaneShells \
 	sd/source/ui/dlg/SpellDialogChildWindow \
 	sd/source/ui/dlg/TemplateScanner \

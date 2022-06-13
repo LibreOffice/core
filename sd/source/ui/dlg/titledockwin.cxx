@@ -22,8 +22,10 @@
 #include <svl/eitem.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/splitwin.hxx>
 #include <vcl/toolbox.hxx>
 
+#include <ViewShellBase.hxx>
 #include <bitmaps.hlst>
 #include <strings.hrc>
 #include <sdresid.hxx>
@@ -32,7 +34,7 @@
 namespace sd
 {
     //= TitledDockingWindow
-    TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, vcl::Window* i_pParent )
+    TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, vcl::Window* i_pParent, const OUString& rsTitle )
         :SfxDockingWindow( i_pBindings, i_pChildWindow, i_pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_DOCKABLE|WB_HIDE|WB_3DLOOK )
         ,m_aToolbox( VclPtr<ToolBox>::Create(this) )
         ,m_aContentWindow( VclPtr<vcl::Window>::Create(this, WB_DIALOGCONTROL) )
@@ -47,6 +49,10 @@ namespace sd
         impl_resetToolBox();
 
         m_aContentWindow->Show();
+
+        m_sTitle = rsTitle;
+        Invalidate();
+        SetSizePixel(LogicToPixel(Size(80,200), MapMode(MapUnit::MapAppFont)));
     }
 
     TitledDockingWindow::~TitledDockingWindow()
@@ -60,13 +66,6 @@ namespace sd
         m_aContentWindow.disposeAndClear();
         SfxDockingWindow::dispose();
     }
-
-    void TitledDockingWindow::SetTitle( const OUString& i_rTitle )
-    {
-        m_sTitle = i_rTitle;
-        Invalidate();
-    }
-
 
     void TitledDockingWindow::SetText( const OUString& i_rText )
     {
@@ -223,10 +222,35 @@ namespace sd
 
     void TitledDockingWindow::StateChanged( StateChangedType i_nType )
     {
+        switch (i_nType)
+        {
+            case StateChangedType::InitShow:
+                Resize();
+                GetContentWindow().SetStyle(GetContentWindow().GetStyle() | WB_DIALOGCONTROL);
+                impl_layout();
+                break;
+
+            case StateChangedType::Visible:
+            {
+                // The visibility of the docking window has changed.  Tell the
+                // ConfigurationController so that it can activate or deactivate
+                // a/the view for the pane.
+                // Without this the side panes remain empty after closing an
+                // in-place slide show.
+                ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
+                    GetBindings().GetDispatcher()->GetFrame());
+                if (pBase != nullptr)
+                {
+                    framework::FrameworkHelper::Instance(*pBase)->UpdateConfiguration();
+                }
+            }
+            break;
+
+            default:;
+        }
         switch ( i_nType )
         {
             case StateChangedType::InitShow:
-                impl_layout();
                 break;
             default:;
         }
@@ -254,6 +278,52 @@ namespace sd
         }
     }
 
+    void TitledDockingWindow::MouseButtonDown (const MouseEvent& rEvent)
+    {
+        if (rEvent.GetButtons() == MOUSE_LEFT)
+        {
+            // For some strange reason we have to set the WB_DIALOGCONTROL at
+            // the content window in order to have it pass focus to its content
+            // window.  Without setting this flag here that works only on views
+            // that have not been taken from the cash and relocated to this pane
+            // docking window.
+            GetContentWindow().SetStyle(GetContentWindow().GetStyle() | WB_DIALOGCONTROL);
+            GetContentWindow().GrabFocus();
+        }
+        SfxDockingWindow::MouseButtonDown(rEvent);
+    }
+
+    void TitledDockingWindow::SetValidSizeRange (const Range& rValidSizeRange)
+    {
+        SplitWindow* pSplitWindow = dynamic_cast<SplitWindow*>(GetParent());
+        if (pSplitWindow == nullptr)
+            return;
+
+        const sal_uInt16 nId (pSplitWindow->GetItemId(static_cast< vcl::Window*>(this)));
+        const sal_uInt16 nSetId (pSplitWindow->GetSet(nId));
+        // Because the TitledDockingWindow paints its own decoration, we have
+        // to compensate the valid size range for that.
+        const SvBorder aBorder (GetDecorationBorder());
+        sal_Int32 nCompensation (pSplitWindow->IsHorizontal()
+            ? aBorder.Top() + aBorder.Bottom()
+            : aBorder.Left() + aBorder.Right());
+        pSplitWindow->SetItemSizeRange(
+            nSetId,
+            Range(
+                rValidSizeRange.Min() + nCompensation,
+                rValidSizeRange.Max() + nCompensation));
+    }
+
+    TitledDockingWindow::Orientation TitledDockingWindow::GetOrientation() const
+    {
+        SplitWindow* pSplitWindow = dynamic_cast<SplitWindow*>(GetParent());
+        if (pSplitWindow == nullptr)
+            return UnknownOrientation;
+        else if (pSplitWindow->IsHorizontal())
+            return HorizontalOrientation;
+        else
+            return VerticalOrientation;
+    }
 
 } // namespace sfx2
 

@@ -87,8 +87,6 @@ merge IXFAttrList with XFSaxAttrList
 merge IXFStream with XFSaxStream
 merge IXFStyle with XFStyle
 merge IconChoicePage with SvxHyperlinkTabPageBase
-merge ImplGlyphFallbackFontSubstitution with (anonymous namespace)::FcGlyphFallbackSubstitution
-merge ImplPreMatchFontSubstitution with (anonymous namespace)::FcPreMatchSubstitution
 merge ListView with TemplateDlgLocalView
 merge LongCurrencyFormatter with LongCurrencyBox
 merge LotusConverterBase with LotusToSc
@@ -103,15 +101,18 @@ merge PropertyWrapperBase with PropertyWrapper
 merge SOParagraph with ParagraphObj
 merge SalData with GenericUnixSalData
 merge SalDisplay with SalX11Display
+merge SalGraphics with SalGraphicsAutoDelegateToImpl
 merge SalInfoPrinter with PspSalInfoPrinter
 merge SalInstance with SalGenericInstance
 merge SalInstanceBox with JSWidget
+merge SalInstanceBuilder with JSInstanceBuilder
 merge SalInstanceCheckButton with JSWidget
 merge SalInstanceComboBoxWithEdit with JSWidget
 merge SalInstanceComboBoxWithoutEdit with JSWidget
 merge SalInstanceDrawingArea with JSWidget
 merge SalInstanceExpander with JSWidget
 merge SalInstanceIconView with JSWidget
+merge SalInstanceImage with JSWidget
 merge SalInstanceLabel with JSWidget
 merge SalInstanceNotebook with JSWidget
 merge SalInstanceRadioButton with JSWidget
@@ -170,7 +171,6 @@ merge SfxExtItemPropertySetInfo_Base with SfxExtItemPropertySetInfo
 merge SfxItemPropertySetInfo_Base with SfxItemPropertySetInfo
 merge SfxModelSubComponent with sfx2::DocumentUndoManager
 merge SkiaSalGraphicsImpl with X11SkiaSalGraphicsImpl
-merge SmElement with SmElementSeparator
 merge SmFontPickList with SmFontPickListBox
 merge StarSymbolToMSMultiFont with (anonymous namespace)::StarSymbolToMSMultiFontImpl
 merge StgAvlIterator with StgIterator
@@ -190,7 +190,7 @@ merge SvxRTFParser with EditRTFParser
 merge SvxVertCTLTextTbxCtrl_Base with SvxVertCTLTextTbxCtrl
 merge SwAccessibleFrame with SwAccessibleContext
 merge SwCursorShell with SwEditShell
-merge SwDashedLine with (anonymous namespace)::SwBreakDashedLine
+merge SwDashedLine with SwBreakDashedLine
 merge SwDrawModeGrf_Base with SwDrawModeGrf
 merge SwEditShell with SwFEShell
 merge SwEndNoteOptionPage with SwFootNoteOptionPage
@@ -220,6 +220,7 @@ merge VclVButtonBox with (anonymous namespace)::LeakTestClass
 merge Viewport3D with Camera3D
 merge WW8PLCFx_Fc_FKP with WW8PLCFx_Cp_FKP
 merge WW8Style with WW8RStyle
+merge X11SalGraphicsImpl with X11CairoSalGraphicsImpl
 merge XFDate with XFDateStart
 merge XFDateTimePart with XFTimePart
 merge XMLNode with XMLChildNode
@@ -271,8 +272,10 @@ merge comphelper::OSequenceOutputStream_Base with comphelper::OSequenceOutputStr
 merge comphelper::OWeakListenerAdapterBase with comphelper::OWeakListenerAdapter
 merge comphelper::PropertySetInfo_BASE with comphelper::PropertySetInfo
 merge comphelper::TraceEvent with comphelper::NamedEvent
+merge comphelper::WeakComponentImplHelperBase with comphelper::WeakComponentImplHelper
 merge connectivity::OKeySet_Base with connectivity::OKeySet
 merge connectivity::evoab::(anonymous namespace)::OEvoabVersion36Helper with connectivity::evoab::(anonymous namespace)::OEvoabVersion38Helper
+merge connectivity::evoab::OEvoabVersionHelper with connectivity::evoab::(anonymous namespace)::OEvoabVersion36Helper
 merge connectivity::file::OStatement_Base with connectivity::file::OStatement_BASE2
 merge connectivity::hsqldb::IMethodGuardAccess with connectivity::hsqldb::OHsqlConnection
 merge connectivity::java_lang_Exception with connectivity::java_sql_SQLException_BASE
@@ -327,6 +330,8 @@ merge ftp::ResultSetBase with ftp::ResultSetI
 merge gfx::DrawCommand with gfx::DrawBase
 merge gfx::GradientInfo with gfx::LinearGradientInfo
 merge gio::Seekable with gio::OutputStream
+merge http_dav_ucp::DAVAuthListener with http_dav_ucp::DAVAuthListener_Impl
+merge http_dav_ucp::DAVSession with http_dav_ucp::CurlSession
 merge oglcanvas::IBufferContext with oglcanvas::(anonymous namespace)::BufferContextImpl
 merge old_SdrDownCompat with SdIOCompat
 merge oox::SequenceSeekableStream with oox::SequenceInputStream
@@ -379,10 +384,12 @@ merge sc::opencl::RATE with sc::opencl::OpIntrate
 merge sc::opencl::RRI with sc::opencl::OpRRI
 merge sc::opencl::XNPV with sc::opencl::OpXNPV
 merge sc_apitest::(anonymous namespace)::TempFileBase with sc_apitest::ScDDELinkObj
+merge sd::(anonymous namespace)::ModelTraverseHandler with sd::(anonymous namespace)::GraphicSizeCheckHandler
 merge sd::BroadcastHelperOwner with sd::DrawController
 merge sd::ClientInfo with sd::ClientInfoInternal
 merge sd::IBluetoothSocket with sd::BufferedStreamSocket
 merge sd::ICustomAnimationListController with sd::CustomAnimationPane
+merge sd::TitledDockingWindow with sd::PaneDockingWindow
 merge sd::ZeroconfService with sd::AvahiNetworkService
 merge sd::sidebar::MasterPageContainerFiller::ContainerAdapter with sd::sidebar::MasterPageContainer::Implementation
 merge sd::sidebar::MasterPageContainerQueue::ContainerAdapter with sd::sidebar::MasterPageContainer::Implementation
@@ -396,7 +403,6 @@ merge sdr::SelectionController with sdr::table::SvxTableController
 merge sdr::contact::ObjectContactOfPagePainter with sdr::contact::PagePrimitiveExtractor
 merge sdr::table::TableDesignUser with sdr::table::SdrTableObjImpl
 merge sfx2::IXmlIdRegistry with sfx2::XmlIdRegistry
-merge sfx2::ThreadHelpBase2 with sfx2::PreventDuplicateInteraction
 merge slideshow::internal::(anonymous namespace)::EventContainer with slideshow::internal::ClickEventHandler
 merge slideshow::internal::AnimationFunction with slideshow::internal::ExpressionNode
 merge slideshow::internal::AnimationNode with slideshow::internal::BaseNode
@@ -445,7 +451,6 @@ merge svt::table::ITableRenderer with svt::table::GridTableRenderer
 merge svx::IContextRequestObserver with svx::FmTextControlShell
 merge svx::IControllerFeatureInvalidation with FmXFormShell
 merge svx::IFocusObserver with svx::FmTextControlShell
-merge svx::IPropertyValueProvider with svx::PropertyValueProvider
 merge svx::RegistrationItemSetHolder with svx::DatabaseRegistrationDialog
 merge svx::sidebar::SvxShapeCommandsMap with svx::sidebar::DefaultShapesPanel
 merge svxform::DispatchInterceptor with svxform::FormController
@@ -453,7 +458,6 @@ merge sw::ClientIteratorBase with SwIterator
 merge sw::ICoreFrameStyle with (anonymous namespace)::SwXFrameStyle
 merge sw::IShellCursorSupplier with SwCursorShell
 merge sw::Meta with sw::MetaField
-merge sw::ModelTraverseHandler with sw::(anonymous namespace)::IndexingNodeHandler
 merge sw::WriterListener with SwClient
 merge sw::mark::Bookmark with sw::mark::CrossRefBookmark
 merge sw::mark::ContentIdxStore with (anonymous namespace)::ContentIdxStoreImpl
@@ -471,6 +475,8 @@ merge vcl::DeletionNotifier with SalFrame
 merge vcl::ExtOutDevData with vcl::PDFExtOutDevData
 merge vcl::SolarThreadExecutor with vcl::solarthread::detail::GenericSolarThreadExecutor
 merge vcl::SwapFile with ImpSwapFile
+merge vcl::font::GlyphFallbackFontSubstitution with (anonymous namespace)::FcGlyphFallbackSubstitution
+merge vcl::font::PreMatchFontSubstitution with (anonymous namespace)::FcPreMatchSubstitution
 merge vcl::pdf::PDFium with vcl::pdf::(anonymous namespace)::PDFiumImpl
 merge vcl::pdf::PDFiumAnnotation with vcl::pdf::(anonymous namespace)::PDFiumAnnotationImpl
 merge vcl::pdf::PDFiumBitmap with vcl::pdf::(anonymous namespace)::PDFiumBitmapImpl
@@ -484,8 +490,6 @@ merge vcl::pdf::PDFiumTextPage with vcl::pdf::(anonymous namespace)::PDFiumTextP
 merge vclcanvas::CanvasCustomSpriteSpriteBase_Base with canvas::CanvasBase
 merge vclcanvas::Sprite with vclcanvas::CanvasCustomSpriteSpriteBase_Base
 merge vclcanvas::SpriteCanvasBaseSpriteSurface_Base with canvas::CanvasBase
-merge webdav_ucp::DAVAuthListener with webdav_ucp::DAVAuthListener_Impl
-merge webdav_ucp::DAVSession with webdav_ucp::NeonSession
 merge weld::AssistantController with vcl::WizardMachine
 merge weld::WidgetStatusListener_Base with weld::WidgetStatusListener
 merge writerfilter::Stream with writerfilter::LoggedStream

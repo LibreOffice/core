@@ -35,7 +35,7 @@
 #include <model/SlsPageDescriptor.hxx>
 #include <cache/SlsPageCache.hxx>
 #include <cache/SlsPageCacheManager.hxx>
-#include <PaneDockingWindow.hxx>
+#include <titledockwin.hxx>
 
 #include <sdpage.hxx>
 #include <Window.hxx>
@@ -316,10 +316,10 @@ void SlideSorterView::UpdateOrientation()
     {
         // Get access to the docking window.
         vcl::Window* pWindow = mrSlideSorter.GetContentWindow();
-        PaneDockingWindow* pDockingWindow = nullptr;
+        TitledDockingWindow* pDockingWindow = nullptr;
         while (pWindow!=nullptr && pDockingWindow==nullptr)
         {
-            pDockingWindow = dynamic_cast<PaneDockingWindow*>(pWindow);
+            pDockingWindow = dynamic_cast<TitledDockingWindow*>(pWindow);
             pWindow = pWindow->GetParent();
         }
 
@@ -329,7 +329,7 @@ void SlideSorterView::UpdateOrientation()
                 Application::GetSettings().GetStyleSettings().GetScrollBarSize());
             switch (pDockingWindow->GetOrientation())
             {
-                case PaneDockingWindow::HorizontalOrientation:
+                case TitledDockingWindow::HorizontalOrientation:
                     if (SetOrientation(Layouter::HORIZONTAL))
                     {
                         const Range aRange (mpLayouter->GetValidVerticalSizeRange());
@@ -339,7 +339,7 @@ void SlideSorterView::UpdateOrientation()
                     }
                     break;
 
-                case PaneDockingWindow::VerticalOrientation:
+                case TitledDockingWindow::VerticalOrientation:
                     if (SetOrientation(Layouter::VERTICAL))
                     {
                         const Range aRange (mpLayouter->GetValidHorizontalSizeRange());
@@ -349,7 +349,7 @@ void SlideSorterView::UpdateOrientation()
                     }
                     break;
 
-                case PaneDockingWindow::UnknownOrientation:
+                case TitledDockingWindow::UnknownOrientation:
                     if (SetOrientation(Layouter::GRID))
                     {
                         const sal_Int32 nAdditionalSize (10);
