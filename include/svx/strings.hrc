@@ -347,6 +347,7 @@
 #define SIP_XA_FILLBMP_POSOFFSETX                           NC_("SIP_XA_FILLBMP_POSOFFSETX", "Tile position X in %")
 #define SIP_XA_FILLBMP_POSOFFSETY                           NC_("SIP_XA_FILLBMP_POSOFFSETY", "Tile position Y in %")
 #define SIP_XA_FILLBACKGROUND                               NC_("SIP_XA_FILLBACKGROUND", "Background fill")
+#define SIP_XA_FILLUSESLIDEBACKGROUND                       NC_("SIP_XA_FILLUSESLIDEBACKGROUND", "Use slide background fill")
 #define SIP_XATTRSET_FILL                                   NC_("SIP_XATTRSET_FILL", "Area attributes")
 #define SIP_XA_FORMTXTSTYLE                                 NC_("SIP_XA_FORMTXTSTYLE", "Fontwork style")
 #define SIP_XA_FORMTXTADJUST                                NC_("SIP_XA_FORMTXTADJUST", "Fontwork alignment")
