@@ -450,7 +450,7 @@
                         <property name="digits">2</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="rowmove-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rowmove">Specifies the value to be used for moving a row.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|rowmove">Specifies the step size value when moving a row with the keyboard.</property>
                           </object>
                         </child>
                       </object>
@@ -469,7 +469,7 @@
                         <property name="digits">2</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="colmove-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|colmove">Specifies the value to be used for moving a column.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|colmove">Specifies the step size value when moving a column with the keyboard.</property>
                           </object>
                         </child>
                       </object>
