@@ -128,7 +128,7 @@ bool WinSalFrame::mbInReparent = false;
 // Macros for support of WM_UNICHAR & Keyman 6.0
 #define Uni_SupplementaryPlanesStart    0x10000
 
-static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame );
+static void UpdateFrameGeometry(WinSalFrame* pFrame);
 static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect = nullptr );
 
 static void SetGeometrySize(vcl::WindowPosSize& rWinPosSize, const Size& rSize)
@@ -137,57 +137,37 @@ static void SetGeometrySize(vcl::WindowPosSize& rWinPosSize, const Size& rSize)
     rWinPosSize.setHeight(rSize.Height() < 0 ? 0 : rSize.Height());
 }
 
-static void UpdateGeometry(WinSalFrame* pFrame, RECT& aRect)
+// If called with UpdateFrameGeometry, it must be called after it, as UpdateFrameGeometry
+// updates the geometry depending on the old state!
+void WinSalFrame::UpdateFrameState()
 {
-    RECT aRect2 = aRect;
-    AdjustWindowRectEx(&aRect2, GetWindowStyle(pFrame->mhWnd),
-                       FALSE, GetWindowExStyle(pFrame->mhWnd));
-    tools::Long nTopDeco = abs(aRect.top - aRect2.top);
-    tools::Long nLeftDeco = abs(aRect.left - aRect2.left);
-    tools::Long nBottomDeco = abs(aRect.bottom - aRect2.bottom);
-    tools::Long nRightDeco = abs(aRect.right - aRect2.right);
+    // don't overwrite restore state in fullscreen mode
+    if (isFullScreen())
+        return;
 
-    pFrame->maState.setPos({ aRect.left + nLeftDeco, aRect.top + nTopDeco });
-    tools::Long nWidth(aRect.right - aRect.left - nLeftDeco - nRightDeco);
-    tools::Long nHeight(aRect.bottom - aRect.top - nTopDeco - nBottomDeco);
-    SetGeometrySize(pFrame->maState, { nWidth, nHeight });
-}
-
-static void ImplSaveFrameState( WinSalFrame* pFrame )
-{
-    // save position, size and state for GetWindowState()
-    if ( !pFrame->mbFullScreen )
+    const bool bVisible = (GetWindowStyle(mhWnd) & WS_VISIBLE);
+    if (IsIconic(mhWnd))
     {
-        bool bVisible = (GetWindowStyle( pFrame->mhWnd ) & WS_VISIBLE) != 0;
-        if ( IsIconic( pFrame->mhWnd ) )
-        {
-            pFrame->maState.rState() |= vcl::WindowState::Minimized;
-            if ( bVisible )
-                pFrame->mnShowState = SW_SHOWMAXIMIZED;
-        }
-        else if ( IsZoomed( pFrame->mhWnd ) )
-        {
-            pFrame->maState.rState() &= ~vcl::WindowState::Minimized;
-            pFrame->maState.rState() |= vcl::WindowState::Maximized;
-            if ( bVisible )
-                pFrame->mnShowState = SW_SHOWMAXIMIZED;
-            pFrame->mbRestoreMaximize = true;
-
-            WINDOWPLACEMENT aPlacement;
-            aPlacement.length = sizeof(aPlacement);
-            if( GetWindowPlacement( pFrame->mhWnd, &aPlacement ) )
-                UpdateGeometry(pFrame, aPlacement.rcNormalPosition);
-        }
-        else
-        {
-            RECT aRect;
-            GetWindowRect( pFrame->mhWnd, &aRect );
-            UpdateGeometry(pFrame, aRect);
-            pFrame->maState.rState() &= ~vcl::WindowState(vcl::WindowState::Minimized | vcl::WindowState::Maximized);
-            if ( bVisible )
-                pFrame->mnShowState = SW_SHOWNORMAL;
-            pFrame->mbRestoreMaximize = false;
-        }
+        m_eState &= ~vcl::WindowState(vcl::WindowState::Normal | vcl::WindowState::Maximized);
+        m_eState |= vcl::WindowState::Minimized;
+        if (bVisible)
+            mnShowState = SW_SHOWMINIMIZED;
+    }
+    else if (IsZoomed(mhWnd))
+    {
+        m_eState &= ~vcl::WindowState(vcl::WindowState::Minimized | vcl::WindowState::Normal);
+        m_eState |= vcl::WindowState::Maximized;
+        if (bVisible)
+            mnShowState = SW_SHOWMAXIMIZED;
+        mbRestoreMaximize = true;
+    }
+    else
+    {
+        m_eState &= ~vcl::WindowState(vcl::WindowState::Minimized | vcl::WindowState::Maximized);
+        m_eState |= vcl::WindowState::Normal;
+        if (bVisible)
+            mnShowState = SW_SHOWNORMAL;
+        mbRestoreMaximize = false;
     }
 }
 
@@ -504,12 +484,10 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     // determine output size and state
     RECT aRect;
     GetClientRect( hWnd, &aRect );
-    pFrame->mnWidth  = aRect.right;
-    pFrame->mnHeight = aRect.bottom;
-    ImplSaveFrameState( pFrame );
     pFrame->mbDefPos = true;
 
-    UpdateFrameGeometry( hWnd, pFrame );
+    UpdateFrameGeometry(pFrame);
+    pFrame->UpdateFrameState();
 
     if( pFrame->mnShowState == SW_SHOWMAXIMIZED )
     {
@@ -854,9 +832,8 @@ WinSalFrame::WinSalFrame()
     mhDefIMEContext     = nullptr;
     mpLocalGraphics     = nullptr;
     mpThreadGraphics    = nullptr;
+    m_eState = vcl::WindowState::Normal;
     mnShowState         = SW_SHOWNORMAL;
-    mnWidth             = 0;
-    mnHeight            = 0;
     mnMinWidth          = 0;
     mnMinHeight         = 0;
     mnMaxWidth          = SHRT_MAX;
@@ -869,7 +846,6 @@ WinSalFrame::WinSalFrame()
     mbFixBorder         = false;
     mbSizeBorder        = false;
     mbFullScreenCaption = false;
-    mbFullScreen        = false;
     mbPresentation      = false;
     mbInShow            = false;
     mbRestoreMaximize   = false;
@@ -1437,7 +1413,7 @@ void WinSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
 
     SetWindowPos( mhWnd, HWND_TOP, nX, nY, static_cast<int>(nWidth), static_cast<int>(nHeight), nPosFlags  );
 
-    UpdateFrameGeometry( mhWnd, this );
+    UpdateFrameGeometry(this);
 
     // Notification -- really ???
     if( nEvent != SalEvent::NONE )
@@ -1670,26 +1646,25 @@ void WinSalFrame::SetWindowState(const vcl::WindowData* pState)
     GetWindowPlacement( mhWnd, &aPlacement );
 
     // set State
-    bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
+    const bool bIsMinimized = IsIconic(mhWnd);
+    const bool bIsMaximized = IsZoomed(mhWnd);
+    const bool bVisible = (GetWindowStyle(mhWnd) & WS_VISIBLE);
     bool bUpdateHiddenFramePos = false;
     if ( !bVisible )
     {
         aPlacement.showCmd = SW_HIDE;
 
-        if ( mbOverwriteState )
+        if (mbOverwriteState && (pState->mask() & vcl::WindowDataMask::State))
         {
-            if ( pState->mask() & vcl::WindowDataMask::State )
+            if (pState->state() & vcl::WindowState::Minimized)
+                mnShowState = SW_SHOWMINIMIZED;
+            else if (pState->state() & vcl::WindowState::Maximized)
             {
-                if ( pState->state() & vcl::WindowState::Minimized )
-                    mnShowState = SW_SHOWMINIMIZED;
-                else if ( pState->state() & vcl::WindowState::Maximized )
-                {
-                    mnShowState = SW_SHOWMAXIMIZED;
-                    bUpdateHiddenFramePos = true;
-                }
-                else if ( pState->state() & vcl::WindowState::Normal )
-                    mnShowState = SW_SHOWNORMAL;
+                mnShowState = SW_SHOWMAXIMIZED;
+                bUpdateHiddenFramePos = true;
             }
+            else if (pState->state() & vcl::WindowState::Normal)
+                mnShowState = SW_SHOWNORMAL;
         }
     }
     else
@@ -1712,8 +1687,7 @@ void WinSalFrame::SetWindowState(const vcl::WindowData* pState)
     // if a window is neither minimized nor maximized or need not be
     // positioned visibly (that is in visible state), do not use
     // SetWindowPlacement since it calculates including the TaskBar
-    if ( !IsIconic( mhWnd ) && !IsZoomed( mhWnd ) &&
-         (!bVisible || (aPlacement.showCmd == SW_RESTORE)) )
+    if (!bIsMinimized && !bIsMaximized && (!bVisible || (aPlacement.showCmd == SW_RESTORE)))
     {
         if( bUpdateHiddenFramePos )
         {
@@ -1752,17 +1726,10 @@ void WinSalFrame::SetWindowState(const vcl::WindowData* pState)
 
 bool WinSalFrame::GetWindowState(vcl::WindowData* pState)
 {
-    if (maState.width() && maState.height())
-    {
-        *pState = maState;
-        // #94144# allow Minimize again, should be masked out when read from configuration
-        // 91625 - Don't save minimize
-        if ( !(pState->state() & (vcl::WindowState::Minimized | vcl::WindowState::Maximized)) )
-            pState->rState() |= vcl::WindowState::Normal;
-        return true;
-    }
-
-    return false;
+    pState->setPosSize(maGeometry.posSize());
+    pState->setState(m_eState);
+    pState->setMask(vcl::WindowDataMask::PosSizeState);
+    return true;
 }
 
 void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
@@ -1823,16 +1790,16 @@ void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
     }
 }
 
-void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
+void WinSalFrame::ShowFullScreen(const bool bFullScreen, const sal_Int32 nDisplay)
 {
-    if ( (mbFullScreen == bFullScreen) && (!bFullScreen || (mnDisplay == nDisplay)) )
+    if ((isFullScreen() == bFullScreen) && (!bFullScreen || (mnDisplay == nDisplay)))
         return;
 
-    mbFullScreen = bFullScreen;
     mnDisplay = nDisplay;
 
     if ( bFullScreen )
     {
+        m_eState |= vcl::WindowState::FullScreen;
         // to hide the Windows taskbar
         DWORD nExStyle = GetWindowExStyle( mhWnd );
         if ( nExStyle & WS_EX_TOOLWINDOW )
@@ -1863,6 +1830,7 @@ void WinSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
     }
     else
     {
+        m_eState &= ~vcl::WindowState::FullScreen;
         // when the ShowState has to be reset, hide the window first to
         // reduce flicker
         bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
@@ -3942,10 +3910,11 @@ static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pPa
     SetGeometrySize(pFrame->maGeometry, { aRect.right - aRect.left, aRect.bottom - aRect.top });
 }
 
-static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame )
+static void UpdateFrameGeometry(WinSalFrame* pFrame)
 {
     if( !pFrame )
         return;
+    const HWND hWnd = pFrame->mhWnd;
 
     RECT aRect;
     GetWindowRect( hWnd, &aRect );
@@ -4015,7 +3984,7 @@ static void ImplHandleMoveMsg( HWND hWnd )
     WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, SAL_MSG_POSTMOVE );
     if ( pFrame )
     {
-        UpdateFrameGeometry( hWnd, pFrame );
+        UpdateFrameGeometry(pFrame);
 
         if ( GetWindowStyle( hWnd ) & WS_VISIBLE )
             pFrame->mbDefPos = false;
@@ -4025,13 +3994,12 @@ static void ImplHandleMoveMsg( HWND hWnd )
         {
             // adjust window again for FullScreenMode
             pFrame->mbInMoveMsg = true;
-            if ( pFrame->mbFullScreen )
+            if (pFrame->isFullScreen())
                 ImplSalFrameFullScreenPos( pFrame );
             pFrame->mbInMoveMsg = false;
         }
 
-        // save state
-        ImplSaveFrameState( pFrame );
+        pFrame->UpdateFrameState();
 
         // Call Hdl
         //#93851 if we call this handler, VCL floating windows are not updated correctly
@@ -4046,38 +4014,33 @@ static void ImplCallSizeHdl( HWND hWnd )
     // as Windows can send these messages also, we have to use
     // the Solar semaphore
     WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, SAL_MSG_POSTCALLSIZE );
-    if ( pFrame )
-    {
-        pFrame->CallCallback( SalEvent::Resize, nullptr );
-        // to avoid double Paints by VCL and SAL
-        if ( IsWindowVisible( hWnd ) && !pFrame->mbInShow )
-            UpdateWindow( hWnd );
+    if (!pFrame)
+        return;
 
-        ImplSalYieldMutexRelease();
-    }
+    pFrame->CallCallback(SalEvent::Resize, nullptr);
+    // to avoid double Paints by VCL and SAL
+    if (IsWindowVisible(hWnd) && !pFrame->mbInShow)
+        UpdateWindow(hWnd);
+
+    ImplSalYieldMutexRelease();
 }
 
-static void ImplHandleSizeMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
+static void ImplHandleSizeMsg(HWND hWnd, WPARAM wParam, LPARAM)
 {
-    if ( (wParam != SIZE_MAXSHOW) && (wParam != SIZE_MAXHIDE) )
-    {
-        WinSalFrame* pFrame = GetWindowPtr( hWnd );
-        if ( pFrame )
-        {
-            UpdateFrameGeometry( hWnd, pFrame );
+    if ((wParam == SIZE_MAXSHOW) || (wParam == SIZE_MAXHIDE))
+        return;
 
-            pFrame->mnWidth  = static_cast<LONG>(LOWORD(lParam));
-            pFrame->mnHeight = static_cast<LONG>(HIWORD(lParam));
-            // save state
-            ImplSaveFrameState( pFrame );
-            // Call Hdl
-            ImplCallSizeHdl( hWnd );
+    WinSalFrame* pFrame = GetWindowPtr(hWnd);
+    if (!pFrame)
+        return;
 
-            WinSalTimer* pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
-            if ( pTimer )
-                pTimer->SetForceRealTimer( true );
-        }
-    }
+    UpdateFrameGeometry(pFrame);
+    pFrame->UpdateFrameState();
+    ImplCallSizeHdl(hWnd);
+
+    WinSalTimer* pTimer = static_cast<WinSalTimer*>(ImplGetSVData()->maSchedCtx.mpSalTimer);
+    if (pTimer)
+        pTimer->SetForceRealTimer(true);
 }
 
 static void ImplHandleFocusMsg( HWND hWnd )
@@ -4169,7 +4132,7 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
     {
         if ( (nMsg == WM_DISPLAYCHANGE) || (nMsg == WM_WININICHANGE) )
         {
-            if ( pFrame->mbFullScreen )
+            if (pFrame->isFullScreen())
                 ImplSalFrameFullScreenPos( pFrame );
         }
 
@@ -4370,7 +4333,7 @@ static bool ImplHandleMinMax( HWND hWnd, LPARAM lParam )
         {
             MINMAXINFO* pMinMax = reinterpret_cast<MINMAXINFO*>(lParam);
 
-            if ( pFrame->mbFullScreen )
+            if (pFrame->isFullScreen())
             {
                 int         nX;
                 int         nY;
@@ -4853,7 +4816,7 @@ static bool ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
     WPARAM nCommand = wParam & 0xFFF0;
 
-    if ( pFrame->mbFullScreen )
+    if (pFrame->isFullScreen())
     {
         bool    bMaximize = IsZoomed( pFrame->mhWnd );
         bool    bMinimize = IsIconic( pFrame->mhWnd );
