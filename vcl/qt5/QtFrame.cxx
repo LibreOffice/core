@@ -114,7 +114,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_bInDrag(false)
     , m_bDefaultSize(true)
     , m_bDefaultPos(true)
-    , m_bFullScreen(false)
+    , m_eState(vcl::WindowState::Normal)
     , m_bFullScreenSpanAll(false)
 #if CHECK_ANY_QT_USING_X11
     , m_nKeyModifiers(ModKeyFlags::NONE)
@@ -187,6 +187,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 
     QWindow* pChildWindow = windowHandle();
     connect(pChildWindow, &QWindow::screenChanged, this, &QtFrame::screenChanged);
+    connect(pChildWindow, &QWindow::windowStateChanged, this, &QtFrame::windowStateChanged);
 
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
@@ -201,6 +202,12 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 }
 
 void QtFrame::screenChanged(QScreen*) { m_pQWidget->fakeResize(); }
+
+void QtFrame::windowStateChanged(Qt::WindowState eWindowState)
+{
+    if (!isFullScreen())
+        m_eState = toVclWindowState(eWindowState);
+}
 
 void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidget* pWidget)
 {
@@ -410,15 +417,6 @@ QScreen* QtFrame::screen() const
 #endif
 }
 
-bool QtFrame::isMinimized() const { return asChild()->isMinimized(); }
-
-bool QtFrame::isMaximized() const { return asChild()->isMaximized(); }
-
-void QtFrame::SetWindowStateImpl(Qt::WindowStates eState)
-{
-    return asChild()->setWindowState(eState);
-}
-
 void QtFrame::SetTitle(const OUString& rTitle)
 {
     m_pQWidget->window()->setWindowTitle(toQString(rTitle));
@@ -532,7 +530,7 @@ Size QtFrame::CalcDefaultSize()
     assert(isWindow());
 
     Size aSize;
-    if (!m_bFullScreen)
+    if (!isFullScreen())
     {
         const QScreen* pScreen = screen();
         if (!pScreen)
@@ -577,6 +575,11 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
 {
     if (!isWindow() || isChild(true, false))
         return;
+    if (windowState() != vcl::WindowState::Normal)
+    {
+        SAL_WARN("vcl.qt", "Can't move or resize a non-normal window!");
+        return;
+    }
 
     if (nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT))
     {
@@ -683,93 +686,168 @@ void QtFrame::SetModal(bool bModal)
 
 bool QtFrame::GetModal() const { return isWindow() && windowHandle()->isModal(); }
 
+vcl::WindowState QtFrame::windowState() const
+{
+    vcl::WindowState eRet;
+    if (isFullScreen())
+    {
+        eRet = m_eState;
+        assert(m_eState & ~vcl::WindowState::FullScreen);
+    }
+    else
+    {
+        eRet = toVclWindowState(asChild()->windowState());
+        assert(eRet != vcl::WindowState::FullScreen);
+    }
+    return eRet;
+}
+
 void QtFrame::SetWindowState(const vcl::WindowData* pState)
 {
     if (!isWindow() || !pState || isChild(true, false))
         return;
 
-    if ((pState->mask() & vcl::WindowDataMask::PosSizeState) == vcl::WindowDataMask::PosSizeState
-        && (pState->state() & vcl::WindowState::Maximized) && !isMaximized())
+    vcl::WindowDataMask eDataMask = pState->mask();
+    const bool bDataHasState
+        = (eDataMask & vcl::WindowDataMask::State) && pState->state() != vcl::WindowState::NONE;
+    const bool bWantNormal = bDataHasState && pState->state() == vcl::WindowState::Normal;
+    const vcl::WindowState eState = windowState();
+    bool bIsNormal = eState == vcl::WindowState::Normal;
+    tools::Rectangle aPosSize = pState->posSize();
+
+    if (bDataHasState)
     {
-        const qreal fRatio = devicePixelRatioF();
-        QWidget* const pChild = asChild();
-        pChild->resize(ceil(pState->width() / fRatio), ceil(pState->height() / fRatio));
-        pChild->move(ceil(pState->x() / fRatio), ceil(pState->y() / fRatio));
-        SetWindowStateImpl(Qt::WindowMaximized);
+        assert(!(pState->state() & vcl::WindowState::FullScreen));
+        if (pState->state() & vcl::WindowState::FullScreen)
+        {
+            SAL_WARN("vcl.qt", "FullScreen must be requested using ShowFullScreen!");
+            return;
+        }
+
+        if (!bIsNormal && bWantNormal && !isChild())
+        {
+            tools::Rectangle aRestoreRect = maGeometry.savedPosSize();
+            maGeometry.unrefOrClearSavedPosSize();
+            assert(!maGeometry.savedPosSizeRefs());
+            asChild()->setWindowState(Qt::WindowNoState);
+            if (!(eDataMask & vcl::WindowDataMask::X))
+                aPosSize.SetPosX(aRestoreRect.Left());
+            if (!(eDataMask & vcl::WindowDataMask::Y))
+                aPosSize.SetPosY(aRestoreRect.Top());
+            if (!(eDataMask & vcl::WindowDataMask::Width))
+                aPosSize.SetWidth(aRestoreRect.GetWidth());
+            if (!(eDataMask & vcl::WindowDataMask::Height))
+                aPosSize.SetHeight(aRestoreRect.GetHeight());
+            bIsNormal = true;
+            eDataMask |= vcl::WindowDataMask::PosSize;
+        }
     }
-    else if (pState->mask() & vcl::WindowDataMask::PosSize)
+
+    if (eDataMask & vcl::WindowDataMask::PosSize)
     {
-        sal_uInt16 nPosSizeFlags = 0;
-        if (pState->mask() & vcl::WindowDataMask::X)
-            nPosSizeFlags |= SAL_FRAME_POSSIZE_X;
-        if (pState->mask() & vcl::WindowDataMask::Y)
-            nPosSizeFlags |= SAL_FRAME_POSSIZE_Y;
-        if (pState->mask() & vcl::WindowDataMask::Width)
-            nPosSizeFlags |= SAL_FRAME_POSSIZE_WIDTH;
-        if (pState->mask() & vcl::WindowDataMask::Height)
-            nPosSizeFlags |= SAL_FRAME_POSSIZE_HEIGHT;
-        SetPosSize(pState->x(), pState->y(), pState->width(), pState->height(), nPosSizeFlags);
-    }
-    else if (pState->mask() & vcl::WindowDataMask::State && !isChild())
-    {
-        if (pState->state() & vcl::WindowState::Maximized)
-            SetWindowStateImpl(Qt::WindowMaximized);
-        else if (pState->state() & vcl::WindowState::Minimized)
-            SetWindowStateImpl(Qt::WindowMinimized);
+        if (bIsNormal)
+        {
+            sal_uInt16 nPosSizeFlags = 0;
+            if (eDataMask & vcl::WindowDataMask::X)
+                nPosSizeFlags |= SAL_FRAME_POSSIZE_X;
+            if (eDataMask & vcl::WindowDataMask::Y)
+                nPosSizeFlags |= SAL_FRAME_POSSIZE_Y;
+            if (eDataMask & vcl::WindowDataMask::Width)
+                nPosSizeFlags |= SAL_FRAME_POSSIZE_WIDTH;
+            if (eDataMask & vcl::WindowDataMask::Height)
+                nPosSizeFlags |= SAL_FRAME_POSSIZE_HEIGHT;
+            SetPosSize(aPosSize.Left(), aPosSize.Top(), aPosSize.GetWidth(), aPosSize.GetHeight(),
+                       nPosSizeFlags);
+        }
         else
-            SetWindowStateImpl(Qt::WindowNoState);
+            SAL_WARN("vcl.qt", "Can't move or resize restore position - not implemented!");
+    }
+
+    if (bDataHasState && !isChild())
+    {
+        Qt::WindowStates eWantState;
+        if (eState != pState->state() && toQtWindowState(pState->state(), eWantState))
+        {
+            if (bIsNormal && !bWantNormal)
+                maGeometry.refOrSavePosSize();
+            asChild()->setWindowState(eWantState);
+        }
     }
 }
 
 bool QtFrame::GetWindowState(vcl::WindowData* pState)
 {
-    pState->setState(vcl::WindowState::Normal);
-    pState->setMask(vcl::WindowDataMask::State);
-    if (isMinimized())
-        pState->rState() |= vcl::WindowState::Minimized;
-    else if (isMaximized())
-        pState->rState() |= vcl::WindowState::Maximized;
-    else
+    if (!isWindow() || !pState)
+        return false;
+    if (maGeometry.savedPosSizeRefs())
     {
-        // we want the frame position and the client area size
-        QRect rect = scaledQRect({ asChild()->pos(), asChild()->size() }, devicePixelRatioF());
-        pState->setPosSize(toRectangle(rect));
-        pState->rMask() |= vcl::WindowDataMask::PosSize;
+        pState->setPosSize(maGeometry.savedPosSize());
+        pState->refOrSavePosSize();
     }
-
+    pState->setMask(vcl::WindowDataMask::PosSizeState);
+    pState->setState(windowState());
+    // we want the frame position and the client area size
+    QRect aRect = scaledQRect({ asChild()->pos(), asChild()->size() }, devicePixelRatioF());
+    pState->setPosSize(toRectangle(aRect));
     return true;
 }
 
-void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
+void QtFrame::ShowFullScreen(const bool bFullScreen, const sal_Int32 nScreen)
 {
     // only top-level windows can go fullscreen
     assert(m_pTopLevel);
 
-    if (m_bFullScreen == bFullScreen)
+    if (!m_pTopLevel || isFullScreen() == bFullScreen)
         return;
 
-    m_bFullScreen = bFullScreen;
-    m_bFullScreenSpanAll = m_bFullScreen && (nScreen < 0);
+    m_bFullScreenSpanAll = bFullScreen && (nScreen < 0);
 
     // show it if it isn't shown yet
     if (!isWindow())
         m_pTopLevel->show();
 
-    if (m_bFullScreen)
+    if (bFullScreen)
     {
-        m_aRestoreGeometry = m_pTopLevel->geometry();
+        assert(m_eState != vcl::WindowState::NONE);
+        assert(!isFullScreen());
+        m_eState |= vcl::WindowState::FullScreen;
+
+        maGeometry.refOrSavePosSize();
         m_nRestoreScreen = maGeometry.screen();
         SetScreenNumber(m_bFullScreenSpanAll ? m_nRestoreScreen : nScreen);
+
         if (!m_bFullScreenSpanAll)
-            windowHandle()->showFullScreen();
+            m_pTopLevel->showFullScreen();
         else
-            windowHandle()->showNormal();
+            m_pTopLevel->showNormal();
     }
     else
     {
+        assert(maGeometry.savedPosSizeRefs());
+        assert(isFullScreen());
+        m_eState &= ~vcl::WindowState::FullScreen;
+        assert(m_eState != vcl::WindowState::NONE);
+
+        tools::Rectangle aRestoreRect = maGeometry.savedPosSize();
+        const bool bNormal = maGeometry.unrefOrClearSavedPosSize();
         SetScreenNumber(m_nRestoreScreen);
-        windowHandle()->showNormal();
-        m_pTopLevel->setGeometry(m_aRestoreGeometry);
+
+        Qt::WindowStates eWantState;
+        if (toQtWindowState(m_eState, eWantState))
+        {
+            // Maybe a Qt bug: directly setting non-normal from full-screen
+            // still results in normal... workaround: add intermediate normal.
+            // Unfortunately, this also results in two animations.
+            if (eWantState != Qt::WindowNoState)
+                m_pTopLevel->showNormal();
+            m_pTopLevel->setWindowState(eWantState);
+        }
+        if (bNormal)
+        {
+            assert(eWantState == Qt::WindowNoState);
+            m_pTopLevel->resize(toQSize(aRestoreRect.GetSize()));
+            m_pTopLevel->move(toQPoint(aRestoreRect.GetPos()));
+        }
     }
 }
 
@@ -1318,7 +1396,7 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
         }
         else // special case: fullscreen over all available screens
         {
-            assert(m_bFullScreen);
+            assert(isFullScreen());
             // left-most screen
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
             QScreen* pScreen = QGuiApplication::screenAt(QPoint(0, 0));

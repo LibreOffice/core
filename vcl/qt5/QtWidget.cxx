@@ -133,6 +133,14 @@ void QtWidget::resizeEvent(QResizeEvent*)
 
     const QRect aQtFrameGeometry = m_rFrame.asChild()->frameGeometry();
     const QRect aQtGeometry = m_rFrame.asChild()->geometry();
+    if (!isFullScreen())
+    {
+        const Qt::WindowStates eState = m_rFrame.asChild()->windowState();
+        if ((eState & ~Qt::WindowActive) && !m_rFrame.maGeometry.savedPosSizeRefs())
+            m_rFrame.maGeometry.refOrSavePosSize();
+        else if (!(eState & ~Qt::WindowActive) && m_rFrame.maGeometry.savedPosSizeRefs())
+            m_rFrame.maGeometry.unrefOrClearSavedPosSize();
+    }
     m_rFrame.maGeometry.setLeftDecoration(aQtGeometry.left() - aQtFrameGeometry.left());
     m_rFrame.maGeometry.setTopDecoration(aQtGeometry.top() - aQtFrameGeometry.top());
     m_rFrame.maGeometry.setRightDecoration(aQtFrameGeometry.right() - aQtGeometry.right());

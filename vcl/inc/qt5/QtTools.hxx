@@ -30,10 +30,12 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
+#include <vcl/windowstate.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
+#include <cassert>
 #include <memory>
 
 class Image;
@@ -80,6 +82,8 @@ inline tools::Rectangle toRectangle(const QRect& rRect)
 inline QSize toQSize(const Size& rSize) { return QSize(rSize.Width(), rSize.Height()); }
 
 inline Size toSize(const QSize& rSize) { return Size(rSize.width(), rSize.height()); }
+
+inline QPoint toQPoint(const Point& rPoint) { return QPoint(rPoint.getX(), rPoint.getY()); }
 
 inline Point toPoint(const QPoint& rPoint) { return Point(rPoint.x(), rPoint.y()); }
 
@@ -141,6 +145,50 @@ inline sal_uInt16 getFormatBits(QImage::Format eFormat)
             std::abort();
             return 0;
     }
+}
+
+inline vcl::WindowState toVclWindowState(const Qt::WindowStates eState)
+{
+    switch (eState & ~Qt::WindowActive)
+    {
+        case Qt::WindowNoState:
+            return vcl::WindowState::Normal;
+        case Qt::WindowMinimized:
+            return vcl::WindowState::Minimized;
+        case Qt::WindowMaximized:
+            return vcl::WindowState::Maximized;
+        case Qt::WindowFullScreen:
+            return vcl::WindowState::FullScreen;
+        default:
+            assert(false && "Unknown Qt state - defaulting to Normal");
+            return vcl::WindowState::Normal;
+    }
+}
+
+inline bool toQtWindowState(const vcl::WindowState eState, Qt::WindowStates& rState)
+{
+    bool bRet = true;
+    switch (eState)
+    {
+        case vcl::WindowState::Normal:
+            rState = Qt::WindowNoState;
+            break;
+        case vcl::WindowState::Minimized:
+            rState = Qt::WindowMinimized;
+            break;
+        case vcl::WindowState::Maximized:
+            rState = Qt::WindowMaximized;
+            break;
+        case vcl::WindowState::FullScreen:
+            rState = Qt::WindowFullScreen;
+            break;
+        default:
+            bRet = false;
+            rState = Qt::WindowNoState;
+            assert(false && "Unconvertable state - fallback to Qt::WindowNoState");
+            break;
+    }
+    return bRet;
 }
 
 typedef struct _cairo_surface cairo_surface_t;

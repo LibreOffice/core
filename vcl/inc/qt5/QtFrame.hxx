@@ -65,7 +65,7 @@ class QPaintDevice;
 class QScreen;
 class QWidget;
 
-class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
+class VCLPLUG_QT_PUBLIC QtFrame final : public QObject, public SalFrame
 {
     Q_OBJECT
 
@@ -96,10 +96,9 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
 
     bool m_bDefaultSize;
     bool m_bDefaultPos;
-    bool m_bFullScreen;
+    vcl::WindowState m_eState;
     bool m_bFullScreenSpanAll;
     sal_uInt32 m_nRestoreScreen;
-    QRect m_aRestoreGeometry;
 
 #if CHECK_QT5_USING_X11
     ScreenSaverInhibitor m_ScreenSaverInhibitor;
@@ -130,14 +129,14 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     bool isWindow() const;
     QWindow* windowHandle() const;
     QScreen* screen() const;
-    bool isMinimized() const;
-    bool isMaximized() const;
-    void SetWindowStateImpl(Qt::WindowStates eState);
+    vcl::WindowState windowState() const;
+    constexpr bool isFullScreen() const { return bool(m_eState & vcl::WindowState::FullScreen); }
 
     void fixICCCMwindowGroup();
 
 private Q_SLOTS:
     void screenChanged(QScreen*);
+    void windowStateChanged(Qt::WindowState);
 
 public:
     QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
