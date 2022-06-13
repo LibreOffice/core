@@ -227,6 +227,13 @@ published service FillProperties
      */
     [optional, property] com::sun::star::text::GraphicCrop GraphicCrop;
 
+    /** If this is `TRUE`, and FillStyle is FillStyle::NONE:
+        The area displays the slide background
+
+        @since LibreOffice 8.0
+    */
+    [optional, property] boolean FillUseSlideBackground;
+
 };
 
 

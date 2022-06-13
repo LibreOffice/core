@@ -241,6 +241,7 @@ protected:
     std::unique_ptr<weld::Toggleable> m_xBtnHatch;
     std::unique_ptr<weld::Toggleable> m_xBtnBitmap;
     std::unique_ptr<weld::Toggleable> m_xBtnPattern;
+    std::unique_ptr<weld::Toggleable> m_xBtnUseBackground;
 
     void SetOptimalSize(weld::DialogController* pController);
 

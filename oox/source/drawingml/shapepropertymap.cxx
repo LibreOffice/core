@@ -47,6 +47,7 @@ const ShapePropertyIds spnDefaultShapeIds =
     PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint,
     PROP_FillHatch,
     PROP_FillBackground,
+    PROP_FillUseSlideBackground,
     PROP_FillBitmapName,
     PROP_ShadowXDistance,
     PROP_ShadowSizeX,
