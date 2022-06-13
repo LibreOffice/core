@@ -53,8 +53,8 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForExtension(std::string_view rExt)
 
     OUString aMimeType;
 
-    tools::Long const nCount = std::size(aMapper);
-    for (tools::Long i = 0; (i < nCount) && aMimeType.isEmpty(); ++i)
+    size_t const nCount = std::size(aMapper);
+    for (size_t i = 0; (i < nCount) && aMimeType.isEmpty(); ++i)
     {
         if (rExt == aMapper[i].pExt)
             aMimeType = OUString(aMapper[i].pMimeType, strlen(aMapper[i].pMimeType),
