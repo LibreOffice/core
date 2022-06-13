@@ -158,7 +158,7 @@
                         <property name="halign">start</property>
                         <property name="label" translatable="yes" context="langtoolconfigpage|urldesc">Please use the base URL, i.e., without “/check”, at the end.</property>
                           <attributes>
-                            <attribute name="scale" value="0.8"/>
+                            <attribute name="scale" value="0.9"/>
                           </attributes>
                       </object>
                       <packing>
@@ -173,7 +173,7 @@
                         <property name="halign">start</property>
                         <property name="label" translatable="yes" context="langtoolconfigpage|usernamedesc">Your LanguageTool account’s username for premium usage.</property>
                         <attributes>
-                          <attribute name="scale" value="0.8"/>
+                          <attribute name="scale" value="0.9"/>
                         </attributes>
                       </object>
                       <packing>
@@ -188,7 +188,7 @@
                         <property name="halign">start</property>
                         <property name="label" translatable="yes" context="langtoolconfigpage|apikeydesc">Your LanguageTool account’s API key for premium usage.</property>
                         <attributes>
-                          <attribute name="scale" value="0.8"/>
+                          <attribute name="scale" value="0.9"/>
                         </attributes>
                       </object>
                       <packing>

@@ -290,7 +290,7 @@
                         <property name="max_width_chars">56</property>
                         <property name="xalign">0</property>
                         <attributes>
-                          <attribute name="scale" value="0.8"/>
+                          <attribute name="scale" value="0.9"/>
                         </attributes>
                       </object>
                       <packing>
