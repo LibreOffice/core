@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e809928_36db7b85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-13T14:23:37Z",
+      "side": 1,
+      "message": "What is the purpose of SwPamRanges? It doesn\u0027t provide the same HasMark() as simply using the SwPaM ring. Is this perhaps old code that hasn\u0027t yet been converted to a newer concept?",
+      "revId": "f8101a98beed3c328dabeb0965504310f963841e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
