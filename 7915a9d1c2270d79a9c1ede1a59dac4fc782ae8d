@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bd66503_59381fd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-06-13T20:08:35Z",
+      "side": 1,
+      "message": "verfied when applied to 7.4.0 beta1 without math and impress installed (where it previously failed because of that)",
+      "revId": "7915a9d1c2270d79a9c1ede1a59dac4fc782ae8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
