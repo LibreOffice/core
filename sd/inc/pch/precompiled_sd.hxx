@@ -514,7 +514,6 @@
 #include <OutlineViewShell.hxx>
 #include <Outliner.hxx>
 #include <PaneChildWindows.hxx>
-#include <PaneDockingWindow.hxx>
 #include <PresentationViewShell.hxx>
 #include <PreviewRenderer.hxx>
 #include <SdShapeTypes.hxx>
