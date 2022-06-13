@@ -75,8 +75,8 @@ const sal_Unicode CHAR_NNBSP    = 0x202F; //NARROW NO-BREAK SPACE
 #define MINDOUBLE   1.7e-307
 #define MAXDOUBLE   1.7e307
 
-#define MINZOOM     20
-#define MAXZOOM     400
+#define MINZOOM     sal_uInt16(20)
+#define MAXZOOM     sal_uInt16(400)
 
 const SCSIZE MAXSUBTOTAL        = 3;
 
