@@ -296,11 +296,11 @@ bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
 
     // click to - button
     if ( nXDiff >= nButtonLeftOffset && nXDiff <= nButtonRightOffset )
-        mxImpl->mnCurrentZoom = basegfx::zoomtools::zoomOut( static_cast<int>(mxImpl->mnCurrentZoom) );
+        mxImpl->mnCurrentZoom = basegfx::zoomtools::zoomOut( mxImpl->mnCurrentZoom );
     // click to + button
     else if ( nXDiff >= aControlRect.GetWidth() - nSliderXOffset + nButtonLeftOffset &&
               nXDiff <= aControlRect.GetWidth() - nSliderXOffset + nButtonRightOffset )
-        mxImpl->mnCurrentZoom = basegfx::zoomtools::zoomIn( static_cast<int>(mxImpl->mnCurrentZoom) );
+        mxImpl->mnCurrentZoom = basegfx::zoomtools::zoomIn( mxImpl->mnCurrentZoom );
     // click to slider
     else if( nXDiff >= nSliderXOffset && nXDiff <= aControlRect.GetWidth() - nSliderXOffset )
     {

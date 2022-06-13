@@ -589,7 +589,7 @@ void SwView::Execute(SfxRequest &rReq)
         case SID_ZOOM_IN:
         case SID_ZOOM_OUT:
         {
-            tools::Long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
+            sal_uInt16 nFact = m_pWrtShell->GetViewOptions()->GetZoom();
             if (SID_ZOOM_IN == nSlot)
                 nFact = basegfx::zoomtools::zoomIn(nFact);
             else

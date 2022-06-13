@@ -478,17 +478,17 @@ bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
     const CommandWheelData* pData = rCEvt.GetWheelData();
     if ( pData && pData->GetMode() == CommandWheelMode::ZOOM )
     {
-        tools::Long nOld = pPreview->GetZoom();
-        tools::Long nNew;
+        sal_uInt16 nOld = pPreview->GetZoom();
+        sal_uInt16 nNew;
         if ( pData->GetDelta() < 0 )
-            nNew = std::max( tools::Long(MINZOOM), basegfx::zoomtools::zoomOut( nOld ));
+            nNew = std::max( MINZOOM, basegfx::zoomtools::zoomOut( nOld ));
         else
-            nNew = std::min( tools::Long(MAXZOOM), basegfx::zoomtools::zoomIn( nOld ));
+            nNew = std::min( MAXZOOM, basegfx::zoomtools::zoomIn( nOld ));
 
         if ( nNew != nOld )
         {
             eZoom = SvxZoomType::PERCENT;
-            pPreview->SetZoom( static_cast<sal_uInt16>(nNew) );
+            pPreview->SetZoom( nNew );
         }
 
         bDone = true;
