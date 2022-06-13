@@ -34,6 +34,7 @@
 #if defined LIBO_INTERNAL_ONLY
 #include <string_view>
 #include <type_traits>
+#include <utility>
 #endif
 
 #include "rtl/ustrbuf.h"
@@ -973,6 +974,20 @@ public:
         rtl_uStringbuffer_insert(&pData, &nCapacity, n, NULL, length);
         return pData->buffer + n;
     }
+
+#if defined LIBO_INTERNAL_ONLY
+    /**
+       "Stream" operator to append a value to this OUStringBuffer.
+
+       @internal
+       @since LibreOffice 7.5
+     */
+    template<typename T>
+    OUStringBuffer& operator<<(T&& rValue)
+    {
+        return append(std::forward<T>(rValue));
+    }
+#endif
 
     /**
         Inserts the string into this string buffer.

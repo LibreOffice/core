@@ -156,6 +156,7 @@ public:
     virtual void            SetMinClientSize( tools::Long nWidth, tools::Long nHeight ) = 0;
     virtual void            SetMaxClientSize( tools::Long nWidth, tools::Long nHeight ) = 0;
     virtual void            SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags ) = 0;
+    static OUString DumpSetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags);
     virtual void            GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) = 0;
     virtual void            GetWorkArea( tools::Rectangle& rRect ) = 0;
     virtual SalFrame*       GetParent() const = 0;
