@@ -44,7 +44,7 @@
 #include <sal/log.hxx>
 
 #include <osl/module.h>
-
+#include <comphelper/scopeguard.hxx>
 #include <tools/debug.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -3956,18 +3956,6 @@ static void UpdateFrameGeometry(WinSalFrame* pFrame)
     pFrame->updateScreenNumber();
 }
 
-static void ImplCallMoveHdl( HWND hWnd )
-{
-    WinSalFrame* pFrame = GetWindowPtr( hWnd );
-    if ( pFrame )
-    {
-        pFrame->CallCallback( SalEvent::Move, nullptr );
-        // to avoid doing Paint twice by VCL and SAL
-        //if ( IsWindowVisible( hWnd ) && !pFrame->mbInShow )
-        //    UpdateWindow( hWnd );
-    }
-}
-
 static void ImplCallClosePopupsHdl( HWND hWnd )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
@@ -3977,40 +3965,51 @@ static void ImplCallClosePopupsHdl( HWND hWnd )
     }
 }
 
-static void ImplHandleMoveMsg( HWND hWnd )
+static void ImplCallMoveHdl(HWND hWnd)
 {
-    WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, SAL_MSG_POSTMOVE );
-    if ( pFrame )
+    WinSalFrame* pFrame = ProcessOrDeferMessage(hWnd, SAL_MSG_POSTMOVE);
+    if (!pFrame)
+        return;
+
+    pFrame->CallCallback(SalEvent::Move, nullptr);
+
+    ImplSalYieldMutexRelease();
+}
+
+static void ImplHandleMoveMsg(HWND hWnd, LPARAM lParam)
+{
+    WinSalFrame* pFrame = GetWindowPtr( hWnd );
+    if (!pFrame)
+        return;
+
+    UpdateFrameGeometry(pFrame);
+
+#ifdef NDEBUG
+    (void) lParam;
+#endif
+    assert(pFrame->maGeometry.x() == static_cast<sal_Int32>(LOWORD(lParam)));
+    assert(pFrame->maGeometry.y() == static_cast<sal_Int32>(HIWORD(lParam)));
+
+    if (GetWindowStyle(hWnd) & WS_VISIBLE)
+        pFrame->mbDefPos = false;
+
+    // protect against recursion
+    if (!pFrame->mbInMoveMsg)
     {
-        UpdateFrameGeometry(pFrame);
-
-        if ( GetWindowStyle( hWnd ) & WS_VISIBLE )
-            pFrame->mbDefPos = false;
-
-        // protect against recursion
-        if ( !pFrame->mbInMoveMsg )
-        {
-            // adjust window again for FullScreenMode
-            pFrame->mbInMoveMsg = true;
-            if ( pFrame->mbFullScreen )
-                ImplSalFrameFullScreenPos( pFrame );
-            pFrame->mbInMoveMsg = false;
-        }
-
-        pFrame->UpdateFrameState();
-
-        // Call Hdl
-        //#93851 if we call this handler, VCL floating windows are not updated correctly
-        ImplCallMoveHdl( hWnd );
-
-        ImplSalYieldMutexRelease();
+        // adjust window again for FullScreenMode
+        pFrame->mbInMoveMsg = true;
+        if (pFrame->mbFullScreen)
+            ImplSalFrameFullScreenPos(pFrame);
+        pFrame->mbInMoveMsg = false;
     }
+
+    pFrame->UpdateFrameState();
+
+    ImplCallMoveHdl(hWnd);
 }
 
 static void ImplCallSizeHdl( HWND hWnd )
 {
-    // as Windows can send these messages also, we have to use
-    // the Solar semaphore
     WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, SAL_MSG_POSTCALLSIZE );
     if (!pFrame)
         return;
@@ -4023,7 +4022,7 @@ static void ImplCallSizeHdl( HWND hWnd )
     ImplSalYieldMutexRelease();
 }
 
-static void ImplHandleSizeMsg(HWND hWnd, WPARAM wParam, LPARAM)
+static void ImplHandleSizeMsg(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
     if ((wParam == SIZE_MAXSHOW) || (wParam == SIZE_MAXHIDE))
         return;
@@ -4033,7 +4032,15 @@ static void ImplHandleSizeMsg(HWND hWnd, WPARAM wParam, LPARAM)
         return;
 
     UpdateFrameGeometry(pFrame);
+
+#ifdef NDEBUG
+    (void) lParam;
+#endif
+    assert(pFrame->maGeometry.width() == static_cast<sal_Int32>(LOWORD(lParam)));
+    assert(pFrame->maGeometry.height() == static_cast<sal_Int32>(HIWORD(lParam)));
+
     pFrame->UpdateFrameState();
+
     ImplCallSizeHdl(hWnd);
 
     WinSalTimer* pTimer = static_cast<WinSalTimer*>(ImplGetSVData()->maSchedCtx.mpSalTimer);
@@ -4044,30 +4051,30 @@ static void ImplHandleSizeMsg(HWND hWnd, WPARAM wParam, LPARAM)
 static void ImplHandleFocusMsg( HWND hWnd )
 {
     WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, SAL_MSG_POSTFOCUS );
-    if ( pFrame )
+    if (!pFrame)
+        return;
+    const ::comphelper::ScopeGuard aScopeGuard([](){ ImplSalYieldMutexRelease(); });
+
+    if (WinSalFrame::mbInReparent)
+        return;
+
+    const bool bGotFocus = ::GetFocus() == hWnd;
+    if (bGotFocus)
     {
-        if ( !WinSalFrame::mbInReparent )
+        if (IsWindowVisible(hWnd) && !pFrame->mbInShow)
+            UpdateWindow(hWnd);
+
+        // do we support IME?
+        if (pFrame->mbIME && pFrame->mhDefIMEContext)
         {
-            bool bGotFocus = ::GetFocus() == hWnd;
-            if ( bGotFocus )
-            {
-                if ( IsWindowVisible( hWnd ) && !pFrame->mbInShow )
-                    UpdateWindow( hWnd );
-
-                // do we support IME?
-                if ( pFrame->mbIME && pFrame->mhDefIMEContext )
-                {
-                    UINT nImeProps = ImmGetProperty( GetKeyboardLayout( 0 ), IGP_PROPERTY );
-
-                    pFrame->mbSpezIME = (nImeProps & IME_PROP_SPECIAL_UI) != 0;
-                    pFrame->mbAtCursorIME = (nImeProps & IME_PROP_AT_CARET) != 0;
-                    pFrame->mbHandleIME = !pFrame->mbSpezIME;
-                }
-            }
-            pFrame->CallCallback( bGotFocus ? SalEvent::GetFocus : SalEvent::LoseFocus, nullptr );
+            UINT nImeProps = ImmGetProperty(GetKeyboardLayout(0), IGP_PROPERTY);
+            pFrame->mbSpezIME = (nImeProps & IME_PROP_SPECIAL_UI) != 0;
+            pFrame->mbAtCursorIME = (nImeProps & IME_PROP_AT_CARET) != 0;
+            pFrame->mbHandleIME = !pFrame->mbSpezIME;
         }
-        ImplSalYieldMutexRelease();
     }
+
+    pFrame->CallCallback(bGotFocus ? SalEvent::GetFocus : SalEvent::LoseFocus, nullptr);
 }
 
 static void ImplHandleCloseMsg( HWND hWnd )
@@ -4126,17 +4133,15 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
         ImplUpdateSysColorEntries();
 
     WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, 0, 0, DeferPolicy::Blocked );
-    if ( pFrame )
-    {
-        if ( (nMsg == WM_DISPLAYCHANGE) || (nMsg == WM_WININICHANGE) )
-        {
-            if ( pFrame->mbFullScreen )
-                ImplSalFrameFullScreenPos( pFrame );
-        }
+    if (!pFrame)
+        return;
 
-        pFrame->CallCallback( nSalEvent, nullptr );
-        ImplSalYieldMutexRelease();
-    }
+    if (((nMsg == WM_DISPLAYCHANGE) || (nMsg == WM_WININICHANGE)) && pFrame->mbFullScreen)
+        ImplSalFrameFullScreenPos(pFrame);
+
+    pFrame->CallCallback(nSalEvent, nullptr);
+
+    ImplSalYieldMutexRelease();
 }
 
 static void ImplHandleUserEvent( HWND hWnd, LPARAM lParam )
@@ -4153,25 +4158,22 @@ static void ImplHandleForcePalette( HWND hWnd )
 {
     SalData*    pSalData = GetSalData();
     HPALETTE    hPal = pSalData->mhDitherPal;
-    if ( hPal )
-    {
-        WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, SAL_MSG_FORCEPALETTE );
-        if ( pFrame && pFrame->mpLocalGraphics && pFrame->mpLocalGraphics->getHDC() )
-        {
-            WinSalGraphics* pGraphics = pFrame->mpLocalGraphics;
-            if (pGraphics->getDefPal())
-            {
-                if (pGraphics->setPalette(hPal, FALSE) != GDI_ERROR)
-                {
-                    InvalidateRect( hWnd, nullptr, FALSE );
-                    UpdateWindow( hWnd );
-                    pFrame->CallCallback( SalEvent::DisplayChanged, nullptr );
-                }
-            }
-        }
-        if ( pFrame )
-            ImplSalYieldMutexRelease();
-    }
+    if (!hPal)
+        return;
+
+    WinSalFrame* pFrame = ProcessOrDeferMessage(hWnd, SAL_MSG_FORCEPALETTE);
+    if (!pFrame)
+        return;
+    const ::comphelper::ScopeGuard aScopeGuard([](){ ImplSalYieldMutexRelease(); });
+
+    WinSalGraphics* pGraphics = pFrame->mpLocalGraphics;
+    if (!pGraphics || !pGraphics->getHDC() || !pGraphics->getDefPal()
+            || (pGraphics->setPalette(hPal, FALSE) == GDI_ERROR))
+        return;
+
+    InvalidateRect(hWnd, nullptr, FALSE);
+    UpdateWindow(hWnd);
+    pFrame->CallCallback(SalEvent::DisplayChanged, nullptr);
 }
 
 static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
@@ -5650,8 +5652,11 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
             break;
 
         case WM_MOVE:
+            ImplHandleMoveMsg(hWnd, lParam);
+            rDef = false;
+            break;
         case SAL_MSG_POSTMOVE:
-            ImplHandleMoveMsg( hWnd );
+            ImplCallMoveHdl(hWnd);
             rDef = false;
             break;
         case WM_SIZE:
