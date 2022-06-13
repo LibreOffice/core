@@ -8,7 +8,9 @@
  */
 
 #include "rtfcharsets.hxx"
-#include <array>
+
+#include <iterator>
+
 #include <rtl/textenc.h>
 
 namespace writerfilter::rtftok

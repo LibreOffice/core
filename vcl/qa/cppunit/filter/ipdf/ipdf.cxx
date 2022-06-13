@@ -13,7 +13,6 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 

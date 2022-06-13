@@ -15,7 +15,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <sal/types.h>
-#include <sfx2/app.hxx>
 #include <tools/stream.hxx>
 #include <unotest/directories.hxx>
 #include <unotools/tempfile.hxx>
