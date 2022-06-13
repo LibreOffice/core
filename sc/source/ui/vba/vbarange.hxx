@@ -120,7 +120,7 @@ class ScVbaRange : public ScVbaRange_BASE
     void fireChangeEvent();
 
     /// @throws css::uno::RuntimeException
-    ScRange obtainRangeEvenIfRangeListIsEmpty( const ScCellRangesBase* pUnoRangesBase ) const;
+    ScRange obtainRangeEvenIfRangeListIsEmpty( const ScRangeList& rCellRanges ) const;
 
 protected:
     virtual ScCellRangesBase* getCellRangesBase() override;
