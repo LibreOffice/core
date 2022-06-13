@@ -155,6 +155,24 @@
                 <property name="position">6</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkToggleButton" id="btnusebackground">
+                <property name="label" translatable="yes" context="areatabpage|btnusebackground">Use Background</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="btnusebackground-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|btnusebackground">Displays the underlying slide background.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">7</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
