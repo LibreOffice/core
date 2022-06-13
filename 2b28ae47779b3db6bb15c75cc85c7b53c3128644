@@ -34,6 +34,24 @@
       "parentUuid": "d100e675_05140104",
       "revId": "2b28ae47779b3db6bb15c75cc85c7b53c3128644",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d62a283f_57b9efa1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-13T19:34:32Z",
+      "side": 1,
+      "message": "it\u0027s merged. Do \u0027git pull -r \u0026\u0026 time make\u0027 to get it and work on top of it",
+      "parentUuid": "fe12788a_31b26808",
+      "revId": "2b28ae47779b3db6bb15c75cc85c7b53c3128644",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
