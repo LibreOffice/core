@@ -137,6 +137,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         nMacroInterpretLevel(0),
         nInterpreterTableOpLevel(0),
         maInterpreterContext( *this, nullptr ),
+        mxScSortedRangeCache(new ScSortedRangeCacheMap),
         nFormulaTrackCount(0),
         eHardRecalcState(HardRecalcState::OFF),
         nVisibleTab( 0 ),
@@ -1198,25 +1199,31 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange, ScInterprete
 ScSortedRangeCache& ScDocument::GetSortedRangeCache( const ScRange & rRange, const ScQueryParam& param,
                                                      ScInterpreterContext* pContext )
 {
-    ScSortedRangeCache* pCache = nullptr;
-    if (!pContext->mxScSortedRangeCache)
-        pContext->mxScSortedRangeCache.reset(new ScSortedRangeCacheMap);
-    ScSortedRangeCacheMap* pCacheMap = pContext->mxScSortedRangeCache.get();
-    // insert with temporary value to avoid doing two lookups
-    auto [findIt, bInserted] = pCacheMap->aCacheMap.emplace(ScSortedRangeCache::makeHashKey(rRange, param), nullptr);
+    assert(mxScSortedRangeCache);
+    ScSortedRangeCache::HashKey key = ScSortedRangeCache::makeHashKey(rRange, param);
+    // This should be created just once for one range, and repeated calls should reuse it, even
+    // between threads (it doesn't make sense to use ScInterpreterContext and have all threads
+    // build their own copy of the same data). So first try read-only access, which should
+    // in most cases be enough.
+    {
+      std::shared_lock guard(mScLookupMutex);
+      auto findIt = mxScSortedRangeCache->aCacheMap.find(key);
+      if( findIt != mxScSortedRangeCache->aCacheMap.end())
+        return *findIt->second;
+    }
+    // Avoid recursive calls because of some cells in the range being dirty and triggering
+    // interpreting, which may call into this again. Threaded calculation makes sure
+    // no cells are dirty.
+    if(!IsThreadedGroupCalcInProgress())
+        InterpretCellsIfNeeded(rRange);
+    std::unique_lock guard(mScLookupMutex);
+    auto [findIt, bInserted] = mxScSortedRangeCache->aCacheMap.emplace(key, nullptr);
     if (bInserted)
     {
-        findIt->second = std::make_unique<ScSortedRangeCache>(this, rRange, param, *pCacheMap, pContext);
-        pCache = findIt->second.get();
-        // The StartListeningArea() call is not thread-safe, as all threads
-        // would access the same SvtBroadcaster.
-        std::unique_lock guard( mScLookupMutex );
-        StartListeningArea(rRange, false, pCache);
+        findIt->second = std::make_unique<ScSortedRangeCache>(this, rRange, param, pContext);
+        StartListeningArea(rRange, false, findIt->second.get());
     }
-    else
-        pCache = (*findIt).second.get();
-
-    return *pCache;
+    return *findIt->second;
 }
 
 void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
@@ -1244,12 +1251,11 @@ void ScDocument::RemoveSortedRangeCache( ScSortedRangeCache & rCache )
     // a result of user input or recalc). If it turns out this can be the case, locking is needed
     // here and also in ScSortedRangeCache::Notify().
     assert(!IsThreadedGroupCalcInProgress());
-    auto & cacheMap = rCache.getCacheMap();
-    auto it(cacheMap.aCacheMap.find(rCache.getHashKey()));
-    if (it != cacheMap.aCacheMap.end())
+    auto it(mxScSortedRangeCache->aCacheMap.find(rCache.getHashKey()));
+    if (it != mxScSortedRangeCache->aCacheMap.end())
     {
         ScSortedRangeCache* pCache = (*it).second.release();
-        cacheMap.aCacheMap.erase(it);
+        mxScSortedRangeCache->aCacheMap.erase(it);
         assert(!IsThreadedGroupCalcInProgress()); // EndListeningArea() is not thread-safe
         EndListeningArea(pCache->getRange(), false, &rCache);
         return;
@@ -1261,10 +1267,9 @@ void ScDocument::ClearLookupCaches()
 {
     assert(!IsThreadedGroupCalcInProgress());
     GetNonThreadedContext().mxScLookupCache.reset();
-    GetNonThreadedContext().mxScSortedRangeCache.reset();
+    mxScSortedRangeCache->aCacheMap.clear();
     // Clear lookup cache in all interpreter-contexts in the (threaded/non-threaded) pools.
     ScInterpreterContextPool::ClearLookupCaches();
-    ScInterpreterContextPool::ClearSortedRangeCaches();
 }
 
 bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder)
