@@ -874,15 +874,18 @@ protected:
                 ScCellRangesBase* pUnoRangesBase = dynamic_cast< ScCellRangesBase* >( xIf.get() );
                 if ( pUnoRangesBase )
                 {
-                    ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-                    ScCompiler aCompiler( m_rDoc, aCellRanges.front().aStart, m_eGrammar );
-                    // compile the string in the format passed in
-                    std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(sFormula));
-                    // convert to API grammar
-                    aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_API );
-                    OUString sConverted;
-                    aCompiler.CreateStringFromTokenArray(sConverted);
-                    sFormula = EQUALS + sConverted;
+                    const ScRangeList& rCellRanges = pUnoRangesBase->GetRangeList();
+                    if (!rCellRanges.empty())
+                    {
+                        ScCompiler aCompiler( m_rDoc, rCellRanges.front().aStart, m_eGrammar );
+                        // compile the string in the format passed in
+                        std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(sFormula));
+                        // convert to API grammar
+                        aCompiler.SetGrammar( formula::FormulaGrammar::GRAM_API );
+                        OUString sConverted;
+                        aCompiler.CreateStringFromTokenArray(sConverted);
+                        sFormula = EQUALS + sConverted;
+                    }
                 }
             }
 
@@ -920,16 +923,19 @@ public:
             {
                 OUString sVal;
                 aValue >>= sVal;
-                ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-                // Compile string from API grammar.
-                ScCompiler aCompiler( m_rDoc, aCellRanges.front().aStart, formula::FormulaGrammar::GRAM_API );
-                std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(sVal));
-                // Convert to desired grammar.
-                aCompiler.SetGrammar( m_eGrammar );
-                OUString sConverted;
-                aCompiler.CreateStringFromTokenArray(sConverted);
-                sVal = EQUALS + sConverted;
-                aValue <<= sVal;
+                const ScRangeList& rCellRanges = pUnoRangesBase->GetRangeList();
+                if (!rCellRanges.empty())
+                {
+                    // Compile string from API grammar.
+                    ScCompiler aCompiler( m_rDoc, rCellRanges.front().aStart, formula::FormulaGrammar::GRAM_API );
+                    std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(sVal));
+                    // Convert to desired grammar.
+                    aCompiler.SetGrammar( m_eGrammar );
+                    OUString sConverted;
+                    aCompiler.CreateStringFromTokenArray(sConverted);
+                    sVal = EQUALS + sConverted;
+                    aValue <<= sVal;
+                }
             }
         }
 
@@ -1923,7 +1929,8 @@ ScVbaRange::Offset( const ::uno::Any &nRowOff, const uno::Any &nColOff )
         return new ScVbaRange( mxParent, mxContext, xRanges );
     }
     // normal range
-    uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pUnoRangesBase->GetDocShell(), aCellRanges.front() ) );
+    const ScRange aRange( obtainRangeEvenIfRangeListIsEmpty( aCellRanges));
+    uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pUnoRangesBase->GetDocShell(), aRange));
     return new ScVbaRange( mxParent, mxContext, xRange  );
 }
 
@@ -2374,12 +2381,11 @@ ScVbaRange::Activate()
 
 }
 
-ScRange ScVbaRange::obtainRangeEvenIfRangeListIsEmpty( const ScCellRangesBase* pUnoRangesBase ) const
+ScRange ScVbaRange::obtainRangeEvenIfRangeListIsEmpty( const ScRangeList& rCellRanges ) const
 {
     // XXX It may be that using the current range list was never correct, but
     // always the initial sheet range would be instead, history is unclear.
 
-    const ScRangeList& rCellRanges = pUnoRangesBase->GetRangeList();
     if (!rCellRanges.empty())
         return rCellRanges.front();
 
@@ -2393,7 +2399,7 @@ ScVbaRange::Rows(const uno::Any& aIndex )
     if ( aIndex.hasValue() )
     {
         ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
-        ScRange aRange( obtainRangeEvenIfRangeListIsEmpty( pUnoRangesBase));
+        ScRange aRange( obtainRangeEvenIfRangeListIsEmpty( pUnoRangesBase->GetRangeList()));
 
         sal_Int32 nValue = 0;
         OUString sAddress;
@@ -2432,7 +2438,7 @@ uno::Reference< excel::XRange >
 ScVbaRange::Columns(const uno::Any& aIndex )
 {
     ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
-    ScRange aRange( obtainRangeEvenIfRangeListIsEmpty( pUnoRangesBase));
+    ScRange aRange( obtainRangeEvenIfRangeListIsEmpty( pUnoRangesBase->GetRangeList()));
 
     if ( aIndex.hasValue() )
     {
@@ -2946,7 +2952,8 @@ ScVbaRange::getEntireColumnOrRow( bool bColumn )
 
         return new ScVbaRange( mxParent, mxContext, xRanges, !bColumn, bColumn );
     }
-    uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pUnoRangesBase->GetDocShell(), aCellRanges.front() ) );
+    const ScRange aRange( obtainRangeEvenIfRangeListIsEmpty( aCellRanges));
+    uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pUnoRangesBase->GetDocShell(), aRange));
     return new ScVbaRange( mxParent, mxContext, xRange, !bColumn, bColumn  );
 }
 
