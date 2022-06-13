@@ -974,6 +974,20 @@ public:
         return pData->buffer + n;
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    /**
+       "Stream" operator to append a value to this OUStringBuffer.
+
+       @internal
+       @since LibreOffice 7.5
+     */
+    template<typename T>
+    OUStringBuffer& operator<<(T&& rValue)
+    {
+        return append(rValue);
+    }
+#endif
+
     /**
         Inserts the string into this string buffer.
 
