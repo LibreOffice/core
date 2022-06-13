@@ -62,10 +62,6 @@ are the same.
 // the default X11 visual is actually also BGRA.
 #define SK_R32_SHIFT 16
 
-// Enable skia on big-endian too. Despite the disclaimer it reportedly
-// actually works fine.
-#define I_ACKNOWLEDGE_SKIA_DOES_NOT_SUPPORT_BIG_ENDIAN 1
-
 // Enable Skia's internal checks depending on DBG_UTIL mode. ENABLE_SKIA_DEBUG
 // controls whether to build with or without optimizations (set in Makefile).
 #ifdef DBG_UTIL
