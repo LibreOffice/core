@@ -162,7 +162,7 @@ namespace sdr::contact
                 xRetval.push_back(
                     drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                            aOutline,
+                            std::move(aOutline),
                             aBColor)));
             }
 

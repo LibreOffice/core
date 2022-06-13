@@ -84,7 +84,7 @@ namespace drawinglayer::primitive2d
             if(bFilled)
             {
                 xReference = new PolyPolygonColorPrimitive2D(
-                    aScaledOutline,
+                    std::move(aScaledOutline),
                     basegfx::BColor(0.0, 0.0, 0.0));
             }
             else
@@ -92,7 +92,7 @@ namespace drawinglayer::primitive2d
                 const basegfx::BColor aGrayTone(0xc0 / 255.0, 0xc0 / 255.0, 0xc0 / 255.0);
 
                 xReference = new PolyPolygonHairlinePrimitive2D(
-                    aScaledOutline,
+                    std::move(aScaledOutline),
                     aGrayTone);
             }
 

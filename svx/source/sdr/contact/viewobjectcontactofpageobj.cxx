@@ -224,7 +224,7 @@ void ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& /*
             svtools::ColorConfigValue aBorderConfig = aColorConfig.GetColorValue(svtools::DOCBOUNDARIES);
             const Color aBorderColor = aBorderConfig.bIsVisible ? aBorderConfig.nColor : aDocColor;
             const basegfx::B2DRange aPageBound(0.0, 0.0, fPageWidth, fPageHeight);
-            const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aPageBound));
+            basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aPageBound));
 
             // add replacement fill
             xPageContent[0] = drawinglayer::primitive2d::Primitive2DReference(
@@ -232,7 +232,7 @@ void ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& /*
 
             // add replacement border
             xPageContent[1] = drawinglayer::primitive2d::Primitive2DReference(
-                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aBorderColor.getBColor()));
+                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aOutline), aBorderColor.getBColor()));
         }
         else
         {
@@ -283,7 +283,7 @@ void ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& /*
         aOwnOutline.transform(aPageObjectTransform);
 
         const drawinglayer::primitive2d::Primitive2DReference xGrayFrame(
-            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOwnOutline, aFrameColor.getBColor()));
+            new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aOwnOutline), aFrameColor.getBColor()));
 
         rVisitor.visit(xGrayFrame);
     }

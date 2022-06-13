@@ -598,7 +598,7 @@ namespace
 
         static const double fPatScFact(10.0); // 10.0 multiply, see old code
         std::vector<double> aDashing(svtools::GetLineDashing(rBorder.Type(), rBorder.PatternScale() * fPatScFact));
-        const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(std::move(aDashing));
+        drawinglayer::attribute::StrokeAttribute aStrokeAttribute(std::move(aDashing));
         const basegfx::B2DPoint aStart(rOrigin + (aPerpendX * aCombination.getRefModeOffset()));
 
         rTarget.append(
@@ -607,7 +607,7 @@ namespace
                     aStart,
                     aStart + rX,
                     std::move(aBorderlines),
-                    aStrokeAttribute)));
+                    std::move(aStrokeAttribute))));
     }
 
     double getMinimalNonZeroValue(double fCurrent, double fNew)

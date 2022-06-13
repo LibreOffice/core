@@ -571,9 +571,8 @@ void ODbaseIndex::CreateImpl()
         nRowsLeft = xSet->getRow();
 
         xSet->beforeFirst();
-        ORowSetValue atmpValue;
-        ONDXKey aKey(atmpValue, nType, 0);
-        ONDXKey aInsertKey(atmpValue, nType, 0);
+        ONDXKey aKey(ORowSetValue(), nType, 0);
+        ONDXKey aInsertKey(ORowSetValue(), nType, 0);
         // Create the index structure
         while (xSet->next())
         {

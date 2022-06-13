@@ -129,7 +129,7 @@ void AnchorPrimitive::create2DDecomposition(
             aDotDashArray.push_back(fDashLen);
             aDotDashArray.push_back(fDistance);
 
-            const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
+            drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
                 std::move(aDotDashArray),
                 fDistance + fDashLen);
 
@@ -137,7 +137,7 @@ void AnchorPrimitive::create2DDecomposition(
                 new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
                     getLine(),
                     aLineAttribute,
-                    aStrokeAttribute));
+                    std::move(aStrokeAttribute)));
 
             rContainer.push_back(aStrokedLine);
         }

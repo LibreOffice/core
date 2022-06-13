@@ -124,7 +124,7 @@ namespace drawinglayer::primitive2d
                 aNewLine.append(rMatrix * aEnd);
 
                 // create hairline
-                rContainer.push_back(new PolygonHairlinePrimitive2D(aNewLine, aHatchColor));
+                rContainer.push_back(new PolygonHairlinePrimitive2D(std::move(aNewLine), aHatchColor));
             }
         }
 

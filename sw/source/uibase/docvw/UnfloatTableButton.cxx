@@ -224,8 +224,8 @@ void UnfloatTableButton::PaintButton()
 
     aSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
         new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-            aTextMatrix, m_sLabel, 0, m_sLabel.getLength(), std::vector<double>(), aFontAttr,
-            css::lang::Locale(), aLineColor)));
+            aTextMatrix, m_sLabel, 0, m_sLabel.getLength(), std::vector<double>(),
+            std::move(aFontAttr), css::lang::Locale(), aLineColor)));
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;

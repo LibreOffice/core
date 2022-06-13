@@ -233,7 +233,7 @@ namespace svgio::svgreader
                     // and strokeWidth and forced to black
                     drawinglayer::primitive2d::Primitive2DReference xEmbedTransparence(
                         new drawinglayer::primitive2d::MaskPrimitive2D(
-                            aClipPolyPolygon,
+                            std::move(aClipPolyPolygon),
                             std::move(rContent)));
 
                     rContent = drawinglayer::primitive2d::Primitive2DContainer { xEmbedTransparence };

@@ -1501,9 +1501,11 @@ void VclMetafileProcessor2D::processPolygonHairlinePrimitive2D(
         basegfx::B2DPolygon aLeft, aRight;
         splitLinePolygon(rBasePolygon, aLeft, aRight);
         rtl::Reference<primitive2d::PolygonHairlinePrimitive2D> xPLeft(
-            new primitive2d::PolygonHairlinePrimitive2D(aLeft, rHairlinePrimitive.getBColor()));
+            new primitive2d::PolygonHairlinePrimitive2D(std::move(aLeft),
+                                                        rHairlinePrimitive.getBColor()));
         rtl::Reference<primitive2d::PolygonHairlinePrimitive2D> xPRight(
-            new primitive2d::PolygonHairlinePrimitive2D(aRight, rHairlinePrimitive.getBColor()));
+            new primitive2d::PolygonHairlinePrimitive2D(std::move(aRight),
+                                                        rHairlinePrimitive.getBColor()));
 
         processBasePrimitive2D(*xPLeft);
         processBasePrimitive2D(*xPRight);
@@ -1551,10 +1553,12 @@ void VclMetafileProcessor2D::processPolygonStrokePrimitive2D(
         basegfx::B2DPolygon aLeft, aRight;
         splitLinePolygon(rBasePolygon, aLeft, aRight);
         rtl::Reference<primitive2d::PolygonStrokePrimitive2D> xPLeft(
-            new primitive2d::PolygonStrokePrimitive2D(aLeft, rStrokePrimitive.getLineAttribute(),
+            new primitive2d::PolygonStrokePrimitive2D(std::move(aLeft),
+                                                      rStrokePrimitive.getLineAttribute(),
                                                       rStrokePrimitive.getStrokeAttribute()));
         rtl::Reference<primitive2d::PolygonStrokePrimitive2D> xPRight(
-            new primitive2d::PolygonStrokePrimitive2D(aRight, rStrokePrimitive.getLineAttribute(),
+            new primitive2d::PolygonStrokePrimitive2D(std::move(aRight),
+                                                      rStrokePrimitive.getLineAttribute(),
                                                       rStrokePrimitive.getStrokeAttribute()));
 
         processBasePrimitive2D(*xPLeft);

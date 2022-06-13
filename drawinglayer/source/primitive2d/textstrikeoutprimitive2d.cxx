@@ -191,7 +191,7 @@ namespace drawinglayer::primitive2d
             // add primitive
             const attribute::LineAttribute aLineAttribute(getFontColor(), fStrikeoutHeight, basegfx::B2DLineJoin::NONE);
             Primitive2DContainer xRetval(1);
-            xRetval[0] = new PolygonStrokePrimitive2D(aStrikeoutLine, aLineAttribute);
+            xRetval[0] = new PolygonStrokePrimitive2D(std::move(aStrikeoutLine), aLineAttribute);
 
             if(bDoubleLine)
             {

@@ -90,7 +90,7 @@ namespace drawinglayer::processor3d
                     {
                         a2DHairline.transform(getObjectTransformation());
                         const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
-                        const primitive2d::Primitive2DReference xRef(new primitive2d::PolygonHairlinePrimitive2D(a2DHairline, aModifiedColor));
+                        const primitive2d::Primitive2DReference xRef(new primitive2d::PolygonHairlinePrimitive2D(std::move(a2DHairline), aModifiedColor));
                         maPrimitive2DSequence.push_back(xRef);
                     }
                     break;
@@ -105,7 +105,7 @@ namespace drawinglayer::processor3d
                     {
                         a2DFill.transform(getObjectTransformation());
                         const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(rPrimitive.getMaterial().getColor()));
-                        const primitive2d::Primitive2DReference xRef(new primitive2d::PolyPolygonColorPrimitive2D(a2DFill, aModifiedColor));
+                        const primitive2d::Primitive2DReference xRef(new primitive2d::PolyPolygonColorPrimitive2D(std::move(a2DFill), aModifiedColor));
                         maPrimitive2DSequence.push_back(xRef);
                     }
                     break;

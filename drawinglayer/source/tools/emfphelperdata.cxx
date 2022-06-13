@@ -677,14 +677,14 @@ namespace emfplushelper
             {
                 mrTargetHolders.Current().append(
                             new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                                startCapPolygon,
+                                std::move(startCapPolygon),
                                 pen->GetColor().getBColor()));
             }
             else
             {
                 mrTargetHolders.Current().append(
                             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                                startCapPolygon,
+                                std::move(startCapPolygon),
                                 lineAttribute,
                                 pen->GetStrokeAttribute(mdExtractedXScale)));
             }
@@ -722,14 +722,14 @@ namespace emfplushelper
             {
                 mrTargetHolders.Current().append(
                             new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                                endCapPolygon,
+                                std::move(endCapPolygon),
                                 pen->GetColor().getBColor()));
             }
             else
             {
                 mrTargetHolders.Current().append(
                             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                                endCapPolygon,
+                                std::move(endCapPolygon),
                                 lineAttribute,
                                 pen->GetStrokeAttribute(mdExtractedXScale)));
             }

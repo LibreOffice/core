@@ -152,12 +152,12 @@ void SwFrameButtonPainter::PaintButton(drawinglayer::primitive2d::Primitive2DCon
             nAngle = 0;
         FillGradientAttribute aFillAttrs(drawinglayer::attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, nAngle, aLighterColor, aFillColor);
         rSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
-                            new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, aFillAttrs)));
+                            new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, std::move(aFillAttrs))));
     }
 
     // Create the border lines primitive
     rSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
-                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPolygon, aLineColor)));
+                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPolygon), aLineColor)));
 }
 
 SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame, bool bHeader ) :
@@ -319,7 +319,7 @@ void SwHeaderFooterWin::PaintButton()
     aSeq.push_back(drawinglayer::primitive2d::Primitive2DReference(
                     new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                         aTextMatrix, m_sLabel, 0, m_sLabel.getLength(),
-                        std::vector<double>(), aFontAttr, css::lang::Locale(), aLineColor)));
+                        std::vector<double>(), std::move(aFontAttr), css::lang::Locale(), aLineColor)));
 
     // Create the 'plus' or 'arrow' primitive
     B2DRectangle aSignArea(B2DPoint(aRect.Right() - BUTTON_WIDTH, 0.0),

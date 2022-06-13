@@ -294,7 +294,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
             drawinglayer::attribute::LineAttribute aLineAttribute(Color(aTextColor).getBColor(), fMnemonicHeight);
 
             rSeq[nPrimitives++] = drawinglayer::primitive2d::Primitive2DReference(
-                        new PolygonStrokePrimitive2D(aLine, aLineAttribute));
+                        new PolygonStrokePrimitive2D(std::move(aLine), aLineAttribute));
         }
 
         nLineStart += nLineLength;

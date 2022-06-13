@@ -67,10 +67,10 @@ void ViewContactOfPageObj::createViewIndependentPrimitive2DSequence(
     // which is aOutRect for SdrPageObj.
     const tools::Rectangle aModelRectangle(GetPageObj().GetLastBoundRect());
     const basegfx::B2DRange aModelRange = vcl::unotools::b2DRectangleFromRectangle(aModelRectangle);
-    const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aModelRange));
+    basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aModelRange));
     const basegfx::BColor aYellow(1.0, 1.0, 0.0);
     const drawinglayer::primitive2d::Primitive2DReference xReference(
-        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aYellow));
+        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aOutline), aYellow));
 
     rVisitor.visit(xReference);
 }

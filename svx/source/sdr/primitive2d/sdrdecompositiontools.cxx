@@ -223,7 +223,7 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
         {
             // create line and stroke attribute
             const attribute::LineAttribute aLineAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin(), rLine.getCap());
-            const attribute::StrokeAttribute aStrokeAttribute(std::vector(rLine.getDotDashArray()), rLine.getFullDotDashLen());
+            attribute::StrokeAttribute aStrokeAttribute(std::vector(rLine.getDotDashArray()), rLine.getFullDotDashLen());
             rtl::Reference<BasePrimitive2D> pNewLinePrimitive;
 
             if(!rPolygon.isClosed() && !rStroke.isDefault())
@@ -237,7 +237,7 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
             else
             {
                 // create data
-                pNewLinePrimitive = new PolygonStrokePrimitive2D(rPolygon, aLineAttribute, aStrokeAttribute);
+                pNewLinePrimitive = new PolygonStrokePrimitive2D(rPolygon, aLineAttribute, std::move(aStrokeAttribute));
             }
 
             if(0.0 != rLine.getTransparence())
