@@ -962,14 +962,14 @@ void paintGraphicUsingPrimitivesHelper(
     // RegionBand-based implementation, so cannot use it here.
     if(rOutputDevice.IsClipRegion())
     {
-        const basegfx::B2DPolyPolygon aClip(rOutputDevice.GetClipRegion().GetAsB2DPolyPolygon());
+        basegfx::B2DPolyPolygon aClip(rOutputDevice.GetClipRegion().GetAsB2DPolyPolygon());
 
         if(0 != aClip.count())
         {
             rContent.resize(1);
             rContent[0] =
                 new drawinglayer::primitive2d::MaskPrimitive2D(
-                    aClip,
+                    std::move(aClip),
                     drawinglayer::primitive2d::Primitive2DContainer(rContent));
         }
     }

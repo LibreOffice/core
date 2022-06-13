@@ -121,16 +121,16 @@ BitmapEx XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
         }
     }
 
-    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
+    drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
         std::move(aDotDashArray),
         fFullDotDashLen);
 
     // create LinePrimitive
     const drawinglayer::primitive2d::Primitive2DReference aLinePrimitive(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
-            aLine,
+            std::move(aLine),
             aLineAttribute,
-            aStrokeAttribute));
+            std::move(aStrokeAttribute)));
 
     // prepare VirtualDevice
     ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;

@@ -879,7 +879,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragMethod::AddConnectorOverl
 
             if(pEdge)
             {
-                const basegfx::B2DPolygon aEdgePolygon(pEdge->ImplAddConnectorOverlay(*this, pEM->IsCon1(), pEM->IsCon2(), bDetail));
+                basegfx::B2DPolygon aEdgePolygon(pEdge->ImplAddConnectorOverlay(*this, pEM->IsCon1(), pEM->IsCon2(), bDetail));
 
                 if(aEdgePolygon.count())
                 {
@@ -930,7 +930,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragMethod::AddConnectorOverl
 
                         drawinglayer::primitive2d::Primitive2DReference aPolyPolygonMarkerPrimitive2D(
                             new drawinglayer::primitive2d::PolygonMarkerPrimitive2D(
-                                aEdgePolygon, aColA, aColB, fStripeLength));
+                                std::move(aEdgePolygon), aColA, aColB, fStripeLength));
                         aRetval.push_back(aPolyPolygonMarkerPrimitive2D);
                     }
                 }

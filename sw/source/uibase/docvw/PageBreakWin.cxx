@@ -201,7 +201,7 @@ void SwPageBreakWin::PaintButton()
     aSeq[0].set(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(aPolygon), aOtherColor));
     aSeq[1].set(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                                        aPolygon, aColor));
+                                        std::move(aPolygon), aColor));
 
     // Create the primitive for the image
     BitmapEx aBmpEx(RID_BMP_PAGE_BREAK);

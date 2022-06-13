@@ -92,9 +92,8 @@ namespace drawinglayer::primitive3d
 
                             aNewPolygon.setClosed(true);
 
-                            const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
-                            const Primitive3DReference xRef(new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, m_aLineMaterial, false));
-                            m_aLineTubeList[a] = xRef;
+                            basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
+                            m_aLineTubeList[a] = new PolyPolygonMaterialPrimitive3D(std::move(aNewPolyPolygon), m_aLineMaterial, false);
 
                             aLastLeft = aNextLeft;
                             aLastRight = aNextRight;
@@ -167,9 +166,8 @@ namespace drawinglayer::primitive3d
 
                             aNewPolygon.setClosed(true);
 
-                            const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
-                            const Primitive3DReference xRef(new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, m_aLineMaterial, false));
-                            m_aLineCapList[a] = xRef;
+                            basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
+                            m_aLineCapList[a] = new PolyPolygonMaterialPrimitive3D(std::move(aNewPolyPolygon), m_aLineMaterial, false);
 
                             aLast = aNext;
                         }
@@ -254,12 +252,12 @@ namespace drawinglayer::primitive3d
                             for (sal_uInt32 a = 0; a < nCount; ++a)
                             {
                                 const basegfx::B3DPolygon& aPartPolygon(aSphere.getB3DPolygon(a));
-                                const basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
+                                basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
 
                                 // need to create one primitive per Polygon since the primitive
                                 // is for planar PolyPolygons which is definitely not the case here
                                 m_aLineCapRoundList[a] = new PolyPolygonMaterialPrimitive3D(
-                                    aPartPolyPolygon,
+                                    std::move(aPartPolyPolygon),
                                     rMaterial,
                                     false);
                             }
@@ -306,8 +304,8 @@ namespace drawinglayer::primitive3d
                             for(sal_uInt32 a(0); a < aSphere.count(); a++)
                             {
                                 const basegfx::B3DPolygon& aPartPolygon(aSphere.getB3DPolygon(a));
-                                const basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
-                                aResultVector.push_back(new PolyPolygonMaterialPrimitive3D(aPartPolyPolygon, rMaterial, false));
+                                basegfx::B3DPolyPolygon aPartPolyPolygon(aPartPolygon);
+                                aResultVector.push_back(new PolyPolygonMaterialPrimitive3D(std::move(aPartPolyPolygon), rMaterial, false));
                             }
                         }
                         else
@@ -453,8 +451,8 @@ namespace drawinglayer::primitive3d
                             // create primitive
                             if(aNewPolygon.count())
                             {
-                                const basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
-                                aResultVector.push_back(new PolyPolygonMaterialPrimitive3D(aNewPolyPolygon, rMaterial, false));
+                                basegfx::B3DPolyPolygon aNewPolyPolygon(aNewPolygon);
+                                aResultVector.push_back(new PolyPolygonMaterialPrimitive3D(std::move(aNewPolyPolygon), rMaterial, false));
                             }
 
                             if(bMiter && aMiterPolygon.count())
@@ -466,8 +464,8 @@ namespace drawinglayer::primitive3d
                                 }
 
                                 // create primitive
-                                const basegfx::B3DPolyPolygon aMiterPolyPolygon(aMiterPolygon);
-                                aResultVector.push_back(new PolyPolygonMaterialPrimitive3D(aMiterPolyPolygon, rMaterial, false));
+                                basegfx::B3DPolyPolygon aMiterPolyPolygon(aMiterPolygon);
+                                aResultVector.push_back(new PolyPolygonMaterialPrimitive3D(std::move(aMiterPolyPolygon), rMaterial, false));
                             }
 
                             // prepare next step
@@ -601,7 +599,7 @@ using namespace com::sun::star;
                                     aSequence = getLineCapSegments(nSegments, aMaterial);
                                 }
 
-                                aResultVector.push_back(new TransformPrimitive3D(aCapTrans, aSequence));
+                                aResultVector.push_back(new TransformPrimitive3D(std::move(aCapTrans), aSequence));
                             }
                             else
                             {
@@ -638,7 +636,7 @@ using namespace com::sun::star;
                                     // line start edge, build transformed primitiveVector3D
                                     aResultVector.push_back(
                                         new TransformPrimitive3D(
-                                            aSphereTrans,
+                                            std::move(aSphereTrans),
                                             aNewList));
                                 }
                             }
@@ -646,7 +644,7 @@ using namespace com::sun::star;
                             // create line segments, build transformed primitiveVector3D
                             aResultVector.push_back(
                                 new TransformPrimitive3D(
-                                    aTubeTrans,
+                                    std::move(aTubeTrans),
                                     getLineTubeSegments(nSegments, aMaterial)));
 
                             if(bNoLineJoin || (!bClosed && bLast))
@@ -689,7 +687,7 @@ using namespace com::sun::star;
 
                                 aResultVector.push_back(
                                     new TransformPrimitive3D(
-                                        aBackCapTrans,
+                                        std::move(aBackCapTrans),
                                         aSequence));
                             }
                         }

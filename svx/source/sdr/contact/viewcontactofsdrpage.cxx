@@ -300,13 +300,13 @@ void ViewContactOfOuterPageBorder::createViewIndependentPrimitive2DSequence(draw
         aRight.append(basegfx::B2DPoint(aPageBorderRange.getMaxX(), aPageBorderRange.getMinY()));
         aRight.append(basegfx::B2DPoint(aPageBorderRange.getMaxX(), aPageBorderRange.getMaxY()));
 
-        rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aLeft, aRGBBorderColor)));
-        rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aRight, aRGBBorderColor)));
+        rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aLeft), aRGBBorderColor)));
+        rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aRight), aRGBBorderColor)));
     }
     else
     {
-        const basegfx::B2DPolygon aPageBorderPolygon(basegfx::utils::createPolygonFromRect(aPageBorderRange));
-        rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPageBorderPolygon, aRGBBorderColor)));
+        basegfx::B2DPolygon aPageBorderPolygon(basegfx::utils::createPolygonFromRect(aPageBorderRange));
+        rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPageBorderPolygon), aRGBBorderColor)));
     }
 }
 
@@ -333,7 +333,7 @@ void ViewContactOfInnerPageBorder::createViewIndependentPrimitive2DSequence(draw
     const basegfx::B2DRange aPageBorderRange(
         static_cast<double>(rPage.GetLeftBorder()), static_cast<double>(rPage.GetUpperBorder()),
         static_cast<double>(rPage.GetWidth() - rPage.GetRightBorder()), static_cast<double>(rPage.GetHeight() - rPage.GetLowerBorder()));
-    const basegfx::B2DPolygon aPageBorderPolygon(basegfx::utils::createPolygonFromRect(aPageBorderRange));
+    basegfx::B2DPolygon aPageBorderPolygon(basegfx::utils::createPolygonFromRect(aPageBorderRange));
 
     // We have only the page information, not the view information. Use the
     // svtools::FONTCOLOR or svtools::DOCBOUNDARIES color for initialisation
@@ -353,7 +353,7 @@ void ViewContactOfInnerPageBorder::createViewIndependentPrimitive2DSequence(draw
 
     // create page outer border primitive
     const basegfx::BColor aRGBBorderColor(aBorderColor.getBColor());
-    rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPageBorderPolygon, aRGBBorderColor)));
+    rVisitor.visit(drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aPageBorderPolygon), aRGBBorderColor)));
 }
 
 ViewContactOfInnerPageBorder::ViewContactOfInnerPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage)

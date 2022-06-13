@@ -138,7 +138,7 @@ namespace drawinglayer::primitive2d
                 // create maskPrimitive with aMaskPolyPolygon and aMaskContentVector
                 const Primitive2DReference xMask(
                     new MaskPrimitive2D(
-                        aMaskPolyPolygon,
+                        std::move(aMaskPolyPolygon),
                         Primitive2DContainer { xTransformPrimitive }));
 
                 rVisitor.visit(xMask);

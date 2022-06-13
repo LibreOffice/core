@@ -255,13 +255,13 @@ void OverlayDiagramPrimitive::create2DDecomposition(
 
     rContainer.push_back(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
-            aPolygonLapUp,
+            std::move(aPolygonLapUp),
             aLineAttribute,
             aStrokeAttribute));
 
     rContainer.push_back(
         new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
-            aPolygonLapDown,
+            std::move(aPolygonLapDown),
             aLineAttribute,
             aStrokeAttribute));
 
@@ -271,7 +271,7 @@ void OverlayDiagramPrimitive::create2DDecomposition(
     {
         rContainer.push_back(
             new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                aTextAsPolyPolygon,
+                std::move(aTextAsPolyPolygon),
                 aLineColor.getBColor()));
     }
 }

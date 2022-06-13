@@ -60,10 +60,10 @@ namespace sw::overlay
             if( nCount )
             {
                 const basegfx::BColor aRGBColor(getBaseColor().getBColor());
-                const basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges()));
+                basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges()));
                 const drawinglayer::primitive2d::Primitive2DReference aOutline(
                     new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                    aPolyPolygon,
+                    std::move(aPolyPolygon),
                     aRGBColor));
 
                 aRetval.resize(1);

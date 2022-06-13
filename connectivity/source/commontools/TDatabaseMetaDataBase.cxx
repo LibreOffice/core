@@ -147,7 +147,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  )
                 {
                     ORowSetValue aValue;
                     aValue.fill(i,*pType,xRow);
-                    aRow.push_back(new ORowSetValueDecorator(aValue));
+                    aRow.push_back(new ORowSetValueDecorator(std::move(aValue)));
                 }
 
                 std::vector<std::shared_ptr<ExpressionNode>>::iterator aIter = aConditions.begin();

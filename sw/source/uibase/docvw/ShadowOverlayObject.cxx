@@ -82,7 +82,7 @@ void ShadowPrimitive::create2DDecomposition(
         case SS_NORMAL:
         {
             aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (2.0 * getDiscreteUnit())));
-            const ::drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
+            ::drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
                 drawinglayer::attribute::GradientStyle::Linear,
                 0.0,
                 0.5,
@@ -94,13 +94,13 @@ void ShadowPrimitive::create2DDecomposition(
             rContainer.push_back(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     aRange,
-                    aFillGradientAttribute));
+                    std::move(aFillGradientAttribute)));
             break;
         }
         case SS_VIEW:
         {
             aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (4.0 * getDiscreteUnit())));
-            const drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
+            drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
                 drawinglayer::attribute::GradientStyle::Linear,
                 0.0,
                 0.5,
@@ -112,13 +112,13 @@ void ShadowPrimitive::create2DDecomposition(
             rContainer.push_back(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     aRange,
-                    aFillGradientAttribute));
+                    std::move(aFillGradientAttribute)));
             break;
         }
         case SS_EDIT:
         {
             aRange.expand(basegfx::B2DTuple(getSecondPosition().getX(), getSecondPosition().getY() + (4.0 * getDiscreteUnit())));
-            const drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
+            drawinglayer::attribute::FillGradientAttribute aFillGradientAttribute(
                 drawinglayer::attribute::GradientStyle::Linear,
                 0.0,
                 0.5,
@@ -130,7 +130,7 @@ void ShadowPrimitive::create2DDecomposition(
             rContainer.push_back(
                 new drawinglayer::primitive2d::FillGradientPrimitive2D(
                     aRange,
-                    aFillGradientAttribute));
+                    std::move(aFillGradientAttribute)));
             break;
         }
         default:

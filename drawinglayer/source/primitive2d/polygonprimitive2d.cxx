@@ -104,8 +104,10 @@ void PolygonMarkerPrimitive2D::create2DDecomposition(
         basegfx::utils::applyLineDashing(getB2DPolygon(), aDash, &aDashedPolyPolyA,
                                          &aDashedPolyPolyB, 2.0 * fLogicDashLength);
 
-        rContainer.push_back(new PolyPolygonHairlinePrimitive2D(aDashedPolyPolyA, getRGBColorA()));
-        rContainer.push_back(new PolyPolygonHairlinePrimitive2D(aDashedPolyPolyB, getRGBColorB()));
+        rContainer.push_back(
+            new PolyPolygonHairlinePrimitive2D(std::move(aDashedPolyPolyA), getRGBColorA()));
+        rContainer.push_back(
+            new PolyPolygonHairlinePrimitive2D(std::move(aDashedPolyPolyB), getRGBColorB()));
     }
     else
     {
@@ -257,14 +259,15 @@ void PolygonStrokePrimitive2D::create2DDecomposition(
             // put into single polyPolygon primitives to make clear that this is NOT meant
             // to be painted as a single tools::PolyPolygon (XORed as fill rule). Alternatively, a
             // melting process may be used here one day.
-            const basegfx::B2DPolyPolygon aNewPolyPolygon(aAreaPolyPolygon.getB2DPolygon(b));
+            basegfx::B2DPolyPolygon aNewPolyPolygon(aAreaPolyPolygon.getB2DPolygon(b));
             const basegfx::BColor aColor(getLineAttribute().getColor());
-            rContainer.push_back(new PolyPolygonColorPrimitive2D(aNewPolyPolygon, aColor));
+            rContainer.push_back(
+                new PolyPolygonColorPrimitive2D(std::move(aNewPolyPolygon), aColor));
         }
     }
     else
     {
-        rContainer.push_back(new PolyPolygonHairlinePrimitive2D(aHairLinePolyPolygon,
+        rContainer.push_back(new PolyPolygonHairlinePrimitive2D(std::move(aHairLinePolyPolygon),
                                                                 getLineAttribute().getColor()));
     }
 }
@@ -396,10 +399,10 @@ void PolygonWavePrimitive2D::create2DDecomposition(
     if (bHasWidth && bHasHeight)
     {
         // create waveline curve
-        const basegfx::B2DPolygon aWaveline(
+        basegfx::B2DPolygon aWaveline(
             basegfx::utils::createWaveline(getB2DPolygon(), getWaveWidth(), getWaveHeight()));
-        rContainer.push_back(
-            new PolygonStrokePrimitive2D(aWaveline, getLineAttribute(), getStrokeAttribute()));
+        rContainer.push_back(new PolygonStrokePrimitive2D(std::move(aWaveline), getLineAttribute(),
+                                                          getStrokeAttribute()));
     }
     else
     {
@@ -538,19 +541,19 @@ void PolygonStrokeArrowPrimitive2D::create2DDecomposition(
     }
 
     // add shaft
-    rContainer.push_back(
-        new PolygonStrokePrimitive2D(aLocalPolygon, getLineAttribute(), getStrokeAttribute()));
+    rContainer.push_back(new PolygonStrokePrimitive2D(std::move(aLocalPolygon), getLineAttribute(),
+                                                      getStrokeAttribute()));
 
     if (aArrowA.count())
     {
         rContainer.push_back(
-            new PolyPolygonColorPrimitive2D(aArrowA, getLineAttribute().getColor()));
+            new PolyPolygonColorPrimitive2D(std::move(aArrowA), getLineAttribute().getColor()));
     }
 
     if (aArrowB.count())
     {
         rContainer.push_back(
-            new PolyPolygonColorPrimitive2D(aArrowB, getLineAttribute().getColor()));
+            new PolyPolygonColorPrimitive2D(std::move(aArrowB), getLineAttribute().getColor()));
     }
 }
 

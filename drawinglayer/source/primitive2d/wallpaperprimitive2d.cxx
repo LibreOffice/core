@@ -201,11 +201,11 @@ namespace drawinglayer::primitive2d
                         if(bNeedsClipping)
                         {
                             // embed to clipping; this is necessary for tiled fills
-                            const basegfx::B2DPolyPolygon aPolyPolygon(
+                            basegfx::B2DPolyPolygon aPolyPolygon(
                                 basegfx::utils::createPolygonFromRect(getLocalObjectRange()));
                             const drawinglayer::primitive2d::Primitive2DReference xClippedFill(
                                 new drawinglayer::primitive2d::MaskPrimitive2D(
-                                    aPolyPolygon,
+                                    std::move(aPolyPolygon),
                                     { aRetval }));
                             aRetval = xClippedFill;
                         }

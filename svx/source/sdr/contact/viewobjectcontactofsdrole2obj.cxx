@@ -113,7 +113,7 @@ void ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
                 aObjectOutline.transform(aObjectMatrix);
 
                 // Use a FillHatchPrimitive2D with necessary attributes
-                const drawinglayer::attribute::FillHatchAttribute aFillHatch(
+                drawinglayer::attribute::FillHatchAttribute aFillHatch(
                     drawinglayer::attribute::HatchStyle::Single, // single hatch
                     125.0, // 1.25 mm
                     basegfx::deg2rad(45.0), // 45 degree diagonal
@@ -124,7 +124,7 @@ void ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
                 const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolyPolygonHatchPrimitive2D(
                     basegfx::B2DPolyPolygon(aObjectOutline),
                     COL_BLACK.getBColor(),
-                    aFillHatch));
+                    std::move(aFillHatch)));
 
                 rVisitor.visit(xReference);
             }

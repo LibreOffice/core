@@ -87,7 +87,7 @@ BitmapEx XHatchList::CreateBitmap( tools::Long nIndex, const Size& rSize) const
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
         // prepare polygon geometry for rectangle
-        const basegfx::B2DPolygon aRectangle(
+        basegfx::B2DPolygon aRectangle(
             basegfx::utils::createPolygonFromRect(
                 basegfx::B2DRange(0.0, 0.0, rSize.Width(), rSize.Height())));
 
@@ -117,7 +117,7 @@ BitmapEx XHatchList::CreateBitmap( tools::Long nIndex, const Size& rSize) const
         const basegfx::B2DVector aScaleVector(aScaleMatrix * basegfx::B2DVector(1.0, 0.0));
         const double fScaleValue(aScaleVector.getLength());
 
-        const drawinglayer::attribute::FillHatchAttribute aFillHatch(
+        drawinglayer::attribute::FillHatchAttribute aFillHatch(
             aHatchStyle,
             static_cast<double>(rHatch.GetDistance()) * fScaleValue,
             toRadians(rHatch.GetAngle()),
@@ -130,11 +130,11 @@ BitmapEx XHatchList::CreateBitmap( tools::Long nIndex, const Size& rSize) const
             new drawinglayer::primitive2d::PolyPolygonHatchPrimitive2D(
                 basegfx::B2DPolyPolygon(aRectangle),
                 aBlack,
-                aFillHatch));
+                std::move(aFillHatch)));
 
         const drawinglayer::primitive2d::Primitive2DReference aBlackRectanglePrimitive(
             new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                aRectangle,
+                std::move(aRectangle),
                 aBlack));
 
         // prepare VirtualDevice

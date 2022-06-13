@@ -41,7 +41,7 @@ namespace sdr::overlay
 
                 const drawinglayer::primitive2d::Primitive2DReference aReference(
                     new drawinglayer::primitive2d::PolygonMarkerPrimitive2D(
-                        aLine,
+                        std::move(aLine),
                         aRGBColorA,
                         aRGBColorB,
                         fStripeLengthPixel));
