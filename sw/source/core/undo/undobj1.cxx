@@ -36,6 +36,7 @@
 #include <rootfrm.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
+#include <mvsave.hxx>
 #include <ndtxt.hxx>
 #include <ndole.hxx>
 #include <frameformats.hxx>
@@ -295,7 +296,6 @@ void SwUndoInsLayFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     if( rContent.GetContentIdx() )  // no content
     {
         assert(&rContent.GetContentIdx()->GetNodes() == &rDoc.GetNodes());
-        bool bRemoveIdx = true;
         if( mnCursorSaveIndexPara > SwNodeOffset(0) )
         {
             SwTextNode *const pNode =
@@ -308,13 +308,10 @@ void SwUndoInsLayFormat::UndoImpl(::sw::UndoRedoContext & rContext)
                         aIdx.GetNode().EndOfSectionIndex() );
                 SwIndex aIndex( pNode, mnCursorSaveIndexPos );
                 SwPosition aPos( *pNode, aIndex );
-                SwDoc::CorrAbs( aIdx, aEndIdx, aPos, true );
-                bRemoveIdx = false;
+                // don't delete bookmarks here, DelFly() will save them in history
+                ::PaMCorrAbs(SwPaM(aIdx, aEndIdx), aPos);
+                // TODO: is aPos actually a sensible pos for e.g. SwXText* ?
             }
-        }
-        if( bRemoveIdx )
-        {
-            RemoveIdxFromSection( rDoc, rContent.GetContentIdx()->GetIndex() );
         }
     }
     DelFly(& rDoc);
