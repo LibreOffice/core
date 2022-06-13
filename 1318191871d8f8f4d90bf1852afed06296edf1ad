@@ -16,6 +16,23 @@
       "message": "Note that I should now finally have some time to look at those bugreports again, and I should have access to an Intel Mac.\n",
       "revId": "1318191871d8f8f4d90bf1852afed06296edf1ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa2170d0_b6b4292f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-13T09:36:40Z",
+      "side": 1,
+      "message": "great. let\u0027s add a -1 for now then and keep this on hold",
+      "revId": "1318191871d8f8f4d90bf1852afed06296edf1ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
