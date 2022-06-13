@@ -19,6 +19,7 @@
 #include <svx/svdotable.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xflbckit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/sdooitm.hxx>
@@ -744,7 +745,10 @@ void SdImportTest2::testTdf105150()
         = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
     // This was drawing::FillStyle_NONE, <p:sp useBgFill="1"> was ignored when
     // the slide didn't have an explicit background fill.
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rFillStyleItem.GetValue());
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
+    auto& rFillBackgroundItem
+        = dynamic_cast<const XFillBackgroundItem&>(pObj->GetMergedItem(XATTR_FILLBACKGROUND));
+    CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
     xDocShRef->DoClose();
 }
 
