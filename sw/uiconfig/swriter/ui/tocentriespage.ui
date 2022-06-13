@@ -751,7 +751,7 @@
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="reltostyle-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|reltostyle">Positions the tab stop relative to the "indent from left" value defined in the paragraph style selected on the Styles tab. Otherwise the tab stop is positioned relative to the left text margin.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="tocentriespage|extended_tip|reltostyle">Positions the tab stop relative to the "before the text" indent  value defined in the paragraph style selected on the Styles tab. Otherwise the tab stop is positioned relative to the left text margin.</property>
                           </object>
                         </child>
                       </object>
