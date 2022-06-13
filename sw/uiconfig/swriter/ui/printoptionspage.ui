@@ -77,7 +77,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="background-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|background">Specifies whether to include colors and objects that are inserted to the background of the page (Format - Page - Background) in the printed document.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="printoptionspage|extended_tip|background">Specifies whether to include colors and objects that are inserted to the background of the page style (Format - Page Style - Area) in the printed document.</property>
                       </object>
                     </child>
                   </object>
@@ -295,7 +295,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="none-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|none">Specifies whether comments in your document are printed.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="printoptionspage|extended_tip|none">Do not print document comments.</property>
                       </object>
                     </child>
                   </object>
@@ -315,7 +315,7 @@
                     <property name="group">none</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="only-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|only">Specifies whether comments in your document are printed.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="printoptionspage|extended_tip|only">Only print the comments of your document.</property>
                       </object>
                     </child>
                   </object>
@@ -335,7 +335,7 @@
                     <property name="group">none</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="end-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|end">Specifies whether comments in your document are printed.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="printoptionspage|extended_tip|end">Print comments on a new page at end of the document.</property>
                       </object>
                     </child>
                   </object>
@@ -355,7 +355,7 @@
                     <property name="group">none</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="endpage-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|endpage">Specifies whether comments in your document are printed.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|endpage">Print comments on a new page after the current page.</property>
                       </object>
                     </child>
                   </object>
@@ -375,7 +375,7 @@
                     <property name="group">none</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="inmargins-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|inmargins">Specifies whether comments in your document are printed.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="printoptionspage|extended_tip|inmargins">Include the comments boxes on the margin of the page. The page contents is rendered to fit both contents and the comments boxes.</property>
                       </object>
                     </child>
                   </object>
