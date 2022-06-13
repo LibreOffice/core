@@ -2274,26 +2274,26 @@ void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
 }
 
 WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStack)
-    : pCtrlStck(pStack),
-    aChrSet(rDoc.GetAttrPool()),
-    aParSet(rDoc.GetAttrPool())
+    : m_pCtrlStck(pStack),
+    m_aChrSet(rDoc.GetAttrPool()),
+    m_aParSet(rDoc.GetAttrPool())
 {
     //Close any open character properties and duplicate them inside the
     //first table cell
-    size_t nCnt = pCtrlStck->size();
+    size_t nCnt = m_pCtrlStck->size();
     for (size_t i=0; i < nCnt; ++i)
     {
-        const SwFltStackEntry& rEntry = (*pCtrlStck)[ i ];
+        const SwFltStackEntry& rEntry = (*m_pCtrlStck)[ i ];
         if (rEntry.m_bOpen)
         {
             if (isCHRATR(rEntry.m_pAttr->Which()))
             {
-                aChrSet.Put( *rEntry.m_pAttr );
+                m_aChrSet.Put( *rEntry.m_pAttr );
 
             }
             else if (isPARATR(rEntry.m_pAttr->Which()))
             {
-                aParSet.Put( *rEntry.m_pAttr );
+                m_aParSet.Put( *rEntry.m_pAttr );
             }
         }
     }
@@ -2301,7 +2301,7 @@ WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStack)
 
 void WW8DupProperties::Insert(const SwPosition &rPos)
 {
-    for (const SfxItemSet* pSet : {&aChrSet, &aParSet})
+    for (const SfxItemSet* pSet : {&m_aChrSet, &m_aParSet})
     {
         if( pSet->Count() )
         {
@@ -2309,7 +2309,7 @@ void WW8DupProperties::Insert(const SwPosition &rPos)
             const SfxPoolItem* pItem = aIter.GetCurItem();
             do
             {
-                pCtrlStck->NewAttr(rPos, *pItem);
+                m_pCtrlStck->NewAttr(rPos, *pItem);
             } while ((pItem = aIter.NextItem()));
         }
     }

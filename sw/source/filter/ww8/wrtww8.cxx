@@ -164,19 +164,19 @@ public:
 // class WW8_WrPc collects all piece entries for one piece
 class WW8_WrPc
 {
-    WW8_CP nStartCp;                    // Starting character position of the text
-    WW8_FC nStartFc;                    // Starting file position of the text
-    sal_uInt16 nStatus;                     // End of paragraph inside the piece?
+    WW8_CP m_nStartCp;                    // Starting character position of the text
+    WW8_FC m_nStartFc;                    // Starting file position of the text
+    sal_uInt16 m_nStatus;                     // End of paragraph inside the piece?
 
 public:
     WW8_WrPc(WW8_FC nSFc, WW8_CP nSCp )
-        : nStartCp( nSCp ), nStartFc( nSFc ), nStatus( 0x0040 )
+        : m_nStartCp( nSCp ), m_nStartFc( nSFc ), m_nStatus( 0x0040 )
     {}
 
-    void SetStatus()                { nStatus = 0x0050; }
-    sal_uInt16 GetStatus()  const       { return nStatus; }
-    WW8_CP GetStartCp() const       { return nStartCp; }
-    WW8_FC GetStartFc() const       { return nStartFc; }
+    void SetStatus()                { m_nStatus = 0x0050; }
+    sal_uInt16 GetStatus()  const       { return m_nStatus; }
+    WW8_CP GetStartCp() const       { return m_nStartCp; }
+    WW8_FC GetStartFc() const       { return m_nStartFc; }
 };
 
 typedef std::map<OUString,tools::Long> BKMKNames;
@@ -189,7 +189,7 @@ class WW8_WrtBookmarks
 {
 private:
     /// Structure of one item inside this map: (startPos, (endPos, (a bool value?, bookmarkName)))
-    BKMKCPs aSttCps;
+    BKMKCPs maSttCps;
     BKMKNames maSwBkmkNms;
 
     WW8_WrtBookmarks(WW8_WrtBookmarks const&) = delete;
@@ -211,7 +211,7 @@ WW8_WrtBookmarks::WW8_WrtBookmarks()
 
 WW8_WrtBookmarks::~WW8_WrtBookmarks()
 {
-    for (auto& rEntry : aSttCps)
+    for (auto& rEntry : maSttCps)
     {
         if (rEntry.second)
         {
@@ -228,12 +228,12 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm)
     {
         BKMK aBK(false,rNm);
         BKMKCP* pBKCP = new BKMKCP(static_cast<tools::Long>(nStartCp),aBK);
-        aSttCps.insert(std::pair<tools::Long,BKMKCP*>(nStartCp,pBKCP));
+        maSttCps.insert(std::pair<tools::Long,BKMKCP*>(nStartCp,pBKCP));
         aResult.first->second = static_cast<tools::Long>(nStartCp);
     }
     else
     {
-        std::pair<CPItr,CPItr> aRange = aSttCps.equal_range(aResult.first->second);
+        std::pair<CPItr,CPItr> aRange = maSttCps.equal_range(aResult.first->second);
         for (CPItr aItr = aRange.first;aItr != aRange.second;++aItr)
         {
             if (aItr->second && aItr->second->second.second == rNm)
@@ -249,7 +249,7 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm)
 
 void WW8_WrtBookmarks::Write( WW8Export& rWrt)
 {
-    if (aSttCps.empty())
+    if (maSttCps.empty())
         return;
     tools::Long n;
     std::vector<OUString> aNames;
@@ -257,7 +257,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
     SvMemoryStream aTempStrm2(65535,65535);
 
     BKMKCPs aEndCps;
-    for (const auto& rEntry : aSttCps)
+    for (const auto& rEntry : maSttCps)
     {
         if (rEntry.second)
         {
@@ -285,7 +285,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
     rWrt.m_pFib->m_fcPlcfbkf = rStrm.Tell();
     rStrm.WriteStream( aTempStrm1 );
     SwWW8Writer::WriteLong(rStrm, rWrt.m_pFib->m_ccpText + rWrt.m_pFib->m_ccpTxbx);
-    for (const auto& rEntry : aSttCps)
+    for (const auto& rEntry : maSttCps)
     {
         if (rEntry.second)
         {
@@ -301,7 +301,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
 
 void WW8_WrtBookmarks::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
 {
-    std::pair<CPItr,CPItr> aRange = aSttCps.equal_range(nFrom);
+    std::pair<CPItr,CPItr> aRange = maSttCps.equal_range(nFrom);
     CPItr aItr = aRange.first;
     while (aItr != aRange.second)
     {
@@ -312,9 +312,9 @@ void WW8_WrtBookmarks::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
                 aItr->second->second.first = true;
                 aItr->second->first = nTo;
             }
-            aSttCps.insert(std::pair<tools::Long,BKMKCP*>(nTo,aItr->second));
+            maSttCps.insert(std::pair<tools::Long,BKMKCP*>(nTo,aItr->second));
             aItr->second = nullptr;
-            aRange = aSttCps.equal_range(nFrom);
+            aRange = maSttCps.equal_range(nFrom);
             aItr = aRange.first;
             continue;
         }
