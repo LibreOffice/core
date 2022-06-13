@@ -11,6 +11,7 @@ from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
+from libreoffice.calc.paste_special import reset_default_values
 
 class tdf142932(UITestCase):
 
@@ -33,11 +34,9 @@ class tdf142932(UITestCase):
             self.assertEqual(get_state_as_dict(gridwin)["SelectedTable"], "1")
 
             with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
-                xText = xDialog.getChild("text")
-                xComments = xDialog.getChild("comments")
+                reset_default_values(self, xDialog)
+
                 xSkipEmpty = xDialog.getChild("skip_empty")
-                self.assertEqual('true', get_state_as_dict(xText)['Selected'])
-                self.assertEqual('false', get_state_as_dict(xComments)['Selected'])
                 xSkipEmpty.executeAction("CLICK", tuple())
                 self.assertEqual('true', get_state_as_dict(xSkipEmpty)['Selected'])
 

@@ -9,6 +9,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from libreoffice.calc.paste_special import reset_default_values
 
 #Bug 62267 - Conditional formatting lost after paste special of text, numbers and dates.
 #If you have a cell with conditional formatting and you use paste special only inserting only text,
@@ -25,8 +26,8 @@ class tdf62267(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             self.xUITest.executeCommand(".uno:Copy")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
-            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial"):
-                #it's the default - text, numbers and dates
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
+                reset_default_values(self, xDialog)
                 pass
 
             #--> Cell formatting should stay as before

@@ -11,6 +11,7 @@ from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
+from libreoffice.calc.paste_special import reset_default_values
 
 class tdf118308(UITestCase):
 
@@ -35,16 +36,7 @@ class tdf118308(UITestCase):
                 # Without the fix in place, this test would have failed here
                 # since a different dialog would have been opened and the children
                 # wouldn't have been found
-                xText = xDialog.getChild("text")
-                xNumbers = xDialog.getChild("numbers")
-                xDatetime = xDialog.getChild("datetime")
-                xFormats = xDialog.getChild("formats")
-
-                self.assertEqual("true", get_state_as_dict(xText)["Selected"])
-                self.assertEqual("true", get_state_as_dict(xNumbers)["Selected"])
-                self.assertEqual("true", get_state_as_dict(xDatetime)["Selected"])
-                self.assertEqual("false", get_state_as_dict(xFormats)["Selected"])
-
+                reset_default_values(self, xDialog)
 
             self.assertEqual("A", get_cell_by_position(calc_document, 0, 0, 0).getString())
 
