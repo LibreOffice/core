@@ -990,7 +990,7 @@ void ScTable::TransposeClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 {
     bool bWasCut = rDocument.IsCutMode();
 
-    for (SCCOL nCol=nCol1; nCol<=nCol2; nCol++)
+    for (SCCOL nCol : GetWritableColumnsRange(nCol1, nCol2))
     {
         std::vector<SCROW> aFilteredRows;
 
