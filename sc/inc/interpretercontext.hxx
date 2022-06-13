@@ -23,7 +23,6 @@ class FormulaToken;
 class ScDocument;
 class SvNumberFormatter;
 struct ScLookupCacheMap;
-struct ScSortedRangeCacheMap;
 class ScInterpreter;
 enum class SvNumFormatType : sal_Int16;
 
@@ -58,7 +57,6 @@ struct ScInterpreterContext
     std::vector<formula::FormulaToken*> maTokens;
     std::vector<DelayedSetNumberFormat> maDelayedSetNumberFormat;
     std::unique_ptr<ScLookupCacheMap> mxScLookupCache; // cache for lookups like VLOOKUP and MATCH
-    std::unique_ptr<ScSortedRangeCacheMap> mxScSortedRangeCache; // cache for unsorted lookups
     // Allocation cache for "aConditions" array in ScInterpreter::IterateParameterIfs()
     // This is populated/used only when formula-group threading is enabled.
     std::vector<sal_uInt8> maConditions;
@@ -85,7 +83,6 @@ private:
     void SetDocAndFormatter(const ScDocument& rDoc, SvNumberFormatter* pFormatter);
     void Cleanup();
     void ClearLookupCache();
-    void ClearSortedRangeCache();
     void initFormatTable();
     SvNumberFormatter* mpFormatter;
     mutable NFIndexAndFmtType maNFTypeCache;
@@ -139,7 +136,6 @@ class ScInterpreterContextPool
 public:
     // Only to be used to clear lookup cache in all pool elements
     static void ClearLookupCaches();
-    static void ClearSortedRangeCaches();
 };
 
 class ScThreadedInterpreterContextGetterGuard
