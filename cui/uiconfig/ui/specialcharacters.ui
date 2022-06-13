@@ -163,7 +163,7 @@
                     <property name="hexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="subsetlb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="specialcharacters|extended_tip|subsetlb">Select a Unicode category for the current font.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="specialcharacters|extended_tip|subsetlb">Select a Unicode block for the current font.</property>
                       </object>
                     </child>
                   </object>
