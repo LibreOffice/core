@@ -69,6 +69,7 @@
 #include <unotools/streamwrap.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svx/unofill.hxx>
@@ -159,9 +160,9 @@ struct CreateShapeParam2D
 
 
 ChartView::ChartView(
-        uno::Reference<uno::XComponentContext> const & xContext,
+        uno::Reference<uno::XComponentContext> xContext,
         ChartModel& rModel)
-    : m_xCC(xContext)
+    : m_xCC(std::move(xContext))
     , mrChartModel(rModel)
     , m_aListenerContainer( m_aMutex )
     , m_bViewDirty(true)

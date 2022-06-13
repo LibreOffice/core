@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <algorithm>
+#include <utility>
 
 namespace com::sun::star::lang { class XEventListener; }
 
@@ -35,8 +36,8 @@ namespace impl
 template< class InterfaceRef >
 struct addListenerFunctor
 {
-    explicit addListenerFunctor( const css::uno::Reference< css::lang::XEventListener > & xListener ) :
-            m_xListener( xListener )
+    explicit addListenerFunctor( css::uno::Reference< css::lang::XEventListener > xListener ) :
+            m_xListener(std::move( xListener ))
     {}
 
     void operator() ( const InterfaceRef & xObject )
@@ -53,8 +54,8 @@ private:
 template< class InterfaceRef >
 struct removeListenerFunctor
 {
-    explicit removeListenerFunctor( const css::uno::Reference<  css::lang::XEventListener > & xListener ) :
-            m_xListener( xListener )
+    explicit removeListenerFunctor( css::uno::Reference<  css::lang::XEventListener > xListener ) :
+            m_xListener(std::move( xListener ))
     {}
 
     void operator() ( const InterfaceRef & xObject )

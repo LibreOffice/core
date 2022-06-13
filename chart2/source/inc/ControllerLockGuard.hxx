@@ -39,7 +39,7 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockGuardUNO
 {
 public:
-    explicit ControllerLockGuardUNO(const rtl::Reference<::chart::ChartModel>& xModel);
+    explicit ControllerLockGuardUNO(rtl::Reference<::chart::ChartModel> xModel);
     ~ControllerLockGuardUNO();
 
 private:
@@ -65,7 +65,7 @@ private:
 class OOO_DLLPUBLIC_CHARTTOOLS ControllerLockHelper
 {
 public:
-    explicit ControllerLockHelper(const rtl::Reference<::chart::ChartModel>& xModel);
+    explicit ControllerLockHelper(rtl::Reference<::chart::ChartModel> xModel);
     ~ControllerLockHelper();
 
     SAL_DLLPRIVATE void lockControllers();

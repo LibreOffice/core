@@ -48,6 +48,7 @@
 #include "WrappedScaleTextProperties.hxx"
 
 #include <algorithm>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -369,8 +370,8 @@ namespace chart::wrapper
 {
 
 AxisWrapper::AxisWrapper(
-    tAxisType eType, const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact) :
-        m_spChart2ModelContact( spChart2ModelContact ),
+    tAxisType eType, std::shared_ptr<Chart2ModelContact> spChart2ModelContact) :
+        m_spChart2ModelContact(std::move( spChart2ModelContact )),
         m_aEventListenerContainer( m_aMutex ),
         m_eType( eType )
 {

@@ -43,10 +43,10 @@ class LegendEntryProvider;
 class VLegend
 {
 public:
-    VLegend( const rtl::Reference< ::chart::Legend > & xLegend,
+    VLegend( rtl::Reference< ::chart::Legend > xLegend,
              const css::uno::Reference< css::uno::XComponentContext > & xContext,
              std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
-             const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage,
+             rtl::Reference<SvxShapeGroupAnyD> xTargetPage,
              ChartModel& rModel  );
 
     void setDefaultWritingMode( sal_Int16 nDefaultWritingMode );

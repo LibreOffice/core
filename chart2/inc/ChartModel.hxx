@@ -215,7 +215,7 @@ private:
 
 public:
     ChartModel() = delete;
-    ChartModel(css::uno::Reference< css::uno::XComponentContext > const & xContext);
+    ChartModel(css::uno::Reference< css::uno::XComponentContext > xContext);
     explicit ChartModel( const ChartModel & rOther );
     virtual ~ChartModel() override;
 

@@ -21,6 +21,7 @@
 #include <ObjectNameProvider.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <ChartModel.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -32,10 +33,10 @@ namespace chart
 
 StatusBarCommandDispatch::StatusBarCommandDispatch(
     const Reference< uno::XComponentContext > & xContext,
-    const rtl::Reference<::chart::ChartModel> & xModel,
+    rtl::Reference<::chart::ChartModel> xModel,
     const Reference< view::XSelectionSupplier > & xSelSupp ) :
         impl::StatusBarCommandDispatch_Base( xContext ),
-        m_xChartModel( xModel  ),
+        m_xChartModel(std::move( xModel  )),
         m_xSelectionSupplier( xSelSupp ),
         m_bIsModified( false )
 {}

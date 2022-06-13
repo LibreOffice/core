@@ -19,6 +19,7 @@
 
 #include <ControllerLockGuard.hxx>
 #include <ChartModel.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -27,8 +28,8 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-ControllerLockGuardUNO::ControllerLockGuardUNO( const rtl::Reference<::chart::ChartModel>& xModel ) :
-        mxModel( xModel )
+ControllerLockGuardUNO::ControllerLockGuardUNO( rtl::Reference<::chart::ChartModel> xModel ) :
+        mxModel(std::move( xModel ))
 {
     mxModel->lockControllers();
 }
@@ -49,8 +50,8 @@ ControllerLockGuard::~ControllerLockGuard()
     mrModel.unlockControllers();
 }
 
-ControllerLockHelper::ControllerLockHelper( const rtl::Reference<::chart::ChartModel> & xModel ) :
-        m_xModel( xModel )
+ControllerLockHelper::ControllerLockHelper( rtl::Reference<::chart::ChartModel> xModel ) :
+        m_xModel(std::move( xModel ))
 {}
 
 ControllerLockHelper::~ControllerLockHelper()

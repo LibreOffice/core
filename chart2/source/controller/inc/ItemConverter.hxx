@@ -73,7 +73,7 @@ public:
         reading/writing converted items
      */
     ItemConverter(
-            const css::uno::Reference< css::beans::XPropertySet > & rPropertySet ,
+            css::uno::Reference< css::beans::XPropertySet > xPropertySet ,
             SfxItemPool& rItemPool );
     virtual ~ItemConverter() override;
 

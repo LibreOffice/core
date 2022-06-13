@@ -30,6 +30,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <rtl/math.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -152,9 +153,9 @@ TickmarkProperties AxisProperties::getBiggestTickmarkProperties()
     return aTickmarkProperties;
 }
 
-AxisProperties::AxisProperties( const rtl::Reference< Axis >& xAxisModel
+AxisProperties::AxisProperties( rtl::Reference< Axis > xAxisModel
                               , ExplicitCategoriesProvider* pExplicitCategoriesProvider )
-    : m_xAxisModel(xAxisModel)
+    : m_xAxisModel(std::move(xAxisModel))
     , m_nDimensionIndex(0)
     , m_bIsMainAxis(true)
     , m_bSwapXAndY(false)

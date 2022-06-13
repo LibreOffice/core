@@ -99,7 +99,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS ObjectIdentifier
 
 public:
     ObjectIdentifier();
-    ObjectIdentifier( const OUString& rObjectCID );
+    ObjectIdentifier( OUString aObjectCID );
     ObjectIdentifier( const css::uno::Reference< css::drawing::XShape >& rxShape );
     ObjectIdentifier( const css::uno::Any& rAny );
 

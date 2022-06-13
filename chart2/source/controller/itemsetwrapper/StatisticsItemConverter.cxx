@@ -34,6 +34,7 @@
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -209,11 +210,11 @@ namespace chart::wrapper
 {
 
 StatisticsItemConverter::StatisticsItemConverter(
-    const rtl::Reference<::chart::ChartModel> & xModel,
+    rtl::Reference<::chart::ChartModel> xModel,
     const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool ) :
         ItemConverter( rPropertySet, rItemPool ),
-        m_xModel( xModel )
+        m_xModel(std::move( xModel ))
 {
 }
 

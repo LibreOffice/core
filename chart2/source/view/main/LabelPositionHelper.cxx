@@ -26,6 +26,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 
 #include <cmath>
+#include <utility>
 
 namespace chart
 {
@@ -34,9 +35,9 @@ using namespace ::com::sun::star::chart2;
 
 LabelPositionHelper::LabelPositionHelper(
                       sal_Int32 nDimensionCount
-                    , const rtl::Reference<SvxShapeGroupAnyD>& xLogicTarget)
+                    , rtl::Reference<SvxShapeGroupAnyD> xLogicTarget)
                     : m_nDimensionCount(nDimensionCount)
-                    , m_xLogicTarget(xLogicTarget)
+                    , m_xLogicTarget(std::move(xLogicTarget))
 {
 }
 

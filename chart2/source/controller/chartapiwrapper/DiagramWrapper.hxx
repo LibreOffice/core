@@ -63,7 +63,7 @@ class DiagramWrapper : public cppu::ImplInheritanceHelper<
                     >
 {
 public:
-    explicit DiagramWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
+    explicit DiagramWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
     virtual ~DiagramWrapper() override;
 
     /// XServiceInfo declarations

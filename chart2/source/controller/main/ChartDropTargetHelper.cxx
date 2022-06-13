@@ -26,6 +26,7 @@
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 
 #include <sot/formats.hxx>
+#include <utility>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -61,9 +62,9 @@ namespace chart
 
 ChartDropTargetHelper::ChartDropTargetHelper(
     const Reference< datatransfer::dnd::XDropTarget >& rxDropTarget,
-    const rtl::Reference<::chart::ChartModel> & xChartDocument ) :
+    rtl::Reference<::chart::ChartModel> xChartDocument ) :
         DropTargetHelper( rxDropTarget ),
-        m_xChartDocument( xChartDocument )
+        m_xChartDocument(std::move( xChartDocument ))
 {}
 
 ChartDropTargetHelper::~ChartDropTargetHelper()

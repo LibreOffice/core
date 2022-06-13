@@ -23,6 +23,7 @@
 #include <float.h>
 
 #include <limits>
+#include <utility>
 
 namespace chart
 {
@@ -70,9 +71,9 @@ double EquidistantTickFactory::getMaximumAtIncrement( double fMax, const Explici
 }
 
 EquidistantTickFactory::EquidistantTickFactory(
-          const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement )
-            : m_rScale( rScale )
-            , m_rIncrement( rIncrement )
+          ExplicitScaleData aScale, ExplicitIncrementData aIncrement )
+            : m_rScale(std::move( aScale ))
+            , m_rIncrement(std::move( aIncrement ))
 {
     //@todo: make sure that the scale is valid for the scaling
 

@@ -30,6 +30,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -87,7 +88,7 @@ namespace chart::wrapper
 
 RegressionCurveItemConverter::RegressionCurveItemConverter(
     const uno::Reference< beans::XPropertySet >& rPropertySet,
-    const rtl::Reference< DataSeries >& xContainer,
+    rtl::Reference< DataSeries > xContainer,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory ) :
@@ -96,7 +97,7 @@ RegressionCurveItemConverter::RegressionCurveItemConverter(
                                   rPropertySet, rItemPool, rDrawModel,
                                   xNamedPropertyContainerFactory,
                                   GraphicObjectType::LineProperties )),
-        m_xCurveContainer( xContainer )
+        m_xCurveContainer(std::move( xContainer ))
 {}
 
 RegressionCurveItemConverter::~RegressionCurveItemConverter()

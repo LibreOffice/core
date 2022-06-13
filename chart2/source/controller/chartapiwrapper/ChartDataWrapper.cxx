@@ -30,6 +30,7 @@
 #include <float.h>
 #include <cmath>
 #include <limits>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -176,9 +177,9 @@ struct lcl_DataOperator : public lcl_Operator
 struct lcl_RowDescriptionsOperator : public lcl_Operator
 {
     lcl_RowDescriptionsOperator( const Sequence< OUString >& rRowDescriptions
-        , const rtl::Reference<::chart::ChartModel>& xChartDoc )
+        , rtl::Reference<::chart::ChartModel> xChartDoc )
         : m_rRowDescriptions( rRowDescriptions )
-        , m_xChartDoc(xChartDoc)
+        , m_xChartDoc(std::move(xChartDoc))
         , m_bDataInColumns(true)
     {
     }
@@ -207,9 +208,9 @@ struct lcl_RowDescriptionsOperator : public lcl_Operator
 struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
 {
     lcl_ComplexRowDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexRowDescriptions
-        , const rtl::Reference<::chart::ChartModel>& xChartDoc )
+        , rtl::Reference<::chart::ChartModel> xChartDoc )
         : m_rComplexRowDescriptions( rComplexRowDescriptions )
-        , m_xChartDoc(xChartDoc)
+        , m_xChartDoc(std::move(xChartDoc))
         , m_bDataInColumns(true)
     {
     }
@@ -259,9 +260,9 @@ struct lcl_AnyRowDescriptionsOperator : public lcl_Operator
 struct lcl_ColumnDescriptionsOperator : public lcl_Operator
 {
     lcl_ColumnDescriptionsOperator( const Sequence< OUString >& rColumnDescriptions
-        , const rtl::Reference<::chart::ChartModel>& xChartDoc )
+        , rtl::Reference<::chart::ChartModel> xChartDoc )
         : m_rColumnDescriptions( rColumnDescriptions )
-        , m_xChartDoc(xChartDoc)
+        , m_xChartDoc(std::move(xChartDoc))
         , m_bDataInColumns(true)
     {
     }
@@ -290,9 +291,9 @@ struct lcl_ColumnDescriptionsOperator : public lcl_Operator
 struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
 {
     lcl_ComplexColumnDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexColumnDescriptions
-        , const rtl::Reference<::chart::ChartModel>& xChartDoc )
+        , rtl::Reference<::chart::ChartModel> xChartDoc )
         : m_rComplexColumnDescriptions( rComplexColumnDescriptions )
-        , m_xChartDoc(xChartDoc)
+        , m_xChartDoc(std::move(xChartDoc))
         , m_bDataInColumns(true)
     {
     }
@@ -363,8 +364,8 @@ struct lcl_DateCategoriesOperator : public lcl_Operator
 
 }
 
-ChartDataWrapper::ChartDataWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
-    : m_spChart2ModelContact(spChart2ModelContact)
+ChartDataWrapper::ChartDataWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
+    : m_spChart2ModelContact(std::move(spChart2ModelContact))
     , m_aEventListenerContainer(m_aMutex)
 {
     osl_atomic_increment( &m_refCount );
@@ -372,9 +373,9 @@ ChartDataWrapper::ChartDataWrapper(const std::shared_ptr<Chart2ModelContact>& sp
     osl_atomic_decrement( &m_refCount );
 }
 
-ChartDataWrapper::ChartDataWrapper( const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
+ChartDataWrapper::ChartDataWrapper( std::shared_ptr<Chart2ModelContact> spChart2ModelContact,
                                     const Reference< XChartData >& xNewData ) :
-        m_spChart2ModelContact( spChart2ModelContact ),
+        m_spChart2ModelContact(std::move( spChart2ModelContact )),
         m_aEventListenerContainer( m_aMutex )
 {
     osl_atomic_increment( &m_refCount );

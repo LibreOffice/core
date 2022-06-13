@@ -38,6 +38,7 @@
 #include "WrappedScaleTextProperties.hxx"
 
 #include <algorithm>
+#include <utility>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::beans::Property;
@@ -260,8 +261,8 @@ struct StaticLegendWrapperPropertyArray : public rtl::StaticAggregate< Sequence<
 namespace chart::wrapper
 {
 
-LegendWrapper::LegendWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
-    : m_spChart2ModelContact(spChart2ModelContact)
+LegendWrapper::LegendWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
+    : m_spChart2ModelContact(std::move(spChart2ModelContact))
     , m_aEventListenerContainer(m_aMutex)
 {
 }

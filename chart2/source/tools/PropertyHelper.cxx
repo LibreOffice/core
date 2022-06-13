@@ -25,6 +25,7 @@
 #include <tools/diagnose_ex.h>
 #include <o3tl/string_view.hxx>
 
+#include <utility>
 #include <vector>
 #include <algorithm>
 #include <iterator>
@@ -38,8 +39,8 @@ namespace
 {
 struct lcl_EqualsElement
 {
-    explicit lcl_EqualsElement( const Any & rValue, const Reference< container::XNameAccess > & xAccess )
-            : m_aValue( rValue ), m_xAccess( xAccess )
+    explicit lcl_EqualsElement( Any  rValue, const Reference< container::XNameAccess > & xAccess )
+            : m_aValue(std::move( rValue )), m_xAccess( xAccess )
     {
         OSL_ASSERT( m_xAccess.is());
     }
@@ -64,8 +65,8 @@ private:
 
 struct lcl_StringMatches
 {
-    explicit lcl_StringMatches( const OUString & rCmpStr ) :
-            m_aCmpStr( rCmpStr )
+    explicit lcl_StringMatches( OUString aCmpStr ) :
+            m_aCmpStr(std::move( aCmpStr ))
     {}
 
     bool operator() ( std::u16string_view rStr )

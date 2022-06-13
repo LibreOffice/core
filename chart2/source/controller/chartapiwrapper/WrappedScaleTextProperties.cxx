@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -40,7 +41,7 @@ namespace {
 class WrappedScaleTextProperty : public WrappedProperty
 {
 public:
-    explicit WrappedScaleTextProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
+    explicit WrappedScaleTextProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
     virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
@@ -52,9 +53,9 @@ private:
 
 }
 
-WrappedScaleTextProperty::WrappedScaleTextProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
+WrappedScaleTextProperty::WrappedScaleTextProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
     : ::chart::WrappedProperty( "ScaleText" , OUString() )
-    , m_spChart2ModelContact( spChart2ModelContact )
+    , m_spChart2ModelContact(std::move( spChart2ModelContact ))
 {
 }
 

@@ -20,6 +20,7 @@
 #include <WrappedProperty.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -29,9 +30,9 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-WrappedProperty::WrappedProperty( const OUString& rOuterName, const OUString& rInnerName)
-                         : m_aOuterName( rOuterName )
-                         , m_aInnerName( rInnerName )
+WrappedProperty::WrappedProperty( OUString aOuterName, OUString aInnerName)
+                         : m_aOuterName(std::move( aOuterName ))
+                         , m_aInnerName(std::move( aInnerName ))
 {
 }
 WrappedProperty::~WrappedProperty()

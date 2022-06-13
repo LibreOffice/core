@@ -22,6 +22,7 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <unonames.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -31,9 +32,9 @@ using ::com::sun::star::uno::Any;
 namespace chart::wrapper
 {
 
-WrappedNumberFormatProperty::WrappedNumberFormatProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
+WrappedNumberFormatProperty::WrappedNumberFormatProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
         : WrappedDirectStateProperty( CHART_UNONAME_NUMFMT, CHART_UNONAME_NUMFMT )
-        , m_spChart2ModelContact(spChart2ModelContact)
+        , m_spChart2ModelContact(std::move(spChart2ModelContact))
 {
 }
 

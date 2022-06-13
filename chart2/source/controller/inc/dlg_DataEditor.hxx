@@ -40,7 +40,7 @@ class DataEditor final : public weld::GenericDialogController
 {
 public:
     DataEditor(weld::Window* pParent,
-               const rtl::Reference<::chart::ChartModel> & xChartDoc,
+               rtl::Reference<::chart::ChartModel> xChartDoc,
                const css::uno::Reference<css::uno::XComponentContext> & xContext);
     virtual ~DataEditor() override;
 

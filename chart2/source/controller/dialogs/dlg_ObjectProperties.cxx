@@ -71,6 +71,7 @@
 #include <svx/numinf.hxx>
 
 #include <svl/cjkoptions.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 namespace com::sun::star::chart2 { class XChartType; }
@@ -86,8 +87,8 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::beans::XPropertySet;
 
-ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString& rObjectCID )
-        : m_aObjectCID( rObjectCID )
+ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( OUString aObjectCID )
+        : m_aObjectCID(std::move( aObjectCID ))
         , m_eObjectType( ObjectIdentifier::getObjectType( m_aObjectCID ) )
         , m_bAffectsMultipleObjects(false)
         , m_bHasGeometryProperties(false)

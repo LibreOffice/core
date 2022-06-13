@@ -110,7 +110,7 @@ class ChartController final : public ::cppu::WeakImplHelper <
 {
 public:
     ChartController() = delete;
-    explicit ChartController(css::uno::Reference< css::uno::XComponentContext > const & xContext);
+    explicit ChartController(css::uno::Reference< css::uno::XComponentContext > xContext);
     virtual ~ChartController() override;
 
     OUString GetContextName();
@@ -344,7 +344,7 @@ private:
     class TheModel : public salhelper::SimpleReferenceObject
     {
         public:
-            explicit TheModel( const rtl::Reference<::chart::ChartModel> & xModel );
+            explicit TheModel( rtl::Reference<::chart::ChartModel> xModel );
 
             virtual ~TheModel() override;
 

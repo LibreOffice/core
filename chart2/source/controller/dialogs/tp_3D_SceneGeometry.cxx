@@ -28,6 +28,7 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 namespace chart
@@ -46,9 +47,9 @@ void lcl_SetMetricFieldLimits(weld::MetricSpinButton& rField, sal_Int64 nLimit)
 }
 
 ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage(weld::Container* pParent,
-        const rtl::Reference< ::chart::Diagram > & xDiagram,
+        rtl::Reference< ::chart::Diagram > xDiagram,
         ControllerLockHelper & rControllerLockHelper)
-    : m_xDiagram( xDiagram )
+    : m_xDiagram(std::move( xDiagram ))
     , m_aAngleTimer("chart2 ThreeD_SceneGeometry_TabPage m_aAngleTimer")
     , m_aPerspectiveTimer("chart2 ThreeD_SceneGeometry_TabPage m_aPerspectiveTimer")
     , m_nXRotation(0)

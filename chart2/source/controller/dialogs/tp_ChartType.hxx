@@ -45,7 +45,7 @@ class ChartTypeTabPage final : public ResourceChangeListener, public vcl::OWizar
 {
 public:
     ChartTypeTabPage( weld::Container* pPage, weld::DialogController* pController
-                , const rtl::Reference<::chart::ChartModel>& xChartModel
+                , rtl::Reference<::chart::ChartModel> xChartModel
                 , bool bShowDescription = true );
     virtual ~ChartTypeTabPage() override;
 

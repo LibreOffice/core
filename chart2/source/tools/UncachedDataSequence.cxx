@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <strings.hrc>
 #include <ResId.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 
@@ -54,27 +55,27 @@ namespace chart
 {
 
 UncachedDataSequence::UncachedDataSequence(
-    const rtl::Reference< InternalDataProvider > & xIntDataProv,
-    const OUString & rRangeRepresentation )
+    rtl::Reference< InternalDataProvider > xIntDataProv,
+    OUString aRangeRepresentation )
         : OPropertyContainer( GetBroadcastHelper()),
           UncachedDataSequence_Base( GetMutex()),
           m_nNumberFormatKey(0),
-          m_xDataProvider( xIntDataProv ),
-          m_aSourceRepresentation( rRangeRepresentation ),
+          m_xDataProvider(std::move( xIntDataProv )),
+          m_aSourceRepresentation(std::move( aRangeRepresentation )),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     registerProperties();
 }
 
 UncachedDataSequence::UncachedDataSequence(
-    const rtl::Reference< InternalDataProvider > & xIntDataProv,
-    const OUString & rRangeRepresentation,
+    rtl::Reference< InternalDataProvider > xIntDataProv,
+    OUString aRangeRepresentation,
     const OUString & rRole )
         : OPropertyContainer( GetBroadcastHelper()),
           UncachedDataSequence_Base( GetMutex()),
           m_nNumberFormatKey(0),
-          m_xDataProvider( xIntDataProv ),
-          m_aSourceRepresentation( rRangeRepresentation ),
+          m_xDataProvider(std::move( xIntDataProv )),
+          m_aSourceRepresentation(std::move( aRangeRepresentation )),
           m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     registerProperties();

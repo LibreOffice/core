@@ -49,10 +49,10 @@ public:
     explicit LabeledDataSequence();
     explicit LabeledDataSequence(const LabeledDataSequence &);
     explicit LabeledDataSequence(
-        const css::uno::Reference< css::chart2::data::XDataSequence > & rValues );
+        css::uno::Reference< css::chart2::data::XDataSequence > xValues );
     explicit LabeledDataSequence(
-        const css::uno::Reference< css::chart2::data::XDataSequence > & rValues,
-        const css::uno::Reference< css::chart2::data::XDataSequence > & rLabels );
+        css::uno::Reference< css::chart2::data::XDataSequence > xValues,
+        css::uno::Reference< css::chart2::data::XDataSequence > xLabels );
 
     virtual ~LabeledDataSequence() override;
 

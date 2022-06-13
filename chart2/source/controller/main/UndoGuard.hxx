@@ -37,7 +37,7 @@ class UndoGuard
 {
 public:
     explicit UndoGuard(
-        const OUString& i_undoMessage,
+        OUString i_undoMessage,
         const css::uno::Reference< css::document::XUndoManager > & i_undoManager,
         const ModelFacet i_facet = E_MODEL
     );

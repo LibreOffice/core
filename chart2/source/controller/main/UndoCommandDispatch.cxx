@@ -23,6 +23,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/document/UndoFailedException.hpp>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -39,9 +40,9 @@ namespace chart
 
 UndoCommandDispatch::UndoCommandDispatch(
     const Reference< uno::XComponentContext > & xContext,
-    const rtl::Reference<::chart::ChartModel> & xModel ) :
+    rtl::Reference<::chart::ChartModel> xModel ) :
         CommandDispatch( xContext ),
-        m_xModel( xModel )
+        m_xModel(std::move( xModel ))
 {
     m_xUndoManager.set( m_xModel->getUndoManager(), uno::UNO_SET_THROW );
 }

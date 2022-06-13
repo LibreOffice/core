@@ -30,6 +30,7 @@
 #include <comphelper/lok.hxx>
 #include <sal/log.hxx>
 #include <sfx2/viewsh.hxx>
+#include <utility>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 namespace chart::sidebar {
@@ -77,12 +78,12 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
 }
 
 ChartColorWrapper::ChartColorWrapper(
-        rtl::Reference<::chart::ChartModel> const & xModel,
+        rtl::Reference<::chart::ChartModel> xModel,
         SvxColorToolBoxControl* pControl,
-        const OUString& rName):
-    mxModel(xModel),
+        OUString aName):
+    mxModel(std::move(xModel)),
     mpControl(pControl),
-    maPropertyName(rName)
+    maPropertyName(std::move(aName))
 {
 }
 
@@ -134,9 +135,9 @@ void ChartColorWrapper::updateData()
 }
 
 ChartLineStyleWrapper::ChartLineStyleWrapper(
-        rtl::Reference<::chart::ChartModel> const & xModel,
+        rtl::Reference<::chart::ChartModel> xModel,
         SvxLineStyleToolBoxControl* pControl)
-    : mxModel(xModel)
+    : mxModel(std::move(xModel))
     , mpControl(pControl)
 {
 }

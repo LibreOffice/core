@@ -29,6 +29,7 @@
 #include <DataSeries.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <UserDefinedProperties.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -115,8 +116,8 @@ struct StaticMinMaxLineWrapperInfo : public rtl::StaticAggregate< uno::Reference
 namespace chart::wrapper
 {
 
-MinMaxLineWrapper::MinMaxLineWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
-        : m_spChart2ModelContact( spChart2ModelContact )
+MinMaxLineWrapper::MinMaxLineWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
+        : m_spChart2ModelContact(std::move( spChart2ModelContact ))
         , m_aEventListenerContainer( m_aMutex )
         , m_aWrappedLineJointProperty( "LineJoint", uno::Any( drawing::LineJoint_NONE ))
 {

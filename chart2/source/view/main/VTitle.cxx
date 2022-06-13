@@ -22,6 +22,7 @@
 #include <ShapeFactory.hxx>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 namespace chart
@@ -29,8 +30,8 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-VTitle::VTitle( const uno::Reference< XTitle > & xTitle )
-                : m_xTitle(xTitle)
+VTitle::VTitle( uno::Reference< XTitle > xTitle )
+                : m_xTitle(std::move(xTitle))
                 , m_fRotationAngleDegree(0.0)
                 , m_nXPos(0)
                 , m_nYPos(0)

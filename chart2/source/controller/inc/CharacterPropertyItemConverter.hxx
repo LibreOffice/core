@@ -36,7 +36,7 @@ public:
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         SfxItemPool& rItemPool,
         const css::awt::Size* pRefSize,
-        const OUString & rRefSizePropertyName,
+        OUString aRefSizePropertyName,
         const css::uno::Reference<css::beans::XPropertySet>& rRefSizePropSet = css::uno::Reference<css::beans::XPropertySet>() );
 
     virtual ~CharacterPropertyItemConverter() override;

@@ -46,6 +46,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -553,11 +554,11 @@ sal_Int32 ObjectHierarchy::getIndexInParent(
 }
 
 ObjectKeyNavigation::ObjectKeyNavigation(
-    const ObjectIdentifier & rCurrentOID,
-    const rtl::Reference<::chart::ChartModel> & xChartDocument,
+    ObjectIdentifier aCurrentOID,
+    rtl::Reference<::chart::ChartModel> xChartDocument,
     ExplicitValueProvider * pExplicitValueProvider /* = 0 */ ) :
-        m_aCurrentOID( rCurrentOID ),
-        m_xChartDocument( xChartDocument ),
+        m_aCurrentOID(std::move( aCurrentOID )),
+        m_xChartDocument(std::move( xChartDocument )),
         m_pExplicitValueProvider( pExplicitValueProvider )
 {
     if ( !m_aCurrentOID.isValid() )

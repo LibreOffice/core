@@ -30,6 +30,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -72,8 +73,8 @@ struct StaticGridWrapperPropertyArray : public rtl::StaticAggregate< Sequence< P
 namespace chart::wrapper
 {
 
-GridWrapper::GridWrapper(tGridType eType, const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
-    : m_spChart2ModelContact(spChart2ModelContact)
+GridWrapper::GridWrapper(tGridType eType, std::shared_ptr<Chart2ModelContact> spChart2ModelContact)
+    : m_spChart2ModelContact(std::move(spChart2ModelContact))
     , m_aEventListenerContainer(m_aMutex)
     , m_eType(eType)
 {

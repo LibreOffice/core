@@ -33,7 +33,7 @@ class ThreeD_SceneGeometry_TabPage
 {
 public:
     ThreeD_SceneGeometry_TabPage(weld::Container* pWindow,
-                                 const rtl::Reference< ::chart::Diagram > & xDiagram,
+                                 rtl::Reference< ::chart::Diagram > xDiagram,
                                  ControllerLockHelper & rControllerLockHelper);
     ~ThreeD_SceneGeometry_TabPage();
 

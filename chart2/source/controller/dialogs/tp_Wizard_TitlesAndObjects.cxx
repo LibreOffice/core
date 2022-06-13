@@ -25,6 +25,7 @@
 #include <Diagram.hxx>
 #include <AxisHelper.hxx>
 #include <ControllerLockGuard.hxx>
+#include <utility>
 
 namespace chart
 {
@@ -32,12 +33,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 TitlesAndObjectsTabPage::TitlesAndObjectsTabPage(weld::Container* pPage, weld::DialogController* pController,
-                                                 const rtl::Reference<::chart::ChartModel>& xChartModel,
+                                                 rtl::Reference<::chart::ChartModel> xChartModel,
                                                  const uno::Reference< uno::XComponentContext >& xContext )
     : OWizardPage(pPage, pController, "modules/schart/ui/wizelementspage.ui", "WizElementsPage")
     , m_xTitleResources(new TitleResources(*m_xBuilder, false))
     , m_xLegendPositionResources(new LegendPositionResources(*m_xBuilder, xContext))
-    , m_xChartModel(xChartModel)
+    , m_xChartModel(std::move(xChartModel))
     , m_xCC(xContext)
     , m_bCommitToModel(true)
     , m_aTimerTriggeredControllerLock( m_xChartModel )

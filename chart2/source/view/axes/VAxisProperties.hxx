@@ -19,6 +19,7 @@
 #pragma once
 
 #include "TickmarkProperties.hxx"
+#include <Axis.hxx>
 #include <LabelAlignment.hxx>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
@@ -39,7 +40,6 @@ namespace com::sun::star::chart2::data { class XTextualDataSequence; }
 
 namespace chart
 {
-class Axis;
 
 //These properties describe how a couple of labels are arranged one to another.
 //The couple can contain all labels for all tickmark depth or just the labels for one single depth or
@@ -140,7 +140,7 @@ struct AxisProperties final
 
     //methods:
 
-    AxisProperties( const rtl::Reference< ::chart::Axis >& xAxisModel
+    AxisProperties( rtl::Reference< ::chart::Axis > xAxisModel
                   , ExplicitCategoriesProvider* pExplicitCategoriesProvider );
 
     void init(bool bCartesian=false);//init from model data (m_xAxisModel)

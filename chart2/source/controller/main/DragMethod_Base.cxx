@@ -24,6 +24,7 @@
 #include <ObjectIdentifier.hxx>
 
 #include <svx/ActionDescriptionProvider.hxx>
+#include <utility>
 #include <vcl/ptrstyle.hxx>
 
 namespace chart
@@ -34,12 +35,12 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::WeakReference;
 
 DragMethod_Base::DragMethod_Base( DrawViewWrapper& rDrawViewWrapper
-                                             , const OUString& rObjectCID
+                                             , OUString aObjectCID
                                              , const rtl::Reference<::chart::ChartModel>& xChartModel
                                              , ActionDescriptionProvider::ActionType eActionType )
     : SdrDragMethod( rDrawViewWrapper )
     , m_rDrawViewWrapper(rDrawViewWrapper)
-    , m_aObjectCID(rObjectCID)
+    , m_aObjectCID(std::move(aObjectCID))
     , m_eActionType( eActionType )
     , m_xChartModel( xChartModel.get() )
 {

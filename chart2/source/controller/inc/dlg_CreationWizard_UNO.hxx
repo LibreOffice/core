@@ -53,7 +53,7 @@ class CreationWizardUnoDlg final : public cppu::BaseMutex
 public:
     CreationWizardUnoDlg() = delete;
 
-    CreationWizardUnoDlg( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    CreationWizardUnoDlg( css::uno::Reference< css::uno::XComponentContext > xContext );
     virtual ~CreationWizardUnoDlg() override;
 
     // XInterface

@@ -24,6 +24,7 @@
 #include <DataSeries.hxx>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace com::sun::star::chart2 { class XDataSeries; }
@@ -47,10 +48,10 @@ public:
     virtual void setValueToSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet, const PROPERTYTYPE & aNewValue ) const =0;
 
     explicit WrappedSeriesOrDiagramProperty( const OUString& rName, const css::uno::Any& rDefaulValue
-        , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact
+        , std::shared_ptr<Chart2ModelContact> spChart2ModelContact
         , tSeriesOrDiagramPropertyType ePropertyType )
             : WrappedProperty(rName,OUString())
-            , m_spChart2ModelContact(spChart2ModelContact)
+            , m_spChart2ModelContact(std::move(spChart2ModelContact))
             , m_aOuterValue(rDefaulValue)
             , m_aDefaultValue(rDefaulValue)
             , m_ePropertyType( ePropertyType )

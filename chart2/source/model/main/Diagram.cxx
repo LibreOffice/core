@@ -44,6 +44,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
@@ -245,9 +246,9 @@ void lcl_CloneCoordinateSystems(
 namespace chart
 {
 
-Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
+Diagram::Diagram( uno::Reference< uno::XComponentContext > xContext ) :
         ::property::OPropertySet( m_aMutex ),
-        m_xContext( xContext ),
+        m_xContext(std::move( xContext )),
         m_xModifyEventForwarder( new ModifyEventForwarder() )
 {
     // Set camera position to a default position (that should be set hard, so
