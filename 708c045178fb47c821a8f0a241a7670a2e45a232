@@ -16,6 +16,41 @@
       "message": "Hi Heiko! I just removed the has_entry option for every frame widget. I\u0027m not sure if we should remove it from the entire hyperlink dialog like done in this patch. Do you have something in mind where this should not be the case? Thank you!",
       "revId": "708c045178fb47c821a8f0a241a7670a2e45a232",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e1781c1_04fbf0ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-06-13T10:29:41Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "708c045178fb47c821a8f0a241a7670a2e45a232",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "695b1d29_32b873d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-06-13T10:29:41Z",
+      "side": 1,
+      "message": "The URL needs to be editable, at least. And Receipient for Mail. So let\u0027s keep it like this (and actually I doubt removing has_entry on a parent also removes it from the children).",
+      "parentUuid": "5d0ef664_aa357234",
+      "revId": "708c045178fb47c821a8f0a241a7670a2e45a232",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
