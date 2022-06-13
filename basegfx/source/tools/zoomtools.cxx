@@ -26,7 +26,7 @@ const double ZOOM_FACTOR = 1.12246205;
 * @param nCurrent current value
 * @param nMultiple multiple against which the current value is rounded
 */
-static tools::Long roundMultiple(tools::Long nCurrent, int nMultiple)
+static sal_uInt64 roundMultiple(sal_uInt64 nCurrent, int nMultiple)
 {
     // round zoom to a multiple of nMultiple
     return (( nCurrent + nMultiple / 2 ) - ( nCurrent + nMultiple / 2 ) % nMultiple);
@@ -39,10 +39,10 @@ static tools::Long roundMultiple(tools::Long nCurrent, int nMultiple)
 *
 * @param nCurrent current zoom factor
 */
-static tools::Long roundZoom(double nCurrent)
+static sal_uInt64 roundZoom(double nCurrent)
 {
     // convert nCurrent properly to int
-    tools::Long nNew = nCurrent + 0.5;
+    sal_uInt64 nNew = nCurrent + 0.5;
 
     // round to more common numbers above 50
     if (nNew > 1000) {
@@ -66,7 +66,7 @@ static tools::Long roundZoom(double nCurrent)
 * @param nPrevious previous zoom factor
 * @param nStep step which shouldn't be skipped
 */
-static tools::Long enforceStep(tools::Long nCurrent, tools::Long nPrevious, int nStep)
+static sal_uInt64 enforceStep(sal_uInt64 nCurrent, sal_uInt64 nPrevious, unsigned int nStep)
 {
     if ((( nCurrent > nStep ) && ( nPrevious < nStep ))
     || (( nCurrent < nStep ) && ( nPrevious > nStep )))
@@ -80,9 +80,9 @@ static tools::Long enforceStep(tools::Long nCurrent, tools::Long nPrevious, int 
 *
 * @param nCurrent current zoom factor
 */
-tools::Long zoomIn(tools::Long nCurrent)
+sal_uInt64 zoomIn(sal_uInt64 nCurrent)
 {
-    tools::Long nNew = roundZoom( nCurrent * ZOOM_FACTOR );
+    sal_uInt64 nNew = roundZoom( nCurrent * ZOOM_FACTOR );
     // make sure some values are not skipped
     nNew = enforceStep(nNew, nCurrent, 200);
     nNew = enforceStep(nNew, nCurrent, 100);
@@ -97,9 +97,9 @@ tools::Long zoomIn(tools::Long nCurrent)
 *
 * @param nCurrent current zoom factor
 */
-tools::Long zoomOut(tools::Long nCurrent)
+sal_uInt64 zoomOut(sal_uInt64 nCurrent)
 {
-    tools::Long nNew = roundZoom( nCurrent / ZOOM_FACTOR );
+    sal_uInt64 nNew = roundZoom( nCurrent / ZOOM_FACTOR );
     // make sure some values are not skipped
     nNew = enforceStep(nNew, nCurrent, 200);
     nNew = enforceStep(nNew, nCurrent, 100);
