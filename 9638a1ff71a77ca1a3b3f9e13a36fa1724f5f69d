@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b220183f_ec891912",
+        "filename": "sw/inc/unoprnms.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-13T16:17:06Z",
+      "side": 0,
+      "message": "Would this have ever been written out into a .odt file as the name of the character format?",
+      "range": {
+        "startLine": 343,
+        "startChar": 40,
+        "endLine": 343,
+        "endChar": 59
+      },
+      "revId": "9638a1ff71a77ca1a3b3f9e13a36fa1724f5f69d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

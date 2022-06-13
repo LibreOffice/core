@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bd6240d_e026ef5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-13T16:17:06Z",
+      "side": 1,
+      "message": "AFAICS, this was imported as orphaned in the initial dump into LO.",
+      "revId": "baa26db5252666263fc54b5cd5a3a3e2a5688db1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
