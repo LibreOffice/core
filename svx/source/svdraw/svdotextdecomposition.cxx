@@ -344,7 +344,7 @@ namespace
                 rInfo.mnTextStart,
                 rInfo.mnTextLen,
                 std::vector(aDXArray),
-                aFontAttribute,
+                std::move(aFontAttribute),
                 rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
                 aBFontColor,
                 rInfo.mbFilled,

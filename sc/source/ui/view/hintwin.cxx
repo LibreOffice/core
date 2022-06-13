@@ -82,7 +82,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
     rtl::Reference<drawinglayer::primitive2d::TextSimplePortionPrimitive2D> pTitle =
         new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                         aTextMatrix, m_aTitle, 0, m_aTitle.getLength(),
-                        std::vector<double>(), aFontAttr, css::lang::Locale(),
+                        std::vector<double>(), std::move(aFontAttr), css::lang::Locale(),
                         rColor.getBColor());
 
     Point aTextStart(nLeft + aHintMargin.Width() + aIndent.Width(),
@@ -150,7 +150,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
     basegfx::BColor aBorderColor(0.5, 0.5, 0.5);
     const drawinglayer::primitive2d::Primitive2DReference aBorder(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-            aPoly, aBorderColor));
+            std::move(aPoly), aBorderColor));
 
     aSeq.insert(aSeq.begin(), aBorder);
     aSeq.insert(aSeq.begin(), aBg);

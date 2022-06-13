@@ -735,12 +735,12 @@ namespace svgio::svgreader
                 }
                 else
                 {
-                    const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(std::move(aDashArray));
+                    drawinglayer::attribute::StrokeAttribute aStrokeAttribute(std::move(aDashArray));
 
                     aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
                         rPath,
                         aLineAttribute,
-                        aStrokeAttribute);
+                        std::move(aStrokeAttribute));
                 }
             }
 
@@ -1067,7 +1067,7 @@ namespace svgio::svgreader
 
                             aClipPolygon.transform(aCombinedTransform);
                             xMarker = new drawinglayer::primitive2d::MaskPrimitive2D(
-                                aClipPolygon,
+                                std::move(aClipPolygon),
                                 drawinglayer::primitive2d::Primitive2DContainer { xMarker });
                         }
 

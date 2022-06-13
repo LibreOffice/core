@@ -113,7 +113,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::impCreateWithG
                 new drawinglayer::primitive2d::Embedded3DPrimitive2D(
                     rxContent3D,
                     pVCOfE3DScene->getObjectTransformation(),
-                    aViewInformation3D,
+                    std::move(aViewInformation3D),
                     aLightNormal,
                     fShadowSlant,
                     rAllContentRange));

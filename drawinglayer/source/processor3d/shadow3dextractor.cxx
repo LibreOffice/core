@@ -155,7 +155,7 @@ namespace drawinglayer::processor3d
                             a2DHairline.transform(getObjectTransformation());
                             mpPrimitive2DSequence->push_back(
                                 new primitive2d::PolygonHairlinePrimitive2D(
-                                    a2DHairline,
+                                    std::move(a2DHairline),
                                     basegfx::BColor()));
                         }
                     }
@@ -186,7 +186,7 @@ namespace drawinglayer::processor3d
                             a2DFill.transform(getObjectTransformation());
                             mpPrimitive2DSequence->push_back(
                                 new primitive2d::PolyPolygonColorPrimitive2D(
-                                    a2DFill,
+                                    std::move(a2DFill),
                                     basegfx::BColor()));
                         }
                     }

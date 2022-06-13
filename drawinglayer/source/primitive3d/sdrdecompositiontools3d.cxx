@@ -144,8 +144,7 @@ namespace drawinglayer::primitive3d
 
             for(sal_uInt32 a(0); a < aScaledPolyPolygon.count(); a++)
             {
-                const Primitive3DReference xRef(new PolygonStrokePrimitive3D(aScaledPolyPolygon.getB3DPolygon(a), aLineAttribute, aStrokeAttribute));
-                aRetval[a] = xRef;
+                aRetval[a] = new PolygonStrokePrimitive3D(aScaledPolyPolygon.getB3DPolygon(a), aLineAttribute, aStrokeAttribute);
             }
 
             if(0.0 != rLine.getTransparence())
@@ -185,7 +184,7 @@ namespace drawinglayer::primitive3d
                     }
 
                     const Primitive3DReference xRef(new PolyPolygonMaterialPrimitive3D(
-                        aScaledPolyPolygon,
+                        std::move(aScaledPolyPolygon),
                         aSdr3DObjectAttribute.getMaterial(),
                         aSdr3DObjectAttribute.getDoubleSided()));
                     aRetval[a] = xRef;

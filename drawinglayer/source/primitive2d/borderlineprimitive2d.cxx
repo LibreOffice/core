@@ -88,14 +88,14 @@ namespace drawinglayer::primitive2d
             {
                 rContainer.push_back(
                     new PolygonStrokePrimitive2D(
-                        aPolygon,
+                        std::move(aPolygon),
                         rLineAttribute));
             }
             else
             {
                 rContainer.push_back(
                     new PolygonStrokePrimitive2D(
-                        aPolygon,
+                        std::move(aPolygon),
                         rLineAttribute,
                         rStrokeAttribute));
             }

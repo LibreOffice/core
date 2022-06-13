@@ -212,7 +212,7 @@ namespace drawinglayer::primitive2d
             }
             else
             {
-                aNewPrimitive = Primitive2DReference(new PolygonStrokePrimitive2D(aLine, aLineAttribute, aStrokeAttribute));
+                aNewPrimitive = Primitive2DReference(new PolygonStrokePrimitive2D(std::move(aLine), aLineAttribute, std::move(aStrokeAttribute)));
             }
 
             // add primitive

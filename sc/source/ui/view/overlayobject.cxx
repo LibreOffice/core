@@ -77,7 +77,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayDashedBorder::createOve
     B2DPolyPolygon aPolygon(aPoly);
     const drawinglayer::primitive2d::Primitive2DReference aReference(
         new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(
-            aPolygon, aColorA, aColorB, pMgr->getStripeLengthPixel()));
+            std::move(aPolygon), aColorA, aColorB, pMgr->getStripeLengthPixel()));
 
     return drawinglayer::primitive2d::Primitive2DContainer { aReference };
 }

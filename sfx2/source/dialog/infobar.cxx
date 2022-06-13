@@ -138,7 +138,8 @@ void SfxInfoBarWindow::SetCloseButtonImage()
     aLine2.append(B2DPoint(aRect.Left(), aRect.Bottom()));
     aCross.append(aLine2);
 
-    aSeq[1] = new PolyPolygonStrokePrimitive2D(aCross, aLineAttribute, StrokeAttribute());
+    aSeq[1]
+        = new PolyPolygonStrokePrimitive2D(std::move(aCross), aLineAttribute, StrokeAttribute());
 
     pProcessor->process(aSeq);
 

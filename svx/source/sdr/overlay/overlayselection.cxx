@@ -134,10 +134,10 @@ namespace sdr::overlay
 
                     if(mbBorder)
                     {
-                        const basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges()));
+                        basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges()));
                         const drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(
                             new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                                aPolyPolygon,
+                                std::move(aPolyPolygon),
                                 aRGBColor));
 
                         // add both to result

@@ -482,7 +482,7 @@ namespace drawinglayer::primitive2d
             {
                 basegfx::B2DPolygon aOutline(basegfx::utils::createUnitPolygon());
                 aOutline.transform(aNew2DTransform);
-                rContainer.push_back(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
+                rContainer.push_back(new PolygonHairlinePrimitive2D(std::move(aOutline), basegfx::BColor(1.0, 0.0, 0.0)));
             }
         }
 

@@ -1246,7 +1246,7 @@ void SbaTableQueryBrowser::connectExternalDispatches()
             aURL.Complete = OUString::createFromAscii( pURLs[i] );
             if ( m_xUrlTransformer.is() )
                 m_xUrlTransformer->parseStrict( aURL );
-            m_aExternalFeatures[ nIds[ i ] ] = ExternalFeature( aURL );
+            m_aExternalFeatures[ nIds[ i ] ] = ExternalFeature( std::move(aURL) );
         }
     }
 

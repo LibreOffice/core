@@ -123,7 +123,7 @@ namespace drawinglayer::primitive2d
                 const Color aVclColor(aColor.nColor);
                 aOutline.transform(getObjectTransform());
                 const drawinglayer::primitive2d::Primitive2DReference xOutline(
-                    new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aVclColor.getBColor()));
+                    new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(std::move(aOutline), aVclColor.getBColor()));
                 rContainer.push_back(xOutline);
             }
         }

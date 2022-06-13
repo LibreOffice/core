@@ -45,7 +45,7 @@ namespace sdr::contact
                 drawinglayer::primitive2d::createNewSdrLineFillShadowAttribute(rItemSet, false));
 
             // get extrude geometry
-            const basegfx::B2DPolyPolygon aPolyPolygon(GetE3dLatheObj().GetPolyPoly2D());
+            basegfx::B2DPolyPolygon aPolyPolygon(GetE3dLatheObj().GetPolyPoly2D());
 
             // get 3D Object Attributes
             drawinglayer::attribute::Sdr3DObjectAttribute aSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
@@ -83,7 +83,7 @@ namespace sdr::contact
             const drawinglayer::primitive3d::Primitive3DReference xReference(
                 new drawinglayer::primitive3d::SdrLathePrimitive3D(
                     aWorldTransform, aTextureSize, aAttribute, aSdr3DObjectAttribute,
-                    aPolyPolygon, nHorizontalSegments, nVerticalSegments,
+                    std::move(aPolyPolygon), nHorizontalSegments, nVerticalSegments,
                     fDiagonal, fBackScale, fRotation,
                     bSmoothNormals, bSmoothLids, bCharacterMode, bCloseFront, bCloseBack));
             xRetval = { xReference };

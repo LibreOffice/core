@@ -84,10 +84,10 @@ namespace sw::overlay
             if ( mbShowSolidBorder )
             {
                 const basegfx::BColor aRGBColor(getBaseColor().getBColor());
-                const basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges()));
+                basegfx::B2DPolyPolygon aPolyPolygon(impCombineRangesToPolyPolygon(getRanges()));
                 const drawinglayer::primitive2d::Primitive2DReference aOutline(
                     new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                    aPolyPolygon,
+                    std::move(aPolyPolygon),
                     aRGBColor));
 
                 aRetval = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparence, aOutline };

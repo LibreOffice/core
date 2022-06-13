@@ -276,13 +276,13 @@ void ViewRedirector::createRedirectedPrimitive2DSequence(
 
                     const double fFullDotDashLen(::std::accumulate(aDotDashArray.begin(), aDotDashArray.end(), 0.0));
                     const drawinglayer::attribute::LineAttribute aLine(aRGBColor);
-                    const drawinglayer::attribute::StrokeAttribute aStroke(std::move(aDotDashArray), fFullDotDashLen);
+                    drawinglayer::attribute::StrokeAttribute aStroke(std::move(aDotDashArray), fFullDotDashLen);
 
                     // create primitive and add
                     const drawinglayer::primitive2d::Primitive2DReference xRef(new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
-                        aPolygon,
+                        std::move(aPolygon),
                         aLine,
-                        aStroke));
+                        std::move(aStroke)));
                     rVisitor.visit(xRef);
                 }
 
@@ -398,7 +398,7 @@ void ViewRedirector::createRedirectedPrimitive2DSequence(
 
                         aVclFont.SetFontHeight( 500 );
 
-                        const drawinglayer::attribute::FontAttribute aFontAttribute(
+                        drawinglayer::attribute::FontAttribute aFontAttribute(
                             drawinglayer::primitive2d::getFontAttributeFromVclFont(
                                 aTextSizeAttribute,
                                 aVclFont,
@@ -416,7 +416,7 @@ void ViewRedirector::createRedirectedPrimitive2DSequence(
                         ::std::vector< double > aDXArray{};
 
                         // create locale; this may need some more information in the future
-                        const css::lang::Locale aLocale;
+                        css::lang::Locale aLocale;
 
                         // create primitive and add
                         const drawinglayer::primitive2d::Primitive2DReference xRef(
@@ -426,8 +426,8 @@ void ViewRedirector::createRedirectedPrimitive2DSequence(
                                 0,
                                 nTextLength,
                                 std::move(aDXArray),
-                                aFontAttribute,
-                                aLocale,
+                                std::move(aFontAttribute),
+                                std::move(aLocale),
                                 aRGBColor));
                         rVisitor.visit(xRef);
                     }

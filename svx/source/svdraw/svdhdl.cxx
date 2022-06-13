@@ -2625,7 +2625,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
     const basegfx::BColor aHilightColor(SvtOptionsDrawinglayer::getHilightColor().getBColor());
     const drawinglayer::primitive2d::Primitive2DReference aGraphicOutline(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-        aGraphicOutlinePolygon,
+        std::move(aGraphicOutlinePolygon),
         aHilightColor));
 
     // combine these
@@ -2636,7 +2636,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
     // embed to MaskPrimitive2D
     const drawinglayer::primitive2d::Primitive2DReference aMaskedGraphic(
         new drawinglayer::primitive2d::MaskPrimitive2D(
-            aCropPolyPolygon,
+            std::move(aCropPolyPolygon),
             std::move(aCombination)));
 
     // embed to UnifiedTransparencePrimitive2D

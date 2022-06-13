@@ -43,9 +43,35 @@ public:
         // false +
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/basic/source/classes/sbunoobj.cxx"))
             return false;
+        if (loplugin::hasPathnamePrefix(
+                fn, SRCDIR "/drawinglayer/source/primitive2d/fillgradientprimitive2d.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(
+                fn, SRCDIR "/drawinglayer/source/primitive3d/sdrdecompositiontools3d.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(
+                fn, SRCDIR "/drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/drawinglayer/source/tools/emfphelperdata.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/ui/view/hintwin.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/source/control/dispatch.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svgio/source/svgreader/svgcharacternode.cxx"))
+            return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/svdraw/textchainflow.cxx"))
             return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/unodraw/unoshtxt.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/diagram/IDiagramHelper.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/sdr/overlay/overlaytools.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/source/svdraw/svddrgmt.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn,
+                                        SRCDIR "/svx/source/svdraw/svdotextpathdecomposition.cxx"))
             return false;
         if (loplugin::hasPathnamePrefix(fn,
                                         SRCDIR "/connectivity/source/drivers/dbase/dindexnode.cxx"))
@@ -65,6 +91,10 @@ public:
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/uibase/docvw/edtwin.cxx"))
             return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/uibase/uiview/viewling.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/core/layout/paintfrm.cxx"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/uibase/docvw/DashedLine.cxx"))
             return false;
         if (loplugin::hasPathnamePrefix(
                 fn, SRCDIR "/writerfilter/source/dmapper/DomainMapperTableHandler.cxx"))

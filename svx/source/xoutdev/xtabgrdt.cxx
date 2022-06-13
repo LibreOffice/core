@@ -93,7 +93,7 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         // prepare polygon geometry for rectangle
-        const basegfx::B2DPolygon aRectangle(
+        basegfx::B2DPolygon aRectangle(
             basegfx::utils::createPolygonFromRect(
                 basegfx::B2DRange(0.0, 0.0, rSize.Width(), rSize.Height())));
 
@@ -152,7 +152,7 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
             }
         }
 
-        const drawinglayer::attribute::FillGradientAttribute aFillGradient(
+        drawinglayer::attribute::FillGradientAttribute aFillGradient(
             aGradientStyle,
             static_cast<double>(rGradient.GetBorder()) * 0.01,
             static_cast<double>(rGradient.GetXOffset()) * 0.01,
@@ -164,12 +164,12 @@ BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) co
         const drawinglayer::primitive2d::Primitive2DReference aGradientPrimitive(
             new drawinglayer::primitive2d::PolyPolygonGradientPrimitive2D(
                 basegfx::B2DPolyPolygon(aRectangle),
-                aFillGradient));
+                std::move(aFillGradient)));
 
         const basegfx::BColor aBlack(0.0, 0.0, 0.0);
         const drawinglayer::primitive2d::Primitive2DReference aBlackRectanglePrimitive(
             new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                aRectangle,
+                std::move(aRectangle),
                 aBlack));
 
         // prepare VirtualDevice

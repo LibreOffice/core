@@ -3781,7 +3781,7 @@ void SwColumnFrame::PaintBreak( ) const
                 aTextMatrix,
                 aBreakText, 0, aBreakText.getLength(),
                 std::vector< double >(),
-                aFontAttr,
+                std::move(aFontAttr),
                 lang::Locale(),
                 aLineColor ) );
 
@@ -5418,10 +5418,10 @@ void SwFrame::PaintSwFrameShadowAndBorder(
                 const SwRect& rClip = getFrameArea();
                 basegfx::B2DRectangle aClip(rClip.Left(), rClip.Top(), rClip.Right(),
                                             rClip.Bottom());
-                const basegfx::B2DPolyPolygon aPolyPolygon(
+                basegfx::B2DPolyPolygon aPolyPolygon(
                     basegfx::utils::createPolygonFromRect(aClip));
                 const drawinglayer::primitive2d::Primitive2DReference xClipped(
-                    new drawinglayer::primitive2d::MaskPrimitive2D(aPolyPolygon, { aRetval }));
+                    new drawinglayer::primitive2d::MaskPrimitive2D(std::move(aPolyPolygon), { aRetval }));
                 aRetval = xClipped;
             }
 
@@ -6858,7 +6858,7 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreatePageAreaDelimit
         aPolygon.append( aBPoint + aVertVector * nLineLength );
 
         aSeq[i] = new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                    aPolygon, aLineColor );
+                    std::move(aPolygon), aLineColor );
     }
 
     return aSeq;
@@ -6878,7 +6878,7 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateRectangleDelimi
     aPolygon.setClosed( true );
 
     aSeq[0] = new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                aPolygon, aLineColor );
+                std::move(aPolygon), aLineColor );
 
     return aSeq;
 }
@@ -6909,7 +6909,7 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateColumnAreaDelim
         aPolygon.append( aBPoint + aVertVector * nLineLength );
 
         aSeq[i] = new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                    aPolygon, aLineColor );
+                    std::move(aPolygon), aLineColor );
     }
 
     return aSeq;

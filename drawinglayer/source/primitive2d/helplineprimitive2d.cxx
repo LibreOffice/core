@@ -52,7 +52,7 @@ namespace drawinglayer::primitive2d
                     aLineA.append(aStartA);
                     aLineA.append(aEndA);
                     aLineA.transform(rViewInformation.getInverseObjectToViewTransformation());
-                    rContainer.push_back(new PolygonMarkerPrimitive2D(aLineA, getRGBColA(), getRGBColB(), getDiscreteDashLength()));
+                    rContainer.push_back(new PolygonMarkerPrimitive2D(std::move(aLineA), getRGBColA(), getRGBColB(), getDiscreteDashLength()));
 
                     const basegfx::B2DVector aPerpendicularNormalizedDirection(basegfx::getPerpendicular(aNormalizedDirection));
                     const basegfx::B2DPoint aStartB(aViewPosition - aPerpendicularNormalizedDirection);
@@ -61,7 +61,7 @@ namespace drawinglayer::primitive2d
                     aLineB.append(aStartB);
                     aLineB.append(aEndB);
                     aLineB.transform(rViewInformation.getInverseObjectToViewTransformation());
-                    rContainer.push_back(new PolygonMarkerPrimitive2D(aLineB, getRGBColA(), getRGBColB(), getDiscreteDashLength()));
+                    rContainer.push_back(new PolygonMarkerPrimitive2D(std::move(aLineB), getRGBColA(), getRGBColB(), getDiscreteDashLength()));
 
                     break;
                 }
@@ -111,7 +111,7 @@ namespace drawinglayer::primitive2d
                         {
                             basegfx::B2DPolygon aPart(aResult.getB2DPolygon(a));
                             aPart.transform(rViewInformation.getInverseObjectToViewTransformation());
-                            rContainer.push_back(new PolygonMarkerPrimitive2D(aPart, getRGBColA(), getRGBColB(), getDiscreteDashLength()));
+                            rContainer.push_back(new PolygonMarkerPrimitive2D(std::move(aPart), getRGBColA(), getRGBColB(), getDiscreteDashLength()));
                         }
                     }
 

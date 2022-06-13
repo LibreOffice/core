@@ -218,11 +218,11 @@ namespace drawinglayer::primitive2d
             // create a gray placeholder hairline polygon in object size
             basegfx::B2DRange aObjectRange(0.0, 0.0, 1.0, 1.0);
             aObjectRange.transform(getTransform());
-            const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aObjectRange));
+            basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aObjectRange));
             const basegfx::BColor aGrayTone(0xc0 / 255.0, 0xc0 / 255.0, 0xc0 / 255.0);
 
             // The replacement object may also get a text like 'empty group' here later
-            Primitive2DReference xRetval(new PolygonHairlinePrimitive2D(aOutline, aGrayTone));
+            Primitive2DReference xRetval(new PolygonHairlinePrimitive2D(std::move(aOutline), aGrayTone));
 
             return xRetval;
         }
