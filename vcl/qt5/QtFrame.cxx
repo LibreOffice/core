@@ -403,15 +403,6 @@ QScreen* QtFrame::screen() const
 #endif
 }
 
-bool QtFrame::isMinimized() const { return asChild()->isMinimized(); }
-
-bool QtFrame::isMaximized() const { return asChild()->isMaximized(); }
-
-void QtFrame::SetWindowStateImpl(Qt::WindowStates eState)
-{
-    return asChild()->setWindowState(eState);
-}
-
 void QtFrame::SetTitle(const OUString& rTitle)
 {
     m_pQWidget->window()->setWindowTitle(toQString(rTitle));
@@ -666,60 +657,100 @@ void QtFrame::SetModal(bool bModal)
 
 bool QtFrame::GetModal() const { return isWindow() && windowHandle()->isModal(); }
 
+vcl::WindowState QtFrame::windowState() const
+{
+    if (m_bFullScreen)
+        return vcl::WindowState::FullScreen;
+    return toVclWindowState(asChild()->windowState());
+}
+
 void QtFrame::SetWindowState(const vcl::WindowData* pState)
 {
     if (!isWindow() || !pState || isChild(true, false))
         return;
 
-    if ((pState->mask() & vcl::WindowDataMask::PosSizeState) == vcl::WindowDataMask::PosSizeState
-        && (pState->state() & vcl::WindowState::Maximized) && !isMaximized())
+    vcl::WindowDataMask eDataMask = pState->mask();
+    const bool bDataHasState
+        = (eDataMask & vcl::WindowDataMask::State) && pState->state() != vcl::WindowState::NONE;
+    const bool bWantNormal = bDataHasState && pState->state() == vcl::WindowState::Normal;
+    const vcl::WindowState eState = windowState();
+    bool bIsNormal = eState == vcl::WindowState::Normal;
+    tools::Rectangle aPosSize = pState->posSize();
+
+    if (bDataHasState)
     {
-        const qreal fRatio = devicePixelRatioF();
-        QWidget* const pChild = asChild();
-        pChild->resize(ceil(pState->width() / fRatio), ceil(pState->height() / fRatio));
-        pChild->move(ceil(pState->x() / fRatio), ceil(pState->y() / fRatio));
-        SetWindowStateImpl(Qt::WindowMaximized);
+        assert(!(pState->state() & vcl::WindowState::FullScreen));
+        if (pState->state() & vcl::WindowState::FullScreen)
+        {
+            SAL_WARN("vcl.qt", "Fullscreen must be requested using SetFullscreen!");
+            return;
+        }
+
+        if (!bIsNormal && bWantNormal && !isChild())
+        {
+            tools::Rectangle aRestoreRect = maGeometry.savedPosSize();
+            maGeometry.unrefOrClearSavedPosSize();
+            assert(!maGeometry.hasSavedPosSize());
+            asChild()->setWindowState(Qt::WindowNoState);
+            if (!(eDataMask & vcl::WindowDataMask::X))
+                aPosSize.SetPosX(aRestoreRect.Left());
+            if (!(eDataMask & vcl::WindowDataMask::Y))
+                aPosSize.SetPosY(aRestoreRect.Top());
+            if (!(eDataMask & vcl::WindowDataMask::Width))
+                aPosSize.SetWidth(aRestoreRect.GetWidth());
+            if (!(eDataMask & vcl::WindowDataMask::Height))
+                aPosSize.SetHeight(aRestoreRect.GetHeight());
+            bIsNormal = true;
+            eDataMask |= vcl::WindowDataMask::PosSize;
+        }
     }
-    else if (pState->mask() & vcl::WindowDataMask::PosSize)
+
+    if (eDataMask & vcl::WindowDataMask::PosSize)
     {
-        sal_uInt16 nPosSizeFlags = 0;
-        if (pState->mask() & vcl::WindowDataMask::X)
-            nPosSizeFlags |= SAL_FRAME_POSSIZE_X;
-        if (pState->mask() & vcl::WindowDataMask::Y)
-            nPosSizeFlags |= SAL_FRAME_POSSIZE_Y;
-        if (pState->mask() & vcl::WindowDataMask::Width)
-            nPosSizeFlags |= SAL_FRAME_POSSIZE_WIDTH;
-        if (pState->mask() & vcl::WindowDataMask::Height)
-            nPosSizeFlags |= SAL_FRAME_POSSIZE_HEIGHT;
-        SetPosSize(pState->x(), pState->y(), pState->width(), pState->height(), nPosSizeFlags);
-    }
-    else if (pState->mask() & vcl::WindowDataMask::State && !isChild())
-    {
-        if (pState->state() & vcl::WindowState::Maximized)
-            SetWindowStateImpl(Qt::WindowMaximized);
-        else if (pState->state() & vcl::WindowState::Minimized)
-            SetWindowStateImpl(Qt::WindowMinimized);
+        if (bIsNormal)
+        {
+            sal_uInt16 nPosSizeFlags = 0;
+            if (eDataMask & vcl::WindowDataMask::X)
+                nPosSizeFlags |= SAL_FRAME_POSSIZE_X;
+            if (eDataMask & vcl::WindowDataMask::Y)
+                nPosSizeFlags |= SAL_FRAME_POSSIZE_Y;
+            if (eDataMask & vcl::WindowDataMask::Width)
+                nPosSizeFlags |= SAL_FRAME_POSSIZE_WIDTH;
+            if (eDataMask & vcl::WindowDataMask::Height)
+                nPosSizeFlags |= SAL_FRAME_POSSIZE_HEIGHT;
+            SetPosSize(aPosSize.Left(), aPosSize.Top(), aPosSize.GetWidth(), aPosSize.GetHeight(),
+                       nPosSizeFlags);
+        }
         else
-            SetWindowStateImpl(Qt::WindowNoState);
+            SAL_WARN("vcl.qt", "Can't move or resize restore position - not implemented!");
+    }
+
+    if (bDataHasState && !isChild())
+    {
+        Qt::WindowStates eWantState;
+        if (eState != pState->state() && toQtWindowState(pState->state(), eWantState))
+        {
+            if (bIsNormal && !bWantNormal)
+                maGeometry.refOrSavePosSize();
+            asChild()->setWindowState(eWantState);
+        }
     }
 }
 
 bool QtFrame::GetWindowState(vcl::WindowData* pState)
 {
-    pState->setState(vcl::WindowState::Normal);
-    pState->setMask(vcl::WindowDataMask::State);
-    if (isMinimized())
-        pState->rState() |= vcl::WindowState::Minimized;
-    else if (isMaximized())
-        pState->rState() |= vcl::WindowState::Maximized;
-    else
+    if (!isWindow() || !pState)
+        return false;
+    if (maGeometry.hasSavedPosSize())
     {
-        // we want the frame position and the client area size
-        QRect rect = scaledQRect({ asChild()->pos(), asChild()->size() }, devicePixelRatioF());
-        pState->setPosSize(toRectangle(rect));
-        pState->rMask() |= vcl::WindowDataMask::PosSize;
+        pState->setPosSize(maGeometry.savedPosSize());
+        pState->refOrSavePosSize();
     }
-
+    pState->setMask(vcl::WindowDataMask::PosSizeState);
+    pState->setState(windowState());
+    // we want the frame position and the client area size
+    QRect aRect = scaledQRect({ asChild()->pos(), asChild()->size() }, devicePixelRatioF());
+    pState->setPosSize(toRectangle(aRect));
     return true;
 }
 
@@ -740,7 +771,7 @@ void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
 
     if (m_bFullScreen)
     {
-        m_aRestoreGeometry = m_pTopLevel->geometry();
+        maGeometry.refOrSavePosSize();
         m_nRestoreScreen = maGeometry.screen();
         SetScreenNumber(m_bFullScreenSpanAll ? m_nRestoreScreen : nScreen);
         if (!m_bFullScreenSpanAll)
@@ -750,9 +781,15 @@ void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
     }
     else
     {
+        assert(maGeometry.hasSavedPosSize());
+        tools::Rectangle aRestoreRect = maGeometry.savedPosSize();
+        const bool bMaximize = maGeometry.unrefOrClearSavedPosSize();
         SetScreenNumber(m_nRestoreScreen);
         windowHandle()->showNormal();
-        m_pTopLevel->setGeometry(m_aRestoreGeometry);
+        aRestoreRect.Move(maGeometry.leftDecoration(), maGeometry.topDecoration());
+        m_pTopLevel->setGeometry(toQRect(aRestoreRect));
+        if (bMaximize)
+            windowHandle()->showMaximized();
     }
 }
 
