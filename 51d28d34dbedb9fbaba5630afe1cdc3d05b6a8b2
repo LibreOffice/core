@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ecc42e9_d664a957",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-06-13T16:54:29Z",
+      "side": 1,
+      "message": "Hi Xisco,\nI proposed this UITest, after creation of a new dialog: \"Go to Sheet\". In which directory should I drop it?",
+      "revId": "51d28d34dbedb9fbaba5630afe1cdc3d05b6a8b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
