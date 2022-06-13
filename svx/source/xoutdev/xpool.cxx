@@ -42,6 +42,7 @@
 #include <svx/xlinjoit.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xfilluseslidebackgrounditem.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/xlnasit.hxx>
 #include <svx/xlndsit.hxx>
@@ -126,6 +127,7 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     rPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem( XGradient(COL_BLACK, COL_BLACK), false );
     rPoolDefaults[XATTR_SECONDARYFILLCOLOR       -XATTR_START] = new XSecondaryFillColorItem(aNullStr, aNullFillCol);
     rPoolDefaults[XATTR_FILLBACKGROUND           -XATTR_START] = new XFillBackgroundItem;
+    rPoolDefaults[XATTR_FILLUSESLIDEBACKGROUND   -XATTR_START] = new XFillUseSlideBackgroundItem;
     rPoolDefaults[XATTR_FORMTXTSTYLE       -XATTR_START] = new XFormTextStyleItem;
     rPoolDefaults[XATTR_FORMTXTADJUST      -XATTR_START] = new XFormTextAdjustItem;
     rPoolDefaults[XATTR_FORMTXTDISTANCE    -XATTR_START] = new XFormTextDistanceItem;

@@ -187,6 +187,7 @@ FillStyle
 FillTransparence
 FillTransparenceGradient
 FillTransparenceGradientName
+FillUseSlideBackground
 Filter
 FilterCriteriaSource
 FilterOptions

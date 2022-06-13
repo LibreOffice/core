@@ -19,6 +19,7 @@
 
 #include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
+#include <svx/xfilluseslidebackgrounditem.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xflclit.hxx>
@@ -41,7 +42,8 @@ enum FillType
     GRADIENT,
     HATCH,
     BITMAP,
-    PATTERN
+    PATTERN,
+    USE_BACKGROUND_FILL
 };
 
 }
@@ -89,6 +91,7 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xBtnHatch(m_xBuilder->weld_toggle_button("btnhatch"))
     , m_xBtnBitmap(m_xBuilder->weld_toggle_button("btnbitmap"))
     , m_xBtnPattern(m_xBuilder->weld_toggle_button("btnpattern"))
+    , m_xBtnUseBackground(m_xBuilder->weld_toggle_button("btnusebackground"))
 {
     maBox.AddButton(m_xBtnNone.get());
     maBox.AddButton(m_xBtnColor.get());
@@ -96,6 +99,7 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     maBox.AddButton(m_xBtnHatch.get());
     maBox.AddButton(m_xBtnBitmap.get());
     maBox.AddButton(m_xBtnPattern.get());
+    maBox.AddButton(m_xBtnUseBackground.get());
     Link<weld::Toggleable&, void> aLink = LINK(this, SvxAreaTabPage, SelectFillTypeHdl_Impl);
     m_xBtnNone->connect_toggled(aLink);
     m_xBtnColor->connect_toggled(aLink);
@@ -103,6 +107,7 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     m_xBtnHatch->connect_toggled(aLink);
     m_xBtnBitmap->connect_toggled(aLink);
     m_xBtnPattern->connect_toggled(aLink);
+    m_xBtnUseBackground->connect_toggled(aLink);
 
     SetExchangeSupport();
 }
@@ -166,7 +171,11 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         default:
         case drawing::FillStyle_NONE:
         {
-            SelectFillType(*m_xBtnNone);
+            XFillUseSlideBackgroundItem aBckItem( rSet.Get(XATTR_FILLUSESLIDEBACKGROUND));
+            if (aBckItem.GetValue())
+                SelectFillType(*m_xBtnUseBackground);
+            else
+                SelectFillType(*m_xBtnNone);
             break;
         }
         case drawing::FillStyle_SOLID:
@@ -184,7 +193,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         case drawing::FillStyle_HATCH:
         {
             m_rXFSet.Put( rSet.Get(XATTR_FILLHATCH) );
-            m_rXFSet.Put( rSet.Get(XATTR_FILLBACKGROUND) );
+            m_rXFSet.Put( rSet.Get(XATTR_FILLUSESLIDEBACKGROUND) );
             m_rXFSet.Put( rSet.Get(XATTR_FILLCOLOR) );
             SelectFillType(*m_xBtnHatch);
             break;
@@ -222,6 +231,8 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
             {
                 XFillStyleItem aStyleItem( drawing::FillStyle_NONE );
                 _pSet->Put( aStyleItem );
+                XFillUseSlideBackgroundItem aFillBgItem( false );
+                _pSet->Put( aFillBgItem );
             }
             break;
         }
@@ -235,6 +246,17 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
             return DeactivatePage_Impl<SvxBitmapTabPage&>(_pSet);
         case PATTERN:
             return DeactivatePage_Impl<SvxPatternTabPage>(_pSet);
+        case USE_BACKGROUND_FILL:
+        {
+            if ( m_bBtnClicked )
+            {
+                XFillStyleItem aStyleItem( drawing::FillStyle_NONE );
+                _pSet->Put( aStyleItem );
+                XFillUseSlideBackgroundItem aFillBgItem( true );
+                _pSet->Put( aFillBgItem );
+            }
+            break;
+        }
         default:
             break;
     }
@@ -255,6 +277,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
         case TRANSPARENT:
         {
             rAttrs->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
+            rAttrs->Put( XFillUseSlideBackgroundItem( false ) );
             return true;
         }
         case SOLID:
@@ -276,6 +299,12 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
         case PATTERN:
         {
             return FillItemSet_Impl<SvxPatternTabPage>( rAttrs );
+        }
+        case USE_BACKGROUND_FILL:
+        {
+            rAttrs->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
+            rAttrs->Put( XFillUseSlideBackgroundItem( true ) );
+            return true;
         }
         default:
             return false;
@@ -344,6 +373,7 @@ std::unique_ptr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, weld::Con
         case HATCH: fnCreate = &SvxHatchTabPage::Create; break;
         case BITMAP: fnCreate = &SvxBitmapTabPage::Create; break;
         case PATTERN: fnCreate = &SvxPatternTabPage::Create; break;
+        case USE_BACKGROUND_FILL: fnCreate = nullptr; break;
     }
     return fnCreate ? (*fnCreate)( pPage, pController, &rSet ) : nullptr;
 }
