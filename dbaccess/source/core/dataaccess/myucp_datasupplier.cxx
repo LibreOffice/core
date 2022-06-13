@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vector>
 
 #include <ucbhelper/contentidentifier.hxx>
@@ -64,8 +65,8 @@ struct DataSupplier_Impl
     rtl::Reference< ODocumentContainer >         m_xContent;
     bool                                         m_bCountFinal;
 
-    explicit DataSupplier_Impl(const rtl::Reference< ODocumentContainer >& rContent)
-        : m_xContent(rContent)
+    explicit DataSupplier_Impl(rtl::Reference< ODocumentContainer > xContent)
+        : m_xContent(std::move(xContent))
         , m_bCountFinal(false)
     {
     }

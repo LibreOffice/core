@@ -42,6 +42,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
 #include <connectivity/dbexception.hxx>
+#include <utility>
 
 namespace dbaui
 {
@@ -58,10 +59,10 @@ using namespace comphelper;
 OCollectionView::OCollectionView(weld::Window* pParent,
                                  const Reference< XContent>& _xContent,
                                  const OUString& _sDefaultName,
-                                 const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
+                                 css::uno::Reference< css::uno::XComponentContext > _xContext)
     : GenericDialogController(pParent, "dbaccess/ui/collectionviewdialog.ui", "CollectionView")
     , m_xContent(_xContent)
-    , m_xContext(_rxContext)
+    , m_xContext(std::move(_xContext))
     , m_bCreateForm(true)
     , m_xFTCurrentPath(m_xBuilder->weld_label("currentPathLabel"))
     , m_xNewFolder(m_xBuilder->weld_button("newFolderButton"))

@@ -55,7 +55,7 @@ namespace dbaui
         OCollectionView(weld::Window * pParent,
                         const css::uno::Reference< css::ucb::XContent>& _xContent,
                         const OUString& _sDefaultName,
-                        const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+                        css::uno::Reference< css::uno::XComponentContext > _xContext);
         virtual ~OCollectionView() override;
         const css::uno::Reference< css::ucb::XContent>& getSelectedFolder() const { return m_xContent;}
         OUString getName() const;

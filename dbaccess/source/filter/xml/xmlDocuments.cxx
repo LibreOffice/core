@@ -19,6 +19,7 @@
 
 #include "xmlDocuments.hxx"
 #include "xmlfilter.hxx"
+#include <utility>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlQuery.hxx"
@@ -35,23 +36,23 @@ namespace dbaxml
 
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
                 ,const Reference< XNameAccess >& _xContainer
-                ,const OUString& _sCollectionServiceName
-                ,const OUString& _sComponentServiceName) :
+                ,OUString _sCollectionServiceName
+                ,OUString _sComponentServiceName) :
     SvXMLImportContext( rImport )
         ,m_xContainer(_xContainer)
-        ,m_sCollectionServiceName(_sCollectionServiceName)
-        ,m_sComponentServiceName(_sComponentServiceName)
+        ,m_sCollectionServiceName(std::move(_sCollectionServiceName))
+        ,m_sComponentServiceName(std::move(_sComponentServiceName))
 {
 
 }
 
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
                 ,const Reference< XNameAccess >& _xContainer
-                ,const OUString& _sCollectionServiceName
+                ,OUString _sCollectionServiceName
                 ) :
     SvXMLImportContext( rImport )
         ,m_xContainer(_xContainer)
-        ,m_sCollectionServiceName(_sCollectionServiceName)
+        ,m_sCollectionServiceName(std::move(_sCollectionServiceName))
 {
 }
 

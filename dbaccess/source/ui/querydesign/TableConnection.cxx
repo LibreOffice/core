@@ -21,6 +21,7 @@
 #include <ConnectionLine.hxx>
 #include <TableConnectionData.hxx>
 #include <JoinTableView.hxx>
+#include <utility>
 
 using namespace dbaui;
 using namespace comphelper;
@@ -29,9 +30,9 @@ using namespace ::com::sun::star::accessibility;
 
 namespace dbaui
 {
-    OTableConnection::OTableConnection( OJoinTableView* _pContainer,const TTableConnectionData::value_type& _pTabConnData )
+    OTableConnection::OTableConnection( OJoinTableView* _pContainer, TTableConnectionData::value_type  _aTabConnData )
         :Window(_pContainer)
-        ,m_pData( _pTabConnData )
+        ,m_pData(std::move( _aTabConnData ))
         ,m_pParent( _pContainer )
         ,m_bSelected( false )
     {

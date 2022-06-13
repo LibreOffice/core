@@ -89,7 +89,7 @@ public:
         weld::Window* pParent,
         const dbtools::SQLExceptionInfo& _rException,
         MessBoxStyle _nStyle = MessBoxStyle::Ok | MessBoxStyle::DefaultOk,
-        const OUString& _rHelpURL = OUString()
+        OUString _sHelpURL = OUString()
     );
 
     /** display a database related error message

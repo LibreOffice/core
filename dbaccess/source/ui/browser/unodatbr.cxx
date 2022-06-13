@@ -88,6 +88,7 @@
 #include <tools/multisel.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
+#include <utility>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -1037,7 +1038,7 @@ namespace
     struct FilterByEntryDataId : public IEntryFilter
     {
         OUString sId;
-        explicit FilterByEntryDataId( const OUString& _rId ) : sId( _rId ) { }
+        explicit FilterByEntryDataId( OUString _aId ) : sId(std::move( _aId )) { }
 
         virtual ~FilterByEntryDataId() {}
 

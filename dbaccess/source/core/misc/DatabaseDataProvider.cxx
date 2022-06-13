@@ -37,6 +37,7 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 
+#include <utility>
 #include <vector>
 
 // TODO: update for new HavingClause-aware FilterManager
@@ -598,8 +599,8 @@ namespace
             ,nDataType( sdbc::DataType::VARCHAR )
         {
         }
-        explicit ColumnDescription( const OUString& i_rName )
-            :sName( i_rName )
+        explicit ColumnDescription( OUString i_sName )
+            :sName(std::move( i_sName ))
             ,nResultSetPosition( 0 )
             ,nDataType( sdbc::DataType::VARCHAR )
         {

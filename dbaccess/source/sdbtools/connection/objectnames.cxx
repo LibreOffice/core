@@ -33,6 +33,7 @@
 #include <osl/diagnose.h>
 
 #include <memory>
+#include <utility>
 
 namespace sdbtools
 {
@@ -200,9 +201,9 @@ namespace sdbtools
         PNameValidation  m_pSecondary;
 
     public:
-        CombinedNameCheck(const PNameValidation& _pPrimary, const PNameValidation& _pSecondary)
-            :m_pPrimary( _pPrimary )
-            ,m_pSecondary( _pSecondary )
+        CombinedNameCheck(PNameValidation _pPrimary, PNameValidation _pSecondary)
+            :m_pPrimary(std::move( _pPrimary ))
+            ,m_pSecondary(std::move( _pSecondary ))
         {
             OSL_ENSURE( m_pPrimary && m_pSecondary, "CombinedNameCheck::CombinedNameCheck: this will crash!" );
         }

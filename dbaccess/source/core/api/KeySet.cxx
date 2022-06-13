@@ -46,6 +46,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <composertools.hxx>
+#include <utility>
 #include "PrivateRow.hxx"
 
 using namespace dbaccess;
@@ -103,17 +104,17 @@ namespace
 }
 
 
-OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
-                 const OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
+OKeySet::OKeySet(connectivity::OSQLTable  _xTable,
+                 OUString _sUpdateTableName,    // this can be the alias or the full qualified name
                  const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
                  const ORowSetValueVector& _aParameterValueForCache,
                  sal_Int32 i_nMaxRows,
                  sal_Int32& o_nRowCount)
             :OCacheSet(i_nMaxRows)
             ,m_aParameterValueForCache(new ORowSetValueVector(_aParameterValueForCache))
-            ,m_xTable(_xTable)
+            ,m_xTable(std::move(_xTable))
             ,m_xComposer(_xComposer)
-            ,m_sUpdateTableName(_rUpdateTableName)
+            ,m_sUpdateTableName(std::move(_sUpdateTableName))
             ,m_rRowCount(o_nRowCount)
             ,m_bRowCountFinal(false)
 {

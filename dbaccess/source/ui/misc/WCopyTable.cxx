@@ -56,6 +56,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
+#include <utility>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -250,10 +251,10 @@ OUString ObjectCopySource::getSelectStatement() const
 }
 
 // NamedTableCopySource
-NamedTableCopySource::NamedTableCopySource( const Reference< XConnection >& _rxConnection, const OUString& _rTableName )
+NamedTableCopySource::NamedTableCopySource( const Reference< XConnection >& _rxConnection, OUString _sTableName )
     :m_xConnection( _rxConnection, UNO_SET_THROW )
     ,m_xMetaData( _rxConnection->getMetaData(), UNO_SET_THROW )
-    ,m_sTableName( _rTableName )
+    ,m_sTableName(std::move( _sTableName ))
 {
     ::dbtools::qualifiedNameComponents( m_xMetaData, m_sTableName, m_sTableCatalog, m_sTableSchema, m_sTableBareName, ::dbtools::EComposeRule::Complete );
     impl_ensureColumnInfo_throw();
@@ -583,7 +584,7 @@ weld::Container* OCopyTableWizard::CreatePageContainer()
     return pPageContainer;
 }
 
-OCopyTableWizard::OCopyTableWizard( weld::Window* pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
+OCopyTableWizard::OCopyTableWizard( weld::Window* pParent, OUString _sDefaultName, sal_Int16 _nOperation,
         ODatabaseExport::TColumns&& _rSourceColumns, const ODatabaseExport::TColumnVector& _rSourceColVec,
         const Reference< XConnection >& _xConnection, const Reference< XNumberFormatter >&  _xFormatter,
         TypeSelectionPageFactory _pTypeSelectionPageFactory, SvStream& _rTypeSelectionPageArg, const Reference< XComponentContext >& _rxContext )
@@ -598,7 +599,7 @@ OCopyTableWizard::OCopyTableWizard( weld::Window* pParent, const OUString& _rDef
     , m_nPageCount(0)
     , m_bDeleteSourceColumns(false)
     , m_bInterConnectionCopy( false )
-    , m_sName(_rDefaultName)
+    , m_sName(std::move(_sDefaultName))
     , m_nOperation( _nOperation )
     , m_ePressed( WIZARD_NONE )
     , m_bCreatePrimaryKeyColumn(false)

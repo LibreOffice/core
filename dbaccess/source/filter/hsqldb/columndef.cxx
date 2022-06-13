@@ -20,23 +20,24 @@
 
 #include "columndef.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <utility>
 
 namespace dbahsql
 {
 using namespace css::sdbc;
 
-ColumnDefinition::ColumnDefinition(const OUString& sName, sal_Int32 eType,
+ColumnDefinition::ColumnDefinition(OUString sName, sal_Int32 eType,
                                    std::vector<sal_Int32>&& aParams, bool bPrimary,
                                    sal_Int32 nAutoIncr, bool bNullable, bool bCaseInsensitive,
-                                   const OUString& sDefault)
-    : m_sName(sName)
+                                   OUString sDefault)
+    : m_sName(std::move(sName))
     , m_eType(eType)
     , m_aParams(std::move(aParams))
     , m_bPrimaryKey(bPrimary)
     , m_nAutoIncrement(nAutoIncr)
     , m_bNullable(bNullable)
     , m_bCaseInsensitive(bCaseInsensitive)
-    , m_sDefaultValue(sDefault)
+    , m_sDefaultValue(std::move(sDefault))
 {
 }
 }

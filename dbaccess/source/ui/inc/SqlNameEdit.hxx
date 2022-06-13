@@ -19,6 +19,7 @@
 #pragma once
 
 #include <svtools/editbrowsebox.hxx>
+#include <utility>
 #include <vcl/weld.hxx>
 
 namespace dbaui
@@ -28,8 +29,8 @@ namespace dbaui
         OUString m_sAllowedChars;
         bool        m_bCheck;           // true when we should check for invalid chars
     public:
-        OSQLNameChecker(const OUString& _rAllowedChars)
-            :m_sAllowedChars(_rAllowedChars)
+        OSQLNameChecker(OUString _sAllowedChars)
+            :m_sAllowedChars(std::move(_sAllowedChars))
             ,m_bCheck(true)
         {
         }

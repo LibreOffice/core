@@ -25,6 +25,7 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <osl/mutex.hxx>
+#include <utility>
 
 namespace sdbtools
 {
@@ -58,8 +59,8 @@ namespace sdbtools
         class EntryGuard;
 
     protected:
-        explicit ConnectionDependentComponent( const css::uno::Reference< css::uno::XComponentContext > & _rContext )
-            :m_aContext( _rContext )
+        explicit ConnectionDependentComponent( css::uno::Reference< css::uno::XComponentContext > _xContext )
+            :m_aContext(std::move( _xContext ))
         {
         }
 

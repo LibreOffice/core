@@ -47,7 +47,7 @@ namespace dbaui
         void clearLineData();
 
     public:
-        OTableConnection( OJoinTableView* pContainer, const TTableConnectionData::value_type& pTabConnData );
+        OTableConnection( OJoinTableView* pContainer, TTableConnectionData::value_type aTabConnData );
         OTableConnection( const OTableConnection& rConn );
         /** destructor
 

@@ -53,7 +53,7 @@ namespace dbaxml
 
         OXMLTable( ODBFilter& rImport
                     ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList
-                    ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
+                    ,css::uno::Reference< css::container::XNameAccess > _xParentContainer
                     ,const OUString& _sServiceName
                     );
         virtual ~OXMLTable() override;

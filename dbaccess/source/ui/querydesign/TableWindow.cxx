@@ -25,6 +25,7 @@
 #include <JoinTableView.hxx>
 #include <JoinDesignView.hxx>
 #include <osl/diagnose.h>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
@@ -86,11 +87,11 @@ void Draw3DBorder(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
 
 }
 
-OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData )
+OTableWindow::OTableWindow( vcl::Window* pParent, TTableWindowData::value_type pTabWinData )
     : ::comphelper::OContainerListener(m_aMutex)
     , Window( pParent, WB_3DLOOK|WB_MOVEABLE )
     , m_xTitle( VclPtr<OTableWindowTitle>::Create(this) )
-    , m_pData( pTabWinData )
+    , m_pData(std::move( pTabWinData ))
     , m_nMoveCount(0)
     , m_nMoveIncrement(1)
     , m_nSizingFlags( SizingFlags::NONE )

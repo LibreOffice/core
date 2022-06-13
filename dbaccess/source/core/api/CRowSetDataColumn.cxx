@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
+#include <utility>
 
 using namespace dbaccess;
 using namespace comphelper;
@@ -44,13 +45,13 @@ ORowSetDataColumn::ORowSetDataColumn( const Reference < XResultSetMetaData >& _x
                                       const Reference < XRowUpdate >& _xRowUpdate,
                                       sal_Int32 _nPos,
                                       const Reference< XDatabaseMetaData >& _rxDBMeta,
-                                      const OUString& _rDescription,
-                                      const OUString& i_sLabel,
-                                      const std::function<const ORowSetValue& (sal_Int32)> &_getValue)
+                                      OUString i_sDescription,
+                                      OUString i_sLabel,
+                                      std::function<const ORowSetValue& (sal_Int32)> _getValue)
     :ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos,_rxDBMeta)
-    ,m_pGetValue(_getValue)
-    ,m_sLabel(i_sLabel)
-    ,m_aDescription(_rDescription)
+    ,m_pGetValue(std::move(_getValue))
+    ,m_sLabel(std::move(i_sLabel))
+    ,m_aDescription(std::move(i_sDescription))
 {
     OColumnSettings::registerProperties( *this );
     registerProperty( PROPERTY_DESCRIPTION, PROPERTY_ID_DESCRIPTION, PropertyAttribute::READONLY, &m_aDescription, cppu::UnoType<decltype(m_aDescription)>::get() );
@@ -192,12 +193,12 @@ void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 
 ORowSetDataColumns::ORowSetDataColumns(
                 bool _bCase,
-                const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
+                ::rtl::Reference< ::connectivity::OSQLColumns> _xColumns,
                 ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,
                 const std::vector< OUString> &_rVector
                 ) : connectivity::sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
-                ,m_aColumns(_rColumns)
+                ,m_aColumns(std::move(_xColumns))
 {
 }
 

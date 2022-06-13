@@ -37,7 +37,7 @@ namespace dbaccess
         const css::uno::Any    m_aDetails;
 
     public:
-        Veto( const css::uno::Any& _rDetails );
+        Veto( css::uno::Any _aDetails );
 
         virtual OUString SAL_CALL getReason() override;
         virtual css::uno::Any SAL_CALL getDetails() override;

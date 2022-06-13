@@ -19,6 +19,7 @@
 
 #include "xmlTable.hxx"
 #include "xmlfilter.hxx"
+#include <utility>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include "xmlEnums.hxx"
@@ -40,11 +41,11 @@ namespace dbaxml
 
 OXMLTable::OXMLTable( ODBFilter& _rImport
                 ,const uno::Reference< XFastAttributeList > & _xAttrList
-                ,const uno::Reference< css::container::XNameAccess >& _xParentContainer
+                ,uno::Reference< css::container::XNameAccess > _xParentContainer
                 ,const OUString& _sServiceName
                 )
     :SvXMLImportContext( _rImport )
-    ,m_xParentContainer(_xParentContainer)
+    ,m_xParentContainer(std::move(_xParentContainer))
     ,m_bApplyFilter(false)
     ,m_bApplyOrder(false)
 {

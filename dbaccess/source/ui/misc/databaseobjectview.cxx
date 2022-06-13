@@ -32,6 +32,7 @@
 #include <osl/diagnose.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/window.hxx>
 
 namespace dbaui
@@ -51,11 +52,11 @@ namespace dbaui
     DatabaseObjectView::DatabaseObjectView( const Reference< XComponentContext >& _rxORB,
             const Reference< XDatabaseDocumentUI >& _rxApplication,
             const Reference< XFrame >& _rxParentFrame,
-            const OUString& _rComponentURL )
+            OUString _sComponentURL )
         :m_xORB             ( _rxORB            )
         ,m_xParentFrame     ( _rxParentFrame    )
         ,m_xApplication     ( _rxApplication    )
-        ,m_sComponentURL    ( _rComponentURL    )
+        ,m_sComponentURL    (std::move( _sComponentURL    ))
     {
         OSL_ENSURE( m_xORB.is(), "DatabaseObjectView::DatabaseObjectView: invalid service factory!" );
         OSL_ENSURE( m_xApplication.is(), "DatabaseObjectView::DatabaseObjectView: invalid connection!" );

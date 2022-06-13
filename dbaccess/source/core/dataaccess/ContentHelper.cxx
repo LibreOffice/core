@@ -38,6 +38,7 @@
 #include <strings.hxx>
 
 #include <map>
+#include <utility>
 
 namespace dbaccess
 {
@@ -63,13 +64,13 @@ OContentHelper_Impl::~OContentHelper_Impl()
 
 OContentHelper::OContentHelper(const Reference< XComponentContext >& _xORB
                                ,const Reference< XInterface >&  _xParentContainer
-                               ,const TContentPtr& _pImpl)
+                               ,TContentPtr _pImpl)
     : OContentHelper_COMPBASE(m_aMutex)
     ,m_aContentListeners(m_aMutex)
     ,m_aPropertyChangeListeners(m_aMutex)
     ,m_xParentContainer( _xParentContainer )
     ,m_aContext( _xORB )
-    ,m_pImpl(_pImpl)
+    ,m_pImpl(std::move(_pImpl))
     ,m_nCommandId(0)
 {
 }

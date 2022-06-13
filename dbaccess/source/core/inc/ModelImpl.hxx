@@ -221,7 +221,7 @@ public:
     virtual ~ODatabaseModelImpl();
 
     ODatabaseModelImpl(
-        const OUString& _rRegistrationName,
+        OUString _sRegistrationName,
         const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
         ODatabaseContext& _rDBContext
         );
@@ -451,7 +451,7 @@ protected:
     ::osl::Mutex m_aMutex; // only use this to init WeakComponentImplHelper
 
 protected:
-    explicit ModelDependentComponent( const ::rtl::Reference< ODatabaseModelImpl >& _model );
+    explicit ModelDependentComponent( ::rtl::Reference< ODatabaseModelImpl > _model );
     virtual ~ModelDependentComponent();
 
     /** returns the component itself

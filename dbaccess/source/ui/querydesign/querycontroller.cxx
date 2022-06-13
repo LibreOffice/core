@@ -64,6 +64,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
+#include <utility>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -1381,8 +1382,8 @@ struct CommentStrip
 {
     OUString maComment;
     bool            mbLastOnLine;
-    CommentStrip( const OUString& rComment, bool bLastOnLine )
-        : maComment( rComment), mbLastOnLine( bLastOnLine) {}
+    CommentStrip( OUString sComment, bool bLastOnLine )
+        : maComment(std::move( sComment)), mbLastOnLine( bLastOnLine) {}
 };
 
 }

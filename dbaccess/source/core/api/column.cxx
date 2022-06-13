@@ -34,6 +34,7 @@
 #include <connectivity/TTableHelper.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace dbaccess;
@@ -147,7 +148,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
 }
 
 OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-        const css::uno::Reference< css::container::XNameAccess >& _rxDrvColumns,
+        css::uno::Reference< css::container::XNameAccess > _xDrvColumns,
         bool _bCaseSensitive,const std::vector< OUString> &_rVector,
         IColumnFactory* _pColFactory,
         ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
@@ -156,7 +157,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
         bool _bUseHardRef)
        : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector,_bUseHardRef)
     ,m_pMediator(nullptr)
-    ,m_xDrvColumns(_rxDrvColumns)
+    ,m_xDrvColumns(std::move(_xDrvColumns))
     ,m_pColFactoryImpl(_pColFactory)
     ,m_pRefreshColumns(_pRefresh)
     ,m_bInitialized(false)

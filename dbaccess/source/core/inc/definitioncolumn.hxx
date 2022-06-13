@@ -151,7 +151,7 @@ namespace dbaccess
         OQueryColumn(
             const css::uno::Reference< css::beans::XPropertySet>& _rxParserColumn,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-            const OUString &i_sLabel
+            OUString i_sLabel
         );
 
         // XTypeProvider
