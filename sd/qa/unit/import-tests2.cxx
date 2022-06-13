@@ -18,7 +18,9 @@
 
 #include <svx/svdotable.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xfilluseslidebackgrounditem.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xflbckit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/sdooitm.hxx>
@@ -223,10 +225,14 @@ void SdImportTest2::testTdf93868()
         drawing::FillStyle_SOLID,
         dynamic_cast<const XFillStyleItem&>(pPage->GetObj(0)->GetMergedItem(XATTR_FILLSTYLE))
             .GetValue());
+
     CPPUNIT_ASSERT_EQUAL(
-        drawing::FillStyle_GRADIENT,
+        drawing::FillStyle_NONE,
         dynamic_cast<const XFillStyleItem&>(pPage->GetObj(1)->GetMergedItem(XATTR_FILLSTYLE))
             .GetValue());
+    CPPUNIT_ASSERT_EQUAL(true, dynamic_cast<const XFillUseSlideBackgroundItem&>(
+                                   pPage->GetObj(1)->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND))
+                                   .GetValue());
 
     xDocShRef->DoClose();
 }
@@ -744,7 +750,10 @@ void SdImportTest2::testTdf105150()
         = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
     // This was drawing::FillStyle_NONE, <p:sp useBgFill="1"> was ignored when
     // the slide didn't have an explicit background fill.
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rFillStyleItem.GetValue());
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
+    auto& rFillBackgroundItem = dynamic_cast<const XFillUseSlideBackgroundItem&>(
+        pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND));
+    CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
     xDocShRef->DoClose();
 }
 
@@ -1730,16 +1739,10 @@ void SdImportTest2::testTdf127964()
     const SdrObject* pObj = pPage->GetObj(0);
     auto& rFillStyleItem
         = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rFillStyleItem.GetValue());
-
-    auto& rFillColorItem
-        = dynamic_cast<const XFillColorItem&>(pObj->GetMergedItem(XATTR_FILLCOLOR));
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 4294967295
-    // - Actual  : 5210557
-    // i.e. instead of transparent (which then got rendered as white), the shape fill color was
-    // blue.
-    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, rFillColorItem.GetColorValue());
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
+    auto& rFillBackgroundItem = dynamic_cast<const XFillUseSlideBackgroundItem&>(
+        pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND));
+    CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
     xDocShRef->DoClose();
 }
 

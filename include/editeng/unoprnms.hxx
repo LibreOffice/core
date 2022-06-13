@@ -41,6 +41,7 @@ inline constexpr OUStringLiteral UNO_NAME_FILLBITMAPURL = u"FillBitmapURL";
 inline constexpr OUStringLiteral UNO_NAME_FILLBITMAPNAME = u"FillBitmapName";
 inline constexpr OUStringLiteral UNO_NAME_FILLGRADIENTSTEPCOUNT = u"FillGradientStepCount";
 inline constexpr OUStringLiteral UNO_NAME_FILLBACKGROUND = u"FillBackground";
+inline constexpr OUStringLiteral UNO_NAME_FILLUSESLIDEBACKGROUND = u"FillUseSlideBackground";
 inline constexpr OUStringLiteral UNO_NAME_FILLCOLOR_2 = u"FillColor2";
 
 inline constexpr OUStringLiteral UNO_NAME_EDGEKIND = u"EdgeKind";
