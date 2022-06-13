@@ -33,6 +33,8 @@ class WinSalGraphics;
 
 class WinSalFrame final: public SalFrame
 {
+    vcl::WindowState m_eState;
+
 public:
     HWND                    mhWnd;                  // Window handle
     HCURSOR                 mhCursor;               // cursor handle
@@ -43,10 +45,7 @@ public:
     HMENU                   mSelectedhMenu;         // the menu where highlighting is currently going on
     HMENU                   mLastActivatedhMenu;    // the menu that was most recently opened
     SystemEnvData           maSysData;              // system data
-    vcl::WindowData maState; ///< frame state
     int                     mnShowState;            // show state
-    LONG                    mnWidth;                // client width in pixeln
-    LONG                    mnHeight;               // client height in pixeln
     int                     mnMinWidth;             // min. client width in pixeln
     int                     mnMinHeight;            // min. client height in pixeln
     int                     mnMaxWidth;             // max. client width in pixeln
@@ -141,6 +140,9 @@ public:
     virtual void                BeginSetClipRegion( sal_uInt32 nRects ) override;
     virtual void                UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                EndSetClipRegion() override;
+
+    constexpr vcl::WindowState state() const { return m_eState; }
+    void UpdateFrameState();
 };
 
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
