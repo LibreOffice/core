@@ -26,10 +26,8 @@ class Tdf148395(UITestCase):
 
                 xSelectedEntry = get_state_as_dict(xTypes)['SelectEntryText']
                 self.assertTrue('Spreadsheet' in xSelectedEntry )
-                # On Windows, there's also 6th item: "Further objects"
-                self.assertLessEqual('5', get_state_as_dict(xTypes)['Children'])
 
-                for i in range(5):
+                for i in range(10):
                     xTypes.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
                     xSelectedEntry = get_state_as_dict(xTypes)['SelectEntryText']
                     if 'Chart' in xSelectedEntry:
