@@ -183,7 +183,7 @@ namespace dbaui
     public:
         NamedTableCopySource(
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-            const OUString& _rTableName
+            OUString _sTableName
         );
 
         // ICopyTableSourceObject overridables
@@ -309,7 +309,7 @@ namespace dbaui
         // used for importing rtf/html sources
         OCopyTableWizard(
             weld::Window* pParent,
-            const OUString& _rDefaultName,
+            OUString _sDefaultName,
             sal_Int16 _nOperation,
             ODatabaseExport::TColumns&& _rDestColumns,
             const ODatabaseExport::TColumnVector& _rSourceColVec,

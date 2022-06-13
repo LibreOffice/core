@@ -26,6 +26,8 @@
 
  *************************************************************************/
 
+#include <utility>
+
 #include "myucp_datasupplier.hxx"
 #include "myucp_resultset.hxx"
 
@@ -42,11 +44,11 @@ using namespace dbaccess;
 // DynamicResultSet Implementation.
 DynamicResultSet::DynamicResultSet(
                       const Reference< XComponentContext >& rxContext,
-                      const rtl::Reference< ODocumentContainer >& rxContent,
+                      rtl::Reference< ODocumentContainer > xContent,
                       const OpenCommandArgument2& rCommand,
                       const Reference< XCommandEnvironment >& rxEnv )
     :ResultSetImplHelper( rxContext, rCommand )
-    ,m_xContent(rxContent)
+    ,m_xContent(std::move(xContent))
     ,m_xEnv( rxEnv )
 {
 }

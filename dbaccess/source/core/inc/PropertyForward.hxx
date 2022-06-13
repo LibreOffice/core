@@ -49,7 +49,7 @@ namespace dbaccess
     public:
         OPropertyForward( const css::uno::Reference< css::beans::XPropertySet>& _xSource,
                           const css::uno::Reference< css::container::XNameAccess>& _xDestContainer,
-                          const OUString& _sName,
+                          OUString _sName,
                           const std::vector< OUString >& _aPropertyList
                          );
 

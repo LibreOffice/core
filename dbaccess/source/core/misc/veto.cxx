@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <veto.hxx>
 
 namespace dbaccess
@@ -25,8 +26,8 @@ namespace dbaccess
     using ::com::sun::star::uno::Any;
 
     // Veto
-    Veto::Veto( const Any& _rDetails )
-        :m_aDetails( _rDetails )
+    Veto::Veto( Any _aDetails )
+        :m_aDetails(std::move( _aDetails ))
     {
     }
 

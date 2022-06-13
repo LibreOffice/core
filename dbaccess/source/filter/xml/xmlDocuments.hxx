@@ -37,13 +37,13 @@ namespace dbaxml
         // for forms and reports
         OXMLDocuments( ODBFilter& rImport
                     ,const css::uno::Reference< css::container::XNameAccess >& _xContainer
-                    ,const OUString& _sCollectionServiceName
-                    ,const OUString& _sComponentServiceName);
+                    ,OUString _sCollectionServiceName
+                    ,OUString _sComponentServiceName);
 
         // for queries
         OXMLDocuments( ODBFilter& rImport
                     ,const css::uno::Reference< css::container::XNameAccess >& _xContainer
-                    ,const OUString& _sCollectionServiceName = OUString()
+                    ,OUString _sCollectionServiceName = OUString()
                     );
 
         virtual ~OXMLDocuments() override;

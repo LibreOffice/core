@@ -48,7 +48,7 @@ namespace dbaui
         virtual ~OConnectionLineData() override;
     public:
         OConnectionLineData();
-        OConnectionLineData( const OUString& rSourceFieldName, const OUString& rDestFieldName );
+        OConnectionLineData( OUString sSourceFieldName, OUString sDestFieldName );
         OConnectionLineData( const OConnectionLineData& rConnLineData );
         // provide a copy of own instance (this is somehow more acceptable for me compared to a virtual assignment operator
         void CopyFrom(const OConnectionLineData& rSource);

@@ -39,7 +39,7 @@ namespace dbaxml
                     ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList
                     ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
                     ,const OUString& _sCollectionServiceName
-                    ,const OUString& _sComponentServiceName
+                    ,OUString _sComponentServiceName
                     );
         OXMLHierarchyCollection( ODBFilter& rImport
                     ,const css::uno::Reference< css::container::XNameAccess >& _xContainer

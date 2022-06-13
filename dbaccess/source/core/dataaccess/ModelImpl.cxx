@@ -58,6 +58,7 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <algorithm>
+#include <utility>
 
 using namespace css;
 using namespace ::com::sun::star::document;
@@ -379,7 +380,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
 }
 
 ODatabaseModelImpl::ODatabaseModelImpl(
-                    const OUString& _rRegistrationName,
+                    OUString _sRegistrationName,
                     const Reference< XComponentContext >& _rxContext,
                     ODatabaseContext& _rDBContext
                     )
@@ -392,7 +393,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_bDocumentInitialized( false )
             ,m_nScriptingSignatureState(SignatureState::UNKNOWN)
             ,m_aContext( _rxContext )
-            ,m_sName(_rRegistrationName)
+            ,m_sName(std::move(_sRegistrationName))
             ,m_nLoginTimeout(0)
             ,m_bReadOnly(false)
             ,m_bPasswordRequired(false)
@@ -1418,8 +1419,8 @@ void ODatabaseModelImpl::storageIsModified()
     setModified( true );
 }
 
-ModelDependentComponent::ModelDependentComponent( const ::rtl::Reference< ODatabaseModelImpl >& _model )
-    :m_pImpl( _model )
+ModelDependentComponent::ModelDependentComponent( ::rtl::Reference< ODatabaseModelImpl > _model )
+    :m_pImpl(std::move( _model ))
 {
 }
 

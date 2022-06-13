@@ -20,6 +20,7 @@
 #include "HelperCollections.hxx"
 
 #include <strings.hxx>
+#include <utility>
 
 #include <osl/diagnose.h>
 
@@ -39,14 +40,14 @@ namespace dbaccess
     using namespace ::cppu;
     using namespace ::osl;
 
-    OPrivateColumns::OPrivateColumns(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
+    OPrivateColumns::OPrivateColumns(::rtl::Reference< ::connectivity::OSQLColumns> _xColumns,
                         bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const std::vector< OUString> &_rVector,
                         bool _bUseAsIndex
                     ) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector,_bUseAsIndex)
-                        ,m_aColumns(_rColumns)
+                        ,m_aColumns(std::move(_xColumns))
     {
     }
 

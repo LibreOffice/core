@@ -22,6 +22,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/FValue.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <utility>
 
 namespace dbaccess
 {
@@ -36,8 +37,8 @@ namespace dbaccess
         ORowSetOldRowHelper& operator=(const ORowSetOldRowHelper& _rRH) = delete;
         ORowSetOldRowHelper(const ORowSetOldRowHelper& _rRh) = delete;
     public:
-        explicit ORowSetOldRowHelper(const ORowSetRow& _rRow)
-            : m_aRow(_rRow)
+        explicit ORowSetOldRowHelper(ORowSetRow _aRow)
+            : m_aRow(std::move(_aRow))
         {}
 
         const ORowSetRow& getRow() const { return m_aRow; }

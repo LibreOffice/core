@@ -39,7 +39,7 @@ private:
 public:
     DynamicResultSet(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const rtl::Reference< ODocumentContainer >& rxContent,
+            rtl::Reference< ODocumentContainer > xContent,
             const css::ucb::OpenCommandArgument2& rCommand,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
 };

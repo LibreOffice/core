@@ -25,6 +25,7 @@
 #include <TableDesignView.hxx>
 #include <FieldDescriptions.hxx>
 #include <svx/svxids.hrc>
+#include <utility>
 
 using namespace dbaui;
 using namespace ::svt;
@@ -116,11 +117,11 @@ OTableEditorUndoAct::~OTableEditorUndoAct()
 {
 }
 
-OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, sal_Int32 nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType )
+OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, sal_Int32 nRowID, sal_uInt16 nColumn, TOTypeInfoSP _pOldType )
     :OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_TYPE_CHANGED)
     ,m_nCol( nColumn )
     ,m_nRow( nRowID )
-    ,m_pOldType( _pOldType )
+    ,m_pOldType(std::move( _pOldType ))
 {
 }
 

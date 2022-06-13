@@ -49,9 +49,9 @@ namespace dbaccess
                           const css::uno::Reference < css::sdbc::XRowUpdate >& _xRowUpdate,
                           sal_Int32 _nPos,
                           const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta,
-                          const OUString& _rDescription,
-                          const OUString& i_sLabel,
-                          const std::function<const ::connectivity::ORowSetValue& (sal_Int32)> &_getValue);
+                          OUString i_sDescription,
+                          OUString i_sLabel,
+                          std::function<const ::connectivity::ORowSetValue& (sal_Int32)> _getValue);
 
 
         // css::lang::XTypeProvider
@@ -84,7 +84,7 @@ namespace dbaccess
     public:
         ORowSetDataColumns(
                         bool _bCase,
-                        const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
+                        ::rtl::Reference< ::connectivity::OSQLColumns> _xColumns,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const std::vector< OUString> &_rVector

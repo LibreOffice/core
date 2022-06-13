@@ -22,6 +22,7 @@
 #include <strings.hrc>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
+#include <utility>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -50,8 +51,8 @@ namespace
         OUString m_defaultImageID;
 
     public:
-        explicit ImageProvider(const OUString& defaultImageID)
-            : m_defaultImageID(defaultImageID)
+        explicit ImageProvider(OUString defaultImageID)
+            : m_defaultImageID(std::move(defaultImageID))
         {
         }
 
@@ -555,9 +556,9 @@ void OSQLMessageBox::Construct(weld::Window* pParent, MessBoxStyle _nStyle, Mess
     impl_addDetailsButton();
 }
 
-OSQLMessageBox::OSQLMessageBox(weld::Window* pParent, const SQLExceptionInfo& rException, MessBoxStyle nStyle, const OUString& rHelpURL)
+OSQLMessageBox::OSQLMessageBox(weld::Window* pParent, const SQLExceptionInfo& rException, MessBoxStyle nStyle, OUString sHelpURL)
     : m_pImpl(new SQLMessageBox_Impl(rException))
-    , m_sHelpURL(rHelpURL)
+    , m_sHelpURL(std::move(sHelpURL))
 {
     Construct(pParent, nStyle, AUTO);
 }

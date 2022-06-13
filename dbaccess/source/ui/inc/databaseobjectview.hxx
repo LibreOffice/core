@@ -91,7 +91,7 @@ namespace dbaui
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
             const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& _rxApplication,
             const css::uno::Reference< css::frame::XFrame >& _rxParentFrame,
-            const OUString& _rComponentURL
+            OUString _sComponentURL
         );
         virtual ~DatabaseObjectView(){}
 

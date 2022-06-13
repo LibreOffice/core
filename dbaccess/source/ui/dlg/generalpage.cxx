@@ -25,6 +25,7 @@
 #include <dsitems.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/stritem.hxx>
@@ -76,7 +77,7 @@ namespace dbaui
             OUString eType;
             OUString sDisplayName;
 
-            DisplayedType( const OUString& _eType, const OUString& _rDisplayName ) : eType( _eType ), sDisplayName( _rDisplayName ) { }
+            DisplayedType( OUString _eType, OUString _sDisplayName ) : eType(std::move( _eType )), sDisplayName(std::move( _sDisplayName )) { }
         };
         typedef std::vector< DisplayedType > DisplayedTypes;
 

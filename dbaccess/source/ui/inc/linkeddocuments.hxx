@@ -53,7 +53,7 @@ namespace dbaui
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const css::uno::Reference< css::container::XNameAccess >& _rxContainer,
             const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-            const OUString& _sDataSourceName
+            OUString _sDataSourceName
         );
         ~OLinkedDocumentsAccess();
 

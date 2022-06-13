@@ -18,6 +18,7 @@
  */
 
 #include <TableConnectionData.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace dbaui;
@@ -27,10 +28,10 @@ OTableConnectionData::OTableConnectionData()
     Init();
 }
 
-OTableConnectionData::OTableConnectionData(const TTableWindowData::value_type& _pReferencingTable
-                                          ,const TTableWindowData::value_type& _pReferencedTable )
- :m_pReferencingTable(_pReferencingTable)
- ,m_pReferencedTable(_pReferencedTable)
+OTableConnectionData::OTableConnectionData(TTableWindowData::value_type _pReferencingTable
+                                          ,TTableWindowData::value_type _pReferencedTable )
+ :m_pReferencingTable(std::move(_pReferencingTable))
+ ,m_pReferencedTable(std::move(_pReferencedTable))
 {
     Init();
 }

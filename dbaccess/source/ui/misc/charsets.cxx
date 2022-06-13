@@ -23,6 +23,7 @@
 #include <strings.hrc>
 #include <rtl/tencinfo.h>
 #include <svx/txenctab.hxx>
+#include <utility>
 
 namespace dbaui
 {
@@ -86,17 +87,17 @@ namespace dbaui
     {
     }
 
-    CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const ::dbtools::CharsetIteratorDerefHelper& _rBase, const OUString& _rDisplayName)
+    CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const ::dbtools::CharsetIteratorDerefHelper& _rBase, OUString  _sDisplayName)
         :CharsetDisplayDerefHelper_Base(_rBase)
-        ,m_sDisplayName(_rDisplayName)
+        ,m_sDisplayName(std::move(_sDisplayName))
     {
         OSL_ENSURE( !m_sDisplayName.isEmpty(), "CharsetDisplayDerefHelper::CharsetDisplayDerefHelper: invalid display name!" );
     }
 
     // OCharsetDisplay::ExtendedCharsetIterator
-    OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator( const OCharsetDisplay* _pContainer, const base_iterator& _rPosition )
+    OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator( const OCharsetDisplay* _pContainer, base_iterator _aPosition )
         :m_pContainer(_pContainer)
-        ,m_aPosition(_rPosition)
+        ,m_aPosition(std::move(_aPosition))
     {
         OSL_ENSURE(m_pContainer, "OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator : invalid container!");
     }

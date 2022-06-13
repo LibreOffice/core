@@ -34,6 +34,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include "callbacks.hxx"
+#include <utility>
 #include <vcl/transfer.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include "TableCopyHelper.hxx"
@@ -74,7 +75,7 @@ namespace dbaui
             bool                        bEnabled;
 
             ExternalFeature() : bEnabled( false ) { }
-            ExternalFeature( const css::util::URL& _rURL ) : aURL( _rURL ), bEnabled( false ) { }
+            ExternalFeature( css::util::URL _aURL ) : aURL(std::move( _aURL )), bEnabled( false ) { }
         };
 
         typedef std::map< sal_uInt16, ExternalFeature >  ExternalFeaturesMap;

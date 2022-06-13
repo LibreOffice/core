@@ -36,6 +36,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/dbaobjectex.hxx>
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -300,8 +301,8 @@ namespace
     class SelectionSupplier : public SelectionSupplier_Base
     {
     public:
-        explicit SelectionSupplier( const Any& _rSelection )
-            :m_aSelection( _rSelection )
+        explicit SelectionSupplier( Any _aSelection )
+            :m_aSelection(std::move( _aSelection ))
         {
         }
 

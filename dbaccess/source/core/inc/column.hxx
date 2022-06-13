@@ -178,7 +178,7 @@ namespace dbaccess
         OColumns(
             ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex,
-            const css::uno::Reference< css::container::XNameAccess >& _rxDrvColumns,
+            css::uno::Reference< css::container::XNameAccess > _xDrvColumns,
             bool _bCaseSensitive,
             const std::vector< OUString> &_rVector,
             IColumnFactory* _pColFactory,
