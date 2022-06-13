@@ -27,20 +27,30 @@ class ToolBox;
 
 namespace sd
 {
-    class TitledDockingWindow : public SfxDockingWindow
+    class TitledDockingWindow final : public SfxDockingWindow
     {
     public:
+        /** Create a new docking window.
+            @param pBindings
+                Used, among others, to determine the ViewShellBase and
+                PaneManager that manage the new docking window.
+            @param pChildWindow
+                This child window is the logical container for the new docking
+                window.
+            @param pParent
+                The parent window of the new docking window.
+            @param rsTitle
+                the initial title
+        */
         TitledDockingWindow(
-            SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow,
-            vcl::Window* i_pParent
+            SfxBindings* i_pBindings,
+            SfxChildWindow* i_pChildWindow,
+            vcl::Window* i_pParent,
+            const OUString& rsTitle
         );
 
         virtual ~TitledDockingWindow() override;
         virtual void dispose() override;
-
-        /** sets a title to be displayed in the docking window
-        */
-        void        SetTitle( const OUString& i_rTitle );
 
         /** returns the content window, which is to be used as parent window for any content to be displayed
             in the docking window.
@@ -53,26 +63,36 @@ namespace sd
         */
         const SvBorder&  GetDecorationBorder() const  { return m_aBorder; }
 
-    protected:
+        /** When docked the given range is passed to the parent SplitWindow.
+        */
+        void SetValidSizeRange (const Range& rValidSizeRange);
+
+        enum Orientation { HorizontalOrientation, VerticalOrientation, UnknownOrientation };
+        /** When the TitledDockingWindow is docked and managed by a split window
+            it can derive its orientation from the orientation of the split
+            window and return either HorizontalOrientation or
+            VerticalOrientation.
+            Otherwise UnknownOrientation is returned.
+        */
+        Orientation GetOrientation() const;
+
+    private:
         // Window overridables
         virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& i_rArea) override;
         virtual void Resize() override;
         virtual void StateChanged( StateChangedType i_nType ) override;
         virtual void DataChanged( const DataChangedEvent& i_rDataChangedEvent ) override;
         virtual void SetText( const OUString& i_rText ) override;
-
+        virtual void MouseButtonDown (const MouseEvent& rEvent) override;
         virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
-    protected:
         /** internal version of ResetToolBox
         */
         void    impl_resetToolBox();
 
-    private:
         DECL_LINK(OnToolboxItemSelected, ToolBox*, void);
 
         void    impl_layout();
 
-    private:
         OUString            m_sTitle;
         VclPtr<ToolBox>     m_aToolbox;
         VclPtr<Window>      m_aContentWindow;

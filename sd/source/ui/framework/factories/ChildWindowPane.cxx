@@ -25,7 +25,7 @@
 
 #include "ChildWindowPane.hxx"
 
-#include <PaneDockingWindow.hxx>
+#include <titledockwin.hxx>
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -164,7 +164,7 @@ vcl::Window* ChildWindowPane::GetWindow()
 
         // From the child window get the docking window and from that the
         // content window that is the container for the actual content.
-        PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(
+        TitledDockingWindow* pDockingWindow = dynamic_cast<TitledDockingWindow*>(
             pChildWindow->GetWindow());
         if (pDockingWindow == nullptr)
             break;
