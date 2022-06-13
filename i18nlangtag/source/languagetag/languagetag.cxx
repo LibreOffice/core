@@ -18,7 +18,6 @@
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <rtl/locale.h>
-#include <tools/long.hxx>
 #include <o3tl/string_view.hxx>
 #include <algorithm>
 #include <map>
@@ -853,7 +852,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     std::unique_lock aGuard( theMutex());
 
 #if OSL_DEBUG_LEVEL > 0
-    static tools::Long nRunning = 0;
+    static sal_uInt64 nRunning = 0;
     // Entering twice here is ok, which is needed for fallback init in
     // getKnowns() in canonicalize() via pImpl->convertBcp47ToLocale() below,
     // everything else is suspicious.
