@@ -1203,11 +1203,11 @@ bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     const CommandWheelData* pWData = rCEvt.GetWheelData();
     if (pWData && CommandWheelMode::ZOOM == pWData->GetMode())
     {
-        tools::Long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
+        sal_uInt16 nFact = m_pWrtShell->GetViewOptions()->GetZoom();
         if( 0L > pWData->GetDelta() )
-            nFact = std::max( tools::Long(20), basegfx::zoomtools::zoomOut( nFact ));
+            nFact = std::max( static_cast<sal_uInt16>(20), basegfx::zoomtools::zoomOut( nFact ));
         else
-            nFact = std::min( tools::Long(600), basegfx::zoomtools::zoomIn( nFact ));
+            nFact = std::min( static_cast<sal_uInt16>(600), basegfx::zoomtools::zoomIn( nFact ));
 
         SetZoom( SvxZoomType::PERCENT, nFact );
         bOk = true;
