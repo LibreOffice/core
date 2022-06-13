@@ -37,6 +37,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/uno/Any.hxx>
@@ -50,20 +51,20 @@ namespace pq_sdbc_driver
 struct ColumnMetaData
 {
     ColumnMetaData(
-        const OUString &_columnName,
-        const OUString &_tableName,
-        const OUString &_schemaTableName,
-        const OUString &_typeName,
+        OUString _columnName,
+        OUString _tableName,
+        OUString _schemaTableName,
+        OUString _typeName,
         sal_Int32 _type,
         sal_Int32 _precision,
         sal_Int32 _scale,
         bool _isCurrency,
         bool _isNullable,
         bool _isAutoIncrement ) :
-        columnName( _columnName ),
-        tableName( _tableName ),
-        schemaTableName( _schemaTableName ),
-        typeName( _typeName ),
+        columnName(std::move( _columnName )),
+        tableName(std::move( _tableName )),
+        schemaTableName(std::move( _schemaTableName )),
+        typeName(std::move( _typeName )),
         type( _type ),
         precision( _precision ),
         scale( _scale ),

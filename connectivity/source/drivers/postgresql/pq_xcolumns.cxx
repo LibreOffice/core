@@ -50,6 +50,7 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
+#include <utility>
 
 #include "pq_xcolumns.hxx"
 #include "pq_xcolumn.hxx"
@@ -109,11 +110,11 @@ Columns::Columns(
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const OUString &schemaName,
-        const OUString &tableName)
+        OUString schemaName,
+        OUString tableName)
     : Container( refMutex, origin, pSettings,  "COLUMN" ),
-      m_schemaName( schemaName ),
-      m_tableName( tableName )
+      m_schemaName(std::move( schemaName )),
+      m_tableName(std::move( tableName ))
 {}
 
 Columns::~Columns()

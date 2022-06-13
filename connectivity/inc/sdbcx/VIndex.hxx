@@ -61,7 +61,7 @@ namespace connectivity::sdbcx
         public:
             OIndex(bool _bCase);
             OIndex( const OUString& Name,
-                    const OUString& Catalog,
+                    OUString Catalog,
                     bool _isUnique,
                     bool _isPrimaryKeyIndex,
                     bool _isClustered,

@@ -24,6 +24,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <TConnection.hxx>
+#include <utility>
 
 using namespace connectivity;
 using namespace connectivity::sdbcx;
@@ -58,10 +59,10 @@ OKey::OKey(bool _bCase) :   ODescriptor_BASE(m_aMutex)
 {
 }
 
-OKey::OKey(const OUString& Name,const std::shared_ptr<KeyProperties>& _rProps, bool _bCase)
+OKey::OKey(const OUString& Name,std::shared_ptr<KeyProperties> _xProps, bool _bCase)
 : ODescriptor_BASE(m_aMutex)
  ,ODescriptor(ODescriptor_BASE::rBHelper, _bCase)
- ,m_aProps(_rProps)
+ ,m_aProps(std::move(_xProps))
 {
     m_Name = Name;
 }

@@ -57,6 +57,7 @@
 #include <string_view>
 
 #include <connectivity/dbconversion.hxx>
+#include <utility>
 
 using osl::MutexGuard;
 
@@ -149,12 +150,12 @@ PreparedStatement::PreparedStatement(
     const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
     const Reference< XConnection > & conn,
     struct ConnectionSettings *pSettings,
-    const OString & stmt )
+    OString stmt )
     : PreparedStatement_BASE(refMutex->GetMutex())
     , OPropertySetHelper(PreparedStatement_BASE::rBHelper)
     , m_connection(conn)
     , m_pSettings(pSettings)
-    , m_stmt(stmt)
+    , m_stmt(std::move(stmt))
     , m_xMutex(refMutex)
     , m_multipleResultAvailable(false)
     , m_multipleResultUpdateCount(0)

@@ -41,7 +41,7 @@ namespace connectivity
         ParameterSubstitution( const ParameterSubstitution& ) = delete;
         ParameterSubstitution& operator=( const ParameterSubstitution& ) = delete;
     public:
-        ParameterSubstitution(const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
+        ParameterSubstitution(css::uno::Reference< css::uno::XComponentContext > _rContext );
     private:
 
         // XServiceInfo

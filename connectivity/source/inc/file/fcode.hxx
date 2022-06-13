@@ -25,6 +25,7 @@
 #include <file/filedllapi.hxx>
 
 #include <stack>
+#include <utility>
 
 namespace connectivity
 {
@@ -107,9 +108,9 @@ namespace connectivity
 
         protected:
             OOperandValue(){}
-            OOperandValue(const ORowSetValue& _rVar, sal_Int32 eDbType)
+            OOperandValue(ORowSetValue _aVar, sal_Int32 eDbType)
                 : OOperand(eDbType)
-                , m_aValue(_rVar)
+                , m_aValue(std::move(_aVar))
             {}
 
             OOperandValue(sal_Int32 eDbType) :OOperand(eDbType){}

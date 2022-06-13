@@ -89,13 +89,13 @@ class ResultSetMetaData :
 
 public:
     ResultSetMetaData(
-        const ::rtl::Reference< comphelper::RefCountedMutex > & reMutex,
-        const css::uno::Reference< css::sdbc::XResultSet >  & origin,
+        ::rtl::Reference< comphelper::RefCountedMutex > reMutex,
+        css::uno::Reference< css::sdbc::XResultSet > origin,
         ResultSet *pResultSet,
         ConnectionSettings **pSettings,
         PGresult const *pResult,
-        const OUString &schemaName,
-        const OUString &tableName );
+        OUString schemaName,
+        OUString tableName );
 
 public:
     // Methods

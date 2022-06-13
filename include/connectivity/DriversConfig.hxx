@@ -60,7 +60,7 @@ namespace connectivity
 
         const ::comphelper::NamedValueCollection& impl_get(std::u16string_view _sURL,sal_Int32 _nProps) const;
     public:
-        DriversConfig(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+        DriversConfig(css::uno::Reference< css::uno::XComponentContext > _xORB);
         ~DriversConfig();
 
         DriversConfig( const DriversConfig& );

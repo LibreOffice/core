@@ -72,8 +72,8 @@ public:
         const css::uno::Reference< css::uno::XInterface > &owner,
         ConnectionSettings **pSettings,
         PGresult *result,
-        const OUString &schema,
-        const OUString &table );
+        OUString schema,
+        OUString table );
     virtual ~ResultSet() override;
 
 public: // XCloseable

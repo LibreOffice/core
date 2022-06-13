@@ -20,6 +20,7 @@
 
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <utility>
 namespace connectivity::hsqldb
     {
         class OTables final : public sdbcx::OCollection
@@ -35,9 +36,9 @@ namespace connectivity::hsqldb
             void createTable( const css::uno::Reference< css::beans::XPropertySet >& descriptor );
             virtual OUString getNameForObject(const sdbcx::ObjectType& _xObject) override;
         public:
-            OTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+            OTables(css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const ::std::vector< OUString> &_rVector) : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
-                ,m_xMetaData(_rMetaData)
+                ,m_xMetaData(std::move(_xMetaData))
             {}
 
             // only the name is identical to ::cppu::OComponentHelper

@@ -44,7 +44,7 @@ namespace connectivity::dbase
 
         public:
             ONDXKey();
-            ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec);
+            ONDXKey(ORowSetValue aVal, sal_Int32 eType, sal_uInt32 nRec);
             ONDXKey(const OUString& aStr, sal_uInt32 nRec);
             ONDXKey(double aVal, sal_uInt32 nRec);
 

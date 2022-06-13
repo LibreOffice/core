@@ -38,8 +38,8 @@ namespace connectivity::mysql
         public:
             virtual void refreshGroups() override;
         public:
-            OMySQLUser(  const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
-            OMySQLUser(  const css::uno::Reference< css::sdbc::XConnection >& _xConnection,const OUString& Name);
+            OMySQLUser(  css::uno::Reference< css::sdbc::XConnection > _xConnection);
+            OMySQLUser(  css::uno::Reference< css::sdbc::XConnection > _xConnection, const OUString& Name);
 
             // XUser
             virtual void SAL_CALL changePassword( const OUString& objPassword, const OUString& newPassword ) override;

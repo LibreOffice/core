@@ -44,6 +44,7 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
+#include <utility>
 
 namespace pq_sdbc_driver
 {
@@ -78,13 +79,13 @@ private:
         std::vector< OUString >&& colNames,
         std::vector< std::vector< css::uno::Any > >&& data,
         ConnectionSettings **ppSettings,
-        const OUString &schema,
-        const OUString &table,
+        OUString schema,
+        OUString table,
         std::vector< OUString >&& primaryKey)
         : SequenceResultSet( mutex, owner, std::move(colNames), std::move(data), (*ppSettings)->tc ),
           m_ppSettings( ppSettings ),
-          m_schema( schema ),
-          m_table( table ),
+          m_schema(std::move( schema )),
+          m_table(std::move( table )),
           m_primaryKey( std::move(primaryKey) ),
           m_insertRow( false )
     {

@@ -76,9 +76,9 @@ namespace connectivity::sdbcx
 
             OColumn(    bool _bCase);
             OColumn(    const OUString& Name,
-                        const OUString& TypeName,
-                        const OUString& DefaultValue,
-                        const OUString& Description,
+                        OUString TypeName,
+                        OUString DefaultValue,
+                        OUString Description,
                         sal_Int32       IsNullable,
                         sal_Int32       Precision,
                         sal_Int32       Scale,
@@ -87,9 +87,9 @@ namespace connectivity::sdbcx
                         bool            IsRowVersion,
                         bool            IsCurrency,
                         bool            _bCase,
-                        const OUString& CatalogName,
-                        const OUString& SchemaName,
-                        const OUString& TableName);
+                        OUString CatalogName,
+                        OUString SchemaName,
+                        OUString TableName);
 
             DECLARE_SERVICE_INFO();
             //XInterface

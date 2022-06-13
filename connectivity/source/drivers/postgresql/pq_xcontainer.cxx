@@ -38,6 +38,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/safeint.hxx>
+#include <utility>
 
 #include "pq_xcontainer.hxx"
 #include "pq_statics.hxx"
@@ -136,14 +137,14 @@ public:
 
 Container::Container(
     const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
-    const css::uno::Reference< css::sdbc::XConnection >  & origin,
+    css::uno::Reference< css::sdbc::XConnection > origin,
     ConnectionSettings *pSettings,
-    const OUString &type)
+    OUString type)
     : ContainerBase( refMutex->GetMutex() ),
       m_xMutex( refMutex ),
       m_pSettings( pSettings ),
-      m_origin( origin ),
-      m_type( type )
+      m_origin(std::move( origin )),
+      m_type(std::move( type ))
 {
 }
 

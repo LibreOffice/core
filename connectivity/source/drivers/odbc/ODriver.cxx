@@ -24,6 +24,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
+#include <utility>
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
@@ -31,9 +32,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-ODBCDriver::ODBCDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
+ODBCDriver::ODBCDriver(css::uno::Reference< css::uno::XComponentContext > _xContext)
     :ODriver_BASE(m_aMutex)
-    ,m_xContext(_rxContext)
+    ,m_xContext(std::move(_xContext))
     ,m_pDriverHandle(SQL_NULL_HANDLE)
 {
 }

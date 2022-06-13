@@ -20,6 +20,7 @@
 #include <connectivity/sqlparse.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 
 namespace connectivity
 {
@@ -28,7 +29,7 @@ namespace connectivity
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star;
 
-    ParameterSubstitution::ParameterSubstitution(const css::uno::Reference< css::uno::XComponentContext >& _rxContext ) : m_xContext(_rxContext)
+    ParameterSubstitution::ParameterSubstitution(css::uno::Reference< css::uno::XComponentContext > _xContext ) : m_xContext(std::move(_xContext))
     {
     }
     void SAL_CALL ParameterSubstitution::initialize( const uno::Sequence< uno::Any >& _aArguments )

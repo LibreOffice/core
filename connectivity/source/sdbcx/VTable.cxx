@@ -25,6 +25,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 
 using namespace ::connectivity;
 using namespace ::connectivity::sdbcx;
@@ -65,14 +66,14 @@ OTable::OTable(OCollection* _pTables,
 
 OTable::OTable( OCollection*    _pTables,
                 bool            _bCase,
-                const OUString& Name,       const OUString& Type,
-                const OUString& Description,const OUString& SchemaName,
-                const OUString& CatalogName) :  OTableDescriptor_BASE(m_aMutex)
+                const OUString& Name,       OUString Type,
+                OUString Description, OUString SchemaName,
+                OUString CatalogName) :  OTableDescriptor_BASE(m_aMutex)
                 ,ODescriptor(OTableDescriptor_BASE::rBHelper,_bCase)
-                ,m_CatalogName(CatalogName)
-                ,m_SchemaName(SchemaName)
-                ,m_Description(Description)
-                ,m_Type(Type)
+                ,m_CatalogName(std::move(CatalogName))
+                ,m_SchemaName(std::move(SchemaName))
+                ,m_Description(std::move(Description))
+                ,m_Type(std::move(Type))
                 ,m_pTables(_pTables)
 {
     m_Name = Name;

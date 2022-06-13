@@ -156,7 +156,7 @@ namespace connectivity
     public:
         // if NULL, a default context will be used
         // the context must live as long as the parser
-        OSQLParser(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const IParseContext* _pContext = nullptr);
+        OSQLParser(css::uno::Reference< css::uno::XComponentContext > xContext, const IParseContext* _pContext = nullptr);
         ~OSQLParser();
 
         // Parsing an SQLStatement

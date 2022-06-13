@@ -23,6 +23,7 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <utility>
 
 namespace com::sun::star::sdbc { class SQLException; }
 namespace com::sun::star::sdbc { class SQLWarning; }
@@ -44,8 +45,8 @@ namespace dbtools
 
     public:
         WarningsContainer() {}
-        WarningsContainer( const css::uno::Reference< css::sdbc::XWarningsSupplier >& _rxExternalWarnings )
-            :m_xExternalWarnings( _rxExternalWarnings ) {}
+        WarningsContainer( css::uno::Reference< css::sdbc::XWarningsSupplier > _xExternalWarnings )
+            :m_xExternalWarnings(std::move( _xExternalWarnings )) {}
 
         void setExternalWarnings( const css::uno::Reference< css::sdbc::XWarningsSupplier >& _rxExternalWarnings )
         {

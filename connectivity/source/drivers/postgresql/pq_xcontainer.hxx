@@ -117,9 +117,9 @@ protected:
 public:
     Container(
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
-        const css::uno::Reference< css::sdbc::XConnection >  & origin,
+        css::uno::Reference< css::sdbc::XConnection > origin,
         ConnectionSettings *pSettings,
-        const OUString & type  // for exception messages
+        OUString type  // for exception messages
         );
 
 public: // XIndexAccess

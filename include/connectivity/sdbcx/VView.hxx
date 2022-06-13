@@ -61,13 +61,13 @@ namespace connectivity::sdbcx
         public:
             DECLARE_SERVICE_INFO();
 
-            OView(bool _bCase,const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData);
+            OView(bool _bCase, css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData);
             OView(  bool _bCase,
                     const OUString& _rName,
-                    const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData,
-                    const OUString& _rCommand = OUString(),
-                    const OUString& _rSchemaName = OUString(),
-                    const OUString& _rCatalogName = OUString());
+                    css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData,
+                    OUString _sCommand = OUString(),
+                    OUString _sSchemaName = OUString(),
+                    OUString _sCatalogName = OUString());
             virtual ~OView() override;
 
             // ODescriptor

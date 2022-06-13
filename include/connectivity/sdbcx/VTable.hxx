@@ -90,10 +90,10 @@ namespace connectivity::sdbcx
             OTable( OCollection*    _pTables,
                     bool _bCase,
                     const OUString& Name,
-                    const OUString& Type,
-                    const OUString& Description = OUString(),
-                    const OUString& SchemaName  = OUString(),
-                    const OUString& CatalogName = OUString());
+                    OUString Type,
+                    OUString Description = OUString(),
+                    OUString SchemaName  = OUString(),
+                    OUString CatalogName = OUString());
 
             virtual ~OTable() override;
 

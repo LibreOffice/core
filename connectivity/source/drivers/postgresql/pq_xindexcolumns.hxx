@@ -63,9 +63,9 @@ private:
         const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const OUString &schemaName,
-        const OUString &tableName,
-        const OUString &indexName,
+        OUString schemaName,
+        OUString tableName,
+        OUString indexName,
         const css::uno::Sequence< OUString > &columns );
 
     virtual ~IndexColumns() override;

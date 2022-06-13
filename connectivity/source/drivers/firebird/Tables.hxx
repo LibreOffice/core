@@ -13,6 +13,7 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
 #include <connectivity/sdbcx/VCollection.hxx>
+#include <utility>
 
 namespace connectivity::firebird
     {
@@ -40,10 +41,10 @@ namespace connectivity::firebird
                         const css::uno::Reference< css::beans::XPropertySet >& rDescriptor) override;
 
         public:
-            Tables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& rMetaData,
+            Tables(css::uno::Reference< css::sdbc::XDatabaseMetaData > xMetaData,
                    ::cppu::OWeakObject& rParent,
                    ::osl::Mutex& rMutex,
-                   ::std::vector< OUString> const & rNames) : sdbcx::OCollection(rParent, true, rMutex, rNames), m_xMetaData(rMetaData) {}
+                   ::std::vector< OUString> const & rNames) : sdbcx::OCollection(rParent, true, rMutex, rNames), m_xMetaData(std::move(xMetaData)) {}
 
             // TODO: we should also implement XDataDescriptorFactory, XRefreshable,
             // XAppend,  etc., but all are optional.

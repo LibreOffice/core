@@ -42,6 +42,7 @@
 
 #include <iterator>
 #include <memory>
+#include <utility>
 
 using namespace ::comphelper;
 using namespace ::connectivity;
@@ -120,9 +121,9 @@ namespace connectivity
         OUString                         m_sForbiddenQueryName;
 
     public:
-        ForbidQueryName( OSQLParseTreeIteratorImpl& _rIteratorImpl, const OUString& _rForbiddenQueryName )
+        ForbidQueryName( OSQLParseTreeIteratorImpl& _rIteratorImpl, OUString _aForbiddenQueryName )
             :m_rpAllForbiddenNames( _rIteratorImpl.m_pForbiddenQueryNames )
-            ,m_sForbiddenQueryName( _rForbiddenQueryName )
+            ,m_sForbiddenQueryName(std::move( _aForbiddenQueryName ))
         {
             if ( !m_rpAllForbiddenNames )
                 m_rpAllForbiddenNames = std::make_shared<QueryNameSet>();

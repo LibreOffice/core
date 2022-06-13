@@ -35,7 +35,7 @@ namespace connectivity::sdbcx
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         public:
             OKeyColumn(bool _bCase);
-            OKeyColumn( const OUString& ReferencedColumn,
+            OKeyColumn( OUString ReferencedColumn,
                             const OUString& Name,
                             const OUString& TypeName,
                             const OUString& DefaultValue,

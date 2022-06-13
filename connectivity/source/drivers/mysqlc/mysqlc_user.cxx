@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <utility>
+
 #include "mysqlc_user.hxx"
 
 using namespace ::connectivity;
@@ -16,16 +18,16 @@ using namespace ::connectivity::sdbcx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 
-User::User(const css::uno::Reference<css::sdbc::XConnection>& rConnection)
+User::User(css::uno::Reference<css::sdbc::XConnection> xConnection)
     : OUser(true) // Case Sensitive
-    , m_xConnection(rConnection)
+    , m_xConnection(std::move(xConnection))
 {
 }
 
-User::User(const css::uno::Reference<css::sdbc::XConnection>& rConnection, const OUString& rName)
+User::User(css::uno::Reference<css::sdbc::XConnection> xConnection, const OUString& rName)
     : OUser(rName,
             true) // Case Sensitive
-    , m_xConnection(rConnection)
+    , m_xConnection(std::move(xConnection))
 {
 }
 

@@ -42,7 +42,7 @@ namespace connectivity::file
                                                                                 //  for this Driver
             css::uno::Reference< css::uno::XComponentContext > m_xContext;
         public:
-            OFileDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+            OFileDriver(css::uno::Reference< css::uno::XComponentContext > _xContext);
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;

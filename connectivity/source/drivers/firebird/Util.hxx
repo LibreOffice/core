@@ -14,6 +14,7 @@
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
+#include <utility>
 
 namespace connectivity::firebird
     {
@@ -57,16 +58,16 @@ public:
              *
              */
             explicit ColumnTypeInfo( short aType, short aSubType = 0,
-                    short nScale = 0, const OUString& sCharset = OUString() )
+                    short nScale = 0, OUString sCharset = OUString() )
                 : m_aType(aType)
                 , m_aSubType(aSubType)
                 , m_nScale(nScale)
-                , m_sCharsetName(sCharset) {}
-            explicit ColumnTypeInfo( short aType, const OUString& sCharset )
+                , m_sCharsetName(std::move(sCharset)) {}
+            explicit ColumnTypeInfo( short aType, OUString sCharset )
                 : m_aType(aType)
                 , m_aSubType(0)
                 , m_nScale(0)
-                , m_sCharsetName(sCharset) {}
+                , m_sCharsetName(std::move(sCharset)) {}
             short getType() const { return m_aType; }
             short getSubType() const { return m_aSubType; }
             short getScale() const { return m_nScale; }

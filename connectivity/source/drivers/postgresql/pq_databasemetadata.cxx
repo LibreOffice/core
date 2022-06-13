@@ -84,6 +84,7 @@
 #include <com/sun/star/sdbc/IndexType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
+#include <utility>
 
 using ::osl::MutexGuard;
 
@@ -114,12 +115,12 @@ namespace pq_sdbc_driver
 #define DEFERRABILITY_NONE                7
 
 DatabaseMetaData::DatabaseMetaData(
-    const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,
-    const css::uno::Reference< css::sdbc::XConnection >  & origin,
+    ::rtl::Reference< comphelper::RefCountedMutex > refMutex,
+    css::uno::Reference< css::sdbc::XConnection > origin,
     ConnectionSettings *pSettings )
-  : m_xMutex( refMutex ),
+  : m_xMutex(std::move( refMutex )),
     m_pSettings( pSettings ),
-    m_origin( origin ),
+    m_origin(std::move( origin )),
     m_getIntSetting_stmt ( m_origin->prepareStatement("SELECT setting FROM pg_catalog.pg_settings WHERE name=?") )
 {
     init_getReferences_stmt();
@@ -1364,9 +1365,9 @@ namespace {
     {
         DatabaseTypeDescription()
         {}
-        DatabaseTypeDescription( const OUString &name, const OUString & type ) :
-            typeName( name ),
-            typeType( type )
+        DatabaseTypeDescription( OUString name, OUString type ) :
+            typeName(std::move( name )),
+            typeType(std::move( type ))
         {}
         DatabaseTypeDescription( const DatabaseTypeDescription &source ) :
             typeName( source.typeName ),

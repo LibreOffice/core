@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <utility>
 
 
 using namespace connectivity;
@@ -38,10 +39,10 @@ ONDXKey::ONDXKey()
 {
 }
 
-ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec)
+ONDXKey::ONDXKey(ORowSetValue aVal, sal_Int32 eType, sal_uInt32 nRec)
     : ONDXKey_BASE(eType)
     , nRecord(nRec)
-    , xValue(rVal)
+    , xValue(std::move(aVal))
 {
 }
 

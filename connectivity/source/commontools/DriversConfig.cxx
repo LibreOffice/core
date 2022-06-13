@@ -22,6 +22,7 @@
 #include <o3tl/string_view.hxx>
 #include <tools/wldcrd.hxx>
 #include <comphelper/sequence.hxx>
+#include <utility>
 
 using namespace connectivity;
 using namespace utl;
@@ -120,8 +121,8 @@ const TInstalledDrivers& DriversConfigImpl::getInstalledDrivers(const uno::Refer
     return m_aDrivers;
 }
 
-DriversConfig::DriversConfig(const uno::Reference< uno::XComponentContext >& _rxORB)
-:m_xORB(_rxORB)
+DriversConfig::DriversConfig(uno::Reference< uno::XComponentContext > _xORB)
+:m_xORB(std::move(_xORB))
 {
 }
 
