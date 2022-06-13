@@ -1093,7 +1093,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject()
                 {
                     // grow to the right size
                     Reference< XPersistObject > xEmpty;
-                    m_aPersistVector.insert( m_aPersistVector.end(), static_cast<size_t>(nId - nSize + 1), xEmpty );
+                    m_aPersistVector.insert( m_aPersistVector.end(), nId - nSize + 1, xEmpty );
                 }
 
                 m_aPersistVector[nId] = xLoadedObj;
