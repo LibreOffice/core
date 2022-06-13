@@ -191,7 +191,6 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mnZOrderOff(pSourceShape->mnZOrderOff)
 , mnDataNodeType(pSourceShape->mnDataNodeType)
 , mfAspectRatio(pSourceShape->mfAspectRatio)
-, mbUseBgFill(pSourceShape->mbUseBgFill)
 , mpDiagramHelper( nullptr )
 , msDiagramDataModelID(pSourceShape->msDiagramDataModelID)
 {}
@@ -1171,6 +1170,11 @@ Reference< XShape > const & Shape::createAndInsert(
         // available as property there, so store it in InteropGrabBag.
         putPropertyToGrabBag("mso-rotation-angle", Any(mnRotation));
 
+        if (getFillProperties().moUseBgFill.get(false))
+        {
+            xSet->setPropertyValue("FillUseSlideBackground", Any(true));
+        }
+
         if( pTheme )
         {
             if( const ShapeStyleRef* pLineRef = getShapeStyleRef( XML_lnRef ) )
@@ -1197,7 +1201,7 @@ Reference< XShape > const & Shape::createAndInsert(
             }
             if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
             {
-                if (!mbUseBgFill)
+                if (!getFillProperties().moUseBgFill.get(false))
                 {
                     nFillPhClr = pFillRef->maPhClr.getColor(rGraphicHelper);
                     nFillPhClrTheme = pFillRef->maPhClr.getSchemeColorIndex();

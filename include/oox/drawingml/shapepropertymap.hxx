@@ -70,6 +70,7 @@ enum class ShapeProperty
     FillBitmapRectanglePoint,
     FillHatch,                    ///< Explicit fill hatch or name of a fill hatch stored in a global container.
     FillBackground,
+    FillUseSlideBackground,
     FillBitmapName,
     ShadowXDistance,
     ShadowSizeX,
