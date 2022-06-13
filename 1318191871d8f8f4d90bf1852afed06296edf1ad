@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23396321_2ea4c10a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-06-13T09:34:06Z",
+      "side": 1,
+      "message": "Note that I should now finally have some time to look at those bugreports again, and I should have access to an Intel Mac.\n",
+      "revId": "1318191871d8f8f4d90bf1852afed06296edf1ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
