@@ -119,6 +119,9 @@ class ScVbaRange : public ScVbaRange_BASE
     /** Fires a Worksheet_Change event for this range or range list. */
     void fireChangeEvent();
 
+    /// @throws css::uno::RuntimeException
+    ScRange obtainRangeEvenIfRangeListIsEmpty( const ScCellRangesBase* pUnoRangesBase ) const;
+
 protected:
     virtual ScCellRangesBase* getCellRangesBase() override;
     /// @throws css::uno::RuntimeException
