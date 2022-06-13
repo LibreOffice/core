@@ -289,6 +289,7 @@
 //    class Svx3DCloseFrontItem : public SfxBoolItem
 //    class Svx3DCloseBackItem : public SfxBoolItem
 //    class XFillBackgroundItem : public SfxBoolItem
+//    class XFillUseSlideBackgroundItem : public SfxBoolItem
 //    class XFillBmpSizeLogItem : public SfxBoolItem
 //    class XFillBmpTileItem : public SfxBoolItem
 //    class XFillBmpStretchItem : public SfxBoolItem
