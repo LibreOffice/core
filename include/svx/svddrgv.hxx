@@ -45,19 +45,19 @@ protected:
     OUString                    maInsPointUndoStr;
     SdrHdlKind                  meDragHdl;
 
-    bool                        mbFramDrag : 1;        // currently frame dragging
-    bool                        mbMarkedHitMovesAlways : 1; // Persistent
-    bool                        mbDragLimit : 1;      // Limit on SnapRect instead of BoundRect
-    bool                        mbDragHdl : 1;        // TRUE: RefPt is slid
-    bool                        mbDragStripes : 1;    // Persistent
-    bool                        mbSolidDragging : 1;  // allow solid create/drag of objects
-    bool                        mbResizeAtCenter : 1;
-    bool                        mbCrookAtCenter : 1;
-    bool                        mbDragWithCopy : 1;
-    bool                        mbInsGluePoint : 1;
-    bool                        mbInsObjPointMode : 1;
-    bool                        mbInsGluePointMode : 1;
-    bool                        mbNoDragXorPolys : 1;
+    bool mbFramDrag : 1;        // currently frame dragging
+    bool mbMarkedHitMovesAlways : 1; // Persistent
+    bool mbDragLimit : 1;      // Limit on SnapRect instead of BoundRect
+    bool mbDragHdl : 1;        // TRUE: RefPt is slid
+    bool mbDragStripes : 1;    // Persistent
+    bool mbSolidDragging : 1;  // allow solid create/drag of objects
+    bool mbResizeAtCenter : 1;
+    bool mbCrookAtCenter : 1;
+    bool mbDragWithCopy : 1;
+    bool mbInsGluePoint : 1;
+    bool mbInsObjPointMode : 1;
+    bool mbInsGluePointMode : 1;
+    bool mbNoDragXorPolys : 1;
 
 protected:
     virtual void SetMarkHandles(SfxViewShell* pOtherShell) override;

@@ -102,36 +102,36 @@ protected:
     SdrObject*                  mpMarkedObj;       // If not just one object ( i.e. More than one object ) is marked.
     SdrPageView*                mpMarkedPV;        // If all marked objects are situated on the same PageView.
 
-    Point                       maRef1;            // Persistent - Rotation center / axis of reflection
-    Point                       maRef2;            // Persistent
-    SdrHdlList                  maHdlList;
+    Point maRef1; // Persistent - Rotation center / axis of reflection
+    Point maRef2; // Persistent
+    SdrHdlList maHdlList;
 
-    sdr::ViewSelection          maSdrViewSelection;
+    sdr::ViewSelection maSdrViewSelection;
 
     std::vector<basegfx::B2DRectangle> maSubSelectionList;
-    tools::Rectangle            maMarkedObjRect;
-    tools::Rectangle            maMarkedPointsRect;
-    tools::Rectangle            maMarkedGluePointsRect;
+    tools::Rectangle maMarkedObjRect;
+    tools::Rectangle maMarkedPointsRect;
+    tools::Rectangle maMarkedGluePointsRect;
 
     static constexpr sal_uInt16 mnFrameHandlesLimit = 50;
 
-    SdrDragMode                 meDragMode;      // Persistent
-    SdrViewEditMode             meEditMode;      // Persistent
-    SdrViewEditMode             meEditMode0;     // Persistent
+    SdrDragMode meDragMode; // Persistent
+    SdrViewEditMode meEditMode; // Persistent
+    SdrViewEditMode meEditMode0; // Persistent
 
-    bool                        mbDesignMode : 1;          // DesignMode for SdrUnoObj
-    bool                        mbForceFrameHandles : 1;   // Persistent - FrameDrag also for single objects
-    bool                        mbPlusHdlAlways : 1;       // Persistent
-    bool                        mbInsPolyPoint : 1;        // at this time InsPolyPointDragging
-    bool                        mbMarkedObjRectDirty : 1;
-    bool                        mbMrkPntDirty : 1;
-    bool                        mbMarkedPointsRectsDirty : 1;
+    bool mbDesignMode : 1;          // DesignMode for SdrUnoObj
+    bool mbForceFrameHandles : 1;   // Persistent - FrameDrag also for single objects
+    bool mbPlusHdlAlways : 1;       // Persistent
+    bool mbInsPolyPoint : 1;        // at this time InsPolyPointDragging
+    bool mbMarkedObjRectDirty : 1;
+    bool mbMrkPntDirty : 1;
+    bool mbMarkedPointsRectsDirty : 1;
 
     // flag to completely disable handles at the view
-    bool                        mbMarkHandlesHidden : 1;
+    bool mbMarkHandlesHidden : 1;
 
     // flag indicating whether all x coordinates are negated or not
-    bool                        mbNegativeX : 1;
+    bool mbNegativeX : 1;
 
     // Helper to get a possible GridOffset from SdrObject
     bool getPossibleGridOffsetForSdrObject(

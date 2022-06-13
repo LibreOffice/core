@@ -60,8 +60,8 @@ enum class SdrEndTextEditKind
 
 class SVXCORE_DLLPUBLIC SdrObjEditView : public SdrGlueEditView, public EditViewCallbacks
 {
-    friend class                SdrPageView;
-    friend class                ImpSdrEditPara;
+    friend class SdrPageView;
+    friend class ImpSdrEditPara;
 
     // Now derived from EditViewCallbacks and overriding these callbacks to
     // allow own EditText visualization
