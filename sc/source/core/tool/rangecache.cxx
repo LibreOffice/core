@@ -52,11 +52,9 @@ static ScSortedRangeCache::ValueType toValueType(const ScQueryParam& param)
 }
 
 ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
-                                       const ScQueryParam& param, ScSortedRangeCacheMap& cacheMap,
-                                       ScInterpreterContext* context)
+                                       const ScQueryParam& param, ScInterpreterContext* context)
     : maRange(rRange)
     , mpDoc(pDoc)
-    , mCacheMap(cacheMap)
     , mDescending(needsDescending(param))
     , mValues(toValueType(param))
 {
