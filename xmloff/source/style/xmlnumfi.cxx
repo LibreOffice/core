@@ -454,9 +454,9 @@ SvXMLNumFmtEmbeddedTextContext::SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rIm
 
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        if ( aIter.getToken() == XML_ELEMENT(NUMBER, XML_POSITION) )
+        if ( aIter.getToken() == XML_ELEMENT(NUMBER, XML_POSITION) || aIter.getToken() == XML_ELEMENT(LO_EXT, XML_POSITION) )
         {
-            if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
+            if (::sax::Converter::convertNumber( nAttrVal, aIter.toView() ))
                 nTextPosition = nAttrVal;
         }
         else
@@ -1745,10 +1745,21 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         }
     }
 
+    if ( ( rInfo.bDecReplace || rInfo.nMinDecimalDigits < rInfo.nDecimals ) && nPrec )     // add decimal replacement (dashes)
+    {
+        //  add dashes for explicit decimal replacement, # or ? for variable decimals
+        sal_Unicode cAdd = rInfo.bDecReplace ? '-' : ( rInfo.bDecAlign ? '?': '#' );
+
+        if ( rInfo.nMinDecimalDigits == 0 )
+            aNumStr.append( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
+        for ( sal_uInt16 i=rInfo.nMinDecimalDigits; i<nPrec; i++)
+            aNumStr.append( cAdd );
+    }
+
     if ( nEmbeddedCount )
     {
         //  insert embedded strings into number string
-        //  only the integer part is supported
+        //  support integer (position >=0) and decimal (position <0) part
         //  nZeroPos is the string position where format position 0 is inserted
 
         sal_Int32 nZeroPos = aNumStr.indexOf( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
@@ -1777,7 +1788,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         {
             sal_Int32 const nFormatPos = it.first;
             sal_Int32 nInsertPos = nZeroPos - nFormatPos;
-            if ( nFormatPos >= 0 && nInsertPos >= 0 )
+            if ( nInsertPos >= 0 )
             {
                 //  #107805# always quote embedded strings - even space would otherwise
                 //  be recognized as thousands separator in French.
@@ -1790,17 +1801,6 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     }
 
     aFormatCode.append( aNumStr );
-
-    if ( ( rInfo.bDecReplace || rInfo.nMinDecimalDigits < rInfo.nDecimals ) && nPrec )     // add decimal replacement (dashes)
-    {
-        //  add dashes for explicit decimal replacement, # or ? for variable decimals
-        sal_Unicode cAdd = rInfo.bDecReplace ? '-' : ( rInfo.bDecAlign ? '?': '#' );
-
-        if ( rInfo.nMinDecimalDigits == 0 )
-            aFormatCode.append( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
-        for ( sal_uInt16 i=rInfo.nMinDecimalDigits; i<nPrec; i++)
-            aFormatCode.append( cAdd );
-    }
 
     //  add extra thousands separators for display factor
 
