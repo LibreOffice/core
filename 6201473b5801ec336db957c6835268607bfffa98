@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1322ac80_bfac20fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T10:17:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "faabc4f8_90c1f8db",
+      "revId": "6201473b5801ec336db957c6835268607bfffa98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68d27fd1_cedfb633",
@@ -59,6 +77,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "575b0cf8_f41d9c25",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T10:17:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68d27fd1_cedfb633",
+      "range": {
+        "startLine": 978,
+        "startChar": 37,
+        "endLine": 978,
+        "endChar": 41
+      },
+      "revId": "6201473b5801ec336db957c6835268607bfffa98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf8bdbe0_8235eb64",
@@ -72,6 +114,24 @@
       "writtenOn": "2022-06-14T09:12:51Z",
       "side": 1,
       "message": "* The parameter should be of forwarding reference type, so that code like `b \u003c\u003c OUString::number(1)` compiles.\n\n* Nitpick: `inline` is redundant noise here.\n\n* Nitpick: The parameter is more a \"value\" than a \"type\".",
+      "revId": "6201473b5801ec336db957c6835268607bfffa98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ab79569_4bd207bd",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T10:17:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf8bdbe0_8235eb64",
       "revId": "6201473b5801ec336db957c6835268607bfffa98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
