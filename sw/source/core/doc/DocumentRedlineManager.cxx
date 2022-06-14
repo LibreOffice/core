@@ -283,6 +283,12 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
                 break;
             }
 
+            // no nodes can be unmerged by this - skip MakeFrames() etc.
+            if (rPam.GetPoint()->nNode == rPam.GetMark()->nNode)
+            {
+                break; // continue with AppendAllObjs()
+            }
+
             // first, call CheckParaRedlineMerge on the first paragraph,
             // to init flag on new merge range (if any) + 1st node post the merge
             auto eMode(sw::FrameMode::Existing);
