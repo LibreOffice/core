@@ -6721,7 +6721,9 @@ uno::Reference<sheet::XSheetCellCursor> SAL_CALL ScTableSheetObj::createCursorBy
         if (pRangesImp)
         {
             const ScRangeList& rRanges = pRangesImp->GetRangeList();
-            OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
+            SAL_WARN_IF( rRanges.size() != 1, "sc", "ScTableSheetObj::createCursorByRange: Range? Ranges?");
+            if (rRanges.empty())
+                return nullptr;
             return new ScCellCursorObj( pDocSh, rRanges[ 0 ] );
         }
     }
