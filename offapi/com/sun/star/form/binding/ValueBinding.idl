@@ -77,7 +77,7 @@ service ValueBinding
 
     /** allows life time control for the component
 
-        <p>An ValueBinding may be known to one ore more components
+        <p>An ValueBinding may be known to one or more components
         supporting the XBindableValue interface, which all work with
         this binding. However, they will not <em>own</em> the ValueBinding.
         The ownership is with another instance, which may also decide to obsolete
