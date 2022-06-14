@@ -542,8 +542,10 @@ Color CalcColor( double nVal, double nVal1, const Color& rCol1, double nVal2, co
 double GetPercentile( const std::vector<double>& rArray, double fPercentile )
 {
     size_t nSize = rArray.size();
-    size_t nIndex = static_cast<size_t>(::rtl::math::approxFloor( fPercentile * (nSize-1)));
-    double fDiff = fPercentile * (nSize-1) - ::rtl::math::approxFloor( fPercentile * (nSize-1));
+    double fFloor = ::rtl::math::approxFloor(fPercentile * (nSize-1));
+    SAL_WARN_IF(fFloor < 0, "sc", "negative percentile");
+    size_t nIndex = fFloor >= 0 ? static_cast<size_t>(fFloor) : 0;
+    double fDiff = fPercentile * (nSize-1) - fFloor;
     std::vector<double>::const_iterator iter = rArray.begin() + nIndex;
     if (fDiff == 0.0)
         return *iter;
