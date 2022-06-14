@@ -5702,6 +5702,7 @@ if test "$cross_compiling" = "yes"; then
         $sub_conf_defaults \
         --with-parallelism="'$with_parallelism'" \
         --with-theme="'$with_theme'" \
+        --with-vendor="'$with_vendor'" \
         $sub_conf_opts \
         $with_build_platform_configure_options \
         --srcdir=$srcdir
@@ -5710,6 +5711,7 @@ if test "$cross_compiling" = "yes"; then
         $sub_conf_defaults \
         --with-parallelism="$with_parallelism" \
         --with-theme="$with_theme" \
+        "--with-vendor=$with_vendor" \
         $sub_conf_opts \
         $with_build_platform_configure_options \
         --srcdir=$srcdir \
