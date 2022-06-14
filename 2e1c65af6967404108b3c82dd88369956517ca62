@@ -70,6 +70,24 @@
       "parentUuid": "5cb5846f_35a10782",
       "revId": "2e1c65af6967404108b3c82dd88369956517ca62",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c77505_412369b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T08:41:17Z",
+      "side": 1,
+      "message": "An other update, which looks small, but fixes Windows. It restores the old API behavior for connecting SalFrame and SalMenu. For whatever reason, SalFrame::SetMenu on Windows sets a native menu bar. Maybe that implementation should be removed, but then I don\u0027t know, if it\u0027s needed for some OLE handling. I just tested this a bit, because I was mainly working on un-maximizing at this time.",
+      "parentUuid": "c52e1670_e46be9f1",
+      "revId": "2e1c65af6967404108b3c82dd88369956517ca62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
