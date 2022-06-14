@@ -690,6 +690,9 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pCharBackgroundTransparency = nullptr;
     XMLPropertyState* pCharHighlight = nullptr;
 
+    XMLPropertyState* pFillStyle(nullptr);
+    XMLPropertyState* pFillColor(nullptr);
+
     bool bNeedsAnchor = false;
 
     for( auto& rPropertyState : rProperties )
@@ -844,10 +847,23 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             }
             break;
 
+        case CTF_FILLSTYLE:
+            pFillStyle = propertyState;
+            break;
+        case CTF_FILLBACKGROUND:
+            pFillBackground = propertyState;
+            break;
+
         case CTF_CHAR_BACKGROUND: pCharBackground = propertyState; break;
         case CTF_CHAR_BACKGROUND_TRANSPARENCY: pCharBackgroundTransparency = propertyState; break;
         case CTF_CHAR_HIGHLIGHT: pCharHighlight = propertyState; break;
         }
+    }
+
+    if (pFillBackground && pFillStyle
+        && pFillStyle->maValue.get<drawing::FillStyle> == FillStyle_NONE)
+    {
+        pFillBackground->mnIndex++; // HACK to change XML attribute
     }
 
     if( pRepeatOffsetX && pRepeatOffsetY )
