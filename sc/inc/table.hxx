@@ -1188,7 +1188,8 @@ private:
                        const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                        SCCOL nLastCol, SCROW nLastRow,
-                       const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc);
+                       const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc,
+                       std::vector< sc::ColumnBlockConstPosition >& blockPos);
     bool        SearchAll(const SvxSearchItem& rSearchItem, const ScMarkData& rMark,
                           ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
