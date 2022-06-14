@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be9cd375_ecfe1dcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T08:42:36Z",
+      "side": 1,
+      "message": "Should this be LO internal? Any reason not to add this?",
+      "revId": "6201473b5801ec336db957c6835268607bfffa98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
