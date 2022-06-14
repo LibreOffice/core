@@ -231,7 +231,7 @@ bool PluginHandler::ignoreLocation(SourceLocation loc) {
 bool PluginHandler::checkIgnoreLocation(SourceLocation loc)
 {
     // The tree-wide analysis plugins (like unusedmethods) don't want
-    // this logic, they only want to ignore externl code
+    // this logic, they only want to ignore external code
     if (!treeWideAnalysisMode)
     {
         // If a location comes from a PCH, it is not necessary to check it
