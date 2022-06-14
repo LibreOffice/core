@@ -33,6 +33,24 @@
       "message": "What is the purpose of SwPamRanges? It doesn\u0027t provide the same HasMark() as simply using the SwPaM ring. Is this perhaps old code that hasn\u0027t yet been converted to a newer concept?",
       "revId": "f8101a98beed3c328dabeb0965504310f963841e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "760a094c_bcfb96e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-14T06:47:29Z",
+      "side": 1,
+      "message": "An SwPaM contains SwPositions, which is a pair of SwNodeIndex and SwIndex. SwIndex is registered in the SwTextNode, so the SwTextNode knows the SwIndexes which point to them. This is needed in case you e.g. press a character at the start of the paragraph and you want to make sure that some character marked as bold later in the paragraph is still bold (e.g. 1-\u003e2 range is turned into 2-\u003e3 after typing at the start for the bold range). SwNodeIndex is similar, it\u0027s updated if you insert a new paragraph at the start of the document.\n\nIn contrast with SwPaM, SwPamRanges is list of SwPamRange and an SwPamRange is just a start/end pair of node index integers. So 1) it doesn\u0027t track character positions 2) it\u0027s not updated automatically.\n\nI\u0027m not sure if it would be possible to convert code using SwPamRanges to SwPaM, depends on if it\u0027s intentional to avoid this registration of node / character indexes or not. Does this help?",
+      "parentUuid": "3948e54c_2a9940f5",
+      "revId": "f8101a98beed3c328dabeb0965504310f963841e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
