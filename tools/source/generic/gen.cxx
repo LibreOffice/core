@@ -42,23 +42,6 @@ size_t Pair::GetHashValue() const
     return hash;
 }
 
-void tools::Rectangle::SetSize( const Size& rSize )
-{
-    if ( rSize.Width() < 0 )
-        nRight  = nLeft + rSize.Width() +1;
-    else if ( rSize.Width() > 0 )
-        nRight  = nLeft + rSize.Width() -1;
-    else
-        SetWidthEmpty();
-
-    if ( rSize.Height() < 0 )
-        nBottom  = nTop + rSize.Height() +1;
-    else if ( rSize.Height() > 0 )
-        nBottom  = nTop + rSize.Height() -1;
-    else
-        SetHeightEmpty();
-}
-
 void tools::Rectangle::SaturatingSetSize(const Size& rSize)
 {
     if (rSize.Width() < 0)
