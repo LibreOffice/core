@@ -1757,6 +1757,12 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
             </rng:choice>
           </rng:attribute>
         </rng:optional>
+        <!-- TODO no proposal for fill-use-slide-background - should perhaps be added as draw:fill value -->
+        <rng:optional>
+          <rng:attribute name="loext:fill-use-slide-background">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
         <rng:optional>
           <rng:attribute name="draw:fill-color">
             <rng:ref name="color"/>
