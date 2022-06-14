@@ -52,6 +52,24 @@
       "parentUuid": "e4d43843_1b519ab3",
       "revId": "86922db292f5708d2431959d15c5ceea70aee7fb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a93ab8c_23628d87",
+        "filename": "toolkit/source/helper/unowrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-14T08:05:51Z",
+      "side": 0,
+      "message": "if that works then that feels like a more natural fix",
+      "parentUuid": "e8266069_d40d878e",
+      "revId": "86922db292f5708d2431959d15c5ceea70aee7fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
