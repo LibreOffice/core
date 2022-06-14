@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97f71952_005e61b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-14T09:39:14Z",
+      "side": 1,
+      "message": "this makes the assert not fire without obvious side effects, maybe you\u0027ve some idea if we should do something different here.",
+      "revId": "59fc78d27078cb77aea278c5eca616099a33d7d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
