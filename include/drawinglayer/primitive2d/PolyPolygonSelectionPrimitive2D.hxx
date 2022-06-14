@@ -60,7 +60,7 @@ private:
 
 public:
     /// constructor
-    PolyPolygonSelectionPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+    PolyPolygonSelectionPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
                                     const basegfx::BColor& rColor, double fTransparence,
                                     double fDiscreteGrow, bool bFill);
 

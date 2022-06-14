@@ -78,7 +78,7 @@ namespace drawinglayer::processor3d
         public:
             Shadow3DExtractingProcessor(
                 const geometry::ViewInformation3D& rViewInformation,
-                const basegfx::B2DHomMatrix& rObjectTransformation,
+                basegfx::B2DHomMatrix aObjectTransformation,
                 const basegfx::B3DVector& rLightNormal,
                 double fShadowSlant,
                 const basegfx::B3DRange& rContained3DRange);

@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -76,15 +77,15 @@ protected:
     bool mbReducedDisplayQuality : 1;
 
 public:
-    ImpViewInformation2D(const basegfx::B2DHomMatrix& rObjectTransformation,
-                         const basegfx::B2DHomMatrix& rViewTransformation,
+    ImpViewInformation2D(basegfx::B2DHomMatrix aObjectTransformation,
+                         basegfx::B2DHomMatrix aViewTransformation,
                          const basegfx::B2DRange& rViewport,
-                         const uno::Reference<drawing::XDrawPage>& rxDrawPage, double fViewTime,
+                         uno::Reference<drawing::XDrawPage> xDrawPage, double fViewTime,
                          bool bReducedDisplayQuality)
-        : maObjectTransformation(rObjectTransformation)
-        , maViewTransformation(rViewTransformation)
+        : maObjectTransformation(std::move(aObjectTransformation))
+        , maViewTransformation(std::move(aViewTransformation))
         , maViewport(rViewport)
-        , mxVisualizedPage(rxDrawPage)
+        , mxVisualizedPage(std::move(xDrawPage))
         , mfViewTime(fViewTime)
         , mbReducedDisplayQuality(bReducedDisplayQuality)
     {

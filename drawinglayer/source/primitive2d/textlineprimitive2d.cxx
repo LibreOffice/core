@@ -24,6 +24,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonWavePrimitive2D.hxx>
+#include <utility>
 
 
 namespace drawinglayer::primitive2d
@@ -247,13 +248,13 @@ namespace drawinglayer::primitive2d
         }
 
         TextLinePrimitive2D::TextLinePrimitive2D(
-            const basegfx::B2DHomMatrix& rObjectTransformation,
+            basegfx::B2DHomMatrix aObjectTransformation,
             double fWidth,
             double fOffset,
             double fHeight,
             TextLine eTextLine,
             const basegfx::BColor& rLineColor)
-        :   maObjectTransformation(rObjectTransformation),
+        :   maObjectTransformation(std::move(aObjectTransformation)),
             mfWidth(fWidth),
             mfOffset(fOffset),
             mfHeight(fHeight),

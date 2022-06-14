@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -27,10 +28,10 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         MaskPrimitive2D::MaskPrimitive2D(
-            const basegfx::B2DPolyPolygon& rMask,
+            basegfx::B2DPolyPolygon aMask,
             Primitive2DContainer&& aChildren)
         :   GroupPrimitive2D(std::move(aChildren)),
-            maMask(rMask)
+            maMask(std::move(aMask))
         {
         }
 

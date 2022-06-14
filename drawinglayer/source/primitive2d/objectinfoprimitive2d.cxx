@@ -18,6 +18,7 @@
  */
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -25,13 +26,13 @@ namespace drawinglayer::primitive2d
 {
         ObjectInfoPrimitive2D::ObjectInfoPrimitive2D(
             Primitive2DContainer&& aChildren,
-            const OUString& rName,
-            const OUString& rTitle,
-            const OUString& rDesc)
+            OUString aName,
+            OUString aTitle,
+            OUString aDesc)
         :   GroupPrimitive2D(std::move(aChildren)),
-            maName(rName),
-            maTitle(rTitle),
-            maDesc(rDesc)
+            maName(std::move(aName)),
+            maTitle(std::move(aTitle)),
+            maDesc(std::move(aDesc))
         {
         }
 

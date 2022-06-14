@@ -56,7 +56,7 @@ private:
 
 public:
     /// constructor
-    PolyPolygonMarkerPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+    PolyPolygonMarkerPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
                                  const basegfx::BColor& rRGBColorA,
                                  const basegfx::BColor& rRGBColorB, double fDiscreteDashLength);
 

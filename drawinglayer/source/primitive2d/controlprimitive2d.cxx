@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <utility>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -241,20 +242,20 @@ namespace drawinglayer::primitive2d
         }
 
         ControlPrimitive2D::ControlPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform,
-            const uno::Reference< awt::XControlModel >& rxControlModel)
-        :   maTransform(rTransform),
-            mxControlModel(rxControlModel)
+            basegfx::B2DHomMatrix aTransform,
+            uno::Reference< awt::XControlModel > xControlModel)
+        :   maTransform(std::move(aTransform)),
+            mxControlModel(std::move(xControlModel))
         {
         }
 
         ControlPrimitive2D::ControlPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform,
-            const uno::Reference< awt::XControlModel >& rxControlModel,
-            const uno::Reference< awt::XControl >& rxXControl)
-        :   maTransform(rTransform),
-            mxControlModel(rxControlModel),
-            mxXControl(rxXControl)
+            basegfx::B2DHomMatrix aTransform,
+            uno::Reference< awt::XControlModel > xControlModel,
+            uno::Reference< awt::XControl > xXControl)
+        :   maTransform(std::move(aTransform)),
+            mxControlModel(std::move(xControlModel)),
+            mxXControl(std::move(xXControl))
         {
         }
 

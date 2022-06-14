@@ -29,6 +29,7 @@
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 #include <o3tl/safeint.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -375,16 +376,16 @@ private:
 
 public:
     RasterPrimitive3D(
-        const std::shared_ptr< drawinglayer::texture::GeoTexSvx >& pGeoTexSvx,
-        const std::shared_ptr< drawinglayer::texture::GeoTexSvx >& pTransparenceGeoTexSvx,
+        std::shared_ptr< drawinglayer::texture::GeoTexSvx > pGeoTexSvx,
+        std::shared_ptr< drawinglayer::texture::GeoTexSvx > pTransparenceGeoTexSvx,
         const drawinglayer::attribute::MaterialAttribute3D& rMaterial,
         const basegfx::B3DPolyPolygon& rPolyPolygon,
         bool bModulate,
         bool bFilter,
         bool bSimpleTextureActive,
         bool bIsLine)
-    :   mpGeoTexSvx(pGeoTexSvx),
-        mpTransparenceGeoTexSvx(pTransparenceGeoTexSvx),
+    :   mpGeoTexSvx(std::move(pGeoTexSvx)),
+        mpTransparenceGeoTexSvx(std::move(pTransparenceGeoTexSvx)),
         maMaterial(rMaterial),
         maPolyPolygon(rPolyPolygon),
         mfCenterZ(basegfx::utils::getRange(rPolyPolygon).getCenter().getZ()),

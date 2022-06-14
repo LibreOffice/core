@@ -22,6 +22,7 @@
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -43,9 +44,9 @@ void PolyPolygonHairlinePrimitive2D::create2DDecomposition(
     }
 }
 
-PolyPolygonHairlinePrimitive2D::PolyPolygonHairlinePrimitive2D(
-    const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rBColor)
-    : maPolyPolygon(rPolyPolygon)
+PolyPolygonHairlinePrimitive2D::PolyPolygonHairlinePrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
+                                                               const basegfx::BColor& rBColor)
+    : maPolyPolygon(std::move(aPolyPolygon))
     , maBColor(rBColor)
 {
 }

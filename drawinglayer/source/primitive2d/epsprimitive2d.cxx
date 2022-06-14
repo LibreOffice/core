@@ -20,6 +20,7 @@
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
+#include <utility>
 
 namespace drawinglayer::primitive2d
 {
@@ -41,11 +42,11 @@ namespace drawinglayer::primitive2d
         }
 
         EpsPrimitive2D::EpsPrimitive2D(
-            const basegfx::B2DHomMatrix& rEpsTransform,
-            const GfxLink& rGfxLink,
+            basegfx::B2DHomMatrix aEpsTransform,
+            GfxLink aGfxLink,
             const GDIMetaFile& rMetaFile)
-        :   maEpsTransform(rEpsTransform),
-            maGfxLink(rGfxLink),
+        :   maEpsTransform(std::move(aEpsTransform)),
+            maGfxLink(std::move(aGfxLink)),
             maMetaFile(rMetaFile)
         {
         }

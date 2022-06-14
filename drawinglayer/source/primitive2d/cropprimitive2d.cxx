@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -33,13 +34,13 @@ namespace drawinglayer::primitive2d
 {
         CropPrimitive2D::CropPrimitive2D(
             Primitive2DContainer&& aChildren,
-            const basegfx::B2DHomMatrix& rTransformation,
+            basegfx::B2DHomMatrix aTransformation,
             double fCropLeft,
             double fCropTop,
             double fCropRight,
             double fCropBottom)
         :   GroupPrimitive2D(std::move(aChildren)),
-            maTransformation(rTransformation),
+            maTransformation(std::move(aTransformation)),
             mfCropLeft(fCropLeft),
             mfCropTop(fCropTop),
             mfCropRight(fCropRight),

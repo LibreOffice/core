@@ -53,7 +53,7 @@ namespace drawinglayer::processor3d
         public:
             Geometry2DExtractingProcessor(
                 const geometry::ViewInformation3D& rViewInformation,
-                const basegfx::B2DHomMatrix& rObjectTransformation);
+                basegfx::B2DHomMatrix aObjectTransformation);
 
             // data read access
             const primitive2d::Primitive2DContainer& getPrimitive2DSequence() const { return maPrimitive2DSequence; }

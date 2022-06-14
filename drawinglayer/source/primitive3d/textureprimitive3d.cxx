@@ -20,6 +20,7 @@
 #include <primitive3d/textureprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -108,13 +109,13 @@ namespace drawinglayer::primitive3d
 
 
         GradientTexturePrimitive3D::GradientTexturePrimitive3D(
-            const attribute::FillGradientAttribute& rGradient,
+            attribute::FillGradientAttribute aGradient,
             const Primitive3DContainer& rChildren,
             const basegfx::B2DVector& rTextureSize,
             bool bModulate,
             bool bFilter)
         :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
-            maGradient(rGradient)
+            maGradient(std::move(aGradient))
         {
         }
 

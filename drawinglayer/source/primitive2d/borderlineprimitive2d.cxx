@@ -26,6 +26,7 @@
 #include <rtl/math.hxx>
 
 #include <algorithm>
+#include <utility>
 
 
 namespace drawinglayer::primitive2d
@@ -266,11 +267,11 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DPoint& rStart,
             const basegfx::B2DPoint& rEnd,
             std::vector< BorderLine >&& rBorderLines,
-            const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute)
+            drawinglayer::attribute::StrokeAttribute aStrokeAttribute)
         :   maStart(rStart),
             maEnd(rEnd),
             maBorderLines(std::move(rBorderLines)),
-            maStrokeAttribute(rStrokeAttribute)
+            maStrokeAttribute(std::move(aStrokeAttribute))
         {
         }
 

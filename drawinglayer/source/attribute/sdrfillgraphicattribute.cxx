@@ -23,6 +23,7 @@
 
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
+#include <utility>
 #include <vcl/graph.hxx>
 
 
@@ -44,7 +45,7 @@ namespace drawinglayer::attribute
             bool                                    mbLogSize : 1;
 
             ImpSdrFillGraphicAttribute(
-                const Graphic& rFillGraphic,
+                Graphic aFillGraphic,
                 const basegfx::B2DVector& rGraphicLogicSize,
                 const basegfx::B2DVector& rSize,
                 const basegfx::B2DVector& rOffset,
@@ -53,7 +54,7 @@ namespace drawinglayer::attribute
                 bool bTiling,
                 bool bStretch,
                 bool bLogSize)
-            :   maFillGraphic(rFillGraphic),
+            :   maFillGraphic(std::move(aFillGraphic)),
                 maGraphicLogicSize(rGraphicLogicSize),
                 maSize(rSize),
                 maOffset(rOffset),

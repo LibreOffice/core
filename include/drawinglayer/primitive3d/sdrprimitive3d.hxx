@@ -63,9 +63,9 @@ namespace drawinglayer
         public:
             /// constructor
             SdrPrimitive3D(
-                const basegfx::B3DHomMatrix& rTransform,
+                basegfx::B3DHomMatrix aTransform,
                 const basegfx::B2DVector& rTextureSize,
-                const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
+                attribute::SdrLineFillShadowAttribute3D aSdrLFSAttribute,
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute);
 
             /// data read access

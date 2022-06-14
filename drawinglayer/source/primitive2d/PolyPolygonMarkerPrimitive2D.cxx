@@ -22,6 +22,7 @@
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -44,10 +45,11 @@ void PolyPolygonMarkerPrimitive2D::create2DDecomposition(
     }
 }
 
-PolyPolygonMarkerPrimitive2D::PolyPolygonMarkerPrimitive2D(
-    const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rRGBColorA,
-    const basegfx::BColor& rRGBColorB, double fDiscreteDashLength)
-    : maPolyPolygon(rPolyPolygon)
+PolyPolygonMarkerPrimitive2D::PolyPolygonMarkerPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
+                                                           const basegfx::BColor& rRGBColorA,
+                                                           const basegfx::BColor& rRGBColorB,
+                                                           double fDiscreteDashLength)
+    : maPolyPolygon(std::move(aPolyPolygon))
     , maRGBColorA(rRGBColorA)
     , maRGBColorB(rRGBColorB)
     , mfDiscreteDashLength(fDiscreteDashLength)

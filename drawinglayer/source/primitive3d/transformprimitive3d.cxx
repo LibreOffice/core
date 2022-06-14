@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -27,10 +28,10 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive3d
 {
         TransformPrimitive3D::TransformPrimitive3D(
-            const basegfx::B3DHomMatrix& rTransformation,
+            basegfx::B3DHomMatrix aTransformation,
             const Primitive3DContainer& rChildren)
         :   GroupPrimitive3D(rChildren),
-            maTransformation(rTransformation)
+            maTransformation(std::move(aTransformation))
         {
         }
 

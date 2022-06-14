@@ -53,7 +53,7 @@ namespace drawinglayer::processor3d
             virtual void processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate);
 
         public:
-            explicit BaseProcessor3D(const geometry::ViewInformation3D& rViewInformation);
+            explicit BaseProcessor3D(geometry::ViewInformation3D aViewInformation);
             virtual ~BaseProcessor3D();
 
             // the central processing method

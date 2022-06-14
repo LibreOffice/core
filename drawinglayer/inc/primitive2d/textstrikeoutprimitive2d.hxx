@@ -42,7 +42,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             BaseTextStrikeoutPrimitive2D(
-                const basegfx::B2DHomMatrix& rObjectTransformation,
+                basegfx::B2DHomMatrix aObjectTransformation,
                 double fWidth,
                 const basegfx::BColor& rFontColor);
 
@@ -77,8 +77,8 @@ namespace drawinglayer::primitive2d
                 double fWidth,
                 const basegfx::BColor& rFontColor,
                 sal_Unicode aStrikeoutChar,
-                const attribute::FontAttribute& rFontAttribute,
-                const css::lang::Locale& rLocale);
+                attribute::FontAttribute aFontAttribute,
+                css::lang::Locale aLocale);
 
             /// data read access
             sal_Unicode getStrikeoutChar() const { return maStrikeoutChar; }

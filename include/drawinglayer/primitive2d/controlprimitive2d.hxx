@@ -72,16 +72,16 @@ private:
 
 public:
     /// constructor
-    ControlPrimitive2D(const basegfx::B2DHomMatrix& rTransform,
-                       const css::uno::Reference<css::awt::XControlModel>& rxControlModel);
+    ControlPrimitive2D(basegfx::B2DHomMatrix aTransform,
+                       css::uno::Reference<css::awt::XControlModel> xControlModel);
 
     /** constructor with an additional XControl as parameter to allow to hand it over at incarnation time
         if it exists. This will avoid to create a 2nd one on demand in createXControl()
         and thus double the XControls.
      */
-    ControlPrimitive2D(const basegfx::B2DHomMatrix& rTransform,
-                       const css::uno::Reference<css::awt::XControlModel>& rxControlModel,
-                       const css::uno::Reference<css::awt::XControl>& rxXControl);
+    ControlPrimitive2D(basegfx::B2DHomMatrix aTransform,
+                       css::uno::Reference<css::awt::XControlModel> xControlModel,
+                       css::uno::Reference<css::awt::XControl> xXControl);
 
     /// data read access
     const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }

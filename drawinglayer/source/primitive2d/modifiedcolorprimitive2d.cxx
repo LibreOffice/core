@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -28,9 +29,9 @@ namespace drawinglayer::primitive2d
 {
         ModifiedColorPrimitive2D::ModifiedColorPrimitive2D(
             Primitive2DContainer&& aChildren,
-            const basegfx::BColorModifierSharedPtr& rColorModifier)
+            basegfx::BColorModifierSharedPtr xColorModifier)
         :   GroupPrimitive2D(std::move(aChildren)),
-            maColorModifier(rColorModifier)
+            maColorModifier(std::move(xColorModifier))
         {
         }
 

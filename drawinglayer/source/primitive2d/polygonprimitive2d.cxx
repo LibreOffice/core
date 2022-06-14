@@ -28,14 +28,15 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <utility>
 
 using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-PolygonHairlinePrimitive2D::PolygonHairlinePrimitive2D(const basegfx::B2DPolygon& rPolygon,
+PolygonHairlinePrimitive2D::PolygonHairlinePrimitive2D(basegfx::B2DPolygon aPolygon,
                                                        const basegfx::BColor& rBColor)
-    : maPolygon(rPolygon)
+    : maPolygon(std::move(aPolygon))
     , maBColor(rBColor)
 {
 }
@@ -112,11 +113,11 @@ void PolygonMarkerPrimitive2D::create2DDecomposition(
     }
 }
 
-PolygonMarkerPrimitive2D::PolygonMarkerPrimitive2D(const basegfx::B2DPolygon& rPolygon,
+PolygonMarkerPrimitive2D::PolygonMarkerPrimitive2D(basegfx::B2DPolygon aPolygon,
                                                    const basegfx::BColor& rRGBColorA,
                                                    const basegfx::BColor& rRGBColorB,
                                                    double fDiscreteDashLength)
-    : maPolygon(rPolygon)
+    : maPolygon(std::move(aPolygon))
     , maRGBColorA(rRGBColorA)
     , maRGBColorB(rRGBColorB)
     , mfDiscreteDashLength(fDiscreteDashLength)
@@ -268,12 +269,12 @@ void PolygonStrokePrimitive2D::create2DDecomposition(
     }
 }
 
-PolygonStrokePrimitive2D::PolygonStrokePrimitive2D(
-    const basegfx::B2DPolygon& rPolygon, const attribute::LineAttribute& rLineAttribute,
-    const attribute::StrokeAttribute& rStrokeAttribute)
-    : maPolygon(rPolygon)
+PolygonStrokePrimitive2D::PolygonStrokePrimitive2D(basegfx::B2DPolygon aPolygon,
+                                                   const attribute::LineAttribute& rLineAttribute,
+                                                   attribute::StrokeAttribute aStrokeAttribute)
+    : maPolygon(std::move(aPolygon))
     , maLineAttribute(rLineAttribute)
-    , maStrokeAttribute(rStrokeAttribute)
+    , maStrokeAttribute(std::move(aStrokeAttribute))
 {
     // MM01: keep these - these are no curve-decompposers but just checks
     // simplify curve segments: moved here to not need to use it
@@ -281,9 +282,9 @@ PolygonStrokePrimitive2D::PolygonStrokePrimitive2D(
     maPolygon = basegfx::utils::simplifyCurveSegments(maPolygon);
 }
 
-PolygonStrokePrimitive2D::PolygonStrokePrimitive2D(const basegfx::B2DPolygon& rPolygon,
+PolygonStrokePrimitive2D::PolygonStrokePrimitive2D(basegfx::B2DPolygon aPolygon,
                                                    const attribute::LineAttribute& rLineAttribute)
-    : maPolygon(rPolygon)
+    : maPolygon(std::move(aPolygon))
     , maLineAttribute(rLineAttribute)
 {
     // MM01: keep these - these are no curve-decompposers but just checks

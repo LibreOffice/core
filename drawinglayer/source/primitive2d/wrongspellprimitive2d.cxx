@@ -22,6 +22,7 @@
 #include <drawinglayer/primitive2d/PolygonWavePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <utility>
 
 
 namespace drawinglayer::primitive2d
@@ -68,11 +69,11 @@ namespace drawinglayer::primitive2d
         }
 
         WrongSpellPrimitive2D::WrongSpellPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransformation,
+            basegfx::B2DHomMatrix aTransformation,
             double fStart,
             double fStop,
             const basegfx::BColor& rColor)
-        :   maTransformation(rTransformation),
+        :   maTransformation(std::move(aTransformation)),
             mfStart(fStart),
             mfStop(fStop),
             maColor(rColor)

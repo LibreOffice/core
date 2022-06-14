@@ -61,7 +61,7 @@ private:
 
 public:
     /// constructor
-    PolygonMarkerPrimitive2D(const basegfx::B2DPolygon& rPolygon, const basegfx::BColor& rRGBColorA,
+    PolygonMarkerPrimitive2D(basegfx::B2DPolygon aPolygon, const basegfx::BColor& rRGBColorA,
                              const basegfx::BColor& rRGBColorB, double fDiscreteDashLength);
 
     /// data read access

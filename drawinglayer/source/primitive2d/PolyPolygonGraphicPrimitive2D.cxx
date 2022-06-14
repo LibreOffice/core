@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <utility>
 #include <vcl/graph.hxx>
 
 using namespace com::sun::star;
@@ -96,9 +97,9 @@ void PolyPolygonGraphicPrimitive2D::create2DDecomposition(
 }
 
 PolyPolygonGraphicPrimitive2D::PolyPolygonGraphicPrimitive2D(
-    const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
+    basegfx::B2DPolyPolygon aPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
     const attribute::FillGraphicAttribute& rFillGraphic)
-    : maPolyPolygon(rPolyPolygon)
+    : maPolyPolygon(std::move(aPolyPolygon))
     , maDefinitionRange(rDefinitionRange)
     , maFillGraphic(rFillGraphic)
 {

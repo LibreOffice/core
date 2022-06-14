@@ -23,6 +23,7 @@
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <rtl/ref.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -45,20 +46,19 @@ void PolyPolygonGradientPrimitive2D::create2DDecomposition(
 }
 
 PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(
-    const basegfx::B2DPolyPolygon& rPolyPolygon,
-    const attribute::FillGradientAttribute& rFillGradient)
+    const basegfx::B2DPolyPolygon& rPolyPolygon, attribute::FillGradientAttribute aFillGradient)
     : maPolyPolygon(rPolyPolygon)
     , maDefinitionRange(rPolyPolygon.getB2DRange())
-    , maFillGradient(rFillGradient)
+    , maFillGradient(std::move(aFillGradient))
 {
 }
 
 PolyPolygonGradientPrimitive2D::PolyPolygonGradientPrimitive2D(
-    const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
-    const attribute::FillGradientAttribute& rFillGradient)
-    : maPolyPolygon(rPolyPolygon)
+    basegfx::B2DPolyPolygon aPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
+    attribute::FillGradientAttribute aFillGradient)
+    : maPolyPolygon(std::move(aPolyPolygon))
     , maDefinitionRange(rDefinitionRange)
-    , maFillGradient(rFillGradient)
+    , maFillGradient(std::move(aFillGradient))
 {
 }
 

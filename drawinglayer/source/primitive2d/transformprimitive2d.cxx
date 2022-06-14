@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -27,10 +28,10 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         TransformPrimitive2D::TransformPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransformation,
+            basegfx::B2DHomMatrix aTransformation,
             Primitive2DContainer&& aChildren)
         :   GroupPrimitive2D(std::move(aChildren)),
-            maTransformation(rTransformation)
+            maTransformation(std::move(aTransformation))
         {
         }
 

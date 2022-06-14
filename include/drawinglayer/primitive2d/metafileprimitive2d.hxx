@@ -65,7 +65,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             MetafilePrimitive2D(
-                const basegfx::B2DHomMatrix& rMetaFileTransform,
+                basegfx::B2DHomMatrix aMetaFileTransform,
                 const GDIMetaFile& rMetaFile);
 
             /// data read access

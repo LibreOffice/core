@@ -25,6 +25,7 @@
 #include <comphelper/string.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <tools/debug.hxx>
+#include <utility>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -1476,11 +1477,10 @@ void VclProcessor2D::adaptTextToFillDrawMode() const
 // process support
 
 VclProcessor2D::VclProcessor2D(const geometry::ViewInformation2D& rViewInformation,
-                               OutputDevice& rOutDev,
-                               const basegfx::BColorModifierStack& rInitStack)
+                               OutputDevice& rOutDev, basegfx::BColorModifierStack aInitStack)
     : BaseProcessor2D(rViewInformation)
     , mpOutputDevice(&rOutDev)
-    , maBColorModifierStack(rInitStack)
+    , maBColorModifierStack(std::move(aInitStack))
     , mnPolygonStrokePrimitive2D(0)
     , mpObjectInfoPrimitive2D(nullptr)
 {

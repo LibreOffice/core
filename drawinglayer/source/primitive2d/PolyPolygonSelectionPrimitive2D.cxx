@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -70,9 +71,9 @@ void PolyPolygonSelectionPrimitive2D::create2DDecomposition(
 }
 
 PolyPolygonSelectionPrimitive2D::PolyPolygonSelectionPrimitive2D(
-    const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rColor,
-    double fTransparence, double fDiscreteGrow, bool bFill)
-    : maPolyPolygon(rPolyPolygon)
+    basegfx::B2DPolyPolygon aPolyPolygon, const basegfx::BColor& rColor, double fTransparence,
+    double fDiscreteGrow, bool bFill)
+    : maPolyPolygon(std::move(aPolyPolygon))
     , maColor(rColor)
     , mfTransparence(fTransparence)
     , mfDiscreteGrow(fabs(fDiscreteGrow))

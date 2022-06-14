@@ -61,7 +61,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             WrongSpellPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransformation,
+                basegfx::B2DHomMatrix aTransformation,
                 double fStart,
                 double fStop,
                 const basegfx::BColor& rColor);

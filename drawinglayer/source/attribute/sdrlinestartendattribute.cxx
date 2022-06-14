@@ -19,6 +19,7 @@
 
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <utility>
 
 
 namespace drawinglayer::attribute
@@ -38,16 +39,16 @@ namespace drawinglayer::attribute
             bool                                    mbEndCentered : 1;     // Line is centered on line end point
 
             ImpSdrLineStartEndAttribute(
-                const basegfx::B2DPolyPolygon& rStartPolyPolygon,
-                const basegfx::B2DPolyPolygon& rEndPolyPolygon,
+                basegfx::B2DPolyPolygon aStartPolyPolygon,
+                basegfx::B2DPolyPolygon aEndPolyPolygon,
                 double fStartWidth,
                 double fEndWidth,
                 bool bStartActive,
                 bool bEndActive,
                 bool bStartCentered,
                 bool bEndCentered)
-            :   maStartPolyPolygon(rStartPolyPolygon),
-                maEndPolyPolygon(rEndPolyPolygon),
+            :   maStartPolyPolygon(std::move(aStartPolyPolygon)),
+                maEndPolyPolygon(std::move(aEndPolyPolygon)),
                 mfStartWidth(fStartWidth),
                 mfEndWidth(fEndWidth),
                 mbStartActive(bStartActive),

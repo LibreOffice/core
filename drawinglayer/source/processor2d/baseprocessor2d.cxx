@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -30,8 +31,8 @@ namespace drawinglayer::processor2d
         {
         }
 
-        BaseProcessor2D::BaseProcessor2D(const geometry::ViewInformation2D& rViewInformation)
-        :   maViewInformation2D(rViewInformation)
+        BaseProcessor2D::BaseProcessor2D(geometry::ViewInformation2D aViewInformation)
+        :   maViewInformation2D(std::move(aViewInformation))
         {
         }
 

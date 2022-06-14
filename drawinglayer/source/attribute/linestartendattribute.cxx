@@ -20,6 +20,7 @@
 #include <drawinglayer/attribute/linestartendattribute.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <utility>
 
 
 namespace drawinglayer::attribute
@@ -35,10 +36,10 @@ namespace drawinglayer::attribute
 
             ImpLineStartEndAttribute(
                 double fWidth,
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                basegfx::B2DPolyPolygon aPolyPolygon,
                 bool bCentered)
             :   mfWidth(fWidth),
-                maPolyPolygon(rPolyPolygon),
+                maPolyPolygon(std::move(aPolyPolygon)),
                 mbCentered(bCentered)
             {
             }

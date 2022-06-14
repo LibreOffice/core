@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <primitive2d/graphicprimitivehelper2d.hxx>
+#include <utility>
 #include <vcl/graph.hxx>
 
 
@@ -91,9 +92,9 @@ namespace drawinglayer::primitive2d
         }
 
         FillGraphicPrimitive2D::FillGraphicPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransformation,
+            basegfx::B2DHomMatrix aTransformation,
             const attribute::FillGraphicAttribute& rFillGraphic)
-        :   maTransformation(rTransformation),
+        :   maTransformation(std::move(aTransformation)),
             maFillGraphic(rFillGraphic)
         {
         }

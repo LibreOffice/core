@@ -23,6 +23,7 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <rtl/ref.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -46,21 +47,22 @@ void PolyPolygonHatchPrimitive2D::create2DDecomposition(
 
 PolyPolygonHatchPrimitive2D::PolyPolygonHatchPrimitive2D(
     const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rBackgroundColor,
-    const attribute::FillHatchAttribute& rFillHatch)
+    attribute::FillHatchAttribute rFillHatch)
     : maPolyPolygon(rPolyPolygon)
     , maDefinitionRange(rPolyPolygon.getB2DRange())
     , maBackgroundColor(rBackgroundColor)
-    , maFillHatch(rFillHatch)
+    , maFillHatch(std::move(rFillHatch))
 {
 }
 
-PolyPolygonHatchPrimitive2D::PolyPolygonHatchPrimitive2D(
-    const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DRange& rDefinitionRange,
-    const basegfx::BColor& rBackgroundColor, const attribute::FillHatchAttribute& rFillHatch)
-    : maPolyPolygon(rPolyPolygon)
+PolyPolygonHatchPrimitive2D::PolyPolygonHatchPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
+                                                         const basegfx::B2DRange& rDefinitionRange,
+                                                         const basegfx::BColor& rBackgroundColor,
+                                                         attribute::FillHatchAttribute rFillHatch)
+    : maPolyPolygon(std::move(aPolyPolygon))
     , maDefinitionRange(rDefinitionRange)
     , maBackgroundColor(rBackgroundColor)
-    , maFillHatch(rFillHatch)
+    , maFillHatch(std::move(rFillHatch))
 {
 }
 

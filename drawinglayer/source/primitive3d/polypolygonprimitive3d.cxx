@@ -20,6 +20,7 @@
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -28,10 +29,10 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive3d
 {
         PolyPolygonMaterialPrimitive3D::PolyPolygonMaterialPrimitive3D(
-            const basegfx::B3DPolyPolygon& rPolyPolygon,
+            basegfx::B3DPolyPolygon aPolyPolygon,
             const attribute::MaterialAttribute3D& rMaterial,
             bool bDoubleSided)
-        :   maPolyPolygon(rPolyPolygon),
+        :   maPolyPolygon(std::move(aPolyPolygon)),
             maMaterial(rMaterial),
             mbDoubleSided(bDoubleSided)
         {

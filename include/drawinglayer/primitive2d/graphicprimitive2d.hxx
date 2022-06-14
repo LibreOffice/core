@@ -61,10 +61,9 @@ private:
 
 public:
     /// constructor(s)
-    GraphicPrimitive2D(const basegfx::B2DHomMatrix& rTransform, const GraphicObject& rGraphicObject,
+    GraphicPrimitive2D(basegfx::B2DHomMatrix aTransform, const GraphicObject& rGraphicObject,
                        const GraphicAttr& rGraphicAttr);
-    GraphicPrimitive2D(const basegfx::B2DHomMatrix& rTransform,
-                       const GraphicObject& rGraphicObject);
+    GraphicPrimitive2D(basegfx::B2DHomMatrix aTransform, const GraphicObject& rGraphicObject);
 
     /// data read access
     const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }

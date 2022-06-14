@@ -44,7 +44,7 @@ private:
 
 public:
     /// constructor
-    PolyPolygonColorPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+    PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
                                 const basegfx::BColor& rBColor);
 
     /// data read access

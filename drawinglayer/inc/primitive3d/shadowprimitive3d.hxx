@@ -48,7 +48,7 @@ namespace drawinglayer::primitive3d
         public:
             /// constructor
             ShadowPrimitive3D(
-                const basegfx::B2DHomMatrix& rShadowTransform,
+                basegfx::B2DHomMatrix aShadowTransform,
                 const basegfx::BColor& rShadowColor,
                 double fShadowTransparence,
                 bool bShadow3D,

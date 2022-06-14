@@ -83,9 +83,9 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             Embedded3DPrimitive2D(
-                const primitive3d::Primitive3DContainer& rxChildren3D,
-                const basegfx::B2DHomMatrix& rObjectTransformation,
-                const geometry::ViewInformation3D& rViewInformation3D,
+                primitive3d::Primitive3DContainer xChildren3D,
+                basegfx::B2DHomMatrix aObjectTransformation,
+                geometry::ViewInformation3D aViewInformation3D,
                 const basegfx::B3DVector& rLightNormal,
                 double fShadowSlant,
                 const basegfx::B3DRange& rScene3DRange);

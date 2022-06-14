@@ -28,6 +28,7 @@
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <primitive3d/textureprimitive3d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -141,9 +142,9 @@ namespace drawinglayer::processor3d
 
         Geometry2DExtractingProcessor::Geometry2DExtractingProcessor(
             const geometry::ViewInformation3D& rViewInformation,
-            const basegfx::B2DHomMatrix& rObjectTransformation)
+            basegfx::B2DHomMatrix aObjectTransformation)
         :   BaseProcessor3D(rViewInformation),
-            maObjectTransformation(rObjectTransformation),
+            maObjectTransformation(std::move(aObjectTransformation)),
             maBColorModifierStack()
         {
         }

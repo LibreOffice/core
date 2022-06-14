@@ -50,7 +50,7 @@ private:
 
 public:
     /// constructor
-    PolyPolygonHairlinePrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+    PolyPolygonHairlinePrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
                                    const basegfx::BColor& rBColor);
 
     /// data read access

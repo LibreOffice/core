@@ -26,6 +26,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
+#include <utility>
 #include <vector>
 
 
@@ -41,10 +42,10 @@ namespace drawinglayer::processor2d
 
         public:
             TextAsPolygonDataNode(
-                const basegfx::B2DPolyPolygon& rB2DPolyPolygon,
+                basegfx::B2DPolyPolygon aB2DPolyPolygon,
                 const basegfx::BColor& rBColor,
                 bool bIsFilled)
-            :   maB2DPolyPolygon(rB2DPolyPolygon),
+            :   maB2DPolyPolygon(std::move(aB2DPolyPolygon)),
                 maBColor(rBColor),
                 mbIsFilled(bIsFilled)
             {

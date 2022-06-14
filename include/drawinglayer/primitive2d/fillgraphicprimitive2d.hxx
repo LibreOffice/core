@@ -58,7 +58,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             FillGraphicPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransformation,
+                basegfx::B2DHomMatrix aTransformation,
                 const attribute::FillGraphicAttribute& rFillGraphic);
 
             /// data read access

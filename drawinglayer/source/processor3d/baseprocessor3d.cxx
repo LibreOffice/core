@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -29,8 +30,8 @@ namespace drawinglayer::processor3d
         {
         }
 
-        BaseProcessor3D::BaseProcessor3D(const geometry::ViewInformation3D& rViewInformation)
-        :   maViewInformation3D(rViewInformation)
+        BaseProcessor3D::BaseProcessor3D(geometry::ViewInformation3D aViewInformation)
+        :   maViewInformation3D(std::move(aViewInformation))
         {
         }
 
