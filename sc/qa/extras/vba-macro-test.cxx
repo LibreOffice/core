@@ -66,6 +66,7 @@ public:
     void testTdf131562();
     void testTdf107902();
     void testTdf90278();
+    void testTdf149531();
 
     CPPUNIT_TEST_SUITE(VBAMacroTest);
     CPPUNIT_TEST(testSimpleCopyAndPaste);
@@ -83,6 +84,7 @@ public:
     CPPUNIT_TEST(testTdf131562);
     CPPUNIT_TEST(testTdf107902);
     CPPUNIT_TEST(testTdf90278);
+    CPPUNIT_TEST(testTdf149531);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -743,6 +745,36 @@ void VBAMacroTest::testTdf90278()
     xDocSh->DoClose();
 }
 
+void VBAMacroTest::testTdf149531()
+{
+    OUString aFileName;
+    createFileURL(u"tdf149531.xls", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT(pFoundShell);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    uno::Any aRet;
+    uno::Sequence<sal_Int16> aOutParamIndex;
+    uno::Sequence<uno::Any> aOutParam;
+    uno::Sequence<uno::Any> aParams;
+
+    // Without the fix in place, this test would have crashed
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:VBAProject.Module1.SetColumnWidth?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    sal_uInt16 nWidth
+        = o3tl::convert(rDoc.GetColWidth(0, 0), o3tl::Length::twip, o3tl::Length::mm100);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(25749), nWidth);
+
+    pDocSh->DoClose();
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(VBAMacroTest);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
