@@ -72,6 +72,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "768b55a9_c44d03e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T11:47:41Z",
+      "side": 1,
+      "message": "\u003e \u003e the imagined scenario\n\u003e \n\u003e Hmm. I must say immediately that I didn\u0027t debug, so I may be wrong in my scenario (it may go through intermediate state that makes my scenario still following your invariants)? Still, from the UI (user) point of view, this scenario is possible (e.g., on Windows):\n\u003e \n\u003e 1. Normal -\u003e maximized (drag to e.g. left side of screen)\n\u003e 2. Maximized -\u003e full screen (using window system button)\n\u003e 3. Full screen -\u003e minimized (using system button)\n\u003e 4. Minimized -\u003e normal (using status bar context menu)\n\u003e \n\u003e Does this scenario fit?\n\nYes. But I\u0027m somehow happy that I\u0027m not the only one struggling with this. It feels I spend more time thinking about it then actually coding (but not waiting on full recompiles of LO when changing the tools::Rectangle on Linux and Windows...)\n\nI\u0027m not sure what your question really is, but this should be handled just fine.\n\nIt comes down to:\n\n\u003e For me the WindowState is represented by:\n\u003e - the normal position and size\n\u003e - the current non-normal state (full-screen | maximized | minimized / iconfified)\n\nWe need to save the position and size when we leave \"normal\" and restore it, when we enter normal. The saved \"normal\" is required when we quit LO, so we can correctly restore the window to it\u0027s original position and size and the restore the state. Actually most of the state transitions are done by the OS, so VCL must report the current state but keep the \"normal\" state updated.\n\nThis is all about fixing tdf#125543 in the end.",
+      "parentUuid": "43b0d827_2f113601",
+      "range": {
+        "startLine": 21,
+        "startChar": 40,
+        "endLine": 22,
+        "endChar": 33
+      },
+      "revId": "fbbbf627ad5378b307ef414b0e93fdac3c4a62c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "5441d912_6b0276bc",
