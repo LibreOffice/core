@@ -2014,6 +2014,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testHatchFill)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(30), getProperty<sal_Int32>(getShape(1), "FillTransparence"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testNestedGroupTextBoxCopyCrash)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf149550.docx");
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+    // This crashed here before the fix.
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_MESSAGE("Where is the doc, it crashed, isn't it?!", mxComponent);
+
+    auto pLayout = parseLayoutDump();
+    // There must be 2 textboxes!
+    assertXPath(pLayout, "/root/page/body/txt/anchored/fly[2]");
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCaptionShape)
 {
     createSwDoc();
