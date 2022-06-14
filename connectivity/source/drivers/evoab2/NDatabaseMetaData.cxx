@@ -300,7 +300,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
     ::osl::MutexGuard aGuard( m_aMutex );
 
     initFields();
-    for (sal_Int32 i = 0; i < static_cast<sal_Int32>(nFields); i++)
+    for (guint i = 0; i < nFields; i++)
     {
         if( match( columnNamePattern, getFieldName( i ), '\0' ) )
         {

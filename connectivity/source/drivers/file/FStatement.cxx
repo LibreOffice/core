@@ -38,6 +38,7 @@
 #include <connectivity/dbexception.hxx>
 #include <strings.hrc>
 #include <algorithm>
+#include <cstddef>
 
 namespace connectivity::file
 {
@@ -440,7 +441,7 @@ void OStatement_Base::createColumnMapping()
     // initialize the column index map (mapping select columns to table columns)
     ::rtl::Reference<connectivity::OSQLColumns> xColumns = m_aSQLIterator.getSelectColumns();
     m_aColMapping.resize(xColumns->size() + 1);
-    for (sal_Int32 i=0; i<static_cast<sal_Int32>(m_aColMapping.size()); ++i)
+    for (std::size_t i=0; i<m_aColMapping.size(); ++i)
         m_aColMapping[i] = i;
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
