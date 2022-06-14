@@ -2762,7 +2762,10 @@ ScDPResultDimension::~ScDPResultDimension()
 ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
 {
     if( bIsDataLayout )
-        return maMemberArray[0].get();
+    {
+        SAL_WARN_IF(maMemberArray.empty(), "sc.core", "MemberArray is empty");
+        return !maMemberArray.empty() ? maMemberArray[0].get() : nullptr;
+    }
 
     MemberHash::const_iterator aRes = maMemberHash.find( iData );
     if( aRes != maMemberHash.end()) {
@@ -2969,8 +2972,11 @@ void ScDPResultDimension::LateInitFrom(
 
 long ScDPResultDimension::GetSize(long nMeasure) const
 {
-    long nTotal = 0;
     long nMemberCount = maMemberArray.size();
+    if (!nMemberCount)
+        return 0;
+
+    long nTotal = 0;
     if (bIsDataLayout)
     {
         OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
@@ -3123,7 +3129,7 @@ void ScDPResultDimension::SortMembers( ScDPResultMember* pRefMember )
     // handle children
 
     // for data layout, call only once - sorting measure is always taken from settings
-    long nLoopCount = bIsDataLayout ? 1 : nCount;
+    long nLoopCount = bIsDataLayout ? std::min<long>(1, nCount) : nCount;
     for (long i=0; i<nLoopCount; i++)
     {
         ScDPResultMember* pMember = maMemberArray[i].get();
