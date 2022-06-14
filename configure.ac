@@ -5664,7 +5664,6 @@ if test "$cross_compiling" = "yes"; then
     test "$enable_wasm_strip" = "yes" && sub_conf_opts="$sub_conf_opts --enable-wasm-strip"
     test "${with_system_lockfile+set}" = set && sub_conf_opts="$sub_conf_opts --with-system-lockfile=${with_system_lockfile}"
     test "${enable_fuzzers}" = yes && sub_conf_opts="$sub_conf_opts --without-system-libxml"
-    test -n "$with_vendor" -a "$with_vendor" != "no" && sub_conf_opts="$sub_conf_opts --with-vendor=$with_vendor"
     if test "$_os" = "Emscripten"; then
         sub_conf_opts="$sub_conf_opts --without-system-libxml --without-system-fontconfig --without-system-freetype --without-system-zlib"
     fi
@@ -5702,6 +5701,7 @@ if test "$cross_compiling" = "yes"; then
         $sub_conf_defaults \
         --with-parallelism="'$with_parallelism'" \
         --with-theme="'$with_theme'" \
+        --with-vendor="'$with_vendor'" \
         $sub_conf_opts \
         $with_build_platform_configure_options \
         --srcdir=$srcdir
@@ -5710,6 +5710,7 @@ if test "$cross_compiling" = "yes"; then
         $sub_conf_defaults \
         --with-parallelism="$with_parallelism" \
         --with-theme="$with_theme" \
+        "--with-vendor=$with_vendor" \
         $sub_conf_opts \
         $with_build_platform_configure_options \
         --srcdir=$srcdir \
