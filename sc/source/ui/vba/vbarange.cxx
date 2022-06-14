@@ -1288,9 +1288,12 @@ uno::Reference< sheet::XSheetCellRange > lclExpandToMerged( const uno::Reference
     {
         aOldAddress = aNewAddress;
         uno::Reference< sheet::XSheetCellCursor > xCursor( xSheet->createCursorByRange( xNewCellRange ), uno::UNO_SET_THROW );
-        xCursor->collapseToMergedArea();
-        xNewCellRange.set( xCursor, uno::UNO_QUERY_THROW );
-        aNewAddress = lclGetRangeAddress( xNewCellRange );
+        if (xCursor.is())
+        {
+            xCursor->collapseToMergedArea();
+            xNewCellRange.set( xCursor, uno::UNO_QUERY_THROW );
+            aNewAddress = lclGetRangeAddress( xNewCellRange );
+        }
     }
     while( bRecursive && (aOldAddress != aNewAddress) );
     return xNewCellRange;
