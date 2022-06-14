@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6adec85c_518531b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T08:59:22Z",
+      "side": 1,
+      "message": "I didn\u0027t spend much time on this yet, as I was mainly working on Qt, where the following test now works:\n\n- start LO\n- maximize window\n- close LO\n- start LO \u003d\u003e window is maximized\n- un-maximize \u003d\u003e window has original position and size\n\nThis is basically tdf#125543; lot of VCL changes for a single bug...\n\nThe update needs to be made to WinSalFrame::SetWindowState to follow the same \"workflow\" then the QtFrame implementation. My \"vision\" is to have some SalFrame based function with new APIs to get/set the WindowState and otherwise use SetPosSize. Won\u0027t happen before tdf#125543 is resolved on all platforms.",
+      "revId": "dd004265656ad139f577d037bfcec9df8f08f53f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
