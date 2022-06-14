@@ -54,10 +54,10 @@ private:
 public:
     /// constructors. The one without definition range will use output range as definition range
     PolyPolygonGradientPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
-                                   const attribute::FillGradientAttribute& rFillGradient);
-    PolyPolygonGradientPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                   attribute::FillGradientAttribute rFillGradient);
+    PolyPolygonGradientPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
                                    const basegfx::B2DRange& rDefinitionRange,
-                                   const attribute::FillGradientAttribute& rFillGradient);
+                                   attribute::FillGradientAttribute aFillGradient);
 
     /// data read access
     const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }

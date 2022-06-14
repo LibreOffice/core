@@ -45,8 +45,8 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             EpsPrimitive2D(
-                const basegfx::B2DHomMatrix& rEpsTransform,
-                const GfxLink& rGfxLink,
+                basegfx::B2DHomMatrix aEpsTransform,
+                GfxLink aGfxLink,
                 const GDIMetaFile& rMetaFile);
 
             /// data read access

@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -28,9 +29,9 @@ namespace drawinglayer::primitive3d
 {
         ModifiedColorPrimitive3D::ModifiedColorPrimitive3D(
             const Primitive3DContainer& rChildren,
-            const basegfx::BColorModifierSharedPtr& rColorModifier)
+            basegfx::BColorModifierSharedPtr xColorModifier)
         :   GroupPrimitive3D(rChildren),
-            maColorModifier(rColorModifier)
+            maColorModifier(std::move(xColorModifier))
         {
         }
 

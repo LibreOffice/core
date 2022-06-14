@@ -55,7 +55,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             TransformPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransformation,
+                basegfx::B2DHomMatrix aTransformation,
                 Primitive2DContainer&& rChildren);
 
             /// data read access

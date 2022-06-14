@@ -54,11 +54,11 @@ private:
 
 public:
     /// constructor
-    PolyPolygonStrokePrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+    PolyPolygonStrokePrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
                                  const attribute::LineAttribute& rLineAttribute,
-                                 const attribute::StrokeAttribute& rStrokeAttribute);
+                                 attribute::StrokeAttribute aStrokeAttribute);
 
-    PolyPolygonStrokePrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+    PolyPolygonStrokePrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
                                  const attribute::LineAttribute& rLineAttribute);
 
     /// data read access

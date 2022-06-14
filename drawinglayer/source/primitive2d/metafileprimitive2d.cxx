@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
+#include <utility>
 #include <wmfemfhelper.hxx>
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
@@ -86,9 +87,9 @@ namespace drawinglayer::primitive2d
         }
 
         MetafilePrimitive2D::MetafilePrimitive2D(
-            const basegfx::B2DHomMatrix& rMetaFileTransform,
+            basegfx::B2DHomMatrix aMetaFileTransform,
             const GDIMetaFile& rMetaFile)
-        :   maMetaFileTransform(rMetaFileTransform),
+        :   maMetaFileTransform(std::move(aMetaFileTransform)),
             maMetaFile(rMetaFile)
         {
         }

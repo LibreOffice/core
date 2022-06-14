@@ -23,6 +23,7 @@
 #include <com/sun/star/geometry/AffineMatrix3D.hpp>
 #include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -210,16 +211,16 @@ namespace drawinglayer::geometry
 
         public:
             ImpViewInformation3D(
-                const basegfx::B3DHomMatrix& rObjectTransformation,
-                const basegfx::B3DHomMatrix& rOrientation,
-                const basegfx::B3DHomMatrix& rProjection,
-                const basegfx::B3DHomMatrix& rDeviceToView,
+                basegfx::B3DHomMatrix aObjectTransformation,
+                basegfx::B3DHomMatrix aOrientation,
+                basegfx::B3DHomMatrix aProjection,
+                basegfx::B3DHomMatrix aDeviceToView,
                 double fViewTime,
                 const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
-            :   maObjectTransformation(rObjectTransformation),
-                maOrientation(rOrientation),
-                maProjection(rProjection),
-                maDeviceToView(rDeviceToView),
+            :   maObjectTransformation(std::move(aObjectTransformation)),
+                maOrientation(std::move(aOrientation)),
+                maProjection(std::move(aProjection)),
+                maDeviceToView(std::move(aDeviceToView)),
                 mfViewTime(fViewTime)
             {
                 impInterpretPropertyValues(rExtendedParameters);

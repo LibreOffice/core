@@ -21,14 +21,15 @@
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-PolyPolygonColorPrimitive2D::PolyPolygonColorPrimitive2D(
-    const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::BColor& rBColor)
-    : maPolyPolygon(rPolyPolygon)
+PolyPolygonColorPrimitive2D::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
+                                                         const basegfx::BColor& rBColor)
+    : maPolyPolygon(std::move(aPolyPolygon))
     , maBColor(rBColor)
 {
 }

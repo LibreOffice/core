@@ -36,6 +36,7 @@
 
 // helper class for animated graphics
 
+#include <utility>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
@@ -342,7 +343,7 @@ namespace drawinglayer::primitive2d
             /// constructor
             AnimatedGraphicPrimitive2D(
                 const Graphic& rGraphic,
-                const basegfx::B2DHomMatrix& rTransform);
+                basegfx::B2DHomMatrix aTransform);
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
@@ -358,12 +359,12 @@ namespace drawinglayer::primitive2d
 
         AnimatedGraphicPrimitive2D::AnimatedGraphicPrimitive2D(
             const Graphic& rGraphic,
-            const basegfx::B2DHomMatrix& rTransform)
+            basegfx::B2DHomMatrix aTransform)
         :   AnimatedSwitchPrimitive2D(
                 animation::AnimationEntryList(),
                 Primitive2DContainer(),
                 false),
-            maTransform(rTransform),
+            maTransform(std::move(aTransform)),
             maGraphic(rGraphic),
             maAnimation(rGraphic.GetAnimation()),
             maVirtualDevice(*Application::GetDefaultDevice()),

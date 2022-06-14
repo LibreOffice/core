@@ -62,8 +62,8 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             PagePreviewPrimitive2D(
-                const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage,
-                const basegfx::B2DHomMatrix& rTransform,
+                css::uno::Reference< css::drawing::XDrawPage > xDrawPage,
+                basegfx::B2DHomMatrix aTransform,
                 double fContentWidth,
                 double fContentHeight,
                 Primitive2DContainer&& rPageContent);

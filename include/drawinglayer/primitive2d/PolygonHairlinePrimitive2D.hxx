@@ -46,7 +46,7 @@ private:
 
 public:
     /// constructor
-    PolygonHairlinePrimitive2D(const basegfx::B2DPolygon& rPolygon, const basegfx::BColor& rBColor);
+    PolygonHairlinePrimitive2D(basegfx::B2DPolygon aPolygon, const basegfx::BColor& rBColor);
 
     /// data read access
     const basegfx::B2DPolygon& getB2DPolygon() const { return maPolygon; }

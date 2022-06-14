@@ -182,7 +182,7 @@ namespace drawinglayer::processor2d
 
         public:
             /// constructor/destructor
-            explicit BaseProcessor2D(const geometry::ViewInformation2D& rViewInformation);
+            explicit BaseProcessor2D(geometry::ViewInformation2D aViewInformation);
             virtual ~BaseProcessor2D();
 
             /// the central processing method

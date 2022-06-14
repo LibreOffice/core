@@ -22,6 +22,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -44,17 +45,17 @@ void PolyPolygonStrokePrimitive2D::create2DDecomposition(
 }
 
 PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(
-    const basegfx::B2DPolyPolygon& rPolyPolygon, const attribute::LineAttribute& rLineAttribute,
-    const attribute::StrokeAttribute& rStrokeAttribute)
-    : maPolyPolygon(rPolyPolygon)
+    basegfx::B2DPolyPolygon aPolyPolygon, const attribute::LineAttribute& rLineAttribute,
+    attribute::StrokeAttribute aStrokeAttribute)
+    : maPolyPolygon(std::move(aPolyPolygon))
     , maLineAttribute(rLineAttribute)
-    , maStrokeAttribute(rStrokeAttribute)
+    , maStrokeAttribute(std::move(aStrokeAttribute))
 {
 }
 
 PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(
-    const basegfx::B2DPolyPolygon& rPolyPolygon, const attribute::LineAttribute& rLineAttribute)
-    : maPolyPolygon(rPolyPolygon)
+    basegfx::B2DPolyPolygon aPolyPolygon, const attribute::LineAttribute& rLineAttribute)
+    : maPolyPolygon(std::move(aPolyPolygon))
     , maLineAttribute(rLineAttribute)
 {
 }

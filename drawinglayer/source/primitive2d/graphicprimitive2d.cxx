@@ -27,6 +27,7 @@
 #include <primitive2d/graphicprimitivehelper2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <utility>
 
 namespace drawinglayer::primitive2d
 {
@@ -170,18 +171,18 @@ void GraphicPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer,
     rContainer.append(std::move(aRetval));
 }
 
-GraphicPrimitive2D::GraphicPrimitive2D(const basegfx::B2DHomMatrix& rTransform,
+GraphicPrimitive2D::GraphicPrimitive2D(basegfx::B2DHomMatrix aTransform,
                                        const GraphicObject& rGraphicObject,
                                        const GraphicAttr& rGraphicAttr)
-    : maTransform(rTransform)
+    : maTransform(std::move(aTransform))
     , maGraphicObject(rGraphicObject)
     , maGraphicAttr(rGraphicAttr)
 {
 }
 
-GraphicPrimitive2D::GraphicPrimitive2D(const basegfx::B2DHomMatrix& rTransform,
+GraphicPrimitive2D::GraphicPrimitive2D(basegfx::B2DHomMatrix aTransform,
                                        const GraphicObject& rGraphicObject)
-    : maTransform(rTransform)
+    : maTransform(std::move(aTransform))
     , maGraphicObject(rGraphicObject)
 {
 }

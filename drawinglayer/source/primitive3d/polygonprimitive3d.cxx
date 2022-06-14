@@ -22,6 +22,7 @@
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <primitive3d/polygontubeprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -30,9 +31,9 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive3d
 {
         PolygonHairlinePrimitive3D::PolygonHairlinePrimitive3D(
-            const basegfx::B3DPolygon& rPolygon,
+            basegfx::B3DPolygon aPolygon,
             const basegfx::BColor& rBColor)
-        :   maPolygon(rPolygon),
+        :   maPolygon(std::move(aPolygon)),
             maBColor(rBColor)
         {
         }
@@ -117,12 +118,12 @@ namespace drawinglayer::primitive3d
         }
 
         PolygonStrokePrimitive3D::PolygonStrokePrimitive3D(
-            const basegfx::B3DPolygon& rPolygon,
+            basegfx::B3DPolygon aPolygon,
             const attribute::LineAttribute& rLineAttribute,
-            const attribute::StrokeAttribute& rStrokeAttribute)
-        :   maPolygon(rPolygon),
+            attribute::StrokeAttribute aStrokeAttribute)
+        :   maPolygon(std::move(aPolygon)),
             maLineAttribute(rLineAttribute),
-            maStrokeAttribute(rStrokeAttribute)
+            maStrokeAttribute(std::move(aStrokeAttribute))
         {
         }
 

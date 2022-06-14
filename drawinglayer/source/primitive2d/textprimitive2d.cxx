@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <primitive2d/texteffectprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace com::sun::star;
@@ -200,18 +201,17 @@ void TextSimplePortionPrimitive2D::create2DDecomposition(
 }
 
 TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
-    const basegfx::B2DHomMatrix& rNewTransform, const OUString& rText, sal_Int32 nTextPosition,
-    sal_Int32 nTextLength, std::vector<double>&& rDXArray,
-    const attribute::FontAttribute& rFontAttribute, const css::lang::Locale& rLocale,
-    const basegfx::BColor& rFontColor, bool bFilled, tools::Long nWidthToFill,
-    const Color& rTextFillColor)
-    : maTextTransform(rNewTransform)
-    , maText(rText)
+    basegfx::B2DHomMatrix rNewTransform, OUString rText, sal_Int32 nTextPosition,
+    sal_Int32 nTextLength, std::vector<double>&& rDXArray, attribute::FontAttribute aFontAttribute,
+    css::lang::Locale aLocale, const basegfx::BColor& rFontColor, bool bFilled,
+    tools::Long nWidthToFill, const Color& rTextFillColor)
+    : maTextTransform(std::move(rNewTransform))
+    , maText(std::move(rText))
     , mnTextPosition(nTextPosition)
     , mnTextLength(nTextLength)
     , maDXArray(std::move(rDXArray))
-    , maFontAttribute(rFontAttribute)
-    , maLocale(rLocale)
+    , maFontAttribute(std::move(aFontAttribute))
+    , maLocale(std::move(aLocale))
     , maFontColor(rFontColor)
     , mbFilled(bFilled)
     , mnWidthToFill(nWidthToFill)

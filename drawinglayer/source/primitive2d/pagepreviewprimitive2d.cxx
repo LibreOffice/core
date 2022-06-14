@@ -24,6 +24,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -101,14 +102,14 @@ namespace drawinglayer::primitive2d
         }
 
         PagePreviewPrimitive2D::PagePreviewPrimitive2D(
-            const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage,
-            const basegfx::B2DHomMatrix& rTransform,
+            css::uno::Reference< css::drawing::XDrawPage > xDrawPage,
+            basegfx::B2DHomMatrix aTransform,
             double fContentWidth,
             double fContentHeight,
             Primitive2DContainer&& rPageContent)
-        :   mxDrawPage(rxDrawPage),
+        :   mxDrawPage(std::move(xDrawPage)),
             maPageContent(std::move(rPageContent)),
-            maTransform(rTransform),
+            maTransform(std::move(aTransform)),
             mfContentWidth(fContentWidth),
             mfContentHeight(fContentHeight)
         {

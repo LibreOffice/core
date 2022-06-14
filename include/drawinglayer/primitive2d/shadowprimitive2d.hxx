@@ -58,7 +58,7 @@ namespace drawinglayer::primitive2d
     public:
             /// constructor
             ShadowPrimitive2D(
-                const basegfx::B2DHomMatrix& rShadowTransform,
+                basegfx::B2DHomMatrix aShadowTransform,
                 const basegfx::BColor& rShadowColor,
                 double fShadowBlur,
                 Primitive2DContainer&& aChildren);

@@ -51,7 +51,7 @@ namespace drawinglayer::primitive3d
         public:
             /// constructor
             PolyPolygonMaterialPrimitive3D(
-                const basegfx::B3DPolyPolygon& rPolyPolygon,
+                basegfx::B3DPolyPolygon aPolyPolygon,
                 const attribute::MaterialAttribute3D& rMaterial,
                 bool bDoubleSided);
 

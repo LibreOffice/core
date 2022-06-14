@@ -46,7 +46,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             TextLinePrimitive2D(
-                const basegfx::B2DHomMatrix& rObjectTransformation,
+                basegfx::B2DHomMatrix aObjectTransformation,
                 double fWidth,
                 double fOffset,
                 double fHeight,

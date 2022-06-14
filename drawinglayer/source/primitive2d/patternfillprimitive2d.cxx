@@ -29,6 +29,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <drawinglayer/converters.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -261,10 +262,10 @@ namespace drawinglayer::primitive2d
         }
 
         PatternFillPrimitive2D::PatternFillPrimitive2D(
-            const basegfx::B2DPolyPolygon& rMask,
+            basegfx::B2DPolyPolygon aMask,
             Primitive2DContainer&& rChildren,
             const basegfx::B2DRange& rReferenceRange)
-        :   maMask(rMask),
+        :   maMask(std::move(aMask)),
             maChildren(std::move(rChildren)),
             maReferenceRange(rReferenceRange),
             mnDiscreteWidth(0),

@@ -19,6 +19,7 @@
 
 #include <primitive3d/shadowprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -27,13 +28,13 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive3d
 {
         ShadowPrimitive3D::ShadowPrimitive3D(
-            const basegfx::B2DHomMatrix& rShadowTransform,
+            basegfx::B2DHomMatrix aShadowTransform,
             const basegfx::BColor& rShadowColor,
             double fShadowTransparence,
             bool bShadow3D,
             const Primitive3DContainer& rChildren)
         :   GroupPrimitive3D(rChildren),
-            maShadowTransform(rShadowTransform),
+            maShadowTransform(std::move(aShadowTransform)),
             maShadowColor(rShadowColor),
             mfShadowTransparence(fShadowTransparence),
             mbShadow3D(bShadow3D)

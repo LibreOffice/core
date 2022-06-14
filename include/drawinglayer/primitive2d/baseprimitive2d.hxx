@@ -32,6 +32,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 #include <deque>
+#include <utility>
 
 namespace drawinglayer::geometry
 {
@@ -177,8 +178,8 @@ class DRAWINGLAYERCORE_DLLPUBLIC UnoPrimitive2D final : public BasePrimitive2DIm
 
 public:
     // constructor/destructor
-    UnoPrimitive2D(const rtl::Reference<BasePrimitive2D>& rPrimitive)
-        : mxPrimitive(rPrimitive)
+    UnoPrimitive2D(rtl::Reference<BasePrimitive2D> xPrimitive)
+        : mxPrimitive(std::move(xPrimitive))
     {
     }
     virtual ~UnoPrimitive2D() override;

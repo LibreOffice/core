@@ -59,11 +59,11 @@ public:
     /// constructors. The one without definition range will use output range as definition range
     PolyPolygonHatchPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
                                 const basegfx::BColor& rBackgroundColor,
-                                const attribute::FillHatchAttribute& rFillHatch);
-    PolyPolygonHatchPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                attribute::FillHatchAttribute aFillHatch);
+    PolyPolygonHatchPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
                                 const basegfx::B2DRange& rDefinitionRange,
                                 const basegfx::BColor& rBackgroundColor,
-                                const attribute::FillHatchAttribute& rFillHatch);
+                                attribute::FillHatchAttribute aFillHatch);
 
     /// data read access
     const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }

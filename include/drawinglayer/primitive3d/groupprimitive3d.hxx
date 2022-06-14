@@ -54,7 +54,7 @@ namespace drawinglayer::primitive3d
 
         public:
             /// constructor
-            explicit GroupPrimitive3D(const Primitive3DContainer& rChildren);
+            explicit GroupPrimitive3D(Primitive3DContainer aChildren);
 
             /// data read access
             const Primitive3DContainer& getChildren() const { return maChildren; }

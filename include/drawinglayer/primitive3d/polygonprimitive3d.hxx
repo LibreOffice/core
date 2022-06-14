@@ -51,7 +51,7 @@ namespace drawinglayer::primitive3d
         public:
             /// constructor
             PolygonHairlinePrimitive3D(
-                const basegfx::B3DPolygon& rPolygon,
+                basegfx::B3DPolygon aPolygon,
                 const basegfx::BColor& rBColor);
 
             /// data read access
@@ -97,9 +97,9 @@ namespace drawinglayer::primitive3d
         public:
             /// constructor
             PolygonStrokePrimitive3D(
-                const basegfx::B3DPolygon& rPolygon,
+                basegfx::B3DPolygon aPolygon,
                 const attribute::LineAttribute& rLineAttribute,
-                const attribute::StrokeAttribute& rStrokeAttribute);
+                attribute::StrokeAttribute aStrokeAttribute);
 
             /// data read access
             const basegfx::B3DPolygon& getB3DPolygon() const { return maPolygon; }

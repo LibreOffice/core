@@ -61,11 +61,11 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             MediaPrimitive2D(
-                const basegfx::B2DHomMatrix& rTransform,
-                const OUString& rURL,
+                basegfx::B2DHomMatrix aTransform,
+                OUString aURL,
                 const basegfx::BColor& rBackgroundColor,
                 sal_uInt32 nDiscreteBorder,
-                const Graphic &rSnapshot);
+                Graphic aSnapshot);
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }

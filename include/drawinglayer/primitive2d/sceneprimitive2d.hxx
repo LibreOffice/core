@@ -116,11 +116,11 @@ namespace drawinglayer::primitive2d
 
             /// constructor
             ScenePrimitive2D(
-                const primitive3d::Primitive3DContainer& rxChildren3D,
-                const attribute::SdrSceneAttribute& rSdrSceneAttribute,
-                const attribute::SdrLightingAttribute& rSdrLightingAttribute,
-                const basegfx::B2DHomMatrix& rObjectTransformation,
-                const geometry::ViewInformation3D& rViewInformation3D);
+                primitive3d::Primitive3DContainer xChildren3D,
+                attribute::SdrSceneAttribute aSdrSceneAttribute,
+                attribute::SdrLightingAttribute aSdrLightingAttribute,
+                basegfx::B2DHomMatrix aObjectTransformation,
+                geometry::ViewInformation3D aViewInformation3D);
 
             /// data read access
             const primitive3d::Primitive3DContainer& getChildren3D() const { return mxChildren3D; }

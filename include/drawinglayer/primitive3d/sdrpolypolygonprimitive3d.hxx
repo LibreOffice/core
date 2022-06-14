@@ -49,7 +49,7 @@ namespace drawinglayer::primitive3d
         public:
             /// constructor
             SdrPolyPolygonPrimitive3D(
-                const basegfx::B3DPolyPolygon& rPolyPolygon3D,
+                basegfx::B3DPolyPolygon aPolyPolygon3D,
                 const basegfx::B3DHomMatrix& rTransform,
                 const basegfx::B2DVector& rTextureSize,
                 const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,

@@ -46,7 +46,7 @@ namespace drawinglayer::primitive3d
         public:
             /// constructor
             TransformPrimitive3D(
-                const basegfx::B3DHomMatrix& rTransformation,
+                basegfx::B3DHomMatrix aTransformation,
                 const Primitive3DContainer& rChildren);
 
             /// data read access

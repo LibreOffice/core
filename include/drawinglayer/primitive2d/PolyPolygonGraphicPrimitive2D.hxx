@@ -52,7 +52,7 @@ private:
                           const geometry::ViewInformation2D& rViewInformation) const override;
 
 public:
-    PolyPolygonGraphicPrimitive2D(const basegfx::B2DPolyPolygon& rPolyPolygon,
+    PolyPolygonGraphicPrimitive2D(basegfx::B2DPolyPolygon aPolyPolygon,
                                   const basegfx::B2DRange& rDefinitionRange,
                                   const attribute::FillGraphicAttribute& rFillGraphic);
 

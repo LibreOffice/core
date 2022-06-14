@@ -44,9 +44,9 @@ namespace drawinglayer::primitive2d
             /// constructor
             ObjectInfoPrimitive2D(
                 Primitive2DContainer&& aChildren,
-                const OUString& rName,
-                const OUString& rTitle,
-                const OUString& rDesc);
+                OUString aName,
+                OUString aTitle,
+                OUString aDesc);
 
             /// data read access
             const OUString& getName() const { return maName; }

@@ -63,7 +63,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             PatternFillPrimitive2D(
-                const basegfx::B2DPolyPolygon& rMask,
+                basegfx::B2DPolyPolygon aMask,
                 Primitive2DContainer&& rChildren,
                 const basegfx::B2DRange& rReferenceRange);
 

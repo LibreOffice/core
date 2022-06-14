@@ -67,12 +67,12 @@ namespace drawinglayer::primitive2d
             FillHatchPrimitive2D(
                 const basegfx::B2DRange& rOutputRange,
                 const basegfx::BColor& rBColor,
-                const attribute::FillHatchAttribute& rFillHatch);
+                attribute::FillHatchAttribute aFillHatch);
             FillHatchPrimitive2D(
                 const basegfx::B2DRange& rOutputRange,
                 const basegfx::B2DRange& rDefinitionRange,
                 const basegfx::BColor& rBColor,
-                const attribute::FillHatchAttribute& rFillHatch);
+                attribute::FillHatchAttribute aFillHatch);
 
             /// data read access
             const basegfx::B2DRange& getOutputRange() const { return maOutputRange; }

@@ -23,6 +23,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -250,7 +251,7 @@ namespace drawinglayer::primitive2d
         }
 
         GridPrimitive2D::GridPrimitive2D(
-            const basegfx::B2DHomMatrix& rTransform,
+            basegfx::B2DHomMatrix aTransform,
             double fWidth,
             double fHeight,
             double fSmallestViewDistance,
@@ -259,7 +260,7 @@ namespace drawinglayer::primitive2d
             sal_uInt32 nSubdivisionsY,
             const basegfx::BColor& rBColor,
             const BitmapEx& rCrossMarker)
-        :   maTransform(rTransform),
+        :   maTransform(std::move(aTransform)),
             mfWidth(fWidth),
             mfHeight(fHeight),
             mfSmallestViewDistance(fSmallestViewDistance),

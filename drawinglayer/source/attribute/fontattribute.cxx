@@ -19,6 +19,7 @@
 
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <rtl/ustring.hxx>
+#include <utility>
 
 namespace drawinglayer::attribute
 {
@@ -38,11 +39,11 @@ public:
     bool mbBiDiStrong : 1; // BiDi Flag
     bool mbMonospaced : 1;
 
-    ImpFontAttribute(const OUString& rFamilyName, const OUString& rStyleName, sal_uInt16 nWeight,
-                     bool bSymbol, bool bVertical, bool bItalic, bool bMonospaced, bool bOutline,
-                     bool bRTL, bool bBiDiStrong)
-        : maFamilyName(rFamilyName)
-        , maStyleName(rStyleName)
+    ImpFontAttribute(OUString aFamilyName, OUString aStyleName, sal_uInt16 nWeight, bool bSymbol,
+                     bool bVertical, bool bItalic, bool bMonospaced, bool bOutline, bool bRTL,
+                     bool bBiDiStrong)
+        : maFamilyName(std::move(aFamilyName))
+        , maStyleName(std::move(aStyleName))
         , mnWeight(nWeight)
         , mbSymbol(bSymbol)
         , mbVertical(bVertical)

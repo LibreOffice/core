@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -26,8 +27,8 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive3d
 {
-        GroupPrimitive3D::GroupPrimitive3D( const Primitive3DContainer& rChildren )
-        :   maChildren(rChildren)
+        GroupPrimitive3D::GroupPrimitive3D( Primitive3DContainer aChildren )
+        :   maChildren(std::move(aChildren))
         {
         }
 

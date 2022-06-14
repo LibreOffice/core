@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 #include <memory>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -31,12 +32,12 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         ShadowPrimitive2D::ShadowPrimitive2D(
-            const basegfx::B2DHomMatrix& rShadowTransform,
+            basegfx::B2DHomMatrix aShadowTransform,
             const basegfx::BColor& rShadowColor,
             double fShadowBlur,
             Primitive2DContainer&& aChildren)
         :   GroupPrimitive2D(std::move(aChildren)),
-            maShadowTransform(rShadowTransform),
+            maShadowTransform(std::move(aShadowTransform)),
             maShadowColor(rShadowColor),
             mfShadowBlur(fShadowBlur)
         {

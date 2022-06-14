@@ -26,6 +26,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <processor3d/shadow3dextractor.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -68,15 +69,15 @@ namespace drawinglayer::primitive2d
         }
 
         Embedded3DPrimitive2D::Embedded3DPrimitive2D(
-            const primitive3d::Primitive3DContainer& rxChildren3D,
-            const basegfx::B2DHomMatrix& rObjectTransformation,
-            const geometry::ViewInformation3D& rViewInformation3D,
+            primitive3d::Primitive3DContainer aChildren3D,
+            basegfx::B2DHomMatrix aObjectTransformation,
+            geometry::ViewInformation3D aViewInformation3D,
             const basegfx::B3DVector& rLightNormal,
             double fShadowSlant,
             const basegfx::B3DRange& rScene3DRange)
-        :   mxChildren3D(rxChildren3D),
-            maObjectTransformation(rObjectTransformation),
-            maViewInformation3D(rViewInformation3D),
+        :   mxChildren3D(std::move(aChildren3D)),
+            maObjectTransformation(std::move(aObjectTransformation)),
+            maViewInformation3D(std::move(aViewInformation3D)),
             maLightNormal(rLightNormal),
             mfShadowSlant(fShadowSlant),
             maScene3DRange(rScene3DRange),

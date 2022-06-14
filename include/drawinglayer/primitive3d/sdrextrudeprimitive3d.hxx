@@ -79,7 +79,7 @@ namespace drawinglayer::primitive3d
                 const basegfx::B2DVector& rTextureSize,
                 const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute,
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                basegfx::B2DPolyPolygon aPolyPolygon,
                 double fDepth,
                 double fDiagonal,
                 double fBackScale,

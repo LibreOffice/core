@@ -22,6 +22,7 @@
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <utility>
 
 
 namespace drawinglayer::attribute
@@ -40,14 +41,14 @@ namespace drawinglayer::attribute
             ImpSdrFillAttribute(
                 double fTransparence,
                 const basegfx::BColor& rColor,
-                const FillGradientAttribute& rGradient,
-                const FillHatchAttribute& rHatch,
-                const SdrFillGraphicAttribute& rFillGraphic)
+                FillGradientAttribute aGradient,
+                FillHatchAttribute aHatch,
+                SdrFillGraphicAttribute aFillGraphic)
             :   mfTransparence(fTransparence),
                 maColor(rColor),
-                maGradient(rGradient),
-                maHatch(rHatch),
-                maFillGraphic(rFillGraphic)
+                maGradient(std::move(aGradient)),
+                maHatch(std::move(aHatch)),
+                maFillGraphic(std::move(aFillGraphic))
             {
             }
 

@@ -23,6 +23,7 @@
 #include <texture/texture.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -286,20 +287,20 @@ namespace drawinglayer::primitive2d
 
         FillGradientPrimitive2D::FillGradientPrimitive2D(
             const basegfx::B2DRange& rOutputRange,
-            const attribute::FillGradientAttribute& rFillGradient)
+            attribute::FillGradientAttribute aFillGradient)
         :   maOutputRange(rOutputRange),
             maDefinitionRange(rOutputRange),
-            maFillGradient(rFillGradient)
+            maFillGradient(std::move(aFillGradient))
         {
         }
 
         FillGradientPrimitive2D::FillGradientPrimitive2D(
             const basegfx::B2DRange& rOutputRange,
             const basegfx::B2DRange& rDefinitionRange,
-            const attribute::FillGradientAttribute& rFillGradient)
+            attribute::FillGradientAttribute aFillGradient)
         :   maOutputRange(rOutputRange),
             maDefinitionRange(rDefinitionRange),
-            maFillGradient(rFillGradient)
+            maFillGradient(std::move(aFillGradient))
         {
         }
 

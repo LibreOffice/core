@@ -50,7 +50,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             MaskPrimitive2D(
-                const basegfx::B2DPolyPolygon& rMask,
+                basegfx::B2DPolyPolygon aMask,
                 Primitive2DContainer&& aChildren);
 
             /// data read access

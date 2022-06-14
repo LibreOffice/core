@@ -22,6 +22,7 @@
 #include <algorithm>
 
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
+#include <utility>
 #include <vcl/graph.hxx>
 
 namespace drawinglayer::attribute
@@ -41,12 +42,12 @@ namespace drawinglayer::attribute
             double                                  mfOffsetY;
 
             ImpFillGraphicAttribute(
-                const Graphic& rGraphic,
+                Graphic aGraphic,
                 const basegfx::B2DRange& rGraphicRange,
                 bool bTiling,
                 double fOffsetX,
                 double fOffsetY)
-            :   maGraphic(rGraphic),
+            :   maGraphic(std::move(aGraphic)),
                 maGraphicRange(rGraphicRange),
                 mbTiling(bTiling),
                 mfOffsetX(fOffsetX),

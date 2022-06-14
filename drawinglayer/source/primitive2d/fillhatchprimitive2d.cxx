@@ -25,6 +25,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -130,10 +131,10 @@ namespace drawinglayer::primitive2d
         FillHatchPrimitive2D::FillHatchPrimitive2D(
             const basegfx::B2DRange& rOutputRange,
             const basegfx::BColor& rBColor,
-            const attribute::FillHatchAttribute& rFillHatch)
+            attribute::FillHatchAttribute aFillHatch)
         :   maOutputRange(rOutputRange),
             maDefinitionRange(rOutputRange),
-            maFillHatch(rFillHatch),
+            maFillHatch(std::move(aFillHatch)),
             maBColor(rBColor)
         {
         }
@@ -142,10 +143,10 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DRange& rOutputRange,
             const basegfx::B2DRange& rDefinitionRange,
             const basegfx::BColor& rBColor,
-            const attribute::FillHatchAttribute& rFillHatch)
+            attribute::FillHatchAttribute aFillHatch)
         :   maOutputRange(rOutputRange),
             maDefinitionRange(rDefinitionRange),
-            maFillHatch(rFillHatch),
+            maFillHatch(std::move(aFillHatch)),
             maBColor(rBColor)
         {
         }

@@ -49,7 +49,7 @@ namespace drawinglayer::primitive3d
         public:
             /// constructor
             HatchTexturePrimitive3D(
-                const attribute::FillHatchAttribute& rHatch,
+                attribute::FillHatchAttribute aHatch,
                 const Primitive3DContainer& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,

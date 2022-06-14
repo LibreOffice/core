@@ -30,6 +30,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <rtl/ref.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -202,13 +203,13 @@ namespace drawinglayer::processor3d
 
         Shadow3DExtractingProcessor::Shadow3DExtractingProcessor(
             const geometry::ViewInformation3D& rViewInformation,
-            const basegfx::B2DHomMatrix& rObjectTransformation,
+            basegfx::B2DHomMatrix aObjectTransformation,
             const basegfx::B3DVector& rLightNormal,
             double fShadowSlant,
             const basegfx::B3DRange& rContained3DRange)
         :   BaseProcessor3D(rViewInformation),
             mpPrimitive2DSequence(&maPrimitive2DSequence),
-            maObjectTransformation(rObjectTransformation),
+            maObjectTransformation(std::move(aObjectTransformation)),
             maLightNormal(rLightNormal),
             mfLightPlaneScalar(0.0),
             mbShadowProjectionIsValid(false),

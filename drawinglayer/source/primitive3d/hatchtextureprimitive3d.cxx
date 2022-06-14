@@ -29,6 +29,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -267,13 +268,13 @@ namespace drawinglayer::primitive3d
         }
 
         HatchTexturePrimitive3D::HatchTexturePrimitive3D(
-            const attribute::FillHatchAttribute& rHatch,
+            attribute::FillHatchAttribute aHatch,
             const Primitive3DContainer& rChildren,
             const basegfx::B2DVector& rTextureSize,
             bool bModulate,
             bool bFilter)
         :   TexturePrimitive3D(rChildren, rTextureSize, bModulate, bFilter),
-            maHatch(rHatch)
+            maHatch(std::move(aHatch))
         {
         }
 

@@ -24,6 +24,7 @@
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
+#include <utility>
 
 
 using namespace com::sun::star;
@@ -117,13 +118,13 @@ namespace drawinglayer::primitive3d
         }
 
         SdrPolyPolygonPrimitive3D::SdrPolyPolygonPrimitive3D(
-            const basegfx::B3DPolyPolygon& rPolyPolygon3D,
+            basegfx::B3DPolyPolygon aPolyPolygon3D,
             const basegfx::B3DHomMatrix& rTransform,
             const basegfx::B2DVector& rTextureSize,
             const attribute::SdrLineFillShadowAttribute3D& rSdrLFSAttribute,
             const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute)
         :   SdrPrimitive3D(rTransform, rTextureSize, rSdrLFSAttribute, rSdr3DObjectAttribute),
-            maPolyPolygon3D(rPolyPolygon3D)
+            maPolyPolygon3D(std::move(aPolyPolygon3D))
         {
         }
 

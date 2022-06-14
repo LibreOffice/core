@@ -147,8 +147,8 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             SvgGradientHelper(
-                const basegfx::B2DHomMatrix& rGradientTransform,
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                basegfx::B2DHomMatrix aGradientTransform,
+                basegfx::B2DPolyPolygon aPolyPolygon,
                 SvgGradientEntryVector&& rGradientEntries,
                 const basegfx::B2DPoint& rStart,
                 bool bUseUnitCoordinates,

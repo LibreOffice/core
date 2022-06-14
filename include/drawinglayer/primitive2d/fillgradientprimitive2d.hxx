@@ -88,11 +88,11 @@ namespace drawinglayer::primitive2d
             /// constructors. The one without definition range will use output range as definition range
             FillGradientPrimitive2D(
                 const basegfx::B2DRange& rOutputRange,
-                const attribute::FillGradientAttribute& rFillGradient);
+                attribute::FillGradientAttribute aFillGradient);
             FillGradientPrimitive2D(
                 const basegfx::B2DRange& rOutputRange,
                 const basegfx::B2DRange& rDefinitionRange,
-                const attribute::FillGradientAttribute& rFillGradient);
+                attribute::FillGradientAttribute aFillGradient);
 
             /// data read access
             const basegfx::B2DRange& getOutputRange() const { return maOutputRange; }
