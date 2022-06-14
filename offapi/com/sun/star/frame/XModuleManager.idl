@@ -37,7 +37,7 @@ interface XModuleManager : com::sun::star::uno::XInterface
                this value can be queried and checked against the configuration.
 
                Since OOo 2.3.0 also the optional interface XModule will be used.
-               If its exists it will be preferred.
+               If it exists it will be preferred.
 
        @param  Module
                Possible objects for this parameter can be the following one:
