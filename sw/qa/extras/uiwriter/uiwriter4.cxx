@@ -292,6 +292,7 @@ public:
     void testInsertPdf();
     void testTdf143760WrapContourToOff();
     void testHatchFill();
+    void testNestedGroupTextBoxCopyCrash();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest4);
     CPPUNIT_TEST(testTdf96515);
@@ -417,6 +418,7 @@ public:
     CPPUNIT_TEST(testInsertPdf);
     CPPUNIT_TEST(testTdf143760WrapContourToOff);
     CPPUNIT_TEST(testHatchFill);
+    CPPUNIT_TEST(testNestedGroupTextBoxCopyCrash);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -4138,6 +4140,29 @@ void SwUiWriterTest4::testHatchFill()
 
     // tdf#146822 Without fix this had failed, because the transparency value of the hatch was not exported.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(30), getProperty<sal_Int32>(getShape(1), "FillTransparence"));
+}
+
+void SwUiWriterTest4::testNestedGroupTextBoxCopyCrash()
+{
+    createSwDoc(DATA_DIRECTORY, "tdf149550.docx");
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+    // This crashed here before the fix.
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_MESSAGE("Where is the doc, it crashed, isn't it?!", mxComponent);
+
+    auto pLayout = parseLayoutDump();
+    // There must be 2 textboxes!
+    assertXPath(pLayout, "/root/page/body/txt/anchored/fly[2]");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest4);

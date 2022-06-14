@@ -27,6 +27,7 @@ class SdrObject;
 class SfxItemSet;
 class SwFrameFormat;
 class SwFrameFormats;
+class SwFormatAnchor;
 class SwFormatContent;
 class SwDoc;
 namespace tools
@@ -204,6 +205,8 @@ class SwTextBoxNode
     // (and the textboxes)
     SwFrameFormat* m_pOwnerShapeFormat;
 
+    mutable bool m_bIsCloningInProgress;
+
 public:
     // Not needed.
     SwTextBoxNode() = delete;
@@ -251,6 +254,14 @@ public:
     size_t GetTextBoxCount() const { return m_pTextBoxes.size(); };
     // Returns with a const collection of textboxes owned by this node.
     std::map<SdrObject*, SwFrameFormat*> GetAllTextBoxes() const;
+
+    void Clone(SwDoc* pDoc, const SwFormatAnchor& rNewAnc, SwFrameFormat* o_pTarget, bool bSetAttr,
+               bool bMakeFrame) const;
+
+private:
+    void Clone_Impl(SwDoc* pDoc, const SwFormatAnchor& rNewAnc, SwFrameFormat* o_pTarget,
+                    const SdrObject* pSrcObj, SdrObject* pDestObj, bool bSetAttr,
+                    bool bMakeFrame) const;
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX
