@@ -170,6 +170,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4c4930cf_0c698d57",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T12:37:32Z",
+      "side": 1,
+      "message": "\u003e Ah - is the \"fullscreen\" discussed here the \"Full Screen (Ctrl+Shift+J)\" from View menu? If so, then please disregard me. I didn\u0027t think about that, and thought about \"maximized\" vs \"fullscreen\" as a difference between an application automatically expanded to a half of screen by dragging it to a monitor side, vs. expanding using respective system button.\n\u003e \n\u003e The F11 on KDE may have no direct counterpart on Windows maybe - and then it would be still another mode that I don\u0027t even know about. Sorry for the noise 😊\n\nI wasn\u0027t aware of the \"Fullscreen\" mode in \"View\"; I just used Impress all time. Yes, that\u0027s what I\u0027m talking about. Now I have some easier test case (currently actually broken for Qt :-().",
+      "parentUuid": "df2a06aa_fd6f437c",
+      "range": {
+        "startLine": 21,
+        "startChar": 40,
+        "endLine": 22,
+        "endChar": 33
+      },
+      "revId": "fbbbf627ad5378b307ef414b0e93fdac3c4a62c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "5441d912_6b0276bc",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
