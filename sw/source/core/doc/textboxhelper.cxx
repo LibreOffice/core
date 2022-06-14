@@ -257,7 +257,7 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
     {
         // If the shape do not have a texbox node and textbox,
         // create that for the shape.
-        auto pTextBox = std::shared_ptr<SwTextBoxNode>(new SwTextBoxNode(pShapeFormat));
+        auto pTextBox = std::make_shared<SwTextBoxNode>(SwTextBoxNode(pShapeFormat));
         pTextBox->AddTextBox(pObj, pFormat);
         pShapeFormat->SetOtherTextBoxFormats(pTextBox);
         pFormat->SetOtherTextBoxFormats(pTextBox);
@@ -1628,6 +1628,8 @@ SwTextBoxNode::SwTextBoxNode(SwFrameFormat* pOwnerShape)
     assert(pOwnerShape);
     assert(pOwnerShape->Which() == RES_DRAWFRMFMT);
 
+    m_bIsCloningInProgress = false;
+
     m_pOwnerShapeFormat = pOwnerShape;
     if (!m_pTextBoxes.empty())
         m_pTextBoxes.clear();
@@ -1784,6 +1786,83 @@ std::map<SdrObject*, SwFrameFormat*> SwTextBoxNode::GetAllTextBoxes() const
         aRet.emplace(rElem.m_pDrawObject, rElem.m_pTextBoxFormat);
     }
     return aRet;
+}
+
+void SwTextBoxNode::Clone(SwDoc* pDoc, const SwFormatAnchor& rNewAnc, SwFrameFormat* o_pTarget,
+                          bool bSetAttr, bool bMakeFrame) const
+{
+    if (!o_pTarget || !pDoc)
+        return;
+
+    if (o_pTarget->Which() != RES_DRAWFRMFMT)
+        return;
+
+    if (m_bIsCloningInProgress)
+        return;
+
+    m_bIsCloningInProgress = true;
+
+    Clone_Impl(pDoc, rNewAnc, o_pTarget, m_pOwnerShapeFormat->FindSdrObject(),
+               o_pTarget->FindSdrObject(), bSetAttr, bMakeFrame);
+
+    m_bIsCloningInProgress = false;
+}
+
+void SwTextBoxNode::Clone_Impl(SwDoc* pDoc, const SwFormatAnchor& rNewAnc, SwFrameFormat* o_pTarget,
+                               const SdrObject* pSrcObj, SdrObject* pDestObj, bool bSetAttr,
+                               bool bMakeFrame) const
+{
+    if (!pSrcObj || !pDestObj)
+        return;
+
+    auto pSrcList = pSrcObj->getChildrenOfSdrObject();
+    auto pDestList = pDestObj->getChildrenOfSdrObject();
+
+    if (pSrcList && pDestList)
+    {
+        if (pSrcList->GetObjCount() != pDestList->GetObjCount())
+            return;
+
+        for (size_t i = 0; i < pSrcList->GetObjCount(); ++i)
+        {
+            Clone_Impl(pDoc, rNewAnc, o_pTarget, pSrcList->GetObj(i), pDestList->GetObj(i),
+                       bSetAttr, bMakeFrame);
+        }
+        return;
+    }
+
+    if (!pSrcList && !pDestList)
+    {
+        if (auto pSrcFormat = GetTextBox(pSrcObj))
+        {
+            SwFormatAnchor aNewAnchor(rNewAnc);
+            if (aNewAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+            {
+                aNewAnchor.SetType(RndStdIds::FLY_AT_CHAR);
+
+                if (!bMakeFrame)
+                    bMakeFrame = true;
+            }
+
+            if (auto pTargetFormat = pDoc->getIDocumentLayoutAccess().CopyLayoutFormat(
+                    *pSrcFormat, aNewAnchor, bSetAttr, bMakeFrame))
+            {
+                if (!o_pTarget->GetOtherTextBoxFormats())
+                {
+                    auto pNewTextBoxes = std::make_shared<SwTextBoxNode>(SwTextBoxNode(o_pTarget));
+                    o_pTarget->SetOtherTextBoxFormats(pNewTextBoxes);
+                    pNewTextBoxes->AddTextBox(pDestObj, pTargetFormat);
+                    pTargetFormat->SetOtherTextBoxFormats(pNewTextBoxes);
+                }
+                else
+                {
+                    o_pTarget->GetOtherTextBoxFormats()->AddTextBox(pDestObj, pTargetFormat);
+                    pTargetFormat->SetOtherTextBoxFormats(o_pTarget->GetOtherTextBoxFormats());
+                }
+                o_pTarget->SetFormatAttr(pTargetFormat->GetContent());
+            }
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
