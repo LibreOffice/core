@@ -113,8 +113,8 @@ IMPL_LINK_NOARG(DataEditor, BrowserCursorMovedHdl, DataBrowser*, void)
 
     m_xTbxData->set_item_sensitive("MoveLeftColumn", bIsDataValid && m_xBrwData->MayMoveLeftColumns() );
     m_xTbxData->set_item_sensitive("MoveRightColumn", bIsDataValid && m_xBrwData->MayMoveRightColumns() );
-    m_xTbxData->set_item_sensitive("MoveUpRow", bIsDataValid && m_xBrwData->MayMoveDownRows() );
-    m_xTbxData->set_item_sensitive("MoveDownRow", bIsDataValid && m_xBrwData->MayMoveUpRows() );
+    m_xTbxData->set_item_sensitive("MoveDownRow", bIsDataValid && m_xBrwData->MayMoveDownRows() );
+    m_xTbxData->set_item_sensitive("MoveUpRow", bIsDataValid && m_xBrwData->MayMoveUpRows() );
 }
 
 // disable all modifying controls
