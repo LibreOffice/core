@@ -96,6 +96,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ff9e889_1710b927",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-14T11:56:09Z",
+      "side": 1,
+      "message": "\u003e I\u0027m somehow happy that I\u0027m not the only one struggling with this\n\n:)\n\n\u003e I\u0027m not sure what your question really is\n\nI meant, how the refcount behaves in that scenario? I thought it could be:\n\n1. Normal -\u003e maximized - refcount changes from 0 to 1 (and the geometry gets saved)\n2. Maximized -\u003e full screen - refcount gets 2 (per your comment)\n3. Full screen -\u003e minimized - refcount doesn\u0027t change?\n4. Minimized -\u003e normal - refcount gets 1? Then the geometry doesn\u0027t get restored?\n\nAlternatively,\n\n3. Full screen -\u003e normal (also a possible thing) - refcount gets 1 without geometry restore?\n\nAs said, it\u0027s a question based only on imagining, not on real understanding/debugging what would actually happen in these scenarios, so please excuse me if that\u0027s obvious/irrelevant.",
+      "parentUuid": "768b55a9_c44d03e4",
+      "range": {
+        "startLine": 21,
+        "startChar": 40,
+        "endLine": 22,
+        "endChar": 33
+      },
+      "revId": "fbbbf627ad5378b307ef414b0e93fdac3c4a62c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "5441d912_6b0276bc",
