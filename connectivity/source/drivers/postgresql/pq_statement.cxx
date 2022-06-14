@@ -59,6 +59,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
+#include <cstddef>
 #include <string.h>
 #include <string_view>
 
@@ -429,8 +430,8 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     &table);
 
                 // check, whether the columns are in the result set (required !)
-                int i;
-                for( i = 0 ; i < static_cast<int>(sourceTableKeys.size()) ;  i ++ )
+                std::size_t i;
+                for( i = 0 ; i < sourceTableKeys.size() ;  i ++ )
                 {
                     if( -1 == PQfnumber(
                             result,
@@ -441,7 +442,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     }
                 }
 
-                if( !sourceTableKeys.empty() && i == static_cast<int>(sourceTableKeys.size()) )
+                if( !sourceTableKeys.empty() && i == sourceTableKeys.size() )
                 {
                     *(data->pLastResultset) =
                         UpdateableResultSet::createFromPGResultSet(
