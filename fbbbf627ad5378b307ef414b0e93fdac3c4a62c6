@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5441d912_6b0276bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-14T08:46:31Z",
+      "side": 1,
+      "message": "I\u0027m not sure if LO stores this information, but certainly on MS-Windows, the maximised size of a window can be something other than full-screen, and is a distinct {x,y,w,h} tuple from the normal size.",
+      "revId": "fbbbf627ad5378b307ef414b0e93fdac3c4a62c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
