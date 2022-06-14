@@ -1022,7 +1022,16 @@ bool ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, vector<ScDPLabelDa
 
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        Reference<container::XNamed> xMember(xMembersIA->getByIndex(i), UNO_QUERY);
+        Reference<container::XNamed> xMember;
+        try
+        {
+            xMember = Reference<container::XNamed>(xMembersIA->getByIndex(i), UNO_QUERY);
+        }
+        catch (const container::NoSuchElementException&)
+        {
+            TOOLS_WARN_EXCEPTION("sc", "ScNameToIndexAccess getByIndex failed");
+        }
+
         ScDPLabelData::Member aMem;
 
         if (xMember.is())
