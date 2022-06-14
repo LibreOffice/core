@@ -2845,7 +2845,7 @@ AC_ARG_WITH(macosx-version-min-required,
     AS_HELP_STRING([--with-macosx-version-min-required=<version>],
         [set the minimum OS version needed to run the built LibreOffice])
     [
-                          e. g.: --with-macosx-version-min-required=10.13
+                          e. g.: --with-macosx-version-min-required=10.14
     ],
 ,)
 
@@ -3446,7 +3446,7 @@ if test $_os = Darwin; then
 
     if test "$with_macosx_version_min_required" = "" ; then
         if test "$host_cpu" = x86_64; then
-            with_macosx_version_min_required="10.13";
+            with_macosx_version_min_required="10.14";
         else
             with_macosx_version_min_required="11.0";
         fi
@@ -3470,9 +3470,6 @@ if test $_os = Darwin; then
     fi
 
     case "$with_macosx_version_min_required" in
-    10.13)
-        MAC_OS_X_VERSION_MIN_REQUIRED="101300"
-        ;;
     10.14)
         MAC_OS_X_VERSION_MIN_REQUIRED="101400"
         ;;
@@ -3501,7 +3498,7 @@ if test $_os = Darwin; then
         MAC_OS_X_VERSION_MIN_REQUIRED="120300"
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.13--12.3])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.14--12.3])
         ;;
     esac
 
