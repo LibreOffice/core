@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ee39d28_cd8fae1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-06-14T00:38:31Z",
+      "side": 1,
+      "message": "We missed your magic, Maxim \u003c3",
+      "revId": "9bc1ffa2153d2474b023e0860d3c9c68ee18727b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
