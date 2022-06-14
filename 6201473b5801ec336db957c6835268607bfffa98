@@ -134,6 +134,24 @@
       "parentUuid": "bf8bdbe0_8235eb64",
       "revId": "6201473b5801ec336db957c6835268607bfffa98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2669fff0_97a5b988",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-14T10:23:31Z",
+      "side": 1,
+      "message": "of course, the use of `rValue` must be wrapped in `std::forward\u003cT\u003e(...)` now to have the desired effect",
+      "parentUuid": "8ab79569_4bd207bd",
+      "revId": "6201473b5801ec336db957c6835268607bfffa98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
