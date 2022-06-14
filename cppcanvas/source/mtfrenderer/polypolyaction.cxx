@@ -227,7 +227,7 @@ namespace cppcanvas::internal
                 TexturedPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
                                         const CanvasSharedPtr&           rCanvas,
                                         const OutDevState&               rState,
-                                        rendering::Texture               aTexture );
+                                        const rendering::Texture&        rTexture );
 
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
@@ -255,12 +255,12 @@ namespace cppcanvas::internal
             TexturedPolyPolyAction::TexturedPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPolyPoly,
                                                             const CanvasSharedPtr&           rCanvas,
                                                             const OutDevState&               rState,
-                                                            rendering::Texture               aTexture ) :
+                                                            const rendering::Texture&        rTexture ) :
                 CachedPrimitiveBase( rCanvas, true ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
                 maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
-                maTexture(std::move( aTexture ))
+                maTexture( rTexture )
             {
                 tools::initRenderState(maState,rState);
             }
