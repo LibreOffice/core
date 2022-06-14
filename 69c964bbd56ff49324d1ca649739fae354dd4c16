@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5590c1f5_fae6d6b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-06-14T08:39:10Z",
+      "side": 1,
+      "message": "Unfortunately there is no 32bit Jenkins...",
+      "parentUuid": "62562579_927c4d8e",
+      "revId": "69c964bbd56ff49324d1ca649739fae354dd4c16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "583755be_4a00d85e",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-06-14T07:53:30Z",
       "side": 1,
       "message": "The real return type of getAccessibleRole() is sal_Int16, why not keep it like that?",
+      "revId": "69c964bbd56ff49324d1ca649739fae354dd4c16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c9f3617_52a7c9f9",
+        "filename": "toolkit/qa/cppunit/a11y/XAccessibleContextTester.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-06-14T08:39:10Z",
+      "side": 1,
+      "message": "that one was a overzeat sed call I fixed the casts up and noticed it too late after push...",
+      "parentUuid": "583755be_4a00d85e",
       "revId": "69c964bbd56ff49324d1ca649739fae354dd4c16",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
