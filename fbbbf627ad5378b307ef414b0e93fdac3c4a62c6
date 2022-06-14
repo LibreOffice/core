@@ -48,6 +48,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "43b0d827_2f113601",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-14T10:19:29Z",
+      "side": 1,
+      "message": "\u003e the imagined scenario\n\nHmm. I must say immediately that I didn\u0027t debug, so I may be wrong in my scenario (it may go through intermediate state that makes my scenario still following your invariants)? Still, from the UI (user) point of view, this scenario is possible (e.g., on Windows):\n\n1. Normal -\u003e maximized (drag to e.g. left side of screen)\n2. Maximized -\u003e full screen (using window system button)\n3. Full screen -\u003e minimized (using system button)\n4. Minimized -\u003e normal (using status bar context menu)\n\nDoes this scenario fit?",
+      "parentUuid": "aaaf7ea7_d94b0196",
+      "range": {
+        "startLine": 21,
+        "startChar": 40,
+        "endLine": 22,
+        "endChar": 33
+      },
+      "revId": "fbbbf627ad5378b307ef414b0e93fdac3c4a62c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "5441d912_6b0276bc",
