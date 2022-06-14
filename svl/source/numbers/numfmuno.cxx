@@ -411,8 +411,55 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const OUString& aFormat,
     {
         //! FIXME: Something still needs to happen here ...
     }
-    sal_Int32 nRet = pFormatter->GetEntryKey( aFormat, eLang );
-    return nRet;
+    sal_uInt32 nRet = pFormatter->GetEntryKey( aFormat, eLang );
+    if (nRet == NUMBERFORMAT_ENTRY_NOT_FOUND)
+    {
+        // This seems to be a workaround for what maybe the bScan option was
+        // intended for? Tokenize the format code?
+
+        // The format string based search is vague and fuzzy, as it is case
+        // sensitive, but the format string is only half way cased, the
+        // keywords (except the "General" keyword) are uppercased and literals
+        // of course are not. Clients using this queryKey() and if not
+        // successful addNew() may still fail if the result of PutEntry() is
+        // false because the format actually existed, just with a different
+        // casing. The only clean way is to just use PutEntry() and ignore the
+        // duplicate case, which clients can't because the API doesn't provide
+        // the information.
+        // Try just another possibilty here, without any guarantee.
+
+        // Use only ASCII upper, because keywords are only those.
+        // Do not transliterate any quoted literals.
+        const sal_Int32 nLen = aFormat.getLength();
+        OUStringBuffer aBuf(0);
+        sal_Unicode* p = aBuf.appendUninitialized( nLen + 1);
+        memcpy( p, aFormat.getStr(), (nLen + 1) * sizeof(sal_Unicode));   // including 0-char
+        aBuf.setLength( nLen);
+        assert(p == aBuf.getStr());
+        sal_Unicode const * const pStop = p + aBuf.getLength();
+        bool bQuoted = false;
+        for ( ; p < pStop; ++p)
+        {
+            if (bQuoted)
+            {
+                // Format codes don't have embedded doubled quotes, i.e. "a""b"
+                // is two literals displayed as `ab`.
+                if (*p == '"')
+                    bQuoted = false;
+            }
+            else if (*p == '"')
+                bQuoted = true;
+            else if ('a' <= *p && *p <= 'z')
+                *p -= 0x20;     // upper
+            else if (*p == '\\')
+                ++p;            // skip escaped next char
+                // Theoretically that should cater for UTF-32 with
+                // iterateCodePoints(), but such character would not match any
+                // of [a-z\"] in its UTF-16 units.
+        }
+        nRet = pFormatter->GetEntryKey( aBuf, eLang );
+    }
+    return static_cast<sal_Int32>(nRet);
 }
 
 sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const OUString& aFormat,
