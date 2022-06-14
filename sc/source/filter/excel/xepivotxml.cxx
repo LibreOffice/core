@@ -1118,7 +1118,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         for (const auto& rDataField : aDataFields)
         {
             tools::Long nDimIdx = rDataField.mnPos;
-            assert(aCachedDims[nDimIdx]); // the loop above should have screened for NULL's.
+            assert(nDimIdx == -2 || aCachedDims[nDimIdx]); // the loop above should have screened for NULL's, skip check for -2 "data field"
             const ScDPSaveDimension& rDim = *rDataField.mpDim;
             std::optional<OUString> pName = rDim.GetLayoutName();
             // tdf#124651: despite being optional in CT_DataField according to ECMA-376 Part 1,
