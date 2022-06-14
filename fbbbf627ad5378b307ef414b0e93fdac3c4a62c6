@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure if LO stores this information, but certainly on MS-Windows, the maximised size of a window can be something other than full-screen, and is a distinct {x,y,w,h} tuple from the normal size.",
       "revId": "fbbbf627ad5378b307ef414b0e93fdac3c4a62c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82e5986c_86a84a5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T09:14:15Z",
+      "side": 1,
+      "message": "That\u0027s everywhere. The general consensus seems to be, that:\n- maximized \u003d window has frame, restricted areas (taskbar etc) are respected, position and size differ from screen size\n- full-screen \u003d window has no frame, whole screen is covered. There are actually two full-screen modes in LO VCL: a single screen in covered or the whole \"virtual\" multi-screen is covered.\n\nBut this doesn\u0027t matter for my implementation. It will have saved the \"normal\" position and size and report the current position and size and the WindowState. I don\u0027t think there is anything else needed. If a user restores LO on a different screen maximized, old maximized values are bogus. The \"normal\" position might be insufficient now too, but there is already code in place to fix that (I didn\u0027t verify, it actually works).\n\nI honestly don\u0027t understand the intention of your comment, but maybe this shows my point. Do I need to update the commit message to make it more clear? Any suggestions?",
+      "parentUuid": "5441d912_6b0276bc",
+      "revId": "fbbbf627ad5378b307ef414b0e93fdac3c4a62c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
