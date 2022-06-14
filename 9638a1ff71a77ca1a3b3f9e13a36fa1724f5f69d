@@ -22,6 +22,30 @@
       },
       "revId": "9638a1ff71a77ca1a3b3f9e13a36fa1724f5f69d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efab02b0_bdccb670",
+        "filename": "sw/inc/unoprnms.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-06-14T10:07:58Z",
+      "side": 0,
+      "message": "i didn\u0027t find any indication that this was ever the case",
+      "parentUuid": "b220183f_ec891912",
+      "range": {
+        "startLine": 343,
+        "startChar": 40,
+        "endLine": 343,
+        "endChar": 59
+      },
+      "revId": "9638a1ff71a77ca1a3b3f9e13a36fa1724f5f69d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
