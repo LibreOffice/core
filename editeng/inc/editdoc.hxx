@@ -244,7 +244,7 @@ private:
 
 public:
                     ContentNode( SfxItemPool& rItemPool );
-                    ContentNode( OUString aStr, ContentAttribs aContentAttribs );
+                    ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs );
                     ~ContentNode();
                     ContentNode(const ContentNode&) = delete;
     ContentNode&    operator=(const ContentNode&) = delete;
