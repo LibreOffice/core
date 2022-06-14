@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11e0c03e_47e3d89d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T09:20:44Z",
+      "side": 1,
+      "message": "\u003e \u003e Any reason you can imagine, why this duplicates the lookup code?\n\u003e \n\u003e Honestly, no. I would love to drop any redundancy here, and I suppose your change is very reasonable (and as always, any reasonable patch will regress in infinite ways, ow my...) 😊\n\nThere is a reason nearly nobody touches VCL lowlevel code. It has even less comments and you definitely can\u0027t test everything affected. At least now there are two people, who think nothing should break ;-)",
+      "parentUuid": "7f4eecef_a6f5c244",
+      "revId": "4026cce398a89539411735c34ae881757d9f76c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "050ce073_8229de77",
@@ -49,6 +67,30 @@
       "writtenOn": "2022-06-14T08:59:40Z",
       "side": 1,
       "message": "Is this also redundant, having vcl::WindowState::FullScreen?",
+      "range": {
+        "startLine": 66,
+        "startChar": 28,
+        "endLine": 66,
+        "endChar": 40
+      },
+      "revId": "4026cce398a89539411735c34ae881757d9f76c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc726fc7_3086ccd3",
+        "filename": "vcl/inc/win/salframe.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T09:20:44Z",
+      "side": 1,
+      "message": "\u003e Is this also redundant, having vcl::WindowState::FullScreen?\n\nHmm, since we\u0027re caching the whole state, this should work. Before this patch,  vcl::WindowState::FullScreen was actually unused, just defined. I\u0027ll update the patch.",
+      "parentUuid": "050ce073_8229de77",
       "range": {
         "startLine": 66,
         "startChar": 28,
