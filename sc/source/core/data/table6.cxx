@@ -323,12 +323,14 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
         GetCellArea( nLastCol, nLastRow);
     else
         GetLastDataPos(nLastCol, nLastRow);
-    return Search(rSearchItem, rCol, rRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc);
+    std::vector< sc::ColumnBlockConstPosition > blockPos;
+    return Search(rSearchItem, rCol, rRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc, blockPos);
 }
 
 bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                      SCCOL nLastCol, SCROW nLastRow,
-                     const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
+                     const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc,
+                     std::vector< sc::ColumnBlockConstPosition >& blockPos)
 {
     bool bFound = false;
     bool bAll =  (rSearchItem.GetCommand() == SvxSearchCmd::FIND_ALL)
@@ -339,9 +341,12 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
     bool bSkipFiltered = !rSearchItem.IsSearchFiltered();
     bool bSearchNotes = (rSearchItem.GetCellType() == SvxSearchCellType::NOTE);
     // We need to cache sc::ColumnBlockConstPosition per each column.
-    std::vector< sc::ColumnBlockConstPosition > blockPos( nLastCol + 1 );
-    for( SCCOL i = 0; i <= nLastCol; ++i )
-        aCol[ i ].InitBlockPosition( blockPos[ i ] );
+    if (static_cast<SCCOL>(blockPos.size()) != nLastCol + 1)
+    {
+        blockPos.resize( nLastCol + 1 );
+        for( SCCOL i = 0; i <= nLastCol; ++i )
+            aCol[ i ].InitBlockPosition( blockPos[ i ] );
+    }
     if (!bAll && rSearchItem.GetBackward())
     {
         SCROW nLastNonFilteredRow = rDocument.MaxRow() + 1;
@@ -529,9 +534,10 @@ bool ScTable::SearchAll(const SvxSearchItem& rSearchItem, const ScMarkData& rMar
     else
         GetLastDataPos(nLastCol, nLastRow);
 
+    std::vector< sc::ColumnBlockConstPosition > blockPos;
     do
     {
-        bFound = Search(rSearchItem, nCol, nRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc);
+        bFound = Search(rSearchItem, nCol, nRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc, blockPos);
         if (bFound)
         {
             bEverFound = true;
@@ -595,10 +601,11 @@ bool ScTable::ReplaceAll(
     SvxSearchItem aCopyItem(rSearchItem);
     aCopyItem.SetRowDirection(false);
 
+    std::vector< sc::ColumnBlockConstPosition > blockPos;
     bool bEverFound = false;
     while (true)
     {
-        bool bFound = Search(aCopyItem, nCol, nRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc);
+        bool bFound = Search(aCopyItem, nCol, nRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc, blockPos);
 
         if (bFound)
         {
