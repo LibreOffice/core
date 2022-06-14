@@ -43,7 +43,7 @@ class WrappedStockProperty : public WrappedProperty
 {
 public:
     explicit WrappedStockProperty( const OUString& rOuterName
-        , css::uno::Any aDefaulValue
+        , css::uno::Any aDefaultValue
         , std::shared_ptr<Chart2ModelContact> spChart2ModelContact );
 
     void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
