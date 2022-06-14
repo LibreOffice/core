@@ -1799,7 +1799,8 @@ void ScInputHandler::LOKSendFormulabarUpdate(const SfxViewShell* pActiveViewSh,
                                              const ESelection& rSelection)
 {
     OUString aSelection =
-        OUString::number(rSelection.nStartPos) + ";" + OUString::number(rSelection.nEndPos);
+        OUString::number(rSelection.nStartPos) + ";" + OUString::number(rSelection.nEndPos) + ";" +
+        OUString::number(rSelection.nStartPara) + ";" + OUString::number(rSelection.nEndPara);
 
     std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
     (*pData)["action_type"] = "setText";
