@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8576d572_aecb574b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-06-14T08:38:09Z",
+      "side": 1,
+      "message": "i haven\u0027t tried this but maybe it works; would be easier with a separate UNO property...",
+      "revId": "036905eb7c14a22d14ebc6fffe26e72549c17010",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
