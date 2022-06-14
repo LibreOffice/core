@@ -152,6 +152,24 @@
       "parentUuid": "8ab79569_4bd207bd",
       "revId": "6201473b5801ec336db957c6835268607bfffa98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c17f8a87_d47a3b52",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T11:00:03Z",
+      "side": 1,
+      "message": "\u003e of course, the use of `rValue` must be wrapped in `std::forward\u003cT\u003e(...)` now to have the desired effect\n\nI had to read-up on std::forward (https://stackoverflow.com/questions/3582001/what-are-the-main-purposes-of-using-stdforward-and-which-problems-it-solves to the rescue). Wasn\u0027t aware this was needed for \"perfect forwarding\".\n\nSo many pitfalls for me for some simple functionality...",
+      "parentUuid": "2669fff0_97a5b988",
+      "revId": "6201473b5801ec336db957c6835268607bfffa98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
