@@ -22,7 +22,7 @@ module com { module sun { module star { module ucb {
 
 /** This exception is used to indicate that there are properties missing.
 
-    <p>For example, to create a new resource, usually one ore more property
+    <p>For example, to create a new resource, usually one or more property
     values must be set prior to executing the command "insert", which makes
     the new resource persistent.
 
