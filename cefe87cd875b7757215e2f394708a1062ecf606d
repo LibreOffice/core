@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c43176e_e94db8f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T08:44:30Z",
+      "side": 1,
+      "message": "The test case is simply:\n- start LO\n- maximize window\n- close LO\n- start LO \u003d\u003e window is maximized\n- un-maximize \u003d\u003e window has original position and size\n\nWorks here.",
+      "revId": "cefe87cd875b7757215e2f394708a1062ecf606d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
