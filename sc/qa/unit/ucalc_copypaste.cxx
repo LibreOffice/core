@@ -113,6 +113,7 @@ public:
     void testCopyPasteReferencesExternalDoc(); // tdf#106456
     void testTdf68976();
     void testTdf71058();
+    void testTdf149554();
 
     void testCutPasteSpecial();
     void testCutPasteSpecialTranspose();
@@ -217,6 +218,7 @@ public:
 
     CPPUNIT_TEST(testTdf68976);
     CPPUNIT_TEST(testTdf71058);
+    CPPUNIT_TEST(testTdf149554);
 
     CPPUNIT_TEST(testCutPasteSpecial);
     CPPUNIT_TEST(testCutPasteSpecialTranspose);
@@ -10349,6 +10351,34 @@ void TestCopyPaste::testTdf71058()
     // - Expected: 2
     // - Actual  : 0
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3, 2, nTab));
+}
+
+void TestCopyPaste::testTdf149554()
+{
+    const SCTAB nTab = 0;
+    m_pDoc->InsertTab(nTab, "Test");
+
+    // Cut C4:C5 to the clip document.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScRange aSrcRange(2, 3, nTab, 3, 3, nTab);
+    cutToClip(*m_xDocShell, aSrcRange, &aClipDoc, false);
+
+    // To E6:E7
+    ScRange aDestRange(4, 5, nTab, 4, 6, nTab);
+    ScMarkData aDestMark(m_pDoc->GetSheetLimits());
+
+    // Transpose
+    ScDocument* pOrigClipDoc = &aClipDoc;
+    ScDocumentUniquePtr pTransClip(new ScDocument(SCDOCMODE_CLIP));
+    aClipDoc.TransposeClip(pTransClip.get(), InsertDeleteFlags::ALL, false, true);
+    aDestMark.SetMarkArea(aDestRange);
+    // Paste. Without the fix in place, this test would have crashed here
+    m_pDoc->CopyFromClip(aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, pTransClip.get(),
+                         true, false, true, false);
+    m_pDoc->UpdateTranspose(aDestRange.aStart, pOrigClipDoc, aDestMark, nullptr);
+    pTransClip.reset();
+
+    m_pDoc->DeleteTab(0);
 }
 
 void TestCopyPaste::testMixData()
