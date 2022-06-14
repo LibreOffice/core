@@ -537,7 +537,9 @@ public:
     /// Set the top edge of the rectangle to y, preserving the height
     inline void SetPosY(tools::Long y);
     inline void         SetPos( const Point& rPoint );
-    void                SetSize( const Size& rSize );
+    inline void SetWidth(tools::Long);
+    inline void SetHeight(tools::Long);
+    inline void SetSize(const Size&);
 
     constexpr Point GetPos() const { return TopLeft(); }
     constexpr Size GetSize() const { return { GetWidth(), GetHeight() }; }
@@ -669,6 +671,32 @@ inline void tools::Rectangle::SetPos( const Point& rPoint )
 {
     SetPosX(rPoint.X());
     SetPosY(rPoint.Y());
+}
+
+inline void tools::Rectangle::SetWidth(tools::Long nWidth)
+{
+    if (nWidth < 0)
+        nRight = nLeft + nWidth + 1;
+    else if (nWidth > 0)
+        nRight = nLeft + nWidth - 1;
+    else
+        SetWidthEmpty();
+}
+
+inline void tools::Rectangle::SetHeight(tools::Long nHeight)
+{
+    if (nHeight < 0)
+        nBottom = nTop + nHeight + 1;
+    else if (nHeight > 0)
+        nBottom = nTop + nHeight - 1;
+    else
+        SetHeightEmpty();
+}
+
+inline void tools::Rectangle::SetSize(const Size& rSize)
+{
+    SetWidth(rSize.Width());
+    SetHeight(rSize.Height());
 }
 
 constexpr inline tools::Long tools::Rectangle::GetWidth() const
