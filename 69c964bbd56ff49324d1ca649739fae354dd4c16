@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62562579_927c4d8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-06-14T07:53:30Z",
+      "side": 1,
+      "message": "Sorry for not having found this earlier, and thanks for the fixes.  Isn\u0027t there any build in Jenkins to check this kind of things?\n\nAnyway, I\u0027ll try and remember to always use explicit types in CppUnit assertions to avoid this.",
+      "revId": "69c964bbd56ff49324d1ca649739fae354dd4c16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "583755be_4a00d85e",
+        "filename": "toolkit/qa/cppunit/a11y/XAccessibleContextTester.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1001582
+      },
+      "writtenOn": "2022-06-14T07:53:30Z",
+      "side": 1,
+      "message": "The real return type of getAccessibleRole() is sal_Int16, why not keep it like that?",
+      "revId": "69c964bbd56ff49324d1ca649739fae354dd4c16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
