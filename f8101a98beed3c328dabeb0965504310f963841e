@@ -51,6 +51,23 @@
       "parentUuid": "3948e54c_2a9940f5",
       "revId": "f8101a98beed3c328dabeb0965504310f963841e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "894cd1ac_39499f44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-14T15:00:07Z",
+      "side": 1,
+      "message": "Other than this, the change looks reasonable to me, feel free to push it if the SwPamRanges was the only unclear piece.",
+      "revId": "f8101a98beed3c328dabeb0965504310f963841e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
