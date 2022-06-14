@@ -7139,9 +7139,11 @@
     </rng:element>
   </rng:define>
   <rng:define name="number-embedded-text-attlist">
-    <rng:attribute name="number:position">
-      <rng:ref name="integer"/>
-    </rng:attribute>
+    <rng:optional>
+      <rng:attribute name="number:position">
+        <rng:ref name="integer"/>
+      </rng:attribute>
+    </rng:optional>
   </rng:define>
   <rng:define name="number-era">
     <rng:element name="number:era">
