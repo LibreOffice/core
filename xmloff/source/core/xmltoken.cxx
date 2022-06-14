@@ -3504,6 +3504,7 @@ namespace xmloff::token {
         TOKEN("date-format", XML_DATE_FORMAT),
         TOKEN("date-rfc-language-tag", XML_DATE_RFC_LANGUAGE_TAG),
 
+        TOKEN("fill-use-slide-background", XML_FILL_USE_SLIDE_BACKGROUND),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }
