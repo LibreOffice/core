@@ -1193,8 +1193,8 @@ ContentNode::ContentNode( SfxItemPool& rPool ) : aContentAttribs( rPool )
 {
 }
 
-ContentNode::ContentNode( OUString aStr, ContentAttribs _aContentAttribs ) :
-    maString(std::move(aStr)), aContentAttribs(std::move(_aContentAttribs))
+ContentNode::ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs ) :
+    maString(rStr), aContentAttribs(rContentAttribs)
 {
 }
 
