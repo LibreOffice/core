@@ -34,6 +34,24 @@
       "parentUuid": "5441d912_6b0276bc",
       "revId": "fbbbf627ad5378b307ef414b0e93fdac3c4a62c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f720e823_59e83704",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-14T09:26:00Z",
+      "side": 1,
+      "message": "That more of a \"are you sure you\u0027re handling this case\" comment :-)\n\nIt seems like you are, so that is fine then",
+      "parentUuid": "82e5986c_86a84a5b",
+      "revId": "fbbbf627ad5378b307ef414b0e93fdac3c4a62c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
