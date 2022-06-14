@@ -1737,14 +1737,30 @@ void SdImportTest2::testTdf127964()
 {
     sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf127964.pptx"), PPTX);
-    const SdrPage* pPage = GetPage(1, xDocShRef);
-    const SdrObject* pObj = pPage->GetObj(0);
-    auto& rFillStyleItem
-        = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
-    auto& rFillBackgroundItem = dynamic_cast<const XFillUseSlideBackgroundItem&>(
-        pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND));
-    CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
+    {
+        const SdrPage* pPage = GetPage(1, xDocShRef);
+        const SdrObject* pObj = pPage->GetObj(0);
+        auto& rFillStyleItem
+            = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
+        auto& rFillBackgroundItem = dynamic_cast<const XFillUseSlideBackgroundItem&>(
+            pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND));
+        CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
+    }
+
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP);
+
+    {
+        const SdrPage* pPage = GetPage(1, xDocShRef);
+        const SdrObject* pObj = pPage->GetObj(0);
+        auto& rFillStyleItem
+            = dynamic_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
+        auto& rFillBackgroundItem = dynamic_cast<const XFillUseSlideBackgroundItem&>(
+            pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND));
+        CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
+    }
+
     xDocShRef->DoClose();
 }
 
