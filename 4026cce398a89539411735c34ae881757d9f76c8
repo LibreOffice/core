@@ -16,6 +16,47 @@
       "message": "@mike: since you are our Windows expert: this seems to work just fine here. Any reason you can imagine, why this duplicates the lookup code?\n\nThere is a follow-up patch, which adds some asserts while flattening the existing code a bit.\n",
       "revId": "4026cce398a89539411735c34ae881757d9f76c8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f4eecef_a6f5c244",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-14T08:59:40Z",
+      "side": 1,
+      "message": "\u003e Any reason you can imagine, why this duplicates the lookup code?\n\nHonestly, no. I would love to drop any redundancy here, and I suppose your change is very reasonable (and as always, any reasonable patch will regress in infinite ways, ow my...) 😊",
+      "parentUuid": "e6a65cf0_d1d3c643",
+      "revId": "4026cce398a89539411735c34ae881757d9f76c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "050ce073_8229de77",
+        "filename": "vcl/inc/win/salframe.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-14T08:59:40Z",
+      "side": 1,
+      "message": "Is this also redundant, having vcl::WindowState::FullScreen?",
+      "range": {
+        "startLine": 66,
+        "startChar": 28,
+        "endLine": 66,
+        "endChar": 40
+      },
+      "revId": "4026cce398a89539411735c34ae881757d9f76c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
