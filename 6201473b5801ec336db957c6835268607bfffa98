@@ -16,6 +16,64 @@
       "message": "Should this be LO internal? Any reason not to add this?",
       "revId": "6201473b5801ec336db957c6835268607bfffa98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faabc4f8_90c1f8db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-14T09:12:51Z",
+      "side": 1,
+      "message": "\u003e Should this be LO internal?\n\nYes, please.\n\n\u003e Any reason not to add this?\n\nI don\u0027t see too much of a compelling reason to add it, but if you feel it makes the code so much more readable to justify its addition, then I wouldn\u0027t object either.",
+      "parentUuid": "be9cd375_ecfe1dcd",
+      "revId": "6201473b5801ec336db957c6835268607bfffa98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68d27fd1_cedfb633",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-14T09:12:51Z",
+      "side": 1,
+      "message": "How does this append a \"type\"?",
+      "range": {
+        "startLine": 978,
+        "startChar": 37,
+        "endLine": 978,
+        "endChar": 41
+      },
+      "revId": "6201473b5801ec336db957c6835268607bfffa98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf8bdbe0_8235eb64",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-14T09:12:51Z",
+      "side": 1,
+      "message": "* The parameter should be of forwarding reference type, so that code like `b \u003c\u003c OUString::number(1)` compiles.\n\n* Nitpick: `inline` is redundant noise here.\n\n* Nitpick: The parameter is more a \"value\" than a \"type\".",
+      "revId": "6201473b5801ec336db957c6835268607bfffa98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
