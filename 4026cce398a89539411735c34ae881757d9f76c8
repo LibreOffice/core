@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6a65cf0_d1d3c643",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T08:52:02Z",
+      "side": 1,
+      "message": "@mike: since you are our Windows expert: this seems to work just fine here. Any reason you can imagine, why this duplicates the lookup code?\n\nThere is a follow-up patch, which adds some asserts while flattening the existing code a bit.\n",
+      "revId": "4026cce398a89539411735c34ae881757d9f76c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
