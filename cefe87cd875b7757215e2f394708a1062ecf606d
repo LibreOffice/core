@@ -16,6 +16,24 @@
       "message": "The test case is simply:\n- start LO\n- maximize window\n- close LO\n- start LO \u003d\u003e window is maximized\n- un-maximize \u003d\u003e window has original position and size\n\nWorks here.",
       "revId": "cefe87cd875b7757215e2f394708a1062ecf606d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3d06970_e61bea6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-14T12:41:06Z",
+      "side": 1,
+      "message": "\u003e The test case is simply:\n\u003e \n\u003e     start LO\n\u003e     maximize window\n\u003e     close LO\n\u003e     start LO \u003d\u003e window is maximized\n\u003e     un-maximize \u003d\u003e window has original position and size\n\u003e \n\u003e Works here.\n\nWell, mostly works on my Debian testing as well, but the window is slightly moving downwards in each cycle, screencast: https://nextcloud.documentfoundation.org/s/m5fSaxHKdicmP9C\nIt\u0027s restored exactly at the same position when just maximizing+unmaximizing, but moves slightly downwards when closing LO in between (see how window is aligned at the top of the \"black area\" in Konsole, but a bit further down later).\nThis is with the whole change series applied on top of master:\n\n885e3814b898 (HEAD -\u003e jmux/GERRIT135813v1_qt_implement_unmaximize_handling) Qt implement un-maxmize handling\n2aafb42beb79 WIN convert un-maxmize handling\nb8ff49fb6736 WIP VCL unify un-maximize handling\nd78d51d9765c VCL expect correct frame size for native menubars\nb83678500237 Rectangle: split SetSize into SetWidth/SetHeight\n0f2ed1804b6e WIN flatten and assert\n34b280ccdf4a WIN drop window state redundancies\n45be0db1b201 OUStringBuffer: add append via operator\u003c\u003c(T\u0026\u0026)\nc243023d641f Convert ImplWindowStateFromStr to WindowData(str)\n495faace64ae Fix and add ostreams for vcl::WindowPosSize\ncdc5b8372306 Make PARTIAL_FULLSCREEN a X11SalFrame bool\ndaf07522f871 Drop SalMenu::DrawMenuBar (is WIN-only)\n4c8537589f2a (origin/master, origin/HEAD, master) liblo-native-code: Add LanguageToolGrammarChecker",
+      "parentUuid": "1c43176e_e94db8f0",
+      "revId": "cefe87cd875b7757215e2f394708a1062ecf606d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
