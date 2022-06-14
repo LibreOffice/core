@@ -352,6 +352,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148868)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf148868.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    pWrtShell->EndPg(/*bSelect=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    pWrtShell->Insert("X");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf129382.docx");
