@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "aaaf7ea7_d94b0196",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-14T10:13:00Z",
+      "side": 1,
+      "message": "\u003e Indeed, the reference counter looks odd; and there is an assert (no greater than 2), and then the code uses the \u0027!maGeometry.hasSavedPosSize()\u0027 checks (e.g. https://gerrit.libreoffice.org/c/core/+/135812). So the flow is unclear:\n\u003e \n\u003e 1. What problem the counter solves? The message does not explain that, only mentions an alternative - again, to solve what is left unsaid.\n\nSo the imagined scenario is:\n- normal window\n- maximized window, normal saved: 1\n- full-screen maximized window: 2\n- un-fullscreen \u003d\u003e maximize: 1\n- minimize: 1\n- normal : 0 \u003d\u003e restore position\n\nThinking about it again, it\u0027s easier to just cache the state and compare it to the current state. I wanted to have some common \"facility\", but maybe this is making everything more complex then needed...\n\nIn the end we just need to save/keep the normal position and size, while in any other none-normal state.\n\n\u003e 2. Why can\u0027t we call refOrSavePosSize unconditionally, tolerating the counter values greater than 2? (I *guess* that the save/restore calls indeed do not follow a strict order, but would then the value of 2 be safe?)\n\nMy original idea was, minimize and maximize are \"stack 1\" and full-screen is \"stack 2\", so you can actually have a WindowState of \"Maximize | Fullscreen\", where going back from Fullscreen restores Maximize (or Minimize). Starting a Fullscreen presentation from a Maximized Impress definitely happens, but OTOH the Fullscreen Impress window is separate, so it\u0027s actually a non-problem here.\n\nThe refcounter going to zero indicates, we should restore the normal size and clear the saved normal position and size.",
+      "parentUuid": "bb6076bd_7b07476d",
+      "range": {
+        "startLine": 21,
+        "startChar": 40,
+        "endLine": 22,
+        "endChar": 33
+      },
+      "revId": "fbbbf627ad5378b307ef414b0e93fdac3c4a62c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "5441d912_6b0276bc",
