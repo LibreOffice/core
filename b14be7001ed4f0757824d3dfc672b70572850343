@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed6d88fc_0661a238",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-06-14T10:20:56Z",
+      "side": 1,
+      "message": "An interesting one. No problem with reverting for now, though it doesn\u0027t do much harm on master if it\u0027s not turned on; but perhaps Lubos has a better idea \u003d)",
+      "revId": "b14be7001ed4f0757824d3dfc672b70572850343",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
