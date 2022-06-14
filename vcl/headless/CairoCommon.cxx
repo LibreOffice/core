@@ -707,6 +707,14 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
 
     cairo_set_line_join(cr, eCairoLineJoin);
     cairo_set_line_cap(cr, eCairoLineCap);
+    constexpr int MaxNormalLineWidth = 4096;
+    if (fLineWidth > MaxNormalLineWidth)
+    {
+        SAL_WARN("vcl.gdi", "drawPolyLine, suspicious line width of: " << fLineWidth);
+        static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+        if (bFuzzing)
+            fLineWidth = MaxNormalLineWidth;
+    }
     cairo_set_line_width(cr, fLineWidth);
     cairo_set_miter_limit(cr, fMiterLimit);
 
