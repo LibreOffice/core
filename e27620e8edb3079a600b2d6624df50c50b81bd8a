@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f58f9bbc_86241246",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-14T08:54:30Z",
+      "side": 1,
+      "message": "Hi Lubos,\nI do confirm the patch fixes the issue. I added a unittest in https://gerrit.libreoffice.org/c/core/+/135816",
+      "revId": "e27620e8edb3079a600b2d6624df50c50b81bd8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
