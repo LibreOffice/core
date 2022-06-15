@@ -127,6 +127,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     // maybe catch-up adjustment
     GetAdjusted();
+    AddExtraBlankWidth();
     GetInfo().SetpSpaceAdd( m_pCurr->GetpLLSpaceAdd() );
     GetInfo().ResetSpaceIdx();
     GetInfo().SetKanaComp( m_pCurr->GetpKanaComp() );

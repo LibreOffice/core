@@ -321,6 +321,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     if ( !bFull )
     {
         Width( aGuess.BreakWidth() );
+        ExtraBlankWidth(aGuess.ExtraBlankWidth());
         // Caution!
         if( !InExpGrp() || InFieldGrp() )
             SetLen( rInf.GetLen() );
@@ -409,6 +410,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             {
                 SwHolePortion *pNew = new SwHolePortion( *this );
                 pNew->SetLen( nRealStart - aGuess.BreakPos() );
+                pNew->Width(0);
+                pNew->ExtraBlankWidth( aGuess.ExtraBlankWidth() );
                 Insert( pNew );
             }
         }
@@ -749,11 +752,28 @@ SwHolePortion::SwHolePortion( const SwTextPortion &rPor )
 {
     SetLen( TextFrameIndex(1) );
     Height( rPor.Height() );
+    Width(0);
     SetAscent( rPor.GetAscent() );
     SetWhichPor( PortionType::Hole );
 }
 
 SwLinePortion *SwHolePortion::Compress() { return this; }
+
+// The GetTextSize() assumes that the own length is correct
+SwPosSize SwHolePortion::GetTextSize(const SwTextSizeInfo& rInf) const
+{
+    SwPosSize aSize = rInf.GetTextSize();
+    if (!GetJoinBorderWithPrev())
+        aSize.Width(aSize.Width() + rInf.GetFont()->GetLeftBorderSpace());
+    if (!GetJoinBorderWithNext())
+        aSize.Width(aSize.Width() + rInf.GetFont()->GetRightBorderSpace());
+
+    aSize.Height(aSize.Height() +
+        rInf.GetFont()->GetTopBorderSpace() +
+        rInf.GetFont()->GetBottomBorderSpace());
+
+    return aSize;
+}
 
 void SwHolePortion::Paint( const SwTextPaintInfo &rInf ) const
 {

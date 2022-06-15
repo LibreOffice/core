@@ -470,6 +470,74 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRedlineDelete)
                          pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf120715_CursorMoveWhenTypingSpaceAtCenteredLineEnd)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf43100_tdf120715_cursorOnSpacesOverMargin.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Make a paint to force the call of AddExtraBlankWidth, that calculate width for holePortions.
+    pDoc->GetDocShell()->GetPreviewBitmap();
+
+    // Move the cursor to the last character of the document.
+    pWrtShell->EndOfSection();
+
+    //Press space and check if the cursor move right with the additional space.
+    sal_Int32 nOldCursorPos = pWrtShell->GetCharRect().Left();
+    pWrtShell->Insert(" ");
+    sal_Int32 nNewCursorPos = pWrtShell->GetCharRect().Left();
+    CPPUNIT_ASSERT_GREATER(nOldCursorPos, nNewCursorPos);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf43100_CursorMoveToSpacesOverMargin)
+{
+    // Test the cursor movement over the right margin in several different paragraphs.
+    // These differences are based on its paragraphs
+    // - alignment (left, center, right, justified),
+    // - line count (1 line, 2 lines, blank line containing only spaces)
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf43100_tdf120715_cursorOnSpacesOverMargin.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Make a paint to force the call of AddExtraBlankWidth, that calculate width for holePortions.
+    pDoc->GetDocShell()->GetPreviewBitmap();
+
+    // Move the cursor to the 2. line.
+    pWrtShell->Down(/*bSelect=*/false, 1, /*bBasicCall=*/false);
+    // Move the cursor to the right margin.
+    pWrtShell->RightMargin(false, false);
+
+    sal_Int32 nMarginPos = pWrtShell->GetCharRect().Left();
+    sal_Int32 nLastCursorPos = nMarginPos;
+
+    // Move the cursor right 5 times, every step should increase the cursor x position.
+    // Before this fix, the cursor stopped at the margin.
+    for (int i = 0; i < 5; i++)
+    {
+        pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+        sal_Int32 nNewCursorPos = pWrtShell->GetCharRect().Left();
+        CPPUNIT_ASSERT_GREATER(nLastCursorPos, nNewCursorPos);
+        nLastCursorPos = nNewCursorPos;
+    }
+
+    // Move down the cursor several lines, and check if it will keep nearly its horizontal position.
+    // Some of the lines are not reach beyond the margin, there the cursor won't be able to keep its
+    // original position.
+    bool aLineReachOverMargin[] = { false, true, true, false, false, true, true,  false, true,
+                                    true,  true, true, false, true,  true, false, false };
+    // Cursor position can be a bit inaccurate, because it can only be positioned on characters,
+    // that is based on the actual line layout, therefore the actual cursor position
+    // is checked against a more distinct position instead of the nMarginPos.
+    sal_Int32 nAvgLeft = (nMarginPos + nLastCursorPos) / 2;
+    for (int i = 2; i < 17; i++)
+    {
+        pWrtShell->Down(/*bSelect=*/false, 1, /*bBasicCall=*/false);
+        sal_Int32 nNewCursorPos = pWrtShell->GetCharRect().Left();
+        if (aLineReachOverMargin[i])
+            CPPUNIT_ASSERT_GREATER(nAvgLeft, nNewCursorPos);
+        else
+            CPPUNIT_ASSERT_LESS(nAvgLeft, nNewCursorPos);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
