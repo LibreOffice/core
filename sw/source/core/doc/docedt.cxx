@@ -28,6 +28,7 @@
 #include <mdiexp.hxx>
 #include <mvsave.hxx>
 #include <redline.hxx>
+#include <rolbck.hxx>
 #include <rootfrm.hxx>
 #include <splargs.hxx>
 #include <swcrsr.hxx>
@@ -133,7 +134,7 @@ void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
 }
 
 void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
-                       SaveFlyArr& rArr, bool bMoveAllFlys )
+        SaveFlyArr& rArr, bool bMoveAllFlys, SwHistory *const pHistory)
 {
     SwFrameFormats& rFormats = *rPam.GetPoint()->nNode.GetNode().GetDoc().GetSpzFrameFormats();
     SwFrameFormat* pFormat;
@@ -179,6 +180,10 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
                     || (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId()
                             && (bInsPos = (rInsPos == *pAPos))))
             {
+                if (pHistory)
+                {
+                    pHistory->AddChangeFlyAnchor(*pFormat);
+                }
                 SaveFly aSave( pAPos->nNode.GetIndex() - rSttNdIdx.GetIndex(),
                     (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())
                         ? (pAPos->nNode == rSttNdIdx)
