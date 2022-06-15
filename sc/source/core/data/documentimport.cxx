@@ -220,26 +220,24 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
         aCell, rPos.Row(), rPos.Tab(), rStr, mpImpl->mrDoc.GetAddressConvention(), pStringParam);
 
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
-    switch (aCell.meType)
+    switch (aCell.getType())
     {
         case CELLTYPE_STRING:
             // string is copied.
-            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), *aCell.mpString);
+            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.getSharedString());
         break;
         case CELLTYPE_EDIT:
             // Cell takes the ownership of the text object.
-            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mpEditText);
-            aCell.mpEditText = nullptr;
+            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.releaseEditText());
         break;
         case CELLTYPE_VALUE:
-            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mfValue);
+            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.getDouble());
         break;
         case CELLTYPE_FORMULA:
             if (!pStringParam)
-                mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *aCell.mpFormula->GetCode());
+                mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *aCell.getFormula()->GetCode());
             // This formula cell instance is directly placed in the document without copying.
-            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mpFormula);
-            aCell.mpFormula = nullptr;
+            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.releaseFormula());
         break;
         default:
             pBlockPos->miCellPos = rCells.set_empty(pBlockPos->miCellPos, rPos.Row(), rPos.Row());
