@@ -4099,7 +4099,7 @@ DocumentContentOperationsManager::~DocumentContentOperationsManager()
 }
 //Private methods
 
-bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl(SwPaM & rPam, SwDeleteFlags const /*flags*/, const bool)
+bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl(SwPaM & rPam, SwDeleteFlags const flags, const bool)
 {
     assert(m_rDoc.getIDocumentRedlineAccess().IsRedlineOn());
 
@@ -4180,7 +4180,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl(SwPaM & rPam
         {
             assert(pRedline->HasValidRange());
             undos.emplace_back(std::make_unique<SwUndoRedlineDelete>(
-                        *pRedline, SwUndoId::DELETE));
+                        *pRedline, SwUndoId::DELETE, flags));
         }
         const SwRewriter aRewriter = undos.front()->GetRewriter();
         // can only group a single undo action
