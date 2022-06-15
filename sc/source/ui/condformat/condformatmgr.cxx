@@ -13,6 +13,7 @@
 #include <document.hxx>
 #include <conditio.hxx>
 #include <o3tl/safeint.hxx>
+#include <unotools/viewoptions.hxx>
 
 ScCondFormatManagerWindow::ScCondFormatManagerWindow(weld::TreeView& rTreeView,
     ScDocument& rDoc, ScConditionalFormatList* pFormatList)
@@ -99,11 +100,20 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument
     m_xBtnAdd->connect_clicked(LINK(this, ScCondFormatManagerDlg, AddBtnHdl));
     m_xTreeView->connect_row_activated(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
 
+    SvtViewOptions aDlgOpt(EViewType::Dialog, "CondFormatDialog");
+    if (aDlgOpt.Exists())
+        m_xDialog->set_window_state(aDlgOpt.GetWindowState().toUtf8());
+
     UpdateButtonSensitivity();
 }
 
 ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
 {
+   // tdf#101285 - Remember dialog position
+    SvtViewOptions aDlgOpt(EViewType::Dialog, "CondFormatDialog");
+    OString sWindowState
+        = m_xDialog->get_window_state(WindowStateMask::Pos);
+    aDlgOpt.SetWindowState(OUString::fromUtf8(sWindowState));
 }
 
 std::unique_ptr<ScConditionalFormatList> ScCondFormatManagerDlg::GetConditionalFormatList()
