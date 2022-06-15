@@ -768,6 +768,10 @@ OUString SAL_CALL ControlModelContainerBase::getImageURL()
 void SAL_CALL ControlModelContainerBase::setImageURL( const OUString& _imageurl )
 {
     m_sImageURL = _imageurl;
+    SolarMutexGuard aGuard;
+    Reference<XPropertySet> xThis(*this, UNO_QUERY);
+    xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_IMAGEURL), Any(_imageurl));
+
 }
 OUString SAL_CALL ControlModelContainerBase::getToolTip()
 {

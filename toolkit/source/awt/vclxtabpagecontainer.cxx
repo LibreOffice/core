@@ -224,6 +224,8 @@ void VCLXTabPageContainer::propertiesChange(const::css::uno::Sequence<PropertyCh
             pTabCtrl->SetPageEnabled(nId, xTabPageModel->getEnabled());
         } else if (rEvent.PropertyName == GetPropertyName(BASEPROPERTY_TITLE)) {
             pTabCtrl->SetPageText(nId, xTabPageModel->getTitle());
+        } else if (rEvent.PropertyName == GetPropertyName(BASEPROPERTY_IMAGEURL)) {
+            pTabCtrl->SetPageImage(nId, TkResMgr::getImageFromURL(xTabPageModel->getImageURL()));
         }
     }
 }
