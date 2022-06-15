@@ -1365,7 +1365,7 @@ void ScChangeActionContent::SetValueString(
     if ( rStr.getLength() > 1 && rStr[0] == '=' )
     {
         rValue.clear();
-        rCell = ScCellValue(new ScFormulaCell(
+        rCell.set(new ScFormulaCell(
             *pDoc, aBigRange.aStart.MakeAddress(*pDoc), rStr,
             pDoc->GetGrammar() ));
         rCell.getFormula()->SetInChangeTrack(true);
