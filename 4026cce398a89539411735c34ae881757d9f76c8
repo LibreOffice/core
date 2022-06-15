@@ -99,6 +99,30 @@
       },
       "revId": "4026cce398a89539411735c34ae881757d9f76c8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "806b7ca9_0a05331b",
+        "filename": "vcl/inc/win/salframe.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-15T09:58:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc726fc7_3086ccd3",
+      "range": {
+        "startLine": 66,
+        "startChar": 28,
+        "endLine": 66,
+        "endChar": 40
+      },
+      "revId": "4026cce398a89539411735c34ae881757d9f76c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
