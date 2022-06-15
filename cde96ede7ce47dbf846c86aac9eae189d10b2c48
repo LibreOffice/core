@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "975aa0d6_e44340ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-15T18:28:25Z",
+      "side": 1,
+      "message": "Stephan: UNO, bridges, Java, I think you might be interested in this one.",
+      "revId": "cde96ede7ce47dbf846c86aac9eae189d10b2c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
