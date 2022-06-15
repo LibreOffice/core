@@ -350,7 +350,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             nInEndPos += std::min(nMaxTrailingLen, searchStr.getLength() - endPos);
         }
 
-        css::uno::Sequence<sal_Int32> offset(nInEndPos - nInStartPos);
+        css::uno::Sequence<sal_Int32> offset;
         in_str = xTranslit->transliterate(searchStr, nInStartPos, nInEndPos - nInStartPos, offset);
 
         if ( bReplaceApostrophe )
@@ -410,7 +410,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         SearchResult sres2;
 
         in_str = searchStr;
-        css::uno::Sequence <sal_Int32> offset( in_str.getLength());
+        css::uno::Sequence <sal_Int32> offset;
 
         in_str = xTranslit2->transliterate( searchStr, 0, in_str.getLength(), offset );
 
@@ -468,7 +468,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
     if ( xTranslit.is() )
     {
         // apply only simple 1<->1 transliteration here
-        css::uno::Sequence<sal_Int32> offset(startPos - endPos);
+        css::uno::Sequence<sal_Int32> offset;
         in_str = xTranslit->transliterate( searchStr, endPos, startPos - endPos, offset );
 
         if ( bReplaceApostrophe )
@@ -532,7 +532,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         SearchResult sres2;
 
         in_str = searchStr;
-        css::uno::Sequence <sal_Int32> offset( in_str.getLength());
+        css::uno::Sequence <sal_Int32> offset;
 
         in_str = xTranslit2->transliterate(searchStr, 0, in_str.getLength(), offset);
 
