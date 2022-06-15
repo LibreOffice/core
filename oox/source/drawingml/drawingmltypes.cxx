@@ -23,6 +23,8 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <sax/tools/converter.hxx>
 #include <oox/token/tokens.hxx>
@@ -374,15 +376,26 @@ const char* GetHatchPattern( const drawing::Hatch& rHatch )
     return sPattern;
 }
 
+namespace
+{
+// ISO/IEC-29500 Part 1 ST_Percentage, and [MS-OI29500] 2.1.1324
+sal_Int32 GetST_Percentage(std::u16string_view s)
+{
+    if (o3tl::ends_with(s, u"%"))
+        return std::round(o3tl::toDouble(s) * 1000);
+    return o3tl::toInt32(s);
+}
+}
+
 /** converts the attributes from a CT_RelativeRect to an IntegerRectangle2D */
 IntegerRectangle2D GetRelativeRect( const Reference< XFastAttributeList >& xAttribs )
 {
     IntegerRectangle2D r;
 
-    r.X1 = xAttribs->getOptionalValue( XML_l ).toInt32();
-    r.Y1 = xAttribs->getOptionalValue( XML_t ).toInt32();
-    r.X2 = xAttribs->getOptionalValue( XML_r ).toInt32();
-    r.Y2 = xAttribs->getOptionalValue( XML_b ).toInt32();
+    r.X1 = GetST_Percentage(xAttribs->getOptionalValue( XML_l ));
+    r.Y1 = GetST_Percentage(xAttribs->getOptionalValue( XML_t ));
+    r.X2 = GetST_Percentage(xAttribs->getOptionalValue( XML_r ));
+    r.Y2 = GetST_Percentage(xAttribs->getOptionalValue( XML_b ));
 
     return r;
 }
