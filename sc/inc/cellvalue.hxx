@@ -10,6 +10,8 @@
 #pragma once
 
 #include "global.hxx"
+#include <svl/sharedstring.hxx>
+#include <variant>
 
 class ScDocument;
 class ScFormulaCell;
@@ -21,12 +23,6 @@ namespace sc {
 struct ColumnBlockPosition;
 }
 
-namespace svl {
-
-class SharedString;
-
-}
-
 /**
  * Store arbitrary cell value of any kind.  It only stores cell value and
  * nothing else.  It creates a copy of the original cell value, and manages
@@ -34,15 +30,8 @@ class SharedString;
  */
 struct SC_DLLPUBLIC ScCellValue
 {
-private:
-    CellType meType;
-public:
-    union {
-        double mfValue1;
-        svl::SharedString* mpString;
-        EditTextObject* mpEditText1;
-        ScFormulaCell* mpFormula1;
-    };
+    /// bool is there to indicate CellType::NONE
+    std::variant<bool, double, svl::SharedString, EditTextObject*, ScFormulaCell*> maData;
 
     ScCellValue();
     ScCellValue( const ScRefCellValue& rCell );
@@ -50,7 +39,7 @@ public:
     ScCellValue( const svl::SharedString& rString );
     ScCellValue( std::unique_ptr<EditTextObject> );
     ScCellValue( const ScCellValue& r );
-    ScCellValue(ScCellValue&& r) noexcept;
+    ScCellValue(ScCellValue&& r) noexcept = default;
     ~ScCellValue();
 
     void clear() noexcept;
@@ -61,25 +50,13 @@ public:
     void set( std::unique_ptr<EditTextObject> );
     void set( ScFormulaCell* pFormula );
 
-    CellType getType() const { return meType; }
-    double getDouble() const { assert(meType == CELLTYPE_VALUE); return mfValue1; }
-    svl::SharedString* getSharedString() const { assert(meType == CELLTYPE_STRING); return mpString; }
-    EditTextObject* getEditText() const { assert(meType == CELLTYPE_EDIT); return mpEditText1; }
-    EditTextObject* releaseEditText()
-    {
-        assert(meType == CELLTYPE_EDIT);
-        auto p = mpEditText1;
-        mpEditText1 = nullptr;
-        return p;
-    }
-    ScFormulaCell* getFormula() const { assert(meType == CELLTYPE_FORMULA); return mpFormula1; }
-    ScFormulaCell* releaseFormula()
-    {
-        assert(meType == CELLTYPE_FORMULA);
-        auto p = mpFormula1;
-        mpFormula1 = nullptr;
-        return p;
-    }
+    CellType getType() const;
+    double getDouble() const { return std::get<double>(maData); }
+    ScFormulaCell* getFormula() const { return std::get<ScFormulaCell*>(maData); }
+    const svl::SharedString* getSharedString() const { return &std::get<svl::SharedString>(maData); }
+    EditTextObject* getEditText() const { return std::get<EditTextObject*>(maData); }
+    EditTextObject* releaseEditText() { auto p = getEditText(); maData = static_cast<EditTextObject*>(nullptr); return p; }
+    ScFormulaCell* releaseFormula() { auto p = getFormula(); maData = static_cast<ScFormulaCell*>(nullptr); return p; }
 
     /**
      * Take cell value from specified position in specified document.
@@ -125,6 +102,8 @@ public:
  */
 struct SC_DLLPUBLIC ScRefCellValue
 {
+    /// bool is there to indicate CellType::NONE
+    std::variant<bool, double, svl::SharedString, EditTextObject*, ScFormulaCell*> maData;
 private:
     CellType meType;
 public:
