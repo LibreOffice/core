@@ -25,6 +25,13 @@
 #include <svl/poolitem.hxx>
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 
+/**
+ * Allows positioning of floating screen objects without considering their own wrapping type and the
+ * wrapping types of the other floating screen objects.
+ *
+ * See <http://www.openoffice.org/specs/writer/compatibility/obj-pos-without-wrapping.sxw> for
+ * details.
+ */
 class SW_DLLPUBLIC SwFormatWrapInfluenceOnObjPos final : public SfxPoolItem
 {
 private:
