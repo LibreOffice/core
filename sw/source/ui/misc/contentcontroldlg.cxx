@@ -30,6 +30,7 @@
 #include <IDocumentState.hxx>
 #include <swuiexp.hxx>
 #include <numfmtlb.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 
@@ -374,7 +375,7 @@ IMPL_LINK_NOARG(SwContentControlDlg, MoveDownHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwContentControlDlg, SelectionChangedHdl, weld::TreeView&, void)
 {
-    if (!m_xListItems->has_focus())
+    if (!comphelper::LibreOfficeKit::isActive() && !m_xListItems->has_focus())
     {
         return;
     }
