@@ -52,6 +52,7 @@ UnoControlTabPageModel::UnoControlTabPageModel( Reference< XComponentContext > c
     ImplRegisterProperty( BASEPROPERTY_SCROLLHEIGHT );
     ImplRegisterProperty( BASEPROPERTY_SCROLLTOP );
     ImplRegisterProperty( BASEPROPERTY_SCROLLLEFT );
+    ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
 }
 
 OUString SAL_CALL UnoControlTabPageModel::getImplementationName()
