@@ -28,6 +28,7 @@
 #include <wrtsh.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <flyfrm.hxx>
+#include <pagefrm.hxx>
 #include <fmtanchr.hxx>
 #include <UndoManager.hxx>
 #include <sortedobjs.hxx>
@@ -956,6 +957,100 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139982)
     pWrtShell->Undo();
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf135976)
+{
+    SwDoc* const pDoc = createDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Insert("foobar");
+
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
+    anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+    SfxItemSet flySet(pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{});
+    flySet.Put(anchor);
+    SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
+    CPPUNIT_ASSERT(pFly != nullptr);
+
+    // turn on redlining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetContentAnchor()->nContent.GetIndex());
+
+    pWrtShell->UnSelectFrame();
+    pWrtShell->SttEndDoc(/*bStart=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    pWrtShell->DelLeft();
+    pWrtShell->DelLeft();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    // the problem was that the fly was deleted from the layout
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
+    // check that the anchor was moved outside the redline
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pFly->GetAnchor().GetContentAnchor()->nContent.GetIndex());
+
+    pWrtShell->Undo(2);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
+    // check that the anchor was restored
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetContentAnchor()->nContent.GetIndex());
+
+    pWrtShell->Redo(2);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pFly->GetAnchor().GetContentAnchor()->nContent.GetIndex());
+
+    pWrtShell->Undo(2);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetContentAnchor()->nContent.GetIndex());
+
+    // now again in the other direction:
+
+    pWrtShell->SttEndDoc(/*bStart=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+
+    pWrtShell->DelRight();
+    pWrtShell->DelRight();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    // the problem was that the fly was deleted from the layout
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pFly->GetAnchor().GetContentAnchor()->nContent.GetIndex());
+
+    pWrtShell->Undo(2);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetContentAnchor()->nContent.GetIndex());
+
+    pWrtShell->Redo(2);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pFly->GetAnchor().GetContentAnchor()->nContent.GetIndex());
+
+    pWrtShell->Undo(2);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetLayout()->GetLastPage()->GetSortedObjs()->size());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pFly->GetAnchor().GetContentAnchor()->nContent.GetIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
