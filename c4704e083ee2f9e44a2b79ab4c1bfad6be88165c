@@ -16,6 +16,24 @@
       "message": "Just for curiosity, did you find a way to avoid regressions like c0e66cfab12d6c78d68af09498533362724dbd05 \"Fix context menu on image which doesnt display\" ? (I mean except filling a bit more the blacklist in moveit.cxx)",
       "revId": "c4704e083ee2f9e44a2b79ab4c1bfad6be88165c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac6d8ce3_3486bbab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-15T17:38:34Z",
+      "side": 1,
+      "message": "no",
+      "parentUuid": "bbbc89f7_7e64ed1e",
+      "revId": "c4704e083ee2f9e44a2b79ab4c1bfad6be88165c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
