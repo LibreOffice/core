@@ -401,6 +401,26 @@ void SwTextCursor::CtorInitTextCursor( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     // GetInfo().SetOut( GetInfo().GetWin() );
 }
 
+// tdf#120715 tdf#43100: Make width for some HolePortions, so cursor will be able to move into it.
+// It sould not change the layout, so this should be called after the layout is calculated.
+void SwTextCursor::AddExtraBlankWidth()
+{
+    SwLinePortion* pPos = m_pCurr->GetNextPortion();
+    SwLinePortion* pNextPos;
+    while (pPos)
+    {
+        pNextPos = pPos->GetNextPortion();
+        // Do it only if it is the last portion that able to handle the cursor,
+        // else the next portion would misscalculate the cursor position
+        if (pPos->ExtraBlankWidth() && (!pNextPos || pNextPos->IsMarginPortion()))
+        {
+            pPos->Width(pPos->Width() + pPos->ExtraBlankWidth());
+            pPos->ExtraBlankWidth(0);
+        }
+        pPos = pNextPos;
+    }
+}
+
 // 1170: Ancient bug: Shift-End forgets the last character ...
 void SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
                                   SwCursorMoveState* pCMS, const tools::Long nMax )
@@ -1228,13 +1248,6 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
         pCMS->m_p2Lines->aPortion.Pos().AdjustY(aCharPos.Y() );
     }
 
-    const IDocumentSettingAccess& rIDSA = GetTextFrame()->GetDoc().getIDocumentSettingAccess();
-    const bool bTabOverMargin = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN)
-        || rIDSA.get(DocumentSettingId::TAB_OVER_SPACING);
-    // Make sure the cursor respects the right margin, unless in compat mode, where the tab size has priority over the margin size.
-    if( pOrig->Left() > nTmpRight && !bTabOverMargin)
-        pOrig->Pos().setX( nTmpRight );
-
     if( nMax )
     {
         if( pOrig->Top() + pOrig->Height() > nMax )
@@ -1254,16 +1267,6 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
             else if( nTmp + pCMS->m_aRealHeight.Y() > nMax )
                 pCMS->m_aRealHeight.setY( nMax - nTmp );
         }
-    }
-    tools::Long nOut = pOrig->Right() - GetTextFrame()->getFrameArea().Right();
-    if( nOut > 0 )
-    {
-        if( GetTextFrame()->getFrameArea().Width() < GetTextFrame()->getFramePrintArea().Left()
-                                   + GetTextFrame()->getFramePrintArea().Width() )
-            nOut += GetTextFrame()->getFrameArea().Width() - GetTextFrame()->getFramePrintArea().Left()
-                    - GetTextFrame()->getFramePrintArea().Width();
-        if( nOut > 0 )
-            pOrig->Pos().AdjustX( -(nOut + 10) );
     }
 }
 
@@ -1320,9 +1323,6 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
     if( bLeftOver )
         x = nLeftMargin;
     const bool bRightOver = x > nRightMargin;
-    if( bRightOver )
-        x = nRightMargin;
-
     const bool bRightAllowed = pCMS && ( pCMS->m_eState == CursorMoveState::NONE );
 
     // Until here everything in document coordinates.
@@ -1647,7 +1647,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
             return GetModelPositionForViewPoint( pPos, Point( GetLineStart() + nX, rPoint.Y() ),
                                 bChgNode, pCMS );
         }
-        if( pPor->InTextGrp() )
+        if( pPor->InTextGrp() || pPor->IsHolePortion() )
         {
             sal_uInt8 nOldProp;
             if( GetPropFont() )
