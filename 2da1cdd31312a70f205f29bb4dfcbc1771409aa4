@@ -22,6 +22,23 @@
       },
       "revId": "2da1cdd31312a70f205f29bb4dfcbc1771409aa4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51b9419f_a13f5bc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-06-15T07:41:03Z",
+      "side": 1,
+      "message": "Is this based on some real need, or just on looking at the code? I tried this when making the function inline, and this only simplifies the C++ code, but the generated code is actually worse (IIRC resize() of mdds_vector creates an additional loop that runs destructors on all the original null strings).\n\n",
+      "revId": "2da1cdd31312a70f205f29bb4dfcbc1771409aa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
