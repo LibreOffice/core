@@ -351,12 +351,17 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
             //     application or establish the backing mode now.
             //     And that depends from the dispatched URL ...
             {
-                if (bHasActiveConnections)
-                    bCloseFrame = true;
-                else if (eOperation == E_CLOSE_FRAME)
-                    bTerminateApp = true;
+                if (eOperation == E_CLOSE_FRAME)
+                {
+                    if (bHasActiveConnections)
+                        bCloseFrame = true;
+                    else
+                        bTerminateApp = true;
+                }
                 else if( SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE) )
                     bEstablishBackingMode = true;
+                else if (bHasActiveConnections)
+                    bCloseFrame = true;
                 else
                     bTerminateApp = true;
             }
