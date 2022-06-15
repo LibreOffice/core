@@ -485,6 +485,14 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const OUString& aFormat,
     {
         throw util::MalformedNumberFormatException(); // Invalid Format
     }
+    else if (aFormStr != aFormat)
+    {
+        // The format exists but with a different format code string, and if it
+        // was only uppercase vs lowercase keywords; but also syntax extensions
+        // are possible like resulting embedded LCIDs and what not the client
+        // doesn't know about. Silently accept instead of throwing an error.
+        nRet = nKey;
+    }
     else
         throw uno::RuntimeException(); // Other error (e.g. already added)
 
