@@ -75,6 +75,17 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/swriter,\
 	sw/uiconfig/swriter/toolbar/optimizetablebar \
 	sw/uiconfig/swriter/toolbar/previewobjectbar \
 	sw/uiconfig/swriter/toolbar/singlemode \
+	sw/uiconfig/swriter/toolbar/singlemode-annotation \
+	sw/uiconfig/swriter/toolbar/singlemode-draw \
+	sw/uiconfig/swriter/toolbar/singlemode-drawtext \
+	sw/uiconfig/swriter/toolbar/singlemode-form \
+	sw/uiconfig/swriter/toolbar/singlemode-frame \
+	sw/uiconfig/swriter/toolbar/singlemode-graphic \
+	sw/uiconfig/swriter/toolbar/singlemode-media \
+	sw/uiconfig/swriter/toolbar/singlemode-ole \
+	sw/uiconfig/swriter/toolbar/singlemode-printpreview \
+	sw/uiconfig/swriter/toolbar/singlemode-table \
+	sw/uiconfig/swriter/toolbar/singlemode-text \
 	sw/uiconfig/swriter/toolbar/standardbar \
 	sw/uiconfig/swriter/toolbar/starshapes \
 	sw/uiconfig/swriter/toolbar/symbolshapes \
