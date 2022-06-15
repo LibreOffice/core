@@ -135,8 +135,12 @@ class VCLPLUG_QT_PUBLIC QtFrame final : public QObject, public SalFrame
     void fixICCCMwindowGroup();
 
 private Q_SLOTS:
+    void frameChanged();
     void screenChanged(QScreen*);
     void windowStateChanged(Qt::WindowState);
+
+Q_SIGNALS:
+    void frameChangedSignal();
 
 public:
     QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
@@ -222,6 +226,8 @@ public:
     void setInputLanguage(LanguageType);
     inline bool isPopup() const;
     static void FillSystemEnvData(SystemEnvData&, sal_IntPtr pWindow, QWidget* pWidget);
+
+    void fixDecoratedPosition();
 };
 
 inline bool QtFrame::CallCallback(SalEvent nEvent, const void* pEvent) const

@@ -35,6 +35,9 @@
 #include <QtSystem.hxx>
 #include <QtTimer.hxx>
 #include <QtVirtualDevice.hxx>
+#if CHECK_ANY_QT_USING_X11
+#include <QtXcbEventFilter.hxx>
+#endif
 
 #include <headless/svpvd.hxx>
 
@@ -223,6 +226,9 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     , m_pTimer(nullptr)
     , m_bSleeping(false)
     , m_pQApplication(std::move(pQApp))
+#if CHECK_ANY_QT_USING_X11
+    , m_pXcbEventFilter(new QtXcbEventFilter)
+#endif
     , m_aUpdateStyleTimer("vcl::qt5 m_aUpdateStyleTimer")
     , m_bUpdateFonts(false)
     , m_pActivePopup(nullptr)
@@ -245,6 +251,9 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     m_aUpdateStyleTimer.SetInvokeHandler(LINK(this, QtInstance, updateStyleHdl));
 
     QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance(qApp->thread());
+#if CHECK_ANY_QT_USING_X11
+    dispatcher->installNativeEventFilter(m_pXcbEventFilter.get());
+#endif
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, [this]() { m_bSleeping = false; });
     connect(dispatcher, &QAbstractEventDispatcher::aboutToBlock, this,
             [this]() { m_bSleeping = true; });
@@ -746,6 +755,18 @@ void QtInstance::setActivePopup(QtFrame* pFrame)
     assert(!pFrame || pFrame->isPopup());
     m_pActivePopup = pFrame;
 }
+
+#if CHECK_ANY_QT_USING_X11
+void QtInstance::notifyDecorationChange(xcb_window_t nWin)
+{
+    for (auto* pSalFrame : getFrames())
+    {
+        auto* pFrame = static_cast<QtFrame*>(pSalFrame);
+        if (pFrame->asChild()->winId() == nWin)
+            pFrame->fixDecoratedPosition();
+    }
+}
+#endif
 
 extern "C" {
 VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()

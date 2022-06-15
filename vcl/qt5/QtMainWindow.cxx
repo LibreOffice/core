@@ -38,9 +38,11 @@ void QtMainWindow::closeEvent(QCloseEvent* pEvent)
         pEvent->ignore();
 }
 
-void QtMainWindow::moveEvent(QMoveEvent* pEvent)
+void QtMainWindow::moveEvent(QMoveEvent*)
 {
     const qreal fRatio = m_rFrame.devicePixelRatioF();
-    m_rFrame.maGeometry.setPos(toPoint(pEvent->pos() * fRatio));
+    m_rFrame.maGeometry.setPos(toPoint(pos() * fRatio));
     m_rFrame.CallCallback(SalEvent::Move, nullptr);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,6 +34,12 @@
 #include <vector>
 
 #include "QtFilePicker.hxx"
+#include "QtTools.hxx"
+
+#if CHECK_ANY_QT_USING_X11
+#include <xcb/xcb.h>
+class QtXcbEventFilter;
+#endif
 
 class QtFrame;
 class QtTimer;
@@ -64,6 +70,9 @@ class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
     std::vector<FreeableCStr> m_pFakeArgvFreeable;
     std::unique_ptr<char* []> m_pFakeArgv;
     std::unique_ptr<int> m_pFakeArgc;
+#if CHECK_ANY_QT_USING_X11
+    std::unique_ptr<QtXcbEventFilter> m_pXcbEventFilter;
+#endif
 
     Timer m_aUpdateStyleTimer;
     bool m_bUpdateFonts;
@@ -183,6 +192,10 @@ public:
 
     QtFrame* activePopup() const { return m_pActivePopup; }
     void setActivePopup(QtFrame*);
+
+#if CHECK_ANY_QT_USING_X11
+    void notifyDecorationChange(xcb_window_t);
+#endif
 };
 
 inline QtInstance* GetQtInstance() { return static_cast<QtInstance*>(GetSalInstance()); }

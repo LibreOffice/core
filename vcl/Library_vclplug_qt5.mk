@@ -106,6 +106,9 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtVirtualDevice \
     vcl/qt5/QtWidget \
     vcl/qt5/QtXAccessible \
+    $(if $(USING_X11), \
+        vcl/qt5/QtXcbEventFilter \
+    ) \
 ))
 
 ifeq ($(OS),LINUX)

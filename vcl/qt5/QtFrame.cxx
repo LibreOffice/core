@@ -51,6 +51,8 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMainWindow>
 
+#if CHECK_ANY_QT_USING_X11
+#include <QtXcbEventFilter.hxx>
 #if CHECK_QT5_USING_X11
 #include <QtX11Extras/QX11Info>
 #include <xcb/xproto.h>
@@ -58,6 +60,7 @@
 #include <xcb/xcb_icccm.h>
 #endif
 #endif
+#endif // CHECK_ANY_QT_USING_X11
 
 #include <window.h>
 #include <vcl/syswin.hxx>
@@ -123,6 +126,11 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 {
     QtInstance* pInst = GetQtInstance();
     pInst->insertFrame(this);
+
+#if CHECK_ANY_QT_USING_X11
+    // Qt::QueuedConnection to give Qt time to process the X11 property notification
+    connect(this, &QtFrame::frameChangedSignal, this, &QtFrame::frameChanged, Qt::QueuedConnection);
+#endif
 
     m_aDamageHandler.handle = this;
     m_aDamageHandler.damaged = ::SvpDamageHandler;
@@ -261,16 +269,9 @@ void QtFrame::fixICCCMwindowGroup()
         return;
 
     if (g_aXcbClientLeaderAtom == 0)
-    {
-        const char* const leader_name = "WM_CLIENT_LEADER\0";
-        xcb_intern_atom_cookie_t atom_cookie
-            = xcb_intern_atom(conn, 1, strlen(leader_name), leader_name);
-        xcb_intern_atom_reply_t* atom_reply = xcb_intern_atom_reply(conn, atom_cookie, nullptr);
-        if (!atom_reply)
-            return;
-        g_aXcbClientLeaderAtom = atom_reply->atom;
-        free(atom_reply);
-    }
+        QtXcbEventFilter::lookupAtom(conn, "WM_CLIENT_LEADER\0");
+    if (g_aXcbClientLeaderAtom == 0)
+        return;
 
     g_bNeedsWmHintsWindowGroup = true;
 
@@ -1654,5 +1655,18 @@ QPoint QtFrame::mapFromParent(const QPoint& rPos) const
 {
     return m_pTopLevel ? m_pQWidget->mapFromParent(rPos) : rPos;
 }
+
+void QtFrame::frameChanged()
+{
+    const QRect aQtFrameGeometry = asChild()->frameGeometry();
+    const QRect aQtGeometry = asChild()->geometry();
+    maGeometry.setLeftDecoration(aQtGeometry.left() - aQtFrameGeometry.left());
+    maGeometry.setTopDecoration(aQtGeometry.top() - aQtFrameGeometry.top());
+    maGeometry.setRightDecoration(aQtFrameGeometry.right() - aQtGeometry.right());
+    maGeometry.setBottomDecoration(aQtFrameGeometry.bottom() - aQtGeometry.bottom());
+    asChild()->move(toQPoint(maGeometry.pos()) / devicePixelRatioF());
+}
+
+void QtFrame::fixDecoratedPosition() { Q_EMIT frameChangedSignal(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -310,13 +310,13 @@ void QtWidget::dragMoveEvent(QDragMoveEvent* pEvent) { m_rFrame.handleDragMove(p
 
 void QtWidget::dropEvent(QDropEvent* pEvent) { m_rFrame.handleDrop(pEvent); }
 
-void QtWidget::moveEvent(QMoveEvent* pEvent)
+void QtWidget::moveEvent(QMoveEvent*)
 {
     // already handled by QtMainWindow::moveEvent
     if (m_rFrame.m_pTopLevel)
         return;
 
-    m_rFrame.maGeometry.setPos(toPoint(pEvent->pos() * m_rFrame.devicePixelRatioF()));
+    m_rFrame.maGeometry.setPos(toPoint(pos() * m_rFrame.devicePixelRatioF()));
     m_rFrame.CallCallback(SalEvent::Move, nullptr);
 }
 
@@ -975,7 +975,6 @@ void QtWidget::changeEvent(QEvent* pEvent)
         default:
             break;
     }
-    QWidget::changeEvent(pEvent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
