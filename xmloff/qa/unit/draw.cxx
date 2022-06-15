@@ -25,6 +25,8 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -500,6 +502,36 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf148714_CurvedArrowsOld)
             CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aSegments[1].Count);
         }
     }
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextRotationPlusPre)
+{
+    // import
+    getComponent() = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                                         + "tdf149551_verticalText.pptx",
+                                     "com.sun.star.presentation.PresentationDocument");
+    // The file has a shape with attribute vert="vert" in <bodyPr> element. That generates a
+    // TextPreRotateAngle attribute in CustomShapeGeometry.
+
+    // Add a TextRotateAngle attribute.
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aGeomSeq;
+    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeomSeq;
+    auto aGeomVec(comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomSeq));
+    aGeomVec.push_back(comphelper::makePropertyValue("TextRotateAngle", sal_Int32(45)));
+    aGeomSeq = comphelper::containerToSequence(aGeomVec);
+    xShapeProps->setPropertyValue("CustomShapeGeometry", uno::Any(aGeomSeq));
+
+    // Save to ODF. Without the fix, a file format error was produced, because attribute
+    // draw:text-rotate-angle was written twice, one from TextPreRotateAngle and the other from
+    // TextRotateAngle.
+    utl::TempFile aTempFile;
+    // This should already catch the format error, but does not, see tdf#149567
+    save("impress8", aTempFile);
+    // But reload catches it.
+    getComponent()->dispose();
+    getComponent() = loadFromDesktop(aTempFile.GetURL());
 }
 CPPUNIT_PLUGIN_IMPLEMENT();
 
