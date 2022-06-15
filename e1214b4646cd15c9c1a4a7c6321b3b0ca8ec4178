@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffc91741_1d819779",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-15T18:18:16Z",
+      "side": 1,
+      "message": "Jenkins fails for a reason unrelated to the patch.\nSince the patch concerns just a typo fix of a string, let\u0027s push this one.",
+      "revId": "e1214b4646cd15c9c1a4a7c6321b3b0ca8ec4178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
