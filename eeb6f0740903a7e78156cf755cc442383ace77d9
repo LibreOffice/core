@@ -35,6 +35,41 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29cd260a_c3c3b29c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-15T14:13:09Z",
+      "side": 1,
+      "message": "Bah, ok, I should had looked up isUnicodeCodePoint() as well.. I presumed it checks for *valid* Unicode points.",
+      "revId": "eeb6f0740903a7e78156cf755cc442383ace77d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "139049e5_0415ec78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-15T14:13:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0a68a61c_1a7a19b3",
+      "revId": "eeb6f0740903a7e78156cf755cc442383ace77d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97cc1cd2_83ec1b2a",
@@ -70,6 +105,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93c3add0_4675c7d7",
+        "filename": "svl/source/numbers/numfmuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-15T14:13:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b54265d6_6f65ec3f",
+      "revId": "eeb6f0740903a7e78156cf755cc442383ace77d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eee8bda4_27bda095",
@@ -83,6 +136,24 @@
       "writtenOn": "2022-06-15T14:02:52Z",
       "side": 1,
       "message": "... and again twice\n\n    assert(isUnicodeCodePoint(code));\n\nbecause it even checks isAsciiLowerCase(code) again.",
+      "revId": "eeb6f0740903a7e78156cf755cc442383ace77d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db1929bd_119a15c3",
+        "filename": "svl/source/numbers/numfmuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-15T14:13:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eee8bda4_27bda095",
       "revId": "eeb6f0740903a7e78156cf755cc442383ace77d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
