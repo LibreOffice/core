@@ -161,28 +161,75 @@ std::u16string_view stripEnd(std::u16string_view rIn, sal_Unicode c)
     return tmpl_stripEnd<std::u16string_view, sal_Unicode>(rIn, c);
 }
 
+namespace
+{
+    template <typename T, typename C> T tmpl_strip(const T &rIn,
+        const C cRemove)
+    {
+        if (rIn.empty())
+            return rIn;
+
+        typename T::size_type end = rIn.size();
+        while (end > 0)
+        {
+            if (rIn[end-1] != cRemove)
+                break;
+            --end;
+        }
+
+        typename T::size_type start = 0;
+        while (start < end)
+        {
+            if (rIn[start] != cRemove)
+                break;
+            ++start;
+        }
+
+        return rIn.substr(start, end - start);
+    }
+    template <typename T, typename C> T tmpl_stripString(const T &rIn,
+        const C cRemove)
+    {
+        if (rIn.isEmpty())
+            return rIn;
+
+        sal_Int32 end = rIn.getLength();
+        while (end > 0)
+        {
+            if (rIn[end-1] != cRemove)
+                break;
+            --end;
+        }
+        sal_Int32 start = 0;
+        while (start < end)
+        {
+            if (rIn[start] != cRemove)
+                break;
+            ++start;
+        }
+
+        return rIn.copy(start, end - start);
+    }
+}
+
 OString strip(const OString& rIn, char c)
 {
-    auto x = tmpl_stripStartString<OString, char>(rIn, c);
-    return stripEnd(x, c);
+    return tmpl_stripString<OString, char>(rIn, c);
 }
 
 std::string_view strip(std::string_view rIn, char c)
 {
-    auto x = tmpl_stripStart<std::string_view, char>(rIn, c);
-    return stripEnd(x, c);
+    return tmpl_strip<std::string_view, char>(rIn, c);
 }
 
 OUString strip(const OUString& rIn, sal_Unicode c)
 {
-    auto x = tmpl_stripStartString<OUString, sal_Unicode>(rIn, c);
-    return stripEnd(x, c);
+    return tmpl_stripString<OUString, sal_Unicode>(rIn, c);
 }
 
 std::u16string_view strip(std::u16string_view rIn, sal_Unicode c)
 {
-    auto x = tmpl_stripStart<std::u16string_view, sal_Unicode>(rIn, c);
-    return stripEnd(x, c);
+    return tmpl_strip<std::u16string_view, sal_Unicode>(rIn, c);
 }
 
 namespace
