@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8717d0e_f2f15e67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-15T18:25:49Z",
+      "side": 1,
+      "message": "It seems ok to me but just in case if one of you think differently...",
+      "revId": "0a79fc240e472fadde60cdd1f69c39809bf8da6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
