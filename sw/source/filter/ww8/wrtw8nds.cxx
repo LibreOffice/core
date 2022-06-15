@@ -2153,7 +2153,7 @@ void MSWordExportBase::GetSortedAnnotationMarks( const SwWW8AttrIter& rAttrs, sa
         }
 
         // Sort the bookmarks by end position
-        std::sort( aSortedEnd.begin(), aSortedEnd.end(), CompareMarksEnd() );
+        std::stable_sort( aSortedEnd.begin(), aSortedEnd.end(), CompareMarksEnd() );
 
         m_rSortedAnnotationMarksStart.swap( aSortedStart );
         m_rSortedAnnotationMarksEnd.swap( aSortedEnd );
@@ -2186,7 +2186,7 @@ void MSWordExportBase::GetSortedBookmarks( const SwTextNode& rNode, sal_Int32 nC
         }
 
         // Sort the bookmarks by end position
-        std::sort( aSortedEnd.begin(), aSortedEnd.end(), CompareMarksEnd() );
+        std::stable_sort( aSortedEnd.begin(), aSortedEnd.end(), CompareMarksEnd() );
 
         m_rSortedBookmarksStart.swap( aSortedStart );
         m_rSortedBookmarksEnd.swap( aSortedEnd );
