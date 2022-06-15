@@ -470,6 +470,65 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRedlineDelete)
                          pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf120715_CursorMoveWhenTypingSpaceAtCenteredLineEnd)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf43100_tdf120715_cursorOnSpacesOverMargin.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    //Make a paint to force the calling of AddExtraBlankWidth, that calculate width for holePortions
+    pDoc->GetDocShell()->GetPreviewBitmap();
+
+    //Move the cursor to the last character of the document
+    pWrtShell->Down(/*bSelect=*/false, 16, /*bBasicCall=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 24, /*bBasicCall=*/false);
+
+    //Press space and check if the cursor move right with the additional space.
+    sal_Int32 nOldLeft = pWrtShell->GetCharRect().Left();
+    pWrtShell->Insert(" ");
+    sal_Int32 nNewLeft = pWrtShell->GetCharRect().Left();
+    CPPUNIT_ASSERT_GREATER(nOldLeft, nNewLeft);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf43100_CursorMoveToSpacesOverMargin)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf43100_tdf120715_cursorOnSpacesOverMargin.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    //Make a paint to force the calling of AddExtraBlankWidth, that calculate width for holePortions
+    pDoc->GetDocShell()->GetPreviewBitmap();
+
+    //Move cursor to the 2. line
+    pWrtShell->Down(/*bSelect=*/false, 1, /*bBasicCall=*/false);
+    //Move cursor over the right margin
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 105, /*bBasicCall=*/false);
+
+    sal_Int32 nOldLeft = pWrtShell->GetCharRect().Left();
+    sal_Int32 nLastLeft = nOldLeft;
+
+    //Move cursor right 5 times, every step should increase the cursor x position
+    for (int i = 0; i < 5; i++)
+    {
+        pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+        sal_Int32 nNewLeft = pWrtShell->GetCharRect().Left();
+        CPPUNIT_ASSERT_GREATER(nLastLeft, nNewLeft);
+        nLastLeft = nNewLeft;
+    }
+
+    //Move down the cursor and check if it will keep it's horizontal position, if possible
+    sal_Int32 nAvgLeft = (nOldLeft + nLastLeft) / 2;
+    bool aOverMargin[] = { false, true, true, false, false, true, true,  false, true,
+                           true,  true, true, false, true,  true, false, false };
+    for (int i = 2; i < 17; i++)
+    {
+        pWrtShell->Down(/*bSelect=*/false, 1, /*bBasicCall=*/false);
+        sal_Int32 nNewLeft = pWrtShell->GetCharRect().Left();
+        if (aOverMargin[i])
+            CPPUNIT_ASSERT_GREATER(nAvgLeft, nNewLeft);
+        else
+            CPPUNIT_ASSERT_LESS(nOldLeft, nNewLeft);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
