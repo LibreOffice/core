@@ -32,6 +32,7 @@
 #include <sal/log.hxx>
 #include <tools/lineend.hxx>
 #include <tools/debug.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
@@ -1631,8 +1632,15 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     tools::Long        nWidth          = rRect.GetWidth();
     tools::Long        nHeight         = rRect.GetHeight();
 
-    if ( ((nWidth <= 0) || (nHeight <= 0)) && (nStyle & DrawTextFlags::Clip) )
-        return;
+    if (nWidth <= 0 || nHeight <= 0)
+    {
+        if (nStyle & DrawTextFlags::Clip)
+            return;
+        static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+        SAL_WARN_IF(bFuzzing, "vcl", "skipping negative rectangle of: " << nWidth << " x " << nHeight);
+        if (bFuzzing)
+            return;
+    }
 
     Point       aPos            = rRect.TopLeft();
 
