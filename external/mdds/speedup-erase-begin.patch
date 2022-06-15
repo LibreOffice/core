@@ -1,0 +1,304 @@
+diff -ur include/mdds/multi_type_vector/types.hpp include/mdds/multi_type_vector/types.hpp
+--- include/mdds/multi_type_vector/types.hpp
++++ include/mdds/multi_type_vector/types.hpp
+@@ -200,6 +200,7 @@
+     typedef std::vector<_Data> store_type;
+ #endif
+     store_type m_array;
++    size_t m_removedFront = 0; // number of elements removed from front of array
+ 
+     element_block() : base_element_block(_TypeId)
+     {}
+@@ -223,7 +224,7 @@
+ 
+     bool operator==(const _Self& r) const
+     {
+-        return m_array == r.m_array;
++        return std::equal(m_array.begin() + m_removedFront, m_array.end(), r.m_array.begin() + r.m_removedFront, r.m_array.end());
+     }
+ 
+     bool operator!=(const _Self& r) const
+@@ -233,27 +234,32 @@
+ 
+     static const value_type& at(const base_element_block& block, typename store_type::size_type pos)
+     {
+-        return get(block).m_array.at(pos);
++        auto & elementBlk = get(block);
++        return elementBlk.m_array.at(pos + elementBlk.m_removedFront);
+     }
+ 
+     static value_type& at(base_element_block& block, typename store_type::size_type pos)
+     {
+-        return get(block).m_array.at(pos);
++        auto & elementBlk = get(block);
++        return elementBlk.m_array.at(pos + elementBlk.m_removedFront);
+     }
+ 
+     static value_type* data(base_element_block& block)
+     {
+-        return get(block).m_array.data();
++        auto & elementBlk = get(block);
++        return elementBlk.m_array.data() + elementBlk.m_removedFront;
+     }
+ 
+     static typename store_type::size_type size(const base_element_block& block)
+     {
+-        return get(block).m_array.size();
++        auto & elementBlk = get(block);
++        return elementBlk.m_array.size() - elementBlk.m_removedFront;
+     }
+ 
+     static iterator begin(base_element_block& block)
+     {
+-        return get(block).m_array.begin();
++        auto & elementBlk = get(block);
++        return elementBlk.m_array.begin() + elementBlk.m_removedFront;
+     }
+ 
+     static iterator end(base_element_block& block)
+@@ -263,7 +269,8 @@
+ 
+     static const_iterator begin(const base_element_block& block)
+     {
+-        return get(block).m_array.begin();
++        auto & elementBlk = get(block);
++        return elementBlk.m_array.begin() + elementBlk.m_removedFront;
+     }
+ 
+     static const_iterator end(const base_element_block& block)
+@@ -273,7 +280,8 @@
+ 
+     static const_iterator cbegin(const base_element_block& block)
+     {
+-        return get(block).m_array.begin();
++        auto & elementBlk = get(block);
++        return elementBlk.m_array.begin() + elementBlk.m_removedFront;
+     }
+ 
+     static const_iterator cend(const base_element_block& block)
+@@ -288,7 +296,8 @@
+ 
+     static reverse_iterator rend(base_element_block& block)
+     {
+-        return get(block).m_array.rend();
++        auto & elementBlk = get(block);
++        return elementBlk.m_array.rend() - elementBlk.m_removedFront;
+     }
+ 
+     static const_reverse_iterator rbegin(const base_element_block& block)
+@@ -298,7 +307,8 @@
+ 
+     static const_reverse_iterator rend(const base_element_block& block)
+     {
+-        return get(block).m_array.rend();
++        auto & elementBlk = get(block);
++        return elementBlk.m_array.rend() - elementBlk.m_removedFront;
+     }
+ 
+     static const_reverse_iterator crbegin(const base_element_block& block)
+@@ -308,7 +318,8 @@
+ 
+     static const_reverse_iterator crend(const base_element_block& block)
+     {
+-        return get(block).m_array.rend();
++        auto & elementBlk = get(block);
++        return elementBlk.m_array.rend() - elementBlk.m_removedFront;
+     }
+ 
+     static _Self& get(base_element_block& block)
+@@ -341,17 +352,23 @@
+ 
+     static void set_value(base_element_block& blk, size_t pos, const _Data& val)
+     {
+-        get(blk).m_array[pos] = val;
++        auto & elementBlk = get(blk);
++        pos += elementBlk.m_removedFront;
++        elementBlk.m_array[pos] = val;
+     }
+ 
+     static void get_value(const base_element_block& blk, size_t pos, _Data& val)
+     {
+-        val = get(blk).m_array[pos];
++        auto & elementBlk = get(blk);
++        pos += elementBlk.m_removedFront;
++        val = elementBlk.m_array[pos];
+     }
+ 
+     static value_type get_value(const base_element_block& blk, size_t pos)
+     {
+-        return get(blk).m_array[pos];
++        auto & elementBlk = get(blk);
++        pos += elementBlk.m_removedFront;
++        return elementBlk.m_array[pos];
+     }
+ 
+     static void append_value(base_element_block& blk, const _Data& val)
+@@ -361,8 +378,9 @@
+ 
+     static void prepend_value(base_element_block& blk, const _Data& val)
+     {
+-        store_type& blk2 = get(blk).m_array;
+-        blk2.insert(blk2.begin(), val);
++        auto & elementBlk = get(blk);
++        store_type& blk2 = elementBlk.m_array;
++        blk2.insert(blk2.begin() + elementBlk.m_removedFront, val);
+     }
+ 
+     static _Self* create_block(size_t init_size)
+@@ -377,7 +395,9 @@
+ 
+     static void resize_block(base_element_block& blk, size_t new_size)
+     {
+-        store_type& st = get(blk).m_array;
++        auto & elementBlk = get(blk);
++        new_size += elementBlk.m_removedFront;
++        store_type& st = elementBlk.m_array;
+         st.resize(new_size);
+ 
+         // Test if the vector's capacity is larger than twice its current
+@@ -390,7 +410,7 @@
+     static void print_block(const base_element_block& blk)
+     {
+         const store_type& blk2 = get(blk).m_array;
+-        std::for_each(blk2.begin(), blk2.end(), print_block_array());
++        std::for_each(blk2.begin() + m_removedFront, blk2.end(), print_block_array());
+         std::cout << std::endl;
+     }
+ #else
+@@ -400,28 +420,39 @@
+ 
+     static void erase_block(base_element_block& blk, size_t pos)
+     {
+-        store_type& blk2 = get(blk).m_array;
+-        blk2.erase(blk2.begin() + pos);
++        auto & elementBlk = get(blk);
++        store_type& blk2 = elementBlk.m_array;
++        if (pos == 0)
++            elementBlk.m_removedFront++;
++        else
++            blk2.erase(blk2.begin() + pos);
+     }
+ 
+     static void erase_block(base_element_block& blk, size_t pos, size_t size)
+     {
+-        store_type& blk2 = get(blk).m_array;
+-        blk2.erase(blk2.begin() + pos, blk2.begin() + pos + size);
++        auto & elementBlk = get(blk);
++        store_type& blk2 = elementBlk.m_array;
++        if (pos == 0)
++            elementBlk.m_removedFront += size;
++        else
++            blk2.erase(blk2.begin() + pos, blk2.begin() + pos + size);
+     }
+ 
+     static void append_values_from_block(base_element_block& dest, const base_element_block& src)
+     {
+         store_type& d = get(dest).m_array;
+-        const store_type& s = get(src).m_array;
+-        d.insert(d.end(), s.begin(), s.end());
++        auto const & srcBlk = get(src);
++        const store_type& s = srcBlk.m_array;
++        d.insert(d.end(), s.begin() + srcBlk.m_removedFront, s.end());
+     }
+ 
+     static void append_values_from_block(
+         base_element_block& dest, const base_element_block& src, size_t begin_pos, size_t len)
+     {
+         store_type& d = get(dest).m_array;
+-        const store_type& s = get(src).m_array;
++        auto const & srcBlk = get(src);
++        const store_type& s = srcBlk.m_array;
++        begin_pos += srcBlk.m_removedFront;
+         std::pair<const_iterator, const_iterator> its = get_iterator_pair(s, begin_pos, len);
+ #ifndef MDDS_MULTI_TYPE_VECTOR_USE_DEQUE
+         d.reserve(d.size() + len);
+@@ -432,32 +463,41 @@
+     static void assign_values_from_block(
+         base_element_block& dest, const base_element_block& src, size_t begin_pos, size_t len)
+     {
+-        store_type& d = get(dest).m_array;
+-        const store_type& s = get(src).m_array;
++        auto & destBlk = get(dest);
++        store_type& d = destBlk.m_array;
++        auto const & srcBlk = get(src);
++        const store_type& s = srcBlk.m_array;
++        begin_pos += srcBlk.m_removedFront;
+         std::pair<const_iterator, const_iterator> its = get_iterator_pair(s, begin_pos, len);
+         d.assign(its.first, its.second);
++        destBlk.m_removedFront = 0;
+     }
+ 
+     static void prepend_values_from_block(
+         base_element_block& dest, const base_element_block& src, size_t begin_pos, size_t len)
+     {
+-        store_type& d = get(dest).m_array;
+-        const store_type& s = get(src).m_array;
++        auto & destBlk = get(dest);
++        store_type& d = destBlk.m_array;
++        auto const & srcBlk = get(src);
++        const store_type& s = srcBlk.m_array;
++        begin_pos += srcBlk.m_removedFront;
+         std::pair<const_iterator, const_iterator> its = get_iterator_pair(s, begin_pos, len);
+ #ifndef MDDS_MULTI_TYPE_VECTOR_USE_DEQUE
+         d.reserve(d.size() + len);
+ #endif
+-        d.insert(d.begin(), its.first, its.second);
++        d.insert(d.begin() + destBlk.m_removedFront, its.first, its.second);
+     }
+ 
+     static void swap_values(base_element_block& blk1, base_element_block& blk2, size_t pos1, size_t pos2, size_t len)
+     {
++        auto & elementBlk1 = get(blk1);
++        auto & elementBlk2 = get(blk2);
+         store_type& st1 = get(blk1).m_array;
+         store_type& st2 = get(blk2).m_array;
+         assert(pos1 + len <= st1.size());
+         assert(pos2 + len <= st2.size());
+ 
+-        typename store_type::iterator it1 = st1.begin(), it2 = st2.begin();
++        typename store_type::iterator it1 = st1.begin() + elementBlk1.m_removedFront, it2 = st2.begin() + elementBlk2.m_removedFront;
+         std::advance(it1, pos1);
+         std::advance(it2, pos2);
+         for (size_t i = 0; i < len; ++i, ++it1, ++it2)
+@@ -475,7 +515,9 @@
+     template<typename _Iter>
+     static void set_values(base_element_block& block, size_t pos, const _Iter& it_begin, const _Iter& it_end)
+     {
+-        store_type& d = get(block).m_array;
++        auto & elementBlk = get(block);
++        store_type& d = elementBlk.m_array;
++        pos += elementBlk.m_removedFront;
+         typename store_type::iterator it_dest = d.begin();
+         std::advance(it_dest, pos);
+         for (_Iter it = it_begin; it != it_end; ++it, ++it_dest)
+@@ -493,21 +535,26 @@
+     template<typename _Iter>
+     static void prepend_values(base_element_block& block, const _Iter& it_begin, const _Iter& it_end)
+     {
+-        store_type& d = get(block).m_array;
+-        d.insert(d.begin(), it_begin, it_end);
++        auto & elementBlk = get(block);
++        store_type& d = elementBlk.m_array;
++        d.insert(d.begin() + elementBlk.m_removedFront, it_begin, it_end);
+     }
+ 
+     template<typename _Iter>
+     static void assign_values(base_element_block& dest, const _Iter& it_begin, const _Iter& it_end)
+     {
+-        store_type& d = get(dest).m_array;
++        auto & destBlk = get(dest);
++        store_type& d = destBlk.m_array;
+         d.assign(it_begin, it_end);
++        destBlk.m_removedFront = 0;
+     }
+ 
+     template<typename _Iter>
+     static void insert_values(base_element_block& block, size_t pos, const _Iter& it_begin, const _Iter& it_end)
+     {
+-        store_type& blk = get(block).m_array;
++        auto & elementBlk = get(block);
++        store_type& blk = elementBlk.m_array;
++        pos += elementBlk.m_removedFront;
+         blk.insert(blk.begin() + pos, it_begin, it_end);
+     }
+ 
