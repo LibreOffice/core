@@ -1408,7 +1408,13 @@ void ScDPResultMember::FillMemberResults(
 
         //  set "continue" flag (removed for subtotals later)
         for (tools::Long i=1; i<nSize; i++)
+        {
             pArray[rPos+i].Flags |= sheet::MemberResultFlags::CONTINUE;
+            // tdf#113002 - add numeric flag to recurring data fields
+            if (bIsNumeric)
+                pArray[rPos + i].Flags |= sheet::MemberResultFlags::NUMERIC;
+        }
+
         if ( pParentLevel && pParentLevel->getRepeatItemLabels() )
         {
             tools::Long nSizeNonEmpty = nSize;
