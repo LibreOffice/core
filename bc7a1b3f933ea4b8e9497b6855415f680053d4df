@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b16825a8_05174727",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-15T11:28:58Z",
+      "side": 1,
+      "message": "Sorry for stupid question: the code seem to work with some \"maximum\" rectangle 100000 x 100000? Is that some OOXML constant (I recall there was some similar 27000 thing or some such)? Or maybe 100% in 1/1000th of a percent units?\n\nAnd then - what is aFillRect? Is that not a rect, but an abused \"rect\" struct with simply four percentage values?\n\nThe formula only makes sense to me if both aFillRect.X1 and aFillRect.X2 mean \"so much offset from that side\", not respective position?",
+      "revId": "bc7a1b3f933ea4b8e9497b6855415f680053d4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecfde202_a22bd658",
