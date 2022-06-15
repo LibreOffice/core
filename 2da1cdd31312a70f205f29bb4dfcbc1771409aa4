@@ -56,6 +56,24 @@
       "message": "Oh, changing a logic to create a loop with destructors based on some different pointer operations here? I am very surprised.",
       "revId": "2da1cdd31312a70f205f29bb4dfcbc1771409aa4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b94c2f5c_154ea77d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-06-15T08:06:48Z",
+      "side": 1,
+      "message": "I\u0027m possibly not remembering it exactly. But the point is that if you\u0027re going to destroy something, it\u0027s faster to destroy it outright rather than move it somewhere and destroy it later. If you google it you\u0027ll find posts on how implementing std::move() using std:swap() is generally a pessimisation.",
+      "parentUuid": "6f26a59f_383e0537",
+      "revId": "2da1cdd31312a70f205f29bb4dfcbc1771409aa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
