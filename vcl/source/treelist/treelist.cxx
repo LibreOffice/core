@@ -103,7 +103,7 @@ sal_uInt16 SvTreeList::GetDepth( const SvTreeListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry && pEntry!=pRootItem.get(),"GetDepth:Bad Entry");
     sal_uInt16 nDepth = 0;
-    while( pEntry->pParent != pRootItem.get() )
+    while( pEntry && pEntry->pParent != pRootItem.get() )
     {
         nDepth++;
         pEntry = pEntry->pParent;
