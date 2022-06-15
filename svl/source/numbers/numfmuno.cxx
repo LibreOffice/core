@@ -21,6 +21,7 @@
 #include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
+#include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/util/Date.hpp>
@@ -449,8 +450,8 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const OUString& aFormat,
             }
             else if (*p == '"')
                 bQuoted = true;
-            else if ('a' <= *p && *p <= 'z')
-                *p -= 0x20;     // upper
+            else if (rtl::isAsciiLowerCase(*p))
+                *p = rtl::toAsciiUpperCase(*p);
             else if (*p == '\\')
                 ++p;            // skip escaped next char
                 // Theoretically that should cater for UTF-32 with
