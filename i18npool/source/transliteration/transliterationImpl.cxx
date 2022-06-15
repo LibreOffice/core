@@ -295,8 +295,6 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
     if (numCascade == 0)
         return inStr;
 
-    if (offset.getLength() != nCount)
-        offset.realloc(nCount);
     if (numCascade == 1)
     {
         if ( startPos == 0 && nCount == inStr.getLength() )
