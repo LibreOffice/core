@@ -99,7 +99,15 @@ void lclCalculateCropPercentage(uno::Reference<graphic::XGraphic> const & xGraph
     sal_Int32 nScaledHeight = aBitmapEx.GetSizePixel().Height();
 
     sal_Int32 nOrigWidth = (nScaledWidth * (100000 - aFillRect.X1 - aFillRect.X2)) / 100000;
+    if (nOrigWidth == 0)
+    {
+        nOrigWidth = 1;
+    }
     sal_Int32 nOrigHeight = (nScaledHeight * (100000 - aFillRect.Y1 - aFillRect.Y2)) / 100000;
+    if (nOrigHeight == 0)
+    {
+        nOrigHeight = 1;
+    }
 
     sal_Int32 nLeftPercentage = nScaledWidth * aFillRect.X1 / nOrigWidth;
     sal_Int32 nRightPercentage = nScaledWidth * aFillRect.X2 / nOrigWidth;
