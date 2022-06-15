@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fa1ab19_8653c19b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-06-15T15:50:22Z",
+      "side": 1,
+      "message": "Hi Xisco, can this be tested also using a c++ test instead of a unit test? ",
+      "revId": "0ad873e1b25f205069867284c68cc7b6455de025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
