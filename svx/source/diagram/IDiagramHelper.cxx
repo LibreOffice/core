@@ -34,6 +34,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
@@ -321,6 +322,9 @@ OverlayDiagramFrame::OverlayDiagramFrame(
 drawinglayer::primitive2d::Primitive2DContainer OverlayDiagramFrame::createOverlayObjectPrimitive2DSequence()
 {
     drawinglayer::primitive2d::Primitive2DContainer aReturnContainer;
+
+    if ( !officecfg::Office::Common::Misc::ExperimentalMode::get() )
+        return aReturnContainer;
 
     if (getOverlayManager())
     {
