@@ -20,6 +20,7 @@
 #include <document.hxx>
 #include <attrib.hxx>
 #include <scitems.hxx>
+#include <sortparam.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
@@ -62,6 +63,7 @@ public:
     void testMacroKeyBinding();
 
     void testVba();
+    void testVbaRangeSort();
     void testTdf107885();
     void testTdf131562();
     void testTdf107902();
@@ -79,6 +81,7 @@ public:
     CPPUNIT_TEST(testMacroKeyBinding);
 
     CPPUNIT_TEST(testVba);
+    CPPUNIT_TEST(testVbaRangeSort);
     CPPUNIT_TEST(testTdf107885);
     CPPUNIT_TEST(testTdf131562);
     CPPUNIT_TEST(testTdf107902);
@@ -587,6 +590,66 @@ void VBAMacroTest::testVba()
                 osl::File::remove(sFileUrl);
         }
     }
+}
+
+void VBAMacroTest::testVbaRangeSort()
+{
+    auto xComponent = loadFromDesktop("private:factory/scalc");
+
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(xComponent, uno::UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    xLibrary->insertByName("TestModule",
+                           uno::Any(OUString("Option VBASupport 1\n"
+                                             "Sub TestRangeSort\n"
+                                             "  Range(Cells(1, 1), Cells(3, 1)).Select\n"
+                                             "  Selection.Sort Key1:=Range(\"A1\"), Header:=False\n"
+                                             "End Sub\n")));
+
+    uno::Any aRet;
+    uno::Sequence<sal_Int16> aOutParamIndex;
+    uno::Sequence<uno::Any> aOutParam;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    rDoc.SetValue(ScAddress(0, 0, 0), 1.0);
+    rDoc.SetValue(ScAddress(0, 1, 0), 0.5);
+    rDoc.SetValue(ScAddress(0, 2, 0), 2.0);
+
+    // Without the fix in place, this call would have crashed in debug builds with failed assertion
+    ErrCode result = SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location=document",
+        {}, aRet, aOutParamIndex, aOutParam);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, result);
+
+    CPPUNIT_ASSERT_EQUAL(0.5, rDoc.GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(ScAddress(0, 2, 0)));
+
+    // Change sheet's first param sorting order
+    ScSortParam aParam;
+    rDoc.GetSortParam(aParam, 0);
+    aParam.maKeyState[0].bAscending = false;
+    rDoc.SetSortParam(aParam, 0);
+
+    result = SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location=document",
+        {}, aRet, aOutParamIndex, aOutParam);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, result);
+
+    // Without the fix in place, this test would have failed in non-debug builds with
+    // - Expected: 2
+    // - Actual  : 0.5
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.5, rDoc.GetValue(ScAddress(0, 2, 0)));
+
+    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testTdf107885()
