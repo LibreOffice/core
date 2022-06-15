@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d2e0072_37fb44cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-15T14:54:01Z",
+      "side": 1,
+      "message": "Hi Thorsten,\nI think this should be experimental for now, any objection to that ?",
+      "revId": "03099f9860443432dd7ad88b103397d2f45d7ae4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
