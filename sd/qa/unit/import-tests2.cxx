@@ -135,6 +135,7 @@ public:
     void testTdf112209();
     void testTdf128596();
     void testDefaultTabStop();
+    void testCropToZero();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -204,6 +205,7 @@ public:
     CPPUNIT_TEST(testTdf112209);
     CPPUNIT_TEST(testTdf128596);
     CPPUNIT_TEST(testDefaultTabStop);
+    CPPUNIT_TEST(testCropToZero);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1293,7 +1295,7 @@ void SdImportTest2::testTdf134210()
 
     Graphic aGraphic(xGraphic);
     BitmapEx aBitmap(aGraphic.GetBitmapEx());
-    CPPUNIT_ASSERT_EQUAL(Color(0x60563e), aBitmap.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x605741), aBitmap.GetPixelColor(0, 0));
 
     xDocShRef->DoClose();
 }
@@ -2033,6 +2035,12 @@ void SdImportTest2::testDefaultTabStop()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), nDefTab);
 
     xDocShRef->DoClose();
+}
+
+void SdImportTest2::testCropToZero()
+{
+    // Must not crash because of division by zero
+    loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/croppedTo0.pptx"), PPTX);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest2);

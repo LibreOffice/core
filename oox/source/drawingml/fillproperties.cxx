@@ -88,67 +88,55 @@ Reference< XGraphic > lclRotateGraphic(uno::Reference<graphic::XGraphic> const &
     return aReturnGraphic.GetXGraphic();
 }
 
-void lclCalculateCropPercentage(uno::Reference<graphic::XGraphic> const & xGraphic, geometry::IntegerRectangle2D &aFillRect)
+using Quotients = std::tuple<double, double, double, double>;
+Quotients getQuotients(geometry::IntegerRectangle2D aRelRect, double hDiv, double vDiv)
 {
-    ::Graphic aGraphic(xGraphic);
-    assert (aGraphic.GetType() == GraphicType::Bitmap);
-
-    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
-
-    sal_Int32 nScaledWidth = aBitmapEx.GetSizePixel().Width();
-    sal_Int32 nScaledHeight = aBitmapEx.GetSizePixel().Height();
-
-    sal_Int32 nOrigWidth = (nScaledWidth * (100000 - aFillRect.X1 - aFillRect.X2)) / 100000;
-    if (nOrigWidth == 0)
-    {
-        nOrigWidth = 1;
-    }
-    sal_Int32 nOrigHeight = (nScaledHeight * (100000 - aFillRect.Y1 - aFillRect.Y2)) / 100000;
-    if (nOrigHeight == 0)
-    {
-        nOrigHeight = 1;
-    }
-
-    sal_Int32 nLeftPercentage = nScaledWidth * aFillRect.X1 / nOrigWidth;
-    sal_Int32 nRightPercentage = nScaledWidth * aFillRect.X2 / nOrigWidth;
-    sal_Int32 nTopPercentage = nScaledHeight * aFillRect.Y1 / nOrigHeight;
-    sal_Int32 nBottomPercentage = nScaledHeight * aFillRect.Y2 / nOrigHeight;
-
-    aFillRect.X1 = -nLeftPercentage;
-    aFillRect.X2 = -nRightPercentage;
-    aFillRect.Y1 = -nTopPercentage;
-    aFillRect.Y2 = -nBottomPercentage;
+    return { aRelRect.X1 / hDiv, aRelRect.Y1 / vDiv, aRelRect.X2 / hDiv, aRelRect.Y2 / vDiv };
 }
 
-// Crops a piece of the bitmap. Takes negative aFillRect values. Negative values means "crop",
-// positive values means "grow" bitmap with empty spaces. lclCropGraphic doesn't handle growing.
-Reference< XGraphic > lclCropGraphic(uno::Reference<graphic::XGraphic> const & xGraphic, geometry::IntegerRectangle2D aFillRect)
+// ECMA-376 Part 1 20.1.8.55 srcRect (Source Rectangle)
+std::optional<Quotients> CropQuotientsFromSrcRect(geometry::IntegerRectangle2D aSrcRect)
+{
+    // Currently the following precondition is guaranteed in GraphicProperties::pushToPropMap
+    assert(aSrcRect.X1 >= 0 && aSrcRect.X2 >= 0 && aSrcRect.Y1 >= 0 && aSrcRect.Y2 >= 0);
+    if (aSrcRect.X1 + aSrcRect.X2 >= 100'000 || aSrcRect.Y1 + aSrcRect.Y2 >= 100'000)
+        return {}; // Cropped everything
+    return getQuotients(aSrcRect, 100'000.0, 100'000.0);
+}
+
+// ECMA-376 Part 1 20.1.8.30 fillRect (Fill Rectangle)
+std::optional<Quotients> CropQuotientsFromFillRect(geometry::IntegerRectangle2D aFillRect)
+{
+    // Currently the following precondition is guaranteed in FillProperties::pushToPropMap
+    assert(aFillRect.X1 <= 0 && aFillRect.X2 <= 0 && aFillRect.Y1 <= 0 && aFillRect.Y2 <= 0);
+    // Negative divisor and negative relative offset give positive value wanted in lclCropGraphic
+    return getQuotients(aFillRect, -100'000.0 + aFillRect.X1 + aFillRect.X2,
+                        -100'000.0 + aFillRect.Y1 + aFillRect.Y2);
+}
+
+// Crops a piece of the bitmap. lclCropGraphic doesn't handle growing.
+Reference<XGraphic> lclCropGraphic(uno::Reference<graphic::XGraphic> const& xGraphic,
+                                   std::optional<Quotients> quotients)
 {
     ::Graphic aGraphic(xGraphic);
-    ::Graphic aReturnGraphic;
-
     assert (aGraphic.GetType() == GraphicType::Bitmap);
 
-    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+    BitmapEx aBitmapEx;
+    if (quotients)
+    {
+        aBitmapEx = aGraphic.GetBitmapEx();
 
-    sal_Int32 nOrigHeight = aBitmapEx.GetSizePixel().Height();
-    sal_Int32 nHeight = nOrigHeight;
-    sal_Int32 nTopCorr  = nOrigHeight * -1 * static_cast<double>(aFillRect.Y1) / 100000;
-    nHeight += nTopCorr;
-    sal_Int32 nBottomCorr = nOrigHeight * -1 * static_cast<double>(aFillRect.Y2) / 100000;
-    nHeight += nBottomCorr;
+        const Size bmpSize = aBitmapEx.GetSizePixel();
+        const auto& [qx1, qy1, qx2, qy2] = *quotients;
+        const tools::Long l = std::round(bmpSize.Width() * qx1);
+        const tools::Long t = std::round(bmpSize.Height() * qy1);
+        const tools::Long r = std::round(bmpSize.Width() * qx2);
+        const tools::Long b = std::round(bmpSize.Height() * qy2);
 
-    sal_Int32 nOrigWidth = aBitmapEx.GetSizePixel().Width();
-    sal_Int32 nWidth = nOrigWidth;
-    sal_Int32 nLeftCorr  = nOrigWidth * -1 * static_cast<double>(aFillRect.X1) / 100000;
-    nWidth += nLeftCorr;
-    sal_Int32 nRightCorr = nOrigWidth * -1 * static_cast<double>(aFillRect.X2) / 100000;
-    nWidth += nRightCorr;
+        aBitmapEx.Crop({ l, t, bmpSize.Width() - r - 1, bmpSize.Height() - b - 1 });
+    }
 
-    aBitmapEx.Scale(Size(nWidth, nHeight));
-    aBitmapEx.Crop(tools::Rectangle(Point(nLeftCorr, nTopCorr), Size(nOrigWidth, nOrigHeight)));
-
-    aReturnGraphic = ::Graphic(aBitmapEx);
+    ::Graphic aReturnGraphic(aBitmapEx);
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
 
     return aReturnGraphic.GetXGraphic();
@@ -818,7 +806,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                             if(bIsCustomShape && bHasCropValues && bNeedCrop)
                             {
-                                xGraphic = lclCropGraphic(xGraphic, aFillRect);
+                                xGraphic = lclCropGraphic(xGraphic, CropQuotientsFromFillRect(aFillRect));
                                 rPropMap.setProperty(ShapeProperty::FillBitmap, xGraphic);
                             }
                         }
@@ -932,9 +920,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
 
                 if(mbIsCustomShape && bHasCropValues && bNeedCrop)
                 {
-                    geometry::IntegerRectangle2D aCropRect = oClipRect;
-                    lclCalculateCropPercentage(xGraphic, aCropRect);
-                    xGraphic = lclCropGraphic(xGraphic, aCropRect);
+                    xGraphic = lclCropGraphic(xGraphic, CropQuotientsFromSrcRect(oClipRect));
                 }
             }
         }
