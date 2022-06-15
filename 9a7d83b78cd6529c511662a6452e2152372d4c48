@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6b729f8_50b689c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-15T20:15:33Z",
+      "side": 1,
+      "message": "this change is only intended for master, 135922 however also meant to be cherry-picked to 7-4",
+      "revId": "9a7d83b78cd6529c511662a6452e2152372d4c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
