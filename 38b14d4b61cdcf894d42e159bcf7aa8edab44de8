@@ -33,6 +33,24 @@
       "message": "I tested with kmfl and keyman and both are OK after this change.\n\nCaolan made some major deleteSurrounding changes in 7.1 in order to disconnect that from accessibility. So I do not expect your accessibility changes will affect kmfl any more.",
       "revId": "38b14d4b61cdcf894d42e159bcf7aa8edab44de8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed43191a_08576e4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-15T18:58:36Z",
+      "side": 1,
+      "message": "Great, thanks!",
+      "parentUuid": "d315c340_6927619d",
+      "revId": "38b14d4b61cdcf894d42e159bcf7aa8edab44de8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
