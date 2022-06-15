@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8ea0265_95b83418",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-15T06:27:15Z",
+      "side": 1,
+      "message": "Pushing this one. this patch and the following ones in the relation chain no longer fail with CppunitTest_sw_core_draw",
+      "revId": "221244d9fb261446a83ef3b69a69a483df9793c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
