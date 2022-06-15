@@ -115,7 +115,7 @@ void ScTable::DeleteBeforeCopyFromClip(
             if (nClipCol > aClipRange.aEnd.Col())
                 nClipCol = aClipRange.aStart.Col(); // loop through columns.
 
-            const ScColumn& rClipCol = rClipTab.aCol[nClipCol];
+            const ScColumn& rClipCol = const_cast<ScTable&>(rClipTab).CreateColumnIfNotExists(nClipCol);
             aCol[nCol].DeleteBeforeCopyFromClip(rCxt, rClipCol, rBroadcastSpans);
         }
     }
