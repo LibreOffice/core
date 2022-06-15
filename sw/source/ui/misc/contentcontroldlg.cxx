@@ -374,11 +374,6 @@ IMPL_LINK_NOARG(SwContentControlDlg, MoveDownHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwContentControlDlg, SelectionChangedHdl, weld::TreeView&, void)
 {
-    if (!m_xListItems->has_focus())
-    {
-        return;
-    }
-
     int nRow = m_xListItems->get_selected_index();
     if (nRow < 0)
     {
