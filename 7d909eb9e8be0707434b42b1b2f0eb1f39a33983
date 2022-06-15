@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58361c5a_2a5657b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-06-15T12:40:03Z",
+      "side": 1,
+      "message": "Fixes BridgeFactory::getExistingBridges for me (returns something when there is an active Java UNO connection).",
+      "revId": "7d909eb9e8be0707434b42b1b2f0eb1f39a33983",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
