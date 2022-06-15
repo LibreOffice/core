@@ -1049,37 +1049,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::QueryService(REFGUID guidService
 }
 
 /**
-* Set the accessible name of the current COM object self or its one child from UNO.
-* @param    varChild, vt member of varChild must be VT_I4,and lVal member stores the child ID,
-* the child ID specify child index from 0 to children count, 0 stands for object self.
-* @param    szName, the name used to set the name of the proper object.
-* @return   S_OK if successful and E_FAIL if failure.
+* No longer supported according to IAccessible doc.
+* Servers should return E_NOTIMPL
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accName(VARIANT varChild, BSTR szName)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accName(VARIANT, BSTR)
 {
-    SolarMutexGuard g;
-
-    try {
-        if (m_isDestroy) return S_FALSE;
-        if(varChild.vt==VT_I4)
-        {
-            if(varChild.lVal==CHILDID_SELF)
-            {
-                SysFreeString(m_pszName);
-                m_pszName=SysAllocString(szName);
-                return S_OK;
-            }
-
-            long lVal = varChild.lVal;
-            varChild.lVal = CHILDID_SELF;
-            IMAccessible *pChild = this->GetChildInterface(lVal);
-            if(!pChild)
-                return E_FAIL;
-            return pChild->put_accName(varChild,szName);
-        }
-        return E_FAIL;
-
-        } catch(...) { return E_FAIL; }
+    return E_NOTIMPL;
 }
 
 /**
