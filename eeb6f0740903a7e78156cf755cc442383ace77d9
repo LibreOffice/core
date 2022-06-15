@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a68a61c_1a7a19b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-15T14:02:52Z",
+      "side": 1,
+      "message": "I\u0027d rather revert this..",
+      "revId": "eeb6f0740903a7e78156cf755cc442383ace77d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97cc1cd2_83ec1b2a",
+        "filename": "svl/source/numbers/numfmuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-15T14:02:52Z",
+      "side": 1,
+      "message": "Well, yes, but the only thing that does different is adding the overhead of\n\n    assert(isUnicodeCodePoint(code));\n\nto each and every character.. which might even be wrong because we iterate over sal_Unicode here and not UTF-32 code points, on purpose, see comment below. So in a debug build we might abort without good reason.",
+      "revId": "eeb6f0740903a7e78156cf755cc442383ace77d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eee8bda4_27bda095",
+        "filename": "svl/source/numbers/numfmuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-15T14:02:52Z",
+      "side": 1,
+      "message": "... and again twice\n\n    assert(isUnicodeCodePoint(code));\n\nbecause it even checks isAsciiLowerCase(code) again.",
+      "revId": "eeb6f0740903a7e78156cf755cc442383ace77d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
