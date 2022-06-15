@@ -241,16 +241,7 @@ sub setglobalvariables
 
     if ( $installer::globals::os eq 'WNT' )
     {
-        if ( $installer::globals::cpuname eq 'INTEL')
-        {
-            $installer::globals::iswindowsbuild = 1;
-            $installer::globals::iswin64build = 0;
-        }
-        else
-        {
-            $installer::globals::iswindowsbuild = 1;
-            $installer::globals::iswin64build = 1;
-        }
+        $installer::globals::iswindowsbuild = 1;
     }
 
     if ( $installer::globals::os eq 'SOLARIS')
