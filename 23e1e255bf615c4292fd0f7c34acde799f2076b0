@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c178e494_28168dd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-06-15T14:45:04Z",
+      "side": 1,
+      "message": "Minor fix in UI test.",
+      "revId": "23e1e255bf615c4292fd0f7c34acde799f2076b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
