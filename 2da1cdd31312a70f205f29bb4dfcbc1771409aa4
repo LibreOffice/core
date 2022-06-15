@@ -39,6 +39,23 @@
       "message": "Is this based on some real need, or just on looking at the code? I tried this when making the function inline, and this only simplifies the C++ code, but the generated code is actually worse (IIRC resize() of mdds_vector creates an additional loop that runs destructors on all the original null strings).\n\n",
       "revId": "2da1cdd31312a70f205f29bb4dfcbc1771409aa4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f26a59f_383e0537",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-15T07:44:51Z",
+      "side": 1,
+      "message": "Oh, changing a logic to create a loop with destructors based on some different pointer operations here? I am very surprised.",
+      "revId": "2da1cdd31312a70f205f29bb4dfcbc1771409aa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
