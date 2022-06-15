@@ -374,15 +374,26 @@ const char* GetHatchPattern( const drawing::Hatch& rHatch )
     return sPattern;
 }
 
+namespace
+{
+// ISO/IEC-29500 Part 1 ST_Percentage, and [MS-OI29500] 2.1.1324
+sal_Int32 GetST_Percentage(const OUString& s)
+{
+    if (s.endsWith(u"%"))
+        return std::round(s.toDouble() * 1000);
+    return s.toInt32();
+}
+}
+
 /** converts the attributes from a CT_RelativeRect to an IntegerRectangle2D */
 IntegerRectangle2D GetRelativeRect( const Reference< XFastAttributeList >& xAttribs )
 {
     IntegerRectangle2D r;
 
-    r.X1 = xAttribs->getOptionalValue( XML_l ).toInt32();
-    r.Y1 = xAttribs->getOptionalValue( XML_t ).toInt32();
-    r.X2 = xAttribs->getOptionalValue( XML_r ).toInt32();
-    r.Y2 = xAttribs->getOptionalValue( XML_b ).toInt32();
+    r.X1 = GetST_Percentage(xAttribs->getOptionalValue( XML_l ));
+    r.Y1 = GetST_Percentage(xAttribs->getOptionalValue( XML_t ));
+    r.X2 = GetST_Percentage(xAttribs->getOptionalValue( XML_r ));
+    r.Y2 = GetST_Percentage(xAttribs->getOptionalValue( XML_b ));
 
     return r;
 }
