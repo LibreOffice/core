@@ -256,7 +256,7 @@ bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
 {
     bool bRet = false;
     if( SwUndoId::DELETE == mnUserId && mnUserId == rNext.mnUserId &&
-        m_bCanGroup == rNext.m_bCanGroup &&
+        m_bCanGroup && rNext.m_bCanGroup &&
         m_bIsDelim == rNext.m_bIsDelim &&
         m_bIsBackspace == rNext.m_bIsBackspace &&
         m_nSttNode == m_nEndNode &&
