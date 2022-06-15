@@ -43,6 +43,21 @@
 
 namespace binaryurp {
 
+css::uno::Reference< css::uno::XInterface > BridgeFactory::static_create(
+    css::uno::Reference< css::uno::XComponentContext > const & /*xContext*/)
+{
+    return static_cast< cppu::OWeakObject * >(new BridgeFactory);
+}
+
+OUString BridgeFactory::static_getImplementationName() {
+    return "com.sun.star.comp.bridge.BridgeFactory";
+}
+
+css::uno::Sequence< OUString >
+BridgeFactory::static_getSupportedServiceNames() {
+    return css::uno::Sequence<OUString>{ "com.sun.star.bridge.BridgeFactory" };
+}
+
 void BridgeFactory::removeBridge(
     css::uno::Reference< css::bridge::XBridge > const & bridge)
 {
@@ -70,7 +85,7 @@ BridgeFactory::~BridgeFactory() {}
 
 OUString BridgeFactory::getImplementationName()
 {
-    return "com.sun.star.comp.bridge.BridgeFactory";
+    return static_getImplementationName();
 }
 
 sal_Bool BridgeFactory::supportsService(OUString const & ServiceName)
@@ -80,7 +95,7 @@ sal_Bool BridgeFactory::supportsService(OUString const & ServiceName)
 
 css::uno::Sequence< OUString > BridgeFactory::getSupportedServiceNames()
 {
-    return { "com.sun.star.bridge.BridgeFactory" };
+    return static_getSupportedServiceNames();
 }
 
 css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
@@ -183,11 +198,23 @@ void BridgeFactory::disposing() {
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-com_sun_star_comp_bridge_BridgeFactory_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
+namespace {
+
+static cppu::ImplementationEntry const services[] = {
+    { &binaryurp::BridgeFactory::static_create,
+      &binaryurp::BridgeFactory::static_getImplementationName,
+      &binaryurp::BridgeFactory::static_getSupportedServiceNames,
+      &cppu::createOneInstanceComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
+};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT void * binaryurp_component_getFactory(
+    char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
-    return cppu::acquire(static_cast< cppu::OWeakObject * >(new binaryurp::BridgeFactory));
+    return cppu::component_getFactoryHelper(
+        pImplName, pServiceManager, pRegistryKey, services);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
