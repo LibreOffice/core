@@ -270,6 +270,7 @@ class SwTextCursor : public SwTextAdjuster
 protected:
     void CtorInitTextCursor( SwTextFrame *pFrame, SwTextSizeInfo *pInf );
     explicit SwTextCursor(SwTextNode const * pTextNode) : SwTextAdjuster(pTextNode) { }
+    void AddExtraBlankWidth();
 public:
     SwTextCursor( SwTextFrame *pTextFrame, SwTextSizeInfo *pTextSizeInf )
         : SwTextAdjuster(pTextFrame->GetTextNodeFirst())
