@@ -34,6 +34,8 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
+
+#include <o3tl/unit_conversion.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
@@ -90,26 +92,36 @@ Reference< XGraphic > lclRotateGraphic(uno::Reference<graphic::XGraphic> const &
 
 void lclCalculateCropPercentage(uno::Reference<graphic::XGraphic> const & xGraphic, geometry::IntegerRectangle2D &aFillRect)
 {
-    ::Graphic aGraphic(xGraphic);
-    assert (aGraphic.GetType() == GraphicType::Bitmap);
+    // aFillRect members represent relative crop from each side (in 1000th percent)
 
-    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+    sal_Int32 nWidthAfterCropPercent = 100000 - aFillRect.X1 - aFillRect.X2;
+    sal_Int32 nHeightAfterCropPercent = 100000 - aFillRect.Y1 - aFillRect.Y2;
 
-    sal_Int32 nScaledWidth = aBitmapEx.GetSizePixel().Width();
-    sal_Int32 nScaledHeight = aBitmapEx.GetSizePixel().Height();
+    if (nWidthAfterCropPercent < 0)
+        nWidthAfterCropPercent = -nWidthAfterCropPercent;
+    else
+    {
+        aFillRect.X1 = -aFillRect.X1;
+        aFillRect.X2 = -aFillRect.X2;
+    }
+    if (nWidthAfterCropPercent != 0)
+    {
+        aFillRect.X1 = o3tl::convert(aFillRect.X1, 100000, nWidthAfterCropPercent);
+        aFillRect.X2 = o3tl::convert(aFillRect.X2, 100000, nWidthAfterCropPercent);
+    }
 
-    sal_Int32 nOrigWidth = (nScaledWidth * (100000 - aFillRect.X1 - aFillRect.X2)) / 100000;
-    sal_Int32 nOrigHeight = (nScaledHeight * (100000 - aFillRect.Y1 - aFillRect.Y2)) / 100000;
-
-    sal_Int32 nLeftPercentage = nScaledWidth * aFillRect.X1 / nOrigWidth;
-    sal_Int32 nRightPercentage = nScaledWidth * aFillRect.X2 / nOrigWidth;
-    sal_Int32 nTopPercentage = nScaledHeight * aFillRect.Y1 / nOrigHeight;
-    sal_Int32 nBottomPercentage = nScaledHeight * aFillRect.Y2 / nOrigHeight;
-
-    aFillRect.X1 = -nLeftPercentage;
-    aFillRect.X2 = -nRightPercentage;
-    aFillRect.Y1 = -nTopPercentage;
-    aFillRect.Y2 = -nBottomPercentage;
+    if (nHeightAfterCropPercent < 0)
+        nHeightAfterCropPercent = -nHeightAfterCropPercent;
+    else
+    {
+        aFillRect.Y1 = -aFillRect.Y1;
+        aFillRect.Y2 = -aFillRect.Y2;
+    }
+    if (nHeightAfterCropPercent != 0)
+    {
+        aFillRect.Y1 = o3tl::convert(aFillRect.Y1, 100000, nHeightAfterCropPercent);
+        aFillRect.Y2 = o3tl::convert(aFillRect.Y2, 100000, nHeightAfterCropPercent);
+    }
 }
 
 // Crops a piece of the bitmap. Takes negative aFillRect values. Negative values means "crop",
