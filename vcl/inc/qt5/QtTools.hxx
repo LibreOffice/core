@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <config_vclplug.h>
+
 #include <QtCore/QPoint>
 #include <QtCore/QRect>
 #include <QtCore/QSize>
