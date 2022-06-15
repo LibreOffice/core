@@ -66,6 +66,7 @@ SvxRedlinTable::SvxRedlinTable(std::unique_ptr<weld::TreeView> xWriterControl,
 {
     if (xWriterTreeView)
     {
+        xWriterTreeView->set_size_request(-1, xWriterTreeView->get_height_rows(8));
         xWriterTreeView->connect_column_clicked(LINK(this, SvxRedlinTable, HeaderBarClick));
         xWriterTreeView->set_sort_func([this](const weld::TreeIter& rLeft, const weld::TreeIter& rRight){
             return ColCompare(rLeft, rRight);
@@ -74,6 +75,7 @@ SvxRedlinTable::SvxRedlinTable(std::unique_ptr<weld::TreeView> xWriterControl,
     }
     if (xCalcTreeView)
     {
+        xCalcTreeView->set_size_request(-1, xCalcTreeView->get_height_rows(8));
         xCalcTreeView->connect_column_clicked(LINK(this, SvxRedlinTable, HeaderBarClick));
         xCalcTreeView->set_sort_func([this](const weld::TreeIter& rLeft, const weld::TreeIter& rRight){
             return ColCompare(rLeft, rRight);
