@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9ef3591_ec5da234",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-15T08:49:38Z",
+      "side": 1,
+      "message": "@Justin: Could you possibly take a look at whether that looks OK/plausible, s. commit msg?\nI tried to reproduce tdf#85912 on gtk3 and kf5 (after implementing what was needed there) and didn\u0027t see any problem, but have close to zero knowledge of IM, so might easily be missing something.",
+      "revId": "38b14d4b61cdcf894d42e159bcf7aa8edab44de8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
