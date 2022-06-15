@@ -16,6 +16,29 @@
       "message": "Mike: could you please review this? Thanks.",
       "revId": "bc7a1b3f933ea4b8e9497b6855415f680053d4df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecfde202_a22bd658",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-15T11:15:34Z",
+      "side": 1,
+      "message": "This looks suspicious to me ... please let me think about it.",
+      "range": {
+        "startLine": 100,
+        "startChar": 44,
+        "endLine": 100,
+        "endChar": 80
+      },
+      "revId": "bc7a1b3f933ea4b8e9497b6855415f680053d4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
