@@ -1293,7 +1293,7 @@ void SdImportTest2::testTdf134210()
 
     Graphic aGraphic(xGraphic);
     BitmapEx aBitmap(aGraphic.GetBitmapEx());
-    CPPUNIT_ASSERT_EQUAL(Color(0x60563e), aBitmap.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x605741), aBitmap.GetPixelColor(0, 0));
 
     xDocShRef->DoClose();
 }
