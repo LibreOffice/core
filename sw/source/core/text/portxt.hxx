@@ -69,6 +69,7 @@ public:
     void SetBlankWidth( const sal_uInt16 nNew ) { m_nBlankWidth = nNew; }
     virtual SwLinePortion *Compress() override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
+    virtual SwPosSize GetTextSize(const SwTextSizeInfo& rInfo) const override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 
     // Accessibility: pass information about this portion to the PortionHandler
