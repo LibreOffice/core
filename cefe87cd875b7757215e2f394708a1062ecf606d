@@ -34,6 +34,24 @@
       "parentUuid": "1c43176e_e94db8f0",
       "revId": "cefe87cd875b7757215e2f394708a1062ecf606d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35484b09_f72a95ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-15T10:09:31Z",
+      "side": 1,
+      "message": "This is very strange. So the position from QWidget::moveEvent is the geometry / clientArea position, but we need the frame position, so can actually ignore the delivered event position and just take pos(). That fixes the positioning, but while testing this, I found an other problem: gen and gtk restore the position at the geometry position, instead of the frame position, so for them the window is restored at \"y() - topDecoration()\"... which doesn\u0027t make any sense, when we explicitly decoupled position from size otherwise - aarg. I\u0027ll change this to always restore the top/left frame position.",
+      "parentUuid": "f3d06970_e61bea6b",
+      "revId": "cefe87cd875b7757215e2f394708a1062ecf606d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
