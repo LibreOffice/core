@@ -291,7 +291,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
                 // same document. If not, re-intern shared strings.
                 svl::SharedStringPool* pSharedStringPool = (bSameDocPool ? nullptr : &rDocument.GetSharedStringPool());
                 svl::SharedString aStr = (pSharedStringPool ?
-                        pSharedStringPool->intern( rSrcCell.getSharedString()-> getString()) :
+                        pSharedStringPool->intern( rSrcCell.getSharedString()->getString()) :
                         *rSrcCell.getSharedString());
 
                 std::vector<svl::SharedString> aStrs(nDestSize, aStr);
