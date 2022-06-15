@@ -27,6 +27,8 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
+#include <mvsave.hxx>
+#include <rolbck.hxx>
 #include <UndoCore.hxx>
 #include <UndoDelete.hxx>
 #include <strings.hrc>
@@ -197,7 +199,8 @@ void SwUndoRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, RedlineType::Any);
 }
 
-SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
+SwUndoRedlineDelete::SwUndoRedlineDelete(
+        const SwPaM& rRange, SwUndoId const nUsrId, SwDeleteFlags const flags)
     : SwUndoRedline( nUsrId != SwUndoId::EMPTY ? nUsrId : SwUndoId::DELETE, rRange ),
     m_bCanGroup( false ), m_bIsDelim( false ), m_bIsBackspace( false )
 {
@@ -218,6 +221,24 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     }
 
     m_bCacheComment = false;
+    if (flags & SwDeleteFlags::ArtificialSelection)
+    {
+        InitHistory(rRange);
+    }
+}
+
+void SwUndoRedlineDelete::InitHistory(SwPaM const& rRedline)
+{
+    m_pHistory.reset(new SwHistory);
+    // try to rely on direction of rPam here so it works for
+    // backspacing/deleting consecutive characters
+    SaveFlyArr flys;
+    SaveFlyInRange(rRedline, *rRedline.GetMark(), flys, false, m_pHistory.get());
+    RestFlyInRange(flys, *rRedline.GetPoint(), &rRedline.GetPoint()->nNode, true);
+    if (m_pHistory->Count())
+    {
+        m_bCanGroup = false; // how to group history?
+    }
 }
 
 // bit of a hack, replace everything...
@@ -241,12 +262,21 @@ void SwUndoRedlineDelete::SetRedlineText(const OUString & rText)
 void SwUndoRedlineDelete::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
     rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, RedlineType::Any);
+    if (m_pHistory)
+    {
+        m_pHistory->TmpRollback(&rDoc, 0);
+    }
 }
 
 void SwUndoRedlineDelete::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
     if (rPam.GetPoint() != rPam.GetMark())
     {
+        if (m_pHistory) // if it was created before, it must be recreated now
+        {
+            rPam.Normalize(m_bIsBackspace); // to check the correct edge
+            InitHistory(rPam);
+        }
         rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline(*mpRedlData, rPam), false );
     }
     sw::UpdateFramesForAddDeleteRedline(rDoc, rPam);
