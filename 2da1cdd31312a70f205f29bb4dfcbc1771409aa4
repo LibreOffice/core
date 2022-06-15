@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81aec80c_66c756a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-15T07:32:44Z",
+      "side": 1,
+      "message": "Just noting that in code like\n\n  SharedString s1(...);\n  SharedString s2(...);\n  s2 \u003d std::move(s1);\n  ... // Here s1 has the old value of s2\n\nthe new behavior is that s1 may be not empty after the move. This might be unimportant, and indeed the rule of thumb is to not rely on a variable state after the move.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 41
+      },
+      "revId": "2da1cdd31312a70f205f29bb4dfcbc1771409aa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
