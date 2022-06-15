@@ -74,6 +74,23 @@
       "parentUuid": "6f26a59f_383e0537",
       "revId": "2da1cdd31312a70f205f29bb4dfcbc1771409aa4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a59c00c_943a53af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-15T08:11:41Z",
+      "side": 1,
+      "message": "Likely http://www.vollmann.ch/en/blog/implementing-move-assignment-variations-in-c++.html and the like.",
+      "revId": "2da1cdd31312a70f205f29bb4dfcbc1771409aa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
