@@ -153,6 +153,30 @@
       },
       "revId": "8e177d0479e93902d86331f2e17f12661961eeb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4b205c2_ca5cfabc",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 5
+      },
+      "lineNbr": 6671,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-15T13:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3784358a_db16509e",
+      "range": {
+        "startLine": 6671,
+        "startChar": 19,
+        "endLine": 6671,
+        "endChar": 20
+      },
+      "revId": "8e177d0479e93902d86331f2e17f12661961eeb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
