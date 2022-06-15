@@ -34,6 +34,7 @@ class SwDoc;
 class SwFormatAnchor;
 class SwFrameFormat;
 class SwIndex;
+class SwHistory;
 class SwNodeIndex;
 class SwNodeRange;
 class SwPaM;
@@ -119,7 +120,7 @@ void RestFlyInRange( SaveFlyArr& rArr, const SwPosition& rSttIdx,
                      const SwNodeIndex* pInsPos, bool isForceToStartPos = false);
 void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr );
 void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
-                       SaveFlyArr& rArr, bool bMoveAllFlys );
+        SaveFlyArr& rArr, bool bMoveAllFlys, SwHistory * pHistory = nullptr);
 
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     const SwNodeIndex& rPtNdIdx,
