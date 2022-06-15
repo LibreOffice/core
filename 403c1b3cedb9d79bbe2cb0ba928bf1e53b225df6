@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ec4e8a8_dd7abb00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-06-15T17:55:56Z",
+      "side": 1,
+      "message": "Feel free to reject the cherry-pick",
+      "revId": "403c1b3cedb9d79bbe2cb0ba928bf1e53b225df6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
