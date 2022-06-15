@@ -259,6 +259,7 @@
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="model">liststore1</property>
+                        <property name="enable-search">False</property>
                         <property name="search-column">0</property>
                         <property name="show-expanders">False</property>
                         <child internal-child="selection">

@@ -480,6 +480,8 @@ class SwAddStylesDlg_Impl : public SfxDialogController
     std::unique_ptr<weld::Button> m_xRightPB;
     std::unique_ptr<weld::TreeView> m_xHeaderTree;
 
+    void ToggleOn(int nEntry, int nToggleColumn);
+
     DECL_LINK(OkHdl, weld::Button&, void);
     DECL_LINK(LeftRightHdl, weld::Button&, void);
     DECL_LINK(KeyInput, const KeyEvent&, bool);
@@ -614,15 +616,37 @@ IMPL_LINK(SwAddStylesDlg_Impl, KeyInput, const KeyEvent&, rKEvt, bool)
     vcl::KeyCode aCode = rKEvt.GetKeyCode();
     bool bHandled = false;
 
-    if (aCode.GetCode() == KEY_ADD || aCode.GetCode() == KEY_RIGHT)
+    sal_uInt16 nCode = aCode.GetCode();
+    switch (nCode)
     {
-        LeftRightHdl(*m_xRightPB);
-        bHandled = true;
-    }
-    else if (aCode.GetCode() == KEY_SUBTRACT || aCode.GetCode() == KEY_LEFT)
-    {
-        LeftRightHdl(*m_xLeftPB);
-        bHandled = true;
+        case KEY_ADD:
+            LeftRightHdl(*m_xRightPB);
+            bHandled = true;
+            break;
+        case KEY_SUBTRACT:
+            LeftRightHdl(*m_xLeftPB);
+            bHandled = true;
+            break;
+        case KEY_0:
+        case KEY_1:
+        case KEY_2:
+        case KEY_3:
+        case KEY_4:
+        case KEY_5:
+        case KEY_6:
+        case KEY_7:
+        case KEY_8:
+        case KEY_9:
+        case KEY_A:
+        {
+            int nEntry = m_xHeaderTree->get_selected_index();
+            if (nEntry != -1)
+            {
+                ToggleOn(nEntry, nCode != KEY_A ? nCode - KEY_0 : 10);
+                bHandled = true;
+            }
+            break;
+        }
     }
 
     return bHandled;
@@ -686,6 +710,11 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, weld::Button&, rBtn, void)
             ++nToggleColumn;
     }
 
+    ToggleOn(nEntry, nToggleColumn);
+}
+
+void SwAddStylesDlg_Impl::ToggleOn(int nEntry, int nToggleColumn)
+{
     for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
     {
         m_xHeaderTree->set_toggle(nEntry, j == nToggleColumn ? TRISTATE_TRUE : TRISTATE_FALSE, j + 1);
