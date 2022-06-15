@@ -23,6 +23,7 @@
 #include <memory>
 #include <undobj.hxx>
 #include <tools/long.hxx>
+#include <IDocumentContentOperations.hxx>
 
 struct SwSortOptions;
 class SwRangeRedline;
@@ -53,17 +54,22 @@ public:
 
 class SwUndoRedlineDelete final : public SwUndoRedline
 {
+private:
+    std::unique_ptr<SwHistory> m_pHistory; ///< for moved fly anchors
+
     bool m_bCanGroup : 1;
     bool m_bIsDelim : 1;
     bool m_bIsBackspace : 1;
 
     OUString m_sRedlineText;
 
+    void InitHistory(SwPaM const& rRange);
+
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
 
 public:
-    SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUserId );
+    SwUndoRedlineDelete(const SwPaM& rRange, SwUndoId nUserId, SwDeleteFlags flags = SwDeleteFlags::Default);
     virtual SwRewriter GetRewriter() const override;
 
     bool CanGrouping( const SwUndoRedlineDelete& rPrev );
