@@ -66,6 +66,7 @@ public:
     void testVbaRangeSort();
     void testTdf107885();
     void testTdf131562();
+    void testTdf52602();
     void testTdf107902();
     void testTdf90278();
     void testTdf149531();
@@ -85,6 +86,7 @@ public:
     CPPUNIT_TEST(testVbaRangeSort);
     CPPUNIT_TEST(testTdf107885);
     CPPUNIT_TEST(testTdf131562);
+    CPPUNIT_TEST(testTdf52602);
     CPPUNIT_TEST(testTdf107902);
     CPPUNIT_TEST(testTdf90278);
     CPPUNIT_TEST(testTdf149531);
@@ -736,6 +738,45 @@ void VBAMacroTest::testTdf131562()
     pDocSh->DoClose();
 }
 
+void VBAMacroTest::testTdf52602()
+{
+    OUString aFileName;
+    createFileURL(u"tdf52602.xls", aFileName);
+    uno::Reference<css::lang::XComponent> xComponent
+        = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    uno::Any aRet;
+    uno::Sequence<sal_Int16> aOutParamIndex;
+    uno::Sequence<uno::Any> aOutParam;
+    uno::Sequence<uno::Any> aParams;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    //Without the fix in place, it would have failed with 'Unexpected dialog:  Error: BASIC runtime error.'
+    SfxObjectShell::CallXScript(xComponent,
+                                "vnd.sun.Star.script:VBAProject.Modul1.Test_NumberFormat_DateTime?"
+                                "language=Basic&location=document",
+                                aParams, aRet, aOutParamIndex, aOutParam);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("15:20"), rDoc.GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("15:20"), rDoc.GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("03/01/2012 15:20"), rDoc.GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("03/01/2012 15:20"), rDoc.GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("03/01/2012 15:20:00"), rDoc.GetString(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("03/01/2012 15:20:00"), rDoc.GetString(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1/3/12 15:20"), rDoc.GetString(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1/3/12 15:20"), rDoc.GetString(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1/ March 2012"), rDoc.GetString(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1/ March 2012"), rDoc.GetString(ScAddress(4, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1/ Mar 2012"), rDoc.GetString(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1/ Mar 2012"), rDoc.GetString(ScAddress(5, 1, 0)));
+
+    pDocSh->DoClose();
+}
 void VBAMacroTest::testTdf107902()
 {
     OUString aFileName;
