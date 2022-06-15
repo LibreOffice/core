@@ -349,7 +349,7 @@ void ScViewFunc::DoThesaurus()
 
     ScCellValue aOldText;
     aOldText.assign(rDoc, aPos);
-    if (aOldText.meType != CELLTYPE_STRING && aOldText.meType != CELLTYPE_EDIT)
+    if (aOldText.getType() != CELLTYPE_STRING && aOldText.getType() != CELLTYPE_EDIT)
     {
         ErrorMessage(STR_THESAURUS_NO_STRING);
         return;
@@ -370,8 +370,8 @@ void ScViewFunc::DoThesaurus()
         pThesaurusEngine->SetDefaults( aEditDefaults );
     }
 
-    if (aOldText.meType == CELLTYPE_EDIT)
-        pThesaurusEngine->SetTextCurrentDefaults(*aOldText.mpEditText);
+    if (aOldText.getType() == CELLTYPE_EDIT)
+        pThesaurusEngine->SetTextCurrentDefaults(*aOldText.getEditText());
     else
         pThesaurusEngine->SetTextCurrentDefaults(aOldText.getString(rDoc));
 
@@ -402,7 +402,7 @@ void ScViewFunc::DoThesaurus()
     {
         ScCellValue aNewText;
 
-        if (aOldText.meType == CELLTYPE_EDIT)
+        if (aOldText.getType() == CELLTYPE_EDIT)
         {
             // The cell will own the text object instance.
             std::unique_ptr<EditTextObject> pText = pThesaurusEngine->CreateTextObject();

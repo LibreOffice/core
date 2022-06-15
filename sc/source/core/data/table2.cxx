@@ -4171,7 +4171,7 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
             ScCellValue aCell;
             aCell.assign(rDocument, ScAddress(nCol, nRow, nTab));
 
-            if (aCell.meType == CELLTYPE_FORMULA)
+            if (aCell.getType() == CELLTYPE_FORMULA)
             {
                 sc::RefUpdateContext aCxt(rDocument);
                 aCxt.meMode = URM_COPY;
@@ -4179,8 +4179,8 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
                 aCxt.mnColDelta = nDestCol - nStartCol;
                 aCxt.mnRowDelta = nDestRow - nStartRow;
                 aCxt.mnTabDelta = nDestTab - nTab;
-                aCell.mpFormula->UpdateReference(aCxt);
-                aCell.mpFormula->aPos = aDest;
+                aCell.getFormula()->UpdateReference(aCxt);
+                aCell.getFormula()->aPos = aDest;
             }
 
             if (bThisTab)

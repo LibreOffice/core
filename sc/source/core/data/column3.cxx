@@ -2225,7 +2225,7 @@ bool ScColumn::ParseString(
         }
         while (false);
 
-        if (rCell.meType == CELLTYPE_NONE)
+        if (rCell.getType() == CELLTYPE_NONE)
         {
             // If we reach here with ScSetStringParam::SpecialNumberOnly it
             // means a simple number was not detected above, so test for
@@ -2879,13 +2879,13 @@ public:
 
         for (const Entry& r : maEntries)
         {
-            switch (r.maValue.meType)
+            switch (r.maValue.getType())
             {
                 case CELLTYPE_VALUE:
-                    rColumn.SetValue(aBlockPos, r.mnRow, r.maValue.mfValue, false);
+                    rColumn.SetValue(aBlockPos, r.mnRow, r.maValue.getDouble(), false);
                 break;
                 case CELLTYPE_STRING:
-                    rColumn.SetRawString(aBlockPos, r.mnRow, *r.maValue.mpString, false);
+                    rColumn.SetRawString(aBlockPos, r.mnRow, r.maValue.getSharedString(), false);
                 break;
                 default:
                     ;

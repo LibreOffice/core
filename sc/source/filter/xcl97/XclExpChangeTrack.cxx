@@ -843,11 +843,11 @@ void XclExpChTrCellContent::GetCellData(
         return;
     }
 
-    switch (rScCell.meType)
+    switch (rScCell.getType())
     {
         case CELLTYPE_VALUE:
         {
-            rpData->fValue = rScCell.mfValue;
+            rpData->fValue = rScCell.getDouble();
             if( XclTools::GetRKFromDouble( rpData->nRKValue, rpData->fValue ) )
             {
                 rpData->nType = EXC_CHTR_TYPE_RK;
@@ -868,20 +868,20 @@ void XclExpChTrCellContent::GetCellData(
         case CELLTYPE_EDIT:
         {
             OUString sCellStr;
-            if (rScCell.meType == CELLTYPE_STRING)
+            if (rScCell.getType() == CELLTYPE_STRING)
             {
-                sCellStr = rScCell.mpString->getString();
+                sCellStr = rScCell.getSharedString().getString();
                 rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
                     rRoot, sCellStr, nullptr);
             }
             else
             {
                 XclExpHyperlinkHelper aLinkHelper( rRoot, aPosition );
-                if (rScCell.mpEditText)
+                if (rScCell.getEditText())
                 {
-                    sCellStr = ScEditUtil::GetString(*rScCell.mpEditText, &GetDoc());
+                    sCellStr = ScEditUtil::GetString(*rScCell.getEditText(), &GetDoc());
                     rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
-                        rRoot, *rScCell.mpEditText, nullptr, aLinkHelper);
+                        rRoot, *rScCell.getEditText(), nullptr, aLinkHelper);
                 }
                 else
                 {
@@ -898,7 +898,7 @@ void XclExpChTrCellContent::GetCellData(
         break;
         case CELLTYPE_FORMULA:
         {
-            const ScFormulaCell* pFmlCell = rScCell.mpFormula;
+            const ScFormulaCell* pFmlCell = rScCell.getFormula();
             rpData->mpFormulaCell = pFmlCell;
 
             const ScTokenArray* pTokenArray = pFmlCell->GetCode();

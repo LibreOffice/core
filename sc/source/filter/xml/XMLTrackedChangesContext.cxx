@@ -860,8 +860,7 @@ void SAL_CALL ScXMLChangeCellContext::endFastElement( sal_Int32 /*nElement*/ )
             }
 
             // The cell will own the text object instance.
-            mrOldCell.meType = CELLTYPE_EDIT;
-            mrOldCell.mpEditText = mpEditTextObj->CreateTextObject().release();
+            mrOldCell.set(mpEditTextObj->CreateTextObject().release());
             GetScImport().GetTextImport()->ResetCursor();
             mpEditTextObj.clear();
         }
@@ -871,13 +870,11 @@ void SAL_CALL ScXMLChangeCellContext::endFastElement( sal_Int32 /*nElement*/ )
             {
                 if (!sText.isEmpty() && bString)
                 {
-                    mrOldCell.meType = CELLTYPE_STRING;
-                    mrOldCell.mpString = new svl::SharedString(pDoc->GetSharedStringPool().intern(sText));
+                    mrOldCell.set(pDoc->GetSharedStringPool().intern(sText));
                 }
                 else
                 {
-                    mrOldCell.meType = CELLTYPE_VALUE;
-                    mrOldCell.mfValue = fValue;
+                    mrOldCell.set(fValue);
                 }
                 if (rType == css::util::NumberFormat::DATE || rType == css::util::NumberFormat::TIME)
                     rInputString = sText;
