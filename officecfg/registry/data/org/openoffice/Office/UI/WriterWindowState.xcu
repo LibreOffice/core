@@ -901,6 +901,94 @@
           <value>false</value>
         </prop>
       </node>
+      <node oor:name="private:resource/toolbar/singlemode-annotation" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Standard (Single Mode) - Comment</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/singlemode-draw" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Standard (Single Mode) - Shape</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/singlemode-drawtext" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Standard (Single Mode) - Shape Text</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/singlemode-form" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Standard (Single Mode) - Form Control</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/singlemode-frame" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Standard (Single Mode) - Frame</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/singlemode-graphic" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Standard (Single Mode) - Image</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/singlemode-media" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Standard (Single Mode) - Media</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/singlemode-ole" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Standard (Single Mode) - OLE Object</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/singlemode-printpreview" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Standard (Single Mode) - Print Preview</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/singlemode-table" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Standard (Single Mode) - Table</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+      <node oor:name="private:resource/toolbar/singlemode-text" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Standard (Single Mode) - Text</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/toolbar/textstylebar" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
           <value>0,2</value>
