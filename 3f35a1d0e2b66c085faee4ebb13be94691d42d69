@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9aa2ec0b_ee799b62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-06-15T12:27:35Z",
+      "side": 1,
+      "message": "Hello. Here\u0027s another patch, in which I\u0027ve made the changes suggested by Stephen (i.e dropped the redundant groups, and used enumeration constraints wherever possible). I\u0027ve also pointed out which C++ enumerations point to which flag in the \u003cinfo\u003e tags. I\u0027ve also checked the tests which were failing (and they are now passing on my end, after Xisco\u0027s patch).",
+      "revId": "3f35a1d0e2b66c085faee4ebb13be94691d42d69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
