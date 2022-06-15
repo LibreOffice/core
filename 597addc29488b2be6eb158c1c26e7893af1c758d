@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90559064_af44073a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-15T18:24:14Z",
+      "side": 1,
+      "message": "Business card is not very clear about its purpose (see https://bugs.documentfoundation.org/show_bug.cgi?id\u003d148978)\nIf you got some information about it, don\u0027t hesitate to feed the bugtracker.",
+      "revId": "597addc29488b2be6eb158c1c26e7893af1c758d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
