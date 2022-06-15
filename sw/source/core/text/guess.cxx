@@ -100,6 +100,9 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 TextFrameIndex nCharsCnt = nMaxLen - nSpaceCnt;
                 if ( nSpaceCnt && nCharsCnt < rPor.GetLen() )
                 {
+                    if (nSpaceCnt)
+                        rInf.GetTextSize( &rSI, rInf.GetIdx() + nCharsCnt, nSpaceCnt,
+                                          nMaxComp, m_nExtraBlankWidth, nMaxSizeDiff );
                     nMaxLen = nCharsCnt;
                     if ( !nMaxLen )
                         return true;
@@ -610,6 +613,13 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     }
     else
         m_nBreakWidth = 0;
+
+    if (m_nBreakStart > rInf.GetIdx() + nPorLen + m_nFieldDiff)
+    {
+        rInf.GetTextSize(&rSI, rInf.GetIdx() + nPorLen,
+                         m_nBreakStart - rInf.GetIdx() - nPorLen - m_nFieldDiff, nMaxComp,
+                         m_nExtraBlankWidth, nMaxSizeDiff, rInf.GetCachedVclData().get());
+    }
 
     if( m_pHanging )
     {
