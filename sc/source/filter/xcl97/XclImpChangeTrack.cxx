@@ -228,8 +228,7 @@ void XclImpChangeTrack::ReadCell(
             double fValue = XclTools::GetDoubleFromRK( pStrm->ReadInt32() );
             if( pStrm->IsValid() )
             {
-                rCell.meType = CELLTYPE_VALUE;
-                rCell.mfValue = fValue;
+                rCell.set(fValue);
             }
         }
         break;
@@ -238,8 +237,7 @@ void XclImpChangeTrack::ReadCell(
             double fValue = pStrm->ReadDouble();
             if( pStrm->IsValid() )
             {
-                rCell.meType = CELLTYPE_VALUE;
-                rCell.mfValue = fValue;
+                rCell.set(fValue);
             }
         }
         break;
@@ -248,8 +246,7 @@ void XclImpChangeTrack::ReadCell(
             OUString sString = pStrm->ReadUniString();
             if( pStrm->IsValid() )
             {
-                rCell.meType = CELLTYPE_STRING;
-                rCell.mpString = new svl::SharedString(GetDoc().GetSharedStringPool().intern(sString));
+                rCell.set(GetDoc().GetSharedStringPool().intern(sString));
             }
         }
         break;
@@ -258,8 +255,7 @@ void XclImpChangeTrack::ReadCell(
             double fValue = static_cast<double>(pStrm->ReaduInt16() != 0);
             if( pStrm->IsValid() )
             {
-                rCell.meType = CELLTYPE_VALUE;
-                rCell.mfValue = fValue;
+                rCell.set(fValue);
                 rFormat = GetFormatter().GetStandardFormat( SvNumFormatType::LOGICAL, ScGlobal::eLnge );
             }
         }
@@ -270,8 +266,7 @@ void XclImpChangeTrack::ReadCell(
             ReadFormula( pTokenArray, rPosition );
             if( pStrm->IsValid() && pTokenArray )
             {
-                rCell.meType = CELLTYPE_FORMULA;
-                rCell.mpFormula = new ScFormulaCell(GetDoc(), rPosition, std::move(pTokenArray));
+                rCell.set(new ScFormulaCell(GetDoc(), rPosition, std::move(pTokenArray)));
             }
         }
         break;

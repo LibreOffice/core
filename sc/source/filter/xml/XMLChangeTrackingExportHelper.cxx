@@ -254,7 +254,7 @@ void ScChangeTrackingExportHelper::WriteValueCell(const ScCellValue& rCell, cons
 {
     assert(rCell.meType == CELLTYPE_VALUE);
 
-    SetValueAttributes(rCell.mfValue, sValue);
+    SetValueAttributes(rCell.getDouble(), sValue);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
 }
 
@@ -264,38 +264,38 @@ void ScChangeTrackingExportHelper::WriteStringCell(const ScCellValue& rCell)
 
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-    if (!rCell.mpString->isEmpty())
+    if (!rCell.getSharedString().isEmpty())
     {
         SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
         bool bPrevCharWasSpace(true);
-        rExport.GetTextParagraphExport()->exportCharacterData(rCell.mpString->getString(), bPrevCharWasSpace);
+        rExport.GetTextParagraphExport()->exportCharacterData(rCell.getSharedString().getString(), bPrevCharWasSpace);
     }
 }
 
 void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
 {
-    assert(rCell.meType == CELLTYPE_EDIT);
+    assert(rCell.getType() == CELLTYPE_EDIT);
 
     OUString sString;
-    if (rCell.mpEditText)
-        sString = ScEditUtil::GetString(*rCell.mpEditText, rExport.GetDocument());
+    if (rCell.getEditText())
+        sString = ScEditUtil::GetString(*rCell.getEditText(), rExport.GetDocument());
 
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-    if (rCell.mpEditText && !sString.isEmpty())
+    if (rCell.getEditText() && !sString.isEmpty())
     {
         if (!pEditTextObj)
             pEditTextObj = new ScEditEngineTextObj();
-        pEditTextObj->SetText(*rCell.mpEditText);
+        pEditTextObj->SetText(*rCell.getEditText());
         rExport.GetTextParagraphExport()->exportText(pEditTextObj, false, false);
     }
 }
 
 void ScChangeTrackingExportHelper::WriteFormulaCell(const ScCellValue& rCell, const OUString& sValue)
 {
-    assert(rCell.meType == CELLTYPE_FORMULA);
+    assert(rCell.getType() == CELLTYPE_FORMULA);
 
-    ScFormulaCell* pFormulaCell = rCell.mpFormula;
+    ScFormulaCell* pFormulaCell = rCell.getFormula();
     OUString sAddress;
     const ScDocument* pDoc = rExport.GetDocument();
     ScRangeStringConverter::GetStringFromAddress(sAddress, pFormulaCell->aPos, pDoc, ::formula::FormulaGrammar::CONV_OOO);
@@ -354,7 +354,7 @@ void ScChangeTrackingExportHelper::WriteCell(const ScCellValue& rCell, const OUS
         return;
     }
 
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
             WriteValueCell(rCell, sValue);
@@ -585,13 +585,13 @@ void ScChangeTrackingExportHelper::WriteRejection(const ScChangeAction* pAction)
 
 void ScChangeTrackingExportHelper::CollectCellAutoStyles(const ScCellValue& rCell)
 {
-    if (rCell.meType != CELLTYPE_EDIT)
+    if (rCell.getType() != CELLTYPE_EDIT)
         return;
 
     if (!pEditTextObj)
         pEditTextObj = new ScEditEngineTextObj();
 
-    pEditTextObj->SetText(*rCell.mpEditText);
+    pEditTextObj->SetText(*rCell.getEditText());
     rExport.GetTextParagraphExport()->collectTextAutoStyles(pEditTextObj, false, false);
 }
 
