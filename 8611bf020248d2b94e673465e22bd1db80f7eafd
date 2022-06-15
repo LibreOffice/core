@@ -16,6 +16,24 @@
       "message": "Hi Olivier,\nis this change necessary ?",
       "revId": "8611bf020248d2b94e673465e22bd1db80f7eafd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbf44884_02ea422c",
+        "filename": "sw/uiconfig/swriter/ui/tocentriespage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-06-15T16:46:48Z",
+      "side": 1,
+      "message": "This came from the Glade tool. I have no interference.",
+      "parentUuid": "7dc2cede_3add9bee",
+      "revId": "8611bf020248d2b94e673465e22bd1db80f7eafd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
