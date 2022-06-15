@@ -412,9 +412,6 @@ SwAccessibleParagraph::SwAccessibleParagraph(
     //Get the real heading level, Heading1 ~ Heading10
     m_nHeadingLevel = GetRealHeadingLevel();
     SetName( OUString() ); // set an empty accessibility name for paragraphs
-
-    // If this object has the focus, then it is remembered by the map itself.
-    m_nOldCaretPos = GetCaretPos();
 }
 
 SwAccessibleParagraph::~SwAccessibleParagraph()
