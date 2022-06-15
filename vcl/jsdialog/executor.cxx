@@ -210,23 +210,61 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
                 else if (sAction == "textselection")
                 {
-                    // start;end
                     OUString sTextData = rData["data"];
                     int nSeparatorPos = sTextData.indexOf(';');
                     if (nSeparatorPos <= 0)
                         return true;
 
+                    int nSeparator2Pos = sTextData.indexOf(';', nSeparatorPos + 1);
+                    int nSeparator3Pos = 0;
+
+                    if (nSeparator2Pos > 0)
+                    {
+                        // start;end;startPara;endPara
+                        nSeparator3Pos = sTextData.indexOf(';', nSeparator2Pos + 1);
+                        if (nSeparator3Pos <= 0)
+                            return true;
+                    }
+                    else
+                    {
+                        // start;end
+                        nSeparator2Pos = 0;
+                        nSeparator3Pos = 0;
+                    }
+
                     std::u16string_view aStartPos = sTextData.subView(0, nSeparatorPos);
-                    std::u16string_view aEndPos = sTextData.subView(nSeparatorPos + 1);
+                    std::u16string_view aEndPos
+                        = sTextData.subView(nSeparatorPos + 1, nSeparator2Pos - nSeparatorPos + 1);
 
                     if (aStartPos.empty() || aEndPos.empty())
                         return true;
 
                     sal_Int32 nStart = o3tl::toInt32(aStartPos);
                     sal_Int32 nEnd = o3tl::toInt32(aEndPos);
+                    sal_Int32 nStartPara = 0;
+                    sal_Int32 nEndPara = 0;
+
+                    // multiline case
+                    if (nSeparator2Pos && nSeparator3Pos)
+                    {
+                        std::u16string_view aStartPara = sTextData.subView(
+                            nSeparator2Pos + 1, nSeparator3Pos - nSeparator2Pos + 1);
+                        std::u16string_view aEndPara = sTextData.subView(nSeparator3Pos + 1);
+
+                        if (aStartPara.empty() || aEndPara.empty())
+                            return true;
+
+                        nStartPara = o3tl::toInt32(aStartPara);
+                        nEndPara = o3tl::toInt32(aEndPara);
+                    }
+
+                    // pass information about paragraph number in the additional data
+                    // handled in sc/source/ui/app/inputwin.cxx
+                    Point* pParaPoint = new Point(nStartPara, nEndPara);
+                    const void* pCmdData = pParaPoint;
 
                     Point aPos(nStart, nEnd);
-                    CommandEvent aCEvt(aPos, CommandEventId::CursorPos);
+                    CommandEvent aCEvt(aPos, CommandEventId::CursorPos, false, pCmdData);
                     LOKTrigger::command(*pArea, aCEvt);
 
                     return true;
