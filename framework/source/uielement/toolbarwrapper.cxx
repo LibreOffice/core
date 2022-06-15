@@ -130,6 +130,8 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
         catch( const Exception& )
         {
         }
+        // Avoid flickering on context change
+        bPopupMode = true;
     }
 
     // Create VCL based toolbar which will be filled with settings data
