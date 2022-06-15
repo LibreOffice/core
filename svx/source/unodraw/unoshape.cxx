@@ -2539,9 +2539,12 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
     }
     }
 
-    OUString sExceptionMessage  ("IllegalArgumentException in SvxShape::setPropertyValueImpl."
-                                " Property Type: " + pProperty->aType.getTypeName() + " Property nWID: " + OUString::number(pProperty->nWID)
-                                + " Value Type: " + (rValue.hasValue() ? rValue.getValueTypeName() : "void (no value)"));
+    OUString sExceptionMessage(
+        "IllegalArgumentException in SvxShape::setPropertyValueImpl."
+        " Property Type: "
+        + pProperty->aType.getTypeName() + " Property Name: " + pProperty->aName
+        + " Property nWID: " + OUString::number(pProperty->nWID)
+        + " Value Type: " + (rValue.hasValue() ? rValue.getValueTypeName() : "void (no value)"));
 
     throw lang::IllegalArgumentException(sExceptionMessage, nullptr, 1);
 }
