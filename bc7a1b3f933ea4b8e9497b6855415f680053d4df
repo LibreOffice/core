@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f989b43_da4f4665",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-15T11:43:21Z",
+      "side": 1,
+      "message": "See core.git 33e69fb9ef450169e7d85ae3215fd9a4fc8082c2 for the commit that added the formula. If there is some correctness problem with that one, then perhaps best to comment on that original change.\n\nThis one just guards against dividing by zero (currently leading to a crash), since the shape width is user input, so we can\u0027t assume that it\u0027s non-zero. oox::vml::ShapeType::getAbsRectangle() similarly rounds up the width to 1 mm100 if it would be zero, that looks like a reasonable approach to re-use here. What do you think? Thanks.",
+      "parentUuid": "b16825a8_05174727",
+      "revId": "bc7a1b3f933ea4b8e9497b6855415f680053d4df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecfde202_a22bd658",
