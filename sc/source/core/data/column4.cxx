@@ -255,7 +255,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
 
     if ((nFlags & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
     {
-        if (!rCxt.isSkipEmptyCells() || rSrcCell.meType != CELLTYPE_NONE)
+        if (!rCxt.isSkipEmptyCells() || rSrcCell.getType() != CELLTYPE_NONE)
         {
             const ScPatternAttr* pAttr = (bSameDocPool ? rCxt.getSingleCellPattern(nColOffset) :
                     rCxt.getSingleCellPattern(nColOffset)->PutInPool( &rDocument, rCxt.getClipDoc()));
@@ -273,11 +273,11 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     {
         std::vector<sc::CellTextAttr> aTextAttrs(nDestSize, rSrcAttr);
 
-        switch (rSrcCell.meType)
+        switch (rSrcCell.getType())
         {
             case CELLTYPE_VALUE:
             {
-                std::vector<double> aVals(nDestSize, rSrcCell.mfValue);
+                std::vector<double> aVals(nDestSize, rSrcCell.getDouble());
                 pBlockPos->miCellPos =
                     maCells.set(pBlockPos->miCellPos, nRow1, aVals.begin(), aVals.end());
                 pBlockPos->miCellTextAttrPos =
@@ -291,8 +291,8 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
                 // same document. If not, re-intern shared strings.
                 svl::SharedStringPool* pSharedStringPool = (bSameDocPool ? nullptr : &rDocument.GetSharedStringPool());
                 svl::SharedString aStr = (pSharedStringPool ?
-                        pSharedStringPool->intern( rSrcCell.mpString->getString()) :
-                        *rSrcCell.mpString);
+                        pSharedStringPool->intern( rSrcCell.getSharedString().getString()) :
+                        rSrcCell.getSharedString());
 
                 std::vector<svl::SharedString> aStrs(nDestSize, aStr);
                 pBlockPos->miCellPos =
@@ -307,7 +307,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
                 std::vector<EditTextObject*> aStrs;
                 aStrs.reserve(nDestSize);
                 for (size_t i = 0; i < nDestSize; ++i)
-                    aStrs.push_back(rSrcCell.mpEditText->Clone().release());
+                    aStrs.push_back(rSrcCell.getEditText()->Clone().release());
 
                 pBlockPos->miCellPos =
                     maCells.set(pBlockPos->miCellPos, nRow1, aStrs.begin(), aStrs.end());
@@ -321,7 +321,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
                 std::vector<sc::RowSpan> aRanges;
                 aRanges.reserve(1);
                 aRanges.emplace_back(nRow1, nRow2);
-                CloneFormulaCell(*pBlockPos, *rSrcCell.mpFormula, rSrcAttr, aRanges);
+                CloneFormulaCell(*pBlockPos, *rSrcCell.getFormula(), rSrcAttr, aRanges);
             }
             break;
             default:
