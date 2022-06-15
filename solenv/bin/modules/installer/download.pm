@@ -363,17 +363,6 @@ sub get_download_architecture
     {
         $arch = "x86";
     }
-    elsif ( $installer::globals::iswindowsbuild )
-    {
-        if ( $installer::globals::iswin64build )
-        {
-            $arch = "x64";
-        }
-        else
-        {
-            $arch = "x86";
-        }
-    }
     elsif ( $installer::globals::cpuname eq 'INTEL' )
     {
         $arch = "x86";
@@ -388,7 +377,7 @@ sub get_download_architecture
     }
     elsif ( $installer::globals::cpuname eq 'X86_64' )
     {
-        $arch = "x86-64";
+        $arch = $installer::globals::os eq 'WNT' ? 'x64' : 'x86-64';
     }
     elsif ( $installer::globals::cpuname eq 'AARCH64' )
     {
