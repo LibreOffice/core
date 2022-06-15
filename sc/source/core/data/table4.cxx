@@ -1761,12 +1761,12 @@ void ScTable::FillSeriesSimple(
 
     if (bVertical)
     {
-        switch (rSrcCell.meType)
+        switch (rSrcCell.getType())
         {
             case CELLTYPE_FORMULA:
             {
                 FillFormulaVertical(
-                    *rSrcCell.mpFormula, rInner, rCol, nIMin, nIMax, pProgress, rProgress);
+                    *rSrcCell.getFormula(), rInner, rCol, nIMin, nIMax, pProgress, rProgress);
             }
             break;
             default:
@@ -1793,7 +1793,7 @@ void ScTable::FillSeriesSimple(
     }
     else
     {
-        switch (rSrcCell.meType)
+        switch (rSrcCell.getType())
         {
             case CELLTYPE_FORMULA:
             {
@@ -1805,7 +1805,7 @@ void ScTable::FillSeriesSimple(
                     if (bHidden)
                         continue;
 
-                    FillFormula(rSrcCell.mpFormula, rCol, rRow, (rInner == nIMax));
+                    FillFormula(rSrcCell.getFormula(), rCol, rRow, (rInner == nIMax));
                     if (pProgress)
                         pProgress->SetStateOnPercent(++rProgress);
                 }
@@ -1888,9 +1888,9 @@ void ScTable::FillAutoSimple(
                 if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
                 {
                     aSrcCell = GetCellValue(rCol, nSource);
-                    if (nISrcStart == nISrcEnd && aSrcCell.meType == CELLTYPE_FORMULA)
+                    if (nISrcStart == nISrcEnd && aSrcCell.getType() == CELLTYPE_FORMULA)
                     {
-                        FillFormulaVertical(*aSrcCell.mpFormula, rInner, rCol, nIStart, nIEnd, pProgress, rProgress);
+                        FillFormulaVertical(*aSrcCell.getFormula(), rInner, rCol, nIStart, nIEnd, pProgress, rProgress);
                         return;
                     }
                     const SvNumFormatType nFormatType = rDocument.GetFormatTable()->GetType(
@@ -1911,14 +1911,14 @@ void ScTable::FillAutoSimple(
                 bGetCell = false;
                 if (!aSrcCell.isEmpty())
                 {
-                    switch (aSrcCell.meType)
+                    switch (aSrcCell.getType())
                     {
                         case CELLTYPE_STRING:
                         case CELLTYPE_EDIT:
-                            if (aSrcCell.meType == CELLTYPE_STRING)
-                                aValue = aSrcCell.mpString->getString();
+                            if (aSrcCell.getType() == CELLTYPE_STRING)
+                                aValue = aSrcCell.getSharedString().getString();
                             else
-                                aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, &rDocument);
+                                aValue = ScEditUtil::GetString(*aSrcCell.getEditText(), &rDocument);
                             if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
                             {
                                 nCellDigits = 0;    // look at each source cell individually
@@ -1937,17 +1937,17 @@ void ScTable::FillAutoSimple(
                 }
             }
 
-            switch (aSrcCell.meType)
+            switch (aSrcCell.getType())
             {
                 case CELLTYPE_VALUE:
                     {
                         double fVal;
-                        if (bBooleanCell && ((fVal = aSrcCell.mfValue) == 0.0 || fVal == 1.0))
-                            aCol[rCol].SetValue(rRow, aSrcCell.mfValue);
+                        if (bBooleanCell && ((fVal = aSrcCell.getDouble()) == 0.0 || fVal == 1.0))
+                            aCol[rCol].SetValue(rRow, aSrcCell.getDouble());
                         else if(bPercentCell)
-                            aCol[rCol].SetValue(rRow, aSrcCell.mfValue + nDelta * 0.01); // tdf#89998 increment by 1% at a time
+                            aCol[rCol].SetValue(rRow, aSrcCell.getDouble() + nDelta * 0.01); // tdf#89998 increment by 1% at a time
                         else
-                            aCol[rCol].SetValue(rRow, aSrcCell.mfValue + nDelta);
+                            aCol[rCol].SetValue(rRow, aSrcCell.getDouble() + nDelta);
                     }
                     break;
                 case CELLTYPE_STRING:
@@ -1965,7 +1965,7 @@ void ScTable::FillAutoSimple(
                             setSuffixCell(
                                 aCol[rCol], rRow,
                                 nNextValue, nCellDigits, aValue,
-                                aSrcCell.meType, bIsOrdinalSuffix);
+                                aSrcCell.getType(), bIsOrdinalSuffix);
                         }
                         else
                         {
@@ -1984,7 +1984,7 @@ void ScTable::FillAutoSimple(
                     break;
                 case CELLTYPE_FORMULA :
                     FillFormula(
-                        aSrcCell.mpFormula, rCol, rRow, (rInner == nIEnd));
+                        aSrcCell.getFormula(), rCol, rRow, (rInner == nIEnd));
                     if (nFormulaCounter - nActFormCnt > nMaxFormCnt)
                         nMaxFormCnt = nFormulaCounter - nActFormCnt;
                     break;
@@ -2033,7 +2033,7 @@ void ScTable::FillAutoSimple(
         //  and even then not individually for each one
 
         ++rProgress;
-        if ( pProgress && (aSrcCell.meType == CELLTYPE_FORMULA || aSrcCell.meType == CELLTYPE_EDIT) )
+        if ( pProgress && (aSrcCell.getType() == CELLTYPE_FORMULA || aSrcCell.getType() == CELLTYPE_EDIT) )
             pProgress->SetStateOnPercent( rProgress );
 
     }
@@ -2230,13 +2230,13 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         else
             aSrcCell = GetCellValue(static_cast<SCCOL>(nISource), static_cast<SCROW>(nOStart));
         // Same logic as for the actual series.
-        if (!aSrcCell.isEmpty() && (aSrcCell.meType == CELLTYPE_VALUE || aSrcCell.meType == CELLTYPE_FORMULA))
+        if (!aSrcCell.isEmpty() && (aSrcCell.getType() == CELLTYPE_VALUE || aSrcCell.getType() == CELLTYPE_FORMULA))
         {
             double nStartVal;
-            if (aSrcCell.meType == CELLTYPE_VALUE)
-                nStartVal = aSrcCell.mfValue;
+            if (aSrcCell.getType() == CELLTYPE_VALUE)
+                nStartVal = aSrcCell.getDouble();
             else
-                nStartVal = aSrcCell.mpFormula->GetValue();
+                nStartVal = aSrcCell.getFormula()->GetValue();
             if (eFillCmd == FILL_LINEAR)
             {
                 if (nStepValue == 0.0)
@@ -2354,7 +2354,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         if (!aSrcCell.isEmpty())
         {
-            CellType eCellType = aSrcCell.meType;
+            CellType eCellType = aSrcCell.getType();
 
             if (eFillCmd == FILL_SIMPLE)                // copy
             {
@@ -2362,8 +2362,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             }
             else if (eCellType == CELLTYPE_VALUE || eCellType == CELLTYPE_FORMULA)
             {
-                const double nStartVal = (eCellType == CELLTYPE_VALUE ? aSrcCell.mfValue :
-                        aSrcCell.mpFormula->GetValue());
+                const double nStartVal = (eCellType == CELLTYPE_VALUE ? aSrcCell.getDouble() :
+                        aSrcCell.getFormula()->GetValue());
                 double nVal = nStartVal;
                 tools::Long nIndex = 0;
 
@@ -2460,9 +2460,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
                 OUString aValue;
                 if (eCellType == CELLTYPE_STRING)
-                    aValue = aSrcCell.mpString->getString();
+                    aValue = aSrcCell.getSharedString().getString();
                 else
-                    aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, &rDocument);
+                    aValue = ScEditUtil::GetString(*aSrcCell.getEditText(), &rDocument);
                 sal_Int32 nStringValue;
                 sal_uInt16 nMinDigits = nArgMinDigits;
                 short nHeadNoneTail = lcl_DecompValueString( aValue, nStringValue, &nMinDigits );

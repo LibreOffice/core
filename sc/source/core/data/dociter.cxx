@@ -973,21 +973,20 @@ OUString ScCellIterator::getString() const
 ScCellValue ScCellIterator::getCellValue() const
 {
     ScCellValue aRet;
-    aRet.meType = maCurCell.meType;
 
     switch (maCurCell.meType)
     {
         case CELLTYPE_STRING:
-            aRet.mpString = new svl::SharedString(*maCurCell.mpString);
+            aRet.set(*maCurCell.mpString);
         break;
         case CELLTYPE_EDIT:
-            aRet.mpEditText = maCurCell.mpEditText->Clone().release();
+            aRet.set( maCurCell.mpEditText->Clone().release() );
         break;
         case CELLTYPE_VALUE:
-            aRet.mfValue = maCurCell.mfValue;
+            aRet.set( maCurCell.mfValue );
         break;
         case CELLTYPE_FORMULA:
-            aRet.mpFormula = maCurCell.mpFormula->Clone();
+            aRet.set( maCurCell.mpFormula->Clone() );
         break;
         default:
             ;

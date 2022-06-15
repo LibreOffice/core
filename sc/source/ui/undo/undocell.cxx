@@ -449,14 +449,14 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
 {
     ScDocument& rDoc = pDocShell->GetDocument();
 
-    switch (rVal.meType)
+    switch (rVal.getType())
     {
         case CELLTYPE_NONE:
             // empty cell
             rDoc.SetEmptyCell(maPos);
         break;
         case CELLTYPE_VALUE:
-            rDoc.SetValue(maPos, rVal.mfValue);
+            rDoc.SetValue(maPos, rVal.getDouble());
         break;
         case CELLTYPE_STRING:
         {
@@ -464,14 +464,14 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
             aParam.setTextInput();
             // Undo only cell content, without setting any number format.
             aParam.meSetTextNumFormat = ScSetStringParam::Keep;
-            rDoc.SetString(maPos, rVal.mpString->getString(), &aParam);
+            rDoc.SetString(maPos, rVal.getSharedString().getString(), &aParam);
         }
         break;
         case CELLTYPE_EDIT:
-            rDoc.SetEditText(maPos, rVal.mpEditText->Clone());
+            rDoc.SetEditText(maPos, rVal.getEditText()->Clone());
         break;
         case CELLTYPE_FORMULA:
-            rDoc.SetFormulaCell(maPos, rVal.mpFormula->Clone());
+            rDoc.SetFormulaCell(maPos, rVal.getFormula()->Clone());
         break;
         default:
             ;
