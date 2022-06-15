@@ -4226,6 +4226,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
 
     OUString       aStr;
     OUStringBuffer aStrBuffer;
+    double fTextRotateAngle(0.0); // sum TextRotateAngle and TextPreRotateAngle
     SvXMLUnitConverter& rUnitConverter = rExport.GetMM100UnitConverter();
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
@@ -4280,14 +4281,9 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                     case EAS_TextPreRotateAngle :
                     case EAS_TextRotateAngle :
                     {
-                        double fTextRotateAngle = 0;
-                        if ( ( rGeoProp.Value >>= fTextRotateAngle ) && fTextRotateAngle != 0 )
-                        {
-                            ::sax::Converter::convertDouble(
-                                    aStrBuffer, fTextRotateAngle );
-                            aStr = aStrBuffer.makeStringAndClear();
-                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_ROTATE_ANGLE, aStr );
-                        }
+                        double fAngle = 0.0;
+                        rGeoProp.Value >>= fAngle;
+                        fTextRotateAngle += fAngle;
                     }
                     break;
                     case EAS_Extrusion :
@@ -4864,6 +4860,12 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                         break;
                 }
             }   // for
+            if (fTextRotateAngle != 0)
+            {
+                ::sax::Converter::convertDouble( aStrBuffer, fTextRotateAngle );
+                aStr = aStrBuffer.makeStringAndClear();
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_ROTATE_ANGLE, aStr );
+            }
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TYPE, aCustomShapeType );
 
             // adjustments
