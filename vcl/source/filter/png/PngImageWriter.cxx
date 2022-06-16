@@ -13,6 +13,24 @@
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <vcl/bitmap.hxx>
 
+namespace
+{
+void combineScanlineChannels(Scanline pRGBScanline, Scanline pAlphaScanline, Scanline pResult,
+                             sal_uInt32 nSize)
+{
+    assert(pRGBScanline && "RGB scanline is null");
+    assert(pAlphaScanline && "Alpha scanline is null");
+
+    for (sal_uInt32 i = 0; i < nSize; i++)
+    {
+        *pResult++ = *pRGBScanline++; // R
+        *pResult++ = *pRGBScanline++; // G
+        *pResult++ = *pRGBScanline++; // B
+        *pResult++ = *pAlphaScanline++; // A
+    }
+}
+}
+
 namespace vcl
 {
 static void lclWriteStream(png_structp pPng, png_bytep pData, png_size_t pDataSize)
@@ -30,7 +48,7 @@ static void lclWriteStream(png_structp pPng, png_bytep pData, png_size_t pDataSi
         png_error(pPng, "Write Error");
 }
 
-bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLevel)
+static bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLevel)
 {
     png_structp pPng = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
@@ -45,6 +63,7 @@ bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLevel)
     }
 
     Bitmap aBitmap;
+    AlphaMask aAlphaMask;
 
     if (setjmp(png_jmpbuf(pPng)))
     {
@@ -56,9 +75,11 @@ bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLevel)
     png_set_write_fn(pPng, &rStream, lclWriteStream, nullptr);
 
     aBitmap = rBitmapEx.GetBitmap();
+    aAlphaMask = rBitmapEx.GetAlpha();
 
     {
         Bitmap::ScopedReadAccess pAccess(aBitmap);
+        Bitmap::ScopedReadAccess pAlphaAccess(aAlphaMask);
         Size aSize = rBitmapEx.GetSizePixel();
 
         int bitDepth = -1;
@@ -74,22 +95,33 @@ bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLevel)
            PNG_COLOR_MASK_ALPHA
         */
         auto eScanlineFormat = pAccess->GetScanlineFormat();
-        if (eScanlineFormat == ScanlineFormat::N8BitPal && aBitmap.HasGreyPalette8Bit())
+        switch (eScanlineFormat)
         {
-            colorType = PNG_COLOR_TYPE_GRAY;
-            bitDepth = 8;
-        }
-        else if (eScanlineFormat == ScanlineFormat::N24BitTcBgr
-                 || eScanlineFormat == ScanlineFormat::N24BitTcRgb)
-        {
-            colorType = PNG_COLOR_TYPE_RGB;
-            bitDepth = 8;
-            if (eScanlineFormat == ScanlineFormat::N24BitTcBgr)
+            case ScanlineFormat::N8BitPal:
+            {
+                if (!aBitmap.HasGreyPalette8Bit())
+                    return false;
+                colorType = PNG_COLOR_TYPE_GRAY;
+                bitDepth = 8;
+                break;
+            }
+            case ScanlineFormat::N24BitTcBgr:
+            {
                 png_set_bgr(pPng);
-        }
-        else
-        {
-            return false;
+                [[fallthrough]];
+            }
+            case ScanlineFormat::N24BitTcRgb:
+            {
+                colorType = PNG_COLOR_TYPE_RGB;
+                bitDepth = 8;
+                if (pAlphaAccess)
+                    colorType = PNG_COLOR_TYPE_RGBA;
+                break;
+            }
+            default:
+            {
+                return false;
+            }
         }
 
         png_set_compression_level(pPng, nCompressionLevel);
@@ -111,10 +143,28 @@ bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLevel)
 
         for (int nPass = 0; nPass < nNumberOfPasses; nPass++)
         {
-            for (tools::Long y = 0; y <= nHeight; y++)
+            for (tools::Long y = 0; y < nHeight; y++)
             {
                 pSourcePointer = pAccess->GetScanline(y);
-                png_write_rows(pPng, &pSourcePointer, 1);
+                Scanline pFinalPointer = pSourcePointer;
+                std::vector<std::remove_pointer_t<Scanline>> aCombinedChannels;
+                if (pAlphaAccess)
+                {
+                    // Check that theres an alpha channel per 3 color/RGB channels
+                    assert(((pAlphaAccess->GetScanlineSize() * 3) == pAccess->GetScanlineSize())
+                           && "RGB and alpha channel size mismatch");
+                    // Allocate enough size to fit all 4 channels
+                    aCombinedChannels.resize(pAlphaAccess->GetScanlineSize()
+                                             + pAccess->GetScanlineSize());
+                    Scanline pAlphaPointer = pAlphaAccess->GetScanline(y);
+                    // Combine RGB and alpha channels
+                    combineScanlineChannels(pSourcePointer, pAlphaPointer, aCombinedChannels.data(),
+                                            pAlphaAccess->GetScanlineSize());
+                    pFinalPointer = aCombinedChannels.data();
+                    // Invert alpha channel (255 - a)
+                    png_set_invert_alpha(pPng);
+                }
+                png_write_row(pPng, pFinalPointer);
             }
         }
     }
