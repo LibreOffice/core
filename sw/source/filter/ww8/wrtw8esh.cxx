@@ -1880,8 +1880,8 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
     {
         static const o3tl::enumarray<SvxBoxItemLine, sal_uInt16> aExhperProp =
         {
-            ESCHER_Prop_dyTextTop,  ESCHER_Prop_dyTextBottom,
-            ESCHER_Prop_dxTextLeft, ESCHER_Prop_dxTextRight
+            sal_uInt16(ESCHER_Prop_dyTextTop),  sal_uInt16(ESCHER_Prop_dyTextBottom),
+            sal_uInt16(ESCHER_Prop_dxTextLeft), sal_uInt16(ESCHER_Prop_dxTextRight)
         };
         const SvxBorderLine* pLine;
 

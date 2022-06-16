@@ -242,12 +242,12 @@ static SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
 // Numbering
 const o3tl::enumarray<SvxAdjust, unsigned short> aSvxToUnoAdjust
 {
-    text::HoriOrientation::LEFT,   //3
-    text::HoriOrientation::RIGHT,  //1
-    USHRT_MAX,
-    text::HoriOrientation::CENTER, //2
-    USHRT_MAX,
-    USHRT_MAX
+    static_cast<unsigned short>(text::HoriOrientation::LEFT),   //3
+    static_cast<unsigned short>(text::HoriOrientation::RIGHT),  //1
+    static_cast<unsigned short>(USHRT_MAX),
+    static_cast<unsigned short>(text::HoriOrientation::CENTER), //2
+    static_cast<unsigned short>(USHRT_MAX),
+    static_cast<unsigned short>(USHRT_MAX)
 };
 
 const unsigned short aUnoToSvxAdjust[] =
