@@ -33,6 +33,23 @@
       "message": "as discussed in the comments at \u003chttps://gerrit.libreoffice.org/c/core/+/134406/16#message-6c784dcae541c19d181e9b67e1200261dfcc2b61\u003e \"tdf#128150 Add OOXML import/export for \u0027use background fill\u0027\", lets stick with 7.5 in line with AC_INIT for now, and do a mass 7.5 -\u003e 8.0 rename if and when marketing would decide otherwise",
       "revId": "4540ded0fdcadd3d580f2001659662488c39905d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "966058e6_9db99eaa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-06-16T17:07:09Z",
+      "side": 1,
+      "message": "The arbitrary version number bumps are not beneficial at all. They have only hurt the perception of our product. Why can\u0027t Marketing see the online comments everywhere?",
+      "revId": "4540ded0fdcadd3d580f2001659662488c39905d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
