@@ -50,6 +50,24 @@
       "message": "So I have a fix for tdf#145843, but I can\u0027t reproduce e.g. tdf#145988 or tdf#146842, using two different Mac computers. A number of people in those bugreports cannot reproduce either (*sigh* that\u0027s such a mess, aren\u0027t Macs supposed to be this nice unified experience? this feels worse than bugreports on Linux or Windows). I\u0027ve set both bugreports to NEEDINFO with some more questions, but I\u0027m not holding my breath for getting something useful back.\n\nSo what can we do here? The way it is now we can keep disabling Skia on Mac forever if people who can fix this can\u0027t reproduce it and people who can reproduce it can\u0027t fix it.\n",
       "revId": "1318191871d8f8f4d90bf1852afed06296edf1ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e2e1221_3a81f335",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-16T19:11:38Z",
+      "side": 1,
+      "message": "Hi Luboš,\nI think we can ask them to try with LibreOffice 7.4 RC1 when it\u0027s released. meanwhile, there is still time for the fix of tdf#145843.",
+      "parentUuid": "f1c2d8af_52e444e5",
+      "revId": "1318191871d8f8f4d90bf1852afed06296edf1ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
