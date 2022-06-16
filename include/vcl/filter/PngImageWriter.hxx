@@ -24,7 +24,7 @@ class VCL_DLLPUBLIC PngImageWriter
     SvStream& mrStream;
     css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
 
-    int mnCompressionLevel;
+    sal_Int32 mnCompressionLevel;
     bool mbInterlaced;
 
 public:
