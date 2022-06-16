@@ -1530,6 +1530,47 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testPartiallyNumberedList)
                 "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:p", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeaderAndItem)
+{
+    // Given a document with a list, first para is not numbered, but the second is:
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("not numbered");
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
+    SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
+    {
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwTextNode& rTextNode = *rNode.GetTextNode();
+        rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+        rTextNode.SetCountedInList(false);
+    }
+    pWrtShell->SplitNode();
+    pWrtShell->Insert2("numbered");
+    {
+        SwNode& rNode = pWrtShell->GetCursor()->GetPoint()->nNode.GetNode();
+        SwTextNode& rTextNode = *rNode.GetTextNode();
+        rTextNode.SetAttr(SwNumRuleItem(pNumRule->GetName()));
+    }
+
+    // When exporting to ReqIF:
+    ExportToReqif();
+
+    // Then make sure the output is well-formed xhtml:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    // Without the accompanying fix in place, this test would have failed:
+    // Entity: line 3: parser error : Opening and ending tag mismatch: ol line 3 and li
+    // <reqif-xhtml:ol><reqif-xhtml:p>not numbered</reqif-xhtml:p></reqif-xhtml:li>
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Make sure that in case the list has a header and an item, then both are wrapped in an <li>
+    // element.
+    assertXPath(pXmlDoc,
+                "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:p", 2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testBlockQuoteNoMargin)
 {
     // Given a document with some text, para style set to Quotations, no bottom margin:
