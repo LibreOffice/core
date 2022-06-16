@@ -418,6 +418,19 @@ namespace drawinglayer::primitive2d
                 nTransparence = 100;
             }
 
+            if(drawing::FillStyle_NONE == eStyle)
+            {
+                XFillBackgroundItem aBckItem(rSet.Get(XATTR_FILLBACKGROUND));
+                const bool bSlideBackgroundFill(aBckItem.GetValue());
+
+                if(bSlideBackgroundFill)
+                {
+                    // we have SlideBackgroundFill mode, create a
+                    // SdrFillAttribute accordingly
+                    return attribute::SdrFillAttribute(true);
+                }
+            }
+
             if(drawing::FillStyle_NONE != eStyle)
             {
                 if(100 != nTransparence)

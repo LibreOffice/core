@@ -56,7 +56,7 @@ namespace drawinglayer::attribute
                 const FillGradientAttribute& rGradient,
                 const FillHatchAttribute& rHatch,
                 const SdrFillGraphicAttribute& rFillGraphic);
-            SdrFillAttribute();
+            SdrFillAttribute(bool bSlideBackgroundFill = false);
             SdrFillAttribute(const SdrFillAttribute&);
             SdrFillAttribute(SdrFillAttribute&&);
             SdrFillAttribute& operator=(const SdrFillAttribute&);
@@ -65,6 +65,9 @@ namespace drawinglayer::attribute
 
             // checks if the incarnation is default constructed
             bool isDefault() const;
+
+            // checks if the incarnation is slideBackgroundFill
+            bool isSlideBackgroundFill() const;
 
             // compare operator
             bool operator==(const SdrFillAttribute& rCandidate) const;
