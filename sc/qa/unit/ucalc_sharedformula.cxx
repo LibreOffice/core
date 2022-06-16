@@ -284,7 +284,7 @@ void TestSharedFormula::testSharedFormulas()
     ScCellValue aCell(svl::SharedString("Test"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This should be a string value.", CELLTYPE_STRING, aCell.getType());
     aCell.commit(*m_pDoc, aPos);
-    CPPUNIT_ASSERT_EQUAL(aCell.mpString->getString(), m_pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL(aCell.getSharedString()->getString(), m_pDoc->GetString(aPos));
     aPos.SetRow(16);
     pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT(pFC);
