@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "337d2054_0829f1ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-16T07:01:55Z",
+      "side": 1,
+      "message": "Would it make sense to cover your \"crop to zero\" improvement with a test?",
+      "revId": "3a241be35390f54585239bce898c66f4acc10d39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
