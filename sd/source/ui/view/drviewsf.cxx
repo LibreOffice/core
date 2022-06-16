@@ -410,6 +410,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_SHADOW_BLUR:
             case SID_ATTR_SHADOW_XDISTANCE:
             case SID_ATTR_SHADOW_YDISTANCE:
+            case SID_ATTR_FILL_USE_SLIDE_BACKGROUND:
             case SID_ATTR_FILL_TRANSPARENCE:
             case SID_ATTR_FILL_FLOATTRANSPARENCE:
             case SID_ATTR_LINE_STYLE:

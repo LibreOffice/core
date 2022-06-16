@@ -193,6 +193,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
         pBindings->Invalidate( SID_FRAME_LINECOLOR );
         pBindings->Invalidate( SID_ATTR_BORDER );
         pBindings->Invalidate( SID_ATTR_FILL_STYLE );
+        pBindings->Invalidate( SID_ATTR_FILL_USE_SLIDE_BACKGROUND );
         pBindings->Invalidate( SID_ATTR_FILL_TRANSPARENCE );
         pBindings->Invalidate( SID_ATTR_FILL_FLOATTRANSPARENCE );
         pBindings->Invalidate( SID_TABLE_MERGE_CELLS );

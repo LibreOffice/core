@@ -19,12 +19,11 @@ class SVXCORE_DLLPUBLIC XFillUseSlideBackgroundItem final : public SfxBoolItem
 public:
     XFillUseSlideBackgroundItem(bool bFill = false);
 
-    SVX_DLLPRIVATE virtual XFillUseSlideBackgroundItem* Clone(SfxItemPool* pPool
-                                                              = nullptr) const override;
+    virtual XFillUseSlideBackgroundItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
-    SVX_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric,
-                                                MapUnit ePresMetric, OUString& rText,
-                                                const IntlWrapper&) const override;
+    virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric,
+                                 MapUnit ePresMetric, OUString& rText,
+                                 const IntlWrapper&) const override;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

@@ -46,6 +46,7 @@ AreaPropertyPanel::AreaPropertyPanel(
       maPatternListControl(SID_PATTERN_LIST, *pBindings, *this),
       maFillTransparenceController(SID_ATTR_FILL_TRANSPARENCE, *pBindings, *this),
       maFillFloatTransparenceController(SID_ATTR_FILL_FLOATTRANSPARENCE, *pBindings, *this),
+      maFillUseSlideBackgroundController(SID_ATTR_FILL_USE_SLIDE_BACKGROUND, *pBindings, *this),
       mpBindings(pBindings)
 {
 }
@@ -84,6 +85,14 @@ void AreaPropertyPanel::setFillTransparence(const XFillTransparenceItem& rItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_TRANSPARENCE,
             SfxCallMode::RECORD, { &rItem });
+}
+
+void AreaPropertyPanel::setFillUseBackground(const XFillStyleItem* pStyleItem,
+                                             const XFillUseSlideBackgroundItem& rItem)
+{
+    GetBindings()->GetDispatcher()->ExecuteList(
+        SID_ATTR_FILL_USE_SLIDE_BACKGROUND, SfxCallMode::RECORD,
+        std::initializer_list<SfxPoolItem const*>{ &rItem, pStyleItem });
 }
 
 void AreaPropertyPanel::setFillFloatTransparence(const XFillFloatTransparenceItem& rItem)
