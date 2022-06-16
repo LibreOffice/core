@@ -44,7 +44,7 @@ void ScUnoListenerCalls::ExecuteAndClear()
     //  During each modified() call, Add may be called again.
     //  These new calls are executed here, too.
 
-    std::vector<ScUnoListenerEntry>::iterator aItr(aEntries.begin());
+    std::list<ScUnoListenerEntry>::iterator aItr(aEntries.begin());
     while (aItr != aEntries.end())
     {
         ScUnoListenerEntry aEntry = *aItr;
