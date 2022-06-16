@@ -16,6 +16,24 @@
       "message": "Pushing this one. this patch and the following ones in the relation chain no longer fail with CppunitTest_sw_core_draw",
       "revId": "221244d9fb261446a83ef3b69a69a483df9793c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "928b2c89_e94f2e76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001306
+      },
+      "writtenOn": "2022-06-16T14:10:56Z",
+      "side": 1,
+      "message": "I dont understand how this triggered that unit failure? I saw other commits that were having the same unit test failure before I merged this also the CI was green when I merged this.",
+      "parentUuid": "c8ea0265_95b83418",
+      "revId": "221244d9fb261446a83ef3b69a69a483df9793c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
