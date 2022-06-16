@@ -1942,7 +1942,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
 
                 ScRefCellValue aCell(rDoc, aPos, blockPos[ nCol - nStartCol ]);
-                switch (aCell.meType)
+                switch (aCell.getType())
                 {
                     case CELLTYPE_FORMULA:
                     {
@@ -2382,7 +2382,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
             SCROW r = nRow - nStartRow + 1;
             SCCOL c = nCol - nStartCol + 1;
             ScRefCellValue aCell(rDoc, ScAddress(nCol, nRow, aRange.aStart.Tab()));
-            CellType eType = aCell.meType;
+            CellType eType = aCell.getType();
             switch( eType )
             {
                 case CELLTYPE_FORMULA:

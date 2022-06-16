@@ -220,7 +220,7 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
         aCell, rPos.Row(), rPos.Tab(), rStr, mpImpl->mrDoc.GetAddressConvention(), pStringParam);
 
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
-    switch (aCell.meType)
+    switch (aCell.getType())
     {
         case CELLTYPE_STRING:
             // string is copied.
@@ -572,7 +572,7 @@ void ScDocumentImport::fillDownCells(const ScAddress& rPos, SCROW nFillSize)
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
     ScRefCellValue aRefCell = pTab->aCol[rPos.Col()].GetCellValue(*pBlockPos, rPos.Row());
 
-    switch (aRefCell.meType)
+    switch (aRefCell.getType())
     {
         case CELLTYPE_VALUE:
         {

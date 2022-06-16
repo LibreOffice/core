@@ -1088,7 +1088,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     double fVal = 0.0;
     if ( bValueData )
     {
-        switch (aCell.meType)
+        switch (aCell.getType())
         {
             case CELLTYPE_VALUE:
                 fVal = aCell.mfValue;
@@ -1178,7 +1178,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
 
     OUString aURL;
     bool bWriteHyperLink(false);
-    if (aCell.meType == CELLTYPE_FORMULA)
+    if (aCell.getType() == CELLTYPE_FORMULA)
     {
         ScFormulaCell* pFCell = aCell.mpFormula;
         if (pFCell->IsHyperLinkCell())
@@ -1200,7 +1200,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     bool bFieldText = false;
 
     const Color* pColor;
-    switch (aCell.meType)
+    switch (aCell.getType())
     {
         case CELLTYPE_EDIT :
             bFieldText = WriteFieldText(aCell.mpEditText);

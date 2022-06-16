@@ -1365,10 +1365,9 @@ void ScChangeActionContent::SetValueString(
     if ( rStr.getLength() > 1 && rStr[0] == '=' )
     {
         rValue.clear();
-        rCell.meType = CELLTYPE_FORMULA;
-        rCell.mpFormula = new ScFormulaCell(
+        rCell = ScCellValue(new ScFormulaCell(
             *pDoc, aBigRange.aStart.MakeAddress(*pDoc), rStr,
-            pDoc->GetGrammar() );
+            pDoc->GetGrammar() ));
         rCell.mpFormula->SetInChangeTrack(true);
     }
     else
@@ -1556,7 +1555,7 @@ OUString ScChangeActionContent::GetStringOfCell(
     if (!GetContentCellType(rCell))
         return OUString();
 
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
         {
@@ -1579,7 +1578,7 @@ OUString ScChangeActionContent::GetStringOfCell(
 
 ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const ScCellValue& rCell )
 {
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE :
         case CELLTYPE_STRING :
@@ -1603,7 +1602,7 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
 
 ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const ScRefCellValue& rCell )
 {
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
         case CELLTYPE_STRING:
@@ -1632,7 +1631,7 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
 
 bool ScChangeActionContent::NeedsNumberFormat( const ScCellValue& rVal )
 {
-    return rVal.meType == CELLTYPE_VALUE;
+    return rVal.getType() == CELLTYPE_VALUE;
 }
 
 void ScChangeActionContent::SetValue(
@@ -1652,7 +1651,7 @@ void ScChangeActionContent::SetValue(
     if (GetContentCellType(rOrgCell))
     {
         rCell.assign(rOrgCell, *pToDoc);
-        switch (rOrgCell.meType)
+        switch (rOrgCell.getType())
         {
             case CELLTYPE_VALUE :
             {   // E.g.: Remember date as such
@@ -1679,7 +1678,7 @@ void ScChangeActionContent::SetCell( OUString& rStr, ScCellValue& rCell, sal_uLo
     if (rCell.isEmpty())
         return;
 
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE :
             // e.g. remember date as date string
@@ -1703,7 +1702,7 @@ OUString ScChangeActionContent::GetValueString(
         return rValue;
     }
 
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_STRING :
             return rCell.mpString->getString();
@@ -1769,7 +1768,7 @@ void ScChangeActionContent::PutValueToDoc(
         return;
     }
 
-    if (rCell.meType == CELLTYPE_VALUE)
+    if (rCell.getType() == CELLTYPE_VALUE)
     {
         pDoc->SetString( aPos.Col(), aPos.Row(), aPos.Tab(), rValue );
         return;
@@ -1853,8 +1852,8 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
     if ( pTrack->IsInDelete() && !pTrack->IsInDeleteTop() )
         return ; // Formula only update whole range
 
-    bool bOldFormula = maOldCell.meType == CELLTYPE_FORMULA;
-    bool bNewFormula = maNewCell.meType == CELLTYPE_FORMULA;
+    bool bOldFormula = maOldCell.getType() == CELLTYPE_FORMULA;
+    bool bNewFormula = maNewCell.getType() == CELLTYPE_FORMULA;
     if ( !(bOldFormula || bNewFormula) )
         return;
 
@@ -2538,10 +2537,10 @@ bool ScChangeTrack::IsMatrixFormulaRangeDifferent(
     nC1 = nC2 = 0;
     nR1 = nR2 = 0;
 
-    if (rOldCell.meType == CELLTYPE_FORMULA && rOldCell.mpFormula->GetMatrixFlag() == ScMatrixMode::Formula)
+    if (rOldCell.getType() == CELLTYPE_FORMULA && rOldCell.mpFormula->GetMatrixFlag() == ScMatrixMode::Formula)
         rOldCell.mpFormula->GetMatColsRows(nC1, nR1);
 
-    if (rNewCell.meType == CELLTYPE_FORMULA && rNewCell.mpFormula->GetMatrixFlag() == ScMatrixMode::Formula)
+    if (rNewCell.getType() == CELLTYPE_FORMULA && rNewCell.mpFormula->GetMatrixFlag() == ScMatrixMode::Formula)
         rNewCell.mpFormula->GetMatColsRows(nC1, nR1);
 
     return nC1 != nC2 || nR1 != nR2;

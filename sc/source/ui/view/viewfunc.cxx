@@ -1264,7 +1264,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         std::unique_ptr<EditTextObject> pNewEditData;
         ScAddress aPos(nCol, nRow, nTab);
         ScRefCellValue aCell(rDoc, aPos);
-        if (aCell.meType == CELLTYPE_EDIT)
+        if (aCell.getType() == CELLTYPE_EDIT)
         {
             const EditTextObject* pEditObj = aCell.mpEditText;
             pOldEditData = pEditObj->Clone();

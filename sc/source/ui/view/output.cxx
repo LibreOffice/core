@@ -1834,7 +1834,7 @@ void ScOutputData::FindChanged()
         {
             const ScRefCellValue& rCell = pThisRowInfo->cellInfo(nX).maCell;
 
-            if (rCell.meType != CELLTYPE_FORMULA)
+            if (rCell.getType() != CELLTYPE_FORMULA)
                 continue;
 
             ScFormulaCell* pFCell = rCell.mpFormula;
@@ -1883,7 +1883,7 @@ void ScOutputData::FindChanged()
             {
                 const ScRefCellValue& rCell = pThisRowInfo->cellInfo(nX).maCell;
 
-                if (rCell.meType != CELLTYPE_FORMULA)
+                if (rCell.getType() != CELLTYPE_FORMULA)
                     continue;
 
                 ScFormulaCell* pFCell = rCell.mpFormula;

@@ -903,7 +903,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
                         ScRefCellValue aCell(*m_pDocument, ScAddress(nDocCol, nDocRow, nTab));
                         if (!aCell.isEmpty())
                         {
-                            if (aCell.meType == CELLTYPE_EDIT)
+                            if (aCell.getType() == CELLTYPE_EDIT)
                             {   // preserve paragraphs
                                 lcl_getLongVarCharEditString(aString, aCell, aEditEngine);
                             }
@@ -1009,7 +1009,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
                 {
                     case sdbc::DataType::LONGVARCHAR:
                         {
-                            if (pCell->meType == CELLTYPE_EDIT)
+                            if (pCell->getType() == CELLTYPE_EDIT)
                                 lcl_getLongVarCharEditString(aString, *pCell, aEditEngine);
                             else
                                 lcl_getLongVarCharString(

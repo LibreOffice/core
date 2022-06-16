@@ -808,7 +808,7 @@ sal_uInt16 ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetective
                                             sal_uInt16 nLevel )
 {
     ScRefCellValue aCell(rDoc, ScAddress(nCol, nRow, nTab));
-    if (aCell.meType != CELLTYPE_FORMULA)
+    if (aCell.getType() != CELLTYPE_FORMULA)
         return DET_INS_EMPTY;
 
     ScFormulaCell* pFCell = aCell.mpFormula;
@@ -896,7 +896,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
     OSL_ENSURE( nLevel<1000, "Level" );
 
     ScRefCellValue aCell(rDoc, ScAddress(nCol, nRow, nTab));
-    if (aCell.meType != CELLTYPE_FORMULA)
+    if (aCell.getType() != CELLTYPE_FORMULA)
         return nLevel;
 
     ScFormulaCell* pFCell = aCell.mpFormula;
@@ -953,7 +953,7 @@ sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiv
                                             sal_uInt16 nLevel )
 {
     ScRefCellValue aCell(rDoc, ScAddress(nCol, nRow, nTab));
-    if (aCell.meType != CELLTYPE_FORMULA)
+    if (aCell.getType() != CELLTYPE_FORMULA)
         return DET_INS_EMPTY;
 
     ScFormulaCell* pFCell = aCell.mpFormula;

@@ -82,7 +82,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
     }
 
     bool bMultiLine = false;
-    CellType eCellType = aCell.meType;
+    CellType eCellType = aCell.getType();
     switch (rSearchItem.GetCellType())
     {
         case SvxSearchCellType::FORMULA:

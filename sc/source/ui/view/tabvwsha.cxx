@@ -705,12 +705,12 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
         if (!bHideAll)
         {
             ScRefCellValue rCell(rDoc, aPos);
-            if (rCell.meType == CELLTYPE_FORMULA)
+            if (rCell.getType() == CELLTYPE_FORMULA)
             {
                 if (!bHideFormula)
                     aString = rCell.mpFormula->GetFormula();
             }
-            else if (rCell.meType == CELLTYPE_EDIT)
+            else if (rCell.getType() == CELLTYPE_EDIT)
             {
                 pObject = rCell.mpEditText;
             }
@@ -720,7 +720,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
                 sal_uInt32 nNumFmt = rDoc.GetNumberFormat( aPos );
 
                 aString = ScCellFormat::GetInputString( rCell, nNumFmt, *pFormatter, rDoc );
-                if (rCell.meType == CELLTYPE_STRING)
+                if (rCell.getType() == CELLTYPE_STRING)
                 {
                     // Put a ' in front if necessary, so that the string is not
                     // unintentionally interpreted as a number, and to show the

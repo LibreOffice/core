@@ -321,7 +321,7 @@ std::unique_ptr<SvxNumberInfoItem> ScTabViewShell::MakeNumberInfoItem( ScDocumen
 
     ScRefCellValue aCell(rDoc, rViewData.GetCurPos());
 
-    switch (aCell.meType)
+    switch (aCell.getType())
     {
         case CELLTYPE_VALUE:
         {

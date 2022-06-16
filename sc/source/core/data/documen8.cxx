@@ -1239,8 +1239,8 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                 // fdo#32786 TITLE_CASE/SENTENCE_CASE need the extra handling in EditEngine (loop over words/sentences).
                 // Still use TransliterationWrapper directly for text cells with other transliteration types,
                 // for performance reasons.
-                if (aCell.meType == CELLTYPE_EDIT ||
-                    (aCell.meType == CELLTYPE_STRING &&
+                if (aCell.getType() == CELLTYPE_EDIT ||
+                    (aCell.getType() == CELLTYPE_STRING &&
                      ( nType == TransliterationFlags::SENTENCE_CASE || nType == TransliterationFlags::TITLE_CASE)))
                 {
                     if (!pEngine)
@@ -1261,7 +1261,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                         pPattern->FillEditItemSet( &aDefaults, pFontSet );
                     }
                     pEngine->SetDefaults( std::move(aDefaults) );
-                    if (aCell.meType == CELLTYPE_STRING)
+                    if (aCell.getType() == CELLTYPE_STRING)
                         pEngine->SetTextCurrentDefaults(aCell.mpString->getString());
                     else if (aCell.mpEditText)
                         pEngine->SetTextCurrentDefaults(*aCell.mpEditText);
@@ -1296,7 +1296,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                     }
                 }
 
-                else if (aCell.meType == CELLTYPE_STRING)
+                else if (aCell.getType() == CELLTYPE_STRING)
                 {
                     OUString aOldStr = aCell.mpString->getString();
                     sal_Int32 nOldLen = aOldStr.getLength();

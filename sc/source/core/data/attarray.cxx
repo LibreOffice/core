@@ -401,7 +401,7 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
     {
         ScAddress aPos(nCol, nRow, nTab);
         ScRefCellValue aCell(rDocument, aPos, blockPos);
-        if (aCell.meType != CELLTYPE_EDIT || !aCell.mpEditText)
+        if (aCell.getType() != CELLTYPE_EDIT || !aCell.mpEditText)
             continue;
 
         std::unique_ptr<EditTextObject> pOldData;

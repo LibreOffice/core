@@ -34,7 +34,9 @@ class SharedString;
  */
 struct SC_DLLPUBLIC ScCellValue
 {
+private:
     CellType meType;
+public:
     union {
         double mfValue;
         svl::SharedString* mpString;
@@ -46,6 +48,7 @@ struct SC_DLLPUBLIC ScCellValue
     ScCellValue( const ScRefCellValue& rCell );
     ScCellValue( double fValue );
     ScCellValue( const svl::SharedString& rString );
+    ScCellValue( std::unique_ptr<EditTextObject> );
     ScCellValue( const ScCellValue& r );
     ScCellValue(ScCellValue&& r) noexcept;
     ~ScCellValue();
@@ -57,6 +60,8 @@ struct SC_DLLPUBLIC ScCellValue
     void set( const EditTextObject& rEditText );
     void set( EditTextObject* pEditText );
     void set( ScFormulaCell* pFormula );
+
+    CellType getType() const { return meType; }
 
     /**
      * Take cell value from specified position in specified document.
@@ -102,7 +107,9 @@ struct SC_DLLPUBLIC ScCellValue
  */
 struct SC_DLLPUBLIC ScRefCellValue
 {
+private:
     CellType meType;
+public:
     union {
         double mfValue;
         const svl::SharedString* mpString;
@@ -123,6 +130,8 @@ struct SC_DLLPUBLIC ScRefCellValue
     ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos );
 
     void clear();
+
+    CellType getType() const { return meType; }
 
     /**
      * Take cell value from specified position in specified document.

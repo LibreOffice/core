@@ -583,7 +583,7 @@ void ScFiltersTest::testBasicCellContentODS()
     ScRefCellValue aCell;
     aCell.assign(rDoc, ScAddress(1,4,0)); // B5
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "This cell must be numeric.", CELLTYPE_VALUE, aCell.meType);
+        "This cell must be numeric.", CELLTYPE_VALUE, aCell.getType());
     CPPUNIT_ASSERT_EQUAL(0.0, aCell.mfValue);
 
     xDocSh->DoClose();

@@ -1026,7 +1026,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
     if( pDoc && rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
         ScRefCellValue aCell(*pDoc, rCurrentPos);
-        bDoIncrement = aCell.meType == CELLTYPE_FORMULA;
+        bDoIncrement = aCell.getType() == CELLTYPE_FORMULA;
         if ( bDoIncrement )
         {
             ScFormulaCell* pFCell = aCell.mpFormula;
@@ -1120,7 +1120,7 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
     if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
         ScRefCellValue aCell(*rXMLImport.GetDocument(), rCurrentPos);
-        if (aCell.meType == CELLTYPE_FORMULA)
+        if (aCell.getType() == CELLTYPE_FORMULA)
         {
             ScFormulaCell* pFCell = aCell.mpFormula;
             SetFormulaCell(pFCell);
@@ -1267,7 +1267,7 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
         return OUString();
 
     ScRefCellValue aCell(*pDoc, aCellPos);
-    switch (aCell.meType)
+    switch (aCell.getType())
     {
         case CELLTYPE_NONE:
             return OUString();

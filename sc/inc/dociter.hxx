@@ -232,7 +232,7 @@ public:
 
     const ScAddress& GetPos() const { return maCurPos; }
 
-    CellType getType() const { return maCurCell.meType;}
+    CellType getType() const { return maCurCell.getType();}
     OUString getString() const;
     const EditTextObject* getEditText() const { return maCurCell.mpEditText;}
     ScFormulaCell* getFormulaCell() { return maCurCell.mpFormula;}

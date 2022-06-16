@@ -667,34 +667,27 @@ ScRefCellValue ScColumn::GetCellValue( sc::ColumnBlockConstPosition& rBlockPos, 
 
 ScRefCellValue ScColumn::GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset )
 {
-    ScRefCellValue aVal; // Defaults to empty cell.
     switch (itPos->type)
     {
         case sc::element_type_numeric:
             // Numeric cell
-            aVal.mfValue = sc::numeric_block::at(*itPos->data, nOffset);
-            aVal.meType = CELLTYPE_VALUE;
+            return ScRefCellValue(sc::numeric_block::at(*itPos->data, nOffset));
         break;
         case sc::element_type_string:
             // String cell
-            aVal.mpString = &sc::string_block::at(*itPos->data, nOffset);
-            aVal.meType = CELLTYPE_STRING;
+            return ScRefCellValue(&sc::string_block::at(*itPos->data, nOffset));
         break;
         case sc::element_type_edittext:
             // Edit cell
-            aVal.mpEditText = sc::edittext_block::at(*itPos->data, nOffset);
-            aVal.meType = CELLTYPE_EDIT;
+            return ScRefCellValue(sc::edittext_block::at(*itPos->data, nOffset));
         break;
         case sc::element_type_formula:
             // Formula cell
-            aVal.mpFormula = sc::formula_block::at(*itPos->data, nOffset);
-            aVal.meType = CELLTYPE_FORMULA;
+            return ScRefCellValue(sc::formula_block::at(*itPos->data, nOffset));
         break;
         default:
-            ;
+            return ScRefCellValue(); // empty cell
     }
-
-    return aVal;
 }
 
 const sc::CellTextAttr* ScColumn::GetCellTextAttr( SCROW nRow ) const

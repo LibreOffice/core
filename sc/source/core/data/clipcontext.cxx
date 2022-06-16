@@ -170,7 +170,7 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
     bool bBoolean  = (nFlags & InsertDeleteFlags::SPECIAL_BOOLEAN) != InsertDeleteFlags::NONE;
     bool bFormula  = (nFlags & InsertDeleteFlags::FORMULA) != InsertDeleteFlags::NONE;
 
-    switch (rSrcCell.meType)
+    switch (rSrcCell.getType())
     {
         case CELLTYPE_VALUE:
         {
