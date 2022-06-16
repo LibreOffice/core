@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b6dd014_a3ca2f53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-16T16:02:33Z",
+      "side": 1,
+      "message": "The failure is not related to this patch, since it\u0027s only executed on gerrit_linux_clang_dbgutil",
+      "revId": "d697f2256694dc57d6b522a321161bc5a2a43e04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
