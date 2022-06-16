@@ -217,7 +217,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
         break;
         case CELLTYPE_VALUE:
         {
-            fValue = rCell.mfValue;
+            fValue = rCell.getDouble();
             nCurFmtIndex = mrDoc.GetNumberFormat( mrContext, rPos );
             nCurFmtType = mrContext.GetNumberFormatType( nCurFmtIndex );
             if ( bCalcAsShown && fValue != 0.0 )
@@ -265,7 +265,7 @@ void ScInterpreter::GetCellString( svl::SharedString& rStr, ScRefCellValue& rCel
         break;
         case CELLTYPE_VALUE:
         {
-            rStr = GetStringFromDouble( rCell.mfValue );
+            rStr = GetStringFromDouble( rCell.getDouble() );
         }
         break;
         default:
@@ -320,7 +320,7 @@ bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     switch (aCell.getType())
                     {
                         case CELLTYPE_VALUE :
-                            nVal = GetValueCellValue(aAdr, aCell.mfValue);
+                            nVal = GetValueCellValue(aAdr, aCell.getDouble());
                             break;
                         case CELLTYPE_FORMULA :
                             if (aCell.mpFormula->IsValue())
@@ -508,7 +508,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             nType = 1;
                             break;
                         case CELLTYPE_VALUE :
-                            nVal = GetValueCellValue(aAdr, aCell.mfValue);
+                            nVal = GetValueCellValue(aAdr, aCell.getDouble());
                             break;
                         case CELLTYPE_FORMULA :
                             nErr = aCell.mpFormula->GetErrCode();
@@ -3546,7 +3546,7 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
         switch (aCell.getType())
         {
             case CELLTYPE_VALUE :
-                nVal = GetValueCellValue(rPos, aCell.mfValue);
+                nVal = GetValueCellValue(rPos, aCell.getDouble());
                 pVar->PutDouble( nVal );
             break;
             case CELLTYPE_STRING :

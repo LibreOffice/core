@@ -1518,7 +1518,7 @@ static FormulaToken* convertToToken( ScDocument& rHostDoc, const ScDocument& rSr
             return new formula::FormulaStringToken(aSS);
         }
         case CELLTYPE_VALUE:
-            return new formula::FormulaDoubleToken(rCell.mfValue);
+            return new formula::FormulaDoubleToken(rCell.getDouble());
         case CELLTYPE_FORMULA:
         {
             ScFormulaCell* pFCell = rCell.mpFormula;
@@ -2944,7 +2944,7 @@ public:
                 }
                 break;
                 case CELLTYPE_VALUE:
-                    pTok.reset(new formula::FormulaDoubleToken(aCell.mfValue));
+                    pTok.reset(new formula::FormulaDoubleToken(aCell.getDouble()));
                 break;
                 case CELLTYPE_FORMULA:
                 {

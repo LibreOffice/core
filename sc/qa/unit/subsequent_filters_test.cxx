@@ -552,7 +552,7 @@ void ScFiltersTest::testDeleteCircleInMergedCellODS()
     aMergedCell.assign(rDoc, aPosMergedCell);
 
     // The value of merged cell change to 6.
-    aMergedCell.mfValue = 6;
+    aMergedCell = ScRefCellValue(6);
 
     // Check that the data is valid.(True if the value = 6)
     const ScValidationData* pData = rDoc.GetValidationEntry(1);
@@ -584,7 +584,7 @@ void ScFiltersTest::testBasicCellContentODS()
     aCell.assign(rDoc, ScAddress(1,4,0)); // B5
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "This cell must be numeric.", CELLTYPE_VALUE, aCell.getType());
-    CPPUNIT_ASSERT_EQUAL(0.0, aCell.mfValue);
+    CPPUNIT_ASSERT_EQUAL(0.0, aCell.getDouble());
 
     xDocSh->DoClose();
 }

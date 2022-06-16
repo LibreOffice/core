@@ -732,7 +732,7 @@ void fillSortedColumnArray(
                     break;
                     case CELLTYPE_VALUE:
                         assert(rCell.mpAttr);
-                        rCellStore.push_back(rCell.maCell.mfValue);
+                        rCellStore.push_back(rCell.maCell.getDouble());
                     break;
                     case CELLTYPE_EDIT:
                         assert(rCell.mpAttr);

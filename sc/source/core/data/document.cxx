@@ -3628,7 +3628,7 @@ FormulaError ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& r
         break;
         case CELLTYPE_VALUE:
         {
-            double fVal = aCell.mfValue;
+            double fVal = aCell.getDouble();
             sal_uInt32 nIndex = pFormatter->GetStandardFormat(
                                     SvNumFormatType::NUMBER,
                                     ScGlobal::eLnge);

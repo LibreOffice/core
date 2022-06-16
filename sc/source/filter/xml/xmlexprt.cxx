@@ -3147,10 +3147,10 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
         case table::CellContentType_VALUE :
             {
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                    aCell.nNumberFormat, aCell.maBaseCell.mfValue);
+                    aCell.nNumberFormat, aCell.maBaseCell.getDouble());
                 if (getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                            aCell.nNumberFormat, aCell.maBaseCell.mfValue, false, XML_NAMESPACE_CALC_EXT, false);
+                            aCell.nNumberFormat, aCell.maBaseCell.getDouble(), false, XML_NAMESPACE_CALC_EXT, false);
             }
             break;
         case table::CellContentType_TEXT :
@@ -3836,7 +3836,7 @@ bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell2)
                             // #i29101# number format may be different from column default styles,
                             // but can lead to different value types, so it must also be compared
                             bIsEqual = (aCell1.nNumberFormat == aCell2.nNumberFormat) &&
-                                       (aCell1.maBaseCell.mfValue == aCell2.maBaseCell.mfValue);
+                                       (aCell1.maBaseCell.getDouble() == aCell2.maBaseCell.getDouble());
                         }
                         break;
                     case table::CellContentType_TEXT :

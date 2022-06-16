@@ -50,7 +50,7 @@ OUString ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nForma
         }
         case CELLTYPE_VALUE:
         {
-            const double & nValue = rCell.mfValue;
+            const double nValue = rCell.getDouble();
             if (!bNullVals && nValue == 0.0)
                 return OUString();
             else
@@ -140,7 +140,7 @@ OUString ScCellFormat::GetInputString(
         case CELLTYPE_VALUE:
         {
             OUString str;
-            rFormatter.GetInputLineString(rCell.mfValue, nFormat, str, bFiltering, bForceSystemLocale);
+            rFormatter.GetInputLineString(rCell.getDouble(), nFormat, str, bFiltering, bForceSystemLocale);
             return str;
         }
         break;

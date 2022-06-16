@@ -254,7 +254,7 @@ void ScChangeTrackingExportHelper::WriteValueCell(const ScCellValue& rCell, cons
 {
     assert(rCell.getType() == CELLTYPE_VALUE);
 
-    SetValueAttributes(rCell.mfValue, sValue);
+    SetValueAttributes(rCell.getDouble(), sValue);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
 }
 

@@ -2557,7 +2557,7 @@ class FilterEntriesHandler
         switch (rCell.getType())
         {
             case CELLTYPE_VALUE:
-                fVal = rCell.mfValue;
+                fVal = rCell.getDouble();
                 break;
 
             case CELLTYPE_FORMULA:
@@ -2882,7 +2882,7 @@ public:
             switch (r.maValue.getType())
             {
                 case CELLTYPE_VALUE:
-                    rColumn.SetValue(aBlockPos, r.mnRow, r.maValue.mfValue, false);
+                    rColumn.SetValue(aBlockPos, r.mnRow, r.maValue.getDouble(), false);
                 break;
                 case CELLTYPE_STRING:
                     rColumn.SetRawString(aBlockPos, r.mnRow, *r.maValue.mpString, false);

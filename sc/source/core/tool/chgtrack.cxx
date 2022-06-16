@@ -1560,7 +1560,7 @@ OUString ScChangeActionContent::GetStringOfCell(
         case CELLTYPE_VALUE:
         {
             OUString str;
-            pDoc->GetFormatTable()->GetInputLineString(rCell.mfValue, nFormat, str);
+            pDoc->GetFormatTable()->GetInputLineString(rCell.getDouble(), nFormat, str);
             return str;
         }
         case CELLTYPE_STRING:
@@ -1656,7 +1656,7 @@ void ScChangeActionContent::SetValue(
             case CELLTYPE_VALUE :
             {   // E.g.: Remember date as such
                 pFromDoc->GetFormatTable()->GetInputLineString(
-                    rOrgCell.mfValue, nFormat, rStr);
+                    rOrgCell.getDouble(), nFormat, rStr);
             }
             break;
             case CELLTYPE_FORMULA :
@@ -1682,7 +1682,7 @@ void ScChangeActionContent::SetCell( OUString& rStr, ScCellValue& rCell, sal_uLo
     {
         case CELLTYPE_VALUE :
             // e.g. remember date as date string
-            pDoc->GetFormatTable()->GetInputLineString(rCell.mfValue, nFormat, rStr);
+            pDoc->GetFormatTable()->GetInputLineString(rCell.getDouble(), nFormat, rStr);
         break;
         case CELLTYPE_FORMULA :
             rCell.mpFormula->SetInChangeTrack(true);

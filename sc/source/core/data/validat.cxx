@@ -576,7 +576,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
     switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
-            nVal = rCell.mfValue;
+            nVal = rCell.getDouble();
         break;
         case CELLTYPE_STRING:
             aString = rCell.mpString->getString();

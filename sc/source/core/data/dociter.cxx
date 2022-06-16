@@ -405,7 +405,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
             {
                 case CELLTYPE_VALUE:
                 {
-                    rValue.mfValue = aCell.mfValue;
+                    rValue.mfValue = aCell.getDouble();
                     rValue.mbIsNumber = true;
                     if ( bCalcAsShown )
                     {
@@ -981,7 +981,7 @@ ScCellValue ScCellIterator::getCellValue() const
             return ScCellValue(maCurCell.mpEditText->Clone());
         break;
         case CELLTYPE_VALUE:
-            return ScCellValue(maCurCell.mfValue);
+            return ScCellValue(maCurCell.getDouble());
         break;
         case CELLTYPE_FORMULA:
             return ScCellValue(maCurCell.mpFormula->Clone());
@@ -1310,7 +1310,7 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, FormulaError& rErr )
         {
             case CELLTYPE_VALUE:
                 {
-                    rValue = pCell->mfValue;
+                    rValue = pCell->getDouble();
                     rErr = FormulaError::NONE;
                     if ( bCalcAsShown )
                     {

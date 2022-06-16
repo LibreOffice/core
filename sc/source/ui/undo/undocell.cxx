@@ -456,7 +456,7 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
             rDoc.SetEmptyCell(maPos);
         break;
         case CELLTYPE_VALUE:
-            rDoc.SetValue(maPos, rVal.mfValue);
+            rDoc.SetValue(maPos, rVal.getDouble());
         break;
         case CELLTYPE_STRING:
         {

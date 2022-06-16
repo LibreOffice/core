@@ -492,7 +492,7 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
 static bool SameValue( const ScRefCellValue& rCell, const ScRefCellValue& rOldCell )
 {
     return rOldCell.getType() == CELLTYPE_VALUE && rCell.getType() == CELLTYPE_VALUE &&
-        rCell.mfValue == rOldCell.mfValue;
+        rCell.getDouble() == rOldCell.getDouble();
 }
 
 bool ScDrawStringsVars::SetText( const ScRefCellValue& rCell )

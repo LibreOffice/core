@@ -325,7 +325,7 @@ std::unique_ptr<SvxNumberInfoItem> ScTabViewShell::MakeNumberInfoItem( ScDocumen
     {
         case CELLTYPE_VALUE:
         {
-            nCellValue = aCell.mfValue;
+            nCellValue = aCell.getDouble();
             eValType = SvxNumberValueType::Number;
         }
         break;
