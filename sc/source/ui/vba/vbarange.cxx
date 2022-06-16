@@ -1140,12 +1140,9 @@ public:
     static uno::Reference< excel::XRange > createRangeFromRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference<uno::XComponentContext >& xContext,
         const uno::Reference< table::XCellRange >& xRange, const uno::Reference< sheet::XCellRangeAddressable >& xCellRangeAddressable )
     {
+        const table::CellRangeAddress aRA( xCellRangeAddressable->getRangeAddress());
         return uno::Reference< excel::XRange >( new ScVbaRange( xParent, xContext,
-            xRange->getCellRangeByPosition(
-                xCellRangeAddressable->getRangeAddress().StartColumn,
-                xCellRangeAddressable->getRangeAddress().StartRow,
-                xCellRangeAddressable->getRangeAddress().EndColumn,
-                xCellRangeAddressable->getRangeAddress().EndRow ) ) );
+                    xRange->getCellRangeByPosition( aRA.StartColumn, aRA.StartRow, aRA.EndColumn, aRA.EndRow)));
     }
 
 };
