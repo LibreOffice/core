@@ -603,11 +603,29 @@ namespace emfplushelper
 
         drawinglayer::attribute::LineStartEndAttribute aStart;
         if (pen->penDataFlags & EmfPlusPenDataStartCap)
-            aStart = EmfPlusHelperData::CreateLineEnd(pen->startCap, pen->penWidth);
+        {
+            if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap)
+                && (pen->customStartCap->polygon.begin()->count() > 1))
+                aStart = drawinglayer::attribute::LineStartEndAttribute(
+                    pen->customStartCap->polygon.getB2DRange().getRange().getX() * mdExtractedXScale
+                        * pen->customStartCap->widthScale * pen->penWidth,
+                    pen->customStartCap->polygon, false);
+            else
+                aStart = EmfPlusHelperData::CreateLineEnd(pen->startCap, pen->penWidth);
+        }
 
         drawinglayer::attribute::LineStartEndAttribute aEnd;
         if (pen->penDataFlags & EmfPlusPenDataEndCap)
-            aEnd = EmfPlusHelperData::CreateLineEnd(pen->endCap, pen->penWidth);
+        {
+            if ((pen->penDataFlags & EmfPlusPenDataCustomEndCap)
+                && (pen->customEndCap->polygon.begin()->count() > 1))
+                aEnd = drawinglayer::attribute::LineStartEndAttribute(
+                    pen->customEndCap->polygon.getB2DRange().getRange().getX() * mdExtractedXScale
+                        * pen->customEndCap->widthScale * pen->penWidth,
+                    pen->customEndCap->polygon, false);
+            else
+                aEnd = EmfPlusHelperData::CreateLineEnd(pen->endCap, pen->penWidth);
+        }
 
         if (pen->GetColor().IsTransparent())
         {
@@ -644,6 +662,7 @@ namespace emfplushelper
                             pen->GetStrokeAttribute(mdExtractedXScale), aStart, aEnd));
                 }
         }
+<<<<<<< HEAD   (c49d42 tdf#149311 PPTX export: fix internal hyperlink on texts)
 
         if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap) && (pen->customStartCap->polygon.begin()->count() > 1))
         {
@@ -735,6 +754,8 @@ namespace emfplushelper
             }
         }
 
+=======
+>>>>>>> CHANGE (5b21b6 tdf#142770 tdf#143031 EMF+ Implement CustomLineCap)
         mrPropertyHolders.Current().setLineColor(pen->GetColor().getBColor());
         mrPropertyHolders.Current().setLineColorActive(true);
         mrPropertyHolders.Current().setFillColorActive(false);
