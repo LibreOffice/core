@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d122d6da_9681d096",
+        "filename": "sw/source/ui/misc/contentcontroldlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-16T11:41:37Z",
+      "side": 1,
+      "message": "Please drop this not needed include and then I think this will be perfect. :-) Thanks!",
+      "revId": "0a8e0beb939bd9396c507f8216f12e7bbaea1246",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
