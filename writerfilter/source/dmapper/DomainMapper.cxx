@@ -3892,13 +3892,19 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
             // If the paragraph contains only the section properties and it has
             // no runs, we should not create a paragraph for it in Writer, unless that would remove the whole section.
-            SectionPropertyMap* pSectionContext = m_pImpl->GetSectionContext();
+            // Also do not remove here column breaks: they are treated in a different way and place.
+            bool bIsColumnBreak = (pContext->isSet(PROP_BREAK_TYPE) && (
+                pContext->getProperty(PROP_BREAK_TYPE)->second == style::BreakType_COLUMN_BEFORE ||
+                pContext->getProperty(PROP_BREAK_TYPE)->second == style::BreakType_COLUMN_AFTER ||
+                pContext->getProperty(PROP_BREAK_TYPE)->second == style::BreakType_COLUMN_BOTH
+                ));
+
             bool bRemove = (!m_pImpl->GetParaChanged() && m_pImpl->GetRemoveThisPara()) ||
                            (!m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr()
                             && !bSingleParagraphAfterRedline
+                            && !bIsColumnBreak
                             && !m_pImpl->GetParaHadField()
                             && (!m_pImpl->GetIsDummyParaAddedForTableInSectionPage())
-                            && !( pSectionContext && pSectionContext->GetBreakType() != -1 && pContext && pContext->isSet(PROP_BREAK_TYPE) )
                             && !m_pImpl->GetIsPreviousParagraphFramed()
                             && !m_pImpl->HasTopAnchoredObjects()
                             && !m_pImpl->IsParaWithInlineObject());
