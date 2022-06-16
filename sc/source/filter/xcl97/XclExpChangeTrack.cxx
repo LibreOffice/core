@@ -870,7 +870,7 @@ void XclExpChTrCellContent::GetCellData(
             OUString sCellStr;
             if (rScCell.getType() == CELLTYPE_STRING)
             {
-                sCellStr = rScCell.mpString->getString();
+                sCellStr = rScCell.getSharedString()->getString();
                 rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
                     rRoot, sCellStr, nullptr);
             }
