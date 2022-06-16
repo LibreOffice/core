@@ -67,9 +67,10 @@ dialogs = [
     {"command": ".uno:StyleNewByExample", "closeButton": "cancel"},
     {"command": ".uno:InsertCell", "closeButton": "cancel"},
     {"command": ".uno:DeleteCell", "closeButton": "cancel"},
-    {"command": ".uno:Insert", "closeButton": "cancel", "skipTestOK": True},
+    # {"command": ".uno:Insert", "closeButton": "cancel", "skipTestOK": True},
         # OK button tested in uitest/calc_tests/gridwin.py
-    {"command": ".uno:Add", "closeButton": "cancel"},
+    # {"command": ".uno:Add", "closeButton": "cancel"},
+        # tested in sc/qa/uitest/range_name/tdf148072.py
     # {"command": ".uno:InsertExternalDataSource", "closeButton": "cancel"},
         # dialog opens and closes, but is not recognized as closed by close_dialog_through_button
     # {"command": ".uno:Delete", "closeButton": "cancel"},
