@@ -180,6 +180,7 @@ void SvxFillTypeBox::Fill(weld::ComboBox& rListBox)
     rListBox.append_text(SvxResId(RID_SVXSTR_HATCH));
     rListBox.append_text(SvxResId(RID_SVXSTR_BITMAP));
     rListBox.append_text(SvxResId(RID_SVXSTR_PATTERN));
+    rListBox.append_text(SvxResId(RID_SVXSTR_USE_BACKGROUND));
 
     rListBox.thaw();
 

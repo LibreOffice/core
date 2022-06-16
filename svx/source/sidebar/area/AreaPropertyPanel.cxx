@@ -86,6 +86,12 @@ void AreaPropertyPanel::setFillTransparence(const XFillTransparenceItem& rItem)
             SfxCallMode::RECORD, { &rItem });
 }
 
+void AreaPropertyPanel::setFillUseBackground(const XFillUseSlideBackgroundItem& rItem)
+{
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_USE_SLIDE_BACKGROUND,
+            SfxCallMode::RECORD, { &rItem });
+}
+
 void AreaPropertyPanel::setFillFloatTransparence(const XFillFloatTransparenceItem& rItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_FLOATTRANSPARENCE,
