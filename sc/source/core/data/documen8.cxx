@@ -1262,7 +1262,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                     }
                     pEngine->SetDefaults( std::move(aDefaults) );
                     if (aCell.getType() == CELLTYPE_STRING)
-                        pEngine->SetTextCurrentDefaults(aCell.mpString->getString());
+                        pEngine->SetTextCurrentDefaults(aCell.getSharedString()->getString());
                     else if (aCell.mpEditText)
                         pEngine->SetTextCurrentDefaults(*aCell.mpEditText);
 
@@ -1298,7 +1298,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
 
                 else if (aCell.getType() == CELLTYPE_STRING)
                 {
-                    OUString aOldStr = aCell.mpString->getString();
+                    OUString aOldStr = aCell.getSharedString()->getString();
                     sal_Int32 nOldLen = aOldStr.getLength();
 
                     if ( bConsiderLanguage )

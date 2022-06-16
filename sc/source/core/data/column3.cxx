@@ -2885,7 +2885,7 @@ public:
                     rColumn.SetValue(aBlockPos, r.mnRow, r.maValue.getDouble(), false);
                 break;
                 case CELLTYPE_STRING:
-                    rColumn.SetRawString(aBlockPos, r.mnRow, *r.maValue.mpString, false);
+                    rColumn.SetRawString(aBlockPos, r.mnRow, *r.maValue.getSharedString(), false);
                 break;
                 default:
                     ;

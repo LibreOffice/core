@@ -2005,7 +2005,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
         {
             if (pCell->getType() == CELLTYPE_STRING)
             {
-                aString = pCell->mpString->getString();
+                aString = pCell->getSharedString()->getString();
                 if (aString.getLength() <= 5 && aString.startsWithIgnoreAsciiCase("sep="))
                 {
                     // Cell content is /^sep=.?$/ so write current separator.
@@ -2170,7 +2170,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                     aString = ScCellFormat::GetString(*pCell, nFormat, &pDummy, rFormatter, *m_pDocument);
                 }
                 else
-                    aString = pCell->mpString->getString();
+                    aString = pCell->getSharedString()->getString();
                 bString = true;
                 break;
             case CELLTYPE_EDIT :

@@ -264,11 +264,11 @@ void ScChangeTrackingExportHelper::WriteStringCell(const ScCellValue& rCell)
 
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-    if (!rCell.mpString->isEmpty())
+    if (!rCell.getSharedString()->isEmpty())
     {
         SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
         bool bPrevCharWasSpace(true);
-        rExport.GetTextParagraphExport()->exportCharacterData(rCell.mpString->getString(), bPrevCharWasSpace);
+        rExport.GetTextParagraphExport()->exportCharacterData(rCell.getSharedString()->getString(), bPrevCharWasSpace);
     }
 }
 

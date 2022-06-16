@@ -1564,7 +1564,7 @@ OUString ScChangeActionContent::GetStringOfCell(
             return str;
         }
         case CELLTYPE_STRING:
-            return rCell.mpString->getString();
+            return rCell.getSharedString()->getString();
         case CELLTYPE_EDIT:
             if (rCell.mpEditText)
                 return ScEditUtil::GetString(*rCell.mpEditText, pDoc);
@@ -1705,7 +1705,7 @@ OUString ScChangeActionContent::GetValueString(
     switch (rCell.getType())
     {
         case CELLTYPE_STRING :
-            return rCell.mpString->getString();
+            return rCell.getSharedString()->getString();
         case CELLTYPE_EDIT :
             if (rCell.mpEditText)
                 return ScEditUtil::GetString(*rCell.mpEditText, pDoc);

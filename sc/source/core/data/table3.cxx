@@ -728,7 +728,7 @@ void fillSortedColumnArray(
                 {
                     case CELLTYPE_STRING:
                         assert(rCell.mpAttr);
-                        rCellStore.push_back(*rCell.maCell.mpString);
+                        rCellStore.push_back(*rCell.maCell.getSharedString());
                     break;
                     case CELLTYPE_VALUE:
                         assert(rCell.mpAttr);
@@ -1570,11 +1570,11 @@ short ScTable::CompareCell(
                 OUString aStr1;
                 OUString aStr2;
                 if (eType1 == CELLTYPE_STRING)
-                    aStr1 = rCell1.mpString->getString();
+                    aStr1 = rCell1.getSharedString()->getString();
                 else
                     aStr1 = GetString(nCell1Col, nCell1Row);
                 if (eType2 == CELLTYPE_STRING)
-                    aStr2 = rCell2.mpString->getString();
+                    aStr2 = rCell2.getSharedString()->getString();
                 else
                     aStr2 = GetString(nCell2Col, nCell2Row);
 

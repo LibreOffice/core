@@ -77,7 +77,7 @@ public:
         CellType eType = rCell.getType();
         if (eType == CELLTYPE_STRING)
         {
-            SharedStringMapType::const_iterator it = maStringMisspells.find(rCell.mpString->getData());
+            SharedStringMapType::const_iterator it = maStringMisspells.find(rCell.getSharedString()->getData());
             if (it == maStringMisspells.end())
                 return false; // Not available
 
@@ -103,7 +103,7 @@ public:
     {
         CellType eType = rCell.getType();
         if (eType == CELLTYPE_STRING)
-            maStringMisspells.insert_or_assign(rCell.mpString->getData(), std::move(pRanges));
+            maStringMisspells.insert_or_assign(rCell.getSharedString()->getData(), std::move(pRanges));
         else if (eType == CELLTYPE_EDIT)
             maEditTextMisspells.insert_or_assign(CellPos(nCol, nRow), std::move(pRanges));
     }
@@ -328,7 +328,7 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
 
     // Cache miss, the cell needs spell-check..
     if (eType == CELLTYPE_STRING)
-        mpEngine->SetText(aCell.mpString->getString());
+        mpEngine->SetText(aCell.getSharedString()->getString());
     else
         mpEngine->SetText(*aCell.mpEditText);
 

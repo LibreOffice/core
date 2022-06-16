@@ -39,7 +39,7 @@ OUString ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nForma
         case CELLTYPE_STRING:
         {
             OUString str;
-            rFormatter.GetOutputString(rCell.mpString->getString(), nFormat, str, ppColor, bUseStarFormat);
+            rFormatter.GetOutputString(rCell.getSharedString()->getString(), nFormat, str, ppColor, bUseStarFormat);
             return str;
         }
         case CELLTYPE_EDIT:

@@ -464,7 +464,7 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
             aParam.setTextInput();
             // Undo only cell content, without setting any number format.
             aParam.meSetTextNumFormat = ScSetStringParam::Keep;
-            rDoc.SetString(maPos, rVal.mpString->getString(), &aParam);
+            rDoc.SetString(maPos, rVal.getSharedString()->getString(), &aParam);
         }
         break;
         case CELLTYPE_EDIT:

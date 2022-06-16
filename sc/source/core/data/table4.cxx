@@ -1916,7 +1916,7 @@ void ScTable::FillAutoSimple(
                         case CELLTYPE_STRING:
                         case CELLTYPE_EDIT:
                             if (aSrcCell.getType() == CELLTYPE_STRING)
-                                aValue = aSrcCell.mpString->getString();
+                                aValue = aSrcCell.getSharedString()->getString();
                             else
                                 aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, &rDocument);
                             if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
@@ -2460,7 +2460,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
                 OUString aValue;
                 if (eCellType == CELLTYPE_STRING)
-                    aValue = aSrcCell.mpString->getString();
+                    aValue = aSrcCell.getSharedString()->getString();
                 else
                     aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, &rDocument);
                 sal_Int32 nStringValue;
