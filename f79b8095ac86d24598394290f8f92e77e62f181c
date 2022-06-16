@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6da770bc_a5d4436a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-06-16T17:44:48Z",
+      "side": 1,
+      "message": "Not convinced by that; surely it makes this async invalidation flushing synchronous which is not what we want surely (?)",
+      "revId": "f79b8095ac86d24598394290f8f92e77e62f181c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
