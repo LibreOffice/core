@@ -12,4 +12,10 @@
 # empty second argument (i.e. no 1)
 $(eval $(call sw_ww8export_test,))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,sw_ww8export, \
+    modules/swriter \
+    sfx \
+    svt \
+))
+
 # vim: set noet sw=4 ts=4:
