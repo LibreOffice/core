@@ -8,8 +8,9 @@
 
 # Use this script to retrieve information from https://crashreport.libreoffice.org
 # about a specific version of LibreOffice
-# Usage sample: ./crashreportScraper.py 7.2.0.4
+# Usage sample: ./crashreportScraper.py --version 7.2.0.4 --repository /path/to/libreoffice/repository/
 
+import argparse
 import requests
 from bs4 import BeautifulSoup
 import sys
@@ -160,17 +161,20 @@ def parse_details_and_get_info(url, gitRepo):
 
 if __name__ == '__main__':
 
-    version = sys.argv[1]
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--version', action='store', dest="version", required=True)
+    parser.add_argument('--repository', action="store", dest="repository", required=True)
+
+    args = parser.parse_args()
 
     crashes = parse_version_url(
-            "https://crashreport.libreoffice.org/stats/version/" + version + "?limit=1000&days=30")
+            "https://crashreport.libreoffice.org/stats/version/" + args.version + "?limit=1000&days=30")
 
-    gitRepo = os.path.dirname(os.path.realpath(__file__)) + "/../"
-
-    print(str(len(crashes)) + " crash reports in version " + version)
+    print(str(len(crashes)) + " crash reports in version " + args.version)
 
     crashesInFile = []
-    fileName = "crashes_" + version.replace(".", "_") + ".csv"
+    fileName = "crashes_" + args.version.replace(".", "_") + ".csv"
     print("Using " + fileName)
 
     bInsertHeader = False
@@ -196,7 +200,7 @@ if __name__ == '__main__':
                     crashCount, crashID, crashVersion, crashOS = parse_reports_and_get_most_recent_report_from_last_page(
                             "https://crashreport.libreoffice.org/stats/signature/" + k)
                     crashReason, crashStack, codeLine = parse_details_and_get_info(
-                            "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, gitRepo)
+                            "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, args.repository)
                     line = '\t'.join([k, str(crashCount), lDate[1], lDate[2],
                             crashID, crashVersion, crashReason, crashOS, crashStack, codeLine, '\n'])
                     f.write(line)
