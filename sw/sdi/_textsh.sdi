@@ -306,7 +306,6 @@ interface BaseText
     [
         ExecMethod = ExecInsert ;
         StateMethod = GetState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     FN_INSERT_COLUMN_BREAK // status(final|play)
     [
