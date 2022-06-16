@@ -23,6 +23,7 @@
 #include <iterator>
 #include <type_traits>
 #include <cassert>
+#include <sal/log.hxx>
 
 namespace o3tl {
 
@@ -55,6 +56,14 @@ public:
 
     static const size_type max_index = static_cast<size_type>(E::LAST);
 
+    enumarray(::std::initializer_list<V> const init)
+    {
+        assert(init.size() == max_index + 1);
+        ::std::copy(init.begin(), init.end(), ::std::begin(detail_values));
+    }
+
+    enumarray() {}
+
     const V& operator[](E index) const
     {
         assert(index>=static_cast<E>(0) && index<=E::LAST);
@@ -78,7 +87,7 @@ public:
 
     V*               data()       { return detail_values; }
 
-//private:
+private:
     V detail_values[max_index + 1];
 };
 

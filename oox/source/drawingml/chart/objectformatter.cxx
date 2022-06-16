@@ -450,7 +450,8 @@ const ShapePropertyIds spnCommonPropIds =
     PROP_FillStyle, PROP_FillColor, PROP_FillTransparence, PROP_FillTransparenceGradientName, PROP_FillGradientName,
     PROP_FillBitmapName, PROP_FillBitmapMode, PROP_FillBitmapSizeX, PROP_FillBitmapSizeY,
     PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint,
-    PROP_FillHatchName, PROP_FillBackground
+    PROP_FillHatchName, PROP_FillBackground,
+    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID
 };
 
 const ShapePropertyIds spnLinearPropIds =
@@ -460,7 +461,8 @@ const ShapePropertyIds spnLinearPropIds =
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID,
     PROP_INVALID, PROP_INVALID, PROP_INVALID,
-    PROP_INVALID, PROP_INVALID
+    PROP_INVALID, PROP_INVALID,
+    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID
 };
 
 const ShapePropertyIds spnFilledPropIds =
@@ -491,7 +493,8 @@ const ShapePropertyIds spnFilledPropIds =
     PROP_FillBitmapPositionOffsetY,
     PROP_FillBitmapRectanglePoint,
     PROP_HatchName,
-    PROP_FillBackground
+    PROP_FillBackground,
+    PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID, PROP_INVALID
 };
 
 /** Property info for common chart objects, to be used in ShapePropertyMap. */
