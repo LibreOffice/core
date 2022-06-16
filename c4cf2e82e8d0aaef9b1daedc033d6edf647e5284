@@ -46,6 +46,30 @@
       },
       "revId": "c4cf2e82e8d0aaef9b1daedc033d6edf647e5284",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42ffc2f5_98cf4e9d",
+        "filename": "offapi/com/sun/star/drawing/FillProperties.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-16T15:28:48Z",
+      "side": 1,
+      "message": "seen \u003chttps://gerrit.libreoffice.org/c/core/+/135986\u003e \"Next release is 7.5\"",
+      "parentUuid": "732410a8_415c8f1f",
+      "range": {
+        "startLine": 222,
+        "startChar": 27,
+        "endLine": 222,
+        "endChar": 30
+      },
+      "revId": "c4cf2e82e8d0aaef9b1daedc033d6edf647e5284",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
