@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84735c41_83c1ef91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-16T14:30:14Z",
+      "side": 1,
+      "message": "janitor: link to revert https://gerrit.libreoffice.org/c/core/+/135859 (high CppUnitTest_sw_core_draw failure rate introduced with this change)",
+      "revId": "c3ed41752237a7a70c856dfb0d618f1c2eacea5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
