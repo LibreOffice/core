@@ -16,6 +16,23 @@
       "message": "WTF. It was correct before.",
       "revId": "157d58605acc714a5756525b567d6b59a1322d35",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55e15534_0d4f0971",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-16T06:17:16Z",
+      "side": 1,
+      "message": "Indeed, you\u0027re right and I was wrong!\n(I\u0027ve taken a look here: https://english.stackexchange.com/questions/5302/log-in-to-or-log-into-or-login-to)\nThank you for the revert.",
+      "revId": "157d58605acc714a5756525b567d6b59a1322d35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
