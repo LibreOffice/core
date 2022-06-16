@@ -23,6 +23,7 @@
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
+#include <cassert>
 #include <memory>
 #include <unordered_map>
 
@@ -1350,7 +1351,7 @@ const SvViewDataEntry* SvListView::GetViewData( const SvTreeListEntry* pEntry ) 
 SvViewDataEntry* SvListView::GetViewData( SvTreeListEntry* pEntry )
 {
     SvDataTable::iterator itr = m_pImpl->m_DataTable.find( pEntry );
-    DBG_ASSERT(itr != m_pImpl->m_DataTable.end(),"Entry not in model or wrong view");
+    assert(itr != m_pImpl->m_DataTable.end() && "Entry not in model or wrong view");
     return itr->second.get();
 }
 
