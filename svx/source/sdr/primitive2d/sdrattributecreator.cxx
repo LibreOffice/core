@@ -40,6 +40,7 @@
 #include <svx/xlnedcit.hxx>
 #include <svx/xdash.hxx>
 #include <svx/xlndsit.hxx>
+#include <svx/xfilluseslidebackgrounditem.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xflclit.hxx>
@@ -416,6 +417,19 @@ namespace drawinglayer::primitive2d
             if(nTransparence > 100)
             {
                 nTransparence = 100;
+            }
+
+            if(drawing::FillStyle_NONE == eStyle)
+            {
+                XFillUseSlideBackgroundItem aBckItem(rSet.Get(XATTR_FILLUSESLIDEBACKGROUND));
+                const bool bSlideBackgroundFill(aBckItem.GetValue());
+
+                if(bSlideBackgroundFill)
+                {
+                    // we have SlideBackgroundFill mode, create a
+                    // SdrFillAttribute accordingly
+                    return attribute::SdrFillAttribute(true);
+                }
             }
 
             if(drawing::FillStyle_NONE != eStyle)
