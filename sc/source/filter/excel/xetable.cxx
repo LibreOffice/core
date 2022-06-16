@@ -2628,7 +2628,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
         {
             case CELLTYPE_VALUE:
             {
-                double fValue = rScCell.mfValue;
+                double fValue = rScCell.getDouble();
 
                 if (pPattern)
                 {

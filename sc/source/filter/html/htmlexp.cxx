@@ -1091,7 +1091,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
         switch (aCell.getType())
         {
             case CELLTYPE_VALUE:
-                fVal = aCell.mfValue;
+                fVal = aCell.getDouble();
                 if ( bCalcAsShown && fVal != 0.0 )
                     fVal = pDoc->RoundValueAsShown( fVal, nFormat );
                 break;

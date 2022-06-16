@@ -847,7 +847,7 @@ void XclExpChTrCellContent::GetCellData(
     {
         case CELLTYPE_VALUE:
         {
-            rpData->fValue = rScCell.mfValue;
+            rpData->fValue = rScCell.getDouble();
             if( XclTools::GetRKFromDouble( rpData->nRKValue, rpData->fValue ) )
             {
                 rpData->nType = EXC_CHTR_TYPE_RK;

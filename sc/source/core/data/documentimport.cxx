@@ -232,7 +232,7 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
             aCell.mpEditText = nullptr;
         break;
         case CELLTYPE_VALUE:
-            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mfValue);
+            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.getDouble());
         break;
         case CELLTYPE_FORMULA:
             if (!pStringParam)
@@ -576,7 +576,7 @@ void ScDocumentImport::fillDownCells(const ScAddress& rPos, SCROW nFillSize)
     {
         case CELLTYPE_VALUE:
         {
-            std::vector<double> aCopied(nFillSize, aRefCell.mfValue);
+            std::vector<double> aCopied(nFillSize, aRefCell.getDouble());
             pBlockPos->miCellPos = rCells.set(
                 pBlockPos->miCellPos, rPos.Row()+1, aCopied.begin(), aCopied.end());
             break;

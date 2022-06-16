@@ -731,7 +731,7 @@ static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rAr
     switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
-            rArg = rCell.mfValue;
+            rArg = rCell.getDouble();
         break;
         case CELLTYPE_FORMULA:
         {

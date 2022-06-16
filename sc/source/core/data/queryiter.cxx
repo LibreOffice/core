@@ -435,7 +435,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col, 
         switch (aCell.getType())
         {
             case CELLTYPE_VALUE :
-                fLastInRangeValue = aCell.mfValue;
+                fLastInRangeValue = aCell.getDouble();
             break;
             case CELLTYPE_FORMULA :
                 fLastInRangeValue = aCell.mpFormula->GetValue();

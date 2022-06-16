@@ -38,7 +38,7 @@ private:
     CellType meType;
 public:
     union {
-        double mfValue;
+        double mfValue1;
         svl::SharedString* mpString;
         EditTextObject* mpEditText;
         ScFormulaCell* mpFormula;
@@ -62,6 +62,7 @@ public:
     void set( ScFormulaCell* pFormula );
 
     CellType getType() const { return meType; }
+    double getDouble() const { assert(meType == CELLTYPE_VALUE); return mfValue1; }
 
     /**
      * Take cell value from specified position in specified document.
@@ -111,7 +112,7 @@ private:
     CellType meType;
 public:
     union {
-        double mfValue;
+        double mfValue1;
         const svl::SharedString* mpString;
         const EditTextObject* mpEditText;
         ScFormulaCell* mpFormula;
@@ -132,6 +133,7 @@ public:
     void clear();
 
     CellType getType() const { return meType; }
+    double getDouble() const { assert(meType == CELLTYPE_VALUE); return mfValue1; }
 
     /**
      * Take cell value from specified position in specified document.

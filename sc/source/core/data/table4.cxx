@@ -316,7 +316,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         tools::Long nDDiff = 0, nMDiff = 0, nYDiff = 0; // to avoid warnings
                         Date aNullDate = rDocument.GetFormatTable()->GetNullDate();
                         Date aCurrDate = aNullDate, aPrevDate = aNullDate;
-                        aCurrDate.AddDays(aCurrCell.mfValue);
+                        aCurrDate.AddDays(aCurrCell.getDouble());
                         for (SCSIZE i = 1; i < nValueCount && bVal; i++)
                         {
                             aPrevCell = aCurrCell;
@@ -326,7 +326,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             aCurrCell = GetCellValue(nColCurr, nRowCurr);
                             if (aCurrCell.getType() == CELLTYPE_VALUE)
                             {
-                                aCurrDate = aNullDate + static_cast<sal_Int32>(aCurrCell.mfValue);
+                                aCurrDate = aNullDate + static_cast<sal_Int32>(aCurrCell.getDouble());
                                 if (eType != FILL_DAY) {
                                     nDDiff = aCurrDate.GetDay()
                                              - static_cast<tools::Long>(aPrevDate.GetDay());
@@ -386,7 +386,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     }
                 }
                 else if (nCurrCellFormatType == SvNumFormatType::LOGICAL
-                         && ((fVal = aCurrCell.mfValue) == 0.0 || fVal == 1.0))
+                         && ((fVal = aCurrCell.getDouble()) == 0.0 || fVal == 1.0))
                 {
                 }
                 else if (nValueCount >= 2)
@@ -399,12 +399,12 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         aCurrCell = GetCellValue(nColCurr, nRowCurr);
                         if (aCurrCell.getType() == CELLTYPE_VALUE)
                         {
-                            double nDiff = approxDiff(aCurrCell.mfValue, aPrevCell.mfValue);
+                            double nDiff = approxDiff(aCurrCell.getDouble(), aPrevCell.getDouble());
                             if (i == 1)
                                 rInc = nDiff;
                             if (!::rtl::math::approxEqual(nDiff, rInc, 13))
                                 bVal = false;
-                            else if ((aCurrCell.mfValue == 0.0 || aCurrCell.mfValue == 1.0)
+                            else if ((aCurrCell.getDouble() == 0.0 || aCurrCell.getDouble() == 1.0)
                                      && (rDocument.GetFormatTable()->GetType(
                                              GetNumberFormat(nColCurr, nRowCurr))
                                          == SvNumFormatType::LOGICAL))
@@ -525,7 +525,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 double nVal;
                 Date aNullDate = rDocument.GetFormatTable()->GetNullDate();
                 Date aDate1 = aNullDate;
-                nVal = aFirstCell.mfValue;
+                nVal = aFirstCell.getDouble();
                 aDate1.AddDays(nVal);
                 Date aDate2 = aNullDate;
                 nVal = GetValue(nCol+nAddX, nRow+nAddY);
@@ -561,7 +561,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         ScRefCellValue aCell = GetCellValue(nCol,nRow);
                         if (aCell.getType() == CELLTYPE_VALUE)
                         {
-                            nVal = aCell.mfValue;
+                            nVal = aCell.getDouble();
                             aDate2 = aNullDate + static_cast<sal_Int32>(nVal);
                             if ( eType == FILL_DAY )
                             {
@@ -612,7 +612,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 rInc = 1.0;
             }
         }
-        else if (bBooleanCell && ((fVal = aFirstCell.mfValue) == 0.0 || fVal == 1.0))
+        else if (bBooleanCell && ((fVal = aFirstCell.getDouble()) == 0.0 || fVal == 1.0))
         {
             // Nothing, rInc stays 0.0, no specific fill mode.
         }
@@ -620,7 +620,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             if (nCount > 1)
             {
-                double nVal1 = aFirstCell.mfValue;
+                double nVal1 = aFirstCell.getDouble();
                 double nVal2 = GetValue(nCol+nAddX, nRow+nAddY);
                 rInc = approxDiff( nVal2, nVal1);
                 nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
@@ -631,7 +631,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     ScRefCellValue aCell = GetCellValue(nCol,nRow);
                     if (aCell.getType() == CELLTYPE_VALUE)
                     {
-                        nVal2 = aCell.mfValue;
+                        nVal2 = aCell.getDouble();
                         double nDiff = approxDiff( nVal2, nVal1);
                         if ( !::rtl::math::approxEqual( nDiff, rInc, 13 ) )
                             bVal = false;
@@ -1434,7 +1434,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     {
                         sal_uInt32 nNumFmt = GetNumberFormat( nSrcX, nSrcY );
                         //  overflow is possible...
-                        double nVal = aCell.mfValue;
+                        double nVal = aCell.getDouble();
                         if ( !(nScFillModeMouseModifier & KEY_MOD1) )
                         {
                             const SvNumFormatType nFormatType = rDocument.GetFormatTable()->GetType(nNumFmt);
@@ -1492,7 +1492,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     }
                     break;
                     case CELLTYPE_VALUE:
-                        nStart = aCell.mfValue;
+                        nStart = aCell.getDouble();
                     break;
                     case CELLTYPE_FORMULA:
                         nStart = aCell.mpFormula->GetValue();
@@ -1942,12 +1942,12 @@ void ScTable::FillAutoSimple(
                 case CELLTYPE_VALUE:
                     {
                         double fVal;
-                        if (bBooleanCell && ((fVal = aSrcCell.mfValue) == 0.0 || fVal == 1.0))
-                            aCol[rCol].SetValue(rRow, aSrcCell.mfValue);
+                        if (bBooleanCell && ((fVal = aSrcCell.getDouble()) == 0.0 || fVal == 1.0))
+                            aCol[rCol].SetValue(rRow, aSrcCell.getDouble());
                         else if(bPercentCell)
-                            aCol[rCol].SetValue(rRow, aSrcCell.mfValue + nDelta * 0.01); // tdf#89998 increment by 1% at a time
+                            aCol[rCol].SetValue(rRow, aSrcCell.getDouble() + nDelta * 0.01); // tdf#89998 increment by 1% at a time
                         else
-                            aCol[rCol].SetValue(rRow, aSrcCell.mfValue + nDelta);
+                            aCol[rCol].SetValue(rRow, aSrcCell.getDouble() + nDelta);
                     }
                     break;
                 case CELLTYPE_STRING:
@@ -2234,7 +2234,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             double nStartVal;
             if (aSrcCell.getType() == CELLTYPE_VALUE)
-                nStartVal = aSrcCell.mfValue;
+                nStartVal = aSrcCell.getDouble();
             else
                 nStartVal = aSrcCell.mpFormula->GetValue();
             if (eFillCmd == FILL_LINEAR)
@@ -2362,7 +2362,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             }
             else if (eCellType == CELLTYPE_VALUE || eCellType == CELLTYPE_FORMULA)
             {
-                const double nStartVal = (eCellType == CELLTYPE_VALUE ? aSrcCell.mfValue :
+                const double nStartVal = (eCellType == CELLTYPE_VALUE ? aSrcCell.getDouble() :
                         aSrcCell.mpFormula->GetValue());
                 double nVal = nStartVal;
                 tools::Long nIndex = 0;

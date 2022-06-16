@@ -205,7 +205,7 @@ std::pair<bool, bool> ScQueryEvaluator::compareByValue(const ScRefCellValue& rCe
     switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
-            nCellVal = rCell.mfValue;
+            nCellVal = rCell.getDouble();
             break;
         case CELLTYPE_FORMULA:
             nCellVal = rCell.mpFormula->GetValue();
@@ -722,7 +722,7 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
         // that has a value and is not an error (those are compared as strings). This
         // is basically simplified isQueryByValue().
         if (aCell.getType() == CELLTYPE_VALUE)
-            value = aCell.mfValue;
+            value = aCell.getDouble();
         else if (aCell.getType() == CELLTYPE_FORMULA
                  && aCell.mpFormula->GetErrCode() != FormulaError::NONE
                  && aCell.mpFormula->IsValue())

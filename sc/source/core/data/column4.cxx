@@ -277,7 +277,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         {
             case CELLTYPE_VALUE:
             {
-                std::vector<double> aVals(nDestSize, rSrcCell.mfValue);
+                std::vector<double> aVals(nDestSize, rSrcCell.getDouble());
                 pBlockPos->miCellPos =
                     maCells.set(pBlockPos->miCellPos, nRow1, aVals.begin(), aVals.end());
                 pBlockPos->miCellTextAttrPos =
