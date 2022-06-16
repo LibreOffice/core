@@ -68,6 +68,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestEmfPlusBrushPathGradientWithBlendColors();
     void TestEmfPlusGetDC();
     void TestEmfPlusSave();
+    void TestEmfPlusDrawPathWithCustomCap();
     void TestEmfPlusDrawPathWithMiterLimit();
     void TestEmfPlusFillClosedCurve();
     void TestExtTextOutOpaqueAndClipTransform();
@@ -119,6 +120,7 @@ public:
     CPPUNIT_TEST(TestEmfPlusBrushPathGradientWithBlendColors);
     CPPUNIT_TEST(TestEmfPlusGetDC);
     CPPUNIT_TEST(TestEmfPlusSave);
+    CPPUNIT_TEST(TestEmfPlusDrawPathWithCustomCap);
     CPPUNIT_TEST(TestEmfPlusDrawPathWithMiterLimit);
     CPPUNIT_TEST(TestEmfPlusFillClosedCurve);
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipTransform);
@@ -1044,6 +1046,30 @@ void Test::TestEmfPlusSave()
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstrokearrow/polygon",
                        "10853.4145539602,7321.41354709201 10853.4145539602,4907.54325697157 "
                        "12832.6557236512,4907.54325697157");
+}
+
+void Test::TestEmfPlusDrawPathWithCustomCap()
+{
+    // tdf#142261 EMF+ records: DrawPath, SetWorldTransform, Object (Brush, Pen, Path)
+    // Check if CustomEndCap is displayed correctly
+    Primitive2DSequence aSequence
+        = parseEmf(u"emfio/qa/cppunit/emf/data/TestEmfPlusDrawPathWithCustomCap.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPathContent(pDocument, aXPathPrefix + "polygonstrokearrow/polygon",
+                       "1423.297394625,1268.98481214025 830.006276132353,558.656004112967");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/line", "color", "#cc0000");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/line", "width", "96");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/line", "linecap", "BUTT");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/stroke", 0);
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/linestartattribute", 0);
+
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/lineendattribute", "centered", "0");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow/lineendattribute/polypolygon", "path",
+                "m-1.5 3 1.5-3 1.5 3z");
 }
 
 void Test::TestEmfPlusDrawPathWithMiterLimit()
