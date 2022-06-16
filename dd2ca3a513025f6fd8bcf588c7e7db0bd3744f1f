@@ -16,6 +16,24 @@
       "message": "I can not reproduce the expected changes in the UI with your patch.\n\nThis is how I test:\n\nFirst, I open a odt file in another version of LibreOffice (for example 7.3). Then I open the same file in the development version of LibreOffice with the patch that you have provided here. I see a dialog box with the same message as before. I click \"Open Read-Only\", then I click on \"Edit Document\", and I get the second dialog box which is just the same as before.\n\nHow do you test your patch? Please note that there are two different dialog boxes here that show personal data.",
       "revId": "dd2ca3a513025f6fd8bcf588c7e7db0bd3744f1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ad2bab8_f719e3e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-06-16T10:57:37Z",
+      "side": 1,
+      "message": "Hi. I think the test you\u0027ve mentioned above is when the same user has a file already opened; in the file uui/source/iahndl-locking.cxx this is triggering the `nMode \u003d\u003d UUI_DOC_OWN_LOAD_LOCK` condition, which opens the AlreadyOpenQueryBox.\n\nHowever this patch changes the OpenLockedQueryBox, which is triggered when a user is trying to open a file which is already opened by another user. \n\nI have been testing this as follows: \n1) On my machine I have made another user (I\u0027m using Ubuntu 20.04) called testuser. I switch users and log in as testuser; I have made a sample document in /home/testuser/Documents, and I open this file with LO Writer while being logged in as testuser. I have set the permissions to this file so that any other user can also access it. This creates a lock file for the file which is opened.\n\n2)  Then I switch users again, now working as myself. Then I open LO\u0027s dev version, and I try to open the file in /home/testuser/Documents. When I do this, I get the OpenLockedQueryBox dialog.\n\nMaybe there\u0027s a better way to do it, but this also works. I think one can also use sudo, but someone suggested me that it\u0027s not a good idea to use sudo.",
+      "parentUuid": "db82488e_40106e90",
+      "revId": "dd2ca3a513025f6fd8bcf588c7e7db0bd3744f1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
