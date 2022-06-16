@@ -25,6 +25,7 @@
 #include <sfx2/objsh.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
+#include <svx/xfilluseslidebackgrounditem.hxx>
 #include <svx/xtable.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/opengrf.hxx>
@@ -49,7 +50,8 @@ enum eFillStyle
     GRADIENT,
     HATCH,
     BITMAP,
-    PATTERN
+    PATTERN,
+    USE_BACKGROUND
 };
 
 }
@@ -419,6 +421,21 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, weld::ComboBox&, void)
             const XFillBitmapItem aXFillBitmapItem( aName, aBitmap );
             const XFillStyleItem aXFillStyleItem(drawing::FillStyle_BITMAP);
             setFillStyleAndBitmap(&aXFillStyleItem, aXFillBitmapItem);
+            break;
+        }
+        case USE_BACKGROUND:
+        {
+            mxLbFillAttr->show();
+            mxLbFillGradFrom->hide();
+            mxLbFillGradTo->hide();
+            mxGradientStyle->hide();
+            mxMTRAngle->hide();
+            mxToolBoxColor->hide();
+            mxBmpImport->hide();
+            mxLbFillAttr->set_sensitive(false);
+
+            const XFillUseSlideBackgroundItem aXFillUseSlideBackgroundItem(true);
+            setFillUseBackground(aXFillUseSlideBackgroundItem);
             break;
         }
     }
@@ -972,6 +989,34 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet,
         m_pPanel->TriggerDeckLayouting();
 }
 
+void AreaPropertyPanelBase::updateFillUseBackground(bool bDisabled, bool bDefaultOrSet, const SfxPoolItem* pState)
+{
+    if (bDisabled)
+    {
+        mpUseSlideBackgroundItem.reset();
+        return;
+    }
+
+    if (bDefaultOrSet)
+    {
+        if (pState)
+        {
+            const XFillUseSlideBackgroundItem* pItem = static_cast<const XFillUseSlideBackgroundItem*>(pState);
+            mpUseSlideBackgroundItem.reset(pItem->Clone());
+        }
+        else
+        {
+            mpUseSlideBackgroundItem.reset();
+        }
+    }
+    else
+    {
+        mpUseSlideBackgroundItem.reset();
+    }
+
+    // TODO: Update controls
+}
+
 void AreaPropertyPanelBase::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
@@ -1003,6 +1048,9 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
         break;
         case SID_ATTR_FILL_BITMAP:
             updateFillBitmap(bDisabled, bDefaultOrSet, pState);
+        break;
+        case SID_ATTR_FILL_USE_SLIDE_BACKGROUND:
+            updateFillUseBackground(bDisabled, bDefaultOrSet, pState);
         break;
         case SID_GRADIENT_LIST:
         {
