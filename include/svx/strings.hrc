@@ -543,6 +543,7 @@
 #define RID_SVXSTR_GRADIENT                                 NC_("RID_SVXSTR_GRADIENT", "Gradient")
 #define RID_SVXSTR_BITMAP                                   NC_("RID_SVXSTR_BITMAP", "Bitmap")
 #define RID_SVXSTR_PATTERN                                  NC_("RID_SVXSTR_PATTERN", "Pattern")
+#define RID_SVXSTR_USE_BACKGROUND                           NC_("RID_SVXSTR_USE_BACKGROUND", "Use Slide Background")
 #define RID_SVXSTR_PATTERN_UNTITLED                         NC_("RID_SVXSTR_PATTERN_UNTITLED", "Untitled Pattern")
 #define RID_SVXSTR_LINESTYLE                                NC_("RID_SVXSTR_LINESTYLE", "Line Style")
 #define RID_SVXSTR_INVISIBLE                                NC_("RID_SVXSTR_INVISIBLE", "None")
