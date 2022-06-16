@@ -686,11 +686,12 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     if( nNewDefListLvl != rHWrt.m_nDefListLvl )
         rHWrt.OutAndSetDefList( nNewDefListLvl );
 
+    bool bAtLeastOneNumbered = false;
     // if necessary, start a bulleted or numbered list
     if( rInfo.bInNumberBulletList )
     {
         OSL_ENSURE( !rHWrt.m_nDefListLvl, "DL cannot be inside OL!" );
-        OutHTML_NumberBulletListStart( rHWrt, aNumInfo );
+        OutHTML_NumberBulletListStart( rHWrt, aNumInfo, bAtLeastOneNumbered );
 
         if( bNumbered )
         {
@@ -759,7 +760,14 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     bool bXhtmlBlockQuote = rHWrt.mbXHTML && rInfo.aToken == OOO_STRING_SVTOOLS_HTML_blockquote;
 
     // if necessary, start a new list item
-    if( rInfo.bInNumberBulletList && bNumbered )
+    bool bNumberedForListItem = bNumbered;
+    if (!bNumberedForListItem && rHWrt.mbXHTML && bAtLeastOneNumbered)
+    {
+        // OutHTML_NumberBulletListEnd() will end a list item if at least one text node is numbered
+        // in the list, so open the list item with the same condition here.
+        bNumberedForListItem = true;
+    }
+    if( rInfo.bInNumberBulletList && bNumberedForListItem )
     {
         HtmlWriter html(rWrt.Strm(), rHWrt.maNamespace);
         html.start(OOO_STRING_SVTOOLS_HTML_li);
