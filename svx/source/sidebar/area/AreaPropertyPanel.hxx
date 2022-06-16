@@ -30,6 +30,7 @@
 
 class XFillFloatTransparenceItem;
 class XFillTransparenceItem;
+class XFillUseSlideBackgroundItem;
 class XFillStyleItem;
 class XFillGradientItem;
 class XFillColorItem;
@@ -59,6 +60,7 @@ public:
     virtual ~AreaPropertyPanel() override;
 
     virtual void setFillTransparence(const XFillTransparenceItem& rItem) override;
+    virtual void setFillUseBackground(const XFillStyleItem* pStyleItem, const XFillUseSlideBackgroundItem& rItem) override;
     virtual void setFillFloatTransparence(const XFillFloatTransparenceItem& rItem) override;
     virtual void setFillStyle(const XFillStyleItem& rItem) override;
     virtual void setFillStyleAndColor(const XFillStyleItem* pStyleItem, const XFillColorItem& aColorItem) override;
