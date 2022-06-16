@@ -69,6 +69,24 @@
       "parentUuid": "244eab11_a5230c75",
       "revId": "75092db73b410c2ce9ab472f6fcfcafb279920a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "884f03f6_3da2e05e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-16T07:59:12Z",
+      "side": 1,
+      "message": "Sorry, I meant to write that SwAnnotationStartPortion_ImplList is not ordered with two items where the start position of those annotations is the same. I think this happens because the ordering happens with AnnotationStartCompareStruct, which simply compares the (start) position of the items, an the Writer doc model will allow starting two annotations at the same position (the comment anchor is at the end, so the end position is unique, but not the start one).\n\nThis suggests that it\u0027s a poor test strategy to build an \"expected\" array of ordered text portions, a better way would be to assert the start and end position of those comments (assuming that the test still fails without the fix in place).\n\nAn alternative approach is to fix Writer\u0027s UNO API to expose annotation marks starting at the same position in a reliable way, I assume that both of them would fix your problem.",
+      "parentUuid": "32677926_93ed81a4",
+      "revId": "75092db73b410c2ce9ab472f6fcfcafb279920a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
