@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79f6acb2_65c90db0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-06-16T10:38:36Z",
+      "side": 1,
+      "message": "1st version of visualization. Does no harm in master, needs Samuel\u0027s changes to see ssth.",
+      "revId": "02ac3d87ea18fffecec4510fd6ecef7e3bc1cf92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
