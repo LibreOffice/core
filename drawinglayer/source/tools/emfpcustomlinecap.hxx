@@ -27,7 +27,7 @@ namespace emfplushelper
     {
         sal_uInt32 type;
         sal_uInt32 strokeStartCap, strokeEndCap, strokeJoin;
-        float miterLimit;
+        float miterLimit, widthScale;
         basegfx::B2DPolyPolygon polygon;
         bool mbIsFilled;
 
