@@ -58,7 +58,7 @@ public:
     void set( double fValue );
     void set( const svl::SharedString& rStr );
     void set( const EditTextObject& rEditText );
-    void set( EditTextObject* pEditText );
+    void set( std::unique_ptr<EditTextObject> );
     void set( ScFormulaCell* pFormula );
 
     CellType getType() const { return meType; }

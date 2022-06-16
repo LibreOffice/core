@@ -315,11 +315,11 @@ void ScCellValue::set( const EditTextObject& rEditText )
     mpEditText = rEditText.Clone().release();
 }
 
-void ScCellValue::set( EditTextObject* pEditText )
+void ScCellValue::set( std::unique_ptr<EditTextObject> xEditText )
 {
     clear();
     meType = CELLTYPE_EDIT;
-    mpEditText = pEditText;
+    mpEditText = xEditText.release();
 }
 
 void ScCellValue::set( ScFormulaCell* pFormula )

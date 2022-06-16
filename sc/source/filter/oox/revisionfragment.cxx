@@ -147,7 +147,7 @@ protected:
                     {
                         svl::SharedStringPool& rPool = rDoc.GetSharedStringPool();
                         pTextObj->NormalizeString(rPool);
-                        mrCellValue.set(pTextObj.release());
+                        mrCellValue.set(std::move(pTextObj));
                     }
                 }
             }
