@@ -84,7 +84,8 @@ void SwHTMLWriter::SetNextNumInfo( std::unique_ptr<SwHTMLNumRuleInfo> pNxt )
 }
 
 Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
-                                 const SwHTMLNumRuleInfo& rInfo )
+                                 const SwHTMLNumRuleInfo& rInfo,
+                                 bool& rAtLeastOneNumbered )
 {
     SwHTMLNumRuleInfo& rPrevInfo = rWrt.GetNumInfo();
     bool bSameRule = rPrevInfo.GetNumRule() == rInfo.GetNumRule();
@@ -124,6 +125,7 @@ Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
             ++nPos;
         }
 
+        rAtLeastOneNumbered = bAtLeastOneNumbered;
         if (!bAtLeastOneNumbered)
         {
             return rWrt;
