@@ -72,6 +72,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
                 SID_ATTR_FILL_BITMAP,
                 SID_ATTR_FILL_TRANSPARENCE,
                 SID_ATTR_FILL_FLOATTRANSPARENCE,
+                SID_ATTR_FILL_USE_SLIDE_BACKGROUND,
                 0 };
 
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );

@@ -57,6 +57,7 @@ public:
     virtual void setFillStyleAndGradient(const XFillStyleItem* pStyleItem, const XFillGradientItem& rGradientItem) override;
     virtual void setFillStyleAndHatch(const XFillStyleItem* pStyleItem, const XFillHatchItem& rHatchItem) override;
     virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& rBitmapItem) override;
+    virtual void setFillUseBackground(const XFillUseSlideBackgroundItem& rItem) override;
 
     virtual void updateData() override;
     virtual void modelInvalid() override;
