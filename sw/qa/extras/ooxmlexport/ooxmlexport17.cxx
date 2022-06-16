@@ -996,6 +996,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149200)
     CPPUNIT_ASSERT_EQUAL(OUString("dark1"), getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:color", "themeColor"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf149313, "tdf149313.docx")
+{
+    // only 2, but not 3 pages in document
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // And ensure that pages are with correct sections (have correct dimensions)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4989), getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "height").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4989), getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4989), getXPath(pXmlDoc, "/root/page[2]/infos/bounds", "height").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8000), getXPath(pXmlDoc, "/root/page[2]/infos/bounds", "width").toInt32());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf135923, "tdf135923-min.docx")
 {
     uno::Reference<text::XText> xShape(getShape(1), uno::UNO_QUERY);
