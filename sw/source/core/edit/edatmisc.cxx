@@ -95,25 +95,10 @@ const SfxPoolItem& SwEditShell::GetDefault( sal_uInt16 nFormatHint ) const
     return GetDoc()->GetDefault( nFormatHint );
 }
 
-// tdf#122893 turn off ShowChanges mode to apply paragraph formatting permanently with redlining
-// ie. in all directly preceding deleted paragraphs at the actual cursor positions
-static void lcl_disableShowChangesIfNeeded( SwDoc *const pDoc, const SwNode& rNode, RedlineFlags &eRedlMode )
-{
-    if ( IDocumentRedlineAccess::IsShowChanges(eRedlMode) &&
-        // is there redlining at beginning of the position (possible redline block before the modified node)
-        pDoc->getIDocumentRedlineAccess().GetRedlinePos( rNode, RedlineType::Any ) <
-                   pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() )
-    {
-        eRedlMode = RedlineFlags::ShowInsert | RedlineFlags::Ignore;
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags( eRedlMode );
-    }
-}
-
-void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags, const bool bParagraphSetting )
+void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags, const bool /*bParagraphSetting*/ )
 {
     CurrShell aCurr( this );
     StartAllAction();
-    RedlineFlags eRedlMode = GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags(), eOldMode = eRedlMode;
     SwPaM* pCursor = GetCursor();
     if( pCursor->GetNext() != pCursor )     // Ring of Cursors
     {
@@ -125,9 +110,6 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags, con
             if( rPaM.HasMark() && ( bIsTableMode ||
                 *rPaM.GetPoint() != *rPaM.GetMark() ))
             {
-                if (bParagraphSetting)
-                    lcl_disableShowChangesIfNeeded( GetDoc(), (*rPaM.Start()).nNode.GetNode(), eRedlMode);
-
                 GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, rHint, nFlags, GetLayout());
             }
         }
@@ -139,21 +121,16 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, SetAttrMode nFlags, con
         if( !HasSelection() )
             UpdateAttr();
 
-        if (bParagraphSetting)
-            lcl_disableShowChangesIfNeeded( GetDoc(), (*pCursor->Start()).nNode.GetNode(), eRedlMode);
-
         GetDoc()->getIDocumentContentOperations().InsertPoolItem(*pCursor, rHint, nFlags, GetLayout());
     }
     EndAllAction();
-    GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOldMode );
 }
 
-void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM* pPaM, const bool bParagraphSetting )
+void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM* pPaM, const bool /*bParagraphSetting*/ )
 {
     CurrShell aCurr( this );
     SwPaM* pCursor = pPaM ? pPaM : GetCursor();
     StartAllAction();
-    RedlineFlags eRedlMode = GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags(), eOldMode = eRedlMode;
     if( pCursor->GetNext() != pCursor )     // Ring of Cursors
     {
         bool bIsTableMode = IsTableMode();
@@ -164,9 +141,6 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM*
             if( rTmpCursor.HasMark() && ( bIsTableMode ||
                 *rTmpCursor.GetPoint() != *rTmpCursor.GetMark() ))
             {
-                if (bParagraphSetting)
-                    lcl_disableShowChangesIfNeeded( GetDoc(), (*rTmpCursor.Start()).nNode.GetNode(), eRedlMode);
-
                 GetDoc()->getIDocumentContentOperations().InsertItemSet(rTmpCursor, rSet, nFlags, GetLayout());
             }
         }
@@ -178,12 +152,8 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM*
         if( !HasSelection() )
             UpdateAttr();
 
-        if (bParagraphSetting)
-            lcl_disableShowChangesIfNeeded( GetDoc(), (*pCursor->Start()).nNode.GetNode(), eRedlMode);
-
         GetDoc()->getIDocumentContentOperations().InsertItemSet(*pCursor, rSet, nFlags, GetLayout());
     }
-    GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOldMode );
     EndAllAction();
 }
 
