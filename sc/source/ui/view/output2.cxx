@@ -491,7 +491,7 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
 
 static bool SameValue( const ScRefCellValue& rCell, const ScRefCellValue& rOldCell )
 {
-    return rOldCell.meType == CELLTYPE_VALUE && rCell.meType == CELLTYPE_VALUE &&
+    return rOldCell.getType() == CELLTYPE_VALUE && rCell.getType() == CELLTYPE_VALUE &&
         rCell.mfValue == rOldCell.mfValue;
 }
 
@@ -604,7 +604,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
     if (bPixelToLogic)
         nWidth = pOutput->mpRefDevice->PixelToLogic(Size(nWidth,0)).Width();
 
-    CellType eType = rCell.meType;
+    CellType eType = rCell.getType();
     if (eType != CELLTYPE_VALUE && eType != CELLTYPE_FORMULA)
         // must be a value or formula cell.
         return;
@@ -862,7 +862,7 @@ static void lcl_DoHyperlinkResult( const OutputDevice* pDev, const tools::Rectan
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
 
     OUString aURL;
-    if (rCell.meType == CELLTYPE_FORMULA)
+    if (rCell.getType() == CELLTYPE_FORMULA)
     {
         ScFormulaCell* pFCell = rCell.mpFormula;
         OUString aCellText;
@@ -882,7 +882,7 @@ static void lcl_DoHyperlinkResult( const OutputDevice* pDev, const tools::Rectan
 
 void ScOutputData::SetSyntaxColor( vcl::Font* pFont, const ScRefCellValue& rCell )
 {
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
             pFont->SetColor(*mxValueColor);
@@ -912,7 +912,7 @@ static void lcl_SetEditColor( EditEngine& rEngine, const Color& rColor )
 void ScOutputData::SetEditSyntaxColor( EditEngine& rEngine, const ScRefCellValue& rCell )
 {
     Color aColor;
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
             aColor = *mxValueColor;
@@ -1630,12 +1630,12 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                         GetVisibleCell( nCellX, nCellY, nTab, aCell );      // get from document
                     if (aCell.isEmpty())
                         bDoCell = false;
-                    else if (aCell.meType == CELLTYPE_EDIT)
+                    else if (aCell.getType() == CELLTYPE_EDIT)
                         bUseEditEngine = true;
                 }
 
                 // Check if this cell is mis-spelled.
-                if (bDoCell && !bUseEditEngine && aCell.meType == CELLTYPE_STRING)
+                if (bDoCell && !bUseEditEngine && aCell.getType() == CELLTYPE_STRING)
                 {
                     if (mpSpellCheckCxt && mpSpellCheckCxt->isMisspelled(nCellX, nCellY))
                         bUseEditEngine = true;
@@ -1722,7 +1722,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                 }
                 if (bDoCell && !bUseEditEngine)
                 {
-                    bool bFormulaCell = (aCell.meType == CELLTYPE_FORMULA);
+                    bool bFormulaCell = (aCell.getType() == CELLTYPE_FORMULA);
                     if ( bFormulaCell )
                         lcl_CreateInterpretProgress(bProgress, mpDoc, aCell.mpFormula);
                     if ( aVars.SetText(aCell) )
@@ -1733,7 +1733,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                 SvxCellHorJustify eOutHorJust = SvxCellHorJustify::Standard;
                 if (bDoCell && !bUseEditEngine)
                 {
-                    CellType eCellType = aCell.meType;
+                    CellType eCellType = aCell.getType();
                     bCellIsValue = ( eCellType == CELLTYPE_VALUE );
                     if ( eCellType == CELLTYPE_FORMULA )
                     {
@@ -2130,7 +2130,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                         }
 
                         // PDF: whole-cell hyperlink from formula?
-                        bool bHasURL = pPDFData && aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->IsHyperLinkCell();
+                        bool bHasURL = pPDFData && aCell.getType() == CELLTYPE_FORMULA && aCell.mpFormula->IsHyperLinkCell();
                         if (bPaint && bHasURL)
                         {
                             tools::Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
@@ -2186,7 +2186,7 @@ static void lcl_ClearEdit( EditEngine& rEngine )       // text and attributes
 
 static bool lcl_SafeIsValue( ScRefCellValue& rCell )
 {
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
             return true;
@@ -2378,7 +2378,7 @@ ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const 
 bool ScOutputData::DrawEditParam::readCellContent(
     const ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields)
 {
-    if (maCell.meType == CELLTYPE_EDIT)
+    if (maCell.getType() == CELLTYPE_EDIT)
     {
         const EditTextObject* pData = maCell.mpEditText;
         if (pData)
@@ -2556,7 +2556,7 @@ bool ScOutputData::DrawEditParam::hasLineBreak() const
 
 bool ScOutputData::DrawEditParam::isHyperlinkCell() const
 {
-    if (maCell.meType != CELLTYPE_FORMULA)
+    if (maCell.getType() != CELLTYPE_FORMULA)
         return false;
 
     return maCell.mpFormula->IsHyperLinkCell();
@@ -2694,7 +2694,7 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
     }
 
     mpEngine->SetVertical(mbAsianVertical);
-    if (maCell.meType == CELLTYPE_EDIT)
+    if (maCell.getType() == CELLTYPE_EDIT)
     {
         // We need to synchronize the vertical mode in the EditTextObject
         // instance too.  No idea why we keep this state in two separate
@@ -4730,7 +4730,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                             // read data from cell
 
-                            if (aCell.meType == CELLTYPE_EDIT)
+                            if (aCell.getType() == CELLTYPE_EDIT)
                             {
                                 if (aCell.mpEditText)
                                     pEngine->SetTextCurrentDefaults(*aCell.mpEditText);

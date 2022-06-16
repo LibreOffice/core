@@ -1999,7 +1999,7 @@ void ScInterpreter::ScIsEmpty()
             // may treat ="" in the referenced cell as blank for Excel
             // interoperability.
             ScRefCellValue aCell(mrDoc, aAdr);
-            if (aCell.meType == CELLTYPE_NONE)
+            if (aCell.getType() == CELLTYPE_NONE)
                 nRes = 1;
         }
         break;
@@ -2050,7 +2050,7 @@ bool ScInterpreter::IsString()
             ScRefCellValue aCell(mrDoc, aAdr);
             if (GetCellErrCode(aCell) == FormulaError::NONE)
             {
-                switch (aCell.meType)
+                switch (aCell.getType())
                 {
                     case CELLTYPE_STRING :
                     case CELLTYPE_EDIT :
@@ -2164,7 +2164,7 @@ void ScInterpreter::ScType()
             ScRefCellValue aCell(mrDoc, aAdr);
             if (GetCellErrCode(aCell) == FormulaError::NONE)
             {
-                switch (aCell.meType)
+                switch (aCell.getType())
                 {
                     // NOTE: this is Xcl nonsense!
                     case CELLTYPE_STRING :
@@ -2648,7 +2648,7 @@ void ScInterpreter::ScIsValue()
             ScRefCellValue aCell(mrDoc, aAdr);
             if (GetCellErrCode(aCell) == FormulaError::NONE)
             {
-                switch (aCell.meType)
+                switch (aCell.getType())
                 {
                     case CELLTYPE_VALUE :
                         bRes = true;
@@ -2741,7 +2741,7 @@ void ScInterpreter::ScIsFormula()
                     {
                         aAdr.SetRow(nRow);
                         ScRefCellValue aCell(mrDoc, aAdr);
-                        pResMat->PutBoolean( (aCell.meType == CELLTYPE_FORMULA), i,j);
+                        pResMat->PutBoolean( (aCell.getType() == CELLTYPE_FORMULA), i,j);
                         ++j;
                     }
                     ++i;
@@ -2803,7 +2803,7 @@ void ScInterpreter::ScFormula()
                     {
                         aAdr.SetRow(nRow);
                         ScRefCellValue aCell(mrDoc, aAdr);
-                        switch (aCell.meType)
+                        switch (aCell.getType())
                         {
                             case CELLTYPE_FORMULA :
                                 aFormula = aCell.mpFormula->GetFormula(formula::FormulaGrammar::GRAM_UNSPECIFIED, &mrContext);
@@ -2829,7 +2829,7 @@ void ScInterpreter::ScFormula()
                 break;
 
             ScRefCellValue aCell(mrDoc, aAdr);
-            switch (aCell.meType)
+            switch (aCell.getType())
             {
                 case CELLTYPE_FORMULA :
                     aFormula = aCell.mpFormula->GetFormula(formula::FormulaGrammar::GRAM_UNSPECIFIED, &mrContext);
@@ -3045,7 +3045,7 @@ bool ScInterpreter::IsEven()
                 SetError(nErr);
             else
             {
-                switch (aCell.meType)
+                switch (aCell.getType())
                 {
                     case CELLTYPE_VALUE :
                         fVal = GetCellValue(aAdr, aCell);
@@ -3228,7 +3228,7 @@ void ScInterpreter::ScT()
             ScRefCellValue aCell(mrDoc, aAdr);
             if (GetCellErrCode(aCell) == FormulaError::NONE)
             {
-                switch (aCell.meType)
+                switch (aCell.getType())
                 {
                     case CELLTYPE_VALUE :
                         bValue = true;
@@ -5097,7 +5097,7 @@ namespace {
 
 bool isCellContentEmpty( const ScRefCellValue& rCell )
 {
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
         case CELLTYPE_STRING:
@@ -5290,7 +5290,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                 }
 
                 ScRefCellValue aCell(mrDoc, aAdr);
-                switch (aCell.meType)
+                switch (aCell.getType())
                 {
                     case CELLTYPE_VALUE :
                         fVal = GetCellValue(aAdr, aCell);
@@ -5644,7 +5644,7 @@ void ScInterpreter::ScCountIf()
                 return ;
             }
             ScRefCellValue aCell(mrDoc, aAdr);
-            switch (aCell.meType)
+            switch (aCell.getType())
             {
                 case CELLTYPE_VALUE :
                     fVal = GetCellValue(aAdr, aCell);
@@ -5914,7 +5914,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     }
 
                     ScRefCellValue aCell(mrDoc, aAdr);
-                    switch (aCell.meType)
+                    switch (aCell.getType())
                     {
                         case CELLTYPE_VALUE :
                             fVal = GetCellValue(aAdr, aCell);

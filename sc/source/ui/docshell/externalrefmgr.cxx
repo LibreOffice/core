@@ -1504,11 +1504,11 @@ static FormulaToken* convertToToken( ScDocument& rHostDoc, const ScDocument& rSr
 {
     if (rCell.hasEmptyValue())
     {
-        bool bInherited = (rCell.meType == CELLTYPE_FORMULA);
+        bool bInherited = (rCell.getType() == CELLTYPE_FORMULA);
         return new ScEmptyCellToken(bInherited, false);
     }
 
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_EDIT:
         case CELLTYPE_STRING:
@@ -2933,7 +2933,7 @@ public:
         {
             ScExternalRefCache::TokenRef pTok;
             ScRefCellValue aCell = mpCurCol->GetCellValue(maBlockPos, nRow);
-            switch (aCell.meType)
+            switch (aCell.getType())
             {
                 case CELLTYPE_STRING:
                 case CELLTYPE_EDIT:

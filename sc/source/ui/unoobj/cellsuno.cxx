@@ -1329,7 +1329,7 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
 
     OUString aVal;
 
-    CellType eType = aCell.meType;
+    CellType eType = aCell.getType();
     if (eType == CELLTYPE_FORMULA)
     {
         ScFormulaCell* pForm = aCell.mpFormula;
@@ -4800,7 +4800,7 @@ OUString SAL_CALL ScCellRangeObj::getArrayFormula()
     ScDocument& rDoc = pDocSh->GetDocument();
     ScRefCellValue aCell1(rDoc, aRange.aStart);
     ScRefCellValue aCell2(rDoc, aRange.aEnd);
-    if (aCell1.meType == CELLTYPE_FORMULA && aCell2.meType == CELLTYPE_FORMULA)
+    if (aCell1.getType() == CELLTYPE_FORMULA && aCell2.getType() == CELLTYPE_FORMULA)
     {
         const ScFormulaCell* pFCell1 = aCell1.mpFormula;
         const ScFormulaCell* pFCell2 = aCell2.mpFormula;
@@ -4864,7 +4864,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens()
     ScDocument& rDoc = pDocSh->GetDocument();
     ScRefCellValue aCell1(rDoc, aRange.aStart);
     ScRefCellValue aCell2(rDoc, aRange.aEnd);
-    if (aCell1.meType == CELLTYPE_FORMULA && aCell2.meType == CELLTYPE_FORMULA)
+    if (aCell1.getType() == CELLTYPE_FORMULA && aCell2.getType() == CELLTYPE_FORMULA)
     {
         const ScFormulaCell* pFCell1 = aCell1.mpFormula;
         const ScFormulaCell* pFCell2 = aCell2.mpFormula;
@@ -6159,7 +6159,7 @@ void SAL_CALL ScCellObj::setFormulaResult( double nValue )
     if (pDocSh)
     {
         ScRefCellValue aCell(pDocSh->GetDocument(), aCellPos);
-        if (aCell.meType == CELLTYPE_FORMULA)
+        if (aCell.getType() == CELLTYPE_FORMULA)
         {
             ScFormulaCell* pCell = aCell.mpFormula;
             pCell->SetHybridDouble( nValue );
@@ -6243,7 +6243,7 @@ table::CellContentType ScCellObj::GetContentType_Impl()
     if ( pDocSh )
     {
         ScRefCellValue aCell(pDocSh->GetDocument(), aCellPos);
-        if (aCell.meType == CELLTYPE_FORMULA)
+        if (aCell.getType() == CELLTYPE_FORMULA)
         {
             bool bValue = aCell.mpFormula->IsValue();
             return bValue ? table::CellContentType_VALUE : table::CellContentType_TEXT;
@@ -6264,7 +6264,7 @@ sal_Int32 SAL_CALL ScCellObj::getError()
 
     FormulaError nError = FormulaError::NONE;
     ScRefCellValue aCell(pDocSh->GetDocument(), aCellPos);
-    if (aCell.meType == CELLTYPE_FORMULA)
+    if (aCell.getType() == CELLTYPE_FORMULA)
         nError = aCell.mpFormula->GetErrCode();
 
     return static_cast<sal_Int32>(nError);
@@ -6282,7 +6282,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellObj::getTokens()
 
     ScDocument& rDoc = pDocSh->GetDocument();
     ScRefCellValue aCell(rDoc, aCellPos);
-    if (aCell.meType == CELLTYPE_FORMULA)
+    if (aCell.getType() == CELLTYPE_FORMULA)
     {
         ScTokenArray* pTokenArray = aCell.mpFormula->GetCode();
         if (pTokenArray)

@@ -984,7 +984,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             OUString aValue = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( m_pDocument.get() );
                             ScMatrixMode eMatrix = ScMatrixMode::NONE;
                             const ScCellValue& rCell = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewCell();
-                            if (rCell.meType == CELLTYPE_FORMULA)
+                            if (rCell.getType() == CELLTYPE_FORMULA)
                                 eMatrix = rCell.mpFormula->GetMatrixFlag();
                             switch ( eMatrix )
                             {

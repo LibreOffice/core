@@ -843,7 +843,7 @@ void XclExpChTrCellContent::GetCellData(
         return;
     }
 
-    switch (rScCell.meType)
+    switch (rScCell.getType())
     {
         case CELLTYPE_VALUE:
         {
@@ -868,7 +868,7 @@ void XclExpChTrCellContent::GetCellData(
         case CELLTYPE_EDIT:
         {
             OUString sCellStr;
-            if (rScCell.meType == CELLTYPE_STRING)
+            if (rScCell.getType() == CELLTYPE_STRING)
             {
                 sCellStr = rScCell.mpString->getString();
                 rpData->mpFormattedString = XclExpStringHelper::CreateCellString(

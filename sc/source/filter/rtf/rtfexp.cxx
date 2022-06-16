@@ -160,7 +160,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
     OUString aContent;
     ScAddress aPos(nCol, nRow, nTab);
     ScRefCellValue aCell(*pDoc, aPos);
-    switch (aCell.meType)
+    switch (aCell.getType())
     {
         case CELLTYPE_NONE:
             bValueData = false;

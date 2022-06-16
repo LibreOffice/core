@@ -2295,15 +2295,15 @@ void ScExportTest::testCellValuesExportODS()
     // check string
     ScRefCellValue aCell;
     aCell.assign(rDoc, ScAddress(0, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, aCell.meType);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, aCell.getType());
 
     // check for an empty cell
     aCell.assign(rDoc, ScAddress(0, 3, 0));
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, aCell.meType);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, aCell.getType());
 
     // check a digit string
     aCell.assign(rDoc, ScAddress(0, 4, 0));
-    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, aCell.meType);
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, aCell.getType());
 
     //check contiguous values
     CPPUNIT_ASSERT_EQUAL(12.0, rDoc.GetValue(0, 5, 0));

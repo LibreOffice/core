@@ -74,7 +74,7 @@ public:
 
     bool query(SCCOL nCol, SCROW nRow, const ScRefCellValue& rCell, MisspellType*& rpRanges) const
     {
-        CellType eType = rCell.meType;
+        CellType eType = rCell.getType();
         if (eType == CELLTYPE_STRING)
         {
             SharedStringMapType::const_iterator it = maStringMisspells.find(rCell.mpString->getData());
@@ -101,7 +101,7 @@ public:
 
     void set(SCCOL nCol, SCROW nRow, const ScRefCellValue& rCell, std::unique_ptr<MisspellType> pRanges)
     {
-        CellType eType = rCell.meType;
+        CellType eType = rCell.getType();
         if (eType == CELLTYPE_STRING)
             maStringMisspells.insert_or_assign(rCell.mpString->getData(), std::move(pRanges));
         else if (eType == CELLTYPE_EDIT)
@@ -234,7 +234,7 @@ void SpellCheckContext::setMisspellRanges(
         reset();
 
     ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, mnTab));
-    CellType eType = aCell.meType;
+    CellType eType = aCell.getType();
 
     if (eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
         return;
@@ -281,7 +281,7 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
     }
 
     ScRefCellValue aCell(*pDoc, ScAddress(nCol, nRow, mnTab));
-    CellType eType = aCell.meType;
+    CellType eType = aCell.getType();
 
     if (eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT)
     {

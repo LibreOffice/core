@@ -2550,7 +2550,7 @@ void ScChart2DataSequence::BuildDataCache()
                         aItem.maString = m_pDocument->GetString(aAdr);
 
                         ScRefCellValue aCell(*m_pDocument, aAdr, hint);
-                        switch (aCell.meType)
+                        switch (aCell.getType())
                         {
                             case CELLTYPE_VALUE:
                                 aItem.mfValue = aCell.getValue();

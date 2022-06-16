@@ -728,7 +728,7 @@ static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rAr
 
     bool bVal = true;
 
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
             rArg = rCell.mfValue;
@@ -745,7 +745,7 @@ static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rAr
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
             bVal = false;
-            if (rCell.meType == CELLTYPE_STRING)
+            if (rCell.getType() == CELLTYPE_STRING)
                 rArgStr = rCell.mpString->getString();
             else if (rCell.mpEditText)
                 rArgStr = ScEditUtil::GetString(*rCell.mpEditText, pDoc);
@@ -950,7 +950,7 @@ bool ScConditionEntry::IsError( const ScAddress& rPos ) const
 {
     ScRefCellValue rCell(*mpDoc, rPos);
 
-    if (rCell.meType == CELLTYPE_FORMULA)
+    if (rCell.getType() == CELLTYPE_FORMULA)
     {
         if (rCell.mpFormula->GetErrCode() != FormulaError::NONE)
             return true;

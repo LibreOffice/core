@@ -3428,7 +3428,7 @@ void ScCellShell::ExecuteFillSingleEdit()
         aPrevPos.IncRow(-1);
         ScRefCellValue aCell(rDoc, aPrevPos);
 
-        if (aCell.meType == CELLTYPE_FORMULA)
+        if (aCell.getType() == CELLTYPE_FORMULA)
         {
             aInit = "=";
             const ScTokenArray* pCode = aCell.mpFormula->GetCode();

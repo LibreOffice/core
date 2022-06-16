@@ -1232,7 +1232,7 @@ void ScTable::InvalidateTextWidth(const ScAddress* pAdrFrom, const ScAddress* pA
 
         if (bBroadcast)
         { // Only with CalcAsShown
-            switch (aCell.meType)
+            switch (aCell.getType())
             {
                 case CELLTYPE_VALUE:
                     rCol.Broadcast(nRow);
@@ -1274,7 +1274,7 @@ void ScTable::InvalidateTextWidth(const ScAddress* pAdrFrom, const ScAddress* pA
 
             if (bBroadcast)
             { // Only with CalcAsShown
-                switch (aCell.meType)
+                switch (aCell.getType())
                 {
                     case CELLTYPE_VALUE:
                         aCol[nCol].Broadcast(nRow);

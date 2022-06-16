@@ -4116,7 +4116,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
         {
             ScRefCellValue aCell = aCol[nCol].GetCellValue(nRow);
 
-            if (aCell.meType != CELLTYPE_FORMULA)
+            if (aCell.getType() != CELLTYPE_FORMULA)
                 continue;
 
             if (!aCell.mpFormula->HasRefListExpressibleAsOneReference(aRef))
@@ -4171,7 +4171,7 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
             ScCellValue aCell;
             aCell.assign(rDocument, ScAddress(nCol, nRow, nTab));
 
-            if (aCell.meType == CELLTYPE_FORMULA)
+            if (aCell.getType() == CELLTYPE_FORMULA)
             {
                 sc::RefUpdateContext aCxt(rDocument);
                 aCxt.meMode = URM_COPY;

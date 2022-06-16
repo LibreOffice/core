@@ -3604,7 +3604,7 @@ FormulaError ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& r
     FormulaError nErr = FormulaError::NONE;
     OUString aStr;
     SvNumberFormatter* pFormatter = GetFormatTable();
-    switch (aCell.meType)
+    switch (aCell.getType())
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:

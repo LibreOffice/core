@@ -2003,7 +2003,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
         // empty to fiddle with "sep=".
         if ((pCell = aIter.GetNext( nCol, nRow)) != nullptr && nCol == nStartCol && !aIter.GetNext( nCol, nRow))
         {
-            if (pCell->meType == CELLTYPE_STRING)
+            if (pCell->getType() == CELLTYPE_STRING)
             {
                 aString = pCell->mpString->getString();
                 if (aString.getLength() <= 5 && aString.startsWithIgnoreAsciiCase("sep="))
@@ -2101,7 +2101,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
         else
             nNextCol = nCol + 1;
 
-        CellType eType = pCell->meType;
+        CellType eType = pCell->getType();
         ScAddress aPos(nCol, nRow, nTab);
         if ( bTabProtect )
         {

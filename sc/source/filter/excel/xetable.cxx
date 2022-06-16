@@ -2624,7 +2624,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
         OUString aAddNoteText;    // additional text to be appended to a note
 
-        switch (rScCell.meType)
+        switch (rScCell.getType())
         {
             case CELLTYPE_VALUE:
             {

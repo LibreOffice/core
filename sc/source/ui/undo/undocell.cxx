@@ -449,7 +449,7 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
 {
     ScDocument& rDoc = pDocShell->GetDocument();
 
-    switch (rVal.meType)
+    switch (rVal.getType())
     {
         case CELLTYPE_NONE:
             // empty cell

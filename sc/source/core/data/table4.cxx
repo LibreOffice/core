@@ -273,7 +273,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if (bOverlapped)
                 bHasOverlappedCells = true;
 
-            if (!bOverlapped || GetCellValue(nColCurr, nRowCurr).meType != CELLTYPE_NONE)
+            if (!bOverlapped || GetCellValue(nColCurr, nRowCurr).getType() != CELLTYPE_NONE)
             {
                 rNonOverlappedCellIdx[nValueCount++] = i;
                 // if there is at least 1 non empty overlapped cell, then no cell should be skipped
@@ -300,7 +300,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             nRowCurr = nRow1 + rNonOverlappedCellIdx[0] * nAddY;
             ScRefCellValue aPrevCell, aCurrCell;
             aCurrCell = GetCellValue(nColCurr, nRowCurr);
-            CellType eCellType = aCurrCell.meType;
+            CellType eCellType = aCurrCell.getType();
             if (eCellType == CELLTYPE_VALUE)
             {
                 bool bVal = true;
@@ -324,7 +324,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             nColCurr = nCol1 + rNonOverlappedCellIdx[i] * nAddX;
                             nRowCurr = nRow1 + rNonOverlappedCellIdx[i] * nAddY;
                             aCurrCell = GetCellValue(nColCurr, nRowCurr);
-                            if (aCurrCell.meType == CELLTYPE_VALUE)
+                            if (aCurrCell.getType() == CELLTYPE_VALUE)
                             {
                                 aCurrDate = aNullDate + static_cast<sal_Int32>(aCurrCell.mfValue);
                                 if (eType != FILL_DAY) {
@@ -397,7 +397,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         nColCurr = nCol1 + rNonOverlappedCellIdx[i] * nAddX;
                         nRowCurr = nRow1 + rNonOverlappedCellIdx[i] * nAddY;
                         aCurrCell = GetCellValue(nColCurr, nRowCurr);
-                        if (aCurrCell.meType == CELLTYPE_VALUE)
+                        if (aCurrCell.getType() == CELLTYPE_VALUE)
                         {
                             double nDiff = approxDiff(aCurrCell.mfValue, aPrevCell.mfValue);
                             if (i == 1)
@@ -471,7 +471,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         nColCurr = nCol1 + rNonOverlappedCellIdx[i] * nAddX;
                         nRowCurr = nRow1 + rNonOverlappedCellIdx[i] * nAddY;
                         ScRefCellValue aCell = GetCellValue(nColCurr, nRowCurr);
-                        CellType eType = aCell.meType;
+                        CellType eType = aCell.getType();
                         if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)
                         {
                             aStr2 = aCell.getString(&rDocument);
@@ -509,7 +509,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     SCROW nRow = nRow1;
 
     ScRefCellValue aFirstCell = GetCellValue(nCol, nRow);
-    CellType eCellType = aFirstCell.meType;
+    CellType eCellType = aFirstCell.getType();
 
     if (eCellType == CELLTYPE_VALUE)
     {
@@ -559,7 +559,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     for (SCSIZE i=1; i<nCount && bVal; i++)
                     {
                         ScRefCellValue aCell = GetCellValue(nCol,nRow);
-                        if (aCell.meType == CELLTYPE_VALUE)
+                        if (aCell.getType() == CELLTYPE_VALUE)
                         {
                             nVal = aCell.mfValue;
                             aDate2 = aNullDate + static_cast<sal_Int32>(nVal);
@@ -629,7 +629,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 for (SCSIZE i=1; i<nCount && bVal; i++)
                 {
                     ScRefCellValue aCell = GetCellValue(nCol,nRow);
-                    if (aCell.meType == CELLTYPE_VALUE)
+                    if (aCell.getType() == CELLTYPE_VALUE)
                     {
                         nVal2 = aCell.mfValue;
                         double nDiff = approxDiff( nVal2, nVal1);
@@ -711,7 +711,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     for (SCSIZE i=1; i<nCount && bVal; i++)
                     {
                         ScRefCellValue aCell = GetCellValue(nCol, nRow);
-                        CellType eType = aCell.meType;
+                        CellType eType = aCell.getType();
                         if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                         {
                             aStr = aCell.getString(&rDocument);
@@ -1397,7 +1397,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                 else
                     nDelta = ( nIndex - nSrcCount + 1 ) / nSrcCount;    // -1 -> -1
 
-                CellType eType = aCell.meType;
+                CellType eType = aCell.getType();
                 switch ( eType )
                 {
                     case CELLTYPE_STRING:
@@ -1477,7 +1477,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
             ScRefCellValue aCell = GetCellValue(nCol1, nRow1);
             if (!aCell.isEmpty())
             {
-                CellType eType = aCell.meType;
+                CellType eType = aCell.getType();
                 switch ( eType )
                 {
                     case CELLTYPE_STRING:
@@ -1761,7 +1761,7 @@ void ScTable::FillSeriesSimple(
 
     if (bVertical)
     {
-        switch (rSrcCell.meType)
+        switch (rSrcCell.getType())
         {
             case CELLTYPE_FORMULA:
             {
@@ -1793,7 +1793,7 @@ void ScTable::FillSeriesSimple(
     }
     else
     {
-        switch (rSrcCell.meType)
+        switch (rSrcCell.getType())
         {
             case CELLTYPE_FORMULA:
             {
@@ -1888,7 +1888,7 @@ void ScTable::FillAutoSimple(
                 if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
                 {
                     aSrcCell = GetCellValue(rCol, nSource);
-                    if (nISrcStart == nISrcEnd && aSrcCell.meType == CELLTYPE_FORMULA)
+                    if (nISrcStart == nISrcEnd && aSrcCell.getType() == CELLTYPE_FORMULA)
                     {
                         FillFormulaVertical(*aSrcCell.mpFormula, rInner, rCol, nIStart, nIEnd, pProgress, rProgress);
                         return;
@@ -1911,11 +1911,11 @@ void ScTable::FillAutoSimple(
                 bGetCell = false;
                 if (!aSrcCell.isEmpty())
                 {
-                    switch (aSrcCell.meType)
+                    switch (aSrcCell.getType())
                     {
                         case CELLTYPE_STRING:
                         case CELLTYPE_EDIT:
-                            if (aSrcCell.meType == CELLTYPE_STRING)
+                            if (aSrcCell.getType() == CELLTYPE_STRING)
                                 aValue = aSrcCell.mpString->getString();
                             else
                                 aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, &rDocument);
@@ -1937,7 +1937,7 @@ void ScTable::FillAutoSimple(
                 }
             }
 
-            switch (aSrcCell.meType)
+            switch (aSrcCell.getType())
             {
                 case CELLTYPE_VALUE:
                     {
@@ -1965,7 +1965,7 @@ void ScTable::FillAutoSimple(
                             setSuffixCell(
                                 aCol[rCol], rRow,
                                 nNextValue, nCellDigits, aValue,
-                                aSrcCell.meType, bIsOrdinalSuffix);
+                                aSrcCell.getType(), bIsOrdinalSuffix);
                         }
                         else
                         {
@@ -2033,7 +2033,7 @@ void ScTable::FillAutoSimple(
         //  and even then not individually for each one
 
         ++rProgress;
-        if ( pProgress && (aSrcCell.meType == CELLTYPE_FORMULA || aSrcCell.meType == CELLTYPE_EDIT) )
+        if ( pProgress && (aSrcCell.getType() == CELLTYPE_FORMULA || aSrcCell.getType() == CELLTYPE_EDIT) )
             pProgress->SetStateOnPercent( rProgress );
 
     }
@@ -2230,10 +2230,10 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         else
             aSrcCell = GetCellValue(static_cast<SCCOL>(nISource), static_cast<SCROW>(nOStart));
         // Same logic as for the actual series.
-        if (!aSrcCell.isEmpty() && (aSrcCell.meType == CELLTYPE_VALUE || aSrcCell.meType == CELLTYPE_FORMULA))
+        if (!aSrcCell.isEmpty() && (aSrcCell.getType() == CELLTYPE_VALUE || aSrcCell.getType() == CELLTYPE_FORMULA))
         {
             double nStartVal;
-            if (aSrcCell.meType == CELLTYPE_VALUE)
+            if (aSrcCell.getType() == CELLTYPE_VALUE)
                 nStartVal = aSrcCell.mfValue;
             else
                 nStartVal = aSrcCell.mpFormula->GetValue();
@@ -2354,7 +2354,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         if (!aSrcCell.isEmpty())
         {
-            CellType eCellType = aSrcCell.meType;
+            CellType eCellType = aSrcCell.getType();
 
             if (eFillCmd == FILL_SIMPLE)                // copy
             {

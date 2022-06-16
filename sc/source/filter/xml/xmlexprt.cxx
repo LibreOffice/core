@@ -214,7 +214,7 @@ OUString lcl_GetFormattedString(ScDocument* pDoc, const ScRefCellValue& rCell, c
     if (!pDoc)
         return OUString();
 
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_STRING:
         {
@@ -3166,7 +3166,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
             break;
         case table::CellContentType_FORMULA :
             {
-                if (aCell.maBaseCell.meType == CELLTYPE_FORMULA)
+                if (aCell.maBaseCell.getType() == CELLTYPE_FORMULA)
                 {
                     const bool bIsMatrix(bIsFirstMatrixCell || aCell.bIsMatrixCovered);
                     ScFormulaCell* pFormulaCell = aCell.maBaseCell.mpFormula;
@@ -3258,11 +3258,11 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
 
     if (!bIsEmpty)
     {
-        if (aCell.maBaseCell.meType == CELLTYPE_EDIT)
+        if (aCell.maBaseCell.getType() == CELLTYPE_EDIT)
         {
             WriteEditCell(aCell.maBaseCell.mpEditText);
         }
-        else if (aCell.maBaseCell.meType == CELLTYPE_FORMULA && aCell.maBaseCell.mpFormula->IsMultilineResult())
+        else if (aCell.maBaseCell.getType() == CELLTYPE_FORMULA && aCell.maBaseCell.mpFormula->IsMultilineResult())
         {
             WriteMultiLineFormulaResult(aCell.maBaseCell.mpFormula);
         }
@@ -3796,7 +3796,7 @@ void ScXMLExport::SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgres
 
 bool ScXMLExport::IsEditCell(const ScMyCell& rCell)
 {
-    return rCell.maBaseCell.meType == CELLTYPE_EDIT;
+    return rCell.maBaseCell.getType() == CELLTYPE_EDIT;
 }
 
 bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell2)

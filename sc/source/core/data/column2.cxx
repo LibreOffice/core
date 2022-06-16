@@ -138,7 +138,7 @@ tools::Long ScColumn::GetNeededSize(
     const SfxItemSet* pCondSet = rDocument.GetCondResult( nCol, nRow, nTab );
 
     //The pPattern may change in GetCondResult
-    if (aCell.meType == CELLTYPE_FORMULA)
+    if (aCell.getType() == CELLTYPE_FORMULA)
     {
         pPattern = pAttrArray->GetPattern( nRow );
         if (ppPatternChange)
@@ -166,8 +166,8 @@ tools::Long ScColumn::GetNeededSize(
 
     // get "cell is value" flag
     // Must be synchronized with ScOutputData::LayoutStrings()
-    bool bCellIsValue = (aCell.meType == CELLTYPE_VALUE);
-    if (aCell.meType == CELLTYPE_FORMULA)
+    bool bCellIsValue = (aCell.getType() == CELLTYPE_VALUE);
+    if (aCell.getType() == CELLTYPE_FORMULA)
     {
         ScFormulaCell* pFCell = aCell.mpFormula;
         bCellIsValue = pFCell->IsRunning() || pFCell->IsValue();
@@ -180,7 +180,7 @@ tools::Long ScColumn::GetNeededSize(
         // to determine the type, the pattern may get invalidated because the
         // result may set a number format. In which case there's also the
         // General format not set anymore...
-        bool bMayInvalidatePattern = (aCell.meType == CELLTYPE_FORMULA);
+        bool bMayInvalidatePattern = (aCell.getType() == CELLTYPE_FORMULA);
         const ScPatternAttr* pOldPattern = pPattern;
         bool bNumeric = aCell.hasNumeric();
         if (bMayInvalidatePattern)
@@ -277,7 +277,7 @@ tools::Long ScColumn::GetNeededSize(
     }
 
     bool bAddMargin = true;
-    CellType eCellType = aCell.meType;
+    CellType eCellType = aCell.getType();
 
     bool bEditEngine = (eCellType == CELLTYPE_EDIT ||
                         eOrient == SvxCellOrientation::Stacked ||
@@ -456,7 +456,7 @@ tools::Long ScColumn::GetNeededSize(
         }
         pEngine->SetPaperSize(aPaper);
 
-        if (aCell.meType == CELLTYPE_EDIT)
+        if (aCell.getType() == CELLTYPE_EDIT)
         {
             pEngine->SetTextNewDefaults(*aCell.mpEditText, std::move(aSet));
         }
@@ -664,7 +664,7 @@ class MaxStrLenFinder
         if (aValStr.getLength() <= mnMaxLen)
             return;
 
-        switch (rCell.meType)
+        switch (rCell.getType())
         {
             case CELLTYPE_NONE:
             case CELLTYPE_VALUE:

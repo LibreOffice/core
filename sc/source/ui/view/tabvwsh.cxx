@@ -110,7 +110,7 @@ OUString ScTabViewShell::GetFormula(const ScAddress& rAddress)
 {
     ScDocument& rDoc = GetViewData().GetDocument();
     ScRefCellValue aCell(rDoc, rAddress);
-    if (!aCell.isEmpty() && aCell.meType == CELLTYPE_FORMULA)
+    if (!aCell.isEmpty() && aCell.getType() == CELLTYPE_FORMULA)
     {
         return aCell.mpFormula->GetFormula();
     }

@@ -401,7 +401,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
         {
             if (!pCell)
                 aCell = sc::toRefCell(maCurPos.first, maCurPos.second);
-            switch (aCell.meType)
+            switch (aCell.getType())
             {
                 case CELLTYPE_VALUE:
                 {
@@ -972,28 +972,23 @@ OUString ScCellIterator::getString() const
 
 ScCellValue ScCellIterator::getCellValue() const
 {
-    ScCellValue aRet;
-    aRet.meType = maCurCell.meType;
-
-    switch (maCurCell.meType)
+    switch (maCurCell.getType())
     {
         case CELLTYPE_STRING:
-            aRet.mpString = new svl::SharedString(*maCurCell.mpString);
+            return ScCellValue(new svl::SharedString(*maCurCell.mpString));
         break;
         case CELLTYPE_EDIT:
-            aRet.mpEditText = maCurCell.mpEditText->Clone().release();
+            return ScCellValue(maCurCell.mpEditText->Clone());
         break;
         case CELLTYPE_VALUE:
-            aRet.mfValue = maCurCell.mfValue;
+            return ScCellValue(maCurCell.mfValue);
         break;
         case CELLTYPE_FORMULA:
-            aRet.mpFormula = maCurCell.mpFormula->Clone();
+            return ScCellValue(maCurCell.mpFormula->Clone());
         break;
         default:
-            ;
+            return ScCellValue();
     }
-
-    return aRet;
 }
 
 bool ScCellIterator::hasString() const
@@ -1311,7 +1306,7 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, FormulaError& rErr )
             else
                 return false;
         }
-        switch (pCell->meType)
+        switch (pCell->getType())
         {
             case CELLTYPE_VALUE:
                 {

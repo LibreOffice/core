@@ -277,7 +277,7 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     ScAddress aPos(nCol, nRow, nTab);
 
     ScRefCellValue aCell(mrDoc, aPos);
-    switch (aCell.meType)
+    switch (aCell.getType())
     {
         case CELLTYPE_STRING:
         {

@@ -449,14 +449,12 @@ bool ScValidationData::IsDataValidCustom(
     svl::SharedString aSS;
     if (bIsVal)
     {
-        aTmpCell.meType = CELLTYPE_VALUE;
-        aTmpCell.mfValue = nVal;
+        aTmpCell = ScRefCellValue(nVal);
     }
     else
     {
-        aTmpCell.meType = CELLTYPE_STRING;
         aSS = mpDoc->GetSharedStringPool().intern(rTest);
-        aTmpCell.mpString = &aSS;
+        aTmpCell = ScRefCellValue(&aSS);
     }
 
     ScCellValue aOriginalCellValue(ScRefCellValue(*GetDocument(), rPos));
@@ -575,7 +573,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
     OUString aString;
     bool bIsVal = true;
 
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
             nVal = rCell.mfValue;

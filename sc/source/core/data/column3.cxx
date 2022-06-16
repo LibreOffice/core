@@ -2115,7 +2115,7 @@ bool ScColumn::ParseString(
                 if (bForceFormatDate)
                 {
                     ScRefCellValue aCell = GetCellValue(nRow);
-                    if (aCell.meType == CELLTYPE_VALUE)
+                    if (aCell.getType() == CELLTYPE_VALUE)
                     {
                         // Only for an actual date (serial number), not an
                         // arbitrary string or formula or empty cell.
@@ -2225,7 +2225,7 @@ bool ScColumn::ParseString(
         }
         while (false);
 
-        if (rCell.meType == CELLTYPE_NONE)
+        if (rCell.getType() == CELLTYPE_NONE)
         {
             // If we reach here with ScSetStringParam::SpecialNumberOnly it
             // means a simple number was not detected above, so test for
@@ -2554,7 +2554,7 @@ class FilterEntriesHandler
 
         double fVal = 0.0;
 
-        switch (rCell.meType)
+        switch (rCell.getType())
         {
             case CELLTYPE_VALUE:
                 fVal = rCell.mfValue;
@@ -2879,7 +2879,7 @@ public:
 
         for (const Entry& r : maEntries)
         {
-            switch (r.maValue.meType)
+            switch (r.maValue.getType())
             {
                 case CELLTYPE_VALUE:
                     rColumn.SetValue(aBlockPos, r.mnRow, r.maValue.mfValue, false);
@@ -3029,7 +3029,7 @@ void ScColumn::SetValue(
 OUString ScColumn::GetString( const ScRefCellValue& aCell, SCROW nRow, const ScInterpreterContext* pContext ) const
 {
     // ugly hack for ordering problem with GetNumberFormat and missing inherited formats
-    if (aCell.meType == CELLTYPE_FORMULA)
+    if (aCell.getType() == CELLTYPE_FORMULA)
         aCell.mpFormula->MaybeInterpret();
 
     sal_uInt32 nFormat = GetNumberFormat( pContext ? *pContext : GetDoc().GetNonThreadedContext(), nRow);
@@ -3343,7 +3343,7 @@ class MaxNumStringLenHandler
     void processCell(size_t nRow, ScRefCellValue& rCell)
     {
         sal_uInt16 nCellPrecision = mnMaxGeneralPrecision;
-        if (rCell.meType == CELLTYPE_FORMULA)
+        if (rCell.getType() == CELLTYPE_FORMULA)
         {
             if (!rCell.mpFormula->IsValue())
                 return;

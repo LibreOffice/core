@@ -724,7 +724,7 @@ void fillSortedColumnArray(
             if (!bOnlyDataAreaExtras)
             {
                 sc::CellStoreType& rCellStore = aSortedCols.at(j)->maCells;
-                switch (rCell.maCell.meType)
+                switch (rCell.maCell.getType())
                 {
                     case CELLTYPE_STRING:
                         assert(rCell.mpAttr);
@@ -1529,7 +1529,7 @@ short ScTable::CompareCell(
 {
     short nRes = 0;
 
-    CellType eType1 = rCell1.meType, eType2 = rCell2.meType;
+    CellType eType1 = rCell1.getType(), eType2 = rCell2.getType();
 
     if (!rCell1.isEmpty())
     {
@@ -2608,7 +2608,7 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
             for (SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2 && !bValid; nCol++)
             {
                 ScRefCellValue aCell = GetCellValue(nCol, j);
-                if (aCell.meType != CELLTYPE_FORMULA)
+                if (aCell.getType() != CELLTYPE_FORMULA)
                     continue;
 
                 if (!aCell.mpFormula->IsSubTotal())
