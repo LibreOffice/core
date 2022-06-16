@@ -65,6 +65,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SfxItemState::DEFAULT == rSet.GetItemState( SID_OBJECT_TITLE_DESCRIPTION ) ||
 
             SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_FILL_STYLE ) ||
+            SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_FILL_USE_SLIDE_BACKGROUND ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_FILL_TRANSPARENCE ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_FILL_FLOATTRANSPARENCE ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_CHANGEBEZIER ) ||
@@ -167,6 +168,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 //rSet.DisableItem( SID_ATTRIBUTES_AREA ); // remove again!
                 rSet.DisableItem( SID_ATTR_FILL_STYLE );
+                rSet.DisableItem( SID_ATTR_FILL_USE_SLIDE_BACKGROUND );
                 rSet.DisableItem( SID_ATTR_FILL_TRANSPARENCE );
                 rSet.DisableItem( SID_ATTR_FILL_FLOATTRANSPARENCE );
             }
@@ -389,6 +391,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             if( bLine && !bText && !bDrawObj &&!b3dObj)
             {
                 rSet.DisableItem( SID_ATTR_FILL_STYLE );
+                rSet.DisableItem( SID_ATTR_FILL_USE_SLIDE_BACKGROUND );
                 rSet.DisableItem( SID_ATTR_FILL_TRANSPARENCE );
                 rSet.DisableItem( SID_ATTR_FILL_FLOATTRANSPARENCE );
             }

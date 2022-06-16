@@ -689,6 +689,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTR_SHADOW_BLUR:
         case SID_ATTR_SHADOW_XDISTANCE:
         case SID_ATTR_SHADOW_YDISTANCE:
+        case SID_ATTR_FILL_USE_SLIDE_BACKGROUND:
         case SID_ATTR_FILL_TRANSPARENCE:
         case SID_ATTR_FILL_FLOATTRANSPARENCE:
 
@@ -727,6 +728,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     case SID_ATTR_FILL_GRADIENT:
                     case SID_ATTR_FILL_HATCH:
                     case SID_ATTR_FILL_BITMAP:
+                    case SID_ATTR_FILL_USE_SLIDE_BACKGROUND:
                     case SID_ATTR_FILL_TRANSPARENCE:
                     case SID_ATTR_FILL_FLOATTRANSPARENCE:
                         GetViewFrame()->GetDispatcher()->Execute( SID_ATTRIBUTES_AREA, SfxCallMode::ASYNCHRON );
