@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f70ae25f_d1780e90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-16T15:44:16Z",
+      "side": 1,
+      "message": "Looks very much like a copy-paste error in that commit, and using the passed ScDocument instead was intended.",
+      "revId": "81c95dd499f50f75f84cf73d2e78964d19c8f4db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
