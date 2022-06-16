@@ -348,6 +348,7 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
     static constexpr OUStringLiteral VND_CMIS = u"vnd.libreoffice.cmis";
 
     static o3tl::enumarray<INetProtocol, SchemeInfo> const map = {
+        // [-loplugin:redundantfcast]:
         SchemeInfo{
             EMPTY, "", false, false, false, false, false, false, false, false},
         SchemeInfo{

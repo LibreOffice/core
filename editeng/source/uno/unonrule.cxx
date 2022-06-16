@@ -67,7 +67,7 @@ const SvxAdjust aUnoToSvxAdjust[] =
     SvxAdjust::Block
 };
 
-const o3tl::enumarray<SvxAdjust, unsigned short> aSvxToUnoAdjust
+const o3tl::enumarray<SvxAdjust, sal_Int16> aSvxToUnoAdjust
 {
     text::HoriOrientation::LEFT,
     text::HoriOrientation::RIGHT,
