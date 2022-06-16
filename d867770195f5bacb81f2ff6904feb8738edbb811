@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bc28a63_c598bc33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-16T19:09:56Z",
+      "side": 1,
+      "message": "To spot this one, I just did in sc/:\ngit grep -n -3 getRangeAddress\n\nThought it could be interesting to apply the same way here.",
+      "revId": "d867770195f5bacb81f2ff6904feb8738edbb811",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
