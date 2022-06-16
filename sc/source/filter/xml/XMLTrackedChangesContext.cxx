@@ -860,7 +860,7 @@ void SAL_CALL ScXMLChangeCellContext::endFastElement( sal_Int32 /*nElement*/ )
             }
 
             // The cell will own the text object instance.
-            mrOldCell.set(mpEditTextObj->CreateTextObject().release());
+            mrOldCell.set(mpEditTextObj->CreateTextObject());
             GetScImport().GetTextImport()->ResetCursor();
             mpEditTextObj.clear();
         }
