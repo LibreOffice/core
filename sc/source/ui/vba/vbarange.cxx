@@ -2657,11 +2657,8 @@ ScVbaRange::Resize( const uno::Any &RowSize, const uno::Any &ColumnSize )
     xCursor->collapseToSize( nColumnSize, nRowSize );
     uno::Reference< sheet::XCellRangeAddressable > xCellRangeAddressable(xCursor, ::uno::UNO_QUERY_THROW );
     uno::Reference< table::XCellRange > xRange( xSheetRange->getSpreadsheet(), ::uno::UNO_QUERY_THROW );
-    return new ScVbaRange( mxParent, mxContext,xRange->getCellRangeByPosition(
-                                        xCellRangeAddressable->getRangeAddress().StartColumn,
-                                        xCellRangeAddressable->getRangeAddress().StartRow,
-                                        xCellRangeAddressable->getRangeAddress().EndColumn,
-                                        xCellRangeAddressable->getRangeAddress().EndRow ) );
+    const table::CellRangeAddress aRA( xCellRangeAddressable->getRangeAddress());
+    return new ScVbaRange( mxParent, mxContext, xRange->getCellRangeByPosition( aRA.StartColumn, aRA.StartRow, aRA.EndColumn, aRA.EndRow));
 }
 
 void
