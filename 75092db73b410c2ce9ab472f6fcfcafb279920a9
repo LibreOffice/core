@@ -51,6 +51,24 @@
       "parentUuid": "722e4feb_2600c799",
       "revId": "75092db73b410c2ce9ab472f6fcfcafb279920a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32677926_93ed81a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-16T07:30:38Z",
+      "side": 1,
+      "message": "\u003e lcl_ExportAnnotationStarts() gets its annotation list from lcl_FillAnnotationStartArray(), which operates on a SwAnnotationStartPortion_ImplList, which is an std::multiset, which is ultimately not ordered.\n\nI\u0027m not convinced this use of std::multiset lies at the heart of the issue, though:  [associative.reqmts.general]/4 states: \"For multiset and multimap, insert, emplace, and erase preserve the relative ordering of equivalent elements.\"  And libc++ (at least for recent LLVM 15 trunk) debug mode doesn\u0027t seem to randomize the order of equivalent multiset elements.",
+      "parentUuid": "244eab11_a5230c75",
+      "revId": "75092db73b410c2ce9ab472f6fcfcafb279920a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
