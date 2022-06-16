@@ -16,6 +16,24 @@
       "message": "Do you still remember any details about that \"assertion in PyThreadState_Swap on the PyThreadAttach below\"?  Asking because this `PyThreadState_Delete(tstate);` now causes an issue with upcoming Python 3.11 at \u003chttps://bugzilla.redhat.com/show_bug.cgi?id\u003d2097411\u003e \"libreoffice fails to build with Python 3.11: Fatal Python error: init_threadstate: thread state already initialized\", and reverting this doesn\u0027t seem to have any negative impact at least on a recent master --with-python\u003dinternal build\u0027s CppunitTest_services.",
       "revId": "1fb53a637597f76bea86514b62ddfad34f60c889",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31cfca26_ef116815",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2022-06-16T15:25:51Z",
+      "side": 1,
+      "message": "Unfortunately I don\u0027t remember. I also don\u0027t find any mention of `PyThreadState_Swap` in LibreOffice@HEAD:\n\n  $ git grep PyThreadState_Swap\n  pyuno/source/loader/pyuno_loader.cxx:    // This prevents an assertion in PyThreadState_Swap on the",
+      "parentUuid": "12f515fc_308769d8",
+      "revId": "1fb53a637597f76bea86514b62ddfad34f60c889",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
