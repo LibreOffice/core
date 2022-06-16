@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c01ef4b3_9b5c965a",
+        "filename": "offapi/com/sun/star/drawing/FillProperties.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-16T14:05:45Z",
+      "side": 1,
+      "message": "Master is at 7.5 since \u003chttps://git.libreoffice.org/core/+/27ebceb366356f65c836e7edcc3609193f6e009c%5E!\u003e \"bump product version to 7.5.0.0.alpha0+\", not 8.0, so better use \"7.5\" here.  (And we\u0027d need to remember to mass fixup any such 7.5 -\u003e 8.0 if marketing decides at some point to name the next version of LO 8.0 rather than 7.5.)",
+      "range": {
+        "startLine": 222,
+        "startChar": 27,
+        "endLine": 222,
+        "endChar": 30
+      },
+      "revId": "c4cf2e82e8d0aaef9b1daedc033d6edf647e5284",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
