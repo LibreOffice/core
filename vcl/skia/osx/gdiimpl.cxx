@@ -139,6 +139,18 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG()
     // This creates the bitmap context from the cropped part, writable_addr32() will get
     // the first pixel of mDirtyRect.topLeft(), and using pixmap.rowBytes() ensures the following
     // pixel lines will be read from correct positions.
+    if (pixmap.bounds() != mDirtyRect && pixmap.bounds().bottom() == mDirtyRect.bottom())
+    {
+        // HACK for tdf#145843: If mDirtyRect includes the last line but not the first pixel of it,
+        // then the rowBytes() trick would lead to the GC* functions thinking that even pixels after
+        // the pixmap data belong to the area (since the shifted x()+rowBytes() points there) and
+        // at least on Intel Mac they would actually read those data, even though I see no good reason
+        // to do that, as that's beyond the x()+width() for the last line. That could be handled
+        // by creating a subset SkImage (which as is said above copies data), or set the x coordinate
+        // to 0, which will then make rowBytes() match the actual data.
+        mDirtyRect.fLeft = 0;
+        assert(mDirtyRect.width() == pixmap.bounds().width());
+    }
     CGContextRef context = CGBitmapContextCreate(
         pixmap.writable_addr32(mDirtyRect.x() * mScaling, mDirtyRect.y() * mScaling),
         mDirtyRect.width() * mScaling, mDirtyRect.height() * mScaling, 8, pixmap.rowBytes(),
