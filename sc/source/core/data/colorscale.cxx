@@ -189,7 +189,7 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
     setListener();
     if(rEntry.mpCell)
     {
-        mpCell.reset(new ScFormulaCell(*rEntry.mpCell, rEntry.mpCell->GetDocument(), rEntry.mpCell->aPos, ScCloneFlags::NoMakeAbsExternal));
+        mpCell.reset(new ScFormulaCell(*rEntry.mpCell, *pDoc, rEntry.mpCell->aPos, ScCloneFlags::NoMakeAbsExternal));
         mpCell->StartListeningTo( *pDoc );
         mpListener.reset(new ScFormulaListener(mpCell.get()));
         if (mpFormat)
