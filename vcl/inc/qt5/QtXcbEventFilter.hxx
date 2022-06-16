@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 #include <xcb/xcb.h>
 
 #include <QtCore/QAbstractNativeEventFilter>
@@ -17,12 +19,16 @@ class QtXcbEventFilter : public QAbstractNativeEventFilter
 {
     static constexpr const char* m_sFrameAtomName = "_NET_FRAME_EXTENTS\0";
     static xcb_atom_t m_nFrameAtom;
+    static constexpr const char* m_sWindowGroupName = "WM_CLIENT_LEADER\0";
+    static xcb_atom_t m_nWindowGroupAtom;
     static bool m_bDidAtomLookups;
 
+    static xcb_atom_t lookupAtom(xcb_connection_t*, const char* const sAtomName);
     static void fetchAtoms();
 
 public:
-    static xcb_atom_t lookupAtom(xcb_connection_t*, const char* const sAtomName);
+    static bool fixICCCMwindowGroup(xcb_window_t nWinId);
+    static void setApplicationID(xcb_window_t nWinId, const OUString& rWMClass);
 
     bool nativeEventFilter(const QByteArray& eventType, void* message, long*) override;
 };

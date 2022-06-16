@@ -31,12 +31,14 @@
 #include <QtSystem.hxx>
 #include <QtTools.hxx>
 #include <QtTransferable.hxx>
+#if CHECK_ANY_QT_USING_X11
+#include <QtXcbEventFilter.hxx>
+#endif
 
 #include <QtCore/QMimeData>
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
 #include <QtCore/QThread>
-#include <QtCore/QVersionNumber>
 #include <QtGui/QDragMoveEvent>
 #include <QtGui/QDropEvent>
 #include <QtGui/QIcon>
@@ -50,17 +52,9 @@
 #endif
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMainWindow>
-
 #if CHECK_ANY_QT_USING_X11
-#include <QtXcbEventFilter.hxx>
-#if CHECK_QT5_USING_X11
 #include <QtX11Extras/QX11Info>
-#include <xcb/xproto.h>
-#if QT5_HAVE_XCB_ICCCM
-#include <xcb/xcb_icccm.h>
 #endif
-#endif
-#endif // CHECK_ANY_QT_USING_X11
 
 #include <window.h>
 #include <vcl/syswin.hxx>
@@ -74,7 +68,6 @@
 
 #if CHECK_QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
 static bool g_bNeedsWmHintsWindowGroup = true;
-static xcb_atom_t g_aXcbClientLeaderAtom = 0;
 #endif
 
 static void SvpDamageHandler(void* handle, sal_Int32 nExtentsX, sal_Int32 nExtentsY,
@@ -253,45 +246,8 @@ void QtFrame::fixICCCMwindowGroup()
     assert(m_aSystemData.platform != SystemEnvData::Platform::Invalid);
     if (m_aSystemData.platform != SystemEnvData::Platform::Xcb)
         return;
-    if (QVersionNumber::fromString(qVersion()) >= QVersionNumber(5, 12))
-        return;
 
-    xcb_connection_t* conn = QX11Info::connection();
-    xcb_window_t win = asChild()->winId();
-
-    xcb_icccm_wm_hints_t hints;
-
-    xcb_get_property_cookie_t prop_cookie = xcb_icccm_get_wm_hints_unchecked(conn, win);
-    if (!xcb_icccm_get_wm_hints_reply(conn, prop_cookie, &hints, nullptr))
-        return;
-
-    if (hints.flags & XCB_ICCCM_WM_HINT_WINDOW_GROUP)
-        return;
-
-    if (g_aXcbClientLeaderAtom == 0)
-        QtXcbEventFilter::lookupAtom(conn, "WM_CLIENT_LEADER\0");
-    if (g_aXcbClientLeaderAtom == 0)
-        return;
-
-    g_bNeedsWmHintsWindowGroup = true;
-
-    prop_cookie = xcb_get_property(conn, 0, win, g_aXcbClientLeaderAtom, XCB_ATOM_WINDOW, 0, 1);
-    xcb_get_property_reply_t* prop_reply = xcb_get_property_reply(conn, prop_cookie, nullptr);
-    if (!prop_reply)
-        return;
-
-    if (xcb_get_property_value_length(prop_reply) != 4)
-    {
-        free(prop_reply);
-        return;
-    }
-
-    xcb_window_t leader = *static_cast<xcb_window_t*>(xcb_get_property_value(prop_reply));
-    free(prop_reply);
-
-    hints.flags |= XCB_ICCCM_WM_HINT_WINDOW_GROUP;
-    hints.window_group = leader;
-    xcb_icccm_set_wm_hints(conn, win, &hints);
+    g_bNeedsWmHintsWindowGroup = QtXcbEventFilter::fixICCCMwindowGroup(asChild()->winId());
 #else
     (void)this; // avoid loplugin:staticmethods
 #endif
@@ -854,23 +810,22 @@ void QtFrame::ShowFullScreen(const bool bFullScreen, const sal_Int32 nScreen)
 
 void QtFrame::StartPresentation(bool bStart)
 {
-// meh - so there's no Qt platform independent solution
-// https://forum.qt.io/topic/38504/solved-qdialog-in-fullscreen-disable-os-screensaver
-#if CHECK_QT5_USING_X11
+    // meh - so there's no Qt platform independent solution
+    // https://forum.qt.io/topic/38504/solved-qdialog-in-fullscreen-disable-os-screensaver
+    assert(m_aSystemData.platform != SystemEnvData::Platform::Invalid);
+    const bool bIsX11 = m_aSystemData.platform == SystemEnvData::Platform::Xcb;
     std::optional<unsigned int> aRootWindow;
     std::optional<Display*> aDisplay;
 
+#if CHECK_QT5_USING_X11
     if (QX11Info::isPlatformX11())
     {
         aRootWindow = QX11Info::appRootWindow();
         aDisplay = QX11Info::display();
     }
-
-    m_ScreenSaverInhibitor.inhibit(bStart, u"presentation", QX11Info::isPlatformX11(), aRootWindow,
-                                   aDisplay);
-#else
-    (void)bStart;
 #endif
+
+    m_ScreenSaverInhibitor.inhibit(bStart, u"presentation", bIsX11, aRootWindow, aDisplay);
 }
 
 void QtFrame::SetAlwaysOnTop(bool bOnTop)
@@ -1435,22 +1390,9 @@ void QtFrame::SetApplicationID(const OUString& rWMClass)
     if (m_aSystemData.platform != SystemEnvData::Platform::Xcb || !m_pTopLevel)
         return;
 
-    OString aResClass = OUStringToOString(rWMClass, RTL_TEXTENCODING_ASCII_US);
-    const char* pResClass
-        = !aResClass.isEmpty() ? aResClass.getStr() : SalGenericSystem::getFrameClassName();
-    OString aResName = SalGenericSystem::getFrameResName();
-
-    // the WM_CLASS data consists of two concatenated cstrings, including the terminating '\0' chars
-    const uint32_t data_len = aResName.getLength() + 1 + strlen(pResClass) + 1;
-    char* data = new char[data_len];
-    memcpy(data, aResName.getStr(), aResName.getLength() + 1);
-    memcpy(data + aResName.getLength() + 1, pResClass, strlen(pResClass) + 1);
-
-    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, m_pTopLevel->winId(),
-                        XCB_ATOM_WM_CLASS, XCB_ATOM_STRING, 8, data_len, data);
-    delete[] data;
+    QtXcbEventFilter::setApplicationID(m_pTopLevel->winId(), rWMClass);
 #else
-    (void)rWMClass;
+    Q_UNUSED(rWMClass);
 #endif
 }
 
