@@ -95,9 +95,8 @@ public:
     virtual bool            SVMainHook(int*) { return false; }
 
     // Frame
-    // DisplayName for Unix ???
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) = 0;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) = 0;
+    virtual SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags, vcl::Window&) = 0;
+    virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags, vcl::Window&) = 0;
     virtual void            DestroyFrame( SalFrame* pFrame ) = 0;
 
     // Object (System Child Window)
@@ -112,7 +111,7 @@ public:
     // its size; otherwise these remain unchanged.
     virtual std::unique_ptr<SalVirtualDevice>
                             CreateVirtualDevice( SalGraphics& rGraphics,
-                                                 tools::Long &rDX, tools::Long &rDY,
+                                                 sal_Int32 &rDX, sal_Int32 &rDY,
                                                  DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) = 0;
 
     // Printer

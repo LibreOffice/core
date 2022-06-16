@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALGEOM_HXX
-#define INCLUDED_VCL_INC_SALGEOM_HXX
+#pragma once
 
 #include <iostream>
 
 #include <vcl/dllapi.h>
 #include <vcl/WindowPosSize.hxx>
+#include <tools/gen.hxx>
 #include <tools/long.hxx>
 
 // There are some unused functions, which I would keep to ease understanding.
@@ -103,18 +103,5 @@ inline std::ostream& operator<<(std::ostream& s, const SalFrameGeometry& rGeom)
       << "}s" << rGeom.screen();
     return s;
 }
-
-/// Interface used to share logic on sizing between
-/// SalVirtualDevices and SalFrames
-class VCL_PLUGIN_PUBLIC SalGeometryProvider
-{
-public:
-    virtual ~SalGeometryProvider() {}
-    virtual tools::Long GetWidth() const = 0;
-    virtual tools::Long GetHeight() const = 0;
-    virtual bool IsOffScreen() const = 0;
-};
-
-#endif // INCLUDED_VCL_INC_SALGEOM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

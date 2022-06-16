@@ -3027,28 +3027,4 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 #endif
 }
 
-void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
-{
-    char* pForceDpi;
-    if ((pForceDpi = getenv("SAL_FORCEDPI")))
-    {
-        OString sForceDPI(pForceDpi);
-        rDPIX = rDPIY = sForceDPI.toInt32();
-        return;
-    }
-
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    GdkScreen* pScreen = gtk_widget_get_screen(mpWindow);
-    double fResolution = -1.0;
-    g_object_get(pScreen, "resolution", &fResolution, nullptr);
-
-    if (fResolution > 0.0)
-        rDPIX = rDPIY = sal_Int32(fResolution);
-    else
-        rDPIX = rDPIY = 96;
-#else
-    rDPIX = rDPIY = 96;
-#endif
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,8 +25,8 @@
 #include <QtWidgets/QLabel>
 
 #include <QtTools.hxx>
-#include <QtGraphicsBase.hxx>
 #include <vcl/decoview.hxx>
+#include <salgdi.hxx>
 
 /**
   Conversion function between VCL ControlState together with
@@ -74,9 +74,10 @@ static void lcl_ApplyBackgroundColorToStyleOption(QStyleOption& rOption,
     }
 }
 
-QtGraphics_Controls::QtGraphics_Controls(const QtGraphicsBase& rGraphics)
+QtGraphics_Controls::QtGraphics_Controls(const SalGraphics& rGraphics)
     : m_rGraphics(rGraphics)
 {
+    // can't call setDevicePixelRatio on an empty QImage...
 }
 
 bool QtGraphics_Controls::isNativeControlSupported(ControlType type, ControlPart part)
@@ -268,8 +269,8 @@ bool QtGraphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     {
         m_image.reset(new QImage(widgetRect.width(), widgetRect.height(),
                                  QImage::Format_ARGB32_Premultiplied));
-        m_image->setDevicePixelRatio(m_rGraphics.devicePixelRatioF());
     }
+    m_image->setDevicePixelRatio(m_rGraphics.GetDPIScaleFactor());
 
     // Default image color - just once
     switch (type)
@@ -1094,14 +1095,14 @@ bool QtGraphics_Controls::hitTestNativeControl(ControlType nType, ControlPart nP
 
 inline int QtGraphics_Controls::downscale(int size, Round eRound)
 {
-    return static_cast<int>(eRound == Round::Ceil ? ceil(size / m_rGraphics.devicePixelRatioF())
-                                                  : floor(size / m_rGraphics.devicePixelRatioF()));
+    const float fScale = m_rGraphics.GetDPIScaleFactor();
+    return static_cast<int>(eRound == Round::Ceil ? ceil(size / fScale) : floor(size / fScale));
 }
 
 inline int QtGraphics_Controls::upscale(int size, Round eRound)
 {
-    return static_cast<int>(eRound == Round::Ceil ? ceil(size * m_rGraphics.devicePixelRatioF())
-                                                  : floor(size * m_rGraphics.devicePixelRatioF()));
+    const float fScale = m_rGraphics.GetDPIScaleFactor();
+    return static_cast<int>(eRound == Round::Ceil ? ceil(size * fScale) : floor(size * fScale));
 }
 
 inline QRect QtGraphics_Controls::downscale(const QRect& rect)

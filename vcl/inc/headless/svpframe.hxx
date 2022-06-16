@@ -57,9 +57,7 @@ class SvpSalFrame : public SalFrame
     OUString m_sTitle;
 
 public:
-    SvpSalFrame( SvpSalInstance* pInstance,
-                 SalFrame* pParent,
-                 SalFrameStyleFlags nSalFrameStyle );
+    SvpSalFrame(SvpSalInstance*, SalFrame* pParent, SalFrameStyleFlags, vcl::Window&);
     virtual ~SvpSalFrame() override;
 
     void GetFocus();
@@ -86,7 +84,8 @@ public:
     virtual void                SetMinClientSize( tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                SetMaxClientSize( tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags ) override;
-    virtual void                GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) override;
+    virtual void GetDPI(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+    virtual void GetClientSize(sal_Int32& rWidth, sal_Int32& rHeight) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void SetWindowState(const vcl::WindowData*) override;
@@ -121,6 +120,8 @@ public:
     /*TODO: functional implementation */
     virtual void                SetScreenNumber( unsigned int ) override {}
     virtual void                SetApplicationID(const OUString &) override {}
+
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 
 private:
     basegfx::B2IVector GetSurfaceFrameSize() const;

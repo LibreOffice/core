@@ -56,7 +56,6 @@
 WinSalBitmap::WinSalBitmap()
 :   SalBitmap(),
     basegfx::SystemDependentDataHolder(),
-    maSize(),
     mhDIB(nullptr),
     mhDDB(nullptr),
     mnBitCount(0)
@@ -912,6 +911,21 @@ bool WinSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, 
 bool WinSalBitmap::Replace( const Color& /*rSearchColor*/, const Color& /*rReplaceColor*/, sal_uInt8 /*nTol*/ )
 {
     return false;
+}
+
+sal_Int32 WinSalBitmap::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width: return maSize.Width();
+        case vcl::SGPmetric::Height: return maSize.Height();
+        case vcl::SGPmetric::DPIX: return 96;
+        case vcl::SGPmetric::DPIY: return 96;
+        case vcl::SGPmetric::ScalePercentage: return 100;
+        case vcl::SGPmetric::OffScreen: return true;
+        case vcl::SGPmetric::BitCount: return mnBitCount;
+    }
+    return -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

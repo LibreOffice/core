@@ -74,7 +74,9 @@ typedef std::map< sal_Ucs, sal_uInt32 >   Ucs2UIntMap;
 // note: all positions are in pixel and relative to
 // the top/left-position of the virtual output area
 
-class VCL_PLUGIN_PUBLIC SalGraphics : protected vcl::WidgetDrawInterface
+class VCL_PLUGIN_PUBLIC SalGraphics
+    : protected vcl::WidgetDrawInterface
+    , public vcl::SalGeometryProvider
 {
 public:
     SalGraphics();
@@ -107,15 +109,6 @@ public:
     }
 
     // public SalGraphics methods, the interface to the independent vcl part
-
-    // get device resolution
-    virtual void                GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) = 0;
-
-    // get the depth of the device
-    virtual sal_uInt16          GetBitCount() const = 0;
-
-    // get the width of the device
-    virtual tools::Long                GetGraphicsWidth() const = 0;
 
     // set the clip region to empty
     virtual void                ResetClipRegion() = 0;
@@ -708,16 +701,6 @@ void SalGraphics::handleDamage(const tools::Rectangle&) {}
 class VCL_DLLPUBLIC SalGraphicsAutoDelegateToImpl : public SalGraphics
 {
 public:
-    sal_uInt16 GetBitCount() const override
-    {
-        return GetImpl()->GetBitCount();
-    }
-
-    tools::Long GetGraphicsWidth() const override
-    {
-        return GetImpl()->GetGraphicsWidth();
-    }
-
     void ResetClipRegion() override
     {
         GetImpl()->ResetClipRegion();

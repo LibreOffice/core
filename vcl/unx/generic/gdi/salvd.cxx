@@ -35,7 +35,7 @@
 #endif
 
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(const SalGraphics& rGraphics,
-        tools::Long &nDX, tools::Long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
+        sal_Int32 &nDX, sal_Int32 &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
         std::unique_ptr<X11SalGraphics> pNewGraphics)
 {
     assert(pNewGraphics);
@@ -48,7 +48,7 @@ std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(const S
 }
 
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphics& rGraphics,
-        tools::Long &nDX, tools::Long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData)
+        sal_Int32 &nDX, sal_Int32 &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData)
 {
     return CreateX11VirtualDevice(rGraphics, nDX, nDY, eFormat, pData, std::make_unique<X11SalGraphics>());
 }
@@ -76,17 +76,16 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, cairo_surface_t* pPreEx
         maX11Common.m_pColormap = m_pDeleteColormap.get();
     }
 
+    assert(pDevice);
     m_pVDev      = pDevice;
     m_pFrame     = nullptr;
-
     bWindow_     = pDisplay->IsDisplay();
-    bVirDev_     = true;
 
     SetDrawable(pDevice->GetDrawable(), pPreExistingTarget, m_nXScreen);
     mxImpl->Init();
 }
 
-X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Long &nDX, tools::Long &nDY,
+X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, sal_Int32 &nDX, sal_Int32 &nDY,
                                          DeviceFormat /*eFormat*/, const SystemGraphicsData *pData,
                                          std::unique_ptr<X11SalGraphics> pNewGraphics) :
     pGraphics_(std::move(pNewGraphics)),
@@ -181,13 +180,12 @@ SalGraphics* X11SalVirtualDevice::AcquireGraphics()
 void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
 { bGraphics_ = false; }
 
-bool X11SalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
+bool X11SalVirtualDevice::SetSizeUsingBuffer(sal_Int32 nDX, sal_Int32 nDY, sal_uInt8*, sal_Int32 nScale)
 {
     if( bExternPixmap_ )
         return false;
 
-    if( !nDX ) nDX = 1;
-    if( !nDY ) nDY = 1;
+    FixSetSizeParams(nDX, nDY, nScale);
 
     Pixmap h = limitXCreatePixmap( GetXDisplay(),
                               pDisplay_->GetDrawable( m_nXScreen ),
@@ -217,6 +215,21 @@ bool X11SalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
         pGraphics_->Init( this );
 
     return true;
+}
+
+sal_Int32 X11SalVirtualDevice::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width: return nDX_;
+        case vcl::SGPmetric::Height: return nDY_;
+        case vcl::SGPmetric::DPIX: return 96;
+        case vcl::SGPmetric::DPIY: return 96;
+        case vcl::SGPmetric::ScalePercentage: return 100;
+        case vcl::SGPmetric::OffScreen: return true;
+        case vcl::SGPmetric::BitCount: return nDepth_;
+    }
+    return -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

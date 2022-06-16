@@ -555,11 +555,14 @@ void QtMenu::SetItemImage(unsigned, SalMenuItem* pItem, const Image& rImage)
 
     // Save new image to use it in DoFullMenuUpdate
     pSalMenuItem->maImage = rImage;
+    if (!rImage)
+        return;
 
     QAction* pAction = pSalMenuItem->getAction();
     if (!pAction)
         return;
 
+    assert(!mpFrame);
     pAction->setIcon(QPixmap::fromImage(toQImage(rImage)));
 }
 

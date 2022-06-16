@@ -472,7 +472,7 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
         else
             n = 1; // printer or other display
     }
-    else if( pSrcGraphics->bVirDev_ )
+    else if (pSrcGraphics->m_pVDev)
     {
         n = 1; // window or compatible virtual device
     }
@@ -488,7 +488,7 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
         // obscured areas beneath overlapping windows), src and dest
         // are the same window.
         const bool bNeedGraphicsExposures( pSrcGraphics == &mrParent &&
-                                           !mrParent.bVirDev_ &&
+                                           !mrParent.m_pVDev &&
                                            pSrcGraphics->bWindow_ );
 
         GC pCopyGC = GetCopyGC();
@@ -1419,7 +1419,7 @@ bool X11SalGraphicsImpl::drawPolyPolygon(
         aPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges( aPolyPolygon );
 
     // don't bother with polygons outside of visible area
-    const basegfx::B2DRange aViewRange( 0, 0, GetGraphicsWidth(), GetGraphicsHeight() );
+    const basegfx::B2DRange aViewRange(0, 0, mrParent.GetWidth(), mrParent.GetHeight());
     aPolyPolygon = basegfx::utils::clipPolyPolygonOnRange( aPolyPolygon, aViewRange, true, false );
     if( !aPolyPolygon.count() )
         return true;
@@ -1432,16 +1432,6 @@ bool X11SalGraphicsImpl::drawPolyPolygon(
         return true;
     const bool bDrawn = drawFilledTrapezoids( aB2DTrapVector.data(), nTrapCount, fTransparency );
     return bDrawn;
-}
-
-tools::Long X11SalGraphicsImpl::GetGraphicsHeight() const
-{
-    if( mrParent.m_pFrame )
-        return mrParent.m_pFrame->maGeometry.height();
-    else if( mrParent.m_pVDev )
-        return static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetHeight();
-    else
-        return 0;
 }
 
 bool X11SalGraphicsImpl::drawFilledTrapezoids( const basegfx::B2DTrapezoid* pB2DTraps, int nTrapCount, double fTransparency )
@@ -1857,7 +1847,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
 
 Color X11SalGraphicsImpl::getPixel( tools::Long nX, tools::Long nY )
 {
-    if( mrParent.bWindow_ && !mrParent.bVirDev_ )
+    if (mrParent.bWindow_ && !mrParent.m_pVDev)
     {
         XWindowAttributes aAttrib;
 
@@ -1905,7 +1895,7 @@ std::shared_ptr<SalBitmap> X11SalGraphicsImpl::getBitmap( tools::Long nX, tools:
         nDY = -nDY;
     }
 
-    if( mrParent.bWindow_ && !mrParent.bVirDev_ )
+    if (mrParent.bWindow_ && !mrParent.m_pVDev)
     {
         XWindowAttributes aAttrib;
 
@@ -1943,7 +1933,7 @@ std::shared_ptr<SalBitmap> X11SalGraphicsImpl::getBitmap( tools::Long nX, tools:
     }
 
     std::shared_ptr<X11SalBitmap> pSalBitmap = std::make_shared<X11SalBitmap>();
-    sal_uInt16 nBitCount = GetBitCount();
+    sal_uInt16 nBitCount = mrParent.GetBitCount();
     vcl::PixelFormat ePixelFormat = vcl::bitDepthToPixelFormat(nBitCount);
 
     if( &mrParent.GetDisplay()->GetColormap( mrParent.m_nXScreen ) != &mrParent.GetColormap() )
@@ -1961,21 +1951,6 @@ std::shared_ptr<SalBitmap> X11SalGraphicsImpl::getBitmap( tools::Long nX, tools:
         pSalBitmap->Create( Size( nDX, nDY ), ePixelFormat, BitmapPalette( nBitCount > 8 ? nBitCount : 0 ) );
 
     return pSalBitmap;
-}
-
-sal_uInt16 X11SalGraphicsImpl::GetBitCount() const
-{
-    return mrParent.GetVisual().GetDepth();
-}
-
-tools::Long X11SalGraphicsImpl::GetGraphicsWidth() const
-{
-    if( mrParent.m_pFrame )
-        return mrParent.m_pFrame->maGeometry.width();
-    else if( mrParent.m_pVDev )
-        return static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetWidth();
-    else
-        return 0;
 }
 
 bool X11SalGraphicsImpl::drawGradient(const tools::PolyPolygon& /*rPolygon*/, const Gradient& /*rGradient*/)

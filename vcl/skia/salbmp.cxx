@@ -199,9 +199,27 @@ void SkiaSalBitmap::Destroy()
     ResetAllData();
 }
 
-Size SkiaSalBitmap::GetSize() const { return mSize; }
-
-sal_uInt16 SkiaSalBitmap::GetBitCount() const { return mBitCount; }
+sal_Int32 SkiaSalBitmap::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width:
+            return mSize.Width();
+        case vcl::SGPmetric::Height:
+            return mSize.Height();
+        case vcl::SGPmetric::DPIX:
+            return 96;
+        case vcl::SGPmetric::DPIY:
+            return 96;
+        case vcl::SGPmetric::ScalePercentage:
+            return 100;
+        case vcl::SGPmetric::OffScreen:
+            return true;
+        case vcl::SGPmetric::BitCount:
+            return mBitCount;
+    }
+    return -1;
+}
 
 BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
 {

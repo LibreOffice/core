@@ -27,13 +27,12 @@ void X11SalGraphics::Init(X11SkiaSalVirtualDevice* pDevice)
     m_pFrame = nullptr;
 
     bWindow_ = pDisplay->IsDisplay();
-    bVirDev_ = true;
 
     mxImpl->Init();
 }
 
-X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(const SalGraphics& rGraphics, tools::Long nDX,
-                                                 tools::Long nDY, const SystemGraphicsData* pData,
+X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(const SalGraphics& rGraphics, sal_Int32 nDX,
+                                                 sal_Int32 nDY, const SystemGraphicsData* pData,
                                                  std::unique_ptr<X11SalGraphics> pNewGraphics)
     : mpGraphics(std::move(pNewGraphics))
     , mbGraphics(false)
@@ -54,6 +53,28 @@ X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(const SalGraphics& rGraphics, t
 
 X11SkiaSalVirtualDevice::~X11SkiaSalVirtualDevice() {}
 
+sal_Int32 X11SkiaSalVirtualDevice::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width:
+            return mnWidth;
+        case vcl::SGPmetric::Height:
+            return mnHeight;
+        case vcl::SGPmetric::DPIX:
+            return 96;
+        case vcl::SGPmetric::DPIY:
+            return 96;
+        case vcl::SGPmetric::ScalePercentage:
+            return 100;
+        case vcl::SGPmetric::OffScreen:
+            return true;
+        case vcl::SGPmetric::BitCount:
+            return 32;
+    }
+    return -1;
+}
+
 SalGraphics* X11SkiaSalVirtualDevice::AcquireGraphics()
 {
     if (mbGraphics)
@@ -67,13 +88,10 @@ SalGraphics* X11SkiaSalVirtualDevice::AcquireGraphics()
 
 void X11SkiaSalVirtualDevice::ReleaseGraphics(SalGraphics*) { mbGraphics = false; }
 
-bool X11SkiaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY)
+bool X11SkiaSalVirtualDevice::SetSizeUsingBuffer(sal_Int32 nDX, sal_Int32 nDY, sal_uInt8*,
+                                                 sal_Int32 nScale)
 {
-    if (!nDX)
-        nDX = 1;
-    if (!nDY)
-        nDY = 1;
-
+    FixSetSizeParams(nDX, nDY, nScale);
     mnWidth = nDX;
     mnHeight = nDY;
     if (mpGraphics)

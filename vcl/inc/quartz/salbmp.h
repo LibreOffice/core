@@ -67,9 +67,6 @@ public:
 
     void            Destroy() override;
 
-    Size            GetSize() const override;
-    sal_uInt16          GetBitCount() const override;
-
     BitmapBuffer   *AcquireBuffer( BitmapAccessMode nMode ) override;
     void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;
 
@@ -78,6 +75,8 @@ public:
     bool            ScalingSupported() const override;
     bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
     bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol ) override;
+
+    sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 
 private:
     // quartz helper

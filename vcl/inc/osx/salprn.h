@@ -76,7 +76,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     virtual bool                SetPrinterData( ImplJobSetup* pSetupData ) override;
     virtual bool                SetData( JobSetFlags i_nFlags, ImplJobSetup* i_pSetupData ) override;
     virtual void                GetPageInfo( const ImplJobSetup* i_pSetupData,
-                                             tools::Long& o_rOutWidth, tools::Long& o_rOutHeight,
+                                             sal_Int32& o_rOutWidth, sal_Int32& o_rOutHeight,
                                              Point& rPageOffset,
                                              Size& rPaperSize ) override;
     virtual sal_uInt32          GetCapabilities( const ImplJobSetup* i_pSetupData, PrinterCapType i_nType ) override;

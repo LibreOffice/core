@@ -24,9 +24,9 @@
 
 #include <QtGui/QImage>
 
-QtVirtualDevice::QtVirtualDevice(double fScale)
-    : m_fScale(fScale)
+QtVirtualDevice::QtVirtualDevice(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_Int32 nScale)
 {
+    SetSizeUsingBuffer(nNewDX, nNewDY, nullptr, nScale);
 }
 
 SalGraphics* QtVirtualDevice::AcquireGraphics()
@@ -45,25 +45,17 @@ void QtVirtualDevice::ReleaseGraphics(SalGraphics* pGraphics)
     delete pGraphics;
 }
 
-bool QtVirtualDevice::SetSize(tools::Long nNewDX, tools::Long nNewDY)
+bool QtVirtualDevice::SetSizeUsingBuffer(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8* pBuffer,
+                                         sal_Int32 nScale)
 {
-    return SetSizeUsingBuffer(nNewDX, nNewDY, nullptr);
-}
-
-bool QtVirtualDevice::SetSizeUsingBuffer(tools::Long nNewDX, tools::Long nNewDY, sal_uInt8* pBuffer)
-{
-    if (nNewDX == 0)
-        nNewDX = 1;
-    if (nNewDY == 0)
-        nNewDY = 1;
-
-    if (m_pImage && m_aFrameSize.width() == nNewDX && m_aFrameSize.height() == nNewDY)
+    FixSetSizeParams(nNewDX, nNewDY, nScale);
+    if (!pBuffer && m_pImage && m_pImage->width() == nNewDX && m_pImage->height() == nNewDY
+        && nScale == GetDPIScalePercentage())
         return true;
 
-    m_aFrameSize = QSize(nNewDX, nNewDY);
-
-    nNewDX *= m_fScale;
-    nNewDY *= m_fScale;
+    float fScale = nScale / 100.0;
+    nNewDX *= fScale;
+    nNewDY *= fScale;
 
     if (pBuffer)
         m_pImage.reset(new QImage(pBuffer, nNewDX, nNewDY, Qt_DefaultFormat32));
@@ -71,17 +63,21 @@ bool QtVirtualDevice::SetSizeUsingBuffer(tools::Long nNewDX, tools::Long nNewDY,
         m_pImage.reset(new QImage(nNewDX, nNewDY, Qt_DefaultFormat32));
 
     m_pImage->fill(Qt::transparent);
-    m_pImage->setDevicePixelRatio(m_fScale);
+    m_pImage->setDevicePixelRatio(fScale);
 
     // update device in existing graphics
     for (auto pQtGraph : m_aGraphics)
-        pQtGraph->ChangeQImage(m_pImage.get());
+        pQtGraph->setQImage(m_pImage.get());
 
     return true;
 }
 
-tools::Long QtVirtualDevice::GetWidth() const { return m_pImage ? m_aFrameSize.width() : 0; }
-
-tools::Long QtVirtualDevice::GetHeight() const { return m_pImage ? m_aFrameSize.height() : 0; }
+sal_Int32 QtVirtualDevice::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    assert(m_pImage);
+    if (!m_pImage)
+        return -1;
+    return ::GetSgpMetricFromQImage(eMetric, *m_pImage);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

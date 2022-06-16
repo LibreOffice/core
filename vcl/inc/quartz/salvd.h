@@ -57,17 +57,8 @@ public:
 
     virtual SalGraphics*            AcquireGraphics() override;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) override;
-    virtual bool                    SetSize( tools::Long nNewDX, tools::Long nNewDY ) override;
-
-    tools::Long GetWidth() const override
-    {
-        return mnWidth;
-    }
-
-    tools::Long GetHeight() const override
-    {
-        return mnHeight;
-    }
+    bool SetSizeUsingBuffer(sal_Int32 nDX, sal_Int32 nDY, sal_uInt8* pData, sal_Int32 nScale) override;
+    sal_Int32 GetSgpMetric(vcl::SGPmetric) const override;
 };
 
 #endif // INCLUDED_VCL_INC_QUARTZ_SALVD_H

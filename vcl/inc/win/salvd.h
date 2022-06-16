@@ -55,13 +55,10 @@ public:
 
     virtual SalGraphics*    AcquireGraphics() override;
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
-    virtual bool            SetSize( tools::Long nNewDX, tools::Long nNewDY ) override;
+    bool SetSizeUsingBuffer(sal_Int32 nDX, sal_Int32 nDY, sal_uInt8*, sal_Int32 nScale) override;
+    sal_Int32 GetSgpMetric(vcl::SGPmetric) const override;
 
     static HBITMAP ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, tools::Long nDY, sal_uInt16 nBitCount, void **ppDummy);
-
-    // SalGeometryProvider
-    virtual tools::Long GetWidth() const override { return mnWidth; }
-    virtual tools::Long GetHeight() const override { return mnHeight; }
 };
 
 

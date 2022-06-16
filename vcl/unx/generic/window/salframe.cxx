@@ -41,6 +41,7 @@
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 #include <unx/salframe.h>
+#include <unx/salunx.h>
 #include <unx/wmadaptor.hxx>
 #include <unx/salbmp.h>
 #include <unx/i18n_ic.hxx>
@@ -784,7 +785,8 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
 }
 
 X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
-                          SystemParentData const * pSystemParent ) :
+                          SystemParentData const * pSystemParent, vcl::Window& rWin)
+    : SalFrame(rWin),
     m_nXScreen( 0 ),
     maAlwaysOnTopRaiseTimer( "vcl::X11SalFrame maAlwaysOnTopRaiseTimer" )
 {
@@ -1402,7 +1404,45 @@ void X11SalFrame::GetWorkArea( tools::Rectangle& rWorkArea )
     rWorkArea = pDisplay_->getWMAdaptor()->getWorkArea( 0 );
 }
 
-void X11SalFrame::GetClientSize( tools::Long &rWidth, tools::Long &rHeight )
+void X11SalFrame::GetDPI(sal_Int32 &rDPIX, sal_Int32 &rDPIY)
+{
+    char* pForceDpi;
+    if ((pForceDpi = getenv("SAL_FORCEDPI")))
+    {
+        OString sForceDPI(pForceDpi);
+        rDPIX = rDPIY = sForceDPI.toInt32();
+        return;
+    }
+
+    const SalDisplay *pDisplay = GetDisplay();
+    if (!pDisplay)
+    {
+        SAL_WARN("vcl", "Null display");
+        rDPIX = rDPIY = 96;
+        return;
+    }
+
+    Pair dpi = pDisplay->GetResolution();
+    rDPIX = dpi.A();
+    rDPIY = dpi.B();
+
+    if (rDPIY > 200)
+    {
+        rDPIX = Divide(rDPIX * 200, rDPIY);
+        rDPIY = 200;
+    }
+
+    // #i12705# equalize x- and y-resolution if they are close enough
+    if (rDPIX == rDPIY)
+        return;
+
+    // different x- and y- resolutions are usually artifacts of
+    // a wrongly calculated screen size.
+    SAL_INFO("vcl.gdi", "Overwriting DPIX of " << rDPIX << " with DPIY " << rDPIY);
+    rDPIX = rDPIY; // y-resolution is more trustworthy
+}
+
+void X11SalFrame::GetClientSize(sal_Int32 &rWidth, sal_Int32 &rHeight)
 {
     if( ! bViewable_  )
     {
@@ -4019,7 +4059,12 @@ void X11SalFrame::EndSetClipRegion()
                               m_vClipRectangles.data(),
                               m_vClipRectangles.size(),
                               op, ordering );
+}
 
+sal_Int32 X11SalFrame::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    assert(eMetric != vcl::SGPmetric::BitCount);
+    return SalFrame::GetWindow()->GetOutDev()->GetSgpMetric(eMetric);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

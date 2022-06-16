@@ -624,7 +624,7 @@ void CompatibleDC::fill(sal_uInt32 color)
         *p++ = color;
 }
 
-WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd, [[maybe_unused]] SalGeometryProvider *pProvider):
+WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd, [[maybe_unused]] vcl::SalGeometryProvider *pProvider):
     mhLocalDC(nullptr),
     mbPrinter(eType == WinSalGraphics::PRINTER),
     mbVirDev(eType == WinSalGraphics::VIRTUAL_DEVICE),
@@ -741,28 +741,6 @@ UINT WinSalGraphics::setPalette(HPALETTE hNewPal, BOOL bForceBkgd)
 HRGN WinSalGraphics::getRegion() const
 {
     return mhRegion;
-}
-
-void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
-{
-    rDPIX = GetDeviceCaps( getHDC(), LOGPIXELSX );
-    rDPIY = GetDeviceCaps( getHDC(), LOGPIXELSY );
-
-    // #111139# this fixes the symptom of div by zero on startup
-    // however, printing will fail most likely as communication with
-    // the printer seems not to work in this case
-    if( !rDPIX || !rDPIY )
-        rDPIX = rDPIY = 600;
-}
-
-sal_uInt16 WinSalGraphics::GetBitCount() const
-{
-    return mpImpl->GetBitCount();
-}
-
-tools::Long WinSalGraphics::GetGraphicsWidth() const
-{
-    return mpImpl->GetGraphicsWidth();
 }
 
 void WinSalGraphics::Flush()
@@ -1115,6 +1093,11 @@ SystemGraphicsData WinSalGraphics::GetGraphicsData() const
     aRes.nSize = sizeof(aRes);
     aRes.hDC = getHDC();
     return aRes;
+}
+
+sal_Int32 WinSalGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    return dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get())->GetSgpMetric(eMetric);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

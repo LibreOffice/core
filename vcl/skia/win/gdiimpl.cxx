@@ -34,7 +34,7 @@
 using namespace SkiaHelper;
 
 WinSkiaSalGraphicsImpl::WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics,
-                                               SalGeometryProvider* mpProvider)
+                                               vcl::SalGeometryProvider* mpProvider)
     : SkiaSalGraphicsImpl(rGraphics, mpProvider)
     , mWinParent(rGraphics)
 {
@@ -432,6 +432,12 @@ void WinSkiaSalGraphicsImpl::ClearNativeControlCache()
 {
     SalData* data = GetSalData();
     data->m_pSkiaControlsCache.reset();
+}
+
+sal_Int32 WinSkiaSalGraphicsImpl::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    assert(provider());
+    return provider()->GetSgpMetric(eMetric);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

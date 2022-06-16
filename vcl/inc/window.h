@@ -140,8 +140,6 @@ struct ImplFrameData
     std::vector<VclPtr<vcl::Window> > maOwnerDrawList;    //< List of system windows with owner draw decoration
     std::shared_ptr<vcl::font::PhysicalFontCollection> mxFontCollection;   //< Font-List for this frame
     std::shared_ptr<ImplFontCache> mxFontCache; //< Font-Cache for this frame
-    sal_Int32           mnDPIX;                 //< Original Screen Resolution
-    sal_Int32           mnDPIY;                 //< Original Screen Resolution
     ImplSVEvent *       mnFocusId;              //< FocusId for PostUserLink
     ImplSVEvent *       mnMouseMoveId;          //< MoveId for PostUserLink
     tools::Long                mnLastMouseX;           //< last x mouse position
@@ -214,11 +212,14 @@ namespace o3tl {
 }
 
 
-class WindowImpl
+class WindowImpl final
 {
+    friend class vcl::Window;
+
 private:
     WindowImpl(const WindowImpl&) = delete;
     WindowImpl& operator=(const WindowImpl&) = delete;
+
 public:
     WindowImpl( vcl::Window& rWindow, WindowType );
     ~WindowImpl();
@@ -431,7 +432,7 @@ bool ImplLOKHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEve
                               tools::Long nX, tools::Long nY, sal_uInt64 nMsgTime,
                               sal_uInt16 nCode, MouseEventModifiers nMode, sal_uInt16 nClicks);
 
-void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight );
+void ImplHandleResize(vcl::Window* pWindow, sal_Int32 nNewWidth, sal_Int32 nNewHeight);
 
 VCL_DLLPUBLIC css::uno::Reference<css::accessibility::XAccessibleEditableText>
 FindFocusedEditableText(css::uno::Reference<css::accessibility::XAccessibleContext> const&);

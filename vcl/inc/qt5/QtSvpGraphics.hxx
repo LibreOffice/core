@@ -22,21 +22,21 @@
 #include <vclpluginapi.h>
 #include <headless/svpgdi.hxx>
 
-#include "QtGraphicsBase.hxx"
-
 class QtFrame;
 
-class VCLPLUG_QT_PUBLIC QtSvpGraphics final : public SvpSalGraphics, public QtGraphicsBase
+class VCLPLUG_QT_PUBLIC QtSvpGraphics final : public SvpSalGraphics
 {
     QtFrame* const m_pFrame;
+    sal_Int32 m_nScalePercentage;
 
     void handleDamage(const tools::Rectangle&) override;
 
 public:
-    QtSvpGraphics(QtFrame* pFrame);
+    QtSvpGraphics(QtFrame* rFrame, sal_Int32 nScalePercentage = -1);
     ~QtSvpGraphics() override;
 
     void updateQWidget() const;
+    QtFrame* frame() const { return m_pFrame; }
 
 #if ENABLE_CAIRO_CANVAS
     bool SupportsCairo() const override;
@@ -46,7 +46,7 @@ public:
                                           int height) const override;
 #endif // ENABLE_CAIRO_CANVAS
 
-    virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 
     virtual OUString getRenderBackendName() const override { return "qt5svp"; }
 };

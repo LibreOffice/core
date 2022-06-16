@@ -76,15 +76,13 @@ public:
 
     virtual void DeInit() {}
 
+    virtual void Flush() {}
+
     virtual void freeResources() = 0;
 
     virtual OUString getRenderBackendName() const = 0;
 
     virtual bool setClipRegion( const vcl::Region& ) = 0;
-
-    virtual sal_uInt16 GetBitCount() const = 0;
-
-    virtual tools::Long GetGraphicsWidth() const = 0;
 
     virtual void ResetClipRegion() = 0;
 

@@ -295,7 +295,7 @@ sal_uInt32 AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, PrinterCapT
 }
 
 void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
-                                  tools::Long& o_rOutWidth, tools::Long& o_rOutHeight,
+                                  sal_Int32& o_rOutWidth, sal_Int32& o_rOutHeight,
                                   Point& rPageOffset,
                                   Size& rPaperSize )
 {

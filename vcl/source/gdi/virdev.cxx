@@ -124,15 +124,14 @@ void VirtualDevice::ReleaseGraphics( bool bRelease )
 }
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
-                                    tools::Long nDX, tools::Long nDY, const SystemGraphicsData *pData )
+                                    sal_Int32 nDX, sal_Int32 nDY, const SystemGraphicsData *pData )
 {
-    SAL_INFO( "vcl.virdev", "ImplInitVirDev(" << nDX << "," << nDY << ")" );
+    SAL_WARN("vcl.virdev", "ImplInitVirDev(" << pOutDev << ", " << nDX << ", " << nDY << ")");
 
     meRefDevMode = RefDevMode::NONE;
     mbForceZeroExtleadBug = false;
     mnBitCount = 0;
     mbScreenComp = false;
-
 
     bool bErase = nDX > 0 && nDY > 0;
 
@@ -144,30 +143,16 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 
     ImplSVData* pSVData = ImplGetSVData();
 
+    SAL_WARN_IF(!pOutDev, "vcl.virdev", "Fallback to default window! Quite probably you want to fix this.");
     if ( !pOutDev )
         pOutDev = ImplGetDefaultWindow()->GetOutDev();
+    assert(pOutDev);
     if( !pOutDev )
         return;
 
-    SalGraphics* pGraphics;
-    if ( !pOutDev->mpGraphics )
-        (void)pOutDev->AcquireGraphics();
-    pGraphics = pOutDev->mpGraphics;
-    if ( pGraphics )
-        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(*pGraphics, nDX, nDY, meFormat, pData);
-    else
-        mpVirDev = nullptr;
-    if ( !mpVirDev )
-    {
-        // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
-        throw css::uno::RuntimeException(
-            "Could not create system bitmap!",
-            css::uno::Reference< css::uno::XInterface >() );
-    }
-
     mnBitCount = pOutDev->GetBitCount();
-    mnOutWidth      = nDX;
-    mnOutHeight     = nDY;
+    m_nWidth = nDX;
+    m_nHeight = nDY;
 
     mbScreenComp    = pOutDev->IsScreenComp();
 
@@ -183,6 +168,29 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     {
         maTextColor = pOutDev->maTextColor;
         mbInitTextColor = true;
+    }
+
+    SalGraphics* pGraphics;
+    if (!pOutDev->mpGraphics)
+    {
+#ifndef NDEBUG
+        bool bRet =
+#endif
+            pOutDev->AcquireGraphics();
+        assert(bRet);
+    }
+    pGraphics = pOutDev->mpGraphics;
+    assert(pGraphics);
+    if ( pGraphics )
+        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice(*pGraphics, nDX, nDY, meFormat, pData);
+    else
+        mpVirDev = nullptr;
+    if ( !mpVirDev )
+    {
+        // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
+        throw css::uno::RuntimeException(
+            "Could not create system bitmap!",
+            css::uno::Reference< css::uno::XInterface >() );
     }
 
     // virtual devices have white background by default
@@ -210,7 +218,7 @@ VirtualDevice::VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormat,
                             << ", " << static_cast<int>(eAlphaFormat)
                             << ", " << static_cast<int>(eOutDevType) << " )" );
 
-    ImplInitVirDev(pCompDev ? pCompDev : Application::GetDefaultDevice(), 0, 0);
+    ImplInitVirDev(pCompDev, 1, 1);
 }
 
 VirtualDevice::VirtualDevice(const SystemGraphicsData& rData, const Size &rSize,
@@ -221,7 +229,8 @@ VirtualDevice::VirtualDevice(const SystemGraphicsData& rData, const Size &rSize,
 {
     SAL_INFO( "vcl.virdev", "VirtualDevice::VirtualDevice( " << static_cast<int>(eFormat) << " )" );
 
-    ImplInitVirDev(Application::GetDefaultDevice(), rSize.Width(), rSize.Height(), &rData);
+    assert(rSize.Width() > 0 && rSize.Height() > 0);
+    ImplInitVirDev(nullptr, rSize.Width(), rSize.Height(), &rData);
 }
 
 VirtualDevice::~VirtualDevice()
@@ -270,7 +279,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     }
 
     bool bRet;
-    tools::Long nNewWidth = rNewSize.Width(), nNewHeight = rNewSize.Height();
+    sal_Int32 nNewWidth = rNewSize.Width(), nNewHeight = rNewSize.Height();
 
     if ( nNewWidth < 1 )
         nNewWidth = 1;
@@ -287,8 +296,8 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
 
         if ( bRet )
         {
-            mnOutWidth  = rNewSize.Width();
-            mnOutHeight = rNewSize.Height();
+            m_nWidth  = rNewSize.Width();
+            m_nHeight = rNewSize.Height();
             Erase();
         }
     }
@@ -311,12 +320,12 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
             {
                 tools::Long nWidth;
                 tools::Long nHeight;
-                if ( mnOutWidth < nNewWidth )
-                    nWidth = mnOutWidth;
+                if ( m_nWidth < nNewWidth )
+                    nWidth = m_nWidth;
                 else
                     nWidth = nNewWidth;
-                if ( mnOutHeight < nNewHeight )
-                    nHeight = mnOutHeight;
+                if ( m_nHeight < nNewHeight )
+                    nHeight = m_nHeight;
                 else
                     nHeight = nNewHeight;
                 SalTwoRect aPosAry(0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight);
@@ -324,8 +333,8 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
                 pNewVirDev->ReleaseGraphics( pGraphics );
                 ReleaseGraphics();
                 mpVirDev = std::move(pNewVirDev);
-                mnOutWidth  = rNewSize.Width();
-                mnOutHeight = rNewSize.Height();
+                m_nWidth  = rNewSize.Width();
+                m_nHeight = rNewSize.Height();
                 bRet = true;
             }
             else
@@ -493,11 +502,6 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
 
     // prepare to use new font lists
     mxFontCache = std::make_shared<ImplFontCache>();
-}
-
-sal_uInt16 VirtualDevice::GetBitCount() const
-{
-    return mnBitCount;
 }
 
 bool VirtualDevice::UsePolyPolygonForComplexGradient()

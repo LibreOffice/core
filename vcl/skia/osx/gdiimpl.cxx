@@ -338,4 +338,10 @@ std::unique_ptr<sk_app::WindowContext> createMetalWindowContext(bool /*temporary
 
 void AquaSkiaSalGraphicsImpl::prepareSkia() { SkiaHelper::prepareSkia(createMetalWindowContext); }
 
+sal_Int32 AquaSkiaSalGraphicsImpl::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    assert(provider());
+    return provider()->GetSgpMetric(eMetric);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

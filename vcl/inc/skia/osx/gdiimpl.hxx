@@ -43,6 +43,7 @@ public:
 
     virtual void Flush() override;
     virtual void Flush(const tools::Rectangle&) override;
+    sal_Int32 GetSgpMetric(vcl::SGPmetric) const override;
 
 private:
     virtual int getWindowScaling() const override;

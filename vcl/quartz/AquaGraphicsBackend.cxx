@@ -243,35 +243,36 @@ void AquaGraphicsBackend::ResetClipRegion()
     }
 }
 
-sal_uInt16 AquaGraphicsBackend::GetBitCount() const
+sal_Int32 AquaSharedAttributes::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    sal_uInt16 nBits = mrShared.mnBitmapDepth ? mrShared.mnBitmapDepth : 32; //24;
-    return nBits;
-}
-
-tools::Long AquaGraphicsBackend::GetGraphicsWidth() const
-{
-    tools::Long width = 0;
-    if (mrShared.maContextHolder.isSet()
-        && (
-#ifndef IOS
-               mrShared.mbWindow ||
-#endif
-               mrShared.mbVirDev))
+    switch (eMetric)
     {
-        width = mrShared.mnWidth;
-    }
-
-#ifndef IOS
-    if (width == 0)
-    {
-        if (mrShared.mbWindow && mrShared.mpFrame)
+        case vcl::SGPmetric::Width:
         {
-            width = mrShared.mpFrame->maGeometry.width();
-        }
-    }
+            sal_Int32 nWidth = 0;
+            if (mrShared.maContextHolder.isSet()
+                && (
+#ifndef IOS
+                       mrShared.mbWindow ||
 #endif
-    return width;
+                       mrShared.mbVirDev))
+            {
+                nWidth = mrShared.mnWidth;
+            }
+#ifndef IOS
+            if ((nWidth == 0) && (mrShared.mbWindow && mrShared.mpFrame))
+                nWidth = mrShared.mpFrame->maGeometry.width();
+#endif
+            return nWidth;
+        }
+        case vcl::SGPmetric::Height:
+            return mrShared.mnHeight;
+        case vcl::SGPmetric::OffScreen:
+            return true;
+        case vcl::SGPmetric::BitCount:
+            return mrShared.mnBitmapDepth ? mrShared.mnBitmapDepth : 32;
+    }
+    return -1;
 }
 
 void AquaGraphicsBackend::SetLineColor()
@@ -1022,31 +1023,6 @@ Color AquaGraphicsBackend::getPixel(tools::Long nX, tools::Long nY)
     return nColor;
 }
 
-void AquaSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
-{
-#ifndef IOS
-    if (!mnRealDPIY)
-    {
-        initResolution((maShared.mbWindow && maShared.mpFrame) ? maShared.mpFrame->getNSWindow()
-                                                               : nil);
-    }
-
-    rDPIX = mnRealDPIX;
-    rDPIY = mnRealDPIY;
-#else
-    // This *must* be 96 or else the iOS app will behave very badly (tiles are scaled wrongly and
-    // don't match each others at their boundaries, and other issues). But *why* it must be 96 I
-    // have no idea. The commit that changed it to 96 from (the arbitrary) 200 did not say. If you
-    // know where else 96 is explicitly or implicitly hard-coded, please modify this comment.
-
-    // Follow-up: It might be this: in 'online', loleaflet/src/map/Map.js:
-    // 15 = 1440 twips-per-inch / 96 dpi.
-    // Chosen to match previous hardcoded value of 3840 for
-    // the current tile pixel size of 256.
-    rDPIX = rDPIY = 96;
-#endif
-}
-
 void AquaGraphicsBackend::pattern50Fill()
 {
     static const CGFloat aFillCol[4] = { 1, 1, 1, 1 };
@@ -1351,6 +1327,23 @@ bool AquaGraphicsBackend::supportsOperation(OutDevSupportType eType) const
             break;
     }
     return false;
+}
+
+sal_Int32 AquaGraphicsBackend::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    SalData* pSalData = GetSalData();
+    assert(pSalData->mnDPIX > 0);
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::DPIX:
+            return pSalData->mnDPIX;
+        case vcl::SGPmetric::DPIY:
+            return pSalData->mnDPIY;
+        case vcl::SGPmetric::ScalePercentage:
+            return pSalData->mnDPIX * 100 / 96;
+        default:
+            return mrShared.GetSgpMetric(eMetric);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

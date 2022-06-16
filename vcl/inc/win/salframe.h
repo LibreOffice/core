@@ -29,6 +29,11 @@
 #include <salframe.hxx>
 #include <svsys.h>
 
+namespace vcl
+{
+class Window;
+}
+
 class WinSalGraphics;
 
 class WinSalFrame final: public SalFrame
@@ -92,7 +97,7 @@ private:
     bool ReleaseFrameGraphicsDC( WinSalGraphics* pGraphics );
 
 public:
-    WinSalFrame();
+    WinSalFrame(vcl::Window&);
     virtual ~WinSalFrame() override;
 
     virtual SalGraphics*        AcquireGraphics() override;
@@ -106,7 +111,9 @@ public:
     virtual void                SetMinClientSize( tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                SetMaxClientSize( tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags ) override;
-    virtual void                GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) override;
+    void GetClientSize(sal_Int32& rWidth, sal_Int32& rHeight) override;
+    void GetDPI(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+    sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void SetWindowState(const vcl::WindowData*) override;

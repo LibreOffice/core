@@ -8479,11 +8479,9 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
 
     sal_Int32 nOldDPIX = GetDPIX();
     sal_Int32 nOldDPIY = GetDPIY();
-    SetDPIX(fResolutionDPI);
-    SetDPIY(fResolutionDPI);
+    SetDPI(fResolutionDPI, fResolutionDPI);
     Size aSize = PixelToLogic(rEmit.m_aPixelSize, MapMode(m_aMapMode.GetMapUnit()));
-    SetDPIX(nOldDPIX);
-    SetDPIY(nOldDPIY);
+    SetDPI(nOldDPIX, nOldDPIY);
     double fScaleX = 1.0 / aSize.Width();
     double fScaleY = 1.0 / aSize.Height();
 

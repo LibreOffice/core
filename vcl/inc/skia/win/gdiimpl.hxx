@@ -29,6 +29,10 @@
 
 class SkTypeface;
 class ControlCacheKey;
+namespace vcl
+{
+class SalGeometryProvider;
+}
 
 class SkiaCompatibleDC : public CompatibleDC
 {
@@ -44,7 +48,7 @@ private:
     WinSalGraphics& mWinParent;
 
 public:
-    WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics, SalGeometryProvider* mpProvider);
+    WinSkiaSalGraphicsImpl(WinSalGraphics& rGraphics, vcl::SalGeometryProvider* mpProvider);
 
     virtual bool UseRenderNativeControl() const override { return true; }
     virtual bool TryRenderCachedNativeControl(ControlCacheKey const& rControlCacheKey, int nX,
@@ -58,6 +62,7 @@ public:
 
     virtual void freeResources() override;
     virtual void Flush() override;
+    sal_Int32 GetSgpMetric(vcl::SGPmetric) const override;
 
     static void prepareSkia();
 

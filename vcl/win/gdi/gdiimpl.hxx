@@ -34,7 +34,6 @@ class WinSalGraphics;
 class WinSalGraphicsImpl : public SalGraphicsImpl, public WinSalGraphicsImplBase
 {
 private:
-
     WinSalGraphics& mrParent;
     bool mbXORMode : 1; // _every_ output with RasterOp XOR
     bool mbPen : 1; // is Pen (FALSE == NULL_PEN)
@@ -60,8 +59,10 @@ private:
     HBRUSH SearchStockBrush(COLORREF nBrushColor);
     HBRUSH MakeBrush(Color nColor);
     void ResetBrush(HBRUSH hNewBrush);
-public:
+    sal_uInt16 GetBitCount() const;
+    tools::Long GetGraphicsWidth() const;
 
+public:
     explicit WinSalGraphicsImpl(WinSalGraphics& rParent);
 
     virtual ~WinSalGraphicsImpl() override;
@@ -73,12 +74,6 @@ public:
     virtual OUString getRenderBackendName() const override { return "gdi"; }
 
     virtual bool setClipRegion( const vcl::Region& ) override;
-    //
-    // get the depth of the device
-    virtual sal_uInt16 GetBitCount() const override;
-
-    // get the width of the device
-    virtual tools::Long GetGraphicsWidth() const override;
 
     // set the clip region to empty
     virtual void ResetClipRegion() override;
@@ -241,6 +236,7 @@ public:
                     tools::Long nWidth, tools::Long nHeight,
                     sal_uInt8 nTransparency ) override;
 
+    sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
             const Gradient& rGradient) override;

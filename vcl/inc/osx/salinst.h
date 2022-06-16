@@ -93,15 +93,15 @@ public:
     virtual void AfterAppInit() override;
     virtual bool SVMainHook(int *) override;
 
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
+    SalFrame* CreateChildFrame(SystemParentData*, SalFrameStyleFlags, vcl::Window&) override;
+    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags, vcl::Window&) override;
     virtual void            DestroyFrame( SalFrame* pFrame ) override;
     virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData,
                                           bool bShow ) override;
     virtual void            DestroyObject( SalObject* pObject ) override;
     virtual std::unique_ptr<SalVirtualDevice>
                             CreateVirtualDevice( SalGraphics& rGraphics,
-                                                   tools::Long &nDX, tools::Long &nDY,
+                                                   sal_Int32& nDX, sal_Int32& nDY,
                                                    DeviceFormat eFormat,
                                                    const SystemGraphicsData *pData = nullptr ) override;
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,

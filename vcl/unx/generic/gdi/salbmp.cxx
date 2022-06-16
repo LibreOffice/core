@@ -712,36 +712,19 @@ void X11SalBitmap::Destroy()
         mpCache->ImplRemove( this );
 }
 
-Size X11SalBitmap::GetSize() const
+sal_Int32 X11SalBitmap::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    Size aSize;
-
-    if( mpDIB )
+    switch (eMetric)
     {
-        aSize.setWidth( mpDIB->mnWidth );
-        aSize.setHeight( mpDIB->mnHeight );
+        case vcl::SGPmetric::Width: return mpDIB ? mpDIB->mnWidth : (mpDDB ? mpDDB->ImplGetWidth() : 0);
+        case vcl::SGPmetric::Height: return mpDIB ? mpDIB->mnHeight : (mpDDB ? mpDDB->ImplGetHeight() : 0);
+        case vcl::SGPmetric::DPIX: return 96;
+        case vcl::SGPmetric::DPIY: return 96;
+        case vcl::SGPmetric::ScalePercentage: return 100;
+        case vcl::SGPmetric::OffScreen: return true;
+        case vcl::SGPmetric::BitCount: return mpDIB ? mpDIB->mnBitCount : (mpDDB ? mpDDB->ImplGetDepth() : 0);
     }
-    else if( mpDDB )
-    {
-        aSize.setWidth( mpDDB->ImplGetWidth() );
-        aSize.setHeight( mpDDB->ImplGetHeight() );
-    }
-
-    return aSize;
-}
-
-sal_uInt16 X11SalBitmap::GetBitCount() const
-{
-    sal_uInt16 nBitCount;
-
-    if( mpDIB )
-        nBitCount = mpDIB->mnBitCount;
-    else if( mpDDB )
-        nBitCount = mpDDB->ImplGetDepth();
-    else
-        nBitCount = 0;
-
-    return nBitCount;
+    return -1;
 }
 
 BitmapBuffer* X11SalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )

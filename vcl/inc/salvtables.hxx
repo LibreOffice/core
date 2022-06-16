@@ -851,11 +851,7 @@ public:
         m_sMenuButtonRow = OUString::fromUtf8(rIdent);
     }
 
-    int get_menu_button_width() const override
-    {
-        OutputDevice* pDefault = Application::GetDefaultDevice();
-        return 20 * (pDefault ? pDefault->GetDPIScaleFactor() : 1.0);
-    }
+    int get_menu_button_width() const override { return 20 * m_xComboBox->GetDPIScaleFactor(); }
 
     void CallHandleEventListener(VclWindowEvent& rEvent)
     {

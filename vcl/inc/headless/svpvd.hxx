@@ -37,10 +37,11 @@ class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
     basegfx::B2IVector                  m_aFrameSize;
     std::vector< SvpSalGraphics* >      m_aGraphics;
 
-    void CreateSurface(tools::Long nNewDX, tools::Long nNewDY, sal_uInt8 *const pBuffer);
+    void CreateSurface(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8 *const pBuffer, sal_Int32 nScale);
 
 protected:
     SvpSalGraphics* AddGraphics(SvpSalGraphics* aGraphics);
+    cairo_surface_t* refSurface() const { return m_pRefSurface; }
 
 public:
     SvpSalVirtualDevice(cairo_surface_t* pRefSurface, cairo_surface_t* pPreExistingTarget);
@@ -50,16 +51,13 @@ public:
     virtual SalGraphics*    AcquireGraphics() override;
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
 
-    virtual bool        SetSize( tools::Long nNewDX, tools::Long nNewDY ) override;
-    virtual bool        SetSizeUsingBuffer( tools::Long nNewDX, tools::Long nNewDY,
-                                            sal_uInt8 * pBuffer
+    virtual bool        SetSizeUsingBuffer( sal_Int32 nNewDX, sal_Int32 nNewDY,
+                                            sal_uInt8 * pBuffer, sal_Int32 nScale = -1
                                           ) override;
 
     cairo_surface_t* GetSurface() const { return m_pSurface; }
 
-    // SalGeometryProvider
-    virtual tools::Long GetWidth() const override;
-    virtual tools::Long GetHeight() const override;
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const;
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX

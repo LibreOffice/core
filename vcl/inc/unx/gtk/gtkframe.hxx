@@ -426,8 +426,8 @@ public:
 #endif
     int                             m_nGrabLevel;
     bool                            m_bSalObjectSetPosSize;
-    GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
-    GtkSalFrame( SystemParentData* pSysData );
+    GtkSalFrame(SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window&);
+    GtkSalFrame(SystemParentData* pSysData, vcl::Window&);
 
     guint                           m_nMenuExportId;
     guint                           m_nActionGroupExportId;
@@ -493,6 +493,8 @@ public:
 
     virtual ~GtkSalFrame() override;
 
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
+
     // SalGraphics or NULL, but two Graphics for all SalFrames
     // must be returned
     virtual SalGraphics*        AcquireGraphics() override;
@@ -517,7 +519,8 @@ public:
     virtual void                SetMinClientSize( tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                SetMaxClientSize( tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags ) override;
-    virtual void                GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) override;
+    void GetDPI(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+    virtual void GetClientSize(sal_Int32& rWidth, sal_Int32& rHeight) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void SetWindowState(const vcl::WindowData*) override;

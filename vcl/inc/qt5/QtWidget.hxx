@@ -82,6 +82,7 @@ class QtWidget : public QWidget
     void inputMethodEvent(QInputMethodEvent*) override;
     QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
     static void closePopup();
+    void handleScaleOrResize(QResizeEvent* pEvent, bool bScaleChanged);
 
 public:
     QtWidget(QtFrame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());

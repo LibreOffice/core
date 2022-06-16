@@ -44,6 +44,8 @@ public:
     virtual bool DrawTextLayout(const GenericSalLayout&) { return false; }
 
     virtual void ClearNativeControlCache() {}
+
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric) const = 0;
 };
 
 #endif // INCLUDED_VCL_INC_WIN_WINGDIIMPL_HXX

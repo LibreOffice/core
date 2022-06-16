@@ -102,9 +102,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
 void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
 {
     if (!rGraphics.mnRealDPIY && rGraphics.maShared.mbWindow && rGraphics.maShared.mpFrame)
-    {
-        rGraphics.initResolution(rGraphics.maShared.mpFrame->getNSWindow());
-    }
+        AquaSalGraphics::GetDPI(rGraphics.maShared.mpFrame->getNSWindow(), rGraphics.mnRealDPIX, rGraphics.mnRealDPIY);
     mnRealDPIX = rGraphics.mnRealDPIX;
     mnRealDPIY = rGraphics.mnRealDPIY;
 }
@@ -121,110 +119,99 @@ SystemGraphicsData AquaSalGraphics::GetGraphicsData() const
 
 #ifndef IOS
 
-void AquaSalGraphics::initResolution(NSWindow* nsWindow)
+void AquaSalGraphics::GetDPI(NSWindow* nsWindow, sal_Int32& rDPIX, sal_Int32& rDPIY)
 {
-    if (!nsWindow)
-    {
-        if (Application::IsBitmapRendering())
-            mnRealDPIX = mnRealDPIY = 96;
-        return;
-    }
-
     // #i100617# read DPI only once; there is some kind of weird caching going on
     // if the main screen changes
     // FIXME: this is really unfortunate and needs to be investigated
 
     SalData* pSalData = GetSalData();
-    if( pSalData->mnDPIX == 0 || pSalData->mnDPIY == 0 )
+    if (pSalData->mnDPIX != 0 && pSalData->mnDPIY != 0)
     {
-        NSScreen* pScreen = nil;
+        rDPIX = pSalData->mnDPIX;
+        rDPIY = pSalData->mnDPIY;
+        return;
+    }
 
-        /* #i91301#
-        many woes went into the try to have different resolutions
-        on different screens. The result of these trials is that OOo is not ready
-        for that yet, vcl and applications would need to be adapted.
+    if (!nsWindow)
+    {
+        assert(Application::IsBitmapRendering());
+        pSalData->mnDPIX = pSalData->mnDPIY = 96;
+        return;
+    }
 
-        Unfortunately this is not possible in the 3.0 timeframe.
-        So let's stay with one resolution for all Windows and VirtualDevices
-        which is the resolution of the main screen
+    /* #i91301#
+    many woes went into the try to have different resolutions
+    on different screens. The result of these trials is that OOo is not ready
+    for that yet, vcl and applications would need to be adapted.
 
-        This of course also means that measurements are exact only on the main screen.
-        For activating different resolutions again just comment out the two lines below.
+    Unfortunately this is not possible in the 3.0 timeframe.
+    So let's stay with one resolution for all Windows and VirtualDevices
+    which is the resolution of the main screen
+    */
+    NSScreen* pScreen = nil;
+    NSArray* pScreens = [NSScreen screens];
+    if (pScreens && [pScreens count] > 0)
+    {
+        pScreen = [pScreens objectAtIndex: 0];
+    }
 
-        if( pWin )
-        pScreen = [pWin screen];
-        */
-        if( pScreen == nil )
+    rDPIX = rDPIY = 96;
+    if( pScreen )
+    {
+        NSDictionary* pDev = [pScreen deviceDescription];
+        if( pDev )
         {
-            NSArray* pScreens = [NSScreen screens];
-            if( pScreens && [pScreens count] > 0)
+            NSNumber* pVal = [pDev objectForKey: @"NSScreenNumber"];
+            if( pVal )
             {
-                pScreen = [pScreens objectAtIndex: 0];
-            }
-        }
-
-        mnRealDPIX = mnRealDPIY = 96;
-        if( pScreen )
-        {
-            NSDictionary* pDev = [pScreen deviceDescription];
-            if( pDev )
-            {
-                NSNumber* pVal = [pDev objectForKey: @"NSScreenNumber"];
-                if( pVal )
-                {
-                    // FIXME: casting a long to CGDirectDisplayID is evil, but
-                    // Apple suggest to do it this way
-                    const CGDirectDisplayID nDisplayID = static_cast<CGDirectDisplayID>([pVal longValue]);
-                    const CGSize aSize = CGDisplayScreenSize( nDisplayID ); // => result is in millimeters
-                    mnRealDPIX = static_cast<sal_Int32>((CGDisplayPixelsWide( nDisplayID ) * 25.4) / aSize.width);
-                    mnRealDPIY = static_cast<sal_Int32>((CGDisplayPixelsHigh( nDisplayID ) * 25.4) / aSize.height);
-                }
-                else
-                {
-                    OSL_FAIL( "no resolution found in device description" );
-                }
+                // FIXME: casting a long to CGDirectDisplayID is evil, but
+                // Apple suggest to do it this way
+                const CGDirectDisplayID nDisplayID = static_cast<CGDirectDisplayID>([pVal longValue]);
+                const CGSize aSize = CGDisplayScreenSize( nDisplayID ); // => result is in millimeters
+                rDPIX = static_cast<sal_Int32>((CGDisplayPixelsWide( nDisplayID ) * 25.4) / aSize.width);
+                rDPIY = static_cast<sal_Int32>((CGDisplayPixelsHigh( nDisplayID ) * 25.4) / aSize.height);
             }
             else
             {
-                OSL_FAIL( "no device description" );
+                OSL_FAIL( "no resolution found in device description" );
             }
         }
         else
         {
-            OSL_FAIL( "no screen found" );
+            OSL_FAIL( "no device description" );
         }
-
-        // #i107076# maintaining size-WYSIWYG-ness causes many problems for
-        //           low-DPI, high-DPI or for mis-reporting devices
-        //           => it is better to limit the calculation result then
-        static const int nMinDPI = 72;
-        if( (mnRealDPIX < nMinDPI) || (mnRealDPIY < nMinDPI) )
-        {
-            mnRealDPIX = mnRealDPIY = nMinDPI;
-        }
-        // Note that on a Retina display, the "mnRealDPIX" as
-        // calculated above is not the true resolution of the display,
-        // but the "logical" one, or whatever the correct terminology
-        // is. (For instance on a 5K 27in iMac, it's 108.)  So at
-        // least currently, it won't be over 200. I don't know whether
-        // this test is a "sanity check", or whether there is some
-        // real reason to limit this to 200.
-        static const int nMaxDPI = 200;
-        if( (mnRealDPIX > nMaxDPI) || (mnRealDPIY > nMaxDPI) )
-        {
-            mnRealDPIX = mnRealDPIY = nMaxDPI;
-        }
-        // for OSX any anisotropy reported for the display resolution is best ignored (e.g. TripleHead2Go)
-        mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
-
-        pSalData->mnDPIX = mnRealDPIX;
-        pSalData->mnDPIY = mnRealDPIY;
     }
     else
     {
-        mnRealDPIX = pSalData->mnDPIX;
-        mnRealDPIY = pSalData->mnDPIY;
+        OSL_FAIL( "no screen found" );
     }
+
+    // #i107076# maintaining size-WYSIWYG-ness causes many problems for
+    //           low-DPI, high-DPI or for mis-reporting devices
+    //           => it is better to limit the calculation result then
+    static const int nMinDPI = 72;
+    if( (rDPIX < nMinDPI) || (rDPIY < nMinDPI) )
+    {
+        rDPIX = rDPIY = nMinDPI;
+    }
+    // Note that on a Retina display, the "rDPIX" as
+    // calculated above is not the true resolution of the display,
+    // but the "logical" one, or whatever the correct terminology
+    // is. (For instance on a 5K 27in iMac, it's 108.)  So at
+    // least currently, it won't be over 200. I don't know whether
+    // this test is a "sanity check", or whether there is some
+    // real reason to limit this to 200.
+    static const int nMaxDPI = 200;
+    if( (rDPIX > nMaxDPI) || (rDPIY > nMaxDPI) )
+    {
+        rDPIX = rDPIY = nMaxDPI;
+    }
+    // for OSX any anisotropy reported for the display resolution is best ignored (e.g. TripleHead2Go)
+    rDPIX = rDPIY = (rDPIX + rDPIY + 1) / 2;
+
+    pSalData->mnDPIX = rDPIX;
+    pSalData->mnDPIY = rDPIY;
 }
 
 #endif
@@ -258,8 +245,8 @@ void AquaSharedAttributes::setState()
 void AquaSalGraphics::updateResolution()
 {
     SAL_WARN_IF(!maShared.mbWindow, "vcl", "updateResolution on inappropriate graphics");
-
-    initResolution((maShared.mbWindow && maShared.mpFrame) ? maShared.mpFrame->getNSWindow() : nil);
+    NSWindow* pWindow = (maShared.mbWindow && maShared.mpFrame) ? maShared.mpFrame->getNSWindow() : nil;
+    AquaSalGraphics::GetDPI(pWindow, mnRealDPIX, mnRealDPIY);
 }
 
 #endif

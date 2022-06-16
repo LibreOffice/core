@@ -74,11 +74,6 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mpExtOutDevData                 = nullptr;
     mnOutOffX                       = 0;
     mnOutOffY                       = 0;
-    mnOutWidth                      = 0;
-    mnOutHeight                     = 0;
-    mnDPIX                          = 0;
-    mnDPIY                          = 0;
-    mnDPIScalePercentage            = 100;
     mnTextOffX                      = 0;
     mnTextOffY                      = 0;
     mnOutOffOrigX                   = 0;
@@ -385,16 +380,6 @@ void OutputDevice::SetDrawMode(DrawModeFlags nDrawMode)
         mpAlphaVDev->SetDrawMode(nDrawMode);
 }
 
-sal_uInt16 OutputDevice::GetBitCount() const
-{
-    // we need a graphics instance
-    if ( !mpGraphics && !AcquireGraphics() )
-        return 0;
-    assert(mpGraphics);
-
-    return mpGraphics->GetBitCount();
-}
-
 void OutputDevice::SetOutOffXPixel(tools::Long nOutOffX)
 {
     mnOutOffX = nOutOffX;
@@ -686,17 +671,17 @@ bool OutputDevice::ImplIsAntiparallel() const
 
 void    OutputDevice::ReMirror( Point &rPoint ) const
 {
-    rPoint.setX( mnOutOffX + mnOutWidth - 1 - rPoint.X() + mnOutOffX );
+    rPoint.setX( mnOutOffX + m_nWidth - 1 - rPoint.X() + mnOutOffX );
 }
 void    OutputDevice::ReMirror( tools::Rectangle &rRect ) const
 {
     tools::Long nWidth = rRect.Right() - rRect.Left();
 
     //long lc_x = rRect.nLeft - mnOutOffX;    // normalize
-    //lc_x = mnOutWidth - nWidth - 1 - lc_x;  // mirror
+    //lc_x = m_nWidth - nWidth - 1 - lc_x;  // mirror
     //rRect.nLeft = lc_x + mnOutOffX;         // re-normalize
 
-    rRect.SetLeft( mnOutOffX + mnOutWidth - nWidth - 1 - rRect.Left() + mnOutOffX );
+    rRect.SetLeft(mnOutOffX + m_nWidth - nWidth - 1 - rRect.Left() + mnOutOffX);
     rRect.SetRight( rRect.Left() + nWidth );
 }
 
@@ -794,7 +779,7 @@ com::sun::star::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetC
      */
     Sequence< Any > aArg{
         Any(reinterpret_cast<sal_Int64>(this)),
-        Any(css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight )),
+        Any(css::awt::Rectangle(mnOutOffX, mnOutOffY, m_nWidth, m_nHeight)),
         Any(false),
         Any(Reference< css::awt::XWindow >()),
         GetSystemGfxDataAny()
@@ -831,6 +816,26 @@ void OutputDevice::ImplDisposeCanvas()
         if( xCanvasComponent.is() )
             xCanvasComponent->dispose();
     }
+}
+
+bool OutputDevice::SetDPI(sal_Int32 nDPIX, sal_Int32 nDPIY)
+{
+    bool bChanged = false;
+    if (nDPIX > 0 && nDPIX != mnDPIX)
+    {
+        mnDPIX = nDPIX;
+        bChanged = true;
+    }
+
+    if (nDPIY > 0 && nDPIY != mnDPIY)
+    {
+        mnDPIY = nDPIY;
+        bChanged = true;
+    }
+
+    if (bChanged)
+        mnDPIScalePercentage = round((mnDPIX + mnDPIY) * 100 / (96 * 2));
+    return bChanged;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

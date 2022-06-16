@@ -34,23 +34,19 @@ class QtVirtualDevice final : public SalVirtualDevice
 {
     std::vector<QtGraphics*> m_aGraphics;
     std::unique_ptr<QImage> m_pImage;
-    QSize m_aFrameSize;
-    double m_fScale;
 
 public:
-    QtVirtualDevice(double fScale);
+    QtVirtualDevice(sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nScale);
 
     // SalVirtualDevice
     virtual SalGraphics* AcquireGraphics() override;
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
 
-    virtual bool SetSize(tools::Long nNewDX, tools::Long nNewDY) override;
-    virtual bool SetSizeUsingBuffer(tools::Long nNewDX, tools::Long nNewDY,
-                                    sal_uInt8* pBuffer) override;
+    virtual bool SetSizeUsingBuffer(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8* pBuffer,
+                                    sal_Int32 nScale = -1) override;
 
     // SalGeometryProvider
-    virtual tools::Long GetWidth() const override;
-    virtual tools::Long GetHeight() const override;
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

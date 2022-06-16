@@ -106,7 +106,7 @@ tools::Long SalGraphics::mirror2( tools::Long x, const OutputDevice& rOutDev ) c
 
 inline tools::Long SalGraphics::GetDeviceWidth(const OutputDevice& rOutDev) const
 {
-    return rOutDev.IsVirtual() ? rOutDev.GetOutputWidthPixel() : GetGraphicsWidth();
+    return rOutDev.IsVirtual() ? rOutDev.GetOutputWidthPixel() : GetWidth();
 }
 
 void SalGraphics::mirror( tools::Long& x, const OutputDevice& rOutDev ) const

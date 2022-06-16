@@ -21,6 +21,7 @@
 #include <o3tl/safeint.hxx>
 #include <vcl/syswin.hxx>
 #include <sal/log.hxx>
+#include <window.h>
 
 #include <headless/svpframe.hxx>
 #include <headless/svpinst.hxx>
@@ -42,7 +43,8 @@ SvpSalFrame* SvpSalFrame::s_pFocusFrame = nullptr;
 
 SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
-                          SalFrameStyleFlags nSalFrameStyle ) :
+                          SalFrameStyleFlags nSalFrameStyle, vcl::Window& rWin)
+    : SalFrame(rWin),
     m_pInstance( pInstance ),
     m_pParent( static_cast<SvpSalFrame*>(pParent) ),
     m_nStyle( nSalFrameStyle ),
@@ -158,7 +160,7 @@ SalGraphics* SvpSalFrame::AcquireGraphics()
 {
     SvpSalGraphics* pGraphics = new SvpSalGraphics();
 #ifndef IOS
-    pGraphics->setSurface(m_pSurface, GetSurfaceFrameSize());
+    pGraphics->setSurface(m_pSurface);
 #endif
     m_aGraphics.push_back( pGraphics );
     return pGraphics;
@@ -277,16 +279,25 @@ void SvpSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
 
         // update device in existing graphics
         for (auto const& graphic : m_aGraphics)
-        {
-             graphic->setSurface(m_pSurface, aFrameSize);
-        }
+             graphic->setSurface(m_pSurface);
     }
     if( m_bVisible )
         m_pInstance->PostEvent( this, nullptr, SalEvent::Resize );
 #endif
 }
 
-void SvpSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
+sal_Int32 SvpSalFrame::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width: return maGeometry.width();
+        case vcl::SGPmetric::Height: return maGeometry.height();
+        default:
+            return GetWindow()->GetOutDev()->GetSgpMetric(eMetric);
+    }
+}
+
+void SvpSalFrame::GetClientSize(sal_Int32& rWidth, sal_Int32& rHeight)
 {
     rWidth = maGeometry.width();
     rHeight = maGeometry.height();
@@ -496,6 +507,11 @@ void SvpSalFrame::UnionClipRegion( tools::Long, tools::Long, tools::Long, tools:
 
 void SvpSalFrame::EndSetClipRegion()
 {
+}
+
+void SvpSalFrame::GetDPI(sal_Int32& rDPIX, sal_Int32& rDPIY)
+{
+    rDPIX = rDPIY = 96;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -92,18 +92,12 @@ bool QtBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& 
 
 void QtBitmap::Destroy() { m_pImage.reset(); }
 
-Size QtBitmap::GetSize() const
+sal_Int32 QtBitmap::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    if (m_pImage)
-        return toSize(m_pImage->size());
-    return Size();
-}
-
-sal_uInt16 QtBitmap::GetBitCount() const
-{
-    if (m_pImage)
-        return getFormatBits(m_pImage->format());
-    return 0;
+    assert(m_pImage);
+    if (!m_pImage)
+        return -1;
+    return GetSgpMetricFromQImage(eMetric, *m_pImage.get());
 }
 
 BitmapBuffer* QtBitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)

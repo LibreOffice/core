@@ -1046,8 +1046,7 @@ void VclOutdevTest::testGetWaveLineSize()
     {
         ScopedVclPtrInstance<WaveLineTester> pTestOutDev;
 
-        pTestOutDev->SetDPIX(96);
-        pTestOutDev->SetDPIY(96);
+        pTestOutDev->SetDPI(96, 96);
 
         CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestOutDev->testGetWaveLineSize(0));
         CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestOutDev->testGetWaveLineSize(1));
@@ -1058,8 +1057,7 @@ void VclOutdevTest::testGetWaveLineSize()
     {
         ScopedVclPtrInstance<WaveLineTesterPrinter> pTestOutDev;
 
-        pTestOutDev->SetDPIX(96);
-        pTestOutDev->SetDPIY(96);
+        pTestOutDev->SetDPI(96, 96);
 
         CPPUNIT_ASSERT_EQUAL(Size(0, 0), pTestOutDev->testGetWaveLineSize(0));
         CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestOutDev->testGetWaveLineSize(1));

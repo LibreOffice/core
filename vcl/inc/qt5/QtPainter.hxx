@@ -30,6 +30,7 @@ class QtPainter final : public QPainter
 {
     QtGraphicsBackend& m_rGraphics;
     QRegion m_aRegion;
+    qreal m_fOriginalDevicePixelRatio;
 
 public:
     QtPainter(QtGraphicsBackend& rGraphics, bool bPrepareBrush = false,

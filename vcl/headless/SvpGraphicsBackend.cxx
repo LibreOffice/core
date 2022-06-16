@@ -42,18 +42,6 @@ bool SvpGraphicsBackend::setClipRegion(const vcl::Region& i_rClip)
 
 void SvpGraphicsBackend::ResetClipRegion() { m_rCairoCommon.m_aClipRegion.SetNull(); }
 
-sal_uInt16 SvpGraphicsBackend::GetBitCount() const
-{
-    if (cairo_surface_get_content(m_rCairoCommon.m_pSurface) != CAIRO_CONTENT_COLOR_ALPHA)
-        return 1;
-    return 32;
-}
-
-tools::Long SvpGraphicsBackend::GetGraphicsWidth() const
-{
-    return m_rCairoCommon.m_pSurface ? m_rCairoCommon.m_aFrameSize.getX() : 0;
-}
-
 void SvpGraphicsBackend::SetLineColor() { m_rCairoCommon.m_aLineColor = SALCOLOR_NONE; }
 
 void SvpGraphicsBackend::SetLineColor(Color nColor) { m_rCairoCommon.m_aLineColor = nColor; }
@@ -504,7 +492,7 @@ std::shared_ptr<SalBitmap> SvpGraphicsBackend::getBitmap(tools::Long nX, tools::
     std::shared_ptr<SvpSalBitmap> pBitmap = std::make_shared<SvpSalBitmap>();
     BitmapPalette aPal;
     vcl::PixelFormat ePixelFormat = vcl::PixelFormat::INVALID;
-    if (GetBitCount() == 1)
+    if (m_rCairoCommon.GetBitCount() == 1)
     {
         ePixelFormat = vcl::PixelFormat::N1_BPP;
         aPal.SetEntryCount(2);

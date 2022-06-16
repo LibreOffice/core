@@ -31,24 +31,18 @@
 #include <QtWidgets/QWidget>
 
 QtGraphics::QtGraphics( QtFrame *pFrame, QImage *pQImage )
-    : m_pFrame( pFrame )
-    , m_pTextStyle{ nullptr, }
+    : m_pTextStyle{ nullptr, }
     , m_aTextColor( 0x00, 0x00, 0x00 )
 {
-    m_pBackend = std::make_unique<QtGraphicsBackend>(m_pFrame, pQImage);
+    m_pBackend = std::make_unique<QtGraphicsBackend>(pFrame, pQImage);
 
-    if (!initWidgetDrawBackends(false))
-    {
-        if (!QtData::noNativeControls())
-            m_pWidgetDraw.reset(new QtGraphics_Controls(*this));
-    }
-    if (m_pFrame)
-        setDevicePixelRatioF(m_pFrame->devicePixelRatioF());
+    if (!initWidgetDrawBackends(false) && !QtData::noNativeControls())
+        m_pWidgetDraw.reset(new QtGraphics_Controls(*this));
 }
 
 QtGraphics::~QtGraphics() { ReleaseFonts(); }
 
-void QtGraphics::ChangeQImage(QImage* pQImage)
+void QtGraphics::setQImage(QImage* pQImage)
 {
     m_pBackend->setQImage(pQImage);
     m_pBackend->ResetClipRegion();
@@ -101,6 +95,18 @@ void QtGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
     QtPainter aPainter(*m_pBackend);
     aPainter.drawImage(QPoint(rDamagedRegion.Left(), rDamagedRegion.Top()), blit);
     aPainter.update(toQRect(rDamagedRegion));
+}
+
+sal_Int32 QtGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    QImage* pImage = m_pBackend->getQImage();
+    QtFrame* pFrame = m_pBackend->frame();
+    assert(pImage || pFrame);
+    if (pImage)
+        return GetSgpMetricFromQImage(eMetric, *pImage);
+    else if (pFrame)
+        return pFrame->GetWindow()->GetOutDev()->GetSgpMetric(eMetric);
+    return -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

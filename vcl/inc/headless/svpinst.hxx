@@ -120,8 +120,8 @@ public:
     bool                    CheckTimeout( bool bExecuteTimers = true );
 
     // Frame
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle, vcl::Window& rWin ) override;
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& ) override;
     virtual void            DestroyFrame( SalFrame* pFrame ) override;
 
     // Object (System Child Window)
@@ -134,7 +134,7 @@ public:
     // pData allows for using a system dependent graphics or device context
     virtual std::unique_ptr<SalVirtualDevice>
                             CreateVirtualDevice( SalGraphics& rGraphics,
-                                                     tools::Long &nDX, tools::Long &nDY,
+                                                     sal_Int32 &nDX, sal_Int32 &nDY,
                                                      DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) override;
 
     // Printer

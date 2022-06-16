@@ -173,4 +173,21 @@ void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
     mbGraphicsUsed = false;
 }
 
+sal_Int32 AquaSalVirtualDevice::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    SalData* pSalData = GetSalData();
+    assert(pSalData->mnDPIX > 0);
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width: return mnWidth;
+        case vcl::SGPmetric::Height: return mnHeight;
+        case vcl::SGPmetric::DPIX: return pSalData->mnDPIX;
+        case vcl::SGPmetric::DPIY: return pSalData->mnDPIY;
+        case vcl::SGPmetric::ScalePercentage: return pSalData->mnDPIX * 100 / 96;
+        case vcl::SGPmetric::OffScreen: return true;
+        case vcl::SGPmetric::BitCount: return mnBitmapDepth;
+    }
+    return -1;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

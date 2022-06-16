@@ -17,23 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALVD_HXX
-#define INCLUDED_VCL_INC_SALVD_HXX
+#pragma once
 
-#include "salgeom.hxx"
+#include <vcl/GeometryProvider.hxx>
+#include <sal/log.hxx>
 
 class SalGraphics;
 
 /// A non-visible drawable/buffer (e.g. an X11 Pixmap).
 class VCL_PLUGIN_PUBLIC SalVirtualDevice
-        : public SalGeometryProvider
+    : public vcl::SalGeometryProvider
 {
 public:
     SalVirtualDevice() {}
     virtual ~SalVirtualDevice() override;
-
-    // SalGeometryProvider
-    virtual bool IsOffScreen() const override { return true; }
 
     // SalGraphics or NULL, but two Graphics for all SalVirtualDevices
     // must be returned
@@ -41,18 +38,24 @@ public:
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
     // Set new size, without saving the old contents
-    virtual bool            SetSize( tools::Long nNewDX, tools::Long nNewDY ) = 0;
+    bool SetSize(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_Int32 nScale = 100)
+        { return SetSizeUsingBuffer(nNewDX, nNewDY, nullptr, nScale); }
+    inline void FixSetSizeParams(sal_Int32& nDX, sal_Int32& nDY, sal_Int32& nScale) const;
 
     // Set new size using a buffer at the given address
-    virtual bool            SetSizeUsingBuffer( tools::Long nNewDX, tools::Long nNewDY,
-                                                sal_uInt8 * /* pBuffer */)
-        {
-            // Only the headless virtual device has an implementation that uses
-            // pBuffer (and bTopDown).
-            return SetSize( nNewDX, nNewDY );
-        }
+    virtual bool SetSizeUsingBuffer(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8*, sal_Int32 nScale = -1) = 0;
 };
 
-#endif // INCLUDED_VCL_INC_SALVD_HXX
+void SalVirtualDevice::FixSetSizeParams(sal_Int32& nDX, sal_Int32& nDY, sal_Int32& nScale) const
+{
+    SAL_WARN_IF(!(nDX != 0 && nDY != 0 && nScale != 0), "vcl",
+                "Invalid virtual device request (" << nDX << " " << nDY << " " << nScale << ")!");
+    if (nDX == 0)
+        nDX = 1;
+    if (nDY == 0)
+        nDY = 1;
+    if (nScale <= 0)
+        nScale = GetDPIScalePercentage();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,17 +38,16 @@ SvpSalGraphics::~SvpSalGraphics()
     ReleaseFonts();
 }
 
-void SvpSalGraphics::setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize)
+void SvpSalGraphics::setSurface(cairo_surface_t* pSurface)
 {
     m_aCairoCommon.m_pSurface = pSurface;
-    m_aCairoCommon.m_aFrameSize = rSize;
-    dl_cairo_surface_get_device_scale(pSurface, &m_aCairoCommon.m_fScale, nullptr);
     GetImpl()->ResetClipRegion();
 }
 
-void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
+sal_Int32 SvpSalGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    rDPIX = rDPIY = 96;
+    assert(m_aCairoCommon.m_pSurface);
+    return CairoCommon::GetSgpMetricFromSurface(eMetric, *m_aCairoCommon.m_pSurface);
 }
 
 #if ENABLE_CAIRO_CANVAS

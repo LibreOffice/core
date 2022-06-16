@@ -112,9 +112,10 @@ public:
 
     void RunInMainThread(std::function<void()> func);
 
-    virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
-    virtual SalFrame* CreateChildFrame(SystemParentData* pParent,
-                                       SalFrameStyleFlags nStyle) override;
+    virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle,
+                                  vcl::Window&) override;
+    virtual SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle,
+                                       vcl::Window&) override;
     virtual void DestroyFrame(SalFrame* pFrame) override;
 
     virtual SalObject* CreateObject(SalFrame* pParent, SystemWindowData* pWindowData,
@@ -122,7 +123,7 @@ public:
     virtual void DestroyObject(SalObject* pObject) override;
 
     virtual std::unique_ptr<SalVirtualDevice>
-    CreateVirtualDevice(SalGraphics& rGraphics, tools::Long& nDX, tools::Long& nDY,
+    CreateVirtualDevice(SalGraphics& rGraphics, sal_Int32& nDX, sal_Int32& nDY,
                         DeviceFormat eFormat, const SystemGraphicsData* pData = nullptr) override;
 
     virtual SalInfoPrinter* CreateInfoPrinter(SalPrinterQueueInfo* pQueueInfo,

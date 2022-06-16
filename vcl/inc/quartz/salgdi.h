@@ -275,6 +275,8 @@ struct AquaSharedAttributes
         return false;
     #endif
     }
+
+    sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const;
 };
 
 class AquaGraphicsBackendBase
@@ -298,8 +300,8 @@ public:
                                    ControlState nState,
                                    const ImplControlValue &aValue) = 0;
     virtual void drawTextLayout(const GenericSalLayout& layout, bool bTextRenderModeForResolutionIndependentLayout) = 0;
-    virtual void Flush() {}
     virtual void Flush( const tools::Rectangle& ) {}
+
 protected:
     static bool performDrawNativeControl(ControlType nType,
                                          ControlPart nPart,
@@ -309,6 +311,7 @@ protected:
                                          CGContextRef context,
                                          AquaSalFrame* mpFrame);
     AquaSharedAttributes& mrShared;
+
 private:
     SalGraphicsImpl* mpImpl = nullptr;
 };
@@ -337,6 +340,9 @@ private:
                         tools::Long nSrcWidth, tools::Long nSrcHeight, AquaSharedAttributes* pSrcShared);
 #endif
 
+    sal_uInt16 GetBitCount() const;
+    tools::Long GetGraphicsWidth() const;
+
 public:
     AquaGraphicsBackend(AquaSharedAttributes & rShared);
     ~AquaGraphicsBackend() override;
@@ -352,10 +358,6 @@ public:
 
     bool setClipRegion(vcl::Region const& rRegion) override;
     void ResetClipRegion() override;
-
-    sal_uInt16 GetBitCount() const override;
-
-    tools::Long GetGraphicsWidth() const override;
 
     void SetLineColor() override;
     void SetLineColor(Color nColor) override;
@@ -469,7 +471,7 @@ public:
 
     void                    SetVirDevGraphics(SalVirtualDevice* pVirDev,CGLayerHolder const &rLayer, CGContextRef, int nBitDepth = 0);
 #ifdef MACOSX
-    void                    initResolution( NSWindow* );
+    static void GetDPI(NSWindow*, sal_Int32& rDPIX, sal_Int32& rDPIY);
     void                    copyResolution( AquaSalGraphics& );
     void                    updateResolution();
 
@@ -523,8 +525,6 @@ protected:
 #endif
 
 public:
-    // get device resolution
-    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
     // set the text color to a specific color
     virtual void            SetTextColor( Color nColor ) override;
     // set the font

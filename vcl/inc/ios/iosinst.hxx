@@ -43,8 +43,9 @@ public:
     CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
 
     void GetWorkArea(tools::Rectangle& rRect);
-    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
-    SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle) override;
+    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window&) override;
+    SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle,
+                               vcl::Window& rWin) override;
 };
 
 #endif // INCLUDED_VCL_INC_IOS_IOSINST_HXX

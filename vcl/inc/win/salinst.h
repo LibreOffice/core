@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_WIN_SALINST_H
-#define INCLUDED_VCL_INC_WIN_SALINST_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -43,14 +42,14 @@ public:
     WinSalInstance();
     virtual ~WinSalInstance() override;
 
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
+    virtual SalFrame*       CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle, vcl::Window&) override;
+    virtual SalFrame*       CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window&) override;
     virtual void            DestroyFrame( SalFrame* pFrame ) override;
     virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow ) override;
     virtual void            DestroyObject( SalObject* pObject ) override;
     virtual std::unique_ptr<SalVirtualDevice>
                             CreateVirtualDevice( SalGraphics& rGraphics,
-                                                     tools::Long &nDX, tools::Long &nDY,
+                                                     sal_Int32 &nDX, sal_Int32 &nDY,
                                                      DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) override;
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData ) override;
@@ -81,11 +80,22 @@ public:
     virtual css::uno::Reference<css::uno::XInterface> ImplCreateDropTarget(const SystemEnvData*) override;
 };
 
-SalFrame* ImplSalCreateFrame( WinSalInstance* pInst, HWND hWndParent, SalFrameStyleFlags nSalFrameStyle );
+struct WinCreateFrameData
+{
+    SalFrameStyleFlags m_nFlags;
+    HWND m_hWnd;
+    vcl::Window& m_rWin;
+
+    WinCreateFrameData(SalFrameStyleFlags nFlags, HWND hWnd, vcl::Window& rWin)
+        : m_nFlags(nFlags)
+        , m_hWnd(hWnd)
+        , m_rWin(rWin)
+    {}
+};
+
+SalFrame* ImplSalCreateFrame(WinSalInstance*, struct WinCreateFrameData&);
 SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent );
 HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, bool bAsChild );
 bool OSSupportsDarkMode();
-
-#endif // INCLUDED_VCL_INC_WIN_SALINST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

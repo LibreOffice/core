@@ -659,7 +659,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
             break;
 
         CASE_NOYIELDLOCK_RESULT( SAL_MSG_CREATEFRAME, ImplSalCreateFrame( GetSalData()->mpInstance,
-            reinterpret_cast<HWND>(lParam), static_cast<SalFrameStyleFlags>(wParam)) )
+            *reinterpret_cast<struct WinCreateFrameData*>(lParam) ))
         CASE_NOYIELDLOCK_RESULT( SAL_MSG_RECREATEHWND, ImplSalReCreateHWND(
             reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), false) )
         CASE_NOYIELDLOCK_RESULT( SAL_MSG_RECREATECHILDHWND, ImplSalReCreateHWND(
@@ -782,13 +782,14 @@ bool WinSalInstance::AnyInput( VclInputFlags nType )
     return false;
 }
 
-SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, SalFrameStyleFlags nSalFrameStyle )
+SalFrame* WinSalInstance::CreateChildFrame(SystemParentData* pSystemParentData, SalFrameStyleFlags nSalFrameStyle, vcl::Window& rWin)
 {
     // to switch to Main-Thread
-    return reinterpret_cast<SalFrame*>(static_cast<sal_IntPtr>(SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, static_cast<WPARAM>(nSalFrameStyle), reinterpret_cast<LPARAM>(pSystemParentData->hWnd) )));
+    struct WinCreateFrameData aData(nSalFrameStyle, pSystemParentData->hWnd, rWin);
+    return reinterpret_cast<SalFrame*>(static_cast<sal_IntPtr>(SendMessageW(mhComWnd, SAL_MSG_CREATEFRAME, 0, reinterpret_cast<LPARAM>(&aData))));
 }
 
-SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle )
+SalFrame* WinSalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle, vcl::Window& rWin)
 {
     // to switch to Main-Thread
     HWND hWndParent;
@@ -796,7 +797,8 @@ SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSa
         hWndParent = static_cast<WinSalFrame*>(pParent)->mhWnd;
     else
         hWndParent = nullptr;
-    return reinterpret_cast<SalFrame*>(static_cast<sal_IntPtr>(SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, static_cast<WPARAM>(nSalFrameStyle), reinterpret_cast<LPARAM>(hWndParent) )));
+    struct WinCreateFrameData aData(nSalFrameStyle, hWndParent, rWin);
+    return reinterpret_cast<SalFrame*>(static_cast<sal_IntPtr>(SendMessageW(mhComWnd, SAL_MSG_CREATEFRAME, 0, reinterpret_cast<LPARAM>(&aData))));
 }
 
 void WinSalInstance::DestroyFrame( SalFrame* pFrame )

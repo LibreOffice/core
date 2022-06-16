@@ -119,4 +119,44 @@ QImage toQImage(const Image& rImage)
     return aImage;
 }
 
+sal_Int32 GetSgpMetricFromQImage(vcl::SGPmetric eMetric, QImage& rImage)
+{
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width:
+            return rImage.width();
+        case vcl::SGPmetric::Height:
+            return rImage.height();
+        case vcl::SGPmetric::ScalePercentage:
+            return round(100 * rImage.devicePixelRatio());
+        case vcl::SGPmetric::OffScreen:
+            return true;
+        case vcl::SGPmetric::BitCount:
+            return getFormatBits(rImage.format());
+        case vcl::SGPmetric::DPIX:
+        case vcl::SGPmetric::DPIY:
+            return round(96 * rImage.devicePixelRatioF());
+    }
+
+    return -1;
+}
+
+QImage toQImage(cairo_surface_t& rSurface, sal_Int32 nScalePercentage)
+{
+    cairo_surface_flush(&rSurface);
+
+    QImage aImage(cairo_image_surface_get_data(&rSurface), cairo_image_surface_get_width(&rSurface),
+                  cairo_image_surface_get_height(&rSurface), Qt_DefaultFormat32);
+    if (nScalePercentage > 0)
+        aImage.setDevicePixelRatio(nScalePercentage / 100.0f);
+    return aImage;
+}
+
+QImage* toQImage(cairo_surface_t* pSurface, sal_Int32 nScalePercentage)
+{
+    if (!pSurface)
+        return nullptr;
+    return new QImage(toQImage(*pSurface, nScalePercentage));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

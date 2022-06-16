@@ -281,10 +281,11 @@ static void UpdateDarkMode(HWND hWnd)
     FreeLibrary(hUxthemeLib);
 }
 
-SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
-                              HWND hWndParent, SalFrameStyleFlags nSalFrameStyle )
+SalFrame* ImplSalCreateFrame(WinSalInstance* pInst, struct WinCreateFrameData &rData)
 {
-    WinSalFrame*   pFrame = new WinSalFrame;
+    HWND hWndParent = rData.m_hWnd;
+    SalFrameStyleFlags nSalFrameStyle = rData.m_nFlags;
+    WinSalFrame*   pFrame = new WinSalFrame(rData.m_rWin);
     HWND        hWnd;
     DWORD       nSysStyle = 0;
     DWORD       nExSysStyle = 0;
@@ -823,7 +824,8 @@ void SetForegroundWindow_Impl(HWND hwnd)
 
 }
 
-WinSalFrame::WinSalFrame()
+WinSalFrame::WinSalFrame(vcl::Window& rWin)
+    : SalFrame(rWin)
 {
     SalData* pSalData = GetSalData();
 
@@ -1561,7 +1563,7 @@ void WinSalFrame::GetWorkArea( tools::Rectangle &rRect )
     rRect.SetBottom( aRect.bottom-1 );
 }
 
-void WinSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
+void WinSalFrame::GetClientSize(sal_Int32& rWidth, sal_Int32& rHeight)
 {
     rWidth  = maGeometry.width();
     rHeight = maGeometry.height();
@@ -2168,6 +2170,25 @@ void WinSalFrame::Flush()
     if(mpThreadGraphics)
         mpThreadGraphics->Flush();
     GdiFlush();
+}
+
+void WinSalFrame::GetDPI(sal_Int32& rDPIX, sal_Int32& rDPIY)
+{
+    HDC hDC = GetDC(mhWnd);
+    rDPIX = GetDeviceCaps(hDC, LOGPIXELSX);
+    rDPIY = GetDeviceCaps(hDC, LOGPIXELSY);
+    ReleaseDC(mhWnd, hDC);
+
+    // #111139# this fixes the symptom of div by zero on startup
+    // however, printing will fail most likely as communication with
+    // the printer seems not to work in this case
+    if (!rDPIX || !rDPIY)
+        rDPIX = rDPIY = 600;
+}
+
+sal_Int32 WinSalFrame::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    return GetWindow()->GetOutDev()->GetSgpMetric(eMetric);
 }
 
 static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pContext )

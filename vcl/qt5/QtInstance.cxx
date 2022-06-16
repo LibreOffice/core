@@ -31,6 +31,7 @@
 #include <QtMenu.hxx>
 #include <QtObject.hxx>
 #include <QtOpenGLContext.hxx>
+#include "QtSvpGraphics.hxx"
 #include "QtSvpVirtualDevice.hxx"
 #include <QtSystem.hxx>
 #include <QtTimer.hxx>
@@ -297,21 +298,23 @@ void QtInstance::localeChanged()
 
 void QtInstance::deleteObjectLater(QObject* pObject) { pObject->deleteLater(); }
 
-SalFrame* QtInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle)
+SalFrame* QtInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle,
+                                       vcl::Window& rWin)
 {
     SalFrame* pRet(nullptr);
-    RunInMainThread([&, this]() { pRet = new QtFrame(nullptr, nStyle, useCairo()); });
+    RunInMainThread([&, this]() { pRet = new QtFrame(nullptr, nStyle, rWin, useCairo()); });
     assert(pRet);
     return pRet;
 }
 
-SalFrame* QtInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle)
+SalFrame* QtInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& rWin)
 {
     assert(!pParent || dynamic_cast<QtFrame*>(pParent));
 
     SalFrame* pRet(nullptr);
-    RunInMainThread(
-        [&, this]() { pRet = new QtFrame(static_cast<QtFrame*>(pParent), nStyle, useCairo()); });
+    RunInMainThread([&, this]() {
+        pRet = new QtFrame(static_cast<QtFrame*>(pParent), nStyle, rWin, useCairo());
+    });
     assert(pRet);
     return pRet;
 }
@@ -344,26 +347,27 @@ void QtInstance::DestroyObject(SalObject* pObject)
     }
 }
 
-std::unique_ptr<SalVirtualDevice>
-QtInstance::CreateVirtualDevice(SalGraphics& rGraphics, tools::Long& nDX, tools::Long& nDY,
-                                DeviceFormat /*eFormat*/, const SystemGraphicsData* pGd)
+std::unique_ptr<SalVirtualDevice> QtInstance::CreateVirtualDevice(SalGraphics& rGraphics,
+                                                                  sal_Int32& nDX, sal_Int32& nDY,
+                                                                  DeviceFormat /*eFormat*/,
+                                                                  const SystemGraphicsData* pGd)
 {
     if (m_bUseCairo)
     {
-        SvpSalGraphics* pSvpSalGraphics = dynamic_cast<QtSvpGraphics*>(&rGraphics);
-        assert(pSvpSalGraphics);
+        QtSvpGraphics* pQtSvpGraphics = dynamic_cast<QtSvpGraphics*>(&rGraphics);
+        assert(pQtSvpGraphics);
         // tdf#127529 see SvpSalInstance::CreateVirtualDevice for the rare case of a non-null pPreExistingTarget
         cairo_surface_t* pPreExistingTarget
             = pGd ? static_cast<cairo_surface_t*>(pGd->pSurface) : nullptr;
         std::unique_ptr<SalVirtualDevice> pVD(
-            new QtSvpVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
+            new QtSvpVirtualDevice(*pQtSvpGraphics, pPreExistingTarget));
         pVD->SetSize(nDX, nDY);
         return pVD;
     }
     else
     {
-        std::unique_ptr<SalVirtualDevice> pVD(new QtVirtualDevice(/*scale*/ 1));
-        pVD->SetSize(nDX, nDY);
+        std::unique_ptr<SalVirtualDevice> pVD(
+            new QtVirtualDevice(nDX, nDY, rGraphics.GetDPIScalePercentage()));
         return pVD;
     }
 }

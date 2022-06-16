@@ -195,13 +195,11 @@ public:
 
     HRGN getRegion() const;
 
-
     enum Type
     {
         PRINTER,
         VIRTUAL_DEVICE,
         WINDOW,
-        SCREEN
     };
 
 public:
@@ -321,13 +319,6 @@ private:
 public:
     // public SalGraphics methods, the interface to the independent vcl part
 
-    // get device resolution
-    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
-    // get the depth of the device
-    virtual sal_uInt16          GetBitCount() const override;
-    // get the width of the device
-    virtual tools::Long            GetGraphicsWidth() const override;
-
     // set the clip region to empty
     virtual void            ResetClipRegion() override;
 
@@ -401,6 +392,8 @@ public:
     virtual bool            supportsOperation( OutDevSupportType ) const override;
 
     virtual SystemGraphicsData GetGraphicsData() const override;
+
+    sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 
     /// Update settings based on the platform values
     static void updateSettingsNative( AllSettings& rSettings );

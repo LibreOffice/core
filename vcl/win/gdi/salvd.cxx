@@ -72,7 +72,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, to
 }
 
 std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphics& rSGraphics,
-                                                       tools::Long &nDX, tools::Long &nDY,
+                                                       sal_Int32& nDX, sal_Int32& nDY,
                                                        DeviceFormat /*eFormat*/,
                                                        const SystemGraphicsData* pData )
 {
@@ -194,7 +194,8 @@ void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
     mbGraphics = false;
 }
 
-bool WinSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
+bool WinSalVirtualDevice::SetSizeUsingBuffer(sal_Int32 nDX, sal_Int32 nDY, sal_uInt8*,
+                                             sal_Int32)
 {
     if( mbForeignDC || !mhBmp )
         return true;    // ???
@@ -218,6 +219,21 @@ bool WinSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
         mpGraphics->GetImpl()->Init();
 
     return true;
+}
+
+sal_Int32 WinSalVirtualDevice::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width: return mnWidth;
+        case vcl::SGPmetric::Height: return mnHeight;
+        case vcl::SGPmetric::DPIX: return 96;
+        case vcl::SGPmetric::DPIY: return 96;
+        case vcl::SGPmetric::ScalePercentage: return 100;
+        case vcl::SGPmetric::OffScreen: return true;
+        case vcl::SGPmetric::BitCount: return mnBitCount;
+    }
+    return -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

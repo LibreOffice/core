@@ -78,8 +78,7 @@ public:
         return m_pBackend.get();
     }
 
-    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
-
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const;
     virtual void            SetTextColor( Color nColor ) override;
     virtual void            SetFont(LogicalFontInstance*, int nFallbackLevel) override;
     virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;

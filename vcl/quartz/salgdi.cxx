@@ -220,11 +220,8 @@ AquaSalGraphics::AquaSalGraphics()
 #if HAVE_FEATURE_SKIA
     if(SkiaHelper::isVCLSkiaEnabled())
         mpBackend.reset(new AquaSkiaSalGraphicsImpl(*this, maShared));
-#else
-    if(false)
-        ;
-#endif
     else
+#endif
         mpBackend.reset(new AquaGraphicsBackend(maShared));
 
     for (int i = 0; i < MAX_FALLBACK; ++i)
@@ -815,6 +812,11 @@ void AquaSalGraphics::Flush()
 void AquaSalGraphics::Flush( const tools::Rectangle& rRect )
 {
     mpBackend->Flush( rRect );
+}
+
+sal_Int32 AquaSalGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    return mpBackend->GetSgpMetric(eMetric);
 }
 
 #ifdef IOS

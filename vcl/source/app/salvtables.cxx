@@ -85,8 +85,8 @@
 #include <salvtables.hxx>
 #include <comphelper/lok.hxx>
 
-SalFrame::SalFrame()
-    : m_pWindow(nullptr)
+SalFrame::SalFrame(vcl::Window& rWindow)
+    : m_pWindow(&rWindow)
     , m_pProc(nullptr)
 {
 }
@@ -96,10 +96,11 @@ SalFrame::SalFrame()
 
 SalFrame::~SalFrame() {}
 
-void SalFrame::SetCallback(vcl::Window* pWindow, SALFRAMEPROC pProc)
+void SalFrame::SetCallback(SALFRAMEPROC pProc)
 {
-    m_pWindow = pWindow;
     m_pProc = pProc;
+    if (!pProc)
+        m_pWindow = nullptr;
 }
 
 // default to full-frame flushes

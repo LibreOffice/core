@@ -739,8 +739,7 @@ void Application::SetSettings( const AllSettings& rSettings )
                              (pVirDev->GetDPIX() == nOldDPIX) &&
                              (pVirDev->GetDPIY() == nOldDPIY) )
                         {
-                            pVirDev->SetDPIX( pFirstFrame->GetOutDev()->GetDPIX() );
-                            pVirDev->SetDPIY( pFirstFrame->GetOutDev()->GetDPIY() );
+                            pVirDev->SetDPI(pFirstFrame->GetOutDev()->GetDPIX(), pFirstFrame->GetOutDev()->GetDPIY());
                             if ( pVirDev->IsMapModeEnabled() )
                             {
                                 MapMode aMapMode = pVirDev->GetMapMode();

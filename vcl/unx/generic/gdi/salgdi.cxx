@@ -61,7 +61,6 @@
 #include "X11CairoSalGraphicsImpl.hxx"
 #endif
 
-
 // X11Common
 
 X11Common::X11Common()
@@ -108,8 +107,7 @@ X11SalGraphics::X11SalGraphics():
     m_aXRenderPicture(0),
     mpClipRegion(nullptr),
     hBrush_(None),
-    bWindow_(false),
-    bVirDev_(false)
+    bWindow_(false)
 {
 #if HAVE_FEATURE_SKIA
     if (SkiaHelper::isVCLSkiaEnabled())
@@ -205,7 +203,6 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
     m_pVDev     = nullptr;
 
     bWindow_    = true;
-    bVirDev_    = false;
 
     SetDrawable(aTarget, nullptr, nXScreen);
     mxImpl->Init();
@@ -317,49 +314,16 @@ bool X11SalGraphics::GetDitherPixmap( Color nColor )
     return true;
 }
 
-void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
+sal_Int32 X11SalGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    char* pForceDpi;
-    if ((pForceDpi = getenv("SAL_FORCEDPI")))
-    {
-        OString sForceDPI(pForceDpi);
-        rDPIX = rDPIY = sForceDPI.toInt32();
-        return;
-    }
+    assert(m_pVDev || m_pFrame);
+    if (m_pFrame && eMetric == vcl::SGPmetric::BitCount)
+        return GetVisual().GetDepth();
 
-    const SalDisplay *pDisplay = GetDisplay();
-    if (!pDisplay)
-    {
-        SAL_WARN( "vcl", "Null display");
-        rDPIX = rDPIY = 96;
-        return;
-    }
-
-    Pair dpi = pDisplay->GetResolution();
-    rDPIX = dpi.A();
-    rDPIY = dpi.B();
-
-    if ( rDPIY > 200 )
-    {
-        rDPIX = Divide( rDPIX * 200, rDPIY );
-        rDPIY = 200;
-    }
-
-    // #i12705# equalize x- and y-resolution if they are close enough
-    if( rDPIX == rDPIY )
-        return;
-
-    // different x- and y- resolutions are usually artifacts of
-    // a wrongly calculated screen size.
-#ifdef DEBUG
-    SAL_INFO("vcl.gdi", "Forcing Resolution from "
-        << std::hex << rDPIX
-        << std::dec << rDPIX
-        << " to "
-        << std::hex << rDPIY
-        << std::dec << rDPIY);
-#endif
-    rDPIX = rDPIY; // y-resolution is more trustworthy
+    if (m_pVDev)
+       return m_pVDev->GetSgpMetric(eMetric);
+    else
+        return m_pFrame->GetSgpMetric(eMetric);
 }
 
 XRenderPictFormat* X11SalGraphics::GetXRenderFormat() const
@@ -384,8 +348,7 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
 
 void X11SalGraphics::Flush()
 {
-    if( X11GraphicsImpl* x11Impl = dynamic_cast< X11GraphicsImpl* >( mxImpl.get()))
-        x11Impl->Flush();
+    mxImpl->Flush();
 }
 
 #if ENABLE_CAIRO_CANVAS
@@ -461,12 +424,12 @@ css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rS
 
 #endif // ENABLE_CAIRO_CANVAS
 
-SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
+vcl::SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
 {
     if (m_pFrame)
-        return static_cast< SalGeometryProvider * >(m_pFrame);
+        return static_cast<vcl::SalGeometryProvider*>(m_pFrame);
     else
-        return static_cast< SalGeometryProvider * >(m_pVDev);
+        return static_cast<vcl::SalGeometryProvider*>(m_pVDev);
 }
 
 cairo_t* X11SalGraphics::getCairoContext()

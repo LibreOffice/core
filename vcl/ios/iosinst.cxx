@@ -118,13 +118,13 @@ public:
     }
 };
 
-SalFrame *IosSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
+SalFrame *IosSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle, vcl::Window& rWin )
 {
     pParent = NULL;
     return new IosSalFrame( this, NULL, nStyle );
 }
 
-SalFrame *IosSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
+SalFrame *IosSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& )
 {
     return new IosSalFrame( this, pParent, nStyle );
 }

@@ -29,8 +29,6 @@
 #include <QtGui/QPainterPath>
 #include <QtGui/QRegion>
 
-#include "QtGraphicsBase.hxx"
-
 namespace vcl::font
 {
 class PhysicalFontCollection;
@@ -42,7 +40,7 @@ class QtFontFace;
 class QtFrame;
 class QtPainter;
 
-class QtGraphicsBackend final : public SalGraphicsImpl, public QtGraphicsBase
+class QtGraphicsBackend final : public SalGraphicsImpl
 {
     friend class QtPainter;
 
@@ -60,9 +58,9 @@ public:
 
     void Init() override {}
 
-    QImage* getQImage() { return m_pQImage; }
-
-    void setQImage(QImage* pQImage) { m_pQImage = pQImage; }
+    QImage* getQImage() const { return m_pQImage; }
+    void setQImage(QImage* pQImage);
+    QtFrame* frame() const { return m_pFrame; }
 
     void freeResources() override {}
 
@@ -70,10 +68,6 @@ public:
 
     bool setClipRegion(vcl::Region const& rRegion) override;
     void ResetClipRegion() override;
-
-    sal_uInt16 GetBitCount() const override;
-
-    tools::Long GetGraphicsWidth() const override;
 
     void SetLineColor() override;
     void SetLineColor(Color nColor) override;
@@ -164,13 +158,11 @@ private:
     void drawScaledImage(const SalTwoRect& rPosAry, const QImage& rImage);
 };
 
-class QtGraphics final : public SalGraphicsAutoDelegateToImpl, public QtGraphicsBase
+class QtGraphics final : public SalGraphicsAutoDelegateToImpl
 {
     friend class QtBitmap;
 
     std::unique_ptr<QtGraphicsBackend> m_pBackend;
-
-    QtFrame* m_pFrame;
 
     rtl::Reference<QtFont> m_pTextStyle[MAX_FALLBACK];
     Color m_aTextColor;
@@ -194,7 +186,7 @@ public:
 
     QImage* getQImage() { return m_pBackend->getQImage(); }
 
-    void ChangeQImage(QImage* pImage);
+    void setQImage(QImage* pQImage);
 
     virtual SalGraphicsImpl* GetImpl() const override;
     virtual SystemGraphicsData GetGraphicsData() const override;
@@ -218,7 +210,7 @@ public:
 
     // GDI
 
-    virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 
     // Text rendering + font support
 

@@ -7,6 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "../qt5/QtSvpVirtualDevice.hxx"
+#pragma once
+
+#include <headless/svpvd.hxx>
+
+class QtSvpGraphics;
+
+class VCL_DLLPUBLIC QtSvpVirtualDevice final : public SvpSalVirtualDevice
+{
+    sal_Int32 m_nScalePercentage;
+
+public:
+    QtSvpVirtualDevice(QtSvpGraphics& rGraphics, cairo_surface_t* pPreExistingTarget);
+    SalGraphics* AcquireGraphics() override;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

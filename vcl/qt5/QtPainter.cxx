@@ -24,17 +24,21 @@
 QtPainter::QtPainter(QtGraphicsBackend& rGraphics, bool bPrepareBrush, sal_uInt8 nTransparency)
     : m_rGraphics(rGraphics)
 {
+    QImage* pQImage;
     if (rGraphics.m_pQImage)
-    {
-        if (!begin(rGraphics.m_pQImage))
-            std::abort();
-    }
+        pQImage = rGraphics.m_pQImage;
     else
     {
-        assert(rGraphics.m_pFrame);
-        if (!begin(rGraphics.m_pFrame->GetQWidget()))
-            std::abort();
+        assert(m_rGraphics.m_pFrame);
+        pQImage = rGraphics.m_pFrame->getQImage();
     }
+
+    // all painting must be done without Qt scaling, as LO does the scaling itself
+    m_fOriginalDevicePixelRatio = pQImage->devicePixelRatioF();
+    pQImage->setDevicePixelRatio(1.0f);
+    if (!begin(pQImage))
+        std::abort();
+
     if (!rGraphics.m_aClipPath.isEmpty())
         setClipPath(rGraphics.m_aClipPath);
     else
@@ -59,12 +63,16 @@ QtPainter::QtPainter(QtGraphicsBackend& rGraphics, bool bPrepareBrush, sal_uInt8
 
 QtPainter::~QtPainter()
 {
+    QImage* pQImage
+        = m_rGraphics.m_pQImage ? m_rGraphics.m_pQImage : m_rGraphics.m_pFrame->getQImage();
+    pQImage->setDevicePixelRatio(m_fOriginalDevicePixelRatio);
+
     if (!m_rGraphics.m_pFrame || m_aRegion.isEmpty())
         return;
 
     QWidget* pWidget = m_rGraphics.m_pFrame->GetQWidget();
     QRect aParentUpdateRect(
-        scaledQRect(m_aRegion.boundingRect(), 1 / m_rGraphics.devicePixelRatioF()));
+        scaledQRect(m_aRegion.boundingRect(), 1 / m_rGraphics.m_pFrame->devicePixelRatioF()));
     if (!m_rGraphics.m_pFrame->GetTopLevelWindow())
         pWidget->update(m_aRegion);
     else

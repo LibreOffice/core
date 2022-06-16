@@ -320,16 +320,6 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
     }
 }
 
-Size QuartzSalBitmap::GetSize() const
-{
-    return Size( mnWidth, mnHeight );
-}
-
-sal_uInt16 QuartzSalBitmap::GetBitCount() const
-{
-    return mnBits;
-}
-
 namespace {
 
 struct pal_entry
@@ -686,6 +676,21 @@ bool QuartzSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*
 bool QuartzSalBitmap::Replace( const Color& /*rSearchColor*/, const Color& /*rReplaceColor*/, sal_uInt8 /*nTol*/ )
 {
     return false;
+}
+
+sal_Int32 QuartzSalBitmap::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width: return mnWidth;
+        case vcl::SGPmetric::Height: return mnHeight;
+        case vcl::SGPmetric::DPIX: return 96;
+        case vcl::SGPmetric::DPIY: return 96;
+        case vcl::SGPmetric::ScalePercentage: return 100;
+        case vcl::SGPmetric::OffScreen: return true;
+        case vcl::SGPmetric::BitCount: return mnBits;
+    }
+    return -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

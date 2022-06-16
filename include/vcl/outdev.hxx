@@ -32,6 +32,7 @@
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
+#include <vcl/GeometryProvider.hxx>
 #include <vcl/region.hxx>
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 #include <vcl/rendercontext/AntialiasingFlags.hxx>
@@ -172,14 +173,16 @@ typedef struct _cairo_surface cairo_surface_t;
 * so we need to use virtual inheritance to keep the referencing counting
 * OK.
 */
-class SAL_WARN_UNUSED VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase
+class SAL_WARN_UNUSED VCL_DLLPUBLIC OutputDevice
+    : public virtual VclReferenceBase
+    , public vcl::SalGeometryProviderImpl
 {
     friend class Printer;
     friend class VirtualDevice;
     friend class vcl::Window;
     friend class vcl::WindowOutputDevice;
     friend class WorkWindow;
-    friend void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight );
+    friend void ImplHandleResize(vcl::Window*, sal_Int32 nNewWidth, sal_Int32 nNewHeight);
 
 private:
     OutputDevice(const OutputDevice&) = delete;
@@ -213,11 +216,6 @@ private:
     tools::Long                            mnOutOffX;
     /// Output offset for device output in pixel (pseudo window offset within window system's frames)
     tools::Long                            mnOutOffY;
-    tools::Long                            mnOutWidth;
-    tools::Long                            mnOutHeight;
-    sal_Int32                       mnDPIX;
-    sal_Int32                       mnDPIY;
-    sal_Int32                       mnDPIScalePercentage; ///< For HiDPI displays, we want to draw elements for a percentage larger
     /// font specific text alignment offsets in pixel units
     mutable tools::Long                    mnTextOffX;
     mutable tools::Long                    mnTextOffY;
@@ -316,12 +314,9 @@ public:
 
     virtual bool                IsScreenComp() const { return true; }
 
-    virtual sal_uInt16          GetBitCount() const;
-
-    Size                        GetOutputSizePixel() const
-                                    { return Size( mnOutWidth, mnOutHeight ); }
-    tools::Long                        GetOutputWidthPixel() const { return mnOutWidth; }
-    tools::Long                        GetOutputHeightPixel() const { return mnOutHeight; }
+    Size GetOutputSizePixel() const { return GetSizePixel(); }
+    tools::Long GetOutputWidthPixel() const { return m_nWidth; }
+    tools::Long GetOutputHeightPixel() const { return m_nHeight; }
     tools::Long                        GetOutOffXPixel() const { return mnOutOffX; }
     tools::Long                        GetOutOffYPixel() const { return mnOutOffY; }
     void                        SetOutOffXPixel(tools::Long nOutOffX);
@@ -384,31 +379,13 @@ protected:
     ///@{
 
 public:
-
-    /** Get the output device's DPI x-axis value.
-
-     @returns x-axis DPI value
+    /** Sets the DPI values
+     *
+     * Use <= 0 to keep the old value
+     *
+     * @returns true if a DPI value was changed
      */
-    SAL_DLLPRIVATE sal_Int32    GetDPIX() const { return mnDPIX; }
-
-    /** Get the output device's DPI y-axis value.
-
-     @returns y-axis DPI value
-     */
-    SAL_DLLPRIVATE sal_Int32    GetDPIY() const { return mnDPIY; }
-
-    SAL_DLLPRIVATE void         SetDPIX( sal_Int32 nDPIX ) { mnDPIX = nDPIX; }
-    SAL_DLLPRIVATE void         SetDPIY( sal_Int32 nDPIY ) { mnDPIY = nDPIY; }
-
-    float GetDPIScaleFactor() const
-    {
-        return mnDPIScalePercentage / 100.0f;
-    }
-
-    sal_Int32 GetDPIScalePercentage() const
-    {
-        return mnDPIScalePercentage;
-    }
+    bool SetDPI(sal_Int32 nDPIX, sal_Int32 nDPIY);
 
     OutDevType                  GetOutDevType() const { return meOutDevType; }
     virtual bool IsVirtual() const;

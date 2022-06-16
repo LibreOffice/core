@@ -61,8 +61,6 @@ public:
                         WinSalBitmap();
     virtual             ~WinSalBitmap() override;
 
-public:
-
     bool                        Create( HANDLE hBitmap );
     virtual bool                Create( const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal ) override;
     virtual bool                Create( const SalBitmap& rSalBmpImpl ) override;
@@ -74,9 +72,6 @@ public:
 
     virtual void                Destroy() override;
 
-    virtual Size                GetSize() const override { return maSize; }
-    virtual sal_uInt16          GetBitCount() const override { return mnBitCount; }
-
     virtual BitmapBuffer*       AcquireBuffer( BitmapAccessMode nMode ) override;
     virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;
     virtual bool                GetSystemData( BitmapSystemData& rData ) override;
@@ -84,6 +79,8 @@ public:
     virtual bool                ScalingSupported() const override;
     virtual bool                Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
     virtual bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol ) override;
+
+    sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 
     // exclusive management op's for SystemDependentData at WinSalBitmap
     template<class T>

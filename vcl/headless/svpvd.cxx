@@ -48,7 +48,7 @@ SvpSalVirtualDevice::~SvpSalVirtualDevice()
 
 SvpSalGraphics* SvpSalVirtualDevice::AddGraphics(SvpSalGraphics* pGraphics)
 {
-    pGraphics->setSurface(m_pSurface, m_aFrameSize);
+    pGraphics->setSurface(m_pSurface);
     m_aGraphics.push_back(pGraphics);
     return pGraphics;
 }
@@ -64,17 +64,39 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
     delete pGraphics;
 }
 
-bool SvpSalVirtualDevice::SetSize( tools::Long nNewDX, tools::Long nNewDY )
+void SvpSalVirtualDevice::CreateSurface(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8 *const pBuffer, sal_Int32 nScalePercentage)
 {
-    return SetSizeUsingBuffer(nNewDX, nNewDY, nullptr);
-}
+    double fScale;
+    if (nScalePercentage > 0)
+        fScale = nScalePercentage / 100.0;
+    else
+        fScale = GetDPIScaleFactor();
 
-void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, sal_uInt8 *const pBuffer)
-{
-    if (m_pSurface)
+    if (nNewDX <= 0 || nNewDY <= 0)
     {
-        cairo_surface_destroy(m_pSurface);
+        if (nScalePercentage > 0 && m_pSurface)
+        {
+            dl_cairo_surface_set_device_scale(m_pSurface, fScale, fScale);
+            return;
+        }
+
+        if (pBuffer && !m_pSurface)
+        {
+            SAL_WARN("vcl", "Trying to set buffer without sizes or surface!");
+            return;
+        }
+
+        if (m_pSurface)
+        {
+            nNewDX = cairo_image_surface_get_width(m_pSurface);
+            nNewDY = cairo_image_surface_get_height(m_pSurface);
+        }
+        else
+            nNewDX = nNewDY = 1;
     }
+
+    if (m_pSurface)
+        cairo_surface_destroy(m_pSurface);
 
     if (pBuffer)
     {
@@ -84,7 +106,7 @@ void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
         // or whether it's that something else that just might happen to be called with LOK active.
         assert(comphelper::LibreOfficeKit::isActive());
         // Force scaling of the painting
-        double fScale = comphelper::LibreOfficeKit::getDPIScale();
+        assert(fScale == comphelper::LibreOfficeKit::getDPIScale());
 
         m_pSurface = cairo_image_surface_create_for_data(pBuffer, CAIRO_FORMAT_ARGB32,
                             nNewDX, nNewDY, cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nNewDX));
@@ -92,17 +114,16 @@ void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
     }
     else if(nNewDX <= 32 && nNewDY <= 32)
     {
-        double fXScale, fYScale;
-        dl_cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
-        nNewDX *= fXScale;
-        nNewDY *= fYScale;
+        dl_cairo_surface_get_device_scale(m_pRefSurface, &fScale, nullptr);
+        nNewDX *= fScale;
+        nNewDY *= fScale;
 
         // Force image-based surface if small. Small VirtualDevice instances are often used for small
         // temporary bitmaps that will eventually have GetBitmap() called on them, which would cause
         // X Server roundtrip with Xlib-based surface, which may be way more costly than doing the drawing
         // in software (which should be fairly cheap for small surfaces anyway).
         m_pSurface = cairo_surface_create_similar_image(m_pRefSurface, CAIRO_FORMAT_ARGB32, nNewDX, nNewDY);
-        dl_cairo_surface_set_device_scale(m_pSurface, fXScale, fYScale);
+        dl_cairo_surface_set_device_scale(m_pSurface, fScale, fScale);
     }
     else
     {
@@ -113,39 +134,35 @@ void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
     SAL_WARN_IF(cairo_surface_status(m_pSurface) != CAIRO_STATUS_SUCCESS, "vcl", "surface of size " << nNewDX << " by " << nNewDY << " creation failed with status of: " << cairo_status_to_string(cairo_surface_status(m_pSurface)));
 }
 
-bool SvpSalVirtualDevice::SetSizeUsingBuffer( tools::Long nNewDX, tools::Long nNewDY,
-        sal_uInt8 *const pBuffer)
+bool SvpSalVirtualDevice::SetSizeUsingBuffer(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8 *const pBuffer, sal_Int32 nScale)
 {
-    if (nNewDX == 0)
-        nNewDX = 1;
-    if (nNewDY == 0)
-        nNewDY = 1;
-
-    if (!m_pSurface || m_aFrameSize.getX() != nNewDX ||
-                       m_aFrameSize.getY() != nNewDY)
+    FixSetSizeParams(nNewDX, nNewDY, nScale);
+    if (!m_pSurface || cairo_image_surface_get_width(m_pSurface) != nNewDX ||
+                       cairo_image_surface_get_height(m_pSurface) != nNewDY)
     {
-        m_aFrameSize = basegfx::B2IVector(nNewDX, nNewDY);
-
         if (m_bOwnsSurface)
-            CreateSurface(nNewDX, nNewDY, pBuffer);
+            CreateSurface(nNewDX, nNewDY, pBuffer, nScale);
 
         assert(m_pSurface);
 
         // update device in existing graphics
         for (auto const& graphic : m_aGraphics)
-            graphic->setSurface(m_pSurface, m_aFrameSize);
+            graphic->setSurface(m_pSurface);
     }
     return true;
 }
 
-tools::Long SvpSalVirtualDevice::GetWidth() const
+sal_Int32 SvpSalVirtualDevice::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    return m_pSurface ? m_aFrameSize.getX() : 0;
-}
+    assert(m_pSurface);
+    if (!m_pSurface)
+    {
+        if (vcl::SGPmetric::ScalePercentage == eMetric && comphelper::LibreOfficeKit::isActive())
+            return round(comphelper::LibreOfficeKit::getDPIScale() * 100);
+        return -1;
+    }
 
-tools::Long SvpSalVirtualDevice::GetHeight() const
-{
-    return m_pSurface ? m_aFrameSize.getY() : 0;
+    return CairoCommon::GetSgpMetricFromSurface(eMetric, *m_pSurface);
 }
 
 #endif

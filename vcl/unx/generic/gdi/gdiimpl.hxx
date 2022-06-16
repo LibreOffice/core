@@ -21,8 +21,6 @@
 
 #include <X11/Xlib.h>
 
-#include <unx/x11/x11gdiimpl.h>
-
 #include <salgdiimpl.hxx>
 
 #include <basegfx/polygon/b2dtrapezoid.hxx>
@@ -38,7 +36,7 @@ class SalPolyLine;
 class X11SalGraphics;
 class Gradient;
 
-class X11SalGraphicsImpl : public SalGraphicsImpl, public X11GraphicsImpl
+class X11SalGraphicsImpl : public SalGraphicsImpl
 {
 private:
     X11SalGraphics& mrParent;
@@ -95,8 +93,6 @@ private:
         const basegfx::triangulator::B2DTriangleVector& rTriangles,
         double fTransparency);
 
-    tools::Long GetGraphicsHeight() const;
-
     void drawMaskedBitmap( const SalTwoRect& rPosAry,
                                               const SalBitmap& rSalBitmap,
                                               const SalBitmap& rTransparentBitmap );
@@ -104,7 +100,6 @@ private:
     void internalDrawPolyLine( sal_uInt32 nPoints, const Point* pPtAry, bool bClose );
 
 public:
-
     explicit X11SalGraphicsImpl(X11SalGraphics& rParent);
 
     virtual void freeResources() override;
@@ -114,12 +109,6 @@ public:
     virtual OUString getRenderBackendName() const override { return "gen"; }
 
     virtual bool setClipRegion( const vcl::Region& ) override;
-    //
-    // get the depth of the device
-    virtual sal_uInt16 GetBitCount() const override;
-
-    // get the width of the device
-    virtual tools::Long GetGraphicsWidth() const override;
 
     // set the clip region to empty
     virtual void ResetClipRegion() override;

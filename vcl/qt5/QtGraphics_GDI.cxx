@@ -23,6 +23,7 @@
 #include <QtPainter.hxx>
 
 #include <sal/log.hxx>
+#include <window.h>
 
 #include <QtGui/QPainter>
 #include <QtGui/QScreen>
@@ -44,6 +45,8 @@ QtGraphicsBackend::QtGraphicsBackend(QtFrame* pFrame, QImage* pQImage)
 }
 
 QtGraphicsBackend::~QtGraphicsBackend() {}
+
+void QtGraphicsBackend::setQImage(QImage* pQImage) { m_pQImage = pQImage; }
 
 const basegfx::B2DPoint aHalfPointOfs(0.5, 0.5);
 
@@ -603,7 +606,7 @@ bool QtGraphicsBackend::blendAlphaBitmap(const SalTwoRect&, const SalBitmap& /*r
 
 static QImage getAlphaImage(const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap)
 {
-    assert(rSourceBitmap.GetSize() == rAlphaBitmap.GetSize());
+    assert(rSourceBitmap.GetSizePixel() == rAlphaBitmap.GetSizePixel());
     assert(rAlphaBitmap.GetBitCount() == 8 || rAlphaBitmap.GetBitCount() == 1);
 
     QImage aAlphaMask = *static_cast<const QtBitmap*>(&rAlphaBitmap)->GetQImage();
@@ -666,10 +669,6 @@ bool QtGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Lon
     return true;
 }
 
-sal_uInt16 QtGraphicsBackend::GetBitCount() const { return getFormatBits(m_pQImage->format()); }
-
-tools::Long QtGraphicsBackend::GetGraphicsWidth() const { return m_pQImage->width(); }
-
 void QtGraphicsBackend::SetLineColor() { m_aLineColor = SALCOLOR_NONE; }
 
 void QtGraphicsBackend::SetLineColor(Color nColor) { m_aLineColor = nColor; }
@@ -700,31 +699,6 @@ bool QtGraphicsBackend::supportsOperation(OutDevSupportType eType) const
         default:
             return false;
     }
-}
-
-void QtGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
-{
-    char* pForceDpi;
-    if ((pForceDpi = getenv("SAL_FORCEDPI")))
-    {
-        OString sForceDPI(pForceDpi);
-        rDPIX = rDPIY = sForceDPI.toInt32();
-        return;
-    }
-
-    if (!m_pFrame)
-        return;
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    QScreen* pScreen = m_pFrame->GetQWidget()->screen();
-#else
-    if (!m_pFrame->GetQWidget()->window()->windowHandle())
-        return;
-
-    QScreen* pScreen = m_pFrame->GetQWidget()->window()->windowHandle()->screen();
-#endif
-    rDPIX = pScreen->logicalDotsPerInchX() * pScreen->devicePixelRatio() + 0.5;
-    rDPIY = pScreen->logicalDotsPerInchY() * pScreen->devicePixelRatio() + 0.5;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

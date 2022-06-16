@@ -57,8 +57,9 @@
 
 AquaSalFrame* AquaSalFrame::s_pCaptureFrame = nullptr;
 
-AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle ) :
-    mpNSWindow(nil),
+AquaSalFrame::AquaSalFrame(SalFrame* pParent, SalFrameStyleFlags salFrameStyle, vcl::Window& rWin)
+    : SalFrame(rWin)
+    , mpNSWindow(nil),
     mpNSView(nil),
     mpDockMenuEntry(nil),
     mpGraphics(nullptr),
@@ -1807,6 +1808,30 @@ void AquaSalFrame::EndSetClipRegion()
     [mpNSWindow setOpaque: (mrClippingPath != nullptr) ? NO : YES];
     [mpNSWindow setBackgroundColor: [NSColor clearColor]];
     // shadow is invalidated when view gets drawn again
+}
+
+void AquaSalFrame::GetDPI(sal_Int32& rDPIX, sal_Int32& rDPIY)
+{
+#ifndef IOS
+    NSWindow* pWindow = (maShared.mbWindow && maShared.mpFrame) ? maShared.mpFrame->getNSWindow() : nil;
+    AquaSalGraphics::GetDPI(pWindow, rDPIX, rDPIY);
+#else
+    // This *must* be 96 or else the iOS app will behave very badly (tiles are scaled wrongly and
+    // don't match each others at their boundaries, and other issues). But *why* it must be 96 I
+    // have no idea. The commit that changed it to 96 from (the arbitrary) 200 did not say. If you
+    // know where else 96 is explicitly or implicitly hard-coded, please modify this comment.
+
+    // Follow-up: It might be this: in 'online', loleaflet/src/map/Map.js:
+    // 15 = 1440 twips-per-inch / 96 dpi.
+    // Chosen to match previous hardcoded value of 3840 for
+    // the current tile pixel size of 256.
+    rDPIX = rDPIY = 96;
+#endif
+}
+
+sal_Int32 AquaSalFrame::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    return GetWindow()->GetOutDev()->GetSgpMetric(eMetric);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -823,9 +823,10 @@ void Printer::ImplUpdatePageData()
     if ( !AcquireGraphics() )
         return;
 
-    mpGraphics->GetResolution( mnDPIX, mnDPIY );
+    mnDPIX = mpGraphics->GetDPIX();
+    mnDPIY = mpGraphics->GetDPIY();
     mpInfoPrinter->GetPageInfo( &maJobSetup.ImplGetConstData(),
-                                mnOutWidth, mnOutHeight,
+                                m_nWidth, m_nHeight,
                                 maPageOffset,
                                 maPaperSize );
 }

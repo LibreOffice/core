@@ -212,29 +212,20 @@ void SvpSalBitmap::Destroy()
     }
 }
 
-Size SvpSalBitmap::GetSize() const
+sal_Int32 SvpSalBitmap::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    Size aSize;
-
-    if (mpDIB)
+    assert(mpDIB);
+    switch (eMetric)
     {
-        aSize.setWidth( mpDIB->mnWidth );
-        aSize.setHeight( mpDIB->mnHeight );
+        case vcl::SGPmetric::Width: return mpDIB ? mpDIB->mnWidth : 0;
+        case vcl::SGPmetric::Height: return mpDIB ? mpDIB->mnHeight : 0;
+        case vcl::SGPmetric::DPIX: return 96;
+        case vcl::SGPmetric::DPIY: return 96;
+        case vcl::SGPmetric::ScalePercentage: return 100;
+        case vcl::SGPmetric::OffScreen: return true;
+        case vcl::SGPmetric::BitCount: return mpDIB ? mpDIB->mnBitCount : 0;
     }
-
-    return aSize;
-}
-
-sal_uInt16 SvpSalBitmap::GetBitCount() const
-{
-    sal_uInt16 nBitCount;
-
-    if (mpDIB)
-        nBitCount = mpDIB->mnBitCount;
-    else
-        nBitCount = 0;
-
-    return nBitCount;
+    return -1;
 }
 
 BitmapBuffer* SvpSalBitmap::AcquireBuffer(BitmapAccessMode)

@@ -459,7 +459,7 @@ void AquaSalVirtualDevice::Destroy()
     }
 }
 
-bool AquaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY)
+bool AquaSalVirtualDevice::SetSizeUsingBuffer(sal_Int32 nDX, sal_Int32 nDY, sal_uInt8*, sal_Int32 nScale)
 {
     SAL_INFO("vcl.virdev", "AquaSalVirtualDevice::SetSize() this=" << this <<
              " (" << nDX << "x" << nDY << ") mbForeignContext=" << (mbForeignContext ? "YES" : "NO"));

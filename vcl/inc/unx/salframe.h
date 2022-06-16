@@ -161,8 +161,10 @@ class X11SalFrame final : public SalFrame
     void            askForXEmbedFocus( sal_Int32 i_nTimeCode );
 
     void            updateWMClass();
+    sal_Int32 GetDPI() const;
+
 public:
-    X11SalFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle, SystemParentData const * pSystemParent = nullptr );
+    X11SalFrame(SalFrame* pParent, SalFrameStyleFlags, SystemParentData const * pSystemParent, vcl::Window&);
     virtual ~X11SalFrame() override;
 
     bool            Dispatch( XEvent *pEvent );
@@ -203,6 +205,7 @@ public:
     bool                    appendUnicodeSequence( sal_Unicode );
     bool                    endUnicodeSequence();
 
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
     virtual SalGraphics*        AcquireGraphics() override;
     virtual void                ReleaseGraphics( SalGraphics* pGraphics ) override;
 
@@ -221,7 +224,8 @@ public:
     virtual void                SetMinClientSize( tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                SetMaxClientSize( tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags ) override;
-    virtual void                GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) override;
+    virtual void GetDPI(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+    virtual void GetClientSize(sal_Int32& rWidth, sal_Int32& rHeight) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void SetWindowState(const vcl::WindowData*) override;

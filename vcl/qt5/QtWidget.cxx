@@ -39,6 +39,7 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QShowEvent>
+#include <QtGui/QScreen>
 #include <QtGui/QTextCharFormat>
 #include <QtGui/QWheelEvent>
 #include <QtWidgets/QMainWindow>
@@ -68,20 +69,8 @@ void QtWidget::paintEvent(QPaintEvent* pEvent)
     if (!m_rFrame.m_bNullRegion)
         p.setClipRegion(m_rFrame.m_aRegion);
 
-    QImage aImage;
-    if (m_rFrame.m_bUseCairo)
-    {
-        cairo_surface_t* pSurface = m_rFrame.m_pSurface.get();
-        cairo_surface_flush(pSurface);
-
-        aImage = QImage(cairo_image_surface_get_data(pSurface),
-                        cairo_image_surface_get_width(pSurface),
-                        cairo_image_surface_get_height(pSurface), Qt_DefaultFormat32);
-    }
-    else
-        aImage = *m_rFrame.m_pQImage;
-
     const qreal fRatio = m_rFrame.devicePixelRatioF();
+    QImage aImage(*m_rFrame.getQImage());
     assert(aImage.size() == scaledQSize(m_rFrame.asChild()->size(), fRatio));
     aImage.setDevicePixelRatio(fRatio);
     QPoint aPos = m_rFrame.mapToParent(pEvent->rect().topLeft());
@@ -110,9 +99,10 @@ void QtWidget::resizeEvent(QResizeEvent*)
                     = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
                 cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
                                             &m_rFrame.m_aDamageHandler, nullptr);
-                m_rFrame.m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(nWidth, nHeight));
+                m_rFrame.m_pSvpGraphics->setSurface(pSurface);
                 UniqueCairoSurface old_surface(m_rFrame.m_pSurface.release());
                 m_rFrame.m_pSurface.reset(pSurface);
+                m_rFrame.m_pQImage.reset();
 
                 const int nMinWidth = qMin(nOldWidth, nWidth);
                 const int nMinHeight = qMin(nOldHeight, nHeight);
@@ -125,9 +115,10 @@ void QtWidget::resizeEvent(QResizeEvent*)
     {
         if (m_rFrame.m_pQImage && m_rFrame.m_pQImage->size() != QSize(nWidth, nHeight))
         {
-            QImage* pImage = new QImage(m_rFrame.m_pQImage->copy(0, 0, nWidth, nHeight));
-            m_rFrame.m_pQtGraphics->ChangeQImage(pImage);
-            m_rFrame.m_pQImage.reset(pImage);
+            QImage* pQImage = new QImage(m_rFrame.m_pQImage->copy(0, 0, nWidth, nHeight));
+            pQImage->setDevicePixelRatio(m_rFrame.GetDPIScaleFactor());
+            m_rFrame.m_pQtGraphics->setQImage(pQImage);
+            m_rFrame.m_pQImage.reset(pQImage);
         }
     }
 

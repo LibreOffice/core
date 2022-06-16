@@ -2750,4 +2750,9 @@ bool WinSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
     return bRet;
 }
 
+sal_Int32 WinSalGraphicsImpl::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    return mrParent.GetSgpMetric(eMetric);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
