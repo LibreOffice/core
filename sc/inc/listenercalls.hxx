@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vector>
+#include <list>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/EventObject.hpp>
 
@@ -48,7 +48,9 @@ struct ScUnoListenerEntry
 class ScUnoListenerCalls
 {
 private:
-    ::std::vector<ScUnoListenerEntry> aEntries;
+    // Must be list, not vector, to not invalidate iterators, see
+    // ExecuteAndClear() implementation.
+    ::std::list<ScUnoListenerEntry> aEntries;
 
 public:
                 ScUnoListenerCalls();
