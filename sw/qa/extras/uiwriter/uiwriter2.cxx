@@ -2147,9 +2147,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105413)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // Set Heading 1 paragraph style in the 3th paragraph.
-    // Because of the tracked deleted region between them,
-    // this sets also the same style in the first paragraph automatically
-    // to keep the changed paragraph style at hiding tracked changes or saving the document
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
@@ -2165,9 +2162,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105413)
                          getProperty<OUString>(getParagraph(3), "ParaStyleName"));
     CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
                          getProperty<OUString>(getParagraph(2), "ParaStyleName"));
-    // first paragraph gets the same heading style
-    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
-                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817)
@@ -2589,9 +2583,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122893)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // Set center-aligned paragraph with preset double line spacing in the 3th paragraph.
-    // Because of the tracked deleted region between them,
-    // this sets also the same formatting in the first paragraph automatically
-    // to keep the changed paragraph formatting at hiding tracked changes or saving the document
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
@@ -2610,10 +2601,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122893)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100),
                          getProperty<style::LineSpacing>(getParagraph(2), "ParaLineSpacing")
                              .Height); // single line spacing
-    // first paragraph is also center-aligned with double line spacing
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(getParagraph(1), "ParaAdjust"));
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int16(200), getProperty<style::LineSpacing>(getParagraph(1), "ParaLineSpacing").Height);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122901)
@@ -2639,9 +2626,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122901)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // Increase paragraph borders in the 3th paragraph, similar to the default icon of the UI
-    // "Increase Paragraph Spacing". Because of the tracked deleted region between them,
-    // this sets also the same formatting in the first paragraph automatically
-    // to keep the changed paragraph formatting at hiding tracked changes or saving the document
+    // "Increase Paragraph Spacing".
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
@@ -2654,11 +2639,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122901)
                          getProperty<sal_Int32>(getParagraph(3), "ParaBottomMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), "ParaTopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(2), "ParaBottomMargin"));
-
-    // first paragraph is also center-aligned with double line spacing
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(101), getProperty<sal_Int32>(getParagraph(1), "ParaTopMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(101),
-                         getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122942)
