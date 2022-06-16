@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc7fe770_a8833606",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-16T07:25:25Z",
+      "side": 1,
+      "message": "Promising, see inline comment for a nitpick.",
+      "revId": "555ee22e7c9d3d384aaf706daff2cafb87d66aec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adb7b712_07846b90",
+        "filename": "sw/source/ui/misc/contentcontroldlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-16T07:25:25Z",
+      "side": 1,
+      "message": "I added the has_focus() check because we do the same in e.g. SwInsertBookmarkDlg\u0027s SelectionChangedHdl(). Playing around a bit, it seems the unwanted cases (e.g. removing the selected row) doesn\u0027t invoke the callback, so this early return is not needed. What do you think about removing it completely instead of this LibreOfficeKit::isActive() hack?\n\nAnd please give a one-paragraph description of the problem you fix by this removal in the commit message. :-) Thanks!",
+      "revId": "555ee22e7c9d3d384aaf706daff2cafb87d66aec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
