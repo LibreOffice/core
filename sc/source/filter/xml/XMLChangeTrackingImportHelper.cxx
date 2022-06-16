@@ -59,8 +59,7 @@ const ScCellValue& ScMyCellInfo::CreateCell(ScDocument& rDoc)
         ScAddress aPos;
         sal_Int32 nOffset(0);
         ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, rDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
-        maCell.meType = CELLTYPE_FORMULA;
-        maCell.mpFormula = new ScFormulaCell(rDoc, aPos, sFormula, eGrammar, nMatrixFlag);
+        maCell.set(new ScFormulaCell(rDoc, aPos, sFormula, eGrammar, nMatrixFlag));
         maCell.mpFormula->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
     }
 
@@ -664,7 +663,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
         if (!aCell.isEmpty())
         {
             ScCellValue aNewCell;
-            if (aCell.meType != CELLTYPE_FORMULA)
+            if (aCell.getType() != CELLTYPE_FORMULA)
             {
                 aNewCell = aCell;
                 pChangeActionContent->SetNewCell(aNewCell, &rDoc, OUString());
@@ -692,8 +691,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
                     sFormula2 = sFormula.copy( 1 );
                 }
 
-                aNewCell.meType = CELLTYPE_FORMULA;
-                aNewCell.mpFormula = new ScFormulaCell(rDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag);
+                aNewCell.set(new ScFormulaCell(rDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag));
                 if (nMatrixFlag == ScMatrixMode::Formula)
                 {
                     SCCOL nCols;

@@ -433,7 +433,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
             {
                 double fVal = aCell.getValue();
                 // CELLTYPE_FORMULA already stores the rounded value.
-                if (aCell.meType == CELLTYPE_VALUE)
+                if (aCell.getType() == CELLTYPE_VALUE)
                 {
                     // TODO: this could be moved to ScCellIterator to take
                     // advantage of the faster ScAttrArray_IterGetNumberFormat.
@@ -648,7 +648,7 @@ void ScInterpreter::ScMatValue()
             ScAddress aAdr;
             PopSingleRef( aAdr );
             ScRefCellValue aCell(mrDoc, aAdr);
-            if (aCell.meType == CELLTYPE_FORMULA)
+            if (aCell.getType() == CELLTYPE_FORMULA)
             {
                 FormulaError nErrCode = aCell.mpFormula->GetErrCode();
                 if (nErrCode != FormulaError::NONE)
@@ -3217,7 +3217,7 @@ void ScInterpreter::ScMatRef()
 
     ScRefCellValue aCell(mrDoc, aAdr);
 
-    if (aCell.meType != CELLTYPE_FORMULA)
+    if (aCell.getType() != CELLTYPE_FORMULA)
     {
         PushError( FormulaError::NoRef );
         return;

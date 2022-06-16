@@ -37,10 +37,10 @@ CellType adjustCellType( CellType eOrig )
 template<typename T>
 OUString getString( const T& rVal )
 {
-    if (rVal.meType == CELLTYPE_STRING)
+    if (rVal.getType() == CELLTYPE_STRING)
         return rVal.mpString->getString();
 
-    if (rVal.meType == CELLTYPE_EDIT)
+    if (rVal.getType() == CELLTYPE_EDIT)
     {
         OUStringBuffer aRet;
         sal_Int32 n = rVal.mpEditText->GetParagraphCount();
@@ -82,8 +82,8 @@ bool equalsFormulaCells( const ScFormulaCell* p1, const ScFormulaCell* p2 )
 template<typename T>
 bool equalsWithoutFormatImpl( const T& left, const T& right )
 {
-    CellType eType1 = adjustCellType(left.meType);
-    CellType eType2 = adjustCellType(right.meType);
+    CellType eType1 = adjustCellType(left.getType());
+    CellType eType2 = adjustCellType(right.getType());
     if (eType1 != eType2)
         return false;
 
@@ -109,7 +109,7 @@ bool equalsWithoutFormatImpl( const T& left, const T& right )
 
 void commitToColumn( const ScCellValue& rCell, ScColumn& rColumn, SCROW nRow )
 {
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_STRING:
             rColumn.SetRawString(nRow, *rCell.mpString);
@@ -161,7 +161,7 @@ bool hasNumericImpl( CellType eType, ScFormulaCell* pFormula )
 template<typename CellT>
 OUString getStringImpl( const CellT& rCell, const ScDocument* pDoc )
 {
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
             return OUString::number(rCell.mfValue);
@@ -182,7 +182,7 @@ OUString getStringImpl( const CellT& rCell, const ScDocument* pDoc )
 template<typename CellT>
 OUString getRawStringImpl( const CellT& rCell, const ScDocument& rDoc )
 {
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
             return OUString::number(rCell.mfValue);
@@ -204,9 +204,9 @@ OUString getRawStringImpl( const CellT& rCell, const ScDocument& rDoc )
 
 ScCellValue::ScCellValue() : meType(CELLTYPE_NONE), mfValue(0.0) {}
 
-ScCellValue::ScCellValue( const ScRefCellValue& rCell ) : meType(rCell.meType), mfValue(rCell.mfValue)
+ScCellValue::ScCellValue( const ScRefCellValue& rCell ) : meType(rCell.getType()), mfValue(rCell.mfValue)
 {
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_STRING:
             mpString = new svl::SharedString(*rCell.mpString);
@@ -225,6 +225,8 @@ ScCellValue::ScCellValue( const ScRefCellValue& rCell ) : meType(rCell.meType), 
 ScCellValue::ScCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
 
 ScCellValue::ScCellValue( const svl::SharedString& rString ) : meType(CELLTYPE_STRING), mpString(new svl::SharedString(rString)) {}
+
+ScCellValue::ScCellValue( std::unique_ptr<EditTextObject> xEdit ) : meType(CELLTYPE_EDIT), mpEditText(xEdit.release()) {}
 
 ScCellValue::ScCellValue( const ScCellValue& r ) : meType(r.meType), mfValue(r.mfValue)
 {
@@ -333,7 +335,7 @@ void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
 
     ScRefCellValue aRefVal(const_cast<ScDocument&>(rDoc), rPos);
 
-    meType = aRefVal.meType;
+    meType = aRefVal.getType();
     switch (meType)
     {
         case CELLTYPE_STRING:

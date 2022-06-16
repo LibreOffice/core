@@ -428,7 +428,7 @@ void ScAccessibleCell::FillPrecedents(utl::AccessibleRelationSetHelper* pRelatio
         return;
 
     ScRefCellValue aCell(*mpDoc, maCellAddress);
-    if (aCell.meType == CELLTYPE_FORMULA)
+    if (aCell.getType() == CELLTYPE_FORMULA)
     {
         ScFormulaCell* pCell = aCell.mpFormula;
         ScDetectiveRefIter aIter(*mpDoc, pCell);

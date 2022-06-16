@@ -159,7 +159,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
     ScDocumentImport& rDoc = rRoot.GetDocImport();
     ScAddress aScPos( nScCol, nScRow, nScTab );
     ScRefCellValue aCell(rDoc.getDoc(), aScPos);
-    switch( aCell.meType )
+    switch( aCell.getType() )
     {
         // #i54261# hyperlinks in string cells
         case CELLTYPE_STRING:
@@ -175,7 +175,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
             ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
             SvxURLField aUrlField( rUrl, aDisplText, SvxURLFormat::AppDefault );
 
-            if( aCell.meType == CELLTYPE_EDIT )
+            if( aCell.getType() == CELLTYPE_EDIT )
             {
                 const EditTextObject* pEditObj = aCell.mpEditText;
                 rEE.SetTextCurrentDefaults( *pEditObj );

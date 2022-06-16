@@ -158,7 +158,7 @@ bool ScQueryEvaluator::isQueryByValue(const ScQueryEntry& rEntry, const ScQueryE
 
 bool ScQueryEvaluator::isQueryByValueForCell(const ScRefCellValue& rCell)
 {
-    if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
+    if (rCell.getType() == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
         // Error values are compared as string.
         return false;
 
@@ -202,7 +202,7 @@ std::pair<bool, bool> ScQueryEvaluator::compareByValue(const ScRefCellValue& rCe
     // reason.
     sal_uInt32 nNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
             nCellVal = rCell.mfValue;
@@ -218,7 +218,7 @@ std::pair<bool, bool> ScQueryEvaluator::compareByValue(const ScRefCellValue& rCe
         nNumFmt = getNumFmt(nCol, nRow);
         if (nNumFmt)
         {
-            switch (rCell.meType)
+            switch (rCell.getType())
             {
                 case CELLTYPE_VALUE:
                 case CELLTYPE_FORMULA:
@@ -301,7 +301,7 @@ OUString ScQueryEvaluator::getCellString(const ScRefCellValue& rCell, SCROW nRow
                                          const ScQueryEntry& rEntry,
                                          const svl::SharedString** sharedString)
 {
-    if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
+    if (rCell.getType() == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
     {
         // Error cell is evaluated as string (for now).
         const FormulaError error = rCell.mpFormula->GetErrCode();
@@ -316,7 +316,7 @@ OUString ScQueryEvaluator::getCellString(const ScRefCellValue& rCell, SCROW nRow
         *sharedString = &it->second;
         return OUString();
     }
-    else if (rCell.meType == CELLTYPE_STRING)
+    else if (rCell.getType() == CELLTYPE_STRING)
     {
         *sharedString = rCell.mpString;
         return OUString();
@@ -684,7 +684,8 @@ std::pair<bool, bool> ScQueryEvaluator::compareByRangeLookup(const ScRefCellValu
 
     if (rItem.meType == ScQueryEntry::ByString)
     {
-        if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
+        if (rCell.getType() == CELLTYPE_FORMULA
+            && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
             // Error values are compared as string.
             return std::pair<bool, bool>(false, bTestEqual);
 
@@ -720,9 +721,9 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
         // For ScQueryEntry::ByValue check that the cell either is a value or is a formula
         // that has a value and is not an error (those are compared as strings). This
         // is basically simplified isQueryByValue().
-        if (aCell.meType == CELLTYPE_VALUE)
+        if (aCell.getType() == CELLTYPE_VALUE)
             value = aCell.mfValue;
-        else if (aCell.meType == CELLTYPE_FORMULA
+        else if (aCell.getType() == CELLTYPE_FORMULA
                  && aCell.mpFormula->GetErrCode() != FormulaError::NONE
                  && aCell.mpFormula->IsValue())
         {

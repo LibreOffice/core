@@ -815,7 +815,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         }
 
         ScRefCellValue aCell(rDoc, aCellPos);
-        if (aCell.meType == CELLTYPE_EDIT)
+        if (aCell.getType() == CELLTYPE_EDIT)
         {
             const EditTextObject* pObj = aCell.mpEditText;
             pEditEngine->SetTextNewDefaults(*pObj, aDefaults);

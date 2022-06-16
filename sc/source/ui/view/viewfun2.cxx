@@ -274,7 +274,7 @@ static ScAutoSum lcl_IsAutoSumData( ScDocument& rDoc, SCCOL nCol, SCROW nRow,
     ScRefCellValue aCell(rDoc, ScAddress(nCol, nRow, nTab));
     if (aCell.hasNumeric())
     {
-        if (aCell.meType == CELLTYPE_FORMULA)
+        if (aCell.getType() == CELLTYPE_FORMULA)
         {
             ScAutoSum val = ScAutoSumNone;
             ScTokenArray* pCode = aCell.mpFormula->GetCode();

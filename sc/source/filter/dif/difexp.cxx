@@ -156,7 +156,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
             bool bWriteStringData = false;
             ScRefCellValue aCell(*pDoc, ScAddress(nColCnt, nRowCnt, nTab));
 
-            switch (aCell.meType)
+            switch (aCell.getType())
             {
                 case CELLTYPE_NONE:
                     aOS.append(pEmptyData);

@@ -629,7 +629,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 {
                     if( eFunc == ifCOUNT2 )
                     {
-                        CellType eCellType = aCell.meType;
+                        CellType eCellType = aCell.getType();
                         if ( eCellType != CELLTYPE_NONE )
                             nCount++;
                         if ( nGlobalError != FormulaError::NONE )

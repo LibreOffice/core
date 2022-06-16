@@ -252,7 +252,7 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
 
 void ScChangeTrackingExportHelper::WriteValueCell(const ScCellValue& rCell, const OUString& sValue)
 {
-    assert(rCell.meType == CELLTYPE_VALUE);
+    assert(rCell.getType() == CELLTYPE_VALUE);
 
     SetValueAttributes(rCell.mfValue, sValue);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
@@ -260,7 +260,7 @@ void ScChangeTrackingExportHelper::WriteValueCell(const ScCellValue& rCell, cons
 
 void ScChangeTrackingExportHelper::WriteStringCell(const ScCellValue& rCell)
 {
-    assert(rCell.meType == CELLTYPE_STRING);
+    assert(rCell.getType() == CELLTYPE_STRING);
 
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
@@ -274,7 +274,7 @@ void ScChangeTrackingExportHelper::WriteStringCell(const ScCellValue& rCell)
 
 void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
 {
-    assert(rCell.meType == CELLTYPE_EDIT);
+    assert(rCell.getType() == CELLTYPE_EDIT);
 
     OUString sString;
     if (rCell.mpEditText)
@@ -293,7 +293,7 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
 
 void ScChangeTrackingExportHelper::WriteFormulaCell(const ScCellValue& rCell, const OUString& sValue)
 {
-    assert(rCell.meType == CELLTYPE_FORMULA);
+    assert(rCell.getType() == CELLTYPE_FORMULA);
 
     ScFormulaCell* pFormulaCell = rCell.mpFormula;
     OUString sAddress;
@@ -354,7 +354,7 @@ void ScChangeTrackingExportHelper::WriteCell(const ScCellValue& rCell, const OUS
         return;
     }
 
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
             WriteValueCell(rCell, sValue);
@@ -585,7 +585,7 @@ void ScChangeTrackingExportHelper::WriteRejection(const ScChangeAction* pAction)
 
 void ScChangeTrackingExportHelper::CollectCellAutoStyles(const ScCellValue& rCell)
 {
-    if (rCell.meType != CELLTYPE_EDIT)
+    if (rCell.getType() != CELLTYPE_EDIT)
         return;
 
     if (!pEditTextObj)

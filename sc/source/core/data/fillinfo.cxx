@@ -571,7 +571,7 @@ void ScDocument::FillInfo(
                                             bHidden, bHideFormula, bTabProtect);
                                 }
 
-                                if (bHidden || (bFormulaMode && bHideFormula && pInfo->maCell.meType == CELLTYPE_FORMULA))
+                                if (bHidden || (bFormulaMode && bHideFormula && pInfo->maCell.getType() == CELLTYPE_FORMULA))
                                     pBasicInfo->bEmptyCellText = true;
 
                                 ++nArrRow;

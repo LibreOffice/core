@@ -255,7 +255,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
 
     if ((nFlags & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
     {
-        if (!rCxt.isSkipEmptyCells() || rSrcCell.meType != CELLTYPE_NONE)
+        if (!rCxt.isSkipEmptyCells() || rSrcCell.getType() != CELLTYPE_NONE)
         {
             const ScPatternAttr* pAttr = (bSameDocPool ? rCxt.getSingleCellPattern(nColOffset) :
                     rCxt.getSingleCellPattern(nColOffset)->PutInPool( &rDocument, rCxt.getClipDoc()));
@@ -273,7 +273,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     {
         std::vector<sc::CellTextAttr> aTextAttrs(nDestSize, rSrcAttr);
 
-        switch (rSrcCell.meType)
+        switch (rSrcCell.getType())
         {
             case CELLTYPE_VALUE:
             {

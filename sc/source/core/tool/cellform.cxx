@@ -34,7 +34,7 @@ OUString ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nForma
 {
     *ppColor = nullptr;
 
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_STRING:
         {
@@ -132,7 +132,7 @@ OUString ScCellFormat::GetInputString(
 {
     if(pShared != nullptr)
         *pShared = nullptr;
-    switch (rCell.meType)
+    switch (rCell.getType())
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
@@ -187,7 +187,7 @@ OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos,
     if (rCell.isEmpty())
         return OUString();
 
-    if (rCell.meType == CELLTYPE_EDIT)
+    if (rCell.getType() == CELLTYPE_EDIT)
     {
         //  GetString converts line breaks into spaces in EditCell,
         //  but here we need the line breaks

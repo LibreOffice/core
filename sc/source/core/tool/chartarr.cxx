@@ -80,7 +80,7 @@ double getCellValue( ScDocument& rDoc, const ScAddress& rPos, double fDefault, b
     double fRet = fDefault;
 
     ScRefCellValue aCell(rDoc, rPos);
-    switch (aCell.meType)
+    switch (aCell.getType())
     {
         case CELLTYPE_VALUE:
         {

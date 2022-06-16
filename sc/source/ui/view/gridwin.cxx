@@ -288,7 +288,7 @@ static bool lcl_IsEditableMatrix( ScDocument& rDoc, const ScRange& rRange )
 
     ScRefCellValue aCell(rDoc, rRange.aEnd);
     ScAddress aPos;
-    return (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(rDoc, aPos) && aPos == rRange.aStart);
+    return (aCell.getType() == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(rDoc, aPos) && aPos == rRange.aStart);
 }
 
 static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScViewData& rViewData )
@@ -333,9 +333,9 @@ static bool lcl_GetHyperlinkCell(
                 rURL = pPattern->GetItem(ATTR_HYPERLINK).GetValue();
                 bFound = true;
             }
-            else if (rCell.meType == CELLTYPE_EDIT)
+            else if (rCell.getType() == CELLTYPE_EDIT)
                 bFound = true;
-            else if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->IsHyperLinkCell())
+            else if (rCell.getType() == CELLTYPE_FORMULA && rCell.mpFormula->IsHyperLinkCell())
                 bFound = true;
             else
                 return false;                               // other cell
@@ -3236,7 +3236,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             // Find the first string to the left for spell checking in case the current cell is empty.
             ScAddress aPos(nCellX, nCellY, nTab);
             ScRefCellValue aSpellCheckCell(rDoc, aPos);
-            while (!bPosIsInEditView && aSpellCheckCell.meType == CELLTYPE_NONE)
+            while (!bPosIsInEditView && aSpellCheckCell.getType() == CELLTYPE_NONE)
             {
                 // Loop until we get the first non-empty cell in the row.
                 aPos.IncCol(-1);
@@ -3246,7 +3246,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 aSpellCheckCell.assign(rDoc, aPos);
             }
 
-            if (aPos.Col() >= 0 && (aSpellCheckCell.meType == CELLTYPE_STRING || aSpellCheckCell.meType == CELLTYPE_EDIT))
+            if (aPos.Col() >= 0 && (aSpellCheckCell.getType() == CELLTYPE_STRING || aSpellCheckCell.getType() == CELLTYPE_EDIT))
                 nColSpellError = aPos.Col();
 
             // Is there a misspelled word somewhere in the cell?
@@ -5704,7 +5704,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     tools::Rectangle aLogicEdit = PixelToLogic( aEditRect, aEditMode );
     tools::Long nThisColLogic = aLogicEdit.Right() - aLogicEdit.Left() + 1;
     Size aPaperSize( 1000000, 1000000 );
-    if (aCell.meType == CELLTYPE_FORMULA)
+    if (aCell.getType() == CELLTYPE_FORMULA)
     {
         tools::Long nSizeX  = 0;
         tools::Long nSizeY  = 0;
@@ -5718,7 +5718,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     pEngine->SetPaperSize( aPaperSize );
 
     std::unique_ptr<EditTextObject> pTextObj;
-    if (aCell.meType == CELLTYPE_EDIT)
+    if (aCell.getType() == CELLTYPE_EDIT)
     {
         if (aCell.mpEditText)
             pEngine->SetTextCurrentDefaults(*aCell.mpEditText);
@@ -5736,7 +5736,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
             // TODO: text content of formatted numbers can be different
             if (aCell.hasNumeric())
                 aRepres = OUString::number(aCell.getValue());
-            else if (aCell.meType == CELLTYPE_FORMULA)
+            else if (aCell.getType() == CELLTYPE_FORMULA)
                 aRepres = aCell.mpFormula->GetString().getString();
 
             pTextObj = ScEditUtil::CreateURLObjectFromURL(rDoc, sURL, aRepres);
