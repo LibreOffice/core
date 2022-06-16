@@ -50,6 +50,23 @@
       "message": "Works well for me",
       "revId": "d9f716c48085ed46c1af31244583d67882cc94ec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61861212_799a1832",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-06-16T14:01:27Z",
+      "side": 1,
+      "message": "This patch solves the issue but someone more experienced should review.",
+      "revId": "d9f716c48085ed46c1af31244583d67882cc94ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
