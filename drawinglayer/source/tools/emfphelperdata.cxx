@@ -603,11 +603,31 @@ namespace emfplushelper
 
         drawinglayer::attribute::LineStartEndAttribute aStart;
         if (pen->penDataFlags & EmfPlusPenDataStartCap)
-            aStart = EmfPlusHelperData::CreateLineEnd(pen->startCap, pen->penWidth);
+        {
+            if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap) && (pen->customStartCap->polygon.begin()->count() > 1))
+                aStart = drawinglayer::attribute::LineStartEndAttribute(3.0 * pen->customStartCap->widthScale * mdExtractedYScale * pen->penWidth, pen->customStartCap->polygon, false);
+            else
+                aStart = EmfPlusHelperData::CreateLineEnd(pen->startCap, pen->penWidth);
+        }
 
         drawinglayer::attribute::LineStartEndAttribute aEnd;
         if (pen->penDataFlags & EmfPlusPenDataEndCap)
-            aEnd = EmfPlusHelperData::CreateLineEnd(pen->endCap, pen->penWidth);
+        {
+            if ((pen->penDataFlags & EmfPlusPenDataCustomEndCap) && (pen->customEndCap->polygon.begin()->count() > 1))
+            {
+
+                ::basegfx::B2DPolyPolygon endCapPolygon(pen->customEndCap->polygon);
+                endCapPolygon.transform(basegfx::utils::createRotateB2DHomMatrix(M_PI_2));
+
+            //basegfx::B2DHomMatrix tran(pen->penWidth, 0.0, polygon.begin()->getB2DPoint(polygon.begin()->count() - 1).getX(),
+            //                           0.0, pen->penWidth, polygon.begin()->getB2DPoint(polygon.begin()->count() - 1).getY());
+            //endCapPolygon.transform(tran);
+
+                aEnd = drawinglayer::attribute::LineStartEndAttribute(3.0 * pen->customEndCap->widthScale * mdExtractedYScale * pen->penWidth, pen->customEndCap->polygon, false);
+            }
+            else
+                aEnd = EmfPlusHelperData::CreateLineEnd(pen->endCap, pen->penWidth);
+        }
 
         if (pen->GetColor().IsTransparent())
         {
@@ -644,7 +664,7 @@ namespace emfplushelper
                             pen->GetStrokeAttribute(mdExtractedXScale), aStart, aEnd));
                 }
         }
-
+/*
         if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap) && (pen->customStartCap->polygon.begin()->count() > 1))
         {
             SAL_WARN("drawinglayer.emf", "EMF+\tCustom Start Line Cap");
@@ -734,7 +754,7 @@ namespace emfplushelper
                                 pen->GetStrokeAttribute(mdExtractedXScale)));
             }
         }
-
+*/
         mrPropertyHolders.Current().setLineColor(pen->GetColor().getBColor());
         mrPropertyHolders.Current().setLineColorActive(true);
         mrPropertyHolders.Current().setFillColorActive(false);
