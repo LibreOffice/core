@@ -16,6 +16,23 @@
       "message": "Would it make sense to cover your \"crop to zero\" improvement with a test?",
       "revId": "3a241be35390f54585239bce898c66f4acc10d39",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07186b2f_6758662d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-16T07:47:55Z",
+      "side": 1,
+      "message": "Will do - but it needs more fixes first",
+      "revId": "3a241be35390f54585239bce898c66f4acc10d39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
