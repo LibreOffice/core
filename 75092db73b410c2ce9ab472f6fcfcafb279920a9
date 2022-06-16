@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "722e4feb_2600c799",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-16T05:53:35Z",
+      "side": 1,
+      "message": "Looks like CppunitTest_sw_ww8export happened to start to work for me by chance with this change, but still fails when other values happen to get picked for __libcpp_debug_randomizer::__seed() in libc++.",
+      "revId": "75092db73b410c2ce9ab472f6fcfcafb279920a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
