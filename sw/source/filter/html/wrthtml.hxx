@@ -719,7 +719,8 @@ Writer& OutCSS1_NumberBulletListStyleOpt( Writer& rWrt, const SwNumRule& rNumRul
                                     sal_uInt8 nLevel );
 
 Writer& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
-                                 const SwHTMLNumRuleInfo& rInfo );
+                                 const SwHTMLNumRuleInfo& rInfo,
+                                 bool& rAtLeastOneNumbered );
 Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
                                const SwHTMLNumRuleInfo& rNextInfo );
 
