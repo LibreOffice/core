@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a977ccf0_522e96eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-06-16T08:10:11Z",
+      "side": 1,
+      "message": "I don\u0027t know if and how often Kohei reviews patches here. This should be submitted upstream at the mdds gitlab.\n",
+      "revId": "557cee80fba6583a6543cb005ea533f44a6d25ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
