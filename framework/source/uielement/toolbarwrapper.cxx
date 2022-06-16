@@ -269,7 +269,7 @@ void SAL_CALL ToolBarWrapper::notifyContextChangeEvent( const ContextChangeEvent
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( aEvent.ContextName.isEmpty() )
+    if ( aEvent.ContextName.isEmpty() || aEvent.ContextName == "default" )
         return;
 
     const OUString aContextToolbar( m_aResourceURL + "-" + aEvent.ContextName.toAsciiLowerCase() );
