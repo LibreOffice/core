@@ -22,6 +22,30 @@
       },
       "revId": "c4cf2e82e8d0aaef9b1daedc033d6edf647e5284",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "732410a8_415c8f1f",
+        "filename": "offapi/com/sun/star/drawing/FillProperties.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-06-16T14:12:18Z",
+      "side": 1,
+      "message": "Ok, will fix it up.\nI was assuming that it will be 8.0, since we didn\u0027t have a .5 release since 3.5, but marketing is always late with its decisions.",
+      "parentUuid": "c01ef4b3_9b5c965a",
+      "range": {
+        "startLine": 222,
+        "startChar": 27,
+        "endLine": 222,
+        "endChar": 30
+      },
+      "revId": "c4cf2e82e8d0aaef9b1daedc033d6edf647e5284",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
