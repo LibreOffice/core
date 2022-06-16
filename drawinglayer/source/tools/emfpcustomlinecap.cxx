@@ -21,6 +21,7 @@
 #include "emfpcustomlinecap.hxx"
 #include "emfppath.hxx"
 #include "emfppen.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::basegfx;
@@ -39,6 +40,7 @@ namespace emfplushelper
         , strokeEndCap(0)
         , strokeJoin(0)
         , miterLimit(0.0)
+        , widthScale(0.0)
         , mbIsFilled(false)
     {
     }
@@ -57,6 +59,8 @@ namespace emfplushelper
         EMFPPath path(pathPoints);
         path.Read(s, pathFlags);
         polygon = path.GetPolygon(rR, false);
+        // rotate polygon by 180 degrees
+        polygon.transform(basegfx::utils::createRotateB2DHomMatrix(M_PI));
         mbIsFilled = bFill;
     }
 
@@ -71,7 +75,6 @@ namespace emfplushelper
         {
             sal_uInt32 customLineCapDataFlags, baseCap;
             float baseInset;
-            float widthScale;
             float fillHotSpotX, fillHotSpotY, strokeHotSpotX, strokeHotSpotY;
 
             s.ReadUInt32(customLineCapDataFlags).ReadUInt32(baseCap).ReadFloat(baseInset)
@@ -82,11 +85,6 @@ namespace emfplushelper
             SAL_INFO("drawinglayer.emf", "EMF+\t\tcustomLineCapDataFlags: 0x" << std::hex << customLineCapDataFlags);
             SAL_INFO("drawinglayer.emf", "EMF+\t\tbaseCap: 0x" << std::hex << baseCap);
             SAL_INFO("drawinglayer.emf", "EMF+\t\tbaseInset: " << baseInset);
-            SAL_INFO("drawinglayer.emf", "EMF+\t\tstrokeStartCap: 0x" << std::hex << strokeStartCap);
-            SAL_INFO("drawinglayer.emf", "EMF+\t\tstrokeEndCap: 0x" << std::hex << strokeEndCap);
-            SAL_INFO("drawinglayer.emf", "EMF+\t\tstrokeJoin: 0x" << std::hex << strokeJoin);
-            SAL_INFO("drawinglayer.emf", "EMF+\t\tmiterLimit: " << miterLimit);
-            SAL_INFO("drawinglayer.emf", "EMF+\t\twidthScale: " << widthScale);
 
             if (customLineCapDataFlags & EmfPlusCustomLineCapDataFillPath)
             {
@@ -103,16 +101,20 @@ namespace emfplushelper
             // TODO only reads the data, does not use them [I've had
             // no test document to be able to implement it]
 
-            sal_Int32 width, height, middleInset, fillState, lineStartCap;
-            sal_Int32 lineEndCap, lineJoin, widthScale;
-            float fillHotSpotX, fillHotSpotY, lineHotSpotX, lineHotSpotY;
+            sal_Int32 fillState;
+            float width, height, middleInset, unusedHotSpot;
 
-            s.ReadInt32(width).ReadInt32(height).ReadInt32(middleInset).ReadInt32(fillState).ReadInt32(lineStartCap)
-                .ReadInt32(lineEndCap).ReadInt32(lineJoin).ReadFloat(miterLimit).ReadInt32(widthScale)
-                .ReadFloat(fillHotSpotX).ReadFloat(fillHotSpotY).ReadFloat(lineHotSpotX).ReadFloat(lineHotSpotY);
+            s.ReadFloat(width).ReadFloat(height).ReadFloat(middleInset).ReadInt32(fillState).ReadUInt32(strokeStartCap)
+                .ReadUInt32(strokeEndCap).ReadUInt32(strokeJoin).ReadFloat(miterLimit).ReadFloat(widthScale)
+                .ReadFloat(unusedHotSpot).ReadFloat(unusedHotSpot).ReadFloat(unusedHotSpot).ReadFloat(unusedHotSpot);
 
             SAL_INFO("drawinglayer.emf", "EMF+\t\tTODO - actually read EmfPlusCustomLineCapArrowData object (section 2.2.2.12)");
         }
+        SAL_INFO("drawinglayer.emf", "EMF+\t\tstrokeStartCap: 0x" << std::hex << strokeStartCap);
+        SAL_INFO("drawinglayer.emf", "EMF+\t\tstrokeEndCap: 0x" << std::hex << strokeEndCap);
+        SAL_INFO("drawinglayer.emf", "EMF+\t\tstrokeJoin: 0x" << std::hex << strokeJoin);
+        SAL_INFO("drawinglayer.emf", "EMF+\t\tmiterLimit: " << miterLimit);
+        SAL_INFO("drawinglayer.emf", "EMF+\t\twidthScale: " << widthScale);
     }
 }
 
