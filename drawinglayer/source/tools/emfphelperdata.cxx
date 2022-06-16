@@ -603,11 +603,26 @@ namespace emfplushelper
 
         drawinglayer::attribute::LineStartEndAttribute aStart;
         if (pen->penDataFlags & EmfPlusPenDataStartCap)
-            aStart = EmfPlusHelperData::CreateLineEnd(pen->startCap, pen->penWidth);
+        {
+            if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap) && (pen->customStartCap->polygon.begin()->count() > 1))
+                aStart = drawinglayer::attribute::LineStartEndAttribute(3.0 * pen->customStartCap->widthScale * mdExtractedYScale * pen->penWidth, pen->customStartCap->polygon, false);
+            else
+                aStart = EmfPlusHelperData::CreateLineEnd(pen->startCap, pen->penWidth);
+        }
 
         drawinglayer::attribute::LineStartEndAttribute aEnd;
         if (pen->penDataFlags & EmfPlusPenDataEndCap)
-            aEnd = EmfPlusHelperData::CreateLineEnd(pen->endCap, pen->penWidth);
+        {
+            if ((pen->penDataFlags & EmfPlusPenDataCustomEndCap) && (pen->customEndCap->polygon.begin()->count() > 1))
+            {
+                //const ::basegfx::B2DVector aRange = pen->customEndCap->polygon.getB2DRange().getRange();
+                //double aRatioX = aRange.getX() / pen->penWidth;
+                //aEnd = drawinglayer::attribute::LineStartEndAttribute(aRatioX * pen->customEndCap->widthScale * pen->penWidth, pen->customEndCap->polygon, false);
+                aEnd = drawinglayer::attribute::LineStartEndAttribute(3.0 * pen->customEndCap->widthScale * pen->penWidth, pen->customEndCap->polygon, false);
+            }
+            else
+                aEnd = EmfPlusHelperData::CreateLineEnd(pen->endCap, pen->penWidth);
+        }
 
         if (pen->GetColor().IsTransparent())
         {
@@ -644,97 +659,6 @@ namespace emfplushelper
                             pen->GetStrokeAttribute(mdExtractedXScale), aStart, aEnd));
                 }
         }
-
-        if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap) && (pen->customStartCap->polygon.begin()->count() > 1))
-        {
-            SAL_WARN("drawinglayer.emf", "EMF+\tCustom Start Line Cap");
-            ::basegfx::B2DPolyPolygon startCapPolygon(pen->customStartCap->polygon);
-
-            // get the gradient of the first line in the polypolygon
-            double x1 = polygon.begin()->getB2DPoint(0).getX();
-            double y1 = polygon.begin()->getB2DPoint(0).getY();
-            double x2 = polygon.begin()->getB2DPoint(1).getX();
-            double y2 = polygon.begin()->getB2DPoint(1).getY();
-
-            if ((x2 - x1) != 0)
-            {
-                double gradient = (y2 - y1) / (x2 - x1);
-
-                // now we get the angle that we need to rotate the arrow by
-                double angle = (M_PI / 2) - atan(gradient);
-
-                // rotate the arrow
-                startCapPolygon.transform(basegfx::utils::createRotateB2DHomMatrix(angle));
-            }
-
-            startCapPolygon.transform(maMapTransform);
-
-            basegfx::B2DHomMatrix tran(pen->penWidth, 0.0, polygon.begin()->getB2DPoint(0).getX(),
-                                       0.0, pen->penWidth, polygon.begin()->getB2DPoint(0).getY());
-            startCapPolygon.transform(tran);
-
-            if (pen->customStartCap->mbIsFilled)
-            {
-                mrTargetHolders.Current().append(
-                            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                                std::move(startCapPolygon),
-                                pen->GetColor().getBColor()));
-            }
-            else
-            {
-                mrTargetHolders.Current().append(
-                            new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                                std::move(startCapPolygon),
-                                lineAttribute,
-                                pen->GetStrokeAttribute(mdExtractedXScale)));
-            }
-        }
-
-        if ((pen->penDataFlags & EmfPlusPenDataCustomEndCap) && (pen->customEndCap->polygon.begin()->count() > 1))
-        {
-            SAL_WARN("drawinglayer.emf", "EMF+\tCustom End Line Cap");
-
-            ::basegfx::B2DPolyPolygon endCapPolygon(pen->customEndCap->polygon);
-
-            // get the gradient of the first line in the polypolygon
-            double x1 = polygon.begin()->getB2DPoint(polygon.begin()->count() - 1).getX();
-            double y1 = polygon.begin()->getB2DPoint(polygon.begin()->count() - 1).getY();
-            double x2 = polygon.begin()->getB2DPoint(polygon.begin()->count() - 2).getX();
-            double y2 = polygon.begin()->getB2DPoint(polygon.begin()->count() - 2).getY();
-
-            if ((x2 - x1) != 0)
-            {
-                double gradient = (y2 - y1) / (x2 - x1);
-
-                // now we get the angle that we need to rotate the arrow by
-                double angle = (M_PI / 2) - atan(gradient);
-
-                // rotate the arrow
-                endCapPolygon.transform(basegfx::utils::createRotateB2DHomMatrix(angle));
-            }
-
-            endCapPolygon.transform(maMapTransform);
-            basegfx::B2DHomMatrix tran(pen->penWidth, 0.0, polygon.begin()->getB2DPoint(polygon.begin()->count() - 1).getX(),
-                                       0.0, pen->penWidth, polygon.begin()->getB2DPoint(polygon.begin()->count() - 1).getY());
-            endCapPolygon.transform(tran);
-
-            if (pen->customEndCap->mbIsFilled)
-            {
-                mrTargetHolders.Current().append(
-                            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                                std::move(endCapPolygon),
-                                pen->GetColor().getBColor()));
-            }
-            else
-            {
-                mrTargetHolders.Current().append(
-                            new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                                std::move(endCapPolygon),
-                                lineAttribute,
-                                pen->GetStrokeAttribute(mdExtractedXScale)));
-            }
-        }
-
         mrPropertyHolders.Current().setLineColor(pen->GetColor().getBColor());
         mrPropertyHolders.Current().setLineColorActive(true);
         mrPropertyHolders.Current().setFillColorActive(false);
