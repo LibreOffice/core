@@ -3420,8 +3420,23 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
 
     ScDocument& rDoc = getScDocument();
 
-    RangeHelper thisRange( mxRange );
+    uno::Reference< table::XCellRange > xRangeCurrent;
+    if (isSingleCellRange())
+    {
+        // Expand to CurrentRegion
+        uno::Reference< excel::XRange > xCurrent( CurrentRegion());
+        if (xCurrent.is())
+        {
+            const ScVbaRange* pRange = getImplementation( xCurrent );
+            if (pRange)
+                xRangeCurrent = pRange->mxRange;
+        }
+    }
+    if (!xRangeCurrent.is())
+        xRangeCurrent = mxRange;
+    RangeHelper thisRange( xRangeCurrent );
     table::CellRangeAddress thisRangeAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
+
     ScSortParam aSortParam;
     SCTAB nTab = thisRangeAddress.Sheet;
     rDoc.GetSortParam( aSortParam, nTab );
@@ -3435,7 +3450,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
 
     // 1) #TODO #FIXME need to process DataOption[1..3] not used currently
     // 2) #TODO #FIXME need to refactor this ( below ) into an IsSingleCell() method
-    uno::Reference< table::XColumnRowRange > xColumnRowRange(mxRange, uno::UNO_QUERY_THROW );
+    uno::Reference< table::XColumnRowRange > xColumnRowRange(xRangeCurrent, uno::UNO_QUERY_THROW );
 
     // set up defaults
 
@@ -3548,24 +3563,24 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
     if ( Key3.hasValue() )
         xKey3 = processKey( Key3, mxContext, pDocShell );
 
-    uno::Reference< util::XSortable > xSort( mxRange, uno::UNO_QUERY_THROW );
+    uno::Reference< util::XSortable > xSort( xRangeCurrent, uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > sortDescriptor = xSort->createSortDescriptor();
     auto psortDescriptor = sortDescriptor.getArray();
     sal_Int32 nTableSortFieldIndex = findSortPropertyIndex( sortDescriptor, "SortFields" );
 
     uno::Sequence< table::TableSortField > sTableFields(1);
     sal_Int32 nTableIndex = 0;
-    updateTableSortField(  mxRange, xKey1, nOrder1, sTableFields.getArray()[ nTableIndex++ ], bIsSortColumns, bMatchCase );
+    updateTableSortField(  xRangeCurrent, xKey1, nOrder1, sTableFields.getArray()[ nTableIndex++ ], bIsSortColumns, bMatchCase );
 
     if ( xKey2.is() )
     {
         sTableFields.realloc( sTableFields.getLength() + 1 );
-        updateTableSortField(  mxRange, xKey2, nOrder2, sTableFields.getArray()[ nTableIndex++ ], bIsSortColumns, bMatchCase );
+        updateTableSortField(  xRangeCurrent, xKey2, nOrder2, sTableFields.getArray()[ nTableIndex++ ], bIsSortColumns, bMatchCase );
     }
     if ( xKey3.is()  )
     {
         sTableFields.realloc( sTableFields.getLength() + 1 );
-        updateTableSortField(  mxRange, xKey3, nOrder3, sTableFields.getArray()[ nTableIndex++ ], bIsSortColumns, bMatchCase );
+        updateTableSortField(  xRangeCurrent, xKey3, nOrder3, sTableFields.getArray()[ nTableIndex++ ], bIsSortColumns, bMatchCase );
     }
     psortDescriptor[ nTableSortFieldIndex ].Value <<= sTableFields;
 
