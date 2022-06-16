@@ -579,7 +579,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             nVal = rCell.getDouble();
         break;
         case CELLTYPE_STRING:
-            aString = rCell.mpString->getString();
+            aString = rCell.getSharedString()->getString();
             bIsVal = false;
         break;
         case CELLTYPE_EDIT:

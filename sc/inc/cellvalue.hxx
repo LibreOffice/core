@@ -63,6 +63,7 @@ public:
 
     CellType getType() const { return meType; }
     double getDouble() const { assert(meType == CELLTYPE_VALUE); return mfValue1; }
+    svl::SharedString* getSharedString() const { assert(meType == CELLTYPE_STRING); return mpString; }
 
     /**
      * Take cell value from specified position in specified document.
@@ -134,6 +135,7 @@ public:
 
     CellType getType() const { return meType; }
     double getDouble() const { assert(meType == CELLTYPE_VALUE); return mfValue1; }
+    const svl::SharedString* getSharedString() const { assert(meType == CELLTYPE_STRING); return mpString; }
 
     /**
      * Take cell value from specified position in specified document.

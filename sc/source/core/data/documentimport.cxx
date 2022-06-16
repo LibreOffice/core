@@ -224,7 +224,7 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
     {
         case CELLTYPE_STRING:
             // string is copied.
-            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), *aCell.mpString);
+            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), *aCell.getSharedString());
         break;
         case CELLTYPE_EDIT:
             // Cell takes the ownership of the text object.
@@ -583,7 +583,7 @@ void ScDocumentImport::fillDownCells(const ScAddress& rPos, SCROW nFillSize)
         }
         case CELLTYPE_STRING:
         {
-            std::vector<svl::SharedString> aCopied(nFillSize, *aRefCell.mpString);
+            std::vector<svl::SharedString> aCopied(nFillSize, *aRefCell.getSharedString());
             pBlockPos->miCellPos = rCells.set(
                 pBlockPos->miCellPos, rPos.Row()+1, aCopied.begin(), aCopied.end());
             break;
