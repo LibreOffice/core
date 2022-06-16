@@ -94,7 +94,7 @@ def get_attachments_from_url(lang, url, pathes):
 
     if lang.startswith("mso"):
         if not do_login(session, url, pathes.config):
-            print("Can't login into " + url)
+            print("Can't log in to " + url)
             return
 
     invalidCount = 0
