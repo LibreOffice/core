@@ -16,6 +16,23 @@
       "message": "Looks like CppunitTest_sw_ww8export happened to start to work for me by chance with this change, but still fails when other values happen to get picked for __libcpp_debug_randomizer::__seed() in libc++.",
       "revId": "75092db73b410c2ce9ab472f6fcfcafb279920a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "244eab11_a5230c75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-16T06:50:06Z",
+      "side": 1,
+      "message": "I think the relevant part of the sw/qa/extras/ww8export/data/comment-export.odt test document is that it has two annotation marks at the end with matching start positions: one covering AAAAAA (earlier end position), the other covering AAAAAA BBBBBB (later end position).\n\nNow CompareMarksEnd in sw/source/filter/ww8/wrtw8nds.cxx is used on annotation and bookmarks which start at the same position: if there are multiple ones, then CompareMarkEnds sorts them. Reading CompareMarkEnds, it should result in increasing end positions (start positions are the same), so first we should get AAAAAA and then AAAAAA BBBBBB. I added this CompareMarkEnds probably from earlier docx code for rtf/ww8 in commit 5bbc027d5dae3472223538b13933ff821e027737 (cws-vmiklos01.diff: Better RTF export filter, 2010-09-17).\n\nMuch later, commit 5e49b9b4e99f787071a624dadd3e587ea6b041a7 (tdf#89405 DOC export: fix corrupted comment order, 2015-03-12) added this test, which seems to assert that the order is the opposite: if two annotation marks have the same start position, then the one with the later end pos is ordered first. This is possible at all, because the order we get for the text portions in the text code is independent from the WW8 export, that order is decided in lcl_ExportAnnotationStarts(), as part of the UNO API. lcl_ExportAnnotationStarts() gets its annotation list from lcl_FillAnnotationStartArray(), which operates on a SwAnnotationStartPortion_ImplList, which is an std::multiset, which is ultimately not ordered.\n\nTo sum up, this looks like poor test code to me. If it\u0027s possible to verify that this test code still fails without the fix, then perhaps the best would be to rewrite this test to not work with the UNO API, but with the sw/-internal mark manager directly, as that stores these marks with an std::vector, which can have a deterministic order.",
+      "revId": "75092db73b410c2ce9ab472f6fcfcafb279920a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
