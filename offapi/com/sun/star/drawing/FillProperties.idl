@@ -219,7 +219,7 @@ published service FillProperties
     /** If this is `TRUE`, and FillStyle is FillStyle::NONE:
         The area displays the slide background
 
-        @since LibreOffice 8.0
+        @since LibreOffice 7.5
     */
     [optional, property] boolean FillUseSlideBackground;
 
