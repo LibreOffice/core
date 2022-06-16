@@ -2192,8 +2192,6 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
     SwTextFormatColl *pLocal = pFormat? pFormat: (*GetDoc()->GetTextFormatColls())[0];
     StartAllAction();
 
-    RedlineFlags eRedlMode = GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags(), eOldMode = eRedlMode;
-
     SwRewriter aRewriter;
 
     aRewriter.AddRule(UndoArg1, pLocal->GetName());
@@ -2207,17 +2205,6 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
 
         if ( !rPaM.HasReadonlySel( GetViewOptions()->IsFormView() ) )
         {
-            // tdf#105413 turn off ShowChanges mode for the next loops to apply styles permanently with redlining,
-            // ie. in all directly preceding deleted paragraphs at the actual cursor positions
-            if ( IDocumentRedlineAccess::IsShowChanges(eRedlMode) &&
-               // is there redlining at beginning of the position (possible redline block before the modified node)
-               GetDoc()->getIDocumentRedlineAccess().GetRedlinePos( (*rPaM.Start()).nNode.GetNode(), RedlineType::Any ) <
-                   GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size() )
-            {
-                eRedlMode = RedlineFlags::ShowInsert | RedlineFlags::Ignore;
-                GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eRedlMode );
-            }
-
             // store previous paragraph style for track changes
             OUString sParaStyleName;
             sal_uInt16 nPoolId = USHRT_MAX;
@@ -2270,8 +2257,6 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
     }
     GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::SETFMTCOLL, &aRewriter);
     EndAllAction();
-
-    GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOldMode );
 }
 
 SwTextFormatColl* SwEditShell::MakeTextFormatColl(const OUString& rFormatCollName,

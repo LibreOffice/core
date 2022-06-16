@@ -1526,7 +1526,6 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             SwDoc& rInsDoc = pDestNd->GetDoc();
             ::sw::UndoGuard const undoGuard(rInsDoc.GetIDocumentUndoRedo());
             pSrcNd->CopyCollFormat( *pDestNd );
-            bCopyCollFormat = false;
         }
 
         if( bOneNd )
