@@ -33,6 +33,24 @@
       "message": "I think the relevant part of the sw/qa/extras/ww8export/data/comment-export.odt test document is that it has two annotation marks at the end with matching start positions: one covering AAAAAA (earlier end position), the other covering AAAAAA BBBBBB (later end position).\n\nNow CompareMarksEnd in sw/source/filter/ww8/wrtw8nds.cxx is used on annotation and bookmarks which start at the same position: if there are multiple ones, then CompareMarkEnds sorts them. Reading CompareMarkEnds, it should result in increasing end positions (start positions are the same), so first we should get AAAAAA and then AAAAAA BBBBBB. I added this CompareMarkEnds probably from earlier docx code for rtf/ww8 in commit 5bbc027d5dae3472223538b13933ff821e027737 (cws-vmiklos01.diff: Better RTF export filter, 2010-09-17).\n\nMuch later, commit 5e49b9b4e99f787071a624dadd3e587ea6b041a7 (tdf#89405 DOC export: fix corrupted comment order, 2015-03-12) added this test, which seems to assert that the order is the opposite: if two annotation marks have the same start position, then the one with the later end pos is ordered first. This is possible at all, because the order we get for the text portions in the text code is independent from the WW8 export, that order is decided in lcl_ExportAnnotationStarts(), as part of the UNO API. lcl_ExportAnnotationStarts() gets its annotation list from lcl_FillAnnotationStartArray(), which operates on a SwAnnotationStartPortion_ImplList, which is an std::multiset, which is ultimately not ordered.\n\nTo sum up, this looks like poor test code to me. If it\u0027s possible to verify that this test code still fails without the fix, then perhaps the best would be to rewrite this test to not work with the UNO API, but with the sw/-internal mark manager directly, as that stores these marks with an std::vector, which can have a deterministic order.",
       "revId": "75092db73b410c2ce9ab472f6fcfcafb279920a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc9db926_dd2866d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-16T07:17:20Z",
+      "side": 1,
+      "message": "After adding some scaffolding to my local libc++ to log values of __libcpp_debug_randomizer::__seed() and to allow overriding those seed values with an env var (rather than having to recompile all of LO with -D_LIBCPP_DEBUG_RANDOMIZE_UNSPECIFIED_STABILITY_SEED\u003d...), I found that e.g. with a seed value of 140210942378288, what is relevant to make the test succeed is a std::stable_sort at\n```\n                // Also sort the start and end positions. We need to reference\n                // the start index in the annotation table and also need to\n                // reference the end index in the start table, so build a map\n                // that knows what index to reference, after sorting.\n                std::sort(aRangeStartPos.begin(), aRangeStartPos.end(), \u0026lcl_PosComp);\n```\nin WW8_WrPlcSubDoc::WriteGenericPlc (sw/source/filter/ww8/wrtw8sty.cxx), while the two std::stable_sort in sw/source/filter/ww8/wrtw8nds.cxx are irrelevant.\n\nSo trying to come up with a workaround or fix that way looks like a game of whack-a-mole, and we should rather go with the suggestions from Miklos` earlier comment.",
+      "parentUuid": "722e4feb_2600c799",
+      "revId": "75092db73b410c2ce9ab472f6fcfcafb279920a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
