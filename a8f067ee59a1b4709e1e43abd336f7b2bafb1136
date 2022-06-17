@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05542ddc_7559f8f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-17T18:52:02Z",
+      "side": 1,
+      "message": "I don\u0027t really know whether its better or not, but lets give it the benefit of the doubt and if it doesn\u0027t work out its always possible to revert later",
+      "revId": "a8f067ee59a1b4709e1e43abd336f7b2bafb1136",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
