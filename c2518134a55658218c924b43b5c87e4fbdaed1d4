@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "115c8515_5ff88180",
+        "filename": "sc/inc/cellvalue.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-17T06:45:24Z",
+      "side": 1,
+      "message": "Did you forget to rename this back to mfValue before commit? Perhaps it would still make sense to do so as a follow-up change.",
+      "revId": "c2518134a55658218c924b43b5c87e4fbdaed1d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
