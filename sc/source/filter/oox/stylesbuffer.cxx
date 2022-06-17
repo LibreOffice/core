@@ -1616,6 +1616,7 @@ PatternFillModel::PatternFillModel( bool bDxf ) :
     mbPatternUsed( !bDxf )
 {
     maPatternColor.setIndexed( OOX_COLOR_WINDOWTEXT );
+    maFiltPatternColor.setIndexed( OOX_COLOR_WINDOWTEXT );
     maFillColor.setIndexed( OOX_COLOR_WINDOWBACK );
 }
 
@@ -1674,6 +1675,7 @@ void GradientFillModel::readGradientStop( SequenceInputStream& rStrm, bool bDxf 
 
 ApiSolidFillData::ApiSolidFillData() :
     mnColor( API_RGB_TRANSPARENT ),
+    mnFiltColor( API_RGB_TRANSPARENT ),
     mbTransparent( true ),
     mbUsed( false )
 {
@@ -1825,8 +1827,8 @@ void Fill::finalizeImport()
         {
             if( rModel.mbFillColorUsed && (!rModel.mbPatternUsed || (rModel.mnPattern == XML_solid)) )
             {
-                if (!rModel.mbPatternUsed)
-                    rModel.maPatternColor = rModel.maFillColor;
+                rModel.maFiltPatternColor = rModel.maPatternColor;
+                rModel.maPatternColor = rModel.maFillColor;
                 rModel.mnPattern = XML_solid;
                 rModel.mbPattColorUsed = rModel.mbPatternUsed = true;
             }
@@ -1836,6 +1838,8 @@ void Fill::finalizeImport()
             {
                 rModel.mbPatternUsed = false;
             }
+            else
+                rModel.maFiltPatternColor = rModel.maPatternColor;
         }
 
         // convert to API fill settings
@@ -1873,15 +1877,20 @@ void Fill::finalizeImport()
             ::Color nWinTextColor = rGraphicHelper.getSystemColor( XML_windowText );
             ::Color nWinColor = rGraphicHelper.getSystemColor( XML_window );
 
-            if( !rModel.mbPattColorUsed )
+            if (!rModel.mbPattColorUsed)
+            {
                 rModel.maPatternColor.setAuto();
+                rModel.maFiltPatternColor.setAuto();
+            }
             ::Color nPattColor = rModel.maPatternColor.getColor( rGraphicHelper, nWinTextColor );
+            ::Color nFiltPattColor = rModel.maFiltPatternColor.getColor( rGraphicHelper, nWinTextColor );
 
             if( !rModel.mbFillColorUsed )
                 rModel.maFillColor.setAuto();
             ::Color nFillColor = rModel.maFillColor.getColor( rGraphicHelper, nWinColor );
 
             maApiData.mnColor = lclGetMixedColor( nPattColor, nFillColor, nAlpha );
+            maApiData.mnFiltColor = lclGetMixedColor( nFiltPattColor, nFillColor, nAlpha );
             maApiData.mbTransparent = false;
         }
     }
@@ -1911,10 +1920,12 @@ void Fill::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
     if ( maApiData.mbTransparent )
     {
         aBrushItem.SetColor( COL_TRANSPARENT );
+        aBrushItem.SetFiltColor( COL_TRANSPARENT );
     }
     else
     {
         aBrushItem.SetColor( maApiData.mnColor  );
+        aBrushItem.SetFiltColor( maApiData.mnFiltColor  );
     }
     ScfTools::PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
 }
