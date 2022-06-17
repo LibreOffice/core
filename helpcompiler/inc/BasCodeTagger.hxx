@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_HELPCOMPILER_INC_BASCODETAGGER_HXX
-#define INCLUDED_HELPCOMPILER_INC_BASCODETAGGER_HXX
+#pragma once
 
 #include <deque>
 #include <memory>
@@ -21,7 +20,7 @@ class LibXmlTreeWalker;
 //!Tagger class.
 class BasicCodeTagger
 {
-  private:
+private:
     xmlDocPtr             m_pDocument;
     std::vector<xmlNodePtr> m_BasicCodeContainerTags;
     std::unique_ptr<LibXmlTreeWalker>  m_pXmlTreeWalker;
@@ -32,7 +31,7 @@ class BasicCodeTagger
     void getBasicCodeContainerNodes();
     void tagBasCodeParagraphs();
 
-  public:
+public:
     enum TaggerException { NULL_DOCUMENT, EMPTY_DOCUMENT };
     BasicCodeTagger( xmlDocPtr rootDoc );
     ~BasicCodeTagger();
@@ -43,18 +42,16 @@ class BasicCodeTagger
 
 class LibXmlTreeWalker
 {
-  private:
+private:
     xmlNodePtr            m_pCurrentNode;
     std::deque<xmlNodePtr> m_Queue; //!Queue for breath-first search
 
-  public:
+public:
     LibXmlTreeWalker( xmlDocPtr doc );
     void nextNode();
     xmlNodePtr currentNode() { return m_pCurrentNode;}
     bool end() const;
     void ignoreCurrNodesChildren();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
