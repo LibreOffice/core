@@ -646,14 +646,6 @@ void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
             // tdf#92335 don't export redundant DOCX import style "ListLabel"
             return;
         }
-        else if (aName.equalsIgnoreAsciiCase("Internet Link"))
-        {
-            aName = "Hyperlink";
-        }
-        else if (aName.equalsIgnoreAsciiCase("Visited Internet Link"))
-        {
-            aName = "FollowedHyperlink";
-        }
 
         m_rExport.AttrOutput().StartStyle( aName, (bFormatColl ? STYLE_TYPE_PARA : STYLE_TYPE_CHAR),
                 nBase, nWwNext, nWwLink, GetWWId( *pFormat ), nPos,
