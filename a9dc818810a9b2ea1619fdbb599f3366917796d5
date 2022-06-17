@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3a92b4d_0315b4ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-17T19:11:04Z",
+      "side": 1,
+      "message": "I still believe he Qt code is easier to follow then other back-ends. OTOH it always feels like it can\u0027t get worse, but then you must use even cruder hacks..",
+      "revId": "a9dc818810a9b2ea1619fdbb599f3366917796d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
