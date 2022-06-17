@@ -2832,6 +2832,7 @@ void SvxLineItem::SetLine( const SvxBorderLine* pNew )
 SvxBrushItem::SvxBrushItem(sal_uInt16 _nWhich)
     : SfxPoolItem(_nWhich)
     , aColor(COL_TRANSPARENT)
+    , aFilterColor(COL_TRANSPARENT)
     , nShadingValue(ShadingPattern::CLEAR)
     , nGraphicTransparency(0)
     , eGraphicPos(GPOS_NONE)
@@ -2842,6 +2843,7 @@ SvxBrushItem::SvxBrushItem(sal_uInt16 _nWhich)
 SvxBrushItem::SvxBrushItem(const Color& rColor, sal_uInt16 _nWhich)
     : SfxPoolItem(_nWhich)
     , aColor(rColor)
+    , aFilterColor(COL_TRANSPARENT)
     , nShadingValue(ShadingPattern::CLEAR)
     , nGraphicTransparency(0)
     , eGraphicPos(GPOS_NONE)
@@ -2852,6 +2854,7 @@ SvxBrushItem::SvxBrushItem(const Color& rColor, sal_uInt16 _nWhich)
 SvxBrushItem::SvxBrushItem(const Graphic& rGraphic, SvxGraphicPosition ePos, sal_uInt16 _nWhich)
     : SfxPoolItem(_nWhich)
     , aColor(COL_TRANSPARENT)
+    , aFilterColor(COL_TRANSPARENT)
     , nShadingValue(ShadingPattern::CLEAR)
     , xGraphicObject(new GraphicObject(rGraphic))
     , nGraphicTransparency(0)
@@ -2864,6 +2867,7 @@ SvxBrushItem::SvxBrushItem(const Graphic& rGraphic, SvxGraphicPosition ePos, sal
 SvxBrushItem::SvxBrushItem(const GraphicObject& rGraphicObj, SvxGraphicPosition ePos, sal_uInt16 _nWhich)
     : SfxPoolItem(_nWhich)
     , aColor(COL_TRANSPARENT)
+    , aFilterColor(COL_TRANSPARENT)
     , nShadingValue(ShadingPattern::CLEAR)
     , xGraphicObject(new GraphicObject(rGraphicObj))
     , nGraphicTransparency(0)
@@ -2877,6 +2881,7 @@ SvxBrushItem::SvxBrushItem(OUString aLink, OUString aFilter,
                            SvxGraphicPosition ePos, sal_uInt16 _nWhich)
     : SfxPoolItem(_nWhich)
     , aColor(COL_TRANSPARENT)
+    , aFilterColor(COL_TRANSPARENT)
     , nShadingValue(ShadingPattern::CLEAR)
     , nGraphicTransparency(0)
     , maStrLink(std::move(aLink))
@@ -2890,6 +2895,7 @@ SvxBrushItem::SvxBrushItem(OUString aLink, OUString aFilter,
 SvxBrushItem::SvxBrushItem(const SvxBrushItem& rItem)
     : SfxPoolItem(rItem)
     , aColor(rItem.aColor)
+    , aFilterColor(rItem.aFilterColor)
     , nShadingValue(rItem.nShadingValue)
     , xGraphicObject(rItem.xGraphicObject ? new GraphicObject(*rItem.xGraphicObject) : nullptr)
     , nGraphicTransparency(rItem.nGraphicTransparency)
@@ -2903,6 +2909,7 @@ SvxBrushItem::SvxBrushItem(const SvxBrushItem& rItem)
 SvxBrushItem::SvxBrushItem(SvxBrushItem&& rItem)
     : SfxPoolItem(std::move(rItem))
     , aColor(std::move(rItem.aColor))
+    , aFilterColor(std::move(rItem.aFilterColor))
     , nShadingValue(std::move(rItem.nShadingValue))
     , xGraphicObject(std::move(rItem.xGraphicObject))
     , nGraphicTransparency(std::move(rItem.nGraphicTransparency))
@@ -3157,8 +3164,8 @@ bool SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
     assert(SfxPoolItem::operator==(rAttr));
 
     const SvxBrushItem& rCmp = static_cast<const SvxBrushItem&>(rAttr);
-    bool bEqual = ( aColor == rCmp.aColor && eGraphicPos == rCmp.eGraphicPos &&
-        nGraphicTransparency == rCmp.nGraphicTransparency);
+    bool bEqual = ( aColor == rCmp.aColor && aFilterColor == rCmp.aFilterColor &&
+        eGraphicPos == rCmp.eGraphicPos && nGraphicTransparency == rCmp.nGraphicTransparency);
 
     if ( bEqual )
     {
@@ -3366,6 +3373,7 @@ void SvxBrushItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxBrushItem"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("color"), BAD_CAST(aColor.AsRGBHexString().toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("filtercolor"), BAD_CAST(aFilterColor.AsRGBHexString().toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("shadingValue"), BAD_CAST(OString::number(nShadingValue).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("link"), BAD_CAST(maStrLink.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("filter"), BAD_CAST(maStrFilter.toUtf8().getStr()));
