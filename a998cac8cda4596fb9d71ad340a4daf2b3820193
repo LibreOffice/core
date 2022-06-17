@@ -16,6 +16,24 @@
       "message": "VCLXComboBox behaves different to VCLXListbox, as VCLXComboBox paints the background color without need to change native widget behaviour. Will examine the difference.",
       "revId": "a998cac8cda4596fb9d71ad340a4daf2b3820193",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31e01635_82f014ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-17T06:39:58Z",
+      "side": 1,
+      "message": "As the commit msg mentions, this doesn\u0027t fix the the example from tdf#148109 as is, but requires uncommenting the line to disable the use of native widgets in the document macro in addition:\n\n    oDlgModel.NativeWidgetLook \u003d false\n\nDid your analysis give any results why it doesn\u0027t work with native widget behavior and you decided not trying to fix that?\n   \nI think that fixing the native widget case as well would be good, if reasonably possible.",
+      "parentUuid": "fb51f1d7_d0870481",
+      "revId": "a998cac8cda4596fb9d71ad340a4daf2b3820193",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
