@@ -189,6 +189,7 @@ public:
     void testWholeRowBold();
     void testXlsxRowsOrder();
     void testTdf91286();
+    void testTdf148820();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -310,6 +311,7 @@ public:
     CPPUNIT_TEST(testWholeRowBold);
     CPPUNIT_TEST(testXlsxRowsOrder);
     CPPUNIT_TEST(testTdf91286);
+    CPPUNIT_TEST(testTdf148820);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3060,6 +3062,32 @@ void ScExportTest2::testTdf91286()
     // - Actual  : 2
     // i.e. the embedded picture would have been saved twice.
     CPPUNIT_ASSERT_EQUAL(1, nImageFiles);
+}
+
+void ScExportTest2::testTdf148820()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf148820.", FORMAT_XLSX);
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
+    xmlDocUniquePtr pSheet
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+
+    sal_Int32 nDxfIdCondFormatFirst
+        = getXPath(pSheet, "/x:worksheet/x:conditionalFormatting[1]/x:cfRule", "dxfId").toInt32() + 1;
+    sal_Int32 nDxfIdCondFormatLast
+        = getXPath(pSheet, "/x:worksheet/x:conditionalFormatting[20]/x:cfRule", "dxfId").toInt32() + 1;
+
+    xmlDocUniquePtr pStyles = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/styles.xml");
+    CPPUNIT_ASSERT(pStyles);
+
+    OString sDxfCondFormatXPath("/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nDxfIdCondFormatFirst)
+        + "]/x:fill/x:patternFill/x:bgColor");
+    assertXPath(pStyles, sDxfCondFormatXPath, "rgb", "FF53B5A9");
+    sDxfCondFormatXPath = OString("/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nDxfIdCondFormatLast)
+        + "]/x:fill/x:patternFill/x:bgColor");
+    assertXPath(pStyles, sDxfCondFormatXPath, "rgb", "FFA30000");
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);
