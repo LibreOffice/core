@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da07e2ff_e3ecb2b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-06-17T03:42:33Z",
+      "side": 1,
+      "message": "This is not a well-formed imperative sentence. Please urgently rephrase in a follow-up commit, since this was backported.",
+      "revId": "d124a955e80ecd4ecf0b28cc5f550401321ce5f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
