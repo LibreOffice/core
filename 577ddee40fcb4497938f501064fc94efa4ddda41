@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0495263_dede0a8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-17T16:19:12Z",
+      "side": 1,
+      "message": "Two \"unstables\" with all builds green for a documentation change is good enough for me 😊",
+      "revId": "577ddee40fcb4497938f501064fc94efa4ddda41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
