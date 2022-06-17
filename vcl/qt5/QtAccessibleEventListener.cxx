@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
@@ -39,6 +40,117 @@ QtAccessibleEventListener::QtAccessibleEventListener(const Reference<XAccessible
     : m_xAccessible(xAccessible)
     , m_pAccessibleWidget(pAccessibleWidget)
 {
+}
+
+void QtAccessibleEventListener::HandleStateChangedEvent(
+    QAccessibleInterface* pQAccessibleInterface,
+    const css::accessibility::AccessibleEventObject& rEvent)
+{
+    QAccessible::State aState;
+
+    short nState = 0;
+    rEvent.NewValue >>= nState;
+    // States in 'QAccessibleStateChangeEvent' indicate what states have changed, so if e.g.
+    // an object loses focus (not just if it gains it), 'focus' state needs to be set to 'true',
+    // so retrieve the old/previous value from the event if necessary.
+    if (nState == AccessibleStateType::INVALID)
+        rEvent.OldValue >>= nState;
+
+    switch (nState)
+    {
+        case AccessibleStateType::ACTIVE:
+            // ignore for now, since it somehow causes Orca to become unresponsive quite quickly
+            // TODO: analyze further and fix root cause
+            /*
+            aState.active = true;
+            break;
+            */
+            return;
+        case AccessibleStateType::BUSY:
+            aState.busy = true;
+            break;
+        case AccessibleStateType::CHECKED:
+            aState.checked = true;
+            break;
+        case AccessibleStateType::COLLAPSE:
+            aState.collapsed = true;
+            break;
+        case AccessibleStateType::DEFAULT:
+            aState.defaultButton = true;
+            break;
+        case AccessibleStateType::ENABLED:
+            aState.disabled = true;
+            break;
+        case AccessibleStateType::EDITABLE:
+            aState.editable = true;
+            break;
+        case AccessibleStateType::EXPANDABLE:
+            aState.expandable = true;
+            break;
+        case AccessibleStateType::EXPANDED:
+            aState.expanded = true;
+            break;
+        case AccessibleStateType::FOCUSABLE:
+            aState.focusable = true;
+            break;
+        case AccessibleStateType::FOCUSED:
+            aState.focused = true;
+            break;
+        case AccessibleStateType::INVALID:
+            aState.invalid = true;
+            break;
+        case AccessibleStateType::VISIBLE:
+            aState.invisible = true;
+            break;
+        case AccessibleStateType::MODAL:
+            aState.modal = true;
+            break;
+        case AccessibleStateType::MOVEABLE:
+            aState.movable = true;
+            break;
+        case AccessibleStateType::MULTI_LINE:
+        // comment in Qt's qaccessible.h has this:
+        // "// quint64 singleLine : 1; // we have multi line, this is redundant."
+        case AccessibleStateType::SINGLE_LINE:
+            aState.multiLine = true;
+            break;
+        case AccessibleStateType::MULTI_SELECTABLE:
+            aState.multiSelectable = true;
+            break;
+        case AccessibleStateType::OFFSCREEN:
+            aState.offscreen = true;
+            break;
+        case AccessibleStateType::PRESSED:
+            aState.pressed = true;
+            break;
+        case AccessibleStateType::RESIZABLE:
+            aState.sizeable = true;
+            break;
+        case AccessibleStateType::SELECTABLE:
+            aState.selectable = true;
+            break;
+        case AccessibleStateType::SELECTED:
+            aState.selected = true;
+            break;
+        // These don't seem to have a matching Qt equivalent
+        case AccessibleStateType::ARMED:
+        case AccessibleStateType::DEFUNC:
+        case AccessibleStateType::HORIZONTAL:
+        case AccessibleStateType::ICONIFIED:
+        case AccessibleStateType::INDETERMINATE:
+        case AccessibleStateType::MANAGES_DESCENDANTS:
+        case AccessibleStateType::OPAQUE:
+        case AccessibleStateType::SENSITIVE:
+        case AccessibleStateType::SHOWING:
+        case AccessibleStateType::STALE:
+        case AccessibleStateType::TRANSIENT:
+        case AccessibleStateType::VERTICAL:
+        default:
+            return;
+    }
+
+    QAccessible::updateAccessibility(
+        new QAccessibleStateChangeEvent(pQAccessibleInterface, aState));
 }
 
 void QtAccessibleEventListener::notifyEvent(const css::accessibility::AccessibleEventObject& aEvent)
@@ -211,8 +323,7 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::LocationChanged));
             return;
         case AccessibleEventId::STATE_CHANGED:
-            QAccessible::updateAccessibility(
-                new QAccessibleEvent(pQAccessibleInterface, QAccessible::ForegroundChanged));
+            HandleStateChangedEvent(pQAccessibleInterface, aEvent);
             return;
         case AccessibleEventId::VALUE_CHANGED:
         {
