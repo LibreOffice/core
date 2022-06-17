@@ -166,7 +166,8 @@ public:
         void putExternal( const OUString & rSymbol, const OUString & rAddIn );
 
         /** Put entry of symbol String and AddIn international String pair,
-            failing silently if rAddIn name already exists. */
+            not warning just info as used for AddIn collection and setting up
+            alias names. */
         void putExternalSoftly( const OUString & rSymbol, const OUString & rAddIn );
 
         /// Core implementation of XFormulaOpCodeMapper::getMappings()
