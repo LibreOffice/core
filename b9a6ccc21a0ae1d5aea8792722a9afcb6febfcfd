@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39c4c923_bb68479c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-17T09:45:46Z",
+      "side": 1,
+      "message": "Looks reasonably in general, see some compatibility \u0026 test readability concerns inline.",
+      "revId": "b9a6ccc21a0ae1d5aea8792722a9afcb6febfcfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16316244_9a164c6d",
+        "filename": "sw/qa/core/text/text.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-17T09:45:46Z",
+      "side": 1,
+      "message": "Would it be possible to make the test document smaller, so you don\u0027t need to go down (or only go down just once if it\u0027s important that it\u0027s not the first layout line)?",
+      "revId": "b9a6ccc21a0ae1d5aea8792722a9afcb6febfcfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16c38323_bc9c0c33",
+        "filename": "sw/qa/core/text/text.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-17T09:45:46Z",
+      "side": 1,
+      "message": "Similar here, moving to the right 106 times is not really minimal, can\u0027t you just jump to the end of the line?",
+      "revId": "b9a6ccc21a0ae1d5aea8792722a9afcb6febfcfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2a4dc4f_e03d486b",
+        "filename": "sw/qa/core/text/text.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-17T09:45:46Z",
+      "side": 1,
+      "message": "Some comments on this would be nice, if I understand correctly, this is meant to be a list of lines, with each line having a cluster (1 or more) false values, followed a cluster (1 or more?) true values, but it\u0027s not too clear.",
+      "revId": "b9a6ccc21a0ae1d5aea8792722a9afcb6febfcfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
