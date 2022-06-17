@@ -449,9 +449,14 @@ void FormulaCompiler::OpCodeMap::putExternal( const OUString & rSymbol, const OU
 
 void FormulaCompiler::OpCodeMap::putExternalSoftly( const OUString & rSymbol, const OUString & rAddIn )
 {
-    bool bOk = maReverseExternalHashMap.emplace(rAddIn, rSymbol).second;
+    // Same as putExternal() but no warning, instead info whether inserted or not.
+    bool bOk = maExternalHashMap.emplace(rSymbol, rAddIn).second;
+    SAL_INFO( "formula.core", "OpCodeMap::putExternalSoftly: symbol " << (bOk ? "" : "not ") << "inserted, " << rSymbol << " -> " << rAddIn);
     if (bOk)
-        maExternalHashMap.emplace(rSymbol, rAddIn);
+    {
+        bOk = maReverseExternalHashMap.emplace(rAddIn, rSymbol).second;
+        SAL_INFO_IF( !bOk, "formula.core", "OpCodeMap::putExternalSoftly: AddIn not inserted, " << rAddIn << " -> " << rSymbol);
+    }
 }
 
 uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceOfFormulaTokens(
