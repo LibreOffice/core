@@ -37,6 +37,12 @@ skia_patches := \
     disable-freetype-colrv1.1 \
     windows-libraries-system32.patch.1 \
     fix-graphite-ifdef.patch.1 \
+<<<<<<< HEAD   (858141 sw HTML export, XHTML mode: fix lost <li> with a list header)
+=======
+    allow-no-es2restrictions.patch.1 \
+    vk_mem_alloc.patch.1 \
+    tdf148624.patch.1 \
+>>>>>>> CHANGE (4dab8a upstream Skia fix for Vulkan crash on texture binding (tdf#1)
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
