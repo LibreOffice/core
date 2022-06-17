@@ -2506,7 +2506,7 @@ void ScInterpreter::ScExternal()
 {
     sal_uInt8 nParamCount = GetByte();
     OUString aUnoName;
-    OUString aFuncName( ScGlobal::getCharClass().uppercase( pCur->GetExternal() ) );
+    OUString aFuncName( pCur->GetExternal().toAsciiUpperCase());    // programmatic name
     LegacyFuncData* pLegacyFuncData = ScGlobal::GetLegacyFuncCollection()->findByName(aFuncName);
     if (pLegacyFuncData)
     {
