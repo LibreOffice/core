@@ -113,7 +113,7 @@ namespace
             "Body Text Indent 3",
             "Block Text",
             "Hyperlink",
-            "Followed Hyperlink",
+            "FollowedHyperlink",
             "Strong",
             "Emphasis",
             "Document Map",
