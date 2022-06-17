@@ -37,6 +37,7 @@ skia_patches := \
     fix-graphite-ifdef.patch.1 \
     allow-no-es2restrictions.patch.1 \
     vk_mem_alloc.patch.1 \
+    tdf148624.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
