@@ -22,6 +22,30 @@
       },
       "revId": "bd3fffb1503050683032ff215fcdea0cbcac2310",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cccfe3ab_1c70b192",
+        "filename": "toolkit/source/helper/property.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2022-06-17T07:08:16Z",
+      "side": 1,
+      "message": "It\u0027s related to the topic. The Listbox shows a blue highlight color of the selected item, the background color is ignored in this. So it is part of the solution, as I need to set the item with another background color even when it is selected.",
+      "parentUuid": "a387dba1_3307adc8",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 114
+      },
+      "revId": "bd3fffb1503050683032ff215fcdea0cbcac2310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
