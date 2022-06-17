@@ -123,7 +123,7 @@ namespace chart
 
 void ObjectHierarchy::createTree( const Reference< XChartDocument >& xChartDocument )
 {
-    m_aChildMap = tChildMap();//clear tree
+    m_aChildMap.clear();
 
     if( !xChartDocument.is() )
         return;
