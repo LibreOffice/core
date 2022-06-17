@@ -63,6 +63,7 @@ public:
     void testMacroKeyBinding();
 
     void testVba();
+    void testTdf149579();
     void testVbaRangeSort();
     void testTdf107885();
     void testTdf131562();
@@ -83,6 +84,7 @@ public:
     CPPUNIT_TEST(testMacroKeyBinding);
 
     CPPUNIT_TEST(testVba);
+    CPPUNIT_TEST(testTdf149579);
     CPPUNIT_TEST(testVbaRangeSort);
     CPPUNIT_TEST(testTdf107885);
     CPPUNIT_TEST(testTdf131562);
@@ -594,6 +596,49 @@ void VBAMacroTest::testVba()
                 osl::File::remove(sFileUrl);
         }
     }
+}
+
+void VBAMacroTest::testTdf149579()
+{
+    auto xComponent = loadFromDesktop("private:factory/scalc");
+
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(xComponent, uno::UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    xLibrary->insertByName("TestModule",
+                           uno::Any(OUString("Option VBASupport 1\n"
+                                             "Sub TestTdf149579\n"
+                                             "Range(\"A1\").Sort Key1:=Range(\"A1\")\n"
+                                             "End Sub\n")));
+
+    uno::Any aRet;
+    uno::Sequence<sal_Int16> aOutParamIndex;
+    uno::Sequence<uno::Any> aOutParam;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    rDoc.SetValue(ScAddress(0, 0, 0), 5.0);
+    rDoc.SetValue(ScAddress(0, 1, 0), 10.0);
+    rDoc.SetValue(ScAddress(0, 2, 0), 1.0);
+
+    // Without the fix in place, this call would have crashed in debug builds with failed assertion
+    ErrCode result = SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:TestLibrary.TestModule.TestTdf149579?language=Basic&location=document",
+        {}, aRet, aOutParamIndex, aOutParam);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, result);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 5
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, rDoc.GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, rDoc.GetValue(ScAddress(0, 2, 0)));
+
+    pDocSh->DoClose();
 }
 
 void VBAMacroTest::testVbaRangeSort()
