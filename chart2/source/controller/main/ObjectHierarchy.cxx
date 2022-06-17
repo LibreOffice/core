@@ -105,7 +105,7 @@ namespace chart
 
 void ObjectHierarchy::createTree( const rtl::Reference<::chart::ChartModel>& xChartDocument )
 {
-    m_aChildMap = tChildMap();//clear tree
+    m_aChildMap.clear();
 
     if( !xChartDocument.is() )
         return;
