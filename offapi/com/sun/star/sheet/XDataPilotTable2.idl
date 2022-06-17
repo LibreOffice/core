@@ -69,8 +69,6 @@ interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
         is empty, no new sheet is inserted.</p>
 
         @param aAddr address of a result cell
-
-        @returns `VOID`
      */
     void insertDrillDownSheet( [in] com::sun::star::table::CellAddress aAddr );
 
