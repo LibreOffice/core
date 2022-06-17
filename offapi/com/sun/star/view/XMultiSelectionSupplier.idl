@@ -60,12 +60,6 @@ interface XMultiSelectionSupplier: XSelectionSupplier
         @param Selection
             either an Object that is selectable or a sequence of objects that are selectable.
 
-        @returns
-            `TRUE`/, if <var>Selection</var> was added to the current selection.
-            `FALSE`, if <var>Selection</var> or parts of <var>Selection</var> could not be
-            added to the current selection. For example, if the selection already contains
-            objects that are forbidden to be selected together with <var>Selection</var>.
-
         @throws com::sun::star::lang::IllegalArgumentException
             If <var>Selection</var> is not a selectable object for this XMultiSelectionSupplier.
             <p>Removing an object from the selection that is not part of the selection should not raise this exception</p>
