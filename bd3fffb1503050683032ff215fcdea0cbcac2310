@@ -46,6 +46,30 @@
       },
       "revId": "bd3fffb1503050683032ff215fcdea0cbcac2310",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a6ec515_63c7bae2",
+        "filename": "toolkit/source/helper/property.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-17T09:11:33Z",
+      "side": 1,
+      "message": "Sorry for nit-picking, but isn\u0027t that related to the two lines above (adding \"HighlightColor\", HightlightTextColor\") rather than the added space in the lines for \"ImageAlign\", \"ImagePosition\"?\n(This is mostly a minor comment for this change, but it\u0027s usually recommended to not touch unrelated lines so they don\u0027t show up in the diff, making it easier to see what the actual change is about, thus e.g. simplifying review and analysing the commit later in case it causes any regressions, etc.)",
+      "parentUuid": "cccfe3ab_1c70b192",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 114
+      },
+      "revId": "bd3fffb1503050683032ff215fcdea0cbcac2310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
