@@ -466,6 +466,7 @@ typedef std::shared_ptr< Border > BorderRef;
 struct PatternFillModel
 {
     Color               maPatternColor;     /// Pattern foreground color.
+    Color               maFiltPatternColor; /// Pattern foreground for color filter.
     Color               maFillColor;        /// Background fill color.
     sal_Int32           mnPattern;          /// Pattern identifier (e.g. solid).
     bool                mbPattColorUsed;    /// True = pattern foreground color used.
@@ -503,6 +504,7 @@ struct GradientFillModel
 struct ApiSolidFillData
 {
     ::Color             mnColor;            /// Fill color.
+    ::Color             mnFiltColor;        /// Fill color filtering.
     bool                mbTransparent;      /// True = transparent area.
     bool                mbUsed;             /// True = fill data is valid.
 
