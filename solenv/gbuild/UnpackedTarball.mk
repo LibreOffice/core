@@ -37,6 +37,15 @@ $(GNUTAR) \
 	-f $(UNPACKED_TARBALL)
 endef
 
+define gb_UnpackedTarget__command_untarxz
+< $(UNPACKED_TARBALL) \
+xz -d \
+| $(GNUTAR) \
+	-x \
+	-C $(UNPACKED_DIR) \
+	$(STRIP_COMPONENTS)=$(UNPACKED_STRIP_COMPONENTS)
+endef
+
 define gb_UnpackedTarget__command_unzip
 unzip \
 	-qq \
@@ -65,7 +74,7 @@ $(call gb_UnpackedTarget_get_target,%).tar.bz2 :
 	$(call gb_UnpackedTarget__command,untar,$@,$*,-j)
 
 $(call gb_UnpackedTarget_get_target,%).tar.xz :
-	$(call gb_UnpackedTarget__command,untar,$@,$*,-J)
+	$(call gb_UnpackedTarget__command,untarxz,$@,$*,-J)
 
 $(call gb_UnpackedTarget_get_target,%).tar.gz :
 	$(call gb_UnpackedTarget__command,untar,$@,$*,-z)
