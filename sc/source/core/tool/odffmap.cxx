@@ -19,8 +19,8 @@
 
 #include <compiler.hxx>
 
-// ODFF, English, MapDupToInternal when writing ODFF, Programmatical, ODF_11
-// functions duplicated to internal when writing ODFF are listed in static const XclFunctionInfo saFuncTable_4[]
+// ODFF, English, Programmatical, ODF_11
+// Functions duplicated to internal when writing ODFF are listed in static const XclFunctionInfo saFuncTable_4[]
 const ScCompiler::AddInMap ScCompiler::g_aAddInMap[] =
 {
     { "ORG.OPENOFFICE.WEEKS", "WEEKS", "com.sun.star.sheet.addin.DateFunctions.getDiffWeeks", "COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETDIFFWEEKS" },
