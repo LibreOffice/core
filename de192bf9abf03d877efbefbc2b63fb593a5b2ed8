@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d22b9c96_061bb067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-17T15:37:40Z",
+      "side": 1,
+      "message": "So now I also tested and \"fixed\" scaling. Something is still amiss: the positioning of a child window, like the combobox popup is wrong when scaled. And no, it\u0027s not the menubar size instead of the border.",
+      "revId": "de192bf9abf03d877efbefbc2b63fb593a5b2ed8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
