@@ -134,7 +134,7 @@ void ObjectHierarchy::createTree( const Reference< XChartDocument >& xChartDocum
     ObjectIdentifier aDiaOID;
     if( xDiagram.is() )
         aDiaOID = ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram, xModel ) );
-    ObjectHierarchy::tChildContainer aTopLevelContainer;
+    tChildContainer aTopLevelContainer;
 
     // First Level
 
@@ -185,7 +185,7 @@ void ObjectHierarchy::createTree( const Reference< XChartDocument >& xChartDocum
             createDiagramTree( aTopLevelContainer, xChartDocument, xDiagram );
         else
         {
-            ObjectHierarchy::tChildContainer aSubContainer;
+            tChildContainer aSubContainer;
             createDiagramTree( aSubContainer, xChartDocument, xDiagram );
             if( !aSubContainer.empty() )
                 m_aChildMap[ aDiaOID ] = aSubContainer;
@@ -206,11 +206,11 @@ void ObjectHierarchy::createTree( const Reference< XChartDocument >& xChartDocum
         aTopLevelContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, u"" ) );
 
     if( ! aTopLevelContainer.empty())
-        m_aChildMap[ ObjectHierarchy::getRootNodeOID() ] = aTopLevelContainer;
+        m_aChildMap[ObjectHierarchy::getRootNodeOID()] = aTopLevelContainer;
 }
 
 void ObjectHierarchy::createLegendTree(
-    ObjectHierarchy::tChildContainer & rContainer,
+    tChildContainer & rContainer,
     const Reference< XChartDocument > & xChartDoc,
     const Reference< XDiagram > & xDiagram  )
 {
@@ -225,7 +225,7 @@ void ObjectHierarchy::createLegendTree(
     {
         Reference< container::XIndexAccess > xLegendShapeContainer(
             m_pExplicitValueProvider->getShapeForCID( aLegendOID.getObjectCID() ), uno::UNO_QUERY );
-        ObjectHierarchy::tChildContainer aLegendEntryOIDs;
+        tChildContainer aLegendEntryOIDs;
         lcl_getChildOIDs( aLegendEntryOIDs, xLegendShapeContainer );
 
         m_aChildMap[ aLegendOID ] = aLegendEntryOIDs;
@@ -233,7 +233,7 @@ void ObjectHierarchy::createLegendTree(
 }
 
 void ObjectHierarchy::createAxesTree(
-    ObjectHierarchy::tChildContainer & rContainer,
+    tChildContainer & rContainer,
     const Reference< XChartDocument > & xChartDoc,
     const Reference< XDiagram > & xDiagram  )
 {
@@ -298,7 +298,7 @@ void ObjectHierarchy::createAxesTree(
 }
 
 void ObjectHierarchy::createWallAndFloor(
-    ObjectHierarchy::tChildContainer & rContainer,
+    tChildContainer & rContainer,
     const Reference< XDiagram > & xDiagram )
 {
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
@@ -316,7 +316,7 @@ void ObjectHierarchy::createWallAndFloor(
 }
 
 void ObjectHierarchy::createDiagramTree(
-    ObjectHierarchy::tChildContainer & rContainer,
+    tChildContainer & rContainer,
     const Reference< XChartDocument > & xChartDoc,
     const Reference< XDiagram > & xDiagram )
 {
@@ -334,7 +334,7 @@ void ObjectHierarchy::createDiagramTree(
 }
 
 void ObjectHierarchy::createDataSeriesTree(
-    ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
+    tChildContainer & rOutDiagramSubContainer,
     const Reference< XDiagram > & xDiagram )
 {
     Reference< XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
@@ -365,7 +365,7 @@ void ObjectHierarchy::createDataSeriesTree(
                         ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForParticle( aSeriesParticle ) ) );
                     rOutDiagramSubContainer.push_back( aSeriesOID );
 
-                    ObjectHierarchy::tChildContainer aSeriesSubContainer;
+                    tChildContainer aSeriesSubContainer;
 
                     Reference< chart2::XDataSeries > const & xSeries = aSeriesSeq[nSeriesIdx];
 
@@ -443,7 +443,7 @@ void ObjectHierarchy::createDataSeriesTree(
     }
 }
 
-void ObjectHierarchy::createAdditionalShapesTree( ObjectHierarchy::tChildContainer& rContainer )
+void ObjectHierarchy::createAdditionalShapesTree(tChildContainer& rContainer)
 {
     try
     {
@@ -491,7 +491,7 @@ const ObjectHierarchy::tChildContainer & ObjectHierarchy::getChildren( const Obj
         if( aIt != m_aChildMap.end())
             return aIt->second;
     }
-    static const ObjectHierarchy::tChildContainer EMPTY;
+    static const tChildContainer EMPTY;
     return EMPTY;
 }
 
@@ -501,13 +501,13 @@ const ObjectHierarchy::tChildContainer & ObjectHierarchy::getSiblings( const Obj
     {
         for (auto const& child : m_aChildMap)
         {
-            ObjectHierarchy::tChildContainer::const_iterator aElemIt(
+            tChildContainer::const_iterator aElemIt(
                 std::find( child.second.begin(), child.second.end(), rNode ));
             if( aElemIt != child.second.end())
                 return child.second;
         }
     }
-    static const ObjectHierarchy::tChildContainer EMPTY;
+    static const tChildContainer EMPTY;
     return EMPTY;
 }
 
@@ -516,8 +516,8 @@ ObjectIdentifier ObjectHierarchy::getParentImpl(
     const ObjectIdentifier & rOID ) const
 {
     // search children
-    ObjectHierarchy::tChildContainer aChildren( getChildren( rParentOID ));
-    ObjectHierarchy::tChildContainer::const_iterator aIt(
+    tChildContainer aChildren( getChildren( rParentOID ));
+    tChildContainer::const_iterator aIt(
         std::find( aChildren.begin(), aChildren.end(), rOID ));
     // recursion end
     if( aIt != aChildren.end())
