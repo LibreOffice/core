@@ -706,10 +706,10 @@ void lcl_GetColumnTypes(
 void lcl_getLongVarCharEditString( OUString& rString,
         const ScRefCellValue& rCell, ScFieldEditEngine& rEditEngine )
 {
-    if (!rCell.mpEditText)
+    if (!rCell.getEditText())
         return;
 
-    rEditEngine.SetTextCurrentDefaults(*rCell.mpEditText);
+    rEditEngine.SetTextCurrentDefaults(*rCell.getEditText());
     rString = rEditEngine.GetText( LINEEND_CRLF );
 }
 

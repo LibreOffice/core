@@ -1203,7 +1203,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     switch (aCell.getType())
     {
         case CELLTYPE_EDIT :
-            bFieldText = WriteFieldText(aCell.mpEditText);
+            bFieldText = WriteFieldText(aCell.getEditText());
             if ( bFieldText )
                 break;
             [[fallthrough]];

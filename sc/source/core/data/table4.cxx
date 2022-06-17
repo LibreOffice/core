@@ -1918,7 +1918,7 @@ void ScTable::FillAutoSimple(
                             if (aSrcCell.getType() == CELLTYPE_STRING)
                                 aValue = aSrcCell.getSharedString()->getString();
                             else
-                                aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, &rDocument);
+                                aValue = ScEditUtil::GetString(*aSrcCell.getEditText(), &rDocument);
                             if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
                             {
                                 nCellDigits = 0;    // look at each source cell individually
@@ -2462,7 +2462,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if (eCellType == CELLTYPE_STRING)
                     aValue = aSrcCell.getSharedString()->getString();
                 else
-                    aValue = ScEditUtil::GetString(*aSrcCell.mpEditText, &rDocument);
+                    aValue = ScEditUtil::GetString(*aSrcCell.getEditText(), &rDocument);
                 sal_Int32 nStringValue;
                 sal_uInt16 nMinDigits = nArgMinDigits;
                 short nHeadNoneTail = lcl_DecompValueString( aValue, nStringValue, &nMinDigits );

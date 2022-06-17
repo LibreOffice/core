@@ -877,11 +877,11 @@ void XclExpChTrCellContent::GetCellData(
             else
             {
                 XclExpHyperlinkHelper aLinkHelper( rRoot, aPosition );
-                if (rScCell.mpEditText)
+                if (rScCell.getEditText())
                 {
-                    sCellStr = ScEditUtil::GetString(*rScCell.mpEditText, &GetDoc());
+                    sCellStr = ScEditUtil::GetString(*rScCell.getEditText(), &GetDoc());
                     rpData->mpFormattedString = XclExpStringHelper::CreateCellString(
-                        rRoot, *rScCell.mpEditText, nullptr, aLinkHelper);
+                        rRoot, *rScCell.getEditText(), nullptr, aLinkHelper);
                 }
                 else
                 {

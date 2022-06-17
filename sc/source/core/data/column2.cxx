@@ -458,7 +458,7 @@ tools::Long ScColumn::GetNeededSize(
 
         if (aCell.getType() == CELLTYPE_EDIT)
         {
-            pEngine->SetTextNewDefaults(*aCell.mpEditText, std::move(aSet));
+            pEngine->SetTextNewDefaults(*aCell.getEditText(), std::move(aSet));
         }
         else
         {

@@ -234,7 +234,7 @@ public:
 
     CellType getType() const { return maCurCell.getType();}
     OUString getString() const;
-    const EditTextObject* getEditText() const { return maCurCell.mpEditText;}
+    const EditTextObject* getEditText() const { return maCurCell.getEditText();}
     ScFormulaCell* getFormulaCell() { return maCurCell.mpFormula;}
     const ScFormulaCell* getFormulaCell() const { return maCurCell.mpFormula;}
     ScCellValue getCellValue() const;

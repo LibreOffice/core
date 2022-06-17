@@ -177,7 +177,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
 
             if( aCell.getType() == CELLTYPE_EDIT )
             {
-                const EditTextObject* pEditObj = aCell.mpEditText;
+                const EditTextObject* pEditObj = aCell.getEditText();
                 rEE.SetTextCurrentDefaults( *pEditObj );
                 rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection( 0, 0, EE_PARA_ALL, 0 ) );
             }

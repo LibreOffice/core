@@ -583,8 +583,8 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             bIsVal = false;
         break;
         case CELLTYPE_EDIT:
-            if (rCell.mpEditText)
-                aString = ScEditUtil::GetString(*rCell.mpEditText, GetDocument());
+            if (rCell.getEditText())
+                aString = ScEditUtil::GetString(*rCell.getEditText(), GetDocument());
             bIsVal = false;
         break;
         case CELLTYPE_FORMULA:

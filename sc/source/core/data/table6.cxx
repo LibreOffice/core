@@ -90,7 +90,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
             if ( eCellType == CELLTYPE_FORMULA )
                 aString = aCell.mpFormula->GetFormula(rDocument.GetGrammar());
             else if ( eCellType == CELLTYPE_EDIT )
-                bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, &rDocument, aString);
+                bMultiLine = lcl_GetTextWithBreaks(*aCell.getEditText(), &rDocument, aString);
             else
             {
                 if( !bSearchFormatted )
@@ -102,7 +102,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         }
         case SvxSearchCellType::VALUE:
             if ( eCellType == CELLTYPE_EDIT )
-                bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, &rDocument, aString);
+                bMultiLine = lcl_GetTextWithBreaks(*aCell.getEditText(), &rDocument, aString);
             else
             {
                 if( !bSearchFormatted )

@@ -468,7 +468,7 @@ void ScUndoSetCell::SetValue( const ScCellValue& rVal )
         }
         break;
         case CELLTYPE_EDIT:
-            rDoc.SetEditText(maPos, rVal.mpEditText->Clone());
+            rDoc.SetEditText(maPos, rVal.getEditText()->Clone());
         break;
         case CELLTYPE_FORMULA:
             rDoc.SetFormulaCell(maPos, rVal.mpFormula->Clone());

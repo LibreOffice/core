@@ -2674,7 +2674,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             {
                 XclExpHyperlinkHelper aLinkHelper( GetRoot(), aScPos );
                 xCell = new XclExpLabelCell(
-                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScCell.mpEditText, aLinkHelper);
+                    GetRoot(), aXclPos, pPattern, nMergeBaseXFId, rScCell.getEditText(), aLinkHelper);
 
                 // add a single created HLINK record to the record list
                 if( aLinkHelper.HasLinkRecord() )

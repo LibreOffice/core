@@ -40,7 +40,7 @@ public:
     union {
         double mfValue1;
         svl::SharedString* mpString;
-        EditTextObject* mpEditText;
+        EditTextObject* mpEditText1;
         ScFormulaCell* mpFormula;
     };
 
@@ -64,6 +64,14 @@ public:
     CellType getType() const { return meType; }
     double getDouble() const { assert(meType == CELLTYPE_VALUE); return mfValue1; }
     svl::SharedString* getSharedString() const { assert(meType == CELLTYPE_STRING); return mpString; }
+    EditTextObject* getEditText() const { assert(meType == CELLTYPE_EDIT); return mpEditText1; }
+    EditTextObject* releaseEditText()
+    {
+        assert(meType == CELLTYPE_EDIT);
+        auto p = mpEditText1;
+        mpEditText1 = nullptr;
+        return p;
+    }
 
     /**
      * Take cell value from specified position in specified document.
@@ -115,7 +123,7 @@ public:
     union {
         double mfValue1;
         const svl::SharedString* mpString;
-        const EditTextObject* mpEditText;
+        const EditTextObject* mpEditText1;
         ScFormulaCell* mpFormula;
     };
 
@@ -136,6 +144,7 @@ public:
     CellType getType() const { return meType; }
     double getDouble() const { assert(meType == CELLTYPE_VALUE); return mfValue1; }
     const svl::SharedString* getSharedString() const { assert(meType == CELLTYPE_STRING); return mpString; }
+    const EditTextObject* getEditText() const { assert(meType == CELLTYPE_EDIT); return mpEditText1; }
 
     /**
      * Take cell value from specified position in specified document.
