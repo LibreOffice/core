@@ -33,6 +33,9 @@ public:
 private:
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     QtAccessibleWidget* m_pAccessibleWidget;
+
+    static void HandleStateChangedEvent(QAccessibleInterface* pQAccessibleInterface,
+                                        const css::accessibility::AccessibleEventObject& rEvent);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
