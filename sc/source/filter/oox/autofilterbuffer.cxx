@@ -441,7 +441,7 @@ ApiFilterSettings ColorFilter::finalizeImport()
     const SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
     // Color (whether text or background color) is always stored in ATTR_BACKGROUND
     const SvxBrushItem* pItem = rItemSet.GetItem<SvxBrushItem>(ATTR_BACKGROUND);
-    ::Color aColor = pItem->GetColor();
+    ::Color aColor = pItem->GetFiltColor();
     util::Color nColor(aColor);
     aSettings.appendField(true, nColor, mbIsBackgroundColor);
     return aSettings;
