@@ -92,7 +92,7 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const OUString& rNam, const OUString& rL
             pArgDescs[i] = pAD[i];
     }
 
-    aUpperName = ScGlobal::getCharClass().uppercase(aUpperName);
+    aUpperName = aUpperName.toAsciiUpperCase();  // programmatic name
     aUpperLocal = ScGlobal::getCharClass().uppercase(aUpperLocal);
 }
 
