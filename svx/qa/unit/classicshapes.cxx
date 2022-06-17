@@ -89,15 +89,15 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98584ShearVertical)
                 .toUtf8()
                 .getStr(),
             5001.0, aFrameRect.Width, 2.0);
-        double nShearA;
-        xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_SHEARANGLE) >>= nShearA;
+        double nShearA = {};
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_SHEARANGLE) >>= nShearA);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             OUString("Incorrect Share angle on skewY page " + OUString::number(nPageIndex))
                 .toUtf8()
                 .getStr(),
             -5313.0, nShearA, 2.0);
-        double nRotA;
-        xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nRotA;
+        double nRotA = {};
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nRotA);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             OUString("Incorrect Rotate angle on skewY page " + OUString::number(nPageIndex))
                 .toUtf8()
@@ -118,15 +118,15 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf98584ShearVertical)
                 .toUtf8()
                 .getStr(),
             5001.0, aFrameRect.Width, 2.0);
-        double nShearA;
-        xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_SHEARANGLE) >>= nShearA;
+        double nShearA = {};
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_SHEARANGLE) >>= nShearA);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             OUString("Incorrect Share angle on matrix page " + OUString::number(nPageIndex))
                 .toUtf8()
                 .getStr(),
             -6343.0, nShearA, 2.0);
-        double nRotA;
-        xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nRotA;
+        double nRotA = {};
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_ROTATEANGLE) >>= nRotA);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             OUString("Incorrect Rotate angle on matrix page " + OUString::number(nPageIndex))
                 .toUtf8()
