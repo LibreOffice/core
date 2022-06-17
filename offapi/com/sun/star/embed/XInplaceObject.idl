@@ -82,7 +82,7 @@ published interface XInplaceObject: com::sun::star::uno::XInterface
     /** provides accelerator table the container wants to use during inplace
         editing.
 
-        @return
+        @param aKeys
             an accelerator table from container
 
         @throws com::sun::star::embed::WrongStateException
