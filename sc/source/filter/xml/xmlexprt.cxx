@@ -3169,7 +3169,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                 if (aCell.maBaseCell.getType() == CELLTYPE_FORMULA)
                 {
                     const bool bIsMatrix(bIsFirstMatrixCell || aCell.bIsMatrixCovered);
-                    ScFormulaCell* pFormulaCell = aCell.maBaseCell.mpFormula;
+                    ScFormulaCell* pFormulaCell = aCell.maBaseCell.getFormula();
                     if (!bIsMatrix || bIsFirstMatrixCell)
                     {
                         if (!mpCompileFormulaCxt)
@@ -3262,9 +3262,9 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
         {
             WriteEditCell(aCell.maBaseCell.getEditText());
         }
-        else if (aCell.maBaseCell.getType() == CELLTYPE_FORMULA && aCell.maBaseCell.mpFormula->IsMultilineResult())
+        else if (aCell.maBaseCell.getType() == CELLTYPE_FORMULA && aCell.maBaseCell.getFormula()->IsMultilineResult())
         {
-            WriteMultiLineFormulaResult(aCell.maBaseCell.mpFormula);
+            WriteMultiLineFormulaResult(aCell.maBaseCell.getFormula());
         }
         else
         {

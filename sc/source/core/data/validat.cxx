@@ -589,7 +589,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
         break;
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFCell = rCell.mpFormula;
+            ScFormulaCell* pFCell = rCell.getFormula();
             bIsVal = pFCell->IsValue();
             if ( bIsVal )
                 nVal  = pFCell->GetValue();

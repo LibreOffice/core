@@ -430,7 +430,7 @@ void ScAccessibleCell::FillPrecedents(utl::AccessibleRelationSetHelper* pRelatio
     ScRefCellValue aCell(*mpDoc, maCellAddress);
     if (aCell.getType() == CELLTYPE_FORMULA)
     {
-        ScFormulaCell* pCell = aCell.mpFormula;
+        ScFormulaCell* pCell = aCell.getFormula();
         ScDetectiveRefIter aIter(*mpDoc, pCell);
         ScRange aRef;
         while ( aIter.GetNextRef( aRef ) )

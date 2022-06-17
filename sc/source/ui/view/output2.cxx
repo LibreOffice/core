@@ -611,7 +611,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, tools::Long
 
     if (eType == CELLTYPE_FORMULA)
     {
-        ScFormulaCell* pFCell = rCell.mpFormula;
+        ScFormulaCell* pFCell = rCell.getFormula();
         if (pFCell->GetErrCode() != FormulaError::NONE || pOutput->mbShowFormulas)
         {
             SetHashText();      // If the error string doesn't fit, always use "###". Also for "display formulas" (#i116691#)
@@ -864,7 +864,7 @@ static void lcl_DoHyperlinkResult( const OutputDevice* pDev, const tools::Rectan
     OUString aURL;
     if (rCell.getType() == CELLTYPE_FORMULA)
     {
-        ScFormulaCell* pFCell = rCell.mpFormula;
+        ScFormulaCell* pFCell = rCell.getFormula();
         OUString aCellText;
         if ( pFCell->IsHyperLinkCell() )
             pFCell->GetURLResult( aURL, aCellText );
@@ -1724,10 +1724,10 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                 {
                     bool bFormulaCell = (aCell.getType() == CELLTYPE_FORMULA);
                     if ( bFormulaCell )
-                        lcl_CreateInterpretProgress(bProgress, mpDoc, aCell.mpFormula);
+                        lcl_CreateInterpretProgress(bProgress, mpDoc, aCell.getFormula());
                     if ( aVars.SetText(aCell) )
                         pOldPattern = nullptr;
-                    bUseEditEngine = aVars.HasEditCharacters() || (bFormulaCell && aCell.mpFormula->IsMultilineResult());
+                    bUseEditEngine = aVars.HasEditCharacters() || (bFormulaCell && aCell.getFormula()->IsMultilineResult());
                 }
                 tools::Long nTotalMargin = 0;
                 SvxCellHorJustify eOutHorJust = SvxCellHorJustify::Standard;
@@ -1737,7 +1737,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                     bCellIsValue = ( eCellType == CELLTYPE_VALUE );
                     if ( eCellType == CELLTYPE_FORMULA )
                     {
-                        ScFormulaCell* pFCell = aCell.mpFormula;
+                        ScFormulaCell* pFCell = aCell.getFormula();
                         bCellIsValue = pFCell->IsRunning() || pFCell->IsValue();
                     }
 
@@ -2130,7 +2130,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                         }
 
                         // PDF: whole-cell hyperlink from formula?
-                        bool bHasURL = pPDFData && aCell.getType() == CELLTYPE_FORMULA && aCell.mpFormula->IsHyperLinkCell();
+                        bool bHasURL = pPDFData && aCell.getType() == CELLTYPE_FORMULA && aCell.getFormula()->IsHyperLinkCell();
                         if (bPaint && bHasURL)
                         {
                             tools::Rectangle aURLRect( aURLStart, aVars.GetTextSize() );
@@ -2192,7 +2192,7 @@ static bool lcl_SafeIsValue( ScRefCellValue& rCell )
             return true;
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFCell = rCell.mpFormula;
+            ScFormulaCell* pFCell = rCell.getFormula();
             if (pFCell->IsRunning() || pFCell->IsValue())
                 return true;
         }
@@ -2559,7 +2559,7 @@ bool ScOutputData::DrawEditParam::isHyperlinkCell() const
     if (maCell.getType() != CELLTYPE_FORMULA)
         return false;
 
-    return maCell.mpFormula->IsHyperLinkCell();
+    return maCell.getFormula()->IsHyperLinkCell();
 }
 
 bool ScOutputData::DrawEditParam::isVerticallyOriented() const

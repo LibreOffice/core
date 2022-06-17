@@ -295,7 +295,7 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScCellValue& rCell, co
 {
     assert(rCell.getType() == CELLTYPE_FORMULA);
 
-    ScFormulaCell* pFormulaCell = rCell.mpFormula;
+    ScFormulaCell* pFormulaCell = rCell.getFormula();
     OUString sAddress;
     const ScDocument* pDoc = rExport.GetDocument();
     ScRangeStringConverter::GetStringFromAddress(sAddress, pFormulaCell->aPos, pDoc, ::formula::FormulaGrammar::CONV_OOO);

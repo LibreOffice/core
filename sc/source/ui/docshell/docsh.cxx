@@ -2125,15 +2125,15 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                     FormulaError nErrCode;
                     if ( bShowFormulas )
                     {
-                        aString = pCell->mpFormula->GetFormula();
+                        aString = pCell->getFormula()->GetFormula();
                         bString = true;
                     }
-                    else if ((nErrCode = pCell->mpFormula->GetErrCode()) != FormulaError::NONE)
+                    else if ((nErrCode = pCell->getFormula()->GetErrCode()) != FormulaError::NONE)
                     {
                         aString = ScGlobal::GetErrorString( nErrCode );
                         bString = true;
                     }
-                    else if (pCell->mpFormula->IsValue())
+                    else if (pCell->getFormula()->IsValue())
                     {
                         sal_uInt32 nFormat = m_pDocument->GetNumberFormat(aPos);
                         if ( bFixedWidth || bSaveAsShown )
@@ -2157,7 +2157,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                             aString = ScCellFormat::GetString(*pCell, nFormat, &pDummy, rFormatter, *m_pDocument);
                         }
                         else
-                            aString = pCell->mpFormula->GetString().getString();
+                            aString = pCell->getFormula()->GetString().getString();
                         bString = true;
                     }
                 }

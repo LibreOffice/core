@@ -288,7 +288,7 @@ static bool lcl_IsEditableMatrix( ScDocument& rDoc, const ScRange& rRange )
 
     ScRefCellValue aCell(rDoc, rRange.aEnd);
     ScAddress aPos;
-    return (aCell.getType() == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(rDoc, aPos) && aPos == rRange.aStart);
+    return (aCell.getType() == CELLTYPE_FORMULA && aCell.getFormula()->GetMatrixOrigin(rDoc, aPos) && aPos == rRange.aStart);
 }
 
 static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScViewData& rViewData )
@@ -335,7 +335,7 @@ static bool lcl_GetHyperlinkCell(
             }
             else if (rCell.getType() == CELLTYPE_EDIT)
                 bFound = true;
-            else if (rCell.getType() == CELLTYPE_FORMULA && rCell.mpFormula->IsHyperLinkCell())
+            else if (rCell.getType() == CELLTYPE_FORMULA && rCell.getFormula()->IsHyperLinkCell())
                 bFound = true;
             else
                 return false;                               // other cell
@@ -5728,7 +5728,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
           // cell ( or other type ? ) with a hyperlink associated with it.
     {
         if (sURL.isEmpty())
-            pTextObj = aCell.mpFormula->CreateURLObject();
+            pTextObj = aCell.getFormula()->CreateURLObject();
         else
         {
             OUString aRepres = sURL;
@@ -5737,7 +5737,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
             if (aCell.hasNumeric())
                 aRepres = OUString::number(aCell.getValue());
             else if (aCell.getType() == CELLTYPE_FORMULA)
-                aRepres = aCell.mpFormula->GetString().getString();
+                aRepres = aCell.getFormula()->GetString().getString();
 
             pTextObj = ScEditUtil::CreateURLObjectFromURL(rDoc, sURL, aRepres);
         }

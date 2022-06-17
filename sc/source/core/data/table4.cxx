@@ -1495,7 +1495,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                         nStart = aCell.getDouble();
                     break;
                     case CELLTYPE_FORMULA:
-                        nStart = aCell.mpFormula->GetValue();
+                        nStart = aCell.getFormula()->GetValue();
                     break;
                     default:
                         nStart = 0.0;
@@ -1766,7 +1766,7 @@ void ScTable::FillSeriesSimple(
             case CELLTYPE_FORMULA:
             {
                 FillFormulaVertical(
-                    *rSrcCell.mpFormula, rInner, rCol, nIMin, nIMax, pProgress, rProgress);
+                    *rSrcCell.getFormula(), rInner, rCol, nIMin, nIMax, pProgress, rProgress);
             }
             break;
             default:
@@ -1805,7 +1805,7 @@ void ScTable::FillSeriesSimple(
                     if (bHidden)
                         continue;
 
-                    FillFormula(rSrcCell.mpFormula, rCol, rRow, (rInner == nIMax));
+                    FillFormula(rSrcCell.getFormula(), rCol, rRow, (rInner == nIMax));
                     if (pProgress)
                         pProgress->SetStateOnPercent(++rProgress);
                 }
@@ -1890,7 +1890,7 @@ void ScTable::FillAutoSimple(
                     aSrcCell = GetCellValue(rCol, nSource);
                     if (nISrcStart == nISrcEnd && aSrcCell.getType() == CELLTYPE_FORMULA)
                     {
-                        FillFormulaVertical(*aSrcCell.mpFormula, rInner, rCol, nIStart, nIEnd, pProgress, rProgress);
+                        FillFormulaVertical(*aSrcCell.getFormula(), rInner, rCol, nIStart, nIEnd, pProgress, rProgress);
                         return;
                     }
                     const SvNumFormatType nFormatType = rDocument.GetFormatTable()->GetType(
@@ -1984,7 +1984,7 @@ void ScTable::FillAutoSimple(
                     break;
                 case CELLTYPE_FORMULA :
                     FillFormula(
-                        aSrcCell.mpFormula, rCol, rRow, (rInner == nIEnd));
+                        aSrcCell.getFormula(), rCol, rRow, (rInner == nIEnd));
                     if (nFormulaCounter - nActFormCnt > nMaxFormCnt)
                         nMaxFormCnt = nFormulaCounter - nActFormCnt;
                     break;
@@ -2236,7 +2236,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if (aSrcCell.getType() == CELLTYPE_VALUE)
                 nStartVal = aSrcCell.getDouble();
             else
-                nStartVal = aSrcCell.mpFormula->GetValue();
+                nStartVal = aSrcCell.getFormula()->GetValue();
             if (eFillCmd == FILL_LINEAR)
             {
                 if (nStepValue == 0.0)
@@ -2363,7 +2363,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             else if (eCellType == CELLTYPE_VALUE || eCellType == CELLTYPE_FORMULA)
             {
                 const double nStartVal = (eCellType == CELLTYPE_VALUE ? aSrcCell.getDouble() :
-                        aSrcCell.mpFormula->GetValue());
+                        aSrcCell.getFormula()->GetValue());
                 double nVal = nStartVal;
                 tools::Long nIndex = 0;
 

@@ -741,13 +741,13 @@ void fillSortedColumnArray(
                     case CELLTYPE_FORMULA:
                         {
                             assert(rCell.mpAttr);
-                            ScAddress aOldPos = rCell.maCell.mpFormula->aPos;
+                            ScAddress aOldPos = rCell.maCell.getFormula()->aPos;
 
                             const ScAddress aCellPos(nCol1 + j, nRow, nTab);
-                            ScFormulaCell* pNew = rCell.maCell.mpFormula->Clone( aCellPos );
+                            ScFormulaCell* pNew = rCell.maCell.getFormula()->Clone( aCellPos );
                             if (pArray->IsUpdateRefs())
                             {
-                                pNew->CopyAllBroadcasters(*rCell.maCell.mpFormula);
+                                pNew->CopyAllBroadcasters(*rCell.maCell.getFormula());
                                 pNew->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, aCellPos);
                             }
                             else
@@ -760,7 +760,7 @@ void fillSortedColumnArray(
                                 // Original source cells will be deleted during
                                 // sc::CellStoreType::transfer(), SvtListener is a base
                                 // class, so we need to replace it.
-                                auto it( ::std::find( rCellListeners.begin(), rCellListeners.end(), rCell.maCell.mpFormula));
+                                auto it( ::std::find( rCellListeners.begin(), rCellListeners.end(), rCell.maCell.getFormula()));
                                 if (it != rCellListeners.end())
                                     *it = pNew;
                             }
@@ -1539,12 +1539,12 @@ short ScTable::CompareCell(
             bool bStr1 = ( eType1 != CELLTYPE_VALUE );
             if (eType1 == CELLTYPE_FORMULA)
             {
-                if (rCell1.mpFormula->GetErrCode() != FormulaError::NONE)
+                if (rCell1.getFormula()->GetErrCode() != FormulaError::NONE)
                 {
                     bErr1 = true;
                     bStr1 = false;
                 }
-                else if (rCell1.mpFormula->IsValue())
+                else if (rCell1.getFormula()->IsValue())
                 {
                     bStr1 = false;
                 }
@@ -1554,12 +1554,12 @@ short ScTable::CompareCell(
             bool bStr2 = ( eType2 != CELLTYPE_VALUE );
             if (eType2 == CELLTYPE_FORMULA)
             {
-                if (rCell2.mpFormula->GetErrCode() != FormulaError::NONE)
+                if (rCell2.getFormula()->GetErrCode() != FormulaError::NONE)
                 {
                     bErr2 = true;
                     bStr2 = false;
                 }
-                else if (rCell2.mpFormula->IsValue())
+                else if (rCell2.getFormula()->IsValue())
                 {
                     bStr2 = false;
                 }
@@ -2611,10 +2611,10 @@ SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
                 if (aCell.getType() != CELLTYPE_FORMULA)
                     continue;
 
-                if (!aCell.mpFormula->IsSubTotal())
+                if (!aCell.getFormula()->IsSubTotal())
                     continue;
 
-                if (RefVisible(aCell.mpFormula))
+                if (RefVisible(aCell.getFormula()))
                     bValid = true;
             }
         }

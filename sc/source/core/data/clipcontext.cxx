@@ -193,7 +193,7 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
             if (bBoolean)
             {
                 // Check if this formula cell is a boolean cell, and if so, go ahead and paste it.
-                const ScTokenArray* pCode = rSrcCell.mpFormula->GetCode();
+                const ScTokenArray* pCode = rSrcCell.getFormula()->GetCode();
                 if (pCode && pCode->GetLen() == 1)
                 {
                     const formula::FormulaToken* p = pCode->FirstToken();
@@ -207,7 +207,7 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
                 // Good.
                 break;
 
-            FormulaError nErr = rSrcCell.mpFormula->GetErrCode();
+            FormulaError nErr = rSrcCell.getFormula()->GetErrCode();
             if (nErr != FormulaError::NONE)
             {
                 // error codes are cloned with values
@@ -222,12 +222,12 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
                     rSrcCell.set(pErrCell);
                 }
             }
-            else if (rSrcCell.mpFormula->IsEmptyDisplayedAsString())
+            else if (rSrcCell.getFormula()->IsEmptyDisplayedAsString())
             {
                 // Empty stays empty and doesn't become 0.
                 rSrcCell.clear();
             }
-            else if (rSrcCell.mpFormula->IsValue())
+            else if (rSrcCell.getFormula()->IsValue())
             {
                 bool bPaste = isDateCell(rSrcCol, rSrcPos.Row()) ? bDateTime : bNumeric;
                 if (!bPaste)
@@ -238,11 +238,11 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
                 }
 
                 // Turn this into a numeric cell.
-                rSrcCell.set(rSrcCell.mpFormula->GetValue());
+                rSrcCell.set(rSrcCell.getFormula()->GetValue());
             }
             else if (bString)
             {
-                svl::SharedString aStr = rSrcCell.mpFormula->GetString();
+                svl::SharedString aStr = rSrcCell.getFormula()->GetString();
                 if (aStr.isEmpty())
                 {
                     // do not clone empty string
@@ -251,18 +251,18 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
                 }
 
                 // Turn this into a string or edit cell.
-                if (rSrcCell.mpFormula->IsMultilineResult())
+                if (rSrcCell.getFormula()->IsMultilineResult())
                 {
                     // TODO : Add shared string support to the edit engine to
                     // make this process simpler.
                     ScFieldEditEngine& rEngine = mrDestDoc.GetEditEngine();
-                    rEngine.SetTextCurrentDefaults(rSrcCell.mpFormula->GetString().getString());
+                    rEngine.SetTextCurrentDefaults(rSrcCell.getFormula()->GetString().getString());
                     std::unique_ptr<EditTextObject> pObj(rEngine.CreateTextObject());
                     pObj->NormalizeString(mrDestDoc.GetSharedStringPool());
                     rSrcCell.set(*pObj);
                 }
                 else
-                    rSrcCell.set(rSrcCell.mpFormula->GetString());
+                    rSrcCell.set(rSrcCell.getFormula()->GetString());
             }
             else
                 // We don't want to paste this.

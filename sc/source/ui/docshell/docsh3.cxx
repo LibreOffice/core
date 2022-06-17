@@ -985,7 +985,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             ScMatrixMode eMatrix = ScMatrixMode::NONE;
                             const ScCellValue& rCell = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewCell();
                             if (rCell.getType() == CELLTYPE_FORMULA)
-                                eMatrix = rCell.mpFormula->GetMatrixFlag();
+                                eMatrix = rCell.getFormula()->GetMatrixFlag();
                             switch ( eMatrix )
                             {
                                 case ScMatrixMode::NONE :
@@ -995,7 +995,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                 {
                                     SCCOL nCols;
                                     SCROW nRows;
-                                    rCell.mpFormula->GetMatColsRows(nCols, nRows);
+                                    rCell.getFormula()->GetMatColsRows(nCols, nRows);
                                     aSourceRange.aEnd.SetCol( aPos.Col() + nCols - 1 );
                                     aSourceRange.aEnd.SetRow( aPos.Row() + nRows - 1 );
                                     aValue = aValue.copy(1, aValue.getLength()-2); // remove the 1st and last characters.

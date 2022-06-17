@@ -321,7 +321,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
                 std::vector<sc::RowSpan> aRanges;
                 aRanges.reserve(1);
                 aRanges.emplace_back(nRow1, nRow2);
-                CloneFormulaCell(*pBlockPos, *rSrcCell.mpFormula, rSrcAttr, aRanges);
+                CloneFormulaCell(*pBlockPos, *rSrcCell.getFormula(), rSrcAttr, aRanges);
             }
             break;
             default:

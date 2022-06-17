@@ -2700,7 +2700,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
                 xCell = new XclExpFormulaCell(
                     GetRoot(), aXclPos, pPattern, nMergeBaseXFId,
-                    *rScCell.mpFormula, maArrayBfr, maShrfmlaBfr, maTableopBfr);
+                    *rScCell.getFormula(), maArrayBfr, maShrfmlaBfr, maTableopBfr);
             }
             break;
 

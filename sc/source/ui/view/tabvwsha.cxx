@@ -708,7 +708,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
             if (rCell.getType() == CELLTYPE_FORMULA)
             {
                 if (!bHideFormula)
-                    aString = rCell.mpFormula->GetFormula();
+                    aString = rCell.getFormula()->GetFormula();
             }
             else if (rCell.getType() == CELLTYPE_EDIT)
             {

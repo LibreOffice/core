@@ -41,7 +41,7 @@ public:
         double mfValue1;
         svl::SharedString* mpString;
         EditTextObject* mpEditText1;
-        ScFormulaCell* mpFormula;
+        ScFormulaCell* mpFormula1;
     };
 
     ScCellValue();
@@ -70,6 +70,14 @@ public:
         assert(meType == CELLTYPE_EDIT);
         auto p = mpEditText1;
         mpEditText1 = nullptr;
+        return p;
+    }
+    ScFormulaCell* getFormula() const { assert(meType == CELLTYPE_FORMULA); return mpFormula1; }
+    ScFormulaCell* releaseFormula()
+    {
+        assert(meType == CELLTYPE_FORMULA);
+        auto p = mpFormula1;
+        mpFormula1 = nullptr;
         return p;
     }
 
@@ -124,7 +132,7 @@ public:
         double mfValue1;
         const svl::SharedString* mpString;
         const EditTextObject* mpEditText1;
-        ScFormulaCell* mpFormula;
+        ScFormulaCell* mpFormula1;
     };
 
     ScRefCellValue();
@@ -145,6 +153,7 @@ public:
     double getDouble() const { assert(meType == CELLTYPE_VALUE); return mfValue1; }
     const svl::SharedString* getSharedString() const { assert(meType == CELLTYPE_STRING); return mpString; }
     const EditTextObject* getEditText() const { assert(meType == CELLTYPE_EDIT); return mpEditText1; }
+    ScFormulaCell* getFormula() const { assert(meType == CELLTYPE_FORMULA); return mpFormula1; }
 
     /**
      * Take cell value from specified position in specified document.

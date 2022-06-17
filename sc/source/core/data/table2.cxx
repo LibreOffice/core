@@ -4119,7 +4119,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
             if (aCell.getType() != CELLTYPE_FORMULA)
                 continue;
 
-            if (!aCell.mpFormula->HasRefListExpressibleAsOneReference(aRef))
+            if (!aCell.getFormula()->HasRefListExpressibleAsOneReference(aRef))
                 continue;
 
             if ( aRef.aStart.Col() == nCol && aRef.aEnd.Col() == nCol &&
@@ -4179,8 +4179,8 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
                 aCxt.mnColDelta = nDestCol - nStartCol;
                 aCxt.mnRowDelta = nDestRow - nStartRow;
                 aCxt.mnTabDelta = nDestTab - nTab;
-                aCell.mpFormula->UpdateReference(aCxt);
-                aCell.mpFormula->aPos = aDest;
+                aCell.getFormula()->UpdateReference(aCxt);
+                aCell.getFormula()->aPos = aDest;
             }
 
             if (bThisTab)

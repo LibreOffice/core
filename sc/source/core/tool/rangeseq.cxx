@@ -266,7 +266,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument& rDoc, const 
                 continue;
             }
 
-            if (aCell.getType() == CELLTYPE_FORMULA && aCell.mpFormula->GetErrCode() != FormulaError::NONE)
+            if (aCell.getType() == CELLTYPE_FORMULA && aCell.getFormula()->GetErrCode() != FormulaError::NONE)
             {
                 // if NV is allowed, leave empty for errors
                 bHasErrors = true;

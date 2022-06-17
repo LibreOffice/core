@@ -423,22 +423,22 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
 
                 case CELLTYPE_FORMULA:
                 {
-                    if (aCell.mpFormula->IsValue())
+                    if (aCell.getFormula()->IsValue())
                     {
-                        rValue.mfValue = aCell.mpFormula->GetValue();
+                        rValue.mfValue = aCell.getFormula()->GetValue();
                         rValue.mbIsNumber = true;
                         mrDoc.GetNumberFormatInfo(
                             mrContext, nNumFmtType, nNumFmtIndex, ScAddress(nCol, nRow, nTab));
-                        rValue.mnError = aCell.mpFormula->GetErrCode();
+                        rValue.mnError = aCell.getFormula()->GetErrCode();
                         return true; // Found it!
                     }
                     else if(mpParam->mbSkipString)
                         incPos();
                     else
                     {
-                        rValue.maString = aCell.mpFormula->GetString().getString();
+                        rValue.maString = aCell.getFormula()->GetString().getString();
                         rValue.mfValue = 0.0;
-                        rValue.mnError = aCell.mpFormula->GetErrCode();
+                        rValue.mnError = aCell.getFormula()->GetErrCode();
                         rValue.mbIsNumber = false;
                         return true;
                     }
@@ -984,7 +984,7 @@ ScCellValue ScCellIterator::getCellValue() const
             return ScCellValue(maCurCell.getDouble());
         break;
         case CELLTYPE_FORMULA:
-            return ScCellValue(maCurCell.mpFormula->Clone());
+            return ScCellValue(maCurCell.getFormula()->Clone());
         break;
         default:
             return ScCellValue();
@@ -1324,10 +1324,10 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, FormulaError& rErr )
                 break;
             case CELLTYPE_FORMULA:
                 {
-                    rErr = pCell->mpFormula->GetErrCode();
-                    if (rErr != FormulaError::NONE || pCell->mpFormula->IsValue())
+                    rErr = pCell->getFormula()->GetErrCode();
+                    if (rErr != FormulaError::NONE || pCell->getFormula()->IsValue())
                     {
-                        rValue = pCell->mpFormula->GetValue();
+                        rValue = pCell->getFormula()->GetValue();
                         bFound = true;
                     }
                 }
