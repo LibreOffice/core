@@ -4594,7 +4594,8 @@ Label_Rewind:
     // Provide single token information and continue. Do not set an error, that
     // would prematurely end compilation. Simple unknown names are handled by
     // the interpreter.
-    aUpper = pCharClass->lowercase( aUpper );
+    // Use the same CharClass that was used for uppercase.
+    aUpper = (mbCharClassesDiffer ? ScGlobal::getCharClass() : *pCharClass).lowercase( aUpper );
     svl::SharedString aSS = rDoc.GetSharedStringPool().intern(aUpper);
     maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
     maRawToken.NewOpCode( ocBad );
