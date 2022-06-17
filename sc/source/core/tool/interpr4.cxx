@@ -133,7 +133,7 @@ sal_uInt32 ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellV
     else
     {
         if (rCell.getType() == CELLTYPE_FORMULA)
-            nErr = rCell.mpFormula->GetErrCode();
+            nErr = rCell.getFormula()->GetErrCode();
         else
             nErr = FormulaError::NONE;
         nFormat = mrDoc.GetNumberFormat( mrContext, rPos );
@@ -156,7 +156,7 @@ double ScInterpreter::GetValueCellValue( const ScAddress& rPos, double fOrig )
 
 FormulaError ScInterpreter::GetCellErrCode( const ScRefCellValue& rCell )
 {
-    return rCell.getType() == CELLTYPE_FORMULA ? rCell.mpFormula->GetErrCode() : FormulaError::NONE;
+    return rCell.getType() == CELLTYPE_FORMULA ? rCell.getFormula()->GetErrCode() : FormulaError::NONE;
 }
 
 double ScInterpreter::ConvertStringToValue( const OUString& rStr )
@@ -193,7 +193,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
     {
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFCell = rCell.mpFormula;
+            ScFormulaCell* pFCell = rCell.getFormula();
             FormulaError nErr = pFCell->GetErrCode();
             if( nErr == FormulaError::NONE )
             {
@@ -253,7 +253,7 @@ void ScInterpreter::GetCellString( svl::SharedString& rStr, ScRefCellValue& rCel
         break;
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFCell = rCell.mpFormula;
+            ScFormulaCell* pFCell = rCell.getFormula();
             nErr = pFCell->GetErrCode();
             if (pFCell->IsValue())
             {
@@ -323,10 +323,10 @@ bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             nVal = GetValueCellValue(aAdr, aCell.getDouble());
                             break;
                         case CELLTYPE_FORMULA :
-                            if (aCell.mpFormula->IsValue())
+                            if (aCell.getFormula()->IsValue())
                             {
-                                nErr = aCell.mpFormula->GetErrCode();
-                                nVal = aCell.mpFormula->GetValue();
+                                nErr = aCell.getFormula()->GetErrCode();
+                                nVal = aCell.getFormula()->GetValue();
                             }
                             else
                                 bOk = false;
@@ -403,10 +403,10 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             aStr = aCell.getString(&mrDoc);
                             break;
                         case CELLTYPE_FORMULA:
-                            if (!aCell.mpFormula->IsValue())
+                            if (!aCell.getFormula()->IsValue())
                             {
-                                nErr = aCell.mpFormula->GetErrCode();
-                                aStr = aCell.mpFormula->GetString().getString();
+                                nErr = aCell.getFormula()->GetErrCode();
+                                aStr = aCell.getFormula()->GetString().getString();
                             }
                             else
                                 bOk = false;
@@ -511,11 +511,11 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             nVal = GetValueCellValue(aAdr, aCell.getDouble());
                             break;
                         case CELLTYPE_FORMULA :
-                            nErr = aCell.mpFormula->GetErrCode();
-                            if (aCell.mpFormula->IsValue())
-                                nVal = aCell.mpFormula->GetValue();
+                            nErr = aCell.getFormula()->GetErrCode();
+                            if (aCell.getFormula()->IsValue())
+                                nVal = aCell.getFormula()->GetValue();
                             else
-                                aStr = aCell.mpFormula->GetString().getString();
+                                aStr = aCell.getFormula()->GetString().getString();
                             break;
                         default :
                             bOk = false;
@@ -698,7 +698,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
 
     FormulaError nErr = FormulaError::NONE;
     if (aCell.getType() == CELLTYPE_FORMULA)
-        nErr = aCell.mpFormula->GetErrCode();
+        nErr = aCell.getFormula()->GetErrCode();
 
     if (nErr != FormulaError::NONE)
     {
@@ -1410,7 +1410,7 @@ void ScInterpreter::PopRefListPushMatrixOrRef()
                         ScAddress aAdr( nCol, nRow, nTab);
                         ScRefCellValue aCell(mrDoc, aAdr);
                         if (aCell.hasError())
-                            xMat->PutError( aCell.mpFormula->GetErrCode(), 0, i);
+                            xMat->PutError( aCell.getFormula()->GetErrCode(), 0, i);
                         else if (aCell.hasEmptyValue())
                             xMat->PutEmpty( 0, i);
                         else if (aCell.hasString())
@@ -3554,16 +3554,16 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
                 pVar->PutString(aCell.getString(&mrDoc));
             break;
             case CELLTYPE_FORMULA :
-                nErr = aCell.mpFormula->GetErrCode();
+                nErr = aCell.getFormula()->GetErrCode();
                 if( nErr == FormulaError::NONE )
                 {
-                    if (aCell.mpFormula->IsValue())
+                    if (aCell.getFormula()->IsValue())
                     {
-                        nVal = aCell.mpFormula->GetValue();
+                        nVal = aCell.getFormula()->GetValue();
                         pVar->PutDouble( nVal );
                     }
                     else
-                        pVar->PutString(aCell.mpFormula->GetString().getString());
+                        pVar->PutString(aCell.getFormula()->GetString().getString());
                 }
                 else
                 {
@@ -3614,7 +3614,7 @@ void ScInterpreter::ScTableOp()
         {   // emulate broadcast and indirectly collect cell pointers
             ScRefCellValue aCell(mrDoc, rPos);
             if (aCell.getType() == CELLTYPE_FORMULA)
-                aCell.mpFormula->SetTableOpDirty();
+                aCell.getFormula()->SetTableOpDirty();
         }
     }
     else
@@ -3627,7 +3627,7 @@ void ScInterpreter::ScTableOp()
 
     ScRefCellValue aCell(mrDoc, aTableOp.aFormulaPos);
     if (aCell.getType() == CELLTYPE_FORMULA)
-        aCell.mpFormula->SetDirtyVar();
+        aCell.getFormula()->SetDirtyVar();
     if (aCell.hasNumeric())
     {
         PushDouble(GetCellValue(aTableOp.aFormulaPos, aCell));
@@ -3658,8 +3658,8 @@ void ScInterpreter::ScTableOp()
 
     if (aCell.getType() == CELLTYPE_FORMULA)
     {
-        aCell.mpFormula->SetDirtyVar();
-        aCell.mpFormula->GetErrCode();     // recalculate original
+        aCell.getFormula()->SetDirtyVar();
+        aCell.getFormula()->GetErrCode();     // recalculate original
     }
 
     // Reset all dirty flags so next incarnation does really collect all cell

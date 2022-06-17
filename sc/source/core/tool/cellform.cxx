@@ -62,7 +62,7 @@ OUString ScCellFormat::GetString( const ScRefCellValue& rCell, sal_uInt32 nForma
         }
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell*  pFCell = rCell.mpFormula;
+            ScFormulaCell*  pFCell = rCell.getFormula();
             if ( bFormula )
             {
                 return pFCell->GetFormula();
@@ -147,7 +147,7 @@ OUString ScCellFormat::GetInputString(
         case CELLTYPE_FORMULA:
         {
             OUString str;
-            ScFormulaCell* pFC = rCell.mpFormula;
+            ScFormulaCell* pFC = rCell.getFormula();
             if (pFC->IsEmptyDisplayedAsString())
                 ; // empty
             else if (pFC->IsValue())

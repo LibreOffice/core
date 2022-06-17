@@ -898,7 +898,7 @@ void XclExpChTrCellContent::GetCellData(
         break;
         case CELLTYPE_FORMULA:
         {
-            const ScFormulaCell* pFmlCell = rScCell.mpFormula;
+            const ScFormulaCell* pFmlCell = rScCell.getFormula();
             rpData->mpFormulaCell = pFmlCell;
 
             const ScTokenArray* pTokenArray = pFmlCell->GetCode();

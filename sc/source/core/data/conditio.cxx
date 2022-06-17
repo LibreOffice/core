@@ -735,11 +735,11 @@ static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rAr
         break;
         case CELLTYPE_FORMULA:
         {
-            bVal = rCell.mpFormula->IsValue();
+            bVal = rCell.getFormula()->IsValue();
             if (bVal)
-                rArg = rCell.mpFormula->GetValue();
+                rArg = rCell.getFormula()->GetValue();
             else
-                rArgStr = rCell.mpFormula->GetString().getString();
+                rArgStr = rCell.getFormula()->GetString().getString();
         }
         break;
         case CELLTYPE_STRING:
@@ -952,7 +952,7 @@ bool ScConditionEntry::IsError( const ScAddress& rPos ) const
 
     if (rCell.getType() == CELLTYPE_FORMULA)
     {
-        if (rCell.mpFormula->GetErrCode() != FormulaError::NONE)
+        if (rCell.getFormula()->GetErrCode() != FormulaError::NONE)
             return true;
     }
 

@@ -2558,7 +2558,7 @@ void ScChart2DataSequence::BuildDataCache()
                             break;
                             case CELLTYPE_FORMULA:
                             {
-                                ScFormulaCell* pFCell = aCell.mpFormula;
+                                ScFormulaCell* pFCell = aCell.getFormula();
                                 FormulaError nErr = pFCell->GetErrCode();
                                 if (nErr != FormulaError::NONE)
                                     break;

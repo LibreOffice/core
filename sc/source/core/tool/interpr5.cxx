@@ -427,7 +427,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
             }
             else if (aCell.hasError())
             {
-                pMat->PutError( aCell.mpFormula->GetErrCode(), nMatCol, nMatRow);
+                pMat->PutError( aCell.getFormula()->GetErrCode(), nMatCol, nMatRow);
             }
             else if (aCell.hasNumeric())
             {
@@ -650,12 +650,12 @@ void ScInterpreter::ScMatValue()
             ScRefCellValue aCell(mrDoc, aAdr);
             if (aCell.getType() == CELLTYPE_FORMULA)
             {
-                FormulaError nErrCode = aCell.mpFormula->GetErrCode();
+                FormulaError nErrCode = aCell.getFormula()->GetErrCode();
                 if (nErrCode != FormulaError::NONE)
                     PushError( nErrCode);
                 else
                 {
-                    const ScMatrix* pMat = aCell.mpFormula->GetMatrix();
+                    const ScMatrix* pMat = aCell.getFormula()->GetMatrix();
                     CalculateMatrixValue(pMat,nC,nR);
                 }
             }
@@ -3223,7 +3223,7 @@ void ScInterpreter::ScMatRef()
         return;
     }
 
-    if (aCell.mpFormula->IsRunning())
+    if (aCell.getFormula()->IsRunning())
     {
         // Twisted odd corner case where an array element's cell tries to
         // access the top left matrix while it is still running, see tdf#88737
@@ -3233,7 +3233,7 @@ void ScInterpreter::ScMatRef()
         return;
     }
 
-    const ScMatrix* pMat = aCell.mpFormula->GetMatrix();
+    const ScMatrix* pMat = aCell.getFormula()->GetMatrix();
     if (pMat)
     {
         SCSIZE nCols, nRows;
@@ -3298,14 +3298,14 @@ void ScInterpreter::ScMatRef()
         nFuncFmtType = nCurFmtType;
         nFuncFmtIndex = nCurFmtIndex;
         // If not a result matrix, obtain the cell value.
-        FormulaError nErr = aCell.mpFormula->GetErrCode();
+        FormulaError nErr = aCell.getFormula()->GetErrCode();
         if (nErr != FormulaError::NONE)
             PushError( nErr );
-        else if (aCell.mpFormula->IsValue())
-            PushDouble(aCell.mpFormula->GetValue());
+        else if (aCell.getFormula()->IsValue())
+            PushDouble(aCell.getFormula()->GetValue());
         else
         {
-            svl::SharedString aVal = aCell.mpFormula->GetString();
+            svl::SharedString aVal = aCell.getFormula()->GetString();
             PushString( aVal );
         }
     }

@@ -339,9 +339,9 @@ std::unique_ptr<SvxNumberInfoItem> ScTabViewShell::MakeNumberInfoItem( ScDocumen
 
         case CELLTYPE_FORMULA:
         {
-            if (aCell.mpFormula->IsValue())
+            if (aCell.getFormula()->IsValue())
             {
-                nCellValue = aCell.mpFormula->GetValue();
+                nCellValue = aCell.getFormula()->GetValue();
                 eValType = SvxNumberValueType::Number;
             }
             else

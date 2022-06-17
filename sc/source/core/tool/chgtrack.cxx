@@ -1368,7 +1368,7 @@ void ScChangeActionContent::SetValueString(
         rCell = ScCellValue(new ScFormulaCell(
             *pDoc, aBigRange.aStart.MakeAddress(*pDoc), rStr,
             pDoc->GetGrammar() ));
-        rCell.mpFormula->SetInChangeTrack(true);
+        rCell.getFormula()->SetInChangeTrack(true);
     }
     else
         rValue = rStr;
@@ -1441,7 +1441,7 @@ OUString ScChangeActionContent::GetRefString(
             ScBigRange aLocalBigRange( GetBigRange() );
             SCCOL nC;
             SCROW nR;
-            rCell.mpFormula->GetMatColsRows( nC, nR );
+            rCell.getFormula()->GetMatColsRows( nC, nR );
             aLocalBigRange.aEnd.IncCol( nC-1 );
             aLocalBigRange.aEnd.IncRow( nR-1 );
             return ScChangeAction::GetRefString( aLocalBigRange, rDoc, bFlag3D );
@@ -1570,7 +1570,7 @@ OUString ScChangeActionContent::GetStringOfCell(
                 return ScEditUtil::GetString(*rCell.getEditText(), pDoc);
             return OUString();
         case CELLTYPE_FORMULA:
-            return rCell.mpFormula->GetFormula();
+            return rCell.getFormula()->GetFormula();
         default:
             return OUString();
     }
@@ -1585,7 +1585,7 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
         case CELLTYPE_EDIT :
             return SC_CACCT_NORMAL;
         case CELLTYPE_FORMULA :
-            switch (rCell.mpFormula->GetMatrixFlag())
+            switch (rCell.getFormula()->GetMatrixFlag())
             {
                 case ScMatrixMode::NONE :
                     return SC_CACCT_NORMAL;
@@ -1610,7 +1610,7 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
             return SC_CACCT_NORMAL;
         case CELLTYPE_FORMULA:
         {
-            const ScFormulaCell* pCell = rCell.mpFormula;
+            const ScFormulaCell* pCell = rCell.getFormula();
             switch (pCell->GetMatrixFlag())
             {
                 case ScMatrixMode::NONE :
@@ -1660,7 +1660,7 @@ void ScChangeActionContent::SetValue(
             }
             break;
             case CELLTYPE_FORMULA :
-                rCell.mpFormula->SetInChangeTrack(true);
+                rCell.getFormula()->SetInChangeTrack(true);
             break;
             default:
             {
@@ -1685,7 +1685,7 @@ void ScChangeActionContent::SetCell( OUString& rStr, ScCellValue& rCell, sal_uLo
             pDoc->GetFormatTable()->GetInputLineString(rCell.getDouble(), nFormat, rStr);
         break;
         case CELLTYPE_FORMULA :
-            rCell.mpFormula->SetInChangeTrack(true);
+            rCell.getFormula()->SetInChangeTrack(true);
         break;
         default:
         {
@@ -1713,7 +1713,7 @@ OUString ScChangeActionContent::GetValueString(
         case CELLTYPE_VALUE : // Is always in rValue
             return rValue;
         case CELLTYPE_FORMULA :
-            return GetFormulaString(rCell.mpFormula);
+            return GetFormulaString(rCell.getFormula());
         case CELLTYPE_NONE:
         default:
             return OUString();
@@ -1780,7 +1780,7 @@ void ScChangeActionContent::PutValueToDoc(
         {
             SCCOL nC;
             SCROW nR;
-            rCell.mpFormula->GetMatColsRows(nC, nR);
+            rCell.getFormula()->GetMatColsRows(nC, nR);
             OSL_ENSURE( nC>0 && nR>0, "ScChangeActionContent::PutValueToDoc: MatColsRows?" );
             ScRange aRange( aPos );
             if ( nC > 1 )
@@ -1792,7 +1792,7 @@ void ScChangeActionContent::PutValueToDoc(
             aDestMark.SetMarkArea( aRange );
             pDoc->InsertMatrixFormula( aPos.Col(), aPos.Row(),
                 aRange.aEnd.Col(), aRange.aEnd.Row(),
-                aDestMark, OUString(), rCell.mpFormula->GetCode());
+                aDestMark, OUString(), rCell.getFormula()->GetCode());
         }
         break;
         case SC_CACCT_MATREF :
@@ -1893,9 +1893,9 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
             // Move is Source here and Target there
             // Position needs to be adjusted before that
             if ( bOldFormula )
-                maOldCell.mpFormula->aPos = aBigRange.aStart.MakeAddress(pTrack->GetDocument());
+                maOldCell.getFormula()->aPos = aBigRange.aStart.MakeAddress(pTrack->GetDocument());
             if ( bNewFormula )
-                maNewCell.mpFormula->aPos = aBigRange.aStart.MakeAddress(pTrack->GetDocument());
+                maNewCell.getFormula()->aPos = aBigRange.aStart.MakeAddress(pTrack->GetDocument());
             if ( nDx )
             {
                 aTmpRange.aStart.IncCol( nDx );
@@ -1927,9 +1927,9 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
     aRefCxt.mnTabDelta = nDz;
 
     if ( bOldFormula )
-        maOldCell.mpFormula->UpdateReference(aRefCxt);
+        maOldCell.getFormula()->UpdateReference(aRefCxt);
     if ( bNewFormula )
-        maNewCell.mpFormula->UpdateReference(aRefCxt);
+        maNewCell.getFormula()->UpdateReference(aRefCxt);
 
     if ( aBigRange.aStart.IsValid( pTrack->GetDocument() ) )
         return;
@@ -1942,7 +1942,7 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
     if ( bOldFormula )
     {
         formula::FormulaToken* t;
-        ScTokenArray* pArr = maOldCell.mpFormula->GetCode();
+        ScTokenArray* pArr = maOldCell.getFormula()->GetCode();
         formula::FormulaTokenArrayPlainIterator aIter(*pArr);
         while ( ( t = aIter.GetNextReference() ) != nullptr )
             lcl_InvalidateReference( pTrack->GetDocument(), *t, rPos );
@@ -1953,7 +1953,7 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
     if ( bNewFormula )
     {
         formula::FormulaToken* t;
-        ScTokenArray* pArr = maNewCell.mpFormula->GetCode();
+        ScTokenArray* pArr = maNewCell.getFormula()->GetCode();
         formula::FormulaTokenArrayPlainIterator aIter(*pArr);
         while ( ( t = aIter.GetNextReference() ) != nullptr )
             lcl_InvalidateReference( pTrack->GetDocument(), *t, rPos );
@@ -2537,11 +2537,11 @@ bool ScChangeTrack::IsMatrixFormulaRangeDifferent(
     nC1 = nC2 = 0;
     nR1 = nR2 = 0;
 
-    if (rOldCell.getType() == CELLTYPE_FORMULA && rOldCell.mpFormula->GetMatrixFlag() == ScMatrixMode::Formula)
-        rOldCell.mpFormula->GetMatColsRows(nC1, nR1);
+    if (rOldCell.getType() == CELLTYPE_FORMULA && rOldCell.getFormula()->GetMatrixFlag() == ScMatrixMode::Formula)
+        rOldCell.getFormula()->GetMatColsRows(nC1, nR1);
 
-    if (rNewCell.getType() == CELLTYPE_FORMULA && rNewCell.mpFormula->GetMatrixFlag() == ScMatrixMode::Formula)
-        rNewCell.mpFormula->GetMatColsRows(nC1, nR1);
+    if (rNewCell.getType() == CELLTYPE_FORMULA && rNewCell.getFormula()->GetMatrixFlag() == ScMatrixMode::Formula)
+        rNewCell.getFormula()->GetMatColsRows(nC1, nR1);
 
     return nC1 != nC2 || nR1 != nR2;
 }
@@ -2862,7 +2862,7 @@ void ScChangeTrack::Dependencies( ScChangeAction* pAct )
         if ( ScChangeActionContent::GetContentCellType(rCell) == SC_CACCT_MATREF )
         {
             ScAddress aOrg;
-            bool bOrgFound = rCell.mpFormula->GetMatrixOrigin(rDoc, aOrg);
+            bool bOrgFound = rCell.getFormula()->GetMatrixOrigin(rDoc, aOrg);
             ScChangeActionContent* pContent = (bOrgFound ? SearchContentAt( aOrg, pAct ) : nullptr);
             if ( pContent && pContent->IsMatrixOrigin() )
             {
@@ -4010,7 +4010,7 @@ bool ScChangeTrack::SelectContent( ScChangeAction* pAct, bool bOldest )
     {
         SCCOL nC;
         SCROW nR;
-        rCell.mpFormula->GetMatColsRows(nC, nR);
+        rCell.getFormula()->GetMatColsRows(nC, nR);
         aBigRange.aEnd.IncCol( nC-1 );
         aBigRange.aEnd.IncRow( nR-1 );
     }

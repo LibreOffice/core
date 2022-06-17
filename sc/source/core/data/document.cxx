@@ -3612,7 +3612,7 @@ FormulaError ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& r
         break;
         case CELLTYPE_FORMULA:
         {
-            ScFormulaCell* pFCell = aCell.mpFormula;
+            ScFormulaCell* pFCell = aCell.getFormula();
             nErr = pFCell->GetErrCode();
             if (pFCell->IsValue())
             {

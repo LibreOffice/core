@@ -2057,7 +2057,7 @@ bool ScInterpreter::IsString()
                         bRes = true;
                         break;
                     case CELLTYPE_FORMULA :
-                        bRes = (!aCell.mpFormula->IsValue() && !aCell.mpFormula->IsEmpty());
+                        bRes = (!aCell.getFormula()->IsValue() && !aCell.getFormula()->IsEmpty());
                         break;
                     default:
                         ; // nothing
@@ -2654,7 +2654,7 @@ void ScInterpreter::ScIsValue()
                         bRes = true;
                         break;
                     case CELLTYPE_FORMULA :
-                        bRes = (aCell.mpFormula->IsValue() && !aCell.mpFormula->IsEmpty());
+                        bRes = (aCell.getFormula()->IsValue() && !aCell.getFormula()->IsEmpty());
                         break;
                     default:
                         ; // nothing
@@ -2806,7 +2806,7 @@ void ScInterpreter::ScFormula()
                         switch (aCell.getType())
                         {
                             case CELLTYPE_FORMULA :
-                                aFormula = aCell.mpFormula->GetFormula(formula::FormulaGrammar::GRAM_UNSPECIFIED, &mrContext);
+                                aFormula = aCell.getFormula()->GetFormula(formula::FormulaGrammar::GRAM_UNSPECIFIED, &mrContext);
                                 pResMat->PutString( mrStrPool.intern( aFormula), i,j);
                                 break;
                             default:
@@ -2832,7 +2832,7 @@ void ScInterpreter::ScFormula()
             switch (aCell.getType())
             {
                 case CELLTYPE_FORMULA :
-                    aFormula = aCell.mpFormula->GetFormula(formula::FormulaGrammar::GRAM_UNSPECIFIED, &mrContext);
+                    aFormula = aCell.getFormula()->GetFormula(formula::FormulaGrammar::GRAM_UNSPECIFIED, &mrContext);
                 break;
                 default:
                     SetError( FormulaError::NotAvailable );
@@ -3052,7 +3052,7 @@ bool ScInterpreter::IsEven()
                         bRes = true;
                     break;
                     case CELLTYPE_FORMULA :
-                        if (aCell.mpFormula->IsValue())
+                        if (aCell.getFormula()->IsValue())
                         {
                             fVal = GetCellValue(aAdr, aCell);
                             bRes = true;
@@ -3234,7 +3234,7 @@ void ScInterpreter::ScT()
                         bValue = true;
                         break;
                     case CELLTYPE_FORMULA :
-                        bValue = aCell.mpFormula->IsValue();
+                        bValue = aCell.getFormula()->IsValue();
                         break;
                     default:
                         ; // nothing
@@ -5113,7 +5113,7 @@ bool isCellContentEmpty( const ScRefCellValue& rCell )
             // OOo and LibreOffice prior to 4.4 did not treat ="" as blank in
             // COUNTBLANK(), we now do for Excel interoperability.
             /* TODO: introduce yet another compatibility option? */
-            sc::FormulaResultValue aRes = rCell.mpFormula->GetResult();
+            sc::FormulaResultValue aRes = rCell.getFormula()->GetResult();
             if (aRes.meType != sc::FormulaResultValue::String)
                 return false;
             if (!aRes.maString.isEmpty())
@@ -5297,7 +5297,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                         bIsString = false;
                         break;
                     case CELLTYPE_FORMULA :
-                        if (aCell.mpFormula->IsValue())
+                        if (aCell.getFormula()->IsValue())
                         {
                             fVal = GetCellValue(aAdr, aCell);
                             bIsString = false;
@@ -5651,7 +5651,7 @@ void ScInterpreter::ScCountIf()
                     bIsString = false;
                     break;
                 case CELLTYPE_FORMULA :
-                    if (aCell.mpFormula->IsValue())
+                    if (aCell.getFormula()->IsValue())
                     {
                         fVal = GetCellValue(aAdr, aCell);
                         bIsString = false;
@@ -5921,7 +5921,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                             bIsString = false;
                             break;
                         case CELLTYPE_FORMULA :
-                            if (aCell.mpFormula->IsValue())
+                            if (aCell.getFormula()->IsValue())
                             {
                                 fVal = GetCellValue(aAdr, aCell);
                                 bIsString = false;

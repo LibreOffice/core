@@ -169,7 +169,7 @@ tools::Long ScColumn::GetNeededSize(
     bool bCellIsValue = (aCell.getType() == CELLTYPE_VALUE);
     if (aCell.getType() == CELLTYPE_FORMULA)
     {
-        ScFormulaCell* pFCell = aCell.mpFormula;
+        ScFormulaCell* pFCell = aCell.getFormula();
         bCellIsValue = pFCell->IsRunning() || pFCell->IsValue();
     }
 
@@ -282,7 +282,7 @@ tools::Long ScColumn::GetNeededSize(
     bool bEditEngine = (eCellType == CELLTYPE_EDIT ||
                         eOrient == SvxCellOrientation::Stacked ||
                         IsAmbiguousScript(nScript) ||
-                        ((eCellType == CELLTYPE_FORMULA) && aCell.mpFormula->IsMultilineResult()));
+                        ((eCellType == CELLTYPE_FORMULA) && aCell.getFormula()->IsMultilineResult()));
 
     if (!bEditEngine)                                   // direct output
     {

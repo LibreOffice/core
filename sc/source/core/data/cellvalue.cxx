@@ -100,7 +100,7 @@ bool equalsWithoutFormatImpl( const T& left, const T& right )
             return aStr1 == aStr2;
         }
         case CELLTYPE_FORMULA:
-            return equalsFormulaCells(left.mpFormula, right.mpFormula);
+            return equalsFormulaCells(left.mpFormula1, right.mpFormula1);
         default:
             ;
     }
@@ -123,7 +123,7 @@ void commitToColumn( const ScCellValue& rCell, ScColumn& rColumn, SCROW nRow )
         case CELLTYPE_FORMULA:
         {
             ScAddress aDestPos(rColumn.GetCol(), nRow, rColumn.GetTab());
-            rColumn.SetFormulaCell(nRow, new ScFormulaCell(*rCell.mpFormula, rColumn.GetDoc(), aDestPos));
+            rColumn.SetFormulaCell(nRow, new ScFormulaCell(*rCell.mpFormula1, rColumn.GetDoc(), aDestPos));
         }
         break;
         default:
@@ -172,7 +172,7 @@ OUString getStringImpl( const CellT& rCell, const ScDocument* pDoc )
                 return ScEditUtil::GetString(*rCell.mpEditText1, pDoc);
         break;
         case CELLTYPE_FORMULA:
-            return rCell.mpFormula->GetString().getString();
+            return rCell.mpFormula1->GetString().getString();
         default:
             ;
     }
@@ -193,7 +193,7 @@ OUString getRawStringImpl( const CellT& rCell, const ScDocument& rDoc )
                 return ScEditUtil::GetString(*rCell.mpEditText1, &rDoc);
         break;
         case CELLTYPE_FORMULA:
-            return rCell.mpFormula->GetRawString().getString();
+            return rCell.mpFormula1->GetRawString().getString();
         default:
             ;
     }
@@ -215,7 +215,7 @@ ScCellValue::ScCellValue( const ScRefCellValue& rCell ) : meType(rCell.getType()
             mpEditText1 = rCell.mpEditText1->Clone().release();
         break;
         case CELLTYPE_FORMULA:
-            mpFormula = rCell.mpFormula->Clone();
+            mpFormula1 = rCell.mpFormula1->Clone();
         break;
         default:
             ;
@@ -239,7 +239,7 @@ ScCellValue::ScCellValue( const ScCellValue& r ) : meType(r.meType), mfValue1(r.
             mpEditText1 = r.mpEditText1->Clone().release();
         break;
         case CELLTYPE_FORMULA:
-            mpFormula = r.mpFormula->Clone();
+            mpFormula1 = r.mpFormula1->Clone();
         break;
         default:
             ;
@@ -259,7 +259,7 @@ ScCellValue::ScCellValue(ScCellValue&& r) noexcept
             mpEditText1 = r.mpEditText1;
         break;
         case CELLTYPE_FORMULA:
-            mpFormula = r.mpFormula;
+            mpFormula1 = r.mpFormula1;
         break;
         default:
             ;
@@ -283,7 +283,7 @@ void ScCellValue::clear() noexcept
             delete mpEditText1;
         break;
         case CELLTYPE_FORMULA:
-            delete mpFormula;
+            delete mpFormula1;
         break;
         default:
             ;
@@ -326,7 +326,7 @@ void ScCellValue::set( ScFormulaCell* pFormula )
 {
     clear();
     meType = CELLTYPE_FORMULA;
-    mpFormula = pFormula;
+    mpFormula1 = pFormula;
 }
 
 void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
@@ -349,7 +349,7 @@ void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
             mfValue1 = aRefVal.mfValue1;
         break;
         case CELLTYPE_FORMULA:
-            mpFormula = aRefVal.mpFormula->Clone();
+            mpFormula1 = aRefVal.mpFormula1->Clone();
         break;
         default:
             meType = CELLTYPE_NONE; // reset to empty.
@@ -394,7 +394,7 @@ void ScCellValue::assign(const ScCellValue& rOther, ScDocument& rDestDoc, ScClon
         break;
         case CELLTYPE_FORMULA:
             // Switch to the destination document.
-            mpFormula = new ScFormulaCell(*rOther.mpFormula, rDestDoc, rOther.mpFormula->aPos, nCloneFlags);
+            mpFormula1 = new ScFormulaCell(*rOther.mpFormula1, rDestDoc, rOther.mpFormula1->aPos, nCloneFlags);
         break;
         default:
             meType = CELLTYPE_NONE; // reset to empty.
@@ -419,7 +419,7 @@ void ScCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
             rDoc.SetValue(rPos, mfValue1);
         break;
         case CELLTYPE_FORMULA:
-            rDoc.SetFormulaCell(rPos, mpFormula->Clone());
+            rDoc.SetFormulaCell(rPos, mpFormula1->Clone());
         break;
         default:
             rDoc.SetEmptyCell(rPos);
@@ -453,7 +453,7 @@ void ScCellValue::release( ScDocument& rDoc, const ScAddress& rPos )
         break;
         case CELLTYPE_FORMULA:
             // This formula cell instance is directly placed in the document without copying.
-            rDoc.SetFormulaCell(rPos, mpFormula);
+            rDoc.SetFormulaCell(rPos, mpFormula1);
         break;
         default:
             rDoc.SetEmptyCell(rPos);
@@ -483,7 +483,7 @@ void ScCellValue::release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType
         break;
         case CELLTYPE_FORMULA:
             // This formula cell instance is directly placed in the document without copying.
-            rColumn.SetFormulaCell(nRow, mpFormula, eListenType);
+            rColumn.SetFormulaCell(nRow, mpFormula1, eListenType);
         break;
         default:
             rColumn.DeleteContent(nRow);
@@ -530,12 +530,12 @@ ScCellValue& ScCellValue::operator=(ScCellValue&& rCell) noexcept
             mpEditText1 = rCell.mpEditText1;
         break;
         case CELLTYPE_FORMULA:
-            mpFormula = rCell.mpFormula;
+            mpFormula1 = rCell.mpFormula1;
         break;
         default:
             ;
     }
-    //we don't need to reset mpString/mpEditText1/mpFormula if we
+    //we don't need to reset mpString/mpEditText1/mpFormula1 if we
     //set meType to NONE as the ScCellValue dtor keys off the meType
     rCell.meType = CELLTYPE_NONE;
 
@@ -562,7 +562,7 @@ ScRefCellValue::ScRefCellValue() : meType(CELLTYPE_NONE), mfValue1(0.0) {}
 ScRefCellValue::ScRefCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue1(fValue) {}
 ScRefCellValue::ScRefCellValue( const svl::SharedString* pString ) : meType(CELLTYPE_STRING), mpString(pString) {}
 ScRefCellValue::ScRefCellValue( const EditTextObject* pEditText ) : meType(CELLTYPE_EDIT), mpEditText1(pEditText) {}
-ScRefCellValue::ScRefCellValue( ScFormulaCell* pFormula ) : meType(CELLTYPE_FORMULA), mpFormula(pFormula) {}
+ScRefCellValue::ScRefCellValue( ScFormulaCell* pFormula ) : meType(CELLTYPE_FORMULA), mpFormula1(pFormula) {}
 
 ScRefCellValue::ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos )
 {
@@ -609,7 +609,7 @@ void ScRefCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
             rDoc.SetValue(rPos, mfValue1);
         break;
         case CELLTYPE_FORMULA:
-            rDoc.SetFormulaCell(rPos, new ScFormulaCell(*mpFormula, rDoc, rPos));
+            rDoc.SetFormulaCell(rPos, new ScFormulaCell(*mpFormula1, rDoc, rPos));
         break;
         default:
             rDoc.SetEmptyCell(rPos);
@@ -618,17 +618,17 @@ void ScRefCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
 
 bool ScRefCellValue::hasString() const
 {
-    return hasStringImpl(meType, mpFormula);
+    return hasStringImpl(meType, mpFormula1);
 }
 
 bool ScRefCellValue::hasNumeric() const
 {
-    return hasNumericImpl(meType, mpFormula);
+    return hasNumericImpl(meType, mpFormula1);
 }
 
 bool ScRefCellValue::hasError() const
 {
-    return meType == CELLTYPE_FORMULA && mpFormula->GetErrCode() != FormulaError::NONE;
+    return meType == CELLTYPE_FORMULA && mpFormula1->GetErrCode() != FormulaError::NONE;
 }
 
 double ScRefCellValue::getValue()
@@ -638,7 +638,7 @@ double ScRefCellValue::getValue()
         case CELLTYPE_VALUE:
             return mfValue1;
         case CELLTYPE_FORMULA:
-            return mpFormula->GetValue();
+            return mpFormula1->GetValue();
         default:
             ;
     }
@@ -652,7 +652,7 @@ double ScRefCellValue::getRawValue() const
         case CELLTYPE_VALUE:
             return mfValue1;
         case CELLTYPE_FORMULA:
-            return mpFormula->GetRawValue();
+            return mpFormula1->GetRawValue();
         default:
             ;
     }
@@ -680,7 +680,7 @@ bool ScRefCellValue::hasEmptyValue()
         return true;
 
     if (meType == CELLTYPE_FORMULA)
-        return mpFormula->IsEmpty();
+        return mpFormula1->IsEmpty();
 
     return false;
 }

@@ -235,10 +235,9 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
         break;
         case CELLTYPE_FORMULA:
             if (!pStringParam)
-                mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *aCell.mpFormula->GetCode());
+                mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *aCell.getFormula()->GetCode());
             // This formula cell instance is directly placed in the document without copying.
-            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mpFormula);
-            aCell.mpFormula = nullptr;
+            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.releaseFormula());
         break;
         default:
             pBlockPos->miCellPos = rCells.set_empty(pBlockPos->miCellPos, rPos.Row(), rPos.Row());

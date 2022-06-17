@@ -1238,7 +1238,7 @@ void ScTable::InvalidateTextWidth(const ScAddress* pAdrFrom, const ScAddress* pA
                     rCol.Broadcast(nRow);
                     break;
                 case CELLTYPE_FORMULA:
-                    aCell.mpFormula->SetDirty();
+                    aCell.getFormula()->SetDirty();
                     break;
                 default:
                 {
@@ -1280,7 +1280,7 @@ void ScTable::InvalidateTextWidth(const ScAddress* pAdrFrom, const ScAddress* pA
                         aCol[nCol].Broadcast(nRow);
                         break;
                     case CELLTYPE_FORMULA:
-                        aCell.mpFormula->SetDirty();
+                        aCell.getFormula()->SetDirty();
                         break;
                     default:
                     {

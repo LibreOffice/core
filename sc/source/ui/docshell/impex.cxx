@@ -1948,7 +1948,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     {
                         if (bFormulas)
                         {
-                            aCellStr = aCell.mpFormula->GetFormula();
+                            aCellStr = aCell.getFormula()->GetFormula();
                             if( aCellStr.indexOf( cSep ) != -1 )
                                 lcl_WriteString( rStrm, aCellStr, cStr, cStr );
                             else
@@ -2426,7 +2426,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                 checkformula:
                     if( bForm )
                     {
-                        const ScFormulaCell* pFCell = aCell.mpFormula;
+                        const ScFormulaCell* pFCell = aCell.getFormula();
                         switch ( pFCell->GetMatrixFlag() )
                         {
                             case ScMatrixMode::Reference :

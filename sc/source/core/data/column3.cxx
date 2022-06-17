@@ -2562,7 +2562,7 @@ class FilterEntriesHandler
 
             case CELLTYPE_FORMULA:
             {
-                ScFormulaCell* pFC = rCell.mpFormula;
+                ScFormulaCell* pFC = rCell.getFormula();
                 FormulaError nErr = pFC->GetErrCode();
                 if (nErr != FormulaError::NONE)
                 {
@@ -3030,7 +3030,7 @@ OUString ScColumn::GetString( const ScRefCellValue& aCell, SCROW nRow, const ScI
 {
     // ugly hack for ordering problem with GetNumberFormat and missing inherited formats
     if (aCell.getType() == CELLTYPE_FORMULA)
-        aCell.mpFormula->MaybeInterpret();
+        aCell.getFormula()->MaybeInterpret();
 
     sal_uInt32 nFormat = GetNumberFormat( pContext ? *pContext : GetDoc().GetNonThreadedContext(), nRow);
     const Color* pColor = nullptr;
@@ -3345,7 +3345,7 @@ class MaxNumStringLenHandler
         sal_uInt16 nCellPrecision = mnMaxGeneralPrecision;
         if (rCell.getType() == CELLTYPE_FORMULA)
         {
-            if (!rCell.mpFormula->IsValue())
+            if (!rCell.getFormula()->IsValue())
                 return;
 
             // Limit unformatted formula cell precision to precision

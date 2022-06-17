@@ -1029,7 +1029,7 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         bDoIncrement = aCell.getType() == CELLTYPE_FORMULA;
         if ( bDoIncrement )
         {
-            ScFormulaCell* pFCell = aCell.mpFormula;
+            ScFormulaCell* pFCell = aCell.getFormula();
             OUString aCellString;
             if (maStringValue)
                 aCellString = *maStringValue;
@@ -1122,7 +1122,7 @@ void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
         ScRefCellValue aCell(*rXMLImport.GetDocument(), rCurrentPos);
         if (aCell.getType() == CELLTYPE_FORMULA)
         {
-            ScFormulaCell* pFCell = aCell.mpFormula;
+            ScFormulaCell* pFCell = aCell.getFormula();
             SetFormulaCell(pFCell);
             if (pFCell)
                 pFCell->SetNeedNumberFormat( true );

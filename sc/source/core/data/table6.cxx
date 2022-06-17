@@ -88,7 +88,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
         case SvxSearchCellType::FORMULA:
         {
             if ( eCellType == CELLTYPE_FORMULA )
-                aString = aCell.mpFormula->GetFormula(rDocument.GetGrammar());
+                aString = aCell.getFormula()->GetFormula(rDocument.GetGrammar());
             else if ( eCellType == CELLTYPE_EDIT )
                 bMultiLine = lcl_GetTextWithBreaks(*aCell.getEditText(), &rDocument, aString);
             else
@@ -165,7 +165,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
     // Don't split the matrix, only replace Matrix formulas
     if (eCellType == CELLTYPE_FORMULA)
     {
-        cMatrixFlag = aCell.mpFormula->GetMatrixFlag();
+        cMatrixFlag = aCell.getFormula()->GetMatrixFlag();
         if(cMatrixFlag == ScMatrixMode::Reference)
             return bFound;
     }
@@ -260,7 +260,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, sc::Colum
             aString, rDocument.GetGrammar(), cMatrixFlag );
         SCCOL nMatCols;
         SCROW nMatRows;
-        aCell.mpFormula->GetMatColsRows(nMatCols, nMatRows);
+        aCell.getFormula()->GetMatColsRows(nMatCols, nMatRows);
         pFCell->SetMatColsRows( nMatCols, nMatRows );
         aCol[nCol].SetFormulaCell(nRow, pFCell);
     }

@@ -1837,7 +1837,7 @@ void ScOutputData::FindChanged()
             if (rCell.getType() != CELLTYPE_FORMULA)
                 continue;
 
-            ScFormulaCell* pFCell = rCell.mpFormula;
+            ScFormulaCell* pFCell = rCell.getFormula();
             if (pFCell->IsRunning())
                 // still being interpreted. Skip it.
                 continue;
@@ -1886,7 +1886,7 @@ void ScOutputData::FindChanged()
                 if (rCell.getType() != CELLTYPE_FORMULA)
                     continue;
 
-                ScFormulaCell* pFCell = rCell.mpFormula;
+                ScFormulaCell* pFCell = rCell.getFormula();
                 if (pFCell->IsRunning())
                     // still being interpreted. Skip it.
                     continue;

@@ -1096,7 +1096,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
                     fVal = pDoc->RoundValueAsShown( fVal, nFormat );
                 break;
             case CELLTYPE_FORMULA:
-                fVal = aCell.mpFormula->GetValue();
+                fVal = aCell.getFormula()->GetValue();
                 break;
             default:
                 OSL_FAIL( "value data with unsupported cell type" );
@@ -1180,7 +1180,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     bool bWriteHyperLink(false);
     if (aCell.getType() == CELLTYPE_FORMULA)
     {
-        ScFormulaCell* pFCell = aCell.mpFormula;
+        ScFormulaCell* pFCell = aCell.getFormula();
         if (pFCell->IsHyperLinkCell())
         {
             OUString aCellText;

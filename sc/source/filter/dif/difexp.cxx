@@ -173,9 +173,9 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     bWriteStringData = true;
                 break;
                 case CELLTYPE_FORMULA:
-                    if (aCell.mpFormula->GetErrCode() != FormulaError::NONE)
+                    if (aCell.getFormula()->GetErrCode() != FormulaError::NONE)
                         aOS.append(pNumDataERROR);
-                    else if (aCell.mpFormula->IsValue())
+                    else if (aCell.getFormula()->IsValue())
                     {
                         aOS.append(pNumData);
                         aString = pDoc->GetInputString( nColCnt, nRowCnt, nTab );
@@ -184,7 +184,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     }
                     else
                     {
-                        aString = aCell.mpFormula->GetString().getString();
+                        aString = aCell.getFormula()->GetString().getString();
                         bWriteStringData = true;
                     }
 
