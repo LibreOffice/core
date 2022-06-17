@@ -16,6 +16,24 @@
       "message": "is the bud id correct ?",
       "revId": "2f24eef047d3b7b2578bad53c7a0147845985ef1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03900218_a943c3eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-17T09:35:54Z",
+      "side": 1,
+      "message": "No, and also some other incorrect pieces. I will fix them all in a next set with a unit test",
+      "parentUuid": "0b995dc9_977ac917",
+      "revId": "2f24eef047d3b7b2578bad53c7a0147845985ef1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
