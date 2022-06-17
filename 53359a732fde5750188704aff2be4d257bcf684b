@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0d197af_aa810308",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-17T17:30:59Z",
+      "side": 1,
+      "message": "This info is not needed, so drop it to keep the subject shorter.",
+      "range": {
+        "startLine": 7,
+        "startChar": 51,
+        "endLine": 7,
+        "endChar": 64
+      },
+      "revId": "53359a732fde5750188704aff2be4d257bcf684b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb128274_9ab1ec8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-17T17:30:59Z",
+      "side": 1,
+      "message": "Don\u0027t reformat the whole files. Please upload a new patch just with the expected lines changed, instead of a diff of +127 / -133.",
+      "revId": "53359a732fde5750188704aff2be4d257bcf684b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
