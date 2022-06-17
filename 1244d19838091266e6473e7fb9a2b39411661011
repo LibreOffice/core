@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8e6bb43_fa5fe7a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-17T21:26:09Z",
+      "side": 1,
+      "message": "[not sure how patch set 4 came to be, and when I sent patch set 5 I accidentally based it on current master rather than on the same parent as patch set 3]",
+      "revId": "1244d19838091266e6473e7fb9a2b39411661011",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
