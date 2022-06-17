@@ -747,8 +747,8 @@ static bool lcl_GetCellContent( ScRefCellValue& rCell, bool bIsStr1, double& rAr
             bVal = false;
             if (rCell.getType() == CELLTYPE_STRING)
                 rArgStr = rCell.getSharedString()->getString();
-            else if (rCell.mpEditText)
-                rArgStr = ScEditUtil::GetString(*rCell.mpEditText, pDoc);
+            else if (rCell.getEditText())
+                rArgStr = ScEditUtil::GetString(*rCell.getEditText(), pDoc);
         break;
         default:
             ;

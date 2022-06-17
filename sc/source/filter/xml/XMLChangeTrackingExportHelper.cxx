@@ -277,16 +277,16 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
     assert(rCell.getType() == CELLTYPE_EDIT);
 
     OUString sString;
-    if (rCell.mpEditText)
-        sString = ScEditUtil::GetString(*rCell.mpEditText, rExport.GetDocument());
+    if (rCell.getEditText())
+        sString = ScEditUtil::GetString(*rCell.getEditText(), rExport.GetDocument());
 
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-    if (rCell.mpEditText && !sString.isEmpty())
+    if (rCell.getEditText() && !sString.isEmpty())
     {
         if (!pEditTextObj)
             pEditTextObj = new ScEditEngineTextObj();
-        pEditTextObj->SetText(*rCell.mpEditText);
+        pEditTextObj->SetText(*rCell.getEditText());
         rExport.GetTextParagraphExport()->exportText(pEditTextObj, false, false);
     }
 }
@@ -591,7 +591,7 @@ void ScChangeTrackingExportHelper::CollectCellAutoStyles(const ScCellValue& rCel
     if (!pEditTextObj)
         pEditTextObj = new ScEditEngineTextObj();
 
-    pEditTextObj->SetText(*rCell.mpEditText);
+    pEditTextObj->SetText(*rCell.getEditText());
     rExport.GetTextParagraphExport()->collectTextAutoStyles(pEditTextObj, false, false);
 }
 

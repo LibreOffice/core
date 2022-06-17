@@ -978,7 +978,7 @@ ScCellValue ScCellIterator::getCellValue() const
             return ScCellValue(maCurCell.getSharedString());
         break;
         case CELLTYPE_EDIT:
-            return ScCellValue(maCurCell.mpEditText->Clone());
+            return ScCellValue(maCurCell.getEditText()->Clone());
         break;
         case CELLTYPE_VALUE:
             return ScCellValue(maCurCell.getDouble());

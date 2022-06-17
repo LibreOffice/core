@@ -330,7 +330,7 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
     if (eType == CELLTYPE_STRING)
         mpEngine->SetText(aCell.getSharedString()->getString());
     else
-        mpEngine->SetText(*aCell.mpEditText);
+        mpEngine->SetText(*aCell.getEditText());
 
     // it has to happen after we set text
     mpEngine->SetDefaultItem(SvxLanguageItem(eCellLang, EE_CHAR_LANGUAGE));

@@ -1347,7 +1347,7 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
     {
         //  GetString on EditCell turns breaks into spaces,
         //  but we need the breaks here
-        const EditTextObject* pData = aCell.mpEditText;
+        const EditTextObject* pData = aCell.getEditText();
         if (pData)
         {
             EditEngine& rEngine = rDoc.GetEditEngine();

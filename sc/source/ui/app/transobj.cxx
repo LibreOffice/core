@@ -314,7 +314,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             ScRefCellValue aCell(*m_pDoc, aPos);
             if (aCell.getType() == CELLTYPE_EDIT)
             {
-                const EditTextObject* pObj = aCell.mpEditText;
+                const EditTextObject* pObj = aCell.getEditText();
                 aEngine.SetTextCurrentDefaults(*pObj);
             }
             else

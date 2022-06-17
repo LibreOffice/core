@@ -2175,7 +2175,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt,
                 break;
             case CELLTYPE_EDIT :
                 {
-                    const EditTextObject* pObj = pCell->mpEditText;
+                    const EditTextObject* pObj = pCell->getEditText();
                     EditEngine& rEngine = m_pDocument->GetEditEngine();
                     rEngine.SetText( *pObj);
                     aString = rEngine.GetText();  // including LF

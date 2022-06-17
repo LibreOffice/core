@@ -228,8 +228,7 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
         break;
         case CELLTYPE_EDIT:
             // Cell takes the ownership of the text object.
-            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mpEditText);
-            aCell.mpEditText = nullptr;
+            pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.releaseEditText());
         break;
         case CELLTYPE_VALUE:
             pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.getDouble());

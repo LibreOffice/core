@@ -191,7 +191,7 @@ OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos,
     {
         //  GetString converts line breaks into spaces in EditCell,
         //  but here we need the line breaks
-        const EditTextObject* pData = rCell.mpEditText;
+        const EditTextObject* pData = rCell.getEditText();
         if (pData)
         {
             ScFieldEditEngine& rEngine = rDoc.GetEditEngine();

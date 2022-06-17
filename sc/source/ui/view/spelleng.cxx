@@ -291,7 +291,7 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         break;
         case CELLTYPE_EDIT:
         {
-            const EditTextObject* pNewEditObj = aCell.mpEditText;
+            const EditTextObject* pNewEditObj = aCell.getEditText();
             SetTextCurrentDefaults(*pNewEditObj);
         }
         break;

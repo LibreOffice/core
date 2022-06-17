@@ -401,20 +401,20 @@ void ScAttrArray::RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
     {
         ScAddress aPos(nCol, nRow, nTab);
         ScRefCellValue aCell(rDocument, aPos, blockPos);
-        if (aCell.getType() != CELLTYPE_EDIT || !aCell.mpEditText)
+        if (aCell.getType() != CELLTYPE_EDIT || !aCell.getEditText())
             continue;
 
         std::unique_ptr<EditTextObject> pOldData;
         if (pDataArray)
-            pOldData = aCell.mpEditText->Clone();
+            pOldData = aCell.getEditText()->Clone();
 
         // Direct modification of cell content - something to watch out for if
         // we decide to share edit text instances in the future.
-        ScEditUtil::RemoveCharAttribs(const_cast<EditTextObject&>(*aCell.mpEditText), *pPattern);
+        ScEditUtil::RemoveCharAttribs(const_cast<EditTextObject&>(*aCell.getEditText()), *pPattern);
 
         if (pDataArray)
         {
-            std::unique_ptr<EditTextObject> pNewData = aCell.mpEditText->Clone();
+            std::unique_ptr<EditTextObject> pNewData = aCell.getEditText()->Clone();
             pDataArray->AddItem(nTab, nCol, nRow, std::move(pOldData), std::move(pNewData));
         }
     }

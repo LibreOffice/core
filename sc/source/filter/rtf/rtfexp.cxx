@@ -168,7 +168,7 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
         case CELLTYPE_EDIT:
         {
             bValueData = false;
-            const EditTextObject* pObj = aCell.mpEditText;
+            const EditTextObject* pObj = aCell.getEditText();
             EditEngine& rEngine = GetEditEngine();
             rEngine.SetText(*pObj);
             aContent = rEngine.GetText(); // LineFeed in between paragraphs!

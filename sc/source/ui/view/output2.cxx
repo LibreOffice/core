@@ -2380,7 +2380,7 @@ bool ScOutputData::DrawEditParam::readCellContent(
 {
     if (maCell.getType() == CELLTYPE_EDIT)
     {
-        const EditTextObject* pData = maCell.mpEditText;
+        const EditTextObject* pData = maCell.getEditText();
         if (pData)
         {
             mpEngine->SetTextCurrentDefaults(*pData);
@@ -2699,7 +2699,7 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
         // We need to synchronize the vertical mode in the EditTextObject
         // instance too.  No idea why we keep this state in two separate
         // instances.
-        const EditTextObject* pData = maCell.mpEditText;
+        const EditTextObject* pData = maCell.getEditText();
         if (pData)
             const_cast<EditTextObject*>(pData)->SetVertical(mbAsianVertical);
     }
@@ -4732,8 +4732,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                             if (aCell.getType() == CELLTYPE_EDIT)
                             {
-                                if (aCell.mpEditText)
-                                    pEngine->SetTextCurrentDefaults(*aCell.mpEditText);
+                                if (aCell.getEditText())
+                                    pEngine->SetTextCurrentDefaults(*aCell.getEditText());
                                 else
                                 {
                                     OSL_FAIL("pData == 0");

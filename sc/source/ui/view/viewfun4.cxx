@@ -371,7 +371,7 @@ void ScViewFunc::DoThesaurus()
     }
 
     if (aOldText.getType() == CELLTYPE_EDIT)
-        pThesaurusEngine->SetTextCurrentDefaults(*aOldText.mpEditText);
+        pThesaurusEngine->SetTextCurrentDefaults(*aOldText.getEditText());
     else
         pThesaurusEngine->SetTextCurrentDefaults(aOldText.getString(rDoc));
 

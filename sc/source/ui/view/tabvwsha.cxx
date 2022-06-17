@@ -712,7 +712,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
             }
             else if (rCell.getType() == CELLTYPE_EDIT)
             {
-                pObject = rCell.mpEditText;
+                pObject = rCell.getEditText();
             }
             else
             {

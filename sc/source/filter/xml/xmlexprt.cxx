@@ -226,7 +226,7 @@ OUString lcl_GetFormattedString(ScDocument* pDoc, const ScRefCellValue& rCell, c
         }
         case CELLTYPE_EDIT:
         {
-            const EditTextObject* pData = rCell.mpEditText;
+            const EditTextObject* pData = rCell.getEditText();
             if (!pData)
                 return OUString();
 
@@ -3260,7 +3260,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
     {
         if (aCell.maBaseCell.getType() == CELLTYPE_EDIT)
         {
-            WriteEditCell(aCell.maBaseCell.mpEditText);
+            WriteEditCell(aCell.maBaseCell.getEditText());
         }
         else if (aCell.maBaseCell.getType() == CELLTYPE_FORMULA && aCell.maBaseCell.mpFormula->IsMultilineResult())
         {

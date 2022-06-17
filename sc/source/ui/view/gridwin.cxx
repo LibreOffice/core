@@ -5720,8 +5720,8 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     std::unique_ptr<EditTextObject> pTextObj;
     if (aCell.getType() == CELLTYPE_EDIT)
     {
-        if (aCell.mpEditText)
-            pEngine->SetTextCurrentDefaults(*aCell.mpEditText);
+        if (aCell.getEditText())
+            pEngine->SetTextCurrentDefaults(*aCell.getEditText());
     }
     else  // Not an Edit cell and is a formula cell with 'Hyperlink'
           // function if we have no URL, otherwise it could be a formula

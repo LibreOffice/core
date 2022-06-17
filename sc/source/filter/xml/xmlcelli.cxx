@@ -1275,7 +1275,7 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
         {
             //  GetString on EditCell replaces linebreaks with spaces;
             //  however here we need line breaks
-            const EditTextObject* pData = aCell.mpEditText;
+            const EditTextObject* pData = aCell.getEditText();
             EditEngine& rEngine = pDoc->GetEditEngine();
             rEngine.SetText(*pData);
             return rEngine.GetText();

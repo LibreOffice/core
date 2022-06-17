@@ -1263,8 +1263,8 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                     pEngine->SetDefaults( std::move(aDefaults) );
                     if (aCell.getType() == CELLTYPE_STRING)
                         pEngine->SetTextCurrentDefaults(aCell.getSharedString()->getString());
-                    else if (aCell.mpEditText)
-                        pEngine->SetTextCurrentDefaults(*aCell.mpEditText);
+                    else if (aCell.getEditText())
+                        pEngine->SetTextCurrentDefaults(*aCell.getEditText());
 
                     pEngine->ClearModifyFlag();
 

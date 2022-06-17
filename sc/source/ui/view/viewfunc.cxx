@@ -1266,7 +1266,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         ScRefCellValue aCell(rDoc, aPos);
         if (aCell.getType() == CELLTYPE_EDIT)
         {
-            const EditTextObject* pEditObj = aCell.mpEditText;
+            const EditTextObject* pEditObj = aCell.getEditText();
             pOldEditData = pEditObj->Clone();
             rDoc.RemoveEditTextCharAttribs(aPos, rAttr);
             pEditObj = rDoc.GetEditText(aPos);
