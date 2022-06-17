@@ -52,11 +52,10 @@ public:
     static bool      isRootNode( const ObjectIdentifier& rOID );
 
     /// equal to getChildren( getRootNodeOID())
-    const tChildContainer &  getTopLevelChildren() const;
-    bool             hasChildren( const ObjectIdentifier& rParent ) const;
-    const tChildContainer &  getChildren( const ObjectIdentifier& rParent ) const;
-
-    const tChildContainer &  getSiblings( const ObjectIdentifier& rNode ) const;
+    const tChildContainer& getTopLevelChildren() const;
+    bool hasChildren(const ObjectIdentifier& rParent) const;
+    const tChildContainer& getChildren(const ObjectIdentifier& rParent) const;
+    const tChildContainer& getSiblings(const ObjectIdentifier& rNode) const;
 
     /// The result is empty, if the node cannot be found in the tree
     ObjectIdentifier             getParent( const ObjectIdentifier& rNode ) const;
@@ -66,30 +65,29 @@ public:
 private:
     void createTree( const rtl::Reference<::chart::ChartModel> & xChartDocument );
     void createAxesTree(
-        ObjectHierarchy::tChildContainer & rContainer,
+        tChildContainer & rContainer,
         const rtl::Reference<::chart::ChartModel> & xChartDoc,
         const rtl::Reference< ::chart::Diagram > & xDiagram  );
     void createDiagramTree(
-        ObjectHierarchy::tChildContainer& rContainer,
+        tChildContainer& rContainer,
         const rtl::Reference<::chart::ChartModel>& xChartDoc,
         const rtl::Reference< ::chart::Diagram >& xDiagram );
     void createDataSeriesTree(
-        ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
+        tChildContainer & rOutDiagramSubContainer,
         const rtl::Reference< ::chart::Diagram > & xDiagram );
     static void createWallAndFloor(
-        ObjectHierarchy::tChildContainer & rContainer,
+        tChildContainer & rContainer,
         const rtl::Reference< ::chart::Diagram > & xDiagram );
     void createLegendTree(
-        ObjectHierarchy::tChildContainer & rContainer,
+        tChildContainer & rContainer,
         const rtl::Reference<::chart::ChartModel> & xChartDoc,
         const rtl::Reference< ::chart::Diagram > & xDiagram  );
-    void createAdditionalShapesTree( ObjectHierarchy::tChildContainer& rContainer );
+    void createAdditionalShapesTree(tChildContainer& rContainer);
     ObjectIdentifier getParentImpl(
         const ObjectIdentifier& rParentOID,
         const ObjectIdentifier& rOID ) const;
 
-    typedef std::map< ObjectIdentifier, ObjectHierarchy::tChildContainer >
-        tChildMap;
+    typedef std::map<ObjectIdentifier, tChildContainer> tChildMap;
     tChildMap m_aChildMap;
     ExplicitValueProvider* m_pExplicitValueProvider;
     bool m_bFlattenDiagram;
