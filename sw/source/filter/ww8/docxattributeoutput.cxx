@@ -6977,7 +6977,11 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
             if ( nWwId < ww::stiMax)
                 pEnglishName = ww::GetEnglishNameFromSti( static_cast<ww::sti>(nWwId ) );
             break;
-        case STYLE_TYPE_CHAR: pType = "character"; break;
+        case STYLE_TYPE_CHAR:
+            pType = "character";
+            if (nWwId < ww::stiMax)
+                pEnglishName = ww::GetEnglishNameFromSti(static_cast<ww::sti>(nWwId));
+            break;
         case STYLE_TYPE_LIST: pType = "numbering"; break;
     }
     pStyleAttributeList->add(FSNS( XML_w, XML_type ), pType);
