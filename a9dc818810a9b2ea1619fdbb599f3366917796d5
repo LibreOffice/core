@@ -69,6 +69,24 @@
       "parentUuid": "7c24eadc_0343f7ee",
       "revId": "a9dc818810a9b2ea1619fdbb599f3366917796d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5910946f_8676eda8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-18T22:30:53Z",
+      "side": 1,
+      "message": "I\u0027ll try to generate a screencast (never done that before) with my additional debug output dumping the maGeometry and \"vcl::WindowData *pState\" in qt5 and gtk3 (Set/GetWindowState; gen acts like gtk3, so I\u0027ll leave that out), but not tonight. FWIW the positioning also works with a 1.5 scaling. And I\u0027ll push a new \"complete\" patchset, now that most other refactoring is merged (I still have 25 pending patches on my master...).",
+      "parentUuid": "d79e8b80_cc81310a",
+      "revId": "a9dc818810a9b2ea1619fdbb599f3366917796d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
