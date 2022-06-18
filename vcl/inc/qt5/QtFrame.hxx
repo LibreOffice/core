@@ -33,7 +33,7 @@
 
 #include <QtCore/QObject>
 
-#if CHECK_QT5_USING_X11
+#if CHECK_ANY_QT_USING_X11
 #include <unx/screensaverinhibitor.hxx>
 // any better way to get rid of the X11 / Qt type clashes?
 #undef Bool
@@ -101,10 +101,8 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     sal_uInt32 m_nRestoreScreen;
     QRect m_aRestoreGeometry;
 
-#if CHECK_QT5_USING_X11
-    ScreenSaverInhibitor m_ScreenSaverInhibitor;
-#endif
 #if CHECK_ANY_QT_USING_X11
+    ScreenSaverInhibitor m_ScreenSaverInhibitor;
     ModKeyFlags m_nKeyModifiers;
 #endif
 
