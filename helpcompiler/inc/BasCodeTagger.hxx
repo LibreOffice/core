@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_HELPCOMPILER_INC_BASCODETAGGER_HXX
-#define INCLUDED_HELPCOMPILER_INC_BASCODETAGGER_HXX
+#pragma once
 
 #include <deque>
 #include <memory>
@@ -54,7 +53,5 @@ class LibXmlTreeWalker
     bool end() const;
     void ignoreCurrNodesChildren();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
