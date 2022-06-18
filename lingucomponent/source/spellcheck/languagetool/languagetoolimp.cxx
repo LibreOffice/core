@@ -405,3 +405,5 @@ lingucomponent_LanguageToolGrammarChecker_get_implementation(
 {
     return cppu::acquire(static_cast<cppu::OWeakObject*>(new LanguageToolGrammarChecker()));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
