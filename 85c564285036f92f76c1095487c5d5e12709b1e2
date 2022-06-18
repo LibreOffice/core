@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39abf7a1_f275aae8",
+        "filename": "vcl/qt5/QtFrame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-18T19:43:12Z",
+      "side": 0,
+      "message": "I don\u0027t understand this part. I don\u0027t have Qt6, so please fill me in. It seems like the empty optionals aren\u0027t good enough, if bIsX11 is true? So IMHO either fix the m_ScreenSaverInhibitor or lie about bIsX11 in case of Qt6? Nothing in this function uses QX11Info in case of Qt6, so this is really puzzling me. At least the DBUS-based inhibitor should work also on Qt6. winId() should return the X11 window. Or is this some temporary fix?",
+      "revId": "85c564285036f92f76c1095487c5d5e12709b1e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
