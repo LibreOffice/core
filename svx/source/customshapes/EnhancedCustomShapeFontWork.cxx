@@ -243,16 +243,36 @@ static void CalculateHorizontalScalingFactor(
 
         if (fScalingFactor < 1.0)
         {
-            // if we have a very large font that will require scaling down to a very small value then
-            // skip directly to a small font size
+            // we have a very large font that will require scaling down to a very small value.
             if (nFontSize > 128)
             {
-                double nEstimatedFinalFontSize = nFontSize * fScalingFactor;
-                double nOnePercentFontSize = nFontSize / 100.0;
-                if (nEstimatedFinalFontSize < nOnePercentFontSize)
+                // see if it will even be possible at the min size
+                sal_Int32 nOrigFontSize = nFontSize;
+                double fOrigScalingFactor = fScalingFactor;
+
+                nFontSize = 2;
+                pVirDev->Push(vcl::PushFlags::FONT);
+                aFont.SetFontHeight(nFontSize);
+                pVirDev->SetFont(aFont);
+                UpdateScalingMode(rFWData, rOutline2d, bSingleLineMode, pVirDev, fScalingFactor);
+                pVirDev->Pop();
+
+                const bool bHopeLess = fScalingFactor < 1.0;
+                // if its hopeless then just continue on with this FontSize of 2, otherwise
+                // continue to try smaller sizes
+                if (!bHopeLess)
                 {
-                    nFontSize = std::max<int>(16, std::ceil(5 * nEstimatedFinalFontSize));
-                    SAL_WARN("svx", "CalculateHorizontalScalingFactor skipping direct to: " << nFontSize << " from " << rFontHeight.GetHeight());
+                    nFontSize = nOrigFontSize;
+                    fScalingFactor = fOrigScalingFactor;
+
+                    // skip directly to a small font size
+                    double nEstimatedFinalFontSize = nFontSize * fScalingFactor;
+                    double nOnePercentFontSize = nFontSize / 100.0;
+                    if (nEstimatedFinalFontSize < nOnePercentFontSize)
+                    {
+                        nFontSize = std::max<int>(16, std::ceil(5 * nEstimatedFinalFontSize));
+                        SAL_WARN("svx", "CalculateHorizontalScalingFactor skipping direct to: " << nFontSize << " from " << rFontHeight.GetHeight());
+                    }
                 }
             }
             nFontSize--;
