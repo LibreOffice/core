@@ -22,6 +22,30 @@
       },
       "revId": "243ffb1604e784a5dbc455a32681af32dd0126af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa46e7c8_1b866f42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-06-18T18:21:07Z",
+      "side": 1,
+      "message": "I made the edit to the message. It\u0027s just how I\u0027ve done things in the past, but I understand what you mean.",
+      "parentUuid": "76c28eff_b54648b7",
+      "range": {
+        "startLine": 7,
+        "startChar": 27,
+        "endLine": 7,
+        "endChar": 56
+      },
+      "revId": "243ffb1604e784a5dbc455a32681af32dd0126af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
