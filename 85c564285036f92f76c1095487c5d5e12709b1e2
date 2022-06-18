@@ -70,6 +70,24 @@
       "parentUuid": "ad501358_5185130d",
       "revId": "85c564285036f92f76c1095487c5d5e12709b1e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a8b5474_b95c8a5c",
+        "filename": "vcl/qt5/QtFrame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-18T21:56:55Z",
+      "side": 0,
+      "message": "Thanks, updated accordingly (and added you as co-author).",
+      "parentUuid": "c71dbbdf_8f341c86",
+      "revId": "85c564285036f92f76c1095487c5d5e12709b1e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
