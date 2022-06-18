@@ -52,6 +52,24 @@
       "parentUuid": "1a55e7a1_7be900e0",
       "revId": "85c564285036f92f76c1095487c5d5e12709b1e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c71dbbdf_8f341c86",
+        "filename": "vcl/qt5/QtFrame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-18T21:21:22Z",
+      "side": 0,
+      "message": "\u003e Hm, but then, unx/screensaverinhibitor.hxx appears to have various X11 includes, so looks X11-specific at first glance? (I have no idea about the underlying functionality, was just looking at the build failure.)\n\nAh - my bad. I knew it used several APIs, but didn\u0027t check (and didn\u0027t realize), that it always exposes X11 details, even without X11 being build and used. And I just realized the header always exposes the X11 Display. Looking into vcl/unx/generic/window/screensaverinhibitor.cxx, all the DBUS stuff depends on ENABLE_GIO. \n\nI simply thought this was handled wrong and made it part of the refactoring accidentally. It\u0027ll also break WASM this way... I think the current best handling would be:\n\n\u003e void QtFrame::StartPresentation(bool bStart)\n\u003e {\n\u003e #if CHECK_ANY_QT_USING_X11\n\u003e     // meh - so there\u0027s no Qt platform independent solution\n\u003e     // https://forum.qt.io/topic/38504/solved-qdialog-in-fullscreen-disable-os-screensaver\n\u003e     assert(m_aSystemData.platform !\u003d SystemEnvData::Platform::Invalid);\n\u003e     const bool bIsX11 \u003d m_aSystemData.platform \u003d\u003d SystemEnvData::Platform::Xcb;\n\u003e     std::optional\u003cunsigned int\u003e aRootWindow;\n\u003e     std::optional\u003cDisplay*\u003e aDisplay;\n\u003e \n\u003e #if CHECK_QT5_USING_X11\n\u003e     if (QX11Info::isPlatformX11())\n\u003e     {\n\u003e         aRootWindow \u003d QX11Info::appRootWindow();\n\u003e         aDisplay \u003d QX11Info::display();\n\u003e     }\n\u003e #endif\n\u003e     m_ScreenSaverInhibitor.inhibit(bStart, u\"presentation\", bIsX11, aRootWindow, aDisplay);\n\u003e #else\n\u003e     Q_UNUSED(bStart);\n\u003e #endif\n\u003e }\n\nAn other patch could #ifdef the X11 details from screensaverinhibitor.hxx, so the DBUS path could be used even without X11.",
+      "parentUuid": "ad501358_5185130d",
+      "revId": "85c564285036f92f76c1095487c5d5e12709b1e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
