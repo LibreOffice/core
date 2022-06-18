@@ -33,6 +33,42 @@
       "message": "nicer if tdf#99514 is prepended to the commit message, I guess.",
       "revId": "86aee8cbb261954b35e44359d803a2fe033d6d92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fe0fc2d_68c9aa6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003573
+      },
+      "writtenOn": "2022-06-18T17:30:49Z",
+      "side": 1,
+      "message": "Thanks for the tip, hope it is better now",
+      "parentUuid": "b7a99016_ffcb5ab2",
+      "revId": "86aee8cbb261954b35e44359d803a2fe033d6d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3168fb6_5bcc97e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003573
+      },
+      "writtenOn": "2022-06-18T17:30:49Z",
+      "side": 1,
+      "message": "I added a test to vba.xls and used IsDate to check Value is a date and Value2 is not, it works in excell and calc now but you have to change gMsgBox to MsgBox to test it.\nthanks for the feedback, can we merge and then build on top?",
+      "parentUuid": "9db37c56_3fe7f3eb",
+      "revId": "86aee8cbb261954b35e44359d803a2fe033d6d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
