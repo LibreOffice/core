@@ -30,8 +30,10 @@ struct ColumnBlockPosition;
  */
 struct SC_DLLPUBLIC ScCellValue
 {
+private:
     /// bool is there to indicate CellType::NONE
     std::variant<bool, double, svl::SharedString, EditTextObject*, ScFormulaCell*> maData;
+public:
 
     ScCellValue();
     ScCellValue( const ScRefCellValue& rCell );
@@ -102,17 +104,15 @@ struct SC_DLLPUBLIC ScCellValue
  */
 struct SC_DLLPUBLIC ScRefCellValue
 {
-    /// bool is there to indicate CellType::NONE
-    std::variant<bool, double, svl::SharedString, EditTextObject*, ScFormulaCell*> maData;
 private:
     CellType meType;
-public:
     union {
-        double mfValue1;
+        double mfValue;
         const svl::SharedString* mpString;
-        const EditTextObject* mpEditText1;
-        ScFormulaCell* mpFormula1;
+        const EditTextObject* mpEditText;
+        ScFormulaCell* mpFormula;
     };
+public:
 
     ScRefCellValue();
     ScRefCellValue( double fValue );
@@ -129,10 +129,10 @@ public:
     void clear();
 
     CellType getType() const { return meType; }
-    double getDouble() const { assert(meType == CELLTYPE_VALUE); return mfValue1; }
+    double getDouble() const { assert(meType == CELLTYPE_VALUE); return mfValue; }
     const svl::SharedString* getSharedString() const { assert(meType == CELLTYPE_STRING); return mpString; }
-    const EditTextObject* getEditText() const { assert(meType == CELLTYPE_EDIT); return mpEditText1; }
-    ScFormulaCell* getFormula() const { assert(meType == CELLTYPE_FORMULA); return mpFormula1; }
+    const EditTextObject* getEditText() const { assert(meType == CELLTYPE_EDIT); return mpEditText; }
+    ScFormulaCell* getFormula() const { assert(meType == CELLTYPE_FORMULA); return mpFormula; }
 
     /**
      * Take cell value from specified position in specified document.

@@ -100,7 +100,7 @@ bool equalsWithoutFormatImpl( const T& left, const T& right )
             return aStr1 == aStr2;
         }
         case CELLTYPE_FORMULA:
-            return equalsFormulaCells(left.mpFormula1, right.mpFormula1);
+            return equalsFormulaCells(left.getFormula(), right.getFormula());
         default:
             ;
     }
@@ -212,15 +212,15 @@ OUString getRawStringImpl( const CellT& rCell, const ScDocument& rDoc )
     switch (rCell.getType())
     {
         case CELLTYPE_VALUE:
-            return OUString::number(rCell.mfValue1);
+            return OUString::number(rCell.getDouble());
         case CELLTYPE_STRING:
-            return rCell.mpString->getString();
+            return rCell.getSharedString()->getString();
         case CELLTYPE_EDIT:
-            if (rCell.mpEditText1)
-                return ScEditUtil::GetString(*rCell.mpEditText1, &rDoc);
+            if (rCell.getEditText())
+                return ScEditUtil::GetString(*rCell.getEditText(), &rDoc);
         break;
         case CELLTYPE_FORMULA:
-            return rCell.mpFormula1->GetRawString().getString();
+            return rCell.getFormula()->GetRawString().getString();
         default:
             ;
     }
@@ -236,7 +236,7 @@ ScCellValue::ScCellValue( const ScRefCellValue& rCell )
     switch (rCell.getType())
     {
         case CELLTYPE_STRING:
-            maData = *rCell.mpString;
+            maData = *rCell.getSharedString();
         break;
         case CELLTYPE_EDIT:
             maData = rCell.getEditText()->Clone().release();
@@ -360,16 +360,16 @@ void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
     switch (aRefVal.getType())
     {
         case CELLTYPE_STRING:
-            maData = *aRefVal.mpString;
+            maData = *aRefVal.getSharedString();
         break;
         case CELLTYPE_EDIT:
-            maData = aRefVal.mpEditText1 ? aRefVal.mpEditText1->Clone().release() : static_cast<EditTextObject*>(nullptr);
+            maData = aRefVal.getEditText() ? aRefVal.getEditText()->Clone().release() : static_cast<EditTextObject*>(nullptr);
         break;
         case CELLTYPE_VALUE:
-            maData = aRefVal.mfValue1;
+            maData = aRefVal.getDouble();
         break;
         case CELLTYPE_FORMULA:
-            maData = aRefVal.mpFormula1->Clone();
+            maData = aRefVal.getFormula()->Clone();
         break;
         default: ; // leave empty
     }
@@ -548,11 +548,11 @@ void ScCellValue::swap( ScCellValue& r )
     std::swap(maData, r.maData);
 }
 
-ScRefCellValue::ScRefCellValue() : meType(CELLTYPE_NONE), mfValue1(0.0) {}
-ScRefCellValue::ScRefCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue1(fValue) {}
+ScRefCellValue::ScRefCellValue() : meType(CELLTYPE_NONE), mfValue(0.0) {}
+ScRefCellValue::ScRefCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
 ScRefCellValue::ScRefCellValue( const svl::SharedString* pString ) : meType(CELLTYPE_STRING), mpString(pString) {}
-ScRefCellValue::ScRefCellValue( const EditTextObject* pEditText ) : meType(CELLTYPE_EDIT), mpEditText1(pEditText) {}
-ScRefCellValue::ScRefCellValue( ScFormulaCell* pFormula ) : meType(CELLTYPE_FORMULA), mpFormula1(pFormula) {}
+ScRefCellValue::ScRefCellValue( const EditTextObject* pEditText ) : meType(CELLTYPE_EDIT), mpEditText(pEditText) {}
+ScRefCellValue::ScRefCellValue( ScFormulaCell* pFormula ) : meType(CELLTYPE_FORMULA), mpFormula(pFormula) {}
 
 ScRefCellValue::ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos )
 {
@@ -568,7 +568,7 @@ void ScRefCellValue::clear()
 {
     // Reset to empty value.
     meType = CELLTYPE_NONE;
-    mfValue1 = 0.0;
+    mfValue = 0.0;
 }
 
 void ScRefCellValue::assign( ScDocument& rDoc, const ScAddress& rPos )
@@ -593,13 +593,13 @@ void ScRefCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
         }
         break;
         case CELLTYPE_EDIT:
-            rDoc.SetEditText(rPos, ScEditUtil::Clone(*mpEditText1, rDoc));
+            rDoc.SetEditText(rPos, ScEditUtil::Clone(*mpEditText, rDoc));
         break;
         case CELLTYPE_VALUE:
-            rDoc.SetValue(rPos, mfValue1);
+            rDoc.SetValue(rPos, mfValue);
         break;
         case CELLTYPE_FORMULA:
-            rDoc.SetFormulaCell(rPos, new ScFormulaCell(*mpFormula1, rDoc, rPos));
+            rDoc.SetFormulaCell(rPos, new ScFormulaCell(*mpFormula, rDoc, rPos));
         break;
         default:
             rDoc.SetEmptyCell(rPos);
@@ -608,17 +608,17 @@ void ScRefCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
 
 bool ScRefCellValue::hasString() const
 {
-    return hasStringImpl(meType, mpFormula1);
+    return hasStringImpl(meType, mpFormula);
 }
 
 bool ScRefCellValue::hasNumeric() const
 {
-    return hasNumericImpl(meType, mpFormula1);
+    return hasNumericImpl(meType, mpFormula);
 }
 
 bool ScRefCellValue::hasError() const
 {
-    return meType == CELLTYPE_FORMULA && mpFormula1->GetErrCode() != FormulaError::NONE;
+    return meType == CELLTYPE_FORMULA && mpFormula->GetErrCode() != FormulaError::NONE;
 }
 
 double ScRefCellValue::getValue()
@@ -626,9 +626,9 @@ double ScRefCellValue::getValue()
     switch (meType)
     {
         case CELLTYPE_VALUE:
-            return mfValue1;
+            return mfValue;
         case CELLTYPE_FORMULA:
-            return mpFormula1->GetValue();
+            return mpFormula->GetValue();
         default:
             ;
     }
@@ -640,9 +640,9 @@ double ScRefCellValue::getRawValue() const
     switch (meType)
     {
         case CELLTYPE_VALUE:
-            return mfValue1;
+            return mfValue;
         case CELLTYPE_FORMULA:
-            return mpFormula1->GetRawValue();
+            return mpFormula->GetRawValue();
         default:
             ;
     }
@@ -670,7 +670,7 @@ bool ScRefCellValue::hasEmptyValue()
         return true;
 
     if (meType == CELLTYPE_FORMULA)
-        return mpFormula1->IsEmpty();
+        return mpFormula->IsEmpty();
 
     return false;
 }
