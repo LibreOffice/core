@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd534221_d20fa3c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-18T09:23:00Z",
+      "side": 1,
+      "message": "Since you use a real name for the patch, you might want to set: git config --global user.name \"Diane Leigh\"\n\nAnd then do a: git commit --amend --reset-author\n\nYou can push a local update just fine. As long as the \"Change-Id\" is the same, Gerrit will just publish an updated patch. Or do a rebase.",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 45
+      },
+      "revId": "c559460ef18b965e8820b54e2b2b494df01675e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
