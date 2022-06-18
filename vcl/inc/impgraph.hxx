@@ -166,10 +166,10 @@ private:
     void                startAnimation(OutputDevice& rOutDev,
                                        const Point& rDestPt,
                                        const Size& rDestSize,
-                                       tools::Long nExtraData,
+                                       tools::Long nRendererId,
                                        OutputDevice* pFirstFrameOutDev);
     void                stopAnimation( const OutputDevice* pOutputDevice,
-                                           tools::Long nExtraData );
+                                           tools::Long nRendererId );
 
     void                setAnimationNotifyHdl( const Link<Animation*,void>& rLink );
     Link<Animation*,void> getAnimationNotifyHdl() const;

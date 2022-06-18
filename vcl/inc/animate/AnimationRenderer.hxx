@@ -34,7 +34,7 @@ struct AInfo
     Size            aStartSize;
     VclPtr<OutputDevice>   pOutDev;
     void*           pRendererData;
-    tools::Long            nExtraData;
+    tools::Long     nRendererId;
     bool            bPause;
 
     AInfo();
@@ -49,7 +49,7 @@ private:
 
     Animation*      mpParent;
     VclPtr<OutputDevice>  mpRenderContext;
-    tools::Long            mnExtraData;
+    tools::Long     mnRendererId;
     Point           maPt;
     Point           maDispPt;
     Point           maRestPt;
@@ -69,12 +69,12 @@ private:
 
 public:
                     AnimationRenderer( Animation* pParent, OutputDevice* pOut,
-                                  const Point& rPt, const Size& rSz, sal_uLong nExtraData,
+                                  const Point& rPt, const Size& rSz, sal_uLong nRendererId,
                                   OutputDevice* pFirstFrameOutDev = nullptr );
                     AnimationRenderer(AnimationRenderer&&) = delete;
                     ~AnimationRenderer();
 
-    bool            matches(const OutputDevice* pOut, tools::Long nExtraData) const;
+    bool            matches(const OutputDevice* pOut, tools::Long nRendererId) const;
     void            drawToPos( sal_uLong nPos );
     void            draw( sal_uLong nPos, VirtualDevice* pVDev=nullptr );
     void            repaint();
