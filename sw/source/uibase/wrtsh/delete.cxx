@@ -291,7 +291,7 @@ bool SwWrtShell::DelLeft()
     return bRet;
 }
 
-bool SwWrtShell::DelRight()
+bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
 {
         // Will be or'ed, if a tableselection exists;
         // will here be implemented on SelectionType::Table
@@ -318,7 +318,7 @@ bool SwWrtShell::DelRight()
                 {
                     SwActContext aActContext(this);
                     ResetCursorStack();
-                    Delete(false);
+                    Delete(isReplaceHeuristic);
                     UpdateAttr();
                 }
                 if( IsBlockMode() )
