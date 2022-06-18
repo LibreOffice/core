@@ -338,33 +338,33 @@ std::string LanguageToolGrammarChecker::makeHttpRequest(std::string_view aURL, H
     }
 
     std::string response_body;
-    curl_easy_setopt(curl.get(), CURLOPT_URL, aURL.data());
+    (void)curl_easy_setopt(curl.get(), CURLOPT_URL, aURL.data());
 
-    curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
-    // curl_easy_setopt(curl.get(), CURLOPT_VERBOSE, 1L);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
+    // (void)curl_easy_setopt(curl.get(), CURLOPT_VERBOSE, 1L);
 
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, static_cast<void*>(&response_body));
-    curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
-    curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, false);
-    curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, CURL_TIMEOUT);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, static_cast<void*>(&response_body));
+    (void)curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, false);
+    (void)curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, CURL_TIMEOUT);
 
     if (method == HTTP_METHOD::HTTP_POST)
     {
-        curl_easy_setopt(curl.get(), CURLOPT_POST, 1L);
+        (void)curl_easy_setopt(curl.get(), CURLOPT_POST, 1L);
         if (isPremium == false)
         {
-            curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, aPostData.getStr());
+            (void)curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, aPostData.getStr());
         }
         else
         {
             premiumPostData = aPostData + "&username=" + username + "&apiKey=" + apiKey;
-            curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, premiumPostData.getStr());
+            (void)curl_easy_setopt(curl.get(), CURLOPT_POSTFIELDS, premiumPostData.getStr());
         }
     }
 
     /*CURLcode cc = */
-    curl_easy_perform(curl.get());
+    (void)curl_easy_perform(curl.get());
     curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &nStatusCode);
     return response_body;
 }
