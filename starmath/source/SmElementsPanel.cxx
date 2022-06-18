@@ -49,9 +49,9 @@ SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBind
     mxCategoryList->set_size_request(-1, mxCategoryList->get_height_rows(6));
 
     mxCategoryList->connect_changed(LINK(this, SmElementsPanel, CategorySelectedHandle));
-    mxCategoryList->select_text(SmResId(RID_CATEGORY_UNARY_BINARY_OPERATORS));
+    mxCategoryList->select(0);
 
-    mxElementsControl->setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
+    mxElementsControl->setElementSetIndex(0);
     mxElementsControl->SetSelectHdl(LINK(this, SmElementsPanel, ElementClickHandler));
 }
 
@@ -63,18 +63,12 @@ SmElementsPanel::~SmElementsPanel()
 
 IMPL_LINK(SmElementsPanel, CategorySelectedHandle, weld::TreeView&, rList, void)
 {
-    const OUString sSelected = rList.get_selected_text();
-    for (const auto& rCategoryId : SmElementsControl::categories())
-    {
-        OUString aCurrentCategoryString = SmResId(rCategoryId);
-        if (aCurrentCategoryString == sSelected)
-        {
-            mxElementsControl->setElementSetId(rCategoryId);
-            if (SmViewShell* pViewSh = GetView())
-                mxElementsControl->setSmSyntaxVersion(pViewSh->GetDoc()->GetSmSyntaxVersion());
-            return;
-        }
-    }
+    const int nActive = rList.get_selected_index();
+    if (nActive == -1)
+        return;
+    mxElementsControl->setElementSetIndex(nActive);
+    if (SmViewShell* pViewSh = GetView())
+        mxElementsControl->setSmSyntaxVersion(pViewSh->GetDoc()->GetSmSyntaxVersion());
 }
 
 IMPL_LINK(SmElementsPanel, ElementClickHandler, OUString, ElementSource, void)
