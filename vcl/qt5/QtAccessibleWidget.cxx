@@ -1039,6 +1039,10 @@ QString QtAccessibleWidget::textAtOffset(int offset, QAccessible::TextBoundaryTy
     sal_Int16 nUnoBoundaryType = lcl_matchQtTextBoundaryType(boundaryType);
     assert(nUnoBoundaryType > 0);
 
+    // special value of -1 for offset means text length
+    if (offset == -1)
+        offset = xText->getCharacterCount();
+
     const TextSegment segment = xText->getTextAtIndex(offset, nUnoBoundaryType);
     *startOffset = segment.SegmentStart;
     *endOffset = segment.SegmentEnd;
