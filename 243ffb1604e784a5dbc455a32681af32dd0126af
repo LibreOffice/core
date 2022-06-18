@@ -46,6 +46,47 @@
       },
       "revId": "243ffb1604e784a5dbc455a32681af32dd0126af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5642741_2b7089b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1003608
+      },
+      "writtenOn": "2022-06-18T20:32:53Z",
+      "side": 1,
+      "message": "Am I correct in assuming I don\u0027t need to change the commit message now that the patch has been merged?",
+      "parentUuid": "aa46e7c8_1b866f42",
+      "range": {
+        "startLine": 7,
+        "startChar": 27,
+        "endLine": 7,
+        "endChar": 56
+      },
+      "revId": "243ffb1604e784a5dbc455a32681af32dd0126af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2132b527_9270b64c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003608
+      },
+      "writtenOn": "2022-06-18T20:32:53Z",
+      "side": 1,
+      "message": "\u003e Patch Set 5: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/117114/ : FAILURE\n\u003e \n\u003e the cppunit test CppunitTest_sw_core_draw failed ( https://ci.libreoffice.org/job/gerrit_windows/129547/ )\n",
+      "revId": "243ffb1604e784a5dbc455a32681af32dd0126af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
