@@ -25,7 +25,6 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <osl/diagnose.h>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <utility>
 
 
 namespace drawinglayer::primitive2d
@@ -257,10 +256,10 @@ namespace drawinglayer::primitive2d
         }
 
         DiscreteShadowPrimitive2D::DiscreteShadowPrimitive2D(
-            basegfx::B2DHomMatrix aTransform,
-            DiscreteShadow aDiscreteShadow)
-        :   maTransform(std::move(aTransform)),
-            maDiscreteShadow(std::move(aDiscreteShadow))
+            const basegfx::B2DHomMatrix& rTransform,
+            const DiscreteShadow& rDiscreteShadow)
+        :   maTransform(rTransform),
+            maDiscreteShadow(rDiscreteShadow)
         {
         }
 
