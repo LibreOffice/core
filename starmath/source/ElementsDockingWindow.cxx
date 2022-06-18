@@ -431,23 +431,19 @@ constexpr std::pair<const SmElementDescr*, size_t> asPair(const SmElementDescr (
     return { category, N };
 }
 
-struct TranslateId_hash
-{
-    size_t operator()(const TranslateId& val) const { return std::hash<std::string_view>()(val.mpId); }
+const std::vector<std::pair<const SmElementDescr*, size_t>> s_a5CategoryDescriptions{
+    { asPair(s_a5UnaryBinaryOperatorsList) },
+    { asPair(s_a5RelationsList) },
+    { asPair(s_a5SetOperationsList) },
+    { asPair(s_a5FunctionsList) },
+    { asPair(s_a5OperatorsList) },
+    { asPair(s_a5AttributesList) },
+    { asPair(s_a5BracketsList) },
+    { asPair(s_a5FormatsList) },
+    { asPair(s_a5OthersList) },
+    { asPair(s_a5ExamplesList) },
 };
 
-const std::unordered_map<TranslateId, std::pair<const SmElementDescr*, size_t>, TranslateId_hash> s_a5CategoryDescriptions{
-    { RID_CATEGORY_UNARY_BINARY_OPERATORS, asPair(s_a5UnaryBinaryOperatorsList) },
-    { RID_CATEGORY_RELATIONS, asPair(s_a5RelationsList) },
-    { RID_CATEGORY_SET_OPERATIONS, asPair(s_a5SetOperationsList) },
-    { RID_CATEGORY_FUNCTIONS, asPair(s_a5FunctionsList) },
-    { RID_CATEGORY_OPERATORS, asPair(s_a5OperatorsList) },
-    { RID_CATEGORY_ATTRIBUTES, asPair(s_a5AttributesList) },
-    { RID_CATEGORY_BRACKETS, asPair(s_a5BracketsList) },
-    { RID_CATEGORY_FORMATS, asPair(s_a5FormatsList) },
-    { RID_CATEGORY_OTHERS, asPair(s_a5OthersList) },
-    { RID_CATEGORY_EXAMPLES, asPair(s_a5ExamplesList) },
-};
 } // namespace
 
 // static
@@ -544,22 +540,22 @@ OUString SmElementsControl::GetElementHelpText(const OUString& itemId)
     return weld::fromId<ElementData*>(itemId)->maHelpText;
 }
 
-void SmElementsControl::setElementSetId(TranslateId pSetId)
+void SmElementsControl::setElementSetIndex(size_t nSetIndex)
 {
-    if (msCurrentSetId == pSetId)
+    if (mnCurrentSetIndex == nSetIndex)
         return;
-    msCurrentSetId = pSetId;
+    mnCurrentSetIndex = nSetIndex;
     build();
 }
 
-void SmElementsControl::addElements(const TranslateId& rCategory)
+void SmElementsControl::addElements(size_t nCategory)
 {
     mpIconView->freeze();
     mpIconView->clear();
     mpIconView->set_item_width(0);
     maItemDatas.clear();
 
-    const auto& [aElementsArray, aElementsArraySize] = s_a5CategoryDescriptions.at(rCategory);
+    const auto& [aElementsArray, aElementsArraySize] = s_a5CategoryDescriptions[nCategory];
 
     for (size_t i = 0; i < aElementsArraySize; i++)
     {
@@ -588,7 +584,7 @@ void SmElementsControl::build()
     switch(m_nSmSyntaxVersion)
     {
         case 5:
-            addElements(msCurrentSetId);
+            addElements(mnCurrentSetIndex);
             break;
         case 6:
         default:
@@ -637,9 +633,9 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
         mxElementListBox->append_text(SmResId(category));
 
     mxElementListBox->connect_changed(LINK(this, SmElementsDockingWindow, ElementSelectedHandle));
-    mxElementListBox->set_active_text(SmResId(RID_CATEGORY_UNARY_BINARY_OPERATORS));
+    mxElementListBox->set_active(0);
 
-    mxElementsControl->setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
+    mxElementsControl->setElementSetIndex(0);
     mxElementsControl->SetSelectHdl(LINK(this, SmElementsDockingWindow, SelectClickHandler));
 }
 
@@ -698,16 +694,10 @@ IMPL_LINK(SmElementsDockingWindow, SelectClickHandler, OUString, sElementSource,
 
 IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, weld::ComboBox&, rList, void)
 {
-    for (const auto& category : SmElementsControl::categories())
-    {
-        OUString aCurrentCategoryString = SmResId(category);
-        if (aCurrentCategoryString == rList.get_active_text())
-        {
-            mxElementsControl->setElementSetId(category);
-            setSmSyntaxVersion(GetView()->GetDoc()->GetSmSyntaxVersion());
-            return;
-        }
-    }
+    const int nActive = rList.get_active();
+    assert(nActive != -1);
+    mxElementsControl->setElementSetIndex(nActive);
+    setSmSyntaxVersion(GetView()->GetDoc()->GetSmSyntaxVersion());
 }
 
 SmViewShell* SmElementsDockingWindow::GetView()
