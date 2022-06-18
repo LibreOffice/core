@@ -89,3 +89,5 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
