@@ -16,6 +16,23 @@
       "message": "Uff, I clicked +2 before noticing that you changed the commit message. You should keep the earlier correct commit message",
       "revId": "8b1ec480f3aaa4a6d395132092a2161857ee312f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ded8b1b4_358181f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-18T12:58:48Z",
+      "side": 1,
+      "message": "So, as Ilmari wrote, please restore the old commit message.",
+      "revId": "8b1ec480f3aaa4a6d395132092a2161857ee312f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
