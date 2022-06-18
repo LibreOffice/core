@@ -74,7 +74,7 @@ void testDoubleProperty(uno::Reference<beans::XPropertySet> const& xPropertySet,
     uno::Any aNewValue;
 
     double dPropertyGet;
-    double dPropertySet;
+    double dPropertySet = {};
 
     OString msgGet
         = "Unable to get PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
@@ -93,8 +93,8 @@ void testDoubleReadonlyProperty(uno::Reference<beans::XPropertySet> const& xProp
 {
     uno::Any aNewValue;
 
-    double dPropertyGet;
-    double dPropertySet;
+    double dPropertyGet = {};
+    double dPropertySet = {};
 
     OString msgGet
         = "Unable to get PropertyValue: " + OUStringToOString(name, RTL_TEXTENCODING_UTF8);
