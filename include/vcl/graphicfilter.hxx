@@ -101,6 +101,7 @@ namespace o3tl
 #define EXP_EMZ                 "SVEMZ"
 #define EXP_JPEG                "SVEJPEG"
 #define EXP_SVG                 "SVESVG"
+#define EXP_SVGZ                "SVESVGZ"
 #define EXP_PDF                 "SVEPDF"
 #define EXP_PNG                 "SVEPNG"
 #define EXP_TIFF                "SVTIFF"

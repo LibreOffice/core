@@ -1844,9 +1844,17 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                 if( rOStm.GetError() )
                     nStatus = ERRCODE_GRFILTER_IOERROR;
             }
-            else if( aFilterName.equalsIgnoreAsciiCase( EXP_SVG ) )
+            else if( aFilterName.equalsIgnoreAsciiCase( EXP_SVG ) || aFilterName.equalsIgnoreAsciiCase( EXP_SVGZ ) )
             {
                 bool bDone(false);
+                SvStream* rTempStm = &rOStm;
+                if (aFilterName.equalsIgnoreAsciiCase(EXP_SVGZ))
+                {
+                    // Write to a different stream so that we can compress to rOStm later
+                    rCompressableStm.SetBufferSize(rOStm.GetBufferSize());
+                    rTempStm = &rCompressableStm;
+                    bShouldCompress = true;
+                }
 
                 // do we have a native Vector Graphic Data RenderGraphic, whose data can be written directly?
                 auto const & rVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
@@ -1856,9 +1864,9 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                     && !rVectorGraphicDataPtr->getBinaryDataContainer().isEmpty())
                 {
                     auto & aDataContainer = rVectorGraphicDataPtr->getBinaryDataContainer();
-                    rOStm.WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
+                    rTempStm->WriteBytes(aDataContainer.getData(), aDataContainer.getSize());
 
-                    if( rOStm.GetError() )
+                    if( rTempStm->GetError() )
                     {
                         nStatus = ERRCODE_GRFILTER_IOERROR;
                     }
@@ -1890,7 +1898,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                             if( xActiveDataSource.is() )
                             {
                                 const css::uno::Reference< css::uno::XInterface > xStmIf(
-                                    static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( rOStm ) ) );
+                                    static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( *rTempStm ) ) );
 
                                 SvMemoryStream aMemStm( 65535, 65535 );
 
