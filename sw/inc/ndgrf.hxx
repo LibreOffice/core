@@ -83,9 +83,9 @@ public:
     void TriggerGraphicArrived();
 
     /// wrappers for non-const calls at GraphicObject
-    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, tools::Long nExtraData, OutputDevice* pFirstFrameOutDev)
-    { maGrfObj.StartAnimation(*pOut, rPt, rSz, nExtraData, pFirstFrameOutDev); }
-    void StopGraphicAnimation(const OutputDevice* pOut, tools::Long nExtraData) { maGrfObj.StopAnimation(pOut, nExtraData); }
+    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, tools::Long nRendererId, OutputDevice* pFirstFrameOutDev)
+    { maGrfObj.StartAnimation(*pOut, rPt, rSz, nRendererId, pFirstFrameOutDev); }
+    void StopGraphicAnimation(const OutputDevice* pOut, tools::Long nRendererId) { maGrfObj.StopAnimation(pOut, nRendererId); }
 
     virtual Size GetTwipSize() const override;
     void SetTwipSize( const Size& rSz );

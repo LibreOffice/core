@@ -43,9 +43,9 @@ public:
     void Clear();
 
     bool Start(OutputDevice& rOutDev, const Point& rDestPt, const Size& rDestSz,
-               tools::Long nExtraData, OutputDevice* pFirstFrameOutDev);
+               tools::Long nRendererId, OutputDevice* pFirstFrameOutDev);
 
-    void Stop(const OutputDevice* pOutDev = nullptr, tools::Long nExtraData = 0);
+    void Stop(const OutputDevice* pOutDev = nullptr, tools::Long nRendererId = 0);
 
     void Draw(OutputDevice& rOutDev, const Point& rDestPt) const;
     void Draw(OutputDevice& rOutDev, const Point& rDestPt, const Size& rDestSz) const;

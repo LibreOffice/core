@@ -162,7 +162,7 @@ BitmapChecksum Animation::GetChecksum() const
 }
 
 bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDestSz,
-                      tools::Long nExtraData, OutputDevice* pFirstFrameOutDev)
+                      tools::Long nRendererId, OutputDevice* pFirstFrameOutDev)
 {
     bool bRet = false;
 
@@ -175,8 +175,8 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
 
             auto itAnimView = std::find_if(
                 maRenderers.begin(), maRenderers.end(),
-                [&rOut, nExtraData](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
-                    return pAnimView->matches(&rOut, nExtraData);
+                [&rOut, nRendererId](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
+                    return pAnimView->matches(&rOut, nRendererId);
                 });
 
             if (itAnimView != maRenderers.end())
@@ -200,7 +200,7 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
 
             if (differs)
                 maRenderers.emplace_back(new AnimationRenderer(this, &rOut, rDestPt, rDestSz,
-                                                               nExtraData, pFirstFrameOutDev));
+                                                               nRendererId, pFirstFrameOutDev));
 
             if (!mbIsInAnimation)
             {
@@ -217,12 +217,12 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
     return bRet;
 }
 
-void Animation::Stop(const OutputDevice* pOut, tools::Long nExtraData)
+void Animation::Stop(const OutputDevice* pOut, tools::Long nRendererId)
 {
     maRenderers.erase(
         std::remove_if(maRenderers.begin(), maRenderers.end(),
                        [=](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
-                           return pAnimView->matches(pOut, nExtraData);
+                           return pAnimView->matches(pOut, nRendererId);
                        }),
         maRenderers.end());
 
@@ -300,12 +300,14 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
                 if (!pAInfo->pRendererData)
                 {
                     pRenderer = new AnimationRenderer(this, pAInfo->pOutDev, pAInfo->aStartOrg,
-                                                      pAInfo->aStartSize, pAInfo->nExtraData);
+                                                      pAInfo->aStartSize, pAInfo->nRendererId);
 
                     maRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
                 }
                 else
+                {
                     pRenderer = static_cast<AnimationRenderer*>(pAInfo->pRendererData);
+                }
 
                 pRenderer->pause(pAInfo->bPause);
                 pRenderer->setMarked(true);
@@ -677,7 +679,7 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
 AInfo::AInfo()
     : pOutDev(nullptr)
     , pRendererData(nullptr)
-    , nExtraData(0)
+    , nRendererId(0)
     , bPause(false)
 {
 }
