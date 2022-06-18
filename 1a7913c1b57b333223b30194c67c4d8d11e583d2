@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a340a7f4_12f2ea28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-06-18T10:15:55Z",
+      "side": 1,
+      "message": "Btw. I guess this can\u0027t be backported to 7.4 due to the macOS annoyance: https://stackoverflow.com/questions/52521388/stdvariantget-does-not-compile-with-apple-llvm-10-0\n\nNow with master it\u0027s fine as we require macOS 10.14 at runtime.",
+      "revId": "1a7913c1b57b333223b30194c67c4d8d11e583d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
