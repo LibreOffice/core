@@ -320,7 +320,7 @@ OUString ScQueryEvaluator::getCellString(const ScRefCellValue& rCell, SCROW nRow
     }
     else if (rCell.getType() == CELLTYPE_STRING)
     {
-        *sharedString = rCell.mpString;
+        *sharedString = rCell.getSharedString();
         return OUString();
     }
     else
