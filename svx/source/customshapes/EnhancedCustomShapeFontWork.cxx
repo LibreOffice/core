@@ -153,6 +153,41 @@ static double GetLength( const tools::Polygon& rPolygon )
     return fLength;
 }
 
+static void UpdateScalingMode(FWData& rFWData, const tools::PolyPolygon& rOutline2d,
+                bool bSingleLineMode,
+                VirtualDevice* pVirDev, double& rScalingFactor)
+{
+    sal_uInt16 i = 0;
+    bool bScalingFactorDefined = false; // New calculation for each font size
+    for( const auto& rTextArea : rFWData.vTextAreas )
+    {
+        // calculating the width of the corresponding 2d text area
+        double fWidth = GetLength( rOutline2d.GetObject( i++ ) );
+        if ( !bSingleLineMode )
+        {
+            fWidth += GetLength( rOutline2d.GetObject( i++ ) );
+            fWidth /= 2.0;
+        }
+
+        for( const auto& rParagraph : rTextArea.vParagraphs )
+        {
+            double fTextWidth = pVirDev->GetTextWidth( rParagraph.aString );
+            if ( fTextWidth > 0.0 )
+            {
+                double fScale = fWidth / fTextWidth;
+                if ( !bScalingFactorDefined )
+                {
+                    rScalingFactor = fScale;
+                    bScalingFactorDefined = true;
+                }
+                else if (fScale < rScalingFactor)
+                {
+                    rScalingFactor = fScale;
+                }
+            }
+        }
+    }
+}
 
 /* CalculateHorizontalScalingFactor returns the horizontal scaling factor for
 the whole text object, so that each text will match its corresponding 2d Outline */
@@ -164,7 +199,6 @@ static void CalculateHorizontalScalingFactor(
     double fScalingFactor = 1.0;
     rFWData.fVerticalTextScaling = 1.0;
 
-    sal_uInt16 i = 0;
     bool bSingleLineMode = false;
     sal_uInt16 nOutlinesCount2d = rOutline2d.Count();
 
@@ -205,36 +239,7 @@ static void CalculateHorizontalScalingFactor(
     // FitTextOutlinesToShapeOutlines()
     do
     {
-        i = 0;
-        bool bScalingFactorDefined = false; // New calculation for each font size
-        for( const auto& rTextArea : rFWData.vTextAreas )
-        {
-            // calculating the width of the corresponding 2d text area
-            double fWidth = GetLength( rOutline2d.GetObject( i++ ) );
-            if ( !bSingleLineMode )
-            {
-                fWidth += GetLength( rOutline2d.GetObject( i++ ) );
-                fWidth /= 2.0;
-            }
-
-            for( const auto& rParagraph : rTextArea.vParagraphs )
-            {
-                double fTextWidth = pVirDev->GetTextWidth( rParagraph.aString );
-                if ( fTextWidth > 0.0 )
-                {
-                    double fScale = fWidth / fTextWidth;
-                    if ( !bScalingFactorDefined )
-                    {
-                        fScalingFactor = fScale;
-                        bScalingFactorDefined = true;
-                    }
-                    else if (fScale < fScalingFactor)
-                    {
-                        fScalingFactor = fScale;
-                    }
-                }
-            }
-        }
+        UpdateScalingMode(rFWData, rOutline2d, bSingleLineMode, pVirDev, fScalingFactor);
 
         if (fScalingFactor < 1.0)
         {
