@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <rtl/uri.hxx>
 #include <utility>
 
 #include <string.h>
@@ -1090,8 +1091,13 @@ void Content::transfer( const css::ucb::TransferInfo& aTransferInfo, const css::
     if (!sDest.endsWith("/")) {
         sDest += "/";
     }
-    if (aTransferInfo.NewTitle.getLength())
-        sDest += aTransferInfo.NewTitle;
+    if (!aTransferInfo.NewTitle.isEmpty())
+    {
+        sDest += rtl::Uri::encode( aTransferInfo.NewTitle,
+                                     rtl_UriCharClassPchar,
+                                     rtl_UriEncodeIgnoreEscapes,
+                                     RTL_TEXTENCODING_UTF8 );
+    }
     else
         sDest += OUString::createFromAscii(g_file_get_basename(getGFile()));
 
