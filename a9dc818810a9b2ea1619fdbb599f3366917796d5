@@ -51,6 +51,24 @@
       "parentUuid": "a51e6711_0865cfeb",
       "revId": "a9dc818810a9b2ea1619fdbb599f3366917796d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d79e8b80_cc81310a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-18T21:42:32Z",
+      "side": 1,
+      "message": "\u003e No. My scenario is simply just restoring the position and size on start, nothing fancy. Just start and quit LO. And fix your original observation, that the window moves without it.\n\nCan you clarify what you mean with my original observation? (Out of the top of my head, only the one from https://gerrit.libreoffice.org/c/core/+/135813 comes to mind, but that was for the more complex scenario.)\n\n\u003e Fact is we store the top-left of the frame in the registrymodifications.xcu. But gen and gtk restore it wrong, probably because of the same reason Qt is wrong: for kwin the frame extends property is set late, so the earlier window positioning code thinks there are no borders. This patch should fix that for Qt. I\u0027m on Debian Buster KDE, which is comparably old. \n\u003e \n\u003e If I simply compare with gen or gtk, starting and quitting LO, the position is always constant but wrong. gtk reacts to the \"configure\" signal to fix the border, but it doesn\u0027t reposition. Kind of worse, then the internal maGeometry is wrong too, but since it\u0027s constant, it doesn\u0027t matter.\n\nI don\u0027t really understand what \"the position is always constant but wrong\" means here.\n\nIn a quick test, all of kf5, gen and gtk3 restore the window at the same position it was when closing for me, which is what looks correct to me from a user perspective; screencast (VCL plugins used in the mentioned order): https://nextcloud.documentfoundation.org/s/BjsQajDj5PJgyrs\nThe window slightly moves when switching from kf5 to gen, which might be related to the native menu bar offset (?), but that doesn\u0027t seem problematic to me, as long as geometry remains unchanged when using the same VCL plugin again.\n\nDo you get a different behavior in your setup? Or did I just not get what the problem is?",
+      "parentUuid": "7c24eadc_0343f7ee",
+      "revId": "a9dc818810a9b2ea1619fdbb599f3366917796d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
