@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a9ccb16_035b095e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-06-18T15:09:05Z",
+      "side": 1,
+      "message": "Hi Eike,\nIf you agree with this patch, I will propose unit test next.",
+      "revId": "516d1bb7332ebc037a810dccb1c5adb3e1c8d8d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
