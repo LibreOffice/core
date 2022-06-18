@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c5f4bd1_dad842e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-06-18T06:35:20Z",
+      "side": 1,
+      "message": "I think there is a way we can add this to a list of revisions to ignore during a bisect? it would be nice to remove these comments.",
+      "revId": "b155908590dcfeb4da52558cc0b012b44737f8bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
