@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ade7b083_89abfa04",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-18T22:39:57Z",
+      "side": 1,
+      "message": "\u003e Am I correct in assuming I don\u0027t need to change the commit message now that the patch has been merged?\n\nYeah - you simply can\u0027t, as the patch is now in git. My comment was more of a FYI, to share / show my reasoning. It\u0027s not a rule and YMMV, but since you\u0027re new; I personally always want to know, why \"stuff\" is done one way or another, so I hope this insight into my train-of-thought might be helpful to you.",
+      "parentUuid": "b5642741_2b7089b7",
+      "range": {
+        "startLine": 7,
+        "startChar": 27,
+        "endLine": 7,
+        "endChar": 56
+      },
+      "revId": "243ffb1604e784a5dbc455a32681af32dd0126af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "2132b527_9270b64c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 8
