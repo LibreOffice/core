@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76c28eff_b54648b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-18T18:13:58Z",
+      "side": 1,
+      "message": "This info isn\u0027t needed. It\u0027s somewhat helpful, if someone applies some defined change to the whole LO source, so they generate multiple patches, one per directory, to keep it manageable and easier conflict free. But this change just patches two random files and they aren\u0027t in /include, where C++98 restrictions apply for the public API. And please just reply in Gerrit and not with private mails, if you don\u0027t have somewhat \"secret\" comments. Others might chime in too and they wouldn\u0027t know about private conversations.",
+      "range": {
+        "startLine": 7,
+        "startChar": 27,
+        "endLine": 7,
+        "endChar": 56
+      },
+      "revId": "243ffb1604e784a5dbc455a32681af32dd0126af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
