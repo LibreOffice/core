@@ -28,7 +28,7 @@
 using namespace svx;
 
 #define DEFAULT_VALUE          0
-#define MAX_DURCH             5670
+#define MAX_DURCH               31680 // tdf#68335: 1584 pt for UX interoperability with Word
 #define MAX_SW                  1709400
 #define MAX_SC_SD               116220200
 #define NEGA_MAXVALUE          -10000000
