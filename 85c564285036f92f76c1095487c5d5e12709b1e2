@@ -88,6 +88,24 @@
       "parentUuid": "c71dbbdf_8f341c86",
       "revId": "85c564285036f92f76c1095487c5d5e12709b1e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8587208_e5b57e3c",
+        "filename": "vcl/qt5/QtFrame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-18T22:24:16Z",
+      "side": 0,
+      "message": "\u003e An other patch could #ifdef the X11 details from screensaverinhibitor.hxx, so the DBUS path could be used even without X11.\n\nI didn\u0027t touch this, please feel free if you want. :)",
+      "parentUuid": "4a8b5474_b95c8a5c",
+      "revId": "85c564285036f92f76c1095487c5d5e12709b1e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
