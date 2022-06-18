@@ -12,10 +12,13 @@
 #include <config_vclplug.h>
 
 #include <QtCore/QVersionNumber>
-#include <QtX11Extras/QX11Info>
 
 #include <QtInstance.hxx>
 #include <QtTools.hxx>
+
+#if CHECK_QT5_USING_X11
+#include <QtX11Extras/QX11Info>
+#endif
 
 #if QT5_HAVE_XCB_ICCCM
 #include <xcb/xcb_icccm.h>
@@ -41,16 +44,19 @@ xcb_atom_t QtX11Support::lookupAtom(xcb_connection_t* pConn, const char* const s
 
 void QtX11Support::fetchAtoms()
 {
+#if CHECK_QT5_USING_X11
     if (m_bDidAtomLookups)
         return;
     m_bDidAtomLookups = true;
 
     xcb_connection_t* pXcbConn = QX11Info::connection();
     m_nWindowGroupAtom = lookupAtom(pXcbConn, m_sWindowGroupName);
+#endif
 }
 
 void QtX11Support::setApplicationID(const xcb_window_t nWinId, std::u16string_view rWMClass)
 {
+#if CHECK_QT5_USING_X11
     OString aResClass = OUStringToOString(rWMClass, RTL_TEXTENCODING_ASCII_US);
     const char* pResClass
         = !aResClass.isEmpty() ? aResClass.getStr() : SalGenericSystem::getFrameClassName();
@@ -65,6 +71,10 @@ void QtX11Support::setApplicationID(const xcb_window_t nWinId, std::u16string_vi
     xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, nWinId, XCB_ATOM_WM_CLASS,
                         XCB_ATOM_STRING, 8, data_len, data);
     delete[] data;
+#else
+    Q_UNUSED(nWinId);
+    Q_UNUSED(rWMClass);
+#endif
 }
 
 bool QtX11Support::fixICCCMwindowGroup(const xcb_window_t nWinId)
