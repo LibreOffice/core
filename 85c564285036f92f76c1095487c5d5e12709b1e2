@@ -34,6 +34,24 @@
       "parentUuid": "39abf7a1_f275aae8",
       "revId": "85c564285036f92f76c1095487c5d5e12709b1e2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad501358_5185130d",
+        "filename": "vcl/qt5/QtFrame.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-18T20:41:25Z",
+      "side": 0,
+      "message": "Hm, but then, unx/screensaverinhibitor.hxx appears to have various X11 includes, so looks X11-specific at first glance? (I have no idea about the underlying functionality, was just looking at the build failure.)",
+      "parentUuid": "1a55e7a1_7be900e0",
+      "revId": "85c564285036f92f76c1095487c5d5e12709b1e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
