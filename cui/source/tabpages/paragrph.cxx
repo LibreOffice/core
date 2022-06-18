@@ -65,8 +65,7 @@ const WhichRangesContainer SvxExtParagraphTabPage::pExtRanges(svl::Items<
     SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP        // 10065 - 10066
 >);
 
-#define MAX_DURCH 5670      // 10 cm makes sense as maximum interline lead
-                            // according to BP
+#define MAX_DURCH 31680     // tdf#68335: 1584 pt for UX interoperability with Word
 #define FIX_DIST_DEF 283    // standard fix distance 0,5 cm
 
 namespace {
