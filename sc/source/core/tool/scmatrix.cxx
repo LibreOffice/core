@@ -238,7 +238,7 @@ public:
 
     ScMatrixImpl( size_t nC, size_t nR, const std::vector<double>& rInitVals );
 
-    ~ScMatrixImpl() COVERITY_NOEXCEPT_FALSE;
+    ~ScMatrixImpl();
 
     void Clear();
     void Resize(SCSIZE nC, SCSIZE nR);
@@ -390,10 +390,10 @@ ScMatrixImpl::ScMatrixImpl( size_t nC, size_t nR, const std::vector<double>& rIn
     nElementsMax -= GetElementCount();
 }
 
-ScMatrixImpl::~ScMatrixImpl() COVERITY_NOEXCEPT_FALSE
+ScMatrixImpl::~ScMatrixImpl()
 {
     nElementsMax += GetElementCount();
-    Clear();
+    suppress_fun_call_w_exception(Clear());
 }
 
 void ScMatrixImpl::Clear()
