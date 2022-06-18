@@ -629,7 +629,7 @@ SvxRTFItemStackType* SvxRTFParser::GetAttrSet_()
 
     aAttrStack.push_back( std::move(xNew) );
 
-    if (aAttrStack.size() > 256 && utl::ConfigManager::IsFuzzing())
+    if (aAttrStack.size() > 128 && utl::ConfigManager::IsFuzzing())
         throw std::range_error("ecStackOverflow");
 
     bNewGroup = false;
