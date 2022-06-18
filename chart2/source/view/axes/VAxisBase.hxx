@@ -31,8 +31,8 @@ class VAxisBase : public VAxisOrGridBase
 {
 public:
     VAxisBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
-           , AxisProperties aAxisProperties
-           , css::uno::Reference< css::util::XNumberFormatsSupplier > xNumberFormatsSupplier );
+           , const AxisProperties& rAxisProperties
+           , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~VAxisBase() override;
 
     /**

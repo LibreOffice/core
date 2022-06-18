@@ -28,7 +28,6 @@
 #include <osl/diagnose.h>
 
 #include <memory>
-#include <utility>
 
 namespace chart
 {
@@ -37,11 +36,11 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
 VAxisBase::VAxisBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
-                     , AxisProperties aAxisProperties
-                     , uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier )
+                     , const AxisProperties& rAxisProperties
+                     , const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
             : VAxisOrGridBase( nDimensionIndex, nDimensionCount )
-            , m_xNumberFormatsSupplier(std::move( xNumberFormatsSupplier ))
-            , m_aAxisProperties(std::move( aAxisProperties ))
+            , m_xNumberFormatsSupplier( xNumberFormatsSupplier )
+            , m_aAxisProperties( rAxisProperties )
             , m_bUseTextLabels( false )
             , m_bReCreateAllTickInfos( true )
             , m_bRecordMaximumTextSize(false)
