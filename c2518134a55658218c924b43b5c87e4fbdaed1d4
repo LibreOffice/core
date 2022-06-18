@@ -16,6 +16,24 @@
       "message": "Did you forget to rename this back to mfValue before commit? Perhaps it would still make sense to do so as a follow-up change.",
       "revId": "c2518134a55658218c924b43b5c87e4fbdaed1d4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7713b11_a1d4533c",
+        "filename": "sc/inc/cellvalue.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-18T14:39:32Z",
+      "side": 1,
+      "message": "thanks, should be sorted with https://gerrit.libreoffice.org/c/core/+/136074",
+      "parentUuid": "115c8515_5ff88180",
+      "revId": "c2518134a55658218c924b43b5c87e4fbdaed1d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
