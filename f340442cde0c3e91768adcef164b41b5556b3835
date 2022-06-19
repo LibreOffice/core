@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca187ab3_55a90993",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-19T21:20:55Z",
+      "side": 1,
+      "message": "2 locations because one is used for parag style management in sidebar, the other one in the menue.",
+      "revId": "f340442cde0c3e91768adcef164b41b5556b3835",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
