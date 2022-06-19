@@ -34,8 +34,8 @@ Sub Assert(Assertion As Boolean, Optional testId As String, Optional testComment
         If Not IsMissing(testId) Then
             testMsg = " " + testId
         End If
-        If Not IsMissing(testComment) And Not (testComment = "") Then
-            testMsg = testMsg + " (" + testComment + ")"
+        If Not IsMissing(testComment) Then
+            If Not (testComment = "") Then testMsg = testMsg + " (" + testComment + ")"
         End If
 
         result = result & Chr$(10) & " Failed:" & testMsg
@@ -50,6 +50,12 @@ Sub AssertEqual(actual As Variant, expected As Variant, testName As String)
         result = result & Chr$(10) & " Failed: " & testName & " returned " & actual & ", expected " & expected
         failCount = failCount + 1
     End If
+End Sub
+
+' Same as AssertEqual, but also checks actual and expected types
+Sub AssertEqualStrict(actual As Variant, expected As Variant, testName As String)
+    AssertEqual(actual, expected, testName)
+    AssertEqual(TypeName(actual), TypeName(expected), testName & " type mismatch:")
 End Sub
 
 Sub AssertEqualApprox(actual, expected, epsilon, testName As String)

@@ -29,6 +29,7 @@
 #include <basic/sbxmeth.hxx>
 #include <sbxprop.hxx>
 #include <svl/SfxBroadcaster.hxx>
+#include "sbxdec.hxx"
 #include "sbxres.hxx"
 
 
@@ -262,6 +263,9 @@ bool SbxObject::Call( const OUString& rName, SbxArray* pParam )
     SbxVariable* pMeth = FindQualified( rName, SbxClassType::DontCare);
     if( dynamic_cast<const SbxMethod*>( pMeth) )
     {
+        // tdf#149622 - clear return value of the method before calling it
+        pMeth->Clear();
+
         // FindQualified() might have struck already!
         if( pParam )
         {
@@ -848,6 +852,36 @@ SbxMethod::~SbxMethod()
 SbxClassType SbxMethod::GetClass() const
 {
     return SbxClassType::Method;
+}
+
+void SbxMethod::Clear()
+{
+    // Release referenced data, and reset data type to the function return type
+    // Implementation similar to SbxValue::SetType
+    // tdf#143582: Don't take "read-only" flag into account, allow clearing method return value
+    switch (aData.eType)
+    {
+        case SbxSTRING:
+            delete aData.pOUString;
+            break;
+        case SbxOBJECT:
+            if (aData.pObj)
+            {
+                if (aData.pObj != this)
+                {
+                    bool bParentProp = (GetUserData() & 0xFFFF) == 5345; // See sbxvalue.cxx
+                    if (!bParentProp)
+                        aData.pObj->ReleaseRef();
+                }
+            }
+            break;
+        case SbxDECIMAL:
+            releaseDecimalPtr(aData.pDecimal);
+            break;
+        default:
+            break;
+    }
+    aData.clear(IsFixed() ? aData.eType : SbxEMPTY);
 }
 
 SbxProperty::SbxProperty( const OUString& r, SbxDataType t )

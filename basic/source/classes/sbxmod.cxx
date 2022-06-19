@@ -2064,10 +2064,7 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
         StarBASIC::Error( ERRCODE_BASIC_BAD_PROP_VALUE );
 
     // tdf#143582 - clear return value of the method before calling it
-    const SbxFlagBits nSavFlags = GetFlags();
-    SetFlag(SbxFlagBits::ReadWrite | SbxFlagBits::NoBroadcast);
     Clear();
-    SetFlags(nSavFlags);
 
     Get( aVals );
     if ( pRet )
