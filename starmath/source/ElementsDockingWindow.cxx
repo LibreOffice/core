@@ -454,6 +454,7 @@ const std::vector<TranslateId>& SmElementsControl::categories()
 
 SmElementsControl::SmElementsControl(std::unique_ptr<weld::IconView> pIconView)
     : mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
+    , mnCurrentSetIndex(-1)
     , m_nSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
     , mbVerticalMode(true)
     , mpIconView(std::move(pIconView))
