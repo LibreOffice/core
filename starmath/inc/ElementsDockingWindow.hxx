@@ -40,7 +40,7 @@ class SmElementsControl
 
     SmDocShell*   mpDocShell;
     SmFormat      maFormat;
-    size_t        mnCurrentSetIndex;
+    int           mnCurrentSetIndex;
     sal_uInt16    m_nSmSyntaxVersion;
 
     bool          mbVerticalMode;
@@ -50,7 +50,7 @@ class SmElementsControl
     Link<OUString, void> maSelectHdlLink;
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
-    void addElements(size_t nCategory);
+    void addElements(int nCategory);
 
     void build();
 
@@ -66,7 +66,7 @@ public:
     ~SmElementsControl();
 
     static const std::vector<TranslateId>& categories();
-    void setElementSetIndex(size_t nSetIndex);
+    void setElementSetIndex(int nSetIndex);
 
     void setVerticalMode(bool bVertical);
 
