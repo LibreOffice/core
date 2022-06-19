@@ -1033,19 +1033,16 @@ cmd/32/colorview.png cmd/32/graphicfilterinvert.png
 cmd/32/grafinvert.png cmd/32/graphicfilterinvert.png
 cmd/32/grafmode.png cmd/32/graphicdialog.png
 cmd/32/graphicfilterposter.png cmd/32/graphicdialog.png
-cmd/32/objecttitledescription.png cmd/32/insertcaptiondialog.png
 
 cmd/lc_colorview.png cmd/lc_graphicfilterinvert.png
 cmd/lc_grafinvert.png cmd/lc_graphicfilterinvert.png
 cmd/lc_grafmode.png cmd/lc_graphicdialog.png
 cmd/lc_graphicfilterposter.png cmd/lc_graphicdialog.png
-cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
 
 cmd/sc_colorview.png cmd/sc_graphicfilterinvert.png
 cmd/sc_grafinvert.png cmd/sc_graphicfilterinvert.png
 cmd/sc_grafmode.png cmd/sc_graphicdialog.png
 cmd/sc_graphicfilterposter.png cmd/sc_graphicdialog.png
-cmd/sc_objecttitledescription.png cmd/sc_insertcaptiondialog.png
 
 # shapes
 cmd/32/arrowshapes.left-right-arrow.png cmd/32/arrowshapes.png
