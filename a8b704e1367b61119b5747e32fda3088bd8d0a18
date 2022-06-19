@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b622d5_5490abf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-06-19T16:23:33Z",
+      "side": 1,
+      "message": "Some known (pre-existing) issues:\n- There is some rounding error in the Paragraph - Indents \u0026 Spacing tab, so it appears as 1587 pt. But it is correct in the sidebar, which does the rounding a bit differently.\n- Also the fixed line spacing field rounds the max value differently, so the max is 55.9 instead of 56 like for above/below spacing.\n- In the sidebar the fixed line spacing box has no max limit set, unlike for the above/below spacing boxes.",
+      "revId": "a8b704e1367b61119b5747e32fda3088bd8d0a18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
