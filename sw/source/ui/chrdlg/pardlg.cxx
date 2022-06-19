@@ -215,7 +215,7 @@ void SwParaDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
             aNames.insert(pBase->GetName());
             pBase = pPool->Next();
         }
-        aNames.erase("No List");
+        aNames.erase(SwResId(STR_POOLNUMRULE_NOLIST));
         for (const auto& rName : aNames)
             rBox.append_text(rName);
     }
