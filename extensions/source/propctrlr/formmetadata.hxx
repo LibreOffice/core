@@ -35,7 +35,7 @@ namespace pcr
     class OPropertyInfoService final
                 :public IPropertyInfoService
     {
-        static sal_uInt16               s_nCount;
+        static std::size_t              s_nCount;
         static OPropertyInfoImpl*       s_pPropertyInfos;
         // TODO: a real structure which allows quick access by name as well as by id
 
