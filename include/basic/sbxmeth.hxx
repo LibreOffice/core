@@ -36,6 +36,7 @@ public:
     virtual SbxClassType GetClass() const override;
     bool IsRuntimeFunction() const { return mbIsRuntimeFunction; }
     SbxDataType GetRuntimeFunctionReturnType() const{ return mbRuntimeFunctionReturnType; }
+    virtual void Clear() override;
 };
 
 #endif
