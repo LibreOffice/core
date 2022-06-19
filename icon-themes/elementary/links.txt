@@ -2669,10 +2669,6 @@ cmd/sc_librelogo-stop.png cmd/sc_basicstop.png
 cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
 
 # Other
-cmd/32/objecttitledescription.png cmd/32/insertcaptiondialog.png
-cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
-cmd/sc_objecttitledescription.png cmd/sc_insertcaptiondialog.png
-
 cmd/32/renametable.png cmd/32/name.png
 cmd/lc_renametable.png cmd/lc_name.png
 cmd/sc_renametable.png cmd/sc_name.png
