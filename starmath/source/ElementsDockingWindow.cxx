@@ -454,6 +454,7 @@ const std::vector<TranslateId>& SmElementsControl::categories()
 
 SmElementsControl::SmElementsControl(std::unique_ptr<weld::IconView> pIconView)
     : mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
+    , mnCurrentSetIndex(-1)
     , m_nSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
     , mbVerticalMode(true)
     , mpIconView(std::move(pIconView))
@@ -540,7 +541,7 @@ OUString SmElementsControl::GetElementHelpText(const OUString& itemId)
     return weld::fromId<ElementData*>(itemId)->maHelpText;
 }
 
-void SmElementsControl::setElementSetIndex(size_t nSetIndex)
+void SmElementsControl::setElementSetIndex(int nSetIndex)
 {
     if (mnCurrentSetIndex == nSetIndex)
         return;
@@ -548,12 +549,14 @@ void SmElementsControl::setElementSetIndex(size_t nSetIndex)
     build();
 }
 
-void SmElementsControl::addElements(size_t nCategory)
+void SmElementsControl::addElements(int nCategory)
 {
     mpIconView->freeze();
     mpIconView->clear();
     mpIconView->set_item_width(0);
     maItemDatas.clear();
+
+    assert(nCategory >= 0 && o3tl::make_unsigned(nCategory) < s_a5CategoryDescriptions.size());
 
     const auto& [aElementsArray, aElementsArraySize] = s_a5CategoryDescriptions[nCategory];
 
