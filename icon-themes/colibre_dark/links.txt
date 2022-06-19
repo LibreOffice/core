@@ -1,11 +1,11 @@
+<<<<<<< HEAD   (5704c3 upstream Skia fix for Vulkan crash on texture binding (tdf#1)
+=======
 # avmedia
 # ==============================================
-avmedia/res/av02048.png cmd/sc_open.png
 avmedia/res/av02049.png cmd/sc_runbasic.png
 avmedia/res/av02050.png cmd/sc_mediapause.png
 avmedia/res/av02051.png cmd/sc_basicstop.png
 avmedia/res/av02052.png cmd/sc_mediarepeat.png
-avmedia/res/av02053.png cmd/sc_ok.png
 avmedia/res/av02054.png cmd/sc_mediamute.png
 avmedia/res/avl02048.png cmd/lc_open.png
 avmedia/res/avl02049.png cmd/lc_runbasic.png
@@ -21,8 +21,6 @@ chart2/res/dataeditor_icon01.png cmd/sc_insertrowsafter.png
 chart2/res/dataeditor_icon02.png cmd/sc_insertcolumnsafter.png
 chart2/res/dataeditor_icon03.png cmd/sc_deleterows.png
 chart2/res/dataeditor_icon04.png cmd/sc_deletecolumns.png
-chart2/res/netlinepoint_52x60.png chart2/res/net_52x60.png
-chart2/res/netlinepointstack_52x60.png chart2/res/netstack_52x60.png
 chart2/res/selectrange.png formula/res/refinp1.png
 
 cmd/32/charttitlemenu.png cmd/32/toggletitle.png
@@ -1859,7 +1857,6 @@ cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/sc_setdefault.png cmd/sc_resetattributes.png
 
 # Impress
-sfx2/res/symphony/sidebar-transition-small.png cmd/sc_slidechangewindow.png
 sfx2/res/symphony/sidebar-transition-large.png cmd/lc_slidechangewindow.png
 
 # Toggle graphics visibility in Writer
@@ -2052,7 +2049,6 @@ res/im30820.png cmd/sc_scriptorganizer.png
 res/im30821.png cmd/sc_choosemacro.png
 res/info.png cmd/lc_helpindex.png
 res/info_16.png cmd/sc_helpindex.png
-res/lc05504.png cmd/lc_print.png
 res/lc05509.png cmd/lc_print.png
 res/lc05539.png cmd/lc_designerdialog.png
 res/lc05678.png cmd/lc_inserthyperlinkcontrol.png
@@ -2060,9 +2056,6 @@ res/lc05700.png cmd/lc_redo.png
 res/lc05701.png cmd/lc_undo.png
 res/lc05710.png cmd/lc_cut.png
 res/lc05711.png cmd/lc_copy.png
-res/lc05961.png cmd/lc_recsearch.png
-res/lc06300.png cmd/lc_nextrecord.png
-res/lc06301.png cmd/lc_prevrecord.png
 res/lc10711.png cmd/lc_removefiltersort.png
 res/lc10715.png cmd/lc_datafilterstandardfilter.png
 res/lc10716.png cmd/lc_datafilterautofilter.png
@@ -2222,8 +2215,6 @@ res/sx10728.png cmd/sc_formattedfield.png
 res/sx10757.png cmd/sc_timefield.png
 res/sx10768.png cmd/sc_scrollbar.png
 res/sx10769.png cmd/sc_spinbutton.png
-res/sx18002.png res/plus.png
-res/sx18003.png res/minus.png
 
 # sc
 # ==============================================
@@ -2310,7 +2301,6 @@ sfx2/res/deleterow.png cmd/sc_cancel.png
 sfx2/res/doccl.png cmd/sc_newdoc.png
 sfx2/res/exec_action.png cmd/sc_optionstreedialog.png
 sfx2/res/favourite.png cmd/sc_insertbookmark.png
-sfx2/res/favourite_big.png cmd/lc_insertbookmark.png
 sfx2/res/hlpdoc.png cmd/sc_helpindex.png
 sfx2/res/minus.png res/minus.png
 sfx2/res/newex.png res/plus.png
@@ -2322,28 +2312,15 @@ sfx2/res/styfam1.png cmd/sc_charfontname.png
 sfx2/res/styfam2.png cmd/sc_controlcodes.png
 sfx2/res/styfam3.png cmd/sc_linestyle.png
 sfx2/res/styfam4.png cmd/sc_showsinglepage.png
-sfx2/res/symphony/sidebar-3d-large.png cmd/lc_cube.png
-sfx2/res/symphony/sidebar-3d-small.png cmd/sc_cube.png
 sfx2/res/symphony/sidebar-animation-large.png cmd/lc_diaeffect.png
-sfx2/res/symphony/sidebar-animation-small.png cmd/sc_diaeffect.png
-sfx2/res/symphony/sidebar-colors-large.png cmd/lc_colorsettings.png
 sfx2/res/symphony/sidebar-colors-small.png cmd/sc_colorsettings.png
-sfx2/res/symphony/sidebar-eyedropper-large.png cmd/lc_bmpmask.png
-sfx2/res/symphony/sidebar-eyedropper-small.png cmd/sc_bmpmask.png
 sfx2/res/symphony/sidebar-functions-large.png cmd/lc_dbviewfunctions.png
-sfx2/res/symphony/sidebar-functions-small.png cmd/sc_dbviewfunctions.png
 sfx2/res/symphony/sidebar-gallery-large.png cmd/lc_gallery.png
-sfx2/res/symphony/sidebar-gallery-small.png cmd/sc_gallery.png
-sfx2/res/symphony/sidebar-imganim-large.png cmd/lc_diaeffect.png
-sfx2/res/symphony/sidebar-imganim-small.png cmd/sc_diaeffect.png
 sfx2/res/symphony/sidebar-navigator-large.png cmd/lc_navigator.png
-sfx2/res/symphony/sidebar-navigator-small.png cmd/sc_navigator.png
 sfx2/res/symphony/sidebar-property-large.png cmd/lc_configuredialog.png
 sfx2/res/symphony/sidebar-property-small.png cmd/sc_configuredialog.png
 sfx2/res/symphony/sidebar-style-large.png cmd/lc_designerdialog.png
-sfx2/res/symphony/sidebar-style-small.png cmd/sc_designerdialog.png
 sfx2/res/symphony/sidebar-template-large.png cmd/lc_slidemasterpage.png
-sfx2/res/symphony/sidebar-template-small.png cmd/sc_slidemasterpage.png
 
 # startmath
 # ==============================================
@@ -2481,6 +2458,8 @@ sw/res/nc20008.png cmd/sc_insertreferencefield.png
 sw/res/nc20009.png cmd/sc_insertindexesentry.png
 sw/res/nc20010.png cmd/sc_shownote.png
 sw/res/nc20011.png cmd/sc_insertdraw.png
+sw/res/nc20012.png cmd/sc_insertfootnote.png
+sw/res/nc20013.png cmd/sc_insertendnote.png
 sw/res/re01.png cmd/lc_unsetcellsreadonly.png
 sw/res/re02.png cmd/lc_unsetcellsreadonly.png
 sw/res/re03.png cmd/sc_protect.png
@@ -2739,3 +2718,47 @@ cmd/sc_redactionpreviewexport.png cmd/sc_exportdirecttopdf.png
 # Extension Dialog
 cmd/sc_stars-full.png sc/res/icon-set-stars-full.png
 cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png
+
+# Contextual Single Toolbar
+cmd/32/zoom-more.png cmd/32/optionstreedialog.png
+cmd/32/accepttrackedchanges-more.png cmd/32/optionstreedialog.png
+cmd/32/fontdialog-more.png cmd/32/optionstreedialog.png
+cmd/32/paragraphdialog-more.png cmd/32/optionstreedialog.png
+cmd/32/tabledialog-more.png cmd/32/optionstreedialog.png
+cmd/32/transformdialog-more.png cmd/32/optionstreedialog.png
+cmd/32/graphicdialog-more.png cmd/32/optionstreedialog.png
+cmd/32/framedialog-more.png cmd/32/optionstreedialog.png
+cmd/32/objectdialog-more.png cmd/32/optionstreedialog.png
+cmd/32/borderdialog-more.png cmd/32/optionstreedialog.png
+cmd/32/textwrap-more.png cmd/32/optionstreedialog.png
+cmd/32/formatarea-more.png cmd/32/optionstreedialog.png
+cmd/32/formatline-more.png cmd/32/optionstreedialog.png
+
+cmd/lc_zoom-more.png cmd/lc_optionstreedialog.png
+cmd/lc_accepttrackedchanges-more.png cmd/lc_optionstreedialog.png
+cmd/lc_fontdialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_paragraphdialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_tabledialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_transformdialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_graphicdialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_framedialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_objectdialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_borderdialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_textwrap-more.png cmd/lc_optionstreedialog.png
+cmd/lc_formatarea-more.png cmd/lc_optionstreedialog.png
+cmd/lc_formatline-more.png cmd/lc_optionstreedialog.png
+
+cmd/sc_zoom-more.png sfx2/res/symphony/open_more.png
+cmd/sc_accepttrackedchanges-more.png sfx2/res/symphony/open_more.png
+cmd/sc_fontdialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_paragraphdialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_tabledialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_transformdialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_graphicdialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_framedialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_objectdialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_borderdialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_textwrap-more.png sfx2/res/symphony/open_more.png
+cmd/sc_formatarea-more.png sfx2/res/symphony/open_more.png
+cmd/sc_formatline-more.png sfx2/res/symphony/open_more.png
+>>>>>>> CHANGE (cb2262 Colibre: tdf#149008 differentiate Description and Caption ic)
