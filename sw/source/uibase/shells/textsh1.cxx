@@ -255,8 +255,8 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std:
 
 static short lcl_AskRedlineFlags(weld::Window *pWin)
 {
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWin, "modules/swriter/ui/queryredlinedialog.ui"));
-    std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QueryRedlineDialog"));
+    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWin, "svx\uiconfig\ui\acceptrejectchangesdialog.ui"));
+    std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("acceptrejectchangesdialog"));
     return xQBox->run();
 }
 
