@@ -31,15 +31,6 @@ namespace svgio::svgreader
         {
         }
 
-        SvgStyleNode::~SvgStyleNode()
-        {
-            while(!maSvgStyleAttributes.empty())
-            {
-                delete *(maSvgStyleAttributes.end() - 1);
-                maSvgStyleAttributes.pop_back();
-            }
-        }
-
         // #i125258# no parent when we are a CssStyle holder to break potential loops because
         // when using CssStyles we jump uncontrolled inside the node tree hierarchy
         bool SvgStyleNode::supportsParentStyle() const
@@ -148,17 +139,11 @@ namespace svgio::svgreader
             if(aSelectors.isEmpty() || aContent.isEmpty())
                 return;
 
-            // create new style and add to local list (for ownership control)
-            SvgStyleAttributes* pNewStyle = new SvgStyleAttributes(*this);
-            maSvgStyleAttributes.push_back(pNewStyle);
-
-            // fill with content
-            pNewStyle->readCssStyle(aContent);
-
             // comma-separated split (Css abbreviation for same style for multiple selectors)
             const sal_Int32 nLen(aSelectors.getLength());
             sal_Int32 nPos(0);
             OUStringBuffer aToken;
+            SvgStyleAttributes* pCurrentStyle;
 
             while(nPos < nLen)
             {
@@ -168,9 +153,22 @@ namespace svgio::svgreader
 
                 const OUString aSingleName(aToken.makeStringAndClear().trim());
 
+                // add the current css class only if wasn't previously added
+                // this way if a class exists twice in aSelectors it won't be overwritten
+                if (maSvgStyleAttributes.find(aSingleName) == maSvgStyleAttributes.end())
+                {
+                    // create new style and add to local list (for ownership control) and
+                    // in case it's written to again in future classes to prevent overwrites
+                    maSvgStyleAttributes[aSingleName] = std::make_unique<SvgStyleAttributes>(*this);
+                }
+                pCurrentStyle = maSvgStyleAttributes[aSingleName].get();
+
+                // fill with content
+                pCurrentStyle->readCssStyle(aContent);
+
                 if(aSingleName.getLength())
                 {
-                    addCssStyleSheet(aSingleName, *pNewStyle);
+                    addCssStyleSheet(aSingleName, *pCurrentStyle);
                 }
 
                 if(nInitPos == nPos)
