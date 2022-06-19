@@ -262,6 +262,12 @@ bool SbxObject::Call( const OUString& rName, SbxArray* pParam )
     SbxVariable* pMeth = FindQualified( rName, SbxClassType::DontCare);
     if( dynamic_cast<const SbxMethod*>( pMeth) )
     {
+        // tdf#149622 - clear return value of the method before calling it
+        const SbxFlagBits nSavFlags = pMeth->GetFlags();
+        pMeth->SetFlag(SbxFlagBits::ReadWrite | SbxFlagBits::NoBroadcast);
+        pMeth->Clear();
+        pMeth->SetFlags(nSavFlags);
+
         // FindQualified() might have struck already!
         if( pParam )
         {
