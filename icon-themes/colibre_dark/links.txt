@@ -909,19 +909,16 @@ cmd/32/colorview.png cmd/32/graphicfilterinvert.png
 cmd/32/grafinvert.png cmd/32/graphicfilterinvert.png
 cmd/32/grafmode.png cmd/32/graphicdialog.png
 cmd/32/graphicfilterposter.png cmd/32/graphicdialog.png
-cmd/32/objecttitledescription.png cmd/32/insertcaptiondialog.png
 
 cmd/lc_colorview.png cmd/lc_graphicfilterinvert.png
 cmd/lc_grafinvert.png cmd/lc_graphicfilterinvert.png
 cmd/lc_grafmode.png cmd/lc_graphicdialog.png
 cmd/lc_graphicfilterposter.png cmd/lc_graphicdialog.png
-cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
 
 cmd/sc_colorview.png cmd/sc_graphicfilterinvert.png
 cmd/sc_grafinvert.png cmd/sc_graphicfilterinvert.png
 cmd/sc_grafmode.png cmd/sc_graphicdialog.png
 cmd/sc_graphicfilterposter.png cmd/sc_graphicdialog.png
-cmd/sc_objecttitledescription.png cmd/sc_insertcaptiondialog.png
 
 # shapes
 cmd/32/arrowshapes.left-right-arrow.png cmd/32/arrowshapes.png
@@ -2719,3 +2716,46 @@ cmd/sc_redactionpreviewexport.png cmd/sc_exportdirecttopdf.png
 # Extension Dialog
 cmd/sc_stars-full.png sc/res/icon-set-stars-full.png
 cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png
+
+# Contextual Single Toolbar
+cmd/32/zoom-more.png cmd/32/optionstreedialog.png
+cmd/32/accepttrackedchanges-more.png cmd/32/optionstreedialog.png
+cmd/32/fontdialog-more.png cmd/32/optionstreedialog.png
+cmd/32/paragraphdialog-more.png cmd/32/optionstreedialog.png
+cmd/32/tabledialog-more.png cmd/32/optionstreedialog.png
+cmd/32/transformdialog-more.png cmd/32/optionstreedialog.png
+cmd/32/graphicdialog-more.png cmd/32/optionstreedialog.png
+cmd/32/framedialog-more.png cmd/32/optionstreedialog.png
+cmd/32/objectdialog-more.png cmd/32/optionstreedialog.png
+cmd/32/borderdialog-more.png cmd/32/optionstreedialog.png
+cmd/32/textwrap-more.png cmd/32/optionstreedialog.png
+cmd/32/formatarea-more.png cmd/32/optionstreedialog.png
+cmd/32/formatline-more.png cmd/32/optionstreedialog.png
+
+cmd/lc_zoom-more.png cmd/lc_optionstreedialog.png
+cmd/lc_accepttrackedchanges-more.png cmd/lc_optionstreedialog.png
+cmd/lc_fontdialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_paragraphdialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_tabledialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_transformdialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_graphicdialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_framedialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_objectdialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_borderdialog-more.png cmd/lc_optionstreedialog.png
+cmd/lc_textwrap-more.png cmd/lc_optionstreedialog.png
+cmd/lc_formatarea-more.png cmd/lc_optionstreedialog.png
+cmd/lc_formatline-more.png cmd/lc_optionstreedialog.png
+
+cmd/sc_zoom-more.png sfx2/res/symphony/open_more.png
+cmd/sc_accepttrackedchanges-more.png sfx2/res/symphony/open_more.png
+cmd/sc_fontdialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_paragraphdialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_tabledialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_transformdialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_graphicdialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_framedialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_objectdialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_borderdialog-more.png sfx2/res/symphony/open_more.png
+cmd/sc_textwrap-more.png sfx2/res/symphony/open_more.png
+cmd/sc_formatarea-more.png sfx2/res/symphony/open_more.png
+cmd/sc_formatline-more.png sfx2/res/symphony/open_more.png
