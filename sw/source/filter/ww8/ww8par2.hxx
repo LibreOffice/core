@@ -117,14 +117,18 @@ friend class SwWW8ImplReader;
     short ImportUPX(short nLen, bool bPAP, bool bOdd);
 
     void Set1StyleDefaults();
-    void Import1Style(sal_uInt16 nNr);
+    void Import1Style(sal_uInt16 nNr,
+                      std::map<OUString, sal_Int32>& rParaCollisions,
+                      std::map<OUString, sal_Int32>& rCharCollisions);
     void RecursiveReg(sal_uInt16 nNr);
 
     void ImportNewFormatStyles();
     void ScanStyles();
     void ImportOldFormatStyles();
 
-    bool PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisStyle, sal_uInt16 nNextStyle);
+    bool PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisStyle, sal_uInt16 nNextStyle,
+                      std::map<OUString, sal_Int32>& rParaCollisions,
+                      std::map<OUString, sal_Int32>& rCharCollisions);
     void PostStyle(SwWW8StyInf const &rSI, bool bOldNoImp);
 
     WW8RStyle(const WW8RStyle&) = delete;

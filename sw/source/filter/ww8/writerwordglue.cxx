@@ -242,16 +242,19 @@ namespace myImplHelpers
     private:
         MapperImpl<C> maHelper;
         o3tl::sorted_vector<const C*> maUsedStyles;
-        C* MakeNonCollidingStyle(const OUString& rName);
+        C* MakeNonCollidingStyle(const OUString& rName,
+                                 std::map<OUString, sal_Int32>& rCollisions);
     public:
         typedef std::pair<C*, bool> StyleResult;
         explicit StyleMapperImpl(SwDoc &rDoc) : maHelper(rDoc) {}
-        StyleResult GetStyle(const OUString& rName, ww::sti eSti);
+        StyleResult GetStyle(const OUString& rName, ww::sti eSti,
+                             std::map<OUString, sal_Int32>& rCollisions);
     };
 
     template<class C>
     typename StyleMapperImpl<C>::StyleResult
-    StyleMapperImpl<C>::GetStyle(const OUString& rName, ww::sti eSti)
+    StyleMapperImpl<C>::GetStyle(const OUString& rName, ww::sti eSti,
+                                 std::map<OUString, sal_Int32>& rCollisions)
     {
         C *pRet = maHelper.GetBuiltInStyle(eSti);
 
@@ -276,7 +279,7 @@ namespace myImplHelpers
             // No commas allow in SW style names
             if (-1 != nIdx)
                 aName = rName.copy( 0, nIdx );
-            pRet = MakeNonCollidingStyle( aName );
+            pRet = MakeNonCollidingStyle(aName, rCollisions);
         }
 
         if (pRet)
@@ -286,7 +289,8 @@ namespace myImplHelpers
     }
 
     template<class C>
-    C* StyleMapperImpl<C>::MakeNonCollidingStyle(const OUString& rName)
+    C* StyleMapperImpl<C>::MakeNonCollidingStyle(const OUString& rName,
+                                                 std::map<OUString, sal_Int32>& rCollisions)
     {
         OUString aName(rName);
         C* pColl = nullptr;
@@ -299,8 +303,15 @@ namespace myImplHelpers
             if (!aName.startsWith("WW-"))
                 aName = "WW-" + aName;
 
-            sal_Int32 nI = 1;
             OUString aBaseName = aName;
+            sal_Int32 nI = 1;
+
+            // if we've seen this basename before then start at
+            // where we finished the last time
+            auto aFind = rCollisions.find(aBaseName);
+            if (aFind != rCollisions.end())
+                nI = aFind->second;
+
             while (
                     nullptr != (pColl = maHelper.GetStyle(aName)) &&
                     (nI < SAL_MAX_INT32)
@@ -308,6 +319,8 @@ namespace myImplHelpers
             {
                 aName = aBaseName + OUString::number(nI++);
             }
+
+            rCollisions.insert_or_assign(aBaseName, nI);
         }
 
         return pColl ? nullptr : maHelper.MakeStyle(aName);
@@ -462,9 +475,10 @@ namespace sw
         }
 
         ParaStyleMapper::StyleResult ParaStyleMapper::GetStyle(
-            const OUString& rName, ww::sti eSti)
+            const OUString& rName, ww::sti eSti,
+            std::map<OUString, sal_Int32>& rCollisions)
         {
-            return mpImpl->GetStyle(rName, eSti);
+            return mpImpl->GetStyle(rName, eSti, rCollisions);
         }
 
         CharStyleMapper::CharStyleMapper(SwDoc &rDoc)
@@ -477,9 +491,10 @@ namespace sw
         }
 
         CharStyleMapper::StyleResult CharStyleMapper::GetStyle(
-            const OUString& rName, ww::sti eSti)
+            const OUString& rName, ww::sti eSti,
+            std::map<OUString, sal_Int32>& rCollisions)
         {
-            return mpImpl->GetStyle(rName, eSti);
+            return mpImpl->GetStyle(rName, eSti, rCollisions);
         }
 
         FontMapExport::FontMapExport(std::u16string_view rFamilyName)

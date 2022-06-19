@@ -3799,7 +3799,10 @@ void WW8RStyle::Set1StyleDefaults()
     }
 }
 
-bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisStyle, sal_uInt16 nNextStyle)
+bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisStyle,
+                             sal_uInt16 nNextStyle,
+                             std::map<OUString, sal_Int32>& rParaCollisions,
+                             std::map<OUString, sal_Int32>& rCharCollisions)
 {
     SwFormat* pColl;
     bool bStyExist;
@@ -3808,7 +3811,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     {
         // Para-Style
         sw::util::ParaStyleMapper::StyleResult aResult =
-            mpIo->m_aParaStyleMapper.GetStyle(rSI.GetOrgWWName(), eSti);
+            mpIo->m_aParaStyleMapper.GetStyle(rSI.GetOrgWWName(), eSti, rParaCollisions);
         pColl = aResult.first;
         bStyExist = aResult.second;
     }
@@ -3816,7 +3819,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     {
         // Char-Style
         sw::util::CharStyleMapper::StyleResult aResult =
-            mpIo->m_aCharStyleMapper.GetStyle(rSI.GetOrgWWName(), eSti);
+            mpIo->m_aCharStyleMapper.GetStyle(rSI.GetOrgWWName(), eSti, rCharCollisions);
         pColl = aResult.first;
         bStyExist = aResult.second;
     }
@@ -3905,7 +3908,9 @@ void WW8RStyle::PostStyle(SwWW8StyInf const &rSI, bool bOldNoImp)
     mpIo->m_nListLevel = MAXLEVEL;
 }
 
-void WW8RStyle::Import1Style( sal_uInt16 nNr )
+void WW8RStyle::Import1Style(sal_uInt16 nNr,
+                             std::map<OUString, sal_Int32>& rParaCollisions,
+                             std::map<OUString, sal_Int32>& rCharCollisions)
 {
     if (nNr >= mpIo->m_vColl.size())
         return;
@@ -3920,14 +3925,14 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
     // valid and not NUL and not yet imported
 
     if( rSI.m_nBase < m_cstd && !mpIo->m_vColl[rSI.m_nBase].m_bImported )
-        Import1Style( rSI.m_nBase );
+        Import1Style(rSI.m_nBase, rParaCollisions, rCharCollisions);
 
     mpStStrm->Seek( rSI.m_nFilePos );
 
     sal_uInt16 nSkip;
     OUString sName;
 
-    std::unique_ptr<WW8_STD> xStd(Read1Style(nSkip, &sName));// read Style
+    std::unique_ptr<WW8_STD> xStd(Read1Style(nSkip, &sName)); // read Style
 
     if (xStd)
         rSI.SetOrgWWIdent( sName, xStd->sti );
@@ -3941,7 +3946,9 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
         return;
     }
 
-    bool bOldNoImp = PrepareStyle(rSI, static_cast<ww::sti>(xStd->sti), nNr, xStd->istdNext);
+    bool bOldNoImp = PrepareStyle(rSI, static_cast<ww::sti>(xStd->sti),
+                                  nNr, xStd->istdNext,
+                                  rParaCollisions, rCharCollisions);
 
     // if something is interpreted wrong, this should make it work again
     sal_uInt64 nPos = mpStStrm->Tell();
@@ -4461,6 +4468,9 @@ void WW8RStyle::ImportOldFormatStyles()
 
     if (iMac > nStyles) iMac = nStyles;
 
+    std::map<OUString, sal_Int32> aParaCollisions;
+    std::map<OUString, sal_Int32> aCharCollisions;
+
     for (stcp = 0; stcp < iMac; ++stcp)
     {
         sal_uInt8 stcNext(0), stcBase(0);
@@ -4492,7 +4502,9 @@ void WW8RStyle::ImportOldFormatStyles()
         if (ww::StandardStiIsCharStyle(eSti) && !aPAPXOffsets[stcp].mnSize)
             mpIo->m_vColl[stc].m_bColl = false;
 
-        bool bOldNoImp = PrepareStyle(rSI, eSti, stc, stcNext);
+        bool bOldNoImp = PrepareStyle(rSI, eSti, stc, stcNext,
+                                      aParaCollisions,
+                                      aCharCollisions);
 
         ImportSprms(aPAPXOffsets[stcp].mnOffset, aPAPXOffsets[stcp].mnSize,
             true);
@@ -4510,9 +4522,12 @@ void WW8RStyle::ImportNewFormatStyles()
 {
     ScanStyles();                       // Scan Based On
 
+    std::map<OUString, sal_Int32> aParaCollisions;
+    std::map<OUString, sal_Int32> aCharCollisions;
+
     for (sal_uInt16 i = 0; i < m_cstd; ++i) // import Styles
         if (mpIo->m_vColl[i].m_bValid)
-            Import1Style( i );
+            Import1Style(i, aParaCollisions, aCharCollisions);
 }
 
 void WW8RStyle::Import()

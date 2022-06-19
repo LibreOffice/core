@@ -162,6 +162,10 @@ namespace sw
                 in knowing if the style has either a builtin standard id, or is
                 a user defined style.
 
+                @param rCollisions
+                Cache of previous name collisions to speed up resolution
+                of later duplicates.
+
                 @return
                 The equivalent writer style packaged as a StyleResult to use
                 for this word style.
@@ -171,7 +175,8 @@ namespace sw
                 rName and WW-rName[0..SAL_MAX_INT32], which is both unlikely
                 and impossible.
             */
-            StyleResult GetStyle(const OUString& rName, ww::sti eSti);
+            StyleResult GetStyle(const OUString& rName, ww::sti eSti,
+                                 std::map<OUString, sal_Int32>& rCollisions);
         };
 
         /** Knows which writer style a given word style should be imported as
@@ -219,6 +224,10 @@ namespace sw
                 in knowing if the style has either a builtin standard id, or is
                 a user defined style.
 
+                @param rCollisions
+                Cache of previous name collisions to speed up resolution
+                of later duplicates.
+
                 @return
                 The equivalent writer style packaged as a StyleResult to use
                 for this word style.
@@ -228,7 +237,8 @@ namespace sw
                 rName and WW-rName[0..SAL_MAX_INT32], which is both unlikely
                 and impossible.
             */
-            StyleResult GetStyle(const OUString& rName, ww::sti eSti);
+            StyleResult GetStyle(const OUString& rName, ww::sti eSti,
+                                 std::map<OUString, sal_Int32>& rCollisions);
         };
 
         /** Find suitable names for exporting this font
