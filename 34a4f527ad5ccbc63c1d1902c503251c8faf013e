@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfefa59c_c902c089",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-19T18:44:59Z",
+      "side": 1,
+      "message": "I hesitated to cherry-pick this one for 7.3 because it\u0027s not a fix of a crash or hang but the patch is quite straightforward.",
+      "revId": "34a4f527ad5ccbc63c1d1902c503251c8faf013e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
