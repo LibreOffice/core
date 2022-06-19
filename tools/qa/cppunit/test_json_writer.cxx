@@ -9,24 +9,18 @@
 
 #include <sal/config.h>
 
+#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+
 #include <o3tl/deleter.hxx>
-#include <test/bootstrapfixture.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/json_writer.hxx>
 
 namespace
 {
-class JsonWriterTest : public test::BootstrapFixture
+class JsonWriterTest : public CppUnit::TestFixture
 {
 public:
-    JsonWriterTest()
-        : BootstrapFixture(true, false)
-    {
-    }
-
-    virtual void setUp() override {}
-
     void test1();
     void test2();
     void testArray();
