@@ -28,7 +28,7 @@ namespace svgio::svgreader
         {
         private:
             /// use styles
-            std::vector< SvgStyleAttributes* >      maSvgStyleAttributes;
+            std::unordered_map< OUString, std::unique_ptr<SvgStyleAttributes> > maSvgStyleAttributes;
 
             bool                                    mbTextCss : 1; // true == type is 'text/css'
 
@@ -36,7 +36,6 @@ namespace svgio::svgreader
             SvgStyleNode(
                 SvgDocument& rDocument,
                 SvgNode* pParent);
-            virtual ~SvgStyleNode() override;
 
             /// #i125258# tell if this node is allowed to have a parent style (e.g. defs do not)
             virtual bool supportsParentStyle() const override;
