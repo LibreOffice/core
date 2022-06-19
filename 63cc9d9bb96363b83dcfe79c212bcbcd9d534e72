@@ -16,6 +16,41 @@
       "message": "Does it seem ok to you? (sometimes url issues may be tricky).",
       "revId": "63cc9d9bb96363b83dcfe79c212bcbcd9d534e72",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4912b8f4_0567edbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-19T16:40:57Z",
+      "side": 1,
+      "message": "yes, thanks, the change looks good",
+      "parentUuid": "4f682145_d0b5b2d7",
+      "revId": "63cc9d9bb96363b83dcfe79c212bcbcd9d534e72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9aafc5e_2d45f51b",
+        "filename": "ucb/source/ucp/gio/gio_content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-19T16:40:57Z",
+      "side": 1,
+      "message": "Please keep sal/config.h the first thing being included, as it should be by convention.  (You could group rtl/uri.hxx with the existing sal includes, say.)",
+      "revId": "63cc9d9bb96363b83dcfe79c212bcbcd9d534e72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
