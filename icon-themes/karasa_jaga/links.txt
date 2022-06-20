@@ -365,7 +365,6 @@ cmd/32/objectmenu.png cmd/32/insertobject.png
 cmd/32/objectmirrorhorizontal.png cmd/32/fliphorizontal.png
 cmd/32/objectmirrorvertical.png cmd/32/flipvertical.png
 cmd/32/objects3dtoolbox.png cmd/32/cube.png
-cmd/32/objecttitledescription.png cmd/32/insertcaptiondialog.png
 cmd/32/open_h.png cmd/32/open.png
 cmd/32/openfromcalc.png cmd/32/open.png
 cmd/32/openfromwriter.png cmd/32/open.png
@@ -987,7 +986,6 @@ cmd/lc_objectmenu.png cmd/lc_insertobject.png
 cmd/lc_objectmirrorhorizontal.png cmd/lc_fliphorizontal.png
 cmd/lc_objectmirrorvertical.png cmd/lc_flipvertical.png
 cmd/lc_objects3dtoolbox.png cmd/lc_cube.png
-cmd/lc_objecttitledescription.png cmd/lc_insertcaptiondialog.png
 cmd/lc_open_h.png cmd/lc_open.png
 cmd/lc_openfromcalc.png cmd/lc_open.png
 cmd/lc_openfromwriter.png cmd/lc_open.png
@@ -1392,7 +1390,6 @@ cmd/sc_objectmenu.png cmd/sc_insertobject.png
 cmd/sc_objectmirrorhorizontal.png cmd/sc_fliphorizontal.png
 cmd/sc_objectmirrorvertical.png cmd/sc_flipvertical.png
 cmd/sc_objects3dtoolbox.png cmd/sc_cube.png
-cmd/sc_objecttitledescription.png cmd/sc_insertcaptiondialog.png
 cmd/sc_open_h.png cmd/sc_open.png
 cmd/sc_openfromcalc.png cmd/sc_open.png
 cmd/sc_openfromwriter.png cmd/sc_open.png
