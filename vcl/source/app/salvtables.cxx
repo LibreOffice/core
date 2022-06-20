@@ -4276,6 +4276,8 @@ public:
     virtual OUString get_id(const weld::TreeIter& rIter) const override
     {
         const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+        if (!rVclIter.iter)
+            return OUString();
         const OUString* pStr = static_cast<const OUString*>(rVclIter.iter->GetUserData());
         if (pStr)
             return *pStr;
