@@ -145,6 +145,7 @@ ExtraData* Dll::GetExtraData ()
 
 
 ExtraData::ExtraData () :
+    m_aLastEntryDesc(EntryDescriptor()),
     bChoosingMacro(false),
     bShellInCriticalSection(false)
 {
