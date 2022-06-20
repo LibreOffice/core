@@ -280,7 +280,7 @@ ScCellValue::ScCellValue( const ScCellValue& r )
 ScCellValue::ScCellValue(ScCellValue&& r) noexcept
     : maData(std::move(r.maData))
 {
-    r.maData = true; // reset to empty;
+    r.maData = std::monostate(); // reset to empty;
 }
 
 ScCellValue::~ScCellValue()
@@ -318,7 +318,7 @@ void ScCellValue::clear() noexcept
     }
 
     // Reset to empty value.
-    maData = true;
+    maData = std::monostate();
 }
 
 void ScCellValue::set( double fValue )
@@ -475,7 +475,7 @@ void ScCellValue::release( ScDocument& rDoc, const ScAddress& rPos )
             rDoc.SetEmptyCell(rPos);
     }
 
-    maData = true; // reset to empty
+    maData = std::monostate(); // reset to empty
 }
 
 void ScCellValue::release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType eListenType )
@@ -503,7 +503,7 @@ void ScCellValue::release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType
             rColumn.DeleteContent(nRow);
     }
 
-    maData = true; // reset to empty
+    maData = std::monostate(); // reset to empty
 }
 
 OUString ScCellValue::getString( const ScDocument& rDoc ) const
@@ -532,7 +532,7 @@ ScCellValue& ScCellValue::operator=(ScCellValue&& rCell) noexcept
 {
     clear();
     maData = std::move(rCell.maData);
-    rCell.maData = true; // reset to empty;
+    rCell.maData = std::monostate(); // reset to empty;
     return *this;
 }
 

@@ -31,8 +31,8 @@ struct ColumnBlockPosition;
 struct SC_DLLPUBLIC ScCellValue
 {
 private:
-    /// bool is there to indicate CellType::NONE
-    std::variant<bool, double, svl::SharedString, EditTextObject*, ScFormulaCell*> maData;
+    /// std::monostate is there to indicate CellType::NONE
+    std::variant<std::monostate, double, svl::SharedString, EditTextObject*, ScFormulaCell*> maData;
 public:
 
     ScCellValue();
