@@ -68,6 +68,7 @@ public:
         static_assert(sizeof... (T) == max_index);
     }
 
+    // coverity[uninit_ctor] - by design:
     enumarray() {}
 
     const V& operator[](E index) const
