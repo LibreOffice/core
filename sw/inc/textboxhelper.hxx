@@ -179,6 +179,9 @@ public:
     /// vector filled with the textboxes.
     static std::vector<SwFrameFormat*> CollectTextBoxes(const SdrObject* pGroupObject,
                                                         SwFrameFormat* pFormat);
+
+    // Compares the anchor of the first and second given formats, and decides whether sync needed.
+    static bool isAnchorSyncNeeded(const SwFrameFormat* pFirst, const SwFrameFormat* pSecond);
 };
 
 /// Textboxes are basically textframe + shape pairs. This means one shape has one frame.
@@ -187,6 +190,8 @@ public:
 /// it can have multiple textboxes.
 class SwTextBoxNode
 {
+    friend class SwTextBoxLockGuard;
+
     // One TextBox-entry
     struct SwTextBoxElement
     {
@@ -194,8 +199,6 @@ class SwTextBoxNode
         SwFrameFormat* m_pTextBoxFormat;
         // The Draw object where the textbox belongs to
         SdrObject* m_pDrawObject;
-        // This is for indicating if the textbox is in special case: for example during undo.
-        bool m_bIsActive;
     };
 
     // This vector stores the textboxes what belongs to this node
@@ -204,7 +207,11 @@ class SwTextBoxNode
     // (and the textboxes)
     SwFrameFormat* m_pOwnerShapeFormat;
 
+    // Prevents oscillating during recursive clone calling.
     mutable bool m_bIsCloningInProgress;
+
+    // Protection against looping
+    bool m_bLock;
 
 public:
     // Not needed.
@@ -238,22 +245,24 @@ public:
     // to the given shape (pDrawObject)
     SwFrameFormat* GetTextBox(const SdrObject* pDrawObject) const;
 
-    // Is this textbox has special state, undo for example?
-    bool IsTextBoxActive(const SdrObject* pDrawObject) const;
-
-    // Setters for the state flag.
-    void SetTextBoxInactive(const SdrObject* pDrawObject);
-    void SetTextBoxActive(const SdrObject* pDrawObject);
+    // Clears all textboxes of this node from the doc and also from here.
+    void ClearAll();
 
     // If this is a group shape, that returns true.
     bool IsGroupTextBox() const;
+
     // This returns with the shape what this class belongs to.
     SwFrameFormat* GetOwnerShape() { return m_pOwnerShapeFormat; };
+
     // This will give the current number of textboxes.
     size_t GetTextBoxCount() const { return m_pTextBoxes.size(); };
+
     // Returns with a const collection of textboxes owned by this node.
     std::map<SdrObject*, SwFrameFormat*> GetAllTextBoxes() const;
 
+    // Does the copy, and assign of all textboxes of this node to the given format.
+    // Important: The given format has to be a shape-format, and must have same structure
+    // as the owner shape has. If the structure different, the cloning will be aborted.
     void Clone(SwDoc* pDoc, const SwFormatAnchor& rNewAnc, SwFrameFormat* o_pTarget, bool bSetAttr,
                bool bMakeFrame) const;
 
@@ -261,6 +270,21 @@ private:
     void Clone_Impl(SwDoc* pDoc, const SwFormatAnchor& rNewAnc, SwFrameFormat* o_pTarget,
                     const SdrObject* pSrcObj, SdrObject* pDestObj, bool bSetAttr,
                     bool bMakeFrame) const;
+};
+
+// Helper class for preventing unwanted sync calls.
+class SwTextBoxLockGuard
+{
+    SwTextBoxNode& m_rTextBoxes;
+
+public:
+    SwTextBoxLockGuard(SwTextBoxNode& rTextBoxes)
+        : m_rTextBoxes(rTextBoxes)
+    {
+        m_rTextBoxes.m_bLock = true;
+    }
+
+    ~SwTextBoxLockGuard() { m_rTextBoxes.m_bLock = false; }
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX
