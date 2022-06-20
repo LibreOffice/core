@@ -4765,6 +4765,8 @@ void SalInstanceTreeView::set_text(const weld::TreeIter& rIter, const OUString& 
 OUString SalInstanceTreeView::get_id(const weld::TreeIter& rIter) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    if (!rVclIter.iter)
+        return OUString();
     const OUString* pStr = static_cast<const OUString*>(rVclIter.iter->GetUserData());
     if (pStr)
         return *pStr;
