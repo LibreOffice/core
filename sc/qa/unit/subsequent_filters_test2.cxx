@@ -154,6 +154,7 @@ public:
     void testColumnWidthRowHeightXLSXML();
     void testCharacterSetXLSXML();
     void testTdf137091();
+    void testTdf141495();
     void testTdf70455();
     void testTdf62268();
     void testTdf137453();
@@ -268,6 +269,7 @@ public:
     CPPUNIT_TEST(testCharacterSetXLSXML);
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
     CPPUNIT_TEST(testTdf137091);
+    CPPUNIT_TEST(testTdf141495);
     CPPUNIT_TEST(testTdf70455);
     CPPUNIT_TEST(testTdf62268);
     CPPUNIT_TEST(testTdf137453);
@@ -2258,6 +2260,30 @@ void ScFiltersTest2::testTdf137091()
     // - Expected: 28/4
     // - Actual  : Err:507
     CPPUNIT_ASSERT_EQUAL(OUString("28/4"), rDoc.GetString(ScAddress(2, 1, 0)));
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf141495()
+{
+    // Set the system locale to Turkish
+    SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
+    aOptions.SetLocaleConfigString("tr-TR");
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+
+    ScDocShellRef xDocSh = loadDoc(u"tdf141495.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    xDocSh->DoHardRecalc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 44956
+    // - Actual  : #ADDIN?
+    CPPUNIT_ASSERT_EQUAL(OUString("44956"), rDoc.GetString(ScAddress(11, 6, 0)));
     xDocSh->DoClose();
 }
 
