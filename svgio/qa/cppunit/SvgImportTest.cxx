@@ -70,6 +70,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf94765();
     void testBehaviourWhenWidthAndHeightIsOrIsNotSet();
     void testTdf97663();
+    void testTdf149449();
 
     Primitive2DSequence parseSvg(std::u16string_view aSource);
 
@@ -106,6 +107,7 @@ public:
     CPPUNIT_TEST(testTdf94765);
     CPPUNIT_TEST(testBehaviourWhenWidthAndHeightIsOrIsNotSet);
     CPPUNIT_TEST(testTdf97663);
+    CPPUNIT_TEST(testTdf149449);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -831,6 +833,24 @@ void Test::testTdf97663()
     // - Expected: 236
     // - Actual  : 204
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "y", "236");
+}
+
+void Test::testTdf149449()
+{
+    // Tests for svg css class redefinition behavior
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf149449.svg");
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "test");
+    // tdf#149449: Without the fix in place, this test would have failed with
+    // - Expected: #ff0000
+    // - Actual  : #00ff00
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#ff0000");
+    // tdf#149449: Without the fix in place, this test would have failed with
+    // - Expected: Sans
+    // - Actual  : Times New Roman
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Sans");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
