@@ -33,6 +33,24 @@
       "message": "There are then two places that compare \"GetSelectedEntry\" with \"No List\", presumably those should be the translation of \"No List\" as well?",
       "revId": "f340442cde0c3e91768adcef164b41b5556b3835",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adaa5287_ab7dbc91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-20T20:04:11Z",
+      "side": 1,
+      "message": "1st one must be:\n    145         const OUString aTemplName(GetSelectedEntry());\n    146         if (aTemplName \u003d\u003d \"No List\")\n\nhttps://opengrok.libreoffice.org/xref/core/sfx2/source/dialog/StyleList.cxx?r\u003dad79900c#146\n\nbut don\u0027t see the second one.\n\nAnyway, just this one is a pb since, as it\u0027s in sfx2, we need to use something else than SwResId which is sw bound.\nDoes it mean STR_POOLNUMRULE_NOLIST should be declared elsewhere than in sw/inc/strings.hrc ? (and in this case it would mean we can only fix master since it would break translation repo)",
+      "parentUuid": "f34c3c55_ffa04859",
+      "revId": "f340442cde0c3e91768adcef164b41b5556b3835",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
