@@ -192,7 +192,7 @@ public:
     /** Constructor.
      * The iterator will only iterate over style sheets which have the family \p eFam
      */
-    SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
+    SfxStyleSheetIterator(const SfxStyleSheetBasePool *pBase,
                           SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
     SfxStyleSearchBits GetSearchMask() const;
     SfxStyleFamily GetSearchFamily() const;
@@ -207,7 +207,7 @@ public:
 
 protected:
 
-    SfxStyleSheetBasePool*  pBasePool;
+    const SfxStyleSheetBasePool*  pBasePool;
     SfxStyleFamily          nSearchFamily;
     SfxStyleSearchBits      nMask;
 
@@ -274,7 +274,7 @@ public:
 
     SfxStyleSheetBase*  First(SfxStyleFamily eFamily, SfxStyleSearchBits eMask = SfxStyleSearchBits::All);
     SfxStyleSheetBase*  Next();
-    virtual SfxStyleSheetBase*  Find( const OUString&, SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
+    virtual SfxStyleSheetBase*  Find( const OUString&, SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All ) const;
 
     virtual bool                SetParent(SfxStyleFamily eFam,
                                           const OUString &rStyle,

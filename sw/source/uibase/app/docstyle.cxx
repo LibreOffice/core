@@ -2578,8 +2578,8 @@ bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
     return bRet;
 }
 
-SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
-                                              SfxStyleFamily eFam, SfxStyleSearchBits n )
+SfxStyleSheetBase* SwDocStyleSheetPool::Find(const OUString& rName,
+                                             SfxStyleFamily eFam, SfxStyleSearchBits n) const
 {
     SfxStyleSearchBits nSMask = n;
     if( SfxStyleFamily::Para == eFam &&  m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
@@ -2706,14 +2706,14 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     // Delete current
     mxIterSheet->Reset();
 
-    SwDoc& rDoc = static_cast<SwDocStyleSheetPool*>(pBasePool)->GetDoc();
+    const SwDoc& rDoc = static_cast<const SwDocStyleSheetPool*>(pBasePool)->GetDoc();
     const SfxStyleSearchBits nSrchMask = nMask;
     const bool bIsSearchUsed = SearchUsed();
 
     bool bSearchHidden( nMask & SfxStyleSearchBits::Hidden );
     bool bOnlyHidden = nMask == SfxStyleSearchBits::Hidden;
 
-    const bool bOrganizer = static_cast<SwDocStyleSheetPool*>(pBasePool)->IsOrganizerMode();
+    const bool bOrganizer = static_cast<const SwDocStyleSheetPool*>(pBasePool)->IsOrganizerMode();
     bool bAll = ( nSrchMask & SfxStyleSearchBits::AllVisible ) == SfxStyleSearchBits::AllVisible;
 
     if( nSearchFamily == SfxStyleFamily::Char
@@ -3154,7 +3154,7 @@ void SwStyleSheetIterator::AppendStyleList(const std::vector<OUString>& rList,
                                             bool bTestUsed, bool bTestHidden, bool bOnlyHidden,
                                             SwGetPoolIdFromName nSection, SfxStyleFamily eFamily )
 {
-    SwDoc& rDoc = static_cast<SwDocStyleSheetPool*>(pBasePool)->GetDoc();
+    const SwDoc& rDoc = static_cast<const SwDocStyleSheetPool*>(pBasePool)->GetDoc();
     bool bUsed = false;
     for (const auto & i : rList)
     {
