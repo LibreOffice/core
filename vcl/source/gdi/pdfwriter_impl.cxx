@@ -2666,9 +2666,11 @@ bool PDFWriterImpl::emitFonts()
             sal_Int32 pCodeUnitsPerGlyph[ 256 ] = {};
             std::vector<sal_Ucs> aCodeUnits;
             aCodeUnits.reserve( 256 );
-            int nGlyphs = 1;
             // fill arrays and prepare encoding index map
             sal_Int32 nToUnicodeStream = 0;
+
+            pWidths[0] = 0; // if it gets used then it will appear in s_subset.m_aMapping, otherwise 0 is fine
+            int nGlyphs = 1;
 
             for (auto const& item : s_subset.m_aMapping)
             {
