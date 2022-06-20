@@ -2555,6 +2555,9 @@ SwFrameFormat::~SwFrameFormat()
     if (Which() == RES_FLYFRMFMT)
         m_pOtherTextBoxFormats->DelTextBox(this);
 
+    if (Which() == RES_DRAWFRMFMT)
+        m_pOtherTextBoxFormats->ClearAll();
+
     m_pOtherTextBoxFormats.reset();
 }
 

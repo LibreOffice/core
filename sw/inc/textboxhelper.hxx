@@ -194,8 +194,6 @@ class SwTextBoxNode
         SwFrameFormat* m_pTextBoxFormat;
         // The Draw object where the textbox belongs to
         SdrObject* m_pDrawObject;
-        // This is for indicating if the textbox is in special case: for example during undo.
-        bool m_bIsActive;
     };
 
     // This vector stores the textboxes what belongs to this node
@@ -238,12 +236,7 @@ public:
     // to the given shape (pDrawObject)
     SwFrameFormat* GetTextBox(const SdrObject* pDrawObject) const;
 
-    // Is this textbox has special state, undo for example?
-    bool IsTextBoxActive(const SdrObject* pDrawObject) const;
-
-    // Setters for the state flag.
-    void SetTextBoxInactive(const SdrObject* pDrawObject);
-    void SetTextBoxActive(const SdrObject* pDrawObject);
+    void ClearAll();
 
     // If this is a group shape, that returns true.
     bool IsGroupTextBox() const;
