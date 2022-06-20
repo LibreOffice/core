@@ -4533,7 +4533,7 @@ bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
                 OUStringBuffer sNum;
                 ImpGetOutputStandard(rNumber, sNum);
                 sNum.stripStart('-');
-                sStr.insert(k, sNum.makeStringAndClear());
+                sStr.insert(k, sNum);
                 break;
             }
             default:
@@ -4693,7 +4693,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
             OUStringBuffer sNum;
             ImpGetOutputStandard(rNumber, sNum);
             sNum.stripStart('-');
-            sBuff.insert(k, sNum.makeStringAndClear());
+            sBuff.insert(k, sNum);
             break;
         }
         default:
@@ -4829,7 +4829,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
             bFoundNumber = true;
             ImpGetOutputStandard(rNumber, sNum);
             sNum.stripStart('-');
-            sBuff.insert(k, sNum.makeStringAndClear());
+            sBuff.insert(k, sNum);
         }
         break;
         case NF_SYMBOLTYPE_FRAC_FDIV: // Do Nothing
@@ -5184,7 +5184,7 @@ static void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_In
     }
     aLCIDString.insert( 0, "[$-" );
     aLCIDString.append( "]" );
-    rFormatStr.insert( nPosInsertLCID, aLCIDString.makeStringAndClear() );
+    rFormatStr.insert( nPosInsertLCID, aLCIDString );
 }
 
 /** Increment nAlphabetID for CJK numerals
