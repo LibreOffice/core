@@ -2547,14 +2547,28 @@ SwFrameFormat::~SwFrameFormat()
         }
     }
 
+    // Check if there any textboxes attached to this format.
     if( nullptr == m_pOtherTextBoxFormats )
         return;
 
+    // Assert here if debug enabled, checking if there is something wrong with the refcount.
+    DBG_ASSERT(size_t(m_pOtherTextBoxFormats.use_count())
+                   == m_pOtherTextBoxFormats->GetTextBoxCount() + size_t(1),
+               "SwFrameFormat::~SwFrameFormat(): Textbox number and refcount mismatch!");
+
     // This is a fly-frame-format just delete this
     // textbox entry from the textbox collection.
+    // Note: Do not delete it from the doc, as that
+    // is already in progress.
     if (Which() == RES_FLYFRMFMT)
         m_pOtherTextBoxFormats->DelTextBox(this);
 
+    // This is a draw-frame-format what belongs to
+    // a shape with textbox(es). Del them all.
+    if (Which() == RES_DRAWFRMFMT)
+        m_pOtherTextBoxFormats->ClearAll();
+
+    // Release the pointer.
     m_pOtherTextBoxFormats.reset();
 }
 
