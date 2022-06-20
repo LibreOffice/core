@@ -366,12 +366,17 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
 
     if (auto pFormat = FindFrameFormat(pSdrObj))
     {
-        if (pFormat->GetOtherTextBoxFormats())
+        if (pFormat->GetOtherTextBoxFormats()
+            && pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
         {
+            // TODO: Improve security with moving this sync call to other place,
+            // where it works for typing but not during layout calc.
             const bool bModified = pFormat->GetDoc()->getIDocumentState().IsEnableSetModified();
             pFormat->GetDoc()->getIDocumentState().SetEnableSetModified(false);
             SwTextBoxHelper::synchronizeGroupTextBoxProperty(SwTextBoxHelper::changeAnchor, pFormat,
                                                              pFormat->FindRealSdrObject());
+            SwTextBoxHelper::synchronizeGroupTextBoxProperty(SwTextBoxHelper::syncTextBoxSize,
+                                                             pFormat, pFormat->FindRealSdrObject());
             pFormat->GetDoc()->getIDocumentState().SetEnableSetModified(bModified);
         }
     }

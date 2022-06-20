@@ -34,6 +34,8 @@
 #include <frmfmt.hxx>
 #include <docsh.hxx>
 #include <pagefrm.hxx>
+#include <textboxhelper.hxx>
+#include <fmtanchr.hxx>
 
 #include <wrtsh.hxx>
 
@@ -64,6 +66,13 @@ void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
         if (RES_DRAWFRMFMT == pSelFormat->Which())
         {
             SdrObject* pSObj = pSelFormat->FindSdrObject();
+
+            // Before layout calc, inline anchored textboxes have to be synced unless crash.
+            if (pSelFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR
+                && pSelFormat->GetOtherTextBoxFormats() && pSObj)
+                SwTextBoxHelper::synchronizeGroupTextBoxProperty(SwTextBoxHelper::changeAnchor,
+                                                                 pSelFormat, pSObj);
+
             static_cast<SwFEShell*>(this)->SelectObj(
                     pSObj->GetCurrentBoundRect().Center() );
         }

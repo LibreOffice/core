@@ -1771,6 +1771,29 @@ SwXText::convertToTextFrame(
                             aAnchor.SetAnchor(aMovePam.Start());
                             m_pImpl->m_pDoc->SetAttr(aAnchor, *pFrameFormat);
                         }
+                        else
+                        {
+                            // if this frame is a textbox of a shape anchored to us, move this textbox too.
+                            const auto& pTextBoxes = pFrameFormat->GetOtherTextBoxFormats();
+                            if (pFrameFormat->Which() == RES_FLYFRMFMT && pTextBoxes
+                                && pTextBoxes->GetOwnerShape())
+                            {
+                                const auto& rShapeAnchor = pTextBoxes->GetOwnerShape()->GetAnchor();
+                                if (rShapeAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR
+                                    && rShapeAnchor.GetContentAnchor() && pFrameFormat->GetAnchor().GetContentAnchor()
+                                    && pStartPam->ContainsPosition(*pFrameFormat->GetAnchor().GetContentAnchor()))
+                                {
+                                    const auto& rAnchorNode
+                                        = pFrameFormat->GetAnchor().GetContentAnchor()->nNode.GetNode();
+                                    if (!(rAnchorNode.FindFooterStartNode() || rAnchorNode.FindHeaderStartNode()))
+                                    {
+                                        SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
+                                        aAnchor.SetAnchor(aMovePam.Start());
+                                        m_pImpl->m_pDoc->SetAttr(aAnchor, *pFrameFormat);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
