@@ -1,0 +1,140 @@
+diff -ur mdds.org/include/mdds/multi_type_vector/types.hpp mdds/include/mdds/multi_type_vector/types.hpp
+--- mdds.org/include/mdds/multi_type_vector/types.hpp	2022-06-20 12:13:12.199156464 +0200
++++ mdds/include/mdds/multi_type_vector/types.hpp	2022-06-20 12:25:13.675660259 +0200
+@@ -180,6 +180,127 @@
+     {}
+ };
+ 
++/**
++ * Vector that delays deleting from the front of the vector, which avoids O(n^2) memory move
++ * operations when code needs to deletes items from one mdds block and add to another mdds block.
++ */
++template<typename T>
++class enhanced_vector
++{
++    typedef std::vector<T> store_type;
++    mutable store_type m_vec;
++    mutable size_t m_removedFront = 0; // number of elements removed from front of array
++public:
++    typedef typename store_type::value_type value_type;
++    typedef typename store_type::size_type size_type;
++    typedef typename store_type::difference_type difference_type;
++    typedef typename store_type::reference reference;
++    typedef typename store_type::const_reference const_reference;
++    typedef typename store_type::pointer pointer;
++    typedef typename store_type::const_pointer const_pointer;
++    typedef typename store_type::iterator iterator;
++    typedef typename store_type::reverse_iterator reverse_iterator;
++    typedef typename store_type::const_iterator const_iterator;
++    typedef typename store_type::const_reverse_iterator const_reverse_iterator;
++    
++    enhanced_vector(size_t n, const T& val) : m_vec(n, val) {}
++    enhanced_vector(size_t n) : m_vec(n) {}
++    template< class InputIt >
++    enhanced_vector( InputIt first, InputIt last ) : m_vec(first, last) {}
++
++    iterator begin() noexcept { return m_vec.begin() + m_removedFront; }
++    iterator end() noexcept { return m_vec.end(); }
++    const_iterator begin() const noexcept { return m_vec.begin() + m_removedFront; }
++    const_iterator end() const noexcept { return m_vec.end(); }
++    
++    reverse_iterator rbegin() { return m_vec.rbegin(); }
++    const_reverse_iterator rbegin() const { return m_vec.rbegin(); }
++    reverse_iterator rend() { return m_vec.rend() - m_removedFront; }
++    const_reverse_iterator rend() const { return m_vec.rend() - m_removedFront; }
++    
++    reference operator[]( size_type pos ) { return m_vec[pos + m_removedFront]; }
++    const_reference operator[]( size_type pos ) const { return m_vec[pos + m_removedFront]; }
++    
++    reference at( size_type pos ) { return m_vec.at(pos + m_removedFront); }
++    const_reference at( size_type pos ) const { return m_vec.at(pos + m_removedFront); }
++
++    void push_back( const T& value ) { m_vec.push_back(value); }
++    
++    iterator insert( iterator pos, const T& value ) { return m_vec.insert(pos, value); }
++    iterator insert( const_iterator pos, T&& value ) { return m_vec.insert(pos, std::move(value)); }
++    template< class InputIt >
++    void insert( iterator pos, InputIt first, InputIt last )
++    {
++        m_vec.insert(pos, first, last);
++    }
++    
++    void resize( size_type count )
++    {
++        clear_removed();
++        m_vec.resize(count);
++    }
++    
++    iterator erase( iterator pos )
++    {
++        if (pos == m_vec.begin() + m_removedFront)
++        {
++            ++m_removedFront;
++            return m_vec.begin() + m_removedFront;
++        }
++        else
++            return m_vec.erase(pos);
++    }
++    
++    iterator erase( iterator first, iterator last )
++    {
++        return m_vec.erase( first, last );
++    }
++    
++    size_type capacity() const
++    {
++        clear_removed();
++        return m_vec.capacity();
++    }
++    
++    void shrink_to_fit() const
++    {
++        clear_removed();
++        m_vec.shrink_to_fit();
++    }
++    
++    void reserve( size_type new_cap )
++    {
++        clear_removed();
++        m_vec.reserve(new_cap);
++    }
++    
++    size_type size() const
++    {
++        return m_vec.size() - m_removedFront;
++    }
++    
++    template< class InputIt >
++    void assign( InputIt first, InputIt last )
++    {
++        clear_removed();
++        m_vec.assign(first, last);
++    }
++
++private:
++    void clear_removed() const
++    {
++        m_vec.erase(m_vec.begin(), m_vec.begin() + m_removedFront);
++        m_removedFront = 0;
++    }
++};
++
++template< class T >
++bool operator==( const enhanced_vector<T>& lhs,
++                 const enhanced_vector<T>& rhs )
++{
++    return std::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
++}
++
+ template<typename _Self, element_t _TypeId, typename _Data>
+ class element_block : public base_element_block
+ {
+@@ -197,7 +318,7 @@
+ #ifdef MDDS_MULTI_TYPE_VECTOR_USE_DEQUE
+     typedef std::deque<_Data> store_type;
+ #else
+-    typedef std::vector<_Data> store_type;
++    typedef enhanced_vector<_Data> store_type;
+ #endif
+     store_type m_array;
+ 
