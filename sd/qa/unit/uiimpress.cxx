@@ -15,6 +15,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -43,6 +45,7 @@
 #include <undo/undomanager.hxx>
 #include <vcl/scheduler.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <ViewShell.hxx>
 #include <app.hrc>
@@ -1047,6 +1050,43 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
     bool bContoured = false;
     xPropSet->getPropertyValue("CharContoured") >>= bContoured;
     CPPUNIT_ASSERT(bContoured);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
+{
+    // Given a document with a theme, accent1 color is set to 0x000004:
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XMasterPageTarget> xMasterPageTarget(xDrawPage, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMasterPage(xMasterPageTarget->getMasterPage(),
+                                                    uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aMap;
+    aMap["Name"] <<= OUString("mytheme");
+    aMap["ColorSchemeName"] <<= OUString("mycolorscheme");
+    uno::Sequence<util::Color> aColorScheme
+        = { 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb };
+    aMap["ColorScheme"] <<= aColorScheme;
+    uno::Any aTheme(aMap.getAsConstPropertyValueList());
+    xMasterPage->setPropertyValue("Theme", aTheme);
+
+    // When inserting a shape:
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("CreateDirectly", true),
+    };
+    dispatchCommand(mxComponent, ".uno:BasicShapes.round-rectangle", aArgs);
+
+    // Then make sure the that fill color of the last shape is the accent1 color:
+    sal_Int32 nShapeIndex = xDrawPage->getCount() - 1;
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(nShapeIndex), uno::UNO_QUERY);
+    sal_Int32 nFillColor{};
+    xShape->getPropertyValue("FillColor") >>= nFillColor;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0 / 0x000004 (~black)
+    // - Actual  : 7512015 / 0x729fcf (~blue)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4), nFillColor);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
