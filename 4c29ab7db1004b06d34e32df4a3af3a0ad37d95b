@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c31ffd6_c7427316",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-06-20T09:01:00Z",
+      "side": 1,
+      "message": "I removed the conflicting lines from links. There still seem to be linebreak changes due to editing the file via Gerrit, ugh. Turning the Ignore Whitespace option on, the three deleted lines are seen easier.",
+      "revId": "4c29ab7db1004b06d34e32df4a3af3a0ad37d95b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
