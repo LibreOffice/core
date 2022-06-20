@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd6ad8a6_5d044d65",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2684,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-20T14:51:13Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/136183 for the simple approach then",
+      "parentUuid": "5ba974b4_693c876a",
+      "revId": "be39eba9a3d81e20c42f1073a365e91ce855c1cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff343ecb_d91b9868",
         "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
         "patchSetId": 4
