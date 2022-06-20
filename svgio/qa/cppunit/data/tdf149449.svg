@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50 px" height="100 px">
+    <style type="text/css">
+    .c1 {fill:#00ff00}
+    <!-- this redefinition should be appended -->
+    .c1 {font-family:Sans}
+    <!-- this redefinition should change the color to red, replacing the first definition -->
+    .c1 {fill:#ff0000}
+    <!-- finally c1 should be equal to fill:#ff0000 and font-family:Sans -->
+    </style>
+    <text x="20" y="20" >
+        <tspan class="c1">test</tspan>
+    </text>
+</svg>
