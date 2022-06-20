@@ -217,7 +217,7 @@ namespace
                 [](const util::DateTime& rValue) -> std::string {
                     OUStringBuffer aBuffer;
                     ::sax::Converter::convertDateTime( aBuffer, rValue, nullptr );
-                    return OUSTR_TO_STDSTR( aBuffer.makeStringAndClear( ) );
+                    return OUSTR_TO_STDSTR( aBuffer );
                 });
             type = libcmis::PropertyType::DateTime;
         }
