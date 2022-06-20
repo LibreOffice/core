@@ -69,6 +69,24 @@
       "message": "Looks good to me.\nCould you please send a follow-up patch which also handles UUI_DOC_OWN_LOAD_LOCK?",
       "revId": "dd2ca3a513025f6fd8bcf588c7e7db0bd3744f1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c5393ec_97a6e1e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-06-20T17:24:56Z",
+      "side": 1,
+      "message": "Hello.\n\nSure, I can work on the other dialog. I have two questions: \n\n1) Like you remarked last time, the two dialogs are very similar and have minor differences. So should I make another .ui file for a new dialog, or should I use the same dialog box?\n\n2) Can I upload more patches here (for  tdf#141026)? If not, where do I upload the new patches?\n\nThanks!",
+      "parentUuid": "15b4eb6a_a5fd447b",
+      "revId": "dd2ca3a513025f6fd8bcf588c7e7db0bd3744f1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
