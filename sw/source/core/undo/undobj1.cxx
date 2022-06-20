@@ -56,8 +56,16 @@ SwUndoFlyBase::~SwUndoFlyBase()
 {
     if( m_bDelFormat )       // delete during an Undo?
     {
-        if (m_pFrameFormat->GetOtherTextBoxFormats())
-        {   // clear that before delete
+        if (const auto& pTextBoxes = m_pFrameFormat->GetOtherTextBoxFormats())
+        {
+            // Clear and unregister before release.
+            if (m_pFrameFormat->Which() == RES_FLYFRMFMT)
+                pTextBoxes->DelTextBox(m_pFrameFormat);
+
+            if (m_pFrameFormat->Which() == RES_DRAWFRMFMT)
+                pTextBoxes->ClearAll();
+
+            // clear that before delete
             m_pFrameFormat->SetOtherTextBoxFormats(nullptr);
         }
         delete m_pFrameFormat;
