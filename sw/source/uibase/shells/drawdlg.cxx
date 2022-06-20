@@ -111,7 +111,8 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(rReq.GetFrameWeld(),
                                                                             &aNewAttr,
                                                                             pDoc,
-                                                                            true));
+                                                                            true,
+                                                                            false));
 
             pDlg->StartExecuteAsync([bChanged, bHasMarked, pDoc, pDlg, pSh, pView, this](
                                         sal_Int32 nResult){

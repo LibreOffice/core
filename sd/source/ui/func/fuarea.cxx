@@ -55,7 +55,9 @@ void FuArea::DoExecute( SfxRequest& rReq )
     mpView->GetAttributes( aNewAttr );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    VclPtr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc, true));
+    bool bHasSlideBackground = mpViewShell->GetDoc()->GetDocumentType() == DocumentType::Impress;
+    VclPtr<AbstractSvxAreaTabDialog> pDlg(
+        pFact->CreateSvxAreaTabDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc, true, bHasSlideBackground));
 
     pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult){
         if (nResult == RET_OK)
