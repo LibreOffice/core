@@ -16,6 +16,24 @@
       "message": "I think there is a way we can add this to a list of revisions to ignore during a bisect? it would be nice to remove these comments.",
       "revId": "b155908590dcfeb4da52558cc0b012b44737f8bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "370713ff_e48c6ac3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-20T06:53:59Z",
+      "side": 1,
+      "message": "see \u003chttps://git.libreoffice.org/core/+/9c470a376a8cf5d42d2adbe2e528f3fe6b2df7ee%5E!/\u003e \"Add .git-blame-ignore-revs\"",
+      "parentUuid": "4c5f4bd1_dad842e0",
+      "revId": "b155908590dcfeb4da52558cc0b012b44737f8bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

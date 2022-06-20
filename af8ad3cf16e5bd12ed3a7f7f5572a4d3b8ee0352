@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b312ccdc_91074b2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-20T06:53:59Z",
+      "side": 1,
+      "message": "Besides removing clearly unhelpful noise, this also does some arbitrary changes that are IMO not helpful, like whether or not docstyle comment continuation lines should start with an asterisk, and whether or not there should be a blank line between accompanying new/delete function declarations.  Better try to avoid such needles \"beautification\".",
+      "revId": "af8ad3cf16e5bd12ed3a7f7f5572a4d3b8ee0352",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
