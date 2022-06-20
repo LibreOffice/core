@@ -423,7 +423,7 @@ void SvpSalFrame::UpdateSettings( AllSettings& rSettings )
         aStdFont.SetFontSize(Size(0, 12));
         aStyleSettings.SetMenuFont(aStdFont);
 
-        SvpSalGraphics* pGraphics = m_aGraphics.back();
+        SvpSalGraphics* pGraphics = m_aGraphics.empty() ? nullptr : m_aGraphics.back();
         bool bFreeGraphics = false;
         if (!pGraphics)
         {
