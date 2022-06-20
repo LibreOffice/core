@@ -418,6 +418,15 @@ public:
         sendUpdate();
     }
 
+    virtual void grab_focus() override
+    {
+        BaseInstanceClass::grab_focus();
+        std::unique_ptr<jsdialog::ActionDataMap> pMap
+                = std::make_unique<jsdialog::ActionDataMap>();
+        (*pMap)[ACTION_TYPE] = "grab_focus";
+        sendAction(std::move(pMap));
+    }
+
     virtual void sendClose() override
     {
         if (m_pSender)
