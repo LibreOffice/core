@@ -52,6 +52,23 @@
       "parentUuid": "0ad2bab8_f719e3e3",
       "revId": "dd2ca3a513025f6fd8bcf588c7e7db0bd3744f1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15b4eb6a_a5fd447b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-20T13:45:59Z",
+      "side": 1,
+      "message": "Looks good to me.\nCould you please send a follow-up patch which also handles UUI_DOC_OWN_LOAD_LOCK?",
+      "revId": "dd2ca3a513025f6fd8bcf588c7e7db0bd3744f1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
