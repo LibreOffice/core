@@ -125,8 +125,13 @@ namespace basegfx
         B2DHomMatrix& operator=(const B2DHomMatrix& rMat);
         B2DHomMatrix& operator=(B2DHomMatrix&& rMat);
 
-        // Help routine to decompose given homogen 3x3 matrix to components. A correction of
-        // the components is done to avoid inaccuracies.
+        /**
+         * Help routine to decompose given homogen 3x3 matrix to components. A correction of the
+         * components is done to avoid inaccuracies.
+         *
+         * See basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix() for the opposite, to
+         * compose a homogen 3x3 matrix from components.
+         */
         bool decompose(B2DTuple& rScale, B2DTuple& rTranslate, double& rRotate, double& rShearX) const;
     };
 
