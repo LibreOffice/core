@@ -873,6 +873,12 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTdf147485)
     load(DATA_DIRECTORY, "Tdf147485.docx");
 }
 
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTdf149546)
+{
+    // Before the fix this was impossible.
+    load(DATA_DIRECTORY, "tdf149546.docx");
+}
+
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
 {
     // Create an in-memory empty document with a user field.
