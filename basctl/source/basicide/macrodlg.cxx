@@ -153,6 +153,13 @@ void MacroChooser::RestoreMacroDescription()
             aDesc = pData->GetLastEntryDescriptor();
     }
 
+    // No valid EntryDescriptor found
+    if (aDesc.GetMethodName().isEmpty())
+    {
+        m_xMacroNameEdit->select_region(0, 0);
+        return;
+    }
+
     m_xBasicBox->SetCurrentEntry(aDesc);
     BasicSelectHdl(m_xBasicBox->get_widget());
 
