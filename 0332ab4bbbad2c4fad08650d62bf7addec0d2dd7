@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d1762e4_afc678df",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1728,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-20T14:16:34Z",
+      "side": 1,
+      "message": "Note that startElement(NS) takes std::optional\u003cO(U)String\u003e as attribute values, so you may avoid the need of conditional calls of startElement(NS) variants (especially useful when you have many separately optional attributes). It could be possible also to write this:\n\n    std::Optional\u003cOString\u003e oWidth;\n    if (pBorderLine-\u003eGetWidth() !\u003d SvxBorderLineWidth::Hairline)\n    {\n        double fConverted(editeng::ConvertBorderWidthToWord(pBorderLine-\u003eGetBorderLineStyle(),\n                                                            pBorderLine-\u003eGetWidth()));\n        oWidth \u003d OString::number(TwipsToEMU(fConverted));\n    }\n    pFS-\u003estartElementNS(XML_a, XML_ln, XML_w, oWidth);\n\n(I do not suggest to do the change - just mentioning in the hope it could be useful in the future.)",
+      "revId": "0332ab4bbbad2c4fad08650d62bf7addec0d2dd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
