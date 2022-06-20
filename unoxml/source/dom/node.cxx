@@ -288,7 +288,7 @@ namespace DOM
             e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
             throw e;
             }
-    }
+        }
 
     /**
     Adds the node newChild to the end of the list of children of this node.

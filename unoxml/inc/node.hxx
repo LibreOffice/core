@@ -115,7 +115,7 @@ namespace DOM
 
         void checkNoParent(css::uno::Reference< css::xml::dom::XNode >const& xNode);
 
-        void checkNoParent(const xmlNodePtr pNode);
+        static void checkNoParent(const xmlNodePtr pNode);
 
         void checkSameOwner(css::uno::Reference< css::xml::dom::XNode >const& xNode);
 
