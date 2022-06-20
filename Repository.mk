@@ -157,6 +157,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	$(call gb_Helper_optional,FUZZERS,sftfuzzer) \
 	$(call gb_Helper_optional,FUZZERS,dbffuzzer) \
 	$(call gb_Helper_optional,FUZZERS,webpfuzzer) \
+	$(call gb_Helper_optional,FUZZERS,lockfuzzer) \
 	soffice_bin \
     $(call gb_CondExeUnopkg, \
         unopkg_bin \

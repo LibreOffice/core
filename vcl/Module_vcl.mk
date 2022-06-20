@@ -189,6 +189,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_sftfuzzer \
     Executable_dbffuzzer \
     Executable_webpfuzzer \
+    Executable_lockfuzzer \
 ))
 endif
 
