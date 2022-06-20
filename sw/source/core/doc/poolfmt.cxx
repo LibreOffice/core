@@ -106,7 +106,7 @@ bool SwDoc::IsUsed( const SwTableAutoFormat& rTableAutoFormat) const
 }
 
 // See if the NumRule is used
-bool SwDoc::IsUsed( const SwNumRule& rRule )
+bool SwDoc::IsUsed( const SwNumRule& rRule ) const
 {
     SwList const*const pList(getIDocumentListsAccess().getListByName(rRule.GetDefaultListId()));
     bool bUsed = rRule.GetTextNodeListSize() > 0 ||

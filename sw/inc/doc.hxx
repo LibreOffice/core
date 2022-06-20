@@ -853,7 +853,7 @@ public:
     bool IsUsed( const sw::BroadcastingModify& ) const;
     /// Query if table style is used.
     bool IsUsed( const SwTableAutoFormat& ) const;
-    bool IsUsed( const SwNumRule& );
+    bool IsUsed( const SwNumRule& ) const;
 
     // Set name of newly loaded document template.
     size_t SetDocPattern(const OUString& rPatternName);
