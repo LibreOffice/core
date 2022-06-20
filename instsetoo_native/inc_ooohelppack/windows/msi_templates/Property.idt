@@ -8,9 +8,9 @@ ApplicationUsers	AllUsers
 ALLUSERS	1
 ARPCOMMENTS	ARPCOMMENTSTEMPLATE
 ARPCONTACT	CIB software GmbH
-ARPHELPLINK	https://libreoffice.cib.eu
-ARPURLINFOABOUT	https://libreoffice.cib.eu
-ARPURLUPDATEINFO	https://libreoffice.cib.eu
+ARPHELPLINK	https://libreoffice.cib.de
+ARPURLINFOABOUT	https://libreoffice.cib.de
+ARPURLUPDATEINFO	https://libreoffice.cib.de
 DefaultUIFont	Tahoma8
 DialogCaption	Windows Installer
 DiskPrompt	[1]
