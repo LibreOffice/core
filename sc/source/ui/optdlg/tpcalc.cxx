@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#undef SC_DLLIMPLEMENTATION
+    #undef SC_DLLIMPLEMENTATION
 
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -143,6 +143,7 @@ void ScTpCalcOptions::Reset(const SfxItemSet* rCoreAttrs)
         m_xFtPrec->set_sensitive(false);
         m_xEdPrec->set_sensitive(false);
         m_xBtnGeneralPrec->set_active(false);
+        m_xEdPrec->set_value(0);
     }
     else
     {

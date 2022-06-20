@@ -157,7 +157,16 @@ bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet* rOutAttrs )
 
 void SvxDefaultColorOptPage::Reset( const SfxItemSet* )
 {
-    m_xLbChartColors->select( 0 );
+    if( m_SvxChartColorTableUniquePtr )
+    {
+        m_SvxChartColorTableUniquePtr->useDefault();
+
+        FillBoxChartColorLB();
+
+        m_xLbChartColors->grab_focus();
+        m_xLbChartColors->select( 0 );
+        m_xPBRemove->set_sensitive(true);
+    }
 }
 
 void SvxDefaultColorOptPage::FillPaletteLB()

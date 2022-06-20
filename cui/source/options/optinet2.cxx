@@ -204,6 +204,8 @@ void SvxProxyTabPage::ReadConfigData_Impl()
         nIntValue = *x;
         m_xHttpPortED->set_text( OUString::number( nIntValue ));
     }
+    else
+        m_xHttpPortED->set_text( "" );
 
     m_xHttpsProxyED->set_text( officecfg::Inet::Settings::ooInetHTTPSProxyName::get() );
     x = officecfg::Inet::Settings::ooInetHTTPSProxyPort::get();
@@ -212,6 +214,8 @@ void SvxProxyTabPage::ReadConfigData_Impl()
         nIntValue = *x;
         m_xHttpsPortED->set_text( OUString::number( nIntValue ));
     }
+    else
+        m_xHttpsPortED->set_text( "" );
 
     m_xFtpProxyED->set_text( officecfg::Inet::Settings::ooInetFTPProxyName::get() );
     x = officecfg::Inet::Settings::ooInetFTPProxyPort::get();
@@ -220,6 +224,8 @@ void SvxProxyTabPage::ReadConfigData_Impl()
         nIntValue = *x;
         m_xFtpPortED->set_text( OUString::number( nIntValue ));
     }
+    else
+        m_xFtpPortED->set_text( "" );
 
     m_xNoProxyForED->set_text( officecfg::Inet::Settings::ooInetNoProxy::get() );
 }
