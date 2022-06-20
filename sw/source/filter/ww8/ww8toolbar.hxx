@@ -105,20 +105,20 @@ class Customization : public TBBase
 {
     friend class SwCTBWrapper;
 
-    sal_Int32 tbidForTBD;
-    sal_uInt16 reserved1;
-    sal_uInt16 ctbds;
-    SwCTBWrapper* pWrapper;
-    std::shared_ptr< SwCTB > customizationDataCTB;
-    std::vector< TBDelta > customizationDataTBDelta;
-    bool bIsDroppedMenuTB;
+    sal_Int32 m_tbidForTBD;
+    sal_uInt16 m_reserved1;
+    sal_uInt16 m_ctbds;
+    SwCTBWrapper* m_pWrapper;
+    std::shared_ptr< SwCTB > m_customizationDataCTB;
+    std::vector< TBDelta > m_customizationDataTBDelta;
+    bool m_bIsDroppedMenuTB;
 
 public:
     explicit Customization( SwCTBWrapper* rapper );
     bool Read(SvStream &rS) override;
     bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenu( SwCTBWrapper&, CustomToolBarImportHelper& );
-    SwCTB*  GetCustomizationData() { return customizationDataCTB.get(); };
+    SwCTB*  GetCustomizationData() { return m_customizationDataCTB.get(); };
 };
 
 class SwCTBWrapper : public Tcg255SubStruct
@@ -183,8 +183,8 @@ public:
 
 class Acd : public TBBase
 {
-    sal_Int16 ibst;
-    sal_uInt16 fciBasedOnABC; //  fciBasedOn(13 bits) A(1bit)B(1bit)C(1Bit)
+    sal_Int16 m_ibst;
+    sal_uInt16 m_fciBasedOnABC; //  fciBasedOn(13 bits) A(1bit)B(1bit)C(1Bit)
     Acd(const Acd&) = delete;
     Acd& operator = ( const Acd&) = delete;
 

@@ -418,11 +418,11 @@ struct SBBItem
     OUString data;
     SBBItem() : cchData(0){}
 };
-    sal_uInt16 fExtend;
-    sal_uInt16 cData;
-    sal_uInt16 cbExtra;
+    sal_uInt16 m_fExtend;
+    sal_uInt16 m_cData;
+    sal_uInt16 m_cbExtra;
 
-    std::vector< SBBItem > dataItems;
+    std::vector< SBBItem > m_dataItems;
 
     Sttb(Sttb const&) = delete;
     Sttb& operator=(Sttb const&) = delete;
@@ -437,9 +437,9 @@ public:
 }
 
 Sttb::Sttb()
-    : fExtend(0)
-    , cData(0)
-    , cbExtra(0)
+    : m_fExtend(0)
+    , m_cData(0)
+    , m_cbExtra(0)
 {
 }
 
@@ -447,19 +447,19 @@ bool Sttb::Read( SvStream& rS )
 {
     SAL_INFO("sw.ww8", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
-    rS.ReadUInt16( fExtend ).ReadUInt16( cData ).ReadUInt16( cbExtra );
-    if ( cData )
+    rS.ReadUInt16( m_fExtend ).ReadUInt16( m_cData ).ReadUInt16( m_cbExtra );
+    if ( m_cData )
     {
         //if they are all going to be empty strings, how many could there be
         const size_t nMaxPossibleRecords = rS.remainingSize() / sizeof(sal_uInt16);
-        if (cData > nMaxPossibleRecords)
+        if (m_cData > nMaxPossibleRecords)
             return false;
-        for ( sal_Int32 index = 0; index < cData; ++index )
+        for ( sal_Int32 index = 0; index < m_cData; ++index )
         {
             SBBItem aItem;
             rS.ReadUInt16( aItem.cchData );
             aItem.data = read_uInt16s_ToOUString(rS, aItem.cchData);
-            dataItems.push_back( aItem );
+            m_dataItems.push_back( aItem );
         }
     }
     return true;
@@ -469,8 +469,8 @@ OUString
 Sttb::getStringAtIndex( sal_uInt32 index )
 {
     OUString aRet;
-    if ( index < dataItems.size() )
-        aRet = dataItems[ index ].data;
+    if ( index < m_dataItems.size() )
+        aRet = m_dataItems[ index ].data;
     return aRet;
 
 }

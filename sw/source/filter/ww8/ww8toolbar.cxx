@@ -39,8 +39,8 @@ namespace {
 
 class MSOWordCommandConvertor : public MSOCommandConvertor
 {
-   IdToString msoToOOcmd;
-   IdToString tcidToOOcmd;
+   IdToString m_MSOToOOcmd;
+   IdToString m_TCIDToOOcmd;
 
 public:
     MSOWordCommandConvertor();
@@ -54,26 +54,26 @@ MSOWordCommandConvertor::MSOWordCommandConvertor()
 {
     // mso command id to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-    msoToOOcmd[ 0x20b ] = ".uno:CloseDoc";
-    msoToOOcmd[ 0x50 ] = ".uno:Open";
+    m_MSOToOOcmd[ 0x20b ] = ".uno:CloseDoc";
+    m_MSOToOOcmd[ 0x50 ] = ".uno:Open";
 
     // mso tcid to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-    tcidToOOcmd[ 0x9d9 ] = ".uno:Print";
+    m_TCIDToOOcmd[ 0x9d9 ] = ".uno:Print";
 }
 
 OUString MSOWordCommandConvertor::MSOCommandToOOCommand( sal_Int16 key )
 {
-    IdToString::iterator it = msoToOOcmd.find( key );
-    if ( it != msoToOOcmd.end() )
+    IdToString::iterator it = m_MSOToOOcmd.find( key );
+    if ( it != m_MSOToOOcmd.end() )
         return it->second;
     return OUString();
 }
 
 OUString MSOWordCommandConvertor::MSOTCIDToOOCommand( sal_Int16 key )
 {
-    IdToString::iterator it = tcidToOOcmd.find( key );
-    if ( it != tcidToOOcmd.end() )
+    IdToString::iterator it = m_TCIDToOOcmd.find( key );
+    if ( it != m_TCIDToOOcmd.end() )
         return it->second;
     return OUString();
 }
@@ -170,7 +170,7 @@ bool SwCTBWrapper::Read( SvStream& rS )
     {
         if (rIndex < 0 || o3tl::make_unsigned(rIndex) >= rCustomizations.size())
             continue;
-        rCustomizations[rIndex].bIsDroppedMenuTB = true;
+        rCustomizations[rIndex].m_bIsDroppedMenuTB = true;
     }
     return rS.good();
 }
@@ -212,11 +212,11 @@ bool SwCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
 }
 
 Customization::Customization( SwCTBWrapper* wrapper )
-    : tbidForTBD( 0 )
-    , reserved1( 0 )
-    , ctbds( 0 )
-    , pWrapper( wrapper )
-    , bIsDroppedMenuTB( false )
+    : m_tbidForTBD( 0 )
+    , m_reserved1( 0 )
+    , m_ctbds( 0 )
+    , m_pWrapper( wrapper )
+    , m_bIsDroppedMenuTB( false )
 {
 }
 
@@ -224,28 +224,28 @@ bool Customization::Read( SvStream &rS)
 {
     SAL_INFO("sw.ww8","Customization::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS.ReadInt32( tbidForTBD ).ReadUInt16( reserved1 ).ReadUInt16( ctbds );
-    if ( tbidForTBD )
+    rS.ReadInt32( m_tbidForTBD ).ReadUInt16( m_reserved1 ).ReadUInt16( m_ctbds );
+    if ( m_tbidForTBD )
     {
         //each TBDelta is at least 18 bytes in size
         size_t nMaxAvailableRecords = rS.remainingSize() / 18;
-        if (ctbds > nMaxAvailableRecords)
+        if (m_ctbds > nMaxAvailableRecords)
             return false;
-        for (sal_uInt16 index = 0; index < ctbds; ++index)
+        for (sal_uInt16 index = 0; index < m_ctbds; ++index)
         {
             TBDelta aTBDelta;
             if (!aTBDelta.Read( rS ) )
                 return false;
-            customizationDataTBDelta.push_back( aTBDelta );
+            m_customizationDataTBDelta.push_back( aTBDelta );
             // Only set the drop down for menus associated with standard toolbar
-            if ( aTBDelta.ControlDropsToolBar() && tbidForTBD == 0x25 )
-                pWrapper->InsertDropIndex( aTBDelta.CustomizationIndex() );
+            if ( aTBDelta.ControlDropsToolBar() && m_tbidForTBD == 0x25 )
+                m_pWrapper->InsertDropIndex( aTBDelta.CustomizationIndex() );
         }
     }
     else
     {
-        customizationDataCTB = std::make_shared<SwCTB>();
-        if ( !customizationDataCTB->Read( rS ) )
+        m_customizationDataCTB = std::make_shared<SwCTB>();
+        if ( !m_customizationDataCTB->Read( rS ) )
                 return false;
     }
     return rS.good();
@@ -253,22 +253,22 @@ bool Customization::Read( SvStream &rS)
 
 bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
-    if ( tbidForTBD == 0x25 )  // we can handle in a limited way additions the built-in menu bar
+    if ( m_tbidForTBD == 0x25 )  // we can handle in a limited way additions the built-in menu bar
     {
-        for ( auto& rTBDelta : customizationDataTBDelta )
+        for ( auto& rTBDelta : m_customizationDataTBDelta )
         {
             // for each new menu ( control that drops a toolbar )
             // import a toolbar
             if ( rTBDelta.ControlIsInserted() && rTBDelta.ControlDropsToolBar() )
             {
-                Customization* pCust = pWrapper->GetCustomizaton( rTBDelta.CustomizationIndex() );
+                Customization* pCust = m_pWrapper->GetCustomizaton( rTBDelta.CustomizationIndex() );
                 if ( pCust )
                 {
                     // currently only support built-in menu
                     static const OUStringLiteral sMenuBar( u"private:resource/menubar/menubar" );
 
                     // Get menu name
-                    SwTBC* pTBC = pWrapper->GetTBCAtOffset( rTBDelta.TBCStreamOffset() );
+                    SwTBC* pTBC = m_pWrapper->GetTBCAtOffset( rTBDelta.TBCStreamOffset() );
                     if ( !pTBC )
                         return false;
                     const OUString sMenuName = pTBC->GetCustomText().replace('&','~');
@@ -301,7 +301,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                         comphelper::makePropertyValue("Type", sal_Int32( 0 )),
                         comphelper::makePropertyValue("ItemDescriptorContainer", xMenuContainer)
                     };
-                    if ( pCust->customizationDataCTB && !pCust->customizationDataCTB->ImportMenuTB( rWrapper, xMenuContainer, helper ) )
+                    if ( pCust->m_customizationDataCTB && !pCust->m_customizationDataCTB->ImportMenuTB( rWrapper, xMenuContainer, helper ) )
                         return false;
                     SAL_INFO("sw.ww8","** there are " << xIndexContainer->getCount() << " menu items on the bar, inserting after that");
                     xIndexContainer->insertByIndex( xIndexContainer->getCount(), uno::Any( aPopupMenu ) );
@@ -323,13 +323,13 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
 
 bool Customization::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
-    if ( tbidForTBD == 0x25 )
+    if ( m_tbidForTBD == 0x25 )
         return ImportMenu( rWrapper, helper );
-    if ( !customizationDataCTB )
+    if ( !m_customizationDataCTB )
         return false;
-    if ( !customizationDataCTB->IsMenuToolbar() )
+    if ( !m_customizationDataCTB->IsMenuToolbar() )
     {
-        if ( !customizationDataCTB->ImportCustomToolBar( rWrapper, helper ) )
+        if ( !m_customizationDataCTB->ImportCustomToolBar( rWrapper, helper ) )
             return false;
     }
     return true;
@@ -967,8 +967,8 @@ Kme::Read(SvStream &rS)
     return rS.good();
 }
 
-Acd::Acd() : ibst( 0 )
-, fciBasedOnABC( 0 )
+Acd::Acd() : m_ibst( 0 )
+, m_fciBasedOnABC( 0 )
 {
 }
 
@@ -976,7 +976,7 @@ bool Acd::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","Acd::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS.ReadInt16( ibst ).ReadUInt16( fciBasedOnABC );
+    rS.ReadInt16( m_ibst ).ReadUInt16( m_fciBasedOnABC );
     return rS.good();
 }
 
