@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ba974b4_693c876a",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2684,
+      "author": {
+        "id": 1003606
+      },
+      "writtenOn": "2022-06-20T14:35:52Z",
+      "side": 1,
+      "message": "I guess pWidths[0] is not set because usually won’t nothing maps to glyph ID 0. I think we can initalize it to 0, if glyph ID 0 gets used it will get its proper width, if it is not used it does not matter what value it gets. But if we want to be accurate, we can try to get the actual width of glyph ID 0 and use it.",
+      "parentUuid": "99d2a8d5_3eb89358",
+      "revId": "be39eba9a3d81e20c42f1073a365e91ce855c1cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff343ecb_d91b9868",
         "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
         "patchSetId": 4
