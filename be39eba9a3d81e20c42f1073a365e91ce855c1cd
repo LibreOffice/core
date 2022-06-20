@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99d2a8d5_3eb89358",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2684,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-20T13:55:08Z",
+      "side": 1,
+      "message": "I see some valgrind warnings on use of uninitialized data like...\n\n\u003d\u003d2894966\u003d\u003d Conditional jump or move depends on uninitialised value(s)\n\u003d\u003d2894966\u003d\u003d    at 0x48B7118: int rtl::str::valueOfInt\u003c33, char, int\u003e(char*, int, short) (strtmpl.hxx:681)\n\u003d\u003d2894966\u003d\u003d    by 0x48B45F5: rtl_str_valueOfInt32 (string.cxx:493)\n\u003d\u003d2894966\u003d\u003d    by 0xC597B8E: rtl::OStringBuffer::append(int, short) (strbuf.hxx:714)\n\u003d\u003d2894966\u003d\u003d    by 0xCAD3D7F: vcl::PDFWriterImpl::emitFonts() (pdfwriter_impl.cxx:2839)\n\u003d\u003d2894966\u003d\u003d    by 0xCAD4DD4: vcl::PDFWriterImpl::emitResources() (pdfwriter_impl.cxx:2928)\n\u003d\u003d2894966\u003d\u003d    by 0xCAE50E3: vcl::PDFWriterImpl::emitCatalog() (pdfwriter_impl.cxx:4615)\n\u003d\u003d2894966\u003d\u003d    by 0xCAED8CF: vcl::PDFWriterImpl::emit() (pdfwriter_impl.cxx:5755)\n\u003d\u003d2894966\u003d\u003d    by 0xCA9F10C: vcl::PDFWriter::Emit() (pdfwriter.cxx:53)\n\u003d\u003d2894966\u003d\u003d    by 0x6657A329: PDFExport::Export(rtl::OUString const\u0026, com::sun::star::uno::Sequence\u003ccom::sun::star::beans::PropertyValue\u003e const\u0026) (pdfexport.cxx:1012)\n\nand if looks like we never set pWidths[0] to anything?",
+      "revId": "be39eba9a3d81e20c42f1073a365e91ce855c1cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff343ecb_d91b9868",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2838,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-20T13:55:08Z",
+      "side": 1,
+      "message": "vs here, here we loop through pWidths from 0 to nGlyphs",
+      "revId": "be39eba9a3d81e20c42f1073a365e91ce855c1cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
