@@ -87,6 +87,24 @@
       "parentUuid": "15b4eb6a_a5fd447b",
       "revId": "dd2ca3a513025f6fd8bcf588c7e7db0bd3744f1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e70d193_aee97d33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-20T21:51:38Z",
+      "side": 1,
+      "message": "OK, thank you for continuing your work on this enhancement!\n\n1) Try reusing the UI file.\n2) Yes, it would be completely fine to have multiple patches for a single issue.\n\nPlease take a look at Mike\u0027s comment in the bug report. Try to change the UI to make it closer to the suggested design.\n\nOne side note: Please mark comments as \"Resolved\" when there is no problem, or you have fixed problems that other people have mentioned. You have 10 unsolved comments here, although I assume you have resolved all of them.",
+      "parentUuid": "1c5393ec_97a6e1e4",
+      "revId": "dd2ca3a513025f6fd8bcf588c7e7db0bd3744f1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
