@@ -385,12 +385,12 @@ struct DoesStyleMatchStyleSheetPredicate final : public svl::StyleSheetPredicate
 
 }
 
-SfxStyleSheetIterator::SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
+SfxStyleSheetIterator::SfxStyleSheetIterator(const SfxStyleSheetBasePool *pBase,
                                              SfxStyleFamily eFam, SfxStyleSearchBits n)
-    : pCurrentStyle(nullptr)
+    : pBasePool(pBase)
+    , pCurrentStyle(nullptr)
     , mnCurrentPosition(0)
 {
-    pBasePool=pBase;
     nSearchFamily=eFam;
     bSearchUsed=false;
     if( (( n & SfxStyleSearchBits::AllVisible ) != SfxStyleSearchBits::AllVisible )
@@ -690,7 +690,7 @@ SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator+=( const SfxStyleSheetBas
 
 SfxStyleSheetBase* SfxStyleSheetBasePool::Find(const OUString& rName,
                                                SfxStyleFamily eFamily,
-                                               SfxStyleSearchBits eMask)
+                                               SfxStyleSearchBits eMask) const
 {
     SfxStyleSheetIterator aIter(this, eFamily, eMask);
     return aIter.Find(rName);

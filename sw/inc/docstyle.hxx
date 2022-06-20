@@ -222,7 +222,7 @@ public:
             SfxStyleSearchBits nMask = SfxStyleSearchBits::All) override;
 
     virtual SfxStyleSheetBase* Find( const OUString&, SfxStyleFamily eFam,
-                                    SfxStyleSearchBits n=SfxStyleSearchBits::All ) override;
+                                    SfxStyleSearchBits n=SfxStyleSearchBits::All ) const override;
 
     virtual bool SetParent( SfxStyleFamily eFam, const OUString &rStyle,
                             const OUString &rParent ) override;
