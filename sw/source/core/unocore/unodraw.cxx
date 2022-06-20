@@ -1164,19 +1164,22 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             }
             else if (pEntry->nWID == FN_TEXT_BOX)
             {
+                auto pObj = SdrObject::getSdrObjectFromXShape(mxShape);
                 if (pEntry->nMemberId == MID_TEXT_BOX)
                 {
                     bool bValue(false);
                     aValue >>= bValue;
+
                     if (bValue)
-                        SwTextBoxHelper::create(pFormat, GetSvxShape()->GetSdrObject());
+                        SwTextBoxHelper::create(pFormat, pObj);
                     else
-                        SwTextBoxHelper::destroy(pFormat, GetSvxShape()->GetSdrObject());
+                        SwTextBoxHelper::destroy(pFormat, pObj);
                 }
                 else if (pEntry->nMemberId == MID_TEXT_BOX_CONTENT)
                 {
-                    if (aValue.getValueType() == cppu::UnoType<uno::Reference<text::XTextFrame>>::get())
-                        SwTextBoxHelper::set(pFormat, GetSvxShape()->GetSdrObject(),
+                    if (aValue.getValueType()
+                        == cppu::UnoType<uno::Reference<text::XTextFrame>>::get())
+                        SwTextBoxHelper::set(pFormat, pObj,
                                              aValue.get<uno::Reference<text::XTextFrame>>());
                     else
                         SAL_WARN( "sw.uno", "This is not a TextFrame!" );
