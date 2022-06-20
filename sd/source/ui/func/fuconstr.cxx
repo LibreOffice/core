@@ -26,6 +26,9 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlnclit.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -364,6 +367,42 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
             {
                 SfxItemSet aAttr(mpView->GetDefaultAttr());
                 rAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
+                pObj->SetMergedItemSet(aAttr);
+            }
+        }
+        else
+        {
+            // Creating an object with fill.
+            SdrPage* pThemePage = pPage;
+            if (pThemePage->TRG_HasMasterPage())
+            {
+                pThemePage = &pThemePage->TRG_GetMasterPage();
+            }
+
+            svx::Theme* pTheme = pThemePage->getSdrPageProperties().GetTheme();
+            if (pTheme)
+            {
+                // We construct an object on a page where the master page has a theme. Take the
+                // accent1 color from that theme, make sure it has priority over the shape's
+                // document-global style.
+                SfxItemSet aAttr(mpView->GetDefaultAttr());
+
+                aAttr.Put(XFillStyleItem(css::drawing::FillStyle_SOLID));
+
+                svx::ThemeColorType eColorType = svx::ThemeColorType::ACCENT1;
+                Color aColor = pTheme->GetColor(eColorType);
+                XFillColorItem aFillColorItem("", aColor);
+                aFillColorItem.GetThemeColor().SetThemeIndex(static_cast<sal_Int16>(eColorType));
+                aAttr.Put(aFillColorItem);
+
+                aAttr.Put(XLineStyleItem(css::drawing::LineStyle_SOLID));
+
+                // Line color is 50% darker than the fill color.
+                aColor.ApplyTintOrShade(-5000);
+                XLineColorItem aLineColorItem("", aColor);
+                // TODO no theme or theme effect for line colors yet.
+                aAttr.Put(aLineColorItem);
+
                 pObj->SetMergedItemSet(aAttr);
             }
         }

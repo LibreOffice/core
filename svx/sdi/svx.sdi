@@ -10512,7 +10512,7 @@ SfxVoidItem SbaBrwInsert SID_SBA_BRW_INSERT
 
 
 SfxStringItem BasicShapes SID_DRAWTBX_CS_BASIC
-(SfxStringItem BasicShapes SID_DRAWTBX_CS_BASIC)
+(SfxStringItem BasicShapes SID_DRAWTBX_CS_BASIC, SfxBoolItem CreateDirectly FN_PARAM_1)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,

@@ -360,6 +360,16 @@ std::vector<Color> Theme::GetColors() const
     return aColors;
 }
 
+Color Theme::GetColor(ThemeColorType eType) const
+{
+    if (!mpColorSet)
+    {
+        return {};
+    }
+
+    return mpColorSet->getColor(static_cast<size_t>(eType));
+}
+
 } // end of namespace svx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
