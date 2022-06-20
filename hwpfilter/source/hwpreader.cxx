@@ -1271,7 +1271,7 @@ void HwpReader::parseCharShape(CharShape const * cshape)
     mxList->addAttribute("style:font-size-asian", sXML_CDATA, OUString::number(cshape->size / 25) + "pt");
 
     ::std::string const tmp = hstr2ksstr(kstr2hstr(
-        reinterpret_cast<unsigned char const *>(hwpfont.GetFontName(0, cshape->font[0]))).c_str());
+        reinterpret_cast<unsigned char const *>(hwpfont.GetFontName(0, cshape->font))).c_str());
     double fRatio = 1.0;
     int size = getRepFamilyName(tmp.c_str(), d->buf, fRatio);
 
@@ -1281,9 +1281,9 @@ void HwpReader::parseCharShape(CharShape const * cshape)
         OUString(d->buf, size, RTL_TEXTENCODING_EUC_KR));
 
     mxList->addAttribute("style:text-scale", sXML_CDATA,
-        OUString::number(static_cast<int>(cshape->ratio[0] * fRatio)) + "%");
+        OUString::number(static_cast<int>(cshape->ratio * fRatio)) + "%");
 
-    double sspace = (cshape->size / 25) * cshape->space[0] / 100.;
+    double sspace = (cshape->size / 25) * cshape->space / 100.;
 
     if (sspace != 0.)
     {

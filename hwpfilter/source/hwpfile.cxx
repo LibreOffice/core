@@ -603,9 +603,9 @@ int HWPFile::compareCharShape(CharShape const *shape)
         CharShape *cshape = getCharShape(i);
 
         if( shape->size == cshape->size &&
-            shape->font[0] == cshape->font[0] &&
-            shape->ratio[0] == cshape->ratio[0] &&
-            shape->space[0] == cshape->space[0] &&
+            shape->font == cshape->font &&
+            shape->ratio == cshape->ratio &&
+            shape->space == cshape->space &&
             shape->color[1] == cshape->color[1] &&
             shape->color[0] == cshape->color[0] &&
             shape->shade == cshape->shade &&
@@ -639,9 +639,9 @@ int HWPFile::compareParaShape(const ParaShape* shape)
             shape->pagebreak == pshape->pagebreak)
         {
             if (shape->cshape->size == pshape->cshape->size &&
-                shape->cshape->font[0] == pshape->cshape->font[0] &&
-                shape->cshape->ratio[0] == pshape->cshape->ratio[0] &&
-                shape->cshape->space[0] == pshape->cshape->space[0] &&
+                shape->cshape->font == pshape->cshape->font &&
+                shape->cshape->ratio == pshape->cshape->ratio &&
+                shape->cshape->space == pshape->cshape->space &&
                 shape->cshape->color[1] == pshape->cshape->color[1] &&
                 shape->cshape->color[0] == pshape->cshape->color[0] &&
                 shape->cshape->shade == pshape->cshape->shade &&
