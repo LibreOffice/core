@@ -72,7 +72,8 @@ void lclExtendSize(Size& rSize, const Size& rInputSize)
 |*
 \************************************************************************/
 
-SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
+SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* pController,
+                               const SfxItemSet& rInAttrs, bool bSlideBackground)
     : SfxTabPage(pPage, pController, "cui/ui/areatabpage.ui", "AreaTabPage", &rInAttrs)
     // local fixed not o be changed values for local pointers
     , maFixed_ChangeType(ChangeType::NONE)
@@ -99,7 +100,7 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     maBox.AddButton(m_xBtnHatch.get());
     maBox.AddButton(m_xBtnBitmap.get());
     maBox.AddButton(m_xBtnPattern.get());
-    maBox.AddButton(m_xBtnUseBackground.get());
+
     Link<weld::Toggleable&, void> aLink = LINK(this, SvxAreaTabPage, SelectFillTypeHdl_Impl);
     m_xBtnNone->connect_toggled(aLink);
     m_xBtnColor->connect_toggled(aLink);
@@ -107,7 +108,13 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     m_xBtnHatch->connect_toggled(aLink);
     m_xBtnBitmap->connect_toggled(aLink);
     m_xBtnPattern->connect_toggled(aLink);
-    m_xBtnUseBackground->connect_toggled(aLink);
+    if (bSlideBackground)
+    {
+        maBox.AddButton(m_xBtnUseBackground.get());
+        m_xBtnUseBackground->connect_toggled(aLink);
+    }
+    else
+        m_xBtnUseBackground->hide();
 
     SetExchangeSupport();
 }
@@ -356,6 +363,14 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 std::unique_ptr<SfxTabPage> SvxAreaTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs)
 {
     auto xRet = std::make_unique<SvxAreaTabPage>(pPage, pController, *rAttrs);
+    xRet->SetOptimalSize(pController);
+    return xRet;
+}
+
+std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreateWithSlideBackground(
+    weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrs)
+{
+    auto xRet = std::make_unique<SvxAreaTabPage>(pPage, pController, *rAttrs, true);
     xRet->SetOptimalSize(pController);
     return xRet;
 }

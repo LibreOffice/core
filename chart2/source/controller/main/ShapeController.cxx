@@ -289,7 +289,7 @@ void ShapeController::executeDispatch_FormatArea()
     }
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr< AbstractSvxAreaTabDialog > pDlg(
-            pFact->CreateSvxAreaTabDialog(pChartWindow, &aAttr, &pDrawModelWrapper->getSdrModel(), true));
+            pFact->CreateSvxAreaTabDialog(pChartWindow, &aAttr, &pDrawModelWrapper->getSdrModel(), true, false));
     if ( pDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();

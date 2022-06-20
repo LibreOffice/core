@@ -31,7 +31,8 @@ SvxAreaTabDialog::SvxAreaTabDialog
     weld::Window* pParent,
     const SfxItemSet* pAttr,
     SdrModel* pModel,
-    bool bShadow
+    bool bShadow,
+    bool bSlideBackground
 )
     : SfxTabDialogController(pParent, "cui/ui/areadialog.ui", "AreaDialog", pAttr)
     , mpDrawModel          ( pModel ),
@@ -52,7 +53,10 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnGradientListState ( ChangeType::NONE ),
     mnHatchingListState ( ChangeType::NONE )
 {
-    AddTabPage("RID_SVXPAGE_AREA", SvxAreaTabPage::Create, nullptr);
+    if (bSlideBackground)
+        AddTabPage("RID_SVXPAGE_AREA", SvxAreaTabPage::CreateWithSlideBackground, nullptr);
+    else
+        AddTabPage("RID_SVXPAGE_AREA", SvxAreaTabPage::Create, nullptr);
 
     if (bShadow)
     {

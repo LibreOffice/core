@@ -541,7 +541,8 @@ public:
     virtual VclPtr<AbstractSvxAreaTabDialog>       CreateSvxAreaTabDialog(weld::Window* pParent,
                                                                           const SfxItemSet* pAttr,
                                                                           SdrModel* pModel,
-                                                                          bool bShadow) override;
+                                                                          bool bShadow,
+                                                                          bool bSlideBackground) override;
     virtual VclPtr<SfxAbstractTabDialog>           CreateSvxLineTabDialog(weld::Window* pParent, const SfxItemSet* pAttr,
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj,
