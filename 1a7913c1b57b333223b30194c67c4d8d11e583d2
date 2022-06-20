@@ -33,6 +33,24 @@
       "message": "Isn\u0027t this what std::monostate is for?",
       "revId": "1a7913c1b57b333223b30194c67c4d8d11e583d2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ea7591c_1024d8d2",
+        "filename": "sc/inc/cellvalue.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-20T10:55:41Z",
+      "side": 1,
+      "message": "good suggestion! https://gerrit.libreoffice.org/c/core/+/136146",
+      "parentUuid": "1a370513_3c8722dc",
+      "revId": "1a7913c1b57b333223b30194c67c4d8d11e583d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
