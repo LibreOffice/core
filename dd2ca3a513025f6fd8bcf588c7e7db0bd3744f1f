@@ -34,6 +34,24 @@
       "parentUuid": "db82488e_40106e90",
       "revId": "dd2ca3a513025f6fd8bcf588c7e7db0bd3744f1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40046e31_d772749e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-20T12:22:04Z",
+      "side": 1,
+      "message": "OK, in this case, the patch works as intended. If you look at the lock file, you will see the contents contain the information. For test.odt previously opened by testuser, the lock file name would be:\n .~lock.test.odt#\nAnd the contents are something like this:\n,testuser,linux,20.06.2022 20:22,file:///home/testuser/.config/libreoffice/4;",
+      "parentUuid": "0ad2bab8_f719e3e3",
+      "revId": "dd2ca3a513025f6fd8bcf588c7e7db0bd3744f1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
