@@ -129,12 +129,13 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
         if(!m_pPaintRegion->empty())
         {
             // This function often gets called with rectangles that line up vertically.
-            // Try to extend the last one downwards to include the new one.
+            // Try to extend the last one downwards to include the new one (use Union()
+            // in case the new one is actually already contained in the last one).
             SwRect& last = m_pPaintRegion->back();
             if(last.Left() == rRect.Left() && last.Width() == rRect.Width()
                 && last.Bottom() + 1 >= rRect.Top() && last.Bottom() <= rRect.Bottom())
             {
-                last = SwRect( last.TopLeft(), rRect.BottomRight());
+                last.Union(rRect);
                 // And these rectangles lined up vertically often come up in groups
                 // that line up horizontally. Try to extend the previous rectangle
                 // to the right to include the last one.
@@ -144,7 +145,7 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
                     if(last2.Top() == last.Top() && last2.Height() == last.Height()
                         && last2.Right() + 1 >= last.Left() && last2.Right() <= last2.Right())
                     {
-                        last2 = SwRect( last2.TopLeft(), last.BottomRight());
+                        last2.Union(last);
                         m_pPaintRegion->pop_back();
                         return true;
                     }
