@@ -4285,12 +4285,16 @@ void SvNumberFormatter::ImpInitCurrencyTable()
 }
 
 
-static void addToCurrencyFormatsList( NfWSStringsDtor& rStrArr, const OUString& rFormat )
+static std::ptrdiff_t addToCurrencyFormatsList( NfWSStringsDtor& rStrArr, const OUString& rFormat )
 {
     // Prevent duplicates even over subsequent calls of
     // GetCurrencyFormatStrings() with the same vector.
-    if (std::find( rStrArr.begin(), rStrArr.end(), rFormat) == rStrArr.end())
-        rStrArr.push_back( rFormat);
+    NfWSStringsDtor::const_iterator it( std::find( rStrArr.begin(), rStrArr.end(), rFormat));
+    if (it != rStrArr.end())
+        return it - rStrArr.begin();
+
+    rStrArr.push_back( rFormat);
+    return rStrArr.size() - 1;
 }
 
 
@@ -4319,9 +4323,7 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
                          + ";"
                          + aRed
                          + aNegativeBank;
-        addToCurrencyFormatsList( rStrArr, format2);
-
-        nDefault = rStrArr.size() - 1;
+        nDefault = addToCurrencyFormatsList( rStrArr, format2);
     }
     else
     {
@@ -4374,8 +4376,7 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
         {
             addToCurrencyFormatsList( rStrArr, format3);
         }
-        addToCurrencyFormatsList( rStrArr, format4);
-        nDefault = rStrArr.size() - 1;
+        nDefault = addToCurrencyFormatsList( rStrArr, format4);
         if (rCurr.GetDigits())
         {
             addToCurrencyFormatsList( rStrArr, format5);
