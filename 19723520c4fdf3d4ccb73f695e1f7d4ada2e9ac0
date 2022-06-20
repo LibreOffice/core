@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59f273f5_7f23121e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-06-20T22:58:48Z",
+      "side": 1,
+      "message": "okay this patch alone doesn\u0027t verify. Case for squashing the two commits?",
+      "revId": "19723520c4fdf3d4ccb73f695e1f7d4ada2e9ac0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
