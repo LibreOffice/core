@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82242bba_5e645994",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-06-20T21:27:53Z",
+      "side": 1,
+      "message": "Can\u0027t figure out why there\u0027s a \"Merge conflict\"",
+      "revId": "0f5f7b5fc186f9ee7ed5de90e75a30264416614d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
