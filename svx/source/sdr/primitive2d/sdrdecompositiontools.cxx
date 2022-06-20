@@ -273,7 +273,7 @@ void SlideBackgroundFillPrimitive2D::create2DDecomposition(
             // since the defining geometry is the getB2DPolyPolygon() one.
             // We have already checked above that it's no empty and overlaps
             // somehow.
-            // It also might be completely insinde the PageRange. If not, we
+            // It also might be completely inside the PageRange. If not, we
             // additionally would need to mask the content against PageBounds,
             // so using potentially two different MaskPrimitive2D's.
             // Since in this case we have a PolyPolygon and a B2DRange it is cheaper
