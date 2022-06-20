@@ -70,6 +70,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void testTdf94765();
     void testBehaviourWhenWidthAndHeightIsOrIsNotSet();
     void testTdf97663();
+    void testCssClassRedefinition();
 
     Primitive2DSequence parseSvg(std::u16string_view aSource);
 
@@ -106,6 +107,7 @@ public:
     CPPUNIT_TEST(testTdf94765);
     CPPUNIT_TEST(testBehaviourWhenWidthAndHeightIsOrIsNotSet);
     CPPUNIT_TEST(testTdf97663);
+    CPPUNIT_TEST(testCssClassRedefinition);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -831,6 +833,26 @@ void Test::testTdf97663()
     // - Expected: 236
     // - Actual  : 204
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "y", "236");
+}
+
+void Test::testCssClassRedefinition()
+{
+    // Tests for svg css class redefinition behavior
+    // Example:
+    // .c1 {fill:#00ff00}
+    // .c1 {font-family:Sans}
+    // .c1 {fill:#ff0000}
+    // Expected result is .c1 {font-family:Sans; fill:#ff0000} because
+    // the second redefinition appends attributes to the class and the
+    // third redefinition replaces the already existing
+    // attribute in the original definition
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/CssClassRedefinition.svg");
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT (pDocument);
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "test");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Sans");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
