@@ -69,6 +69,23 @@ public:
     const ColorSet& getColorSet(std::u16string_view rName);
 };
 
+/// Offsets into the color list of a theme.
+enum class ThemeColorType
+{
+    DK1 = 0,
+    LT1 = 1,
+    DK2 = 2,
+    LT2 = 3,
+    ACCENT1 = 4,
+    ACCENT2 = 5,
+    ACCENT3 = 6,
+    ACCENT4 = 7,
+    ACCENT5 = 8,
+    ACCENT6 = 9,
+    HLINK = 10,
+    FOLHLINK = 11,
+};
+
 /// A named theme has a named color set.
 class SVXCORE_DLLPUBLIC Theme
 {
@@ -94,6 +111,8 @@ public:
     void UpdateSdrPage(const SdrPage* pPage);
 
     std::vector<Color> GetColors() const;
+
+    Color GetColor(ThemeColorType eType) const;
 };
 
 } // end of namespace svx
