@@ -21,6 +21,7 @@
 
 #include <cstddef>
 
+#include <o3tl/string_view.hxx>
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>
 
@@ -586,7 +587,8 @@ bool StringRangeEnumerator::setRange( std::u16string_view aNewRange )
             aNumberBuf.append( *pInput++ );
         if( !aNumberBuf.isEmpty() )
         {
-            sal_Int32 nNumber = aNumberBuf.makeStringAndClear().toInt32() + mnOffset;
+            sal_Int32 nNumber = o3tl::toInt32(aNumberBuf) + mnOffset;
+            aNumberBuf.setLength(0);
             aNumbers.push_back( nNumber );
             bSequence = false;
         }

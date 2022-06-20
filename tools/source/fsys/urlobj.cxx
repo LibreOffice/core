@@ -1898,7 +1898,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         }
     }
 
-    INetURLObject aNewURI(aSynAbsURIRef.makeStringAndClear());
+    INetURLObject aNewURI(aSynAbsURIRef);
     if (aNewURI.HasError())
     {
         // Detect cases where a relative input could not be made absolute
