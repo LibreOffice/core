@@ -16,6 +16,24 @@
       "message": "I removed the conflicting lines from links. There still seem to be linebreak changes due to editing the file via Gerrit, ugh. Turning the Ignore Whitespace option on, the three deleted lines are seen easier.",
       "revId": "4c29ab7db1004b06d34e32df4a3af3a0ad37d95b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44e779f1_f45d6eb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2022-06-20T10:07:18Z",
+      "side": 1,
+      "message": "Big thanks Adolfo!",
+      "parentUuid": "6c31ffd6_c7427316",
+      "revId": "4c29ab7db1004b06d34e32df4a3af3a0ad37d95b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
