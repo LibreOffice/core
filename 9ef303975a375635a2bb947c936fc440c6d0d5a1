@@ -16,6 +16,24 @@
       "message": "tools::Long seems wrong for this... I\u0027m fairly certain this should be a size_t. Stephan, can you tell me if this is correct or not? ",
       "revId": "9ef303975a375635a2bb947c936fc440c6d0d5a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6111b47_46d306a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-20T07:12:47Z",
+      "side": 1,
+      "message": "best to drop the unnecessary cast completely",
+      "parentUuid": "03906f54_a91d7055",
+      "revId": "9ef303975a375635a2bb947c936fc440c6d0d5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
