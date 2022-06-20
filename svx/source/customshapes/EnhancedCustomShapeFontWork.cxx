@@ -258,7 +258,7 @@ static void CalculateHorizontalScalingFactor(
                 pVirDev->Pop();
 
                 const bool bHopeLess = fScalingFactor < 1.0;
-                // if its hopeless then just continue on with this FontSize of 2, otherwise
+                // if it's hopeless then just continue on with this FontSize of 2, otherwise
                 // continue to try smaller sizes
                 if (!bHopeLess)
                 {
