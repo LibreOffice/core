@@ -114,7 +114,7 @@ class DLLEXPORT HWPPara
 /**
  * Box object list
  */
-        std::map<unsigned short, std::unique_ptr<HBox>> hhstr;
+        std::vector<std::unique_ptr<HBox>> hhstr;
 
         HWPPara(void);
         ~HWPPara(void);

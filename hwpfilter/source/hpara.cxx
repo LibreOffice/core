@@ -166,12 +166,12 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
         auto hBox = readHBox(hwpf);
         if (!hBox)
             return false;
-        hhstr[ii] = std::move(hBox);
-        if (hhstr[ii]->hh == CH_END_PARA)
+        hhstr.emplace_back(std::move(hBox));
+        if (hhstr.back()->hh == CH_END_PARA)
             break;
-        if( hhstr[ii]->hh < CH_END_PARA )
+        if( hhstr.back()->hh < CH_END_PARA )
                 pshape->reserved[0] = 0;
-        ii += hhstr[ii]->WSize();
+        ii += hhstr.back()->WSize();
     }
     return nch && !hwpf.State();
 }
