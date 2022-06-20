@@ -604,7 +604,7 @@ int HWPFile::compareCharShape(CharShape const *shape)
 
         if( shape->size == cshape->size &&
             shape->font[0] == cshape->font[0] &&
-            shape->ratio[0] == cshape->ratio[0] &&
+            shape->ratio == cshape->ratio &&
             shape->space[0] == cshape->space[0] &&
             shape->color[1] == cshape->color[1] &&
             shape->color[0] == cshape->color[0] &&
@@ -640,7 +640,7 @@ int HWPFile::compareParaShape(const ParaShape* shape)
         {
             if (shape->cshape->size == pshape->cshape->size &&
                 shape->cshape->font[0] == pshape->cshape->font[0] &&
-                shape->cshape->ratio[0] == pshape->cshape->ratio[0] &&
+                shape->cshape->ratio == pshape->cshape->ratio &&
                 shape->cshape->space[0] == pshape->cshape->space[0] &&
                 shape->cshape->color[1] == pshape->cshape->color[1] &&
                 shape->cshape->color[0] == pshape->cshape->color[0] &&

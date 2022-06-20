@@ -262,9 +262,9 @@ CharShape::CharShape()
     : index(0)
     , size(0)
     , font{0}
-    , ratio{0}
     , space{0}
     , color{0}
+    , ratio(0)
     , shade(0)
     , attr(0)
 {
@@ -277,7 +277,10 @@ void CharShape::Read(HWPFile & hwpf)
         return;
     size = tmp16;
     hwpf.ReadBlock(font, NLanguage);
-    hwpf.ReadBlock(ratio, NLanguage);
+
+    hwpf.Read1b(ratio);
+    hwpf.SkipBlock(NLanguage - 1); //skip unused part of remaining ratio field
+
     hwpf.ReadBlock(space, NLanguage);
     hwpf.ReadBlock(color, 2);
     hwpf.Read1b(shade);

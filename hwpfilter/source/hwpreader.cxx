@@ -1281,7 +1281,7 @@ void HwpReader::parseCharShape(CharShape const * cshape)
         OUString(d->buf, size, RTL_TEXTENCODING_EUC_KR));
 
     mxList->addAttribute("style:text-scale", sXML_CDATA,
-        OUString::number(static_cast<int>(cshape->ratio[0] * fRatio)) + "%");
+        OUString::number(static_cast<int>(cshape->ratio * fRatio)) + "%");
 
     double sspace = (cshape->size / 25) * cshape->space[0] / 100.;
 

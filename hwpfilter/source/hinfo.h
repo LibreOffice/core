@@ -220,9 +220,9 @@ struct CharShape
  */
     hunit     size;
     unsigned char font[NLanguage];
-    unsigned char ratio[NLanguage];
     signed char   space[NLanguage];               /* 자간 */
     unsigned char color[2];
+    unsigned char ratio;
     unsigned char shade;
     unsigned char attr;
 
