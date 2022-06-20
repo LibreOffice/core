@@ -16,6 +16,24 @@
       "message": "Hi Xisco, can this be tested also using a c++ test instead of a unit test? ",
       "revId": "0ad873e1b25f205069867284c68cc7b6455de025",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6697be8a_bb07d15a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-20T08:40:36Z",
+      "side": 1,
+      "message": "Hi Andreas,\nI don\u0027t know off the top of my head but I\u0027ll check. Thank for fix btw",
+      "parentUuid": "5fa1ab19_8653c19b",
+      "revId": "0ad873e1b25f205069867284c68cc7b6455de025",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
