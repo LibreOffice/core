@@ -55,15 +55,6 @@ virtual std::unique_ptr<Resetter> preTest(const char* filename) override
         }
         return nullptr;
     }
-
-protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return o3tl::ends_with(filename, ".docx");
-    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143860NonPrimitiveCustomShape)
@@ -197,8 +188,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_stroke_shadow)
     verify();
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf123569_rotWriterImage, "tdf123569_rotWriterImage_46deg.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf123569_rotWriterImage)
 {
+    loadAndReload("tdf123569_rotWriterImage_46deg.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
@@ -233,8 +225,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf66039, "tdf66039.docx")
                                  xTables->getCount());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf142486_FrameShadow, "tdf142486_FrameShadow.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf142486_FrameShadow)
 {
+    loadAndReload("tdf142486_FrameShadow.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -253,8 +246,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142486_FrameShadow, "tdf142486_FrameShadow.odt")
     CPPUNIT_ASSERT(sText.startsWith("e"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf136059, "tdf136059.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf136059)
 {
+    loadAndReload("tdf136059.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Contour has not been exported!", true,
@@ -548,8 +542,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135773_numberingShading)
     assertXPath(pXmlStyles, "/w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:shd", "fill", "ED4C05");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf140336_paraNoneShading, "tdf140336_paraNoneShading.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf140336_paraNoneShading)
 {
+    loadAndReload("tdf140336_paraNoneShading.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Before the fix, the background from a style was exported to dis-inheriting paragraphs/styles.
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(COL_AUTO), getProperty<sal_uInt32>(getParagraph(1), "ParaBackColor"));
@@ -560,8 +555,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf140336_paraNoneShading, "tdf140336_paraNoneShadi
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(16744272), getProperty<sal_uInt32>(getParagraph(2), "ParaBackColor"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf141173_missingFrames, "tdf141173_missingFrames.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf141173_missingFrames)
 {
+    loadAndReload("tdf141173_missingFrames.rtf");
     // Without the fix in place, almost all of the text and textboxes were missing.
     // Without the fix, there were only 2 shapes (mostly unseen).
     CPPUNIT_ASSERT_EQUAL(13, getShapes());
@@ -672,8 +668,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
     assertXPathNoAttribute(pXmlDoc, "//w:del", "date");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf139580)
 {
+    loadAndReload("tdf139580.odt");
     // Without the fix in place, this test would have crashed at export time
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -764,8 +761,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136841, "tdf136841.docx")
     CPPUNIT_ASSERT_EQUAL( Color(228,71,69), bitmap.GetPixelColor(38,38));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf138953)
 {
+    loadAndReload("croppedAndRotated.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure the rotation is exported correctly, and size not distorted
@@ -778,8 +776,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138953, "croppedAndRotated.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8664), frameRect.Width);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf118535, "tdf118535.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf118535)
 {
+    loadAndReload("tdf118535.odt");
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
@@ -989,8 +988,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf139549)
 }
 
 
-DECLARE_OOXMLEXPORT_TEST(testTdf143726, "Simple-TOC.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf143726)
 {
+    loadAndReload("Simple-TOC.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
     CPPUNIT_ASSERT(pXmlStyles);
