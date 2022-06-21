@@ -4464,6 +4464,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     // ParseReference().
 
     OUString aUpper;
+    bool bAsciiUpper = false;
 
 Label_Rewind:
 
@@ -4483,7 +4484,7 @@ Label_Rewind:
 
         mbRewind = false;
         aUpper.clear();
-        bool bAsciiUpper = false;
+        bAsciiUpper = false;
 
         if (bAsciiNonAlnum)
         {
@@ -4554,6 +4555,8 @@ Label_Rewind:
             // more likely in that localized language than in the formula
             // language. This in corner cases needs to continue to work for
             // existing documents and environments.
+            // Do not change bAsciiUpper from here on for the lowercase() call
+            // below in the ocBad case to use the correct CharClass.
             aUpper = ScGlobal::getCharClass().uppercase( aOrg );
         }
 
@@ -4618,7 +4621,7 @@ Label_Rewind:
     // would prematurely end compilation. Simple unknown names are handled by
     // the interpreter.
     // Use the same CharClass that was used for uppercase.
-    aUpper = (mbCharClassesDiffer ? ScGlobal::getCharClass() : *pCharClass).lowercase( aUpper );
+    aUpper = ((bAsciiUpper || mbCharClassesDiffer) ? ScGlobal::getCharClass() : *pCharClass).lowercase( aUpper );
     svl::SharedString aSS = rDoc.GetSharedStringPool().intern(aUpper);
     maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
     maRawToken.NewOpCode( ocBad );
