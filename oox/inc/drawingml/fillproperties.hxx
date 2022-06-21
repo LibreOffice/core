@@ -49,13 +49,13 @@ struct GradientFillProperties
     typedef ::std::multimap< double, Color > GradientStopMap;
 
     GradientStopMap     maGradientStops;        /// Gradient stops (colors/transparence).
-    OptValue< css::geometry::IntegerRectangle2D > moFillToRect;
-    OptValue< css::geometry::IntegerRectangle2D > moTileRect;
-    OptValue< sal_Int32 > moGradientPath;       /// If set, gradient follows rectangle, circle, or shape.
-    OptValue< sal_Int32 > moShadeAngle;         /// Rotation angle of linear gradients.
-    OptValue< sal_Int32 > moShadeFlip;          /// Flip mode of gradient, if not stretched to shape.
-    OptValue< bool >    moShadeScaled;          /// True = scale gradient into shape.
-    OptValue< bool >    moRotateWithShape;      /// True = rotate gradient with shape.
+    std::optional< css::geometry::IntegerRectangle2D > moFillToRect;
+    std::optional< css::geometry::IntegerRectangle2D > moTileRect;
+    std::optional< sal_Int32 > moGradientPath;       /// If set, gradient follows rectangle, circle, or shape.
+    std::optional< sal_Int32 > moShadeAngle;         /// Rotation angle of linear gradients.
+    std::optional< sal_Int32 > moShadeFlip;          /// Flip mode of gradient, if not stretched to shape.
+    std::optional< bool >    moShadeScaled;          /// True = scale gradient into shape.
+    std::optional< bool >    moRotateWithShape;      /// True = rotate gradient with shape.
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const GradientFillProperties& rSourceProps );
@@ -65,7 +65,7 @@ struct PatternFillProperties
 {
     Color               maPattFgColor;          /// Pattern foreground color.
     Color               maPattBgColor;          /// Pattern background color.
-    OptValue< sal_Int32 > moPattPreset;         /// Preset pattern type.
+    std::optional< sal_Int32 > moPattPreset;         /// Preset pattern type.
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const PatternFillProperties& rSourceProps );
@@ -97,28 +97,28 @@ struct ArtisticEffectProperties
 struct BlipFillProperties
 {
     css::uno::Reference<css::graphic::XGraphic> mxFillGraphic; /// The fill graphic.
-    OptValue< sal_Int32 > moBitmapMode;         /// Bitmap tile or stretch.
-    OptValue< css::geometry::IntegerRectangle2D >
+    std::optional< sal_Int32 > moBitmapMode;         /// Bitmap tile or stretch.
+    std::optional< css::geometry::IntegerRectangle2D >
                           moFillRect;             /// Stretch fill offsets.
-    OptValue< css::geometry::IntegerRectangle2D >
+    std::optional< css::geometry::IntegerRectangle2D >
                           moClipRect;
-    OptValue< sal_Int32 > moTileOffsetX;        /// Width of bitmap tiles (EMUs).
-    OptValue< sal_Int32 > moTileOffsetY;        /// Height of bitmap tiles (EMUs).
-    OptValue< sal_Int32 > moTileScaleX;         /// Horizontal scaling of bitmap tiles (1/1000 percent).
-    OptValue< sal_Int32 > moTileScaleY;         /// Vertical scaling of bitmap tiles (1/1000 percent).
-    OptValue< sal_Int32 > moTileAlign;          /// Anchor point inside bitmap.
-    OptValue< sal_Int32 > moTileFlip;           /// Flip mode of bitmap tiles.
-    OptValue< bool >      moRotateWithShape;      /// True = rotate bitmap with shape.
+    std::optional< sal_Int32 > moTileOffsetX;        /// Width of bitmap tiles (EMUs).
+    std::optional< sal_Int32 > moTileOffsetY;        /// Height of bitmap tiles (EMUs).
+    std::optional< sal_Int32 > moTileScaleX;         /// Horizontal scaling of bitmap tiles (1/1000 percent).
+    std::optional< sal_Int32 > moTileScaleY;         /// Vertical scaling of bitmap tiles (1/1000 percent).
+    std::optional< sal_Int32 > moTileAlign;          /// Anchor point inside bitmap.
+    std::optional< sal_Int32 > moTileFlip;           /// Flip mode of bitmap tiles.
+    std::optional< bool >      moRotateWithShape;      /// True = rotate bitmap with shape.
     // effects
-    OptValue< sal_Int32 > moColorEffect;        /// XML token for a color effect.
-    OptValue< sal_Int32 > moBrightness;         /// Brightness in the range [-100000,100000].
-    OptValue< sal_Int32 > moContrast;           /// Contrast in the range [-100000,100000].
+    std::optional< sal_Int32 > moColorEffect;        /// XML token for a color effect.
+    std::optional< sal_Int32 > moBrightness;         /// Brightness in the range [-100000,100000].
+    std::optional< sal_Int32 > moContrast;           /// Contrast in the range [-100000,100000].
     Color                 maColorChangeFrom;      /// Start color of color transformation.
     Color                 maColorChangeTo;        /// Destination color of color transformation.
     Color                 maDuotoneColors[2];     /// Duotone Colors
 
     ArtisticEffectProperties maEffect;          /// Artistic effect, not supported by core.
-    OptValue<sal_Int32> moAlphaModFix; ///< Alpha Modulate Fixed Effect.
+    std::optional<sal_Int32> moAlphaModFix; ///< Alpha Modulate Fixed Effect.
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const BlipFillProperties& rSourceProps );
@@ -126,9 +126,9 @@ struct BlipFillProperties
 
 struct FillProperties
 {
-    OptValue< sal_Int32 > moFillType;           /// Fill type (OOXML token).
+    std::optional< sal_Int32 > moFillType;           /// Fill type (OOXML token).
     Color               maFillColor;            /// Solid fill color and transparence.
-    OptValue< bool > moUseBgFill;               /// Whether the background is used as fill type
+    std::optional< bool > moUseBgFill;               /// Whether the background is used as fill type
     GradientFillProperties maGradientProps;     /// Properties for gradient fills.
     PatternFillProperties maPatternProps;       /// Properties for pattern fills.
     BlipFillProperties  maBlipProps;            /// Properties for bitmap fills.

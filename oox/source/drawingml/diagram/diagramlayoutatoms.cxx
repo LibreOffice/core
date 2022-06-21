@@ -45,10 +45,10 @@ using namespace ::oox::core;
 namespace
 {
 /// Looks up the value of the rInternalName -> nProperty key in rProperties.
-oox::OptValue<sal_Int32> findProperty(const oox::drawingml::LayoutPropertyMap& rProperties,
+std::optional<sal_Int32> findProperty(const oox::drawingml::LayoutPropertyMap& rProperties,
                                       const OUString& rInternalName, sal_Int32 nProperty)
 {
-    oox::OptValue<sal_Int32> oRet;
+    std::optional<sal_Int32> oRet;
 
     auto it = rProperties.find(rInternalName);
     if (it != rProperties.end())
@@ -1515,12 +1515,12 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                                 bool bScaleDownEmptySpacing = false;
                                 if (nDir == XML_fromL || nDir == XML_fromR)
                                 {
-                                    oox::OptValue<sal_Int32> oWidth = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
+                                    std::optional<sal_Int32> oWidth = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
                                     bScaleDownEmptySpacing = oWidth.has_value() && oWidth.value() > 0;
                                 }
                                 if (!bScaleDownEmptySpacing && (nDir == XML_fromT || nDir == XML_fromB))
                                 {
-                                    oox::OptValue<sal_Int32> oHeight = findProperty(aProperties, aCurrShape->getInternalName(), XML_h);
+                                    std::optional<sal_Int32> oHeight = findProperty(aProperties, aCurrShape->getInternalName(), XML_h);
                                     bScaleDownEmptySpacing = oHeight.has_value() && oHeight.value() > 0;
                                 }
                                 if (bScaleDownEmptySpacing && aCurrShape->getChildren().empty())
@@ -1568,8 +1568,8 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
             awt::Size aTotalSize;
             for (const auto & aCurrShape : rShape->getChildren())
             {
-                oox::OptValue<sal_Int32> oWidth = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
-                oox::OptValue<sal_Int32> oHeight = findProperty(aProperties, aCurrShape->getInternalName(), XML_h);
+                std::optional<sal_Int32> oWidth = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
+                std::optional<sal_Int32> oHeight = findProperty(aProperties, aCurrShape->getInternalName(), XML_h);
                 awt::Size aSize = aChildSize;
                 if (oWidth.has_value())
                     aSize.Width = oWidth.value();
@@ -1594,8 +1594,8 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
             for (auto& aCurrShape : rShape->getChildren())
             {
                 // Extract properties relevant for this shape from constraints.
-                oox::OptValue<sal_Int32> oWidth = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
-                oox::OptValue<sal_Int32> oHeight = findProperty(aProperties, aCurrShape->getInternalName(), XML_h);
+                std::optional<sal_Int32> oWidth = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
+                std::optional<sal_Int32> oHeight = findProperty(aProperties, aCurrShape->getInternalName(), XML_h);
 
                 awt::Size aSize = aChildSize;
                 if (oWidth.has_value())

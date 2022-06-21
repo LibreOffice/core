@@ -57,13 +57,13 @@ struct AxisModel
     ShapeRef            mxMajorGridLines;   /// Major grid lines formatting.
     ShapeRef            mxMinorGridLines;   /// Minor grid lines formatting.
     NumberFormat        maNumberFormat;     /// Number format for axis tick labels.
-    OptValue< double >  mofCrossesAt;       /// Position on this axis where another axis crosses.
-    OptValue< double >  mofMajorUnit;       /// Unit for major tick marks on date/value axis.
-    OptValue< double >  mofMinorUnit;       /// Unit for minor tick marks on date/value axis.
-    OptValue< double >  mofLogBase;         /// Logarithmic base for logarithmic axes.
-    OptValue< double >  mofMax;             /// Maximum axis value.
-    OptValue< double >  mofMin;             /// Minimum axis value.
-    OptValue< sal_Int32 > monBaseTimeUnit;  /// Base time unit shown on a date axis.
+    std::optional< double >  mofCrossesAt;       /// Position on this axis where another axis crosses.
+    std::optional< double >  mofMajorUnit;       /// Unit for major tick marks on date/value axis.
+    std::optional< double >  mofMinorUnit;       /// Unit for minor tick marks on date/value axis.
+    std::optional< double >  mofLogBase;         /// Logarithmic base for logarithmic axes.
+    std::optional< double >  mofMax;             /// Maximum axis value.
+    std::optional< double >  mofMin;             /// Minimum axis value.
+    std::optional< sal_Int32 > monBaseTimeUnit;  /// Base time unit shown on a date axis.
     sal_Int32           mnAxisId;           /// Unique axis identifier.
     sal_Int32           mnAxisPos;          /// Position of the axis (top/bottom/left/right).
     sal_Int32           mnCrossAxisId;      /// Identifier of a crossing axis.

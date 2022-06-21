@@ -49,15 +49,15 @@ struct AdjustHandle
                                             pos;
 
     // depending to the type (polar or not):
-    OptValue< OUString >               gdRef1; // gdRefX   or gdRefR
-    OptValue< css::drawing::EnhancedCustomShapeParameter >
+    std::optional< OUString >               gdRef1; // gdRefX   or gdRefR
+    std::optional< css::drawing::EnhancedCustomShapeParameter >
                                             min1;   // minX     or minR
-    OptValue< css::drawing::EnhancedCustomShapeParameter >
+    std::optional< css::drawing::EnhancedCustomShapeParameter >
                                             max1;   // maxX     or maxR
-    OptValue< OUString >               gdRef2; // gdRefY   or gdRefAng
-    OptValue< css::drawing::EnhancedCustomShapeParameter >
+    std::optional< OUString >               gdRef2; // gdRefY   or gdRefAng
+    std::optional< css::drawing::EnhancedCustomShapeParameter >
                                             min2;   // minX     or minAng
-    OptValue< css::drawing::EnhancedCustomShapeParameter >
+    std::optional< css::drawing::EnhancedCustomShapeParameter >
                                             max2;   // maxY     or maxAng
 
     AdjustHandle( bool bPolar ) : polar( bPolar ) {};
@@ -110,7 +110,7 @@ public:
     std::vector< CustomShapeGuide >&    getGuideList(){ return maGuideList; };
     std::vector< AdjustHandle >&        getAdjustHandleList(){ return maAdjustHandleList; };
     std::vector< ConnectionSite >&      getConnectionSiteList(){ return maConnectionSiteList; };
-    OptValue< GeomRect >&               getTextRect(){ return maTextRect; };
+    std::optional< GeomRect >&          getTextRect(){ return maTextRect; };
     std::vector< Path2D >&              getPath2DList(){ return maPath2DList; };
     std::vector< css::drawing::EnhancedCustomShapeSegment >& getSegments(){ return maSegments; };
     void                                setMirroredX( bool bMirroredX ) { mbMirroredX = bMirroredX; };
@@ -137,7 +137,7 @@ private:
     std::vector< CustomShapeGuide > maGuideList;
     std::vector< AdjustHandle >     maAdjustHandleList;
     std::vector< ConnectionSite >   maConnectionSiteList;
-    OptValue< GeomRect >            maTextRect;
+    std::optional< GeomRect >       maTextRect;
     std::vector< Path2D >           maPath2DList;
 
     std::vector< css::drawing::EnhancedCustomShapeSegment >

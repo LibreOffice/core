@@ -39,9 +39,9 @@ class ShapePropertyMap;
 
 struct LineArrowProperties
 {
-    OptValue< sal_Int32 > moArrowType;
-    OptValue< sal_Int32 > moArrowWidth;
-    OptValue< sal_Int32 > moArrowLength;
+    std::optional< sal_Int32 > moArrowType;
+    std::optional< sal_Int32 > moArrowWidth;
+    std::optional< sal_Int32 > moArrowLength;
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const LineArrowProperties& rSourceProps );
@@ -56,11 +56,11 @@ struct LineProperties
     LineArrowProperties maEndArrow;         /// End line arrow style.
     FillProperties      maLineFill;         /// Line fill (solid, gradient, ...).
     DashStopVector      maCustomDash;       /// User-defined line dash style.
-    OptValue< sal_Int32 > moLineWidth;      /// Line width (EMUs).
-    OptValue< sal_Int32 > moPresetDash;     /// Preset dash (OOXML token).
-    OptValue< sal_Int32 > moLineCompound;   /// Line compound type (OOXML token).
-    OptValue< sal_Int32 > moLineCap;        /// Line cap (OOXML token).
-    OptValue< sal_Int32 > moLineJoint;      /// Line joint type (OOXML token).
+    std::optional< sal_Int32 > moLineWidth;      /// Line width (EMUs).
+    std::optional< sal_Int32 > moPresetDash;     /// Preset dash (OOXML token).
+    std::optional< sal_Int32 > moLineCompound;   /// Line compound type (OOXML token).
+    std::optional< sal_Int32 > moLineCap;        /// Line cap (OOXML token).
+    std::optional< sal_Int32 > moLineJoint;      /// Line joint type (OOXML token).
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const LineProperties& rSourceProps );

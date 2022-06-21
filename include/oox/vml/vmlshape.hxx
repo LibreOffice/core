@@ -62,10 +62,10 @@ struct ShapeTypeModel
     OUString     maShapeId;              ///< Unique identifier of the shape.
     OUString     maLegacyId;             ///< Plaintext identifier of the shape.
     OUString     maShapeName;            ///< Name of the shape, if present.
-    OptValue< sal_Int32 > moShapeType;          ///< Builtin shape type identifier.
+    std::optional< sal_Int32 > moShapeType;          ///< Builtin shape type identifier.
 
-    OptValue< Int32Pair > moCoordPos;           ///< Top-left position of coordinate system for children scaling.
-    OptValue< Int32Pair > moCoordSize;          ///< Size of coordinate system for children scaling.
+    std::optional< Int32Pair > moCoordPos;           ///< Top-left position of coordinate system for children scaling.
+    std::optional< Int32Pair > moCoordSize;          ///< Size of coordinate system for children scaling.
     OUString     maPosition;             ///< Position type of the shape.
     OUString     maZIndex;                ///< ZIndex of the shape
     OUString     maLeft;                 ///< X position of the shape bounding box (number with unit).
@@ -96,21 +96,21 @@ struct ShapeTypeModel
     ShadowModel         maShadowModel;          ///< Shape shadow formatting.
     TextpathModel       maTextpathModel;        ///< Shape textpath formatting.
 
-    OptValue< OUString > moGraphicPath;  ///< Path to a graphic for this shape.
-    OptValue< OUString > moGraphicTitle; ///< Title of the graphic.
-    OptValue< OUString > moWrapAnchorX;  ///< The base object from which our horizontal positioning should be calculated.
-    OptValue< OUString > moWrapAnchorY;  ///< The base object from which our vertical positioning should be calculated.
-    OptValue< OUString > moWrapType;     ///< How to wrap the text around the object
-    OptValue< OUString > moWrapSide;     ///< On which side to wrap the text around the object
+    std::optional< OUString > moGraphicPath;  ///< Path to a graphic for this shape.
+    std::optional< OUString > moGraphicTitle; ///< Title of the graphic.
+    std::optional< OUString > moWrapAnchorX;  ///< The base object from which our horizontal positioning should be calculated.
+    std::optional< OUString > moWrapAnchorY;  ///< The base object from which our vertical positioning should be calculated.
+    std::optional< OUString > moWrapType;     ///< How to wrap the text around the object
+    std::optional< OUString > moWrapSide;     ///< On which side to wrap the text around the object
     OUString maVTextAnchor; ///< How the text inside the shape is anchored vertically.
     OUString maWrapDistanceLeft;         ///< Distance from the left side of the shape to the text that wraps around it.
     OUString maWrapDistanceRight;        ///< Distance from the right side of the shape to the text that wraps around it.
     OUString maWrapDistanceTop;          ///< Distance from the top of the shape to the text that wraps around it.
     OUString maWrapDistanceBottom;       ///< Distance from the bottom of the shape to the text that wraps around it.
-    OptValue<OUString> moCropBottom; ///< Specifies the how much to crop the image from the bottom up as a fraction of picture size.
-    OptValue<OUString> moCropLeft; ///< Specifies how much to crop the image from the left in as a fraction of picture size.
-    OptValue<OUString> moCropRight; ///< Specifies how much to crop the image from the right in as a fraction of picture size.
-    OptValue<OUString> moCropTop; ///< Specifies how much to crop the image from the top down as a fraction of picture size.
+    std::optional<OUString> moCropBottom; ///< Specifies the how much to crop the image from the bottom up as a fraction of picture size.
+    std::optional<OUString> moCropLeft; ///< Specifies how much to crop the image from the left in as a fraction of picture size.
+    std::optional<OUString> moCropRight; ///< Specifies how much to crop the image from the right in as a fraction of picture size.
+    std::optional<OUString> moCropTop; ///< Specifies how much to crop the image from the top down as a fraction of picture size.
     OUString maLayoutFlowAlt; ///< Specifies the alternate layout flow for text in textboxes.
 
     /// An adjustment for the intensity of all colors, i.e. contrast, on a 0..0x10000 scale.

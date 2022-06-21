@@ -45,20 +45,20 @@ struct TextCharacterProperties
     TextFont            maSymbolFont;
     Color               maUnderlineColor;
     Color               maHighlightColor;
-    OptValue< OUString > moLang;
-    OptValue< sal_Int32 > moHeight;
+    std::optional< OUString > moLang;
+    std::optional< sal_Int32 > moHeight;
     /// If a font scale has to be applied manually to moHeight.
-    OptValue< double > moFontScale;
-    OptValue< sal_Int32 > moSpacing;
-    OptValue< sal_Int32 > moUnderline;
-    OptValue< sal_Int32 > moBaseline;
-    OptValue< sal_Int32 > moStrikeout;
-    OptValue< sal_Int32 > moCaseMap;
-    OptValue< bool >    moBold;
-    OptValue< bool >    moItalic;
-    OptValue< bool >    moUnderlineLineFollowText;
-    OptValue< bool >    moUnderlineFillFollowText;
-    OptValue<LineProperties> moTextOutlineProperties;
+    std::optional< double > moFontScale;
+    std::optional< sal_Int32 > moSpacing;
+    std::optional< sal_Int32 > moUnderline;
+    std::optional< sal_Int32 > moBaseline;
+    std::optional< sal_Int32 > moStrikeout;
+    std::optional< sal_Int32 > moCaseMap;
+    std::optional< bool >    moBold;
+    std::optional< bool >    moItalic;
+    std::optional< bool >    moUnderlineLineFollowText;
+    std::optional< bool >    moUnderlineFillFollowText;
+    std::optional<LineProperties> moTextOutlineProperties;
 
     FillProperties      maFillProperties;
     /// Set if there was a property set that alters run visually during import

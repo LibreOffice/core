@@ -34,9 +34,9 @@ namespace oox::drawingml {
 struct TextBodyProperties
 {
     PropertyMap                                     maPropertyMap;
-    OptValue< sal_Int32 >                           moRotation;
+    std::optional< sal_Int32 >                      moRotation;
     bool                                            mbAnchorCtr;
-    OptValue< sal_Int32 >                           moVert;
+    std::optional< sal_Int32 >                      moVert;
     bool                                            moUpright = false;
     std::array<std::optional<sal_Int32>, 4> moInsets;
     std::optional< sal_Int32 >                    moTextOffUpper;
