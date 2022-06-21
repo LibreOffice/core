@@ -695,8 +695,8 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     JavaVMInitArgs vm_args;
 
     struct Option {
-        Option(OString const & theOptionString, void * theExtraInfo):
-            optionString(theOptionString), extraInfo(theExtraInfo)
+        Option(OString theOptionString, void * theExtraInfo):
+            optionString(std::move(theOptionString)), extraInfo(theExtraInfo)
         {}
 
         OString optionString;

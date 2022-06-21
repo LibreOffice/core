@@ -20,6 +20,7 @@
 #define INCLUDED_JVMFWK_PLUGINS_SUNMAJOR_PLUGINLIB_UTIL_HXX
 
 #include <rtl/ustring.hxx>
+#include <utility>
 #include <vector>
 #include <vendorbase.hxx>
 
@@ -63,7 +64,7 @@ bool makeDriveLetterSame(OUString * fileURL);
 struct InfoFindSame
 {
     OUString sJava;
-    explicit InfoFindSame(const OUString& sJavaHome):sJava(sJavaHome){}
+    explicit InfoFindSame(OUString sJavaHome):sJava(std::move(sJavaHome)){}
 
     bool operator () (const rtl::Reference<VendorBase> & aVendorInfo)
     {
@@ -74,7 +75,7 @@ struct InfoFindSame
 struct SameOrSubDirJREMap
 {
     OUString s1;
-    explicit SameOrSubDirJREMap(const OUString& s):s1(s){
+    explicit SameOrSubDirJREMap(OUString s):s1(std::move(s)){
     }
 
     bool operator () (const std::pair<const OUString, rtl::Reference<VendorBase> > & s2)
