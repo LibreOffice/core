@@ -330,7 +330,10 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                     const auto& rLabelMap = pLabelSource->mxDataSeq->maData;
                     const auto& rKV = rLabelMap.find(mrModel.mnIndex);
                     if (rKV != rLabelMap.end())
-                        rKV->second >>= oaLabelText.use();
+                    {
+                        oaLabelText.emplace();
+                        rKV->second >>= *oaLabelText;
+                    }
                 }
             }
 

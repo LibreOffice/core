@@ -115,7 +115,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
     {
         case A_TOKEN(ln): // CT_LineProperties
             // TODO still largely unsupported
-            return new LinePropertiesContext(*this, rAttribs, mrTextCharacterProperties.moTextOutlineProperties.use());
+            return new LinePropertiesContext(*this, rAttribs, *mrTextCharacterProperties.moTextOutlineProperties);
         // EG_FillProperties
         case A_TOKEN( noFill ):
         case A_TOKEN( solidFill ):
