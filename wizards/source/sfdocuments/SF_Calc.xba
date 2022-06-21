@@ -4444,6 +4444,7 @@ Private Function _ValidateSheet(Optional ByRef pvSheetName As Variant _
 &apos;&apos;&apos;		DUPLICATESHEETERROR		A sheet with the given name exists already
 
 Dim vSheets As Variant				&apos;	List of sheets
+Dim sSheet As String				&apos;	Sheet name without single quotes
 Dim lSheet As Long					&apos;	Index in list of sheets
 Dim vTypes As Variant				&apos;	Array of accepted variable types
 Dim bValid As Boolean				&apos;	Return value
@@ -4474,12 +4475,13 @@ Try:
 			pvSheetName = _Component.CurrentController.ActiveSheet.Name
 		Else
 			vSheets = _Component.getSheets.getElementNames()
+			sSheet = Replace(pvSheetName, &quot;&apos;&quot;, &quot;&quot;)
 			If pvNew Then
-				If ScriptForge.SF_Array.Contains(vSheets, pvSheetName) Then GoTo CatchDuplicate
+				If ScriptForge.SF_Array.Contains(vSheets, sSheet) Then GoTo CatchDuplicate
 			Else
-				If Not ScriptForge.SF_Utils._Validate(pvSheetName, psArgName, V_STRING, vSheets) Then GoTo Finally
+				If Not ScriptForge.SF_Utils._Validate(sSheet, psArgName, V_STRING, vSheets) Then GoTo Finally
 				If pvResetSheet Then
-					lSheet = ScriptForge.SF_Array.IndexOf(vSheets, pvSheetName, CaseSensitive := False)
+					lSheet = ScriptForge.SF_Array.IndexOf(vSheets, sSheet, CaseSensitive := False)
 					pvSheetName = vSheets(lSheet)
 				End If
 			End If
