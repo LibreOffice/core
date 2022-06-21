@@ -16,6 +16,23 @@
       "message": "Ready for review.",
       "revId": "489bb8e5ef3b245ba158afcf96e203547eeb3501",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78148aa1_8079b4ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-06-21T09:08:23Z",
+      "side": 1,
+      "message": "As_Char anchored grouped shapes with textboxes, having content, have issues with copying, the content lost after copy. It needs tweaks, do not merge. ",
+      "revId": "489bb8e5ef3b245ba158afcf96e203547eeb3501",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
