@@ -85,6 +85,7 @@ public:
     void testSortWithSheetExternalReferencesODS();
     void testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef const & xDocShRef, SCROW nRow1, SCROW nRow2,
             bool bCheckRelativeInSheet );
+    void testForcepoint107();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
@@ -106,6 +107,7 @@ public:
     CPPUNIT_TEST(testEnhancedProtectionXLSX);
     CPPUNIT_TEST(testSortWithSharedFormulasODS);
     CPPUNIT_TEST(testSortWithSheetExternalReferencesODS);
+    CPPUNIT_TEST(testForcepoint107);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -759,6 +761,13 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef c
             CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(nCol,nRow,0)));
         }
     }
+}
+
+// just needs to not crash on recalc
+void ScFiltersTest::testForcepoint107()
+{
+    ScDocShellRef xDocSh = loadDoc(u"forcepoint107.", FORMAT_XLSX, true);
+    xDocSh->DoHardRecalc();
 }
 
 ScFiltersTest::ScFiltersTest()
