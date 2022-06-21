@@ -180,7 +180,6 @@ public:
 
     bool         has_value() const { return mbHasValue; }
     bool         operator!() const { return !mbHasValue; }
-    bool         differsFrom( const Type& rValue ) const { return mbHasValue && (maValue != rValue); }
 
     const Type&  get() const { return maValue; }
     const Type&  get( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }

@@ -449,12 +449,13 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         rPropMap.setProperty( ShapeProperty::LineCap, eLineCap );
 
     // create line dash from preset dash token or dash stop vector (not for invisible line)
-    if( (eLineStyle != drawing::LineStyle_NONE) && (moPresetDash.differsFrom( XML_solid ) || !maCustomDash.empty()) )
+    if( (eLineStyle != drawing::LineStyle_NONE) &&
+        ((moPresetDash.has_value() && moPresetDash.get() != XML_solid) || !maCustomDash.empty()) )
     {
         LineDash aLineDash;
         aLineDash.Style = lclGetDashStyle( moLineCap.get( XML_flat ) );
 
-        if(moPresetDash.differsFrom(XML_solid))
+        if(moPresetDash.has_value() && moPresetDash.get() != XML_solid)
             lclConvertPresetDash(aLineDash, moPresetDash.get(XML_dash));
         else // !maCustomDash.empty()
         {
@@ -505,11 +506,12 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 drawing::LineStyle LineProperties::getLineStyle() const
 {
     // rules to calculate the line style inferred from the code in LineProperties::pushToPropMap
-    return (maLineFill.moFillType.get() == XML_noFill) ?
-            drawing::LineStyle_NONE :
-            (moPresetDash.differsFrom( XML_solid ) || (!moPresetDash && !maCustomDash.empty())) ?
-                    drawing::LineStyle_DASH :
-                    drawing::LineStyle_SOLID;
+    if (maLineFill.moFillType.get() == XML_noFill)
+        return drawing::LineStyle_NONE;
+    if ((moPresetDash.has_value() && moPresetDash.get() != XML_solid) ||
+        (!moPresetDash && !maCustomDash.empty()))
+       return drawing::LineStyle_DASH;
+    return drawing::LineStyle_SOLID;
 }
 
 drawing::LineCap LineProperties::getLineCap() const
