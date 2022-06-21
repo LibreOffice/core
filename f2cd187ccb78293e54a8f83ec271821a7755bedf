@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa4c99c0_510109d2",
+        "filename": "svgio/source/svgreader/svgstylenode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-06-21T12:48:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac87a3e6_7ff0764b",
+      "range": {
+        "startLine": 146,
+        "startChar": 12,
+        "endLine": 146,
+        "endChar": 46
+      },
+      "revId": "f2cd187ccb78293e54a8f83ec271821a7755bedf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d862f511_a73eea5a",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-06-21T10:46:53Z",
       "side": 1,
       "message": "You already have searched with find() so you are essentially searching the map a second time here, which isn\u0027t needed.",
+      "range": {
+        "startLine": 163,
+        "startChar": 53,
+        "endLine": 163,
+        "endChar": 64
+      },
+      "revId": "f2cd187ccb78293e54a8f83ec271821a7755bedf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e07fb86_881d911f",
+        "filename": "svgio/source/svgreader/svgstylenode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-06-21T12:48:38Z",
+      "side": 1,
+      "message": "Whoops, done",
+      "parentUuid": "d862f511_a73eea5a",
       "range": {
         "startLine": 163,
         "startChar": 53,
