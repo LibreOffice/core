@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5c59e37_8b2f3b35",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-21T12:16:36Z",
+      "side": 1,
+      "message": "Should the change be here instead ?",
+      "revId": "22605ecfddc17040deab7f7974cd825f9ae5fb1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
