@@ -279,7 +279,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             return new TextCharacterPropertiesContext( *this, rAttribs, mrTextParagraphProperties.getTextCharacterProperties() );
         case W_TOKEN( jc ):
             {
-                OptValue< OUString > oParaAdjust = rAttribs.getString( W_TOKEN(val) );
+                std::optional< OUString > oParaAdjust = rAttribs.getString( W_TOKEN(val) );
                 if( oParaAdjust.has_value() && !oParaAdjust.value().isEmpty() )
                 {
                     const OUString& sParaAdjust = oParaAdjust.value();
@@ -299,7 +299,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 // Spacing before
                 if( !rAttribs.getBool(W_TOKEN(beforeAutospacing), false) )
                 {
-                    OptValue<sal_Int32> oBefore = rAttribs.getInteger(W_TOKEN(before));
+                    std::optional<sal_Int32> oBefore = rAttribs.getInteger(W_TOKEN(before));
                     if (oBefore.has_value())
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
@@ -309,7 +309,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     }
                     else
                     {
-                        OptValue<sal_Int32> oBeforeLines = rAttribs.getInteger(W_TOKEN(beforeLines));
+                        std::optional<sal_Int32> oBeforeLines = rAttribs.getInteger(W_TOKEN(beforeLines));
                         if (oBeforeLines.has_value())
                         {
                             TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
@@ -323,7 +323,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 // Spacing after
                 if( !rAttribs.getBool(W_TOKEN(afterAutospacing), false) )
                 {
-                    OptValue<sal_Int32> oAfter = rAttribs.getInteger(W_TOKEN(after));
+                    std::optional<sal_Int32> oAfter = rAttribs.getInteger(W_TOKEN(after));
                     if (oAfter.has_value())
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
@@ -333,7 +333,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     }
                     else
                     {
-                        OptValue<sal_Int32> oAfterLines = rAttribs.getInteger(W_TOKEN(afterLines));
+                        std::optional<sal_Int32> oAfterLines = rAttribs.getInteger(W_TOKEN(afterLines));
                         if (oAfterLines.has_value())
                         {
                             TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
@@ -345,8 +345,8 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 }
 
                 // Line spacing
-                OptValue<OUString> oLineRule = rAttribs.getString(W_TOKEN(lineRule));
-                OptValue<sal_Int32> oLineSpacing = rAttribs.getInteger(W_TOKEN(line));
+                std::optional<OUString> oLineRule = rAttribs.getString(W_TOKEN(lineRule));
+                std::optional<sal_Int32> oLineSpacing = rAttribs.getInteger(W_TOKEN(line));
                 if (oLineSpacing.has_value())
                 {
                     TextSpacing& rLineSpacing = mrTextParagraphProperties.getLineSpacing();

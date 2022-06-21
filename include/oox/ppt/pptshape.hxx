@@ -39,7 +39,6 @@ namespace com::sun::star {
 namespace oox {
     namespace core { class XmlFilterBase; }
     namespace drawingml { class Theme; }
-    template <typename Type> class OptValue;
 }
 
 namespace oox::ppt {
@@ -83,7 +82,7 @@ public:
     bool hasNonInheritedShapeProperties() const { return mbHasNoninheritedShapeProperties; }
 
     static oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nFirstSubType,
-            const sal_Int32 nSecondSubType, const OptValue< sal_Int32 >& oSubTypeIndex,
+            const sal_Int32 nSecondSubType, const std::optional< sal_Int32 >& oSubTypeIndex,
             std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly = false );
     static oox::drawingml::ShapePtr findPlaceholderByIndex( const sal_Int32 nIdx,
             std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly = false );

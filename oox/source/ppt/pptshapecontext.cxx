@@ -66,7 +66,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
         case PPT_TOKEN( ph ):
         {
             SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
-            OptValue< sal_Int32 > oSubType( rAttribs.getToken( XML_type) );
+            std::optional< sal_Int32 > oSubType( rAttribs.getToken( XML_type) );
             sal_Int32 nSubType( rAttribs.getToken( XML_type, XML_obj ) );
             oox::drawingml::ShapePtr pTmpPlaceholder;
 

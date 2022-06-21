@@ -148,7 +148,7 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
             case A_TOKEN( prstTxWarp ):     // CT_PresetTextShape
                 if( mpShapePtr )
                 {
-                    const OptValue<OUString> sPrst = rAttribs.getString( XML_prst );
+                    const std::optional<OUString> sPrst = rAttribs.getString( XML_prst );
                     if( sPrst.has_value() )
                     {
                         mrTextBodyProp.msPrst = sPrst.value();

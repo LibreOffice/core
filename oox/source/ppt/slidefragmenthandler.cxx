@@ -82,7 +82,7 @@ SlideFragmentHandler::~SlideFragmentHandler()
         PropertyMap aPropMap;
         PropertySet aSlideProp( xSlide );
 
-        OptValue<bool> aShowMasterShapes = rAttribs.getBool(XML_showMasterSp);
+        std::optional<bool> aShowMasterShapes = rAttribs.getBool(XML_showMasterSp);
         if (aShowMasterShapes.has_value() && !aShowMasterShapes.value())
             xSet->setPropertyValue("IsBackgroundObjectsVisible", Any(false));
 

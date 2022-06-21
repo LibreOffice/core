@@ -49,29 +49,29 @@ namespace {
 
 /** Returns the boolean value from the specified VML attribute (if present).
  */
-OptValue< bool > lclDecodeBool( const AttributeList& rAttribs, sal_Int32 nToken )
+std::optional< bool > lclDecodeBool( const AttributeList& rAttribs, sal_Int32 nToken )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nToken );
-    if( oValue.has_value() ) return OptValue< bool >( ConversionHelper::decodeBool( oValue.value() ) );
-    return OptValue< bool >();
+    std::optional< OUString > oValue = rAttribs.getString( nToken );
+    if( oValue.has_value() ) return std::optional< bool >( ConversionHelper::decodeBool( oValue.value() ) );
+    return std::optional< bool >();
 }
 
 /** Returns the percentage value from the specified VML attribute (if present).
     The value will be normalized (1.0 is returned for 100%).
  */
-OptValue< double > lclDecodePercent( const AttributeList& rAttribs, sal_Int32 nToken, double fDefValue )
+std::optional< double > lclDecodePercent( const AttributeList& rAttribs, sal_Int32 nToken, double fDefValue )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nToken );
-    if( oValue.has_value() ) return OptValue< double >( ConversionHelper::decodePercent( oValue.value(), fDefValue ) );
-    return OptValue< double >();
+    std::optional< OUString > oValue = rAttribs.getString( nToken );
+    if( oValue.has_value() ) return std::optional< double >( ConversionHelper::decodePercent( oValue.value(), fDefValue ) );
+    return std::optional< double >();
 }
 
 /** #119750# Special method for opacity; it *should* be a percentage value, but there are cases
     where a value relative to 0xffff (65536) is used, ending with an 'f'
  */
-OptValue< double > lclDecodeOpacity( const AttributeList& rAttribs, sal_Int32 nToken, double fDefValue )
+std::optional< double > lclDecodeOpacity( const AttributeList& rAttribs, sal_Int32 nToken, double fDefValue )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nToken );
+    std::optional< OUString > oValue = rAttribs.getString( nToken );
     double fRetval(fDefValue);
 
     if( oValue.has_value() )
@@ -92,15 +92,15 @@ OptValue< double > lclDecodeOpacity( const AttributeList& rAttribs, sal_Int32 nT
         }
     }
 
-    return OptValue< double >(fRetval);
+    return std::optional< double >(fRetval);
 }
 
 /** Returns the integer value pair from the specified VML attribute (if present).
  */
-OptValue< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int32 nToken )
+std::optional< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int32 nToken )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nToken );
-    OptValue< Int32Pair > oRetValue;
+    std::optional< OUString > oValue = rAttribs.getString( nToken );
+    std::optional< Int32Pair > oRetValue;
     if( oValue.has_value() )
     {
         std::u16string_view aValue1, aValue2;
@@ -112,10 +112,10 @@ OptValue< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int
 
 /** Returns the percentage pair from the specified VML attribute (if present).
  */
-OptValue< DoublePair > lclDecodePercentPair( const AttributeList& rAttribs, sal_Int32 nToken )
+std::optional< DoublePair > lclDecodePercentPair( const AttributeList& rAttribs, sal_Int32 nToken )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nToken );
-    OptValue< DoublePair > oRetValue;
+    std::optional< OUString > oValue = rAttribs.getString( nToken );
+    std::optional< DoublePair > oRetValue;
     if( oValue.has_value() )
     {
         std::u16string_view aValue1, aValue2;
@@ -398,7 +398,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.moCropTop = rAttribs.getString(XML_croptop);
 
             // Gain / contrast.
-            OptValue<OUString> oGain = rAttribs.getString(XML_gain);
+            std::optional<OUString> oGain = rAttribs.getString(XML_gain);
             sal_Int32 nGain = 0x10000;
             if (oGain.has_value() && oGain.value().endsWith("f"))
             {
@@ -413,7 +413,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.mnGain = nGain;
 
             // Blacklevel / brightness.
-            OptValue<OUString> oBlacklevel = rAttribs.getString(XML_blacklevel);
+            std::optional<OUString> oBlacklevel = rAttribs.getString(XML_blacklevel);
             sal_Int16 nBlacklevel = 0;
             if (oBlacklevel.has_value() && oBlacklevel.value().endsWith("f"))
             {
@@ -450,10 +450,10 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
     return nullptr;
 }
 
-OptValue< OUString > ShapeTypeContext::decodeFragmentPath( const AttributeList& rAttribs, sal_Int32 nToken ) const
+std::optional< OUString > ShapeTypeContext::decodeFragmentPath( const AttributeList& rAttribs, sal_Int32 nToken ) const
 {
-    OptValue< OUString > oFragmentPath;
-    OptValue< OUString > oRelId = rAttribs.getString( nToken );
+    std::optional< OUString > oFragmentPath;
+    std::optional< OUString > oRelId = rAttribs.getString( nToken );
     if( oRelId.has_value() )
         oFragmentPath = getFragmentPathFromRelId( oRelId.value() );
     return oFragmentPath;

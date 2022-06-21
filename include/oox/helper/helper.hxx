@@ -24,6 +24,7 @@
 
 #include <cstring>
 #include <limits>
+#include <optional>
 
 #include <o3tl/safeint.hxx>
 #include <osl/endian.h>
@@ -168,37 +169,8 @@ inline void setFlag( Type& ornBitField, Type nMask, bool bSet = true )
 }
 
 
-/** Optional value, similar to ::std::optional<>, with convenience accessors.
- */
 template< typename Type >
-class OptValue
-{
-public:
-                 OptValue() : maValue(), mbHasValue( false ) {}
-    explicit     OptValue( const Type& rValue ) : maValue( rValue ), mbHasValue( true ) {}
-
-    bool         has_value() const { return mbHasValue; }
-    bool         operator!() const { return !mbHasValue; }
-
-    const Type&  value() const { return maValue; }
-    const Type&  value_or( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }
-
-    Type&        operator*() { assert(mbHasValue); return maValue; }
-    Type&        emplace() { mbHasValue = true; maValue = Type(); return maValue; }
-
-    OptValue&    operator=( const Type& rValue ) { maValue = rValue; mbHasValue = true; return *this; }
-    bool         operator==( const OptValue& rValue ) const {
-                             return ( ( !mbHasValue && rValue.mbHasValue == false ) ||
-                                 ( mbHasValue == rValue.mbHasValue && maValue == rValue.maValue ) );
-                 }
-
-private:
-    Type                maValue;
-    bool                mbHasValue;
-};
-
-template< typename Type >
-void assignIfUsed( OptValue<Type>& rDestValue, const OptValue<Type>& rSourceValue )
+void assignIfUsed( std::optional<Type>& rDestValue, const std::optional<Type>& rSourceValue )
 {
     if( rSourceValue.has_value() )
         rDestValue = rSourceValue.value();

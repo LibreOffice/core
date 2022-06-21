@@ -179,7 +179,7 @@ public:
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setSubTypeIndex( sal_Int32 nSubTypeIndex ) { moSubTypeIndex = nSubTypeIndex; }
-    const OptValue< sal_Int32 >&    getSubTypeIndex() const { return moSubTypeIndex; }
+    const std::optional< sal_Int32 >& getSubTypeIndex() const { return moSubTypeIndex; }
 
     // setDefaults has to be called if styles are imported (OfficeXML is not storing properties having the default value)
     void                            setDefaults(bool bHeight);
@@ -353,7 +353,7 @@ protected:
     OUString                    msId;
     OUString                    msDescription;
     sal_Int32                   mnSubType;      // if this type is not zero, then the shape is a placeholder
-    OptValue< sal_Int32 >       moSubTypeIndex;
+    std::optional< sal_Int32 >  moSubTypeIndex;
 
     ShapeStyleRefMap            maShapeStyleRefs;
 

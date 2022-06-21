@@ -683,7 +683,7 @@ namespace
 // 5. ph with the same oSubTypeIndex
 
 oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal_Int32 nSecondSubType,
-    const OptValue< sal_Int32 >& oSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly )
+    const std::optional< sal_Int32 >& oSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly )
 {
     class Placeholders
     {
@@ -693,7 +693,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal
         {
         }
 
-        void add(const oox::drawingml::ShapePtr& aShape, sal_Int32 nFirstSubType, sal_Int32 nSecondSubType, const OptValue< sal_Int32 >& oSubTypeIndex)
+        void add(const oox::drawingml::ShapePtr& aShape, sal_Int32 nFirstSubType, sal_Int32 nSecondSubType, const std::optional< sal_Int32 >& oSubTypeIndex)
         {
             if (!aShape)
                 return;
