@@ -166,8 +166,8 @@ OOX_DLLPUBLIC sal_Int32 decodeMeasureToTwip(const GraphicHelper& rGraphicHelper,
      */
     OOX_DLLPUBLIC ::oox::drawingml::Color decodeColor(
                             const GraphicHelper& rGraphicHelper,
-                            const OptValue< OUString >& roVmlColor,
-                            const OptValue< double >& roVmlOpacity,
+                            const std::optional< OUString >& roVmlColor,
+                            const std::optional< double >& roVmlOpacity,
                             ::Color nDefaultRgb,
                             ::Color nPrimaryRgb = API_RGB_TRANSPARENT );
 
@@ -193,9 +193,9 @@ OOX_DLLPUBLIC sal_Int32 decodeMeasureToTwip(const GraphicHelper& rGraphicHelper,
 /** The stroke arrow model structure contains all properties for a line end arrow. */
 struct StrokeArrowModel
 {
-    OptValue< sal_Int32 > moArrowType;
-    OptValue< sal_Int32 > moArrowWidth;
-    OptValue< sal_Int32 > moArrowLength;
+    std::optional< sal_Int32 > moArrowType;
+    std::optional< sal_Int32 > moArrowWidth;
+    std::optional< sal_Int32 > moArrowLength;
 
     void                assignUsed( const StrokeArrowModel& rSource );
 };
@@ -204,16 +204,16 @@ struct StrokeArrowModel
 /** The stroke model structure contains all shape border properties. */
 struct StrokeModel
 {
-    OptValue< bool >    moStroked;              ///< Shape border line on/off.
+    std::optional< bool >    moStroked;              ///< Shape border line on/off.
     StrokeArrowModel    maStartArrow;           ///< Start line arrow style.
     StrokeArrowModel    maEndArrow;             ///< End line arrow style.
-    OptValue< OUString > moColor;        ///< Solid line color.
-    OptValue< double > moOpacity;               ///< Solid line color opacity.
-    OptValue< OUString > moWeight;       ///< Line width.
-    OptValue< OUString > moDashStyle;    ///< Line dash (predefined or manually).
-    OptValue< sal_Int32 > moLineStyle;          ///< Line style (single, double, ...).
-    OptValue< sal_Int32 > moEndCap;             ///< Type of line end cap.
-    OptValue< sal_Int32 > moJoinStyle;          ///< Type of line join.
+    std::optional< OUString > moColor;        ///< Solid line color.
+    std::optional< double > moOpacity;               ///< Solid line color opacity.
+    std::optional< OUString > moWeight;       ///< Line width.
+    std::optional< OUString > moDashStyle;    ///< Line dash (predefined or manually).
+    std::optional< sal_Int32 > moLineStyle;          ///< Line style (single, double, ...).
+    std::optional< sal_Int32 > moEndCap;             ///< Type of line end cap.
+    std::optional< sal_Int32 > moJoinStyle;          ///< Type of line join.
 
     void                assignUsed( const StrokeModel& rSource );
 
@@ -227,18 +227,18 @@ struct StrokeModel
 /** The fill model structure contains all shape fill properties. */
 struct OOX_DLLPUBLIC FillModel
 {
-    OptValue< bool >    moFilled;               ///< Shape fill on/off.
-    OptValue< OUString > moColor;        ///< Solid fill color.
-    OptValue< double >  moOpacity;              ///< Solid fill color opacity.
-    OptValue< OUString > moColor2;       ///< End color of gradient.
-    OptValue< double >  moOpacity2;             ///< End color opacity of gradient.
-    OptValue< sal_Int32 > moType;               ///< Fill type.
-    OptValue< sal_Int32 > moAngle;              ///< Gradient rotation angle.
-    OptValue< double >  moFocus;                ///< Linear gradient focus of second color.
-    OptValue< DoublePair > moFocusPos;          ///< Rectangular gradient focus position of second color.
-    OptValue< DoublePair > moFocusSize;         ///< Rectangular gradient focus size of second color.
-    OptValue< OUString > moBitmapPath;   ///< Path to fill bitmap fragment.
-    OptValue< bool >    moRotate;               ///< True = rotate gradient/bitmap with shape.
+    std::optional< bool >    moFilled;               ///< Shape fill on/off.
+    std::optional< OUString > moColor;        ///< Solid fill color.
+    std::optional< double >  moOpacity;              ///< Solid fill color opacity.
+    std::optional< OUString > moColor2;       ///< End color of gradient.
+    std::optional< double >  moOpacity2;             ///< End color opacity of gradient.
+    std::optional< sal_Int32 > moType;               ///< Fill type.
+    std::optional< sal_Int32 > moAngle;              ///< Gradient rotation angle.
+    std::optional< double >  moFocus;                ///< Linear gradient focus of second color.
+    std::optional< DoublePair > moFocusPos;          ///< Rectangular gradient focus position of second color.
+    std::optional< DoublePair > moFocusSize;         ///< Rectangular gradient focus size of second color.
+    std::optional< OUString > moBitmapPath;   ///< Path to fill bitmap fragment.
+    std::optional< bool >    moRotate;               ///< True = rotate gradient/bitmap with shape.
 
     void                assignUsed( const FillModel& rSource );
 
@@ -253,10 +253,10 @@ struct OOX_DLLPUBLIC FillModel
 struct OOX_DLLPUBLIC ShadowModel
 {
     bool               mbHasShadow;               ///< Is a v:shadow element seen?
-    OptValue<bool>     moShadowOn;                ///< Is the element turned on?
-    OptValue<OUString> moColor;                   ///< Specifies the color of the shadow.
-    OptValue<OUString> moOffset;                  ///< Specifies the shadow's offset from the shape's location.
-    OptValue<double>   moOpacity;                 ///< Specifies the opacity of the shadow.
+    std::optional<bool>     moShadowOn;                ///< Is the element turned on?
+    std::optional<OUString> moColor;                   ///< Specifies the color of the shadow.
+    std::optional<OUString> moOffset;                  ///< Specifies the shadow's offset from the shape's location.
+    std::optional<double>   moOpacity;                 ///< Specifies the opacity of the shadow.
 
     ShadowModel();
 
@@ -267,9 +267,9 @@ struct OOX_DLLPUBLIC ShadowModel
 /** The shadow model structure contains all shape textpath properties. */
 struct TextpathModel
 {
-    OptValue<OUString> moString;                  ///< Specifies the string of the textpath.
-    OptValue<OUString> moStyle;                   ///< Specifies the style of the textpath.
-    OptValue<bool>     moTrim;                    ///< Specifies whether extra space is removed above and below the text
+    std::optional<OUString> moString;                  ///< Specifies the string of the textpath.
+    std::optional<OUString> moStyle;                   ///< Specifies the style of the textpath.
+    std::optional<bool>     moTrim;                    ///< Specifies whether extra space is removed above and below the text
 
     TextpathModel();
 

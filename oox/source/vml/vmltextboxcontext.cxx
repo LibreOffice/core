@@ -72,14 +72,14 @@ TextPortionContext::TextPortionContext( ContextHandler2Helper const & rParent,
         break;
         case OOX_TOKEN(dml, blip):
             {
-                OptValue<OUString> oRelId = rAttribs.getString(R_TOKEN(embed));
+                std::optional<OUString> oRelId = rAttribs.getString(R_TOKEN(embed));
                 if (oRelId.has_value())
                     mrTextBox.mrTypeModel.moGraphicPath = getFragmentPathFromRelId(oRelId.value());
             }
         break;
         case VML_TOKEN(imagedata):
             {
-                OptValue<OUString> oRelId = rAttribs.getString(R_TOKEN(id));
+                std::optional<OUString> oRelId = rAttribs.getString(R_TOKEN(id));
                 if (oRelId.has_value())
                     mrTextBox.mrTypeModel.moGraphicPath = getFragmentPathFromRelId(oRelId.value());
             }

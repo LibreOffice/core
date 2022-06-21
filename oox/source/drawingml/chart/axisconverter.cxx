@@ -53,7 +53,7 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-void lclSetValueOrClearAny( Any& orAny, const OptValue< double >& rofValue )
+void lclSetValueOrClearAny( Any& orAny, const std::optional< double >& rofValue )
 {
     if( rofValue.has_value() ) orAny <<= rofValue.value(); else orAny.clear();
 }
@@ -76,7 +76,7 @@ sal_Int32 lclGetApiTimeUnit( sal_Int32 nTimeUnit )
     return TimeUnit::DAY;
 }
 
-void lclConvertTimeInterval( Any& orInterval, const OptValue< double >& rofUnit, sal_Int32 nTimeUnit )
+void lclConvertTimeInterval( Any& orInterval, const std::optional< double >& rofUnit, sal_Int32 nTimeUnit )
 {
     if( rofUnit.has_value() && (1.0 <= rofUnit.value()) && (rofUnit.value() <= SAL_MAX_INT32) )
         orInterval <<= css::chart::TimeInterval( static_cast< sal_Int32 >( rofUnit.value() ), lclGetApiTimeUnit( nTimeUnit ) );

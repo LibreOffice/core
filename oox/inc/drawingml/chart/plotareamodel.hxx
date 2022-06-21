@@ -30,9 +30,9 @@ namespace oox::drawingml::chart {
 
 struct View3DModel
 {
-    OptValue< sal_Int32 > monHeightPercent; /// Height of the 3D view, relative to chart width.
-    OptValue< sal_Int32 > monRotationX;     /// Horizontal rotation in degrees.
-    OptValue< sal_Int32 > monRotationY;     /// Vertical rotation in degrees.
+    std::optional< sal_Int32 > monHeightPercent; /// Height of the 3D view, relative to chart width.
+    std::optional< sal_Int32 > monRotationX;     /// Horizontal rotation in degrees.
+    std::optional< sal_Int32 > monRotationY;     /// Vertical rotation in degrees.
     sal_Int32           mnDepthPercent;     /// Depth of the 3D view, relative to chart width.
     sal_Int32           mnPerspective;      /// Eye distance to the 3D objects.
     bool                mbRightAngled;      /// True = right-angled axes in 3D view.

@@ -223,7 +223,7 @@ sal_Int32 ConversionHelper::decodeMeasureToTwip(const GraphicHelper& rGraphicHel
 }
 
 Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
-        const OptValue< OUString >& roVmlColor, const OptValue< double >& roVmlOpacity,
+        const std::optional< OUString >& roVmlColor, const std::optional< double >& roVmlOpacity,
         ::Color nDefaultRgb, ::Color nPrimaryRgb )
 {
     Color aDmlColor;
@@ -554,12 +554,12 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
 
 namespace {
 
-sal_Int64 lclGetEmu( const GraphicHelper& rGraphicHelper, const OptValue< OUString >& roValue, sal_Int64 nDefValue )
+sal_Int64 lclGetEmu( const GraphicHelper& rGraphicHelper, const std::optional< OUString >& roValue, sal_Int64 nDefValue )
 {
     return roValue.has_value() ? ConversionHelper::decodeMeasureToEmu( rGraphicHelper, roValue.value(), 0, false, false ) : nDefValue;
 }
 
-void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::DashStopVector& orCustomDash, const OptValue< OUString >& roDashStyle )
+void lclGetDmlLineDash( std::optional< sal_Int32 >& oroPresetDash, LineProperties::DashStopVector& orCustomDash, const std::optional< OUString >& roDashStyle )
 {
     if( !roDashStyle.has_value() )
         return;
@@ -593,7 +593,7 @@ void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::Da
     }
 }
 
-sal_Int32 lclGetDmlArrowType( const OptValue< sal_Int32 >& roArrowType )
+sal_Int32 lclGetDmlArrowType( const std::optional< sal_Int32 >& roArrowType )
 {
     if( roArrowType.has_value() ) switch( roArrowType.value() )
     {
@@ -607,7 +607,7 @@ sal_Int32 lclGetDmlArrowType( const OptValue< sal_Int32 >& roArrowType )
     return XML_none;
 }
 
-sal_Int32 lclGetDmlArrowWidth( const OptValue< sal_Int32 >& roArrowWidth )
+sal_Int32 lclGetDmlArrowWidth( const std::optional< sal_Int32 >& roArrowWidth )
 {
     if( roArrowWidth.has_value() ) switch( roArrowWidth.value() )
     {
@@ -618,7 +618,7 @@ sal_Int32 lclGetDmlArrowWidth( const OptValue< sal_Int32 >& roArrowWidth )
     return XML_med;
 }
 
-sal_Int32 lclGetDmlArrowLength( const OptValue< sal_Int32 >& roArrowLength )
+sal_Int32 lclGetDmlArrowLength( const std::optional< sal_Int32 >& roArrowLength )
 {
     if( roArrowLength.has_value() ) switch( roArrowLength.value() )
     {
@@ -636,7 +636,7 @@ void lclConvertArrow( LineArrowProperties& orArrowProp, const StrokeArrowModel& 
     orArrowProp.moArrowLength = lclGetDmlArrowLength( rStrokeArrow.moArrowLength );
 }
 
-sal_Int32 lclGetDmlLineCompound( const OptValue< sal_Int32 >& roLineStyle )
+sal_Int32 lclGetDmlLineCompound( const std::optional< sal_Int32 >& roLineStyle )
 {
     if( roLineStyle.has_value() ) switch( roLineStyle.value() )
     {
@@ -649,7 +649,7 @@ sal_Int32 lclGetDmlLineCompound( const OptValue< sal_Int32 >& roLineStyle )
     return XML_sng;
 }
 
-sal_Int32 lclGetDmlLineCap( const OptValue< sal_Int32 >& roEndCap )
+sal_Int32 lclGetDmlLineCap( const std::optional< sal_Int32 >& roEndCap )
 {
     if( roEndCap.has_value() ) switch( roEndCap.value() )
     {
@@ -660,7 +660,7 @@ sal_Int32 lclGetDmlLineCap( const OptValue< sal_Int32 >& roEndCap )
     return XML_flat;    // different defaults in VML (flat) and DrawingML (square)
 }
 
-sal_Int32 lclGetDmlLineJoint( const OptValue< sal_Int32 >& roJoinStyle )
+sal_Int32 lclGetDmlLineJoint( const std::optional< sal_Int32 >& roJoinStyle )
 {
     if( roJoinStyle.has_value() ) switch( roJoinStyle.value() )
     {
@@ -969,7 +969,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
                 }
                 else if (aName == u"font-size")
                 {
-                    oox::OptValue<OUString> aOptString {OUString(aValue)};
+                    std::optional<OUString> aOptString {OUString(aValue)};
                     float nSize = drawingml::convertEmuToPoints(lclGetEmu(rGraphicHelper, aOptString, 1));
 
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);

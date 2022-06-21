@@ -115,7 +115,7 @@ public:
             case DGM_TOKEN( hierBranch ):
             {
                 // need to convert from oox::OptValue to std::optional since 1st is not available in svx
-                const OptValue< sal_Int32 > aOptVal(rAttribs.getToken( XML_val ));
+                const std::optional< sal_Int32 > aOptVal(rAttribs.getToken( XML_val ));
                 if(aOptVal.has_value())
                     mrPoint.moHierarchyBranch = aOptVal.value();
                 break;

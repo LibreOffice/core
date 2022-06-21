@@ -32,37 +32,37 @@ namespace oox::drawingml {
 
 struct RotationProperties
 {
-    OptValue< sal_Int32 > mnLatitude;
-    OptValue< sal_Int32 > mnLongitude;
-    OptValue< sal_Int32 > mnRevolution;
+    std::optional< sal_Int32 > mnLatitude;
+    std::optional< sal_Int32 > mnLongitude;
+    std::optional< sal_Int32 > mnRevolution;
 };
 
 struct BevelProperties
 {
-    OptValue< sal_Int32 > mnPreset;
-    OptValue< sal_Int32 > mnWidth;
-    OptValue< sal_Int32 > mnHeight;
+    std::optional< sal_Int32 > mnPreset;
+    std::optional< sal_Int32 > mnWidth;
+    std::optional< sal_Int32 > mnHeight;
 };
 
 struct Generic3DProperties
 {
-    OptValue< sal_Int32 > mnPreset;
-    OptValue< float > mfFieldOfVision;
-    OptValue< float > mfZoom;
-    OptValue< sal_Int32 > mnLightRigDirection;
-    OptValue< sal_Int32 > mnLightRigType;
+    std::optional< sal_Int32 > mnPreset;
+    std::optional< float > mfFieldOfVision;
+    std::optional< float > mfZoom;
+    std::optional< sal_Int32 > mnLightRigDirection;
+    std::optional< sal_Int32 > mnLightRigType;
     RotationProperties maCameraRotation;
     RotationProperties maLightRigRotation;
 
-    OptValue< sal_Int32 > mnExtrusionH;
-    OptValue< sal_Int32 > mnContourW;
-    OptValue< sal_Int32 > mnShapeZ;
-    OptValue< sal_Int32 > mnMaterial;
+    std::optional< sal_Int32 > mnExtrusionH;
+    std::optional< sal_Int32 > mnContourW;
+    std::optional< sal_Int32 > mnShapeZ;
+    std::optional< sal_Int32 > mnMaterial;
     Color maExtrusionColor;
     Color maContourColor;
 
-    OptValue< BevelProperties > maTopBevelProperties;
-    OptValue< BevelProperties > maBottomBevelProperties;
+    std::optional< BevelProperties > maTopBevelProperties;
+    std::optional< BevelProperties > maBottomBevelProperties;
 
     static OUString     getCameraPrstName( sal_Int32 nElement );
     static OUString     getLightRigName( sal_Int32 nElement );

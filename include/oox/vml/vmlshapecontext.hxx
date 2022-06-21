@@ -109,7 +109,7 @@ private:
     void                setStyle( std::u16string_view rStyle );
 
     /** Resolve a relation identifier to a fragment path. */
-    OptValue< OUString > decodeFragmentPath( const AttributeList& rAttribs, sal_Int32 nToken ) const;
+    std::optional< OUString > decodeFragmentPath( const AttributeList& rAttribs, sal_Int32 nToken ) const;
 
 private:
     std::shared_ptr<ShapeType> m_pShapeType;

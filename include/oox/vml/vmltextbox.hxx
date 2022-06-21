@@ -41,24 +41,24 @@ struct ShapeTypeModel;
 /// A text paragraph in a textbox.
 struct TextParagraphModel
 {
-    OptValue<OUString> moParaAdjust; ///< Paragraph adjust (left, center, right, etc.)
-    OptValue<OUString> moParaStyleName;
+    std::optional<OUString> moParaAdjust; ///< Paragraph adjust (left, center, right, etc.)
+    std::optional<OUString> moParaStyleName;
 };
 
 /** Font settings for a text portion in a textbox. */
 struct OOX_DLLPUBLIC TextFontModel
 {
-    OptValue< OUString > moName;     ///< Font name.
-    OptValue< OUString > moNameAsian; ///< Asian font name.
-    OptValue< OUString > moNameComplex; ///< Complex font name.
-    OptValue< OUString > moColor;    ///< Font color, HTML encoded, sort of.
-    OptValue< sal_Int32 > monSize;          ///< Font size in twips.
-    OptValue< sal_Int32 > monUnderline;     ///< Single or double underline.
-    OptValue< sal_Int32 > monEscapement;    ///< Subscript or superscript.
-    OptValue< bool >    mobBold;
-    OptValue< bool >    mobItalic;
-    OptValue< bool >    mobStrikeout;
-    OptValue<sal_Int32> monSpacing;
+    std::optional< OUString > moName;     ///< Font name.
+    std::optional< OUString > moNameAsian; ///< Asian font name.
+    std::optional< OUString > moNameComplex; ///< Complex font name.
+    std::optional< OUString > moColor;    ///< Font color, HTML encoded, sort of.
+    std::optional< sal_Int32 > monSize;          ///< Font size in twips.
+    std::optional< sal_Int32 > monUnderline;     ///< Single or double underline.
+    std::optional< sal_Int32 > monEscapement;    ///< Subscript or superscript.
+    std::optional< bool >    mobBold;
+    std::optional< bool >    mobItalic;
+    std::optional< bool >    mobStrikeout;
+    std::optional<sal_Int32> monSpacing;
 
     explicit            TextFontModel();
 };

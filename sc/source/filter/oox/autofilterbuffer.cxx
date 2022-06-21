@@ -732,7 +732,7 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
     ::std::vector<TableFilterField3> aFilterFields;
 
     // track if columns require to enable or disable regular expressions
-    OptValue< bool > obNeedsRegExp;
+    std::optional< bool > obNeedsRegExp;
 
     /*  Track whether the filter fields of the first filter column are
         connected with 'or'. In this case, other filter fields cannot be
