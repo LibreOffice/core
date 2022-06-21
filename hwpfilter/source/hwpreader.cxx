@@ -2817,7 +2817,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
     }
 
     int n = 0;
-    while (n < para->nch)
+    while (n < para->nch && o3tl::make_unsigned(n) < para->hhstr.size())
     {
         const auto& box = para->hhstr[n];
 
