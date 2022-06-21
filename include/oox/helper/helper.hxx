@@ -184,7 +184,8 @@ public:
     const Type&  get() const { return maValue; }
     const Type&  get( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }
 
-    Type&        use() { mbHasValue = true; return maValue; }
+    Type&        operator*() { return maValue; }
+    Type&        emplace() { mbHasValue = true; maValue = Type(); return maValue; }
 
     OptValue&    operator=( const Type& rValue ) { maValue = rValue; mbHasValue = true; return *this; }
     bool         operator==( const OptValue& rValue ) const {
