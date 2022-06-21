@@ -16,6 +16,69 @@
       "message": "Changed commit message and the +1 is missing from verified",
       "revId": "44708fac601deb420a164bb5db8dd1964b0382ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a7f9742_874ac7bc",
+        "filename": "svgio/qa/cppunit/SvgImportTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-21T11:07:37Z",
+      "side": 1,
+      "message": "Ideally don\u0027t name the test class with the bug number but with what it is checking.",
+      "range": {
+        "startLine": 838,
+        "startChar": 0,
+        "endLine": 838,
+        "endChar": 6
+      },
+      "revId": "44708fac601deb420a164bb5db8dd1964b0382ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe80cd0b_890158e6",
+        "filename": "svgio/qa/cppunit/SvgImportTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-21T11:07:37Z",
+      "side": 1,
+      "message": "Expand this with description of what is the expected behavior. The best place to describe it is here - better than the commit message or the bug report.",
+      "revId": "44708fac601deb420a164bb5db8dd1964b0382ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e7b108c_755d6c2f",
+        "filename": "svgio/qa/cppunit/SvgImportTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-21T11:07:37Z",
+      "side": 1,
+      "message": "Describing with what the test failed with in the past is irrelevant for the future - I never do it but some others as you can se do it for some reason.",
+      "range": {
+        "startLine": 846,
+        "startChar": 4,
+        "endLine": 848,
+        "endChar": 26
+      },
+      "revId": "44708fac601deb420a164bb5db8dd1964b0382ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
