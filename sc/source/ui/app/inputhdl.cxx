@@ -828,6 +828,7 @@ ScInputHandler::ScInputHandler()
         bLastIsSymbol( false ),
         mbDocumentDisposing(false),
         mbPartialPrefix(false),
+        mbEditingExistingContent(false),
         nValidation( 0 ),
         eAttrAdjust( SvxCellHorJustify::Standard ),
         aScaleX( 1,1 ),
@@ -1760,6 +1761,9 @@ void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
     if (pEditEngine)
     {
         aFormula = pEditEngine->GetText(0);
+        /* TODO: LOK: are you sure you want '+' and '-' let start formulas with
+         * function names? That was meant for "data typist" numeric keyboard
+         * input. */
         bEdit = aFormula.getLength() > 1 && (aFormula[0] == '=' || aFormula[0] == '+' || aFormula[0] == '-');
     }
 
@@ -2564,6 +2568,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             }
             else
                 aStr = GetEditText(mpEditEngine.get());
+            mbEditingExistingContent = !aStr.isEmpty();
 
             if (aStr.startsWith("{=") && aStr.endsWith("}") )  // Matrix formula?
             {
@@ -2578,8 +2583,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
             if ( SC_MOD()->GetAppOptions().GetAutoComplete() )
                 GetColData();
 
-            if ( !aStr.isEmpty() && ( aStr[0] == '=' || aStr[0] == '+' || aStr[0] == '-' ) &&
-                 !cTyped && !bCreatingFuncView )
+            if (!cTyped && !bCreatingFuncView && StartsLikeFormula(aStr))
                 InitRangeFinder(aStr); // Formula is being edited -> RangeFinder
 
             bNewTable = true; // -> PostEditView Call
@@ -2781,6 +2785,13 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
     bInOwnChange = false;
 }
 
+bool ScInputHandler::StartsLikeFormula( std::u16string_view rStr ) const
+{
+    // For new input '+' and '-' may start the dreaded "lazy data typist"
+    // formula input, editing existing formula content can only start with '='.
+    return !rStr.empty() && (rStr[0] == '=' || (!mbEditingExistingContent && (rStr[0] == '+' || rStr[0] == '-')));
+}
+
 void ScInputHandler::UpdateFormulaMode()
 {
     SfxApplication* pSfxApp = SfxGetpApp();
@@ -2789,8 +2800,7 @@ void ScInputHandler::UpdateFormulaMode()
     if (bIsFormula)
     {
         const OUString& rText = mpEditEngine->GetText(0);
-        bIsFormula = !rText.isEmpty() &&
-            (rText[0] == '=' || rText[0] == '+' || rText[0] == '-');
+        bIsFormula = StartsLikeFormula(rText);
     }
 
     if ( bIsFormula )
@@ -3399,6 +3409,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     nFormSelStart = nFormSelEnd = 0;
     aFormText.clear();
 
+    mbEditingExistingContent = false;
     bInOwnChange = false;
     bInEnterHandler = false;
     if (bUpdateLayout)
@@ -3413,6 +3424,7 @@ void ScInputHandler::CancelHandler()
 
     bModified = false;
     mbPartialPrefix = false;
+    mbEditingExistingContent = false;
 
     // Don't rely on ShowRefFrame switching the active view synchronously
     // execute the function directly on the correct view's bindings instead
