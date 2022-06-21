@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/VetoException.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <utility>
 
 
 namespace pcr
@@ -56,12 +57,12 @@ namespace pcr
 
 
     FormController::FormController( const Reference< XComponentContext >& _rxContext,
-            const OUString& sImplementationName,
+            OUString sImplementationName,
             const css::uno::Sequence<OUString>& aSupportedServiceNames,
             bool _bUseFormFormComponentHandlers )
         :OPropertyBrowserController( _rxContext )
         ,FormController_PropertyBase1( m_aBHelper )
-        ,m_sImplementationName( sImplementationName )
+        ,m_sImplementationName(std::move( sImplementationName ))
         ,m_aSupportedServiceNames( aSupportedServiceNames )
     {
         osl_atomic_increment( &m_refCount );

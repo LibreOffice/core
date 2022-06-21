@@ -30,6 +30,7 @@
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 #include <vcl/event.hxx>
 #include <vcl/mnemonic.hxx>
 #include "general.hxx"
@@ -476,8 +477,8 @@ BibGeneralPage::~BibGeneralPage()
 class ChangeListener : public cppu::WeakImplHelper<css::beans::XPropertyChangeListener>
 {
 public:
-    explicit ChangeListener(const css::uno::Reference<css::beans::XPropertySet>& rPropSet)
-        : m_xPropSet(rPropSet)
+    explicit ChangeListener(css::uno::Reference<css::beans::XPropertySet> xPropSet)
+        : m_xPropSet(std::move(xPropSet))
         , m_bSelfChanging(false)
     {
     }

@@ -21,6 +21,7 @@
 
 #include "formstrings.hxx"
 #include <comphelper/sequence.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 namespace pcr
@@ -29,10 +30,10 @@ namespace pcr
     using namespace ::com::sun::star::beans;
 
     ListSelectionDialog::ListSelectionDialog(weld::Window* pParent, const Reference< XPropertySet >& _rxListBox,
-            const OUString& _rPropertyName, const OUString& _rPropertyUIName)
+            OUString _sPropertyName, const OUString& _rPropertyUIName)
         : GenericDialogController(pParent, "modules/spropctrlr/ui/listselectdialog.ui", "ListSelectDialog")
         , m_xListBox     ( _rxListBox     )
-        , m_sPropertyName( _rPropertyName )
+        , m_sPropertyName(std::move( _sPropertyName ))
         , m_xFrame(m_xBuilder->weld_frame("frame"))
         , m_xEntries(m_xBuilder->weld_tree_view("treeview"))
     {

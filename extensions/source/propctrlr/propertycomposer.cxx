@@ -27,6 +27,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <utility>
 
 
 namespace pcr
@@ -48,7 +49,7 @@ namespace pcr
         {
             OUString sPropertyName;
             const Any&      rValue;
-            SetPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) : sPropertyName( _rPropertyName ), rValue( _rValue ) { }
+            SetPropertyValue( OUString _aPropertyName, const Any& _rValue ) : sPropertyName(std::move( _aPropertyName )), rValue( _rValue ) { }
             void operator()( const Reference< XPropertyHandler >& _rHandler )
             {
                 _rHandler->setPropertyValue( sPropertyName, rValue );

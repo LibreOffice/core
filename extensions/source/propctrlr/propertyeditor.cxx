@@ -23,6 +23,7 @@
 #include "linedescriptor.hxx"
 
 #include <tools/debug.hxx>
+#include <utility>
 #include <osl/diagnose.h>
 
 namespace pcr
@@ -370,8 +371,8 @@ namespace pcr
     {
     }
 
-    OPropertyEditor::PropertyPage::PropertyPage(sal_uInt16 nPagePos, const OUString& rLabel, std::unique_ptr<OBrowserPage> pPage)
-        : nPos(nPagePos), sLabel(rLabel), xPage(std::move(pPage))
+    OPropertyEditor::PropertyPage::PropertyPage(sal_uInt16 nPagePos, OUString aLabel, std::unique_ptr<OBrowserPage> pPage)
+        : nPos(nPagePos), sLabel(std::move(aLabel)), xPage(std::move(pPage))
     {
     }
 

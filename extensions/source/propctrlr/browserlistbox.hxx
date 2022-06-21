@@ -23,6 +23,7 @@
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
+#include <utility>
 #include <vcl/weld.hxx>
 #include <rtl/ref.hxx>
 
@@ -53,10 +54,10 @@ namespace pcr
         css::uno::Reference< css::inspection::XPropertyHandler >
                                                 xHandler;
 
-        ListBoxLine( const OUString& rName, const BrowserLinePointer& _pLine, const css::uno::Reference< css::inspection::XPropertyHandler >& _rxHandler )
-            : aName( rName ),
-              pLine( _pLine ),
-              xHandler( _rxHandler )
+        ListBoxLine( OUString _aName, BrowserLinePointer _pLine, css::uno::Reference< css::inspection::XPropertyHandler > _xHandler )
+            : aName(std::move( _aName )),
+              pLine(std::move( _pLine )),
+              xHandler(std::move( _xHandler ))
         {
         }
     };

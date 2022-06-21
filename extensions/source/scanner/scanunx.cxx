@@ -22,6 +22,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/thread.hxx>
 #include <sal/log.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <memory>
 
@@ -129,7 +130,7 @@ public:
     virtual void SAL_CALL run() override;
     virtual void SAL_CALL onTerminated() override { delete this; }
 public:
-    ScannerThread( const std::shared_ptr<SaneHolder>& pHolder,
+    ScannerThread( std::shared_ptr<SaneHolder> pHolder,
                    const Reference< css::lang::XEventListener >& listener,
                    ScannerManager* pManager );
     virtual ~ScannerThread() override;
@@ -137,10 +138,10 @@ public:
 
 }
 
-ScannerThread::ScannerThread(const std::shared_ptr<SaneHolder>& pHolder,
+ScannerThread::ScannerThread(std::shared_ptr<SaneHolder> pHolder,
                              const Reference< css::lang::XEventListener >& listener,
                              ScannerManager* pManager)
-        : m_pHolder( pHolder ), m_xListener( listener ), m_pManager( pManager )
+        : m_pHolder(std::move( pHolder )), m_xListener( listener ), m_pManager( pManager )
 {
     SAL_INFO("extensions.scanner", "ScannerThread");
 }

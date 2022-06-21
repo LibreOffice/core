@@ -72,7 +72,7 @@ namespace pcr
         SQLCommandDesigner(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const ::rtl::Reference< ISQLCommandAdapter >& _rxPropertyAdapter,
-            const ::dbtools::SharedConnection& _rConnection,
+            ::dbtools::SharedConnection _aConnection,
             const Link<SQLCommandDesigner&,void>& _rCloseLink
         );
 
