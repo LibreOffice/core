@@ -184,15 +184,14 @@ public:
     const Type&  get() const { return maValue; }
     const Type&  get( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }
 
-    void         set( const Type& rValue ) { maValue = rValue; mbHasValue = true; }
     Type&        use() { mbHasValue = true; return maValue; }
 
-    OptValue&    operator=( const Type& rValue ) { set( rValue ); return *this; }
+    OptValue&    operator=( const Type& rValue ) { maValue = rValue; mbHasValue = true; return *this; }
     bool         operator==( const OptValue& rValue ) const {
                              return ( ( !mbHasValue && rValue.mbHasValue == false ) ||
                                  ( mbHasValue == rValue.mbHasValue && maValue == rValue.maValue ) );
                  }
-    void         assignIfUsed( const OptValue& rValue ) { if( rValue.mbHasValue ) set( rValue.maValue ); }
+    void         assignIfUsed( const OptValue& rValue ) { if( rValue.mbHasValue ) operator=(rValue.maValue); }
 
 private:
     Type                maValue;

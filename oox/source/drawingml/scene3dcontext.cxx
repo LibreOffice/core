@@ -105,9 +105,9 @@ ContextHandlerRef SceneText3DPropertiesContext::onCreateContext( sal_Int32 aElem
             aProps.mnPreset = rAttribs.getToken( XML_prst, XML_none );
 
         if( aElementToken == A_TOKEN( bevelT ) )
-            mr3DProperties.maTopBevelProperties.set( aProps );
+            mr3DProperties.maTopBevelProperties = aProps;
         else
-            mr3DProperties.maBottomBevelProperties.set( aProps );
+            mr3DProperties.maBottomBevelProperties = aProps;
         break;
     }
 
@@ -150,9 +150,9 @@ ContextHandlerRef Shape3DPropertiesContext::onCreateContext( sal_Int32 aElementT
             aProps.mnPreset = rAttribs.getToken( XML_prst, XML_none );
 
         if( aElementToken == A_TOKEN( bevelT ) )
-            mr3DProperties.maTopBevelProperties.set( aProps );
+            mr3DProperties.maTopBevelProperties = aProps;
         else
-            mr3DProperties.maBottomBevelProperties.set( aProps );
+            mr3DProperties.maBottomBevelProperties = aProps;
 
         break;
     }

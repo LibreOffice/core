@@ -906,7 +906,7 @@ TextFormatter::TextFormatter( ObjectFormatterData& rData, const AutoTextEntry* p
     ::Color nTextColor = getPhColor( -1 );
     if( sal_Int32(nTextColor) >= 0 ) {
         mxAutoText->maFillProperties.maFillColor.setSrgbClr( nTextColor );
-        mxAutoText->maFillProperties.moFillType.set(XML_solidFill);
+        mxAutoText->maFillProperties.moFillType = XML_solidFill;
     }
     mxAutoText->moHeight = pAutoTextEntry->mnDefFontSize;
     mxAutoText->moBold = pAutoTextEntry->mbBold;
