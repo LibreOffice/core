@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "377aff96_eeeffae5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-06-21T14:12:32Z",
+      "side": 1,
+      "message": "I had to rebase change to remove conflict, removed the unnecessary line changes. This only deals with comments.\n\nWould be good to add it to the ignored revisions list.",
+      "revId": "9deed349027de09bfba7ccd458522fee611f6b4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
