@@ -114,7 +114,7 @@ void SalFrame::SetRepresentedURL(const OUString&)
 OUString SalFrame::DumpSetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                   tools::Long nHeight, sal_uInt16 nFlags)
 {
-    // assuming the 4 integers normally don't have more then 4 digits, but might be negative
+    // assuming the 4 integers normally don't have more than 4 digits, but might be negative
     OUStringBuffer aBuffer(4 * 5 + 5);
     if (nFlags & SAL_FRAME_POSSIZE_WIDTH)
         aBuffer << nWidth << "x";
