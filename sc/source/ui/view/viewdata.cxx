@@ -1153,7 +1153,7 @@ ScMarkType ScViewData::GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) 
         if (eMarkType == SC_MARK_NONE)
             eMarkType = SC_MARK_SIMPLE;
         const ScPatternAttr* pMarkPattern = mrDoc.GetPattern(GetCurX(), GetCurY(), GetTabNo());
-        if (pMarkPattern->GetItemSet().GetItemState(ATTR_MERGE, false) == SfxItemState::SET)
+        if (pMarkPattern && pMarkPattern->GetItemSet().GetItemState(ATTR_MERGE, false) == SfxItemState::SET)
         {
             SCROW nRow = pMarkPattern->GetItem(ATTR_MERGE).GetRowMerge();
             SCCOL nCol = pMarkPattern->GetItem(ATTR_MERGE).GetColMerge();
