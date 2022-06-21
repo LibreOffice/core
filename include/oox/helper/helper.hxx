@@ -176,7 +176,6 @@ class OptValue
 public:
                  OptValue() : maValue(), mbHasValue( false ) {}
     explicit     OptValue( const Type& rValue ) : maValue( rValue ), mbHasValue( true ) {}
-    explicit     OptValue( bool bHasValue, const Type& rValue ) : maValue( rValue ), mbHasValue( bHasValue ) {}
 
     bool         has_value() const { return mbHasValue; }
     bool         operator!() const { return !mbHasValue; }
