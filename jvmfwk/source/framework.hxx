@@ -20,6 +20,7 @@
 #define INCLUDED_JVMFWK_SOURCE_FRAMEWORK_HXX
 
 #include <jvmfwk/framework.hxx>
+#include <utility>
 
 namespace jfw
 {
@@ -28,8 +29,8 @@ class FrameworkException : public std::exception
 {
 public:
 
-    FrameworkException(javaFrameworkError err, const OString& msg):
-        errorCode(err), message(msg)
+    FrameworkException(javaFrameworkError err, OString msg):
+        errorCode(err), message(std::move(msg))
         {
         }
     javaFrameworkError errorCode;

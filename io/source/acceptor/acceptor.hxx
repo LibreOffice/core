@@ -32,7 +32,7 @@ namespace io_acceptor {
     class PipeAcceptor
     {
     public:
-        PipeAcceptor( const OUString &sPipeName , const OUString &sConnectionDescription );
+        PipeAcceptor( OUString sPipeName, OUString sConnectionDescription );
 
         void init();
         css::uno::Reference < css::connection::XConnection >  accept(  );
@@ -49,10 +49,10 @@ namespace io_acceptor {
     class SocketAcceptor
     {
     public:
-        SocketAcceptor( const OUString & sSocketName ,
+        SocketAcceptor( OUString sSocketName ,
                         sal_uInt16 nPort,
                         bool bTcpNoDelay,
-                        const OUString &sConnectionDescription );
+                        OUString sConnectionDescription );
 
         void init();
         css::uno::Reference < css::connection::XConnection > accept();

@@ -28,6 +28,7 @@
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -49,7 +50,7 @@ namespace io_acceptor {
 
     {
     public:
-        explicit SocketConnection( const OUString & sConnectionDescription );
+        explicit SocketConnection( OUString sConnectionDescription );
 
         virtual sal_Int32 SAL_CALL read( css::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead ) override;
@@ -129,9 +130,9 @@ namespace io_acceptor {
     }
 
 
-    SocketConnection::SocketConnection( const OUString &sConnectionDescription) :
+    SocketConnection::SocketConnection( OUString sConnectionDescription) :
         m_nStatus( 0 ),
-        m_sDescription( sConnectionDescription ),
+        m_sDescription(std::move( sConnectionDescription )),
         _started(false),
         _closed(false),
         _error(false)
@@ -264,12 +265,12 @@ namespace io_acceptor {
         _listeners.erase(aListener);
     }
 
-    SocketAcceptor::SocketAcceptor( const OUString &sSocketName,
+    SocketAcceptor::SocketAcceptor( OUString sSocketName,
                                     sal_uInt16 nPort,
                                     bool bTcpNoDelay,
-                                    const OUString &sConnectionDescription) :
-        m_sSocketName( sSocketName ),
-        m_sConnectionDescription( sConnectionDescription ),
+                                    OUString sConnectionDescription) :
+        m_sSocketName(std::move( sSocketName )),
+        m_sConnectionDescription(std::move( sConnectionDescription )),
         m_nPort( nPort ),
         m_bTcpNoDelay( bTcpNoDelay ),
         m_bClosed( false )

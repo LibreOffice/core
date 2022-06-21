@@ -29,6 +29,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <jvmaccess/virtualmachine.hxx>
 #include <jvmaccess/unovirtualmachine.hxx>
+#include <utility>
 
 namespace {
 
@@ -43,9 +44,9 @@ protected:
     virtual void SAL_CALL disposing() override;
 
 public:
-    explicit SingletonFactory( ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access )
+    explicit SingletonFactory( ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access )
         : t_impl( m_aMutex ),
-          m_vm_access( vm_access )
+          m_vm_access(std::move( vm_access ))
         {}
 
     // XSingleComponentFactory impl

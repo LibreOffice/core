@@ -23,6 +23,7 @@
 
 #include "connector.hxx"
 #include <osl/pipe.hxx>
+#include <utility>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -32,9 +33,9 @@ using namespace ::com::sun::star::connection;
 
 namespace stoc_connector {
 
-    PipeConnection::PipeConnection( const OUString & sConnectionDescription ) :
+    PipeConnection::PipeConnection( OUString sConnectionDescription ) :
         m_nStatus( 0 ),
-        m_sDescription( sConnectionDescription )
+        m_sDescription(std::move( sConnectionDescription ))
     {
         // make it unique
         m_sDescription += ",uniqueValue=";
