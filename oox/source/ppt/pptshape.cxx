@@ -345,7 +345,7 @@ void PPTShape::addShape(
 
         if (mnSubType && getSubTypeIndex().has_value() && meShapeLocation == Layout)
         {
-            oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex().get(), rSlidePersist.getShapes()->getChildren(), true );
+            oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex().value(), rSlidePersist.getShapes()->getChildren(), true );
             if (!pPlaceholder)
                 pPlaceholder = PPTShape::findPlaceholder( mnSubType, 0, getSubTypeIndex(), rSlidePersist.getShapes()->getChildren(), true );
 
@@ -372,13 +372,13 @@ void PPTShape::addShape(
         // use placeholder index if possible
         if (mnSubType && getSubTypeIndex().has_value() && rSlidePersist.getMasterPersist())
         {
-            oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex(getSubTypeIndex().get(), rSlidePersist.getMasterPersist()->getShapes()->getChildren());
+            oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex(getSubTypeIndex().value(), rSlidePersist.getMasterPersist()->getShapes()->getChildren());
             // TODO: Check if this is required for non-notes slides as well...
             if (rSlidePersist.isNotesPage() && pPlaceholder && pPlaceholder->getSubType() != getSubType())
                 pPlaceholder.reset();
 
             if (pPlaceholder) {
-                SAL_INFO("oox.ppt","found placeholder with index: " << getSubTypeIndex().get() << " and type: " << lclDebugSubType( mnSubType ));
+                SAL_INFO("oox.ppt","found placeholder with index: " << getSubTypeIndex().value() << " and type: " << lclDebugSubType( mnSubType ));
                 PPTShape* pPPTPlaceholder = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                 TextListStylePtr pNewTextListStyle = std::make_shared<TextListStyle>();
 
@@ -398,7 +398,7 @@ void PPTShape::addShape(
                     // aMasterTextListStyle->dump();
                 }
                 if (pPPTPlaceholder && pPPTPlaceholder->mpPlaceholder) {
-                    SAL_INFO("oox.ppt","placeholder has parent placeholder: " << pPPTPlaceholder->mpPlaceholder->getId() << " type: " << lclDebugSubType( pPPTPlaceholder->mpPlaceholder->getSubType() ) << " index: " << pPPTPlaceholder->mpPlaceholder->getSubTypeIndex().get() );
+                    SAL_INFO("oox.ppt","placeholder has parent placeholder: " << pPPTPlaceholder->mpPlaceholder->getId() << " type: " << lclDebugSubType( pPPTPlaceholder->mpPlaceholder->getSubType() ) << " index: " << pPPTPlaceholder->mpPlaceholder->getSubTypeIndex().value() );
                     SAL_INFO("oox.ppt","has textbody " << (pPPTPlaceholder->mpPlaceholder->getTextBody() != nullptr) );
                     TextListStylePtr pPlaceholderStyle = getSubTypeTextListStyle( rSlidePersist, pPPTPlaceholder->mpPlaceholder->getSubType() );
                     if (pPPTPlaceholder->mpPlaceholder->getTextBody())
@@ -789,7 +789,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx,
     std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
     while( aRevIter != rShapes.rend() )
     {
-        if ( (*aRevIter)->getSubTypeIndex().has_value() && (*aRevIter)->getSubTypeIndex().get() == nIdx &&
+        if ( (*aRevIter)->getSubTypeIndex().has_value() && (*aRevIter)->getSubTypeIndex().value() == nIdx &&
              ( !bMasterOnly || ShapeLocationIsMaster((*aRevIter).get()) ) )
         {
             aShapePtr = *aRevIter;

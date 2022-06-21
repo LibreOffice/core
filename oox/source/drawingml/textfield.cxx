@@ -170,7 +170,7 @@ sal_Int32 TextField::insertAt(
         aTextCharacterProps.assignUsed( maTextParagraphProperties.getTextCharacterProperties() );
         aTextCharacterProps.assignUsed( getTextCharacterProperties() );
         if ( aTextCharacterProps.moHeight.has_value() )
-            nCharHeight = aTextCharacterProps.moHeight.get();
+            nCharHeight = aTextCharacterProps.moHeight.value();
         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 
         std::vector< Reference< XTextField > > fields;

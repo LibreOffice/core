@@ -244,7 +244,7 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
 
     // separate leading color name or RGB value from following palette index
     std::u16string_view aColorName, aColorIndex;
-    separatePair( aColorName, aColorIndex, roVmlColor.get(), ' ' );
+    separatePair( aColorName, aColorIndex, roVmlColor.value(), ' ' );
 
     // RGB colors in the format '#RRGGBB'
     if( (aColorName.size() == 7) && (aColorName[ 0 ] == '#') )
@@ -310,7 +310,7 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
     }
 
     OSL_FAIL( OStringBuffer( "lclGetColor - invalid VML color name '" +
-            OUStringToOString( roVmlColor.get(), RTL_TEXTENCODING_ASCII_US ) + "'" ).getStr() );
+            OUStringToOString( roVmlColor.value(), RTL_TEXTENCODING_ASCII_US ) + "'" ).getStr() );
     aDmlColor.setSrgbClr( nDefaultRgb );
     return aDmlColor;
 }
@@ -556,7 +556,7 @@ namespace {
 
 sal_Int64 lclGetEmu( const GraphicHelper& rGraphicHelper, const OptValue< OUString >& roValue, sal_Int64 nDefValue )
 {
-    return roValue.has_value() ? ConversionHelper::decodeMeasureToEmu( rGraphicHelper, roValue.get(), 0, false, false ) : nDefValue;
+    return roValue.has_value() ? ConversionHelper::decodeMeasureToEmu( rGraphicHelper, roValue.value(), 0, false, false ) : nDefValue;
 }
 
 void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::DashStopVector& orCustomDash, const OptValue< OUString >& roDashStyle )
@@ -564,7 +564,7 @@ void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::Da
     if( !roDashStyle.has_value() )
         return;
 
-    const OUString& rDashStyle = roDashStyle.get();
+    const OUString& rDashStyle = roDashStyle.value();
     switch( AttributeConversion::decodeToken( rDashStyle ) )
     {
         case XML_solid:             oroPresetDash = XML_solid;          return;
@@ -595,7 +595,7 @@ void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::Da
 
 sal_Int32 lclGetDmlArrowType( const OptValue< sal_Int32 >& roArrowType )
 {
-    if( roArrowType.has_value() ) switch( roArrowType.get() )
+    if( roArrowType.has_value() ) switch( roArrowType.value() )
     {
         case XML_none:      return XML_none;
         case XML_block:     return XML_triangle;
@@ -609,7 +609,7 @@ sal_Int32 lclGetDmlArrowType( const OptValue< sal_Int32 >& roArrowType )
 
 sal_Int32 lclGetDmlArrowWidth( const OptValue< sal_Int32 >& roArrowWidth )
 {
-    if( roArrowWidth.has_value() ) switch( roArrowWidth.get() )
+    if( roArrowWidth.has_value() ) switch( roArrowWidth.value() )
     {
         case XML_narrow:    return XML_sm;
         case XML_medium:    return XML_med;
@@ -620,7 +620,7 @@ sal_Int32 lclGetDmlArrowWidth( const OptValue< sal_Int32 >& roArrowWidth )
 
 sal_Int32 lclGetDmlArrowLength( const OptValue< sal_Int32 >& roArrowLength )
 {
-    if( roArrowLength.has_value() ) switch( roArrowLength.get() )
+    if( roArrowLength.has_value() ) switch( roArrowLength.value() )
     {
         case XML_short:     return XML_sm;
         case XML_medium:    return XML_med;
@@ -638,7 +638,7 @@ void lclConvertArrow( LineArrowProperties& orArrowProp, const StrokeArrowModel& 
 
 sal_Int32 lclGetDmlLineCompound( const OptValue< sal_Int32 >& roLineStyle )
 {
-    if( roLineStyle.has_value() ) switch( roLineStyle.get() )
+    if( roLineStyle.has_value() ) switch( roLineStyle.value() )
     {
         case XML_single:            return XML_sng;
         case XML_thinThin:          return XML_dbl;
@@ -651,7 +651,7 @@ sal_Int32 lclGetDmlLineCompound( const OptValue< sal_Int32 >& roLineStyle )
 
 sal_Int32 lclGetDmlLineCap( const OptValue< sal_Int32 >& roEndCap )
 {
-    if( roEndCap.has_value() ) switch( roEndCap.get() )
+    if( roEndCap.has_value() ) switch( roEndCap.value() )
     {
         case XML_flat:      return XML_flat;
         case XML_square:    return XML_sq;
@@ -662,7 +662,7 @@ sal_Int32 lclGetDmlLineCap( const OptValue< sal_Int32 >& roEndCap )
 
 sal_Int32 lclGetDmlLineJoint( const OptValue< sal_Int32 >& roJoinStyle )
 {
-    if( roJoinStyle.has_value() ) switch( roJoinStyle.get() )
+    if( roJoinStyle.has_value() ) switch( roJoinStyle.value() )
     {
         case XML_round: return XML_round;
         case XML_bevel: return XML_bevel;
@@ -837,9 +837,9 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
             case XML_tile:
             case XML_frame:
             {
-                if( moBitmapPath.has_value() && !moBitmapPath.get().isEmpty() )
+                if( moBitmapPath.has_value() && !moBitmapPath.value().isEmpty() )
                 {
-                    aFillProps.maBlipProps.mxFillGraphic = rGraphicHelper.importEmbeddedGraphic(moBitmapPath.get());
+                    aFillProps.maBlipProps.mxFillGraphic = rGraphicHelper.importEmbeddedGraphic(moBitmapPath.value());
                     if (aFillProps.maBlipProps.mxFillGraphic.is())
                     {
                         aFillProps.moFillType = XML_blipFill;
@@ -874,7 +874,7 @@ ShadowModel::ShadowModel()
 
 void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper) const
 {
-    if (!mbHasShadow || (moShadowOn.has_value() && !moShadowOn.get()))
+    if (!mbHasShadow || (moShadowOn.has_value() && !moShadowOn.value()))
         return;
 
     drawingml::Color aColor = ConversionHelper::decodeColor(rGraphicHelper, moColor, moOpacity, API_RGB_GRAY);
@@ -883,7 +883,7 @@ void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper&
     if (moOffset.has_value())
     {
         std::u16string_view aOffsetX, aOffsetY;
-        ConversionHelper::separatePair(aOffsetX, aOffsetY, moOffset.get(), ',');
+        ConversionHelper::separatePair(aOffsetX, aOffsetY, moOffset.value(), ',');
         if (!aOffsetX.empty())
             nOffsetX = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aOffsetX, 0, false, false );
         if (!aOffsetY.empty())
@@ -926,7 +926,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
     if (moString.has_value())
     {
         uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
-        xTextRange->setString(moString.get());
+        xTextRange->setString(moString.value());
 
         uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> aGeomPropSeq = xPropertySet->getPropertyValue("CustomShapeGeometry").get< uno::Sequence<beans::PropertyValue> >();
@@ -978,10 +978,10 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
             }
         }
     }
-    if (moTrim.has_value() && moTrim.get())
+    if (moTrim.has_value() && moTrim.value())
         return;
 
-    OUString sText = moString.get();
+    OUString sText = moString.value();
     ScopedVclPtrInstance<VirtualDevice> pDevice;
     vcl::Font aFont = pDevice->GetFont();
     aFont.SetFamilyName(sFont);

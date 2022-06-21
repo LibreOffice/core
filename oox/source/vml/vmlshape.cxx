@@ -546,7 +546,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
         std::optional<sal_Int32> oLineWidth;
         if (maTypeModel.maStrokeModel.moWeight.has_value())
             oLineWidth = ConversionHelper::decodeMeasureToHmm(
-                rGraphicHelper, maTypeModel.maStrokeModel.moWeight.get(), 0, false, false);
+                rGraphicHelper, maTypeModel.maStrokeModel.moWeight.value(), 0, false, false);
         if (aPropMap.hasProperty(PROP_LineColor))
         {
             uno::Reference<beans::XPropertySet> xPropertySet(rxShape, uno::UNO_QUERY);
@@ -578,7 +578,7 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
 
 static void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)
 {
-    OUString aWrapType = rTypeModel.moWrapType.get();
+    OUString aWrapType = rTypeModel.moWrapType.value();
 
     // Extreme negative top margin? Then the shape will end up at the top of the page, it's pointless to perform any kind of wrapping.
     sal_Int32 nMarginTop = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, rTypeModel.maMarginTop, 0, false, true);
@@ -590,9 +590,9 @@ static void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeMo
          aWrapType == "through" )
     {
         nSurround = css::text::WrapTextMode_PARALLEL;
-        if ( rTypeModel.moWrapSide.get() == "left" )
+        if ( rTypeModel.moWrapSide.value() == "left" )
             nSurround = css::text::WrapTextMode_LEFT;
-        else if ( rTypeModel.moWrapSide.get() == "right" )
+        else if ( rTypeModel.moWrapSide.value() == "right" )
             nSurround = css::text::WrapTextMode_RIGHT;
     }
     else if ( aWrapType == "topAndBottom" )
@@ -981,13 +981,13 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
             awt::Size aOriginalSize = rGraphicHelper.getOriginalSize(rxGraphic);
 
             if (maTypeModel.moCropBottom.has_value())
-                aGraphicCrop.Bottom = lclConvertCrop(maTypeModel.moCropBottom.get(), aOriginalSize.Height);
+                aGraphicCrop.Bottom = lclConvertCrop(maTypeModel.moCropBottom.value(), aOriginalSize.Height);
             if (maTypeModel.moCropLeft.has_value())
-                aGraphicCrop.Left = lclConvertCrop(maTypeModel.moCropLeft.get(), aOriginalSize.Width);
+                aGraphicCrop.Left = lclConvertCrop(maTypeModel.moCropLeft.value(), aOriginalSize.Width);
             if (maTypeModel.moCropRight.has_value())
-                aGraphicCrop.Right = lclConvertCrop(maTypeModel.moCropRight.get(), aOriginalSize.Width);
+                aGraphicCrop.Right = lclConvertCrop(maTypeModel.moCropRight.value(), aOriginalSize.Width);
             if (maTypeModel.moCropTop.has_value())
-                aGraphicCrop.Top = lclConvertCrop(maTypeModel.moCropTop.get(), aOriginalSize.Height);
+                aGraphicCrop.Top = lclConvertCrop(maTypeModel.moCropTop.value(), aOriginalSize.Height);
 
             aPropSet.setProperty(PROP_GraphicCrop, aGraphicCrop);
         }

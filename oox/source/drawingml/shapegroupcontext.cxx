@@ -60,14 +60,14 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
     case XML_cNvPr:
     {
         mpGroupShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
-        mpGroupShapePtr->setId( rAttribs.getString( XML_id ).get() );
-        mpGroupShapePtr->setName( rAttribs.getString( XML_name ).get() );
+        mpGroupShapePtr->setId( rAttribs.getString( XML_id ).value() );
+        mpGroupShapePtr->setName( rAttribs.getString( XML_name ).value() );
         break;
     }
     case XML_ph:
         mpGroupShapePtr->setSubType( rAttribs.getToken( XML_type, FastToken::DONTKNOW ) );
         if( rAttribs.hasAttribute( XML_idx ) )
-            mpGroupShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).get().toInt32() );
+            mpGroupShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).value().toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 

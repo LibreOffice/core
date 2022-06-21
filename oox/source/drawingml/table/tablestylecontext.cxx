@@ -37,8 +37,8 @@ TableStyleContext::TableStyleContext( ContextHandler2Helper const & rParent,
 : ContextHandler2( rParent )
 , mrTableStyle( rTableStyle )
 {
-    mrTableStyle.getStyleId() = rAttribs.getString( XML_styleId ).get();
-    mrTableStyle.getStyleName() = rAttribs.getString( XML_styleName ).get();
+    mrTableStyle.getStyleId() = rAttribs.getString( XML_styleId ).value();
+    mrTableStyle.getStyleName() = rAttribs.getString( XML_styleName ).value();
 }
 
 TableStyleContext::~TableStyleContext()

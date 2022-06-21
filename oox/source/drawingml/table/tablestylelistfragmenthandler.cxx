@@ -48,7 +48,7 @@ ContextHandlerRef TableStyleListFragmentHandler::onCreateContext(
     switch( aElementToken )
     {
         case A_TOKEN( tblStyleLst ):    // CT_TableStyleList
-            mrTableStyleList.getDefaultStyleId() = rAttribs.getString( XML_def ).get();
+            mrTableStyleList.getDefaultStyleId() = rAttribs.getString( XML_def ).value();
             break;
         case A_TOKEN( tblStyle ):       // CT_TableStyle
             std::vector< TableStyle >& rTableStyles = mrTableStyleList.getTableStyles();

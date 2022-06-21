@@ -68,7 +68,7 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     sal_Int32 aIns[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
     for( sal_Int32 i = 0; i < sal_Int32(SAL_N_ELEMENTS( aIns )); i++)
     {
-        sValue = rAttribs.getString( aIns[i] ).get();
+        sValue = rAttribs.getString( aIns[i] ).value();
         if( !sValue.isEmpty() )
             mrTextBodyProp.moInsets[i] = GetCoordinate( sValue );
     }
@@ -151,7 +151,7 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
                     const OptValue<OUString> sPrst = rAttribs.getString( XML_prst );
                     if( sPrst.has_value() )
                     {
-                        mrTextBodyProp.msPrst = sPrst.get();
+                        mrTextBodyProp.msPrst = sPrst.value();
                         if( mrTextBodyProp.msPrst != "textNoShape" )
                             return new PresetTextShapeContext( *this, rAttribs,
                                                            *( mpShapePtr->getCustomShapeProperties() ) );

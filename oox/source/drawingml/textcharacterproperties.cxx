@@ -114,16 +114,16 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         bool bContoured = false;
 
         // noFill doesn't exist for characters. Map noFill to 99% transparency
-        if (maFillProperties.moFillType.get() == XML_noFill)
+        if (maFillProperties.moFillType.value() == XML_noFill)
             aColor.addTransformation(XML_alpha, 1000);
 
         // tdf#137438 Emulate text outline color/transparency.
         // If the outline color dominates, then use it as the text color.
         if (moTextOutlineProperties.has_value()
-            && moTextOutlineProperties.get().maLineFill.moFillType.has_value()
-            && moTextOutlineProperties.get().maLineFill.moFillType.get() != XML_noFill)
+            && moTextOutlineProperties.value().maLineFill.moFillType.has_value()
+            && moTextOutlineProperties.value().maLineFill.moFillType.value() != XML_noFill)
         {
-            Color aLineColor = moTextOutlineProperties.get().maLineFill.getBestSolidColor();
+            Color aLineColor = moTextOutlineProperties.value().maLineFill.getBestSolidColor();
             sal_Int16 nLineTransparency = aLineColor.getTransparency();
 
             // tdf#127696 If the text color is white (and the outline color doesn't dominate),
@@ -146,9 +146,9 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         }
     }
 
-    if( moLang.has_value() && !moLang.get().isEmpty() )
+    if( moLang.has_value() && !moLang.value().isEmpty() )
     {
-        LanguageTag aTag(moLang.get());
+        LanguageTag aTag(moLang.value());
         lang::Locale aLocale(aTag.getLocale());
         switch(MsLangId::getScriptType(aTag.getLanguageType()))
         {
@@ -163,9 +163,9 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
 
     if( moHeight.has_value() )
     {
-        float fHeight = GetFontHeight( moHeight.get() );
+        float fHeight = GetFontHeight( moHeight.value() );
         if (moFontScale.has_value())
-            fHeight *= (moFontScale.get() / 100000);
+            fHeight *= (moFontScale.value() / 100000);
         rPropMap.setProperty( PROP_CharHeight, fHeight);
         rPropMap.setProperty( PROP_CharHeightAsian, fHeight);
         rPropMap.setProperty( PROP_CharHeightComplex, fHeight);
@@ -234,7 +234,7 @@ void TextCharacterProperties::pushToPropSet( PropertySet& rPropSet, const XmlFil
 
 float TextCharacterProperties::getCharHeightPoints( float fDefault ) const
 {
-    return moHeight.has_value() ? GetFontHeight( moHeight.get() ) : fDefault;
+    return moHeight.has_value() ? GetFontHeight( moHeight.value() ) : fDefault;
 }
 
 } // namespace oox::drawingml

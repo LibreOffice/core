@@ -839,7 +839,7 @@ LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
     }
     // change line width according to chart auto style
     if( mxAutoLine->moLineWidth.has_value() )
-        mxAutoLine->moLineWidth = mxAutoLine->moLineWidth.get() * pAutoFormatEntry->mnRelLineWidth / 100;
+        mxAutoLine->moLineWidth = mxAutoLine->moLineWidth.value() * pAutoFormatEntry->mnRelLineWidth / 100;
 }
 
 void LineFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRef< Shape >& rxShapeProp, sal_Int32 nSeriesIdx )
@@ -915,7 +915,7 @@ TextFormatter::TextFormatter( ObjectFormatterData& rData, const AutoTextEntry* p
     {
         mxAutoText->assignUsed( *pTextProps );
         if( pTextProps->moHeight.has_value() )
-            mxAutoText->moHeight = pTextProps->moHeight.get() * pAutoTextEntry->mnRelFontSize / 100;
+            mxAutoText->moHeight = pTextProps->moHeight.value() * pAutoTextEntry->mnRelFontSize / 100;
     }
 }
 

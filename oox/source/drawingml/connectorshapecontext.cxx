@@ -70,15 +70,15 @@ ConnectorShapePropertiesContext::onCreateContext(sal_Int32 aElementToken,
     switch (getBaseToken(aElementToken))
     {
         case XML_cNvPr:
-            mpConnectorShapePtr->setId(rAttribs.getString(XML_id).get());
-            mpConnectorShapePtr->setName(rAttribs.getString(XML_name).get());
+            mpConnectorShapePtr->setId(rAttribs.getString(XML_id).value());
+            mpConnectorShapePtr->setName(rAttribs.getString(XML_name).value());
             break;
         case XML_stCxn:
         {
             ConnectorShapeProperties aConnectorShapeProps;
             aConnectorShapeProps.mbStartShape = true;
-            aConnectorShapeProps.maDestShapeId = rAttribs.getString(XML_id).get();
-            aConnectorShapeProps.mnDestGlueId = rAttribs.getInteger(XML_idx).get();
+            aConnectorShapeProps.maDestShapeId = rAttribs.getString(XML_id).value();
+            aConnectorShapeProps.mnDestGlueId = rAttribs.getInteger(XML_idx).value();
             mrConnectorShapePropertiesList.push_back(aConnectorShapeProps);
             break;
         }
@@ -86,8 +86,8 @@ ConnectorShapePropertiesContext::onCreateContext(sal_Int32 aElementToken,
         {
             ConnectorShapeProperties aConnectorShapeProps;
             aConnectorShapeProps.mbStartShape = false;
-            aConnectorShapeProps.maDestShapeId = rAttribs.getString(XML_id).get();
-            aConnectorShapeProps.mnDestGlueId = rAttribs.getInteger(XML_idx).get();
+            aConnectorShapeProps.maDestShapeId = rAttribs.getString(XML_id).value();
+            aConnectorShapeProps.mnDestGlueId = rAttribs.getInteger(XML_idx).value();
             mrConnectorShapePropertiesList.push_back(aConnectorShapeProps);
             break;
         }
