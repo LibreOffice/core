@@ -192,12 +192,18 @@ public:
                              return ( ( !mbHasValue && rValue.mbHasValue == false ) ||
                                  ( mbHasValue == rValue.mbHasValue && maValue == rValue.maValue ) );
                  }
-    void         assignIfUsed( const OptValue& rValue ) { if( rValue.mbHasValue ) operator=(rValue.maValue); }
 
 private:
     Type                maValue;
     bool                mbHasValue;
 };
+
+template< typename Type >
+void assignIfUsed( OptValue<Type>& rDestValue, const OptValue<Type>& rSourceValue )
+{
+    if( rSourceValue.has_value() )
+        rDestValue = rSourceValue.get();
+}
 
 
 /** Provides platform independent functions to convert from or to little-endian
