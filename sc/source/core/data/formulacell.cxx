@@ -925,6 +925,9 @@ ScFormulaCell::~ScFormulaCell()
     if (!mxGroup || !mxGroup->mpCode)
         // Formula token is not shared.
         delete pCode;
+
+    if (mxGroup && mxGroup->mpTopCell == this)
+        mxGroup->mpTopCell = nullptr;
 }
 
 ScFormulaCell* ScFormulaCell::Clone() const

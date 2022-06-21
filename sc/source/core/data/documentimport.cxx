@@ -385,6 +385,14 @@ void ScDocumentImport::setFormulaCell(const ScAddress& rPos, ScFormulaCell* pCel
         mpImpl->mrDoc.CheckLinkFormulaNeedingCheck( *pCell->GetCode());
 
     sc::CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
+
+    sc::CellStoreType::position_type aPos = rCells.position(rPos.Row());
+    if (aPos.first != rCells.end() && aPos.first->type == sc::element_type_formula)
+    {
+        ScFormulaCell* p = sc::formula_block::at(*aPos.first->data, aPos.second);
+        sc::SharedFormulaUtil::unshareFormulaCell(aPos, *p);
+    }
+
     pBlockPos->miCellPos =
         rCells.set(pBlockPos->miCellPos, rPos.Row(), pCell);
 }
