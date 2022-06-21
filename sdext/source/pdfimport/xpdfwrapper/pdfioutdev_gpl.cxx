@@ -474,12 +474,21 @@ int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, const GfxState* st
     {
         // TODO(P3): Unfortunately, need to read stream twice, since
         // we must write byte count to stdout before
+#if POPPLER_CHECK_VERSION(22, 6, 0)
+        std::optional<std::vector<unsigned char>> pBuf = gfxFont->readEmbFontFile( m_pDoc->getXRef() );
+        nSize = pBuf->size();
+        if ( nSize > 0 )
+        {
+            aNewFont.isEmbedded = true;
+        }
+#else
         char* pBuf = gfxFont->readEmbFontFile( m_pDoc->getXRef(), &nSize );
         if( pBuf )
         {
             aNewFont.isEmbedded = true;
             gfree(pBuf);
         }
+#endif
     }
 
     m_aFontMap[ nNewId ] = aNewFont;
@@ -492,13 +501,28 @@ void PDFOutDev::writeFontFile( GfxFont* gfxFont ) const
         return;
 
     int nSize = 0;
+#if POPPLER_CHECK_VERSION(22, 6, 0)
+    std::optional<std::vector<unsigned char>> pBuf = gfxFont->readEmbFontFile( m_pDoc->getXRef() );
+    nSize = pBuf->size();
+    if ( nSize == 0 )
+        return;
+#else
     char* pBuf = gfxFont->readEmbFontFile( m_pDoc->getXRef(), &nSize );
     if( !pBuf )
         return;
+#endif
 
     // ---sync point--- see SYNC STREAMS above
     fflush(stdout);
 
+#if POPPLER_CHECK_VERSION(22, 6, 0)
+    if( fwrite(&pBuf, sizeof(std::vector<unsigned char>), nSize, g_binary_out) != static_cast<size_t>(nSize) )
+    {
+        exit(1); // error
+    }
+    // ---sync point--- see SYNC STREAMS above
+    fflush(g_binary_out);
+#else
     if( fwrite(pBuf, sizeof(char), nSize, g_binary_out) != static_cast<size_t>(nSize) )
     {
         gfree(pBuf);
@@ -507,6 +531,7 @@ void PDFOutDev::writeFontFile( GfxFont* gfxFont ) const
     // ---sync point--- see SYNC STREAMS above
     fflush(g_binary_out);
     gfree(pBuf);
+#endif
 }
 
 #if POPPLER_CHECK_VERSION(0, 83, 0)
@@ -759,7 +784,11 @@ void PDFOutDev::updateFont(GfxState *state)
 {
     assert(state);
 
+#if POPPLER_CHECK_VERSION(22, 6, 0)
+    GfxFont *gfxFont = state->getFont().get();
+#else
     GfxFont *gfxFont = state->getFont();
+#endif
     if( !gfxFont )
         return;
 
