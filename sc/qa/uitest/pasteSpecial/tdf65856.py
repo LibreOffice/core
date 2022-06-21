@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file
+from uitest.uihelper.common import get_url_for_data_file, get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.calc.paste_special import reset_default_values
@@ -56,11 +56,9 @@ class tdf65856(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
             #mark cell B2
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
-            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
-                reset_default_values(self, xDialog)
-
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:PasteSpecial") as xDialog:
                 xmove_right = xDialog.getChild("move_right")
-                xmove_right.executeAction("CLICK", tuple())
+                self.assertEqual("true", get_state_as_dict(xmove_right)["Checked"])
 
             #check
             self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 1).getString(), "1")
