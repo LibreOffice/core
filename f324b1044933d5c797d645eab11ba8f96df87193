@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae5e91ff_33709842",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-21T15:40:32Z",
+      "side": 1,
+      "message": "Factored out the refactoring from feature/scaling-geometry-provider. I probably need someone with a Mac to fix this platform.",
+      "revId": "f324b1044933d5c797d645eab11ba8f96df87193",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
