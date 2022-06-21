@@ -79,6 +79,7 @@ public:
     void testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef const & xDocShRef, SCROW nRow1, SCROW nRow2,
             bool bCheckRelativeInSheet );
     void testSortWithFormattingXLS();
+    void testForcepoint107();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
@@ -104,6 +105,7 @@ public:
     CPPUNIT_TEST(testSortWithSharedFormulasODS);
     CPPUNIT_TEST(testSortWithSheetExternalReferencesODS);
     CPPUNIT_TEST(testSortWithFormattingXLS);
+    CPPUNIT_TEST(testForcepoint107);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -843,6 +845,13 @@ void ScFiltersTest::testSortWithFormattingXLS()
     bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
     CPPUNIT_ASSERT(bSorted);
     xDocSh->DoClose();
+}
+
+// just needs to not crash on recalc
+void ScFiltersTest::testForcepoint107()
+{
+    ScDocShellRef xDocSh = loadDoc(u"forcepoint107.", FORMAT_XLSX, true);
+    xDocSh->DoHardRecalc();
 }
 
 ScFiltersTest::ScFiltersTest()
