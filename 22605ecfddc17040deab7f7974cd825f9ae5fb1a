@@ -16,6 +16,29 @@
       "message": "Should the change be here instead ?",
       "revId": "22605ecfddc17040deab7f7974cd825f9ae5fb1a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b899231_6f7e2ada",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-06-21T12:29:54Z",
+      "side": 1,
+      "message": "Or \"Dark Gray 1\", which is #666666 \u003d 6710886.",
+      "range": {
+        "startLine": 444,
+        "startChar": 19,
+        "endLine": 444,
+        "endChar": 26
+      },
+      "revId": "22605ecfddc17040deab7f7974cd825f9ae5fb1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
