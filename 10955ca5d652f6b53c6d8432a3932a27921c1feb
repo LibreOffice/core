@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02bcfe9b_514c5ca2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-06-21T14:01:37Z",
+      "side": 1,
+      "message": "Hi Stephan, last of these comment ones for now. I removed two newlines in regkey.cxx... but I thought it would be OK if we could add this to the revlist of skippable revisions. ",
+      "revId": "10955ca5d652f6b53c6d8432a3932a27921c1feb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
