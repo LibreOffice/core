@@ -17,6 +17,7 @@ import sys
 import os
 import math
 from datetime import datetime
+import urllib.parse
 
 def convert_str_to_date(value):
     value = value.replace('.', '')
@@ -194,11 +195,11 @@ if __name__ == '__main__':
             f.flush()
 
         for k, lDate in crashes.items():
-            if len(k) < 254 and k not in crashesInFile and '`' not in k:
+            if k not in crashesInFile:
                 print("Parsing " + k)
                 try:
                     crashCount, crashID, crashVersion, crashOS = parse_reports_and_get_most_recent_report_from_last_page(
-                            "https://crashreport.libreoffice.org/stats/signature/" + k)
+                            "https://crashreport.libreoffice.org/stats/signature/" + urllib.parse.quote(k))
                     crashReason, crashStack, codeLine = parse_details_and_get_info(
                             "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, args.repository)
                     line = '\t'.join([k, str(crashCount), lDate[1], lDate[2],
