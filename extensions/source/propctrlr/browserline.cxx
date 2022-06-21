@@ -29,6 +29,7 @@
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <utility>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -52,9 +53,9 @@ namespace pcr
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-    OBrowserLine::OBrowserLine(const OUString& rEntryName, weld::Container* pParent, weld::SizeGroup* pLabelGroup,
+    OBrowserLine::OBrowserLine(OUString aEntryName, weld::Container* pParent, weld::SizeGroup* pLabelGroup,
                                weld::Container* pInitialControlParent)
-        : m_sEntryName(rEntryName)
+        : m_sEntryName(std::move(aEntryName))
         , m_xBuilder(Application::CreateBuilder(pParent, "modules/spropctrlr/ui/browserline.ui"))
         , m_xContainer(m_xBuilder->weld_container("BrowserLine"))
         , m_xFtTitle(m_xBuilder->weld_label("label"))

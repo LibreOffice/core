@@ -60,8 +60,8 @@ namespace pcr
             const char* _pListenerClassAsciiName,
             const char* _pListenerMethodAsciiName,
             TranslateId pDisplayNameResId,
-            const OUString& _sHelpId,
-            const OString& _sUniqueBrowseId );
+            OUString _sHelpId,
+            OString _sUniqueBrowseId );
     };
 
     typedef std::unordered_map< OUString, EventDescription >   EventMap;

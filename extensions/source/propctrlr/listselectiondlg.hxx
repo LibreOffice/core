@@ -37,7 +37,7 @@ namespace pcr
         ListSelectionDialog(
             weld::Window* _pParent,
             const css::uno::Reference< css::beans::XPropertySet >& _rxListBox,
-            const OUString& _rPropertyName,
+            OUString _sPropertyName,
             const OUString& _rPropertyUIName
         );
         virtual ~ListSelectionDialog() override;

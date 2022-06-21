@@ -28,6 +28,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <algorithm>
+#include <utility>
 
 namespace pcr
 {
@@ -46,20 +47,20 @@ namespace pcr
         sal_uInt32      nUIFlags;
 
         OPropertyInfoImpl(
-                        const OUString&            rName,
+                        OUString                    aName,
                         sal_Int32                   _nId,
-                        const OUString&             aTranslation,
+                        OUString                    aTranslation,
                         sal_uInt16                  nPosId,
-                        const OUString&,
+                        OUString ,
                         sal_uInt32                  _nUIFlags);
     };
 
 
-    OPropertyInfoImpl::OPropertyInfoImpl(const OUString& _rName, sal_Int32 _nId,
-                                   const OUString& aString, sal_uInt16 nP, const OUString& sHid, sal_uInt32 _nUIFlags)
-       :sName(_rName)
-       ,sTranslation(aString)
-       ,sHelpId(sHid)
+    OPropertyInfoImpl::OPropertyInfoImpl(OUString _aName, sal_Int32 _nId,
+                                   OUString aString, sal_uInt16 nP, OUString sHid, sal_uInt32 _nUIFlags)
+       :sName(std::move(_aName))
+       ,sTranslation(std::move(aString))
+       ,sHelpId(std::move(sHid))
        ,nId(_nId)
        ,nPos(nP)
        ,nUIFlags(_nUIFlags)

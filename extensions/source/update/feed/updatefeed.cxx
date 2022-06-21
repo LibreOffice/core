@@ -53,6 +53,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <osl/conditn.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 namespace beans = com::sun::star::beans ;
@@ -159,10 +160,10 @@ public:
     virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName) override;
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    UpdateInformationProvider(const uno::Reference<uno::XComponentContext>& xContext,
-                              const uno::Reference< ucb::XUniversalContentBroker >& xUniversalContentBroker,
-                              const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
-                              const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI);
+    UpdateInformationProvider(uno::Reference<uno::XComponentContext> xContext,
+                              uno::Reference< ucb::XUniversalContentBroker > xUniversalContentBroker,
+                              uno::Reference< xml::dom::XDocumentBuilder > xDocumentBuilder,
+                              uno::Reference< xml::xpath::XXPathAPI > xXPathAPI);
 
 protected:
 
@@ -199,8 +200,8 @@ class UpdateInformationEnumeration : public ::cppu::WeakImplHelper< container::X
 {
 public:
     UpdateInformationEnumeration(const uno::Reference< xml::dom::XNodeList >& xNodeList,
-                                 const rtl::Reference< UpdateInformationProvider >& xUpdateInformationProvider) :
-        m_xUpdateInformationProvider(xUpdateInformationProvider),
+                                 rtl::Reference< UpdateInformationProvider > xUpdateInformationProvider) :
+        m_xUpdateInformationProvider(std::move(xUpdateInformationProvider)),
         m_xNodeList(xNodeList),
         m_nNodes(xNodeList.is() ? xNodeList->getLength() : 0),
         m_nCount(0)
@@ -288,14 +289,14 @@ private:
 };
 
 UpdateInformationProvider::UpdateInformationProvider(
-    const uno::Reference<uno::XComponentContext>& xContext,
-    const uno::Reference< ucb::XUniversalContentBroker >& xUniversalContentBroker,
-    const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
-    const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI)
-    : m_xContext(xContext)
-    , m_xUniversalContentBroker(xUniversalContentBroker)
-    , m_xDocumentBuilder(xDocumentBuilder)
-    , m_xXPathAPI(xXPathAPI)
+    uno::Reference<uno::XComponentContext> xContext,
+    uno::Reference< ucb::XUniversalContentBroker > xUniversalContentBroker,
+    uno::Reference< xml::dom::XDocumentBuilder > xDocumentBuilder,
+    uno::Reference< xml::xpath::XXPathAPI > xXPathAPI)
+    : m_xContext(std::move(xContext))
+    , m_xUniversalContentBroker(std::move(xUniversalContentBroker))
+    , m_xDocumentBuilder(std::move(xDocumentBuilder))
+    , m_xXPathAPI(std::move(xXPathAPI))
     , m_aRequestHeaderList(2)
     , m_nCommandId(0)
 {
