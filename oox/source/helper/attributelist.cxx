@@ -163,7 +163,7 @@ oox::drawingml::Color AttributeList::getHighlightColor(sal_Int32 nAttrToken) con
 OptValue< sal_Int32 > AttributeList::getToken( sal_Int32 nAttrToken ) const
 {
     sal_Int32 nToken = mxAttribs->getOptionalValueToken( nAttrToken, XML_TOKEN_INVALID );
-    return OptValue< sal_Int32 >( nToken != XML_TOKEN_INVALID, nToken );
+    return nToken == XML_TOKEN_INVALID ? OptValue< sal_Int32 >() : OptValue< sal_Int32 >( nToken );
 }
 
 OptValue< OUString > AttributeList::getString( sal_Int32 nAttrToken ) const
@@ -186,35 +186,35 @@ OptValue< double > AttributeList::getDouble( sal_Int32 nAttrToken ) const
 {
     double nValue;
     bool bValid = getAttribList()->getAsDouble( nAttrToken, nValue );
-    return OptValue< double >( bValid, nValue );
+    return bValid ? OptValue< double >( nValue ) : OptValue< double >();
 }
 
 OptValue< sal_Int32 > AttributeList::getInteger( sal_Int32 nAttrToken ) const
 {
     sal_Int32 nValue;
     bool bValid = getAttribList()->getAsInteger( nAttrToken, nValue );
-    return OptValue< sal_Int32 >( bValid, nValue );
+    return bValid ? OptValue< sal_Int32 >( nValue ) : OptValue< sal_Int32 >();
 }
 
 OptValue< sal_uInt32 > AttributeList::getUnsigned( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     bool bValid = !aValue.isEmpty();
-    return OptValue< sal_uInt32 >( bValid, AttributeConversion::decodeUnsigned( aValue ) );
+    return bValid ? OptValue< sal_uInt32 >( AttributeConversion::decodeUnsigned( aValue ) ) : OptValue< sal_uInt32 >();
 }
 
 OptValue< sal_Int64 > AttributeList::getHyper( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     bool bValid = !aValue.isEmpty();
-    return OptValue< sal_Int64 >( bValid, bValid ? AttributeConversion::decodeHyper( aValue ) : 0 );
+    return bValid ? OptValue< sal_Int64 >( AttributeConversion::decodeHyper( aValue ) ) : OptValue< sal_Int64 >();
 }
 
 OptValue< sal_Int32 > AttributeList::getIntegerHex( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     bool bValid = !aValue.isEmpty();
-    return OptValue< sal_Int32 >( bValid, bValid ? AttributeConversion::decodeIntegerHex( aValue ) : 0 );
+    return bValid ? OptValue< sal_Int32 >( AttributeConversion::decodeIntegerHex( aValue ) ) : OptValue< sal_Int32 >();
 }
 
 OptValue< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
@@ -243,7 +243,7 @@ OptValue< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
         case XML_off:   return OptValue< bool >( false );
     }
     OptValue< sal_Int32 > onValue = getInteger( nAttrToken );
-    return OptValue< bool >( onValue.has_value(), onValue.get() != 0 );
+    return onValue.has_value() ? OptValue< bool >( onValue.get() != 0 ) : OptValue< bool >();
 }
 
 OptValue< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) const
@@ -252,16 +252,15 @@ OptValue< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) co
     util::DateTime aDateTime;
     bool bValid = (aValue.getLength() == 19) && (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') &&
         (aValue[ 10 ] == 'T') && (aValue[ 13 ] == ':') && (aValue[ 16 ] == ':');
-    if( bValid )
-    {
-        aDateTime.Year    = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 0, 4 )) );
-        aDateTime.Month   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 5, 2 )) );
-        aDateTime.Day     = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 8, 2 )) );
-        aDateTime.Hours   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 11, 2 )) );
-        aDateTime.Minutes = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 14, 2 )) );
-        aDateTime.Seconds = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 17, 2 )) );
-    }
-    return OptValue< util::DateTime >( bValid, aDateTime );
+    if (!bValid)
+        return OptValue< util::DateTime >();
+    aDateTime.Year    = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 0, 4 )) );
+    aDateTime.Month   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 5, 2 )) );
+    aDateTime.Day     = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 8, 2 )) );
+    aDateTime.Hours   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 11, 2 )) );
+    aDateTime.Minutes = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 14, 2 )) );
+    aDateTime.Seconds = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 17, 2 )) );
+    return OptValue< util::DateTime >( aDateTime );
 }
 
 // defaulted return values ----------------------------------------------------
