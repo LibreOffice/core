@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd5a2bd9_75be3852",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-21T13:12:55Z",
+      "side": 1,
+      "message": "Jenkins does not propagate to changed commit message patch, so doing it here.",
+      "revId": "f9e23bbb5858d55e49c0ac7b70cbd21b985f44cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
