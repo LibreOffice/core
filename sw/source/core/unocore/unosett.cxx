@@ -250,16 +250,6 @@ const o3tl::enumarray<SvxAdjust, sal_Int16> aSvxToUnoAdjust
     sal_Int16(-1)
 };
 
-const unsigned short aUnoToSvxAdjust[] =
-{
-    USHRT_MAX,
-    static_cast<unsigned short>(SvxAdjust::Right),       // 1
-    static_cast<unsigned short>(SvxAdjust::Center),      // 3
-    static_cast<unsigned short>(SvxAdjust::Left),        // 0
-    USHRT_MAX,
-    USHRT_MAX
-};
-
 OUString SwXFootnoteProperties::getImplementationName()
 {
     return "SwXFootnoteProperties";
@@ -1537,14 +1527,20 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         {
             sal_Int16 nValue = text::HoriOrientation::NONE;
             rProp.Value >>= nValue;
-            if (nValue > text::HoriOrientation::NONE &&
-                nValue <= text::HoriOrientation::LEFT &&
-                USHRT_MAX != aUnoToSvxAdjust[nValue])
-            {
-                aFormat.SetNumAdjust(static_cast<SvxAdjust>(aUnoToSvxAdjust[nValue]));
-            }
-            else
+            switch (nValue) {
+            case text::HoriOrientation::RIGHT:
+                aFormat.SetNumAdjust(SvxAdjust::Right);
+                break;
+            case text::HoriOrientation::CENTER:
+                aFormat.SetNumAdjust(SvxAdjust::Center);
+                break;
+            case text::HoriOrientation::LEFT:
+                aFormat.SetNumAdjust(SvxAdjust::Left);
+                break;
+            default:
                 bWrongArg = true;
+                break;
+            }
         }
         else if (rProp.Name == UNO_NAME_PARENT_NUMBERING)
         {
