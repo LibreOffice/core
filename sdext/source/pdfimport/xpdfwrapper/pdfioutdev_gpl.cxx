@@ -476,10 +476,10 @@ int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, const GfxState* st
         // we must write byte count to stdout before
 #if POPPLER_CHECK_VERSION(22, 6, 0)
         std::optional<std::vector<unsigned char>> pBuf = gfxFont->readEmbFontFile( m_pDoc->getXRef() );
-        nSize = pBuf->size();
-        if ( nSize > 0 )
+        if ( pBuf )
         {
             aNewFont.isEmbedded = true;
+            nSize = pBuf->size();
         }
 #else
         char* pBuf = gfxFont->readEmbFontFile( m_pDoc->getXRef(), &nSize );
@@ -503,7 +503,8 @@ void PDFOutDev::writeFontFile( GfxFont* gfxFont ) const
     int nSize = 0;
 #if POPPLER_CHECK_VERSION(22, 6, 0)
     std::optional<std::vector<unsigned char>> pBuf = gfxFont->readEmbFontFile( m_pDoc->getXRef() );
-    nSize = pBuf->size();
+    if ( pBuf )
+        nSize = pBuf->size();
     if ( nSize == 0 )
         return;
 #else
