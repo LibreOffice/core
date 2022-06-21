@@ -108,7 +108,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty( PROP_CharFontFamilyComplex, nFontFamily);
     }
 
-    if ( maFillProperties.moFillType.has() )
+    if ( maFillProperties.moFillType.has_value() )
     {
         Color aColor = maFillProperties.getBestSolidColor();
         bool bContoured = false;
@@ -119,8 +119,8 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
 
         // tdf#137438 Emulate text outline color/transparency.
         // If the outline color dominates, then use it as the text color.
-        if (moTextOutlineProperties.has()
-            && moTextOutlineProperties.get().maLineFill.moFillType.has()
+        if (moTextOutlineProperties.has_value()
+            && moTextOutlineProperties.get().maLineFill.moFillType.has_value()
             && moTextOutlineProperties.get().maLineFill.moFillType.get() != XML_noFill)
         {
             Color aLineColor = moTextOutlineProperties.get().maLineFill.getBestSolidColor();
@@ -146,7 +146,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         }
     }
 
-    if( moLang.has() && !moLang.get().isEmpty() )
+    if( moLang.has_value() && !moLang.get().isEmpty() )
     {
         LanguageTag aTag(moLang.get());
         lang::Locale aLocale(aTag.getLocale());
@@ -161,10 +161,10 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         }
     }
 
-    if( moHeight.has() )
+    if( moHeight.has_value() )
     {
         float fHeight = GetFontHeight( moHeight.get() );
-        if (moFontScale.has())
+        if (moFontScale.has_value())
             fHeight *= (moFontScale.get() / 100000);
         rPropMap.setProperty( PROP_CharHeight, fHeight);
         rPropMap.setProperty( PROP_CharHeightAsian, fHeight);
@@ -177,7 +177,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     rPropMap.setProperty( PROP_CharStrikeout, GetFontStrikeout( moStrikeout.get( XML_noStrike ) ));
     rPropMap.setProperty( PROP_CharCaseMap, GetCaseMap( moCaseMap.get( XML_none ) ));
 
-    if( moBaseline.has() ) {
+    if( moBaseline.has_value() ) {
         rPropMap.setProperty( PROP_CharEscapement, sal_Int16(moBaseline.get( 0 ) / 1000));
         rPropMap.setProperty( PROP_CharEscapementHeight, sal_Int8(DFLT_ESC_PROP));
     } else {
@@ -196,7 +196,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     rPropMap.setProperty( PROP_CharPostureComplex, eSlant);
 
     bool bUnderlineFillFollowText = moUnderlineFillFollowText.get( false );
-    if( moUnderline.has() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
+    if( moUnderline.has_value() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
     {
         rPropMap.setProperty( PROP_CharUnderlineHasColor, true);
         rPropMap.setProperty( PROP_CharUnderlineColor, maUnderlineColor.getColor( rFilter.getGraphicHelper() ));
@@ -234,7 +234,7 @@ void TextCharacterProperties::pushToPropSet( PropertySet& rPropSet, const XmlFil
 
 float TextCharacterProperties::getCharHeightPoints( float fDefault ) const
 {
-    return moHeight.has() ? GetFontHeight( moHeight.get() ) : fDefault;
+    return moHeight.has_value() ? GetFontHeight( moHeight.get() ) : fDefault;
 }
 
 } // namespace oox::drawingml

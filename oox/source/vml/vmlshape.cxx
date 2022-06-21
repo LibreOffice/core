@@ -544,7 +544,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
         }
         // And no LineColor property; individual borders can have colors and widths
         std::optional<sal_Int32> oLineWidth;
-        if (maTypeModel.maStrokeModel.moWeight.has())
+        if (maTypeModel.maStrokeModel.moWeight.has_value())
             oLineWidth = ConversionHelper::decodeMeasureToHmm(
                 rGraphicHelper, maTypeModel.maStrokeModel.moWeight.get(), 0, false, false);
         if (aPropMap.hasProperty(PROP_LineColor))
@@ -975,18 +975,18 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
         aPropSet.setProperty(PROP_TopMargin, uno::Any(nWrapDistanceTop));
         aPropSet.setProperty(PROP_BottomMargin, uno::Any(nWrapDistanceBottom));
 
-        if (maTypeModel.moCropBottom.has() || maTypeModel.moCropLeft.has() || maTypeModel.moCropRight.has() || maTypeModel.moCropTop.has())
+        if (maTypeModel.moCropBottom.has_value() || maTypeModel.moCropLeft.has_value() || maTypeModel.moCropRight.has_value() || maTypeModel.moCropTop.has_value())
         {
             text::GraphicCrop aGraphicCrop;
             awt::Size aOriginalSize = rGraphicHelper.getOriginalSize(rxGraphic);
 
-            if (maTypeModel.moCropBottom.has())
+            if (maTypeModel.moCropBottom.has_value())
                 aGraphicCrop.Bottom = lclConvertCrop(maTypeModel.moCropBottom.get(), aOriginalSize.Height);
-            if (maTypeModel.moCropLeft.has())
+            if (maTypeModel.moCropLeft.has_value())
                 aGraphicCrop.Left = lclConvertCrop(maTypeModel.moCropLeft.get(), aOriginalSize.Width);
-            if (maTypeModel.moCropRight.has())
+            if (maTypeModel.moCropRight.has_value())
                 aGraphicCrop.Right = lclConvertCrop(maTypeModel.moCropRight.get(), aOriginalSize.Width);
-            if (maTypeModel.moCropTop.has())
+            if (maTypeModel.moCropTop.has_value())
                 aGraphicCrop.Top = lclConvertCrop(maTypeModel.moCropTop.get(), aOriginalSize.Height);
 
             aPropSet.setProperty(PROP_GraphicCrop, aGraphicCrop);

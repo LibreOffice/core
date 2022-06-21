@@ -82,7 +82,7 @@ static void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
         aBorderLine.LineDistance = 0;
     }
 
-    if ( rLineProperties.moPresetDash.has() )
+    if ( rLineProperties.moPresetDash.has_value() )
     {
         switch ( rLineProperties.moPresetDash.get() )
         {
@@ -536,7 +536,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
         aFillProperties.maFillColor.setSrgbClr(sal_Int32(aResult.GetRGBColor()));
         aFillProperties.moFillType.set(XML_solidFill);
     }
-    if (!aFillProperties.moFillType.has())
+    if (!aFillProperties.moFillType.has_value())
         aFillProperties.moFillType.set(XML_noFill);
 
     // TODO: phClr?

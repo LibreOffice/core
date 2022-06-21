@@ -210,7 +210,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         // tdf#134118 leave gap if the time unit is month
         bool bIsMonthBasedTimeUnit = false;
         if( mrModel.mxPlotArea.is() && mrModel.mxPlotArea->maAxes.size() > 0 &&
-            mrModel.mxPlotArea->maAxes[0]->monBaseTimeUnit.has() )
+            mrModel.mxPlotArea->maAxes[0]->monBaseTimeUnit.has_value() )
         {
             bIsMonthBasedTimeUnit = mrModel.mxPlotArea->maAxes[0]->monBaseTimeUnit.get() == XML_months;
         }

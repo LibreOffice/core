@@ -737,7 +737,7 @@ sal_uInt32 VmlDrawing::convertControlTextColor( const OUString& rTextColor ) con
 
 void VmlDrawing::convertControlFontData( AxFontData& rAxFontData, sal_uInt32& rnOleTextColor, const ::oox::vml::TextFontModel& rFontModel ) const
 {
-    if( rFontModel.moName.has() )
+    if( rFontModel.moName.has_value() )
         rAxFontData.maFontName = rFontModel.moName.get();
 
     // font height: convert from twips to points, then to internal representation of AX controls

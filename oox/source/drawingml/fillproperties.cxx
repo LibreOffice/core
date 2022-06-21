@@ -345,7 +345,7 @@ void FillProperties::assignUsed( const FillProperties& rSourceProps )
 Color FillProperties::getBestSolidColor() const
 {
     Color aSolidColor;
-    if( moFillType.has() ) switch( moFillType.get() )
+    if( moFillType.has_value() ) switch( moFillType.get() )
     {
         case XML_solidFill:
             aSolidColor = maFillColor;
@@ -371,7 +371,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         const GraphicHelper& rGraphicHelper, sal_Int32 nShapeRotation, ::Color nPhClr, sal_Int16 nPhClrTheme,
         bool bFlipH, bool bFlipV, bool bIsCustomShape) const
 {
-    if( !moFillType.has() )
+    if( !moFillType.has_value() )
         return;
 
     FillStyle eFillStyle = FillStyle_NONE;
@@ -434,7 +434,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 if ( !maGradientProps.moRotateWithShape.get( true ) )
                     nShapeRotation = 0;
 
-                if( maGradientProps.moGradientPath.has() )
+                if( maGradientProps.moGradientPath.has_value() )
                 {
                     IntegerRectangle2D aFillToRect = maGradientProps.moFillToRect.get( IntegerRectangle2D( 0, 0, MAX_PERCENT, MAX_PERCENT ) );
                     sal_Int32 nCenterX = (MAX_PERCENT + aFillToRect.X1 - aFillToRect.X2) / 2;
@@ -783,7 +783,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             rPropMap.setProperty( ShapeProperty::FillBitmapOffsetY, nTileOffsetY );
                         }
                     }
-                    else if ( eBitmapMode == BitmapMode_STRETCH && maBlipProps.moFillRect.has() )
+                    else if ( eBitmapMode == BitmapMode_STRETCH && maBlipProps.moFillRect.has_value() )
                     {
                         geometry::IntegerRectangle2D aFillRect( maBlipProps.moFillRect.get() );
                         awt::Size aOriginalSize( rGraphicHelper.getOriginalSize( xGraphic ) );
@@ -813,7 +813,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     }
                 }
 
-                if (maBlipProps.moAlphaModFix.has())
+                if (maBlipProps.moAlphaModFix.has_value())
                     rPropMap.setProperty(ShapeProperty::FillTransparency, static_cast<sal_Int16>(100 - (maBlipProps.moAlphaModFix.get() / PER_PERCENT)));
             }
         break;
@@ -823,7 +823,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
             if( rPropMap.supportsProperty( ShapeProperty::FillHatch ) )
             {
                 Color aColor( maPatternProps.maPattFgColor );
-                if( aColor.isUsed() && maPatternProps.moPattPreset.has() )
+                if( aColor.isUsed() && maPatternProps.moPattPreset.has_value() )
                 {
                     eFillStyle = FillStyle_HATCH;
                     rPropMap.setProperty( ShapeProperty::FillHatch, createHatch( maPatternProps.moPattPreset.get(), aColor.getColor( rGraphicHelper, nPhClr ) ) );
@@ -897,7 +897,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         }
 
         // cropping
-        if ( maBlipProps.moClipRect.has() )
+        if ( maBlipProps.moClipRect.has_value() )
         {
             geometry::IntegerRectangle2D oClipRect( maBlipProps.moClipRect.get() );
             awt::Size aOriginalSize( rGraphicHelper.getOriginalSize( xGraphic ) );
@@ -953,7 +953,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             rPropMap.setProperty(PROP_Graphic, xGraphic);
 
 
-        if ( maBlipProps.moAlphaModFix.has() )
+        if ( maBlipProps.moAlphaModFix.has_value() )
         {
             rPropMap.setProperty(PROP_Transparency, static_cast<sal_Int16>(100 - (maBlipProps.moAlphaModFix.get() / PER_PERCENT)));
         }

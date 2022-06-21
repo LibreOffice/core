@@ -169,7 +169,7 @@ sal_Int32 TextField::insertAt(
         TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
         aTextCharacterProps.assignUsed( maTextParagraphProperties.getTextCharacterProperties() );
         aTextCharacterProps.assignUsed( getTextCharacterProperties() );
-        if ( aTextCharacterProps.moHeight.has() )
+        if ( aTextCharacterProps.moHeight.has_value() )
             nCharHeight = aTextCharacterProps.moHeight.get();
         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 

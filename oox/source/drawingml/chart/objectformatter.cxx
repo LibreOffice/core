@@ -838,7 +838,7 @@ LineFormatter::LineFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
         mxAutoLine->maLineFill.maFillColor.setSrgbClr( 0xD9D9D9 );
     }
     // change line width according to chart auto style
-    if( mxAutoLine->moLineWidth.has() )
+    if( mxAutoLine->moLineWidth.has_value() )
         mxAutoLine->moLineWidth = mxAutoLine->moLineWidth.get() * pAutoFormatEntry->mnRelLineWidth / 100;
 }
 
@@ -914,7 +914,7 @@ TextFormatter::TextFormatter( ObjectFormatterData& rData, const AutoTextEntry* p
     if( const TextCharacterProperties* pTextProps = lclGetTextProperties( rxGlobalTextProp ) )
     {
         mxAutoText->assignUsed( *pTextProps );
-        if( pTextProps->moHeight.has() )
+        if( pTextProps->moHeight.has_value() )
             mxAutoText->moHeight = pTextProps->moHeight.get() * pAutoTextEntry->mnRelFontSize / 100;
     }
 }
@@ -1139,7 +1139,7 @@ void ObjectFormatter::convertAutomaticFill( PropertySet& rPropSet, ObjectType eO
 
 bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
 {
-    return !rxShapeProp || !rxShapeProp->getFillProperties().moFillType.has();
+    return !rxShapeProp || !rxShapeProp->getFillProperties().moFillType.has_value();
 }
 
 } // namespace oox

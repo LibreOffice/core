@@ -127,7 +127,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     for (std::size_t i = 0; i < SAL_N_ELEMENTS(aInsets); ++i)
                     {
                         OptValue<OUString> oValue = rAttribs.getString(aInsets[i]);
-                        if (oValue.has())
+                        if (oValue.has_value())
                             oInsets[i] = oox::drawingml::GetCoordinate(oValue.get());
                         else
                             // Defaults from the spec: left/right: 91440 EMU, top/bottom: 45720 EMU
@@ -239,7 +239,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     if (rAttribs.hasAttribute(XML_lIns))
                     {
                         OptValue<OUString> oValue = rAttribs.getString(aInsets[i]);
-                        if (oValue.has())
+                        if (oValue.has_value())
                             pTextBody->getTextProperties().moInsets[i]
                                 = oox::drawingml::GetCoordinate(oValue.get());
                         else
@@ -299,7 +299,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             if (rAttribs.hasAttribute(XML_id))
             {
                 OptValue<OUString> id = rAttribs.getString(XML_id);
-                if (id.has())
+                if (id.has_value())
                 {
                     oox::drawingml::LinkedTxbxAttr linkedTxtBoxAttr;
                     linkedTxtBoxAttr.id = id.get().toInt32();
@@ -318,7 +318,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             mpShapePtr->setTextBox(true);
             OptValue<OUString> id = rAttribs.getString(XML_id);
             OptValue<OUString> seq = rAttribs.getString(XML_seq);
-            if (id.has() && seq.has())
+            if (id.has_value() && seq.has_value())
             {
                 oox::drawingml::LinkedTxbxAttr linkedTxtBoxAttr;
                 linkedTxtBoxAttr.id = id.get().toInt32();

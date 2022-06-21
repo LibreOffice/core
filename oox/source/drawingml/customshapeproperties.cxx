@@ -214,7 +214,7 @@ void CustomShapeProperties::pushToPropSet(
 
         aPath.setProperty( PROP_Segments, comphelper::containerToSequence(maSegments) );
 
-        if ( maTextRect.has() ) {
+        if ( maTextRect.has_value() ) {
             Sequence< EnhancedCustomShapeTextFrame > aTextFrames{
                 { /* tl */ { maTextRect.get().l, maTextRect.get().t },
                   /* br */ { maTextRect.get().r, maTextRect.get().b } }
@@ -286,21 +286,21 @@ void CustomShapeProperties::pushToPropSet(
                 // 4. The unit of angular adjustment values are 6000th degree.
 
                 aHandle.setProperty( PROP_Position, maAdjustHandleList[ i ].pos);
-                if ( maAdjustHandleList[ i ].gdRef1.has() )
+                if ( maAdjustHandleList[ i ].gdRef1.has_value() )
                 {
                     sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef1.get() );
                     if ( nIndex >= 0 )
                         aHandle.setProperty( PROP_RefR, nIndex);
                 }
-                if ( maAdjustHandleList[ i ].gdRef2.has() )
+                if ( maAdjustHandleList[ i ].gdRef2.has_value() )
                 {
                     sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef2.get() );
                     if ( nIndex >= 0 )
                         aHandle.setProperty( PROP_RefAngle, nIndex);
                 }
-                if ( maAdjustHandleList[ i ].min1.has() )
+                if ( maAdjustHandleList[ i ].min1.has_value() )
                     aHandle.setProperty( PROP_RadiusRangeMinimum, maAdjustHandleList[ i ].min1.get());
-                if ( maAdjustHandleList[ i ].max1.has() )
+                if ( maAdjustHandleList[ i ].max1.has_value() )
                     aHandle.setProperty( PROP_RadiusRangeMaximum, maAdjustHandleList[ i ].max1.get());
 
                 /* TODO: AngleMin & AngleMax
@@ -313,7 +313,7 @@ void CustomShapeProperties::pushToPropSet(
             else
             {
                 aHandle.setProperty( PROP_Position, maAdjustHandleList[ i ].pos);
-                if ( maAdjustHandleList[ i ].gdRef1.has() )
+                if ( maAdjustHandleList[ i ].gdRef1.has_value() )
                 {
                     // TODO: PROP_RefX and PROP_RefY are not yet part of our file format,
                     // so the handles will not work after save/reload
@@ -321,19 +321,19 @@ void CustomShapeProperties::pushToPropSet(
                     if ( nIndex >= 0 )
                         aHandle.setProperty( PROP_RefX, nIndex);
                 }
-                if ( maAdjustHandleList[ i ].gdRef2.has() )
+                if ( maAdjustHandleList[ i ].gdRef2.has_value() )
                 {
                     sal_Int32 nIndex = GetCustomShapeGuideValue( maAdjustmentGuideList, maAdjustHandleList[ i ].gdRef2.get() );
                     if ( nIndex >= 0 )
                         aHandle.setProperty( PROP_RefY, nIndex);
                 }
-                if ( maAdjustHandleList[ i ].min1.has() )
+                if ( maAdjustHandleList[ i ].min1.has_value() )
                     aHandle.setProperty( PROP_RangeXMinimum, maAdjustHandleList[ i ].min1.get());
-                if ( maAdjustHandleList[ i ].max1.has() )
+                if ( maAdjustHandleList[ i ].max1.has_value() )
                     aHandle.setProperty( PROP_RangeXMaximum, maAdjustHandleList[ i ].max1.get());
-                if ( maAdjustHandleList[ i ].min2.has() )
+                if ( maAdjustHandleList[ i ].min2.has_value() )
                     aHandle.setProperty( PROP_RangeYMinimum, maAdjustHandleList[ i ].min2.get());
-                if ( maAdjustHandleList[ i ].max2.has() )
+                if ( maAdjustHandleList[ i ].max2.has_value() )
                     aHandle.setProperty( PROP_RangeYMaximum, maAdjustHandleList[ i ].max2.get());
             }
             aHandlesRange[ i ] = aHandle.makePropertyValueSequence();

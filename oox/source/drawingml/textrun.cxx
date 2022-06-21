@@ -76,7 +76,7 @@ sal_Int32 TextRun::insertAt(
             aTextCharacterProps.maFillProperties.moFillType = XML_solidFill;
 
         aTextCharacterProps.assignUsed(maTextCharacterProperties);
-        if ( aTextCharacterProps.moHeight.has() )
+        if ( aTextCharacterProps.moHeight.has_value() )
             nCharHeight = aTextCharacterProps.moHeight.get();
         else
             // UNO API has the character height as float, DML has it as int, but in hundreds.
@@ -158,7 +158,7 @@ sal_Int32 TextRun::insertAt(
                     aTextCharacterProps.maFillProperties.maFillColor.setSchemeClr(XML_hlink);
 
                 aTextCharacterProps.maFillProperties.moFillType.set(XML_solidFill);
-                if ( !maTextCharacterProperties.moUnderline.has() )
+                if ( !maTextCharacterProperties.moUnderline.has_value() )
                     aTextCharacterProps.moUnderline.set( XML_sng );
 
                 PropertySet aFieldTextPropSet( xTextFieldCursor );

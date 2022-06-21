@@ -64,7 +64,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
         {
             mrColor.setSchemeClr( rAttribs.getToken( XML_val, XML_TOKEN_INVALID ) );
             oox::OptValue<OUString> sSchemeName = rAttribs.getString( XML_val );
-            if( sSchemeName.has() )
+            if( sSchemeName.has_value() )
                 mrColor.setSchemeName( sSchemeName.use() );
         }
         break;

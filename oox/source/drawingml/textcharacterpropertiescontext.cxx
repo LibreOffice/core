@@ -228,7 +228,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             else if (attrib == "none")
                 mrTextCharacterProperties.moUnderline = XML_none;
             auto colorAttrib = rAttribs.getIntegerHex(W_TOKEN(color));
-            if (colorAttrib.has())
+            if (colorAttrib.has_value())
             {
                 oox::drawingml::Color theColor;
                 theColor.setSrgbClr(colorAttrib.get());
@@ -259,14 +259,14 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
                 mrTextCharacterProperties.moStrikeout = XML_dblStrike;
             break;
         case W_TOKEN( color ):
-            if (rAttribs.getInteger(W_TOKEN(val)).has())
+            if (rAttribs.getInteger(W_TOKEN(val)).has_value())
             {
                 mrTextCharacterProperties.maFillProperties.maFillColor.setSrgbClr(rAttribs.getIntegerHex(W_TOKEN(val)).get());
                 mrTextCharacterProperties.maFillProperties.moFillType.set(XML_solidFill);
             }
             break;
         case W_TOKEN(  sz ):
-            if (rAttribs.getInteger(W_TOKEN(val)).has())
+            if (rAttribs.getInteger(W_TOKEN(val)).has_value())
             {
                 sal_Int32 nVal = rAttribs.getInteger(W_TOKEN(val)).get();
                 // wml has half points, dml has hundred points

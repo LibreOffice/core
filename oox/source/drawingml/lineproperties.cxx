@@ -433,7 +433,7 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         const GraphicHelper& rGraphicHelper, ::Color nPhClr ) const
 {
     // line fill type must exist, otherwise ignore other properties
-    if( !maLineFill.moFillType.has() )
+    if( !maLineFill.moFillType.has_value() )
         return;
 
     // line style (our core only supports none and solid)
@@ -444,8 +444,8 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
     rPropMap.setProperty( ShapeProperty::LineWidth, nLineWidth );
 
     // line cap type
-    LineCap eLineCap = moLineCap.has() ? lclGetLineCap( moLineCap.get() ) : LineCap_BUTT;
-    if( moLineCap.has() )
+    LineCap eLineCap = moLineCap.has_value() ? lclGetLineCap( moLineCap.get() ) : LineCap_BUTT;
+    if( moLineCap.has_value() )
         rPropMap.setProperty( ShapeProperty::LineCap, eLineCap );
 
     // create line dash from preset dash token or dash stop vector (not for invisible line)
@@ -485,7 +485,7 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
     rPropMap.setProperty( ShapeProperty::LineStyle, eLineStyle );
 
     // line joint type
-    if( moLineJoint.has() )
+    if( moLineJoint.has_value() )
         rPropMap.setProperty( ShapeProperty::LineJoint, lclGetLineJoint( moLineJoint.get() ) );
 
     // line color and transparence
@@ -514,7 +514,7 @@ drawing::LineStyle LineProperties::getLineStyle() const
 
 drawing::LineCap LineProperties::getLineCap() const
 {
-    if( moLineCap.has() )
+    if( moLineCap.has_value() )
         return lclGetLineCap( moLineCap.get() );
 
     return drawing::LineCap_BUTT;
@@ -522,7 +522,7 @@ drawing::LineCap LineProperties::getLineCap() const
 
 drawing::LineJoint LineProperties::getLineJoint() const
 {
-    if( moLineJoint.has() )
+    if( moLineJoint.has_value() )
         return lclGetLineJoint( moLineJoint.get() );
 
     return drawing::LineJoint_NONE;
