@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d1e2a4f_b16c462c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-06-21T12:28:01Z",
+      "side": 1,
+      "message": "The above mentioned issue fixed, i think, it can be merged.",
+      "revId": "b2fac5d6bc1d369f2ecd2dee8ef5524d3096f498",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
