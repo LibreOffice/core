@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19134e5b_30e41d49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-21T15:01:31Z",
+      "side": 1,
+      "message": "Anyone know what should happen in this doc? I can see that the \"TopCell\" of a FormulaGroup is deleted but there were dangling references to it elsewhere that cause use-after-delete. In this demo patch I zero out the TopCell* of the group when the cell is deleted to make it a nullptr dereference, but maybe if one FormulaCell replaces another and the other was a TopCell of a group then its replacement should be too?",
+      "revId": "bd89487a0d0b92ae97549c32b9f10284a1866a10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
