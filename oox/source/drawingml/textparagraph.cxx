@@ -108,7 +108,7 @@ void TextParagraph::insertAt(
 
             TextCharacterProperties aTextCharacterProps( aTextCharacterStyle );
             aTextCharacterProps.assignUsed( maEndProperties );
-            if ( aTextCharacterProps.moHeight.has() )
+            if ( aTextCharacterProps.moHeight.has_value() )
                 nCharHeight = nCharHeightFirst = aTextCharacterProps.moHeight.get();
             aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
         }
@@ -145,9 +145,9 @@ void TextParagraph::insertAt(
 
             // bullets have same color as following texts by default
             if( !aioBulletList.hasProperty( PROP_BulletColor ) && !maRuns.empty()
-                && (*maRuns.begin())->getTextCharacterProperties().maFillProperties.moFillType.has() )
+                && (*maRuns.begin())->getTextCharacterProperties().maFillProperties.moFillType.has_value() )
                 aioBulletList.setProperty( PROP_BulletColor, (*maRuns.begin())->getTextCharacterProperties().maFillProperties.getBestSolidColor().getColor( rFilterBase.getGraphicHelper() ));
-            if( !aioBulletList.hasProperty( PROP_BulletColor ) && aTextCharacterStyle.maFillProperties.moFillType.has() )
+            if( !aioBulletList.hasProperty( PROP_BulletColor ) && aTextCharacterStyle.maFillProperties.moFillType.has_value() )
                 aioBulletList.setProperty( PROP_BulletColor, aTextCharacterStyle.maFillProperties.getBestSolidColor().getColor( rFilterBase.getGraphicHelper() ));
             if( !aioBulletList.hasProperty( PROP_GraphicSize ) && !maRuns.empty()
                 && aParaProp.getBulletList().maGraphic.hasValue())

@@ -54,7 +54,7 @@ ContextHandlerRef LayoutFragmentHandler::onCreateContext( sal_Int32 aElementToke
             mpSlidePersistPtr->setLayoutValueToken( rAttribs.getToken( XML_type, 0 ) ); // CT_SlideLayoutType
 
             OptValue< bool > aShowMasterShapes = rAttribs.getBool( XML_showMasterSp );
-            if( aShowMasterShapes.has() && !aShowMasterShapes.get() ) {
+            if( aShowMasterShapes.has_value() && !aShowMasterShapes.get() ) {
                 mpSlidePersistPtr->hideShapesAsMasterShapes();
             }
             break;

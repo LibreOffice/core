@@ -236,7 +236,7 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
         aDmlColor.addTransformation( XML_alpha, nOpacity );
 
     // color attribute not present - set passed default color
-    if( !roVmlColor.has() )
+    if( !roVmlColor.has_value() )
     {
         aDmlColor.setSrgbClr( nDefaultRgb );
         return aDmlColor;
@@ -556,12 +556,12 @@ namespace {
 
 sal_Int64 lclGetEmu( const GraphicHelper& rGraphicHelper, const OptValue< OUString >& roValue, sal_Int64 nDefValue )
 {
-    return roValue.has() ? ConversionHelper::decodeMeasureToEmu( rGraphicHelper, roValue.get(), 0, false, false ) : nDefValue;
+    return roValue.has_value() ? ConversionHelper::decodeMeasureToEmu( rGraphicHelper, roValue.get(), 0, false, false ) : nDefValue;
 }
 
 void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::DashStopVector& orCustomDash, const OptValue< OUString >& roDashStyle )
 {
-    if( !roDashStyle.has() )
+    if( !roDashStyle.has_value() )
         return;
 
     const OUString& rDashStyle = roDashStyle.get();
@@ -595,7 +595,7 @@ void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::Da
 
 sal_Int32 lclGetDmlArrowType( const OptValue< sal_Int32 >& roArrowType )
 {
-    if( roArrowType.has() ) switch( roArrowType.get() )
+    if( roArrowType.has_value() ) switch( roArrowType.get() )
     {
         case XML_none:      return XML_none;
         case XML_block:     return XML_triangle;
@@ -609,7 +609,7 @@ sal_Int32 lclGetDmlArrowType( const OptValue< sal_Int32 >& roArrowType )
 
 sal_Int32 lclGetDmlArrowWidth( const OptValue< sal_Int32 >& roArrowWidth )
 {
-    if( roArrowWidth.has() ) switch( roArrowWidth.get() )
+    if( roArrowWidth.has_value() ) switch( roArrowWidth.get() )
     {
         case XML_narrow:    return XML_sm;
         case XML_medium:    return XML_med;
@@ -620,7 +620,7 @@ sal_Int32 lclGetDmlArrowWidth( const OptValue< sal_Int32 >& roArrowWidth )
 
 sal_Int32 lclGetDmlArrowLength( const OptValue< sal_Int32 >& roArrowLength )
 {
-    if( roArrowLength.has() ) switch( roArrowLength.get() )
+    if( roArrowLength.has_value() ) switch( roArrowLength.get() )
     {
         case XML_short:     return XML_sm;
         case XML_medium:    return XML_med;
@@ -638,7 +638,7 @@ void lclConvertArrow( LineArrowProperties& orArrowProp, const StrokeArrowModel& 
 
 sal_Int32 lclGetDmlLineCompound( const OptValue< sal_Int32 >& roLineStyle )
 {
-    if( roLineStyle.has() ) switch( roLineStyle.get() )
+    if( roLineStyle.has_value() ) switch( roLineStyle.get() )
     {
         case XML_single:            return XML_sng;
         case XML_thinThin:          return XML_dbl;
@@ -651,7 +651,7 @@ sal_Int32 lclGetDmlLineCompound( const OptValue< sal_Int32 >& roLineStyle )
 
 sal_Int32 lclGetDmlLineCap( const OptValue< sal_Int32 >& roEndCap )
 {
-    if( roEndCap.has() ) switch( roEndCap.get() )
+    if( roEndCap.has_value() ) switch( roEndCap.get() )
     {
         case XML_flat:      return XML_flat;
         case XML_square:    return XML_sq;
@@ -662,7 +662,7 @@ sal_Int32 lclGetDmlLineCap( const OptValue< sal_Int32 >& roEndCap )
 
 sal_Int32 lclGetDmlLineJoint( const OptValue< sal_Int32 >& roJoinStyle )
 {
-    if( roJoinStyle.has() ) switch( roJoinStyle.get() )
+    if( roJoinStyle.has_value() ) switch( roJoinStyle.get() )
     {
         case XML_round: return XML_round;
         case XML_bevel: return XML_bevel;
@@ -837,7 +837,7 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
             case XML_tile:
             case XML_frame:
             {
-                if( moBitmapPath.has() && !moBitmapPath.get().isEmpty() )
+                if( moBitmapPath.has_value() && !moBitmapPath.get().isEmpty() )
                 {
                     aFillProps.maBlipProps.mxFillGraphic = rGraphicHelper.importEmbeddedGraphic(moBitmapPath.get());
                     if (aFillProps.maBlipProps.mxFillGraphic.is())
@@ -874,13 +874,13 @@ ShadowModel::ShadowModel()
 
 void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper) const
 {
-    if (!mbHasShadow || (moShadowOn.has() && !moShadowOn.get()))
+    if (!mbHasShadow || (moShadowOn.has_value() && !moShadowOn.get()))
         return;
 
     drawingml::Color aColor = ConversionHelper::decodeColor(rGraphicHelper, moColor, moOpacity, API_RGB_GRAY);
     // nOffset* is in mm100, default value is 35 twips, see DffPropertyReader::ApplyAttributes() in msfilter.
     sal_Int32 nOffsetX = 62, nOffsetY = 62;
-    if (moOffset.has())
+    if (moOffset.has_value())
     {
         std::u16string_view aOffsetX, aOffsetY;
         ConversionHelper::separatePair(aOffsetX, aOffsetY, moOffset.get(), ',');
@@ -923,7 +923,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
 {
     OUString sFont = "";
 
-    if (moString.has())
+    if (moString.has_value())
     {
         uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
         xTextRange->setString(moString.get());
@@ -947,7 +947,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
         }
         rPropMap.setAnyProperty(PROP_CustomShapeGeometry, uno::Any(aGeomPropSeq));
     }
-    if (moStyle.has())
+    if (moStyle.has_value())
     {
         OUString aStyle = moStyle.get(OUString());
 
@@ -978,7 +978,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
             }
         }
     }
-    if (moTrim.has() && moTrim.get())
+    if (moTrim.has_value() && moTrim.get())
         return;
 
     OUString sText = moString.get();

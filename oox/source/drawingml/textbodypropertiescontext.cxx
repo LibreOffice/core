@@ -149,7 +149,7 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
                 if( mpShapePtr )
                 {
                     const OptValue<OUString> sPrst = rAttribs.getString( XML_prst );
-                    if( sPrst.has() )
+                    if( sPrst.has_value() )
                     {
                         mrTextBodyProp.msPrst = sPrst.get();
                         if( mrTextBodyProp.msPrst != "textNoShape" )

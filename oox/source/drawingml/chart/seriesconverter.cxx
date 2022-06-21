@@ -124,10 +124,10 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     bool bHasAnyElement = true;
     if (bMSO2007Doc)
     {
-        bHasAnyElement = rDataLabel.moaSeparator.has() || rDataLabel.monLabelPos.has() ||
-            rDataLabel.mobShowCatName.has() || rDataLabel.mobShowLegendKey.has() ||
-            rDataLabel.mobShowPercent.has() || rDataLabel.mobShowSerName.has() ||
-            rDataLabel.mobShowVal.has();
+        bHasAnyElement = rDataLabel.moaSeparator.has_value() || rDataLabel.monLabelPos.has_value() ||
+            rDataLabel.mobShowCatName.has_value() || rDataLabel.mobShowLegendKey.has_value() ||
+            rDataLabel.mobShowPercent.has_value() || rDataLabel.mobShowSerName.has_value() ||
+            rDataLabel.mobShowVal.has_value();
     }
 
     bool bShowValue   = !rDataLabel.mbDeleted && rDataLabel.mobShowVal.get( !bMSO2007Doc );
@@ -160,13 +160,13 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     // data label separator (do not overwrite series separator, if no explicit point separator is present)
     // Set the data label separator to "new line" if the value is shown as percentage with a category name,
     // just like in MS-Office. In any other case the default separator will be a semicolon.
-    if( bShowPercent && !bShowValue && ( bDataSeriesLabel || rDataLabel.moaSeparator.has() ) )
+    if( bShowPercent && !bShowValue && ( bDataSeriesLabel || rDataLabel.moaSeparator.has_value() ) )
         rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "\n" ) );
-    else if( bDataSeriesLabel || rDataLabel.moaSeparator.has() )
+    else if( bDataSeriesLabel || rDataLabel.moaSeparator.has_value() )
         rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "; " ) );
 
     // data label placement (do not overwrite series placement, if no explicit point placement is present)
-    if( !(bDataSeriesLabel || rDataLabel.monLabelPos.has()) )
+    if( !(bDataSeriesLabel || rDataLabel.monLabelPos.has_value()) )
         return;
 
     namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
@@ -200,7 +200,7 @@ void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const Graphic
     if (rLP.maLineFill.moFillType.get() == XML_noFill)
         return;
 
-    if (rLP.moLineWidth.has())
+    if (rLP.moLineWidth.has_value())
     {
         sal_Int32 nWidth = convertEmuToHmm(rLP.moLineWidth.get());
         rPropSet.setProperty(PROP_LabelBorderWidth, uno::Any(nWidth));
@@ -215,7 +215,7 @@ void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHe
 {
     FillProperties& rFP = rShape.getFillProperties();
 
-    if (rFP.moFillType.has() && rFP.moFillType.get() == XML_solidFill)
+    if (rFP.moFillType.has_value() && rFP.moFillType.get() == XML_solidFill)
     {
         rPropSet.setProperty(PROP_LabelFillStyle, drawing::FillStyle_SOLID);
 
@@ -223,7 +223,7 @@ void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHe
         ::Color nColor = aColor.getColor(rGraphicHelper);
         rPropSet.setProperty(PROP_LabelFillColor, uno::Any(nColor));
     }
-    else if(rFP.moFillType.has() && rFP.moFillType.get() == XML_pattFill)
+    else if(rFP.moFillType.has_value() && rFP.moFillType.get() == XML_pattFill)
     {
         rPropSet.setProperty(PROP_LabelFillStyle, drawing::FillStyle_HATCH);
         rPropSet.setProperty(PROP_LabelFillBackground, true);
@@ -355,7 +355,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                     {
                         DataPointCustomLabelFieldType eType = lcl_ConvertFieldNameToFieldEnum( pField->getType() );
 
-                        if (eType == DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE && oaCellRange.has())
+                        if (eType == DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE && oaCellRange.has_value())
                         {
                             xCustomLabel->setCellRange( oaCellRange.get() );
                             xCustomLabel->setString( oaLabelText.get() );
@@ -665,15 +665,15 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             aPropSet.setProperty( PROP_MovingAveragePeriod, mrModel.mnPeriod );
 
             // Intercept
-            bool hasIntercept = mrModel.mfIntercept.has();
+            bool hasIntercept = mrModel.mfIntercept.has_value();
             aPropSet.setProperty( PROP_ForceIntercept, hasIntercept);
             if (hasIntercept)
                 aPropSet.setProperty( PROP_InterceptValue,  mrModel.mfIntercept.get());
 
             // Extrapolation
-            if (mrModel.mfForward.has())
+            if (mrModel.mfForward.has_value())
                 aPropSet.setProperty( PROP_ExtrapolateForward, mrModel.mfForward.get() );
-            if (mrModel.mfBackward.has())
+            if (mrModel.mfBackward.has_value())
                 aPropSet.setProperty( PROP_ExtrapolateBackward, mrModel.mfBackward.get() );
 
             // trendline formatting

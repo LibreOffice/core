@@ -343,7 +343,7 @@ void PPTShape::addShape(
 
         SAL_INFO("oox.ppt","shape service: " << sServiceName);
 
-        if (mnSubType && getSubTypeIndex().has() && meShapeLocation == Layout)
+        if (mnSubType && getSubTypeIndex().has_value() && meShapeLocation == Layout)
         {
             oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex().get(), rSlidePersist.getShapes()->getChildren(), true );
             if (!pPlaceholder)
@@ -370,7 +370,7 @@ void PPTShape::addShape(
         }
 
         // use placeholder index if possible
-        if (mnSubType && getSubTypeIndex().has() && rSlidePersist.getMasterPersist())
+        if (mnSubType && getSubTypeIndex().has_value() && rSlidePersist.getMasterPersist())
         {
             oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex(getSubTypeIndex().get(), rSlidePersist.getMasterPersist()->getShapes()->getChildren());
             // TODO: Check if this is required for non-notes slides as well...
@@ -789,7 +789,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx,
     std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
     while( aRevIter != rShapes.rend() )
     {
-        if ( (*aRevIter)->getSubTypeIndex().has() && (*aRevIter)->getSubTypeIndex().get() == nIdx &&
+        if ( (*aRevIter)->getSubTypeIndex().has_value() && (*aRevIter)->getSubTypeIndex().get() == nIdx &&
              ( !bMasterOnly || ShapeLocationIsMaster((*aRevIter).get()) ) )
         {
             aShapePtr = *aRevIter;

@@ -73,14 +73,14 @@ TextPortionContext::TextPortionContext( ContextHandler2Helper const & rParent,
         case OOX_TOKEN(dml, blip):
             {
                 OptValue<OUString> oRelId = rAttribs.getString(R_TOKEN(embed));
-                if (oRelId.has())
+                if (oRelId.has_value())
                     mrTextBox.mrTypeModel.moGraphicPath = getFragmentPathFromRelId(oRelId.get());
             }
         break;
         case VML_TOKEN(imagedata):
             {
                 OptValue<OUString> oRelId = rAttribs.getString(R_TOKEN(id));
-                if (oRelId.has())
+                if (oRelId.has_value())
                     mrTextBox.mrTypeModel.moGraphicPath = getFragmentPathFromRelId(oRelId.get());
             }
         break;

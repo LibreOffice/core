@@ -86,7 +86,7 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         std::vector<beans::PropertyValue> aPropVec;
         const TextParagraphModel& rParagraph = portion.maParagraph;
         const TextFontModel& rFont = portion.maFont;
-        if (rFont.moName.has())
+        if (rFont.moName.has_value())
         {
             aPropertyValue.Name = "CharFontName";
             aPropertyValue.Value <<= rFont.moName.get();
@@ -100,19 +100,19 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
             aPropertyValue.Value <<= rFont.moNameComplex.get();
             aPropVec.push_back(aPropertyValue);
         }
-        if (rFont.mobBold.has())
+        if (rFont.mobBold.has_value())
         {
             aPropertyValue.Name = "CharWeight";
             aPropertyValue.Value <<= rFont.mobBold.get() ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
             aPropVec.push_back(aPropertyValue);
         }
-        if (rFont.monSize.has())
+        if (rFont.monSize.has_value())
         {
             aPropertyValue.Name = "CharHeight";
             aPropertyValue.Value <<= double(rFont.monSize.get()) / 2.;
             aPropVec.push_back(aPropertyValue);
         }
-        if (rFont.monSpacing.has())
+        if (rFont.monSpacing.has_value())
         {
             aPropertyValue.Name = "CharKerning";
             // Value is not converted to mm100: SvxKerningItem::PutValue() gets
@@ -121,7 +121,7 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
             aPropertyValue.Value <<= sal_Int16(rFont.monSpacing.get());
             aPropVec.push_back(aPropertyValue);
         }
-        if (rParagraph.moParaAdjust.has())
+        if (rParagraph.moParaAdjust.has_value())
         {
             style::ParagraphAdjust eAdjust = style::ParagraphAdjust_LEFT;
             if (rParagraph.moParaAdjust.get() == "center")
@@ -138,21 +138,21 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         // because it will only  be applied to the entire shape, and not per-paragraph.
         if (sParaStyle.isEmpty() )
         {
-            if ( rParagraph.moParaStyleName.has() )
+            if ( rParagraph.moParaStyleName.has_value() )
                 sParaStyle = rParagraph.moParaStyleName.get();
             if ( bAmbiguousStyle )
                 bAmbiguousStyle = false; // both empty parastyle and ambiguous can only be true at the first paragraph
             else
-                bAmbiguousStyle = rParagraph.moParaStyleName.has(); // ambiguous if both default and specified style used.
+                bAmbiguousStyle = rParagraph.moParaStyleName.has_value(); // ambiguous if both default and specified style used.
         }
         else if ( !bAmbiguousStyle )
         {
-            if ( !rParagraph.moParaStyleName.has() )
+            if ( !rParagraph.moParaStyleName.has_value() )
                 bAmbiguousStyle = true; // ambiguous if both specified and default style used.
             else if ( rParagraph.moParaStyleName.get() != sParaStyle )
                 bAmbiguousStyle = true; // ambiguous if two different styles specified.
         }
-        if (rFont.moColor.has())
+        if (rFont.moColor.has_value())
         {
             aPropertyValue.Name = "CharColor";
             aPropertyValue.Value <<= rFont.moColor.get().toUInt32(16);

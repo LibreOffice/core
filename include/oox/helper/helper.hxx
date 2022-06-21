@@ -178,7 +178,7 @@ public:
     explicit     OptValue( const Type& rValue ) : maValue( rValue ), mbHasValue( true ) {}
     explicit     OptValue( bool bHasValue, const Type& rValue ) : maValue( rValue ), mbHasValue( bHasValue ) {}
 
-    bool         has() const { return mbHasValue; }
+    bool         has_value() const { return mbHasValue; }
     bool         operator!() const { return !mbHasValue; }
     bool         differsFrom( const Type& rValue ) const { return mbHasValue && (maValue != rValue); }
 

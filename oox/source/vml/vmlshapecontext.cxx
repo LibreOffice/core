@@ -52,7 +52,7 @@ namespace {
 OptValue< bool > lclDecodeBool( const AttributeList& rAttribs, sal_Int32 nToken )
 {
     OptValue< OUString > oValue = rAttribs.getString( nToken );
-    if( oValue.has() ) return OptValue< bool >( ConversionHelper::decodeBool( oValue.get() ) );
+    if( oValue.has_value() ) return OptValue< bool >( ConversionHelper::decodeBool( oValue.get() ) );
     return OptValue< bool >();
 }
 
@@ -62,7 +62,7 @@ OptValue< bool > lclDecodeBool( const AttributeList& rAttribs, sal_Int32 nToken 
 OptValue< double > lclDecodePercent( const AttributeList& rAttribs, sal_Int32 nToken, double fDefValue )
 {
     OptValue< OUString > oValue = rAttribs.getString( nToken );
-    if( oValue.has() ) return OptValue< double >( ConversionHelper::decodePercent( oValue.get(), fDefValue ) );
+    if( oValue.has_value() ) return OptValue< double >( ConversionHelper::decodePercent( oValue.get(), fDefValue ) );
     return OptValue< double >();
 }
 
@@ -74,7 +74,7 @@ OptValue< double > lclDecodeOpacity( const AttributeList& rAttribs, sal_Int32 nT
     OptValue< OUString > oValue = rAttribs.getString( nToken );
     double fRetval(fDefValue);
 
-    if( oValue.has() )
+    if( oValue.has_value() )
     {
         const OUString& aString(oValue.get());
         const sal_Int32 nLength(aString.getLength());
@@ -101,7 +101,7 @@ OptValue< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int
 {
     OptValue< OUString > oValue = rAttribs.getString( nToken );
     OptValue< Int32Pair > oRetValue;
-    if( oValue.has() )
+    if( oValue.has_value() )
     {
         std::u16string_view aValue1, aValue2;
         ConversionHelper::separatePair( aValue1, aValue2, oValue.get(), ',' );
@@ -116,7 +116,7 @@ OptValue< DoublePair > lclDecodePercentPair( const AttributeList& rAttribs, sal_
 {
     OptValue< OUString > oValue = rAttribs.getString( nToken );
     OptValue< DoublePair > oRetValue;
-    if( oValue.has() )
+    if( oValue.has_value() )
     {
         std::u16string_view aValue1, aValue2;
         ConversionHelper::separatePair( aValue1, aValue2, oValue.get(), ',' );
@@ -400,7 +400,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             // Gain / contrast.
             OptValue<OUString> oGain = rAttribs.getString(XML_gain);
             sal_Int32 nGain = 0x10000;
-            if (oGain.has() && oGain.get().endsWith("f"))
+            if (oGain.has_value() && oGain.get().endsWith("f"))
             {
                 nGain = oGain.get().toInt32();
             }
@@ -415,7 +415,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             // Blacklevel / brightness.
             OptValue<OUString> oBlacklevel = rAttribs.getString(XML_blacklevel);
             sal_Int16 nBlacklevel = 0;
-            if (oBlacklevel.has() && oBlacklevel.get().endsWith("f"))
+            if (oBlacklevel.has_value() && oBlacklevel.get().endsWith("f"))
             {
                 nBlacklevel = oBlacklevel.get().toInt32();
             }
@@ -454,7 +454,7 @@ OptValue< OUString > ShapeTypeContext::decodeFragmentPath( const AttributeList& 
 {
     OptValue< OUString > oFragmentPath;
     OptValue< OUString > oRelId = rAttribs.getString( nToken );
-    if( oRelId.has() )
+    if( oRelId.has_value() )
         oFragmentPath = getFragmentPathFromRelId( oRelId.get() );
     return oFragmentPath;
 }
@@ -611,7 +611,7 @@ void ShapeContext::setPoints(std::u16string_view rPoints)
     if (!mrShape.getTypeModel().maWidth.isEmpty() || !mrShape.getTypeModel().maHeight.isEmpty())
         return;
 
-    if (mrShape.getTypeModel().moCoordSize.has())
+    if (mrShape.getTypeModel().moCoordSize.has_value())
     {
         double fWidth = mrShape.getTypeModel().moCoordSize.get().first;
         fWidth = o3tl::convert(fWidth, o3tl::Length::twip, o3tl::Length::pt);

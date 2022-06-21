@@ -280,7 +280,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
         case W_TOKEN( jc ):
             {
                 OptValue< OUString > oParaAdjust = rAttribs.getString( W_TOKEN(val) );
-                if( oParaAdjust.has() && !oParaAdjust.get().isEmpty() )
+                if( oParaAdjust.has_value() && !oParaAdjust.get().isEmpty() )
                 {
                     const OUString& sParaAdjust = oParaAdjust.get();
                     if( sParaAdjust == "left" )
@@ -300,7 +300,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 if( !rAttribs.getBool(W_TOKEN(beforeAutospacing), false) )
                 {
                     OptValue<sal_Int32> oBefore = rAttribs.getInteger(W_TOKEN(before));
-                    if (oBefore.has())
+                    if (oBefore.has_value())
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
                         rSpacing.nUnit = TextSpacing::Unit::Points;
@@ -310,7 +310,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     else
                     {
                         OptValue<sal_Int32> oBeforeLines = rAttribs.getInteger(W_TOKEN(beforeLines));
-                        if (oBeforeLines.has())
+                        if (oBeforeLines.has_value())
                         {
                             TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
                             rSpacing.nUnit = TextSpacing::Unit::Percent;
@@ -324,7 +324,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 if( !rAttribs.getBool(W_TOKEN(afterAutospacing), false) )
                 {
                     OptValue<sal_Int32> oAfter = rAttribs.getInteger(W_TOKEN(after));
-                    if (oAfter.has())
+                    if (oAfter.has_value())
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
                         rSpacing.nUnit = TextSpacing::Unit::Points;
@@ -334,7 +334,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     else
                     {
                         OptValue<sal_Int32> oAfterLines = rAttribs.getInteger(W_TOKEN(afterLines));
-                        if (oAfterLines.has())
+                        if (oAfterLines.has_value())
                         {
                             TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
                             rSpacing.nUnit = TextSpacing::Unit::Percent;
@@ -347,10 +347,10 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 // Line spacing
                 OptValue<OUString> oLineRule = rAttribs.getString(W_TOKEN(lineRule));
                 OptValue<sal_Int32> oLineSpacing = rAttribs.getInteger(W_TOKEN(line));
-                if (oLineSpacing.has())
+                if (oLineSpacing.has_value())
                 {
                     TextSpacing& rLineSpacing = mrTextParagraphProperties.getLineSpacing();
-                    if( !oLineRule.has() || oLineRule.get() == "auto" )
+                    if( !oLineRule.has_value() || oLineRule.get() == "auto" )
                     {
                         rLineSpacing.nUnit = TextSpacing::Unit::Percent;
                         rLineSpacing.nValue = oLineSpacing.get() * MAX_PERCENT / 240;

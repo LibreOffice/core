@@ -77,7 +77,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                 sal_Int32 nSubTypeIndex = rAttribs.getString( XML_idx ).get().toInt32();
                 mpShapePtr->setSubTypeIndex( nSubTypeIndex );
 
-                if(!oSubType.has() && pMasterPersist)
+                if(!oSubType.has_value() && pMasterPersist)
                 {
                     pTmpPlaceholder = PPTShape::findPlaceholderByIndex( nSubTypeIndex, pMasterPersist->getShapes()->getChildren() );
 

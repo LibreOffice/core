@@ -116,7 +116,7 @@ public:
             {
                 // need to convert from oox::OptValue to std::optional since 1st is not available in svx
                 const OptValue< sal_Int32 > aOptVal(rAttribs.getToken( XML_val ));
-                if(aOptVal.has())
+                if(aOptVal.has_value())
                     mrPoint.moHierarchyBranch = aOptVal.get();
                 break;
             }

@@ -1100,7 +1100,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         if (rShape.getWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
             xPropertySet->setPropertyValue("Surround", uno::Any(rShape.getWrap()));
         oox::ModelObjectHelper aModelObjectHelper(m_rImport.getModelFactory());
-        if (aFillModel.moType.has())
+        if (aFillModel.moType.has_value())
         {
             oox::drawingml::ShapePropertyMap aPropMap(aModelObjectHelper);
             aFillModel.pushToPropMap(aPropMap, m_rImport.getGraphicHelper());
