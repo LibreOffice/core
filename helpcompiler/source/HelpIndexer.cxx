@@ -16,6 +16,7 @@
 #include <osl/thread.h>
 #include <o3tl/string_view.hxx>
 #include <memory>
+#include <utility>
 
 #include "LuceneHelper.hxx"
 #include <CLucene.h>
@@ -29,9 +30,9 @@
 
 using namespace lucene::document;
 
-HelpIndexer::HelpIndexer(OUString const &lang, OUString const &module,
+HelpIndexer::HelpIndexer(OUString lang, OUString module,
     std::u16string_view srcDir, std::u16string_view outDir)
-    : d_lang(lang), d_module(module)
+    : d_lang(std::move(lang)), d_module(std::move(module))
 {
     d_indexDir = outDir + OUStringChar('/') + module + ".idxl";
     d_captionDir = OUString::Concat(srcDir) + "/caption";

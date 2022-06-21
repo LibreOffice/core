@@ -29,14 +29,15 @@
 #include <libxslt/transform.h>
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
-HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_inputFile,
-    const fs::path &in_src, const fs::path &in_zipdir, const fs::path &in_resCompactStylesheet,
-    const fs::path &in_resEmbStylesheet, const std::string &in_module, const std::string &in_lang,
+HelpCompiler::HelpCompiler(StreamTable &in_streamTable, fs::path in_inputFile,
+    fs::path in_src, fs::path in_zipdir, fs::path in_resCompactStylesheet,
+    fs::path in_resEmbStylesheet, std::string in_module, std::string in_lang,
     bool in_bExtensionMode)
-    : streamTable(in_streamTable), inputFile(in_inputFile),
-    src(in_src), zipdir(in_zipdir), module(in_module), lang(in_lang), resCompactStylesheet(in_resCompactStylesheet),
-    resEmbStylesheet(in_resEmbStylesheet), bExtensionMode( in_bExtensionMode )
+    : streamTable(in_streamTable), inputFile(std::move(in_inputFile)),
+    src(std::move(in_src)), zipdir(std::move(in_zipdir)), module(std::move(in_module)), lang(std::move(in_lang)), resCompactStylesheet(std::move(in_resCompactStylesheet)),
+    resEmbStylesheet(std::move(in_resEmbStylesheet)), bExtensionMode( in_bExtensionMode )
 {
     xmlKeepBlanksDefaultValue = 0;
     char* os = getenv("OS");
@@ -239,9 +240,9 @@ public:
 private:
     std::vector<std::string> extendedHelpText;
 public:
-    myparser(const std::string &indocumentId, const std::string &infileName,
-        const std::string &intitle) : documentId(indocumentId), fileName(infileName),
-        title(intitle)
+    myparser(std::string indocumentId, std::string infileName,
+        std::string intitle) : documentId(std::move(indocumentId)), fileName(std::move(infileName)),
+        title(std::move(intitle))
     {
         hidlist.reset(new std::vector<std::string>);
         keywords.reset(new Hashtable);

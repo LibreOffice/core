@@ -26,6 +26,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include <libxml/parser.h>
@@ -162,15 +163,15 @@ struct HelpProcessingException
     std::string                     m_aXMLParsingFile;
     int                             m_nXMLParsingLine;
 
-    HelpProcessingException( HelpProcessingErrorClass eErrorClass, const std::string& aErrorMsg )
+    HelpProcessingException( HelpProcessingErrorClass eErrorClass, std::string aErrorMsg )
         : m_eErrorClass( eErrorClass )
-        , m_aErrorMsg( aErrorMsg )
+        , m_aErrorMsg(std::move( aErrorMsg ))
         , m_nXMLParsingLine( 0 )
     {}
-    HelpProcessingException( const std::string& aErrorMsg, const std::string& aXMLParsingFile, int nXMLParsingLine )
+    HelpProcessingException( std::string aErrorMsg, std::string aXMLParsingFile, int nXMLParsingLine )
         : m_eErrorClass( HelpProcessingErrorClass::XmlParsing )
-        , m_aErrorMsg( aErrorMsg )
-        , m_aXMLParsingFile( aXMLParsingFile )
+        , m_aErrorMsg(std::move( aErrorMsg ))
+        , m_aXMLParsingFile(std::move( aXMLParsingFile ))
         , m_nXMLParsingLine( nXMLParsingLine )
     {}
 };
@@ -179,13 +180,13 @@ class HelpCompiler
 {
 public:
     HelpCompiler(StreamTable &streamTable,
-                const fs::path &in_inputFile,
-                const fs::path &in_src,
-                const fs::path &in_zipdir,
-                const fs::path &in_resCompactStylesheet,
-                const fs::path &in_resEmbStylesheet,
-                const std::string &in_module,
-                const std::string &in_lang,
+                fs::path in_inputFile,
+                fs::path in_src,
+                fs::path in_zipdir,
+                fs::path in_resCompactStylesheet,
+                fs::path in_resEmbStylesheet,
+                std::string in_module,
+                std::string in_lang,
                 bool in_bExtensionMode);
     /// @throws HelpProcessingException
     /// @throws BasicCodeTagger::TaggerException
