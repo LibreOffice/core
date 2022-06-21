@@ -262,7 +262,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             if (rAttribs.getInteger(W_TOKEN(val)).has_value())
             {
                 mrTextCharacterProperties.maFillProperties.maFillColor.setSrgbClr(rAttribs.getIntegerHex(W_TOKEN(val)).get());
-                mrTextCharacterProperties.maFillProperties.moFillType.set(XML_solidFill);
+                mrTextCharacterProperties.maFillProperties.moFillType = XML_solidFill;
             }
             break;
         case W_TOKEN(  sz ):
