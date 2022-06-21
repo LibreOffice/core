@@ -16,6 +16,24 @@
       "message": "I had to rebase change to remove conflict, removed the unnecessary line changes. This only deals with comments.\n\nWould be good to add it to the ignored revisions list.",
       "revId": "9deed349027de09bfba7ccd458522fee611f6b4c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c08bbcb7_0d76ac4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-21T14:18:17Z",
+      "side": 1,
+      "message": "\u003e Would be good to add it to the ignored revisions list.\n\nYou can do that, for this change and for similar other ones, once they have been submitted and thus have a stable git hash, by uploading a Gerrit change modifying .git-blame-ignore-revs accordingly.",
+      "parentUuid": "377aff96_eeeffae5",
+      "revId": "9deed349027de09bfba7ccd458522fee611f6b4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
