@@ -57,6 +57,7 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <osl/diagnose.h>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
 #include <sfx2/strings.hrc>
@@ -148,10 +149,10 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
 }
 
 
-DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& xContext,
+DocumentHolder::DocumentHolder( uno::Reference< uno::XComponentContext > xContext,
                                 OCommonEmbeddedObject* pEmbObj )
 : m_pEmbedObj( pEmbObj ),
-  m_xContext( xContext ),
+  m_xContext(std::move( xContext )),
   m_bReadOnly( false ),
   m_bWaitForClose( false ),
   m_bAllowClosing( false ),
