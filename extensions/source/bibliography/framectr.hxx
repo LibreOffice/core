@@ -27,6 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
+#include <utility>
 #include <vcl/window.hxx>
 #include <vector>
 #include <memory>
@@ -44,9 +45,9 @@ class BibStatusDispatch
 public:
     css::util::URL                 aURL;
     css::uno::Reference< css::frame::XStatusListener >    xListener;
-                        BibStatusDispatch( const css::util::URL& rURL, const css::uno::Reference< css::frame::XStatusListener >& rRef )
-                            : aURL( rURL )
-                            , xListener( rRef )
+                        BibStatusDispatch( css::util::URL aURL, css::uno::Reference< css::frame::XStatusListener > xRef )
+                            : aURL(std::move( aURL ))
+                            , xListener(std::move( xRef ))
                         {}
 };
 
@@ -73,7 +74,7 @@ friend class BibFrameCtrl_Impl;
 
     static bool                 SaveModified(const css::uno::Reference< css::form::runtime::XFormController>& xController);
 public:
-                                BibFrameController_Impl( const css::uno::Reference< css::awt::XWindow > & xComponent,
+                                BibFrameController_Impl( css::uno::Reference< css::awt::XWindow > xComponent,
                                                         BibDataManager* pDatMan);
                                 virtual ~BibFrameController_Impl() override;
 

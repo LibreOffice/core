@@ -68,7 +68,7 @@ namespace pcr
         bool                    m_bReadOnly;
 
     public:
-        OBrowserLine(const OUString& rEntryName, weld::Container* pParent, weld::SizeGroup* pLabelGroup,
+        OBrowserLine(OUString aEntryName, weld::Container* pParent, weld::SizeGroup* pLabelGroup,
                      weld::Container* pInitialControlParent);
         ~OBrowserLine();
 

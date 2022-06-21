@@ -31,6 +31,7 @@
 #include <o3tl/any.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/mnemonic.hxx>
@@ -48,9 +49,9 @@ using namespace ::com::sun::star::beans;
 // Constants --------------------------------------------------------------
 
 
-BibToolBarListener::BibToolBarListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId):
+BibToolBarListener::BibToolBarListener(BibToolBar *pTB, OUString aStr, ToolBoxItemId nId):
         nIndex(nId),
-        aCommand(aStr),
+        aCommand(std::move(aStr)),
         pToolBar(pTB)
 {
 }

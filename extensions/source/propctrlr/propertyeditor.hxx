@@ -46,7 +46,7 @@ namespace pcr
             OUString sLabel;
             std::unique_ptr<OBrowserPage> xPage;
             PropertyPage();
-            PropertyPage(sal_uInt16 nPagePos, const OUString& rLabel, std::unique_ptr<OBrowserPage> pPage);
+            PropertyPage(sal_uInt16 nPagePos, OUString aLabel, std::unique_ptr<OBrowserPage> pPage);
         };
 
         std::unique_ptr<weld::Container> m_xContainer;

@@ -26,6 +26,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <utility>
 #include <vcl/svapp.hxx>
 
 namespace dbp
@@ -41,7 +42,7 @@ namespace dbp
                 OUString aImplementationName,
                 const css::uno::Sequence<OUString>& aSupportedServices)
             : OUnoAutoPilot_Base(_rxORB),
-              m_ImplementationName(aImplementationName),
+              m_ImplementationName(std::move(aImplementationName)),
               m_SupportedServices(aSupportedServices)
         {
         }

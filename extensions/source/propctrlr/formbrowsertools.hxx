@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 
 #include <set>
+#include <utility>
 
 
 namespace pcr
@@ -54,7 +55,7 @@ namespace pcr
         OUString m_sName;
 
     public:
-        explicit FindPropertyByName( const OUString& _rName ) : m_sName( _rName ) { }
+        explicit FindPropertyByName( OUString _aName ) : m_sName(std::move( _aName )) { }
         bool operator()( const css::beans::Property& _rProp ) const
         {
             return m_sName == _rProp.Name;

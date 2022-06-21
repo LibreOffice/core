@@ -44,6 +44,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/componentbase.hxx>
 #include <rtl/ref.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 namespace pcr
@@ -719,9 +720,9 @@ namespace pcr
             OUString sPropertyName;
             Any             aNewPropertyValue;
 
-            EventTranslation( const OUString& _propertyName, const Any& _newPropertyValue )
-                :sPropertyName( _propertyName )
-                ,aNewPropertyValue( _newPropertyValue )
+            EventTranslation( OUString _propertyName, Any _newPropertyValue )
+                :sPropertyName(std::move( _propertyName ))
+                ,aNewPropertyValue(std::move( _newPropertyValue ))
             {
             }
         };

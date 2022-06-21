@@ -25,6 +25,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include "bibconfig.hxx"
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
@@ -146,9 +147,9 @@ void BibFrameCtrl_Impl::disposing( const lang::EventObject& /*Source*/ )
         pController->getFrame()->removeFrameActionListener( this );
 }
 
-BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWindow > & xComponent,
+BibFrameController_Impl::BibFrameController_Impl( uno::Reference< awt::XWindow > xComponent,
                                                 BibDataManager* pDataManager)
-    :m_xWindow( xComponent )
+    :m_xWindow(std::move( xComponent ))
     ,m_xDatMan( pDataManager )
 {
     m_bDisposing = false;

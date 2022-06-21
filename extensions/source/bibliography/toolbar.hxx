@@ -44,7 +44,7 @@ protected:
 
 public:
 
-    BibToolBarListener(BibToolBar *pTB, const OUString& aStr, ToolBoxItemId nId);
+    BibToolBarListener(BibToolBar *pTB, OUString aStr, ToolBoxItemId nId);
     virtual ~BibToolBarListener() override;
 
     const OUString&          GetCommand() const { return aCommand;}
