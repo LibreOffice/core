@@ -105,6 +105,7 @@ private:
     bool                    mbDocumentDisposing:1;
     /// To indicate if there is a partial prefix completion.
     bool                    mbPartialPrefix:1;
+    bool                    mbEditingExistingContent:1;
 
     sal_uLong                   nValidation;
     SvxCellHorJustify       eAttrAdjust;
@@ -144,6 +145,7 @@ private:
     bool            StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated,
                                 ScEditEngineDefaulter* pTopEngine );
     void            RemoveSelection();
+    bool            StartsLikeFormula( std::u16string_view rStr ) const;
     void            UpdateFormulaMode();
     static void     InvalidateAttribs();
     void            ImplCreateEditEngine();
