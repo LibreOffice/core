@@ -3547,16 +3547,22 @@ if test $_os = Darwin; then
 
     AC_MSG_CHECKING([whether to do code signing])
 
-    if test "$enable_macosx_code_signing" = yes; then
-        # By default use the first suitable certificate (?).
+    if test -z "$enable_macosx_code_signing" -o "$enable_macosx_code_signing" == "no" ; then
+        AC_MSG_RESULT([no])
+    else
+        if test "$enable_macosx_code_signing" = yes; then
+            # By default use the first suitable certificate (?).
 
-        # http://stackoverflow.com/questions/13196291/difference-between-mac-developer-and-3rd-party-mac-developer-application
-        # says that the "Mac Developer" certificate is useful just for self-testing. For distribution
-        # outside the Mac App Store, use the "Developer ID Application" one, and for distribution in
-        # the App Store, the "3rd Party Mac Developer" one. I think it works best to the
-        # "Developer ID Application" one.
-
-        identity=`security find-identity -p codesigning -v 2>/dev/null | grep 'Developer ID Application:' | $AWK '{print $2}' |head -1`
+            # http://stackoverflow.com/questions/13196291/difference-between-mac-developer-and-3rd-party-mac-developer-application
+            # says that the "Mac Developer" certificate is useful just for self-testing. For distribution
+            # outside the Mac App Store, use the "Developer ID Application" one, and for distribution in
+            # the App Store, the "3rd Party Mac Developer" one. I think it works best to the
+            # "Developer ID Application" one.
+            identity="Developer ID Application:"
+        else
+            identity=$enable_macosx_code_signing
+        fi
+        identity=`security find-identity -p codesigning -v 2>/dev/null | $AWK "/$identity/{print \\$2; exit}"`
         if test -n "$identity"; then
             MACOSX_CODESIGNING_IDENTITY=$identity
             pretty_name=`security find-identity -p codesigning -v | grep "$MACOSX_CODESIGNING_IDENTITY" | sed -e 's/^[[^"]]*"//' -e 's/"//'`
@@ -3564,12 +3570,6 @@ if test $_os = Darwin; then
         else
             AC_MSG_ERROR([cannot determine identity to use])
         fi
-    elif test -n "$enable_macosx_code_signing" -a "$enable_macosx_code_signing" != no ; then
-        MACOSX_CODESIGNING_IDENTITY=$enable_macosx_code_signing
-        pretty_name=`security find-identity -p codesigning -v | grep "$MACOSX_CODESIGNING_IDENTITY" | sed -e 's/^[[^"]]*"//' -e 's/"//'`
-        AC_MSG_RESULT([yes, using the identity $MACOSX_CODESIGNING_IDENTITY for $pretty_name])
-    else
-        AC_MSG_RESULT([no])
     fi
 
     AC_MSG_CHECKING([whether to create a Mac App Store package])
@@ -3578,11 +3578,15 @@ if test $_os = Darwin; then
         AC_MSG_RESULT([no])
     elif test -z "$MACOSX_CODESIGNING_IDENTITY"; then
         AC_MSG_ERROR([You forgot --enable-macosx-code-signing])
-    elif test "$enable_macosx_package_signing" = yes; then
-        # By default use the first suitable certificate.
-        # It should be a "3rd Party Mac Developer Installer" one
-
-        identity=`security find-identity -v 2>/dev/null | grep '3rd Party Mac Developer Installer:' | awk '{print $2}' |head -1`
+    else
+        if test "$enable_macosx_package_signing" = yes; then
+            # By default use the first suitable certificate.
+            # It should be a "3rd Party Mac Developer Installer" one
+            identity="3rd Party Mac Developer Installer:"
+        else
+            identity=$enable_macosx_package_signing
+        fi
+        identity=`security find-identity -v 2>/dev/null | $AWK "/$identity/ {print \\$2; exit}"`
         if test -n "$identity"; then
             MACOSX_PACKAGE_SIGNING_IDENTITY=$identity
             pretty_name=`security find-identity -v | grep "$MACOSX_PACKAGE_SIGNING_IDENTITY" | sed -e 's/^[[^"]]*"//' -e 's/"//'`
@@ -3590,10 +3594,6 @@ if test $_os = Darwin; then
         else
             AC_MSG_ERROR([Could not find any suitable '3rd Party Mac Developer Installer' certificate])
         fi
-    else
-        MACOSX_PACKAGE_SIGNING_IDENTITY=$enable_macosx_package_signing
-        pretty_name=`security find-identity -v | grep "$MACOSX_PACKAGE_SIGNING_IDENTITY" | sed -e 's/^[[^"]]*"//' -e 's/"//'`
-        AC_MSG_RESULT([yes, using the identity $MACOSX_PACKAGE_SIGNING_IDENTITY for $pretty_name])
     fi
 
     if test -n "$MACOSX_CODESIGNING_IDENTITY" -a -n "$MACOSX_PACKAGE_SIGNING_IDENTITY" -a "$MACOSX_CODESIGNING_IDENTITY" = "$MACOSX_PACKAGE_SIGNING_IDENTITY"; then
