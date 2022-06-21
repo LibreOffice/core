@@ -540,7 +540,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
                     instead the top border of the caption text. */
                 if( const ::oox::vml::TextFontModel* pFontModel = pTextBox ? pTextBox->getFirstFont() : nullptr )
                 {
-                    sal_Int32 nFontHeightHmm = o3tl::convert( pFontModel->monSize.get( 160 ), o3tl::Length::twip, o3tl::Length::mm100 );
+                    sal_Int32 nFontHeightHmm = o3tl::convert( pFontModel->monSize.value_or( 160 ), o3tl::Length::twip, o3tl::Length::mm100 );
                     sal_Int32 nYDiff = ::std::min< sal_Int32 >( nFontHeightHmm / 2, aShapeRect.Y );
                     aShapeRect.Y -= nYDiff;
                     aShapeRect.Height += nYDiff;
@@ -741,19 +741,19 @@ void VmlDrawing::convertControlFontData( AxFontData& rAxFontData, sal_uInt32& rn
         rAxFontData.maFontName = rFontModel.moName.get();
 
     // font height: convert from twips to points, then to internal representation of AX controls
-    rAxFontData.setHeightPoints( static_cast< sal_Int16 >( (rFontModel.monSize.get( 200 ) + 10) / 20 ) );
+    rAxFontData.setHeightPoints( static_cast< sal_Int16 >( (rFontModel.monSize.value_or( 200 ) + 10) / 20 ) );
 
     // font effects
     rAxFontData.mnFontEffects = AxFontFlags::NONE;
-    setFlag( rAxFontData.mnFontEffects, AxFontFlags::Bold, rFontModel.mobBold.get( false ) );
-    setFlag( rAxFontData.mnFontEffects, AxFontFlags::Italic, rFontModel.mobItalic.get( false ) );
-    setFlag( rAxFontData.mnFontEffects, AxFontFlags::Strikeout, rFontModel.mobStrikeout.get( false ) );
-    sal_Int32 nUnderline = rFontModel.monUnderline.get( XML_none );
+    setFlag( rAxFontData.mnFontEffects, AxFontFlags::Bold, rFontModel.mobBold.value_or( false ) );
+    setFlag( rAxFontData.mnFontEffects, AxFontFlags::Italic, rFontModel.mobItalic.value_or( false ) );
+    setFlag( rAxFontData.mnFontEffects, AxFontFlags::Strikeout, rFontModel.mobStrikeout.value_or( false ) );
+    sal_Int32 nUnderline = rFontModel.monUnderline.value_or( XML_none );
     setFlag( rAxFontData.mnFontEffects, AxFontFlags::Underline, nUnderline != XML_none );
     rAxFontData.mbDblUnderline = nUnderline == XML_double;
 
     // font color
-    rnOleTextColor = convertControlTextColor( rFontModel.moColor.get( OUString() ) );
+    rnOleTextColor = convertControlTextColor( rFontModel.moColor.value_or( OUString() ) );
 }
 
 void VmlDrawing::convertControlText( AxFontData& rAxFontData, sal_uInt32& rnOleTextColor,
@@ -778,7 +778,7 @@ void VmlDrawing::convertControlText( AxFontData& rAxFontData, sal_uInt32& rnOleT
 void VmlDrawing::convertControlBackground( AxMorphDataModelBase& rAxModel, const ::oox::vml::ShapeBase& rShape ) const
 {
     const ::oox::vml::FillModel& rFillModel = rShape.getTypeModel().maFillModel;
-    bool bHasFill = rFillModel.moFilled.get( true );
+    bool bHasFill = rFillModel.moFilled.value_or( true );
     setFlag( rAxModel.mnFlags, AX_FLAGS_OPAQUE, bHasFill );
     if( bHasFill )
     {

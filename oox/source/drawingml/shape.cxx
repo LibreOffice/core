@@ -992,7 +992,7 @@ Reference< XShape > const & Shape::createAndInsert(
     // ToDo: Not sure about the restrictions given by bUseRotationTransform.
     // Since LibreOffice doesn't have 3D camera options for 2D shapes, rotate the shape opposite of
     // the camera Z axis rotation, in order to produce the same visual result from MSO
-    const sal_Int32 nCameraRotation = get3DProperties().maCameraRotation.mnRevolution.get(0);
+    const sal_Int32 nCameraRotation = get3DProperties().maCameraRotation.mnRevolution.value_or(0);
     if (bUseRotationTransform && (mnRotation != 0 || nCameraRotation != 0))
         lcl_RotateAtCenter(aTransformation, nOrientation * (mnRotation - nCameraRotation));
 
@@ -1196,7 +1196,7 @@ Reference< XShape > const & Shape::createAndInsert(
             }
             if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
             {
-                if (!getFillProperties().moUseBgFill.get(false))
+                if (!getFillProperties().moUseBgFill.value_or(false))
                 {
                     nFillPhClr = pFillRef->maPhClr.getColor(rGraphicHelper);
                     nFillPhClrTheme = pFillRef->maPhClr.getSchemeColorIndex();
@@ -1501,7 +1501,7 @@ Reference< XShape > const & Shape::createAndInsert(
             // Store original fill and line colors of the shape and the theme color name to InteropGrabBag
             std::vector<beans::PropertyValue> aProperties
             {
-                comphelper::makePropertyValue("EmuLineWidth", aLineProperties.moLineWidth.get(0)),
+                comphelper::makePropertyValue("EmuLineWidth", aLineProperties.moLineWidth.value_or(0)),
                 comphelper::makePropertyValue("OriginalSolidFillClr", aShapeProps.getProperty(PROP_FillColor)),
                 comphelper::makePropertyValue("OriginalLnSolidFillClr", aShapeProps.getProperty(PROP_LineColor))
             };
@@ -1688,7 +1688,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 sal_Int32 nTextCameraZRotation = static_cast< sal_Int32 >( getTextBody()->get3DProperties().maCameraRotation.mnRevolution.get() );
                 mpCustomShapePropertiesPtr->setTextCameraZRotateAngle( nTextCameraZRotation / 60000 );
 
-                sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );
+                sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.value_or( 0 ) );
 
                 nTextRotateAngle -= mnDiagramRotation;
                 /* OOX measures text rotation clockwise in 1/60000th degrees,

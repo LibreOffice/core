@@ -244,7 +244,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
     OUStringBuffer aBuffer;
     sal_Int32 nMarkerWidth = 0;
     bool bMarkerCenter = false;
-    sal_Int32 nArrowType = rArrowProps.moArrowType.get( XML_none );
+    sal_Int32 nArrowType = rArrowProps.moArrowType.value_or( XML_none );
     OSL_ASSERT((nArrowType & sal_Int32(0xFFFF0000))==0);
     switch( nArrowType )
     {
@@ -270,8 +270,8 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
     if( !aBuffer.isEmpty() )
     {
         bool bIsArrow = nArrowType == XML_arrow;
-        sal_Int32 nLength = lclGetArrowSize( rArrowProps.moArrowLength.get( XML_med ) );
-        sal_Int32 nWidth  = lclGetArrowSize( rArrowProps.moArrowWidth.get( XML_med ) );
+        sal_Int32 nLength = lclGetArrowSize( rArrowProps.moArrowLength.value_or( XML_med ) );
+        sal_Int32 nWidth  = lclGetArrowSize( rArrowProps.moArrowWidth.value_or( XML_med ) );
 
         sal_Int32 nNameIndex = nWidth * 3 + nLength + 1;
         aBuffer.append( ' ' ).append( nNameIndex );
@@ -453,10 +453,10 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         ((moPresetDash.has_value() && moPresetDash.get() != XML_solid) || !maCustomDash.empty()) )
     {
         LineDash aLineDash;
-        aLineDash.Style = lclGetDashStyle( moLineCap.get( XML_flat ) );
+        aLineDash.Style = lclGetDashStyle( moLineCap.value_or( XML_flat ) );
 
         if(moPresetDash.has_value() && moPresetDash.get() != XML_solid)
-            lclConvertPresetDash(aLineDash, moPresetDash.get(XML_dash));
+            lclConvertPresetDash(aLineDash, moPresetDash.value_or(XML_dash));
         else // !maCustomDash.empty()
         {
             lclConvertCustomDash(aLineDash, maCustomDash);
@@ -532,7 +532,7 @@ drawing::LineJoint LineProperties::getLineJoint() const
 
 sal_Int32 LineProperties::getLineWidth() const
 {
-    return convertEmuToHmm( moLineWidth.get( 0 ) );
+    return convertEmuToHmm( moLineWidth.value_or( 0 ) );
 }
 
 } // namespace oox

@@ -230,7 +230,7 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
 
     // convert opacity
     const sal_Int32 DML_FULL_OPAQUE = ::oox::drawingml::MAX_PERCENT;
-    double fOpacity = roVmlOpacity.get( 1.0 );
+    double fOpacity = roVmlOpacity.value_or( 1.0 );
     sal_Int32 nOpacity = getLimitedValue< sal_Int32, double >( fOpacity * DML_FULL_OPAQUE, 0, DML_FULL_OPAQUE );
     if( nOpacity < DML_FULL_OPAQUE )
         aDmlColor.addTransformation( XML_alpha, nOpacity );
@@ -700,7 +700,7 @@ void StrokeModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper
         DrawingML code do the hard work. */
     LineProperties aLineProps;
 
-    if( moStroked.get( true ) )
+    if( moStroked.value_or( true ) )
     {
         aLineProps.maLineFill.moFillType = XML_solidFill;
         lclConvertArrow( aLineProps.maStartArrow, maStartArrow );
@@ -751,17 +751,17 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
         DrawingML code do the hard work. */
     FillProperties aFillProps;
 
-    if( moFilled.get( true ) )
+    if( moFilled.value_or( true ) )
     {
-        sal_Int32 nFillType = moType.get( XML_solid );
+        sal_Int32 nFillType = moType.value_or( XML_solid );
         switch( nFillType )
         {
             case XML_gradient:
             case XML_gradientRadial:
             {
                 aFillProps.moFillType = XML_gradFill;
-                aFillProps.maGradientProps.moRotateWithShape = moRotate.get( false );
-                double fFocus = moFocus.get( 0.0 );
+                aFillProps.maGradientProps.moRotateWithShape = moRotate.value_or( false );
+                double fFocus = moFocus.value_or( 0.0 );
 
                 // prepare colors
                 Color aColor1 = ConversionHelper::decodeColor( rGraphicHelper, moColor, moOpacity, API_RGB_WHITE );
@@ -771,7 +771,7 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                 if( nFillType == XML_gradient )
                 {
                     // normalize angle to range [0;360) degrees
-                    sal_Int32 nVmlAngle = getIntervalValue< sal_Int32, sal_Int32 >( moAngle.get( 0 ), 0, 360 );
+                    sal_Int32 nVmlAngle = getIntervalValue< sal_Int32, sal_Int32 >( moAngle.value_or( 0 ), 0, 360 );
 
                     // focus of -50% or 50% is axial gradient
                     if( ((-0.75 <= fFocus) && (fFocus <= -0.25)) || ((0.25 <= fFocus) && (fFocus <= 0.75)) )
@@ -813,8 +813,8 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                 {
                     aFillProps.maGradientProps.moGradientPath = XML_rect;
                     // convert VML focus position and size to DrawingML fill-to-rect
-                    DoublePair aFocusPos = moFocusPos.get( DoublePair( 0.0, 0.0 ) );
-                    DoublePair aFocusSize = moFocusSize.get( DoublePair( 0.0, 0.0 ) );
+                    DoublePair aFocusPos = moFocusPos.value_or( DoublePair( 0.0, 0.0 ) );
+                    DoublePair aFocusSize = moFocusSize.value_or( DoublePair( 0.0, 0.0 ) );
                     double fLeft   = getLimitedValue< double, double >( aFocusPos.first, 0.0, 1.0 );
                     double fTop    = getLimitedValue< double, double >( aFocusPos.second, 0.0, 1.0 );
                     double fRight  = getLimitedValue< double, double >( fLeft + aFocusSize.first, fLeft, 1.0 );
@@ -949,7 +949,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
     }
     if (moStyle.has_value())
     {
-        OUString aStyle = moStyle.get(OUString());
+        OUString aStyle = moStyle.value_or(OUString());
 
         sal_Int32 nIndex = 0;
         while( nIndex >= 0 )

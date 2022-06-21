@@ -116,7 +116,7 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     // ST_TextVerticalType
     if( rAttribs.hasAttribute( XML_vert ) ) {
         mrTextBodyProp.moVert = rAttribs.getToken( XML_vert );
-        sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
+        sal_Int32 tVert = mrTextBodyProp.moVert.value_or( XML_horz );
         if (tVert == XML_vert || tVert == XML_eaVert || tVert == XML_mongolianVert)
             mrTextBodyProp.moRotation = 5400000;
         else if (tVert == XML_vert270)
@@ -175,7 +175,7 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
             }
             case A_TOKEN( spAutoFit ):
                 {
-                    const sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
+                    const sal_Int32 tVert = mrTextBodyProp.moVert.value_or( XML_horz );
                     if( tVert != XML_vert && tVert != XML_eaVert && tVert != XML_vert270 && tVert != XML_mongolianVert )
                         mrTextBodyProp.maPropertyMap.setProperty( PROP_TextAutoGrowHeight, true);
                 }

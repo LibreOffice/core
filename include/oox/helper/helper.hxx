@@ -181,7 +181,7 @@ public:
     bool         operator!() const { return !mbHasValue; }
 
     const Type&  get() const { return maValue; }
-    const Type&  get( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }
+    const Type&  value_or( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }
 
     Type&        operator*() { assert(mbHasValue); return maValue; }
     Type&        emplace() { mbHasValue = true; maValue = Type(); return maValue; }

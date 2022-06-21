@@ -381,7 +381,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         case XML_noFill:
         {
             eFillStyle = FillStyle_NONE;
-            rPropMap.setProperty(ShapeProperty::FillUseSlideBackground, moUseBgFill.get(false));
+            rPropMap.setProperty(ShapeProperty::FillUseSlideBackground, moUseBgFill.value_or(false));
         }
         break;
 
@@ -431,12 +431,12 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 }
 
                 // "rotate with shape" set to false -> do not rotate
-                if ( !maGradientProps.moRotateWithShape.get( true ) )
+                if ( !maGradientProps.moRotateWithShape.value_or( true ) )
                     nShapeRotation = 0;
 
                 if( maGradientProps.moGradientPath.has_value() )
                 {
-                    IntegerRectangle2D aFillToRect = maGradientProps.moFillToRect.get( IntegerRectangle2D( 0, 0, MAX_PERCENT, MAX_PERCENT ) );
+                    IntegerRectangle2D aFillToRect = maGradientProps.moFillToRect.value_or( IntegerRectangle2D( 0, 0, MAX_PERCENT, MAX_PERCENT ) );
                     sal_Int32 nCenterX = (MAX_PERCENT + aFillToRect.X1 - aFillToRect.X2) / 2;
                     aGradient.XOffset = getLimitedValue<sal_Int16, sal_Int32>(
                         nCenterX / PER_PERCENT, 0, 100);
@@ -635,7 +635,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     // Now we have a potential border and a largest segment. Use those.
 
                     aGradient.Style = bSymmetric ? awt::GradientStyle_AXIAL : awt::GradientStyle_LINEAR;
-                    sal_Int32 nShadeAngle = maGradientProps.moShadeAngle.get( 0 );
+                    sal_Int32 nShadeAngle = maGradientProps.moShadeAngle.value_or( 0 );
                     // Adjust for flips
                     if ( bFlipH )
                         nShadeAngle = 180*60000 - nShadeAngle;
@@ -737,7 +737,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                 if (xGraphic.is())
                 {
-                    if (maBlipProps.moColorEffect.get(XML_TOKEN_INVALID) == XML_grayscl)
+                    if (maBlipProps.moColorEffect.value_or(XML_TOKEN_INVALID) == XML_grayscl)
                         xGraphic = lclGreysScaleGraphic(xGraphic);
 
                     if (rPropMap.supportsProperty(ShapeProperty::FillBitmapName) &&
@@ -755,31 +755,31 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 if( eFillStyle == FillStyle_BITMAP )
                 {
                     // bitmap mode (single, repeat, stretch)
-                    BitmapMode eBitmapMode = lclGetBitmapMode( maBlipProps.moBitmapMode.get( XML_TOKEN_INVALID ) );
+                    BitmapMode eBitmapMode = lclGetBitmapMode( maBlipProps.moBitmapMode.value_or( XML_TOKEN_INVALID ) );
                     rPropMap.setProperty( ShapeProperty::FillBitmapMode, eBitmapMode );
 
                     // additional settings for repeated bitmap
                     if( eBitmapMode == BitmapMode_REPEAT )
                     {
                         // anchor position inside bitmap
-                        RectanglePoint eRectPoint = lclGetRectanglePoint( maBlipProps.moTileAlign.get( XML_tl ) );
+                        RectanglePoint eRectPoint = lclGetRectanglePoint( maBlipProps.moTileAlign.value_or( XML_tl ) );
                         rPropMap.setProperty( ShapeProperty::FillBitmapRectanglePoint, eRectPoint );
 
                         awt::Size aOriginalSize = lclGetOriginalSize(rGraphicHelper, maBlipProps.mxFillGraphic);
                         if( (aOriginalSize.Width > 0) && (aOriginalSize.Height > 0) )
                         {
                             // size of one bitmap tile (given as 1/1000 percent of bitmap size), convert to 1/100 mm
-                            double fScaleX = maBlipProps.moTileScaleX.get( MAX_PERCENT ) / static_cast< double >( MAX_PERCENT );
+                            double fScaleX = maBlipProps.moTileScaleX.value_or( MAX_PERCENT ) / static_cast< double >( MAX_PERCENT );
                             sal_Int32 nFillBmpSizeX = getLimitedValue< sal_Int32, double >( aOriginalSize.Width * fScaleX, 1, SAL_MAX_INT32 );
                             rPropMap.setProperty( ShapeProperty::FillBitmapSizeX, nFillBmpSizeX );
-                            double fScaleY = maBlipProps.moTileScaleY.get( MAX_PERCENT ) / static_cast< double >( MAX_PERCENT );
+                            double fScaleY = maBlipProps.moTileScaleY.value_or( MAX_PERCENT ) / static_cast< double >( MAX_PERCENT );
                             sal_Int32 nFillBmpSizeY = getLimitedValue< sal_Int32, double >( aOriginalSize.Height * fScaleY, 1, SAL_MAX_INT32 );
                             rPropMap.setProperty( ShapeProperty::FillBitmapSizeY, nFillBmpSizeY );
 
                             // offset of the first bitmap tile (given as EMUs), convert to percent
-                            sal_Int16 nTileOffsetX = getDoubleIntervalValue< sal_Int16 >( maBlipProps.moTileOffsetX.get( 0 ) / 3.6 / aOriginalSize.Width, 0, 100 );
+                            sal_Int16 nTileOffsetX = getDoubleIntervalValue< sal_Int16 >( maBlipProps.moTileOffsetX.value_or( 0 ) / 3.6 / aOriginalSize.Width, 0, 100 );
                             rPropMap.setProperty( ShapeProperty::FillBitmapOffsetX, nTileOffsetX );
-                            sal_Int16 nTileOffsetY = getDoubleIntervalValue< sal_Int16 >( maBlipProps.moTileOffsetY.get( 0 ) / 3.6 / aOriginalSize.Height, 0, 100 );
+                            sal_Int16 nTileOffsetY = getDoubleIntervalValue< sal_Int16 >( maBlipProps.moTileOffsetY.value_or( 0 ) / 3.6 / aOriginalSize.Height, 0, 100 );
                             rPropMap.setProperty( ShapeProperty::FillBitmapOffsetY, nTileOffsetY );
                         }
                     }
@@ -862,11 +862,11 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
 void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelper& rGraphicHelper, bool bFlipH, bool bFlipV) const
 {
-    sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.get( 0 ) / PER_PERCENT, -100, 100 );
-    sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.get( 0 ) / PER_PERCENT, -100, 100 );
+    sal_Int16 nBrightness = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moBrightness.value_or( 0 ) / PER_PERCENT, -100, 100 );
+    sal_Int16 nContrast = getLimitedValue< sal_Int16, sal_Int32 >( maBlipProps.moContrast.value_or( 0 ) / PER_PERCENT, -100, 100 );
     ColorMode eColorMode = ColorMode_STANDARD;
 
-    switch( maBlipProps.moColorEffect.get( XML_TOKEN_INVALID ) )
+    switch( maBlipProps.moColorEffect.value_or( XML_TOKEN_INVALID ) )
     {
         case XML_biLevel:   eColorMode = ColorMode_MONO;    break;
         case XML_grayscl:   eColorMode = ColorMode_GREYS;   break;

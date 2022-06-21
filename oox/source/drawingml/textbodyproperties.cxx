@@ -45,7 +45,7 @@ TextBodyProperties::TextBodyProperties()
 /* For Legacy purposes: TODO: Check if it is required at all! */
 void TextBodyProperties::pushVertSimulation()
 {
-    sal_Int32 tVert = moVert.get( XML_horz );
+    sal_Int32 tVert = moVert.value_or( XML_horz );
     if( !(tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert) )
         return;
 
@@ -79,7 +79,7 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
         PROP_TextLowerDistance
     };
 
-    switch (moRotation.get(0))
+    switch (moRotation.value_or(0))
     {
         case 90*1*60000: nOff = 3; break;
         case 90*2*60000: nOff = 2; break;
