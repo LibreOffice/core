@@ -1391,7 +1391,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
         aPos.AdjustX( -nSizeX );
     tools::Rectangle aCellRect(aPos, Size(nSizeX, nSizeY));
 
-    weld::Window* pParent = weld::GetPopupParent(*this, aCellRect);
+    weld::Window* pParent = comphelper::LibreOfficeKit::isActive() ? GetFrameWeld() : weld::GetPopupParent(*this, aCellRect);
     mpFilterBox = std::make_shared<ScFilterListBox>(pParent, this, nCol, nRow, ScFilterBoxMode::DataSelect);
     mpFilterBox->connect_closed(LINK(this, ScGridWindow, PopupModeEndHdl));
     weld::TreeView& rFilterBox = mpFilterBox->get_widget();
