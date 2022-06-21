@@ -398,7 +398,7 @@ ScMatrixImpl::~ScMatrixImpl()
 
 void ScMatrixImpl::Clear()
 {
-    maMat.clear();
+    suppress_fun_call_w_exception(maMat.clear());
     maMatFlag.clear();
 }
 
