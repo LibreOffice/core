@@ -217,9 +217,9 @@ void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
     if( rTypeGroup.getTypeInfo().meTypeCategory == TYPECATEGORY_PIE )
     {
         // Y rotation used as 'first pie slice angle' in 3D pie charts
-        rTypeGroup.convertPieRotation( aPropSet, mrModel.monRotationY.get( 0 ) );
+        rTypeGroup.convertPieRotation( aPropSet, mrModel.monRotationY.value_or( 0 ) );
         // X rotation a.k.a. elevation (map OOXML [0..90] to Chart2 [-90,0])
-        nRotationX = getLimitedValue< sal_Int32, sal_Int32 >( mrModel.monRotationX.get( 15 ), 0, 90 ) - 90;
+        nRotationX = getLimitedValue< sal_Int32, sal_Int32 >( mrModel.monRotationX.value_or( 15 ), 0, 90 ) - 90;
         // no right-angled axes in pie charts
         bRightAngled = false;
         // ambient color (Gray 30%)
@@ -230,9 +230,9 @@ void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
     else // 3D bar/area/line charts
     {
         // Y rotation (OOXML [0..359], Chart2 [-179,180])
-        nRotationY = mrModel.monRotationY.get( 20 );
+        nRotationY = mrModel.monRotationY.value_or( 20 );
         // X rotation a.k.a. elevation (OOXML [-90..90], Chart2 [-179,180])
-        nRotationX = getLimitedValue< sal_Int32, sal_Int32 >( mrModel.monRotationX.get( 15 ), -90, 90 );
+        nRotationX = getLimitedValue< sal_Int32, sal_Int32 >( mrModel.monRotationX.value_or( 15 ), -90, 90 );
         // right-angled axes
         bRightAngled = mrModel.mbRightAngled;
         // ambient color (Gray 20%)

@@ -313,7 +313,7 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
     mrTypeModel.moCoordPos = lclDecodeInt32Pair( rAttribs, XML_coordorigin );
     mrTypeModel.moCoordSize = lclDecodeInt32Pair( rAttribs, XML_coordsize );
     setStyle( rAttribs.getString( XML_style, OUString() ) );
-    if( lclDecodeBool( rAttribs, O_TOKEN( hr )).get( false ))
+    if( lclDecodeBool( rAttribs, O_TOKEN( hr )).value_or( false ))
     {   // MSO's handling of o:hr width is nowhere near what the spec says:
         // - o:hrpct is not in % but in 0.1%
         // - if o:hrpct is not given, 100% width is assumed
@@ -435,7 +435,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         case VML_TOKEN( shadow ):
         {
             mrTypeModel.maShadowModel.mbHasShadow = true;
-            mrTypeModel.maShadowModel.moShadowOn = lclDecodeBool(rAttribs, XML_on).get(false);
+            mrTypeModel.maShadowModel.moShadowOn = lclDecodeBool(rAttribs, XML_on).value_or(false);
             assignIfUsed(mrTypeModel.maShadowModel.moColor, rAttribs.getString(XML_color));
             assignIfUsed(mrTypeModel.maShadowModel.moOffset, rAttribs.getString(XML_offset));
             mrTypeModel.maShadowModel.moOpacity = lclDecodePercent(rAttribs, XML_opacity, 1.0);

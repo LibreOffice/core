@@ -1060,14 +1060,14 @@ void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef
     bool bStacked = false;
     if( bSupportsStacked )
     {
-        sal_Int32 nVert = rxTextProp->getTextProperties().moVert.get( XML_horz );
+        sal_Int32 nVert = rxTextProp->getTextProperties().moVert.value_or( XML_horz );
         bStacked = (nVert == XML_wordArtVert) || (nVert == XML_wordArtVertRtl);
         rPropSet.setProperty( PROP_StackCharacters, bStacked );
     }
 
     /*  Chart2 expects rotation angle as double value in range of [0,360).
         OOXML counts clockwise, Chart2 counts counterclockwise. */
-    double fAngle = static_cast< double >( bStacked ? 0 : rxTextProp->getTextProperties().moRotation.get( nDefaultRotation ) );
+    double fAngle = static_cast< double >( bStacked ? 0 : rxTextProp->getTextProperties().moRotation.value_or( nDefaultRotation ) );
     // MS Office UI allows values only in range of [-90,90].
     if ( fAngle < -5400000.0 || fAngle > 5400000.0 )
     {

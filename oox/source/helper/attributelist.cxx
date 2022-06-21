@@ -288,7 +288,7 @@ OUString AttributeList::getString( sal_Int32 nAttrToken, const OUString& rDefaul
 
 OUString AttributeList::getXString( sal_Int32 nAttrToken, const OUString& rDefault ) const
 {
-    return getXString( nAttrToken ).get( rDefault );
+    return getXString( nAttrToken ).value_or( rDefault );
 }
 
 const char* AttributeList::getChar( sal_Int32 nAttrToken ) const
@@ -303,42 +303,42 @@ const char* AttributeList::getChar( sal_Int32 nAttrToken ) const
 
 double AttributeList::getDouble( sal_Int32 nAttrToken, double fDefault ) const
 {
-    return getDouble( nAttrToken ).get( fDefault );
+    return getDouble( nAttrToken ).value_or( fDefault );
 }
 
 sal_Int32 AttributeList::getInteger( sal_Int32 nAttrToken, sal_Int32 nDefault ) const
 {
-    return getInteger( nAttrToken ).get( nDefault );
+    return getInteger( nAttrToken ).value_or( nDefault );
 }
 
 sal_uInt32 AttributeList::getUnsigned( sal_Int32 nAttrToken, sal_uInt32 nDefault ) const
 {
-    return getUnsigned( nAttrToken ).get( nDefault );
+    return getUnsigned( nAttrToken ).value_or( nDefault );
 }
 
 sal_Int64 AttributeList::getHyper( sal_Int32 nAttrToken, sal_Int64 nDefault ) const
 {
-    return getHyper( nAttrToken ).get( nDefault );
+    return getHyper( nAttrToken ).value_or( nDefault );
 }
 
 sal_Int32 AttributeList::getIntegerHex( sal_Int32 nAttrToken, sal_Int32 nDefault ) const
 {
-    return getIntegerHex( nAttrToken ).get( nDefault );
+    return getIntegerHex( nAttrToken ).value_or( nDefault );
 }
 
 sal_uInt32 AttributeList::getUnsignedHex( sal_Int32 nAttrToken, sal_uInt32 nDefault ) const
 {
-    return getIntegerHex( nAttrToken ).get( nDefault );
+    return getIntegerHex( nAttrToken ).value_or( nDefault );
 }
 
 bool AttributeList::getBool( sal_Int32 nAttrToken, bool bDefault ) const
 {
-    return getBool( nAttrToken ).get( bDefault );
+    return getBool( nAttrToken ).value_or( bDefault );
 }
 
 util::DateTime AttributeList::getDateTime( sal_Int32 nAttrToken, const util::DateTime& rDefault ) const
 {
-    return getDateTime( nAttrToken ).get( rDefault );
+    return getDateTime( nAttrToken ).value_or( rDefault );
 }
 
 std::vector<sal_Int32> AttributeList::getTokenList(sal_Int32 nAttrToken) const

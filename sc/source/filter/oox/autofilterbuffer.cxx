@@ -786,7 +786,7 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
         xFilterDesc->setFilterFields3( comphelper::containerToSequence( aFilterFields ) );
 
     // regular expressions
-    bool bUseRegExp = obNeedsRegExp.get( false );
+    bool bUseRegExp = obNeedsRegExp.value_or( false );
     aDescProps.setProperty( PROP_UseRegularExpressions, bUseRegExp );
 
     // sort

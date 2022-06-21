@@ -130,11 +130,11 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
             rDataLabel.mobShowVal.has_value();
     }
 
-    bool bShowValue   = !rDataLabel.mbDeleted && rDataLabel.mobShowVal.get( !bMSO2007Doc );
-    bool bShowPercent = !rDataLabel.mbDeleted && rDataLabel.mobShowPercent.get( !bMSO2007Doc ) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE);
-    bool bShowCateg   = !rDataLabel.mbDeleted && rDataLabel.mobShowCatName.get( !bMSO2007Doc );
-    bool bShowSerName = !rDataLabel.mbDeleted && rDataLabel.mobShowSerName.get( !bMSO2007Doc );
-    bool bShowSymbol  = !rDataLabel.mbDeleted && rDataLabel.mobShowLegendKey.get( !bMSO2007Doc );
+    bool bShowValue   = !rDataLabel.mbDeleted && rDataLabel.mobShowVal.value_or( !bMSO2007Doc );
+    bool bShowPercent = !rDataLabel.mbDeleted && rDataLabel.mobShowPercent.value_or( !bMSO2007Doc ) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE);
+    bool bShowCateg   = !rDataLabel.mbDeleted && rDataLabel.mobShowCatName.value_or( !bMSO2007Doc );
+    bool bShowSerName = !rDataLabel.mbDeleted && rDataLabel.mobShowSerName.value_or( !bMSO2007Doc );
+    bool bShowSymbol  = !rDataLabel.mbDeleted && rDataLabel.mobShowLegendKey.value_or( !bMSO2007Doc );
 
     // tdf#132174, tdf#136650: the inner data table has no own cell number format.
     if( bHasInternalData && bShowValue && !bShowPercent )
@@ -161,9 +161,9 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     // Set the data label separator to "new line" if the value is shown as percentage with a category name,
     // just like in MS-Office. In any other case the default separator will be a semicolon.
     if( bShowPercent && !bShowValue && ( bDataSeriesLabel || rDataLabel.moaSeparator.has_value() ) )
-        rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "\n" ) );
+        rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.value_or( "\n" ) );
     else if( bDataSeriesLabel || rDataLabel.moaSeparator.has_value() )
-        rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "; " ) );
+        rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.value_or( "; " ) );
 
     // data label placement (do not overwrite series placement, if no explicit point placement is present)
     if( !(bDataSeriesLabel || rDataLabel.monLabelPos.has_value()) )
@@ -171,7 +171,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
 
     namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
     sal_Int32 nPlacement = -1;
-    switch( rDataLabel.monLabelPos.get( XML_TOKEN_INVALID ) )
+    switch( rDataLabel.monLabelPos.value_or( XML_TOKEN_INVALID ) )
     {
         case XML_outEnd:    nPlacement = csscd::OUTSIDE;        break;
         case XML_inEnd:     nPlacement = csscd::INSIDE;         break;
@@ -321,7 +321,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
 
             OptValue< OUString > oaLabelText;
             OptValue< OUString > oaCellRange;
-            if (mrModel.mobShowDataLabelsRange.get(false))
+            if (mrModel.mobShowDataLabelsRange.value_or(false))
             {
                 const DataSourceModel* pLabelSource = mrModel.mrParent.mpLabelsSource;
                 if (pLabelSource && pLabelSource->mxDataSeq.is())
@@ -727,8 +727,8 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         // data point marker
         if( ( mrModel.monMarkerSymbol.has_value() && mrModel.monMarkerSymbol.get() != rSeries.mnMarkerSymbol ) ||
             ( mrModel.monMarkerSize.has_value() && mrModel.monMarkerSize.get() != rSeries.mnMarkerSize ) )
-            rTypeGroup.convertMarker( aPropSet, mrModel.monMarkerSymbol.get( rSeries.mnMarkerSymbol ),
-                    mrModel.monMarkerSize.get( rSeries.mnMarkerSize ), mrModel.mxMarkerProp );
+            rTypeGroup.convertMarker( aPropSet, mrModel.monMarkerSymbol.value_or( rSeries.mnMarkerSymbol ),
+                    mrModel.monMarkerSize.value_or( rSeries.mnMarkerSize ), mrModel.mxMarkerProp );
 
         // data point pie explosion
         if( mrModel.monExplosion.has_value() && mrModel.monExplosion.get() != rSeries.mnExplosion )
@@ -839,7 +839,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     rTypeGroup.convertLineSmooth( aSeriesProp, mrModel.mbSmooth );
 #endif
     // 3D bar style (not possible to set at chart type -> set at all series)
-    rTypeGroup.convertBarGeometry( aSeriesProp, mrModel.monShape.get( rTypeGroup.getModel().mnShape ) );
+    rTypeGroup.convertBarGeometry( aSeriesProp, mrModel.monShape.value_or( rTypeGroup.getModel().mnShape ) );
     // pie explosion (restricted to [0%,100%] in Chart2)
     rTypeGroup.convertPieExplosion( aSeriesProp, mrModel.mnExplosion );
 

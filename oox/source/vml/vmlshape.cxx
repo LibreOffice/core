@@ -158,18 +158,18 @@ ShapeType::~ShapeType()
 
 sal_Int32 ShapeType::getShapeType() const
 {
-    return maTypeModel.moShapeType.get( 0 );
+    return maTypeModel.moShapeType.value_or( 0 );
 }
 
 OUString ShapeType::getGraphicPath() const
 {
-    return maTypeModel.moGraphicPath.get( OUString() );
+    return maTypeModel.moGraphicPath.value_or( OUString() );
 }
 
 awt::Rectangle ShapeType::getCoordSystem() const
 {
-    Int32Pair aCoordPos = maTypeModel.moCoordPos.get( Int32Pair( 0, 0 ) );
-    Int32Pair aCoordSize = maTypeModel.moCoordSize.get( Int32Pair( 1000, 1000 ) );
+    Int32Pair aCoordPos = maTypeModel.moCoordPos.value_or( Int32Pair( 0, 0 ) );
+    Int32Pair aCoordSize = maTypeModel.moCoordSize.value_or( Int32Pair( 1000, 1000 ) );
     if( aCoordSize.first == 0 )
         aCoordSize.first = 1;
     if( aCoordSize.second == 0 )

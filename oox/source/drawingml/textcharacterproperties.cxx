@@ -171,31 +171,31 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty( PROP_CharHeightComplex, fHeight);
     }
 
-    rPropMap.setProperty( PROP_CharKerning, static_cast<sal_Int16>(GetTextSpacingPoint( moSpacing.get( 0 ) )));
+    rPropMap.setProperty( PROP_CharKerning, static_cast<sal_Int16>(GetTextSpacingPoint( moSpacing.value_or( 0 ) )));
 
-    rPropMap.setProperty( PROP_CharUnderline, GetFontUnderline( moUnderline.get( XML_none ) ));
-    rPropMap.setProperty( PROP_CharStrikeout, GetFontStrikeout( moStrikeout.get( XML_noStrike ) ));
-    rPropMap.setProperty( PROP_CharCaseMap, GetCaseMap( moCaseMap.get( XML_none ) ));
+    rPropMap.setProperty( PROP_CharUnderline, GetFontUnderline( moUnderline.value_or( XML_none ) ));
+    rPropMap.setProperty( PROP_CharStrikeout, GetFontStrikeout( moStrikeout.value_or( XML_noStrike ) ));
+    rPropMap.setProperty( PROP_CharCaseMap, GetCaseMap( moCaseMap.value_or( XML_none ) ));
 
     if( moBaseline.has_value() ) {
-        rPropMap.setProperty( PROP_CharEscapement, sal_Int16(moBaseline.get( 0 ) / 1000));
+        rPropMap.setProperty( PROP_CharEscapement, sal_Int16(moBaseline.value_or( 0 ) / 1000));
         rPropMap.setProperty( PROP_CharEscapementHeight, sal_Int8(DFLT_ESC_PROP));
     } else {
         rPropMap.setProperty( PROP_CharEscapement, sal_Int16(0));
         rPropMap.setProperty( PROP_CharEscapementHeight, sal_Int8(100)); // 100%
     }
 
-    float fWeight = moBold.get( false ) ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
+    float fWeight = moBold.value_or( false ) ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
     rPropMap.setProperty( PROP_CharWeight, fWeight);
     rPropMap.setProperty( PROP_CharWeightAsian, fWeight);
     rPropMap.setProperty( PROP_CharWeightComplex, fWeight);
 
-    awt::FontSlant eSlant = moItalic.get( false ) ? awt::FontSlant_ITALIC : awt::FontSlant_NONE;
+    awt::FontSlant eSlant = moItalic.value_or( false ) ? awt::FontSlant_ITALIC : awt::FontSlant_NONE;
     rPropMap.setProperty( PROP_CharPosture, eSlant);
     rPropMap.setProperty( PROP_CharPostureAsian, eSlant);
     rPropMap.setProperty( PROP_CharPostureComplex, eSlant);
 
-    bool bUnderlineFillFollowText = moUnderlineFillFollowText.get( false );
+    bool bUnderlineFillFollowText = moUnderlineFillFollowText.value_or( false );
     if( moUnderline.has_value() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
     {
         rPropMap.setProperty( PROP_CharUnderlineHasColor, true);

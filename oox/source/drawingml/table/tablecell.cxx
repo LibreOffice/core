@@ -68,17 +68,17 @@ static void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
     {
         Color aColor = rLineProperties.maLineFill.getBestSolidColor();
         aBorderLine.Color = sal_Int32(aColor.getColor( rFilterBase.getGraphicHelper() ));
-        aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
-        aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
-        aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 2 );
+        aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.value_or( 0 ) ) / 4 );
+        aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.value_or( 0 ) ) / 4 );
+        aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.value_or( 0 ) ) / 2 );
         aBorderLine.LineDistance = 0;
     }
     else
     {
         aBorderLine.Color = sal_Int32( COL_AUTO );
-        aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
-        aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
-        aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 2 );
+        aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.value_or( 0 ) ) / 4 );
+        aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.value_or( 0 ) ) / 4 );
+        aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.value_or( 0 ) ) / 2 );
         aBorderLine.LineDistance = 0;
     }
 
