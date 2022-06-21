@@ -16,6 +16,23 @@
       "message": "Factored out the refactoring from feature/scaling-geometry-provider. I probably need someone with a Mac to fix this platform.",
       "revId": "f324b1044933d5c797d645eab11ba8f96df87193",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63927aca_d9089ce0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-21T15:49:58Z",
+      "side": 1,
+      "message": "FWIW, I tried to identify and fix independent bugs with individual patches, which I found while working on this. But it\u0027s harder then expected, because it\u0027s a more fundamental change then I expected (and much more work).\n\nThis is something that compiles and seem to work on Windows and Linux. Current state is some first stab and MacOS, which I honestly don\u0027t believe to even compile.\n\nI would appreciate, if some MacOS dev could fix this for the platform. Is IOS supposed to still be a working build target?",
+      "revId": "f324b1044933d5c797d645eab11ba8f96df87193",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
