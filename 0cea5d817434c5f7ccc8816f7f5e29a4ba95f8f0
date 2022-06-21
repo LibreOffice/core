@@ -16,6 +16,24 @@
       "message": "Now that this check is gone, did you check from-scratch created documents have unchanged layout, i.e. still not allowing tabs to go over the margin?",
       "revId": "0cea5d817434c5f7ccc8816f7f5e29a4ba95f8f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6623966e_9d79e0fe",
+        "filename": "sw/source/core/text/itrcrsr.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2022-06-21T11:29:30Z",
+      "side": 0,
+      "message": "Thx for the warning... now i tested tabs over the margin (with new document, and docx/odt imported documents), as much as i could, but i did not seen layout change, only cursor position change... \nbefore this patch, the cursor positioned on the margin (when the cursor is on the tab)\nnow the cursor will be positioned exactly where the tab is... but i thought it as not a bug, because if there is an EOP, then that is positioned there too.",
+      "parentUuid": "c4d98c13_bd522d17",
+      "revId": "0cea5d817434c5f7ccc8816f7f5e29a4ba95f8f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a60a709_c55cdf6d",
+        "filename": "sw/qa/core/text/text.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2022-06-21T11:29:30Z",
+      "side": 1,
+      "message": "Thx, looks like there is a way to jump right to the end of the document 😊\nAbout the test doc size: I made this test document for bug 43100 test, that need to be this big.. and the end of that document could be used for this test as well.. maybe it wasn\u0027t the best idea, but i thought i could save 1 test document by reuseing this document here.",
+      "parentUuid": "16316244_9a164c6d",
+      "revId": "b9a6ccc21a0ae1d5aea8792722a9afcb6febfcfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16c38323_bc9c0c33",
@@ -52,6 +70,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "085e665a_17c769e9",
+        "filename": "sw/qa/core/text/text.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2022-06-21T11:29:30Z",
+      "side": 1,
+      "message": "thx, looks like the RightMargin(...) do the same here as moveing right 105 times.\nIt jumps to the margin, not to the end of the line, because the line is 123 character long, and reach almost to the end of the page",
+      "parentUuid": "16c38323_bc9c0c33",
+      "revId": "b9a6ccc21a0ae1d5aea8792722a9afcb6febfcfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2a4dc4f_e03d486b",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-06-17T09:45:46Z",
       "side": 1,
       "message": "Some comments on this would be nice, if I understand correctly, this is meant to be a list of lines, with each line having a cluster (1 or more) false values, followed a cluster (1 or more?) true values, but it\u0027s not too clear.",
+      "revId": "b9a6ccc21a0ae1d5aea8792722a9afcb6febfcfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b2709c6_c9e4cd1b",
+        "filename": "sw/qa/core/text/text.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2022-06-21T11:29:30Z",
+      "side": 1,
+      "message": "Sorry for that... i hope this new comments + variable renaming explain the situation.\nThe document have 17 lines.. every line end with many space characters.\nmost of the lines end between the right margin and the right page_end... except 7 lines... short lines that are not right aligned.\naLineReachOverMargin tells for every lines if it end beyond the right margin, or not.",
+      "parentUuid": "d2a4dc4f_e03d486b",
       "revId": "b9a6ccc21a0ae1d5aea8792722a9afcb6febfcfd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
