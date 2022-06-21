@@ -109,7 +109,7 @@ void TextParagraph::insertAt(
             TextCharacterProperties aTextCharacterProps( aTextCharacterStyle );
             aTextCharacterProps.assignUsed( maEndProperties );
             if ( aTextCharacterProps.moHeight.has_value() )
-                nCharHeight = nCharHeightFirst = aTextCharacterProps.moHeight.get();
+                nCharHeight = nCharHeightFirst = aTextCharacterProps.moHeight.value();
             aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
         }
         else

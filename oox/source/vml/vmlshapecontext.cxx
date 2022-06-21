@@ -52,7 +52,7 @@ namespace {
 OptValue< bool > lclDecodeBool( const AttributeList& rAttribs, sal_Int32 nToken )
 {
     OptValue< OUString > oValue = rAttribs.getString( nToken );
-    if( oValue.has_value() ) return OptValue< bool >( ConversionHelper::decodeBool( oValue.get() ) );
+    if( oValue.has_value() ) return OptValue< bool >( ConversionHelper::decodeBool( oValue.value() ) );
     return OptValue< bool >();
 }
 
@@ -62,7 +62,7 @@ OptValue< bool > lclDecodeBool( const AttributeList& rAttribs, sal_Int32 nToken 
 OptValue< double > lclDecodePercent( const AttributeList& rAttribs, sal_Int32 nToken, double fDefValue )
 {
     OptValue< OUString > oValue = rAttribs.getString( nToken );
-    if( oValue.has_value() ) return OptValue< double >( ConversionHelper::decodePercent( oValue.get(), fDefValue ) );
+    if( oValue.has_value() ) return OptValue< double >( ConversionHelper::decodePercent( oValue.value(), fDefValue ) );
     return OptValue< double >();
 }
 
@@ -76,7 +76,7 @@ OptValue< double > lclDecodeOpacity( const AttributeList& rAttribs, sal_Int32 nT
 
     if( oValue.has_value() )
     {
-        const OUString& aString(oValue.get());
+        const OUString& aString(oValue.value());
         const sal_Int32 nLength(aString.getLength());
 
         if(nLength > 0)
@@ -104,7 +104,7 @@ OptValue< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int
     if( oValue.has_value() )
     {
         std::u16string_view aValue1, aValue2;
-        ConversionHelper::separatePair( aValue1, aValue2, oValue.get(), ',' );
+        ConversionHelper::separatePair( aValue1, aValue2, oValue.value(), ',' );
         oRetValue = Int32Pair( o3tl::toInt32(aValue1), o3tl::toInt32(aValue2) );
     }
     return oRetValue;
@@ -119,7 +119,7 @@ OptValue< DoublePair > lclDecodePercentPair( const AttributeList& rAttribs, sal_
     if( oValue.has_value() )
     {
         std::u16string_view aValue1, aValue2;
-        ConversionHelper::separatePair( aValue1, aValue2, oValue.get(), ',' );
+        ConversionHelper::separatePair( aValue1, aValue2, oValue.value(), ',' );
         oRetValue = DoublePair(
             ConversionHelper::decodePercent( aValue1, 0.0 ),
             ConversionHelper::decodePercent( aValue2, 0.0 ) );
@@ -400,9 +400,9 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             // Gain / contrast.
             OptValue<OUString> oGain = rAttribs.getString(XML_gain);
             sal_Int32 nGain = 0x10000;
-            if (oGain.has_value() && oGain.get().endsWith("f"))
+            if (oGain.has_value() && oGain.value().endsWith("f"))
             {
-                nGain = oGain.get().toInt32();
+                nGain = oGain.value().toInt32();
             }
             if (nGain < 0x10000)
             {
@@ -415,9 +415,9 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             // Blacklevel / brightness.
             OptValue<OUString> oBlacklevel = rAttribs.getString(XML_blacklevel);
             sal_Int16 nBlacklevel = 0;
-            if (oBlacklevel.has_value() && oBlacklevel.get().endsWith("f"))
+            if (oBlacklevel.has_value() && oBlacklevel.value().endsWith("f"))
             {
-                nBlacklevel = oBlacklevel.get().toInt32();
+                nBlacklevel = oBlacklevel.value().toInt32();
             }
             if (nBlacklevel != 0)
             {
@@ -455,7 +455,7 @@ OptValue< OUString > ShapeTypeContext::decodeFragmentPath( const AttributeList& 
     OptValue< OUString > oFragmentPath;
     OptValue< OUString > oRelId = rAttribs.getString( nToken );
     if( oRelId.has_value() )
-        oFragmentPath = getFragmentPathFromRelId( oRelId.get() );
+        oFragmentPath = getFragmentPathFromRelId( oRelId.value() );
     return oFragmentPath;
 }
 
@@ -536,7 +536,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
                 }
                 if (const ShapeType* pShapeType = pShapeContainer->getShapeTypeById(aType))
                 {
-                    nShapeType = pShapeType->getTypeModel().moShapeType.get();
+                    nShapeType = pShapeType->getTypeModel().moShapeType.value();
                 }
             }
             mrShapeModel.mbInGroup = (getParentElement() == VML_TOKEN(group));
@@ -613,9 +613,9 @@ void ShapeContext::setPoints(std::u16string_view rPoints)
 
     if (mrShape.getTypeModel().moCoordSize.has_value())
     {
-        double fWidth = mrShape.getTypeModel().moCoordSize.get().first;
+        double fWidth = mrShape.getTypeModel().moCoordSize.value().first;
         fWidth = o3tl::convert(fWidth, o3tl::Length::twip, o3tl::Length::pt);
-        double fHeight = mrShape.getTypeModel().moCoordSize.get().second;
+        double fHeight = mrShape.getTypeModel().moCoordSize.value().second;
         fHeight = o3tl::convert(fHeight, o3tl::Length::twip, o3tl::Length::pt);
         mrShape.getTypeModel().maWidth = OUString::number(fWidth) + "pt";
         mrShape.getTypeModel().maHeight = OUString::number(fHeight) + "pt";

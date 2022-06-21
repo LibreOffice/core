@@ -96,7 +96,7 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
     case XML_videoFile:
         {
             OUString rPath = getRelations().getFragmentPathFromRelId(
-                    rAttribs.getString(R_TOKEN(link)).get() );
+                    rAttribs.getString(R_TOKEN(link)).value() );
             if (!rPath.isEmpty())
             {
                 Reference<XInputStream> xMediaStream = lcl_GetMediaStream(rPath, getFilter());
@@ -110,7 +110,7 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
             else
             {
                 rPath = getRelations().getExternalTargetFromRelId(
-                    rAttribs.getString(R_TOKEN(link)).get());
+                    rAttribs.getString(R_TOKEN(link)).value());
                 if (!rPath.isEmpty()) // linked media file
                     mpShapePtr->getGraphicProperties().m_sMediaPackageURL
                         = getFilter().getAbsoluteUrl(rPath);
@@ -154,7 +154,7 @@ ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aEleme
 
         case XML_graphicData :          // CT_GraphicalObjectData
         {
-            OUString sUri( rAttribs.getString( XML_uri ).get() );
+            OUString sUri( rAttribs.getString( XML_uri ).value() );
             if ( sUri == "http://schemas.openxmlformats.org/presentationml/2006/ole" ||
                     sUri == "http://purl.oclc.org/ooxml/presentationml/ole" )
                 return new OleObjectGraphicDataContext( *this, mpShapePtr );
@@ -277,10 +277,10 @@ ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aEleme
     {
     case DGM_TOKEN( relIds ):
     {
-        msDm = rAttribs.getString( R_TOKEN( dm ) ).get();
-        msLo = rAttribs.getString( R_TOKEN( lo ) ).get();
-        msQs = rAttribs.getString( R_TOKEN( qs ) ).get();
-        msCs = rAttribs.getString( R_TOKEN( cs ) ).get();
+        msDm = rAttribs.getString( R_TOKEN( dm ) ).value();
+        msLo = rAttribs.getString( R_TOKEN( lo ) ).value();
+        msQs = rAttribs.getString( R_TOKEN( qs ) ).value();
+        msCs = rAttribs.getString( R_TOKEN( cs ) ).value();
         loadDiagram(mpShapePtr,
                     getFilter(),
                     getFragmentPathFromRelId( msDm ),

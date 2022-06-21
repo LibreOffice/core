@@ -119,7 +119,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
   // ST_Coordinate
     if ( rAttribs.hasAttribute( XML_indent ) )
     {
-        sValue = rAttribs.getString( XML_indent ).get();
+        sValue = rAttribs.getString( XML_indent ).value();
         mrTextParagraphProperties.getFirstLineIndentation() = std::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
@@ -142,14 +142,14 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     // ParaLeftMargin
     if ( rAttribs.hasAttribute( XML_marL ) )
     {
-        sValue = rAttribs.getString( XML_marL ).get();
+        sValue = rAttribs.getString( XML_marL ).value();
         mrTextParagraphProperties.getParaLeftMargin() = std::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
     // ParaRightMargin
     if ( rAttribs.hasAttribute( XML_marR ) )
     {
-        sValue = rAttribs.getString( XML_marR ).get();
+        sValue = rAttribs.getString( XML_marR ).value();
         sal_Int32 nMarR  = sValue.isEmpty() ? 0 : GetCoordinate( sValue ) ;
         rPropertyMap.setProperty( PROP_ParaRightMargin, nMarR);
     }
@@ -216,11 +216,11 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             mrBulletList.mbBulletSizeFollowText <<= true;
             break;
         case A_TOKEN( buSzPct ):        // CT_TextBulletSizePercent
-            mrBulletList.setBulletSize( std::lround( GetPercent( rAttribs.getString( XML_val ).get() ) / 1000.f ) );
+            mrBulletList.setBulletSize( std::lround( GetPercent( rAttribs.getString( XML_val ).value() ) / 1000.f ) );
             break;
         case A_TOKEN( buSzPts ):        // CT_TextBulletSizePoint
             mrBulletList.setBulletSize(0);
-            mrBulletList.setFontSize( static_cast<sal_Int16>(GetTextSize( rAttribs.getString( XML_val ).get() ) ) );
+            mrBulletList.setFontSize( static_cast<sal_Int16>(GetTextSize( rAttribs.getString( XML_val ).value() ) ) );
             break;
 
         // EG_TextBulletTypeface
@@ -260,7 +260,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( buChar ):         // CT_TextCharBullet
             try {
 
-                mrBulletList.setBulletChar( rAttribs.getString( XML_char ).get() );
+                mrBulletList.setBulletChar( rAttribs.getString( XML_char ).value() );
                 mrBulletList.setSuffixNone();
             }
             catch(SAXException& /* e */)
@@ -280,9 +280,9 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
         case W_TOKEN( jc ):
             {
                 OptValue< OUString > oParaAdjust = rAttribs.getString( W_TOKEN(val) );
-                if( oParaAdjust.has_value() && !oParaAdjust.get().isEmpty() )
+                if( oParaAdjust.has_value() && !oParaAdjust.value().isEmpty() )
                 {
-                    const OUString& sParaAdjust = oParaAdjust.get();
+                    const OUString& sParaAdjust = oParaAdjust.value();
                     if( sParaAdjust == "left" )
                         mrTextParagraphProperties.setParaAdjust(ParagraphAdjust_LEFT);
                     else if ( sParaAdjust == "right" )
@@ -304,7 +304,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
                         rSpacing.nUnit = TextSpacing::Unit::Points;
-                        rSpacing.nValue = convertTwipToMm100(oBefore.get());
+                        rSpacing.nValue = convertTwipToMm100(oBefore.value());
                         rSpacing.bHasValue = true;
                     }
                     else
@@ -314,7 +314,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                         {
                             TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
                             rSpacing.nUnit = TextSpacing::Unit::Percent;
-                            rSpacing.nValue = oBeforeLines.get() * MAX_PERCENT / 100;
+                            rSpacing.nValue = oBeforeLines.value() * MAX_PERCENT / 100;
                             rSpacing.bHasValue = true;
                         }
                     }
@@ -328,7 +328,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
                         rSpacing.nUnit = TextSpacing::Unit::Points;
-                        rSpacing.nValue = convertTwipToMm100(oAfter.get());
+                        rSpacing.nValue = convertTwipToMm100(oAfter.value());
                         rSpacing.bHasValue = true;
                     }
                     else
@@ -338,7 +338,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                         {
                             TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
                             rSpacing.nUnit = TextSpacing::Unit::Percent;
-                            rSpacing.nValue = oAfterLines.get() * MAX_PERCENT / 100;
+                            rSpacing.nValue = oAfterLines.value() * MAX_PERCENT / 100;
                             rSpacing.bHasValue = true;
                         }
                     }
@@ -350,15 +350,15 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 if (oLineSpacing.has_value())
                 {
                     TextSpacing& rLineSpacing = mrTextParagraphProperties.getLineSpacing();
-                    if( !oLineRule.has_value() || oLineRule.get() == "auto" )
+                    if( !oLineRule.has_value() || oLineRule.value() == "auto" )
                     {
                         rLineSpacing.nUnit = TextSpacing::Unit::Percent;
-                        rLineSpacing.nValue = oLineSpacing.get() * MAX_PERCENT / 240;
+                        rLineSpacing.nValue = oLineSpacing.value() * MAX_PERCENT / 240;
                     }
                     else
                     {
                         rLineSpacing.nUnit = TextSpacing::Unit::Points;
-                        rLineSpacing.nValue = convertTwipToMm100(oLineSpacing.get());
+                        rLineSpacing.nValue = convertTwipToMm100(oLineSpacing.value());
                     }
                     rLineSpacing.bHasValue = true;
                 }

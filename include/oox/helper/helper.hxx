@@ -180,7 +180,7 @@ public:
     bool         has_value() const { return mbHasValue; }
     bool         operator!() const { return !mbHasValue; }
 
-    const Type&  get() const { return maValue; }
+    const Type&  value() const { return maValue; }
     const Type&  value_or( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }
 
     Type&        operator*() { assert(mbHasValue); return maValue; }
@@ -201,7 +201,7 @@ template< typename Type >
 void assignIfUsed( OptValue<Type>& rDestValue, const OptValue<Type>& rSourceValue )
 {
     if( rSourceValue.has_value() )
-        rDestValue = rSourceValue.get();
+        rDestValue = rSourceValue.value();
 }
 
 

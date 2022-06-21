@@ -38,8 +38,8 @@ TextFieldContext::TextFieldContext( ContextHandler2Helper const & rParent,
         , mrTextField( rTextField )
         , mbIsInText( false )
 {
-    mrTextField.setUuid( rAttributes.getString( XML_id ).get() );
-    mrTextField.setType( rAttributes.getString( XML_type ).get() );
+    mrTextField.setUuid( rAttributes.getString( XML_id ).value() );
+    mrTextField.setType( rAttributes.getString( XML_type ).value() );
 }
 
 void TextFieldContext::onEndElement( )

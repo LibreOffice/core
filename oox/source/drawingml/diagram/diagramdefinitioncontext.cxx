@@ -37,14 +37,14 @@ DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper const 
     : ContextHandler2( rParent )
     , mpLayout( pLayout )
 {
-    mpLayout->setDefStyle( rAttributes.getString( XML_defStyle ).get() );
-    OUString sValue = rAttributes.getString( XML_minVer ).get();
+    mpLayout->setDefStyle( rAttributes.getString( XML_defStyle ).value() );
+    OUString sValue = rAttributes.getString( XML_minVer ).value();
     if( sValue.isEmpty() )
     {
         sValue = "http://schemas.openxmlformats.org/drawingml/2006/diagram";
     }
     mpLayout->setMinVer( sValue );
-    mpLayout->setUniqueId( rAttributes.getString( XML_uniqueId ).get() );
+    mpLayout->setUniqueId( rAttributes.getString( XML_uniqueId ).value() );
 }
 
 DiagramDefinitionContext::~DiagramDefinitionContext()
@@ -61,18 +61,18 @@ DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
     switch( aElement )
     {
     case DGM_TOKEN( title ):
-        mpLayout->setTitle( rAttribs.getString( XML_val ).get() );
+        mpLayout->setTitle( rAttribs.getString( XML_val ).value() );
         break;
     case DGM_TOKEN( desc ):
-        mpLayout->setDesc( rAttribs.getString( XML_val ).get() );
+        mpLayout->setDesc( rAttribs.getString( XML_val ).value() );
         break;
     case DGM_TOKEN( layoutNode ):
     {
         LayoutNodePtr pNode = std::make_shared<LayoutNode>(mpLayout->getDiagram());
         mpLayout->getNode() = pNode;
         pNode->setChildOrder( rAttribs.getToken( XML_chOrder, XML_b ) );
-        pNode->setMoveWith( rAttribs.getString( XML_moveWith ).get() );
-        pNode->setStyleLabel( rAttribs.getString( XML_styleLbl ).get() );
+        pNode->setMoveWith( rAttribs.getString( XML_moveWith ).value() );
+        pNode->setStyleLabel( rAttribs.getString( XML_styleLbl ).value() );
         return new LayoutNodeContext( *this, rAttribs, pNode );
     }
      case DGM_TOKEN( clrData ):

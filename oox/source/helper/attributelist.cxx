@@ -243,7 +243,7 @@ OptValue< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
         case XML_off:   return OptValue< bool >( false );
     }
     OptValue< sal_Int32 > onValue = getInteger( nAttrToken );
-    return onValue.has_value() ? OptValue< bool >( onValue.get() != 0 ) : OptValue< bool >();
+    return onValue.has_value() ? OptValue< bool >( onValue.value() != 0 ) : OptValue< bool >();
 }
 
 OptValue< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) const

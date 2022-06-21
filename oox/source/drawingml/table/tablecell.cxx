@@ -64,7 +64,7 @@ static void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
         sal_Int32 nPropId )
 {
     BorderLine2 aBorderLine;
-    if ( rLineProperties.maLineFill.moFillType.has_value() && rLineProperties.maLineFill.moFillType.get() != XML_noFill )
+    if ( rLineProperties.maLineFill.moFillType.has_value() && rLineProperties.maLineFill.moFillType.value() != XML_noFill )
     {
         Color aColor = rLineProperties.maLineFill.getBestSolidColor();
         aBorderLine.Color = sal_Int32(aColor.getColor( rFilterBase.getGraphicHelper() ));
@@ -84,7 +84,7 @@ static void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
 
     if ( rLineProperties.moPresetDash.has_value() )
     {
-        switch ( rLineProperties.moPresetDash.get() )
+        switch ( rLineProperties.moPresetDash.value() )
         {
         case XML_dot:
         case XML_sysDot:
@@ -502,7 +502,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
         applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesInsideV, PROP_RightBorder );
     }
 
-    if (rProperties.getBgColor().isUsed() && !maFillProperties.maFillColor.isUsed() && maFillProperties.moFillType.get() == XML_noFill)
+    if (rProperties.getBgColor().isUsed() && !maFillProperties.maFillColor.isUsed() && maFillProperties.moFillType.value() == XML_noFill)
     {
         maFillProperties.moFillType = XML_solidFill;
         maFillProperties.maFillColor = rProperties.getBgColor();

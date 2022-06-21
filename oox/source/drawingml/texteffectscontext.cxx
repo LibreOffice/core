@@ -119,7 +119,7 @@ void TextEffectsContext::pushAttributeToGrabBag (sal_Int32 aAttributeId, const O
 {
     if (!rAttribs.hasAttribute(aAttributeId))
         return;
-    OUString aString = rAttribs.getString(aAttributeId).get();
+    OUString aString = rAttribs.getString(aAttributeId).value();
     mpGrabBagStack->addString(rElementName, aString);
 }
 

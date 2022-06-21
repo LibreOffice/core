@@ -197,12 +197,12 @@ void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const Graphic
 {
     LineProperties& rLP = rShape.getLineProperties();
     // no fill has the same effect as no border so skip it
-    if (rLP.maLineFill.moFillType.get() == XML_noFill)
+    if (rLP.maLineFill.moFillType.value() == XML_noFill)
         return;
 
     if (rLP.moLineWidth.has_value())
     {
-        sal_Int32 nWidth = convertEmuToHmm(rLP.moLineWidth.get());
+        sal_Int32 nWidth = convertEmuToHmm(rLP.moLineWidth.value());
         rPropSet.setProperty(PROP_LabelBorderWidth, uno::Any(nWidth));
         rPropSet.setProperty(PROP_LabelBorderStyle, uno::Any(drawing::LineStyle_SOLID));
     }
@@ -215,7 +215,7 @@ void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHe
 {
     FillProperties& rFP = rShape.getFillProperties();
 
-    if (rFP.moFillType.has_value() && rFP.moFillType.get() == XML_solidFill)
+    if (rFP.moFillType.has_value() && rFP.moFillType.value() == XML_solidFill)
     {
         rPropSet.setProperty(PROP_LabelFillStyle, drawing::FillStyle_SOLID);
 
@@ -223,13 +223,13 @@ void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHe
         ::Color nColor = aColor.getColor(rGraphicHelper);
         rPropSet.setProperty(PROP_LabelFillColor, uno::Any(nColor));
     }
-    else if(rFP.moFillType.has_value() && rFP.moFillType.get() == XML_pattFill)
+    else if(rFP.moFillType.has_value() && rFP.moFillType.value() == XML_pattFill)
     {
         rPropSet.setProperty(PROP_LabelFillStyle, drawing::FillStyle_HATCH);
         rPropSet.setProperty(PROP_LabelFillBackground, true);
 
         Color aHatchColor( rFP.maPatternProps.maPattFgColor );
-        drawing::Hatch aHatch = createHatch(rFP.maPatternProps.moPattPreset.get(), aHatchColor.getColor(rGraphicHelper, 0));
+        drawing::Hatch aHatch = createHatch(rFP.maPatternProps.moPattPreset.value(), aHatchColor.getColor(rGraphicHelper, 0));
 
         OUString sHatchName = rModelObjHelper.insertFillHatch(aHatch);
         rPropSet.setProperty(PROP_LabelFillHatchName, sHatchName);
@@ -360,8 +360,8 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
 
                         if (eType == DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_CELLRANGE && oaCellRange.has_value())
                         {
-                            xCustomLabel->setCellRange( oaCellRange.get() );
-                            xCustomLabel->setString( oaLabelText.get() );
+                            xCustomLabel->setCellRange( oaCellRange.value() );
+                            xCustomLabel->setString( oaLabelText.value() );
                             xCustomLabel->setDataLabelsRange( true );
                         }
                         else
@@ -671,13 +671,13 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             bool hasIntercept = mrModel.mfIntercept.has_value();
             aPropSet.setProperty( PROP_ForceIntercept, hasIntercept);
             if (hasIntercept)
-                aPropSet.setProperty( PROP_InterceptValue,  mrModel.mfIntercept.get());
+                aPropSet.setProperty( PROP_InterceptValue,  mrModel.mfIntercept.value());
 
             // Extrapolation
             if (mrModel.mfForward.has_value())
-                aPropSet.setProperty( PROP_ExtrapolateForward, mrModel.mfForward.get() );
+                aPropSet.setProperty( PROP_ExtrapolateForward, mrModel.mfForward.value() );
             if (mrModel.mfBackward.has_value())
-                aPropSet.setProperty( PROP_ExtrapolateBackward, mrModel.mfBackward.get() );
+                aPropSet.setProperty( PROP_ExtrapolateBackward, mrModel.mfBackward.value() );
 
             // trendline formatting
             getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_TRENDLINE );
@@ -725,14 +725,14 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
 
         // data point marker
-        if( ( mrModel.monMarkerSymbol.has_value() && mrModel.monMarkerSymbol.get() != rSeries.mnMarkerSymbol ) ||
-            ( mrModel.monMarkerSize.has_value() && mrModel.monMarkerSize.get() != rSeries.mnMarkerSize ) )
+        if( ( mrModel.monMarkerSymbol.has_value() && mrModel.monMarkerSymbol.value() != rSeries.mnMarkerSymbol ) ||
+            ( mrModel.monMarkerSize.has_value() && mrModel.monMarkerSize.value() != rSeries.mnMarkerSize ) )
             rTypeGroup.convertMarker( aPropSet, mrModel.monMarkerSymbol.value_or( rSeries.mnMarkerSymbol ),
                     mrModel.monMarkerSize.value_or( rSeries.mnMarkerSize ), mrModel.mxMarkerProp );
 
         // data point pie explosion
-        if( mrModel.monExplosion.has_value() && mrModel.monExplosion.get() != rSeries.mnExplosion )
-            rTypeGroup.convertPieExplosion( aPropSet, mrModel.monExplosion.get() );
+        if( mrModel.monExplosion.has_value() && mrModel.monExplosion.value() != rSeries.mnExplosion )
+            rTypeGroup.convertPieExplosion( aPropSet, mrModel.monExplosion.value() );
 
         // point formatting
         if( mrModel.mxShapeProp.is() )

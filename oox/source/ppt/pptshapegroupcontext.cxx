@@ -69,15 +69,15 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
         // don't override SmartArt properties for embedded drawing's spTree
         mpGroupShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
         if (mpGroupShapePtr->getId().isEmpty())
-            mpGroupShapePtr->setId(rAttribs.getString(XML_id).get());
+            mpGroupShapePtr->setId(rAttribs.getString(XML_id).value());
         if (mpGroupShapePtr->getName().isEmpty())
-            mpGroupShapePtr->setName( rAttribs.getString( XML_name ).get() );
+            mpGroupShapePtr->setName( rAttribs.getString( XML_name ).value() );
         break;
     }
     case PPT_TOKEN( ph ):
         mpGroupShapePtr->setSubType( rAttribs.getToken( XML_type, FastToken::DONTKNOW ) );
         if( rAttribs.hasAttribute( XML_idx ) )
-            mpGroupShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).get().toInt32() );
+            mpGroupShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).value().toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 
@@ -106,7 +106,7 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
                 pShape->getFillProperties().moFillType = XML_noFill;
                 pShape->getFillProperties().moUseBgFill = true;
             }
-            pShape->setModelId(rAttribs.getString( XML_modelId ).get());
+            pShape->setModelId(rAttribs.getString( XML_modelId ).value());
             return new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape );
         }
     case PPT_TOKEN( pic ):          // CT_Picture

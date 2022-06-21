@@ -89,27 +89,27 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         if (rFont.moName.has_value())
         {
             aPropertyValue.Name = "CharFontName";
-            aPropertyValue.Value <<= rFont.moName.get();
+            aPropertyValue.Value <<= rFont.moName.value();
             aPropVec.push_back(aPropertyValue);
 
             aPropertyValue.Name = "CharFontNameAsian";
-            aPropertyValue.Value <<= rFont.moNameAsian.get();
+            aPropertyValue.Value <<= rFont.moNameAsian.value();
             aPropVec.push_back(aPropertyValue);
 
             aPropertyValue.Name = "CharFontNameComplex";
-            aPropertyValue.Value <<= rFont.moNameComplex.get();
+            aPropertyValue.Value <<= rFont.moNameComplex.value();
             aPropVec.push_back(aPropertyValue);
         }
         if (rFont.mobBold.has_value())
         {
             aPropertyValue.Name = "CharWeight";
-            aPropertyValue.Value <<= rFont.mobBold.get() ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
+            aPropertyValue.Value <<= rFont.mobBold.value() ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
             aPropVec.push_back(aPropertyValue);
         }
         if (rFont.monSize.has_value())
         {
             aPropertyValue.Name = "CharHeight";
-            aPropertyValue.Value <<= double(rFont.monSize.get()) / 2.;
+            aPropertyValue.Value <<= double(rFont.monSize.value()) / 2.;
             aPropVec.push_back(aPropertyValue);
         }
         if (rFont.monSpacing.has_value())
@@ -118,15 +118,15 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
             // Value is not converted to mm100: SvxKerningItem::PutValue() gets
             // called with nMemberId = 0, so no mm100 -> twips conversion will
             // be done there.
-            aPropertyValue.Value <<= sal_Int16(rFont.monSpacing.get());
+            aPropertyValue.Value <<= sal_Int16(rFont.monSpacing.value());
             aPropVec.push_back(aPropertyValue);
         }
         if (rParagraph.moParaAdjust.has_value())
         {
             style::ParagraphAdjust eAdjust = style::ParagraphAdjust_LEFT;
-            if (rParagraph.moParaAdjust.get() == "center")
+            if (rParagraph.moParaAdjust.value() == "center")
                 eAdjust = style::ParagraphAdjust_CENTER;
-            else if (rParagraph.moParaAdjust.get() == "right")
+            else if (rParagraph.moParaAdjust.value() == "right")
                 eAdjust = style::ParagraphAdjust_RIGHT;
 
             aPropertyValue.Name = "ParaAdjust";
@@ -139,7 +139,7 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         if (sParaStyle.isEmpty() )
         {
             if ( rParagraph.moParaStyleName.has_value() )
-                sParaStyle = rParagraph.moParaStyleName.get();
+                sParaStyle = rParagraph.moParaStyleName.value();
             if ( bAmbiguousStyle )
                 bAmbiguousStyle = false; // both empty parastyle and ambiguous can only be true at the first paragraph
             else
@@ -149,13 +149,13 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         {
             if ( !rParagraph.moParaStyleName.has_value() )
                 bAmbiguousStyle = true; // ambiguous if both specified and default style used.
-            else if ( rParagraph.moParaStyleName.get() != sParaStyle )
+            else if ( rParagraph.moParaStyleName.value() != sParaStyle )
                 bAmbiguousStyle = true; // ambiguous if two different styles specified.
         }
         if (rFont.moColor.has_value())
         {
             aPropertyValue.Name = "CharColor";
-            aPropertyValue.Value <<= rFont.moColor.get().toUInt32(16);
+            aPropertyValue.Value <<= rFont.moColor.value().toUInt32(16);
             aPropVec.push_back(aPropertyValue);
         }
         xTextAppend->appendTextPortion(portion.maText, comphelper::containerToSequence(aPropVec));

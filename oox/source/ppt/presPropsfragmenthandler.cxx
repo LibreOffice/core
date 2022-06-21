@@ -76,10 +76,10 @@ core::ContextHandlerRef PresPropsFragmentHandler::onCreateContext(sal_Int32 aEle
             m_bTiming = rAttribs.getBool(XML_useTimings, true);
             return this;
         case PPT_TOKEN(custShow):
-            m_sId = rAttribs.getString(XML_id).get();
+            m_sId = rAttribs.getString(XML_id).value();
             return this;
         case PPT_TOKEN(sldRg):
-            m_sSt = rAttribs.getString(XML_st).get();
+            m_sSt = rAttribs.getString(XML_st).value();
             return this;
     }
     return this;

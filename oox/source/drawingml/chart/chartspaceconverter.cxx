@@ -212,7 +212,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         if( mrModel.mxPlotArea.is() && mrModel.mxPlotArea->maAxes.size() > 0 &&
             mrModel.mxPlotArea->maAxes[0]->monBaseTimeUnit.has_value() )
         {
-            bIsMonthBasedTimeUnit = mrModel.mxPlotArea->maAxes[0]->monBaseTimeUnit.get() == XML_months;
+            bIsMonthBasedTimeUnit = mrModel.mxPlotArea->maAxes[0]->monBaseTimeUnit.value() == XML_months;
         }
 
         if (!bIsMonthBasedTimeUnit) switch( mrModel.mnDispBlanksAs )

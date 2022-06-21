@@ -345,7 +345,7 @@ void FillProperties::assignUsed( const FillProperties& rSourceProps )
 Color FillProperties::getBestSolidColor() const
 {
     Color aSolidColor;
-    if( moFillType.has_value() ) switch( moFillType.get() )
+    if( moFillType.has_value() ) switch( moFillType.value() )
     {
         case XML_solidFill:
             aSolidColor = maFillColor;
@@ -375,8 +375,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         return;
 
     FillStyle eFillStyle = FillStyle_NONE;
-    OSL_ASSERT((moFillType.get() & sal_Int32(0xFFFF0000))==0);
-    switch( moFillType.get() )
+    OSL_ASSERT((moFillType.value() & sal_Int32(0xFFFF0000))==0);
+    switch( moFillType.value() )
     {
         case XML_noFill:
         {
@@ -444,7 +444,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     aGradient.YOffset = getLimitedValue<sal_Int16, sal_Int32>(
                         nCenterY / PER_PERCENT, 0, 100);
 
-                    if( maGradientProps.moGradientPath.get() == XML_circle )
+                    if( maGradientProps.moGradientPath.value() == XML_circle )
                     {
                         // Style should be radial at least when the horizontal center is at 50%.
                         // Otherwise import as a linear gradient, because it is the most similar to the MSO radial style.
@@ -785,7 +785,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     }
                     else if ( eBitmapMode == BitmapMode_STRETCH && maBlipProps.moFillRect.has_value() )
                     {
-                        geometry::IntegerRectangle2D aFillRect( maBlipProps.moFillRect.get() );
+                        geometry::IntegerRectangle2D aFillRect( maBlipProps.moFillRect.value() );
                         awt::Size aOriginalSize( rGraphicHelper.getOriginalSize( xGraphic ) );
                         if ( aOriginalSize.Width && aOriginalSize.Height )
                         {
@@ -814,7 +814,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 }
 
                 if (maBlipProps.moAlphaModFix.has_value())
-                    rPropMap.setProperty(ShapeProperty::FillTransparency, static_cast<sal_Int16>(100 - (maBlipProps.moAlphaModFix.get() / PER_PERCENT)));
+                    rPropMap.setProperty(ShapeProperty::FillTransparency, static_cast<sal_Int16>(100 - (maBlipProps.moAlphaModFix.value() / PER_PERCENT)));
             }
         break;
 
@@ -826,7 +826,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 if( aColor.isUsed() && maPatternProps.moPattPreset.has_value() )
                 {
                     eFillStyle = FillStyle_HATCH;
-                    rPropMap.setProperty( ShapeProperty::FillHatch, createHatch( maPatternProps.moPattPreset.get(), aColor.getColor( rGraphicHelper, nPhClr ) ) );
+                    rPropMap.setProperty( ShapeProperty::FillHatch, createHatch( maPatternProps.moPattPreset.value(), aColor.getColor( rGraphicHelper, nPhClr ) ) );
                     if( aColor.hasTransparency() )
                         rPropMap.setProperty( ShapeProperty::FillTransparency, aColor.getTransparency() );
 
@@ -899,7 +899,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         // cropping
         if ( maBlipProps.moClipRect.has_value() )
         {
-            geometry::IntegerRectangle2D oClipRect( maBlipProps.moClipRect.get() );
+            geometry::IntegerRectangle2D oClipRect( maBlipProps.moClipRect.value() );
             awt::Size aOriginalSize( rGraphicHelper.getOriginalSize( xGraphic ) );
             if ( aOriginalSize.Width && aOriginalSize.Height )
             {
@@ -955,7 +955,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
 
         if ( maBlipProps.moAlphaModFix.has_value() )
         {
-            rPropMap.setProperty(PROP_Transparency, static_cast<sal_Int16>(100 - (maBlipProps.moAlphaModFix.get() / PER_PERCENT)));
+            rPropMap.setProperty(PROP_Transparency, static_cast<sal_Int16>(100 - (maBlipProps.moAlphaModFix.value() / PER_PERCENT)));
         }
     }
     rPropMap.setProperty(PROP_GraphicColorMode, eColorMode);

@@ -50,7 +50,7 @@ namespace oox::drawingml {
             {
                 OUString sValue;
                 TabStop aTabStop;
-                sValue = rAttribs.getString( XML_pos ).get();
+                sValue = rAttribs.getString( XML_pos ).value();
                 if( !sValue.isEmpty() )
                 {
                     aTabStop.Position = GetCoordinate( sValue );

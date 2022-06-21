@@ -59,8 +59,8 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
         case PPT_TOKEN( cNvPr ):
         {
             mpShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
-            mpShapePtr->setId( rAttribs.getString( XML_id ).get() );
-            mpShapePtr->setName( rAttribs.getString( XML_name ).get() );
+            mpShapePtr->setId( rAttribs.getString( XML_id ).value() );
+            mpShapePtr->setName( rAttribs.getString( XML_name ).value() );
             break;
         }
         case PPT_TOKEN( ph ):
@@ -74,7 +74,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
 
             if( rAttribs.hasAttribute( XML_idx ) )
             {
-                sal_Int32 nSubTypeIndex = rAttribs.getString( XML_idx ).get().toInt32();
+                sal_Int32 nSubTypeIndex = rAttribs.getString( XML_idx ).value().toInt32();
                 mpShapePtr->setSubTypeIndex( nSubTypeIndex );
 
                 if(!oSubType.has_value() && pMasterPersist)

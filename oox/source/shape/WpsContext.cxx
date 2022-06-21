@@ -128,7 +128,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     {
                         OptValue<OUString> oValue = rAttribs.getString(aInsets[i]);
                         if (oValue.has_value())
-                            oInsets[i] = oox::drawingml::GetCoordinate(oValue.get());
+                            oInsets[i] = oox::drawingml::GetCoordinate(oValue.value());
                         else
                             // Defaults from the spec: left/right: 91440 EMU, top/bottom: 45720 EMU
                             oInsets[i]
@@ -241,7 +241,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                         OptValue<OUString> oValue = rAttribs.getString(aInsets[i]);
                         if (oValue.has_value())
                             pTextBody->getTextProperties().moInsets[i]
-                                = oox::drawingml::GetCoordinate(oValue.get());
+                                = oox::drawingml::GetCoordinate(oValue.value());
                         else
                             // Defaults from the spec: left/right: 91440 EMU, top/bottom: 45720 EMU
                             pTextBody->getTextProperties().moInsets[i]
@@ -280,7 +280,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 if (xPropertySet.is())
                 {
                     oox::OptValue<OUString> presetShapeName = rAttribs.getString(XML_prst);
-                    const OUString& preset = presetShapeName.get();
+                    const OUString& preset = presetShapeName.value();
                     comphelper::SequenceAsHashMap aCustomShapeGeometry(
                         xPropertySet->getPropertyValue("CustomShapeGeometry"));
                     aCustomShapeGeometry["PresetTextWarp"] <<= preset;
@@ -302,7 +302,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 if (id.has_value())
                 {
                     oox::drawingml::LinkedTxbxAttr linkedTxtBoxAttr;
-                    linkedTxtBoxAttr.id = id.get().toInt32();
+                    linkedTxtBoxAttr.id = id.value().toInt32();
                     mpShapePtr->setTxbxHasLinkedTxtBox(true);
                     mpShapePtr->setLinkedTxbxAttributes(linkedTxtBoxAttr);
                 }
@@ -321,8 +321,8 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             if (id.has_value() && seq.has_value())
             {
                 oox::drawingml::LinkedTxbxAttr linkedTxtBoxAttr;
-                linkedTxtBoxAttr.id = id.get().toInt32();
-                linkedTxtBoxAttr.seq = seq.get().toInt32();
+                linkedTxtBoxAttr.id = id.value().toInt32();
+                linkedTxtBoxAttr.seq = seq.value().toInt32();
                 mpShapePtr->setTxbxHasLinkedTxtBox(true);
                 mpShapePtr->setLinkedTxbxAttributes(linkedTxtBoxAttr);
             }

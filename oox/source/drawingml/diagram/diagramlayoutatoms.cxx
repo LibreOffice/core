@@ -1516,12 +1516,12 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                                 if (nDir == XML_fromL || nDir == XML_fromR)
                                 {
                                     oox::OptValue<sal_Int32> oWidth = findProperty(aProperties, aCurrShape->getInternalName(), XML_w);
-                                    bScaleDownEmptySpacing = oWidth.has_value() && oWidth.get() > 0;
+                                    bScaleDownEmptySpacing = oWidth.has_value() && oWidth.value() > 0;
                                 }
                                 if (!bScaleDownEmptySpacing && (nDir == XML_fromT || nDir == XML_fromB))
                                 {
                                     oox::OptValue<sal_Int32> oHeight = findProperty(aProperties, aCurrShape->getInternalName(), XML_h);
-                                    bScaleDownEmptySpacing = oHeight.has_value() && oHeight.get() > 0;
+                                    bScaleDownEmptySpacing = oHeight.has_value() && oHeight.value() > 0;
                                 }
                                 if (bScaleDownEmptySpacing && aCurrShape->getChildren().empty())
                                 {
@@ -1572,9 +1572,9 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                 oox::OptValue<sal_Int32> oHeight = findProperty(aProperties, aCurrShape->getInternalName(), XML_h);
                 awt::Size aSize = aChildSize;
                 if (oWidth.has_value())
-                    aSize.Width = oWidth.get();
+                    aSize.Width = oWidth.value();
                 if (oHeight.has_value())
-                    aSize.Height = oHeight.get();
+                    aSize.Height = oHeight.value();
                 aTotalSize.Width += aSize.Width;
                 aTotalSize.Height += aSize.Height;
             }
@@ -1599,9 +1599,9 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
 
                 awt::Size aSize = aChildSize;
                 if (oWidth.has_value())
-                    aSize.Width = oWidth.get();
+                    aSize.Width = oWidth.value();
                 if (oHeight.has_value())
-                    aSize.Height = oHeight.get();
+                    aSize.Height = oHeight.value();
                 if (aChildrenToShrink.empty()
                     || aChildrenToShrink.find(aCurrShape->getInternalName())
                            != aChildrenToShrink.end())

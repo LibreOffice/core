@@ -55,12 +55,12 @@ namespace {
 
 void lclSetValueOrClearAny( Any& orAny, const OptValue< double >& rofValue )
 {
-    if( rofValue.has_value() ) orAny <<= rofValue.get(); else orAny.clear();
+    if( rofValue.has_value() ) orAny <<= rofValue.value(); else orAny.clear();
 }
 
 bool lclIsLogarithmicScale( const AxisModel& rAxisModel )
 {
-    return rAxisModel.mofLogBase.has_value() && (2.0 <= rAxisModel.mofLogBase.get()) && (rAxisModel.mofLogBase.get() <= 1000.0);
+    return rAxisModel.mofLogBase.has_value() && (2.0 <= rAxisModel.mofLogBase.value()) && (rAxisModel.mofLogBase.value() <= 1000.0);
 }
 
 sal_Int32 lclGetApiTimeUnit( sal_Int32 nTimeUnit )
@@ -78,8 +78,8 @@ sal_Int32 lclGetApiTimeUnit( sal_Int32 nTimeUnit )
 
 void lclConvertTimeInterval( Any& orInterval, const OptValue< double >& rofUnit, sal_Int32 nTimeUnit )
 {
-    if( rofUnit.has_value() && (1.0 <= rofUnit.get()) && (rofUnit.get() <= SAL_MAX_INT32) )
-        orInterval <<= css::chart::TimeInterval( static_cast< sal_Int32 >( rofUnit.get() ), lclGetApiTimeUnit( nTimeUnit ) );
+    if( rofUnit.has_value() && (1.0 <= rofUnit.value()) && (rofUnit.value() <= SAL_MAX_INT32) )
+        orInterval <<= css::chart::TimeInterval( static_cast< sal_Int32 >( rofUnit.value() ), lclGetApiTimeUnit( nTimeUnit ) );
     else
         orInterval.clear();
 }
@@ -265,7 +265,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                     lclConvertTimeInterval( aScaleData.TimeIncrement.MinorTimeInterval, mrModel.mofMinorUnit, mrModel.mnMinorTimeUnit );
                     // base time unit
                     if( mrModel.monBaseTimeUnit.has_value() )
-                        aScaleData.TimeIncrement.TimeResolution <<= lclGetApiTimeUnit( mrModel.monBaseTimeUnit.get() );
+                        aScaleData.TimeIncrement.TimeResolution <<= lclGetApiTimeUnit( mrModel.monBaseTimeUnit.value() );
                     else
                         aScaleData.TimeIncrement.TimeResolution.clear();
                 }
@@ -276,7 +276,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                     if (mrModel.mxTextProp.is()
                         && mrModel.mxTextProp->getTextProperties().moRotation.has_value())
                         bTextOverlap
-                            = mrModel.mxTextProp->getTextProperties().moRotation.get() == 0;
+                            = mrModel.mxTextProp->getTextProperties().moRotation.value() == 0;
                     aAxisProp.setProperty(PROP_TextOverlap, bTextOverlap);
                     /* do not break text into several lines unless the rotation is 0 degree,
                        or the rotation is 90 degree and the inner size of the chart is not fixed,
@@ -309,7 +309,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                 // major increment
                 IncrementData& rIncrementData = aScaleData.IncrementData;
                 if( mrModel.mofMajorUnit.has_value() && aScaleData.Scaling.is() )
-                    rIncrementData.Distance <<= aScaleData.Scaling->doScaling( mrModel.mofMajorUnit.get() );
+                    rIncrementData.Distance <<= aScaleData.Scaling->doScaling( mrModel.mofMajorUnit.value() );
                 else
                     lclSetValueOrClearAny( rIncrementData.Distance, mrModel.mofMajorUnit );
                 // minor increment
@@ -322,9 +322,9 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                     if( mrModel.mofMinorUnit.has_value() )
                         rIntervalCount <<= sal_Int32( 9 );
                 }
-                else if( mrModel.mofMajorUnit.has_value() && mrModel.mofMinorUnit.has_value() && (0.0 < mrModel.mofMinorUnit.get()) && (mrModel.mofMinorUnit.get() <= mrModel.mofMajorUnit.get()) )
+                else if( mrModel.mofMajorUnit.has_value() && mrModel.mofMinorUnit.has_value() && (0.0 < mrModel.mofMinorUnit.value()) && (mrModel.mofMinorUnit.value() <= mrModel.mofMajorUnit.value()) )
                 {
-                    double fCount = mrModel.mofMajorUnit.get() / mrModel.mofMinorUnit.get() + 0.5;
+                    double fCount = mrModel.mofMajorUnit.value() / mrModel.mofMinorUnit.value() + 0.5;
                     if( (1.0 <= fCount) && (fCount < 1001.0) )
                         rIntervalCount <<= static_cast< sal_Int32 >( fCount );
                 }
@@ -377,7 +377,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
 
         // calculate automatic origin depending on scaling mode of crossing axis
         bool bCrossingLogScale = pCrossingAxis && lclIsLogarithmicScale( *pCrossingAxis );
-        double fCrossingPos = bManualCrossing ? mrModel.mofCrossesAt.get() : (bCrossingLogScale ? 1.0 : 0.0);
+        double fCrossingPos = bManualCrossing ? mrModel.mofCrossesAt.value() : (bCrossingLogScale ? 1.0 : 0.0);
         aAxisProp.setProperty( PROP_CrossoverValue, fCrossingPos );
 
         // axis title ---------------------------------------------------------

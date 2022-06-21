@@ -216,14 +216,14 @@ ContextHandlerRef ThemeElementsContext::onCreateContext( sal_Int32 nElement, con
         case A_TOKEN( clrScheme ):  // CT_ColorScheme
             if (rAttribs.hasAttribute(XML_name))
             {
-                mrTheme.getClrScheme().SetName(rAttribs.getString(XML_name).get());
+                mrTheme.getClrScheme().SetName(rAttribs.getString(XML_name).value());
             }
             return new clrSchemeContext( *this, mrTheme.getClrScheme() );
         case A_TOKEN( fontScheme ): // CT_FontScheme
             return new FontSchemeContext( *this, mrTheme.getFontScheme() );
 
         case A_TOKEN( fmtScheme ):  // CT_StyleMatrix
-            mrTheme.setStyleName( rAttribs.getString( XML_name ).get() );
+            mrTheme.setStyleName( rAttribs.getString( XML_name ).value() );
             return this;
 
         case A_TOKEN( fillStyleLst ):   // CT_FillStyleList

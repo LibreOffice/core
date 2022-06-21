@@ -42,7 +42,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
     , maProperties(aProperties)
 {
     OUString sURL, sHref;
-    OUString aRelId = rAttribs.getString( R_TOKEN( id ) ).get();
+    OUString aRelId = rAttribs.getString( R_TOKEN( id ) ).value();
     if ( !aRelId.isEmpty() )
     {
         sHref = getRelations().getExternalTargetFromRelId( aRelId );
@@ -56,13 +56,13 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
             sURL = getRelations().getInternalTargetFromRelId( aRelId );
         }
     }
-    OUString sTooltip = rAttribs.getString( R_TOKEN( tooltip ) ).get();
+    OUString sTooltip = rAttribs.getString( R_TOKEN( tooltip ) ).value();
     if ( !sTooltip.isEmpty() )
         maProperties.setProperty(PROP_Representation, sTooltip);
-    OUString sFrame = rAttribs.getString( R_TOKEN( tgtFrame ) ).get();
+    OUString sFrame = rAttribs.getString( R_TOKEN( tgtFrame ) ).value();
     if( !sFrame.isEmpty() )
         maProperties.setProperty(PROP_TargetFrame, sFrame);
-    OUString aAction = rAttribs.getString( XML_action ).get();
+    OUString aAction = rAttribs.getString( XML_action ).value();
     if ( !aAction.isEmpty() )
     {
         // reserved values of the unrestricted string aAction:

@@ -643,17 +643,17 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
         std::shared_ptr<TextRun> pRun = pParagraph->getRuns()[0];
         TextCharacterProperties& pProperties = pRun->getTextCharacterProperties();
 
-        if (pProperties.moBold.has_value() && pProperties.moBold.get())
+        if (pProperties.moBold.has_value() && pProperties.moBold.value())
         {
             xSet->setPropertyValue( UNO_NAME_CHAR_WEIGHT, uno::Any( css::awt::FontWeight::BOLD ) );
         }
-        if (pProperties.moItalic.has_value() && pProperties.moItalic.get())
+        if (pProperties.moItalic.has_value() && pProperties.moItalic.value())
         {
             xSet->setPropertyValue( UNO_NAME_CHAR_POSTURE, uno::Any( css::awt::FontSlant::FontSlant_ITALIC ) );
         }
         if (pProperties.moHeight.has_value())
         {
-            sal_Int32 nHeight = pProperties.moHeight.get() / 100;
+            sal_Int32 nHeight = pProperties.moHeight.value() / 100;
             xSet->setPropertyValue( UNO_NAME_CHAR_HEIGHT, uno::Any( nHeight ) );
         }
         if (pProperties.maFillProperties.maFillColor.isUsed())
@@ -1240,7 +1240,7 @@ Reference< XShape > const & Shape::createAndInsert(
             aShapeProps.assignUsed( mpTextBody->getTextProperties().maPropertyMap );
             // Push char properties as well - specifically useful when this is a placeholder
             if( mpMasterTextListStyle &&  mpMasterTextListStyle->getListStyle()[0].getTextCharacterProperties().moHeight.has_value() )
-                aShapeProps.setProperty(PROP_CharHeight, GetFontHeight( mpMasterTextListStyle->getListStyle()[0].getTextCharacterProperties().moHeight.get() ));
+                aShapeProps.setProperty(PROP_CharHeight, GetFontHeight( mpMasterTextListStyle->getListStyle()[0].getTextCharacterProperties().moHeight.value() ));
         }
 
         // applying properties
@@ -1259,7 +1259,7 @@ Reference< XShape > const & Shape::createAndInsert(
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
 
         FillProperties aFillProperties = getActualFillProperties(pTheme, &rShapeOrParentShapeFillProps);
-        if (getFillProperties().moFillType.has_value() && getFillProperties().moFillType.get() == XML_grpFill)
+        if (getFillProperties().moFillType.has_value() && getFillProperties().moFillType.value() == XML_grpFill)
             getFillProperties().assignUsed(aFillProperties);
         if(!bIsCroppedGraphic)
             aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr, nFillPhClrTheme, mbFlipH, mbFlipV, bIsCustomShape );
@@ -1359,7 +1359,7 @@ Reference< XShape > const & Shape::createAndInsert(
                         css::table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(PropertyMap::getPropertyName(nBorder)).get<css::table::BorderLine2>();
                         aBorderLine.Color = aShapeProps.getProperty(PROP_LineColor).get<sal_Int32>();
                         if (aLineProperties.moLineWidth.has_value())
-                            aBorderLine.LineWidth = convertEmuToHmm(aLineProperties.moLineWidth.get());
+                            aBorderLine.LineWidth = convertEmuToHmm(aLineProperties.moLineWidth.value());
                         aShapeProps.setProperty(nBorder, aBorderLine);
                     }
                     aShapeProps.erase(PROP_LineColor);
@@ -1413,7 +1413,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     if (aEffectProperties.maShadow.moShadowDir.has_value())
                     {
                         css::table::ShadowLocation nLocation = css::table::ShadowLocation_NONE;
-                        switch (aEffectProperties.maShadow.moShadowDir.get())
+                        switch (aEffectProperties.maShadow.moShadowDir.value())
                         {
                         case 13500000:
                             nLocation = css::table::ShadowLocation_TOP_LEFT;
@@ -1685,7 +1685,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setMirroredY( true );
             if( getTextBody() )
             {
-                sal_Int32 nTextCameraZRotation = static_cast< sal_Int32 >( getTextBody()->get3DProperties().maCameraRotation.mnRevolution.get() );
+                sal_Int32 nTextCameraZRotation = static_cast< sal_Int32 >( getTextBody()->get3DProperties().maCameraRotation.mnRevolution.value() );
                 mpCustomShapePropertiesPtr->setTextCameraZRotateAngle( nTextCameraZRotation / 60000 );
 
                 sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.value_or( 0 ) );
@@ -1812,7 +1812,7 @@ Reference< XShape > const & Shape::createAndInsert(
         if ( aEffectProperties.maGlow.moGlowRad.has_value() )
         {
             uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
-            propertySet->setPropertyValue("GlowEffectRadius", Any(convertEmuToHmm(aEffectProperties.maGlow.moGlowRad.get())));
+            propertySet->setPropertyValue("GlowEffectRadius", Any(convertEmuToHmm(aEffectProperties.maGlow.moGlowRad.value())));
             propertySet->setPropertyValue("GlowEffectColor", Any(aEffectProperties.maGlow.moGlowColor.getColor(rGraphicHelper)));
             propertySet->setPropertyValue("GlowEffectTransparency", Any(aEffectProperties.maGlow.moGlowColor.getTransparency()));
         }
@@ -1822,7 +1822,7 @@ Reference< XShape > const & Shape::createAndInsert(
         {
             uno::Reference<beans::XPropertySet> propertySet(mxShape, uno::UNO_QUERY);
             propertySet->setPropertyValue(
-                "SoftEdgeRadius", Any(convertEmuToHmm(aEffectProperties.maSoftEdge.moRad.get())));
+                "SoftEdgeRadius", Any(convertEmuToHmm(aEffectProperties.maSoftEdge.moRad.value())));
         }
     }
 
@@ -2196,7 +2196,7 @@ FillProperties Shape::getActualFillProperties(const Theme* pTheme, const FillPro
 
     // Parent shape's properties
     if ( pParentShapeFillProps != nullptr)
-        if( getFillProperties().moFillType.has_value() && getFillProperties().moFillType.get() == XML_grpFill )
+        if( getFillProperties().moFillType.has_value() && getFillProperties().moFillType.value() == XML_grpFill )
             aFillProperties.assignUsed( *pParentShapeFillProps );
 
     return aFillProperties;
