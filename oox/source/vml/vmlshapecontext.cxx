@@ -349,16 +349,16 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
     if( isRootElement() ) switch( nElement )
     {
         case VML_TOKEN( stroke ):
-            mrTypeModel.maStrokeModel.moStroked.assignIfUsed( lclDecodeBool( rAttribs, XML_on ) );
+            assignIfUsed( mrTypeModel.maStrokeModel.moStroked, lclDecodeBool( rAttribs, XML_on ) );
             mrTypeModel.maStrokeModel.maStartArrow.moArrowType = rAttribs.getToken( XML_startarrow );
             mrTypeModel.maStrokeModel.maStartArrow.moArrowWidth = rAttribs.getToken( XML_startarrowwidth );
             mrTypeModel.maStrokeModel.maStartArrow.moArrowLength = rAttribs.getToken( XML_startarrowlength );
             mrTypeModel.maStrokeModel.maEndArrow.moArrowType = rAttribs.getToken( XML_endarrow );
             mrTypeModel.maStrokeModel.maEndArrow.moArrowWidth = rAttribs.getToken( XML_endarrowwidth );
             mrTypeModel.maStrokeModel.maEndArrow.moArrowLength = rAttribs.getToken( XML_endarrowlength );
-            mrTypeModel.maStrokeModel.moColor.assignIfUsed( rAttribs.getString( XML_color ) );
+            assignIfUsed( mrTypeModel.maStrokeModel.moColor, rAttribs.getString( XML_color ) );
             mrTypeModel.maStrokeModel.moOpacity = lclDecodeOpacity( rAttribs, XML_opacity, 1.0 );
-            mrTypeModel.maStrokeModel.moWeight.assignIfUsed( rAttribs.getString( XML_weight ) );
+            assignIfUsed( mrTypeModel.maStrokeModel.moWeight, rAttribs.getString( XML_weight ) );
             mrTypeModel.maStrokeModel.moDashStyle = rAttribs.getString( XML_dashstyle );
             mrTypeModel.maStrokeModel.moLineStyle = rAttribs.getToken( XML_linestyle );
             mrTypeModel.maStrokeModel.moEndCap = rAttribs.getToken( XML_endcap );
@@ -369,8 +369,8 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             // in DOCX shapes use r:id for the relationship id
             // in XLSX they use o:relid
             bool bHasORelId = rAttribs.hasAttribute( O_TOKEN(relid) );
-            mrTypeModel.maFillModel.moFilled.assignIfUsed( lclDecodeBool( rAttribs, XML_on ) );
-            mrTypeModel.maFillModel.moColor.assignIfUsed( rAttribs.getString( XML_color ) );
+            assignIfUsed( mrTypeModel.maFillModel.moFilled, lclDecodeBool( rAttribs, XML_on ) );
+            assignIfUsed( mrTypeModel.maFillModel.moColor, rAttribs.getString( XML_color ) );
             mrTypeModel.maFillModel.moOpacity = lclDecodeOpacity( rAttribs, XML_opacity, 1.0 );
             mrTypeModel.maFillModel.moColor2 = rAttribs.getString( XML_color2 );
             mrTypeModel.maFillModel.moOpacity2 = lclDecodeOpacity( rAttribs, XML_opacity2, 1.0 );
@@ -436,15 +436,15 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         {
             mrTypeModel.maShadowModel.mbHasShadow = true;
             mrTypeModel.maShadowModel.moShadowOn = lclDecodeBool(rAttribs, XML_on).get(false);
-            mrTypeModel.maShadowModel.moColor.assignIfUsed(rAttribs.getString(XML_color));
-            mrTypeModel.maShadowModel.moOffset.assignIfUsed(rAttribs.getString(XML_offset));
+            assignIfUsed(mrTypeModel.maShadowModel.moColor, rAttribs.getString(XML_color));
+            assignIfUsed(mrTypeModel.maShadowModel.moOffset, rAttribs.getString(XML_offset));
             mrTypeModel.maShadowModel.moOpacity = lclDecodePercent(rAttribs, XML_opacity, 1.0);
         }
         break;
         case VML_TOKEN( textpath ):
-            mrTypeModel.maTextpathModel.moString.assignIfUsed(rAttribs.getString(XML_string));
-            mrTypeModel.maTextpathModel.moStyle.assignIfUsed(rAttribs.getString(XML_style));
-            mrTypeModel.maTextpathModel.moTrim.assignIfUsed(lclDecodeBool(rAttribs, XML_trim));
+            assignIfUsed(mrTypeModel.maTextpathModel.moString, rAttribs.getString(XML_string));
+            assignIfUsed(mrTypeModel.maTextpathModel.moStyle, rAttribs.getString(XML_style));
+            assignIfUsed(mrTypeModel.maTextpathModel.moTrim, lclDecodeBool(rAttribs, XML_trim));
         break;
     }
     return nullptr;

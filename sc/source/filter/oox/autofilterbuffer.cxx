@@ -774,7 +774,7 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
             aFilterFields.insert( aFilterFields.end(), rColumnFields.begin(), rColumnFields.end() );
 
             // update the regular expressions mode
-            obNeedsRegExp.assignIfUsed( aSettings.mobNeedsRegExp );
+            assignIfUsed( obNeedsRegExp, aSettings.mobNeedsRegExp );
         }
 
         if( bHasOrConnection )

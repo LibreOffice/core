@@ -136,15 +136,15 @@ ShapeTypeModel::ShapeTypeModel():
 
 void ShapeTypeModel::assignUsed( const ShapeTypeModel& rSource )
 {
-    moShapeType.assignIfUsed( rSource.moShapeType );
-    moCoordPos.assignIfUsed( rSource.moCoordPos );
-    moCoordSize.assignIfUsed( rSource.moCoordSize );
+    assignIfUsed( moShapeType, rSource.moShapeType );
+    assignIfUsed( moCoordPos, rSource.moCoordPos );
+    assignIfUsed( moCoordSize, rSource.moCoordSize );
     /*  The style properties position, left, top, width, height, margin-left,
         margin-top are not derived from shape template to shape. */
     maStrokeModel.assignUsed( rSource.maStrokeModel );
     maFillModel.assignUsed( rSource.maFillModel );
-    moGraphicPath.assignIfUsed( rSource.moGraphicPath );
-    moGraphicTitle.assignIfUsed( rSource.moGraphicTitle );
+    assignIfUsed( moGraphicPath, rSource.moGraphicPath );
+    assignIfUsed( moGraphicTitle, rSource.moGraphicTitle );
 }
 
 ShapeType::ShapeType( Drawing& rDrawing ) :

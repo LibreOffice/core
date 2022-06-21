@@ -292,51 +292,51 @@ void GradientFillProperties::assignUsed( const GradientFillProperties& rSourcePr
 {
     if( !rSourceProps.maGradientStops.empty() )
         maGradientStops = rSourceProps.maGradientStops;
-    moFillToRect.assignIfUsed( rSourceProps.moFillToRect );
-    moTileRect.assignIfUsed( rSourceProps.moTileRect );
-    moGradientPath.assignIfUsed( rSourceProps.moGradientPath );
-    moShadeAngle.assignIfUsed( rSourceProps.moShadeAngle );
-    moShadeFlip.assignIfUsed( rSourceProps.moShadeFlip );
-    moShadeScaled.assignIfUsed( rSourceProps.moShadeScaled );
-    moRotateWithShape.assignIfUsed( rSourceProps.moRotateWithShape );
+    assignIfUsed( moFillToRect, rSourceProps.moFillToRect );
+    assignIfUsed( moTileRect, rSourceProps.moTileRect );
+    assignIfUsed( moGradientPath, rSourceProps.moGradientPath );
+    assignIfUsed( moShadeAngle, rSourceProps.moShadeAngle );
+    assignIfUsed( moShadeFlip, rSourceProps.moShadeFlip );
+    assignIfUsed( moShadeScaled, rSourceProps.moShadeScaled );
+    assignIfUsed( moRotateWithShape, rSourceProps.moRotateWithShape );
 }
 
 void PatternFillProperties::assignUsed( const PatternFillProperties& rSourceProps )
 {
     maPattFgColor.assignIfUsed( rSourceProps.maPattFgColor );
     maPattBgColor.assignIfUsed( rSourceProps.maPattBgColor );
-    moPattPreset.assignIfUsed( rSourceProps.moPattPreset );
+    assignIfUsed( moPattPreset, rSourceProps.moPattPreset );
 }
 
 void BlipFillProperties::assignUsed( const BlipFillProperties& rSourceProps )
 {
     if(rSourceProps.mxFillGraphic.is())
         mxFillGraphic = rSourceProps.mxFillGraphic;
-    moBitmapMode.assignIfUsed( rSourceProps.moBitmapMode );
-    moFillRect.assignIfUsed( rSourceProps.moFillRect );
-    moTileOffsetX.assignIfUsed( rSourceProps.moTileOffsetX );
-    moTileOffsetY.assignIfUsed( rSourceProps.moTileOffsetY );
-    moTileScaleX.assignIfUsed( rSourceProps.moTileScaleX );
-    moTileScaleY.assignIfUsed( rSourceProps.moTileScaleY );
-    moTileAlign.assignIfUsed( rSourceProps.moTileAlign );
-    moTileFlip.assignIfUsed( rSourceProps.moTileFlip );
-    moRotateWithShape.assignIfUsed( rSourceProps.moRotateWithShape );
-    moColorEffect.assignIfUsed( rSourceProps.moColorEffect );
-    moBrightness.assignIfUsed( rSourceProps.moBrightness );
-    moContrast.assignIfUsed( rSourceProps.moContrast );
+    assignIfUsed( moBitmapMode, rSourceProps.moBitmapMode );
+    assignIfUsed( moFillRect, rSourceProps.moFillRect );
+    assignIfUsed( moTileOffsetX, rSourceProps.moTileOffsetX );
+    assignIfUsed( moTileOffsetY, rSourceProps.moTileOffsetY );
+    assignIfUsed( moTileScaleX, rSourceProps.moTileScaleX );
+    assignIfUsed( moTileScaleY, rSourceProps.moTileScaleY );
+    assignIfUsed( moTileAlign, rSourceProps.moTileAlign );
+    assignIfUsed( moTileFlip, rSourceProps.moTileFlip );
+    assignIfUsed( moRotateWithShape, rSourceProps.moRotateWithShape );
+    assignIfUsed( moColorEffect, rSourceProps.moColorEffect );
+    assignIfUsed( moBrightness, rSourceProps.moBrightness );
+    assignIfUsed( moContrast, rSourceProps.moContrast );
     maColorChangeFrom.assignIfUsed( rSourceProps.maColorChangeFrom );
     maColorChangeTo.assignIfUsed( rSourceProps.maColorChangeTo );
     maDuotoneColors[0].assignIfUsed( rSourceProps.maDuotoneColors[0] );
     maDuotoneColors[1].assignIfUsed( rSourceProps.maDuotoneColors[1] );
     maEffect.assignUsed( rSourceProps.maEffect );
-    moAlphaModFix.assignIfUsed(rSourceProps.moAlphaModFix);
+    assignIfUsed(moAlphaModFix, rSourceProps.moAlphaModFix);
 }
 
 void FillProperties::assignUsed( const FillProperties& rSourceProps )
 {
-    moFillType.assignIfUsed( rSourceProps.moFillType );
+    assignIfUsed( moFillType, rSourceProps.moFillType );
     maFillColor.assignIfUsed( rSourceProps.maFillColor );
-    moUseBgFill.assignIfUsed( rSourceProps.moUseBgFill );
+    assignIfUsed( moUseBgFill, rSourceProps.moUseBgFill );
     maGradientProps.assignUsed( rSourceProps.maGradientProps );
     maPatternProps.assignUsed( rSourceProps.maPatternProps );
     maBlipProps.assignUsed( rSourceProps.maBlipProps );
