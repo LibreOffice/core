@@ -138,6 +138,15 @@ int main(int argc, char **argv)
     _setmode( _fileno( g_binary_out ), _O_BINARY );
 #endif
 
+#if POPPLER_CHECK_VERSION(22, 6, 0)
+    PDFDoc aDoc( std::make_unique<GooString>(pFileName),
+                 std::optional<GooString>(pOwnerPasswordStr),
+                 std::optional<GooString>(pUserPasswordStr) );
+
+    PDFDoc aErrDoc( std::make_unique<GooString>(pErrFileName),
+                 std::optional<GooString>(pOwnerPasswordStr),
+                 std::optional<GooString>(pUserPasswordStr) );
+#else
     PDFDoc aDoc( pFileName,
                  pOwnerPasswordStr,
                  pUserPasswordStr );
@@ -145,6 +154,7 @@ int main(int argc, char **argv)
     PDFDoc aErrDoc( pErrFileName,
                  pOwnerPasswordStr,
                  pUserPasswordStr );
+#endif
 
     // Check various permissions for aDoc.
     PDFDoc &rDoc = aDoc.isOk()? aDoc: aErrDoc;
