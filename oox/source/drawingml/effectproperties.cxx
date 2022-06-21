@@ -21,23 +21,23 @@ namespace oox::drawingml {
 
 void EffectGlowProperties ::assignUsed(const EffectGlowProperties& rSourceProps)
 {
-    moGlowRad.assignIfUsed( rSourceProps.moGlowRad );
+    assignIfUsed( moGlowRad, rSourceProps.moGlowRad );
     moGlowColor.assignIfUsed( rSourceProps.moGlowColor );
 }
 
 void EffectSoftEdgeProperties::assignUsed(const EffectSoftEdgeProperties& rSourceProps)
 {
-    moRad.assignIfUsed(rSourceProps.moRad);
+    assignIfUsed(moRad, rSourceProps.moRad);
 }
 
 void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourceProps)
 {
-    moShadowDist.assignIfUsed( rSourceProps.moShadowDist );
-    moShadowDir.assignIfUsed( rSourceProps.moShadowDir );
-    moShadowSx.assignIfUsed( rSourceProps.moShadowSx );
-    moShadowSy.assignIfUsed( rSourceProps.moShadowSy );
+    assignIfUsed( moShadowDist, rSourceProps.moShadowDist );
+    assignIfUsed( moShadowDir, rSourceProps.moShadowDir );
+    assignIfUsed( moShadowSx, rSourceProps.moShadowSx );
+    assignIfUsed( moShadowSy, rSourceProps.moShadowSy );
     moShadowColor.assignIfUsed( rSourceProps.moShadowColor );
-    moShadowBlur.assignIfUsed( rSourceProps.moShadowBlur );
+    assignIfUsed( moShadowBlur, rSourceProps.moShadowBlur );
 
 }
 

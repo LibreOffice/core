@@ -675,23 +675,23 @@ sal_Int32 lclGetDmlLineJoint( const OptValue< sal_Int32 >& roJoinStyle )
 
 void StrokeArrowModel::assignUsed( const StrokeArrowModel& rSource )
 {
-    moArrowType.assignIfUsed( rSource.moArrowType );
-    moArrowWidth.assignIfUsed( rSource.moArrowWidth );
-    moArrowLength.assignIfUsed( rSource.moArrowLength );
+    assignIfUsed( moArrowType, rSource.moArrowType );
+    assignIfUsed( moArrowWidth, rSource.moArrowWidth );
+    assignIfUsed( moArrowLength, rSource.moArrowLength );
 }
 
 void StrokeModel::assignUsed( const StrokeModel& rSource )
 {
-    moStroked.assignIfUsed( rSource.moStroked );
+    assignIfUsed( moStroked, rSource.moStroked );
     maStartArrow.assignUsed( rSource.maStartArrow );
     maEndArrow.assignUsed( rSource.maEndArrow );
-    moColor.assignIfUsed( rSource.moColor );
-    moOpacity.assignIfUsed( rSource.moOpacity );
-    moWeight.assignIfUsed( rSource.moWeight );
-    moDashStyle.assignIfUsed( rSource.moDashStyle );
-    moLineStyle.assignIfUsed( rSource.moLineStyle );
-    moEndCap.assignIfUsed( rSource.moEndCap );
-    moJoinStyle.assignIfUsed( rSource.moJoinStyle );
+    assignIfUsed( moColor, rSource.moColor );
+    assignIfUsed( moOpacity, rSource.moOpacity );
+    assignIfUsed( moWeight, rSource.moWeight );
+    assignIfUsed( moDashStyle, rSource.moDashStyle );
+    assignIfUsed( moLineStyle, rSource.moLineStyle );
+    assignIfUsed( moEndCap, rSource.moEndCap );
+    assignIfUsed( moJoinStyle, rSource.moJoinStyle );
 }
 
 void StrokeModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper ) const
@@ -722,18 +722,18 @@ void StrokeModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper
 
 void FillModel::assignUsed( const FillModel& rSource )
 {
-    moFilled.assignIfUsed( rSource.moFilled );
-    moColor.assignIfUsed( rSource.moColor );
-    moOpacity.assignIfUsed( rSource.moOpacity );
-    moColor2.assignIfUsed( rSource.moColor2 );
-    moOpacity2.assignIfUsed( rSource.moOpacity2 );
-    moType.assignIfUsed( rSource.moType );
-    moAngle.assignIfUsed( rSource.moAngle );
-    moFocus.assignIfUsed( rSource.moFocus );
-    moFocusPos.assignIfUsed( rSource.moFocusPos );
-    moFocusSize.assignIfUsed( rSource.moFocusSize );
-    moBitmapPath.assignIfUsed( rSource.moBitmapPath );
-    moRotate.assignIfUsed( rSource.moRotate );
+    assignIfUsed( moFilled, rSource.moFilled );
+    assignIfUsed( moColor, rSource.moColor );
+    assignIfUsed( moOpacity, rSource.moOpacity );
+    assignIfUsed( moColor2, rSource.moColor2 );
+    assignIfUsed( moOpacity2, rSource.moOpacity2 );
+    assignIfUsed( moType, rSource.moType );
+    assignIfUsed( moAngle, rSource.moAngle );
+    assignIfUsed( moFocus, rSource.moFocus );
+    assignIfUsed( moFocusPos, rSource.moFocusPos );
+    assignIfUsed( moFocusSize, rSource.moFocusSize );
+    assignIfUsed( moBitmapPath, rSource.moBitmapPath );
+    assignIfUsed( moRotate, rSource.moRotate );
 }
 
 static void lcl_setGradientStop( std::multimap< double, Color >& rMap, const double fKey, const Color& rValue ) {

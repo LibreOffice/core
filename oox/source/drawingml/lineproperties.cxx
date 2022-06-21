@@ -410,9 +410,9 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
 
 void LineArrowProperties::assignUsed( const LineArrowProperties& rSourceProps )
 {
-    moArrowType.assignIfUsed( rSourceProps.moArrowType );
-    moArrowWidth.assignIfUsed( rSourceProps.moArrowWidth );
-    moArrowLength.assignIfUsed( rSourceProps.moArrowLength );
+    assignIfUsed( moArrowType, rSourceProps.moArrowType );
+    assignIfUsed( moArrowWidth, rSourceProps.moArrowWidth );
+    assignIfUsed( moArrowLength, rSourceProps.moArrowLength );
 }
 
 void LineProperties::assignUsed( const LineProperties& rSourceProps )
@@ -422,11 +422,11 @@ void LineProperties::assignUsed( const LineProperties& rSourceProps )
     maLineFill.assignUsed( rSourceProps.maLineFill );
     if( !rSourceProps.maCustomDash.empty() )
         maCustomDash = rSourceProps.maCustomDash;
-    moLineWidth.assignIfUsed( rSourceProps.moLineWidth );
-    moPresetDash.assignIfUsed( rSourceProps.moPresetDash );
-    moLineCompound.assignIfUsed( rSourceProps.moLineCompound );
-    moLineCap.assignIfUsed( rSourceProps.moLineCap );
-    moLineJoint.assignIfUsed( rSourceProps.moLineJoint );
+    assignIfUsed( moLineWidth, rSourceProps.moLineWidth );
+    assignIfUsed( moPresetDash, rSourceProps.moPresetDash );
+    assignIfUsed( moLineCompound, rSourceProps.moLineCompound );
+    assignIfUsed( moLineCap, rSourceProps.moLineCap );
+    assignIfUsed( moLineJoint, rSourceProps.moLineJoint );
 }
 
 void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
