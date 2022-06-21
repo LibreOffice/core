@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb46f836_8da6f5b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-21T20:33:34Z",
+      "side": 1,
+      "message": "Just a note: I suppose that ECMA vs ISO is not about \"OOXML vs MS implementation\" (the latter has its own documentation, like [MS-DOCX] and the like). It\u0027s rather about the standards organization that *governs* the standard evolution (ECMA), as opposed to the ISO that gets the prepared standard basically ready to the final standardization. Absolutely similar to OASIS ODF vs ISO ODF.",
+      "revId": "3fb1477de164bba260e3e9a39afcb3f67c78fb5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
