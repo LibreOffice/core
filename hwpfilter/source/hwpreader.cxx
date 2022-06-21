@@ -2876,7 +2876,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
         d->bInHeader = false;
     }
 
-    for (n = 0; n < para->nch && para->hhstr[n]->hh;
+    for (n = 0; n < para->nch && o3tl::make_unsigned(n) < para->hhstr.size() && para->hhstr[n]->hh;
         n += para->hhstr[n]->WSize())
     {
         if( para->hhstr[n]->hh == CH_END_PARA )
