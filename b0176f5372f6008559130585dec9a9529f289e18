@@ -33,6 +33,29 @@
       "message": "We have this magic number used elsewhere in:\n vcl/source/filter/GraphicFormatDetector.cxx:463",
       "revId": "b0176f5372f6008559130585dec9a9529f289e18",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06852bae_e551bbe4",
+        "filename": "vcl/source/filter/graphicfilter2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-21T06:00:58Z",
+      "side": 1,
+      "message": "If we can identify it is WMF, we don\u0027t need to rely on the extension.",
+      "range": {
+        "startLine": 1137,
+        "startChar": 16,
+        "endLine": 1137,
+        "endChar": 74
+      },
+      "revId": "b0176f5372f6008559130585dec9a9529f289e18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
