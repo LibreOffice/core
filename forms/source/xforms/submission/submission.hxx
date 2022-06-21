@@ -39,6 +39,7 @@
 #include "serialization.hxx"
 
 #include <memory>
+#include <utility>
 
 class CSubmissionPut;
 class CSubmissionPost;
@@ -114,9 +115,9 @@ public:
         UNKNOWN_ERROR
     };
 
-    CSubmission(std::u16string_view aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
+    CSubmission(std::u16string_view aURL, css::uno::Reference< css::xml::dom::XDocumentFragment > aFragment)
         : m_aURLObj(aURL)
-        , m_aFragment(aFragment)
+        , m_aFragment(std::move(aFragment))
         , m_xContext(::comphelper::getProcessComponentContext())
     {}
 

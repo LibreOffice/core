@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <utility>
 #include <vector>
 
 #include <propertybaghelper.hxx>
@@ -94,10 +95,10 @@ public:
     OUString     aValue;
     sal_uInt16          nRepresentation;
 
-    HtmlSuccessfulObj( const OUString& _rName, const OUString& _rValue,
+    HtmlSuccessfulObj( OUString _aName, OUString _aValue,
         sal_uInt16 _nRepresent = SUCCESSFUL_REPRESENT_TEXT )
-        :aName( _rName )
-        ,aValue( _rValue )
+        :aName(std::move( _aName ))
+        ,aValue(std::move( _aValue ))
         ,nRepresentation( _nRepresent )
     {
     }

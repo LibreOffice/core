@@ -21,6 +21,7 @@
 
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <utility>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
@@ -42,7 +43,7 @@ class ImgProdLockBytes : public SvLockBytes
 public:
 
     ImgProdLockBytes( SvStream* pStm, bool bOwner );
-    explicit ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > const & rStreamRef );
+    explicit ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > xStreamRef );
 
     virtual ErrCode     ReadAt( sal_uInt64 nPos, void* pBuffer, std::size_t nCount, std::size_t * pRead ) const override;
     virtual ErrCode     WriteAt( sal_uInt64 nPos, const void* pBuffer, std::size_t nCount, std::size_t * pWritten ) override;
@@ -59,8 +60,8 @@ ImgProdLockBytes::ImgProdLockBytes( SvStream* pStm, bool bOwner ) :
 }
 
 
-ImgProdLockBytes::ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > const & rStmRef ) :
-        xStmRef( rStmRef )
+ImgProdLockBytes::ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > _xStmRef ) :
+        xStmRef(std::move( _xStmRef ))
 {
     if( !xStmRef.is() )
         return;

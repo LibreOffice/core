@@ -21,6 +21,8 @@
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
+#include <utility>
+
 
 namespace frm
 {
@@ -31,8 +33,8 @@ namespace frm
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
 
-    ORichTextFeatureDispatcher::ORichTextFeatureDispatcher( EditView& _rView, const URL&  _rURL )
-        :m_aFeatureURL( _rURL )
+    ORichTextFeatureDispatcher::ORichTextFeatureDispatcher( EditView& _rView, URL _aURL )
+        :m_aFeatureURL(std::move( _aURL ))
         ,m_aStatusListeners( m_aMutex )
         ,m_pEditView( &_rView )
         ,m_bDisposed( false )

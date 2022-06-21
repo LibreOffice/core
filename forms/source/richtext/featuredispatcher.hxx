@@ -53,7 +53,7 @@ namespace frm
         void                               checkDisposed() const { if ( isDisposed() ) throw css::lang::DisposedException(); }
 
     protected:
-        ORichTextFeatureDispatcher( EditView& _rView, const css::util::URL&  _rURL );
+        ORichTextFeatureDispatcher( EditView& _rView, css::util::URL _aURL );
         virtual ~ORichTextFeatureDispatcher( ) override;
 
     public:

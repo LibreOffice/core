@@ -60,7 +60,7 @@ class OGridColumn   :public ::cppu::BaseMutex
 // [properties]
 
 public:
-    OGridColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext, const OUString& _sModelName);
+    OGridColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext, OUString _sModelName);
     explicit OGridColumn(const OGridColumn* _pOriginal );
     virtual ~OGridColumn() override;
 
