@@ -1772,7 +1772,7 @@ Reference< XShape > const & Shape::createAndInsert(
                         if ( pFontRef->maPhClr.isUsed() )
                         {
                             aCharStyleProperties.maFillProperties.maFillColor = pFontRef->maPhClr;
-                            aCharStyleProperties.maFillProperties.moFillType.set(XML_solidFill);
+                            aCharStyleProperties.maFillProperties.moFillType = XML_solidFill;
                         }
                     }
                 }

@@ -213,7 +213,7 @@ static void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
     if ( rTableStylePart.getTextColor().isUsed() )
     {
         aTextCharProps.maFillProperties.maFillColor = rTableStylePart.getTextColor();
-        aTextCharProps.maFillProperties.moFillType.set(XML_solidFill);
+        aTextCharProps.maFillProperties.moFillType = XML_solidFill;
     }
     if( rTableStylePart.getTextBoldStyle() )
         aTextCharProps.moBold = *rTableStylePart.getTextBoldStyle();
@@ -534,10 +534,10 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
         ::Color aResult( basegfx::interpolate(nBgColor.getBColor(), nCellColor.getBColor(), 1.0 - fTransparency) );
         aFillProperties.maFillColor.clearTransformations();
         aFillProperties.maFillColor.setSrgbClr(sal_Int32(aResult.GetRGBColor()));
-        aFillProperties.moFillType.set(XML_solidFill);
+        aFillProperties.moFillType = XML_solidFill;
     }
     if (!aFillProperties.moFillType.has_value())
-        aFillProperties.moFillType.set(XML_noFill);
+        aFillProperties.moFillType = XML_noFill;
 
     // TODO: phClr?
     aFillProperties.pushToPropMap( aPropMap, rFilterBase.getGraphicHelper() );

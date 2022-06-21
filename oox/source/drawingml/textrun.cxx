@@ -157,9 +157,9 @@ sal_Int32 TextRun::insertAt(
                 if (!maTextCharacterProperties.maHyperlinkPropertyMap.hasProperty(PROP_CharColor))
                     aTextCharacterProps.maFillProperties.maFillColor.setSchemeClr(XML_hlink);
 
-                aTextCharacterProps.maFillProperties.moFillType.set(XML_solidFill);
+                aTextCharacterProps.maFillProperties.moFillType = XML_solidFill;
                 if ( !maTextCharacterProperties.moUnderline.has_value() )
-                    aTextCharacterProps.moUnderline.set( XML_sng );
+                    aTextCharacterProps.moUnderline = XML_sng;
 
                 PropertySet aFieldTextPropSet( xTextFieldCursor );
                 aTextCharacterProps.pushToPropSet( aFieldTextPropSet, rFilterBase );

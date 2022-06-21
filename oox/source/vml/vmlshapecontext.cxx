@@ -646,8 +646,8 @@ void ShapeContext::setPoints(std::u16string_view rPoints)
                   o3tl::convert(fMaxY - fMinY, o3tl::Length::twip, o3tl::Length::pt))
               + "pt";
         // Set moCoordSize, otherwise default (1000,1000) is used.
-        mrShape.getTypeModel().moCoordSize.set(
-            Int32Pair(basegfx::fround(fMaxX - fMinX), basegfx::fround(fMaxY - fMinY)));
+        mrShape.getTypeModel().moCoordSize =
+            Int32Pair(basegfx::fround(fMaxX - fMinX), basegfx::fround(fMaxY - fMinY));
     }
 }
 
