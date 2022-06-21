@@ -144,7 +144,7 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
 #define SAL_DETAIL_LOG_STREAM(condition, level, area, where, stream) \
     do { \
-        if (condition) \
+        if (SAL_UNLIKELY(condition)) \
         { \
             switch (sal_detail_log_report(level, area)) \
             { \
