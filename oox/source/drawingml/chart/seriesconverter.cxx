@@ -722,12 +722,13 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
 
         // data point marker
-        if( mrModel.monMarkerSymbol.differsFrom( rSeries.mnMarkerSymbol ) || mrModel.monMarkerSize.differsFrom( rSeries.mnMarkerSize ) )
+        if( ( mrModel.monMarkerSymbol.has_value() && mrModel.monMarkerSymbol.get() != rSeries.mnMarkerSymbol ) ||
+            ( mrModel.monMarkerSize.has_value() && mrModel.monMarkerSize.get() != rSeries.mnMarkerSize ) )
             rTypeGroup.convertMarker( aPropSet, mrModel.monMarkerSymbol.get( rSeries.mnMarkerSymbol ),
                     mrModel.monMarkerSize.get( rSeries.mnMarkerSize ), mrModel.mxMarkerProp );
 
         // data point pie explosion
-        if( mrModel.monExplosion.differsFrom( rSeries.mnExplosion ) )
+        if( mrModel.monExplosion.has_value() && mrModel.monExplosion.get() != rSeries.mnExplosion )
             rTypeGroup.convertPieExplosion( aPropSet, mrModel.monExplosion.get() );
 
         // point formatting

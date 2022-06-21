@@ -64,7 +64,7 @@ static void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
         sal_Int32 nPropId )
 {
     BorderLine2 aBorderLine;
-    if ( rLineProperties.maLineFill.moFillType.differsFrom( XML_noFill ))
+    if ( rLineProperties.maLineFill.moFillType.has_value() && rLineProperties.maLineFill.moFillType.get() != XML_noFill )
     {
         Color aColor = rLineProperties.maLineFill.getBestSolidColor();
         aBorderLine.Color = sal_Int32(aColor.getColor( rFilterBase.getGraphicHelper() ));
