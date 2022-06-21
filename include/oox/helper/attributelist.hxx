@@ -95,41 +95,41 @@ public:
     // optional return values -------------------------------------------------
 
     /** Returns the token identifier of the value of the specified attribute. */
-    OptValue< sal_Int32 > getToken( sal_Int32 nAttrToken ) const;
+    std::optional< sal_Int32 > getToken( sal_Int32 nAttrToken ) const;
 
     /** Returns the Color object of highlight of the text. */
     oox::drawingml::Color getHighlightColor(sal_Int32 nAttrToken) const;
 
     /** Returns the string value of the specified attribute. */
-    OptValue< OUString > getString( sal_Int32 nAttrToken ) const;
+    std::optional< OUString > getString( sal_Int32 nAttrToken ) const;
 
     /** Returns the string value of the specified attribute, returns an empty string if attribute not present. */
     OUString getStringDefaulted( sal_Int32 nAttrToken ) const;
 
     /** Returns the string value of the specified attribute. All characters in
         the format '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
-    OptValue< OUString > getXString( sal_Int32 nAttrToken ) const;
+    std::optional< OUString > getXString( sal_Int32 nAttrToken ) const;
 
     /** Returns the double value of the specified attribute. */
-    OptValue< double >  getDouble( sal_Int32 nAttrToken ) const;
+    std::optional< double >  getDouble( sal_Int32 nAttrToken ) const;
 
     /** Returns the 32-bit signed integer value of the specified attribute (decimal). */
-    OptValue< sal_Int32 > getInteger( sal_Int32 nAttrToken ) const;
+    std::optional< sal_Int32 > getInteger( sal_Int32 nAttrToken ) const;
 
     /** Returns the 32-bit unsigned integer value of the specified attribute (decimal). */
-    OptValue< sal_uInt32 > getUnsigned( sal_Int32 nAttrToken ) const;
+    std::optional< sal_uInt32 > getUnsigned( sal_Int32 nAttrToken ) const;
 
     /** Returns the 64-bit signed integer value of the specified attribute (decimal). */
-    OptValue< sal_Int64 > getHyper( sal_Int32 nAttrToken ) const;
+    std::optional< sal_Int64 > getHyper( sal_Int32 nAttrToken ) const;
 
     /** Returns the 32-bit signed integer value of the specified attribute (hexadecimal). */
-    OptValue< sal_Int32 > getIntegerHex( sal_Int32 nAttrToken ) const;
+    std::optional< sal_Int32 > getIntegerHex( sal_Int32 nAttrToken ) const;
 
     /** Returns the boolean value of the specified attribute. */
-    OptValue< bool >    getBool( sal_Int32 nAttrToken ) const;
+    std::optional< bool > getBool( sal_Int32 nAttrToken ) const;
 
     /** Returns the date/time value of the specified attribute. */
-    OptValue< css::util::DateTime > getDateTime( sal_Int32 nAttrToken ) const;
+    std::optional< css::util::DateTime > getDateTime( sal_Int32 nAttrToken ) const;
 
     // defaulted return values ------------------------------------------------
 

@@ -160,18 +160,18 @@ oox::drawingml::Color AttributeList::getHighlightColor(sal_Int32 nAttrToken) con
 
 // optional return values -----------------------------------------------------
 
-OptValue< sal_Int32 > AttributeList::getToken( sal_Int32 nAttrToken ) const
+std::optional< sal_Int32 > AttributeList::getToken( sal_Int32 nAttrToken ) const
 {
     sal_Int32 nToken = mxAttribs->getOptionalValueToken( nAttrToken, XML_TOKEN_INVALID );
-    return nToken == XML_TOKEN_INVALID ? OptValue< sal_Int32 >() : OptValue< sal_Int32 >( nToken );
+    return nToken == XML_TOKEN_INVALID ? std::optional< sal_Int32 >() : std::optional< sal_Int32 >( nToken );
 }
 
-OptValue< OUString > AttributeList::getString( sal_Int32 nAttrToken ) const
+std::optional< OUString > AttributeList::getString( sal_Int32 nAttrToken ) const
 {
     // check if the attribute exists (empty string may be different to missing attribute)
     if( mxAttribs->hasAttribute( nAttrToken ) )
-        return OptValue< OUString >( mxAttribs->getOptionalValue( nAttrToken ) );
-    return OptValue< OUString >();
+        return std::optional< OUString >( mxAttribs->getOptionalValue( nAttrToken ) );
+    return std::optional< OUString >();
 }
 
 OUString AttributeList::getStringDefaulted( sal_Int32 nAttrToken ) const
@@ -182,93 +182,93 @@ OUString AttributeList::getStringDefaulted( sal_Int32 nAttrToken ) const
     return OUString();
 }
 
-OptValue< OUString > AttributeList::getXString( sal_Int32 nAttrToken ) const
+std::optional< OUString > AttributeList::getXString( sal_Int32 nAttrToken ) const
 {
     // check if the attribute exists (empty string may be different to missing attribute)
     if( mxAttribs->hasAttribute( nAttrToken ) )
-        return OptValue< OUString >( AttributeConversion::decodeXString( mxAttribs->getOptionalValue( nAttrToken ) ) );
-    return OptValue< OUString >();
+        return std::optional< OUString >( AttributeConversion::decodeXString( mxAttribs->getOptionalValue( nAttrToken ) ) );
+    return std::optional< OUString >();
 }
 
-OptValue< double > AttributeList::getDouble( sal_Int32 nAttrToken ) const
+std::optional< double > AttributeList::getDouble( sal_Int32 nAttrToken ) const
 {
     double nValue;
     bool bValid = getAttribList()->getAsDouble( nAttrToken, nValue );
-    return bValid ? OptValue< double >( nValue ) : OptValue< double >();
+    return bValid ? std::optional< double >( nValue ) : std::optional< double >();
 }
 
-OptValue< sal_Int32 > AttributeList::getInteger( sal_Int32 nAttrToken ) const
+std::optional< sal_Int32 > AttributeList::getInteger( sal_Int32 nAttrToken ) const
 {
     sal_Int32 nValue;
     bool bValid = getAttribList()->getAsInteger( nAttrToken, nValue );
-    return bValid ? OptValue< sal_Int32 >( nValue ) : OptValue< sal_Int32 >();
+    return bValid ? std::optional< sal_Int32 >( nValue ) : std::optional< sal_Int32 >();
 }
 
-OptValue< sal_uInt32 > AttributeList::getUnsigned( sal_Int32 nAttrToken ) const
+std::optional< sal_uInt32 > AttributeList::getUnsigned( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     bool bValid = !aValue.isEmpty();
-    return bValid ? OptValue< sal_uInt32 >( AttributeConversion::decodeUnsigned( aValue ) ) : OptValue< sal_uInt32 >();
+    return bValid ? std::optional< sal_uInt32 >( AttributeConversion::decodeUnsigned( aValue ) ) : std::optional< sal_uInt32 >();
 }
 
-OptValue< sal_Int64 > AttributeList::getHyper( sal_Int32 nAttrToken ) const
+std::optional< sal_Int64 > AttributeList::getHyper( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     bool bValid = !aValue.isEmpty();
-    return bValid ? OptValue< sal_Int64 >( AttributeConversion::decodeHyper( aValue ) ) : OptValue< sal_Int64 >();
+    return bValid ? std::optional< sal_Int64 >( AttributeConversion::decodeHyper( aValue ) ) : std::optional< sal_Int64 >();
 }
 
-OptValue< sal_Int32 > AttributeList::getIntegerHex( sal_Int32 nAttrToken ) const
+std::optional< sal_Int32 > AttributeList::getIntegerHex( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     bool bValid = !aValue.isEmpty();
-    return bValid ? OptValue< sal_Int32 >( AttributeConversion::decodeIntegerHex( aValue ) ) : OptValue< sal_Int32 >();
+    return bValid ? std::optional< sal_Int32 >( AttributeConversion::decodeIntegerHex( aValue ) ) : std::optional< sal_Int32 >();
 }
 
-OptValue< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
+std::optional< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
 {
     const char *pAttr;
 
     // catch the common cases as quickly as possible first
     bool bHasAttr = getAttribList()->getAsChar( nAttrToken, pAttr );
     if( !bHasAttr )
-        return OptValue< bool >();
+        return std::optional< bool >();
     if( !strcmp( pAttr, "false" ) )
-        return OptValue< bool >( false );
+        return std::optional< bool >( false );
     if( !strcmp( pAttr, "true" ) )
-        return OptValue< bool >( true );
+        return std::optional< bool >( true );
 
     // now for all the crazy stuff
 
     // boolean attributes may be "t", "f", "true", "false", "on", "off", "1", or "0"
     switch( getToken( nAttrToken, XML_TOKEN_INVALID ) )
     {
-        case XML_t:     return OptValue< bool >( true );  // used in VML
-        case XML_true:  return OptValue< bool >( true );
-        case XML_on:    return OptValue< bool >( true );
-        case XML_f:     return OptValue< bool >( false ); // used in VML
-        case XML_false: return OptValue< bool >( false );
-        case XML_off:   return OptValue< bool >( false );
+        case XML_t:     return std::optional< bool >( true );  // used in VML
+        case XML_true:  return std::optional< bool >( true );
+        case XML_on:    return std::optional< bool >( true );
+        case XML_f:     return std::optional< bool >( false ); // used in VML
+        case XML_false: return std::optional< bool >( false );
+        case XML_off:   return std::optional< bool >( false );
     }
-    OptValue< sal_Int32 > onValue = getInteger( nAttrToken );
-    return onValue.has_value() ? OptValue< bool >( onValue.value() != 0 ) : OptValue< bool >();
+    std::optional< sal_Int32 > onValue = getInteger( nAttrToken );
+    return onValue.has_value() ? std::optional< bool >( onValue.value() != 0 ) : std::optional< bool >();
 }
 
-OptValue< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) const
+std::optional< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     util::DateTime aDateTime;
     bool bValid = (aValue.getLength() == 19) && (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') &&
         (aValue[ 10 ] == 'T') && (aValue[ 13 ] == ':') && (aValue[ 16 ] == ':');
     if (!bValid)
-        return OptValue< util::DateTime >();
+        return std::optional< util::DateTime >();
     aDateTime.Year    = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 0, 4 )) );
     aDateTime.Month   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 5, 2 )) );
     aDateTime.Day     = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 8, 2 )) );
     aDateTime.Hours   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 11, 2 )) );
     aDateTime.Minutes = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 14, 2 )) );
     aDateTime.Seconds = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 17, 2 )) );
-    return OptValue< util::DateTime >( aDateTime );
+    return std::optional< util::DateTime >( aDateTime );
 }
 
 // defaulted return values ----------------------------------------------------

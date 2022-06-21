@@ -53,7 +53,7 @@ ContextHandlerRef LayoutFragmentHandler::onCreateContext( sal_Int32 aElementToke
         {
             mpSlidePersistPtr->setLayoutValueToken( rAttribs.getToken( XML_type, 0 ) ); // CT_SlideLayoutType
 
-            OptValue< bool > aShowMasterShapes = rAttribs.getBool( XML_showMasterSp );
+            std::optional< bool > aShowMasterShapes = rAttribs.getBool( XML_showMasterSp );
             if( aShowMasterShapes.has_value() && !aShowMasterShapes.value() ) {
                 mpSlidePersistPtr->hideShapesAsMasterShapes();
             }

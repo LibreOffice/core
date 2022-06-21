@@ -319,8 +319,8 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             if( nParagraphs > 1 )
                 nSequenceSize += nParagraphs - 1;
 
-            OptValue< OUString > oaLabelText;
-            OptValue< OUString > oaCellRange;
+            std::optional< OUString > oaLabelText;
+            std::optional< OUString > oaCellRange;
             if (mrModel.mobShowDataLabelsRange.value_or(false))
             {
                 const DataSourceModel* pLabelSource = mrModel.mrParent.mpLabelsSource;

@@ -33,18 +33,18 @@ struct DataLabelModelBase
     ShapeRef            mxShapeProp;        /// Data label frame formatting.
     TextBodyRef         mxTextProp;         /// Data label text formatting.
     NumberFormat        maNumberFormat;     /// Number format for numeric data labels.
-    OptValue< OUString > moaSeparator;/// Separator between label components.
-    OptValue< sal_Int32 > monLabelPos;      /// Data label position.
-    OptValue< bool >    mobShowBubbleSize;  /// True = show size of bubbles in bubble charts.
-    OptValue< bool >    mobShowCatName;     /// True = show category name of data points.
-    OptValue< bool >    mobShowLegendKey;   /// True = show legend key of data series.
-    OptValue< bool >    mobShowPercent;     /// True = show percentual value in pie/doughnut charts.
-    OptValue< bool >    mobShowSerName;     /// True = show series name.
-    OptValue< bool >    mobShowVal;         /// True = show data point value.
+    std::optional< OUString > moaSeparator;/// Separator between label components.
+    std::optional< sal_Int32 > monLabelPos;      /// Data label position.
+    std::optional< bool >    mobShowBubbleSize;  /// True = show size of bubbles in bubble charts.
+    std::optional< bool >    mobShowCatName;     /// True = show category name of data points.
+    std::optional< bool >    mobShowLegendKey;   /// True = show legend key of data series.
+    std::optional< bool >    mobShowPercent;     /// True = show percentual value in pie/doughnut charts.
+    std::optional< bool >    mobShowSerName;     /// True = show series name.
+    std::optional< bool >    mobShowVal;         /// True = show data point value.
 
     /// True = the value from the <c15:datalabelsRange> corresponding to the
     /// index of this label is used as the label text.
-    OptValue< bool >    mobShowDataLabelsRange;
+    std::optional< bool >    mobShowDataLabelsRange;
     bool                mbDeleted;          /// True = data label(s) deleted.
 
     explicit            DataLabelModelBase(bool bMSO2007Doc);
@@ -142,9 +142,9 @@ struct TrendlineModel
     ShapeRef            mxShapeProp;        /// Trendline formatting.
     TrendlineLabelRef   mxLabel;            /// Trendline label text object.
     OUString            maName;             /// User-defined name of the trendline.
-    OptValue< double >  mfBackward;         /// Size of trendline before first data point.
-    OptValue< double >  mfForward;          /// Size of trendline behind last data point.
-    OptValue< double >  mfIntercept;        /// Crossing point with Y axis.
+    std::optional< double > mfBackward;         /// Size of trendline before first data point.
+    std::optional< double > mfForward;          /// Size of trendline behind last data point.
+    std::optional< double > mfIntercept;        /// Crossing point with Y axis.
     sal_Int32           mnOrder;            /// Polynomial order in range [2, 6].
     sal_Int32           mnPeriod;           /// Moving average period in range [2, 255].
     sal_Int32           mnTypeId;           /// Type of the trendline.
@@ -163,10 +163,10 @@ struct DataPointModel
     ShapeRef            mxShapeProp;        /// Data point formatting.
     PictureOptionsRef   mxPicOptions;       /// Fill bitmap settings.
     ShapeRef            mxMarkerProp;       /// Data point marker formatting.
-    OptValue< sal_Int32 > monExplosion;     /// Pie slice moved from pie center.
-    OptValue< sal_Int32 > monMarkerSize;    /// Size of the series line marker (2...72).
-    OptValue< sal_Int32 > monMarkerSymbol;  /// Series line marker symbol.
-    OptValue< bool >    mobBubble3d;        /// True = show bubbles with 3D shade.
+    std::optional< sal_Int32 > monExplosion;     /// Pie slice moved from pie center.
+    std::optional< sal_Int32 > monMarkerSize;    /// Size of the series line marker (2...72).
+    std::optional< sal_Int32 > monMarkerSymbol;  /// Series line marker symbol.
+    std::optional< bool >    mobBubble3d;        /// True = show bubbles with 3D shade.
     sal_Int32           mnIndex;            /// Unique data point index.
     bool                mbInvertNeg;        /// True = invert negative data points (not derived from series!).
 
@@ -202,7 +202,7 @@ struct SeriesModel
     ShapeRef            mxMarkerProp;       /// Data point marker formatting.
     TextRef             mxText;             /// Series title source.
     DataLabelsRef       mxLabels;           /// Data point label settings for all points.
-    OptValue< sal_Int32 > monShape;         /// 3D bar shape type.
+    std::optional< sal_Int32 > monShape;         /// 3D bar shape type.
     sal_Int32           mnExplosion;        /// Pie slice moved from pie center.
     sal_Int32           mnIndex;            /// Series index used for automatic formatting.
     sal_Int32           mnMarkerSize;       /// Size of the series line marker (2...72).
