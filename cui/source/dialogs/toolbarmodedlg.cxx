@@ -94,12 +94,12 @@ ToolbarmodeDialog::ToolbarmodeDialog(weld::Window* pParent)
                        (m_xBuilder->weld_radio_button("rbButton9")) }
     , m_pInfoLabel(m_xBuilder->weld_label("lbInfo"))
 {
-    static_assert(SAL_N_ELEMENTS(m_pRadioButtons) == SAL_N_ELEMENTS(TOOLBARMODES_ARRAY));
+    static_assert(SAL_N_ELEMENTS(m_pRadioButtons) == std::size(TOOLBARMODES_ARRAY));
 
     Link<weld::Toggleable&, void> aLink = LINK(this, ToolbarmodeDialog, SelectToolbarmode);
 
     const OUString sCurrentMode = GetCurrentMode();
-    for (tools::ULong i = 0; i < std::size(m_pRadioButtons); i++)
+    for (std::size_t i = 0; i < std::size(m_pRadioButtons); ++i)
     {
         m_pRadioButtons[i]->connect_toggled(aLink);
         if (sCurrentMode == std::get<1>(TOOLBARMODES_ARRAY[i]))
@@ -131,7 +131,7 @@ static bool file_exists(const OUString& fileName)
 
 int ToolbarmodeDialog::GetActiveRadioButton()
 {
-    for (tools::ULong i = 0; i < std::size(m_pRadioButtons); i++)
+    for (std::size_t i = 0; i < std::size(m_pRadioButtons); ++i)
     {
         if (m_pRadioButtons[i]->get_active())
             return i;
