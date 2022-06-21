@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3af1f2e_1c8e0129",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-21T09:35:46Z",
+      "side": 1,
+      "message": "I don\u0027t understand why the test fails in libreoffice-7-3 but it didn\u0027t fail with master or libreoffice-7-4",
+      "revId": "ad43c3a7caed6d96b8bbc4c1a64cd560d9236ba6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
