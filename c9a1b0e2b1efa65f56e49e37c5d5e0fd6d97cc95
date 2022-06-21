@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25e8cad0_067027d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-21T08:34:47Z",
+      "side": 1,
+      "message": "Should be ok also for 7-3, just let\u0027s wait a little if any problem arises with these three commits in 7-4.",
+      "revId": "c9a1b0e2b1efa65f56e49e37c5d5e0fd6d97cc95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
