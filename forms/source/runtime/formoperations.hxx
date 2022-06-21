@@ -36,6 +36,7 @@
 #include <connectivity/dbtools.hxx>
 #include <tools/long.hxx>
 #include <unotools/resmgr.hxx>
+#include <utility>
 
 namespace frm
 {
@@ -301,10 +302,10 @@ namespace frm
         {
         public:
             impl_appendOrderByColumn_throw(const FormOperations *pFO,
-                                           css::uno::Reference< css::beans::XPropertySet > const & xField,
+                                           css::uno::Reference< css::beans::XPropertySet > xField,
                                            bool bUp)
                 : m_pFO(pFO)
-                , m_xField(xField)
+                , m_xField(std::move(xField))
                 , m_bUp(bUp)
             {};
 
@@ -320,11 +321,11 @@ namespace frm
         {
         public:
             impl_appendFilterByColumn_throw(const FormOperations *pFO,
-                                            css::uno::Reference< css::sdb::XSingleSelectQueryComposer > const & xParser,
-                                            css::uno::Reference< css::beans::XPropertySet > const & xField)
+                                            css::uno::Reference< css::sdb::XSingleSelectQueryComposer > xParser,
+                                            css::uno::Reference< css::beans::XPropertySet > xField)
                 : m_pFO(pFO)
-                , m_xParser(xParser)
-                , m_xField(xField)
+                , m_xParser(std::move(xParser))
+                , m_xField(std::move(xField))
             {};
 
             void operator()() {

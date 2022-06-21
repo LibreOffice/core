@@ -114,7 +114,7 @@ class OGroupCompAcc
     friend class OGroupCompAccLess;
 
 public:
-    OGroupCompAcc(const css::uno::Reference< css::beans::XPropertySet>& rxElement, const OGroupComp& _rGroupComp );
+    OGroupCompAcc(const css::uno::Reference< css::beans::XPropertySet>& rxElement, OGroupComp _aGroupComp );
 
     bool operator==( const OGroupCompAcc& rCompAcc ) const;
 
@@ -132,7 +132,7 @@ class OGroup final
     friend class OGroupLess;
 
 public:
-    explicit OGroup(const OUString& rGroupName);
+    explicit OGroup(OUString sGroupName);
 
     const OUString& GetGroupName() const { return m_aGroupName; }
     css::uno::Sequence< css::uno::Reference< css::awt::XControlModel>  > GetControlModels() const;

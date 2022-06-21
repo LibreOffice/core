@@ -74,7 +74,7 @@ namespace xforms
 
     protected:
         // create basic data type
-        OXSDDataType( const OUString& _rName, sal_Int16 _nTypeClass );
+        OXSDDataType( OUString _aName, sal_Int16 _nTypeClass );
         virtual ~OXSDDataType() override;
 
     public:
