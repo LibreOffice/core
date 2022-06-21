@@ -44,7 +44,6 @@
 #include <osl/diagnose.h>
 #include "connectivity/dbconversion.hxx"
 #include <rtl/ustrbuf.hxx>
-#include <sal/macros.h>
 #include <sal/log.hxx>
 
 #if defined _MSC_VER
@@ -4382,7 +4381,7 @@ OString OParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) const
 
 IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const OString& rToken) const
 {
-	static IParseContext::InternationalKeyCode Intl_TokenID[] =
+    static IParseContext::InternationalKeyCode const Intl_TokenID[] =
 	{
 		InternationalKeyCode::Like, InternationalKeyCode::Not, InternationalKeyCode::Null, InternationalKeyCode::True,
 		InternationalKeyCode::False, InternationalKeyCode::Is, InternationalKeyCode::Between, InternationalKeyCode::Or,
@@ -4392,15 +4391,14 @@ IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const OString&
         InternationalKeyCode::VarPop,InternationalKeyCode::Collect,InternationalKeyCode::Fusion,InternationalKeyCode::Intersection
 	};
 
-	sal_uInt32 nCount = SAL_N_ELEMENTS( Intl_TokenID );
-	for (sal_uInt32 i = 0; i < nCount; i++)
-	{
-		OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
-		if (rToken.equalsIgnoreAsciiCase(aKey))
-			return Intl_TokenID[i];
-	}
+    auto const token = std::find_if(std::cbegin(Intl_TokenID), std::cend(Intl_TokenID)
+                                    , [&rToken, this](IParseContext::InternationalKeyCode const & tokenID)
+                                      { return rToken.equalsIgnoreAsciiCase(getIntlKeywordAscii(tokenID)); });
 
-	return InternationalKeyCode::None;
+    if (std::cend(Intl_TokenID) != token)
+        return *token;
+
+    return InternationalKeyCode::None;
 }
 
 
@@ -4670,7 +4668,7 @@ OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pCont
 #if OSL_DEBUG_LEVEL > 0
 OUString OSQLParser::RuleIDToStr(sal_uInt32 nRuleID)
 {
-	OSL_ENSURE(nRuleID < SAL_N_ELEMENTS(yytname), "OSQLParser::RuleIDToStr: Invalid nRuleId!");
+    OSL_ENSURE(nRuleID < std::size(yytname), "OSQLParser::RuleIDToStr: Invalid nRuleId!");
 	return OUString::createFromAscii(yytname[nRuleID]);
 }
 #endif
@@ -4680,8 +4678,8 @@ sal_uInt32 OSQLParser::StrToRuleID(const OString & rValue)
 {
 	// Search for the given name in yytname and return the index
 	// (or UNKNOWN_RULE, if not found)
-	static sal_uInt32 nLen = SAL_N_ELEMENTS(yytname);
-	for (sal_uInt32 i = YYTRANSLATE(SQL_TOKEN_INVALIDSYMBOL); i < (nLen-1); i++)
+    static sal_uInt32 const nLen = std::size(yytname)-1;
+    for (sal_uInt32 i = YYTRANSLATE(SQL_TOKEN_INVALIDSYMBOL); i < nLen; ++i)
 	{
 		if (rValue == yytname[i])
 			return i;
