@@ -2816,10 +2816,8 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
     }
 
     int n = 0;
-    while (n < para->nch)
+    for (const auto& box : para->hhstr)
     {
-        const auto& box = para->hhstr[n];
-
         if (!box->hh)
             break;
 
