@@ -112,7 +112,7 @@ public:
         const css::uno::Reference< css::frame::XDispatchProvider >& xOwnDisp );
 
 
-    DocumentHolder( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    DocumentHolder( css::uno::Reference< css::uno::XComponentContext > xContext,
                     OCommonEmbeddedObject* pEmbObj );
     virtual ~DocumentHolder() override;
 

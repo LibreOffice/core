@@ -35,6 +35,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 
+#include <utility>
 #include <vcl/weld.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/stdtext.hxx>
@@ -54,7 +55,7 @@
 using namespace ::com::sun::star;
 
 
-OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XComponentContext >& rxContext,
+OCommonEmbeddedObject::OCommonEmbeddedObject( uno::Reference< uno::XComponentContext > xContext,
                                                 const uno::Sequence< beans::NamedValue >& aObjProps )
 : m_bReadOnly( false )
 , m_bDisposed( false )
@@ -62,7 +63,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XCompon
 , m_nObjectState( -1 )
 , m_nTargetState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
-, m_xContext( rxContext )
+, m_xContext(std::move( xContext ))
 , m_nMiscStatus( 0 )
 , m_bEmbeddedScriptSupport( true )
 , m_bDocumentRecoverySupport( true )
@@ -82,7 +83,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XCompon
 
 
 OCommonEmbeddedObject::OCommonEmbeddedObject(
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        uno::Reference< uno::XComponentContext > xContext,
         const uno::Sequence< beans::NamedValue >& aObjProps,
         const uno::Sequence< beans::PropertyValue >& aMediaDescr,
         const uno::Sequence< beans::PropertyValue >& aObjectDescr )
@@ -92,7 +93,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 , m_nObjectState( embed::EmbedStates::LOADED )
 , m_nTargetState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
-, m_xContext( rxContext )
+, m_xContext(std::move( xContext ))
 , m_nMiscStatus( 0 )
 , m_bEmbeddedScriptSupport( true )
 , m_bDocumentRecoverySupport( true )

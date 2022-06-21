@@ -292,13 +292,13 @@ protected:
 
 public:
     // in case a new object must be created the class ID must be specified
-    OleEmbeddedObject( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    OleEmbeddedObject( css::uno::Reference< css::uno::XComponentContext > xContext,
                         const css::uno::Sequence< sal_Int8 >& aClassID,
-                        const OUString& aClassName );
+                        OUString  aClassName );
 
     // in case object will be loaded from a persistent entry or from a file the class ID will be detected on loading
     // factory can do it for OOo objects, but for OLE objects OS dependent code is required
-    OleEmbeddedObject( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    OleEmbeddedObject( css::uno::Reference< css::uno::XComponentContext > xContext,
                         bool bLink );
 #ifdef _WIN32
     // this constructor let object be initialized from clipboard
