@@ -438,7 +438,7 @@
         </node>
         <node oor:name="DocBoundaries">
           <prop oor:name="IsVisible">
-            <value>true</value>
+            <value>8421504</value>
           </prop>
           <prop oor:name="Color">
             <value>1842204</value>
