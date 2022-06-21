@@ -36,6 +36,7 @@
 #include "formstrings.hxx"
 
 #include <algorithm>
+#include <utility>
 
 
 namespace pcr
@@ -63,7 +64,7 @@ namespace pcr
             OUString m_sReference;
 
         public:
-            explicit StringCompare( const OUString& _rReference ) : m_sReference( _rReference ) { }
+            explicit StringCompare( OUString _aReference ) : m_sReference(std::move( _aReference )) { }
 
             bool operator()( std::u16string_view _rCompare )
             {

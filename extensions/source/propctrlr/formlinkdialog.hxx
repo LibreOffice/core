@@ -67,8 +67,8 @@ namespace pcr
             const css::uno::Reference< css::beans::XPropertySet >& _rxMasterForm,
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const OUString& _sExplanation = OUString(),
-            const OUString& _sDetailLabel = OUString(),
-            const OUString& _sMasterLabel = OUString()
+            OUString _sDetailLabel = OUString(),
+            OUString _sMasterLabel = OUString()
         );
 
         virtual ~FormLinkDialog() override;

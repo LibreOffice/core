@@ -37,6 +37,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <utility>
 #include <yesno.hrc>
 #include <comphelper/types.hxx>
 #include <o3tl/string_view.hxx>
@@ -58,7 +59,7 @@ class StringRepresentation:
         lang::XInitialization>
 {
 public:
-    explicit StringRepresentation(uno::Reference< uno::XComponentContext > const & context);
+    explicit StringRepresentation(uno::Reference< uno::XComponentContext > context);
     StringRepresentation (const StringRepresentation&) = delete;
     StringRepresentation& operator=(const StringRepresentation&) = delete;
 
@@ -128,8 +129,8 @@ private:
 
 }
 
-StringRepresentation::StringRepresentation(uno::Reference< uno::XComponentContext > const & context) :
-    m_xContext(context)
+StringRepresentation::StringRepresentation(uno::Reference< uno::XComponentContext > context) :
+    m_xContext(std::move(context))
 {}
 
 // com.sun.star.uno.XServiceInfo:

@@ -65,6 +65,7 @@
 #include <algorithm>
 #include <iterator>
 #include <string_view>
+#include <utility>
 
 namespace pcr
 {
@@ -123,11 +124,11 @@ namespace pcr
     namespace FormComponentType = css::form::FormComponentType;
 
     EventDescription::EventDescription( EventId _nId, const char* _pListenerNamespaceAscii, const char* _pListenerClassAsciiName,
-            const char* _pListenerMethodAsciiName, TranslateId pDisplayNameResId, const OUString& _sHelpId, const OString& _sUniqueBrowseId )
+            const char* _pListenerMethodAsciiName, TranslateId pDisplayNameResId, OUString _sHelpId, OString _sUniqueBrowseId )
         :sDisplayName(PcrRes( pDisplayNameResId ))
         ,sListenerMethodName( OUString::createFromAscii( _pListenerMethodAsciiName ) )
-        ,sHelpId( _sHelpId )
-        ,sUniqueBrowseId( _sUniqueBrowseId )
+        ,sHelpId(std::move( _sHelpId ))
+        ,sUniqueBrowseId(std::move( _sUniqueBrowseId ))
         ,nId( _nId )
     {
         OUStringBuffer aQualifiedListenerClass;

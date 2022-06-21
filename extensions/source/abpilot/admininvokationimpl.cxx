@@ -26,6 +26,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <strings.hrc>
 #include <componentmodule.hxx>
+#include <utility>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 
@@ -41,10 +42,10 @@ namespace abp
     using namespace ::com::sun::star::sdbc;
 
     OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XComponentContext >& _rxContext,
-                    const css::uno::Reference< css::beans::XPropertySet >& _rxDataSource,
+                    css::uno::Reference< css::beans::XPropertySet > _xDataSource,
                     weld::Window* _pMessageParent)
         :m_xContext(_rxContext)
-        ,m_xDataSource(_rxDataSource)
+        ,m_xDataSource(std::move(_xDataSource))
         ,m_pMessageParent(_pMessageParent)
     {
         DBG_ASSERT(m_xContext.is(), "OAdminDialogInvokation::OAdminDialogInvokation: invalid service factory!");

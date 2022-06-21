@@ -52,7 +52,7 @@ namespace pcr
     public:
         FormController(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-            const OUString& sImplementName,
+            OUString sImplementName,
             const css::uno::Sequence<OUString>& aSupportedServiceNames,
             bool _bUseFormFormComponentHandlers
         );
