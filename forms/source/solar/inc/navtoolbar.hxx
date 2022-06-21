@@ -60,8 +60,8 @@ namespace frm
         NavigationToolBar(
             vcl::Window* _pParent,
             WinBits _nStyle,
-            const PCommandImageProvider& _pImageProvider,
-            const OUString & sModuleId
+            PCommandImageProvider _pImageProvider,
+            OUString sModuleId
         );
         virtual ~NavigationToolBar( ) override;
         virtual void dispose() override;

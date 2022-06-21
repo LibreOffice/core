@@ -22,6 +22,7 @@
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xforms/XModel.hpp>
+#include <utility>
 
 namespace xforms
 {
@@ -38,12 +39,12 @@ public:
     { }
 
     EvaluationContext(
-        const css::uno::Reference<css::xml::dom::XNode>& xContextNode,
-        const css::uno::Reference<css::xforms::XModel>& xModel,
-        const css::uno::Reference<css::container::XNameContainer>& xNamespaces )
-        : mxContextNode( xContextNode ),
-          mxModel( xModel ),
-          mxNamespaces( xNamespaces )
+        css::uno::Reference<css::xml::dom::XNode> xContextNode,
+        css::uno::Reference<css::xforms::XModel> xModel,
+        css::uno::Reference<css::container::XNameContainer> xNamespaces )
+        : mxContextNode(std::move( xContextNode )),
+          mxModel(std::move( xModel )),
+          mxNamespaces(std::move( xNamespaces ))
     { }
 
     css::uno::Reference<css::xml::dom::XNode> mxContextNode;

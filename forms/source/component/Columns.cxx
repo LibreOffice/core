@@ -36,6 +36,7 @@
 #include <services.hxx>
 #include <tools/debug.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <utility>
 
 
 namespace frm
@@ -186,11 +187,11 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType )
 }
 
 
-OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const OUString& _sModelName )
+OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, OUString _sModelName )
     :OGridColumn_BASE(m_aMutex)
     ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
     ,m_aHidden( Any( false ) )
-    ,m_aModelName(_sModelName)
+    ,m_aModelName(std::move(_sModelName))
 {
 
     // Create the UnoControlModel

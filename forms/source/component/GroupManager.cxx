@@ -27,6 +27,7 @@
 #include <frm_strings.hxx>
 
 #include <algorithm>
+#include <utility>
 
 namespace frm
 {
@@ -54,9 +55,9 @@ namespace
     }
 }
 
-OGroupCompAcc::OGroupCompAcc(const Reference<XPropertySet>& rxElement, const OGroupComp& _rGroupComp )
+OGroupCompAcc::OGroupCompAcc(const Reference<XPropertySet>& rxElement, OGroupComp _aGroupComp )
                :m_xComponent( rxElement )
-               ,m_aGroupComp( _rGroupComp )
+               ,m_aGroupComp(std::move( _aGroupComp ))
 {
 }
 
@@ -118,8 +119,8 @@ public:
     }
 };
 
-OGroup::OGroup( const OUString& rGroupName )
-        :m_aGroupName( rGroupName )
+OGroup::OGroup( OUString sGroupName )
+        :m_aGroupName(std::move( sGroupName ))
         ,m_nInsertPos(0)
 {
 }

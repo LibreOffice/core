@@ -30,6 +30,7 @@
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 
 namespace xforms
@@ -52,11 +53,11 @@ namespace xforms
     using namespace ::frm;
     U_NAMESPACE_USE
 
-    OXSDDataType::OXSDDataType( const OUString& _rName, sal_Int16 _nTypeClass )
+    OXSDDataType::OXSDDataType( OUString _aName, sal_Int16 _nTypeClass )
         :OXSDDataType_PBase( m_aBHelper )
         ,m_bIsBasic( true )
         ,m_nTypeClass( _nTypeClass )
-        ,m_sName( _rName )
+        ,m_sName(std::move( _aName ))
         ,m_nWST( WhiteSpaceTreatment::Preserve )
         ,m_bPatternMatcherDirty( true )
     {

@@ -29,6 +29,7 @@
 
 #include <svx/labelitemwindow.hxx>
 
+#include <utility>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/toolbox.hxx>
 
@@ -134,14 +135,14 @@ namespace frm
     }
 
     NavigationToolBar::NavigationToolBar( vcl::Window* _pParent, WinBits _nStyle,
-                                          const PCommandImageProvider& _pImageProvider,
-                                          const OUString & sModuleId )
+                                          PCommandImageProvider _pImageProvider,
+                                          OUString sModuleId )
         :Window( _pParent, _nStyle )
         ,m_pDispatcher( nullptr )
-        ,m_pImageProvider( _pImageProvider )
+        ,m_pImageProvider(std::move( _pImageProvider ))
         ,m_eImageSize( eSmall )
         ,m_pToolbar( nullptr )
-        ,m_sModuleId( sModuleId )
+        ,m_sModuleId(std::move( sModuleId ))
     {
         implInit( );
     }
