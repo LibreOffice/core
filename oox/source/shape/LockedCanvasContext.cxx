@@ -79,8 +79,8 @@ LockedCanvasContext::onCreateContext(sal_Int32 nElementToken, const ::oox::Attri
         case XML_cNvPr: // CT_NonVisualDrawingProps
         {
             mpShapePtr->setHidden(rAttribs.getBool(XML_hidden, false));
-            mpShapePtr->setId(rAttribs.getString(XML_id).value());
-            mpShapePtr->setName(rAttribs.getString(XML_name).value());
+            mpShapePtr->setId(rAttribs.getString(XML_id));
+            mpShapePtr->setName(rAttribs.getString(XML_name));
             break;
         }
         case XML_cNvGrpSpPr: // CT_NonVisualGroupDrawingShapeProps

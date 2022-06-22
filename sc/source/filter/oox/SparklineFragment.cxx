@@ -151,9 +151,9 @@ void addAttributesToSparklineAttributes(sc::SparklineAttributes& rSparklineAttri
     rSparklineAttributes.setRightToLeft(rAttribs.getBool(XML_rightToLeft, false));
 
     if (rSparklineAttributes.getMaxAxisType() == sc::AxisType::Custom)
-        rSparklineAttributes.setManualMax(oManualMax.value());
+        rSparklineAttributes.setManualMax(oManualMax);
     if (rSparklineAttributes.getMinAxisType() == sc::AxisType::Custom)
-        rSparklineAttributes.setManualMin(oManualMin.value());
+        rSparklineAttributes.setManualMin(oManualMin);
 }
 
 } // end anonymous namespace

@@ -43,7 +43,7 @@ Transform2DContext::Transform2DContext( ContextHandler2Helper const & rParent, c
     else
     {
         if( rAttribs.hasAttribute( XML_rot ) )
-            mrShape.getTextBody()->getTextProperties().moRotation = rAttribs.getInteger( XML_rot ).value();
+            mrShape.getTextBody()->getTextProperties().moRotation = rAttribs.getInteger( XML_rot );
     }
 }
 
@@ -59,8 +59,8 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
             {
                 case A_TOKEN( off ):
                     {
-                        const OUString sXValue = rAttribs.getString( XML_x ).value();
-                        const OUString sYValue = rAttribs.getString( XML_y ).value();
+                        const OUString sXValue = rAttribs.getString( XML_x );
+                        const OUString sYValue = rAttribs.getString( XML_y );
 
                         if( !sXValue.isEmpty() && nType != XML_ellipse )
                             mrShape.getTextBody()->getTextProperties().moTextOffLeft = GetCoordinate( sXValue.toInt32() - mrShape.getPosition().X );
@@ -70,8 +70,8 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
                     break;
                 case A_TOKEN( ext ):
                     {
-                        const OUString sXValue = rAttribs.getString( XML_cx ).value();
-                        const OUString sYValue = rAttribs.getString( XML_cy ).value();
+                        const OUString sXValue = rAttribs.getString( XML_cx );
+                        const OUString sYValue = rAttribs.getString( XML_cy );
 
                         if( !sXValue.isEmpty() && nType == XML_rect )
                         {
@@ -96,22 +96,22 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
     switch( aElementToken )
     {
     case A_TOKEN( off ):        // horz/vert translation
-        mrShape.setPosition( awt::Point( rAttribs.getString( XML_x ).value().toInt32(), rAttribs.getString( XML_y ).value().toInt32() ) );
+        mrShape.setPosition( awt::Point( rAttribs.getString( XML_x ).toInt32(), rAttribs.getString( XML_y ).toInt32() ) );
         break;
     case A_TOKEN( ext ):        // horz/vert size
-        mrShape.setSize( awt::Size( rAttribs.getString( XML_cx ).value().toInt32(), rAttribs.getString( XML_cy ).value().toInt32() ) );
+        mrShape.setSize( awt::Size( rAttribs.getString( XML_cx ).toInt32(), rAttribs.getString( XML_cy ).toInt32() ) );
         break;
     case A_TOKEN( chOff ):  // horz/vert translation of children
-        mrShape.setChildPosition( awt::Point( rAttribs.getString( XML_x ).value().toInt32(), rAttribs.getString( XML_y ).value().toInt32() ) );
+        mrShape.setChildPosition( awt::Point( rAttribs.getString( XML_x ).toInt32(), rAttribs.getString( XML_y ).toInt32() ) );
         break;
     case A_TOKEN( chExt ):  // horz/vert size of children
         {
-            sal_Int32 nChExtCx = rAttribs.getString(XML_cx).value().toInt32();
+            sal_Int32 nChExtCx = rAttribs.getString(XML_cx).toInt32();
 
             if(nChExtCx == 0)
                 nChExtCx = mrShape.getSize().Width;
 
-            sal_Int32 nChExtCy = rAttribs.getString(XML_cy).value().toInt32();
+            sal_Int32 nChExtCy = rAttribs.getString(XML_cy).toInt32();
 
             if(nChExtCy == 0)
                 nChExtCy = mrShape.getSize().Height;

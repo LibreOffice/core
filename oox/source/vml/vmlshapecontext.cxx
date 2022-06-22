@@ -51,7 +51,7 @@ namespace {
  */
 OptValue< bool > lclDecodeBool( const AttributeList& rAttribs, sal_Int32 nToken )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nToken );
+    OptValue< OUString > oValue = rAttribs.getStringOpt( nToken );
     if( oValue.has_value() ) return OptValue< bool >( ConversionHelper::decodeBool( oValue.value() ) );
     return OptValue< bool >();
 }
@@ -61,7 +61,7 @@ OptValue< bool > lclDecodeBool( const AttributeList& rAttribs, sal_Int32 nToken 
  */
 OptValue< double > lclDecodePercent( const AttributeList& rAttribs, sal_Int32 nToken, double fDefValue )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nToken );
+    OptValue< OUString > oValue = rAttribs.getStringOpt( nToken );
     if( oValue.has_value() ) return OptValue< double >( ConversionHelper::decodePercent( oValue.value(), fDefValue ) );
     return OptValue< double >();
 }
@@ -71,7 +71,7 @@ OptValue< double > lclDecodePercent( const AttributeList& rAttribs, sal_Int32 nT
  */
 OptValue< double > lclDecodeOpacity( const AttributeList& rAttribs, sal_Int32 nToken, double fDefValue )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nToken );
+    OptValue< OUString > oValue = rAttribs.getStringOpt( nToken );
     double fRetval(fDefValue);
 
     if( oValue.has_value() )
@@ -99,7 +99,7 @@ OptValue< double > lclDecodeOpacity( const AttributeList& rAttribs, sal_Int32 nT
  */
 OptValue< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int32 nToken )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nToken );
+    OptValue< OUString > oValue = rAttribs.getStringOpt( nToken );
     OptValue< Int32Pair > oRetValue;
     if( oValue.has_value() )
     {
@@ -114,7 +114,7 @@ OptValue< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int
  */
 OptValue< DoublePair > lclDecodePercentPair( const AttributeList& rAttribs, sal_Int32 nToken )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nToken );
+    OptValue< OUString > oValue = rAttribs.getStringOpt( nToken );
     OptValue< DoublePair > oRetValue;
     if( oValue.has_value() )
     {
@@ -356,9 +356,9 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.maStrokeModel.maEndArrow.moArrowType = rAttribs.getToken( XML_endarrow );
             mrTypeModel.maStrokeModel.maEndArrow.moArrowWidth = rAttribs.getToken( XML_endarrowwidth );
             mrTypeModel.maStrokeModel.maEndArrow.moArrowLength = rAttribs.getToken( XML_endarrowlength );
-            assignIfUsed( mrTypeModel.maStrokeModel.moColor, rAttribs.getString( XML_color ) );
+            assignIfUsed( mrTypeModel.maStrokeModel.moColor, rAttribs.getStringOpt( XML_color ) );
             mrTypeModel.maStrokeModel.moOpacity = lclDecodeOpacity( rAttribs, XML_opacity, 1.0 );
-            assignIfUsed( mrTypeModel.maStrokeModel.moWeight, rAttribs.getString( XML_weight ) );
+            assignIfUsed( mrTypeModel.maStrokeModel.moWeight, rAttribs.getStringOpt( XML_weight ) );
             mrTypeModel.maStrokeModel.moDashStyle = rAttribs.getString( XML_dashstyle );
             mrTypeModel.maStrokeModel.moLineStyle = rAttribs.getToken( XML_linestyle );
             mrTypeModel.maStrokeModel.moEndCap = rAttribs.getToken( XML_endcap );
@@ -370,7 +370,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             // in XLSX they use o:relid
             bool bHasORelId = rAttribs.hasAttribute( O_TOKEN(relid) );
             assignIfUsed( mrTypeModel.maFillModel.moFilled, lclDecodeBool( rAttribs, XML_on ) );
-            assignIfUsed( mrTypeModel.maFillModel.moColor, rAttribs.getString( XML_color ) );
+            assignIfUsed( mrTypeModel.maFillModel.moColor, rAttribs.getStringOpt( XML_color ) );
             mrTypeModel.maFillModel.moOpacity = lclDecodeOpacity( rAttribs, XML_opacity, 1.0 );
             mrTypeModel.maFillModel.moColor2 = rAttribs.getString( XML_color2 );
             mrTypeModel.maFillModel.moOpacity2 = lclDecodeOpacity( rAttribs, XML_opacity2, 1.0 );
@@ -398,7 +398,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.moCropTop = rAttribs.getString(XML_croptop);
 
             // Gain / contrast.
-            OptValue<OUString> oGain = rAttribs.getString(XML_gain);
+            OptValue<OUString> oGain = rAttribs.getStringOpt(XML_gain);
             sal_Int32 nGain = 0x10000;
             if (oGain.has_value() && oGain.value().endsWith("f"))
             {
@@ -413,7 +413,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.mnGain = nGain;
 
             // Blacklevel / brightness.
-            OptValue<OUString> oBlacklevel = rAttribs.getString(XML_blacklevel);
+            OptValue<OUString> oBlacklevel = rAttribs.getStringOpt(XML_blacklevel);
             sal_Int16 nBlacklevel = 0;
             if (oBlacklevel.has_value() && oBlacklevel.value().endsWith("f"))
             {
@@ -436,14 +436,14 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         {
             mrTypeModel.maShadowModel.mbHasShadow = true;
             mrTypeModel.maShadowModel.moShadowOn = lclDecodeBool(rAttribs, XML_on).value_or(false);
-            assignIfUsed(mrTypeModel.maShadowModel.moColor, rAttribs.getString(XML_color));
-            assignIfUsed(mrTypeModel.maShadowModel.moOffset, rAttribs.getString(XML_offset));
+            assignIfUsed(mrTypeModel.maShadowModel.moColor, rAttribs.getStringOpt(XML_color));
+            assignIfUsed(mrTypeModel.maShadowModel.moOffset, rAttribs.getStringOpt(XML_offset));
             mrTypeModel.maShadowModel.moOpacity = lclDecodePercent(rAttribs, XML_opacity, 1.0);
         }
         break;
         case VML_TOKEN( textpath ):
-            assignIfUsed(mrTypeModel.maTextpathModel.moString, rAttribs.getString(XML_string));
-            assignIfUsed(mrTypeModel.maTextpathModel.moStyle, rAttribs.getString(XML_style));
+            assignIfUsed(mrTypeModel.maTextpathModel.moString, rAttribs.getStringOpt(XML_string));
+            assignIfUsed(mrTypeModel.maTextpathModel.moStyle, rAttribs.getStringOpt(XML_style));
             assignIfUsed(mrTypeModel.maTextpathModel.moTrim, lclDecodeBool(rAttribs, XML_trim));
         break;
     }
@@ -453,7 +453,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
 OptValue< OUString > ShapeTypeContext::decodeFragmentPath( const AttributeList& rAttribs, sal_Int32 nToken ) const
 {
     OptValue< OUString > oFragmentPath;
-    OptValue< OUString > oRelId = rAttribs.getString( nToken );
+    OptValue< OUString > oRelId = rAttribs.getStringOpt( nToken );
     if( oRelId.has_value() )
         oFragmentPath = getFragmentPathFromRelId( oRelId.value() );
     return oFragmentPath;
