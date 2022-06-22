@@ -16,6 +16,23 @@
       "message": "Hi Caolán,\nNot sure whether gUserItemSz.Height() should never be zero here but there are some crash reports which reason is EXCEPTION_INT_DIVIDE_BY_ZERO so at least avoid it. What do you think ?",
       "revId": "972bccefcf3b1a30fffbf4d9125d954589507be7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83d86c84_4ba4ad76",
+        "filename": "svtools/source/control/ctrlbox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-22T11:26:09Z",
+      "side": 1,
+      "message": "baffling to me, we take the height and * 16 and divide by 10, so if it was even 1 initially from get_text_height() we would have 1 for the height. So the get_text_height() must have been 0, which is a very odd thing to happen.\n\nRather than go with nMaxDeviceHeight on this failure case, maybe something arbitrary and relatively small as the fallback of how may previews to create is the way to go, e.g. \"16\" or something like that.",
+      "revId": "972bccefcf3b1a30fffbf4d9125d954589507be7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
