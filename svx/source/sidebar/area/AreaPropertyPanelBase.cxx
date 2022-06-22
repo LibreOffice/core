@@ -256,8 +256,10 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, weld::ComboBox&, void)
             mxBmpImport->hide();
             mxLbFillAttr->set_sensitive(false);
 
-            // #i122676# need to call a single SID_ATTR_FILL_STYLE change
-            setFillStyle(XFillStyleItem(drawing::FillStyle_NONE));
+            const XFillStyleItem aXFillStyleItem(drawing::FillStyle_NONE);
+            // Need to disable the XFillUseSlideBackgroundItem
+            const XFillUseSlideBackgroundItem aXFillUseSlideBackgroundItem(false);
+            setFillUseBackground(&aXFillStyleItem, aXFillUseSlideBackgroundItem);
             break;
         }
         case SOLID:
