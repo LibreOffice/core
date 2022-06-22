@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1859b0fd_a3793456",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-22T08:10:16Z",
+      "side": 1,
+      "message": "Hi Caolán,\nNot sure whether gUserItemSz.Height() should never be zero here but there are some crash reports which reason is EXCEPTION_INT_DIVIDE_BY_ZERO so at least avoid it. What do you think ?",
+      "revId": "972bccefcf3b1a30fffbf4d9125d954589507be7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
