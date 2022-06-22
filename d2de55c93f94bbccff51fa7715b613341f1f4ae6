@@ -16,6 +16,24 @@
       "message": "\u003chttps://ci.libreoffice.org/job/lo_tb_master_linux_dbg/38612/\u003e, which was triggered after exactly (only) this commit started to fail with the kill-wrapper killing UITest_impress_tests at sd/qa/uitest/impress_tests/save_readonly_with_password.py, line 95.  And all of the following four builds of that bot so far failed either exactly the same way and/or with the kill-wrapper killing the similar UITest_writer_test6 at sw/qa/uitest/writer_tests6/save_readonly_with_password.py, line 54.",
       "revId": "d2de55c93f94bbccff51fa7715b613341f1f4ae6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "254e83f3_846381c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-22T18:23:56Z",
+      "side": 1,
+      "message": "(And those two kill-wrapper scenarios already happened sporadically in the past, see the comments starting at \u003chttps://gerrit.libreoffice.org/c/core/+/130530/2#message-19c008e41a7f97abf18117b278ed35799e55838a\u003e \"uitest: introduce wait_until_file_is_available\".  But they seem to have increased dramatically in frequency now, across Jenkins tinderbox and \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/\u003e builds, witness e.g. \u003chttps://gerrit.libreoffice.org/c/core/+/136281\u003e \"fix build --with-help\" being killed four times in a row.  And it looks likely that this change is the culprit.)",
+      "parentUuid": "e1b55358_9bd28e57",
+      "revId": "d2de55c93f94bbccff51fa7715b613341f1f4ae6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
