@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72067983_e2dad110",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3517,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-22T14:01:50Z",
+      "side": 1,
+      "message": "Addressed in https://gerrit.libreoffice.org/c/core/+/136285",
+      "parentUuid": "540c5dd9_75d39a13",
+      "revId": "cd966aac6ecd8ce606ac3f2ccd602e467114ba3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1e9e6e3b_9a97ba78",
         "filename": "sc/source/filter/xml/xmlexprt.cxx",
         "patchSetId": 3
