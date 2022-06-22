@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34e42fac_559ec4cd",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-06-22T22:09:40Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be std::size too?",
+      "range": {
+        "startLine": 97,
+        "startChar": 18,
+        "endLine": 97,
+        "endChar": 32
+      },
+      "revId": "47ea364673d9f62c9367cf89b474cc1338391454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c674e35_3b0f724c",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-06-22T22:09:40Z",
+      "side": 1,
+      "message": "for simple arithmetic types like size_t there\u0027s no performance boost to using ++i vs i++ when the return type is not used, every compiler will inline the operator call so the temporaries created will get optimized away",
+      "range": {
+        "startLine": 134,
+        "startChar": 62,
+        "endLine": 134,
+        "endChar": 63
+      },
+      "revId": "47ea364673d9f62c9367cf89b474cc1338391454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
