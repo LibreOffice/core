@@ -70,6 +70,24 @@
       "parentUuid": "df378465_f8f82b23",
       "revId": "b055412299ba1104a17ec68165de9d3f37c661cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03b74b93_c2741459",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3989,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-22T06:32:39Z",
+      "side": 1,
+      "message": "This seems to WFM:\n\n  assert(pFrame-\u003emaGeometry.x() \u003d\u003d static_cast\u003csal_Int16\u003e(LOWORD(lParam)) || IsIconic(hWnd));",
+      "parentUuid": "4f0e59c8_c48ce4c6",
+      "revId": "b055412299ba1104a17ec68165de9d3f37c661cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
