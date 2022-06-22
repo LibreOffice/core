@@ -33,6 +33,24 @@
       "message": "This fails locally in master (for sberg and for me) on Windows, and also doing the test manually makes the object jump down on reload already in 7.2.0.4:\n\nhttps://i.imgur.com/wh8f575.gif",
       "revId": "d0921aa753c43600272865602df3c7c2a8f13196",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98fd56f5_adbdbfda",
+        "filename": "sc/qa/unit/scshapetest.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-22T09:27:36Z",
+      "side": 1,
+      "message": "\u003e This fails locally in master (for sberg and for me) on Windows\n\nthough for the failure I see on Windows I can trace it back to the recent \u003chttps://gerrit.libreoffice.org/c/core/+/135809\u003e \"WIN drop window state redundancies\" (see my comment there)",
+      "parentUuid": "7a69dcaa_b92bb8f3",
+      "revId": "d0921aa753c43600272865602df3c7c2a8f13196",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
