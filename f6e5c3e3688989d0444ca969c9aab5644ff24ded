@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8cafdc4_2ef83026",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-06-22T10:16:31Z",
+      "side": 1,
+      "message": "this looks quite wrong. probably what you want is pBuf-\u003edata() and pBuf-\u003esize() ... except nSize is already pBuf-\u003esize() so it should be 1 for the 2nd arg?",
+      "range": {
+        "startLine": 519,
+        "startChar": 15,
+        "endLine": 519,
+        "endChar": 56
+      },
+      "revId": "f6e5c3e3688989d0444ca969c9aab5644ff24ded",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
