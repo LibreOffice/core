@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72d0e8cd_5b71abfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-22T10:05:28Z",
+      "side": 1,
+      "message": "Note that the jump depends on vertical window size; *possibly* on the row height which has the anchor cell.\nWhen I have the window small enough, so that the object gets its top in the middle of a row, I see no vertical jump.\n\nWhen the object gets created with top *very close* to a small row\u0027s top, the jump is huge.\n\nWhen the object gets created with top *very close* to a wide row\u0027s top, the jump is not that huge.\n\nPossibly a small difference in window size caused by jmux\u0027 commit caused a bit different position of the object in sberg\u0027s case? Overall, the test failure seem to actually show some real problem that needs fixing.",
+      "revId": "d0921aa753c43600272865602df3c7c2a8f13196",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a69dcaa_b92bb8f3",
