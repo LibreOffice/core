@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c9f452b_e125eaf2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-22T06:41:40Z",
+      "side": 1,
+      "message": "Makes sense. Did you consider covering the fix with a test? If this affects invalidations, then you could test this from CppunitTest_sw_tiledrendering. Or is this only about painting?",
+      "revId": "08eb8adf85537b25e2e4328448b84b30d99f45af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
