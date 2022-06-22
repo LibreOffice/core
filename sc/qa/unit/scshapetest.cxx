@@ -71,6 +71,7 @@ public:
     void testCustomShapeCellAnchoredRotatedShape();
     void testTdf144242_Line_noSwapWH();
     void testTdf144242_OpenBezier_noSwapWH();
+    void testLargeAnchorOffset();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
     CPPUNIT_TEST(testTdf143619_validation_circle_pos);
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testCustomShapeCellAnchoredRotatedShape);
     CPPUNIT_TEST(testTdf144242_Line_noSwapWH);
     CPPUNIT_TEST(testTdf144242_OpenBezier_noSwapWH);
+    CPPUNIT_TEST(testLargeAnchorOffset);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1230,6 +1232,38 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
                            + OUString::number(pData->maEnd.Col()) + " row "
                            + OUString::number(pData->maEnd.Row()));
     CPPUNIT_ASSERT_EQUAL(OUString("start col 1 row 1 end col 2 row 8"), sActual);
+
+    pDocSh->DoClose();
+}
+
+void ScShapeTest::testLargeAnchorOffset()
+{
+    // The example doc contains a resize-with-cell-anchored measure line
+    // with a large vertical offset that shifts the start point onto the
+    // next cell below.
+    OUString aFileURL;
+    createFileURL(u"LargeAnchorOffset.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(pDocSh->GetDocument(), 0);
+
+    const Point aOldPos = pObj->GetRelativePos();
+    // Just to check that it imports correctly
+    lcl_AssertPointEqualWithTolerance("before reload", { 9504, 9089 }, aOldPos, 1);
+
+    saveAndReload(xComponent, "calc8");
+
+    pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    pObj = lcl_getSdrObjectWithAssert(pDocSh->GetDocument(), 0);
+
+    // Without the fix, this would fail:
+    //   Test name: sc_apitest::ScShapeTest::testLargeAnchorOffset
+    //   assertion failed
+    //   - Expression: std::abs(rExpected.Y() - rActual.Y()) <= nTolerance
+    //   - after reload Y expected 9089 actual 9643 Tolerance 1
+    const Point aNewPos = pObj->GetRelativePos();
+    lcl_AssertPointEqualWithTolerance("after reload", aOldPos, aNewPos, 1);
 
     pDocSh->DoClose();
 }
