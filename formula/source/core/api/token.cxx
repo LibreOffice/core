@@ -1256,8 +1256,12 @@ bool FormulaMissingContext::AddMissingExternal( FormulaTokenArray *pNewArr ) con
 
     const OUString &rName = mpFunc->GetExternal();
 
-    // initial (fast) check:
-    sal_Unicode nLastChar = rName[ rName.getLength() - 1];
+    // initial (fast) checks:
+    sal_Int32 nLength = rName.getLength();
+    if (!nLength)
+        return false;
+
+    sal_Unicode nLastChar = rName[ nLength - 1];
     if ( nLastChar != 't' && nLastChar != 'm' )
         return false;
 
