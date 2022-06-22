@@ -9046,12 +9046,12 @@ void ScInterpreter::ScFind()
         {
             sal_Int32 nIdx = 0;
             nCnt = 0;
-            while ( nIdx <= nPos )
+            while ( nIdx < nPos )
             {
                 sStr.iterateCodePoints( &nIdx );
                 ++nCnt;
             }
-            PushDouble( static_cast<double>(nCnt) );
+            PushDouble( static_cast<double>(nCnt + 1) );
         }
     }
 }
@@ -9445,12 +9445,12 @@ void ScInterpreter::ScSearch()
         {
             sal_Int32 nIdx = 0;
             sal_Int32 nCnt = 0;
-            while ( nIdx <= nPos )
+            while ( nIdx < nPos )
             {
                 sStr.iterateCodePoints( &nIdx );
                 ++nCnt;
             }
-            PushDouble( static_cast<double>(nCnt) );
+            PushDouble( static_cast<double>(nCnt + 1) );
         }
     }
 }
