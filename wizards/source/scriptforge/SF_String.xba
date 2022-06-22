@@ -2539,6 +2539,9 @@ Public Function Unquote(Optional ByRef InputStr As Variant _
 							) As String
 &apos;&apos;&apos;	Reset a quoted string to its original content
 &apos;&apos;&apos;		(used f.i. for parsing of csv-like records)
+&apos;&apos;&apos;	When the input string contains the quote character, the latter must be escaped:
+&apos;&apos;&apos;		- QuoteChar = double quote, by doubling it (&quot;&quot;)
+&apos;&apos;&apos;		- QuoteChar = single quote, with a preceding backslash (\&apos;)
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		InputStr: the input string
 &apos;&apos;&apos;		QuoteChar: either &quot; (default) or &apos;
@@ -2567,7 +2570,7 @@ Check:
 	End If
 
 Try:
-	If Left(InputStr, 1) &lt;&gt; &quot;&quot;&quot;&quot; Then	&apos;	No need to parse further
+	If Left(InputStr, 1) &lt;&gt; QuoteChar Then		&apos;	No need to parse further
 		sUnquote = InputStr
 	Else
 		Set oCharacterClass = SF_Utils._GetUNOService(&quot;CharacterClass&quot;)
