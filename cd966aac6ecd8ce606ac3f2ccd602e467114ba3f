@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e9e6e3b_9a97ba78",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3555,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-22T12:46:46Z",
+      "side": 1,
+      "message": "Using ManualColWidthRowHeight.ods from https://gerrit.libreoffice.org/c/core/+/106990, and simply default-creating a measure line + setting it to anchor to cell with resize with cell, saving it gives to me at this point:\n\n  aRectFull \u003d { LT\u003d[9504 , 8590] RB\u003d[17503 , 9989] [8000 x 1400] }\n  aRectReduced \u003d { LT\u003d[9504 , 9089] RB\u003d[17503 , 9989] [8000 x 901] }\n\nNote that there\u0027s *no* hidden rows/columns at this point.\nIt looks like either one of the rectangles is wrong (getShapeRect gives some obsolete data?), or they do not directly correspond to one another.\n\nMaybe it makes sense to calculate the reduced rectangle the same way - using pDoc-\u003eGetMMRect with bHiddenAsZero\u003dtrue? I imagine there may be some problem with the approach when the start or end cell is hidden (I even don\u0027t know if the offsets may move the point outside of the start/end cell? - in which case, complications could be even greater). Or do you know how to make sure that getShapeRect gives an up-to-date information?",
+      "revId": "cd966aac6ecd8ce606ac3f2ccd602e467114ba3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
