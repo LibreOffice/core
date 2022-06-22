@@ -2344,16 +2344,12 @@ SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
     return aInfo;
 }
 
-static void lcl_SetSearchLabelWindow(const OUString& rStr)
+static void lcl_SetSearchLabelWindow(const OUString& rStr, SfxViewFrame& rViewFrame)
 {
-    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    if (!pViewFrame)
-        return;
-
     bool bNotFound = rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND);
 
     css::uno::Reference< css::beans::XPropertySet > xPropSet(
-            pViewFrame->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
+            rViewFrame.GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
     xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
     css::uno::Reference< css::ui::XUIElement > xUIElement =
@@ -2424,6 +2420,10 @@ OUString SvxSearchDialogWrapper::GetSearchLabel()
 
 void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
 {
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (!pViewFrame)
+        return;
+
     OUString sStr;
     if (rSL == SearchLabel::End)
         sStr = SvxResId(RID_SVXSTR_SEARCH_END);
@@ -2444,17 +2444,21 @@ void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
     else if (rSL == SearchLabel::ReminderStartWrapped)
         sStr = SvxResId(RID_SVXSTR_SEARCH_REMINDER_START_WRAPPED);
 
-    lcl_SetSearchLabelWindow(sStr);
-    if (SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>( SfxViewFrame::Current()->
+    lcl_SetSearchLabelWindow(sStr, *pViewFrame);
+
+    if (SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>( pViewFrame->
             GetChildWindow( SvxSearchDialogWrapper::GetChildWindowId() )))
         pWrp->getDialog()->SetSearchLabel(sStr);
 }
 
 void SvxSearchDialogWrapper::SetSearchLabel(const OUString& sStr)
 {
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (!pViewFrame)
+        return;
 
-    lcl_SetSearchLabelWindow(sStr);
-    if (SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>( SfxViewFrame::Current()->
+    lcl_SetSearchLabelWindow(sStr, *pViewFrame);
+    if (SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>( pViewFrame->
             GetChildWindow( SvxSearchDialogWrapper::GetChildWindowId() )))
         pWrp->getDialog()->SetSearchLabel(sStr);
 }
