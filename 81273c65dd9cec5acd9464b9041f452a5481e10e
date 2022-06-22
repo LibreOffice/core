@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "108eb625_599f082e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-06-22T16:13:54Z",
+      "side": 1,
+      "message": "@Michael: I\u0027m sorry, I haven\u0027t checked yet, but it seemed ok for me. The first paragraph thing was a workaround to fix WYSWYG editing in Show Changes mode, but maybe it\u0027s obsolete. Thanks for the fix!",
+      "revId": "81273c65dd9cec5acd9464b9041f452a5481e10e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
