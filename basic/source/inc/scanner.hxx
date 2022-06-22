@@ -33,6 +33,7 @@ class SbiScanner
 {
     OUString   aBuf;             // input buffer
     OUString   aLine;
+    OUString   aSaveLine;
     sal_Int32 nLineIdx;
     sal_Int32 nSaveLineIdx;
     StarBASIC* pBasic;                  // instance for error callbacks
@@ -80,8 +81,8 @@ public:
     sal_Int32 GetCol1() const       { return nCol1;   }
     void  SetCol1( sal_Int32 n )    { nCol1 = n;      }
     StarBASIC* GetBasic()           { return pBasic;  }
-    void  SaveLine()                { nSaveLineIdx = nLineIdx; }
-    void  RestoreLine()             { nLineIdx = nSaveLineIdx; }
+    void  SaveLine()                { aSaveLine = aLine; nSaveLineIdx = nLineIdx; }
+    void  RestoreLine()             { nLineIdx = nSaveLineIdx; aLine = aSaveLine; }
     void  LockColumn();
     void  UnlockColumn();
     bool  DoesColonFollow();
