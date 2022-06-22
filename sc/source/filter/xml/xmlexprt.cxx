@@ -3481,14 +3481,12 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             // end cell address of snap rect. In case of a transformed shape, it is not in rMyCell.
             ScAddress aSnapStartAddress = rMyCell.maCellAddress;
             ScDrawObjData* pObjData = nullptr;
-            bool bIsShapeTransformed = false;
             if (pObj)
             {
                 pObjData = ScDrawLayer::GetObjData(pObj);
-                bIsShapeTransformed = pObj->GetRotateAngle() != 0_deg100 || pObj->GetShearAngle() != 0_deg100;
+                if (pObjData)
+                    aSnapStartAddress = pObjData->maStart;
             }
-            if (bIsShapeTransformed && pObjData)
-                aSnapStartAddress = pObjData->maStart;
 
             // In case rows or columns are hidden above or before the snap rect, move the shape to the
             // position it would have, if these rows and columns are visible.
@@ -3509,7 +3507,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
             // tdf#137033 In case the shape is anchored "To Cell (resize with cell)" hiding rows or
             // columns inside the snap rect has not only changed size of the shape but rotate and shear
             // angle too. We resize the shape to full size. That will recover the original angles too.
-            if (rShape.bResizeWithCell && pObjData && pObj)
+            if (rShape.bResizeWithCell && pObjData) // implies pObj & aSnapStartAddress = pObjData->maStart
             {
                 // Get original size from anchor
                 const Point aSnapStartOffset = pObjData->maStartOffset;
