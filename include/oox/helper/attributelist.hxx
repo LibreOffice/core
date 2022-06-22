@@ -101,32 +101,53 @@ public:
     oox::drawingml::Color getHighlightColor(sal_Int32 nAttrToken) const;
 
     /** Returns the string value of the specified attribute. */
-    OptValue< OUString > getString( sal_Int32 nAttrToken ) const;
+    OptValue< OUString > getStringOpt( sal_Int32 nAttrToken ) const;
+
+    /** Returns the string value of the specified attribute, empty if not present */
+    OUString getString( sal_Int32 nAttrToken ) const { return getStringOpt(nAttrToken).value_or(OUString()); }
 
     /** Returns the string value of the specified attribute. All characters in
         the format '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
-    OptValue< OUString > getXString( sal_Int32 nAttrToken ) const;
+    OptValue< OUString > getXStringOpt( sal_Int32 nAttrToken ) const;
+
+    /** Returns the string value of the specified attribute. All characters in
+        the format '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
+    OUString getXString( sal_Int32 nAttrToken ) const { return getXStringOpt(nAttrToken).value_or(OUString()); }
 
     /** Returns the double value of the specified attribute. */
-    OptValue< double >  getDouble( sal_Int32 nAttrToken ) const;
+    OptValue< double > getDoubleOpt( sal_Int32 nAttrToken ) const;
+
+    double getDouble( sal_Int32 nAttrToken ) const { return getDoubleOpt(nAttrToken).value_or(0); }
 
     /** Returns the 32-bit signed integer value of the specified attribute (decimal). */
-    OptValue< sal_Int32 > getInteger( sal_Int32 nAttrToken ) const;
+    OptValue< sal_Int32 > getIntegerOpt( sal_Int32 nAttrToken ) const;
+
+    sal_Int32 getInteger( sal_Int32 nAttrToken ) const { return getIntegerOpt(nAttrToken).value_or(0); }
 
     /** Returns the 32-bit unsigned integer value of the specified attribute (decimal). */
-    OptValue< sal_uInt32 > getUnsigned( sal_Int32 nAttrToken ) const;
+    OptValue< sal_uInt32 > getUnsignedOpt( sal_Int32 nAttrToken ) const;
+
+    sal_uInt32 getUnsigned( sal_Int32 nAttrToken ) const { return getUnsignedOpt(nAttrToken).value_or(0); }
 
     /** Returns the 64-bit signed integer value of the specified attribute (decimal). */
-    OptValue< sal_Int64 > getHyper( sal_Int32 nAttrToken ) const;
+    OptValue< sal_Int64 > getHyperOpt( sal_Int32 nAttrToken ) const;
+
+    sal_Int64 getHyper( sal_Int32 nAttrToken ) const { return getHyperOpt(nAttrToken).value_or(0); }
 
     /** Returns the 32-bit signed integer value of the specified attribute (hexadecimal). */
-    OptValue< sal_Int32 > getIntegerHex( sal_Int32 nAttrToken ) const;
+    OptValue< sal_Int32 > getIntegerHexOpt( sal_Int32 nAttrToken ) const;
+
+    sal_Int32 getIntegerHex( sal_Int32 nAttrToken ) const { return getIntegerHexOpt(nAttrToken).value_or(0); }
 
     /** Returns the boolean value of the specified attribute. */
-    OptValue< bool >    getBool( sal_Int32 nAttrToken ) const;
+    OptValue< bool >    getBoolOpt( sal_Int32 nAttrToken ) const;
+
+    bool    getBool( sal_Int32 nAttrToken ) const { return getBoolOpt(nAttrToken).value_or(false); }
 
     /** Returns the date/time value of the specified attribute. */
-    OptValue< css::util::DateTime > getDateTime( sal_Int32 nAttrToken ) const;
+    OptValue< css::util::DateTime > getDateTimeOpt( sal_Int32 nAttrToken ) const;
+
+    css::util::DateTime getDateTime( sal_Int32 nAttrToken ) const { return getDateTimeOpt(nAttrToken).value_or(css::util::DateTime()); }
 
     // defaulted return values ------------------------------------------------
 
