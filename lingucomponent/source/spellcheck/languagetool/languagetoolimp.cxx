@@ -40,6 +40,7 @@
 #include <tools/color.hxx>
 #include <tools/long.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -53,28 +54,23 @@ using namespace linguistic;
 
 namespace
 {
-PropertyValue lcl_MakePropertyValue(const OUString& rName, uno::Any& rValue)
-{
-    return PropertyValue(rName, -1, rValue, css::beans::PropertyState_DIRECT_VALUE);
-}
-
 Sequence<PropertyValue> lcl_GetLineColorPropertyFromErrorId(const std::string& rErrorId)
 {
-    uno::Any aColor;
+    Color aColor;
     if (rErrorId == "TYPOS")
     {
-        aColor <<= COL_LIGHTRED;
+        aColor = COL_LIGHTRED;
     }
     else if (rErrorId == "STYLE")
     {
-        aColor <<= COL_LIGHTBLUE;
+        aColor = COL_LIGHTBLUE;
     }
     else
     {
         // Same color is used for other errorId's such as GRAMMAR, TYPOGRAPHY..
-        aColor <<= COL_ORANGE;
+        aColor = COL_ORANGE;
     }
-    Sequence<PropertyValue> aProperties{ lcl_MakePropertyValue("LineColor", aColor) };
+    Sequence<PropertyValue> aProperties{ comphelper::makePropertyValue("LineColor", aColor) };
     return aProperties;
 }
 }
