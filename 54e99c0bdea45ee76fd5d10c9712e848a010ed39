@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65555b0a_45b5c331",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-22T20:45:21Z",
+      "side": 1,
+      "message": "With \u003chttps://git.libreoffice.org/lode/+/6d3d7d27fc007629f57b75cb577c919caeb3afe6%5E%21\u003e \"kill-wrapper: Also dump content of any log files\", it dumped the content of /home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/workdir/UITest/writer_tests6/done.log now for the hung \u003chttps://ci.libreoffice.org/job/lo_tb_master_linux_dbg/38618/\u003e, but I\u0027m not sure it actually contains the stuff that gets printed here.  Maybe it would make sense to (1) add some unique labels to what gets printed here, so one can search for those labels in the failure output, and (2) print to stderr rather than stdout, in the hope that that would get flushed more aggressively and thus have a higher chance of ending up in the killed process\u0027 log file.",
+      "revId": "54e99c0bdea45ee76fd5d10c9712e848a010ed39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
