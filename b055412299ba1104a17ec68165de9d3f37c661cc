@@ -16,6 +16,24 @@
       "message": "@mike: any additional insight on this? Is that generally a potential problem, which is fixable? Same for MSG_SIZE AFAIK.",
       "revId": "b055412299ba1104a17ec68165de9d3f37c661cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3a3e00a_af1017b5",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3989,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-22T06:02:09Z",
+      "side": 1,
+      "message": "I was able to repro when minimizing LibreOffice main window (at which point, the LOWORD and HIWORD were 33536, while x and y were 310 and 149).",
+      "parentUuid": "673cc3dd_2352fa87",
+      "revId": "b055412299ba1104a17ec68165de9d3f37c661cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
