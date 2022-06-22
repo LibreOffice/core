@@ -34,6 +34,24 @@
       "parentUuid": "673cc3dd_2352fa87",
       "revId": "b055412299ba1104a17ec68165de9d3f37c661cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df378465_f8f82b23",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3989,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-22T06:09:27Z",
+      "side": 1,
+      "message": "Ah - the assert in CppunitTest_starmath_qa_cppunit is different: the x is -1, while LOWORD is 65535 (so we need to cast it not to sal_Int32, but to sal_Int16 to test the equality).",
+      "parentUuid": "b3a3e00a_af1017b5",
+      "revId": "b055412299ba1104a17ec68165de9d3f37c661cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
