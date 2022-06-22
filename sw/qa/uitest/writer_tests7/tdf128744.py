@@ -33,7 +33,6 @@ class tdf128744(UITestCase):
                     self.assertEqual(get_state_as_dict(xPasswordDialog)["DisplayText"], "Enter Password")
                     xPassword = xPasswordDialog.getChild("pass1ed")
                     xPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "bad password"}))
-                    print(xPasswordDialog.getChildren())
                     xOkBtn = xPasswordDialog.getChild("ok")
                     with self.ui_test.execute_blocking_action(xOkBtn.executeAction, args=('CLICK', ())) as xInfoBox:
                         # "Invalid password" infobox
