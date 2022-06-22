@@ -34,7 +34,7 @@ HelpIndexer::HelpIndexer(OUString lang, OUString module,
     std::u16string_view srcDir, std::u16string_view outDir)
     : d_lang(std::move(lang)), d_module(std::move(module))
 {
-    d_indexDir = outDir + OUStringChar('/') + module + ".idxl";
+    d_indexDir = outDir + OUStringChar('/') + d_module + ".idxl";
     d_captionDir = OUString::Concat(srcDir) + "/caption";
     d_contentDir = OUString::Concat(srcDir) + "/content";
 }
