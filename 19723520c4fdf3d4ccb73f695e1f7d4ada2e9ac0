@@ -16,6 +16,24 @@
       "message": "okay this patch alone doesn\u0027t verify. Case for squashing the two commits?",
       "revId": "19723520c4fdf3d4ccb73f695e1f7d4ada2e9ac0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2379abb9_d943f024",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-22T12:17:42Z",
+      "side": 1,
+      "message": "\u003e okay this patch alone doesn\u0027t verify. Case for squashing the two commits?\n\nYeah... make one commit from both.",
+      "parentUuid": "59f273f5_7f23121e",
+      "revId": "19723520c4fdf3d4ccb73f695e1f7d4ada2e9ac0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
