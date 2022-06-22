@@ -34,6 +34,24 @@
       "parentUuid": "e4b76f4e_0324315d",
       "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd9df1aa_8bce1dad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-22T11:22:35Z",
+      "side": 1,
+      "message": "\u003e What kind of setup do you run? Monitor scaling?\n\na laptop with 2560x1600 screen and 100% scaling",
+      "parentUuid": "5b8624e7_5700ef6d",
+      "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
