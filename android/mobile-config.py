@@ -14,13 +14,13 @@
 # already over-complicated by rampant conditionals.
 
 import sys
-import xml.etree.ElementTree as ElementTree
+import xml.etree.ElementTree as ET
 
 main_xcd_discard = [
-    'org.openoffice.Office/TableWizard',  # huge
+    'org.openoffice.Office/TableWizard', # huge
 
-    'org.openoffice.Office.DataAccess/Drivers',  # no database
-    'org.openoffice.Office/Addons',  # no addons
+    'org.openoffice.Office.DataAccess/Drivers', # no database
+    'org.openoffice.Office/Addons', # no addons
 
     # no conventional UI; reverse sorted by size
     'org.openoffice.Office.UI/GenericCommands',
@@ -46,15 +46,15 @@ main_xcd_discard = [
     'org.openoffice.Office.UI/GlobalSettings',
     'org.openoffice.Office.UI/BibliographyWindowState',
     'org.openoffice.Office.UI/Category',
-]
+    ]
 
 if __name__ == '__main__':
-    tree = ElementTree.parse(sys.argv[1])
+    tree = ET.parse(sys.argv[1])
     root = tree.getroot()
 
     total = 0
     for child in root:
-        total += len(ElementTree.tostring(child))
+        total += len(ET.tostring(child))
 
     saved = 0
     to_remove = []
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     for child in root:
         section = child.attrib['{http://openoffice.org/2001/registry}name']
         package = child.attrib['{http://openoffice.org/2001/registry}package']
-        size = len(ElementTree.tostring(child))
+        size = len(ET.tostring(child));
         key = '%s/%s' % (package, section)
         if key in main_xcd_discard:
             print('removed %s - saving %d' % (key, size))
@@ -72,7 +72,7 @@ if __name__ == '__main__':
     for child in to_remove:
         root.remove(child)
 
-    print("saved %d of %d bytes: %2.f%%" % (saved, total, saved * 100.0 / total))
+    print("saved %d of %d bytes: %2.f%%" % (saved, total, saved*100.0/total))
 
     # Don't do pointless Word -> Writer and similar conversions when we have no UI.
     nsDict = {
@@ -80,37 +80,28 @@ if __name__ == '__main__':
         "component-data": "{http://openoffice.org/2001/registry}component-data",
         "name": "{http://openoffice.org/2001/registry}name",
     }
-    microsoftImport = '%(component-schema)s[@%(name)s="Common"]/component/group[@%(name)s="Filter"]/group[@%(' +\
-                      'name)s="Microsoft"]/group[@%(name)s="Import"]/prop' % nsDict
+    microsoftImport = '%(component-schema)s[@%(name)s="Common"]/component/group[@%(name)s="Filter"]/group[@%(name)s="Microsoft"]/group[@%(name)s="Import"]/prop' % nsDict
     props = root.findall(microsoftImport)
     for prop in props:
         prop.findall("value")[0].text = "false"
 
     # Disable View -> Text Boundaries
-    for prop in root.findall(
-            '%(component-schema)s[@%(name)s="UI"]/templates/group[@%(name)s="ColorScheme"]/group[@%(' +
-            'name)s="DocBoundaries"]/prop' % nsDict):
+    for prop in root.findall('%(component-schema)s[@%(name)s="UI"]/templates/group[@%(name)s="ColorScheme"]/group[@%(name)s="DocBoundaries"]/prop' % nsDict):
         for value in prop.findall("value"):
             value.text = "false"
 
     # Disable Table -> Table Boundaries
-    for prop in root.findall(
-            '%(component-schema)s[@%(name)s="UI"]/templates/group[@%(name)s="ColorScheme"]/group[@%(' +
-            'name)s="TableBoundaries"]/prop' % nsDict):
+    for prop in root.findall('%(component-schema)s[@%(name)s="UI"]/templates/group[@%(name)s="ColorScheme"]/group[@%(name)s="TableBoundaries"]/prop' % nsDict):
         for value in prop.findall("value"):
             value.text = "false"
 
     # Disable follow link with Ctrl+Click, use Click only for mobile app.
-    for prop in root.findall(
-            '%(component-schema)s[@%(name)s="Common"]/component/group[@%(name)s="Security"]/group[@%(' +
-            'name)s="Scripting"]/prop[@%(name)s="HyperlinksWithCtrlClick"]' % nsDict):
+    for prop in root.findall('%(component-schema)s[@%(name)s="Common"]/component/group[@%(name)s="Security"]/group[@%(name)s="Scripting"]/prop[@%(name)s="HyperlinksWithCtrlClick"]' % nsDict):
         for value in prop.findall("value"):
             value.text = "false"
 
     # Disable Impress View -> Slide Pane
-    for prop in root.findall(
-            '%(component-data)s[@%(name)s="Impress"]/node[@%(name)s="MultiPaneGUI"]/node[@%(' +
-            'name)s="SlideSorterBar"]/node[@%(name)s="Visible"]/prop[@%(name)s="ImpressView"]' % nsDict):
+    for prop in root.findall('%(component-data)s[@%(name)s="Impress"]/node[@%(name)s="MultiPaneGUI"]/node[@%(name)s="SlideSorterBar"]/node[@%(name)s="Visible"]/prop[@%(name)s="ImpressView"]' % nsDict):
         for value in prop.findall("value"):
             value.text = "false"
 
