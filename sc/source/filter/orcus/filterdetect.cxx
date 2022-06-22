@@ -14,7 +14,7 @@
 
 #include <unotools/mediadescriptor.hxx>
 
-#include <rtl/strbuf.hxx>
+#include <tools/stream.hxx>
 
 #include <orcus/format_detection.hpp>
 
@@ -68,7 +68,7 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
         return OUString();
 
     css::uno::Reference<css::io::XInputStream> xInputStream(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], css::uno::UNO_QUERY );
-    OStringBuffer aContent(xInputStream->available());
+    SvMemoryStream aContent(xInputStream->available());
 
     static const sal_Int32 nBytes = 4096;
     css::uno::Sequence<sal_Int8> aSeq(nBytes);
@@ -77,10 +77,10 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
     {
         sal_Int32 nReadBytes = xInputStream->readBytes(aSeq, nBytes);
         bEnd = (nReadBytes != nBytes);
-        aContent.append(reinterpret_cast<const char*>(aSeq.getConstArray()), nReadBytes);
+        aContent.WriteBytes(aSeq.getConstArray(), nReadBytes);
     }
 
-    orcus::format_t eFormat = orcus::detect(reinterpret_cast<const unsigned char*>(aContent.getStr()), aContent.getLength());
+    orcus::format_t eFormat = orcus::detect(static_cast<const unsigned char*>(aContent.GetData()), aContent.GetSize());
 
     switch (eFormat)
     {
