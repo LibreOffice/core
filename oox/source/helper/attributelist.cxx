@@ -166,7 +166,7 @@ OptValue< sal_Int32 > AttributeList::getToken( sal_Int32 nAttrToken ) const
     return nToken == XML_TOKEN_INVALID ? OptValue< sal_Int32 >() : OptValue< sal_Int32 >( nToken );
 }
 
-OptValue< OUString > AttributeList::getString( sal_Int32 nAttrToken ) const
+OptValue< OUString > AttributeList::getStringOpt( sal_Int32 nAttrToken ) const
 {
     // check if the attribute exists (empty string may be different to missing attribute)
     if( mxAttribs->hasAttribute( nAttrToken ) )
@@ -174,7 +174,7 @@ OptValue< OUString > AttributeList::getString( sal_Int32 nAttrToken ) const
     return OptValue< OUString >();
 }
 
-OptValue< OUString > AttributeList::getXString( sal_Int32 nAttrToken ) const
+OptValue< OUString > AttributeList::getXStringOpt( sal_Int32 nAttrToken ) const
 {
     // check if the attribute exists (empty string may be different to missing attribute)
     if( mxAttribs->hasAttribute( nAttrToken ) )
@@ -182,42 +182,42 @@ OptValue< OUString > AttributeList::getXString( sal_Int32 nAttrToken ) const
     return OptValue< OUString >();
 }
 
-OptValue< double > AttributeList::getDouble( sal_Int32 nAttrToken ) const
+OptValue< double > AttributeList::getDoubleOpt( sal_Int32 nAttrToken ) const
 {
     double nValue;
     bool bValid = getAttribList()->getAsDouble( nAttrToken, nValue );
     return bValid ? OptValue< double >( nValue ) : OptValue< double >();
 }
 
-OptValue< sal_Int32 > AttributeList::getInteger( sal_Int32 nAttrToken ) const
+OptValue< sal_Int32 > AttributeList::getIntegerOpt( sal_Int32 nAttrToken ) const
 {
     sal_Int32 nValue;
     bool bValid = getAttribList()->getAsInteger( nAttrToken, nValue );
     return bValid ? OptValue< sal_Int32 >( nValue ) : OptValue< sal_Int32 >();
 }
 
-OptValue< sal_uInt32 > AttributeList::getUnsigned( sal_Int32 nAttrToken ) const
+OptValue< sal_uInt32 > AttributeList::getUnsignedOpt( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     bool bValid = !aValue.isEmpty();
     return bValid ? OptValue< sal_uInt32 >( AttributeConversion::decodeUnsigned( aValue ) ) : OptValue< sal_uInt32 >();
 }
 
-OptValue< sal_Int64 > AttributeList::getHyper( sal_Int32 nAttrToken ) const
+OptValue< sal_Int64 > AttributeList::getHyperOpt( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     bool bValid = !aValue.isEmpty();
     return bValid ? OptValue< sal_Int64 >( AttributeConversion::decodeHyper( aValue ) ) : OptValue< sal_Int64 >();
 }
 
-OptValue< sal_Int32 > AttributeList::getIntegerHex( sal_Int32 nAttrToken ) const
+OptValue< sal_Int32 > AttributeList::getIntegerHexOpt( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     bool bValid = !aValue.isEmpty();
     return bValid ? OptValue< sal_Int32 >( AttributeConversion::decodeIntegerHex( aValue ) ) : OptValue< sal_Int32 >();
 }
 
-OptValue< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
+OptValue< bool > AttributeList::getBoolOpt( sal_Int32 nAttrToken ) const
 {
     const char *pAttr;
 
@@ -242,11 +242,11 @@ OptValue< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
         case XML_false: return OptValue< bool >( false );
         case XML_off:   return OptValue< bool >( false );
     }
-    OptValue< sal_Int32 > onValue = getInteger( nAttrToken );
+    OptValue< sal_Int32 > onValue = getIntegerOpt( nAttrToken );
     return onValue.has_value() ? OptValue< bool >( onValue.value() != 0 ) : OptValue< bool >();
 }
 
-OptValue< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) const
+OptValue< util::DateTime > AttributeList::getDateTimeOpt( sal_Int32 nAttrToken ) const
 {
     OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
     util::DateTime aDateTime;
@@ -288,7 +288,7 @@ OUString AttributeList::getString( sal_Int32 nAttrToken, const OUString& rDefaul
 
 OUString AttributeList::getXString( sal_Int32 nAttrToken, const OUString& rDefault ) const
 {
-    return getXString( nAttrToken ).value_or( rDefault );
+    return getXStringOpt( nAttrToken ).value_or( rDefault );
 }
 
 const char* AttributeList::getChar( sal_Int32 nAttrToken ) const
@@ -303,42 +303,42 @@ const char* AttributeList::getChar( sal_Int32 nAttrToken ) const
 
 double AttributeList::getDouble( sal_Int32 nAttrToken, double fDefault ) const
 {
-    return getDouble( nAttrToken ).value_or( fDefault );
+    return getDoubleOpt( nAttrToken ).value_or( fDefault );
 }
 
 sal_Int32 AttributeList::getInteger( sal_Int32 nAttrToken, sal_Int32 nDefault ) const
 {
-    return getInteger( nAttrToken ).value_or( nDefault );
+    return getIntegerOpt( nAttrToken ).value_or( nDefault );
 }
 
 sal_uInt32 AttributeList::getUnsigned( sal_Int32 nAttrToken, sal_uInt32 nDefault ) const
 {
-    return getUnsigned( nAttrToken ).value_or( nDefault );
+    return getUnsignedOpt( nAttrToken ).value_or( nDefault );
 }
 
 sal_Int64 AttributeList::getHyper( sal_Int32 nAttrToken, sal_Int64 nDefault ) const
 {
-    return getHyper( nAttrToken ).value_or( nDefault );
+    return getHyperOpt( nAttrToken ).value_or( nDefault );
 }
 
 sal_Int32 AttributeList::getIntegerHex( sal_Int32 nAttrToken, sal_Int32 nDefault ) const
 {
-    return getIntegerHex( nAttrToken ).value_or( nDefault );
+    return getIntegerHexOpt( nAttrToken ).value_or( nDefault );
 }
 
 sal_uInt32 AttributeList::getUnsignedHex( sal_Int32 nAttrToken, sal_uInt32 nDefault ) const
 {
-    return getIntegerHex( nAttrToken ).value_or( nDefault );
+    return getIntegerHexOpt( nAttrToken ).value_or( nDefault );
 }
 
 bool AttributeList::getBool( sal_Int32 nAttrToken, bool bDefault ) const
 {
-    return getBool( nAttrToken ).value_or( bDefault );
+    return getBoolOpt( nAttrToken ).value_or( bDefault );
 }
 
 util::DateTime AttributeList::getDateTime( sal_Int32 nAttrToken, const util::DateTime& rDefault ) const
 {
-    return getDateTime( nAttrToken ).value_or( rDefault );
+    return getDateTimeOpt( nAttrToken ).value_or( rDefault );
 }
 
 std::vector<sal_Int32> AttributeList::getTokenList(sal_Int32 nAttrToken) const
