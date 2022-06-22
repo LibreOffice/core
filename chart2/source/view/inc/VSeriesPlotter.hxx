@@ -234,8 +234,10 @@ public:
 
     void setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider );
 
+    ExplicitCategoriesProvider* getExplicitCategoriesProvider() { return m_pExplicitCategoriesProvider; }
+
     //get series names for the z axis labels
-    css::uno::Sequence< OUString > getSeriesNames() const;
+    css::uno::Sequence<OUString> getSeriesNames() const;
 
     void setPageReferenceSize( const css::awt::Size & rPageRefSize );
     //better performance for big data

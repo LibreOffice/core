@@ -2316,20 +2316,29 @@ std::vector<VDataSeries*> VSeriesPlotter::getAllSeries()
     return aAllSeries;
 }
 
-uno::Sequence< OUString > VSeriesPlotter::getSeriesNames() const
+uno::Sequence<OUString> VSeriesPlotter::getSeriesNames() const
 {
     std::vector<OUString> aRetVector;
 
     OUString aRole;
-    if( m_xChartTypeModel.is() )
+    if (m_xChartTypeModel.is())
         aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
 
-    for (VDataSeries const* pSeries : getAllSeries())
+    for (auto const& rGroup : m_aZSlots)
     {
-        if (pSeries)
+        if (!rGroup.empty())
         {
-            OUString aSeriesName( DataSeriesHelper::getDataSeriesLabel( pSeries->getModel(), aRole ) );
-            aRetVector.push_back( aSeriesName );
+            VDataSeriesGroup const & rSeriesGroup(rGroup[0]);
+            if (!rSeriesGroup.m_aSeriesVector.empty())
+            {
+                VDataSeries const * pSeries = rSeriesGroup.m_aSeriesVector[0].get();
+                rtl::Reference< DataSeries > xSeries( pSeries ? pSeries->getModel() : nullptr );
+                if( xSeries.is() )
+                {
+                    OUString aSeriesName( DataSeriesHelper::getDataSeriesLabel( xSeries, aRole ) );
+                    aRetVector.push_back( aSeriesName );
+                }
+            }
         }
     }
     return comphelper::containerToSequence( aRetVector );
