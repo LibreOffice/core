@@ -44,7 +44,7 @@ private:
 #endif
 
 public:
-    HelpParser( const OString &rHelpFile );
+    HelpParser( OString sHelpFile );
 
 /// Method append a PO file with the content of a parsed XML file
 /// @PRECOND rHelpFile is valid

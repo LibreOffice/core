@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <helpmerge.hxx>
+#include <utility>
 #include <vector>
 
 #ifdef _WIN32
@@ -66,8 +67,8 @@ void HelpParser::Dump(LangHashMap* rElem_in,const OString & sKey_in)
 }
 #endif
 
-HelpParser::HelpParser( const OString &rHelpFile )
-        : sHelpFile( rHelpFile )
+HelpParser::HelpParser( OString _sHelpFile )
+        : sHelpFile(std::move( _sHelpFile ))
           {};
 
 /*****************************************************************************/

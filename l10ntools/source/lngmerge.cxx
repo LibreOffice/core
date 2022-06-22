@@ -29,6 +29,7 @@
 #include <common.hxx>
 #include <po.hxx>
 #include <lngmerge.hxx>
+#include <utility>
 
 namespace {
 
@@ -57,8 +58,8 @@ void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
 
 
 
-LngParser::LngParser(const OString &rLngFile)
-    : sSource( rLngFile )
+LngParser::LngParser(OString sLngFile)
+    : sSource(std::move( sLngFile ))
 {
     std::ifstream aStream(sSource.getStr());
     if (!aStream.is_open())

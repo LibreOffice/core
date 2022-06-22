@@ -32,6 +32,7 @@
 #include <helper.hxx>
 #include <export.hxx>
 #include <cfgmerge.hxx>
+#include <utility>
 #include <tokens.h>
 
 namespace {
@@ -327,9 +328,8 @@ void CfgParser::Execute( int nToken, char * pToken )
 
 CfgExport::CfgExport(
         const OString &rOutputFile,
-        const OString &rFilePath )
-
-                : sPath( rFilePath )
+        OString sFilePath )
+    : sPath(std::move( sFilePath ))
 {
     pOutputStream.open( rOutputFile, PoOfstream::APP );
     if (!pOutputStream.isOpen())
@@ -386,8 +386,8 @@ void CfgExport::WorkOnText(
 
 CfgMerge::CfgMerge(
     const OString &rMergeSource, const OString &rOutputFile,
-    const OString &rFilename, const OString &rLanguage )
-                : sFilename( rFilename ),
+    OString _sFilename, const OString &rLanguage )
+                : sFilename(std::move( _sFilename )),
                 bEnglish( false )
 {
     pOutputStream.open(

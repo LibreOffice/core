@@ -23,6 +23,7 @@
 #include <string_view>
 
 #include <helper.hxx>
+#include <utility>
 #include <xmlparse.hxx>
 #include <fstream>
 #include <iostream>
@@ -300,9 +301,9 @@ XMLFile::~XMLFile()
     }
 }
 
-XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created from memory stream
+XMLFile::XMLFile( OString _sFileName ) // the file name, empty if created from memory stream
     : XMLParentNode( nullptr )
-    , m_sFileName( rFileName )
+    , m_sFileName(std::move( _sFileName ))
 {
     m_aNodes_localize.emplace( OString("bookmark") , true );
     m_aNodes_localize.emplace( OString("variable") , true );
@@ -531,11 +532,11 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
 }
 
 XMLElement::XMLElement(
-    const OString &rName,    // the element name
+    OString _sName,    // the element name
     XMLParentNode *pParent   // parent node of this element
 )
     : XMLParentNode( pParent )
-    , m_sElementName( rName )
+    , m_sElementName(std::move( _sName ))
 {
 }
 

@@ -54,8 +54,8 @@ typedef std::unordered_map<OString, bool>
 class ResData
 {
 public:
-    ResData( const OString &rGId );
-    ResData( const OString &rGId , const OString &rFilename );
+    ResData( OString rGId );
+    ResData( OString sGId , OString sFilename );
 
     OString sResTyp;
     OString sId;
