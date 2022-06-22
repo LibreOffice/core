@@ -465,7 +465,6 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
         xPageStyle->setPropertyValue("TopBorder", uno::Any(aBorder));
         sal_Int32 nTopBorderDistance = -646;
         xPageStyle->setPropertyValue("TopBorderDistance", uno::Any(nTopBorderDistance));
-        pDocShell->GetDoc()->dumpAsXml();
     }
 
     // When saving that document to RTF:
