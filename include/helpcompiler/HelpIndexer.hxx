@@ -48,7 +48,7 @@ class L10N_DLLPUBLIC HelpIndexer {
      * @param srcDir The help directory to index
      * @param outDir The directory to write the "module".idxl directory to
      */
-        HelpIndexer(OUString lang, OUString module,
+        HelpIndexer(OUString const &lang, OUString const &module,
             std::u16string_view srcDir, std::u16string_view outDir);
 
     /**

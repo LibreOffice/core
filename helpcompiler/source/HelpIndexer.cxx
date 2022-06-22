@@ -30,7 +30,7 @@
 
 using namespace lucene::document;
 
-HelpIndexer::HelpIndexer(OUString lang, OUString module,
+HelpIndexer::HelpIndexer(OUString const &lang, OUString const &module,
     std::u16string_view srcDir, std::u16string_view outDir)
     : d_lang(std::move(lang)), d_module(std::move(module))
 {
