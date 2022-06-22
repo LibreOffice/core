@@ -25,6 +25,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <export.hxx>
@@ -65,17 +66,17 @@ namespace
 
 
 
-ResData::ResData( const OString &rGId )
+ResData::ResData( OString _sGId )
     :
-    sGId( rGId )
+    sGId(std::move( _sGId ))
 {
     sGId = sGId.replaceAll("\r", OString());
 }
 
-ResData::ResData( const OString &rGId, const OString &rFilename)
+ResData::ResData( OString _sGId, OString _sFilename)
     :
-    sGId( rGId ),
-    sFilename( rFilename )
+    sGId(std::move( _sGId )),
+    sFilename(std::move( _sFilename ))
 {
     sGId = sGId.replaceAll("\r", OString());
 }

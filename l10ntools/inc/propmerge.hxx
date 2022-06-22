@@ -30,7 +30,7 @@ private:
 
 public:
     PropParser(
-        const OString& rInputFile, const OString& rLang,
+        OString sInputFile, OString sLang,
         const bool bMergeMode );
     ~PropParser();
 

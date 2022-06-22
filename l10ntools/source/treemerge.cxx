@@ -20,6 +20,7 @@
 #include <common.hxx>
 #include <po.hxx>
 #include <treemerge.hxx>
+#include <utility>
 
 
 namespace
@@ -197,9 +198,9 @@ namespace
 }
 
 TreeParser::TreeParser(
-    const OString& rInputFile, const OString& rLang )
+    const OString& rInputFile, OString _sLang )
     : m_pSource( nullptr )
-    , m_sLang( rLang )
+    , m_sLang(std::move( _sLang ))
     , m_bIsInitialized( false )
 {
     m_pSource = xmlParseFile( rInputFile.getStr() );

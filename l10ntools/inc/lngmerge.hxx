@@ -50,7 +50,7 @@ private:
     static void WritePO(PoOfstream &aPOStream, OStringHashMap &rText_inout,
         const OString &rActFileName, const OString &rID);
 public:
-    LngParser(const OString &rLngFile);
+    LngParser(OString sLngFile);
     ~LngParser();
 
     void CreatePO( const OString &rPOFile );

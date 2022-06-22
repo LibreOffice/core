@@ -29,7 +29,7 @@ private:
 
 public:
     /// Parse tree file
-    TreeParser( const OString& rInputFile, const OString& rLang );
+    TreeParser( const OString& rInputFile, OString sLang );
     ~TreeParser();
 
     bool isInitialized() const { return m_bIsInitialized; }
