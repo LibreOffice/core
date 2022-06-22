@@ -67,9 +67,9 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     case XML_cNvPr:
     {
         mpShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
-        mpShapePtr->setId( rAttribs.getString( XML_id ).value() );
-        mpShapePtr->setName( rAttribs.getString( XML_name ).value() );
-        mpShapePtr->setDescription( rAttribs.getString( XML_descr ).value() );
+        mpShapePtr->setId( rAttribs.getString( XML_id ) );
+        mpShapePtr->setName( rAttribs.getString( XML_name ) );
+        mpShapePtr->setDescription( rAttribs.getString( XML_descr ) );
         break;
     }
     case XML_hlinkMouseOver:
@@ -78,7 +78,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     case XML_ph:
         mpShapePtr->setSubType( rAttribs.getToken( XML_type, XML_obj ) );
         if( rAttribs.hasAttribute( XML_idx ) )
-            mpShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).value().toInt32() );
+            mpShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 

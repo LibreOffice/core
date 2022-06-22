@@ -119,7 +119,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
   // ST_Coordinate
     if ( rAttribs.hasAttribute( XML_indent ) )
     {
-        sValue = rAttribs.getString( XML_indent ).value();
+        sValue = rAttribs.getString( XML_indent );
         mrTextParagraphProperties.getFirstLineIndentation() = std::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
@@ -142,14 +142,14 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     // ParaLeftMargin
     if ( rAttribs.hasAttribute( XML_marL ) )
     {
-        sValue = rAttribs.getString( XML_marL ).value();
+        sValue = rAttribs.getString( XML_marL );
         mrTextParagraphProperties.getParaLeftMargin() = std::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
     // ParaRightMargin
     if ( rAttribs.hasAttribute( XML_marR ) )
     {
-        sValue = rAttribs.getString( XML_marR ).value();
+        sValue = rAttribs.getString( XML_marR );
         sal_Int32 nMarR  = sValue.isEmpty() ? 0 : GetCoordinate( sValue ) ;
         rPropertyMap.setProperty( PROP_ParaRightMargin, nMarR);
     }
@@ -216,11 +216,11 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             mrBulletList.mbBulletSizeFollowText <<= true;
             break;
         case A_TOKEN( buSzPct ):        // CT_TextBulletSizePercent
-            mrBulletList.setBulletSize( std::lround( GetPercent( rAttribs.getString( XML_val ).value() ) / 1000.f ) );
+            mrBulletList.setBulletSize( std::lround( GetPercent( rAttribs.getString( XML_val ) ) / 1000.f ) );
             break;
         case A_TOKEN( buSzPts ):        // CT_TextBulletSizePoint
             mrBulletList.setBulletSize(0);
-            mrBulletList.setFontSize( static_cast<sal_Int16>(GetTextSize( rAttribs.getString( XML_val ).value() ) ) );
+            mrBulletList.setFontSize( static_cast<sal_Int16>(GetTextSize( rAttribs.getString( XML_val ) ) ) );
             break;
 
         // EG_TextBulletTypeface
@@ -260,7 +260,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( buChar ):         // CT_TextCharBullet
             try {
 
-                mrBulletList.setBulletChar( rAttribs.getString( XML_char ).value() );
+                mrBulletList.setBulletChar( rAttribs.getString( XML_char ) );
                 mrBulletList.setSuffixNone();
             }
             catch(SAXException& /* e */)
@@ -279,7 +279,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             return new TextCharacterPropertiesContext( *this, rAttribs, mrTextParagraphProperties.getTextCharacterProperties() );
         case W_TOKEN( jc ):
             {
-                OptValue< OUString > oParaAdjust = rAttribs.getString( W_TOKEN(val) );
+                OptValue< OUString > oParaAdjust = rAttribs.getStringOpt( W_TOKEN(val) );
                 if( oParaAdjust.has_value() && !oParaAdjust.value().isEmpty() )
                 {
                     const OUString& sParaAdjust = oParaAdjust.value();
@@ -299,7 +299,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 // Spacing before
                 if( !rAttribs.getBool(W_TOKEN(beforeAutospacing), false) )
                 {
-                    OptValue<sal_Int32> oBefore = rAttribs.getInteger(W_TOKEN(before));
+                    OptValue<sal_Int32> oBefore = rAttribs.getIntegerOpt(W_TOKEN(before));
                     if (oBefore.has_value())
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
@@ -309,7 +309,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     }
                     else
                     {
-                        OptValue<sal_Int32> oBeforeLines = rAttribs.getInteger(W_TOKEN(beforeLines));
+                        OptValue<sal_Int32> oBeforeLines = rAttribs.getIntegerOpt(W_TOKEN(beforeLines));
                         if (oBeforeLines.has_value())
                         {
                             TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
@@ -323,7 +323,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 // Spacing after
                 if( !rAttribs.getBool(W_TOKEN(afterAutospacing), false) )
                 {
-                    OptValue<sal_Int32> oAfter = rAttribs.getInteger(W_TOKEN(after));
+                    OptValue<sal_Int32> oAfter = rAttribs.getIntegerOpt(W_TOKEN(after));
                     if (oAfter.has_value())
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
@@ -333,7 +333,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     }
                     else
                     {
-                        OptValue<sal_Int32> oAfterLines = rAttribs.getInteger(W_TOKEN(afterLines));
+                        OptValue<sal_Int32> oAfterLines = rAttribs.getIntegerOpt(W_TOKEN(afterLines));
                         if (oAfterLines.has_value())
                         {
                             TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
@@ -345,8 +345,8 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 }
 
                 // Line spacing
-                OptValue<OUString> oLineRule = rAttribs.getString(W_TOKEN(lineRule));
-                OptValue<sal_Int32> oLineSpacing = rAttribs.getInteger(W_TOKEN(line));
+                OptValue<OUString> oLineRule = rAttribs.getStringOpt(W_TOKEN(lineRule));
+                OptValue<sal_Int32> oLineSpacing = rAttribs.getIntegerOpt(W_TOKEN(line));
                 if (oLineSpacing.has_value())
                 {
                     TextSpacing& rLineSpacing = mrTextParagraphProperties.getLineSpacing();

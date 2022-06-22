@@ -126,7 +126,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     std::optional<sal_Int32> oInsets[4];
                     for (std::size_t i = 0; i < SAL_N_ELEMENTS(aInsets); ++i)
                     {
-                        OptValue<OUString> oValue = rAttribs.getString(aInsets[i]);
+                        OptValue<OUString> oValue = rAttribs.getStringOpt(aInsets[i]);
                         if (oValue.has_value())
                             oInsets[i] = oox::drawingml::GetCoordinate(oValue.value());
                         else
@@ -238,7 +238,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 {
                     if (rAttribs.hasAttribute(XML_lIns))
                     {
-                        OptValue<OUString> oValue = rAttribs.getString(aInsets[i]);
+                        OptValue<OUString> oValue = rAttribs.getStringOpt(aInsets[i]);
                         if (oValue.has_value())
                             pTextBody->getTextProperties().moInsets[i]
                                 = oox::drawingml::GetCoordinate(oValue.value());
@@ -279,7 +279,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
                 if (xPropertySet.is())
                 {
-                    oox::OptValue<OUString> presetShapeName = rAttribs.getString(XML_prst);
+                    oox::OptValue<OUString> presetShapeName = rAttribs.getStringOpt(XML_prst);
                     const OUString& preset = presetShapeName.value();
                     comphelper::SequenceAsHashMap aCustomShapeGeometry(
                         xPropertySet->getPropertyValue("CustomShapeGeometry"));
@@ -298,7 +298,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             //for further processing.
             if (rAttribs.hasAttribute(XML_id))
             {
-                OptValue<OUString> id = rAttribs.getString(XML_id);
+                OptValue<OUString> id = rAttribs.getStringOpt(XML_id);
                 if (id.has_value())
                 {
                     oox::drawingml::LinkedTxbxAttr linkedTxtBoxAttr;
@@ -316,8 +316,8 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             //for further processing.
             mpShapePtr->getCustomShapeProperties()->setShapeTypeOverride(true);
             mpShapePtr->setTextBox(true);
-            OptValue<OUString> id = rAttribs.getString(XML_id);
-            OptValue<OUString> seq = rAttribs.getString(XML_seq);
+            OptValue<OUString> id = rAttribs.getStringOpt(XML_id);
+            OptValue<OUString> seq = rAttribs.getStringOpt(XML_seq);
             if (id.has_value() && seq.has_value())
             {
                 oox::drawingml::LinkedTxbxAttr linkedTxtBoxAttr;

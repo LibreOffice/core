@@ -67,7 +67,7 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         mrTextCharacterProperties.moUnderline = rAttribs.getToken( XML_u );
     if ( rAttribs.hasAttribute( XML_strike ) )
         mrTextCharacterProperties.moStrikeout = rAttribs.getToken( XML_strike );
-    if ( rAttribs.hasAttribute( XML_baseline ) && rAttribs.getInteger( XML_baseline ).value() != 0 )
+    if ( rAttribs.hasAttribute( XML_baseline ) && rAttribs.getInteger( XML_baseline ) != 0 )
         mrTextCharacterProperties.moBaseline = rAttribs.getInteger( XML_baseline );
 
     if ( rAttribs.hasAttribute( XML_b ) )
@@ -229,7 +229,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
                 mrTextCharacterProperties.moUnderline = XML_dash;
             else if (attrib == "none")
                 mrTextCharacterProperties.moUnderline = XML_none;
-            auto colorAttrib = rAttribs.getIntegerHex(W_TOKEN(color));
+            auto colorAttrib = rAttribs.getIntegerHexOpt(W_TOKEN(color));
             if (colorAttrib.has_value())
             {
                 oox::drawingml::Color theColor;
@@ -261,16 +261,16 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
                 mrTextCharacterProperties.moStrikeout = XML_dblStrike;
             break;
         case W_TOKEN( color ):
-            if (rAttribs.getInteger(W_TOKEN(val)).has_value())
+            if (rAttribs.getIntegerOpt(W_TOKEN(val)).has_value())
             {
-                mrTextCharacterProperties.maFillProperties.maFillColor.setSrgbClr(rAttribs.getIntegerHex(W_TOKEN(val)).value());
+                mrTextCharacterProperties.maFillProperties.maFillColor.setSrgbClr(rAttribs.getIntegerHex(W_TOKEN(val)));
                 mrTextCharacterProperties.maFillProperties.moFillType = XML_solidFill;
             }
             break;
         case W_TOKEN(  sz ):
-            if (rAttribs.getInteger(W_TOKEN(val)).has_value())
+            if (auto oVal = rAttribs.getIntegerOpt(W_TOKEN(val)); oVal.has_value())
             {
-                sal_Int32 nVal = rAttribs.getInteger(W_TOKEN(val)).value();
+                sal_Int32 nVal = oVal.value();
                 // wml has half points, dml has hundred points
                 mrTextCharacterProperties.moHeight = nVal * 50;
             }

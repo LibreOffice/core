@@ -72,14 +72,14 @@ TextPortionContext::TextPortionContext( ContextHandler2Helper const & rParent,
         break;
         case OOX_TOKEN(dml, blip):
             {
-                OptValue<OUString> oRelId = rAttribs.getString(R_TOKEN(embed));
+                OptValue<OUString> oRelId = rAttribs.getStringOpt(R_TOKEN(embed));
                 if (oRelId.has_value())
                     mrTextBox.mrTypeModel.moGraphicPath = getFragmentPathFromRelId(oRelId.value());
             }
         break;
         case VML_TOKEN(imagedata):
             {
-                OptValue<OUString> oRelId = rAttribs.getString(R_TOKEN(id));
+                OptValue<OUString> oRelId = rAttribs.getStringOpt(R_TOKEN(id));
                 if (oRelId.has_value())
                     mrTextBox.mrTypeModel.moGraphicPath = getFragmentPathFromRelId(oRelId.value());
             }
@@ -181,9 +181,9 @@ TextBoxContext::TextBoxContext( ContextHandler2Helper const & rParent, TextBox& 
     ContextHandler2( rParent ),
     mrTextBox( rTextBox )
 {
-    if( rAttribs.getString( XML_insetmode ).value() != "auto" )
+    if( rAttribs.getString( XML_insetmode ) != "auto" )
     {
-        OUString inset = rAttribs.getString( XML_inset ).value();
+        OUString inset = rAttribs.getString( XML_inset );
         std::u16string_view value;
         std::u16string_view remainingStr;
 

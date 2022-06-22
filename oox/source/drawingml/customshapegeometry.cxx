@@ -621,8 +621,8 @@ ContextHandlerRef GeomGuideListContext::onCreateContext( sal_Int32 aElementToken
     if ( aElementToken == A_TOKEN( gd ) )   // CT_GeomGuide
     {
         CustomShapeGuide aGuide;
-        aGuide.maName = rAttribs.getString( XML_name ).value();
-        aGuide.maFormula = convertToOOEquation( mrCustomShapeProperties, rAttribs.getString( XML_fmla ).value() );
+        aGuide.maName = rAttribs.getString( XML_name );
+        aGuide.maFormula = convertToOOEquation( mrCustomShapeProperties, rAttribs.getString( XML_fmla ) );
         mrGuideList.push_back( aGuide );
     }
     return this;
@@ -647,8 +647,8 @@ public:
 AdjPoint2DContext::AdjPoint2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
 : ContextHandler2( rParent )
 {
-    rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_x ).value() );
-    rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_y ).value() );
+    rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_x ) );
+    rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_y ) );
 }
 
 namespace {
@@ -823,7 +823,7 @@ ConnectionSiteContext::ConnectionSiteContext( ContextHandler2Helper const & rPar
 , mrConnectionSite( rConnectionSite )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    mrConnectionSite.ang = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_ang ).value() );
+    mrConnectionSite.ang = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_ang ) );
 }
 
 ContextHandlerRef ConnectionSiteContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
@@ -1099,8 +1099,8 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
             EnhancedCustomShapeParameterPair aScale;
             EnhancedCustomShapeParameterPair aAngles;
 
-            aScale.First = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_wR ).value() );
-            aScale.Second = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_hR ).value() );
+            aScale.First = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_wR ) );
+            aScale.Second = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_hR ) );
 
             CustomShapeGuide aGuide;
             sal_Int32 nArcNum = mrCustomShapeProperties.getArcNum();
@@ -1108,7 +1108,7 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
             // start angle
             aGuide.maName = "arctosa" + OUString::number( nArcNum );
             aGuide.maFormula = "("
-                + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_stAng ).value() ) )
+                + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_stAng ) ) )
                 + ")/60000.0";
             aAngles.First.Value <<= CustomShapeProperties::SetCustomShapeGuideValue( mrCustomShapeProperties.getGuideList(), aGuide );
             aAngles.First.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -1116,7 +1116,7 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
             // swing angle
             aGuide.maName = "arctosw" + OUString::number( nArcNum );
             aGuide.maFormula = "("
-                + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_swAng ).value() ) )
+                + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_swAng ) ) )
                 + ")/60000.0";
             aAngles.Second.Value <<= CustomShapeProperties::SetCustomShapeGuideValue( mrCustomShapeProperties.getGuideList(), aGuide );
             aAngles.Second.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -1234,10 +1234,10 @@ ContextHandlerRef CustomShapeGeometryContext::onCreateContext( sal_Int32 aElemen
         case A_TOKEN( rect ):           // CT_GeomRectList geometry rect list
         {
             GeomRect aGeomRect;
-            aGeomRect.l = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_l ).value() );
-            aGeomRect.t = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_t ).value() );
-            aGeomRect.r = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_r ).value() );
-            aGeomRect.b = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_b ).value() );
+            aGeomRect.l = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_l ) );
+            aGeomRect.t = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_t ) );
+            aGeomRect.r = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_r ) );
+            aGeomRect.b = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_b ) );
             mrCustomShapeProperties.getTextRect() = aGeomRect;
         }
         break;
