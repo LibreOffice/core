@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "540c5dd9_75d39a13",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3517,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-22T13:06:59Z",
+      "side": 1,
+      "message": "I\u0027m sorry for multiple questions. Could you please tell if this \"bIsShapeTransformed\" check is required, or is it simply an optimization for the case when we know for sure that pObjData-\u003emaStart \u003d\u003d rMyCell.maCellAddress? I.e., can we use pObjData-\u003emaStart unconditionally whenever pObjData exists?\n\nThank you!",
+      "revId": "cd966aac6ecd8ce606ac3f2ccd602e467114ba3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1e9e6e3b_9a97ba78",
         "filename": "sc/source/filter/xml/xmlexprt.cxx",
         "patchSetId": 3
