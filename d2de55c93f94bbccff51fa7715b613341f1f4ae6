@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1b55358_9bd28e57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-22T18:12:58Z",
+      "side": 1,
+      "message": "\u003chttps://ci.libreoffice.org/job/lo_tb_master_linux_dbg/38612/\u003e, which was triggered after exactly (only) this commit started to fail with the kill-wrapper killing UITest_impress_tests at sd/qa/uitest/impress_tests/save_readonly_with_password.py, line 95.  And all of the following four builds of that bot so far failed either exactly the same way and/or with the kill-wrapper killing the similar UITest_writer_test6 at sw/qa/uitest/writer_tests6/save_readonly_with_password.py, line 54.",
+      "revId": "d2de55c93f94bbccff51fa7715b613341f1f4ae6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
