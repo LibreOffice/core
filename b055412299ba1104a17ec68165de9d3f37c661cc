@@ -52,6 +52,24 @@
       "parentUuid": "b3a3e00a_af1017b5",
       "revId": "b055412299ba1104a17ec68165de9d3f37c661cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f0e59c8_c48ce4c6",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3989,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-22T06:20:40Z",
+      "side": 1,
+      "message": "Wrt minimization: https://www.google.com/search?q\u003d%22wm_move%22%20%2233536%22 shows a (small) number of 33536 exactly in relation to the minimization events. Possibly it makes sense to check either the constant here, or the minimized state.",
+      "parentUuid": "df378465_f8f82b23",
+      "revId": "b055412299ba1104a17ec68165de9d3f37c661cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
