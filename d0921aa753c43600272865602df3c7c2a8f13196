@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c180f09c_9aa2a8bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-22T09:03:01Z",
+      "side": 1,
+      "message": "Oh fun. I see I already wrote about this before :-)\n\nStill, in the screencast, I forgot to hide the column; here is with the column hidden:\nhttps://i.imgur.com/09O1jKi.gif",
+      "revId": "d0921aa753c43600272865602df3c7c2a8f13196",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a69dcaa_b92bb8f3",
