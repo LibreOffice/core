@@ -29,9 +29,6 @@
 #include <unx/genprn.h>
 
 #include <condition_variable>
-#include <mutex>
-#include <functional>
-#include <chrono>
 
 #include <sys/time.h>
 
@@ -42,56 +39,10 @@
 #define SvpSalInstance AquaSalInstance
 #endif
 
-class SvpYieldCondition final
-{
-    bool m_bReady = false;
-    bool m_bSleeping = false;
-    std::mutex& m_rMutex;
-    std::condition_variable m_Conditional;
-
-public:
-    SvpYieldCondition(std::mutex& rMutex) : m_rMutex(rMutex) {}
-
-    void notify_all()
-    {
-        {
-            std::lock_guard<std::mutex> g(m_rMutex);
-            m_bReady = true;
-        }
-        m_Conditional.notify_all();
-    }
-
-    void wait(std::function<bool()> func = [](){ return false; })
-    {
-        std::unique_lock<std::mutex> g(m_rMutex);
-        if (func())
-            return;
-        m_bSleeping = true;
-        m_Conditional.wait(g, [this]() { return m_bReady; });
-        m_bSleeping = false;
-        m_bReady = false;
-    }
-
-    void wait_for(std::chrono::milliseconds rel_time, std::function<bool()> func = [](){ return false; })
-    {
-        std::unique_lock<std::mutex> g(m_rMutex);
-        if (func())
-            return;
-        m_bSleeping = true;
-        m_Conditional.wait_for(g, rel_time, [this]() { return m_bReady; });
-        m_bSleeping = false;
-        m_bReady = false;
-    }
-
-    std::mutex& mutex() const { return m_rMutex; }
-    bool isSleeping() const { return m_bSleeping; }
-};
-
 class SvpSalInstance;
 class SvpSalTimer final : public SalTimer
 {
     SvpSalInstance* m_pInstance;
-
 public:
     SvpSalTimer( SvpSalInstance* pInstance ) : m_pInstance( pInstance ) {}
     virtual ~SvpSalTimer() override;
@@ -104,25 +55,51 @@ public:
 class SvpSalFrame;
 class GenPspGraphics;
 
+enum class SvpRequest
+{
+    NONE,
+    MainThreadDispatchOneEvent,
+    MainThreadDispatchAllEvents,
+};
+
+class SvpSalYieldMutex final : public SalYieldMutex
+{
+private:
+    // note: these members might as well live in SvpSalInstance, but there is
+    // at least one subclass of SvpSalInstance (GTK3) that doesn't use them.
+    friend class SvpSalInstance;
+    // members for communication from main thread to non-main thread
+    int                     m_FeedbackFDs[2];
+    osl::Condition          m_NonMainWaitingYieldCond;
+    // members for communication from non-main thread to main thread
+    bool                    m_bNoYieldLock = false; // accessed only on main thread
+    std::mutex              m_WakeUpMainMutex; // guard m_wakeUpMain & m_Request
+    std::condition_variable m_WakeUpMainCond;
+    bool                    m_wakeUpMain = false;
+    SvpRequest              m_Request = SvpRequest::NONE;
+
+    virtual void            doAcquire( sal_uInt32 nLockCount ) override;
+    virtual sal_uInt32      doRelease( bool bUnlockAll ) override;
+
+public:
+    SvpSalYieldMutex();
+    virtual ~SvpSalYieldMutex() override;
+
+    virtual bool IsCurrentThread() const override;
+};
+
+// NOTE: the functions IsMainThread, DoYield and Wakeup *require* the use of
+// SvpSalYieldMutex; if a subclass uses something else it must override these
+// (Wakeup is only called by SvpSalTimer and SvpSalFrame)
 class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance, public SalUserEventList
 {
     timeval                 m_aTimeout;
     sal_uLong               m_nTimeoutMS;
     oslThreadIdentifier     m_MainThread;
 
-    // members for communication from main thread to non-main thread
-    std::mutex m_NonMainYieldMutex;
-    SvpYieldCondition m_WaitCondition;
-    SvpYieldCondition m_EventCondition;
-    bool m_bWasEvent;
-
-    // members for communication from non-main thread to main thread
-    std::mutex m_MainYieldMutex;
-    SvpYieldCondition m_MainYieldCondition;
-
     virtual void            TriggerUserEventProcessing() override;
     virtual void            ProcessEvent( SalUserEvent aEvent ) override;
-    bool ImplYield(bool bWait);
+    bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
 
 public:
     static SvpSalInstance*  s_pDefaultInstance;
@@ -130,7 +107,9 @@ public:
     SvpSalInstance( std::unique_ptr<SalYieldMutex> pMutex );
     virtual ~SvpSalInstance() override;
 
-    void                    Wakeup();
+    void                    CloseWakeupPipe(bool log);
+    void                    CreateWakeupPipe(bool log);
+    void                    Wakeup(SvpRequest request = SvpRequest::NONE);
 
     void                    StartTimer( sal_uInt64 nMS );
     void                    StopTimer();
