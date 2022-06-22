@@ -11,6 +11,7 @@
 #include <math.h>
 #include <string.h>
 #include <memory>
+#include <utility>
 #include <vector>
 #include <string>
 #include <sstream>
@@ -358,9 +359,9 @@ struct CallbackData
     std::string m_aPayload;
     LOKDocView* m_pDocView;
 
-    CallbackData(int nType, const std::string& rPayload, LOKDocView* pDocView)
+    CallbackData(int nType, std::string aPayload, LOKDocView* pDocView)
         : m_nType(nType),
-          m_aPayload(rPayload),
+          m_aPayload(std::move(aPayload)),
           m_pDocView(pDocView) {}
 };
 
