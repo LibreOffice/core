@@ -1652,7 +1652,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     case RES_POOLFRM_GRAPHIC:
     case RES_POOLFRM_OLE:
         {
-            aSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PARA ));
+            aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ));
             aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_DYNAMIC ));

@@ -901,7 +901,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
     RndStdIds eFlyAnchor = pFlyFormat->GetAnchor().GetAnchorId();
     // Without the working image listener in place, this test would have
     // failed, eFlyAnchor was FLY_AT_PARA.
-    CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_CHAR, eFlyAnchor);
+    CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AS_CHAR, eFlyAnchor);
 
     pTransfer->Cut();
     pListener->GetString().clear();
