@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cea5fa33_29a73136",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-22T10:46:22Z",
+      "side": 0,
+      "message": "@sberg: just a blind guess re-reading the patch: what happens, if you add:\n\n\u003e  if (!maGeometry.width() || !maGeometry.height())\n\u003e    return false;\n    \nI\u0027m somewhat sceptical, that a failing GetWindowState is always handled correctly, but maybe that is crucial here for your case.",
+      "revId": "8c3e8af0e60865ec6d38e2117efdb4ed2f10a20c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
