@@ -16,6 +16,23 @@
       "message": "... and that is why you should not override jenkins -1 without looking at all builds\u0027 results/without explaining the failures in the comments...\n\nSure, the failure on Windows was unrelated, but that doesn\u0027t nullify the failures on the two android builds...",
       "revId": "f2e43dc5a7413506f9d41294e96cc1e2aead9a03",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b74eb4fb_31d662f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-06-22T14:00:22Z",
+      "side": 1,
+      "message": "Sorry for the fuck up. Now the Android builds passed.",
+      "revId": "f2e43dc5a7413506f9d41294e96cc1e2aead9a03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
