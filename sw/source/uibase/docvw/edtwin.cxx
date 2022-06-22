@@ -2825,69 +2825,72 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     {
         const SwPageFrame* pPageFrame = rSh.GetLayout()->GetPageAtPos( aDocPos );
 
-        // Is it active?
-        bool bActive = true;
-        const SwPageDesc* pDesc = pPageFrame->GetPageDesc();
-
-        const SwFrameFormat* pFormat = pDesc->GetLeftFormat();
-        if ( pPageFrame->OnRightPage() )
-             pFormat = pDesc->GetRightFormat();
-
-        if ( pFormat )
+        if ( pPageFrame )
         {
-            if ( eControl == FrameControlType::Header )
-                bActive = pFormat->GetHeader().IsActive();
-            else
-                bActive = pFormat->GetFooter().IsActive();
-        }
+            // Is it active?
+            bool bActive = true;
+            const SwPageDesc* pDesc = pPageFrame->GetPageDesc();
 
-        if ( !bActive )
-        {
-            // When in Hide-Whitespace mode, we don't want header
-            // and footer controls.
-            if (!rSh.GetViewOptions()->IsHideWhitespaceMode())
+            const SwFrameFormat* pFormat = pDesc->GetLeftFormat();
+            if ( pPageFrame->OnRightPage() )
+                 pFormat = pDesc->GetRightFormat();
+
+            if ( pFormat )
             {
-                SwPaM aPam(*rSh.GetCurrentShellCursor().GetPoint());
-                const bool bWasInHeader = aPam.GetPoint()->nNode.GetNode().FindHeaderStartNode() != nullptr;
-                const bool bWasInFooter = aPam.GetPoint()->nNode.GetNode().FindFooterStartNode() != nullptr;
+                if ( eControl == FrameControlType::Header )
+                    bActive = pFormat->GetHeader().IsActive();
+                else
+                    bActive = pFormat->GetFooter().IsActive();
+            }
 
-                // Is the cursor in a part like similar to the one we clicked on? For example,
-                // if the cursor is in a header and we click on an empty header... don't change anything to
-                // keep consistent behaviour due to header edit mode (and the same for the footer as well).
-
-                // Otherwise, we hide the header/footer control if a separator is shown, and vice versa.
-                if (!(bWasInHeader && eControl == FrameControlType::Header) &&
-                    !(bWasInFooter && eControl == FrameControlType::Footer))
+            if ( !bActive )
+            {
+                // When in Hide-Whitespace mode, we don't want header
+                // and footer controls.
+                if (!rSh.GetViewOptions()->IsHideWhitespaceMode())
                 {
-                    const bool bSeparatorWasVisible = rSh.IsShowHeaderFooterSeparator(eControl);
-                    rSh.SetShowHeaderFooterSeparator(eControl, !bSeparatorWasVisible);
+                    SwPaM aPam(*rSh.GetCurrentShellCursor().GetPoint());
+                    const bool bWasInHeader = aPam.GetPoint()->nNode.GetNode().FindHeaderStartNode() != nullptr;
+                    const bool bWasInFooter = aPam.GetPoint()->nNode.GetNode().FindFooterStartNode() != nullptr;
 
-                    // Repaint everything
-                    Invalidate();
+                    // Is the cursor in a part like similar to the one we clicked on? For example,
+                    // if the cursor is in a header and we click on an empty header... don't change anything to
+                    // keep consistent behaviour due to header edit mode (and the same for the footer as well).
 
-                    // tdf#84929. If the footer control had not been showing, do not change the cursor position,
-                    // because the user may have scrolled to turn on the separator control and
-                    // if the cursor cannot be positioned on-screen, then the user would need to scroll back again to use the control.
-                    // This should only be done for the footer. The cursor can always be re-positioned near the header. tdf#134023.
-                    if ( eControl == FrameControlType::Footer && !bSeparatorWasVisible
-                         && rSh.GetViewOptions()->IsUseHeaderFooterMenu() && !Application::IsHeadlessModeEnabled() )
-                        return;
+                    // Otherwise, we hide the header/footer control if a separator is shown, and vice versa.
+                    if (!(bWasInHeader && eControl == FrameControlType::Header) &&
+                        !(bWasInFooter && eControl == FrameControlType::Footer))
+                    {
+                        const bool bSeparatorWasVisible = rSh.IsShowHeaderFooterSeparator(eControl);
+                        rSh.SetShowHeaderFooterSeparator(eControl, !bSeparatorWasVisible);
+
+                        // Repaint everything
+                        Invalidate();
+
+                        // tdf#84929. If the footer control had not been showing, do not change the cursor position,
+                        // because the user may have scrolled to turn on the separator control and
+                        // if the cursor cannot be positioned on-screen, then the user would need to scroll back again to use the control.
+                        // This should only be done for the footer. The cursor can always be re-positioned near the header. tdf#134023.
+                        if ( eControl == FrameControlType::Footer && !bSeparatorWasVisible
+                             && rSh.GetViewOptions()->IsUseHeaderFooterMenu() && !Application::IsHeadlessModeEnabled() )
+                            return;
+                    }
                 }
             }
-        }
-        else
-        {
-            // Make sure we have the proper Header/Footer separators shown
-            // as these may be changed if clicking on an empty Header/Footer
-            rSh.SetShowHeaderFooterSeparator( FrameControlType::Header, eControl == FrameControlType::Header );
-            rSh.SetShowHeaderFooterSeparator( FrameControlType::Footer, eControl == FrameControlType::Footer );
-
-            if ( !rSh.IsHeaderFooterEdit() )
+            else
             {
-                rSh.ToggleHeaderFooterEdit();
+                // Make sure we have the proper Header/Footer separators shown
+                // as these may be changed if clicking on an empty Header/Footer
+                rSh.SetShowHeaderFooterSeparator( FrameControlType::Header, eControl == FrameControlType::Header );
+                rSh.SetShowHeaderFooterSeparator( FrameControlType::Footer, eControl == FrameControlType::Footer );
 
-                // Repaint everything
-                rSh.GetWin()->Invalidate();
+                if ( !rSh.IsHeaderFooterEdit() )
+                {
+                    rSh.ToggleHeaderFooterEdit();
+
+                    // Repaint everything
+                    rSh.GetWin()->Invalidate();
+                }
             }
         }
     }
