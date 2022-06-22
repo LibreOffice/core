@@ -182,7 +182,6 @@ public:
         return m_HiddenChg[ nCnt ];
     }
     TextFrameIndex NextHiddenChg(TextFrameIndex nPos) const;
-    static void selectHiddenTextProperty(const SwTextNode& rNode, MultiSelection &rHiddenMulti);
     TextFrameIndex NextBookmark(TextFrameIndex nPos) const;
     MarkKind GetBookmark(TextFrameIndex nPos) const;
     static void CalcHiddenRanges(const SwTextNode& rNode,

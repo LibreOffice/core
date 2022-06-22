@@ -2530,6 +2530,41 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
                 pBookmarks->emplace_back(pBookmark, MarkKind::End);
             }
         }
+
+        bool bHide = false;
+        if (pBookmark && pBookmark->IsHidden())
+        {
+            // bookmark is marked as hidden
+            bHide = true;
+
+            // bookmark is marked as hidden with conditions
+            if (!pBookmark->GetHideCondition().isEmpty())
+            {
+                SwDoc& rDoc = *const_cast<SwDoc*>(rNode.GetDoc());
+                SwCalc aCalc(rDoc);
+                rDoc.getIDocumentFieldsAccess().FieldsToCalc(aCalc, rNode.GetIndex(), USHRT_MAX);
+
+                SwSbxValue aValue = aCalc.Calculate(pBookmark->GetHideCondition());
+                if(!aValue.IsVoidValue())
+                {
+                    bHide = aValue.GetBool();
+                }
+            }
+        }
+
+        if (bHide)
+        {
+            // intersect bookmark range with textnode range and add the intersection to rHiddenMulti
+
+            const sal_Int32 nSt =  pBookmark->GetMarkStart().nContent.GetIndex();
+            const sal_Int32 nEnd = pBookmark->GetMarkEnd().nContent.GetIndex();
+
+            if( nEnd > nSt )
+            {
+                Range aTmp( nSt, nEnd - 1 );
+                rHiddenMulti.Select(aTmp, true);
+            }
+        }
     }
 }
 
