@@ -16,6 +16,7 @@
 
 #include <boost/property_tree/ptree.hpp>
 #include <o3tl/unreachable.hxx>
+#include <utility>
 
 namespace {
 
@@ -26,9 +27,9 @@ struct GtvCalcHeaderBarPrivateImpl
     {
         int m_nSize;
         std::string m_aText;
-        Header(int nSize, const std::string& rText)
+        Header(int nSize, std::string aText)
             : m_nSize(nSize),
-              m_aText(rText)
+              m_aText(std::move(aText))
             { }
     };
 
