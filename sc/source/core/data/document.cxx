@@ -727,7 +727,14 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                     if (pTab)
                         pTab->UpdateDeleteTab(aCxt);
 
+                // tdf#149502 make sure ScTable destructor called after the erase is finished, when
+                // maTabs[x].nTab==x is true again, as it should be always true.
+                // In the end of maTabs.erase, maTabs indexes change, but nTab updated before erase.
+                // ~ScTable expect that maTabs[x].nTab==x so it shouldn't be called during erase.
+                ScTableUniquePtr pErasedTab = std::move(maTabs[nTab]);
                 maTabs.erase(maTabs.begin() + nTab);
+                delete pErasedTab.release();
+
                 // UpdateBroadcastAreas must be called between UpdateDeleteTab,
                 // which ends listening, and StartAllListeners, to not modify
                 // areas that are to be inserted by starting listeners.
