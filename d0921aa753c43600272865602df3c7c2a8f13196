@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a69dcaa_b92bb8f3",
+        "filename": "sc/qa/unit/scshapetest.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-22T08:57:50Z",
+      "side": 1,
+      "message": "This fails locally in master (for sberg and for me) on Windows, and also doing the test manually makes the object jump down on reload already in 7.2.0.4:\n\nhttps://i.imgur.com/wh8f575.gif",
+      "revId": "d0921aa753c43600272865602df3c7c2a8f13196",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
