@@ -16,6 +16,24 @@
       "message": "This started to cause CppunitTest_sc_shapetest to fail for me on Windows with\n  sc/qa/unit/scshapetest.cxx(169) : error : Assertion\n  Test name: sc_apitest::ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline\n  assertion failed\n  - Expression: std::abs(rExpected.Y() - rActual.Y()) \u003c\u003d nTolerance\n  - after reload Y expected 16012 actual 18234 Tolerance 1\n\n(Though that test is generally known to be somewhat flaky, see the comments at \u003chttps://gerrit.libreoffice.org/c/core/+/106990\u003e \"tdf#137576 Improve cell anchored measure line in Calc\".  But at least for me, the test apparently reliably succeeded in the past, started to reliably fail now, and succeeds again when I local revert this commit.)",
       "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b8624e7_5700ef6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-22T10:53:29Z",
+      "side": 1,
+      "message": "What kind of setup do you run? Monitor scaling? But then I also had asserts failing in https://gerrit.libreoffice.org/c/core/+/135810, which I don\u0027t understand.",
+      "parentUuid": "e4b76f4e_0324315d",
+      "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
