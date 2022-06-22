@@ -24,6 +24,7 @@
 
 #include <cstring>
 #include <memory>
+#include <utility>
 #include <vector>
 
 #include <formula/formuladllapi.h>
@@ -336,7 +337,7 @@ class FORMULA_DLLPUBLIC FormulaStringToken final : public FormulaToken
 {
     svl::SharedString maString;
 public:
-    FormulaStringToken( const svl::SharedString& r );
+    FormulaStringToken( svl::SharedString r );
     FormulaStringToken( const FormulaStringToken& r );
 
     virtual FormulaToken* Clone() const override;
@@ -352,7 +353,7 @@ class FORMULA_DLLPUBLIC FormulaStringOpToken final : public FormulaByteToken
 {
     svl::SharedString maString;
 public:
-    FormulaStringOpToken( OpCode e, const svl::SharedString& r );
+    FormulaStringOpToken( OpCode e, svl::SharedString r );
     FormulaStringOpToken( const FormulaStringOpToken& r );
 
     virtual FormulaToken* Clone() const override;
@@ -386,12 +387,12 @@ class FORMULA_DLLPUBLIC FormulaExternalToken final : public FormulaByteToken
 private:
             OUString            aExternal;
 public:
-                                FormulaExternalToken( OpCode e, sal_uInt8 n, const OUString& r ) :
+                                FormulaExternalToken( OpCode e, sal_uInt8 n, OUString  r ) :
                                     FormulaByteToken( e, n, svExternal, ParamClass::Unknown ),
-                                    aExternal( r ) {}
-                                FormulaExternalToken( OpCode e, const OUString& r ) :
+                                    aExternal(std::move( r )) {}
+                                FormulaExternalToken( OpCode e, OUString  r ) :
                                     FormulaByteToken( e, 0, svExternal, ParamClass::Unknown ),
-                                    aExternal( r ) {}
+                                    aExternal(std::move( r )) {}
                                 FormulaExternalToken( const FormulaExternalToken& r ) :
                                     FormulaByteToken( r ), aExternal( r.aExternal ) {}
 
