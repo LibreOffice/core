@@ -22,6 +22,30 @@
       },
       "revId": "f6e5c3e3688989d0444ca969c9aab5644ff24ded",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28b2a9dd_4063716e",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1003613
+      },
+      "writtenOn": "2022-06-22T15:46:34Z",
+      "side": 1,
+      "message": "Ops, it\u0027s wrong indeed, sorry. \n\nAlthough more verbose than \"1\", isn\u0027t \"sizeof(*pBuf-\u003edata())\" better for the second argument?",
+      "parentUuid": "c8cafdc4_2ef83026",
+      "range": {
+        "startLine": 519,
+        "startChar": 15,
+        "endLine": 519,
+        "endChar": 56
+      },
+      "revId": "f6e5c3e3688989d0444ca969c9aab5644ff24ded",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

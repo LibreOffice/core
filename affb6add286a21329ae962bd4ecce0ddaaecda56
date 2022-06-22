@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc1a69ad_32910fae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003613
+      },
+      "writtenOn": "2022-06-22T15:46:34Z",
+      "side": 1,
+      "message": "\u003e Patch Set 4: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/117352/ : FAILURE\n\u003e \n\u003e compiler couldn\"t find the file »opening dependency file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/compilerplugins/clang/obj/blockblock.d« referenced from /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/compilerplugins/clang/blockblock.cxx:1:0 ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/116214/ )\n\nShould I heed this error? It looks like a transient problem with the builder.",
+      "revId": "affb6add286a21329ae962bd4ecce0ddaaecda56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
