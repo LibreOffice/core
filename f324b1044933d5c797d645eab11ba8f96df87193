@@ -50,6 +50,24 @@
       "message": "I\u0027m not convinced this makes things any better. I\u0027m always glad to see vcl cleaned up, but this (for me) falls into the category of unnecessary abstraction. Just my 2c.",
       "revId": "f324b1044933d5c797d645eab11ba8f96df87193",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39353eb1_c5fcf781",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-22T10:20:26Z",
+      "side": 1,
+      "message": "\u003e I\u0027m not convinced this makes things any better.\n\nI have no idea what \"things any better\" refers to. What improvement do you expect?\n\n\u003e I\u0027m always glad to see vcl cleaned up, but this (for me) falls into the category of unnecessary abstraction. Just my 2c.\n\nThe main goal is to easier track, if all \"drawable\" correctly handle the scaling. The goal is still to handle \"scaling per screen\" in VCL at some point. Currently moving a LO window between screens with different scaling is just very broken, if scaling is supposed to happen by VCL, because a lot of stuff is cached just for one factor.\n\nSo now I would like to get some ideas, how to handle this problem differently. I currently have the idea to have a default OutputDevice per screen, and maybe even shared for screens with the same scaling. Same would apply for the font cache, the Icon management / cache, which is handled in VCL but also in toolbar managers. From comments fount in VCL I originally assumed the problem is VCL only, but it affects much more (and maybe it can be reduced to VCL-only at some point).",
+      "parentUuid": "b1d59011_d1234b4a",
+      "revId": "f324b1044933d5c797d645eab11ba8f96df87193",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
