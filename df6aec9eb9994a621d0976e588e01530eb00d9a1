@@ -22,6 +22,30 @@
       },
       "revId": "df6aec9eb9994a621d0976e588e01530eb00d9a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c930ac5_b473b3e1",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3992,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-22T10:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1df66ee2_ecd51f30",
+      "range": {
+        "startLine": 3992,
+        "startChar": 11,
+        "endLine": 3992,
+        "endChar": 12
+      },
+      "revId": "df6aec9eb9994a621d0976e588e01530eb00d9a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
