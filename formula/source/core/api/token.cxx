@@ -33,6 +33,7 @@
 #include <formula/compiler.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <memory>
+#include <utility>
 
 namespace formula
 {
@@ -1933,8 +1934,8 @@ bool FormulaTypedDoubleToken::operator==( const FormulaToken& r ) const
     return FormulaDoubleToken::operator==( r ) && mnType == r.GetDoubleType();
 }
 
-FormulaStringToken::FormulaStringToken( const svl::SharedString& r ) :
-    FormulaToken( svString ), maString( r )
+FormulaStringToken::FormulaStringToken( svl::SharedString r ) :
+    FormulaToken( svString ), maString(std::move( r ))
 {
 }
 
@@ -1961,8 +1962,8 @@ bool FormulaStringToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && maString == r.GetString();
 }
 
-FormulaStringOpToken::FormulaStringOpToken( OpCode e, const svl::SharedString& r ) :
-    FormulaByteToken( e, 0, svString, ParamClass::Unknown ), maString( r ) {}
+FormulaStringOpToken::FormulaStringOpToken( OpCode e, svl::SharedString r ) :
+    FormulaByteToken( e, 0, svString, ParamClass::Unknown ), maString(std::move( r )) {}
 
 FormulaStringOpToken::FormulaStringOpToken( const FormulaStringOpToken& r ) :
     FormulaByteToken( r ), maString( r.maString ) {}
