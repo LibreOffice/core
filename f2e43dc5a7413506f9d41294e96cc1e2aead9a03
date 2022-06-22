@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "849862f0_78ce4259",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-22T12:58:41Z",
+      "side": 1,
+      "message": "... and that is why you should not override jenkins -1 without looking at all builds\u0027 results/without explaining the failures in the comments...\n\nSure, the failure on Windows was unrelated, but that doesn\u0027t nullify the failures on the two android builds...",
+      "revId": "f2e43dc5a7413506f9d41294e96cc1e2aead9a03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
