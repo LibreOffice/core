@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adf8ee9f_8f3f53bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-22T18:25:44Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1 was rebased\n\nIt might have been informative to rebase it atop d2de55c93f94bbccff51fa7715b613341f1f4ae6^, see the comments starting at \u003chttps://gerrit.libreoffice.org/c/core/+/117900/8#message-e439f5f2b9ed7a24d6f47fd640defe14dc392eb5\u003e \"svp: don\u0027t directly yield in main thread\n\".",
+      "revId": "e86d40ca7c97bb6b909de4b554b1449903acd4c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
