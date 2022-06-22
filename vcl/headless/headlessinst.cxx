@@ -47,7 +47,7 @@ SalSystem *HeadlessSalInstance::CreateSalSystem()
 
 extern "C" SalInstance *create_SalInstance()
 {
-    HeadlessSalInstance* pInstance = new HeadlessSalInstance(std::make_unique<SalYieldMutex>());
+    HeadlessSalInstance* pInstance = new HeadlessSalInstance(std::make_unique<SvpSalYieldMutex>());
     new SvpSalData();
     return pInstance;
 }
