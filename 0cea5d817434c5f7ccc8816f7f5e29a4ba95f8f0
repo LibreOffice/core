@@ -34,6 +34,24 @@
       "parentUuid": "c4d98c13_bd522d17",
       "revId": "0cea5d817434c5f7ccc8816f7f5e29a4ba95f8f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24b271aa_4d8049f9",
+        "filename": "sw/source/core/text/itrcrsr.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-22T06:44:00Z",
+      "side": 0,
+      "message": "Great, if there are no layout changes, then we\u0027re good.",
+      "parentUuid": "6623966e_9d79e0fe",
+      "revId": "0cea5d817434c5f7ccc8816f7f5e29a4ba95f8f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
