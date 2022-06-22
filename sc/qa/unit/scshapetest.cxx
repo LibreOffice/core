@@ -55,10 +55,7 @@ public:
     void testTdf137033_FlipHori_Resize();
     void testTdf137033_RotShear_ResizeHide();
     void testTdf137033_RotShear_Hide();
-// this test has starting failing under OSX
-#if !defined MACOSX
     void testTdf137576_LogicRectInDefaultMeasureline();
-#endif
     void testTdf137576_LogicRectInNewMeasureline();
     void testMeasurelineHideColSave();
     void testHideColsShow();
@@ -85,10 +82,7 @@ public:
     CPPUNIT_TEST(testTdf137033_FlipHori_Resize);
     CPPUNIT_TEST(testTdf137033_RotShear_ResizeHide);
     CPPUNIT_TEST(testTdf137033_RotShear_Hide);
-// this test has starting failing under OSX
-#if !defined MACOSX
     CPPUNIT_TEST(testTdf137576_LogicRectInDefaultMeasureline);
-#endif
     CPPUNIT_TEST(testTdf137576_LogicRectInNewMeasureline);
     CPPUNIT_TEST(testMeasurelineHideColSave);
     CPPUNIT_TEST(testHideColsShow);
@@ -769,13 +763,8 @@ void ScShapeTest::testTdf137033_RotShear_Hide()
     pDocSh->DoClose();
 }
 
-// this test has starting failing under OSX
-#if !defined MACOSX
 void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
 {
-    if (!IsDefaultDPI())
-        return;
-
     // Error was, that the empty logical rectangle of a default measure line (Ctrl+Click)
     // resulted in zeros in NonRotatedAnchor and a wrong position when reloading.
 
@@ -828,7 +817,6 @@ void ScShapeTest::testTdf137576_LogicRectInDefaultMeasureline()
 
     pDocSh->DoClose();
 }
-#endif
 
 void ScShapeTest::testTdf137576_LogicRectInNewMeasureline()
 {
