@@ -569,14 +569,11 @@ void ODataOutputStream::writeDouble(double Value)
 
 void ODataOutputStream::writeUTF(const OUString& Value)
 {
-    sal_Int32 nStrLen = Value.getLength();
     const sal_Unicode * pStr = Value.getStr();
     sal_Int32 nUTFLen = 0;
-    sal_Int32 i;
 
-    for( i = 0 ; i < nStrLen ; i++ )
+    for( sal_uInt16 c : pStr )
     {
-        sal_uInt16 c = pStr[i];
         if( (c >= 0x0001) && (c <= 0x007F) )
         {
             nUTFLen++;
@@ -603,9 +600,8 @@ void ODataOutputStream::writeUTF(const OUString& Value)
     else {
         writeShort( static_cast<sal_uInt16>(nUTFLen) );
     }
-    for( i = 0 ; i < nStrLen ; i++ )
+    for( sal_uInt16 c : pStr )
     {
-        sal_uInt16 c = pStr[i];
         if( (c >= 0x0001) && (c <= 0x007F) )
         {
             writeByte(sal_Int8(c));
