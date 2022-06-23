@@ -69,6 +69,24 @@
       "parentUuid": "dc1184d3_254afa79",
       "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c686ce4_310aa2b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-23T06:55:11Z",
+      "side": 1,
+      "message": "So the behavior appears to be the same with and without this change:\n* `instdir/program/soffice workdir/UnpackedTarball/liborcus/test/gnumeric/test.gnumeric` selects `case orcus::format_t::gnumeric`.\n* `instdir/program/soffice workdir/UnpackedTarball/liborcus/test/xls-xml/basic/input.xml` doesn\u0027t call `OrcusFormatDetect::detect` at all (and instead opens a Calc document via some other filter?!?).",
+      "parentUuid": "d5e71b86_70af1971",
+      "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
