@@ -4314,10 +4314,10 @@ void ScCompiler::AutoCorrectParsedSymbol()
 
 bool ScCompiler::ToUpperAsciiOrI18nIsAscii( OUString& rUpper, const OUString& rOrg ) const
 {
-    if (FormulaGrammar::isODFF( meGrammar ))
+    if (FormulaGrammar::isODFF( meGrammar) || FormulaGrammar::isOOXML( meGrammar))
     {
-        // ODFF has a defined set of English function names, avoid i18n
-        // overhead.
+        // ODFF and OOXML have defined sets of English function names, avoid
+        // i18n overhead.
         rUpper = rOrg.toAsciiUpperCase();
         return true;
     }
