@@ -478,6 +478,7 @@ IMPL_LINK_NOARG(ScGridWindow, PopupModeEndHdl, weld::Popover&, void)
         mpFilterBox->SetCancelled();     // cancel select
         // restore the mouse capture state of the GridWindow to
         // what it was at initial popup time
+        SAL_WARN_IF(bMouseWasCaptured, "sc.ui", "Is there a scenario where the mouse was captured before mouse down?");
         if (bMouseWasCaptured)
             CaptureMouse();
     }
@@ -1817,6 +1818,9 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     if (pScMod->IsModalMode(mrViewData.GetSfxDocShell()))
         return;
 
+    const bool bWasMouseCaptured = IsMouseCaptured();
+    SAL_WARN_IF(bWasMouseCaptured, "sc.ui", "Is there a scenario where the mouse is captured before mouse down?");
+
     pScActiveViewShell = mrViewData.GetViewShell();         // if left is clicked
     nScClickMouseModifier = rMEvt.GetModifier();            // to always catch a control click
 
@@ -2073,9 +2077,11 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             tools::Rectangle aButtonRect = GetListValButtonRect( aListValPos );
             if ( aButtonRect.Contains( aPos ) )
             {
-                // tdf#125917 typically we have the mouse captured already, except if are editing the cell.
-                // Ensure its captured before the menu is launched even in the cell editing case
-                CaptureMouse();
+                // tdf#149609 if we captured the mouse in the course of this function
+                // release it before showing the data select menu to undo any unhelpful
+                // seleng capture
+                if (!bWasMouseCaptured && IsMouseCaptured())
+                    ReleaseMouse();
 
                 LaunchDataSelectMenu( aListValPos.Col(), aListValPos.Row() );
 
@@ -2091,7 +2097,11 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     ScRange aScenRange;
     if ( rMEvt.IsLeft() && HasScenarioButton( aPos, aScenRange ) )
     {
-        CaptureMouse();
+        // tdf#149609 if we captured the mouse in the course of this function
+        // release it before showing the data scenario menu to undo any unhelpful
+        // seleng capture
+        if (!bWasMouseCaptured && IsMouseCaptured())
+            ReleaseMouse();
 
         DoScenarioMenu( aScenRange );
 
