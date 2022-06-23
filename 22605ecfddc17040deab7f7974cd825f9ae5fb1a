@@ -39,6 +39,48 @@
       },
       "revId": "22605ecfddc17040deab7f7974cd825f9ae5fb1a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33bb473d_72a2df73",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1001965
+      },
+      "writtenOn": "2022-06-23T10:59:43Z",
+      "side": 1,
+      "message": "I would prefer white but agree today for Gray :D",
+      "parentUuid": "6b899231_6f7e2ada",
+      "range": {
+        "startLine": 444,
+        "startChar": 19,
+        "endLine": 444,
+        "endChar": 26
+      },
+      "revId": "22605ecfddc17040deab7f7974cd825f9ae5fb1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68ca95b3_470e29d2",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1001965
+      },
+      "writtenOn": "2022-06-23T10:59:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5c59e37_8b2f3b35",
+      "revId": "22605ecfddc17040deab7f7974cd825f9ae5fb1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
