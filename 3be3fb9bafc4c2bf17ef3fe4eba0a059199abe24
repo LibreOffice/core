@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7c9f0d1_2a534648",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-23T12:48:33Z",
+      "side": 1,
+      "message": "noting that the merge request for this upstream is at:\nhttps://gitlab.com/mdds/mdds/-/merge_requests/53",
+      "revId": "3be3fb9bafc4c2bf17ef3fe4eba0a059199abe24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8bcbfe1_ee5e3ee4",
