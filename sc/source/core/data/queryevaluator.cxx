@@ -489,8 +489,9 @@ std::pair<bool, bool> ScQueryEvaluator::compareByString(const ScQueryEntry& rEnt
                     const rtl_uString* pQuer = rItem.maString.getDataIgnoreCase();
                     const rtl_uString* pCellStr = rSource.getDataIgnoreCase();
 
-                    assert(pQuer != nullptr);
                     assert(pCellStr != nullptr);
+                    if (pQuer == nullptr)
+                        pQuer = svl::SharedString::getEmptyString().getDataIgnoreCase();
 
                     const sal_Int32 nIndex
                         = (rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH)
