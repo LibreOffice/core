@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "229709fd_26499c2d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-06-23T00:02:50Z",
+      "side": 1,
+      "message": "I\u0027d say yes.",
+      "parentUuid": "ee65d06f_b7b7200b",
+      "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc1184d3_254afa79",
