@@ -3894,6 +3894,18 @@ void SwContentTree::UpdateTracking()
                         // unselect all entries, make pEntry visible, and select
                         m_xTreeView->set_cursor(rEntry);
                         Select();
+
+                        // tdf#149279 show at least two outline entries before the set cursor entry
+                        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator(&rEntry));
+                        for (int i = 0; i < 2; i++)
+                        {
+                            if (m_xTreeView->get_iter_depth(*xIter) == 0)
+                                break;
+                            m_xTreeView->iter_previous(*xIter);
+                            while (!weld::IsEntryVisible(*m_xTreeView, *xIter))
+                                m_xTreeView->iter_parent(*xIter);
+                        }
+                        m_xTreeView->scroll_to_row(*xIter);
                     }
                     bRet = true;
                 }
