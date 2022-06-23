@@ -124,6 +124,23 @@
       "parentUuid": "27876a49_13a3bd9f",
       "revId": "b33ec910085fa67b96eb2d39625a7fdcef062448",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79357937_1697ffc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-23T11:30:32Z",
+      "side": 1,
+      "message": "And `MsgBox ActiveSheet.Name` in the end of the code shows \u0027Sheet2\u0027 which is still hidden, so indeed the VBA notion of the active sheet includes hidden ones.",
+      "revId": "b33ec910085fa67b96eb2d39625a7fdcef062448",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
