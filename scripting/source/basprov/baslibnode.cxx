@@ -21,6 +21,7 @@
 #include "basmodnode.hxx"
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <comphelper/sequence.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbstar.hxx>
@@ -40,13 +41,13 @@ namespace basprov
 
 
     BasicLibraryNodeImpl::BasicLibraryNodeImpl( const Reference< XComponentContext >& rxContext,
-         const OUString& sScriptingContext, BasicManager* pBasicManager,
-        const Reference< script::XLibraryContainer >& xLibContainer, const OUString& sLibName, bool isAppScript )
+         OUString  sScriptingContext, BasicManager* pBasicManager,
+        const Reference< script::XLibraryContainer >& xLibContainer, OUString sLibName, bool isAppScript )
         :m_xContext( rxContext )
-    ,m_sScriptingContext( sScriptingContext )
+    ,m_sScriptingContext(std::move( sScriptingContext ))
         ,m_pBasicManager( pBasicManager )
         ,m_xLibContainer( xLibContainer )
-        ,m_sLibName( sLibName )
+        ,m_sLibName(std::move( sLibName ))
         ,m_bIsAppScript( isAppScript )
     {
         if ( m_xLibContainer.is() )

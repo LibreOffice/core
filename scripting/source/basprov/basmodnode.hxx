@@ -46,7 +46,7 @@ namespace basprov
 
     public:
         BasicModuleNodeImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const OUString& sScriptingContext,
+            OUString sScriptingContext,
             SbModule* pModule, bool isAppScript );
         virtual ~BasicModuleNodeImpl() override;
 

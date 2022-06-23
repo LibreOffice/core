@@ -50,10 +50,10 @@ namespace basprov
 
     public:
         BasicLibraryNodeImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        const OUString& sScriptingContext,
+        OUString  sScriptingContext,
             BasicManager* pBasicManager,
             const css::uno::Reference< css::script::XLibraryContainer >& xLibContainer,
-            const OUString& sLibName, bool isAppScript );
+            OUString sLibName, bool isAppScript );
         virtual ~BasicLibraryNodeImpl() override;
 
         // XBrowseNode

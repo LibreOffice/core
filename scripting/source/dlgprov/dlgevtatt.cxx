@@ -23,6 +23,7 @@
 
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <tools/diagnose_ex.h>
@@ -102,12 +103,12 @@ namespace dlgprov
         Reference<  script::XScriptListener > mxListener;
         virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet ) override;
         public:
-        DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel, const OUString& sDialogLibName );
+        DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel, OUString sDialogLibName );
     };
 
   }
 
-    DialogVBAScriptListenerImpl::DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel, const OUString& sDialogLibName ) : DialogScriptListenerImpl( rxContext ), msDialogLibName( sDialogLibName )
+    DialogVBAScriptListenerImpl::DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel, OUString sDialogLibName ) : DialogScriptListenerImpl( rxContext ), msDialogLibName(std::move( sDialogLibName ))
     {
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
         Sequence< Any > args(1);
@@ -360,10 +361,10 @@ namespace dlgprov
 
 
     DialogAllListenerImpl::DialogAllListenerImpl( const Reference< XScriptListener >& rxListener,
-        const OUString& rScriptType, const OUString& rScriptCode )
+        OUString sScriptType, OUString sScriptCode )
         :m_xScriptListener( rxListener )
-        ,m_sScriptType( rScriptType )
-        ,m_sScriptCode( rScriptCode )
+        ,m_sScriptType(std::move( sScriptType ))
+        ,m_sScriptCode(std::move( sScriptCode ))
     {
     }
 
