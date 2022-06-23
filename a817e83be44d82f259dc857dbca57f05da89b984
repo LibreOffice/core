@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec28f955_03688091",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-06-23T20:52:10Z",
+      "side": 1,
+      "message": "IIUC the svg canvas is too small for whatever font Sans gets substituted for? Good catch. I shouldn\u0027t have made the canvas that small.\n\nThis may also need to be cherry picked after https://gerrit.libreoffice.org/c/core/+/136315 gets approved",
+      "revId": "a817e83be44d82f259dc857dbca57f05da89b984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
