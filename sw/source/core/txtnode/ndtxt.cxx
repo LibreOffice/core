@@ -3160,24 +3160,24 @@ bool SwTextNode::HasBullet() const
 //i53420 added max outline parameter
 OUString SwTextNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
         const unsigned int _nRestrictToThisLevel,
-        SwRootFrame const*const pLayout) const
+        SwRootFrame const*const pLayout, SwListRedlineType eRedline) const
 {
     if (GetDoc().IsClipBoard() && m_oNumStringCache)
     {
         // #i111677# do not expand number strings in clipboard documents
         return *m_oNumStringCache;
     }
-    const SwNumRule* pRule = GetNum(pLayout) ? GetNum(pLayout)->GetNumRule() : nullptr;
+    const SwNumRule* pRule = GetNum(pLayout, eRedline) ? GetNum(pLayout, eRedline)->GetNumRule() : nullptr;
     if ( pRule &&
          IsCountedInList() )
     {
         SvxNumberType const& rNumberType(
-                pRule->Get( lcl_BoundListLevel(GetActualListLevel()) ) );
+                pRule->Get( lcl_BoundListLevel(GetActualListLevel(eRedline)) ) );
         if (rNumberType.IsTextFormat() ||
 
             (style::NumberingType::NUMBER_NONE == rNumberType.GetNumberingType()))
         {
-            return pRule->MakeNumString( GetNum(pLayout)->GetNumberVector(),
+            return pRule->MakeNumString( GetNum(pLayout, eRedline)->GetNumberVector(),
                                      _bInclPrefixAndSuffixStrings,
                                      _nRestrictToThisLevel,
                                      nullptr,
@@ -3992,11 +3992,13 @@ SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
     return pOldColl;
 }
 
-const SwNodeNum* SwTextNode::GetNum(SwRootFrame const*const pLayout) const
+const SwNodeNum* SwTextNode::GetNum(SwRootFrame const*const pLayout, SwListRedlineType eRedline) const
 {
     // invariant: it's only in list in Hide mode if it's in list in normal mode
     assert(mpNodeNum || !mpNodeNumRLHidden);
-    return pLayout && pLayout->IsHideRedlines() ? mpNodeNumRLHidden.get() : mpNodeNum.get();
+    return (pLayout && pLayout->IsHideRedlines()) || SwListRedlineType::HIDDEN == eRedline
+            ? mpNodeNumRLHidden.get()
+            : ( SwListRedlineType::ORIGTEXT == eRedline ? mpNodeNumOrig.get() : mpNodeNum.get() );
 }
 
 void SwTextNode::DoNum(std::function<void (SwNodeNum &)> const& rFunc)
@@ -4014,9 +4016,9 @@ void SwTextNode::DoNum(std::function<void (SwNodeNum &)> const& rFunc)
 }
 
 SwNumberTree::tNumberVector
-SwTextNode::GetNumberVector(SwRootFrame const*const pLayout) const
+SwTextNode::GetNumberVector(SwRootFrame const*const pLayout, SwListRedlineType eRedline) const
 {
-    if (SwNodeNum const*const pNum = GetNum(pLayout))
+    if (SwNodeNum const*const pNum = GetNum(pLayout, eRedline))
     {
         return pNum->GetNumberVector();
     }
@@ -4137,11 +4139,13 @@ int SwTextNode::GetAttrListLevel() const
     return nAttrListLevel;
 }
 
-int SwTextNode::GetActualListLevel() const
+int SwTextNode::GetActualListLevel(SwListRedlineType eRedline) const
 {
-    assert(!GetNum() || !mpNodeNumRLHidden || // must be in sync
-        GetNum()->GetLevelInListTree() == mpNodeNumRLHidden->GetLevelInListTree());
-    return GetNum() ? GetNum()->GetLevelInListTree() : -1;
+    assert(SwListRedlineType::SHOW != eRedline ||
+        !GetNum(nullptr, SwListRedlineType::SHOW) || !mpNodeNumRLHidden || // must be in sync
+        GetNum(nullptr, SwListRedlineType::SHOW)->GetLevelInListTree() ==
+                                                        mpNodeNumRLHidden->GetLevelInListTree());
+    return GetNum(nullptr, eRedline) ? GetNum(nullptr, eRedline)->GetLevelInListTree() : -1;
 }
 
 void SwTextNode::SetListRestart( bool bRestart )
@@ -4318,10 +4322,30 @@ void SwTextNode::AddToList()
 
     assert(!mpNodeNum);
     mpNodeNum.reset(new SwNodeNum(this, false));
-    pList->InsertListItem(*mpNodeNum, false, GetAttrListLevel(), GetDoc());
+    pList->InsertListItem(*mpNodeNum, SwListRedlineType::SHOW, GetAttrListLevel(), GetDoc());
+
+    // set redline lists
+    bool bRecordChanges = GetDoc().GetDocShell() && GetDoc().GetDocShell()->IsChangeRecording();
+    if (!bRecordChanges || GetDoc().IsInXMLImport() || GetDoc().IsInWriterfilterImport() )
+    {
+        const SwRedlineTable& rRedTable = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
+        SwRedlineTable::size_type nRedlPos = GetDoc().getIDocumentRedlineAccess().GetRedlinePos(*this, RedlineType::Insert);
+        // paragraph start is not in a tracked insertion
+        if ( SwRedlineTable::npos == nRedlPos || GetIndex() <= rRedTable[nRedlPos]->Start()->nNode.GetNode().GetIndex() )
+        {
+            AddToListOrig();
+
+            SwRedlineTable::size_type nRedlPosDel = GetDoc().getIDocumentRedlineAccess().GetRedlinePos(*this, RedlineType::Delete);
+            if ( SwRedlineTable::npos == nRedlPosDel )
+                AddToListRLHidden();
+        }
+    }
+    else if ( bRecordChanges )
+        AddToListRLHidden();
+
     // iterate all frames & if there's one with hidden layout...
     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> iter(*this);
-    for (SwTextFrame* pFrame = iter.First(); pFrame; pFrame = iter.Next())
+    for (SwTextFrame* pFrame = iter.First(); pFrame && !mpNodeNumRLHidden; pFrame = iter.Next())
     {
         if (pFrame->getRootFrame()->IsHideRedlines())
         {
@@ -4337,18 +4361,28 @@ void SwTextNode::AddToList()
 void SwTextNode::AddToListRLHidden()
 {
     if (mpNodeNumRLHidden)
-    {
-        assert(false);
-        OSL_FAIL( "<SwTextNode::AddToListRLHidden()> - the text node is already added to a list. Serious defect" );
         return;
-    }
 
     SwList *const pList(FindList(this));
     if (pList)
     {
         assert(!mpNodeNumRLHidden);
         mpNodeNumRLHidden.reset(new SwNodeNum(this, true));
-        pList->InsertListItem(*mpNodeNumRLHidden, true, GetAttrListLevel(), GetDoc());
+        pList->InsertListItem(*mpNodeNumRLHidden, SwListRedlineType::HIDDEN, GetAttrListLevel(), GetDoc());
+    }
+}
+
+void SwTextNode::AddToListOrig()
+{
+    if (mpNodeNumOrig)
+        return;
+
+    SwList *const pList(FindList(this));
+    if (pList)
+    {
+        assert(!mpNodeNumOrig);
+        mpNodeNumOrig.reset(new SwNodeNum(this, true));
+        pList->InsertListItem(*mpNodeNumOrig, SwListRedlineType::ORIGTEXT, GetAttrListLevel(), GetDoc());
     }
 }
 
@@ -4356,6 +4390,7 @@ void SwTextNode::RemoveFromList()
 {
     // sw_redlinehide: ensure it's removed from the other half too!
     RemoveFromListRLHidden();
+    RemoveFromListOrig();
     if ( IsInList() )
     {
         SwList::RemoveListItem(*mpNodeNum, GetDoc());
@@ -4372,6 +4407,18 @@ void SwTextNode::RemoveFromListRLHidden()
         assert(mpNodeNumRLHidden->GetParent() || !GetNodes().IsDocNodes());
         SwList::RemoveListItem(*mpNodeNumRLHidden, GetDoc());
         mpNodeNumRLHidden.reset();
+
+        SetWordCountDirty( true );
+    }
+}
+
+void SwTextNode::RemoveFromListOrig()
+{
+    if (mpNodeNumOrig) // direct access because RemoveFromList doesn't have layout
+    {
+        assert(mpNodeNumOrig->GetParent() || !GetNodes().IsDocNodes());
+        SwList::RemoveListItem(*mpNodeNumOrig, GetDoc());
+        mpNodeNumOrig.reset();
 
         SetWordCountDirty( true );
     }
