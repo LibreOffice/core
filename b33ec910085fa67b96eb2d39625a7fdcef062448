@@ -141,6 +141,24 @@
       "message": "And `MsgBox ActiveSheet.Name` in the end of the code shows \u0027Sheet2\u0027 which is still hidden, so indeed the VBA notion of the active sheet includes hidden ones.",
       "revId": "b33ec910085fa67b96eb2d39625a7fdcef062448",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14a937ab_a720065c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-06-23T11:51:09Z",
+      "side": 1,
+      "message": "The range will be passed to the VBARange, but if it\u0027s hidden, the ScVbaRange::ScVbaRange does not receive the correct range object since ScTabView::SetTabNo selects only visible sheets.",
+      "parentUuid": "5d5349a6_626f9b54",
+      "revId": "b33ec910085fa67b96eb2d39625a7fdcef062448",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
