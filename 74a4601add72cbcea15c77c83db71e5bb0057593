@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e97728cd_6f9a4b1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-23T15:20:52Z",
+      "side": 1,
+      "message": "Going to hold onto this for a week or two to see if there are sideeffects.",
+      "revId": "74a4601add72cbcea15c77c83db71e5bb0057593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
