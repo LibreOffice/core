@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b2efe40_28ebffee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-06-23T14:02:45Z",
+      "side": 1,
+      "message": "@Tibor: very nice fix! I\u0027ve added some (possible) references for our previous work, and a thank you to Regina, according to her helpful comment in the issue.",
+      "revId": "3c80d00689dd52c11ebc8de1c90142148e58b2ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
