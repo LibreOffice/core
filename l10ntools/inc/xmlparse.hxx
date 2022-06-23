@@ -25,7 +25,6 @@
 #include <cstddef>
 #include <memory>
 #include <utility>
-#include <utility>
 #include <vector>
 
 #include <expat.h>
