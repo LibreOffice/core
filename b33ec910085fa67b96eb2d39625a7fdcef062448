@@ -16,6 +16,24 @@
       "message": "Hi Mike! This is just a simple dirty workround to overcome this bug. Is there any other possibility to set the current tab? Or should we add an bApi paramter to ScTabView::SetTabNo to avoid the paint calls?",
       "revId": "b33ec910085fa67b96eb2d39625a7fdcef062448",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fce9ea3_e7f31a98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-23T09:54:08Z",
+      "side": 1,
+      "message": "What does Excel do when you activate a hidden sheet there? I mean, visibly. What does its active sheet property (whatever it is) say. My question is if activating it from the code could possibly unhide it?\n\nI suppose that we need to avoid changes here, but instead, in the VBA object code, have an own object representing an active sheet, which would usually point to currently active Calc sheet, but could be also set to a hidden sheet.",
+      "parentUuid": "d514e97b_01d83faa",
+      "revId": "b33ec910085fa67b96eb2d39625a7fdcef062448",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
