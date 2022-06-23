@@ -18,6 +18,41 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fc00fb8_8641d17d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-06-23T08:21:54Z",
+      "side": 1,
+      "message": "Thanks for the review. :)",
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecca24a4_4ffa59cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-06-23T08:21:54Z",
+      "side": 1,
+      "message": "Yes, I will create a unit test for that case, especially because there is no any for this conditional issue.",
+      "parentUuid": "1ef96e56_9217a1ba",
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3249a09d_56592e7e",
@@ -31,6 +66,30 @@
       "writtenOn": "2022-06-23T08:15:54Z",
       "side": 1,
       "message": "Since there is a new class member (filter color) it will be great to add here as well. Maybe somewhere else?",
+      "range": {
+        "startLine": 3371,
+        "startChar": 19,
+        "endLine": 3371,
+        "endChar": 28
+      },
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2971374f_5699ecb2",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3371,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-06-23T08:21:54Z",
+      "side": 1,
+      "message": "Yes, good point, I will. I just didn\u0027t add here, because I wasn\u0027t sure that it is necessary. But everywhere else I think added.",
+      "parentUuid": "3249a09d_56592e7e",
       "range": {
         "startLine": 3371,
         "startChar": 19,
@@ -66,6 +125,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ede7015b_f42ce0d0",
+        "filename": "include/editeng/brushitem.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-06-23T08:21:54Z",
+      "side": 1,
+      "message": "Ok.",
+      "parentUuid": "c6495593_7fde933f",
+      "range": {
+        "startLine": 46,
+        "startChar": 24,
+        "endLine": 46,
+        "endChar": 34
+      },
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ddbb79de_e11d98f2",
         "filename": "sc/source/filter/inc/stylesbuffer.hxx",
         "patchSetId": 5
@@ -89,6 +172,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cdf4b071_78fc50a0",
+        "filename": "sc/source/filter/inc/stylesbuffer.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-06-23T08:21:54Z",
+      "side": 1,
+      "message": "Ok.",
+      "parentUuid": "ddbb79de_e11d98f2",
+      "range": {
+        "startLine": 469,
+        "startChar": 24,
+        "endLine": 469,
+        "endChar": 42
+      },
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89674a6e_85e87fcc",
         "filename": "sc/source/filter/inc/stylesbuffer.hxx",
         "patchSetId": 5
@@ -100,6 +207,30 @@
       "writtenOn": "2022-06-23T08:15:54Z",
       "side": 1,
       "message": "Same here.",
+      "range": {
+        "startLine": 507,
+        "startChar": 24,
+        "endLine": 507,
+        "endChar": 35
+      },
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "640fcbc3_bc6cb7e6",
+        "filename": "sc/source/filter/inc/stylesbuffer.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-06-23T08:21:54Z",
+      "side": 1,
+      "message": "Ok.",
+      "parentUuid": "89674a6e_85e87fcc",
       "range": {
         "startLine": 507,
         "startChar": 24,
