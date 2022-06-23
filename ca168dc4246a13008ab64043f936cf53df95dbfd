@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ef96e56_9217a1ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-06-23T08:15:54Z",
+      "side": 1,
+      "message": "Looks good for me in general.\n\nWhat about a unit test here? These foreground and background filter values are tricky, so it will be great to cover this topic somehow.\n\nPlus some imho:",
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3249a09d_56592e7e",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3371,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-06-23T08:15:54Z",
+      "side": 1,
+      "message": "Since there is a new class member (filter color) it will be great to add here as well. Maybe somewhere else?",
+      "range": {
+        "startLine": 3371,
+        "startChar": 19,
+        "endLine": 3371,
+        "endChar": 28
+      },
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6495593_7fde933f",
+        "filename": "include/editeng/brushitem.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-06-23T08:15:54Z",
+      "side": 1,
+      "message": "Maybe it will make sense to have a full name, for example aFilterColor?",
+      "range": {
+        "startLine": 46,
+        "startChar": 24,
+        "endLine": 46,
+        "endChar": 34
+      },
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddbb79de_e11d98f2",
+        "filename": "sc/source/filter/inc/stylesbuffer.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-06-23T08:15:54Z",
+      "side": 1,
+      "message": "Same naming proposal: \"Filter\" instead of \"Filt\"",
+      "range": {
+        "startLine": 469,
+        "startChar": 24,
+        "endLine": 469,
+        "endChar": 42
+      },
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89674a6e_85e87fcc",
+        "filename": "sc/source/filter/inc/stylesbuffer.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-06-23T08:15:54Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 507,
+        "startChar": 24,
+        "endLine": 507,
+        "endChar": 35
+      },
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
