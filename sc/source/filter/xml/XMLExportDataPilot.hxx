@@ -58,9 +58,9 @@ class ScXMLExportDataPilot
     void WriteLevels(const ScDPSaveDimension* pDim);
     void WriteDatePart(sal_Int32 nPart);
     void WriteNumGroupInfo(const ScDPNumGroupInfo& pGroupInfo);
-    void WriteGroupDimAttributes(const ScDPSaveGroupDimension* pGroupDim);
+    void WriteGroupDimAttributes(const ScDPSaveGroupDimension& rGroupDim);
     void WriteGroupDimElements(const ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
-    void WriteNumGroupDim(const ScDPSaveNumGroupDimension* pNumGroupDim);
+    void WriteNumGroupDim(const ScDPSaveNumGroupDimension& rNumGroupDim);
     void WriteDimension(const ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
     void WriteDimensions(const ScDPSaveData* pDPSave);
 

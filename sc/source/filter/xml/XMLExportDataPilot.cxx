@@ -594,33 +594,27 @@ void ScXMLExportDataPilot::WriteNumGroupInfo(const ScDPNumGroupInfo& rGroupInfo)
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STEP, sValue);
 }
 
-void ScXMLExportDataPilot::WriteGroupDimAttributes(const ScDPSaveGroupDimension* pGroupDim)
+void ScXMLExportDataPilot::WriteGroupDimAttributes(const ScDPSaveGroupDimension& rGroupDim)
 {
-    if (pGroupDim)
+    OUString aSrcFieldName = ScDPUtil::getSourceDimensionName(rGroupDim.GetSourceDimName());
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, aSrcFieldName);
+    if (rGroupDim.GetDatePart())
     {
-        OUString aSrcFieldName = ScDPUtil::getSourceDimensionName(pGroupDim->GetSourceDimName());
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, aSrcFieldName);
-        if (pGroupDim->GetDatePart())
-        {
-            WriteDatePart(pGroupDim->GetDatePart());
-            WriteNumGroupInfo(pGroupDim->GetDateInfo());
-        }
+        WriteDatePart(rGroupDim.GetDatePart());
+        WriteNumGroupInfo(rGroupDim.GetDateInfo());
     }
 }
 
-void ScXMLExportDataPilot::WriteNumGroupDim(const ScDPSaveNumGroupDimension* pNumGroupDim)
+void ScXMLExportDataPilot::WriteNumGroupDim(const ScDPSaveNumGroupDimension& rNumGroupDim)
 {
-    if (pNumGroupDim)
+    if (rNumGroupDim.GetDatePart())
     {
-        if (pNumGroupDim->GetDatePart())
-        {
-            WriteDatePart(pNumGroupDim->GetDatePart());
-            WriteNumGroupInfo(pNumGroupDim->GetDateInfo());
-        }
-        else
-        {
-            WriteNumGroupInfo(pNumGroupDim->GetInfo());
-        }
+        WriteDatePart(rNumGroupDim.GetDatePart());
+        WriteNumGroupInfo(rNumGroupDim.GetDateInfo());
+    }
+    else
+    {
+        WriteNumGroupInfo(rNumGroupDim.GetInfo());
     }
 }
 
@@ -634,9 +628,9 @@ void ScXMLExportDataPilot::WriteGroupDimElements(const ScDPSaveDimension* pDim, 
         pNumGroupDim = pDimData->GetNumGroupDim(pDim->GetName());
         OSL_ENSURE((!pGroupDim || !pNumGroupDim), "there should be no NumGroup and Group at the same field");
         if (pGroupDim)
-            WriteGroupDimAttributes(pGroupDim);
+            WriteGroupDimAttributes(*pGroupDim);
         else if (pNumGroupDim)
-            WriteNumGroupDim(pNumGroupDim);
+            WriteNumGroupDim(*pNumGroupDim);
     }
     if (!(pGroupDim || pNumGroupDim))
         return;
