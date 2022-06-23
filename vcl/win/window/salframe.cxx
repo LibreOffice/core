@@ -2024,6 +2024,7 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
 
     static o3tl::enumarray<PointerStyle, ImplPtrData> aImplPtrTab =
     {
+    // [-loplugin:redundantfcast]:
     ImplPtrData{ nullptr, IDC_ARROW, 0 },                       // POINTER_ARROW
     ImplPtrData{ nullptr, nullptr, SAL_RESID_POINTER_NULL },    // POINTER_NULL
     ImplPtrData{ nullptr, IDC_WAIT, 0 },                        // POINTER_WAIT
