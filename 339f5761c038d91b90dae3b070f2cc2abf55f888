@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d8222c1_707abede",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-23T13:14:00Z",
+      "side": 1,
+      "message": "does this look plausible ?\n\ncontext is backtrace like: https://dev-builds.libreoffice.org/crashtest/5d41aca772cb9c4afd92ad408c66bd9642bb3952/backtraces/task230-core.backtrace.txt",
+      "revId": "339f5761c038d91b90dae3b070f2cc2abf55f888",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
