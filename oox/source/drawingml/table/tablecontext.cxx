@@ -79,7 +79,7 @@ TableContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& r
     case A_TOKEN( gridCol ):            // CT_TableCol
         {
             std::vector< sal_Int32 >& rvTableGrid( mrTableProperties.getTableGrid() );
-            rvTableGrid.push_back( rAttribs.getString( XML_w ).value().toInt32() );
+            rvTableGrid.push_back( rAttribs.getStringDefaulted( XML_w ).toInt32() );
         }
         break;
     case A_TOKEN( tr ):                 // CT_TableRow

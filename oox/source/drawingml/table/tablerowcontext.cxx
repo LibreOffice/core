@@ -34,7 +34,7 @@ TableRowContext::TableRowContext( ContextHandler2Helper const & rParent, const A
 : ContextHandler2( rParent )
 , mrTableRow( rTableRow )
 {
-    rTableRow.setHeight( rAttribs.getString( XML_h ).value().toInt32() );
+    rTableRow.setHeight( rAttribs.getStringDefaulted( XML_h ).toInt32() );
 }
 
 TableRowContext::~TableRowContext()

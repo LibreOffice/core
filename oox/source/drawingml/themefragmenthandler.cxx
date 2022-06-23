@@ -48,7 +48,7 @@ ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, con
             {
                 case A_TOKEN( theme ):
                 {
-                    mrTheme.setThemeName(rAttribs.getString(XML_name).value());
+                    mrTheme.setThemeName(rAttribs.getStringDefaulted(XML_name));
                     return this;
                 }
             }

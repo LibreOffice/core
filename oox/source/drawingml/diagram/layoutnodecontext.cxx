@@ -102,7 +102,7 @@ public:
         : ContextHandler2( rParent )
         , mpNode( pNode )
         {
-            msName = rAttribs.getString( XML_name ).value();
+            msName = rAttribs.getStringDefaulted( XML_name );
         }
 
     virtual ContextHandlerRef
@@ -143,7 +143,7 @@ public:
     ForEachContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, const ForEachAtomPtr& pAtom )
         : LayoutNodeContext( rParent, rAttribs, pAtom )
         {
-            pAtom->setRef(rAttribs.getString(XML_ref).value());
+            pAtom->setRef(rAttribs.getStringDefaulted(XML_ref));
             pAtom->iterator().loadFromXAttr( rAttribs.getFastAttributeList() );
 
             LayoutAtomMap& rLayoutAtomMap = pAtom->getLayoutNode().getDiagram().getLayout()->getLayoutAtomMap();
@@ -164,7 +164,7 @@ public:
 
     virtual ContextHandlerRef onCreateContext( ::sal_Int32 aElement, const AttributeList& rAttribs ) override
         {
-            mVariables[ getBaseToken(aElement) ] = rAttribs.getString( XML_val ).value();
+            mVariables[ getBaseToken(aElement) ] = rAttribs.getStringDefaulted( XML_val );
             return this;
         }
 private:
@@ -181,7 +181,7 @@ LayoutNodeContext::LayoutNodeContext( ContextHandler2Helper const & rParent,
     , mpNode( pAtom )
 {
     assert( pAtom && "Node must NOT be NULL" );
-    mpNode->setName( rAttribs.getString( XML_name ).value() );
+    mpNode->setName( rAttribs.getStringDefaulted( XML_name ) );
 }
 
 LayoutNodeContext::~LayoutNodeContext()
@@ -216,8 +216,8 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
             }
         }
 
-        pNode->setMoveWith( rAttribs.getString( XML_moveWith ).value() );
-        pNode->setStyleLabel( rAttribs.getString( XML_styleLbl ).value() );
+        pNode->setMoveWith( rAttribs.getStringDefaulted( XML_moveWith ) );
+        pNode->setStyleLabel( rAttribs.getStringDefaulted( XML_styleLbl ) );
         return new LayoutNodeContext( *this, rAttribs, pNode );
     }
     case DGM_TOKEN( shape ):
