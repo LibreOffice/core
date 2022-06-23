@@ -1060,7 +1060,16 @@ void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreads
         {
             SCTAB nNewTab = rRanges[ 0 ].aStart.Tab();
             if ( pViewSh->GetViewData().GetDocument().HasTable(nNewTab) )
+            {
+                // tdf#148766 - make tab visible, otherwise tab will not be selected
+                const bool bIsVisible = pViewSh->GetViewData().GetDocument().IsVisible(nNewTab);
+                if (!bIsVisible)
+                    pViewSh->GetViewData().GetDocument().SetVisible(nNewTab, true);
                 pViewSh->SetTabNo( nNewTab );
+                if (!bIsVisible)
+                    pViewSh->GetViewData().GetDocument().SetVisible(nNewTab, false);
+            }
+
         }
     }
 }
