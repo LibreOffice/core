@@ -34,6 +34,24 @@
       "parentUuid": "d514e97b_01d83faa",
       "revId": "b33ec910085fa67b96eb2d39625a7fdcef062448",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73ad6684_9bce2d24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-06-23T11:20:29Z",
+      "side": 1,
+      "message": "Excel does the exact same thing as Calc: it does not show any text in the message box.",
+      "parentUuid": "5fce9ea3_e7f31a98",
+      "revId": "b33ec910085fa67b96eb2d39625a7fdcef062448",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
