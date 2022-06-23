@@ -14,9 +14,11 @@
         <property name="hexpand">True</property>
         <property name="border_width">6</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="spacing">1</property>
+        <property name="width_request">200</property>
         <child>
           <object class="GtkBox" id="box2">
+            <property name="width_request">230</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
