@@ -16,6 +16,24 @@
       "message": "IIUC the svg canvas is too small for whatever font Sans gets substituted for? Good catch. I shouldn\u0027t have made the canvas that small.\n\nThis may also need to be cherry picked after https://gerrit.libreoffice.org/c/core/+/136315 gets approved",
       "revId": "a817e83be44d82f259dc857dbca57f05da89b984",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a373a151_8e5402d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-23T21:09:11Z",
+      "side": 1,
+      "message": "\u003e IIUC the svg canvas is too small for whatever font Sans gets substituted for? Good catch. I shouldn\u0027t have made the canvas that small.\n\nYes, increasing the canvas width to e.g. 100px would also have happened to solve the issue for me, but I think its better still to make things as deterministic as possible by using a font that is known not to get substituted with whatever happens to be available in some environment.",
+      "parentUuid": "ec28f955_03688091",
+      "revId": "a817e83be44d82f259dc857dbca57f05da89b984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
