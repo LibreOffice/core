@@ -18,6 +18,7 @@
  */
 
 #include "basscript.hxx"
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbmod.hxx>
@@ -54,11 +55,11 @@ constexpr OUStringLiteral BASSCRIPT_PROPERTY_CALLER = u"Caller";
     // BasicScriptImpl
 
 
-    BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef const & xMethod )
+    BasicScriptImpl::BasicScriptImpl( OUString funcName, SbMethodRef xMethod )
         : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
-        ,m_xMethod( xMethod )
-        ,m_funcName( funcName )
+        ,m_xMethod(std::move( xMethod ))
+        ,m_funcName(std::move( funcName ))
         ,m_documentBasicManager( nullptr )
         ,m_xDocumentScriptContext()
     {
@@ -66,11 +67,11 @@ constexpr OUStringLiteral BASSCRIPT_PROPERTY_CALLER = u"Caller";
     }
 
 
-    BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef const & xMethod,
+    BasicScriptImpl::BasicScriptImpl( OUString funcName, SbMethodRef xMethod,
         BasicManager& documentBasicManager, const Reference< XScriptInvocationContext >& documentScriptContext ) : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
-        ,m_xMethod( xMethod )
-        ,m_funcName( funcName )
+        ,m_xMethod(std::move( xMethod ))
+        ,m_funcName(std::move( funcName ))
         ,m_documentBasicManager( &documentBasicManager )
         ,m_xDocumentScriptContext( documentScriptContext )
     {

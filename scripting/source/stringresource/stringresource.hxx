@@ -31,6 +31,7 @@
 #include <comphelper/interfacecontainer4.hxx>
 #include <mutex>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 
@@ -67,7 +68,7 @@ struct LocaleItem
     bool                   m_bModified;
 
     LocaleItem( css::lang::Locale locale, bool bLoaded=true )
-        : m_locale( locale )
+        : m_locale(std::move( locale ))
         , m_nNextIndex( 0 )
         , m_bLoaded( bLoaded )
         , m_bModified( false )
