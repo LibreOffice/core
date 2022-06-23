@@ -16,6 +16,24 @@
       "message": "Thank you for fixing my error.",
       "revId": "7d5dcf5f547e29d61e788b88f7a3f7b4feafb6b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc5a31b7_49e435d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-23T05:48:41Z",
+      "side": 1,
+      "message": "No, thank *you* for fixing that original bug; this was just a small leftover from the bigger improvement :) The only thing that I\u0027m unsure is if it\u0027s safe to use pObjData-\u003emaStart unconditionally as I made it - as I mentioned in the commit message, and also in https://gerrit.libreoffice.org/c/core/+/108377/3#message-f8c00e0ee3dc3067552651a4da9a3633ec455062. Well, if it regresses, the fix would be obvious 😊\n\nActually, I was thinking yesterday how lucky we were that *you* also added that unit test in the other commit that allowed to repro reliably on my system. The unit test was 99% of success in fixing this - again, thank you!",
+      "parentUuid": "bfc530d9_136aad3c",
+      "revId": "7d5dcf5f547e29d61e788b88f7a3f7b4feafb6b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
