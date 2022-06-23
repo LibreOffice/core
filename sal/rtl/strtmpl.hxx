@@ -26,6 +26,7 @@
 #include <cstring>
 #include <cwchar>
 #include <limits>
+#include <new>
 #include <string_view>
 #include <type_traits>
 #include <utility>
@@ -1405,6 +1406,9 @@ void stringbuffer_insert(IMPL_RTL_STRINGDATA** ppThis, sal_Int32* capacity, sal_
     assert(len >= 0);
     if (len == 0)
         return;
+    if (len > std::numeric_limits<sal_Int32>::max() - (*ppThis)->length) {
+        throw std::bad_alloc();
+    }
 
     stringbuffer_ensureCapacity(ppThis, capacity, (*ppThis)->length + len);
 
