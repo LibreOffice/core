@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e233ce2d_668783c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-23T08:32:31Z",
+      "side": 1,
+      "message": "Are you sure we default to as-char when inserting new images? We used to default toat-para, then I changed that to as-char (4f40bf6a79de6d60da0a5090cdfeda6242e889f0), and later had to change to at-char (a7528cd6f17ea5c5b29e7d607e54c62de0d9e7db).\n\nSo at-para -\u003e at-char is OK, but at-char -\u003e as-char would re-introduce the problems described in a7528cd6f17ea5c5b29e7d607e54c62de0d9e7db.",
+      "revId": "d7ce0a603d7f9e5ad9220aff837e9a67c62f1b88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
