@@ -1,0 +1,27 @@
+--- third_party/abseil-cpp/absl/meta/type_traits.h
++++ third_party/abseil-cpp/absl/meta/type_traits.h
+@@ -489,23 +489,7 @@
+ // operation that is not trivial. `is_trivially_copy_assignable<T>` is simply
+ // `is_trivially_assignable<T&, const T&>`.
+ template <typename T>
+-struct is_trivially_copy_assignable
+-    : std::integral_constant<
+-          bool, __has_trivial_assign(typename std::remove_reference<T>::type) &&
+-                    absl::is_copy_assignable<T>::value> {
+-#ifdef ABSL_HAVE_STD_IS_TRIVIALLY_ASSIGNABLE
+- private:
+-  static constexpr bool compliant =
+-      std::is_trivially_copy_assignable<T>::value ==
+-      is_trivially_copy_assignable::value;
+-  static_assert(compliant || std::is_trivially_copy_assignable<T>::value,
+-                "Not compliant with std::is_trivially_copy_assignable; "
+-                "Standard: false, Implementation: true");
+-  static_assert(compliant || !std::is_trivially_copy_assignable<T>::value,
+-                "Not compliant with std::is_trivially_copy_assignable; "
+-                "Standard: true, Implementation: false");
+-#endif  // ABSL_HAVE_STD_IS_TRIVIALLY_ASSIGNABLE
+-};
++using is_trivially_copy_assignable = std::is_trivially_copy_assignable<T>;
+ 
+ #if defined(__cpp_lib_remove_cvref) && __cpp_lib_remove_cvref >= 201711L
+ template <typename T>
