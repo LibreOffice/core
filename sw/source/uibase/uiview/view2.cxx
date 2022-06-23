@@ -1472,6 +1472,11 @@ void SwView::Execute(SfxRequest &rReq)
                     m_pWrtShell->EnterSelFrameMode( &aCursorPos );
                 }
             }
+            else
+            {
+                // DOCX stores its cursor position as a bookmark
+                m_pWrtShell->GotoMark("_GoBack");
+            }
         }
         break;
         case SID_INSERT_GRAPHIC:
