@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d448bd1_6f9f1565",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-23T09:52:35Z",
+      "side": 1,
+      "message": "This causes may macOS build to fail JunitTest_toolkit_unoapi_1 with\n\n[...]\n\u003e checking: [toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleComponent] is iface: [com.sun.star.accessibility.XAccessibleComponent] testcode: [ifc.accessibility._XAccessibleComponent]\n\u003e LOG\u003e Execute: containsPoint()\n\u003e LOG\u003e Upper bound of box containsPoint no component points - FAILED\n\u003e LOG\u003e Lower bound of box containsPoint no component points - FAILED\n\u003e LOG\u003e Left bound of box containsPoint no component points - FAILED\n\u003e LOG\u003e Right bound of box containsPoint no component points - FAILED\n\u003e LOG\u003e Outer upper and lower bounds contain no component points - OK\n\u003e LOG\u003e Outer left and right bounds contain no component points - OK\n\u003e Method containsPoint() finished with state FAILED\n\u003e LOG\u003e containsPoint(): COMPLETED.FAILED\n[...]\n\u003e LOG\u003e Execute: getBounds()\n\u003e LOG\u003e Bounds \u003d (0,0),(0,0)\n\u003e Method getBounds() finished with state FAILED\n\u003e LOG\u003e getBounds(): COMPLETED.FAILED\n[...]\n\u003e LOG\u003e Execute: getSize()\n\u003e LOG\u003e starting required method: getBounds()\n\u003e LOG\u003e ! Required method getBounds() failed\n\u003e LOG\u003e getSize(): COMPLETED.FAILED\n[...]\n\u003e ***** State for toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleComponent ******\n\u003e [toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleComponent::containsPoint()] is testcode: [containsPoint()] - COMPLETED.FAILED\n\u003e [toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleComponent::getBounds()] is testcode: [getBounds()] - COMPLETED.FAILED\n\u003e [toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleComponent::getSize()] is testcode: [getSize()] - COMPLETED.FAILED\n\u003e \n\u003e Whole interface: COMPLETED.FAILED\n\u003e **************************************************************************************************\n[...]\n\u003e ***** State for toolkit.AccessibleMenu ******\n\u003e [toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleComponent] is testcode: [ifc.accessibility._XAccessibleComponent] - COMPLETED.FAILED\n\u003e \n\u003e Whole component: COMPLETED.FAILED\n\u003e *********************************************\n[...]",
+      "revId": "afc828b9833b7a612369e95606ba56d41ef2c369",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
