@@ -16,6 +16,23 @@
       "message": "Just a note: I suppose that ECMA vs ISO is not about \"OOXML vs MS implementation\" (the latter has its own documentation, like [MS-DOCX] and the like). It\u0027s rather about the standards organization that *governs* the standard evolution (ECMA), as opposed to the ISO that gets the prepared standard basically ready to the final standardization. Absolutely similar to OASIS ODF vs ISO ODF.",
       "revId": "3fb1477de164bba260e3e9a39afcb3f67c78fb5e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89358462_9982f913",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-23T08:38:49Z",
+      "side": 1,
+      "message": "We have 3 filters:\n\n- strict: this is import-only\n- transitional: this has an ISO and an ECMA variant\n\nThe ECMA variant does hacks to get our output be accepted by MSO 2007, while the ISO one would follow the spec (and only open in MSO \u003e\u003d 2010).\n\nI imagine that the current ECMA version doesn\u0027t recommend anymore what we do on export in ECMA mode. :-) (Since we somewhat still care about MSO 2007 users, but they do not.)",
+      "revId": "3fb1477de164bba260e3e9a39afcb3f67c78fb5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
