@@ -752,10 +752,12 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
                 {
                     case mdds::mtm::element_empty:
                         aVal.nType = ScMatValType::Empty;
+                        aVal.aStr = svl::SharedString::getEmptyString();
                     break;
                     case mdds::mtm::element_numeric:
                         aVal.nType = maMatFlag.get<TMatFlag>(nR, nC)
                             == SC_MATFLAG_EMPTYPATH ? ScMatValType::EmptyPath : ScMatValType::Empty;
+                        aVal.aStr = svl::SharedString::getEmptyString();
                     break;
                     default:
                         assert(false);

@@ -313,8 +313,6 @@ public:
         empty path. */
     svl::SharedString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const ;
 
-    /// @ATTENTION: If bString the ScMatrixValue->pS may still be NULL to indicate
-    /// an empty string!
     ScMatrixValue Get( SCSIZE nC, SCSIZE nR) const ;
 
     /** @return <TRUE/> if string or any empty, empty cell, empty result, empty
