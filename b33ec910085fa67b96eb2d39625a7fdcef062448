@@ -106,6 +106,24 @@
       "parentUuid": "c1e02bce_01474c1c",
       "revId": "b33ec910085fa67b96eb2d39625a7fdcef062448",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d5349a6_626f9b54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-06-23T11:28:19Z",
+      "side": 1,
+      "message": "Na, ignore the NOTABUG, Excel definitely shows the message",
+      "parentUuid": "27876a49_13a3bd9f",
+      "revId": "b33ec910085fa67b96eb2d39625a7fdcef062448",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
