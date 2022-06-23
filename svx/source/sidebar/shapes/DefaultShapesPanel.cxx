@@ -53,6 +53,8 @@ DefaultShapesPanel::DefaultShapesPanel (
     , mxFrame(rxFrame)
 {
     Initialize();
+    pParent->set_size_request(pParent->get_approximate_digit_width() * 20, -1);
+    m_xContainer->set_size_request(m_xContainer->get_approximate_digit_width() * 25, -1);
 }
 
 std::unique_ptr<PanelLayout> DefaultShapesPanel::Create(
