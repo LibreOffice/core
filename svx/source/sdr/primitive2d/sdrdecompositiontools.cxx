@@ -60,6 +60,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <set>
 
 using namespace com::sun::star;
 
@@ -330,8 +331,35 @@ void SlideBackgroundFillPrimitive2D::get2DDecomposition(
         const_cast< SlideBackgroundFillPrimitive2D* >(this)->mpLastVC = pViewContact;
     }
 
+    // tdf#149650 allow remember/detect of potential recursion for content creation.
+    // use a std::set association - instead of a single bool or adress - due to the
+    // possibility of multiple SlideBackgroundFillPrimitive2D's being used at the same
+    // refresh. Also possible would be a local member (bool), but that just makes the
+    // class more complicated. Working wth the adress is not a problem here since below
+    // it reliably gets added/removed while being incarnated only.
+    static std::set<const SlideBackgroundFillPrimitive2D*> potentiallyActiveRecursion;
+
+    if(potentiallyActiveRecursion.end() != potentiallyActiveRecursion.find(this))
+    {
+        // The method getPrimitive2DSequenceSubHierarchy used in create2DDecomposition
+        // above has the potential to create a recursion, e.g. when the content of a page
+        // contains a SdrPageObj that again displays the page content (and potentially so
+        // on).
+        // This is valid, but works like a fractal, showing page content
+        // smaller and smaller inside a page. This needs to be controlled here to avoid
+        // the recursion. In this case just allow one single step since
+        // we are mainly interested in the page's BG fill anyways
+        return;
+    }
+
+    // remember that we enter a potential recursion
+    potentiallyActiveRecursion.insert(this);
+
     // use parent implementation
     BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
+
+    // forget about potential recursion
+    potentiallyActiveRecursion.extract(this);
 }
 
 bool SlideBackgroundFillPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
