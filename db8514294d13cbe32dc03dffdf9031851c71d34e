@@ -33,6 +33,24 @@
       "message": "I wonder if we risk making this loop infinite if we do this. If we can\u0027t reproduce it, it might be safer to immediately return nullptr in the case of nothing returned by FindPageFrame. The function seems to do that in other cases, so that\u0027s presumably fairly safe to do.",
       "revId": "db8514294d13cbe32dc03dffdf9031851c71d34e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4744f37f_8be47bd8",
+        "filename": "sw/source/core/layout/trvlfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-23T13:35:22Z",
+      "side": 1,
+      "message": "Yep, that makes sense. Thanks!",
+      "parentUuid": "7071f153_1b06797d",
+      "revId": "db8514294d13cbe32dc03dffdf9031851c71d34e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
