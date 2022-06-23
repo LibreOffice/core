@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25c38307_ba52fc5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001965
+      },
+      "writtenOn": "2022-06-23T10:45:53Z",
+      "side": 1,
+      "message": "Please do only the bug report related changings here. For other changings please create a different patch",
+      "revId": "47ea364673d9f62c9367cf89b474cc1338391454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34e42fac_559ec4cd",
