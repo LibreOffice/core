@@ -159,6 +159,24 @@
       "parentUuid": "5d5349a6_626f9b54",
       "revId": "b33ec910085fa67b96eb2d39625a7fdcef062448",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f19c101_9faebea5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-23T12:20:05Z",
+      "side": 1,
+      "message": "Note how ScVbaRange::ApplicationRange uses xView-\u003egetActiveSheet to obtain the active sheet, while there should be a special VBA active sheet object, that would allow to point to any sheet, including \"inactive\" in Calc sense.",
+      "parentUuid": "14a937ab_a720065c",
+      "revId": "b33ec910085fa67b96eb2d39625a7fdcef062448",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
