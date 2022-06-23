@@ -61,8 +61,10 @@
 #include <IMark.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <docsh.hxx>
+#include <editsh.hxx>
 #include <ndtxt.hxx>
 #include "wrtww8.hxx"
 #include <fmtline.hxx>
@@ -518,6 +520,16 @@ ErrCode DocxExport::ExportDocument_Impl()
     // Set the 'Reviewing' flags in the settings structure
     m_aSettings.revisionView = m_bOrigShowChanges;
     m_aSettings.trackRevisions = bool( RedlineFlags::On & m_nOrigRedlineFlags );
+
+    // Save the last cursor position so it can be restored in Word/Writer with Shift-F5
+    SwEditShell* pEditSh = m_rDoc.GetEditShell();
+    if (pEditSh && !m_bTemplate)
+    {
+        IDocumentMarkAccess& rIDMA = *m_rDoc.getIDocumentMarkAccess();
+        rIDMA.deleteMark(rIDMA.findMark("_GoBack"), false);
+        rIDMA.makeMark(*pEditSh->GetCursor(), "_GoBack", IDocumentMarkAccess::MarkType::BOOKMARK,
+                       sw::mark::InsertMode::New);
+    }
 
     InitStyles();
 
