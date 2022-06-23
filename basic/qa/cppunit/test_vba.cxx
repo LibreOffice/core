@@ -136,6 +136,7 @@ void VBATest::testMiscVBAFunctions()
         "strreverse.vb",
         "switch.vb",
         "tdf147089_idiv.vb",
+        "tdf147529_optional_parameters_msgbox.vb",
         "tdf148358_non_ascii_names.vb",
         "timeserial.vb",
         "timevalue.vb",
