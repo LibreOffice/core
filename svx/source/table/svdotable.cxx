@@ -2372,7 +2372,7 @@ void SdrTableObj::SaveGeoData(SdrObjGeoData& rGeo) const
 
 void SdrTableObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
-    DBG_ASSERT( dynamic_cast< const TableObjectGeoData* >( &rGeo ), "svx::SdrTableObj::SaveGeoData(), illegal geo data!" );
+    DBG_ASSERT( dynamic_cast< const TableObjectGeoData* >( &rGeo ), "svx::SdrTableObj::RestoreGeoData(), illegal geo data!" );
 
     maLogicRect = static_cast<const TableObjectGeoData &>(rGeo).maLogicRect;
 
