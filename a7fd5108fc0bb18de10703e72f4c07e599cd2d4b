@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e2eac0b_6559989a",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2009,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-06-23T14:52:39Z",
+      "side": 1,
+      "message": "This doesn\u0027t handle 2-digit or longer numbers, also it may crash with empty rURLs.\n\nIt\u0027s possible to fix these with this:\n\n    if (sTarget.isEmpty())\n    {\n        sal_Int32 nSplit \u003d rURL.lastIndexOf(\u0027 \u0027);\n        if (nSplit \u003e -1)\n            sTarget \u003d OUString::Concat(\"slide\") + rURL.subView(nSplit + 1) + \".xml\";\n    }",
+      "range": {
+        "startLine": 2008,
+        "startChar": 4,
+        "endLine": 2009,
+        "endChar": 90
+      },
+      "revId": "a7fd5108fc0bb18de10703e72f4c07e599cd2d4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
