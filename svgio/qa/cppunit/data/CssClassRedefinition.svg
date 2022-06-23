@@ -2,7 +2,7 @@
     <style type="text/css">
     .c1 {fill:#00ff00}
     <!-- this redefinition should be appended -->
-    .c1 {font-family:Sans}
+    .c1 {font-family:Open Symbol}
     <!-- this redefinition should change the color to red, replacing the first definition -->
     .c1 {fill:#ff0000}
     <!-- finally c1 should be equal to fill:#ff0000 and font-family:Sans -->
