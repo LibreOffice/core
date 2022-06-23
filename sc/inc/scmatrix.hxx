@@ -65,9 +65,8 @@ struct ScMatrixValue
     bool GetBoolean() const         { return fVal != 0.0; }
 
     ScMatrixValue() : fVal(0.0), nType(ScMatValType::Empty) {}
-
-    ScMatrixValue(const ScMatrixValue& r) :
-        fVal(r.fVal), aStr(r.aStr), nType(r.nType) {}
+    ScMatrixValue(const ScMatrixValue& r) = default;
+    ScMatrixValue& operator= (const ScMatrixValue& r) = default;
 
     bool operator== (const ScMatrixValue& r) const
     {
@@ -90,17 +89,6 @@ struct ScMatrixValue
     bool operator!= (const ScMatrixValue& r) const
     {
         return !operator==(r);
-    }
-
-    ScMatrixValue& operator= (const ScMatrixValue& r)
-    {
-        if (this == &r)
-            return *this;
-
-        nType = r.nType;
-        fVal = r.fVal;
-        aStr = r.aStr;
-        return *this;
     }
 };
 
