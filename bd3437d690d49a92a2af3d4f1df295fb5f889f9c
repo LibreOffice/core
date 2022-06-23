@@ -34,6 +34,24 @@
       "parentUuid": "62ec6b2d_8380232f",
       "revId": "bd3437d690d49a92a2af3d4f1df295fb5f889f9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf0cdd16_e3d5c3ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-23T21:46:49Z",
+      "side": 1,
+      "message": "I don\u0027t understand why Gerrit does not show any new upload but just a new Jenkins build on patchset 2 and then on patchset 3, followed by the rebase patchset 4. Sorry, yes, current is good.",
+      "parentUuid": "bc0887a4_093b3d6f",
+      "revId": "bd3437d690d49a92a2af3d4f1df295fb5f889f9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
