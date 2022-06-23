@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <utility>
 
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
@@ -48,8 +49,8 @@ class LotusWordProImportFilter final : public cppu::WeakImplHelper
     bool importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
 public:
-    explicit LotusWordProImportFilter( const css::uno::Reference< css::uno::XComponentContext > &rxContext)
-        : mxContext( rxContext )
+    explicit LotusWordProImportFilter( css::uno::Reference< css::uno::XComponentContext > xContext)
+        : mxContext(std::move( xContext ))
     {
     }
 

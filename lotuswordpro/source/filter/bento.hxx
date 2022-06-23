@@ -341,7 +341,7 @@ public: // Methods
 
 public: // Internal methods
     CBenNamedObject(LtcBenContainer * pContainer, BenObjectID ObjectID,
-    CUtListElmt * pPrevObject, const OString& rName,
+    CUtListElmt * pPrevObject, OString aName,
     CUtListElmt * pPrevNamedObjectListElmt);
 
     const OString& GetName() const { return csName; }

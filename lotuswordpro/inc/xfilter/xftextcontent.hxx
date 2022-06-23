@@ -70,7 +70,7 @@ class XFTextContent : public XFContent
 public:
     XFTextContent() {}
 
-    explicit XFTextContent(const OUString& text);
+    explicit XFTextContent(OUString text);
 
     virtual ~XFTextContent() override;
 
