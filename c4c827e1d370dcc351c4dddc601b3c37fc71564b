@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "375db8ea_c2bdf562",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-06-23T13:42:47Z",
+      "side": 1,
+      "message": "@Szücsi: thanks for the fix! Sorry, I\u0027ve changed the order of the fixes, but it\u0027s worth to add this, too.",
+      "revId": "c4c827e1d370dcc351c4dddc601b3c37fc71564b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
