@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "109e57c0_004c7826",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-23T13:20:21Z",
+      "side": 1,
+      "message": "Please create a follow-up patch, indeed this is done. Thank you!",
+      "revId": "0d0469b4302dfe95b016a6f04b145834b79d5ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4ee3f72_3398d5da",
@@ -49,6 +66,24 @@
       "side": 1,
       "message": "It is: https://gitlab.freedesktop.org/poppler/poppler/-/blob/master/poppler/GfxFont.cc#L826\nWe should compare it with std::nullopt\nEdit: No way to push here anymore",
       "parentUuid": "c4ee3f72_3398d5da",
+      "revId": "0d0469b4302dfe95b016a6f04b145834b79d5ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87df3ca4_53bc6364",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-23T13:20:21Z",
+      "side": 1,
+      "message": "No need to compare to nullopt directly, just use something like\n\n    if (pBuf)\n        nSize \u003d pBuf-\u003esize();\n    if (nSize \u003d\u003d 0)\n        return;",
+      "parentUuid": "25cb9680_2814ec13",
       "revId": "0d0469b4302dfe95b016a6f04b145834b79d5ed3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
