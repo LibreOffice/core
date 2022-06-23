@@ -35,6 +35,7 @@
 #include <memory>
 #include <vector>
 #include <functional>
+#include <list.hxx>
 
 class SfxHint;
 class SwNumRule;
@@ -94,6 +95,7 @@ class SW_DLLPUBLIC SwTextNode final
 
     mutable std::unique_ptr<SwNodeNum> mpNodeNum;  ///< Numbering for this paragraph.
     mutable std::unique_ptr<SwNodeNum> mpNodeNumRLHidden; ///< Numbering for this paragraph (hidden redlines)
+    mutable std::unique_ptr<SwNodeNum> mpNodeNumOrig; ///< Numbering for this paragraph (before changes)
 
     OUString m_Text;
 
@@ -439,10 +441,12 @@ public:
      */
     SwNumRule *GetNumRule(bool bInParent = true) const;
 
-    const SwNodeNum* GetNum(SwRootFrame const* pLayout = nullptr) const;
+    const SwNodeNum* GetNum(SwRootFrame const* pLayout = nullptr,
+             SwListRedlineType eRedline = SwListRedlineType::SHOW) const;
     void DoNum(std::function<void (SwNodeNum &)> const&);
 
-    SwNumberTree::tNumberVector GetNumberVector(SwRootFrame const* pLayout = nullptr) const;
+    SwNumberTree::tNumberVector GetNumberVector(SwRootFrame const* pLayout = nullptr,
+            SwListRedlineType eRedline = SwListRedlineType::SHOW) const;
 
     /**
        Returns if this text node is an outline.
@@ -477,7 +481,8 @@ public:
     */
     OUString GetNumString( const bool _bInclPrefixAndSuffixStrings = true,
             const unsigned int _nRestrictToThisLevel = MAXLEVEL,
-            SwRootFrame const* pLayout = nullptr) const;
+            SwRootFrame const* pLayout = nullptr,
+            SwListRedlineType eRedline = SwListRedlineType::SHOW) const;
 
     /**
        Returns the additional indents of this text node and its numbering.
@@ -572,7 +577,7 @@ public:
         @return the actual list level of this text node, if it is a list item,
                -1 otherwise
     */
-    int GetActualListLevel() const;
+    int GetActualListLevel(SwListRedlineType eRedline = SwListRedlineType::SHOW) const;
 
     /**
        Returns outline level of this text node.
@@ -787,8 +792,10 @@ public:
 
     void AddToList();
     void AddToListRLHidden();
+    void AddToListOrig();
     void RemoveFromList();
     void RemoveFromListRLHidden();
+    void RemoveFromListOrig();
     bool IsInList() const;
 
     bool IsFirstOfNumRule(SwRootFrame const& rLayout) const;

@@ -563,15 +563,15 @@ static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTe
     return nullptr;
 }
 
-static void lcl_setRedlineAttr( SwTextFormatInfo &rInf, const SwTextNode& rTextNode, const std::unique_ptr<SwFont>& pNumFnt )
+static bool lcl_setRedlineAttr( SwTextFormatInfo &rInf, const SwTextNode& rTextNode, const std::unique_ptr<SwFont>& pNumFnt )
 {
     if ( rInf.GetVsh()->GetLayout()->IsHideRedlines() )
-        return;
+        return false;
 
     bool bIsMoved;
     const SwRangeRedline* pRedlineNum = lcl_GetRedlineAtNodeInsertionOrDeletion( rTextNode, bIsMoved );
     if (!pRedlineNum)
-        return;
+        return false;
 
     // moved text: dark green with double underline or strikethrough
     if ( bIsMoved )
@@ -581,7 +581,7 @@ static void lcl_setRedlineAttr( SwTextFormatInfo &rInf, const SwTextNode& rTextN
             pNumFnt->SetStrikeout(STRIKEOUT_DOUBLE);
         else
             pNumFnt->SetUnderline(LINESTYLE_DOUBLE);
-        return;
+        return true;
     }
 
     SwAttrPool& rPool = rInf.GetVsh()->GetDoc()->GetAttrPool();
@@ -602,6 +602,8 @@ static void lcl_setRedlineAttr( SwTextFormatInfo &rInf, const SwTextNode& rTextN
         pNumFnt->SetUnderline(pItem->GetLineStyle());
     if (const SvxCrossedOutItem* pItem = aSet.GetItemIfSet(RES_CHRATR_CROSSEDOUT))
         pNumFnt->SetStrikeout( pItem->GetStrikeout() );
+
+    return true;
 }
 
 SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) const
@@ -730,11 +732,35 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
             }
             else
             {
-                OUString aText( pTextNd->GetNumString(true, MAXLEVEL, m_pFrame->getRootFrame()) );
-                if ( !aText.isEmpty() )
+                // Show Changes mode shows the actual numbering (SwListRedlineType::HIDDEN) and
+                // the original one (SwListRedlineType::ORIGTEXT) instead of the fake numbering
+                // (SwListRedlineType::SHOW, which counts removed and inserted numbered paragraphs
+                // in a single list)
+                bool bHasHiddenNum = false;
+                OUString aText( pTextNd->GetNumString(true, MAXLEVEL, m_pFrame->getRootFrame(), SwListRedlineType::HIDDEN) );
+                const SwDoc& rDoc = pTextNd->GetDoc();
+                const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
+                if ( rTable.size() && !rInf.GetVsh()->GetLayout()->IsHideRedlines() )
                 {
-                    aText += pTextNd->GetLabelFollowedBy();
+                    OUString aHiddenText( pTextNd->GetNumString(true, MAXLEVEL, m_pFrame->getRootFrame(), SwListRedlineType::ORIGTEXT) );
+
+                    if ( !aText.isEmpty() || !aHiddenText.isEmpty() )
+                    {
+                        if (aText != aHiddenText && !aHiddenText.isEmpty())
+                        {
+                            bHasHiddenNum = true;
+                            // show also original number after the actual one enclosed in [ and ],
+                            // and replace tabulator with space to avoid messy indentation
+                            // resulted by the longer numbering, e.g. "1.[2.]" instead of "1.".
+                            aText = aText +  "[" + aHiddenText + "]"
+                                     + pTextNd->GetLabelFollowedBy().replaceAll("\t", " ");
+                        }
+                        else if (!aText.isEmpty())
+                            aText += pTextNd->GetLabelFollowedBy();
+                    }
                 }
+                else if (!aText.isEmpty())
+                    aText += pTextNd->GetLabelFollowedBy();
 
                 // Not just an optimization ...
                 // A number portion without text will be assigned a width of 0.
@@ -763,7 +789,8 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
 
                     checkApplyParagraphMarkFormatToNumbering(pNumFnt.get(), rInf, pIDSA, pFormat);
 
-                    lcl_setRedlineAttr( rInf, *pTextNd, pNumFnt );
+                    if ( !lcl_setRedlineAttr( rInf, *pTextNd, pNumFnt ) && bHasHiddenNum )
+                        pNumFnt->SetColor(NON_PRINTING_CHARACTER_COLOR);
 
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), m_pFrame->IsVertical() );
