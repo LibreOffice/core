@@ -735,7 +735,7 @@ void SbRtl_FileLen(StarBASIC *, SbxArray & rPar, bool)
     {
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    
+
     SbxVariableRef pArg = rPar.Get(1);
     OUString aStr( pArg->GetOUString() );
     sal_Int32 nLen = 0;
@@ -4326,6 +4326,17 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
+
+    // tdf#147529 - check for missing optional parameters
+    for (sal_uInt32 i = 2; i < nArgCount; i++)
+    {
+        if (rPar.Get(i)->GetType() == SbxERROR && SbiRuntime::IsMissing(rPar.Get(i), 1))
+        {
+            StarBASIC::Error(ERRCODE_BASIC_NOT_OPTIONAL);
+            return;
+        }
+    }
+
     WinBits nType = 0; // MB_OK
     if( nArgCount >= 3 )
         nType = static_cast<WinBits>(rPar.Get(2)->GetInteger());
