@@ -631,11 +631,12 @@ void ScXMLExportDataPilot::WriteGroupDimElements(const ScDPSaveDimension* pDim, 
     if (pDimData)
     {
         pGroupDim = pDimData->GetNamedGroupDim(pDim->GetName());
-        WriteGroupDimAttributes(pGroupDim);
         pNumGroupDim = pDimData->GetNumGroupDim(pDim->GetName());
-        WriteNumGroupDim(pNumGroupDim);
-
         OSL_ENSURE((!pGroupDim || !pNumGroupDim), "there should be no NumGroup and Group at the same field");
+        if (pGroupDim)
+            WriteGroupDimAttributes(pGroupDim);
+        else if (pNumGroupDim)
+            WriteNumGroupDim(pNumGroupDim);
     }
     if (!(pGroupDim || pNumGroupDim))
         return;
