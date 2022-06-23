@@ -162,10 +162,10 @@ protected:
     DECL_DLLPRIVATE_LINK(ClickImportBitmapHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(ToolbarHdl_Impl, const OString&, void);
 
-    void Update();
     void ImpUpdateTransparencies();
     void SetTransparency(sal_uInt16 nVal);
     void SelectFillAttrHdl_Impl();
+    void FillStyleChanged(bool bUpdateModel);
 };
 
 } // end of namespace svx::sidebar
