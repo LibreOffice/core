@@ -25,6 +25,7 @@
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>
@@ -57,11 +58,11 @@ namespace basprov
 
 
     BasicMethodNodeImpl::BasicMethodNodeImpl( const Reference< XComponentContext >& rxContext,
-        const OUString& sScriptingContext, SbMethod* pMethod, bool isAppScript )
+        OUString sScriptingContext, SbMethod* pMethod, bool isAppScript )
         : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
         ,m_xContext( rxContext )
-        ,m_sScriptingContext( sScriptingContext )
+        ,m_sScriptingContext(std::move( sScriptingContext ))
         ,m_pMethod( pMethod )
         ,m_bIsAppScript( isAppScript )
         ,m_bEditable( true )

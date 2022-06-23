@@ -20,6 +20,7 @@
 #include "basmodnode.hxx"
 #include "basmethnode.hxx"
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbmod.hxx>
@@ -40,9 +41,9 @@ namespace basprov
 
 
     BasicModuleNodeImpl::BasicModuleNodeImpl( const Reference< XComponentContext >& rxContext,
-        const OUString& sScriptingContext, SbModule* pModule, bool isAppScript )
+        OUString sScriptingContext, SbModule* pModule, bool isAppScript )
         :m_xContext( rxContext )
-        ,m_sScriptingContext( sScriptingContext )
+        ,m_sScriptingContext(std::move( sScriptingContext ))
         ,m_pModule( pModule )
         ,m_bIsAppScript( isAppScript )
     {
