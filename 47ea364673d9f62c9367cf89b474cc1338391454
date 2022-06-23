@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fc7a94a_b631b64d",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1003612
+      },
+      "writtenOn": "2022-06-23T15:54:49Z",
+      "side": 1,
+      "message": "Unfortunatelly std::size for a class member can\u0027t be calculated at compile time (at least by my compiler gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0) so can\u0027t be used here.\n\nA was thinking about intoducing some constexpr MAX_RADIO_BUTTONS or similar but i\u0027m not sure if it is intended solution in this scenario.",
+      "parentUuid": "34e42fac_559ec4cd",
+      "range": {
+        "startLine": 97,
+        "startChar": 18,
+        "endLine": 97,
+        "endChar": 32
+      },
+      "revId": "47ea364673d9f62c9367cf89b474cc1338391454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2c674e35_3b0f724c",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-06-22T22:09:40Z",
       "side": 1,
       "message": "for simple arithmetic types like size_t there\u0027s no performance boost to using ++i vs i++ when the return type is not used, every compiler will inline the operator call so the temporaries created will get optimized away",
+      "range": {
+        "startLine": 134,
+        "startChar": 62,
+        "endLine": 134,
+        "endChar": 63
+      },
+      "revId": "47ea364673d9f62c9367cf89b474cc1338391454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab57e212_5f80c20c",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1003612
+      },
+      "writtenOn": "2022-06-23T15:54:49Z",
+      "side": 1,
+      "message": "Understood.",
+      "parentUuid": "2c674e35_3b0f724c",
       "range": {
         "startLine": 134,
         "startChar": 62,
