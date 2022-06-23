@@ -16,6 +16,24 @@
       "message": "https://gerrit.libreoffice.org/c/core/+/136281 is the effort to fix it, if that\u0027s works it\u0027s presumably to be preferred.",
       "revId": "2fa4da31e496a1e35ae1396fa91ee147aedd3a72",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b1bfa60_b21bdd63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-06-23T01:32:51Z",
+      "side": 1,
+      "message": "136281 works, I abandon my patch.",
+      "parentUuid": "0d9b76c1_e14c764c",
+      "revId": "2fa4da31e496a1e35ae1396fa91ee147aedd3a72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
