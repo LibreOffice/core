@@ -67,6 +67,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f7548614_55810b75",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-06-23T17:14:28Z",
+      "side": 1,
+      "message": "Ah okay. SAL_N_ELEMENTS should be fine here.. it pretty much does sizeof(arr)/sizeof(arr[0]) (or uses templates for the same effect). No need for a new macro.",
+      "parentUuid": "0fc7a94a_b631b64d",
+      "range": {
+        "startLine": 97,
+        "startChar": 18,
+        "endLine": 97,
+        "endChar": 32
+      },
+      "revId": "47ea364673d9f62c9367cf89b474cc1338391454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "2c674e35_3b0f724c",
         "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
         "patchSetId": 3
