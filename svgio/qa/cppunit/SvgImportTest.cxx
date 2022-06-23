@@ -852,7 +852,8 @@ void Test::testCssClassRedefinition()
     CPPUNIT_ASSERT (pDocument);
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "test");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#ff0000");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Sans");
+    assertXPath(
+        pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Open Symbol");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
