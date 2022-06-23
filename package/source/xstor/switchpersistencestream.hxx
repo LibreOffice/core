@@ -58,11 +58,11 @@ class SwitchablePersistenceStream
 public:
 
     SwitchablePersistenceStream(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        css::uno::Reference< css::uno::XComponentContext > xContext,
         const css::uno::Reference< css::io::XStream >& xStream );
 
     SwitchablePersistenceStream(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        css::uno::Reference< css::uno::XComponentContext > xContext,
         const css::uno::Reference< css::io::XInputStream >& xInStream );
 
     virtual ~SwitchablePersistenceStream() override;

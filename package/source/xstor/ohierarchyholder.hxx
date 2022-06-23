@@ -31,6 +31,7 @@
 #include <rtl/ref.hxx>
 
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 class OHierarchyElement_Impl;
@@ -54,12 +55,12 @@ class OHierarchyElement_Impl : public cppu::WeakImplHelper< css::embed::XTransac
     OWeakStorRefVector_Impl m_aOpenStreams;
 
 public:
-    explicit OHierarchyElement_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage )
-    : m_xOwnStorage( xStorage )
+    explicit OHierarchyElement_Impl( css::uno::Reference< css::embed::XStorage > xStorage )
+    : m_xOwnStorage(std::move( xStorage ))
     {}
 
-    explicit OHierarchyElement_Impl( const css::uno::WeakReference< css::embed::XStorage >& xWeakStorage )
-    : m_xWeakOwnStorage( xWeakStorage )
+    explicit OHierarchyElement_Impl( css::uno::WeakReference< css::embed::XStorage > xWeakStorage )
+    : m_xWeakOwnStorage(std::move( xWeakStorage ))
     {}
 
     void Commit();

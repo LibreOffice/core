@@ -25,18 +25,19 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <utility>
 
 #include "owriteablestream.hxx"
 
 using namespace ::com::sun::star;
 
 OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
-                                    uno::Reference < io::XInputStream > const & xStream,
+                                    uno::Reference < io::XInputStream > xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
 : m_pImpl( &aImpl )
 , m_xMutex( m_pImpl->m_xMutex )
-, m_xStream( xStream )
+, m_xStream(std::move( xStream ))
 , m_aProperties( aProps )
 , m_bDisposed( false )
 , m_nStorageType( nStorageType )
@@ -48,12 +49,12 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
     assert(m_xStream.is());
 }
 
-OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > const & xStream,
+OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
 : m_pImpl( nullptr )
 , m_xMutex( new comphelper::RefCountedMutex )
-, m_xStream( xStream )
+, m_xStream(std::move( xStream ))
 , m_aProperties( aProps )
 , m_bDisposed( false )
 , m_nStorageType( nStorageType )

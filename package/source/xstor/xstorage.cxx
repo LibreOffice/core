@@ -55,6 +55,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 #include "xstorage.hxx"
@@ -127,8 +128,8 @@ static uno::Reference< io::XInputStream > GetSeekableTempCopy( const uno::Refere
     return xTempIn;
 }
 
-SotElement_Impl::SotElement_Impl(const OUString& rName, bool bStor, bool bNew)
-    : m_aOriginalName(rName)
+SotElement_Impl::SotElement_Impl(OUString aName, bool bStor, bool bNew)
+    : m_aOriginalName(std::move(aName))
     , m_bIsRemoved(false)
     , m_bIsInserted(bNew)
     , m_bIsStorage(bStor)
@@ -220,7 +221,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > const & xStream,
 OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
                                 sal_Int32 nMode,
                                 uno::Reference< container::XNameContainer > const & xPackageFolder,
-                                uno::Reference< lang::XSingleServiceFactory > const & xPackage,
+                                uno::Reference< lang::XSingleServiceFactory > xPackage,
                                 uno::Reference< uno::XComponentContext > const & xContext,
                                 sal_Int32 nStorageType )
 : m_xMutex( new comphelper::RefCountedMutex )
@@ -233,7 +234,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_bListCreated( false )
 , m_nModifiedListenerCount( 0 )
 , m_xPackageFolder( xPackageFolder )
-, m_xPackage( xPackage )
+, m_xPackage(std::move( xPackage ))
 , m_xContext( xContext )
 , m_bHasCommonEncryptionData( false )
 , m_pParent( pParent ) // can be empty in case of temporary readonly substorages and relation storage

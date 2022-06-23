@@ -24,6 +24,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include <rtl/ustrbuf.hxx>
 
@@ -40,8 +41,8 @@ struct ManifestScopeEntry
     StringHashMap   m_aNamespaces;
     bool            m_bValid;
 
-    ManifestScopeEntry( const OUString& aConvertedName, StringHashMap&& aNamespaces )
-    : m_aConvertedName( aConvertedName )
+    ManifestScopeEntry( OUString aConvertedName, StringHashMap&& aNamespaces )
+    : m_aConvertedName(std::move( aConvertedName ))
     , m_aNamespaces( std::move(aNamespaces) )
     , m_bValid( true )
     {}

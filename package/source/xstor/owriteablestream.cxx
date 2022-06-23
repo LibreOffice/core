@@ -52,6 +52,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <PackageConstants.hxx>
+#include <utility>
 
 #include "selfterminatefilestream.hxx"
 #include "owriteablestream.hxx"
@@ -259,17 +260,17 @@ const beans::StringPair* lcl_findPairByName(const uno::Sequence<beans::StringPai
 OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
                                       const uno::Reference< packages::XDataSinkEncrSupport >& xPackageStream,
                                       const uno::Reference< lang::XSingleServiceFactory >& xPackage,
-                                      const uno::Reference< uno::XComponentContext >& rContext,
+                                      uno::Reference< uno::XComponentContext > xContext,
                                       bool bForceEncrypted,
                                       sal_Int32 nStorageType,
                                       bool bDefaultCompress,
-                                      const uno::Reference< io::XInputStream >& xRelInfoStream )
+                                      uno::Reference< io::XInputStream > xRelInfoStream )
 : m_xMutex( new comphelper::RefCountedMutex )
 , m_pAntiImpl( nullptr )
 , m_bHasDataToFlush( false )
 , m_bFlushed( false )
 , m_xPackageStream( xPackageStream )
-, m_xContext( rContext )
+, m_xContext(std::move( xContext ))
 , m_pParent( pParent )
 , m_bForceEncrypted( bForceEncrypted )
 , m_bUseCommonEncryption( !bForceEncrypted && nStorageType == embed::StorageFormats::PACKAGE )
@@ -278,7 +279,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
 , m_xPackage( xPackage )
 , m_bHasInsertedStreamOptimization( false )
 , m_nStorageType( nStorageType )
-, m_xOrigRelInfoStream( xRelInfoStream )
+, m_xOrigRelInfoStream(std::move( xRelInfoStream ))
 , m_bOrigRelInfoBroken( false )
 , m_nRelInfoStatus( RELINFO_NO_INIT )
 , m_nRelId( 1 )
