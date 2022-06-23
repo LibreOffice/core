@@ -174,6 +174,14 @@ OptValue< OUString > AttributeList::getString( sal_Int32 nAttrToken ) const
     return OptValue< OUString >();
 }
 
+OUString AttributeList::getStringDefaulted( sal_Int32 nAttrToken ) const
+{
+    // check if the attribute exists (empty string may be different to missing attribute)
+    if( mxAttribs->hasAttribute( nAttrToken ) )
+        return mxAttribs->getOptionalValue( nAttrToken );
+    return OUString();
+}
+
 OptValue< OUString > AttributeList::getXString( sal_Int32 nAttrToken ) const
 {
     // check if the attribute exists (empty string may be different to missing attribute)

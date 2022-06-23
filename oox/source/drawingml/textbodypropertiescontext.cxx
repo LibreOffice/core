@@ -68,7 +68,7 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     sal_Int32 aIns[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
     for( sal_Int32 i = 0; i < sal_Int32(SAL_N_ELEMENTS( aIns )); i++)
     {
-        sValue = rAttribs.getString( aIns[i] ).value();
+        sValue = rAttribs.getStringDefaulted( aIns[i] );
         if( !sValue.isEmpty() )
             mrTextBodyProp.moInsets[i] = GetCoordinate( sValue );
     }

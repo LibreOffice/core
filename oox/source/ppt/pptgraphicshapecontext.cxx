@@ -51,14 +51,14 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
 //  case NMSP_PPT|XML_drElemPr:
 //      break;
     case PPT_TOKEN(cNvPr):
-        mpShapePtr->setId( rAttribs.getString( XML_id ).value() );
-        mpShapePtr->setName( rAttribs.getString( XML_name ).value() );
+        mpShapePtr->setId( rAttribs.getStringDefaulted( XML_id ) );
+        mpShapePtr->setName( rAttribs.getStringDefaulted( XML_name ) );
         break;
     case PPT_TOKEN(ph):
     {
         sal_Int32 nSubType( rAttribs.getToken( XML_type, XML_obj ) );
         mpShapePtr->setSubType( nSubType );
-        OUString sIdx( rAttribs.getString( XML_idx ).value() );
+        OUString sIdx( rAttribs.getStringDefaulted( XML_idx ) );
         bool bHasIdx = !sIdx.isEmpty();
         sal_Int32 nIdx = sIdx.toInt32();
         if( rAttribs.hasAttribute( XML_idx ) )

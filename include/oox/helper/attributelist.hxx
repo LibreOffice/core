@@ -103,6 +103,9 @@ public:
     /** Returns the string value of the specified attribute. */
     OptValue< OUString > getString( sal_Int32 nAttrToken ) const;
 
+    /** Returns the string value of the specified attribute, returns an empty string if attribute not present. */
+    OUString getStringDefaulted( sal_Int32 nAttrToken ) const;
+
     /** Returns the string value of the specified attribute. All characters in
         the format '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
     OptValue< OUString > getXString( sal_Int32 nAttrToken ) const;

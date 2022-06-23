@@ -57,12 +57,12 @@ public:
                     svx::diagram::Connection& rConnection=mrConnection.back();
 
                     rConnection.mnXMLType = static_cast<svx::diagram::TypeConstant>(rAttribs.getToken( XML_type, XML_parOf ));
-                    rConnection.msModelId = rAttribs.getString( XML_modelId ).value();
-                    rConnection.msSourceId = rAttribs.getString( XML_srcId ).value();
-                    rConnection.msDestId  = rAttribs.getString( XML_destId ).value();
-                    rConnection.msPresId  = rAttribs.getString( XML_presId ).value();
-                    rConnection.msSibTransId  = rAttribs.getString( XML_sibTransId ).value();
-                    rConnection.msParTransId  = rAttribs.getString( XML_parTransId ).value();
+                    rConnection.msModelId = rAttribs.getStringDefaulted( XML_modelId );
+                    rConnection.msSourceId = rAttribs.getStringDefaulted( XML_srcId );
+                    rConnection.msDestId  = rAttribs.getStringDefaulted( XML_destId );
+                    rConnection.msPresId  = rAttribs.getStringDefaulted( XML_presId );
+                    rConnection.msSibTransId  = rAttribs.getStringDefaulted( XML_sibTransId );
+                    rConnection.msParTransId  = rAttribs.getStringDefaulted( XML_parTransId );
                     rConnection.mnSourceOrder = rAttribs.getInteger( XML_srcOrd, 0 );
                     rConnection.mnDestOrder = rAttribs.getInteger( XML_destOrd, 0 );
 
@@ -214,7 +214,7 @@ public:
         mrPoint( rPoint ),
         mrDiagramData( rDiagramData )
     {
-        mrPoint.msModelId = rAttribs.getString( XML_modelId ).value();
+        mrPoint.msModelId = rAttribs.getStringDefaulted( XML_modelId );
 
         // the default type is XML_node
         const sal_Int32 nType  = rAttribs.getToken( XML_type, XML_node );
@@ -222,7 +222,7 @@ public:
 
         // ignore the cxnId unless it is this type. See 5.15.3.1.3 in Primer
         if( ( nType == XML_parTrans ) || ( nType == XML_sibTrans ) )
-            mrPoint.msCnxId = rAttribs.getString( XML_cxnId ).value();
+            mrPoint.msCnxId = rAttribs.getStringDefaulted( XML_cxnId );
     }
 
     virtual ContextHandlerRef
@@ -371,7 +371,7 @@ DataModelContext::onCreateContext( ::sal_Int32 aElement,
     case A_TOKEN( ext ):
         break;
     case DSP_TOKEN( dataModelExt ):
-        mpDataModel->getExtDrawings().push_back( rAttribs.getString( XML_relId ).value() );
+        mpDataModel->getExtDrawings().push_back( rAttribs.getStringDefaulted( XML_relId ) );
         break;
     default:
         break;

@@ -119,7 +119,7 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
   // ST_Coordinate
     if ( rAttribs.hasAttribute( XML_indent ) )
     {
-        sValue = rAttribs.getString( XML_indent ).value();
+        sValue = rAttribs.getStringDefaulted( XML_indent );
         mrTextParagraphProperties.getFirstLineIndentation() = std::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
@@ -142,14 +142,14 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     // ParaLeftMargin
     if ( rAttribs.hasAttribute( XML_marL ) )
     {
-        sValue = rAttribs.getString( XML_marL ).value();
+        sValue = rAttribs.getStringDefaulted( XML_marL );
         mrTextParagraphProperties.getParaLeftMargin() = std::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
     // ParaRightMargin
     if ( rAttribs.hasAttribute( XML_marR ) )
     {
-        sValue = rAttribs.getString( XML_marR ).value();
+        sValue = rAttribs.getStringDefaulted( XML_marR );
         sal_Int32 nMarR  = sValue.isEmpty() ? 0 : GetCoordinate( sValue ) ;
         rPropertyMap.setProperty( PROP_ParaRightMargin, nMarR);
     }
@@ -216,11 +216,11 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             mrBulletList.mbBulletSizeFollowText <<= true;
             break;
         case A_TOKEN( buSzPct ):        // CT_TextBulletSizePercent
-            mrBulletList.setBulletSize( std::lround( GetPercent( rAttribs.getString( XML_val ).value() ) / 1000.f ) );
+            mrBulletList.setBulletSize( std::lround( GetPercent( rAttribs.getStringDefaulted( XML_val ) ) / 1000.f ) );
             break;
         case A_TOKEN( buSzPts ):        // CT_TextBulletSizePoint
             mrBulletList.setBulletSize(0);
-            mrBulletList.setFontSize( static_cast<sal_Int16>(GetTextSize( rAttribs.getString( XML_val ).value() ) ) );
+            mrBulletList.setFontSize( static_cast<sal_Int16>(GetTextSize( rAttribs.getStringDefaulted( XML_val ) ) ) );
             break;
 
         // EG_TextBulletTypeface
@@ -260,7 +260,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( buChar ):         // CT_TextCharBullet
             try {
 
-                mrBulletList.setBulletChar( rAttribs.getString( XML_char ).value() );
+                mrBulletList.setBulletChar( rAttribs.getStringDefaulted( XML_char ) );
                 mrBulletList.setSuffixNone();
             }
             catch(SAXException& /* e */)

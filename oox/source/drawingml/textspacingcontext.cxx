@@ -44,11 +44,11 @@ namespace oox::drawingml {
         {
         case A_TOKEN( spcPct ):
             maSpacing.nUnit = TextSpacing::Unit::Percent;
-            maSpacing.nValue = GetPercent( rAttribs.getString( XML_val ).value() );
+            maSpacing.nValue = GetPercent( rAttribs.getStringDefaulted( XML_val ) );
             break;
         case A_TOKEN( spcPts ):
             maSpacing.nUnit = TextSpacing::Unit::Points;
-            maSpacing.nValue = GetTextSpacingPoint( rAttribs.getString( XML_val ).value() );
+            maSpacing.nValue = GetTextSpacingPoint( rAttribs.getStringDefaulted( XML_val ) );
             maSpacing.bExactValue = true;
             break;
         default:

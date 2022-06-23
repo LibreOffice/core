@@ -67,7 +67,7 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         mrTextCharacterProperties.moUnderline = rAttribs.getToken( XML_u );
     if ( rAttribs.hasAttribute( XML_strike ) )
         mrTextCharacterProperties.moStrikeout = rAttribs.getToken( XML_strike );
-    if ( rAttribs.hasAttribute( XML_baseline ) && rAttribs.getInteger( XML_baseline ).value() != 0 )
+    if ( rAttribs.hasAttribute( XML_baseline ) && rAttribs.getInteger( XML_baseline, 0 ) != 0 )
         mrTextCharacterProperties.moBaseline = rAttribs.getInteger( XML_baseline );
 
     if ( rAttribs.hasAttribute( XML_b ) )
@@ -263,14 +263,14 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case W_TOKEN( color ):
             if (rAttribs.getInteger(W_TOKEN(val)).has_value())
             {
-                mrTextCharacterProperties.maFillProperties.maFillColor.setSrgbClr(rAttribs.getIntegerHex(W_TOKEN(val)).value());
+                mrTextCharacterProperties.maFillProperties.maFillColor.setSrgbClr(rAttribs.getIntegerHex(W_TOKEN(val), 0));
                 mrTextCharacterProperties.maFillProperties.moFillType = XML_solidFill;
             }
             break;
         case W_TOKEN(  sz ):
             if (rAttribs.getInteger(W_TOKEN(val)).has_value())
             {
-                sal_Int32 nVal = rAttribs.getInteger(W_TOKEN(val)).value();
+                sal_Int32 nVal = rAttribs.getInteger(W_TOKEN(val), 0);
                 // wml has half points, dml has hundred points
                 mrTextCharacterProperties.moHeight = nVal * 50;
             }

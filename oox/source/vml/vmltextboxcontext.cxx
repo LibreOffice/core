@@ -181,9 +181,9 @@ TextBoxContext::TextBoxContext( ContextHandler2Helper const & rParent, TextBox& 
     ContextHandler2( rParent ),
     mrTextBox( rTextBox )
 {
-    if( rAttribs.getString( XML_insetmode ).value() != "auto" )
+    if( rAttribs.getStringDefaulted( XML_insetmode ) != "auto" )
     {
-        OUString inset = rAttribs.getString( XML_inset ).value();
+        OUString inset = rAttribs.getStringDefaulted( XML_inset );
         std::u16string_view value;
         std::u16string_view remainingStr;
 
