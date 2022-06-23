@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a4e42b9d_e69725b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003613
+      },
+      "writtenOn": "2022-06-23T13:13:01Z",
+      "side": 1,
+      "message": "Since this has already been closed, do I open a new merge request?",
+      "revId": "0d0469b4302dfe95b016a6f04b145834b79d5ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c4ee3f72_3398d5da",
         "filename": "sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx",
         "patchSetId": 5
@@ -14,6 +31,24 @@
       "writtenOn": "2022-06-23T12:36:26Z",
       "side": 1,
       "message": "I am not an expert in poppler, so please excuse me if I write nonsense, but given that they now use optional\u003cvector\u003e as the return type, it looks reasonable to expect they return nullopt where they returned nullptr before.",
+      "revId": "0d0469b4302dfe95b016a6f04b145834b79d5ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25cb9680_2814ec13",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1003613
+      },
+      "writtenOn": "2022-06-23T13:13:01Z",
+      "side": 1,
+      "message": "It is: https://gitlab.freedesktop.org/poppler/poppler/-/blob/master/poppler/GfxFont.cc#L826\nWe should compare it with std::nullopt\nEdit: No way to push here anymore",
+      "parentUuid": "c4ee3f72_3398d5da",
       "revId": "0d0469b4302dfe95b016a6f04b145834b79d5ed3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
