@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8bcbfe1_ee5e3ee4",
+        "filename": "external/mdds/speedup-erase-begin.patch",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-06-23T12:41:22Z",
+      "side": 1,
+      "message": "A problem with this approach I see is that it doesn\u0027t destruct the element until clear_removed() is called at some later unknown point. That may be fine for Calc\u0027s use, but not for all types, and given that mdds is generic, Kohei might not like that.\nI\u0027m not quite sure what the proper way to deal with that would be, I\u0027m thinking maybe checking !std::is_trivially_destructible and then using std::move() to move the value out to a temporary.",
+      "revId": "3be3fb9bafc4c2bf17ef3fe4eba0a059199abe24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "198aa190_cf045f95",
+        "filename": "external/mdds/speedup-erase-begin.patch",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-06-23T12:41:22Z",
+      "side": 1,
+      "message": "Note that this is inconsistent with the other erase(). It\u0027d probably make sense to apply the same optimization here too.",
+      "revId": "3be3fb9bafc4c2bf17ef3fe4eba0a059199abe24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
