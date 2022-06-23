@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57fcce68_b5e1ba46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-23T20:17:18Z",
+      "side": 1,
+      "message": "see \u003chttps://gerrit.libreoffice.org/c/core/+/136350\u003e \"Make CppunitTest_svgio CPPUNIT_TEST_NAME\u003dTest::testCssClassRedefinition robust\"",
+      "revId": "eedc5b1c576fcaaea85a5278762efc8ba8c5a084",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
