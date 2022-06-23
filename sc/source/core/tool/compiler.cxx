@@ -3350,10 +3350,7 @@ bool ScCompiler::ParseSingleReference( const OUString& rName, const OUString* pE
             // A named range named e.g. 'num1' is valid with 1k columns, but would become a reference
             // when the document is opened later with 16k columns. Resolve the conflict by not
             // considering it a reference.
-            OUString aUpper;
-            bool bAsciiUpper = ToUpperAsciiOrI18nIsAscii( aUpper, rName );
-            if (bAsciiUpper || mbCharClassesDiffer)
-                aUpper = ScGlobal::getCharClass().uppercase( rName );
+            OUString aUpper( ScGlobal::getCharClass().uppercase( rName ));
             mnCurrentSheetTab = aAddr.Tab(); // temporarily set for ParseNamedRange()
             if(ParseNamedRange( aUpper, true )) // only check
                 return false;
