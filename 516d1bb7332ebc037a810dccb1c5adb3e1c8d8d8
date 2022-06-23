@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0295d8e6_97a1be80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-06-23T18:53:53Z",
+      "side": 1,
+      "message": "Thanks Eike for your review. I\u0027m going to make some improvements.",
+      "revId": "516d1bb7332ebc037a810dccb1c5adb3e1c8d8d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce234ab7_e938c602",
@@ -48,6 +65,24 @@
       "writtenOn": "2022-06-23T17:51:50Z",
       "side": 1,
       "message": "Maybe, but ODF v1.3 in 19.358 number:position\nhttps://docs.oasis-open.org/office/OpenDocument/v1.3/os/part3-schema/OpenDocument-v1.3-os-part3-schema.html#__RefHeading__1417578_253892949\nsays \"The index of a position starts with 1\"\n\nSo instead of number:position\u003d\"0\" that should already be loext:position\u003d\"0\".",
+      "revId": "516d1bb7332ebc037a810dccb1c5adb3e1c8d8d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "337cdc5a_59c246e9",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-06-23T18:53:53Z",
+      "side": 1,
+      "message": "I agreed with your position, but CppunitTest_sc_jumbosheets_test failed if position\u003d\"0\" is loext. See https://ci.libreoffice.org/job/gerrit_linux_gcc_release/120151/\nSo I guessed that there will be some backward compatibility if we let loext:position\u003d\"0\"\nI\u0027m going to try to modify CppunitTest_sc_jumbosheets_test.",
+      "parentUuid": "ce234ab7_e938c602",
       "revId": "516d1bb7332ebc037a810dccb1c5adb3e1c8d8d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
