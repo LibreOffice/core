@@ -1290,13 +1290,22 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
                     if( !pStart->GetPrev()->IsLayoutFrame() )
                         return nullptr;
                     pStart = static_cast<const SwLayoutFrame*>(pStart->GetPrev());
-                    pContent = pStart->IsInDocBody()
-                                ? pStart->ContainsContent()
-                                : pStart->FindPageFrame()->FindFirstBodyContent();
+                    if( pStart->IsInDocBody() )
+                        pContent = pStart->ContainsContent();
+                    else
+                    {
+                        const SwPageFrame *pPage = pStart->FindPageFrame();
+                        if( !pPage )
+                            return nullptr;
+                        pContent = pPage->FindFirstBodyContent();
+                    }
                 }
                 if ( !pContent )  // Somewhere down the road we have to start with one!
                 {
-                    pContent = pStart->FindPageFrame()->GetUpper()->ContainsContent();
+                    const SwPageFrame *pPage = pStart->FindPageFrame();
+                    if( !pPage )
+                        return nullptr;
+                    pContent = pPage->GetUpper()->ContainsContent();
                     while ( pContent && !pContent->IsInDocBody() )
                         pContent = pContent->GetNextContentFrame();
                     if ( !pContent )
@@ -1314,7 +1323,12 @@ const SwContentFrame *SwLayoutFrame::GetContentPos( Point& rPoint,
                     pContent = pStart->ContainsContent();
                 }
                 else // Somewhere down the road we have to start with one!
-                    pContent = pStart->FindPageFrame()->GetUpper()->ContainsContent();
+                {
+                    const SwPageFrame *pPage = pStart->FindPageFrame();
+                    if( !pPage )
+                        return nullptr;
+                    pContent = pPage->GetUpper()->ContainsContent();
+                }
             }
             pActual = pContent;
         }
