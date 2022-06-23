@@ -16,6 +16,24 @@
       "message": "Propagating my -1 from before the rebase. The SCROW -\u003e SCCOL change is still needed.",
       "revId": "bd3437d690d49a92a2af3d4f1df295fb5f889f9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc0887a4_093b3d6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-23T18:20:13Z",
+      "side": 1,
+      "message": "Then you can surely mark it in the latest patchset, where this is change is needed... ;)",
+      "parentUuid": "62ec6b2d_8380232f",
+      "revId": "bd3437d690d49a92a2af3d4f1df295fb5f889f9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
