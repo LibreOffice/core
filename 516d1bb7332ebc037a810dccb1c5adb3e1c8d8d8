@@ -16,6 +16,40 @@
       "message": "Hi Eike,\nIf you agree with this patch, I will propose unit test next.",
       "revId": "516d1bb7332ebc037a810dccb1c5adb3e1c8d8d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02ce6588_375096d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-23T17:51:50Z",
+      "side": 1,
+      "message": "In general looks good. I do not agree with the number:position\u003d\"0\" though, see inline comment.",
+      "revId": "516d1bb7332ebc037a810dccb1c5adb3e1c8d8d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce234ab7_e938c602",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-23T17:51:50Z",
+      "side": 1,
+      "message": "Maybe, but ODF v1.3 in 19.358 number:position\nhttps://docs.oasis-open.org/office/OpenDocument/v1.3/os/part3-schema/OpenDocument-v1.3-os-part3-schema.html#__RefHeading__1417578_253892949\nsays \"The index of a position starts with 1\"\n\nSo instead of number:position\u003d\"0\" that should already be loext:position\u003d\"0\".",
+      "revId": "516d1bb7332ebc037a810dccb1c5adb3e1c8d8d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
