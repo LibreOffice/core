@@ -16,6 +16,23 @@
       "message": "Hi Caolán,\nYet another crash fix. Review is appreciated ",
       "revId": "db8514294d13cbe32dc03dffdf9031851c71d34e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7071f153_1b06797d",
+        "filename": "sw/source/core/layout/trvlfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-23T13:09:29Z",
+      "side": 1,
+      "message": "I wonder if we risk making this loop infinite if we do this. If we can\u0027t reproduce it, it might be safer to immediately return nullptr in the case of nothing returned by FindPageFrame. The function seems to do that in other cases, so that\u0027s presumably fairly safe to do.",
+      "revId": "db8514294d13cbe32dc03dffdf9031851c71d34e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
