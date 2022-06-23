@@ -133,7 +133,7 @@ private:
 class LwpFormulaText:public LwpFormulaArg
 {
 public:
-    explicit LwpFormulaText( const OUString& aText);
+    explicit LwpFormulaText( OUString aText);
     virtual OUString ToString(LwpTableLayout* /*pCellsMap*/) override {return m_aText;}
 private:
     OUString m_aText;

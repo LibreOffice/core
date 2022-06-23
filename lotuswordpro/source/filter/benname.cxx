@@ -53,16 +53,18 @@
  *
  *
  ************************************************************************/
+#include <utility>
+
 #include "bento.hxx"
 
 namespace OpenStormBento
 {
 // changed to remove warning
 CBenNamedObject::CBenNamedObject(LtcBenContainer * pContainer,
-  BenObjectID ObjectID, CUtListElmt * pPrevObject, const OString& rName,
+  BenObjectID ObjectID, CUtListElmt * pPrevObject, OString aName,
   CUtListElmt * pPrevNamedObjectListElmt)
     : CBenObject(pContainer, ObjectID, pPrevObject)
-    , csName(rName)
+    , csName(std::move(aName))
     , cNameListElmt(pPrevNamedObjectListElmt)
 {
     cNameListElmt.SetNamedObject(this);

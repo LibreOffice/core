@@ -67,6 +67,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <memory>
+#include <utility>
 
 LwpFormulaArg::~LwpFormulaArg()
 {
@@ -356,7 +357,7 @@ OUString LwpFormulaConst::ToString(LwpTableLayout* /*pCellsMap*/)
     return OUString::number(m_dVal);
 }
 
-LwpFormulaText::LwpFormulaText( const OUString& aText) : m_aText(aText)
+LwpFormulaText::LwpFormulaText( OUString aText) : m_aText(std::move(aText))
 {
 }
 

@@ -68,6 +68,7 @@
 #include "lwppiece.hxx"
 
 //For converting to xml
+#include <utility>
 #include <xfilter/xfnumberstyle.hxx>
 
 class LwpObjectStream;
@@ -102,15 +103,15 @@ struct LwpCurrencyInfo
     OUString sSymbol;
     bool bPost;
     bool bShowSpace;
-    explicit LwpCurrencyInfo(const OUString& sSym)
-      : sSymbol(sSym), bPost(false), bShowSpace(false)
+    explicit LwpCurrencyInfo(OUString sSym)
+      : sSymbol(std::move(sSym)), bPost(false), bShowSpace(false)
     {
     }
     LwpCurrencyInfo() : bPost(false), bShowSpace(false)
     {
     }
-    LwpCurrencyInfo(const OUString& sSym, bool bPost_, bool bShowSpace_)
-        : sSymbol(sSym), bPost(bPost_), bShowSpace(bShowSpace_)
+    LwpCurrencyInfo(OUString sSym, bool bPost_, bool bShowSpace_)
+        : sSymbol(std::move(sSym)), bPost(bPost_), bShowSpace(bShowSpace_)
     {
     }
 };
