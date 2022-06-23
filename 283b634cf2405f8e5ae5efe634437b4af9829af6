@@ -33,6 +33,24 @@
       "message": "Do you know any sample files that should cause OrcusFormatDetect::detect to detect the sought-after orcus::format_t::gnumeric and orcus::format_t::xls_xml?  `make check` doesn\u0027t appear to trigger any detection of either of those two formats, neither before nor after this change, so it is hard for me to tell whether this change actually works as intended.",
       "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5e71b86_70af1971",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-06-23T00:01:55Z",
+      "side": 1,
+      "message": "You can try files under https://gitlab.com/orcus/orcus/-/tree/master/test/gnumeric and https://gitlab.com/orcus/orcus/-/tree/master/test/xls-xml. I\u0027m not sure if there are any files you can use in the libreoffice repo.",
+      "parentUuid": "dc1184d3_254afa79",
+      "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
