@@ -16,6 +16,24 @@
       "message": "Anyone know what should happen in this doc? I can see that the \"TopCell\" of a FormulaGroup is deleted but there were dangling references to it elsewhere that cause use-after-delete. In this demo patch I zero out the TopCell* of the group when the cell is deleted to make it a nullptr dereference, but maybe if one FormulaCell replaces another and the other was a TopCell of a group then its replacement should be too?",
       "revId": "bd89487a0d0b92ae97549c32b9f10284a1866a10",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6670dde_39fe56ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-06-23T16:12:50Z",
+      "side": 1,
+      "message": "This does not look correct. Groups are refcounted, so it\u0027s either deleted right after this, or there would be a group left with broken content (with the patch I get a crash in ScFormulaCell::Interpret() afterwards).\n\nIf cells of a group get altered, then the group needs adjusting. See e.g. all the calls to unshareFormulaCell() in various places. I think the ScFormulaCell dtor should at most assert (although looking at the mxCode already there it\u0027s a question how many places do not bother to ungroup before deleting things).",
+      "parentUuid": "19134e5b_30e41d49",
+      "revId": "bd89487a0d0b92ae97549c32b9f10284a1866a10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
