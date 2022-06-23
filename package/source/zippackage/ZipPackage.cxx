@@ -73,6 +73,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <utility>
 
 using namespace osl;
 using namespace cppu;
@@ -131,7 +132,7 @@ class DummyInputStream : public ::cppu::WeakImplHelper< XInputStream >
 
 }
 
-ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
+ZipPackage::ZipPackage ( uno::Reference < XComponentContext > xContext )
 : m_aMutexHolder( new comphelper::RefCountedMutex )
 , m_nStartKeyGenerationID( xml::crypto::DigestID::SHA1 )
 , m_nChecksumDigestID( xml::crypto::DigestID::SHA1_1K )
@@ -144,7 +145,7 @@ ZipPackage::ZipPackage ( const uno::Reference < XComponentContext > &xContext )
 , m_nFormat( embed::StorageFormats::PACKAGE ) // package is the default format
 , m_bAllowRemoveOnInsert( true )
 , m_eMode ( e_IMode_None )
-, m_xContext( xContext )
+, m_xContext(std::move( xContext ))
 {
     m_xRootFolder = new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
 }

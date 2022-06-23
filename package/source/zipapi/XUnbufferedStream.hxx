@@ -62,7 +62,7 @@ class XUnbufferedStream final : public cppu::WeakImplHelper
 public:
     XUnbufferedStream(
                  const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                 const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
+                 rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
                  ZipEntry const & rEntry,
                  css::uno::Reference < css::io::XInputStream > const & xNewZipStream,
                  const ::rtl::Reference< EncryptionData >& rData,
@@ -73,7 +73,7 @@ public:
 
     // allows to read package raw stream
     XUnbufferedStream(
-                 const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
+                 rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
                  const css::uno::Reference < css::io::XInputStream >& xRawStream,
                  const ::rtl::Reference< EncryptionData >& rData );
 

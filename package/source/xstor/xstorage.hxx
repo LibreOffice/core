@@ -88,7 +88,7 @@ struct SotElement_Impl
     std::unique_ptr<OWriteStream_Impl, o3tl::default_delete<OWriteStream_Impl>> m_xStream;
 
 public:
-    SotElement_Impl(const OUString& rName, bool bStor, bool bNew);
+    SotElement_Impl(OUString aName, bool bStor, bool bNew);
 };
 
 // Main storage implementation
@@ -182,7 +182,7 @@ struct OStorage_Impl
     OStorage_Impl(  OStorage_Impl* pParent,
                     sal_Int32 nMode,
                     css::uno::Reference< css::container::XNameContainer > const & xPackageFolder,
-                    css::uno::Reference< css::lang::XSingleServiceFactory > const & xPackage,
+                    css::uno::Reference< css::lang::XSingleServiceFactory > xPackage,
                     css::uno::Reference< css::uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType );
 

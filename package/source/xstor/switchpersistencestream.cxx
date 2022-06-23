@@ -22,6 +22,7 @@
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <comphelper/storagehelper.hxx>
+#include <utility>
 #include "switchpersistencestream.hxx"
 
 using namespace ::com::sun::star;
@@ -43,17 +44,17 @@ struct SPStreamData_Impl
 
     SPStreamData_Impl(
             bool bInStreamBased,
-            const uno::Reference< io::XTruncate >& xOrigTruncate,
-            const uno::Reference< io::XSeekable >& xOrigSeekable,
-            const uno::Reference< io::XInputStream >& xOrigInStream,
-            const uno::Reference< io::XOutputStream >& xOrigOutStream,
+            uno::Reference< io::XTruncate > xOrigTruncate,
+            uno::Reference< io::XSeekable > xOrigSeekable,
+            uno::Reference< io::XInputStream > xOrigInStream,
+            uno::Reference< io::XOutputStream > xOrigOutStream,
             bool bInOpen,
             bool bOutOpen )
     : m_bInStreamBased( bInStreamBased )
-    , m_xOrigTruncate( xOrigTruncate )
-    , m_xOrigSeekable( xOrigSeekable )
-    , m_xOrigInStream( xOrigInStream )
-    , m_xOrigOutStream( xOrigOutStream )
+    , m_xOrigTruncate(std::move( xOrigTruncate ))
+    , m_xOrigSeekable(std::move( xOrigSeekable ))
+    , m_xOrigInStream(std::move( xOrigInStream ))
+    , m_xOrigOutStream(std::move( xOrigOutStream ))
     , m_bInOpen( bInOpen )
     , m_bOutOpen( bOutOpen )
     {
@@ -61,17 +62,17 @@ struct SPStreamData_Impl
 };
 
 SwitchablePersistenceStream::SwitchablePersistenceStream(
-        const uno::Reference< uno::XComponentContext >& xContext,
+        uno::Reference< uno::XComponentContext > xContext,
         const uno::Reference< io::XStream >& xStream )
-: m_xContext( xContext )
+: m_xContext(std::move( xContext ))
 {
     SwitchPersistenceTo( xStream );
 }
 
 SwitchablePersistenceStream::SwitchablePersistenceStream(
-        const uno::Reference< uno::XComponentContext >& xContext,
+        uno::Reference< uno::XComponentContext > xContext,
         const uno::Reference< io::XInputStream >& xInputStream )
-: m_xContext( xContext )
+: m_xContext(std::move( xContext ))
 {
     SwitchPersistenceTo( xInputStream );
 }
