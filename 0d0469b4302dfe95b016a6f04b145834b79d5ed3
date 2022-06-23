@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4ee3f72_3398d5da",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-23T12:36:26Z",
+      "side": 1,
+      "message": "I am not an expert in poppler, so please excuse me if I write nonsense, but given that they now use optional\u003cvector\u003e as the return type, it looks reasonable to expect they return nullopt where they returned nullptr before.",
+      "revId": "0d0469b4302dfe95b016a6f04b145834b79d5ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
