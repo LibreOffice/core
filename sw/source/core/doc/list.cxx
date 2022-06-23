@@ -39,6 +39,7 @@ SwList::SwList( const OUString& sListId,
         maListTrees.emplace_back(
             std::make_unique<SwNodeNum>( &rDefaultListStyle ),
             std::make_unique<SwNodeNum>( &rDefaultListStyle ),
+            std::make_unique<SwNodeNum>( &rDefaultListStyle ),
             std::make_unique<SwPaM>( *(aPam.Start()), *(aPam.End()) ));
 
         pNode = pNode->EndOfSectionNode();
@@ -58,6 +59,7 @@ SwList::~SwList() COVERITY_NOEXCEPT_FALSE
     {
         SwNodeNum::HandleNumberTreeRootNodeDelete(*(rNumberTree.pRoot));
         SwNodeNum::HandleNumberTreeRootNodeDelete(*(rNumberTree.pRootRLHidden));
+        SwNodeNum::HandleNumberTreeRootNodeDelete(*(rNumberTree.pRootOrigText));
     }
 }
 
@@ -73,7 +75,7 @@ bool SwList::HasNodes() const
     return false;
 }
 
-void SwList::InsertListItem(SwNodeNum& rNodeNum, bool const isHiddenRedlines,
+void SwList::InsertListItem(SwNodeNum& rNodeNum, SwListRedlineType const eRedline,
                             const int nLevel, const SwDoc& rDoc)
 {
     const SwPosition aPosOfNodeNum( rNodeNum.GetPosition() );
@@ -88,9 +90,11 @@ void SwList::InsertListItem(SwNodeNum& rNodeNum, bool const isHiddenRedlines,
         if ( pRangeNodes == pNodesOfNodeNum &&
              *pStart <= aPosOfNodeNum && aPosOfNodeNum <= *pEnd)
         {
-            auto const& pRoot(isHiddenRedlines
+            auto const& pRoot(SwListRedlineType::HIDDEN == eRedline
                     ? rNumberTree.pRootRLHidden
-                    : rNumberTree.pRoot);
+                    : SwListRedlineType::SHOW == eRedline
+                            ? rNumberTree.pRoot
+                            : rNumberTree.pRootOrigText);
             pRoot->AddChild(&rNodeNum, nLevel, rDoc);
             break;
         }
@@ -108,6 +112,7 @@ void SwList::InvalidateListTree()
     {
         rNumberTree.pRoot->InvalidateTree();
         rNumberTree.pRootRLHidden->InvalidateTree();
+        rNumberTree.pRootOrigText->InvalidateTree();
     }
 }
 
@@ -117,6 +122,7 @@ void SwList::ValidateListTree(const SwDoc& rDoc)
     {
         rNumberTree.pRoot->NotifyInvalidChildren(rDoc);
         rNumberTree.pRootRLHidden->NotifyInvalidChildren(rDoc);
+        rNumberTree.pRootOrigText->NotifyInvalidChildren(rDoc);
     }
 }
 
@@ -162,6 +168,7 @@ void SwList::NotifyItemsOnListLevel( const int nLevel )
     {
         rNumberTree.pRoot->NotifyNodesOnListLevel( nLevel );
         rNumberTree.pRootRLHidden->NotifyNodesOnListLevel( nLevel );
+        rNumberTree.pRootOrigText->NotifyNodesOnListLevel( nLevel );
     }
 }
 
