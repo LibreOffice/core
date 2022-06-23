@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41d0f381_a0c92897",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-06-23T11:04:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecca24a4_4ffa59cf",
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3249a09d_56592e7e",
@@ -90,6 +108,30 @@
       "side": 1,
       "message": "Yes, good point, I will. I just didn\u0027t add here, because I wasn\u0027t sure that it is necessary. But everywhere else I think added.",
       "parentUuid": "3249a09d_56592e7e",
+      "range": {
+        "startLine": 3371,
+        "startChar": 19,
+        "endLine": 3371,
+        "endChar": 28
+      },
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74c1ff43_d6f17c92",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3371,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-06-23T11:04:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2971374f_5699ecb2",
       "range": {
         "startLine": 3371,
         "startChar": 19,
@@ -147,6 +189,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6690df0e_b0e16fca",
+        "filename": "include/editeng/brushitem.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-06-23T11:04:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ede7015b_f42ce0d0",
+      "range": {
+        "startLine": 46,
+        "startChar": 24,
+        "endLine": 46,
+        "endChar": 34
+      },
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ddbb79de_e11d98f2",
@@ -194,6 +260,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34005880_1da485c4",
+        "filename": "sc/source/filter/inc/stylesbuffer.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-06-23T11:04:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdf4b071_78fc50a0",
+      "range": {
+        "startLine": 469,
+        "startChar": 24,
+        "endLine": 469,
+        "endChar": 42
+      },
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89674a6e_85e87fcc",
@@ -231,6 +321,30 @@
       "side": 1,
       "message": "Ok.",
       "parentUuid": "89674a6e_85e87fcc",
+      "range": {
+        "startLine": 507,
+        "startChar": 24,
+        "endLine": 507,
+        "endChar": 35
+      },
+      "revId": "ca168dc4246a13008ab64043f936cf53df95dbfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7c0fb92_a1d93d35",
+        "filename": "sc/source/filter/inc/stylesbuffer.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2022-06-23T11:04:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "640fcbc3_bc6cb7e6",
       "range": {
         "startLine": 507,
         "startChar": 24,
