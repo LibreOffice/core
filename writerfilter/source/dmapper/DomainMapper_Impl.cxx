@@ -6743,19 +6743,26 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                 case FIELD_MACROBUTTON:
                 {
-                    //extract macro name
-                    sal_Int32 nIndex = sizeof(" MACROBUTTON ");
-                    OUString sMacro = pContext->GetCommand().getToken( 0, ' ', nIndex);
                     if (xFieldProperties.is())
-                        xFieldProperties->setPropertyValue(
-                                getPropertyName(PROP_MACRO_NAME), uno::Any( sMacro ));
-
-                    //extract quick help text
-                    if(xFieldProperties.is() && pContext->GetCommand().getLength() > nIndex + 1)
                     {
-                        xFieldProperties->setPropertyValue(
-                            getPropertyName(PROP_HINT),
-                            uno::Any( pContext->GetCommand().copy( nIndex )));
+                        sal_Int32 nIndex = sizeof(" MACROBUTTON ");
+                        OUString sCommand = pContext->GetCommand();
+
+                        //extract macro name
+                        if (sCommand.getLength() >= nIndex)
+                        {
+                            OUString sMacro = sCommand.getToken(0, ' ', nIndex);
+                            xFieldProperties->setPropertyValue(
+                                    getPropertyName(PROP_MACRO_NAME), uno::Any( sMacro ));
+                        }
+
+                        //extract quick help text
+                        if (sCommand.getLength() > nIndex + 1)
+                        {
+                            xFieldProperties->setPropertyValue(
+                                getPropertyName(PROP_HINT),
+                                uno::Any( sCommand.copy( nIndex )));
+                        }
                     }
                 }
                 break;
