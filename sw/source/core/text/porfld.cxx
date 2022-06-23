@@ -481,6 +481,12 @@ void SwFieldPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
 
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("expand"), BAD_CAST(m_aExpand.toUtf8().getStr()));
 
+    if (m_pFont)
+    {
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("font-height"), BAD_CAST(OString::number(m_pFont->GetSize(m_pFont->GetActual()).Height()).getStr()));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("font-width"), BAD_CAST(OString::number(m_pFont->GetSize(m_pFont->GetActual()).Width()).getStr()));
+    }
+
     (void)xmlTextWriterEndElement(pWriter);
 }
 
