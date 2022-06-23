@@ -41,6 +41,7 @@
 #include <cppuhelper/weak.hxx>
 
 #include <osl/file.hxx>
+#include <utility>
 #endif
 
 using namespace com::sun::star;
@@ -61,9 +62,9 @@ namespace
 class DebugDocumentHandler final : public cppu::WeakImplHelper< XDocumentHandler >
 {
 public:
-    DebugDocumentHandler(const uno::Reference< XDocumentHandler >& handler, const uno::Reference< XDocumentHandler >& debug)
-        : m_handler(handler)
-        , m_debug(debug)
+    DebugDocumentHandler(uno::Reference< XDocumentHandler > handler, uno::Reference< XDocumentHandler > debug)
+        : m_handler(std::move(handler))
+        , m_debug(std::move(debug))
     {
     }
 

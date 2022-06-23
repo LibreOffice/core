@@ -57,6 +57,7 @@
  * @file
  * Font object to serial to xml filter.
  ************************************************************************/
+#include <utility>
 #include <xfilter/xfstylecont.hxx>
 #include <xfilter/ixfstyle.hxx>
 #include <xfilter/xffont.hxx>
@@ -65,8 +66,8 @@
 #include <xfilter/xffontfactory.hxx>
 #include <lwpglobalmgr.hxx>
 
-XFStyleContainer::XFStyleContainer(const OUString& strStyleNamePrefix)
-    :m_strStyleNamePrefix(strStyleNamePrefix)
+XFStyleContainer::XFStyleContainer(OUString strStyleNamePrefix)
+    :m_strStyleNamePrefix(std::move(strStyleNamePrefix))
 {
 }
 
