@@ -304,11 +304,32 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
     // (and not COL_GREEN color of the tracked text movement, see testRedlineMoving) elements
     assertXPath(
         pXmlDoc,
-        "/metafile/push/push/push/textcolor[not(@color='#000000') and not(@color='#008000')]", 6);
+        "/metafile/push/push/push/textcolor[not(@color='#000000') and not(@color='#008000')]", 5);
 
     // tdf#145068 numbering shows changes in the associated list item, not the next one
     // This was 1 (black numbering of the first list item previously)
     assertXPath(pXmlDoc, "/metafile/push/push/push/font[4][@color='#000000']", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf115523.fodt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Show the correct and the original line numbering instead of counting
+    // the deleted list items in Show Changes mode, as part of the list
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", "1.");
+    // This was "2." (deleted text node, now its text content is part of the first list item)
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", "[2.] ");
+    // This was "3." (now it's the second list item)
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", "2.[3.] ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
@@ -488,8 +509,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145225_RedlineMovingWithBadInsertio
     // insert a tracked paragraph break in middle of the second list item, i.e. split it
     dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
     dispatchCommand(mxComponent, ".uno:TrackChanges", {});
-    pWrtShell->Down(false, 1);
-    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    // positionate the cursor in the middle of the second list item
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
     pWrtShell->SplitNode(false);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), pEditShell->GetRedlineCount());
 
