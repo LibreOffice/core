@@ -31,6 +31,7 @@
 #include <ZipPackageStream.hxx>
 
 #include <algorithm>
+#include <utility>
 
 using namespace com::sun::star;
 using namespace com::sun::star::io;
@@ -40,14 +41,14 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 /** This class is used to deflate Zip entries
  */
 ZipOutputEntryBase::ZipOutputEntryBase(
-        const css::uno::Reference< css::io::XOutputStream >& rxOutput,
-        const uno::Reference< uno::XComponentContext >& rxContext,
+        css::uno::Reference< css::io::XOutputStream > xOutput,
+        uno::Reference< uno::XComponentContext > xContext,
         ZipEntry& rEntry,
         ZipPackageStream* pStream,
         bool bEncrypt,
         bool checkStream)
-: m_xContext(rxContext)
-, m_xOutStream(rxOutput)
+: m_xContext(std::move(xContext))
+, m_xOutStream(std::move(xOutput))
 , m_pCurrentEntry(&rEntry)
 , m_nDigested(0)
 , m_pCurrentStream(pStream)
@@ -279,10 +280,10 @@ class ZipOutputEntryInThread::Task : public comphelper::ThreadTask
 
 public:
     Task( const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, ZipOutputEntryInThread *pEntry,
-          const uno::Reference< io::XInputStream >& xInStream )
+          uno::Reference< io::XInputStream > xInStream )
         : comphelper::ThreadTask(pTag)
         , mpEntry(pEntry)
-        , mxInStream(xInStream)
+        , mxInStream(std::move(xInStream))
     {}
 
 private:

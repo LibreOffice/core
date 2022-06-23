@@ -36,8 +36,8 @@ class WrapStreamForShare final : public cppu::WeakImplHelper < css::io::XInputSt
     sal_Int64 m_nCurPos;
 
 public:
-    WrapStreamForShare( const css::uno::Reference< css::io::XInputStream >& xInStream,
-                        const rtl::Reference< comphelper::RefCountedMutex >& rMutexRef );
+    WrapStreamForShare( css::uno::Reference< css::io::XInputStream > xInStream,
+                        rtl::Reference< comphelper::RefCountedMutex > xMutexRef );
     virtual ~WrapStreamForShare() override;
 
     // XInputStream

@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/io/IOException.hpp>
+#include <utility>
 #include <osl/diagnose.h>
 
 #include "wrapstreamforshare.hxx"
@@ -33,10 +34,10 @@ using namespace ::com::sun::star;
 #define THROW_WHERE ""
 #endif
 
-WrapStreamForShare::WrapStreamForShare( const uno::Reference< io::XInputStream >& xInStream,
-                                        const rtl::Reference< comphelper::RefCountedMutex >& rMutexRef )
-: m_xMutex( rMutexRef )
-, m_xInStream( xInStream )
+WrapStreamForShare::WrapStreamForShare( uno::Reference< io::XInputStream > xInStream,
+                                        rtl::Reference< comphelper::RefCountedMutex > xMutexRef )
+: m_xMutex(std::move( xMutexRef ))
+, m_xInStream(std::move( xInStream ))
 , m_nCurPos( 0 )
 {
     if ( !m_xMutex.is() || !m_xInStream.is() )

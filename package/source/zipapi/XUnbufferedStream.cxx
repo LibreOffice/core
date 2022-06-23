@@ -30,6 +30,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -40,7 +41,7 @@ using com::sun::star::packages::zip::ZipIOException;
 
 XUnbufferedStream::XUnbufferedStream(
                       const uno::Reference< uno::XComponentContext >& xContext,
-                      const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
+                      rtl::Reference< comphelper::RefCountedMutex > aMutexHolder,
                       ZipEntry const & rEntry,
                       Reference < XInputStream > const & xNewZipStream,
                       const ::rtl::Reference< EncryptionData >& rData,
@@ -48,7 +49,7 @@ XUnbufferedStream::XUnbufferedStream(
                       bool bIsEncrypted,
                       const OUString& aMediaType,
                       bool bRecoveryMode )
-: maMutexHolder( aMutexHolder )
+: maMutexHolder(std::move( aMutexHolder ))
 , mxZipStream ( xNewZipStream )
 , mxZipSeek ( xNewZipStream, UNO_QUERY )
 , maEntry ( rEntry )
@@ -111,10 +112,10 @@ XUnbufferedStream::XUnbufferedStream(
 
 // allows to read package raw stream
 XUnbufferedStream::XUnbufferedStream(
-                    const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
+                    rtl::Reference< comphelper::RefCountedMutex > aMutexHolder,
                     const Reference < XInputStream >& xRawStream,
                     const ::rtl::Reference< EncryptionData >& rData )
-: maMutexHolder( aMutexHolder )
+: maMutexHolder(std::move( aMutexHolder ))
 , mxZipStream ( xRawStream )
 , mxZipSeek ( xRawStream, UNO_QUERY )
 , mnBlockSize( 1 )

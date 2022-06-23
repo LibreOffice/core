@@ -137,11 +137,11 @@ public:
                 OStorage_Impl* pParent,
                 const css::uno::Reference< css::packages::XDataSinkEncrSupport >& xPackageStream,
                 const css::uno::Reference< css::lang::XSingleServiceFactory >& xPackage,
-                const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                css::uno::Reference< css::uno::XComponentContext > xContext,
                 bool bForceEncrypted,
                 sal_Int32 nStorageType,
                 bool bDefaultCompress,
-                const css::uno::Reference< css::io::XInputStream >& xRelInfoStream =
+                css::uno::Reference< css::io::XInputStream > xRelInfoStream =
                     css::uno::Reference< css::io::XInputStream >() );
 
     ~OWriteStream_Impl();
