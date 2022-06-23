@@ -87,6 +87,23 @@
       "parentUuid": "d5e71b86_70af1971",
       "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5ba63cf_bf80885d",
+        "filename": "sc/source/filter/orcus/filterdetect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-23T07:04:47Z",
+      "side": 1,
+      "message": "I\u0027m surprised that we need to read more than the first 100 bytes or so to detect a format, I would much rather we clamp the input size to some reasonable number to these detect methods, because they can make opening large files very slow if we try and read the entirety of a large file.",
+      "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
