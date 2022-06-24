@@ -416,7 +416,7 @@ OUString generateRandomPipeId()
         throw RuntimeException( "cannot create random pool!?", nullptr );
     sal_uInt8 bytes[ 32 ];
     if (rtl_random_getBytes(
-            s_hPool, bytes, SAL_N_ELEMENTS(bytes) ) != rtl_Random_E_None) {
+            s_hPool, bytes, std::size(bytes) ) != rtl_Random_E_None) {
         throw RuntimeException( "random pool error!?", nullptr );
     }
     OUStringBuffer buf;
