@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fe35dce_48e92762",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-24T11:35:23Z",
+      "side": 1,
+      "message": "Hi Julien,\nwith your patch, if I type setH in math, I get an empty symbol, see https://imgur.com/a/lSnDqVI",
+      "revId": "4adffaed69b16b69fbb309b630c60784fb885f12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
