@@ -26,6 +26,7 @@
 #include "PresenterSlideSorter.hxx"
 #include "PresenterToolBar.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -94,11 +95,11 @@ public:
 PresenterViewFactory::PresenterViewFactory (
     const Reference<uno::XComponentContext>& rxContext,
     const Reference<frame::XController>& rxController,
-    const ::rtl::Reference<PresenterController>& rpPresenterController)
+    ::rtl::Reference<PresenterController> pPresenterController)
     : PresenterViewFactoryInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
       mxControllerWeak(rxController),
-      mpPresenterController(rpPresenterController)
+      mpPresenterController(std::move(pPresenterController))
 {
 }
 

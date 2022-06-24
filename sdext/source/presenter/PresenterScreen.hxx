@@ -95,7 +95,7 @@ class PresenterScreen
 public:
     PresenterScreen (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::frame::XModel2>& rxModel);
+        css::uno::Reference<css::frame::XModel2> xModel);
     virtual ~PresenterScreen() override;
     PresenterScreen(const PresenterScreen&) = delete;
     PresenterScreen& operator=(const PresenterScreen&) = delete;

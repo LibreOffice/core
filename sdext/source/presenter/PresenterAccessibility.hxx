@@ -51,8 +51,8 @@ class PresenterAccessible
 {
 public:
     PresenterAccessible (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const ::rtl::Reference<PresenterController>& rpPresenterController,
+        css::uno::Reference<css::uno::XComponentContext> xContext,
+        ::rtl::Reference<PresenterController> xPresenterController,
         const css::uno::Reference<css::drawing::framework::XPane>& rxMainPane);
     virtual ~PresenterAccessible() override;
 

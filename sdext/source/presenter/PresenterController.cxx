@@ -51,6 +51,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -82,19 +83,19 @@ PresenterController::InstanceContainer PresenterController::maInstances;
 }
 
 PresenterController::PresenterController (
-    const css::uno::WeakReference<css::lang::XEventListener> &rxScreen,
+    css::uno::WeakReference<css::lang::XEventListener> xScreen,
     const Reference<XComponentContext>& rxContext,
     const Reference<frame::XController>& rxController,
     const Reference<presentation::XSlideShowController>& rxSlideShowController,
-    const rtl::Reference<PresenterPaneContainer>& rpPaneContainer,
+    rtl::Reference<PresenterPaneContainer> xPaneContainer,
     const Reference<XResourceId>& rxMainPaneId)
     : PresenterControllerInterfaceBase(m_aMutex),
-      mxScreen(rxScreen),
+      mxScreen(std::move(xScreen)),
       mxComponentContext(rxContext),
       mxController(rxController),
       mxSlideShowController(rxSlideShowController),
       mxMainPaneId(rxMainPaneId),
-      mpPaneContainer(rpPaneContainer),
+      mpPaneContainer(std::move(xPaneContainer)),
       mnCurrentSlideIndex(-1),
       mpWindowManager(new PresenterWindowManager(rxContext,mpPaneContainer,this)),
       mpCanvasHelper(std::make_shared<PresenterCanvasHelper>()),

@@ -60,8 +60,8 @@ class PresenterWindowManager
 public:
     PresenterWindowManager (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const ::rtl::Reference<PresenterPaneContainer>& rpPaneContainer,
-        const ::rtl::Reference<PresenterController>& rpPresenterController);
+        ::rtl::Reference<PresenterPaneContainer> pPaneContainer,
+        ::rtl::Reference<PresenterController> pPresenterController);
     virtual ~PresenterWindowManager() override;
     PresenterWindowManager(const PresenterWindowManager&) = delete;
     PresenterWindowManager& operator=(const PresenterWindowManager&) = delete;

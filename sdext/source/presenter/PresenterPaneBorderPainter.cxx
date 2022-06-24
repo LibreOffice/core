@@ -30,6 +30,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <map>
 #include <memory>
+#include <utility>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -96,7 +97,7 @@ class  PresenterPaneBorderPainter::Renderer
 public:
     Renderer (
         const Reference<XComponentContext>& rxContext,
-        const std::shared_ptr<PresenterTheme>& rpTheme);
+        std::shared_ptr<PresenterTheme> xTheme);
 
     void SetCanvas (const Reference<rendering::XCanvas>& rxCanvas);
     void PaintBorder (
@@ -364,8 +365,8 @@ void PresenterPaneBorderPainter::ThrowIfDisposed() const
 
 PresenterPaneBorderPainter::Renderer::Renderer (
     const Reference<XComponentContext>& rxContext,
-    const std::shared_ptr<PresenterTheme>& rpTheme)
-    : mpTheme(rpTheme),
+    std::shared_ptr<PresenterTheme> xTheme)
+    : mpTheme(std::move(xTheme)),
       maViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), nullptr),
       mbHasCallout(false)
 {

@@ -102,13 +102,13 @@ private:
 
     PresenterButton (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
-        const ::rtl::Reference<PresenterController>& rpPresenterController,
-        const std::shared_ptr<PresenterTheme>& rpTheme,
+        ::rtl::Reference<PresenterController> xPresenterController,
+        std::shared_ptr<PresenterTheme> xTheme,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        const PresenterTheme::SharedFontDescriptor& rFont,
-        const PresenterTheme::SharedFontDescriptor& rMouseOverFont,
-        const OUString& rxText,
-        const OUString& rxAction);
+        PresenterTheme::SharedFontDescriptor aFont,
+        PresenterTheme::SharedFontDescriptor aMouseOverFont,
+        OUString sText,
+        OUString sAction);
     void RenderButton (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::geometry::IntegerSize2D& rSize,

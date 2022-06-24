@@ -25,6 +25,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <comphelper/stl_types.hxx>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -41,7 +42,7 @@ private:
     uno::Sequence<sal_Int8>           m_aBuf;
 
 public:
-    explicit OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput );
+    explicit OdfEmitter( uno::Reference<io::XOutputStream> xOutput );
 
     virtual void beginTag( const char* pTag, const PropertyMap& rProperties ) override;
     virtual void write( const OUString& rString ) override;
@@ -50,8 +51,8 @@ public:
 
 }
 
-OdfEmitter::OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput ) :
-    m_xOutput( xOutput ),
+OdfEmitter::OdfEmitter( uno::Reference<io::XOutputStream> xOutput ) :
+    m_xOutput(std::move( xOutput )),
     m_aLineFeed{ '\n' }
 {
     OSL_PRECOND(m_xOutput.is(), "OdfEmitter(): invalid output stream");

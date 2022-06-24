@@ -42,8 +42,8 @@ private:
         css::uno::XComponentContext > m_xContext;
 
 public:
-    explicit PDFDetector( const css::uno::Reference<
-                                css::uno::XComponentContext >& xContext );
+    explicit PDFDetector( css::uno::Reference<
+                                css::uno::XComponentContext > xContext );
 
     // XExtendedFilterDetection
     virtual OUString SAL_CALL detect( css::uno::Sequence<

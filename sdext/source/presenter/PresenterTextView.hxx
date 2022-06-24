@@ -41,10 +41,10 @@ class PresenterTextCaret
 public:
     PresenterTextCaret (
         css::uno::Reference<css::uno::XComponentContext> const& xContext,
-        const ::std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)>&
-            rCharacterBoundsAccess,
-        const ::std::function<void (const css::awt::Rectangle&)>&
-            rInvalidator);
+        ::std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)>
+            aCharacterBoundsAccess,
+        ::std::function<void (const css::awt::Rectangle&)>
+            aInvalidator);
     ~PresenterTextCaret();
 
     void ShowCaret();
@@ -93,7 +93,7 @@ public:
         const css::uno::Reference<css::i18n::XBreakIterator>& rxBreakIterator,
         const css::uno::Reference<css::i18n::XScriptTypeDetector>& rxScriptTypeDetector,
         const css::uno::Reference<css::text::XTextRange>& rxTextRange,
-        const SharedPresenterTextCaret& rpCaret);
+        SharedPresenterTextCaret xCaret);
 
     void Paint (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,

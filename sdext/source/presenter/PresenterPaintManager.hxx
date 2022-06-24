@@ -45,8 +45,8 @@ public:
     */
     PresenterPaintManager (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper,
-        const rtl::Reference<PresenterPaneContainer>& rpPaneContainer);
+        css::uno::Reference<css::drawing::XPresenterHelper> xPresenterHelper,
+        rtl::Reference<PresenterPaneContainer> xPaneContainer);
 
     ::std::function<void (const css::awt::Rectangle& rRepaintBox)>
         GetInvalidator (

@@ -37,6 +37,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 #include <memory>
+#include <utility>
 #include <string.h>
 
 using namespace com::sun::star;
@@ -182,9 +183,9 @@ unsigned int FileEmitContext::readOrigBytes( unsigned int nOrigOffset, unsigned 
 }
 
 
-PDFDetector::PDFDetector( const uno::Reference< uno::XComponentContext >& xContext) :
+PDFDetector::PDFDetector( uno::Reference< uno::XComponentContext > xContext) :
     PDFDetectorBase( m_aMutex ),
-    m_xContext( xContext )
+    m_xContext(std::move( xContext ))
 {}
 
 // XExtendedFilterDetection

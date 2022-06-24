@@ -37,6 +37,7 @@
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <osl/mutex.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -47,14 +48,14 @@ namespace sdext::presenter {
 //===== PresenterSlideShowView ================================================
 
 PresenterSlideShowView::PresenterSlideShowView (
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-    const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+    css::uno::Reference<css::uno::XComponentContext> xContext,
+    css::uno::Reference<css::drawing::framework::XResourceId> xViewId,
     const css::uno::Reference<css::frame::XController>& rxController,
-    const ::rtl::Reference<PresenterController>& rpPresenterController)
+    ::rtl::Reference<PresenterController> xPresenterController)
     : PresenterSlideShowViewInterfaceBase(m_aMutex),
-      mxComponentContext(rxContext),
-      mpPresenterController(rpPresenterController),
-      mxViewId(rxViewId),
+      mxComponentContext(std::move(xContext)),
+      mpPresenterController(std::move(xPresenterController)),
+      mxViewId(std::move(xViewId)),
       mxController(rxController),
       mxSlideShowController(PresenterHelper::GetSlideShowController(rxController)),
       mbIsViewAdded(false),

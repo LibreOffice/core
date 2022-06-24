@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
+
 #include "PresenterCurrentSlideObserver.hxx"
 
 using namespace ::com::sun::star;
@@ -27,10 +29,10 @@ namespace sdext::presenter {
 //===== PresenterCurrentSlideObserver =========================================
 
 PresenterCurrentSlideObserver::PresenterCurrentSlideObserver (
-    const ::rtl::Reference<PresenterController>& rxPresenterController,
+    ::rtl::Reference<PresenterController> xPresenterController,
     const Reference<presentation::XSlideShowController>& rxSlideShowController)
     : PresenterCurrentSlideObserverInterfaceBase(m_aMutex),
-      mpPresenterController(rxPresenterController),
+      mpPresenterController(std::move(xPresenterController)),
       mxSlideShowController(rxSlideShowController)
 {
     if( mpPresenterController.is() )

@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include <cppuhelper/implbase.hxx>
 
@@ -40,8 +41,8 @@ namespace pdfi
             OUString m_aName;
             OUString m_aValue;
 
-            AttrEntry( const OUString& i_rName, const OUString& i_rValue )
-            : m_aName( i_rName ), m_aValue( i_rValue ) {}
+            AttrEntry( OUString i_aName, OUString i_aValue )
+            : m_aName(std::move( i_aName )), m_aValue(std::move( i_aValue )) {}
         };
         std::vector< AttrEntry >                                    m_aAttributes;
         std::unordered_map< OUString, size_t >   m_aIndexMap;

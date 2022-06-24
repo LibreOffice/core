@@ -25,6 +25,7 @@
 #include "PresenterSpritePane.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -48,10 +49,10 @@ Reference<drawing::framework::XResourceFactory> PresenterPaneFactory::Create (
 
 PresenterPaneFactory::PresenterPaneFactory (
     const Reference<uno::XComponentContext>& rxContext,
-    const ::rtl::Reference<PresenterController>& rpPresenterController)
+    ::rtl::Reference<PresenterController> xPresenterController)
     : PresenterPaneFactoryInterfaceBase(m_aMutex),
       mxComponentContextWeak(rxContext),
-      mpPresenterController(rpPresenterController)
+      mpPresenterController(std::move(xPresenterController))
 {
 }
 

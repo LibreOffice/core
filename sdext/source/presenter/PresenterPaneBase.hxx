@@ -56,7 +56,7 @@ class PresenterPaneBase
 public:
     PresenterPaneBase (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const ::rtl::Reference<PresenterController>& rpPresenterController);
+        ::rtl::Reference<PresenterController> xPresenterController);
     virtual ~PresenterPaneBase() override;
     PresenterPaneBase(const PresenterPaneBase&) = delete;
     PresenterPaneBase& operator=(const PresenterPaneBase&) = delete;

@@ -51,7 +51,7 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::frame::XController>& rxController,
-        const ::rtl::Reference<PresenterController>& rpPresenterController);
+        ::rtl::Reference<PresenterController> xPresenterController);
     virtual ~PresenterHelpView() override;
 
     virtual void SAL_CALL disposing() override;

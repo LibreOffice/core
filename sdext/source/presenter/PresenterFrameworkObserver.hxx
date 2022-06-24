@@ -67,7 +67,7 @@ private:
             e.g. when some resource has been created.
     */
     PresenterFrameworkObserver (
-        const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
+        css::uno::Reference<css::drawing::framework::XConfigurationController> xController,
         const Action& rAction);
     virtual ~PresenterFrameworkObserver() override;
 

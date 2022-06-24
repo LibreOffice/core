@@ -22,6 +22,7 @@
 
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <utility>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -34,13 +35,13 @@ namespace sdext::presenter {
 
 PresenterBitmapContainer::PresenterBitmapContainer (
     const OUString& rsConfigurationBase,
-    const std::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
+    std::shared_ptr<PresenterBitmapContainer> xParentContainer,
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
-    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-    const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper)
-    : mpParentContainer(rpParentContainer),
-      mxCanvas(rxCanvas),
-      mxPresenterHelper(rxPresenterHelper)
+    css::uno::Reference<css::rendering::XCanvas> xCanvas,
+    css::uno::Reference<css::drawing::XPresenterHelper> xPresenterHelper)
+    : mpParentContainer(std::move(xParentContainer)),
+      mxCanvas(std::move(xCanvas)),
+      mxPresenterHelper(std::move(xPresenterHelper))
 {
     Initialize(rxComponentContext);
 
@@ -58,13 +59,13 @@ PresenterBitmapContainer::PresenterBitmapContainer (
 
 PresenterBitmapContainer::PresenterBitmapContainer (
     const css::uno::Reference<css::container::XNameAccess>& rxRootNode,
-    const std::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
+    std::shared_ptr<PresenterBitmapContainer> xParentContainer,
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
-    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-    const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper)
-    : mpParentContainer(rpParentContainer),
-      mxCanvas(rxCanvas),
-      mxPresenterHelper(rxPresenterHelper)
+    css::uno::Reference<css::rendering::XCanvas> xCanvas,
+    css::uno::Reference<css::drawing::XPresenterHelper> xPresenterHelper)
+    : mpParentContainer(std::move(xParentContainer)),
+      mxCanvas(std::move(xCanvas)),
+      mxPresenterHelper(std::move(xPresenterHelper))
 {
     Initialize(rxComponentContext);
 

@@ -95,7 +95,7 @@ private:
 
     PresenterPaneFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const ::rtl::Reference<PresenterController>& rpPresenterController);
+        ::rtl::Reference<PresenterController> xPresenterController);
 
     void Register (const css::uno::Reference<css::frame::XController>& rxController);
 

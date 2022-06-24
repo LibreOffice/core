@@ -19,6 +19,7 @@
 
 #include "PresenterFrameworkObserver.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -28,10 +29,10 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sdext::presenter {
 
 PresenterFrameworkObserver::PresenterFrameworkObserver (
-    const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
+    css::uno::Reference<css::drawing::framework::XConfigurationController> xController,
     const Action& rAction)
     : PresenterFrameworkObserverInterfaceBase(m_aMutex),
-      mxConfigurationController(rxController),
+      mxConfigurationController(std::move(xController)),
       maAction(rAction)
 {
     if ( ! mxConfigurationController.is())

@@ -31,6 +31,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <utility>
 #include <math.h>
 
 using namespace ::com::sun::star;
@@ -46,7 +47,7 @@ class PresenterScrollBar::MousePressRepeater
     : public std::enable_shared_from_this<MousePressRepeater>
 {
 public:
-    explicit MousePressRepeater (const ::rtl::Reference<PresenterScrollBar>& rpScrollBar);
+    explicit MousePressRepeater (::rtl::Reference<PresenterScrollBar> xScrollBar);
     void Dispose();
     void Start (const PresenterScrollBar::Area& reArea);
     void Stop();
@@ -68,17 +69,17 @@ std::weak_ptr<PresenterBitmapContainer> PresenterScrollBar::mpSharedBitmaps;
 PresenterScrollBar::PresenterScrollBar (
     const Reference<XComponentContext>& rxComponentContext,
     const Reference<awt::XWindow>& rxParentWindow,
-    const std::shared_ptr<PresenterPaintManager>& rpPaintManager,
-    const ::std::function<void (double)>& rThumbMotionListener)
+    std::shared_ptr<PresenterPaintManager> xPaintManager,
+    ::std::function<void (double)>  aThumbMotionListener)
     : PresenterScrollBarInterfaceBase(m_aMutex),
       mxComponentContext(rxComponentContext),
-      mpPaintManager(rpPaintManager),
+      mpPaintManager(std::move(xPaintManager)),
       mnThumbPosition(0),
       mnTotalSize(0),
       mnThumbSize(0),
       mnLineHeight(10),
       maDragAnchor(-1,-1),
-      maThumbMotionListener(rThumbMotionListener),
+      maThumbMotionListener(std::move(aThumbMotionListener)),
       meButtonDownArea(None),
       meMouseMoveArea(None),
       mbIsNotificationActive(false),
@@ -725,9 +726,9 @@ void PresenterVerticalScrollBar::PaintComposite(
 //===== PresenterScrollBar::MousePressRepeater ================================
 
 PresenterScrollBar::MousePressRepeater::MousePressRepeater (
-    const ::rtl::Reference<PresenterScrollBar>& rpScrollBar)
+    ::rtl::Reference<PresenterScrollBar> xScrollBar)
     : mnMousePressRepeaterTaskId(PresenterTimer::NotAValidTaskId),
-      mpScrollBar(rpScrollBar),
+      mpScrollBar(std::move(xScrollBar)),
       meMouseArea(PresenterScrollBar::None)
 {
 }

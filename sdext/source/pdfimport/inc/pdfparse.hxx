@@ -26,6 +26,7 @@
 
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include <memory>
 
@@ -72,8 +73,8 @@ struct PDFComment final : public PDFEntry
 {
     OString  m_aComment;
 
-    explicit PDFComment( const OString& rComment )
-    : PDFEntry(), m_aComment( rComment ) {}
+    explicit PDFComment( OString aComment )
+    : PDFEntry(), m_aComment(std::move( aComment )) {}
     virtual ~PDFComment() override;
     virtual bool emit( EmitContext& rWriteContext ) const override;
     virtual PDFEntry* clone() const override;
@@ -90,8 +91,8 @@ struct PDFName final : public PDFValue
 {
     OString  m_aName;
 
-    explicit PDFName( const OString& rName )
-    : PDFValue(), m_aName( rName ) {}
+    explicit PDFName( OString aName )
+    : PDFValue(), m_aName(std::move( aName )) {}
     virtual ~PDFName() override;
     virtual bool emit( EmitContext& rWriteContext ) const override;
     virtual PDFEntry* clone() const override;
@@ -103,8 +104,8 @@ struct PDFString final : public PDFValue
 {
     OString  m_aString;
 
-    explicit PDFString( const OString& rString )
-    : PDFValue(), m_aString( rString ) {}
+    explicit PDFString( OString aString )
+    : PDFValue(), m_aString(std::move( aString )) {}
     virtual ~PDFString() override;
     virtual bool emit( EmitContext& rWriteContext ) const override;
     virtual PDFEntry* clone() const override;

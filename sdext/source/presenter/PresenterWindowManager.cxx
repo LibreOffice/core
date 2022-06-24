@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/settings.hxx>
 #include "PresenterWindowManager.hxx"
 #include "PresenterController.hxx"
@@ -48,12 +49,12 @@ namespace sdext::presenter {
 
 PresenterWindowManager::PresenterWindowManager (
     const Reference<XComponentContext>& rxContext,
-    const ::rtl::Reference<PresenterPaneContainer>& rpPaneContainer,
-    const ::rtl::Reference<PresenterController>& rpPresenterController)
+    ::rtl::Reference<PresenterPaneContainer> pPaneContainer,
+    ::rtl::Reference<PresenterController> pPresenterController)
     : PresenterWindowManagerInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
-      mpPresenterController(rpPresenterController),
-      mpPaneContainer(rpPaneContainer),
+      mpPresenterController(std::move(pPresenterController)),
+      mpPaneContainer(std::move(pPaneContainer)),
       mbIsLayoutPending(true),
       mbIsLayouting(false),
       meLayoutMode(LM_Generic),

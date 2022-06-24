@@ -36,6 +36,7 @@
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <o3tl/safeint.hxx>
+#include <utility>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -432,9 +433,9 @@ PresenterTextParagraph::PresenterTextParagraph (
     const Reference<i18n::XBreakIterator>& rxBreakIterator,
     const Reference<i18n::XScriptTypeDetector>& rxScriptTypeDetector,
     const Reference<text::XTextRange>& rxTextRange,
-    const SharedPresenterTextCaret& rpCaret)
+    SharedPresenterTextCaret xCaret)
     : mnParagraphIndex(nParagraphIndex),
-      mpCaret(rpCaret),
+      mpCaret(std::move(xCaret)),
       mxBreakIterator(rxBreakIterator),
       mxScriptTypeDetector(rxScriptTypeDetector),
       mnVerticalOffset(0),
@@ -1029,15 +1030,15 @@ void PresenterTextParagraph::SetupCellArray (
 
 PresenterTextCaret::PresenterTextCaret (
         uno::Reference<uno::XComponentContext> const& xContext,
-    const ::std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)>& rCharacterBoundsAccess,
-    const ::std::function<void (const css::awt::Rectangle&)>& rInvalidator)
+    ::std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)> aCharacterBoundsAccess,
+    ::std::function<void (const css::awt::Rectangle&)> aInvalidator)
     : m_xContext(xContext)
     , mnParagraphIndex(-1),
       mnCharacterIndex(-1),
       mnCaretBlinkTaskId(0),
       mbIsCaretVisible(false),
-      maCharacterBoundsAccess(rCharacterBoundsAccess),
-      maInvalidator(rInvalidator)
+      maCharacterBoundsAccess(std::move(aCharacterBoundsAccess)),
+      maInvalidator(std::move(aInvalidator))
 {
 }
 
