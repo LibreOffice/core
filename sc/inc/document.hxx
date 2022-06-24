@@ -2558,7 +2558,7 @@ public:
      */
     void UnshareFormulaCells( SCTAB nTab, SCCOL nCol, std::vector<SCROW>& rRows );
     void RegroupFormulaCells( SCTAB nTab, SCCOL nCol );
-    void RegroupFormulaCells( const ScRange& range );
+    SC_DLLPUBLIC void RegroupFormulaCells( const ScRange& range );
 
     formula::FormulaTokenRef ResolveStaticReference( const ScAddress& rPos );
     formula::FormulaTokenRef ResolveStaticReference( const ScRange& rRange );

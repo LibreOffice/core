@@ -1459,6 +1459,18 @@ PivotTable& PivotTableBuffer::createPivotTable()
 
 void PivotTableBuffer::finalizeImport()
 {
+    if(maTables.empty())
+        return;
+
+    // Create formula groups. This needs to be done before pivot tables, because
+    // import may lead to calling ScDPObject::GetSource(), which calls ScDPObject::CreateObjects(),
+    // which will ensure all the cells are not dirty, causing recalculation even though
+    // ScDPObject::GetSource() doesn't need it. And the recalculation is slower without formula
+    // groups set up. Fixing that properly seems quite complex, given that do-everything approach
+    // of ScDPObject, so at least ensure the calculation is efficient.
+    ScDocument& rDoc = getDocImport().getDoc();
+    rDoc.RegroupFormulaCells( ScRange( 0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), rDoc.GetMaxTableNumber()));
+
     maTables.forEachMem( &PivotTable::finalizeImport );
 }
 
