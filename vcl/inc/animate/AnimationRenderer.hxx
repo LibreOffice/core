@@ -43,29 +43,7 @@ struct AInfo
 
 class VCL_DLLPUBLIC AnimationRenderer
 {
-private:
-
     friend class Animation;
-
-    Animation*      mpParent;
-    VclPtr<OutputDevice>  mpRenderContext;
-    tools::Long     mnRendererId;
-    Point           maPt;
-    Point           maDispPt;
-    Point           maRestPt;
-    Size            maSz;
-    Size            maSzPix;
-    Size            maDispSz;
-    Size            maRestSz;
-    vcl::Region     maClip;
-    VclPtr<VirtualDevice>  mpBackground;
-    VclPtr<VirtualDevice>  mpRestore;
-    sal_uLong       mnActIndex;
-    Disposal        meLastDisposal;
-    bool            mbIsPaused;
-    bool            mbIsMarked;
-    bool            mbIsMirroredHorizontally;
-    bool            mbIsMirroredVertically;
 
 public:
                     AnimationRenderer( Animation* pParent, OutputDevice* pOut,
@@ -91,6 +69,27 @@ public:
 
     void            setMarked( bool bIsMarked ) { mbIsMarked = bIsMarked; }
     bool            isMarked() const { return mbIsMarked; }
+
+private:
+    Animation*      mpParent;
+    VclPtr<OutputDevice>  mpRenderContext;
+    tools::Long     mnRendererId;
+    Point           maPt;
+    Point           maDispPt;
+    Point           maRestPt;
+    Size            maSz;
+    Size            maSzPix;
+    Size            maDispSz;
+    Size            maRestSz;
+    vcl::Region     maClip;
+    VclPtr<VirtualDevice>  mpBackground;
+    VclPtr<VirtualDevice>  mpRestore;
+    sal_uLong       mnActIndex;
+    Disposal        meLastDisposal;
+    bool            mbIsPaused;
+    bool            mbIsMarked;
+    bool            mbIsMirroredHorizontally;
+    bool            mbIsMirroredVertically;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
