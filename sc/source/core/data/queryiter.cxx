@@ -1219,8 +1219,9 @@ ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::Mak
     return SortedCacheIndexer(rCells, nStartRow, nEndRow, sortedCache);
 }
 
-static bool CanBeUsedForSorterCache(const ScDocument& rDoc, const ScQueryParam& rParam,
-    const ScFormulaCell* cell, const ScComplexRefData* refData)
+static bool CanBeUsedForSorterCache(ScDocument& rDoc, const ScQueryParam& rParam,
+    SCTAB nTab, const ScFormulaCell* cell, const ScComplexRefData* refData,
+    ScInterpreterContext& context)
 {
     if(!rParam.GetEntry(0).bDoQuery || rParam.GetEntry(1).bDoQuery
         || rParam.GetEntry(0).GetQueryItems().size() != 1 )
@@ -1237,18 +1238,11 @@ static bool CanBeUsedForSorterCache(const ScDocument& rDoc, const ScQueryParam& 
     if(rParam.mbRangeLookup)
         return false;
     if(rParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString
-        && !ScQueryEvaluator::isMatchWholeCell(rDoc, rParam.GetEntry(0)))
+        && !ScQueryEvaluator::isMatchWholeCell(rDoc, rParam.GetEntry(0).eOp))
         return false; // substring matching cannot be sorted
     if(rParam.GetEntry(0).eOp != SC_LESS && rParam.GetEntry(0).eOp != SC_LESS_EQUAL
         && rParam.GetEntry(0).eOp != SC_GREATER && rParam.GetEntry(0).eOp != SC_GREATER_EQUAL
         && rParam.GetEntry(0).eOp != SC_EQUAL)
-        return false;
-    // tdf#149071 - numbers entered as string can be compared both as numbers
-    // and as strings, depending on the cell content, and that makes it hard to pre-sort
-    // the data; such queries are ScQueryEntry::ByValue but have maString set too
-    // (see ScQueryParamBase::FillInExcelSyntax())
-    if(rParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue
-        && rParam.GetEntry(0).GetQueryItem().maString.isValid())
         return false;
     // For unittests allow inefficient caching, in order for the code to be checked.
     static bool inUnitTest = getenv("LO_TESTNAME") != nullptr;
@@ -1268,6 +1262,15 @@ static bool CanBeUsedForSorterCache(const ScDocument& rDoc, const ScQueryParam& 
     if( !cell || !cell->GetCellGroup() || cell->GetCellGroup()->mnLength < 10 )
     {
         if(!inUnitTest)
+            return false;
+    }
+    // Check that all the relevant caches would be valid (may not be the case when mixing
+    // numeric and string cells for ByValue lookups).
+    for(SCCOL col : rDoc.GetAllocatedColumnsRange(nTab, rParam.nCol1, rParam.nCol2))
+    {
+        ScRange aSortedRangeRange( col, rParam.nRow1, nTab, col, rParam.nRow2, nTab);
+        ScSortedRangeCache& cache = rDoc.GetSortedRangeCache( aSortedRangeRange, rParam, &context );
+        if(!cache.isValid())
             return false;
     }
     return true;
@@ -1329,10 +1332,11 @@ bool ScQueryCellIterator< ScQueryCellIteratorAccess::SortedCache >::GetNext()
     return GetThis();
 }
 
-bool ScQueryCellIteratorSortedCache::CanBeUsed(const ScDocument& rDoc, const ScQueryParam& rParam,
-    const ScFormulaCell* cell, const ScComplexRefData* refData)
+bool ScQueryCellIteratorSortedCache::CanBeUsed(ScDocument& rDoc, const ScQueryParam& rParam,
+    SCTAB nTab, const ScFormulaCell* cell, const ScComplexRefData* refData,
+    ScInterpreterContext& context)
 {
-    return CanBeUsedForSorterCache(rDoc, rParam, cell, refData);
+    return CanBeUsedForSorterCache(rDoc, rParam, nTab, cell, refData, context);
 }
 
 // Countifs implementation.
@@ -1359,10 +1363,11 @@ sal_uInt64 ScCountIfCellIterator< accessType >::GetCount()
 }
 
 
-bool ScCountIfCellIteratorSortedCache::CanBeUsed(const ScDocument& rDoc, const ScQueryParam& rParam,
-    const ScFormulaCell* cell, const ScComplexRefData* refData)
+bool ScCountIfCellIteratorSortedCache::CanBeUsed(ScDocument& rDoc, const ScQueryParam& rParam,
+    SCTAB nTab, const ScFormulaCell* cell, const ScComplexRefData* refData,
+    ScInterpreterContext& context)
 {
-    return CanBeUsedForSorterCache(rDoc, rParam, cell, refData);
+    return CanBeUsedForSorterCache(rDoc, rParam, nTab, cell, refData, context);
 }
 
 template<>
