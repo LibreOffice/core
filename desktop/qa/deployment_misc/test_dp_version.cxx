@@ -60,7 +60,7 @@ void Test::test() {
           OUString("9223372036854775807"),
           ::dp_misc::GREATER }
     };
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
+    for (std::size_t i = 0; i < std::size(data); ++i) {
         CPPUNIT_ASSERT_EQUAL(
             data[i].order,
             ::dp_misc::compareVersions(data[i].version1, data[i].version2));
