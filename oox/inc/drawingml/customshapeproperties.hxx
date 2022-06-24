@@ -117,6 +117,7 @@ public:
     void                                setMirroredY( bool bMirroredY ) { mbMirroredY = bMirroredY; };
     void                                setTextRotateAngle( sal_Int32 nAngle ) { mnTextRotateAngle = nAngle; };
     void                                setTextCameraZRotateAngle( sal_Int32 nAngle ) { mnTextCameraZRotateAngle = nAngle; };
+    void                                setTextAreaRotateAngle(sal_Int32 nAngle) { moTextAreaRotateAngle = nAngle; };
 
     static sal_Int32 SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide );
     static sal_Int32 GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, std::u16string_view rFormulaName );
@@ -144,8 +145,9 @@ private:
                                     maSegments;
     bool                            mbMirroredX;
     bool                            mbMirroredY;
-    sal_Int32                       mnTextRotateAngle;
+    sal_Int32                       mnTextRotateAngle; // TextPreRotateAngle
     sal_Int32                       mnTextCameraZRotateAngle;
+    std::optional< sal_Int32 >      moTextAreaRotateAngle; // TextRotateAngle
 
     typedef std::unordered_map< sal_Int32, PropertyMap > PresetDataMap;
 
