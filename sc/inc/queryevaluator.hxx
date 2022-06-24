@@ -72,10 +72,10 @@ class ScQueryEvaluator
     std::vector<std::vector<double>> mCachedSortedItemValues;
     std::vector<std::vector<const rtl_uString*>> mCachedSortedItemStrings;
 
-    static bool isPartialTextMatchOp(const ScQueryEntry& rEntry);
-    static bool isTextMatchOp(const ScQueryEntry& rEntry);
-    static bool isMatchWholeCellHelper(bool docMatchWholeCell, const ScQueryEntry& rEntry);
-    bool isMatchWholeCell(const ScQueryEntry& rEntry) const;
+    static bool isPartialTextMatchOp(ScQueryOp eOp);
+    static bool isTextMatchOp(ScQueryOp eOp);
+    static bool isMatchWholeCellHelper(bool docMatchWholeCell, ScQueryOp eOp);
+    bool isMatchWholeCell(ScQueryOp eOp) const;
     void setupTransliteratorIfNeeded();
     void setupCollatorIfNeeded();
 
@@ -114,13 +114,13 @@ public:
     bool ValidQuery(SCROW nRow, const ScRefCellValue* pCell = nullptr,
                     sc::TableColumnBlockPositionSet* pBlockPos = nullptr);
 
-    static bool isQueryByValue(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
+    static bool isQueryByValue(ScQueryOp eOp, ScQueryEntry::QueryType eType,
                                const ScRefCellValue& rCell);
-    static bool isQueryByString(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
+    static bool isQueryByString(ScQueryOp eOp, ScQueryEntry::QueryType eType,
                                 const ScRefCellValue& rCell);
-    OUString getCellString(const ScRefCellValue& rCell, SCROW nRow, const ScQueryEntry& rEntry,
+    OUString getCellString(const ScRefCellValue& rCell, SCROW nRow, SCCOL nCol,
                            const svl::SharedString** sharedString);
-    static bool isMatchWholeCell(const ScDocument& rDoc, const ScQueryEntry& rEntry);
+    static bool isMatchWholeCell(const ScDocument& rDoc, ScQueryOp eOp);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

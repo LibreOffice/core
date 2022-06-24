@@ -5803,7 +5803,8 @@ void ScInterpreter::ScCountIf()
             }
             else
             {
-                if(ScCountIfCellIteratorSortedCache::CanBeUsed(mrDoc, rParam, pMyFormulaCell, refData))
+                if(ScCountIfCellIteratorSortedCache::CanBeUsed(mrDoc, rParam, nTab1, pMyFormulaCell,
+                        refData, mrContext))
                 {
                     ScCountIfCellIteratorSortedCache aCellIter(mrDoc, mrContext, nTab1, rParam, false);
                     fCount += aCellIter.GetCount();
@@ -6198,7 +6199,8 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             }
             else
             {
-                if( ScQueryCellIteratorSortedCache::CanBeUsed( mrDoc, rParam, pMyFormulaCell, refData ))
+                if( ScQueryCellIteratorSortedCache::CanBeUsed( mrDoc, rParam, nTab1, pMyFormulaCell,
+                        refData, mrContext ))
                 {
                     ScQueryCellIteratorSortedCache aCellIter(mrDoc, mrContext, nTab1, rParam, false);
                     // Increment Entry.nField in iterator when switching to next column.
@@ -10045,7 +10047,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
     }
     else // EQUAL
     {
-        if( ScQueryCellIteratorSortedCache::CanBeUsed( rDoc, rParam, cell, refData ))
+        if( ScQueryCellIteratorSortedCache::CanBeUsed( rDoc, rParam, rParam.nTab, cell, refData, rContext ))
         {
             ScQueryCellIteratorSortedCache aCellIter( rDoc, rContext, rParam.nTab, rParam, false);
             if (aCellIter.GetFirst())
