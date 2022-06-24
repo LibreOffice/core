@@ -158,6 +158,24 @@
       "parentUuid": "541b5971_cbcabecc",
       "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "081c5159_42d2af4a",
+        "filename": "sc/source/filter/orcus/filterdetect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-24T06:06:53Z",
+      "side": 1,
+      "message": "My first impetus had been to use osl_mapFile, but that would need aMediaDescriptor to provide a URL, and that URL to be a file URL---conditions that I assume would not generally be met, so I didn\u0027t consider that further for this immediate, backportable fix.  But it might be a worthwhile optimization where applicable?",
+      "parentUuid": "d69e0576_cd0d7ff6",
+      "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
