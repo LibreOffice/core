@@ -94,25 +94,36 @@ namespace dbaui
         {
             short   nFlag;
             weld::Widget* pFrame;
-        } aSections[] = {
+        } const aSections[] = {
             { TC_EXTENSION,     m_xExtensionHeader.get() },
             { TC_SEPARATORS,    m_xFormatHeader.get() },
             { TC_HEADER,        m_xRowHeader.get() },
-            { TC_CHARSET,       m_xCharSetHeader.get() },
-            { 0, nullptr }
+            { TC_CHARSET,       m_xCharSetHeader.get() }
+//            { 0, nullptr }
         };
 
-        for ( size_t section=0; section < SAL_N_ELEMENTS( aSections ) - 1; ++section )
+        for (auto const & section: aSections)
         {
-            if ( ( m_nAvailableSections & aSections[section].nFlag ) != 0 )
+            if ( ( m_nAvailableSections & section.nFlag ) != 0 )
             {
                 // the section is visible, no need to do anything here
                 continue;
             }
 
             // hide all elements from this section
-            aSections[section].pFrame->hide();
+            section.pFrame->hide();
         }
+//        for ( size_t section=0; section < std::size( aSections ) - 1; ++section )
+//        {
+//            if ( ( m_nAvailableSections & aSections[section].nFlag ) != 0 )
+//            {
+//                // the section is visible, no need to do anything here
+//                continue;
+//            }
+
+//            // hide all elements from this section
+//            aSections[section].pFrame->hide();
+//        }
 
         m_xContainer->show();
     }
