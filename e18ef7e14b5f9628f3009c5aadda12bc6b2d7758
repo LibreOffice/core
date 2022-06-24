@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d6c9956_f58e9cf2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-06-24T09:18:11Z",
+      "side": 1,
+      "message": "@Tibi: thanks for the fix! It\u0027s not exactly the follow-up of the import fix, so I\u0027ve modified the description.",
+      "revId": "e18ef7e14b5f9628f3009c5aadda12bc6b2d7758",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
