@@ -91,6 +91,23 @@ class PngFilterTest : public test::BootstrapFixture
             bIsSame);
     }
 
+    // Tests that aPngReader.read returns false on corrupted files
+    void testImportCorruptedPng(const OUString& sFileName)
+    {
+        SvFileStream aFileStream(getFullUrl(sFileName), StreamMode::READ);
+        BitmapEx aImportedBitmapEx;
+
+        bool bOpenOk = !aFileStream.GetError() && aFileStream.GetBufferSize() > 0;
+        CPPUNIT_ASSERT_MESSAGE(OString("Failed to open file: " + sFileName.toUtf8()).getStr(),
+                               bOpenOk);
+        vcl::PngImageReader aPngReader(aFileStream);
+        bool bReadOk = aPngReader.read(aImportedBitmapEx);
+        // Make sure this file was not read successfully
+        CPPUNIT_ASSERT_MESSAGE(
+            OString("Corrupted png should not be opened: " + sFileName.toUtf8()).getStr(),
+            !bReadOk);
+    }
+
 public:
     PngFilterTest()
         : BootstrapFixture(true, false)
