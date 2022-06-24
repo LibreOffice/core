@@ -294,6 +294,29 @@ std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems(
     return aDataItems;
 }
 
+void Animation::PopulateRenderers()
+{
+    for (auto& pDataItem : CreateAnimationDataItems())
+    {
+        AnimationRenderer* pRenderer = nullptr;
+        if (!pDataItem->mpRendererData)
+        {
+            pRenderer = new AnimationRenderer(this, pDataItem->mpRenderContext,
+                                              pDataItem->maOriginStartPt, pDataItem->maStartSize,
+                                              pDataItem->mnRendererId);
+
+            maRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
+        }
+        else
+        {
+            pRenderer = static_cast<AnimationRenderer*>(pDataItem->mpRendererData);
+        }
+
+        pRenderer->Pause(pDataItem->mbIsPaused);
+        pRenderer->SetMarked(true);
+    }
+}
+
 IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     const size_t nAnimCount = maFrames.size();
@@ -305,27 +328,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
         if (maNotifyLink.IsSet())
         {
             maNotifyLink.Call(this);
-
-            // set view state from AnimationData structure
-            for (auto& pDataItem : CreateAnimationDataItems())
-            {
-                AnimationRenderer* pRenderer = nullptr;
-                if (!pDataItem->mpRendererData)
-                {
-                    pRenderer = new AnimationRenderer(
-                        this, pDataItem->mpRenderContext, pDataItem->maOriginStartPt,
-                        pDataItem->maStartSize, pDataItem->mnRendererId);
-
-                    maRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
-                }
-                else
-                {
-                    pRenderer = static_cast<AnimationRenderer*>(pDataItem->mpRendererData);
-                }
-
-                pRenderer->Pause(pDataItem->mbIsPaused);
-                pRenderer->SetMarked(true);
-            }
+            PopulateRenderers();
 
             // delete all unmarked views
             auto removeStart
