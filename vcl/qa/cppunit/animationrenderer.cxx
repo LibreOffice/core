@@ -76,10 +76,10 @@ void VclAnimationRendererTest::testDrawToPos()
 
     AnimationRenderer* pAnimationRenderer
         = new AnimationRenderer(&aTestAnim, pTestRC.get(), Point(0, 0), Size(10, 10), 5);
-    pAnimationRenderer->drawToPos(0);
-    pAnimationRenderer->drawToPos(1);
-    pAnimationRenderer->drawToPos(2);
-    pAnimationRenderer->drawToPos(10);
+    pAnimationRenderer->drawToIndex(0);
+    pAnimationRenderer->drawToIndex(1);
+    pAnimationRenderer->drawToIndex(2);
+    pAnimationRenderer->drawToIndex(10);
 
     CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestRC->GetOutputSizePixel());
 }

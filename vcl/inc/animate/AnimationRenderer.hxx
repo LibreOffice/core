@@ -60,7 +60,7 @@ private:
     vcl::Region     maClip;
     VclPtr<VirtualDevice>  mpBackground;
     VclPtr<VirtualDevice>  mpRestore;
-    sal_uLong       mnActPos;
+    sal_uLong       mnActIndex;
     Disposal        meLastDisposal;
     bool            mbIsPaused;
     bool            mbIsMarked;
@@ -75,8 +75,8 @@ public:
                     ~AnimationRenderer();
 
     bool            matches(const OutputDevice* pOut, tools::Long nRendererId) const;
-    void            drawToPos( sal_uLong nPos );
-    void            draw( sal_uLong nPos, VirtualDevice* pVDev=nullptr );
+    void            drawToIndex( sal_uLong nIndex );
+    void            draw( sal_uLong nIndex, VirtualDevice* pVDev=nullptr );
     void            repaint();
     AInfo*          createAInfo() const;
 
