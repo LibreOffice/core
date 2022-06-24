@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c837b3c7_c3ae6c01",
+        "filename": "svx/uiconfig/ui/defaultshapespanel.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-24T12:19:23Z",
+      "side": 1,
+      "message": "I\u0027m generally not a big fan of putting in a hard-coded pixel width because the width of other things in the UI tends to depend on the width of locale-dependent text and the size of fonts etc is theme related so a number like this mightn\u0027t work universally.\n\nWhat can work better is some explicit code to set the width in terms of average character width. Like:\nxWidget-\u003eset_size_request(xWidget-\u003eget_approximate_digit_width() * 30, -1);\nand there a lot of places we do that.",
+      "revId": "2ca6b8d96e38dc0cb5d5d2fe203e4279c000610b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
