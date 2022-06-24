@@ -1437,6 +1437,7 @@ Reference< XShape > const & Shape::createAndInsert(
             }
             else if (mbTextBox)
             {
+                // ToDo: TextBox has no rotated text, so indroduce it only if really needed. tdf#82627
                 aShapeProps.setProperty(PROP_TextBox, true);
             }
 
@@ -1688,30 +1689,35 @@ Reference< XShape > const & Shape::createAndInsert(
                 sal_Int32 nTextCameraZRotation = getTextBody()->get3DProperties().maCameraRotation.mnRevolution.value_or(0);
                 mpCustomShapePropertiesPtr->setTextCameraZRotateAngle( nTextCameraZRotation / 60000 );
 
-                sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.value_or( 0 ) );
+                // TextPreRotateAngle. Text rotates inside the text area.
+                sal_Int32 nTextPreRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moTextPreRotation.value_or( 0 ) );
 
-                nTextRotateAngle -= mnDiagramRotation;
-                /* OOX measures text rotation clockwise in 1/60000th degrees,
-                   relative to the containing shape. setTextRotateAngle wants degrees anticlockwise. */
-                nTextRotateAngle = -1 * nTextRotateAngle / 60000;
+                nTextPreRotateAngle -= mnDiagramRotation;
 
+                // TextRotateAngle. The text area rotates.
+                sal_Int32 nTextAreaRotateAngle = getTextBody()->getTextProperties().moTextAreaRotation.value_or(0);
                 if (getTextBody()->getTextProperties().moUpright)
                 {
-                    // When upright is set, we want the text without any rotation.
-                    // But if we set 0 here, the text is still rotated if the
-                    // shape containing it is rotated.
-                    // Hence, we rotate the text into the opposite direction of
-                    // the rotation of the shape, by as much as the shape was rotated.
-                    mpCustomShapePropertiesPtr->setTextRotateAngle((mnRotation / 60000) + nTextRotateAngle);
-                    // Also put the initial angles away in a GrabBag.
+                    // When upright is set, any text area transformation and shape rotation is ignored
+                    // in MS Office. To simulate this behaviour, we rotate the text area into the
+                    // opposite direction of the shape rotation by as much as the shape was rotated
+                    // and so compensate the shape rotation, which is added in rendering.
+                    nTextAreaRotateAngle = -mnRotation;
+                    // If 45° <= shape rotation < 135° or 225° <= shape rotation < 315°,
+                    // then MS Office adds an additional 90° rotation to the text area.
+                    const sal_Int32 nDeg(mnRotation / 60000);
+                    if ((nDeg >= 45 && nDeg < 135) || (nDeg >= 225 && nDeg < 315))
+                    {
+                        nTextAreaRotateAngle += 5400000;
+                        nTextPreRotateAngle -= 5400000; // compensate the addional text area rotation
+                    }
                     putPropertyToGrabBag("Upright", Any(true));
-                    putPropertyToGrabBag("nShapeRotationAtImport", Any(mnRotation / 60000));
-                    putPropertyToGrabBag("nTextRotationAtImport", Any(nTextRotateAngle));
                 }
-                else
-                {
-                    mpCustomShapePropertiesPtr->setTextRotateAngle(nTextRotateAngle);
-                }
+                /* OOX measures text rotation clockwise in 1/60000th degrees,
+                   relative to the containing shape. set*Angle wants degrees counter-clockwise. */
+                mpCustomShapePropertiesPtr->setTextRotateAngle(-nTextPreRotateAngle / 60000);
+                if (nTextAreaRotateAngle != 0)
+                    mpCustomShapePropertiesPtr->setTextAreaRotateAngle(-nTextAreaRotateAngle / 60000);
 
                 auto sHorzOverflow = getTextBody()->getTextProperties().msHorzOverflow;
                 if (!sHorzOverflow.isEmpty())

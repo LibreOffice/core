@@ -65,7 +65,7 @@ void TextBodyProperties::pushVertSimulation()
         maPropertyMap.setProperty( PROP_TextHorizontalAdjust, TextHorizontalAdjust_CENTER);
 }
 
-/* Push text distances / insets, taking into consideration Shape Rotation */
+/* Push text distances / insets, taking into consideration text rotation */
 void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
 {
     for (auto & rValue : maTextDistanceValues)
@@ -79,13 +79,16 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
         PROP_TextLowerDistance
     };
 
-    switch (moRotation.value_or(0))
+    switch (moTextPreRotation.value_or(0))
     {
         case 90*1*60000: nOff = 3; break;
         case 90*2*60000: nOff = 2; break;
         case 90*3*60000: nOff = 1; break;
         default: break;
     }
+
+    if (moVert && moVert.value() == XML_eaVert)
+        nOff = (nOff + 3) % aProps.size();
 
     for (size_t i = 0; i < aProps.size(); i++)
     {
@@ -100,16 +103,11 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
         if (nOff == 1 && moTextOffUpper)
             nVal = *moTextOffUpper;
 
-
         if (nOff == 2 && moTextOffRight)
             nVal = *moTextOffRight;
 
         if (nOff == 3 && moTextOffLower)
             nVal = *moTextOffLower;
-
-
-        if( nVal < 0 )
-            nVal = 0;
 
         sal_Int32 nTextOffsetValue = nVal;
 

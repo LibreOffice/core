@@ -839,7 +839,7 @@ void SdImportTest::testN862510_2()
         CPPUNIT_ASSERT( pGrpObj );
         SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>( pGrpObj->GetSubList()->GetObj( 1 ) );
         CPPUNIT_ASSERT( pObj );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong Text Rotation!", 90.0, pObj->GetExtraTextRotation( true ) );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong Text Rotation!", 90.0, pObj->GetExtraTextRotation( false ) );
     }
 
     xDocShRef->DoClose();
@@ -1231,10 +1231,10 @@ void SdImportTest::testBnc870237()
     const SdrObjGroup* pGroupObj = dynamic_cast<SdrObjGroup*>( pPage->GetObj( 0 ) );
     const SdrObject* pObj = pGroupObj->GetSubList()->GetObj( 1 );
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST).GetValue());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(9919), pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST).GetValue());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST).GetValue());
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(-158), pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(9760), pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(-158), pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(-158), pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST).GetValue());
 
     xDocShRef->DoClose();
 }
@@ -1836,7 +1836,7 @@ void SdImportTest::testTdf93830()
 
     sal_Int32 nTextLeftDistance = 0;
     xPropSet->getPropertyValue( "TextLeftDistance" ) >>= nTextLeftDistance;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4152), nTextLeftDistance);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4024), nTextLeftDistance);
 
     xDocShRef->DoClose();
 }

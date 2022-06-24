@@ -31,6 +31,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 
@@ -539,6 +540,68 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeTint)
     // i.e. we remembered the theme index, without being able to remember the tint effect, leading
     // to a bad background color.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(-1), nFillColorTheme);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testVert270AndTextRot)
+{
+    // tdf##149551. The document contains a shape with attributes 'rot="720000"' and 'vert="vert270"'
+    // of the <bodyPr> element. Without the fix the simulation of vert270 had overwritten the text
+    // rotation angle and thus 'rot'="720000" was lost.
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf149551_vert270AndTextRot.pptx";
+    load(aURL);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeoPropSeq;
+    comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
+
+    // Without the fix the property "TextRotateAngle" does not exist.
+    comphelper::SequenceAsHashMap::iterator it = aGeoPropMap.find("TextRotateAngle");
+    CPPUNIT_ASSERT(it != aGeoPropMap.end());
+    sal_Int32 nAngle;
+    // MS 720000 clockwise -> ODF -12deg counter-clockwise
+    it->second >>= nAngle;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-12), nAngle);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTextRot)
+{
+    // tdf#149551 The document contains a shape with attribute 'rot="720000"' of the <bodyPr> element.
+    // Without fix, the text rotation angle was saved in "TextPreRotateAngle" instead of
+    // "TextRotateAngle". That resulted in unrotated but sheared text.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf149551_TextRot.pptx";
+    load(aURL);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeoPropSeq;
+    comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
+
+    // Without the fix the property "TextRotateAngle" does not exist.
+    comphelper::SequenceAsHashMap::iterator it = aGeoPropMap.find("TextRotateAngle");
+    CPPUNIT_ASSERT(it != aGeoPropMap.end());
+    sal_Int32 nAngle;
+    // MS 720000 clockwise -> ODF -12deg counter-clockwise
+    it->second >>= nAngle;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-12), nAngle);
+
+    // Because writing mode is LR_TB, the property "TextPreRotateAngle" may missing, or in case it
+    // exists, its value must be 0. Without fix it had value -12.
+    it = aGeoPropMap.find("TextPreRotateAngle");
+    if (it != aGeoPropMap.end())
+    {
+        it->second >>= nAngle;
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nAngle);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

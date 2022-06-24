@@ -1689,7 +1689,7 @@ void SdImportTestSmartArt::testTdf134221()
     CPPUNIT_ASSERT(xShapeB.is());
     uno::Reference<beans::XPropertySet> xTxtProps(xShapeB, uno::UNO_QUERY_THROW);
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(736),
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-248),
                          xTxtProps->getPropertyValue("TextUpperDistance").get<sal_Int32>());
 
     xDocShRef->DoClose();

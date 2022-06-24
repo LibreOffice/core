@@ -274,9 +274,9 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                     // do not overlap text unless the rotation is 0 in xml
                     bool bTextOverlap = false;
                     if (mrModel.mxTextProp.is()
-                        && mrModel.mxTextProp->getTextProperties().moRotation.has_value())
+                        && mrModel.mxTextProp->getTextProperties().moTextAreaRotation.has_value())
                         bTextOverlap
-                            = mrModel.mxTextProp->getTextProperties().moRotation.value() == 0;
+                            = mrModel.mxTextProp->getTextProperties().moTextAreaRotation.value() == 0;
                     aAxisProp.setProperty(PROP_TextOverlap, bTextOverlap);
                     /* do not break text into several lines unless the rotation is 0 degree,
                        or the rotation is 90 degree and the inner size of the chart is not fixed,

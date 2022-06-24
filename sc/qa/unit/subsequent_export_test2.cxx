@@ -2203,10 +2203,10 @@ void ScExportTest2::testTdf91251_missingOverflowRoundtrip()
 
 void ScExportTest2::testTdf137000_handle_upright()
 {
-    // tdf#106197 When exporting the "upright" attribute, we must set
-    // TextPreRotateAngle to 0.
-    // (Upright is an xml attribute of xdr:txBody/a:bodyPr. It is set when
-    // in a textbox menu we choose: do not rotate this element.)
+    // Upright is an xml attribute of xdr:txBody/a:bodyPr. It is set when in a textbox menu we
+    // choose, 'do not rotate this element'. Implementations are in tdf#106197 with followup
+    // tdf#137000. tdf#149538, tdf#149551 improve the implementation to export 'upright' instead
+    // of workaround 'rot'.
     ScDocShellRef xShell = loadDoc(u"tdf137000_export_upright.", FORMAT_XLSX);
 
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
@@ -2214,8 +2214,7 @@ void ScExportTest2::testTdf137000_handle_upright()
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
     CPPUNIT_ASSERT(pDrawing);
 
-    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr", "rot",
-                "-5400000");
+    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr", "upright", "1");
 }
 
 void ScExportTest2::testTdf126305_DataValidatyErrorAlert()

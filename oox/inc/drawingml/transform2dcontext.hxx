@@ -20,6 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TRANSFORM2DCONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_TRANSFORM2DCONTEXT_HXX
 
+#include <optional>
+
 #include <oox/core/contexthandler2.hxx>
 
 namespace oox::drawingml {
@@ -37,6 +39,9 @@ public:
 private:
     Shape&              mrShape;
     bool                mbtxXfrm;
+    std::optional<sal_Int32> mno_txXfrmRot;
+    std::optional<sal_Int32> mno_txXfrmOffX;
+    std::optional<sal_Int32> mno_txXfrmOffY;
 };
 
 } // namespace oox::drawingml

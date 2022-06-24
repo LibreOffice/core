@@ -770,6 +770,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148784StretchCommandVW)
               .toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchY", nHalfHeight, nHR);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf149551VertPadding)
+{
+    // The document has shape[1] with attribute vert="vert270" and shape[2] with vert="vert". The text
+    // has paddings lIns="720000"=2cm, tIns="360000"=1cm, rIns="0" and bIns="0".
+    // After load and save the paddings were rotated and a 90deg text rotation was added.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf149551_vert_and_padding.pptx";
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    // Verify the markup. The values must be the same as in the original file.
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    for (sal_Int32 i = 1; i <= 2; i++)
+    {
+        OString sElement = "//p:spTree/p:sp[" + OString::number(i) + "]/p:txBody/a:bodyPr";
+        assertXPath(pXmlDoc, sElement, "lIns", "720000");
+        assertXPath(pXmlDoc, sElement, "tIns", "360000");
+        assertXPath(pXmlDoc, sElement, "rIns", "0");
+        assertXPath(pXmlDoc, sElement, "bIns", "0");
+        assertXPathNoAttribute(pXmlDoc, sElement, "rot");
+    }
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

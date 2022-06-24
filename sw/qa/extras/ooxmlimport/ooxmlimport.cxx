@@ -1361,7 +1361,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo87488)
         CPPUNIT_ASSERT_EQUAL(props->getPropertyValue("RotateAngle"),
                              uno::Any(sal_Int32(270 * 100)));
         comphelper::SequenceAsHashMap geom(props->getPropertyValue("CustomShapeGeometry"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(90), geom["TextPreRotateAngle"].get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(90), geom["TextRotateAngle"].get<sal_Int32>());
     }
 }
 
