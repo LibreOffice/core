@@ -282,6 +282,18 @@ void Animation::ImplRestartTimer(sal_uLong nTimeout)
     maTimer.Start();
 }
 
+std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems()
+{
+    std::vector<std::unique_ptr<AnimationData>> aDataItems;
+
+    for (auto const& rItem : maRenderers)
+    {
+        aDataItems.emplace_back(rItem->CreateAnimationData());
+    }
+
+    return aDataItems;
+}
+
 IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     const size_t nAnimCount = maFrames.size();
@@ -292,15 +304,10 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
         if (maNotifyLink.IsSet())
         {
-            std::vector<std::unique_ptr<AnimationData>> aDataItems;
-            // create AnimationData-List
-            for (auto const& i : maRenderers)
-                aDataItems.emplace_back(i->CreateAnimationData());
-
             maNotifyLink.Call(this);
 
             // set view state from AnimationData structure
-            for (auto& pDataItem : aDataItems)
+            for (auto& pDataItem : CreateAnimationDataItems())
             {
                 AnimationRenderer* pRenderer = nullptr;
                 if (!pDataItem->mpRendererData)
