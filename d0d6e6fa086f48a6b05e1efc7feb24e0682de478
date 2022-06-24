@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0d46548_b0bb8655",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-06-24T19:14:25Z",
+      "side": 1,
+      "message": "Note: Verified by Jenkins on all platforms in the last two (rebased) patch set, also in the run associated to tdf#149710, which was based on this commit.",
+      "revId": "d0d6e6fa086f48a6b05e1efc7feb24e0682de478",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
