@@ -197,7 +197,7 @@ void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const Graphic
 {
     LineProperties& rLP = rShape.getLineProperties();
     // no fill has the same effect as no border so skip it
-    if (rLP.maLineFill.moFillType.value() == XML_noFill)
+    if (rLP.maLineFill.moFillType.has_value() && rLP.maLineFill.moFillType.value() == XML_noFill)
         return;
 
     if (rLP.moLineWidth.has_value())
