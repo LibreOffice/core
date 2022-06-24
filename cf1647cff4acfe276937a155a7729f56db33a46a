@@ -34,6 +34,24 @@
       "parentUuid": "1e3cf967_2e94bcb3",
       "revId": "cf1647cff4acfe276937a155a7729f56db33a46a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dbc23c6_6972e434",
+        "filename": "basic/qa/basic_coverage/test_non_ascii_names.bas",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-06-24T06:01:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff11a810_0427a666",
+      "revId": "cf1647cff4acfe276937a155a7729f56db33a46a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
