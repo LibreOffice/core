@@ -24,6 +24,11 @@
 #include <svx/unopage.hxx>
 #include <vcl/virdev.hxx>
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <sfx2/viewsh.hxx>
+#include <svx/svdview.hxx>
+#include <svx/sdr/table/tablecontroller.hxx>
+#include <editeng/editobj.hxx>
 
 using namespace ::com::sun::star;
 
@@ -98,6 +103,39 @@ CPPUNIT_TEST_FIXTURE(Test, testTableShadowBlur)
     // as well, while the rendering transparency should be based on the transparency of the shadow
     // itself and the transparency of the cell fill.
     assertXPath(pDocument, "//objectinfo/unifiedtransparence[1]", "transparence", "80");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSvxTableControllerSetAttrToSelectedShape)
+{
+    // Given a document with a table shape, editing cell text:
+    getComponent() = loadFromDesktop("private:factory/simpress",
+                                     "com.sun.star.presentation.PresentationDocument");
+    uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue("Rows", sal_Int32(2)),
+            comphelper::makePropertyValue("Columns", sal_Int32(2)) };
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pDrawPage);
+    SdrPage* pSdrPage = pDrawPage->GetSdrPage();
+    auto pSdrObject
+        = dynamic_cast<sdr::table::SdrTableObj*>(pSdrPage->GetObj(pSdrPage->GetObjCount() - 1));
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    pSdrView->SdrBeginTextEdit(pSdrObject);
+    CPPUNIT_ASSERT(pSdrView->IsTextEdit());
+    const EditTextObject& rEdit = pSdrObject->getText(0)->GetOutlinerParaObject()->GetTextObject();
+    SfxItemSet aSet(rEdit.GetParaAttribs(0));
+    auto pTableController
+        = dynamic_cast<sdr::table::SvxTableController*>(pSdrView->getSelectionController().get());
+
+    // When applying attributes which only affect the cell text, not the table shape:
+    pTableController->SetAttrToSelectedShape(aSet);
+
+    // Then make sure the text edit is not ended:
+    CPPUNIT_ASSERT(pSdrView->IsTextEdit());
 }
 }
 
