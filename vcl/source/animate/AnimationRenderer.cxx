@@ -39,7 +39,7 @@ AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
         maClip          ( mpRenderContext->GetClipRegion() ),
         mpBackground    ( VclPtr<VirtualDevice>::Create() ),
         mpRestore       ( VclPtr<VirtualDevice>::Create() ),
-        mnActPos        ( 0 ),
+        mnActIndex      ( 0 ),
         meLastDisposal  ( Disposal::Back ),
         mbIsPaused      ( false ),
         mbIsMarked      ( false ),
@@ -79,7 +79,7 @@ AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
     mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSzPix);
 
     // Initialize drawing to actual position
-    drawToPos( mpParent->ImplGetCurPos() );
+    drawToIndex( mpParent->ImplGetCurPos() );
 
     // If first frame OutputDevice is set, update variables now for real OutputDevice
     if( pFirstFrameOutDev )
@@ -139,7 +139,7 @@ void AnimationRenderer::getPosSize( const AnimationBitmap& rAnimationBitmap, Poi
         rPosPix.setY( maSzPix.Height() - 1 - aPt2.Y() );
 }
 
-void AnimationRenderer::drawToPos( sal_uLong nPos )
+void AnimationRenderer::drawToIndex( sal_uLong nIndex )
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
@@ -157,9 +157,9 @@ void AnimationRenderer::drawToPos( sal_uLong nPos )
         xOldClip = pRenderContext->GetClipRegion();
 
     aVDev->SetOutputSizePixel( maSzPix, false );
-    nPos = std::min( nPos, static_cast<sal_uLong>(mpParent->Count()) - 1 );
+    nIndex = std::min( nIndex, static_cast<sal_uLong>(mpParent->Count()) - 1 );
 
-    for( sal_uLong i = 0; i <= nPos; i++ )
+    for( sal_uLong i = 0; i <= nIndex; i++ )
         draw( i, aVDev.get() );
 
     if (xOldClip)
@@ -173,7 +173,7 @@ void AnimationRenderer::drawToPos( sal_uLong nPos )
         pRenderContext->SetClipRegion(*xOldClip);
 }
 
-void AnimationRenderer::draw( sal_uLong nPos, VirtualDevice* pVDev )
+void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
@@ -198,8 +198,8 @@ void AnimationRenderer::draw( sal_uLong nPos, VirtualDevice* pVDev )
         Size                    aSizePix;
         Size                    aBmpSizePix;
         const sal_uLong             nLastPos = mpParent->Count() - 1;
-        mnActPos = std::min( nPos, nLastPos );
-        const AnimationBitmap&  rAnimationBitmap = mpParent->Get( static_cast<sal_uInt16>( mnActPos ) );
+        mnActIndex = std::min( nIndex, nLastPos );
+        const AnimationBitmap&  rAnimationBitmap = mpParent->Get( static_cast<sal_uInt16>( mnActIndex ) );
 
         getPosSize( rAnimationBitmap, aPosPix, aSizePix );
 
@@ -238,7 +238,7 @@ void AnimationRenderer::draw( sal_uLong nPos, VirtualDevice* pVDev )
             pDev = pVDev;
 
         // restore background after each run
-        if( !nPos )
+        if( !nIndex )
         {
             meLastDisposal = Disposal::Back;
             maRestPt = Point();
@@ -303,7 +303,7 @@ void AnimationRenderer::repaint()
     mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSzPix);
 
     mbIsPaused = false;
-    drawToPos( mnActPos );
+    drawToIndex( mnActIndex );
     mbIsPaused = bOldPause;
 }
 
