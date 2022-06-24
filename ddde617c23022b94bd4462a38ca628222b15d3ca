@@ -16,6 +16,24 @@
       "message": "or perhaps  https://gerrit.libreoffice.org/c/core/+/136404 ?",
       "revId": "ddde617c23022b94bd4462a38ca628222b15d3ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "290db17e_ead81f28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-24T18:45:03Z",
+      "side": 1,
+      "message": "Whatever you prefer/want. I don\u0027t have enthusiasm myself for adding unlocks/locks to each code path that turns out to need it as we discover them. Could push this one for 7-4/7-3 and do the other for trunk.",
+      "parentUuid": "62201221_772a34b0",
+      "revId": "ddde617c23022b94bd4462a38ca628222b15d3ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
