@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2004da4_1af25529",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-24T06:08:43Z",
+      "side": 1,
+      "message": "License statement:\nhttps://lists.freedesktop.org/archives/libreoffice/2022-June/089082.html",
+      "revId": "6ec8ae2682c2d946f562c59c2e52a6cf28e3ddbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
