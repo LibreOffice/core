@@ -103,6 +103,7 @@
       <menu:menuitem menu:label="setQ" menu:id=".uno:InsertCommandText?Text:string=setQ "/>
       <menu:menuitem menu:label="setR" menu:id=".uno:InsertCommandText?Text:string=setR "/>
       <menu:menuitem menu:label="setC" menu:id=".uno:InsertCommandText?Text:string=setC "/>
+      <menu:menuitem menu:label="setH" menu:id=".uno:InsertCommandText?Text:string=setH "/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:FunctionsMenu">

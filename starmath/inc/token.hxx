@@ -103,7 +103,7 @@ enum SmTokenType
     TRSUB,          TRSUP,          TCSUB,          TCSUP,          TLSUB,
     TLSUP,          TFROM,          TTO,            TUOPER,         TBOPER,
     // Set theory
-    TSETN,          TSETZ,          TSETQ,          TSETR,          TSETC,
+    TSETN,          TSETZ,          TSETQ,          TSETR,          TSETC,    TSETH,
     TIN,            TNOTIN,         TNI,            TEMPTYSET,      // Insideout
     TSUBSET,        TSUBSETEQ,      TSUPSET,        TSUPSETEQ,      // Subsupset
     TNSUBSET,       TNSUPSET,       TNSUBSETEQ,     TNSUPSETEQ,     // Not subsupset

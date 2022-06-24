@@ -193,6 +193,7 @@ sal_Unicode const MS_SETZ = 0x2124;
 sal_Unicode const MS_SETQ = 0x211A;
 sal_Unicode const MS_SETR = 0x211D;
 sal_Unicode const MS_SETC = 0x2102;
+sal_Unicode const MS_SETH = 0x210D;
 
 sal_Unicode const MS_PERCENT = 0x0025;
 

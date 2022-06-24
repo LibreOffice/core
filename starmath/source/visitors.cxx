@@ -2511,6 +2511,9 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case MS_SETC:
             Append(u"setC");
             break;
+        case MS_SETH:
+            Append(u"setH");
+            break;
         case MS_HBAR:
             Append(u"hbar");
             break;

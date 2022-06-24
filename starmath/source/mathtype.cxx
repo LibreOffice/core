@@ -243,6 +243,9 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
         case 0x2102:
             pC = " setC ";
             break;
+        case 0x210d:
+            pC = " setH ";
+            break;
         case 0x210f:
             pC = " hbar ";
             break;

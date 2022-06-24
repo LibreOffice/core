@@ -281,6 +281,7 @@ inline constexpr OUStringLiteral RID_UNDOFORMATNAME = u"Format";
 #define RID_SETQ                "setQ "
 #define RID_SETR                "setR "
 #define RID_SETC                "setC "
+#define RID_SETH                "setH "
 #define RID_WIDEHATX            "widehat {<?>} "
 #define RID_WIDETILDEX          "widetilde {<?>} "
 #define RID_WIDEVECX            "widevec {<?>} "

@@ -212,6 +212,7 @@ const SmTokenTableEntry aTokenTable[]
         { u"sans", TSANS, '\0', TG::Font, 0 },
         { u"serif", TSERIF, '\0', TG::Font, 0 },
         { u"setC", TSETC, MS_SETC, TG::Standalone, 5 },
+        { u"setH", TSETH, MS_SETH, TG::Standalone, 5 },
         { u"setminus", TSETMINUS, MS_BACKSLASH, TG::Product, 0 },
         { u"setN", TSETN, MS_SETN, TG::Standalone, 5 },
         { u"setQ", TSETQ, MS_SETQ, TG::Standalone, 5 },
@@ -1722,6 +1723,7 @@ std::unique_ptr<SmNode> SmParser5::DoTerm(bool bGroupNumberIdent)
         case TSETQ:
         case TSETR:
         case TSETC:
+        case TSETH:
         case THBAR:
         case TLAMBDABAR:
         case TBACKEPSILON:
