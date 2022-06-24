@@ -148,7 +148,7 @@ inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad
  */
 SVXCORE_DLLPUBLIC Degree100 GetAngle(const Point& rPnt);
 
-Degree100 NormAngle18000(Degree100 a); /// Normalize angle to -180.00..179.99
+SVXCORE_DLLPUBLIC Degree100 NormAngle18000(Degree100 a); /// Normalize angle to -180.00..179.99
 
 SVXCORE_DLLPUBLIC Degree100 NormAngle36000(Degree100 a); /// Normalize angle to 0.00..359.99
 
