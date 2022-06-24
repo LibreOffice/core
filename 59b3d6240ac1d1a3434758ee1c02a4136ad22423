@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "89ff0ec6_7ab90166",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-24T08:11:52Z",
+      "side": 1,
+      "message": "Do we really need to avoid this cost? The existing method is in line with others taking defaults like getInteger, and empty OUString ctor should be cheap (and if it shows, we may resume your abandoned (?) change to optimize it more?). The new method makes the already bloated API look inconsistent.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 30
+      },
+      "revId": "59b3d6240ac1d1a3434758ee1c02a4136ad22423",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a8e651dd_225dc6d2",
