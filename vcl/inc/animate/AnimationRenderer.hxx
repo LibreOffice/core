@@ -43,8 +43,6 @@ struct AnimationData
 
 class VCL_DLLPUBLIC AnimationRenderer
 {
-    friend class Animation;
-
 public:
                     AnimationRenderer( Animation* pParent, OutputDevice* pOut,
                                   const Point& rPt, const Size& rSz, sal_uLong nRendererId,
