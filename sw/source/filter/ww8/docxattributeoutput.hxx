@@ -1072,6 +1072,7 @@ public:
     bool HasPostitFields() const;
     enum class hasResolved { no, yes };
     hasResolved WritePostitFields();
+    void WriteFederatedId();
     void WritePostItFieldsResolved();
 
     /// VMLTextExport

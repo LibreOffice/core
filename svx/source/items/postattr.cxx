@@ -25,6 +25,7 @@ SfxPoolItem* SvxPostItAuthorItem::CreateDefault() { return new SvxPostItAuthorIt
 SfxPoolItem* SvxPostItDateItem::CreateDefault() { return new SvxPostItDateItem(0); }
 SfxPoolItem* SvxPostItTextItem::CreateDefault() { return new SvxPostItTextItem(0); }
 SfxPoolItem* SvxPostItIdItem::CreateDefault() { return new SvxPostItIdItem(0); }
+SfxPoolItem* SvxPostItFederatedIdItem::CreateDefault() { return new SvxPostItFederatedIdItem(0); }
 
 SvxPostItAuthorItem::SvxPostItAuthorItem( sal_uInt16 _nWhich )
 {
@@ -150,6 +151,16 @@ SvxPostItIdItem::SvxPostItIdItem( sal_uInt16 _nWhich )
 SvxPostItIdItem* SvxPostItIdItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItIdItem( *this );
+}
+
+SvxPostItFederatedIdItem::SvxPostItFederatedIdItem( sal_uInt16 _nWhich )
+{
+    SetWhich( _nWhich );
+}
+
+SvxPostItFederatedIdItem* SvxPostItFederatedIdItem::Clone( SfxItemPool * ) const
+{
+    return new SvxPostItFederatedIdItem( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

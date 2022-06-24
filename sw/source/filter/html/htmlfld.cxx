@@ -640,7 +640,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const char *pTag )
 
     SwPostItField aPostItField(
                     static_cast<SwPostItFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Postit )),
-                    OUString(), aComment, OUString(), OUString(), DateTime(DateTime::SYSTEM));
+                    OUString(), aComment, OUString(), OUString(), OUString(), DateTime(DateTime::SYSTEM));
     InsertAttr( SwFormatField( aPostItField ), false );
 
     if( bMoveFwd )

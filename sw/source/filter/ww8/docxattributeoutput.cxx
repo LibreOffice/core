@@ -8735,6 +8735,29 @@ DocxAttributeOutput::hasResolved DocxAttributeOutput::WritePostitFields()
     return eResult;
 }
 
+void DocxAttributeOutput::WriteFederatedId()
+{
+    std::set< OUString > uniqueAuthor;
+    for (auto& [f, data] : m_postitFields)
+    {
+        OUString federatedId = f->GetFederatedId();
+        OUString author = f->GetPar1();
+        if (federatedId.isEmpty() || uniqueAuthor.find(author) != uniqueAuthor.end())
+            continue;
+
+        uniqueAuthor.insert(author);
+        OUString userId = federatedId.getToken(0, '@');
+        OUString providerId = federatedId.getToken(1, '@');
+
+        m_pSerializer->startElementNS( XML_w15, XML_person,
+        FSNS( XML_w15, XML_author ), author);
+        m_pSerializer->singleElementNS( XML_w15, XML_presenceInfo,
+        FSNS( XML_w15, XML_providerId ), providerId,
+        FSNS( XML_w15, XML_userId ), userId);
+        m_pSerializer->endElementNS(XML_w15, XML_person);
+    }
+}
+
 void DocxAttributeOutput::WritePostItFieldsResolved()
 {
     for (auto& [f, data] : m_postitFields)

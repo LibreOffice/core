@@ -1043,6 +1043,7 @@ struct SwFieldProperties_Impl
     OUString    sPar2;
     OUString    sPar3;
     OUString    sPar4;
+    OUString    sPar5;
     Date            aDate;
     double          fDouble;
     uno::Sequence<beans::PropertyValue> aPropSeq;
@@ -1382,6 +1383,7 @@ void SAL_CALL SwXTextField::attach(
                         m_pImpl->m_pProps->sPar2, // content
                         m_pImpl->m_pProps->sPar3, // author's initials
                         m_pImpl->m_pProps->sPar4, // name
+                        m_pImpl->m_pProps->sPar5, // FederatedId
                         aDateTime,
                         m_pImpl->m_pProps->bBool1 // resolvedflag
                     );
@@ -2222,6 +2224,9 @@ SwXTextField::setPropertyValue(
             break;
         case FIELD_PROP_PAR4:
             rValue >>= m_pImpl->m_pProps->sPar4;
+            break;
+        case FIELD_PROP_PAR5:
+            rValue >>= m_pImpl->m_pProps->sPar5;
             break;
         case FIELD_PROP_FORMAT:
             rValue >>= m_pImpl->m_pProps->nFormat;

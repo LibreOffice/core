@@ -71,6 +71,7 @@ struct SwInsertField_Data
     sal_uInt16 m_nSubType;
     const OUString m_sPar1;
     const OUString m_sPar2;
+    const OUString m_sPar3;
     sal_uInt32 m_nFormatId;
     SwWrtShell* m_pSh;
     sal_Unicode m_cSeparator;
@@ -88,6 +89,19 @@ struct SwInsertField_Data
         m_nSubType(nSub),
         m_sPar1(rPar1),
         m_sPar2(rPar2),
+        m_nFormatId(nFormatId),
+        m_pSh(pShell),
+        m_cSeparator(cSep),
+        m_bIsAutomaticLanguage(bIsAutoLanguage),
+        m_pParent(nullptr) {}
+
+    SwInsertField_Data(SwFieldTypesEnum nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2, const OUString& rPar3,
+                    sal_uInt32 nFormatId, SwWrtShell* pShell = nullptr, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :
+        m_nTypeId(nType),
+        m_nSubType(nSub),
+        m_sPar1(rPar1),
+        m_sPar2(rPar2),
+        m_sPar3(rPar3),
         m_nFormatId(nFormatId),
         m_pSh(pShell),
         m_cSeparator(cSep),
