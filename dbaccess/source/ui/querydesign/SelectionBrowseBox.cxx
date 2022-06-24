@@ -2088,8 +2088,8 @@ sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
 {
     sal_Int32 nErg(0);
     // only the first 11 rows are interesting
-    sal_Int32 const nSize = SAL_N_ELEMENTS(nVisibleRowMask);
-    for(sal_Int32 i=0;i<nSize;i++)
+    std::size_t const nSize = std::size(nVisibleRowMask);
+    for(std::size_t i=0;i<nSize;i++)
     {
         if(!m_bVisibleRow[i])
             nErg |= nVisibleRowMask[i];
@@ -2100,8 +2100,8 @@ sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
 void OSelectionBrowseBox::SetNoneVisibleRow(sal_Int32 nRows)
 {
     // only the first 11 rows are interesting
-    sal_Int32 const nSize = SAL_N_ELEMENTS(nVisibleRowMask);
-    for(sal_Int32 i=0;i< nSize;i++)
+    std::size_t const nSize = std::size(nVisibleRowMask);
+    for(std::size_t i=0;i< nSize;i++)
         m_bVisibleRow[i] = !(nRows & nVisibleRowMask[i]);
 }
 

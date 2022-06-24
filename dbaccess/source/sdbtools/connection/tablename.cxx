@@ -192,7 +192,7 @@ namespace sdbtools
 
             bool found = false;
             size_t i = 0;
-            for ( ; i < SAL_N_ELEMENTS( TypeTable ) && !found; ++i )
+            for ( ; i < std::size(TypeTable) && !found; ++i )
                 if ( TypeTable[i].nCompositionType == _nType )
                     found = true;
             if ( !found )
