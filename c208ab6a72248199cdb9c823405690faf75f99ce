@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b5a80ea_71838569",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-06-24T07:48:32Z",
+      "side": 1,
+      "message": "Hi Tomaz, fixed a problem caused by a rebase conflict. Should be nice and simple. ",
+      "revId": "c208ab6a72248199cdb9c823405690faf75f99ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
