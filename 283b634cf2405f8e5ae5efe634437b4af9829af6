@@ -122,6 +122,24 @@
       "parentUuid": "b5ba63cf_bf80885d",
       "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "541b5971_cbcabecc",
+        "filename": "sc/source/filter/orcus/filterdetect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-06-24T03:41:31Z",
+      "side": 1,
+      "message": "Just to be clear, the detection code itself should only read the first part of the stream, not the entire stream. But the stream itself needs to be fully available in the virtual memory space, if that makes sense.  If you memory-map the stream, it should only load the part of the stream that gets parsed by the detection code, thereby avoiding having to load the entire stream in memory.  But if the stream is not memory-mapped, then it may cause a memory-usage spike for a large file.",
+      "parentUuid": "a8a95b00_6148515e",
+      "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
