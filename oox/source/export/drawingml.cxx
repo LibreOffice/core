@@ -125,6 +125,7 @@
 #include <editeng/unonrule.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
+#include <svx/svdtrans.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <drawingml/presetgeometrynames.hxx>
@@ -3278,9 +3279,6 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     uno::Reference<drawing::XShape> xShape(rXIface, UNO_QUERY);
     uno::Reference<XPropertySet> rXPropSet(rXIface, UNO_QUERY);
 
-    sal_Int32 nTextPreRotateAngle = 0;
-    double nTextRotateAngle = 0;
-
     constexpr const sal_Int32 constDefaultLeftRightInset = 254;
     constexpr const sal_Int32 constDefaultTopBottomInset = 127;
     sal_Int32 nLeft = constDefaultLeftRightInset;
@@ -3298,6 +3296,9 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         mAny >>= nTop;
     if (GetProperty(rXPropSet, "TextLowerDistance"))
         mAny >>= nBottom;
+
+    // ToDo: adapt inset and alignment for vertical writing modes. MS Office has them physically
+    // to text area rectangle, LO has them relative to writing modes.
 
     // Transform the text distance values so they are compatible with OOXML insets
     if (xShape.is())
@@ -3331,7 +3332,6 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     if (GetProperty(rXPropSet, "TextWritingMode"))
     {
         WritingMode eMode;
-
         if( ( mAny >>= eMode ) && eMode == WritingMode_TB_RL )
         {
             sWritingMode = "eaVert";
@@ -3339,13 +3339,14 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         }
     }
 
-    bool bIsFontworkShape(IsFontworkShape(rXPropSet));
+    // read values from CustomShapeGeometry
     Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
     uno::Sequence<beans::PropertyValue> aTextPathSeq;
     bool bScaleX(false);
     OUString sShapeType("non-primitive");
-    // ToDo move to InteropGrabBag
     OUString sMSWordPresetTextWarp;
+    sal_Int32 nTextPreRotateAngle = 0; // degree
+    std::optional<Degree100> nTextRotateAngleDeg100; // text area rotation
 
     if (GetProperty(rXPropSet, "CustomShapeGeometry"))
     {
@@ -3354,23 +3355,16 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         {
             for ( const auto& rProp : std::as_const(aProps) )
             {
-                if ( rProp.Name == "TextPreRotateAngle" && ( rProp.Value >>= nTextPreRotateAngle ) )
-                {
-                    if ( nTextPreRotateAngle == -90 )
-                    {
-                        sWritingMode = "vert";
-                        bVertical = true;
-                    }
-                    else if ( nTextPreRotateAngle == -270 )
-                    {
-                        sWritingMode = "vert270";
-                        bVertical = true;
-                    }
-                }
+                if (rProp.Name == "TextPreRotateAngle")
+                     rProp.Value >>= nTextPreRotateAngle;
                 else if (rProp.Name == "AdjustmentValues")
                     rProp.Value >>= aAdjustmentSeq;
                 else if( rProp.Name == "TextRotateAngle" )
-                    rProp.Value >>= nTextRotateAngle;
+                {
+                    double fTextRotateAngle; // degree
+                    rProp.Value >>= fTextRotateAngle;
+                    nTextRotateAngleDeg100 = Degree100(std::lround(fTextRotateAngle * 100.0));
+                }
                 else if (rProp.Name == "Type")
                     rProp.Value >>= sShapeType;
                 else if (rProp.Name == "TextPath")
@@ -3419,6 +3413,39 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             }
         }
     }
+
+    // read InteropGrabBag if any
+    std::optional<OUString> sHorzOverflow;
+    std::optional<OUString> sVertOverflow;
+    bool bUpright = false;
+    std::optional<OString> isUpright;
+    if (rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    {
+        uno::Sequence<beans::PropertyValue> aGrabBag;
+        rXPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+        for (const auto& aProp : std::as_const(aGrabBag))
+        {
+            if (aProp.Name == "Upright")
+            {
+                aProp.Value >>= bUpright;
+                isUpright = OString(bUpright ? "1" : "0");
+            }
+            else if (aProp.Name == "horzOverflow")
+            {
+                OUString sValue;
+                aProp.Value >>= sValue;
+                sHorzOverflow = sValue;
+            }
+            else if (aProp.Name == "vertOverflow")
+            {
+                OUString sValue;
+                aProp.Value >>= sValue;
+                sVertOverflow = sValue;
+            }
+        }
+    }
+
+    bool bIsFontworkShape(IsFontworkShape(rXPropSet));
     OUString sPresetWarp(PresetGeometryTypeNames::GetMsoName(sShapeType));
     // ODF may have user defined TextPath, use "textPlain" as ersatz.
     if (sPresetWarp.isEmpty())
@@ -3427,6 +3454,48 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     bool bFromWordArt = !bScaleX
                         && ( sPresetWarp == "textArchDown" || sPresetWarp == "textArchUp"
                             || sPresetWarp == "textButton" || sPresetWarp == "textCircle");
+
+
+    std::optional<OString> sTextRotateAngleMSUnit;
+    if (bUpright)
+    {
+        Degree100 nShapeRotateAngleDeg100(0_deg100);
+        if ( GetProperty(rXPropSet, "RotateAngle"))
+            nShapeRotateAngleDeg100 = Degree100(mAny.get<sal_Int32>());
+        // Depending on shape rotation, the import has made 90deg changes to nTextPreRotateAngle
+        // and nTextAreaRotateAngle. Revert it.
+        if ((nShapeRotateAngleDeg100 > 4500_deg100 && nShapeRotateAngleDeg100 <= 13500_deg100)
+                || (nShapeRotateAngleDeg100 > 22500_deg100 && nShapeRotateAngleDeg100 <= 31500_deg100))
+        {
+            nTextRotateAngleDeg100 = nTextRotateAngleDeg100.value_or(0_deg100) + 9000_deg100;
+            nTextPreRotateAngle -= 90;
+        }
+        // If text is no longer upright, write 'rot' else write 'upright'.
+        Degree100 nAngleSum = nShapeRotateAngleDeg100 + nTextRotateAngleDeg100.value_or(0_deg100);
+        if (abs(NormAngle18000(nAngleSum)) >= 100_deg100) // consider inaccuracy from rounding
+        {
+            isUpright.reset();
+            if (nTextRotateAngleDeg100.has_value())
+                sTextRotateAngleMSUnit = oox::drawingml::calcRotationValue(nTextRotateAngleDeg100.value().get());
+        }
+    }
+    else if (nTextRotateAngleDeg100.has_value())
+        sTextRotateAngleMSUnit = oox::drawingml::calcRotationValue(nTextRotateAngleDeg100.value().get());
+
+    // detect not yet implemented writing modes, which are simulated with nTextPreRotateAngle
+    if (!sWritingMode)
+    {
+        if (nTextPreRotateAngle == -90)
+        {
+            sWritingMode = "vert";
+            bVertical = true;
+        }
+        else if (nTextPreRotateAngle == -270)
+        {
+            sWritingMode = "vert270";
+            bVertical = true;
+        }
+    }
 
     TextHorizontalAdjust eHorizontalAlignment( TextHorizontalAdjust_CENTER );
     bool bHorizontalCenter = false;
@@ -3459,9 +3528,6 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 pWrap = "square";
         }
 
-        std::optional<OUString> sHorzOverflow;
-        std::optional<OUString> sVertOverflow;
-        sal_Int32 nShapeRotateAngle = rXPropSet->getPropertyValue("RotateAngle").get<sal_Int32>() / 300;
         sal_Int16 nCols = 0;
         sal_Int32 nColSpacing = -1;
         if (GetProperty(rXPropSet, "TextColumns"))
@@ -3474,59 +3540,6 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 {
                     if (GetProperty(xProps, "AutomaticDistance"))
                         mAny >>= nColSpacing;
-                }
-            }
-        }
-
-        std::optional<OString> isUpright;
-        if (GetProperty(rXPropSet, "InteropGrabBag"))
-        {
-            if (rXPropSet->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
-            {
-                bool bUpright = false;
-                sal_Int32 nOldShapeRotation = 0;
-                sal_Int32 nOldTextRotation = 0;
-                uno::Sequence<beans::PropertyValue> aGrabBag;
-                rXPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-                for (const auto& aProp : std::as_const(aGrabBag))
-                {
-                    if (aProp.Name == "Upright")
-                    {
-                        aProp.Value >>= bUpright;
-                        isUpright = OString(bUpright ? "1" : "0");
-                    }
-                    else if (aProp.Name == "horzOverflow")
-                    {
-                        OUString sValue;
-                        aProp.Value >>= sValue;
-                        sHorzOverflow = sValue;
-                    }
-                    else if (aProp.Name == "vertOverflow")
-                    {
-                        OUString sValue;
-                        aProp.Value >>= sValue;
-                        sVertOverflow = sValue;
-                    }
-                }
-                if (bUpright)
-                {
-                    for (const auto& aProp : std::as_const(aGrabBag))
-                    {
-                        if (aProp.Name == "nShapeRotationAtImport")
-                            aProp.Value >>= nOldShapeRotation;
-                        else if (aProp.Name == "nTextRotationAtImport")
-                            aProp.Value >>= nOldTextRotation;
-                    }
-                    // So our shape with the textbox in it was not rotated.
-                    // Keep upright and make the preRotateAngle 0, it is an attribute
-                    // of textBodyPr and must be 0 when upright is true, otherwise
-                    // bad rotation happens in MSO.
-                    if (nShapeRotateAngle == nOldShapeRotation && nShapeRotateAngle == nOldTextRotation)
-                        nTextPreRotateAngle = 0;
-                    // So we rotated the shape, in this case lose upright and do
-                    // as LO normally does.
-                    else
-                        isUpright.reset();
                 }
             }
         }
@@ -3546,7 +3559,8 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                                XML_anchorCtr, sax_fastparser::UseIf("1", bHorizontalCenter),
                                XML_vert, sWritingMode,
                                XML_upright, isUpright,
-                               XML_rot, sax_fastparser::UseIf(oox::drawingml::calcRotationValue((nTextPreRotateAngle + nTextRotateAngle) * 100), (nTextPreRotateAngle + nTextRotateAngle) != 0));
+                               XML_rot, sTextRotateAngleMSUnit);
+
         if (bIsFontworkShape)
         {
             if (aAdjustmentSeq.hasElements())
