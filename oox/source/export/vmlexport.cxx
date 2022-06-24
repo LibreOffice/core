@@ -1009,21 +1009,23 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 #if OSL_DEBUG_LEVEL > 0
                 const size_t opt_nProp_size(opt.nProp.size());
                 const sal_uInt8 opt_nProp_empty(0);
-                fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%zu, %p]\n",
-                        nId,
-                        opt.nPropValue,
-                        opt_nProp_size,
-                        0 == opt_nProp_size ? &opt_nProp_empty : opt.nProp.data());
+                SAL_WARN( "oox.vml", "TODO VMLExport::Commit(), unimplemented id: " << nId
+                        << ", value: " << opt.nPropValue
+                        << ", data: [" << opt_nProp_size << ", "
+                        << (0 == opt_nProp_size ? &opt_nProp_empty : opt.nProp.data())
+                        << "]");
                 if ( opt.nProp.size() )
                 {
                     const sal_uInt8 *pIt = opt.nProp.data();
-                    fprintf( stderr, "    ( " );
+                    OStringBuffer buf;
+                    buf.append( "    ( " );
                     for ( int nCount = opt.nProp.size(); nCount; --nCount )
                     {
-                        fprintf( stderr, "%02x ", *pIt );
+                        buf.append( *pIt, 16 ).append(' ');
                         ++pIt;
                     }
-                    fprintf( stderr, ")\n" );
+                    buf.append( ")" );
+                    SAL_WARN("oox.vml", buf);
                 }
 #endif
                 break;
