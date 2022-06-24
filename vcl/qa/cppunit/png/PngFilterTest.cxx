@@ -45,6 +45,52 @@ class PngFilterTest : public test::BootstrapFixture
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }
 
+    // Tests that a pngs BitmapEx is the same after reading and
+    // after writing
+    void testImportExportPng(const OUString& sFileName)
+    {
+        SvFileStream aFileStream(getFullUrl(sFileName), StreamMode::READ);
+        SvMemoryStream aExportStream;
+        BitmapEx aImportedBitmapEx;
+        BitmapEx aExportedImportedBitmapEx;
+
+        bool bOpenOk = !aFileStream.GetError() && aFileStream.GetBufferSize() > 0;
+        CPPUNIT_ASSERT_MESSAGE(OString("Failed to open file: " + sFileName.toUtf8()).getStr(),
+                               bOpenOk);
+
+        // Read the test png from the file
+        {
+            vcl::PngImageReader aPngReader(aFileStream);
+            bool bReadOk = aPngReader.read(aImportedBitmapEx);
+            CPPUNIT_ASSERT_MESSAGE(
+                OString("Failed to read png from: " + sFileName.toUtf8()).getStr(), bReadOk);
+        }
+
+        // Write the imported png to a stream
+        {
+            vcl::PngImageWriter aPngWriter(aExportStream);
+            bool bWriteOk = aPngWriter.write(aImportedBitmapEx);
+            CPPUNIT_ASSERT_MESSAGE(OString("Failed to write png: " + sFileName.toUtf8()).getStr(),
+                                   bWriteOk);
+            aExportStream.Seek(0);
+        }
+
+        // Read the png again from the exported stream
+        {
+            vcl::PngImageReader aPngReader(aExportStream);
+            bool bReadOk = aPngReader.read(aExportedImportedBitmapEx);
+            CPPUNIT_ASSERT_MESSAGE(
+                OString("Failed to read exported png: " + sFileName.toUtf8()).getStr(), bReadOk);
+        }
+
+        // Compare imported and exported BitmapEx
+        // This compares pixel size, inner bitmap and alpha mask
+        bool bIsSame = (aExportedImportedBitmapEx == aImportedBitmapEx);
+        CPPUNIT_ASSERT_MESSAGE(
+            OString("Import->Export png test failed for png: " + sFileName.toUtf8()).getStr(),
+            bIsSame);
+    }
+
 public:
     PngFilterTest()
         : BootstrapFixture(true, false)
@@ -53,6 +99,7 @@ public:
     }
 
     void testPng();
+    void testPngSuite();
     void testMsGifInPng();
     void testPngRoundtrip8BitGrey();
     void testPngRoundtrip24();
@@ -61,6 +108,7 @@ public:
 
     CPPUNIT_TEST_SUITE(PngFilterTest);
     CPPUNIT_TEST(testPng);
+    CPPUNIT_TEST(testPngSuite);
     CPPUNIT_TEST(testMsGifInPng);
     CPPUNIT_TEST(testPngRoundtrip8BitGrey);
     CPPUNIT_TEST(testPngRoundtrip24);
@@ -244,6 +292,8 @@ void PngFilterTest::testPng()
         }
     }
 }
+
+void PngFilterTest::testPngSuite() {}
 
 void PngFilterTest::testMsGifInPng()
 {
