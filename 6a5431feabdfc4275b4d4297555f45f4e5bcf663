@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1681fb8_125db3fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-06-24T12:14:45Z",
+      "side": 1,
+      "message": "@Szücsi: very nice and useful fix! This can be a nice improvement for 7.4. Note: I\u0027ve found a regression, see the extended commit description, but we can fix that during the 7.4 bug fix releases. \n\n@Miki: many thanks for your review!",
+      "revId": "6a5431feabdfc4275b4d4297555f45f4e5bcf663",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
