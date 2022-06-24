@@ -45,6 +45,69 @@ class PngFilterTest : public test::BootstrapFixture
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }
 
+    // Tests that a pngs BitmapEx is the same after reading and
+    // after writing
+    void testImportExportPng(const OUString& sFileName)
+    {
+        SvFileStream aFileStream(getFullUrl(sFileName), StreamMode::READ);
+        SvMemoryStream aExportStream;
+        BitmapEx aImportedBitmapEx;
+        BitmapEx aExportedImportedBitmapEx;
+
+        bool bOpenOk = !aFileStream.GetError() && aFileStream.GetBufferSize() > 0;
+        CPPUNIT_ASSERT_MESSAGE(OString("Failed to open file: " + sFileName.toUtf8()).getStr(),
+                               bOpenOk);
+
+        // Read the test png from the file
+        {
+            vcl::PngImageReader aPngReader(aFileStream);
+            bool bReadOk = aPngReader.read(aImportedBitmapEx);
+            CPPUNIT_ASSERT_MESSAGE(
+                OString("Failed to read png from: " + sFileName.toUtf8()).getStr(), bReadOk);
+        }
+
+        // Write the imported png to a stream
+        {
+            vcl::PngImageWriter aPngWriter(aExportStream);
+            bool bWriteOk = aPngWriter.write(aImportedBitmapEx);
+            CPPUNIT_ASSERT_MESSAGE(OString("Failed to write png: " + sFileName.toUtf8()).getStr(),
+                                   bWriteOk);
+            aExportStream.Seek(0);
+        }
+
+        // Read the png again from the exported stream
+        {
+            vcl::PngImageReader aPngReader(aExportStream);
+            bool bReadOk = aPngReader.read(aExportedImportedBitmapEx);
+            CPPUNIT_ASSERT_MESSAGE(
+                OString("Failed to read exported png: " + sFileName.toUtf8()).getStr(), bReadOk);
+        }
+
+        // Compare imported and exported BitmapEx
+        // This compares pixel size, inner bitmap and alpha mask
+        bool bIsSame = (aExportedImportedBitmapEx == aImportedBitmapEx);
+        CPPUNIT_ASSERT_MESSAGE(
+            OString("Import->Export png test failed for png: " + sFileName.toUtf8()).getStr(),
+            bIsSame);
+    }
+
+    // Tests that aPngReader.read returns false on corrupted files
+    void testImportCorruptedPng(const OUString& sFileName)
+    {
+        SvFileStream aFileStream(getFullUrl(sFileName), StreamMode::READ);
+        BitmapEx aImportedBitmapEx;
+
+        bool bOpenOk = !aFileStream.GetError() && aFileStream.GetBufferSize() > 0;
+        CPPUNIT_ASSERT_MESSAGE(OString("Failed to open file: " + sFileName.toUtf8()).getStr(),
+                               bOpenOk);
+        vcl::PngImageReader aPngReader(aFileStream);
+        bool bReadOk = aPngReader.read(aImportedBitmapEx);
+        // Make sure this file was not read successfully
+        CPPUNIT_ASSERT_MESSAGE(
+            OString("Corrupted png should not be opened: " + sFileName.toUtf8()).getStr(),
+            !bReadOk);
+    }
+
 public:
     PngFilterTest()
         : BootstrapFixture(true, false)
@@ -53,6 +116,7 @@ public:
     }
 
     void testPng();
+    void testPngSuite();
     void testMsGifInPng();
     void testPngRoundtrip8BitGrey();
     void testPngRoundtrip24();
@@ -61,6 +125,7 @@ public:
 
     CPPUNIT_TEST_SUITE(PngFilterTest);
     CPPUNIT_TEST(testPng);
+    CPPUNIT_TEST(testPngSuite);
     CPPUNIT_TEST(testMsGifInPng);
     CPPUNIT_TEST(testPngRoundtrip8BitGrey);
     CPPUNIT_TEST(testPngRoundtrip24);
@@ -242,6 +307,218 @@ void PngFilterTest::testPng()
                 CPPUNIT_ASSERT_MESSAGE("Bitmap is not 24 or 32 bit.", false);
             }
         }
+    }
+}
+
+void PngFilterTest::testPngSuite()
+{
+    // Test the PngSuite test files by Willem van Schaik
+    // filename:                               g04i2c08.png
+    //                                         || ||||
+    // test feature (in this case gamma) ------+| ||||
+    // parameter of test (here gamma-value) ----+ ||||
+    // interlaced or non-interlaced --------------+|||
+    // color-type (numerical) ---------------------+||
+    // color-type (descriptive) --------------------+|
+    // bit-depth ------------------------------------+
+    OUString aFilenames[] = {
+        // Basic formats, not interlaced
+        OUString("basn0g01.png"), // b&w
+        OUString("basn0g02.png"), // 2 bit grayscale
+        OUString("basn0g04.png"), // 4 bit grayscale
+        OUString("basn0g08.png"), // 8 bit grayscale
+        OUString("basn0g16.png"), // 16 bit grayscale
+        OUString("basn2c08.png"), // 8 bit rgb
+        OUString("basn2c16.png"), // 16 bit rgb
+        OUString("basn3p01.png"), // 1 bit palette
+        OUString("basn3p02.png"), // 2 bit palette
+        OUString("basn3p04.png"), // 4 bit palette
+        OUString("basn3p08.png"), // 8 bit palette
+        OUString("basn4a08.png"), // 8 bit grayscale + 8 bit alpha
+        OUString("basn4a16.png"), // 16 bit grayscale + 16 bit alpha
+        OUString("basn6a08.png"), // 8 bit rgba
+        OUString("basn6a16.png"), // 16 bit rgba
+        // Basic formats, interlaced
+        OUString("basi0g01.png"), // b&w
+        OUString("basi0g02.png"), // 2 bit grayscale
+        OUString("basi0g04.png"), // 4 bit grayscale
+        OUString("basi0g08.png"), // 8 bit grayscale
+        OUString("basi0g16.png"), // 16 bit grayscale
+        OUString("basi2c08.png"), // 8 bit rgb
+        OUString("basi2c16.png"), // 16 bit rgb
+        OUString("basi3p01.png"), // 1 bit palette
+        OUString("basi3p02.png"), // 2 bit palette
+        OUString("basi3p04.png"), // 4 bit palette
+        OUString("basi3p08.png"), // 8 bit palette
+        OUString("basi4a08.png"), // 8 bit grayscale + 8 bit alpha
+        OUString("basi4a16.png"), // 16 bit grayscale + 16 bit alpha
+        OUString("basi6a08.png"), // 8 bit rgba
+        OUString("basi6a16.png"), // 16 bit rgba
+        // Odd sizes, not interlaced
+        OUString("s01n3p01.png"), // 1x1
+        OUString("s02n3p01.png"), // 2x2
+        OUString("s03n3p01.png"), // 3x3
+        OUString("s04n3p01.png"), // 4x4
+        OUString("s05n3p02.png"), // 5x5
+        OUString("s06n3p02.png"), // 6x6
+        OUString("s07n3p02.png"), // 7x7
+        OUString("s08n3p02.png"), // 8x8
+        OUString("s09n3p02.png"), // 9x9
+        OUString("s32n3p04.png"), // 32x32
+        OUString("s33n3p04.png"), // 33x33
+        OUString("s34n3p04.png"), // 34x34
+        OUString("s35n3p04.png"), // 35x35
+        OUString("s36n3p04.png"), // 36x36
+        OUString("s37n3p04.png"), // 37x37
+        OUString("s38n3p04.png"), // 38x38
+        OUString("s39n3p04.png"), // 39x39
+        OUString("s40n3p04.png"), // 40x40
+        // Odd sizes, interlaced
+        OUString("s01i3p01.png"), // 1x1
+        OUString("s02i3p01.png"), // 2x2
+        OUString("s03i3p01.png"), // 3x3
+        OUString("s04i3p01.png"), // 4x4
+        OUString("s05i3p02.png"), // 5x5
+        OUString("s06i3p02.png"), // 6x6
+        OUString("s07i3p02.png"), // 7x7
+        OUString("s08i3p02.png"), // 8x8
+        OUString("s09i3p02.png"), // 9x9
+        OUString("s32i3p04.png"), // 32x32
+        OUString("s33i3p04.png"), // 33x33
+        OUString("s34i3p04.png"), // 34x34
+        OUString("s35i3p04.png"), // 35x35
+        OUString("s36i3p04.png"), // 36x36
+        OUString("s37i3p04.png"), // 37x37
+        OUString("s38i3p04.png"), // 38x38
+        OUString("s39i3p04.png"), // 39x39
+        OUString("s40i3p04.png"), // 40x40
+        // Background colors
+        OUString("bgai4a08.png"), // 8 bit grayscale, alpha, no background chunk, interlaced
+        OUString("bgai4a16.png"), // 16 bit grayscale, alpha, no background chunk, interlaced
+        OUString("bgan6a08.png"), // 3x8 bits rgb color, alpha, no background chunk
+        OUString("bgan6a16.png"), // 3x16 bits rgb color, alpha, no background chunk
+        OUString("bgbn4a08.png"), // 8 bit grayscale, alpha, black background chunk
+        OUString("bggn4a16.png"), // 16 bit grayscale, alpha, gray background chunk
+        OUString("bgwn6a08.png"), // 3x8 bits rgb color, alpha, white background chunk
+        OUString("bgyn6a16.png"), // 3x16 bits rgb color, alpha, yellow background chunk
+        // Transparency
+        OUString("tbbn0g04.png"), // transparent, black background chunk
+        OUString("tbbn2c16.png"), // transparent, blue background chunk
+        OUString("tbbn3p08.png"), // transparent, black background chunk
+        OUString("tbgn2c16.png"), // transparent, green background chunk
+        OUString("tbgn3p08.png"), // transparent, light-gray background chunk
+        OUString("tbrn2c08.png"), // transparent, red background chunk
+        OUString("tbwn0g16.png"), // transparent, white background chunk
+        OUString("tbwn3p08.png"), // transparent, white background chunk
+        OUString("tbyn3p08.png"), // transparent, yellow background chunk
+        OUString("tp1n3p08.png"), // transparent, but no background chunk
+        OUString("tm3n3p02.png"), // multiple levels of transparency, 3 entries
+        // Gamma
+        OUString("g03n0g16.png"), // grayscale, file-gamma = 0.35
+        OUString("g03n2c08.png"), // color, file-gamma = 0.35
+        OUString("g03n3p04.png"), // paletted, file-gamma = 0.35
+        OUString("g04n0g16.png"), // grayscale, file-gamma = 0.45
+        OUString("g04n2c08.png"), // color, file-gamma = 0.45
+        OUString("g04n3p04.png"), // paletted, file-gamma = 0.45
+        OUString("g05n0g16.png"), // grayscale, file-gamma = 0.55
+        OUString("g05n2c08.png"), // color, file-gamma = 0.55
+        OUString("g05n3p04.png"), // paletted, file-gamma = 0.55
+        OUString("g07n0g16.png"), // grayscale, file-gamma = 0.70
+        OUString("g07n2c08.png"), // color, file-gamma = 0.70
+        OUString("g07n3p04.png"), // paletted, file-gamma = 0.70
+        OUString("g10n0g16.png"), // grayscale, file-gamma = 1.00
+        OUString("g10n2c08.png"), // color, file-gamma = 1.00
+        OUString("g10n3p04.png"), // paletted, file-gamma = 1.00
+        OUString("g25n0g16.png"), // grayscale, file-gamma = 2.50
+        OUString("g25n2c08.png"), // color, file-gamma = 2.50
+        OUString("g25n3p04.png"), // paletted, file-gamma = 2.50
+        // Image filtering
+        OUString("f00n0g08.png"), // grayscale, no interlacing, filter-type 0
+        OUString("f00n2c08.png"), // color, no interlacing, filter-type 0
+        OUString("f01n0g08.png"), // grayscale, no interlacing, filter-type 1
+        OUString("f01n2c08.png"), // color, no interlacing, filter-type 1
+        OUString("f02n0g08.png"), // grayscale, no interlacing, filter-type 2
+        OUString("f02n2c08.png"), // color, no interlacing, filter-type 2
+        OUString("f03n0g08.png"), // grayscale, no interlacing, filter-type 3
+        OUString("f03n2c08.png"), // color, no interlacing, filter-type 3
+        OUString("f04n0g08.png"), // grayscale, no interlacing, filter-type 4
+        OUString("f04n2c08.png"), // color, no interlacing, filter-type 4
+        OUString("f99n0g04.png"), // bit-depth 4, filter changing per scanline
+        // Additional palettes
+        OUString("pp0n2c16.png"), // six-cube palette-chunk in true-color image
+        OUString("pp0n6a08.png"), // six-cube palette-chunk in true-color+alpha image
+        OUString("ps1n0g08.png"), // six-cube suggested palette (1 byte) in grayscale image
+        OUString("ps1n2c16.png"), // six-cube suggested palette (1 byte) in true-color image
+        OUString("ps2n0g08.png"), // six-cube suggested palette (2 bytes) in grayscale image
+        OUString("ps2n2c16.png"), // six-cube suggested palette (2 bytes) in true-color image
+        // Ancillary chunks
+        OUString("ccwn2c08.png"), // chroma chunk w:0.3127,0.329 r:0.64,0.33 g:0.30,0.60 b:0.15,0.06
+        OUString("ccwn3p08.png"), // chroma chunk w:0.3127,0.329 r:0.64,0.33 g:0.30,0.60 b:0.15,0.06
+        OUString("cdfn2c08.png"), // physical pixel dimensions, 8x32 flat pixels
+        OUString("cdhn2c08.png"), // physical pixel dimensions, 32x8 high pixels
+        OUString("cdsn2c08.png"), // physical pixel dimensions, 8x8 square pixels
+        OUString("cdun2c08.png"), // physical pixel dimensions, 1000 pixels per 1 meter
+        OUString("ch1n3p04.png"), // histogram 15 colors
+        OUString("ch2n3p08.png"), // histogram 256 colors
+        OUString("cm0n0g04.png"), // modification time, 01-jan-2000 12:34:56
+        OUString("cm7n0g04.png"), // modification time, 01-jan-1970 00:00:00
+        OUString("cm9n0g04.png"), // modification time, 31-dec-1999 23:59:59
+        OUString("cs3n2c16.png"), // color, 13 significant bits
+        OUString("cs3n3p08.png"), // paletted, 3 significant bits
+        OUString("cs5n2c08.png"), // color, 5 significant bits
+        OUString("cs5n3p08.png"), // paletted, 5 significant bits
+        OUString("cs8n2c08.png"), // color, 8 significant bits (reference)
+        OUString("cs8n3p08.png"), // paletted, 8 significant bits (reference)
+        OUString("ct0n0g04.png"), // no textual data
+        OUString("ct1n0g04.png"), // with textual data
+        OUString("ctzn0g04.png"), // with compressed textual data
+        OUString("cten0g04.png"), // international UTF-8, english
+        OUString("ctfn0g04.png"), // international UTF-8, finnish
+        OUString("ctgn0g04.png"), // international UTF-8, greek
+        OUString("cthn0g04.png"), // international UTF-8, hindi
+        OUString("ctjn0g04.png"), // international UTF-8, japanese
+        OUString("exif2c08.png"), // chunk with jpeg exif data
+        // Chunk ordering
+        OUString("oi1n0g16.png"), // grayscale mother image with 1 idat-chunk
+        OUString("oi1n2c16.png"), // color mother image with 1 idat-chunk
+        OUString("oi2n0g16.png"), // grayscale image with 2 idat-chunks
+        OUString("oi2n2c16.png"), // color image with 2 idat-chunks
+        OUString("oi4n0g16.png"), // grayscale image with 4 unequal sized idat-chunks
+        OUString("oi4n2c16.png"), // color image with 4 unequal sized idat-chunks
+        OUString("oi9n0g16.png"), // grayscale image with all idat-chunks length one
+        OUString("oi9n2c16.png"), // color image with all idat-chunks length one
+        // Zlib compression
+        OUString("z00n2c08.png"), // color, no interlacing, compression level 0 (none)
+        OUString("z03n2c08.png"), // color, no interlacing, compression level 3
+        OUString("z06n2c08.png"), // color, no interlacing, compression level 6 (default)
+        OUString("z09n2c08.png"), // color, no interlacing, compression level 9 (maximum)
+    };
+
+    for (const auto& aFilename : aFilenames)
+    {
+        testImportExportPng(aFilename);
+    }
+
+    OUString aCorruptedFilenames[] = {
+        OUString("xs1n0g01.png"), // signature byte 1 MSBit reset to zero
+        OUString("xs2n0g01.png"), // signature byte 2 is a 'Q'
+        OUString("xs4n0g01.png"), // signature byte 4 lowercase
+        OUString("xs7n0g01.png"), // 7th byte a space instead of control-Z
+        OUString("xcrn0g04.png"), // added cr bytes
+        OUString("xlfn0g04.png"), // added lf bytes
+        OUString("xhdn0g08.png"), // incorrect IHDR checksum
+        OUString("xc1n0g08.png"), // color type 1
+        OUString("xc9n2c08.png"), // color type 9
+        OUString("xd0n2c08.png"), // bit-depth 0
+        OUString("xd3n2c08.png"), // bit-depth 3
+        OUString("xd9n2c08.png"), // bit-depth 99
+        OUString("xdtn0g01.png"), // missing IDAT chunk
+        OUString("xcsn0g01.png"), // incorrect IDAT checksum
+    };
+
+    for (const auto& aFilename : aCorruptedFilenames)
+    {
+        testImportCorruptedPng(aFilename);
     }
 }
 
