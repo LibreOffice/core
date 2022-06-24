@@ -39,7 +39,7 @@ class DNDEventDispatcher final : public ::cppu::WeakImplHelper<
     void designate_currentwindow(vcl::Window *pWindow);
     DECL_LINK(WindowEventListener, VclWindowEvent&, void);
 
-    std::mutex m_aMutex;
+    std::recursive_mutex m_aMutex;
     css::uno::Sequence< css::datatransfer::DataFlavor > m_aDataFlavorList;
 
     vcl::Window* findTopLevelWindow(Point location);
