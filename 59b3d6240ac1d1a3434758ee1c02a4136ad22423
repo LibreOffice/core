@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8e651dd_225dc6d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-24T06:24:04Z",
+      "side": 1,
+      "message": "Looks OK to me. Once you move oox::OptValue to std::optional, it may make sense to move the clang plugin to store/, I assume it won\u0027t find anything after that.",
+      "revId": "59b3d6240ac1d1a3434758ee1c02a4136ad22423",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
