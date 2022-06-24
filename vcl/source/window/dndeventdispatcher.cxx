@@ -153,7 +153,7 @@ void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
 
 void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 {
-    std::scoped_lock aImplGuard( m_aMutex );
+    std::unique_lock aImplGuard( m_aMutex );
 
     Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
@@ -174,9 +174,12 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     }
     else
     {
+        // tdf#149626 we can recurse into here, so drop lock
+        aImplGuard.unlock();
         // fire dragOver on listeners of current window
         nListeners = fireDragOverEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
             dtde.SourceActions );
+        aImplGuard.lock();
     }
 
     // reject drag if no listener found
