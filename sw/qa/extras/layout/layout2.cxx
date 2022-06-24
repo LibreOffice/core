@@ -332,6 +332,48 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering)
     assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", "2.[3.] ");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149710_RedlineNumberingEditing)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf149710.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Show Changes
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwRootFrame* pLayout(pWrtShell->GetLayout());
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+
+    // delete the paragraph mark of the first list item with change tracking
+    dispatchCommand(mxComponent, ".uno:GoToEndOfLine", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    // Dump the rendering of the first page as an XML file.
+    SwDocShell* pShell = pDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Show the correct and the original line numbering instead of counting
+    // the deleted list items in Show Changes mode, as part of the list
+    // This was "1."
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", "[1.] ");
+    // This was "2." (deleted text node, now its text content is part of the first list item)
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", "1.[2.] ");
+    // This was "3." (now it's the second list item)
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", "2.[3.] ");
+
+    // remove the tracked deletion, and check the layout again
+    pWrtShell->Undo();
+    xMetaFile = pShell->GetPreviewMetaFile();
+    pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", "1.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", "2.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", "3.");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf85610.fodt");
