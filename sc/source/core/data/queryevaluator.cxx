@@ -332,8 +332,7 @@ OUString ScQueryEvaluator::getCellString(const ScRefCellValue& rCell, SCROW nRow
                   : mrTab.GetNumberFormat(static_cast<SCCOL>(rEntry.nField), nRow);
         SvNumberFormatter* pFormatter
             = mpContext ? mpContext->GetFormatTable() : mrDoc.GetFormatTable();
-        return ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrDoc, sharedString,
-                                            rEntry.bDoQuery);
+        return ScCellFormat::GetInputString(rCell, nFormat, *pFormatter, mrDoc, sharedString, true);
     }
 }
 
