@@ -1240,7 +1240,7 @@ void SbaTableQueryBrowser::connectExternalDispatches()
             ID_BROWSER_INSERTCONTENT
         };
 
-        for ( size_t i=0; i < SAL_N_ELEMENTS( pURLs ); ++i )
+        for ( size_t i=0; i < std::size( pURLs ); ++i )
         {
             URL aURL;
             aURL.Complete = OUString::createFromAscii( pURLs[i] );
