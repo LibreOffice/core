@@ -176,6 +176,24 @@
       "parentUuid": "d69e0576_cd0d7ff6",
       "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e2d50ae_9e7f2d6c",
+        "filename": "sc/source/filter/orcus/filterdetect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-24T06:30:22Z",
+      "side": 1,
+      "message": "Noting that, in general, the media URLs we use are not compatible with optimised MS-Windows temporary files (which is an ongoing source of pain for which I don\u0027t have a good answer - I am tempted to install some kind of global std::map down in sal which maps a special URL prefix to windows file handles to deal with this)",
+      "parentUuid": "081c5159_42d2af4a",
+      "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
