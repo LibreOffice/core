@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <core_resource.hxx>
 #include <templwin.hrc>
 #include "templwin.hxx"
@@ -25,13 +26,9 @@ namespace SvtDocInfoTable_Impl
 {
     OUString GetString(int nId)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(STRARY_SVT_DOCINFO); ++i)
-        {
-            if (STRARY_SVT_DOCINFO[i].second == nId)
-                return DBA_RES(STRARY_SVT_DOCINFO[i].first);
-        }
-
-        return OUString();
+        auto const found = std::find_if(std::begin(STRARY_SVT_DOCINFO), std::end(STRARY_SVT_DOCINFO)
+                                        , [nId](auto const & docinfo){ return docinfo.second == nId; });
+        return (found != std::end(STRARY_SVT_DOCINFO)) ? DBA_RES(found->first) : OUString();
     }
 }
 
