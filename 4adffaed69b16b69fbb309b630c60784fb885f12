@@ -34,6 +34,24 @@
       "parentUuid": "2fe35dce_48e92762",
       "revId": "4adffaed69b16b69fbb309b630c60784fb885f12",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dca993b1_f48e49c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002852
+      },
+      "writtenOn": "2022-06-24T14:12:56Z",
+      "side": 1,
+      "message": "I believe the displaying of this symbol is dependent on fonts.  AFAICT our bundled OpenSymbol font doesn\u0027t include this ℍ (U+210D) character.",
+      "parentUuid": "186be396_202e468c",
+      "revId": "4adffaed69b16b69fbb309b630c60784fb885f12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
