@@ -290,30 +290,31 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
         if (maNotifyLink.IsSet())
         {
-            std::vector<std::unique_ptr<AInfo>> aAInfoList;
-            // create AInfo-List
+            std::vector<std::unique_ptr<AnimationData>> aDataItems;
+            // create AnimationData-List
             for (auto const& i : maRenderers)
-                aAInfoList.emplace_back(i->createAInfo());
+                aDataItems.emplace_back(i->createAnimationData());
 
             maNotifyLink.Call(this);
 
-            // set view state from AInfo structure
-            for (auto& pAInfo : aAInfoList)
+            // set view state from AnimationData structure
+            for (auto& pDataItem : aDataItems)
             {
                 AnimationRenderer* pRenderer = nullptr;
-                if (!pAInfo->pRendererData)
+                if (!pDataItem->pRendererData)
                 {
-                    pRenderer = new AnimationRenderer(this, pAInfo->pOutDev, pAInfo->aStartOrg,
-                                                      pAInfo->aStartSize, pAInfo->nRendererId);
+                    pRenderer
+                        = new AnimationRenderer(this, pDataItem->pOutDev, pDataItem->aStartOrg,
+                                                pDataItem->aStartSize, pDataItem->nRendererId);
 
                     maRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
                 }
                 else
                 {
-                    pRenderer = static_cast<AnimationRenderer*>(pAInfo->pRendererData);
+                    pRenderer = static_cast<AnimationRenderer*>(pDataItem->pRendererData);
                 }
 
-                pRenderer->pause(pAInfo->bPause);
+                pRenderer->pause(pDataItem->bPause);
                 pRenderer->setMarked(true);
             }
 
@@ -680,7 +681,7 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
     return rIStm;
 }
 
-AInfo::AInfo()
+AnimationData::AnimationData()
     : pOutDev(nullptr)
     , pRendererData(nullptr)
     , nRendererId(0)
