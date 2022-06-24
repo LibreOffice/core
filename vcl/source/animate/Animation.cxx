@@ -292,6 +292,28 @@ std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems(
     return aDataItems;
 }
 
+void Animation::PopulateRenderers()
+{
+    for (auto& pDataItem : CreateAnimationDataItems())
+    {
+        AnimationRenderer* pRenderer = nullptr;
+        if (!pDataItem->pRendererData)
+        {
+            pRenderer = new AnimationRenderer(this, pDataItem->pOutDev, pDataItem->aStartOrg,
+                                              pDataItem->aStartSize, pDataItem->nRendererId);
+
+            maRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
+        }
+        else
+        {
+            pRenderer = static_cast<AnimationRenderer*>(pDataItem->pRendererData);
+        }
+
+        pRenderer->pause(pDataItem->bPause);
+        pRenderer->setMarked(true);
+    }
+}
+
 IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     const size_t nAnimCount = maFrames.size();
@@ -303,27 +325,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
         if (maNotifyLink.IsSet())
         {
             maNotifyLink.Call(this);
-
-            // set view state from AnimationData structure
-            for (auto& pDataItem : CreateAnimationDataItems())
-            {
-                AnimationRenderer* pRenderer = nullptr;
-                if (!pDataItem->pRendererData)
-                {
-                    pRenderer
-                        = new AnimationRenderer(this, pDataItem->pOutDev, pDataItem->aStartOrg,
-                                                pDataItem->aStartSize, pDataItem->nRendererId);
-
-                    maRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
-                }
-                else
-                {
-                    pRenderer = static_cast<AnimationRenderer*>(pDataItem->pRendererData);
-                }
-
-                pRenderer->pause(pDataItem->bPause);
-                pRenderer->setMarked(true);
-            }
+            PopulateRenderers();
 
             // delete all unmarked views
             auto removeStart
