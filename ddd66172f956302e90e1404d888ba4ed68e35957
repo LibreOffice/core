@@ -74,6 +74,30 @@
       },
       "revId": "ddd66172f956302e90e1404d888ba4ed68e35957",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e486631_dab480b7",
+        "filename": "sc/source/core/data/stlsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-06-24T06:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a13b76e_bf8c2208",
+      "range": {
+        "startLine": 271,
+        "startChar": 59,
+        "endLine": 271,
+        "endChar": 65
+      },
+      "revId": "ddd66172f956302e90e1404d888ba4ed68e35957",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
