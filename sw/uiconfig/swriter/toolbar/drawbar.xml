@@ -60,4 +60,6 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle"/>
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:visible="false"/>
 </toolbar:toolbar>
