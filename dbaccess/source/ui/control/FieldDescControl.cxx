@@ -177,9 +177,9 @@ void OFieldDescControl::SetReadOnly( bool bReadOnly )
                                         , m_xTypeText.get(), m_xAutoIncrementValueText.get()
     };
 
-    OSL_ENSURE(SAL_N_ELEMENTS(ppAggregates) == SAL_N_ELEMENTS(ppAggregatesText),"Lists are not identical!");
+    OSL_ENSURE(std::size(ppAggregates) == std::size(ppAggregatesText),"Lists are not identical!");
 
-    for (size_t i=0; i<SAL_N_ELEMENTS(ppAggregates); ++i)
+    for (size_t i=0; i<std::size(ppAggregates); ++i)
     {
         if ( ppAggregatesText[i] )
             ppAggregatesText[i]->set_sensitive( !bReadOnly );
