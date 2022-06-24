@@ -25,7 +25,7 @@ namespace SvtDocInfoTable_Impl
 {
     OUString GetString(int nId)
     {
-        for (size_t i = 0; i < SAL_N_ELEMENTS(STRARY_SVT_DOCINFO); ++i)
+        for (size_t i = 0; i < std::size(STRARY_SVT_DOCINFO); ++i)
         {
             if (STRARY_SVT_DOCINFO[i].second == nId)
                 return DBA_RES(STRARY_SVT_DOCINFO[i].first);
