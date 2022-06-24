@@ -37,6 +37,9 @@ public:
 private:
     Shape&              mrShape;
     bool                mbtxXfrm;
+    std::optional<sal_Int32> mno_txXfrmRot;
+    std::optional<sal_Int32> mno_txXfrmOffX;
+    std::optional<sal_Int32> mno_txXfrmOffY;
 };
 
 } // namespace oox::drawingml
