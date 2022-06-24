@@ -27,6 +27,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdtditm.hxx>
+#include <svx/svdmodel.hxx>
 
 #include <array>
 
@@ -65,7 +66,7 @@ void TextBodyProperties::pushVertSimulation()
         maPropertyMap.setProperty( PROP_TextHorizontalAdjust, TextHorizontalAdjust_CENTER);
 }
 
-/* Push text distances / insets, taking into consideration Shape Rotation */
+/* Push text distances / insets, taking into consideration text rotation */
 void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
 {
     for (auto & rValue : maTextDistanceValues)
@@ -86,6 +87,9 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
         case 90*3*60000: nOff = 1; break;
         default: break;
     }
+    
+    if (moVert && moVert.value() == XML_eaVert)
+        nOff = (nOff + 3) % aProps.size();
 
     for (size_t i = 0; i < aProps.size(); i++)
     {
@@ -106,10 +110,6 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
 
         if (nOff == 3 && moTextOffLower)
             nVal = *moTextOffLower;
-
-
-        if( nVal < 0 )
-            nVal = 0;
 
         sal_Int32 nTextOffsetValue = nVal;
 
@@ -160,7 +160,7 @@ void TextBodyProperties::readjustTextDistances(uno::Reference<drawing::XShape> c
 {
     // Only for custom shapes (for now)
     auto* pCustomShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
-    if (pCustomShape)
+    if (pCustomShape && !pCustomShape->getSdrModelFromSdrObject().IsWriter())
     {
         sal_Int32 nLower = pCustomShape->GetTextLowerDistance();
         sal_Int32 nUpper = pCustomShape->GetTextUpperDistance();
