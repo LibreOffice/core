@@ -164,27 +164,28 @@ void OFieldDescControl::Init()
 void OFieldDescControl::SetReadOnly( bool bReadOnly )
 {
     // Enable/disable Controls
-    OWidgetBase* ppAggregates[]     = {   m_xRequired.get(), m_xNumType.get()
-                                        , m_xAutoIncrement.get(), m_xDefault.get()
-                                        , m_xTextLen.get(), m_xLength.get()
-                                        , m_xScale.get(), m_xColumnName.get()
-                                        , m_xType.get(), m_xAutoIncrementValue.get()
-    };
-    weld::Widget* ppAggregatesText[] = {  m_xRequiredText.get(), m_xNumTypeText.get()
-                                        , m_xAutoIncrementText.get(), m_xDefaultText.get()
-                                        , m_xTextLenText.get(), m_xLengthText.get()
-                                        , m_xScaleText.get(), m_xColumnNameText.get()
-                                        , m_xTypeText.get(), m_xAutoIncrementValueText.get()
-    };
-
-    OSL_ENSURE(SAL_N_ELEMENTS(ppAggregates) == SAL_N_ELEMENTS(ppAggregatesText),"Lists are not identical!");
-
-    for (size_t i=0; i<SAL_N_ELEMENTS(ppAggregates); ++i)
+    struct final
     {
-        if ( ppAggregatesText[i] )
-            ppAggregatesText[i]->set_sensitive( !bReadOnly );
-        if ( ppAggregates[i] )
-            ppAggregates[i]->set_sensitive( !bReadOnly );
+        OWidgetBase * aggregate;
+        weld::Widget * text;
+    } const aggregates[] = {
+        {m_xRequired.get(), m_xRequiredText.get()}
+        , {m_xNumType.get(), m_xNumTypeText.get()}
+        , {m_xAutoIncrement.get(), m_xAutoIncrementText.get()}
+        , {m_xDefault.get(), m_xDefaultText.get()}
+        , {m_xTextLen.get(), m_xTextLenText.get()}
+        , {m_xLength.get(), m_xLengthText.get()}
+        , {m_xScale.get(), m_xScaleText.get()}
+        , {m_xColumnName.get(), m_xColumnNameText.get()}
+        , {m_xType.get(), m_xTypeText.get()}
+        , {m_xAutoIncrementValue.get(), m_xAutoIncrementValueText.get()}};
+
+    for (auto const & aggregate: aggregates)
+    {
+        if (aggregate.text)
+            aggregate.text->set_sensitive(!bReadOnly);
+        if (aggregate.aggregate)
+            aggregate.aggregate->set_sensitive(!bReadOnly);
     }
 
     if (m_xFormat)
