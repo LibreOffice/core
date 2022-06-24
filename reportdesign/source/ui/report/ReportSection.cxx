@@ -50,6 +50,7 @@
 #include <dlgedclip.hxx>
 #include <rptui_slotid.hrc>
 
+#include <utility>
 #include <vcl/commandevent.hxx>
 #include <o3tl/safeint.hxx>
 
@@ -69,14 +70,14 @@ static Color lcl_getOverlappedControlColor(/*const uno::Reference <lang::XMultiS
     return aConfig.GetColorValue(CFG_REPORTDESIGNER, DBOVERLAPPEDCONTROL).getColor();
 }
 
-OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< report::XSection >& _xSection)
+OReportSection::OReportSection(OSectionWindow* _pParent,uno::Reference< report::XSection > _xSection)
     : Window(_pParent,WB_DIALOGCONTROL)
     , ::comphelper::OPropertyChangeListener(m_aMutex)
     , DropTargetHelper(this)
     , m_pPage(nullptr)
     , m_pView(nullptr)
     , m_pParent(_pParent)
-    , m_xSection(_xSection)
+    , m_xSection(std::move(_xSection))
     , m_nPaintEntranceCount(0)
     , m_eMode(DlgEdMode::Select)
 {

@@ -69,7 +69,7 @@ class ODateTimeDialog : public weld::GenericDialogController
     void InsertEntry(sal_Int16 _nNumberFormatId);
 public:
     ODateTimeDialog(weld::Window* pParent,
-                     const css::uno::Reference< css::report::XSection>& _xHoldAlive,
+                     css::uno::Reference< css::report::XSection> _xHoldAlive,
                      ::rptui::OReportController* _pController);
     virtual short run() override;
 };

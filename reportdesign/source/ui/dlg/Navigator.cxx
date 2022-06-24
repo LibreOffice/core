@@ -38,6 +38,7 @@
 #include <comphelper/containermultiplexer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/SelectionMultiplex.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/commandevent.hxx>
@@ -115,7 +116,7 @@ class NavigatorTree : public ::cppu::BaseMutex
         ::rtl::Reference< comphelper::OContainerListenerAdapter>    m_pContainerListener;
         NavigatorTree*                                              m_pTree;
     public:
-        UserData(NavigatorTree* pTree, const uno::Reference<uno::XInterface>& xContent);
+        UserData(NavigatorTree* pTree, uno::Reference<uno::XInterface> xContent);
         virtual ~UserData() override;
 
         const uno::Reference< uno::XInterface >& getContent() const { return m_xContent; }
@@ -677,10 +678,10 @@ void NavigatorTree::removeEntry(const weld::TreeIter& rEntry, bool bRemove)
         m_xTreeView->remove(rEntry);
 }
 
-NavigatorTree::UserData::UserData(NavigatorTree* pTree,const uno::Reference<uno::XInterface>& xContent)
+NavigatorTree::UserData::UserData(NavigatorTree* pTree,uno::Reference<uno::XInterface> xContent)
     : OPropertyChangeListener(m_aMutex)
     , OContainerListener(m_aMutex)
-    , m_xContent(xContent)
+    , m_xContent(std::move(xContent))
     , m_pTree(pTree)
 {
     uno::Reference<beans::XPropertySet> xProp(m_xContent,uno::UNO_QUERY);

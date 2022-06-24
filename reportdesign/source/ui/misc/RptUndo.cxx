@@ -315,11 +315,11 @@ void OGroupSectionUndo::implReRemove( )
 OGroupUndo::OGroupUndo(OReportModel& _rMod
                        ,TranslateId pCommentID
                        ,Action  _eAction
-                       ,const uno::Reference< report::XGroup>& _xGroup
-                       ,const uno::Reference< report::XReportDefinition >& _xReportDefinition)
+                       ,uno::Reference< report::XGroup> _xGroup
+                       ,uno::Reference< report::XReportDefinition > _xReportDefinition)
 : OCommentUndoAction(_rMod,pCommentID)
-,m_xGroup(_xGroup)
-,m_xReportDefinition(_xReportDefinition)
+,m_xGroup(std::move(_xGroup))
+,m_xReportDefinition(std::move(_xReportDefinition))
 ,m_eAction(_eAction)
 {
     m_nLastPosition = getPositionInIndexAccess(m_xReportDefinition->getGroups(),m_xGroup);

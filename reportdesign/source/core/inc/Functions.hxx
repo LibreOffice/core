@@ -59,7 +59,7 @@ namespace reportdesign
         virtual void SAL_CALL disposing() override;
     public:
         explicit OFunctions( const css::uno::Reference< css::report::XFunctionsSupplier >& _xParent
-                ,const css::uno::Reference< css::uno::XComponentContext >& context);
+                ,css::uno::Reference< css::uno::XComponentContext > context);
 
     // XFunctions
         // Methods

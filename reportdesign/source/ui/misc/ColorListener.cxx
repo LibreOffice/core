@@ -18,6 +18,7 @@
  */
 #include <ColorListener.hxx>
 #include <svl/hint.hxx>
+#include <utility>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 
@@ -27,9 +28,9 @@
 namespace rptui
 {
 
-OColorListener::OColorListener(vcl::Window* _pParent ,const OUString& _sColorEntry)
+OColorListener::OColorListener(vcl::Window* _pParent ,OUString _sColorEntry)
 : Window(_pParent)
-,m_sColorEntry(_sColorEntry)
+,m_sColorEntry(std::move(_sColorEntry))
 ,m_nColor(COL_LIGHTBLUE)
 ,m_bCollapsed(false)
 ,m_bMarked(false)

@@ -29,6 +29,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <utility>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlement.hxx>
@@ -47,9 +48,9 @@ namespace rptxml
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-ImportDocumentHandler::ImportDocumentHandler(uno::Reference< uno::XComponentContext > const & context)
+ImportDocumentHandler::ImportDocumentHandler(uno::Reference< uno::XComponentContext > context)
     :m_bImportedChart( false )
-    ,m_xContext(context)
+    ,m_xContext(std::move(context))
 {
 }
 

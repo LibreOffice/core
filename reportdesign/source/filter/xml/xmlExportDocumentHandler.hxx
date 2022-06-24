@@ -43,7 +43,7 @@ typedef ::cppu::WeakAggImplHelper3< css::xml::sax::XDocumentHandler
 class ExportDocumentHandler : public ExportDocumentHandler_BASE
 {
 public:
-    explicit ExportDocumentHandler(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit ExportDocumentHandler(css::uno::Reference< css::uno::XComponentContext > context);
 
 private:
     // XServiceInfo

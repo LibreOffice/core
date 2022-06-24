@@ -71,7 +71,7 @@ protected:
     bool        m_bIsListening;
 
     OObjectBase(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
-    OObjectBase(const OUString& _sComponentName);
+    OObjectBase(OUString _sComponentName);
 
     virtual ~OObjectBase();
 

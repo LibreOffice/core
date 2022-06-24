@@ -42,7 +42,7 @@ namespace rptui
         public ReportComponentHandler_Base
     {
     public:
-        explicit ReportComponentHandler(css::uno::Reference< css::uno::XComponentContext > const & context);
+        explicit ReportComponentHandler(css::uno::Reference< css::uno::XComponentContext > context);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;

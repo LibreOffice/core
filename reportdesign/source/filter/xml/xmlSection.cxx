@@ -18,6 +18,7 @@
  */
 #include "xmlSection.hxx"
 #include "xmlfilter.hxx"
+#include <utility>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -45,10 +46,10 @@ namespace rptxml
 
 OXMLSection::OXMLSection( ORptFilter& rImport,
                 const uno::Reference< xml::sax::XFastAttributeList > & _xAttrList
-                ,const uno::Reference< report::XSection >& _xSection
+                ,uno::Reference< report::XSection > _xSection
                 ,bool _bPageHeader)
 :SvXMLImportContext( rImport )
-,m_xSection(_xSection)
+,m_xSection(std::move(_xSection))
 {
 
     if (!m_xSection.is())

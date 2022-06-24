@@ -21,6 +21,7 @@
 #include <Section.hxx>
 #include <RptObject.hxx>
 #include <ReportDrawPage.hxx>
+#include <utility>
 
 namespace rptui
 {
@@ -28,10 +29,10 @@ using namespace ::com::sun::star;
 
 OReportPage::OReportPage(
     OReportModel& _rModel,
-    const uno::Reference< report::XSection >& _xSection)
+    uno::Reference< report::XSection > _xSection)
 :   SdrPage(_rModel, false/*bMasterPage*/)
     ,rModel(_rModel)
-    ,m_xSection(_xSection)
+    ,m_xSection(std::move(_xSection))
     ,m_bSpecialInsertMode(false)
 {
 }

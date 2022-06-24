@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <string_view>
+#include <utility>
 
 namespace rptui
 {
@@ -45,19 +46,19 @@ namespace rptui
         PropUIFlags     nUIFlags;
 
         OPropertyInfoImpl(
-                        const OUString&        rName,
+                        OUString               aName,
                         sal_Int32              _nId,
-                        const OUString&        aTranslation,
-                        const OString&         _sHelpId,
+                        OUString               aTranslation,
+                        OString                _sHelpId,
                         PropUIFlags            _nUIFlags);
     };
 
 
-    OPropertyInfoImpl::OPropertyInfoImpl(const OUString& _rName, sal_Int32 _nId,
-                                   const OUString& aString, const OString& sHid, PropUIFlags _nUIFlags)
-       :sName(_rName)
-       ,sTranslation(aString)
-       ,sHelpId(sHid)
+    OPropertyInfoImpl::OPropertyInfoImpl(OUString _aName, sal_Int32 _nId,
+                                   OUString aString, OString sHid, PropUIFlags _nUIFlags)
+       :sName(std::move(_aName))
+       ,sTranslation(std::move(aString))
+       ,sHelpId(std::move(sHid))
        ,nId(_nId)
        ,nUIFlags(_nUIFlags)
     {

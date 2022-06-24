@@ -46,7 +46,7 @@ class OPageNumberDialog : public weld::GenericDialogController
     void operator =(const OPageNumberDialog&) = delete;
 public:
     OPageNumberDialog(weld::Window* pParent,
-                      const css::uno::Reference< css::report::XReportDefinition>& _xHoldAlive,
+                      css::uno::Reference< css::report::XReportDefinition> _xHoldAlive,
                       ::rptui::OReportController* _pController);
     virtual ~OPageNumberDialog() override;
     virtual short run() override;

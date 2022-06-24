@@ -20,6 +20,7 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_COLUMNINFO_HXX
 
 #include <rtl/ustring.hxx>
+#include <utility>
 
 namespace rptui
 {
@@ -27,13 +28,13 @@ namespace rptui
     {
         OUString sColumnName;
         OUString sLabel;
-        ColumnInfo(const OUString& i_sColumnName,const OUString& i_sLabel)
-            : sColumnName(i_sColumnName)
-            , sLabel(i_sLabel)
+        ColumnInfo(OUString i_sColumnName,OUString i_sLabel)
+            : sColumnName(std::move(i_sColumnName))
+            , sLabel(std::move(i_sLabel))
         {
         }
-        ColumnInfo(const OUString& i_sColumnName)
-            : sColumnName(i_sColumnName)
+        ColumnInfo(OUString i_sColumnName)
+            : sColumnName(std::move(i_sColumnName))
         {
         }
     };

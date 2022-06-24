@@ -76,7 +76,7 @@ namespace rptui
         // OPropertyChangeListener
         virtual void    _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) override;
     public:
-        OReportSection(OSectionWindow* _pParent,const css::uno::Reference< css::report::XSection >& _xSection);
+        OReportSection(OSectionWindow* _pParent,css::uno::Reference< css::report::XSection > _xSection);
         virtual ~OReportSection() override;
         virtual void dispose() override;
 

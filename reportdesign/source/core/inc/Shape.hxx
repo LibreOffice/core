@@ -113,7 +113,7 @@ namespace reportdesign
         explicit OShape(css::uno::Reference< css::uno::XComponentContext > const & _xContext
                         ,const css::uno::Reference< css::lang::XMultiServiceFactory > & _xFactory
                         ,css::uno::Reference< css::drawing::XShape >& _xShape
-                        ,const OUString& _sServiceName);
+                        ,OUString _sServiceName);
 
         DECLARE_XINTERFACE( )
         // css::lang::XServiceInfo

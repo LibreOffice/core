@@ -28,6 +28,7 @@
 #include <Tools.hxx>
 #include <FormatCondition.hxx>
 #include <ReportHelperImpl.hxx>
+#include <utility>
 
 namespace reportdesign
 {
@@ -58,13 +59,13 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext)
 OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
                ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
                ,uno::Reference< drawing::XShape >& _xShape
-               ,const OUString& _sServiceName)
+               ,OUString _sServiceName)
 :ShapeBase(m_aMutex)
 ,ShapePropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,lcl_getShapeOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nZOrder(0)
 ,m_bOpaque(false)
-,m_sServiceName(_sServiceName)
+,m_sServiceName(std::move(_sServiceName))
 {
     m_aProps.aComponent.m_sName  = RptResId(RID_STR_SHAPE);
     m_aProps.aComponent.m_xFactory = _xFactory;

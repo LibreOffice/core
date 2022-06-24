@@ -43,7 +43,7 @@ class FunctionManager : public formula::IFunctionManager
     mutable ::std::vector< TCategoriesMap::iterator > m_aCategoryIndex;
     mutable TFunctionsMap   m_aFunctions;
 public:
-            FunctionManager(const css::uno::Reference< css::report::meta::XFunctionManager>& _xMgr);
+            FunctionManager(css::uno::Reference< css::report::meta::XFunctionManager> _xMgr);
     virtual ~FunctionManager();
     virtual sal_uInt32                              getCount() const override;
     virtual const formula::IFunctionCategory*       getCategory(sal_uInt32 nPos) const override;
@@ -59,7 +59,7 @@ class FunctionDescription : public formula::IFunctionDescription
     css::uno::Reference< css::report::meta::XFunctionDescription> m_xFunctionDescription;
     const formula::IFunctionCategory* m_pFunctionCategory;
 public:
-    FunctionDescription(const formula::IFunctionCategory* _pFunctionCategory,const css::uno::Reference< css::report::meta::XFunctionDescription>& _xFunctionDescription);
+    FunctionDescription(const formula::IFunctionCategory* _pFunctionCategory,css::uno::Reference< css::report::meta::XFunctionDescription> _xFunctionDescription);
     virtual ~FunctionDescription(){}
 
     virtual OUString getFunctionName() const override ;
