@@ -1685,7 +1685,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setMirroredY( true );
             if( getTextBody() )
             {
-                sal_Int32 nTextCameraZRotation = static_cast< sal_Int32 >( getTextBody()->get3DProperties().maCameraRotation.mnRevolution.value() );
+                sal_Int32 nTextCameraZRotation = getTextBody()->get3DProperties().maCameraRotation.mnRevolution.value_or(0);
                 mpCustomShapePropertiesPtr->setTextCameraZRotateAngle( nTextCameraZRotation / 60000 );
 
                 sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.value_or( 0 ) );

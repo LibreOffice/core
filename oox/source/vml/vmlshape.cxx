@@ -578,7 +578,7 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
 
 static void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)
 {
-    OUString aWrapType = rTypeModel.moWrapType.value();
+    OUString aWrapType = rTypeModel.moWrapType.value_or("");
 
     // Extreme negative top margin? Then the shape will end up at the top of the page, it's pointless to perform any kind of wrapping.
     sal_Int32 nMarginTop = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, rTypeModel.maMarginTop, 0, false, true);
@@ -590,7 +590,9 @@ static void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeMo
          aWrapType == "through" )
     {
         nSurround = css::text::WrapTextMode_PARALLEL;
-        if ( rTypeModel.moWrapSide.value() == "left" )
+        if ( !rTypeModel.moWrapSide.has_value() )
+            ; // leave as PARALLEL
+        else if ( rTypeModel.moWrapSide.value() == "left" )
             nSurround = css::text::WrapTextMode_LEFT;
         else if ( rTypeModel.moWrapSide.value() == "right" )
             nSurround = css::text::WrapTextMode_RIGHT;
