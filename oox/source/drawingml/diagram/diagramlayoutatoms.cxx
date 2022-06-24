@@ -1757,13 +1757,13 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                         n90x = -2;
                     else if (nShapeRot > 45 * PER_DEGREE)
                         n90x = -1;
-                    pTextBody->getTextProperties().moRotation = n90x * 90 * PER_DEGREE;
+                    pTextBody->getTextProperties().moTextPreRotation = n90x * 90 * PER_DEGREE;
                 }
                 break;
                 case XML_grav:
                 {
                     if (nShapeRot > (90 * PER_DEGREE) && nShapeRot < (270 * PER_DEGREE))
-                        pTextBody->getTextProperties().moRotation = -180 * PER_DEGREE;
+                        pTextBody->getTextProperties().moTextPreRotation = -180 * PER_DEGREE;
                 }
                 break;
                 case XML_none:

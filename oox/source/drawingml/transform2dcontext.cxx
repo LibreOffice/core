@@ -17,12 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cmath>
+
 #include <drawingml/transform2dcontext.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/drawingml/shape.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/textbody.hxx>
 #include <oox/token/namespaces.hxx>
+
+#include <com/sun/star/awt/Rectangle.hpp>
 
 using namespace ::com::sun::star;
 using ::oox::core::ContextHandlerRef;
@@ -42,56 +46,243 @@ Transform2DContext::Transform2DContext( ContextHandler2Helper const & rParent, c
     }
     else
     {
-        if( rAttribs.hasAttribute( XML_rot ) )
-            mrShape.getTextBody()->getTextProperties().moRotation = rAttribs.getInteger( XML_rot, 0 );
+        if (rAttribs.hasAttribute(XML_rot))
+        {
+            mno_txXfrmRot = rAttribs.getInteger(XML_rot, 0);
+            sal_Int32 nTextAreaRot = mrShape.getTextBody()->getTextProperties().moTextAreaRotation.value_or(0);
+            mrShape.getTextBody()->getTextProperties().moTextAreaRotation = mno_txXfrmRot.value() + nTextAreaRot;
+        }
     }
+}
+
+namespace
+{
+bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
+{
+    // When we are here, we have neither xShape nor a SdrObject. So need to manually calc the text
+    // area rectangle defined in the preset in OOXML standard, but only for those types of shapes
+    // where we know, that MS Office SmartArt presets do not use the default text area rectangle.
+    const sal_Int32 nType = rShape.getCustomShapeProperties()->getShapePresetType();
+    switch (nType)
+    {
+        case XML_ellipse:
+            // The preset text rectangle touches the perimeter of the ellipse at 45deg.
+            rRect.X = rShape.getPosition().X + rShape.getSize().Width * ((1.0 - M_SQRT1_2) / 2.0);
+            rRect.Y = rShape.getPosition().Y + rShape.getSize().Height * ((1.0 - M_SQRT1_2) / 2.0);
+            rRect.Width = rShape.getSize().Width * M_SQRT1_2;
+            rRect.Height = rShape.getSize().Height * M_SQRT1_2;
+            return true;
+        case XML_roundRect:
+        case XML_round2SameRect:
+        {
+            // Second handle of round2SameRect used in preset diagrams has value 0.
+            auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            double fAdj = aAdjGdList.empty() ? 16667 : aAdjGdList[0].maFormula.toDouble();
+            sal_Int32 nWidth = rShape.getSize().Width;
+            sal_Int32 nHeight = rShape.getSize().Height;
+            if (nWidth == 0 || nHeight == 0)
+                return false;
+            double fMaxAdj = 50000.0 * nWidth / std::min(nWidth, nHeight);
+            std::clamp<double>(fAdj, 0, fMaxAdj);
+            sal_Int32 nTextLeft = std::min(nWidth, nHeight) * fAdj / 100000.0 * 0.29289;
+            sal_Int32 nTextTop = nTextLeft;
+            rRect.X = rShape.getPosition().X + nTextLeft;
+            rRect.Y = rShape.getPosition().Y + nTextTop;
+            rRect.Width = nWidth - 2 * nTextLeft;
+            rRect.Height = nHeight - (nType == XML_roundRect ? 2 : 1) * nTextTop;
+            return true;
+        }
+        case XML_trapezoid:
+        {
+            auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            double fAdj = aAdjGdList.empty() ? 25000 : aAdjGdList[0].maFormula.toDouble();
+            sal_Int32 nWidth = rShape.getSize().Width;
+            sal_Int32 nHeight = rShape.getSize().Height;
+            if (nWidth == 0 || nHeight == 0)
+                return false;
+            double fMaxAdj = 50000.0 * nWidth / std::min(nWidth, nHeight);
+            std::clamp<double>(fAdj, 0, fMaxAdj);
+            sal_Int32 nTextLeft = nWidth / 3.0 * fAdj / fMaxAdj;
+            sal_Int32 nTextTop = nHeight / 3.0 * fAdj / fMaxAdj;
+            rRect.X = rShape.getPosition().X + nTextLeft;
+            rRect.Y = rShape.getPosition().Y + nTextTop;
+            rRect.Width = nWidth - 2 * nTextLeft;
+            rRect.Height = nHeight - 2 * nTextTop;
+            return true;
+        }
+        case XML_flowChartManualOperation:
+        {
+            sal_Int32 nWidth = rShape.getSize().Width;
+            sal_Int32 nTextLeft = nWidth / 5;
+            rRect.X = rShape.getPosition().X + nTextLeft;
+            rRect.Y = rShape.getPosition().Y;
+            rRect.Width = nWidth - 2 * nTextLeft;
+            rRect.Height = rShape.getSize().Height;
+            return true;
+        }
+        case XML_pie:
+        case XML_rect:
+        case XML_wedgeRectCallout:
+        {
+            // When tdf#149918 is fixed, pie will need its own case
+            rRect.X = rShape.getPosition().X;
+            rRect.Y = rShape.getPosition().Y;
+            rRect.Width = rShape.getSize().Width;
+            rRect.Height = rShape.getSize().Height;
+            return true;
+        }
+        case XML_gear6:
+        {
+            // The identifiers here reflect the guides name value in presetShapeDefinitions.xml
+            double w = rShape.getSize().Width;
+            double h = rShape.getSize().Height;
+            if (w <= 0 || h <= 0)
+                return false;
+            double a1(15000.0);
+            double a2(3526.0);
+            auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            if (aAdjGdList.size() == 2)
+            {
+                a1 = aAdjGdList[0].maFormula.toDouble();
+                a2 = aAdjGdList[1].maFormula.toDouble();
+                std::clamp<double>(a1, 0, 20000);
+                std::clamp<double>(a2, 0, 5358);
+            }
+            double th = std::min(w, h) * a1 / 100000.0;
+            double l2 = std::min(w, h) * a2 / 100000.0 / 2.0;
+            double l3 = th / 2.0 + l2;
+
+            double rh = h / 2.0 - th;
+            double rw = w / 2.0 - th;
+
+            double maxr = std::min(rw, rh);
+            double ha = atan2(l3, maxr);
+
+            double aA1 = basegfx::deg2rad(330) - ha;
+            double ta11 = rw * cos(aA1);
+            double ta12 = rh * sin(aA1);
+            double bA1 = atan2(ta12, ta11);
+            double cta1 = rh * cos(bA1);
+            double sta1 = rw * sin(bA1);
+            double ma1 = std::hypot(cta1, sta1);
+            double na1 = rw * rh / ma1;
+            double dxa1 = na1 * cos(bA1);
+            double dya1 = na1 * sin(bA1);
+
+            double xA1 = w / 2.0 + dxa1; // r
+            double yA1 = h / 2.0 + dya1; // t
+            double yD2 = h - yA1; // b
+            double xD5 = w - xA1; // l
+
+            rRect.X = rShape.getPosition().X + xD5;
+            rRect.Y = rShape.getPosition().Y + yA1;
+            rRect.Width = xA1 - xD5;
+            rRect.Height = yD2 - yA1;
+            return true;
+        }
+        case XML_hexagon:
+        {
+            auto aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            double fAdj = aAdjGdList.empty() ? 25000 : aAdjGdList[0].maFormula.toDouble();
+            sal_Int32 nWidth = rShape.getSize().Width;
+            sal_Int32 nHeight = rShape.getSize().Height;
+            if (nWidth == 0 || nHeight == 0)
+                return false;
+            double fMaxAdj = 50000.0 * nWidth / std::min(nWidth, nHeight);
+            std::clamp<double>(fAdj, 0, fMaxAdj);
+            double fFactor = fAdj/fMaxAdj/6.0 + 1.0/12.0;
+            sal_Int32 nTextLeft = nWidth * fFactor;
+            sal_Int32 nTextTop = nHeight * fFactor;
+            rRect.X = rShape.getPosition().X + nTextLeft;
+            rRect.Y = rShape.getPosition().Y + nTextTop;
+            rRect.Width = nWidth - 2 * nTextLeft;
+            rRect.Height = nHeight - 2 * nTextTop;
+            return true;
+        }
+        default:
+            return false;
+    }
+}
 }
 
 ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if( mbtxXfrm )
     {
-        // Workaround: only for rectangles
-        const sal_Int32 nType = mrShape.getCustomShapeProperties()->getShapePresetType();
-        if( nType == XML_rect || nType == XML_roundRect || nType == XML_ellipse )
+        // The child elements <a:off> and <a:ext> of a <dsp:txXfrm> element describe the position and
+        // size of the text area rectangle. We cannot change the text area rectangle directly, because
+        // currently we depend on the geometry definition of the preset. As workaround we change the
+        // indents to move and scale the text block. The needed shifts are calculated here as moTextOff
+        // and used in TextBodyProperties::pushTextDistances().
+        awt::Rectangle aPresetTextRectangle;
+        if (!ConstructPresetTextRectangle(mrShape, aPresetTextRectangle))
+            return nullptr; // faulty shape or corrections from txXfrm not needed.
+
+        switch (aElementToken)
         {
-            switch( aElementToken )
+            case A_TOKEN(off):
             {
-                case A_TOKEN( off ):
-                    {
-                        const OUString sXValue = rAttribs.getStringDefaulted( XML_x );
-                        const OUString sYValue = rAttribs.getStringDefaulted( XML_y );
-
-                        if( !sXValue.isEmpty() && nType != XML_ellipse )
-                            mrShape.getTextBody()->getTextProperties().moTextOffLeft = GetCoordinate( sXValue.toInt32() - mrShape.getPosition().X );
-                        if( !sYValue.isEmpty() )
-                            mrShape.getTextBody()->getTextProperties().moTextOffUpper = GetCoordinate( sYValue.toInt32() - mrShape.getPosition().Y );
-                    }
-                    break;
-                case A_TOKEN( ext ):
-                    {
-                        const OUString sXValue = rAttribs.getStringDefaulted( XML_cx );
-                        const OUString sYValue = rAttribs.getStringDefaulted( XML_cy );
-
-                        if( !sXValue.isEmpty() && nType == XML_rect )
-                        {
-                            mrShape.getTextBody()->getTextProperties().moTextOffRight = GetCoordinate(mrShape.getSize().Width - sXValue.toInt32());
-                            if( mrShape.getTextBody()->getTextProperties().moTextOffLeft )
-                               *mrShape.getTextBody()->getTextProperties().moTextOffRight -=  *mrShape.getTextBody()->getTextProperties().moTextOffLeft;
-                        }
-                        if( !sYValue.isEmpty() )
-                        {
-                            mrShape.getTextBody()->getTextProperties().moTextOffLower = GetCoordinate(mrShape.getSize().Height - sYValue.toInt32());
-                            if( mrShape.getTextBody()->getTextProperties().moTextOffUpper )
-                               *mrShape.getTextBody()->getTextProperties().moTextOffLower -=  *mrShape.getTextBody()->getTextProperties().moTextOffUpper;
-
-                        }
-                    }
-                    break;
+                // need <a:ext> too, so only save values here.
+                const OUString sXValue = rAttribs.getStringDefaulted(XML_x);
+                const OUString sYValue = rAttribs.getStringDefaulted(XML_y);
+                if (!sXValue.isEmpty() && !sYValue.isEmpty())
+                {
+                    mno_txXfrmOffX = sXValue.toInt32();
+                    mno_txXfrmOffY = sYValue.toInt32();
+                }
             }
+            break;
+            case A_TOKEN(ext):
+            {
+                // Build text frame from txXfrm element
+                awt::Rectangle aUnrotatedTxXfrm = aPresetTextRectangle; // dummy initialize
+                const OUString sCXValue = rAttribs.getStringDefaulted(XML_cx);
+                const OUString sCYValue = rAttribs.getStringDefaulted(XML_cy);
+                if (!sCXValue.isEmpty() && !sCYValue.isEmpty() && mno_txXfrmOffX.has_value()
+                    && mno_txXfrmOffY.has_value())
+                {
+                    sal_Int32 ntxXfrmWidth = sCXValue.toInt32();
+                    sal_Int32 ntxXfrmHeight = sCYValue.toInt32();
+                    aUnrotatedTxXfrm.X = mno_txXfrmOffX.value();
+                    aUnrotatedTxXfrm.Y = mno_txXfrmOffY.value();
+                    aUnrotatedTxXfrm.Width = ntxXfrmWidth;
+                    aUnrotatedTxXfrm.Height = ntxXfrmHeight;
+                }
+                else if (mno_txXfrmOffX.has_value() && mno_txXfrmOffY.has_value()) // can it happen?
+                {
+                    aUnrotatedTxXfrm.X = mno_txXfrmOffX.value();
+                    aUnrotatedTxXfrm.Y = mno_txXfrmOffY.value();
+                }
+                else if (!sCXValue.isEmpty() && !sCYValue.isEmpty()) // can it happen?
+                {
+                    aUnrotatedTxXfrm.Width = sCXValue.toInt32();
+                    aUnrotatedTxXfrm.Height = sCYValue.toInt32();
+                }
+                // Calculate indent offsets
+                sal_Int32 nOffsetLeft = aUnrotatedTxXfrm.X - aPresetTextRectangle.X;
+                sal_Int32 nOffsetTop = aUnrotatedTxXfrm.Y - aPresetTextRectangle.Y;
+                sal_Int32 nOffsetRight
+                    = aPresetTextRectangle.Width - aUnrotatedTxXfrm.Width - nOffsetLeft;
+                sal_Int32 nOffsetBottom
+                    = aPresetTextRectangle.Height - aUnrotatedTxXfrm.Height - nOffsetTop;
+
+                if (nOffsetLeft)
+                    mrShape.getTextBody()->getTextProperties().moTextOffLeft
+                        = GetCoordinate(nOffsetLeft);
+                if (nOffsetTop)
+                    mrShape.getTextBody()->getTextProperties().moTextOffUpper
+                        = GetCoordinate(nOffsetTop);
+                if (nOffsetRight)
+                    mrShape.getTextBody()->getTextProperties().moTextOffRight
+                        = GetCoordinate(nOffsetRight);
+                if (nOffsetBottom)
+                    mrShape.getTextBody()->getTextProperties().moTextOffLower
+                        = GetCoordinate(nOffsetBottom);
+            }
+            break;
         }
         return nullptr;
-    }
+    } // end of case mbtxXfrm
 
     switch( aElementToken )
     {
