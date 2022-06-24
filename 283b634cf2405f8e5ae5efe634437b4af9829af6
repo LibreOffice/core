@@ -140,6 +140,24 @@
       "parentUuid": "a8a95b00_6148515e",
       "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d69e0576_cd0d7ff6",
+        "filename": "sc/source/filter/orcus/filterdetect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-06-24T03:52:42Z",
+      "side": 1,
+      "message": "Having said that, in a situation where the stream contains a zip archive which consists of multiple compressed sections each of which need to be uncompressed before the parsing happens, I would still think that the entire blob needs to be available so that the uncompressing the compressed stream is done correctly.\n\nIf the zip archive blob itself is only partially available, I have no idea what would happen then, to be completely honest.",
+      "parentUuid": "541b5971_cbcabecc",
+      "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
