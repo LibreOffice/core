@@ -34,6 +34,23 @@
       "parentUuid": "3d448bd1_6f9f1565",
       "revId": "afc828b9833b7a612369e95606ba56d41ef2c369",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab344f98_104aaee5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-06-24T09:45:48Z",
+      "side": 1,
+      "message": "I just retested tdf#137471 (\"CMIS dialog advances beyond lower right corner of the screen\", mentioned in the commit msg) on X11 with master as of 535cdff8127426ce8accdb6049f90b6b2fd754a2, but the issue is not fixed for me. It works if I revert the merged change (PS 16) and reapply PS 9 instead. Is that expected (and the bug has not been closed due to this) e.g. because some of the other pending changes is needed in addition now?",
+      "revId": "afc828b9833b7a612369e95606ba56d41ef2c369",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
