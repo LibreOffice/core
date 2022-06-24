@@ -28,7 +28,7 @@ class OutputDevice;
 class VirtualDevice;
 struct AnimationBitmap;
 
-struct AInfo
+struct AnimationData
 {
     Point           aStartOrg;
     Size            aStartSize;
@@ -37,7 +37,7 @@ struct AInfo
     tools::Long     nRendererId;
     bool            bPause;
 
-    AInfo();
+    AnimationData();
 };
 
 
@@ -56,7 +56,7 @@ public:
     void            drawToIndex( sal_uLong nIndex );
     void            draw( sal_uLong nIndex, VirtualDevice* pVDev=nullptr );
     void            repaint();
-    AInfo*          createAInfo() const;
+    AnimationData*          createAnimationData() const;
 
     void            getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
 
