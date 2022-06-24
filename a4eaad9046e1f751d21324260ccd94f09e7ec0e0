@@ -16,6 +16,40 @@
       "message": "Hi Mike! What do you think about this change?",
       "revId": "a4eaad9046e1f751d21324260ccd94f09e7ec0e0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "516ec5d9_efd37d5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-24T06:09:38Z",
+      "side": 1,
+      "message": "LGTM :) - thank you!",
+      "revId": "a4eaad9046e1f751d21324260ccd94f09e7ec0e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "427c5619_9fa15e8e",
+        "filename": "basic/qa/basic_coverage/test_tdf147529_optional_parameters_msgbox.bas",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-24T06:09:38Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we check the error code maybe?",
+      "revId": "a4eaad9046e1f751d21324260ccd94f09e7ec0e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
