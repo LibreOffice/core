@@ -402,7 +402,7 @@ void SwTextCursor::CtorInitTextCursor( SwTextFrame *pNewFrame, SwTextSizeInfo *p
 }
 
 // tdf#120715 tdf#43100: Make width for some HolePortions, so cursor will be able to move into it.
-// It sould not change the layout, so this should be called after the layout is calculated.
+// It should not change the layout, so this should be called after the layout is calculated.
 void SwTextCursor::AddExtraBlankWidth()
 {
     SwLinePortion* pPos = m_pCurr->GetNextPortion();
