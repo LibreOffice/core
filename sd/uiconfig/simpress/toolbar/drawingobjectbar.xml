@@ -65,6 +65,7 @@
  <toolbar:toolbaritem xlink:href=".uno:DesignerDialog"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible"/>
+ <toolbar:toolbaritem xlink:href=".uno:GridUse">
  <toolbar:toolbaritem xlink:href=".uno:HelplinesMove"/>
 </toolbar:toolbar>
 

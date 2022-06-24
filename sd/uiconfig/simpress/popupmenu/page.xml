@@ -16,6 +16,7 @@
   <menu:menu menu:id=".uno:GridMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:GridVisible"/>
+      <menu:menuitem menu:id=".uno:GridUse"/>
       <menu:menuitem menu:id=".uno:GridFront"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:HelplinesMove"/>
