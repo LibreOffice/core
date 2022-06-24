@@ -102,7 +102,8 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     }
 
     // ST_Angle
-    mrTextBodyProp.moRotation = rAttribs.getInteger( XML_rot );
+    if (rAttribs.getInteger(XML_rot).has_value())
+        mrTextBodyProp.moTextAreaRotation = rAttribs.getInteger(XML_rot).value();
 
 //   bool bRtlCol = rAttribs.getBool( XML_rtlCol, false );
     // ST_PositiveCoordinate
@@ -117,7 +118,9 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     if( rAttribs.hasAttribute( XML_vert ) ) {
         mrTextBodyProp.moVert = rAttribs.getToken( XML_vert );
         sal_Int32 tVert = mrTextBodyProp.moVert.value_or( XML_horz );
-        if (tVert == XML_vert || tVert == XML_eaVert || tVert == XML_mongolianVert)
+        if (tVert == XML_eaVert)
+            mrTextBodyProp.maPropertyMap.setProperty(PROP_TextWritingMode, WritingMode_TB_RL);
+        else if (tVert == XML_vert || tVert == XML_mongolianVert)
             mrTextBodyProp.moRotation = 5400000;
         else if (tVert == XML_vert270)
             mrTextBodyProp.moRotation = 5400000 * 3;

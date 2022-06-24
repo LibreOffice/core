@@ -979,7 +979,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf87924, "tdf87924.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
     // This was -270, the text rotation angle was set when it should not be rotated.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+    // -270 is indeed correct but gave wrong rendering because of tdf#149809. I have now disabled
+    // generating an attached frame if shape is rotated. Regina 2022-07-03.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-270), aGeometry["TextPreRotateAngle"].get<sal_Int32>());
+    // CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aGeometry["TextPreRotateAngle"].get<sal_Int32>());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testIndents, "indents.docx")

@@ -74,7 +74,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 }
                 else if (nVert != XML_horz)
                 {
-                    // Get the existing rotation of the shape.
+/*                    // Get the existing rotation of the shape.
                     drawing::HomogenMatrix3 aMatrix;
                     xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
                     basegfx::B2DHomMatrix aTransformation;
@@ -93,10 +93,10 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     double fShearX = 0;
                     aTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
 
-                    // If the text is not rotated the way the shape wants it already, set the angle.
+                    // If the text is not rotated the way the shape wants it already, set the angle.*/
                     const sal_Int32 nRotation = nVert == XML_vert270 ? -270 : -90;
-                    if (static_cast<sal_Int32>(basegfx::rad2deg(fRotate))
-                        != NormAngle36000(Degree100(nRotation * 100)).get() / 100)
+//                    if (static_cast<sal_Int32>(basegfx::rad2deg(fRotate))
+//                        != NormAngle36000(Degree100(nRotation * 100)).get() / 100)
                     {
                         comphelper::SequenceAsHashMap aCustomShapeGeometry(
                             xPropertySet->getPropertyValue("CustomShapeGeometry"));
