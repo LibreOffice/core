@@ -127,6 +127,8 @@ void CustomShapeProperties::pushToPropSet(
         aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
         aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextRotateAngle );
         aPropertyMap.setProperty( PROP_TextCameraZRotateAngle, mnTextCameraZRotateAngle );
+        if (moTextAreaRotateAngle.has_value())
+            aPropertyMap.setProperty(PROP_TextRotateAngle, moTextAreaRotateAngle.value());
         Sequence< PropertyValue > aSeq = aPropertyMap.makePropertyValueSequence();
         aPropSet.setProperty( PROP_CustomShapeGeometry, aSeq );
 
@@ -189,6 +191,8 @@ void CustomShapeProperties::pushToPropSet(
         aPropertyMap.setProperty( PROP_MirroredY, mbMirroredY );
         if( mnTextRotateAngle )
             aPropertyMap.setProperty( PROP_TextPreRotateAngle, mnTextRotateAngle );
+        if (moTextAreaRotateAngle.has_value())
+            aPropertyMap.setProperty(PROP_TextRotateAngle, moTextAreaRotateAngle.value());
         // Note 1: If Equations are defined - they are processed using internal div by 360 coordinates
         // while if they are not, standard ooxml coordinates are used.
         // This size specifically affects scaling.
