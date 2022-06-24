@@ -194,6 +194,24 @@
       "parentUuid": "081c5159_42d2af4a",
       "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7989ca71_7fcafa3f",
+        "filename": "sc/source/filter/orcus/filterdetect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-06-24T22:42:00Z",
+      "side": 1,
+      "message": "I think the change Stephan had made is reasonable as a backportable fix.  What I mentioned should be taken toward any potential future improvements.",
+      "parentUuid": "3e2d50ae_9e7f2d6c",
+      "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
