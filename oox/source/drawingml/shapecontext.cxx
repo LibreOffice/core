@@ -32,6 +32,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <sal/log.hxx>
+#include <drawingml/transform2dcontext.hxx>
 
 using namespace oox::core;
 using namespace ::com::sun::star;
@@ -95,13 +96,13 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
             mpShapePtr->setTextBody( std::make_shared<TextBody>() );
         return new TextBodyContext( *this, mpShapePtr );
     }
-    case XML_txXfrm:
+    case XML_txXfrm: // diagram shape. [MS-ODRAWXML]
     {
         const TextBodyPtr& rShapePtr = mpShapePtr->getTextBody();
         if (rShapePtr)
-            rShapePtr->getTextProperties().moRotation = rAttribs.getInteger( XML_rot );
-        return nullptr;
+            return new oox::drawingml::Transform2DContext( *this, rAttribs, *mpShapePtr, true );
     }
+        break;
     case XML_cNvSpPr:
         break;
     case XML_spLocks:
