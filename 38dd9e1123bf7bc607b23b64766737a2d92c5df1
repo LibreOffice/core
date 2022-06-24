@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f74e295_19b5289b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-06-24T10:42:10Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix! I wasn\u0027t able to test it without a localized build, but I\u0027ve seen, that the paragraph styles have already handled this way. Moreover, our QA staff are going to test it.",
+      "revId": "38dd9e1123bf7bc607b23b64766737a2d92c5df1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
