@@ -37,6 +37,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
 
@@ -63,8 +64,8 @@ namespace {
     {
     public:
         PresenterScreenListener (
-            const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-            const css::uno::Reference<css::frame::XModel2>& rxModel);
+            css::uno::Reference<css::uno::XComponentContext> xContext,
+            css::uno::Reference<css::frame::XModel2> xModel);
         PresenterScreenListener(const PresenterScreenListener&) = delete;
         PresenterScreenListener& operator=(const PresenterScreenListener&) = delete;
 
@@ -164,11 +165,11 @@ Any SAL_CALL PresenterScreenJob::execute(
 namespace {
 
 PresenterScreenListener::PresenterScreenListener (
-    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-    const css::uno::Reference<css::frame::XModel2>& rxModel)
+    css::uno::Reference<css::uno::XComponentContext> xContext,
+    css::uno::Reference<css::frame::XModel2> xModel)
     : PresenterScreenListenerInterfaceBase(m_aMutex),
-      mxModel(rxModel),
-      mxComponentContext(rxContext)
+      mxModel(std::move(xModel)),
+      mxComponentContext(std::move(xContext))
 {
 }
 
@@ -238,9 +239,9 @@ void SAL_CALL PresenterScreenListener::disposing (const css::lang::EventObject&)
 
 PresenterScreen::PresenterScreen (
     const Reference<XComponentContext>& rxContext,
-    const css::uno::Reference<css::frame::XModel2>& rxModel)
+    css::uno::Reference<css::frame::XModel2> xModel)
     : PresenterScreenInterfaceBase(m_aMutex),
-      mxModel(rxModel),
+      mxModel(std::move(xModel)),
       mxContextWeak(rxContext)
 {
 }

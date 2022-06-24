@@ -22,6 +22,7 @@
 #include "PresenterPaintManager.hxx"
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
+#include <utility>
 
 using namespace css;
 using namespace css::uno;
@@ -33,9 +34,9 @@ namespace sdext::presenter {
 
 PresenterPaneBase::PresenterPaneBase (
     const Reference<XComponentContext>& rxContext,
-    const ::rtl::Reference<PresenterController>& rpPresenterController)
+    ::rtl::Reference<PresenterController> xPresenterController)
     : PresenterPaneBaseInterfaceBase(m_aMutex),
-      mpPresenterController(rpPresenterController),
+      mpPresenterController(std::move(xPresenterController)),
       mxComponentContext(rxContext)
 {
     if (mpPresenterController)

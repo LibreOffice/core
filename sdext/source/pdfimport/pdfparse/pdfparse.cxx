@@ -40,6 +40,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <utility>
 
 // disable warnings again because someone along the line has enabled them
 // (we have  included boost headers, what did you expect?)
@@ -88,8 +89,8 @@ class PDFGrammar :  public grammar< PDFGrammar<iteratorT> >
 {
 public:
 
-    explicit PDFGrammar( const iteratorT& first )
-    : m_fDouble( 0.0 ), m_aGlobalBegin( first ) {}
+    explicit PDFGrammar( iteratorT first )
+    : m_fDouble( 0.0 ), m_aGlobalBegin(std::move( first )) {}
     ~PDFGrammar()
     {
         if( !m_aObjectStack.empty() )

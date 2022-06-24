@@ -30,6 +30,7 @@
 #include <memory>
 #include <mutex>
 #include <set>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -41,7 +42,7 @@ class TimerTask
 {
 public:
     TimerTask (
-        const PresenterTimer::Task& rTask,
+        PresenterTimer::Task aTask,
         const TimeValue& rDueTime,
         const sal_Int64 nRepeatInterval,
         const sal_Int32 nTaskId);
@@ -397,11 +398,11 @@ sal_Int64 TimerScheduler::ConvertFromTimeValue (
 namespace {
 
 TimerTask::TimerTask (
-    const PresenterTimer::Task& rTask,
+    PresenterTimer::Task aTask,
     const TimeValue& rDueTime,
     const sal_Int64 nRepeatInterval,
     const sal_Int32 nTaskId)
-    : maTask(rTask),
+    : maTask(std::move(aTask)),
       maDueTime(rDueTime),
       mnRepeatInterval(nRepeatInterval),
       mnTaskId(nTaskId),

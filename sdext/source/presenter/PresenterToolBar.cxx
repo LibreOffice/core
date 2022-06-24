@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/settings.hxx>
 #include "PresenterToolBar.hxx"
 
@@ -56,8 +57,8 @@ namespace {
     public:
         Text();
         Text (
-            const OUString& rsText,
-            const PresenterTheme::SharedFontDescriptor& rpFont);
+            OUString sText,
+            PresenterTheme::SharedFontDescriptor pFont);
 
         void SetText (const OUString& rsText);
         const OUString& GetText() const;
@@ -120,7 +121,7 @@ namespace {
           public ElementInterfaceBase
     {
     public:
-        explicit Element (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
+        explicit Element (::rtl::Reference<PresenterToolBar> pToolBar);
         Element(const Element&) = delete;
         Element& operator=(const Element&) = delete;
 
@@ -263,8 +264,8 @@ namespace {
         class Listener : public PresenterClockTimer::Listener
         {
         public:
-            explicit Listener (const ::rtl::Reference<TimeLabel>& rxLabel)
-                : mxLabel(rxLabel) {}
+            explicit Listener (::rtl::Reference<TimeLabel> xLabel)
+                : mxLabel(std::move(xLabel)) {}
             virtual ~Listener() {}
             virtual void TimeHasChanged (const oslDateTime& rCurrentTime) override
             { if (mxLabel.is()) mxLabel->TimeHasChanged(rCurrentTime); }
@@ -349,15 +350,15 @@ namespace {
 
 PresenterToolBar::PresenterToolBar (
     const Reference<XComponentContext>& rxContext,
-    const css::uno::Reference<css::awt::XWindow>& rxWindow,
-    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-    const ::rtl::Reference<PresenterController>& rpPresenterController,
+    css::uno::Reference<css::awt::XWindow> xWindow,
+    css::uno::Reference<css::rendering::XCanvas> xCanvas,
+    ::rtl::Reference<PresenterController> pPresenterController,
     const Anchor eAnchor)
     : PresenterToolBarInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
-      mxWindow(rxWindow),
-      mxCanvas(rxCanvas),
-      mpPresenterController(rpPresenterController),
+      mxWindow(std::move(xWindow)),
+      mxCanvas(std::move(xCanvas)),
+      mpPresenterController(std::move(pPresenterController)),
       mbIsLayoutPending(false),
       meAnchor(eAnchor)
 {
@@ -1126,9 +1127,9 @@ Reference<drawing::XDrawPage> SAL_CALL PresenterToolBarView::getCurrentPage()
 namespace {
 
 Element::Element (
-    const ::rtl::Reference<PresenterToolBar>& rpToolBar)
+    ::rtl::Reference<PresenterToolBar> pToolBar)
     : ElementInterfaceBase(m_aMutex),
-      mpToolBar(rpToolBar),
+      mpToolBar(std::move(pToolBar)),
       mbIsOver(false),
       mbIsPressed(false),
       mbIsSelected(false),
@@ -1605,10 +1606,10 @@ Text::Text()
 }
 
 Text::Text (
-    const OUString& rsText,
-    const PresenterTheme::SharedFontDescriptor& rpFont)
-    : msText(rsText),
-      mpFont(rpFont)
+    OUString sText,
+    PresenterTheme::SharedFontDescriptor pFont)
+    : msText(std::move(sText)),
+      mpFont(std::move(pFont))
 {
 }
 

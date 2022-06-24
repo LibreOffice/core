@@ -81,11 +81,11 @@ public:
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     PresenterController (
-        const css::uno::WeakReference<css::lang::XEventListener> &rxScreen,
+        css::uno::WeakReference<css::lang::XEventListener> xScreen,
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::frame::XController>& rxController,
         const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController,
-        const rtl::Reference<PresenterPaneContainer>& rpPaneContainer,
+        rtl::Reference<PresenterPaneContainer> xPaneContainer,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxMainPaneId);
     virtual ~PresenterController() override;
 

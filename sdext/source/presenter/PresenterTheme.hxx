@@ -57,8 +57,8 @@ class PresenterTheme
 {
 public:
     PresenterTheme (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
+        css::uno::Reference<css::uno::XComponentContext> xContext,
+        css::uno::Reference<css::rendering::XCanvas> xCanvas);
     ~PresenterTheme();
 
     bool HasCanvas() const;

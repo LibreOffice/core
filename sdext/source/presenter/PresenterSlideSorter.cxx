@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/settings.hxx>
 
 #include "PresenterSlideSorter.hxx"
@@ -73,7 +74,7 @@ namespace {
 class PresenterSlideSorter::Layout
 {
 public:
-    explicit Layout (const ::rtl::Reference<PresenterScrollBar>& rpVerticalScrollBar);
+    explicit Layout (::rtl::Reference<PresenterScrollBar> xVerticalScrollBar);
 
     void Update (const geometry::RealRectangle2D& rBoundingBox, const double nSlideAspectRatio);
     void SetupVisibleArea();
@@ -129,7 +130,7 @@ public:
         const Reference<container::XIndexAccess>& rxSlides,
         const std::shared_ptr<PresenterTheme>& rpTheme,
         const Reference<awt::XWindow>& rxInvalidateTarget,
-        const std::shared_ptr<PresenterPaintManager>& rpPaintManager);
+        std::shared_ptr<PresenterPaintManager> xPaintManager);
     MouseOverManager(const MouseOverManager&) = delete;
     MouseOverManager& operator=(const MouseOverManager&) = delete;
 
@@ -1049,7 +1050,7 @@ void PresenterSlideSorter::ThrowIfDisposed()
 //===== PresenterSlideSorter::Layout ==========================================
 
 PresenterSlideSorter::Layout::Layout (
-    const ::rtl::Reference<PresenterScrollBar>& rpVerticalScrollBar)
+    ::rtl::Reference<PresenterScrollBar> xVerticalScrollBar)
     : mnHorizontalOffset(0),
       mnVerticalOffset(0),
       mnHorizontalGap(0),
@@ -1063,7 +1064,7 @@ PresenterSlideSorter::Layout::Layout (
       mnLastVisibleColumn(-1),
       mnFirstVisibleRow(-1),
       mnLastVisibleRow(-1),
-      mpVerticalScrollBar(rpVerticalScrollBar)
+      mpVerticalScrollBar(std::move(xVerticalScrollBar))
 {
 }
 
@@ -1403,11 +1404,11 @@ PresenterSlideSorter::MouseOverManager::MouseOverManager (
     const Reference<container::XIndexAccess>& rxSlides,
     const std::shared_ptr<PresenterTheme>& rpTheme,
     const Reference<awt::XWindow>& rxInvalidateTarget,
-    const std::shared_ptr<PresenterPaintManager>& rpPaintManager)
+    std::shared_ptr<PresenterPaintManager> xPaintManager)
     : mxSlides(rxSlides),
       mnSlideIndex(-1),
       mxInvalidateTarget(rxInvalidateTarget),
-      mpPaintManager(rpPaintManager)
+      mpPaintManager(std::move(xPaintManager))
 {
     if (rpTheme != nullptr)
     {

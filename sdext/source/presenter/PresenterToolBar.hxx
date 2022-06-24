@@ -70,9 +70,9 @@ public:
 
     PresenterToolBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::awt::XWindow>& rxWindow,
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const ::rtl::Reference<PresenterController>& rpPresenterController,
+        css::uno::Reference<css::awt::XWindow> xWindow,
+        css::uno::Reference<css::rendering::XCanvas> xCanvas,
+        ::rtl::Reference<PresenterController> pPresenterController,
         const Anchor eAnchor);
     virtual ~PresenterToolBar() override;
     PresenterToolBar(const PresenterToolBar&) = delete;

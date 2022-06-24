@@ -123,7 +123,7 @@ private:
     PresenterViewFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::frame::XController>& rxController,
-        const ::rtl::Reference<PresenterController>& rpPresenterController);
+        ::rtl::Reference<PresenterController> pPresenterController);
 
     void Register (const css::uno::Reference<css::frame::XController>& rxController);
 

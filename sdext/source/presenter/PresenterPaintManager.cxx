@@ -22,6 +22,7 @@
 #include "PresenterPaneContainer.hxx"
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -30,12 +31,12 @@ namespace sdext::presenter {
 
 PresenterPaintManager::PresenterPaintManager (
     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-    const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper,
-    const rtl::Reference<PresenterPaneContainer>& rpPaneContainer)
+    css::uno::Reference<css::drawing::XPresenterHelper> xPresenterHelper,
+    rtl::Reference<PresenterPaneContainer> xPaneContainer)
     : mxParentWindow(rxParentWindow),
       mxParentWindowPeer(rxParentWindow, UNO_QUERY),
-      mxPresenterHelper(rxPresenterHelper),
-      mpPaneContainer(rpPaneContainer)
+      mxPresenterHelper(std::move(xPresenterHelper)),
+      mpPaneContainer(std::move(xPaneContainer))
 {
 }
 

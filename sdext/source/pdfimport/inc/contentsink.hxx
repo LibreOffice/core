@@ -48,14 +48,14 @@ namespace pdfi
 {
     struct FontAttributes
     {
-        FontAttributes( const OUString&      familyName_,
-                        const OUString&      sFontWeight,
+        FontAttributes( OUString             familyName_,
+                        OUString             sFontWeight,
                         bool                 isItalic_,
                         bool                 isUnderline_,
                         double               size_,
                         double               ascent_) :
-            familyName(familyName_),
-            fontWeight(sFontWeight),
+            familyName(std::move(familyName_)),
+            fontWeight(std::move(sFontWeight)),
             isItalic(isItalic_),
             isUnderline(isUnderline_),
             isOutline(false),

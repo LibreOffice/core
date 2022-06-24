@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
 #include <vcl/settings.hxx>
 #include "PresenterHelpView.hxx"
 #include "PresenterButton.hxx"
@@ -66,7 +67,7 @@ namespace {
     {
     public:
         LineDescriptorList (
-            const OUString& rsText,
+            OUString sText,
             const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
             const sal_Int32 nMaximalWidth);
 
@@ -121,11 +122,11 @@ PresenterHelpView::PresenterHelpView (
     const Reference<uno::XComponentContext>& rxContext,
     const Reference<XResourceId>& rxViewId,
     const Reference<frame::XController>& rxController,
-    const ::rtl::Reference<PresenterController>& rpPresenterController)
+    ::rtl::Reference<PresenterController> xPresenterController)
     : PresenterHelpViewInterfaceBase(m_aMutex),
       mxComponentContext(rxContext),
       mxViewId(rxViewId),
-      mpPresenterController(rpPresenterController),
+      mpPresenterController(std::move(xPresenterController)),
       mnSeparatorY(0),
       mnMaximalWidth(0)
 {
@@ -529,10 +530,10 @@ void LineDescriptor::CalculateSize (
 namespace {
 
 LineDescriptorList::LineDescriptorList (
-    const OUString& rsText,
+    OUString sText,
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
     const sal_Int32 nMaximalWidth)
-    : msText(rsText)
+    : msText(std::move(sText))
 {
     Update(rxFont, nMaximalWidth);
 }

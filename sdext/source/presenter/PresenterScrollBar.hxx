@@ -189,8 +189,8 @@ protected:
     PresenterScrollBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        const std::shared_ptr<PresenterPaintManager>& rpPaintManager,
-        const ::std::function<void (double)>& rThumbMotionListener);
+        std::shared_ptr<PresenterPaintManager> xPaintManager,
+        ::std::function<void (double)>  aThumbMotionListener);
 
     void Repaint (
         const css::geometry::RealRectangle2D& rBox,

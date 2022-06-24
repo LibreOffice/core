@@ -45,7 +45,7 @@ class PresenterCurrentSlideObserver
 {
 public:
     PresenterCurrentSlideObserver (
-        const ::rtl::Reference<PresenterController>& rxPresenterController,
+        ::rtl::Reference<PresenterController> xPresenterController,
         const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController);
     virtual ~PresenterCurrentSlideObserver() override;
 

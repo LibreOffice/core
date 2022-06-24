@@ -59,10 +59,10 @@ class PresenterSlideShowView
 {
 public:
     PresenterSlideShowView (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        css::uno::Reference<css::uno::XComponentContext> xContext,
+        css::uno::Reference<css::drawing::framework::XResourceId> xViewId,
         const css::uno::Reference<css::frame::XController>& rxController,
-        const ::rtl::Reference<PresenterController>& rpPresenterController);
+        ::rtl::Reference<PresenterController> xPresenterController);
     virtual ~PresenterSlideShowView() override;
     PresenterSlideShowView(const PresenterSlideShowView&) = delete;
     PresenterSlideShowView& operator=(const PresenterSlideShowView&) = delete;
