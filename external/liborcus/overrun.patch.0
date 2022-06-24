@@ -1,0 +1,63 @@
+--- src/parser/sax_token_parser.cpp
++++ src/parser/sax_token_parser.cpp
+@@ -10,6 +10,7 @@
+ 
+ #include <mdds/sorted_string_map.hpp>
+ #include <cctype>
++#include <limits>
+ 
+ namespace orcus {
+ 
+@@ -329,6 +330,28 @@
+     m_elem.raw_name = elem.name;
+ }
+ 
++static uint8_t readUint8(char const * begin, char const * end, char const ** endptr) {
++    unsigned n = 0;
++    char const * p = begin;
++    for (; p != end; ++p) {
++        char const c = *p;
++        if (c < '0' || c > '9') {
++            break;
++        }
++        n = 10 * n + (c - '0');
++        if (n > std::numeric_limits<uint8_t>::max()) {
++            *endptr = nullptr;
++            return 0;
++        }
++    }
++    if (p == begin) {
++        *endptr = nullptr;
++        return 0;
++    }
++    *endptr = p;
++    return n;
++}
++
+ void sax_token_handler_wrapper_base::attribute(std::string_view name, std::string_view val)
+ {
+     decl_attr_type dat = decl_attr::get().find(name.data(), name.size());
+@@ -340,18 +362,18 @@
+             const char* p = val.data();
+             const char* p_end = p + val.size();
+ 
+-            char* endptr = nullptr;
+-            long v = std::strtol(p, &endptr, 10);
++            const char* endptr = nullptr;
++            uint8_t v = readUint8(p, p_end, &endptr);
+ 
+-            if (!endptr || endptr >= p_end || *endptr != '.')
++            if (!endptr || endptr == p_end || *endptr != '.')
+                 break;
+ 
+             m_declaration.version_major = v;
+             p = endptr + 1;
+ 
+-            v = std::strtol(p, &endptr, 10);
++            v = readUint8(p, p_end, &endptr);
+ 
+-            if (!endptr || endptr > p_end)
++            if (!endptr)
+                 break;
+ 
+             m_declaration.version_minor = v;
