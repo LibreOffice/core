@@ -27,6 +27,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdtditm.hxx>
+#include <svx/svdmodel.hxx>
 
 #include <array>
 
@@ -65,8 +66,8 @@ void TextBodyProperties::pushVertSimulation()
         maPropertyMap.setProperty( PROP_TextHorizontalAdjust, TextHorizontalAdjust_CENTER);
 }
 
-/* Push text distances / insets, taking into consideration Shape Rotation */
-void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
+/* Push text distances / insets, taking into consideration text rotation */
+void TextBodyProperties::pushTextDistances()
 {
     for (auto & rValue : maTextDistanceValues)
         rValue.reset();
@@ -86,6 +87,9 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
         case 90*3*60000: nOff = 1; break;
         default: break;
     }
+    
+    if (moVert && moVert.value() == XML_eaVert)
+        nOff = (nOff + 3) % aProps.size();
 
     for (size_t i = 0; i < aProps.size(); i++)
     {
@@ -100,16 +104,11 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
         if (nOff == 1 && moTextOffUpper)
             nVal = *moTextOffUpper;
 
-
         if (nOff == 2 && moTextOffRight)
             nVal = *moTextOffRight;
 
         if (nOff == 3 && moTextOffLower)
             nVal = *moTextOffLower;
-
-
-        if( nVal < 0 )
-            nVal = 0;
 
         sal_Int32 nTextOffsetValue = nVal;
 
@@ -128,25 +127,6 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
         nOff = (nOff + 1) % aProps.size();
     }
 
-    // Check if bottom and top are set
-    if (maTextDistanceValues[1] && maTextDistanceValues[3])
-    {
-        double nHeight = rTextAreaSize.getHeight();
-
-        double nTop = *maTextDistanceValues[1];
-        double nBottom = *maTextDistanceValues[3];
-
-        // Check if top + bottom is more than text area height.
-        // If yes, we need to adjust the values as defined in OOXML.
-        if (nTop + nBottom >= nHeight)
-        {
-            double diffFactor = (nTop + nBottom - nHeight) / 2.0;
-
-            maTextDistanceValues[1] = nTop - diffFactor;
-            maTextDistanceValues[3] = nBottom - diffFactor;
-        }
-    }
-
     for (size_t i = 0; i < aProps.size(); i++)
     {
         if (maTextDistanceValues[i])
@@ -158,32 +138,31 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
    the text area into account, not just the shape area*/
 void TextBodyProperties::readjustTextDistances(uno::Reference<drawing::XShape> const& xShape)
 {
-    // Only for custom shapes (for now)
-    auto* pCustomShape = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
-    if (pCustomShape)
+    // tdf#148321 Check if top inset + bottom inset is more than text area height.
+    // If yes, we need to adjust the values to get same rendering as in MS Office.
+    // Only for custom shapes (for now); not for docx, as Word hides overflowing text
+    auto* pCustomShape
+        = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+    if (pCustomShape && !pCustomShape->getSdrModelFromSdrObject().IsWriter())
     {
-        sal_Int32 nLower = pCustomShape->GetTextLowerDistance();
-        sal_Int32 nUpper = pCustomShape->GetTextUpperDistance();
+        double fLower(pCustomShape->GetTextLowerDistance());
+        double fUpper(pCustomShape->GetTextUpperDistance());
 
-        pCustomShape->SetMergedItem(makeSdrTextUpperDistItem(0));
-        pCustomShape->SetMergedItem(makeSdrTextLowerDistItem(0));
+        tools::Rectangle aTextAreaRect;
+        double fTextAreaHeight = pCustomShape->GetTextBounds(aTextAreaRect)
+                                     ? aTextAreaRect.GetHeight()
+                                     : pCustomShape->GetLogicRect().GetHeight();
 
-        tools::Rectangle aAnchorRect;
-        pCustomShape->TakeTextAnchorRect(aAnchorRect);
-        Size aAnchorSize = aAnchorRect.GetSize();
-
-        pushTextDistances(aAnchorSize);
-        if (maTextDistanceValues[1] && maTextDistanceValues[3])
+        if (fUpper + fLower >= fTextAreaHeight)
         {
-            nLower = *maTextDistanceValues[3];
-            nUpper = *maTextDistanceValues[1];
+            double diffFactor = (fUpper + fLower - fTextAreaHeight) / 2.0;
+            fUpper -= diffFactor;
+            fLower -= diffFactor;
         }
-
-        pCustomShape->SetMergedItem(makeSdrTextLowerDistItem(nLower));
-        pCustomShape->SetMergedItem(makeSdrTextUpperDistItem(nUpper));
+        pCustomShape->SetMergedItem(makeSdrTextLowerDistItem(fLower));
+        pCustomShape->SetMergedItem(makeSdrTextUpperDistItem(fUpper));
     }
 }
-
 
 } // namespace oox::drawingml
 
