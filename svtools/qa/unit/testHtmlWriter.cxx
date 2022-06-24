@@ -198,6 +198,27 @@ CPPUNIT_TEST_FIXTURE(Test, testExactElementEnd)
     CPPUNIT_ASSERT_EQUAL(OString("<start><a/><b/></start>"), aString);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testAttributeValueEncode)
+{
+    // Given a HTML writer:
+    SvMemoryStream aStream;
+    HtmlWriter aHtml(aStream);
+    aHtml.prettyPrint(false);
+
+    // When writing an attribute with a value that needs encoding:
+    aHtml.start("element");
+    aHtml.attribute("attribute", "a&b");
+    aHtml.end();
+
+    // Then make sure that the encoding is performed:
+    OString aString = extractFromStream(aStream);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: <element attribute="a&amp;b"/>
+    // - Actual  : <element attribute="a&b"/>
+    // i.e. attribute value was not encoded in HTML, but it was in e.g. XML.
+    CPPUNIT_ASSERT_EQUAL(OString("<element attribute=\"a&amp;b\"/>"), aString);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

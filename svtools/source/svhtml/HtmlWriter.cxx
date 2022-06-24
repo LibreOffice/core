@@ -11,6 +11,7 @@
 #include <svtools/HtmlWriter.hxx>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>
+#include <svtools/htmlout.hxx>
 
 HtmlWriter::HtmlWriter(SvStream& rStream, std::string_view rNamespace) :
     mrStream(rStream),
@@ -127,7 +128,7 @@ void HtmlWriter::writeAttribute(SvStream& rStream, std::string_view aAttribute, 
     rStream.WriteOString(aAttribute);
     rStream.WriteChar('=');
     rStream.WriteChar('"');
-    rStream.WriteOString(aValue);
+    HTMLOutFuncs::Out_String(rStream, OStringToOUString(aValue, RTL_TEXTENCODING_UTF8));
     rStream.WriteChar('"');
 }
 
