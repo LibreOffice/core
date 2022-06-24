@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3458398_796cd9f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-24T20:36:37Z",
+      "side": 1,
+      "message": "Is this _GoBack in every language, or does MS localize this?",
+      "revId": "91f01a0509709e3858147f83f699875504fd8a4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efe1229a_cc76e2a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-24T20:36:37Z",
+      "side": 1,
+      "message": "Does this happen with RTF in MS Word too?",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 21
+      },
+      "revId": "91f01a0509709e3858147f83f699875504fd8a4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1fd9179_fd5cd139",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-24T20:36:37Z",
+      "side": 1,
+      "message": "Downside: a light gray field shading is seen which will probably be reported as a regression.",
+      "range": {
+        "startLine": 7,
+        "startChar": 55,
+        "endLine": 7,
+        "endChar": 63
+      },
+      "revId": "91f01a0509709e3858147f83f699875504fd8a4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f38b7a80_fd4a6f28",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-24T20:36:37Z",
+      "side": 1,
+      "message": "Does MS ALWAYS generate this bookmark? I assume so (but I don\u0027t get it with MS 2003 - not surprising since it sounds like it didn\u0027t start in DOCX until 2010).",
+      "range": {
+        "startLine": 7,
+        "startChar": 23,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "91f01a0509709e3858147f83f699875504fd8a4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12552517_362862e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-24T20:36:37Z",
+      "side": 1,
+      "message": "Does MS bookmark a selection? Does it restore a selection if bookmarked that way?",
+      "range": {
+        "startLine": 9,
+        "startChar": 12,
+        "endLine": 9,
+        "endChar": 20
+      },
+      "revId": "91f01a0509709e3858147f83f699875504fd8a4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83992898_de81a4c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-24T20:36:37Z",
+      "side": 1,
+      "message": "Does MS Word always prompt to jump on FILEOPEN? I can\u0027t remember ever seeing this. Do they also have \"authorship\" requirements?",
+      "range": {
+        "startLine": 9,
+        "startChar": 41,
+        "endLine": 9,
+        "endChar": 46
+      },
+      "revId": "91f01a0509709e3858147f83f699875504fd8a4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72c60aee_0ec548ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-24T20:36:37Z",
+      "side": 1,
+      "message": "I have some questions to be considered before pushing this.",
+      "revId": "91f01a0509709e3858147f83f699875504fd8a4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
