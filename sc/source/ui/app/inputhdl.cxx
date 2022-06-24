@@ -2786,6 +2786,10 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
 
     if (comphelper::LibreOfficeKit::isActive() && pActiveViewSh && pInputWin)
     {
+        UpdateActiveView();
+        if (pActiveView)
+            aSel = pActiveView->GetSelection();
+
         ScInputHandler::LOKSendFormulabarUpdate(pActiveViewSh,
                                                 ScEditUtil::GetMultilineString(*mpEditEngine),
                                                 aSel);
