@@ -72,7 +72,7 @@ char const PROCESSING_DONE[] = "InternalIPC::ProcessingDone";
 OString readStringFromPipe(osl::StreamPipe const & pipe) {
     for (OStringBuffer str;;) {
         char buf[1024];
-        sal_Int32 n = pipe.recv(buf, SAL_N_ELEMENTS(buf));
+        sal_Int32 n = pipe.recv(buf, std::size(buf));
         if (n <= 0) {
             SAL_INFO("desktop.app", "read empty string");
             return "";
@@ -1155,9 +1155,9 @@ void PipeIpcThread::execute()
             // notify client we're ready to process its args:
             SAL_INFO("desktop.app", "writing <" << SEND_ARGUMENTS << ">");
             sal_Int32 n = aStreamPipe.write(
-                SEND_ARGUMENTS, SAL_N_ELEMENTS(SEND_ARGUMENTS));
+                SEND_ARGUMENTS, std::size(SEND_ARGUMENTS));
                 // incl. terminating NUL
-            if (n != SAL_N_ELEMENTS(SEND_ARGUMENTS)) {
+            if (n != std::size(SEND_ARGUMENTS)) {
                 SAL_WARN("desktop.app", "short write: " << n);
                 continue;
             }
@@ -1186,9 +1186,9 @@ void PipeIpcThread::execute()
             {
                 // processing finished, inform the requesting end:
                 SAL_INFO("desktop.app", "writing <" << PROCESSING_DONE << ">");
-                n = aStreamPipe.write(PROCESSING_DONE, SAL_N_ELEMENTS(PROCESSING_DONE));
+                n = aStreamPipe.write(PROCESSING_DONE, std::size(PROCESSING_DONE));
                 // incl. terminating NUL
-                if (n != SAL_N_ELEMENTS(PROCESSING_DONE))
+                if (n != std::size(PROCESSING_DONE))
                 {
                     SAL_WARN("desktop.app", "short write: " << n);
                     continue;
