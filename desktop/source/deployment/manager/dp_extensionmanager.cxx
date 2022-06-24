@@ -296,7 +296,7 @@ std::vector<Reference<css::deployment::XPackage> >
     std::vector<Reference<css::deployment::XPackage> > extensionList;
     Reference<css::deployment::XPackageManager> lRepos[] = {
           getUserRepository(), getSharedRepository(), getBundledRepository() };
-    for (int i(0); i != SAL_N_ELEMENTS(lRepos); ++i)
+    for (std::size_t i(0); i != std::size(lRepos); ++i)
     {
         Reference<css::deployment::XPackage> xPackage;
         try
