@@ -1614,7 +1614,9 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     m_xAfterText->set_sensitive(bEnable);
     m_xMaxHyphenLabel->set_sensitive(bEnable);
     m_xMaxHyphenEdit->set_sensitive(bEnable);
+    m_xMinWordLabel->set_sensitive(bEnable);
     m_xMinWordLength->set_sensitive(bEnable);
+    m_xHyphenZoneLabel->set_sensitive(bEnable);
     m_xHyphenZone->set_sensitive(bEnable);
 
     switch (rSet->GetItemState(SID_ATTR_PARA_PAGENUM))
@@ -1931,7 +1933,9 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     , m_xExtHyphenAfterBox(m_xBuilder->weld_spin_button("spinLineBegin"))
     , m_xMaxHyphenLabel(m_xBuilder->weld_label("labelMaxNum"))
     , m_xMaxHyphenEdit(m_xBuilder->weld_spin_button("spinMaxNum"))
+    , m_xMinWordLabel(m_xBuilder->weld_label("labelMinLen"))
     , m_xMinWordLength(m_xBuilder->weld_spin_button("spinMinLen"))
+    , m_xHyphenZoneLabel(m_xBuilder->weld_label("labelHyphenZone"))
     , m_xHyphenZone(new SvxRelativeField(m_xBuilder->weld_metric_spin_button("spinHyphenZone", FieldUnit::CM)))
     //Page break
     , m_xPageBreakBox(m_xBuilder->weld_check_button("checkInsert"))
@@ -2001,7 +2005,9 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     m_xExtHyphenAfterBox->set_sensitive(false);
     m_xMaxHyphenLabel->set_sensitive(false);
     m_xMaxHyphenEdit->set_sensitive(false);
+    m_xMinWordLabel->set_sensitive(false);
     m_xMinWordLength->set_sensitive(false);
+    m_xHyphenZoneLabel->set_sensitive(false);
     m_xHyphenZone->set_sensitive(false);
     m_xPageNumBox->set_sensitive(false);
     m_xPagenumEdit->set_sensitive(false);
@@ -2136,7 +2142,9 @@ void SvxExtParagraphTabPage::HyphenClickHdl()
     m_xExtHyphenAfterBox->set_sensitive(bEnable);
     m_xMaxHyphenLabel->set_sensitive(bEnable);
     m_xMaxHyphenEdit->set_sensitive(bEnable);
+    m_xMinWordLabel->set_sensitive(bEnable);
     m_xMinWordLength->set_sensitive(bEnable);
+    m_xHyphenZoneLabel->set_sensitive(bEnable);
     m_xHyphenZone->set_sensitive(bEnable);
     m_xHyphenBox->set_state(bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
