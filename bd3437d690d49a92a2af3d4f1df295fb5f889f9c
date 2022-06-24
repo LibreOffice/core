@@ -52,6 +52,24 @@
       "parentUuid": "bc0887a4_093b3d6f",
       "revId": "bd3437d690d49a92a2af3d4f1df295fb5f889f9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fc394a6_3a09ca4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-24T02:32:51Z",
+      "side": 1,
+      "message": "Gerrit hides those entries for me for some reason. It shows them when I select \"Show all entries\".",
+      "parentUuid": "cf0cdd16_e3d5c3ab",
+      "revId": "bd3437d690d49a92a2af3d4f1df295fb5f889f9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
