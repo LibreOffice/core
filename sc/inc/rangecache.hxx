@@ -47,11 +47,13 @@ public:
     ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange, const ScQueryParam& param,
                        ScInterpreterContext* context);
 
+    /// Returns if the cache is usable.
+    bool isValid() const { return mValid; }
+
     /// Remove from document structure and delete (!) cache on modify hint.
     virtual void Notify(const SfxHint& rHint) override;
 
     const ScRange& getRange() const { return maRange; }
-    bool isDescending() const { return mDescending; }
 
     enum class ValueType
     {
@@ -62,14 +64,16 @@ public:
     struct HashKey
     {
         ScRange range;
-        bool descending;
-        ValueType type;
+        ValueType valueType;
+        ScQueryOp queryOp;
+        ScQueryEntry::QueryType queryType;
         bool operator==(const HashKey& other) const
         {
-            return range == other.range && descending == other.descending && type == other.type;
+            return range == other.range && valueType == other.valueType && queryOp == other.queryOp
+                   && queryType == other.queryType;
         }
     };
-    HashKey getHashKey() const { return { maRange, mDescending, mValues }; }
+    HashKey getHashKey() const { return { maRange, mValueType, mQueryOp, mQueryType }; }
     static HashKey makeHashKey(const ScRange& range, const ScQueryParam& param);
 
     struct Hash
@@ -78,8 +82,9 @@ public:
         {
             // Range should be just one column.
             size_t hash = key.range.hashStartColumn();
-            o3tl::hash_combine(hash, key.descending);
-            o3tl::hash_combine(hash, key.type);
+            o3tl::hash_combine(hash, key.valueType);
+            o3tl::hash_combine(hash, key.queryOp);
+            o3tl::hash_combine(hash, key.queryType);
             return hash;
         }
     };
@@ -100,8 +105,10 @@ private:
     std::vector<size_t> mRowToIndex; // indexed by 'SCROW - maRange.aStart.Row()'
     ScRange maRange;
     ScDocument* mpDoc;
-    bool mDescending;
-    ValueType mValues;
+    bool mValid;
+    ValueType mValueType;
+    ScQueryOp mQueryOp;
+    ScQueryEntry::QueryType mQueryType;
 
     ScSortedRangeCache(const ScSortedRangeCache&) = delete;
     ScSortedRangeCache& operator=(const ScSortedRangeCache&) = delete;
