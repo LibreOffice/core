@@ -187,6 +187,12 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
         SwTextNode * pNode(pStartNode);
         do
         {
+            // deleted text node: remove it from "hidden" list
+            // to update numbering in Show Changes mode
+            SwPosition aPos( *pNode, pNode->Len() );
+            if ( pNode->GetNumRule() && aPos < *rPam.End() )
+                pNode->RemoveFromListRLHidden();
+
             std::vector<SwTextFrame*> frames;
             SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pNode);
             for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
@@ -284,6 +290,12 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
         SwTextNode * pNode(pStartNode);
         do
         {
+            // undeleted text node: add it to the "hidden" list
+            // to update numbering in Show Changes mode
+            SwPosition aPos( *pNode, pNode->Len() );
+            if ( pNode->GetNumRule() && aPos < *rPam.End() )
+                pNode->AddToListRLHidden();
+
             std::vector<SwTextFrame*> frames;
             SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pNode);
             for (SwTextFrame * pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
