@@ -2754,6 +2754,13 @@ void SvxTableController::SetAttrToSelectedShape(const SfxItemSet& rAttr)
     SfxItemSetFixed<SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST> aSet(*rAttr.GetPool());
     aSet.Put(rAttr);
 
+    if (!aSet.Count())
+    {
+        // If there are no items to be applied on the shape, then don't set anything, it would
+        // terminate text edit without a good reason, which affects undo/redo.
+        return;
+    }
+
     // Set shadow items on the marked shape.
     mrView.SetAttrToMarked(aSet, /*bReplaceAll=*/false);
 }
