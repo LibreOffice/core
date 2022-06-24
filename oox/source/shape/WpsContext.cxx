@@ -74,37 +74,15 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 }
                 else if (nVert != XML_horz)
                 {
-                    // Get the existing rotation of the shape.
-                    drawing::HomogenMatrix3 aMatrix;
-                    xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
-                    basegfx::B2DHomMatrix aTransformation;
-                    aTransformation.set(0, 0, aMatrix.Line1.Column1);
-                    aTransformation.set(0, 1, aMatrix.Line1.Column2);
-                    aTransformation.set(0, 2, aMatrix.Line1.Column3);
-                    aTransformation.set(1, 0, aMatrix.Line1.Column1);
-                    aTransformation.set(1, 1, aMatrix.Line2.Column2);
-                    aTransformation.set(1, 2, aMatrix.Line3.Column3);
-                    aTransformation.set(2, 0, aMatrix.Line1.Column1);
-                    aTransformation.set(2, 1, aMatrix.Line2.Column2);
-                    aTransformation.set(2, 2, aMatrix.Line3.Column3);
-                    basegfx::B2DTuple aScale;
-                    basegfx::B2DTuple aTranslate;
-                    double fRotate = 0;
-                    double fShearX = 0;
-                    aTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
-
-                    // If the text is not rotated the way the shape wants it already, set the angle.
+                    // The UI of Word has only 'vert' and 'vert270'. Further values would be
+                    // 'mongolianVert', 'wordArtVert' and 'wordArtVertRtl'.
                     const sal_Int32 nRotation = nVert == XML_vert270 ? -270 : -90;
-                    if (static_cast<sal_Int32>(basegfx::rad2deg(fRotate))
-                        != NormAngle36000(Degree100(nRotation * 100)).get() / 100)
-                    {
-                        comphelper::SequenceAsHashMap aCustomShapeGeometry(
-                            xPropertySet->getPropertyValue("CustomShapeGeometry"));
-                        aCustomShapeGeometry["TextPreRotateAngle"] <<= nRotation;
-                        xPropertySet->setPropertyValue(
-                            "CustomShapeGeometry",
-                            uno::Any(aCustomShapeGeometry.getAsConstPropertyValueList()));
-                    }
+                    comphelper::SequenceAsHashMap aCustomShapeGeometry(
+                        xPropertySet->getPropertyValue("CustomShapeGeometry"));
+                    aCustomShapeGeometry["TextPreRotateAngle"] <<= nRotation;
+                    xPropertySet->setPropertyValue(
+                        "CustomShapeGeometry",
+                        uno::Any(aCustomShapeGeometry.getAsConstPropertyValueList()));
                 }
 
                 if (bool bUpright = rAttribs.getBool(XML_upright, false))

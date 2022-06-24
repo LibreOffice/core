@@ -95,7 +95,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
             mpShapePtr->setTextBody( std::make_shared<TextBody>() );
         return new TextBodyContext( *this, mpShapePtr );
     }
-    case XML_txXfrm:
+    case XML_txXfrm: // diagram shape. [MS-ODRAWXML]
     {
         const TextBodyPtr& rShapePtr = mpShapePtr->getTextBody();
         if (rShapePtr)

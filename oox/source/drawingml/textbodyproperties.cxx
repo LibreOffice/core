@@ -65,7 +65,7 @@ void TextBodyProperties::pushVertSimulation()
         maPropertyMap.setProperty( PROP_TextHorizontalAdjust, TextHorizontalAdjust_CENTER);
 }
 
-/* Push text distances / insets, taking into consideration Shape Rotation */
+/* Push text distances / insets, taking into consideration text rotation */
 void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
 {
     for (auto & rValue : maTextDistanceValues)
@@ -86,6 +86,9 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
         case 90*3*60000: nOff = 1; break;
         default: break;
     }
+    
+    if (moVert && moVert.value() == XML_eaVert)
+        nOff = (nOff + 3) % aProps.size();
 
     for (size_t i = 0; i < aProps.size(); i++)
     {

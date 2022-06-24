@@ -43,7 +43,43 @@ Transform2DContext::Transform2DContext( ContextHandler2Helper const & rParent, c
     else
     {
         if( rAttribs.hasAttribute( XML_rot ) )
-            mrShape.getTextBody()->getTextProperties().moRotation = rAttribs.getInteger( XML_rot, 0 );
+        {
+            // We might have already a text rotation from 'vert="vert"' or 'vert="vert270"' in addition.
+            sal_Int32 nVertRot = mrShape.getTextBody()->getTextProperties().moRotation.value_or(0);
+            // And need to know the txXfrm rotation for adapting insets
+            sal_Int32 nRot = rAttribs.getInteger(XML_rot, 0);
+            mrShape.getTextBody()->getTextProperties().moRotation = nRot + nVertRot;
+
+            // Adapt insets. The needed offset depends on nVertRot and nRot.
+            // normalize angles
+            while (nRot < 0)
+                nRot += 21600000;
+            while (nRot >= 21600000)
+                nRot -= 21600000;
+            while (nVertRot < 0)
+                nVertRot += 21600000;
+            while (nRot >= 21600000)
+                nVertRot -= 21600000;
+            // determine round shift offset
+            sal_Int32 nOff(0);
+            if (nRot == 16200000 && (nVertRot == 16200000 || nVertRot == 5400000))
+                nOff = 3;
+            else if (nRot == 5400000)
+                nOff = 1;
+            else if (nRot == 10800000 && nVertRot == 16200000)
+                nOff = 1; // Error in PowerPoint ?
+            else if (nRot == 10800000)
+                nOff = 2;
+            // move the insets values
+            std::array<sal_Int32, 4> aOldInsets;
+            for (size_t i = 0; i < 4; i++)
+                aOldInsets[i] = mrShape.getTextBody()->getTextProperties().moInsets[i].value_or(0);
+            for (size_t i = 0; i<4; i++)
+            {
+                mrShape.getTextBody()->getTextProperties().moInsets[nOff] = aOldInsets[i];
+                nOff = (nOff + 1) % 4;
+            }
+        }
     }
 }
 
