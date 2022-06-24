@@ -121,8 +121,8 @@ bool SmIsMathAlpha(const OUString &rText)
         u'\x2127',              u'\x210A',              MS_HBAR,
         MS_LAMBDABAR,           MS_SETN,                MS_SETZ,
         MS_SETQ,                MS_SETR,                MS_SETC,
-        u'\x2373',              u'\xE0A5',              u'\x2112',
-        u'\x2130',              u'\x2131'
+        MS_SETH,                u'\x2373',              u'\xE0A5',
+        u'\x2112',              u'\x2130',              u'\x2131'
     });
 
     if (rText.isEmpty())

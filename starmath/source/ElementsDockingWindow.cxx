@@ -144,7 +144,8 @@ const SmElementDescr s_a5SetOperationsList[] =
     {RID_SETZ, RID_SETZ_HELP, {}, {}},
     {RID_SETQ, RID_SETQ_HELP, {}, {}},
     {RID_SETR, RID_SETR_HELP, {}, {}},
-    {RID_SETC, RID_SETC_HELP, {}, {}}
+    {RID_SETC, RID_SETC_HELP, {}, {}},
+    {RID_SETH, RID_SETH_HELP, {}, {}}
 };
 
 const SmElementDescr s_a5FunctionsList[] =

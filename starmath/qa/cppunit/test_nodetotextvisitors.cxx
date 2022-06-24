@@ -192,6 +192,7 @@ void Test::SimpleSetOp()
     parseandparseagain("setQ", "Set of rational numbers");
     parseandparseagain("setR", "Set of real numbers");
     parseandparseagain("setC", "Set of complex numbers");
+    parseandparseagain("setH", "Set of complex numbers");
 }
 
 void Test::SimpleFunctions()
