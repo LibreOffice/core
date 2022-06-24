@@ -828,15 +828,19 @@ void QtMenu::ShowCloseButton(bool bShow)
     lcl_force_menubar_layout_update(*mpQMenuBar);
 }
 
-bool QtMenu::ShowNativePopupMenu(FloatingWindow*, const tools::Rectangle&,
+bool QtMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& rRect,
                                  FloatWinPopupFlags nFlags)
 {
     assert(mpQMenu);
     DoFullMenuUpdate(mpVCLMenu);
     mpQMenu->setTearOffEnabled(bool(nFlags & FloatWinPopupFlags::AllowTearOff));
 
-    const QPoint aPos = QCursor::pos();
-    mpQMenu->exec(aPos);
+    const VclPtr<vcl::Window> xParent = pWin->ImplGetWindowImpl()->mpRealParent;
+    const QtFrame* pFrame = static_cast<QtFrame*>(xParent->ImplGetFrame());
+    assert(pFrame);
+    const tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
+    const QRect aRect = toQRect(aFloatRect, 1 / pFrame->devicePixelRatioF());
+    mpQMenu->exec(aRect.topLeft());
 
     return true;
 }
