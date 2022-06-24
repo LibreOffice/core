@@ -102,7 +102,8 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     }
 
     // ST_Angle
-    mrTextBodyProp.moRotation = rAttribs.getInteger( XML_rot );
+    if (rAttribs.getInteger(XML_rot).has_value())
+        mrTextBodyProp.moTextAreaRotation = rAttribs.getInteger(XML_rot).value();
 
 //   bool bRtlCol = rAttribs.getBool( XML_rtlCol, false );
     // ST_PositiveCoordinate
