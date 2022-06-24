@@ -29,6 +29,7 @@
 #include <svx/svdundo.hxx>
 
 #include <functional>
+#include <utility>
 
 namespace dbaui
 {
@@ -50,8 +51,8 @@ namespace rptui
         OGroupHelper(const OGroupHelper&) = delete;
         OGroupHelper& operator=(const OGroupHelper&) = delete;
     public:
-        OGroupHelper(const css::uno::Reference< css::report::XGroup >& _xGroup)
-            :m_xGroup(_xGroup)
+        OGroupHelper(css::uno::Reference< css::report::XGroup > _xGroup)
+            :m_xGroup(std::move(_xGroup))
         {
         }
         css::uno::Reference< css::report::XSection >   getHeader() { return m_xGroup->getHeader(); }
@@ -71,8 +72,8 @@ namespace rptui
     {
         css::uno::Reference< css::report::XReportDefinition > m_xReport;
     public:
-        OReportHelper(const css::uno::Reference< css::report::XReportDefinition >& _xReport)
-            :m_xReport(_xReport)
+        OReportHelper(css::uno::Reference< css::report::XReportDefinition > _xReport)
+            :m_xReport(std::move(_xReport))
         {
         }
         css::uno::Reference< css::report::XSection > getReportHeader() { return m_xReport->getReportHeader(); }
@@ -167,7 +168,7 @@ namespace rptui
     public:
         OUndoContainerAction(SdrModel& rMod
                             ,Action _eAction
-                            ,const css::uno::Reference< css::container::XIndexContainer >& rContainer
+                            ,css::uno::Reference< css::container::XIndexContainer > xContainer
                             ,const css::uno::Reference< css::uno::XInterface>& xElem
                             ,TranslateId pCommentId);
         virtual ~OUndoContainerAction() override;

@@ -23,16 +23,17 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <o3tl/safeint.hxx>
+#include <utility>
 
 namespace reportdesign
 {
 
     using namespace com::sun::star;
 
-OFunctions::OFunctions(const uno::Reference< report::XFunctionsSupplier >& _xParent,const uno::Reference< uno::XComponentContext >& context)
+OFunctions::OFunctions(const uno::Reference< report::XFunctionsSupplier >& _xParent,uno::Reference< uno::XComponentContext > context)
 :FunctionsBase(m_aMutex)
 ,m_aContainerListeners(m_aMutex)
-,m_xContext(context)
+,m_xContext(std::move(context))
 ,m_xParent(_xParent)
 {
 }

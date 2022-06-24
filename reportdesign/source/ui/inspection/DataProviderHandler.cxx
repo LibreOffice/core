@@ -48,15 +48,16 @@
 #include <helpids.h>
 #include <strings.hrc>
 #include <PropertyForward.hxx>
+#include <utility>
 
 namespace rptui
 {
 
 using namespace ::com::sun::star;
 
-DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext > const & context)
+DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext > context)
     :DataProviderHandler_Base(m_aMutex)
-    ,m_xContext(context)
+    ,m_xContext(std::move(context))
 {
     try
     {

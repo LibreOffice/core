@@ -64,7 +64,7 @@ public:
         , const css::uno::Reference< css::lang::XMultiServiceFactory>& _xServiceFactory
         , const std::shared_ptr< formula::IFunctionManager >& _pFunctionMgr
         , const OUString& _sFormula
-        , const css::uno::Reference < css::beans::XPropertySet >& _xRowSet
+        , css::uno::Reference < css::beans::XPropertySet > _xRowSet
         , svl::SharedStringPool& rStrPool );
 
     virtual ~FormulaDialog() override;

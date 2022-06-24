@@ -30,6 +30,7 @@
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/weakref.hxx>
+#include <utility>
 
 namespace reportdesign
 {
@@ -58,8 +59,8 @@ namespace reportdesign
         bool m_bAutoGrow;
 
         OReportComponentProperties(
-                css::uno::Reference<css::uno::XComponentContext> const& xContext)
-            : m_xContext(xContext)
+                css::uno::Reference<css::uno::XComponentContext> xContext)
+            : m_xContext(std::move(xContext))
             , m_nHeight(0)
             , m_nWidth(0)
             , m_nPosX(0)

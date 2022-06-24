@@ -48,7 +48,7 @@ namespace rptui
         public DataProviderHandler_Base
     {
     public:
-        explicit DataProviderHandler(css::uno::Reference< css::uno::XComponentContext > const & context);
+        explicit DataProviderHandler(css::uno::Reference< css::uno::XComponentContext > context);
     private:
 
         // XServiceInfo

@@ -124,8 +124,8 @@ namespace rptui
         OGroupUndo(OReportModel& rMod
                     ,TranslateId pCommentID
                     ,Action _eAction
-                    ,const css::uno::Reference< css::report::XGroup>& _xGroup
-                    ,const css::uno::Reference< css::report::XReportDefinition >& _xReportDefinition);
+                    ,css::uno::Reference< css::report::XGroup> _xGroup
+                    ,css::uno::Reference< css::report::XReportDefinition > _xReportDefinition);
         virtual void        Undo() override;
         virtual void        Redo() override;
     };

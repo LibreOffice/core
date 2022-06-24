@@ -58,7 +58,7 @@ namespace reportdesign
         virtual void SAL_CALL disposing() override;
     public:
         OGroups( const css::uno::Reference< css::report::XReportDefinition >& _xParent
-                ,const css::uno::Reference< css::uno::XComponentContext >& context);
+                ,css::uno::Reference< css::uno::XComponentContext > context);
 
     // XGroups
         // Attributes

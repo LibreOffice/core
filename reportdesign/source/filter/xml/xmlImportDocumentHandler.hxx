@@ -43,7 +43,7 @@ typedef ::cppu::WeakAggImplHelper3< css::xml::sax::XDocumentHandler
 class ImportDocumentHandler : public ImportDocumentHandler_BASE
 {
 public:
-    explicit ImportDocumentHandler(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit ImportDocumentHandler(css::uno::Reference< css::uno::XComponentContext > context);
 
 private:
     // XServiceInfo

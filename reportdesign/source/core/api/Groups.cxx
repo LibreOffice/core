@@ -23,16 +23,17 @@
 #include <o3tl/safeint.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
+#include <utility>
 
 namespace reportdesign
 {
 
     using namespace com::sun::star;
 
-OGroups::OGroups(const uno::Reference< report::XReportDefinition >& _xParent,const uno::Reference< uno::XComponentContext >& context)
+OGroups::OGroups(const uno::Reference< report::XReportDefinition >& _xParent,uno::Reference< uno::XComponentContext > context)
 :GroupsBase(m_aMutex)
 ,m_aContainerListeners(m_aMutex)
-,m_xContext(context)
+,m_xContext(std::move(context))
 ,m_xParent(_xParent)
 {
 }

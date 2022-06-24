@@ -52,7 +52,7 @@ class REPORTDESIGN_DLLPUBLIC OReportPage final : public SdrPage
 public:
 
     OReportPage( OReportModel& rModel
-                ,const css::uno::Reference< css::report::XSection >& _xSection );
+                ,css::uno::Reference< css::report::XSection > _xSection );
 
     virtual rtl::Reference<SdrPage> CloneSdrPage(SdrModel& rTargetModel) const override;
 

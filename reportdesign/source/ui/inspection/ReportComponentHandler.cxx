@@ -24,6 +24,7 @@
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <metadata.hxx>
+#include <utility>
 
 
 namespace rptui
@@ -31,9 +32,9 @@ namespace rptui
 
 using namespace ::com::sun::star;
 
-ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentContext > const & context)
+ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentContext > context)
     :ReportComponentHandler_Base(m_aMutex)
-    ,m_xContext(context)
+    ,m_xContext(std::move(context))
 {
     try
     {

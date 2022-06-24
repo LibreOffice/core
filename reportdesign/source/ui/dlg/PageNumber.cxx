@@ -23,6 +23,7 @@
 #include <strings.hxx>
 #include <ReportController.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <utility>
 
 namespace rptui
 {
@@ -32,11 +33,11 @@ using namespace ::comphelper;
 
 
 OPageNumberDialog::OPageNumberDialog(weld::Window* pParent,
-                                     const uno::Reference< report::XReportDefinition >& _xHoldAlive,
+                                     uno::Reference< report::XReportDefinition > _xHoldAlive,
                                      OReportController* _pController)
     : GenericDialogController(pParent, "modules/dbreport/ui/pagenumberdialog.ui", "PageNumberDialog")
     , m_pController(_pController)
-    , m_xHoldAlive(_xHoldAlive)
+    , m_xHoldAlive(std::move(_xHoldAlive))
     , m_xPageN(m_xBuilder->weld_radio_button("pagen"))
     , m_xPageNofM(m_xBuilder->weld_radio_button("pagenofm"))
     , m_xTopPage(m_xBuilder->weld_radio_button("toppage"))

@@ -47,6 +47,7 @@
 #include <tools/diagnose_ex.h>
 #include <PropertyForward.hxx>
 #include <UndoEnv.hxx>
+#include <utility>
 
 namespace rptui
 {
@@ -311,8 +312,8 @@ OObjectBase::OObjectBase(const uno::Reference< report::XReportComponent>& _xComp
     m_xReportComponent = _xComponent;
 }
 
-OObjectBase::OObjectBase(const OUString& _sComponentName)
-:m_sComponentName(_sComponentName)
+OObjectBase::OObjectBase(OUString _sComponentName)
+:m_sComponentName(std::move(_sComponentName))
 ,m_bIsListening(false)
 {
 }

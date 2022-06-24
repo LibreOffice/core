@@ -58,7 +58,7 @@ namespace rptxml
 
         OXMLTable( ORptFilter& rImport
                     ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
-                    ,const css::uno::Reference< css::report::XSection >& _xSection
+                    ,css::uno::Reference< css::report::XSection > _xSection
                     );
         virtual ~OXMLTable() override;
 

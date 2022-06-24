@@ -29,6 +29,7 @@
 
 #include <Formula.hxx>
 #include <AddField.hxx>
+#include <utility>
 #include <helpids.h>
 
 
@@ -45,12 +46,12 @@ FormulaDialog::FormulaDialog(weld::Window* pParent
                              , const uno::Reference<lang::XMultiServiceFactory>& _xServiceFactory
                              , const std::shared_ptr< IFunctionManager >&  _pFunctionMgr
                              , const OUString& _sFormula
-                             , const css::uno::Reference < css::beans::XPropertySet >& _xRowSet
+                             , css::uno::Reference < css::beans::XPropertySet > _xRowSet
                              , svl::SharedStringPool& rStrPool )
     : FormulaModalDialog( pParent, _pFunctionMgr.get(),this)
     ,m_aFunctionManager(_pFunctionMgr)
     ,m_xFormulaData(new FormEditData())
-    ,m_xRowSet(_xRowSet)
+    ,m_xRowSet(std::move(_xRowSet))
     ,m_pEdit(nullptr)
     ,m_sFormula("=")
     ,m_nStart(0)

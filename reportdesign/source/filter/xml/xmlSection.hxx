@@ -37,7 +37,7 @@ namespace rptxml
 
         OXMLSection( ORptFilter& rImport
                     ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
-                    ,const css::uno::Reference< css::report::XSection >& _xSection
+                    ,css::uno::Reference< css::report::XSection > _xSection
                     ,bool _bPageHeader = true);
         virtual ~OXMLSection() override;
 

@@ -21,6 +21,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 
+#include <utility>
 #include <vcl/svapp.hxx>
 
 #include <tools/diagnose_ex.h>
@@ -59,11 +60,11 @@ IMPL_LINK(OAddFieldWindow, DragBeginHdl, bool&, rUnsetDragIcon, bool)
     return false;
 }
 
-OAddFieldWindow::OAddFieldWindow(weld::Window* pParent, const uno::Reference< beans::XPropertySet >& xRowSet)
+OAddFieldWindow::OAddFieldWindow(weld::Window* pParent, uno::Reference< beans::XPropertySet > xRowSet)
     : GenericDialogController(pParent, "modules/dbreport/ui/floatingfield.ui", "FloatingField")
     , ::comphelper::OPropertyChangeListener(m_aMutex)
     , ::comphelper::OContainerListener(m_aMutex)
-    , m_xRowSet(xRowSet)
+    , m_xRowSet(std::move(xRowSet))
     , m_xActions(m_xBuilder->weld_toolbar("toolbox"))
     , m_xListBox(m_xBuilder->weld_tree_view("treeview"))
     , m_xHelpText(m_xBuilder->weld_label("helptext"))

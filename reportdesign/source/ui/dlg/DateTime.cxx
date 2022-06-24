@@ -22,6 +22,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <strings.hxx>
 #include <ReportController.hxx>
@@ -36,12 +37,12 @@ using namespace ::comphelper;
 
 
 
-ODateTimeDialog::ODateTimeDialog(weld::Window* _pParent, const uno::Reference< report::XSection >& _xHoldAlive,
+ODateTimeDialog::ODateTimeDialog(weld::Window* _pParent, uno::Reference< report::XSection > _xHoldAlive,
                                  OReportController* _pController)
     : GenericDialogController(_pParent, "modules/dbreport/ui/datetimedialog.ui", "DateTimeDialog")
 
     , m_pController(_pController)
-    , m_xHoldAlive(_xHoldAlive)
+    , m_xHoldAlive(std::move(_xHoldAlive))
     , m_xDate(m_xBuilder->weld_check_button("date"))
     , m_xFTDateFormat(m_xBuilder->weld_label("datelistbox_label"))
     , m_xDateListBox(m_xBuilder->weld_combo_box("datelistbox"))

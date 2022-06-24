@@ -78,7 +78,7 @@ class  OAddFieldWindow : public weld::GenericDialogController
     void operator =(const OAddFieldWindow&) = delete;
 public:
     OAddFieldWindow(weld::Window* pParent,
-                    const css::uno::Reference< css::beans::XPropertySet >& xRowSet);
+                    css::uno::Reference< css::beans::XPropertySet >  xRowSet);
 
     virtual ~OAddFieldWindow() override;
 
