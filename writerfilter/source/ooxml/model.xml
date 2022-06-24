@@ -5363,6 +5363,7 @@
   </namespace>
   <namespace name="w15">
     <start name="commentsEx"/>
+    <start name="people"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/word/2012/wordml" attributeFormDefault="qualified">
       <define name="commentsEx">
         <element name="commentsEx">
@@ -5398,6 +5399,29 @@
           <value>1</value>
         </choice>
       </define>
+      <define name="people">
+        <element name="people">
+          <ref name="CT_Person"/>
+        </element>
+      </define>
+      <define name="CT_Person">
+        <element name="person">
+          <attribute name="author">
+            <ref name="ST_String"/>
+          </attribute>
+          <ref name="CT_PresenceInfo"/>
+        </element>
+      </define>
+      <define name="CT_PresenceInfo">
+        <element name="presenceInfo">
+          <attribute name="providerId">
+            <ref name="ST_String"/>
+          </attribute>
+          <attribute name="userId">
+            <ref name="ST_String"/>
+          </attribute>
+        </element>
+      </define>
     </grammar>
     <resource name="CT_CommentsEx" resource="Stream">
       <element name="commentEx" tokenid="ooxml:CT_CommentsEx_commentEx"/>
@@ -5408,6 +5432,17 @@
     </resource>
     <resource name="ST_LongHexNumber" resource="String"/>
     <resource name="ST_OnOff" resource="Boolean"/>
+    <resource name="CT_People" resource="Stream">
+      <element name="people" tokenid="ooxml:CT_People"/>
+    </resource>
+    <resource name="CT_Person" resource="Properties">
+      <attribute name="author" tokenid="ooxml:CT_Person_author"/>
+    </resource>
+    <resource name="CT_PresenceInfo" resource="Properties">
+      <element name="presenceInfo" tokenid="ooxml:CT_PresenceInfo"/>
+      <attribute name="providerId" tokenid="ooxml:CT_PresenceInfo_providerId"/>
+      <attribute name="userId" tokenid="ooxml:CT_PresenceInfo_userId"/>
+    </resource>
   </namespace>
   <namespace name="a14">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/drawing/2010/main">

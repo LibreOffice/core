@@ -3477,6 +3477,8 @@ namespace xmloff::token {
         XML_DATE_FORMAT,
         XML_DATE_RFC_LANGUAGE_TAG,
 
+        XML_FEDERATED_ID,
+
         XML_TOKEN_END
     };
 

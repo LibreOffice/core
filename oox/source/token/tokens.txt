@@ -5888,3 +5888,7 @@ zoomScaleNormal
 zoomScalePageLayoutView
 zoomScaleSheetLayoutView
 zoomToFit
+person
+presenceInfo
+userId
+providerId

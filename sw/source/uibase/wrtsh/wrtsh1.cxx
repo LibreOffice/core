@@ -2206,6 +2206,11 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         if ( pTextItem )
             sText = pTextItem->GetValue();
 
+        const SvxPostItFederatedIdItem* pFederatedIdItem = rReq.GetArg<SvxPostItFederatedIdItem>(SID_ATTR_POSTIT_FEDERATEDID);
+        OUString sFederatedId = OUString();
+        if ( pFederatedIdItem )
+            sFederatedId = pFederatedIdItem->GetValue();
+
         // If we have a text already registered for answer, use that
         if (GetView().GetPostItMgr()->IsAnswer() && !GetView().GetPostItMgr()->GetAnswerText().isEmpty())
         {
@@ -2222,7 +2227,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         // --> suggestion has to be removed before
         GetView().GetEditWin().StopQuickHelp();
 
-        SwInsertField_Data aData(SwFieldTypesEnum::Postit, 0, sAuthor, sText, 0);
+        SwInsertField_Data aData(SwFieldTypesEnum::Postit, 0, sAuthor, sText, sFederatedId, 0);
 
         if (IsSelFrameMode())
         {

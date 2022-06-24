@@ -741,6 +741,20 @@ void DocxExport::WritePostitFields()
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
     pPostitFS->endElementNS( XML_w, XML_comments );
 
+    pPostitFS = m_rFilter.openFragmentStreamWithSerializer( "word/people.xml",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.people+xml");
+
+    pPostitFS->startElementNS(XML_w15, XML_people, // Add namespaces manually now
+                              FSNS(XML_xmlns, XML_mc), m_rFilter.getNamespaceURL(OOX_NS(mce)),
+                              FSNS(XML_xmlns, XML_w15), m_rFilter.getNamespaceURL(OOX_NS(w15)),
+                              FSNS(XML_mc, XML_Ignorable), "w15");
+
+    //write providerId and userId
+    m_pAttrOutput->SetSerializer( pPostitFS );
+    m_pAttrOutput->WriteFederatedId();
+    m_pAttrOutput->SetSerializer( m_pDocumentFS );
+    pPostitFS->endElementNS( XML_w15, XML_people);
+
     if (eHasResolved != DocxAttributeOutput::hasResolved::yes)
         return;
 

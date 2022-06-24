@@ -55,6 +55,12 @@ published service Annotation
     /** contains the creation date.
      */
     [optional, property]com::sun::star::util::DateTime DateTimeValue;
+
+    [optional, property]string FederatedId;
+    /** contains the authorId of the annotation.
+
+        @since LibreOffice 4.0
+    */
 };
 
 

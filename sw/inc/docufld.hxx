@@ -451,6 +451,7 @@ class SW_DLLPUBLIC SwPostItField final : public SwField
     OUString m_sAuthor;
     OUString m_sInitials; ///< Initials of the author.
     OUString m_sName;     ///< Name of the comment.
+    OUString m_sFederatedId; ///< ID of author
     DateTime    m_aDateTime;
     bool     m_bResolved;
     std::optional<OutlinerParaObject> mpText;
@@ -465,6 +466,7 @@ public:
                    const OUString& rText,
                    const OUString& rInitials,
                    const OUString& rName,
+                   const OUString& rFederatedId,
                    const DateTime& rDate,
                    const bool bResolved = false,
                    const sal_uInt32 nPostItId = 0);
@@ -494,6 +496,7 @@ public:
     const OUString&         GetInitials() const { return m_sInitials;}
     void                    SetName(const OUString& rStr);
     const OUString&         GetName() const { return m_sName;}
+    const OUString&         GetFederatedId() const { return m_sFederatedId; }
 
     const OutlinerParaObject* GetTextObject() const { return mpText ? &*mpText : nullptr;}
     void SetTextObject( std::optional<OutlinerParaObject> pText );
