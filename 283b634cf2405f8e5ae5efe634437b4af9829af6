@@ -212,6 +212,24 @@
       "parentUuid": "3e2d50ae_9e7f2d6c",
       "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c4750fb_759c9a32",
+        "filename": "sc/source/filter/orcus/filterdetect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-06-25T13:04:21Z",
+      "side": 1,
+      "message": "Kohei, does orcus have some abstraction of a seekable file? \nBecause passing in such an interface (which would obviously be a wrapper around some kind of XSeekable) would be a sufficiently general interface to avoid needing to load the entire file at once.",
+      "parentUuid": "7989ca71_7fcafa3f",
+      "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
