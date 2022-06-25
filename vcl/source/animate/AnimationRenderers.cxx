@@ -145,4 +145,12 @@ bool Animation::Repaint(OutputDevice& rOut, tools::Long nRendererId, Point const
     return bRepainted;
 }
 
+void Animation::CreateDefaultRenderer(Animation* pAnim, OutputDevice* pOut, Point const& rDestPt,
+                                      Size const& rDestSz, sal_uLong nRendererId,
+                                      OutputDevice* pFirstFrameOutDev)
+{
+    maRenderers.emplace_back(
+        new AnimationRenderer(pAnim, pOut, rDestPt, rDestSz, nRendererId, pFirstFrameOutDev));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
