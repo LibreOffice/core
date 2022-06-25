@@ -87,6 +87,54 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12bff2db_b4e1772a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-25T14:26:42Z",
+      "side": 1,
+      "message": "No - not in 2019. It seems to keep the information outside of the document now.",
+      "parentUuid": "f38b7a80_fd4a6f28",
+      "range": {
+        "startLine": 7,
+        "startChar": 23,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "91f01a0509709e3858147f83f699875504fd8a4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2248cb03_6476aa96",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-25T14:26:42Z",
+      "side": 1,
+      "message": "Irrelevant now that I\u0027m assuming non-document storage.",
+      "parentUuid": "efe1229a_cc76e2a4",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 21
+      },
+      "revId": "91f01a0509709e3858147f83f699875504fd8a4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12552517_362862e1",
@@ -128,6 +176,54 @@
         "startChar": 41,
         "endLine": 9,
         "endChar": 46
+      },
+      "revId": "91f01a0509709e3858147f83f699875504fd8a4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7739ee0_8df2cb54",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-25T14:26:42Z",
+      "side": 1,
+      "message": "No. The mere presence of a _GoBack is not enough to prompt a jump. It must be stored elsewhere.",
+      "parentUuid": "83992898_de81a4c0",
+      "range": {
+        "startLine": 9,
+        "startChar": 41,
+        "endLine": 9,
+        "endChar": 46
+      },
+      "revId": "91f01a0509709e3858147f83f699875504fd8a4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4122d070_885b3a9e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-25T14:26:42Z",
+      "side": 1,
+      "message": "No - it seems to mark the start of the line, not the exact edit/cursor location.",
+      "parentUuid": "12552517_362862e1",
+      "range": {
+        "startLine": 9,
+        "startChar": 12,
+        "endLine": 9,
+        "endChar": 20
       },
       "revId": "91f01a0509709e3858147f83f699875504fd8a4c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"

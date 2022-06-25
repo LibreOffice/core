@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b43f8b44_dfc68f2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-25T14:26:42Z",
+      "side": 1,
+      "message": "Testing suggests Microsoft has changed course on this. It still recognizes (and removes I think) _GoBack bookmarks, but doesn\u0027t rely on them any more to prompt a \"welcome back\" message.",
+      "revId": "32db3621eb7d5dfaef7991f64a42ba96c3113eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
