@@ -367,7 +367,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
     if (nAnimCount)
     {
-        bool bGlobalPause = false;
+        bool bIsAnyRendererActive = true;
 
         if (maNotifyLink.IsSet())
         {
@@ -381,8 +381,9 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             maRenderers.erase(removeStart, maRenderers.cend());
 
             // check if every remaining view is paused
-            bGlobalPause = std::all_of(maRenderers.cbegin(), maRenderers.cend(),
-                                       [](const auto& pRenderer) { return pRenderer->isPaused(); });
+            bIsAnyRendererActive
+                = std::any_of(maRenderers.cbegin(), maRenderers.cend(),
+                              [](const auto& pRenderer) { return !pRenderer->isPaused(); });
 
             // reset marked state
             std::for_each(maRenderers.cbegin(), maRenderers.cend(),
@@ -391,13 +392,15 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
         if (maRenderers.empty())
             Stop();
-        else if (bGlobalPause)
+        else if (!bIsAnyRendererActive)
             ImplRestartTimer(10);
         else
             RenderNextFrameInAllRenderers();
     }
     else
+    {
         Stop();
+    }
 }
 
 bool Animation::Insert(const AnimationFrame& rStepBmp)
