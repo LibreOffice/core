@@ -361,6 +361,24 @@ void Animation::RenderNextFrameInAllRenderers()
         ImplRestartTimer(pCurrentFrameBmp->mnWait);
 }
 
+void Animation::PruneMarkedRenderers()
+{
+    // delete all unmarked views
+    auto removeStart = std::remove_if(maRenderers.begin(), maRenderers.end(),
+                                      [](const auto& pRenderer) { return !pRenderer->IsMarked(); });
+    maRenderers.erase(removeStart, maRenderers.cend());
+
+    // reset marked state
+    std::for_each(maRenderers.cbegin(), maRenderers.cend(),
+                  [](const auto& pRenderer) { pRenderer->SetMarked(false); });
+}
+
+bool Animation::AllRenderersPaused()
+{
+    return !std::any_of(maRenderers.cbegin(), maRenderers.cend(),
+                        [](const auto& pRenderer) { return !pRenderer->IsPaused(); });
+}
+
 IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     const size_t nAnimCount = maFrames.size();
@@ -373,21 +391,8 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
         {
             maNotifyLink.Call(this);
             PopulateRenderers();
-
-            // delete all unmarked views
-            auto removeStart
-                = std::remove_if(maRenderers.begin(), maRenderers.end(),
-                                 [](const auto& pRenderer) { return !pRenderer->IsMarked(); });
-            maRenderers.erase(removeStart, maRenderers.cend());
-
-            // check if every remaining view is paused
-            bGlobalPause
-                = !std::any_of(maRenderers.cbegin(), maRenderers.cend(),
-                               [](const auto& pRenderer) { return !pRenderer->IsPaused(); });
-
-            // reset marked state
-            std::for_each(maRenderers.cbegin(), maRenderers.cend(),
-                          [](const auto& pRenderer) { pRenderer->SetMarked(false); });
+            PruneMarkedRenderers();
+            bGlobalPause = AllRenderersPaused();
         }
 
         if (maRenderers.empty())
