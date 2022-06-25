@@ -115,6 +115,7 @@ private:
     SAL_DLLPRIVATE void RenderNextFrameInAllRenderers();
     SAL_DLLPRIVATE void PruneMarkedRenderers();
     SAL_DLLPRIVATE bool AllRenderersPaused();
+    SAL_DLLPRIVATE void ClearAnimationRenderers();
 
     SAL_DLLPRIVATE void ImplRestartTimer(sal_uLong nTimeout);
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);

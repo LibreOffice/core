@@ -16,6 +16,8 @@
 
 #include <algorithm>
 
+void Animation::ClearAnimationRenderers() { maRenderers.clear(); }
+
 std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems()
 {
     std::vector<std::unique_ptr<AnimationData>> aDataItems;

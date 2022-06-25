@@ -103,7 +103,7 @@ void Animation::Clear()
     maGlobalSize = Size();
     maBitmapEx.SetEmpty();
     maFrames.clear();
-    maRenderers.clear();
+    ClearAnimationRenderers();
 }
 
 bool Animation::IsTransparent() const
