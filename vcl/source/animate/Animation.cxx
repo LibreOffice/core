@@ -173,7 +173,7 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
         {
             bool bRepainted = Repaint(rOut, nRendererId, rDestPt, rDestSz);
 
-            if (maRenderers.empty())
+            if (!RenderersAvailable())
             {
                 maTimer.Stop();
                 mbIsInAnimation = false;
@@ -208,7 +208,7 @@ void Animation::Stop(const OutputDevice* pOut, tools::Long nRendererId)
                        }),
         maRenderers.end());
 
-    if (maRenderers.empty())
+    if (!RenderersAvailable())
     {
         maTimer.Stop();
         mbIsInAnimation = false;
@@ -278,7 +278,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             bGlobalPause = AllRenderersPaused();
         }
 
-        if (maRenderers.empty())
+        if (!RenderersAvailable())
             Stop();
         else if (bGlobalPause)
             ImplRestartTimer(10);
