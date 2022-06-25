@@ -37,7 +37,7 @@ Animation::Animation()
     : maTimer("vcl::Animation")
     , mnLoopCount(0)
     , mnLoops(0)
-    , mnPos(0)
+    , mnFrameIndex(0)
     , mbIsInAnimation(false)
     , mbLoopTerminated(false)
 {
@@ -49,7 +49,7 @@ Animation::Animation(const Animation& rAnimation)
     , maTimer("vcl::Animation")
     , maGlobalSize(rAnimation.maGlobalSize)
     , mnLoopCount(rAnimation.mnLoopCount)
-    , mnPos(rAnimation.mnPos)
+    , mnFrameIndex(rAnimation.mnFrameIndex)
     , mbIsInAnimation(false)
     , mbLoopTerminated(rAnimation.mbLoopTerminated)
 {
@@ -78,7 +78,7 @@ Animation& Animation::operator=(const Animation& rAnimation)
         maGlobalSize = rAnimation.maGlobalSize;
         maBitmapEx = rAnimation.maBitmapEx;
         mnLoopCount = rAnimation.mnLoopCount;
-        mnPos = rAnimation.mnPos;
+        mnFrameIndex = rAnimation.mnFrameIndex;
         mbLoopTerminated = rAnimation.mbLoopTerminated;
         mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
     }
@@ -169,7 +169,7 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
     if (!maFrames.empty())
     {
         if ((rOut.GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
-            && (ANIMATION_TIMEOUT_ON_CLICK != maFrames[mnPos]->mnWait))
+            && (ANIMATION_TIMEOUT_ON_CLICK != maFrames[mnFrameIndex]->mnWait))
         {
             bool differs = true;
 
@@ -197,7 +197,7 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
             {
                 maTimer.Stop();
                 mbIsInAnimation = false;
-                mnPos = 0;
+                mnFrameIndex = 0;
             }
 
             if (differs)
@@ -206,7 +206,7 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
 
             if (!mbIsInAnimation)
             {
-                ImplRestartTimer(maFrames[mnPos]->mnWait);
+                ImplRestartTimer(maFrames[mnFrameIndex]->mnWait);
                 mbIsInAnimation = true;
             }
         }
@@ -247,7 +247,7 @@ void Animation::Draw(OutputDevice& rOut, const Point& rDestPt, const Size& rDest
     if (!nCount)
         return;
 
-    AnimationFrame* pObj = maFrames[std::min(mnPos, nCount - 1)].get();
+    AnimationFrame* pObj = maFrames[std::min(mnFrameIndex, nCount - 1)].get();
 
     if (rOut.GetConnectMetaFile() || (rOut.GetOutDevType() == OUTDEV_PRINTER))
     {
@@ -259,15 +259,15 @@ void Animation::Draw(OutputDevice& rOut, const Point& rDestPt, const Size& rDest
     }
     else
     {
-        const size_t nOldPos = mnPos;
+        const size_t nOldPos = mnFrameIndex;
         if (mbLoopTerminated)
-            const_cast<Animation*>(this)->mnPos = nCount - 1;
+            const_cast<Animation*>(this)->mnFrameIndex = nCount - 1;
 
         {
             AnimationRenderer{ const_cast<Animation*>(this), &rOut, rDestPt, rDestSz, 0 };
         }
 
-        const_cast<Animation*>(this)->mnPos = nOldPos;
+        const_cast<Animation*>(this)->mnFrameIndex = nOldPos;
     }
 }
 
@@ -355,17 +355,17 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
         }
         else
         {
-            AnimationFrame* pStepBmp
-                = (++mnPos < maFrames.size()) ? maFrames[mnPos].get() : nullptr;
+            AnimationFrame* pCurrentFrameBmp
+                = (++mnFrameIndex < maFrames.size()) ? maFrames[mnFrameIndex].get() : nullptr;
 
-            if (!pStepBmp)
+            if (!pCurrentFrameBmp)
             {
                 if (mnLoops == 1)
                 {
                     Stop();
                     mbLoopTerminated = true;
-                    mnPos = nAnimCount - 1;
-                    maBitmapEx = maFrames[mnPos]->maBitmapEx;
+                    mnFrameIndex = nAnimCount - 1;
+                    maBitmapEx = maFrames[mnFrameIndex]->maBitmapEx;
                     return;
                 }
                 else
@@ -373,14 +373,14 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
                     if (mnLoops)
                         mnLoops--;
 
-                    mnPos = 0;
-                    pStepBmp = maFrames[mnPos].get();
+                    mnFrameIndex = 0;
+                    pCurrentFrameBmp = maFrames[mnFrameIndex].get();
                 }
             }
 
             // Paint all views.
             std::for_each(maRenderers.cbegin(), maRenderers.cend(),
-                          [this](const auto& pRenderer) { pRenderer->Draw(mnPos); });
+                          [this](const auto& pRenderer) { pRenderer->Draw(mnFrameIndex); });
             /*
              * If a view is marked, remove the view, because
              * area of output lies out of display area of window.
@@ -395,7 +395,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             if (maRenderers.empty())
                 Stop();
             else
-                ImplRestartTimer(pStepBmp->mnWait);
+                ImplRestartTimer(pCurrentFrameBmp->mnWait);
         }
     }
     else
@@ -538,17 +538,19 @@ void Animation::Mirror(BmpMirrorFlags nMirrorFlags)
 
     for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
     {
-        AnimationFrame* pStepBmp = maFrames[i].get();
-        bRet = pStepBmp->maBitmapEx.Mirror(nMirrorFlags);
+        AnimationFrame* pCurrentFrameBmp = maFrames[i].get();
+        bRet = pCurrentFrameBmp->maBitmapEx.Mirror(nMirrorFlags);
         if (bRet)
         {
             if (nMirrorFlags & BmpMirrorFlags::Horizontal)
-                pStepBmp->maPositionPixel.setX(maGlobalSize.Width() - pStepBmp->maPositionPixel.X()
-                                               - pStepBmp->maSizePixel.Width());
+                pCurrentFrameBmp->maPositionPixel.setX(maGlobalSize.Width()
+                                                       - pCurrentFrameBmp->maPositionPixel.X()
+                                                       - pCurrentFrameBmp->maSizePixel.Width());
 
             if (nMirrorFlags & BmpMirrorFlags::Vertical)
-                pStepBmp->maPositionPixel.setY(maGlobalSize.Height() - pStepBmp->maPositionPixel.Y()
-                                               - pStepBmp->maSizePixel.Height());
+                pCurrentFrameBmp->maPositionPixel.setY(maGlobalSize.Height()
+                                                       - pCurrentFrameBmp->maPositionPixel.Y()
+                                                       - pCurrentFrameBmp->maSizePixel.Height());
         }
     }
 
