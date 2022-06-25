@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_INC_PAGEMASTERSTYLEMAP_HXX
-#define XMLOFF_INC_PAGEMASTERSTYLEMAP_HXX
+#pragma once
 
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmltypes.hxx>
@@ -193,7 +192,5 @@
 
 extern const XMLPropertyMapEntry aXMLPageMasterStyleMap[];
 extern const XMLPropertyMapEntry g_XMLPageMasterDrawingPageStyleMap[];
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
