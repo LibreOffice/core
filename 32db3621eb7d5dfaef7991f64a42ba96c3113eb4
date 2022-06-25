@@ -50,6 +50,23 @@
       "message": "Imo, the bookmark in the file has a real advantage. It allows the author to restore the position wherever they work (on laptop vs. desktop, for example). MS decision to abandon the bookmark *could be* related to storing user settings on the cloud; and that is not possible to rely for LO.\n\nThe marker at the bookmark could be avoided for the special case. ",
       "revId": "32db3621eb7d5dfaef7991f64a42ba96c3113eb4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f669a51a_5470573f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-25T16:08:23Z",
+      "side": 1,
+      "message": "See also tdf#140147 explaining why the bookmark is superior to current way to store last position in terms of view coordinates. ",
+      "revId": "32db3621eb7d5dfaef7991f64a42ba96c3113eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
