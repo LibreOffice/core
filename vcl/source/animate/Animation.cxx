@@ -175,8 +175,8 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
 
             auto itAnimView = std::find_if(
                 maRenderers.begin(), maRenderers.end(),
-                [&rOut, nRendererId](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
-                    return pAnimView->matches(&rOut, nRendererId);
+                [&rOut, nRendererId](const std::unique_ptr<AnimationRenderer>& pRenderer) -> bool {
+                    return pRenderer->matches(&rOut, nRendererId);
                 });
 
             if (itAnimView != maRenderers.end())
@@ -221,8 +221,8 @@ void Animation::Stop(const OutputDevice* pOut, tools::Long nRendererId)
 {
     maRenderers.erase(
         std::remove_if(maRenderers.begin(), maRenderers.end(),
-                       [=](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
-                           return pAnimView->matches(pOut, nRendererId);
+                       [=](const std::unique_ptr<AnimationRenderer>& pRenderer) -> bool {
+                           return pRenderer->matches(pOut, nRendererId);
                        }),
         maRenderers.end());
 
