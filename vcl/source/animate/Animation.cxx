@@ -401,7 +401,9 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             RenderNextFrameInAllRenderers();
     }
     else
+    {
         Stop();
+    }
 }
 
 bool Animation::Insert(const AnimationFrame& rStepBmp)
