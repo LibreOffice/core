@@ -106,7 +106,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes" context="specialcharacters|subsetft">Subset:</property>
+                    <property name="label" translatable="yes" context="specialcharacters|subsetft">Character block:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">subsetlb</property>
                   </object>
