@@ -223,8 +223,8 @@ void Animation::Stop(const OutputDevice* pOut, tools::Long nRendererId)
 {
     maRenderers.erase(
         std::remove_if(maRenderers.begin(), maRenderers.end(),
-                       [=](const std::unique_ptr<AnimationRenderer>& pRenderer) -> bool {
-                           return pRenderer->Matches(pOut, nRendererId);
+                       [=](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
+                           return pAnimView->Matches(pOut, nRendererId);
                        }),
         maRenderers.end());
 
@@ -381,8 +381,9 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             maRenderers.erase(removeStart, maRenderers.cend());
 
             // check if every remaining view is paused
-            bGlobalPause = std::all_of(maRenderers.cbegin(), maRenderers.cend(),
-                                       [](const auto& pRenderer) { return pRenderer->IsPaused(); });
+            bGlobalPause
+                = !std::any_of(maRenderers.cbegin(), maRenderers.cend(),
+                               [](const auto& pRenderer) { return !pRenderer->IsPaused(); });
 
             // reset marked state
             std::for_each(maRenderers.cbegin(), maRenderers.cend(),
