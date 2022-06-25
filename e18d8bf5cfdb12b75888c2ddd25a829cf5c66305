@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28f5614a_6fcd1642",
+        "filename": "vcl/source/control/thumbpos.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-25T16:29:15Z",
+      "side": 0,
+      "message": "You should also remove the #endif from here",
+      "revId": "e18d8bf5cfdb12b75888c2ddd25a829cf5c66305",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
