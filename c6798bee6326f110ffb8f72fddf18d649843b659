@@ -16,6 +16,24 @@
       "message": "Hi Caolán, the gtk3 version of treeview scroll_to_row, when passed a row that is visible with children collapsed, expands the children before scrolling the row into view. The sal version does not. In this patch I have removed the cause of this happening for the gtk3 version. Would a separate patch for this be better than including it here?",
       "revId": "c6798bee6326f110ffb8f72fddf18d649843b659",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56cb3ffa_693e35a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-25T19:58:12Z",
+      "side": 1,
+      "message": "whichever you prefer, if sal doesn\u0027t and gtk does then I\u0027m happy enough to have the gtk one not do it in order to be consistent.",
+      "parentUuid": "ea7ff6f6_564c8e52",
+      "revId": "c6798bee6326f110ffb8f72fddf18d649843b659",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
