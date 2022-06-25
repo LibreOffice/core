@@ -92,7 +92,7 @@ public:
 public:
     SAL_DLLPRIVATE static void ImplIncAnimCount() { mnAnimCount++; }
     SAL_DLLPRIVATE static void ImplDecAnimCount() { mnAnimCount--; }
-    SAL_DLLPRIVATE sal_uLong ImplGetCurPos() const { return mnPos; }
+    SAL_DLLPRIVATE sal_uLong ImplGetCurPos() const { return mnFrameIndex; }
 
 private:
     SAL_DLLPRIVATE static sal_uLong mnAnimCount;
@@ -106,7 +106,7 @@ private:
     Size maGlobalSize;
     sal_uInt32 mnLoopCount;
     sal_uInt32 mnLoops;
-    size_t mnPos;
+    size_t mnFrameIndex;
     bool mbIsInAnimation;
     bool mbLoopTerminated;
 
