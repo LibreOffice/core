@@ -33,7 +33,6 @@
 #include <unotools/configitem.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
-#include <sal/macros.h>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/string_view.hxx>
@@ -271,15 +270,12 @@ NamesToHdl const aNamesToHdl[] =
 uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
 {
     uno::Sequence< OUString > aNames;
-
-    sal_Int32 nMax = SAL_N_ELEMENTS(aNamesToHdl);
-
-    aNames.realloc( nMax );
+    aNames.realloc(std::size(aNamesToHdl));
     OUString *pNames = aNames.getArray();
     sal_Int32 nIdx = 0;
-    for (sal_Int32 i = 0; i < nMax;  ++i)
+    for (auto const & nameToHdl: aNamesToHdl)
     {
-        const char *pFullPropName = aNamesToHdl[i].pFullPropName;
+        const char *pFullPropName = nameToHdl.pFullPropName;
         if (pFullPropName)
             pNames[ nIdx++ ] = OUString::createFromAscii( pFullPropName );
     }

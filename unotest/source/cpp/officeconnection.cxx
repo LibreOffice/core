@@ -29,7 +29,6 @@
 #include <osl/process.h>
 #include <osl/test/uniquepipename.hxx>
 #include <osl/time.h>
-#include <sal/macros.h>
 #include <unotest/getargument.hxx>
 #include <unotest/officeconnection.hxx>
 #include <unotest/toabsolutefileurl.hxx>
@@ -81,7 +80,7 @@ void OfficeConnection::setUp() {
             osl_executeProcess(
                 toAbsoluteFileUrl(
                     argSoffice.copy(RTL_CONSTASCII_LENGTH("path:"))).pData,
-                args, SAL_N_ELEMENTS(args), 0, nullptr, nullptr, envs, envs == nullptr ? 0 : 1,
+                args, std::size(args), 0, nullptr, nullptr, envs, envs == nullptr ? 0 : 1,
                 &process_));
     } else if (argSoffice.match("connect:")) {
         desc = argSoffice.copy(RTL_CONSTASCII_LENGTH("connect:"));

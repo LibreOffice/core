@@ -32,7 +32,6 @@
 #include <unotools/syslocale.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-#include <sal/macros.h>
 #include <sal/log.hxx>
 
 #include <string.h>
@@ -886,7 +885,7 @@ FontWeight FontSubstConfiguration::getSubstWeight( const css::uno::Reference< XN
         {
             if( !pLine->isEmpty() )
             {
-                for( weight=SAL_N_ELEMENTS(pWeightNames)-1; weight >= 0; weight-- )
+                for( weight=std::size(pWeightNames)-1; weight >= 0; weight-- )
                     if( pLine->equalsIgnoreAsciiCaseAscii( pWeightNames[weight].pName ) )
                         break;
             }
@@ -913,7 +912,7 @@ FontWidth FontSubstConfiguration::getSubstWidth( const css::uno::Reference< XNam
         {
             if( !pLine->isEmpty() )
             {
-                for( width=SAL_N_ELEMENTS(pWidthNames)-1; width >= 0; width-- )
+                for( width=std::size(pWidthNames)-1; width >= 0; width-- )
                     if( pLine->equalsIgnoreAsciiCaseAscii( pWidthNames[width].pName ) )
                         break;
             }

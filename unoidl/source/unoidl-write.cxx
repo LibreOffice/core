@@ -130,7 +130,7 @@ void write8(osl::File & file, sal_uInt64 value) {
     }
     unsigned char buf[1];
     buf[0] = value & 0xFF;
-    write(file, buf, SAL_N_ELEMENTS(buf));
+    write(file, buf, std::size(buf));
 }
 
 void write16(osl::File & file, sal_uInt64 value) {
@@ -142,7 +142,7 @@ void write16(osl::File & file, sal_uInt64 value) {
     unsigned char buf[2];
     buf[0] = value & 0xFF;
     buf[1] = (value >> 8) & 0xFF;
-    write(file, buf, SAL_N_ELEMENTS(buf));
+    write(file, buf, std::size(buf));
 }
 
 void write32(osl::File & file, sal_uInt64 value) {
@@ -156,7 +156,7 @@ void write32(osl::File & file, sal_uInt64 value) {
     buf[1] = (value >> 8) & 0xFF;
     buf[2] = (value >> 16) & 0xFF;
     buf[3] = (value >> 24) & 0xFF;
-    write(file, buf, SAL_N_ELEMENTS(buf));
+    write(file, buf, std::size(buf));
 }
 
 void write64(osl::File & file, sal_uInt64 value) {
@@ -169,7 +169,7 @@ void write64(osl::File & file, sal_uInt64 value) {
     buf[5] = (value >> 40) & 0xFF;
     buf[6] = (value >> 48) & 0xFF;
     buf[7] = (value >> 56) & 0xFF;
-    write(file, buf, SAL_N_ELEMENTS(buf));
+    write(file, buf, std::size(buf));
 }
 
 void writeIso60599Binary32(osl::File & file, float value) {
@@ -182,7 +182,7 @@ void writeIso60599Binary32(osl::File & file, float value) {
     std::swap(sa.buf[0], sa.buf[3]);
     std::swap(sa.buf[1], sa.buf[2]);
 #endif
-    write(file, sa.buf, SAL_N_ELEMENTS(sa.buf));
+    write(file, sa.buf, std::size(sa.buf));
 }
 
 void writeIso60599Binary64(osl::File & file, double value) {
@@ -197,7 +197,7 @@ void writeIso60599Binary64(osl::File & file, double value) {
     std::swap(sa.buf[2], sa.buf[5]);
     std::swap(sa.buf[3], sa.buf[4]);
 #endif
-    write(file, sa.buf, SAL_N_ELEMENTS(sa.buf));
+    write(file, sa.buf, std::size(sa.buf));
 }
 
 OString toAscii(OUString const & name) {

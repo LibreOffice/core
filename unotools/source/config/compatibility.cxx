@@ -96,7 +96,7 @@ OUString SvtCompatibilityEntry::getName( const Index rIdx )
     };
 
     /* Size of sPropertyName array not equal size of the SvtCompatibilityEntry::Index enum class */
-    assert( SAL_N_ELEMENTS(sPropertyName) == static_cast<int>( SvtCompatibilityEntry::getElementCount() ) );
+    assert( std::size(sPropertyName) == SvtCompatibilityEntry::getElementCount() );
 
     return OUString::createFromAscii( sPropertyName[ static_cast<int>(rIdx) ] );
 }

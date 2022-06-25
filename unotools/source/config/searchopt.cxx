@@ -24,7 +24,6 @@
 #include <unotools/configitem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.h>
-#include <sal/macros.h>
 #include <osl/diagnose.h>
 #include <i18nutil/transliteration.hxx>
 
@@ -153,10 +152,9 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames()
         "IsUseWildcard"                         // 29
     };
 
-    const int nCount = SAL_N_ELEMENTS( aPropNames );
-    Sequence< OUString > aNames( nCount );
+    Sequence< OUString > aNames(std::size(aPropNames));
     OUString* pNames = aNames.getArray();
-    for (sal_Int32 i = 0;  i < nCount;  ++i)
+    for (std::size_t i = 0;  i < std::size(aPropNames); ++i)
         pNames[i] = OUString::createFromAscii( aPropNames[i] );
 
     return aNames;
