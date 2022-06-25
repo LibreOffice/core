@@ -112,6 +112,7 @@ private:
 
     SAL_DLLPRIVATE std::vector<std::unique_ptr<AnimationData>> CreateAnimationDataItems();
     SAL_DLLPRIVATE void PopulateRenderers();
+    SAL_DLLPRIVATE void RenderNextFrameInAllRenderers();
 
     SAL_DLLPRIVATE void ImplRestartTimer(sal_uLong nTimeout);
     DECL_DLLPRIVATE_LINK(ImplTimeoutHdl, Timer*, void);
