@@ -67,6 +67,23 @@
       "message": "See also tdf#140147 explaining why the bookmark is superior to current way to store last position in terms of view coordinates. ",
       "revId": "32db3621eb7d5dfaef7991f64a42ba96c3113eb4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "468efa34_b3c9e1d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-25T16:09:30Z",
+      "side": 1,
+      "message": "Oh, sorry, I neant tdf#141586",
+      "revId": "32db3621eb7d5dfaef7991f64a42ba96c3113eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
