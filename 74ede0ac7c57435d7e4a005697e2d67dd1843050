@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "873cd541_9f536c76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-25T16:30:29Z",
+      "side": 1,
+      "message": "Please fix this problem",
+      "revId": "74ede0ac7c57435d7e4a005697e2d67dd1843050",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1369cda4_a75d3dfd",
+        "filename": "vcl/source/filter/idxf/dxftblrd.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-25T16:30:29Z",
+      "side": 1,
+      "message": "You should also remove the #endif from here",
+      "revId": "74ede0ac7c57435d7e4a005697e2d67dd1843050",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
