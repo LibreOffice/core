@@ -16,6 +16,8 @@
 
 #include <algorithm>
 
+void Animation::ClearAnimationRenderers() { maRenderers.clear(); }
+
 std::vector<std::unique_ptr<AnimationData>> Animation::CreateAnimationDataItems()
 {
     std::vector<std::unique_ptr<AnimationData>> aDataItems;
@@ -111,6 +113,34 @@ bool Animation::AllRenderersPaused()
 {
     return !std::any_of(maRenderers.cbegin(), maRenderers.cend(),
                         [](const auto& pRenderer) { return !pRenderer->isPaused(); });
+}
+
+bool Animation::Repaint(OutputDevice& rOut, tools::Long nRendererId, Point const& rDestPt,
+                        Size const& rDestSz)
+{
+    bool bRepainted = true;
+
+    auto itAnimView = std::find_if(
+        maRenderers.begin(), maRenderers.end(),
+        [&rOut, nRendererId](const std::unique_ptr<AnimationRenderer>& pRenderer) -> bool {
+            return pRenderer->matches(&rOut, nRendererId);
+        });
+
+    if (itAnimView != maRenderers.end())
+    {
+        if ((*itAnimView)->getOriginPosition() == rDestPt
+            && (*itAnimView)->getOutSizePix() == rOut.LogicToPixel(rDestSz))
+        {
+            (*itAnimView)->repaint();
+            bRepainted = false;
+        }
+        else
+        {
+            maRenderers.erase(itAnimView);
+        }
+    }
+
+    return bRepainted;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
