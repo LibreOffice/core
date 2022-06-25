@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6227f4d2_da046f76",
+        "filename": "extras/source/wordbook/technical.dic",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-06-25T15:59:02Z",
+      "side": 1,
+      "message": "“macOS” is dromedary case",
+      "revId": "68da5f990fca31829850e8c0058fd6dad23aaf2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
