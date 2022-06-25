@@ -130,6 +130,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79b8e972_1b6caac8",
+        "filename": "starmath/inc/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-25T08:46:39Z",
+      "side": 1,
+      "message": "Indeed!",
+      "parentUuid": "eab1e9ce_b3486ad9",
+      "range": {
+        "startLine": 290,
+        "startChar": 66,
+        "endLine": 290,
+        "endChar": 82
+      },
+      "revId": "4adffaed69b16b69fbb309b630c60784fb885f12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ff0caa3_323d3f27",
@@ -143,6 +167,30 @@
       "writtenOn": "2022-06-25T07:59:16Z",
       "side": 1,
       "message": "And this is obviously wrong from copy-n-paste.  Either \"Set of Hamilton numbers\" or \"Set of quarternion numbers\", to match the name above.",
+      "range": {
+        "startLine": 195,
+        "startChar": 32,
+        "endLine": 195,
+        "endChar": 54
+      },
+      "revId": "4adffaed69b16b69fbb309b630c60784fb885f12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4bfcaf1_52b3d673",
+        "filename": "starmath/qa/cppunit/test_nodetotextvisitors.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-25T08:46:39Z",
+      "side": 1,
+      "message": "Done!",
+      "parentUuid": "3ff0caa3_323d3f27",
       "range": {
         "startLine": 195,
         "startChar": 32,
