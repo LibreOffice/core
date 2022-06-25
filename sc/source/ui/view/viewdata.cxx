@@ -2416,7 +2416,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         const_cast<ScViewData*>(this)->aScrSize.setHeight( pView->GetGridHeight(eWhichY) );
     }
 
-    sal_uLong nTSize;
+    sal_uInt16 nTSize;
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
 
@@ -2484,20 +2484,27 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 
         if (nWhereY >= nStartPosY)
         {
-            if (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height())
+            for (SCROW nY = nStartPosY; nY < nWhereY && (bAllowNeg || bIsTiledRendering || nScrPosY <= aScrSize.Height()); nY++)
             {
-                if (nWhereY - 1 > mrDoc.MaxRow())
+                if ( nY > mrDoc.MaxRow() )
                     nScrPosY = 0x7FFFFFFF;
-                else if (bAllowNeg || bIsTiledRendering)
-                {
-                    sal_uLong nSizeYPix = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, nForTab, nPPTY);
-                    nScrPosY += nSizeYPix;
-                }
                 else
                 {
-                    sal_uLong nMaxHeight = aScrSize.getHeight() - nScrPosY;
-                    sal_uLong nSizeYPix = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, nForTab, nPPTY, &nMaxHeight);
-                    nScrPosY += nSizeYPix;
+                    nTSize = mrDoc.GetRowHeight( nY, nTabNo );
+                    if (nTSize)
+                    {
+                        tools::Long nSizeYPix = ToPixel( nTSize, nPPTY );
+                        nScrPosY += nSizeYPix;
+                    }
+                    else if ( nY < mrDoc.MaxRow() )
+                    {
+                        // skip multiple hidden rows (forward only for now)
+                        SCROW nNext = mrDoc.FirstVisibleRow(nY + 1, mrDoc.MaxRow(), nTabNo);
+                        if ( nNext > mrDoc.MaxRow() )
+                            nY = mrDoc.MaxRow();
+                        else
+                            nY = nNext - 1;     // +=nDir advances to next visible row
+                    }
                 }
             }
         }
