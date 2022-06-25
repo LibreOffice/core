@@ -378,8 +378,9 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             maRenderers.erase(removeStart, maRenderers.cend());
 
             // check if every remaining view is paused
-            bGlobalPause = std::all_of(maRenderers.cbegin(), maRenderers.cend(),
-                                       [](const auto& pRenderer) { return pRenderer->isPause(); });
+            bGlobalPause
+                = !std::any_of(maRenderers.cbegin(), maRenderers.cend(),
+                               [](const auto& pRenderer) { return !pRenderer->isPause(); });
 
             // reset marked state
             std::for_each(maRenderers.cbegin(), maRenderers.cend(),
