@@ -181,8 +181,8 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
             }
 
             if (bRepainted)
-                maRenderers.emplace_back(new AnimationRenderer(this, &rOut, rDestPt, rDestSz,
-                                                               nRendererId, pFirstFrameOutDev));
+                CreateDefaultRenderer(this, &rOut, rDestPt, rDestSz, nRendererId,
+                                      pFirstFrameOutDev);
 
             if (!mbIsInAnimation)
             {
