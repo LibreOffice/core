@@ -854,7 +854,7 @@ public:
     tools::Long     GetColWidth( SCCOL nStartCol, SCCOL nEndCol ) const;
     sal_uInt16 GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero = true ) const;
     tools::Long     GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true ) const;
-    tools::Long     GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale, const tools::Long* pnMaxHeight = nullptr ) const;
+    tools::Long     GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const;
     tools::Long     GetColOffset( SCCOL nCol, bool bHiddenAsZero = true ) const;
     tools::Long     GetRowOffset( SCROW nRow, bool bHiddenAsZero = true ) const;
 
