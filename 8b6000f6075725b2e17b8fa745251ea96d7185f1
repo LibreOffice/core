@@ -70,6 +70,24 @@
       "parentUuid": "bd9df1aa_8bce1dad",
       "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38e027d5_3e744d75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-06-25T16:50:31Z",
+      "side": 1,
+      "message": "Looks like my patch uncovered a bug; nothing uncommon in VCL code from my POV.",
+      "parentUuid": "0c2ca4db_aedf1728",
+      "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
