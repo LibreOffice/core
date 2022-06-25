@@ -103,7 +103,7 @@ void Animation::Clear()
     maGlobalSize = Size();
     maBitmapEx.SetEmpty();
     maFrames.clear();
-    maRenderers.clear();
+    ClearAnimationRenderers();
 }
 
 bool Animation::IsTransparent() const
@@ -171,27 +171,7 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
         if ((rOut.GetOutDevType() == OUTDEV_WINDOW) && !mbLoopTerminated
             && (ANIMATION_TIMEOUT_ON_CLICK != maFrames[mnFrameIndex]->mnWait))
         {
-            bool differs = true;
-
-            auto itAnimView = std::find_if(
-                maRenderers.begin(), maRenderers.end(),
-                [&rOut, nRendererId](const std::unique_ptr<AnimationRenderer>& pRenderer) -> bool {
-                    return pRenderer->matches(&rOut, nRendererId);
-                });
-
-            if (itAnimView != maRenderers.end())
-            {
-                if ((*itAnimView)->getOriginPosition() == rDestPt
-                    && (*itAnimView)->getOutSizePix() == rOut.LogicToPixel(rDestSz))
-                {
-                    (*itAnimView)->repaint();
-                    differs = false;
-                }
-                else
-                {
-                    maRenderers.erase(itAnimView);
-                }
-            }
+            bool bRepainted = Repaint(rOut, nRendererId, rDestPt, rDestSz);
 
             if (maRenderers.empty())
             {
@@ -200,7 +180,7 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
                 mnFrameIndex = 0;
             }
 
-            if (differs)
+            if (bRepainted)
                 maRenderers.emplace_back(new AnimationRenderer(this, &rOut, rDestPt, rDestSz,
                                                                nRendererId, pFirstFrameOutDev));
 
