@@ -317,6 +317,50 @@ void Animation::PopulateRenderers()
     }
 }
 
+void Animation::RenderNextFrameInAllRenderers()
+{
+    AnimationFrame* pCurrentFrameBmp
+        = (++mnFrameIndex < maFrames.size()) ? maFrames[mnFrameIndex].get() : nullptr;
+
+    if (!pCurrentFrameBmp)
+    {
+        if (mnLoops == 1)
+        {
+            Stop();
+            mbLoopTerminated = true;
+            mnFrameIndex = mnAnimCount - 1;
+            maBitmapEx = maFrames[mnFrameIndex]->maBitmapEx;
+            return;
+        }
+        else
+        {
+            if (mnLoops)
+                mnLoops--;
+
+            mnFrameIndex = 0;
+            pCurrentFrameBmp = maFrames[mnFrameIndex].get();
+        }
+    }
+
+    // Paint all views.
+    std::for_each(maRenderers.cbegin(), maRenderers.cend(),
+                  [this](const auto& pRenderer) { pRenderer->draw(mnFrameIndex); });
+    /*
+     * If a view is marked, remove the view, because
+     * area of output lies out of display area of window.
+     * Mark state is set from view itself.
+     */
+    auto removeStart = std::remove_if(maRenderers.begin(), maRenderers.end(),
+                                      [](const auto& pRenderer) { return pRenderer->isMarked(); });
+    maRenderers.erase(removeStart, maRenderers.cend());
+
+    // stop or restart timer
+    if (maRenderers.empty())
+        Stop();
+    else
+        ImplRestartTimer(pCurrentFrameBmp->mnWait);
+}
+
 IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 {
     const size_t nAnimCount = maFrames.size();
@@ -350,57 +394,11 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
         }
 
         if (maRenderers.empty())
-        {
             Stop();
-        }
         else if (bGlobalPause)
-        {
             ImplRestartTimer(10);
-        }
         else
-        {
-            AnimationFrame* pCurrentFrameBmp
-                = (++mnFrameIndex < maFrames.size()) ? maFrames[mnFrameIndex].get() : nullptr;
-
-            if (!pCurrentFrameBmp)
-            {
-                if (mnLoops == 1)
-                {
-                    Stop();
-                    mbLoopTerminated = true;
-                    mnFrameIndex = nAnimCount - 1;
-                    maBitmapEx = maFrames[mnFrameIndex]->maBitmapEx;
-                    return;
-                }
-                else
-                {
-                    if (mnLoops)
-                        mnLoops--;
-
-                    mnFrameIndex = 0;
-                    pCurrentFrameBmp = maFrames[mnFrameIndex].get();
-                }
-            }
-
-            // Paint all views.
-            std::for_each(maRenderers.cbegin(), maRenderers.cend(),
-                          [this](const auto& pRenderer) { pRenderer->draw(mnFrameIndex); });
-            /*
-             * If a view is marked, remove the view, because
-             * area of output lies out of display area of window.
-             * Mark state is set from view itself.
-             */
-            auto removeStart
-                = std::remove_if(maRenderers.begin(), maRenderers.end(),
-                                 [](const auto& pRenderer) { return pRenderer->isMarked(); });
-            maRenderers.erase(removeStart, maRenderers.cend());
-
-            // stop or restart timer
-            if (maRenderers.empty())
-                Stop();
-            else
-                ImplRestartTimer(pCurrentFrameBmp->mnWait);
-        }
+            RenderNextFrameInAllRenderers();
     }
     else
         Stop();
