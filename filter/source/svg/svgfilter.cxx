@@ -78,6 +78,7 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mpObjects( nullptr ),
     mbExportShapeSelection(false),
     mbIsPreview(false),
+    mbShouldCompress(false),
     mbWriterFilter(false),
     mbCalcFilter(false),
     mbImpressFilter(false),
