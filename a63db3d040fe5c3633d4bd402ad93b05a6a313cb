@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4cc5392_d1e0ef28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-26T06:33:56Z",
+      "side": 1,
+      "message": "Android Jenkins failed for an unrelated reason, the other Jenkins are ok, let\u0027s push this one.",
+      "revId": "a63db3d040fe5c3633d4bd402ad93b05a6a313cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
