@@ -230,6 +230,24 @@
       "parentUuid": "7989ca71_7fcafa3f",
       "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b401dc97_d8e27843",
+        "filename": "sc/source/filter/orcus/filterdetect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-06-26T23:24:20Z",
+      "side": 1,
+      "message": "\u003e Kohei, does orcus have some abstraction of a seekable file? \nNot at the moment.  We\u0027d have to do some re-designing in order to support that. Let me think about it.",
+      "parentUuid": "7c4750fb_759c9a32",
+      "revId": "283b634cf2405f8e5ae5efe634437b4af9829af6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
