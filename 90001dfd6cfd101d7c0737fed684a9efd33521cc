@@ -33,6 +33,24 @@
       "message": "I believe this change is not correct.\nThe commits 504f651e8240d17b366cd970ded7110803d28070 and 504f651e8240d17b366cd970ded7110803d28070 created a UI for defining the defaults (for non-templated documents, and for templates). Now the value in the style of the non-templated document should correspond to the value set at Tools \u003e Options \u003e Writer \u003e Formatting Aids, not to some fixed value; and the insertion code should not actually check that value, but use the value set in the style.",
       "revId": "90001dfd6cfd101d7c0737fed684a9efd33521cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bae0595_2e5c67ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-26T20:33:53Z",
+      "side": 1,
+      "message": "sorry, \"and 5951da5175b9d7e5b3b47bd0d90989d2ef528c79\"",
+      "parentUuid": "76241b95_e1e40cd1",
+      "revId": "90001dfd6cfd101d7c0737fed684a9efd33521cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
