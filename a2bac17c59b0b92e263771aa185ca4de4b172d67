@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af0e428b_911db8fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-26T07:59:24Z",
+      "side": 1,
+      "message": "Nice! :-)",
+      "revId": "a2bac17c59b0b92e263771aa185ca4de4b172d67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fae55b28_e346c2f3",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-26T07:59:24Z",
+      "side": 1,
+      "message": "Please note that Value2 is documented [1] to differ by not returning Date *and Currency* types. This change only talks about dates; and that is based on our implementation not returning Currencies (?); but even if we don\u0027t return currencies, we may change that at some point, when the cell is formatted that way; and then the method will need more changes.\n\nSo please use some enum, like\n\n    enum class ValueType { value, value2 };\n\nand use it instead of the boolean argument. Having that at the evaluation cite would allow to customize evaluation according to the spec.\n\n[1] https://docs.microsoft.com/en-us/office/vba/api/Excel.Range.Value2",
+      "revId": "a2bac17c59b0b92e263771aa185ca4de4b172d67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58a8260f_ce31548c",
+        "filename": "sc/source/ui/vba/vbarange.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-26T07:59:24Z",
+      "side": 1,
+      "message": "Please add the argument name: it allows to understand the meaning of the argument in the function call, when you look at the function declaration.",
+      "revId": "a2bac17c59b0b92e263771aa185ca4de4b172d67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

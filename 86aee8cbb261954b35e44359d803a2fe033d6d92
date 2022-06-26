@@ -105,6 +105,24 @@
       "parentUuid": "ce593b76_84aa5202",
       "revId": "86aee8cbb261954b35e44359d803a2fe033d6d92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d81f4b19_3144025f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-26T07:59:24Z",
+      "side": 1,
+      "message": "\u003e you\u0027ve added a test document\n\nNo, that was existing document, with a modified test macro\n\nHannah: could you please change the macro to set B1 too, as it does for A1; to do that with a date, you need to use Formula property:\n\n    Range(\"Tabelle1!B1\").Formula \u003d \"2022-06-10\"\n\nIn its current form, it\u0027s self-inconsistent: it only sets A1, but tests both A1 and B1 (relying on the pre-set data).",
+      "parentUuid": "28e458e6_84aa7a65",
+      "revId": "86aee8cbb261954b35e44359d803a2fe033d6d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
