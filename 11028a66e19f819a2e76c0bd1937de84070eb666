@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8a993a8_51337808",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-06-26T07:35:21Z",
+      "side": 1,
+      "message": "This also fixes bug 149648",
+      "revId": "11028a66e19f819a2e76c0bd1937de84070eb666",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
