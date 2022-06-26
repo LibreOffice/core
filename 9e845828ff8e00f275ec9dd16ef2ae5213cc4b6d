@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43fc594c_699e2f0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-26T06:37:11Z",
+      "side": 1,
+      "message": "Please change description since you modified vcl part not embedserv or helpcompiler",
+      "revId": "9e845828ff8e00f275ec9dd16ef2ae5213cc4b6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
