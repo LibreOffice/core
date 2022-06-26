@@ -962,7 +962,7 @@ Try:
 				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
-					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;CALCADDRESS&quot; &amp; Iif(pvArgs(0) = &quot;Sheet&quot;, &quot;1&quot;, &quot;2&quot;), pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;CALCADDRESS&quot; &amp; Iif(Left(pvArgs(0), 5) = &quot;Sheet&quot;, &quot;1&quot;, &quot;2&quot;), pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
 			Case DUPLICATESHEETERROR	&apos;	SF_Calc.InsertSheet(arg, SheetName, Document)
 				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _

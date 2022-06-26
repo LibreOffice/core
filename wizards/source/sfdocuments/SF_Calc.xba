@@ -127,7 +127,7 @@ Private Const SERVICEREFERENCE	= &quot;SFDocuments.CalcReference&quot;
 
 Private Const ISCALCFORM		= 2						&apos;	Form is stored in a Calc document
 
-Private Const cstSPECIALCHARS	= &quot; `~!@#$%^&amp;()-_=+{}|;:,&lt;.&gt;&quot;&quot;&quot;
+Private Const cstSPECIALCHARS	= &quot; `~!@#$%^&amp;()-_=+{}|;,&lt;.&gt;&quot;&quot;&quot;
 			&apos;	Presence of a special character forces surrounding the sheet name with single quotes in absolute addresses
 
 
@@ -4080,6 +4080,7 @@ Private Function _ParseAddress(ByVal psAddress As String) As Object
 
 Dim oAddress As Object				&apos;	Return value
 Dim sAddress As String				&apos;	Alias of psAddress
+Dim vRangeName As Variant			&apos;	Array Sheet/Range
 Dim lStart As Long					&apos;	Position of found regex
 Dim sSheet As String				&apos;	Sheet component
 Dim sRange As String				&apos;	Range component
@@ -4112,23 +4113,17 @@ Dim oSelect As Object				&apos;	Current selection
 		.RawAddress = psAddress
 		Set .XSpreadSheet = Nothing	:	Set .XCellRange = Nothing
 
-		&apos;	Remove leading &apos;$&apos;
-		If Left(psAddress, 1) = &quot;$&quot; Then sAddress = Mid(psAddress, 2) Else sAddress = psAddress
-		&apos;	Split in sheet and range components - Check presence of surrounding single quotes or dot
-		If Left(sAddress, 1) = &quot;&apos;&quot; Then
-			lStart = 1
-			sSheet = ScriptForge.SF_String.FindRegex(sAddress, &quot;^&apos;[^\[\]*?:\/\\]+&apos;&quot;)
-			If lStart = 0 Then GoTo CatchAddress	&apos;	Invalid sheet name
-			If Len(sAddress) &gt; Len(sSheet) + 1 Then
-				If Mid(sAddress, Len(sSheet) + 1, 1) = &quot;.&quot; then sRange = Mid(sAddress, Len(sSheet) + 2)
-			End If
-			sSheet = Replace(Replace(sSheet, &quot;$&quot;, &quot;&quot;), &quot;&apos;&quot;, &quot;&quot;)
-		ElseIf InStr(sAddress, &quot;.&quot;) &gt; 0 Then
-			sSheet = Replace(Split(sAddress, &quot;.&quot;)(0), &quot;$&quot;, &quot;&quot;)
-			sRange = Replace(Split(sAddress, &quot;.&quot;)(1), &quot;$&quot;, &quot;&quot;)
-		Else
-			sSheet = sAddress
-		End If
+		&apos;	Remove leading &quot;$&apos; when followed with an apostrophe
+		If Left(psAddress, 2) = &quot;$&apos;&quot; Then sAddress = Mid(psAddress, 2) Else sAddress = psAddress
+		&apos;	Split in sheet and range components on dot not enclosed in single quotes
+		vRangeName = ScriptForge.SF_String.SplitNotQuoted(sAddress, Delimiter := &quot;.&quot;, QuoteChar := &quot;&apos;&quot;)
+		sSheet = ScriptForge.SF_String.Unquote(Replace(vRangeName(0), &quot;&apos;&apos;&quot;, &quot;\&apos;&quot;), QuoteChar := &quot;&apos;&quot;)
+		&apos;	Keep a leading &quot;$&quot; in the sheet name only if name enclosed in single quotes
+		&apos;	Notes:
+		&apos;		sheet names may contain &quot;$&quot; (even &quot;$&quot; is a valid sheet name), named ranges must not
+		&apos;		sheet names may contain apostrophes (except in 1st and last positions), range names must not
+		If Left(vRangeName(0), 2) &lt;&gt; &quot;&apos;$&quot; And Left(sSheet, 1) = &quot;$&quot; And Len(sSheet) &gt; 1 Then sSheet = Mid(sSheet, 2)
+		If UBound(vRangeName) &gt; 0 Then sRange = vRangeName(1)
 
 		&apos;	Resolve sheet part: either a document named range, or the active sheet or a real sheet
 		Set oSheets = _Component.getSheets()
@@ -4444,7 +4439,6 @@ Private Function _ValidateSheet(Optional ByRef pvSheetName As Variant _
 &apos;&apos;&apos;		DUPLICATESHEETERROR		A sheet with the given name exists already
 
 Dim vSheets As Variant				&apos;	List of sheets
-Dim sSheet As String				&apos;	Sheet name without single quotes
 Dim lSheet As Long					&apos;	Index in list of sheets
 Dim vTypes As Variant				&apos;	Array of accepted variable types
 Dim bValid As Boolean				&apos;	Return value
@@ -4475,13 +4469,13 @@ Try:
 			pvSheetName = _Component.CurrentController.ActiveSheet.Name
 		Else
 			vSheets = _Component.getSheets.getElementNames()
-			sSheet = Replace(pvSheetName, &quot;&apos;&quot;, &quot;&quot;)
 			If pvNew Then
-				If ScriptForge.SF_Array.Contains(vSheets, sSheet) Then GoTo CatchDuplicate
+				&apos;	ScriptForge.SF_String.FindRegex(sAddress, &quot;^&apos;[^\[\]*?:\/\\]+&apos;&quot;)
+				If ScriptForge.SF_Array.Contains(vSheets, pvSheetName) Then GoTo CatchDuplicate
 			Else
-				If Not ScriptForge.SF_Utils._Validate(sSheet, psArgName, V_STRING, vSheets) Then GoTo Finally
+				If Not ScriptForge.SF_Utils._Validate(pvSheetName, psArgName, V_STRING, vSheets) Then GoTo Finally
 				If pvResetSheet Then
-					lSheet = ScriptForge.SF_Array.IndexOf(vSheets, sSheet, CaseSensitive := False)
+					lSheet = ScriptForge.SF_Array.IndexOf(vSheets, pvSheetName, CaseSensitive := False)
 					pvSheetName = vSheets(lSheet)
 				End If
 			End If
@@ -4496,6 +4490,39 @@ CatchDuplicate:
 	ScriptForge.SF_Exception.RaiseFatal(DUPLICATESHEETERROR, psArgName, pvSheetName, &quot;Document&quot;, [_Super]._FileIdent())
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Calc._ValidateSheet
+
+REM -----------------------------------------------------------------------------
+Private Function _ValidateSheetName(ByRef psSheetName As String _
+										, ByVal psArgName As String _
+										) As Boolean
+&apos;&apos;&apos;	Check the validity of the sheet name:
+&apos;&apos;&apos;	A sheet name	- must not be ampty
+&apos;&apos;&apos;					- must not contain next characters: []*?:/\
+&apos;&apos;&apos;					- must not use &apos; (the apostrophe) as first or last character
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psSheetName: the name to check
+&apos;&apos;&apos;		psArgName: the name of the argument to appear in error messages
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when the sheet name is valid
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		CALCADDRESSERROR		&apos;	Sheet name could not be parsed to a valid name
+
+Dim bValid As Boolean				&apos;	Return value
+
+Try:
+	bValid = ( Len(psSheetName) &gt; 0 )
+	If bValid Then bValid = ( Left(psSheetName, 1) &lt;&gt; &quot;&apos;&quot; And Right(psSheetName, 1) &lt;&gt; &quot;&apos;&quot; )
+	If bValid Then bValid = ( Len(ScriptForge.SF_String.FindRegex(psSheetName, &quot;^[^\[\]*?:\/\\]+$&quot;, 1, CaseSensitive := False)) &gt; 0 )
+	If Not bValid Then GoTo CatchSheet
+
+Finally:
+	_ValidateSheetName = bValid
+	Exit Function
+CatchSheet:
+	ScriptForge.SF_Exception.RaiseFatal(CALCADDRESSERROR, psArgName, psSheetName _
+				, &quot;Document&quot;, [_Super]._FileIdent())
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Calc._ValidateSheetName
 
 REM ============================================ END OF SFDOCUMENTS.SF_CALC
 </script:module>
