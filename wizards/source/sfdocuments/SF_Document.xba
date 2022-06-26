@@ -1279,7 +1279,8 @@ Private Function _FileIdent() As String
 &apos;&apos;&apos;	Returns a file identification from the information that is currently available
 &apos;&apos;&apos;	Useful e.g. for display in error messages
 
-	_FileIdent = Iif(Len(_WindowFileName) &gt; 0, SF_FileSystem._ConvertFromUrl(_WindowFileName), _WindowTitle)
+	&apos;	OS notation is used to avoid presence of &quot;%nn&quot; in error messages and wrong parameter substitutions
+	_FileIdent = Iif(Len(_WindowFileName) &gt; 0, ConvertFromUrl(_WindowFileName), _WindowTitle)
 
 End Function	&apos;	SFDocuments.SF_Document._FileIdent
 
