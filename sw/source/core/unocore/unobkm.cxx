@@ -206,7 +206,8 @@ sal_Int64 SAL_CALL SwXBookmark::getSomething( const uno::Sequence< sal_Int8 >& r
 
 void SwXBookmark::attachToRangeEx(
     const uno::Reference< text::XTextRange > & xTextRange,
-    IDocumentMarkAccess::MarkType eType)
+    IDocumentMarkAccess::MarkType eType,
+    bool const isFieldmarkSeparatorAtStart)
 {
     if (m_pImpl->m_pRegisteredBookmark)
     {
@@ -247,7 +248,10 @@ void SwXBookmark::attachToRangeEx(
     }
     m_pImpl->registerInMark(*this,
         m_pImpl->m_pDoc->getIDocumentMarkAccess()->makeMark(
-            aPam, m_pImpl->m_sMarkName, eType, ::sw::mark::InsertMode::New));
+            aPam, m_pImpl->m_sMarkName, eType, ::sw::mark::InsertMode::New,
+            // note: aPam will be moved fwd by inserting start char, so sep
+            // will be directly following start
+            isFieldmarkSeparatorAtStart ? aPam.Start() : nullptr));
     // #i81002#
     // Check, if bookmark has been created.
     // E.g., the creation of a cross-reference bookmark is suppress,
@@ -622,7 +626,8 @@ void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTe
 {
 
     attachToRangeEx( xTextRange,
-                     ( m_bReplacementObject ? IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK : IDocumentMarkAccess::MarkType::TEXT_FIELDMARK ) );
+         (m_bReplacementObject ? IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK : IDocumentMarkAccess::MarkType::TEXT_FIELDMARK),
+         m_isFieldmarkSeparatorAtStart);
 }
 
 OUString SwXFieldmark::getFieldType()
@@ -742,6 +747,14 @@ SwXFieldmark::setPropertyValue(const OUString& PropertyName,
             throw uno::RuntimeException();
 
         pCheckboxFm->SetChecked( bChecked );
+    }
+    else if (PropertyName == "PrivateSeparatorAtStart")
+    {
+        bool isFieldmarkSeparatorAtStart{};
+        if (rValue >>= isFieldmarkSeparatorAtStart)
+        {
+            m_isFieldmarkSeparatorAtStart = isFieldmarkSeparatorAtStart;
+        }
     }
     // this doesn't support any SwXBookmark property
 }
