@@ -63,6 +63,8 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
+#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
+#include <com/sun/star/container/XIdentifierAccess.hpp>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -1636,11 +1638,33 @@ static void lcl_GetConnectorAdjustValue(const Reference<XShape>& xShape, tools::
     }
 }
 
+static sal_Int32 lcl_GetGluePointId(const Reference<XShape>& xShape, sal_Int32& nGluePointId)
+{
+    uno::Reference<drawing::XGluePointsSupplier> xSupplier(xShape, uno::UNO_QUERY);
+    uno::Reference<container::XIdentifierAccess> xGluePoints(xSupplier->getGluePoints(),
+                                                             uno::UNO_QUERY);
+    sal_uInt32 nCount = xGluePoints->getIdentifiers().size();
+    if (nCount > 4)
+        nGluePointId -= 4;
+    else
+    {
+        // change id of the bounding box (1 <-> 3)
+        if (nGluePointId == 1)
+            nGluePointId = 3; // Right
+        else if (nGluePointId == 3)
+            nGluePointId = 1; // Left
+    }
+
+    return nGluePointId;
+}
+
 ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape )
 {
     bool bFlipH = false;
     bool bFlipV = false;
     sal_Int32 nAngle = 0;
+    sal_Int32 nStartGlueId = 0;
+    sal_Int32 nEndGlueId = 0;
 
     SAL_INFO("oox.shape", "write connector shape");
 
@@ -1679,6 +1703,13 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     }
     GET( rXShapeA, EdgeStartConnection );
     GET( rXShapeB, EdgeEndConnection );
+
+    GET(nStartGlueId, StartGluePointIndex);
+    if (nStartGlueId != -1)
+        lcl_GetGluePointId(rXShapeA, nStartGlueId);
+    GET(nEndGlueId, EndGluePointIndex);
+    if (nEndGlueId != -1)
+        lcl_GetGluePointId(rXShapeB, nEndGlueId);
 
     // Position is relative to group in Word, but relative to anchor of group in API.
     if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes && m_xParent.is())
@@ -1749,7 +1780,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
             GetNewShapeID(rXShapeA);
         if (GetShapeID(rXShapeB) == -1)
             GetNewShapeID(rXShapeB);
-        WriteConnectorConnections(aConnectorEntry, GetShapeID(rXShapeA), GetShapeID(rXShapeB));
+        WriteConnectorConnections(nStartGlueId, nEndGlueId, GetShapeID(rXShapeA), GetShapeID(rXShapeB));
         pFS->endElementNS(mnXmlNamespace, XML_cNvCxnSpPr);
         if (GetDocumentType() == DOCUMENT_PPTX)
             pFS->singleElementNS(mnXmlNamespace, XML_nvPr);
