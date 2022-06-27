@@ -16,6 +16,23 @@
       "message": "Hi Caolán,\nthe div-by-zero asserts were added by you in 414226273aa4dc0e2d06cbd482ffac37ea9338c3, however,it seems the problem might also happen with release builds as reported in the crashreport",
       "revId": "cb292ad836df92e100c9977d614acd58c49dd470",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29d132d3_36ebfa23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-27T13:15:57Z",
+      "side": 1,
+      "message": "I think I can reproduce this, or similar, but format, page style, text grid, grid (lines and characters), max base text size of 800 and then click in \"characters per line\" and then click in \"lines per page\"",
+      "revId": "cb292ad836df92e100c9977d614acd58c49dd470",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
