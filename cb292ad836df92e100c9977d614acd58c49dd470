@@ -33,6 +33,24 @@
       "message": "I think I can reproduce this, or similar, but format, page style, text grid, grid (lines and characters), max base text size of 800 and then click in \"characters per line\" and then click in \"lines per page\"",
       "revId": "cb292ad836df92e100c9977d614acd58c49dd470",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f9b94a0_98ef05d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-27T13:45:43Z",
+      "side": 1,
+      "message": "I can reproduce it here too\nI think you should change the author of the patch to yourself.\nThanks",
+      "parentUuid": "29d132d3_36ebfa23",
+      "revId": "cb292ad836df92e100c9977d614acd58c49dd470",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
