@@ -16,6 +16,24 @@
       "message": "But the documentation of css.system.XSimpleMailMessage::setAttachment (in offapi/com/sun/star/system/XSimpleMailMessage.idl) states that these need to be file URLs, so why add code that tries to silently convert illegal input into file URLs?",
       "revId": "738e0bd68c4b4286b85d3eb5c1a638247fcc26bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8da12ca8_21e54159",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-27T13:29:35Z",
+      "side": 1,
+      "message": "It could indeed be changed to reject the illegal paths ... but I guessed that it already accepted file paths, so some user code must already depend on that (and the bug shows that users tried that). Not opposed to a follow-up making that stricter ;-)",
+      "parentUuid": "f8aa84e9_1941e2c5",
+      "revId": "738e0bd68c4b4286b85d3eb5c1a638247fcc26bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
