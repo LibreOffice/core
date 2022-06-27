@@ -4699,19 +4699,19 @@ void DrawingML::WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>
     mpFS->endElementNS(XML_a, XML_custGeom);
 }
 
-void DrawingML::WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID )
+void DrawingML::WriteConnectorConnections( sal_uInt32 nStartGlueId, sal_Int32 nEndGlueId, sal_Int32 nStartID, sal_Int32 nEndID )
 {
     if( nStartID != -1 )
     {
         mpFS->singleElementNS( XML_a, XML_stCxn,
                                XML_id, OString::number(nStartID),
-                               XML_idx, OString::number(rConnectorEntry.GetConnectorRule(true)) );
+                               XML_idx, OString::number(nStartGlueId) );
     }
     if( nEndID != -1 )
     {
         mpFS->singleElementNS( XML_a, XML_endCxn,
                                XML_id, OString::number(nEndID),
-                               XML_idx, OString::number(rConnectorEntry.GetConnectorRule(false)) );
+                               XML_idx, OString::number(nEndGlueId) );
     }
 }
 
