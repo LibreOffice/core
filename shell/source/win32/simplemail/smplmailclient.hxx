@@ -38,7 +38,7 @@ public:
 private:
     void validateParameter(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag);
     void assembleCommandLine(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag, std::vector<OUString>& rCommandArgs);
-    OUString CopyAttachment(const OUString& sOrigAttachURL, OUString& sUserVisibleName);
+    OUString CopyAttachment(const OUString& sOrigAttachURL, OUString& sUserVisibleName, bool& nodelete);
     // Don't try to delete the copied attachment files; let the spawned process cleanup them
     void ReleaseAttachments();
 
