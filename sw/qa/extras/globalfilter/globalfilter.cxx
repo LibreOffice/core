@@ -1465,12 +1465,20 @@ void Test::testTextFormField()
 
         // In the first paragraph we have an empty text form field with the placeholder spaces
         const uno::Reference< text::XTextRange > xPara = getParagraph(1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("TextFieldStart"), getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("TextFieldSeparator"), getProperty<OUString>(getRun(xPara, 2), "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("Text"), getProperty<OUString>(getRun(xPara, 3), "TextPortionType"));
         sal_Unicode vEnSpaces[5] = {8194, 8194, 8194, 8194, 8194};
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(vEnSpaces, 5), xPara->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(vEnSpaces, 5), getRun(xPara, 3)->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("TextFieldEnd"), getProperty<OUString>(getRun(xPara, 4), "TextPortionType"));
 
         // In the second paragraph we have a set text
         const uno::Reference< text::XTextRange > xPara2 = getParagraph(2);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("xxxxx"), xPara2->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("TextFieldStart"), getProperty<OUString>(getRun(xPara2, 1), "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("TextFieldSeparator"), getProperty<OUString>(getRun(xPara2, 2), "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("Text"), getProperty<OUString>(getRun(xPara2, 3), "TextPortionType"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("xxxxx"), getRun(xPara2, 3)->getString());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("TextFieldEnd"), getProperty<OUString>(getRun(xPara2, 4), "TextPortionType"));
     }
 }
 

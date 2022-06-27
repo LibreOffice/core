@@ -181,6 +181,7 @@ constexpr OUStringLiteral gsVisitedCharStyleName(u"VisitedCharStyleName");
 constexpr OUStringLiteral gsWidth(u"Width");
 constexpr OUStringLiteral gsWidthType( u"WidthType"  );
 constexpr OUStringLiteral gsTextFieldStart( u"TextFieldStart"  );
+constexpr OUStringLiteral gsTextFieldSep(u"TextFieldSeparator");
 constexpr OUStringLiteral gsTextFieldEnd( u"TextFieldEnd"  );
 constexpr OUStringLiteral gsTextFieldStartEnd( u"TextFieldStartEnd"  );
 
@@ -2281,6 +2282,19 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                                 openFieldMark = NONE;
                             }
                         }
+                    }
+                }
+            }
+            else if (sType == gsTextFieldSep)
+            {
+                Reference<text::XFormField> const xFormField(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
+                if (!bAutoStyles)
+                {
+                    if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+                    {
+                        SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+                            XML_NAMESPACE_FIELD, XML_FIELDMARK_SEPARATOR,
+                            false, false );
                     }
                 }
             }
