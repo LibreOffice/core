@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include <com/sun/star/xml/dom/DOMException.hpp>
+#include <utility>
 
 #include "element.hxx"
 #include "document.hxx"
@@ -31,9 +32,9 @@ using namespace css::xml::dom;
 
 namespace DOM
 {
-    CAttributesMap::CAttributesMap(::rtl::Reference<CElement> const& pElement,
+    CAttributesMap::CAttributesMap(::rtl::Reference<CElement> pElement,
                 ::osl::Mutex & rMutex)
-        : m_pElement(pElement)
+        : m_pElement(std::move(pElement))
         , m_rMutex(rMutex)
     {
     }

@@ -42,7 +42,7 @@ namespace DOM
         ::osl::Mutex & m_rMutex;
 
     public:
-        CAttributesMap(::rtl::Reference<CElement> const& pElement,
+        CAttributesMap(::rtl::Reference<CElement> pElement,
                 ::osl::Mutex & rMutex);
 
         /**

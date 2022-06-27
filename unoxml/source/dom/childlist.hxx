@@ -42,7 +42,7 @@ namespace DOM
         ::osl::Mutex & m_rMutex;
 
     public:
-        CChildList(::rtl::Reference<CNode> const& pBase,
+        CChildList(::rtl::Reference<CNode> pBase,
                 ::osl::Mutex & rMutex);
 
         /**

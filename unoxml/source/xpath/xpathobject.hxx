@@ -49,7 +49,7 @@ namespace XPath
         css::xml::xpath::XPathObjectType const m_XPathObjectType;
 
     public:
-        CXPathObject( ::rtl::Reference<DOM::CDocument> const& pDocument,
+        CXPathObject( ::rtl::Reference<DOM::CDocument> pDocument,
             ::osl::Mutex & rMutex,
             std::shared_ptr<xmlXPathObject> const& pXPathObj);
 

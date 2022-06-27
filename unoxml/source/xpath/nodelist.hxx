@@ -53,7 +53,7 @@ namespace XPath
 
     public:
         CNodeList(
-                ::rtl::Reference<DOM::CDocument> const& pDocument,
+                ::rtl::Reference<DOM::CDocument> pDocument,
                 ::osl::Mutex & rMutex,
                 std::shared_ptr<xmlXPathObject> const& rxpathObj);
         /**
