@@ -335,7 +335,7 @@ void ToxTextGenerator::GetAttributesForNode(
 {
     // note: this *must* use the same flags as SwTextNode::GetExpandText()
     // or indexes will be off!
-    ExpandMode eMode = ExpandMode::ExpandFields;
+    ExpandMode eMode = ExpandMode::ExpandFields | ExpandMode::HideFieldmarkCommands;
     if (pLayout && pLayout->IsHideRedlines())
     {
         eMode |= ExpandMode::HideDeletions;

@@ -72,11 +72,12 @@ enum class ExpandMode
     HideDeletions  = 0x0008,
     /// do not expand to content, but replace with zwsp
     ReplaceMode    = 0x0010,
+    HideFieldmarkCommands = 0x0020,
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<ExpandMode> : is_typed_flags<ExpandMode, 0x001f> {};
+    template<> struct typed_flags<ExpandMode> : is_typed_flags<ExpandMode, 0x003f> {};
 }
 
 class ModelToViewHelper
@@ -127,7 +128,7 @@ public:
 
     ModelToViewHelper(const SwTextNode &rNode, SwRootFrame const* pLayout,
             // defaults are appropriate for spell/grammar checking
-            ExpandMode eMode = ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode);
+            ExpandMode eMode = ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::HideFieldmarkCommands | ExpandMode::ReplaceMode);
     ModelToViewHelper() //pass through filter, view == model
     {
     }

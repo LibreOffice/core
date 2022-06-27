@@ -106,7 +106,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
     if (eMode & ExpandMode::HideDeletions)
         SwScriptInfo::selectRedLineDeleted(rNode, aHiddenMulti);
 
-    if (eMode & ExpandMode::ExpandFields)
+    if (eMode & ExpandMode::HideFieldmarkCommands)
     {
         // hide fieldmark commands
         IDocumentMarkAccess const& rIDMA(*rNode.GetDoc().getIDocumentMarkAccess());
@@ -204,6 +204,22 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
         if (oStartHidden && rNode.Len() != 0)
         {
             aHiddenMulti.Select({*oStartHidden, rNode.Len() - 1}, true);
+        }
+    }
+    else if (eMode & ExpandMode::ExpandFields) // subset: only hide dummy chars
+    {
+        for (sal_Int32 i = 0; i < rNode.GetText().getLength(); ++i)
+        {
+            switch (rNode.GetText()[i])
+            {
+                case CH_TXT_ATR_FIELDSTART:
+                case CH_TXT_ATR_FIELDSEP:
+                case CH_TXT_ATR_FIELDEND:
+                {
+                    aHiddenMulti.Select({i, i}, true);
+                    break;
+                }
+            }
         }
     }
 
