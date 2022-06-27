@@ -16,6 +16,24 @@
       "message": "crashtesting triggers this assert with\nwget https://bugzilla.mozilla.org/attachment.cgi?id\u003d8548336 -O ~/moz1121068-2.pptx\n./instdir/program/soffice.bin --headless --convert-to pdf ~/moz1121068-2.pptx",
       "revId": "5772cef244dbee5834efbc693bc714d89ae6301d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b690b32c_ea94e1f2",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-27T08:35:40Z",
+      "side": 1,
+      "message": "Will check, thanks!",
+      "parentUuid": "d001f6bd_ba478e33",
+      "revId": "5772cef244dbee5834efbc693bc714d89ae6301d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
