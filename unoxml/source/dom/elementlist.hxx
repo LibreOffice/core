@@ -60,7 +60,7 @@ namespace DOM
         void buildlist(xmlNodePtr pNode, bool start=true);
 
     public:
-        CElementListImpl(::rtl::Reference<CElement> const& pElement,
+        CElementListImpl(::rtl::Reference<CElement> pElement,
                 ::osl::Mutex & rMutex,
                 std::u16string_view rName, OUString const*const pURI);
 

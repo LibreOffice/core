@@ -22,6 +22,7 @@
 #include <libxml/tree.h>
 
 #include <node.hxx>
+#include <utility>
 #include "document.hxx"
 
 using namespace css::uno;
@@ -29,9 +30,9 @@ using namespace css::xml::dom;
 
 namespace DOM
 {
-    CChildList::CChildList(::rtl::Reference<CNode> const& pBase,
+    CChildList::CChildList(::rtl::Reference<CNode> pBase,
                 ::osl::Mutex & rMutex)
-        : m_pNode(pBase)
+        : m_pNode(std::move(pBase))
         , m_rMutex(rMutex)
     {
     }

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <utility>
+
 #include "nodelist.hxx"
 
 #include "../dom/document.hxx"
@@ -27,10 +29,10 @@ using namespace css::xml::dom;
 namespace XPath
 {
     CNodeList::CNodeList(
-                ::rtl::Reference<DOM::CDocument> const& pDocument,
+                ::rtl::Reference<DOM::CDocument> pDocument,
                 ::osl::Mutex & rMutex,
                 std::shared_ptr<xmlXPathObject> const& rxpathObj)
-        : m_pDocument(pDocument)
+        : m_pDocument(std::move(pDocument))
         , m_rMutex(rMutex)
         , m_pNodeSet(nullptr)
     {
