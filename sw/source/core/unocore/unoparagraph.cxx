@@ -922,18 +922,12 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
         }
         case FN_UNO_LIST_ID:
         {
-            if (*ppSet)
+            SwNumRule* pNumRule = rTextNode.GetNumRule();
+            if (pNumRule && pNumRule->HasContinueList())
             {
-                if ((*ppSet)->GetItemState(RES_PARATR_LIST_ID, false) == SfxItemState::SET)
-                {
-                    SwNumRule* pNumRule = rTextNode.GetNumRule();
-                    if (!pNumRule || pNumRule->HasContinueList())
-                    {
-                        eRet = beans::PropertyState_DIRECT_VALUE;
-                    }
-                }
-                bDone = true;
+                eRet = beans::PropertyState_DIRECT_VALUE;
             }
+            bDone = true;
             break;
         }
         case FN_UNO_ANCHOR_TYPES:
