@@ -497,8 +497,11 @@ static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rPare
     }
 
     //  see ImpSvNumberformatScan::Next_Symbol
+
+    // All format types except BOOLEAN may contain minus sign or delimiter.
     if ( cChar == '-' )
-        return true;   // all format types may content minus sign or delimiter
+        return nFormatType != SvXMLStylesTokens::BOOLEAN_STYLE;
+
     if ( ( cChar == ' ' ||
            cChar == '/' ||
            cChar == '.' ||
@@ -528,11 +531,13 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
 {
     bool bQuote = true;
     sal_Int32 nLength = rContent.getLength();
+    const SvXMLStylesTokens nFormatType = rParent.GetType();
 
-    if ((nLength == 1 && lcl_ValidChar( rContent[0], rParent)) ||
-            (nLength == 2 &&
-             ((rContent[0] == ' ' && rContent[1] == '-') ||
-              (rContent[1] == ' ' && lcl_ValidChar( rContent[0], rParent)))))
+    if (nFormatType != SvXMLStylesTokens::BOOLEAN_STYLE &&
+            ((nLength == 1 && lcl_ValidChar( rContent[0], rParent)) ||
+             (nLength == 2 &&
+              ((rContent[0] == ' ' && rContent[1] == '-') ||
+               (rContent[1] == ' ' && lcl_ValidChar( rContent[0], rParent))))))
     {
         //  Don't quote single separator characters like space or percent,
         //  or separator characters followed by space (used in date formats).
@@ -541,7 +546,7 @@ static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumForm
         //  the difference of quotes.
         bQuote = false;
     }
-    else if ( rParent.GetType() == SvXMLStylesTokens::PERCENTAGE_STYLE && nLength > 1 )
+    else if ( nFormatType == SvXMLStylesTokens::PERCENTAGE_STYLE && nLength > 1 )
     {
         //  the percent character in percentage styles must be left out of quoting
         //  (one occurrence is enough even if there are several percent characters in the string)
@@ -906,7 +911,7 @@ void SvXMLNumFmtElementContext::endFastElement(sal_Int32 )
             }
             break;
         case SvXMLStyleTokens::Boolean:
-            // ignored - only default boolean format is supported
+            rParent.AddNfKeyword( NF_KEY_BOOLEAN );
             break;
 
         case SvXMLStyleTokens::Day:
@@ -1533,9 +1538,8 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
             nIndex = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, nFormatLang );
     }
 
-    //  boolean is always the builtin boolean format
-    //  (no other boolean formats are implemented)
-    if ( nType == SvXMLStylesTokens::BOOLEAN_STYLE )
+    if ( nType == SvXMLStylesTokens::BOOLEAN_STYLE && !bHasExtraText &&
+            aMyConditions.empty() && sFormat.toChar() != '[' )
         nIndex = pFormatter->GetFormatIndex( NF_BOOLEAN, nFormatLang );
 
     //  check for default date formats
