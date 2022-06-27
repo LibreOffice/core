@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "122057d9_8b6fa47d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-27T13:41:07Z",
+      "side": 1,
+      "message": "I think disabling the widget when it gets into the state where it would divide by zero works for this case without bad side effect.",
+      "revId": "f5d49e21b4b6e5ba5745fa153cfdb1ee652ae276",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
