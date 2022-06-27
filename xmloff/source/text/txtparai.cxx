@@ -1433,6 +1433,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImpSpanContext_Impl
 
     case XML_ELEMENT(FIELD, XML_FIELDMARK):
     case XML_ELEMENT(FIELD, XML_FIELDMARK_START):
+    case XML_ELEMENT(FIELD, XML_FIELDMARK_SEPARATOR):
     case XML_ELEMENT(FIELD, XML_FIELDMARK_END):
         pContext = new XMLTextMarkImportContext(rImport, *rImport.GetTextImport(),
                                                 rHints.GetCrossRefHeadingBookmark());

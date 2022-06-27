@@ -3315,6 +3315,7 @@ namespace xmloff::token {
         // enhanced fields
         TOKEN( "fieldmark",             XML_FIELDMARK ),
         TOKEN( "fieldmark-start",       XML_FIELDMARK_START ),
+        TOKEN( "fieldmark-separator",   XML_FIELDMARK_SEPARATOR ),
         TOKEN( "fieldmark-end",         XML_FIELDMARK_END ),
 
         TOKEN( "image-scale",           XML_IMAGE_SCALE  ),

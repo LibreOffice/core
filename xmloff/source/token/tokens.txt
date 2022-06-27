@@ -3090,6 +3090,7 @@ use-zero
 ignore
 fieldmark
 fieldmark-start
+fieldmark-separator
 fieldmark-end
 image-scale
 isotropic
