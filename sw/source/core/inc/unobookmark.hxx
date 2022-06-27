@@ -61,7 +61,8 @@ protected:
     /// @throws css::uno::RuntimeException
     void attachToRangeEx(
             const css::uno::Reference< css::text::XTextRange > & xTextRange,
-            IDocumentMarkAccess::MarkType eType);
+            IDocumentMarkAccess::MarkType eType,
+            bool isFieldmarkSeparatorAtStart = false);
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     virtual void attachToRange(
@@ -190,6 +191,7 @@ class SwXFieldmark final
 {
     ::sw::mark::ICheckboxFieldmark* getCheckboxFieldmark();
     bool const m_bReplacementObject;
+    bool m_isFieldmarkSeparatorAtStart = false;
 
     css::uno::Reference<css::text::XTextRange>
         GetCommand(::sw::mark::IFieldmark const& rMark);
