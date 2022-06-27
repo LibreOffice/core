@@ -969,6 +969,12 @@ static Type getUnoTypeForSbxValue( const SbxValue* pVal )
     // No object, convert basic type
     else
     {
+        if (eBaseType == SbxBYTE && pVal->GetByte() > 127)
+        {
+            // Basic Byte type is unsigned; cppu::UnoType<sal_uInt8> corresponds to UNO boolean,
+            // so values 128-255 are only representable starting with UNO short types
+            eBaseType = SbxUSHORT;
+        }
         aRetType = getUnoTypeForSbxBaseType( eBaseType );
     }
     return aRetType;
@@ -1049,19 +1055,10 @@ static Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmall
                     aType = ::cppu::UnoType<sal_Int16>::get();
                 break;
             }
-            case TypeClass_UNSIGNED_SHORT:
-            {
-                sal_uInt16 n = pVar->GetUShort();
-                if( n <= 255 )
-                    aType = cppu::UnoType<sal_uInt8>::get();
-                break;
-            }
             case TypeClass_UNSIGNED_LONG:
             {
                 sal_uInt32 n = pVar->GetLong();
-                if( n <= 255 )
-                    aType = cppu::UnoType<sal_uInt8>::get();
-                else if( n <= SbxMAXUINT )
+                if( n <= SbxMAXUINT )
                     aType = cppu::UnoType<cppu::UnoUnsignedShortType>::get();
                 break;
             }
