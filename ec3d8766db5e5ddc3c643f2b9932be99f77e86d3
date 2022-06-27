@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aac02316_64c36c51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-27T21:32:32Z",
+      "side": 1,
+      "message": "One important note: you should fix your previous submission while preserving the Change-ID to avoid duplicate submissions.",
+      "revId": "ec3d8766db5e5ddc3c643f2b9932be99f77e86d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07296b38_a789c9f4",
