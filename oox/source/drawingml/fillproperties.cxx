@@ -97,8 +97,10 @@ Quotients getQuotients(geometry::IntegerRectangle2D aRelRect, double hDiv, doubl
 // ECMA-376 Part 1 20.1.8.55 srcRect (Source Rectangle)
 std::optional<Quotients> CropQuotientsFromSrcRect(geometry::IntegerRectangle2D aSrcRect)
 {
-    // Currently the following precondition is guaranteed in GraphicProperties::pushToPropMap
-    assert(aSrcRect.X1 >= 0 && aSrcRect.X2 >= 0 && aSrcRect.Y1 >= 0 && aSrcRect.Y2 >= 0);
+    aSrcRect.X1 = std::max(aSrcRect.X1, sal_Int32(0));
+    aSrcRect.X2 = std::max(aSrcRect.X2, sal_Int32(0));
+    aSrcRect.Y1 = std::max(aSrcRect.Y1, sal_Int32(0));
+    aSrcRect.Y2 = std::max(aSrcRect.Y2, sal_Int32(0));
     if (aSrcRect.X1 + aSrcRect.X2 >= 100'000 || aSrcRect.Y1 + aSrcRect.Y2 >= 100'000)
         return {}; // Cropped everything
     return getQuotients(aSrcRect, 100'000.0, 100'000.0);
@@ -107,8 +109,10 @@ std::optional<Quotients> CropQuotientsFromSrcRect(geometry::IntegerRectangle2D a
 // ECMA-376 Part 1 20.1.8.30 fillRect (Fill Rectangle)
 std::optional<Quotients> CropQuotientsFromFillRect(geometry::IntegerRectangle2D aFillRect)
 {
-    // Currently the following precondition is guaranteed in FillProperties::pushToPropMap
-    assert(aFillRect.X1 <= 0 && aFillRect.X2 <= 0 && aFillRect.Y1 <= 0 && aFillRect.Y2 <= 0);
+    aFillRect.X1 = std::min(aFillRect.X1, sal_Int32(0));
+    aFillRect.X2 = std::min(aFillRect.X2, sal_Int32(0));
+    aFillRect.Y1 = std::min(aFillRect.Y1, sal_Int32(0));
+    aFillRect.Y2 = std::min(aFillRect.Y2, sal_Int32(0));
     // Negative divisor and negative relative offset give positive value wanted in lclCropGraphic
     return getQuotients(aFillRect, -100'000.0 + aFillRect.X1 + aFillRect.X2,
                         -100'000.0 + aFillRect.Y1 + aFillRect.Y2);

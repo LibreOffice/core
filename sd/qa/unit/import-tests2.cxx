@@ -2056,6 +2056,7 @@ void SdImportTest2::testDefaultTabStop()
 void SdImportTest2::testCropToZero()
 {
     // Must not crash because of division by zero
+    // Also must not fail assertions because of passing negative value to CropQuotientsFromSrcRect
     loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/croppedTo0.pptx"), PPTX);
 }
 
