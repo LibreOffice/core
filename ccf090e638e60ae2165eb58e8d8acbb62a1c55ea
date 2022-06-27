@@ -34,6 +34,24 @@
       "parentUuid": "e2ee49d0_3c2f9de0",
       "revId": "ccf090e638e60ae2165eb58e8d8acbb62a1c55ea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f1ab23e_e6f1a931",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-06-27T15:49:53Z",
+      "side": 1,
+      "message": "Sorry, wrong link. It\u0027s the same BZ ticket - not a duplicate since bug 128360 is about the page tab. Thanks for your patch!",
+      "parentUuid": "1313fc6d_7bc856f4",
+      "revId": "ccf090e638e60ae2165eb58e8d8acbb62a1c55ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
