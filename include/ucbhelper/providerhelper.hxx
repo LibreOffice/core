@@ -130,7 +130,7 @@ public:
 
 
     ContentProviderImplHelper(
-                const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+                css::uno::Reference< css::uno::XComponentContext > xContext );
     virtual ~ContentProviderImplHelper() override;
 
 
