@@ -19,7 +19,7 @@
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/toolboxid.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <memory>

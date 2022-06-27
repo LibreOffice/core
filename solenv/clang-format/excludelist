@@ -6177,7 +6177,6 @@ include/tools/time.hxx
 include/tools/urlobj.hxx
 include/tools/weakbase.h
 include/tools/weakbase.hxx
-include/tools/wintypes.hxx
 include/tools/wldcrd.hxx
 include/tools/zcodec.hxx
 include/typelib/typedescription.h
@@ -6457,6 +6456,7 @@ include/vcl/vectorgraphicdata.hxx
 include/vcl/virdev.hxx
 include/vcl/wall.hxx
 include/vcl/window.hxx
+include/vcl/wintypes.hxx
 include/vcl/wizardmachine.hxx
 include/vcl/wmf.hxx
 include/vcl/wrkwin.hxx

@@ -41,7 +41,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/interfacecontainer3.hxx>

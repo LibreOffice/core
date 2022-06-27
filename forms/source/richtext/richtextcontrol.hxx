@@ -26,7 +26,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include "rtattributes.hxx"
 #include "textattributelistener.hxx"
 

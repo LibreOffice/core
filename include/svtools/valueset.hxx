@@ -20,7 +20,7 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/image.hxx>
 #include <memory>

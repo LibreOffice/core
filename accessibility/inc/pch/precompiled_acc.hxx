@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-11-29 09:45:37 using:
+ Generated on 2022-06-27 18:57:49 using:
  ./bin/update_pch accessibility acc --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -52,6 +52,7 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 #endif // PCH_LEVEL >= 1
@@ -69,6 +70,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/math.h>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -92,6 +94,7 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/Scanline.hxx>
+#include <vcl/WindowPosSize.hxx>
 #include <vcl/accessibletable.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/alpha.hxx>
@@ -142,7 +145,7 @@
 #include <vcl/task.hxx>
 #include <vcl/textfilter.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/toolbox.hxx>
+#include <vcl/toolboxid.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/treelist.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
@@ -157,6 +160,7 @@
 #include <vcl/wall.hxx>
 #include <vcl/window.hxx>
 #include <vcl/windowstate.hxx>
+#include <vcl/wintypes.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -166,6 +170,7 @@
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/Range2D.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/Tuple2D.hxx>
@@ -238,7 +243,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -291,7 +295,6 @@
 #include <extended/AccessibleGridControlTableBase.hxx>
 #include <extended/AccessibleGridControlTableCell.hxx>
 #include <extended/accessiblebrowseboxcell.hxx>
-#include <extended/accessibletabbarbase.hxx>
 #include <helper/accresmgr.hxx>
 #include <helper/characterattributeshelper.hxx>
 #include <i18nlangtag/lang.h>
@@ -316,7 +319,6 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
-#include <svtools/tabbar.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
@@ -336,7 +338,6 @@
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
-#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
