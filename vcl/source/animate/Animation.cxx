@@ -162,7 +162,7 @@ BitmapChecksum Animation::GetChecksum() const
 }
 
 bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDestSz,
-                      tools::Long nRendererId, OutputDevice* pFirstFrameOutDev)
+                      tools::Long nRendererId, bool bFirstFrameOnly)
 {
     bool bRet = false;
 
@@ -200,7 +200,7 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
 
             if (differs)
                 maRenderers.emplace_back(new AnimationRenderer(this, &rOut, rDestPt, rDestSz,
-                                                               nRendererId, pFirstFrameOutDev));
+                                                               nRendererId, bFirstFrameOnly));
 
             if (!mbIsInAnimation)
             {

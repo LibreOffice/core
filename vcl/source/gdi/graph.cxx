@@ -447,11 +447,10 @@ void Graphic::DrawEx(OutputDevice& rOutDev, const OUString& rText,
 }
 
 void Graphic::StartAnimation(OutputDevice& rOutDev, const Point& rDestPt,
-                             const Size& rDestSz, tools::Long nRendererId,
-                             OutputDevice* pFirstFrameOutDev)
+                             const Size& rDestSz, tools::Long nRendererId, bool bFirstFrameOnly)
 {
     ImplTestRefCount();
-    mxImpGraphic->startAnimation(rOutDev, rDestPt, rDestSz, nRendererId, pFirstFrameOutDev);
+    mxImpGraphic->startAnimation(rOutDev, rDestPt, rDestSz, nRendererId, bFirstFrameOnly);
 }
 
 void Graphic::StopAnimation( const OutputDevice* pOutDev, tools::Long nRendererId )

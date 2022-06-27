@@ -1212,9 +1212,21 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                             pShell->GetViewOptions()->IsPDFExport() || pShell->isOutputToWindow(),
                             "pOut should not be a virtual device" );
 
-                    pGrfNd->StartGraphicAnimation(pOut, aAlignedGrfArea.Pos(),
-                                        aAlignedGrfArea.SSize(), reinterpret_cast<sal_IntPtr>(this),
-                                        pVout );
+                    OutputDevice* pOut2 = nullptr;
+                    bool bFirstFrameOnly = false;
+
+                    if (pVout)
+                    {
+                        pOut2 = pVout;
+                        bFirstFrameOnly = true;
+                    }
+                    else
+                    {
+                        pOut2 = pOut;
+                    }
+
+                    pGrfNd->StartGraphicAnimation(pOut2, aAlignedGrfArea.Pos(),
+                                        aAlignedGrfArea.SSize(), reinterpret_cast<sal_IntPtr>(this), bFirstFrameOnly);
                 }
                 else
                 {

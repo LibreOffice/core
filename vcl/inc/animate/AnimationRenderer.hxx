@@ -66,11 +66,11 @@ private:
     bool            mbIsMarked;
     bool            mbIsMirroredHorizontally;
     bool            mbIsMirroredVertically;
+    bool            mbFirstFrameOnly;
 
 public:
                     AnimationRenderer( Animation* pParent, OutputDevice* pOut,
-                                  const Point& rPt, const Size& rSz, sal_uLong nRendererId,
-                                  OutputDevice* pFirstFrameOutDev = nullptr );
+                                  const Point& rPt, const Size& rSz, sal_uLong nRendererId, bool bFirstFrameOnly = false );
                     AnimationRenderer(AnimationRenderer&&) = delete;
                     ~AnimationRenderer();
 

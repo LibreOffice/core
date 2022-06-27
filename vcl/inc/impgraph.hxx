@@ -167,7 +167,7 @@ private:
                                        const Point& rDestPt,
                                        const Size& rDestSize,
                                        tools::Long nRendererId,
-                                       OutputDevice* pFirstFrameOutDev);
+                                       bool bFirstFrameOnly);
     void                stopAnimation( const OutputDevice* pOutputDevice,
                                            tools::Long nRendererId );
 
