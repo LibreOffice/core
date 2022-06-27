@@ -356,7 +356,7 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, weld::SpinButton&, rField, void)
         {
             auto nValue = m_xCharsPerLineNF->get_value();
             assert(nValue && "div-by-zero");
-            auto nWidth = m_aPageSize.Width() / nValue;
+            auto nWidth = nValue == 0 ? m_aPageSize.Width() : m_aPageSize.Width() / nValue;
             m_xTextSizeMF->set_value(m_xTextSizeMF->normalize(nWidth), FieldUnit::TWIP);
             //prevent rounding errors in the MetricField by saving the used value
             m_nRubyUserValue = nWidth;
@@ -379,7 +379,7 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, weld::SpinButton&, rField, void)
         {
             auto nValue = m_xLinesPerPageNF->get_value();
             assert(nValue && "div-by-zero");
-            auto nHeight = m_aPageSize.Height() / nValue;
+            auto nHeight = nValue == 0 ? m_aPageSize.Height() : m_aPageSize.Height() / nValue;
             m_xTextSizeMF->set_value(m_xTextSizeMF->normalize(nHeight), FieldUnit::TWIP);
             m_xRubySizeMF->set_value(0, FieldUnit::TWIP);
             SetLinesOrCharsRanges( *m_xLinesRangeFT , m_xLinesPerPageNF->get_max() );
