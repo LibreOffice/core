@@ -58,8 +58,8 @@ namespace /* private */
     std::vector<std::wstring> gTo;
     std::vector<std::wstring> gCc;
     std::vector<std::wstring> gBcc;
-    // Keep temp filepath and displayed name
-    std::vector<std::pair<std::wstring, std::wstring>> gAttachments;
+    // Keep temp filepath, displayed name, and "do not delete" flag
+    std::vector<std::tuple<std::wstring, std::wstring, bool>> gAttachments;
     int gMapiFlags = 0;
 }
 
@@ -121,11 +121,12 @@ static void initAttachmentList(MapiAttachmentList_t* pMapiAttachmentList)
 {
     OSL_ASSERT(pMapiAttachmentList->empty());
 
-    for (const auto& attachment : gAttachments)
+    for (const auto& [filepath, attachname, nodelete] : gAttachments)
     {
+        (void)nodelete;
         MapiFileDescW mfd;
         ZeroMemory(&mfd, sizeof(mfd));
-        mfd.lpszPathName = const_cast<wchar_t*>(attachment.first.c_str());
+        mfd.lpszPathName = const_cast<wchar_t*>(filepath.c_str());
         // MapiFileDesc documentation (https://msdn.microsoft.com/en-us/library/hh707272)
         // allows using here either nullptr, or a pointer to empty string. However,
         // for Outlook 2013, we cannot use nullptr here, and must point to a (possibly
@@ -134,7 +135,7 @@ static void initAttachmentList(MapiAttachmentList_t* pMapiAttachmentList)
         // Since C++11, c_str() must return a pointer to single null character when the
         // string is empty, so we are OK here in case when there's no explicit file name
         // passed
-        mfd.lpszFileName = const_cast<wchar_t*>(attachment.second.c_str());
+        mfd.lpszFileName = const_cast<wchar_t*>(attachname.c_str());
         mfd.nPosition = sal::static_int_cast<ULONG>(-1);
         pMapiAttachmentList->push_back(mfd);
     }
@@ -239,7 +240,14 @@ static void initParameter(int argc, wchar_t* argv[])
                     sName = argv[i+3];
                     i += 2;
                 }
-                gAttachments.emplace_back(sPath, sName);
+                // Also there may be --nodelete to keep the attachment on exit
+                bool nodelete = false;
+                if ((i + 2) < argc && _wcsicmp(argv[i+2], L"--nodelete") == 0)
+                {
+                    nodelete = true;
+                    ++i;
+                }
+                gAttachments.emplace_back(sPath, sName, nodelete);
             }
             else if (_wcsicmp(argv[i], L"--langtag") == 0)
                 gLangTag = o3tl::toU(argv[i+1]);
@@ -401,8 +409,12 @@ int wmain(int argc, wchar_t* argv[])
     }
 
     // Now cleanup the temporary attachment files
-    for (const auto& rAttachment : gAttachments)
-        DeleteFileW(rAttachment.first.c_str());
+    for (const auto& [filepath, attachname, nodelete] : gAttachments)
+    {
+        (void)attachname;
+        if (!nodelete)
+            DeleteFileW(filepath.c_str());
+    }
 
     // Only show the error message if UI was requested
     if ((ulRet != SUCCESS_SUCCESS) && (gMapiFlags & (MAPI_DIALOG | MAPI_LOGON_UI)))
@@ -434,11 +446,13 @@ int wmain(int argc, wchar_t* argv[])
         for (const auto& address : gBcc)
             oss << "--bcc " << address << std::endl;
 
-        for (const auto& attachment : gAttachments)
+        for (const auto& [filepath, attachname, nodelete] : gAttachments)
         {
-            oss << "--attach " << attachment.first << std::endl;
-            if (!attachment.second.empty())
-                oss << "--attach-name " << attachment.second << std::endl;
+            oss << "--attach " << filepath << std::endl;
+            if (!attachname.empty())
+                oss << "--attach-name " << attachname << std::endl;
+            if (nodelete)
+                oss << "--nodelete" << std::endl;
         }
 
         if (gMapiFlags & MAPI_DIALOG)
