@@ -51,6 +51,24 @@
       "parentUuid": "29d132d3_36ebfa23",
       "revId": "cb292ad836df92e100c9977d614acd58c49dd470",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2de584a5_449ba0c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-27T13:59:41Z",
+      "side": 1,
+      "message": "I think I have, you\u0027re still the \"gerrit owner\" but I\u0027m now the patch author.",
+      "parentUuid": "6f9b94a0_98ef05d1",
+      "revId": "cb292ad836df92e100c9977d614acd58c49dd470",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
