@@ -639,6 +639,46 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDate)
     CPPUNIT_ASSERT_EQUAL(OUString("008000"), pContentControl->GetColor());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testListIdState)
+{
+    // Given a document with 3 paragraphs: an outer numbering on para 1 & 3, an inner numbering on
+    // para 2:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    {
+        SfxItemSetFixed<RES_PARATR_NUMRULE, RES_PARATR_NUMRULE> aSet(pWrtShell->GetAttrPool());
+        SwNumRuleItem aItem("Numbering ABC");
+        aSet.Put(aItem);
+        pWrtShell->SetAttrSet(aSet);
+    }
+    pWrtShell->SplitNode();
+    {
+        SfxItemSetFixed<RES_PARATR_NUMRULE, RES_PARATR_NUMRULE> aSet(pWrtShell->GetAttrPool());
+        SwNumRuleItem aItem("Numbering 123");
+        aSet.Put(aItem);
+        pWrtShell->SetAttrSet(aSet);
+    }
+    pWrtShell->SplitNode();
+    {
+        SfxItemSetFixed<RES_PARATR_NUMRULE, RES_PARATR_NUMRULE> aSet(pWrtShell->GetAttrPool());
+        SwNumRuleItem aItem("Numbering ABC");
+        aSet.Put(aItem);
+        pWrtShell->SetAttrSet(aSet);
+    }
+
+    // When checking if xml:id="..." needs writing for the first paragraph during ODT export:
+    uno::Reference<beans::XPropertyState> xPara(getParagraph(1), uno::UNO_QUERY);
+    beans::PropertyState eState = xPara->getPropertyState("ListId");
+
+    // Then make sure that xml:id="..." gets written for para 1, as it'll be continued in para 3.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0 (DIRECT_VALUE)
+    // - Actual  : 1 (DEFAULT_VALUE)
+    // i.e. para 1 didn't write an xml:id="..." but para 3 referred to it using continue-list="...",
+    // which is inconsistent.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, eState);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
