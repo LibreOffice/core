@@ -168,7 +168,7 @@ int SvRTFParser::GetNextToken_()
                             {
                                 nNextToken = GetNextToken_();
                             }
-                            while (nNextToken != '{' && nNextToken != sal_Unicode(EOF));
+                            while (nNextToken != '{' && nNextToken != sal_Unicode(EOF) && IsParserWorking());
 
                             SkipGroup();
                             GetNextToken_();  // overread the last bracket
