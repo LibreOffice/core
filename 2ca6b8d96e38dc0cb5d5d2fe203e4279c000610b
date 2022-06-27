@@ -34,6 +34,24 @@
       "parentUuid": "c837b3c7_c3ae6c01",
       "revId": "2ca6b8d96e38dc0cb5d5d2fe203e4279c000610b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c163237_58b9d8a5",
+        "filename": "svx/uiconfig/ui/defaultshapespanel.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-27T08:12:18Z",
+      "side": 1,
+      "message": "if the inside box has a bigger size-request than the outside one, then that should be the same result as if the outside box has the bigger size-request. What might give you a good result is in DefaultShapesPanel::DefaultShapesPanel to use m_xContainer-\u003eset_size_request(...) in PanelLayout::PanelLayout m_xContainer is set from the \"DefaultShapesPanel\" widget so \"m_xContainer-\u003eset_size_request(m_xContainer-\u003eget_approximate_digit_width() * 20, -1);\" might give you the change you want.",
+      "parentUuid": "68f3076e_dcccf2de",
+      "revId": "2ca6b8d96e38dc0cb5d5d2fe203e4279c000610b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
