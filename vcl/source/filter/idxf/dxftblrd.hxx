@@ -2,8 +2,7 @@
 /*
  * This file is part of the LibreOffice project.
  *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * This Source Code Form is subject to the terms of the Mozilla Publi * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * This file incorporates work covered by the following license notice:
@@ -17,8 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFTBLRD_HXX
-#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFTBLRD_HXX
+# pragma once
 
 #include <sal/config.h>
 
@@ -168,8 +166,6 @@ public:
     DXFVPort * SearchVPort(std::string_view rName) const;
 
 };
-
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
