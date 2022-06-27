@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c8b02d4_9f705ed6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-27T16:31:32Z",
+      "side": 1,
+      "message": "This started to cause \u003chttps://ci.libreoffice.org/job/lo_ubsan/2441/\u003e to fail with\n\n  /sw/source/core/text/itrcrsr.cxx:1659:50: runtime error: downcast of address 0x60700059b250 which does not point to an object of type \u0027SwTextPortion\u0027\n  0x60700059b250: note: object is of type \u0027SwHolePortion\u0027\n   00 00 00 00  90 23 40 a7 6f 7f 00 00  e1 03 00 00 00 00 00 00  0d 01 00 00 00 00 00 00  00 00 00 00\n                ^~~~~~~~~~~~~~~~~~~~~~~\n                vptr for \u0027SwHolePortion\u0027\n      #0 0x7f6f9f1777f0 in SwTextCursor::GetModelPositionForViewPoint(SwPosition*, Point const\u0026, bool, SwCursorMoveState*) const /sw/source/core/text/itrcrsr.cxx:1659:50\n      #1 0x7f6f9efc2b39 in SwTextFrame::UnitDown_(SwPaM*, long, bool) const /sw/source/core/text/frmcrsr.cxx:1200:49\n      #2 0x7f6f9efc5b50 in SwTextFrame::UnitDown(SwPaM*, long, bool) const /sw/source/core/text/frmcrsr.cxx:1298:31\n      #3 0x7f6f9be4bac8 in SwCursor::UpDown(bool, unsigned short, Point const*, long, SwRootFrame\u0026) /sw/source/core/crsr/swcrsr.cxx:2062:31\n      #4 0x7f6f9bf0692b in SwShellCursor::UpDown(bool, unsigned short) /sw/source/core/crsr/viscrs.cxx:1025:22\n      #5 0x7f6f9bb840c0 in SwCursorShell::UpDown(bool, unsigned short) /sw/source/core/crsr/crsrsh.cxx:511:29\n      #6 0x7f6fa37f131d in SwCursorShell::Down(unsigned short) /sw/inc/crsrsh.hxx:359:50\n      #7 0x7f6fa37dcfc9 in SwWrtShell::Down(bool, unsigned short, bool) /sw/source/uibase/wrtsh/move.cxx:171:27\n      #8 0x7f6fb6aa1325 in testTdf43100_CursorMoveToSpacesOverMargin::TestBody() /sw/qa/core/text/text.cxx:532:20\n\nduring CppunitTest_sw_core_text CPPUNIT_TEST_NAME\u003dtestTdf43100_CursorMoveToSpacesOverMargin::TestBody",
+      "revId": "7ef9c3ef30023cc40068e1f735aa4bec4811288b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
