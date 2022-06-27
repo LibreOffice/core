@@ -35,6 +35,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -105,7 +106,7 @@ namespace {
 
 enum lcl_MarkType { TypeReference, TypeReferenceStart, TypeReferenceEnd,
                     TypeBookmark, TypeBookmarkStart, TypeBookmarkEnd,
-                    TypeFieldmark, TypeFieldmarkStart, TypeFieldmarkEnd
+                    TypeFieldmark, TypeFieldmarkStart, TypeFieldmarkSeparator, TypeFieldmarkEnd
                   };
 
 }
@@ -120,6 +121,7 @@ SvXMLEnumMapEntry<lcl_MarkType> const lcl_aMarkTypeMap[] =
     { XML_BOOKMARK_END,           TypeBookmarkEnd },
     { XML_FIELDMARK,              TypeFieldmark },
     { XML_FIELDMARK_START,        TypeFieldmarkStart },
+    { XML_FIELDMARK_SEPARATOR,    TypeFieldmarkSeparator },
     { XML_FIELDMARK_END,          TypeFieldmarkEnd },
     { XML_TOKEN_INVALID,          lcl_MarkType(0) },
 };
@@ -173,12 +175,12 @@ void XMLTextMarkImportContext::startFastElement( sal_Int32 nElement,
 }
 
 static auto InsertFieldmark(SvXMLImport & rImport,
-        XMLTextImportHelper & rHelper, OUString const& rName) -> void
+        XMLTextImportHelper & rHelper, bool const isFieldmarkSeparatorMissing) -> void
 {
     assert(rHelper.hasCurrentFieldCtx()); // was set up in StartElement()
 
     // fdo#86795 check if it's actually a checkbox first
-    OUString const type(rHelper.getCurrentFieldType());
+    auto const [ name, type ] = rHelper.getCurrentFieldType();
     OUString const fieldmarkTypeName = lcl_getFieldmarkName(type);
     if (fieldmarkTypeName == ODF_FORMCHECKBOX ||
         fieldmarkTypeName == ODF_FORMDROPDOWN)
@@ -187,9 +189,20 @@ static auto InsertFieldmark(SvXMLImport & rImport,
         return;
     }
 
+    uno::Reference<text::XTextRange> const xStartRange(rHelper.getCurrentFieldStart());
+    uno::Reference<text::XTextCursor> const xCursor(
+        rHelper.GetText()->createTextCursorByRange(xStartRange));
+    uno::Reference<text::XTextRangeCompare> const xCompare(rHelper.GetText(), uno::UNO_QUERY);
+    if (xCompare->compareRegionStarts(xStartRange, rHelper.GetCursorAsRange()) < 0)
+    {
+        SAL_WARN("xmloff.text", "invalid field mark positions");
+        assert(false);
+    }
+    xCursor->gotoRange(rHelper.GetCursorAsRange(), true);
+
     Reference<XTextContent> const xContent = XMLTextMarkImportContext::CreateAndInsertMark(
-            rImport, "com.sun.star.text.Fieldmark",
-            rName, rHelper.GetCursorAsRange());
+            rImport, "com.sun.star.text.Fieldmark", name, xCursor,
+            OUString(), isFieldmarkSeparatorMissing);
 
     if (!xContent.is())
         return;
@@ -256,7 +269,7 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
     if (!SvXMLUnitConverter::convertEnum(nTmp, SvXMLImport::getNameFromToken(nElement), lcl_aMarkTypeMap))
         return;
 
-    if (m_sBookmarkName.isEmpty() && TypeFieldmarkEnd != nTmp)
+    if (m_sBookmarkName.isEmpty() && TypeFieldmarkEnd != nTmp && TypeFieldmarkSeparator != nTmp)
         return;
 
     switch (nTmp)
@@ -412,13 +425,21 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
             // else: no start found -> ignore!
             break;
         }
-        case TypeFieldmarkStart: // no separator, so insert at start
+        case TypeFieldmarkStart:
         {
-            InsertFieldmark(GetImport(), m_rHelper, m_sBookmarkName);
+            break;
+        }
+        case TypeFieldmarkSeparator:
+        {
+            InsertFieldmark(GetImport(), m_rHelper, false);
             break;
         }
         case TypeFieldmarkEnd:
         {
+            if (!m_rHelper.hasCurrentFieldSeparator())
+            {   // backward compat for old files without separator
+                InsertFieldmark(GetImport(), m_rHelper, true);
+            }
             PopFieldmark(m_rHelper);
             break;
         }
@@ -446,7 +467,8 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
     const OUString& sServiceName,
     const OUString& sMarkName,
     const Reference<XTextRange> & rRange,
-    const OUString& i_rXmlId)
+    const OUString& i_rXmlId,
+    bool const isFieldmarkSeparatorMissing)
 {
     // create mark
     const Reference<XMultiServiceFactory> xFactory(rImport.GetModel(),
@@ -476,6 +498,12 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
                 OSL_FAIL("name given, but XNamed not supported?");
                 return nullptr;
             }
+        }
+
+        if (isFieldmarkSeparatorMissing)
+        {
+            uno::Reference<beans::XPropertySet> const xProps(xIfc, uno::UNO_QUERY_THROW);
+            xProps->setPropertyValue("PrivateSeparatorAtStart", uno::Any(true));
         }
 
         // cast to XTextContent and attach to document
