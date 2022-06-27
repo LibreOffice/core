@@ -1967,6 +1967,7 @@ void SAL_CALL SwXTextField::attach(
         if (!pTextAttr)
             throw uno::RuntimeException("no SwTextAttr inserted?");  // could theoretically happen, if paragraph is full
 
+        m_pImpl->ClearFieldType();
         const SwFormatField& rField = pTextAttr->GetFormatField();
         m_pImpl->SetFormatField(const_cast<SwFormatField*>(&rField), pDoc);
 
@@ -1990,7 +1991,6 @@ void SAL_CALL SwXTextField::attach(
         m_pImpl->GetFormatField()->SetXTextField(this);
         m_pImpl->m_wThis = this;
         m_pImpl->m_bIsDescriptor = false;
-        m_pImpl->ClearFieldType();
         m_pImpl->m_pProps.reset();
         if (m_pImpl->m_bCallUpdate)
             update();
