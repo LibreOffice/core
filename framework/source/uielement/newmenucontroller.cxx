@@ -40,7 +40,6 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
-#include <unotools/moduleoptions.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -111,7 +110,6 @@ void NewMenuController::determineAndSetNewDocAccel(const css::awt::KeyEvent& rKe
 {
     sal_uInt16 nCount(m_xPopupMenu->getItemCount());
     sal_uInt16 nId( 0 );
-    bool      bFound( false );
     OUString aCommand;
 
     if ( !m_aEmptyDocURL.isEmpty() )
@@ -127,31 +125,8 @@ void NewMenuController::determineAndSetNewDocAccel(const css::awt::KeyEvent& rKe
                 if ( aCommand.startsWith( m_aEmptyDocURL ) )
                 {
                     m_xPopupMenu->setAcceleratorKeyEvent(nId, rKeyCode);
-                    bFound = true;
                     break;
                 }
-            }
-        }
-    }
-
-    if ( bFound )
-        return;
-
-    // Search for the default module name
-    OUString aDefaultModuleName( SvtModuleOptions().GetDefaultModuleName() );
-    if ( aDefaultModuleName.isEmpty() )
-        return;
-
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
-    {
-        if (m_xPopupMenu->getItemType(i) != css::awt::MenuItemType_SEPARATOR)
-        {
-            nId = m_xPopupMenu->getItemId(i);
-            aCommand = m_xPopupMenu->getCommand(nId);
-            if ( aCommand.indexOf( aDefaultModuleName ) >= 0 )
-            {
-                m_xPopupMenu->setAcceleratorKeyEvent(nId, rKeyCode);
-                break;
             }
         }
     }
@@ -372,8 +347,9 @@ void SAL_CALL NewMenuController::disposing( const EventObject& )
 }
 
 // XStatusListener
-void SAL_CALL NewMenuController::statusChanged( const FeatureStateEvent& )
+void SAL_CALL NewMenuController::statusChanged( const FeatureStateEvent& Event )
 {
+    Event.State >>= m_aEmptyDocURL;
 }
 
 // XMenuListener
@@ -452,23 +428,6 @@ void NewMenuController::impl_setPopupMenu()
     {
         m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
         m_bModuleIdentified = true;
-
-        if ( !m_aModuleIdentifier.isEmpty() )
-        {
-            Sequence< PropertyValue > aSeq;
-
-            if ( xModuleManager->getByName( m_aModuleIdentifier ) >>= aSeq )
-            {
-                for ( PropertyValue const & prop : std::as_const(aSeq) )
-                {
-                    if ( prop.Name == "ooSetupFactoryEmptyDocumentURL" )
-                    {
-                        prop.Value >>= m_aEmptyDocURL;
-                        break;
-                    }
-                }
-            }
-        }
     }
     catch ( const RuntimeException& )
     {
