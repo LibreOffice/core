@@ -147,16 +147,6 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             break;
         }
 
-        if (utl::ConfigManager::IsFuzzing())
-        {
-            const uint64_t MAX_SIZE = 500000000;
-            if (TIFFTileSize64(tif) > MAX_SIZE)
-            {
-                SAL_WARN("filter.tiff", "skipping large tiffs");
-                break;
-            }
-        }
-
         uint32_t nPixelsRequired;
         constexpr size_t nMaxPixelsAllowed = SAL_MAX_INT32/4;
         // two buffers currently required, so limit further
@@ -165,6 +155,16 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
         {
             SAL_WARN("filter.tiff", "skipping oversized tiff image " << w << " x " << h);
             break;
+        }
+
+        if (utl::ConfigManager::IsFuzzing())
+        {
+            const uint64_t MAX_SIZE = 200000000;
+            if (TIFFTileSize64(tif) > MAX_SIZE || nPixelsRequired > MAX_SIZE)
+            {
+                SAL_WARN("filter.tiff", "skipping large tiffs");
+                break;
+            }
         }
 
         std::vector<uint32_t> raster(nPixelsRequired);
