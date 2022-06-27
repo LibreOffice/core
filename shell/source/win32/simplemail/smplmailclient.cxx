@@ -194,7 +194,11 @@ OUString CSmplMailClient::CopyAttachment(const OUString& sOrigAttachURL, OUStrin
     maAttachmentFiles.back()->EnableKillingFile();
     INetURLObject aFilePathObj(maAttachmentFiles.back()->GetURL());
     OUString sNewAttachmentURL = aFilePathObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-    if (osl::File::copy(sOrigAttachURL, sNewAttachmentURL) == osl::FileBase::RC::E_None)
+    OUString sCorrectedOrigAttachURL(sOrigAttachURL);
+    // Make sure to convert to URL, if a system path was passed to XSimpleMailMessage
+    // Ignore conversion error, in which case sCorrectedOrigAttachURL is unchanged
+    osl::FileBase::getFileURLFromSystemPath(sCorrectedOrigAttachURL, sCorrectedOrigAttachURL);
+    if (osl::File::copy(sCorrectedOrigAttachURL, sNewAttachmentURL) == osl::FileBase::RC::E_None)
     {
         INetURLObject url(sOrigAttachURL, INetURLObject::EncodeMechanism::WasEncoded);
         sUserVisibleName = url.getName(INetURLObject::LAST_SEGMENT, true,
