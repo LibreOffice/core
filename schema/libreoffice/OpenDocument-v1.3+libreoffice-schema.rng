@@ -2808,6 +2808,12 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   </rng:define>
   <rng:define name="paragraph-content" combine="choice"
    xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0">
+    <rng:element name="field:fieldmark-separator">
+      <rng:empty/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="paragraph-content" combine="choice"
+   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0">
     <rng:element name="field:fieldmark-end">
       <rng:empty/>
     </rng:element>

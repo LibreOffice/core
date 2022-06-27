@@ -3308,6 +3308,7 @@ namespace xmloff::token {
         // enhanced fields
         XML_FIELDMARK,
         XML_FIELDMARK_START,
+        XML_FIELDMARK_SEPARATOR,
         XML_FIELDMARK_END,
 
         XML_IMAGE_SCALE,
