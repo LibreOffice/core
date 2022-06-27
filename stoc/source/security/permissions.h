@@ -22,6 +22,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <utility>
 
 namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
@@ -38,8 +39,8 @@ public:
 
     Permission(
         t_type type,
-        ::rtl::Reference< Permission > const & next )
-        : m_next( next )
+        ::rtl::Reference< Permission > next )
+        : m_next(std::move( next ))
         , m_type( type )
         {}
 
@@ -66,8 +67,8 @@ class PermissionCollection
 public:
     PermissionCollection()
         {}
-    explicit PermissionCollection( ::rtl::Reference< Permission > const & single )
-        : m_head( single )
+    explicit PermissionCollection( ::rtl::Reference< Permission > single )
+        : m_head(std::move( single ))
         {}
     PermissionCollection(
         css::uno::Sequence< css::uno::Any > const & permissions,

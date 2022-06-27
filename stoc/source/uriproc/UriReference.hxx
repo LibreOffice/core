@@ -30,8 +30,8 @@ namespace stoc::uriproc {
 class UriReference {
 public:
     UriReference(
-        OUString const & scheme, bool hasAuthority,
-        OUString const & authority, OUString const & path,
+        OUString scheme, bool hasAuthority,
+        OUString const & authority, OUString path,
         bool hasQuery, OUString const & query);
 
     ~UriReference();

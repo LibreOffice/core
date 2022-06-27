@@ -19,6 +19,8 @@
 
 #include <uno/any2.h>
 
+#include <utility>
+
 #include "base.hxx"
 
 using namespace css::reflection;
@@ -41,10 +43,10 @@ ClassNameVector g_aClassNames;
 
 
 IdlClassImpl::IdlClassImpl( IdlReflectionServiceImpl * pReflection,
-                            const OUString & rName, typelib_TypeClass eTypeClass,
+                            OUString aName, typelib_TypeClass eTypeClass,
                             typelib_TypeDescription * pTypeDescr )
     : m_xReflection( pReflection )
-    , _aName( rName )
+    , _aName(std::move( aName ))
     , _eTypeClass( static_cast<TypeClass>(eTypeClass) )
     , _pTypeDescr( pTypeDescr )
 {
@@ -201,11 +203,11 @@ Reference< XIdlArray > IdlClassImpl::getArray()
 }
 
 
-IdlMemberImpl::IdlMemberImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
+IdlMemberImpl::IdlMemberImpl( IdlReflectionServiceImpl * pReflection, OUString aName,
                               typelib_TypeDescription * pTypeDescr,
                               typelib_TypeDescription * pDeclTypeDescr )
     : m_xReflection( pReflection )
-    , _aName( rName )
+    , _aName(std::move( aName ))
     , _pTypeDescr( pTypeDescr )
     , _pDeclTypeDescr( pDeclTypeDescr )
 {

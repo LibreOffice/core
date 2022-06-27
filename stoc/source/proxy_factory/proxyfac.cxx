@@ -36,6 +36,7 @@
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <utility>
 
 
 using namespace ::com::sun::star;
@@ -133,7 +134,7 @@ struct ProxyRoot : public ::cppu::OWeakAggObject
     // XAggregation
     virtual Any SAL_CALL queryAggregation( Type const & rType ) override;
 
-    ProxyRoot( ::rtl::Reference< FactoryImpl > const & factory,
+    ProxyRoot( ::rtl::Reference< FactoryImpl > factory,
                       Reference< XInterface > const & xTarget );
 
     ::rtl::Reference< FactoryImpl > m_factory;
@@ -152,9 +153,9 @@ struct binuno_Proxy : public uno_Interface
     TypeDescription m_typeDescr;
 
     binuno_Proxy(
-        ::rtl::Reference< ProxyRoot > const & root,
-        UnoInterfaceReference const & target,
-        OUString const & oid, TypeDescription const & typeDescr );
+        ::rtl::Reference< ProxyRoot > root,
+        UnoInterfaceReference target,
+        OUString oid, TypeDescription typeDescr );
 };
 
 extern "C"
@@ -251,14 +252,14 @@ static void binuno_proxy_dispatch(
 
 
 binuno_Proxy::binuno_Proxy(
-    ::rtl::Reference< ProxyRoot > const & root,
-    UnoInterfaceReference const & target,
-    OUString const & oid, TypeDescription const & typeDescr )
+    ::rtl::Reference< ProxyRoot > root,
+    UnoInterfaceReference target,
+    OUString oid, TypeDescription typeDescr )
     : m_nRefCount( 1 ),
-      m_root( root ),
-      m_target( target ),
-      m_oid( oid ),
-      m_typeDescr( typeDescr )
+      m_root(std::move( root )),
+      m_target(std::move( target )),
+      m_oid(std::move( oid )),
+      m_typeDescr(std::move( typeDescr ))
 {
     uno_Interface::acquire = binuno_proxy_acquire;
     uno_Interface::release = binuno_proxy_release;
@@ -266,9 +267,9 @@ binuno_Proxy::binuno_Proxy(
 }
 
 ProxyRoot::ProxyRoot(
-    ::rtl::Reference< FactoryImpl > const & factory,
+    ::rtl::Reference< FactoryImpl > factory,
     Reference< XInterface > const & xTarget )
-    : m_factory( factory )
+    : m_factory(std::move( factory ))
 {
     m_factory->m_cpp2uno.mapInterface(
         reinterpret_cast< void ** >( &m_target.m_pUnoI ), xTarget.get(),
