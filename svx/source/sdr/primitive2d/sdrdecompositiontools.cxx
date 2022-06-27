@@ -55,12 +55,8 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
-#include <svx/sdr/contact/objectcontact.hxx>
-#include <svx/sdr/contact/viewobjectcontact.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
-#include <set>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
+#include <sdr/contact/viewcontactofmasterpagedescriptor.hxx>
 
 using namespace com::sun::star;
 
@@ -133,30 +129,61 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
     return aAnchorRange;
 }
 
-sdr::contact::ViewContact* getMasterPageViewContact(
+drawinglayer::attribute::SdrFillAttribute getMasterPageFillAttribute(
     const geometry::ViewInformation2D& rViewInformation,
     basegfx::B2DVector& rPageSize)
 {
+    drawinglayer::attribute::SdrFillAttribute aRetval;
+
     // get SdrPage
     const SdrPage* pVisualizedPage(GetSdrPageFromXDrawPage(rViewInformation.getVisualizedPage()));
-    if(nullptr == pVisualizedPage)
-        return nullptr;
 
-    // do not use in MasterPage mode, so initial SdrPage shall *not* be a
-    // MasterPage
-    if(pVisualizedPage->IsMasterPage())
-        return nullptr;
+    if(nullptr != pVisualizedPage)
+    {
+        // copy needed values for further processing
+        rPageSize.setX(pVisualizedPage->GetWidth());
+        rPageSize.setY(pVisualizedPage->GetHeight());
 
-    // we need that SdrPage to have a MasterPage
-    if(!pVisualizedPage->TRG_HasMasterPage())
-        return nullptr;
+        if(pVisualizedPage->IsMasterPage())
+        {
+            // the page is a MasterPage, so we are in MasterPage view
+            // still need #i110846#, see ViewContactOfMasterPage
+            if(pVisualizedPage->getSdrPageProperties().GetStyleSheet())
+            {
+                // create page fill attributes with correct properties
+                aRetval = drawinglayer::primitive2d::createNewSdrFillAttribute(
+                    pVisualizedPage->getSdrPageProperties().GetItemSet());
+            }
+        }
+        else
+        {
+            // the page is *no* MasterPage, we are in normal Page view, get the MasterPage
+            if(pVisualizedPage->TRG_HasMasterPage())
+            {
+                sdr::contact::ViewContact& rVC(pVisualizedPage->TRG_GetMasterPageDescriptorViewContact());
+                sdr::contact::ViewContactOfMasterPageDescriptor* pVCOMPD(
+                    dynamic_cast<sdr::contact::ViewContactOfMasterPageDescriptor*>(&rVC));
 
-    // copy needed values for processing
-    rPageSize.setX(pVisualizedPage->GetWidth());
-    rPageSize.setY(pVisualizedPage->GetHeight());
+                if(nullptr != pVCOMPD)
+                {
+                    // in this case the still needed #i110846# is part of
+                    //  getCorrectSdrPageProperties, that's the main reason to re-use
+                    // that call/functionality here
+                    const SdrPageProperties* pCorrectProperties(
+                        pVCOMPD->GetMasterPageDescriptor().getCorrectSdrPageProperties());
 
-    // return it's ViewContact
-    return &pVisualizedPage->TRG_GetMasterPageDescriptorViewContact();
+                    if(pCorrectProperties)
+                    {
+                        // create page fill attributes when correct properties were identified
+                        aRetval = drawinglayer::primitive2d::createNewSdrFillAttribute(
+                            pCorrectProperties->GetItemSet());
+                    }
+                }
+            }
+        }
+    }
+
+    return aRetval;
 }
 
 // provide a Primitive2D for the SlideBackgroundFill-mode. It is capable
@@ -164,18 +191,15 @@ sdr::contact::ViewContact* getMasterPageViewContact(
 // needed preparation of the geometry in an isolated and controllable
 // space and way.
 // It is currently simple buffered (due to being derived from
-// BufferedDecompositionPrimitive2D) and detects if MasterPage changes
+// BufferedDecompositionPrimitive2D) and detects if FillStyle changes
 class SlideBackgroundFillPrimitive2D final : public BufferedDecompositionPrimitive2D
 {
 private:
     /// the basegfx::B2DPolyPolygon geometry
     basegfx::B2DPolyPolygon maPolyPolygon;
 
-    /// the polygon fill color - to allow simple fallback if needed
-    basegfx::BColor maBColor;
-
-    /// the last VC the geometry was created for
-    sdr::contact::ViewContact* mpLastVC;
+    /// the last SdrFillAttribute the geometry was created for
+    drawinglayer::attribute::SdrFillAttribute maLastFill;
 
 protected:
     // create decomposition data
@@ -186,8 +210,7 @@ protected:
 public:
     /// constructor
     SlideBackgroundFillPrimitive2D(
-        const basegfx::B2DPolyPolygon& rPolyPolygon,
-        const basegfx::BColor& rBColor);
+        const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     /// check existing decomposition data, call parent
     virtual void get2DDecomposition(
@@ -196,7 +219,6 @@ public:
 
     /// data read access
     const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
-    const basegfx::BColor& getBColor() const { return maBColor; }
 
     /// compare operator
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
@@ -209,12 +231,10 @@ public:
 };
 
 SlideBackgroundFillPrimitive2D::SlideBackgroundFillPrimitive2D(
-    const basegfx::B2DPolyPolygon& rPolyPolygon,
-    const basegfx::BColor& rBColor)
+    const basegfx::B2DPolyPolygon& rPolyPolygon)
 : BufferedDecompositionPrimitive2D()
 , maPolyPolygon(rPolyPolygon)
-, maBColor(rBColor)
-, mpLastVC(nullptr)
+, maLastFill()
 {
 }
 
@@ -223,90 +243,44 @@ void SlideBackgroundFillPrimitive2D::create2DDecomposition(
     const geometry::ViewInformation2D& rViewInformation) const
 {
     basegfx::B2DVector aPageSize;
-    sdr::contact::ViewContact* pViewContact(getMasterPageViewContact(rViewInformation, aPageSize));
 
-    // Check that we have a referenced SdrPage that is no MasterPage itself and has a MasterPage,
-    // we got it's ViewContact in pViewContact
-    if(nullptr != pViewContact)
-    {
-        // Get PolygonRange of own local geometry
-        const basegfx::B2DRange aPolygonRange(getB2DPolyPolygon().getB2DRange());
+    // get fill from target Page, this will check for all needed things
+    // like MasterPage/relationships, etc. (see getMasterPageFillAttribute impl above)
+    drawinglayer::attribute::SdrFillAttribute aFill(
+        getMasterPageFillAttribute(rViewInformation, aPageSize));
 
-        // if local geometry is empty, nothing will be shown, we are done
-        if(aPolygonRange.isEmpty())
-            return;
+    // if fill is on default (empty), nothing will be shown, we are done
+    if(aFill.isDefault())
+        return;
 
-        // Get PageRange
-        const basegfx::B2DRange aPageRange(0.0, 0.0, aPageSize.getX(), aPageSize.getY());
+    // Get PolygonRange of own local geometry
+    const basegfx::B2DRange aPolygonRange(getB2DPolyPolygon().getB2DRange());
 
-        // if local geometry does not overlap with PageRange, nothing will be shown, we are done
-        if(!aPageRange.overlaps(aPolygonRange))
-            return;
+    // if local geometry is empty, nothing will be shown, we are done
+    if(aPolygonRange.isEmpty())
+        return;
 
-        // Get the geometry
+    // Get PageRange
+    const basegfx::B2DRange aPageRange(0.0, 0.0, aPageSize.getX(), aPageSize.getY());
 
-        // Add the MasterPage BG fill (if used, e.g. Picture/gradient, ...)
-        pViewContact->getViewIndependentPrimitive2DContainer(rContainer);
+    // if local geometry does not overlap with PageRange, nothing will be shown, we are done
+    if(!aPageRange.overlaps(aPolygonRange))
+        return;
 
-        // To create the MasterPage's ObjectHierarchy we need an ObjectContact (AKA View-side of things).
-        // We do not have one, but can use a temporary one anytime for temporary work. That whole VC/VOC/OC
-        // is designed to work with on-demand temporary objects if needed
-        sdr::contact::ObjectContact aObjectContact;
+    // create FillPrimitive2D with the geometry (the PolyPolygon) and
+    // the page's definitonRange to:
+    // - on one hand limit to geometry
+    // - on the other hand allow continutation of fill outside of
+    //   MasterPage's range
+    const attribute::FillGradientAttribute aEmptyFillTransparenceGradient;
+    const Primitive2DReference aCreatedFill(
+        createPolyPolygonFillPrimitive(
+            getB2DPolyPolygon(), // geometry
+            aPageRange, // definition range
+            aFill,
+            aEmptyFillTransparenceGradient));
 
-        // get the VOC from it (gets created)
-        sdr::contact::ViewObjectContact& rViewObjectContact(pViewContact->GetViewObjectContact(aObjectContact));
-        sdr::contact::DisplayInfo aDisplayInfo;
-
-        // we need this DisplayInfo-flag here - exceptionally - to get the same output as
-        // if the MasterPage is used as sub-content when creating geometry content for
-        // the non-MasterPage-view
-        aDisplayInfo.SetSubContentActive(true);
-
-        // get the full MasterPage ObjectHierarchy
-        rViewObjectContact.getPrimitive2DSequenceSubHierarchy(aDisplayInfo, rContainer);
-
-        if(!rContainer.empty())
-        {
-            // We got the geometry, but it may overlap the PageBounds of the
-            // Page/MasterPage, thus showing more beyond the PageBorders than
-            // the regular PageView does and is intended.
-            // This is independent from the geometry we collected in rContainer
-            // since the defining geometry is the getB2DPolyPolygon() one.
-            // We have already checked above that it's no empty and overlaps
-            // somehow.
-            // It also might be completely inside the PageRange. If not, we
-            // additionally would need to mask the content against PageBounds,
-            // so using potentially two different MaskPrimitive2D's.
-            // Since in this case we have a PolyPolygon and a B2DRange it is cheaper
-            // to geometrically clip that PolyPolygon geometry and use it
-            basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
-
-            if(!aPageRange.isInside(aPolygonRange))
-            {
-                // we need to clip local geometry against PageBounds
-                aPolyPolygon = basegfx::utils::clipPolyPolygonOnRange(
-                    aPolyPolygon,
-                    aPageRange,
-                    true /* bInside, use inside geometry */,
-                    false /* bStroke, handle as filled PolyPolygon */);
-            }
-
-            // create MaskPrimitive2D to limit display to PolygonGeometry
-            const Primitive2DReference aMasked(
-                new MaskPrimitive2D(
-                    std::move(aPolyPolygon),
-                    std::move(rContainer)));
-
-            rContainer = Primitive2DContainer { aMasked };
-            return;
-        }
-    }
-
-    // fallback: create as if drawing::FillStyle_SOLID was used
-    rContainer.push_back(
-        new PolyPolygonColorPrimitive2D(
-            getB2DPolyPolygon(),
-            getBColor()));
+    rContainer = Primitive2DContainer { aCreatedFill };
 }
 
 void SlideBackgroundFillPrimitive2D::get2DDecomposition(
@@ -314,11 +288,13 @@ void SlideBackgroundFillPrimitive2D::get2DDecomposition(
     const geometry::ViewInformation2D& rViewInformation) const
 {
     basegfx::B2DVector aPageSize;
-    sdr::contact::ViewContact* pViewContact(getMasterPageViewContact(rViewInformation, aPageSize));
+    drawinglayer::attribute::SdrFillAttribute aFill;
 
     if(!getBuffered2DDecomposition().empty())
     {
-        if(nullptr != pViewContact && pViewContact != mpLastVC)
+        aFill = getMasterPageFillAttribute(rViewInformation, aPageSize);
+
+        if(!(aFill == maLastFill))
         {
             // conditions of last local decomposition have changed, delete
             const_cast< SlideBackgroundFillPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
@@ -327,39 +303,12 @@ void SlideBackgroundFillPrimitive2D::get2DDecomposition(
 
     if(getBuffered2DDecomposition().empty())
     {
-        // remember last MasterPageViewContact
-        const_cast< SlideBackgroundFillPrimitive2D* >(this)->mpLastVC = pViewContact;
+        // remember last Fill
+        const_cast< SlideBackgroundFillPrimitive2D* >(this)->maLastFill = aFill;
     }
-
-    // tdf#149650 allow remember/detect of potential recursion for content creation.
-    // use a std::set association - instead of a single bool or address - due to the
-    // possibility of multiple SlideBackgroundFillPrimitive2D's being used at the same
-    // refresh. Also possible would be a local member (bool), but that just makes the
-    // class more complicated. Working with the address is not a problem here since below
-    // it reliably gets added/removed while being incarnated only.
-    static std::set<const SlideBackgroundFillPrimitive2D*> potentiallyActiveRecursion;
-
-    if(potentiallyActiveRecursion.end() != potentiallyActiveRecursion.find(this))
-    {
-        // The method getPrimitive2DSequenceSubHierarchy used in create2DDecomposition
-        // above has the potential to create a recursion, e.g. when the content of a page
-        // contains a SdrPageObj that again displays the page content (and potentially so
-        // on).
-        // This is valid, but works like a fractal, showing page content
-        // smaller and smaller inside a page. This needs to be controlled here to avoid
-        // the recursion. In this case just allow one single step since
-        // we are mainly interested in the page's BG fill anyways
-        return;
-    }
-
-    // remember that we enter a potential recursion
-    potentiallyActiveRecursion.insert(this);
 
     // use parent implementation
     BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
-
-    // forget about potential recursion
-    potentiallyActiveRecursion.extract(this);
 }
 
 bool SlideBackgroundFillPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
@@ -369,8 +318,7 @@ bool SlideBackgroundFillPrimitive2D::operator==(const BasePrimitive2D& rPrimitiv
         const SlideBackgroundFillPrimitive2D& rCompare
             = static_cast<const SlideBackgroundFillPrimitive2D&>(rPrimitive);
 
-        return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
-            && getBColor() == rCompare.getBColor());
+        return getB2DPolyPolygon() == rCompare.getB2DPolyPolygon();
     }
 
     return false;
@@ -450,8 +398,7 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 // create needed Primitive2D representation for
                 // SlideBackgroundFill-mode
                 pNewFillPrimitive = new SlideBackgroundFillPrimitive2D(
-                    rPolyPolygon,
-                    rFill.getColor());
+                    rPolyPolygon);
             }
             else
             {
