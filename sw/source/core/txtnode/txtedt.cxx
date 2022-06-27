@@ -2085,7 +2085,7 @@ bool SwTextNode::CountWords( SwDocStat& rStat,
     // ConversionMap to expand fields, remove invisible and redline deleted text for scanner
     const ModelToViewHelper aConversionMap(*this,
         getIDocumentLayoutAccess().GetCurrentLayout(),
-        ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::HideInvisible | ExpandMode::HideDeletions);
+        ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::HideInvisible | ExpandMode::HideDeletions | ExpandMode::HideFieldmarkCommands);
     const OUString& aExpandText = aConversionMap.getViewText();
 
     if (aExpandText.isEmpty() && !bCountNumbering)
