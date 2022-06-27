@@ -277,10 +277,15 @@ ScCellValue::ScCellValue( const ScCellValue& r )
     }
 }
 
+void ScCellValue::reset_to_empty()
+{
+    suppress_fun_call_w_exception(maData = std::monostate()); // reset to empty;
+}
+
 ScCellValue::ScCellValue(ScCellValue&& r) noexcept
     : maData(std::move(r.maData))
 {
-    r.maData = std::monostate(); // reset to empty;
+    r.reset_to_empty();
 }
 
 ScCellValue::~ScCellValue()
@@ -308,17 +313,17 @@ void ScCellValue::clear() noexcept
     switch (getType())
     {
         case CELLTYPE_EDIT:
-            delete getEditText();
+            suppress_fun_call_w_exception(delete getEditText());
         break;
         case CELLTYPE_FORMULA:
-            delete getFormula();
+            suppress_fun_call_w_exception(delete getFormula());
         break;
         default:
             ;
     }
 
     // Reset to empty value.
-    maData = std::monostate();
+    reset_to_empty();
 }
 
 void ScCellValue::set( double fValue )
@@ -475,7 +480,7 @@ void ScCellValue::release( ScDocument& rDoc, const ScAddress& rPos )
             rDoc.SetEmptyCell(rPos);
     }
 
-    maData = std::monostate(); // reset to empty
+    reset_to_empty(); // reset to empty
 }
 
 void ScCellValue::release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType eListenType )
@@ -503,7 +508,7 @@ void ScCellValue::release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType
             rColumn.DeleteContent(nRow);
     }
 
-    maData = std::monostate(); // reset to empty
+    reset_to_empty(); // reset to empty
 }
 
 OUString ScCellValue::getString( const ScDocument& rDoc ) const
@@ -532,7 +537,7 @@ ScCellValue& ScCellValue::operator=(ScCellValue&& rCell) noexcept
 {
     clear();
     maData = std::move(rCell.maData);
-    rCell.maData = std::monostate(); // reset to empty;
+    rCell.reset_to_empty(); // reset to empty;
     return *this;
 }
 

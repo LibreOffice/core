@@ -33,6 +33,8 @@ struct SC_DLLPUBLIC ScCellValue
 private:
     /// std::monostate is there to indicate CellType::NONE
     std::variant<std::monostate, double, svl::SharedString, EditTextObject*, ScFormulaCell*> maData;
+
+    void reset_to_empty();
 public:
 
     ScCellValue();
