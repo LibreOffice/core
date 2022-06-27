@@ -34,6 +34,24 @@
       "parentUuid": "d001f6bd_ba478e33",
       "revId": "5772cef244dbee5834efbc693bc714d89ae6301d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc91b2bb_8cc331a4",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-27T12:34:42Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/136492",
+      "parentUuid": "b690b32c_ea94e1f2",
+      "revId": "5772cef244dbee5834efbc693bc714d89ae6301d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
