@@ -3340,7 +3340,7 @@ static OUString lcl_ExctractVariableAndHint( const OUString& rCommand, OUString&
     sal_Int32 nIndex = rCommand.indexOf( ' ', 2); //find last space after 'ASK'
     if (nIndex == -1)
         return OUString();
-    while(rCommand[nIndex] == ' ')
+    while (nIndex < rCommand.getLength() && rCommand[nIndex] == ' ')
         ++nIndex;
     OUString sShortCommand( rCommand.copy( nIndex ) ); //cut off the " ASK "
 
