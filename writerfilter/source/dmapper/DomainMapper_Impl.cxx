@@ -4503,7 +4503,7 @@ static OUString lcl_ExtractVariableAndHint( std::u16string_view rCommand, OUStri
     size_t nIndex = rCommand.find( ' ', 2); //find last space after 'ASK'
     if (nIndex == std::u16string_view::npos)
         return OUString();
-    while(rCommand[nIndex] == ' ')
+    while (nIndex < rCommand.size() && rCommand[nIndex] == ' ')
         ++nIndex;
     std::u16string_view sShortCommand( rCommand.substr( nIndex ) ); //cut off the " ASK "
 
