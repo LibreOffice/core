@@ -193,7 +193,8 @@ const OUString& GetBaseTempDirURL()
 }
 }
 
-OUString CSmplMailClient::CopyAttachment(const OUString& sOrigAttachURL, OUString& sUserVisibleName)
+OUString CSmplMailClient::CopyAttachment(const OUString& sOrigAttachURL, OUString& sUserVisibleName,
+                                         bool& nodelete)
 {
     // We do two things here:
     // 1. Make the attachment temporary filename to not contain any fancy characters possible in
@@ -216,6 +217,7 @@ OUString CSmplMailClient::CopyAttachment(const OUString& sOrigAttachURL, OUStrin
         INetURLObject url(sOrigAttachURL, INetURLObject::EncodeMechanism::WasEncoded);
         sUserVisibleName = url.getName(INetURLObject::LAST_SEGMENT, true,
             INetURLObject::DecodeMechanism::WithCharset);
+        nodelete = false;
     }
     else
     {
@@ -224,6 +226,7 @@ OUString CSmplMailClient::CopyAttachment(const OUString& sOrigAttachURL, OUStrin
         // is the absent attachment file anyway.
         sNewAttachmentURL = sOrigAttachURL;
         maAttachmentFiles.pop_back();
+        nodelete = true; // Do not delete a non-temporary in senddoc
     }
     return sNewAttachmentURL;
 }
@@ -311,7 +314,8 @@ void CSmplMailClient::assembleCommandLine(
     for (const auto& attachment : attachments)
     {
         OUString sDisplayName;
-        OUString sTempFileURL(CopyAttachment(attachment, sDisplayName));
+        bool nodelete = false;
+        OUString sTempFileURL(CopyAttachment(attachment, sDisplayName, nodelete));
         OUString sysPath;
         osl::FileBase::RC err = osl::FileBase::getSystemPathFromFileURL(sTempFileURL, sysPath);
         if (err != osl::FileBase::E_None)
@@ -327,6 +331,8 @@ void CSmplMailClient::assembleCommandLine(
             rCommandArgs.push_back(ATTACH_NAME);
             rCommandArgs.push_back(sDisplayName);
         }
+        if (nodelete)
+            rCommandArgs.push_back("--nodelete");
     }
 
     if (!(aFlag & NO_USER_INTERFACE))
