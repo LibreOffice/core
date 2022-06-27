@@ -446,12 +446,16 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
                 if ( xPageSiteRef )
                     idToPage[ xPageSiteRef->getId() ] = control;
             }
-            else
+            else if (elem->getControlType() == API_CONTROL_TABSTRIP)
             {
                 AxTabStripModel* pTabStrip = static_cast<AxTabStripModel*>(elem.get());
                 sCaptions = pTabStrip->maItems;
                 pMultiPage->mnActiveTab = pTabStrip->mnListIndex;
                 pMultiPage->mnTabStyle = pTabStrip->mnTabStyle;
+            }
+            else
+            {
+                SAL_WARN("oox", "unexpected control type " << elem->getControlType());
             }
         }
         // apply caption/titles to pages
