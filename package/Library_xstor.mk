@@ -27,6 +27,7 @@ $(eval $(call gb_Library_use_libraries,xstor,\
 	sal \
 	salhelper \
 	tl \
+	utl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xstor,\

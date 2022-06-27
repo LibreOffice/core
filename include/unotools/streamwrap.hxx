@@ -164,6 +164,7 @@ class UNOTOOLS_DLLPUBLIC OStreamWrapper final
 public:
     OStreamWrapper(SvStream& _rStream);
     OStreamWrapper(std::unique_ptr<SvStream> _rStream);
+    OStreamWrapper(SvStream* _pStream, bool _bOwner = false);
 
 // css::io::XStream
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) override;

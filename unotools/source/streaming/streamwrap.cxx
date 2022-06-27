@@ -132,12 +132,13 @@ sal_Int32 SAL_CALL OInputStreamWrapper::available()
 void SAL_CALL OInputStreamWrapper::closeInput()
 {
     std::scoped_lock aGuard( m_aMutex );
-    checkConnected();
+    if (m_pSvStream)
+    {
+        if (m_bSvStreamOwner)
+            delete m_pSvStream;
 
-    if (m_bSvStreamOwner)
-        delete m_pSvStream;
-
-    m_pSvStream = nullptr;
+        m_pSvStream = nullptr;
+    }
 }
 
 void OInputStreamWrapper::checkConnected() const
@@ -295,6 +296,11 @@ OStreamWrapper::OStreamWrapper(SvStream& _rStream)
 OStreamWrapper::OStreamWrapper(std::unique_ptr<SvStream> pStream)
 {
     SetStream( pStream.release(), true );
+}
+
+OStreamWrapper::OStreamWrapper(SvStream* pStream, bool bOwner)
+{
+    SetStream( pStream, bOwner );
 }
 
 css::uno::Reference< css::io::XInputStream > SAL_CALL OStreamWrapper::getInputStream(  )

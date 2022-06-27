@@ -21,23 +21,18 @@
 
 #include "selfterminatefilestream.hxx"
 #include <comphelper/processfactory.hxx>
+#include <unotools/streamwrap.hxx>
 
 using namespace ::com::sun::star;
 
-OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< uno::XComponentContext >& xContext, const OUString& aURL )
-: m_aURL( aURL )
+OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< uno::XComponentContext >& xContext, utl::TempFile aTempFile )
+: m_oTempFile( std::move(aTempFile) )
 {
     uno::Reference< uno::XComponentContext > xOwnContext = xContext;
     if ( !xOwnContext.is() )
         xOwnContext.set( ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
 
-    // IMPORTANT: The implementation is based on idea that m_xFileAccess, m_xInputStream and m_xSeekable are always set
-    // otherwise an exception is thrown in constructor
-
-    m_xFileAccess.set( ucb::SimpleFileAccess::create(xOwnContext) );
-
-    m_xInputStream.set( m_xFileAccess->openFileRead( aURL ), uno::UNO_SET_THROW );
-    m_xSeekable.set( m_xInputStream, uno::UNO_QUERY_THROW );
+    m_xStreamWrapper = new utl::OSeekableInputStreamWrapper( m_oTempFile->GetStream(StreamMode::READWRITE), /*bOwner*/false );
 }
 
 OSelfTerminateFileStream::~OSelfTerminateFileStream()
@@ -49,37 +44,32 @@ void OSelfTerminateFileStream::CloseStreamDeleteFile()
 {
     try
     {
-        m_xInputStream->closeInput();
+        m_xStreamWrapper->closeInput();
     }
     catch( uno::Exception& )
     {}
 
-    try
-    {
-        m_xFileAccess->kill( m_aURL );
-    }
-    catch( uno::Exception& )
-    {}
+    m_oTempFile.reset();
 }
 
 sal_Int32 SAL_CALL OSelfTerminateFileStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
-    return m_xInputStream->readBytes( aData, nBytesToRead );
+    return m_xStreamWrapper->readBytes( aData, nBytesToRead );
 }
 
 sal_Int32 SAL_CALL OSelfTerminateFileStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
-    return m_xInputStream->readSomeBytes( aData, nMaxBytesToRead );
+    return m_xStreamWrapper->readSomeBytes( aData, nMaxBytesToRead );
 }
 
 void SAL_CALL OSelfTerminateFileStream::skipBytes( sal_Int32 nBytesToSkip )
 {
-    return m_xInputStream->skipBytes( nBytesToSkip );
+    return m_xStreamWrapper->skipBytes( nBytesToSkip );
 }
 
 sal_Int32 SAL_CALL OSelfTerminateFileStream::available(  )
 {
-    return m_xInputStream->available();
+    return m_xStreamWrapper->available();
 }
 
 void SAL_CALL OSelfTerminateFileStream::closeInput(  )
@@ -89,17 +79,17 @@ void SAL_CALL OSelfTerminateFileStream::closeInput(  )
 
 void SAL_CALL OSelfTerminateFileStream::seek( sal_Int64 location )
 {
-    m_xSeekable->seek( location );
+    m_xStreamWrapper->seek( location );
 }
 
 sal_Int64 SAL_CALL OSelfTerminateFileStream::getPosition()
 {
-    return m_xSeekable->getPosition();
+    return m_xStreamWrapper->getPosition();
 }
 
 sal_Int64 SAL_CALL OSelfTerminateFileStream::getLength()
 {
-    return m_xSeekable->getLength();
+    return m_xStreamWrapper->getLength();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
