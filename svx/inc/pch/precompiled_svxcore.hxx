@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2022-01-26 09:16:35 using:
+ Generated on 2022-06-27 18:59:31 using:
  ./bin/update_pch svx svxcore --cutoff=7 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -35,6 +35,7 @@
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
+#include <iterator>
 #include <limits.h>
 #include <limits>
 #include <map>
@@ -55,7 +56,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/optional/optional.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
@@ -71,6 +71,7 @@
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
+#include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -80,6 +81,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
@@ -104,6 +106,7 @@
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/Scanline.hxx>
+#include <vcl/WindowPosSize.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
@@ -128,6 +131,8 @@
 #include <vcl/headbar.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
+#include <vcl/keycod.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -147,6 +152,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/windowstate.hxx>
+#include <vcl/wintypes.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -181,9 +187,10 @@
 #include <basic/basicdllapi.h>
 #include <basic/sbxcore.hxx>
 #include <basic/sbxdef.hxx>
+#include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -355,6 +362,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/span.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -395,7 +403,6 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/valueset.hxx>
-#include <toolkit/dllapi.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/UnitConversion.hxx>
 #include <tools/bigint.hxx>
@@ -421,7 +428,6 @@
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
-#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>

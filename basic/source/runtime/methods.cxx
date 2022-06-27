@@ -27,7 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sound.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <basic/sbx.hxx>

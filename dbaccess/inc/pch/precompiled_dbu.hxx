@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-09-12 11:51:31 using:
+ Generated on 2022-06-27 18:57:36 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -114,6 +114,7 @@
 #include <vcl/wall.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
+#include <vcl/wintypes.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/color/bcolor.hxx>
@@ -124,8 +125,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -182,12 +181,13 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <o3tl/safeint.hxx>
+#include <o3tl/span.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
@@ -216,7 +216,6 @@
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
-#include <tools/wintypes.hxx>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
 #include <unotools/eventlisteneradapter.hxx>
@@ -230,7 +229,7 @@
 #include <IClipBoardTest.hxx>
 #include <QEnumTypes.hxx>
 #include <TableConnectionData.hxx>
-#include <TableWindowData.hxx>
+#include <TableFieldDescription.hxx>
 #include <TypeInfo.hxx>
 #include <UITools.hxx>
 #include <browserids.hxx>

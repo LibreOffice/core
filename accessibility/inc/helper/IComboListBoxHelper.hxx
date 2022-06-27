@@ -21,7 +21,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <rtl/ustring.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <tools/long.hxx>
 
 namespace com::sun::star::datatransfer::clipboard {

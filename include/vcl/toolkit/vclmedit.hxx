@@ -24,7 +24,7 @@
 #endif
 
 #include <tools/lineend.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>

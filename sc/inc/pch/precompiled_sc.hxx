@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2022-01-26 09:14:15 using:
+ Generated on 2022-06-27 18:59:25 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -89,6 +89,7 @@
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -110,11 +111,13 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/BinaryDataContainer.hxx>
+#include <vcl/EnumContext.hxx>
 #include <vcl/GraphicAttributes.hxx>
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/Scanline.hxx>
+#include <vcl/WindowPosSize.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
@@ -126,7 +129,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/dockwin.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
@@ -156,6 +158,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/windowstate.hxx>
+#include <vcl/wintypes.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -166,6 +169,7 @@
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/Range2D.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
@@ -342,6 +346,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/span.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -382,6 +387,7 @@
 #include <svl/lstner.hxx>
 #include <svl/numformat.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
@@ -467,7 +473,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/weakbase.h>
 #include <tools/weakbase.hxx>
-#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
@@ -492,6 +497,8 @@
 #if PCH_LEVEL >= 4
 #include <AccessibleContextBase.hxx>
 #include <IAnyRefDialog.hxx>
+#include <Sparkline.hxx>
+#include <SparklineGroup.hxx>
 #include <TableFillingAndNavigationTools.hxx>
 #include <address.hxx>
 #include <anyrefdg.hxx>
@@ -572,7 +579,6 @@
 #include <refundo.hxx>
 #include <refupdat.hxx>
 #include <refupdatecontext.hxx>
-#include <root.hxx>
 #include <rowheightcontext.hxx>
 #include <scabstdlg.hxx>
 #include <scdllapi.h>
@@ -581,6 +587,7 @@
 #include <scmod.hxx>
 #include <scopetools.hxx>
 #include <scresid.hxx>
+#include <segmenttree.hxx>
 #include <sheetdata.hxx>
 #include <sheetevents.hxx>
 #include <shellids.hxx>
@@ -596,12 +603,12 @@
 #include <transobj.hxx>
 #include <types.hxx>
 #include <uiitems.hxx>
+#include <undobase.hxx>
 #include <undoblk.hxx>
 #include <unonames.hxx>
 #include <userdat.hxx>
 #include <validat.hxx>
 #include <viewdata.hxx>
-#include <xiroot.hxx>
 #include <xlconst.hxx>
 #include <xlroot.hxx>
 #endif // PCH_LEVEL >= 4

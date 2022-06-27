@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <dbaccess/dbaccessdllapi.h>
 #include <rtl/ref.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-09-28 05:29:25 using:
+ Generated on 2022-06-27 18:58:21 using:
  ./bin/update_pch cui cui --cutoff=8 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -71,7 +71,6 @@
 #include <osl/process.h>
 #include <osl/security.hxx>
 #include <osl/thread.h>
-#include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
@@ -151,7 +150,6 @@
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/syswin.hxx>
 #include <vcl/task.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/transfer.hxx>
@@ -164,7 +162,7 @@
 #include <vcl/wall.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
-#include <vcl/windowstate.hxx>
+#include <vcl/wintypes.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -175,6 +173,7 @@
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/Range2D.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
@@ -216,23 +215,19 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
-#include <com/sun/star/i18n/Calendar2.hpp>
-#include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
-#include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/LanguageCountryInfo.hpp>
 #include <com/sun/star/i18n/LocaleDataItem2.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
-#include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
-#include <com/sun/star/i18n/ParseResult.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
-#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -242,11 +237,9 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -265,10 +258,13 @@
 #include <com/sun/star/util/SearchAlgorithms.hpp>
 #include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/XAccounting.hpp>
+#include <comphelper/compbase.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/dispatchcommand.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/weak.hxx>
 #include <cppu/cppudllapi.h>
@@ -278,12 +274,15 @@
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/editstat.hxx>
@@ -299,14 +298,14 @@
 #include <editeng/svxfont.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <i18nutil/i18nutildllapi.h>
 #include <i18nutil/searchopt.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/deleter.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/span.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -351,6 +350,7 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/unitconv.hxx>
 #include <svtools/valueset.hxx>
+#include <svx/colorbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
@@ -422,14 +422,13 @@
 #include <tools/urlobj.hxx>
 #include <tools/weakbase.h>
 #include <tools/weakbase.hxx>
-#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
-#include <unotools/charclass.hxx>
+#include <unotools/configitem.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>

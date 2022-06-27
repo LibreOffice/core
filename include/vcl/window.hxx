@@ -23,7 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 #include <tools/link.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/region.hxx>

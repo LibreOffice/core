@@ -21,7 +21,7 @@
 #define INCLUDED_TOOLKIT_INC_HELPER_IMAGEALIGN_HXX
 
 #include <sal/types.h>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 
 namespace toolkit
 {
