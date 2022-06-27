@@ -934,6 +934,7 @@ uno::Reference< XSpellAlternatives >
             // TODO: this doesn't handle fieldmarks properly
             ModelToViewHelper const aConversionMap(*pNode, GetLayout(),
                 ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode
+                | ExpandMode::HideFieldmarkCommands
                 | (GetLayout()->IsHideRedlines() ? ExpandMode::HideDeletions : ExpandMode(0))
                 | (GetViewOptions()->IsShowHiddenChar() ? ExpandMode(0) : ExpandMode::HideInvisible));
             auto const nBeginView(aConversionMap.ConvertToViewPosition(nBegin));

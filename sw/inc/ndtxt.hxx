@@ -710,7 +710,7 @@ public:
                             const bool bWithNum = false,
                             const bool bAddSpaceAfterListLabelStr = false,
                             const bool bWithSpacesForLevel = false,
-                            const ExpandMode eAdditionalMode = ExpandMode::ExpandFootnote) const;
+                            const ExpandMode eAdditionalMode = ExpandMode::ExpandFootnote | ExpandMode::HideFieldmarkCommands) const;
     bool CopyExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
                            sal_Int32 nIdx, sal_Int32 nLen,
                            SwRootFrame const* pLayout,
