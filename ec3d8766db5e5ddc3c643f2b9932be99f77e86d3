@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07296b38_a789c9f4",
+        "filename": "vcl/source/control/thumbpos.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-27T20:40:48Z",
+      "side": 1,
+      "message": "Please write #pragma and avoid space after #.",
+      "revId": "ec3d8766db5e5ddc3c643f2b9932be99f77e86d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83aa7fcf_6e3d20e5",
+        "filename": "vcl/source/control/thumbpos.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-27T20:40:48Z",
+      "side": 1,
+      "message": "You should also remove this blank line.",
+      "revId": "ec3d8766db5e5ddc3c643f2b9932be99f77e86d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
