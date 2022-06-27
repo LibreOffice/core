@@ -154,15 +154,15 @@ public:
 
 class MCD : public TBBase
 {
-    sal_Int8 reserved1; //  A signed integer that MUST be 0x56.
-    sal_uInt8 reserved2; // MUST be 0.
-    sal_uInt16 ibst; // Unsigned integer that specifies the name of the macro. Macro name is specified by MacroName.xstz of the MacroName entry in the MacroNames such that MacroName.ibst equals ibst. MacroNames MUST contain such an entry.
-    sal_uInt16 ibstName; // An unsigned integer that specifies the index into the Command String Table (TcgSttbf.sttbf) where the macro's name and arguments are specified.
-    sal_uInt16 reserved3; // An unsigned integer that MUST be 0xFFFF.
-    sal_uInt32 reserved4; //MUST be ignored.
-    sal_uInt32 reserved5; //MUST be 0.
-    sal_uInt32 reserved6; //MUST be ignored.
-    sal_uInt32 reserved7; //MUST be ignored
+    sal_Int8 m_reserved1; //  A signed integer that MUST be 0x56.
+    sal_uInt8 m_reserved2; // MUST be 0.
+    sal_uInt16 m_ibst; // Unsigned integer that specifies the name of the macro. Macro name is specified by MacroName.xstz of the MacroName entry in the MacroNames such that MacroName.ibst equals ibst. MacroNames MUST contain such an entry.
+    sal_uInt16 m_ibstName; // An unsigned integer that specifies the index into the Command String Table (TcgSttbf.sttbf) where the macro's name and arguments are specified.
+    sal_uInt16 m_reserved3; // An unsigned integer that MUST be 0xFFFF.
+    sal_uInt32 m_reserved4; //MUST be ignored.
+    sal_uInt32 m_reserved5; //MUST be 0.
+    sal_uInt32 m_reserved6; //MUST be ignored.
+    sal_uInt32 m_reserved7; //MUST be ignored
 
 public:
     MCD();
@@ -208,12 +208,12 @@ public:
 
 class Kme : public TBBase
 {
-    sal_Int16 reserved1; //MUST be zero.
-    sal_Int16 reserved2; //MUST be zero.
-    sal_uInt16 kcm1; //A Kcm that specifies the primary shortcut key.
-    sal_uInt16 kcm2; //A Kcm that specifies the secondary shortcut key, or 0x00FF if there is no secondary shortcut key.
-    sal_uInt16 kt; //A Kt that specifies the type of action to be taken when the key combination is pressed.
-    sal_uInt32 param; //The meaning of this field depends on the value of kt
+    sal_Int16 m_reserved1; //MUST be zero.
+    sal_Int16 m_reserved2; //MUST be zero.
+    sal_uInt16 m_kcm1; //A Kcm that specifies the primary shortcut key.
+    sal_uInt16 m_kcm2; //A Kcm that specifies the secondary shortcut key, or 0x00FF if there is no secondary shortcut key.
+    sal_uInt16 m_kt; //A Kt that specifies the type of action to be taken when the key combination is pressed.
+    sal_uInt32 m_param; //The meaning of this field depends on the value of kt
 
     Kme(const Kme&) = delete;
     Kme& operator = ( const Kme&) = delete;
@@ -286,8 +286,8 @@ public:
 
 class MacroName : public TBBase
 {
-    sal_uInt16 ibst; //An unsigned integer that specifies the index of the current entry in the macro name table. MUST NOT be the same as the index of any other entry.
-    Xstz xstz;
+    sal_uInt16 m_ibst; //An unsigned integer that specifies the index of the current entry in the macro name table. MUST NOT be the same as the index of any other entry.
+    Xstz m_xstz;
     MacroName(const MacroName&) = delete;
     MacroName& operator = ( const MacroName&) = delete;
 
@@ -298,8 +298,8 @@ public:
 
 class MacroNames : public Tcg255SubStruct
 {
-    sal_uInt16 iMac; //An unsigned integer that specifies the number of MacroName structures in rgNames.
-    std::unique_ptr<MacroName[]> rgNames;
+    sal_uInt16 m_iMac; //An unsigned integer that specifies the number of MacroName structures in rgNames.
+    std::unique_ptr<MacroName[]> m_rgNames;
 
     MacroNames(const MacroNames&) = delete;
     MacroNames& operator = ( const MacroNames&) = delete;

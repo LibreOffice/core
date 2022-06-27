@@ -886,7 +886,7 @@ bool TcgSttbfCore::Read( SvStream& rS )
 }
 
 MacroNames::MacroNames() :
- iMac( 0 )
+ m_iMac( 0 )
 {
 }
 
@@ -899,24 +899,24 @@ bool MacroNames::Read( SvStream &rS)
     SAL_INFO("sw.ww8","MacroNames::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
-    rS.ReadUInt16( iMac );
-    if ( iMac )
+    rS.ReadUInt16( m_iMac );
+    if ( m_iMac )
     {
         //even an empty MacroName will take 2 bytes
         size_t nMaxAvailableRecords = rS.remainingSize()/sizeof(sal_uInt16);
-        if (iMac > nMaxAvailableRecords)
+        if (m_iMac > nMaxAvailableRecords)
             return false;
-        rgNames.reset( new MacroName[ iMac ] );
-        for ( sal_Int32 index = 0; index < iMac; ++index )
+        m_rgNames.reset( new MacroName[ m_iMac ] );
+        for ( sal_Int32 index = 0; index < m_iMac; ++index )
         {
-            if ( !rgNames[ index ].Read( rS ) )
+            if ( !m_rgNames[ index ].Read( rS ) )
                 return false;
         }
     }
     return rS.good();
 }
 
-MacroName::MacroName():ibst(0)
+MacroName::MacroName():m_ibst(0)
 {
 }
 
@@ -924,8 +924,8 @@ bool MacroName::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","MacroName::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS.ReadUInt16( ibst );
-    return xstz.Read( rS );
+    rS.ReadUInt16( m_ibst );
+    return m_xstz.Read( rS );
 }
 
 Xstz::Xstz():chTerm(0)
@@ -945,12 +945,12 @@ Xstz::Read(SvStream &rS)
     return rS.good();
 }
 
-Kme::Kme() : reserved1(0)
-,reserved2(0)
-,kcm1(0)
-,kcm2(0)
-,kt(0)
-,param(0)
+Kme::Kme() : m_reserved1(0)
+,m_reserved2(0)
+,m_kcm1(0)
+,m_kcm2(0)
+,m_kt(0)
+,m_param(0)
 {
 }
 
@@ -963,7 +963,7 @@ Kme::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","Kme::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS.ReadInt16( reserved1 ).ReadInt16( reserved2 ).ReadUInt16( kcm1 ).ReadUInt16( kcm2 ).ReadUInt16( kt ).ReadUInt32( param );
+    rS.ReadInt16( m_reserved1 ).ReadInt16( m_reserved2 ).ReadUInt16( m_kcm1 ).ReadUInt16( m_kcm2 ).ReadUInt16( m_kt ).ReadUInt32( m_param );
     return rS.good();
 }
 
@@ -980,15 +980,15 @@ bool Acd::Read(SvStream &rS)
     return rS.good();
 }
 
-MCD::MCD() :  reserved1(0x56)
-,reserved2( 0 )
-,ibst( 0 )
-,ibstName( 0 )
-,reserved3( 0xFFFF )
-,reserved4( 0 )
-,reserved5( 0 )
-,reserved6( 0 )
-,reserved7( 0 )
+MCD::MCD() :  m_reserved1(0x56)
+,m_reserved2( 0 )
+,m_ibst( 0 )
+,m_ibstName( 0 )
+,m_reserved3( 0xFFFF )
+,m_reserved4( 0 )
+,m_reserved5( 0 )
+,m_reserved6( 0 )
+,m_reserved7( 0 )
 {
 }
 
@@ -996,8 +996,8 @@ bool MCD::Read(SvStream &rS)
 {
     SAL_INFO("sw.ww8","MCD::Read() stream pos 0x" << rS.Tell() );
     nOffSet = rS.Tell();
-    rS.ReadSChar( reserved1 ).ReadUChar( reserved2 ).ReadUInt16( ibst ).ReadUInt16( ibstName ).ReadUInt16( reserved3 );
-    rS.ReadUInt32( reserved4 ).ReadUInt32( reserved5 ).ReadUInt32( reserved6 ).ReadUInt32( reserved7 );
+    rS.ReadSChar( m_reserved1 ).ReadUChar( m_reserved2 ).ReadUInt16( m_ibst ).ReadUInt16( m_ibstName ).ReadUInt16( m_reserved3 );
+    rS.ReadUInt32( m_reserved4 ).ReadUInt32( m_reserved5 ).ReadUInt32( m_reserved6 ).ReadUInt32( m_reserved7 );
     return rS.good();
 }
 
