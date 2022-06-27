@@ -1645,6 +1645,8 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
     // only afterwards.
     // The first column's desired width would be discarded as it would cause
     // the Table's width to exceed the maximum width.
+    const tools::Long nMaxRight = std::max(aTabCols.GetRightMax(), nOldRight);
+    double fProportionalWish = (nMaxRight - aTabCols.GetLeft()) / fTotalWish;
     const sal_uInt16 nEqualWidth = (aTabCols.GetRight() - aTabCols.GetLeft()) / (aTabCols.Count() + 1);
     const sal_Int16 nTablePadding = nSelectedWidth - fTotalWish;
     for ( int k = 0; k < 2; ++k )
@@ -1654,6 +1656,8 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
             // bNoShrink: distribute excess space proportionately on pass 2.
             if ( bNoShrink && k && nTablePadding > 0 && fTotalWish > 0 )
                 aWish[i] += round( aWish[i] / fTotalWish * nTablePadding );
+            else if (k && fProportionalWish < 1)
+                aWish[i] = std::max(aMins[i], static_cast<sal_uInt16>(aWish[i] * fProportionalWish));
 
             // First pass is primarily a shrink pass. Give all columns a chance
             //    to grow by requesting the maximum width as "balanced".
@@ -1678,7 +1682,6 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
                     nDiff -= aTabCols[i] - aTabCols[i-1];
 
                 tools::Long nTabRight = aTabCols.GetRight() + nDiff;
-                const tools::Long nMaxRight = std::max(aTabCols.GetRightMax(), nOldRight);
 
                 // If the Table would become (or is already) too wide,
                 // restrict the column growth to the allowed maximum.
@@ -1687,6 +1690,9 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
                     const tools::Long nTmpD = nTabRight - nMaxRight;
                     nDiff     -= nTmpD;
                     nTabRight -= nTmpD;
+                    // Max table-size already reached. Remaining cols must not be shrunk
+                    if (k)
+                        fProportionalWish = 1;
                 }
 
                 // all the remaining columns need to be shifted by the same amount
