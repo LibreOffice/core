@@ -25,6 +25,8 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
 # https://gitlab.com/orcus/orcus/-/commit/0a99ca6d50af51f1b0a151fdcac5e12ec9b01bf8
 # forcepoint-95.patch.1 submitted as
 # https://gitlab.com/orcus/orcus/-/merge_requests/124
+# overrun.patch.0 submitted as
+# https://gitlab.com/orcus/orcus/-/merge_requests/131
 
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/rpath.patch.0 \
