@@ -1123,11 +1123,12 @@ public:
 
     void SetFormatField(SwFormatField* pFormatField, SwDoc* pDoc)
     {
+        if (m_pFormatField)
+            EndListening(m_pFormatField->GetNotifier());
         m_pFormatField = pFormatField;
         m_pDoc = pDoc;
         if(m_pFormatField)
         {
-            EndListeningAll();
             StartListening(m_pFormatField->GetNotifier());
         }
     }
@@ -1156,13 +1157,16 @@ public:
     }
     void SetFieldType(SwFieldType& rType)
     {
-        EndListeningAll();
+        if (m_pFieldType)
+            EndListening(m_pFieldType->GetNotifier());
         m_pFieldType = &rType;
         StartListening(m_pFieldType->GetNotifier());
     }
     void ClearFieldType()
     {
-        SvtListener::EndListeningAll();
+        if (!m_pFieldType)
+            return;
+        EndListening(m_pFieldType->GetNotifier());
         m_pFieldType = nullptr;
     }
     virtual void Notify(const SfxHint&) override;
