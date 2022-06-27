@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fb0b701_ee4013f3",
+        "filename": "vcl/source/filter/idxf/dxftblrd.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-27T20:39:41Z",
+      "side": 1,
+      "message": "Please revert changes to this line. Note that you should not touch other parts of the code, including comments that are not related to what you are doing in your commit.",
+      "revId": "fa4fff00d00fc75d064bfc301c1628b1f303ffc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72b3a506_aa73bda9",
+        "filename": "vcl/source/filter/idxf/dxftblrd.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-27T20:39:41Z",
+      "side": 1,
+      "message": "Please use #prama and avoid space after #.",
+      "revId": "fa4fff00d00fc75d064bfc301c1628b1f303ffc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
