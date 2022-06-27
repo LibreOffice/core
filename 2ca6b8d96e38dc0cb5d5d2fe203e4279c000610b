@@ -52,6 +52,24 @@
       "parentUuid": "68f3076e_dcccf2de",
       "revId": "2ca6b8d96e38dc0cb5d5d2fe203e4279c000610b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ace8c4b0_a07f9809",
+        "filename": "svx/uiconfig/ui/defaultshapespanel.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-06-27T12:33:14Z",
+      "side": 1,
+      "message": "Thank you for your advise, it works.",
+      "parentUuid": "3c163237_58b9d8a5",
+      "revId": "2ca6b8d96e38dc0cb5d5d2fe203e4279c000610b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
