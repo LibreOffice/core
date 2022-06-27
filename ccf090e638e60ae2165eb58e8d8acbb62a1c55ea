@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2ee49d0_3c2f9de0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-06-27T08:35:35Z",
+      "side": 1,
+      "message": "Please check whether this patch also solves https://bugs.documentfoundation.org/show_bug.cgi?id\u003d149723.",
+      "revId": "ccf090e638e60ae2165eb58e8d8acbb62a1c55ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
