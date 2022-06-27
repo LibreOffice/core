@@ -46,7 +46,7 @@ namespace svgio::svgreader
             IdStyleTokenMapper      maIdStyleTokenMapperList;
 
         public:
-            explicit SvgDocument(const OUString& rAbsolutePath);
+            explicit SvgDocument(OUString aAbsolutePath);
             ~SvgDocument();
 
             SvgDocument(const SvgDocument&) = delete;
