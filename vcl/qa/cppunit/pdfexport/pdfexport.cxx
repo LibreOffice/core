@@ -35,6 +35,7 @@
 #include <fpdf_text.h>
 #include <fpdf_doc.h>
 #include <fpdfview.h>
+#include <cpp/fpdf_scopers.h>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -111,6 +112,7 @@ public:
     void testTdf107013();
     void testTdf107018();
     void testTdf107089();
+    void testTdf148706();
     void testTdf99680();
     void testTdf99680_2();
     void testTdf108963();
@@ -156,6 +158,7 @@ public:
     CPPUNIT_TEST(testTdf107013);
     CPPUNIT_TEST(testTdf107018);
     CPPUNIT_TEST(testTdf107089);
+    CPPUNIT_TEST(testTdf148706);
     CPPUNIT_TEST(testTdf99680);
     CPPUNIT_TEST(testTdf99680_2);
     CPPUNIT_TEST(testTdf108963);
@@ -789,6 +792,58 @@ void PdfExportTest::testTdf107089()
     auto it = std::search(pStart, pEnd, aHello.getStr(), aHello.getStr() + aHello.getLength());
     // This failed, 'Hello' was part only a mixed compressed/uncompressed stream, i.e. garbage.
     CPPUNIT_ASSERT(it != pEnd);
+}
+
+void PdfExportTest::testTdf148706()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf148706.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    ScopedFPDFDocument pPdfDocument(
+        FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // The page has one annotation.
+    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_GetAnnotCount(pPdfPage.get()));
+    ScopedFPDFAnnotation pAnnot(FPDFPage_GetAnnot(pPdfPage.get(), 0));
+
+    //// Without the fix in place, this test would have failed with
+    //// - Expected: 1821.84
+    //// - Actual  :
+    CPPUNIT_ASSERT(FPDFAnnot_HasKey(pAnnot.get(), "V"));
+    CPPUNIT_ASSERT_EQUAL(FPDF_OBJECT_STRING, FPDFAnnot_GetValueType(pAnnot.get(), "V"));
+
+    size_t nDALength = FPDFAnnot_GetStringValue(pAnnot.get(), "V", nullptr, 0);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(0), nDALength % 2);
+    std::vector<sal_Unicode> aDABuf(nDALength / 2);
+    FPDFAnnot_GetStringValue(
+        pAnnot.get(), "V", reinterpret_cast<FPDF_WCHAR*>(aDABuf.data()), nDALength);
+
+    OUString aDA(reinterpret_cast<sal_Unicode*>(aDABuf.data()));
+    CPPUNIT_ASSERT_EQUAL(OUString("1821.84"), aDA);
+
+    CPPUNIT_ASSERT(FPDFAnnot_HasKey(pAnnot.get(), "DV"));
+    CPPUNIT_ASSERT_EQUAL(FPDF_OBJECT_STRING, FPDFAnnot_GetValueType(pAnnot.get(), "DV"));
+
+    FPDFAnnot_GetStringValue(
+        pAnnot.get(), "DV", reinterpret_cast<FPDF_WCHAR*>(aDABuf.data()), nDALength);
+
+    aDA = reinterpret_cast<sal_Unicode*>(aDABuf.data());
+    CPPUNIT_ASSERT_EQUAL(OUString("1821.84"), aDA);
 }
 
 void PdfExportTest::testTdf99680()
