@@ -316,10 +316,13 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
     {
         sal_Int32 nCharsPerLine = m_aPageSize.Width() / nTextSize;
         m_xCharsPerLineNF->set_max(nCharsPerLine);
+        m_xCharsPerLineNF->set_sensitive(nCharsPerLine != 0);
         m_xCharsPerLineNF->set_value(nCharsPerLine);
-        m_xLinesPerPageNF->set_max(m_aPageSize.Height() /
+        sal_Int32 nMaxLines = m_aPageSize.Height() /
         (   m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FieldUnit::TWIP)) +
-                    m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FieldUnit::TWIP))));
+                    m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FieldUnit::TWIP)));
+        m_xLinesPerPageNF->set_max(nMaxLines);
+        m_xLinesPerPageNF->set_sensitive(nMaxLines != 0);
         SetLinesOrCharsRanges( *m_xCharsRangeFT , m_xCharsPerLineNF->get_max() );
         SetLinesOrCharsRanges( *m_xLinesRangeFT , m_xLinesPerPageNF->get_max() );
     }
@@ -369,6 +372,7 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, weld::SpinButton&, rField, void)
                 (   m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FieldUnit::TWIP)) +
                     m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FieldUnit::TWIP))));
             m_xLinesPerPageNF->set_max(nMaxLines);
+            m_xLinesPerPageNF->set_sensitive(nMaxLines != 0);
         }
         SetLinesOrCharsRanges( *m_xLinesRangeFT , m_xLinesPerPageNF->get_max() );
         SetLinesOrCharsRanges( *m_xCharsRangeFT , m_xCharsPerLineNF->get_max() );
@@ -415,6 +419,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, weld::MetricSpinButton&, rField, v
                 sal_Int32 nMaxChars = m_aPageSize.Width() / nTextSize;
                 m_xCharsPerLineNF->set_value(nMaxChars);
                 m_xCharsPerLineNF->set_max(nMaxChars);
+                m_xCharsPerLineNF->set_sensitive(nMaxChars != 0);
                 SetLinesOrCharsRanges( *m_xCharsRangeFT , m_xCharsPerLineNF->get_max() );
             }
         }
@@ -424,6 +429,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, weld::MetricSpinButton&, rField, v
                 (   m_xTextSizeMF->denormalize(m_xTextSizeMF->get_value(FieldUnit::TWIP)) +
                     m_xRubySizeMF->denormalize(m_xRubySizeMF->get_value(FieldUnit::TWIP))));
             m_xLinesPerPageNF->set_max(nMaxLines);
+            m_xLinesPerPageNF->set_sensitive(nMaxLines != 0);
             SetLinesOrCharsRanges( *m_xLinesRangeFT , m_xLinesPerPageNF->get_max() );
         }
     }
