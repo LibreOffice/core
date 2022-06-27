@@ -90,6 +90,7 @@ VbaFilterConfig::VbaFilterConfig( const Reference< XComponentContext >& rxContex
     }
     catch(const Exception& )
     {
+        TOOLS_WARN_EXCEPTION("oox", "");
     }
     OSL_ENSURE( mxConfigAccess.is(), "VbaFilterConfig::VbaFilterConfig - cannot open configuration" );
 }
@@ -131,6 +132,7 @@ void VbaMacroAttacherBase::resolveAndAttachMacro( const Reference< XVBAMacroReso
     }
     catch(const Exception& )
     {
+        TOOLS_WARN_EXCEPTION("oox", "");
     }
 }
 
@@ -233,6 +235,7 @@ Reference< XNameContainer > VbaProject::openLibrary( sal_Int32 nPropId )
     }
     catch(const Exception& )
     {
+        TOOLS_WARN_EXCEPTION("oox", "");
     }
     OSL_ENSURE( xLibrary.is(), "VbaProject::openLibrary - cannot create library" );
     return xLibrary;
@@ -421,6 +424,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
     }
     catch(const Exception& )
     {
+        TOOLS_WARN_EXCEPTION("oox", "");
     }
 }
 
@@ -510,6 +514,7 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
             }
             catch(const Exception& )
             {
+                TOOLS_WARN_EXCEPTION("oox", "");
             }
         }
     }
@@ -533,6 +538,7 @@ void VbaProject::attachMacros()
     }
     catch(const Exception& )
     {
+        TOOLS_WARN_EXCEPTION("oox", "");
     }
 }
 

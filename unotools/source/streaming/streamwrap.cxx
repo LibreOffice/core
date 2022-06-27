@@ -297,6 +297,11 @@ OStreamWrapper::OStreamWrapper(std::unique_ptr<SvStream> pStream)
     SetStream( pStream.release(), true );
 }
 
+OStreamWrapper::OStreamWrapper(SvStream* pStream, bool bOwner)
+{
+    SetStream( pStream, bOwner );
+}
+
 css::uno::Reference< css::io::XInputStream > SAL_CALL OStreamWrapper::getInputStream(  )
 {
     return this;
