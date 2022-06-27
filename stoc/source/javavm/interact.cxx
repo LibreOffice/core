@@ -24,6 +24,7 @@
 #include <com/sun/star/task/XInteractionRetry.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
+#include <utility>
 
 namespace com::sun::star::task { class XInteractionContinuation; }
 
@@ -78,8 +79,8 @@ bool InteractionRequest::RetryContinuation::isSelected() const
     return m_bSelected;
 }
 
-InteractionRequest::InteractionRequest(css::uno::Any const & rRequest):
-    m_aRequest(rRequest)
+InteractionRequest::InteractionRequest(css::uno::Any aRequest):
+    m_aRequest(std::move(aRequest))
 {
     m_xRetryContinuation = new RetryContinuation;
     m_aContinuations = { new AbortContinuation, m_xRetryContinuation };

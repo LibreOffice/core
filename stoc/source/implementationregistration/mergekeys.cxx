@@ -18,6 +18,7 @@
  */
 
 
+#include <utility>
 #include <vector>
 
 #include <osl/diagnose.h>
@@ -40,9 +41,9 @@ struct Link
     OUString m_name;
     OUString m_target;
 
-    Link( OUString const & name, OUString const & target )
-        : m_name( name )
-        , m_target( target )
+    Link( OUString name, OUString target )
+        : m_name(std::move( name ))
+        , m_target(std::move( target ))
         {}
 };
 

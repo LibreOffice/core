@@ -36,7 +36,7 @@ class InteractionRequest:
     public cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
 public:
-    explicit InteractionRequest(css::uno::Any const & rRequest);
+    explicit InteractionRequest(css::uno::Any aRequest);
 
     virtual css::uno::Any SAL_CALL getRequest() override;
 

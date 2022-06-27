@@ -61,7 +61,7 @@ class JavaVirtualMachine:
 public:
     explicit JavaVirtualMachine(
         css::uno::Reference<
-            css::uno::XComponentContext > const & rContext);
+            css::uno::XComponentContext > xContext);
 
     // XInitialization
     virtual void SAL_CALL
