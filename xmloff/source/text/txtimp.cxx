@@ -166,7 +166,7 @@ struct XMLTextImportHelper::Impl
     typedef ::std::pair< OUString, OUString> field_name_type_t;
     typedef ::std::pair< OUString, OUString > field_param_t;
     typedef ::std::vector< field_param_t > field_params_t;
-    typedef ::std::tuple<field_name_type_t, field_params_t, uno::Reference<text::XFormField>> field_stack_item_t;
+    typedef ::std::tuple<field_name_type_t, field_params_t, uno::Reference<text::XFormField>, uno::Reference<text::XTextRange>> field_stack_item_t;
     typedef ::std::stack< field_stack_item_t > field_stack_t;
 
     field_stack_t m_FieldStack;
@@ -2105,7 +2105,7 @@ bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
 void XMLTextImportHelper::pushFieldCtx( const OUString& name, const OUString& type )
 {
     m_xImpl->m_FieldStack.push(Impl::field_stack_item_t(
-        Impl::field_name_type_t(name, type), Impl::field_params_t(), uno::Reference<text::XFormField>{}));
+        Impl::field_name_type_t(name, type), Impl::field_params_t(), uno::Reference<text::XFormField>{}, GetCursor()->getStart()));
 }
 
 uno::Reference<text::XFormField>
@@ -2133,16 +2133,42 @@ void XMLTextImportHelper::addFieldParam( const OUString& name, const OUString& v
     }
 }
 
-OUString XMLTextImportHelper::getCurrentFieldType()
+::std::pair<OUString, OUString> XMLTextImportHelper::getCurrentFieldType() const
 {
     assert(!m_xImpl->m_FieldStack.empty());
     if (!m_xImpl->m_FieldStack.empty())
     {
-        return std::get<0>(m_xImpl->m_FieldStack.top()).second;
+        return std::get<0>(m_xImpl->m_FieldStack.top());
     }
     else
     {
-        return OUString();
+        return {};
+    }
+}
+
+uno::Reference<text::XTextRange> XMLTextImportHelper::getCurrentFieldStart() const
+{
+    assert(!m_xImpl->m_FieldStack.empty());
+    if (!m_xImpl->m_FieldStack.empty())
+    {
+        return std::get<3>(m_xImpl->m_FieldStack.top());
+    }
+    else
+    {
+        return {};
+    }
+}
+
+bool XMLTextImportHelper::hasCurrentFieldSeparator() const
+{
+    assert(!m_xImpl->m_FieldStack.empty());
+    if (!m_xImpl->m_FieldStack.empty())
+    {
+        return std::get<2>(m_xImpl->m_FieldStack.top()).is();
+    }
+    else
+    {
+        return {};
     }
 }
 

@@ -96,7 +96,8 @@ public:
         const OUString& sServiceName,
         const OUString& sMarkName,
         const css::uno::Reference<css::text::XTextRange> & rRange,
-        const OUString& i_rXmlId = OUString());
+        const OUString& i_rXmlId = OUString(),
+        bool const isFieldmarkSeparatorMissing = false);
 
     bool FindName(
         const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList);
