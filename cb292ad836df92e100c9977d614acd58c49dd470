@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "898f8624_2e899013",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-27T12:00:42Z",
+      "side": 1,
+      "message": "Hi Caolán,\nthe div-by-zero asserts were added by you in 414226273aa4dc0e2d06cbd482ffac37ea9338c3, however,it seems the problem might also happen with release builds as reported in the crashreport",
+      "revId": "cb292ad836df92e100c9977d614acd58c49dd470",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
