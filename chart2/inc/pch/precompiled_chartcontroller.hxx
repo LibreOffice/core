@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2022-01-26 09:11:52 using:
+ Generated on 2022-06-27 18:58:36 using:
  ./bin/update_pch chart2 chartcontroller --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -74,6 +74,8 @@
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
@@ -97,6 +99,7 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/Scanline.hxx>
+#include <vcl/WindowPosSize.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/animate/AnimationBitmap.hxx>
@@ -156,6 +159,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/windowstate.hxx>
+#include <vcl/wintypes.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -168,6 +172,7 @@
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/Range2D.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b3drange.hxx>
@@ -208,14 +213,7 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <com/sun/star/chart2/XAxis.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/DashStyle.hpp>
@@ -226,7 +224,6 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
@@ -244,10 +241,10 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/sheet/XRangeSelectionListener.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
@@ -271,7 +268,6 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/broadcasthelper.hxx>
@@ -279,6 +275,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/interfacecontainer4.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/multicontainer2.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -311,6 +308,7 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <editeng/colritem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/editobj.hxx>
@@ -438,7 +436,6 @@
 #include <tools/toolsdllapi.h>
 #include <tools/weakbase.h>
 #include <tools/weakbase.hxx>
-#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
@@ -454,6 +451,7 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <CharacterPropertyItemConverter.hxx>
@@ -467,6 +465,7 @@
 #include <ChartWindow.hxx>
 #include <CommonConverters.hxx>
 #include <ControllerLockGuard.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <Diagram.hxx>
@@ -477,11 +476,13 @@
 #include <GraphicPropertyItemConverter.hxx>
 #include <ItemConverter.hxx>
 #include <ItemPropertyMap.hxx>
+#include <Legend.hxx>
 #include <LegendHelper.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ObjectNameProvider.hxx>
 #include <RegressionCurveHelper.hxx>
+#include <RegressionCurveModel.hxx>
 #include <ResId.hxx>
 #include <StatisticsHelper.hxx>
 #include <ThreeDHelper.hxx>

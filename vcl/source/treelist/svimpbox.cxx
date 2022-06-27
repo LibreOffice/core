@@ -32,7 +32,7 @@
 
 #include <vcl/toolkit/treelistbox.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <bitmaps.hlst>
 #include <svimpbox.hxx>
 #include <comphelper/processfactory.hxx>

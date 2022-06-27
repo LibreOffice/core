@@ -25,7 +25,7 @@
 #include <string_view>
 
 #include <rtl/ustring.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 #include <vcl/dllapi.h>
 
 class Image;

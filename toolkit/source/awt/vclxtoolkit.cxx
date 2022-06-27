@@ -61,7 +61,7 @@
 #include <rtl/process.h>
 #include <sal/log.hxx>
 #include <tools/link.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 
 #ifdef MACOSX
 #include <premac.h>

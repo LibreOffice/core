@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2022-01-26 09:17:05 using:
+ Generated on 2022-06-27 18:58:17 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -36,6 +36,7 @@
 #include <initializer_list>
 #include <iomanip>
 #include <iostream>
+#include <iterator>
 #include <limits.h>
 #include <limits>
 #include <list>
@@ -76,6 +77,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringconcat.hxx>
@@ -100,6 +102,7 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/Scanline.hxx>
+#include <vcl/WindowPosSize.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate/Animation.hxx>
@@ -148,6 +151,7 @@
 #include <vcl/rendercontext/SalLayoutFlags.hxx>
 #include <vcl/rendercontext/State.hxx>
 #include <vcl/rendercontext/SystemTextColorFlags.hxx>
+#include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
@@ -163,10 +167,12 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
 #include <vcl/vectorgraphicdata.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/windowstate.hxx>
+#include <vcl/wintypes.hxx>
 #include <vcl/wizardmachine.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
@@ -177,6 +183,7 @@
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/Range2D.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/Tuple2D.hxx>
@@ -199,15 +206,13 @@
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
@@ -236,6 +241,7 @@
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/HatchStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
@@ -273,13 +279,10 @@
 #include <com/sun/star/mail/XConnectionListener.hpp>
 #include <com/sun/star/mail/XMailMessage.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
-#include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/PositionLayoutDir.hpp>
@@ -287,7 +290,9 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/XTextSection.hpp>
+#include <com/sun/star/text/XFootnote.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
@@ -322,7 +327,6 @@
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
@@ -347,7 +351,6 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <editeng/adjustitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -356,33 +359,21 @@
 #include <editeng/editstat.hxx>
 #include <editeng/eedata.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/forbiddenruleitem.hxx>
-#include <editeng/formatbreakitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <editeng/hngpnctitem.hxx>
-#include <editeng/hyphenzoneitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/lspcitem.hxx>
 #include <editeng/numdef.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/orphitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/overflowingtxt.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/paragraphdata.hxx>
-#include <editeng/paravertalignitem.hxx>
-#include <editeng/pgrditem.hxx>
-#include <editeng/scriptspaceitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
-#include <editeng/spltitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/svxfont.hxx>
-#include <editeng/tstpitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/widwitem.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
@@ -393,16 +384,17 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/span.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/XParagraphFormat.hpp>
+#include <ooo/vba/word/XSection.hpp>
+#include <ooo/vba/word/XWrapFormat.hpp>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <sfx2/Metadatable.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/chalign.hxx>
@@ -461,6 +453,7 @@
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/autoformathelper.hxx>
+#include <svx/charmap.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/colorwindow.hxx>
 #include <svx/ctredlin.hxx>
@@ -471,7 +464,6 @@
 #include <svx/pagectrl.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
-#include <svx/svddef.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/swframetypes.hxx>
@@ -501,7 +493,6 @@
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
-#include <tools/wintypes.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
@@ -515,9 +506,11 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <unotools/viewoptions.hxx>
 #include <vbahelper/vbadllapi.h>
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
@@ -537,6 +530,7 @@
 #include <cmdid.h>
 #include <cnttab.hxx>
 #include <column.hxx>
+#include <condedit.hxx>
 #include <dbmgr.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -560,10 +554,12 @@
 #include <fmtftn.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtornt.hxx>
-#include <fmtpdsc.hxx>
 #include <fmtrfmrk.hxx>
 #include <fmtruby.hxx>
 #include <format.hxx>
+#include <formatcontentcontrol.hxx>
+#include <formatlinebreak.hxx>
+#include <frmatr.hxx>
 #include <frmdlg.hxx>
 #include <frmfmt.hxx>
 #include <frmpage.hxx>
@@ -577,6 +573,7 @@
 #include <ndarr.hxx>
 #include <ndhints.hxx>
 #include <ndindex.hxx>
+#include <ndtxt.hxx>
 #include <ndtyp.hxx>
 #include <node.hxx>
 #include <nodeoffset.hxx>
@@ -616,10 +613,10 @@
 #include <tgrditem.hxx>
 #include <tox.hxx>
 #include <toxe.hxx>
+#include <txatbase.hxx>
 #include <uiitems.hxx>
 #include <uitool.hxx>
 #include <undobj.hxx>
-#include <unobaseclass.hxx>
 #include <unotools.hxx>
 #include <usrpref.hxx>
 #include <view.hxx>

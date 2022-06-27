@@ -26,7 +26,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/wintypes.hxx>
+#include <vcl/wintypes.hxx>
 
 namespace framework{
 
