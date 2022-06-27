@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8aa84e9_1941e2c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-27T12:45:19Z",
+      "side": 1,
+      "message": "But the documentation of css.system.XSimpleMailMessage::setAttachment (in offapi/com/sun/star/system/XSimpleMailMessage.idl) states that these need to be file URLs, so why add code that tries to silently convert illegal input into file URLs?",
+      "revId": "738e0bd68c4b4286b85d3eb5c1a638247fcc26bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
