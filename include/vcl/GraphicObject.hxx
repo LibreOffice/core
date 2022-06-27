@@ -264,7 +264,7 @@ public:
                                 const Point& rPt,
                                 const Size& rSz,
                                 tools::Long nExtraData = 0,
-                                OutputDevice* pFirstFrameOutDev = nullptr
+                                bool bFirstFrameOnly = false
                             );
 
     void                    StopAnimation( const OutputDevice* pOut = nullptr, tools::Long nExtraData = 0 );

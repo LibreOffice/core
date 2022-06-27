@@ -541,8 +541,7 @@ void GraphicObject::DrawTiled(OutputDevice& rOut, const tools::Rectangle& rArea,
 }
 
 bool GraphicObject::StartAnimation(OutputDevice& rOut, const Point& rPt, const Size& rSz,
-                                   tools::Long nRendererId,
-                                   OutputDevice* pFirstFrameOutDev)
+                                   tools::Long nRendererId, bool bFirstFrameOnly)
 {
     bool bRet = false;
 
@@ -573,13 +572,13 @@ bool GraphicObject::StartAnimation(OutputDevice& rOut, const Point& rPt, const S
             }
         }
 
-        if (!mxSimpleCache || (mxSimpleCache->maAttr != aAttr) || pFirstFrameOutDev)
+        if (!mxSimpleCache || (mxSimpleCache->maAttr != aAttr) || bFirstFrameOnly)
         {
             mxSimpleCache.reset(new GrfSimpleCacheObj(GetTransformedGraphic(&aAttr), aAttr));
             mxSimpleCache->maGraphic.SetAnimationNotifyHdl(GetGraphic().GetAnimationNotifyHdl());
         }
 
-        mxSimpleCache->maGraphic.StartAnimation(rOut, aPt, aSz, nRendererId, pFirstFrameOutDev);
+        mxSimpleCache->maGraphic.StartAnimation(rOut, aPt, aSz, nRendererId, bFirstFrameOnly);
 
         if( bCropped )
             rOut.Pop();

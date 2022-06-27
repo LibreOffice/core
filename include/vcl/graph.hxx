@@ -158,7 +158,7 @@ public:
                                    const Point& rDestPt,
                                    const Size& rDestSize,
                                    tools::Long nExtraData = 0,
-                                   OutputDevice* pFirstFrameOutDev = nullptr);
+                                   bool bFirstFrameOnly = false);
     void            StopAnimation( const OutputDevice* pOutputDevice,
                           tools::Long nExtraData );
 

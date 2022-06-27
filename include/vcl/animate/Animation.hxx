@@ -43,7 +43,7 @@ public:
     void Clear();
 
     bool Start(OutputDevice& rOutDev, const Point& rDestPt, const Size& rDestSz,
-               tools::Long nRendererId, OutputDevice* pFirstFrameOutDev);
+               tools::Long nRendererId, bool bFirstFrameOnly = false);
 
     void Stop(const OutputDevice* pOutDev = nullptr, tools::Long nRendererId = 0);
 

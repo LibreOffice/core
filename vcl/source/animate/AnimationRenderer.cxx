@@ -28,10 +28,9 @@
 
 AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
                             const Point& rPt, const Size& rSz,
-                            sal_uLong nRendererId,
-                            OutputDevice* pFirstFrameOutDev ) :
+                            sal_uLong nRendererId, bool bFirstFrameOnly ) :
         mpParent        ( pParent ),
-        mpRenderContext ( pFirstFrameOutDev ? pFirstFrameOutDev : pOut ),
+        mpRenderContext ( pOut ),
         mnRendererId     ( nRendererId ),
         maPt            ( rPt ),
         maSz            ( rSz ),
@@ -44,7 +43,8 @@ AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
         mbIsPaused      ( false ),
         mbIsMarked      ( false ),
         mbIsMirroredHorizontally         ( maSz.Width() < 0 ),
-        mbIsMirroredVertically         ( maSz.Height() < 0 )
+        mbIsMirroredVertically         ( maSz.Height() < 0 ),
+        mbFirstFrameOnly (bFirstFrameOnly)
 {
     Animation::ImplIncAnimCount();
 
@@ -80,13 +80,6 @@ AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
 
     // Initialize drawing to actual position
     drawToPos( mpParent->ImplGetCurPos() );
-
-    // If first frame OutputDevice is set, update variables now for real OutputDevice
-    if( pFirstFrameOutDev )
-    {
-        mpRenderContext = pOut;
-        maClip = mpRenderContext->GetClipRegion();
-    }
 }
 
 AnimationRenderer::~AnimationRenderer()

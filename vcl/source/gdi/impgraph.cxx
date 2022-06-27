@@ -1085,13 +1085,12 @@ void ImpGraphic::draw(OutputDevice& rOutDev,
 }
 
 void ImpGraphic::startAnimation(OutputDevice& rOutDev, const Point& rDestPt,
-                                const Size& rDestSize, tools::Long nRendererId,
-                                OutputDevice* pFirstFrameOutDev )
+                                const Size& rDestSize, tools::Long nRendererId, bool bFirstFrameOnly)
 {
     ensureAvailable();
 
     if( isSupportedGraphic() && !isSwappedOut() && mpAnimation )
-        mpAnimation->Start(rOutDev, rDestPt, rDestSize, nRendererId, pFirstFrameOutDev);
+        mpAnimation->Start(rOutDev, rDestPt, rDestSize, nRendererId, bFirstFrameOnly);
 }
 
 void ImpGraphic::stopAnimation( const OutputDevice* pOutDev, tools::Long nRendererId )
