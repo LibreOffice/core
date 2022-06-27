@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e2d4abd_5ff51fc4",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-27T08:05:15Z",
+      "side": 1,
+      "message": "I\u0027m sorry if I was a bit unclear.\nWhat I meant was:\n1. Introduce the ValueType enum at some header, so that it may be used where needed (see below);\n2. Use it everywhere *instead of* the bool \"IgnoreDate\" arguments / fields in the code.\n\nSo ValueGetter needs to change bool mbIgnoreDate to ValueType meValueType, and take a ValueType in its constructor; ScVbaRange::DoGetValue should also take a ValueType, not a bool; and so the enum should be introduced in the sc/source/ui/vba/vbarange.hxx.\n\nSorry for the confusion I introduced. :-)",
+      "revId": "64a26f4b5760dab9bff480073311379c39ae2572",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
