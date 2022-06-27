@@ -25,21 +25,21 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <unotools/streamwrap.hxx>
+#include <unotools/tempfile.hxx>
+#include <rtl/ref.hxx>
+#include <optional>
 
 struct OWriteStream_Impl;
 
 class OSelfTerminateFileStream final : public cppu::WeakImplHelper< css::io::XInputStream,
                                                                css::io::XSeekable >
 {
-    css::uno::Reference< css::ucb::XSimpleFileAccess3 > m_xFileAccess;
-
-    OUString m_aURL;
-
-    css::uno::Reference< css::io::XInputStream > m_xInputStream;
-    css::uno::Reference< css::io::XSeekable > m_xSeekable;
+    std::optional<utl::TempFile> m_oTempFile;
+    rtl::Reference< utl::OSeekableInputStreamWrapper > m_xStreamWrapper;
 
 public:
-    OSelfTerminateFileStream( const css::uno::Reference< css::uno::XComponentContext >& xContext, const OUString& aURL );
+    OSelfTerminateFileStream( const css::uno::Reference< css::uno::XComponentContext >& xContext, utl::TempFile aTempFile );
 
     virtual ~OSelfTerminateFileStream() override;
 

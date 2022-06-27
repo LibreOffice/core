@@ -43,6 +43,7 @@
 #include <comphelper/bytereader.hxx>
 #include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <vector>
 #include <memory>
@@ -73,7 +74,7 @@ struct OWriteStream_Impl
     friend class OInputCompStream;
 
     OWriteStream*   m_pAntiImpl;
-    OUString m_aTempURL;
+    std::optional<utl::TempFile> m_oTempFile;
 
     css::uno::Reference< css::io::XStream > m_xCacheStream;
     css::uno::Reference< css::io::XSeekable > m_xCacheSeek;
@@ -116,8 +117,8 @@ struct OWriteStream_Impl
     sal_Int32 m_nRelId;
 
 private:
-    OUString const & GetFilledTempFileIfNo( const css::uno::Reference< css::io::XInputStream >& xStream );
-    OUString const & FillTempGetFileName();
+    void GetFilledTempFileIfNo( const css::uno::Reference< css::io::XInputStream >& xStream );
+    void FillTempGetFileName();
     css::uno::Reference< css::io::XStream >       GetTempFileAsStream();
     css::uno::Reference< css::io::XInputStream >  GetTempFileAsInputStream();
 
@@ -149,7 +150,7 @@ public:
     void CleanCacheStream();
 
     bool UsesCommonEncryption_Impl() const { return m_bUseCommonEncryption; }
-    bool HasTempFile_Impl() const { return ( m_aTempURL.getLength() != 0 ); }
+    bool HasTempFile_Impl() const { return m_oTempFile.has_value(); }
     bool IsTransacted();
 
     bool HasWriteOwner_Impl() const { return ( m_pAntiImpl != nullptr ); }

@@ -82,6 +82,42 @@ struct WSInternalData_Impl
 namespace package
 {
 
+static void CopyInputToOutput(
+    const css::uno::Reference< css::io::XInputStream >& xInput,
+    SvStream& rOutput )
+{
+    static const sal_Int32 nConstBufferSize = 32000;
+
+    uno::Reference< css::lang::XUnoTunnel > xInputTunnel( xInput, uno::UNO_QUERY );
+    comphelper::ByteReader* pByteReader = nullptr;
+    if (xInputTunnel)
+        pByteReader = reinterpret_cast< comphelper::ByteReader* >( xInputTunnel->getSomething( comphelper::ByteReader::getUnoTunnelId() ) );
+
+    if (pByteReader)
+    {
+        sal_Int32 nRead;
+        sal_Int8 aTempBuf[ nConstBufferSize ];
+        do
+        {
+            nRead = pByteReader->readSomeBytes ( aTempBuf, nConstBufferSize );
+            rOutput.WriteBytes ( aTempBuf, nRead );
+        }
+        while ( nRead == nConstBufferSize );
+    }
+    else
+    {
+        sal_Int32 nRead;
+        uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
+
+        do
+        {
+            nRead = xInput->readBytes ( aSequence, nConstBufferSize );
+            rOutput.WriteBytes ( aSequence.getConstArray(), nRead );
+        }
+        while ( nRead == nConstBufferSize );
+    }
+}
+
 bool PackageEncryptionDataLessOrEqual( const ::comphelper::SequenceAsHashMap& aHash1, const ::comphelper::SequenceAsHashMap& aHash2 )
 {
     // tdf#93389: aHash2 may contain more than in aHash1, if it contains also data for other package
@@ -196,51 +232,6 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
     return true;
 }
 
-bool KillFile( const OUString& aURL, const uno::Reference< uno::XComponentContext >& xContext )
-{
-    if ( !xContext.is() )
-        return false;
-
-    bool bRet = false;
-
-    try
-    {
-        uno::Reference < ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create( xContext ) );
-
-        xAccess->kill( aURL );
-        bRet = true;
-    }
-    catch( const uno::Exception& )
-    {
-        TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
-    }
-
-    return bRet;
-}
-
-OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext >& rContext )
-{
-    OUString aTempURL;
-
-    uno::Reference < io::XTempFile > xTempFile(
-            io::TempFile::create(rContext),
-            uno::UNO_SET_THROW );
-
-    try {
-        xTempFile->setRemoveFile( false );
-        aTempURL = xTempFile->getUri();
-    }
-    catch ( const uno::Exception& )
-    {
-        TOOLS_INFO_EXCEPTION("package.xstor", "Quiet exception");
-    }
-
-    if ( aTempURL.isEmpty() )
-        throw uno::RuntimeException("Cannot create tempfile.");
-
-    return aTempURL;
-}
-
 uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< uno::XComponentContext >& rContext )
 {
     static constexpr OUStringLiteral sName(u"com.sun.star.comp.MemoryStream");
@@ -295,11 +286,7 @@ OWriteStream_Impl::~OWriteStream_Impl()
 {
     DisposeWrappers();
 
-    if ( !m_aTempURL.isEmpty() )
-    {
-        KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-        m_aTempURL.clear();
-    }
+    m_oTempFile.reset();
 
     CleanCacheStream();
 }
@@ -355,7 +342,7 @@ bool OWriteStream_Impl::IsEncrypted()
     if ( m_bForceEncrypted || m_bHasCachedEncryptionData )
         return true;
 
-    if ( !m_aTempURL.isEmpty() || m_xCacheStream.is() )
+    if ( m_oTempFile.has_value() || m_xCacheStream.is() )
         return false;
 
     GetStreamProperties();
@@ -490,52 +477,42 @@ void OWriteStream_Impl::DisposeWrappers()
     m_aInputStreamsVector.clear();
 }
 
-OUString const & OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XInputStream >& xStream )
+void OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XInputStream >& xStream )
 {
-    if ( !m_aTempURL.getLength() )
+    if ( !m_oTempFile.has_value() )
     {
-        OUString aTempURL = GetNewTempFileURL( m_xContext );
+        m_oTempFile.emplace();
+        m_oTempFile->EnableKillingFile();
 
         try {
-            if ( !aTempURL.isEmpty() && xStream.is() )
+            if ( xStream.is() )
             {
-                uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
-
-                uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aTempURL );
-                if ( !xTempOutStream.is() )
-                    throw io::IOException("no temp stream"); // TODO:
                 // the current position of the original stream should be still OK, copy further
-                ::comphelper::OStorageHelper::CopyInputToOutput( xStream, xTempOutStream );
-                xTempOutStream->closeOutput();
-                xTempOutStream.clear();
+                package::CopyInputToOutput( xStream, *m_oTempFile->GetStream(StreamMode::READWRITE) );
             }
         }
         catch( const packages::WrongPasswordException& )
         {
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
-            KillFile( aTempURL, comphelper::getProcessComponentContext() );
+            m_oTempFile.reset();
             throw;
         }
         catch( const uno::Exception& )
         {
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
-            KillFile( aTempURL, comphelper::getProcessComponentContext() );
+            m_oTempFile.reset();
             throw;
         }
 
-        if ( !aTempURL.isEmpty() )
+        if ( m_oTempFile.has_value() )
             CleanCacheStream();
-
-        m_aTempURL = aTempURL;
     }
-
-    return m_aTempURL;
 }
 
-OUString const & OWriteStream_Impl::FillTempGetFileName()
+void OWriteStream_Impl::FillTempGetFileName()
 {
     // should try to create cache first, if the amount of contents is too big, the temp file should be taken
-    if ( !m_xCacheStream.is() && m_aTempURL.isEmpty() )
+    if ( !m_xCacheStream.is() && !m_oTempFile.has_value() )
     {
         uno::Reference< io::XInputStream > xOrigStream = m_xPackageStream->getDataStream();
         if ( !xOrigStream.is() )
@@ -568,45 +545,31 @@ OUString const & OWriteStream_Impl::FillTempGetFileName()
                 m_xCacheStream = xCacheStream;
                 m_xCacheSeek->seek( 0 );
             }
-            else if ( m_aTempURL.isEmpty() )
+            else if ( !m_oTempFile.has_value() )
             {
-                m_aTempURL = GetNewTempFileURL( m_xContext );
+                m_oTempFile.emplace();
+                m_oTempFile->EnableKillingFile();
 
                 try {
-                    if ( !m_aTempURL.isEmpty() )
-                    {
-                        uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
+                    // copy stream contents to the file
+                    SvStream* pStream = m_oTempFile->GetStream(StreamMode::READWRITE);
+                    pStream->WriteBytes( aData.getConstArray(), aData.getLength() );
 
-                        uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( m_aTempURL );
-                        if ( !xTempOutStream.is() )
-                            throw io::IOException("no temp stream"); // TODO:
-
-                        // copy stream contents to the file
-                        xTempOutStream->writeBytes( aData );
-
-                        // the current position of the original stream should be still OK, copy further
-                        ::comphelper::OStorageHelper::CopyInputToOutput( xOrigStream, xTempOutStream );
-                        xTempOutStream->closeOutput();
-                        xTempOutStream.clear();
-                    }
+                    // the current position of the original stream should be still OK, copy further
+                    package::CopyInputToOutput( xOrigStream, *pStream );
                 }
                 catch( const packages::WrongPasswordException& )
                 {
-                    KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-                    m_aTempURL.clear();
-
+                    m_oTempFile.reset();
                     throw;
                 }
                 catch( const uno::Exception& )
                 {
-                    KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-                    m_aTempURL.clear();
+                    m_oTempFile.reset();
                 }
             }
         }
     }
-
-    return m_aTempURL;
 }
 
 uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
@@ -615,17 +578,17 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
 
     if ( !m_xCacheStream.is() )
     {
-        if ( m_aTempURL.isEmpty() )
-            m_aTempURL = FillTempGetFileName();
+        if ( !m_oTempFile.has_value() )
+            FillTempGetFileName();
 
-        if ( !m_aTempURL.isEmpty() )
+        if ( m_oTempFile.has_value() )
         {
             // the temporary file is not used if the cache is used
-            uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
-
             try
             {
-                xTempStream = xTempAccess->openFileReadWrite( m_aTempURL );
+                SvStream* pStream = m_oTempFile->GetStream(StreamMode::READWRITE);
+                pStream->Seek(0);
+                xTempStream = new utl::OStreamWrapper(pStream, /*bOwner*/false);
             }
             catch( const uno::Exception& )
             {
@@ -652,17 +615,17 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
 
     if ( !m_xCacheStream.is() )
     {
-        if ( m_aTempURL.isEmpty() )
-            m_aTempURL = FillTempGetFileName();
+        if ( !m_oTempFile.has_value() )
+            FillTempGetFileName();
 
-        if ( !m_aTempURL.isEmpty() )
+        if ( m_oTempFile.has_value() )
         {
             // the temporary file is not used if the cache is used
-            uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
-
             try
             {
-                xInputStream = xTempAccess->openFileRead( m_aTempURL );
+                SvStream* pStream = m_oTempFile->GetStream(StreamMode::READWRITE);
+                pStream->Seek(0);
+                xInputStream = new utl::OStreamWrapper(pStream, /*bOwner*/false);
             }
             catch( const uno::Exception& )
             {
@@ -697,7 +660,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     if ( m_bHasDataToFlush )
         throw io::IOException("m_bHasDataToFlush==true");
 
-    OSL_ENSURE( m_aTempURL.isEmpty() && !m_xCacheStream.is(), "The temporary must not exist!" );
+    OSL_ENSURE( !m_oTempFile.has_value() && !m_xCacheStream.is(), "The temporary must not exist!" );
 
     // use new file as current persistent representation
     // the new file will be removed after it's stream is closed
@@ -792,7 +755,7 @@ void OWriteStream_Impl::Commit()
         m_xCacheSeek.clear();
 
     }
-    else if ( !m_aTempURL.isEmpty() )
+    else if ( m_oTempFile.has_value() )
     {
         if ( m_pAntiImpl )
             m_pAntiImpl->DeInit();
@@ -800,10 +763,11 @@ void OWriteStream_Impl::Commit()
         uno::Reference< io::XInputStream > xInStream;
         try
         {
-            xInStream = new OSelfTerminateFileStream(m_xContext, m_aTempURL);
+            xInStream = new OSelfTerminateFileStream(m_xContext, std::move(*m_oTempFile));
         }
         catch( const uno::Exception& )
         {
+            TOOLS_WARN_EXCEPTION("package", "");
         }
 
         if ( !xInStream.is() )
@@ -813,7 +777,7 @@ void OWriteStream_Impl::Commit()
 
         // TODO/NEW: Let the temporary file be removed after commit
         xNewPackageStream->setDataStream( xInStream );
-        m_aTempURL.clear();
+        m_oTempFile.reset();
     }
     else // if ( m_bHasInsertedStreamOptimization )
     {
@@ -874,7 +838,7 @@ void OWriteStream_Impl::Revert()
     if ( !m_bHasDataToFlush )
         return; // nothing to do
 
-    OSL_ENSURE( !m_aTempURL.isEmpty() || m_xCacheStream.is(), "The temporary must exist!" );
+    OSL_ENSURE( m_oTempFile.has_value() || m_xCacheStream.is(), "The temporary must exist!" );
 
     if ( m_xCacheStream.is() )
     {
@@ -882,11 +846,7 @@ void OWriteStream_Impl::Revert()
         m_xCacheSeek.clear();
     }
 
-    if ( !m_aTempURL.isEmpty() )
-    {
-        KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-        m_aTempURL.clear();
-    }
+    m_oTempFile.reset();
 
     m_aProps.realloc( 0 );
 
@@ -1229,7 +1189,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
     if ( ( nStreamMode & embed::ElementModes::READWRITE ) == embed::ElementModes::READ )
     {
         uno::Reference< io::XInputStream > xInStream;
-        if ( m_xCacheStream.is() || !m_aTempURL.isEmpty() )
+        if ( m_xCacheStream.is() || m_oTempFile.has_value() )
             xInStream = GetTempFileAsInputStream(); //TODO:
         else
             xInStream = m_xPackageStream->getDataStream();
@@ -1244,7 +1204,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
     }
     else if ( ( nStreamMode & embed::ElementModes::READWRITE ) == embed::ElementModes::SEEKABLEREAD )
     {
-        if ( !m_xCacheStream.is() && m_aTempURL.isEmpty() && !( m_xPackageStream->getDataStream().is() ) )
+        if ( !m_xCacheStream.is() && !m_oTempFile.has_value() && !( m_xPackageStream->getDataStream().is() ) )
         {
             // The stream does not exist in the storage
             throw io::IOException();
@@ -1267,11 +1227,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         uno::Reference< io::XStream > xStream;
         if ( ( nStreamMode & embed::ElementModes::TRUNCATE ) == embed::ElementModes::TRUNCATE )
         {
-            if ( !m_aTempURL.isEmpty() )
-            {
-                KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-                m_aTempURL.clear();
-            }
+            m_oTempFile.reset();
             if ( m_xCacheStream.is() )
                 CleanCacheStream();
 
@@ -1287,7 +1243,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         }
         else if ( !m_bHasInsertedStreamOptimization )
         {
-            if ( m_aTempURL.isEmpty() && !m_xCacheStream.is() && !( m_xPackageStream->getDataStream().is() ) )
+            if ( !m_oTempFile.has_value() && !m_xCacheStream.is() && !( m_xPackageStream->getDataStream().is() ) )
             {
                 // The stream does not exist in the storage
                 m_bHasDataToFlush = true;
@@ -2107,7 +2063,8 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
                 m_xSeekable->seek( 0 );
 
                 // it is enough to copy the cached stream, the cache should already contain everything
-                if ( !m_pImpl->GetFilledTempFileIfNo( m_xInStream ).isEmpty() )
+                m_pImpl->GetFilledTempFileIfNo( m_xInStream );
+                if ( m_pImpl->m_oTempFile.has_value() )
                 {
                     DeInit();
                     // the last position is known and it is differs from the current stream position
@@ -2170,7 +2127,8 @@ sal_Int32 OWriteStream::writeSomeBytes( const sal_Int8* pData, sal_Int32 nBytesT
                 m_xSeekable->seek( 0 );
 
                 // it is enough to copy the cached stream, the cache should already contain everything
-                if ( !m_pImpl->GetFilledTempFileIfNo( m_xInStream ).isEmpty() )
+                m_pImpl->GetFilledTempFileIfNo( m_xInStream );
+                if ( m_pImpl->m_oTempFile.has_value() )
                 {
                     DeInit();
                     // the last position is known and it is differs from the current stream position
