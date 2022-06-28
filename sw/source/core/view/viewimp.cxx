@@ -161,8 +161,10 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
 
 void SwViewShellImp::AddPendingLOKInvalidation( const SwRect& rRect )
 {
-    // These are often repeated, so check first for duplicates.
     std::vector<SwRect>& l = m_pendingLOKInvalidations;
+    if(l.empty()) // Announce that these invalidations will need flushing.
+        m_pShell->GetSfxViewShell()->libreOfficeKitViewAddPendingInvalidateTiles();
+    // These are often repeated, so check first for duplicates.
     if( std::find( l.begin(), l.end(), rRect ) == l.end())
         l.push_back( rRect );
 }
