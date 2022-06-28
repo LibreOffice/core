@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f24b3eec_6c55fb0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-28T06:04:06Z",
+      "side": 1,
+      "message": "It\u0027s just for the test to see what info Jenkins machines on macos may provide.\n(I wonder too if we shouldn\u0027t use \"deep\" parameter each time).",
+      "revId": "aa64a96c4e40401be200f3ec45ec923190532ed7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
