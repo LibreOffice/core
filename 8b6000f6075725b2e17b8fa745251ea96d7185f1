@@ -123,6 +123,24 @@
       "parentUuid": "44a24c0c_45bd37d7",
       "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc64c9f8_09d21f1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-28T15:39:38Z",
+      "side": 1,
+      "message": "Stephan: does adding to sw/qa/extras/ooxmlexport/ooxmlexport12.cxx\n\n    20: #include \u003ccom/sun/star/util/XRefreshable.hpp\u003e\n    ...\n    471: // Refresh all cross-reference fields\n    472: uno::Reference\u003cutil::XRefreshable\u003e(xFieldsAccess, uno::UNO_QUERY_THROW)-\u003erefresh();\n\nfixes it?",
+      "parentUuid": "38d08c4a_2b873e57",
+      "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
