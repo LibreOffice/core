@@ -50,6 +50,23 @@
       "message": "Ok seeing https://bugs.documentfoundation.org/show_bug.cgi?id\u003d128233#c30 and https://bugs.documentfoundation.org/show_bug.cgi?id\u003d128233#c34 or from a duplicate (https://bugs.documentfoundation.org/show_bug.cgi?id\u003d132025#c16 but indeed there\u0027s also https://bugs.documentfoundation.org/show_bug.cgi?id\u003d132025#c13 which seems to show there\u0027s still be a pb.\nBut why does this seem to work for 3 different people?\nIf \"strict\" and \"verbose\u003d4\" make no harm, what about to use them? At least everybody will see that it doesn\u0027t work and may propose something else.\n",
       "revId": "aa64a96c4e40401be200f3ec45ec923190532ed7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9c41ef7_3b87aeed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-28T19:06:14Z",
+      "side": 1,
+      "message": "About \"deep\" option, reading https://developer.apple.com/library/archive/technotes/tn2206/_index.html#//apple_ref/doc/uid/DTS40007919-CH1-TNTAG404:\n\"Important: While the --deep option can be applied to a signing operation, this is not recommended. We recommend that you sign code inside out in individual stages (as Xcode does automatically). Signing with --deep is for emergency repairs and temporary adjustments only.\", you\u0027re right for signing action.\n\nBut just above, I read:\n\"When verifying signatures, add --deep to perform recursive validation of nested code. Without --deep, validation will be shallow: it will check the immediate nested content but not check that fully. Note that Gatekeeper always performs --deep style validation.\"\nbut we never use codesign with \"verify\" option as indicated in https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html\n\"Testing Conformance with Command Line Tools\n\nTo get a sense of whether your app conforms to Gatekeeper policies when you distribute with Developer ID, you can use the following codesign command to mimic what Gatekeeper does:\n\ncodesign --verify --deep --strict --verbose\u003d2 \u003ccode-path\u003e\n\nIf your app is signed properly, the output looks like this:\n\n\u003ccode-path\u003e: valid on disk\n\n\u003ccode-path\u003e: satisfies its Designated Requirement\"\n\nThere\u0027s also just below:\n\"\nAlternately, the spctl utility is actually a command-line interface to the same security assessment policy subsystem that Gatekeeper uses. Like Gatekeeper, spctl only accepts Developer ID signed apps and apps downloaded from the Mac App Store by default. Run spctl on your app like this:\n\nspctl -a -t exec -vv \u003ccode-path\u003e\n\nThis is the output if your app\u0027s signature is accepted:\n\n\u003ccode-path\u003e: accepted\n\nsource\u003dDeveloper ID\n\norigin\u003d\u003cidentity\u003e\n\nIf you get any result other than accepted, your app is not compatible with Gatekeeper.\n\"\n\nBTW, you indicated Jenkins don\u0027t use codesigning, do macos TBs use it?",
+      "revId": "aa64a96c4e40401be200f3ec45ec923190532ed7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
