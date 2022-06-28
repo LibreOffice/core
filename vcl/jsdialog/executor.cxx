@@ -319,6 +319,18 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                     pToolbar->set_menu_item_active(sId, !bIsActive);
                     return true;
                 }
+                else if (sAction == "closemenu")
+                {
+                    OString sId = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                    pToolbar->set_menu_item_active(sId, false);
+                    return true;
+                }
+                else if (sAction == "openmenu")
+                {
+                    OString sId = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                    pToolbar->set_menu_item_active(sId, true);
+                    return true;
+                }
             }
         }
         else if (sControlType == "edit")
