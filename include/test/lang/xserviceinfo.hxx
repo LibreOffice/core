@@ -10,6 +10,7 @@
 #ifndef INCLUDED_TEST_LANG_XSERVICEINFO_HXX
 #define INCLUDED_TEST_LANG_XSERVICEINFO_HXX
 
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/uno/XInterface.hpp>
@@ -23,13 +24,13 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XServiceInfo
 {
 public:
-    XServiceInfo(const OUString& rImplName, const OUString& rServiceName)
-        : m_aImplName(rImplName)
+    XServiceInfo(OUString aImplName, const OUString& rServiceName)
+        : m_aImplName(std::move(aImplName))
     {
         m_aServiceNames.push_back(rServiceName);
     }
-    XServiceInfo(const OUString& rImplName, const std::vector<OUString> rServiceNames)
-        : m_aImplName(rImplName)
+    XServiceInfo(OUString aImplName, const std::vector<OUString> rServiceNames)
+        : m_aImplName(std::move(aImplName))
         , m_aServiceNames(rServiceNames)
     {
     }

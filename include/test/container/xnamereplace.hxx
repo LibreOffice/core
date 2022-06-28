@@ -17,14 +17,15 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <utility>
 
 namespace apitest
 {
 class OOO_DLLPUBLIC_TEST XNameReplace
 {
 public:
-    XNameReplace(const OUString& rName)
-        : m_aReplacementName(rName)
+    XNameReplace(OUString aName)
+        : m_aReplacementName(std::move(aName))
     {
     }
 

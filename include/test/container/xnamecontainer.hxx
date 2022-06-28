@@ -17,6 +17,7 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <utility>
 
 namespace apitest
 {
@@ -29,8 +30,8 @@ public:
     {
     }
     // removes given entry
-    XNameContainer(const OUString& rNameToRemove)
-        : m_aName(rNameToRemove)
+    XNameContainer(OUString aNameToRemove)
+        : m_aName(std::move(aNameToRemove))
     {
     }
 
