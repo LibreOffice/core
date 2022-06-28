@@ -88,6 +88,23 @@
       "parentUuid": "0c2ca4db_aedf1728",
       "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44a24c0c_45bd37d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-28T13:42:16Z",
+      "side": 1,
+      "message": "As it turns out, this also started to make my Windows builds (on \"a laptop with 2560x1600 screen and 100% scaling\") consistently fail CppunitTest_sw_ooxmlexport12 with\n\n  C:/lo-clang/core/sw/qa/extras/ooxmlexport/ooxmlexport12.cxx(523) : error : Assertion\n  Test name: testObjectCrossReference::TestBody\n  equality assertion failed\n  - Expected: Text 2\n  - Actual  : 2\n",
+      "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
