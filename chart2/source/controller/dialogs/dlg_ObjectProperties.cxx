@@ -31,6 +31,7 @@
 #include "tp_TitleRotation.hxx"
 #include "tp_PolarOptions.hxx"
 #include "tp_DataPointOption.hxx"
+#include "tp_DataTable.hxx"
 #include <ResId.hxx>
 #include <ViewElementListProvider.hxx>
 #include <ChartModelHelper.hxx>
@@ -452,6 +453,12 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
         case OBJECTTYPE_AXIS_UNITLABEL:
         case OBJECTTYPE_UNKNOWN:
             // nothing
+            break;
+        case OBJECTTYPE_DATA_TABLE:
+            AddTabPage("datatable", SchResId(STR_PAGE_DATA_TABLE), DataTableTabPage::Create);
+            AddTabPage("border", SchResId(STR_PAGE_LINE), RID_SVXPAGE_LINE);
+            AddTabPage("area", SchResId(STR_PAGE_AREA), RID_SVXPAGE_AREA);
+            AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
             break;
         case OBJECTTYPE_DATA_CURVE_EQUATION:
             AddTabPage("border", SchResId(STR_PAGE_BORDER), RID_SVXPAGE_LINE);

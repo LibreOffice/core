@@ -68,6 +68,7 @@ enum ObjectType
     OBJECTTYPE_DATA_STOCK_RANGE,
     OBJECTTYPE_DATA_STOCK_LOSS,
     OBJECTTYPE_DATA_STOCK_GAIN,
+    OBJECTTYPE_DATA_TABLE,
     OBJECTTYPE_SHAPE,
     OBJECTTYPE_UNKNOWN
 };
@@ -145,6 +146,9 @@ public:
     static OUString createParticleForLegend( ChartModel& rModel );
 
     static OUString createParticleForLegend(
+        const css::uno::Reference< css::frame::XModel >& xChartModel );
+
+    static OUString createParticleForDataTable(
         const css::uno::Reference< css::frame::XModel >& xChartModel );
 
     static OUString addChildParticle( std::u16string_view rParticle, std::u16string_view rChildParticle );

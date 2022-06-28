@@ -310,6 +310,9 @@ OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
         case OBJECTTYPE_DATA_CURVE_EQUATION:
                 aRet=SchResId(STR_OBJECT_CURVE_EQUATION);
                 break;
+        case OBJECTTYPE_DATA_TABLE:
+                aRet=SchResId(STR_OBJECT_DATA_TABLE);
+                break;
         default: //OBJECTTYPE_UNKNOWN
             ;
     }
