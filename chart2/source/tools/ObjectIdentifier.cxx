@@ -322,6 +322,12 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
 
         }
 
+        uno::Reference<chart2::XDataTable> xDataTable(xObject, uno::UNO_QUERY);
+        if (xDataTable.is())
+        {
+            return createClassifiedIdentifierForParticle(createParticleForDataTable(xChartModel));
+        }
+
         //axis
         Reference< XAxis > xAxis( xObject, uno::UNO_QUERY );
         if( xAxis.is() )
@@ -542,6 +548,11 @@ OUString ObjectIdentifier::createParticleForLegend(
     //todo: if more than one diagram is implemented, find the correct diagram which is owner of the given legend
 
     return ObjectIdentifier::createParticleForDiagram() + ":" + getStringForType( OBJECTTYPE_LEGEND ) + "=";
+}
+
+OUString ObjectIdentifier::createParticleForDataTable(const rtl::Reference<::chart::ChartModel>& /* xChartModel */)
+{
+    return ObjectIdentifier::createParticleForDiagram() + ":" + getStringForType(OBJECTTYPE_DATA_TABLE) + "=";
 }
 
 OUString ObjectIdentifier::createClassifiedIdentifier(
@@ -870,6 +881,9 @@ OUString ObjectIdentifier::getStringForType( ObjectType eObjectType )
         case OBJECTTYPE_DATA_STOCK_GAIN:
                 aRet="StockGain";
                 break;
+        case OBJECTTYPE_DATA_TABLE:
+                aRet="DataTable";
+                break;
         default: //OBJECTTYPE_UNKNOWN
             ;
     }
@@ -941,6 +955,8 @@ ObjectType ObjectIdentifier::getObjectType( std::u16string_view aCID )
         eRet = OBJECTTYPE_DATA_STOCK_LOSS;
     else if( o3tl::starts_with(aCID, u"StockGain") )
         eRet = OBJECTTYPE_DATA_STOCK_GAIN;
+    else if( o3tl::starts_with(aCID, u"DataTable") )
+        eRet = OBJECTTYPE_DATA_TABLE;
     else
         eRet = OBJECTTYPE_UNKNOWN;
 
@@ -1239,6 +1255,13 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                         if(xChartType.is())
                             xChartType->getPropertyValue( "WhiteDay" ) >>= xObjectProperties;
                     }
+                    break;
+            case OBJECTTYPE_DATA_TABLE:
+                    {
+                        if (xDiagram.is())
+                            xObjectProperties.set(xDiagram->getDataTable(), uno::UNO_QUERY);
+                    }
+                break;
                     break;
             default: //OBJECTTYPE_UNKNOWN
                     break;
