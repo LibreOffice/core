@@ -1486,6 +1486,12 @@ void CallbackFlushHandler::dumpState(rtl::OStringBuffer &rState)
     }
 }
 
+void CallbackFlushHandler::libreOfficeKitViewAddPendingInvalidateTiles()
+{
+    // Invoke() will call flushPendingLOKInvalidateTiles(), so just make sure the timer is active.
+    startTimer();
+}
+
 void CallbackFlushHandler::queue(const int type, const char* data)
 {
     CallbackData callbackData(data);

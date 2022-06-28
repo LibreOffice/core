@@ -50,6 +50,9 @@ public:
     virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId,
                                                             int nSourceViewId)
         = 0;
+    // There are pending invalidate tiles calls that need to be processed.
+    // A call to SfxViewShell::flushPendingLOKInvalidateTiles() should be scheduled.
+    virtual void libreOfficeKitViewAddPendingInvalidateTiles() = 0;
     virtual void dumpState(rtl::OStringBuffer& rState) = 0;
 };
 

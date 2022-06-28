@@ -118,6 +118,7 @@ namespace desktop {
         virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) override;
         virtual void libreOfficeKitViewUpdatedCallback(int nType) override;
         virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) override;
+        virtual void libreOfficeKitViewAddPendingInvalidateTiles() override;
         virtual void dumpState(rtl::OStringBuffer &rState) override;
 
     private:
