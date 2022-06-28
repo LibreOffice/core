@@ -52,6 +52,24 @@
       "parentUuid": "d93f363d_0e31f148",
       "revId": "65ba84ea7f1b06333f4be72150254615db1f8d3b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a4a5377_a6ed9987",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-28T15:44:11Z",
+      "side": 1,
+      "message": "Ok, Current help patch will be correct for 7.4 then.\nWith time to experiment/see what changes are needed for master.",
+      "parentUuid": "86bb8f81_2fc5a136",
+      "revId": "65ba84ea7f1b06333f4be72150254615db1f8d3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
