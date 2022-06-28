@@ -131,6 +131,10 @@ public:
 
 inline void SvxLRSpaceItem::SetLeft( const tools::Long nL, const sal_uInt16 nProp )
 {
+    if (0 == nL)
+    {
+        SetExplicitZeroMarginValLeft(true);
+    }
     nLeftMargin = (nL * nProp) / 100;
     nTxtLeft = nLeftMargin;
     nPropLeftMargin = nProp;
