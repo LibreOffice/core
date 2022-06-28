@@ -75,7 +75,7 @@ sal_uInt32 TableManager::getGridAfter(sal_uInt32 nRow)
 {
     if (!isInTable())
     {
-        SAL_WARN("writerfilter", "TableManager::getGridBefore called while not in table");
+        SAL_WARN("writerfilter", "TableManager::getGridAfter called while not in table");
         return 0;
     }
     if (nRow >= mTableDataStack.top()->getRowCount())
