@@ -238,12 +238,19 @@ bool SalLayout::GetBoundRect(tools::Rectangle& rRect) const
         // get bounding rectangle of individual glyph
         if (pGlyph->GetGlyphBoundRect(pGlyphFont, aRectangle))
         {
-            // merge rectangle
-            aRectangle += Point(aPos.getX(), aPos.getY());
-            if (rRect.IsEmpty())
-                rRect = aRectangle;
-            else
-                rRect.Union(aRectangle);
+            if (!aRectangle.IsEmpty())
+            {
+                aRectangle.AdjustLeft(std::floor(aPos.getX()));
+                aRectangle.AdjustRight(std::ceil(aPos.getX()));
+                aRectangle.AdjustTop(std::floor(aPos.getY()));
+                aRectangle.AdjustBottom(std::ceil(aPos.getY()));
+
+                // merge rectangle
+                if (rRect.IsEmpty())
+                    rRect = aRectangle;
+                else
+                    rRect.Union(aRectangle);
+            }
             bRet = true;
         }
     }
