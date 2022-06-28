@@ -106,6 +106,12 @@ void TestLokCallbackWrapper::libreOfficeKitViewUpdatedCallbackPerViewId(int nTyp
     startTimer();
 }
 
+void TestLokCallbackWrapper::libreOfficeKitViewAddPendingInvalidateTiles()
+{
+    // Invoke() will call flushPendingLOKInvalidateTiles().
+    startTimer();
+}
+
 void TestLokCallbackWrapper::discardUpdatedTypes(int nType, int nViewId)
 {
     // If a callback is called directly with an event, drop the updated flag for it, since

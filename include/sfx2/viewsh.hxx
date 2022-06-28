@@ -350,10 +350,11 @@ public:
     virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
     virtual void libreOfficeKitViewCallbackWithViewId(int nType, const char* pPayload, int nViewId) const override;
     virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) const override;
-    // Performs any pending calls to libreOfficeKitViewInvalidateTilesCallback() as necessary.
-    virtual void flushPendingLOKInvalidateTiles();
     virtual void libreOfficeKitViewUpdatedCallback(int nType) const override;
     virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const override;
+    // Performs any pending calls to libreOfficeKitViewInvalidateTilesCallback() as necessary.
+    virtual void flushPendingLOKInvalidateTiles();
+    virtual void libreOfficeKitViewAddPendingInvalidateTiles() override;
     // Returns current payload for nType, after libreOfficeKitViewUpdatedCallback() or
     // libreOfficeKitViewUpdatedCallbackPerViewId() were called. If no payload should
     // be generated, the ignore flag should be set.

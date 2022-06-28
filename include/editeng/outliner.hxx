@@ -373,6 +373,7 @@ public:
     virtual void libreOfficeKitViewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart) const = 0;
     virtual void libreOfficeKitViewUpdatedCallback(int nType) const = 0;
     virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId, int nSourceViewId) const = 0;
+    virtual void libreOfficeKitViewAddPendingInvalidateTiles() = 0;
     virtual ViewShellId GetViewShellId() const = 0;
     virtual ViewShellDocId GetDocId() const = 0;
     /// Wrapper around SfxLokHelper::notifyOtherViews().
