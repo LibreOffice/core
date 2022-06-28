@@ -635,6 +635,12 @@ bool SvpGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap&
         return false;
     }
 
+    if (!rTR.mnSrcWidth || !rTR.mnSrcHeight)
+    {
+        SAL_WARN("vcl.gdi", "not possible to stretch nothing");
+        return true;
+    }
+
     // MM02 try to access buffered BitmapHelper
     std::shared_ptr<BitmapHelper> aSurface;
     tryToUseSourceBuffer(rSourceBitmap, aSurface);
