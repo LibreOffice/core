@@ -270,7 +270,7 @@ void SlideBackgroundFillPrimitive2D::create2DDecomposition(
     // create FillPrimitive2D with the geometry (the PolyPolygon) and
     // the page's definitonRange to:
     // - on one hand limit to geometry
-    // - on the other hand allow continutation of fill outside of
+    // - on the other hand allow continuation of fill outside of
     //   MasterPage's range
     const attribute::FillGradientAttribute aEmptyFillTransparenceGradient;
     const Primitive2DReference aCreatedFill(
