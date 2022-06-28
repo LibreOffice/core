@@ -51,7 +51,11 @@ bool TableManager::isIgnore() const { return isRowEnd(); }
 
 sal_uInt32 TableManager::getGridBefore(sal_uInt32 nRow)
 {
-    assert(isInTable());
+    if (!isInTable())
+    {
+        SAL_WARN("writerfilter", "TableManager::getGridBefore called while not in table");
+        return 0;
+    }
     if (nRow >= mTableDataStack.top()->getRowCount())
         return 0;
     return mTableDataStack.top()->getRow(nRow)->getGridBefore();
@@ -69,7 +73,11 @@ void TableManager::setCurrentGridBefore(sal_uInt32 nSkipGrids)
 
 sal_uInt32 TableManager::getGridAfter(sal_uInt32 nRow)
 {
-    assert(isInTable());
+    if (!isInTable())
+    {
+        SAL_WARN("writerfilter", "TableManager::getGridBefore called while not in table");
+        return 0;
+    }
     if (nRow >= mTableDataStack.top()->getRowCount())
         return 0;
     return mTableDataStack.top()->getRow(nRow)->getGridAfter();
