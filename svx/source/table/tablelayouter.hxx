@@ -115,7 +115,7 @@ public:
                             sal_Int32 nFirstCol,
                             sal_Int32 nLastCol,
                             const bool bOptimize,
-                            const bool bMinimize );
+                            bool bMinimize);
     void DistributeRows( ::tools::Rectangle& rArea,
                          sal_Int32 nFirstRow,
                          sal_Int32 nLastRow,

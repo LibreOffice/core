@@ -1138,7 +1138,7 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
                                        sal_Int32 nFirstCol,
                                        sal_Int32 nLastCol,
                                        const bool bOptimize,
-                                       const bool bMinimize )
+                                       bool bMinimize)
 {
     if( !mxTable.is() )
         return;
@@ -1189,6 +1189,9 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
             }
         }
         const sal_Int32 nDistributeExcess = nAllWidth - fAllWish;
+        if (nDistributeExcess < 0)
+            bMinimize = false;
+        double fProportionalWish = !fAllWish || nDistributeExcess > 0 ? 1 : nAllWidth / fAllWish;
 
         sal_Int32 nWidth = nEqualWidth;
         for( sal_Int32 nCol = nFirstCol; nCol <= nLastCol; ++nCol )
@@ -1197,19 +1200,20 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
                 nWidth = nAllWidth; // last column gets rounding/logic errors
             else if ( (bMinimize || bOptimize) && fAllWish )
             {
-                //pass 2 - first come, first served when requesting from the
-                //  unneeded pool, or proportionally allocate excess.
+                //pass 2 - proportionately allocate excess and reclaimed column widths.
                 const sal_Int32 nIndex = nCol - nFirstCol;
-                if ( aWish[nIndex] > nEqualWidth + nUnused )
+                const sal_Int32 nProportionalWish = std::max(getMinimumColumnWidth(nIndex),
+                    static_cast<sal_Int32>(aWish[nIndex] * fProportionalWish));
+                if (nProportionalWish > nEqualWidth + nUnused)
                 {
                     nWidth = nEqualWidth + nUnused;
                     nUnused = 0;
                 }
                 else
                 {
-                    nWidth = aWish[nIndex];
-                    if ( aWish[nIndex] > nEqualWidth )
-                        nUnused -= aWish[nIndex] - nEqualWidth;
+                    nWidth = nProportionalWish;
+                    if (aWish[nIndex] > nEqualWidth)
+                        nUnused -= nProportionalWish - nEqualWidth;
 
                     if ( !bMinimize && nDistributeExcess > 0 )
                         nWidth += nWidth / fAllWish * nDistributeExcess;
