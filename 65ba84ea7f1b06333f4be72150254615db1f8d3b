@@ -16,6 +16,24 @@
       "message": "Seth - do you build LO from git? It might actually be harder to explain what minimize/optimize do in Writer after this, but in general it \"distributes the columns proportionally\" without any respect to symmetry / guaranteed minimums.\n\nSince columns aren\u0027t so concerned with symmetry, this algorithm is probably better for content fitting.",
       "revId": "65ba84ea7f1b06333f4be72150254615db1f8d3b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d93f363d_0e31f148",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-28T11:55:16Z",
+      "side": 1,
+      "message": "- Will this be part of 7.4?  \n- Is this both minimal and optimize column, or does this change only affect Step 3 in optimize column?\n- Was this change inspired by the analysis in help? (supporting my secret hypothesis of the value of making behavior changes and UI design concurrently with help writing).",
+      "parentUuid": "41e86436_6ea3d6bb",
+      "revId": "65ba84ea7f1b06333f4be72150254615db1f8d3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
