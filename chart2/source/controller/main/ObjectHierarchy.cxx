@@ -217,6 +217,14 @@ void ObjectHierarchy::createAxesTree(
     if( !bSupportsAxesGrids )
         return;
 
+    // Data Table
+    uno::Reference<chart2::XDataTable> xDataTable = xDiagram->getDataTable();
+    if (xDataTable.is())
+    {
+        rContainer.push_back(ObjectIdentifier::createClassifiedIdentifierForObject(xDataTable, xChartDoc));
+    }
+
+    // Axes
     std::vector< rtl::Reference< Axis > > aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ true );
     if( !m_bOrderingForElementSelector )
     {

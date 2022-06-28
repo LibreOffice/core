@@ -194,7 +194,14 @@ constexpr TypedWhichId<SfxStringItem>       SCHATTR_REGRESSION_YNAME            
 constexpr TypedWhichId<SfxInt32Item>        SCHATTR_REGRESSION_MOVING_TYPE          (SCHATTR_REGRESSION_START + 12);
 constexpr sal_uInt16                        SCHATTR_REGRESSION_END                  (SCHATTR_REGRESSION_MOVING_TYPE);
 
-constexpr sal_uInt16 SCHATTR_END (SCHATTR_REGRESSION_END);
+constexpr sal_uInt16                        SCHATTR_DATA_TABLE_START                (SCHATTR_REGRESSION_END + 1);
+constexpr TypedWhichId<SfxBoolItem>         SCHATTR_DATA_TABLE_HORIZONTAL_BORDER    (SCHATTR_DATA_TABLE_START + 0);
+constexpr TypedWhichId<SfxBoolItem>         SCHATTR_DATA_TABLE_VERTICAL_BORDER      (SCHATTR_DATA_TABLE_START + 1);
+constexpr TypedWhichId<SfxBoolItem>         SCHATTR_DATA_TABLE_OUTLINE              (SCHATTR_DATA_TABLE_START + 2);
+constexpr TypedWhichId<SfxBoolItem>         SCHATTR_DATA_TABLE_KEYS                 (SCHATTR_DATA_TABLE_START + 3);
+constexpr sal_uInt16                        SCHATTR_DATA_TABLE_END                  (SCHATTR_DATA_TABLE_KEYS);
+
+constexpr sal_uInt16 SCHATTR_END (SCHATTR_DATA_TABLE_END);
 
 // values for Items
 

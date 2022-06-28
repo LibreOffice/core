@@ -138,6 +138,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/tp_DataLabel \
     chart2/source/controller/dialogs/tp_DataPointOption \
     chart2/source/controller/dialogs/tp_DataSource \
+    chart2/source/controller/dialogs/tp_DataTable \
     chart2/source/controller/dialogs/tp_ErrorBars \
     chart2/source/controller/dialogs/tp_LegendPosition \
     chart2/source/controller/dialogs/tp_PointGeometry \
@@ -153,6 +154,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/itemsetwrapper/AxisItemConverter \
     chart2/source/controller/itemsetwrapper/CharacterPropertyItemConverter \
     chart2/source/controller/itemsetwrapper/DataPointItemConverter \
+    chart2/source/controller/itemsetwrapper/DataTableItemConverter \
     chart2/source/controller/itemsetwrapper/ErrorBarItemConverter \
     chart2/source/controller/itemsetwrapper/GraphicPropertyItemConverter \
     chart2/source/controller/itemsetwrapper/ItemConverter \
