@@ -39,6 +39,7 @@ public:
     virtual void libreOfficeKitViewUpdatedCallback(int nType) override;
     virtual void libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nViewId,
                                                             int nSourceViewId) override;
+    virtual void libreOfficeKitViewAddPendingInvalidateTiles() override;
     virtual void Invoke() override;
 
 private:
