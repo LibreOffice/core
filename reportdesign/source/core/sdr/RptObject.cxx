@@ -389,8 +389,8 @@ void OObjectBase::SetPropsFromRect(const tools::Rectangle& _rRect)
     if ( pPage && !_rRect.IsEmpty() )
     {
         const uno::Reference<report::XSection>& xSection = pPage->getSection();
-        assert(_rRect.getHeight() >= 0);
-        const sal_uInt32 newHeight( ::std::max(tools::Long(0), _rRect.getHeight()+_rRect.Top()) );
+        assert(_rRect.getHalfOpenHeight() >= 0);
+        const sal_uInt32 newHeight( ::std::max(tools::Long(0), _rRect.getHalfOpenHeight()+_rRect.Top()) );
         if ( xSection.is() && ( newHeight > xSection->getHeight() ) )
             xSection->setHeight( newHeight );
 

@@ -884,7 +884,7 @@ double UserFormGeometryHelper::implGetSize( bool bHeight, bool bOuter ) const
         if( const vcl::Window* pWindow = VCLUnoHelper::GetWindow( mxWindow ) )
         {
             tools::Rectangle aOuterRect = pWindow->GetWindowExtentsRelative( nullptr );
-            aSizePixel = awt::Size( aOuterRect.getWidth(), aOuterRect.getHeight() );
+            aSizePixel = awt::Size( aOuterRect.getHalfOpenWidth(), aOuterRect.getHalfOpenHeight() );
         }
     }
 
@@ -911,8 +911,8 @@ void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOute
             if( !aOuterRect.IsEmpty() )
             {
                 awt::Rectangle aInnerRect = mxWindow->getPosSize();
-                sal_Int32 nDecorWidth = aOuterRect.getWidth() - aInnerRect.Width;
-                sal_Int32 nDecorHeight = aOuterRect.getHeight() - aInnerRect.Height;
+                sal_Int32 nDecorWidth = aOuterRect.getHalfOpenWidth() - aInnerRect.Width;
+                sal_Int32 nDecorHeight = aOuterRect.getHalfOpenHeight() - aInnerRect.Height;
                 aSizePixel.Width = ::std::max< sal_Int32 >( aSizePixel.Width - nDecorWidth, 1 );
                 aSizePixel.Height = ::std::max< sal_Int32 >( aSizePixel.Height - nDecorHeight, 1 );
             }

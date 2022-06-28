@@ -871,9 +871,9 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
                         bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
                                         , xModel
-                                        , awt::Rectangle(aObjectRect.Left(),aObjectRect.Top(),aObjectRect.getWidth(),aObjectRect.getHeight())
+                                        , awt::Rectangle(aObjectRect.Left(),aObjectRect.Top(),aObjectRect.getHalfOpenWidth(),aObjectRect.getHalfOpenHeight())
                                         , awt::Rectangle(aOldObjectRect.Left(), aOldObjectRect.Top(), 0, 0)
-                                        , awt::Rectangle(aPageRect.Left(),aPageRect.Top(),aPageRect.getWidth(),aPageRect.getHeight()) );
+                                        , awt::Rectangle(aPageRect.Left(),aPageRect.Top(),aPageRect.getHalfOpenWidth(),aPageRect.getHalfOpenHeight()) );
 
                         if( bMoved || bChanged )
                         {
@@ -1510,7 +1510,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                                 else
                                     bReturn = PositionAndSizeHelper::moveObject(
                                         m_aSelection.getSelectedCID(), getChartModel(),
-                                        awt::Rectangle(aRect.Left() + fShiftAmountX, aRect.Top() + fShiftAmountY, aRect.getWidth(), aRect.getHeight()),
+                                        awt::Rectangle(aRect.Left() + fShiftAmountX, aRect.Top() + fShiftAmountY, aRect.getHalfOpenWidth(), aRect.getHalfOpenHeight()),
                                         awt::Rectangle(aRect.Left(), aRect.Top(), 0, 0),
                                         awt::Rectangle(0, 0, aPageSize.Width, aPageSize.Height));
                             }

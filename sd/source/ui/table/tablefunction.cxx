@@ -118,10 +118,10 @@ static void InsertTableImpl(const DrawViewShell* pShell,
         }
         else
         {
-            if( aMaxSize.Height() > aWinRect.getHeight() )
-                aMaxSize.setHeight( aWinRect.getHeight() );
-            if( aMaxSize.Width() > aWinRect.getWidth() )
-                aMaxSize.setWidth( aWinRect.getWidth() );
+            if( aMaxSize.Height() > aWinRect.getHalfOpenHeight() )
+                aMaxSize.setHeight( aWinRect.getHalfOpenHeight() );
+            if( aMaxSize.Width() > aWinRect.getHalfOpenWidth() )
+                aMaxSize.setWidth( aWinRect.getHalfOpenWidth() );
         }
 
         if( aSize.Width() > aMaxSize.getWidth() )

@@ -676,8 +676,8 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 const bool bAllowSwap = pObj->GetObjIdentifier() != SdrObjKind::Line && pObj->GetObjIdentifier() != SdrObjKind::Group;
                 if ( bAllowSwap && (( nAngle > 4500_deg100 && nAngle <= 13500_deg100 ) || ( nAngle > 22500_deg100 && nAngle <= 31500_deg100 )) )
                 {
-                    const tools::Long nWidth  = aRect.getWidth();
-                    const tools::Long nHeight = aRect.getHeight();
+                    const tools::Long nWidth  = aRect.getHalfOpenWidth();
+                    const tools::Long nHeight = aRect.getHalfOpenHeight();
                     aRect.setWidth( nHeight );
                     aRect.setHeight( nWidth );
                     bHasHeightWidthSwapped = true;
@@ -749,10 +749,10 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
         {
             SwTwips nXOff;
             SwTwips nYOff;
-            SwTwips nSnapWidth = pObj->GetSnapRect().getWidth();
-            SwTwips nSnapHeight = pObj->GetSnapRect().getHeight();
-            SwTwips nLogicWidth = pObj->GetLogicRect().getWidth();
-            SwTwips nLogicHeight = pObj->GetLogicRect().getHeight();
+            SwTwips nSnapWidth = pObj->GetSnapRect().getHalfOpenWidth();
+            SwTwips nSnapHeight = pObj->GetSnapRect().getHalfOpenHeight();
+            SwTwips nLogicWidth = pObj->GetLogicRect().getHalfOpenWidth();
+            SwTwips nLogicHeight = pObj->GetLogicRect().getHalfOpenHeight();
             // +1 for to compensate integer arithmetic rounding errors
             if(bHasHeightWidthSwapped)
             {

@@ -445,8 +445,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetGraphicSelection)
     pXTextDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, pHdl->GetPos().getX(), pHdl->GetPos().getY() + 1000);
     tools::Rectangle aShapeAfter = pObject->GetSnapRect();
     // Check that a resize happened, but aspect ratio is not kept.
-    CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
-    CPPUNIT_ASSERT_EQUAL(aShapeBefore.getHeight() + 1000, aShapeAfter.getHeight());
+    CPPUNIT_ASSERT_EQUAL(aShapeBefore.getHalfOpenWidth(), aShapeAfter.getHalfOpenWidth());
+    CPPUNIT_ASSERT_EQUAL(aShapeBefore.getHalfOpenHeight() + 1000, aShapeAfter.getHalfOpenHeight());
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testResetSelection)

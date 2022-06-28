@@ -70,8 +70,8 @@ namespace drawinglayer::primitive2d
 
                 aAdaptedTransform.translate(-aMtfTarget.Left(), -aMtfTarget.Top());
                 aAdaptedTransform.scale(
-                    aMtfTarget.getWidth() ? 1.0 / aMtfTarget.getWidth() : 1.0,
-                    aMtfTarget.getHeight() ? 1.0 / aMtfTarget.getHeight() : 1.0);
+                    aMtfTarget.getHalfOpenWidth() ? 1.0 / aMtfTarget.getHalfOpenWidth() : 1.0,
+                    aMtfTarget.getHalfOpenHeight() ? 1.0 / aMtfTarget.getHalfOpenHeight() : 1.0);
                 aAdaptedTransform = getTransform() * aAdaptedTransform;
 
                 // embed to target transformation
