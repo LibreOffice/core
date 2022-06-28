@@ -32,8 +32,8 @@ void Test::test_rectangle()
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetWidth());
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetHeight());
 
-        CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.getWidth());
-        CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.getHeight());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.getOpenWidth());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.getOpenHeight());
     }
 
     {
@@ -47,10 +47,10 @@ void Test::test_rectangle()
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetWidth());
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetHeight());
 
-        // getWidth and getHeight return the size that excludes one of the bounds,
+        // getOpenWidth and getOpenHeight return the size that excludes one of the bounds,
         // unlike the ctor and GetWidth / GetHeight that operate on inclusive size
-        CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.getWidth());
-        CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.getHeight());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.getOpenWidth());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.getOpenHeight());
 
         aRect.SetPosX(12);
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetHeight());

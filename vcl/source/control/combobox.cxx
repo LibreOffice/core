@@ -1012,7 +1012,7 @@ tools::Long ComboBox::getMaxWidthScrollBarAndDownButton() const
     if ( GetNativeControlRegion(ControlType::Combobox, ControlPart::ButtonDown,
         aArea, ControlState::NONE, aControlValue, aBound, aContent) )
     {
-        nButtonDownWidth = aContent.getWidth();
+        nButtonDownWidth = aContent.getOpenWidth();
     }
 
     tools::Long nScrollBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
@@ -1468,7 +1468,7 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
         aContent.Move(-aPoint.X(), -aPoint.Y());
 
         aBounds.aButtonPos = Point(aContent.Left(), nTop);
-        aBounds.aButtonSize = Size(aContent.getWidth(), (nBottom-nTop));
+        aBounds.aButtonSize = Size(aContent.getOpenWidth(), (nBottom-nTop));
 
         // adjust the size of the edit field
         if (m_rThis.GetNativeControlRegion(ControlType::Combobox, ControlPart::SubEdit,
@@ -1484,7 +1484,7 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
         else
         {
             // use the themes drop down size for the button
-            aBounds.aSubEditSize = Size(rOutSz.Width() - aContent.getWidth(), rOutSz.Height());
+            aBounds.aSubEditSize = Size(rOutSz.Width() - aContent.getOpenWidth(), rOutSz.Height());
         }
     }
     else

@@ -238,8 +238,8 @@ void ViewContactOfE3dScene::createObjectTransformation()
     // create 2d Object Transformation from relative point in 2d scene to world
     const tools::Rectangle aRectangle(GetE3dScene().GetSnapRect());
 
-    maObjectTransformation.set(0, 0, aRectangle.getWidth());
-    maObjectTransformation.set(1, 1, aRectangle.getHeight());
+    maObjectTransformation.set(0, 0, aRectangle.getOpenWidth());
+    maObjectTransformation.set(1, 1, aRectangle.getOpenHeight());
     maObjectTransformation.set(0, 2, aRectangle.Left());
     maObjectTransformation.set(1, 2, aRectangle.Top());
 }

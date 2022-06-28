@@ -588,7 +588,7 @@ IMPL_LINK(CustomAnimationList, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             if (mxTreeView->get_cursor(xEntry.get()))
             {
                 auto aRect = mxTreeView->get_row_area(*xEntry);
-                const Point aPos(aRect.getWidth() / 2, aRect.getHeight() / 2);
+                const Point aPos(aRect.getOpenWidth() / 2, aRect.getOpenHeight() / 2);
                 const CommandEvent aCEvt(aPos, CommandEventId::ContextMenu);
                 CommandHdl(aCEvt);
                 return true;

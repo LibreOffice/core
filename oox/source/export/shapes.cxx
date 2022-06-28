@@ -1712,14 +1712,14 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     }
 
     tools::Rectangle aRect( Point( aStartPoint.X, aStartPoint.Y ), Point( aEndPoint.X, aEndPoint.Y ) );
-    if( aRect.getWidth() < 0 ) {
+    if( aRect.getOpenWidth() < 0 ) {
         aRect.SetLeft(aEndPoint.X);
         aRect.setWidth( aStartPoint.X - aEndPoint.X );
         if (eConnectorType == ConnectorType_LINE)
             bFlipH = true;
     }
 
-    if( aRect.getHeight() < 0 ) {
+    if( aRect.getOpenHeight() < 0 ) {
         aRect.SetTop(aEndPoint.Y);
         aRect.setHeight( aStartPoint.Y - aEndPoint.Y );
         if (eConnectorType == ConnectorType_LINE)

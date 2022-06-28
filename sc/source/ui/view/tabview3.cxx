@@ -429,13 +429,13 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     tools::Rectangle aNewRowArea(0, aOldSize.getHeight(), aOldSize.getWidth(), aNewSize.getHeight());
 
     // Only invalidate if spreadsheet extended to the right
-    if (aNewColArea.getWidth())
+    if (aNewColArea.getOpenWidth())
     {
         SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), &aNewColArea);
     }
 
     // Only invalidate if spreadsheet extended to the bottom
-    if (aNewRowArea.getHeight())
+    if (aNewRowArea.getOpenHeight())
     {
         SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), &aNewRowArea);
     }

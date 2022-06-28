@@ -4507,8 +4507,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 && aObjName.match( "PowerPlusWaterMarkObject" ) )
                             {
                                 double fRatio = static_cast<double>(pDevice->GetTextHeight()) / nTextWidth;
-                                sal_Int32 nNewHeight = fRatio * aObjData.aBoundRect.getWidth();
-                                sal_Int32 nPaddingY = aObjData.aBoundRect.getHeight() - nNewHeight;
+                                sal_Int32 nNewHeight = fRatio * aObjData.aBoundRect.getOpenWidth();
+                                sal_Int32 nPaddingY = aObjData.aBoundRect.getOpenHeight() - nNewHeight;
 
                                 if ( nPaddingY > 0 )
                                     aObjData.aBoundRect.setHeight( nNewHeight );
@@ -4680,8 +4680,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         {
                             double fLogicXOfs(0.0); // LogicLeft_LO = LogicLeft_MS + fXLogicOfs
                             double fLogicYOfs(0.0);
-                            double fLogicPieWidth(aObjData.aBoundRect.getWidth());
-                            double fLogicPieHeight(aObjData.aBoundRect.getHeight());
+                            double fLogicPieWidth(aObjData.aBoundRect.getOpenWidth());
+                            double fLogicPieHeight(aObjData.aBoundRect.getOpenHeight());
                             double fLogicEllipseWidth(0.0); // to be LogicWidth_LO
                             double fLogicEllipseHeight(0.0);
                             if (aPieRect_MS.getWidth())

@@ -273,9 +273,9 @@ sal_Int32 PDFDocument::WriteAppearanceObject(tools::Rectangle& rSignatureRectang
     }
 
     aEditBuffer.WriteCharPtr("/BBox[0 0 ");
-    aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getWidth()));
+    aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getOpenWidth()));
     aEditBuffer.WriteCharPtr(" ");
-    aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getHeight()));
+    aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getOpenHeight()));
     aEditBuffer.WriteCharPtr("]\n/Length ");
 
     // Add the object to the doc-level edit buffer and update the offset.
@@ -329,9 +329,9 @@ sal_Int32 PDFDocument::WriteAnnotObject(PDFObjectElement const& rFirstPage, sal_
     m_aEditBuffer.WriteCharPtr(" 0 obj\n");
     m_aEditBuffer.WriteCharPtr("<</Type/Annot/Subtype/Widget/F 132\n");
     m_aEditBuffer.WriteCharPtr("/Rect[0 0 ");
-    m_aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getWidth()));
+    m_aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getOpenWidth()));
     m_aEditBuffer.WriteCharPtr(" ");
-    m_aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getHeight()));
+    m_aEditBuffer.WriteOString(OString::number(rSignatureRectangle.getOpenHeight()));
     m_aEditBuffer.WriteCharPtr("]\n");
     m_aEditBuffer.WriteCharPtr("/FT/Sig\n");
     m_aEditBuffer.WriteCharPtr("/P ");

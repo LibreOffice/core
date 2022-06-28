@@ -1297,7 +1297,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                     break;
 
                 const ::tools::Rectangle& aRect = pEmbeddedObj->GetVisArea();
-                awt::Rectangle aVisArea( aRect.Left(), aRect.Top(), aRect.getWidth(), aRect.getHeight() );
+                awt::Rectangle aVisArea( aRect.Left(), aRect.Top(), aRect.getOpenWidth(), aRect.getOpenHeight() );
                 aAny <<= aVisArea;
             }
             break;

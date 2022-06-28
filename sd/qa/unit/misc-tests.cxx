@@ -902,7 +902,7 @@ void SdMiscTest::testTdf131033()
 
     // Error was, that the 2D representation of the scene did not contain the default 20°
     // rotation of the new scene around x-axis and therefore was not high enough.
-    const double fSnapRectHeight = pObj->GetSnapRect().getHeight();
+    const double fSnapRectHeight = pObj->GetSnapRect().getOpenHeight();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("2D height", 7096.0, fSnapRectHeight, 1.0);
 
     xDocShRef->DoClose();

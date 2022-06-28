@@ -210,7 +210,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
         aPagePos.setX(convertTwipToMm100(aPagePos.X()));
         aPagePos.setY(convertTwipToMm100(aPagePos.Y()));
 
-        sal_Int32 nLOKViewWidth = 0.8 * convertTwipToMm100(pViewShell->getLOKVisibleArea().getWidth());
+        sal_Int32 nLOKViewWidth = 0.8 * convertTwipToMm100(pViewShell->getLOKVisibleArea().getOpenWidth());
         if (aFontworkSize.getWidth() > nLOKViewWidth)
         {
             double fScale = static_cast<double>(aFontworkSize.getWidth()) / nLOKViewWidth;

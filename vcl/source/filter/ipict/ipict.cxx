@@ -1337,8 +1337,8 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         //   before drawing some text and also to draw this text.
         // So using a too small region can lead to clip the end of the text ;
         //   but this can be discussable...
-        aRect.setWidth(aRect.getWidth()+1);
-        aRect.setHeight(aRect.getHeight()+1);
+        aRect.setWidth(aRect.getOpenWidth()+1);
+        aRect.setHeight(aRect.getOpenHeight()+1);
         pVirDev->SetClipRegion( vcl::Region( aRect ) );
         break;
     }

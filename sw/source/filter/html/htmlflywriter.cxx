@@ -932,9 +932,9 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
         const tools::Rectangle& rSnapRect = pObject->GetSnapRect();
         aFrameSize.emplace();
         aFrameSize->SetWidthSizeType(SwFrameSize::Fixed);
-        aFrameSize->SetWidth(rSnapRect.getWidth());
+        aFrameSize->SetWidth(rSnapRect.getOpenWidth());
         aFrameSize->SetHeightSizeType(SwFrameSize::Fixed);
-        aFrameSize->SetHeight(rSnapRect.getHeight());
+        aFrameSize->SetHeight(rSnapRect.getOpenHeight());
         pFSItem = &*aFrameSize;
     }
     if( (nFrameOptions & HtmlFrmOpts::Size) &&

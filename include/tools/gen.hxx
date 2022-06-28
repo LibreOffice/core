@@ -478,13 +478,12 @@ inline std::basic_ostream<charT, traits> & operator <<(
 ///
 /// If you have the misfortune of having to use this class, don't immediately
 /// despair but first take note that the uppercase GetWidth() / GetHeight()
-/// etc. methods interpret the interval as closed, while the lowercase
-/// getWidth() / getHeight() etc. methods interpret the interval as half-open.
-/// Ok, now is the time for despair.
+/// etc. methods interpret the interval as closed. To use the half open versions,
+/// use GetOpenWidth() / GetOpenHeight().
 ///
 /// If you want to work with Size, you must use the closed interval functions!
-/// And don't add getSize / setSize; this will probably just introduce bugs,
-/// especially when used in combination with list-initialization.
+/// And don't add GetOpenSize() / setSize; this will probably just introduce
+/// bugs, especially when used in combination with list-initialization.
 ///
 /// (Eventually you might notice, that the same engineer was also working on
 /// Qt at some point; see documentation on QRect::bottom / QRect::right ;-).
@@ -579,9 +578,9 @@ public:
     tools::Long         getX() const { return nLeft; }
     tools::Long         getY() const { return nTop; }
     /// Returns the difference between right and left, assuming the range includes one end, but not the other.
-    tools::Long getWidth() const { return Right() - Left(); }
+    tools::Long getOpenWidth() const { return Right() - Left(); }
     /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
-    tools::Long getHeight() const { return Bottom() - Top(); }
+    tools::Long getOpenHeight() const { return Bottom() - Top(); }
     void                setWidth( tools::Long n ) { nRight = nLeft + n; }
     void                setHeight( tools::Long n ) { nBottom = nTop + n; }
     /// Returns the string representation of the rectangle, format is "x, y, width, height".
