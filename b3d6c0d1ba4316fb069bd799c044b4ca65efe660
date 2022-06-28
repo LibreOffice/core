@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1df00de_82c5e605",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-28T01:25:00Z",
+      "side": 1,
+      "message": "I\u0027m not sure anyone can really understand the interaction of m_pCurrentCursor and especial how it intersects with IsTableMode.\n\nI allowed a few silly mistakes as I was developing this, and was happy that each one proved to hit a unit test failure. (The first was m_pCurrentCursor \u003d GetNext() instead of GetPrev().  The other was ignoring when TableMode passed its Cursor.)\n\nm_pCurrentCursor must always be valid. I saw a few dynamic_casts, but compiling didn\u0027t allow those to be changed to static_cast. TableMode fails the dynamic_cast these, so that is how I avoided the situation.\n\nIn this reverse-cell-select, the very first item was a bDel of pCurrentCursor, so changing to GetPrev() goes to the end of the loop - the last item. That for sure will not be bDel, so that solves the major false-selection problem in tables.\n\n",
+      "revId": "b3d6c0d1ba4316fb069bd799c044b4ca65efe660",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
