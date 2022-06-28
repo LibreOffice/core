@@ -152,10 +152,6 @@ bool SwEditShell::SelectionHasNumber() const
     bool bResult = false;
     for (SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
-        // If in table cells select mode, ignore the cells that aren't actually selected
-        if (IsTableMode() && !rPaM.HasMark())
-            continue;
-
         SwNodeOffset nStt = rPaM.Start()->nNode.GetIndex();
         SwNodeOffset nEnd = rPaM.End()->nNode.GetIndex();
         for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
@@ -191,9 +187,6 @@ bool SwEditShell::SelectionHasBullet() const
     bool bResult = false;
     for (SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
-        if (IsTableMode() && !rPaM.HasMark())
-            continue;
-
         SwNodeOffset nStt = rPaM.Start()->nNode.GetIndex();
         SwNodeOffset nEnd = rPaM.End()->nNode.GetIndex();
         for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
@@ -265,9 +258,6 @@ void SwEditShell::DelNumRules()
         GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
         for (SwPaM& rPaM : pCursor->GetRingContainer())
         {
-            if (IsTableMode() && !rPaM.HasMark())
-                continue;
-
             GetDoc()->DelNumRules(rPaM, GetLayout());
         }
         GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
@@ -705,19 +695,7 @@ sal_uInt8 SwEditShell::GetNumLevel() const
 
 const SwNumRule* SwEditShell::GetNumRuleAtCurrCursorPos() const
 {
-    SwPaM* pCursor = GetCursor();
-    if (IsTableMode() && pCursor->IsMultiSelection() )
-    {
-        // Find the first valid position
-        for (SwPaM& rPaM : pCursor->GetRingContainer())
-        {
-            if (!rPaM.HasMark())
-                continue;
-            pCursor = &rPaM;
-            break;
-        }
-    }
-    SwPosition pos(*pCursor->GetPoint());
+    SwPosition pos(*GetCursor()->GetPoint());
     return SwDoc::GetNumRuleAtPos( pos, GetLayout() );
 }
 
@@ -774,9 +752,6 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
         OUString sContinuedListId(rContinuedListId);
         for (SwPaM& rPaM : pCursor->GetRingContainer())
         {
-            if (IsTableMode() && !rPaM.HasMark())
-                continue;
-
             OUString sListId = GetDoc()->SetNumRule(rPaM, rRule,
                                   bCreateNewList, GetLayout(), sContinuedListId,
                                   true, bResetIndentAttrs );
