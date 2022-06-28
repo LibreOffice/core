@@ -121,7 +121,7 @@ void FormFieldButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     Point aButtonPos(aFrameRect.TopLeft());
     aButtonPos.AdjustX(aFrameRect.GetSize().getWidth() - 1);
     Size aButtonSize(aFrameRect.GetSize());
-    aButtonSize.setWidth(GetSizePixel().getWidth() - aFrameRect.getWidth() - nPadding);
+    aButtonSize.setWidth(GetSizePixel().getWidth() - aFrameRect.getOpenWidth() - nPadding);
     const tools::Rectangle aButtonRect(tools::Rectangle(aButtonPos, aButtonSize));
 
     // Background & border

@@ -1010,8 +1010,8 @@ css::awt::Rectangle VCLXToolkit::getWorkArea(  )
     css::awt::Rectangle aNotherRect;
     aNotherRect.X = aWorkRect.Left();
     aNotherRect.Y = aWorkRect.Top();
-    aNotherRect.Width = aWorkRect.getWidth();
-    aNotherRect.Height = aWorkRect.getHeight();
+    aNotherRect.Width = aWorkRect.getOpenWidth();
+    aNotherRect.Height = aWorkRect.getOpenHeight();
     return aNotherRect;
 }
 

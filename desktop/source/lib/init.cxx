@@ -483,7 +483,7 @@ tools::Rectangle RectangleAndPart::SanitizedRectangle(tools::Long nLeft, tools::
 
 tools::Rectangle RectangleAndPart::SanitizedRectangle(const tools::Rectangle& rect)
 {
-    return SanitizedRectangle(rect.Left(), rect.Top(), rect.getWidth(), rect.getHeight());
+    return SanitizedRectangle(rect.Left(), rect.Top(), rect.getOpenWidth(), rect.getOpenHeight());
 }
 
 const std::string& CallbackFlushHandler::CallbackData::getPayload() const

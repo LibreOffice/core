@@ -158,8 +158,8 @@ void lcl_calculateMSOBaseRectangle(const SdrObject& rObj, double& rfMSOLeft, dou
     // directly usable as 'base rectangle'.
     double fCenterX = (rObj.GetSnapRect().Left() + rObj.GetSnapRect().Right()) / 2.0;
     double fCenterY = (rObj.GetSnapRect().Top() + rObj.GetSnapRect().Bottom()) / 2.0;
-    double fHalfWidth = rObj.GetLogicRect().getWidth() / 2.0;
-    double fHalfHeight = rObj.GetLogicRect().getHeight() / 2.0;
+    double fHalfWidth = rObj.GetLogicRect().getOpenWidth() / 2.0;
+    double fHalfHeight = rObj.GetLogicRect().getOpenHeight() / 2.0;
 
     // MSO swaps width and height depending on rotation angle; exception: Word 2007 (vers 12) never
     // swaps width and height for images.
@@ -334,9 +334,9 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
             basegfx::B2DHomMatrix aTranslateToOrigin(
                 basegfx::utils::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
             aPolyPolygon.transform(aTranslateToOrigin);
-            const double fWidth(pSdrObj->GetLogicRect().getWidth());
+            const double fWidth(pSdrObj->GetLogicRect().getOpenWidth());
             double fScaleX = fWidth == 0.0 ? 1.0 : 21600.0 / fWidth;
-            const double fHeight(pSdrObj->GetLogicRect().getHeight());
+            const double fHeight(pSdrObj->GetLogicRect().getOpenHeight());
             double fScaleY = fHeight == 0.0 ? 1.0 : 21600.0 / fHeight;
             basegfx::B2DHomMatrix aScale(basegfx::utils::createScaleB2DHomMatrix(fScaleX, fScaleY));
             aPolyPolygon.transform(aScale);
@@ -386,9 +386,9 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
                     basegfx::utils::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
                 aPolyPolygon.transform(aTranslateToOrigin);
 
-                const double fWidth(pSdrObj->GetLogicRect().getWidth());
+                const double fWidth(pSdrObj->GetLogicRect().getOpenWidth());
                 double fScaleX = fWidth == 0.0 ? 1.0 : 21600.0 / fWidth;
-                const double fHeight(pSdrObj->GetLogicRect().getHeight());
+                const double fHeight(pSdrObj->GetLogicRect().getOpenHeight());
                 double fScaleY = fHeight == 0.0 ? 1.0 : 21600.0 / fHeight;
                 basegfx::B2DHomMatrix aScale(
                     basegfx::utils::createScaleB2DHomMatrix(fScaleX, fScaleY));
@@ -1384,7 +1384,8 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     m_pImpl->getExport().DocxAttrOutput().GetSdtEndBefore(pSdrObject);
 
     sax_fastparser::FSHelperPtr pFS = m_pImpl->getSerializer();
-    Size aSize(pSdrObject->GetLogicRect().getWidth(), pSdrObject->GetLogicRect().getHeight());
+    Size aSize(pSdrObject->GetLogicRect().getOpenWidth(),
+               pSdrObject->GetLogicRect().getOpenHeight());
     startDMLAnchorInline(pFrameFormat, aSize);
 
     rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
@@ -1665,7 +1666,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
                                            uno::UNO_QUERY);
 
     // write necessary tags to document.xml
-    Size aSize(sdrObject->GetSnapRect().getWidth(), sdrObject->GetSnapRect().getHeight());
+    Size aSize(sdrObject->GetSnapRect().getOpenWidth(), sdrObject->GetSnapRect().getOpenHeight());
     startDMLAnchorInline(&rFrameFormat, aSize);
 
     m_pImpl->getDrawingML()->SetFS(m_pImpl->getSerializer());

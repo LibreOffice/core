@@ -2594,7 +2594,7 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
         tools::Rectangle(0, aOldSize.getHeight(), aNewSize.getWidth(), aNewSize.getHeight());
 
     // Only invalidate if spreadsheet has extended to the right or bottom
-    if ((bColumn && aNewArea.getWidth()) || (!bColumn && aNewArea.getHeight()))
+    if ((bColumn && aNewArea.getOpenWidth()) || (!bColumn && aNewArea.getOpenHeight()))
     {
         rTabView.UpdateSelectionOverlay();
         SfxLokHelper::notifyInvalidation(rViewData.GetViewShell(), &aNewArea);

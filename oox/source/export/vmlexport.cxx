@@ -390,7 +390,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                 nPaddingY += pItem->GetValue();
 
             tools::Rectangle aRect( rRect );
-            aRect.setHeight( aRect.getHeight() + nPaddingY );
+            aRect.setHeight( aRect.getOpenHeight() + nPaddingY );
             AddRectangleDimensions( m_ShapeStyle, aRect );
         }
         else

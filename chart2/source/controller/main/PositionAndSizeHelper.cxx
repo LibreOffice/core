@@ -46,7 +46,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     tools::Rectangle aPageRect( Point(rPageRectangle.X,rPageRectangle.Y), Size(rPageRectangle.Width,rPageRectangle.Height) );
 
     // every following branch divides by width and height
-    if (aPageRect.getWidth() == 0 || aPageRect.getHeight() == 0)
+    if (aPageRect.getOpenWidth() == 0 || aPageRect.getOpenHeight() == 0)
         return false;
 
     if( eObjectType==OBJECTTYPE_TITLE )
@@ -56,16 +56,16 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         aRelativePosition.Anchor = drawing::Alignment_CENTER;
         //the anchor point at the title object is top/middle
         Point aPos = aObjectRect.TopLeft();
-        aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getWidth())/2.0)/double(aPageRect.getWidth());
-        aRelativePosition.Secondary = (double(aPos.Y())+double(aObjectRect.getHeight())/2.0)/double(aPageRect.getHeight());
+        aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getOpenWidth())/2.0)/double(aPageRect.getOpenWidth());
+        aRelativePosition.Secondary = (double(aPos.Y())+double(aObjectRect.getOpenHeight())/2.0)/double(aPageRect.getOpenHeight());
         xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
     }
     else if( eObjectType == OBJECTTYPE_DATA_LABEL )
     {
         RelativePosition aAbsolutePosition;
         RelativePosition aCustomLabelPosition;
-        aAbsolutePosition.Primary = double(rOldPositionAndSize.X) / double(aPageRect.getWidth());
-        aAbsolutePosition.Secondary = double(rOldPositionAndSize.Y) / double(aPageRect.getHeight());
+        aAbsolutePosition.Primary = double(rOldPositionAndSize.X) / double(aPageRect.getOpenWidth());
+        aAbsolutePosition.Secondary = double(rOldPositionAndSize.Y) / double(aPageRect.getOpenHeight());
 
         if( xObjectProp->getPropertyValue("CustomLabelPosition") >>= aCustomLabelPosition )
         {
@@ -82,8 +82,8 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         else if( fRotation == 270.0 )
             aPos = aObjectRect.TopRight();
 
-        aCustomLabelPosition.Primary = double(aPos.X()) / double(aPageRect.getWidth()) - aAbsolutePosition.Primary;
-        aCustomLabelPosition.Secondary = double(aPos.Y()) / double(aPageRect.getHeight()) - aAbsolutePosition.Secondary;
+        aCustomLabelPosition.Primary = double(aPos.X()) / double(aPageRect.getOpenWidth()) - aAbsolutePosition.Primary;
+        aCustomLabelPosition.Secondary = double(aPos.Y()) / double(aPageRect.getOpenHeight()) - aAbsolutePosition.Secondary;
         xObjectProp->setPropertyValue("CustomLabelPosition", uno::Any(aCustomLabelPosition));
     }
     else if( eObjectType==OBJECTTYPE_DATA_CURVE_EQUATION )
@@ -93,8 +93,8 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         //the anchor point at the title object is top/middle
         Point aPos = aObjectRect.TopLeft();
-        aRelativePosition.Primary = double(aPos.X())/double(aPageRect.getWidth());
-        aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getHeight());
+        aRelativePosition.Primary = double(aPos.X())/double(aPageRect.getOpenWidth());
+        aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getOpenHeight());
         xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
     }
     else if(eObjectType==OBJECTTYPE_LEGEND)
@@ -106,21 +106,21 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
 
         aRelativePosition.Primary =
             static_cast< double >( aAnchor.X()) /
-            static_cast< double >( aPageRect.getWidth() );
+            static_cast< double >( aPageRect.getOpenWidth() );
         aRelativePosition.Secondary =
             static_cast< double >( aAnchor.Y()) /
-            static_cast< double >( aPageRect.getHeight());
+            static_cast< double >( aPageRect.getOpenHeight());
 
         xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
 
         aRelativeSize.Primary =
-            static_cast< double >( aObjectRect.getWidth()) /
-            static_cast< double >( aPageRect.getWidth() );
+            static_cast< double >( aObjectRect.getOpenWidth()) /
+            static_cast< double >( aPageRect.getOpenWidth() );
         if (aRelativeSize.Primary > 1.0)
             aRelativeSize.Primary = 1.0;
         aRelativeSize.Secondary =
-            static_cast< double >( aObjectRect.getHeight()) /
-            static_cast< double >( aPageRect.getHeight());
+            static_cast< double >( aObjectRect.getOpenHeight()) /
+            static_cast< double >( aPageRect.getOpenHeight());
         if (aRelativeSize.Secondary > 1.0)
             aRelativeSize.Secondary = 1.0;
 
@@ -135,16 +135,16 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         aRelativePosition.Anchor = drawing::Alignment_CENTER;
 
         Point aPos = aObjectRect.Center();
-        aRelativePosition.Primary = double(aPos.X())/double(aPageRect.getWidth());
-        aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getHeight());
+        aRelativePosition.Primary = double(aPos.X())/double(aPageRect.getOpenWidth());
+        aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getOpenHeight());
         xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
 
         //set size:
         RelativeSize aRelativeSize;
         //the anchor points for the diagram are in the middle of the diagram
         //and in the middle of the page
-        aRelativeSize.Primary = double(aObjectRect.getWidth())/double(aPageRect.getWidth());
-        aRelativeSize.Secondary = double(aObjectRect.getHeight())/double(aPageRect.getHeight());
+        aRelativeSize.Primary = double(aObjectRect.getOpenWidth())/double(aPageRect.getOpenWidth());
+        aRelativeSize.Secondary = double(aObjectRect.getOpenHeight())/double(aPageRect.getOpenHeight());
         xObjectProp->setPropertyValue( "RelativeSize", uno::Any(aRelativeSize) );
     }
     else

@@ -100,14 +100,14 @@ static bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,tools::Long& _n
                             break;
                         case ControlModification::CENTER_HORIZONTAL:
                             if ( _aObjRect.Left() < aOverlappingRect.Left() )
-                                nXTemp += aOverlappingRect.Left() - aNewRect.Left() - aNewRect.getWidth();
+                                nXTemp += aOverlappingRect.Left() - aNewRect.Left() - aNewRect.getOpenWidth();
                             else
                                 nXTemp += aOverlappingRect.Right() - aNewRect.Left();
                             bMoveAllowed = _nXMov != nXTemp;
                             break;
                         case ControlModification::CENTER_VERTICAL:
                             if ( _aObjRect.Top() < aOverlappingRect.Top() )
-                                nYTemp += aOverlappingRect.Top() - aNewRect.Top() - aNewRect.getHeight();
+                                nYTemp += aOverlappingRect.Top() - aNewRect.Top() - aNewRect.getOpenHeight();
                             else
                                 nYTemp += aOverlappingRect.Bottom() - aNewRect.Top();
                             bMoveAllowed = _nYMov != nYTemp;
@@ -140,9 +140,9 @@ static bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,tools::Long& _n
                                             aNewRect.SetTop( aIntersectionRect.Bottom() );
                                         }
                                     }
-                                    nYTemp = aNewRect.getHeight();
+                                    nYTemp = aNewRect.getOpenHeight();
                                     bMoveAllowed = _nYMov != nYTemp;
-                                    nXTemp = aNewRect.getWidth();
+                                    nXTemp = aNewRect.getOpenWidth();
                                     bMoveAllowed = bMoveAllowed && _nXMov != nXTemp;
                                 }
                             }
@@ -651,19 +651,19 @@ void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,
         switch(_nControlModification)
         {
             case ControlModification::WIDTH_SMALLEST:
-                if ( _rResize.getWidth() > aObjRect.getWidth() )
+                if ( _rResize.getOpenWidth() > aObjRect.getOpenWidth() )
                     _rResize = aObjRect;
                 break;
             case ControlModification::HEIGHT_SMALLEST:
-                if ( _rResize.getHeight() > aObjRect.getHeight() )
+                if ( _rResize.getOpenHeight() > aObjRect.getOpenHeight() )
                     _rResize = aObjRect;
                 break;
             case ControlModification::WIDTH_GREATEST:
-                if ( _rResize.getWidth() < aObjRect.getWidth() )
+                if ( _rResize.getOpenWidth() < aObjRect.getOpenWidth() )
                     _rResize = aObjRect;
                 break;
             case ControlModification::HEIGHT_GREATEST:
-                if ( _rResize.getHeight() < aObjRect.getHeight() )
+                if ( _rResize.getOpenHeight() < aObjRect.getOpenHeight() )
                     _rResize = aObjRect;
                 break;
             default: break;
@@ -824,16 +824,16 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
             // resizing control
             if ( !aResize.IsEmpty() && aObjRect != aResize )
             {
-                nXMov = aResize.getWidth();
-                nYMov = aResize.getHeight();
+                nXMov = aResize.getOpenWidth();
+                nYMov = aResize.getOpenHeight();
                 switch(_nControlModification)
                 {
                     case ControlModification::WIDTH_GREATEST:
                     case ControlModification::HEIGHT_GREATEST:
                         if ( _nControlModification == ControlModification::HEIGHT_GREATEST )
-                            nXMov = aObjRect.getWidth();
+                            nXMov = aObjRect.getOpenWidth();
                         else if ( _nControlModification == ControlModification::WIDTH_GREATEST )
-                            nYMov = aObjRect.getHeight();
+                            nYMov = aObjRect.getOpenHeight();
                         lcl_getNewRectSize(aObjRect,nXMov,nYMov,pObj,pView,_nControlModification);
                         [[fallthrough]];
                     case ControlModification::WIDTH_SMALLEST:
@@ -845,9 +845,9 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
                             if ( pObjBase )
                             {
                                 if ( _nControlModification == ControlModification::WIDTH_SMALLEST || _nControlModification == ControlModification::WIDTH_GREATEST )
-                                    pObjBase->getReportComponent()->setSize(awt::Size(nXMov,aObjRect.getHeight()));
+                                    pObjBase->getReportComponent()->setSize(awt::Size(nXMov,aObjRect.getOpenHeight()));
                                 else if ( _nControlModification == ControlModification::HEIGHT_GREATEST || _nControlModification == ControlModification::HEIGHT_SMALLEST )
-                                    pObjBase->getReportComponent()->setSize(awt::Size(aObjRect.getWidth(),nYMov));
+                                    pObjBase->getReportComponent()->setSize(awt::Size(aObjRect.getOpenWidth(),nYMov));
                             }
                         }
                         break;
@@ -1463,7 +1463,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
                                     if ( nCode == KEY_UP )
                                     {
                                         aPos.setX( aMarkRect.Left() );
-                                        aPos.setY( aOver.Top() - aMarkRect.getHeight() );
+                                        aPos.setY( aOver.Top() - aMarkRect.getOpenHeight() );
                                         nY += (aPos.Y() - aMarkRect.Top());
                                     }
                                     else if ( nCode == KEY_DOWN )
@@ -1474,7 +1474,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
                                     }
                                     else if ( nCode == KEY_LEFT )
                                     {
-                                        aPos.setX( aOver.Left() - aMarkRect.getWidth() );
+                                        aPos.setX( aOver.Left() - aMarkRect.getOpenWidth() );
                                         aPos.setY( aMarkRect.Top() );
                                         nX += (aPos.X() - aMarkRect.Left());
                                     }
@@ -1553,8 +1553,8 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
                             case SdrHdlKind::Right:
                             case SdrHdlKind::LowerRight:
                             case SdrHdlKind::Lower:
-                                aNewRect.setWidth(aNewRect.getWidth() + nX);
-                                aNewRect.setHeight(aNewRect.getHeight() + nY);
+                                aNewRect.setWidth(aNewRect.getOpenWidth() + nX);
+                                aNewRect.setHeight(aNewRect.getOpenHeight() + nY);
                                 break;
                             default:
                                 break;

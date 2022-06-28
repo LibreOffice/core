@@ -255,8 +255,8 @@ void ScJumboSheetsTest::testTdf134553()
     // Without the fix in place, this test would have failed here
     CPPUNIT_ASSERT(pOleObj);
 
-    CPPUNIT_ASSERT_EQUAL(tools::Long(12741), pOleObj->GetLogicRect().getWidth());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(7620), pOleObj->GetLogicRect().getHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12741), pOleObj->GetLogicRect().getOpenWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(7620), pOleObj->GetLogicRect().getOpenHeight());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4574), pOleObj->GetLogicRect().getX());
     CPPUNIT_ASSERT_EQUAL(tools::Long(437), pOleObj->GetLogicRect().getY());
 
@@ -279,8 +279,8 @@ void ScJumboSheetsTest::testTdf134553()
     pOleObj = getSingleChartObject(rDoc, 0);
     CPPUNIT_ASSERT(pOleObj);
 
-    CPPUNIT_ASSERT_EQUAL(tools::Long(12741), pOleObj->GetLogicRect().getWidth());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(7620), pOleObj->GetLogicRect().getHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12741), pOleObj->GetLogicRect().getOpenWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(7620), pOleObj->GetLogicRect().getOpenHeight());
     CPPUNIT_ASSERT_EQUAL(tools::Long(5097), pOleObj->GetLogicRect().getX());
     // tdf#147458: Without the fix in place, this test would have failed with
     // - Expected: 1058

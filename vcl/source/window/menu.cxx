@@ -136,8 +136,8 @@ void lclDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Recta
 
     tools::Long heightOrig = height;
 
-    tools::Long x = rRect.Left() + (rRect.getWidth() - width)/2 + 1;
-    tools::Long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
+    tools::Long x = rRect.Left() + (rRect.getOpenWidth() - width)/2 + 1;
+    tools::Long y = rRect.Top() + (rRect.getOpenHeight() - height)/2 + 1;
     while( height >= 1)
     {
         rRenderContext.DrawRect( tools::Rectangle( x, y, x + linewidth, y ) );
@@ -1679,7 +1679,7 @@ void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const tools::R
     tools::Rectangle aBgRect(rRect);
     int nOuterSpaceX = ImplGetSVData()->maNWFData.mnMenuFormatBorderX;
     aBgRect.Move(SPACE_AROUND_TITLE, SPACE_AROUND_TITLE);
-    aBgRect.setWidth(aBgRect.getWidth() - 2 * SPACE_AROUND_TITLE - 2 * nOuterSpaceX);
+    aBgRect.setWidth(aBgRect.getOpenWidth() - 2 * SPACE_AROUND_TITLE - 2 * nOuterSpaceX);
     aBgRect.setHeight(nTitleHeight - 2 * SPACE_AROUND_TITLE);
     rRenderContext.DrawRect(aBgRect);
 
@@ -1687,7 +1687,7 @@ void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const tools::R
     Point aTextTopLeft(aBgRect.TopLeft());
     tools::Rectangle aTextBoundRect;
     rRenderContext.GetTextBoundRect( aTextBoundRect, aTitleText );
-    aTextTopLeft.AdjustX((aBgRect.getWidth() - aTextBoundRect.GetSize().Width()) / 2 );
+    aTextTopLeft.AdjustX((aBgRect.getOpenWidth() - aTextBoundRect.GetSize().Width()) / 2 );
     aTextTopLeft.AdjustY((aBgRect.GetHeight() - aTextBoundRect.GetSize().Height()) / 2
                         - aTextBoundRect.Top() );
     rRenderContext.DrawText(aTextTopLeft, aTitleText, 0, aTitleText.getLength());

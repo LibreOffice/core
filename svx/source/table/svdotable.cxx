@@ -1917,8 +1917,8 @@ void SdrTableObj::NbcSetLogicRect(const tools::Rectangle& rRect)
 {
     maLogicRect=rRect;
     ImpJustifyRect(maLogicRect);
-    const bool bWidth = maLogicRect.getWidth() != maRect.getWidth();
-    const bool bHeight = maLogicRect.getHeight() != maRect.getHeight();
+    const bool bWidth = maLogicRect.getOpenWidth() != maRect.getOpenWidth();
+    const bool bHeight = maLogicRect.getOpenHeight() != maRect.getOpenHeight();
     maRect = maLogicRect;
     if (mpImpl->mbSkipChangeLayout)
         // Avoid distributing newly available space between existing cells.
@@ -1932,7 +1932,7 @@ void SdrTableObj::NbcSetLogicRect(const tools::Rectangle& rRect)
 void SdrTableObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool /* bShrinkOnly = false */ )
 {
     tools::Rectangle aAdjustRect( rMaxRect );
-    aAdjustRect.setHeight( GetLogicRect().getHeight() );
+    aAdjustRect.setHeight( GetLogicRect().getOpenHeight() );
     SetLogicRect( aAdjustRect );
 }
 
