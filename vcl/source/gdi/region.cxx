@@ -316,7 +316,8 @@ Region::Region(bool bIsNull)
 Region::Region(const tools::Rectangle& rRect)
 :   mbIsNull(false)
 {
-    mpRegionBand.reset(rRect.IsEmpty() ? nullptr : new RegionBand(rRect));
+    if (!rRect.IsEmpty())
+        mpRegionBand = std::make_shared<RegionBand>(rRect);
 }
 
 Region::Region(const tools::Polygon& rPolygon)
@@ -437,12 +438,12 @@ void vcl::Region::Move( tools::Long nHorzMove, tools::Long nVertMove )
     }
     else if(getRegionBand())
     {
-        RegionBand* pNew = new RegionBand(*getRegionBand());
+        std::shared_ptr<RegionBand> pNew = std::make_shared<RegionBand>(*getRegionBand());
 
         pNew->Move(nHorzMove, nVertMove);
         mpB2DPolyPolygon.reset();
         mpPolyPolygon.reset();
-        mpRegionBand.reset(pNew);
+        mpRegionBand = std::move(pNew);
     }
     else
     {
@@ -490,12 +491,12 @@ void vcl::Region::Scale( double fScaleX, double fScaleY )
     }
     else if(getRegionBand())
     {
-        RegionBand* pNew = new RegionBand(*getRegionBand());
+        std::shared_ptr<RegionBand> pNew = std::make_shared<RegionBand>(*getRegionBand());
 
         pNew->Scale(fScaleX, fScaleY);
         mpB2DPolyPolygon.reset();
         mpPolyPolygon.reset();
-        mpRegionBand.reset(pNew);
+        mpRegionBand = std::move(pNew);
     }
     else
     {
@@ -1447,7 +1448,10 @@ Region& vcl::Region::operator=( const tools::Rectangle& rRect )
 {
     mpB2DPolyPolygon.reset();
     mpPolyPolygon.reset();
-    mpRegionBand.reset(rRect.IsEmpty() ? nullptr : new RegionBand(rRect));
+    if (!rRect.IsEmpty())
+        mpRegionBand = std::make_shared<RegionBand>(rRect);
+    else
+        mpRegionBand.reset();
     mbIsNull = false;
 
     return *this;
