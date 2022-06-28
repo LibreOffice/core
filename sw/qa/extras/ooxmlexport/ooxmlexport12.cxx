@@ -990,7 +990,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122563)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 1);
     // Size of the embedded OLE spreadsheet was the bad "width:28.35pt;height:28.35pt"
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object/v:shape", "style",
-                "width:255.75pt;height:63.75pt;mso-wrap-distance-right:0pt");
+                "width:255.75pt;height:63.75pt");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf94628)

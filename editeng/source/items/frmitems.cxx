@@ -493,9 +493,7 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
         nPropFirstLineOffset == rOther.GetPropTextFirstLineOffset() &&
         nPropLeftMargin == rOther.GetPropLeft()  &&
         nPropRightMargin == rOther.GetPropRight() &&
-        bAutoFirst == rOther.IsAutoFirst() &&
-        bExplicitZeroMarginValRight == rOther.IsExplicitZeroMarginValRight() &&
-        bExplicitZeroMarginValLeft == rOther.IsExplicitZeroMarginValLeft() );
+        bAutoFirst == rOther.IsAutoFirst() );
 }
 
 SvxLRSpaceItem* SvxLRSpaceItem::Clone( SfxItemPool* ) const
