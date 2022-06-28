@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_DECOVIEW_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/outdev.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclenum.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -29,6 +28,7 @@
 namespace tools { class Rectangle; }
 class Point;
 class Color;
+class OutputDevice;
 
 // Flags for DrawSymbol()
 enum class DrawSymbolFlags
