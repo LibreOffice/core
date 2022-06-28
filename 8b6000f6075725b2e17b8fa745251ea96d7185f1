@@ -141,6 +141,24 @@
       "parentUuid": "38d08c4a_2b873e57",
       "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21375019_2dae0635",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-28T15:42:36Z",
+      "side": 1,
+      "message": "\u003e opening the testdoc in Writer, saving to DOCX and reloading would give \"2\" in the last line on the last (2nd) page.\n\nForgot to mention: this happens also in release 7.3, so not specific to the discussed change.",
+      "parentUuid": "bc64c9f8_09d21f1b",
+      "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
