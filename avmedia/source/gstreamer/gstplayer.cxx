@@ -442,6 +442,28 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
             "error: '" << error->message << "' debug: '"
                 << error_debug << "'");
     }
+    else if ( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_WARNING )
+    {
+        GError* error;
+        gchar* error_debug;
+
+        gst_message_parse_warning( message, &error, &error_debug );
+        SAL_WARN(
+            "avmedia.gstreamer",
+            "warning: '" << error->message << "' debug: '"
+                << error_debug << "'");
+    }
+    else if ( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_INFO )
+    {
+        GError* error;
+        gchar* error_debug;
+
+        gst_message_parse_info( message, &error, &error_debug );
+        SAL_WARN(
+            "avmedia.gstreamer",
+            "info: '" << error->message << "' debug: '"
+                << error_debug << "'");
+    }
 #endif
 
     if (!mbUseGtkSink)
@@ -612,6 +634,8 @@ void SAL_CALL Player::start()
     {
         gst_element_set_state( mpPlaybin, GST_STATE_PLAYING );
     }
+
+    SAL_INFO( "avmedia.gstreamer", AVVERSION "start " << mpPlaybin );
 }
 
 void SAL_CALL Player::stop()
@@ -636,8 +660,6 @@ sal_Bool SAL_CALL Player::isPlaying()
     {
         bRet = GST_STATE_TARGET(mpPlaybin) == GST_STATE_PLAYING;
     }
-
-    SAL_INFO( "avmedia.gstreamer", AVVERSION "isPlaying " << bRet );
 
     return bRet;
 }
