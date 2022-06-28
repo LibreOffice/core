@@ -286,7 +286,8 @@ namespace sdr::contact
         {
             const SdrObject& rReferencedObject = GetSwVirtFlyDrawObj().GetReferencedObj();
 
-            if(dynamic_cast<const SwFlyDrawObj*>( &rReferencedObject) !=  nullptr)
+            // check if it is a SwFlyDrawObj*
+            if (rReferencedObject.GetObjIdentifier() == SdrObjKind::SwFlyDrawObjIdentifier)
             {
                 // create an own specialized primitive which is used as repaint callpoint and HitTest
                 // for HitTest processor (see primitive implementation above)
@@ -311,7 +312,8 @@ basegfx::B2DRange SwVirtFlyDrawObj::getOuterBound() const
     basegfx::B2DRange aOuterRange;
     const SdrObject& rReferencedObject = GetReferencedObj();
 
-    if(dynamic_cast<const SwFlyDrawObj*>( &rReferencedObject) !=  nullptr)
+    // check if it is a SwFlyDrawObj*
+    if (rReferencedObject.GetObjIdentifier() == SdrObjKind::SwFlyDrawObjIdentifier)
     {
         const SwFlyFrame* pFlyFrame = GetFlyFrame();
 
