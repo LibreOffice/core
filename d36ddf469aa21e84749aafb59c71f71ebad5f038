@@ -16,6 +16,24 @@
       "message": "sx03249.png got a little blurry",
       "revId": "d36ddf469aa21e84749aafb59c71f71ebad5f038",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2d7d10e_a699867c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2022-06-28T13:33:51Z",
+      "side": 1,
+      "message": "Ah I love your eagle eye. The icon was taken from official Breeze. So the issue come from upstream. Will update it along with odp_16_8.png",
+      "parentUuid": "a689ef18_fae04594",
+      "revId": "d36ddf469aa21e84749aafb59c71f71ebad5f038",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
