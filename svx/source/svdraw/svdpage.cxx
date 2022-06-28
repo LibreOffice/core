@@ -229,11 +229,9 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 
 void SdrObjList::RecalcObjOrdNums()
 {
-    const size_t nCount = GetObjCount();
-    for (size_t no=0; no<nCount; ++no) {
-        SdrObject* pObj=GetObj(no);
-        pObj->SetOrdNum(no);
-    }
+    size_t no=0;
+    for (SdrObject* pObj : maList)
+        pObj->SetOrdNum(no++);
     mbObjOrdNumsDirty=false;
 }
 
