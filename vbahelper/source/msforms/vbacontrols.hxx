@@ -34,7 +34,7 @@ public:
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::awt::XControl >& xDialog,
-        const css::uno::Reference< css::frame::XModel >& xModel,
+        css::uno::Reference< css::frame::XModel > xModel,
         double fOffsetX, double fOffsetY );
     // XControls
     virtual void SAL_CALL Move( double cx, double cy ) override;

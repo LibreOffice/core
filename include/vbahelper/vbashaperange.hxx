@@ -62,7 +62,7 @@ private:
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::drawing::XShapes > const & getShapes() ;
 public:
-    ScVbaShapeRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, const css::uno::Reference< css::drawing::XDrawPage>& xDrawShape, const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaShapeRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, css::uno::Reference< css::drawing::XDrawPage> xDrawShape, css::uno::Reference< css::frame::XModel > xModel );
 
     // Methods
     virtual void SAL_CALL Select(  ) override;

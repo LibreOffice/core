@@ -47,7 +47,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl );
+    ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::container::XIndexAccess > xSettings, VbaCommandBarHelperRef pHelper, css::uno::Reference< css::container::XIndexAccess > xBarSettings, OUString sResourceUrl );
 
     // Attributes
     virtual OUString SAL_CALL getCaption() override;

@@ -76,7 +76,7 @@ protected:
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    ScVbaShape( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nType );
+    ScVbaShape( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape >  xShape, css::uno::Reference< css::drawing::XShapes > xShapes, css::uno::Reference< css::frame::XModel > xModel, sal_Int32 nType );
     virtual ~ScVbaShape() override;
 
     /// @throws css::uno::RuntimeException

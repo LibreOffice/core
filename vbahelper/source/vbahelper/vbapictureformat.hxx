@@ -40,7 +40,7 @@ private:
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape > const & xShape );
+    ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape > xShape );
 
     // Attributes
     virtual double SAL_CALL getBrightness() override;
