@@ -367,14 +367,30 @@ void ChartController::impl_PasteGraphic(
     xGraphicShape->SvxShape::setPropertyValue( "Graphic", uno::Any( xGraphic ));
 
     awt::Size aGraphicSize( 1000, 1000 );
+    bool bGotGraphicSize = false;
+    try
+    {
+        bGotGraphicSize = xGraphicShape->SvxShape::getPropertyValue( "Size100thMM") >>= aGraphicSize;
+    }
+    catch (css::beans::UnknownPropertyException& )
+    {}
     auto pChartWindow(GetChartWindow());
     // first try size in 100th mm, then pixel size
-    if( ! ( xGraphicShape->SvxShape::getPropertyValue( "Size100thMM") >>= aGraphicSize ) &&
-        ( ( xGraphicShape->SvxShape::getPropertyValue( "SizePixel") >>= aGraphicSize ) && pChartWindow ))
+    if( !bGotGraphicSize )
     {
-        ::Size aVCLSize( pChartWindow->PixelToLogic( Size( aGraphicSize.Width, aGraphicSize.Height )));
-        aGraphicSize.Width = aVCLSize.getWidth();
-        aGraphicSize.Height = aVCLSize.getHeight();
+        bool bGotSizePixel = false;
+        try
+        {
+            bGotSizePixel = xGraphicShape->SvxShape::getPropertyValue( "SizePixel") >>= aGraphicSize;
+        }
+        catch (css::beans::UnknownPropertyException& )
+        {}
+        if ( bGotSizePixel && pChartWindow )
+        {
+            ::Size aVCLSize( pChartWindow->PixelToLogic( Size( aGraphicSize.Width, aGraphicSize.Height )));
+            aGraphicSize.Width = aVCLSize.getWidth();
+            aGraphicSize.Height = aVCLSize.getHeight();
+        }
     }
     xGraphicShape->setSize( aGraphicSize );
     xGraphicShape->setPosition( awt::Point( 0, 0 ) );
