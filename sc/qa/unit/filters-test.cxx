@@ -502,19 +502,19 @@ void ScFiltersTest::testCommentSize()
     CPPUNIT_ASSERT(pCaption);
 
     const tools::Rectangle& rOldRect = pCaption->GetLogicRect();
-    CPPUNIT_ASSERT_EQUAL(tools::Long(2899), rOldRect.getWidth());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(939), rOldRect.getHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2899), rOldRect.getOpenWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(939), rOldRect.getOpenHeight());
 
     pNote->SetText(aPos, "first\nsecond\nthird");
 
     const tools::Rectangle& rNewRect = pCaption->GetLogicRect();
-    CPPUNIT_ASSERT_EQUAL(rOldRect.getWidth(), rNewRect.getWidth());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1605), rNewRect.getHeight());
+    CPPUNIT_ASSERT_EQUAL(rOldRect.getOpenWidth(), rNewRect.getOpenWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1605), rNewRect.getOpenHeight());
 
     rDoc.GetUndoManager()->Undo();
 
-    CPPUNIT_ASSERT_EQUAL(rOldRect.getWidth(), pCaption->GetLogicRect().getWidth());
-    CPPUNIT_ASSERT_EQUAL(rOldRect.getHeight(), pCaption->GetLogicRect().getHeight());
+    CPPUNIT_ASSERT_EQUAL(rOldRect.getOpenWidth(), pCaption->GetLogicRect().getOpenWidth());
+    CPPUNIT_ASSERT_EQUAL(rOldRect.getOpenHeight(), pCaption->GetLogicRect().getOpenHeight());
 
     xDocSh->DoClose();
 }

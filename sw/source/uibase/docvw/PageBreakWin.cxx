@@ -211,9 +211,9 @@ void SwPageBreakWin::PaintButton()
     aSeq[2].set(new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
                                         aBmpEx, B2DPoint(nImgOfstX, 1.0)));
 
-    double nTop = double(aRect.getHeight()) / 2.0;
+    double nTop = double(aRect.getOpenHeight()) / 2.0;
     double nBottom = nTop + 4.0;
-    double nLeft = aRect.getWidth() - ARROW_WIDTH - 6.0;
+    double nLeft = aRect.getOpenWidth() - ARROW_WIDTH - 6.0;
     if (bRtl)
         nLeft = ARROW_WIDTH - 2.0;
     double nRight = nLeft + 8.0;

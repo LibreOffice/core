@@ -255,22 +255,22 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                         SdrObject* pNewObj(pObject->CloneSdrObject(*m_pModel));
                         m_pPage->InsertObject(pNewObj, SAL_MAX_SIZE);
                         tools::Rectangle aRet(VCLPoint(rCopy->getPosition()),VCLSize(rCopy->getSize()));
-                        aRet.setHeight(aRet.getHeight() + 1);
-                        aRet.setWidth(aRet.getWidth() + 1);
+                        aRet.setHeight(aRet.getOpenHeight() + 1);
+                        aRet.setWidth(aRet.getOpenWidth() + 1);
                         bool bOverlapping = true;
                         while ( bOverlapping )
                         {
                             bOverlapping = isOver(aRet,*m_pPage,*m_pView,true,pNewObj) != nullptr;
                             if ( bOverlapping )
                             {
-                                aRet.Move(0,aRet.getHeight()+1);
+                                aRet.Move(0,aRet.getOpenHeight()+1);
                                 pNewObj->SetLogicRect(aRet);
                             }
                         }
                         m_pView->AddUndo( m_pView->GetModel()->GetSdrUndoFactory().CreateUndoNewObject( *pNewObj ) );
                         m_pView->MarkObj( pNewObj, m_pView->GetSdrPageView() );
-                        if ( m_xSection.is() && (o3tl::make_unsigned(aRet.getHeight() + aRet.Top()) > m_xSection->getHeight()) )
-                            m_xSection->setHeight(aRet.getHeight() + aRet.Top());
+                        if ( m_xSection.is() && (o3tl::make_unsigned(aRet.getOpenHeight() + aRet.Top()) > m_xSection->getHeight()) )
+                            m_xSection->setHeight(aRet.getOpenHeight() + aRet.Top());
                     }
                 }
             }
@@ -538,10 +538,10 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
                     xReportComponent->setPosition(aPos);
                     correctOverlapping(pObject,*this,false);
                     tools::Rectangle aRet(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
-                    aRet.setHeight(aRet.getHeight() + 1);
-                    aRet.setWidth(aRet.getWidth() + 1);
-                    if ( m_xSection.is() && (o3tl::make_unsigned(aRet.getHeight() + aRet.Top()) > m_xSection->getHeight()) )
-                        m_xSection->setHeight(aRet.getHeight() + aRet.Top());
+                    aRet.setHeight(aRet.getOpenHeight() + 1);
+                    aRet.setWidth(aRet.getOpenWidth() + 1);
+                    if ( m_xSection.is() && (o3tl::make_unsigned(aRet.getOpenHeight() + aRet.Top()) > m_xSection->getHeight()) )
+                        m_xSection->setHeight(aRet.getOpenHeight() + aRet.Top());
 
                     pObject->RecalcBoundRect();
                 }

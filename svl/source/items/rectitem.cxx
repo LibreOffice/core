@@ -80,14 +80,14 @@ bool SfxRectangleItem::QueryValue( css::uno::Any& rVal,
         {
             rVal <<= css::awt::Rectangle( aVal.Left(),
                                              aVal.Top(),
-                                             aVal.getWidth(),
-                                             aVal.getHeight() );
+                                             aVal.getOpenWidth(),
+                                             aVal.getOpenHeight() );
             break;
         }
         case MID_RECT_LEFT:  rVal <<= aVal.Left(); break;
         case MID_RECT_RIGHT: rVal <<= aVal.Top(); break;
-        case MID_WIDTH: rVal <<= aVal.getWidth(); break;
-        case MID_HEIGHT: rVal <<= aVal.getHeight(); break;
+        case MID_WIDTH: rVal <<= aVal.getOpenWidth(); break;
+        case MID_HEIGHT: rVal <<= aVal.getOpenHeight(); break;
         default: OSL_FAIL("Wrong MemberID!"); return false;
     }
 

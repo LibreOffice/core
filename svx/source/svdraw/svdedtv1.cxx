@@ -1489,7 +1489,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
             // multiple objects, range is collected in aRect
             aTransformation = basegfx::utils::createScaleTranslateB2DHomMatrix(
                 aRect.Left(), aRect.Top(),
-                aRect.getWidth(), aRect.getHeight());
+                aRect.getOpenWidth(), aRect.getOpenHeight());
         }
         else
         {

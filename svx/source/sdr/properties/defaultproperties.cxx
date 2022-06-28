@@ -163,8 +163,8 @@ namespace sdr::properties
                 {
                     // Shape is filled by a vector graphic: tell it our size as a hint.
                     basegfx::B2DTuple aSizeHint;
-                    aSizeHint.setX(GetSdrObject().GetSnapRect().getWidth());
-                    aSizeHint.setY(GetSdrObject().GetSnapRect().getHeight());
+                    aSizeHint.setX(GetSdrObject().GetSnapRect().getOpenWidth());
+                    aSizeHint.setY(GetSdrObject().GetSnapRect().getOpenHeight());
                     pVectorData->setSizeHint(aSizeHint);
                 }
             }

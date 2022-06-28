@@ -2374,8 +2374,8 @@ static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tool
 {
     const Image pImage(StockImage::Yes, CHEVRON);
     Size aImageSize = pImage.GetSizePixel();
-    tools::Long x = rRect.Left() + (rRect.getWidth() - aImageSize.Width())/2;
-    tools::Long y = rRect.Top() + (rRect.getHeight() - aImageSize.Height())/2;
+    tools::Long x = rRect.Left() + (rRect.getOpenWidth() - aImageSize.Width())/2;
+    tools::Long y = rRect.Top() + (rRect.getOpenHeight() - aImageSize.Height())/2;
     DrawImageFlags nImageStyle = DrawImageFlags::NONE;
 
     rRenderContext.DrawImage(Point(x,y), pImage, nImageStyle);
@@ -2401,10 +2401,10 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tool
 
     // the assumption is, that the width always specifies the size of the expected arrow.
     const tools::Long nMargin = round(2 * rRenderContext.GetDPIScaleFactor());
-    const tools::Long nSize = rDropDownRect.getWidth() - 2 * nMargin;
+    const tools::Long nSize = rDropDownRect.getOpenWidth() - 2 * nMargin;
     const tools::Long nHalfSize = (nSize + 1) / 2;
-    const tools::Long x = rDropDownRect.Left() + nMargin + (bRotate ? (rDropDownRect.getWidth() - nHalfSize) / 2 : 0);
-    const tools::Long y = rDropDownRect.Top() + nMargin + (rDropDownRect.getHeight() - (bRotate ? nSize : nHalfSize)) / 2;
+    const tools::Long x = rDropDownRect.Left() + nMargin + (bRotate ? (rDropDownRect.getOpenWidth() - nHalfSize) / 2 : 0);
+    const tools::Long y = rDropDownRect.Top() + nMargin + (rDropDownRect.getOpenHeight() - (bRotate ? nSize : nHalfSize)) / 2;
 
     aPoly.SetPoint(Point(x, y), 0);
     if (bRotate) // >
@@ -2672,7 +2672,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
         }
         else
         {
-            nImageOffX += (nBtnWidth-(bDropDown ? aDropDownRect.getWidth() : 0)+SMALLBUTTON_OFF_NORMAL_X-aImageSize.Width())/2;
+            nImageOffX += (nBtnWidth-(bDropDown ? aDropDownRect.getOpenWidth() : 0)+SMALLBUTTON_OFF_NORMAL_X-aImageSize.Width())/2;
             if ( meTextPosition == ToolBoxTextPosition::Right )
                 nImageOffY += (nBtnHeight-aImageSize.Height())/2;
         }
@@ -2735,7 +2735,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
             else
             {
                 // center horizontally
-                nTextOffX += (nBtnWidth-(bDropDown ? aDropDownRect.getWidth() : 0)+SMALLBUTTON_OFF_NORMAL_X-aTxtSize.Width() - TB_IMAGETEXTOFFSET)/2;
+                nTextOffX += (nBtnWidth-(bDropDown ? aDropDownRect.getOpenWidth() : 0)+SMALLBUTTON_OFF_NORMAL_X-aTxtSize.Width() - TB_IMAGETEXTOFFSET)/2;
                 // set vertical position
                 nTextOffY += nBtnHeight - aTxtSize.Height();
             }

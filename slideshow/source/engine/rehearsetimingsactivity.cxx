@@ -163,7 +163,7 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
     tools::Rectangle rect;
     const FontMetric metric( blackHole->GetFontMetric() );
     blackHole->GetTextBoundRect( rect, "XX:XX:XX" );
-    maSpriteSizePixel.setX( rect.getWidth() * 12 / 10 );
+    maSpriteSizePixel.setX( rect.getOpenWidth() * 12 / 10 );
     maSpriteSizePixel.setY( metric.GetLineHeight() * 11 / 10 );
     mnYOffset = (metric.GetAscent() + (metric.GetLineHeight() / 20));
 
@@ -455,7 +455,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     blackHole->DrawRect( rect );
     blackHole->GetTextBoundRect( rect, time );
     blackHole->DrawText(
-        Point( (maSpriteSizePixel.getX() - rect.getWidth()) / 2,
+        Point( (maSpriteSizePixel.getX() - rect.getOpenWidth()) / 2,
                mnYOffset ), time );
 
     metaFile.Stop();

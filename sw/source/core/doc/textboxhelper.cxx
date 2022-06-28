@@ -989,8 +989,8 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
             }
             else if (bAdjustSize)
             {
-                awt::Size aSize(convertTwipToMm100(aRect.getWidth()),
-                                convertTwipToMm100(aRect.getHeight()));
+                awt::Size aSize(convertTwipToMm100(aRect.getOpenWidth()),
+                                convertTwipToMm100(aRect.getOpenHeight()));
                 aValue <<= aSize;
             }
         }
@@ -1105,7 +1105,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 SwFormatFrameSize aSize(pFormat->GetFrameSize());
                 if (!aRect.IsEmpty())
                 {
-                    aSize.SetHeight(aRect.getHeight());
+                    aSize.SetHeight(aRect.getOpenHeight());
                     aTextBoxSet.Put(aSize);
                 }
             }
@@ -1159,8 +1159,8 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                         aTextBoxSet.Put(aHoriOrient);
                     }
 
-                    aSize.SetWidth(aRect.getWidth());
-                    aSize.SetHeight(aRect.getHeight());
+                    aSize.SetWidth(aRect.getOpenWidth());
+                    aSize.SetHeight(aRect.getOpenHeight());
                     aTextBoxSet.Put(aSize);
                 }
             }

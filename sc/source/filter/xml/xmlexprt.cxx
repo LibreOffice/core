@@ -3533,14 +3533,14 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                 aRectFull.SetTop(aStartCellRect.Top() + aSnapStartOffset.Y());
                 aRectFull.SetBottom(aEndCellRect.Top() + aSnapEndOffset.Y());
                 aRectReduced = pObjData->getShapeRect();
-                if(abs(aRectFull.getWidth() - aRectReduced.getWidth()) > 1
-                   || abs(aRectFull.getHeight() - aRectReduced.getHeight()) > 1)
+                if(abs(aRectFull.getOpenWidth() - aRectReduced.getOpenWidth()) > 1
+                   || abs(aRectFull.getOpenHeight() - aRectReduced.getOpenHeight()) > 1)
                 {
                     bNeedsRestore = true;
-                    Fraction aScaleWidth(aRectFull.getWidth(), aRectReduced.getWidth());
+                    Fraction aScaleWidth(aRectFull.getOpenWidth(), aRectReduced.getOpenWidth());
                     if (!aScaleWidth.IsValid())
                         aScaleWidth = Fraction(1.0);
-                    Fraction aScaleHeight(aRectFull.getHeight(), aRectReduced.getHeight());
+                    Fraction aScaleHeight(aRectFull.getOpenHeight(), aRectReduced.getOpenHeight());
                     if (!aScaleHeight.IsValid())
                         aScaleHeight = Fraction(1.0);
                     pObj->NbcResize(pObj->GetRelativePos(), aScaleWidth, aScaleHeight);
@@ -5190,9 +5190,9 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
                 pProps[++i].Name = "VisibleAreaLeft";
                 pProps[i].Value <<= static_cast<sal_Int32>(aRect.Left());
                 pProps[++i].Name = "VisibleAreaWidth";
-                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getWidth());
+                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getOpenWidth());
                 pProps[++i].Name = "VisibleAreaHeight";
-                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getHeight());
+                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getOpenHeight());
             }
         }
     }

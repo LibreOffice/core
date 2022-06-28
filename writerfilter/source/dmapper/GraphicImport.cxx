@@ -983,8 +983,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 tools::Rectangle aSnapRect = pShape->GetSnapRect(); // Twips
                                 m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(aSnapRect.Left());
                                 m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(aSnapRect.Top());
-                                aLOSize.Width = ConversionHelper::convertTwipToMM100(aSnapRect.getWidth());
-                                aLOSize.Height = ConversionHelper::convertTwipToMM100(aSnapRect.getHeight());
+                                aLOSize.Width = ConversionHelper::convertTwipToMM100(aSnapRect.getOpenWidth());
+                                aLOSize.Height = ConversionHelper::convertTwipToMM100(aSnapRect.getOpenHeight());
                             }
                             else
                             {
@@ -1051,8 +1051,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                     tools::Rectangle aSnapRect = pShape->GetSnapRect(); // Twip
                                     aLOSnapRect.X = ConversionHelper::convertTwipToMM100(aSnapRect.Left());
                                     aLOSnapRect.Y = ConversionHelper::convertTwipToMM100(aSnapRect.Top());
-                                    aLOSnapRect.Width = ConversionHelper::convertTwipToMM100(aSnapRect.getWidth());
-                                    aLOSnapRect.Height = ConversionHelper::convertTwipToMM100(aSnapRect.getHeight());
+                                    aLOSnapRect.Width = ConversionHelper::convertTwipToMM100(aSnapRect.getOpenWidth());
+                                    aLOSnapRect.Height = ConversionHelper::convertTwipToMM100(aSnapRect.getOpenHeight());
                                 }
 
                                 m_pImpl->nLeftMargin  += aLOSnapRect.X - aMSOBaseLeftTop.X;
@@ -1093,8 +1093,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 tools::Rectangle aBoundRect = pShape->GetCurrentBoundRect(); // Twip
                                 aLOBoundRect.X = ConversionHelper::convertTwipToMM100(aBoundRect.Left());
                                 aLOBoundRect.Y = ConversionHelper::convertTwipToMM100(aBoundRect.Top());
-                                aLOBoundRect.Width = ConversionHelper::convertTwipToMM100(aBoundRect.getWidth());
-                                aLOBoundRect.Height = ConversionHelper::convertTwipToMM100(aBoundRect.getHeight());
+                                aLOBoundRect.Width = ConversionHelper::convertTwipToMM100(aBoundRect.getOpenWidth());
+                                aLOBoundRect.Height = ConversionHelper::convertTwipToMM100(aBoundRect.getOpenHeight());
                             }
 
                             m_pImpl->nLeftMargin += aLOBoundRect.X - aMSOBaseLeftTop.X;

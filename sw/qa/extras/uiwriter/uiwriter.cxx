@@ -978,7 +978,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testShapeTextboxAutosize)
     // Shape -> textbox synchronization was missing, the second shape had the
     // same height as the first, even though the first contained 1 paragraph
     // and the other 2 ones.
-    CPPUNIT_ASSERT(pFirst->GetSnapRect().getHeight() < pSecond->GetSnapRect().getHeight());
+    CPPUNIT_ASSERT(pFirst->GetSnapRect().getOpenHeight() < pSecond->GetSnapRect().getOpenHeight());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo82191)

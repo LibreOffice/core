@@ -76,7 +76,7 @@ static tools::Rectangle ImplCursorInvert(vcl::RenderContext* pRenderContext, Imp
                 Point pAry[7];
                 // Related system settings for "delta" could be:
                 // gtk cursor-aspect-ratio and  windows SPI_GETCARETWIDTH
-                int delta = (aRect.getHeight() * 4 / 100) + 1;
+                int delta = (aRect.getOpenHeight() * 4 / 100) + 1;
                 if( pData->mnDirection == CursorDirection::LTR )
                 {
                     // left-to-right

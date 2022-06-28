@@ -1157,7 +1157,7 @@ awt::Size SAL_CALL SvxShape::getSize()
     if(HasSdrObject())
     {
         tools::Rectangle aRect( svx_getLogicRectHack(GetSdrObject()) );
-        Size aObjSize( aRect.getWidth(), aRect.getHeight() );
+        Size aObjSize( aRect.getOpenWidth(), aRect.getOpenHeight() );
         ForceMetricTo100th_mm(aObjSize);
         return css::awt::Size( aObjSize.getWidth(), aObjSize.getHeight() );
     }
