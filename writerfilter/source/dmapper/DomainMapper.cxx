@@ -1074,6 +1074,16 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             if (nName == NS_ooxml::LN_CT_SdtRun_sdtContent)
             {
+                if (m_pImpl->GetSdtStarts().empty() && !m_pImpl->m_pSdtHelper->getSdtTexts().isEmpty())
+                {
+                    // A non-inline SDT is already started, first convert that to a field and only
+                    // then map the inline SDT to a content control.
+                    if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText)
+                    {
+                        m_pImpl->m_pSdtHelper->createPlainTextControl();
+                    }
+                }
+
                 m_pImpl->m_pSdtHelper->setControlType(SdtControlType::richText);
                 m_pImpl->PushSdt();
                 break;

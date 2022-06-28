@@ -74,6 +74,27 @@ CPPUNIT_TEST_FIXTURE(Test, testLargeParaTopMargin)
     // -> wrap around a TextBox), which shifted the triangle shape out of the page frame.
     CPPUNIT_ASSERT_EQUAL(nExpected, nParaTopMargin);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSdtRunInPara)
+{
+    // Given a document with a block SDT, and inside that some content + a run SDT:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-run-in-para.docx";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure the content inside the block SDT but outside the run SDT is not lost:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: first-second
+    // - Actual  : second
+    // i.e. the block-SDT-only string was lost.
+    CPPUNIT_ASSERT_EQUAL(OUString("first-second"), xPara->getString());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
