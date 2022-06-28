@@ -1118,12 +1118,12 @@ IMPL_LINK_NOARG(ScrollBar, ImplAutoTimerHdl, Timer *, void)
 void ScrollBar::ImplInvert()
 {
     tools::Rectangle aRect( maThumbRect );
-    if( aRect.getWidth() > 4 )
+    if( aRect.getHalfOpenWidth() > 4 )
     {
         aRect.AdjustLeft(2 );
         aRect.AdjustRight( -2 );
     }
-    if( aRect.getHeight() > 4 )
+    if( aRect.getHalfOpenHeight() > 4 )
     {
         aRect.AdjustTop(2 );
         aRect.AdjustBottom( -2 );

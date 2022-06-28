@@ -192,9 +192,9 @@ tools::Rectangle AccessibleGridControlHeader::implGetBoundingBox()
     tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ) );
     tools::Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
     if(isColumnBar())
-        return tools::Rectangle(aGridRect.TopLeft(), Size(aGridRect.getWidth(),aHeaderRect.getHeight()));
+        return tools::Rectangle(aGridRect.TopLeft(), Size(aGridRect.getHalfOpenWidth(),aHeaderRect.getHalfOpenHeight()));
     else
-        return tools::Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getWidth(),aGridRect.getHeight()));
+        return tools::Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getHalfOpenWidth(),aGridRect.getHalfOpenHeight()));
 
 }
 
@@ -203,9 +203,9 @@ tools::Rectangle AccessibleGridControlHeader::implGetBoundingBoxOnScreen()
     tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ) );
     tools::Rectangle aHeaderRect (m_aTable.calcHeaderRect(isColumnBar()));
     if(isColumnBar())
-        return tools::Rectangle(aGridRect.TopLeft(), Size(aGridRect.getWidth(),aHeaderRect.getHeight()));
+        return tools::Rectangle(aGridRect.TopLeft(), Size(aGridRect.getHalfOpenWidth(),aHeaderRect.getHalfOpenHeight()));
     else
-        return tools::Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getWidth(),aGridRect.getHeight()));
+        return tools::Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getHalfOpenWidth(),aGridRect.getHalfOpenHeight()));
 }
 
 // internal helper methods ----------------------------------------------------

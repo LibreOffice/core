@@ -647,9 +647,9 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
     }
 
     // if we have optimal sized rows, distribute what is given (left)
-    if( !bFit && !aOptimalColumns.empty() && (nCurrentWidth < rArea.getWidth()) )
+    if( !bFit && !aOptimalColumns.empty() && (nCurrentWidth < rArea.getHalfOpenWidth()) )
     {
-        sal_Int32 nLeft = rArea.getWidth() - nCurrentWidth;
+        sal_Int32 nLeft = rArea.getHalfOpenWidth() - nCurrentWidth;
         sal_Int32 nDistribute = nLeft / aOptimalColumns.size();
 
         auto iter( aOptimalColumns.begin() );
@@ -697,8 +697,8 @@ void TableLayouter::LayoutTableWidth( tools::Rectangle& rArea, bool bFit )
     }
 
     // now scale if wanted and needed
-    if( bFit && (nCurrentWidth != rArea.getWidth()) )
-        distribute( maColumns, rArea.getWidth() - nCurrentWidth );
+    if( bFit && (nCurrentWidth != rArea.getHalfOpenWidth()) )
+        distribute( maColumns, rArea.getHalfOpenWidth() - nCurrentWidth );
 
     // last step, update left edges
     sal_Int32 nNewWidth = 0;
@@ -834,9 +834,9 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
     }
 
     // if we have optimal sized rows, distribute what is given (left)
-    if( !bFit && !aOptimalRows.empty() && (nCurrentHeight < rArea.getHeight()) )
+    if( !bFit && !aOptimalRows.empty() && (nCurrentHeight < rArea.getHalfOpenHeight()) )
     {
-        sal_Int32 nLeft = rArea.getHeight() - nCurrentHeight;
+        sal_Int32 nLeft = rArea.getHalfOpenHeight() - nCurrentHeight;
         sal_Int32 nDistribute = nLeft / aOptimalRows.size();
 
         auto iter( aOptimalRows.begin() );
@@ -881,8 +881,8 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
     }
 
     // now scale if wanted and needed
-    if( bFit && nCurrentHeight != rArea.getHeight() )
-        distribute(maRows, o3tl::saturating_sub<sal_Int32>(rArea.getHeight(), nCurrentHeight));
+    if( bFit && nCurrentHeight != rArea.getHalfOpenHeight() )
+        distribute(maRows, o3tl::saturating_sub<sal_Int32>(rArea.getHalfOpenHeight(), nCurrentHeight));
 
     // last step, update left edges
     sal_Int32 nNewHeight = 0;

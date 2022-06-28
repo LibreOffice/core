@@ -109,7 +109,7 @@ void SwContentControlButton::Paint(vcl::RenderContext& rRenderContext, const too
     Point aButtonPos(aFrameRect.TopLeft());
     aButtonPos.AdjustX(aFrameRect.GetSize().getWidth() - 1);
     Size aButtonSize(aFrameRect.GetSize());
-    aButtonSize.setWidth(GetSizePixel().getWidth() - aFrameRect.getWidth() - nPadding);
+    aButtonSize.setWidth(GetSizePixel().getWidth() - aFrameRect.getHalfOpenWidth() - nPadding);
     const tools::Rectangle aButtonRect(tools::Rectangle(aButtonPos, aButtonSize));
 
     // Background & border

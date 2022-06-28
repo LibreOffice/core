@@ -121,8 +121,8 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds()
             aBoundingBox = awt::Rectangle (
                 aBBox.Left(),
                 aBBox.Top(),
-                aBBox.getWidth(),
-                aBBox.getHeight());
+                aBBox.getHalfOpenWidth(),
+                aBBox.getHalfOpenHeight());
         }
         else
             aBoundingBox = awt::Rectangle (

@@ -235,12 +235,12 @@ void SvLBoxString::Paint(
         else if (mfAlign == 0.5)
         {
             nStyle |= DrawTextFlags::Center;
-            aSize.setWidth(rDev.GetBoundingRect(&rEntry).getWidth());
+            aSize.setWidth(rDev.GetBoundingRect(&rEntry).getHalfOpenWidth());
         }
         else if (mfAlign > 0.5)
         {
             nStyle |= DrawTextFlags::Right;
-            aSize.setWidth(rDev.GetBoundingRect(&rEntry).getWidth());
+            aSize.setWidth(rDev.GetBoundingRect(&rEntry).getHalfOpenWidth());
         }
     }
     aSize.setHeight(GetHeight(&rDev, &rEntry));

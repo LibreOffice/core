@@ -945,8 +945,8 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
         // Create the new TopLeft of the unrotated, cropped object by creating
         // as if re-creating the unrotated geometry
         aNewTopLeft = Point(
-            basegfx::fround(aRotNewCenter.getX() - (0.5 * aNewRect.getWidth())),
-            basegfx::fround(aRotNewCenter.getY() - (0.5 * aNewRect.getHeight())));
+            basegfx::fround(aRotNewCenter.getX() - (0.5 * aNewRect.getHalfOpenWidth())),
+            basegfx::fround(aRotNewCenter.getY() - (0.5 * aNewRect.getHalfOpenHeight())));
     }
 
     // check if we have movement and execute if yes

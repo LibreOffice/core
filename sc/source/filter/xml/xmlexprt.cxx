@@ -3533,14 +3533,14 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                 aRectFull.SetTop(aStartCellRect.Top() + aSnapStartOffset.Y());
                 aRectFull.SetBottom(aEndCellRect.Top() + aSnapEndOffset.Y());
                 aRectReduced = pObjData->getShapeRect();
-                if(abs(aRectFull.getWidth() - aRectReduced.getWidth()) > 1
-                   || abs(aRectFull.getHeight() - aRectReduced.getHeight()) > 1)
+                if(abs(aRectFull.getHalfOpenWidth() - aRectReduced.getHalfOpenWidth()) > 1
+                   || abs(aRectFull.getHalfOpenHeight() - aRectReduced.getHalfOpenHeight()) > 1)
                 {
                     bNeedsRestore = true;
-                    Fraction aScaleWidth(aRectFull.getWidth(), aRectReduced.getWidth());
+                    Fraction aScaleWidth(aRectFull.getHalfOpenWidth(), aRectReduced.getHalfOpenWidth());
                     if (!aScaleWidth.IsValid())
                         aScaleWidth = Fraction(1.0);
-                    Fraction aScaleHeight(aRectFull.getHeight(), aRectReduced.getHeight());
+                    Fraction aScaleHeight(aRectFull.getHalfOpenHeight(), aRectReduced.getHalfOpenHeight());
                     if (!aScaleHeight.IsValid())
                         aScaleHeight = Fraction(1.0);
                     pObj->NbcResize(pObj->GetRelativePos(), aScaleWidth, aScaleHeight);
@@ -5190,9 +5190,9 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
                 pProps[++i].Name = "VisibleAreaLeft";
                 pProps[i].Value <<= static_cast<sal_Int32>(aRect.Left());
                 pProps[++i].Name = "VisibleAreaWidth";
-                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getWidth());
+                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getHalfOpenWidth());
                 pProps[++i].Name = "VisibleAreaHeight";
-                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getHeight());
+                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getHalfOpenHeight());
             }
         }
     }
