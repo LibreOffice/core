@@ -34,6 +34,24 @@
       "parentUuid": "41e86436_6ea3d6bb",
       "revId": "65ba84ea7f1b06333f4be72150254615db1f8d3b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86bb8f81_2fc5a136",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-28T14:53:47Z",
+      "side": 1,
+      "message": "Not planning to backport to 7.4. Just master.\n\nYes - this affects both minimize and optimize. Those two are identical except for the table not shrinking in Writer.\n\nYes, inspired by help analysis. My second-last email said that I wanted to \"2A.) distribute proportionately, not first come first served. (This is probably much harder to do, but should be possible.)\".  Doing this made my \"1.) calculate the guaranteed minimum from the maximum table size\" irrelevant - but that too was possible.",
+      "parentUuid": "d93f363d_0e31f148",
+      "revId": "65ba84ea7f1b06333f4be72150254615db1f8d3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
