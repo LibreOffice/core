@@ -978,7 +978,10 @@ tools::Long OutputDevice::GetTextArray( const OUString& rStr, std::vector<sal_In
         // element init in the happy case will still be found by tools,
         // and hope that is sufficient.
         if (pDXAry)
+        {
+            pDXAry->resize(nLen);
             std::fill(pDXAry->begin(), pDXAry->end(), 0);
+        }
         return 0;
     }
 
