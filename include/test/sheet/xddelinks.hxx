@@ -16,14 +16,15 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
+#include <utility>
 
 namespace apitest
 {
 class OOO_DLLPUBLIC_TEST XDDELinks
 {
 public:
-    XDDELinks(const OUString& rTopic)
-        : m_aTopic(rTopic)
+    XDDELinks(OUString aTopic)
+        : m_aTopic(std::move(aTopic))
     {
     }
 

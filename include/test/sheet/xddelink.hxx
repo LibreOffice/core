@@ -14,6 +14,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
+#include <utility>
 
 namespace apitest
 {
@@ -27,8 +28,8 @@ public:
     void testGetTopic();
 
 protected:
-    explicit XDDELink(OUString const& rURL)
-        : m_URL(rURL)
+    explicit XDDELink(OUString aURL)
+        : m_URL(std::move(aURL))
     {
     }
     ~XDDELink() {}

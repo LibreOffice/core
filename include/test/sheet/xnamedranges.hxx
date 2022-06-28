@@ -17,6 +17,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <test/testdllapi.hxx>
+#include <utility>
 
 namespace apitest
 {
@@ -30,8 +31,8 @@ public:
     }
 
     // removes given entry
-    XNamedRanges(const OUString& rNameToRemove)
-        : maNameToRemove(rNameToRemove)
+    XNamedRanges(OUString aNameToRemove)
+        : maNameToRemove(std::move(aNameToRemove))
     {
     }
 
