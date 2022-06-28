@@ -176,6 +176,11 @@ ChartItemPool::ChartItemPool():
     rPoolDefaults[SCHATTR_REGRESSION_YNAME                 - SCHATTR_START] = new SfxStringItem(SCHATTR_REGRESSION_YNAME, "f(x)");
     rPoolDefaults[SCHATTR_REGRESSION_MOVING_TYPE           - SCHATTR_START] = new SfxInt32Item(SCHATTR_REGRESSION_MOVING_TYPE, css::chart2::MovingAverageType::Prior);
 
+    rPoolDefaults[SCHATTR_DATA_TABLE_HORIZONTAL_BORDER - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATA_TABLE_HORIZONTAL_BORDER, false);
+    rPoolDefaults[SCHATTR_DATA_TABLE_VERTICAL_BORDER   - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATA_TABLE_VERTICAL_BORDER, false);
+    rPoolDefaults[SCHATTR_DATA_TABLE_OUTLINE           - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATA_TABLE_OUTLINE, false);
+    rPoolDefaults[SCHATTR_DATA_TABLE_KEYS              - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATA_TABLE_KEYS, false);
+
     /**************************************************************************
     * ItemInfos
     **************************************************************************/

@@ -170,4 +170,12 @@ const WhichRangesContainer nRegEquationWhichPairs(svl::Items<
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
 >);
 
+const WhichRangesContainer nDataTableWhichPairs(svl::Items<
+    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
+    SCHATTR_DATA_TABLE_START, SCHATTR_DATA_TABLE_END,
+    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
+    XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
+    EE_ITEMS_START, EE_ITEMS_END
+>);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
