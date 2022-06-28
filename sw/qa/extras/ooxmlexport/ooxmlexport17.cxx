@@ -39,15 +39,6 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase(DATA_DIRECTORY, "Office Open XML Text") {}
-
-protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return o3tl::ends_with(filename, ".docx");
-    }
 };
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135164_cancelledNumbering, "tdf135164_cancelledNumbering.docx")
@@ -565,8 +556,9 @@ DECLARE_OOXMLEXPORT_TEST(TestWPGZOrder, "testWPGZOrder.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf148720, "tdf148720.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf148720)
 {
+    loadAndReload("tdf148720.odt");
     const auto& pLayout = parseLayoutDump();
 
     const OString sShapeXPaths[] =
@@ -900,8 +892,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144563, "tdf144563.docx")
 
 // broken test document?
 #if !defined(_WIN32)
-DECLARE_OOXMLEXPORT_TEST(testTdf146955, "tdf146955.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
 {
+    loadAndReload("tdf146955.odt");
     // import of a (broken?) DOCX export with dozens of frames raised a SAX exception,
     // when the code tried to access to a non-existent footnote
     uno::Reference<text::XFootnotesSupplier> xNotes(mxComponent, uno::UNO_QUERY);
@@ -909,8 +902,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146955, "tdf146955.odt")
 }
 #endif
 
-DECLARE_OOXMLEXPORT_TEST(testTdf144668, "tdf144668.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf144668)
 {
+    loadAndReload("tdf144668.odt");
     uno::Reference<beans::XPropertySet> xPara1(getParagraph(1, u"level1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("[0001]"), getProperty<OUString>(xPara1, "ListLabelString"));
 
