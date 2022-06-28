@@ -1259,7 +1259,9 @@ static bool CanBeUsedForSorterCache(ScDocument& rDoc, const ScQueryParam& rParam
         if(!inUnitTest)
             return false;
     }
-    if( !cell || !cell->GetCellGroup() || cell->GetCellGroup()->mnLength < 10 )
+    if( !cell )
+        return false;
+    if( !cell->GetCellGroup() || cell->GetCellGroup()->mnLength < 10 )
     {
         if(!inUnitTest)
             return false;
@@ -1269,6 +1271,8 @@ static bool CanBeUsedForSorterCache(ScDocument& rDoc, const ScQueryParam& rParam
     for(SCCOL col : rDoc.GetAllocatedColumnsRange(nTab, rParam.nCol1, rParam.nCol2))
     {
         ScRange aSortedRangeRange( col, rParam.nRow1, nTab, col, rParam.nRow2, nTab);
+        if( aSortedRangeRange.Contains( cell->aPos ))
+            return false; // self-referencing, can't create cache
         ScSortedRangeCache& cache = rDoc.GetSortedRangeCache( aSortedRangeRange, rParam, &context );
         if(!cache.isValid())
             return false;
