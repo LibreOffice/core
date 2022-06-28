@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef8ba379_8fce22fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-28T09:15:46Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "a08470b5b100d888ec3f00e92dd4ad37b4f61124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95919d46_26d07428",
+        "filename": "package/source/xstor/owriteablestream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-28T09:15:46Z",
+      "side": 1,
+      "message": "These all possibly could be turned to HasTempFile_Impl (or else the latter method looks almost unused and unneeded?)",
+      "range": {
+        "startLine": 345,
+        "startChar": 9,
+        "endLine": 345,
+        "endChar": 30
+      },
+      "revId": "a08470b5b100d888ec3f00e92dd4ad37b4f61124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
