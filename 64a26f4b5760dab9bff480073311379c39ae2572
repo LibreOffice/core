@@ -34,6 +34,23 @@
       "parentUuid": "7e2d4abd_5ff51fc4",
       "revId": "64a26f4b5760dab9bff480073311379c39ae2572",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7da7cc52_91aeab94",
+        "filename": "sc/source/ui/vba/vbarange.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-28T12:01:09Z",
+      "side": 1,
+      "message": "Possibly I\u0027d put the enum right here:\n\n    enum class RangeValueType { value, value2 };\n\nso that it\u0027s available to all the code using it; you would e.g. declare the ScVbaRange::DoGetValue like this:\n\n    css::uno::Any DoGetValue( RangeValueType eValueType );\n\nand then in ScVbaRange::getValue, you would call it like\n\n    return DoGetValue( RangeValueType::value );\n\nand in ScVbaRange::getValue\n\n    return DoGetValue( RangeValueType::value2 );\n\nDoes it make sense?",
+      "revId": "64a26f4b5760dab9bff480073311379c39ae2572",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
