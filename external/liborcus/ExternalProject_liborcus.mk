@@ -47,7 +47,7 @@ ifeq ($(OS),ANDROID)
 liborcus_LIBS+=$(gb_STDLIBS)
 endif
 
-liborcus_CPPCLAGS=$(CPPFLAGS)
+liborcus_CPPFLAGS=$(CPPFLAGS)
 ifeq ($(SYSTEM_ZLIB),)
 liborcus_CPPFLAGS+=$(ZLIB_CFLAGS)
 endif
