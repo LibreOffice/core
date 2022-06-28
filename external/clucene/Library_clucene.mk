@@ -31,11 +31,17 @@ $(eval $(call gb_Library_add_defs,clucene,\
     -Dclucene_contribs_lib_EXPORTS \
 ))
 
-# Needed when building against MSVC in C++17 mode, as
-# workdir/UnpackedTarball/clucene/src/core/CLucene/util/Equators.h uses std::binary_function:
+# Needed when building against either libc++ or MSVC's standard library (including clang-cl builds),
+# as e.g. workdir/UnpackedTarball/clucene/src/core/CLucene/util/_Arrays.h uses std::binary_function:
+ifeq ($(HAVE_LIBCPP),TRUE)
+$(eval $(call gb_Library_add_defs,clucene, \
+    -D_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION \
+))
+else ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_defs,clucene, \
     -D_HAS_AUTO_PTR_ETC=1 \
 ))
+endif
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,clucene,\

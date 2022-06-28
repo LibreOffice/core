@@ -1,0 +1,12 @@
+--- boost/config/stdlib/libcpp.hpp
++++ boost/config/stdlib/libcpp.hpp
+@@ -167,5 +167,9 @@
+ #if !defined(BOOST_NO_CXX14_HDR_SHARED_MUTEX) && (_LIBCPP_VERSION < 5000)
+ #  define BOOST_NO_CXX14_HDR_SHARED_MUTEX
+ #endif
++
++#if __cplusplus >= 201103
++#  define BOOST_NO_CXX98_FUNCTION_BASE
++#endif
+ 
+ //  --- end ---
