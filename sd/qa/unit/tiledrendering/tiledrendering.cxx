@@ -570,8 +570,8 @@ void SdTiledRenderingTest::testSetGraphicSelection()
 
     ::tools::Rectangle aShapeAfter = pObject->GetSnapRect();
     // Check that a resize happened, but aspect ratio is not kept.
-    CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
-    CPPUNIT_ASSERT(aShapeBefore.getHeight() < aShapeAfter.getHeight());
+    CPPUNIT_ASSERT_EQUAL(aShapeBefore.getOpenWidth(), aShapeAfter.getOpenWidth());
+    CPPUNIT_ASSERT(aShapeBefore.getOpenHeight() < aShapeAfter.getOpenHeight());
 }
 
 void SdTiledRenderingTest::testUndoShells()
@@ -1146,8 +1146,8 @@ void SdTiledRenderingTest::testCursorVisibility_SingleClick()
 
     // Click once outside of the text (in the first quartile) => no editing.
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-    const auto cornerX = o3tl::toTwips(aRect.Left() + (aRect.getWidth() / 4), o3tl::Length::mm100);
-    const auto cornerY = o3tl::toTwips(aRect.Top() + (aRect.getHeight() / 4), o3tl::Length::mm100);
+    const auto cornerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 4), o3tl::Length::mm100);
+    const auto cornerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 4), o3tl::Length::mm100);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       cornerX, cornerY,
                                       1, MOUSE_LEFT, 0);
@@ -1161,8 +1161,8 @@ void SdTiledRenderingTest::testCursorVisibility_SingleClick()
     CPPUNIT_ASSERT(!aView1.m_bCursorVisible);
 
     // Click again, now on the text, in the center, to start editing.
-    const auto centerX = o3tl::toTwips(aRect.Left() + (aRect.getWidth() / 2), o3tl::Length::mm100);
-    const auto centerY = o3tl::toTwips(aRect.Top() + (aRect.getHeight() / 2), o3tl::Length::mm100);
+    const auto centerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 2), o3tl::Length::mm100);
+    const auto centerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 2), o3tl::Length::mm100);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       1, MOUSE_LEFT, 0);
@@ -1195,8 +1195,8 @@ void SdTiledRenderingTest::testCursorVisibility_DoubleClick()
 
     // Double-click outside the text to enter edit mode.
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-    const auto cornerX = o3tl::toTwips(aRect.Left() + (aRect.getWidth() / 4), o3tl::Length::mm100);
-    const auto cornerY = o3tl::toTwips(aRect.Top() + (aRect.getHeight() / 4), o3tl::Length::mm100);
+    const auto cornerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 4), o3tl::Length::mm100);
+    const auto cornerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 4), o3tl::Length::mm100);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       cornerX, cornerY,
                                       2, MOUSE_LEFT, 0);
@@ -1239,8 +1239,8 @@ void SdTiledRenderingTest::testCursorVisibility_MultiView()
     SfxLokHelper::setView(nView1);
 
     ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-    const auto centerX = o3tl::toTwips(aRect.Left() + (aRect.getWidth() / 2), o3tl::Length::mm100);
-    const auto centerY = o3tl::toTwips(aRect.Top() + (aRect.getHeight() / 2), o3tl::Length::mm100);
+    const auto centerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 2), o3tl::Length::mm100);
+    const auto centerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 2), o3tl::Length::mm100);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       2, MOUSE_LEFT, 0);
@@ -1275,8 +1275,8 @@ void SdTiledRenderingTest::testCursorVisibility_Escape()
 
     // Click once on the text to start editing.
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-    const auto centerX = o3tl::toTwips(aRect.Left() + (aRect.getWidth() / 2), o3tl::Length::mm100);
-    const auto centerY = o3tl::toTwips(aRect.Top() + (aRect.getHeight() / 2), o3tl::Length::mm100);
+    const auto centerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 2), o3tl::Length::mm100);
+    const auto centerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 2), o3tl::Length::mm100);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       1, MOUSE_LEFT, 0);
@@ -2070,8 +2070,8 @@ void SdTiledRenderingTest::testMultiViewInsertDeletePage2()
 
     // Double-click outside the text to enter edit mode.
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-    const auto cornerX = o3tl::toTwips(aRect.Left() + (aRect.getWidth() / 4), o3tl::Length::mm100);
-    const auto cornerY = o3tl::toTwips(aRect.Top() + (aRect.getHeight() / 4), o3tl::Length::mm100);
+    const auto cornerX = o3tl::toTwips(aRect.Left() + (aRect.getOpenWidth() / 4), o3tl::Length::mm100);
+    const auto cornerY = o3tl::toTwips(aRect.Top() + (aRect.getOpenHeight() / 4), o3tl::Length::mm100);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       cornerX, cornerY,
                                       2, MOUSE_LEFT, 0);

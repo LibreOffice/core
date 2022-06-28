@@ -229,7 +229,7 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 
     if (maWelcomeImage.IsEmpty())
     {
-        const tools::Long aWidth(aRect.GetWidth() > aRect.getHeight() ? aRect.GetHeight()/2 : aRect.GetWidth()/2);
+        const tools::Long aWidth(aRect.GetWidth() > aRect.getOpenHeight() ? aRect.GetHeight()/2 : aRect.GetWidth()/2);
         maWelcomeImage = SfxApplication::GetApplicationLogo(aWidth);
     }
 

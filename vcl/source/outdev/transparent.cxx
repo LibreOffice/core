@@ -327,7 +327,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                     // This is because the source is a polygon which when painted would not paint
                     // the rightmost and lowest pixel line(s), so use one pixel less for the
                     // rectangle, too.
-                                                    aPixelRect.getWidth(), aPixelRect.getHeight(),
+                                                    aPixelRect.getOpenWidth(), aPixelRect.getOpenHeight(),
                                                     sal::static_int_cast<sal_uInt8>(nTransparencePercent),
                                                     *this );
             }

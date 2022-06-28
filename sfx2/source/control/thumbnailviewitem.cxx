@@ -218,7 +218,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
     aTextEngine.SetFont(getVclFontFromFontAttribute(pAttrs->aFontAttr,
                               pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(), 0,
                               css::lang::Locale()));
-    aTextEngine.SetMaxTextWidth(maDrawArea.getWidth());
+    aTextEngine.SetMaxTextWidth(maDrawArea.getOpenWidth());
     aTextEngine.SetText(aOrigText);
 
     sal_Int32 nPrimitives = rSeq.size();
@@ -240,7 +240,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
             double nDotsWidth = aTextDev.getTextWidth("...",0,3);
 
             sal_Int32 nLength = nLineLength - 1;
-            while ( nDotsWidth + aTextDev.getTextWidth(aText, nLineStart, nLength) > maDrawArea.getWidth() && nLength > 0)
+            while ( nDotsWidth + aTextDev.getTextWidth(aText, nLineStart, nLength) > maDrawArea.getOpenWidth() && nLength > 0)
             {
                 --nLength;
             }
@@ -249,7 +249,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
             nLineLength = nLength + 3;
         }
 
-        double nLineX = maDrawArea.Left() + (maDrawArea.getWidth() - nLineWidth) / 2.0;
+        double nLineX = maDrawArea.Left() + (maDrawArea.getOpenWidth() - nLineWidth) / 2.0;
 
         basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
                     pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),

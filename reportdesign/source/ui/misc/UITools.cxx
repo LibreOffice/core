@@ -957,8 +957,8 @@ tools::Rectangle getRectangleFromControl(SdrObject* _pControl)
         if (xComponent.is())
         {
             tools::Rectangle aRect(VCLPoint(xComponent->getPosition()),VCLSize(xComponent->getSize()));
-            aRect.setHeight(aRect.getHeight() + 1);
-            aRect.setWidth(aRect.getWidth() + 1);
+            aRect.setHeight(aRect.getOpenHeight() + 1);
+            aRect.setWidth(aRect.getOpenWidth() + 1);
             return aRect;
         }
     }
@@ -980,7 +980,7 @@ void correctOverlapping(SdrObject* _pControl,OReportSection const & _aReportSect
         if ( bOverlapping )
         {
             const tools::Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();
-            aRect.Move(0,aLogicRect.Top() + aLogicRect.getHeight() - aRect.Top());
+            aRect.Move(0,aLogicRect.Top() + aLogicRect.getOpenHeight() - aRect.Top());
             xComponent->setPositionY(aRect.Top());
         }
     }

@@ -2914,7 +2914,7 @@ Size ImplListBoxFloatingWindow::CalcFloatSize() const
             aFloatSz.AdjustWidth(nSBWidth );
         }
 
-        tools::Long nDesktopWidth = GetDesktopRectPixel().getWidth();
+        tools::Long nDesktopWidth = GetDesktopRectPixel().getOpenWidth();
         if (aFloatSz.Width() > nDesktopWidth)
             // Don't exceed the desktop width.
             aFloatSz.setWidth( nDesktopWidth );

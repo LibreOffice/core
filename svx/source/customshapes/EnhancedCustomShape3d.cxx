@@ -571,8 +571,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             pScene->NbcSetSnapRect( aSnapRect );
 
             // InitScene replacement
-            double fW = aBoundRect2d.getWidth();
-            double fH = aBoundRect2d.getHeight();
+            double fW = aBoundRect2d.getOpenWidth();
+            double fH = aBoundRect2d.getOpenHeight();
             rCamera.SetAutoAdjustProjection( false );
             rCamera.SetViewWindow( -fW / 2, - fH / 2, fW, fH);
             basegfx::B3DPoint aLookAt( 0.0, 0.0, 0.0 );
@@ -620,8 +620,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
             drawing::Direction3D aRotationCenterDefault( 0, 0, 0 );
             drawing::Direction3D aRotationCenter( GetDirection3D( rGeometryItem, "RotationCenter", aRotationCenterDefault ) );
-            aRotationCenter.DirectionX *= aSnapRect.getWidth();
-            aRotationCenter.DirectionY *= aSnapRect.getHeight();
+            aRotationCenter.DirectionX *= aSnapRect.getOpenWidth();
+            aRotationCenter.DirectionY *= aSnapRect.getOpenHeight();
             if (pMap)
             {
                 aRotationCenter.DirectionZ *= *pMap;

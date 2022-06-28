@@ -3579,7 +3579,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                                 if ( bOverlapping )
                                 {
                                     const tools::Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();
-                                    aLabelAndTextfield.Move(0,aLogicRect.Top() + aLogicRect.getHeight() - aLabelAndTextfield.Top());
+                                    aLabelAndTextfield.Move(0,aLogicRect.Top() + aLogicRect.getOpenHeight() - aLabelAndTextfield.Top());
                                     bHasToMove = true;
                                 }
                             }

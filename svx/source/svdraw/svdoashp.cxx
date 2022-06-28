@@ -2342,7 +2342,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                             // Both 'resize shape to fix text' and multiple columns are enabled. The
                             // first means a dynamic height, the second expects a fixed height.
                             // Resolve this conflict by going with the original height.
-                            nHgt = rR.getHeight();
+                            nHgt = rR.getOpenHeight();
                         }
                     }
                     rOutliner.Clear();

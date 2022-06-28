@@ -43,7 +43,7 @@ private:
 
 void TheWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    rRenderContext.DrawText(Point(rRect.GetWidth() / 2, rRect.getHeight() / 2),
+    rRenderContext.DrawText(Point(rRect.GetWidth() / 2, rRect.getOpenHeight() / 2),
                             OUString(u"VCL module in LibreOffice"));
 }
 
