@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b58e76b_497c0bc1",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-28T19:11:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fae55b28_e346c2f3",
+      "revId": "a2bac17c59b0b92e263771aa185ca4de4b172d67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58a8260f_ce31548c",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-06-26T07:59:24Z",
       "side": 1,
       "message": "Please add the argument name: it allows to understand the meaning of the argument in the function call, when you look at the function declaration.",
+      "revId": "a2bac17c59b0b92e263771aa185ca4de4b172d67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f11d36a5_3ec345d4",
+        "filename": "sc/source/ui/vba/vbarange.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-28T19:11:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58a8260f_ce31548c",
       "revId": "a2bac17c59b0b92e263771aa185ca4de4b172d67",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
