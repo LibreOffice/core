@@ -725,15 +725,16 @@ void vcl::Region::Exclude( const tools::Rectangle& rRect )
     }
 
     // only region band mode possibility left here or null/empty
-    const RegionBand* pCurrent = getRegionBand();
-
-    if(!pCurrent)
+    if(!mpRegionBand)
     {
         // empty? -> done!
         return;
     }
 
-    std::shared_ptr<RegionBand> pNew( std::make_shared<RegionBand>(*pCurrent));
+    std::shared_ptr<RegionBand>& pNew = mpRegionBand;
+    // only make a copy if someone else is also using it
+    if (pNew.use_count() > 1)
+        pNew = std::make_shared<RegionBand>(*pNew);
 
     // get justified rectangle
     const tools::Long nLeft(std::min(rRect.Left(), rRect.Right()));
@@ -749,11 +750,7 @@ void vcl::Region::Exclude( const tools::Rectangle& rRect )
 
     // cleanup
     if(!pNew->OptimizeBandList())
-    {
         pNew.reset();
-    }
-
-    mpRegionBand = std::move(pNew);
 }
 
 void vcl::Region::XOr( const tools::Rectangle& rRect )
