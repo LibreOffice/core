@@ -2965,6 +2965,7 @@ void ScFiltersTest::testFormulaDependency()
 }
 
 void ScFiltersTest::testImportCrashes() {
+    testImportCrash(u"tdf149752.", FORMAT_ODS);
     testImportCrash(u"tdf122643.", FORMAT_ODS);
     testImportCrash(u"tdf132278.", FORMAT_ODS);
     testImportCrash(u"tdf130959.", FORMAT_XLSX);
