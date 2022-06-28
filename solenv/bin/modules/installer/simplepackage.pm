@@ -392,7 +392,7 @@ sub create_package
             chdir $localfrom;
 
             if ( $ENV{'MACOSX_CODESIGNING_IDENTITY'} ) {
-                my $lp_sign = "codesign --verbose --sign $ENV{'MACOSX_CODESIGNING_IDENTITY'} --deep '$appfolder'" ;
+                my $lp_sign = "codesign --strict --verbose=4 --sign $ENV{'MACOSX_CODESIGNING_IDENTITY'} --deep '$appfolder'" ;
                 my $output = `$lp_sign 2>&1`;
                 unless ($?) {
                     $infoline = "Success: \"$lp_sign\" executed successfully!\n";
@@ -433,7 +433,7 @@ sub create_package
                 opendir(my $dh, $sdkbindir);
                 foreach my $sdkbinary (readdir $dh) {
                     next unless -f "$sdkbindir/$sdkbinary";
-                    $systemcall = "codesign --force --verbose --options=runtime --identifier='$ENV{MACOSX_BUNDLE_IDENTIFIER}.$sdkbinary' --sign '$ENV{MACOSX_CODESIGNING_IDENTITY}' --entitlements $ENV{BUILDDIR}/hardened_runtime.xcent $sdkbindir/$sdkbinary > /tmp/codesign_losdk_$sdkbinary.log 2>&1";
+                    $systemcall = "codesign --force --strict --verbose=4 --options=runtime --identifier='$ENV{MACOSX_BUNDLE_IDENTIFIER}.$sdkbinary' --sign '$ENV{MACOSX_CODESIGNING_IDENTITY}' --entitlements $ENV{BUILDDIR}/hardened_runtime.xcent $sdkbindir/$sdkbinary > /tmp/codesign_losdk_$sdkbinary.log 2>&1";
                     print "... $systemcall ...\n";
                     my $returnvalue = system($systemcall);
                     $infoline = "Systemcall: $systemcall\n";
