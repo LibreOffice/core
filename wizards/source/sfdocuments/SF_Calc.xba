@@ -4496,7 +4496,7 @@ Private Function _ValidateSheetName(ByRef psSheetName As String _
 										, ByVal psArgName As String _
 										) As Boolean
 &apos;&apos;&apos;	Check the validity of the sheet name:
-&apos;&apos;&apos;	A sheet name	- must not be ampty
+&apos;&apos;&apos;	A sheet name	- must not be empty
 &apos;&apos;&apos;					- must not contain next characters: []*?:/\
 &apos;&apos;&apos;					- must not use &apos; (the apostrophe) as first or last character
 &apos;&apos;&apos;	Args:
