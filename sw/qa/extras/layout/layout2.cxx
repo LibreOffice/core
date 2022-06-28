@@ -332,6 +332,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering)
     assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", "2.[3.] ");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering2)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf115524.fodt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Show the correct and the original line numbering in Show Changes mode
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", "1.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", "2.");
+    // FIXME: show as 3.[2.]
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", "3.");
+    // This was "4." (not shown the original number)
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[7]/text", "4.[3.] ");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149710_RedlineNumberingEditing)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf149710.fodt");
