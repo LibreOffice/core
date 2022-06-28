@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76a05d0e_cf9b822c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-28T19:10:49Z",
+      "side": 1,
+      "message": "Great! ",
+      "revId": "c6b3701b3e9f419d8d7b26f830846d9296cb3d8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d42be9b9_bc35cc74",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-28T19:10:49Z",
+      "side": 1,
+      "message": "It\u0027s almost perfect! The only thing that is left is this rename. It looks confusing, because it uses the same \"value type\" terminology that the new enum used to determine which kind of \u0027value\u0027 we are calling. Note that this eValueType variable is of type table::CellContentType; so it may be reasonable to call it \u0027eCellContentType\u0027 or \u0027eContentType\u0027 maybe?",
+      "revId": "c6b3701b3e9f419d8d7b26f830846d9296cb3d8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
