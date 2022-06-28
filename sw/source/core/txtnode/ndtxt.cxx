@@ -4324,6 +4324,9 @@ void SwTextNode::AddToList()
     pList->InsertListItem(*mpNodeNum, SwListRedlineType::SHOW, GetAttrListLevel(), GetDoc());
 
     // set redline lists
+    // "default" list: visible items in Show Changes mode (tracked insertions and deletions)
+    // "hidden" list: visible items in Hide Changes mode (tracked insertions, but not deletions)
+    // "orig" list: visible items rejecting all changes (no tracked insertions and deletions)
     bool bRecordChanges = GetDoc().GetDocShell() && GetDoc().GetDocShell()->IsChangeRecording();
     if (!bRecordChanges || GetDoc().IsInXMLImport() || GetDoc().IsInWriterfilterImport() )
     {
@@ -4334,10 +4337,14 @@ void SwTextNode::AddToList()
         {
             AddToListOrig();
 
+            // if the paragraph is not deleted, add to the "hidden" list, too
             SwRedlineTable::size_type nRedlPosDel = GetDoc().getIDocumentRedlineAccess().GetRedlinePos(*this, RedlineType::Delete);
             if ( SwRedlineTable::npos == nRedlPosDel )
                 AddToListRLHidden();
         }
+        // inserted paragraph, e.g. during file load, add to the "hidden" list
+        else if ( SwRedlineTable::npos != nRedlPos )
+            AddToListRLHidden();
     }
     else if ( bRecordChanges )
         AddToListRLHidden();
