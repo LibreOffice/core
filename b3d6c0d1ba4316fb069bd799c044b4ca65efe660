@@ -16,6 +16,23 @@
       "message": "I\u0027m not sure anyone can really understand the interaction of m_pCurrentCursor and especial how it intersects with IsTableMode.\n\nI allowed a few silly mistakes as I was developing this, and was happy that each one proved to hit a unit test failure. (The first was m_pCurrentCursor \u003d GetNext() instead of GetPrev().  The other was ignoring when TableMode passed its Cursor.)\n\nm_pCurrentCursor must always be valid. I saw a few dynamic_casts, but compiling didn\u0027t allow those to be changed to static_cast. TableMode fails the dynamic_cast these, so that is how I avoided the situation.\n\nIn this reverse-cell-select, the very first item was a bDel of pCurrentCursor, so changing to GetPrev() goes to the end of the loop - the last item. That for sure will not be bDel, so that solves the major false-selection problem in tables.\n\n",
       "revId": "b3d6c0d1ba4316fb069bd799c044b4ca65efe660",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55cb220a_b7e6108a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-28T15:21:52Z",
+      "side": 1,
+      "message": "Playing with m_pCurrentCursor looks like dangerous stuff, so I should get additional approval. I have no intention to backport this - so lots of time to revert if necessary.\n\nThe revert of the per-situation-avoidance-fixes is a separate patch. http://gerrit.libreoffice.org/c/core/+/136578\n\nNormally, a table cell select is left to right - m_pCurrentCursor is naturally the first item, but it isn\u0027t marked to be bDeleted. When the cells are selected in revert, m_pCurrentCursor is still the first item, but now it is marked as bDel. Previously it wasn\u0027t deleted and thus the selection spilled over to affect the paragraph properties of the should-have-been-deleted-from-selection cell.\n\nThis patch also fixes bug 119540 which is the same idea as all the others, but hadn\u0027t been fixed yet.",
+      "revId": "b3d6c0d1ba4316fb069bd799c044b4ca65efe660",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
