@@ -33,6 +33,7 @@
 #include <MultipleChartConverters.hxx>
 #include <TitleItemConverter.hxx>
 #include <LegendItemConverter.hxx>
+#include <DataTableItemConverter.hxx>
 #include <RegressionCurveItemConverter.hxx>
 #include <RegressionEquationItemConverter.hxx>
 #include <ErrorBarItemConverter.hxx>
@@ -287,6 +288,17 @@ wrapper::ItemConverter* createItemConverter(
                                         rDrawModel, xChartModel,
                                         wrapper::GraphicObjectType::LineAndFillProperties );
                     break;
+            case OBJECTTYPE_DATA_TABLE:
+            {
+                std::unique_ptr<awt::Size> pRefSize;
+                if (pRefSizeProvider)
+                    pRefSize.reset(new awt::Size(pRefSizeProvider->getPageSize()));
+
+                pItemConverter =  new wrapper::DataTableItemConverter(
+                                        xObjectProperties, rDrawModel.GetItemPool(),
+                                        rDrawModel, xChartModel, pRefSize.get());
+            }
+            break;
             default: //OBJECTTYPE_UNKNOWN
                     break;
         }

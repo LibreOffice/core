@@ -74,6 +74,7 @@ enum ObjectType
     OBJECTTYPE_DATA_STOCK_RANGE,
     OBJECTTYPE_DATA_STOCK_LOSS,
     OBJECTTYPE_DATA_STOCK_GAIN,
+    OBJECTTYPE_DATA_TABLE,
     OBJECTTYPE_SHAPE,
     OBJECTTYPE_UNKNOWN
 };
@@ -147,6 +148,9 @@ public:
             , sal_Int32 nChartTypeIndex, sal_Int32 nSeriesIndex );
 
     static OUString createParticleForLegend(
+        const rtl::Reference<::chart::ChartModel>& xChartModel );
+
+    static OUString createParticleForDataTable(
         const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     static OUString addChildParticle( std::u16string_view rParticle, std::u16string_view rChildParticle );
