@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6200e2b7_3795b661",
+        "filename": "vcl/qa/cppunit/png/PngFilterTest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-28T16:23:58Z",
+      "side": 1,
+      "message": "Only actual tests should start with \"test\" + something. For such methods better to use \"check\" + something or \"assert\" + something. Also this could be a function in an anonymous namespace.",
+      "range": {
+        "startLine": 50,
+        "startChar": 9,
+        "endLine": 50,
+        "endChar": 28
+      },
+      "revId": "37ad665a2cc1f6c2d872717a0d51e59535312a4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
