@@ -9,6 +9,23 @@
 
 #include <sal/config.h>
 
+// Needed since LLVM 15 libc++ (hence the ignored -Wunused-macros for older libc++) when
+// #include <boost/multi_array.hpp> below includes Boost 1.79.0
+// workdir/UnpackedTarball/boost/boost/functional.hpp using std::unary_function, but must
+// come very early here in case <functional> is already (indirectly) included earlier:
+#include <config_libcxx.h>
+#if HAVE_LIBCPP
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-macros"
+#endif
+// [-loplugin:reservedid]:
+#define _LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
+#endif
+
 #include <string_view>
 
 #include <config_features.h>

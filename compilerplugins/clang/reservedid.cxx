@@ -113,7 +113,7 @@ void ReservedId::postRun() {
                 for (;;) {
                     if (d->getKind() == MacroDirective::MD_Define) {
                         auto loc = d->getLocation();
-                        if (loc.isValid() && !ignoreLocation(loc)) {
+                        if (loc.isValid() && !ignoreLocation(loc) && !suppressWarningAt(loc)) {
                             auto file = getFilenameOfLocation(loc);
                             if (!loplugin::isSameUnoIncludePathname(
                                     file,
