@@ -17,14 +17,15 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
+#include <utility>
 
 namespace apitest
 {
 class OOO_DLLPUBLIC_TEST XNamed
 {
 public:
-    XNamed(const OUString& rTestName)
-        : m_aTestName(rTestName)
+    XNamed(OUString aTestName)
+        : m_aTestName(std::move(aTestName))
     {
     }
 

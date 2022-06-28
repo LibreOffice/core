@@ -15,14 +15,15 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
+#include <utility>
 
 namespace apitest
 {
 class OOO_DLLPUBLIC_TEST XNameAccess
 {
 public:
-    XNameAccess(const OUString& rName)
-        : m_aName(rName)
+    XNameAccess(OUString aName)
+        : m_aName(std::move(aName))
     {
     }
 

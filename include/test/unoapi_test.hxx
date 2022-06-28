@@ -24,7 +24,7 @@
 class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
-    UnoApiTest(const OUString& path);
+    UnoApiTest(OUString path);
 
     void createFileURL(std::u16string_view aFileBase, OUString& rFilePath);
 
