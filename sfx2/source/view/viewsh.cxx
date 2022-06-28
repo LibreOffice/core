@@ -1546,6 +1546,16 @@ void SfxViewShell::libreOfficeKitViewUpdatedCallbackPerViewId(int nType, int nVi
             << lokCallbackTypeToString(nType));
 }
 
+void SfxViewShell::libreOfficeKitViewAddPendingInvalidateTiles()
+{
+    if (pImpl->m_pLibreOfficeKitViewCallback)
+        pImpl->m_pLibreOfficeKitViewCallback->libreOfficeKitViewAddPendingInvalidateTiles();
+    else
+        SAL_INFO(
+            "sfx.view",
+            "SfxViewShell::libreOfficeKitViewAddPendingInvalidateTiles no callback set!");
+}
+
 void SfxViewShell::afterCallbackRegistered()
 {
 }
