@@ -54,7 +54,7 @@ protected:
     const css::uno::Reference< css::frame::XModel >& getModel() const { return mxModel; }
 public:
     VbaDocumentBase(    const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
-            css::uno::Reference< css::frame::XModel > const & xModel );
+            css::uno::Reference< css::frame::XModel > xModel );
     VbaDocumentBase(    css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     // Attributes

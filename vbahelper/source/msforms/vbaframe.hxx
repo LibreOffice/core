@@ -37,7 +37,7 @@ public:
         const css::uno::Reference< css::uno::XInterface >& xControl,
         const css::uno::Reference< css::frame::XModel >& xModel,
         std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper,
-        const css::uno::Reference< css::awt::XControl >& xDialog );
+        css::uno::Reference< css::awt::XControl > xDialog );
 
     // XFrame attributes
     virtual OUString SAL_CALL getCaption() override;

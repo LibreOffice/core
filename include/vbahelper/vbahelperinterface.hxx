@@ -30,6 +30,7 @@
 #include <ooo/vba/XHelperInterface.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <utility>
 #include <vbahelper/vbahelper.hxx>
 
 // use this class when you have an object like
@@ -66,7 +67,7 @@ protected:
     css::uno::WeakReference< ov::XHelperInterface > mxParent;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 public:
-    InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxParent( xParent ), mxContext( xContext ) {}
+    InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, css::uno::Reference< css::uno::XComponentContext > xContext ) : mxParent( xParent ), mxContext(std::move( xContext )) {}
     virtual OUString getServiceImplName() = 0;
     virtual css::uno::Sequence<OUString> getServiceNames() = 0;
 
