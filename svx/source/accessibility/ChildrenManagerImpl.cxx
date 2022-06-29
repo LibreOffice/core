@@ -114,12 +114,12 @@ tools::Long ChildrenManagerImpl::GetChildCount() const noexcept
 
 css::uno::Reference<css::drawing::XShape> ChildrenManagerImpl::GetChildShape(tools::Long nIndex)
 {
-    uno::Reference<XAccessible> xAcc = GetChild(nIndex);
-    auto I = std::find_if(maVisibleChildren.begin(), maVisibleChildren.end(),
-        [&xAcc](const ChildDescriptor& rChild) { return rChild.mxAccessibleShape == xAcc; });
-    if (I != maVisibleChildren.end())
-        return I->mxShape;
-    return uno::Reference< drawing::XShape > ();
+    // Check whether the given index is valid.
+    if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maVisibleChildren.size())
+        throw lang::IndexOutOfBoundsException (
+            "no accessible child with index " + OUString::number(nIndex),
+            mxParent);
+    return maVisibleChildren[nIndex].mxShape;
 }
 
 /** Return the requested accessible child object.  Create it if it is not
