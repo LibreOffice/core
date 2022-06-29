@@ -177,6 +177,24 @@
       "parentUuid": "21375019_2dae0635",
       "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92b7c1af_b9e5924c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-29T09:09:16Z",
+      "side": 1,
+      "message": "This looks like a workaround to me. The test loads/saves a document then has a long list of asserts on what the result is. If you need to \"refresh\" something right after load, that sounds suboptimal.",
+      "parentUuid": "316cf1e8_0e09989d",
+      "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
