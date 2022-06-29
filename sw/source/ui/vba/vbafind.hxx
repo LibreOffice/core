@@ -57,9 +57,10 @@ private:
     /// @throws css::uno::RuntimeException
     bool SearchReplace();
 
-public:
     /// @throws css::uno::RuntimeException
-    SwVbaFind( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextRange >& xTextRange );
+    SwVbaFind( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel );
+public:
+    static css::uno::Reference< ooo::vba::word::XFind > GetOrCreateFind(const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< com::sun::star::uno::XComponentContext >& rContext, const css::uno::Reference< com::sun::star::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextRange >& xTextRange);
     virtual ~SwVbaFind() override;
 
     // Attributes
