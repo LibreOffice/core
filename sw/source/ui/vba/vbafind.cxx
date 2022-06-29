@@ -22,13 +22,18 @@
 #include <ooo/vba/word/WdReplace.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include "doc.hxx"
+#include "docsh.hxx"
 #include "wordvbahelper.hxx"
+#include <rtl/ref.hxx>
+#include <sal/log.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaFind::SwVbaFind( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange ) :
-    SwVbaFind_BASE( rParent, rContext ), mxModel( xModel ), mxTextRange( xTextRange ), mbReplace( false ), mnReplaceType( word::WdReplace::wdReplaceOne ), mnWrap( word::WdFindWrap::wdFindStop )
+
+SwVbaFind::SwVbaFind( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& xModel ) :
+    SwVbaFind_BASE( rParent, rContext ), mxModel( xModel ), mbReplace( false ), mnReplaceType( word::WdReplace::wdReplaceOne ), mnWrap( word::WdFindWrap::wdFindStop )
 {
     mxReplaceable.set( mxModel, uno::UNO_QUERY_THROW );
     mxPropertyReplace.set( mxReplaceable->createReplaceDescriptor(), uno::UNO_QUERY_THROW );
@@ -39,6 +44,27 @@ SwVbaFind::SwVbaFind( const uno::Reference< ooo::vba::XHelperInterface >& rParen
 SwVbaFind::~SwVbaFind()
 {
 }
+
+uno::Reference< word::XFind > SwVbaFind::GetOrCreateFind(const uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                                                         const uno::Reference< uno::XComponentContext >& rContext,
+                                                         const uno::Reference< frame::XModel >& xModel,
+                                                         const uno::Reference< text::XTextRange >& xTextRange)
+{
+    rtl::Reference< SwVbaFind > xFind;
+    SwDoc* pDoc = word::getDocShell( xModel )->GetDoc();
+    if( pDoc )
+        xFind = dynamic_cast<SwVbaFind *>( pDoc->getVbaFind().get() );
+    if ( !xFind )
+    {
+        xFind = new SwVbaFind( rParent, rContext, xModel );
+        if ( pDoc )
+            pDoc->setVbaFind( xFind );
+    }
+    xFind->mxTextRange = xTextRange;
+
+    return xFind;
+}
+
 
 bool SwVbaFind::InRange( const uno::Reference< text::XTextRange >& xCurrentRange )
 {

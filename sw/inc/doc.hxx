@@ -175,6 +175,10 @@ namespace com::sun::star {
     namespace script::vba { class XVBAEventProcessor; }
 }
 
+namespace ooo::vba::word {
+    class XFind;
+}
+
 namespace sfx2 {
     class IXmlIdRegistry;
 }
@@ -281,6 +285,7 @@ class SW_DLLPUBLIC SwDoc final
     std::unique_ptr<IGrammarContact> mpGrammarContact;             //< for grammar checking in paragraphs during editing
 
     css::uno::Reference< css::script::vba::XVBAEventProcessor > mxVbaEvents;
+    css::uno::Reference< ooo::vba::word::XFind > mxVbaFind;
     css::uno::Reference<css::container::XNameContainer> m_xTemplateToProjectCache;
 
     /// Table styles (autoformats that are applied with table changes).
@@ -1619,6 +1624,8 @@ public:
     void SetDefaultPageMode(bool bSquaredPageMode);
     bool IsSquaredPageMode() const;
 
+    css::uno::Reference< ooo::vba::word::XFind > getVbaFind() const { return mxVbaFind; }
+    void setVbaFind( const css::uno::Reference< ooo::vba::word::XFind > &xFind) { mxVbaFind = xFind; }
     css::uno::Reference< css::script::vba::XVBAEventProcessor > const & GetVbaEventProcessor();
     void SetVBATemplateToProjectCache( css::uno::Reference< css::container::XNameContainer > const & xCache ) { m_xTemplateToProjectCache = xCache; };
     const css::uno::Reference< css::container::XNameContainer >& GetVBATemplateToProjectCache() const { return m_xTemplateToProjectCache; };
