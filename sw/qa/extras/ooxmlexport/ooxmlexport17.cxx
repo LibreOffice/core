@@ -16,6 +16,7 @@
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/TextGridMode.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -1019,6 +1020,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148273_sectionBulletFormatLeak, "tdf148273_secti
     // i.e. empty paragraph formats from the first section leaked to the bullet's formatting
     uno::Any aValue = xProps->getPropertyValue("ListAutoFormat");
     CPPUNIT_ASSERT_EQUAL(false, aValue.hasValue());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf149089, "tdf149089.docx")
+{
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    uno::Reference<beans::XPropertySet> xPageStyle(xPageStyles->getByName("Standard"), uno::UNO_QUERY);
+    sal_Int16 nGridMode;
+    xPageStyle->getPropertyValue("GridMode") >>= nGridMode;
+    CPPUNIT_ASSERT_EQUAL( sal_Int16(text::TextGridMode::LINES), nGridMode);   // was LINES_AND_CHARS
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
