@@ -63,7 +63,6 @@ private:
     PortionType mnWhichPor;       // Who's who?
     bool m_bJoinBorderWithPrev;
     bool m_bJoinBorderWithNext;
-    SwTwips m_nExtraBlankWidth = 0;    // width of spaces after the break
 
     void Truncate_();
 
@@ -84,8 +83,6 @@ public:
     SwTwips PrtWidth() const { return Width(); }
     void AddPrtWidth( const SwTwips nNew ) { Width( Width() + nNew ); }
     void SubPrtWidth( const SwTwips nNew ) { Width( Width() - nNew ); }
-    SwTwips ExtraBlankWidth() const { return m_nExtraBlankWidth; }
-    void ExtraBlankWidth(const SwTwips nNew) { m_nExtraBlankWidth = nNew; }
     SwTwips GetHangingBaseline() const { return mnHangingBaseline; }
     void SetHangingBaseline( const SwTwips nNewBaseline ) { mnHangingBaseline = nNewBaseline; }
 
@@ -194,7 +191,6 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
     mnWhichPor = rPortion.mnWhichPor;
     m_bJoinBorderWithPrev = rPortion.m_bJoinBorderWithPrev;
     m_bJoinBorderWithNext = rPortion.m_bJoinBorderWithNext;
-    m_nExtraBlankWidth = rPortion.m_nExtraBlankWidth;
     return *this;
 }
 
@@ -206,8 +202,7 @@ inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
     mnHangingBaseline( rPortion.mnHangingBaseline ),
     mnWhichPor( rPortion.mnWhichPor ),
     m_bJoinBorderWithPrev( rPortion.m_bJoinBorderWithPrev ),
-    m_bJoinBorderWithNext( rPortion.m_bJoinBorderWithNext ),
-    m_nExtraBlankWidth(rPortion.m_nExtraBlankWidth)
+    m_bJoinBorderWithNext( rPortion.m_bJoinBorderWithNext )
 {
 }
 
