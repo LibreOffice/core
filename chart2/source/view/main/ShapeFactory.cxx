@@ -2533,16 +2533,17 @@ void ShapeFactory::removeSubShapes( const rtl::Reference<SvxShapeGroupAnyD>& xSh
 }
 
 rtl::Reference<SvxTableShape>
-ShapeFactory::createTable(rtl::Reference<SvxShapeGroupAnyD> const& xTarget)
+ShapeFactory::createTable(rtl::Reference<SvxShapeGroupAnyD> const& xTarget, OUString const& rName)
 {
-    if( !xTarget.is() )
+    if (!xTarget.is())
         return nullptr;
 
     //create table shape
     rtl::Reference<SvxTableShape> xShape = new SvxTableShape(nullptr);
     xShape->setShapeKind(SdrObjKind::Table);
     xTarget->addShape(*xShape);
-
+    if (!rName.isEmpty())
+        setShapeName(xShape, rName);
     return xShape;
 }
 
