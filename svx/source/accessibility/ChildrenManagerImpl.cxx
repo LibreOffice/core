@@ -24,6 +24,7 @@
 #include "ChildrenManagerImpl.hxx"
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/AccessibleControlShape.hxx>
+#include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <vcl/svapp.hxx>
@@ -424,7 +425,7 @@ void ChildrenManagerImpl::CreateAccessibilityObjects (
             rChild.mbCreateEventPending = false;
             mrContext.CommitChange (
                 AccessibleEventId::CHILD,
-                uno::Any(rChild.mxAccessibleShape),
+                uno::Any(uno::Reference<XAccessible>(rChild.mxAccessibleShape)),
                 uno::Any());
         }
         ++nPos;
@@ -472,7 +473,7 @@ void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
 
     // Inform listeners about new child.
     uno::Any aNewShape;
-    aNewShape <<= rDescriptor.mxAccessibleShape;
+    aNewShape <<= uno::Reference<XAccessible>(rDescriptor.mxAccessibleShape);
     aGuard.clear();
     mrContext.CommitChange (
         AccessibleEventId::CHILD,
@@ -517,7 +518,7 @@ void ChildrenManagerImpl::SetShapeList (const css::uno::Reference<css::drawing::
 }
 
 
-void ChildrenManagerImpl::AddAccessibleShape (css::uno::Reference<css::accessibility::XAccessible> const & shape)
+void ChildrenManagerImpl::AddAccessibleShape (rtl::Reference<AccessibleShape> const & shape)
 {
     assert(shape.is());
     maAccessibleShapes.push_back (shape);
@@ -547,7 +548,7 @@ void ChildrenManagerImpl::ClearAccessibleShapeList()
     for (auto& rChild : aLocalVisibleChildren)
         if ( rChild.mxAccessibleShape.is() && rChild.mxShape.is() )
         {
-            ::comphelper::disposeComponent(rChild.mxAccessibleShape);
+            rChild.mxAccessibleShape->dispose();
             rChild.mxAccessibleShape = nullptr;
         }
 
@@ -556,7 +557,7 @@ void ChildrenManagerImpl::ClearAccessibleShapeList()
         if (rpShape.is())
         {
             // Dispose the object.
-            ::comphelper::disposeComponent(rpShape);
+            rpShape->dispose();
             rpShape = nullptr;
         }
 }
@@ -748,7 +749,7 @@ bool ChildrenManagerImpl::ReplaceChild (
         mrContext.CommitChange (
             AccessibleEventId::CHILD,
             uno::Any(),
-            uno::Any (I->mxAccessibleShape));
+            uno::Any (uno::Reference<XAccessible>(I->mxAccessibleShape)));
 
         // Replace with replacement and send an event about existence
         // of the new child.
@@ -764,7 +765,7 @@ bool ChildrenManagerImpl::ReplaceChild (
         I->mxAccessibleShape = pNewChild.get();
         mrContext.CommitChange (
             AccessibleEventId::CHILD,
-            uno::Any (I->mxAccessibleShape),
+            uno::Any (uno::Reference<XAccessible>(I->mxAccessibleShape)),
             uno::Any());
 
         return true;
@@ -1026,7 +1027,7 @@ ChildDescriptor::ChildDescriptor (const Reference<drawing::XShape>& xShape)
 }
 
 
-ChildDescriptor::ChildDescriptor (const Reference<XAccessible>& rxAccessibleShape)
+ChildDescriptor::ChildDescriptor (const rtl::Reference<AccessibleShape>& rxAccessibleShape)
     : mxAccessibleShape (rxAccessibleShape),
       mbCreateEventPending (true)
 {
@@ -1034,11 +1035,6 @@ ChildDescriptor::ChildDescriptor (const Reference<XAccessible>& rxAccessibleShap
     // state set.
     AccessibleShape* pAccessibleShape = GetAccessibleShape();
     pAccessibleShape->SetState (AccessibleStateType::VISIBLE);
-}
-
-AccessibleShape* ChildDescriptor::GetAccessibleShape() const
-{
-    return static_cast<AccessibleShape*> (mxAccessibleShape.get());
 }
 
 void ChildDescriptor::setIndexAtAccessibleShape(sal_Int32 _nIndex)
@@ -1056,16 +1052,15 @@ void ChildDescriptor::disposeAccessibleObject (AccessibleContextBase& rParent)
 
     // Send event that the shape has been removed.
     uno::Any aOldValue;
-    aOldValue <<= mxAccessibleShape;
+    aOldValue <<= uno::Reference<XAccessible>(mxAccessibleShape);
     rParent.CommitChange (
         AccessibleEventId::CHILD,
         uno::Any(),
         aOldValue);
 
     // Dispose and remove the object.
-    Reference<lang::XComponent> xComponent (mxAccessibleShape, uno::UNO_QUERY);
-    if (xComponent.is())
-        xComponent->dispose ();
+    if (mxAccessibleShape.is())
+        mxAccessibleShape->dispose();
 
     mxAccessibleShape = nullptr;
 }
