@@ -1212,10 +1212,10 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
     }
 
     // tdf#149754 VCL gradient draw is not capable to handle all primitive gradient definitions,
-    // what should be clear due to being developed to ectend/replace them in
+    // what should be clear due to being developed to extend/replace them in
     // capabilities & precision.
     // It is e.g. not capable to correctly paint if the OutputRange is not completely
-    // inside the DefinitionRange, thus forcing to paint gradent parts *outside* the
+    // inside the DefinitionRange, thus forcing to paint gradient parts *outside* the
     // DefinitionRange.
     // This happens for Writer with Frames anchored in Frames (and was broken due to
     // falling back to VCL Gradient paint here), and for the new SlideBackgroundFill
