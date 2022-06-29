@@ -25,7 +25,6 @@ class DeleteAllComments(UITestCase):
 
             self.xUITest.executeCommand(".uno:SelectAll")
             self.xUITest.executeCommand(".uno:InsertAnnotation")
-            cursor = document.getCurrentController().getViewCursor()
             type_text(xWriterEdit, "EEEEE")
             self.xUITest.executeCommand(".uno:InsertAnnotation")
             self.xUITest.executeCommand(".uno:DeleteAllNotes")
@@ -34,7 +33,7 @@ class DeleteAllComments(UITestCase):
 
     def test_comment_trackchanges(self):
 #tdf111524
-        with self.ui_test.create_doc_in_start_center("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")

@@ -16,7 +16,7 @@ import string
 class Tdf146375(UITestCase):
 
    def test_tdf146375(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             count = 0
             # Use a random name

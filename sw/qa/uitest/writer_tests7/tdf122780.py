@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf122780(UITestCase):
 
    def test_tdf122780(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf122780.docx")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf122780.docx")):
             with self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties") as xDialog:
 
                 # Without the fix in place, this test would have hung here

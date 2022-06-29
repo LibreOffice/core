@@ -14,7 +14,6 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf120731(UITestCase):
    def test_tdf120731_crash_open_char_dialog(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf120731.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.xUITest.executeCommand(".uno:SelectAll")
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog"):

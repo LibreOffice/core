@@ -17,7 +17,6 @@ class tdf118208(UITestCase):
 
     def test_tdf118208_search_dialog_format_crash(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf118208.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             # 1. Open the attached file.
             # 2. Press ctrl-H to show the search and replace dialog.
             # 3. Press the "Format..."  button.

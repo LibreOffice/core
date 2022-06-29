@@ -15,7 +15,6 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf124586(UITestCase):
    def test_tdf124586_crash_switch_outline_numbering(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf124586.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             #Goto Tools > Chapter Numbering.
             with self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog") as xDialog:

@@ -47,7 +47,6 @@ class WriterSort(UITestCase):
             #Tools - Sort
             with self.ui_test.execute_dialog_through_command(".uno:SortDialog") as xDialog:
                 xDown = xDialog.getChild("down1")
-                xcolsb1 = xDialog.getChild("colsb1")
                 xtypelb1 = xDialog.getChild("typelb1")
                 xcharacter = xDialog.getChild("character")
                 xseparator = xDialog.getChild("separator")

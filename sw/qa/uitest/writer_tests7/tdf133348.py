@@ -14,10 +14,6 @@ class tdf133348(UITestCase):
 
         with self.ui_test.create_doc_in_start_center("writer") as document:
 
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
-
-
             self.xUITest.executeCommand(".uno:SelectAll")
             xArgs = mkPropertyValues({"Text": "C1"})
             self.xUITest.executeCommandWithParameters(".uno:InsertAnnotation", xArgs)
@@ -33,7 +29,6 @@ class tdf133348(UITestCase):
                 actionProps = mkPropertyValues(props)
                 xFirstName.executeAction("TYPE", actionProps)
 
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             xArgs = mkPropertyValues({"Text": "C2"})
             self.xUITest.executeCommandWithParameters(".uno:ReplyComment", xArgs)
 

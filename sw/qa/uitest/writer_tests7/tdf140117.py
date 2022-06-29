@@ -26,7 +26,6 @@ class tdf140117(UITestCase):
 
                     xPageSytle = document.getStyleFamilies().getByIndex(2)
                     xHeaderText = xPageSytle.getByIndex(0).HeaderText.String
-                    xHeaderFirstText = xPageSytle.getByIndex(0).HeaderTextFirst.String
                     xHeaderLeftText = xPageSytle.getByIndex(0).HeaderTextLeft.String
                     xHeaderRightText = xPageSytle.getByIndex(0).HeaderTextRight.String
 

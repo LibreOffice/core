@@ -19,7 +19,7 @@ class trackedchanges(UITestCase):
 
     def test_tdf91270(self):
 
-        with self.ui_test.create_doc_in_start_center("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
@@ -133,8 +133,6 @@ class trackedchanges(UITestCase):
 
     def test_list_of_changes(self):
         with self.ui_test.load_file(get_url_for_data_file("trackedChanges.odt")) as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
             listText = [
                     "Unknown Author\t01/24/2020 16:19:32\t",
@@ -197,8 +195,6 @@ class trackedchanges(UITestCase):
 
     def test_tdf135018(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf135018.odt")) as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
             self.assertEqual(5, document.CurrentController.PageCount)
 
@@ -223,8 +219,6 @@ class trackedchanges(UITestCase):
 
     def test_tdf144270_tracked_table_rows(self):
         with self.ui_test.load_file(get_url_for_data_file("TC-table-del-add.docx")) as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
             tables = document.getTextTables()
             self.assertEqual(3, len(tables))
@@ -328,10 +322,7 @@ class trackedchanges(UITestCase):
 
     def test_tdf148032(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("trackedChanges.odt")) as document:
-
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
+        with self.ui_test.load_file(get_url_for_data_file("trackedChanges.odt")):
 
             # adding new Comment
             self.xUITest.executeCommand(".uno:InsertAnnotation")

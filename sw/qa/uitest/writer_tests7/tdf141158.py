@@ -9,7 +9,6 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import get_url_for_data_file
 
@@ -32,7 +31,6 @@ class TestTdf141158(UITestCase):
             self.xUITest.executeCommand(".uno:JumpToHeader")
             # get the text of the header
             xPageSytle = document.getStyleFamilies().getByIndex(2)
-            xHeaderText = xPageSytle.getByIndex(0).HeaderText.String
             xHeaderLeftText = xPageSytle.getByIndex(0).HeaderTextLeft.String
             # without the fix in place it was "Right Header" (lost hidden left header),
             # with the fix it should pass...

@@ -9,7 +9,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from com.sun.star.rdf.URIs import RDF_TYPE, RDFS_COMMENT, RDFS_LABEL, ODF_PREFIX, ODF_SUFFIX, LO_EXT_SHADING
+from com.sun.star.rdf.URIs import LO_EXT_SHADING
 
 class styleNavigator(UITestCase):
 

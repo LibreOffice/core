@@ -49,7 +49,6 @@ class CheckNamedPropertyValues(unittest.TestCase):
         p2 = PropertyValue(Name="Horst", Value="BadGuy")
         prop2 = uno.Any("[]com.sun.star.beans.PropertyValue", (p2,))
 
-        t = xCont.getElementType()
         self.assertFalse(xCont.hasElements(),  "Initial container is not empty")
 
         uno.invoke(xCont, "insertByName", ("prop1", prop1))

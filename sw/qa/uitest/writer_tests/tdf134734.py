@@ -8,10 +8,8 @@
 #
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, select_pos
 from com.sun.star.drawing.FillStyle import SOLID
-import importlib
 
 class TestClass(UITestCase):
     def test_master_page_background(self):

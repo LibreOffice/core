@@ -8,15 +8,13 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import type_text, get_url_for_data_file, get_state_as_dict
+from uitest.uihelper.common import get_url_for_data_file, get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf137737(UITestCase):
 
     def test_tdf137737(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf137737.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
             self.assertEqual(2, writer_doc.Endnotes.Count)
 

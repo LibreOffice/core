@@ -15,7 +15,6 @@ class asianPhoneticGuide(UITestCase):
 
    def test_asian_phonetic_guide(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:RubyDialog", close_button="close") as xDialog:
 

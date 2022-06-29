@@ -15,7 +15,6 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf126017(UITestCase):
    def test_tdf126017_crash_after_undo(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf126017.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             #go to TOC
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:

@@ -8,8 +8,6 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from com.sun.star.text.TextContentAnchorType import AT_PAGE, AT_PARAGRAPH
 
 class tdf143785(UITestCase):
 
@@ -17,23 +15,20 @@ class tdf143785(UITestCase):
 
         with self.ui_test.load_file(get_url_for_data_file("tdf137802.odt")) as document:
 
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
-
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
 
             self.ui_test.wait_until_child_is_available('metricfield')
 
             self.assertEqual(False, document.isModified())
 
-            with self.ui_test.execute_dialog_through_command(".uno:TransformDialog", close_button="cancel") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TransformDialog", close_button="cancel"):
                 pass
 
             # Without the fix in place, this test would have failed with
             # AssertionError: False != True
             self.assertEqual(False, document.isModified())
 
-            with self.ui_test.execute_dialog_through_command(".uno:FormatArea", close_button="cancel") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:FormatArea", close_button="cancel"):
                 pass
 
             # tdf#143778: Without the fix in place, this test would have failed with

@@ -15,7 +15,6 @@ from uitest.uihelper.common import get_url_for_data_file
 class tableToText(UITestCase):
     def test_table_to_text(self):
         with self.ui_test.load_file(get_url_for_data_file("tableToText.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             #dialog Table to text - Tabs; verify
             with self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText") as xDialog:
                 tabs = xDialog.getChild("tabs")

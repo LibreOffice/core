@@ -15,8 +15,6 @@ class tdf126168(UITestCase):
 
    def test_tdf126168_frame_undo_redo_crash(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
             #2) Menu > Insert > Frame > Frame
             #3) Press OK in Frame dialog

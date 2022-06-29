@@ -17,8 +17,7 @@ from uitest.uihelper.common import change_measurement_unit
 
 class tableProperties(UITestCase):
     def test_table_properties(self):
-        with self.ui_test.load_file(get_url_for_data_file("tableToText.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("tableToText.odt")):
 
             change_measurement_unit(self, "Centimeter")
 

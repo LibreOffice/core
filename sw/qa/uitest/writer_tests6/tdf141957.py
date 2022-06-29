@@ -15,7 +15,6 @@ class tdf141957(UITestCase):
     def test_tdf_141957(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf141957.odt")):
             with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
-                tabcontrol = xDialog.getChild("tabcontrol")
 
                 xLandscape = xDialog.getChild('radiobuttonLandscape')
                 self.assertEqual("true", get_state_as_dict(xLandscape)['Checked'])

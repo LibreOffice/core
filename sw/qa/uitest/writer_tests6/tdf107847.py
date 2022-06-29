@@ -15,7 +15,6 @@ class tdf107847(UITestCase):
 
    def test_tdf_107847_macro_tab_crash(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")

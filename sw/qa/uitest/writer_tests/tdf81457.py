@@ -15,7 +15,7 @@ class tdf81457(UITestCase):
 
 #tdf 81457
    def test_open_documentProperties_tdf81457(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf81457.odt")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf81457.odt")):
             with self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "2")     #tab Custom properties

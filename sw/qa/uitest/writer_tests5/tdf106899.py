@@ -17,7 +17,6 @@ class tdf106899(UITestCase):
         # Copy concordance file containing an utf8 index entry
         org.libreoffice.unotest.makeCopyFromTDOC("tdf106899.sdi")
         with self.ui_test.load_file(get_url_for_data_file("tdf106899.odt")) as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # Update the alphabetical index and check if it contains the utf8 index entry
             xDocumentIndexes = document.DocumentIndexes

@@ -16,7 +16,7 @@ import time
 class TestSwGrfShell(UITestCase):
     def testFormatGraphicDlg(self):
         # Given a document with an image with a relative size:
-        with self.ui_test.load_file(get_url_for_data_file("image-rel-size.fodt")) as component:
+        with self.ui_test.load_file(get_url_for_data_file("image-rel-size.fodt")):
             self.xUITest.executeCommand(".uno:JumpToNextFrame")
             # 120 ms in the SwView ctor
             time.sleep(0.2)

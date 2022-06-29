@@ -16,7 +16,6 @@ class watermark(UITestCase):
 
    def test_insert_watermark(self):
         with self.ui_test.create_doc_in_start_center("writer"):
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:Watermark") as xDialog:
                 xTextInput = xDialog.getChild("TextInput")

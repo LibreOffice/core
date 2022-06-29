@@ -209,7 +209,7 @@ class WriterPageDialog(UITestCase):
     def test_cancel_button_page_dialog(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 
-            with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="cancel") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="cancel"):
                 pass
 
 

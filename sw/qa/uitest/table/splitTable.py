@@ -14,7 +14,6 @@ from uitest.uihelper.common import get_url_for_data_file
 class splitTable(UITestCase):
     def test_split_table(self):
         with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")
             self.xUITest.executeCommand(".uno:GoDown")
@@ -33,7 +32,6 @@ class splitTable(UITestCase):
 
         #dialog Split table, check Custom heading, OK -> verify 2 tables, 1st has 2 rows, second has 4 rows
         with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")
             self.xUITest.executeCommand(".uno:GoDown")
@@ -51,7 +49,6 @@ class splitTable(UITestCase):
 
         #dialog Split table, check No heading, OK -> verify 2 tables, 1st has 2 rows, second has 4 rows
         with self.ui_test.load_file(get_url_for_data_file("splitTable.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")
             self.xUITest.executeCommand(".uno:GoDown")

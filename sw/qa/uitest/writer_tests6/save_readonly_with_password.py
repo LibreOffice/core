@@ -92,8 +92,6 @@ class save_readonly_with_password(UITestCase):
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
 
-                xWriterEdit = self.xUITest.getTopFocusWindow().getChild("writer_edit")
-
                 self.assertTrue(document.isReadonly())
 
                 with self.ui_test.execute_dialog_through_command(".uno:EditDoc") as xDialog:

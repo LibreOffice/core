@@ -16,7 +16,6 @@ class tdf81292(UITestCase):
 
    def test_tdf81292_table_sort(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf81292.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             #select whole table
             self.xUITest.executeCommand(".uno:SelectTable")
             #Tools - Sort

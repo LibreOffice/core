@@ -16,8 +16,6 @@ class fontWorksDialog(UITestCase):
 
     def test_fontwork_selector(self):
         with self.ui_test.create_doc_in_start_center("writer"):
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
             with self.ui_test.execute_dialog_through_command(".uno:FontworkGalleryFloater", close_button="cancel") as xDialog:
                 FontWorkSelector = xDialog.getChild("ctlFavoriteswin")

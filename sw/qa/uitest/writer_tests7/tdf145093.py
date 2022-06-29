@@ -7,15 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import select_pos
-from uitest.uihelper.common import type_text
 from uitest.uihelper.common import get_url_for_data_file
 
 class tdf145093(UITestCase):
     def test_tdf145093(self):
         # load the sample file
-        with self.ui_test.load_file(get_url_for_data_file("tdf39721.fodt")) as document:
+        with self.ui_test.load_file(get_url_for_data_file("tdf39721.fodt")):
 
             # redlining should be on
             self.xUITest.executeCommand(".uno:TrackChanges")

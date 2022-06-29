@@ -13,8 +13,7 @@ class dateFormFieldDialog(UITestCase):
 
     def test_setting_date_format(self):
         # open a file with a date form field
-        with self.ui_test.load_file(get_url_for_data_file("date_form_field.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("date_form_field.odt")):
 
             # open the dialog (cursor is at the field)
             with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
@@ -38,8 +37,7 @@ class dateFormFieldDialog(UITestCase):
 
     def test_date_field_with_custom_format(self):
         # open a file with a date form field
-        with self.ui_test.load_file(get_url_for_data_file("date_form_field_custom_format.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("date_form_field_custom_format.odt")):
 
             # open the dialog (cursor is at the field)
             with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
@@ -61,7 +59,6 @@ class dateFormFieldDialog(UITestCase):
     def test_date_reformat(self):
         # open a file with a date form field
         with self.ui_test.load_file(get_url_for_data_file("date_form_field.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             self.assertEqual(writer_doc.getText().getString(), "07/17/19")
 
             # open the dialog (cursor is at the field)
@@ -84,7 +81,6 @@ class dateFormFieldDialog(UITestCase):
     def test_date_field_with_placeholder(self):
         # open a file with a date form field
         with self.ui_test.load_file(get_url_for_data_file("date_form_field_with_placeholder.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             self.assertEqual(writer_doc.getText().getString(), "[select date]")
 
             # open the dialog (cursor is at the field)
@@ -110,7 +106,6 @@ class dateFormFieldDialog(UITestCase):
 
         # open a file with a date form field
         with self.ui_test.load_file(get_url_for_data_file("date_form_field_without_current_date.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             self.assertEqual(writer_doc.getText().getString(), "07/17/19")
 
             # open the dialog (cursor is at the field)
