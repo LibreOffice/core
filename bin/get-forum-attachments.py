@@ -24,25 +24,34 @@ from requests.packages.urllib3.util.retry import Retry
 
 forums = {
     # https://wiki.documentfoundation.org/Website/Web_Sites_services#Unofficial_and_Related_Pages
-    'en': "https://forum.openoffice.org/en/forum",
-    'es': "https://forum.openoffice.org/es/forum",
-    'fr': "https://forum.openoffice.org/fr/forum",
-    'hu': "https://forum.openoffice.org/hu/forum",
-    'it': "https://forum.openoffice.org/it/forum",
-    'ja': "https://forum.openoffice.org/ja/forum",
-    'nl': "https://forum.openoffice.org/nl/forum",
-    'pl': "https://forum.openoffice.org/pl/forum",
-    'vi': "https://forum.openoffice.org/vi/forum",
-    'tr': "https://forum.libreoffice.org.tr",
-    'de': "https://www.openoffice-forum.de",
-    'de2': "https://www.libreoffice-forum.de",
-    'de3': "https://de.openoffice.info",
+    'en': ["https://forum.openoffice.org/en/forum", False, 0],
+    'es': ["https://forum.openoffice.org/es/forum", False, 0],
+    'fr': ["https://forum.openoffice.org/fr/forum", False, 0],
+    'hu': ["https://forum.openoffice.org/hu/forum", False, 1300],
+    'it': ["https://forum.openoffice.org/it/forum", False, 0],
+    'ja': ["https://forum.openoffice.org/ja/forum", False, 0],
+    'nl': ["https://forum.openoffice.org/nl/forum", False, 0],
+    'pl': ["https://forum.openoffice.org/pl/forum", False, 0],
+    'vi': ["https://forum.openoffice.org/vi/forum", False, 0],
+    'tr': ["https://forum.libreoffice.org.tr", False, 0],
+    'de': ["https://www.openoffice-forum.de", False, 0],
+    'de2': ["https://www.libreoffice-forum.de", False, 0],
+    'de3': ["https://de.openoffice.info", False, 0],
     # Others
-    'mso-en': "https://www.msofficeforums.com",
-    'mso-de': "https://www.ms-office-forum.net/forum",
+    'mso-de': ["https://www.ms-office-forum.net/forum", True, 0],
+    'mso-en': ["https://www.msofficeforums.com", True, 0],
+    'mso-en2': ["https://www.excelguru.ca/forums", False, 0],
+    'mso-en3': ["http://www.vbaexpress.com/forum", True, 5100],
+    # lang : [url, doLogin, startIndex]
 }
 
-def do_login(session, url, configFile):
+def get_attachment_query(lang):
+    if lang.startswith("mso"):
+        return "/attachment.php?attachmentid="
+    else:
+        return "/download/file.php?id="
+
+def login(session, url, configFile):
     config = configparser.ConfigParser()
 
     config.read(configFile)
@@ -71,20 +80,18 @@ def do_login(session, url, configFile):
 
     return False
 
-def get_attachments_from_url(lang, url, pathes):
+def get_attachments_from_url(lang, config, pathes):
+    url = config[0]
+    doLogin = config[1]
+    startIndex = config[2]
 
     print("Checking " + url)
-
-    startIndex = 0
 
     # Keep the index and resume from there
     indexFile = os.path.join(pathes.outdir, lang + ".index")
     if os.path.isfile(indexFile):
         with open(indexFile) as f:
             startIndex = int(f.readline().rstrip()) + 1
-    else:
-        if lang == 'hu':
-            startIndex = 1300
 
     session = requests.Session()
     retry = Retry(connect=3, backoff_factor=0.5)
@@ -92,17 +99,14 @@ def get_attachments_from_url(lang, url, pathes):
     session.mount('http://', adapter)
     session.mount('https://', adapter)
 
-    if lang.startswith("mso"):
-        if not do_login(session, url, pathes.config):
+    if doLogin:
+        if not login(session, url, pathes.config):
             print("Can't log in to " + url)
             return
 
     invalidCount = 0
     for i in range(startIndex, 999999):
-        if lang.startswith("mso"):
-            fileUrl = url + "/attachment.php?attachmentid=" + str(i)
-        else:
-            fileUrl = url + "/download/file.php?id=" + str(i)
+        fileUrl = url + get_attachment_query(lang) + str(i)
 
         h = session.head(fileUrl)
         header = h.headers
@@ -111,8 +115,8 @@ def get_attachments_from_url(lang, url, pathes):
             # Let's assume this is an invalid file link
             invalidCount += 1
 
-            # Let's assume, if we get 100 invalid files, that there are no more files
-            if invalidCount == 100:
+            # Let's assume, if we get 200 invalid files, that there are no more files
+            if invalidCount == 200:
                 print("No more attachments found in " + url)
                 break
         else:
@@ -158,8 +162,8 @@ if __name__ == '__main__':
     processes = []
     # 10 at a time seems to work fine
     with ThreadPoolExecutor(max_workers=10) as executor:
-        for lang, url in forums.items():
-            processes.append(executor.submit(get_attachments_from_url, lang, url, pathes))
+        for lang, config in forums.items():
+            processes.append(executor.submit(get_attachments_from_url, lang, config, pathes))
 
     for task in as_completed(processes):
         result = task.result()
