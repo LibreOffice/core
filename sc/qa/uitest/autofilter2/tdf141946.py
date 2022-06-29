@@ -50,7 +50,8 @@ class tdf141946(UITestCase):
             xFloatWindow = self.xUITest.getFloatWindow()
             xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xList = xCheckListMenu.getChild("check_list_box")
-            self.assertEqual(2, len(xList.getChildren()))
+            # since tdf#117267, we are showing the hidden filter rows as inactive elements (2 active + 1 inactive)
+            self.assertEqual(3, len(xList.getChildren()))
             xCloseBtn = xFloatWindow.getChild("cancel")
             xCloseBtn.executeAction("CLICK", tuple())
 
