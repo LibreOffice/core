@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9710e02_d1ed97c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-29T18:44:54Z",
+      "side": 1,
+      "message": "Please don\u0027t use . in the end of the commit title.",
+      "revId": "3afa117d59352917d5d18199231a5bdc3937271a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91071ed4_5f633515",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-29T18:44:54Z",
+      "side": 1,
+      "message": "Thanks for the patch! Please take a look at the comments.",
+      "revId": "3afa117d59352917d5d18199231a5bdc3937271a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "715266e7_fdcfea18",
+        "filename": "shell/source/sessioninstall/SyncDbusSessionHelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-29T18:44:54Z",
+      "side": 1,
+      "message": "I prefer a more descriptive message like: \"InstallResources is not implemented\".",
+      "revId": "3afa117d59352917d5d18199231a5bdc3937271a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cac097f_1b2587da",
+        "filename": "shell/source/sessioninstall/SyncDbusSessionHelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-29T18:44:54Z",
+      "side": 1,
+      "message": "Also here, \"SearchFile is not implemented\" is better.",
+      "revId": "3afa117d59352917d5d18199231a5bdc3937271a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
