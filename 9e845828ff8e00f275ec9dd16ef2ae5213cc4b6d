@@ -16,6 +16,24 @@
       "message": "Please change description since you modified vcl part not embedserv or helpcompiler",
       "revId": "9e845828ff8e00f275ec9dd16ef2ae5213cc4b6d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f2dcafe_4869d976",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003620
+      },
+      "writtenOn": "2022-06-29T06:25:45Z",
+      "side": 1,
+      "message": "is there another problem with my commit?",
+      "parentUuid": "43fc594c_699e2f0c",
+      "revId": "9e845828ff8e00f275ec9dd16ef2ae5213cc4b6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
