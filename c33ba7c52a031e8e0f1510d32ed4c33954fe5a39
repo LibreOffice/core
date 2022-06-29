@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad8119ee_e50ead3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-29T16:36:18Z",
+      "side": 1,
+      "message": "Does this fix tdf#141313?",
+      "revId": "c33ba7c52a031e8e0f1510d32ed4c33954fe5a39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
