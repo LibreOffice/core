@@ -15052,24 +15052,48 @@ public:
     }
 
     using GtkInstanceWidget::set_sensitive;
+    using GtkInstanceWidget::get_sensitive;
 
     virtual void set_sensitive(int pos, bool bSensitive, int col) override
     {
         if (col == -1)
-            col = m_nTextCol;
+        {
+            for (const auto& elem : m_aSensitiveMap)
+                set(pos, elem.second, bSensitive);
+        }
         else
+        {
             col = to_internal_model(col);
-        set(pos, m_aSensitiveMap[col], bSensitive);
+            set(pos, m_aSensitiveMap[col], bSensitive);
+        }
+    }
+
+    virtual bool get_sensitive(int pos, int col) const override
+    {
+        col = to_internal_model(col);
+        return get_bool(pos, m_aSensitiveMap.find(col)->second);
     }
 
     virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col) override
     {
-        if (col == -1)
-            col = m_nTextCol;
-        else
-            col = to_internal_model(col);
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
-        set(rGtkIter.iter, m_aSensitiveMap[col], bSensitive);
+        if (col == -1)
+        {
+            for (const auto& elem : m_aSensitiveMap)
+                set(rGtkIter.iter, elem.second, bSensitive);
+        }
+        else
+        {
+            col = to_internal_model(col);
+            set(rGtkIter.iter, m_aSensitiveMap[col], bSensitive);
+        }
+    }
+
+    virtual bool get_sensitive(const weld::TreeIter& rIter, int col) const override
+    {
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        col = to_internal_model(col);
+        return get_bool(rGtkIter.iter, m_aSensitiveMap.find(col)->second);
     }
 
     void set_image(const GtkTreeIter& iter, int col, GdkPixbuf* pixbuf)

@@ -1425,6 +1425,7 @@ protected:
     void do_set_toggle(SvTreeListEntry* pEntry, TriState eState, int col);
 
     static TriState do_get_toggle(SvTreeListEntry* pEntry, int col);
+    static bool do_get_sensitive(SvTreeListEntry* pEntry, int col);
 
     TriState get_toggle(SvTreeListEntry* pEntry, int col) const;
 
@@ -1518,13 +1519,19 @@ public:
 
     virtual void set_text(int pos, const OUString& rText, int col = -1) override;
 
-    void set_sensitive(SvTreeListEntry* pEntry, bool bSensitive, int col);
-
     using SalInstanceWidget::set_sensitive;
+    using SalInstanceWidget::get_sensitive;
+
+    void set_sensitive(SvTreeListEntry* pEntry, bool bSensitive, int col);
+    bool get_sensitive(SvTreeListEntry* pEntry, int col) const;
 
     virtual void set_sensitive(int pos, bool bSensitive, int col = -1) override;
 
     virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col = -1) override;
+
+    virtual bool get_sensitive(int pos, int col) const override;
+
+    virtual bool get_sensitive(const weld::TreeIter& rIter, int col) const override;
 
     virtual TriState get_toggle(int pos, int col = -1) const override;
 
