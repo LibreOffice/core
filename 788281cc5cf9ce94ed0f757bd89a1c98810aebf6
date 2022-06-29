@@ -16,6 +16,24 @@
       "message": "Makes sense to me to revert and give Attila time to investigate this without a pressure to fix it ASAP.",
       "revId": "788281cc5cf9ce94ed0f757bd89a1c98810aebf6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "539bab25_c177ec65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-06-29T07:46:45Z",
+      "side": 1,
+      "message": "Attila was working on a solution yesterday, but it\u0027s ok, if he hasn\u0027t been finished, yet, especially because we don\u0027t want to stop the UBSAN testing. Sorry for the missing feedback.",
+      "parentUuid": "f7db9bce_a4c2b308",
+      "revId": "788281cc5cf9ce94ed0f757bd89a1c98810aebf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
