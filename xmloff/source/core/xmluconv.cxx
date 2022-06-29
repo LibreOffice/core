@@ -406,7 +406,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
     const bool bHasTime = (fValue > 0.0);
 
     sal_Int16 nTempYear = aDate.GetYear();
-    assert(nTempYear != 0);
+    SAL_WARN_IF(nTempYear == 0, "xmloff", "invalid date year");
     if (nTempYear < 0)
     {
         rBuffer.append( '-');
@@ -421,13 +421,13 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
     rBuffer.append( sal_Int32( nTempYear));
     rBuffer.append( '-');
     sal_uInt16 nTemp = aDate.GetMonth();
-    assert(1 <= nTemp && nTemp <= 12);
+    SAL_WARN_IF(nTemp < 1 || nTemp > 12, "xmloff", "invalid date month");
     if (nTemp < 10)
         rBuffer.append( '0');
     rBuffer.append( sal_Int32( nTemp));
     rBuffer.append( '-');
     nTemp = aDate.GetDay();
-    assert(1 <= nTemp && nTemp <= 31);
+    SAL_WARN_IF(nTemp < 1 || nTemp > 31, "xmloff", "invalid date day");
     if (nTemp < 10)
         rBuffer.append( '0');
     rBuffer.append( sal_Int32( nTemp));
