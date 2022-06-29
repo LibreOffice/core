@@ -16,6 +16,24 @@
       "message": "Does this fix tdf#141313?",
       "revId": "c33ba7c52a031e8e0f1510d32ed4c33954fe5a39",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eab4193d_3e5c0196",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-29T18:34:31Z",
+      "side": 1,
+      "message": "Not this one, but https://gerrit.libreoffice.org/c/core/+/136615 \n\nBut this one is still needed, since otherwise you\u0027d have the menu entry, and you could see your phone\u0027s device and enter the pin, but still couldn\u0027t confirm/accept it.\nThx for the bugnumber though, I\u0027ll add it to the other one.",
+      "parentUuid": "ad8119ee_e50ead3e",
+      "revId": "c33ba7c52a031e8e0f1510d32ed4c33954fe5a39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
