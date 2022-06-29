@@ -32,7 +32,8 @@
 void SfxBroadcaster::Broadcast(const SfxHint& rHint)
 {
     // notify all registered listeners exactly once
-    for (size_t i = 0; i < m_Listeners.size(); ++i)
+    size_t nSize = m_Listeners.size();
+    for (size_t i = 0; i < nSize; ++i)
     {
         SfxListener* const pListener = m_Listeners[i];
         if (pListener)
