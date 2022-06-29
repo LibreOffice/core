@@ -4301,11 +4301,12 @@ void SalInstanceTreeView::set_sensitive(SvTreeListEntry* pEntry, bool bSensitive
         for (sal_uInt16 nCur = 0; nCur < nCount; ++nCur)
         {
             SvLBoxItem& rItem = pEntry->GetItem(nCur);
-            if (rItem.GetType() == SvLBoxItemType::String)
+            if (rItem.GetType() == SvLBoxItemType::String
+                || rItem.GetType() == SvLBoxItemType::Button
+                || rItem.GetType() == SvLBoxItemType::ContextBmp)
             {
                 rItem.Enable(bSensitive);
                 InvalidateModelEntry(pEntry);
-                break;
             }
         }
         return;

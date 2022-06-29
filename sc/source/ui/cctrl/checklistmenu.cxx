@@ -450,6 +450,7 @@ ScCheckListMenuControl::Config::Config() :
 ScCheckListMember::ScCheckListMember()
     : mnValue(0.0)
     , mbVisible(true)
+    , mbHiddenByOtherFilter(false)
     , mbDate(false)
     , mbLeaf(false)
     , mbValue(false)
@@ -719,6 +720,8 @@ namespace
             aLabel = ScResId(STR_EMPTYDATA);
         rView.set_toggle(rIter, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
         rView.set_text(rIter, aLabel, 0);
+        if (rMember.mbHiddenByOtherFilter)
+            rView.set_sensitive(rIter, false);
     }
 }
 
@@ -727,7 +730,8 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
     OUString aSearchText = mxEdSearch->get_text();
     aSearchText = ScGlobal::getCharClass().lowercase( aSearchText );
     bool bSearchTextEmpty = aSearchText.isEmpty();
-    size_t n = maMembers.size();
+    size_t nEnableMember = std::count_if(maMembers.begin(), maMembers.end(),
+        [](const ScCheckListMember& rLMem) { return !rLMem.mbHiddenByOtherFilter; });
     size_t nSelCount = 0;
 
     // This branch is the general case, the other is an optimized variant of
@@ -738,7 +742,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
 
         bool bSomeDateDeletes = false;
 
-        for (size_t i = 0; i < n; ++i)
+        for (size_t i = 0; i < nEnableMember; ++i)
         {
             bool bIsDate = maMembers[i].mbDate;
             bool bPartialMatch = false;
@@ -785,7 +789,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
 
         if ( bSomeDateDeletes )
         {
-            for (size_t i = 0; i < n; ++i)
+            for (size_t i = 0; i < nEnableMember; ++i)
             {
                 if (!maMembers[i].mbDate)
                     continue;
@@ -813,7 +817,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
         {
             std::vector<size_t> aShownIndexes;
 
-            for (size_t i = 0; i < n; ++i)
+            for (size_t i = 0; i < nEnableMember; ++i)
             {
                 assert(!maMembers[i].mbDate);
 
@@ -839,7 +843,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
         }
     }
 
-    if ( nSelCount == n )
+    if ( nSelCount == nEnableMember )
         mxChkToggleAll->set_state( TRISTATE_TRUE );
     else if ( nSelCount == 0 )
         mxChkToggleAll->set_state( TRISTATE_FALSE );
@@ -874,7 +878,9 @@ void ScCheckListMenuControl::Check(const weld::TreeIter* pEntry)
     if (pEntry)
         CheckEntry(*pEntry, mpChecks->get_toggle(*pEntry) == TRISTATE_TRUE);
     size_t nNumChecked = GetCheckedEntryCount();
-    if (nNumChecked == maMembers.size())
+    size_t nEnableMember = std::count_if(maMembers.begin(), maMembers.end(),
+        [](const ScCheckListMember& rLMem) { return !rLMem.mbHiddenByOtherFilter; });
+    if (nNumChecked == nEnableMember)
         // all members visible
         mxChkToggleAll->set_state(TRISTATE_TRUE);
     else if (nNumChecked == 0)
@@ -1026,7 +1032,7 @@ void ScCheckListMenuControl::addDateMember(const OUString& rsName, double nVal, 
     mpChecks->thaw();
 }
 
-void ScCheckListMenuControl::addMember(const OUString& rName, const double nVal, bool bVisible, bool bValue)
+void ScCheckListMenuControl::addMember(const OUString& rName, const double nVal, bool bVisible, bool bHiddenByOtherFilter, bool bValue)
 {
     ScCheckListMember aMember;
     // tdf#46062 - indicate hidden whitespaces using quotes
@@ -1037,6 +1043,7 @@ void ScCheckListMenuControl::addMember(const OUString& rName, const double nVal,
     aMember.mbLeaf = true;
     aMember.mbValue = bValue;
     aMember.mbVisible = bVisible;
+    aMember.mbHiddenByOtherFilter = bHiddenByOtherFilter;
     aMember.mxParent.reset();
     maMembers.emplace_back(std::move(aMember));
 }
@@ -1272,6 +1279,8 @@ IMPL_LINK(ScCheckListMenuControl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
 {
     size_t n = maMembers.size();
+    size_t nEnableMember = std::count_if(maMembers.begin(), maMembers.end(),
+        [](const ScCheckListMember& rLMem) { return !rLMem.mbHiddenByOtherFilter; });
     size_t nVisMemCount = 0;
 
     if (nMaxMemberWidth == -1)
@@ -1326,7 +1335,7 @@ size_t ScCheckListMenuControl::initMembers(int nMaxMemberWidth)
             mpChecks->expand_row(*rRow);
     }
 
-    if (nVisMemCount == n)
+    if (nVisMemCount == nEnableMember)
     {
         // all members visible
         mxChkToggleAll->set_state(TRISTATE_TRUE);
@@ -1389,7 +1398,7 @@ void ScCheckListMenuControl::getResult(ResultType& rResult)
             bool bState = vCheckeds.find(aLabel.makeStringAndClear()) != vCheckeds.end();
 
             ResultEntry aResultEntry;
-            aResultEntry.bValid = bState;
+            aResultEntry.bValid = bState && !maMembers[i].mbHiddenByOtherFilter;
             aResultEntry.aName = maMembers[i].maRealName;
             aResultEntry.nValue = maMembers[i].mnValue;
             aResultEntry.bDate = maMembers[i].mbDate;

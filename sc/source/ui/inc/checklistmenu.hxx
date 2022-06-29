@@ -36,6 +36,7 @@ struct ScCheckListMember
     OUString                 maRealName;
     double                   mnValue; // number value of filter condition
     bool                     mbVisible;
+    bool                     mbHiddenByOtherFilter;
     bool                     mbDate;
     bool                     mbLeaf;
     bool                     mbValue; // true if the filter condition is value
@@ -135,7 +136,7 @@ public:
 
     void setMemberSize(size_t n);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
-    void addMember(const OUString& rName, const double nVal, bool bVisible,
+    void addMember(const OUString& rName, const double nVal, bool bVisible, bool bHiddenByOtherFilter,
                    bool bValue = false);
     size_t initMembers(int nMaxMemberWidth = -1);
     void setConfig(const Config& rConfig);
