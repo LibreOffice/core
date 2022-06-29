@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4e1cc64_3c573e6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-29T18:37:42Z",
+      "side": 1,
+      "message": "carry-over jenkins vote after editing the commit-msg to include tdf#141313\n\nNeeds https://gerrit.libreoffice.org/c/core/+/136616 alongside though, as otherwise you\u0027d not be able to pair/approve devices.",
+      "revId": "d4732e5ec7681beee44a48ad95fbe6b28c2ec00b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
