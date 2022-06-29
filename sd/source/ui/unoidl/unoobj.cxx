@@ -95,7 +95,6 @@ using ::com::sun::star::drawing::XShape;
 #define WID_ANIMPATH        16
 #define WID_IMAGEMAP        17
 #define WID_ISANIMATION     18
-#define WID_THAT_NEED_ANIMINFO 19
 
 #define WID_ISEMPTYPRESOBJ  20
 #define WID_ISPRESOBJ       21
@@ -421,8 +420,6 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
         SdrObject* pObj = mpShape->GetSdrObject();
         if( pObj )
         {
-            SdAnimationInfo* pInfo = GetAnimationInfo(pEntry->nWID <= WID_THAT_NEED_ANIMINFO);
-
             switch(pEntry->nWID)
             {
                 case WID_NAVORDER:
@@ -506,19 +503,23 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                     if(!(aValue >>= aString))
                         throw lang::IllegalArgumentException();
 
+                    SdAnimationInfo* pInfo = GetAnimationInfo(true);
                     pInfo->SetBookmark( SdDrawPage::getUiNameFromPageApiName( aString ) );
                     break;
                 }
                 case WID_CLICKACTION:
+                {
+                    SdAnimationInfo* pInfo = GetAnimationInfo(true);
                     ::cppu::any2enum< presentation::ClickAction >( pInfo->meClickAction, aValue);
                     break;
-
+                }
 // TODO: WID_PLAYFULL:
                 case WID_SOUNDFILE:
                 {
                     OUString aString;
                     if(!(aValue >>= aString))
                         throw lang::IllegalArgumentException();
+                    SdAnimationInfo* pInfo = GetAnimationInfo(true);
                     pInfo->maSoundFile = aString;
                     EffectMigration::UpdateSoundEffect( mpShape, pInfo );
                     break;
@@ -526,6 +527,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
 
                 case WID_SOUNDON:
                 {
+                    SdAnimationInfo* pInfo = GetAnimationInfo(true);
                     if( !(aValue >>= pInfo->mbSoundOn) )
                         throw lang::IllegalArgumentException();
                     EffectMigration::UpdateSoundEffect( mpShape, pInfo );
@@ -537,6 +539,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                     if(!(aValue >>= nVerb))
                         throw lang::IllegalArgumentException();
 
+                    SdAnimationInfo* pInfo = GetAnimationInfo(true);
                     pInfo->mnVerb = static_cast<sal_uInt16>(nVerb);
                     break;
                 }
