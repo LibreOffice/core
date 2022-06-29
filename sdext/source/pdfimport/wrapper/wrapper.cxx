@@ -156,12 +156,12 @@ public:
         m_aFontMap(101)
     {}
 
-    void parseLine( const OString& rLine );
+    void parseLine( std::string_view aLine );
 };
 
 class LineParser {
     Parser  & m_parser;
-    OString m_aLine;
+    std::string_view m_aLine;
 
     static void parseFontFamilyName( FontAttributes& aResult );
     void    readInt32( sal_Int32& o_Value );
@@ -174,7 +174,7 @@ class LineParser {
 public:
     std::size_t m_nCharIndex = 0;
 
-    LineParser(Parser & parser, OString const & line): m_parser(parser), m_aLine(line) {}
+    LineParser(Parser & parser, std::string_view line): m_parser(parser), m_aLine(line) {}
 
     std::string_view readNextToken();
     sal_Int32      readInt32();
@@ -384,7 +384,7 @@ void LineParser::readChar()
     OString aChars;
 
     if (m_nCharIndex != std::string_view::npos)
-        aChars = lcl_unescapeLineFeeds( m_aLine.subView( m_nCharIndex ) );
+        aChars = lcl_unescapeLineFeeds( m_aLine.substr( m_nCharIndex ) );
 
     // chars gobble up rest of line
     m_nCharIndex = std::string_view::npos;
@@ -552,7 +552,7 @@ void LineParser::readFont()
 
     nSize = nSize < 0.0 ? -nSize : nSize;
     // Read FontName. From the current position to the end (any white spaces will be included).
-    aFontName = lcl_unescapeLineFeeds(m_aLine.subView(m_nCharIndex));
+    aFontName = lcl_unescapeLineFeeds(m_aLine.substr(m_nCharIndex));
 
     // name gobbles up rest of line
     m_nCharIndex = std::string_view::npos;
@@ -776,7 +776,7 @@ void LineParser::readLink()
 
     m_parser.m_pSink->hyperLink( aBounds,
                         OStringToOUString( lcl_unescapeLineFeeds(
-                                m_aLine.subView(m_nCharIndex) ),
+                                m_aLine.substr(m_nCharIndex) ),
                                 RTL_TEXTENCODING_UTF8 ) );
     // name gobbles up rest of line
     m_nCharIndex = std::string_view::npos;
@@ -809,13 +809,13 @@ void LineParser::readSoftMaskedImage()
     m_parser.m_pSink->drawAlphaMaskedImage( aImage, aMask );
 }
 
-void Parser::parseLine( const OString& rLine )
+void Parser::parseLine( std::string_view aLine )
 {
     OSL_PRECOND( m_pSink,         "Invalid sink" );
     OSL_PRECOND( m_pErr,          "Invalid filehandle" );
     OSL_PRECOND( m_xContext.is(), "Invalid service factory" );
 
-    LineParser lp(*this, rLine);
+    LineParser lp(*this, aLine);
     const std::string_view rCmd = lp.readNextToken();
     const hash_entry* pEntry = PdfKeywordHash::in_word_set( rCmd.data(),
                                                             rCmd.size() );
@@ -1136,7 +1136,8 @@ bool xpdf_ImportFromFile(const OUString& rURL,
                 if ( line.isEmpty() )
                     break;
 
-                aParser.parseLine(line.makeStringAndClear());
+                aParser.parseLine(line);
+                line.setLength(0);
             }
         }
     }
