@@ -187,7 +187,7 @@ bool VAxisBase::prepareShapeCreation()
     if (m_aAxisProperties.m_bDisplayLabels)
         m_xTextTarget = ShapeFactory::createGroup2D( m_xFinalTarget, m_aCID );
     if (m_aAxisProperties.m_bDisplayDataTable)
-        m_xDataTableTarget = ShapeFactory::createGroup2D(m_xFinalTarget, m_aCID);
+        m_xDataTableTarget = ShapeFactory::createGroup2D(m_xFinalTarget);
 
     return true;
 }
