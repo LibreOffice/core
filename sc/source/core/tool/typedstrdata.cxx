@@ -12,19 +12,33 @@
 
 #include <unotools/collatorwrapper.hxx>
 
+bool ScTypedStrData::LessHiddenRows::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
+{
+    return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
+}
+
 bool ScTypedStrData::LessCaseSensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
 {
     if (left.meStrType != right.meStrType)
         return left.meStrType < right.meStrType;
 
     if (left.meStrType == Value)
+    {
+        if (left.mfValue == right.mfValue)
+            return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
         return left.mfValue < right.mfValue;
+    }
 
     if (left.mbIsDate != right.mbIsDate)
         return left.mbIsDate < right.mbIsDate;
 
-    return ScGlobal::GetCaseCollator().compareString(
-        left.maStrValue, right.maStrValue) < 0;
+    sal_Int32 nEqual = ScGlobal::GetCaseCollator().compareString(
+        left.maStrValue, right.maStrValue);
+
+    if (!nEqual)
+        return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
+
+    return nEqual < 0;
 }
 
 bool ScTypedStrData::LessCaseInsensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
@@ -33,13 +47,22 @@ bool ScTypedStrData::LessCaseInsensitive::operator() (const ScTypedStrData& left
         return left.meStrType < right.meStrType;
 
     if (left.meStrType == Value)
+    {
+        if (left.mfValue == right.mfValue)
+            return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
         return left.mfValue < right.mfValue;
+    }
 
     if (left.mbIsDate != right.mbIsDate)
         return left.mbIsDate < right.mbIsDate;
 
-    return ScGlobal::GetCollator().compareString(
-        left.maStrValue, right.maStrValue) < 0;
+    sal_Int32 nEqual = ScGlobal::GetCollator().compareString(
+        left.maStrValue, right.maStrValue);
+
+    if (!nEqual)
+        return left.mbIsHiddenByFilter < right.mbIsHiddenByFilter;
+
+    return nEqual < 0;
 }
 
 bool ScTypedStrData::EqualCaseSensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
@@ -79,12 +102,13 @@ bool ScTypedStrData::operator< (const ScTypedStrData& r) const
 }
 
 ScTypedStrData::ScTypedStrData(
-    const OUString& rStr, double fVal, double fRVal, StringType nType, bool bDate ) :
+    const OUString& rStr, double fVal, double fRVal, StringType nType, bool bDate, bool bIsHiddenByFilter ) :
     maStrValue(rStr),
     mfValue(fVal),
     mfRoundedValue(fRVal),
     meStrType(nType),
-    mbIsDate( bDate ) {}
+    mbIsDate( bDate ),
+    mbIsHiddenByFilter(bIsHiddenByFilter) {}
 
 FindTypedStrData::FindTypedStrData(const ScTypedStrData& rVal, bool bCaseSens) :
     maVal(rVal), mbCaseSens(bCaseSens) {}

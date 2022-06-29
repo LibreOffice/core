@@ -364,7 +364,7 @@ void SvLBoxButton::Paint(
     const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
 {
     SvBmp nIndex = SvLBoxButtonData::GetIndex(nItemFlags);
-    DrawImageFlags nStyle = rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
+    DrawImageFlags nStyle = (rDev.IsEnabled() && !mbDisabled) ? DrawImageFlags::NONE : DrawImageFlags::Disable;
 
     //Native drawing
     bool bNativeOK = false;
@@ -518,7 +518,7 @@ void SvLBoxContextBmp::Paint(
 
     bool _bSemiTransparent = bool( SvTLEntryFlags::SEMITRANSPARENT & rEntry.GetFlags( ) );
     // draw
-    DrawImageFlags nStyle = _rDev.IsEnabled() ? DrawImageFlags::NONE : DrawImageFlags::Disable;
+    DrawImageFlags nStyle = (_rDev.IsEnabled() && !mbDisabled) ? DrawImageFlags::NONE : DrawImageFlags::Disable;
     if (_bSemiTransparent)
         nStyle |= DrawImageFlags::SemiTransparent;
     rRenderContext.DrawImage(_rPos, rImage, nStyle);
