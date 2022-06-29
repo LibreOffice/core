@@ -26,21 +26,28 @@ public:
     };
 
     ScTypedStrData(
-        OUString&& rStr, double fVal = 0.0, double fRVal = 0.0, StringType nType = Standard, bool bDate = false ) :
+        OUString&& rStr, double fVal = 0.0, double fRVal = 0.0, StringType nType = Standard, bool bDate = false, bool bIsHiddenByFilter = false ) :
         maStrValue(std::move(rStr)),
         mfValue(fVal),
         mfRoundedValue(fRVal),
         meStrType(nType),
-        mbIsDate( bDate ) {}
+        mbIsDate( bDate ),
+        mbIsHiddenByFilter(bIsHiddenByFilter) {}
 
     ScTypedStrData( const OUString& rStr, double fVal = 0.0, double fRVal = 0.0, StringType eType = Standard,
-                    bool bDate = false );
+                    bool bDate = false, bool bIsHiddenByFilter = false );
 
     bool IsDate() const { return mbIsDate;}
+    bool IsHiddenByFilter() const { return mbIsHiddenByFilter;}
     const OUString& GetString() const { return maStrValue;}
     StringType GetStringType() const { return meStrType;}
     double GetValue() const { return mfValue; }
     double GetRoundedValue() const { return mfRoundedValue; }
+
+    struct LessHiddenRows
+    {
+        bool operator() (const ScTypedStrData& left, const ScTypedStrData& right) const;
+    };
 
     struct LessCaseSensitive
     {
@@ -70,6 +77,7 @@ private:
     double mfRoundedValue; // rounded value by format code
     StringType meStrType;
     bool   mbIsDate;
+    bool   mbIsHiddenByFilter;
 };
 
 class FindTypedStrData

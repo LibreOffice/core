@@ -46,7 +46,8 @@ class tdf140754(UITestCase):
 
             xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xList = xCheckListMenu.getChild("check_list_box")
-            self.assertEqual(25, len(xList.getChildren()))
+            # since tdf#117267, we are showing the hidden filter rows as inactive elements (25 active + 140 inactive)
+            self.assertEqual(165, len(xList.getChildren()))
 
             # Without the fix in place, this test would have crashed here
             xOkBtn = xFloatWindow.getChild("ok")

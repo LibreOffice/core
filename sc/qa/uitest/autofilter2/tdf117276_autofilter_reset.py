@@ -135,7 +135,8 @@ class tdf117276_autofilter_reset(UITestCase):
             self.assertFalse(is_row_hidden(document, 5))
 
             self.assertEqual(5, self.get_values_count_in_AutoFilter(xGridWindow, "0"))
-            self.assertEqual(2, self.get_values_count_in_AutoFilter(xGridWindow, "1"))
+            # since tdf#117267, we are showing the hidden filter rows as inactive elements (2 active + 1 inactive)
+            self.assertEqual(3, self.get_values_count_in_AutoFilter(xGridWindow, "1"))
 
             # 4. open filter of column B and deselect "Unique b5"
             xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))
