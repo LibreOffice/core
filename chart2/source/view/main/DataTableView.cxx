@@ -12,6 +12,7 @@
 #include <ShapeFactory.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <ChartModel.hxx>
+#include <ObjectIdentifier.hxx>
 
 #include <svx/svdotable.hxx>
 
@@ -193,7 +194,9 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
         return;
 
     ShapeFactory::removeSubShapes(m_xTarget);
-    m_xTableShape = ShapeFactory::createTable(m_xTarget);
+    auto sParticle = ObjectIdentifier::createParticleForDataTable(m_xChartModel);
+    auto sCID = ObjectIdentifier::createClassifiedIdentifierForParticle(sParticle);
+    m_xTableShape = ShapeFactory::createTable(m_xTarget, sCID);
 
     uno::Reference<table::XTable> xTable;
     try

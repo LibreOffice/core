@@ -213,7 +213,7 @@ public:
                 const css::uno::Reference< css::beans::XPropertySet > & xTextProperties,
                 double nRotation, const OUString& aName, sal_Int32 nTextMaxWidth );
 
-    static rtl::Reference<SvxTableShape> createTable(css::uno::Reference< css::drawing::XShapes >& xTarget);
+    static rtl::Reference<SvxTableShape> createTable(css::uno::Reference<css::drawing::XShapes>& xTarget, OUString const& rName = OUString());
 
     css::uno::Reference< css::drawing::XShape >
         createInvisibleRectangle(
