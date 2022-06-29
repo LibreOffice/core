@@ -33,6 +33,23 @@
       "message": "Playing with m_pCurrentCursor looks like dangerous stuff, so I should get additional approval. I have no intention to backport this - so lots of time to revert if necessary.\n\nThe revert of the per-situation-avoidance-fixes is a separate patch. http://gerrit.libreoffice.org/c/core/+/136578\n\nNormally, a table cell select is left to right - m_pCurrentCursor is naturally the first item, but it isn\u0027t marked to be bDeleted. When the cells are selected in revert, m_pCurrentCursor is still the first item, but now it is marked as bDel. Previously it wasn\u0027t deleted and thus the selection spilled over to affect the paragraph properties of the should-have-been-deleted-from-selection cell.\n\nThis patch also fixes bug 119540 which is the same idea as all the others, but hadn\u0027t been fixed yet.",
       "revId": "b3d6c0d1ba4316fb069bd799c044b4ca65efe660",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62ce3b4d_eb0cddab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-06-29T07:14:27Z",
+      "side": 1,
+      "message": "Do I understand that the second bug is to be fixed with this change? If so, did you consider covering the fix with a test?\n\nI would hope that you could test this starting from having access to an SwWrtShell pointer.",
+      "revId": "b3d6c0d1ba4316fb069bd799c044b4ca65efe660",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
