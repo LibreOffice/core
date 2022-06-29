@@ -332,6 +332,14 @@ void PageElement::resolveUnderlines( PDFIProcessor const & rProc )
     // FIXME: currently the algorithm used is quadratic
     // this could be solved by some sorting beforehand
 
+    std::vector<Element*> textAndHypers;
+    textAndHypers.reserve(Children.size());
+    for (auto const & p : Children)
+    {
+        if (dynamic_cast< TextElement* >(p.get()) || dynamic_cast<HyperlinkElement*>(p.get()))
+            textAndHypers.push_back(p.get());
+    }
+
     auto poly_it = Children.begin();
     while( poly_it != Children.end() )
     {
@@ -372,9 +380,8 @@ void PageElement::resolveUnderlines( PDFIProcessor const & rProc )
             u_y = r_x; r_x = l_x; l_x = u_y;
         }
         u_y = aPoly.getB2DPoint(0).getY();
-        for( const auto& rxChild : Children )
+        for( Element* pEle : textAndHypers )
         {
-            Element* pEle = rxChild.get();
             if( pEle->y <= u_y && pEle->y + pEle->h*1.1 >= u_y )
             {
                 // first: is the element underlined completely ?
@@ -394,13 +401,13 @@ void PageElement::resolveUnderlines( PDFIProcessor const & rProc )
                             pText->FontId = rProc.getFontId( aAttr );
                         }
                     }
-                    else if( dynamic_cast< HyperlinkElement* >(pEle) )
+                    else // must be HyperlinkElement
                         bRemovePoly = true;
                 }
                 // second: hyperlinks may be larger than their underline
                 // since they are just arbitrary rectangles in the action definition
-                else if( dynamic_cast< HyperlinkElement* >(pEle) != nullptr &&
-                         l_x >= pEle->x && r_x <= pEle->x+pEle->w )
+                else if( l_x >= pEle->x && r_x <= pEle->x+pEle->w &&
+                        dynamic_cast< HyperlinkElement* >(pEle) != nullptr )
                 {
                     bRemovePoly = true;
                 }
