@@ -3,6 +3,29 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a9e9eafc_9880b96e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-06-29T00:01:54Z",
+      "side": 1,
+      "message": "\"allows COLUMNS WITH very long paragraphs TO later on have a better chance of WIDENING\" (only rows grow (-:)",
+      "range": {
+        "startLine": 14,
+        "startChar": 9,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "65ba84ea7f1b06333f4be72150254615db1f8d3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "41e86436_6ea3d6bb",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
