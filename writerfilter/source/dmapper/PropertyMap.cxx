@@ -1759,15 +1759,22 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
 
         const sal_Int32 nGridLines = nTextAreaHeight / nGridLinePitch;
+        sal_Int16 nGridType = m_nGridType;
         if ( nGridLines >= 0 && nGridLines <= SAL_MAX_INT16 )
             Insert( PROP_GRID_LINES, uno::Any( sal_Int16(nGridLines) ) );
+        else
+            nGridType = text::TextGridMode::NONE;
 
         // PROP_GRID_MODE
-        Insert( PROP_GRID_MODE, uno::Any( static_cast<sal_Int16> (m_nGridType) ) );
-        if ( m_nGridType == text::TextGridMode::LINES_AND_CHARS )
+        if ( nGridType == text::TextGridMode::LINES_AND_CHARS )
         {
-            Insert( PROP_GRID_SNAP_TO_CHARS, uno::Any( m_bGridSnapToChars ) );
+            if (!m_nDxtCharSpace)
+                nGridType = text::TextGridMode::LINES;
+            else
+                Insert( PROP_GRID_SNAP_TO_CHARS, uno::Any( m_bGridSnapToChars ) );
         }
+
+        Insert( PROP_GRID_MODE, uno::Any( nGridType ) );
 
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
         const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( u"Standard" );
