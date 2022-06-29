@@ -599,24 +599,26 @@ public:
         {
             // Merge the color parameters to the color itself.
             const XFillColorItem* pColorItem = static_cast<const XFillColorItem*>(pArgs->GetItem(SID_ATTR_FILL_COLOR));
-            assert(pColorItem);
-            XFillColorItem aColorItem(*pColorItem);
-            if (pArgs->GetItemState(SID_ATTR_COLOR_THEME_INDEX, false, &pItem) == SfxItemState::SET)
+            if (pColorItem)
             {
-                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                aColorItem.GetThemeColor().SetThemeIndex(pIntItem->GetValue());
+                XFillColorItem aColorItem(*pColorItem);
+                if (pArgs->GetItemState(SID_ATTR_COLOR_THEME_INDEX, false, &pItem) == SfxItemState::SET)
+                {
+                    auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
+                    aColorItem.GetThemeColor().SetThemeIndex(pIntItem->GetValue());
+                }
+                if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_MOD, false, &pItem) == SfxItemState::SET)
+                {
+                    auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
+                    aColorItem.GetThemeColor().SetLumMod(pIntItem->GetValue());
+                }
+                if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_OFF, false, &pItem) == SfxItemState::SET)
+                {
+                    auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
+                    aColorItem.GetThemeColor().SetLumOff(pIntItem->GetValue());
+                }
+                pArgs->Put(aColorItem);
             }
-            if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_MOD, false, &pItem) == SfxItemState::SET)
-            {
-                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                aColorItem.GetThemeColor().SetLumMod(pIntItem->GetValue());
-            }
-            if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_OFF, false, &pItem) == SfxItemState::SET)
-            {
-                auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                aColorItem.GetThemeColor().SetLumOff(pIntItem->GetValue());
-            }
-            pArgs->Put(aColorItem);
         }
     }
 }
