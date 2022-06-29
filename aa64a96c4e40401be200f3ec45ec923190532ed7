@@ -101,6 +101,23 @@
       "message": "Just worked myself to all the comments once more to find steps to reproduce the problem, and low-and-behold, the user who most frequently spammed the \"add the codesign command\" wrote:\n####\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d128233#c65\nI just discovered that under \"(macOS) Settings \u003e Security \u003e Files and Folders\", access to the Documents folder was denied for LibreOffice. Once I granted access, opening the file dialogue worked as expected.\n####\n\nI\u0027ll -1 this one and unless someone can provide clear steps to reproduce with 7.3.4, I\u0027ll continue to ignore the problem as \"very corner-case\" or \"user shoot him/herself in the foot by previously denying access\"\n\nNo matter what order, it always works as expected (both as admin user as well as standard user):\n* reset permissions using the \"tccutil reset All org.libreoffice.script\" command mentioned above\n* drag LibreOffice to a folder on disk\nA) run LibreOffice without installing the languagepack first\n* you get the gatekeeper prompt whether you want to run the application\n* LibreOffice launches in English, as expected. Create a new file\n* Hit save, file dialog defaults to Documents directory, on hitting \"Save\"\n  → macOS prompts and asks whether to grant LibreOffice permission to access the Documents folder\n  → approve and LO can save successfully.\n  → new documents can be saved to documents folder without a second prompt\n* Use Save as (or just create another document, doesn\u0027t make a difference) and select the Desktop folder in the file selector, on hitting \"save\"\n  → macOS prompts and asks whether to grant LibreOffice permission to the Desktop folder\n  → approve and LO can save successfully\n  → further saves to the Desktop won\u0027t trigger the prompt\n* close LibreOffice and install the languagepack\n* launch LibreOffice again and now comes up in translated form\n* saving documents to desktop or documents folder don\u0027t trigger a prompt and work\nB) install the languagepack without launching LibreOffice first\n  → after hitting \"install\" in the languagepack installer it will trigger launching LO and you\u0027ll get the the gatekeeper prompt asking whether you want to launch LibreOffice\n* approve and the langaugepack installation continues\nB.1) after languagepack installation is complete, LO still is running, close and restart to use it in the new locale\n* creating documents and saving them works as above, first time you try to access Documents or Desktop you get the permission prompt, subsequent ones work without interruption.\nB.2) after languagepack isntallation create a document in the still-running English LO and save\n* get the prompts as expected and saving works.\n* after relaunching to switch to the new UI language saving works without additional prompts.\n\nSo it is a complete non-issue for me. Everything works as it should/as expected.\nAnother user mentioned LibreOffice was installed via homebrew - no idea what that means, if it is not a build done by me, I don\u0027t care. If it doesn\u0027t install via dmg, I don\u0027t care. (have no control over it in that case anyway).\n",
       "revId": "aa64a96c4e40401be200f3ec45ec923190532ed7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ea31e74_4cac5dd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-29T14:03:38Z",
+      "side": 1,
+      "message": "Thank you for the really detailed feedback!\nIMHO, I think it would be useful to copy this comment verbatim on the bugtracker.\nThen we\u0027d put this WFM and if someone still reproduces the pb after having applied all what you indicated, he/she\u0027ll have to indicate the precise process to reproduce this.\nWhat do you think?\n\nMeanwhile, let\u0027s abandon this patch then.",
+      "revId": "aa64a96c4e40401be200f3ec45ec923190532ed7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
