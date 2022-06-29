@@ -1854,10 +1854,7 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
             // It additionally also should mean that the recursion/iteration
             // ends here as it must had been triggered by this free-flying
             // out-of-sheets cell
-            /* TODO: replace by a simple rRecursionHelper.EndIteration() call
-             * if the assertions hold. */
             const bool bOnlyThis = (rRecursionHelper.GetList().size() == 1);
-            assert(bOnlyThis);
             rRecursionHelper.GetList().remove_if([this](const ScFormulaRecursionEntry& r){return r.pCell == this;});
             if (bOnlyThis)
             {
