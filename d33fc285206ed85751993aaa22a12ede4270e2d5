@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f787666b_3ddfea3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-06-29T05:26:09Z",
+      "side": 1,
+      "message": "patch on tob has successful build",
+      "revId": "d33fc285206ed85751993aaa22a12ede4270e2d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
