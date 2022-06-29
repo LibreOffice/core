@@ -133,6 +133,7 @@ public:
     void selectMenuItem(size_t nPos, bool bSubMenuTimer);
     void queueLaunchSubMenu(size_t nPos, ScListSubMenuControl* pMenu);
 
+    size_t getMemberSize() const;
     void setMemberSize(size_t n);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
     void addMember(const OUString& rName, const double nVal, bool bVisible,

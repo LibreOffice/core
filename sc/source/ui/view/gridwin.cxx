@@ -1124,10 +1124,15 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
         }
     }
 
+    std::size_t nAllHiddenValues = 0;
     // Remove old entries in auto-filter rules
     if (!bColorMode)
     {
         aParam.RemoveAllEntriesByField(rPos.Col());
+
+        ScFilterEntries aFilterEntries;
+        rDoc.GetFilterEntries(rPos.Col(), rPos.Row(), rPos.Tab(), aFilterEntries, true);
+        nAllHiddenValues = aFilterEntries.size();
 
         // tdf#46184 reset filter options to default values
         aParam.eSearchType = utl::SearchParam::SearchType::Normal;
@@ -1137,7 +1142,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     }
 
     if (eMode != AutoFilterMode::Clear
-        && !(eMode == AutoFilterMode::Normal && mpAutoFilterPopup->isAllSelected()))
+        && !(eMode == AutoFilterMode::Normal && mpAutoFilterPopup->isAllSelected() && mpAutoFilterPopup->getMemberSize() == nAllHiddenValues))
     {
         // Try to use the existing entry for the column (if one exists).
         ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
