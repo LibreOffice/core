@@ -195,6 +195,24 @@
       "parentUuid": "316cf1e8_0e09989d",
       "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49a53361_36bbc94f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-29T09:50:46Z",
+      "side": 1,
+      "message": "\u003e This looks like a workaround\n\nIndeed. Yet, the question is, how it is related to the change in VCL here. And as I said, I tried to open the testdoc (from the test in question, introduced back in 2018) in a 7.3 release (so without the change), and the document doesn\u0027t show the expected text without explicit user action. It is puzzling then why the test succeeds on the same Windows system, but it moves the problem somewhere else.\n\nAdditionally, the specific test does not intend to test the automatic refresh: the test comments explicitly talk about the *not saving* of the cross refs; so even after the manual refresh \"workaround\", the test would indeed do its job, right?\n\nMy take here is this workaround is much more benign than the \"only test on Linux\" or \"do not test on non-default DPI\" that we put right and left ;) I.e., I would like to avoid reverting the change here because of the test failure that actually is unclear itself.",
+      "parentUuid": "92b7c1af_b9e5924c",
+      "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
