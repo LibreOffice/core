@@ -34,6 +34,41 @@
       "parentUuid": "7c8b02d4_9f705ed6",
       "revId": "7ef9c3ef30023cc40068e1f735aa4bec4811288b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4778996e_c0acb6cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2022-06-29T11:04:41Z",
+      "side": 1,
+      "message": "thx for the catch",
+      "revId": "7ef9c3ef30023cc40068e1f735aa4bec4811288b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc1b3ff8_70e18efd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2022-06-29T11:04:41Z",
+      "side": 1,
+      "message": "Sorry i didnt analyzed the code that my change altered.. \nI think casting directy to SwLinePortion resolve the problem... as the SwTextSlot parameter is a SwLinePortion... maybe that is why i did not seen any problem here... because both textportion, and holeportion is a lineportion.. and the SwTextSlot casted the pointer to lineportion anyways",
+      "parentUuid": "5da529e0_699f4ac2",
+      "revId": "7ef9c3ef30023cc40068e1f735aa4bec4811288b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
