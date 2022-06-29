@@ -92,6 +92,10 @@ namespace pdfi
         /// Union element geometry with given element
         void updateGeometryWith( const Element* pMergeFrom );
 
+        /// To avoid some dynamic_cast cost
+        virtual const TextElement* dynCastAsTextElement() const { return nullptr; }
+        virtual TextElement* dynCastAsTextElement() { return nullptr; }
+
 #if OSL_DEBUG_LEVEL > 0
         // xxx refact TODO: move code to visitor
         virtual void emitStructure( int nLevel );
@@ -174,6 +178,9 @@ namespace pdfi
 
     public:
         virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
+
+        virtual const TextElement* dynCastAsTextElement() const override { return this; }
+        virtual TextElement* dynCastAsTextElement() override { return this; }
 
         OUStringBuffer Text;
         sal_Int32           FontId;

@@ -518,7 +518,7 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_
             nCurLineElements = 0;
             for( const auto& rxChild : pCurPara->Children )
             {
-                TextElement* pTestText = dynamic_cast<TextElement*>(rxChild.get());
+                TextElement* pTestText = rxChild->dynCastAsTextElement();
                 if( pTestText )
                 {
                     fCurLineHeight = (fCurLineHeight*double(nCurLineElements) + pTestText->h)/double(nCurLineElements+1);
@@ -552,12 +552,12 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_
             // or perhaps the draw element begins a new paragraph
             else if( next_page_element != elem.Children.end() )
             {
-                TextElement* pText = dynamic_cast<TextElement*>(next_page_element->get());
+                TextElement* pText = (*next_page_element)->dynCastAsTextElement();
                 if( ! pText )
                 {
                     ParagraphElement* pPara = dynamic_cast<ParagraphElement*>(next_page_element->get());
                     if( pPara && ! pPara->Children.empty() )
-                        pText = dynamic_cast<TextElement*>(pPara->Children.front().get());
+                        pText = pPara->Children.front()->dynCastAsTextElement();
                 }
                 if( pText && // check there is a text
                     pDraw->h < pText->h*1.5 && // and it is approx the same height
@@ -586,9 +586,9 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< std::unique_
             }
         }
 
-        TextElement* pText = dynamic_cast<TextElement*>(page_element->get());
+        TextElement* pText = (*page_element)->dynCastAsTextElement();
         if( ! pText && pLink && ! pLink->Children.empty() )
-            pText = dynamic_cast<TextElement*>(pLink->Children.front().get());
+            pText = pLink->Children.front()->dynCastAsTextElement();
         if( pText )
         {
             Element* pGeo = pLink ? static_cast<Element*>(pLink) :
@@ -745,7 +745,7 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
     while( next != rParent.Children.end() )
     {
         bool bConcat = false;
-        TextElement* pCur = dynamic_cast<TextElement*>(it->get());
+        TextElement* pCur = (*it)->dynCastAsTextElement();
         if( pCur )
         {
             TextElement* pNext = dynamic_cast<TextElement*>(next->get());
