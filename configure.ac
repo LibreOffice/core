@@ -5603,6 +5603,7 @@ if test "$cross_compiling" = "yes"; then
         config_host.mk.in \
         config_host_lang.mk.in \
         Makefile.in \
+        lo.xcent.in \
         bin/bffvalidator.sh.in \
         bin/odfvalidator.sh.in \
         bin/officeotron.sh.in \
@@ -11807,6 +11808,8 @@ AC_MSG_CHECKING([whether to enable Impress remote control])
 if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_SDREMOTE=TRUE
+    SDREMOTE_ENTITLEMENT="	<key>com.apple.security.network.server</key>
+	<true/>"
     AC_MSG_CHECKING([whether to enable Bluetooth support in Impress remote control])
 
     if test $OS = MACOSX && test "$MACOSX_SDK_VERSION" -ge 101500; then
@@ -11814,6 +11817,7 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
         if test "$enable_sdremote_bluetooth" = yes; then
             AC_MSG_ERROR([macOS SDK $macosx_sdk does not currently support --enable-sdremote-bluetooth])
         fi
+        add_warning "not building the bluetooth part of the sdremote - used api was removed from macOS SDK 10.15"
         enable_sdremote_bluetooth=no
     fi
     # If not explicitly enabled or disabled, default
@@ -11863,6 +11867,9 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
         AC_MSG_RESULT([no])
         ENABLE_SDREMOTE_BLUETOOTH=
         SYSTEM_BLUEZ=
+        SDREMOTE_ENTITLEMENT="$SDREMOTE_ENTITLEMENT
+	<key>com.apple.security.device.bluetooth</key>
+	<true/>"
     fi
 else
     ENABLE_SDREMOTE=
@@ -11871,6 +11878,7 @@ else
 fi
 AC_SUBST(ENABLE_SDREMOTE)
 AC_SUBST(ENABLE_SDREMOTE_BLUETOOTH)
+AC_SUBST(SDREMOTE_ENTITLEMENT)
 AC_SUBST(SYSTEM_BLUEZ)
 
 dnl ===================================================================
@@ -14724,6 +14732,7 @@ AC_CONFIG_LINKS([include:include])
 AC_CONFIG_FILES([config_host.mk
                  config_host_lang.mk
                  Makefile
+                 lo.xcent
                  bin/bffvalidator.sh
                  bin/odfvalidator.sh
                  bin/officeotron.sh
