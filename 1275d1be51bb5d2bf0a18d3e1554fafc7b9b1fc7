@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2115df2a_ed77be23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-06-29T22:52:54Z",
+      "side": 1,
+      "message": "Rather not.. this indicates a serious failure, probably already at import (the ScDocOptions NullDate to be exported in sc/source/filter/xml/xmlexprt.cxx ScXMLExport::WriteCalculationSettings() with SC_UNO_NULLDATE already have nDay \u003d 0, nMonth \u003d 0, nYear \u003d 0), likely due to a bad default value or a bad imported document setting.\n\nI\u0027ll investigate.",
+      "revId": "1275d1be51bb5d2bf0a18d3e1554fafc7b9b1fc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
