@@ -1342,7 +1342,7 @@ void makeRedline( SwPaM const & rPaM,
             if (!aWhichPairs.empty())
             {
                 sal_uInt16 nStylePoolId = USHRT_MAX;
-                OUString sParaStyleName;
+                OUString sParaStyleName, sUIStyle;
                 SfxItemSet aItemSet(rDoc.GetAttrPool(), aWhichPairs);
 
                 for (size_t i = 0; i < aEntries.size(); ++i)
@@ -1374,7 +1374,11 @@ void makeRedline( SwPaM const & rPaM,
                 if (eType == RedlineType::ParagraphFormat && sParaStyleName.isEmpty())
                     nStylePoolId = RES_POOLCOLL_STANDARD;
 
-                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( sParaStyleName, nStylePoolId, &aItemSet ));
+                // tdf#149747 Get UI style name from programmatic style name
+                SwStyleNameMapper::FillUIName(sParaStyleName, sUIStyle,
+                                              SwGetPoolIdFromName::TxtColl);
+                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl(
+                    sUIStyle.isEmpty() ? sParaStyleName : sUIStyle, nStylePoolId, &aItemSet));
             }
             else if (eType == RedlineType::ParagraphFormat)
                 xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( "", RES_POOLCOLL_STANDARD, nullptr ));
