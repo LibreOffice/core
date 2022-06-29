@@ -316,6 +316,21 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
     }
 }
 
+namespace
+{
+struct ChildDescriptorLess
+{
+    bool operator()(const ChildDescriptor& lhs, const ChildDescriptor& rhs) const
+    {
+        auto pLhsShape = lhs.mxShape.get();
+        auto pRhsShape = rhs.mxShape.get();
+        if (pLhsShape || pRhsShape)
+            return pLhsShape < pRhsShape;
+        return lhs.mxAccessibleShape.get() < rhs.mxAccessibleShape.get();
+    }
+};
+}
+    
 void ChildrenManagerImpl::RemoveNonVisibleChildren (
     const ChildDescriptorListType& rNewChildList,
     ChildDescriptorListType& rOldChildList)
@@ -323,9 +338,16 @@ void ChildrenManagerImpl::RemoveNonVisibleChildren (
     // Iterate over list of formerly visible children and remove those that
     // are not visible anymore, i.e. member of the new list of visible
     // children.
+
+    // the lists have already been sorted in MergeAccessibilityInformation
+    auto newIt = rNewChildList.begin();
+    auto newEnd = rNewChildList.end();
+
     for (auto& rChild : rOldChildList)
     {
-        if (::std::find(rNewChildList.begin(), rNewChildList.end(), rChild) == rNewChildList.end())
+        while (newIt != newEnd && ChildDescriptorLess()(*newIt, rChild))
+            newIt++;
+        if (newIt == newEnd || !(*newIt == rChild) )
         {
             // The child is disposed when there is a UNO shape from which
             // the accessible shape can be created when the shape becomes
@@ -349,16 +371,19 @@ void ChildrenManagerImpl::RemoveNonVisibleChildren (
 void ChildrenManagerImpl::MergeAccessibilityInformation (
     ChildDescriptorListType& raNewChildList)
 {
-    ChildDescriptorListType::const_iterator aStartVisibleChildren = maVisibleChildren.begin();
+    // sort the lists by mxShape, and then walk them in parallel, which avoids an O(n^2) loop
+    std::sort(maVisibleChildren.begin(), maVisibleChildren.end(), ChildDescriptorLess());
+    std::sort(raNewChildList.begin(), raNewChildList.end(), ChildDescriptorLess());
+    ChildDescriptorListType::const_iterator aOldChildDescriptor = maVisibleChildren.begin();
     ChildDescriptorListType::const_iterator aEndVisibleChildren = maVisibleChildren.end();
 
     for (auto& rChild : raNewChildList)
     {
-        ChildDescriptorListType::const_iterator aOldChildDescriptor =
-            std::find(aStartVisibleChildren, aEndVisibleChildren, rChild);
+        while (aOldChildDescriptor != aEndVisibleChildren && ChildDescriptorLess()(*aOldChildDescriptor, rChild))
+            aOldChildDescriptor++;
 
         // Copy accessible shape if that exists in the old descriptor.
-        if (aOldChildDescriptor != aEndVisibleChildren &&
+        if (aOldChildDescriptor != aEndVisibleChildren && *aOldChildDescriptor == rChild &&
             aOldChildDescriptor->mxAccessibleShape.is())
         {
             rChild.mxAccessibleShape = aOldChildDescriptor->mxAccessibleShape;
