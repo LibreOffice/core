@@ -395,6 +395,8 @@ SwDoc::SwDoc()
  */
 SwDoc::~SwDoc()
 {
+    mxVbaFind.clear();
+
     // nothing here should create Undo actions!
     GetIDocumentUndoRedo().DoUndo(false);
 
