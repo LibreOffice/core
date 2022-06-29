@@ -182,7 +182,7 @@ public:
             The new shape that is added to the list of accessible shapes; must
             be non-null.
     */
-    void AddAccessibleShape (css::uno::Reference<css::accessibility::XAccessible> const & shape);
+    void AddAccessibleShape (rtl::Reference<AccessibleShape> const & shape);
 
     /** Clear the lists of accessible shapes and that of visible accessible
         shapes.  The list of UNO shapes is not modified.
@@ -289,7 +289,7 @@ private:
     /** This list of additional accessible shapes that can or shall not be
         created by the shape factory.
     */
-    typedef std::vector< css::uno::Reference< css::accessibility::XAccessible> > AccessibleShapeList;
+    typedef std::vector< rtl::Reference< AccessibleShape> > AccessibleShapeList;
     AccessibleShapeList maAccessibleShapes;
 
     /** Rectangle that describes the visible area in which a shape has to lie
@@ -426,7 +426,7 @@ public:
         empty and only replaced by a reference to a new object when that is
         requested from the outside.
     */
-    css::uno::Reference<css::accessibility::XAccessible> mxAccessibleShape;
+    rtl::Reference<AccessibleShape> mxAccessibleShape;
 
     /** Return a pointer to the implementation object of the accessible
         shape of this descriptor.
@@ -435,7 +435,7 @@ public:
             shape is empty or it can not be transformed into a pointer to
             the desired class.
     */
-    AccessibleShape* GetAccessibleShape() const;
+    AccessibleShape* GetAccessibleShape() const { return mxAccessibleShape.get(); }
 
     /** set the index _nIndex at the accessible shape
         @param  _nIndex
@@ -459,7 +459,7 @@ public:
     /** Create a new descriptor for the specified shape with empty reference
         to the original shape.
     */
-    explicit ChildDescriptor (const css::uno::Reference<css::accessibility::XAccessible>& rxAccessibleShape);
+    explicit ChildDescriptor (const rtl::Reference<AccessibleShape>& rxAccessibleShape);
 
     /** Dispose the accessible object of this descriptor.  If that object
         does not exist then do nothing.
