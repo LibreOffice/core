@@ -47,8 +47,10 @@ class tdf117276_autofilter_reset(UITestCase):
         self.assertTrue(is_row_hidden(document, 4))
         self.assertFalse(is_row_hidden(document, 5))
 
-        self.assertEqual(1, self.get_values_count_in_AutoFilter(xGridWindow, "0"))
-        self.assertEqual(2, self.get_values_count_in_AutoFilter(xGridWindow, "1"))
+        # since tdf#117267, we are showing the hidden filter rows as inactive elements (1 active + 4 inactive)
+        self.assertEqual(5, self.get_values_count_in_AutoFilter(xGridWindow, "0"))
+        # since tdf#117267, we are showing the hidden filter rows as inactive elements (2 active + 1 inactive)
+        self.assertEqual(3, self.get_values_count_in_AutoFilter(xGridWindow, "1"))
 
     def test_run(self):
         with self.ui_test.create_doc_in_start_center("calc") as document:
@@ -135,7 +137,8 @@ class tdf117276_autofilter_reset(UITestCase):
             self.assertFalse(is_row_hidden(document, 5))
 
             self.assertEqual(5, self.get_values_count_in_AutoFilter(xGridWindow, "0"))
-            self.assertEqual(2, self.get_values_count_in_AutoFilter(xGridWindow, "1"))
+            # since tdf#117267, we are showing the hidden filter rows as inactive elements (2 active + 1 inactive)
+            self.assertEqual(3, self.get_values_count_in_AutoFilter(xGridWindow, "1"))
 
             # 4. open filter of column B and deselect "Unique b5"
             xGridWindow.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "1", "ROW": "0"}))

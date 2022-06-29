@@ -127,6 +127,7 @@ public:
     int GetHeight(const SvTreeListBox* pView, const SvTreeListEntry* pEntry) const;
     static int GetHeight(const SvViewDataEntry* pData, sal_uInt16 nItemPos);
     void Enable(bool bEnabled) { mbDisabled = !bEnabled; }
+    bool isEnable() const { return !mbDisabled; }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) = 0;
 
