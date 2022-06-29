@@ -1030,8 +1030,9 @@ public:
     virtual OUString get_text(int row, int col = -1) const = 0;
     // col index -1 sets the first text column
     virtual void set_text(int row, const OUString& rText, int col = -1) = 0;
-    // col index -1 sets the first text column
+    // col index -1 sets all columns
     virtual void set_sensitive(int row, bool bSensitive, int col = -1) = 0;
+    virtual bool get_sensitive(int row, int col) const = 0;
     virtual void set_id(int row, const OUString& rId) = 0;
     // col index -1 sets the expander toggle, enable_toggle_buttons must have been called to create that column
     virtual void set_toggle(int row, TriState eState, int col = -1) = 0;
@@ -1129,8 +1130,9 @@ public:
     virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;
     // col index -1 sets the first text column
     virtual void set_text(const TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
-    // col index -1 sets the first text column
+    // col index -1 sets all columns
     virtual void set_sensitive(const TreeIter& rIter, bool bSensitive, int col = -1) = 0;
+    virtual bool get_sensitive(const TreeIter& rIter, int col) const = 0;
     virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
     virtual bool get_text_emphasis(const TreeIter& rIter, int col) const = 0;
     virtual void set_text_align(const TreeIter& rIter, double fAlign, int col) = 0;
@@ -1331,6 +1333,7 @@ public:
     virtual TreeView* get_drag_source() const = 0;
 
     using Widget::set_sensitive;
+    using Widget::get_sensitive;
 };
 
 class VCL_DLLPUBLIC IconView : virtual public Widget

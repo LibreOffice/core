@@ -4266,11 +4266,12 @@ void SalInstanceTreeView::set_sensitive(SvTreeListEntry* pEntry, bool bSensitive
         for (sal_uInt16 nCur = 0; nCur < nCount; ++nCur)
         {
             SvLBoxItem& rItem = pEntry->GetItem(nCur);
-            if (rItem.GetType() == SvLBoxItemType::String)
+            if (rItem.GetType() == SvLBoxItemType::String
+                || rItem.GetType() == SvLBoxItemType::Button
+                || rItem.GetType() == SvLBoxItemType::ContextBmp)
             {
                 rItem.Enable(bSensitive);
                 InvalidateModelEntry(pEntry);
-                break;
             }
         }
         return;
@@ -4285,16 +4286,44 @@ void SalInstanceTreeView::set_sensitive(SvTreeListEntry* pEntry, bool bSensitive
     InvalidateModelEntry(pEntry);
 }
 
+bool SalInstanceTreeView::do_get_sensitive(SvTreeListEntry* pEntry, int col)
+{
+    if (static_cast<size_t>(col) == pEntry->ItemCount())
+        return false;
+
+    assert(col >= 0 && o3tl::make_unsigned(col) < pEntry->ItemCount());
+    SvLBoxItem& rItem = pEntry->GetItem(col);
+    return rItem.isEnable();
+}
+
+bool SalInstanceTreeView::get_sensitive(SvTreeListEntry* pEntry, int col) const
+{
+    col = to_internal_model(col);
+    return do_get_sensitive(pEntry, col);
+}
+
 void SalInstanceTreeView::set_sensitive(int pos, bool bSensitive, int col)
 {
     SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
     set_sensitive(pEntry, bSensitive, col);
 }
 
+bool SalInstanceTreeView::get_sensitive(int pos, int col) const
+{
+    SvTreeListEntry* pEntry = m_xTreeView->GetEntry(nullptr, pos);
+    return get_sensitive(pEntry, col);
+}
+
 void SalInstanceTreeView::set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col)
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     set_sensitive(rVclIter.iter, bSensitive, col);
+}
+
+bool SalInstanceTreeView::get_sensitive(const weld::TreeIter& rIter, int col) const
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    return get_sensitive(rVclIter.iter, col);
 }
 
 TriState SalInstanceTreeView::get_toggle(int pos, int col) const
