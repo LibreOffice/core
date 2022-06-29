@@ -67,6 +67,23 @@
       "message": "About \"deep\" option, reading https://developer.apple.com/library/archive/technotes/tn2206/_index.html#//apple_ref/doc/uid/DTS40007919-CH1-TNTAG404:\n\"Important: While the --deep option can be applied to a signing operation, this is not recommended. We recommend that you sign code inside out in individual stages (as Xcode does automatically). Signing with --deep is for emergency repairs and temporary adjustments only.\", you\u0027re right for signing action.\n\nBut just above, I read:\n\"When verifying signatures, add --deep to perform recursive validation of nested code. Without --deep, validation will be shallow: it will check the immediate nested content but not check that fully. Note that Gatekeeper always performs --deep style validation.\"\nbut we never use codesign with \"verify\" option as indicated in https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html\n\"Testing Conformance with Command Line Tools\n\nTo get a sense of whether your app conforms to Gatekeeper policies when you distribute with Developer ID, you can use the following codesign command to mimic what Gatekeeper does:\n\ncodesign --verify --deep --strict --verbose\u003d2 \u003ccode-path\u003e\n\nIf your app is signed properly, the output looks like this:\n\n\u003ccode-path\u003e: valid on disk\n\n\u003ccode-path\u003e: satisfies its Designated Requirement\"\n\nThere\u0027s also just below:\n\"\nAlternately, the spctl utility is actually a command-line interface to the same security assessment policy subsystem that Gatekeeper uses. Like Gatekeeper, spctl only accepts Developer ID signed apps and apps downloaded from the Mac App Store by default. Run spctl on your app like this:\n\nspctl -a -t exec -vv \u003ccode-path\u003e\n\nThis is the output if your app\u0027s signature is accepted:\n\n\u003ccode-path\u003e: accepted\n\nsource\u003dDeveloper ID\n\norigin\u003d\u003cidentity\u003e\n\nIf you get any result other than accepted, your app is not compatible with Gatekeeper.\n\"\n\nBTW, you indicated Jenkins don\u0027t use codesigning, do macos TBs use it?",
       "revId": "aa64a96c4e40401be200f3ec45ec923190532ed7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e1b8c02_b83bb9a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-29T12:25:18Z",
+      "side": 1,
+      "message": "you write it yourself: The codesign command used in the bugtickets is to *verify* a signature, and since that passes/doesn\u0027t find any issues, there is nothing wrong with the signature in the first place.\n\nAnd no, none of the automated builders use codesigning.\n\nI suspect that for the affected user the prompt from macOS to grant access was not shown for some reason and did timeout and thus LibreOffice was blacklisted... so another way to retrigger probably would be to use\n\n  tccutil reset SystemPolicyDocumentsFolder\n\nand/or\n\n  tccutil reset SystemPolicyDesktopFolder\n\nfor documents folder and Desktop folder respectively without any additional parameter this will reset the permissions for all apps, if you only want to do it for libreoffice, use\n\n  tccutil reset SystemPolicyDesktopFolder org.libreoffice.script\n\nor to reset every privacy decision related to LibreOffice use\n  tccutil reset All org.libreoffice.script\n  \n \nAlso note that when running from terminal by launching /path/to/LibreOffice.app/Contents/MacOS/soffice it will be the Terminal\u0027s permissions that are applied, you\u0027d have to use \"open /path/to/LibreOffice.app\" or run it from finder to have it run in its own scope",
+      "revId": "aa64a96c4e40401be200f3ec45ec923190532ed7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
