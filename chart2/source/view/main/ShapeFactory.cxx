@@ -2656,7 +2656,8 @@ void ShapeFactory::removeSubShapes( const uno::Reference< drawing::XShapes >& xS
     }
 }
 
-rtl::Reference<SvxTableShape> ShapeFactory::createTable(uno::Reference<drawing::XShapes>& xTarget)
+rtl::Reference<SvxTableShape>
+ShapeFactory::createTable(uno::Reference<drawing::XShapes>& xTarget, OUString const& rName)
 {
     if (!xTarget.is())
         return nullptr;
@@ -2666,6 +2667,8 @@ rtl::Reference<SvxTableShape> ShapeFactory::createTable(uno::Reference<drawing::
     xShape->setShapeKind(OBJ_TABLE);
     uno::Reference<drawing::XShape> xShapeUno(xShape);
     xTarget->add(xShapeUno);
+    if (!rName.isEmpty())
+        setShapeName(xShapeUno, rName);
 
     return xShape;
 }
