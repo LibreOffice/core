@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94b7819a_501bfe23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-06-29T08:35:34Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! Under Linux, crashing wasn\u0027t so frequent, but I was able to  reproduce that, too.",
+      "revId": "a94edb7f9b8987518a1757a873d2c1fc94efa327",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
