@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10b9c651_da458449",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-06-29T15:38:36Z",
+      "side": 1,
+      "message": "I see quite a few of these, so not just an isolated case. I\u0027ll push.",
+      "revId": "59e6406b7022cb33f3c0705bdfc7d9e16a294a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
