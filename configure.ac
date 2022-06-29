@@ -1899,6 +1899,11 @@ AC_ARG_WITH(macosx-bundle-identifier,
          org.libreoffice.script ("script", huh?).]),
 ,with_macosx_bundle_identifier=org.libreoffice.script)
 
+AC_ARG_WITH(macosx-provisioning-profile,
+    AS_HELP_STRING([--with-macosx-provisioning-profile=/path/to/mac.provisionprofile],
+        [Specify the path to a provisioning profile to use]),
+,)
+
 AC_ARG_WITH(product-name,
     AS_HELP_STRING([--with-product-name='My Own Office Suite'],
         [Define the product name. Default is AC_PACKAGE_NAME.]),
@@ -3615,6 +3620,18 @@ if test $_os = Darwin; then
     AC_MSG_CHECKING([what macOS app bundle identifier to use])
     MACOSX_BUNDLE_IDENTIFIER=$with_macosx_bundle_identifier
     AC_MSG_RESULT([$MACOSX_BUNDLE_IDENTIFIER])
+
+    if test -n "$with_macosx_provisioning_profile" ; then
+        if test ! -f "$with_macosx_provisioning_profile"; then
+            AC_MSG_ERROR([provisioning profile not found at $with_macosx_provisioning_profile])
+        else
+            MACOSX_PROVISIONING_PROFILE=$with_macosx_provisioning_profile
+            MACOSX_PROVISIONING_INFO=$([security cms -D -i "$MACOSX_PROVISIONING_PROFILE" | \
+                xmllint --xpath "//key[.='com.apple.application-identifier' or .='com.apple.developer.team-identifier'] \
+                    | //key[.='com.apple.application-identifier' or .='com.apple.developer.team-identifier']/following-sibling::string[1]" - | \
+                sed -e 's#><#>\n\t<#g' -e 's#^#\t#'])
+        fi
+    fi
 fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
@@ -3625,6 +3642,8 @@ AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(MACOSX_PACKAGE_SIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
+AC_SUBST(MACOSX_PROVISIONING_INFO)
+AC_SUBST(MACOSX_PROVISIONING_PROFILE)
 
 dnl ===================================================================
 dnl Check iOS SDK and compiler
