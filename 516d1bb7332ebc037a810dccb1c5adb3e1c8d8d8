@@ -85,6 +85,24 @@
       "parentUuid": "ce234ab7_e938c602",
       "revId": "516d1bb7332ebc037a810dccb1c5adb3e1c8d8d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07189ddc_eb3f6c53",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-06-29T19:20:37Z",
+      "side": 1,
+      "message": "CppunitTest_sc_jumbosheets_test is now passing. It was due to \"Precision\" problem which is already fixed.",
+      "parentUuid": "337cdc5a_59c246e9",
+      "revId": "516d1bb7332ebc037a810dccb1c5adb3e1c8d8d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
