@@ -2559,7 +2559,7 @@ class FilterEntriesHandler
 
         if (rCell.hasString())
         {
-            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr)));
+            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), 0.0, 0.0, ScTypedStrData::Standard, false, mrColumn.IsFilteredRow()));
             return;
         }
 
@@ -2617,9 +2617,9 @@ class FilterEntriesHandler
         }
         // store the formatted/rounded value for filtering
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0 && !bDate)
-            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), fVal, rColumn.GetDoc().RoundValueAsShown(fVal, nFormat), ScTypedStrData::Value, bDate));
+            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), fVal, rColumn.GetDoc().RoundValueAsShown(fVal, nFormat), ScTypedStrData::Value, bDate, mrColumn.IsFilteredRow()));
         else
-            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), fVal, fVal, ScTypedStrData::Value, bDate));
+            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), fVal, fVal, ScTypedStrData::Value, bDate, mrColumn.IsFilteredRow()));
     }
 
 public:
@@ -2670,9 +2670,10 @@ public:
 
 void ScColumn::GetFilterEntries(
     sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,
-    ScFilterEntries& rFilterEntries, bool bFiltering )
+    ScFilterEntries& rFilterEntries, bool bFiltering, bool bHiddenRow )
 {
     mbFiltering = bFiltering;
+    mbFilteredRow = bHiddenRow;
     FilterEntriesHandler aFunc(*this, rFilterEntries);
     rBlockPos.miCellPos =
         sc::ParseAll(rBlockPos.miCellPos, maCells, nStartRow, nEndRow, aFunc, aFunc);
