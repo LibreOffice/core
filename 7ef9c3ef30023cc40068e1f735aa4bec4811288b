@@ -69,6 +69,24 @@
       "parentUuid": "5da529e0_699f4ac2",
       "revId": "7ef9c3ef30023cc40068e1f735aa4bec4811288b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7a5504f_bc0a8819",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-29T14:55:58Z",
+      "side": 1,
+      "message": "\u003e I think casting directy to SwLinePortion resolve the problem... as the SwTextSlot parameter is a SwLinePortion...\n\nAh indeed, dropping the redundant `static_cast\u003cSwTextPortion*\u003e` would have fixed the test.  (And it somehow didn\u0027t occur to me to check that, first thing.)  Can you please recommit with that fix applied?",
+      "parentUuid": "dc1b3ff8_70e18efd",
+      "revId": "7ef9c3ef30023cc40068e1f735aa4bec4811288b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
