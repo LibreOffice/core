@@ -1131,6 +1131,7 @@ public:
     virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;
     // col index -1 sets the first text column
     virtual void set_text(const TreeIter& rIter, const OUString& rStr, int col = -1) = 0;
+    virtual bool get_sensitive(const TreeIter& rIter) const = 0;
     // col index -1 sets the first text column
     virtual void set_sensitive(const TreeIter& rIter, bool bSensitive, int col = -1) = 0;
     virtual void set_text_emphasis(const TreeIter& rIter, bool bOn, int col) = 0;
@@ -1332,6 +1333,7 @@ public:
     // for dragging and dropping between TreeViews, return the active source
     virtual TreeView* get_drag_source() const = 0;
 
+    using Widget::get_sensitive;
     using Widget::set_sensitive;
 };
 

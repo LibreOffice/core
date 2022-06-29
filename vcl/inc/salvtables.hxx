@@ -1518,12 +1518,15 @@ public:
 
     virtual void set_text(int pos, const OUString& rText, int col = -1) override;
 
+    bool get_sensitive(SvTreeListEntry* pEntry) const;
     void set_sensitive(SvTreeListEntry* pEntry, bool bSensitive, int col);
 
+    using SalInstanceWidget::get_sensitive;
     using SalInstanceWidget::set_sensitive;
 
     virtual void set_sensitive(int pos, bool bSensitive, int col = -1) override;
 
+    virtual bool get_sensitive(const weld::TreeIter& rIter) const override;
     virtual void set_sensitive(const weld::TreeIter& rIter, bool bSensitive, int col = -1) override;
 
     virtual TriState get_toggle(int pos, int col = -1) const override;

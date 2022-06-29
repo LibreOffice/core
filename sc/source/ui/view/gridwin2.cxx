@@ -487,9 +487,9 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
             OUString aName = rMem.getDisplayName();
             if (aName.isEmpty())
                 // Use special string for an empty name.
-                mpDPFieldPopup->addMember(ScResId(STR_EMPTYDATA), 0.0, rMem.mbVisible);
+                mpDPFieldPopup->addMember(ScResId(STR_EMPTYDATA), 0.0, rMem.mbVisible, false);
             else
-                mpDPFieldPopup->addMember(rMem.getDisplayName(), 0.0, rMem.mbVisible);
+                mpDPFieldPopup->addMember(rMem.getDisplayName(), 0.0, rMem.mbVisible, false);
         }
     }
 

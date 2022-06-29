@@ -2281,7 +2281,7 @@ void SvTreeListBox::MouseButtonUp( const MouseEvent& rMEvt )
             {
                 SvLBoxButton* pItemCheckBox
                     = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
-                if (pItemCheckBox && GetItemPos(pEntry, 0).first < aPnt.X() - GetMapMode().GetOrigin().X())
+                if (pItemCheckBox && pItemCheckBox->isEnable() && GetItemPos(pEntry, 0).first < aPnt.X() - GetMapMode().GetOrigin().X())
                 {
                     pItemCheckBox->ClickHdl(pEntry);
                     InvalidateEntry(pEntry);
