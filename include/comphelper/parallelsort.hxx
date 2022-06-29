@@ -292,7 +292,7 @@ void s3sort(const RandItr aBegin, const RandItr aEnd, Compare aComp = Compare(),
     const std::size_t nLen = static_cast<std::size_t>(aEnd - aBegin);
     if (nLen < nBaseCaseSize)
     {
-        std::sort(aBegin, aEnd, aComp);
+        std::stable_sort(aBegin, aEnd, aComp);
         return;
     }
 
