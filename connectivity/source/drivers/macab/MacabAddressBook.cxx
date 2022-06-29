@@ -82,6 +82,13 @@ MacabAddressBook::MacabAddressBook( )
    m_xMacabRecords(nullptr),
    m_bRetrievedGroups(false)
 {
+    if(m_aAddressBook == nullptr)
+    {
+        // TODO: tell the user to reset the permission via "tccutil reset AddressBook"
+        // or the system preferences and try again, this time granting the access
+        throw RuntimeException(
+            "failed to access the macOS address book - permission not granted?" );
+    }
 }
 
 
