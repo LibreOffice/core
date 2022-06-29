@@ -32,6 +32,8 @@
       <column type="gint"/>
       <!-- column-name sensitive1 -->
       <column type="gboolean"/>
+      <!-- column-name sensitive2 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkTreeStore" id="liststore4">

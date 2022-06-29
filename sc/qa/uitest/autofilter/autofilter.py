@@ -237,7 +237,8 @@ class AutofilterTest(UITestCase):
             xFloatWindow = self.xUITest.getFloatWindow()
             xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
-            self.assertEqual(5, len(xTreeList.getChildren()))
+            # since tdf#117267, we are showing the hidden filter rows as inactive elements (5 active + 3 inactive)
+            self.assertEqual(8, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
             xOkBtn.executeAction("CLICK", tuple())
 
@@ -258,7 +259,8 @@ class AutofilterTest(UITestCase):
             xFloatWindow = self.xUITest.getFloatWindow()
             xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
-            self.assertEqual(9, len(xTreeList.getChildren()))
+            # since tdf#117267, we are showing the hidden filter rows as inactive elements (9 active + 3 inactive)
+            self.assertEqual(12, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
             xOkBtn.executeAction("CLICK", tuple())
 
@@ -279,7 +281,8 @@ class AutofilterTest(UITestCase):
             xFloatWindow = self.xUITest.getFloatWindow()
             xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
-            self.assertEqual(3, len(xTreeList.getChildren()))
+            # since tdf#117267, we are showing the hidden filter rows as inactive elements (3 active + 5 inactive)
+            self.assertEqual(8, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
             xOkBtn.executeAction("CLICK", tuple())
 
@@ -300,7 +303,8 @@ class AutofilterTest(UITestCase):
             xFloatWindow = self.xUITest.getFloatWindow()
             xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
-            self.assertEqual(3, len(xTreeList.getChildren()))
+            # since tdf#117267, we are showing the hidden filter rows as inactive elements (3 active + 1 inactive)
+            self.assertEqual(4, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
             xOkBtn.executeAction("CLICK", tuple())
 
@@ -326,7 +330,8 @@ class AutofilterTest(UITestCase):
             xFloatWindow = self.xUITest.getFloatWindow()
             xCheckListMenu = xFloatWindow.getChild("FilterDropDown")
             xTreeList = xCheckListMenu.getChild("check_list_box")
-            self.assertEqual(2, len(xTreeList.getChildren()))
+            # since tdf#117267, we are showing the hidden filter rows as inactive elements (2 active + 1 inactive)
+            self.assertEqual(3, len(xTreeList.getChildren()))
             xOkBtn = xFloatWindow.getChild("cancel")
             xOkBtn.executeAction("CLICK", tuple())
 
