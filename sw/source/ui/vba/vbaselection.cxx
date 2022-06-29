@@ -60,6 +60,7 @@
 #include "vbastyle.hxx"
 #include <docsh.hxx>
 #include <tblenum.hxx>
+#include <sal/log.hxx>
 #include <fesh.hxx>
 
 using namespace ::ooo::vba;
@@ -518,7 +519,7 @@ uno::Reference< word::XFind > SAL_CALL
 SwVbaSelection::getFind()
 {
     uno::Reference< text::XTextRange > xTextRange = GetSelectedRange();
-    return uno::Reference< word::XFind >( new SwVbaFind( this, mxContext, mxModel, xTextRange ) );
+    return SwVbaFind::GetOrCreateFind(this, mxContext, mxModel, xTextRange);
 }
 
 uno::Any SAL_CALL
