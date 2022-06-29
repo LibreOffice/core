@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b534419_752f3f3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-29T12:50:37Z",
+      "side": 1,
+      "message": "Hi Caolán,\nI found two more forums from where we can get some more attachments, specially xls and xlsx files.\nWould you be interested in running it overnight in the crashtesting vm to see how many new files we can get ?",
+      "revId": "c6c1e14d6b5f21639f338b9a386acc264cd7e005",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
