@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65dada8f_a8c3bddc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-06-29T23:51:47Z",
+      "side": 1,
+      "message": "So in order to make the tests more thorough and more specialized for each png file, I made each test case optionally take a std::vector\u003cstd::function\u003c\u003e\u003e. This way I can pass a bunch of assert functions I want to each test, and they can be different for each test but common ones can be reused.\n\nThis is not the final result ofc. But I want to hear your thoughts, is this a good approach? If not let me know so I don\u0027t continue because this is going to be a pretty big one since there\u0027s so many files to specialize tests for.\n\nPS: This does work. For example if you bind the wrong values to fAssertSize the test will fail (see line 455)",
+      "revId": "3c43fd3d4be5906b8b7864a651fc9a92401f3587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
