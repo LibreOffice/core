@@ -960,6 +960,21 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(6000), nFillColorLumOff);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorNoColor)
+{
+    // Given an empty Impress document:
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    SfxDispatcher* pDispatcher = pViewShell->GetViewFrame()->GetDispatcher();
+
+    // When dispatching a fill color that only has a fill style (no color), then make sure we don't
+    // crash:
+    XFillStyleItem aXFillStyleItem(drawing::FillStyle_NONE);
+    pDispatcher->ExecuteList(SID_ATTR_FILL_COLOR, SfxCallMode::RECORD, { &aXFillStyleItem });
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testThemeShapeInsert)
 {
     // Given a document with a theme, accent1 color is set to 0x000004:
