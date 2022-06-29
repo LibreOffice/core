@@ -60,6 +60,7 @@
 #include "vbastyle.hxx"
 #include <docsh.hxx>
 #include <tblenum.hxx>
+#include <sal/log.hxx>
 #include <fesh.hxx>
 
 using namespace ::ooo::vba;
@@ -67,7 +68,7 @@ using namespace ::com::sun::star;
 
 SwVbaSelection::SwVbaSelection( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& rModel ) : SwVbaSelection_BASE( rParent, rContext ), mxModel( rModel )
 {
-    mxTextViewCursor = word::getXTextViewCursor( mxModel );
+   mxTextViewCursor = word::getXTextViewCursor( mxModel );
 }
 
 SwVbaSelection::~SwVbaSelection()
@@ -518,7 +519,7 @@ uno::Reference< word::XFind > SAL_CALL
 SwVbaSelection::getFind()
 {
     uno::Reference< text::XTextRange > xTextRange = GetSelectedRange();
-    return uno::Reference< word::XFind >( new SwVbaFind( this, mxContext, mxModel, xTextRange ) );
+    return uno::Reference< word::XFind >( SwVbaFind::GetOrCreateFind(this, mxContext, mxModel, xTextRange) );
 }
 
 uno::Any SAL_CALL
