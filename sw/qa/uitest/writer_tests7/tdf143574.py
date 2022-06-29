@@ -7,7 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-import org.libreoffice.unotest
 from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
 

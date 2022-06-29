@@ -121,7 +121,6 @@ class findReplace(UITestCase):
         #tdf116242  ţ ț
     def test_tdf116242_replace_t_with_cedilla(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf116242.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 searchterm = xDialog.getChild("searchterm")
@@ -139,7 +138,7 @@ class findReplace(UITestCase):
 
         #Bug 98417 - FIND & REPLACE: Add 'Find Previous' button
     def test_tdf98417_find_previous_writer(self):
-        with self.ui_test.load_file(get_url_for_data_file("findReplace.odt")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("findReplace.odt")):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:

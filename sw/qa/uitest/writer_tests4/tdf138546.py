@@ -15,7 +15,6 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf138546(UITestCase):
     def test_tdf138546(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf138546.odt")):
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             change_measurement_unit(self, "Centimeter")
 

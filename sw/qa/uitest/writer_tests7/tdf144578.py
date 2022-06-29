@@ -9,8 +9,6 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
-import time
-
 class tdf144578(UITestCase):
 
     def test_tdf144578(self):

@@ -17,7 +17,6 @@ class tdf116474(UITestCase):
 
    def test_tdf116474_insert_caption_undo(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             text = document.getText()
             cursor = text.createTextCursor()
             textGraphic = document.createInstance('com.sun.star.text.TextGraphicObject')
@@ -34,7 +33,6 @@ class tdf116474(UITestCase):
                 xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption"}))
 
 
-            xFrame = document.TextFrames[0]
             self.assertEqual(document.TextFrames[0].Text.String, "Figure 1: Caption")
             self.assertEqual(document.GraphicObjects.getCount(), 1)  #nr. of images
             #Undo, redo

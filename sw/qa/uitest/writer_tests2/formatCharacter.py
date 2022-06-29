@@ -17,8 +17,7 @@ from uitest.uihelper.common import select_by_text
 class formatCharacter(UITestCase):
 
    def test_format_character_tab_font(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
@@ -69,8 +68,7 @@ class formatCharacter(UITestCase):
 
 
    def test_format_character_tab_font_effects(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
@@ -121,7 +119,6 @@ class formatCharacter(UITestCase):
 
    def test_format_character_tab_hyperlink(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
@@ -160,8 +157,7 @@ class formatCharacter(UITestCase):
 
 
    def test_format_character_tab_asian_layout(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
@@ -179,8 +175,7 @@ class formatCharacter(UITestCase):
                 self.assertEqual(get_state_as_dict(xTwolines)["Selected"], "true")
 
    def test_format_character_tab_position(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
@@ -224,8 +219,7 @@ class formatCharacter(UITestCase):
 
 
    def test_format_character_tab_position_scalewidthsb(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")

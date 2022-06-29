@@ -50,7 +50,6 @@ class CheckIndexedPropertyValues(unittest.TestCase):
         p3 = PropertyValue(Name="Peter", Value="FamilyGuy")
         prop3 = uno.Any("[]com.sun.star.beans.PropertyValue", (p3,))
 
-        t = xCont.getElementType()
         self.assertEqual(0, len(xCont), "Initial container is not empty")
         uno.invoke(xCont, "insertByIndex", (0, prop1))
 

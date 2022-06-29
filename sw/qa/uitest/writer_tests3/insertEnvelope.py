@@ -20,7 +20,6 @@ class WriterInsertEnvelope(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:InsertEnvelope", close_button="user") as xDialog:
                 xAddrTxt= xDialog.getChild("addredit")
                 xSenderTxt = xDialog.getChild("senderedit")
-                xSenderCheckBox = xDialog.getChild("sender")
 
                 xAddrTxt.executeAction("SELECT", mkPropertyValues({"FROM": "1", "TO": "200"}))
                 xAddrTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

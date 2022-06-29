@@ -16,7 +16,7 @@ from uitest.uihelper.common import select_pos
 class specialCharacter(UITestCase):
 
     def test_tdf56363(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # Insert a font including a font feature into the font name combobox
@@ -33,10 +33,7 @@ class specialCharacter(UITestCase):
                 self.assertEqual(get_state_as_dict(xComboFont)["Text"], fontName)
 
     def test_special_character(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
-
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertSymbol", close_button="cancel") as xDialog:
                 xCharSet = xDialog.getChild("showcharset")  # default charset

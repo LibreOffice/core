@@ -14,9 +14,7 @@ class versionDialog(UITestCase):
 
     def test_tdf131931(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf131931.odt")) as writer_doc:
-
-            xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.load_file(get_url_for_data_file("tdf131931.odt")):
 
             with self.ui_test.execute_dialog_through_command(".uno:VersionDialog", close_button="close") as xVersionDialog:
 

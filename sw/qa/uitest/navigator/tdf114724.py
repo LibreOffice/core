@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf114724(UITestCase):
 
     def test_track_headings_outline(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf114724.odt")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf114724.odt")):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 

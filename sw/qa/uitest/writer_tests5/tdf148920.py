@@ -14,7 +14,7 @@ class tdf148920(UITestCase):
 
    def test_tdf148920(self):
 
-        with self.ui_test.create_doc_in_start_center("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             self.xUITest.executeCommand(".uno:StyleApply?Style:string=Text%20body&FamilyName:string=ParagraphStyles")
 

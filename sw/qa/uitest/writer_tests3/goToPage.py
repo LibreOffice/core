@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class GoToPage_dialog(UITestCase):
 
    def test_go_to_page(self):
-    with self.ui_test.load_file(get_url_for_data_file("3pages.odt")) as writer_doc:
+    with self.ui_test.load_file(get_url_for_data_file("3pages.odt")):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 

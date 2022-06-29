@@ -15,7 +15,7 @@ class writerWordCount(UITestCase):
 
     def test_word_count_dialog(self):
 
-        with self.ui_test.create_doc_in_start_center("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -45,7 +45,7 @@ class writerWordCount(UITestCase):
 
     def test_tdf68347(self):
         #Bug 68347 - Incorrect word count in a document with recorded changes
-        with self.ui_test.load_file(get_url_for_data_file("tdf68347.odt")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf68347.odt")):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -57,7 +57,6 @@ class writerWordCount(UITestCase):
                 xselectchars = xDialog.getChild("selectchars")
                 xdocchars = xDialog.getChild("docchars")
                 xselectcharsnospaces = xDialog.getChild("selectcharsnospaces")
-                xdoccharsnospaces = xDialog.getChild("doccharsnospaces")
                 xselectcjkchars = xDialog.getChild("selectcjkchars")
                 xdoccjkchars = xDialog.getChild("doccjkchars")
 
@@ -72,14 +71,13 @@ class writerWordCount(UITestCase):
                 self.assertEqual(get_state_as_dict(xdoccjkchars)["Text"], "0")
 
     def test_tdf91100(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close"):
                 pass
 
     def test_tdf58050(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf58050.html")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf58050.html")):
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close") as xDialog:
 
@@ -103,7 +101,7 @@ class writerWordCount(UITestCase):
 
     def test_word_count_interpunction_counted_tdf56975_a(self):
 
-        with self.ui_test.create_doc_in_start_center("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #Open writer, enter "Testing one two! Test?"
@@ -132,7 +130,7 @@ class writerWordCount(UITestCase):
 
     def test_word_count_interpunction_counted_tdf56975_b(self):
 
-        with self.ui_test.create_doc_in_start_center("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #1. Create a new text document.
@@ -208,20 +206,13 @@ class writerWordCount(UITestCase):
                 self.assertEqual(get_state_as_dict(xdoccjkchars)["Text"], "0")
 
     def test_tdf51816(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf51816.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
+        with self.ui_test.load_file(get_url_for_data_file("tdf51816.odt")):
             #1. Open attached document
             #2. Tools> Word count
             with self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog", close_button="close") as xDialog:
                 xselectwords = xDialog.getChild("selectwords")
-                xdocwords = xDialog.getChild("docwords")
                 xselectchars = xDialog.getChild("selectchars")
-                xdocchars = xDialog.getChild("docchars")
                 xselectcharsnospaces = xDialog.getChild("selectcharsnospaces")
-                xdoccharsnospaces = xDialog.getChild("doccharsnospaces")
-                xselectcjkchars = xDialog.getChild("selectcjkchars")
-                xdoccjkchars = xDialog.getChild("doccjkchars")
 
                 #3. Click after "At nunc" then <Ctrl><Shift><Left>
                 self.xUITest.executeCommand(".uno:GoRight")

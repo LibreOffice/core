@@ -12,7 +12,7 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf134243(UITestCase):
 
     def test_tdf134243(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf134243.odt")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf134243.odt")):
 
             # Without the fix in place, it would hung launching the mailmerge wizard
             with self.ui_test.execute_dialog_through_command(".uno:MailMergeWizard", close_button="cancel"):

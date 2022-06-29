@@ -14,7 +14,6 @@ class insertFootEndnote(UITestCase):
 
    def test_insert_foot_endnote(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
 #Automatic - Footnote
             with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog"):

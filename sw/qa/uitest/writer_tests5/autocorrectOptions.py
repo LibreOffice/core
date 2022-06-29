@@ -16,7 +16,6 @@ class autocorrectOptions(UITestCase):
 
    def test_autocorrect_options_writer(self):
         with self.ui_test.create_doc_in_start_center("writer"):
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:AutoCorrectDlg", close_button="cancel") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
@@ -26,7 +25,6 @@ class autocorrectOptions(UITestCase):
                 xnew = xDialog.getChild("new")
                 xdelete = xDialog.getChild("delete")
                 xtabview = xDialog.getChild("tabview")
-                xreset = xDialog.getChild("reset")
                 nrRows = get_state_as_dict(xtabview)["VisibleCount"]
 
                 self.assertTrue(int(nrRows) > 0)

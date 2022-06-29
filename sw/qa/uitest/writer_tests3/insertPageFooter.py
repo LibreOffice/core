@@ -37,7 +37,7 @@ class WriterInsertPageFooter(UITestCase):
             document.StyleFamilies.PageStyles.Standard.FooterIsOn, False)
 
     def test_footer(self):
-        with self.ui_test.create_doc_in_start_center("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             self.insert_footer()
 

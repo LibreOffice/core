@@ -19,7 +19,6 @@ class tdf115572(UITestCase):
 
    def test_tdf115572_table_format_gets_reset_deleting_row(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             #insert table 2x2
             with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
                 pass
@@ -44,7 +43,6 @@ class tdf115572(UITestCase):
 
    def test_tdf115572_table_format_gets_reset_deleting_column(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
             #insert table 2x2
             with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
                 pass

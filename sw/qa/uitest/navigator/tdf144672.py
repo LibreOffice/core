@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf144672(UITestCase):
 
     def test_Tdf144672(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf144672.odt")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf144672.odt")):
 
             xMainWindow = self.xUITest.getTopFocusWindow()
             xWriterEdit = xMainWindow.getChild("writer_edit")

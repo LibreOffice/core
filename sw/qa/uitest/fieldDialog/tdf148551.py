@@ -8,8 +8,7 @@
 #
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 
 class Tdf148551(UITestCase):
@@ -17,8 +16,6 @@ class Tdf148551(UITestCase):
     def test_tdf148551(self):
 
         with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:InsertField", close_button="cancel") as xDialog:
                 xTab = xDialog.getChild("tabcontrol")

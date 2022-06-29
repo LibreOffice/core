@@ -34,8 +34,6 @@ class insertCaption(UITestCase):
                 xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption"}))
 
 
-            xFrame = document.TextFrames[0]
-
             self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption")
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog") as xDialogCaption:

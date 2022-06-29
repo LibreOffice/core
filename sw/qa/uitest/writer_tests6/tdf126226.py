@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class Tdf126226(UITestCase):
 
    def test_tdf126226(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf126226.odt")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf126226.odt")):
 
             self.xUITest.executeCommand(".uno:SelectAll")
 

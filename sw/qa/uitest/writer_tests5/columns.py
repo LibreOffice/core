@@ -15,7 +15,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class columns(UITestCase):
     def test_columns(self):
         with self.ui_test.create_doc_in_start_center("writer"):
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             change_measurement_unit(self, "Centimeter")
 

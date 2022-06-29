@@ -15,7 +15,7 @@ class tdf143569(UITestCase):
 
     def test_Tdf143569(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf143569.odt")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf143569.odt")):
 
             xMainWindow = self.xUITest.getTopFocusWindow()
             xWriterEdit = xMainWindow.getChild("writer_edit")

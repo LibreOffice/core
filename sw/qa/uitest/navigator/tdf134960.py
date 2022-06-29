@@ -37,7 +37,7 @@ class tdf134960_hyperlinks(UITestCase):
 
     def test_tdf134960_hyperlinks(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf134960.odt")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf134960.odt")):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -47,7 +47,7 @@ class tdf134960_hyperlinks(UITestCase):
 
     def test_tdf134960_hyperlinks_with_multiple_pages(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf134960.odt")) as writer_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf134960.odt")):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 

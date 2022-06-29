@@ -16,7 +16,6 @@ class tdf123378(UITestCase):
         # FIXME unstable test
         return
         with self.ui_test.create_doc_in_start_center("writer") as document:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.xUITest.executeCommand(".uno:Print")
             xDialog = self.xUITest.getTopFocusWindow()

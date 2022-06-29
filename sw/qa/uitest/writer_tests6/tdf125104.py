@@ -10,7 +10,6 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos, get_state_as_dict
 from uitest.uihelper.common import select_by_text
-from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf125104(UITestCase):
 

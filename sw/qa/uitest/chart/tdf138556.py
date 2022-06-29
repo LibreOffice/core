@@ -10,14 +10,12 @@
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict
 
 class tdf138556( UITestCase ):
 
     def test_stock_chart13_insert_series( self ):
         #Start LibreOffice Writer
         with self.ui_test.create_doc_in_start_center( "writer" ):
-            xMainTop = self.xUITest.getTopFocusWindow()
 
             #Insert Chart
             self.xUITest.executeCommand( ".uno:InsertObjectChart" )

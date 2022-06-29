@@ -36,8 +36,6 @@ class textToTable(UITestCase):
 
     def test_text_to_table_header(self):
         with self.ui_test.load_file(get_url_for_data_file("textToTable.odt")) as writer_doc:
-            xWriterDoc = self.xUITest.getTopFocusWindow()
-            xWriterEdit = xWriterDoc.getChild("writer_edit")
             #open file; select all text ; dialog Text to table - other ":"; verify
             self.xUITest.executeCommand(".uno:SelectAll")
             with self.ui_test.execute_dialog_through_command(".uno:ConvertTextToTable") as xDialog:

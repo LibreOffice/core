@@ -10,7 +10,6 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
-from uitest.uihelper.common import select_pos
 
 class Tdf148395(UITestCase):
 

@@ -33,14 +33,7 @@ class tdf122722(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
 
-                xEffects = xDialog.getChild("effectslb")
-                xRelief = xDialog.getChild("relieflb")
                 xHidden = xDialog.getChild("hiddencb")
-                xOverline = xDialog.getChild("overlinelb")
-                xStrikeout = xDialog.getChild("strikeoutlb")
-                xUnderline = xDialog.getChild("underlinelb")
-                xEmphasis = xDialog.getChild("emphasislb")
-                xPosition = xDialog.getChild("positionlb")
 
                 xHidden.executeAction("CLICK", tuple())
 
@@ -49,14 +42,7 @@ class tdf122722(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
 
-                xEffects = xDialog.getChild("effectslb")
-                xRelief = xDialog.getChild("relieflb")
                 xHidden = xDialog.getChild("hiddencb")
-                xOverline = xDialog.getChild("overlinelb")
-                xStrikeout = xDialog.getChild("strikeoutlb")
-                xUnderline = xDialog.getChild("underlinelb")
-                xEmphasis = xDialog.getChild("emphasislb")
-                xPosition = xDialog.getChild("positionlb")
 
                 self.assertEqual(get_state_as_dict(xHidden)["Selected"], "true")
                 xHidden.executeAction("CLICK", tuple())
