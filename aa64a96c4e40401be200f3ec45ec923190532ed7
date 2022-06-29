@@ -118,6 +118,23 @@
       "message": "Thank you for the really detailed feedback!\nIMHO, I think it would be useful to copy this comment verbatim on the bugtracker.\nThen we\u0027d put this WFM and if someone still reproduces the pb after having applied all what you indicated, he/she\u0027ll have to indicate the precise process to reproduce this.\nWhat do you think?\n\nMeanwhile, let\u0027s abandon this patch then.",
       "revId": "aa64a96c4e40401be200f3ec45ec923190532ed7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "154d60a2_b0202716",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-29T15:09:21Z",
+      "side": 1,
+      "message": "Don\u0027t bother about commenting the bugtracker, I\u0027ll take care of this (not verbatim finally) since you\u0027re working on some patches.\nThank you again!",
+      "revId": "aa64a96c4e40401be200f3ec45ec923190532ed7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
