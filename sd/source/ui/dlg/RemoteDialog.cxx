@@ -27,7 +27,7 @@ RemoteDialog::~RemoteDialog() {}
 IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton, weld::Button&, void)
 {
     weld::WaitObject(m_xDialog.get());
-#if defined(ENABLE_SDREMOTE) && defined(ENABLE_SDREMOTE_BLUETOOTH)
+#if defined(ENABLE_SDREMOTE)
     auto xEntry = m_xClientBox->GetActiveEntry();
     if (!xEntry)
         return;
