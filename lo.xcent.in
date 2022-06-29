@@ -14,16 +14,13 @@
 	<true/>
 	<key>com.apple.security.network.client</key>
 	<true/>
-	<key>com.apple.security.network.server</key>
-	<true/>
-	<key>com.apple.security.device.bluetooth</key>
-	<true/>
 	<key>com.apple.security.print</key>
 	<true/>
         <key>com.apple.security.cs.disable-executable-page-protection</key>
         <true/>
-    <!-- Allow Base to import data from Address Book -->
-    <key>com.apple.security.personal-information.addressbook</key>
-    <true/>
+        <!-- Allow Base to import data from Address Book -->
+        <key>com.apple.security.personal-information.addressbook</key>
+        <true/>
+@SDREMOTE_ENTITLEMENT@
 </dict>
 </plist>
