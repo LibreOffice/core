@@ -213,6 +213,24 @@
       "parentUuid": "92b7c1af_b9e5924c",
       "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "245be10a_51f1fb9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-29T12:04:08Z",
+      "side": 1,
+      "message": "\u003e My take here is this workaround is much more benign than the \"only test on Linux\" or \"do not test on non-default DPI\" that we put right and left ;) I.e., I would like to avoid reverting the change here because of the test failure that actually is unclear itself.\n\nI agree that adding a workaround to the test would presumably be preferable to reverting this change.  But I think it would still be even more preferable to track down what is actually going on exactly and why the test started to fail for me.  I\u0027ll see if I can find some time to do that.  (And as things are seemingly only failing for me, leaving this open for now shouldn\u0027t cause too much trouble overall.)",
+      "parentUuid": "49a53361_36bbc94f",
+      "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
