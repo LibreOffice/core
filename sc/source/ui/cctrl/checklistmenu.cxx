@@ -933,6 +933,12 @@ void ScCheckListMenuControl::updateMemberParents(const weld::TreeIter* pLeaf, si
     }
 }
 
+const size_t ScCheckListMenuControl::getMemberSize() const
+{
+    return maMembers.size();
+}
+
+
 void ScCheckListMenuControl::setMemberSize(size_t n)
 {
     maMembers.reserve(n);

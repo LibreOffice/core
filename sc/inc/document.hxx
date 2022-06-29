@@ -2158,7 +2158,7 @@ public:
      * database range that contains the specified cell position.
      */
     void              GetFilterEntries( SCCOL nCol, SCROW nRow,
-                                        SCTAB nTab, ScFilterEntries& rFilterEntries );
+                                        SCTAB nTab, ScFilterEntries& rFilterEntries, bool all = false );
 
     SC_DLLPUBLIC void GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
                                             SCTAB nTab, bool bCaseSens,

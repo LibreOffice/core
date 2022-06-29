@@ -1559,7 +1559,7 @@ void ScDocument::GetFilterSelCount( SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE& 
  * Entries for AutoFilter listbox
  */
 void ScDocument::GetFilterEntries(
-    SCCOL nCol, SCROW nRow, SCTAB nTab, ScFilterEntries& rFilterEntries )
+    SCCOL nCol, SCROW nRow, SCTAB nTab, ScFilterEntries& rFilterEntries, bool all )
 {
     if ( !(ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && pDBCollection) )
         return;
@@ -1595,7 +1595,7 @@ void ScDocument::GetFilterEntries(
         }
     }
 
-    if ( bFilter )
+    if (bFilter && !all)
     {
         maTabs[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rFilterEntries, bFilter );
     }
