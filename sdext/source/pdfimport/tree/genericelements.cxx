@@ -192,7 +192,7 @@ bool ParagraphElement::isSingleLined( PDFIProcessor const & rProc ) const
         if( dynamic_cast< ParagraphElement* >(rxChild.get()) != nullptr )
             return false;
 
-        pText = dynamic_cast< TextElement* >(rxChild.get());
+        pText = rxChild->dynCastAsTextElement();
         if( pText )
         {
             const FontAttributes& rFont = rProc.getFont( pText->FontId );
@@ -226,7 +226,7 @@ double ParagraphElement::getLineHeight( PDFIProcessor& rProc ) const
             if( lh > line_h )
                 line_h = lh;
         }
-        else if( (pText = dynamic_cast< TextElement* >( rxChild.get() )) != nullptr )
+        else if( (pText = rxChild->dynCastAsTextElement()) != nullptr )
         {
             const FontAttributes& rFont = rProc.getFont( pText->FontId );
             double lh = pText->h;
@@ -243,9 +243,9 @@ TextElement* ParagraphElement::getFirstTextChild() const
 {
     TextElement* pText = nullptr;
     auto it = std::find_if(Children.begin(), Children.end(),
-        [](const std::unique_ptr<Element>& rxElem) { return dynamic_cast<TextElement*>(rxElem.get()) != nullptr; });
+        [](const std::unique_ptr<Element>& rxElem) { return rxElem->dynCastAsTextElement() != nullptr; });
     if (it != Children.end())
-        pText = dynamic_cast<TextElement*>(it->get());
+        pText = (*it)->dynCastAsTextElement();
     return pText;
 }
 
@@ -270,7 +270,7 @@ bool PageElement::resolveHyperlink( const std::list<std::unique_ptr<Element>>::i
         if( (*it)->x >= pLink->x && (*it)->x + (*it)->w <= pLink->x + pLink->w &&
             (*it)->y >= pLink->y && (*it)->y + (*it)->h <= pLink->y + pLink->h )
         {
-            TextElement* pText = dynamic_cast<TextElement*>(it->get());
+            TextElement* pText = (*it)->dynCastAsTextElement();
             if( pText )
             {
                 if( pLink->Children.empty() )
@@ -336,7 +336,7 @@ void PageElement::resolveUnderlines( PDFIProcessor const & rProc )
     textAndHypers.reserve(Children.size());
     for (auto const & p : Children)
     {
-        if (dynamic_cast< TextElement* >(p.get()) || dynamic_cast<HyperlinkElement*>(p.get()))
+        if (p->dynCastAsTextElement() || dynamic_cast<HyperlinkElement*>(p.get()))
             textAndHypers.push_back(p.get());
     }
 
@@ -388,7 +388,7 @@ void PageElement::resolveUnderlines( PDFIProcessor const & rProc )
                 if( pEle->x + pEle->w*0.1 >= l_x &&
                     pEle->x + pEle->w*0.9 <= r_x )
                 {
-                    TextElement* pText = dynamic_cast< TextElement* >(pEle);
+                    TextElement* pText = pEle->dynCastAsTextElement();
                     if( pText )
                     {
                         const GraphicsContext& rTextGC = rProc.getGraphicsContext( pText->GCId );
