@@ -50,6 +50,24 @@
       "message": "Do I understand that the second bug is to be fixed with this change? If so, did you consider covering the fix with a test?\n\nI would hope that you could test this starting from having access to an SwWrtShell pointer.",
       "revId": "b3d6c0d1ba4316fb069bd799c044b4ca65efe660",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df0ffc09_55f1f84f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-29T09:58:32Z",
+      "side": 1,
+      "message": "These three bug reports are essentially the same thing. There are unit tests for two separate tests already, so I don\u0027t see the point in making a third one. It is all related to \"paragraph properties\" spilling over into a right-to-left-then-unselect-left table cell.\n\nThe follow-up patch (containing reference to the third bug #) reverts the whack-a-mole patches that let those two unit tests currently pass. Because of this patch, they will continue to pass, as should any conceivable situation that depends on proper table cell selection. Adding testing load won\u0027t provide any additional benefit in this case.",
+      "parentUuid": "62ce3b4d_eb0cddab",
+      "revId": "b3d6c0d1ba4316fb069bd799c044b4ca65efe660",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
