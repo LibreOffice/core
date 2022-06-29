@@ -407,12 +407,7 @@ void PageElement::resolveUnderlines( PDFIProcessor const & rProc )
             }
         }
         if( bRemovePoly )
-        {
-            auto next_it = poly_it;
-            ++next_it;
-            Children.erase( poly_it );
-            poly_it = next_it;
-        }
+            poly_it = Children.erase( poly_it );
         else
             ++poly_it;
     }
