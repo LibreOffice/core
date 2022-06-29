@@ -3901,7 +3901,8 @@ void SwContentTree::UpdateTracking()
                         {
                             if (m_xTreeView->get_iter_depth(*xIter) == 0)
                                 break;
-                            m_xTreeView->iter_previous(*xIter);
+                            if (!m_xTreeView->iter_previous(*xIter))
+                                break;
                             while (!weld::IsEntryVisible(*m_xTreeView, *xIter))
                                 m_xTreeView->iter_parent(*xIter);
                         }
