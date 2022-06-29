@@ -317,7 +317,7 @@ void PDFIProcessor::drawGlyphs( const OUString&             rGlyphs,
 
 void PDFIProcessor::endText()
 {
-    TextElement* pText = dynamic_cast<TextElement*>(m_pCurElement);
+    TextElement* pText = m_pCurElement->dynCastAsTextElement();
     if( pText )
         m_pCurElement = pText->Parent;
 }
@@ -637,9 +637,9 @@ static bool lr_tb_sort( std::unique_ptr<Element> const & pLeft, std::unique_ptr<
     // of the same order as font height whereas the real paint area
     // of text is usually smaller
     double fudge_factor_left = 0.0, fudge_factor_right = 0.0;
-    if( dynamic_cast< TextElement* >(pLeft.get()) )
+    if( pLeft->dynCastAsTextElement() )
         fudge_factor_left = 0.1;
-    if (dynamic_cast< TextElement* >(pRight.get()))
+    if( pRight->dynCastAsTextElement() )
         fudge_factor_right = 0.1;
 
     // Allow negative height
