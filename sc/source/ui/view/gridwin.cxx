@@ -949,7 +949,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
                 bSelected = aSelectedString.count(aStringVal) > 0;
             else if (bQueryByNonEmpty)
                 bSelected = false;
-            mpAutoFilterPopup->addMember(aStringVal, aDoubleVal, bSelected);
+            mpAutoFilterPopup->addMember(aStringVal, aDoubleVal, bSelected, it->IsHiddenByFilter());
             aFilterEntries.maStrData.erase(it);
             break;
         }
@@ -959,7 +959,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         const OUString& aStringVal = rEntry.GetString();
         const double aDoubleVal = rEntry.GetValue();
         const double aRDoubleVal = rEntry.GetRoundedValue();
-        bool bSelected = true;
+        bool bSelected = !rEntry.IsHiddenByFilter();
 
         if (!aSelectedValue.empty() || !aSelectedString.empty())
         {
@@ -970,9 +970,10 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         }
 
         if ( rEntry.IsDate() )
-            mpAutoFilterPopup->addDateMember( aStringVal, rEntry.GetValue(), bSelected );
+            mpAutoFilterPopup->addDateMember( aStringVal, rEntry.GetValue(), bSelected, rEntry.IsHiddenByFilter());
         else
-            mpAutoFilterPopup->addMember( aStringVal, aRDoubleVal, bSelected, rEntry.GetStringType() == ScTypedStrData::Value );
+            mpAutoFilterPopup->addMember( aStringVal, aRDoubleVal, bSelected, rEntry.IsHiddenByFilter(),
+                rEntry.GetStringType() == ScTypedStrData::Value );
     }
 
     // Populate the menu.
