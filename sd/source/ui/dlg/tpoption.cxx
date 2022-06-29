@@ -491,7 +491,7 @@ IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl, weld::ComboBox&, void)
 
 void SdTpOptionsMisc::SetImpressMode()
 {
-#ifndef ENABLE_SDREMOTE_BLUETOOTH
+#ifndef ENABLE_SDREMOTE
     m_xCbxEnableSdremote->hide();
 #else
     (void) this; // loplugin:staticmethods
