@@ -30,11 +30,6 @@
 #include <o3tl/lru_map.hxx>
 #include <tools/long.hxx>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::linguistic2;
-
 // Magical numbers
 #define MAX_CACHE_SIZE 10
 #define MAX_SUGGESTIONS_SIZE 10
@@ -48,13 +43,15 @@ enum class HTTP_METHOD
 };
 
 class LanguageToolGrammarChecker
-    : public cppu::WeakImplHelper<XProofreader, XInitialization, XServiceInfo, XServiceDisplayName>
+    : public cppu::WeakImplHelper<css::linguistic2::XProofreader, css::lang::XInitialization,
+                                  css::lang::XServiceInfo, css::lang::XServiceDisplayName>
 {
-    Sequence<Locale> m_aSuppLocales;
-    o3tl::lru_map<OUString, Sequence<SingleProofreadingError>> mCachedResults;
+    css::uno::Sequence<css::lang::Locale> m_aSuppLocales;
+    o3tl::lru_map<OUString, css::uno::Sequence<css::linguistic2::SingleProofreadingError>>
+        mCachedResults;
     LanguageToolGrammarChecker(const LanguageToolGrammarChecker&) = delete;
     LanguageToolGrammarChecker& operator=(const LanguageToolGrammarChecker&) = delete;
-    static void parseProofreadingJSONResponse(ProofreadingResult& rResult,
+    static void parseProofreadingJSONResponse(css::linguistic2::ProofreadingResult& rResult,
                                               std::string_view aJSONBody);
     static std::string makeHttpRequest(std::string_view aURL, HTTP_METHOD method,
                                        const OString& aPostData, tools::Long& nStatusCode);
@@ -64,30 +61,31 @@ public:
     virtual ~LanguageToolGrammarChecker() override;
 
     // XSupportedLocales
-    virtual Sequence<Locale> SAL_CALL getLocales() override;
-    virtual sal_Bool SAL_CALL hasLocale(const Locale& rLocale) override;
+    virtual css::uno::Sequence<css::lang::Locale> SAL_CALL getLocales() override;
+    virtual sal_Bool SAL_CALL hasLocale(const css::lang::Locale& rLocale) override;
 
     // XProofReader
     virtual sal_Bool SAL_CALL isSpellChecker() override;
-    virtual ProofreadingResult SAL_CALL doProofreading(
-        const OUString& aDocumentIdentifier, const OUString& aText, const Locale& aLocale,
-        sal_Int32 nStartOfSentencePosition, sal_Int32 nSuggestedBehindEndOfSentencePosition,
-        const Sequence<PropertyValue>& aProperties) override;
+    virtual css::linguistic2::ProofreadingResult SAL_CALL
+    doProofreading(const OUString& aDocumentIdentifier, const OUString& aText,
+                   const css::lang::Locale& aLocale, sal_Int32 nStartOfSentencePosition,
+                   sal_Int32 nSuggestedBehindEndOfSentencePosition,
+                   const css::uno::Sequence<css::beans::PropertyValue>& aProperties) override;
 
     virtual void SAL_CALL ignoreRule(const OUString& aRuleIdentifier,
-                                     const Locale& aLocale) override;
+                                     const css::lang::Locale& aLocale) override;
     virtual void SAL_CALL resetIgnoreRules() override;
 
     // XServiceDisplayName
-    virtual OUString SAL_CALL getServiceDisplayName(const Locale& rLocale) override;
+    virtual OUString SAL_CALL getServiceDisplayName(const css::lang::Locale& rLocale) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const Sequence<Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
