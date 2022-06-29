@@ -3000,7 +3000,11 @@ void ScTable::GetFilteredFilterEntries(
     {
         if (queryEvaluator.ValidQuery(j))
         {
-            aCol[nCol].GetFilterEntries(aBlockPos, j, j, rFilterEntries, bFiltering);
+            aCol[nCol].GetFilterEntries(aBlockPos, j, j, rFilterEntries, bFiltering, false/*bHiddenRow*/);
+        }
+        else
+        {
+            aCol[nCol].GetFilterEntries(aBlockPos, j, j, rFilterEntries, bFiltering, true/*bHiddenRow*/);
         }
     }
 }

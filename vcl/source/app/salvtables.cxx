@@ -4289,6 +4289,28 @@ void SalInstanceTreeView::set_text(int pos, const OUString& rText, int col)
     set_text(pEntry, rText, col);
 }
 
+bool SalInstanceTreeView::get_sensitive(SvTreeListEntry* pEntry)
+{
+    bool bSensitive = true;
+    const sal_uInt16 nCount = pEntry->ItemCount();
+    for (sal_uInt16 nCur = 0; nCur < nCount; ++nCur)
+    {
+        SvLBoxItem& rItem = pEntry->GetItem(nCur);
+        if (rItem.GetType() == SvLBoxItemType::String)
+        {
+            bSensitive = rItem.isEnable();
+            break;
+        }
+    }
+    return bSensitive;
+}
+
+bool SalInstanceTreeView::get_sensitive(const weld::TreeIter& rIter) const
+{
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    return get_sensitive(rVclIter.iter);
+}
+
 void SalInstanceTreeView::set_sensitive(SvTreeListEntry* pEntry, bool bSensitive, int col)
 {
     if (col == -1)
@@ -4301,11 +4323,12 @@ void SalInstanceTreeView::set_sensitive(SvTreeListEntry* pEntry, bool bSensitive
         for (sal_uInt16 nCur = 0; nCur < nCount; ++nCur)
         {
             SvLBoxItem& rItem = pEntry->GetItem(nCur);
-            if (rItem.GetType() == SvLBoxItemType::String)
+            if (rItem.GetType() == SvLBoxItemType::String
+                || rItem.GetType() == SvLBoxItemType::Button
+                || rItem.GetType() == SvLBoxItemType::ContextBmp)
             {
                 rItem.Enable(bSensitive);
                 InvalidateModelEntry(pEntry);
-                break;
             }
         }
         return;

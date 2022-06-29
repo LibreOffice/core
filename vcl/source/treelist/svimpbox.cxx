@@ -1845,7 +1845,7 @@ bool SvImpLBox::MouseMoveCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry cons
 
 bool SvImpLBox::ButtonUpCheckCtrl( const MouseEvent& rMEvt )
 {
-    if( m_pActiveButton )
+    if( m_pActiveButton && m_pActiveButton->isEnable())
     {
         m_pView->ReleaseMouse();
         SvTreeListEntry* pEntry = GetClickedEntry( rMEvt.GetPosPixel() );
