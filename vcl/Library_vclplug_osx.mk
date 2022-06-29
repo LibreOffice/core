@@ -32,10 +32,14 @@ $(eval $(call gb_Library_use_custom_headers,vclplug_osx,\
     officecfg/registry \
 ))
 
+# TODO: arguably the private CoreUI framework should never be used, no matter whether building
+# a sandboxed version or a "regular" desktop version
 $(eval $(call gb_Library_add_libs,vclplug_osx,\
     -framework IOKit \
-    -F/System/Library/PrivateFrameworks \
-    -framework CoreUI \
+    $(if $(ENABLE_MACOSX_SANDBOX),,\
+        -F/System/Library/PrivateFrameworks \
+        -framework CoreUI \
+    ) \
     -lobjc \
 ))
 
