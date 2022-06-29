@@ -74,7 +74,7 @@ void ChildrenManager::SetShapeList (const css::uno::Reference<css::drawing::XSha
     mpImpl->SetShapeList (xShapeList);
 }
 
-void ChildrenManager::AddAccessibleShape (css::uno::Reference<css::accessibility::XAccessible> const & shape)
+void ChildrenManager::AddAccessibleShape (rtl::Reference<AccessibleShape> const & shape)
 {
     mpImpl->AddAccessibleShape (shape);
 }

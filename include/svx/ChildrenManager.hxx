@@ -46,6 +46,7 @@ class XShapes;
 namespace accessibility
 {
 class AccessibleContextBase;
+class AccessibleShape;
 class AccessibleShapeTreeInfo;
 class ChildrenManagerImpl;
 
@@ -164,7 +165,7 @@ public:
 
         @param shape must be non-null
     */
-    void AddAccessibleShape(css::uno::Reference<css::accessibility::XAccessible> const& shape);
+    void AddAccessibleShape(rtl::Reference<AccessibleShape> const& shape);
 
     /** Clear the list of accessible shapes which have been added by
         previous calls to <member>AddAccessibleShape</member>.
