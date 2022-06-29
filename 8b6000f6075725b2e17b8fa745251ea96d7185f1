@@ -159,6 +159,24 @@
       "parentUuid": "bc64c9f8_09d21f1b",
       "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "316cf1e8_0e09989d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-29T08:47:19Z",
+      "side": 1,
+      "message": "diff --git a/sw/qa/extras/ooxmlexport/ooxmlexport12.cxx b/sw/qa/extras/ooxmlexport/ooxmlexport12.cxx\n  index 8b4fc39dd02d..b355778dc146 100644\n  --- a/sw/qa/extras/ooxmlexport/ooxmlexport12.cxx\n  +++ b/sw/qa/extras/ooxmlexport/ooxmlexport12.cxx\n  @@ -18,6 +18,7 @@\n   #include \u003ccom/sun/star/text/XTextTablesSupplier.hpp\u003e\n   #include \u003ccom/sun/star/text/XTextTable.hpp\u003e\n   #include \u003ccom/sun/star/document/XViewDataSupplier.hpp\u003e\n  +#include \u003ccom/sun/star/util/XRefreshable.hpp\u003e\n   #include \u003co3tl/string_view.hxx\u003e\n   \n   class Test : public SwModelTestBase\n  @@ -467,6 +468,8 @@ CPPUNIT_TEST_FIXTURE(Test, testObjectCrossReference)\n       uno::Reference\u003ctext::XTextFieldsSupplier\u003e xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);\n       uno::Reference\u003ccontainer::XEnumerationAccess\u003e xFieldsAccess(\n           xTextFieldsSupplier-\u003egetTextFields());\n  +    // Refresh all cross-reference fields:\n  +    uno::Reference\u003cutil::XRefreshable\u003e(xFieldsAccess, uno::UNO_QUERY_THROW)-\u003erefresh();\n       uno::Reference\u003ccontainer::XEnumeration\u003e xFields(xFieldsAccess-\u003ecreateEnumeration());\n       CPPUNIT_ASSERT(xFields-\u003ehasMoreElements());\n   \n\nwould indeed fix it for me.  Though it looks odd that this VCL commit would affect that behavior.  Maybe some Writer people can share their thoughts whether this might be plausible at all (and whether Mike\u0027s proposed change would be a true fix or just a workaround)?",
+      "parentUuid": "21375019_2dae0635",
+      "revId": "8b6000f6075725b2e17b8fa745251ea96d7185f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
