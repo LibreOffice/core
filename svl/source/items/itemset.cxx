@@ -45,8 +45,13 @@
  * Don't create ItemSets with full range before FreezeIdRanges()!
  */
 SfxItemSet::SfxItemSet(SfxItemPool& rPool)
-    : SfxItemSet(rPool, rPool.GetFrozenIdRanges())
+    : m_pPool(&rPool), m_pParent(nullptr),
+    m_ppItems(new SfxPoolItem const *[svl::detail::CountRanges(rPool.GetFrozenIdRanges())]{}),
+    m_pWhichRanges(rPool.GetFrozenIdRanges()),
+    m_nCount(0),
+    m_bItemsFixed(false)
 {
+    assert(svl::detail::validRanges2(m_pWhichRanges));
 }
 
 SfxItemSet::SfxItemSet( SfxItemPool& rPool, SfxAllItemSetFlag )
