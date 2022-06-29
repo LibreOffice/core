@@ -22,5 +22,6 @@
         <key>com.apple.security.personal-information.addressbook</key>
         <true/>
 @SDREMOTE_ENTITLEMENT@
+@MACOSX_PROVISIONING_INFO@
 </dict>
 </plist>
