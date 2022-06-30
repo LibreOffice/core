@@ -4345,7 +4345,13 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
         aChartDispatcher->dispatch(aCommandURL, comphelper::containerToSequence(aPropertyValuesVector));
         return;
     }
-    else if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers.count(nView))
+    if (LokStarMathHelper aMathHelper(SfxViewShell::Current());
+        aMathHelper.GetGraphicWindow() && aCommand != ".uno:Save")
+    {
+        aMathHelper.Dispatch(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
+        return;
+    }
+    if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers.count(nView))
     {
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
                 new DispatchResultListener(pCommand, pDocument->mpCallbackFlushHandlers[nView]));

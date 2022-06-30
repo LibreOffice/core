@@ -170,7 +170,7 @@ public:
 
     void SyncUpdate();
 
-    bool hasChartContextCurrently() const;
+    bool hasChartOrMathContextCurrently() const;
 
     static SidebarController* GetSidebarControllerForView(const SfxViewShell* pViewShell);
 
