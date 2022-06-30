@@ -16,6 +16,23 @@
       "message": "hmmm, this is actually a shutdown problem, because we are keeping an object alive longer than it wants to be. Presumably this only did not show up previously out of sheer luck :-)\n\nProbably that SwAccessibleDocument needs to be explicitly disposed.\n",
       "revId": "76d29518154411dbe33306d38e1db91b0aa872dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ca28f1d_53f1174b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-30T10:53:56Z",
+      "side": 1,
+      "message": "Thank you for your quick feedback!\nIf the patch revealed a bug, let\u0027s abandon the revert.",
+      "revId": "76d29518154411dbe33306d38e1db91b0aa872dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
