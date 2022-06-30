@@ -2042,6 +2042,14 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
         aRect.AdjustLeft( -1 );
     else
         aRect.AdjustRight( 1 );
+
+    if (maFont.GetOrientation() != 0_deg10)
+    {
+        tools::Polygon aRotatedPolygon(aRect);
+        aRotatedPolygon.Rotate(Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2), maFont.GetOrientation());
+        return aRotatedPolygon.GetBoundRect();
+    }
+
     return aRect;
 }
 
