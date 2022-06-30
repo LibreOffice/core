@@ -33,6 +33,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -666,6 +667,9 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         m_aTableProperties->Insert( PROP_HORI_ORIENT, uno::Any( sal_Int16(nHoriOrient) ) );
         //fill default value - if not available
         m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::Any( sal_Int32(0)), false);
+        m_aTableProperties->Insert(PROP_WRITING_MODE,
+                                   uno::Any(sal_Int16(text::WritingMode2::CONTEXT)),
+                                   /*bOverWrite=*/false);
 
         // if table is only a single row, and row is set as don't split, set the same value for the whole table.
         if( m_aRowProperties.size() == 1 && m_aRowProperties[0] )
