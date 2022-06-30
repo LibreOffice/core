@@ -52,6 +52,7 @@
 #include <ObjectNameProvider.hxx>
 #include <Legend.hxx>
 #include <LegendHelper.hxx>
+#include <DataTable.hxx>
 #include <RegressionCurveModel.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
@@ -152,6 +153,24 @@ void ChartController::executeDispatch_InsertGrid()
     catch(const uno::RuntimeException&)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+}
+
+void ChartController::executeDispatch_OpenInsertDataTableDialog()
+{
+    rtl::Reference<Diagram> xDiagram = getFirstDiagram();
+    SolarMutexGuard aGuard;
+    if (xDiagram->getDataTable().is())
+    {
+        xDiagram->setDataTable(uno::Reference<chart2::XDataTable>());
+    }
+    else
+    {
+        uno::Reference<chart2::XDataTable> xDataTable(new DataTable);
+        if (xDataTable.is())
+        {
+            xDiagram->setDataTable(xDataTable);
+        }
     }
 }
 
