@@ -31,6 +31,7 @@
 
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <swdtflvr.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -2035,6 +2036,47 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testNestedGroupTextBoxCopyCrash)
     auto pLayout = parseLayoutDump();
     // There must be 2 textboxes!
     assertXPath(pLayout, "/root/page/body/txt/anchored/fly[2]");
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCrashOnExit)
+{
+    // Load the bugdoc with a table annd a textbox shape inside.
+    CPPUNIT_ASSERT(createSwDoc(DATA_DIRECTORY, "tdf142715.odt"));
+
+    // Get the textbox selected
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    auto xShape = getShape(1);
+    CPPUNIT_ASSERT(xShape);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel);
+    uno::Reference<frame::XController> xController = xModel->getCurrentController();
+    CPPUNIT_ASSERT(xController);
+    uno::Reference<view::XSelectionSupplier> xSelection(xController, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSelection);
+    CPPUNIT_ASSERT(xSelection->select(uno::Any(xShape)));
+    CPPUNIT_ASSERT(xSelection->getSelection().hasValue());
+    uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
+
+    // Check the textbox is selected
+    CPPUNIT_ASSERT_EQUAL(true, xProperties->getPropertyValue("TextBox").get<bool>());
+
+    // Remove the textbox
+    dispatchCommand(mxComponent, ".uno:RemoveTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(false, xProperties->getPropertyValue("TextBox").get<bool>());
+
+    // Readd the textbox (to run the textboxhelper::create() method)
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(true, xProperties->getPropertyValue("TextBox").get<bool>());
+
+    // save and reload
+    reload("writer8", "tdf142715_.odt");
+
+    // Before the fix this crashed here and will not be reopened.
+    CPPUNIT_ASSERT_MESSAGE("Crash on exit, isn't it?", mxComponent);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCaptionShape)
