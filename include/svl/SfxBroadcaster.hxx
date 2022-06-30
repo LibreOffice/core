@@ -31,6 +31,8 @@ class SVL_DLLPUBLIC SfxBroadcaster
     /** Contains the positions of removed listeners. */
     std::vector<size_t>     m_RemovedPositions;
     std::vector<SfxListener*> m_Listeners;
+    bool                    m_bSorted;
+    bool                    m_bInBroadcast;
 
 private:
     void                    AddListener( SfxListener& rListener );
@@ -42,7 +44,7 @@ protected:
 
 public:
 
-                            SfxBroadcaster() {}
+                            SfxBroadcaster() : m_bSorted(false), m_bInBroadcast(false) {}
                             SfxBroadcaster( const SfxBroadcaster &rBC );
     virtual                 ~SfxBroadcaster() COVERITY_NOEXCEPT_FALSE;
 
