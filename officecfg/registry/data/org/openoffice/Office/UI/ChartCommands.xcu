@@ -64,6 +64,11 @@
           <value xml:lang="en-US">Y Error ~Bars...</value>
         </prop>
       </node>
+      <node oor:name=".uno:InsertMenuDataTable" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Data Table...</value>
+        </prop>
+      </node>
       <!--  Menu - Format -->
       <node oor:name=".uno:FormatSelection" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">

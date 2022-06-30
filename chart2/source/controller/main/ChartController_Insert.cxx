@@ -50,6 +50,7 @@
 #include <DataSeriesHelper.hxx>
 #include <ObjectNameProvider.hxx>
 #include <LegendHelper.hxx>
+#include <DataTable.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
@@ -153,6 +154,24 @@ void ChartController::executeDispatch_InsertGrid()
     catch(const uno::RuntimeException&)
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+}
+
+void ChartController::executeDispatch_OpenInsertDataTableDialog()
+{
+    uno::Reference<chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(getModel());
+    SolarMutexGuard aGuard;
+    if (xDiagram->getDataTable().is())
+    {
+        xDiagram->setDataTable(uno::Reference<chart2::XDataTable>());
+    }
+    else
+    {
+        uno::Reference<chart2::XDataTable> xDataTable(new DataTable);
+        if (xDataTable.is())
+        {
+            xDiagram->setDataTable(xDataTable);
+        }
     }
 }
 

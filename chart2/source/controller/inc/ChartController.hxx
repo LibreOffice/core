@@ -438,6 +438,7 @@ private:
     void executeDispatch_OpenLegendDialog();
     void executeDispatch_InsertAxes();
     void executeDispatch_InsertGrid();
+    void executeDispatch_OpenInsertDataTableDialog();
 
     void executeDispatch_InsertMenu_DataLabels();
     void executeDispatch_InsertMenu_Trendlines();
