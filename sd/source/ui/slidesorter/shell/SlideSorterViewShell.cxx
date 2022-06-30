@@ -74,7 +74,7 @@ namespace sd::slidesorter {
 
 namespace {
 
-bool inChartContext(const sd::View* pView)
+bool inChartOrMathContext(const sd::View* pView)
 {
     if (!pView)
         return false;
@@ -82,7 +82,7 @@ bool inChartContext(const sd::View* pView)
     SfxViewShell* pViewShell = pView->GetSfxViewShell();
     SidebarController* pSidebar = SidebarController::GetSidebarControllerForView(pViewShell);
     if (pSidebar)
-        return pSidebar->hasChartContextCurrently();
+        return pSidebar->hasChartOrMathContextCurrently();
 
     return false;
 }
@@ -459,9 +459,9 @@ void SlideSorterViewShell::ArrangeGUIElements()
 
 void SlideSorterViewShell::Activate (bool bIsMDIActivate)
 {
-    if(inChartContext(GetView()))
+    if(inChartOrMathContext(GetView()))
     {
-        // Avoid context changes for chart during activation / deactivation.
+        // Avoid context changes for chart/math during activation / deactivation.
         const bool bIsContextBroadcasterEnabled (SfxShell::SetContextBroadcasterEnabled(false));
 
         ViewShell::Activate(bIsMDIActivate);

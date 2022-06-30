@@ -14,8 +14,11 @@
 #include <tools/gen.hxx>
 #include <vcl/vclptr.hxx>
 
+namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XDispatch; }
+namespace com::sun::star::uno { template<class E> class Sequence; }
+namespace rtl { class OUString; }
 namespace vcl { class Window; }
 
 class SfxViewShell;
@@ -71,6 +74,8 @@ public:
 
     vcl::Window* GetGraphicWindow();
     vcl::Window* GetWidgetWindow();
+
+    void Dispatch(const rtl::OUString& cmd, const css::uno::Sequence<css::beans::PropertyValue>& rArguments);
 
     bool postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier,
                         double fScaleX = 1.0, double fScaleY = 1.0);

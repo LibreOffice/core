@@ -13,6 +13,7 @@
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/lokhelper.hxx>
 
+#include <comphelper/dispatchcommand.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/fract.hxx>
 #include <vcl/layout.hxx>
@@ -41,6 +42,14 @@ css::uno::Reference<css::frame::XController>& LokStarMathHelper::GetXController(
     }
 
     return mxController;
+}
+
+void LokStarMathHelper::Dispatch(const OUString& cmd,
+                                 const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
+{
+    if (const css::uno::Reference<css::frame::XController>& xController = GetXController())
+        if (const css::uno::Reference<css::frame::XFrame> xFrame = xController->getFrame())
+            comphelper::dispatchCommand(cmd, xFrame, rArguments);
 }
 
 namespace
