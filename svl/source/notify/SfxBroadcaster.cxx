@@ -19,6 +19,7 @@
 
 #include <svl/SfxBroadcaster.hxx>
 
+#include <comphelper/scopeguard.hxx>
 #include <svl/hint.hxx>
 #include <svl/lstner.hxx>
 #include <tools/debug.hxx>
@@ -26,11 +27,15 @@
 #include <algorithm>
 #include <cassert>
 #include <vector>
+#include <sal/log.hxx>
 
 // broadcast immediately
 
 void SfxBroadcaster::Broadcast(const SfxHint& rHint)
 {
+    const bool oldInBroadcast = m_bInBroadcast;
+    comphelper::ScopeGuard aGuard([this, oldInBroadcast] { m_bInBroadcast = oldInBroadcast; });
+    m_bInBroadcast = true;
     // notify all registered listeners exactly once
     size_t nSize = m_Listeners.size();
     for (size_t i = 0; i < nSize; ++i)
@@ -59,6 +64,8 @@ SfxBroadcaster::~SfxBroadcaster() COVERITY_NOEXCEPT_FALSE
 // copy ctor of class SfxBroadcaster
 
 SfxBroadcaster::SfxBroadcaster(const SfxBroadcaster& rOther)
+    : m_bSorted(false)
+    , m_bInBroadcast(false)
 {
     for (size_t i = 0; i < rOther.m_Listeners.size(); ++i)
     {
@@ -84,6 +91,7 @@ void SfxBroadcaster::AddListener(SfxListener& rListener)
         assert(m_Listeners[targetPosition] == nullptr);
         m_Listeners[targetPosition] = &rListener;
     }
+    m_bSorted = false;
 }
 
 // forward a notification to all registered listeners
@@ -122,8 +130,62 @@ void SfxBroadcaster::RemoveListener(SfxListener& rListener)
     // then scan the whole list if we didn't find it
     if (positionOfRemovedElement == -1)
     {
-        auto aIter = std::find(m_Listeners.begin(), m_Listeners.end(), &rListener);
-        positionOfRemovedElement = std::distance(m_Listeners.begin(), aIter);
+        // Repeated removes can be quite expensive when the list is large,
+        // so we amortize the cost by sorting first, then binary searching.
+        // But we can only do this if we are not inside a broadcast.
+        if (!m_bSorted && !m_bInBroadcast)
+        {
+            std::sort(m_Listeners.begin(), m_Listeners.end());
+            m_bSorted = true;
+            // the removed positions are now at the front of the array
+            for (size_t i = 0; i < m_RemovedPositions.size(); ++i)
+                m_RemovedPositions[i] = i;
+        }
+        if (m_bSorted)
+        {
+            // do binary search, open-code this so we can ignore removed elements
+            size_t first = 0;
+            size_t last = m_Listeners.size() - 1;
+            size_t middle = first;
+            while (first <= last)
+            {
+                middle = (first + last) / 2;
+                if (m_Listeners[middle] == nullptr)
+                {
+                    // ignore any removed elements, and look for a valid pointer to compare against
+                    do
+                    {
+                        middle++;
+                    } while (m_Listeners[middle] == nullptr && middle <= last);
+                    if (middle > last)
+                        // found nothing between middle and last, so search again between first and middle
+                        last = (first + last) / 2 - 1;
+                    else if (m_Listeners[middle] < &rListener)
+                        first = middle + 1;
+                    else if (m_Listeners[middle] == &rListener)
+                        break; // found
+                    else // (m_Listeners[middle] > &rListener)
+                        last = (first + last) / 2 - 1;
+                }
+                else
+                {
+                    if (m_Listeners[middle] < &rListener)
+                        first = middle + 1;
+                    else if (m_Listeners[middle] == &rListener)
+                        break; // found
+                    else // (m_Listeners[middle] > &rListener)
+                        last = middle - 1;
+                }
+            }
+            assert(first <= last && "not found");
+            assert(m_Listeners[middle] == &rListener && "middle is wrong");
+            positionOfRemovedElement = middle;
+        }
+        else
+        {
+            auto aIter = std::find(m_Listeners.begin(), m_Listeners.end(), &rListener);
+            positionOfRemovedElement = std::distance(m_Listeners.begin(), aIter);
+        }
     }
     // DO NOT erase the listener, set the pointer to 0
     // because the current continuation may contain this->Broadcast
