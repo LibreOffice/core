@@ -44,8 +44,10 @@ SchXMLCalculationSettingsContext::SchXMLCalculationSettingsContext( SvXMLImport&
         if ( aIter.getToken() == XML_ELEMENT(TABLE, XML_DATE_VALUE) )
         {
             util::DateTime aNullDate;
-            ::sax::Converter::parseDateTime(aNullDate, aIter.toView());
-            m_aNullDate <<= aNullDate;
+            if (::sax::Converter::parseDateTime(aNullDate, aIter.toView()))
+                m_aNullDate <<= aNullDate;
+            else
+                SAL_WARN("xmloff", "SchXMLCalculationSettingsContext: broken DateTime '" << aIter.toView() << "'");
         }
         else
             XMLOFF_WARN_UNKNOWN("xmloff", aIter);
