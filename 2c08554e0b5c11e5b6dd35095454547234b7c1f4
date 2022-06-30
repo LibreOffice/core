@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9c81bda_c358053f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-06-30T08:28:17Z",
+      "side": 1,
+      "message": "Is this OK? Small change, as per mailing list discussion I know it doesn\u0027t solve the major issue but it is a start :-)",
+      "revId": "2c08554e0b5c11e5b6dd35095454547234b7c1f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
