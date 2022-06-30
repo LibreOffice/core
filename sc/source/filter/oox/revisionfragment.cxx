@@ -287,12 +287,7 @@ void RevisionHeadersFragment::importHeader( const AttributeList& rAttribs )
     {
         util::DateTime aDateTime;
         if (sax::Converter::parseDateTime(aDateTime, aDateTimeStr))
-        {
-            Date aDate(aDateTime);
-            tools::Time aTime(aDateTime);
-            aMetadata.maDateTime.SetDate(aDate.GetDate());
-            aMetadata.maDateTime.SetTime(aTime.GetTime());
-        }
+            aMetadata.maDateTime = aDateTime;
         else
             SAL_WARN("sc.filter", "RevisionHeadersFragment: broken DateTime '" << aDateTimeStr << "'");
     }
