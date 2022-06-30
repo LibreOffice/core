@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c6b9c2b_1ac0d8dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-30T17:48:49Z",
+      "side": 1,
+      "message": "breaks the build when --enable-macosx-sandbox is used/change doesn\u0027t cover all instances.",
+      "revId": "eecc113e6f6e51e5e37059235c1069dc9c4c1cc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ef575e7_eda8cfb9",
+        "filename": "sal/osl/unx/uunxapi.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-06-30T17:48:49Z",
+      "side": 1,
+      "message": "this (and the other user of cpPath in lines 385 ff) break in the --enable-macosx-sandbox case..\n\nJenkins doesn\u0027t use it, and is fine due to\n  #define prepare_to_access_file_path( cpFilePath ) nullptr\n\nfor the non-sandbox case...",
+      "range": {
+        "startLine": 366,
+        "startChar": 61,
+        "endLine": 366,
+        "endChar": 67
+      },
+      "revId": "eecc113e6f6e51e5e37059235c1069dc9c4c1cc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
