@@ -273,6 +273,8 @@ private:
     */
     void RemoveObjectFromContainer (
         const sal_uInt32 nObjectPosition);
+
+    void ImplReformatAllEdgeObjects(const SdrObjList& );
 };
 
 // Used for all methods which return a page number
