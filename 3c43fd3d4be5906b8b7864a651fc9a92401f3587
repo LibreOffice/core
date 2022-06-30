@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b5c29c6_bb42080a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-06-30T13:29:08Z",
+      "side": 1,
+      "message": "Not sure how I feel about that as IMHO test should be a straightforward as possible, so in this case I think it is better to just create another test method that tests a certain set of images where you assert the expected size and/or expected bit-count, even if you have to repeat the import/export/import cycle for those. Alternatively, why not check the size and bit-count for all of the images?",
+      "parentUuid": "65dada8f_a8c3bddc",
+      "revId": "3c43fd3d4be5906b8b7864a651fc9a92401f3587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14767f5d_b5998881",
