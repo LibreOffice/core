@@ -12,6 +12,8 @@
 #include <queue>
 
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
@@ -168,6 +170,27 @@ DECLARE_OOXMLEXPORT_TEST(testTdf132475_printField, "tdf132475_printField.docx")
     uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Thursday, March 17, 2022"), xField->getPresentation(false));
     CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Last printed"), xField->getPresentation(true));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf114734_commentFormating, "tdf114734_commentFormating.docx")
+{
+    if (mbExported)
+        return;
+    // Get the PostIt/Comment/Annotation
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+
+    uno::Reference<text::XText> xText = getProperty<uno::Reference<text::XText>>(xField, "TextRange");
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
+    // Paragraph formatting was lost: should be right to left, and thus right-justified
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Right to Left comment",
+                                 text::WritingMode2::RL_TB,
+                                 getProperty<sal_Int16>(xParagraph, "WritingMode"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("literal right justified",
+                                 sal_Int16(style::ParagraphAdjust_RIGHT),
+                                 getProperty<sal_Int16>(xParagraph, "ParaAdjust"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135906)

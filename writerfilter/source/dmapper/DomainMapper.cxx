@@ -1369,7 +1369,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     {
     case NS_ooxml::LN_CT_PPrBase_jc:
     {
-        bool bExchangeLeftRight = !IsRTFImport() && ExchangeLeftRight(rContext, *m_pImpl);
+        bool bExchangeLeftRight = !IsRTFImport() && !m_pImpl->IsInComments() && ExchangeLeftRight(rContext, *m_pImpl);
         handleParaJustification(nIntValue, rContext, bExchangeLeftRight);
         break;
     }
@@ -1667,7 +1667,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             m_pImpl->GetPropertyFromParaStyleSheet(PROP_WRITING_MODE) >>= nParentBidi;
             // Paragraph justification reverses its meaning in an RTL context.
             // 1. Only make adjustments if the BiDi changes.
-            if ( nParentBidi != nWritingMode && !IsRTFImport() )
+            if (nParentBidi != nWritingMode && !IsRTFImport() && !m_pImpl->IsInComments())
             {
                 style::ParagraphAdjust eAdjust = style::ParagraphAdjust(-1);
                 // 2. no adjust property exists yet
@@ -3318,7 +3318,7 @@ void DomainMapper::lcl_startParagraphGroup()
 
     if (m_pImpl->GetTopContext())
     {
-        if (!m_pImpl->IsInShape())
+        if (!m_pImpl->IsInShape() && !m_pImpl->IsInComments())
         {
             const OUString& sDefaultParaStyle = m_pImpl->GetDefaultParaStyleName();
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::Any( sDefaultParaStyle ) );
