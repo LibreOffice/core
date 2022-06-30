@@ -40,7 +40,6 @@
 #include <o3tl/enumarray.hxx>
 
 #include <string_view>
-#include <unordered_set>
 #include <vector>
 
 namespace com::sun::star::accessibility { class XAccessibleEventListener; }
@@ -222,7 +221,7 @@ class DocumentFocusListener final :
     public ::cppu::WeakImplHelper< css::accessibility::XAccessibleEventListener >
 {
 
-    std::unordered_set< css::uno::Reference< css::uno::XInterface > > m_aRefList;
+    o3tl::sorted_vector< css::uno::Reference< css::uno::XInterface > > m_aRefList;
 
 public:
     /// @throws lang::IndexOutOfBoundsException
