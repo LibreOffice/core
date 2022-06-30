@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ae09a75_e4efd470",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-06-30T05:25:59Z",
+      "side": 1,
+      "message": "Design hat on, I’d support reverting 0c7e6080519014f1fb345ed25e2f12c9a043b3ae in all cases; it doesn’t even provide a seamless visual integration. Let’s avoid the trouble of using private APIs entirely.",
+      "revId": "788dcbef1bae7dbe600f8f193944cd9b31aa27d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
