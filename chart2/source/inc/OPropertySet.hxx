@@ -28,11 +28,12 @@
 #include <com/sun/star/style/XStyleSupplier.hpp>
 
 #include <map>
+#include "charttoolsdllapi.hxx"
 
 namespace property
 {
 
-class OPropertySet :
+class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
     public ::cppu::OBroadcastHelper,
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet
     public ::cppu::OPropertySetHelper,

@@ -56,6 +56,7 @@
         <menu:menuitem menu:id=".uno:InsertMenuLegend"/>
         <menu:menuitem menu:id=".uno:InsertMenuAxes"/>
         <menu:menuitem menu:id=".uno:InsertMenuGrids"/>
+        <menu:menuitem menu:id=".uno:InsertMenuDataTable"/>
       <menu:menuseparator/>
         <menu:menuitem menu:id=".uno:InsertMenuDataLabels"/>
         <menu:menuitem menu:id=".uno:InsertMenuTrendlines"/>
