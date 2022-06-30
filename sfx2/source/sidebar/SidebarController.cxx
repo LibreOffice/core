@@ -1609,9 +1609,10 @@ void SidebarController::saveDeckState()
     }
 }
 
-bool SidebarController::hasChartContextCurrently() const
+bool SidebarController::hasChartOrMathContextCurrently() const
 {
-    return GetCurrentContext().msApplication == "com.sun.star.chart2.ChartDocument";
+    return GetCurrentContext().msApplication == "com.sun.star.chart2.ChartDocument"
+           || GetCurrentContext().msApplication == "com.sun.star.formula.FormulaProperties";
 }
 
 sfx2::sidebar::SidebarController* SidebarController::GetSidebarControllerForView(const SfxViewShell* pViewShell)
