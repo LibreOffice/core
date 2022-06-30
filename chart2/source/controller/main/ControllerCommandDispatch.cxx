@@ -594,7 +594,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ ".uno:InsertMenuMeanValues" ] = bIsWritable && m_apModelState->bSupportsStatistics;
     m_aCommandAvailability[ ".uno:InsertMenuXErrorBars" ] = bIsWritable && m_apModelState->bSupportsStatistics;
     m_aCommandAvailability[ ".uno:InsertMenuYErrorBars" ] = bIsWritable && m_apModelState->bSupportsStatistics;
-    m_aCommandAvailability[ ".uno:InsertSymbol" ] = bIsWritable && m_apControllerState->bIsTextObject;
+    m_aCommandAvailability[ ".uno:InsertSymbol" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsTextObject;
+    m_aCommandAvailability[ ".uno:InsertMenuDataTable" ] = bIsWritable;
 
     // format objects
     bool bFormatObjectAvailable = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsFormateableObjectSelected;
