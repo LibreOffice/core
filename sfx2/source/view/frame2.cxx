@@ -182,7 +182,7 @@ void SfxFrameWindow_Impl::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == StateChangedType::InitShow )
     {
-        pFrame->pImpl->bHidden = false;
+        pFrame->m_pImpl->bHidden = false;
         if ( pFrame->IsInPlace() )
             // TODO/MBA: workaround for bug in LayoutManager: the final resize does not get through because the
             // LayoutManager works asynchronously and between resize and time execution the DockingAcceptor was exchanged so that
@@ -200,7 +200,7 @@ void SfxFrameWindow_Impl::StateChanged( StateChangedType nStateChange )
 
 void SfxFrameWindow_Impl::DoResize()
 {
-    if ( !pFrame->pImpl->bLockResize )
+    if ( !pFrame->m_pImpl->bLockResize )
         pFrame->Resize();
 }
 
@@ -294,9 +294,9 @@ SfxFrame::SfxFrame( vcl::Window& i_rContainerWindow )
 {
     Construct_Impl();
 
-    pImpl->bHidden = false;
+    m_pImpl->bHidden = false;
     InsertTopFrame_Impl( this );
-    pImpl->pExternalContainerWindow = &i_rContainerWindow;
+    m_pImpl->pExternalContainerWindow = &i_rContainerWindow;
 
     pWindow = VclPtr<SfxFrameWindow_Impl>::Create( this, i_rContainerWindow );
 
@@ -338,8 +338,8 @@ SystemWindow* SfxFrame::GetSystemWindow() const
 
 SystemWindow* SfxFrame::GetTopWindow_Impl() const
 {
-    if ( pImpl->pExternalContainerWindow->IsSystemWindow() )
-        return static_cast<SystemWindow*>( pImpl->pExternalContainerWindow.get() );
+    if ( m_pImpl->pExternalContainerWindow->IsSystemWindow() )
+        return static_cast<SystemWindow*>( m_pImpl->pExternalContainerWindow.get() );
     else
         return nullptr;
 }
@@ -347,12 +347,12 @@ SystemWindow* SfxFrame::GetTopWindow_Impl() const
 
 void SfxFrame::LockResize_Impl( bool bLock )
 {
-    pImpl->bLockResize = bLock;
+    m_pImpl->bLockResize = bLock;
 }
 
 void SfxFrame::SetMenuBarOn_Impl( bool bOn )
 {
-    pImpl->bMenuBarOn = bOn;
+    m_pImpl->bMenuBarOn = bOn;
 
     Reference< css::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
     Reference< css::frame::XLayoutManager > xLayoutManager;
@@ -376,7 +376,7 @@ void SfxFrame::SetMenuBarOn_Impl( bool bOn )
 
 bool SfxFrame::IsMenuBarOn_Impl() const
 {
-    return pImpl->bMenuBarOn;
+    return m_pImpl->bMenuBarOn;
 }
 
 void SfxFrame::PrepareForDoc_Impl( const SfxObjectShell& i_rDoc )
@@ -384,8 +384,8 @@ void SfxFrame::PrepareForDoc_Impl( const SfxObjectShell& i_rDoc )
     const ::comphelper::NamedValueCollection aDocumentArgs( i_rDoc.GetModel()->getArgs2( { "Hidden", "PluginMode" } ) );
 
     // hidden?
-    OSL_ENSURE( !pImpl->bHidden, "when does this happen?" );
-    pImpl->bHidden = aDocumentArgs.getOrDefault( "Hidden", pImpl->bHidden );
+    OSL_ENSURE( !m_pImpl->bHidden, "when does this happen?" );
+    m_pImpl->bHidden = aDocumentArgs.getOrDefault( "Hidden", m_pImpl->bHidden );
 
     // update our descriptor
     UpdateDescriptor( &i_rDoc );
@@ -393,12 +393,12 @@ void SfxFrame::PrepareForDoc_Impl( const SfxObjectShell& i_rDoc )
     // plugin mode
     sal_Int16 nPluginMode = aDocumentArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode && ( nPluginMode != 2 ) )
-        pImpl->bInPlace = true;
+        m_pImpl->bInPlace = true;
 }
 
 bool SfxFrame::IsMarkedHidden_Impl() const
 {
-    return pImpl->bHidden;
+    return m_pImpl->bHidden;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

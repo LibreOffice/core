@@ -69,7 +69,7 @@ class SFX2_DLLPUBLIC SfxFrame final : public SvCompatWeakBase<SfxFrame>
     friend class SfxFrameWindow_Impl;
 
 private:
-    std::unique_ptr< SfxFrame_Impl >     pImpl;
+    std::unique_ptr< SfxFrame_Impl >     m_pImpl;
     VclPtr<vcl::Window> pWindow;
 
     virtual             ~SfxFrame();
