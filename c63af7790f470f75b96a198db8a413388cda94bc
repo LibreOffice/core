@@ -16,6 +16,24 @@
       "message": "Oh! Here goes some misunderstanding.\n\nWhen talking about the rename, I only meant one variable inside CellValueGetter::visitNode method, which was initially called eType, and which was unrelated to the ValueType, it didn\u0027t relate to the result of Range::value or Range::value2. It was holding the type of the data in a cell, and thus *unrelated* to your change.\n\nYou decided to rename it for some reason; I assumed it was because the eType was confusing, and one could make a mistake, thinking that eType relates to ValueType. But the rename was from eType to eValueType, and that was even more misleading.\n\nTo clean up the confusion, I suggest now to do this:\n\n1. Revert the last changes to the Patchset 6 (i.e., undo what you done last).\n2. Open CellValueGetter::visitNode, and *inside it* (only!), rename eValueType to eType.\n\nThat would make the patch perfect. Thank you, and excuse me for being unclear - English is not my first language :)",
       "revId": "c63af7790f470f75b96a198db8a413388cda94bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2fa8035_8931ac58",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-30T01:36:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d65e9395_ef72c89f",
+      "revId": "c63af7790f470f75b96a198db8a413388cda94bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
