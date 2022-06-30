@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "975d74e1_177f9723",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1003620
+      },
+      "writtenOn": "2022-06-30T08:30:52Z",
+      "side": 1,
+      "message": "I corrected it!\nhttps://gerrit.libreoffice.org/c/core/+/136663",
+      "parentUuid": "b9710e02_d1ed97c7",
+      "revId": "3afa117d59352917d5d18199231a5bdc3937271a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "91071ed4_5f633515",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -52,6 +70,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "804d59bc_32491a8d",
+        "filename": "shell/source/sessioninstall/SyncDbusSessionHelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1003620
+      },
+      "writtenOn": "2022-06-30T08:30:52Z",
+      "side": 1,
+      "message": "I corrected it!\nhttps://gerrit.libreoffice.org/c/core/+/136663",
+      "parentUuid": "715266e7_fdcfea18",
+      "revId": "3afa117d59352917d5d18199231a5bdc3937271a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6cac097f_1b2587da",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-06-29T18:44:54Z",
       "side": 1,
       "message": "Also here, \"SearchFile is not implemented\" is better.",
+      "revId": "3afa117d59352917d5d18199231a5bdc3937271a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d0f53b9_a5250ed9",
+        "filename": "shell/source/sessioninstall/SyncDbusSessionHelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1003620
+      },
+      "writtenOn": "2022-06-30T08:30:52Z",
+      "side": 1,
+      "message": "I corrected it!\nhttps://gerrit.libreoffice.org/c/core/+/136663",
+      "parentUuid": "6cac097f_1b2587da",
       "revId": "3afa117d59352917d5d18199231a5bdc3937271a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
