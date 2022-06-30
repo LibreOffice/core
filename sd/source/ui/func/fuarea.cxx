@@ -59,10 +59,10 @@ void FuArea::DoExecute( SfxRequest& rReq )
     VclPtr<AbstractSvxAreaTabDialog> pDlg(
         pFact->CreateSvxAreaTabDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc, true, bHasSlideBackground));
 
-    pDlg->StartExecuteAsync([pDlg, this](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([pDlg, pView = this->mpView, pViewShell = this->mpViewShell](sal_Int32 nResult){
         if (nResult == RET_OK)
         {
-            mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));
+            pView->SetAttributes (*(pDlg->GetOutputItemSet ()));
 
             // attributes changed, update Listboxes in Objectbars
             static const sal_uInt16 SidArray[] = {
@@ -76,11 +76,11 @@ void FuArea::DoExecute( SfxRequest& rReq )
                 SID_ATTR_FILL_USE_SLIDE_BACKGROUND,
                 0 };
 
-            mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+            pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
         }
 
         // deferred until the dialog ends
-        mpViewShell->Cancel();
+        pViewShell->Cancel();
 
         pDlg->disposeOnce();
     });
