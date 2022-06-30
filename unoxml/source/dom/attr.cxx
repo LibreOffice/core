@@ -36,7 +36,7 @@ using namespace css::xml::dom::events;
 
 namespace DOM
 {
-    CAttr::CAttr(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+    CAttr::CAttr(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
             xmlAttrPtr const pAttr)
         : CAttr_Base(rDocument, rMutex,
                 NodeType_ATTRIBUTE_NODE, reinterpret_cast<xmlNodePtr>(pAttr))
@@ -100,7 +100,7 @@ namespace DOM
     */
     OUString SAL_CALL CAttr::getName()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
             return OUString();
@@ -116,7 +116,7 @@ namespace DOM
     */
     Reference< XElement > SAL_CALL CAttr::getOwnerElement()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
             return nullptr;
@@ -147,7 +147,7 @@ namespace DOM
     */
     OUString SAL_CALL CAttr::getValue()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
             return OUString();
@@ -164,7 +164,7 @@ namespace DOM
     */
     void SAL_CALL CAttr::setValue(const OUString& value)
     {
-        ::osl::ClearableMutexGuard guard(m_rMutex);
+        ::std::unique_lock guard(m_rMutex);
 
         if ((nullptr == m_aNodePtr) || (nullptr == m_aAttrPtr)) {
             return;
@@ -202,7 +202,7 @@ namespace DOM
                 Reference<XNode>( static_cast<XAttr*>( this ) ),
                 sOldValue, value, getName(), AttrChangeType_MODIFICATION );
 
-        guard.clear(); // release mutex before calling event handlers
+        guard.unlock(); // release mutex before calling event handlers
 
         dispatchEvent(event);
         dispatchSubtreeModified();
@@ -210,7 +210,7 @@ namespace DOM
 
     void SAL_CALL CAttr::setPrefix(const OUString& prefix)
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if (!m_aNodePtr) { return; }
 
@@ -228,7 +228,7 @@ namespace DOM
 
     OUString SAL_CALL CAttr::getPrefix()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if (!m_aNodePtr) { return OUString(); }
 
@@ -247,7 +247,7 @@ namespace DOM
 
     OUString SAL_CALL CAttr::getNamespaceURI()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         if (!m_aNodePtr) { return OUString(); }
 

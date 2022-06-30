@@ -25,7 +25,7 @@ using namespace css::xml::dom;
 namespace DOM
 {
     CDocumentFragment::CDocumentFragment(
-            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
             xmlNodePtr const pNode)
         : CDocumentFragment_Base(rDocument, rMutex,
                 NodeType_DOCUMENT_FRAGMENT_NODE, pNode)

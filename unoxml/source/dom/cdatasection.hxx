@@ -18,7 +18,7 @@
  */
 
 #pragma once
-
+#include <mutex>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XCDATASection.hpp>
 
@@ -35,7 +35,7 @@ namespace DOM
     {
         friend class CDocument;
 
-        CCDATASection(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CCDATASection(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
                 xmlNodePtr const pNode);
 
     public:

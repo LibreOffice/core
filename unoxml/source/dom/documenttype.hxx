@@ -44,7 +44,7 @@ namespace DOM
 
         xmlDtdPtr m_aDtdPtr;
 
-        CDocumentType(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CDocumentType(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
                 xmlDtdPtr const pDtd);
 
     public:

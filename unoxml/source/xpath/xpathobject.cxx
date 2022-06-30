@@ -19,6 +19,8 @@
 
 #include "xpathobject.hxx"
 
+#include <mutex>
+
 #include <string.h>
 
 #include <utility>
@@ -63,7 +65,7 @@ namespace XPath
 
     CXPathObject::CXPathObject(
             ::rtl::Reference<DOM::CDocument> pDocument,
-            ::osl::Mutex & rMutex,
+            ::std::recursive_mutex & rMutex,
             std::shared_ptr<xmlXPathObject> const& pXPathObj)
         : m_pDocument(std::move(pDocument))
         , m_rMutex(rMutex)
@@ -86,7 +88,7 @@ namespace XPath
     Reference< XNodeList > SAL_CALL
     CXPathObject::getNodeList()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         Reference< XNodeList > const xRet(
             new CNodeList(m_pDocument, m_rMutex, m_pXPathObj));
@@ -98,7 +100,7 @@ namespace XPath
      */
     sal_Bool SAL_CALL CXPathObject::getBoolean()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         return xmlXPathCastToBoolean(m_pXPathObj.get()) != 0;
     }
@@ -108,7 +110,7 @@ namespace XPath
     */
     sal_Int8 SAL_CALL CXPathObject::getByte()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         return static_cast<sal_Int8>(xmlXPathCastToNumber(m_pXPathObj.get()));
     }
@@ -118,7 +120,7 @@ namespace XPath
     */
     sal_Int16 SAL_CALL CXPathObject::getShort()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         return static_cast<sal_Int16>(xmlXPathCastToNumber(m_pXPathObj.get()));
     }
@@ -128,7 +130,7 @@ namespace XPath
     */
     sal_Int32 SAL_CALL CXPathObject::getLong()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         return static_cast<sal_Int32>(xmlXPathCastToNumber(m_pXPathObj.get()));
     }
@@ -138,7 +140,7 @@ namespace XPath
     */
     sal_Int64 SAL_CALL CXPathObject::getHyper()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         return static_cast<sal_Int64>(xmlXPathCastToNumber(m_pXPathObj.get()));
     }
@@ -148,7 +150,7 @@ namespace XPath
     */
     float SAL_CALL CXPathObject::getFloat()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         return static_cast<float>(xmlXPathCastToNumber(m_pXPathObj.get()));
     }
@@ -158,7 +160,7 @@ namespace XPath
     */
     double SAL_CALL CXPathObject::getDouble()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         return  xmlXPathCastToNumber(m_pXPathObj.get());
     }
@@ -168,7 +170,7 @@ namespace XPath
     */
     OUString SAL_CALL CXPathObject::getString()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         std::shared_ptr<xmlChar const> str(
             xmlXPathCastToString(m_pXPathObj.get()), xmlFree);

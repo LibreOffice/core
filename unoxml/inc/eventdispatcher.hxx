@@ -20,7 +20,7 @@
 #pragma once
 
 #include <map>
-
+#include <mutex>
 #include <libxml/tree.h>
 
 #include <rtl/ustring.hxx>
@@ -28,8 +28,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
-
-namespace osl { class Mutex; }
 
 namespace DOM {
 
@@ -67,7 +65,7 @@ public:
 
     void dispatchEvent(
         DOM::CDocument & rDocument,
-        ::osl::Mutex & rMutex,
+        ::std::recursive_mutex & rMutex,
         xmlNodePtr const pNode,
         css::uno::Reference<css::xml::dom::XNode> const& xNode,
         css::uno::Reference< css::xml::dom::events::XEvent > const& xEvent) const;

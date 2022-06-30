@@ -27,7 +27,7 @@ using namespace css::xml::sax;
 
 namespace DOM
 {
-    CComment::CComment(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+    CComment::CComment(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
             xmlNodePtr const pNode)
         : CComment_Base(rDocument, rMutex, NodeType_COMMENT_NODE, pNode)
     {
