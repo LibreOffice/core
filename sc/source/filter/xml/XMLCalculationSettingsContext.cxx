@@ -158,6 +158,10 @@ ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
             aDate.Year = aDateTime.Year;
             pCalcSet->SetNullDate(aDate);
         }
+        else
+        {
+            SAL_WARN("sc.filter","ignoring invalid NullDate '" << aIter.toView() << "'");
+        }
     }
 }
 
