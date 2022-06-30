@@ -1281,6 +1281,22 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
         impl_showOnlineHelp(aHelpURL, pWidget);
         return true;
     }
+#ifdef MACOSX
+    if (@available(macOS 10.14, *)) {
+        // Workaround: Safari sandboxing prevents it from accessing files in the LibreOffice.app folder
+        // force online-help instead if Safari is default browser.
+        CFURLRef pBrowser = LSCopyDefaultApplicationURLForURL(
+                                CFURLCreateWithString(
+                                    kCFAllocatorDefault,
+                                    static_cast<CFStringRef>(@"https://www.libreoffice.org"),
+                                    nullptr),
+                                kLSRolesAll, nullptr);
+        if([static_cast<NSString*>(CFURLGetString(pBrowser)) isEqualToString:@"file:///Applications/Safari.app/"]) {
+            impl_showOnlineHelp(aHelpURL, pWidget);
+            return true;
+        }
+    }
+#endif
 
     // If the HTML or no help is installed, but aHelpURL nevertheless references valid help content,
     // that implies that help content belongs to an extension (and thus would not be available
