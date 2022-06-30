@@ -22,6 +22,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <fmtanchr.hxx>
@@ -3918,6 +3919,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf103612)
                 "Text inside section after ToC");
     assertXPath(pLayout, "/root/page[1]/body/section[6]/txt[1]/LineBreak[1]", "Line",
                 "Text after section");
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testCrashOnExit)
+{
+    // Load the bugdoc with a table and a textbox shape inside.
+    CPPUNIT_ASSERT(createSwDoc(DATA_DIRECTORY, "tdf142715.odt"));
+    // Get the textbox selected
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    auto xShape = getShape(1);
+    CPPUNIT_ASSERT(xShape);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel);
+    uno::Reference<frame::XController> xController = xModel->getCurrentController();
+    CPPUNIT_ASSERT(xController);
+    uno::Reference<view::XSelectionSupplier> xSelection(xController, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSelection);
+    CPPUNIT_ASSERT(xSelection->select(uno::Any(xShape)));
+    CPPUNIT_ASSERT(xSelection->getSelection().hasValue());
+    uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
+    // Check if the textbox is selected
+    CPPUNIT_ASSERT_EQUAL(true, xProperties->getPropertyValue("TextBox").get<bool>());
+    // Remove the textbox
+    dispatchCommand(mxComponent, ".uno:RemoveTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(false, xProperties->getPropertyValue("TextBox").get<bool>());
+    // Readd the textbox (to run the textboxhelper::create() method)
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(true, xProperties->getPropertyValue("TextBox").get<bool>());
+    // save and reload
+    reload("writer8", "tdf142715_.odt");
+    // Before the fix this crashed here and could not reopen.
+    CPPUNIT_ASSERT_MESSAGE("Crash on exit, isn't it?", mxComponent);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf97899)
