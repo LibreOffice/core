@@ -34,11 +34,11 @@ using namespace sfx2::sidebar;
 
 namespace {
 
-bool inChartContext(const SwView& rViewShell)
+bool inChartOrMathContext(const SwView& rViewShell)
 {
     SidebarController* pSidebar = SidebarController::GetSidebarControllerForView(&rViewShell);
     if (pSidebar)
-        return pSidebar->hasChartContextCurrently();
+        return pSidebar->hasChartOrMathContextCurrently();
 
     return false;
 }
@@ -56,11 +56,11 @@ void SwOleShell::InitInterface_Impl()
 
 void SwOleShell::Activate(bool bMDI)
 {
-    if(!inChartContext(GetView()))
+    if(!inChartOrMathContext(GetView()))
         SwFrameShell::Activate(bMDI);
     else
     {
-        // Avoid context changes for chart during activation / deactivation.
+        // Avoid context changes for chart/math during activation / deactivation.
         const bool bIsContextBroadcasterEnabled (SfxShell::SetContextBroadcasterEnabled(false));
 
         SwFrameShell::Activate(bMDI);
@@ -71,11 +71,11 @@ void SwOleShell::Activate(bool bMDI)
 
 void SwOleShell::Deactivate(bool bMDI)
 {
-    if(!inChartContext(GetView()))
+    if(!inChartOrMathContext(GetView()))
         SwFrameShell::Deactivate(bMDI);
     else
     {
-        // Avoid context changes for chart during activation / deactivation.
+        // Avoid context changes for chart/math during activation / deactivation.
         const bool bIsContextBroadcasterEnabled (SfxShell::SetContextBroadcasterEnabled(false));
 
         SwFrameShell::Deactivate(bMDI);
