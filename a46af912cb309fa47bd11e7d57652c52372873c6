@@ -34,6 +34,24 @@
       "parentUuid": "996c45db_736650d6",
       "revId": "a46af912cb309fa47bd11e7d57652c52372873c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a466c049_148fda64",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-30T14:35:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77acdee9_36f4990b",
+      "revId": "a46af912cb309fa47bd11e7d57652c52372873c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

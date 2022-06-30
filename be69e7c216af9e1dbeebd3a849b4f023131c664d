@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45385b93_53dc0b44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-06-30T14:35:13Z",
+      "side": 1,
+      "message": "I forgot to mark this as done.\nThe problem spotted by Caolán was fixed in 19a6adddec0f5a6ee771939a17f85bdde4a44ce3 ( before the libreoffice-7-4-branch-point ) and bothaeeb0141aca4f1698b09bc8f06ded41247b54279 and 19a6adddec0f5a6ee771939a17f85bdde4a44ce3 are backported as one in this patch",
+      "revId": "be69e7c216af9e1dbeebd3a849b4f023131c664d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
