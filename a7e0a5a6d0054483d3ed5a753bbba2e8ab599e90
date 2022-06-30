@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "955107df_688136e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-30T01:57:08Z",
+      "side": 1,
+      "message": "Does the compat mode map to a set of our compat flags? Can we maybe drop the grab bag, and use a heuristic from the set flags to define the compat mode on writing to docx? ",
+      "revId": "a7e0a5a6d0054483d3ed5a753bbba2e8ab599e90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
