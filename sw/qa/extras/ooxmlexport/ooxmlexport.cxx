@@ -718,6 +718,15 @@ DECLARE_OOXMLEXPORT_TEST(testTableRtl, "table-rtl.docx")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>(xTable, "WritingMode"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTableLr, "table-ltr.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // This was text::WritingMode2::RL_TB, i.e. direction of the table was wrongly guessed.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::CONTEXT, getProperty<sal_Int16>(xTable, "WritingMode"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist30, "cjklist30.docx")
 {
     sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
