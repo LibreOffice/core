@@ -98,27 +98,19 @@ void VclComplexTextTest::testArabic()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(71, aBoundRect.GetWidth(), 2); // This sometimes equals to 70
     CPPUNIT_ASSERT_DOUBLES_EQUAL(15, aBoundRect.getOpenHeight(), 1);
 
-#if 0
-    // FIXME: This seems to be wishful thinking, GetTextRect() does not take
-    // rotation into account.
-
     // normal orientation
     tools::Rectangle aInput;
     tools::Rectangle aRect = pOutDev->GetTextRect( aInput, aOneTwoThree );
 
     // now rotate 270 degrees
     vcl::Font aRotated( aFont );
-    aRotated.SetOrientation( 2700 );
+    aRotated.SetOrientation( 2700_deg10 );
     pOutDev->SetFont( aRotated );
     tools::Rectangle aRectRot = pOutDev->GetTextRect( aInput, aOneTwoThree );
 
     // Check that we did do the rotation...
-    fprintf( stderr, "%" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 "\n",
-             sal_Int64(aRect.GetWidth()), sal_Int64(aRect.GetHeight()),
-             sal-Int64(aRectRot.GetWidth()), sal_Int64(aRectRot.GetHeight()) );
-    CPPUNIT_ASSERT( aRectRot.GetWidth() == aRect.GetHeight() );
-    CPPUNIT_ASSERT( aRectRot.GetHeight() == aRect.GetWidth() );
-#endif
+    CPPUNIT_ASSERT_EQUAL( aRectRot.GetWidth(), aRect.GetHeight() );
+    CPPUNIT_ASSERT_EQUAL( aRectRot.GetHeight(), aRect.GetWidth() );
 #endif
 }
 
