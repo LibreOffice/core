@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "433cd394_8177a2cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-06-30T07:22:23Z",
+      "side": 1,
+      "message": "Looks good to me. I have tested some of the files with pyflakes myself, and ran them as UI tests to make sure that they work.\nAs the CI verification passes, this change seems to be OK.\n@Xisco: What do you think?",
+      "revId": "724ec23bde47934f53039d66871f2eff2d45edb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
