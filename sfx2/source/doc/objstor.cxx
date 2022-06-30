@@ -2333,6 +2333,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
         {
             const char *msg = e.what();
             const OUString sError(msg, strlen(msg), RTL_TEXTENCODING_ASCII_US);
+            SAL_WARN("sfx.doc", "exception importing " << sError);
             SetError(*new StringErrorInfo(ERRCODE_SFX_DOLOADFAILED,
                 sError, DialogMask::ButtonsOk | DialogMask::MessageError));
         }
