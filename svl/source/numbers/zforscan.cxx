@@ -519,14 +519,18 @@ void ImpSvNumberformatScan::SetDependentKeywords()
 
 void ImpSvNumberformatScan::ChangeNullDate(sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear)
 {
-    maNullDate = Date(nDay, nMonth, nYear);
-    if (!maNullDate.IsValidDate())
+    Date aDate(nDay, nMonth, nYear);
+    if (!aDate.IsValidDate())
     {
-        maNullDate.Normalize();
+        aDate.Normalize();
         SAL_WARN("svl.numbers","ImpSvNumberformatScan::ChangeNullDate - not valid"
                 " d: " << nDay << " m: " << nMonth << " y: " << nYear << " normalized to"
-                " d: " << maNullDate.GetDay() << " m: " << maNullDate.GetMonth() << " y: " << maNullDate.GetYear());
+                " d: " << aDate.GetDay() << " m: " << aDate.GetMonth() << " y: " << aDate.GetYear());
+        // Slap the caller if really bad, like year 0.
+        assert(aDate.IsValidDate());
     }
+    if (aDate.IsValidDate())
+        maNullDate = aDate;
 }
 
 void ImpSvNumberformatScan::ChangeStandardPrec(sal_uInt16 nPrec)
