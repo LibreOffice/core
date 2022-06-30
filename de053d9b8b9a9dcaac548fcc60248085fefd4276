@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5abc9cab_3f3a54aa",
+        "filename": "svx/uiconfig/ui/dockingfontwork.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-06-30T14:09:48Z",
+      "side": 1,
+      "message": "Don\u0027t understand why you disallow focus. Some of the buttons have lost their icon - but apparently not related to this patch as it\u0027s also happening with master.",
+      "range": {
+        "startLine": 47,
+        "startChar": 43,
+        "endLine": 47,
+        "endChar": 48
+      },
+      "revId": "de053d9b8b9a9dcaac548fcc60248085fefd4276",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
