@@ -1179,7 +1179,8 @@ public:
                                 const SwTableAutoFormat* );
 
     // text to table conversion - API support
-    const SwTable* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes );
+    const SwTable* TextToTable(const std::vector<std::vector<SwNodeRange>>& rTableNodes,
+                               bool bGuessFRAMEDIR = true);
 
     bool TableToText( const SwTableNode* pTableNd, sal_Unicode cCh );
 

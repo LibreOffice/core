@@ -2183,7 +2183,7 @@ SwXText::convertToTable(
         aRowSeparators(rRowProperties.getLength());
     std::vector<VerticallyMergedCell> aMergedCells;
 
-    SwTable const*const pTable = m_pImpl->m_pDoc->TextToTable( aTableNodes );
+    SwTable const*const pTable = m_pImpl->m_pDoc->TextToTable(aTableNodes, /*bGuessDir=*/false);
 
     if (!pTable)
         return uno::Reference< text::XTextTable >();

@@ -1128,7 +1128,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
     return pTableNd;
 }
 
-const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes )
+const SwTable* SwDoc::TextToTable(const std::vector<std::vector<SwNodeRange>>& rTableNodes,
+                                  bool bGuessDir)
 {
     if (rTableNodes.empty())
         return nullptr;
@@ -1243,7 +1244,8 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     if (pSttContentNd)
     {
         const SwAttrSet & aNdSet = pSttContentNd->GetSwAttrSet();
-        if (const SvxFrameDirectionItem* pItem = aNdSet.GetItemIfSet( RES_FRAMEDIR ))
+        const SvxFrameDirectionItem* pItem = aNdSet.GetItemIfSet(RES_FRAMEDIR);
+        if (pItem && bGuessDir)
         {
             pTableFormat->SetFormatAttr( *pItem );
         }
