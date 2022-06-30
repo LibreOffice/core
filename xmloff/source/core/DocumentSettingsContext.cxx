@@ -462,8 +462,10 @@ void XMLConfigItemContext::endFastElement(sal_Int32 )
         else if (IsXMLToken(msType, XML_DATETIME))
         {
             util::DateTime aDateTime;
-            ::sax::Converter::parseDateTime(aDateTime, sValue);
-            mrAny <<= aDateTime;
+            if (::sax::Converter::parseDateTime(aDateTime, sValue))
+                mrAny <<= aDateTime;
+            else
+                SAL_WARN("xmloff.core", "XMLConfigItemContext: broken DateTime '" << sValue << "'");
         }
         else if (IsXMLToken(msType, XML_BASE64BINARY))
         {
