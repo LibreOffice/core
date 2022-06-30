@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8110b1a_cc9d3c9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-06-30T18:59:50Z",
+      "side": 1,
+      "message": "Well you need to check for different stuff for every different file in the suite. For example, not all files need to be checked for size, most are 32x32. Some need to be checked for bit depth and others for palette count. Some can be checked for transparency and pixel colors at each corner for example. That is *if* we need to make the test that thorough. If I just check size and bit count for all of the images isn\u0027t that still not a thorough enough test?\n\nThe purpose of this test (when finished) is to catch regressions if pngimagewriter/reader is ever modified I would say.",
+      "parentUuid": "4b5c29c6_bb42080a",
+      "revId": "3c43fd3d4be5906b8b7864a651fc9a92401f3587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14767f5d_b5998881",
