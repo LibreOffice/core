@@ -42,11 +42,11 @@ namespace drawing = com::sun::star::drawing;
 
 namespace {
 
-bool inChartContext(const ScTabViewShell* pViewShell)
+bool inChartOrMathContext(const ScTabViewShell* pViewShell)
 {
     SidebarController* pSidebar = SidebarController::GetSidebarControllerForView(pViewShell);
     if (pSidebar)
-        return pSidebar->hasChartContextCurrently();
+        return pSidebar->hasChartOrMathContextCurrently();
 
     return false;
 }
@@ -66,11 +66,11 @@ void ScChartShell::InitInterface_Impl()
 
 void ScChartShell::Activate(bool bMDI)
 {
-    if(!inChartContext(GetViewData().GetViewShell()))
+    if(!inChartOrMathContext(GetViewData().GetViewShell()))
         ScDrawShell::Activate(bMDI);
     else
     {
-        // Avoid context changes for chart during activation / deactivation.
+        // Avoid context changes for chart/math during activation / deactivation.
         const bool bIsContextBroadcasterEnabled (SfxShell::SetContextBroadcasterEnabled(false));
 
         SfxShell::Activate(bMDI);
@@ -81,11 +81,11 @@ void ScChartShell::Activate(bool bMDI)
 
 void ScChartShell::Deactivate(bool bMDI)
 {
-    if(!inChartContext(GetViewData().GetViewShell()))
+    if(!inChartOrMathContext(GetViewData().GetViewShell()))
         ScDrawShell::Deactivate(bMDI);
     else
     {
-        // Avoid context changes for chart during activation / deactivation.
+        // Avoid context changes for chart/math during activation / deactivation.
         const bool bIsContextBroadcasterEnabled (SfxShell::SetContextBroadcasterEnabled(false));
 
         SfxShell::Deactivate(bMDI);
