@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e600da83_60912080",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-06-30T06:18:12Z",
+      "side": 1,
+      "message": "The question is whether the test is written poorly and should accept both \"A\" and \"a\" here, or whether the Calc operations performed by the test are intended to produce deterministic results?",
+      "revId": "731652168df31d53033025841d844170c520834c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
