@@ -119,6 +119,7 @@ public:
     void testPatternImport();
     void testPptCrop();
     void testTdf149206();
+    void testTdf149785();
     void testTdf120028();
     void testDescriptionImport();
     void testTdf83247();
@@ -183,6 +184,7 @@ public:
     CPPUNIT_TEST(testTdf116266);
     CPPUNIT_TEST(testPptCrop);
     CPPUNIT_TEST(testTdf149206);
+    CPPUNIT_TEST(testTdf149785);
     CPPUNIT_TEST(testTdf120028);
     CPPUNIT_TEST(testDescriptionImport);
     CPPUNIT_TEST(testTdf83247);
@@ -1565,6 +1567,20 @@ void SdImportTest2::testTdf149206()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5937), aCrop.Bottom);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Left);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Right);
+}
+
+void SdImportTest2::testTdf149785()
+{
+    // Without the fix in place, this test would have failed to load the file
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf149785.pptx"), PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY);
+
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest2::testTdf120028()
