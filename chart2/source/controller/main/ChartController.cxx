@@ -1172,6 +1172,8 @@ void SAL_CALL ChartController::dispatch(
         this->executeDispatch_InsertErrorBars(false);
     else if( aCommand == "InsertMenuYErrorBars" )
         this->executeDispatch_InsertErrorBars(true);
+    else if( aCommand == "InsertMenuDataTable" )
+        this->executeDispatch_OpenInsertDataTableDialog();
     else if( aCommand == "InsertSymbol" )
          this->executeDispatch_InsertSpecialCharacter();
     else if( aCommand == "InsertTrendline" )
@@ -1625,6 +1627,7 @@ const o3tl::sorted_vector< OUString >& ChartController::impl_getAvailableCommand
         "DeleteTrendline",    "DeleteMeanValue",      "DeleteTrendlineEquation",
         "DeleteXErrorBars",   "DeleteYErrorBars",
         "DeleteDataLabels",   "DeleteDataLabel",
+        "InsertMenuDataTable",
         //format objects
         "FormatSelection",     "TransformDialog",
         "DiagramType",        "View3D",
