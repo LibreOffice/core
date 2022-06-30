@@ -91,11 +91,11 @@ using namespace sfx2::sidebar;
 
 namespace {
 
-bool inChartContext(const ScTabViewShell* pViewShell)
+bool inChartOrMathContext(const ScTabViewShell* pViewShell)
 {
     SidebarController* pSidebar = SidebarController::GetSidebarControllerForView(pViewShell);
     if (pSidebar)
-        return pSidebar->hasChartContextCurrently();
+        return pSidebar->hasChartOrMathContextCurrently();
 
     return false;
 }
@@ -217,7 +217,7 @@ void ScTabViewShell::Activate(bool bMDI)
     //  don't call CheckSelectionTransfer here - activating a view should not change the
     //  primary selection (may be happening just because the mouse was moved over the window)
 
-    if (!inChartContext(this))
+    if (!inChartOrMathContext(this))
     {
         ContextChangeEventMultiplexer::NotifyContextChange(
             GetController(),
