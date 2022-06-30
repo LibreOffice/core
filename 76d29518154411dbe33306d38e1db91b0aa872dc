@@ -33,6 +33,23 @@
       "message": "Thank you for your quick feedback!\nIf the patch revealed a bug, let\u0027s abandon the revert.",
       "revId": "76d29518154411dbe33306d38e1db91b0aa872dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25f9bc3f_76792c61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-06-30T11:28:33Z",
+      "side": 1,
+      "message": "Just for information, I\u0027ve launched a build on my second local repo containing \"--enable-symbols\" and not \"enable-dbgutil\". I\u0027ll retrieve a Valgrind trace hoping it\u0027ll help to pinpoint precisely the pb.",
+      "revId": "76d29518154411dbe33306d38e1db91b0aa872dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ],
   "submitRequirementResults": []
