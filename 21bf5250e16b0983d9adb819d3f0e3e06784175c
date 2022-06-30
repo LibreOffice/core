@@ -16,6 +16,24 @@
       "message": "In general, there should be no feature that cannot be saved in the native format (at least extended flavor) - otherwise there may exist document models that cannot be saved without loss in *any* format. Could the ODF extension be introduced in parallel?",
       "revId": "21bf5250e16b0983d9adb819d3f0e3e06784175c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57d92ef5_3c331d95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-06-30T20:52:41Z",
+      "side": 1,
+      "message": "This is not a new feature. I see \u0027TextPreRotateAngle\u0027 already in commit 5c4d1b05faa8a from 2012-01-11. And the confusion between text rotation from writing mode \u0027vert\u0027 and text rotation from text area rotation \u0027rot\u0027 has existed ever since. Because the attribute \u0027rot\u0027 has a corresponding attribute for custom shapes in ODF but \u0027vert\u0027 has no corresponding solution in ODF, I first want to clearly separate them in code.\n\nA solution for \u0027vert\u0027 is not straight forward. I had already tried to discuss it on the dev-list, but without real success [How to write OOXML attribute \u0027vert\u0027 of \u003cbodyPr\u003e element to ODF; 2022-06-16]. My current favorite is, to use attribute loext:writing-mode of the graphic properties. That is already used for WritingMode2_BT_LR for frame-shapes. BT_LR corresponds to vert\u003d\"vert270\". But WritingMode2 is not yet directly available for custom shapes.\n\nTherefore I think, it would not be helpful to include ODF import/export in this patch. It is already quite large.",
+      "parentUuid": "b751d81f_698691a0",
+      "revId": "21bf5250e16b0983d9adb819d3f0e3e06784175c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
