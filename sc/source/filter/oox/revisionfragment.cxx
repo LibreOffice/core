@@ -286,11 +286,15 @@ void RevisionHeadersFragment::importHeader( const AttributeList& rAttribs )
     if (!aDateTimeStr.isEmpty())
     {
         util::DateTime aDateTime;
-        sax::Converter::parseDateTime(aDateTime, aDateTimeStr);
-        Date aDate(aDateTime);
-        tools::Time aTime(aDateTime);
-        aMetadata.maDateTime.SetDate(aDate.GetDate());
-        aMetadata.maDateTime.SetTime(aTime.GetTime());
+        if (sax::Converter::parseDateTime(aDateTime, aDateTimeStr))
+        {
+            Date aDate(aDateTime);
+            tools::Time aTime(aDateTime);
+            aMetadata.maDateTime.SetDate(aDate.GetDate());
+            aMetadata.maDateTime.SetTime(aTime.GetTime());
+        }
+        else
+            SAL_WARN("sc.filter", "RevisionHeadersFragment: broken DateTime '" << aDateTimeStr << "'");
     }
 
     aMetadata.maUserName = rAttribs.getString(XML_userName, OUString());
