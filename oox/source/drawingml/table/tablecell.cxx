@@ -502,7 +502,8 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
         applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesInsideV, PROP_RightBorder );
     }
 
-    if (rProperties.getBgColor().isUsed() && !maFillProperties.maFillColor.isUsed() && maFillProperties.moFillType.value() == XML_noFill)
+    if (rProperties.getBgColor().isUsed() && !maFillProperties.maFillColor.isUsed() &&
+        maFillProperties.moFillType.value_or(0) == XML_noFill)
     {
         maFillProperties.moFillType = XML_solidFill;
         maFillProperties.maFillColor = rProperties.getBgColor();
