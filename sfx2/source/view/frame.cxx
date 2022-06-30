@@ -65,7 +65,7 @@ SfxPoolItem* SfxUnoFrameItem::CreateDefault()
 }
 void SfxFrame::Construct_Impl()
 {
-    pImpl.reset(new SfxFrame_Impl);
+    m_pImpl.reset(new SfxFrame_Impl);
     gaFramesArr_Impl.push_back( this );
 }
 
@@ -79,28 +79,28 @@ SfxFrame::~SfxFrame()
     if ( it != gaFramesArr_Impl.end() )
         gaFramesArr_Impl.erase( it );
 
-    delete pImpl->pDescr;
+    delete m_pImpl->pDescr;
 }
 
 bool SfxFrame::DoClose()
 {
     // Actually, one more PrepareClose is still needed!
     bool bRet = false;
-    if ( !pImpl->bClosing )
+    if ( !m_pImpl->bClosing )
     {
-        pImpl->bClosing = true;
+        m_pImpl->bClosing = true;
         CancelTransfers();
 
         // now close frame; it will be deleted if this call is successful, so don't use any members after that!
         bRet = true;
         try
         {
-            Reference< XCloseable > xCloseable  ( pImpl->xFrame, UNO_QUERY );
+            Reference< XCloseable > xCloseable  ( m_pImpl->xFrame, UNO_QUERY );
             if (xCloseable.is())
                 xCloseable->close(true);
-            else if ( pImpl->xFrame.is() )
+            else if ( m_pImpl->xFrame.is() )
             {
-                Reference < XFrame > xFrame = pImpl->xFrame;
+                Reference < XFrame > xFrame = m_pImpl->xFrame;
                 xFrame->setComponent( Reference < css::awt::XWindow >(), Reference < XController >() );
                 xFrame->dispose();
             }
@@ -109,7 +109,7 @@ bool SfxFrame::DoClose()
         }
         catch( css::util::CloseVetoException& )
         {
-            pImpl->bClosing = false;
+            m_pImpl->bClosing = false;
             bRet = false;
         }
         catch( css::lang::DisposedException& )
@@ -123,17 +123,17 @@ bool SfxFrame::DoClose()
 void SfxFrame::DoClose_Impl()
 {
     SfxBindings* pBindings = nullptr;
-    if ( pImpl->pCurrentViewFrame )
-        pBindings = &pImpl->pCurrentViewFrame->GetBindings();
+    if ( m_pImpl->pCurrentViewFrame )
+        pBindings = &m_pImpl->pCurrentViewFrame->GetBindings();
 
     // For internal tasks Controllers and Tools must be cleared
-    if ( pImpl->pWorkWin )
-        pImpl->pWorkWin->DeleteControllers_Impl();
+    if ( m_pImpl->pWorkWin )
+        m_pImpl->pWorkWin->DeleteControllers_Impl();
 
-    if ( pImpl->pCurrentViewFrame )
-        pImpl->pCurrentViewFrame->Close();
+    if ( m_pImpl->pCurrentViewFrame )
+        m_pImpl->pCurrentViewFrame->Close();
 
-    if ( pImpl->bOwnsBindings )
+    if ( m_pImpl->bOwnsBindings )
     {
         delete pBindings;
         pBindings = nullptr;
@@ -144,8 +144,8 @@ void SfxFrame::DoClose_Impl()
 
 bool SfxFrame::DocIsModified_Impl()
 {
-    return pImpl->pCurrentViewFrame && pImpl->pCurrentViewFrame->GetObjectShell() &&
-            pImpl->pCurrentViewFrame->GetObjectShell()->IsModified();
+    return m_pImpl->pCurrentViewFrame && m_pImpl->pCurrentViewFrame->GetObjectShell() &&
+            m_pImpl->pCurrentViewFrame->GetObjectShell()->IsModified();
 }
 
 bool SfxFrame::PrepareClose_Impl( bool bUI )
@@ -153,9 +153,9 @@ bool SfxFrame::PrepareClose_Impl( bool bUI )
     bool bRet = true;
 
     // prevent recursive calls
-    if( !pImpl->bPrepClosing )
+    if( !m_pImpl->bPrepClosing )
     {
-        pImpl->bPrepClosing = true;
+        m_pImpl->bPrepClosing = true;
 
         SfxObjectShell* pCur = GetCurrentDocument() ;
         if( pCur )
@@ -179,12 +179,12 @@ bool SfxFrame::PrepareClose_Impl( bool bUI )
                 bRet = pCur->PrepareClose( bUI );
         }
 
-        pImpl->bPrepClosing = false;
+        m_pImpl->bPrepClosing = false;
     }
 
-    if ( bRet && pImpl->pWorkWin )
+    if ( bRet && m_pImpl->pWorkWin )
         // if closing was accepted by the component the UI subframes must be asked also
-        bRet = pImpl->pWorkWin->PrepareClose_Impl();
+        bRet = m_pImpl->pWorkWin->PrepareClose_Impl();
 
     return bRet;
 }
@@ -192,20 +192,20 @@ bool SfxFrame::PrepareClose_Impl( bool bUI )
 
 bool SfxFrame::IsClosing_Impl() const
 {
-    return pImpl->bClosing;
+    return m_pImpl->bClosing;
 }
 
 void SfxFrame::SetIsClosing_Impl()
 {
-    pImpl->bClosing = true;
+    m_pImpl->bClosing = true;
 }
 
 void SfxFrame::CancelTransfers()
 {
-    if( pImpl->bInCancelTransfers )
+    if( m_pImpl->bInCancelTransfers )
         return;
 
-    pImpl->bInCancelTransfers = true;
+    m_pImpl->bInCancelTransfers = true;
     SfxObjectShell* pObj = GetCurrentDocument();
     if( pObj ) //&& !( pObj->Get_Impl()->nLoadedFlags & SfxLoadedFlags::ALL ))
     {
@@ -224,12 +224,12 @@ void SfxFrame::CancelTransfers()
     //  Check if StarOne-Loader should be canceled
     SfxFrameWeakRef wFrame( this );
     if (wFrame.is())
-        pImpl->bInCancelTransfers = false;
+        m_pImpl->bInCancelTransfers = false;
 }
 
 SfxViewFrame* SfxFrame::GetCurrentViewFrame() const
 {
-    return pImpl->pCurrentViewFrame;
+    return m_pImpl->pCurrentViewFrame;
 }
 
 bool SfxFrame::IsAutoLoadLocked_Impl() const
@@ -245,24 +245,24 @@ bool SfxFrame::IsAutoLoadLocked_Impl() const
 
 SfxObjectShell* SfxFrame::GetCurrentDocument() const
 {
-    return pImpl->pCurrentViewFrame ?
-            pImpl->pCurrentViewFrame->GetObjectShell() :
+    return m_pImpl->pCurrentViewFrame ?
+            m_pImpl->pCurrentViewFrame->GetObjectShell() :
             nullptr;
 }
 
 void SfxFrame::SetCurrentViewFrame_Impl( SfxViewFrame *pFrame )
 {
-    pImpl->pCurrentViewFrame = pFrame;
+    m_pImpl->pCurrentViewFrame = pFrame;
 }
 
 bool SfxFrame::GetHasTitle() const
 {
-    return pImpl->mbHasTitle;
+    return m_pImpl->mbHasTitle;
 }
 
 void SfxFrame::SetHasTitle( bool n )
 {
-    pImpl->mbHasTitle = n;
+    m_pImpl->mbHasTitle = n;
 }
 
 void SfxFrame::GetViewData_Impl()
@@ -339,14 +339,14 @@ SfxFrameDescriptor* SfxFrame::GetDescriptor() const
     // Create a FrameDescriptor On Demand; if there is no TopLevel-Frame
     // will result in an error, as no valid link is created.
 
-    if ( !pImpl->pDescr )
+    if ( !m_pImpl->pDescr )
     {
         DBG_ASSERT( true, "No TopLevel-Frame, but no Descriptor!" );
-        pImpl->pDescr = new SfxFrameDescriptor;
+        m_pImpl->pDescr = new SfxFrameDescriptor;
         if ( GetCurrentDocument() )
-            pImpl->pDescr->SetURL( GetCurrentDocument()->GetMedium()->GetOrigURL() );
+            m_pImpl->pDescr->SetURL( GetCurrentDocument()->GetMedium()->GetOrigURL() );
     }
-    return pImpl->pDescr;
+    return m_pImpl->pDescr;
 }
 
 void SfxFrame::GetDefaultTargetList(TargetList& rList)
@@ -502,20 +502,20 @@ bool SfxUnoFrameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId
 
 css::uno::Reference< css::frame::XController > SfxFrame::GetController() const
 {
-    if ( pImpl->pCurrentViewFrame && pImpl->pCurrentViewFrame->GetViewShell() )
-        return pImpl->pCurrentViewFrame->GetViewShell()->GetController();
+    if ( m_pImpl->pCurrentViewFrame && m_pImpl->pCurrentViewFrame->GetViewShell() )
+        return m_pImpl->pCurrentViewFrame->GetViewShell()->GetController();
     else
         return css::uno::Reference< css::frame::XController > ();
 }
 
 const css::uno::Reference< css::frame::XFrame >&  SfxFrame::GetFrameInterface() const
 {
-    return pImpl->xFrame;
+    return m_pImpl->xFrame;
 }
 
 void SfxFrame::SetFrameInterface_Impl( const css::uno::Reference< css::frame::XFrame >& rFrame )
 {
-    pImpl->xFrame = rFrame;
+    m_pImpl->xFrame = rFrame;
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
     if ( !rFrame.is() && GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetBindings().SetRecorder_Impl( xRecorder );
@@ -527,8 +527,8 @@ void SfxFrame::Appear()
     {
         GetCurrentViewFrame()->Show();
         GetWindow().Show();
-        pImpl->xFrame->getContainerWindow()->setVisible( true );
-        Reference < css::awt::XTopWindow > xTopWindow( pImpl->xFrame->getContainerWindow(), UNO_QUERY );
+        m_pImpl->xFrame->getContainerWindow()->setVisible( true );
+        Reference < css::awt::XTopWindow > xTopWindow( m_pImpl->xFrame->getContainerWindow(), UNO_QUERY );
         if ( xTopWindow.is() )
             xTopWindow->toFront();
     }
@@ -543,17 +543,17 @@ void SfxFrame::AppearWithUpdate()
 
 void SfxFrame::SetOwnsBindings_Impl( bool bSet )
 {
-    pImpl->bOwnsBindings = bSet;
+    m_pImpl->bOwnsBindings = bSet;
 }
 
 bool SfxFrame::OwnsBindings_Impl() const
 {
-    return pImpl->bOwnsBindings;
+    return m_pImpl->bOwnsBindings;
 }
 
 void SfxFrame::SetToolSpaceBorderPixel_Impl( const SvBorder& rBorder )
 {
-    pImpl->aBorder = rBorder;
+    m_pImpl->aBorder = rBorder;
     SfxViewFrame *pF = GetCurrentViewFrame();
     if ( !pF )
         return;
@@ -583,8 +583,8 @@ tools::Rectangle SfxFrame::GetTopOuterRectPixel_Impl() const
 
 SfxWorkWindow* SfxFrame::GetWorkWindow_Impl() const
 {
-    if ( pImpl->pWorkWin )
-        return pImpl->pWorkWin;
+    if ( m_pImpl->pWorkWin )
+        return m_pImpl->pWorkWin;
     else
         return nullptr;
 }
@@ -629,12 +629,12 @@ void SfxFrame::CreateWorkWindow_Impl()
         }
     }
 
-    pImpl->pWorkWin = new SfxWorkWindow( &pFrame->GetWindow(), this, pFrame );
+    m_pImpl->pWorkWin = new SfxWorkWindow( &pFrame->GetWindow(), this, pFrame );
 }
 
 void SfxFrame::GrabFocusOnComponent_Impl()
 {
-    if ( pImpl->bReleasingComponent )
+    if ( m_pImpl->bReleasingComponent )
     {
         GetWindow().GrabFocus();
         return;
@@ -650,12 +650,12 @@ void SfxFrame::GrabFocusOnComponent_Impl()
 
 void SfxFrame::ReleasingComponent_Impl()
 {
-    pImpl->bReleasingComponent = true;
+    m_pImpl->bReleasingComponent = true;
 }
 
 bool SfxFrame::IsInPlace() const
 {
-    return pImpl->bInPlace;
+    return m_pImpl->bInPlace;
 }
 
 void SfxFrame::Resize()
@@ -692,12 +692,12 @@ void SfxFrame::Resize()
             // remains the same, setting the toolspace border at the ContainerEnvironment doesn't force a
             // resize on the IPEnvironment; without that no resize is called for the SfxViewFrame. So always
             // set the window size of the SfxViewFrame explicit.
-            SetToolSpaceBorderPixel_Impl( pImpl->aBorder );
+            SetToolSpaceBorderPixel_Impl( m_pImpl->aBorder );
         }
     }
-    else if ( pImpl->pCurrentViewFrame )
+    else if ( m_pImpl->pCurrentViewFrame )
     {
-        pImpl->pCurrentViewFrame->GetWindow().SetSizePixel( GetWindow().GetOutputSizePixel() );
+        m_pImpl->pCurrentViewFrame->GetWindow().SetSizePixel( GetWindow().GetOutputSizePixel() );
     }
 
 }
