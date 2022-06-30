@@ -774,17 +774,29 @@ void SdrObjList::ReformatAllTextObjects()
 */
 void SdrObjList::ReformatAllEdgeObjects()
 {
+    ImplReformatAllEdgeObjects(*this);
+}
+
+void SdrObjList::ImplReformatAllEdgeObjects(const SdrObjList& rObjList)
+{
     // #i120437# go over whole hierarchy, not only over object level null (seen from grouping)
-    SdrObjListIter aIter(this, SdrIterMode::DeepNoGroups);
-
-    while(aIter.IsMore())
+    for(size_t nIdx(0), nCount(rObjList.GetObjCount()); nIdx < nCount; ++nIdx)
     {
-        SdrObject* pObj = aIter.Next();
-        if (pObj->GetObjIdentifier() != SdrObjKind::Edge)
-            continue;
-
-        SdrEdgeObj* pSdrEdgeObj = static_cast< SdrEdgeObj* >(pObj);
-        pSdrEdgeObj->Reformat();
+        SdrObject* pSdrObject(rObjList.GetObjectForNavigationPosition(nIdx));
+        const SdrObjList* pChildren(pSdrObject->getChildrenOfSdrObject());
+        const bool bIsGroup(nullptr != pChildren);
+        if(!bIsGroup)
+        {
+            if (pSdrObject->GetObjIdentifier() == SdrObjKind::Edge)
+            {
+                SdrEdgeObj* pSdrEdgeObj = static_cast< SdrEdgeObj* >(pSdrObject);
+                pSdrEdgeObj->Reformat();
+            }
+        }
+        else
+        {
+            ImplReformatAllEdgeObjects(*pChildren);
+        }
     }
 }
 
