@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b751d81f_698691a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-06-30T01:45:23Z",
+      "side": 1,
+      "message": "In general, there should be no feature that cannot be saved in the native format (at least extended flavor) - otherwise there may exist document models that cannot be saved without loss in *any* format. Could the ODF extension be introduced in parallel?",
+      "revId": "21bf5250e16b0983d9adb819d3f0e3e06784175c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
