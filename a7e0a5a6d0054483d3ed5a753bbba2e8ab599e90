@@ -16,6 +16,41 @@
       "message": "Does the compat mode map to a set of our compat flags? Can we maybe drop the grab bag, and use a heuristic from the set flags to define the compat mode on writing to docx? ",
       "revId": "a7e0a5a6d0054483d3ed5a753bbba2e8ab599e90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf3baa89_63aa8987",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-30T10:38:13Z",
+      "side": 1,
+      "message": "This is identical to what was done for DOCX files in 7.0 with tdf#131304 .docx: provide default compatibilityMode value.\n\nThere is a growing amount of DOCX import code that makes decisions based on this grabbag value. This is a specific item that is read from the docx settings.xml file - and pure DOCX files can be either 12, 14, or 15. We have no separate compat flags that match those three.\n\nOn DOCX export, we are looking at the grabbag to see what we should export into settings.xml. If the grabbag is not there, we export as 15, but a .DOC could never have the layout/whatever properties of a 15.\n\nTabOverMargin should be a visually compelling layout example here. The layout really changed for 15, and I am seeing that more and more. DOC layout will always resemble old DOCX, and thus when we export a DOC as DOCX, we need to ensure it exports as an old format.",
+      "parentUuid": "955107df_688136e5",
+      "revId": "a7e0a5a6d0054483d3ed5a753bbba2e8ab599e90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f13eca1d_f18cce60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-06-30T10:38:13Z",
+      "side": 1,
+      "message": "Quite a bit of writerfilter code looks directly at the grabbag value, and export absolutely depends on it.",
+      "revId": "a7e0a5a6d0054483d3ed5a753bbba2e8ab599e90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
