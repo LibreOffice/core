@@ -71,6 +71,17 @@ private:
                                                          true);
         ::chart::PropertyHelper::setPropertyValueDefault(aMap, DataTableProperty_Outilne, true);
         ::chart::PropertyHelper::setPropertyValueDefault(aMap, DataTableProperty_Keys, false);
+
+        ::chart::PropertyHelper::setPropertyValue(
+            aMap, ::chart::LinePropertiesHelper::PROP_LINE_WIDTH, uno::Any(sal_Int32(1)));
+
+        float fDefaultCharHeight = 10.0;
+        ::chart::PropertyHelper::setPropertyValue(
+            aMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight);
+        ::chart::PropertyHelper::setPropertyValue(
+            aMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight);
+        ::chart::PropertyHelper::setPropertyValue(
+            aMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight);
     }
 };
 
