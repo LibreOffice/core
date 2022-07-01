@@ -1142,6 +1142,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] sequence< any > TypedItemList;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published interface XControlContainer {
      interface ::com::sun::star::uno::XInterface;
@@ -1242,6 +1244,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
    };
    module util {
@@ -1307,6 +1311,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published interface XDialog {
      interface ::com::sun::star::uno::XInterface;
@@ -1395,6 +1401,8 @@ module com {
      [property] boolean VScroll;
      [property, optional] short WritingMode;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published service UnoControlFileControl {
      service ::com::sun::star::awt::UnoControlEdit;
@@ -1467,6 +1475,8 @@ module com {
      [property] ::com::sun::star::util::Color TextLineColor;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
      [property, optional] boolean NoLabel;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published service UnoControlFormattedField {
      service ::com::sun::star::awt::UnoControlEdit;
@@ -1511,7 +1521,9 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
-    };
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
+   };
     published service UnoControlGroupBox {
      service ::com::sun::star::awt::UnoControl;
     };
@@ -1606,6 +1618,8 @@ module com {
      [property, optional] short MouseWheelBehavior;
      [property, maybevoid, optional] short ItemSeparatorPos;
      [property, optional] sequence< any > TypedItemList;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published interface XNumericField {
      interface ::com::sun::star::uno::XInterface;
@@ -1661,6 +1675,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published interface XPatternField {
      interface ::com::sun::star::uno::XInterface;
@@ -1701,6 +1717,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published interface XProgressBar {
      interface ::com::sun::star::uno::XInterface;
@@ -1871,6 +1889,8 @@ module com {
      [property, optional] short WritingMode;
      [property, optional] short MouseWheelBehavior;
      [property, optional] ::com::sun::star::style::VerticalAlignment VerticalAlign;
+     [property, optional] ::com::sun::star::util::Color HighlightColor;
+     [property, optional] ::com::sun::star::util::Color HighlightTextColor;
     };
     published struct VclContainerEvent: ::com::sun::star::lang::EventObject {
      ::com::sun::star::uno::XInterface Child;

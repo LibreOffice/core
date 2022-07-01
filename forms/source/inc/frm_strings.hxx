@@ -213,6 +213,8 @@ inline constexpr OUStringLiteral PROPERTY_BACKGROUNDCOLOR = u"BackgroundColor";
 inline constexpr OUStringLiteral PROPERTY_ICONSIZE = u"IconSize";
 inline constexpr OUStringLiteral PROPERTY_TEXTLINECOLOR = u"TextLineColor";
 inline constexpr OUStringLiteral PROPERTY_HIDEINACTIVESELECTION = u"HideInactiveSelection";
+inline constexpr OUStringLiteral PROPERTY_HIGHLIGHT_COLOR = u"HighlightColor";
+inline constexpr OUStringLiteral PROPERTY_HIGHLIGHT_TEXT_COLOR = u"HighlightTextColor";
 
 inline constexpr OUStringLiteral PROPERTY_SHOW_POSITION = u"ShowPosition";
 inline constexpr OUStringLiteral PROPERTY_SHOW_NAVIGATION = u"ShowNavigation";

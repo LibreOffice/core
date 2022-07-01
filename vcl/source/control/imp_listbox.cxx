@@ -2477,6 +2477,37 @@ void ImplListBox::SetEdgeBlending(bool bNew)
     }
 }
 
+void ImplListBox::SetHighlightColor(const Color& rColor)
+{
+    AllSettings aSettings(GetSettings());
+    StyleSettings aStyle(aSettings.GetStyleSettings());
+    aStyle.SetHighlightColor(rColor);
+    aSettings.SetStyleSettings(aStyle);
+    SetSettings(aSettings);
+
+    AllSettings aSettingsLB(maLBWindow->GetSettings());
+    StyleSettings aStyleLB(aSettingsLB.GetStyleSettings());
+    aStyleLB.SetListBoxWindowHighlightColor(rColor);
+    aSettingsLB.SetStyleSettings(aStyleLB);
+    maLBWindow->SetSettings(aSettingsLB);
+}
+
+void ImplListBox::SetHighlightTextColor(const Color& rColor)
+{
+    AllSettings aSettings(GetSettings());
+    StyleSettings aStyle(aSettings.GetStyleSettings());
+    aStyle.SetHighlightTextColor(rColor);
+    aSettings.SetStyleSettings(aStyle);
+    SetSettings(aSettings);
+
+    AllSettings aSettingsLB(maLBWindow->GetSettings());
+    StyleSettings aStyleLB(aSettingsLB.GetStyleSettings());
+    aStyleLB.SetListBoxWindowHighlightTextColor(rColor);
+    aSettingsLB.SetStyleSettings(aStyleLB);
+    maLBWindow->SetSettings(aSettingsLB);
+}
+
+
 ImplWin::ImplWin( vcl::Window* pParent, WinBits nWinStyle ) :
     Control ( pParent, nWinStyle )
 {

@@ -484,6 +484,9 @@ public:
     void            SetCallSelectionChangedHdl( bool bCall )    { maLBWindow->GetEntryList().SetCallSelectionChangedHdl( bCall ); }
     bool            IsSelectionChanged() const                  { return maLBWindow->IsSelectionChanged(); }
     sal_uInt16      GetSelectModifier() const                   { return maLBWindow->GetSelectModifier(); }
+    void            SetHighlightColor(const Color& rColor);
+    void            SetHighlightTextColor(const Color& rColor);
+
 
     void            SetMRUEntries( std::u16string_view rEntries, sal_Unicode cSep );
     OUString        GetMRUEntries( sal_Unicode cSep ) const;
