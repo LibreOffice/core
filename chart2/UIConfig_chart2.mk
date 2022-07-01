@@ -44,7 +44,9 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/combobox \
 	chart2/uiconfig/ui/datarangedialog \
 	chart2/uiconfig/ui/dlg_DataLabel \
+	chart2/uiconfig/ui/dlg_InsertDataTable \
 	chart2/uiconfig/ui/dlg_InsertErrorBars \
+	chart2/uiconfig/ui/dlg_InsertLegend \
 	chart2/uiconfig/ui/imagefragment \
 	chart2/uiconfig/ui/insertaxisdlg \
 	chart2/uiconfig/ui/insertgriddlg \
@@ -58,7 +60,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/smoothlinesdlg \
 	chart2/uiconfig/ui/steppedlinesdlg \
 	chart2/uiconfig/ui/titlerotationtabpage \
-	chart2/uiconfig/ui/dlg_InsertLegend \
 	chart2/uiconfig/ui/tp_3D_SceneAppearance \
 	chart2/uiconfig/ui/tp_3D_SceneGeometry \
 	chart2/uiconfig/ui/tp_3D_SceneIllumination \
