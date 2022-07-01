@@ -63,7 +63,6 @@ interface BaseTextGraphic
     [
         ExecMethod = Execute ;
         StateMethod = GetAttrState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
     SID_EXTERNAL_EDIT
