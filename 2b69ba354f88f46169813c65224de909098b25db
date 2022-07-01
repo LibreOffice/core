@@ -69,6 +69,24 @@
       "parentUuid": "989d4d7f_635dde05",
       "revId": "2b69ba354f88f46169813c65224de909098b25db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cdb9ea0_8d2b06e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-07-01T12:53:01Z",
+      "side": 1,
+      "message": "I don\u0027t know why the wip submission did not work then.\n\nThe comment about the patch being unfinished referred to the first patch revision. Now Heiko can comment on your latest.",
+      "parentUuid": "f127ab42_aec8c59d",
+      "revId": "2b69ba354f88f46169813c65224de909098b25db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
