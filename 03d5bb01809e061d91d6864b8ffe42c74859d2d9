@@ -16,6 +16,24 @@
       "message": "Is is still OK to backport this release plan wise?",
       "revId": "03d5bb01809e061d91d6864b8ffe42c74859d2d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5035173_3947cdc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-07-01T08:09:16Z",
+      "side": 1,
+      "message": "yes, it\u0027s, see https://wiki.documentfoundation.org/ReleasePlan/7.4. Ui freeze is week 27",
+      "parentUuid": "0dc1d2dc_5f278fa7",
+      "revId": "03d5bb01809e061d91d6864b8ffe42c74859d2d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
