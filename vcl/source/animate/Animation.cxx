@@ -181,7 +181,7 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
 
             if (itAnimView != maRenderers.end())
             {
-                if ((*itAnimView)->getOutPos() == rDestPt
+                if ((*itAnimView)->getOriginPosition() == rDestPt
                     && (*itAnimView)->getOutSizePix() == rOut.LogicToPixel(rDestSz))
                 {
                     (*itAnimView)->repaint();
