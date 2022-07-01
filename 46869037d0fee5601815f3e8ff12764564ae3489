@@ -33,6 +33,24 @@
       "message": "By the way: commit 6868efe203cffda0ab60db2abc4637433e6caf90 tells:\n\n\u003e It is evidently possible that\n\u003e a listener may be either added or removed at the SfxBroadcaster\n\u003e while that SfxBroadcaster is currently doing a Broadcast\n\n... so using a pre-computed index would likely break when a Notify would result in a listener removed from the vector, just like with range-based for.",
       "revId": "46869037d0fee5601815f3e8ff12764564ae3489",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35e33290_455ef614",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-01T08:12:10Z",
+      "side": 1,
+      "message": "We don\u0027t actually remove listeners from the vector, we just zero them out.",
+      "parentUuid": "1a8105ef_d178136d",
+      "revId": "46869037d0fee5601815f3e8ff12764564ae3489",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
