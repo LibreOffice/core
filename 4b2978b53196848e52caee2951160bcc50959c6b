@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76d4c629_874c87c5",
+        "filename": "sw/source/core/doc/docbm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-01T07:59:07Z",
+      "side": 1,
+      "message": "probably the other two will need the same thing, since they have the same ordering criteria",
+      "revId": "4b2978b53196848e52caee2951160bcc50959c6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
