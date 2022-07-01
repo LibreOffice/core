@@ -50,11 +50,11 @@ private:
     Animation*      mpParent;
     VclPtr<OutputDevice>  mpRenderContext;
     tools::Long     mnRendererId;
-    Point           maPt;
+    Point           maOriginPt;
     Point           maDispPt;
     Point           maRestPt;
-    Size            maSz;
-    Size            maSzPix;
+    Size            maLogicalSize;
+    Size            maSizePx;
     Size            maDispSz;
     Size            maRestSz;
     vcl::Region     maClip;
@@ -82,9 +82,9 @@ public:
 
     void            getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
 
-    const Point&    getOutPos() const { return maPt; }
+    const Point&    getOriginPosition() const { return maOriginPt; }
 
-    const Size&     getOutSizePix() const { return maSzPix; }
+    const Size&     getOutSizePix() const { return maSizePx; }
 
     void            pause( bool bIsPaused ) { mbIsPaused = bIsPaused; }
     bool            isPause() const { return mbIsPaused; }
