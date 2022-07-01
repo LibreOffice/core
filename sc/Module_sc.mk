@@ -112,9 +112,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 ))
 endif
 
-# Disabled to allow the check tinderbox execute the sd tests
-# CppunitTest_sc_chart_regression_test \
-
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	JunitTest_sc_complex \
 	JunitTest_sc_unoapi_1 \
