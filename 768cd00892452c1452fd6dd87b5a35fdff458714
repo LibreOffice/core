@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b16bb92f_e5ea1302",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-07-01T21:02:31Z",
+      "side": 1,
+      "message": "gaurds -\u003e guards",
+      "revId": "768cd00892452c1452fd6dd87b5a35fdff458714",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
