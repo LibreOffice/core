@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95c1c352_d1956c45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-01T11:13:39Z",
+      "side": 1,
+      "message": "First thoughts:\n\n1) commit 3c6a53b9ce64180b2a03e097c1844f7496f26815\nAuthor: Noel Grandin \u003cnoelgrandin@gmail.com\u003e\nDate:   Sat Apr 17 14:49:43 2021 +0200\n    improve the look of the macOS combobox\n\nintroduced new style colors specific to list/combo boxes. I haven\u0027t checked yet, but would those have to be used instead now? (unless that is changed again due to regression tdf#149804)\n\n2) Do you think support for setting highlight colors should be added for other controls besides list boxes as well?\n",
+      "revId": "9eac8f416eb49c33751443f500b62b5af88c35aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
