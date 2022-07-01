@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e6b925c0_22ec3e9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-01T08:56:16Z",
+      "side": 1,
+      "message": "I think we have two different problems here\n(1) Sorting on export, which affects the output format\n(2) Sorting for internal use (ie. here) which is more serious as it may lead to weird internal behaviour.\n\nThis patch affects (2), so I think it\u0027s a very good thing :-)\n\n\u003e \n\u003e - CompareMarksEnd in the WW8 export will sort bookmarks start at the \n\nThis is problem (1), which I am less concerned about.\n\n\u003e \n\u003e - lcl_FillBookmarkArray() operates on an SwXBookmarkPortion_ImplList in \n\nThis could be either, but I think it should use the same sorting as this code, just to be safe.",
+      "parentUuid": "aec48902_46a7a188",
+      "revId": "4b2978b53196848e52caee2951160bcc50959c6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "76d4c629_874c87c5",
         "filename": "sw/source/core/doc/docbm.cxx",
         "patchSetId": 1
