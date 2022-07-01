@@ -189,6 +189,18 @@ published service UnoControlListBoxModel
         @since LibreOffice 5.4
      */
     [optional, property] sequence<any> TypedItemList;
+
+    /** specifies the background color (RGB) of selected items in the control which are highlighted.
+
+        @since LibreOffice 7.5
+     */
+    [optional, property] com::sun::star::util::Color HighlightColor;
+
+    /** specifies the text color (RGB) of selected items in the control which are highlighted.
+
+        @since LibreOffice 7.5
+     */
+    [optional, property] com::sun::star::util::Color HighlightTextColor;
 };
 
 

@@ -209,6 +209,8 @@ public:
 
     void                EnableMultiSelection( bool bMulti );
     bool                IsMultiSelectionEnabled() const;
+    void                SetHighlightColor(const Color& rColor);
+    void                SetHighlightTextColor(const Color& rColor);
 
     void                SetReadOnly( bool bReadOnly = true );
     bool                IsReadOnly() const;

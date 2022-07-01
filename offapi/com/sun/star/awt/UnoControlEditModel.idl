@@ -226,6 +226,18 @@ published service UnoControlEditModel
         @since OOo 3.3
      */
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
+
+    /** specifies the background color (RGB) of selected text in the control which is highlighted.
+
+        @since LibreOffice 7.5
+     */
+    [optional, property] com::sun::star::util::Color HighlightColor;
+
+    /** specifies the text color (RGB) of selected text in the control which is highlighted.
+
+        @since LibreOffice 7.5
+     */
+    [optional, property] com::sun::star::util::Color HighlightTextColor;
 };
 
 
