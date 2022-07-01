@@ -20,6 +20,7 @@
 #include <comphelper/seqstream.hxx>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
+#include <o3tl/unreachable.hxx>
 
 using namespace connectivity;
 using namespace dbtools;
@@ -47,25 +48,16 @@ css::uno::Reference< css::io::XInputStream > SAL_CALL BlobHelper::getBinaryStrea
     return new ::comphelper::SequenceInputStream(m_aValue);
 }
 
-
-// The "return" after a call to throwFeatureNotImplementedSQLException()
-// (which always throws) will be detected as unreachable when doing
-// global inlining.
-
-SAL_WNOUNREACHABLE_CODE_PUSH
-
 ::sal_Int64 SAL_CALL BlobHelper::position( const css::uno::Sequence< ::sal_Int8 >& /*pattern*/, ::sal_Int64 /*start*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XBlob::position", *this );
-    return 0;
+    O3TL_UNREACHABLE;
 }
 
 ::sal_Int64 SAL_CALL BlobHelper::positionOfBlob( const css::uno::Reference< css::sdbc::XBlob >& /*pattern*/, ::sal_Int64 /*start*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XBlob::positionOfBlob", *this );
-    return 0;
+    O3TL_UNREACHABLE;
 }
-
-SAL_WNOUNREACHABLE_CODE_POP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
