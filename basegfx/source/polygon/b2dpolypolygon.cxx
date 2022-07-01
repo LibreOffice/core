@@ -108,6 +108,11 @@ public:
         }
     }
 
+    void reserve(sal_uInt32 nCount)
+    {
+        maPolygons.reserve(nCount);
+    }
+
     void insert(sal_uInt32 nIndex, const basegfx::B2DPolyPolygon& rPolyPolygon)
     {
         // add nCount polygons from rPolyPolygon
@@ -286,6 +291,12 @@ public:
     {
         if(nCount)
             mpPolyPolygon->insert(std::as_const(mpPolyPolygon)->count(), rPolygon, nCount);
+    }
+
+    void B2DPolyPolygon::reserve(sal_uInt32 nCount)
+    {
+        if(nCount)
+            mpPolyPolygon->reserve(nCount);
     }
 
     B2DPolyPolygon B2DPolyPolygon::getDefaultAdaptiveSubdivision() const
