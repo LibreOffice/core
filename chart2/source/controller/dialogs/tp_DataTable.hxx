@@ -10,21 +10,14 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
-
-namespace weld
-{
-class CheckButton;
-}
+#include <res_DataTableProperties.hxx>
 
 namespace chart
 {
 class DataTableTabPage : public SfxTabPage
 {
 private:
-    std::unique_ptr<weld::CheckButton> m_xCbHorizontalBorder;
-    std::unique_ptr<weld::CheckButton> m_xCbVerticalBorder;
-    std::unique_ptr<weld::CheckButton> m_xCbOutilne;
-    std::unique_ptr<weld::CheckButton> m_xCbKeys;
+    DataTablePropertiesResources m_aDataTablePropertiesResources;
 
 public:
     DataTableTabPage(weld::Container* pPage, weld::DialogController* pController,
