@@ -74,23 +74,23 @@ public:
                     AnimationRenderer(AnimationRenderer&&) = delete;
                     ~AnimationRenderer();
 
-    bool            matches(const OutputDevice* pOut, tools::Long nRendererId) const;
-    void            drawToIndex( sal_uLong nIndex );
-    void            draw( sal_uLong nIndex, VirtualDevice* pVDev=nullptr );
-    void            repaint();
-    AnimationData*          createAnimationData() const;
+    bool            Matches(const OutputDevice* pOut, tools::Long nRendererId) const;
+    void            DrawToIndex( sal_uLong nIndex );
+    void            Draw( sal_uLong nIndex, VirtualDevice* pVDev=nullptr );
+    void            Repaint();
+    AnimationData*  CreateAnimationData() const;
 
-    void            getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
+    void            GetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
 
     const Point&    GetOriginPosition() const { return maPt; }
 
-    const Size&     getOutSizePix() const { return maSizePx; }
+    const Size&     GetOutSizePix() const { return maSizePx; }
 
     void            Pause( bool bIsPaused ) { mbIsPaused = bIsPaused; }
     bool            IsPaused() const { return mbIsPaused; }
 
-    void            setMarked( bool bIsMarked ) { mbIsMarked = bIsMarked; }
-    bool            isMarked() const { return mbIsMarked; }
+    void            SetMarked( bool bIsMarked ) { mbIsMarked = bIsMarked; }
+    bool            IsMarked() const { return mbIsMarked; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

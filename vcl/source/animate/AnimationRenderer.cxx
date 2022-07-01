@@ -79,7 +79,7 @@ AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
     mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSizePx);
 
     // Initialize drawing to actual position
-    drawToIndex( mpParent->ImplGetCurPos() );
+    DrawToIndex( mpParent->ImplGetCurPos() );
 
     // If first frame OutputDevice is set, update variables now for real OutputDevice
     if( pFirstFrameOutDev )
@@ -97,12 +97,12 @@ AnimationRenderer::~AnimationRenderer()
     Animation::ImplDecAnimCount();
 }
 
-bool AnimationRenderer::matches(const OutputDevice* pOut, tools::Long nRendererId) const
+bool AnimationRenderer::Matches(const OutputDevice* pOut, tools::Long nRendererId) const
 {
     return (!pOut || pOut == mpRenderContext) && (mnRendererId == 0 || mnRendererId == nRendererId);
 }
 
-void AnimationRenderer::getPosSize( const AnimationBitmap& rAnimationBitmap, Point& rPosPix, Size& rSizePix )
+void AnimationRenderer::GetPosSize( const AnimationBitmap& rAnimationBitmap, Point& rPosPix, Size& rSizePix )
 {
     const Size& rAnmSize = mpParent->GetDisplaySizePixel();
     Point       aPt2( rAnimationBitmap.maPositionPixel.X() + rAnimationBitmap.maSizePixel.Width() - 1,
@@ -139,7 +139,7 @@ void AnimationRenderer::getPosSize( const AnimationBitmap& rAnimationBitmap, Poi
         rPosPix.setY( maSizePx.Height() - 1 - aPt2.Y() );
 }
 
-void AnimationRenderer::drawToIndex( sal_uLong nIndex )
+void AnimationRenderer::DrawToIndex( sal_uLong nIndex )
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
@@ -160,7 +160,7 @@ void AnimationRenderer::drawToIndex( sal_uLong nIndex )
     nIndex = std::min( nIndex, static_cast<sal_uLong>(mpParent->Count()) - 1 );
 
     for( sal_uLong i = 0; i <= nIndex; i++ )
-        draw( i, aVDev.get() );
+        Draw( i, aVDev.get() );
 
     if (xOldClip)
         pRenderContext->SetClipRegion( maClip );
@@ -173,7 +173,7 @@ void AnimationRenderer::drawToIndex( sal_uLong nIndex )
         pRenderContext->SetClipRegion(*xOldClip);
 }
 
-void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
+void AnimationRenderer::Draw( sal_uLong nIndex, VirtualDevice* pVDev )
 {
     VclPtr<vcl::RenderContext> pRenderContext = mpRenderContext;
 
@@ -189,7 +189,9 @@ void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
 
     // check, if output lies out of display
     if( aOutRect.Intersection( tools::Rectangle( maDispPt, maDispSz ) ).IsEmpty() )
-        setMarked( true );
+    {
+        SetMarked( true );
+    }
     else if( !mbIsPaused )
     {
         VclPtr<VirtualDevice>   pDev;
@@ -201,7 +203,7 @@ void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
         mnActIndex = std::min( nIndex, nLastPos );
         const AnimationBitmap&  rAnimationBitmap = mpParent->Get( static_cast<sal_uInt16>( mnActIndex ) );
 
-        getPosSize( rAnimationBitmap, aPosPix, aSizePix );
+        GetPosSize( rAnimationBitmap, aPosPix, aSizePix );
 
         // Mirrored horizontally?
         if( mbIsMirroredHorizontally )
@@ -296,18 +298,18 @@ void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
     }
 }
 
-void AnimationRenderer::repaint()
+void AnimationRenderer::Repaint()
 {
     const bool bOldPause = mbIsPaused;
 
     mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSizePx);
 
     mbIsPaused = false;
-    drawToIndex( mnActIndex );
+    DrawToIndex( mnActIndex );
     mbIsPaused = bOldPause;
 }
 
-AnimationData* AnimationRenderer::createAnimationData() const
+AnimationData* AnimationRenderer::CreateAnimationData() const
 {
     AnimationData* pDataItem = new AnimationData;
 
