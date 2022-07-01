@@ -68,6 +68,7 @@ namespace basegfx
         // insert/append single polygon
         void insert(sal_uInt32 nIndex, const B2DPolygon& rPolygon, sal_uInt32 nCount = 1);
         void append(const B2DPolygon& rPolygon, sal_uInt32 nCount = 1);
+        void reserve(sal_uInt32 nCount);
 
         /** Default adaptive subdivision access
 
