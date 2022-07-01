@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d5704e40_774d9230",
+        "filename": "svx/uiconfig/ui/dockingfontwork.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-07-01T16:03:17Z",
+      "side": 1,
+      "message": "Blame the \"can-focus\" addition to Glade 3.38.2. Apparently the tag was missing and Glade added it on its own with False as default. Changed to True.",
+      "parentUuid": "db7dac43_76b990e9",
+      "range": {
+        "startLine": 47,
+        "startChar": 43,
+        "endLine": 47,
+        "endChar": 48
+      },
+      "revId": "de053d9b8b9a9dcaac548fcc60248085fefd4276",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6823af86_b054e53e",
         "filename": "svx/uiconfig/ui/dockingfontwork.ui",
         "patchSetId": 1
@@ -78,6 +102,30 @@
       "writtenOn": "2022-07-01T06:54:55Z",
       "side": 1,
       "message": "Stumble over this a bit. Usual order is action - object - attribute like Add Text Shadow. So how about Slant Text Shadow?",
+      "range": {
+        "startLine": 452,
+        "startChar": 110,
+        "endLine": 452,
+        "endChar": 127
+      },
+      "revId": "de053d9b8b9a9dcaac548fcc60248085fefd4276",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c0713c4_26886914",
+        "filename": "svx/uiconfig/ui/dockingfontwork.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-07-01T16:03:17Z",
+      "side": 1,
+      "message": "done.",
+      "parentUuid": "6823af86_b054e53e",
       "range": {
         "startLine": 452,
         "startChar": 110,
