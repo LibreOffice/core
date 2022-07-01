@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65527d7a_0c2279ca",
+        "filename": "sw/source/ui/vba/vbafind.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-01T15:54:33Z",
+      "side": 1,
+      "message": "Interesting, if this would be thread safe. If it turns out to be problematic, we could make the static thread-local.",
+      "revId": "fbe78403efc2b762ad1d0a526c44d86acb123f52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e3b050b_dcb3a5fe",
+        "filename": "sw/source/ui/vba/vbaselection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-01T15:54:33Z",
+      "side": 1,
+      "message": "Please revert the removal of the leading space here.",
+      "revId": "fbe78403efc2b762ad1d0a526c44d86acb123f52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
