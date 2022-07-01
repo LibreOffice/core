@@ -27,6 +27,7 @@ public:
     void testPieChartLabels2();
     void testPieChartLabels3();
     void testPieChartLabels4();
+    void testChart();
     void testTdf76649TrendLineBug();
     void testTdf88154LabelRotatedLayout();
 
@@ -37,6 +38,7 @@ public:
     CPPUNIT_TEST(testPieChartLabels2);
     CPPUNIT_TEST(testPieChartLabels3);
     CPPUNIT_TEST(testPieChartLabels4);
+    CPPUNIT_TEST(testChart);
     CPPUNIT_TEST(testTdf76649TrendLineBug);
     CPPUNIT_TEST(testTdf88154LabelRotatedLayout);
 
@@ -153,6 +155,12 @@ void Chart2XShapeTest::testPieChartLabels4()
     // data value and percent value are centered horizontally
     load(u"chart2/qa/extras/xshape/data/ods/", u"tdf90839-4.ods");
     compareAgainstReference(u"tdf90839-4.xml");
+}
+
+void Chart2XShapeTest::testChart()
+{
+    load(u"chart2/qa/extras/xshape/data/ods/", u"testChart.ods");
+    compareAgainstReference(u"testChart.xml");
 }
 
 void Chart2XShapeTest::testTdf76649TrendLineBug()
