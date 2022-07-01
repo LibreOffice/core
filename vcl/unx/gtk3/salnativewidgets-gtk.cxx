@@ -2306,6 +2306,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetButtonTextColor( aTextColor );
     aStyleSet.SetDefaultActionButtonTextColor(aTextColor);
     aStyleSet.SetActionButtonTextColor(aTextColor);
+    aStyleSet.SetListBoxWindowTextColor( aTextColor );
     aStyleSet.SetRadioCheckTextColor( aTextColor );
     aStyleSet.SetGroupTextColor( aTextColor );
     aStyleSet.SetLabelTextColor( aTextColor );
@@ -2406,6 +2407,8 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         ::Color aHighlightTextColor = getColor( text_color );
         aStyleSet.SetHighlightColor( aHighlightColor );
         aStyleSet.SetHighlightTextColor( aHighlightTextColor );
+        aStyleSet.SetListBoxWindowHighlightColor( aHighlightColor );
+        aStyleSet.SetListBoxWindowHighlightTextColor( aHighlightTextColor );
         // make active like highlight, except with a small contrast. Note, see
         // a GtkListBoxRow in a GtkStackSidebar for a gtk widget with a
         // difference between highlighted and highlighted with focus.
@@ -2424,6 +2427,8 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         aStyleSet.SetFieldColor( aBackFieldColor );
         // This baby is the default page/paper color
         aStyleSet.SetWindowColor( aBackFieldColor );
+        // listbox background color
+        aStyleSet.SetListBoxWindowBackgroundColor( aBackFieldColor );
 
 #if GTK_CHECK_VERSION(4, 0, 0)
         double caretAspectRatio = 0.04f;
