@@ -301,17 +301,17 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             for (auto& pDataItem : aDataItems)
             {
                 AnimationRenderer* pRenderer = nullptr;
-                if (!pDataItem->pRendererData)
+                if (!pDataItem->mpRendererData)
                 {
-                    pRenderer
-                        = new AnimationRenderer(this, pDataItem->pOutDev, pDataItem->aStartOrg,
-                                                pDataItem->aStartSize, pDataItem->nRendererId);
+                    pRenderer = new AnimationRenderer(
+                        this, pDataItem->mpRenderContext, pDataItem->maOriginStartPt,
+                        pDataItem->maStartSize, pDataItem->mnRendererId);
 
                     maRenderers.push_back(std::unique_ptr<AnimationRenderer>(pRenderer));
                 }
                 else
                 {
-                    pRenderer = static_cast<AnimationRenderer*>(pDataItem->pRendererData);
+                    pRenderer = static_cast<AnimationRenderer*>(pDataItem->mpRendererData);
                 }
 
                 pRenderer->pause(pDataItem->mbIsPaused);
@@ -682,9 +682,9 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
 }
 
 AnimationData::AnimationData()
-    : pOutDev(nullptr)
-    , pRendererData(nullptr)
-    , nRendererId(0)
+    : mpRenderContext(nullptr)
+    , mpRendererData(nullptr)
+    , mnRendererId(0)
     , mbIsPaused(false)
 {
 }
