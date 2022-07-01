@@ -1385,7 +1385,7 @@ bool StringConstant::isStringConstant(
     }
     clang::StringLiteral const * lit = dyn_cast<clang::StringLiteral>(expr);
     if (lit != nullptr) {
-        if (!(lit->isAscii() || lit->isUTF8())) {
+        if (!(compat::isOrdinary(lit) || lit->isUTF8())) {
             return false;
         }
         unsigned n = lit->getLength();

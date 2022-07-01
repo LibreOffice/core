@@ -125,6 +125,14 @@ inline const clang::Expr *getSubExprAsWritten(const clang::CastExpr *This) {
   return getSubExprAsWritten(const_cast<clang::CastExpr *>(This));
 }
 
+inline bool isOrdinary(clang::StringLiteral const * expr) {
+#if CLANG_VERSION >= 150000
+    return expr->isOrdinary();
+#else
+    return expr->isAscii();
+#endif
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
