@@ -121,7 +121,7 @@
                     <property name="spacing">3</property>
                     <child>
                       <object class="GtkRadioButton" id="rbButton1">
-                        <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton1">Standard Toolbar</property>
+                        <property name="label" translatable="yes" context="ToolbarmodeDialog|radiobutton1">Compact</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
