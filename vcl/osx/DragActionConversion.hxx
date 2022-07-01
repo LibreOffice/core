@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OSX_DRAGACTIONCONVERSION_HXX
-#define INCLUDED_VCL_OSX_DRAGACTIONCONVERSION_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -38,6 +37,5 @@ unsigned int OfficeToSystemDragActions(sal_Int8 dragActions);
  */
 sal_Int8 SystemToOfficeDragActions(unsigned int dragActions);
 
-#endif // INCLUDED_VCL_OSX_DRAGACTIONCONVERSION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
