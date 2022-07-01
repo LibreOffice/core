@@ -109,6 +109,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/dlg_DataSource \
     chart2/source/controller/dialogs/dlg_InsertAxis_Grid \
     chart2/source/controller/dialogs/dlg_InsertDataLabel \
+    chart2/source/controller/dialogs/dlg_InsertDataTable \
     chart2/source/controller/dialogs/dlg_InsertErrorBars \
     chart2/source/controller/dialogs/dlg_InsertLegend \
     chart2/source/controller/dialogs/dlg_InsertTitle \
@@ -122,6 +123,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/RangeSelectionListener \
     chart2/source/controller/dialogs/res_BarGeometry \
     chart2/source/controller/dialogs/res_DataLabel \
+    chart2/source/controller/dialogs/res_DataTableProperties \
     chart2/source/controller/dialogs/res_ErrorBar \
     chart2/source/controller/dialogs/res_LegendPosition \
     chart2/source/controller/dialogs/res_Titles \
