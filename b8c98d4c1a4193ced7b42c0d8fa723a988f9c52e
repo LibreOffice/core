@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dac8f0b_27fa7408",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-01T12:07:21Z",
+      "side": 1,
+      "message": "@Noel: IIUC, this shouldn\u0027t break macOS, but I can\u0027t test that myself.",
+      "revId": "b8c98d4c1a4193ced7b42c0d8fa723a988f9c52e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
