@@ -440,6 +440,9 @@ private:
     void executeDispatch_OpenLegendDialog();
     void executeDispatch_InsertAxes();
     void executeDispatch_InsertGrid();
+
+    void executeDispatch_InsertDataTable();
+    void executeDispatch_DeleteDataTable();
     void executeDispatch_OpenInsertDataTableDialog();
 
     void executeDispatch_InsertMenu_DataLabels();
