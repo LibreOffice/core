@@ -33,6 +33,23 @@
       "message": "My approach to solve this problem was leaded on the comment in toolkit/source/controls/unocontrol.cxx:\n            else if ( nPType \u003d\u003d BASEPROPERTY_NATIVE_WIDGET_LOOK )\n            {\n                // since *a lot* of other properties might be overruled by this one, we need\n                // a special handling:\n                // NativeWidgetLook needs to be set first: If it is set to ON, all other\n                // properties describing the look (e.g. BackgroundColor) are ignored, anyway.\n                // If it is switched OFF, then we need to do it first because else it will\n                // overrule other look-related properties, and re-initialize them from system\n                // defaults.\n                \nWith this approach it is intended, that a macro programmer has to know, that he has first need to set NativeWidgetLook accordingly. Thus he needs the information how a native widget is defined and which properties are all concerned.\n\nMichaels approch is, that setting the background color should work also with native widgets, see https://gerrit.libreoffice.org/c/core/+/101284. This works also instead setting NativeWidgetLook as I\u0027ve tested this by editing the corresponding piece of code similar to Michaels change.\n\nSo what is the correct approach, as I\u0027ve not found out so far, what the correct definition of a native widget is?",
       "revId": "13f892134a59973ba09dcee6eb05d5a46c0537a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9378b5c_077419ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2022-07-01T09:36:03Z",
+      "side": 1,
+      "message": "@Caolán: What is your opinion?",
+      "revId": "13f892134a59973ba09dcee6eb05d5a46c0537a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
