@@ -72,6 +72,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21dbcbfb_b914babd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-01T11:59:33Z",
+      "side": 1,
+      "message": "Reading again what sort vs stable_sort is, now your change actually makes sense to me. I don\u0027t think there is an invariant that a document can\u0027t contain 2 bookmarks starting + ending at the same positions + having the same name. Which means that we do need stable_sort() if we want unchanged order at the end of the sort. Sorry that it took a few cycles for me to realize this. :-)\n\n(And still once somebody needs this in practice, the above patch would make sense to me, but adding it without somebody requesting it may be just a bloat.)",
+      "parentUuid": "e6ef5a99_435f2fc4",
+      "revId": "4b2978b53196848e52caee2951160bcc50959c6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76d4c629_874c87c5",
