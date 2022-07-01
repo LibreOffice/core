@@ -16,6 +16,24 @@
       "message": "Maybe consider moving LokClipboard into VCL as a small class that itself would use LokClipboardImpl from a higher layers, that would implement XClipboard itself? Then it would only be a matter of constructor change, and nothing would change in all places where it\u0027s used?",
       "revId": "bd9d83216d8a8478cc6084c63c7c9fd157219d87",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8b4c19e_22f1cf86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-07-01T08:27:24Z",
+      "side": 1,
+      "message": "That was the initial plan, but we have to access that class directly in desktop module.",
+      "parentUuid": "48d0ad60_098caf90",
+      "revId": "bd9d83216d8a8478cc6084c63c7c9fd157219d87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
