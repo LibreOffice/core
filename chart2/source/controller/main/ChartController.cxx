@@ -1228,6 +1228,10 @@ void SAL_CALL ChartController::dispatch(
         this->executeDispatch_DeleteMajorGrid();
     else if( aCommand == "DeleteMinorGrid" )
         this->executeDispatch_DeleteMinorGrid();
+    else if( aCommand == "InsertDataTable" )
+         this->executeDispatch_InsertDataTable();
+    else if( aCommand == "DeleteDataTable" )
+         this->executeDispatch_DeleteDataTable();
     //format objects
     else if( aCommand == "FormatSelection" )
         this->executeDispatch_ObjectProperties();
@@ -1628,6 +1632,7 @@ const o3tl::sorted_vector< OUString >& ChartController::impl_getAvailableCommand
         "DeleteXErrorBars",   "DeleteYErrorBars",
         "DeleteDataLabels",   "DeleteDataLabel",
         "InsertMenuDataTable",
+        "InsertDataTable", "DeleteDataTable",
         //format objects
         "FormatSelection",     "TransformDialog",
         "DiagramType",        "View3D",
