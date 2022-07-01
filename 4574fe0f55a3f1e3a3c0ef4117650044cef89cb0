@@ -16,6 +16,24 @@
       "message": "More information: In Jenkins the bt log shows, the crash were in ~swdoc() dtor, during calling DeleteAndDestroyAl for the frame format table. I think there was double freeing, what have fixed by ps 21. But i do not know why it passed locally.",
       "revId": "4574fe0f55a3f1e3a3c0ef4117650044cef89cb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de07a878_f11d5d2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-01T08:11:23Z",
+      "side": 1,
+      "message": "sorry ps 22 has that fix.",
+      "parentUuid": "312f1730_d021552e",
+      "revId": "4574fe0f55a3f1e3a3c0ef4117650044cef89cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
