@@ -1,0 +1,49 @@
+--- src/Numbertext.cxx
++++ src/Numbertext.cxx
+@@ -41,7 +41,14 @@
+     std::wifstream wif(filename);
+     if (wif.fail())
+         return false;
++#if defined __GNUC__
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
++#endif
+     wif.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
++#if defined __GNUC__
++#pragma GCC diagnostic pop
++#endif
+     std::wstringstream wss;
+     wss << wif.rdbuf();
+     result = wss.str();
+@@ -122,8 +129,15 @@
+     MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, wstr.get(), nSize);
+     return wstr.get();
+ #elif !defined NUMBERTEXT_BOOST
++#if defined __GNUC__
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
++#endif
+     typedef std::codecvt_utf8<wchar_t> convert_type;
+     std::wstring_convert<convert_type, wchar_t> converter;
++#if defined __GNUC__
++#pragma GCC diagnostic pop
++#endif
+     return converter.from_bytes( s );
+ #else
+     return ::locale::conv::utf_to_utf<wchar_t>(s.c_str(), s.c_str() + s.size());
+@@ -138,8 +152,15 @@
+     WideCharToMultiByte(CP_UTF8, 0, s.c_str(), -1, str.get(), nSize, nullptr, nullptr);
+     return str.get();
+ #elif !defined NUMBERTEXT_BOOST
++#if defined __GNUC__
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
++#endif
+     typedef std::codecvt_utf8<wchar_t> convert_type;
+     std::wstring_convert<convert_type, wchar_t> converter;
++#if defined __GNUC__
++#pragma GCC diagnostic pop
++#endif
+     return converter.to_bytes( s );
+ #else
+     return ::locale::conv::utf_to_utf<char>(s.c_str(), s.c_str() + s.size());
