@@ -311,11 +311,11 @@ AnimationData* AnimationRenderer::createAnimationData() const
 {
     AnimationData* pDataItem = new AnimationData;
 
-    pDataItem->aStartOrg = maOriginPt;
-    pDataItem->aStartSize = maLogicalSize;
-    pDataItem->pOutDev = mpRenderContext;
-    pDataItem->pRendererData = const_cast<AnimationRenderer *>(this);
-    pDataItem->nRendererId = mnRendererId;
+    pDataItem->maOriginStartPt = maOriginPt;
+    pDataItem->maStartSize = maLogicalSize;
+    pDataItem->mpRenderContext = mpRenderContext;
+    pDataItem->mpRendererData = const_cast<AnimationRenderer *>(this);
+    pDataItem->mnRendererId = mnRendererId;
     pDataItem->mbIsPaused = mbIsPaused;
 
     return pDataItem;

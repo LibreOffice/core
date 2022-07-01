@@ -30,12 +30,12 @@ struct AnimationBitmap;
 
 struct AnimationData
 {
-    Point           aStartOrg;
-    Size            aStartSize;
-    VclPtr<OutputDevice>   pOutDev;
-    void*           pRendererData;
-    tools::Long     nRendererId;
-    bool            mbIsPaused;
+    Point maOriginStartPt;
+    Size maStartSize;
+    VclPtr<OutputDevice> mpRenderContext;
+    void* mpRendererData;
+    tools::Long mnRendererId;
+    bool mbIsPaused;
 
     AnimationData();
 };
