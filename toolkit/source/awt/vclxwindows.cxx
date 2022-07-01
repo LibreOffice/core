@@ -1512,6 +1512,8 @@ void VCLXListBox::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_REFERENCE_DEVICE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
+                     BASEPROPERTY_HIGHLIGHT_COLOR,
+                     BASEPROPERTY_HIGHLIGHT_TEXT_COLOR,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -1926,6 +1928,32 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any
             }
         }
         break;
+        case BASEPROPERTY_HIGHLIGHT_COLOR:
+        {
+            Color nColor = 0;
+            if (!(Value >>= nColor))
+                nColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
+
+            AllSettings aSettings(pListBox->GetSettings());
+            StyleSettings aStyle(aSettings.GetStyleSettings());
+            aStyle.SetHighlightColor(nColor);
+            aSettings.SetStyleSettings(aStyle);
+            pListBox->SetSettings(aSettings);
+        }
+        break;
+        case BASEPROPERTY_HIGHLIGHT_TEXT_COLOR:
+        {
+            Color nColor = 0;
+            if (!(Value >>= nColor))
+                nColor = Application::GetSettings().GetStyleSettings().GetHighlightTextColor();
+
+            AllSettings aSettings(pListBox->GetSettings());
+            StyleSettings aStyle(aSettings.GetStyleSettings());
+            aStyle.SetHighlightTextColor(nColor);
+            aSettings.SetStyleSettings(aStyle);
+            pListBox->SetSettings(aSettings);
+        }
+        break;
         default:
         {
             VCLXWindow::setProperty( PropertyName, Value );
@@ -1975,6 +2003,16 @@ css::uno::Any VCLXListBox::getProperty( const OUString& PropertyName )
                     pStrings[n] = pListBox->GetEntry( n );
                 aProp <<= aSeq;
 
+            }
+            break;
+            case BASEPROPERTY_HIGHLIGHT_COLOR:
+            {
+                aProp <<= GetWindow()->GetSettings().GetStyleSettings().GetHighlightColor();
+            }
+            break;
+            case BASEPROPERTY_HIGHLIGHT_TEXT_COLOR:
+            {
+                aProp <<= GetWindow()->GetSettings().GetStyleSettings().GetHighlightTextColor();
             }
             break;
             default:
