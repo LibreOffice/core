@@ -1348,6 +1348,8 @@ void VCLXSpinField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 {
     PushPropertyIds( rIds,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
+                     BASEPROPERTY_HIGHLIGHT_COLOR,
+                     BASEPROPERTY_HIGHLIGHT_TEXT_COLOR,
                      0 );
     VCLXEdit::ImplGetPropertyIds( rIds );
 }
@@ -1512,6 +1514,8 @@ void VCLXListBox::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_REFERENCE_DEVICE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
+                     BASEPROPERTY_HIGHLIGHT_COLOR,
+                     BASEPROPERTY_HIGHLIGHT_TEXT_COLOR,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -1926,6 +1930,22 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any
             }
         }
         break;
+        case BASEPROPERTY_HIGHLIGHT_COLOR:
+        {
+            Color nColor = 0;
+            if (!(Value >>= nColor))
+                nColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
+            pListBox->SetHighlightColor(nColor);
+        }
+        break;
+        case BASEPROPERTY_HIGHLIGHT_TEXT_COLOR:
+        {
+            Color nColor = 0;
+            if (!(Value >>= nColor))
+                nColor = Application::GetSettings().GetStyleSettings().GetHighlightTextColor();
+            pListBox->SetHighlightTextColor(nColor);
+        }
+        break;
         default:
         {
             VCLXWindow::setProperty( PropertyName, Value );
@@ -1975,6 +1995,16 @@ css::uno::Any VCLXListBox::getProperty( const OUString& PropertyName )
                     pStrings[n] = pListBox->GetEntry( n );
                 aProp <<= aSeq;
 
+            }
+            break;
+            case BASEPROPERTY_HIGHLIGHT_COLOR:
+            {
+                aProp <<= GetWindow()->GetSettings().GetStyleSettings().GetHighlightColor();
+            }
+            break;
+            case BASEPROPERTY_HIGHLIGHT_TEXT_COLOR:
+            {
+                aProp <<= GetWindow()->GetSettings().GetStyleSettings().GetHighlightTextColor();
             }
             break;
             default:
@@ -3119,6 +3149,8 @@ void VCLXFixedText::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_REFERENCE_DEVICE,
+                     BASEPROPERTY_HIGHLIGHT_COLOR,
+                     BASEPROPERTY_HIGHLIGHT_TEXT_COLOR,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -3760,6 +3792,8 @@ void VCLXEdit::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_HIGHLIGHT_COLOR,
+                     BASEPROPERTY_HIGHLIGHT_TEXT_COLOR,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -4140,6 +4174,8 @@ void VCLXComboBox::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_REFERENCE_DEVICE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
+                     BASEPROPERTY_HIGHLIGHT_COLOR,
+                     BASEPROPERTY_HIGHLIGHT_TEXT_COLOR,
                      0);
     // no, don't call VCLXEdit here - it has properties which we do *not* want to have at combo box
     // #i92690# / 2008-08-12 / frank.schoenheit@sun.com
@@ -4339,6 +4375,22 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const css::uno::An
                 pComboBox->Clear();
                 addItems( aItems, 0 );
             }
+        }
+        break;
+        case BASEPROPERTY_HIGHLIGHT_COLOR:
+        {
+            Color nColor = 0;
+            if (!(Value >>= nColor))
+                nColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
+            pComboBox->SetHighlightColor(nColor);
+        }
+        break;
+        case BASEPROPERTY_HIGHLIGHT_TEXT_COLOR:
+        {
+            Color nColor = 0;
+            if (!(Value >>= nColor))
+                nColor = Application::GetSettings().GetStyleSettings().GetHighlightTextColor();
+            pComboBox->SetHighlightTextColor(nColor);
         }
         break;
         default:
@@ -4743,6 +4795,8 @@ void VCLXDateField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
+                     BASEPROPERTY_HIGHLIGHT_COLOR,
+                     BASEPROPERTY_HIGHLIGHT_TEXT_COLOR,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -5096,6 +5150,8 @@ void VCLXTimeField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
+                     BASEPROPERTY_HIGHLIGHT_COLOR,
+                     BASEPROPERTY_HIGHLIGHT_TEXT_COLOR,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -5412,6 +5468,8 @@ void VCLXNumericField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
+                     BASEPROPERTY_HIGHLIGHT_COLOR,
+                     BASEPROPERTY_HIGHLIGHT_TEXT_COLOR,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -6023,6 +6081,8 @@ void VCLXPatternField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
+                     BASEPROPERTY_HIGHLIGHT_COLOR,
+                     BASEPROPERTY_HIGHLIGHT_TEXT_COLOR,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -7628,6 +7688,8 @@ void SVTXCurrencyField::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
+                     BASEPROPERTY_HIGHLIGHT_COLOR,
+                     BASEPROPERTY_HIGHLIGHT_TEXT_COLOR,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }

@@ -153,6 +153,8 @@ static ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
         DECL_PROP_2     ( "HighContrastMode",       HIGHCONTRASTMODE,   bool,               BOUND, MAYBEDEFAULT ),
         DECL_PROP_2     ( "HScroll",                HSCROLL,            bool,               BOUND, MAYBEDEFAULT ),
         DECL_PROP_2     ( "HardLineBreaks",         HARDLINEBREAKS,     bool,               BOUND, MAYBEDEFAULT ),
+        DECL_PROP_3     ( "HighlightColor",         HIGHLIGHT_COLOR,    sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID),
+        DECL_PROP_3     ( "HighlightTextColor",     HIGHLIGHT_TEXT_COLOR, sal_Int32,        BOUND, MAYBEDEFAULT, MAYBEVOID),
         DECL_PROP_2     ( "ImageAlign",             IMAGEALIGN,         sal_Int16,          BOUND, MAYBEDEFAULT),
         DECL_PROP_2     ( "ImagePosition",          IMAGEPOSITION,      sal_Int16,          BOUND, MAYBEDEFAULT),
         DECL_PROP_2     ( "ImageURL",               IMAGEURL,           css::uno::Any,      BOUND, MAYBEDEFAULT ),

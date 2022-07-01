@@ -106,6 +106,8 @@ public:
 
     void            DrawEntry( const UserDrawEvent& rEvt );
     void            SetBorderStyle( WindowBorderStyle nBorderStyle );
+    void            SetHighlightColor(const Color& rColor);
+    void            SetHighlightTextColor(const Color& rColor);
 
     /**
      * Adds a new separator at the given position n.

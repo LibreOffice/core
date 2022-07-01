@@ -1140,6 +1140,30 @@ bool ListBox::IsMultiSelectionEnabled() const
     return mpImplLB->IsMultiSelectionEnabled();
 }
 
+
+void ListBox::SetHighlightColor(const Color& rColor)
+{
+    AllSettings aSettings(GetSettings());
+    StyleSettings aStyle(aSettings.GetStyleSettings());
+    aStyle.SetHighlightColor(rColor);
+    aSettings.SetStyleSettings(aStyle);
+    SetSettings(aSettings);
+
+    mpImplLB->SetHighlightColor(rColor);
+}
+
+void ListBox::SetHighlightTextColor(const Color& rColor)
+{
+    AllSettings aSettings(GetSettings());
+    StyleSettings aStyle(aSettings.GetStyleSettings());
+    aStyle.SetHighlightTextColor(rColor);
+    aSettings.SetStyleSettings(aStyle);
+    SetSettings(aSettings);
+
+    mpImplLB->SetHighlightTextColor(rColor);
+}
+
+
 Size ListBox::CalcMinimumSize() const
 {
     Size aSz;
