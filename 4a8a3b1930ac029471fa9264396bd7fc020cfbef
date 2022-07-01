@@ -16,6 +16,24 @@
       "message": "changes continuously fail on all platforms, building locally and making sure it passes would be much appreciated.",
       "revId": "4a8a3b1930ac029471fa9264396bd7fc020cfbef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3f8c332_35856ab4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-01T08:10:15Z",
+      "side": 1,
+      "message": "I am so sorry, but the last patch sets have been tested by running all tests locally and (i do not know why) none of them failed locally. I am using cygwin under windows, and in spite of this, on Jenkins windows build failed many times. Any idea?",
+      "parentUuid": "d44e4001_7b1ce72d",
+      "revId": "4a8a3b1930ac029471fa9264396bd7fc020cfbef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
