@@ -3330,6 +3330,8 @@ namespace basegfx::utils
 
             if(0 != nCount)
             {
+                aRetval.reserve(nCount);
+
                 const css::awt::Point* pPointSequence = rPointSequenceSource.getConstArray();
                 const css::drawing::PolygonFlags* pFlagSequence = rFlagSequenceSource.getConstArray();
 
