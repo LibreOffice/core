@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aec48902_46a7a188",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-07-01T08:43:05Z",
+      "side": 1,
+      "message": "No objections to this in general, but as discussed at https://gerrit.libreoffice.org/c/core/+/135916, the ordering of these marks when they start at the same position is not too clear: it seems we have 2 places where these are ordered:\n\n- CompareMarksEnd in the WW8 export will sort bookmarks start at the same position by their end position (which may not be stable if the both have the same start and end position)\n\n- lcl_FillBookmarkArray() operates on an SwXBookmarkPortion_ImplList in the UNO API, and there it seems to work only with the start position, giving an unpredictable result when two bookmarks start at the same position (which is allowed)\n\nIt seems to me these problems are still there after this change (just flagging them); but if this change improves sometimes, it doesn\u0027t make the situation worse.\n\nIf my analysis is not correct, of course please do point it out. :-)",
+      "revId": "4b2978b53196848e52caee2951160bcc50959c6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76d4c629_874c87c5",
