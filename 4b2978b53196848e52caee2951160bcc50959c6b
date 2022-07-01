@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e6ef5a99_435f2fc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-01T11:36:10Z",
+      "side": 1,
+      "message": "\u003e Even for (2), my reading of lcl_MarkOrderingByStart() is that you get unpredictable order in case two bookmarks start on the same position. Bookmark starts don\u0027t have a dummy character at start, so this can happen. If there is a practical need, then either ordering by end pos or by name (for marks starting at the same position) would probably make sense.\n\nIf I drop this change\u0027s use of stable_sort again and instead use the below patch (assuming that matches what you mean above), the test still fails.\n\n  diff --git a/sw/source/core/doc/docbm.cxx b/sw/source/core/doc/docbm.cxx\n  index 1b283437ab6f..6c596a6566fe 100644\n  --- a/sw/source/core/doc/docbm.cxx\n  +++ b/sw/source/core/doc/docbm.cxx\n  @@ -219,11 +219,17 @@ namespace\n           }\n           auto *const pCRFirst (dynamic_cast\u003c::sw::mark::CrossRefBookmark const*\u003e(pFirst));\n           auto *const pCRSecond(dynamic_cast\u003c::sw::mark::CrossRefBookmark const*\u003e(pSecond));\n  -        if ((pCRFirst \u003d\u003d nullptr) \u003d\u003d (pCRSecond \u003d\u003d nullptr))\n  +        if ((pCRFirst \u003d\u003d nullptr) !\u003d (pCRSecond \u003d\u003d nullptr))\n           {\n  -            return false; // equal\n  +            return pCRFirst !\u003d nullptr; // cross-ref sorts *before*\n           }\n  -        return pCRFirst !\u003d nullptr; // cross-ref sorts *before*\n  +        auto const\u0026 rFirstEnd(pFirst-\u003eGetMarkEnd());\n  +        auto const\u0026 rSecondEnd(pSecond-\u003eGetMarkEnd());\n  +        if (rFirstEnd !\u003d rSecondEnd)\n  +        {\n  +            return rFirstEnd \u003c rSecondEnd;\n  +        }\n  +        return pFirst-\u003eGetName() \u003c pSecond-\u003eGetName();\n       }\n   \n       bool lcl_MarkOrderingByEnd(const ::sw::mark::MarkBase *const pFirst,",
+      "parentUuid": "c820adcb_c2608c54",
+      "revId": "4b2978b53196848e52caee2951160bcc50959c6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "76d4c629_874c87c5",
         "filename": "sw/source/core/doc/docbm.cxx",
         "patchSetId": 1
