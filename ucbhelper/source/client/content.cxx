@@ -1022,8 +1022,6 @@ bool Content::isFolder()
 }
 
 
-SAL_WNOUNREACHABLE_CODE_PUSH
-
 bool Content::isDocument()
 {
     bool bDoc = false;
@@ -1037,12 +1035,8 @@ bool Content::isDocument()
                     get() ) ),
          m_xImpl->getEnvironment() );
 
-    // Unreachable - cancelCommandExecution always throws an exception,
-    // But some compilers complain...
-    return false;
+    O3TL_UNREACHABLE;
 }
-
-SAL_WNOUNREACHABLE_CODE_POP
 
 void Content::lock()
 {
