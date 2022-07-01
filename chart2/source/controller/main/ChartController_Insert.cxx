@@ -225,6 +225,32 @@ void ChartController::executeDispatch_OpenInsertDataTableDialog()
     }
 }
 
+void ChartController::executeDispatch_InsertDataTable()
+{
+    SolarMutexGuard aGuard;
+    uno::Reference<chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(getModel());
+    auto xDataTable = xDiagram->getDataTable();
+    if (!xDataTable.is())
+    {
+        uno::Reference<chart2::XDataTable> xNewDataTable(new DataTable);
+        if (xNewDataTable.is())
+        {
+            xDiagram->setDataTable(xNewDataTable);
+        }
+    }
+}
+
+void ChartController::executeDispatch_DeleteDataTable()
+{
+    SolarMutexGuard aGuard;
+    uno::Reference<chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(getModel());
+    auto xDataTable = xDiagram->getDataTable();
+    if (xDataTable.is())
+    {
+        xDiagram->setDataTable(uno::Reference<chart2::XDataTable>());
+    }
+}
+
 void ChartController::executeDispatch_InsertTitles()
 {
     UndoGuard aUndoGuard(

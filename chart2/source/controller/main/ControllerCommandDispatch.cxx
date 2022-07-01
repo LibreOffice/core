@@ -364,6 +364,8 @@ struct ModelState
 
     bool bSupportsStatistics;
     bool bSupportsAxes;
+
+    bool bDataTable = false;
 };
 
 ModelState::ModelState() :
@@ -449,6 +451,8 @@ void ModelState::update( const Reference< frame::XModel > & xModel )
     bHasLegend = LegendHelper::hasLegend( xDiagram );
     bHasWall = DiagramHelper::isSupportingFloorAndWall( xDiagram );
     bHasFloor = bHasWall && bIsThreeD;
+
+    bDataTable = xDiagram.is() && xDiagram->getDataTable().is();
 }
 
 bool ModelState::HasAnyAxis() const
@@ -706,6 +710,10 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ ".uno:FormatMinorGrid" ] = bIsWritable;
     m_aCommandAvailability[ ".uno:InsertMinorGrid" ] = bIsWritable;
     m_aCommandAvailability[ ".uno:DeleteMinorGrid" ] = bIsWritable;
+
+    // data table
+    m_aCommandAvailability[ ".uno:InsertDataTable" ] = bIsWritable && bModelStateIsValid && !m_apModelState->bDataTable;
+    m_aCommandAvailability[ ".uno:DeleteDataTable" ] = bIsWritable && bModelStateIsValid && m_apModelState->bDataTable;
 }
 
 bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
