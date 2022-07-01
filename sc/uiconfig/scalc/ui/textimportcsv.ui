@@ -130,7 +130,7 @@
                       <object class="GtkLabel" id="textlanguage">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="textimportcsv|textlanguage">_Language:</property>
+                        <property name="label" translatable="yes" context="textimportcsv|textlanguage">_Locale:</property>
                         <property name="use-underline">True</property>
                         <property name="mnemonic-widget">language</property>
                         <property name="xalign">0</property>
