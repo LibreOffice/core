@@ -1085,6 +1085,7 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
     // Text
     style.SetFieldTextColor(aText);
     style.SetFieldRolloverTextColor(aText);
+    style.SetListBoxWindowTextColor(aText);
     style.SetWindowTextColor(aText);
     style.SetToolTextColor(aText);
 
@@ -1092,6 +1093,7 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
     style.SetFieldColor(aBase);
     style.SetWindowColor(aBase);
     style.SetActiveTabColor(aBase);
+    style.SetListBoxWindowBackgroundColor(aBase);
     style.SetAlternatingRowColor(toColor(pal.color(QPalette::Active, QPalette::AlternateBase)));
 
     // Buttons
@@ -1129,6 +1131,8 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
     // Selection
     style.SetHighlightColor(aHigh);
     style.SetHighlightTextColor(aHighText);
+    style.SetListBoxWindowHighlightColor(aHigh);
+    style.SetListBoxWindowHighlightTextColor(aHighText);
     style.SetActiveColor(aHigh);
     style.SetActiveTextColor(aHighText);
 
