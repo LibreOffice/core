@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97eae448_6c6677e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2022-07-01T09:14:23Z",
+      "side": 1,
+      "message": "I\u0027ve separated the part with highlight color, see https://bugs.documentfoundation.org/show_bug.cgi?id\u003d149797\nand\nhttps://gerrit.libreoffice.org/c/core/+/136691,\nso we can concentrate on the background color issue.",
+      "revId": "13f892134a59973ba09dcee6eb05d5a46c0537a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
