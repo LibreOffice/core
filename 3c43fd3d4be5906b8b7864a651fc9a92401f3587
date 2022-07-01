@@ -54,6 +54,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29b1ebc3_f6d6c77e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-01T09:03:18Z",
+      "side": 1,
+      "message": "What different stuff you need to check for different files? The most I see is to check the properties of the imported Bitmap, which are size, BPP, palette (yes/no), transparency (yes/no),... which are applicable to all of them. What else? If there is something super special you need to test for a test PNG, you can do it again in a different test for the same file. \n\nEven if most use size 32x32 this is still an expectation, which can be asserted - even if it\u0027s not a corner case. You don\u0027t really know what could fail so you need to be thorough. A 32x32 image could still produce a Bitmap that is 0x0 in size for some reason and you wouldn\u0027t catch this.",
+      "parentUuid": "c8110b1a_cc9d3c9a",
+      "revId": "3c43fd3d4be5906b8b7864a651fc9a92401f3587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14767f5d_b5998881",
