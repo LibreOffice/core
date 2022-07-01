@@ -3105,15 +3105,17 @@ void SvxShape::setAllPropertiesToDefault()
 {
     ::SolarMutexGuard aGuard;
 
-    if( !HasSdrObject() )
+    SdrObject* pSdrObj = GetSdrObject();
+    if( !pSdrObj )
         throw lang::DisposedException();
-    GetSdrObject()->ClearMergedItem(); // nWhich == 0 => all
+    pSdrObj->ClearMergedItem(); // nWhich == 0 => all
 
-    if(dynamic_cast<const SdrGrafObj*>(GetSdrObject()) != nullptr)
+    const SdrObjKind nObjId = pSdrObj->GetObjIdentifier();
+    if(nObjId == SdrObjKind::Graphic) // SdrGrafObj
     {
         // defaults for graphic objects have changed:
-        GetSdrObject()->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
-        GetSdrObject()->SetMergedItem( XLineStyleItem( drawing::LineStyle_NONE ) );
+        pSdrObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
+        pSdrObj->SetMergedItem( XLineStyleItem( drawing::LineStyle_NONE ) );
     }
 
     // #i68523# special handling for Svx3DCharacterModeItem, this is not saved
@@ -3121,12 +3123,12 @@ void SvxShape::setAllPropertiesToDefault()
     // does not load lathe or extrude objects, it is possible to set the items
     // here.
     // For other solution possibilities, see task description.
-    if( dynamic_cast<const E3dLatheObj* >(GetSdrObject())  != nullptr|| dynamic_cast<const E3dExtrudeObj* >(GetSdrObject()) != nullptr)
+    if( nObjId == SdrObjKind::E3D_Lathe /*E3dLatheObj*/ || nObjId == SdrObjKind::E3D_Extrusion /*E3dExtrudeObj*/ )
     {
-        GetSdrObject()->SetMergedItem(Svx3DCharacterModeItem(true));
+        pSdrObj->SetMergedItem(Svx3DCharacterModeItem(true));
     }
 
-    GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
+    pSdrObj->getSdrModelFromSdrObject().SetChanged();
 }
 
 void SvxShape::setPropertiesToDefault(

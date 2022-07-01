@@ -516,8 +516,9 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
     if (!pNewObj)
         return nullptr;
 
-    if( auto pScene = dynamic_cast<E3dScene* >(pNewObj) )
+    if( nType == SdrObjKind::E3D_Scene )
     {
+        auto pScene = static_cast<E3dScene* >(pNewObj);
         // initialise scene
 
         double fW = static_cast<double>(aSize.Width);
@@ -534,8 +535,9 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
 
         pScene->SetBoundAndSnapRectsDirty();
     }
-    else if(auto pObj = dynamic_cast<E3dExtrudeObj* >(pNewObj))
+    else if(nType == SdrObjKind::E3D_Extrusion)
     {
+        auto pObj = static_cast<E3dExtrudeObj* >(pNewObj);
         basegfx::B2DPolygon aNewPolygon;
         aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
         aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
@@ -546,8 +548,9 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
         // #107245# pObj->SetExtrudeCharacterMode(sal_True);
         pObj->SetMergedItem(Svx3DCharacterModeItem(true));
     }
-    else if(auto pLatheObj = dynamic_cast<E3dLatheObj* >(pNewObj))
+    else if(nType == SdrObjKind::E3D_Lathe)
     {
+        auto pLatheObj = static_cast<E3dLatheObj* >(pNewObj);
         basegfx::B2DPolygon aNewPolygon;
         aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
         aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
