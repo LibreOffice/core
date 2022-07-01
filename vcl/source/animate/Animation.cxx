@@ -314,7 +314,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
                     pRenderer = static_cast<AnimationRenderer*>(pDataItem->pRendererData);
                 }
 
-                pRenderer->pause(pDataItem->bPause);
+                pRenderer->pause(pDataItem->mbIsPaused);
                 pRenderer->setMarked(true);
             }
 
@@ -326,7 +326,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
             // check if every remaining view is paused
             bGlobalPause = std::all_of(maRenderers.cbegin(), maRenderers.cend(),
-                                       [](const auto& pRenderer) { return pRenderer->isPause(); });
+                                       [](const auto& pRenderer) { return pRenderer->isPaused(); });
 
             // reset marked state
             std::for_each(maRenderers.cbegin(), maRenderers.cend(),
@@ -685,7 +685,7 @@ AnimationData::AnimationData()
     : pOutDev(nullptr)
     , pRendererData(nullptr)
     , nRendererId(0)
-    , bPause(false)
+    , mbIsPaused(false)
 {
 }
 
