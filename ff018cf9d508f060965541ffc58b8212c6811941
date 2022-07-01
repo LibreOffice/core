@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b81a6336_27fd0a57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-07-01T09:51:09Z",
+      "side": 1,
+      "message": "Interesting. Is there no way to tell a11y to use the tooltip instead of the label, which probably will make more sense?\n\nKeep in mind that the menu label isn\u0027t guaranteed to be more complete. If you search *Commands.xcu files for \"ContextLabel\" (which is what being pulled by the \"Label\" property), you\u0027ll see many cases where the opposite is true. It also won\u0027t strip accelerators and ellipsis, which we probably don\u0027t want to see in toolbar labels.\n\nThose shortened labels were introduced mainly for the notebookbar, where we want to show the labels for some buttons, but can\u0027t afford long labels (or where the context is obvious from the surrounding controls). This created a problem also for customization - see the long discussion in tdf#108458. Ideally we should just restore the long base labels we used to have, and move the shortened NB labels to a dedicated property (or aliases, or whichever other solution we invent).\n\nIn any case, please remember to update the documentation at officecfg/registry/schema/org/openoffice/Office/UI/Commands.xcs, whenever you make any such changes.",
+      "revId": "ff018cf9d508f060965541ffc58b8212c6811941",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "573410e7_07f6f38c",
+        "filename": "framework/source/uielement/toolbarmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-07-01T09:51:09Z",
+      "side": 1,
+      "message": "Can this be ever true? The menu label pulls \"ContextLabel\", or \"Label\" if the former isn\u0027t defined. So when empty - it means that \"Label\" isn\u0027t defined, which should make \"Name\" also be empty.",
+      "revId": "ff018cf9d508f060965541ffc58b8212c6811941",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
