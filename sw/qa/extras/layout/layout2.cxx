@@ -509,6 +509,63 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149710_RedlineNumberingEditing)
     assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", "3.");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149709_RedlineNumberingLevel)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf149709.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Show Changes
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwRootFrame* pLayout(pWrtShell->GetLayout());
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+
+    // insert a new list item at start of the second list item "a)"
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    pWrtShell->Down(false, 1);
+    pWrtShell->SplitNode(false);
+
+    // Dump the rendering of the first page as an XML file.
+    SwDocShell* pShell = pDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Show the correct and the original line numbering instead of counting
+    // the deleted list items in Show Changes mode, as part of the list
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", "1.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", "a)");
+    // This was "b)[2.]"
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[4]/text", "b)[a)] ");
+    // This was "c)[3.]"
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[6]/text", "c)[b)] ");
+    // This was "4.[2.]" (after disabling Show Changes, and enabling again)
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[8]/text", "2.");
+
+    // remove the tracked deletion, and check the layout again
+    pWrtShell->Undo();
+    xMetaFile = pShell->GetPreviewMetaFile();
+    pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", "1.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", "a)");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", "b)");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[7]/text", "2.");
+
+    // check Redo
+    pWrtShell->Redo();
+    xMetaFile = pShell->GetPreviewMetaFile();
+    pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", "1.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", "a)");
+    // TODO: show as b)[a)]
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[4]/text", "b)");
+    // FIXME: This must be "c)[b]"
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[6]/text", "c)[a)] ");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[8]/text", "2.");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf85610.fodt");

@@ -4005,12 +4005,18 @@ void SwTextNode::DoNum(std::function<void (SwNodeNum &)> const& rFunc)
     // temp. clear because GetActualListLevel() may be called and the assert
     // there triggered during update, which is unhelpful
     std::unique_ptr<SwNodeNum> pBackup = std::move(mpNodeNumRLHidden);
+    std::unique_ptr<SwNodeNum> pBackup2 = std::move(mpNodeNumOrig);
     assert(mpNodeNum);
     rFunc(*mpNodeNum);
     if (pBackup)
     {
         mpNodeNumRLHidden = std::move(pBackup);
         rFunc(*mpNodeNumRLHidden);
+    }
+    if (pBackup2)
+    {
+        mpNodeNumOrig = std::move(pBackup2);
+        rFunc(*mpNodeNumOrig);
     }
 }
 
