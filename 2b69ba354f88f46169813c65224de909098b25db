@@ -33,6 +33,42 @@
       "message": "Aman: based on our discussions, you were supposed to submit a patch in WIP status and ask questions on how to proceed. I\u0027m not seeing any question from you and the patch is not in WIP status, but is clearly unfinished.",
       "revId": "2b69ba354f88f46169813c65224de909098b25db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19d38333_82168dd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003571
+      },
+      "writtenOn": "2022-07-01T12:45:29Z",
+      "side": 1,
+      "message": "After doing changes in code this file is deleted by itself it is not deleted by me manually i thought it is due to my code changes that\u0027s why i added.",
+      "parentUuid": "a7ffcb80_81005a7d",
+      "revId": "2b69ba354f88f46169813c65224de909098b25db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f127ab42_aec8c59d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003571
+      },
+      "writtenOn": "2022-07-01T12:45:29Z",
+      "side": 1,
+      "message": "I submitted it in WIP using ./logerrit submit master%wip command thats it. Can you tell me how i can set it to work in progress and what do you mean by clearly unfinished.",
+      "parentUuid": "989d4d7f_635dde05",
+      "revId": "2b69ba354f88f46169813c65224de909098b25db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
