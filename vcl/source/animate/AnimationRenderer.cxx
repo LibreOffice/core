@@ -34,8 +34,8 @@ AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
         mpRenderContext ( pFirstFrameOutDev ? pFirstFrameOutDev : pOut ),
         mnRendererId     ( nRendererId ),
         maPt            ( rPt ),
-        maSz            ( rSz ),
-        maSzPix         ( mpRenderContext->LogicToPixel( maSz ) ),
+        maLogicalSize            ( rSz ),
+        maSizePx         ( mpRenderContext->LogicToPixel( maLogicalSize ) ),
         maClip          ( mpRenderContext->GetClipRegion() ),
         mpBackground    ( VclPtr<VirtualDevice>::Create() ),
         mpRestore       ( VclPtr<VirtualDevice>::Create() ),
@@ -43,40 +43,40 @@ AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
         meLastDisposal  ( Disposal::Back ),
         mbIsPaused      ( false ),
         mbIsMarked      ( false ),
-        mbIsMirroredHorizontally         ( maSz.Width() < 0 ),
-        mbIsMirroredVertically         ( maSz.Height() < 0 )
+        mbIsMirroredHorizontally         ( maLogicalSize.Width() < 0 ),
+        mbIsMirroredVertically         ( maLogicalSize.Height() < 0 )
 {
     Animation::ImplIncAnimCount();
 
     // Mirrored horizontally?
     if( mbIsMirroredHorizontally )
     {
-        maDispPt.setX( maPt.X() + maSz.Width() + 1 );
-        maDispSz.setWidth( -maSz.Width() );
-        maSzPix.setWidth( -maSzPix.Width() );
+        maDispPt.setX( maPt.X() + maLogicalSize.Width() + 1 );
+        maDispSz.setWidth( -maLogicalSize.Width() );
+        maSizePx.setWidth( -maSizePx.Width() );
     }
     else
     {
         maDispPt.setX( maPt.X() );
-        maDispSz.setWidth( maSz.Width() );
+        maDispSz.setWidth( maLogicalSize.Width() );
     }
 
     // Mirrored vertically?
     if( mbIsMirroredVertically )
     {
-        maDispPt.setY( maPt.Y() + maSz.Height() + 1 );
-        maDispSz.setHeight( -maSz.Height() );
-        maSzPix.setHeight( -maSzPix.Height() );
+        maDispPt.setY( maPt.Y() + maLogicalSize.Height() + 1 );
+        maDispSz.setHeight( -maLogicalSize.Height() );
+        maSizePx.setHeight( -maSizePx.Height() );
     }
     else
     {
         maDispPt.setY( maPt.Y() );
-        maDispSz.setHeight( maSz.Height() );
+        maDispSz.setHeight( maLogicalSize.Height() );
     }
 
     // save background
-    mpBackground->SetOutputSizePixel( maSzPix );
-    mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSzPix);
+    mpBackground->SetOutputSizePixel( maSizePx );
+    mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSizePx);
 
     // Initialize drawing to actual position
     drawToIndex( mpParent->ImplGetCurPos() );
@@ -111,13 +111,13 @@ void AnimationRenderer::getPosSize( const AnimationBitmap& rAnimationBitmap, Poi
 
     // calculate x scaling
     if( rAnmSize.Width() > 1 )
-        fFactX = static_cast<double>( maSzPix.Width() - 1 ) / ( rAnmSize.Width() - 1 );
+        fFactX = static_cast<double>( maSizePx.Width() - 1 ) / ( rAnmSize.Width() - 1 );
     else
         fFactX = 1.0;
 
     // calculate y scaling
     if( rAnmSize.Height() > 1 )
-        fFactY = static_cast<double>( maSzPix.Height() - 1 ) / ( rAnmSize.Height() - 1 );
+        fFactY = static_cast<double>( maSizePx.Height() - 1 ) / ( rAnmSize.Height() - 1 );
     else
         fFactY = 1.0;
 
@@ -132,11 +132,11 @@ void AnimationRenderer::getPosSize( const AnimationBitmap& rAnimationBitmap, Poi
 
     // Mirrored horizontally?
     if( mbIsMirroredHorizontally )
-        rPosPix.setX( maSzPix.Width() - 1 - aPt2.X() );
+        rPosPix.setX( maSizePx.Width() - 1 - aPt2.X() );
 
     // Mirrored vertically?
     if( mbIsMirroredVertically )
-        rPosPix.setY( maSzPix.Height() - 1 - aPt2.Y() );
+        rPosPix.setY( maSizePx.Height() - 1 - aPt2.Y() );
 }
 
 void AnimationRenderer::drawToIndex( sal_uLong nIndex )
@@ -156,7 +156,7 @@ void AnimationRenderer::drawToIndex( sal_uLong nIndex )
     if (!maClip.IsNull())
         xOldClip = pRenderContext->GetClipRegion();
 
-    aVDev->SetOutputSizePixel( maSzPix, false );
+    aVDev->SetOutputSizePixel( maSizePx, false );
     nIndex = std::min( nIndex, static_cast<sal_uLong>(mpParent->Count()) - 1 );
 
     for( sal_uLong i = 0; i <= nIndex; i++ )
@@ -165,7 +165,7 @@ void AnimationRenderer::drawToIndex( sal_uLong nIndex )
     if (xOldClip)
         pRenderContext->SetClipRegion( maClip );
 
-    pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, *aVDev );
+    pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSizePx, *aVDev );
     if (pGuard)
         pGuard->SetPaintRect(tools::Rectangle(maDispPt, maDispSz));
 
@@ -231,8 +231,8 @@ void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
         if( !pVDev )
         {
             pDev = VclPtr<VirtualDevice>::Create();
-            pDev->SetOutputSizePixel( maSzPix, false );
-            pDev->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *pRenderContext );
+            pDev->SetOutputSizePixel( maSizePx, false );
+            pDev->DrawOutDev( Point(), maSizePx, maDispPt, maDispSz, *pRenderContext );
         }
         else
             pDev = pVDev;
@@ -242,7 +242,7 @@ void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
         {
             meLastDisposal = Disposal::Back;
             maRestPt = Point();
-            maRestSz = maSzPix;
+            maRestSz = maSizePx;
         }
 
         // restore
@@ -280,7 +280,7 @@ void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
             if (xOldClip)
                 pRenderContext->SetClipRegion( maClip );
 
-            pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, *pDev );
+            pRenderContext->DrawOutDev( maDispPt, maDispSz, Point(), maSizePx, *pDev );
             if (pGuard)
                 pGuard->SetPaintRect(tools::Rectangle(maDispPt, maDispSz));
 
@@ -300,7 +300,7 @@ void AnimationRenderer::repaint()
 {
     const bool bOldPause = mbIsPaused;
 
-    mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSzPix);
+    mpRenderContext->SaveBackground(*mpBackground, maDispPt, maDispSz, maSizePx);
 
     mbIsPaused = false;
     drawToIndex( mnActIndex );
@@ -312,7 +312,7 @@ AnimationData* AnimationRenderer::createAnimationData() const
     AnimationData* pDataItem = new AnimationData;
 
     pDataItem->aStartOrg = maPt;
-    pDataItem->aStartSize = maSz;
+    pDataItem->aStartSize = maLogicalSize;
     pDataItem->pOutDev = mpRenderContext;
     pDataItem->pRendererData = const_cast<AnimationRenderer *>(this);
     pDataItem->nRendererId = mnRendererId;

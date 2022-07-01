@@ -53,8 +53,8 @@ private:
     Point           maPt;
     Point           maDispPt;
     Point           maRestPt;
-    Size            maSz;
-    Size            maSzPix;
+    Size            maLogicalSize;
+    Size            maSizePx;
     Size            maDispSz;
     Size            maRestSz;
     vcl::Region     maClip;
@@ -84,7 +84,7 @@ public:
 
     const Point&    GetOriginPosition() const { return maPt; }
 
-    const Size&     getOutSizePix() const { return maSzPix; }
+    const Size&     getOutSizePix() const { return maSizePx; }
 
     void            pause( bool bIsPaused ) { mbIsPaused = bIsPaused; }
     bool            isPause() const { return mbIsPaused; }
