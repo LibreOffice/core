@@ -700,7 +700,7 @@ void ImplStyleData::SetStandardStyles()
     maMenuBarRolloverColor      = COL_BLUE;
     maMenuBorderColor           = COL_LIGHTGRAY;
     maMenuTextColor             = COL_BLACK;
-    maListBoxWindowBackgroundColor = COL_LIGHTGRAY;
+    maListBoxWindowBackgroundColor = COL_WHITE;
     maListBoxWindowTextColor    = COL_BLACK;
     maListBoxWindowHighlightColor = COL_BLUE;
     maListBoxWindowHighlightTextColor = COL_WHITE;
