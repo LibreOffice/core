@@ -2852,7 +2852,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:element>
   </rng:define>
 
-  <!-- TODO(vmiklos) no proposal -->
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4131 Inline content controls for text documents -->
   <rng:define name="paragraph-content" combine="choice">
     <rng:element name="loext:content-control">
       <rng:optional>
