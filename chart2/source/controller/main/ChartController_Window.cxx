@@ -1020,14 +1020,18 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             aMenuName = m_pDrawViewWrapper->IsTextEdit() ? std::u16string_view( u"drawtext" ) : std::u16string_view( u"draw" );
         else
         {
+            ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
+
             // todo: the context menu should be specified by an xml file in uiconfig
             sal_Int16 nUniqueId = 1;
-            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Cut" );
-            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Copy" );
-            lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Paste" );
-            xPopupMenu->insertSeparator( -1 );
+            if (eObjectType != OBJECTTYPE_DATA_TABLE)
+            {
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Cut" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Copy" );
+                lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:Paste" );
+                xPopupMenu->insertSeparator( -1 );
+            }
 
-            ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
             rtl::Reference< Diagram > xDiagram = getFirstDiagram();
 
             OUString aFormatCommand( lcl_getFormatCommandForObjectCID( m_aSelection.getSelectedCID() ) );
@@ -1219,7 +1223,13 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteMajorGrid" );
                     if( bIsMinorGridVisible && !bIsSecondaryAxis )
                         lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteMinorGrid" );
+                    if (bIsAxisVisible)
+                        lcl_insertMenuCommand(xPopupMenu,  nUniqueId++, ".uno:InsertDataTable");
                 }
+            }
+            else if (eObjectType == OBJECTTYPE_DATA_TABLE)
+            {
+                lcl_insertMenuCommand(xPopupMenu,  nUniqueId++, ".uno:DeleteDataTable");
             }
 
             if( eObjectType == OBJECTTYPE_DATA_STOCK_LOSS )
