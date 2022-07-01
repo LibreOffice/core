@@ -1405,6 +1405,40 @@ void ComboBox::SetBorderStyle( WindowBorderStyle nBorderStyle )
     }
 }
 
+void ComboBox::SetHighlightColor( const Color& rColor )
+{
+    AllSettings aSettings(GetSettings());
+    StyleSettings aStyle(aSettings.GetStyleSettings());
+    aStyle.SetHighlightColor(rColor);
+    aSettings.SetStyleSettings(aStyle);
+    SetSettings(aSettings);
+
+    AllSettings aSettingsSubEdit(m_pImpl->m_pSubEdit->GetSettings());
+    StyleSettings aStyleSubEdit(aSettingsSubEdit.GetStyleSettings());
+    aStyleSubEdit.SetHighlightColor(rColor);
+    aSettingsSubEdit.SetStyleSettings(aStyleSubEdit);
+    m_pImpl->m_pSubEdit->SetSettings(aSettings);
+
+    m_pImpl->m_pImplLB->SetHighlightColor(rColor);
+}
+
+void ComboBox::SetHighlightTextColor( const Color& rColor )
+{
+    AllSettings aSettings(GetSettings());
+    StyleSettings aStyle(aSettings.GetStyleSettings());
+    aStyle.SetHighlightTextColor(rColor);
+    aSettings.SetStyleSettings(aStyle);
+    SetSettings(aSettings);
+
+    AllSettings aSettingsSubEdit(m_pImpl->m_pSubEdit->GetSettings());
+    StyleSettings aStyleSubEdit(aSettingsSubEdit.GetStyleSettings());
+    aStyleSubEdit.SetHighlightTextColor(rColor);
+    aSettingsSubEdit.SetStyleSettings(aStyleSubEdit);
+    m_pImpl->m_pSubEdit->SetSettings(aSettings);
+
+    m_pImpl->m_pImplLB->SetHighlightTextColor(rColor);
+}
+
 ImplListBoxWindow* ComboBox::GetMainWindow() const
 {
     return m_pImpl->m_pImplLB->GetMainWindow();

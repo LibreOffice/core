@@ -1702,6 +1702,46 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                     pWindow->GetOutDev()->SetLineColor( nColor );
             }
         break;
+        case BASEPROPERTY_HIGHLIGHT_COLOR:
+        {
+            Color nColor = 0;
+            if ( bVoid )
+            {
+                nColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
+            }
+            else
+            {
+                if (!(Value >>= nColor))
+                    break;
+            }
+
+            AllSettings aSettings(pWindow->GetSettings());
+            StyleSettings aStyle(aSettings.GetStyleSettings());
+            aStyle.SetHighlightColor(nColor);
+            aSettings.SetStyleSettings(aStyle);
+            pWindow->SetSettings(aSettings);
+        }
+        break;
+        case BASEPROPERTY_HIGHLIGHT_TEXT_COLOR:
+        {
+            Color nColor = 0;
+            if (bVoid)
+            {
+                nColor = Application::GetSettings().GetStyleSettings().GetHighlightTextColor();
+            }
+            else
+            {
+                if (!(Value >>= nColor))
+                    break;
+            }
+
+            AllSettings aSettings(pWindow->GetSettings());
+            StyleSettings aStyle(aSettings.GetStyleSettings());
+            aStyle.SetHighlightTextColor(nColor);
+            aSettings.SetStyleSettings(aStyle);
+            pWindow->SetSettings(aSettings);
+        }
+        break;
         case BASEPROPERTY_BORDER:
         {
             WinBits nStyle = pWindow->GetStyle();
@@ -2026,6 +2066,12 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
             break;
             case BASEPROPERTY_LINECOLOR:
                 aProp <<= GetWindow()->GetOutDev()->GetLineColor();
+            break;
+            case BASEPROPERTY_HIGHLIGHT_COLOR:
+                aProp <<= GetWindow()->GetSettings().GetStyleSettings().GetHighlightColor();
+            break;
+            case BASEPROPERTY_HIGHLIGHT_TEXT_COLOR:
+                aProp <<= GetWindow()->GetSettings().GetStyleSettings().GetHighlightTextColor();
             break;
             case BASEPROPERTY_BORDER:
             {

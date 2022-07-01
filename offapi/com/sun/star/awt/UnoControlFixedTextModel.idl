@@ -136,6 +136,18 @@ published service UnoControlFixedTextModel
         @since OOo 2.4
      */
     [optional, property] boolean NoLabel;
+
+    /** specifies the background color (RGB) of selected text in the control which is highlighted.
+
+        @since LibreOffice 7.5
+     */
+    [optional, property] com::sun::star::util::Color HighlightColor;
+
+    /** specifies the text color (RGB) of selected text in the control which is highlighted.
+
+        @since LibreOffice 7.5
+     */
+    [optional, property] com::sun::star::util::Color HighlightTextColor;
 };
 
 

@@ -208,7 +208,9 @@ css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             case BASEPROPERTY_SCROLLVALUE:
             case BASEPROPERTY_VISIBLESIZE:
             case BASEPROPERTY_BACKGROUNDCOLOR:
-            case BASEPROPERTY_FILLCOLOR:            break;  // Void
+            case BASEPROPERTY_FILLCOLOR:
+            case BASEPROPERTY_HIGHLIGHT_COLOR:
+            case BASEPROPERTY_HIGHLIGHT_TEXT_COLOR:            break;  // Void
 
             case BASEPROPERTY_FONTRELIEF:
             case BASEPROPERTY_FONTEMPHASISMARK:

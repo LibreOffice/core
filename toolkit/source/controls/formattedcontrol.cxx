@@ -132,6 +132,8 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
         ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
         ImplRegisterProperty( BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR );
+        ImplRegisterProperty( BASEPROPERTY_HIGHLIGHT_COLOR );
+        ImplRegisterProperty( BASEPROPERTY_HIGHLIGHT_TEXT_COLOR );
 
         Any aTreatAsNumber;
         aTreatAsNumber <<= true;
