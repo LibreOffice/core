@@ -11,8 +11,10 @@
 
 #include <vcl/weldutils.hxx>
 #include <vcl/event.hxx>
+#include <vcl/decoview.hxx>
 
 #include <edtwin.hxx>
+#include <dview.hxx>
 
 SwContentControlButton::SwContentControlButton(
     SwEditWin* pEditWin, const std::shared_ptr<SwContentControl>& pContentControl)
@@ -107,7 +109,7 @@ void SwContentControlButton::Paint(vcl::RenderContext& rRenderContext, const too
 
     // Draw the button next to the frame
     Point aButtonPos(aFrameRect.TopLeft());
-    aButtonPos.AdjustX(aFrameRect.GetSize().getWidth() - 1);
+    aButtonPos.AdjustX(aFrameRect.GetSize().getWidth() - nPadding * 2);
     Size aButtonSize(aFrameRect.GetSize());
     aButtonSize.setWidth(GetSizePixel().getWidth() - aFrameRect.getWidth() - nPadding);
     const tools::Rectangle aButtonRect(tools::Rectangle(aButtonPos, aButtonSize));
@@ -118,21 +120,26 @@ void SwContentControlButton::Paint(vcl::RenderContext& rRenderContext, const too
     rRenderContext.DrawRect(aButtonRect);
 
     // the arrowhead
-    rRenderContext.SetLineColor(aLineColor);
-    rRenderContext.SetFillColor(aLineColor);
-
-    Point aCenter(aButtonPos.X() + (aButtonSize.Width() / 2),
-                  aButtonPos.Y() + (aButtonSize.Height() / 2));
-    tools::Long nMinWidth = 4;
-    tools::Long nMinHeight = 2;
-    Size aArrowSize(std::max(aButtonSize.Width() / 4, nMinWidth),
-                    std::max(aButtonSize.Height() / 10, nMinHeight));
-
-    tools::Polygon aPoly(3);
-    aPoly.SetPoint(Point(aCenter.X() - aArrowSize.Width(), aCenter.Y() - aArrowSize.Height()), 0);
-    aPoly.SetPoint(Point(aCenter.X() + aArrowSize.Width(), aCenter.Y() - aArrowSize.Height()), 1);
-    aPoly.SetPoint(Point(aCenter.X(), aCenter.Y() + aArrowSize.Height()), 2);
-    rRenderContext.DrawPolygon(aPoly);
+    DecorationView aDecoView(&rRenderContext);
+    tools::Rectangle aSymbolRect(aButtonRect);
+    // 20% distance to the left and right button border
+    const tools::Long nBorderDistanceLeftAndRight = aSymbolRect.GetWidth() / 4;
+    aSymbolRect.AdjustLeft(nBorderDistanceLeftAndRight);
+    aSymbolRect.AdjustRight(-nBorderDistanceLeftAndRight);
+    // 20% distance to the top and bottom button border
+    const tools::Long nBorderDistanceTopAndBottom = aSymbolRect.GetHeight() / 4;
+    aSymbolRect.AdjustTop(nBorderDistanceTopAndBottom);
+    aSymbolRect.AdjustBottom(-nBorderDistanceTopAndBottom);
+    AntialiasingFlags eAntialiasing = rRenderContext.GetAntialiasing();
+    if (SwDrawView::IsAntiAliasing())
+    {
+        rRenderContext.SetAntialiasing(eAntialiasing | AntialiasingFlags::Enable);
+    }
+    aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, GetTextColor(), DrawSymbolFlags::NONE);
+    if (SwDrawView::IsAntiAliasing())
+    {
+        rRenderContext.SetAntialiasing(eAntialiasing);
+    }
 }
 
 WindowHitTest SwContentControlButton::ImplHitTest(const Point& rFramePos)
