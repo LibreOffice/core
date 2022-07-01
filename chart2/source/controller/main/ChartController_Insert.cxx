@@ -25,6 +25,7 @@
 #include <dlg_InsertLegend.hxx>
 #include <dlg_InsertErrorBars.hxx>
 #include <dlg_InsertTitle.hxx>
+#include <dlg_InsertDataTable.hxx>
 #include <dlg_ObjectProperties.hxx>
 
 #include <ChartModel.hxx>
@@ -56,6 +57,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/ActionDescriptionProvider.hxx>
 
 #include <tools/diagnose_ex.h>
@@ -159,18 +161,66 @@ void ChartController::executeDispatch_InsertGrid()
 
 void ChartController::executeDispatch_OpenInsertDataTableDialog()
 {
-    uno::Reference<chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(getModel());
     SolarMutexGuard aGuard;
-    if (xDiagram->getDataTable().is())
+    uno::Reference<chart2::XDiagram> xDiagram = ChartModelHelper::findDiagram(getModel());
+
+    InsertDataTableDialog aDialog(GetChartFrame());
     {
-        xDiagram->setDataTable(uno::Reference<chart2::XDataTable>());
-    }
-    else
-    {
-        uno::Reference<chart2::XDataTable> xDataTable(new DataTable);
+        // init values
+        DataTableDialogData aData;
+        auto xDataTable = xDiagram->getDataTable();
+        aData.mbShow = xDataTable.is();
         if (xDataTable.is())
         {
-            xDiagram->setDataTable(xDataTable);
+            uno::Reference<beans::XPropertySet> xProperties(xDataTable, uno::UNO_QUERY);
+
+            uno::Any aAny = xProperties->getPropertyValue("HBorder");
+            if (aAny.has<bool>())
+                aData.mbHorizontalBorders = aAny.get<bool>();
+
+            aAny = xProperties->getPropertyValue("VBorder");
+            if (aAny.has<bool>())
+                aData.mbVerticalBorders = aAny.get<bool>();
+
+            aAny = xProperties->getPropertyValue("Outline");
+            if (aAny.has<bool>())
+                aData.mbOutline = aAny.get<bool>();
+
+            aAny = xProperties->getPropertyValue("Keys");
+            if (aAny.has<bool>())
+                aData.mbKeys = aAny.get<bool>();
+        }
+        aDialog.init(aData);
+    }
+
+    // show the dialog
+    if (aDialog.run() == RET_OK)
+    {
+        auto& rDialogData = aDialog.getDataTableDialogData();
+
+        auto xDataTable = xDiagram->getDataTable();
+        if (!rDialogData.mbShow && xDataTable.is())
+        {
+            xDiagram->setDataTable(uno::Reference<chart2::XDataTable>());
+        }
+        else if (rDialogData.mbShow && !xDataTable.is())
+        {
+            uno::Reference<chart2::XDataTable> xNewDataTable(new DataTable);
+            if (xNewDataTable.is())
+            {
+                xDiagram->setDataTable(xNewDataTable);
+            }
+        }
+
+        // Set the properties
+        xDataTable = xDiagram->getDataTable();
+        if (rDialogData.mbShow && xDataTable.is())
+        {
+            uno::Reference<beans::XPropertySet> xProperties(xDataTable, uno::UNO_QUERY);
+            xProperties->setPropertyValue("HBorder" , uno::Any(rDialogData.mbHorizontalBorders));
+            xProperties->setPropertyValue("VBorder" , uno::Any(rDialogData.mbVerticalBorders));
+            xProperties->setPropertyValue("Outline" , uno::Any(rDialogData.mbOutline));
+            xProperties->setPropertyValue("Keys" , uno::Any(rDialogData.mbKeys));
         }
     }
 }
