@@ -176,19 +176,21 @@ bool Animation::Start(OutputDevice& rOut, const Point& rDestPt, const Size& rDes
             auto itAnimView = std::find_if(
                 maRenderers.begin(), maRenderers.end(),
                 [&rOut, nRendererId](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
-                    return pAnimView->matches(&rOut, nRendererId);
+                    return pAnimView->Matches(&rOut, nRendererId);
                 });
 
             if (itAnimView != maRenderers.end())
             {
                 if ((*itAnimView)->GetOriginPosition() == rDestPt
-                    && (*itAnimView)->getOutSizePix() == rOut.LogicToPixel(rDestSz))
+                    && (*itAnimView)->GetOutSizePix() == rOut.LogicToPixel(rDestSz))
                 {
-                    (*itAnimView)->repaint();
+                    (*itAnimView)->Repaint();
                     differs = false;
                 }
                 else
+                {
                     maRenderers.erase(itAnimView);
+                }
             }
 
             if (maRenderers.empty())
@@ -222,7 +224,7 @@ void Animation::Stop(const OutputDevice* pOut, tools::Long nRendererId)
     maRenderers.erase(
         std::remove_if(maRenderers.begin(), maRenderers.end(),
                        [=](const std::unique_ptr<AnimationRenderer>& pAnimView) -> bool {
-                           return pAnimView->matches(pOut, nRendererId);
+                           return pAnimView->Matches(pOut, nRendererId);
                        }),
         maRenderers.end());
 
@@ -293,7 +295,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
             std::vector<std::unique_ptr<AnimationData>> aDataItems;
             // create AnimationData-List
             for (auto const& i : maRenderers)
-                aDataItems.emplace_back(i->createAnimationData());
+                aDataItems.emplace_back(i->CreateAnimationData());
 
             maNotifyLink.Call(this);
 
@@ -315,13 +317,13 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
                 }
 
                 pRenderer->Pause(pDataItem->mbIsPaused);
-                pRenderer->setMarked(true);
+                pRenderer->SetMarked(true);
             }
 
             // delete all unmarked views
             auto removeStart
                 = std::remove_if(maRenderers.begin(), maRenderers.end(),
-                                 [](const auto& pRenderer) { return !pRenderer->isMarked(); });
+                                 [](const auto& pRenderer) { return !pRenderer->IsMarked(); });
             maRenderers.erase(removeStart, maRenderers.cend());
 
             // check if every remaining view is paused
@@ -330,7 +332,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
             // reset marked state
             std::for_each(maRenderers.cbegin(), maRenderers.cend(),
-                          [](const auto& pRenderer) { pRenderer->setMarked(false); });
+                          [](const auto& pRenderer) { pRenderer->SetMarked(false); });
         }
 
         if (maRenderers.empty())
@@ -368,7 +370,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
 
             // Paint all views.
             std::for_each(maRenderers.cbegin(), maRenderers.cend(),
-                          [this](const auto& pRenderer) { pRenderer->draw(mnPos); });
+                          [this](const auto& pRenderer) { pRenderer->Draw(mnPos); });
             /*
              * If a view is marked, remove the view, because
              * area of output lies out of display area of window.
@@ -376,7 +378,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer*, void)
              */
             auto removeStart
                 = std::remove_if(maRenderers.begin(), maRenderers.end(),
-                                 [](const auto& pRenderer) { return pRenderer->isMarked(); });
+                                 [](const auto& pRenderer) { return pRenderer->IsMarked(); });
             maRenderers.erase(removeStart, maRenderers.cend());
 
             // stop or restart timer
