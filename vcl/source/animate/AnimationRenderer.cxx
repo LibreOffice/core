@@ -28,11 +28,11 @@
 
 AnimationRenderer::AnimationRenderer( Animation* pParent, OutputDevice* pOut,
                             const Point& rPt, const Size& rSz,
-                            sal_uLong nRendererId,
+                            sal_uLong mnRendererId,
                             OutputDevice* pFirstFrameOutDev ) :
         mpParent        ( pParent ),
         mpRenderContext ( pFirstFrameOutDev ? pFirstFrameOutDev : pOut ),
-        mnRendererId     ( nRendererId ),
+        mnRendererId     ( mnRendererId ),
         maPt            ( rPt ),
         maLogicalSize            ( rSz ),
         maSizePx         ( mpRenderContext->LogicToPixel( maLogicalSize ) ),
@@ -99,7 +99,7 @@ AnimationRenderer::~AnimationRenderer()
 
 bool AnimationRenderer::matches(const OutputDevice* pOut, tools::Long nRendererId) const
 {
-    return (!pOut || pOut == mpRenderContext) && (nRendererId == 0 || nRendererId == mnRendererId);
+    return (!pOut || pOut == mpRenderContext) && (mnRendererId == 0 || mnRendererId == nRendererId);
 }
 
 void AnimationRenderer::getPosSize( const AnimationBitmap& rAnimationBitmap, Point& rPosPix, Size& rSizePix )
@@ -311,11 +311,11 @@ AnimationData* AnimationRenderer::createAnimationData() const
 {
     AnimationData* pDataItem = new AnimationData;
 
-    pDataItem->aStartOrg = maPt;
-    pDataItem->aStartSize = maLogicalSize;
-    pDataItem->pOutDev = mpRenderContext;
-    pDataItem->pRendererData = const_cast<AnimationRenderer *>(this);
-    pDataItem->nRendererId = mnRendererId;
+    pDataItem->maOriginStartPt = maPt;
+    pDataItem->maStartSize = maLogicalSize;
+    pDataItem->mpRenderContext = mpRenderContext;
+    pDataItem->mpRendererData = const_cast<AnimationRenderer *>(this);
+    pDataItem->mnRendererId = mnRendererId;
     pDataItem->mbIsPaused = mbIsPaused;
 
     return pDataItem;
