@@ -50,19 +50,17 @@ namespace basegfx::internal
         {
             const sal_Int64 nStrSize = rStr.size();
             sal_Unicode aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
-            OUStringBuffer sNumberString;
+            const sal_Int32 nStartPos = io_rPos;
 
             // sign
             if(aChar == '+' || aChar == '-')
             {
-                sNumberString.append(rStr[io_rPos]);
                 aChar = rStr[++io_rPos];
             }
 
             // numbers before point
             while('0' <= aChar && '9' >= aChar)
             {
-                sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
                 aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
             }
@@ -70,7 +68,6 @@ namespace basegfx::internal
             // point
             if(aChar == '.')
             {
-                sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
                 aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
             }
@@ -78,7 +75,6 @@ namespace basegfx::internal
             // numbers after point
             while ('0' <= aChar && '9' >= aChar)
             {
-                sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
                 aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
             }
@@ -86,14 +82,12 @@ namespace basegfx::internal
             // 'e'
             if(aChar == 'e' || aChar == 'E')
             {
-                sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
                 aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
 
                 // sign for 'e'
                 if(aChar == '+' || aChar == '-')
                 {
-                    sNumberString.append(rStr[io_rPos]);
                     io_rPos++;
                     aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
                 }
@@ -101,16 +95,17 @@ namespace basegfx::internal
                 // number for 'e'
                 while('0' <= aChar && '9' >= aChar)
                 {
-                    sNumberString.append(rStr[io_rPos]);
                     io_rPos++;
                     aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
                 }
             }
 
-            if(sNumberString.getLength())
+            const sal_Int32 nLen = io_rPos - nStartPos;
+            if(nLen)
             {
+                rStr = rStr.substr(nStartPos, nLen);
                 rtl_math_ConversionStatus eStatus;
-                o_fRetval = ::rtl::math::stringToDouble( sNumberString,
+                o_fRetval = ::rtl::math::stringToDouble( rStr,
                                                             '.',
                                                             ',',
                                                             &eStatus );
