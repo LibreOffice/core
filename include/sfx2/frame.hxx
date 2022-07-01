@@ -70,7 +70,7 @@ class SFX2_DLLPUBLIC SfxFrame final : public SvCompatWeakBase<SfxFrame>
 
 private:
     std::unique_ptr< SfxFrame_Impl >     m_pImpl;
-    VclPtr<vcl::Window> pWindow;
+    VclPtr<vcl::Window> m_pWindow;
 
     virtual             ~SfxFrame();
 
@@ -82,7 +82,7 @@ public:
                         CreateBlankFrame();
     static SfxFrame*    CreateHidden( SfxObjectShell const & rDoc, vcl::Window& rWindow, SfxInterfaceId nViewId );
 
-    vcl::Window&        GetWindow() const { return *pWindow;}
+    vcl::Window&        GetWindow() const { return *m_pWindow;}
     void                CancelTransfers();
     bool                DoClose();
 
