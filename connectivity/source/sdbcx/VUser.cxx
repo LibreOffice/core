@@ -22,6 +22,7 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/unreachable.hxx>
 
 
 using namespace connectivity;
@@ -113,15 +114,12 @@ Reference< XNameAccess > SAL_CALL OUser::getGroups(  )
     return m_pGroups.get();
 }
 
-
-SAL_WNOUNREACHABLE_CODE_PUSH
-
 sal_Int32 SAL_CALL OUser::getPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
     ::dbtools::throwFeatureNotImplementedSQLException( "XAuthorizable::changePassword", *this );
-    return 0;
+    O3TL_UNREACHABLE;
 }
 
 sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ )
@@ -129,11 +127,8 @@ sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const OUString& /*objName*/, s
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
     ::dbtools::throwFeatureNotImplementedSQLException( "XAuthorizable::getGrantablePrivileges", *this );
-    return 0;
+    O3TL_UNREACHABLE;
 }
-
-SAL_WNOUNREACHABLE_CODE_POP
-
 
 void SAL_CALL OUser::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ )
 {
