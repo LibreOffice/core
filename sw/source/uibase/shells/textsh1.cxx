@@ -253,12 +253,6 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std:
 
 }
 
-static short lcl_AskRedlineFlags(weld::Window *pWin)
-{
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pWin, "modules/swriter/ui/queryredlinedialog.ui"));
-    std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QueryRedlineDialog"));
-    return xQBox->run();
-}
 
 static void sw_ParagraphDialogResult(SfxItemSet* pSet, SwWrtShell &rWrtSh, SfxRequest& rReq, SwPaM* pPaM)
 {
@@ -756,27 +750,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<AbstractSwModalRedlineAcceptDlg> xDlg(pFact->CreateSwModalRedlineAcceptDlg(GetView().GetEditWin().GetFrameWeld()));
 
-            switch (lcl_AskRedlineFlags(GetView().GetFrameWeld()))
-            {
-                case RET_OK:
-                {
-                    xDlg->AcceptAll(true);
-                    SfxRequest aReq( pVFrame, FN_AUTOFORMAT_APPLY );
-                    aReq.Done();
-                    rReq.Ignore();
-                    break;
-                }
-
-                case RET_CANCEL:
-                    xDlg->AcceptAll(false);
-                    rReq.Ignore();
-                    break;
-
-                case 102:
-                    xDlg->Execute();
-                    rReq.Done();
-                    break;
-            }
+            xDlg->Execute();
+            rReq.Done();
         }
         break;
 
