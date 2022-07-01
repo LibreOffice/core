@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libnumbertext, \
     external/libnumbertext/MSVCNonBMPBug.patch1 \
     external/libnumbertext/WinUnicodePath.patch1 \
     external/libnumbertext/EmptyString.patch1 \
+    external/libnumbertext/deprecated.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
