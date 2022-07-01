@@ -4158,7 +4158,7 @@
               <desc>Specifies whether text is formatted in bold or underlined when the corresponding characters are entered (*bold*, /italic/, -strikeout-, _underline_).</desc>
               <label>Apply underline or bold</label>
             </info>
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="SetInetAttribute" oor:type="xs:boolean" oor:nillable="false">
             <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - URL recognition -->
