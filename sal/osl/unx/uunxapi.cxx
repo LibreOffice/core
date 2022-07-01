@@ -363,7 +363,7 @@ int osl::mkdir(const OString& path, mode_t mode)
 
 int open_c(const OString& path, int oflag, int mode)
 {
-    accessFilePathState *state = prepare_to_access_file_path(cpPath);
+    accessFilePathState *state = prepare_to_access_file_path(path.getStr());
 
     int result = open(path.getStr(), oflag, mode);
     int saved_errno = errno;
@@ -382,9 +382,10 @@ int open_c(const OString& path, int oflag, int mode)
         // scoped bookmark for it so that we can access the file in
         // the future, too. (For the "Recent Files" functionality.)
         const char *sandbox = [NSHomeDirectory() UTF8String];
-        if (!(strncmp(sandbox, cpPath, strlen(sandbox)) == 0 &&
-              cpPath[strlen(sandbox)] == '/'))
+        if (!(strncmp(sandbox, path.getStr(), strlen(sandbox)) == 0 &&
+              path[strlen(sandbox)] == '/'))
         {
+            auto cpPath = path.getStr();
             NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:cpPath]];
             NSData *data = [url bookmarkDataWithOptions:NSURLBookmarkCreationWithSecurityScope
                          includingResourceValuesForKeys:nil
@@ -399,7 +400,7 @@ int open_c(const OString& path, int oflag, int mode)
     }
 #endif
 
-    done_accessing_file_path(path, state);
+    done_accessing_file_path(path.getStr(), state);
 
     errno = saved_errno;
 
