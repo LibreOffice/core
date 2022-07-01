@@ -466,7 +466,8 @@ void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape,
         uno::Reference<beans::XPropertySet> xPropertySet(rShape, uno::UNO_QUERY);
         if (xPropertySet.is())
         {
-            xPropertySet->setPropertyValue("HandlePathObjScale", uno::Any(true));
+            static constexpr OUStringLiteral sHandlePathObjScale = u"HandlePathObjScale";
+            xPropertySet->setPropertyValue(sHandlePathObjScale, uno::Any(true));
         }
     }
 }
