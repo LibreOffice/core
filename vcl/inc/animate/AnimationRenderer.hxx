@@ -35,7 +35,7 @@ struct AnimationData
     VclPtr<OutputDevice>   pOutDev;
     void*           pRendererData;
     tools::Long     nRendererId;
-    bool            bPause;
+    bool            mbIsPaused;
 
     AnimationData();
 };
@@ -86,8 +86,8 @@ public:
 
     const Size&     getOutSizePix() const { return maLogicalSizePix; }
 
-    void            pause( bool bIsPaused ) { mbIsPaused = bIsPaused; }
-    bool            isPause() const { return mbIsPaused; }
+    void            Pause( bool bIsPaused ) { mbIsPaused = bIsPaused; }
+    bool            IsPaused() const { return mbIsPaused; }
 
     void            setMarked( bool bIsMarked ) { mbIsMarked = bIsMarked; }
     bool            isMarked() const { return mbIsMarked; }
