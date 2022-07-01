@@ -553,6 +553,7 @@ namespace basegfx::utils
             const css::drawing::PointSequenceSequence& rPointSequenceSequenceSource)
         {
             B2DPolyPolygon aRetval;
+            aRetval.reserve(rPointSequenceSequenceSource.getLength());
             const css::drawing::PointSequence* pPointSequence = rPointSequenceSequenceSource.getConstArray();
             const css::drawing::PointSequence* pPointSeqEnd = pPointSequence + rPointSequenceSequenceSource.getLength();
 
