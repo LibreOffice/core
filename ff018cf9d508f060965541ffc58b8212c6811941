@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96b4f342_4d798373",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-01T14:26:03Z",
+      "side": 1,
+      "message": "Thanks a lot, this is very helpful! I have to admit that I know little about how all of this works together, and I\u0027m not a real a11y expert either.\n\n\u003e Interesting. Is there no way to tell a11y to use the tooltip instead of the label, which probably will make more sense?\n\nDoing so would be easy: in `VCLXAccessibleToolBoxItem::GetText`, just drop the\n\n    sRet \u003d m_pToolBox-\u003eGetItemText( m_nItemId );\n    \n(and then superfluous check in the next line), since there is already a fallback to use the quick help text (\u003d tooltip). (and then take a closer look and consider what to do with the other places using the item text)\n\nThe question is whether generally using the tooltip is a good idea. For those examples mentioned in tdf#149789 and the commit msg, that would fit, since those are concise. If that\u0027s how tooltips for toolbar items are always designed, maybe that\u0027s a good way forward.\nHowever, if those tooltips can also be rather long help descriptions (as I think they can at least be elsewhere), I think it wouldn\u0027t fit too well. (See also my comment in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d113488#c1 ).\n\n\n\u003e Keep in mind that the menu label isn\u0027t guaranteed to be more complete. If you search *Commands.xcu files for \"ContextLabel\" (which is what being pulled by the \"Label\" property), you\u0027ll see many cases where the opposite is true. It also won\u0027t strip accelerators and ellipsis, which we probably don\u0027t want to see in toolbar labels.\n\nThanks for the hint. My presumably incorrect assumption that the label would be more complete was built on the comment in `vcl::CommandInfoProvider::GetMenuLabelForCommand`, and the fact that the previously used `vcl::CommandInfoProvider::GetLabelForCommand` uses `\"Name\"`:\n\n    // Here we want to use \"Label\", not \"Name\". \"Name\" is a stripped-down version of \"Label\" without accelerators\n    // and ellipsis. In the menu, we want to have those accelerators and ellipsis.\n\n\n\u003e (...) Ideally we should just restore the long base labels we used to have, and move the shortened NB labels to a dedicated property (or aliases, or whichever other solution we invent).\n\u003e \n\u003e In any case, please remember to update the documentation at officecfg/registry/schema/org/openoffice/Office/UI/Commands.xcs, whenever you make any such changes.\n\nLooking into officecfg/registry/schema/org/openoffice/Office/UI/Commands.xcs, the description for \"Label\" sounds to me like it might best fit for the a11y case (\"A localized text that describes the command.\"). But then, we currently run into the issue you mention that the text in there has been shortened.\n\nTherefore, with my limited understanding of the whole topic, your suggestion to restore the longer labels and use a specific property for shorter ones for the notebookbar sounds very good to me, and would obsolete this Gerrit change.\n\nThat\u0027s something over the top of my head, though.\n\nAny suggestions on how to continue are much appreciated.",
+      "parentUuid": "b81a6336_27fd0a57",
+      "revId": "ff018cf9d508f060965541ffc58b8212c6811941",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "573410e7_07f6f38c",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-07-01T09:51:09Z",
       "side": 1,
       "message": "Can this be ever true? The menu label pulls \"ContextLabel\", or \"Label\" if the former isn\u0027t defined. So when empty - it means that \"Label\" isn\u0027t defined, which should make \"Name\" also be empty.",
+      "revId": "ff018cf9d508f060965541ffc58b8212c6811941",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03f3355e_40640393",
+        "filename": "framework/source/uielement/toolbarmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-01T14:26:03Z",
+      "side": 1,
+      "message": "After getting deeper into this: You\u0027re right. I previously didn\u0027t really understand how all of those work together, and left it as a potential fallback.",
+      "parentUuid": "573410e7_07f6f38c",
       "revId": "ff018cf9d508f060965541ffc58b8212c6811941",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
