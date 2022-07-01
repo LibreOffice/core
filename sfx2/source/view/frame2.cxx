@@ -290,7 +290,7 @@ SfxFrame* SfxFrame::Create( const Reference < XFrame >& i_rFrame )
 
 SfxFrame::SfxFrame( vcl::Window& i_rContainerWindow )
     :SvCompatWeakBase<SfxFrame>( this )
-    ,pWindow( nullptr )
+    ,m_pWindow( nullptr )
 {
     Construct_Impl();
 
@@ -298,13 +298,13 @@ SfxFrame::SfxFrame( vcl::Window& i_rContainerWindow )
     InsertTopFrame_Impl( this );
     m_pImpl->pExternalContainerWindow = &i_rContainerWindow;
 
-    pWindow = VclPtr<SfxFrameWindow_Impl>::Create( this, i_rContainerWindow );
+    m_pWindow = VclPtr<SfxFrameWindow_Impl>::Create( this, i_rContainerWindow );
 
     // always show pWindow, which is the ComponentWindow of the XFrame we live in
     // nowadays, since SfxFrames can be created with an XFrame only, hiding or showing the complete XFrame
     // is not done at level of the container window, not at SFX level. Thus, the component window can
     // always be visible.
-    pWindow->Show();
+    m_pWindow->Show();
 }
 
 void SfxFrame::SetPresentationMode( bool bSet )

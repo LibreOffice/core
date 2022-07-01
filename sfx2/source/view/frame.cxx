@@ -73,7 +73,7 @@ void SfxFrame::Construct_Impl()
 SfxFrame::~SfxFrame()
 {
     RemoveTopFrame_Impl( this );
-    pWindow.disposeAndClear();
+    m_pWindow.disposeAndClear();
 
     auto it = std::find( gaFramesArr_Impl.begin(), gaFramesArr_Impl.end(), this );
     if ( it != gaFramesArr_Impl.end() )
