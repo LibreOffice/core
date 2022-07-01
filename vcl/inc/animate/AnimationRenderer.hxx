@@ -82,7 +82,7 @@ public:
 
     void            getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
 
-    const Point&    getOutPos() const { return maPt; }
+    const Point&    GetOriginPosition() const { return maPt; }
 
     const Size&     getOutSizePix() const { return maSzPix; }
 
