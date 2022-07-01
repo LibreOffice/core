@@ -1454,6 +1454,8 @@ void ToolBarManager::FillToolbarFromContainer( const Reference< XIndexAccess >& 
                         aTooltip = vcl::CommandInfoProvider::GetTooltipForCommand(aCommandURL, aProperties, m_xFrame);
 
                     if ( aLabel.isEmpty() )
+                        aLabel = vcl::CommandInfoProvider::GetMenuLabelForCommand(aProperties);
+                    if ( aLabel.isEmpty() )
                         aLabel = aString;
 
                     m_pImpl->InsertItem(nId, aString, aCommandURL, aTooltip, aLabel, nItemBits);
