@@ -886,10 +886,7 @@ SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetB
 
 SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const css::uno::Reference< css::style::XStyle >& xStyle )
 {
-    SfxUnoStyleSheet* pRet = dynamic_cast< SfxUnoStyleSheet* >( xStyle.get() );
-    if( !pRet )
-        pRet = comphelper::getFromUnoTunnel<SfxUnoStyleSheet>(xStyle);
-    return pRet;
+    return comphelper::getFromUnoTunnel<SfxUnoStyleSheet>(xStyle);
 }
 
 /**
