@@ -51,6 +51,24 @@
       "parentUuid": "1a8105ef_d178136d",
       "revId": "46869037d0fee5601815f3e8ff12764564ae3489",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dd22b79_fcb2ca6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-07-01T08:25:59Z",
+      "side": 1,
+      "message": "... but then the same commit made it to not remove entries from the vector, only nullify them. So the difference in behavior from this commit would be limited to adding listeners - those that were appended to the end in the middle of notifications will not get notified. Maybe that is OK, since the procedure already may skip those added at the previously removed positions that happened to be already processed by the loop.",
+      "parentUuid": "1a8105ef_d178136d",
+      "revId": "46869037d0fee5601815f3e8ff12764564ae3489",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
