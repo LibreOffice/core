@@ -24,8 +24,8 @@
 
 #include <assert.h>
 #include <atomic>
+#include <thread>
 
-#include <osl/thread.h>
 #include <osl/mutex.hxx>
 #include <comphelper/comphelperdllapi.h>
 
@@ -72,7 +72,7 @@ protected:
     sal_uInt32            m_nCount;
 
 private:
-    std::atomic<oslThreadIdentifier> m_nThreadId;
+    std::atomic<std::thread::id> m_nThreadId;
 
     SolarMutex(const SolarMutex&) = delete;
     SolarMutex& operator=(const SolarMutex&) = delete;
