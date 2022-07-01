@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17e31083_63cc8b9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-07-01T12:25:54Z",
+      "side": 1,
+      "message": "Hi Eike,\n\nThe patch is getting too large (for me), so I propose a step by step approach, see comment above ScInterpreter::ScXLookup() in sc/source/core/tool/interpr1.cxx .\nMy first aim is get the patch working functionally (and \u0027ignore\u0027 performance) and then improve on it. I hope that this will reduce the size of the patches.\n\nMy questions now are:\n-I have based the code now on the way ScMatch was implemented and combined the code as much as possible. Do you think this approach actually is better than my previous on (in which I converted all ranges to matrix to reduce the code)?\n-Do you agree that my suggested step-by-step approach is a gooed suggestion?\n-Can you give comments (including nit-picks, I don\u0027t mind) to my changes?\n\nAs before, I am not in a hurry.",
+      "revId": "769e6c78c56cdab6e8360fd17d0e931642c850cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
