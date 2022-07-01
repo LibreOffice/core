@@ -504,6 +504,17 @@
           <value xml:lang="en-US">Format Single Data Label...</value>
         </prop>
       </node>
+      <!-- data table -->
+      <node oor:name=".uno:InsertDataTable" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Data Table</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DeleteDataTable" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Delete Data Table</value>
+        </prop>
+      </node>
       <!-- data series and point -->
       <node oor:name=".uno:FormatDataSeries" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
