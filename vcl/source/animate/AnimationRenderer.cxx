@@ -316,7 +316,7 @@ AnimationData* AnimationRenderer::createAnimationData() const
     pDataItem->pOutDev = mpRenderContext;
     pDataItem->pRendererData = const_cast<AnimationRenderer *>(this);
     pDataItem->nRendererId = mnRendererId;
-    pDataItem->bPause = mbIsPaused;
+    pDataItem->mbIsPaused = mbIsPaused;
 
     return pDataItem;
 }
