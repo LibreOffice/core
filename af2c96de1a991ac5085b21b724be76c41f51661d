@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6197de67_3c6c7f21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-02T15:12:40Z",
+      "side": 1,
+      "message": "This revert may be reverted once the pb triggered (cf tdf#149819) will be fixed.",
+      "revId": "af2c96de1a991ac5085b21b724be76c41f51661d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
