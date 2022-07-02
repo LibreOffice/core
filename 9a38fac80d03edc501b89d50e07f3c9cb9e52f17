@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2badd46_46a19206",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-07-02T14:59:46Z",
+      "side": 1,
+      "message": "Thousand separator not imported if there is some embedded text in decimal part:\n- Expected: #,##0.000\" \"###\" \"###\n- Actual  : 0.000\" \"###\" \"###\n",
+      "revId": "9a38fac80d03edc501b89d50e07f3c9cb9e52f17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
