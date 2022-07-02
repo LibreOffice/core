@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_VIRDEV_HXX
 #define INCLUDED_VCL_VIRDEV_HXX
 
+#include <config_cairo_canvas.h>
+
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 #include <vcl/salgtype.hxx>
@@ -148,6 +150,10 @@ public:
 
     virtual             ~VirtualDevice() override;
     virtual void        dispose() override;
+
+#if ENABLE_CAIRO_CANVAS
+    cairo::SurfaceSharedPtr     CreateSurface(int x, int y, int width, int height) const override;
+#endif
 
     bool                CanEnableNativeWidget() const override;
 
