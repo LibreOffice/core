@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6031854f_2de5fe14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-02T19:58:48Z",
+      "side": 1,
+      "message": "Rebasing won\u0027t help here.\nYou need to remove the empty line as indicated by Hossein and by clang Jenkins:\n\"/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/solenv/bin/install-gdb-printers -a /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/instdir -c\ndiff --git a/vcl/source/control/thumbpos.hxx.index b/vcl/source/control/thumbpos.hxx.index.format\nindex d67e33e5984f..33d3d55f31f1 100644\n--- a/vcl/source/control/thumbpos.hxx.index\n+++ b/vcl/source/control/thumbpos.hxx.index.format\n@@ -18,5 +18,4 @@ inline tools::Long ImplMulDiv(tools::Long nNumber, tools::Long nNumerator, tools\n     return static_cast\u003ctools::Long\u003e(n);\n }\n \n-\n /* vim:set shiftwidth\u003d4 softtabstop\u003d4 expandtab: */\n\nERROR: The above differences were found between the code to commit \nand the clang-format rules. Tips:\n\n- You may run \u0027/opt/lo/bin/clang-format -i \u003cproblematic file\u003e\u0027 to fix up style automatically.\n- See solenv/clang-format/README on where to get the required version of clang-format binaries.\n- If you renamed an excluded file, update solenv/clang-format/excludelist accordingly to keep it excluded.\"",
+      "revId": "67c2225095d5883292dd38a555fcf9a37cbcc01a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
