@@ -149,6 +149,8 @@ public:
     virtual             ~VirtualDevice() override;
     virtual void        dispose() override;
 
+    cairo::SurfaceSharedPtr     CreateSurface(int x, int y, int width, int height) const override;
+
     bool                CanEnableNativeWidget() const override;
 
     virtual void        EnableRTL( bool bEnable = true ) override;
