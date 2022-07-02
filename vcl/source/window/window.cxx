@@ -882,6 +882,18 @@ bool WindowOutputDevice::AcquireGraphics() const
     return mpGraphics != nullptr;
 }
 
+#if ENABLE_CAIRO_CANVAS
+
+cairo::SurfaceSharedPtr WindowOutputDevice::CreateSurface(int x, int y, int width, int height) const
+{
+    if (!mpGraphics && !AcquireGraphics())
+        return cairo::SurfaceSharedPtr();
+    assert(mpGraphics);
+    return mpGraphics->CreateSurface(*this, x, y, width, height);
+}
+
+#endif
+
 void WindowOutputDevice::ReleaseGraphics( bool bRelease )
 {
     DBG_TESTSOLARMUTEX();
