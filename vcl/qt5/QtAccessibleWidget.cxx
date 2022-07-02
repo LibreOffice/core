@@ -734,17 +734,23 @@ QColor QtAccessibleWidget::backgroundColor() const
 
 void* QtAccessibleWidget::interface_cast(QAccessible::InterfaceType t)
 {
-    if (t == QAccessible::ActionInterface)
+    if (t == QAccessible::ActionInterface && accessibleProvidesInterface<XAccessibleAction>())
         return static_cast<QAccessibleActionInterface*>(this);
-    if (t == QAccessible::TextInterface)
+    if (t == QAccessible::TextInterface && accessibleProvidesInterface<XAccessibleText>())
         return static_cast<QAccessibleTextInterface*>(this);
-    if (t == QAccessible::EditableTextInterface)
+    if (t == QAccessible::EditableTextInterface
+        && accessibleProvidesInterface<XAccessibleEditableText>())
         return static_cast<QAccessibleEditableTextInterface*>(this);
-    if (t == QAccessible::ValueInterface)
+    if (t == QAccessible::ValueInterface && accessibleProvidesInterface<XAccessibleValue>())
         return static_cast<QAccessibleValueInterface*>(this);
     if (t == QAccessible::TableCellInterface)
-        return static_cast<QAccessibleTableCellInterface*>(this);
-    if (t == QAccessible::TableInterface)
+    {
+        // parent must be a table
+        Reference<XAccessibleTable> xTable = getAccessibleTableForParent();
+        if (xTable.is())
+            return static_cast<QAccessibleTableCellInterface*>(this);
+    }
+    if (t == QAccessible::TableInterface && accessibleProvidesInterface<XAccessibleTable>())
         return static_cast<QAccessibleTableInterface*>(this);
     return nullptr;
 }
@@ -1164,7 +1170,7 @@ void QtAccessibleWidget::setCurrentValue(const QVariant& value)
     xValue->setCurrentValue(Any(value.toDouble()));
 }
 
-// QAccessibleTable
+// QAccessibleTableInterface
 QAccessibleInterface* QtAccessibleWidget::caption() const
 {
     Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
@@ -1386,6 +1392,7 @@ bool QtAccessibleWidget::unselectRow(int row)
     return xTableSelection->unselectRow(row);
 }
 
+// QAccessibleTableCellInterface
 QList<QAccessibleInterface*> QtAccessibleWidget::columnHeaderCells() const
 {
     SAL_WARN("vcl.qt", "Unsupported QAccessibleTableCellInterface::columnHeaderCells");
