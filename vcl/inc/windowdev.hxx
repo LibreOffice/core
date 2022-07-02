@@ -30,6 +30,8 @@ public:
     virtual ~WindowOutputDevice() override;
     virtual void dispose() override;
 
+    cairo::SurfaceSharedPtr CreateSurface(int x, int y, int width, int height) const override;
+
     size_t GetSyncCount() const override { return 0x000000ff; }
     virtual void EnableRTL(bool bEnable = true) override;
 
