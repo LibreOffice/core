@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_cairo_canvas.h>
+
 #include <test/bootstrapfixture.hxx>
 #include <test/outputdevice.hxx>
 
@@ -29,6 +31,10 @@
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <bufferdevice.hxx>
 #include <window.h>
+
+#if ENABLE_CAIRO_CANVAS
+#include <vcl/cairo.hxx>
+#endif
 
 const size_t INITIAL_SETUP_ACTION_COUNT = 5;
 
@@ -1006,9 +1012,17 @@ public:
     {
     }
 
-    bool AcquireGraphics() const { return true; }
-    void ReleaseGraphics(bool) {}
-    bool UsePolyPolygonForComplexGradient() { return false; }
+    bool AcquireGraphics() const override { return true; }
+    void ReleaseGraphics(bool) override {}
+
+#if ENABLE_CAIRO_CANVAS
+    cairo::SurfaceSharedPtr CreateSurface(int, int, int, int) const override
+    {
+        return cairo::SurfaceSharedPtr();
+    }
+#endif
+
+    bool UsePolyPolygonForComplexGradient() override { return false; }
 
     bool testShouldDrawWavePixelAsRect(tools::Long nLineWidth)
     {

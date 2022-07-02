@@ -2785,11 +2785,20 @@ cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const cairo::CairoSurfaceS
     return std::make_shared<cairo::Gtk3Surface>(rSurface);
 }
 
-cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int x, int y, int width, int height) const
+cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const vcl::WindowOutputDevice& /*rRefDevice*/, int x, int y, int width, int height) const
 {
     return std::make_shared<cairo::Gtk3Surface>(this, x, y, width, height);
 }
 
+cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const VirtualDevice& /*rRefDevice*/, int x, int y, int width, int height) const
+{
+    return std::make_shared<cairo::Gtk3Surface>(this, x, y, width, height);
+}
+
+cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const Printer& /*rRefDevice*/, int x, int y, int width, int height) const
+{
+    return std::make_shared<cairo::Gtk3Surface>(this, x, y, width, height);
+}
 #endif
 
 void GtkSalGraphics::WidgetQueueDraw() const
