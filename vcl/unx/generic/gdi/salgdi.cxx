@@ -41,6 +41,8 @@
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 
+#include <windowdev.hxx>
+
 #include <unx/salunx.h>
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
@@ -418,15 +420,21 @@ namespace
     }
 }
 
-cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const OutputDevice& rRefDevice,
+cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const vcl::WindowOutputDevice& rRefDevice,
                                 int x, int y, int width, int height ) const
 {
-    if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-        return std::make_shared<cairo::X11Surface>(getSysData(*rRefDevice.GetOwnerWindow()),
+    return std::make_shared<cairo::X11Surface>(getSysData(*rRefDevice.GetOwnerWindow()),
                                                x,y,width,height);
-    if( rRefDevice.IsVirtual() )
-        return std::make_shared<cairo::X11Surface>(getSysData(static_cast<const VirtualDevice&>(rRefDevice)),
-                                               x,y,width,height);
+}
+
+cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const VirtualDevice& rRefDevice,
+                                int x, int y, int width, int height ) const
+{
+    return std::make_shared<cairo::X11Surface>(getSysData(rRefDevice),x,y,width,height);
+}
+
+cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const Printer&, int, int, int, int ) const
+{
     return cairo::SurfaceSharedPtr();
 }
 

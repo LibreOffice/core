@@ -24,6 +24,12 @@
 
 #include "QtGraphicsBase.hxx"
 
+namespace vcl
+{
+class WindowOutputDevice;
+}
+class VirtualDevice;
+class Printer;
 class QtFrame;
 
 class VCLPLUG_QT_PUBLIC QtSvpGraphics final : public SvpSalGraphics, public QtGraphicsBase
@@ -42,7 +48,11 @@ public:
     bool SupportsCairo() const override;
     cairo::SurfaceSharedPtr
     CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
-    cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width,
+    cairo::SurfaceSharedPtr CreateSurface(const vcl::WindowOutputDevice& rRefDevice, int x, int y,
+                                          int width, int height) const override;
+    cairo::SurfaceSharedPtr CreateSurface(const VirtualDevice& rRefDevice, int x, int y, int width,
+                                          int height) const override;
+    cairo::SurfaceSharedPtr CreateSurface(const Printer& rRefDevice, int x, int y, int width,
                                           int height) const override;
 #endif // ENABLE_CAIRO_CANVAS
 

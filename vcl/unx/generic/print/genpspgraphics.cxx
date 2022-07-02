@@ -454,7 +454,17 @@ cairo::SurfaceSharedPtr GenPspGraphics::CreateSurface(const cairo::CairoSurfaceS
     return cairo::SurfaceSharedPtr();
 }
 
-cairo::SurfaceSharedPtr GenPspGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int /*x*/, int /*y*/, int /*width*/, int /*height*/) const
+cairo::SurfaceSharedPtr GenPspGraphics::CreateSurface(const vcl::WindowOutputDevice& /*rRefDevice*/, int /*x*/, int /*y*/, int /*width*/, int /*height*/) const
+{
+    return cairo::SurfaceSharedPtr();
+}
+
+cairo::SurfaceSharedPtr GenPspGraphics::CreateSurface(const VirtualDevice& /*rRefDevice*/, int /*x*/, int /*y*/, int /*width*/, int /*height*/) const
+{
+    return cairo::SurfaceSharedPtr();
+}
+
+cairo::SurfaceSharedPtr GenPspGraphics::CreateSurface(const Printer& /*rRefDevice*/, int /*x*/, int /*y*/, int /*width*/, int /*height*/) const
 {
     return cairo::SurfaceSharedPtr();
 }

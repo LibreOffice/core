@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <config_cairo_canvas.h>
+
 #include <vcl/outdev.hxx>
 
 namespace vcl
@@ -29,6 +31,10 @@ public:
     WindowOutputDevice(vcl::Window& rOwnerWindow);
     virtual ~WindowOutputDevice() override;
     virtual void dispose() override;
+
+#if ENABLE_CAIRO_CANVAS
+    cairo::SurfaceSharedPtr CreateSurface(int x, int y, int width, int height) const override;
+#endif
 
     size_t GetSyncCount() const override { return 0x000000ff; }
     virtual void EnableRTL(bool bEnable = true) override;

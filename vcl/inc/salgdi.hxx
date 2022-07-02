@@ -60,7 +60,11 @@ namespace vcl
 class AbstractTrueTypeFont;
 class FileDefinitionWidgetDraw;
 typedef struct TTGlobalFontInfo_ TTGlobalFontInfo;
+class WindowOutputDevice;
 }
+
+class VirtualDevice;
+class Printer;
 
 typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
 typedef std::map< sal_Ucs, sal_uInt32 >   Ucs2UIntMap;
@@ -459,7 +463,9 @@ public:
     /// Create Surface from given cairo surface
     virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const = 0;
     /// Create surface with given dimensions
-    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const = 0;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const vcl::WindowOutputDevice& rRefDevice, int x, int y, int width, int height) const = 0;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const Printer& rRefDevice, int x, int y, int width, int height) const = 0;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const VirtualDevice& rRefDevice, int x, int y, int width, int height) const = 0;
     /// Create Surface for given bitmap data
     virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const = 0;
     virtual css::uno::Any       GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const = 0;

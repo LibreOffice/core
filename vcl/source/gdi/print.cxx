@@ -55,6 +55,18 @@
 
 int nImplSysDialog = 0;
 
+#if ENABLE_CAIRO_CANVAS
+
+cairo::SurfaceSharedPtr Printer::CreateSurface(int x, int y, int width, int height) const
+{
+    if (!mpGraphics && !AcquireGraphics())
+        return cairo::SurfaceSharedPtr();
+    assert(mpGraphics);
+    return mpGraphics->CreateSurface(*this, x, y, width, height);
+}
+
+#endif
+
 namespace
 {
     Paper ImplGetPaperFormat( tools::Long nWidth100thMM, tools::Long nHeight100thMM )

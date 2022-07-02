@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_PRINT_HXX
 #define INCLUDED_VCL_PRINT_HXX
 
+#include <config_cairo_canvas.h>
+
 #include <sal/config.h>
 
 #include <sal/types.h>
@@ -135,6 +137,10 @@ protected:
     vcl::Region                 ClipToDeviceBounds(vcl::Region aRegion) const override;
 
 public:
+#if ENABLE_CAIRO_CANVAS
+    cairo::SurfaceSharedPtr     CreateSurface(int x, int y, int width, int height) const override;
+#endif
+
     void                        SetSystemTextColor(SystemTextColorFlags, bool) override;
     void                        DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
                                     const Gradient& rGradient );

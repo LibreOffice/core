@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <config_cairo_canvas.h>
+
 #include <sal/config.h>
 
 #include <o3tl/span.hxx>
@@ -291,16 +293,19 @@ public:
     SystemGraphicsData          GetSystemGfxData() const;
     OUString                    GetRenderBackendName() const;
 
+#if ENABLE_CAIRO_CANVAS
     // Used by the canvas module. Despite the name it does not always return true if Cairo is supported.
     bool                        SupportsCairo() const;
     /// Create Surface from given cairo surface
     cairo::SurfaceSharedPtr     CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const;
     /// Create surface with given dimensions
-    cairo::SurfaceSharedPtr     CreateSurface(int x, int y, int width, int height) const;
+    virtual cairo::SurfaceSharedPtr     CreateSurface(int x, int y, int width, int height) const = 0;
     /// Create Surface for given bitmap data
     cairo::SurfaceSharedPtr     CreateBitmapSurface(const BitmapSystemData& rData, const Size& rSize) const;
     /// Return native handle for underlying surface
     css::uno::Any               GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const;
+#endif
+
     css::uno::Any               GetSystemGfxDataAny() const;
 
     void                        SetRefPoint();

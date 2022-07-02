@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_cairo_canvas.h>
+
 #include <test/bootstrapfixture.hxx>
 #include <cppunit/TestAssert.h>
 
@@ -29,6 +31,12 @@ public:
     void SaveBackground(VirtualDevice&, const Point&, const Size&, const Size&) const override {}
     bool AcquireGraphics() const override { return true; }
     void ReleaseGraphics(bool) override {}
+#if ENABLE_CAIRO_CANVAS
+    cairo::SurfaceSharedPtr CreateSurface(int, int, int, int) const override
+    {
+        return cairo::SurfaceSharedPtr();
+    }
+#endif
     bool UsePolyPolygonForComplexGradient() override { return false; }
 };
 }

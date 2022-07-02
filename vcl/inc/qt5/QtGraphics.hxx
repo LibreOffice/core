@@ -35,6 +35,15 @@ namespace vcl::font
 {
 class PhysicalFontCollection;
 }
+
+namespace vcl
+{
+class WindowOutputDevice;
+}
+
+class Printer;
+class VirtualDevice;
+
 class QImage;
 class QPushButton;
 class QtFont;
@@ -207,7 +216,11 @@ public:
     virtual bool SupportsCairo() const override;
     virtual cairo::SurfaceSharedPtr
     CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
-    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y,
+    virtual cairo::SurfaceSharedPtr CreateSurface(const vcl::WindowOutputDevice& rRefDevice, int x,
+                                                  int y, int width, int height) const override;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const VirtualDevice& rRefDevice, int x, int y,
+                                                  int width, int height) const override;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const Printer& rRefDevice, int x, int y,
                                                   int width, int height) const override;
     virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice,
                                                         const BitmapSystemData& rData,

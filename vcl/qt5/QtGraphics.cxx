@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/print.hxx>
+#include <vcl/virdev.hxx>
+
+#include <windowdev.hxx>
+
 #include <QtGraphics.hxx>
 
 #include <QtData.hxx>
@@ -68,7 +73,20 @@ QtGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& /*rSurface*/) cons
     return nullptr;
 }
 
-cairo::SurfaceSharedPtr QtGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int /*x*/,
+cairo::SurfaceSharedPtr QtGraphics::CreateSurface(const vcl::WindowOutputDevice& /*rRefDevice*/,
+                                                  int /*x*/, int /*y*/, int /*width*/,
+                                                  int /*height*/) const
+{
+    return nullptr;
+}
+
+cairo::SurfaceSharedPtr QtGraphics::CreateSurface(const VirtualDevice& /*rRefDevice*/, int /*x*/,
+                                                  int /*y*/, int /*width*/, int /*height*/) const
+{
+    return nullptr;
+}
+
+cairo::SurfaceSharedPtr QtGraphics::CreateSurface(const Printer& /*rRefDevice*/, int /*x*/,
                                                   int /*y*/, int /*width*/, int /*height*/) const
 {
     return nullptr;
