@@ -11,6 +11,11 @@
 #include <sal/log.hxx>
 #include <salbmp.hxx>
 
+#include <vcl/print.hxx>
+#include <vcl/virdev.hxx>
+
+#include <windowdev.hxx>
+
 #include <config_cairo_canvas.h>
 
 #include <QtData.hxx>
@@ -54,8 +59,20 @@ QtSvpGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
     return std::make_shared<cairo::QtSvpSurface>(rSurface);
 }
 
-cairo::SurfaceSharedPtr QtSvpGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int x,
+cairo::SurfaceSharedPtr QtSvpGraphics::CreateSurface(const vcl::WindowOutputDevice& /*rRefDevice*/,
+                                                     int x, int y, int width, int height) const
+{
+    return std::make_shared<cairo::QtSvpSurface>(this, x, y, width, height);
+}
+
+cairo::SurfaceSharedPtr QtSvpGraphics::CreateSurface(const VirtualDevice& /*rRefDevice*/, int x,
                                                      int y, int width, int height) const
+{
+    return std::make_shared<cairo::QtSvpSurface>(this, x, y, width, height);
+}
+
+cairo::SurfaceSharedPtr QtSvpGraphics::CreateSurface(const Printer& /*rRefDevice*/, int x, int y,
+                                                     int width, int height) const
 {
     return std::make_shared<cairo::QtSvpSurface>(this, x, y, width, height);
 }
