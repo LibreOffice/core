@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a827180_16118b82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-02T19:59:41Z",
+      "side": 1,
+      "message": "Same pb as the other patch, you must remove the empty line.",
+      "revId": "5a7be0bcfab2765b6e5072ef2f3a1461639319fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
