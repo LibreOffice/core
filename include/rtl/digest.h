@@ -92,7 +92,6 @@ SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_create  (
 /** Destroy a digest handle.
     @post Digest handle destroyed and invalid.
     @param[in] Digest digest handle to be destroyed.
-    @return   None.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroy (
     rtlDigest Digest

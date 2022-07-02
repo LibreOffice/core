@@ -162,7 +162,6 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_loadUserProfile(
 /** Unload a User Profile
     Implemented just for Windows
     @param[in] Security previously fetch Security of the User
-    @return nothing is returned!
 */
 
 SAL_DLLPUBLIC void SAL_CALL osl_unloadUserProfile(

@@ -171,8 +171,10 @@ SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_decode (
 ) SAL_THROW_EXTERN_C();
 
 /** Destroy a cipher handle.
+
+    Cipher handle destroyed and invalid.
+
     @param[in] Cipher cipher handle to be destroyed.
-    @return None. Cipher handle destroyed and invalid.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_cipher_destroy (
     rtlCipher Cipher

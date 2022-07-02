@@ -68,8 +68,10 @@ SAL_DLLPUBLIC void * SAL_CALL rtl_reallocateMemory (
 
 
 /** Free memory.
+
+    Memory is released, and the pointer is invalidated.
+
     @param[in] Ptr pointer to the previously allocated memory.
-    @return none. Memory is released. Ptr is invalid.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_freeMemory (
     void * Ptr
@@ -103,10 +105,12 @@ SAL_DLLPUBLIC void SAL_CALL rtl_secureZeroMemory (
 
 
 /** Zero and free memory.
+
+    Memory is zero'ed with rtl_secureZeroMemory() and released.
+    The original pointer is no longer valid.
+
     @param[in] Ptr   pointer to the previously allocated memory.
     @param[in] Bytes memory size.
-    @return none. Memory is zero'ed with rtl_secureZeroMemory() and released.
-                  Ptr is invalid.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_freeZeroMemory (
     void *   Ptr,
@@ -136,8 +140,9 @@ SAL_DLLPUBLIC void* SAL_CALL rtl_allocateAlignedMemory (
 
 /** Free memory allocated with rtl_allocateAlignedMemory().
 
+    Memory is released, and the pointer invalidated.
+
     @param[in] Ptr pointer to the previously allocated memory.
-    @return none. Memory is released. Ptr is invalid.
 
     @since LibreOffice 4.3
  */
@@ -179,7 +184,6 @@ SAL_DLLPUBLIC rtl_arena_type * SAL_CALL rtl_arena_create (
 
 /**
  *  @param[in] pArena the arena to destroy.
- *  @return None
  *
  *  @see rtl_arena_create()
  */
@@ -206,8 +210,6 @@ SAL_DLLPUBLIC void * SAL_CALL rtl_arena_alloc (
  *  @param[in] pArena arena from which resource was allocated.
  *  @param[in] pAddr  resource to free.
  *  @param[in] nBytes size of resource.
- *
- *  @return None.
  *
  *  @see rtl_arena_alloc()
  */
@@ -257,8 +259,6 @@ SAL_DLLPUBLIC rtl_cache_type * SAL_CALL rtl_cache_create (
 /**
  *  @param[in] pCache the cache to destroy.
  *
- *  @return None.
- *
  *  @see rtl_cache_create()
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_cache_destroy (
@@ -279,8 +279,6 @@ SAL_DLLPUBLIC void * SAL_CALL rtl_cache_alloc (
 /**
  *  @param[in] pCache cache from which object was allocated.
  *  @param[in] pObj   object to free.
- *
- *  @return None.
  *
  *  @see rtl_cache_alloc()
  */
