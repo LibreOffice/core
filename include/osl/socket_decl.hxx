@@ -174,8 +174,10 @@ namespace osl
         static inline ::rtl::OUString SAL_CALL getLocalHostname( oslSocketResult *pResult = NULL);
 
         /** Tries to find an address for a host.
+
             @see osl_resolveHostname()
-            @return A new created socket-address or 0 if the name could not be found.
+            @param strHostName hostname
+            @param Addr A newly created socket-address or 0 if the name could not be found.
         */
         static inline void SAL_CALL resolveHostname(
             const ::rtl::OUString & strHostName , SocketAddr & Addr );

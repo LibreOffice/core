@@ -36,7 +36,9 @@ namespace osl
 
     public:
         /** Create a mutex.
-            @return 0 if the mutex could not be created, otherwise a handle to the mutex.
+
+            The mutex value is 0 if it could not be created, otherwise a handle to the mutex.
+
             @see ::osl_createMutex()
         */
         Mutex()

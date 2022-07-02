@@ -832,7 +832,8 @@ SAL_DLLPUBLIC void SAL_CALL osl_destroyHostAddr(oslHostAddr Addr);
 
 
 /** Get the hostname member of Addr.
-    @return The hostname or 0 upon failure.
+    @param Addr address for host name
+    @param strHostname The host name or 0 upon failure.
 */
 SAL_DLLPUBLIC void SAL_CALL osl_getHostnameOfHostAddr(const oslHostAddr Addr, rtl_uString **strHostname);
 
