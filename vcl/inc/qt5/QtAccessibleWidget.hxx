@@ -153,6 +153,15 @@ private:
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleContextImpl() const;
     css::uno::Reference<css::accessibility::XAccessibleTable> getAccessibleTableForParent() const;
+
+    template <class Interface> bool accessibleProvidesInterface() const
+    {
+        css::uno::Reference<css::accessibility::XAccessibleContext> xContext
+            = getAccessibleContextImpl();
+        css::uno::Reference<Interface> xInterface(xContext, css::uno::UNO_QUERY);
+        return xInterface.is();
+    }
+
     QObject* m_pObject;
 };
 
