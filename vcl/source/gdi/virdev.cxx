@@ -252,6 +252,14 @@ void VirtualDevice::dispose()
     OutputDevice::dispose();
 }
 
+cairo::SurfaceSharedPtr VirtualDevice::CreateSurface(int x, int y, int width, int height) const
+{
+    if (!mpGraphics && !AcquireGraphics())
+        return cairo::SurfaceSharedPtr();
+    assert(mpGraphics);
+    return mpGraphics->CreateSurface(*this, x, y, width, height);
+}
+
 bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                                                  sal_uInt8 *const pBuffer)
 {
