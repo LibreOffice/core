@@ -264,7 +264,7 @@ QRect QtAccessibleWidget::rect() const
         return QRect();
 
     Reference<XAccessibleComponent> xAccessibleComponent(xAc, UNO_QUERY);
-    awt::Point aPoint = xAccessibleComponent->getLocation();
+    awt::Point aPoint = xAccessibleComponent->getLocationOnScreen();
     awt::Size aSize = xAccessibleComponent->getSize();
 
     return QRect(aPoint.X, aPoint.Y, aSize.Width, aSize.Height);
