@@ -175,7 +175,8 @@ namespace osl
 
         /** Tries to find an address for a host.
             @see osl_resolveHostname()
-            @return A new created socket-address or 0 if the name could not be found.
+            @param strHostName hostname
+            @param Address A newly created socket-address or 0 if the name could not be found.
         */
         static inline void SAL_CALL resolveHostname(
             const ::rtl::OUString & strHostName , SocketAddr & Addr );

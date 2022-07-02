@@ -1345,7 +1345,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromStr_WithLength(
     @param[in]     from         the String to take the substring from.
     @param[in]     beginIndex   the beginning index, inclusive.
     @param[in]     count        the number of characters.
-    @return    the specified substring.
 
     @since LibreOffice 4.0
  */

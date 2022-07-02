@@ -62,7 +62,6 @@ SAL_DLLPUBLIC rtlRandomPool SAL_CALL rtl_random_createPool (void) SAL_THROW_EXTE
 
 /** Destroy a Random Pool.
     @param[in] Pool a Random Pool.
-    @return none. Pool is invalid.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_random_destroyPool (
     rtlRandomPool Pool
