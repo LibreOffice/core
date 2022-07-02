@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9830bf9_e3f3bdf1",
+        "filename": "vcl/source/control/thumbpos.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-02T17:42:18Z",
+      "side": 1,
+      "message": "Why keeping this comment which was related to the #endif ?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 43
+      },
+      "revId": "bc84ea0214a7f527e753680bb8096ac86e48d79d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
