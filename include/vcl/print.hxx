@@ -134,6 +134,8 @@ protected:
     vcl::Region                 ClipToDeviceBounds(vcl::Region aRegion) const override;
 
 public:
+    cairo::SurfaceSharedPtr     CreateSurface(int x, int y, int width, int height) const override;
+
     void                        SetSystemTextColor(SystemTextColorFlags, bool) override;
     void                        DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
                                     const Gradient& rGradient );
