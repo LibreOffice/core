@@ -184,7 +184,7 @@ AccessibleBrowseBoxBase::getAccessibleRelationSet()
     return new utl::AccessibleRelationSetHelper;
 }
 
-Reference< css::accessibility::XAccessibleStateSet > SAL_CALL
+sal_Int64 SAL_CALL
 AccessibleBrowseBoxBase::getAccessibleStateSet()
 {
     SolarMethodGuard aGuard( getMutex() );
@@ -355,23 +355,22 @@ bool AccessibleBrowseBoxBase::implIsShowing()
     return bShowing;
 }
 
-rtl::Reference<::utl::AccessibleStateSetHelper> AccessibleBrowseBoxBase::implCreateStateSetHelper()
+sal_Int64 AccessibleBrowseBoxBase::implCreateStateSetHelper()
 {
-    rtl::Reference<::utl::AccessibleStateSetHelper>
-        pStateSetHelper = new ::utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if( isAlive() )
     {
         // SHOWING done with mxParent
         if( implIsShowing() )
-            pStateSetHelper->AddState( AccessibleStateType::SHOWING );
+            nStateSet |= AccessibleStateType::SHOWING;
         // BrowseBox fills StateSet with states depending on object type
-        mpBrowseBox->FillAccessibleStateSet( *pStateSetHelper, getType() );
+        mpBrowseBox->FillAccessibleStateSet( nStateSet, getType() );
     }
     else
-        pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
+        nStateSet |= AccessibleStateType::DEFUNC;
 
-    return pStateSetHelper;
+    return nStateSet;
 }
 
 // internal helper methods

@@ -158,12 +158,8 @@ long const IA2_STATES[] =
     IA2_STATE_TRANSIENT,                //=                     0x20000;
     IA2_STATE_VERTICAL                  // =                    0x40000;
 };
-/*
 
-<=== map ===>
-
-*/
-short const UNO_STATES[] =
+sal_Int64 const UNO_STATES[] =
 {
     ACTIVE,         // = (sal_Int16)1;
     ARMED,          // = (sal_Int16)2;
@@ -2958,26 +2954,19 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_states(AccessibleStates __RP
     if (!m_xContext.is())
         return E_FAIL;
 
-    Reference<XAccessibleStateSet> const pRStateSet =
+    sal_Int64 const nRStateSet =
         m_xContext->getAccessibleStateSet();
-    if(!pRStateSet.is())
+    if(!nRStateSet)
     {
         return S_OK;
     }
-    Sequence<short> pStates = pRStateSet->getStates();
 
-
-    long count = pStates.getLength() ;
     *states = 0x0;
-    for( int i = 0; i < count; i++  )
+    for( std::size_t j = 0; j < SAL_N_ELEMENTS(UNO_STATES); j++ )
     {
-        for( std::size_t j = 0; j < SAL_N_ELEMENTS(UNO_STATES); j++ )
+        if( (UNO_STATES[j] != -1) && (nRStateSet & UNO_STATES[j]) )
         {
-            if( pStates[i] == UNO_STATES[j] )
-            {
-                *states |= IA2_STATES[j];
-                break;
-            }
+            *states |= IA2_STATES[j];
         }
     }
     return S_OK;

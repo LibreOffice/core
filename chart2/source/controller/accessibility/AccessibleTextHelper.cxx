@@ -151,10 +151,10 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleTextHelper::getAccessible
     return Reference< XAccessibleRelationSet >();
 }
 
-Reference< XAccessibleStateSet > SAL_CALL AccessibleTextHelper::getAccessibleStateSet()
+sal_Int64 SAL_CALL AccessibleTextHelper::getAccessibleStateSet()
 {
     OSL_FAIL( "Not implemented in this helper" );
-    return Reference< XAccessibleStateSet >();
+    return 0;
 }
 
 lang::Locale SAL_CALL AccessibleTextHelper::getLocale()

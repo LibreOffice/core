@@ -33,7 +33,6 @@
 class SvxEditSource;
 class SvxTextForwarder;
 class SvxViewForwarder;
-namespace utl { class AccessibleStateSetHelper; }
 
 namespace accessibility
 {
@@ -66,7 +65,7 @@ namespace accessibility
         virtual OUString SAL_CALL getAccessibleDescription() override;
         virtual OUString SAL_CALL getAccessibleName() override;
         virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;
-        virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet() override;
+        virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
         virtual css::lang::Locale SAL_CALL getLocale() override;
 
         // XAccessibleEventBroadcaster
@@ -148,8 +147,8 @@ namespace accessibility
         AccessibleImageBullet& operator= ( const AccessibleImageBullet& ) = delete;
 
         // maintain state set and send STATE_CHANGE events
-        void SetState( const sal_Int16 nStateId );
-        void UnSetState( const sal_Int16 nStateId );
+        void SetState( const sal_Int64 nStateId );
+        void UnSetState( const sal_Int64 nStateId );
 
         SvxEditSource& GetEditSource() const;
 
@@ -188,7 +187,7 @@ namespace accessibility
         Point maEEOffset;
 
         // the current state set (updated from SetState/UnSetState and guarded by solar mutex)
-        rtl::Reference< utl::AccessibleStateSetHelper > mxStateSet;
+        sal_Int64 mnStateSet = 0;
 
         /// The shape we're the accessible for (unguarded)
         css::uno::Reference< css::accessibility::XAccessible > mxParent;

@@ -43,7 +43,6 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <o3tl/safeint.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <tools/gen.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
@@ -1723,30 +1722,30 @@ uno::Reference<XAccessible> SAL_CALL
 }
 
     /// Return the set of current states.
-uno::Reference<XAccessibleStateSet> SAL_CALL
+sal_Int64 SAL_CALL
     ScAccessibleDocument::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
-    uno::Reference<XAccessibleStateSet> xParentStates;
+    sal_Int64 nParentStates = 0;
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
-        xParentStates = xParentContext->getAccessibleStateSet();
+        nParentStates = xParentContext->getAccessibleStateSet();
     }
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
-    if (IsDefunc(xParentStates))
-        pStateSet->AddState(AccessibleStateType::DEFUNC);
+    sal_Int64 nStateSet = 0;
+    if (IsDefunc(nParentStates))
+        nStateSet |= AccessibleStateType::DEFUNC;
     else
     {
-        pStateSet->AddState(AccessibleStateType::EDITABLE);
-        pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::OPAQUE);
+        nStateSet |= AccessibleStateType::EDITABLE;
+        nStateSet |= AccessibleStateType::ENABLED;
+        nStateSet |= AccessibleStateType::OPAQUE;
         if (isShowing())
-            pStateSet->AddState(AccessibleStateType::SHOWING);
+            nStateSet |= AccessibleStateType::SHOWING;
         if (isVisible())
-            pStateSet->AddState(AccessibleStateType::VISIBLE);
+            nStateSet |= AccessibleStateType::VISIBLE;
     }
-    return pStateSet;
+    return nStateSet;
 }
 
 OUString SAL_CALL
@@ -2121,11 +2120,10 @@ bool ScAccessibleDocument::IsTableSelected() const
     return bResult;
 }
 
-bool ScAccessibleDocument::IsDefunc(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+bool ScAccessibleDocument::IsDefunc(sal_Int64 nParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || (mpViewShell == nullptr) || !getAccessibleParent().is() ||
-        (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
+        (nParentStates & AccessibleStateType::DEFUNC);
 }
 
 void ScAccessibleDocument::AddChild(const uno::Reference<XAccessible>& xAcc, bool bFireEvent)

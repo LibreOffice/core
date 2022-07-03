@@ -49,10 +49,6 @@ class SvLBoxButtonData;
 class Timer;
 class Edit;
 
-namespace utl {
-    class AccessibleStateSetHelper;
-}
-
 enum class SvButtonState { Unchecked, Checked, Tristate };
 
 // *********************************************************************
@@ -454,7 +450,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
     /** Fills the StateSet of one entry. */
-    void FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const;
+    void FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, sal_Int64& rStateSet ) const;
 
     virtual OUString GetEntryAccessibleDescription(SvTreeListEntry* pEntry) const;
 

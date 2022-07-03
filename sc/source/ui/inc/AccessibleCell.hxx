@@ -110,8 +110,7 @@ public:
         getAccessibleChild(sal_Int32 nIndex) override;
 
     /// Return the set of current states.
-    virtual css::uno::Reference<
-            css::accessibility::XAccessibleStateSet> SAL_CALL
+    virtual sal_Int64 SAL_CALL
         getAccessibleStateSet() override;
 
     virtual css::uno::Reference<
@@ -140,10 +139,8 @@ private:
 
     ScSplitPos meSplitPos;
 
-    bool IsDefunc(
-        const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
-    virtual bool IsEditable(
-        const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates) override;
+    bool IsDefunc(sal_Int64 nParentStates);
+    virtual bool IsEditable(sal_Int64 nParentStates) override;
     bool IsOpaque() const;
     bool IsFocused() const;
     bool IsSelected();
