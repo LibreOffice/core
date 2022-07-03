@@ -44,7 +44,6 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <svx/svdview.hxx>
 #include <tools/diagnose_ex.h>
@@ -176,9 +175,6 @@ void AccessibleShape::Init()
 
 void AccessibleShape::UpdateStates()
 {
-    if (mxStateSet == nullptr)
-        return;
-
     // Set the opaque state for certain shape types when their fill style is
     // solid.
     bool bShapeIsOpaque = false;
@@ -205,9 +201,9 @@ void AccessibleShape::UpdateStates()
         }
     }
     if (bShapeIsOpaque)
-        mxStateSet->AddState (AccessibleStateType::OPAQUE);
+        mnStateSet |= AccessibleStateType::OPAQUE;
     else
-        mxStateSet->RemoveState (AccessibleStateType::OPAQUE);
+        mnStateSet &= ~AccessibleStateType::OPAQUE;
 
     // Set the selected state.
     bool bShapeIsSelected = false;
@@ -218,9 +214,9 @@ void AccessibleShape::UpdateStates()
     }
 
     if (bShapeIsSelected)
-        mxStateSet->AddState (AccessibleStateType::SELECTED);
+        mnStateSet |= AccessibleStateType::SELECTED;
     else
-        mxStateSet->RemoveState (AccessibleStateType::SELECTED);
+        mnStateSet &= ~AccessibleStateType::SELECTED;
 }
 
 OUString AccessibleShape::GetStyle() const
@@ -228,7 +224,7 @@ OUString AccessibleShape::GetStyle() const
     return ShapeTypeHandler::CreateAccessibleBaseName( mxShape );
 }
 
-bool AccessibleShape::SetState (sal_Int16 aState)
+bool AccessibleShape::SetState (sal_Int64 aState)
 {
     bool bStateHasChanged = false;
 
@@ -247,7 +243,7 @@ bool AccessibleShape::SetState (sal_Int16 aState)
 }
 
 
-bool AccessibleShape::ResetState (sal_Int16 aState)
+bool AccessibleShape::ResetState (sal_Int64 aState)
 {
     bool bStateHasChanged = false;
 
@@ -266,7 +262,7 @@ bool AccessibleShape::ResetState (sal_Int16 aState)
 }
 
 
-bool AccessibleShape::GetState (sal_Int16 aState)
+bool AccessibleShape::GetState (sal_Int64 aState)
 {
     if (aState == AccessibleStateType::FOCUSED && mpText != nullptr)
     {
@@ -379,7 +375,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
         SHOWING
         VISIBLE
 */
-uno::Reference<XAccessibleStateSet> SAL_CALL
+sal_Int64 SAL_CALL
     AccessibleShape::getAccessibleStateSet()
 {
     ::osl::MutexGuard aGuard (m_aMutex);
@@ -390,18 +386,13 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         return AccessibleContextBase::getAccessibleStateSet ();
     }
 
-    ::utl::AccessibleStateSetHelper* pStateSet = mxStateSet.get();
-
-    if (!pStateSet)
-        return Reference<XAccessibleStateSet>();
-
     // Merge current FOCUSED state from edit engine.
     if (mpText)
     {
         if (mpText->HaveFocus())
-            pStateSet->AddState (AccessibleStateType::FOCUSED);
+            mnStateSet |= AccessibleStateType::FOCUSED;
         else
-            pStateSet->RemoveState (AccessibleStateType::FOCUSED);
+            mnStateSet &= ~AccessibleStateType::FOCUSED;
     }
     //Just when the document is not read-only,set states EDITABLE,RESIZABLE,MOVEABLE
     css::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
@@ -411,33 +402,24 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
                                 xTempAccContext = xTempAcc->getAccessibleContext();
         if( xTempAccContext.is() )
         {
-            css::uno::Reference<XAccessibleStateSet> rState =
-                xTempAccContext->getAccessibleStateSet();
-            if (rState.is())
+            sal_Int64 nState = xTempAccContext->getAccessibleStateSet();
+            if (nState & AccessibleStateType::EDITABLE)
             {
-                const css::uno::Sequence<short> aStates = rState->getStates();
-                if (std::find(aStates.begin(), aStates.end(), AccessibleStateType::EDITABLE) != aStates.end())
-                {
-                    pStateSet->AddState (AccessibleStateType::EDITABLE);
-                    pStateSet->AddState (AccessibleStateType::RESIZABLE);
-                    pStateSet->AddState (AccessibleStateType::MOVEABLE);
-                }
+                mnStateSet |= AccessibleStateType::EDITABLE;
+                mnStateSet |= AccessibleStateType::RESIZABLE;
+                mnStateSet |= AccessibleStateType::MOVEABLE;
             }
         }
     }
 
-    // Create a copy of the state set that may be modified by the
-    // caller without affecting the current state set.
-    Reference<XAccessibleStateSet> xStateSet(new ::utl::AccessibleStateSetHelper(*pStateSet));
+    sal_Int64 nRetStateSet = mnStateSet;
 
     if (mpParent && mpParent->IsDocumentSelAll())
     {
-        ::utl::AccessibleStateSetHelper* pCopyStateSet =
-            static_cast<::utl::AccessibleStateSetHelper*>(xStateSet.get());
-        pCopyStateSet->AddState (AccessibleStateType::SELECTED);
+        nRetStateSet |= AccessibleStateType::SELECTED;
     }
 
-    return xStateSet;
+    return nRetStateSet;
 }
 
 // XAccessibleComponent
@@ -780,12 +762,9 @@ sal_Bool SAL_CALL AccessibleShape::isAccessibleChildSelected( sal_Int32 nChildIn
         }
         else if( xContext->getAccessibleRole() == AccessibleRole::SHAPE )
         {
-            Reference< XAccessibleStateSet > pRState = xContext->getAccessibleStateSet();
-            if( !pRState.is() )
-                return false;
+            sal_Int64 pRState = xContext->getAccessibleStateSet();
 
-            const uno::Sequence<short> aStates = pRState->getStates();
-            return std::find(aStates.begin(), aStates.end(), AccessibleStateType::SELECTED) != aStates.end();
+            return bool(pRState & AccessibleStateType::SELECTED);
         }
     }
 
@@ -1012,9 +991,7 @@ void AccessibleShape::disposing()
 
     // Make sure to send an event that this object loses the focus in the
     // case that it has the focus.
-    ::utl::AccessibleStateSetHelper* pStateSet = mxStateSet.get();
-    if (pStateSet != nullptr)
-        pStateSet->RemoveState (AccessibleStateType::FOCUSED);
+    mnStateSet &= ~AccessibleStateType::FOCUSED;
 
     // Unregister from model.
     if (mxShape.is() && maShapeTreeInfo.GetModelBroadcaster().is())

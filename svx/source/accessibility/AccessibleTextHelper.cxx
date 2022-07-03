@@ -122,7 +122,7 @@ namespace accessibility
             return mnStartIndex;
         }
 
-        void SetAdditionalChildStates( VectorOfStates&& rChildStates );
+        void SetAdditionalChildStates( sal_Int64 nChildStates );
 
         void Dispose();
 
@@ -352,9 +352,9 @@ namespace accessibility
         }
     }
 
-    void AccessibleTextHelper_Impl::SetAdditionalChildStates( VectorOfStates&& rChildStates )
+    void AccessibleTextHelper_Impl::SetAdditionalChildStates( sal_Int64 nChildStates )
     {
-        maParaManager.SetAdditionalChildStates( std::move(rChildStates) );
+        maParaManager.SetAdditionalChildStates( nChildStates );
     }
 
     void AccessibleTextHelper_Impl::SetChildFocus( sal_Int32 nChild, bool bHaveFocus )
@@ -1642,9 +1642,9 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleTextHelper::SetAdditionalChildStates( VectorOfStates&& rChildStates )
+    void AccessibleTextHelper::SetAdditionalChildStates( sal_Int64 nChildStates )
     {
-        mpImpl->SetAdditionalChildStates( std::move(rChildStates) );
+        mpImpl->SetAdditionalChildStates( nChildStates );
     }
 
     void AccessibleTextHelper::UpdateChildren()

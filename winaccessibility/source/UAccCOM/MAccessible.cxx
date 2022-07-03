@@ -158,31 +158,27 @@ long const IA2_STATES[] =
     IA2_STATE_TRANSIENT,                //=                     0x20000;
     IA2_STATE_VERTICAL                  // =                    0x40000;
 };
-/*
 
-<=== map ===>
-
-*/
-short const UNO_STATES[] =
+sal_Int64 const UNO_STATES[] =
 {
-    ACTIVE,         // = (sal_Int16)1;
-    ARMED,          // = (sal_Int16)2;
-    DEFUNC,         // = (sal_Int16)5;
-    EDITABLE,       // = (sal_Int16)6;
-    HORIZONTAL,     // = (sal_Int16)12;
-    ICONIFIED,      // = (sal_Int16)13;
+    ACTIVE,
+    ARMED,
+    DEFUNC,
+    EDITABLE,
+    HORIZONTAL,
+    ICONIFIED,
     -1,             //IA2_STATE_INVALID_ENTRY
-    MANAGES_DESCENDANTS, // = (sal_Int16)15;
-    MODAL,          // = (sal_Int16)16;
-    MULTI_LINE,     // = (sal_Int16)17;
-    OPAQUE,         // = (sal_Int16)19;
+    MANAGES_DESCENDANTS,
+    MODAL,
+    MULTI_LINE,
+    OPAQUE,
     -1,             //IA2_STATE_REQUIRED
     -1,             //IA2_STATE_SELECTABLE_TEXT
-    SINGLE_LINE,    // = (sal_Int16)26;
-    STALE,          // = (sal_Int16)27;
+    SINGLE_LINE,
+    STALE,
     -1,             //IA2_STATE_SUPPORTS_AUTOCOMPLETION
     TRANSIENT,      //IA2_STATE_TRANSIENT
-    VERTICAL        // = (sal_Int16)29;
+    VERTICAL
 };
 
 using namespace com::sun::star::accessibility::AccessibleRole;
@@ -2958,26 +2954,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_states(AccessibleStates __RP
     if (!m_xContext.is())
         return E_FAIL;
 
-    Reference<XAccessibleStateSet> const pRStateSet =
+    sal_Int64 const nRStateSet =
         m_xContext->getAccessibleStateSet();
-    if(!pRStateSet.is())
-    {
-        return S_OK;
-    }
-    Sequence<short> pStates = pRStateSet->getStates();
 
-
-    long count = pStates.getLength() ;
     *states = 0x0;
-    for( int i = 0; i < count; i++  )
+    for( std::size_t j = 0; j < SAL_N_ELEMENTS(UNO_STATES); j++ )
     {
-        for( std::size_t j = 0; j < SAL_N_ELEMENTS(UNO_STATES); j++ )
+        if( (UNO_STATES[j] != -1) && (nRStateSet & UNO_STATES[j]) )
         {
-            if( pStates[i] == UNO_STATES[j] )
-            {
-                *states |= IA2_STATES[j];
-                break;
-            }
+            *states |= IA2_STATES[j];
         }
     }
     return S_OK;

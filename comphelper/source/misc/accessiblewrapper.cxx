@@ -345,9 +345,8 @@ namespace comphelper
         ,m_xChildMapper( new OWrappedAccessibleChildrenManager( getComponentContext() ) )
     {
         // determine if we're allowed to cache children
-        Reference< XAccessibleStateSet > xStates( m_xInnerContext->getAccessibleStateSet( ) );
-        OSL_ENSURE( xStates.is(), "OAccessibleContextWrapperHelper::OAccessibleContextWrapperHelper: no inner state set!" );
-        m_xChildMapper->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANTS) );
+        sal_Int64 aStates = m_xInnerContext->getAccessibleStateSet( );
+        m_xChildMapper->setTransientChildren( aStates & AccessibleStateType::MANAGES_DESCENDANTS );
 
         m_xChildMapper->setOwningAccessible( m_xOwningAccessible );
     }
@@ -417,7 +416,7 @@ namespace comphelper
         if ( AccessibleEventId::STATE_CHANGED == _rEvent.EventId )
         {
             bool bChildTransienceChanged = false;
-            sal_Int16 nChangeState = 0;
+            sal_Int64 nChangeState = 0;
             if ( _rEvent.OldValue >>= nChangeState )
                 bChildTransienceChanged = bChildTransienceChanged || AccessibleStateType::MANAGES_DESCENDANTS == nChangeState;
             if ( _rEvent.NewValue >>= nChangeState )
@@ -543,7 +542,7 @@ namespace comphelper
     }
 
 
-    Reference< XAccessibleStateSet > SAL_CALL OAccessibleContextWrapper::getAccessibleStateSet(  )
+    sal_Int64 SAL_CALL OAccessibleContextWrapper::getAccessibleStateSet(  )
     {
         return m_xInnerContext->getAccessibleStateSet();
     }

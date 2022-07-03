@@ -26,7 +26,6 @@
 
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
@@ -323,33 +322,32 @@ Reference< XAccessibleRelationSet > SAL_CALL SmGraphicAccessible::getAccessibleR
     return new utl::AccessibleRelationSetHelper(); // empty relation set
 }
 
-Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStateSet()
+sal_Int64 SAL_CALL SmGraphicAccessible::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
-    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet =
-            new ::utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if (!pWin)
-        pStateSet->AddState( AccessibleStateType::DEFUNC );
+        nStateSet |= AccessibleStateType::DEFUNC;
     else
     {
-        pStateSet->AddState( AccessibleStateType::ENABLED );
-        pStateSet->AddState( AccessibleStateType::FOCUSABLE );
+        nStateSet |= AccessibleStateType::ENABLED;
+        nStateSet |= AccessibleStateType::FOCUSABLE;
         if (pWin->HasFocus())
-            pStateSet->AddState( AccessibleStateType::FOCUSED );
+            nStateSet |= AccessibleStateType::FOCUSED;
         if (pWin->IsActive())
-            pStateSet->AddState( AccessibleStateType::ACTIVE );
+            nStateSet |= AccessibleStateType::ACTIVE;
         if (pWin->IsVisible())
-            pStateSet->AddState( AccessibleStateType::SHOWING );
+            nStateSet |= AccessibleStateType::SHOWING;
         if (pWin->IsReallyVisible())
-            pStateSet->AddState( AccessibleStateType::VISIBLE );
+            nStateSet |= AccessibleStateType::VISIBLE;
         weld::DrawingArea* pDrawingArea = pWin->GetDrawingArea();
         OutputDevice& rDevice = pDrawingArea->get_ref_device();
         if (COL_TRANSPARENT != rDevice.GetBackground().GetColor())
-            pStateSet->AddState( AccessibleStateType::OPAQUE );
+            nStateSet |= AccessibleStateType::OPAQUE;
     }
 
-    return pStateSet;
+    return nStateSet;
 }
 
 Locale SAL_CALL SmGraphicAccessible::getLocale()

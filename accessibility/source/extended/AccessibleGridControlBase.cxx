@@ -155,13 +155,13 @@ AccessibleGridControlBase::getAccessibleRelationSet()
    return new utl::AccessibleRelationSetHelper;
 }
 
-css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL
+sal_Int64 SAL_CALL
 AccessibleGridControlBase::getAccessibleStateSet()
 {
     SolarMutexGuard aSolarGuard;
 
     // don't check whether alive -> StateSet may contain DEFUNC
-    return implCreateStateSetHelper();
+    return implCreateStateSet();
 }
 
 lang::Locale SAL_CALL AccessibleGridControlBase::getLocale()
@@ -278,22 +278,21 @@ bool AccessibleGridControlBase::implIsShowing()
     return bShowing;
 }
 
-rtl::Reference<::utl::AccessibleStateSetHelper> AccessibleGridControlBase::implCreateStateSetHelper()
+sal_Int64 AccessibleGridControlBase::implCreateStateSet()
 {
-    rtl::Reference<::utl::AccessibleStateSetHelper>
-        pStateSetHelper = new ::utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if( isAlive() )
     {
         // SHOWING done with m_xParent
         if( implIsShowing() )
-            pStateSetHelper->AddState( AccessibleStateType::SHOWING );
+            nStateSet |= AccessibleStateType::SHOWING;
         // GridControl fills StateSet with states depending on object type
-        m_aTable.FillAccessibleStateSet( *pStateSetHelper, getType() );
+        m_aTable.FillAccessibleStateSet( nStateSet, getType() );
     }
     else
-        pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
-    return pStateSetHelper;
+        nStateSet |= AccessibleStateType::DEFUNC;
+    return nStateSet;
 }
 
 // internal helper methods

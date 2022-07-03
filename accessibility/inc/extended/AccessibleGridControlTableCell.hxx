@@ -112,12 +112,9 @@ namespace accessibility
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
             getAccessibleChild( sal_Int32 nChildIndex ) override;
 
-        /** Creates a new AccessibleStateSetHelper and fills it with states of the
-            current object.
-            @return
-                A filled AccessibleStateSetHelper.
+        /** Return a bitset of states of the current object.
         */
-        rtl::Reference<::utl::AccessibleStateSetHelper> implCreateStateSetHelper() override;
+        sal_Int64 implCreateStateSet() override;
 
         // XAccessible ------------------------------------------------------------
 

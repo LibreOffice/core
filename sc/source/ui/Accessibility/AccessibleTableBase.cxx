@@ -361,12 +361,10 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     return uno::Reference<XAccessibleRelationSet>();
 }
 
-uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessibleTableBase::getAccessibleStateSet()
+sal_Int64 SAL_CALL ScAccessibleTableBase::getAccessibleStateSet()
 {
     OSL_FAIL("should be implemented in the abrevated class");
-    uno::Reference< XAccessibleStateSet > xAccessibleStateSet;
-    return xAccessibleStateSet;
+    return 0;
 }
 
     ///=====  XAccessibleSelection  ===========================================

@@ -23,7 +23,6 @@
 #include <helper/accresmgr.hxx>
 #include <strings.hrc>
 
-#include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -123,17 +122,17 @@ void VCLXAccessibleCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindo
 }
 
 
-void VCLXAccessibleCheckBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void VCLXAccessibleCheckBox::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
 
-    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    rStateSet |= AccessibleStateType::FOCUSABLE;
 
     if ( IsChecked() )
-        rStateSet.AddState( AccessibleStateType::CHECKED );
+        rStateSet |= AccessibleStateType::CHECKED;
 
     if ( IsIndeterminate() )
-        rStateSet.AddState( AccessibleStateType::INDETERMINATE );
+        rStateSet |= AccessibleStateType::INDETERMINATE;
 }
 
 
