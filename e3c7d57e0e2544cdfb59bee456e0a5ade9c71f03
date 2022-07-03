@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbc4926c_fb4923e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-07-03T17:38:04Z",
+      "side": 1,
+      "message": "I\u0027m not sure if changing to singular is correct, given that if you first select several rows it will insert same amount of new rows.",
+      "revId": "e3c7d57e0e2544cdfb59bee456e0a5ade9c71f03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
