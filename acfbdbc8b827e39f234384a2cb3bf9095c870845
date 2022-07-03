@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c60a91db_f03916b5",
+        "filename": "vcl/qa/cppunit/png/PngFilterTest.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-07-03T19:40:22Z",
+      "side": 1,
+      "message": "Okay, all test cases added with the expected results and the test passes for me.\n\nI\u0027ve added these notes here to explain why certain test cases look weird, for example the first one using an 8 bit palette instead of a 1 bit palette as we discussed.\n\nI\u0027ve also tested that modifying these test cases produces errors as they should.",
+      "revId": "acfbdbc8b827e39f234384a2cb3bf9095c870845",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
