@@ -30,7 +30,6 @@
 #include <memory>
 
 using namespace ::dbaui;
-using namespace ::utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::lang;

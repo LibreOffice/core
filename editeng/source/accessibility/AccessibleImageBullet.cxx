@@ -31,7 +31,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>
 #include <editeng/eerdll.hxx>
@@ -66,13 +65,13 @@ namespace accessibility
         try
         {
             // Create the state set.
-            mxStateSet  = new ::utl::AccessibleStateSetHelper ();
+            mnStateSet = 0;
 
             // these are always on
-            mxStateSet->AddState( AccessibleStateType::VISIBLE );
-            mxStateSet->AddState( AccessibleStateType::SHOWING );
-            mxStateSet->AddState( AccessibleStateType::ENABLED );
-            mxStateSet->AddState( AccessibleStateType::SENSITIVE );
+            mnStateSet |= AccessibleStateType::VISIBLE;
+            mnStateSet |= AccessibleStateType::SHOWING;
+            mnStateSet |= AccessibleStateType::ENABLED;
+            mnStateSet |= AccessibleStateType::SENSITIVE;
         }
         catch( const uno::Exception& ) {}
     }
@@ -148,17 +147,13 @@ namespace accessibility
         return uno::Reference< XAccessibleRelationSet >();
     }
 
-    uno::Reference< XAccessibleStateSet > SAL_CALL AccessibleImageBullet::getAccessibleStateSet()
+    sal_Int64 SAL_CALL AccessibleImageBullet::getAccessibleStateSet()
     {
-
         SolarMutexGuard aGuard;
 
         // Create a copy of the state set and return it.
 
-        if( !mxStateSet )
-            return uno::Reference<XAccessibleStateSet>();
-
-        return uno::Reference<XAccessibleStateSet>( new ::utl::AccessibleStateSetHelper (*mxStateSet) );
+        return mnStateSet;
     }
 
     lang::Locale SAL_CALL AccessibleImageBullet::getLocale()
@@ -420,22 +415,20 @@ namespace accessibility
                                                          aEvent );
     }
 
-    void AccessibleImageBullet::SetState( const sal_Int16 nStateId )
+    void AccessibleImageBullet::SetState( const sal_Int64 nStateId )
     {
-        if( mxStateSet != nullptr &&
-            !mxStateSet->contains(nStateId) )
+        if( !(mnStateSet & nStateId) )
         {
-            mxStateSet->AddState( nStateId );
+            mnStateSet |= nStateId;
             FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any( nStateId ) );
         }
     }
 
-    void AccessibleImageBullet::UnSetState( const sal_Int16 nStateId )
+    void AccessibleImageBullet::UnSetState( const sal_Int64 nStateId )
     {
-        if( mxStateSet != nullptr &&
-            mxStateSet->contains(nStateId) )
+        if( mnStateSet & nStateId )
         {
-            mxStateSet->RemoveState( nStateId );
+            mnStateSet &= ~nStateId;
             FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::Any( nStateId ) );
         }
     }

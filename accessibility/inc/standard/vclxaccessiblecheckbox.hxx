@@ -51,7 +51,7 @@ private:
     void    SetIndeterminate( bool bIndeterminate );
 
     virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
+    virtual void FillAccessibleStateSet( sal_Int64& rStateSet ) override;
 
 public:
     VCLXAccessibleCheckBox( VCLXWindow* pVCLXindow );

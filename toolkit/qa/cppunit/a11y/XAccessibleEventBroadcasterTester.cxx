@@ -92,10 +92,9 @@ bool XAccessibleEventBroadcasterTester::isTransient(
 bool XAccessibleEventBroadcasterTester::isTransient(
     const uno::Reference<accessibility::XAccessibleContext> xCtx)
 {
-    return (
-        xCtx->getAccessibleStateSet()->contains(accessibility::AccessibleStateType::TRANSIENT)
-        && xCtx->getAccessibleParent()->getAccessibleContext()->getAccessibleStateSet()->contains(
-               accessibility::AccessibleStateType::MANAGES_DESCENDANTS));
+    return ((xCtx->getAccessibleStateSet() & accessibility::AccessibleStateType::TRANSIENT)
+            && (xCtx->getAccessibleParent()->getAccessibleContext()->getAccessibleStateSet()
+                & accessibility::AccessibleStateType::MANAGES_DESCENDANTS));
 }
 
 /**

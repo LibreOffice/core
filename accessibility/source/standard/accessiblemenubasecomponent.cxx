@@ -28,7 +28,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/vclevent.hxx>
 
@@ -112,7 +111,7 @@ void OAccessibleMenuBaseComponent::SetEnabled( bool bEnabled )
     if ( m_bEnabled == bEnabled )
         return;
 
-    sal_Int16 nStateType=AccessibleStateType::ENABLED;
+    sal_Int64 nStateType=AccessibleStateType::ENABLED;
     if (IsMenuHideDisabledEntries())
     {
         nStateType = AccessibleStateType::VISIBLE;
@@ -689,22 +688,22 @@ Reference< XAccessibleContext > OAccessibleMenuBaseComponent::getAccessibleConte
 // XAccessibleContext
 
 
-Reference< XAccessibleStateSet > OAccessibleMenuBaseComponent::getAccessibleStateSet(  )
+sal_Int64 OAccessibleMenuBaseComponent::getAccessibleStateSet(  )
 {
     OExternalLockGuard aGuard( this );
 
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
-        FillAccessibleStateSet( *pStateSetHelper );
+        FillAccessibleStateSet( nStateSet );
     }
     else
     {
-        pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
+        nStateSet |= AccessibleStateType::DEFUNC;
     }
 
-    return pStateSetHelper;
+    return nStateSet;
 }
 
 

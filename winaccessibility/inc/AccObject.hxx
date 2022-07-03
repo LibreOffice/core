@@ -74,7 +74,7 @@ private:
     void UpdateActionDesc();
     void UpdateRole();
 
-    DWORD GetMSAAStateFromUNO(short xState);//translate state from UNO to MSAA value
+    DWORD GetMSAAStateFromUNO(sal_Int64 xState);//translate state from UNO to MSAA value
     css::accessibility::XAccessibleSelection* GetXAccessibleSelection();
     void GetExpandedState(sal_Bool* isExpandable, sal_Bool* isExpanded);
     OUString GetMAccessibleValueFromAny(css::uno::Any pAny);
@@ -109,8 +109,8 @@ public:
 
     void NotifyDestroy();
 
-    void  DecreaseState(short xState );//call COM interface DecreaseState method
-    void  IncreaseState( short xState );//call COM interface IncreaseState method
+    void  DecreaseState( sal_Int64 xState );//call COM interface DecreaseState method
+    void  IncreaseState( sal_Int64 xState );//call COM interface IncreaseState method
 
     void  SetName( css::uno::Any newName);
     void  SetValue( css::uno::Any pAny );

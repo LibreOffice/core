@@ -121,8 +121,7 @@ public:
     virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet() override;
 
-    virtual css::uno::Reference<css::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet() override;
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
 
     virtual css::lang::Locale SAL_CALL getLocale() override;
 
@@ -177,7 +176,7 @@ protected:
     css::uno::Reference<css::awt::XWindow2> mxBorderWindow;
     const css::lang::Locale maLocale;
     const sal_Int16 mnRole;
-    sal_uInt32 mnStateSet;
+    sal_Int64 mnStateSet;
     bool mbIsFocused;
     css::uno::Reference<css::accessibility::XAccessible> mxParentAccessible;
     ::std::vector<rtl::Reference<AccessibleObject> > maChildren;
@@ -187,43 +186,15 @@ protected:
     virtual awt::Size GetSize();
     virtual awt::Point GetAbsoluteParentLocation();
 
-    virtual bool GetWindowState (const sal_Int16 nType) const;
+    virtual bool GetWindowState (const sal_Int64 nType) const;
 
-    void UpdateState (const sal_Int16 aState, const bool bValue);
+    void UpdateState (const sal_Int64 aState, const bool bValue);
 
     /// @throws css::lang::DisposedException
     void ThrowIfDisposed() const;
 };
 
-//===== AccessibleStateSet ====================================================
-
 namespace {
-typedef ::cppu::WeakComponentImplHelper <
-    css::accessibility::XAccessibleStateSet
-    > AccessibleStateSetInterfaceBase;
-
-class AccessibleStateSet
-    : public ::cppu::BaseMutex,
-      public AccessibleStateSetInterfaceBase
-{
-public:
-    explicit AccessibleStateSet (const sal_Int32 nStateSet);
-
-    static sal_uInt32 GetStateMask (const sal_Int16 nType);
-
-    //----- XAccessibleStateSet -----------------------------------------------
-
-    virtual sal_Bool SAL_CALL isEmpty() override;
-
-    virtual sal_Bool SAL_CALL contains (sal_Int16 nState) override;
-
-    virtual sal_Bool SAL_CALL containsAll (const css::uno::Sequence<sal_Int16>& rStateSet) override;
-
-    virtual css::uno::Sequence<sal_Int16> SAL_CALL getStates() override;
-
-private:
-    const sal_Int32 mnStateSet;
-};
 
 //===== AccessibleRelationSet =================================================
 
@@ -335,7 +306,7 @@ protected:
     virtual awt::Point GetRelativeLocation() override;
     virtual awt::Size GetSize() override;
     virtual awt::Point GetAbsoluteParentLocation() override;
-    virtual bool GetWindowState (const sal_Int16 nType) const override;
+    virtual bool GetWindowState (const sal_Int64 nType) const override;
 
 private:
     SharedPresenterTextParagraph mpParagraph;
@@ -860,12 +831,12 @@ Reference<XAccessibleRelationSet> SAL_CALL
     return nullptr;
 }
 
-Reference<XAccessibleStateSet> SAL_CALL
+sal_Int64 SAL_CALL
     PresenterAccessible::AccessibleObject::getAccessibleStateSet()
 {
     ThrowIfDisposed();
 
-    return Reference<XAccessibleStateSet>(new AccessibleStateSet(mnStateSet));
+    return mnStateSet;
 }
 
 lang::Locale SAL_CALL
@@ -1052,7 +1023,7 @@ void SAL_CALL PresenterAccessible::AccessibleObject::disposing (const css::lang:
 
 //----- private ---------------------------------------------------------------
 
-bool PresenterAccessible::AccessibleObject::GetWindowState (const sal_Int16 nType) const
+bool PresenterAccessible::AccessibleObject::GetWindowState (const sal_Int64 nType) const
 {
     switch (nType)
     {
@@ -1088,20 +1059,19 @@ void PresenterAccessible::AccessibleObject::UpdateStateSet()
 }
 
 void PresenterAccessible::AccessibleObject::UpdateState(
-    const sal_Int16 nState,
+    const sal_Int64 nState,
     const bool bValue)
 {
-    const sal_uInt32 nStateMask (AccessibleStateSet::GetStateMask(nState));
-    if (((mnStateSet & nStateMask) != 0) == bValue)
+    if (((mnStateSet & nState) != 0) == bValue)
         return;
     if (bValue)
     {
-        mnStateSet |= nStateMask;
+        mnStateSet |= nState;
         FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, Any(), Any(nState));
     }
     else
     {
-        mnStateSet &= ~nStateMask;
+        mnStateSet &= ~nState;
         FireAccessibleEvent(AccessibleEventId::STATE_CHANGED, Any(nState), Any());
     }
 }
@@ -1220,51 +1190,6 @@ void PresenterAccessible::AccessibleObject::ThrowIfDisposed() const
         throw lang::DisposedException("object has already been disposed", uno::Reference<uno::XInterface>(const_cast<uno::XWeak*>(static_cast<uno::XWeak const *>(this))));
 }
 
-//===== AccessibleStateSet ====================================================
-
-AccessibleStateSet::AccessibleStateSet (const sal_Int32 nStateSet)
-    : AccessibleStateSetInterfaceBase(m_aMutex),
-      mnStateSet (nStateSet)
-{
-}
-
-sal_uInt32 AccessibleStateSet::GetStateMask (const sal_Int16 nState)
-{
-    if (nState<0 || o3tl::make_unsigned(nState)>=sizeof(sal_uInt32)*8)
-    {
-        throw RuntimeException("AccessibleStateSet::GetStateMask: invalid state");
-    }
-
-    return 1<<nState;
-}
-
-//----- XAccessibleStateSet ---------------------------------------------------
-
-sal_Bool SAL_CALL AccessibleStateSet::isEmpty()
-{
-    return mnStateSet==0;
-}
-
-sal_Bool SAL_CALL AccessibleStateSet::contains (sal_Int16 nState)
-{
-    return (mnStateSet & GetStateMask(nState)) != 0;
-}
-
-sal_Bool SAL_CALL AccessibleStateSet::containsAll (const css::uno::Sequence<sal_Int16>& rStateSet)
-{
-    return std::none_of(rStateSet.begin(), rStateSet.end(),
-        [this](const sal_Int16 nState) { return (mnStateSet & GetStateMask(nState)) == 0; });
-}
-
-css::uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSet::getStates()
-{
-    ::std::vector<sal_Int16> aStates;
-    aStates.reserve(sizeof(mnStateSet)*8);
-    for (sal_uInt16 nIndex=0; nIndex<sizeof(mnStateSet)*8; ++nIndex)
-        if ((mnStateSet & GetStateMask(nIndex)) != 0)
-            aStates.push_back(nIndex);
-    return Sequence<sal_Int16>(aStates.data(), aStates.size());
-}
 
 //===== AccessibleRelationSet =================================================
 
@@ -1617,7 +1542,7 @@ awt::Point PresenterAccessible::AccessibleParagraph::GetAbsoluteParentLocation()
     return awt::Point();
 }
 
-bool PresenterAccessible::AccessibleParagraph::GetWindowState (const sal_Int16 nType) const
+bool PresenterAccessible::AccessibleParagraph::GetWindowState (const sal_Int64 nType) const
 {
     switch (nType)
     {

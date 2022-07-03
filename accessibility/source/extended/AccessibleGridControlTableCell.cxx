@@ -40,7 +40,6 @@ namespace accessibility
         }
     }
     using namespace ::com::sun::star::lang;
-    using namespace utl;
     using namespace comphelper;
     using namespace ::com::sun::star::uno;
     using ::com::sun::star::accessibility::XAccessible;
@@ -177,27 +176,24 @@ namespace accessibility
         throw css::lang::IndexOutOfBoundsException();
     }
 
-    /** Creates a new AccessibleStateSetHelper and fills it with states of the
-        current object.
-        @return
-            A filled AccessibleStateSetHelper.
+    /** Return a bitset of states of the current object.
     */
-    rtl::Reference<::utl::AccessibleStateSetHelper> AccessibleGridControlTableCell::implCreateStateSetHelper()
+    sal_Int64 AccessibleGridControlTableCell::implCreateStateSet()
     {
-        rtl::Reference<::utl::AccessibleStateSetHelper> pStateSetHelper = new ::utl::AccessibleStateSetHelper;
+        sal_Int64 nStateSet = 0;
 
         if( isAlive() )
         {
             // SHOWING done with mxParent
             if( implIsShowing() )
-                pStateSetHelper->AddState( AccessibleStateType::SHOWING );
+                nStateSet |= AccessibleStateType::SHOWING;
 
-            m_aTable.FillAccessibleStateSetForCell( *pStateSetHelper, getRowPos(), static_cast< sal_uInt16 >( getColumnPos() ) );
+            m_aTable.FillAccessibleStateSetForCell( nStateSet, getRowPos(), static_cast< sal_uInt16 >( getColumnPos() ) );
         }
         else
-            pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
+            nStateSet |= AccessibleStateType::DEFUNC;
 
-        return pStateSetHelper;
+        return nStateSet;
     }
 
 

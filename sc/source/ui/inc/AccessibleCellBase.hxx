@@ -118,8 +118,7 @@ protected:
     sal_Int32 mnIndex;
 
 private:
-    virtual bool IsEditable(
-        const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
+    virtual bool IsEditable(sal_Int64 nParentStates);
 protected:
     /// @throw css::uno::RuntimeException
     OUString GetNote() const;

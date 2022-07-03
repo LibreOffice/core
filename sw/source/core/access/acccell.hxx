@@ -46,7 +46,7 @@ class SwAccessibleCell : public SwAccessibleContext,
 protected:
     // Set states for getAccessibleStateSet.
     // This derived class additionally sets SELECTABLE(1) and SELECTED(+)
-    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) override;
+    virtual void GetStates( sal_Int64& rStateSet ) override;
 
     virtual void InvalidateCursorPos_() override;
 

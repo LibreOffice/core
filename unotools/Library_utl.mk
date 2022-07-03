@@ -53,7 +53,6 @@ $(eval $(call gb_Library_use_libraries,utl,\
 
 $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/accessibility/accessiblerelationsethelper \
-    unotools/source/accessibility/accessiblestatesethelper \
 ))
 
 # add all source files that shall be compiled with exceptions enabled
