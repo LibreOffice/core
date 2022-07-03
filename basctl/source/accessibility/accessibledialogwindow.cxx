@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -395,27 +394,27 @@ void AccessibleDialogWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindo
 }
 
 
-void AccessibleDialogWindow::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void AccessibleDialogWindow::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     if ( !m_pDialogWindow )
         return;
 
     if ( m_pDialogWindow->IsEnabled() )
-        rStateSet.AddState( AccessibleStateType::ENABLED );
+        rStateSet |= AccessibleStateType::ENABLED;
 
-    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    rStateSet |= AccessibleStateType::FOCUSABLE;
 
     if ( m_pDialogWindow->HasFocus() )
-        rStateSet.AddState( AccessibleStateType::FOCUSED );
+        rStateSet |= AccessibleStateType::FOCUSED;
 
-    rStateSet.AddState( AccessibleStateType::VISIBLE );
+    rStateSet |= AccessibleStateType::VISIBLE;
 
     if ( m_pDialogWindow->IsVisible() )
-        rStateSet.AddState( AccessibleStateType::SHOWING );
+        rStateSet |= AccessibleStateType::SHOWING;
 
-    rStateSet.AddState( AccessibleStateType::OPAQUE );
+    rStateSet |= AccessibleStateType::OPAQUE;
 
-    rStateSet.AddState( AccessibleStateType::RESIZABLE );
+    rStateSet |= AccessibleStateType::RESIZABLE;
 }
 
 
@@ -672,22 +671,22 @@ Reference< XAccessibleRelationSet > AccessibleDialogWindow::getAccessibleRelatio
 }
 
 
-Reference< XAccessibleStateSet > AccessibleDialogWindow::getAccessibleStateSet(  )
+sal_Int64 AccessibleDialogWindow::getAccessibleStateSet(  )
 {
     OExternalLockGuard aGuard( this );
 
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
-        FillAccessibleStateSet( *pStateSetHelper );
+        FillAccessibleStateSet( nStateSet );
     }
     else
     {
-        pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
+        nStateSet |= AccessibleStateType::DEFUNC;
     }
 
-    return pStateSetHelper;
+    return nStateSet;
 }
 
 

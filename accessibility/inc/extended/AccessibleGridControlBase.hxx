@@ -27,7 +27,6 @@
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -38,10 +37,6 @@
 
 
 namespace vcl { class Window; }
-
-namespace utl {
-    class AccessibleStateSetHelper;
-}
 
 
 namespace accessibility {
@@ -103,8 +98,7 @@ public:
         getAccessibleRelationSet() override;
 
     /** @return  The set of current states. */
-    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL
-        getAccessibleStateSet() override;
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
 
     /** @return  The parent's locale. */
     virtual css::lang::Locale SAL_CALL getLocale() override;
@@ -212,13 +206,13 @@ protected:
     //    @return  The bounding box (VCL rect.) in screen coordinates. */
     virtual tools::Rectangle implGetBoundingBoxOnScreen() = 0;
 
-    /** Creates a new AccessibleStateSetHelper and fills it with states of the
+    /** Creates a bitset of states of the
         current object. This method calls FillStateSet at the GridControl which
         fills it with more states depending on the object type. Derived classes
         may overwrite this method and add more states.
         @attention  This method requires locked mutex's.
-        @return  A filled AccessibleStateSetHelper. */
-    virtual rtl::Reference<::utl::AccessibleStateSetHelper> implCreateStateSetHelper();
+    */
+    virtual sal_Int64 implCreateStateSetHelper();
 
     // internal helper methods
 

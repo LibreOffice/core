@@ -19,7 +19,6 @@
 
 #include <standard/vclxaccessiblefixedtext.hxx>
 
-#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
@@ -31,12 +30,12 @@ using namespace ::com::sun::star::accessibility;
 
 // VCLXAccessibleFixedText
 
-void VCLXAccessibleFixedText::FillAccessibleStateSet(utl::AccessibleStateSetHelper& rStateSet)
+void VCLXAccessibleFixedText::FillAccessibleStateSet(sal_Int64& rStateSet)
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet(rStateSet);
 
     if (GetWindow() && GetWindow()->GetStyle() & WB_WORDBREAK)
-        rStateSet.AddState(AccessibleStateType::MULTI_LINE);
+        rStateSet |= AccessibleStateType::MULTI_LINE;
 }
 
 // XServiceInfo

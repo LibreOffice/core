@@ -47,7 +47,7 @@ protected:
 
     virtual bool            IsHighlighted() override;
 
-    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
+    virtual void            FillAccessibleStateSet( sal_Int64& rStateSet ) override;
 
     // OCommonAccessibleText
     virtual OUString                     implGetText() final override;

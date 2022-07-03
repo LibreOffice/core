@@ -41,7 +41,6 @@
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
@@ -579,7 +578,7 @@ QAccessible::Role QtAccessibleWidget::role() const
 
 namespace
 {
-void lcl_addState(QAccessible::State* state, sal_Int16 nState)
+void lcl_addState(QAccessible::State* state, sal_Int64 nState)
 {
     switch (nState)
     {
@@ -697,16 +696,12 @@ QAccessible::State QtAccessibleWidget::state() const
     if (!xAc.is())
         return state;
 
-    Reference<XAccessibleStateSet> xStateSet(xAc->getAccessibleStateSet());
+    sal_Int64 nStateSet(xAc->getAccessibleStateSet());
 
-    if (!xStateSet.is())
-        return state;
-
-    const Sequence<sal_Int16> aStates = xStateSet->getStates();
-
-    for (const sal_Int16 nState : aStates)
+    for (int i = 0; i < 63; ++i)
     {
-        lcl_addState(&state, nState);
+        if (nStateSet & (1 << i))
+            lcl_addState(&state, 1 << i);
     }
 
     return state;

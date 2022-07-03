@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -335,14 +334,13 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
 
 // SwAccessibleDocument
 
-void SwAccessibleDocument::GetStates(
-        ::utl::AccessibleStateSetHelper& rStateSet )
+void SwAccessibleDocument::GetStates( sal_Int64& rStateSet )
 {
     SwAccessibleContext::GetStates( rStateSet );
 
     // MULTISELECTABLE
-    rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
-    rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
+    rStateSet |= AccessibleStateType::MULTI_SELECTABLE;
+    rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
 }
 
 SwAccessibleDocument::SwAccessibleDocument(

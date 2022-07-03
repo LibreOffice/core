@@ -14038,7 +14038,6 @@ unotest/source/cpp/unobootstrapprotector/unobootstrapprotector.cxx
 unotest/source/cpp/unoexceptionprotector/unoexceptionprotector.cxx
 unotools/qa/unit/testGetEnglishSearchName.cxx
 unotools/source/accessibility/accessiblerelationsethelper.cxx
-unotools/source/accessibility/accessiblestatesethelper.cxx
 unotools/source/config/bootstrap.cxx
 unotools/source/config/cmdoptions.cxx
 unotools/source/config/compatibility.cxx

@@ -44,10 +44,6 @@ namespace svt {
     class BrowseBoxImpl;
 }
 
-namespace utl {
-    class AccessibleStateSetHelper;
-}
-
 namespace vcl {
     class IAccessibleFactory;
 }
@@ -803,13 +799,13 @@ public:
     /** Fills the StateSet with all states (except DEFUNC and SHOWING, done by
         the accessible object), depending on the specified object type. */
     virtual void FillAccessibleStateSet(
-            ::utl::AccessibleStateSetHelper& rStateSet,
+            sal_Int64& rStateSet,
             AccessibleBrowseBoxObjType eObjType ) const override;
 
     /** Fills the StateSet with all states for one cell (except DEFUNC and SHOWING, done by
         the accessible object). */
     virtual void FillAccessibleStateSetForCell(
-            ::utl::AccessibleStateSetHelper& _rStateSet,
+            sal_Int64& _rStateSet,
             sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
 
     /** Sets focus to current cell of the data table. */

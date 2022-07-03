@@ -23,7 +23,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -318,14 +317,14 @@ namespace accessibility
             pCtrl->SetNoSelection();
     }
 
-    void AccessibleIconChoiceCtrl::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+    void AccessibleIconChoiceCtrl::FillAccessibleStateSet( sal_Int64& rStateSet )
     {
         VCLXAccessibleComponent::FillAccessibleStateSet( rStateSet );
         if ( isAlive() )
         {
-            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-            rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
-            rStateSet.AddState( AccessibleStateType::SELECTABLE );
+            rStateSet |= AccessibleStateType::FOCUSABLE;
+            rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
+            rStateSet |= AccessibleStateType::SELECTABLE;
         }
     }
 

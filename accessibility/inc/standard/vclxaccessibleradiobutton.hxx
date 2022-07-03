@@ -40,7 +40,7 @@ class VCLXAccessibleRadioButton final : public VCLXAccessibleTextComponent,
 
     virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet ) override;
-    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
+    virtual void FillAccessibleStateSet( sal_Int64& rStateSet ) override;
 
 public:
     using VCLXAccessibleTextComponent::VCLXAccessibleTextComponent;

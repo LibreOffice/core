@@ -38,7 +38,6 @@ class VclWindowEvent;
 
 namespace utl {
 class AccessibleRelationSetHelper;
-class AccessibleStateSetHelper;
 }
 
 
@@ -63,7 +62,7 @@ protected:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual void    ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );
     virtual void    FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet );
-    virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    virtual void    FillAccessibleStateSet( sal_Int64& rStateSet );
 
     virtual css::uno::Reference< css::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent );
 
@@ -100,7 +99,7 @@ public:
     OUString SAL_CALL getAccessibleName(  ) override;
     OUString SAL_CALL getAccessibleId(  ) override;
     css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
-    css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
+    sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
     css::lang::Locale SAL_CALL getLocale(  ) override;
 
     // css::accessibility::XAccessibleComponent
@@ -140,7 +139,7 @@ private:
     OUString getAccessibleName() => VCL Window::GetAccessibleText() => Most windows return Window::GetText()
     OUString getAccessibleId() => VCL Window::get_id()
     Reference< XAccessibleRelationSet > getAccessibleRelationSet()
-    Reference< XAccessibleStateSet > getAccessibleStateSet() => override FillAccessibleStateSet( ... )
+    sal_Int64 getAccessibleStateSet() => override FillAccessibleStateSet( ... )
 
 ---------------------------------------------------------- */
 

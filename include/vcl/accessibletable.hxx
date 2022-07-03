@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 namespace com::sun::star::accessibility { class XAccessible; }
-namespace utl { class AccessibleStateSetHelper; }
 namespace vcl { class Window; }
 
 namespace vcl::table
@@ -70,7 +69,7 @@ public:
 
     /** Fills the StateSet with all states (except DEFUNC and SHOWING, done by
             the accessible object), depending on the specified object type. */
-    virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet,
+    virtual void FillAccessibleStateSet( sal_Int64& rStateSet,
             AccessibleTableControlObjType eObjType ) const= 0;
 
     // Window
@@ -90,7 +89,7 @@ public:
     virtual tools::Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) = 0;
     virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)= 0;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)= 0;
-    virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const= 0;
+    virtual void FillAccessibleStateSetForCell( sal_Int64& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const= 0;
     virtual OUString GetRowName(sal_Int32 _nIndex) const = 0;
     virtual OUString GetColumnName( sal_Int32 _nIndex ) const = 0;
     virtual OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;

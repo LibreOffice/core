@@ -26,7 +26,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/stringtransfer.hxx>
@@ -296,32 +295,32 @@ namespace accessibility
         return new utl::AccessibleRelationSetHelper;
     }
 
-    Reference< XAccessibleStateSet > SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleStateSet(  )
+    sal_Int64 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleStateSet(  )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
+        sal_Int64 nStateSet = 0;
 
         if ( IsAlive_Impl() )
         {
-            pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
-            pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
-            pStateSetHelper->AddState( AccessibleStateType::ENABLED );
-            pStateSetHelper->AddState( AccessibleStateType::SENSITIVE );
+            nStateSet |= AccessibleStateType::TRANSIENT;
+            nStateSet |= AccessibleStateType::SELECTABLE;
+            nStateSet |= AccessibleStateType::ENABLED;
+            nStateSet |= AccessibleStateType::SENSITIVE;
             if ( IsShowing_Impl() )
             {
-                pStateSetHelper->AddState( AccessibleStateType::SHOWING );
-                pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
+                nStateSet |=  AccessibleStateType::SHOWING;
+                nStateSet |=  AccessibleStateType::VISIBLE;
             }
 
             if ( m_pIconCtrl && m_pIconCtrl->GetCursor() == m_pIconCtrl->GetEntry( m_nIndex ) )
-                pStateSetHelper->AddState( AccessibleStateType::SELECTED );
+                nStateSet |=  AccessibleStateType::SELECTED;
         }
         else
-            pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
+            nStateSet |=  AccessibleStateType::DEFUNC;
 
-        return pStateSetHelper;
+        return nStateSet;
     }
 
     Locale SAL_CALL AccessibleIconChoiceCtrlEntry::getLocale(  )

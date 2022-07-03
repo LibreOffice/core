@@ -26,7 +26,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -53,17 +52,16 @@ AccessibleContextBase::AccessibleContextBase (
         maRole(aRole)
 {
     // Create the state set.
-    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet  = new ::utl::AccessibleStateSetHelper ();
-    mxStateSet = pStateSet;
+    mnStateSet = 0;
 
     // Set some states.  Don't use the SetState method because no events
     // shall be broadcasted (that is not yet initialized anyway).
-    pStateSet->AddState (AccessibleStateType::ENABLED);
-    pStateSet->AddState (AccessibleStateType::SENSITIVE);
-    pStateSet->AddState (AccessibleStateType::SHOWING);
-    pStateSet->AddState (AccessibleStateType::VISIBLE);
-    pStateSet->AddState (AccessibleStateType::FOCUSABLE);
-    pStateSet->AddState (AccessibleStateType::SELECTABLE);
+    mnStateSet |= AccessibleStateType::ENABLED;
+    mnStateSet |= AccessibleStateType::SENSITIVE;
+    mnStateSet |= AccessibleStateType::SHOWING;
+    mnStateSet |= AccessibleStateType::VISIBLE;
+    mnStateSet |= AccessibleStateType::FOCUSABLE;
+    mnStateSet |= AccessibleStateType::SELECTABLE;
 
     // Create the relation set.
     mxRelationSet = new ::utl::AccessibleRelationSetHelper ();
@@ -73,12 +71,12 @@ AccessibleContextBase::~AccessibleContextBase()
 {
 }
 
-bool AccessibleContextBase::SetState (sal_Int16 aState)
+bool AccessibleContextBase::SetState (sal_Int64 aState)
 {
     ::osl::ClearableMutexGuard aGuard (m_aMutex);
-    if ((mxStateSet != nullptr) && !mxStateSet->contains(aState))
+    if (!(mnStateSet & aState))
     {
-        mxStateSet->AddState (aState);
+        mnStateSet |= aState;
         // Clear the mutex guard so that it is not locked during calls to
         // listeners.
         aGuard.clear();
@@ -100,12 +98,12 @@ bool AccessibleContextBase::SetState (sal_Int16 aState)
 }
 
 
-bool AccessibleContextBase::ResetState (sal_Int16 aState)
+bool AccessibleContextBase::ResetState (sal_Int64 aState)
 {
     ::osl::ClearableMutexGuard aGuard (m_aMutex);
-    if ((mxStateSet != nullptr) && mxStateSet->contains(aState))
+    if (mnStateSet & aState)
     {
-        mxStateSet->RemoveState (aState);
+        mnStateSet &= ~aState;
         // Clear the mutex guard so that it is not locked during calls to listeners.
         aGuard.clear();
 
@@ -122,14 +120,10 @@ bool AccessibleContextBase::ResetState (sal_Int16 aState)
 }
 
 
-bool AccessibleContextBase::GetState (sal_Int16 aState)
+bool AccessibleContextBase::GetState (sal_Int64 aState)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
-    if (mxStateSet != nullptr)
-        return mxStateSet->contains(aState);
-    else
-        // If there is no state set then return false as a default value.
-        return false;
+    return mnStateSet & aState;
 }
 
 
@@ -292,28 +286,19 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
         SHOWING
         VISIBLE
 */
-uno::Reference<XAccessibleStateSet> SAL_CALL
+sal_Int64 SAL_CALL
     AccessibleContextBase::getAccessibleStateSet()
 {
-    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet;
-
     if (rBHelper.bDisposed)
     {
         // We are already disposed!
         // Create a new state set that has only set the DEFUNC state.
-        pStateSet = new ::utl::AccessibleStateSetHelper ();
-        pStateSet->AddState (AccessibleStateType::DEFUNC);
+        return AccessibleStateType::DEFUNC;
     }
     else
     {
-        // Create a copy of the state set and return it.
-        pStateSet = mxStateSet;
-
-        if (pStateSet != nullptr)
-            pStateSet = new ::utl::AccessibleStateSetHelper (*pStateSet);
+        return mnStateSet;
     }
-
-    return pStateSet;
 }
 
 

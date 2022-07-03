@@ -28,7 +28,6 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/event.hxx>
@@ -93,22 +92,22 @@ bool VCLXAccessibleMenuItem::IsHighlighted()
 }
 
 
-void VCLXAccessibleMenuItem::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void VCLXAccessibleMenuItem::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     OAccessibleMenuItemComponent::FillAccessibleStateSet( rStateSet );
 
-    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    rStateSet |= AccessibleStateType::FOCUSABLE;
 
     if ( IsFocused() )
-        rStateSet.AddState( AccessibleStateType::FOCUSED );
+        rStateSet |= AccessibleStateType::FOCUSED;
 
-    rStateSet.AddState( AccessibleStateType::SELECTABLE );
+    rStateSet |= AccessibleStateType::SELECTABLE;
 
     if ( IsSelected() )
-        rStateSet.AddState( AccessibleStateType::SELECTED );
+        rStateSet |= AccessibleStateType::SELECTED;
 
     if ( IsChecked() )
-        rStateSet.AddState( AccessibleStateType::CHECKED );
+        rStateSet |= AccessibleStateType::CHECKED;
 }
 
 

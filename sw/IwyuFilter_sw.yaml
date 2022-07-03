@@ -462,9 +462,6 @@ excludelist:
     sw/qa/extras/layout/layout.cxx:
     - comphelper/scopeguard.hxx
     - com/sun/star/linguistic2/LinguServiceManager.hpp
-    sw/source/core/access/acccontext.cxx:
-    # Actually used
-    - com/sun/star/accessibility/XAccessibleStateSet.hpp
     sw/source/core/access/AccessibilityCheck.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp

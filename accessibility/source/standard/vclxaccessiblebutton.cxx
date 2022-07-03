@@ -21,7 +21,6 @@
 #include <helper/accresmgr.hxx>
 #include <strings.hrc>
 
-#include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -68,7 +67,7 @@ void VCLXAccessibleButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowE
 }
 
 
-void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void VCLXAccessibleButton::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
 
@@ -76,22 +75,22 @@ void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper
     if ( !pButton )
         return;
 
-    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    rStateSet |= AccessibleStateType::FOCUSABLE;
 
     if ( pButton->GetState() == TRISTATE_TRUE )
-        rStateSet.AddState( AccessibleStateType::CHECKED );
+        rStateSet |= AccessibleStateType::CHECKED;
 
     if ( pButton->IsPressed() )
-        rStateSet.AddState( AccessibleStateType::PRESSED );
+        rStateSet |= AccessibleStateType::PRESSED;
 
     // IA2 CWS: if the button has a popup menu, it should has the state EXPANDABLE
     if( pButton->GetType() == WindowType::MENUBUTTON )
     {
-        rStateSet.AddState( AccessibleStateType::EXPANDABLE );
+        rStateSet |= AccessibleStateType::EXPANDABLE;
     }
     if( pButton->GetStyle() & WB_DEFBUTTON )
     {
-        rStateSet.AddState( AccessibleStateType::DEFAULT );
+        rStateSet |= AccessibleStateType::DEFAULT;
     }
 }
 

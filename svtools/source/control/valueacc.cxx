@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
@@ -211,33 +210,33 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueItemAcc::g
 }
 
 
-uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueItemAcc::getAccessibleStateSet()
+sal_Int64 SAL_CALL ValueItemAcc::getAccessibleStateSet()
 {
     const SolarMutexGuard aSolarGuard;
-    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if( mpParent )
     {
-        pStateSet->AddState (accessibility::AccessibleStateType::ENABLED);
-        pStateSet->AddState (accessibility::AccessibleStateType::SENSITIVE);
-        pStateSet->AddState (accessibility::AccessibleStateType::SHOWING);
-        pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
+        nStateSet |= accessibility::AccessibleStateType::ENABLED;
+        nStateSet |= accessibility::AccessibleStateType::SENSITIVE;
+        nStateSet |= accessibility::AccessibleStateType::SHOWING;
+        nStateSet |= accessibility::AccessibleStateType::VISIBLE;
         if ( !mbIsTransientChildrenDisabled )
-            pStateSet->AddState (accessibility::AccessibleStateType::TRANSIENT);
+            nStateSet |= accessibility::AccessibleStateType::TRANSIENT;
 
         // SELECTABLE
-        pStateSet->AddState( accessibility::AccessibleStateType::SELECTABLE );
+        nStateSet |= accessibility::AccessibleStateType::SELECTABLE;
         //      pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
 
         // SELECTED
         if( mpParent->mrParent.GetSelectedItemId() == mpParent->mnId )
         {
-            pStateSet->AddState( accessibility::AccessibleStateType::SELECTED );
+            nStateSet |= accessibility::AccessibleStateType::SELECTED;
             //              pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );
         }
     }
 
-    return pStateSet;
+    return nStateSet;
 }
 
 
@@ -619,22 +618,22 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::ge
     return mpParent->GetDrawingArea()->get_accessible_relation_set();
 }
 
-uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueSetAcc::getAccessibleStateSet()
+sal_Int64 SAL_CALL ValueSetAcc::getAccessibleStateSet()
 {
     ThrowIfDisposed();
-    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper();
+    sal_Int64 nStateSet = 0;
 
     // Set some states.
-    pStateSet->AddState (accessibility::AccessibleStateType::ENABLED);
-    pStateSet->AddState (accessibility::AccessibleStateType::SENSITIVE);
-    pStateSet->AddState (accessibility::AccessibleStateType::SHOWING);
-    pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
-    pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANTS);
-    pStateSet->AddState (accessibility::AccessibleStateType::FOCUSABLE);
+    nStateSet |= accessibility::AccessibleStateType::ENABLED;
+    nStateSet |= accessibility::AccessibleStateType::SENSITIVE;
+    nStateSet |= accessibility::AccessibleStateType::SHOWING;
+    nStateSet |= accessibility::AccessibleStateType::VISIBLE;
+    nStateSet |= accessibility::AccessibleStateType::MANAGES_DESCENDANTS;
+    nStateSet |= accessibility::AccessibleStateType::FOCUSABLE;
     if (mbIsFocused)
-        pStateSet->AddState (accessibility::AccessibleStateType::FOCUSED);
+        nStateSet |= accessibility::AccessibleStateType::FOCUSED;
 
-    return pStateSet;
+    return nStateSet;
 }
 
 

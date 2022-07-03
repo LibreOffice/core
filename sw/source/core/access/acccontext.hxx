@@ -35,9 +35,6 @@ namespace vcl { class Window; }
 class SwCursorShell;
 class SdrObject;
 class SwPaM;
-namespace utl {
-    class AccessibleStateSetHelper;
-}
 namespace accessibility {
     class AccessibleShape;
 }
@@ -176,12 +173,12 @@ protected:
     void FireVisibleDataEvent();
 
     // broadcast state change event
-    void FireStateChangedEvent( sal_Int16 nState, bool bNewState );
+    void FireStateChangedEvent( sal_Int64 nState, bool bNewState );
 
     // Set states for getAccessibleStateSet.
     // This base class sets DEFUNC(0/1), EDITABLE(0/1), ENABLED(1),
     // SHOWING(0/1), OPAQUE(0/1) and VISIBLE(1).
-    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+    virtual void GetStates( sal_Int64& rStateSet );
 
      bool IsEditableState();
 
@@ -250,9 +247,7 @@ public:
         getAccessibleRelationSet() override;
 
     // Return the set of current states.
-    virtual css::uno::Reference<
-            css::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet() override;
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
 
     /** Return the parents locale or throw exception if this object has no
         parent yet/anymore. */

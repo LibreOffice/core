@@ -47,7 +47,6 @@
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/weldeditview.hxx>
 #include <tools/diagnose_ex.h>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/event.hxx>
@@ -778,35 +777,33 @@ public:
         return m_pController->GetDrawingArea()->get_accessible_relation_set();
     }
 
-    virtual css::uno::Reference<css::accessibility::XAccessibleStateSet>
-        SAL_CALL getAccessibleStateSet() override
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override
     {
         SolarMutexGuard aGuard;
-        rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet
-            = new ::utl::AccessibleStateSetHelper;
+        sal_Int64 nStateSet = 0;
 
         if (!m_pController || !m_xTextHelper)
-            pStateSet->AddState(css::accessibility::AccessibleStateType::DEFUNC);
+            nStateSet |= css::accessibility::AccessibleStateType::DEFUNC;
         else
         {
-            pStateSet->AddState(css::accessibility::AccessibleStateType::MULTI_LINE);
-            pStateSet->AddState(css::accessibility::AccessibleStateType::ENABLED);
-            pStateSet->AddState(css::accessibility::AccessibleStateType::EDITABLE);
-            pStateSet->AddState(css::accessibility::AccessibleStateType::FOCUSABLE);
-            pStateSet->AddState(css::accessibility::AccessibleStateType::SELECTABLE);
+            nStateSet |= css::accessibility::AccessibleStateType::MULTI_LINE;
+            nStateSet |= css::accessibility::AccessibleStateType::ENABLED;
+            nStateSet |= css::accessibility::AccessibleStateType::EDITABLE;
+            nStateSet |= css::accessibility::AccessibleStateType::FOCUSABLE;
+            nStateSet |= css::accessibility::AccessibleStateType::SELECTABLE;
             if (m_pController->HasFocus())
-                pStateSet->AddState(css::accessibility::AccessibleStateType::FOCUSED);
+                nStateSet |= css::accessibility::AccessibleStateType::FOCUSED;
             if (m_pController->IsActive())
-                pStateSet->AddState(css::accessibility::AccessibleStateType::ACTIVE);
+                nStateSet |= css::accessibility::AccessibleStateType::ACTIVE;
             if (m_pController->IsVisible())
-                pStateSet->AddState(css::accessibility::AccessibleStateType::SHOWING);
+                nStateSet |= css::accessibility::AccessibleStateType::SHOWING;
             if (m_pController->IsReallyVisible())
-                pStateSet->AddState(css::accessibility::AccessibleStateType::VISIBLE);
+                nStateSet |= css::accessibility::AccessibleStateType::VISIBLE;
             if (COL_TRANSPARENT != m_pEditEngine->GetBackgroundColor())
-                pStateSet->AddState(css::accessibility::AccessibleStateType::OPAQUE);
+                nStateSet |= css::accessibility::AccessibleStateType::OPAQUE;
         }
 
-        return pStateSet;
+        return nStateSet;
     }
 
     virtual css::lang::Locale SAL_CALL getLocale() override

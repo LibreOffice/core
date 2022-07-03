@@ -147,7 +147,8 @@ void XAccessibleComponentTester::testAccessibleAtPoint()
             child->getAccessibleContext(), uno::UNO_SET_THROW);
         std::cout << "* Found child: " << AccessibilityTools::debugString(child) << std::endl;
         std::cout << "  states: "
-                  << AccessibilityTools::debugString(childContext->getAccessibleStateSet())
+                  << AccessibilityTools::debugAccessibleStateSet(
+                         childContext->getAccessibleStateSet())
                   << std::endl;
         uno::Reference<accessibility::XAccessibleComponent> xChildComponent(childContext,
                                                                             uno::UNO_QUERY);

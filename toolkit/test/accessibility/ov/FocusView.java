@@ -31,7 +31,6 @@ import com.sun.star.accessibility.AccessibleEventObject;
 import com.sun.star.accessibility.AccessibleStateType;
 import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleStateSet;
 import com.sun.star.uno.UnoRuntime;
 
 public class FocusView
@@ -103,8 +102,8 @@ public class FocusView
         }
         else
         {
-            XAccessibleStateSet aStateSet = mxContext.getAccessibleStateSet();
-            if (aStateSet.contains(AccessibleStateType.FOCUSED))
+            long aStateSet = mxContext.getAccessibleStateSet();
+            if (aStateSet & AccessibleStateType.FOCUSED)
                 maFocused.setText ("focused");
             else
                 maFocused.setText ("not focused");

@@ -38,7 +38,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -214,20 +213,19 @@ bool SwAccessibleParagraph::IsHeading() const
     return pTextNd->IsOutline();
 }
 
-void SwAccessibleParagraph::GetStates(
-        ::utl::AccessibleStateSetHelper& rStateSet )
+void SwAccessibleParagraph::GetStates( sal_Int64& rStateSet )
 {
     SwAccessibleContext::GetStates( rStateSet );
 
     // MULTILINE
-    rStateSet.AddState( AccessibleStateType::MULTI_LINE );
+    rStateSet |= AccessibleStateType::MULTI_LINE;
 
     if (GetCursorShell())
     {
         // MULTISELECTABLE
-        rStateSet.AddState(AccessibleStateType::MULTI_SELECTABLE);
+        rStateSet |= AccessibleStateType::MULTI_SELECTABLE;
         // FOCUSABLE
-        rStateSet.AddState(AccessibleStateType::FOCUSABLE);
+        rStateSet |= AccessibleStateType::FOCUSABLE;
     }
 
     // FOCUSED (simulates node index of cursor)
@@ -240,7 +238,7 @@ void SwAccessibleParagraph::GetStates(
     {
         vcl::Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
-            rStateSet.AddState( AccessibleStateType::FOCUSED );
+            rStateSet |= AccessibleStateType::FOCUSED;
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }

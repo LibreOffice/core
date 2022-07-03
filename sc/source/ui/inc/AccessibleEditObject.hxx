@@ -113,9 +113,7 @@ public:
         getAccessibleChild(sal_Int32 nIndex) override;
 
     /// Return the set of current states.
-    virtual css::uno::Reference<
-            css::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet() override;
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
 
     //=====  XAccessibleSelection  ============================================
 
@@ -179,8 +177,7 @@ private:
     EditObjectType meObjectType;
     bool           mbHasFocus;
 
-    bool IsDefunc(
-        const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
+    bool IsDefunc(sal_Int64 nParentStates);
 
     void CreateTextHelper();
     ScDocument *m_pScDoc;

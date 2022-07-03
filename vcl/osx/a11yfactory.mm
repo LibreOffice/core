@@ -151,7 +151,7 @@ static bool enabled = false;
            Unfortunately this can increase memory consumption drastically until the non transient parent
            is destroyed and finally all the transients are released.
         */
-        if ( ! rxAccessibleContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::TRANSIENT ) )
+        if ( ! (rxAccessibleContext -> getAccessibleStateSet() & AccessibleStateType::TRANSIENT ) )
         #endif
         {
             [ dAllWrapper setObject: aWrapper forKey: nKey ];

@@ -178,7 +178,7 @@ public:
 
     /// Return the set of current states.
     // perhaps sometimes to be implemented
-    virtual css::uno::Reference<css::accessibility::XAccessibleStateSet> SAL_CALL
+    virtual sal_Int64 SAL_CALL
         getAccessibleStateSet() override;
 
     ///=====  XAccessibleSelection  ===========================================

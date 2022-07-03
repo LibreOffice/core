@@ -128,8 +128,8 @@ public class AccessibilityTools {
     private static XAccessibleContext getAccessibleObjectForRole_(XAccessible xacc,
         short role) {
         XAccessibleContext ac = xacc.getAccessibleContext();
-        boolean isShowing = ac.getAccessibleStateSet()
-        .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
+        boolean isShowing = (ac.getAccessibleStateSet()
+            & com.sun.star.accessibility.AccessibleStateType.SHOWING) != 0;
 
         if ((ac.getAccessibleRole() == role) && isShowing) {
             SearchedAccessible = xacc;
@@ -215,8 +215,8 @@ public class AccessibilityTools {
         String name,
         String implName) {
         XAccessibleContext ac = xacc.getAccessibleContext();
-        boolean isShowing = ac.getAccessibleStateSet()
-        .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
+        boolean isShowing = (ac.getAccessibleStateSet() &
+            com.sun.star.accessibility.AccessibleStateType.SHOWING) != 0;
 
         // hotfix for i91828:
         // if role to search is 0 then ignore the role.
@@ -282,8 +282,8 @@ public class AccessibilityTools {
             logging(log,indent + indent + bounds);
         }
 
-        boolean isShowing = ac.getAccessibleStateSet()
-        .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
+        boolean isShowing = (ac.getAccessibleStateSet()
+            & com.sun.star.accessibility.AccessibleStateType.SHOWING) != 0;
         logging(log,indent + indent + "StateType contains SHOWING: " +
             isShowing);
 

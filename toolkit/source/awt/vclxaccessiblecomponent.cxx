@@ -34,7 +34,6 @@
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
@@ -385,50 +384,50 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
     }
 }
 
-void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void VCLXAccessibleComponent::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         if ( pWindow->IsVisible() )
         {
-            rStateSet.AddState( accessibility::AccessibleStateType::VISIBLE );
-            rStateSet.AddState( accessibility::AccessibleStateType::SHOWING );
+            rStateSet |= accessibility::AccessibleStateType::VISIBLE;
+            rStateSet |= accessibility::AccessibleStateType::SHOWING;
         }
         else
         {
-            rStateSet.AddState( accessibility::AccessibleStateType::INVALID );
+            rStateSet |= accessibility::AccessibleStateType::INVALID;
         }
 
         if ( pWindow->IsEnabled() )
         {
-            rStateSet.AddState( accessibility::AccessibleStateType::ENABLED );
-            rStateSet.AddState( accessibility::AccessibleStateType::SENSITIVE );
+            rStateSet |= accessibility::AccessibleStateType::ENABLED;
+            rStateSet |= accessibility::AccessibleStateType::SENSITIVE;
         }
 
         if ( pWindow->HasChildPathFocus() &&
              ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||
                getAccessibleRole() == accessibility::AccessibleRole::ALERT ||
                getAccessibleRole() == accessibility::AccessibleRole::DIALOG ) )  // #i18891#
-            rStateSet.AddState( accessibility::AccessibleStateType::ACTIVE );
+            rStateSet |= accessibility::AccessibleStateType::ACTIVE;
 
         if ( pWindow->HasFocus() || ( pWindow->IsCompoundControl() && pWindow->HasChildPathFocus() ) )
-            rStateSet.AddState( accessibility::AccessibleStateType::FOCUSED );
+            rStateSet |= accessibility::AccessibleStateType::FOCUSED;
 
         if ( pWindow->IsWait() )
-            rStateSet.AddState( accessibility::AccessibleStateType::BUSY );
+            rStateSet |= accessibility::AccessibleStateType::BUSY;
 
         if ( pWindow->GetStyle() & WB_SIZEABLE )
-            rStateSet.AddState( accessibility::AccessibleStateType::RESIZABLE );
+            rStateSet |= accessibility::AccessibleStateType::RESIZABLE;
         // 6. frame doesn't have MOVABLE state
         // 10. for password text, where is the sensitive state?
         if( ( getAccessibleRole() == accessibility::AccessibleRole::FRAME ||getAccessibleRole() == accessibility::AccessibleRole::DIALOG )&& pWindow->GetStyle() & WB_MOVEABLE )
-            rStateSet.AddState( accessibility::AccessibleStateType::MOVEABLE );
+            rStateSet |= accessibility::AccessibleStateType::MOVEABLE;
         if( pWindow->IsDialog() )
         {
             Dialog *pDlg = static_cast< Dialog* >( pWindow.get() );
             if( pDlg->IsInExecute() )
-                rStateSet.AddState( accessibility::AccessibleStateType::MODAL );
+                rStateSet |= accessibility::AccessibleStateType::MODAL;
         }
         //If a combobox or list's edit child isn't read-only,EDITABLE state
         //should be set.
@@ -436,7 +435,7 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
         {
             if( !( pWindow->GetStyle() & WB_READONLY) ||
                 !static_cast<Edit*>(pWindow.get())->IsReadOnly() )
-                    rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
+                    rStateSet |= accessibility::AccessibleStateType::EDITABLE;
         }
 
         VclPtr<vcl::Window> pChild = pWindow->GetWindow( GetWindowType::FirstChild );
@@ -448,14 +447,14 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
             {
                 if( !( pWinTemp->GetStyle() & WB_READONLY) ||
                     !static_cast<Edit*>(pWinTemp.get())->IsReadOnly() )
-                    rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
+                    rStateSet |= accessibility::AccessibleStateType::EDITABLE;
                 break;
             }
             if( pChild->GetType() == WindowType::EDIT )
             {
                 if( !( pChild->GetStyle() & WB_READONLY) ||
                     !static_cast<Edit*>(pChild.get())->IsReadOnly())
-                    rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
+                    rStateSet |= accessibility::AccessibleStateType::EDITABLE;
                 break;
             }
             pChild = pChild->GetWindow( GetWindowType::Next );
@@ -463,7 +462,7 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
     }
     else
     {
-        rStateSet.AddState( accessibility::AccessibleStateType::DEFUNC );
+        rStateSet |= accessibility::AccessibleStateType::DEFUNC;
     }
 
 /*
@@ -644,13 +643,13 @@ uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent:
     return pRelationSetHelper;
 }
 
-uno::Reference< accessibility::XAccessibleStateSet > VCLXAccessibleComponent::getAccessibleStateSet(  )
+sal_Int64 VCLXAccessibleComponent::getAccessibleStateSet(  )
 {
     OExternalLockGuard aGuard( this );
 
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
-    FillAccessibleStateSet( *pStateSetHelper );
-    return pStateSetHelper;
+    sal_Int64 nStateSet = 0;
+    FillAccessibleStateSet( nStateSet );
+    return nStateSet;
 }
 
 lang::Locale VCLXAccessibleComponent::getLocale()
@@ -729,8 +728,8 @@ void VCLXAccessibleComponent::grabFocus(  )
 {
     OExternalLockGuard aGuard( this );
 
-    uno::Reference< accessibility::XAccessibleStateSet > xStates = getAccessibleStateSet();
-    if ( m_xVCLXWindow.is() && xStates.is() && xStates->contains( accessibility::AccessibleStateType::FOCUSABLE ) )
+    sal_Int64 nStates = getAccessibleStateSet();
+    if ( m_xVCLXWindow.is() && ( nStates & accessibility::AccessibleStateType::FOCUSABLE ) )
         m_xVCLXWindow->setFocus();
 }
 

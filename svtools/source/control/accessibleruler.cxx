@@ -18,7 +18,6 @@
  */
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -194,34 +193,33 @@ uno::Reference< XAccessibleRelationSet > SAL_CALL SvtRulerAccessible::getAccessi
 }
 
 
-uno::Reference< XAccessibleStateSet > SAL_CALL SvtRulerAccessible::getAccessibleStateSet()
+sal_Int64 SAL_CALL SvtRulerAccessible::getAccessibleStateSet()
 {
     ::osl::MutexGuard                       aGuard( m_aMutex );
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if( IsAlive() )
     {
-        pStateSetHelper->AddState( AccessibleStateType::ENABLED );
+        nStateSet |= AccessibleStateType::ENABLED;
 
-        pStateSetHelper->AddState( AccessibleStateType::SHOWING );
+        nStateSet |= AccessibleStateType::SHOWING;
 
         if( isVisible() )
-            pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
+            nStateSet |= AccessibleStateType::VISIBLE;
 
         if ( mpRepr->GetStyle() & WB_HORZ )
-            pStateSetHelper->AddState( AccessibleStateType::HORIZONTAL );
+            nStateSet |= AccessibleStateType::HORIZONTAL;
         else
-            pStateSetHelper->AddState( AccessibleStateType::VERTICAL );
+            nStateSet |= AccessibleStateType::VERTICAL;
 
-        if(pStateSetHelper->contains(AccessibleStateType::FOCUSABLE))
+        if(nStateSet & AccessibleStateType::FOCUSABLE)
         {
-            pStateSetHelper->RemoveState( AccessibleStateType::FOCUSABLE );
+            nStateSet &= ~AccessibleStateType::FOCUSABLE;
         }
 
     }
 
-
-    return pStateSetHelper;
+    return nStateSet;
 }
 
 lang::Locale SAL_CALL SvtRulerAccessible::getLocale()

@@ -34,7 +34,6 @@
 #include <vcl/decoview.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <sot/formats.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -3479,31 +3478,31 @@ css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
     return xAccessible;
 }
 
-void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const
+void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, sal_Int64& rStateSet ) const
 {
     assert(pEntry && "SvTreeListBox::FillAccessibleEntryStateSet: invalid entry");
 
     if ( pEntry->HasChildrenOnDemand() || pEntry->HasChildren() )
     {
-        rStateSet.AddState( AccessibleStateType::EXPANDABLE );
+        rStateSet |= AccessibleStateType::EXPANDABLE;
         if ( IsExpanded( pEntry ) )
-            rStateSet.AddState( sal_Int16(AccessibleStateType::EXPANDED) );
+            rStateSet |= AccessibleStateType::EXPANDED;
     }
 
     if ( GetCheckButtonState( pEntry ) == SvButtonState::Checked )
-        rStateSet.AddState( AccessibleStateType::CHECKED );
+        rStateSet |= AccessibleStateType::CHECKED;
     if ( IsEntryVisible( pEntry ) )
-        rStateSet.AddState( AccessibleStateType::VISIBLE );
+        rStateSet |= AccessibleStateType::VISIBLE;
     if ( IsSelected( pEntry ) )
-        rStateSet.AddState( AccessibleStateType::SELECTED );
+        rStateSet |= AccessibleStateType::SELECTED;
     if ( IsEnabled() )
     {
-        rStateSet.AddState( AccessibleStateType::ENABLED );
-        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-        rStateSet.AddState( AccessibleStateType::SELECTABLE );
+        rStateSet |= AccessibleStateType::ENABLED;
+        rStateSet |= AccessibleStateType::FOCUSABLE;
+        rStateSet |= AccessibleStateType::SELECTABLE;
         SvViewDataEntry* pViewDataNewCur = GetViewDataEntry(pEntry);
         if (pViewDataNewCur && pViewDataNewCur->HasFocus())
-            rStateSet.AddState( AccessibleStateType::FOCUSED );
+            rStateSet |= AccessibleStateType::FOCUSED;
     }
 }
 

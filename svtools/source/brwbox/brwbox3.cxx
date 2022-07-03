@@ -20,7 +20,6 @@
 #include <svtools/brwbox.hxx>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessiblefactory.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>
@@ -37,7 +36,6 @@ using namespace ::com::sun::star::accessibility;
 namespace svt
 {
     using namespace ::com::sun::star::lang;
-    using namespace utl;
 
     static Reference< XAccessible > getHeaderCell( BrowseBoxImpl::THeaderCellMap& _raHeaderCells,
                                             sal_Int32 _nPos,
@@ -318,7 +316,7 @@ OUString BrowseBox::GetColumnDescription( sal_uInt16 _nColumn ) const
 
 
 void BrowseBox::FillAccessibleStateSet(
-        ::utl::AccessibleStateSetHelper& rStateSet,
+        sal_Int64& rStateSet,
         AccessibleBrowseBoxObjType eObjType ) const
 {
     switch( eObjType )
@@ -326,47 +324,47 @@ void BrowseBox::FillAccessibleStateSet(
         case AccessibleBrowseBoxObjType::BrowseBox:
         case AccessibleBrowseBoxObjType::Table:
 
-            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+            rStateSet |= AccessibleStateType::FOCUSABLE;
             if ( HasFocus() )
-                rStateSet.AddState( AccessibleStateType::FOCUSED );
+                rStateSet |= AccessibleStateType::FOCUSED;
             if ( IsActive() )
-                rStateSet.AddState( AccessibleStateType::ACTIVE );
+                rStateSet |= AccessibleStateType::ACTIVE;
             if ( GetUpdateMode() )
-                rStateSet.AddState( AccessibleStateType::EDITABLE );
+                rStateSet |= AccessibleStateType::EDITABLE;
             if ( IsEnabled() )
             {
-                rStateSet.AddState( AccessibleStateType::ENABLED );
-                rStateSet.AddState( AccessibleStateType::SENSITIVE );
+                rStateSet |= AccessibleStateType::ENABLED;
+                rStateSet |= AccessibleStateType::SENSITIVE;
             }
             if ( IsReallyVisible() )
-                rStateSet.AddState( AccessibleStateType::VISIBLE );
+                rStateSet |= AccessibleStateType::VISIBLE;
             if ( eObjType == AccessibleBrowseBoxObjType::Table )
-                rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
+                rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
 
             break;
         case AccessibleBrowseBoxObjType::RowHeaderBar:
-            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-            rStateSet.AddState( AccessibleStateType::VISIBLE );
+            rStateSet |= AccessibleStateType::FOCUSABLE;
+            rStateSet |= AccessibleStateType::VISIBLE;
             if ( GetSelectRowCount() )
-                rStateSet.AddState( AccessibleStateType::FOCUSED );
-            rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
+                rStateSet |= AccessibleStateType::FOCUSED;
+            rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
             break;
         case AccessibleBrowseBoxObjType::ColumnHeaderBar:
-            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-            rStateSet.AddState( AccessibleStateType::VISIBLE );
+            rStateSet |= AccessibleStateType::FOCUSABLE;
+            rStateSet |= AccessibleStateType::VISIBLE;
             if ( GetSelectColumnCount() )
-                rStateSet.AddState( AccessibleStateType::FOCUSED );
-            rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
+                rStateSet |= AccessibleStateType::FOCUSED;
+            rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
             break;
         case AccessibleBrowseBoxObjType::TableCell:
             {
                 sal_Int32 nRow = GetCurRow();
                 sal_uInt16 nColumn = GetCurColumnId();
                 if ( IsFieldVisible(nRow,nColumn) )
-                    rStateSet.AddState( AccessibleStateType::VISIBLE );
+                    rStateSet |= AccessibleStateType::VISIBLE;
                 if ( !IsFrozen( nColumn ) )
-                    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-                rStateSet.AddState( AccessibleStateType::TRANSIENT );
+                    rStateSet |= AccessibleStateType::FOCUSABLE;
+                rStateSet |= AccessibleStateType::TRANSIENT;
             }
             break;
         case AccessibleBrowseBoxObjType::RowHeaderCell:
@@ -377,16 +375,16 @@ void BrowseBox::FillAccessibleStateSet(
     }
 }
 
-void BrowseBox::FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet,
+void BrowseBox::FillAccessibleStateSetForCell( sal_Int64& _rStateSet,
                                                sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const
 {
     //! TODO check if the state is valid for table cells
     if ( IsCellVisible( _nRow, _nColumnPos ) )
-        _rStateSet.AddState( AccessibleStateType::VISIBLE );
+        _rStateSet |= AccessibleStateType::VISIBLE;
     if ( GetCurrRow() == _nRow && GetCurrColumn() == _nColumnPos )
-        _rStateSet.AddState( AccessibleStateType::FOCUSED );
+        _rStateSet |= AccessibleStateType::FOCUSED;
     else // only transient when column is not focused
-        _rStateSet.AddState( AccessibleStateType::TRANSIENT );
+        _rStateSet |= AccessibleStateType::TRANSIENT;
 }
 
 
