@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80a601f2_ee4f0b0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-03T19:08:39Z",
+      "side": 1,
+      "message": "I know we\u0027ll be soon at the end of the 7.3 and this bug is not a blocker but the fix is very straightforward.\nHowever, no pb if you consider it doesn\u0027t worth it.",
+      "revId": "89b4a8795648b063eb68f631b5f5780c7400dfa1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
