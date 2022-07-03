@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c3e63c2_49baa12c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-07-03T08:47:53Z",
+      "side": 1,
+      "message": "This patch fixes the issue.\n@Aman: Please write a detailed description on what you did in the commit message.\n\n@Heiko: What do you think?",
+      "revId": "94fd02b60fb4d769600fc90ca509dc3caffac2e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
