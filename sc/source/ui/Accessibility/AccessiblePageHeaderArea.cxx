@@ -34,7 +34,6 @@
 #include <comphelper/sequence.hxx>
 #include <editeng/editobj.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 
@@ -139,29 +138,22 @@ uno::Reference< XAccessible > SAL_CALL
     return mpTextHelper->GetChild(nIndex);
 }
 
-uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessiblePageHeaderArea::getAccessibleStateSet()
+sal_Int64 SAL_CALL ScAccessiblePageHeaderArea::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
-    uno::Reference<XAccessibleStateSet> xParentStates;
-    if (getAccessibleParent().is())
-    {
-        uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
-        xParentStates = xParentContext->getAccessibleStateSet();
-    }
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
+    sal_Int64 nStateSet = 0;
     if (IsDefunc())
-        pStateSet->AddState(AccessibleStateType::DEFUNC);
+        nStateSet |= AccessibleStateType::DEFUNC;
     else
     {
-        pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::MULTI_LINE);
+        nStateSet |= AccessibleStateType::ENABLED;
+        nStateSet |= AccessibleStateType::MULTI_LINE;
         if (isShowing())
-            pStateSet->AddState(AccessibleStateType::SHOWING);
+            nStateSet |= AccessibleStateType::SHOWING;
         if (isVisible())
-            pStateSet->AddState(AccessibleStateType::VISIBLE);
+            nStateSet |= AccessibleStateType::VISIBLE;
     }
-    return pStateSet;
+    return nStateSet;
 }
 
 // XServiceInfo

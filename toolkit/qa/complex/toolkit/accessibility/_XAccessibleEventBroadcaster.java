@@ -166,11 +166,12 @@ public class _XAccessibleEventBroadcaster {
 
     private static boolean chkTransient(Object Testcase) {
         XAccessibleContext accCon = UnoRuntime.queryInterface(XAccessibleContext.class, Testcase);
-        return accCon.getAccessibleStateSet().contains(
-            AccessibleStateType.TRANSIENT)
-            && accCon.getAccessibleParent().getAccessibleContext()
-                .getAccessibleStateSet().contains(
-                    AccessibleStateType.MANAGES_DESCENDANTS);
+        long nStateSet = accCon.getAccessibleStateSet();
+        if ((nStateSet & AccessibleStateType.TRANSIENT) == 0)
+            return false;
+        long nParentStateSet = accCon.getAccessibleParent().getAccessibleContext()
+                .getAccessibleStateSet();
+        return (nParentStateSet & AccessibleStateType.MANAGES_DESCENDANTS) != 0;
     }
 
 }

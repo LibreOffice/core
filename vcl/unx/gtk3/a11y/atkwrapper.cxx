@@ -32,7 +32,6 @@
 #include <com/sun/star/accessibility/XAccessibleContext2.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
@@ -110,7 +109,7 @@ static AtkRelationType mapRelationType( sal_Int16 nRelation )
     return type;
 }
 
-AtkStateType mapAtkState( sal_Int16 nState )
+AtkStateType mapAtkState( sal_Int64 nState )
 {
     AtkStateType type = ATK_STATE_INVALID;
 
@@ -592,18 +591,16 @@ wrapper_ref_state_set( AtkObject *atk_obj )
     if( obj->mpContext.is() )
     {
         try {
-            uno::Reference< accessibility::XAccessibleStateSet > xStateSet(
-                obj->mpContext->getAccessibleStateSet());
+            sal_Int64 nStateSet = obj->mpContext->getAccessibleStateSet();
 
-            if( xStateSet.is() )
+            if( nStateSet )
             {
-                uno::Sequence< sal_Int16 > aStates = xStateSet->getStates();
-
-                for( const auto nState : aStates )
+                for (int i=0; i<63; ++i)
                 {
                     // ATK_STATE_LAST_DEFINED is used to check if the state
                     // is unmapped, do not report it to Atk
-                    if ( mapAtkState( nState ) != ATK_STATE_LAST_DEFINED )
+                    sal_Int64 nState = sal_Int64(1) << i;
+                    if ( (nStateSet & nState) && mapAtkState( nState ) != ATK_STATE_LAST_DEFINED )
                         atk_state_set_add_state( pSet, mapAtkState( nState ) );
                 }
 
@@ -896,8 +893,8 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
         }
 
         // Attach a listener to the UNO object if it's not TRANSIENT
-        uno::Reference< accessibility::XAccessibleStateSet > xStateSet( xContext->getAccessibleStateSet() );
-        if( xStateSet.is() && ! xStateSet->contains( accessibility::AccessibleStateType::TRANSIENT ) )
+        sal_Int64 nStateSet( xContext->getAccessibleStateSet() );
+        if( ! (nStateSet & accessibility::AccessibleStateType::TRANSIENT ) )
         {
             uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster(xContext, uno::UNO_QUERY);
             if( xBroadcaster.is() )

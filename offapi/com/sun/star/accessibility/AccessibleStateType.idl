@@ -32,52 +32,56 @@ module com { module sun { module star { module accessibility {
     include future extensions to the set of roles we have to use constants
     here.</p>
 
+    <p>These states are giving values corresponding to the bits of a 64-bit
+    value, since we OR them together to create bitsets to represent the
+    combinated state of an accessibility object .</p>
+
     @since OOo 1.1.2
 */
 constants AccessibleStateType
 {
     /** Indicates an invalid state.
     */
-    const short INVALID = 0;
+    const hyper INVALID = 0;
 
     /** Indicates a window is currently the active window.
     */
-    const short ACTIVE = 1;
+    const hyper ACTIVE = 1;
 
     /** Indicates that the object is armed.
     */
-    const short ARMED = 2;
+    const hyper ARMED = 2;
 
     /** Indicates the current object is busy.
     */
-    const short BUSY = 3;
+    const hyper BUSY = 4;
 
     /** Indicates this object is currently checked.
     */
-    const short CHECKED = 4;
+    const hyper CHECKED = 8;
 
     /** User interface object corresponding to this object no longer exists.
 
         <p>Indicates the user interface object corresponding to this object
         no longer exists.</p>
     */
-    const short DEFUNC = 5;
+    const hyper DEFUNC = 16;
 
     /** Indicates the user can change the contents of this object.
     */
-    const short EDITABLE = 6;
+    const hyper EDITABLE = 32;
 
     /** Indicates this object is enabled.
     */
-    const short ENABLED = 7;
+    const hyper ENABLED = 64;
 
     /** Indicates this object allows progressive disclosure of its children.
     */
-    const short EXPANDABLE = 8;
+    const hyper EXPANDABLE = 128;
 
     /** Indicates this object is expanded.
     */
-    const short EXPANDED = 9;
+    const hyper EXPANDED = 256;
 
     /** Object can accept the keyboard focus.
 
@@ -85,27 +89,27 @@ constants AccessibleStateType
         events resulting from typing on the keyboard will normally be passed
         to it when it has focus.</p>
     */
-    const short FOCUSABLE = 10;
+    const hyper FOCUSABLE = 512;
 
     /** Indicates this object currently has the keyboard focus.
     */
-    const short FOCUSED = 11;
+    const hyper FOCUSED = 1024;
 
     /** Indicates the orientation of this object is horizontal.
     */
-    const short HORIZONTAL = 12;
+    const hyper HORIZONTAL = 2048;
 
     /** Indicates this object is minimized and is represented only by an
         icon.
     */
-    const short ICONIFIED = 13;
+    const hyper ICONIFIED = 4096;
 
     /** Sometimes UI elements can have a state indeterminate.
         This can happen e.g. if a check box reflects the bold state of text in a text processor.
         When the current selection contains text which is bold and also text which is not bold, the state is indeterminate.
 
     */
-    const short INDETERMINATE = 14;
+    const hyper INDETERMINATE = 8192;
 
     /** Indicates the most (all) children are transient and it is not
         necessary to add listener to the children. Only the active descendant
@@ -119,38 +123,38 @@ constants AccessibleStateType
         children to add listener. Only the active descendant should get
         listener if it is not transient.
     */
-    const short MANAGES_DESCENDANTS = 15;
+    const hyper MANAGES_DESCENDANTS = 16384;
 
     /** Object is modal.
 
         <p>Indicates something must be done with this object before the user
         can interact with an object in a different window.</p>
     */
-    const short MODAL = 16;
+    const hyper MODAL = 32768;
 
     /** Indicates this (text) object can contain multiple lines of text
     */
-    const short MULTI_LINE = 17;
+    const hyper MULTI_LINE = 65536;
 
     /** More than one child may be selected at the same time.
 
         <p>Indicates this object allows more than one of its children to be
         selected at the same time.</p>
     */
-    const short MULTI_SELECTABLE = 18;
+    const hyper MULTI_SELECTABLE = 131072;
 
     /** Indicates this object paints every pixel within its rectangular
         region.
     */
-    const short OPAQUE = 19;
+    const hyper OPAQUE = 262144;
 
     /** Indicates this object is currently pressed.
     */
-    const short PRESSED = 20;
+    const hyper PRESSED = 524288;
 
     /** Indicates the size of this object is not fixed.
     */
-    const short RESIZABLE = 21;
+    const hyper RESIZABLE = 1048576;
 
     /** Object is selectable.
 
@@ -158,7 +162,7 @@ constants AccessibleStateType
         children to be selected, and that this child is one of those
         children that can be selected.</p>
     */
-    const short SELECTABLE = 22;
+    const hyper SELECTABLE = 2097152;
 
     /** Object is selected.
 
@@ -166,11 +170,11 @@ constants AccessibleStateType
         children to be selected, and that this child is one of those
         children that has been selected.</p>
     */
-    const short SELECTED = 23;
+    const hyper SELECTED = 4194304;
 
     /** Indicates this object is sensitive.
     */
-    const short SENSITIVE = 24;
+    const hyper SENSITIVE = 8388608;
 
     /** Object is displayed on the screen.
 
@@ -180,26 +184,26 @@ constants AccessibleStateType
         though, not necessarily visible on the screen because it may be
         occluded by other objects.</p>
     */
-    const short SHOWING = 25;
+    const hyper SHOWING = 16777216;
 
     /** Indicates this (text) object can contain only a single line of text
     */
-    const short SINGLE_LINE = 26;
+    const hyper SINGLE_LINE = 33554432;
 
     /** Object information is stale and might not be up to date
 
         <p>Indicates that the information that is returned from this object
         might be out of sync with the application.</p>
     */
-    const short STALE = 27;
+    const hyper STALE = 67108864;
 
     /** Indicates this object is transient.
     */
-    const short TRANSIENT= 28;
+    const hyper TRANSIENT= 134217728;
 
     /** Indicates the orientation of this object is vertical.
     */
-    const short VERTICAL = 29;
+    const hyper VERTICAL = 268435456;
 
     /** Object wants to be displayed on the screen.
 
@@ -209,31 +213,31 @@ constants AccessibleStateType
         set the VISIBLE state and the object lies at least
         partly in the visible area of its parent.</p>
     */
-    const short VISIBLE = 30;
+    const hyper VISIBLE = 536870912;
 
     // The following constants have been introduced with the IA2 CWS:
 
     // MOVEABLE only exists in MSAA/IA2, but not in ATK/JAA/NSAccessibility.
     /** Indicates the position of the object is not fixed.
     */
-    const short MOVEABLE = 31;
+    const hyper MOVEABLE = 1073741824;
 
     // DEFAULT exists in MSAA/IA2, and now also in ATK and NSAccessibility.
     /** Indicates the object is the default button in a window
     */
-    const short DEFAULT = 32;
+    const hyper DEFAULT = 2147483648;
 
     // OFFSCREEN only exists in MSAA/IA2, but not in ATK/JAA/NSAccessibility.
     // MT: Shouldn't this be the same like !SHOWING in UAA/ATK?
     /** Indicates the object is outside of the screen area
     */
-    const short OFFSCREEN = 33;
+    const hyper OFFSCREEN = 4294967296;
 
     // COLLAPSED exists in MSAA/IA2, and now also in JAA, but not in ATK/NSAccessibility. In NSAccessibility, there is a notification for collapse.
     // In opposite to MSAA, UAA has EXPANDABLE, so EXPANDABLE && !EXPANDED should be the same like COLLAPSED.
     /** Indicates that the object is collapsed
     */
-    const short COLLAPSE = 34;
+    const hyper COLLAPSE = 8589934592;
 
 };
 

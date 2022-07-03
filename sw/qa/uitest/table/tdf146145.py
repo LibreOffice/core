@@ -21,7 +21,7 @@ class tdf146145(UITestCase):
 
        for i in xFrame.getPropertyValue("LayoutManager").getElements():
            if i.getPropertyValue('ResourceURL') == 'private:resource/toolbar/changes':
-               return ENABLED in i.getRealInterface().getAccessibleContext().getAccessibleChild(5).getAccessibleStateSet().getStates()
+               return (ENABLED & i.getRealInterface().getAccessibleContext().getAccessibleChild(5).getAccessibleStateSet()) == ENABLED
 
        return False
 

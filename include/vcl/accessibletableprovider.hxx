@@ -24,7 +24,6 @@
 #include <vcl/window.hxx>
 
 namespace com::sun::star::accessibility { class XAccessible; }
-namespace utl { class AccessibleStateSetHelper; }
 
 namespace vcl
 {
@@ -106,8 +105,8 @@ public:
     virtual OUString                GetAccessibleObjectName( AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
     virtual OUString                GetAccessibleObjectDescription( AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
 
-    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, AccessibleBrowseBoxObjType _eType ) const = 0;
-    virtual void                    FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
+    virtual void                    FillAccessibleStateSet( sal_Int64& _rStateSet, AccessibleBrowseBoxObjType _eType ) const = 0;
+    virtual void                    FillAccessibleStateSetForCell( sal_Int64& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
     virtual void                    GrabTableFocus() = 0;
 
     // OutputDevice

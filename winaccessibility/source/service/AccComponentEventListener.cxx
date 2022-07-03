@@ -134,7 +134,7 @@ void AccComponentEventListener::HandleCaretChangedEvent(Any, Any)
  * @param   state   new state id
  * @param   enable  true if state is set, false if state is unset
  */
-void AccComponentEventListener::SetComponentState(short state, bool enable)
+void AccComponentEventListener::SetComponentState(sal_Int64 state, bool enable)
 {
     // only the following state can be fired state event.
     switch (state)
@@ -204,7 +204,7 @@ void AccComponentEventListener::SetComponentState(short state, bool enable)
  * @param   state   the state id
  * @param   set     true if state is set, false if state is unset
  */
-void AccComponentEventListener::FireStatePropertyChange(short state, bool set)
+void AccComponentEventListener::FireStatePropertyChange(sal_Int64 state, bool set)
 {
     if( set)
     {
