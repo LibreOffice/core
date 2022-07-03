@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab58f72e_aaef6615",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-07-03T21:47:04Z",
+      "side": 1,
+      "message": "Thanks Maxim!  You are correct about rows.  And the same is true for columns. Have made some appropriate changes.\n\nBut I have tried your suggestion about setting RTL in Table Properties, and can see\nthat \"Before\" and \"After\" makes more sense (if that setting is used). \n\nSo maybe the \"solution\" is to mirror the icon horizontally?  (i.e., change Properties value to \"3\")  Or maybe this patch should be abandoned.\n\nIn any case, could you add a note about this setting in Table Properties in BZ to tdf#149741 -- because it has not been mentioned there already, but seems essential consider in relation to possible changes.",
+      "revId": "700609e16d7f4d243e6c84dac1c4235efd33f6b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
