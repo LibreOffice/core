@@ -2714,7 +2714,7 @@ static SfxItemSet CreatePaintSet(const WhichRangesContainer& pRanges, SfxItemPoo
         if (bNoParagraphFormats && (nWhich == EE_PARA_START))
             continue;
 
-        for (; nWhich < nLastWhich; nWhich++)
+        for (; nWhich <= nLastWhich; nWhich++)
         {
             const SfxPoolItem* pSourceItem = rSourceSet.GetItem(nWhich);
             const SfxPoolItem* pTargetItem = rTargetSet.GetItem(nWhich);
