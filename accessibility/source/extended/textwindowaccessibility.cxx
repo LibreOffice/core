@@ -32,7 +32,6 @@
 #include <extended/textwindowaccessibility.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/txtattr.hxx>
@@ -193,15 +192,13 @@ SAL_CALL Paragraph::getAccessibleRelationSet()
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessibleStateSet >
-SAL_CALL Paragraph::getAccessibleStateSet()
+sal_Int64 SAL_CALL Paragraph::getAccessibleStateSet()
 {
     checkDisposed();
 
     // FIXME  Notification of changes (STATE_CHANGED) missing when
     // m_rView.IsReadOnly() changes:
-    return new ::utl::AccessibleStateSetHelper(
-        m_xDocument->retrieveParagraphState(this));
+    return m_xDocument->retrieveParagraphState(this);
 }
 
 // virtual
@@ -748,29 +745,21 @@ css::lang::Locale Document::retrieveLocale()
     // happen that this Paragraph lies outside the range from m_aVisibleBegin
     // to m_aVisibleEnd.  In that case, it is neither VISIBLE nor SHOWING:
     ::sal_Int64 nState
-          = (static_cast< ::sal_Int64 >(1)
-             << css::accessibility::AccessibleStateType::ENABLED)
-          | (static_cast< ::sal_Int64 >(1)
-             << css::accessibility::AccessibleStateType::SENSITIVE)
-          | (static_cast< ::sal_Int64 >(1)
-             << css::accessibility::AccessibleStateType::FOCUSABLE)
-          | (static_cast< ::sal_Int64 >(1)
-             << css::accessibility::AccessibleStateType::MULTI_LINE);
+          = css::accessibility::AccessibleStateType::ENABLED
+          | css::accessibility::AccessibleStateType::SENSITIVE
+          | css::accessibility::AccessibleStateType::FOCUSABLE
+          | css::accessibility::AccessibleStateType::MULTI_LINE;
     if (!m_rView.IsReadOnly())
-        nState |= (static_cast< ::sal_Int64 >(1)
-                   << css::accessibility::AccessibleStateType::EDITABLE);
+        nState |= css::accessibility::AccessibleStateType::EDITABLE;
     Paragraphs::iterator aPara(m_xParagraphs->begin()
                                + pParagraph->getNumber());
     if (aPara >= m_aVisibleBegin && aPara < m_aVisibleEnd)
     {
         nState
-            |= (static_cast< ::sal_Int64 >(1)
-                << css::accessibility::AccessibleStateType::VISIBLE)
-            | (static_cast< ::sal_Int64 >(1)
-               << css::accessibility::AccessibleStateType::SHOWING);
+            |= css::accessibility::AccessibleStateType::VISIBLE
+            | css::accessibility::AccessibleStateType::SHOWING;
         if (aPara == m_aFocused)
-            nState |= (static_cast< ::sal_Int64 >(1)
-                       << css::accessibility::AccessibleStateType::FOCUSED);
+            nState |= css::accessibility::AccessibleStateType::FOCUSED;
     }
     return nState;
 };
@@ -1369,11 +1358,11 @@ Document::getAccessibleAtPoint(css::awt::Point const & rPoint)
     }
     return nullptr;
 }
-void Document::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void Document::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     VCLXAccessibleComponent::FillAccessibleStateSet( rStateSet );
     if (!m_rView.IsReadOnly())
-        rStateSet.AddState( css::accessibility::AccessibleStateType::EDITABLE );
+        rStateSet |= css::accessibility::AccessibleStateType::EDITABLE;
 }
 
 void    Document::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )

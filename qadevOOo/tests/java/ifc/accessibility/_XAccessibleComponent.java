@@ -232,8 +232,8 @@ public class _XAccessibleComponent extends MultiMethodTest {
                                              children[i]);
 
             boolean MightBeCovered = false;
-            boolean isShowing = xAc.getAccessibleStateSet()
-                                   .contains(com.sun.star.accessibility.AccessibleStateType.SHOWING);
+            boolean isShowing = (xAc.getAccessibleStateSet() &
+                                    com.sun.star.accessibility.AccessibleStateType.SHOWING) != 0;
             log.println("\tStateType containsPoint SHOWING: " +
                         isShowing);
 

@@ -43,7 +43,6 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -280,28 +279,27 @@ Reference<XAccessibleRelationSet> SAL_CALL
     return Reference<XAccessibleRelationSet>();
 }
 
-Reference<XAccessibleStateSet > SAL_CALL
-    AccessibleSlideSorterView::getAccessibleStateSet()
+sal_Int64 SAL_CALL AccessibleSlideSorterView::getAccessibleStateSet()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper();
+    sal_Int64 nStateSet = 0;
 
-    pStateSet->AddState(AccessibleStateType::FOCUSABLE);
-    pStateSet->AddState(AccessibleStateType::SELECTABLE);
-    pStateSet->AddState(AccessibleStateType::ENABLED);
-    pStateSet->AddState(AccessibleStateType::ACTIVE);
-    pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
-    pStateSet->AddState(AccessibleStateType::OPAQUE);
+    nStateSet |= AccessibleStateType::FOCUSABLE;
+    nStateSet |= AccessibleStateType::SELECTABLE;
+    nStateSet |= AccessibleStateType::ENABLED;
+    nStateSet |= AccessibleStateType::ACTIVE;
+    nStateSet |= AccessibleStateType::MULTI_SELECTABLE;
+    nStateSet |= AccessibleStateType::OPAQUE;
     if (mpContentWindow!=nullptr)
     {
         if (mpContentWindow->IsVisible())
-            pStateSet->AddState(AccessibleStateType::VISIBLE);
+            nStateSet |= AccessibleStateType::VISIBLE;
         if (mpContentWindow->IsReallyVisible())
-            pStateSet->AddState(AccessibleStateType::SHOWING);
+            nStateSet |= AccessibleStateType::SHOWING;
     }
 
-    return pStateSet;
+    return nStateSet;
 }
 
 lang::Locale SAL_CALL AccessibleSlideSorterView::getLocale()

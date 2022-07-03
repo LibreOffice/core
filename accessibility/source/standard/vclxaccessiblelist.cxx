@@ -22,7 +22,6 @@
 #include <helper/listboxhelper.hxx>
 
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -114,7 +113,7 @@ void SAL_CALL VCLXAccessibleList::disposing()
 }
 
 
-void VCLXAccessibleList::FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet)
+void VCLXAccessibleList::FillAccessibleStateSet (sal_Int64& rStateSet)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -124,8 +123,8 @@ void VCLXAccessibleList::FillAccessibleStateSet (utl::AccessibleStateSetHelper& 
         && (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN
         && !m_pListBoxHelper->IsInDropDown() )
     {
-        rStateSet.RemoveState (AccessibleStateType::VISIBLE);
-        rStateSet.RemoveState (AccessibleStateType::SHOWING);
+        rStateSet &= ~AccessibleStateType::VISIBLE;
+        rStateSet &= ~AccessibleStateType::SHOWING;
         m_bVisible = false;
     }
 
@@ -135,10 +134,10 @@ void VCLXAccessibleList::FillAccessibleStateSet (utl::AccessibleStateSetHelper& 
     if ( m_pListBoxHelper )
     {
         if ( m_pListBoxHelper->IsMultiSelectionEnabled() )
-            rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE);
-        rStateSet.AddState (AccessibleStateType::FOCUSABLE);
+            rStateSet |= AccessibleStateType::MULTI_SELECTABLE;
+        rStateSet |= AccessibleStateType::FOCUSABLE;
         // All children are transient.
-        rStateSet.AddState (AccessibleStateType::MANAGES_DESCENDANTS);
+        rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
     }
 }
 

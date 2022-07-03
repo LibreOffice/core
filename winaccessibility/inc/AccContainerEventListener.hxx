@@ -67,8 +67,8 @@ public:
             css::uno::Any oldValue, css::uno::Any newValue);
 
     //state changed
-    virtual void SetComponentState(short state, bool enable) override;
-    virtual void FireStatePropertyChange(short state, bool set) override;
+    virtual void SetComponentState(sal_Int64 state, bool enable) override;
+    virtual void FireStatePropertyChange(sal_Int64 state, bool set) override;
     virtual void FireStateFocusedChange(bool enable) override;
     virtual bool IsEditable(css::uno::Reference<css::accessibility::XAccessibleContext> const & xContext);
 

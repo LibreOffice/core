@@ -22,7 +22,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <sfx2/thumbnailview.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
@@ -169,20 +168,20 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ThumbnailViewAc
     return uno::Reference< accessibility::XAccessibleRelationSet >();
 }
 
-uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ThumbnailViewAcc::getAccessibleStateSet()
+sal_Int64 SAL_CALL ThumbnailViewAcc::getAccessibleStateSet()
 {
     ThrowIfDisposed();
-    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper();
+    sal_Int64 nStateSet = 0;
 
     // Set some states.
-    pStateSet->AddState (accessibility::AccessibleStateType::ENABLED);
-    pStateSet->AddState (accessibility::AccessibleStateType::SENSITIVE);
-    pStateSet->AddState (accessibility::AccessibleStateType::SHOWING);
-    pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
-    pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANTS);
-    pStateSet->AddState (accessibility::AccessibleStateType::FOCUSABLE);
+    nStateSet |= accessibility::AccessibleStateType::ENABLED;
+    nStateSet |= accessibility::AccessibleStateType::SENSITIVE;
+    nStateSet |= accessibility::AccessibleStateType::SHOWING;
+    nStateSet |= accessibility::AccessibleStateType::VISIBLE;
+    nStateSet |= accessibility::AccessibleStateType::MANAGES_DESCENDANTS;
+    nStateSet |= accessibility::AccessibleStateType::FOCUSABLE;
 
-    return pStateSet;
+    return nStateSet;
 }
 
 lang::Locale SAL_CALL ThumbnailViewAcc::getLocale()
@@ -680,33 +679,33 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ThumbnailViewIt
     return uno::Reference< accessibility::XAccessibleRelationSet >();
 }
 
-uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ThumbnailViewItemAcc::getAccessibleStateSet()
+sal_Int64 SAL_CALL ThumbnailViewItemAcc::getAccessibleStateSet()
 {
     const SolarMutexGuard aSolarGuard;
-    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if( mpParent )
     {
-        pStateSet->AddState (accessibility::AccessibleStateType::ENABLED);
-        pStateSet->AddState (accessibility::AccessibleStateType::SENSITIVE);
-        pStateSet->AddState (accessibility::AccessibleStateType::SHOWING);
-        pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
+        nStateSet |= accessibility::AccessibleStateType::ENABLED;
+        nStateSet |= accessibility::AccessibleStateType::SENSITIVE;
+        nStateSet |= accessibility::AccessibleStateType::SHOWING;
+        nStateSet |= accessibility::AccessibleStateType::VISIBLE;
         if ( !mbIsTransientChildrenDisabled )
-            pStateSet->AddState (accessibility::AccessibleStateType::TRANSIENT);
+            nStateSet |= accessibility::AccessibleStateType::TRANSIENT;
 
         // SELECTABLE
-        pStateSet->AddState( accessibility::AccessibleStateType::SELECTABLE );
+        nStateSet |= accessibility::AccessibleStateType::SELECTABLE;
         //      pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
 
         // SELECTED
         if( mpParent->isSelected() )
         {
-            pStateSet->AddState( accessibility::AccessibleStateType::SELECTED );
+            nStateSet |= accessibility::AccessibleStateType::SELECTED;
             //              pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );
         }
     }
 
-    return pStateSet;
+    return nStateSet;
 }
 
 lang::Locale SAL_CALL ThumbnailViewItemAcc::getLocale()

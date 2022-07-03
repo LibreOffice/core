@@ -156,7 +156,8 @@ using namespace ::com::sun::star::uno;
         if ( rxAccessible.is() ) {
             Reference < XAccessibleContext > rxAccessibleContext = rxAccessible -> getAccessibleContext();
             if ( rxAccessibleContext.is() && rxAccessibleContext -> getAccessibleRole() == AccessibleRole::TEXT ) {
-                if ( ! rxAccessibleContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::EDITABLE ) ) {
+                sal_Int64 nStateSet = rxAccessibleContext -> getAccessibleStateSet();
+                if ( !(nStateSet & AccessibleStateType::EDITABLE ) ) {
                     [ nativeRole release ];
                     nativeRole = NSAccessibilityPopUpButtonRole;
                 }

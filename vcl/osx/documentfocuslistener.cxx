@@ -51,7 +51,7 @@ DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
         {
             case AccessibleEventId::STATE_CHANGED:
             {
-                sal_Int16 nState = AccessibleStateType::INVALID;
+                sal_Int64 nState = AccessibleStateType::INVALID;
                 aEvent.NewValue >>= nState;
 
                 if( AccessibleStateType::FOCUSED == nState )
@@ -129,20 +129,20 @@ void DocumentFocusListener::attachRecursive(
 {
     if( xContext.is() )
     {
-        Reference< XAccessibleStateSet > xStateSet = xContext->getAccessibleStateSet();
+        sal_Int64 nStateSet = xContext->getAccessibleStateSet();
 
-        if( xStateSet.is() )
-            attachRecursive(xAccessible, xContext, xStateSet);
+        if( nStateSet )
+            attachRecursive(xAccessible, xContext, nStateSet);
     }
 }
 
 void DocumentFocusListener::attachRecursive(
     const Reference< XAccessible >& xAccessible,
     const Reference< XAccessibleContext >& xContext,
-    const Reference< XAccessibleStateSet >& xStateSet
+    sal_Int64 nStateSet
 )
 {
-    if( xStateSet->contains(AccessibleStateType::FOCUSED ) )
+    if( nStateSet & AccessibleStateType::FOCUSED )
         m_aFocusTracker.setFocusedObject( xAccessible );
 
     Reference< XAccessibleEventBroadcaster > xBroadcaster(xContext, UNO_QUERY);
@@ -152,7 +152,7 @@ void DocumentFocusListener::attachRecursive(
     {
         xBroadcaster->addAccessibleEventListener(static_cast< XAccessibleEventListener *>(this));
 
-        if( ! xStateSet->contains(AccessibleStateType::MANAGES_DESCENDANTS ) )
+        if( ! (nStateSet & AccessibleStateType::MANAGES_DESCENDANTS) )
         {
             sal_Int32 n, nmax = xContext->getAccessibleChildCount();
             for( n = 0; n < nmax; n++ )
@@ -179,16 +179,16 @@ void DocumentFocusListener::detachRecursive(
     const Reference< XAccessibleContext >& xContext
 )
 {
-    Reference< XAccessibleStateSet > xStateSet = xContext->getAccessibleStateSet();
+    sal_Int64 nStateSet = xContext->getAccessibleStateSet();
 
-    if( xStateSet.is() )
-        detachRecursive(xAccessible, xContext, xStateSet);
+    if( nStateSet )
+        detachRecursive(xAccessible, xContext, nStateSet);
 }
 
 void DocumentFocusListener::detachRecursive(
     const Reference< XAccessible >&,
     const Reference< XAccessibleContext >& xContext,
-    const Reference< XAccessibleStateSet >& xStateSet
+    sal_Int64 nStateSet
 )
 {
     Reference< XAccessibleEventBroadcaster > xBroadcaster(xContext, UNO_QUERY);
@@ -197,7 +197,7 @@ void DocumentFocusListener::detachRecursive(
     {
         xBroadcaster->removeAccessibleEventListener(static_cast< XAccessibleEventListener *>(this));
 
-        if( ! xStateSet->contains(AccessibleStateType::MANAGES_DESCENDANTS ) )
+        if( ! (nStateSet & AccessibleStateType::MANAGES_DESCENDANTS) )
         {
             sal_Int32 n, nmax = xContext->getAccessibleChildCount();
             for( n = 0; n < nmax; n++ )

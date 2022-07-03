@@ -37,8 +37,7 @@ AccessibilityTools::getAccessibleObjectForRole(
     const css::uno::Reference<css::accessibility::XAccessible>& xacc, sal_Int16 role)
 {
     css::uno::Reference<css::accessibility::XAccessibleContext> ac = xacc->getAccessibleContext();
-    bool isShowing
-        = ac->getAccessibleStateSet()->contains(accessibility::AccessibleStateType::SHOWING);
+    bool isShowing = ac->getAccessibleStateSet() & accessibility::AccessibleStateType::SHOWING;
 
     if ((ac->getAccessibleRole() == role) && isShowing)
     {
@@ -91,14 +90,6 @@ bool AccessibilityTools::equals(const uno::Reference<accessibility::XAccessibleC
         return false;
 
     return equals(xctx1->getAccessibleParent(), xctx2->getAccessibleParent());
-}
-
-bool AccessibilityTools::equals(const uno::Reference<accessibility::XAccessibleStateSet>& xsts1,
-                                const uno::Reference<accessibility::XAccessibleStateSet>& xsts2)
-{
-    if (!xsts1.is() || !xsts2.is())
-        return xsts1.is() == xsts2.is();
-    return xsts1->getStates() == xsts2->getStates();
 }
 
 OUString AccessibilityTools::getRoleName(const sal_Int16 role)
@@ -283,7 +274,7 @@ OUString AccessibilityTools::getRoleName(const sal_Int16 role)
     return "unknown";
 }
 
-OUString AccessibilityTools::getStateName(const sal_Int16 state)
+OUString AccessibilityTools::debugAccessibleStateSet(const sal_Int64 state)
 {
     switch (state)
     {
@@ -461,20 +452,6 @@ OUString AccessibilityTools::debugName(accessibility::XAccessibleContext* ctx)
 OUString AccessibilityTools::debugName(accessibility::XAccessible* acc)
 {
     return debugName(acc->getAccessibleContext().get());
-}
-
-OUString AccessibilityTools::debugName(accessibility::XAccessibleStateSet* xsts)
-{
-    OUString name;
-
-    for (auto state : xsts->getStates())
-    {
-        if (name.getLength())
-            name += " | ";
-        name += AccessibilityTools::getStateName(state);
-    }
-
-    return name;
 }
 
 OUString AccessibilityTools::debugName(const accessibility::AccessibleEventObject* evobj)

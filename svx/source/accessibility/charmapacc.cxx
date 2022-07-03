@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <stdio.h>
@@ -190,33 +189,33 @@ uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL SvxShowCha
 }
 
 
-uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSetAcc::getAccessibleStateSet()
+sal_Int64 SAL_CALL SvxShowCharSetAcc::getAccessibleStateSet()
 {
     OExternalLockGuard aGuard( this );
 
-    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if (m_pParent)
     {
         // SELECTABLE
-        pStateSet->AddState( AccessibleStateType::FOCUSABLE );
+        nStateSet |= AccessibleStateType::FOCUSABLE;
         if (m_pParent->HasFocus())
         {
-            pStateSet->AddState( AccessibleStateType::FOCUSED );
-            pStateSet->AddState( AccessibleStateType::ACTIVE );
+            nStateSet |= AccessibleStateType::FOCUSED;
+            nStateSet |= AccessibleStateType::ACTIVE;
         }
         if (m_pParent->IsEnabled())
         {
-            pStateSet->AddState( AccessibleStateType::ENABLED );
-            pStateSet->AddState( AccessibleStateType::SENSITIVE );
+            nStateSet |= AccessibleStateType::ENABLED;
+            nStateSet |= AccessibleStateType::SENSITIVE;
         }
         if (m_pParent->IsVisible())
-            pStateSet->AddState( AccessibleStateType::VISIBLE );
+            nStateSet |= AccessibleStateType::VISIBLE;
 
-        pStateSet->AddState( AccessibleStateType::MANAGES_DESCENDANTS );
+        nStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
     }
 
-    return pStateSet;
+    return nStateSet;
 }
 
 
@@ -462,37 +461,37 @@ uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL SvxShowCha
 }
 
 
-uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSetItemAcc::getAccessibleStateSet()
+sal_Int64 SAL_CALL SvxShowCharSetItemAcc::getAccessibleStateSet()
 {
     OExternalLockGuard aGuard( this );
 
-    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if( mpParent )
     {
         if (mpParent->mrParent.IsEnabled())
         {
-            pStateSet->AddState( css::accessibility::AccessibleStateType::ENABLED );
+            nStateSet |= css::accessibility::AccessibleStateType::ENABLED;
             // SELECTABLE
-            pStateSet->AddState( css::accessibility::AccessibleStateType::SELECTABLE );
-            pStateSet->AddState( css::accessibility::AccessibleStateType::FOCUSABLE );
+            nStateSet |= css::accessibility::AccessibleStateType::SELECTABLE;
+            nStateSet |= css::accessibility::AccessibleStateType::FOCUSABLE;
         }
 
         // SELECTED
         if( mpParent->mrParent.GetSelectIndexId() == mpParent->mnId )
         {
-            pStateSet->AddState( css::accessibility::AccessibleStateType::SELECTED );
-            pStateSet->AddState( css::accessibility::AccessibleStateType::FOCUSED );
+            nStateSet |= css::accessibility::AccessibleStateType::SELECTED;
+            nStateSet |= css::accessibility::AccessibleStateType::FOCUSED;
         }
         if ( mpParent->mnId >= mpParent->mrParent.FirstInView() && mpParent->mnId <= mpParent->mrParent.LastInView() )
         {
-            pStateSet->AddState( AccessibleStateType::VISIBLE );
-            pStateSet->AddState( AccessibleStateType::SHOWING );
+            nStateSet |= AccessibleStateType::VISIBLE;
+            nStateSet |= AccessibleStateType::SHOWING;
         }
-        pStateSet->AddState( AccessibleStateType::TRANSIENT );
+        nStateSet |= AccessibleStateType::TRANSIENT;
     }
 
-    return pStateSet;
+    return nStateSet;
 }
 
 

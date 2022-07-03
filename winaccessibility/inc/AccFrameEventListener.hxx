@@ -44,7 +44,7 @@ public:
     virtual void HandleChildChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
 
     //state changed
-    virtual void SetComponentState(short state, bool enable) override;
+    virtual void SetComponentState(sal_Int64 state, bool enable) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

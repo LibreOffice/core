@@ -33,11 +33,6 @@ class Menu;
 class VclSimpleEvent;
 class VclMenuEvent;
 
-namespace utl {
-class AccessibleStateSetHelper;
-}
-
-
 
 typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,
@@ -106,7 +101,7 @@ protected:
 
     void                    ProcessMenuEvent( const VclMenuEvent& rVclMenuEvent );
 
-    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) = 0;
+    virtual void            FillAccessibleStateSet( sal_Int64& rStateSet ) = 0;
 
     // XComponent
     virtual void SAL_CALL   disposing() override;
@@ -130,7 +125,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
     // XAccessibleContext
-    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
 };
 
 

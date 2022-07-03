@@ -35,7 +35,7 @@ protected:
     // Set states for getAccessibleStateSet.
     // This derived class additionally sets SELECTABLE(1), SELECTED(+),
     // FOCUSABLE(1) and FOCUSED(+)
-    virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) override;
+    virtual void GetStates( sal_Int64& rStateSet ) override;
     SwFlyFrame* getFlyFrame() const;
     bool GetSelectedState( );
     SwPaM* GetCursor();

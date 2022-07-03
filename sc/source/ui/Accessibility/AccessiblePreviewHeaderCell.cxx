@@ -35,7 +35,6 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/hint.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <toolkit/helper/convert.hxx>
 
 #ifdef indices
@@ -229,30 +228,30 @@ sal_Int32 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleIndexInParent()
     return mnIndex;
 }
 
-uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleStateSet()
+sal_Int64 SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference<XAccessibleStateSet> xParentStates;
+    sal_Int64 nParentStates = 0;
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
-        xParentStates = xParentContext->getAccessibleStateSet();
+        nParentStates = xParentContext->getAccessibleStateSet();
     }
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
-    if (IsDefunc(xParentStates))
-        pStateSet->AddState(AccessibleStateType::DEFUNC);
+    sal_Int64 nStateSet = 0;
+    if (IsDefunc(nParentStates))
+        nStateSet |= AccessibleStateType::DEFUNC;
     else
     {
-        pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::MULTI_LINE);
+        nStateSet |= AccessibleStateType::ENABLED;
+        nStateSet |= AccessibleStateType::MULTI_LINE;
         if (isShowing())
-            pStateSet->AddState(AccessibleStateType::SHOWING);
-        pStateSet->AddState(AccessibleStateType::TRANSIENT);
+            nStateSet |= AccessibleStateType::SHOWING;
+        nStateSet |= AccessibleStateType::TRANSIENT;
         if (isVisible())
-            pStateSet->AddState(AccessibleStateType::VISIBLE);
+            nStateSet |= AccessibleStateType::VISIBLE;
     }
-    return pStateSet;
+    return nStateSet;
 }
 
 //=====  XServiceInfo  ====================================================
@@ -367,10 +366,10 @@ OUString ScAccessiblePreviewHeaderCell::createAccessibleName()
     return sName;
 }
 
-bool ScAccessiblePreviewHeaderCell::IsDefunc( const uno::Reference<XAccessibleStateSet>& rxParentStates )
+bool ScAccessiblePreviewHeaderCell::IsDefunc( sal_Int64 nParentStates )
 {
     return ScAccessibleContextBase::IsDefunc() || (mpViewShell == nullptr) || !getAccessibleParent().is() ||
-        (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
+        (nParentStates & AccessibleStateType::DEFUNC);
 }
 
 void ScAccessiblePreviewHeaderCell::CreateTextHelper()

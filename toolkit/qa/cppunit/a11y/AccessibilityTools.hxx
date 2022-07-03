@@ -27,7 +27,6 @@
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 
 class AccessibilityTools
 {
@@ -44,8 +43,6 @@ public:
                        const css::uno::Reference<css::accessibility::XAccessible>& xacc2);
     static bool equals(const css::uno::Reference<css::accessibility::XAccessibleContext>& xctx1,
                        const css::uno::Reference<css::accessibility::XAccessibleContext>& xctx2);
-    static bool equals(const css::uno::Reference<css::accessibility::XAccessibleStateSet>& xsts1,
-                       const css::uno::Reference<css::accessibility::XAccessibleStateSet>& xsts2);
 
     static OUString getRoleName(const sal_Int16 role);
     static OUString getStateName(const sal_Int16 state);
@@ -79,6 +76,8 @@ public:
 
         return ost.str();
     }
+
+    static OUString debugAccessibleStateSet(sal_Int64 p);
 
     /**
      * @brief Process events until a condition or a timeout
@@ -126,7 +125,6 @@ public:
 private:
     static OUString debugName(css::accessibility::XAccessibleContext* xctx);
     static OUString debugName(css::accessibility::XAccessible* xacc);
-    static OUString debugName(css::accessibility::XAccessibleStateSet* xsts);
     static OUString debugName(const css::accessibility::AccessibleEventObject* evobj);
 };
 
@@ -149,7 +147,6 @@ CPPUNIT_NS_BEGIN
 
 AT_ASSERTION_TRAITS(css::accessibility::XAccessible);
 AT_ASSERTION_TRAITS(css::accessibility::XAccessibleContext);
-AT_ASSERTION_TRAITS(css::accessibility::XAccessibleStateSet);
 
 #undef AT_ASSERTION_TRAITS
 

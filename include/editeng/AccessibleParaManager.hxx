@@ -94,18 +94,17 @@ namespace accessibility
         typedef ::std::pair< css::uno::Reference<
             css::accessibility::XAccessible > , css::awt::Rectangle > Child;
         typedef ::std::vector< WeakChild > VectorOfChildren;
-        typedef ::std::vector< sal_Int16 > VectorOfStates;
 
         AccessibleParaManager();
         ~AccessibleParaManager();
 
-        /** Sets a vector of additional accessible states.
+        /** Sets a bitset of additional accessible states.
 
             The states are passed to every created child object
             (text paragraph). The state values are defined in
             css::accessibility::AccessibleStateType.
          */
-        void SetAdditionalChildStates( VectorOfStates&& rChildStates );
+        void SetAdditionalChildStates( sal_Int64 nChildStates );
 
         /** Set the number of paragraphs
 
@@ -144,9 +143,9 @@ namespace accessibility
         /// Make all children active and editable (or off)
         void SetActive( bool bActive = true );
         /// Set state of all children
-        void SetState( const sal_Int16 nStateId );
+        void SetState( const sal_Int64 nStateId );
         /// Unset state of all children
-        void UnSetState( const sal_Int16 nStateId );
+        void UnSetState( const sal_Int64 nStateId );
         /// Set offset to edit engine for all children
         void SetEEOffset        ( const Point& rOffset );
         /// Dispose all living children
@@ -240,9 +239,9 @@ namespace accessibility
 
     private:
         /// Set state on given child
-        void SetState( sal_Int32 nChild, const sal_Int16 nStateId );
+        void SetState( sal_Int32 nChild, const sal_Int64 nStateId );
         /// Unset state on given child
-        void UnSetState( sal_Int32 nChild, const sal_Int16 nStateId );
+        void UnSetState( sal_Int32 nChild, const sal_Int64 nStateId );
         /// Init child with default state (as stored in previous SetFocus and SetActive calls)
         void InitChild( AccessibleEditableTextPara&     rChild,
                         SvxEditSourceAdapter&           rEditSource,
@@ -253,7 +252,7 @@ namespace accessibility
         VectorOfChildren maChildren;
 
         /// Additional states that will be set at every created child object.
-        VectorOfStates maChildStates;
+        sal_Int64 mnChildStates;
 
         // cache EE offset for child creation
         Point maEEOffset;

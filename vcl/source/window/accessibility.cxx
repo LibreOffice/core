@@ -572,17 +572,14 @@ FindFocusedEditableText(uno::Reference<accessibility::XAccessibleContext> const&
     if (!xContext.is())
         return uno::Reference<accessibility::XAccessibleEditableText>();
 
-    uno::Reference<accessibility::XAccessibleStateSet> xState = xContext->getAccessibleStateSet();
-    if (xState.is())
+    sal_Int64 nState = xContext->getAccessibleStateSet();
+    if (nState & accessibility::AccessibleStateType::FOCUSED)
     {
-        if (xState->contains(accessibility::AccessibleStateType::FOCUSED))
-        {
-            uno::Reference<accessibility::XAccessibleEditableText> xText(xContext, uno::UNO_QUERY);
-            if (xText.is())
-                return xText;
-            if (xState->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS))
-                return uno::Reference<accessibility::XAccessibleEditableText>();
-        }
+        uno::Reference<accessibility::XAccessibleEditableText> xText(xContext, uno::UNO_QUERY);
+        if (xText.is())
+            return xText;
+        if (nState & accessibility::AccessibleStateType::MANAGES_DESCENDANTS)
+            return uno::Reference<accessibility::XAccessibleEditableText>();
     }
 
     bool bSafeToIterate = true;

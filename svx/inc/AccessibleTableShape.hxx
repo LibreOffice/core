@@ -114,11 +114,11 @@ public:
     /// @throws css::lang::IndexOutOfBoundsException
     void getColumnAndRow( sal_Int32 nChildIndex, sal_Int32& rnColumn, sal_Int32& rnRow );
     // overwrite the SetState & ResetState to do special operation for table cell's internal text
-    virtual bool SetState (sal_Int16 aState) override;
-    virtual bool ResetState (sal_Int16 aState) override;
+    virtual bool SetState (sal_Int64 aState) override;
+    virtual bool ResetState (sal_Int64 aState) override;
     // The following two methods are used to set state directly on table object, instead of the internal cell or paragraph.
-    bool SetStateDirectly (sal_Int16 aState);
-    bool ResetStateDirectly (sal_Int16 aState);
+    bool SetStateDirectly (sal_Int64 aState);
+    bool ResetStateDirectly (sal_Int64 aState);
     // Get the currently active cell which is text editing
     AccessibleCell* GetActiveAccessibleCell();
 
@@ -163,7 +163,7 @@ public:
     virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
     virtual OUString SAL_CALL getAccessibleDescription(  ) override;
     virtual OUString SAL_CALL getAccessibleName(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 

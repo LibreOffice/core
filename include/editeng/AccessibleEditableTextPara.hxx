@@ -48,7 +48,6 @@ class MapMode;
 class SvxAccessibleTextAdapter;
 class SvxAccessibleTextEditViewAdapter;
 namespace accessibility { class AccessibleImageBullet; }
-namespace utl { class AccessibleStateSetHelper; }
 
 namespace accessibility
 {
@@ -102,7 +101,7 @@ namespace accessibility
         virtual OUString SAL_CALL getAccessibleDescription() override;
         virtual OUString SAL_CALL getAccessibleName() override;
         virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;
-        virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet() override;
+        virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
         virtual css::lang::Locale SAL_CALL getLocale() override;
 
         // XAccessibleEventBroadcaster
@@ -236,9 +235,9 @@ namespace accessibility
         void FireEvent(const sal_Int16 nEventId, const css::uno::Any& rNewValue = css::uno::Any(), const css::uno::Any& rOldValue = css::uno::Any() ) const;
 
         /// Sets the given state on the internal state set and fires STATE_CHANGE event. Don't hold locks when calling this!
-        void SetState( const sal_Int16 nStateId );
+        void SetState( const sal_Int64 nStateId );
         /// Unsets the given state on the internal state set and fires STATE_CHANGE event. Don't hold locks when calling this!
-        void UnSetState( const sal_Int16 nStateId );
+        void UnSetState( const sal_Int64 nStateId );
 
         static tools::Rectangle LogicToPixel( const tools::Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder const & rForwarder );
 
@@ -365,7 +364,7 @@ namespace accessibility
         Point maEEOffset;
 
         // the current state set (updated from SetState/UnSetState and guarded by solar mutex)
-        rtl::Reference< ::utl::AccessibleStateSetHelper > mxStateSet;
+        sal_Int64 mnStateSet;
 
         /// The shape we're the accessible for (unguarded)
         css::uno::Reference< css::accessibility::XAccessible > mxParent;

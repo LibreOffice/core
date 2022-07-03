@@ -213,7 +213,7 @@ public class AccessibleIconChoiceCtrl extends TestCase {
             "com.sun.star.accessibility.AccessibleStateType.MANAGES_DESCENDANTS",
         };
 
-        short[] expectedStates = new short[] {
+        long[] expectedStates = new long[] {
             com.sun.star.accessibility.AccessibleStateType.ENABLED,
             com.sun.star.accessibility.AccessibleStateType.FOCUSABLE,
             com.sun.star.accessibility.AccessibleStateType.SHOWING,

@@ -31,7 +31,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
@@ -473,41 +472,41 @@ namespace accessibility
         return xRelSet;
     }
 
-    Reference< XAccessibleStateSet > SAL_CALL AccessibleListBoxEntry::getAccessibleStateSet(  )
+    sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleStateSet(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
+        sal_Int64 nStateSet = 0;
 
         if ( IsAlive_Impl() )
         {
             switch(getAccessibleRole())
             {
                 case AccessibleRole::LABEL:
-                    pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
-                    pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
-                    pStateSetHelper->AddState( AccessibleStateType::ENABLED );
+                    nStateSet |= AccessibleStateType::TRANSIENT;
+                    nStateSet |= AccessibleStateType::SELECTABLE;
+                    nStateSet |= AccessibleStateType::ENABLED;
                     if (m_pTreeListBox->IsInplaceEditingEnabled())
-                        pStateSetHelper->AddState( AccessibleStateType::EDITABLE );
+                        nStateSet |= AccessibleStateType::EDITABLE;
                     if (IsShowing_Impl())
-                        pStateSetHelper->AddState( AccessibleStateType::SHOWING );
+                        nStateSet |= AccessibleStateType::SHOWING;
                     break;
                 case AccessibleRole::CHECK_BOX:
-                    pStateSetHelper->AddState( AccessibleStateType::TRANSIENT );
-                    pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
-                    pStateSetHelper->AddState( AccessibleStateType::ENABLED );
+                    nStateSet |= AccessibleStateType::TRANSIENT;
+                    nStateSet |= AccessibleStateType::SELECTABLE;
+                    nStateSet |= AccessibleStateType::ENABLED;
                     if (IsShowing_Impl())
-                        pStateSetHelper->AddState( AccessibleStateType::SHOWING );
+                        nStateSet |= AccessibleStateType::SHOWING;
                     break;
             }
             SvTreeListEntry *pEntry = m_pTreeListBox->GetEntryFromPath(m_aEntryPath);
             if (pEntry)
-                m_pTreeListBox->FillAccessibleEntryStateSet(pEntry, *pStateSetHelper);
+                m_pTreeListBox->FillAccessibleEntryStateSet(pEntry, nStateSet);
         }
         else
-            pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
+            nStateSet |= AccessibleStateType::DEFUNC;
 
-        return pStateSetHelper;
+        return nStateSet;
     }
 
     Locale SAL_CALL AccessibleListBoxEntry::getLocale(  )

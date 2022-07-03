@@ -23,7 +23,6 @@ import java.awt.geom.Rectangle2D;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.accessibility.XAccessibleText;
-import com.sun.star.accessibility.XAccessibleStateSet;
 import com.sun.star.accessibility.AccessibleStateType;
 
 class CanvasShape
@@ -63,12 +62,9 @@ class CanvasShape
             msDescription = mxContext.getAccessibleDescription();
 
             // Extract the selected and focused flag.
-            XAccessibleStateSet xStateSet = mxContext.getAccessibleStateSet ();
-            if (xStateSet != null)
-            {
-                mbSelected = xStateSet.contains (AccessibleStateType.SELECTED);
-                mbFocused = xStateSet.contains (AccessibleStateType.FOCUSED);
-            }
+            long nStateSet = mxContext.getAccessibleStateSet ();
+            mbSelected = (nStateSet & AccessibleStateType.SELECTED) != 0;
+            mbFocused = (nStateSet & AccessibleStateType.FOCUSED) != 0;
         }
 
         updateGeometry ();

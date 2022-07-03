@@ -52,7 +52,6 @@ namespace com::sun::star {
     namespace accessibility { class XAccessibleEventListener; }
     namespace accessibility { class XAccessibleHyperlink; }
     namespace accessibility { class XAccessibleRelationSet; }
-    namespace accessibility { class XAccessibleStateSet; }
     namespace beans { struct PropertyValue; }
     namespace document { struct EventObject; }
     namespace drawing { class XShape; }
@@ -178,7 +177,7 @@ public:
             The returned flag indicates whether the specified state has been
             changed (<TRUE/>), i.e. it has formerly not been set.
     */
-    virtual bool SetState (sal_Int16 aState) override;
+    virtual bool SetState (sal_Int64 aState) override;
 
     /** Reset the specified state.  If the state is <const>FOCUSED</const>
         then, additionally to the inherited functionality, the focus
@@ -192,7 +191,7 @@ public:
             The returned flag indicates whether the specified state has been
             changed (<TRUE/>), i.e. it has formerly been set.
     */
-    virtual bool ResetState (sal_Int16 aState) override;
+    virtual bool ResetState (sal_Int64 aState) override;
 
     /** Return the state of the specified state.  Take the
         <const>FOCUSED</const> state from the accessible edit engine.
@@ -205,7 +204,7 @@ public:
             entity that manages the state set.
 
     */
-    bool GetState (sal_Int16 aState);
+    bool GetState (sal_Int64 aState);
 
 
     //=====  XAccessibleContext  ==============================================
@@ -229,8 +228,7 @@ public:
 
 
     /// Return the set of current states.
-    virtual css::uno::Reference<
-            css::accessibility::XAccessibleStateSet> SAL_CALL
+    virtual sal_Int64 SAL_CALL
         getAccessibleStateSet() override;
 
     /// Return this objects index among the parents children.

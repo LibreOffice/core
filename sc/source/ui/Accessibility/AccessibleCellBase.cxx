@@ -232,13 +232,13 @@ sal_Bool SAL_CALL
     bool bResult = false;
     if((aNumber >>= fValue) && mpDoc && mpDoc->GetDocumentShell())
     {
-        uno::Reference<XAccessibleStateSet> xParentStates;
+        sal_Int64 nParentStates = 0;
         if (getAccessibleParent().is())
         {
             uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
-            xParentStates = xParentContext->getAccessibleStateSet();
+            nParentStates = xParentContext->getAccessibleStateSet();
         }
-        if (IsEditable(xParentStates))
+        if (IsEditable(nParentStates))
         {
             ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDoc->GetDocumentShell());
             bResult = pDocShell->GetDocFunc().SetValueCell(maCellAddress, fValue, false);
@@ -285,12 +285,9 @@ uno::Sequence<sal_Int8> SAL_CALL
     return css::uno::Sequence<sal_Int8>();
 }
 
-bool ScAccessibleCellBase::IsEditable(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+bool ScAccessibleCellBase::IsEditable(sal_Int64 nParentStates)
 {
-    bool bEditable(false);
-    if (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::EDITABLE))
-        bEditable = true;
+    bool bEditable = nParentStates & AccessibleStateType::EDITABLE;
     return bEditable;
 }
 

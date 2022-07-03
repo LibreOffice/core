@@ -45,7 +45,7 @@ protected:
     virtual ~VCLXAccessibleEdit() override = default;
 
     virtual void                ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual void                FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
+    virtual void                FillAccessibleStateSet( sal_Int64& rStateSet ) override;
     sal_Int16                   implGetAccessibleRole();
 
     // OCommonAccessibleText

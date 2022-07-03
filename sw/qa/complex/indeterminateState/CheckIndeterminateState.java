@@ -22,7 +22,6 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.AccessibleStateType;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleStateSet;
 import com.sun.star.awt.FontWeight;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XPropertySet;
@@ -78,9 +77,9 @@ public class CheckIndeterminateState {
 
         XAccessibleContext oContext = UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
 
-        XAccessibleStateSet oSet = oContext.getAccessibleStateSet();
+        long oSet = oContext.getAccessibleStateSet();
 
-        assertTrue("The 'INDETERMINATE' state is not set.",oSet.contains(AccessibleStateType.INDETERMINATE));
+        assertTrue("The 'INDETERMINATE' state is not set.", (oSet & AccessibleStateType.INDETERMINATE) != 0);
     }
 
     @Before public void setUpDocument() throws com.sun.star.uno.Exception {
