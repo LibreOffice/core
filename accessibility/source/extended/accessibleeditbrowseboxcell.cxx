@@ -123,7 +123,7 @@ namespace accessibility
         return baseGetAccessibleRelationSet( );
     }
 
-    css::uno::Reference<css::accessibility::XAccessibleStateSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleStateSet()
+    sal_Int64 SAL_CALL EditBrowseBoxTableCell::getAccessibleStateSet()
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();

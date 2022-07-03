@@ -102,7 +102,7 @@ void  AccContainerEventListener::notifyEvent( const css::accessibility::Accessib
 
 void AccContainerEventListener::HandleStateChangedEvent(Any oldValue, Any newValue)
 {
-    short State;
+    sal_Int64 State;
     if( newValue >>= State)
     {
         SetComponentState(State, true);
@@ -202,7 +202,7 @@ void AccContainerEventListener::HandleTextChangedEvent(Any, Any newValue)
  * @param   state   new state id
  * @param   enable  true if state is set, false if state is unset
  */
-void AccContainerEventListener::SetComponentState(short state, bool enable )
+void AccContainerEventListener::SetComponentState(sal_Int64 state, bool enable )
 {
     // only the following state can be fired state event.
 
@@ -275,7 +275,7 @@ void AccContainerEventListener::SetComponentState(short state, bool enable )
  * @param   state   the state id
  * @param   set     true if state is set, false if state is unset
  */
-void AccContainerEventListener::FireStatePropertyChange(short state, bool set)
+void AccContainerEventListener::FireStatePropertyChange(sal_Int64 state, bool set)
 {
     if( set )
     {
@@ -423,18 +423,8 @@ void AccContainerEventListener::HandleValueChangedEvent(Any, Any)
 
 bool AccContainerEventListener::IsEditable(Reference<XAccessibleContext> const & xContext)
 {
-    Reference< XAccessibleStateSet > pRState = xContext->getAccessibleStateSet();
-    if( !pRState.is() )
-        return false;
-
-    Sequence<short> pStates = pRState->getStates();
-    int count = pStates.getLength();
-    for( int iIndex = 0;iIndex < count;iIndex++ )
-    {
-        if(pStates[iIndex] == AccessibleStateType::EDITABLE)
-            return true;
-    }
-    return false;
+    sal_Int64 nRState = xContext->getAccessibleStateSet();
+    return nRState & AccessibleStateType::EDITABLE;
 }
 
 bool AccContainerEventListener::NotifyChildEvent(UnoMSAAEvent eWinEvent, const Any& Value)

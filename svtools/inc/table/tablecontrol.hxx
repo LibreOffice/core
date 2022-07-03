@@ -116,7 +116,7 @@ namespace svt::table
         virtual OUString GetAccessibleObjectName(vcl::table::AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const override;
         virtual void GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow ) override;
         virtual OUString GetAccessibleObjectDescription(vcl::table::AccessibleTableControlObjType eObjType) const override;
-        virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet, vcl::table::AccessibleTableControlObjType eObjType ) const override;
+        virtual void FillAccessibleStateSet( sal_Int64& rStateSet, vcl::table::AccessibleTableControlObjType eObjType ) const override;
 
         // temporary methods
         // Those do not really belong into the public API - they're intended for firing A11Y-related events. However,
@@ -143,7 +143,7 @@ namespace svt::table
         virtual tools::Rectangle calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos ) override;
         virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
-        virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const override;
+        virtual void FillAccessibleStateSetForCell( sal_Int64& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const override;
         virtual OUString GetRowName(sal_Int32 _nIndex) const override;
         virtual OUString GetColumnName( sal_Int32 _nIndex ) const override;
         virtual bool HasRowHeader() override;

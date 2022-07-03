@@ -37,7 +37,7 @@ public:
                                   AccObjectManagerAgent* Agent);
     virtual ~AccTextComponentEventListener() override;
 
-    virtual void SetComponentState(short state, bool enable) override;
+    virtual void SetComponentState(sal_Int64 state, bool enable) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,7 +26,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -295,21 +294,21 @@ namespace accessibility
     }
 
 
-    void AccessibleTabBarPageList::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+    void AccessibleTabBarPageList::FillAccessibleStateSet( sal_Int64& rStateSet )
     {
         if ( !m_pTabBar )
             return;
 
         if ( m_pTabBar->IsEnabled() )
         {
-            rStateSet.AddState( AccessibleStateType::ENABLED );
-            rStateSet.AddState( AccessibleStateType::SENSITIVE );
+            rStateSet |= AccessibleStateType::ENABLED;
+            rStateSet |= AccessibleStateType::SENSITIVE;
         }
 
-        rStateSet.AddState( AccessibleStateType::VISIBLE );
+        rStateSet |= AccessibleStateType::VISIBLE;
 
         if ( m_pTabBar->IsVisible() )
-            rStateSet.AddState( AccessibleStateType::SHOWING );
+            rStateSet |= AccessibleStateType::SHOWING;
     }
 
 
@@ -470,22 +469,22 @@ namespace accessibility
     }
 
 
-    Reference< XAccessibleStateSet > AccessibleTabBarPageList::getAccessibleStateSet(  )
+    sal_Int64 AccessibleTabBarPageList::getAccessibleStateSet(  )
     {
         OExternalLockGuard aGuard( this );
 
-        rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
+        sal_Int64 nStateSet = 0;
 
         if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
         {
-            FillAccessibleStateSet( *pStateSetHelper );
+            FillAccessibleStateSet( nStateSet );
         }
         else
         {
-            pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
+            nStateSet |= AccessibleStateType::DEFUNC;
         }
 
-        return pStateSetHelper;
+        return nStateSet;
     }
 
 

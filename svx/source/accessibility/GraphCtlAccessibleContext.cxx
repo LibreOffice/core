@@ -23,7 +23,6 @@
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -390,27 +389,27 @@ Reference< XAccessibleRelationSet > SAL_CALL SvxGraphCtrlAccessibleContext::getA
 }
 
 
-Reference< XAccessibleStateSet > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleStateSet()
+sal_Int64 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleStateSet()
 {
     ::SolarMutexGuard aGuard;
 
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if ( rBHelper.bDisposed || mbDisposed )
     {
-        pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
+        nStateSet |= AccessibleStateType::DEFUNC;
     }
     else
     {
-        pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
+        nStateSet |= AccessibleStateType::FOCUSABLE;
         if( mpControl->HasFocus() )
-            pStateSetHelper->AddState( AccessibleStateType::FOCUSED );
-        pStateSetHelper->AddState( AccessibleStateType::OPAQUE );
-        pStateSetHelper->AddState( AccessibleStateType::SHOWING );
-        pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
+            nStateSet |= AccessibleStateType::FOCUSED;
+        nStateSet |= AccessibleStateType::OPAQUE;
+        nStateSet |= AccessibleStateType::SHOWING;
+        nStateSet |= AccessibleStateType::VISIBLE;
     }
 
-    return pStateSetHelper;
+    return nStateSet;
 }
 
 

@@ -126,7 +126,7 @@ void AccEventListener::HandleVisibleDataChangedEvent()
  */
 void AccEventListener::HandleStateChangedEvent(Any oldValue, Any newValue)
 {
-    short newV, oldV;
+    sal_Int64 newV, oldV;
     if (newValue >>= newV)
     {
         SetComponentState(newV, true);
@@ -142,7 +142,7 @@ void AccEventListener::HandleStateChangedEvent(Any oldValue, Any newValue)
  *  @param  state       new state id
  *  @param  enable      true if state is set, false if state is unset
  */
-void AccEventListener::SetComponentState(short state, bool enable)
+void AccEventListener::SetComponentState(sal_Int64 state, bool enable)
 {
     switch (state)
     {
@@ -177,7 +177,7 @@ void AccEventListener::FireStateFocusedChange(bool enable)
  *  @param state    the state id
  *  @param set      true if state is set, false if state is unset
  */
-void AccEventListener::FireStatePropertyChange(short /*state*/, bool set)
+void AccEventListener::FireStatePropertyChange(sal_Int64 /*state*/, bool set)
 {
     if (set)
     {

@@ -26,7 +26,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <vcl/svapp.hxx>
@@ -212,22 +211,22 @@ OUString OAccessibleMenuItemComponent::GetItemText()
 }
 
 
-void OAccessibleMenuItemComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void OAccessibleMenuItemComponent::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     bool bEnabled = IsEnabled();
     if ( bEnabled )
     {
-        rStateSet.AddState( AccessibleStateType::ENABLED );
-        rStateSet.AddState( AccessibleStateType::SENSITIVE );
+        rStateSet |= AccessibleStateType::ENABLED;
+        rStateSet |= AccessibleStateType::SENSITIVE;
     }
 
     if ( IsVisible() )
     {
-        rStateSet.AddState( AccessibleStateType::SHOWING );
+        rStateSet |= AccessibleStateType::SHOWING;
         if( !IsMenuHideDisabledEntries() || bEnabled )
-            rStateSet.AddState( AccessibleStateType::VISIBLE );
+            rStateSet |= AccessibleStateType::VISIBLE;
     }
-    rStateSet.AddState( AccessibleStateType::OPAQUE );
+    rStateSet |= AccessibleStateType::OPAQUE;
 }
 
 

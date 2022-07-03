@@ -55,7 +55,7 @@ private:
 
     virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual void            ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent ) override;
-    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
+    virtual void            FillAccessibleStateSet( sal_Int64& rStateSet ) override;
 
     // XComponent
     virtual void SAL_CALL   disposing() override;

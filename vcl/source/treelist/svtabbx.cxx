@@ -23,7 +23,6 @@
 #include <vcl/headbar.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -921,30 +920,30 @@ OUString SvHeaderTabListBox::GetAccessibleObjectDescription( AccessibleBrowseBox
     return aRetText;
 }
 
-void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, AccessibleBrowseBoxObjType _eType ) const
+void SvHeaderTabListBox::FillAccessibleStateSet( sal_Int64& _rStateSet, AccessibleBrowseBoxObjType _eType ) const
 {
     switch( _eType )
     {
         case AccessibleBrowseBoxObjType::BrowseBox:
         case AccessibleBrowseBoxObjType::Table:
         {
-            _rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+            _rStateSet |= AccessibleStateType::FOCUSABLE;
             if ( HasFocus() )
-                _rStateSet.AddState( AccessibleStateType::FOCUSED );
+                _rStateSet |= AccessibleStateType::FOCUSED;
             if ( IsActive() )
-                _rStateSet.AddState( AccessibleStateType::ACTIVE );
+                _rStateSet |= AccessibleStateType::ACTIVE;
             if ( IsEnabled() )
             {
-                _rStateSet.AddState( AccessibleStateType::ENABLED );
-                _rStateSet.AddState( AccessibleStateType::SENSITIVE );
+                _rStateSet |= AccessibleStateType::ENABLED;
+                _rStateSet |= AccessibleStateType::SENSITIVE;
             }
             if ( IsReallyVisible() )
-                _rStateSet.AddState( AccessibleStateType::VISIBLE );
+                _rStateSet |= AccessibleStateType::VISIBLE;
             if ( _eType == AccessibleBrowseBoxObjType::Table )
             {
 
-                _rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
-                _rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
+                _rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
+                _rStateSet |= AccessibleStateType::MULTI_SELECTABLE;
             }
             break;
         }
@@ -954,21 +953,21 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
             sal_Int32 nCurRow = GetCurrRow();
             sal_uInt16 nCurColumn = GetCurrColumn();
             if ( IsCellVisible( nCurRow, nCurColumn ) )
-                _rStateSet.AddState( AccessibleStateType::VISIBLE );
+                _rStateSet |= AccessibleStateType::VISIBLE;
             if ( IsEnabled() )
-                _rStateSet.AddState( AccessibleStateType::ENABLED );
-            _rStateSet.AddState( AccessibleStateType::TRANSIENT );
+                _rStateSet |= AccessibleStateType::ENABLED;
+            _rStateSet |= AccessibleStateType::TRANSIENT;
             break;
         }
 
         case AccessibleBrowseBoxObjType::RowHeaderCell:
         case AccessibleBrowseBoxObjType::ColumnHeaderCell:
         {
-            _rStateSet.AddState( AccessibleStateType::VISIBLE );
-            _rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-            _rStateSet.AddState( AccessibleStateType::TRANSIENT );
+            _rStateSet |= AccessibleStateType::VISIBLE;
+            _rStateSet |= AccessibleStateType::FOCUSABLE;
+            _rStateSet |= AccessibleStateType::TRANSIENT;
             if ( IsEnabled() )
-                _rStateSet.AddState( AccessibleStateType::ENABLED );
+                _rStateSet |= AccessibleStateType::ENABLED;
             break;
         }
         default:
@@ -976,24 +975,24 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
     }
 }
 
-void SvHeaderTabListBox::FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumn ) const
+void SvHeaderTabListBox::FillAccessibleStateSetForCell( sal_Int64& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumn ) const
 {
-    _rStateSet.AddState( AccessibleStateType::SELECTABLE );
-    _rStateSet.AddState( AccessibleStateType::TRANSIENT );
+    _rStateSet |= AccessibleStateType::SELECTABLE;
+    _rStateSet |= AccessibleStateType::TRANSIENT;
 
     if ( IsCellVisible( _nRow, _nColumn ) )
     {
-        _rStateSet.AddState( AccessibleStateType::VISIBLE );
-        _rStateSet.AddState( AccessibleStateType::ENABLED );
+        _rStateSet |= AccessibleStateType::VISIBLE;
+        _rStateSet |= AccessibleStateType::ENABLED;
     }
 
     if ( IsRowSelected( _nRow ) )
     {
-        _rStateSet.AddState( AccessibleStateType::ACTIVE );
-        _rStateSet.AddState( AccessibleStateType::SELECTED );
+        _rStateSet |= AccessibleStateType::ACTIVE;
+        _rStateSet |= AccessibleStateType::SELECTED;
     }
     if ( IsEnabled() )
-        _rStateSet.AddState( AccessibleStateType::ENABLED );
+        _rStateSet |= AccessibleStateType::ENABLED;
 }
 
 void SvHeaderTabListBox::GrabTableFocus()

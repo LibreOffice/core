@@ -111,7 +111,7 @@ void AccMenuEventListener::HandleSelectionChangedEventNoArgs()
 /**
  *  handle the Menu_popup event
  */
-void AccMenuEventListener::FireStatePropertyChange(short state, bool set)
+void AccMenuEventListener::FireStatePropertyChange(sal_Int64 state, bool set)
 {
     if( set )
     {

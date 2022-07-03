@@ -766,7 +766,7 @@ void AccObject::UpdateState()
     }
 
     XAccessibleContext* pContext  = m_xAccContextRef.get();
-    Reference< XAccessibleStateSet > pRState = pContext->getAccessibleStateSet();
+    sal_Int64 nRState = pContext->getAccessibleStateSet();
     if( !pRState.is() )
     {
         assert(false);
@@ -786,19 +786,30 @@ void AccObject::UpdateState()
     bool isVisible = false;
     bool isFocusable = false;
 
-    for (const sal_Int16 nState : pRState->getStates())
+    if (nRState & ENABLED)
     {
-        if (nState == ENABLED)
-            isEnable = true;
-        else if (nState == SHOWING)
-            isShowing = true;
-        else if (nState == VISIBLE)
-            isVisible = true;
-        else if (nState == EDITABLE)
-            isEditable = true;
-        else if (nState == FOCUSABLE)
-            isFocusable = true;
-        IncreaseState(nState);
+        isEnable = true;
+        IncreaseState(ENABLED);
+    }
+    if (nRState & SHOWING)
+    {
+        isShowing = true;
+        IncreaseState(SHOWING);
+    }
+    if (nRState & VISIBLE)
+    {
+        isVisible = true;
+        IncreaseState(VISIBLE);
+    }
+    if (nRState & EDITABLE)
+    {
+        isEditable = true;
+        IncreaseState(EDITABLE);
+    }
+    if (nRState & FOCUSABLE)
+    {
+        isFocusable = true;
+        IncreaseState(FOCUSABLE);
     }
     bool bIsMenuItem = m_accRole == MENU_ITEM || m_accRole == RADIO_MENU_ITEM || m_accRole == CHECK_MENU_ITEM;
 
@@ -1040,19 +1051,12 @@ void AccObject::GetExpandedState( sal_Bool* isExpandable, sal_Bool* isExpanded)
     {
         return;
     }
-    Reference< XAccessibleStateSet > pRState = m_xAccContextRef->getAccessibleStateSet();
-    if( !pRState.is() )
-    {
-        return;
-    }
+    sal_Int64 nRState = m_xAccContextRef->getAccessibleStateSet();
 
-    for (sal_Int16 nState : pRState->getStates())
-    {
-        if (nState == EXPANDED)
-            *isExpanded = true;
-        else if (nState == EXPANDABLE)
-            *isExpandable = true;
-    }
+    if (nRState & EXPANDED)
+        *isExpanded = true;
+    if (nRState & EXPANDABLE)
+        *isExpandable = true;
 }
 
 void AccObject::NotifyDestroy()

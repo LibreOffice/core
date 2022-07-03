@@ -94,7 +94,7 @@ void                   atk_object_wrapper_set_role(AtkObjectWrapper* wrapper, sa
 
 void                   atk_object_wrapper_dispose(AtkObjectWrapper* wrapper);
 
-AtkStateType mapAtkState( sal_Int16 nState );
+AtkStateType mapAtkState( sal_Int64 nState );
 
 AtkRelation*           atk_object_wrapper_relation_new(const css::accessibility::AccessibleRelation& rRelation);
 

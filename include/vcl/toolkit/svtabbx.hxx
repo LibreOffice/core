@@ -184,8 +184,8 @@ public:
     virtual OUString                GetAccessibleObjectDescription( AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const override;
     virtual vcl::Window*                 GetWindowInstance() override;
 
-    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, AccessibleBrowseBoxObjType _eType ) const override;
-    virtual void                    FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
+    virtual void                    FillAccessibleStateSet( sal_Int64& _rStateSet, AccessibleBrowseBoxObjType _eType ) const override;
+    virtual void                    FillAccessibleStateSetForCell( sal_Int64& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
     virtual void                    GrabTableFocus() override;
 
     // OutputDevice

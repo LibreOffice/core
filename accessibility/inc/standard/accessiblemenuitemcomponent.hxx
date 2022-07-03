@@ -48,7 +48,7 @@ protected:
 
     virtual bool            IsMenuHideDisabledEntries() override;
 
-    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
+    virtual void            FillAccessibleStateSet( sal_Int64& rStateSet ) override;
 
     // OCommonAccessibleComponent
     virtual css::awt::Rectangle implGetBounds(  ) override;

@@ -22,7 +22,6 @@ module com { module sun { module star { module accessibility {
  interface XAccessible;
  interface XAccessibleRelationSet;
  interface XAccessibleSelection;
- interface XAccessibleStateSet;
 
 /** Implement this interface for exposing various aspects of a class's
     content.
@@ -155,16 +154,16 @@ interface XAccessibleContext : ::com::sun::star::uno::XInterface
 
         <p>The returned state set is a copy: Changing the returned state set
         will not be reflected by changing the object's set of states.  See
-        the documentation of XAccessibleStateSet for a
+        the documentation of XAccessibleStateType for a
         description of the individual states.</p>
 
         @return
             A reference to this object's state set or an empty reference if
             states are not supported.
 
-        @see XAccessibleStateSet
+        @see XAccessibleStateType
     */
-    XAccessibleStateSet getAccessibleStateSet ();
+    hyper getAccessibleStateSet ();
 
     /** Returns the locale of the component.
 

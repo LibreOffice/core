@@ -1650,7 +1650,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/accessibility,\
 	XAccessibleMultiLineText \
 	XAccessibleRelationSet \
 	XAccessibleSelection \
-	XAccessibleStateSet \
 	XAccessibleTable \
     XAccessibleTableSelection \
 	XAccessibleText \

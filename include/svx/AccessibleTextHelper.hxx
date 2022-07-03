@@ -249,7 +249,7 @@ public:
     */
     sal_Int32 GetStartIndex() const;
 
-    /** Sets a vector of additional accessible states.
+    /** Sets a bitset of additional accessible states.
 
         The states are passed to every created child object
         (text paragraph). The state values are defined in
@@ -258,7 +258,7 @@ public:
         This function has to be called before querying for
         any children (e.g. with GetChild()).
     */
-    void SetAdditionalChildStates(VectorOfStates&& rChildStates);
+    void SetAdditionalChildStates(sal_Int64 rChildStates);
 
     /** Update the visible children
 

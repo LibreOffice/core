@@ -155,29 +155,26 @@ namespace accessibility
         throw css::lang::IndexOutOfBoundsException();
     }
 
-    /** Creates a new AccessibleStateSetHelper and fills it with states of the
-        current object.
-        @return
-            A filled AccessibleStateSetHelper.
+    /** Return a bitset of states of the current object.
     */
-    rtl::Reference<::utl::AccessibleStateSetHelper> AccessibleBrowseBoxTableCell::implCreateStateSetHelper()
+    sal_Int64 AccessibleBrowseBoxTableCell::implCreateStateSetHelper()
     {
         SolarMethodGuard aGuard(getMutex());
 
-        rtl::Reference<::utl::AccessibleStateSetHelper> pStateSetHelper = new ::utl::AccessibleStateSetHelper;
+        sal_Int64 nStateSet = 0;
 
         if( isAlive() )
         {
             // SHOWING done with mxParent
             if( implIsShowing() )
-                pStateSetHelper->AddState( AccessibleStateType::SHOWING );
+                nStateSet |= AccessibleStateType::SHOWING;
 
-            mpBrowseBox->FillAccessibleStateSetForCell( *pStateSetHelper, getRowPos(), static_cast< sal_uInt16 >( getColumnPos() ) );
+            mpBrowseBox->FillAccessibleStateSetForCell( nStateSet, getRowPos(), static_cast< sal_uInt16 >( getColumnPos() ) );
         }
         else
-            pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
+            nStateSet |= AccessibleStateType::DEFUNC;
 
-        return pStateSetHelper;
+        return nStateSet;
     }
 
 

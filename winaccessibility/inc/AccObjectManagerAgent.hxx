@@ -63,8 +63,8 @@ public:
                               HWND  hWnd = nullptr);
     void DeleteChildrenAccObj( css::accessibility::XAccessible* pXAcc );
 
-    void  DecreaseState( css::accessibility::XAccessible* pXAcc,unsigned short pState );
-    void  IncreaseState( css::accessibility::XAccessible* pXAcc,unsigned short pState );
+    void  DecreaseState( css::accessibility::XAccessible* pXAcc, sal_Int64 pState );
+    void  IncreaseState( css::accessibility::XAccessible* pXAcc, sal_Int64 pState );
     void  UpdateState( css::accessibility::XAccessible* pXAcc );
 
     static void UpdateLocation( css::accessibility::XAccessible* pXAcc,

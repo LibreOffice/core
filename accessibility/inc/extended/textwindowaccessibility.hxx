@@ -180,9 +180,7 @@ private:
     css::uno::Reference< css::accessibility::XAccessibleRelationSet >
     SAL_CALL getAccessibleRelationSet() override;
 
-    virtual
-    css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL
-    getAccessibleStateSet() override;
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
 
     virtual css::lang::Locale SAL_CALL getLocale() override;
 
@@ -479,7 +477,7 @@ private:
     virtual css::uno::Reference< css::accessibility::XAccessible >
     SAL_CALL getAccessibleAtPoint(css::awt::Point const & rPoint) override;
 
-    virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
+    virtual void FillAccessibleStateSet( sal_Int64& rStateSet ) override;
     virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet ) override;
 
     // ??? Will be called with both the external (Solar) and internal mutex

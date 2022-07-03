@@ -21,7 +21,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
@@ -74,7 +73,7 @@ bool SwAccessibleCell::IsSelected()
     return bRet;
 }
 
-void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
+void SwAccessibleCell::GetStates( sal_Int64& rStateSet )
 {
     SwAccessibleContext::GetStates( rStateSet );
 
@@ -82,9 +81,9 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     const SwViewShell *pVSh = GetMap()->GetShell();
     assert(pVSh);
     if( dynamic_cast<const SwCursorShell*>( pVSh) !=  nullptr )
-        rStateSet.AddState( AccessibleStateType::SELECTABLE );
+        rStateSet |= AccessibleStateType::SELECTABLE;
     //Add resizable state to table cell.
-    rStateSet.AddState( AccessibleStateType::RESIZABLE );
+    rStateSet |= AccessibleStateType::RESIZABLE;
 
     if (IsDisposing()) // tdf#135098
         return;
@@ -92,7 +91,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     // SELECTED
     if( IsSelected() )
     {
-        rStateSet.AddState( AccessibleStateType::SELECTED );
+        rStateSet |= AccessibleStateType::SELECTED;
         SAL_WARN_IF(!m_bIsSelected, "sw.a11y", "bSelected out of sync");
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );

@@ -61,7 +61,7 @@ void  AccParagraphEventListener::notifyEvent( const css::accessibility::Accessib
         //Added for paragraph selected state.
     case AccessibleEventId::STATE_CHANGED:
         {
-            short State;
+            sal_Int64 State;
             if( (aEvent.NewValue >>= State) && (State == AccessibleStateType::SELECTED) )
             {
                 pAgent->IncreaseState(m_xAccessible.get(), State);
@@ -103,7 +103,7 @@ void AccParagraphEventListener::HandleCaretChangedEvent(Any, Any)
  *  @param state    new state id
  *  @param enable   true if state is set, false if state is unset
  */
-void AccParagraphEventListener::SetComponentState(short state, bool enable )
+void AccParagraphEventListener::SetComponentState(sal_Int64 state, bool enable )
 {
     // only the following state can be fired state event.
     switch (state)

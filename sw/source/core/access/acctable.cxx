@@ -28,7 +28,6 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <o3tl/safeint.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <frmfmt.hxx>
 #include <tabfrm.hxx>
@@ -594,17 +593,16 @@ sal_Int32 SwAccessibleTable::GetIndexOfSelectedChild(
     return n < nChildren ? n : -1;
 }
 
-void SwAccessibleTable::GetStates(
-        ::utl::AccessibleStateSetHelper& rStateSet )
+void SwAccessibleTable::GetStates( sal_Int64& rStateSet )
 {
     SwAccessibleContext::GetStates( rStateSet );
     //Add resizable state to table
-    rStateSet.AddState( AccessibleStateType::RESIZABLE );
+    rStateSet |= AccessibleStateType::RESIZABLE;
     // MULTISELECTABLE
-    rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
+    rStateSet |= AccessibleStateType::MULTI_SELECTABLE;
     SwCursorShell* pCursorShell = GetCursorShell();
-    if( pCursorShell  )
-        rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
+    if( pCursorShell )
+        rStateSet |= AccessibleStateType::MULTI_SELECTABLE;
 }
 
 SwAccessibleTable::SwAccessibleTable(
