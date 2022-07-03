@@ -422,7 +422,6 @@
 #include <typelib/typedescription.h>
 #include <uno/any2.h>
 #include <uno/sequence2.h>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>

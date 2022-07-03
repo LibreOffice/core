@@ -56,9 +56,9 @@ namespace accessibility
         // owner is responsible for possible child death
     }
 
-    void AccessibleParaManager::SetAdditionalChildStates( VectorOfStates&& rChildStates )
+    void AccessibleParaManager::SetAdditionalChildStates( sal_Int64 nChildStates )
     {
-        maChildStates = std::move(rChildStates);
+        mnChildStates = nChildStates;
     }
 
     void AccessibleParaManager::SetNum( sal_Int32 nNumParas )
@@ -243,35 +243,36 @@ namespace accessibility
             rChild.SetState( AccessibleStateType::FOCUSED );
 
         // add states passed from outside
-        for( const auto& rState : maChildStates )
-            rChild.SetState( rState );
+        for (int i=0; i<63; i++)
+            if ( (1<<i) & mnChildStates )
+                rChild.SetState( 1<<i );
     }
 
-    void AccessibleParaManager::SetState( sal_Int32 nChild, const sal_Int16 nStateId )
+    void AccessibleParaManager::SetState( sal_Int32 nChild, const sal_Int64 nStateId )
     {
-        MemFunAdapter< const sal_Int16 > aFunc( &AccessibleEditableTextPara::SetState,
+        MemFunAdapter< const sal_Int64 > aFunc( &AccessibleEditableTextPara::SetState,
                                                 nStateId );
         aFunc( GetChild(nChild) );
     }
 
-    void AccessibleParaManager::SetState( const sal_Int16 nStateId )
+    void AccessibleParaManager::SetState( const sal_Int64 nStateId )
     {
         std::for_each( begin(), end(),
-                         MemFunAdapter< const sal_Int16 >( &AccessibleEditableTextPara::SetState,
+                         MemFunAdapter< const sal_Int64 >( &AccessibleEditableTextPara::SetState,
                                                            nStateId ) );
     }
 
-    void AccessibleParaManager::UnSetState( sal_Int32 nChild, const sal_Int16 nStateId )
+    void AccessibleParaManager::UnSetState( sal_Int32 nChild, const sal_Int64 nStateId )
     {
-        MemFunAdapter< const sal_Int16 > aFunc( &AccessibleEditableTextPara::UnSetState,
+        MemFunAdapter< const sal_Int64 > aFunc( &AccessibleEditableTextPara::UnSetState,
                                                 nStateId );
         aFunc( GetChild(nChild) );
     }
 
-    void AccessibleParaManager::UnSetState( const sal_Int16 nStateId )
+    void AccessibleParaManager::UnSetState( const sal_Int64 nStateId )
     {
         std::for_each( begin(), end(),
-                         MemFunAdapter< const sal_Int16 >( &AccessibleEditableTextPara::UnSetState,
+                         MemFunAdapter< const sal_Int64 >( &AccessibleEditableTextPara::UnSetState,
                                                            nStateId ) );
     }
 

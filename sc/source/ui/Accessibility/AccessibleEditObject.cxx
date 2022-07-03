@@ -29,7 +29,6 @@
 #include <inputhdl.hxx>
 #include <inputwin.hxx>
 
-#include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -263,31 +262,30 @@ uno::Reference< XAccessible > SAL_CALL
     return mpTextHelper->GetChild(nIndex);
 }
 
-uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessibleEditObject::getAccessibleStateSet()
+sal_Int64 SAL_CALL ScAccessibleEditObject::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
-    uno::Reference<XAccessibleStateSet> xParentStates;
+    sal_Int64 nParentStates = 0;
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
-        xParentStates = xParentContext->getAccessibleStateSet();
+        nParentStates = xParentContext->getAccessibleStateSet();
     }
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
-    if (IsDefunc(xParentStates))
-        pStateSet->AddState(AccessibleStateType::DEFUNC);
+    sal_Int64 nStateSet = 0;
+    if (IsDefunc(nParentStates))
+        nStateSet |= AccessibleStateType::DEFUNC;
     else
     {
         // all states are const, because this object exists only in one state
-        pStateSet->AddState(AccessibleStateType::EDITABLE);
-        pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::SENSITIVE);
-        pStateSet->AddState(AccessibleStateType::MULTI_LINE);
-        pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
-        pStateSet->AddState(AccessibleStateType::SHOWING);
-        pStateSet->AddState(AccessibleStateType::VISIBLE);
+        nStateSet |= AccessibleStateType::EDITABLE;
+        nStateSet |= AccessibleStateType::ENABLED;
+        nStateSet |= AccessibleStateType::SENSITIVE;
+        nStateSet |= AccessibleStateType::MULTI_LINE;
+        nStateSet |= AccessibleStateType::MULTI_SELECTABLE;
+        nStateSet |= AccessibleStateType::SHOWING;
+        nStateSet |= AccessibleStateType::VISIBLE;
     }
-    return pStateSet;
+    return nStateSet;
 }
 
 OUString
@@ -343,11 +341,10 @@ uno::Sequence<sal_Int8> SAL_CALL
 
     //====  internal  =========================================================
 
-bool ScAccessibleEditObject::IsDefunc(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+bool ScAccessibleEditObject::IsDefunc(sal_Int64 nParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || !getAccessibleParent().is() ||
-         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
+         (nParentStates & AccessibleStateType::DEFUNC);
 }
 
 OutputDevice* ScAccessibleEditObject::GetOutputDeviceForView()

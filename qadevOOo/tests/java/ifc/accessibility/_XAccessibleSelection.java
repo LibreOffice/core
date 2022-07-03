@@ -545,9 +545,9 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         for (int i = 0; i < cc; i++) {
             try {
-                if (accCon.getAccessibleChild(i).getAccessibleContext()
+                if ((accCon.getAccessibleChild(i).getAccessibleContext()
                           .getAccessibleStateSet()
-                          .contains(com.sun.star.accessibility.AccessibleStateType.SELECTABLE)) {
+                          & com.sun.star.accessibility.AccessibleStateType.SELECTABLE) != 0) {
                     ret = ret + 1;
                     System.out.println("Child " + i + " is selectable");
                 }
@@ -564,9 +564,9 @@ public class _XAccessibleSelection extends MultiMethodTest {
         boolean res = false;
 
         try {
-            if (accCon.getAccessibleChild(index).getAccessibleContext()
+            if ((accCon.getAccessibleChild(index).getAccessibleContext()
                       .getAccessibleStateSet()
-                      .contains(com.sun.star.accessibility.AccessibleStateType.SELECTABLE)) {
+                      & com.sun.star.accessibility.AccessibleStateType.SELECTABLE) != 0) {
                 res = true;
             }
 

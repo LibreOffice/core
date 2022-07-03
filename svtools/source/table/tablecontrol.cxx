@@ -27,7 +27,6 @@
 
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/vclevent.hxx>
 
@@ -35,7 +34,6 @@ using namespace ::com::sun::star::uno;
 using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
-using namespace utl;
 
 namespace svt::table
 {
@@ -400,7 +398,7 @@ namespace svt::table
 
 
     void TableControl::FillAccessibleStateSet(
-            ::utl::AccessibleStateSetHelper& rStateSet,
+            sal_Int64& rStateSet,
             vcl::table::AccessibleTableControlObjType eObjType ) const
     {
         switch( eObjType )
@@ -408,63 +406,63 @@ namespace svt::table
             case vcl::table::TCTYPE_GRIDCONTROL:
             case vcl::table::TCTYPE_TABLE:
 
-                rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+                rStateSet |= AccessibleStateType::FOCUSABLE;
 
                 if ( m_pImpl->getSelEngine()->GetSelectionMode() == SelectionMode::Multiple )
-                    rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE);
+                    rStateSet |= AccessibleStateType::MULTI_SELECTABLE;
 
                 if ( HasChildPathFocus() )
-                    rStateSet.AddState( AccessibleStateType::FOCUSED );
+                    rStateSet |= AccessibleStateType::FOCUSED;
 
                 if ( IsActive() )
-                    rStateSet.AddState( AccessibleStateType::ACTIVE );
+                    rStateSet |= AccessibleStateType::ACTIVE;
 
                 if ( m_pImpl->getDataWindow().IsEnabled() )
                 {
-                    rStateSet.AddState( AccessibleStateType::ENABLED );
-                    rStateSet.AddState( AccessibleStateType::SENSITIVE );
+                    rStateSet |= AccessibleStateType::ENABLED;
+                    rStateSet |= AccessibleStateType::SENSITIVE;
                 }
 
                 if ( IsReallyVisible() )
-                    rStateSet.AddState( AccessibleStateType::VISIBLE );
+                    rStateSet |= AccessibleStateType::VISIBLE;
 
                 if ( eObjType == vcl::table::TCTYPE_TABLE )
-                    rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
+                    rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
                 break;
 
             case vcl::table::TCTYPE_ROWHEADERBAR:
-                rStateSet.AddState( AccessibleStateType::VISIBLE );
-                rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
+                rStateSet |= AccessibleStateType::VISIBLE;
+                rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
                 break;
 
             case vcl::table::TCTYPE_COLUMNHEADERBAR:
-                rStateSet.AddState( AccessibleStateType::VISIBLE );
-                rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
+                rStateSet |= AccessibleStateType::VISIBLE;
+                rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
                 break;
 
             case vcl::table::TCTYPE_TABLECELL:
                 {
-                    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+                    rStateSet |= AccessibleStateType::FOCUSABLE;
                     if ( HasChildPathFocus() )
-                        rStateSet.AddState( AccessibleStateType::FOCUSED );
-                    rStateSet.AddState( AccessibleStateType::ACTIVE );
-                    rStateSet.AddState( AccessibleStateType::TRANSIENT );
-                    rStateSet.AddState( AccessibleStateType::SELECTABLE);
-                    rStateSet.AddState( AccessibleStateType::VISIBLE );
-                    rStateSet.AddState( AccessibleStateType::SHOWING );
+                        rStateSet |= AccessibleStateType::FOCUSED;
+                    rStateSet |= AccessibleStateType::ACTIVE;
+                    rStateSet |= AccessibleStateType::TRANSIENT;
+                    rStateSet |= AccessibleStateType::SELECTABLE;
+                    rStateSet |= AccessibleStateType::VISIBLE;
+                    rStateSet |= AccessibleStateType::SHOWING;
                     if ( IsRowSelected( GetCurrentRow() ) )
                         // Hmm? Wouldn't we expect the affected row to be a parameter to this function?
-                        rStateSet.AddState( AccessibleStateType::SELECTED );
+                        rStateSet |= AccessibleStateType::SELECTED;
                 }
                 break;
 
             case vcl::table::TCTYPE_ROWHEADERCELL:
-                rStateSet.AddState( AccessibleStateType::VISIBLE );
-                rStateSet.AddState( AccessibleStateType::TRANSIENT );
+                rStateSet |= AccessibleStateType::VISIBLE;
+                rStateSet |= AccessibleStateType::TRANSIENT;
                 break;
 
             case vcl::table::TCTYPE_COLUMNHEADERCELL:
-                rStateSet.AddState( AccessibleStateType::VISIBLE );
+                rStateSet |= AccessibleStateType::VISIBLE;
                 break;
         }
     }
@@ -560,20 +558,20 @@ namespace svt::table
     }
 
 
-    void TableControl::FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 ) const
+    void TableControl::FillAccessibleStateSetForCell( sal_Int64& _rStateSet, sal_Int32 _nRow, sal_uInt16 ) const
     {
         if ( IsRowSelected( _nRow ) )
-            _rStateSet.AddState( AccessibleStateType::SELECTED );
+            _rStateSet |= AccessibleStateType::SELECTED;
         if ( HasChildPathFocus() )
-            _rStateSet.AddState( AccessibleStateType::FOCUSED );
+            _rStateSet |= AccessibleStateType::FOCUSED;
         else // only transient when column is not focused
-            _rStateSet.AddState( AccessibleStateType::TRANSIENT );
+            _rStateSet |= AccessibleStateType::TRANSIENT;
 
-        _rStateSet.AddState( AccessibleStateType::VISIBLE );
-        _rStateSet.AddState( AccessibleStateType::SHOWING );
-        _rStateSet.AddState( AccessibleStateType::ENABLED );
-        _rStateSet.AddState( AccessibleStateType::SENSITIVE );
-        _rStateSet.AddState( AccessibleStateType::ACTIVE );
+        _rStateSet |= AccessibleStateType::VISIBLE;
+        _rStateSet |= AccessibleStateType::SHOWING;
+        _rStateSet |= AccessibleStateType::ENABLED;
+        _rStateSet |= AccessibleStateType::SENSITIVE;
+        _rStateSet |= AccessibleStateType::ACTIVE;
     }
 
 

@@ -48,7 +48,7 @@ void QtAccessibleEventListener::HandleStateChangedEvent(
 {
     QAccessible::State aState;
 
-    short nState = 0;
+    sal_Int64 nState = 0;
     rEvent.NewValue >>= nState;
     // States in 'QAccessibleStateChangeEvent' indicate what states have changed, so if e.g.
     // an object loses focus (not just if it gains it), 'focus' state needs to be set to 'true',

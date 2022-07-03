@@ -22,7 +22,6 @@
 #include <toolkit/awt/vclxwindows.hxx>
 
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -91,16 +90,16 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
 }
 
 
-void VCLXAccessibleRadioButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void VCLXAccessibleRadioButton::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
 
     VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
     if ( pVCLXRadioButton )
     {
-        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+        rStateSet |= AccessibleStateType::FOCUSABLE;
         if ( pVCLXRadioButton->getState() )
-            rStateSet.AddState( AccessibleStateType::CHECKED );
+            rStateSet |= AccessibleStateType::CHECKED;
     }
 }
 

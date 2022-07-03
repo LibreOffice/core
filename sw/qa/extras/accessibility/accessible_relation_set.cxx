@@ -54,7 +54,7 @@ AccessibilityTools::getAccessibleObjectForRole(
     const css::uno::Reference<css::accessibility::XAccessible>& xacc, sal_Int16 role)
 {
     css::uno::Reference<css::accessibility::XAccessibleContext> ac = xacc->getAccessibleContext();
-    bool isShowing = ac->getAccessibleStateSet()->contains(AccessibleStateType::SHOWING);
+    bool isShowing = ac->getAccessibleStateSet() & AccessibleStateType::SHOWING;
 
     if ((ac->getAccessibleRole() == role) && isShowing)
     {

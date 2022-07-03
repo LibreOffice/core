@@ -44,7 +44,7 @@ AccTextComponentEventListener::~AccTextComponentEventListener()
  *  @param state    new state id
  *  @param enable   true if state is set, false if state is unset
  */
-void AccTextComponentEventListener::SetComponentState(short state, bool enable )
+void AccTextComponentEventListener::SetComponentState(sal_Int64 state, bool enable )
 {
     // only the following state can be fired state event.
     switch (state)

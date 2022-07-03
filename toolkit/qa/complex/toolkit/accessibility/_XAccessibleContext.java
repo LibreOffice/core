@@ -25,7 +25,6 @@ import com.sun.star.accessibility.IllegalAccessibleComponentStateException;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleRelationSet;
-import com.sun.star.accessibility.XAccessibleStateSet;
 import util.AccessibilityTools;
 
 /**
@@ -219,8 +218,7 @@ public class _XAccessibleContext {
      * Has <b> OK </b> status if the set is not null.
      */
     public boolean _getAccessibleStateSet() {
-        XAccessibleStateSet set = oObj.getAccessibleStateSet();
-        return set != null;
+        return true;
     }
 
     /**

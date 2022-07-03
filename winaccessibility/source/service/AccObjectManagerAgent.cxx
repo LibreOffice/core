@@ -198,7 +198,7 @@ void AccObjectManagerAgent::DeleteChildrenAccObj( XAccessible* pXAcc )
    * @param pState The lost state of control.
    * @return
    */
-void AccObjectManagerAgent::DecreaseState( XAccessible* pXAcc,unsigned short pState )
+void AccObjectManagerAgent::DecreaseState( XAccessible* pXAcc, sal_Int64 pState )
 {
     if(pWinManager)
     {
@@ -212,7 +212,7 @@ void AccObjectManagerAgent::DecreaseState( XAccessible* pXAcc,unsigned short pSt
    * @param pState The new state of control.
    * @return
    */
-void AccObjectManagerAgent::IncreaseState( XAccessible* pXAcc,unsigned short pState )
+void AccObjectManagerAgent::IncreaseState( XAccessible* pXAcc, sal_Int64 pState )
 {
     if(pWinManager)
     {
