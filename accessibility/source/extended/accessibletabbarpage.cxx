@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -135,23 +134,23 @@ namespace accessibility
     }
 
 
-    void AccessibleTabBarPage::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+    void AccessibleTabBarPage::FillAccessibleStateSet( sal_Int64& rStateSet )
     {
         if ( IsEnabled() )
         {
-            rStateSet.AddState( AccessibleStateType::ENABLED );
-            rStateSet.AddState( AccessibleStateType::SENSITIVE );
+            rStateSet |=  AccessibleStateType::ENABLED;
+            rStateSet |=  AccessibleStateType::SENSITIVE;
         }
 
-        rStateSet.AddState( AccessibleStateType::VISIBLE );
+        rStateSet |=  AccessibleStateType::VISIBLE;
 
         if ( IsShowing() )
-            rStateSet.AddState( AccessibleStateType::SHOWING );
+            rStateSet |=  AccessibleStateType::SHOWING;
 
-        rStateSet.AddState( AccessibleStateType::SELECTABLE );
+        rStateSet |=  AccessibleStateType::SELECTABLE;
 
         if ( IsSelected() )
-            rStateSet.AddState( AccessibleStateType::SELECTED );
+            rStateSet |=  AccessibleStateType::SELECTED;
     }
 
 
@@ -311,22 +310,22 @@ namespace accessibility
     }
 
 
-    Reference< XAccessibleStateSet > AccessibleTabBarPage::getAccessibleStateSet(  )
+    sal_Int64 AccessibleTabBarPage::getAccessibleStateSet(  )
     {
         OExternalLockGuard aGuard( this );
 
-        rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
+        sal_Int64 nStateSet = 0;
 
         if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
         {
-            FillAccessibleStateSet( *pStateSetHelper );
+            FillAccessibleStateSet( nStateSet );
         }
         else
         {
-            pStateSetHelper->AddState( AccessibleStateType::DEFUNC );
+            nStateSet |= AccessibleStateType::DEFUNC;
         }
 
-        return pStateSetHelper;
+        return nStateSet;
     }
 
 

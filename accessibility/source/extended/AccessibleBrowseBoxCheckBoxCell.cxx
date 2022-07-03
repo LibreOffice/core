@@ -52,18 +52,17 @@ namespace accessibility
         return this;
     }
 
-    rtl::Reference<::utl::AccessibleStateSetHelper> AccessibleCheckBoxCell::implCreateStateSetHelper()
+    sal_Int64 AccessibleCheckBoxCell::implCreateStateSetHelper()
     {
-        rtl::Reference<::utl::AccessibleStateSetHelper> pStateSetHelper =
-            AccessibleBrowseBoxCell::implCreateStateSetHelper();
+        sal_Int64 nStateSet = AccessibleBrowseBoxCell::implCreateStateSetHelper();
         if( isAlive() )
         {
             mpBrowseBox->FillAccessibleStateSetForCell(
-                *pStateSetHelper, getRowPos(), static_cast< sal_uInt16 >( getColumnPos() ) );
+                nStateSet, getRowPos(), static_cast< sal_uInt16 >( getColumnPos() ) );
             if ( m_eState == TRISTATE_TRUE )
-                pStateSetHelper->AddState( AccessibleStateType::CHECKED );
+                nStateSet |= AccessibleStateType::CHECKED;
         }
-        return pStateSetHelper;
+        return nStateSet;
     }
 
     // XAccessibleValue

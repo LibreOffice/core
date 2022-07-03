@@ -47,7 +47,7 @@ public:
     virtual void HandleSelectionChangedEventNoArgs();
 
     //for state changed event
-    virtual void FireStatePropertyChange(short state, bool set) override;
+    virtual void FireStatePropertyChange(sal_Int64 state, bool set) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

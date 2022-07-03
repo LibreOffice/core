@@ -46,7 +46,7 @@ void AccObjectContainerEventListener::HandleStateChangedEvent(Any oldValue, Any 
 {
     //set the accessible name before process for there is no NAME_CHANGED event when change
     //the text in drawing objects.
-    short newV;
+    sal_Int64 newV;
     if (newValue >>= newV)
     {
         if (newV == AccessibleStateType::FOCUSED)

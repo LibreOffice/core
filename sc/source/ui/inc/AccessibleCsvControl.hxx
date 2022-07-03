@@ -37,7 +37,6 @@
 #include <map>
 
 class ScCsvControl;
-namespace utl { class AccessibleStateSetHelper; }
 
 /** Accessible base class used for CSV controls. */
 class ScAccessibleCsvControl : public comphelper::OAccessibleComponentHelper
@@ -78,8 +77,8 @@ protected:
     /** Returns the VCL control. Assumes a living object. */
     ScCsvControl& implGetControl() const;
 
-    /** Creates a StateSetHelper and fills it with DEFUNC, OPAQUE, ENABLED, SHOWING and VISIBLE. */
-    rtl::Reference<::utl::AccessibleStateSetHelper> implCreateStateSet();
+    /** Creates a StateSet and fills it with DEFUNC, OPAQUE, ENABLED, SHOWING and VISIBLE. */
+    sal_Int64 implCreateStateSet();
 };
 
 class ScCsvRuler;
@@ -123,7 +122,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;
 
     /** Returns the current set of states. */
-    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet >  SAL_CALL getAccessibleStateSet() override;
+    virtual sal_Int64  SAL_CALL getAccessibleStateSet() override;
 
     // XAccessibleText --------------------------------------------------------
 
@@ -272,7 +271,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;
 
     /** Returns the current set of states. */
-    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet >  SAL_CALL getAccessibleStateSet() override;
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
 
     // XAccessibleTable -------------------------------------------------------
 
@@ -482,7 +481,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() override;
 
     /** Returns the current set of states. */
-    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet >  SAL_CALL getAccessibleStateSet() override;
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
 
     // XInterface -------------------------------------------------------------
 

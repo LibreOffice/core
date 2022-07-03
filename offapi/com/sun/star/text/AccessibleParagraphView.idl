@@ -61,7 +61,7 @@ service AccessibleParagraphView
                 the paragraph.
             <li>There are no relations.
             <li>The following states are supported by the
-                ::com::sun::star::accessibility::XAccessibleStateSet returned by
+                accessible state bitset returned by
                 ::com::sun::star::accessibility::XAccessibleContext::getAccessibleStateSet().
                 <ul>
                     <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
