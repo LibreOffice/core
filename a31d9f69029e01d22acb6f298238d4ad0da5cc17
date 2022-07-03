@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8fc0db9_2c067fa1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-07-03T16:28:22Z",
+      "side": 1,
+      "message": "I checked that the ranges here have \"LAST\" and \"END\" corresponding to the id of the last element and not the id+1.\n\nBUT I saw in other locations that END could correspond to the id of last element + 1, eg: SVXMAP_END\n77 #define SVXMAP_END                  25  // last+1 !\nin include/svx/unoprov.hxx.\n\nInstead of changing comparison operator, should I rather use + 1 too when defining  LAST for each range?\neg:\n133  constexpr sal_uInt16       EE_CHAR_END            (EE_CHAR_START + 33);\n\ninstead of:\n133  constexpr sal_uInt16       EE_CHAR_END            (EE_CHAR_START + 32);",
+      "revId": "a31d9f69029e01d22acb6f298238d4ad0da5cc17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
