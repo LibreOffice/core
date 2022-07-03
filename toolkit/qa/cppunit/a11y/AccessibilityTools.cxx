@@ -37,8 +37,7 @@ AccessibilityTools::getAccessibleObjectForRole(
     const css::uno::Reference<css::accessibility::XAccessible>& xacc, sal_Int16 role)
 {
     css::uno::Reference<css::accessibility::XAccessibleContext> ac = xacc->getAccessibleContext();
-    bool isShowing
-        = ac->getAccessibleStateSet()->contains(accessibility::AccessibleStateType::SHOWING);
+    bool isShowing = ac->getAccessibleStateSet() & accessibility::AccessibleStateType::SHOWING;
 
     if ((ac->getAccessibleRole() == role) && isShowing)
     {
@@ -91,14 +90,6 @@ bool AccessibilityTools::equals(const uno::Reference<accessibility::XAccessibleC
         return false;
 
     return equals(xctx1->getAccessibleParent(), xctx2->getAccessibleParent());
-}
-
-bool AccessibilityTools::equals(const uno::Reference<accessibility::XAccessibleStateSet>& xsts1,
-                                const uno::Reference<accessibility::XAccessibleStateSet>& xsts2)
-{
-    if (!xsts1.is() || !xsts2.is())
-        return xsts1.is() == xsts2.is();
-    return xsts1->getStates() == xsts2->getStates();
 }
 
 OUString AccessibilityTools::getRoleName(const sal_Int16 role)
@@ -283,82 +274,131 @@ OUString AccessibilityTools::getRoleName(const sal_Int16 role)
     return "unknown";
 }
 
-OUString AccessibilityTools::getStateName(const sal_Int16 state)
+OUString AccessibilityTools::debugAccessibleStateSet(const sal_Int64 stateSet)
 {
-    switch (state)
+    OUString combinedName;
+    for (int i = 0; i < 63; i++)
     {
-        case accessibility::AccessibleStateType::ACTIVE:
-            return "ACTIVE";
-        case accessibility::AccessibleStateType::ARMED:
-            return "ARMED";
-        case accessibility::AccessibleStateType::BUSY:
-            return "BUSY";
-        case accessibility::AccessibleStateType::CHECKED:
-            return "CHECKED";
-        case accessibility::AccessibleStateType::COLLAPSE:
-            return "COLLAPSE";
-        case accessibility::AccessibleStateType::DEFAULT:
-            return "DEFAULT";
-        case accessibility::AccessibleStateType::DEFUNC:
-            return "DEFUNC";
-        case accessibility::AccessibleStateType::EDITABLE:
-            return "EDITABLE";
-        case accessibility::AccessibleStateType::ENABLED:
-            return "ENABLED";
-        case accessibility::AccessibleStateType::EXPANDABLE:
-            return "EXPANDABLE";
-        case accessibility::AccessibleStateType::EXPANDED:
-            return "EXPANDED";
-        case accessibility::AccessibleStateType::FOCUSABLE:
-            return "FOCUSABLE";
-        case accessibility::AccessibleStateType::FOCUSED:
-            return "FOCUSED";
-        case accessibility::AccessibleStateType::HORIZONTAL:
-            return "HORIZONTAL";
-        case accessibility::AccessibleStateType::ICONIFIED:
-            return "ICONIFIED";
-        case accessibility::AccessibleStateType::INDETERMINATE:
-            return "INDETERMINATE";
-        case accessibility::AccessibleStateType::INVALID:
-            return "INVALID";
-        case accessibility::AccessibleStateType::MANAGES_DESCENDANTS:
-            return "MANAGES_DESCENDANTS";
-        case accessibility::AccessibleStateType::MODAL:
-            return "MODAL";
-        case accessibility::AccessibleStateType::MOVEABLE:
-            return "MOVEABLE";
-        case accessibility::AccessibleStateType::MULTI_LINE:
-            return "MULTI_LINE";
-        case accessibility::AccessibleStateType::MULTI_SELECTABLE:
-            return "MULTI_SELECTABLE";
-        case accessibility::AccessibleStateType::OFFSCREEN:
-            return "OFFSCREEN";
-        case accessibility::AccessibleStateType::OPAQUE:
-            return "OPAQUE";
-        case accessibility::AccessibleStateType::PRESSED:
-            return "PRESSED";
-        case accessibility::AccessibleStateType::RESIZABLE:
-            return "RESIZABLE";
-        case accessibility::AccessibleStateType::SELECTABLE:
-            return "SELECTABLE";
-        case accessibility::AccessibleStateType::SELECTED:
-            return "SELECTED";
-        case accessibility::AccessibleStateType::SENSITIVE:
-            return "SENSITIVE";
-        case accessibility::AccessibleStateType::SHOWING:
-            return "SHOWING";
-        case accessibility::AccessibleStateType::SINGLE_LINE:
-            return "SINGLE_LINE";
-        case accessibility::AccessibleStateType::STALE:
-            return "STALE";
-        case accessibility::AccessibleStateType::TRANSIENT:
-            return "TRANSIENT";
-        case accessibility::AccessibleStateType::VERTICAL:
-            return "VERTICAL";
-        case accessibility::AccessibleStateType::VISIBLE:
-            return "VISIBLE";
+        sal_Int64 state = sal_Int64(1) << i;
+        if (!(stateSet & state))
+            continue;
+        OUString name;
+        switch (state)
+        {
+            case accessibility::AccessibleStateType::ACTIVE:
+                name = "ACTIVE";
+                break;
+            case accessibility::AccessibleStateType::ARMED:
+                name = "ARMED";
+                break;
+            case accessibility::AccessibleStateType::BUSY:
+                name = "BUSY";
+                break;
+            case accessibility::AccessibleStateType::CHECKED:
+                name = "CHECKED";
+                break;
+            case accessibility::AccessibleStateType::COLLAPSE:
+                name = "COLLAPSE";
+                break;
+            case accessibility::AccessibleStateType::DEFAULT:
+                name = "DEFAULT";
+                break;
+            case accessibility::AccessibleStateType::DEFUNC:
+                name = "DEFUNC";
+                break;
+            case accessibility::AccessibleStateType::EDITABLE:
+                name = "EDITABLE";
+                break;
+            case accessibility::AccessibleStateType::ENABLED:
+                name = "ENABLED";
+                break;
+            case accessibility::AccessibleStateType::EXPANDABLE:
+                name = "EXPANDABLE";
+                break;
+            case accessibility::AccessibleStateType::EXPANDED:
+                name = "EXPANDED";
+                break;
+            case accessibility::AccessibleStateType::FOCUSABLE:
+                name = "FOCUSABLE";
+                break;
+            case accessibility::AccessibleStateType::FOCUSED:
+                name = "FOCUSED";
+                break;
+            case accessibility::AccessibleStateType::HORIZONTAL:
+                name = "HORIZONTAL";
+                break;
+            case accessibility::AccessibleStateType::ICONIFIED:
+                name = "ICONIFIED";
+                break;
+            case accessibility::AccessibleStateType::INDETERMINATE:
+                name = "INDETERMINATE";
+                break;
+            case accessibility::AccessibleStateType::INVALID:
+                name = "INVALID";
+                break;
+            case accessibility::AccessibleStateType::MANAGES_DESCENDANTS:
+                name = "MANAGES_DESCENDANTS";
+                break;
+            case accessibility::AccessibleStateType::MODAL:
+                name = "MODAL";
+                break;
+            case accessibility::AccessibleStateType::MOVEABLE:
+                name = "MOVEABLE";
+                break;
+            case accessibility::AccessibleStateType::MULTI_LINE:
+                name = "MULTI_LINE";
+                break;
+            case accessibility::AccessibleStateType::MULTI_SELECTABLE:
+                name = "MULTI_SELECTABLE";
+                break;
+            case accessibility::AccessibleStateType::OFFSCREEN:
+                name = "OFFSCREEN";
+                break;
+            case accessibility::AccessibleStateType::OPAQUE:
+                name = "OPAQUE";
+                break;
+            case accessibility::AccessibleStateType::PRESSED:
+                name = "PRESSED";
+                break;
+            case accessibility::AccessibleStateType::RESIZABLE:
+                name = "RESIZABLE";
+                break;
+            case accessibility::AccessibleStateType::SELECTABLE:
+                name = "SELECTABLE";
+                break;
+            case accessibility::AccessibleStateType::SELECTED:
+                name = "SELECTED";
+                break;
+            case accessibility::AccessibleStateType::SENSITIVE:
+                name = "SENSITIVE";
+                break;
+            case accessibility::AccessibleStateType::SHOWING:
+                name = "SHOWING";
+                break;
+            case accessibility::AccessibleStateType::SINGLE_LINE:
+                name = "SINGLE_LINE";
+                break;
+            case accessibility::AccessibleStateType::STALE:
+                name = "STALE";
+                break;
+            case accessibility::AccessibleStateType::TRANSIENT:
+                name = "TRANSIENT";
+                break;
+            case accessibility::AccessibleStateType::VERTICAL:
+                name = "VERTICAL";
+                break;
+            case accessibility::AccessibleStateType::VISIBLE:
+                name = "VISIBLE";
+                break;
+        }
+        if (combinedName.getLength())
+            combinedName += " | ";
+        combinedName += name;
     }
-    return "unknown";
+
+    if (combinedName.isEmpty())
+        return "unknown";
+    return combinedName;
 }
 
 OUString AccessibilityTools::getEventIdName(const sal_Int16 event_id)
@@ -461,20 +501,6 @@ OUString AccessibilityTools::debugName(accessibility::XAccessibleContext* ctx)
 OUString AccessibilityTools::debugName(accessibility::XAccessible* acc)
 {
     return debugName(acc->getAccessibleContext().get());
-}
-
-OUString AccessibilityTools::debugName(accessibility::XAccessibleStateSet* xsts)
-{
-    OUString name;
-
-    for (auto state : xsts->getStates())
-    {
-        if (name.getLength())
-            name += " | ";
-        name += AccessibilityTools::getStateName(state);
-    }
-
-    return name;
 }
 
 OUString AccessibilityTools::debugName(const accessibility::AccessibleEventObject* evobj)

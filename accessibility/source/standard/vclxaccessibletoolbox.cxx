@@ -22,7 +22,6 @@
 #include <standard/vclxaccessibletoolboxitem.hxx>
 #include <toolkit/helper/convert.hxx>
 
-#include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -473,18 +472,18 @@ void VCLXAccessibleToolBox::ReleaseSubToolBox( ToolBox* _pSubToolBox )
     }
 }
 
-void VCLXAccessibleToolBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void VCLXAccessibleToolBox::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     VCLXAccessibleComponent::FillAccessibleStateSet( rStateSet );
 
     VclPtr< ToolBox > pToolBox = GetAs< ToolBox >();
     if ( pToolBox )
     {
-        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+        rStateSet |= AccessibleStateType::FOCUSABLE;
         if ( pToolBox->IsHorizontal() )
-            rStateSet.AddState( AccessibleStateType::HORIZONTAL );
+            rStateSet |= AccessibleStateType::HORIZONTAL;
         else
-            rStateSet.AddState( AccessibleStateType::VERTICAL );
+            rStateSet |= AccessibleStateType::VERTICAL;
     }
 }
 

@@ -18,7 +18,6 @@
  */
 
 #include <vcl/window.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -39,13 +38,12 @@ bool SwAccessiblePage::IsSelected()
     return GetMap()->IsPageSelected( static_cast < const SwPageFrame * >( GetFrame() ) );
 }
 
-void SwAccessiblePage::GetStates(
-        ::utl::AccessibleStateSetHelper& rStateSet )
+void SwAccessiblePage::GetStates( sal_Int64& rStateSet )
 {
     SwAccessibleContext::GetStates( rStateSet );
 
     // FOCUSABLE
-    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    rStateSet |= AccessibleStateType::FOCUSABLE;
 
     // FOCUSED
     if( IsSelected() )
@@ -56,7 +54,7 @@ void SwAccessiblePage::GetStates(
 
         vcl::Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
-            rStateSet.AddState( AccessibleStateType::FOCUSED );
+            rStateSet |= AccessibleStateType::FOCUSED;
     }
 }
 

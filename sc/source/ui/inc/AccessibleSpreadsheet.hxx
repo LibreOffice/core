@@ -155,7 +155,7 @@ private:
         getAccessibleRelationSet() override;
 
     /// Return the set of current states.
-    virtual css::uno::Reference<css::accessibility::XAccessibleStateSet> SAL_CALL
+    virtual sal_Int64 SAL_CALL
         getAccessibleStateSet() override;
 
     ///=====  XAccessibleSelection  ===========================================
@@ -219,8 +219,7 @@ private:
     /// Return the object's current bounding box relative to the parent object.
     virtual tools::Rectangle GetBoundingBox() const override;
 
-    bool IsDefunc(
-        const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
+    bool IsDefunc(sal_Int64 nParentStates);
     bool IsEditable();
     bool IsFocused();
     bool IsCompleteSheetSelected();

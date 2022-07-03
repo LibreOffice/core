@@ -64,12 +64,9 @@ namespace accessibility
         */
         virtual OUString SAL_CALL getImplementationName() override;
 
-        /** Creates a new AccessibleStateSetHelper and fills it with states of the
-            current object.
-            @return
-                A filled AccessibleStateSetHelper.
+        /** Return a bitset of states of the current object.
         */
-        rtl::Reference<::utl::AccessibleStateSetHelper> implCreateStateSetHelper() override;
+        sal_Int64 implCreateStateSet() override;
 
     private:
         virtual tools::Rectangle implGetBoundingBox() override;

@@ -1053,15 +1053,8 @@ bool AccObjectWinManager::IsStateManageDescendant(XAccessible* pAccessible)
         Reference<XAccessibleContext> xContext = pAccessible->getAccessibleContext();
         if(xContext.is())
         {
-            Reference< XAccessibleStateSet > pRState = xContext->getAccessibleStateSet();
-            if( !pRState.is() )
-                return false;
-
-            for (sal_Int16 nState : pRState->getStates())
-            {
-                if (nState == AccessibleStateType::MANAGES_DESCENDANTS)
-                    return true;
-            }
+            sal_Int64 nRState = xContext->getAccessibleStateSet();
+            return nRState & AccessibleStateType::MANAGES_DESCENDANTS;
         }
     }
     return false;
