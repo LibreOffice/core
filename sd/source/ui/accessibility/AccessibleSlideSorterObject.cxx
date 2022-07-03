@@ -34,7 +34,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <sal/log.hxx>
 
 #include <sdpage.hxx>
@@ -180,33 +179,33 @@ Reference<XAccessibleRelationSet> SAL_CALL
     return Reference<XAccessibleRelationSet>();
 }
 
-Reference<XAccessibleStateSet> SAL_CALL
+sal_Int64 SAL_CALL
     AccessibleSlideSorterObject::getAccessibleStateSet()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet = new ::utl::AccessibleStateSetHelper();
+    sal_Int64 nStateSet = 0;
 
     if (mxParent.is())
     {
         // Unconditional states.
-        pStateSet->AddState(AccessibleStateType::SELECTABLE);
-        pStateSet->AddState(AccessibleStateType::FOCUSABLE);
-        pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::VISIBLE);
-        pStateSet->AddState(AccessibleStateType::SHOWING);
-        pStateSet->AddState(AccessibleStateType::ACTIVE);
-        pStateSet->AddState(AccessibleStateType::SENSITIVE);
+        nStateSet |= AccessibleStateType::SELECTABLE;
+        nStateSet |= AccessibleStateType::FOCUSABLE;
+        nStateSet |= AccessibleStateType::ENABLED;
+        nStateSet |= AccessibleStateType::VISIBLE;
+        nStateSet |= AccessibleStateType::SHOWING;
+        nStateSet |= AccessibleStateType::ACTIVE;
+        nStateSet |= AccessibleStateType::SENSITIVE;
 
         // Conditional states.
         if (mrSlideSorter.GetController().GetPageSelector().IsPageSelected(mnPageNumber))
-            pStateSet->AddState(AccessibleStateType::SELECTED);
+            nStateSet |= AccessibleStateType::SELECTED;
         if (mrSlideSorter.GetController().GetFocusManager().GetFocusedPageIndex() == mnPageNumber)
             if (mrSlideSorter.GetController().GetFocusManager().IsFocusShowing())
-                pStateSet->AddState(AccessibleStateType::FOCUSED);
+                nStateSet |= AccessibleStateType::FOCUSED;
     }
 
-    return pStateSet;
+    return nStateSet;
 }
 
 lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale()

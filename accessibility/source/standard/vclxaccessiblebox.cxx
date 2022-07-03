@@ -22,7 +22,6 @@
 #include <standard/vclxaccessibleedit.hxx>
 #include <standard/vclxaccessiblelist.hxx>
 
-#include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -492,7 +491,7 @@ Any VCLXAccessibleBox::getMinimumIncrement(  )
 }
 
 // Set the INDETERMINATE state when there is no selected item for combobox
-void VCLXAccessibleBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void VCLXAccessibleBox::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     VCLXAccessibleComponent::FillAccessibleStateSet(rStateSet);
     if (m_aBoxType == COMBOBOX )
@@ -508,7 +507,7 @@ void VCLXAccessibleBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& r
             nEntryCount = pComboBox->GetEntryCount();
         }
         if ( sText.isEmpty() && nEntryCount > 0 )
-            rStateSet.AddState(AccessibleStateType::INDETERMINATE);
+            rStateSet |= AccessibleStateType::INDETERMINATE;
     }
     else if (m_aBoxType == LISTBOX && m_bIsDropDownBox)
     {
@@ -517,7 +516,7 @@ void VCLXAccessibleBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& r
         {
             sal_Int32 nSelectedEntryCount = pListBox->GetSelectedEntryCount();
             if ( nSelectedEntryCount == 0)
-                rStateSet.AddState(AccessibleStateType::INDETERMINATE);
+                rStateSet |= AccessibleStateType::INDETERMINATE;
         }
     }
 }

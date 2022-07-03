@@ -28,7 +28,6 @@
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
@@ -234,22 +233,22 @@ void AquaA11yFocusTracker::window_got_focus(vcl::Window *pWindow)
     if( ! xContext.is() )
         return;
 
-    Reference< XAccessibleStateSet > xStateSet = xContext->getAccessibleStateSet();
+    sal_Int64 nStateSet = xContext->getAccessibleStateSet();
 
-    if( ! xStateSet.is() )
+    if( ! nStateSet )
         return;
 
 /* the UNO ToolBox wrapper does not (yet?) support XAccessibleSelection, so we
  * need to add listeners to the children instead of re-using the tabpage stuff
  */
-    if( xStateSet->contains(AccessibleStateType::FOCUSED) && (pWindow->GetType() != WindowType::TREELISTBOX) )
+    if( (nStateSet & AccessibleStateType::FOCUSED) && (pWindow->GetType() != WindowType::TREELISTBOX) )
     {
         setFocusedObject( xAccessible );
     }
     else
     {
         if( m_aDocumentWindowList.insert(pWindow).second )
-            m_xDocumentFocusListener->attachRecursive(xAccessible, xContext, xStateSet);
+            m_xDocumentFocusListener->attachRecursive(xAccessible, xContext, nStateSet);
     }
 }
 

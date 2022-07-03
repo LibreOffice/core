@@ -184,10 +184,10 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
     protected static boolean chkTransient(Object Testcase) {
         boolean ret = false;
         XAccessibleContext accCon = UnoRuntime.queryInterface(XAccessibleContext.class,Testcase);
-        if (accCon.getAccessibleStateSet().contains(
-            com.sun.star.accessibility.AccessibleStateType.TRANSIENT)){
-            if (!accCon.getAccessibleParent().getAccessibleContext().getAccessibleStateSet().contains(
-                com.sun.star.accessibility.AccessibleStateType.MANAGES_DESCENDANTS)) {
+        if ((accCon.getAccessibleStateSet() &
+            com.sun.star.accessibility.AccessibleStateType.TRANSIENT) != 0){
+            if ((accCon.getAccessibleParent().getAccessibleContext().getAccessibleStateSet() &
+                  com.sun.star.accessibility.AccessibleStateType.MANAGES_DESCENDANTS) == 0) {
                 throw new lib.StatusException(lib.Status.failed("Parent doesn't manage descendents"));
             }
             ret=true;

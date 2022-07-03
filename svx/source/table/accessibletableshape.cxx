@@ -954,7 +954,7 @@ AccessibleCell* AccessibleTableShape::GetActiveAccessibleCell()
 }
 
 //If current active cell is in editing, the focus state should be set to internal text
-bool AccessibleTableShape::SetState (sal_Int16 aState)
+bool AccessibleTableShape::SetState (sal_Int64 aState)
 {
     if( aState == AccessibleStateType::FOCUSED )
     {
@@ -967,7 +967,7 @@ bool AccessibleTableShape::SetState (sal_Int16 aState)
 }
 
 //If current active cell is in editing, the focus state should be reset to internal text
-bool AccessibleTableShape::ResetState (sal_Int16 aState)
+bool AccessibleTableShape::ResetState (sal_Int64 aState)
 {
     if( aState == AccessibleStateType::FOCUSED )
     {
@@ -979,12 +979,12 @@ bool AccessibleTableShape::ResetState (sal_Int16 aState)
     return AccessibleShape::ResetState (aState);
 }
 
-bool AccessibleTableShape::SetStateDirectly (sal_Int16 aState)
+bool AccessibleTableShape::SetStateDirectly (sal_Int64 aState)
 {
     return AccessibleContextBase::SetState (aState);
 }
 
-bool AccessibleTableShape::ResetStateDirectly (sal_Int16 aState)
+bool AccessibleTableShape::ResetStateDirectly (sal_Int64 aState)
 {
     return AccessibleContextBase::ResetState (aState);
 }
@@ -1051,7 +1051,7 @@ OUString SAL_CALL AccessibleTableHeaderShape::getAccessibleName()
     return mpTable->getAccessibleName();
 }
 
-Reference< XAccessibleStateSet > SAL_CALL AccessibleTableHeaderShape::getAccessibleStateSet()
+sal_Int64 SAL_CALL AccessibleTableHeaderShape::getAccessibleStateSet()
 {
     return mpTable->getAccessibleStateSet();
 }

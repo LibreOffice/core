@@ -89,7 +89,7 @@ namespace comphelper
         virtual OUString SAL_CALL getAccessibleDescription(  ) override = 0;
         virtual OUString SAL_CALL getAccessibleName(  ) override = 0;
         virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override = 0;
-        virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override = 0;
+        virtual sal_Int64 SAL_CALL getAccessibleStateSet(  ) override = 0;
 
         // XAccessibleContext2 - default implementation
         virtual OUString SAL_CALL getAccessibleId(  ) override;
