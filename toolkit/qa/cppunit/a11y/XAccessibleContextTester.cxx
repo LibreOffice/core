@@ -143,9 +143,9 @@ void XAccessibleContextTester::testGetAccessibleRole()
  */
 void XAccessibleContextTester::testGetAccessibleStateSet()
 {
-    auto stateSet = mxContext->getAccessibleStateSet();
-    std::cout << "The state set is: " << AccessibilityTools::debugString(stateSet) << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("state set is not set", stateSet.is());
+    sal_Int64 stateSet = mxContext->getAccessibleStateSet();
+    std::cout << "The state set is: " << AccessibilityTools::debugAccessibleStateSet(stateSet)
+              << std::endl;
 }
 
 /**

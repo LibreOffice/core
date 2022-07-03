@@ -18,7 +18,6 @@
 
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleStateSet;
 import tools.NameProvider;
 
 class AccessibleContextHandler
@@ -71,22 +70,16 @@ class AccessibleContextHandler
                     break;
                 case 3:
                     sChild = "";
-                    XAccessibleStateSet xStateSet =
-                        xContext.getAccessibleStateSet();
-                    if (xStateSet != null)
+                    long xStateSet = xContext.getAccessibleStateSet();
+                    for (short i=0; i<=30; i++)
                     {
-                        for (short i=0; i<=30; i++)
+                        if ((xStateSet & (1<<i)) != 0)
                         {
-                            if (xStateSet.contains (i))
-                            {
-                                if (sChild.compareTo ("") != 0)
-                                    sChild += ", ";
-                                sChild += NameProvider.getStateName(i);
-                            }
+                            if (sChild.compareTo ("") != 0)
+                                sChild += ", ";
+                            sChild += NameProvider.getStateName(1<<i);
                         }
                     }
-                    else
-                        sChild += "no state set";
                     sChild = "State set: " + sChild;
             }
         }

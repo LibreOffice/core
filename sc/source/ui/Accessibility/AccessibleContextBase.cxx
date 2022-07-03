@@ -333,10 +333,9 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     return new utl::AccessibleRelationSetHelper();
 }
 
-uno::Reference<XAccessibleStateSet> SAL_CALL
-        ScAccessibleContextBase::getAccessibleStateSet()
+sal_Int64 SAL_CALL ScAccessibleContextBase::getAccessibleStateSet()
 {
-    return uno::Reference<XAccessibleStateSet>();
+    return 0;
 }
 
 lang::Locale SAL_CALL

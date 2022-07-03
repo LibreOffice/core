@@ -55,7 +55,7 @@ public:
     void attachRecursive(
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
         const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext,
-        const css::uno::Reference< css::accessibility::XAccessibleStateSet >& xStateSet
+        sal_Int64 nStateSet
     );
 
     /// @throws css::lang::IndexOutOfBoundsException
@@ -76,7 +76,7 @@ public:
     void detachRecursive(
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
         const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext,
-        const css::uno::Reference< css::accessibility::XAccessibleStateSet >& xStateSet
+        sal_Int64 nStateSet
     );
 
     /// @throws css::lang::IndexOutOfBoundsException

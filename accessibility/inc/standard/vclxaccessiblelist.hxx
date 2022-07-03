@@ -151,7 +151,7 @@ private:
         AccessibleStateType::MULTI_SELECTABLE to the state set
         of the base classes.
     */
-    virtual void FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet) override;
+    virtual void FillAccessibleStateSet (sal_Int64& rStateSet) override;
 
     /** Create the specified child and insert it into the list of children.
         Sets the child's states.

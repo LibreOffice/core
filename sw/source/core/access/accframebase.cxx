@@ -19,7 +19,6 @@
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <frmfmt.hxx>
@@ -57,8 +56,7 @@ bool SwAccessibleFrameBase::IsSelected()
     return bRet;
 }
 
-void SwAccessibleFrameBase::GetStates(
-        ::utl::AccessibleStateSetHelper& rStateSet )
+void SwAccessibleFrameBase::GetStates( sal_Int64& rStateSet )
 {
     SwAccessibleContext::GetStates( rStateSet );
 
@@ -68,25 +66,25 @@ void SwAccessibleFrameBase::GetStates(
     if (dynamic_cast<const SwFEShell*>(pVSh))
     {
         // SELECTABLE
-        rStateSet.AddState(AccessibleStateType::SELECTABLE);
+        rStateSet |= AccessibleStateType::SELECTABLE;
         // FOCUSABLE
-        rStateSet.AddState(AccessibleStateType::FOCUSABLE);
+        rStateSet |= AccessibleStateType::FOCUSABLE;
     }
 
     // SELECTED and FOCUSED
     if( IsSelected() )
     {
-        rStateSet.AddState( AccessibleStateType::SELECTED );
+        rStateSet |= AccessibleStateType::SELECTED;
         SAL_WARN_IF(!m_bIsSelected, "sw.a11y", "bSelected out of sync");
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
         vcl::Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
-            rStateSet.AddState( AccessibleStateType::FOCUSED );
+            rStateSet |= AccessibleStateType::FOCUSED;
     }
     if( GetSelectedState() )
-        rStateSet.AddState( AccessibleStateType::SELECTED );
+        rStateSet |= AccessibleStateType::SELECTED;
 }
 
 SwNodeType SwAccessibleFrameBase::GetNodeType( const SwFlyFrame *pFlyFrame )

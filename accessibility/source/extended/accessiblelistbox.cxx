@@ -26,7 +26,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 
 
 namespace accessibility
@@ -490,15 +489,15 @@ namespace accessibility
         getListBox()->Select( pEntry, false );
     }
 
-    void AccessibleListBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+    void AccessibleListBox::FillAccessibleStateSet( sal_Int64& rStateSet )
     {
         VCLXAccessibleComponent::FillAccessibleStateSet( rStateSet );
         if ( getListBox() && isAlive() )
         {
-            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-            rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
+            rStateSet |= AccessibleStateType::FOCUSABLE;
+            rStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
             if ( getListBox()->GetSelectionMode() == SelectionMode::Multiple )
-                rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
+                rStateSet |= AccessibleStateType::MULTI_SELECTABLE;
         }
     }
 

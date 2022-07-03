@@ -22,7 +22,6 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/convert.hxx>
 
-#include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -103,17 +102,17 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
 }
 
 
-void VCLXAccessibleEdit::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void VCLXAccessibleEdit::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
 
     VCLXEdit* pVCLXEdit = static_cast< VCLXEdit* >( GetVCLXWindow() );
     if ( pVCLXEdit )
     {
-        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-        rStateSet.AddState( AccessibleStateType::SINGLE_LINE );
+        rStateSet |= AccessibleStateType::FOCUSABLE;
+        rStateSet |= AccessibleStateType::SINGLE_LINE;
         if ( pVCLXEdit->isEditable() )
-            rStateSet.AddState( AccessibleStateType::EDITABLE );
+            rStateSet |= AccessibleStateType::EDITABLE;
     }
 }
 

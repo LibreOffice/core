@@ -67,7 +67,7 @@ AtkListener::~AtkListener()
 
 static AtkStateType mapState( const uno::Any &rAny )
 {
-    sal_Int16 nState = accessibility::AccessibleStateType::INVALID;
+    sal_Int64 nState = accessibility::AccessibleStateType::INVALID;
     rAny >>= nState;
     return mapAtkState( nState );
 }
@@ -133,10 +133,9 @@ void AtkListener::updateChildList(
 {
     m_aChildList.clear();
 
-    uno::Reference< accessibility::XAccessibleStateSet > xStateSet = pContext->getAccessibleStateSet();
-    if( !xStateSet.is()
-        || xStateSet->contains(accessibility::AccessibleStateType::DEFUNC)
-        || xStateSet->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
+    sal_Int64 nStateSet = pContext->getAccessibleStateSet();
+    if( (nStateSet & accessibility::AccessibleStateType::DEFUNC)
+        || (nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
         return;
 
     css::uno::Reference<css::accessibility::XAccessibleContext3> xContext3(pContext, css::uno::UNO_QUERY);
@@ -395,7 +394,7 @@ void printNotifyEvent( const accessibility::AccessibleEventObject& rEvent )
     {
         case accessibility::AccessibleEventId::STATE_CHANGED:
         {
-            sal_Int16 nState;
+            sal_Int64 nState;
             if (rEvent.OldValue >>= nState)
                 os << "  * old state = " << getOrUnknown(aStates, nState);
             if (rEvent.NewValue >>= nState)

@@ -37,7 +37,6 @@
 #include <formulaiter.hxx>
 #include <validat.hxx>
 
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -224,62 +223,62 @@ uno::Reference< XAccessible > SAL_CALL
     return AccessibleStaticTextBase::getAccessibleChild(nIndex);
 }
 
-uno::Reference<XAccessibleStateSet> SAL_CALL
+sal_Int64 SAL_CALL
     ScAccessibleCell::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
-    uno::Reference<XAccessibleStateSet> xParentStates;
+    sal_Int64 nParentStates = 0;
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
-        xParentStates = xParentContext->getAccessibleStateSet();
+        nParentStates = xParentContext->getAccessibleStateSet();
     }
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
-    if (IsDefunc(xParentStates))
-        pStateSet->AddState(AccessibleStateType::DEFUNC);
+    sal_Int64 nStateSet = 0;
+    if (IsDefunc(nParentStates))
+        nStateSet |= AccessibleStateType::DEFUNC;
     else
     {
         if (IsFocused())
-            pStateSet->AddState(AccessibleStateType::FOCUSED);
+            nStateSet |= AccessibleStateType::FOCUSED;
 
         if (IsFormulaMode())
         {
-            pStateSet->AddState(AccessibleStateType::ENABLED);
-            pStateSet->AddState(AccessibleStateType::MULTI_LINE);
-            pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
+            nStateSet |= AccessibleStateType::ENABLED;
+            nStateSet |= AccessibleStateType::MULTI_LINE;
+            nStateSet |= AccessibleStateType::MULTI_SELECTABLE;
             if (IsOpaque())
-                pStateSet->AddState(AccessibleStateType::OPAQUE);
-            pStateSet->AddState(AccessibleStateType::SELECTABLE);
+                nStateSet |= AccessibleStateType::OPAQUE;
+            nStateSet |= AccessibleStateType::SELECTABLE;
             if (IsSelected())
-                pStateSet->AddState(AccessibleStateType::SELECTED);
+                nStateSet |= AccessibleStateType::SELECTED;
             if (isShowing())
-                pStateSet->AddState(AccessibleStateType::SHOWING);
-            pStateSet->AddState(AccessibleStateType::TRANSIENT);
+                nStateSet |= AccessibleStateType::SHOWING;
+            nStateSet |= AccessibleStateType::TRANSIENT;
             if (isVisible())
-                pStateSet->AddState(AccessibleStateType::VISIBLE);
-            return pStateSet;
+                nStateSet |= AccessibleStateType::VISIBLE;
+            return nStateSet;
         }
-        if (IsEditable(xParentStates))
+        if (IsEditable(nParentStates))
         {
-            pStateSet->AddState(AccessibleStateType::EDITABLE);
-            pStateSet->AddState(AccessibleStateType::RESIZABLE);
+            nStateSet |= AccessibleStateType::EDITABLE;
+            nStateSet |= AccessibleStateType::RESIZABLE;
         }
-        pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::MULTI_LINE);
-        pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
-        pStateSet->AddState(AccessibleStateType::FOCUSABLE);
+        nStateSet |= AccessibleStateType::ENABLED;
+        nStateSet |= AccessibleStateType::MULTI_LINE;
+        nStateSet |= AccessibleStateType::MULTI_SELECTABLE;
+        nStateSet |= AccessibleStateType::FOCUSABLE;
         if (IsOpaque())
-            pStateSet->AddState(AccessibleStateType::OPAQUE);
-        pStateSet->AddState(AccessibleStateType::SELECTABLE);
+            nStateSet |= AccessibleStateType::OPAQUE;
+        nStateSet |= AccessibleStateType::SELECTABLE;
         if (IsSelected())
-            pStateSet->AddState(AccessibleStateType::SELECTED);
+            nStateSet |= AccessibleStateType::SELECTED;
         if (isShowing())
-            pStateSet->AddState(AccessibleStateType::SHOWING);
-        pStateSet->AddState(AccessibleStateType::TRANSIENT);
+            nStateSet |= AccessibleStateType::SHOWING;
+        nStateSet |= AccessibleStateType::TRANSIENT;
         if (isVisible())
-            pStateSet->AddState(AccessibleStateType::VISIBLE);
+            nStateSet |= AccessibleStateType::VISIBLE;
     }
-    return pStateSet;
+    return nStateSet;
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL
@@ -313,18 +312,16 @@ uno::Sequence< OUString> SAL_CALL
 
     //====  internal  =========================================================
 
-bool ScAccessibleCell::IsDefunc(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+bool ScAccessibleCell::IsDefunc(sal_Int64 nParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || (mpDoc == nullptr) || (mpViewShell == nullptr) || !getAccessibleParent().is() ||
-         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
+         (nParentStates & AccessibleStateType::DEFUNC);
 }
 
-bool ScAccessibleCell::IsEditable(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+bool ScAccessibleCell::IsEditable(sal_Int64 nParentStates)
 {
     bool bEditable(true);
-    if (rxParentStates.is() && !rxParentStates->contains(AccessibleStateType::EDITABLE) &&
+    if ( !(nParentStates & AccessibleStateType::EDITABLE) &&
         mpDoc)
     {
         // here I have to test whether the protection of the table should influence this cell.

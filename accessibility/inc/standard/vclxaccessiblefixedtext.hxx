@@ -25,7 +25,7 @@ class VCLXAccessibleFixedText final : public VCLXAccessibleTextComponent
 {
     virtual ~VCLXAccessibleFixedText() override = default;
 
-    virtual void FillAccessibleStateSet(utl::AccessibleStateSetHelper& rStateSet) override;
+    virtual void FillAccessibleStateSet(sal_Int64& rStateSet) override;
 
 public:
     using VCLXAccessibleTextComponent::VCLXAccessibleTextComponent;

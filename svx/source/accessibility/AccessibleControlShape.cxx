@@ -33,7 +33,6 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <svx/IAccessibleParent.hxx>
 #include <svx/svdouno.hxx>
@@ -89,7 +88,7 @@ namespace
 
     // determines whether or not a state which belongs to the inner context needs to be forwarded to the "composed"
     // context
-    bool    isComposedState( const sal_Int16 _nState )
+    bool    isComposedState( const sal_Int64 _nState )
     {
         return  (   ( AccessibleStateType::INVALID != _nState )
                 &&  ( AccessibleStateType::DEFUNC != _nState )
@@ -237,9 +236,8 @@ void AccessibleControlShape::Init()
                 // some initialization for our child manager, which is used in alive mode only
                 if ( isAliveMode( m_xUnoControl ) )
                 {
-                    Reference< XAccessibleStateSet > xStates( getAccessibleStateSet( ) );
-                    OSL_ENSURE( xStates.is(), "AccessibleControlShape::AccessibleControlShape: no inner state set!" );
-                    m_pChildManager->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANTS ) );
+                    sal_Int64 nStates( getAccessibleStateSet( ) );
+                    m_pChildManager->setTransientChildren( nStates & AccessibleStateType::MANAGES_DESCENDANTS );
                 }
 
                 // finally, aggregate a proxy for the control context
@@ -410,7 +408,7 @@ void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& 
     if ( AccessibleEventId::STATE_CHANGED == _rEvent.EventId )
     {
         // multiplex this change
-        sal_Int16 nLostState( 0 ), nGainedState( 0 );
+        sal_Int64 nLostState( 0 ), nGainedState( 0 );
         _rEvent.OldValue >>= nLostState;
         _rEvent.NewValue >>= nGainedState;
 
@@ -754,7 +752,7 @@ void AccessibleControlShape::adjustAccessibleRole( )
 
 #ifdef DBG_UTIL
 
-bool AccessibleControlShape::SetState( sal_Int16 _nState )
+bool AccessibleControlShape::SetState( sal_Int64 _nState )
 {
     OSL_ENSURE( !isAliveMode( m_xUnoControl ) || !isComposedState( _nState ),
         "AccessibleControlShape::SetState: a state which should be determined by the control context is set from outside!" );
@@ -768,26 +766,12 @@ void AccessibleControlShape::initializeComposedState()
         // no action necessary for design mode
         return;
 
-    // get our own state set implementation
-    ::utl::AccessibleStateSetHelper* pComposedStates = mxStateSet.get();
-    OSL_PRECOND( pComposedStates,
-        "AccessibleControlShape::initializeComposedState: no composed set!" );
-
     // we need to reset some states of the composed set, because they either do not apply
     // for controls in alive mode, or are in the responsibility of the UNO-control, anyway
-    pComposedStates->RemoveState( AccessibleStateType::ENABLED );       // this is controlled by the UNO-control
-    pComposedStates->RemoveState( AccessibleStateType::SENSITIVE );     // this is controlled by the UNO-control
-    pComposedStates->RemoveState( AccessibleStateType::FOCUSABLE );     // this is controlled by the UNO-control
-    pComposedStates->RemoveState( AccessibleStateType::SELECTABLE );    // this does not hold for an alive UNO-control
-#if OSL_DEBUG_LEVEL > 0
-    // now, only states which are not in the responsibility of the UNO control should be part of this state set
-    {
-        const Sequence< sal_Int16 > aInitStates = pComposedStates->getStates();
-        for ( sal_Int16 state : aInitStates )
-            OSL_ENSURE( !isComposedState( state ),
-                "AccessibleControlShape::initializeComposedState: invalid initial composed state (should be controlled by the UNO-control)!" );
-    }
-#endif
+    mnStateSet &= ~AccessibleStateType::ENABLED;       // this is controlled by the UNO-control
+    mnStateSet &= ~AccessibleStateType::SENSITIVE;     // this is controlled by the UNO-control
+    mnStateSet &= ~AccessibleStateType::FOCUSABLE;     // this is controlled by the UNO-control
+    mnStateSet &= ~AccessibleStateType::SELECTABLE;    // this does not hold for an alive UNO-control
 
     // get my inner context
     Reference< XAccessibleContext > xInnerContext( m_aControlContext );
@@ -796,18 +780,15 @@ void AccessibleControlShape::initializeComposedState()
         return;
 
     // get all states of the inner context
-    Reference< XAccessibleStateSet > xInnerStates( xInnerContext->getAccessibleStateSet() );
-    OSL_ENSURE( xInnerStates.is(), "AccessibleControlShape::initializeComposedState: no inner states!" );
-    Sequence< sal_Int16 > aInnerStates;
-    if ( xInnerStates.is() )
-        aInnerStates = xInnerStates->getStates();
+    sal_Int64 nInnerStates( xInnerContext->getAccessibleStateSet() );
 
     // look which one are to be propagated to the composed context
-    for ( const sal_Int16 nState : std::as_const(aInnerStates) )
+    for ( int i = 0; i < 63; ++i )
     {
-        if ( isComposedState( nState ) && !pComposedStates->contains( nState ) )
+        sal_Int64 nState = sal_Int64(1) << i;
+        if ( (nInnerStates & nState) && isComposedState( nState ) )
         {
-            pComposedStates->AddState( nState );
+            mnStateSet |= nState;
         }
     }
 }

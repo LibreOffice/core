@@ -139,7 +139,7 @@ private:
 
 #ifdef DBG_UTIL
     /// Set the specified state
-    virtual bool SetState( sal_Int16 _nState ) override;
+    virtual bool SetState( sal_Int64 _nState ) override;
 #endif // DBG_UTIL
 
     /// (safely) reads the given property from the model of the UNO control
