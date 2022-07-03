@@ -353,7 +353,6 @@
 #include <tools/urlobj.hxx>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/pathoptions.hxx>

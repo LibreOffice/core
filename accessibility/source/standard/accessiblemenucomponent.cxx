@@ -27,7 +27,6 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -61,26 +60,26 @@ bool OAccessibleMenuComponent::IsVisible()
 }
 
 
-void OAccessibleMenuComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
+void OAccessibleMenuComponent::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     if ( IsEnabled() )
     {
-        rStateSet.AddState( AccessibleStateType::ENABLED );
-        rStateSet.AddState( AccessibleStateType::SENSITIVE );
+        rStateSet |= AccessibleStateType::ENABLED;
+        rStateSet |= AccessibleStateType::SENSITIVE;
     }
 
-    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+    rStateSet |= AccessibleStateType::FOCUSABLE;
 
     if ( IsFocused() )
-        rStateSet.AddState( AccessibleStateType::FOCUSED );
+        rStateSet |= AccessibleStateType::FOCUSED;
 
     if ( IsVisible() )
     {
-        rStateSet.AddState( AccessibleStateType::VISIBLE );
-        rStateSet.AddState( AccessibleStateType::SHOWING );
+        rStateSet |= AccessibleStateType::VISIBLE;
+        rStateSet |= AccessibleStateType::SHOWING;
     }
 
-    rStateSet.AddState( AccessibleStateType::OPAQUE );
+    rStateSet |= AccessibleStateType::OPAQUE;
 }
 
 

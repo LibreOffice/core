@@ -58,8 +58,8 @@ public:
 
     //for state changed event
     virtual void HandleStateChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
-    virtual void SetComponentState(short state, bool enable);
-    virtual void FireStatePropertyChange(short state, bool set);
+    virtual void SetComponentState(sal_Int64 state, bool enable);
+    virtual void FireStatePropertyChange(sal_Int64 state, bool set);
     virtual void FireStateFocusedChange(bool enable);
 
     //for bound rect changed event

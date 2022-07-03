@@ -39,7 +39,7 @@ namespace accessibility
 
         virtual ~AccessibleCheckBoxCell() override {}
 
-        virtual rtl::Reference<::utl::AccessibleStateSetHelper> implCreateStateSetHelper() override;
+        virtual sal_Int64 implCreateStateSet() override;
 
     public:
         AccessibleCheckBoxCell(const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,

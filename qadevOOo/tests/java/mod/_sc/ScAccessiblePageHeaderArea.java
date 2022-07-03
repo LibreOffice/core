@@ -27,11 +27,7 @@ import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
 
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleAction;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleStateSet;
+import com.sun.star.accessibility.*;
 import com.sun.star.awt.XWindow;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
@@ -133,8 +129,8 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         oObj = AccessibilityTools.getAccessibleObjectForRole
             (xRoot, AccessibleRole.HEADER, "").getAccessibleChild(0);
         XAccessibleContext cont = UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
-        XAccessibleStateSet StateSet = cont.getAccessibleStateSet();
-        if (StateSet.contains((short)27)) {
+        long StateSet = cont.getAccessibleStateSet();
+        if ((StateSet & AccessibleStateType.TRANSIENT) != 0) {
             log.println("Object is transient");
         }
 

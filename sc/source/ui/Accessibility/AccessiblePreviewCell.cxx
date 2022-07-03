@@ -28,7 +28,6 @@
 #include <prevloc.hxx>
 #include <document.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <editeng/brushitem.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
@@ -139,34 +138,34 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleChi
     return mpTextHelper->GetChild(nIndex);
 }
 
-uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessibleStateSet()
+sal_Int64 SAL_CALL ScAccessiblePreviewCell::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference<XAccessibleStateSet> xParentStates;
+    sal_Int64 nParentStates = 0;
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
-        xParentStates = xParentContext->getAccessibleStateSet();
+        nParentStates = xParentContext->getAccessibleStateSet();
     }
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
-    if (IsDefunc(xParentStates))
-        pStateSet->AddState(AccessibleStateType::DEFUNC);
+    sal_Int64 nStateSet = 0;
+    if (IsDefunc(nParentStates))
+        nStateSet |= AccessibleStateType::DEFUNC;
     else
     {
-        pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::MULTI_LINE);
+        nStateSet |= AccessibleStateType::ENABLED;
+        nStateSet |= AccessibleStateType::MULTI_LINE;
         if (IsOpaque())
-            pStateSet->AddState(AccessibleStateType::OPAQUE);
+            nStateSet |= AccessibleStateType::OPAQUE;
         if (isShowing())
-            pStateSet->AddState(AccessibleStateType::SHOWING);
-        pStateSet->AddState(AccessibleStateType::TRANSIENT);
+            nStateSet |= AccessibleStateType::SHOWING;
+        nStateSet |= AccessibleStateType::TRANSIENT;
         if (isVisible())
-            pStateSet->AddState(AccessibleStateType::VISIBLE);
+            nStateSet |= AccessibleStateType::VISIBLE;
         // MANAGES_DESCENDANTS (for paragraphs)
-        pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
+        nStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
     }
-    return pStateSet;
+    return nStateSet;
 }
 
 //=====  XServiceInfo  ====================================================
@@ -229,15 +228,13 @@ tools::Rectangle ScAccessiblePreviewCell::GetBoundingBox() const
     return aCellRect;
 }
 
-bool ScAccessiblePreviewCell::IsDefunc(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+bool ScAccessiblePreviewCell::IsDefunc(sal_Int64 nParentStates)
 {
     return ScAccessibleContextBase::IsDefunc() || (mpDoc == nullptr) || (mpViewShell == nullptr) || !getAccessibleParent().is() ||
-         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
+         (nParentStates & AccessibleStateType::DEFUNC);
 }
 
-bool ScAccessiblePreviewCell::IsEditable(
-    const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
+bool ScAccessiblePreviewCell::IsEditable(sal_Int64 /* nParentStates */)
 {
     return false;
 }
@@ -269,9 +266,7 @@ void ScAccessiblePreviewCell::CreateTextHelper()
     mpTextHelper->SetEventSource( this );
 
     // paragraphs in preview are transient
-    ::accessibility::AccessibleTextHelper::VectorOfStates aChildStates;
-    aChildStates.push_back( AccessibleStateType::TRANSIENT );
-    mpTextHelper->SetAdditionalChildStates( std::move(aChildStates) );
+    mpTextHelper->SetAdditionalChildStates( AccessibleStateType::TRANSIENT );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
