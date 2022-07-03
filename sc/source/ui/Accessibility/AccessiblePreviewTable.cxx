@@ -37,7 +37,6 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/hint.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
@@ -498,29 +497,29 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndexInParent()
     return mnIndex;
 }
 
-uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePreviewTable::getAccessibleStateSet()
+sal_Int64 SAL_CALL ScAccessiblePreviewTable::getAccessibleStateSet()
 {
     SolarMutexGuard aGuard;
-    uno::Reference<XAccessibleStateSet> xParentStates;
+    sal_Int64 nParentStates = 0;
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
-        xParentStates = xParentContext->getAccessibleStateSet();
+        nParentStates = xParentContext->getAccessibleStateSet();
     }
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSet = new utl::AccessibleStateSetHelper();
-    if (IsDefunc(xParentStates))
-        pStateSet->AddState(AccessibleStateType::DEFUNC);
+    sal_Int64 nStateSet = 0;
+    if (IsDefunc(nParentStates))
+        nStateSet |= AccessibleStateType::DEFUNC;
     else
     {
-        pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
-        pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::OPAQUE);
+        nStateSet |= AccessibleStateType::MANAGES_DESCENDANTS;
+        nStateSet |= AccessibleStateType::ENABLED;
+        nStateSet |= AccessibleStateType::OPAQUE;
         if (isShowing())
-            pStateSet->AddState(AccessibleStateType::SHOWING);
+            nStateSet |= AccessibleStateType::SHOWING;
         if (isVisible())
-            pStateSet->AddState(AccessibleStateType::VISIBLE);
+            nStateSet |= AccessibleStateType::VISIBLE;
     }
-    return pStateSet;
+    return nStateSet;
 }
 
 //=====  XServiceInfo  ====================================================
@@ -617,10 +616,10 @@ tools::Rectangle ScAccessiblePreviewTable::GetBoundingBox() const
     return aRect;
 }
 
-bool ScAccessiblePreviewTable::IsDefunc( const uno::Reference<XAccessibleStateSet>& rxParentStates )
+bool ScAccessiblePreviewTable::IsDefunc( sal_Int64 nParentStates )
 {
     return ScAccessibleContextBase::IsDefunc() || (mpViewShell == nullptr) || !getAccessibleParent().is() ||
-        (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
+        (nParentStates & AccessibleStateType::DEFUNC);
 }
 
 void ScAccessiblePreviewTable::FillTableInfo() const

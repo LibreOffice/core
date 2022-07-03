@@ -104,7 +104,7 @@ void AccWindowEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
  *  @param state    new state id
  *  @param enable   true if state is set, false if state is unset
  */
-void AccWindowEventListener::SetComponentState(short state, bool enable )
+void AccWindowEventListener::SetComponentState(sal_Int64 state, bool enable )
 {
     // only the following state can be fired state event.
     switch (state)

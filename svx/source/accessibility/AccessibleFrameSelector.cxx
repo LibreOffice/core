@@ -20,7 +20,6 @@
 #include <AccessibleFrameSelector.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -107,44 +106,38 @@ Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet( 
     return mpFrameSel->get_accessible_relation_set();
 }
 
-Reference< XAccessibleStateSet > AccFrameSelector::getAccessibleStateSet(  )
+sal_Int64 AccFrameSelector::getAccessibleStateSet(  )
 {
     SolarMutexGuard aGuard;
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if(!mpFrameSel)
-        pStateSetHelper->AddState(AccessibleStateType::DEFUNC);
+        nStateSet |= AccessibleStateType::DEFUNC;
     else
     {
-        const sal_Int16 aStandardStates[] =
-        {
-            AccessibleStateType::EDITABLE,
-            AccessibleStateType::FOCUSABLE,
-            AccessibleStateType::MULTI_SELECTABLE,
-            AccessibleStateType::SELECTABLE,
-            AccessibleStateType::SHOWING,
-            AccessibleStateType::VISIBLE,
-            AccessibleStateType::OPAQUE,
-            0};
-        sal_Int16 nState = 0;
-        while(aStandardStates[nState])
-        {
-            pStateSetHelper->AddState(aStandardStates[nState++]);
-        }
+        // add standard states
+        nStateSet |=
+            AccessibleStateType::EDITABLE |
+            AccessibleStateType::FOCUSABLE |
+            AccessibleStateType::MULTI_SELECTABLE |
+            AccessibleStateType::SELECTABLE |
+            AccessibleStateType::SHOWING |
+            AccessibleStateType::VISIBLE |
+            AccessibleStateType::OPAQUE;
         if(mpFrameSel->IsEnabled())
         {
-            pStateSetHelper->AddState(AccessibleStateType::ENABLED);
-            pStateSetHelper->AddState(AccessibleStateType::SENSITIVE);
+            nStateSet |= AccessibleStateType::ENABLED;
+            nStateSet |= AccessibleStateType::SENSITIVE;
         }
 
         if (mpFrameSel->HasFocus())
         {
-            pStateSetHelper->AddState(AccessibleStateType::ACTIVE);
-            pStateSetHelper->AddState(AccessibleStateType::FOCUSED);
-            pStateSetHelper->AddState(AccessibleStateType::SELECTED);
+            nStateSet |= AccessibleStateType::ACTIVE;
+            nStateSet |= AccessibleStateType::FOCUSED;
+            nStateSet |= AccessibleStateType::SELECTED;
         }
     }
-    return pStateSetHelper;
+    return nStateSet;
 }
 
 Reference< XAccessible > AccFrameSelector::getAccessibleAtPoint(
@@ -275,44 +268,37 @@ Reference< XAccessibleRelationSet > AccFrameSelectorChild::getAccessibleRelation
     return xRet;
 }
 
-Reference< XAccessibleStateSet > AccFrameSelectorChild::getAccessibleStateSet(  )
+sal_Int64 AccFrameSelectorChild::getAccessibleStateSet(  )
 {
     SolarMutexGuard aGuard;
-    rtl::Reference<utl::AccessibleStateSetHelper> pStateSetHelper = new utl::AccessibleStateSetHelper;
+    sal_Int64 nStateSet = 0;
 
     if(!mpFrameSel)
-        pStateSetHelper->AddState(AccessibleStateType::DEFUNC);
+        nStateSet |= AccessibleStateType::DEFUNC;
     else
     {
-        const sal_Int16 aStandardStates[] =
-        {
-            AccessibleStateType::EDITABLE,
-            AccessibleStateType::FOCUSABLE,
-            AccessibleStateType::MULTI_SELECTABLE,
-            AccessibleStateType::SELECTABLE,
-            AccessibleStateType::SHOWING,
-            AccessibleStateType::VISIBLE,
-            AccessibleStateType::OPAQUE,
-            0};
-        sal_Int16 nState = 0;
-        while(aStandardStates[nState])
-        {
-            pStateSetHelper->AddState(aStandardStates[nState++]);
-        }
+        nStateSet |=
+            AccessibleStateType::EDITABLE |
+            AccessibleStateType::FOCUSABLE |
+            AccessibleStateType::MULTI_SELECTABLE |
+            AccessibleStateType::SELECTABLE |
+            AccessibleStateType::SHOWING |
+            AccessibleStateType::VISIBLE |
+            AccessibleStateType::OPAQUE;
         if(mpFrameSel->IsEnabled())
         {
-            pStateSetHelper->AddState(AccessibleStateType::ENABLED);
-            pStateSetHelper->AddState(AccessibleStateType::SENSITIVE);
+            nStateSet |= AccessibleStateType::ENABLED;
+            nStateSet |= AccessibleStateType::SENSITIVE;
         }
 
         if (mpFrameSel->HasFocus() && mpFrameSel->IsBorderSelected(meBorder))
         {
-            pStateSetHelper->AddState(AccessibleStateType::ACTIVE);
-            pStateSetHelper->AddState(AccessibleStateType::FOCUSED);
-            pStateSetHelper->AddState(AccessibleStateType::SELECTED);
+            nStateSet |= AccessibleStateType::ACTIVE;
+            nStateSet |= AccessibleStateType::FOCUSED;
+            nStateSet |= AccessibleStateType::SELECTED;
         }
     }
-    return pStateSetHelper;
+    return nStateSet;
 }
 
 Reference< XAccessible > AccFrameSelectorChild::getAccessibleAtPoint(
