@@ -40,7 +40,6 @@
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::chart2 { class XChartDocument; }
 namespace com::sun::star::view { class XSelectionSupplier; }
-namespace utl { class AccessibleStateSetHelper; }
 
 
 class SdrView;
@@ -135,14 +134,14 @@ protected:
 
         @throws css::uno::RuntimeException
     */
-    void             AddState( sal_Int16 aState );
+    void             AddState( sal_Int64 aState );
 
     /** Removes a state from the set if the set contains the state, otherwise
         nothing is done.
 
         @throws css::uno::RuntimeException
     */
-    void             RemoveState( sal_Int16 aState );
+    void             RemoveState( sal_Int64 aState );
 
     /** has to be overridden by derived classes that support child elements.
         With this method a rescan is initiated that should result in a correct
@@ -238,8 +237,7 @@ protected:
 //         throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL
         getAccessibleRelationSet() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL
-        getAccessibleStateSet() override;
+    virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;
     virtual css::lang::Locale SAL_CALL getLocale() override;
     // has to be implemented by derived classes
 //     virtual OUString SAL_CALL getAccessibleDescription()
@@ -305,7 +303,7 @@ private:
 
         Note: This member must come before m_aStateSet!
      */
-    rtl::Reference<::utl::AccessibleStateSetHelper>     m_xStateSetHelper;
+    sal_Int64     m_nStateSet;
 
     AccessibleElementInfo  m_aAccInfo;
     const bool             m_bAlwaysTransparent;

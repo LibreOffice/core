@@ -118,7 +118,7 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
  *  @param state    new state id
  *  @param enable   true if state is set, false if state is unset
  */
-void AccFrameEventListener::SetComponentState(short state, bool enable )
+void AccFrameEventListener::SetComponentState(sal_Int64 state, bool enable )
 {
     // only the following state can be fired state event.
     switch (state)

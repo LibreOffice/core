@@ -193,7 +193,6 @@
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
@@ -345,7 +344,6 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3

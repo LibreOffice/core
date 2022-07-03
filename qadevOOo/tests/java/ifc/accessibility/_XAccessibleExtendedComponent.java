@@ -72,7 +72,7 @@ public class _XAccessibleExtendedComponent extends MultiMethodTest {
     /**
      * Calls the method and compares returned value with value that was
      * returned by the method
-     * <code>XAccessibleStateSet.contains(AccessibleStateType.ENABLED)</code>.
+     * <code>XAccessibleStateSet & AccessibleStateType.ENABLED</code>.
      * Has OK status if returned values are equal.
      * deprecated from version srx644g 29.10.02 on
      *
@@ -86,7 +86,7 @@ public class _XAccessibleExtendedComponent extends MultiMethodTest {
             UnoRuntime.queryInterface(XAccessibleStateSet.class, oObj);
 
         if (accStateSet != null) {
-            res = accStateSet.contains(AccessibleStateType.ENABLED)==isEnabled;
+            res = ((accStateSet &  AccessibleStateType.ENABLED) != 0) == isEnabled;
         }
 
         tRes.tested("isEnabled()", res);

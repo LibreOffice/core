@@ -55,8 +55,8 @@ public:
     //for caret changed event
     virtual void HandleCaretChangedEvent(css::uno::Any oldValue, css::uno::Any newValue);
 
-    virtual void SetComponentState(short state, bool enable) override;
-    virtual void FireStatePropertyChange(short state, bool set) override;
+    virtual void SetComponentState(sal_Int64 state, bool enable) override;
+    virtual void FireStatePropertyChange(sal_Int64 state, bool set) override;
     virtual void FireStateFocusedChange(bool enable) override;
 
     void HandleSelectionChangedEventNoArgs();

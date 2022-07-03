@@ -43,7 +43,6 @@
 #include <o3tl/functional.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
-#include <unotools/accessiblestatesethelper.hxx>
 
 #include <algorithm>
 #include <iterator>
@@ -73,18 +72,17 @@ AccessibleBase::AccessibleBase(
         m_bMayHaveChildren( bMayHaveChildren ),
         m_bChildrenInitialized( false ),
         m_nEventNotifierId(0),
-        m_xStateSetHelper( new ::utl::AccessibleStateSetHelper() ),
+        m_nStateSet( 0 ),
         m_aAccInfo(std::move( aAccInfo )),
         m_bAlwaysTransparent( bAlwaysTransparent ),
         m_bStateSetInitialized( false )
 {
     // initialize some states
-    OSL_ASSERT( m_xStateSetHelper.is() );
-    m_xStateSetHelper->AddState( AccessibleStateType::ENABLED );
-    m_xStateSetHelper->AddState( AccessibleStateType::SHOWING );
-    m_xStateSetHelper->AddState( AccessibleStateType::VISIBLE );
-    m_xStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
-    m_xStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
+    m_nStateSet |= AccessibleStateType::ENABLED;
+    m_nStateSet |= AccessibleStateType::SHOWING;
+    m_nStateSet |= AccessibleStateType::VISIBLE;
+    m_nStateSet |= AccessibleStateType::SELECTABLE;
+    m_nStateSet |= AccessibleStateType::FOCUSABLE;
 }
 
 AccessibleBase::~AccessibleBase()
@@ -165,18 +163,16 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
     return false;
 }
 
-void AccessibleBase::AddState( sal_Int16 aState )
+void AccessibleBase::AddState( sal_Int64 aState )
 {
     CheckDisposeState();
-    OSL_ASSERT( m_xStateSetHelper.is() );
-    m_xStateSetHelper->AddState( aState );
+    m_nStateSet |= aState;
 }
 
-void AccessibleBase::RemoveState( sal_Int16 aState )
+void AccessibleBase::RemoveState( sal_Int64 aState )
 {
     CheckDisposeState();
-    OSL_ASSERT( m_xStateSetHelper.is() );
-    m_xStateSetHelper->RemoveState( aState );
+    m_nStateSet &= ~aState;
 }
 
 bool AccessibleBase::UpdateChildren()
@@ -416,11 +412,7 @@ void SAL_CALL AccessibleBase::disposing()
         // reset pointers
         m_aAccInfo.m_pParent = nullptr;
 
-        // attach new empty state set helper to member reference
-        rtl::Reference<::utl::AccessibleStateSetHelper> pHelper = new ::utl::AccessibleStateSetHelper();
-        pHelper->AddState(AccessibleStateType::DEFUNC);
-        // release old helper and attach new one
-        m_xStateSetHelper = pHelper;
+        m_nStateSet = AccessibleStateType::DEFUNC;
 
         m_bIsDisposed = true;
 
@@ -538,7 +530,7 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleBase::getAccessibleRelati
     return aResult;
 }
 
-Reference< XAccessibleStateSet > SAL_CALL AccessibleBase::getAccessibleStateSet()
+sal_Int64 SAL_CALL AccessibleBase::getAccessibleStateSet()
 {
     if( ! m_bStateSetInitialized )
     {
@@ -555,7 +547,7 @@ Reference< XAccessibleStateSet > SAL_CALL AccessibleBase::getAccessibleStateSet(
         m_bStateSetInitialized = true;
     }
 
-    return m_xStateSetHelper;
+    return m_nStateSet;
 }
 
 lang::Locale SAL_CALL AccessibleBase::getLocale()

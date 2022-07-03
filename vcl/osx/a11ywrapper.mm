@@ -117,7 +117,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
            Unfortunately this can increase memory consumption drastically until the non transient parent
            is destroyed and finally all the transients are released.
         */
-        if ( ! rxAccessibleContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::TRANSIENT ) )
+        if ( ! ( rxAccessibleContext -> getAccessibleStateSet() & AccessibleStateType::TRANSIENT ) )
         #endif
         {
             Reference< XAccessibleEventBroadcaster > xBroadcaster(rxAccessibleContext, UNO_QUERY);
@@ -256,8 +256,9 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(id)enabledAttribute {
-    if ( [ self accessibleContext ] -> getAccessibleStateSet().is() ) {
-        return [ NSNumber numberWithBool: [ self accessibleContext ] -> getAccessibleStateSet() -> contains ( AccessibleStateType::ENABLED ) ];
+    sal_Int64 nStateSet = [ self accessibleContext ] -> getAccessibleStateSet();
+    if ( nStateSet ) {
+        return [ NSNumber numberWithBool: ( (nStateSet & AccessibleStateType::ENABLED) != 0 ) ];
     } else {
         return nil;
     }
@@ -269,13 +270,17 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         Reference < XAccessible > rxParent = [ self accessibleContext ] -> getAccessibleParent();
         if ( rxParent.is() ) {
             Reference < XAccessibleContext > rxContext = rxParent -> getAccessibleContext();
-            if ( rxContext.is() && rxContext -> getAccessibleStateSet().is() ) {
-                isFocused = [ NSNumber numberWithBool: rxContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::FOCUSED ) ];
+            if ( rxContext.is() ) {
+                sal_Int64 nStateSet = rxContext -> getAccessibleStateSet();
+                if ( nStateSet ) {
+                    isFocused = [ NSNumber numberWithBool: ( ( nStateSet & AccessibleStateType::FOCUSED ) != 0 ) ];
+                }
             }
         }
         return isFocused;
-    } else if ( [ self accessibleContext ] -> getAccessibleStateSet().is() ) {
-        return [ NSNumber numberWithBool: [ self accessibleContext ] -> getAccessibleStateSet() -> contains ( AccessibleStateType::FOCUSED ) ];
+    } else if ( [ self accessibleContext ] -> getAccessibleStateSet() ) {
+        sal_Int64 nStateSet = [ self accessibleContext ] -> getAccessibleStateSet();
+        return [ NSNumber numberWithBool: ( ( nStateSet & AccessibleStateType::FOCUSED ) != 0 ) ];
     } else {
         return nil;
     }
@@ -547,11 +552,13 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 }
 
 -(id)expandedAttribute {
-    return [ NSNumber numberWithBool: [ self accessibleContext ] -> getAccessibleStateSet() -> contains ( AccessibleStateType::EXPANDED ) ];
+    sal_Int64 nStateSet = [ self accessibleContext ] -> getAccessibleStateSet();
+    return [ NSNumber numberWithBool: ( ( nStateSet & AccessibleStateType::EXPANDED ) != 0 ) ];
 }
 
 -(id)selectedAttribute {
-    return [ NSNumber numberWithBool: [ self accessibleContext ] -> getAccessibleStateSet() -> contains ( AccessibleStateType::SELECTED ) ];
+    sal_Int64 nStateSet = [ self accessibleContext ] -> getAccessibleStateSet();
+    return [ NSNumber numberWithBool: ( ( nStateSet & AccessibleStateType::SELECTED ) != 0 ) ];
 }
 
 -(id)stringForRangeAttributeForParameter:(id)range {
@@ -612,10 +619,10 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 
 -(id)orientationAttribute {
     NSString * orientation = nil;
-    Reference < XAccessibleStateSet > stateSet = [ self accessibleContext ] -> getAccessibleStateSet();
-    if ( stateSet -> contains ( AccessibleStateType::HORIZONTAL ) ) {
+    sal_Int64 stateSet = [ self accessibleContext ] -> getAccessibleStateSet();
+    if ( stateSet & AccessibleStateType::HORIZONTAL ) {
         orientation = NSAccessibilityHorizontalOrientationValue;
-    } else if ( stateSet -> contains ( AccessibleStateType::VERTICAL ) ) {
+    } else if ( stateSet & AccessibleStateType::VERTICAL ) {
         orientation = NSAccessibilityVerticalOrientationValue;
     }
     return orientation;
@@ -722,7 +729,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
             ignored = true;
             break;
         default:
-            ignored = ! ( [ self accessibleContext ] -> getAccessibleStateSet() -> contains ( AccessibleStateType::VISIBLE ) );
+            ignored = ! ( [ self accessibleContext ] -> getAccessibleStateSet() & AccessibleStateType::VISIBLE );
             break;
     }
     return ignored; // TODO: to be completed
@@ -998,9 +1005,8 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
             if (nCount < 0 || nCount > SAL_MAX_UINT16 /* slow enough for anyone */)
                 bSafeToIterate = false;
             else { // manages descendants is an horror from the a11y standards guys.
-                Reference< XAccessibleStateSet > xStateSet;
-                xStateSet = rxAccessibleContext -> getAccessibleStateSet();
-                if (xStateSet.is() && xStateSet -> contains(AccessibleStateType::MANAGES_DESCENDANTS ) )
+                sal_Int64 nStateSet = rxAccessibleContext -> getAccessibleStateSet();
+                if ( nStateSet & AccessibleStateType::MANAGES_DESCENDANTS )
                     bSafeToIterate = false;
             }
 

@@ -31,7 +31,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <fmtanchr.hxx>
 
@@ -117,13 +116,9 @@ static bool lcl_getSelectedState(const SwAccessibleChild& aChild,
         Reference< XAccessibleContext > pRContext = xAcc->getAccessibleContext();
         if(!pRContext.is())
             return false;
-        Reference<XAccessibleStateSet> pRStateSet = pRContext->getAccessibleStateSet();
-        if( pRStateSet.is() )
-        {
-            const Sequence<short> aStates = pRStateSet->getStates();
-            if (std::find(aStates.begin(), aStates.end(), AccessibleStateType::SELECTED) != aStates.end())
-                return true;
-        }
+        sal_Int64 nRStateSet = pRContext->getAccessibleStateSet();
+        if(nRStateSet & AccessibleStateType::SELECTED)
+            return true;
     }
     return false;
 }
