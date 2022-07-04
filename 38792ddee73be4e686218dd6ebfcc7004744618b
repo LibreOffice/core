@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ec69a1a_5a6e023b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2022-07-04T13:32:16Z",
+      "side": 1,
+      "message": "Is this string visible from Online UI? I am concerned about the impact on localization.",
+      "revId": "38792ddee73be4e686218dd6ebfcc7004744618b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
