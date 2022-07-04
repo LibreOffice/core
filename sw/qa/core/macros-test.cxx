@@ -64,7 +64,7 @@ class SwMacrosTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     SwMacrosTest();
 
-    void createFileURL(std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath);
+    void createFileURL(std::u16string_view aFile, OUString& rFilePath);
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -94,24 +94,27 @@ private:
     OUString m_aBaseString;
 };
 
-void SwMacrosTest::createFileURL(std::u16string_view aFileBase, std::u16string_view aFileExtension, OUString& rFilePath)
+void SwMacrosTest::createFileURL(std::u16string_view aFile, OUString& rFilePath)
 {
-    rFilePath = m_directories.getSrcRootURL() + m_aBaseString + "/" + aFileExtension + "/"
-        + aFileBase + aFileExtension;
+    auto i = aFile.find_last_of('.');
+    CPPUNIT_ASSERT_MESSAGE("Missing Extension", i != std::string_view::npos);
+    std::u16string_view aFileExtension = aFile.substr(i+1);
+
+    rFilePath = m_directories.getSrcRootURL() + m_aBaseString + "/" + aFileExtension + "/" + aFile;
 }
 
 void SwMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
         {
-            OUString("testVba."),
+            OUString("testVba.doc"),
             OUString("vnd.sun.Star.script:Project.NewMacros.Macro1?language=Basic&location=document")
         }
     };
     for ( size_t  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
         OUString aFileName;
-        createFileURL(testInfo[i].sFileBaseName, u"doc", aFileName);
+        createFileURL(testInfo[i].sFileBaseName, aFileName);
         uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
         OUString sUrl = testInfo[i].sMacroUrl;
         Any aRet;
@@ -203,7 +206,7 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
 void SwMacrosTest::testControlShapeGrouping()
 {
     OUString aFileName;
-    createFileURL(u"testControlShapeGrouping.", u"odt", aFileName);
+    createFileURL(u"testControlShapeGrouping.odt", aFileName);
     Reference< css::lang::XComponent > xComponent(
         loadFromDesktop(aFileName, "com.sun.star.text.TextDocument"));
 
@@ -343,7 +346,7 @@ void SwMacrosTest::testFdo55289()
 void SwMacrosTest::testFdo68983()
 {
     OUString aFileName;
-    createFileURL(u"fdo68983.", u"odt", aFileName);
+    createFileURL(u"fdo68983.odt", aFileName);
     Reference< css::lang::XComponent > xComponent =
         loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
     Reference< frame::XStorable > xDocStorable(xComponent, UNO_QUERY_THROW);
