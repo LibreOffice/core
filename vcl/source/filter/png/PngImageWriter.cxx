@@ -100,6 +100,13 @@ static bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLev
         auto eScanlineFormat = pAccess->GetScanlineFormat();
         switch (eScanlineFormat)
         {
+            case ScanlineFormat::N1BitMsbPal:
+            case ScanlineFormat::N1BitLsbPal:
+            {
+                colorType = PNG_COLOR_TYPE_PALETTE;
+                bitDepth = 1;
+                break;
+            }
             case ScanlineFormat::N8BitPal:
             {
                 if (!aBitmap.HasGreyPalette8Bit())
@@ -132,6 +139,23 @@ static bool pngWrite(SvStream& rStream, BitmapEx& rBitmapEx, int nCompressionLev
         int interlaceType = PNG_INTERLACE_NONE;
         int compressionType = PNG_COMPRESSION_TYPE_DEFAULT;
         int filterMethod = PNG_FILTER_TYPE_DEFAULT;
+
+        // Convert BitmapPalette to png_color*
+        if (colorType == PNG_COLOR_TYPE_PALETTE)
+        {
+            // Reserve enough space for 3 channels for each palette entry
+            auto aBitmapPalette = pAccess->GetPalette();
+            auto nEntryCount = aBitmapPalette.GetEntryCount();
+            std::unique_ptr<png_color[]> aPngPaletteArray(new png_color[nEntryCount * 3]);
+            for (sal_uInt16 i = 0; i < nEntryCount; i++)
+            {
+                aPngPaletteArray[i].red = aBitmapPalette[i].GetRed();
+                aPngPaletteArray[i].green = aBitmapPalette[i].GetGreen();
+                aPngPaletteArray[i].blue = aBitmapPalette[i].GetBlue();
+            }
+            // Palette is copied over so it can be safely discarded
+            png_set_PLTE(pPng, pInfo, aPngPaletteArray.get(), nEntryCount);
+        }
 
         png_set_IHDR(pPng, pInfo, aSize.Width(), aSize.Height(), bitDepth, colorType, interlaceType,
                      compressionType, filterMethod);
