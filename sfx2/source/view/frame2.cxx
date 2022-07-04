@@ -55,7 +55,7 @@ class SfxFrameWindow_Impl : public vcl::Window
 {
     DECL_LINK(ModalHierarchyHdl, bool, void);
 public:
-    SfxFrame*           pFrame;
+    SfxFrame*           m_pFrame;
 
     SfxFrameWindow_Impl( SfxFrame* pF, vcl::Window& i_rContainerWindow );
 
@@ -71,7 +71,7 @@ public:
 
 SfxFrameWindow_Impl::SfxFrameWindow_Impl(SfxFrame* pF, vcl::Window& i_rContainerWindow)
     : Window(&i_rContainerWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK)
-    , pFrame(pF)
+    , m_pFrame(pF)
 {
     i_rContainerWindow.SetModalHierarchyHdl(LINK(this, SfxFrameWindow_Impl, ModalHierarchyHdl));
 }
@@ -88,23 +88,23 @@ void SfxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     // tdf#131613 the printers changing has no effect on window layout
     if (rDCEvt.GetType() == DataChangedEventType::PRINTER)
         return;
-    SfxWorkWindow *pWorkWin = pFrame->GetWorkWindow_Impl();
+    SfxWorkWindow *pWorkWin = m_pFrame->GetWorkWindow_Impl();
     if ( pWorkWin )
         pWorkWin->DataChanged_Impl();
 }
 
 bool SfxFrameWindow_Impl::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( pFrame->IsClosing_Impl() || !pFrame->GetFrameInterface().is() )
+    if ( m_pFrame->IsClosing_Impl() || !m_pFrame->GetFrameInterface().is() )
         return false;
 
-    SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
+    SfxViewFrame* pView = m_pFrame->GetCurrentViewFrame();
     if ( !pView || !pView->GetObjectShell() )
         return Window::EventNotify( rNEvt );
 
     if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
-        if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !pFrame->IsInPlace() )
+        if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !m_pFrame->IsInPlace() )
         {
             SAL_INFO("sfx", "SfxFrame: GotFocus");
             pView->MakeActive_Impl( false );
@@ -126,7 +126,7 @@ bool SfxFrameWindow_Impl::EventNotify( NotifyEvent& rNEvt )
 
 IMPL_LINK(SfxFrameWindow_Impl, ModalHierarchyHdl, bool, bSetModal, void)
 {
-    SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
+    SfxViewFrame* pView = m_pFrame->GetCurrentViewFrame();
     if (!pView || !pView->GetObjectShell())
         return;
     pView->SetModalMode(bSetModal);
@@ -137,7 +137,7 @@ bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     MouseNotifyEvent nType = rNEvt.GetType();
     if ( nType == MouseNotifyEvent::KEYINPUT || nType == MouseNotifyEvent::KEYUP )
     {
-        SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
+        SfxViewFrame* pView = m_pFrame->GetCurrentViewFrame();
         SfxViewShell* pShell = pView ? pView->GetViewShell() : nullptr;
         if ( pShell && pShell->HasKeyListeners_Impl() && pShell->HandleNotifyEvent_Impl( rNEvt ) )
             return true;
@@ -145,7 +145,7 @@ bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     else if ( nType == MouseNotifyEvent::MOUSEBUTTONUP || nType == MouseNotifyEvent::MOUSEBUTTONDOWN )
     {
         vcl::Window* pWindow = rNEvt.GetWindow();
-        SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
+        SfxViewFrame* pView = m_pFrame->GetCurrentViewFrame();
         SfxViewShell* pShell = pView ? pView->GetViewShell() : nullptr;
         if ( pShell )
             if ( pWindow == pShell->GetWindow() || pShell->GetWindow()->IsChild( pWindow ) )
@@ -158,7 +158,7 @@ bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         vcl::Window* pWindow = rNEvt.GetWindow();
         const MouseEvent* pMEvent = rNEvt.GetMouseEvent();
         Point aPos = pWindow->OutputToScreenPixel( pMEvent->GetPosPixel() );
-        SfxWorkWindow *pWorkWin = pFrame->GetWorkWindow_Impl();
+        SfxWorkWindow *pWorkWin = m_pFrame->GetWorkWindow_Impl();
         if ( pWorkWin )
             pWorkWin->EndAutoShow_Impl( aPos );
     }
@@ -168,8 +168,10 @@ bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 
 void SfxFrameWindow_Impl::GetFocus()
 {
-    if ( pFrame && !pFrame->IsClosing_Impl() && pFrame->GetCurrentViewFrame() && pFrame->GetFrameInterface().is() )
-        pFrame->GetCurrentViewFrame()->MakeActive_Impl( true );
+    if ( m_pFrame && !m_pFrame->IsClosing_Impl() &&
+         m_pFrame->GetCurrentViewFrame() &&
+         m_pFrame->GetFrameInterface().is() )
+        m_pFrame->GetCurrentViewFrame()->MakeActive_Impl( true );
 }
 
 void SfxFrameWindow_Impl::Resize()
@@ -182,15 +184,15 @@ void SfxFrameWindow_Impl::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == StateChangedType::InitShow )
     {
-        pFrame->m_pImpl->bHidden = false;
-        if ( pFrame->IsInPlace() )
+        m_pFrame->m_pImpl->bHidden = false;
+        if ( m_pFrame->IsInPlace() )
             // TODO/MBA: workaround for bug in LayoutManager: the final resize does not get through because the
             // LayoutManager works asynchronously and between resize and time execution the DockingAcceptor was exchanged so that
             // the resize event never is sent to the component
             SetSizePixel( GetParent()->GetOutputSizePixel() );
 
         DoResize();
-        SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
+        SfxViewFrame* pView = m_pFrame->GetCurrentViewFrame();
         if ( pView )
             pView->GetBindings().GetWorkWindow_Impl()->ShowChildren_Impl();
     }
@@ -200,8 +202,8 @@ void SfxFrameWindow_Impl::StateChanged( StateChangedType nStateChange )
 
 void SfxFrameWindow_Impl::DoResize()
 {
-    if ( !pFrame->m_pImpl->bLockResize )
-        pFrame->Resize();
+    if ( !m_pFrame->m_pImpl->bLockResize )
+        m_pFrame->Resize();
 }
 
 Reference < XFrame > SfxFrame::CreateBlankFrame()
