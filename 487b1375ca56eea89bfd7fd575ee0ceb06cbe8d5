@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "190aebca_44086130",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-04T05:10:06Z",
+      "side": 1,
+      "message": "IIUC, 32-bit already don\u0027t suffice for what we currently have in ./offapi/com/sun/star/accessibility/AccessibleStateType.idl",
+      "range": {
+        "startLine": 13,
+        "startChar": 44,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "487b1375ca56eea89bfd7fd575ee0ceb06cbe8d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c6dbf23_f1b90797",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-07-04T05:10:06Z",
+      "side": 1,
+      "message": "+1 for the general idea, which looks good to me.\n\nDidn\u0027t look at all of the single changes in detail and it doesn\u0027t compile here yet, but I\u0027m happy to take a closer look at a later patch set if you follow that road.",
+      "revId": "487b1375ca56eea89bfd7fd575ee0ceb06cbe8d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
