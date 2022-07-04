@@ -16,6 +16,24 @@
       "message": "normally all of this would go into the XDataTable interface?",
       "revId": "ca7c1039deb48140e9c588bf17c6bbc7211e2076",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48621e15_bd48de00",
+        "filename": "offapi/com/sun/star/chart2/DataTable.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-07-04T08:25:12Z",
+      "side": 1,
+      "message": "Usually you have a separate file for properties, which are included in the service not the interface. Checking around a bit I didn\u0027t see an example, where a pure property is defined or included in an interface.\n\nFor DataTable and XDataTable I mostly just copied the definitions of Legend and XLegend.",
+      "parentUuid": "93482292_ea7803f6",
+      "revId": "ca7c1039deb48140e9c588bf17c6bbc7211e2076",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
