@@ -16,6 +16,103 @@
       "message": "I noticed doxygen warnings in the Windows build.",
       "revId": "c98dfcae25a7c8d65268387a2d88f8d6c693fa58",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ebeab8b_fac7afbb",
+        "filename": "include/osl/profile.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-04T08:05:04Z",
+      "side": 1,
+      "message": "* Any reason you didn\u0027t introduce a preceding empty line here, as you did e.g. in include/osl/mutex.hxx?  I /think/ Doxygen wants that to separate the title from the first paragraph of the detailed description.  (And if it doesn\u0027t, still better to be consistent in how you handle that across this Gerrit change.)\n\n* The detailed description has always been wrong (an exception is thrown if profile would be null).  I\u0027d suggest to just drop the detailed description completely (either in this change or in a follow-up).",
+      "revId": "c98dfcae25a7c8d65268387a2d88f8d6c693fa58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4214483_1f77415b",
+        "filename": "include/osl/socket.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-04T08:05:04Z",
+      "side": 1,
+      "message": "* Nothing gets \"looked up\" here, this function just retrieves the hostname from the given oslHostAddr data structure.\n* Please be consistent in how you spell \"hostname\" vs. \"host name\" across this comment.\n* Better spell the verb \"lookup\" as \"look up\"?",
+      "revId": "c98dfcae25a7c8d65268387a2d88f8d6c693fa58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2462d5ba_29f5ff8e",
+        "filename": "include/osl/socket_decl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-04T08:05:04Z",
+      "side": 1,
+      "message": "You must spell the @param argument the same way as the parameter in the function prototype.",
+      "range": {
+        "startLine": 179,
+        "startChar": 19,
+        "endLine": 179,
+        "endChar": 26
+      },
+      "revId": "c98dfcae25a7c8d65268387a2d88f8d6c693fa58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb93cd5e_f720c0c3",
+        "filename": "include/rtl/alloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-04T08:05:04Z",
+      "side": 1,
+      "message": "Please be consistent about how you treat the original \"Ptr is invalid.\" in the modifications across this file.",
+      "revId": "c98dfcae25a7c8d65268387a2d88f8d6c693fa58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0cc0965_e1a7163d",
+        "filename": "include/rtl/alloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-04T08:05:04Z",
+      "side": 1,
+      "message": "why close with a semicolon here?",
+      "range": {
+        "startLine": 143,
+        "startChar": 51,
+        "endLine": 143,
+        "endChar": 52
+      },
+      "revId": "c98dfcae25a7c8d65268387a2d88f8d6c693fa58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
