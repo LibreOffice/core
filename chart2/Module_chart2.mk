@@ -38,12 +38,10 @@ $(eval $(call gb_Module_add_slowcheck_targets,chart2,\
     CppunitTest_chart2_geometry \
 ))
 
-ifeq ($(ENABLE_CHART_TESTS),TRUE)
 ifeq ($(WITH_FONTS), TRUE)
 $(eval $(call gb_Module_add_slowcheck_targets,chart2,\
     CppunitTest_chart2_xshape \
 ))
-endif
 endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,chart2,\
