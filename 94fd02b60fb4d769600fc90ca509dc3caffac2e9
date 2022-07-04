@@ -16,6 +16,23 @@
       "message": "This patch fixes the issue.\n@Aman: Please write a detailed description on what you did in the commit message.\n\n@Heiko: What do you think?",
       "revId": "94fd02b60fb4d769600fc90ca509dc3caffac2e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2764286c_98bd1009",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-07-04T10:53:20Z",
+      "side": 1,
+      "message": "queryredlinedialog.ui is not accessed anywhere else so  we should remove it (and all references). \u003d\u003e -1 Haven\u0027t tested the patch but it looks good now. \u003d\u003e +2",
+      "revId": "94fd02b60fb4d769600fc90ca509dc3caffac2e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
