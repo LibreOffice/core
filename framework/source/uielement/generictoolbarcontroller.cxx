@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <svl/imageitm.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -218,6 +219,7 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
     ItemStatus      aItemState;
     Visibility      aItemVisibility;
     ControlCommand  aControlCommand;
+    SfxImageItem    aImageItem;
 
     if (( Event.State >>= bValue ) && !m_bEnumCommand )
     {
@@ -290,6 +292,12 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
                 }
             }
         }
+        if ( m_bMadeInvisible )
+            m_xToolbar->ShowItem( m_nID );
+    }
+    else if ( aImageItem.PutValue( Event.State, 0 ) )
+    {
+        m_xToolbar->SetItemImageMirrorMode( m_nID, aImageItem.IsMirrored() );
         if ( m_bMadeInvisible )
             m_xToolbar->ShowItem( m_nID );
     }

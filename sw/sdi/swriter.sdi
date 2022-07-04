@@ -2643,7 +2643,7 @@ SfxVoidItem InsertColumnDialog FN_TABLE_INSERT_COL_DLG
     GroupId = SfxGroupId::Table;
 ]
 
-SfxVoidItem InsertColumnsBefore FN_TABLE_INSERT_COL_BEFORE
+SfxImageItem InsertColumnsBefore FN_TABLE_INSERT_COL_BEFORE
 ()
 [
     AutoUpdate = FALSE,
@@ -2680,7 +2680,7 @@ SfxVoidItem InsertColumns FN_TABLE_INSERT_COL
     GroupId = SfxGroupId::Table;
 ]
 
-SfxVoidItem InsertColumnsAfter FN_TABLE_INSERT_COL_AFTER
+SfxImageItem InsertColumnsAfter FN_TABLE_INSERT_COL_AFTER
 ()
 [
     AutoUpdate = FALSE,
