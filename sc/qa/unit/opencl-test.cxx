@@ -527,7 +527,7 @@ bool ScOpenCLTest::initTestEnv(std::u16string_view fileName, sal_Int32 nFormat,
 bool ScOpenCLTest::detectOpenCLDevice()
 {
     sc::FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly();
-    return sc::FormulaGroupInterpreter::switchOpenCLDevice(OUString(),true);
+    return sc::FormulaGroupInterpreter::switchOpenCLDevice(u"",true);
 }
 
 void ScOpenCLTest::enableOpenCL()
