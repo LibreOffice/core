@@ -87,6 +87,24 @@
       "parentUuid": "dc1b3ff8_70e18efd",
       "revId": "7ef9c3ef30023cc40068e1f735aa4bec4811288b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99199a37_23741fe3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-07-04T13:41:59Z",
+      "side": 1,
+      "message": "\u003e Can you please recommit with that fix applied?\n\nseen as \u003chttps://git.libreoffice.org/core/+/690d4eb71509649ad147cfe60f5b97e2cfaaa519%5E%21\u003e \"tdf#43100 tdf#104683 tdf#120715 sw: cursor on spaces over margin\"",
+      "parentUuid": "d7a5504f_bc0a8819",
+      "revId": "7ef9c3ef30023cc40068e1f735aa4bec4811288b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
