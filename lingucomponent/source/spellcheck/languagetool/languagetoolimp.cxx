@@ -41,6 +41,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <unotools/lingucfg.hxx>
 #include <osl/mutex.hxx>
+#include <sal/log.hxx>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -332,8 +333,12 @@ std::string LanguageToolGrammarChecker::makeHttpRequest(std::string_view aURL, H
 
     curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, static_cast<void*>(&response_body));
-    curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
-    curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, false);
+    // allow unknown or self-signed certificates
+    if (rLanguageOpts.getSSLVerification() == false)
+    {
+        curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYPEER, false);
+        curl_easy_setopt(curl.get(), CURLOPT_SSL_VERIFYHOST, false);
+    }
     curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, CURL_TIMEOUT);
 
     if (method == HTTP_METHOD::HTTP_POST)
@@ -350,8 +355,11 @@ std::string LanguageToolGrammarChecker::makeHttpRequest(std::string_view aURL, H
         }
     }
 
-    /*CURLcode cc = */
-    curl_easy_perform(curl.get());
+    CURLcode cc = curl_easy_perform(curl.get());
+    if (cc != CURLE_OK)
+    {
+        SAL_WARN("languagetool", "CURL request returned with error: " << static_cast<sal_Int32>(cc));
+    }
     curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &nStatusCode);
     return response_body;
 }
