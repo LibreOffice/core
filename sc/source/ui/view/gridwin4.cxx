@@ -1166,8 +1166,9 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             // to be tweaked temporarily to match the current view's zoom.
                             SuppressEditViewMessagesGuard aGuard(*pOtherEditView);
 
-                            pOtherEditView->SetOutputArea(rDevice.PixelToLogic(aEditRect));
-                            pOtherEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
+                            aEditRect = rDevice.PixelToLogic(aEditRect);
+                            aEditRect.Intersection(pOtherEditView->GetOutputArea());
+                            pOtherEditView->Paint(aEditRect, &rDevice);
 
                             // Rollback the mapmode and 'output area'.
                             rOtherWin.SetMapMode(aOrigMapMode);
