@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec6f8769_992db765",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1861,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-04T15:03:09Z",
+      "side": 1,
+      "message": "Sorry Xisco, i meant that in my message after merging my last patch. Sorry. However that might be not enough. Today i have written a test what uses that patch and calls this marked selectObj() function, and produces the test tha same syntoms like this test. But there are good news: Replacing this to the API based selection this will work. Soon i upload that test and tomorrow (or maybe today) i fix this too. If you interested in that, i can link it to here. The py test works because that uses the API unlike this. Link and fix soon. Have a nice day!",
+      "range": {
+        "startLine": 1861,
+        "startChar": 15,
+        "endLine": 1861,
+        "endChar": 24
+      },
+      "revId": "46f2a0d6c4b23955dfd4e9078033882d7b66b00c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
