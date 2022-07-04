@@ -33,6 +33,24 @@
       "message": "Patch https://gerrit.libreoffice.org/c/core/+/60080/ for https://bugs.documentfoundation.org/show_bug.cgi?id\u003d119293 changed the label \"Insert Columns Left\" to \"Insert Columns Before\", and other, to be LTR/RTL independent. ",
       "revId": "700609e16d7f4d243e6c84dac1c4235efd33f6b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5aaa67b_3a312c9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2022-07-04T08:01:23Z",
+      "side": 1,
+      "message": "\u003e So maybe the \"solution\" is to mirror the icon horizontally?  (i.e., change Properties value to \"3\")\n\nUnfortunately this won\u0027t solve the problem, because the behavior of these commands depends on the direction of the table, while the mirroring is done based on the direction of the current paragraph. So you will still get wrong results with LTR paragraph inside a RTL table or vice versa.\n\n\u003e In any case, could you add a note about this setting in Table Properties in BZ to tdf#149741 -- because it has not been mentioned there already, but seems essential consider in relation to possible changes.\n\nThe steps provided there seems to work too, i.e. switching to RTL *before* inserting the table.",
+      "parentUuid": "ab58f72e_aaef6615",
+      "revId": "700609e16d7f4d243e6c84dac1c4235efd33f6b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
