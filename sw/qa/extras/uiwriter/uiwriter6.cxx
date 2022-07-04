@@ -1874,6 +1874,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf74363)
     CPPUNIT_ASSERT_EQUAL(OUString("Testing "), getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf139922)
+{
+    createSwDoc();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    emulateTyping(*pTextDoc, u"this is a SEntence. this is a SEntence.");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: This is a Sentence. This is a Sentence.
+    // - Actual  : this is a Sentence. This is a Sentence.
+    CPPUNIT_ASSERT_EQUAL(OUString("This is a Sentence. This is a Sentence."),
+                         getParagraph(2)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf143176)
 {
     // Hungarian test document with right-to-left paragraph setting
