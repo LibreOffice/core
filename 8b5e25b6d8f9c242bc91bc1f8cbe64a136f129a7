@@ -16,6 +16,23 @@
       "message": "Fixing ODF 1.3 and adding Unit test",
       "revId": "8b5e25b6d8f9c242bc91bc1f8cbe64a136f129a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c72b153a_fe904370",
+        "filename": "schema/odf1.3/OpenDocument-v1.3-schema.rng",
+        "patchSetId": 8
+      },
+      "lineNbr": 7142,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-07-04T19:17:51Z",
+      "side": 1,
+      "message": "I doubt this optional is correct. When would the number:position attribute be optional in a \u003cnumber:embedded-text\u003e element? Note this is the ODF v1.3 schema without extensions.",
+      "revId": "8b5e25b6d8f9c242bc91bc1f8cbe64a136f129a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
