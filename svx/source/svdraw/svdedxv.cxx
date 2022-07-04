@@ -2631,9 +2631,9 @@ bool SdrObjEditView::SupportsFormatPaintbrush(SdrInventor nObjectInventor,
         case SdrObjKind::OLE2:
         case SdrObjKind::Table:
             return true;
-        case SdrObjKind::Edge:
         case SdrObjKind::Caption:
             return false;
+        case SdrObjKind::Edge:
         case SdrObjKind::PathPoly:
         case SdrObjKind::PathPolyLine:
             return true;
