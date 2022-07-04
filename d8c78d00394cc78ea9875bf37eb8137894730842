@@ -16,6 +16,23 @@
       "message": "@Heiko -- here is a final attempt to see if anything useful can be \"saved\" out of my clumsy move to be helpful...\n@Maxim - thanks for your patient explanations. ",
       "revId": "d8c78d00394cc78ea9875bf37eb8137894730842",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b8c9277_e881de8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-07-04T11:05:13Z",
+      "side": 1,
+      "message": "Not much benefit from a tooltip that just repeats the label ;-)\nWhat we could do, if the icon mirror or duplication is not going to work, is to explain \"before \u003d left in case of LTR...\" with the tooltip. But it\u0027s probably too much text and better suited for the documentation.",
+      "revId": "d8c78d00394cc78ea9875bf37eb8137894730842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
