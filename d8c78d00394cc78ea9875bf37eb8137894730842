@@ -33,6 +33,24 @@
       "message": "Not much benefit from a tooltip that just repeats the label ;-)\nWhat we could do, if the icon mirror or duplication is not going to work, is to explain \"before \u003d left in case of LTR...\" with the tooltip. But it\u0027s probably too much text and better suited for the documentation.",
       "revId": "d8c78d00394cc78ea9875bf37eb8137894730842",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "285efe6a_3ea86950",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-07-04T12:09:00Z",
+      "side": 1,
+      "message": "\u003e Not much benefit from a tooltip that just repeats the label ;-)\nBeg to disagree. In this case, the Context Label is needed -- because of the current design where these commands are in an Insert submenu for both menu and context menu. But that Context Label gets used as \"tooltip\" in the Table bar. (as can be seen from looking at the interface.)\n\nThe current patch would give a better tooltip for Table bar (and make it more similar to the Delete row/column tooltips). If that makes sense, then maybe this can just make it before the string freeze.\n\nAnd for a possible future, could consider - or maybe it is even viable now, and can be removed later if necessary?\n\nTooltip:  Insert column after (or before in RTL table).\nand:       Insert column before (or after in RTL table).",
+      "parentUuid": "6b8c9277_e881de8b",
+      "revId": "d8c78d00394cc78ea9875bf37eb8137894730842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
