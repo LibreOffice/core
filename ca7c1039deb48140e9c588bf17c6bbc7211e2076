@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93482292_ea7803f6",
+        "filename": "offapi/com/sun/star/chart2/DataTable.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-07-04T07:52:15Z",
+      "side": 1,
+      "message": "normally all of this would go into the XDataTable interface?",
+      "revId": "ca7c1039deb48140e9c588bf17c6bbc7211e2076",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
