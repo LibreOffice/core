@@ -175,6 +175,7 @@ public:
     void testPngRoundtrip24();
     void testPngRoundtrip24_8();
     void testPngRoundtrip32();
+    void testPngWrite1BitRGBPalette();
 
     CPPUNIT_TEST_SUITE(PngFilterTest);
     CPPUNIT_TEST(testPng);
@@ -184,6 +185,7 @@ public:
     CPPUNIT_TEST(testPngRoundtrip24);
     CPPUNIT_TEST(testPngRoundtrip24_8);
     CPPUNIT_TEST(testPngRoundtrip32);
+    CPPUNIT_TEST(testPngWrite1BitRGBPalette);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1862,6 +1864,70 @@ void PngFilterTest::testPngRoundtrip24_8()
 }
 
 void PngFilterTest::testPngRoundtrip32() {}
+
+void PngFilterTest::testPngWrite1BitRGBPalette()
+{
+    SvMemoryStream aExportStream;
+    {
+        BitmapPalette aPal;
+        aPal.SetEntryCount(2);
+        aPal[0] = COL_RED;
+        aPal[1] = COL_GREEN;
+        Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N1_BPP, &aPal);
+        {
+            BitmapScopedWriteAccess pWriteAccessBitmap(aBitmap);
+            // Top left
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    pWriteAccessBitmap->SetPixelIndex(i, j, 0);
+                }
+            }
+            // Top right
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 8; j < 16; j++)
+                {
+                    pWriteAccessBitmap->SetPixelIndex(i, j, 1);
+                }
+            }
+            // Bottom left
+            for (int i = 8; i < 16; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    pWriteAccessBitmap->SetPixelIndex(i, j, 1);
+                }
+            }
+            // Bottom right
+            for (int i = 8; i < 16; i++)
+            {
+                for (int j = 8; j < 16; j++)
+                {
+                    pWriteAccessBitmap->SetPixelIndex(i, j, 0);
+                }
+            }
+        }
+        BitmapEx aBitmapEx(aBitmap);
+        vcl::PngImageWriter aPngWriter(aExportStream);
+        CPPUNIT_ASSERT_EQUAL(true, aPngWriter.write(aBitmapEx));
+    }
+    aExportStream.Seek(0);
+    {
+        vcl::PngImageReader aPngReader(aExportStream);
+        BitmapEx aBitmapEx;
+        CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmapEx));
+
+        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Width());
+        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Height());
+
+        CPPUNIT_ASSERT_EQUAL(COL_RED, aBitmapEx.GetPixelColor(0, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_RED, aBitmapEx.GetPixelColor(15, 15));
+        CPPUNIT_ASSERT_EQUAL(COL_GREEN, aBitmapEx.GetPixelColor(15, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_GREEN, aBitmapEx.GetPixelColor(0, 15));
+    }
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PngFilterTest);
 
