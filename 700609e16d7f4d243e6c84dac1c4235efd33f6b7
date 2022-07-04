@@ -16,6 +16,23 @@
       "message": "Thanks Maxim!  You are correct about rows.  And the same is true for columns. Have made some appropriate changes.\n\nBut I have tried your suggestion about setting RTL in Table Properties, and can see\nthat \"Before\" and \"After\" makes more sense (if that setting is used). \n\nSo maybe the \"solution\" is to mirror the icon horizontally?  (i.e., change Properties value to \"3\")  Or maybe this patch should be abandoned.\n\nIn any case, could you add a note about this setting in Table Properties in BZ to tdf#149741 -- because it has not been mentioned there already, but seems essential consider in relation to possible changes.",
       "revId": "700609e16d7f4d243e6c84dac1c4235efd33f6b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2bf3260_820fa6b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-07-04T06:32:21Z",
+      "side": 1,
+      "message": "Patch https://gerrit.libreoffice.org/c/core/+/60080/ for https://bugs.documentfoundation.org/show_bug.cgi?id\u003d119293 changed the label \"Insert Columns Left\" to \"Insert Columns Before\", and other, to be LTR/RTL independent. ",
+      "revId": "700609e16d7f4d243e6c84dac1c4235efd33f6b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
