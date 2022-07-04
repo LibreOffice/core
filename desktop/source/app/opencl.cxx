@@ -198,7 +198,7 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
     OUString aDevice = officecfg::Office::Calc::Formula::Calculation::OpenCLDevice::get();
     OUString aSelectedCLDeviceVersionID;
     if (!openclwrapper::switchOpenCLDevice(
-            &aDevice,
+            aDevice,
             officecfg::Office::Calc::Formula::Calculation::OpenCLAutoSelect::get(),
             false /* bForceEvaluation */,
             aSelectedCLDeviceVersionID))
