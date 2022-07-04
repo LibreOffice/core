@@ -52,6 +52,7 @@ protected:
     bool m_bReplace : 1;          // Used by SwGrfNumPortion
     const bool m_bPlaceHolder : 1;
     bool m_bNoLength : 1;       // HACK for meta suffix (no CH_TXTATR)
+    bool m_bContentControl = false;
 
     void SetFont( std::unique_ptr<SwFont> pNew ) { m_pFont = std::move(pNew); }
     bool IsNoLength() const  { return m_bNoLength; }
@@ -107,6 +108,8 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
+
+    void SetContentControl(bool bContentControl) { m_bContentControl = bContentControl; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
                    TextFrameIndex& nOffset) const override;
