@@ -42,15 +42,15 @@ public:
 
 class SwCTB : public TBBase
 {
-    Xst name;
-    sal_Int32 cbTBData;
-    TB tb;
-    std::vector<TBVisualData> rVisualData;
-    sal_Int32 iWCTBl;
-    sal_uInt16 reserved;
-    sal_uInt16 unused;
-    sal_Int32 cCtls;
-    std::vector< SwTBC > rTBC;
+    Xst m_name;
+    sal_Int32 m_cbTBData;
+    TB m_tb;
+    std::vector<TBVisualData> m_rVisualData;
+    sal_Int32 m_iWCTBl;
+    sal_uInt16 m_reserved;
+    sal_uInt16 m_unused;
+    sal_Int32 m_cCtls;
+    std::vector< SwTBC > m_rTBC;
 
     SwCTB(const SwCTB&) = delete;
     SwCTB& operator = ( const SwCTB&) = delete;
@@ -62,7 +62,7 @@ public:
     bool IsMenuToolbar() const;
     bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenuTB( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
-    OUString const & GetName() { return tb.getName().getString(); }
+    OUString const & GetName() { return m_tb.getName().getString(); }
 };
 
 class TBDelta : public TBBase
@@ -171,8 +171,8 @@ public:
 
 class PlfMcd : public Tcg255SubStruct
 {
-    sal_Int32 iMac;
-    std::vector<MCD> rgmcd; // array of MCD's
+    sal_Int32 m_iMac;
+    std::vector<MCD> m_rgmcd; // array of MCD's
     PlfMcd(const PlfMcd&) = delete;
     PlfMcd& operator = ( const PlfMcd&) = delete;
 
@@ -195,8 +195,8 @@ public:
 
 class PlfAcd: public Tcg255SubStruct
 {
-    sal_Int32 iMac;
-    std::unique_ptr<Acd[]> rgacd;
+    sal_Int32 m_iMac;
+    std::unique_ptr<Acd[]> m_rgacd;
     PlfAcd(const PlfAcd&) = delete;
     PlfAcd& operator = ( const PlfAcd&) = delete;
 
@@ -226,8 +226,8 @@ public:
 
 class PlfKme : public Tcg255SubStruct
 {
-    sal_Int32 iMac;
-    std::unique_ptr<Kme[]> rgkme;
+    sal_Int32 m_iMac;
+    std::unique_ptr<Kme[]> m_rgkme;
     PlfKme(const PlfKme&) = delete;
     PlfKme& operator = ( const PlfKme&) = delete;
 

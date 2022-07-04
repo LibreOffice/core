@@ -374,11 +374,11 @@ bool TBDelta::Read(SvStream &rS)
     return rS.good();
 }
 
-SwCTB::SwCTB() : cbTBData( 0 )
-,iWCTBl( 0 )
-,reserved( 0 )
-,unused( 0 )
-,cCtls( 0 )
+SwCTB::SwCTB() : m_cbTBData( 0 )
+,m_iWCTBl( 0 )
+,m_reserved( 0 )
+,m_unused( 0 )
+,m_cCtls( 0 )
 {
 }
 
@@ -388,35 +388,35 @@ SwCTB::~SwCTB()
 
 bool SwCTB::IsMenuToolbar() const
 {
-    return tb.IsMenuToolbar();
+    return m_tb.IsMenuToolbar();
 }
 
 bool SwCTB::Read( SvStream &rS)
 {
     SAL_INFO("sw.ww8","SwCTB::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    if ( !name.Read( rS ) )
+    if ( !m_name.Read( rS ) )
         return false;
-    rS.ReadInt32( cbTBData );
-    if ( !tb.Read( rS ) )
+    rS.ReadInt32( m_cbTBData );
+    if ( !m_tb.Read( rS ) )
         return false;
     for ( short index = 0; index < nVisualData; ++index )
     {
         TBVisualData aVisData;
         aVisData.Read( rS );
-        rVisualData.push_back( aVisData );
+        m_rVisualData.push_back( aVisData );
     }
 
-    rS.ReadInt32( iWCTBl ).ReadUInt16( reserved ).ReadUInt16( unused ).ReadInt32( cCtls );
+    rS.ReadInt32( m_iWCTBl ).ReadUInt16( m_reserved ).ReadUInt16( m_unused ).ReadInt32( m_cCtls );
 
-    if ( cCtls )
+    if ( m_cCtls )
     {
-        for ( sal_Int32 index = 0; index < cCtls; ++index )
+        for ( sal_Int32 index = 0; index < m_cCtls; ++index )
         {
             SwTBC aTBC;
             if ( !aTBC.Read( rS ) )
                 return false;
-            rTBC.push_back( aTBC );
+            m_rTBC.push_back( aTBC );
         }
     }
     return rS.good();
@@ -427,7 +427,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
     bool bRes = false;
     try
     {
-        if ( !tb.IsEnabled() )
+        if ( !m_tb.IsEnabled() )
             return true;  // didn't fail, just ignoring
         // Create default setting
         uno::Reference< container::XIndexContainer > xIndexContainer( helper.getCfgManager()->createSettings(), uno::UNO_SET_THROW );
@@ -435,10 +435,10 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
         uno::Reference< beans::XPropertySet > xProps( xIndexContainer, uno::UNO_QUERY_THROW );
 
         // set UI name for toolbar
-        xProps->setPropertyValue( "UIName", uno::Any( name.getString() ) );
+        xProps->setPropertyValue( "UIName", uno::Any( m_name.getString() ) );
 
-        const OUString sToolBarName = "private:resource/toolbar/custom_" + name.getString();
-        for ( auto& rItem : rTBC )
+        const OUString sToolBarName = "private:resource/toolbar/custom_" + m_name.getString();
+        for ( auto& rItem : m_rTBC )
         {
             // createToolBar item for control
             if ( !rItem.ImportToolBarControl( rWrapper, xIndexContainer, helper, IsMenuToolbar() ) )
@@ -468,7 +468,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
 
 bool SwCTB::ImportMenuTB( SwCTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& xIndexContainer, CustomToolBarImportHelper& rHelper )
 {
-    for ( auto& rItem : rTBC )
+    for ( auto& rItem : m_rTBC )
     {
         // createToolBar item for control
         if ( !rItem.ImportToolBarControl( rWrapper, xIndexContainer, rHelper, true ) )
@@ -746,7 +746,7 @@ bool Tcg255SubStruct::Read(SvStream &rS)
 }
 
 PlfMcd::PlfMcd()
-    : iMac(0)
+    : m_iMac(0)
 {
 }
 
@@ -755,21 +755,21 @@ bool PlfMcd::Read(SvStream &rS)
     SAL_INFO("sw.ww8","PffMcd::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
-    rS.ReadInt32( iMac );
-    if (iMac < 0)
+    rS.ReadInt32( m_iMac );
+    if (m_iMac < 0)
         return false;
     auto nMaxPossibleRecords = rS.remainingSize() / 24 /*sizeof MCD*/;
-    if (o3tl::make_unsigned(iMac) > nMaxPossibleRecords)
+    if (o3tl::make_unsigned(m_iMac) > nMaxPossibleRecords)
     {
-        SAL_WARN("sw.ww8", iMac << " records claimed, but max possible is " << nMaxPossibleRecords);
-        iMac = nMaxPossibleRecords;
+        SAL_WARN("sw.ww8", m_iMac << " records claimed, but max possible is " << nMaxPossibleRecords);
+        m_iMac = nMaxPossibleRecords;
     }
-    if (iMac)
+    if (m_iMac)
     {
-        rgmcd.resize(iMac);
-        for ( sal_Int32 index = 0; index < iMac; ++index )
+        m_rgmcd.resize(m_iMac);
+        for ( sal_Int32 index = 0; index < m_iMac; ++index )
         {
-            if ( !rgmcd[ index ].Read( rS ) )
+            if ( !m_rgmcd[ index ].Read( rS ) )
                 return false;
         }
     }
@@ -777,7 +777,7 @@ bool PlfMcd::Read(SvStream &rS)
 }
 
 PlfAcd::PlfAcd() :
- iMac(0)
+ m_iMac(0)
 {
 }
 
@@ -790,21 +790,21 @@ bool PlfAcd::Read( SvStream &rS)
     SAL_INFO("sw.ww8","PffAcd::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
-    rS.ReadInt32( iMac );
-    if (iMac < 0)
+    rS.ReadInt32( m_iMac );
+    if (m_iMac < 0)
         return false;
     auto nMaxPossibleRecords = rS.remainingSize() / (sizeof(sal_uInt16)*2);
-    if (o3tl::make_unsigned(iMac) > nMaxPossibleRecords)
+    if (o3tl::make_unsigned(m_iMac) > nMaxPossibleRecords)
     {
-        SAL_WARN("sw.ww8", iMac << " records claimed, but max possible is " << nMaxPossibleRecords);
-        iMac = nMaxPossibleRecords;
+        SAL_WARN("sw.ww8", m_iMac << " records claimed, but max possible is " << nMaxPossibleRecords);
+        m_iMac = nMaxPossibleRecords;
     }
-    if (iMac)
+    if (m_iMac)
     {
-        rgacd.reset( new Acd[ iMac ] );
-        for ( sal_Int32 index = 0; index < iMac; ++index )
+        m_rgacd.reset( new Acd[ m_iMac ] );
+        for ( sal_Int32 index = 0; index < m_iMac; ++index )
         {
-            if ( !rgacd[ index ].Read( rS ) )
+            if ( !m_rgacd[ index ].Read( rS ) )
                 return false;
         }
     }
@@ -812,7 +812,7 @@ bool PlfAcd::Read( SvStream &rS)
 }
 
 PlfKme::PlfKme() :
- iMac( 0 )
+ m_iMac( 0 )
 {
 }
 
@@ -825,18 +825,18 @@ bool PlfKme::Read(SvStream &rS)
     SAL_INFO("sw.ww8","PlfKme::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
-    rS.ReadInt32( iMac );
-    if (iMac > 0)
+    rS.ReadInt32( m_iMac );
+    if (m_iMac > 0)
     {
         //each Kme is 14 bytes in size
         size_t nMaxAvailableRecords = rS.remainingSize() / 14;
-        if (o3tl::make_unsigned(iMac) > nMaxAvailableRecords)
+        if (o3tl::make_unsigned(m_iMac) > nMaxAvailableRecords)
             return false;
 
-        rgkme.reset( new Kme[ iMac ] );
-        for( sal_Int32 index=0; index<iMac; ++index )
+        m_rgkme.reset( new Kme[ m_iMac ] );
+        for( sal_Int32 index=0; index<m_iMac; ++index )
         {
-            if ( !rgkme[ index ].Read( rS ) )
+            if ( !m_rgkme[ index ].Read( rS ) )
                 return false;
         }
     }
