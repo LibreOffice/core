@@ -441,7 +441,7 @@ void SwFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
     SwFontSave aSave( rInf, m_pFont.get() );
 
 //    OSL_ENSURE(GetLen() <= TextFrameIndex(1), "SwFieldPortion::Paint: rest-portion pollution?");
-    if( Width() && ( !m_bPlaceHolder || rInf.GetOpt().IsShowPlaceHolderFields() ) )
+    if( Width() && ( !m_bPlaceHolder || rInf.GetOpt().IsShowPlaceHolderFields() ) && !m_bContentControl )
     {
         // A very liberal use of the background
         rInf.DrawViewOpt( *this, PortionType::Field );
