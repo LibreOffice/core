@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a05ee6c_2824b6d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-04T15:10:51Z",
+      "side": 1,
+      "message": "after the trial of Jenkins it can be merged",
+      "revId": "0145681f07170c9c4a76827d4766abcd88e90792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
