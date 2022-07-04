@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03df3613_153a2284",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-07-04T10:52:28Z",
+      "side": 1,
+      "message": "@Heiko -- here is a final attempt to see if anything useful can be \"saved\" out of my clumsy move to be helpful...\n@Maxim - thanks for your patient explanations. ",
+      "revId": "d8c78d00394cc78ea9875bf37eb8137894730842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
