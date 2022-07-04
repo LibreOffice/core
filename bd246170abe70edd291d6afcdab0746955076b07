@@ -1,4 +1,22 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4cbd7ca_d5738881",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-07-04T11:14:52Z",
+      "side": 1,
+      "message": "Hello Xisco! After merging the https://gerrit.libreoffice.org/c/core/+/136192 i think this one worth a try again. There was so many memory handling issues what will be fixed with that patch, so after that this test should work fine. What is your opinion? ",
+      "revId": "bd246170abe70edd291d6afcdab0746955076b07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ],
   "submitRequirementResults": []
 }
