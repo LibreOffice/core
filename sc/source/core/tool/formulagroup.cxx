@@ -189,7 +189,7 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     }
 
     OUString aSelectedCLDeviceVersionID;
-    bool bSuccess = openclwrapper::switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation, aSelectedCLDeviceVersionID);
+    bool bSuccess = openclwrapper::switchOpenCLDevice(rDeviceId, bAutoSelect, bForceEvaluation, aSelectedCLDeviceVersionID);
 
     if (!bSuccess)
         return false;
