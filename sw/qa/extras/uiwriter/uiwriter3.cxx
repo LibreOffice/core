@@ -20,6 +20,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <boost/property_tree/json_parser.hpp>
@@ -43,6 +44,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <rootfrm.hxx>
+#include <osl/thread.hxx>
 
 namespace
 {
@@ -1806,6 +1808,56 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636_2)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getColumns()->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143574)
+{
+    // grab the bugdoc
+    createSwDoc(DATA_DIRECTORY, "tdf143574.odt");
+
+    // there have to be one groupshape
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.GroupShape"),
+                         xShapeDescriptor->getShapeType());
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel);
+    uno::Reference<frame::XController> xController = xModel->getCurrentController();
+    CPPUNIT_ASSERT(xController);
+    uno::Reference<view::XSelectionSupplier> xSelection(xController, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSelection);
+
+    // select that only shape
+    CPPUNIT_ASSERT(xSelection->select(uno::Any(getShape(1))));
+    // There must be a wait for the shell being ready
+    osl::Thread::wait(std::chrono::seconds(1));
+
+    // go inside
+    dispatchCommand(mxComponent, ".uno:EnterGroup", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Select on child
+    CPPUNIT_ASSERT(xSelection->select(xGroup->getByIndex(0)));
+    Scheduler::ProcessEventsToIdle();
+    // There also have to wait for the selection
+    osl::Thread::wait(std::chrono::seconds(1));
+
+    // At this point Writer crashed here before the fix.
+    dispatchCommand(mxComponent, ".uno:AddTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Check for the textbox being added successfuly
+    uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShapeProps);
+    CPPUNIT_ASSERT_EQUAL(true, xShapeProps->getPropertyValue("TextBox").get<bool>());
+
+    // Remove the texbox, and check that
+    dispatchCommand(mxComponent, ".uno:RemoveTextBox", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(false, xShapeProps->getPropertyValue("TextBox").get<bool>());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140828)
