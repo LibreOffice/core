@@ -176,6 +176,7 @@ public:
     void testPngRoundtrip24_8();
     void testPngRoundtrip32();
     void testPngWrite1BitRGBPalette();
+    void testPngWrite8BitRGBPalette();
 
     CPPUNIT_TEST_SUITE(PngFilterTest);
     CPPUNIT_TEST(testPng);
@@ -186,6 +187,7 @@ public:
     CPPUNIT_TEST(testPngRoundtrip24_8);
     CPPUNIT_TEST(testPngRoundtrip32);
     CPPUNIT_TEST(testPngWrite1BitRGBPalette);
+    CPPUNIT_TEST(testPngWrite8BitRGBPalette);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1926,6 +1928,53 @@ void PngFilterTest::testPngWrite1BitRGBPalette()
         CPPUNIT_ASSERT_EQUAL(COL_RED, aBitmapEx.GetPixelColor(15, 15));
         CPPUNIT_ASSERT_EQUAL(COL_GREEN, aBitmapEx.GetPixelColor(15, 0));
         CPPUNIT_ASSERT_EQUAL(COL_GREEN, aBitmapEx.GetPixelColor(0, 15));
+    }
+}
+
+void PngFilterTest::testPngWrite8BitRGBPalette()
+{
+    SvMemoryStream aExportStream;
+    BitmapPalette aRedPalette;
+    aRedPalette.SetEntryCount(256);
+    for (sal_uInt16 i = 0; i < 256; i++)
+    {
+        aRedPalette[i].SetRed(i);
+        aRedPalette[i].SetGreen(0);
+        aRedPalette[i].SetBlue(0);
+    }
+    {
+        Bitmap aBitmap(Size(16, 16), vcl::PixelFormat::N8_BPP, &aRedPalette);
+        {
+            BitmapScopedWriteAccess pWriteAccessBitmap(aBitmap);
+            for (int i = 0; i < 16; i++)
+            {
+                for (int j = 0; j < 16; j++)
+                {
+                    pWriteAccessBitmap->SetPixelIndex(i, j, i * 16 + j);
+                }
+            }
+        }
+        BitmapEx aBitmapEx(aBitmap);
+        vcl::PngImageWriter aPngWriter(aExportStream);
+        CPPUNIT_ASSERT_EQUAL(true, aPngWriter.write(aBitmapEx));
+    }
+    aExportStream.Seek(0);
+    {
+        vcl::PngImageReader aPngReader(aExportStream);
+        BitmapEx aBitmapEx;
+        CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmapEx));
+
+        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Width());
+        CPPUNIT_ASSERT_EQUAL(16L, aBitmapEx.GetSizePixel().Height());
+
+        for (int i = 0; i < 16; i++)
+        {
+            for (int j = 0; j < 16; j++)
+            {
+                CPPUNIT_ASSERT_EQUAL(aRedPalette[i * 16 + j].GetRGBColor(),
+                                     aBitmapEx.GetPixelColor(j, i));
+            }
+        }
     }
 }
 
