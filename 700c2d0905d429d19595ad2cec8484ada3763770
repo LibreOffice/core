@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17e3d80d_27d1a8a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-07-04T16:08:17Z",
+      "side": 1,
+      "message": "Still needs an uitest, but at the moment I have no virtual machine on my computer where I can get the uno call in order to fully test this bug fix. I hope I can create one in the next days.",
+      "revId": "700c2d0905d429d19595ad2cec8484ada3763770",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
