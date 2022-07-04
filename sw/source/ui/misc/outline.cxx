@@ -409,6 +409,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(weld::Container* pPage, weld:
     m_xPrefixED->connect_changed(LINK(this,   SwOutlineSettingsTabPage, DelimModify));
     m_xSuffixED->connect_changed(LINK(this,   SwOutlineSettingsTabPage, DelimModify));
     m_xStartEdit->connect_value_changed(LINK(this,  SwOutlineSettingsTabPage, StartModified));
+    m_xCharFormatLB->make_sorted();
     m_xCharFormatLB->connect_changed(LINK(this,  SwOutlineSettingsTabPage, CharFormatHdl));
 }
 
